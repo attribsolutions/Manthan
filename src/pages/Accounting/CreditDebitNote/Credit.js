@@ -1,155 +1,155 @@
-
-
-import React, { useEffect, useState, } from "react";
+import React, { useEffect, useState } from "react";
 import {
     Col,
     FormGroup,
-    Input,
     Label,
-    Row
+    Input,
+    Row,
+    Button,
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
 import {
     BreadcrumbShowCountlabel,
     Breadcrumb_inputName,
-    commonPageField,
-    commonPageFieldSuccess,
+    Retailer_List_Success, commonPageFieldSuccess,
+    saveCredit, CredietDebitType, saveCredit_Success, EditCreditlistSuccess
 } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
+import { commonPageField } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import {
     comAddPageFieldFunc,
-    formValid,
     initialFiledFunc,
     onChangeSelect,
     onChangeText,
-    resetFunction
+    resetFunction,
 } from "../../../components/Common/validationFunction";
-import { SaveButton } from "../../../components/Common/CommonButton";
-import {
-    breadcrumbReturnFunc,
-    btnIsDissablefunc,
-    loginCompanyID,
-    loginPartyID,
-    loginUserID
-} from "../../../components/Common/CommonFunction";
 import Select from "react-select";
-import Flatpickr from "react-flatpickr"
-import * as url from "../../../routes/route_url";
-import * as pageId from "../../../routes/allPageID"
-import * as mode from "../../../routes/PageMode"
-import ToolkitProvider from "react-bootstrap-table2-toolkit";
-import BootstrapTable from "react-bootstrap-table-next";
-import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
-import { CInput } from "../../../CustomValidateForm/CInput";
-import { decimalRegx, onlyNumberRegx } from "../../../CustomValidateForm/RegexPattern"
-import { ReceiptGoButtonMaster, ReceiptGoButtonMaster_Success } from "../../../store/Accounting/Receipt/action";
+import { Change_Button, C_Button, SaveButton, } from "../../../components/Common/CommonButton";
+import { url, mode, pageId } from "../../../routes/index"
 import { Retailer_List } from "../../../store/CommonAPI/SupplierRedux/actions";
-import { postSelect_Field_for_dropdown } from "../../../store/Administrator/PartyMasterBulkUpdateRedux/actions";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
-import { CredietDebitType, EditCreditlistSuccess, Invoice_Return_ID, Invoice_Return_ID_Success, saveCredit, saveCredit_Success } from "../../../store/Accounting/CreditRedux/action";
-import { InvoiceNumber, InvoiceNumberSuccess } from "../../../store/Sales/SalesReturnRedux/action";
+import { InvoiceNumberSuccess, SalesReturnAddBtn_Action, SalesReturnAddBtn_Action_Succcess, InvoiceNumber } from "../../../store/Sales/SalesReturnRedux/action";
+import { CInput, C_DatePicker, C_Select } from "../../../CustomValidateForm/index";
+import { decimalRegx, } from "../../../CustomValidateForm/RegexPattern";
+import { getpartyItemList } from "../../../store/Administrator/PartyItemsRedux/action";
+import { return_discountCalculate_Func } from "../../Sale/SalesReturn/SalesCalculation";
 import * as _cfunc from "../../../components/Common/CommonFunction";
-import { calculateSalesReturnFunc, return_discountCalculate_Func } from "../../Sale/SalesReturn/SalesCalculation";
-import { C_DatePicker, C_Select } from "../../../CustomValidateForm";
+import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
+import BootstrapTable from "react-bootstrap-table-next";
+import ToolkitProvider from "react-bootstrap-table2-toolkit";
 
-const Credit = (props) => {
-    const history = useHistory();
+
+
+const SalesReturn = (props) => {
+
     const dispatch = useDispatch();
+    const history = useHistory()
     const currentDate_ymd = _cfunc.date_ymd_func();
-    const loginSystemSetting = _cfunc.loginSystemSetting()
+
+
+    const [pageMode, setPageMode] = useState(mode.defaultsave);
+    const [userPageAccessState, setUserAccState] = useState('');
+    const [editCreatedBy, seteditCreatedBy] = useState("");
 
     const fileds = {
         CRDRNoteDate: currentDate_ymd,
         Customer: "",
-        NoteReason: "",
-        servicesItem: "",
         Narration: "",
-        GrandTotal: 0,
         InvoiceNO: "",
-        calculate: ""
+        ItemName: "",
     }
 
-    const [state, setState] = useState(() => initialFiledFunc(fileds));
-    const [pageMode, setPageMode] = useState(mode.defaultsave);//changes
-    const [modalCss, setModalCss] = useState(false);
-    const [userPageAccessState, setUserAccState] = useState(198);
-    const [editCreatedBy, seteditCreatedBy] = useState("");
-    const [calculation, Setcalculation] = useState([]);
-    const [Table, setTable] = useState([]);
-    const [Table1, setTable1] = useState([]);
-    const [TotalSum, setTotalSum] = useState(0);
-    const [IsSystemSetting, setIsSystemSetting] = useState(false);
+    const [state, setState] = useState(initialFiledFunc(fileds))
+    const [discountDropOption] = useState([{ value: 1, label: "Rs" }, { value: 2, label: "%" }]);
+    const [TableArr, setTableArr] = useState([]);
+
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
         postMsg,
-        pageField,
-        ReceiptGoButton,
         RetailerList,
+        ItemList,
         InvoiceNo,
-        CreditDebitType,
-        ReceiptModeList,
-        InvoiceReturn,
+        pageField,
+        userAccess,
+        addButtonData,
         saveBtnloading,
+        addBtnLoading,
         invoiceNoDropDownLoading,
-        userAccess } = useSelector((state) => ({
-            saveBtnloading: state.CredietDebitReducer.saveBtnloading,
-            invoiceNoDropDownLoading: state.SalesReturnReducer.invoiceNoDropDownLoading,
-            postMsg: state.CredietDebitReducer.postMsg,
-            RetailerList: state.CommonAPI_Reducer.RetailerList,
-            CreditDebitType: state.CredietDebitReducer.CreditDebitType,
-            InvoiceReturn: state.CredietDebitReducer.InvoiceReturn,
-            ReceiptGoButton: state.ReceiptReducer.ReceiptGoButton,
-            ReceiptModeList: state.PartyMasterBulkUpdateReducer.SelectField,
-            InvoiceNo: state.SalesReturnReducer.InvoiceNo,
-            updateMsg: state.BankReducer.updateMessage,
-            userAccess: state.Login.RoleAccessUpdateData,
-            pageField: state.CommonPageFieldReducer.pageField
-        }));
+        retailerDropLoading,
+
+
+        CreditDebitType,
+
+    } = useSelector((state) => ({
+        saveBtnloading: state.CredietDebitReducer.saveBtnloading,
+        postMsg: state.CredietDebitReducer.postMsg,
+        RetailerList: state.CommonAPI_Reducer.RetailerList,
+        ItemList: state.PartyItemsReducer.partyItem,
+        userAccess: state.Login.RoleAccessUpdateData,
+        pageField: state.CommonPageFieldReducer.pageField,
+
+        addButtonData: state.SalesReturnReducer.addButtonData,
+        InvoiceNo: state.SalesReturnReducer.InvoiceNo,
+        addBtnLoading: state.SalesReturnReducer.addBtnLoading,
+        invoiceNoDropDownLoading: state.SalesReturnReducer.invoiceNoDropDownLoading,
+        retailerDropLoading: state.CommonAPI_Reducer.retailerDropLoading,
+
+
+        CreditDebitType: state.CredietDebitReducer.CreditDebitType,
+    }));
+
 
     useEffect(() => {
-        const page_Id = pageId.CREDIT//changes
-        dispatch(commonPageFieldSuccess(null));
-        dispatch(commonPageField(page_Id))
-        dispatch(ReceiptGoButtonMaster_Success([]))
-        dispatch(Invoice_Return_ID_Success([]))
         dispatch(InvoiceNumberSuccess([]))
-    }, []);
+        dispatch(commonPageFieldSuccess(null));
+        dispatch(commonPageField(pageId.CREDIT))
+        dispatch(getpartyItemList(JSON.stringify(_cfunc.loginJsonBody())))
 
-    const values = { ...state.values }
-    const { isError } = state;
-    const { fieldLabel } = state;
-    let { Data = [] } = ReceiptGoButton;
-    const { InvoiceItems = [] } = InvoiceReturn;
+        const jsonBody = JSON.stringify({
+            Type: 1,
+            PartyID: _cfunc.loginPartyID(),
+            CompanyID: _cfunc.loginCompanyID()
+        });
+        dispatch(Retailer_List(jsonBody));
+        dispatch(BreadcrumbShowCountlabel(`${"Total Amount"} :${0}`))
+        return () => {
+            dispatch(Retailer_List_Success([]));
+        }
+    }, []);
 
     const location = { ...history.location };
     const hasShowloction = location.hasOwnProperty(mode.editValue)//changes
     const hasShowModal = props.hasOwnProperty(mode.editValue)//changes
 
-    // userAccess useEffect
-    useEffect(() => {
+    const values = { ...state.values }
+    const { isError } = state;
+    const { fieldLabel } = state;
+
+
+    useEffect(() => {// userAccess useEffect
         let userAcc = null;
         let locationPath = location.pathname;
-
         if (hasShowModal) {
             locationPath = props.masterPath;
         };
-
         userAcc = userAccess.find((inx) => {
             return (`/${inx.ActualPagePath}` === locationPath)
         })
-
         if (userAcc) {
             setUserAccState(userAcc)
-            breadcrumbReturnFunc({ dispatch, userAcc });
+            _cfunc.breadcrumbReturnFunc({ dispatch, userAcc });
         };
     }, [userAccess])
 
     useEffect(() => {
-        if (loginSystemSetting.IsAmountadjustedinInvoice === "0") {
-            setIsSystemSetting(true)
-        }
+        let credietDebitBody = JSON.stringify({
+            Company: _cfunc.loginCompanyID(),
+            TypeID: 5
+        });
+        dispatch(CredietDebitType(credietDebitBody));
+
     }, []);
 
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
@@ -165,27 +165,26 @@ const Credit = (props) => {
             else if (hasShowModal) {
                 hasEditVal = props.editValue
                 setPageMode(props.pageMode)
-                setModalCss(true)
             }
             if (hasEditVal) {
-
-                const { CRDRNoteDate, Customer, NoteReason, servicesItem, Narration, GrandTotal, CRDRInvoices, CustomerID, CRDRNoteItems, FullNoteNumber, NoteType } = hasEditVal
+                debugger
+                const { CRDRNoteDate, Customer, Narration, GrandTotal, CRDRInvoices, CustomerID, CRDRNoteItems } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
                 values.CRDRNoteDate = CRDRNoteDate;
                 values.Customer = { label: Customer, value: CustomerID };
-                values.NoteReason = { label: NoteReason, value: "" };
-                values.InvoiceNO = { label: NoteType === "CreditNote" ? null : FullNoteNumber, value: "" };
-                values.servicesItem = servicesItem;
-                values.Narration = Narration;
-                values.GrandTotal = GrandTotal;
-                CRDRInvoices.map((index, key) => (
-                    key,
-                    index.BalanceAmount = index.GrandTotal - index.PaidAmount
-                ));
-                setTable(CRDRInvoices)
 
-                setTable1(CRDRNoteItems)
+                values.InvoiceNO = CRDRInvoices;
+
+                values.Narration = Narration;
+
+
+
+                setTableArr(CRDRNoteItems)
+
+                let dataCount = CRDRNoteItems.length;
+                let commaSeparateAmount = _cfunc.amountCommaSeparateFunc(Number(GrandTotal).toFixed(2));
+                dispatch(BreadcrumbShowCountlabel(`Count:${dataCount} ₹ ${commaSeparateAmount}`));
 
                 setState({ values, fieldLabel, hasValid, required, isError })
                 dispatch(Breadcrumb_inputName(hasEditVal.Name))
@@ -195,11 +194,19 @@ const Credit = (props) => {
         }
     }, []);
 
+    useEffect(() => {
+        if (pageField) {
+            const fieldArr = pageField.PageFieldMaster
+            comAddPageFieldFunc({ state, setState, fieldArr })
+        }
+    }, [pageField])
+
     useEffect(async () => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(saveCredit_Success({ Status: false }))
             setState(() => resetFunction(fileds, state)) //Clear form values 
             dispatch(Breadcrumb_inputName(''))
+            setTableArr([])
 
             if (pageMode === "other") {
                 customAlert({
@@ -227,561 +234,596 @@ const Credit = (props) => {
     }, [postMsg])
 
     useEffect(() => {
-        if (pageField) {
-            const fieldArr = pageField.PageFieldMaster
-            comAddPageFieldFunc({ state, setState, fieldArr })
+
+        if (addButtonData.StatusCode === 200 && addButtonData.Status === true) {
+            dispatch(SalesReturnAddBtn_Action_Succcess({ StatusCode: false }))
+            try {
+                const updateItemArr = [...TableArr];
+                let existingIds = updateItemArr.map(item => item.id);
+                let nextId = existingIds.length > 0 ? Math.max(...existingIds) + 1 : 1;
+
+                addButtonData.Data.forEach((i) => {
+                    const MRPOptions = i.ItemMRPDetails.map(i => ({ label: i.MRPValue, value: i.MRP, Rate: i.Rate }));
+                    const GSTOptions = i.ItemGSTDetails.map(i => ({ label: i.GSTPercentage, value: i.GST }));
+
+                    const highestMRP = i.ItemMRPDetails.reduce((prev, current) => {// Default highest GST when Return mode "2==ItemWise"
+                        return (prev.MRP > current.MRP) ? prev : current;
+                    }, '');
+
+                    const highestGST = i.ItemGSTDetails.reduce((prev, current) => {// Default  highest GST when Return mode "2==ItemWise"
+                        return (prev.GST > current.GST) ? prev : current;
+                    }, '');
+
+                    // if (returnMode === 2) { //(returnMode === 2) ItemWise
+                    i.Rate = highestMRP.Rate || "";
+                    i.MRP = highestMRP.MRP || "";
+                    i.MRPValue = highestMRP.MRPValue || "";
+
+                    i.GST = highestGST.GST || "";
+                    i.GSTPercentage = highestGST.GSTPercentage || "";
+                    // }
+
+                    const InvoiceQuantity = i.Quantity
+                    const newItemRow = {
+                        ...i,
+                        Quantity: '',
+                        InvoiceQuantity,
+                        id: nextId,
+                        MRPOptions,
+                        GSTOptions,
+                    }
+                    const caculate = return_discountCalculate_Func(newItemRow)
+                    newItemRow["roundedTotalAmount"] = caculate.roundedTotalAmount;
+                    updateItemArr.push(newItemRow);
+                    nextId++;
+                });
+
+                let sumOfGrandTotal = updateItemArr.reduce((accumulator, currentObject) => accumulator + Number(currentObject["roundedTotalAmount"]) || 0, 0);
+                let count_label = `${"Total Amount"} :${Number(sumOfGrandTotal).toLocaleString()}`
+                dispatch(BreadcrumbShowCountlabel(count_label));
+                updateItemArr.sort((a, b) => b.id - a.id);
+                setTableArr(updateItemArr);
+                setState((i) => {
+                    let a = { ...i }
+                    a.values.ItemName = ""
+                    a.hasValid.ItemName.valid = true;
+                    return a
+                })
+
+            } catch (error) { _cfunc.CommonConsole(error) }
         }
-    }, [pageField]);
+    }, [addButtonData])
 
-    // Retailer DropDown List Type 1 for credit list drop down
-    useEffect(() => {
-        const jsonBody = JSON.stringify({
-            Type: 1,
-            PartyID: loginPartyID(),
-            CompanyID: loginCompanyID()
-        });
-        dispatch(Retailer_List(jsonBody));
-    }, []);
 
-    // Note Reason Type id 6 Required
-    useEffect(() => {
-        const jsonBody = JSON.stringify({
-            Company: loginCompanyID(),
-            TypeID: 6
-        });
-        dispatch(postSelect_Field_for_dropdown(jsonBody));
-    }, []);
-
-    //   Note Type Api for Type identify
-    useEffect(() => {
-        const jsonBody = JSON.stringify({
-            Company: loginCompanyID(),
-            TypeID: 5
-        });
-        dispatch(CredietDebitType(jsonBody));
-    }, [])
-
-    const PartyOptions = RetailerList.map((index) => ({
+    const customerOptions = RetailerList.map((index) => ({
         value: index.id,
         label: index.Name,
     }));
 
-    const ReceiptModeOptions = ReceiptModeList.map((index) => ({
-        value: index.id,
-        label: index.Name,
+    const itemList = ItemList.map((index) => ({
+        value: index.Item,
+        label: index.ItemName,
+        itemCheck: index.selectCheck
     }));
+
+    const ItemList_Options = itemList.filter((index) => {
+        return index.itemCheck === true
+    });
 
     const InvoiceNo_Options = InvoiceNo.map((index) => ({
         value: index.Invoice,
         label: index.FullInvoiceNumber,
     }));
 
-    const CreditDebitTypeId = CreditDebitType.find((index) => {
-        return index.Name === "CreditNote"
-    });
-
-    const GoodsCreditType = CreditDebitType.find((index) => {
-        return index.Name === "Goods CreditNote"
-    })
-
-    function DateOnchange(e, date) {
-        setState((i) => {
-            const a = { ...i }
-            a.values.DebitDate = date;
-            a.hasValid.DebitDate.valid = true
-            return a
-        })
-    };
-
-    function InvoiceNoOnChange(e) {
-        let id = e.value
-        dispatch(Invoice_Return_ID(id));
-    };
-
-    function CustomerOnChange(e) { // Customer dropdown function
-        dispatch(Invoice_Return_ID_Success([]))
-        setState((i) => {
-            i.values.GrandTotal = 0
-            i.values.InvoiceNO = ""
-            i.hasValid.GrandTotal.valid = true;
-            i.hasValid.InvoiceNO.valid = true;
-            return i
-        })
-
-        const jsonBody = JSON.stringify({
-            PartyID: loginPartyID(),
-            CustomerID: e.value,
-            InvoiceID: ""
-        });
-
-        const body = { jsonBody, pageMode }
-        dispatch(ReceiptGoButtonMaster(body));
-        const jsonBody1 = JSON.stringify({
-            PartyID: loginPartyID(),
-            CustomerID: e.value
-        });
-
-        dispatch(InvoiceNumber(jsonBody1));
-    };
-
-    function CalculateOnchange(event, row, key) {  // Calculate Input box onChange Function
-        let input = event.target.value
-        let v1 = Number(row.BalanceAmount);
-        let v2 = Number(input)
-        if (!(v1 >= v2)) {
-            event.target.value = v1;
-        }
-        row.Calculate = event.target.value
-        let calSum = 0
-        Data.forEach(element => {
-            calSum = calSum + Number(element.Calculate)
-        });
-        setState((i) => {
-            let a = { ...i }
-            a.values.GrandTotal = calSum
-            a.hasValid.GrandTotal.valid = true;
-            return a
-        })
-    };
-
-    function AmountPaid_onChange(event) {
-
-        if (IsSystemSetting) {
-            onChangeText({ event, state, setState })
-        }
-        else {
-            let input = event.target.value
-            let sum = 0
-            Data.forEach(element => {
-                sum = sum + Number(element.BalanceAmount)
-            });
-
-            let v1 = Number(sum);
-            let v2 = Number(input)
-            if (!(v1 >= v2)) {
-                event.target.value = Number(v1.toFixed(2));
-            }
-            onChangeText({ event, state, setState })
-
-            AmountPaidDistribution(event.target.value)
-            dispatch(BreadcrumbShowCountlabel(`${"Calculate Amount"} :${_cfunc.amountCommaSeparateFunc(event.target.value)}`))
-        }
-    }
-
-    function AmountPaidDistribution(val1) {
-
-        let value = Number(val1)
-        let Amount = value
-        Data.map((index) => {
-            let amt = Number(index.BalanceAmount)
-            if ((Amount > amt) && !(amt === 0)) {
-                Amount = Amount - amt
-                index.Calculate = amt.toFixed(2)
-            }
-            else if ((Amount <= amt) && (Amount > 0)) {
-                index.Calculate = Amount.toFixed(2)
-                Amount = 0
-            }
-            else {
-                index.Calculate = 0;
-            }
-            try {
-                document.getElementById(`Quantity${index.FullInvoiceNumber}`).value = index.Calculate
-            } catch (e) { }
-        })
-    }
-
-    function val_onChange(val, row, type, key) {
-        
-        if (type === "qty") {
-            row["Quantity"] = val;
-        }
-        else {
-            row["Rate"] = val
-        }
-
-        // let v1 = Number(row.BaseUnitQuantity);
-        // let v2 = Number(val)
-        // if (!(v1 >= v2)) {
-        //     val = v1;
-        // }
-        row.gstPercentage = row.GSTPercentage
-        const calculate = return_discountCalculate_Func(row)
-
-        row["AmountTotal"] = Number(calculate.roundedTotalAmount);
-        row["DiscBasicAmount"] = Number(calculate.discountBaseAmt);
-        row["GSTAmount"] = Number(calculate.roundedGstAmount);
-        row["CGSTAmount"] = Number(calculate.CGST_Amount);
-        row["SGSTAmount"] = Number(calculate.SGST_Amount);
-
-        let sum = 0
-        InvoiceItems.forEach(ind => {
-
-            if (ind.AmountTotal === undefined) {
-                ind.AmountTotal = 0
-            }
-            var amt = Number(ind.AmountTotal)
-            sum = sum + amt
-        });
 
 
-
-
-
-
-        setState((i) => {
-            let a = { ...i }
-            a.values.GrandTotal = Number(sum).toFixed(2)
-            a.hasValid.GrandTotal.valid = true;
-            return a
-        })
-        setTotalSum(sum)
-        AmountPaidDistribution(sum)
-        dispatch(BreadcrumbShowCountlabel(`${"Calculate Amount"} :${Number(sum).toFixed(2)}`))
-        try {
-            document.getElementById(`Qty${key}`).value = val
-        } catch (e) { }
-    };
-
-    function UnitOnchange(e, row, key) {
-
-        row["selectedUnit"] = e.value
-    };
-
-    const pagesListColumns1 = [
-        {
-            text: "ItemName",
-            dataField: "ItemName",
-        },
-        {
-            text: "BaseUnitQuantity",
-            dataField: "BaseUnitQuantity",
-        },
-        {
-            text: "Unit Name",
-            dataField: "UnitName",
-            headerStyle: (colum, colIndex) => {
-                return { width: '60px', textAlign: 'center' };
-            },
-        },
-
-        {
-            text: "Quantity ",
-            dataField: "",
-            formatter: (cellContent, row, key) => {
-
-                return (<span >
-
-                    <CInput
-                        key={`Qty${row.Item}${key}`}
-                        id={`Qty${key}`}
-                        cpattern={onlyNumberRegx}
-                        defaultValue={pageMode === mode.view ? row.Quantity : ""}
-                        autoComplete="off"
-                        className=" text-end"
-                        onChange={(e) => {
-                            let val = e.target.value
-                            let v1 = Number(row.BaseUnitQuantity);
-                            let v2 = Number(val)
-                            if (!(v1 >= v2)) {
-                                val = v1;
-                            }
-                            val_onChange(val, row, "qty", key)
-                        }}
-                    />
-                </span>)
-            }
-        },
-        {
-            text: "Unit",
-            dataField: "",
-            formatter: (cellContent, row, key) => {
-
-
-                if (pageMode !== mode.view) {
-                    const Units = row.ItemUnitDetails.map((index) => ({
-                        value: index.Unit,
-                        label: index.UnitName,
-                    }));
-
-                    row["unit"] = { label: row.UnitName, value: row.Unit };
-
-                    return (<span style={{ justifyContent: 'center', width: "200px" }}>
-                        <Select
-                            id={`Unit${key}`}
-                            name="Unit"
-                            defaultValue={row.unit}
-                            isSearchable={true}
-                            className="react-dropdown"
-                            classNamePrefix="dropdown"
-                            options={Units}
-                            onChange={(e) => UnitOnchange(e, row, key)}
-
-                        />
-                    </span>)
-                } else {
-                    row.unit = { label: row.UnitName, value: row.Unit };
-                    return (<span style={{ justifyContent: 'center', width: "200px" }}>
-
-                        <Select
-                            id={`Unit${key}`}
-                            name="Unit"
-                            defaultValue={row.unit}
-                            disabled={true}
-                            isSearchable={true}
-                            className="react-dropdown"
-                            classNamePrefix="dropdown"
-                            onChange={(e) => UnitOnchange(e, row, key)}
-
-                        />
-                    </span>)
-
-                }
-
-            }
-        },
-        {
-            text: "Rate",
-            dataField: "",
-            formatter: (cellContent, row, key) => {
-
-                return (<span >
-                    <CInput
-                        type="text"
-                        key={`Ratey${row.Item}${key}`}
-                        id={`Ratey${key}`}
-                        defaultValue={row.Rate}
-                        disabled={pageMode === mode.view ? true : false}
-                        cpattern={onlyNumberRegx}
-                        autoComplete="off"
-                        className=" text-end"
-                        onChange={(e) => {
-                            const val = e.target.value
-                            val_onChange(val, row, "Rate")
-
-                        }}
-                    />
-                </span>)
-            }
-        },
-    ];
 
     const pagesListColumns = [
         {
-            text: "InvoiceDate",
-            dataField: "InvoiceDate",
+            text: "Item Name",
+            dataField: "ItemName",
+
+            formatter: (cell, row) => {
+                return (
+                    <Label style={{ minWidth: "200px" }}>{row.ItemName}</Label>
+                )
+            }
         },
         {
-            text: "Invoice No",
-            dataField: "FullInvoiceNumber",
-        },
-        {
-            text: "Invoice Amount",
-            dataField: "GrandTotal",
-            align: () => 'right',
-            formatter: (cellContent) => <>{_cfunc.amountCommaSeparateFunc(cellContent)}</>,
-        },
-        {
-            text: "Paid",
-            dataField: "PaidAmount",
-            align: () => 'right',
-            formatter: (cellContent) => <>{_cfunc.amountCommaSeparateFunc(cellContent)}</>,
-        },
-        {
-            text: "Bal Amt",
-            dataField: "BalanceAmount",
-            align: () => 'right',
-            formatter: (cellContent) => <>{_cfunc.amountCommaSeparateFunc(cellContent)}</>,
-        },
-        {
-            text: "Calculate",
+            text: "Quantity",
             dataField: "",
-            formatter: (cellContent, row, key) => {
+            classes: () => "sales-discount-row",
 
+            formatExtraData: { TableArr },
+            formatter: (cell, row, key, { TableArr }) => {
+                return (
+                    <div className="parent" >
+                        <div className="child" style={{ minWidth: "100px" }}>
+                            <CInput
 
-                return (<span style={{ justifyContent: 'center', width: "100px" }}>
-                    <CInput
-                        key={`Quantity${row.FullInvoiceNumber}${key}`}
-                        id={`Quantity${row.FullInvoiceNumber}`}
-                        cpattern={decimalRegx}
-                        defaultValue={pageMode === mode.view ? row.Amount : row.Calculate}
-                        disabled={pageMode === mode.view ? true : false}
-                        autoComplete="off"
-                        className="col col-sm text-center"
-                        onChange={(e) => CalculateOnchange(e, row, key)}
+                                defaultValue={row.Quantity}
+                                autoComplete="off"
+                                type="text"
+                                cpattern={decimalRegx}
+                                placeholder="Enter Quantity"
+                                className="col col-sm text-end"
+                                onChange={(event) => {
+                                    row["Quantity"] = event.target.value;
+                                    totalAmountCalcuationFunc(row, TableArr)
+                                }}
+                            />
+                        </div>
+                        <div className="child mt-2 pl-1">
+                            <label className="label">&nbsp;{row.UnitName}</label>
+                        </div>
 
+                    </div>
+                )
+            }
+        },
+
+        {
+            text: "MRP",
+            dataField: "MRP",
+            formatExtraData: { TableArr },
+            formatter: (cell, row, key, { TableArr }) => {
+                return (
+                    <>
+                        <div style={{ minWidth: "90px" }}>
+                            <Select
+                                id={`MRP${key}`}
+                                name="MRP"
+                                defaultValue={(row.MRP === "") ? "" : { value: row.MRP, label: row.MRPValue }}
+                                isSearchable={true}
+                                className="react-dropdown"
+                                classNamePrefix="dropdown"
+                                options={row.MRPOptions}
+                                onChange={(event) => {
+                                    try {
+                                        row.MRP = event.value;
+                                        row.MRPValue = event.label;
+                                        row.Rate = event.Rate;
+                                        totalAmountCalcuationFunc(row, TableArr)
+                                        document.getElementById(`Rate-${key}-${row.id}`).value = event.Rate
+                                    } catch (error) {
+                                        _cfunc.CommonConsole(error)
+                                    }
+
+                                }}
+
+                            />
+                        </div>
+                    </>
+                )
+            }
+        },
+
+        {
+            text: "GST",
+            dataField: "",
+
+            formatExtraData: { TableArr },
+            formatter: (cell, row, key, { TableArr }) => {
+                return (<div style={{ minWidth: "90px" }}>
+                    <Select
+                        id={`GST${key}`}
+                        name="GST"
+                        defaultValue={(row.GST === "") ? "" : { value: row.GST, label: row.GSTPercentage }}
+                        isSearchable={true}
+                        // isDisabled={returnMode === 1 && true}
+                        className="react-dropdown"
+                        classNamePrefix="dropdown"
+                        options={row.GSTOptions}
+                        onChange={(event) => {
+                            row.GST = event.value;
+                            row.GSTPercentage = event.label;
+                            totalAmountCalcuationFunc(row, TableArr)
+                        }}
                     />
-                </span>)
+                </div>)
+            }
+        },
+        {
+            text: "Basic Rate",
+            dataField: "",
+
+            classes: () => "sales-rate-row",
+            formatExtraData: { TableArr },
+            formatter: (cellContent, row, key, { TableArr }) => {
+                if (!Number(row["DiscountType"])) {
+                    row["DiscountType"] = 2;
+                }
+                return (
+                    <>
+                        <div className="">
+                            <div className="parent  mb-1">
+                                <div className="child">
+                                    <Select
+                                        id={`DicountType_${key}`}
+                                        classNamePrefix="select2-selection"
+                                        defaultValue={discountDropOption[1]}
+                                        options={discountDropOption}
+                                        onChange={(e) => {
+                                            row.DiscountType = e.value;
+                                            row.Discount = ''
+                                            document.getElementById(`Discount-${key}`).value = ''//changr Discount value  by id
+                                            totalAmountCalcuationFunc(row, TableArr);
+                                        }}
+                                    />
+                                </div>
+                                <div className="child">
+                                    <CInput
+                                        type="text"
+                                        id={`Discount-${key}`}//this id use discount type onchange
+                                        placeholder="Dist."
+                                        className="text-end"
+                                        cpattern={decimalRegx}
+                                        onChange={(e) => {
+                                            let e_val = Number(e.target.value);
+
+                                            // Check if discount type is "percentage"
+                                            if (Number(row.DiscountType) === 2) {// Discount type 2 represents "percentage"
+                                                // Limit the input to the range of 0 to 100
+                                                if (e_val >= 100) {
+                                                    e.target.value = 100; // Set the input value to 100 if it exceeds 100
+                                                } else if (!(e_val >= 0 && e_val < 100)) {
+                                                    e.target.value = ""; // Clear the input value if it is less than 0
+                                                }
+                                            }
+                                            row.Discount = e.target.value;
+                                            totalAmountCalcuationFunc(row, TableArr)
+                                        }}
+
+                                    />
+                                </div>
+                            </div>
+                            <div className="parent">
+                                <CInput
+                                    defaultValue={row.Rate}
+                                    id={`Rate-${key}-${row.id}`}//this id use discount type onchange
+                                    placeholder="Enter Rate"
+                                    type="text"
+                                    cpattern={decimalRegx}
+                                    className="text-end"
+                                    onChange={(event) => {
+                                        row.Rate = event.target.value
+                                        totalAmountCalcuationFunc(row, TableArr)
+                                    }}
+                                />
+                            </div>
+
+                        </div>
+
+                    </>
+                );
             },
-            headerStyle: (colum, colIndex) => {
-                return { width: '140px', textAlign: 'center' };
-            },
+        },
+        {
+            text: "Item Comment",
+            dataField: "",
+            formatter: (_cell, row,) => {
+                return (<>
+                    <div className="parent">
+                        <div className="child">
+                            <Input
+                                placeholder="Enter Comment"
+                                defaultChecked={row.ItemComment}
+                                type="text"
+                                onChange={(event) => { row.ItemComment = event.target.value }}
+                            />
+                        </div>
+                    </div>
+                </>
+                )
+            }
+        },
+        {
+            text: "Action ",
+            formatExtraData: { TableArr },
+            formatter: (_cell, row, key, { TableArr }) => (
+                <>
+                    <div style={{ justifyContent: 'center' }} >
+                        <Col>
+                            <FormGroup className=" col col-sm-4 ">
+                                <Button
+                                    id={"deleteid"}
+                                    type="button"
+                                    className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
+                                    data-mdb-toggle="tooltip" data-mdb-placement="top" title='Delete MRP'
+                                    onClick={(e) => { deleteButtonAction(row, TableArr) }}>
+                                    <i className="mdi mdi-delete font-size-18"></i>
+                                </Button>
+                            </FormGroup>
+                        </Col>
+                    </div>
+                </>
+            ),
         },
     ];
 
-    const saveHandeller = async (event) => {
-        const tableItemArray = []
+    const totalAmountCalcuationFunc = (row, TablelistArray = []) => {
+        const caculate = return_discountCalculate_Func(row)
+        row.roundedTotalAmount = caculate.roundedTotalAmount;
+
+        let sumOfGrandTotal = TablelistArray.reduce((accumulator, currentObject) => accumulator + Number(currentObject["roundedTotalAmount"]) || 0, 0);
+        let dataCount = TablelistArray.length;
+        let commaSeparateAmount = _cfunc.amountCommaSeparateFunc(Number(sumOfGrandTotal).toFixed(2));
+        dispatch(BreadcrumbShowCountlabel(`Count:${dataCount} ₹ ${commaSeparateAmount}`));
+    }
+
+    const deleteButtonAction = (row, TablelistArray = []) => {
+        const newArr = TablelistArray.filter((index) => !(index.id === row.id))
+        let sumOfGrandTotal = newArr.reduce((accumulator, currentObject) => accumulator + Number(currentObject["roundedTotalAmount"]) || 0, 0);
+        let count_label = `${"Total Amount"} :${Number(sumOfGrandTotal).toLocaleString()}`
+        dispatch(BreadcrumbShowCountlabel(count_label));
+        setTableArr(newArr)
+    }
+
+    const ReturnDate_Onchange = (e, date) => {
+        setState((i) => {
+            const a = { ...i }
+            a.values.CRDRNoteDate = date;
+            a.hasValid.CRDRNoteDate.valid = true
+            return a
+        })
+    }
+
+    const AddPartyHandler = async () => {
+
+        const invalidMsg1 = []
+        if ((values.ItemName === '')) {
+            invalidMsg1.push(`Select Item Name`)
+        }
+
+        if (invalidMsg1.length > 0) {
+            customAlert({
+                Type: 4,
+                Message: JSON.stringify(invalidMsg1)
+            })
+            return
+        }
+
+        const jsonBody = JSON.stringify({
+            "ItemID": values.ItemName.value,
+            "BatchCode": "",
+            "Customer": values.Customer.value // Customer Swipe when Po return
+        })
+
+        const InvoiceId = ''
+        dispatch(SalesReturnAddBtn_Action({ jsonBody, InvoiceId, returnMode: 2 }))//(returnMode === 2) ItemWise
+        // setReturnMode(nrwReturnMode)
+    }
+
+    const RetailerHandler = (event) => {
+        setState((i) => {
+            let a = { ...i }
+            a.values.ItemName = ""
+            a.values.InvoiceNO = ""
+            a.values.Customer = event
+
+            a.hasValid.Customer.valid = true;
+            a.hasValid.ItemName.valid = true;
+            a.hasValid.InvoiceNO.valid = true;
+
+            return a
+        })
+        setTableArr([])
+
+        const jsonBody = JSON.stringify({
+            PartyID: _cfunc.loginPartyID(),
+            CustomerID: event.value
+        });
+
+        dispatch(InvoiceNumber(jsonBody));
+    }
+
+    const RetailerOnCancelClickHandler = () => {
+        setState((i) => {
+            let a = { ...i }
+            a.values.ItemName = ""
+            a.values.InvoiceNO = ""
+            a.values.Customer = ''
+
+            a.hasValid.Customer.valid = true;
+            a.hasValid.ItemName.valid = true;
+            a.hasValid.InvoiceNO.valid = true;
+            return a
+        })
+        setTableArr([])
+    }
+
+    const itemNameOnChangeHandler = (hasSelect, evn) => {
+        if (values.Customer === "") {
+            customAlert({ Type: 3, Message: `Please select ${fieldLabel.Customer}` })
+            return
+        }
+        onChangeSelect({ hasSelect, evn, state, setState, })
+        // setReturnMode(2)
+    }
+
+    const changeButtonHandler = async () => {
+        const permission = await customAlert({ Type: 7, Message: "Are you sure you want to change the customer?" })
+        if (permission) {
+            setTableArr([])
+        }
+    }
+
+    const SaveHandler = async (event) => {
+
         event.preventDefault();
         const btnId = event.target.id;
-        if ((values.Amount === 0) || (values.Amount === "NaN")) {
-            customAlert({
-                Type: 3,
-                Message: `Amount Paid value can not be ${values.Amount}`,
-            })
-            return btnIsDissablefunc({ btnId, state: false })
-        }
+        let grand_total = 0;
+        const invalidMessages = [];
+        const filterData = TableArr.filter((i) => {
+            if (i.Quantity > 0) {
+                let msgString = ' Please Select';
 
-        const ReceiptInvoices1 = Data.map((index) => ({
-            Invoice: index.Invoice,
-            GrandTotal: index.GrandTotal,
-            PaidAmount: index.Calculate,
-        }))
-        const FilterReceiptInvoices = ReceiptInvoices1.filter((index) => {
-            return index.PaidAmount > 0
-        })
+                if (i.MRP === '') { msgString = msgString + ', ' + "MRP" };
+                if (i.GST === '') { msgString = msgString + ', ' + "GST" };
+                if (!(Number(i.Rate) > 0)) { msgString = msgString + ', ' + "Rate" };
 
-        let inValideUnits = []
-
-        InvoiceItems.forEach(index => {
-
-            if ((!(index.unit.value) && (Number(index.Quantity) > 0))) {
-                inValideUnits.push({ [`${index.ItemName}`]: "This Item Unit Is Required." })
-            }
-
-            if (index.Quantity) {
-                
-                const CRDRNoteItems = {
-                    CRDRNoteDate: values.CRDRNoteDate,
-                    Item: index.Item,
-                    Quantity: Number(index.Quantity),
-                    Unit: index.selectedUnit ? index.selectedUnit : index.unit.value,
-                    BaseUnitQuantity: index.BaseUnitQuantity,
-                    MRP: index.MRP,
-                    Rate: index.Rate,
-                    BasicAmount: index.DiscBasicAmount,
-                    TaxType: index.TaxType,
-                    GST: index.GST,
-                    GSTAmount: index.CGSTAmount,
-                    Amount: index.AmountTotal,
-                    CGST: index.CGSTAmount,
-                    SGST: index.SGSTAmount,
-                    IGST: index.IGST,
-                    BatchCode: index.BatchCode,
-                    CGSTPercentage: index.CGSTPercentage,
-                    SGSTPercentage: index.SGSTPercentage,
-                    IGSTPercentage: index.IGSTPercentage,
-
+                if (((i.MRP === '') || (i.GST === '') || !(Number(i.Rate) > 0))) {
+                    invalidMessages.push({ [i.ItemName]: msgString });
                 }
-                tableItemArray.push(CRDRNoteItems)
+                return true
             }
+        });
 
-        })
-
-        if (inValideUnits.length > 0) {
+        if (invalidMessages.length > 0) {
             customAlert({
-                Type: 3,
-                Message: inValideUnits
-            })
-            return btnIsDissablefunc({ btnId, state: false })
+                Type: 4,
+                Message: invalidMessages,
+            });
+            return;
         }
+
+        if (filterData.length === 0) {
+            customAlert({
+                Type: 4,
+                Message: "Please Enter One Item Quantity",
+            });
+            return;
+        }
+
+        const creditNoteItems = filterData.map((i) => {
+
+            const calculate = return_discountCalculate_Func(i);
+            grand_total += Number(calculate.roundedTotalAmount);
+
+            return {
+                "CRDRNoteDate": "2023-09-04",
+                "Item": i.Item,
+                "ItemName": i.ItemName,
+                "Quantity": i.Quantity,
+                "Unit": i.Unit,
+                "BaseUnitQuantity": i.BaseUnitQuantity,
+                "BatchCode": '1111',
+                "MRP": i.MRP,
+                "MRPValue": i.MRPValue,
+                "Rate": i.Rate,
+                "GST": i.GST,
+                "ItemComment": i.ItemComment,
+                "CGST": Number(calculate.CGST_Amount).toFixed(2),
+                "SGST": Number(calculate.SGST_Amount).toFixed(2),
+                "IGST": Number(calculate.IGST_Amount).toFixed(2),
+                "GSTPercentage": calculate.GST_Percentage,
+                "CGSTPercentage": calculate.CGST_Percentage,
+                "SGSTPercentage": calculate.SGST_Percentage,
+                "IGSTPercentage": calculate.IGST_Percentage,
+                "BasicAmount": Number(calculate.discountBaseAmt).toFixed(2),
+                "GSTAmount": Number(calculate.roundedGstAmount).toFixed(2),
+                "Amount": Number(calculate.roundedTotalAmount).toFixed(2),
+                "TaxType": 'GST',
+                "DiscountType": calculate.discountType,
+                "Discount": calculate.discount,
+                "DiscountAmount": Number(calculate.disCountAmt).toFixed(2),
+            };
+        });
 
         try {
-            if (formValid(state, setState)) {
-                btnIsDissablefunc({ btnId, state: true })
+            const jsonBody = JSON.stringify({
+                CRDRNoteDate: values.CRDRNoteDate,
+                Customer: values.Customer.value,
+                InvoiceNO: values.InvoiceNO.value,
+                NoteType: CreditDebitType.find((index) => index.Name === "Goods CreditNote").id,
+                GrandTotal: grand_total.toFixed(2),
+                Narration: values.Narration,
+                CRDRNoteItems: creditNoteItems,
+                Party: _cfunc.loginPartyID(),
+                CreatedBy: _cfunc.loginUserID(),
+                UpdatedBy: _cfunc.loginUserID(),
+                CRDRInvoices: [],
+            });
 
-                const jsonBody = JSON.stringify({
-                    CRDRNoteDate: values.CRDRNoteDate,
-                    Customer: values.Customer.value,
-                    NoteType: tableItemArray.length === 0 ? CreditDebitTypeId.id : GoodsCreditType.id,
-                    GrandTotal: values.GrandTotal,
-                    Narration: values.Narration,
-                    NoteReason: values.NoteReason.value,
-                    CRDRNoteItems: tableItemArray ? tableItemArray : [],
-                    Party: loginPartyID(),
-                    CreatedBy: loginUserID(),
-                    UpdatedBy: loginUserID(),
-                    CRDRInvoices: !(IsSystemSetting) ? FilterReceiptInvoices : [],
-                })
-                dispatch(saveCredit({ jsonBody, btnId }));
-            }
-        } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
+            dispatch(saveCredit({ jsonBody, btnId }));
 
+        } catch (e) { _cfunc.CommonConsole(e) }
     };
 
-    // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
-    var IsEditMode_Css = ''
-    if ((modalCss) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
+
+
 
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
-                <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
-                <div className="page-content" style={{ marginBottom: "5cm" }}>
+                <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
+
+                <div className="page-content" >
+
                     <form noValidate>
                         <div className="px-2 c_card_filter header text-black mb-1" >
                             <Row>
                                 <Col sm="6">
                                     <FormGroup className="row mt-2" >
                                         <Label className="col-sm-1 p-2"
-                                            style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.CRDRNoteDate}</Label>
+                                            style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.CRDRNoteDate}  </Label>
                                         <Col sm="7">
                                             <C_DatePicker
-                                                name='CreditDate'
+                                                name='CRDRNoteDate'
                                                 value={values.CRDRNoteDate}
-                                                onChange={DateOnchange}
+                                                onChange={ReturnDate_Onchange}
                                             />
                                         </Col>
                                     </FormGroup>
                                 </Col >
 
-                                <Col sm="6">
-                                    <FormGroup className=" row mt-2 " >
-                                        <Label className="col-sm-1 p-2"
-                                            style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.Narration}</Label>
-                                        <Col sm="7">
-                                            <Input
-                                                name="Narration"
-                                                id="Narration"
-                                                value={values.Narration}
-                                                type="text"
-                                                className={isError.Narration.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                placeholder="Please Enter Comment"
-                                                autoComplete='off'
-                                                autoFocus={true}
-                                                onChange={(event) => {
-                                                    onChangeText({ event, state, setState })
-                                                }}
-                                            />
-                                            {isError.Narration.length > 0 && (
-                                                <span className="text-danger f-8"><small>{isError.Narration}</small></span>
-                                            )}
-                                        </Col>
 
-                                    </FormGroup>
-                                </Col >
+
                             </Row>
 
                             <Row>
-                                <Col sm="6">
+                                <Col sm="6"> {/*//Retailer DropDown */}
                                     <FormGroup className=" row mt-1 " >
                                         <Label className="col-sm-1 p-2"
                                             style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.Customer} </Label>
                                         <Col sm="7">
-                                            <Select
-                                                id="Customer"
+                                            <C_Select
+                                                id="Customer "
                                                 name="Customer"
                                                 value={values.Customer}
                                                 isSearchable={true}
-                                                className="react-dropdown"
-                                                classNamePrefix="dropdown"
-                                                options={PartyOptions}
-                                                onChange={(hasSelect, evn) => {
-                                                    onChangeSelect({ hasSelect, evn, state, setState });
-                                                    CustomerOnChange(hasSelect)
-                                                }}
+                                                isLoading={retailerDropLoading}
+                                                isDisabled={((TableArr.length > 0)) ? true : false}
+                                                options={customerOptions}
                                                 styles={{
                                                     menu: provided => ({ ...provided, zIndex: 2 })
                                                 }}
+                                                onChange={RetailerHandler}
+                                                onCancelClick={RetailerOnCancelClickHandler}
+                                            />
+                                            {isError.Customer.length > 0 && (
+                                                <span className="text-danger f-8"><small>{isError.Customer}</small></span>
+                                            )}
+                                        </Col>
+
+                                        <Col sm="1" className="mx-6 mt-1">
+                                            {TableArr.length > 0 &&
+                                                <Change_Button
+                                                    type="button"
+                                                    onClick={changeButtonHandler}
+                                                />
+                                            }
+                                        </Col>
+                                    </FormGroup>
+                                </Col >
+                                {/* <Col sm="6">
+                                    <FormGroup className=" row mt-2 " >
+                                        <Label className="col-sm-1 p-2"
+                                            style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.Customer} </Label>
+                                        <Col sm="7">
+                                            <C_Select
+                                                id="Customer "
+                                                name="Customer"
+                                                value={values.Customer}
+                                                isSearchable={true}
+                                                isLoading={retailerDropLoading}
+                                                isDisabled={((TableArr.length > 0)) ? true : false}
+                                                options={customerOptions}
+                                                styles={{
+                                                    menu: provided => ({ ...provided, zIndex: 2 })
+                                                }}
+                                                onChange={RetailerHandler}
+                                                onCancelClick={RetailerOnCancelClickHandler}
                                             />
                                             {isError.Customer.length > 0 && (
                                                 <span className="text-danger f-8"><small>{isError.Customer}</small></span>
@@ -789,67 +831,75 @@ const Credit = (props) => {
                                         </Col>
 
                                     </FormGroup>
-                                </Col >
-                                <Col sm="6">
+                                </Col > */}
+
+                                <Col sm="6"> {/* Narration Input*/}
                                     <FormGroup className=" row mt-1 " >
                                         <Label className="col-sm-1 p-2"
-                                            style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.NoteReason}</Label>
+                                            style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.Narration} </Label>
                                         <Col sm="7">
-                                            <Select
-                                                id="NoteReason "
-                                                name="NoteReason"
-                                                value={values.NoteReason}
-                                                className="react-dropdown"
-                                                classNamePrefix="dropdown"
-                                                options={ReceiptModeOptions}
-                                                onChange={(hasSelect, evn) => { onChangeSelect({ hasSelect, evn, state, setState, }) }}
-                                                styles={{
-                                                    menu: provided => ({ ...provided, zIndex: 2 })
+                                            <Input
+                                                name="Narration"
+                                                id="Narration"
+                                                value={values.Narration}
+                                                type="text"
+                                                className={isError.Narration.length > 0 ? "is-invalid form-control" : "form-control"}
+                                                placeholder="Enter Comment"
+                                                autoComplete='off'
+                                                onChange={(event) => {
+                                                    onChangeText({ event, state, setState })
                                                 }}
                                             />
-                                            {isError.NoteReason.length > 0 && (
-                                                <span className="text-danger f-8"><small>{isError.NoteReason}</small></span>
+                                            {isError.Narration.length > 0 && (
+                                                <span className="invalid-feedback">{isError.Narration}</span>
                                             )}
-
                                         </Col>
+
                                     </FormGroup>
-                                </Col >
+                                </Col>
                             </Row>
 
                             <Row>
-                                <Col sm="6">
+                                <Col sm="6"> {/* //ItemName */}
                                     <FormGroup className=" row mt-1 " >
                                         <Label className="col-sm-1 p-2"
-                                            style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.GrandTotal}</Label>
+                                            style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.ItemName} </Label>
                                         <Col sm="7">
-                                            <CInput
-                                                name="GrandTotal"
-                                                id="GrandTotal"
-                                                cpattern={decimalRegx}
-                                                value={values.GrandTotal}
-                                                type="text"
-                                                className={isError.GrandTotal.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                placeholder="Please Enter Amount"
-                                                autoComplete='off'
-                                                autoFocus={true}
-                                                onChange={AmountPaid_onChange}
-                                            />
-                                            {isError.GrandTotal.length > 0 && (
-                                                <span className="text-danger f-8"><small>{isError.GrandTotal}</small></span>
+                                            <C_Select
+                                                id="ItemName "
+                                                name="ItemName"
+                                                value={values.ItemName}
+                                                isSearchable={true}
+                                                className="react-dropdown"
+                                                classNamePrefix="dropdown"
+                                                styles={{
+                                                    menu: provided => ({ ...provided, zIndex: 2 })
+                                                }}
 
-                                            )}
+                                                options={ItemList_Options}
+                                                onChange={itemNameOnChangeHandler}
+                                            />
                                         </Col>
 
-
+                                        <Col sm="1" className="mx-6 mt-1">
+                                            <C_Button
+                                                type="button"
+                                                loading={addBtnLoading}
+                                                className="btn btn-outline-primary border-1 font-size-12 text-center"
+                                                onClick={() => AddPartyHandler("ItemWise")}
+                                            >
+                                                Add
+                                            </C_Button>
+                                        </Col>
                                     </FormGroup>
                                 </Col >
-                                <Col sm="6">
+
+                                <Col sm="6">{/* //InvoiceNO DropDown */}
                                     <FormGroup className=" row mt-1 " >
                                         <Label className="col-sm-1 p-2"
                                             style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.InvoiceNO}</Label>
                                         <Col sm="7">
                                             <C_Select
-                                                id="InvoiceNO "
                                                 name="InvoiceNO"
                                                 value={values.InvoiceNO}
                                                 className="react-dropdown"
@@ -858,7 +908,6 @@ const Credit = (props) => {
                                                 isLoading={invoiceNoDropDownLoading}
                                                 onChange={(hasSelect, evn) => {
                                                     onChangeSelect({ hasSelect, evn, state, setState, })
-                                                    InvoiceNoOnChange(hasSelect)
                                                 }}
                                                 styles={{
                                                     menu: provided => ({ ...provided, zIndex: 2 })
@@ -872,104 +921,63 @@ const Credit = (props) => {
                             </Row>
                         </div>
 
-                        <ToolkitProvider
-                            keyField="id"
-                            data={Table1.length <= 0 ? InvoiceItems : Table1}
-                            columns={pagesListColumns1}
-                            search
-                        >
-                            {toolkitProps => (
-                                <React.Fragment>
-                                    {InvoiceItems.length <= 0 ? null : <div className="table">
-                                        <BootstrapTable
-                                            keyField={"id"}
-                                            bordered={true}
-                                            striped={false}
-                                            noDataIndication={<div className="text-danger text-center ">Record Not available</div>}
-                                            classes={"table align-middle table-nowrap table-hover"}
-                                            headerWrapperClasses={"thead-light"}
+                        <div>
+                            <ToolkitProvider
+                                keyField={"id"}
+                                data={TableArr}
+                                columns={pagesListColumns}
+                                search
+                            >
+                                {(toolkitProps) => (
+                                    <React.Fragment>
+                                        <Row>
+                                            <Col xl="12">
+                                                <div className="table-responsive table" style={{ minHeight: "60vh" }}>
+                                                    <BootstrapTable
+                                                        keyField={"id"}
+                                                        id="table_Arrow"
+                                                        classes={"table  table-bordered "}
+                                                        noDataIndication={
+                                                            <div className="text-danger text-center ">
+                                                                Items Not available
+                                                            </div>
+                                                        }
+                                                        {...toolkitProps.baseProps}
+                                                        onDataSizeChange={(e) => {
+                                                            _cfunc.tableInputArrowUpDounFunc("#table_Arrow")
+                                                        }}
+                                                    />
+                                                </div>
+                                            </Col>
+                                            {mySearchProps(toolkitProps.searchProps,)}
+                                        </Row>
 
-                                            {...toolkitProps.baseProps}
-
-                                        />
-
-                                        {mySearchProps(toolkitProps.searchProps)}
-                                    </div>
-
-                                    }
-                                    {Table1.length <= 0 ? null : <div className="table">
-                                        <BootstrapTable
-                                            keyField={"id"}
-                                            bordered={true}
-                                            striped={false}
-                                            noDataIndication={<div className="text-danger text-center ">Record Not available</div>}
-                                            classes={"table align-middle table-nowrap table-hover"}
-                                            headerWrapperClasses={"thead-light"}
-
-                                            {...toolkitProps.baseProps}
-
-                                        />
-
-                                        {mySearchProps(toolkitProps.searchProps)}
-                                    </div>
-                                    }
-
-                                </React.Fragment>
-                            )
-                            }
-                        </ToolkitProvider>
-
-                        {!(IsSystemSetting) && <ToolkitProvider
-
-                            keyField="id"
-                            data={Table.length <= 0 ? Data : Table}
-                            columns={pagesListColumns}
-
-                            search
-                        >
-                            {toolkitProps => (
-                                <React.Fragment>
-                                    <div className="table">
-                                        <BootstrapTable
-                                            keyField={"id"}
-                                            bordered={true}
-                                            striped={false}
-                                            noDataIndication={<div className="text-danger text-center ">Record Not available</div>}
-                                            classes={"table align-middle table-nowrap table-hover"}
-                                            headerWrapperClasses={"thead-light"}
-
-                                            {...toolkitProps.baseProps}
-
-                                        />
-                                        {mySearchProps(toolkitProps.searchProps)}
-                                    </div>
-
-                                </React.Fragment>
-                            )
-                            }
-                        </ToolkitProvider>}
-
+                                    </React.Fragment>
+                                )}
+                            </ToolkitProvider>
+                        </div>
 
                         {
-                            InvoiceItems.length > 0 ?
+                            TableArr.length > 0 ?
                                 <FormGroup>
                                     <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
-                                        <SaveButton pageMode={pageMode}
+                                        <SaveButton
+                                            pageMode={pageMode}
+                                            forceDisabled={addBtnLoading}
                                             loading={saveBtnloading}
-                                            onClick={saveHandeller}
+                                            onClick={SaveHandler}
                                             userAcc={userPageAccessState}
-                                            editCreatedBy={editCreatedBy}
-                                            module={"Receipts"}
-
+                                            module={"SalesReturn"}
                                         />
+
                                     </Col>
                                 </FormGroup >
                                 : null
                         }
 
                     </form >
-                </div>
-            </React.Fragment>
+                </div >
+            </React.Fragment >
         );
     }
     else {
@@ -978,4 +986,10 @@ const Credit = (props) => {
         )
     }
 };
-export default Credit;
+
+export default SalesReturn
+
+
+
+
+
