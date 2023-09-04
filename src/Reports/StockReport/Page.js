@@ -33,8 +33,8 @@ const StockReport = (stockdata) => {
     });
     function generateSaveAndOpenPDFReport() {
         const pdfUrl = URL.createObjectURL(doc.output('blob'));
-        const options = { filename: `Stock_Report/${data.PartyName}/${date_dmy_func()}` }
-        window.open(pdfUrl, options);
+        // const options = { filename: `Stock_Report/${data.PartyName}/${date_dmy_func()}` }
+        window.open(pdfUrl);
     }
     generateSaveAndOpenPDFReport();
 }
