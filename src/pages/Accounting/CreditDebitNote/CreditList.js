@@ -87,14 +87,14 @@ const CreditList = () => {
 
         if (subPageMode === url.CREDIT_LIST) {
             page_Id = pageId.CREDIT_LIST;
-            masterPath = url.CREDIT;
-            newBtnPath = url.CREDIT;
+            masterPath = url.GOODS_CREDIT_NOTE;
+            newBtnPath = url.GOODS_CREDIT_NOTE;
             buttonMsgLable = "Credit"
         }
         else if (subPageMode === url.DEBIT_LIST) {
             page_Id = pageId.DEBIT_LIST;
-            masterPath = url.DEBIT;
-            newBtnPath = url.DEBIT;
+            masterPath = url.GOODS_DEBIT_NOTE;
+            newBtnPath = url.GOODS_DEBIT_NOTE;
             buttonMsgLable = "Debit"
         }
         setOtherState({ masterPath, newBtnPath, buttonMsgLable, page_Id })

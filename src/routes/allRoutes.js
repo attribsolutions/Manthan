@@ -409,8 +409,8 @@ const userRoutes = [
   { path: path.CREDIT_LIST, component: CreditList },
   { path: path.DEBIT_LIST, component: CreditList },
 
-  { path: path.CREDIT, component: GoodsCreditNote },
-  { path: path.DEBIT, component: Debit },
+  { path: path.GOODS_CREDIT_NOTE, component: GoodsCreditNote },
+  { path: path.GOODS_DEBIT_NOTE, component: GoodsCreditNote },
 
   //**************************** Reports ***********************************//
 

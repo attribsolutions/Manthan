@@ -51,6 +51,7 @@ const GoodsCreditNote = (props) => {
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState('');
     const [editCreatedBy, seteditCreatedBy] = useState("");
+    const [subPageMode] = useState(history.location.pathname);
 
     const fileds = {
         CRDRNoteDate: currentDate_ymd,
@@ -78,10 +79,7 @@ const GoodsCreditNote = (props) => {
         addBtnLoading,
         invoiceNoDropDownLoading,
         retailerDropLoading,
-
-
         CreditDebitType,
-
     } = useSelector((state) => ({
         saveBtnloading: state.CredietDebitReducer.saveBtnloading,
         postMsg: state.CredietDebitReducer.postMsg,
@@ -89,41 +87,39 @@ const GoodsCreditNote = (props) => {
         ItemList: state.PartyItemsReducer.partyItem,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
-
         addButtonData: state.SalesReturnReducer.addButtonData,
         InvoiceNo: state.SalesReturnReducer.InvoiceNo,
         addBtnLoading: state.SalesReturnReducer.addBtnLoading,
         invoiceNoDropDownLoading: state.SalesReturnReducer.invoiceNoDropDownLoading,
         retailerDropLoading: state.CommonAPI_Reducer.retailerDropLoading,
-
-
         CreditDebitType: state.CredietDebitReducer.CreditDebitType,
     }));
 
 
     useEffect(() => {
-        dispatch(InvoiceNumberSuccess([]))
+        const page_id = subPageMode === url.GOODS_CREDIT_NOTE ? pageId.GOODS_CREDIT_NOTE : pageId.GOODS_DEBIT_NOTE;
+        dispatch(InvoiceNumberSuccess([]));
         dispatch(commonPageFieldSuccess(null));
-        dispatch(commonPageField(pageId.CREDIT))
-        dispatch(getpartyItemList(JSON.stringify(_cfunc.loginJsonBody())))
+        dispatch(commonPageField(page_id));
+        dispatch(getpartyItemList(JSON.stringify(_cfunc.loginJsonBody())));
 
         const jsonBody = JSON.stringify({
             Type: 1,
             PartyID: _cfunc.loginPartyID(),
-            CompanyID: _cfunc.loginCompanyID()
+            CompanyID: _cfunc.loginCompanyID(),
         });
         dispatch(Retailer_List(jsonBody));
-        dispatch(BreadcrumbShowCountlabel(`${"Total Amount"} :${0}`))
+        dispatch(BreadcrumbShowCountlabel(`${"Total Amount"} :${0}`));
         return () => {
             dispatch(Retailer_List_Success([]));
-        }
+        };
     }, []);
 
     const location = { ...history.location };
-    const hasShowloction = location.hasOwnProperty(mode.editValue)//changes
-    const hasShowModal = props.hasOwnProperty(mode.editValue)//changes
+    const hasShowloction = location.hasOwnProperty(mode.editValue);//changes
+    const hasShowModal = props.hasOwnProperty(mode.editValue);//changes
 
-    const values = { ...state.values }
+    const values = { ...state.values };
     const { isError } = state;
     const { fieldLabel } = state;
 
@@ -135,13 +131,13 @@ const GoodsCreditNote = (props) => {
             locationPath = props.masterPath;
         };
         userAcc = userAccess.find((inx) => {
-            return (`/${inx.ActualPagePath}` === locationPath)
+            return (`/${inx.ActualPagePath}` === locationPath);
         })
         if (userAcc) {
-            setUserAccState(userAcc)
+            setUserAccState(userAcc);
             _cfunc.breadcrumbReturnFunc({ dispatch, userAcc });
         };
-    }, [userAccess])
+    }, [userAccess]);
 
     useEffect(() => {
         let credietDebitBody = JSON.stringify({
@@ -154,38 +150,44 @@ const GoodsCreditNote = (props) => {
 
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
+        try {
+            if ((hasShowloction || hasShowModal)) {
 
-        if ((hasShowloction || hasShowModal)) {
+                let hasEditVal = null
+                if (hasShowloction) {
+                    setPageMode(location.pageMode)
+                    hasEditVal = location.editValue
+                }
+                else if (hasShowModal) {
+                    hasEditVal = props.editValue
+                    setPageMode(props.pageMode)
+                }
+                if (hasEditVal) {
 
-            let hasEditVal = null
-            if (hasShowloction) {
-                setPageMode(location.pageMode)
-                hasEditVal = location.editValue
+                    const { CRDRNoteDate, Customer, Narration, GrandTotal, CRDRInvoices = '', CustomerID, CRDRNoteItems = [] } = hasEditVal
+                    debugger
+                    const { values, fieldLabel, hasValid, required, isError } = { ...state }
+                    values.CRDRNoteDate = CRDRNoteDate;
+                    values.Customer = { label: Customer, value: CustomerID };
+                    values.InvoiceNO = CRDRInvoices[0]
+                        ? {
+                            label: CRDRInvoices[0].FullInvoiceNumber,
+                            value: CRDRInvoices[0].id
+                        } : '';
+                    values.Narration = Narration;
+                    setTableArr(CRDRNoteItems)
+
+                    let dataCount = CRDRNoteItems.length;
+                    let commaSeparateAmount = _cfunc.amountCommaSeparateFunc(Number(GrandTotal).toFixed(2));
+                    dispatch(BreadcrumbShowCountlabel(`Count:${dataCount} ₹ ${commaSeparateAmount}`));
+
+                    setState({ values, fieldLabel, hasValid, required, isError })
+                    dispatch(Breadcrumb_inputName(hasEditVal.Name))
+                    seteditCreatedBy(hasEditVal.CreatedBy)
+                }
+                dispatch(EditCreditlistSuccess({ Status: false }))
             }
-            else if (hasShowModal) {
-                hasEditVal = props.editValue
-                setPageMode(props.pageMode)
-            }
-            if (hasEditVal) {
-                debugger
-                const { CRDRNoteDate, Customer, Narration, GrandTotal, CRDRInvoices, CustomerID, CRDRNoteItems } = hasEditVal
-                const { values, fieldLabel, hasValid, required, isError } = { ...state }
-                values.CRDRNoteDate = CRDRNoteDate;
-                values.Customer = { label: Customer, value: CustomerID };
-                values.InvoiceNO = CRDRInvoices;
-                values.Narration = Narration;
-                setTableArr(CRDRNoteItems)
-
-                let dataCount = CRDRNoteItems.length;
-                let commaSeparateAmount = _cfunc.amountCommaSeparateFunc(Number(GrandTotal).toFixed(2));
-                dispatch(BreadcrumbShowCountlabel(`Count:${dataCount} ₹ ${commaSeparateAmount}`));
-
-                setState({ values, fieldLabel, hasValid, required, isError })
-                dispatch(Breadcrumb_inputName(hasEditVal.Name))
-                seteditCreatedBy(hasEditVal.CreatedBy)
-            }
-            dispatch(EditCreditlistSuccess({ Status: false }))
-        }
+        } catch (w) { _cfunc.CommonConsole(w) }
     }, []);
 
     useEffect(() => {
@@ -225,7 +227,7 @@ const GoodsCreditNote = (props) => {
                 Message: JSON.stringify(postMsg.Message),
             })
         }
-    }, [postMsg])
+    }, [postMsg]);
 
     useEffect(() => {
 
@@ -248,14 +250,12 @@ const GoodsCreditNote = (props) => {
                         return (prev.GST > current.GST) ? prev : current;
                     }, '');
 
-                    // if (returnMode === 2) { //(returnMode === 2) ItemWise
                     i.Rate = highestMRP.Rate || "";
                     i.MRP = highestMRP.MRP || "";
                     i.MRPValue = highestMRP.MRPValue || "";
 
                     i.GST = highestGST.GST || "";
                     i.GSTPercentage = highestGST.GSTPercentage || "";
-                    // }
 
                     const InvoiceQuantity = i.Quantity
                     const newItemRow = {
@@ -284,9 +284,9 @@ const GoodsCreditNote = (props) => {
                     return a
                 })
 
-            } catch (error) { _cfunc.CommonConsole(error) }
+            } catch (error) { _cfunc.CommonConsole(error); }
         }
-    }, [addButtonData])
+    }, [addButtonData]);
 
 
     const customerOptions = RetailerList.map((index) => ({
@@ -314,18 +314,12 @@ const GoodsCreditNote = (props) => {
         {
             text: "Item Name",
             dataField: "ItemName",
-
-            formatter: (cell, row) => {
-                return (
-                    <Label style={{ minWidth: "200px" }}>{row.ItemName}</Label>
-                )
-            }
+            formatter: (cell, row) => (<Label style={{ minWidth: "200px" }}>{row.ItemName}</Label>)
         },
         {
             text: "Quantity",
             dataField: "",
             classes: () => "sales-discount-row",
-
             formatExtraData: { TableArr },
             formatter: (cell, row, key, { TableArr }) => {
                 return (
@@ -492,13 +486,13 @@ const GoodsCreditNote = (props) => {
         {
             text: "Item Comment",
             dataField: "",
-            formatter: (_cell, row,) => {
+            formatter: (_cell, row, key) => {
                 return (<>
                     <div className="parent">
                         <div className="child">
                             <Input
                                 placeholder="Enter Comment"
-                                defaultChecked={row.ItemComment}
+                                defaultValue={row.ItemComment}
                                 type="text"
                                 onChange={(event) => { row.ItemComment = event.target.value }}
                             />
@@ -582,7 +576,6 @@ const GoodsCreditNote = (props) => {
 
         const InvoiceId = ''
         dispatch(SalesReturnAddBtn_Action({ jsonBody, InvoiceId, returnMode: 2 }))//(returnMode === 2) ItemWise
-        // setReturnMode(nrwReturnMode)
     }
 
     const RetailerHandler = (event) => {
@@ -640,90 +633,94 @@ const GoodsCreditNote = (props) => {
     }
 
     const SaveHandler = async (event) => {
-
-        event.preventDefault();
-        const btnId = event.target.id;
-        let grand_total = 0;
-        const invalidMessages = [];
-        const filterData = TableArr.filter((i) => {
-            if (i.Quantity > 0) {
-                let msgString = ' Please Select';
-
-                if (i.MRP === '') { msgString = msgString + ', ' + "MRP" };
-                if (i.GST === '') { msgString = msgString + ', ' + "GST" };
-                if (!(Number(i.Rate) > 0)) { msgString = msgString + ', ' + "Rate" };
-
-                if (((i.MRP === '') || (i.GST === '') || !(Number(i.Rate) > 0))) {
-                    invalidMessages.push({ [i.ItemName]: msgString });
-                }
-                return true
-            }
-        });
-
-        if (invalidMessages.length > 0) {
-            customAlert({
-                Type: 4,
-                Message: invalidMessages,
-            });
-            return;
-        }
-
-        if (filterData.length === 0) {
-            customAlert({
-                Type: 4,
-                Message: "Please Enter One Item Quantity",
-            });
-            return;
-        }
-
-        const creditNoteItems = filterData.map((i) => {
-
-            const calculate = return_discountCalculate_Func(i);
-            grand_total += Number(calculate.roundedTotalAmount);
-
-            return {
-                "CRDRNoteDate": "2023-09-04",
-                "Item": i.Item,
-                "ItemName": i.ItemName,
-                "Quantity": i.Quantity,
-                "Unit": i.Unit,
-                "BaseUnitQuantity": i.BaseUnitQuantity,
-                "BatchCode": '1111',
-                "MRP": i.MRP,
-                "MRPValue": i.MRPValue,
-                "Rate": i.Rate,
-                "GST": i.GST,
-                "ItemComment": i.ItemComment,
-                "CGST": Number(calculate.CGST_Amount).toFixed(2),
-                "SGST": Number(calculate.SGST_Amount).toFixed(2),
-                "IGST": Number(calculate.IGST_Amount).toFixed(2),
-                "GSTPercentage": calculate.GST_Percentage,
-                "CGSTPercentage": calculate.CGST_Percentage,
-                "SGSTPercentage": calculate.SGST_Percentage,
-                "IGSTPercentage": calculate.IGST_Percentage,
-                "BasicAmount": Number(calculate.discountBaseAmt).toFixed(2),
-                "GSTAmount": Number(calculate.roundedGstAmount).toFixed(2),
-                "Amount": Number(calculate.roundedTotalAmount).toFixed(2),
-                "TaxType": 'GST',
-                "DiscountType": calculate.discountType,
-                "Discount": calculate.discount,
-                "DiscountAmount": Number(calculate.disCountAmt).toFixed(2),
-            };
-        });
-
         try {
+            event.preventDefault();
+            const btnId = event.target.id;
+            let grand_total = 0;
+            const invalidMessages = [];
+            const filterData = TableArr.filter((i) => {
+                if (i.Quantity > 0) {
+                    let msgString = ' Please Select';
+
+                    if (i.MRP === '') { msgString = msgString + ', ' + "MRP" };
+                    if (i.GST === '') { msgString = msgString + ', ' + "GST" };
+                    if (!(Number(i.Rate) > 0)) { msgString = msgString + ', ' + "Rate" };
+
+                    if (((i.MRP === '') || (i.GST === '') || !(Number(i.Rate) > 0))) {
+                        invalidMessages.push({ [i.ItemName]: msgString });
+                    }
+                    return true
+                }
+            });
+
+            if (invalidMessages.length > 0) {
+                customAlert({
+                    Type: 4,
+                    Message: invalidMessages,
+                });
+                return;
+            }
+
+            if (filterData.length === 0) {
+                customAlert({
+                    Type: 4,
+                    Message: "Please Enter One Item Quantity",
+                });
+                return;
+            }
+
+            const creditNoteItems = filterData.map((i) => {
+
+                const calculate = return_discountCalculate_Func(i);
+                grand_total += Number(calculate.roundedTotalAmount);
+
+                return {
+                    "CRDRNoteDate": "2023-09-04",
+                    "Item": i.Item,
+                    "ItemName": i.ItemName,
+                    "Quantity": i.Quantity,
+                    "Unit": i.Unit,
+                    "BaseUnitQuantity": i.BaseUnitQuantity,
+                    "BatchCode": '1111',
+                    "MRP": i.MRP,
+                    "MRPValue": i.MRPValue,
+                    "Rate": i.Rate,
+                    "GST": i.GST,
+                    "ItemComment": i.ItemComment,
+                    "CGST": Number(calculate.CGST_Amount).toFixed(2),
+                    "SGST": Number(calculate.SGST_Amount).toFixed(2),
+                    "IGST": Number(calculate.IGST_Amount).toFixed(2),
+                    "GSTPercentage": calculate.GST_Percentage,
+                    "CGSTPercentage": calculate.CGST_Percentage,
+                    "SGSTPercentage": calculate.SGST_Percentage,
+                    "IGSTPercentage": calculate.IGST_Percentage,
+                    "BasicAmount": Number(calculate.discountBaseAmt).toFixed(2),
+                    "GSTAmount": Number(calculate.roundedGstAmount).toFixed(2),
+                    "Amount": Number(calculate.roundedTotalAmount).toFixed(2),
+                    "TaxType": 'GST',
+                    "DiscountType": calculate.discountType,
+                    "Discount": calculate.discount,
+                    "DiscountAmount": Number(calculate.disCountAmt).toFixed(2),
+                };
+            });
+
+            const noteType_BySubPageMode = () => {
+                return (subPageMode === url.GOODS_CREDIT_NOTE)
+                    ? CreditDebitType.find((index) => index.Name === "Goods CreditNote").id
+                    : CreditDebitType.find((index) => index.Name === "Goods DeditNote").id;
+            };
+
             const jsonBody = JSON.stringify({
                 CRDRNoteDate: values.CRDRNoteDate,
                 Customer: values.Customer.value,
-                InvoiceNO: values.InvoiceNO.value,
-                NoteType: CreditDebitType.find((index) => index.Name === "Goods CreditNote").id,
+                NoteType: noteType_BySubPageMode(),
                 GrandTotal: grand_total.toFixed(2),
                 Narration: values.Narration,
                 CRDRNoteItems: creditNoteItems,
                 Party: _cfunc.loginPartyID(),
                 CreatedBy: _cfunc.loginUserID(),
                 UpdatedBy: _cfunc.loginUserID(),
-                CRDRInvoices: [],
+                CRDRInvoices: [{ Invoice: values.InvoiceNO.value, }],
             });
 
             dispatch(saveCredit({ jsonBody, btnId }));
@@ -797,32 +794,6 @@ const GoodsCreditNote = (props) => {
                                         </Col>
                                     </FormGroup>
                                 </Col >
-                                {/* <Col sm="6">
-                                    <FormGroup className=" row mt-2 " >
-                                        <Label className="col-sm-1 p-2"
-                                            style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.Customer} </Label>
-                                        <Col sm="7">
-                                            <C_Select
-                                                id="Customer "
-                                                name="Customer"
-                                                value={values.Customer}
-                                                isSearchable={true}
-                                                isLoading={retailerDropLoading}
-                                                isDisabled={((TableArr.length > 0)) ? true : false}
-                                                options={customerOptions}
-                                                styles={{
-                                                    menu: provided => ({ ...provided, zIndex: 2 })
-                                                }}
-                                                onChange={RetailerHandler}
-                                                onCancelClick={RetailerOnCancelClickHandler}
-                                            />
-                                            {isError.Customer.length > 0 && (
-                                                <span className="text-danger f-8"><small>{isError.Customer}</small></span>
-                                            )}
-                                        </Col>
-
-                                    </FormGroup>
-                                </Col > */}
 
                                 <Col sm="6"> {/* Narration Input*/}
                                     <FormGroup className=" row mt-1 " >

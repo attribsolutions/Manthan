@@ -228,12 +228,12 @@ export const PAYMENT_ENTRY_LIST = "/PaymentEntryList"
 export const BANK_ASSIGN = "/BankAssign"
 
 export const CREDIT_LIST = "/Credit_List"
-export const CREDIT = "/Credit"
+export const GOODS_CREDIT_NOTE = "/Credit"
 
 export const INVOICE_CONFIGURATION = "/InvoiceConfiguration"
 
 export const DEBIT_LIST = "/Debit_List"
-export const DEBIT = "/Debit"
+export const GOODS_DEBIT_NOTE = "/Debit"
 
 export const SAP_LEDGER = "/SapLedger"
 

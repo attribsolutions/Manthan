@@ -136,117 +136,117 @@ export const Discount_List = url.DISCOUNT_MASTER
 
 //******************************* Purchase Module ************************************//
 
-export const OrderList_1 = url.ORDER_1
-export const Order_1 = url.ORDER_LIST_1
+export const OrderList_1 = url.ORDER_1;
+export const Order_1 = url.ORDER_LIST_1;
 
-export const OrderList_2 = url.ORDER_2
-export const Order_2 = url.ORDER_LIST_2
+export const OrderList_2 = url.ORDER_2;
+export const Order_2 = url.ORDER_LIST_2;
 
-export const OrderList_4 = url.ORDER_4
-export const Order_4 = url.ORDER_LIST_4
+export const OrderList_4 = url.ORDER_4;
+export const Order_4 = url.ORDER_LIST_4;
 
-export const PurchaseReturnList = url.PURCHASE_RETURN
-export const PurchaseReturn = url.PURCHASE_RETURN_LIST
+export const PurchaseReturnList = url.PURCHASE_RETURN;
+export const PurchaseReturn = url.PURCHASE_RETURN_LIST;
 
 //******************************* Production ************************************//
 
-export const BOMList = url.BIllOf_MATERIALS
-export const BOM = url.BIllOf_MATERIALS_LIST
+export const BOMList = url.BIllOf_MATERIALS;
+export const BOM = url.BIllOf_MATERIALS_LIST;
 
-export const WorkOrderList = url.WORK_ORDER
-export const WorkOrder = url.WORK_ORDER_LIST
+export const WorkOrderList = url.WORK_ORDER;
+export const WorkOrder = url.WORK_ORDER_LIST;
 
-export const MaterialIssueList = url.MATERIAL_ISSUE_STP
-export const MaterialIssue = url.MATERIAL_ISSUE_LIST
-export const MaterialIssue_STP = url.MATERIAL_ISSUE_LIST
+export const MaterialIssueList = url.MATERIAL_ISSUE_STP;
+export const MaterialIssue = url.MATERIAL_ISSUE_LIST;
+export const MaterialIssue_STP = url.MATERIAL_ISSUE_LIST;
 
-export const ProductionReIssue = url.PRODUCTION_REISSUE_LIST
-export const ProductionReIssueList = url.PRODUCTION_REISSUE
-export const ProductionReIssue_STP = url.PRODUCTION_REISSUE_STP
+export const ProductionReIssue = url.PRODUCTION_REISSUE_LIST;
+export const ProductionReIssueList = url.PRODUCTION_REISSUE;
+export const ProductionReIssue_STP = url.PRODUCTION_REISSUE_STP;
 
-export const ProductionMaster = url.PRODUCTION_LIST
-export const ProductionList = url.PRODUCTION_STP
-export const Production_Add_Mode = url.PRODUCTION_LIST
+export const ProductionMaster = url.PRODUCTION_LIST;
+export const ProductionList = url.PRODUCTION_STP;
+export const Production_Add_Mode = url.PRODUCTION_LIST;
 
 //******************************* Inventory  ************************************//
 
-export const GRN_LIST_1 = url.GRN_STP_1
-export const GRN_ADD_1 = url.GRN_LIST_1
-export const GRN_STP_1 = url.GRN_LIST_1
+export const GRN_LIST_1 = url.GRN_STP_1;
+export const GRN_ADD_1 = url.GRN_LIST_1;
+export const GRN_STP_1 = url.GRN_LIST_1;
 
-export const GRNList_3 = url.GRN_STP_3
-export const GRN_ADD_3 = url.GRN_LIST_3
-export const GRN_STP_3 = url.GRN_LIST_3
+export const GRNList_3 = url.GRN_STP_3;
+export const GRN_ADD_3 = url.GRN_LIST_3;
+export const GRN_STP_3 = url.GRN_LIST_3;
 
-export const StockEntry = url.STOCK_ENTRY
+export const StockEntry = url.STOCK_ENTRY;
 
-export const ChallanList = url.CHALLAN
-export const Challan = url.CHALLAN_LIST
+export const ChallanList = url.CHALLAN;
+export const Challan = url.CHALLAN_LIST;
 
 //******************************* Inter Branch ************************************//
 
-export const OrderList_3 = url.IB_ORDER
-export const Order_3 = url.IB_ORDER_PO_LIST
+export const OrderList_3 = url.IB_ORDER;
+export const Order_3 = url.IB_ORDER_PO_LIST;
 
-export const InwardList = url.IB_INWARD_STP
-export const Inward = url.INWARD_LIST
-export const IB_INWARD_STP = url.IB_INVOICE_LIST
+export const InwardList = url.IB_INWARD_STP;
+export const Inward = url.INWARD_LIST;
+export const IB_INWARD_STP = url.IB_INVOICE_LIST;
 
-export const IB_Invoice_List = url.IB_INVOICE_STP
-export const IB_Invoice = url.IB_INVOICE_LIST
-export const IB_Invoice_STP = url.IB_ORDER_PO_LIST
+export const IB_Invoice_List = url.IB_INVOICE_STP;
+export const IB_Invoice = url.IB_INVOICE_LIST;
+export const IB_Invoice_STP = url.IB_ORDER_PO_LIST;
 
 //******************************* Sales ************************************//
-export const InvoiceList = url.INVOICE_1
-export const Invoice_1 = url.INVOICE_LIST_1
+export const InvoiceList = url.INVOICE_1;
+export const Invoice_1 = url.INVOICE_LIST_1;
 
-export const Loading_Sheet_List = url.LOADING_SHEET
-export const Loading_Sheet = url.LOADING_SHEET_LIST
-export const Loading_Sheet_List_Update = url.LOADING_SHEET_LIST
-export const BulkRecipt = url.LOADING_SHEET_LIST
+export const Loading_Sheet_List = url.LOADING_SHEET;
+export const Loading_Sheet = url.LOADING_SHEET_LIST;
+export const Loading_Sheet_List_Update = url.LOADING_SHEET_LIST;
+export const BulkRecipt = url.LOADING_SHEET_LIST;
 
-export const SalesReturn = url.SALES_RETURN_LIST
-export const SalesReturnList = url.SALES_RETURN
+export const SalesReturn = url.SALES_RETURN_LIST;
+export const SalesReturnList = url.SALES_RETURN;
 
-export const Purchase_Return_Mode_3 = url.SALES_RETURN_LIST
+export const Purchase_Return_Mode_3 = url.SALES_RETURN_LIST;
 
 //********************************Accounting ***********************************//
-export const Receipts = url.RECEIPTS_LIST
-export const ReceiptList = url.RECEIPTS
-export const ReceiptList_2 = url.RECEIPTS_LIST_2
+export const Receipts = url.RECEIPTS_LIST;
+export const ReceiptList = url.RECEIPTS;
+export const ReceiptList_2 = url.RECEIPTS_LIST_2;
 
-export const PaymentEntry = url.PAYMENT_ENTRY_LIST
-export const PaymentEntryList = url.PAYMENT_ENTRY
+export const PaymentEntry = url.PAYMENT_ENTRY_LIST;
+export const PaymentEntryList = url.PAYMENT_ENTRY;
 
-export const BankAssign = url.BANK_ASSIGN
+export const BankAssign = url.BANK_ASSIGN;
 
-export const Credit = url.CREDIT_LIST
-export const CreditList = url.CREDIT
+export const Credit = url.CREDIT_LIST;
+export const CreditList = url.GOODS_CREDIT_NOTE;
 
-export const Debit = url.DEBIT_LIST
-export const DebitList = url.DEBIT
+export const Debit = url.DEBIT_LIST;
+export const DebitList = url.GOODS_DEBIT_NOTE;
 
-export const SapLedger = url.SAP_LEDGER
+export const SapLedger = url.SAP_LEDGER;
 
-export const StockReport = url.STOCK_REPORT
+export const StockReport = url.STOCK_REPORT;
 
-export const Stock_Report_1 = url.STOCK_REPORT_1
+export const Stock_Report_1 = url.STOCK_REPORT_1;
 
 //**************************** Reports ***********************************//
 
-export const OrderSummaryReport = url.ORDER_SUMMARY_REPORT
+export const OrderSummaryReport = url.ORDER_SUMMARY_REPORT;
 
-export const Generic_Sale_Report = url.GENERIC_SALE_REPORT
+export const Generic_Sale_Report = url.GENERIC_SALE_REPORT;
 
-export const RetailerDataReport = url.RETAILER_DATA_REPORT
+export const RetailerDataReport = url.RETAILER_DATA_REPORT;
 
-export const Damage_Stock_Report = url.DAMAGE_STOCK_REPORT
+export const Damage_Stock_Report = url.DAMAGE_STOCK_REPORT;
 
-export const DeleteInvoiceDataExport = url.DELETE_INVOICE_DATA_EXPORT
+export const DeleteInvoiceDataExport = url.DELETE_INVOICE_DATA_EXPORT;
 
-export const Item_Sale_Report = url.ITEM_SALE_REPORT
+export const Item_Sale_Report = url.ITEM_SALE_REPORT;
 
-export const Claim_Summary_list = url.CLAIM_SUMMARY_MASTER
+export const Claim_Summary_list = url.CLAIM_SUMMARY_MASTER;
 
-export const Claim_Summary_Master = url.CLAIM_SUMMARY_lIST
+export const Claim_Summary_Master = url.CLAIM_SUMMARY_lIST;
 

@@ -82,7 +82,7 @@ const Debit = (props) => {
         }));
 
     useEffect(() => {
-        const page_Id = pageId.DEBIT
+        const page_Id = pageId.GOODS_DEBIT_NOTE
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
     }, []);
