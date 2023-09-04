@@ -41,7 +41,7 @@ import ToolkitProvider from "react-bootstrap-table2-toolkit";
 
 
 
-const SalesReturn = (props) => {
+const GoodsCreditNote = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory()
@@ -170,16 +170,10 @@ const SalesReturn = (props) => {
                 debugger
                 const { CRDRNoteDate, Customer, Narration, GrandTotal, CRDRInvoices, CustomerID, CRDRNoteItems } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
-
                 values.CRDRNoteDate = CRDRNoteDate;
                 values.Customer = { label: Customer, value: CustomerID };
-
                 values.InvoiceNO = CRDRInvoices;
-
                 values.Narration = Narration;
-
-
-
                 setTableArr(CRDRNoteItems)
 
                 let dataCount = CRDRNoteItems.length;
@@ -314,8 +308,6 @@ const SalesReturn = (props) => {
         value: index.Invoice,
         label: index.FullInvoiceNumber,
     }));
-
-
 
 
     const pagesListColumns = [
@@ -493,7 +485,6 @@ const SalesReturn = (props) => {
                             </div>
 
                         </div>
-
                     </>
                 );
             },
@@ -987,7 +978,7 @@ const SalesReturn = (props) => {
     }
 };
 
-export default SalesReturn
+export default GoodsCreditNote
 
 
 

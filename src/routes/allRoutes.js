@@ -126,7 +126,7 @@ import SalesManMaster from "../pages/Adminisrator/SalesManPages/SalesManMaster";
 import SalesManList from "../pages/Adminisrator/SalesManPages/SalesManList";
 import LoadingSheet from "../pages/Sale/LoadingSheet/LoadingSheet";
 import LoadingSheetList from "../pages/Sale/LoadingSheet/LoadingSheetList";
-// import CreditLimitMaster from "../pages/Adminisrator/CreditPages/CreditLimitMaster";
+
 import Report from "../Reports/AllReportPage";
 import RouteUpdate from "../pages/Adminisrator/RouteUpdate/RouteUpdate";
 import PartyMasterBulkUpdate from "../pages/Adminisrator/PartyMasterBulkPages/PartyMasterBulkUpdate";
@@ -141,7 +141,7 @@ import BulkRecipt from "../pages/Accounting/Receipt/BulkReceipt";
 import BankAssign from "../pages/Accounting/BankAssign/BankAssign";
 import LoadingSheetUpdate from "../pages/Sale/LoadingSheet/LoadingSheetUpdate";
 import SalesReturn from "../pages/Sale/SalesReturn/SalesReturn";
-import Credit from "../pages/Accounting/CreditDebitNote/Credit";
+import GoodsCreditNote from "../pages/Accounting/CreditDebitNote/GoodsCreditNote";
 import CreditList from "../pages/Accounting/CreditDebitNote/CreditList";
 
 import ImportFieldAdd from "../pages/Adminisrator/ImportMaster/FieldAdd/ImportFieldAdd";
@@ -409,7 +409,7 @@ const userRoutes = [
   { path: path.CREDIT_LIST, component: CreditList },
   { path: path.DEBIT_LIST, component: CreditList },
 
-  { path: path.CREDIT, component: Credit },
+  { path: path.CREDIT, component: GoodsCreditNote },
   { path: path.DEBIT, component: Debit },
 
   //**************************** Reports ***********************************//
