@@ -90,7 +90,7 @@ const InvoiceList = () => {
         Update_Vehicle_Invoice,
         sendToScmMsg
     } = reducers;
-
+    debugger
     const {
         fromdate,
         todate,
@@ -377,9 +377,11 @@ const InvoiceList = () => {
     };
     //Added For send To Scm Button 
     function sendToScmBtnFunc(config) {
+
         const InvoiceID = config.rowData.id
         const jsonBody = JSON.stringify({ Invoice: InvoiceID })
-        dispatch(InvoiceSendToScm({ jsonBody }))
+        const btnId = config.btnId
+        dispatch(InvoiceSendToScm({ jsonBody, btnId }))
     }
 
     const HeaderContent = () => {

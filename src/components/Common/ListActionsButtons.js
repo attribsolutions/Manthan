@@ -117,7 +117,7 @@ export const listPageActionsButtonFunc = (props) => {
 
     const renderButtonWithSpinner = (btnmode, spinnerColor, iconClass) => {
         const style = (btnmode === mode.makeBtn) ? { marginLeft: "5px", marginRight: "6px" } : {};
-
+        
         return (
             <>
                 {listBtnLoading === btnmode ? (
@@ -183,7 +183,7 @@ export const listPageActionsButtonFunc = (props) => {
         const renderButtonIfNeeded = ({ condition, btnmode, iconClass, actionFunc, dispatchAction, title, buttonClasss, isDummyBtn }) => {
             if ((!condition && !isDummyBtn) || IsRecordDeleted) return null;
             if (!isDummyBtn) {
-
+                
                 return (
                     <Button
                         type="button"

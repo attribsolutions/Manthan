@@ -64,7 +64,7 @@ export const Rows = (data) => {
     let GSTPercentage = 0
 
     ClaimSummaryItemDetails.forEach((element, key) => {
-        
+
         const TotalGST = (Number(element.CGST)) + (Number(element.SGST))
         const tableitemRow = [
             `${date_dmy_func(element.ReturnDate)}`,
@@ -127,7 +127,7 @@ export const Rows = (data) => {
         else {
             // returnArr.push(totalrow());
             returnArr.push(tableitemRow);
-            
+
             data["tableTot"] = totalLots()
             Gst = element.GST;
         }
@@ -142,20 +142,17 @@ export const Rows = (data) => {
 export const BilledByRow = (data) => {
 
     var BilledByArray = [
-        [`${data.PartyDetails.PartyName}`],
-        [`${data.PartyDetails.Address}`],
-        [`MobileNo:${data.PartyDetails.MobileNo}`],
+        [`                  ${data.PartyDetails.PartyName}`],
+        [`                  ${data.PartyDetails.Address}`],
+        [`                  ${data.PartyDetails.MobileNo}`],
     ]
     return BilledByArray;
 }
 export const BilledToRow = (data) => {
 
     var BilledToArray = [
-
-        [`Expiry From Retailer Claim summary`],
-        [`${data.PartyDetails.GSTIN}`],
-        [`${data.PartyDetails.FSSAINo}`],
-
+        [`                   ${data.PartyDetails.GSTIN}`],
+        [`                  ${data.PartyDetails.FSSAINo}`],
     ]
 
     return BilledToArray;
