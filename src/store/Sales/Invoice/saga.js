@@ -81,7 +81,7 @@ function* save_Invoice_Genfun({ config }) {
 
 
 function* Invoice_Send_To_Scm_GenFun({ config }) {         // Save API
-  
+
   try {
     const response = yield call(Invoice_Send_To_Scm, config);
     yield put(InvoiceSendToScmSuccess(response));

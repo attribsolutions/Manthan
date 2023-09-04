@@ -43,6 +43,7 @@ const INIT_STATE = {
 }
 
 const InvoiceReducer = (state = INIT_STATE, action) => {
+
     switch (action.type) {
         // GO Button 
         case GO_BUTTON_FOR_INVOICE_ADD:

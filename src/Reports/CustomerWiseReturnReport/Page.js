@@ -36,8 +36,7 @@ const CustomerWiseReturnReport = (data) => {
 
     function generateSaveAndOpenPDFReport() {
         const pdfUrl = URL.createObjectURL(doc.output('blob'));
-        // window.open(pdfUrl);
-        window.open(pdfUrl, '_blank', `filename=${"gdff fd"}`);
+        window.open(pdfUrl);
     }
     generateSaveAndOpenPDFReport();
 }
