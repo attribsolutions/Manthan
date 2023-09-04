@@ -137,7 +137,7 @@ export const RowsWithCGST_SGST = (data) => {
                 HSNcodes = element.HSNCode.slice(0, 8);
             }
         }
-        debugger
+        
         const tableitemRow = [
             SrNO++,
             `${HSNcodes} ${element.ItemName}`,
@@ -471,7 +471,7 @@ export const DetailsOfTransportRow = (data) => {
     // if (data.InvoiceUploads.length > 0) {
     //     EwayData = data.InvoiceUploads[0]
     // }
-    debugger
+    
     var DetailsOfTransportArray = [
         [`                      ${data.NoteType}`],
         [`                      ${data.Narration === null ? "" : data.Narration}`],

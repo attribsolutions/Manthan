@@ -46,7 +46,7 @@ const InvioceReporta5 = async (data) => {
             }
         });
     }
-    debugger
+    
     doc.setProperties({
         title: `Credit Note Report /${data.Customer}/${date_dmy_func(data.CRDRNoteDate)} `
     });
