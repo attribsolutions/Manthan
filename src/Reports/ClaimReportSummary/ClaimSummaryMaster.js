@@ -253,9 +253,11 @@ const ClaimSummaryMaster = (props) => {
             },
             formatExtraData: { btnLoading: reducers.ReportBtnLoading, selectedDate: values },
             formatter: (value, row, key, { btnLoading, selectedDate }) => {
-                //selected date push to row to pass json accurate selectdate value format
                 row["selectedDate"] = selectedDate
-                debugger
+                // Condition For Claim Generation 
+                // 1) row Id is (Not Null) then Claim is all Ready Created Will not Show in Master page Table
+                // 2) Logged-in-User Can Not Creat Claim or delete claim 
+                // 3) If Return Count Is greater than 0 then only claim create  
                 return (
                     <>
 
@@ -265,10 +267,10 @@ const ClaimSummaryMaster = (props) => {
                                 <C_Button
                                     loading={btnLoading === `gobtn-${"createClaim"}-${row.id}-${key}`}
                                     type="button"
-                                    style={{ width: "100px", cursor: ((Number(row.id) === 0) && (Number(row.returncnt) === 0)) ? "pointer" : "not-allowed" }}
+                                    style={{ width: "100px", cursor: ((Number(row.id) === 0) && (Number(row.returncnt) > 0)) ? "pointer" : "not-allowed" }}
                                     title="Create Claim"
                                     spinnerColor="white"
-                                    className={(Number(row.returncnt) === 0) ? deltBtnCss : createClaimBtnCss}
+                                    className={((Number(row.returncnt) === 0) || (row.forceCreateHide)) ? deltBtnCss : createClaimBtnCss}
                                     onClick={(e) => {
                                         if ((Number(row.returncnt) > 0) && (!row.forceCreateHide)) {
                                             goButtonHandler("createClaim", row, `gobtn-${"createClaim"}-${row.id}-${key}`)
@@ -276,8 +278,8 @@ const ClaimSummaryMaster = (props) => {
                                     }}
                                 >
                                     {(Number(row.id) > 0) ? "Created" : "Create"}
-                                    {(Number(row.returncnt) > 0) && <i className="fas fa-pencil-alt font-size-13"></i>}
-                                    {(Number(row.returncnt) === 0) && <i className="  fas fa-ban font-size-13"></i>}
+                                    {((Number(row.returncnt) > 0) && (!row.forceCreateHide)) && <i className="fas fa-pencil-alt font-size-13"></i>}
+                                    {((Number(row.returncnt) === 0) || (row.forceCreateHide)) && <i className="  fas fa-ban font-size-13"></i>}
 
 
                                 </C_Button>
