@@ -54,7 +54,7 @@ const InvoiceDataExport = (props) => {
     );
 
     const { Data = [], goBtnMode } = tableData;
-    
+
     const values = { ...state.values }
 
     // Featch Modules List data  First Rendering
@@ -94,6 +94,7 @@ const InvoiceDataExport = (props) => {
 
     useEffect(() => {
         if (goBtnMode === "downloadExcel") {
+
             if (Data.length > 0) {
                 ReportComponent({      // Download CSV
                     pageField,
