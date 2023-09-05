@@ -7,6 +7,7 @@ import {
 } from "./actionType";
 import { MasterClaimCreatApiErrorAction, OrderSummaryApiErrorAction, claimList_API_Success, deleteClaimSuccess, postMasterClaimCreat_API_Success, postOrderSummary_API_Success } from "./action";
 import { ClaimList_API, MasterClaimCreate_API, OderSummary_GoBtn_API, delete_Claim_API } from "../../../helpers/backend_helper";
+import { loginPartyID } from "../../../components/Common/CommonFunction";
 
 function* MasterClaimCreat_GenFunc({ config }) {
 
@@ -17,24 +18,47 @@ function* MasterClaimCreat_GenFunc({ config }) {
 }
 
 function* ClaimList_GenFunc({ config }) {
-
+    const Party_ID = loginPartyID()
     try {
         const response = yield call(ClaimList_API, config);
         let NewResponse = []
         if (config.Type === "List") {
-            
+
             for (const item of response.Data) {
                 if (item.id !== null) {
+                    let isDeleteDisable = false
+
+                    if (item.PartyID === Party_ID) {
+                        isDeleteDisable = true
+                    }
+
                     const newItem = {
                         ...item,
                         MonthStartDate: config.MonthStartDate,
-                        MonthEndDate: config.MonthEndDate
+                        MonthEndDate: config.MonthEndDate,
+                        forceDeleteHide: isDeleteDisable,
+
                     };
                     NewResponse.push(newItem);
                 }
             }
         } else {
-            NewResponse = response.Data.filter(Party => Party.id === null);
+
+            for (const item of response.Data) {
+                if (item.id === null) {
+                    let isCreatDisable = false
+
+                    if (item.PartyID === Party_ID) {
+                        isCreatDisable = true
+                    }
+                    const newItem = {
+                        ...item,
+                        forceCreateHide: isCreatDisable,
+                    };
+                    NewResponse.push(newItem);
+                }
+            }
+
         }
 
         yield put(claimList_API_Success(NewResponse))

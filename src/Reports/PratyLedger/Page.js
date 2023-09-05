@@ -30,8 +30,7 @@ const PartyLedgerReport = (data1) => {
     });
     function generateSaveAndOpenPDFReport() {
         const pdfUrl = URL.createObjectURL(doc.output('blob'));
-        const options = { filename: `PartyLedger_Report/From${date_dmy_func(data.FormDate)}To${date_dmy_func(data.ToDate)}` }
-        window.open(pdfUrl, options);
+        window.open(pdfUrl);
     }
     generateSaveAndOpenPDFReport();
 };

@@ -30,8 +30,7 @@ const ItemRegisterReport = (data) => {
 
     function generateSaveAndOpenPDFReport() {
         const pdfUrl = URL.createObjectURL(doc.output('blob'));
-        const options = { filename: "MaterialRegisterReport" }
-        window.open(pdfUrl, options);
+        window.open(pdfUrl);
     }
     generateSaveAndOpenPDFReport();
 

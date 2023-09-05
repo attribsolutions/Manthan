@@ -76,7 +76,7 @@ const ClaimSummaryMaster = (props) => {
 
     // userAccess useEffect
     useEffect(() => {
-        
+
         let userAcc = null;
         let locationPath = location.pathname;
         if (hasShowModal) {
@@ -188,7 +188,7 @@ const ClaimSummaryMaster = (props) => {
 
     function MonthAndYearOnchange(e, InitialDate) {
         dispatch(claimList_API_Success([]))
-        
+
         let selectedMonth = ""
         if (InitialDate) {
             selectedMonth = e
@@ -229,6 +229,7 @@ const ClaimSummaryMaster = (props) => {
     const currentMonth = getFormattedDate(new Date(), "yyyy-MM");
 
     const pagesListColumns = [
+
         {
             text: "Party",
             dataField: "PartyName",
@@ -236,6 +237,11 @@ const ClaimSummaryMaster = (props) => {
         {
             text: "Return Count",
             dataField: "returncnt",
+            formatter: (cellContent, index) => (
+                <>
+                    <div >{`${Number(index.returncnt) === 0 ? "0" : index.returncnt}`}</div>
+                </>
+            )
 
         },
 
@@ -249,24 +255,29 @@ const ClaimSummaryMaster = (props) => {
             formatter: (value, row, key, { btnLoading, selectedDate }) => {
                 //selected date push to row to pass json accurate selectdate value format
                 row["selectedDate"] = selectedDate
-                
+                debugger
                 return (
                     <>
+
                         <div className=" d-flex justify-content-start  gap-2" >
                             <div
                                 className="mt-3  mb-3">
                                 <C_Button
                                     loading={btnLoading === `gobtn-${"createClaim"}-${row.id}-${key}`}
                                     type="button"
-                                    style={{ width: "100px", cursor: ((row.id === null) && (row.returncnt !== null)) ? "pointer" : "not-allowed" }}
+                                    style={{ width: "100px", cursor: ((Number(row.id) === 0) && (Number(row.returncnt) === 0)) ? "pointer" : "not-allowed" }}
                                     title="Create Claim"
                                     spinnerColor="white"
-                                    className={row.returncnt === null ? deltBtnCss : createClaimBtnCss}
-                                    onClick={(e) => { ((row.id === null) && (row.returncnt !== null)) ? goButtonHandler("createClaim", row, `gobtn-${"createClaim"}-${row.id}-${key}`) : void (0) }}
+                                    className={(Number(row.returncnt) === 0) ? deltBtnCss : createClaimBtnCss}
+                                    onClick={(e) => {
+                                        if ((Number(row.returncnt) > 0) && (!row.forceCreateHide)) {
+                                            goButtonHandler("createClaim", row, `gobtn-${"createClaim"}-${row.id}-${key}`)
+                                        }
+                                    }}
                                 >
-                                    {row.id !== null ? "Created" : "Create"}
-                                    {row.returncnt !== null && row.id === null && <i className="fas fa-pencil-alt font-size-13"></i>}
-                                    {row.returncnt === null && <i className="  fas fa-ban font-size-13"></i>}
+                                    {(Number(row.id) > 0) ? "Created" : "Create"}
+                                    {(Number(row.returncnt) > 0) && <i className="fas fa-pencil-alt font-size-13"></i>}
+                                    {(Number(row.returncnt) === 0) && <i className="  fas fa-ban font-size-13"></i>}
 
 
                                 </C_Button>
