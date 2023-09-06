@@ -190,8 +190,7 @@ import ClaimSummaryMaster from "../Reports/ClaimReportSummary/ClaimSummaryMaster
 const userRoutes = [
   // *************************** DashBord *******************************//
 
-  { path: path.DASHBORD, component: Dashboard },
-
+  
   { path: path.DASHBORD_1, component: Dashboard_1 },
   { path: path.DASHBORD_2, component: Dashboard_1 },
 
