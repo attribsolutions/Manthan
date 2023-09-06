@@ -126,7 +126,7 @@ import SalesManMaster from "../pages/Adminisrator/SalesManPages/SalesManMaster";
 import SalesManList from "../pages/Adminisrator/SalesManPages/SalesManList";
 import LoadingSheet from "../pages/Sale/LoadingSheet/LoadingSheet";
 import LoadingSheetList from "../pages/Sale/LoadingSheet/LoadingSheetList";
-// import CreditLimitMaster from "../pages/Adminisrator/CreditPages/CreditLimitMaster";
+
 import Report from "../Reports/AllReportPage";
 import RouteUpdate from "../pages/Adminisrator/RouteUpdate/RouteUpdate";
 import PartyMasterBulkUpdate from "../pages/Adminisrator/PartyMasterBulkPages/PartyMasterBulkUpdate";
@@ -141,7 +141,8 @@ import BulkRecipt from "../pages/Accounting/Receipt/BulkReceipt";
 import BankAssign from "../pages/Accounting/BankAssign/BankAssign";
 import LoadingSheetUpdate from "../pages/Sale/LoadingSheet/LoadingSheetUpdate";
 import SalesReturn from "../pages/Sale/SalesReturn/SalesReturn";
-import Credit from "../pages/Accounting/CreditDebitNote/Credit";
+import GoodsCreditNote from "../pages/Accounting/CreditDebitNote/GoodsCreditNote";
+import DebitNoteMaster from "../pages/Accounting/Debit/Debit";
 import CreditList from "../pages/Accounting/CreditDebitNote/CreditList";
 
 import ImportFieldAdd from "../pages/Adminisrator/ImportMaster/FieldAdd/ImportFieldAdd";
@@ -281,6 +282,9 @@ const userRoutes = [
   { path: path.PARTYITEM, component: PartyItems },
   { path: path.PARTYITEM_LIST, component: PartyItemsList },
 
+  { path: path.CHANNEL_ITEM, component: PartyItems },
+  { path: path.CHANNEL_ITEM_LIST, component: PartyItemsList },
+
   { path: path.SUBGROUP, component: SubGroupMaster },
   { path: path.SUBGROUP_LIST, component: SubGroupList },
 
@@ -406,11 +410,22 @@ const userRoutes = [
   { path: path.PAYMENT_ENTRY, component: PaymentEntry },
   { path: path.PAYMENT_ENTRY_LIST, component: PaymentEntryList },
 
-  { path: path.CREDIT_LIST, component: CreditList },
-  { path: path.DEBIT_LIST, component: CreditList },
+// |||||||||||||||||||||||||||||||||||||||||||||||||||
 
-  { path: path.CREDIT, component: Credit },
-  { path: path.DEBIT, component: Debit },
+  { path: path.CREDIT_LIST, component: CreditList },
+  { path: path.CREDIT_NOTE, component: DebitNoteMaster },
+
+  { path: path.DEBIT_LIST, component: CreditList },
+  { path: path.DEBIT_NOTE, component: DebitNoteMaster },
+
+
+  { path: path.GOODS_CREDIT_LIST, component: CreditList },
+  { path: path.GOODS_CREDIT_NOTE, component: GoodsCreditNote },
+  
+  { path: path.GOODS_DEBIT_LIST, component: CreditList },
+  { path: path.GOODS_DEBIT_NOTE, component: GoodsCreditNote },
+  
+// |||||||||||||||||||||||||||||||||||||||||||||||||||
 
   //**************************** Reports ***********************************//
 

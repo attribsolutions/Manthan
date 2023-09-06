@@ -87,7 +87,7 @@ axiosApi.interceptors.response.use(
 
             logRequestAndResponse(error.config, networkErrorResponse);
 
-            showAlert('Network error. Please check your internet connection.', 'error');
+            showToastAlert('Network error. Please check your internet connection.', 'error');
         } else {
             // Handle other errors and log using utility function
             const { data, status } = error.response;
@@ -103,7 +103,7 @@ axiosApi.interceptors.response.use(
             const errorMessage = messages[status] || 'Oops! Something went wrong.';
 
             logRequestAndResponse(error.config, error.response);
-            showAlert(errorMessage, 'error');
+            showToastAlert(errorMessage, 'error');
         }
 
         return Promise.reject(error);
@@ -121,9 +121,9 @@ function getBadRequestMessage(data) {
 
 axiosRetry(axiosApi, { retries: 3, retryDelay: axiosRetry.exponentialDelay });
 
-const activeToasts = new Set();
 
-function showAlert(message, color = '') {
+const activeToasts = new Set();
+export function showToastAlert(message, color = '') {
     if (!activeToasts.has(message)) {
         activeToasts.add(message);
 

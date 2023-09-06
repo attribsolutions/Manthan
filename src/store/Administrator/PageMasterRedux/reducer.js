@@ -15,7 +15,8 @@ import {
   RELATED_PAGELIST_DROPDOWN_ACTION,
   GET_FIELD_VALIDATIONS,
   EDIT_PAGE_LIST_ID_ACTION,
-  DELETE_PAGE_LIST_ID_ACTION
+  DELETE_PAGE_LIST_ID_ACTION,
+  GET_FIELD_VALIDATIONS_FOR_ALL_TYPE_SUCCESS
 } from "./actionType"
 
 const INIT_STATE = {
@@ -32,6 +33,7 @@ const INIT_STATE = {
   PageAccess: [],
   ControlTypes: [],
   FieldValidations: [],
+  fieldValidationsALLType: [],
   fieldvalidationDropDownLoading: false,
   loading: false,
   saveBtnloading: false,
@@ -147,6 +149,13 @@ const H_Pages = (state = INIT_STATE, action) => {
         FieldValidations: action.payload,
         fieldvalidationDropDownLoading: false
       }
+
+      case GET_FIELD_VALIDATIONS_FOR_ALL_TYPE_SUCCESS:
+        return {
+          ...state,
+          fieldValidationsALLType: action.payload,
+        }
+      
 
     case PAGEMASTER_API_ERROR_ACTION:
       return {

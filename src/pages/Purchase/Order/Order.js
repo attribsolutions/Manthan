@@ -949,6 +949,7 @@ const Order = (props) => {
     }
 
     async function assignItem_onClick(event) {
+        debugger
         event.stopPropagation();
         const isParty = subPageMode === url.ORDER_1 ? supplierSelect.value : _cfunc.loginPartyID()
         const config = {

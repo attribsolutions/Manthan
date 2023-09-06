@@ -30,7 +30,7 @@ import { saveSalesReturnMaster, InvoiceNumber, InvoiceNumberSuccess, saveSalesRe
 import "./purchaseReturn.scss";
 import { CInput, C_DatePicker, C_Select } from "../../../CustomValidateForm/index";
 import { decimalRegx, } from "../../../CustomValidateForm/RegexPattern";
-import { getpartyItemList } from "../../../store/Administrator/PartyItemsRedux/action";
+import { goButtonPartyItemAddPage } from "../../../store/Administrator/PartyItemsRedux/action";
 import { innerStockCaculation, returnQtyOnChange, return_discountCalculate_Func, stockQtyOnChange } from "./PurchaseReturnCalculation";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
@@ -108,7 +108,7 @@ const PurchaseReturn = (props) => {
         dispatch(InvoiceNumberSuccess([]))
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(pageId.PURCHASE_RETURN))
-        dispatch(getpartyItemList(JSON.stringify(_cfunc.loginJsonBody())))
+        dispatch(goButtonPartyItemAddPage(JSON.stringify(_cfunc.loginJsonBody())))
         dispatch(GetVenderSupplierCustomer({ subPageMode: url.PURCHASE_RETURN, RouteID: "" }))
         dispatch(BreadcrumbShowCountlabel(`${"Total Amount"} :${0}`))
     }, []);

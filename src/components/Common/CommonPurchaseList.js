@@ -52,7 +52,6 @@ const CommonPurchaseList = (props) => {
   const {
     MasterModal,
     masterPath,
-    ButtonMsgLable,
     goButnFunc = () => { },
     makeBtnFunc = () => { },
     hideBtnFunc = () => { },
@@ -334,7 +333,13 @@ const CommonPurchaseList = (props) => {
                 data={tableProps}
                 columns={tableColumns}
                 selectRow={selectCheckParams.isShow ?
-                  selectAllCheck(rowSelected(), nonSelectedRow(), "left", selectCheckParams.selectHeaderLabel)
+                  selectAllCheck({
+                    rowSelected: rowSelected(),
+                    nonSelectedRow: nonSelectedRow(),
+                    position: "left",
+                    headLabel: selectCheckParams.selectHeaderLabel,
+
+                  })
                   : undefined}
                 defaultSorted={defaultSorted}
                 updatedRowBlinkId={updatedRowBlinkId}

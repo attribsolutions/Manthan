@@ -13,6 +13,7 @@ import {
   PageMasterApiErrorAction,
   delete_PageListID_Success,
   getPageTypeSuccess,
+  getFieldValidationsForALLTypeSuccess,
 } from "./actions";
 import {
   ControlTypes_DropDown_Api,
@@ -37,6 +38,7 @@ import {
   SAVE_PAGE_MASTER_ACTION,
   UPDATE_PAGE_LIST_ID_ACTION,
   GET_PAGETYPE,
+  GET_FIELD_VALIDATIONS_FOR_ALL_TYPE,
 } from "./actionType";
 import { CommonConsole } from "../../../components/Common/CommonFunction";
 
@@ -119,7 +121,36 @@ function* FieldValidations_DropDown_GenFun({ id }) {
   try {
     const response = yield call(GetFieldValidationOnControlType_DropDown_API, id);
     yield put(getFieldValidationsSuccess(response.Data));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) {
+    CommonConsole(error);
+    yield put(PageMasterApiErrorAction());
+  }
+}
+
+//  Field Validations dropdown list
+function* FieldValidationsForAllTypeGenFun({ }) {
+  try {
+    const type1Resp = yield call(GetFieldValidationOnControlType_DropDown_API, 1);
+    const type2Resp = yield call(GetFieldValidationOnControlType_DropDown_API, 2);
+    const type3Resp = yield call(GetFieldValidationOnControlType_DropDown_API, 3);
+    const type4Resp = yield call(GetFieldValidationOnControlType_DropDown_API, 4);
+    if ((type1Resp.StatusCode === 200)
+      || (type2Resp.StatusCode === 200)
+      || (type3Resp.StatusCode === 200)
+      || (type4Resp.StatusCode === 200)) {
+
+      let response = [
+        { type: 1, data: type1Resp.Data },
+        { type: 2, data: type2Resp.Data },
+        { type: 3, data: type3Resp.Data },
+        { type: 4, data: type4Resp.Data }
+      ]
+      yield put(getFieldValidationsForALLTypeSuccess(response));
+    }
+  } catch (error) {
+    CommonConsole(error);
+    yield put(PageMasterApiErrorAction());
+  }
 }
 
 function* HPageSaga() {
@@ -133,6 +164,7 @@ function* HPageSaga() {
   yield takeLatest(GET_CONTROL_TYPES, ControlTypes_DropDown_GenFun)
   yield takeLatest(GET_FIELD_VALIDATIONS, FieldValidations_DropDown_GenFun)
   yield takeLatest(GET_PAGETYPE, PageType_DropDown_GenFunc)
+  yield takeLatest(GET_FIELD_VALIDATIONS_FOR_ALL_TYPE, FieldValidationsForAllTypeGenFun)
 }
 
 export default HPageSaga;

@@ -194,7 +194,7 @@ const ViewDetails_Modal = () => {
             const tableItemArray = []
             let inValideUnits = []
             tableArray.ReturnItems.forEach(index => {
-                debugger
+                
                 const approvedQty = index.ApprovedQuantity ? index.ApprovedQuantity : index.Quantity
                 const Comment = index.ApproveComment ? index.ApproveComment : null
 

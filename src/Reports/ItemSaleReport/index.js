@@ -12,7 +12,7 @@ import BootstrapTable from "react-bootstrap-table-next";
 import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
 import { BreadcrumbShowCountlabel, GetVenderSupplierCustomer, GetVenderSupplierCustomerSuccess, commonPageField, commonPageFieldSuccess, getBaseUnit_ForDropDown, getGroupList, getItemList, getSubGroupList, get_Group_By_GroupType_ForDropDown, get_Sub_Group_By_Group_ForDropDown, get_Sub_Group_By_Group_ForDropDown_Success } from "../../store/actions";
 import { GetRoutesList, GetRoutesListSuccess } from "../../store/Administrator/RoutesRedux/actions";
-import { getPartyTypelist } from "../../store/Administrator/PartyTypeRedux/action";
+import { getPartyTypelist, getPartyTypelistSuccess } from "../../store/Administrator/PartyTypeRedux/action";
 
 import { ItemSaleGoButton_API, ItemSaleGoButton_API_Success, Items_On_Group_And_Subgroup_API, SupplierOnPartyType_API, SupplierOnPartyType_API_Success } from "../../store/Report/ItemSaleReport/action";
 import ShowTableComponent from "./showTable";
@@ -148,6 +148,7 @@ const ItemSaleReport = (props) => {
         dispatch(BreadcrumbShowCountlabel(`Count:0 ₹ 0`))
         return () => {
             dispatch(commonPageFieldSuccess(null));
+            dispatch(getPartyTypelistSuccess([]));
             dispatch(ItemSaleGoButton_API_Success([]));
         }
     }, [])

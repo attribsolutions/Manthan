@@ -37,6 +37,28 @@ import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { C_DatePicker } from "../../../CustomValidateForm";
 import * as _cfunc from "../../../components/Common/CommonFunction"
 
+
+function initialState(history) {
+
+    let page_Id = '';
+    let listPath = ''
+    let sub_Mode = history.location.pathname;
+
+    if (sub_Mode === url.CREDIT_NOTE) {
+        page_Id = pageId.CREDIT_NOTE;
+        listPath = url.CREDIT_LIST
+    }
+    else if (sub_Mode === url.DEBIT_NOTE) {
+        page_Id = pageId.DEBIT_NOTE;
+        listPath = url.DEBIT_LIST
+    }
+
+    return { page_Id, listPath }
+};
+
+
+
+
 const Debit = (props) => {
 
     const history = useHistory()
@@ -53,9 +75,10 @@ const Debit = (props) => {
         ReceiptNO: "",
         ReceiptDate: ""
     }
-
     const [state, setState] = useState(() => initialFiledFunc(fileds))
-
+    const [page_id] = useState(() => initialState(history).page_Id)
+    const [listPath] = useState(() => initialState(history).listPath)
+    const [subPageMode] = useState(history.location.pathname)
     const [pageMode, setPageMode] = useState(mode.defaultsave);//changes
     const [modalCss, setModalCss] = useState(false);
     const [userPageAccessState, setUserAccState] = useState(123);
@@ -82,9 +105,11 @@ const Debit = (props) => {
         }));
 
     useEffect(() => {
-        const page_Id = pageId.DEBIT
         dispatch(commonPageFieldSuccess(null));
-        dispatch(commonPageField(page_Id))
+        dispatch(commonPageField(page_id))
+        return () => {
+            dispatch(commonPageFieldSuccess(null));
+        }
     }, []);
 
     const values = { ...state.values }
@@ -167,7 +192,7 @@ const Debit = (props) => {
                 })
                 if (promise) {
                     history.push({
-                        pathname: url.DEBIT_LIST,
+                        pathname: listPath,
                     })
                 }
             }

@@ -8,7 +8,7 @@ import { C_DatePicker, C_Select } from "../../CustomValidateForm";
 import * as _cfunc from "../../components/Common/CommonFunction";
 import { mode, } from "../../routes/index"
 import { MetaTags } from "react-meta-tags";
-import { GetVenderSupplierCustomer, GetVenderSupplierCustomerSuccess, getBaseUnit_ForDropDown, getpartyItemList, getpdfReportdata, getpdfReportdataSuccess } from "../../store/actions";
+import { GetVenderSupplierCustomer, GetVenderSupplierCustomerSuccess, getBaseUnit_ForDropDown, goButtonPartyItemAddPage, getpdfReportdata, getpdfReportdataSuccess } from "../../store/actions";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import * as report from '../ReportIndex'
 import { ItemRegister_API, PartyLedgerReport_API } from "../../helpers/backend_helper";
@@ -73,7 +73,7 @@ const ItemRegisterReport = (props) => {
     useEffect(() => {
         dispatch(getBaseUnit_ForDropDown());
         const jsonBody = JSON.stringify({ ..._cfunc.loginJsonBody() });
-        dispatch(getpartyItemList(jsonBody));
+        dispatch(goButtonPartyItemAddPage(jsonBody));
     }, [])
 
     useEffect(() => {
