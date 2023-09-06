@@ -91,6 +91,9 @@ export const PARTY_SUB_PARTY_lIST = 58
 export const PARTYITEM = 36
 export const PARTYITEM_LIST = 62
 
+export const CHANNEL_ITEM = 228
+export const CHANNEL_ITEM_LIST = 229
+
 export const SUBGROUP = 61
 export const SUBGROUP_LIST = 63
 
@@ -215,11 +218,22 @@ export const SALES_RETURN_LIST = 187
 export const PURCHASE_RETURN_MODE_3 = 211
 
 //**************************** Accounting ***********************************//
-export const CREDIT_LIST = 191
-export const CREDIT = 190
 
-export const DEBIT = 192
+// ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+
+export const CREDIT_NOTE = 190
+export const CREDIT_LIST = 191
+
+export const DEBIT_NOTE = 192
 export const DEBIT_LIST = 193
+
+export const GOODS_CREDIT_LIST = 229
+export const GOODS_CREDIT_NOTE = 228
+
+export const GOODS_DEBIT_LIST = 230
+export const GOODS_DEBIT_NOTE = 231
+// ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+
 
 export const RECEIPTS = 173
 export const RECEIPTS_LIST = 174

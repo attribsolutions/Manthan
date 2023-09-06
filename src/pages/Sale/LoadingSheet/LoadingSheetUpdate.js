@@ -21,7 +21,6 @@ import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import DynamicColumnHook, { selectAllCheck } from "../../../components/Common/TableCommonFunc";
 import { C_DatePicker } from "../../../CustomValidateForm";
 import * as _cfunc from "../../../components/Common/CommonFunction";
-import { makeBtnCss } from "../../../components/Common/ListActionsButtons";
 
 const LoadingSheetUpdate = (props) => {
 
@@ -213,9 +212,9 @@ const LoadingSheetUpdate = (props) => {
         {
             text: "Amount",
             dataField: "AmountPaid",
-            align:"right"
+            align: "right"
         },
-             
+
     ];
 
     if (!(userPageAccessState === '')) {
@@ -270,7 +269,10 @@ const LoadingSheetUpdate = (props) => {
                                                 keyField={"id"}
                                                 bordered={true}
                                                 striped={false}
-                                                selectRow={selectAllCheck(rowSelected(), nonSelectedRow())}
+                                                selectRow={selectAllCheck({
+                                                    rowSelected: rowSelected(),
+                                                    nonSelectedRow: nonSelectedRow(),
+                                                })}
                                                 noDataIndication={<div className="text-danger text-center ">Record Not available</div>}
                                                 classes={"table align-middle table-nowrap table-hover"}
                                                 headerWrapperClasses={"thead-light"}

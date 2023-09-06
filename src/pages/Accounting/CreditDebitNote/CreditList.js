@@ -87,16 +87,29 @@ const CreditList = () => {
 
         if (subPageMode === url.CREDIT_LIST) {
             page_Id = pageId.CREDIT_LIST;
-            masterPath = url.CREDIT;
-            newBtnPath = url.CREDIT;
+            masterPath = url.CREDIT_NOTE;
+            newBtnPath = url.CREDIT_NOTE;
             buttonMsgLable = "Credit"
         }
         else if (subPageMode === url.DEBIT_LIST) {
             page_Id = pageId.DEBIT_LIST;
-            masterPath = url.DEBIT;
-            newBtnPath = url.DEBIT;
+            masterPath = url.DEBIT_NOTE;
+            newBtnPath = url.DEBIT_NOTE;
             buttonMsgLable = "Debit"
         }
+        else if (subPageMode === url.GOODS_CREDIT_LIST) {
+            page_Id = pageId.GOODS_CREDIT_LIST;
+            masterPath = url.GOODS_CREDIT_NOTE;
+            newBtnPath = url.GOODS_CREDIT_NOTE;
+            buttonMsgLable = "Credit"
+        }
+        else if (subPageMode === url.GOODS_DEBIT_LIST) {
+            page_Id = pageId.GOODS_DEBIT_LIST;
+            masterPath = url.GOODS_DEBIT_NOTE;
+            newBtnPath = url.GOODS_DEBIT_NOTE;
+            buttonMsgLable = "Debit"
+        };
+
         setOtherState({ masterPath, newBtnPath, buttonMsgLable, page_Id })
         setpageMode(page_Mode)
         dispatch(commonPageFieldListSuccess(null))
@@ -109,6 +122,7 @@ const CreditList = () => {
             dispatch(getSupplierSuccess([]));
         }
     }, []);
+
 
     //   Note Type Api for Type identify
     useEffect(() => {
@@ -148,28 +162,28 @@ const CreditList = () => {
         dispatch(Retailer_List(jsonBody));
     }, []);
 
-    const NoteType = []
-    CreditDebitType.forEach(index => {
-        if (otherState.buttonMsgLable === "Credit") {
-            if ((index.Name === "CreditNote") || (index.Name === "Goods CreditNote")) {
-                const arr = {
-                    value: index.id,
-                    label: index.Name,
-                }
-                NoteType.push(arr)
-            }
-        }
-        else {
-            if ((index.Name === "DebitNote") || (index.Name === "Goods DebitNote")) {
-                const arr = {
-                    value: index.id,
-                    label: index.Name,
-                }
-                NoteType.push(arr)
-            }
-        }
-    })
-    NoteType.unshift({ value: "", label: " All" });
+    // const NoteType = []
+    // CreditDebitType.forEach(index => {
+    //     if (otherState.buttonMsgLable === "Credit") {
+    //         if ((index.Name === "CreditNote") || (index.Name === "Goods CreditNote")) {
+    //             const arr = {
+    //                 value: index.id,
+    //                 label: index.Name,
+    //             }
+    //             NoteType.push(arr)
+    //         }
+    //     }
+    //     else {
+    //         if ((index.Name === "DebitNote") || (index.Name === "Goods DebitNote")) {
+    //             const arr = {
+    //                 value: index.id,
+    //                 label: index.Name,
+    //             }
+    //             NoteType.push(arr)
+    //         }
+    //     }
+    // })
+    // NoteType.unshift({ value: "", label: " All" });
 
     useEffect(() => {
         if (CreditDebitType.length > 0) {
@@ -177,191 +191,206 @@ const CreditList = () => {
         }
     }, [CreditDebitType]);
 
-    function goButtonHandler() {
+    function noteType_BySubPageMode() {
+        if (subPageMode === url.GOODS_CREDIT_LIST) {
+            return CreditDebitType.find((index) => index.Name === "Goods CreditNote")?.id
+        }
+        else if (subPageMode === url.GOODS_DEBIT_LIST) {
+            return CreditDebitType.find((index) => index.Name === "Goods DebitNote")?.id;
+        }
+        else if (subPageMode === url.CREDIT_LIST) {
+            return CreditDebitType.find((index) => index.Name === "CreditNote")?.id
+        }
+        else if (subPageMode === url.DEBIT_LIST) {
+            return CreditDebitType.find((index) => index.Name === "DebitNote")?.id;
+        }
+    
+   }
+function goButtonHandler() {
 
-        const jsonBody = JSON.stringify({
-            FromDate: values.FromDate,
-            ToDate: values.ToDate,
-            CustomerID: values.Customer.value,
-            PartyID: _cfunc.loginSelectedPartyID(),
-            NoteType: values.NoteType.value,
-            Note: otherState.buttonMsgLable
-        });
-        dispatch(GetCreditList(jsonBody, hasPagePath));
-    }
+    const jsonBody = JSON.stringify({
+        FromDate: values.FromDate,
+        ToDate: values.ToDate,
+        CustomerID: values.Customer.value,
+        PartyID: _cfunc.loginSelectedPartyID(),
+        NoteType: noteType_BySubPageMode(),
+        Note: otherState.buttonMsgLable
+    });
+    dispatch(GetCreditList(jsonBody, hasPagePath));
+}
 
-    function downBtnFunc(config) {
-        config["ReportType"] = report.Credit;
-        dispatch(getpdfReportdata(Edit_Credit_List_API, config))
+function downBtnFunc(config) {
+    config["ReportType"] = report.Credit;
+    dispatch(getpdfReportdata(Edit_Credit_List_API, config))
 
-    }
+}
 
-    function fromdateOnchange(e, date) {
-        setState((i) => {
-            const a = { ...i }
-            a.values.FromDate = date;
-            a.hasValid.FromDate.valid = true
-            return a
-        })
-    }
+function fromdateOnchange(e, date) {
+    setState((i) => {
+        const a = { ...i }
+        a.values.FromDate = date;
+        a.hasValid.FromDate.valid = true
+        return a
+    })
+}
 
-    function todateOnchange(e, date) {
-        setState((i) => {
-            const a = { ...i }
-            a.values.ToDate = date;
-            a.hasValid.ToDate.valid = true
-            return a
-        })
-    }
+function todateOnchange(e, date) {
+    setState((i) => {
+        const a = { ...i }
+        a.values.ToDate = date;
+        a.hasValid.ToDate.valid = true
+        return a
+    })
+}
 
-    function CustomerOnChange(e) {
-        setState((i) => {
-            const a = { ...i }
-            a.values.Customer = e;
-            a.hasValid.Customer.valid = true
-            return a
-        })
-    }
+function CustomerOnChange(e) {
+    setState((i) => {
+        const a = { ...i }
+        a.values.Customer = e;
+        a.hasValid.Customer.valid = true
+        return a
+    })
+}
 
-    function NoteTypeOnChange(e) {
-        setState((i) => {
-            const a = { ...i }
-            a.values.NoteType = e;
-            a.hasValid.NoteType.valid = true
-            return a
-        })
-    }
+function NoteTypeOnChange(e) {
+    setState((i) => {
+        const a = { ...i }
+        a.values.NoteType = e;
+        a.hasValid.NoteType.valid = true
+        return a
+    })
+}
 
-    function partySelectButtonHandler() {
-        const jsonBody = JSON.stringify({
-            Type: 4,
-            PartyID: _cfunc.loginSelectedPartyID(),
-            CompanyID: _cfunc.loginCompanyID()
-        });
-        dispatch(Retailer_List(jsonBody));
-    }
+function partySelectButtonHandler() {
+    const jsonBody = JSON.stringify({
+        Type: 4,
+        PartyID: _cfunc.loginSelectedPartyID(),
+        CompanyID: _cfunc.loginCompanyID()
+    });
+    dispatch(Retailer_List(jsonBody));
+}
 
-    function partySelectOnChangeHandler() {
-        dispatch(GetCreditListSuccess([]));
-        dispatch(Retailer_List_Success([]));
-        setState((i) => {
-            const a = { ...i }
-            a.values.Customer = { value: "", label: "All" }
-            a.values.NoteType = { value: "", label: "All" }
-            a.hasValid.Customer.valid = true;
-            a.hasValid.NoteType.valid = true;
-            return a
-        })
-    }
-    const HeaderContent = () => {
-        return (
-            <div className="px-2 c_card_filter text-black" >
-                <div className="row" >
-                    <Col sm={2} className="">
-                        <FormGroup className=" mb-2 row mt-3 " >
-                            <Label className="col-sm-4 p-2"
-                                style={{ width: "66px" }}>FromDate</Label>
-                            <Col sm={7}>
-                                <C_DatePicker
-                                    name='FromDate'
-                                    value={values.FromDate}
-                                    onChange={fromdateOnchange}
-                                />
-                            </Col>
-                        </FormGroup>
-                    </Col>
-
-                    <Col sm={2} className="">
-                        <FormGroup className=" row mt-3 " >
-                            <Label className="col-sm-4 p-2"
-                                style={{ width: "60px" }}>ToDate</Label>
-                            <Col sm={7}>
-                                <C_DatePicker
-                                    name="ToDate"
-                                    value={values.ToDate}
-                                    onChange={todateOnchange}
-                                />
-                            </Col>
-                        </FormGroup>
-                    </Col>
-
-                    <Col sm={3}>
-                        <FormGroup className=" row mt-3 " >
-                            <Label className="col-sm-2 p-2"
-                                style={{ width: "85px" }}>Customer</Label>
-                            <Col sm={7}>
-                                <Select
-                                    name="Customer"
-                                    classNamePrefix="select2-Customer"
-                                    value={values.Customer}
-                                    options={customerOptions}
-                                    onChange={CustomerOnChange}
-                                    styles={{
-                                        menu: provided => ({ ...provided, zIndex: 2 })
-                                    }}
-                                />
-                            </Col>
-                        </FormGroup>
-                    </Col >
-
-                    <Col sm={3}>
-                        <FormGroup className=" row mt-3 " >
-                            <Label className="col-md-3 p-2"
-                                style={{ width: "90px" }}>NoteType</Label>
-                            <Col sm={8}>
-                                <Select
-                                    name="Customer"
-                                    classNamePrefix="select2-Customer"
-                                    value={values.NoteType}
-                                    options={NoteType}
-                                    onChange={NoteTypeOnChange}
-                                    styles={{
-                                        menu: provided => ({ ...provided, zIndex: 2 })
-                                    }}
-                                />
-                            </Col>
-                        </FormGroup>
-                    </Col >
-
-                    <Col sm={1} className="mt-3 " style={{ paddingLeft: "100px" }}>
-                        <Go_Button onClick={goButtonHandler} loading={listBtnLoading} />
-                    </Col>
-                </div>
-            </div>
-        )
-    }
-
+function partySelectOnChangeHandler() {
+    dispatch(GetCreditListSuccess([]));
+    dispatch(Retailer_List_Success([]));
+    setState((i) => {
+        const a = { ...i }
+        a.values.Customer = { value: "", label: "All" }
+        a.values.NoteType = { value: "", label: "All" }
+        a.hasValid.Customer.valid = true;
+        a.hasValid.NoteType.valid = true;
+        return a
+    })
+}
+const HeaderContent = () => {
     return (
-        <React.Fragment>
-            <PageLoadingSpinner isLoading={(listBtnLoading || !pageField)} />
-            <div className="page-content">
-                <PartyDropdown_Common
-                    goButtonHandler={partySelectButtonHandler}
-                    changeButtonHandler={partySelectOnChangeHandler} />
-                {
-                    (pageField) ?
-                        <CommonPurchaseList
-                            action={action}
-                            reducers={reducers}
-                            showBreadcrumb={false}
-                            masterPath={otherState.masterPath}
-                            newBtnPath={otherState.newBtnPath}
-                            makeBtnShow={otherState.makeBtnShow}
-                            pageMode={pageMode}
-                            HeaderContent={HeaderContent}
-                            goButnFunc={goButtonHandler}
-                            downBtnFunc={downBtnFunc}
-                            ButtonMsgLable={otherState.buttonMsgLable}
-                            deleteName={"FullNoteNumber"}
-                            MasterModal={otherState.MasterModal}
-                            totalAmountShow={true}
+        <div className="px-2 c_card_filter text-black" >
+            <div className="row" >
+                <Col sm={2} className="">
+                    <FormGroup className=" mb-2 row mt-3 " >
+                        <Label className="col-sm-4 p-2"
+                            style={{ width: "66px" }}>FromDate</Label>
+                        <Col sm={7}>
+                            <C_DatePicker
+                                name='FromDate'
+                                value={values.FromDate}
+                                onChange={fromdateOnchange}
+                            />
+                        </Col>
+                    </FormGroup>
+                </Col>
 
-                        />
-                        : null
-                }
+                <Col sm={2} className="">
+                    <FormGroup className=" row mt-3 " >
+                        <Label className="col-sm-4 p-2"
+                            style={{ width: "60px" }}>ToDate</Label>
+                        <Col sm={7}>
+                            <C_DatePicker
+                                name="ToDate"
+                                value={values.ToDate}
+                                onChange={todateOnchange}
+                            />
+                        </Col>
+                    </FormGroup>
+                </Col>
+
+                <Col sm={3}>
+                    <FormGroup className=" row mt-3 " >
+                        <Label className="col-sm-2 p-2"
+                            style={{ width: "85px" }}>Customer</Label>
+                        <Col sm={7}>
+                            <Select
+                                name="Customer"
+                                classNamePrefix="select2-Customer"
+                                value={values.Customer}
+                                options={customerOptions}
+                                onChange={CustomerOnChange}
+                                styles={{
+                                    menu: provided => ({ ...provided, zIndex: 2 })
+                                }}
+                            />
+                        </Col>
+                    </FormGroup>
+                </Col >
+
+                {/* <Col sm={3}>
+                    <FormGroup className=" row mt-3 " >
+                        <Label className="col-md-3 p-2"
+                            style={{ width: "90px" }}>NoteType</Label>
+                        <Col sm={8}>
+                            <Select
+                                name="Customer"
+                                classNamePrefix="select2-Customer"
+                                value={values.NoteType}
+                                options={NoteType}
+                                onChange={NoteTypeOnChange}
+                                styles={{
+                                    menu: provided => ({ ...provided, zIndex: 2 })
+                                }}
+                            />
+                        </Col>
+                    </FormGroup>
+                </Col > */}
+
+                <Col sm={1} className="mt-3 " style={{ paddingLeft: "100px" }}>
+                    <Go_Button onClick={goButtonHandler} loading={listBtnLoading} />
+                </Col>
             </div>
-        </React.Fragment>
+        </div>
     )
+}
+
+return (
+    <React.Fragment>
+        <PageLoadingSpinner isLoading={(listBtnLoading || !pageField)} />
+        <div className="page-content">
+            <PartyDropdown_Common
+                goButtonHandler={partySelectButtonHandler}
+                changeButtonHandler={partySelectOnChangeHandler} />
+            {
+                (pageField) ?
+                    <CommonPurchaseList
+                        action={action}
+                        reducers={reducers}
+                        showBreadcrumb={false}
+                        masterPath={otherState.masterPath}
+                        newBtnPath={otherState.newBtnPath}
+                        makeBtnShow={otherState.makeBtnShow}
+                        pageMode={pageMode}
+                        HeaderContent={HeaderContent}
+                        goButnFunc={goButtonHandler}
+                        downBtnFunc={downBtnFunc}
+                        ButtonMsgLable={otherState.buttonMsgLable}
+                        deleteName={"FullNoteNumber"}
+                        MasterModal={otherState.MasterModal}
+                        totalAmountShow={true}
+
+                    />
+                    : null
+            }
+        </div>
+    </React.Fragment>
+)
 }
 
 export default CreditList;

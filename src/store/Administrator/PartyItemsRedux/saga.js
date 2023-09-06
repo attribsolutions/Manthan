@@ -1,15 +1,24 @@
-import { Filter } from "interweave";
-import { call, delay, put, takeLatest } from "redux-saga/effects";
-import { CommonConsole, loginJsonBody } from "../../../components/Common/CommonFunction";
-import { Save_Party_Items, get_Party_Item_List, GetPartyList_API, edit_PartyItem_List_Api, } from "../../../helpers/backend_helper";
-import { SavePartyItemsSuccess, getPartyItemListSuccess, getPartyListSuccess, editPartyItemIDSuccess, PartyItemApiErrorAction, } from "./action";
-import { POST_PARTYITEMS, GET_PARTY_ITEM_LIST, GET_PARTY_LIST, EDIT_PARTY_ITEM_ID, } from "./actionType";
+import { call, put, takeLatest } from "redux-saga/effects";
+import { CommonConsole } from "../../../components/Common/CommonFunction";
+import { PartyItemGoBtnAdd_API, ChannelItemGoBtnAdd_API, PartyItem_List_API, ChannelItem_List_API, PartyItem_Save_API, ChannelItem_Save_API, PartyItem_Edit_API, ChannelItem_Edit_API, } from "../../../helpers/backend_helper";
+import { url } from "../../../routes";
+import { savePartyItemsActionSuccess, goButtonPartyItemAddPageSuccess, getPartyItemAssingListSuccess, editPartyItemIDSuccess, PartyItemApiErrorAction, } from "./action";
+import { SAVE_PARTY_ITEMS_ACTION, GO_BUTTON_PARTY_ITEM_ADD, GET_PARTY_ITEM_ASSING_LIST, EDIT_PARTY_ITEM_ID, } from "./actionType";
 
 
-function* Save_PartyItems_GneratorFunction({ config }) {            // Save API
+function* save_PartyItems_GenFunc({ config }) {
+  const { subPageMode } = config;
   try {
-    const response = yield call(Save_Party_Items, config);
-    yield put(SavePartyItemsSuccess(response));
+    let response = null
+ 
+    if (subPageMode === url.CHANNEL_ITEM) {
+      response = yield call(ChannelItem_Save_API, config);
+    }else{
+      response = yield call(PartyItem_Save_API, config);
+    }
+    if (response) {
+      yield put(savePartyItemsActionSuccess(response));
+    }
   } catch (error) {
     CommonConsole(error)
     yield put(PartyItemApiErrorAction())
@@ -17,10 +26,15 @@ function* Save_PartyItems_GneratorFunction({ config }) {            // Save API
 }
 
 // get Item list for Master Page
-function* getPartyItemGenFunc({ jsonBody }) {                       // getList API
+function* goButton_partyItem_Add_GenFunc(config) {
+  const { jsonBody, subPageMode } = config;
   try {
-   
-    const response = yield call(get_Party_Item_List, jsonBody);
+    let response = null
+    if (subPageMode === url.CHANNEL_ITEM_LIST) {
+      response = yield call(PartyItemGoBtnAdd_API, jsonBody);
+    } else {
+      response = yield call(ChannelItemGoBtnAdd_API, jsonBody);
+    }
     response.Data.map((item) => {
       item["selectCheck"] = false
       if (item.Party > 0) {
@@ -28,7 +42,9 @@ function* getPartyItemGenFunc({ jsonBody }) {                       // getList A
       }
       return item
     });
-    yield put(getPartyItemListSuccess(response.Data));
+    yield put(goButtonPartyItemAddPageSuccess(response.Data));
+
+
   } catch (error) {
     CommonConsole(error)
     yield put(PartyItemApiErrorAction())
@@ -36,11 +52,22 @@ function* getPartyItemGenFunc({ jsonBody }) {                       // getList A
 }
 
 
-function* getPartyListGenFunc() {
-  // const filter = loginJsonBody()                                         // getList API
+function* getPartyItemList_GenFunc({ config }) {
+  debugger
+  const { subPageMode } = config
   try {
-    const response = yield call(GetPartyList_API);
-    yield put(getPartyListSuccess(response.Data));
+    let response = null
+    if (subPageMode === url.PARTYITEM_LIST) {
+      response = yield call(PartyItem_List_API);
+    }
+    else if (subPageMode === url.CHANNEL_ITEM_LIST) {
+      response = yield call(ChannelItem_List_API);
+    }
+    if (response) {
+      yield put(getPartyItemAssingListSuccess(response.Data));
+    } else {
+      yield put(PartyItemApiErrorAction())
+    }
   } catch (error) {
     CommonConsole(error)
     yield put(PartyItemApiErrorAction())
@@ -48,23 +75,33 @@ function* getPartyListGenFunc() {
 }
 
 
-function* editPartyItems_ID_GenratorFunction({ body }) {     // edit API 
+function* editPartyItems_ID_GenFunc({ body }) {     // edit API 
+  debugger
+  const { config, jsonBody, subPageMode } = body;
 
-  const { config, jsonBody } = body;
   try {
-    const response = yield call(edit_PartyItem_List_Api, jsonBody);
-    response.pageMode = config.btnmode;
+    let response = null
+    if (subPageMode === url.CHANNEL_ITEM_LIST) {
+      response = yield call(ChannelItem_Edit_API, jsonBody);
+    } else {
+      response = yield call(PartyItem_Edit_API, jsonBody);
+    }
+    if (response) {
+      response.pageMode = config.btnmode;
 
-    const PartyItem = response.Data.map((item) => {
-      item["itemCheck"] = false
-      if (item.Party > 0) {
-        item.itemCheck = true;
-      }
-      return item
-    });
-    response.Data = { ...config, PartyItem };
+      const PartyItem = response.Data.map((item) => {
+        item["itemCheck"] = false
+        if (item.Party > 0) {
+          item.itemCheck = true;
+        }
+        return item
+      });
+      response.Data = { ...config, PartyItem };
 
-    yield put(editPartyItemIDSuccess(response));
+      yield put(editPartyItemIDSuccess(response));
+    }
+
+
   } catch (error) {
     CommonConsole(error)
     yield put(PartyItemApiErrorAction())
@@ -75,10 +112,10 @@ function* editPartyItems_ID_GenratorFunction({ body }) {     // edit API
 
 
 function* PartyItemsSaga() {
-  yield takeLatest(POST_PARTYITEMS, Save_PartyItems_GneratorFunction)
-  yield takeLatest(GET_PARTY_ITEM_LIST, getPartyItemGenFunc)
-  yield takeLatest(GET_PARTY_LIST, getPartyListGenFunc)
-  yield takeLatest(EDIT_PARTY_ITEM_ID, editPartyItems_ID_GenratorFunction)
+  yield takeLatest(SAVE_PARTY_ITEMS_ACTION, save_PartyItems_GenFunc)
+  yield takeLatest(GO_BUTTON_PARTY_ITEM_ADD, goButton_partyItem_Add_GenFunc)
+  yield takeLatest(GET_PARTY_ITEM_ASSING_LIST, getPartyItemList_GenFunc)
+  yield takeLatest(EDIT_PARTY_ITEM_ID, editPartyItems_ID_GenFunc)
 
 
 }

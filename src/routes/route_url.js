@@ -96,8 +96,12 @@ export const TERMS_AND_CONDITION_LIST = "/TermsAndCondtionsList"
 export const PARTY_SUB_PARTY = "/PartySubParty"
 export const PARTY_SUB_PARTY_lIST = "/PartySubPartyList"
 
-export const PARTYITEM = '/PartyItems'
-export const PARTYITEM_LIST = '/PartyItemsList'
+export const PARTYITEM = '/PartyItems';
+export const PARTYITEM_LIST = '/PartyItemsList';
+
+export const CHANNEL_ITEM = '/ChannelItem';
+export const CHANNEL_ITEM_LIST = '/ChannelItemList';
+
 
 export const SUBGROUP = "/SubGroupMaster"
 export const SUBGROUP_LIST = "/SubGroupList"
@@ -227,13 +231,28 @@ export const PAYMENT_ENTRY_LIST = "/PaymentEntryList"
 
 export const BANK_ASSIGN = "/BankAssign"
 
-export const CREDIT_LIST = "/Credit_List"
-export const CREDIT = "/Credit"
+
 
 export const INVOICE_CONFIGURATION = "/InvoiceConfiguration"
 
+
+
+
+
+export const CREDIT_NOTE = "/Credit"
+export const CREDIT_LIST = "/Credit_List"
+
+export const DEBIT_NOTE = "/Debit"
 export const DEBIT_LIST = "/Debit_List"
-export const DEBIT = "/Debit"
+
+export const GOODS_CREDIT_NOTE = "/GoodsCreditNote"
+export const GOODS_CREDIT_LIST = "/GoodsCreditNoteList"
+
+export const GOODS_DEBIT_NOTE = "/GoodsDebitNote"
+export const GOODS_DEBIT_LIST = "/GoodsDebitNoteList"
+
+
+
 
 export const SAP_LEDGER = "/SapLedger"
 

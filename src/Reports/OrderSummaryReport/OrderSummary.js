@@ -314,6 +314,11 @@ const OrderSummary = (props) => {
                                     style={{ width: "83px" }}>FromDate</Label>
                                 <Col sm="6">
                                     <C_DatePicker
+                                        options={{
+                                            altInput: true,
+                                            altFormat: "d-m-Y",
+                                            dateFormat: "Y-m-d",
+                                        }}
                                         name='FromDate'
                                         value={values.FromDate}
                                         onChange={fromdateOnchange}
@@ -328,6 +333,11 @@ const OrderSummary = (props) => {
                                     style={{ width: "65px" }}>ToDate</Label>
                                 <Col sm="6">
                                     <C_DatePicker
+                                        options={{
+                                            altInput: true,
+                                            altFormat: "d-m-Y",
+                                            dateFormat: "Y-m-d",
+                                        }}
                                         name="ToDate"
                                         value={values.ToDate}
                                         onChange={todateOnchange}

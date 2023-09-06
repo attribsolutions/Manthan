@@ -1,11 +1,12 @@
 import {
   EDIT_PARTY_ITEM_ID_SUCCESS,
-  GET_PARTY_ITEM_LIST,
-  GET_PARTY_ITEM_LIST_SUCCESS,
-  GET_PARTY_LIST_SUCCESS,
+  GO_BUTTON_PARTY_ITEM_ADD,
+  GO_BUTTON_PARTY_ITEM_ADD_SUCCESS,
+  GET_PARTY_ITEM_ASSING_LIST,
+  GET_PARTY_ITEM_ASSING_LIST_SUCCESS,
   PARTY_ITEM_API_ERROR_ACTION,
-  POST_PARTYITEMS,
-  POST_PARTYITEMS_SUCCESS,
+  SAVE_PARTY_ITEMS_ACTION,
+  SAVE_PARTY_ITEMS_ACTION_SUCCESS,
 } from "./actionType"
 const INIT_STATE = {
 
@@ -16,6 +17,7 @@ const INIT_STATE = {
   partyItem: [],
   partyList: [],
 
+  goBtnloading:false,
   partyItemListLoading: false,
   saveBtnloading: false
 }
@@ -24,13 +26,13 @@ const PartyItemsReducer = (state = INIT_STATE, action) => {
 
   switch (action.type) {
 
-    case POST_PARTYITEMS:
+    case SAVE_PARTY_ITEMS_ACTION:
       return {
         ...state,
         saveBtnloading: true
       }
 
-    case POST_PARTYITEMS_SUCCESS:
+    case SAVE_PARTY_ITEMS_ACTION_SUCCESS:
       return {
         ...state,
         postMsg: action.payload,
@@ -38,18 +40,25 @@ const PartyItemsReducer = (state = INIT_STATE, action) => {
 
       }
 
-    case GET_PARTY_LIST_SUCCESS:
+      case GET_PARTY_ITEM_ASSING_LIST:
       return {
         ...state,
+        goBtnloading: true,
+      }
+
+    case GET_PARTY_ITEM_ASSING_LIST_SUCCESS:
+      return {
+        ...state,
+        goBtnloading: false,
         partyList: action.payload,
       }
 
-    case GET_PARTY_ITEM_LIST:
+    case GO_BUTTON_PARTY_ITEM_ADD:
       return {
         ...state,
         partyItemListLoading: true,
       }
-    case GET_PARTY_ITEM_LIST_SUCCESS:
+    case GO_BUTTON_PARTY_ITEM_ADD_SUCCESS:
       return {
         ...state,
         partyItem: action.payload,
@@ -66,6 +75,7 @@ const PartyItemsReducer = (state = INIT_STATE, action) => {
       return {
         ...state,
         saveBtnloading: false,
+        goBtnloading:false,
         partyItemListLoading: false,
       }
 

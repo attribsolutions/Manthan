@@ -25,7 +25,7 @@ import { url, mode, pageId } from "../../../routes/index"
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { CInput, C_DatePicker, C_Select } from "../../../CustomValidateForm/index";
 import { decimalRegx, } from "../../../CustomValidateForm/RegexPattern";
-import { getPartyItemListSuccess, getpartyItemList } from "../../../store/Administrator/PartyItemsRedux/action";
+import { goButtonPartyItemAddPageSuccess, goButtonPartyItemAddPage } from "../../../store/Administrator/PartyItemsRedux/action";
 import { StockEntry_GO_button_api_For_Item } from "../../../helpers/backend_helper";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import "../../../pages/Sale/SalesReturn/salesReturn.scss";
@@ -73,7 +73,7 @@ const StockEntry = (props) => {
         const page_Id = pageId.STOCK_ENTRY
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
-        dispatch(getpartyItemList(JSON.stringify({ ..._cfunc.loginJsonBody(), PartyID: _cfunc.loginSelectedPartyID() })))
+        dispatch(goButtonPartyItemAddPage(JSON.stringify({ ..._cfunc.loginJsonBody(), PartyID: _cfunc.loginSelectedPartyID() })))
     }, []);
 
     const location = { ...history.location }
@@ -501,7 +501,7 @@ const StockEntry = (props) => {
     };
 
     function partyOnChngeButtonHandler() {
-        dispatch(getPartyItemListSuccess([]))
+        dispatch(goButtonPartyItemAddPageSuccess([]))
         setTableArr([])
         setState((i) => {
             const a = { ...i }
@@ -512,7 +512,7 @@ const StockEntry = (props) => {
     }
 
     function goButtonHandler() {
-        dispatch(getpartyItemList(JSON.stringify({ ..._cfunc.loginJsonBody(), PartyID: _cfunc.loginSelectedPartyID() })))
+        dispatch(goButtonPartyItemAddPage(JSON.stringify({ ..._cfunc.loginJsonBody(), PartyID: _cfunc.loginSelectedPartyID() })))
     }
 
     if (!(userPageAccessState === '')) {
@@ -575,8 +575,10 @@ const StockEntry = (props) => {
                                         </Col>
                                     </FormGroup>
                                 </Col >
+
                             </Row>
                         </div>
+                        <div style={{ color: "red", fontSize: "18px" }} className="sliding-text" >  Warning: If new stock is added then previous stock will be zero.  </div>
 
                         <ToolkitProvider
                             keyField={"id"}

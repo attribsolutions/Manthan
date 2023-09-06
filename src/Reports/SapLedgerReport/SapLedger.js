@@ -332,7 +332,6 @@ const SapLedger = (props) => {
                                         bordered={true}
                                         striped={false}
                                         rowStyle={rowStyle}
-                                        // selectRow={selectAllCheck(rowSelected())}
                                         noDataIndication={<div className="text-danger text-center ">Record Not available</div>}
                                         classes={"table align-middle table-nowrap table-hover"}
                                         headerWrapperClasses={"thead-light"}

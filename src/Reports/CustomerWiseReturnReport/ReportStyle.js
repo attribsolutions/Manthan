@@ -33,18 +33,146 @@ export const reportHeder1 = (doc, data) => {
     doc.setFont(undefined, 'bold')
     doc.setDrawColor(0, 0, 0);
     doc.line(570, 63, 30, 63) //horizontal line 1 billby upper
-    doc.line(570, 16, 30, 16);//horizontal line 2
-    doc.line(570, 80, 30, 80);//horizontal line 3
     doc.line(408, 63, 408, 16);//vertical line header section billby 
     doc.line(570, 32, 408, 32);//horizontal line 3
     doc.line(570, 47, 408, 47);//horizontal line 3
 
 
 
+    var BilledByStyle = {
+        margin: {
+            top: 45, left: 30, right: 35,
+        },
+        didDrawCell: (data1) => {
+            const rowIdx = data1.row.index;
+            const colIdx = data1.column.index;
+            if (rowIdx === 0 && colIdx === 0) {
+                let x = data1.cursor.x + 2
+                let y = data1.cursor.y + 8
+                doc.setFontSize(8)
+                doc.setFont(undefined, 'bold')
+                doc.text('Customer: ', x, y)
+            };
+            if (rowIdx === 1 && colIdx === 0) {
+                let x = data1.cursor.x + 2
+                let y = data1.cursor.y + 8
+                doc.setFontSize(8)
+                doc.setFont(undefined, 'bold')
+                doc.text('Address: ', x, y)
+            };
+
+            if (rowIdx === 2 && colIdx === 0) {
+                let x = data1.cursor.x + 2
+                let y = data1.cursor.y + 8
+                doc.setFontSize(8)
+                doc.setFont(undefined, 'bold')
+                doc.text('Mobile No: ', x, y)
+            };
+
+        },
+
+        showHead: 'always',
+        theme: 'plain',
+        styles: {
+            overflow: 'linebreak',
+            fontSize: 8,
+            height: 0,
+        },
+        bodyStyles: {
+            columnWidth: 'wrap',
+            textColor: [30, 30, 30],
+            cellPadding: 2,
+            fontSize: 8,
+            fontStyle: 'normal',
+            lineColor: [0, 0, 0]
+        },
+        columnStyles: {
+            0: {
+                valign: "top",
+                columnWidth: 260,
+                halign: 'lfet',
+            }
+        },
+        tableLineColor: "black",
+
+        startY: 63
+    };
+
+    var BilledToStyle = {
+
+        didDrawCell: (data1) => {
+            const rowIdx = data1.row.index;
+            const colIdx = data1.column.index;
+            if (rowIdx === 0 && colIdx === 0) {
+                let x = data1.cursor.x + 2
+                let y = data1.cursor.y + 9
+                doc.setFontSize(8)
+                doc.setFont(undefined, 'bold')
+                doc.text('GSTIN No: ', x, y)
+            };
+            if (rowIdx === 1 && colIdx === 0) {
+                let x = data1.cursor.x + 2
+                let y = data1.cursor.y + 9
+                doc.setFontSize(8)
+                doc.setFont(undefined, 'bold')
+                doc.text('FSSAI No: ', x, y)
+            };
+
+
+
+        },
+        margin: {
+            top: 45, left: 292, right: 35,
+        },
+        showHead: 'always',
+        theme: 'plain',
+        styles: {
+            overflow: 'linebreak',
+            fontSize: 8,
+            height: 0,
+        },
+        bodyStyles: {
+            columnWidth: 'wrap',
+            textColor: [30, 30, 30],
+            cellPadding: data.PrintType ? 1 : 2,
+            fontSize: 8,
+            fontStyle: 'normal',
+            lineColor: [0, 0, 0]
+        },
+        columnStyles: {
+            0: {
+                valign: "top",
+                columnWidth: 270,
+                halign: 'lfet',
+            },
+        },
+        tableLineColor: "black",
+        startY: 63,
+    };
+
+
+    const priLength = () => {
+        let final_y = doc.previousAutoTable.finalY
+        if (final_y > initial_y) {
+            initial_y = final_y
+        }
+
+    }
+
+    doc.autoTable(table.BilledBy, table.BilledByRow(data), BilledByStyle);
+    priLength()
+
+    doc.autoTable(table.BilledTo, table.BilledToRow(data), BilledToStyle);
+    priLength()
+
+    doc.line(290, initial_y, 290, 63);//Vertical line 
+
+
 }
 
 export const reportHeder3 = (doc, data) => {
-
+    doc.line(570, 32, 408, 32);// horizontal line Repeat
+    doc.line(570, 47, 408, 47);// horizontal line Repeat
     doc.setFont('Tahoma')
     doc.setFontSize(10)
     doc.setFont(undefined, 'bold')
@@ -166,7 +294,7 @@ export const tableBody = (doc, data) => {
             },
         },
         tableLineColor: "black",
-        startY: 80,
+        startY: initial_y,
     };
 
     doc.autoTable(table.columns, table.Rows(data), options,);
