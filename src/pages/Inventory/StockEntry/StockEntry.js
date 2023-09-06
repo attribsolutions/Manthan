@@ -575,8 +575,10 @@ const StockEntry = (props) => {
                                         </Col>
                                     </FormGroup>
                                 </Col >
+
                             </Row>
                         </div>
+                        <span style={{ color: "red", fontSize: "18px" }}  > Warning : If New Stock is Added Privious Stock Will be 0  </span>
 
                         <ToolkitProvider
                             keyField={"id"}
