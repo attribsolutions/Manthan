@@ -329,13 +329,13 @@ export const PartySubParty_Update_API = ({ jsonBody, updateId }) => put(`${url.P
 export const PartySubParty_Dropdown_Get_API = (id) => get(`${url.PARTY_SUB_PARTY}/${id}`)// PartySubParty dropdown Api
 
 
-export const ChannelItemGoBtnAdd_List = (jsonBody) => post(url.PARTY_ITEM_FILTER, jsonBody) // get api
-export const ChannelItem_Save_API = ({ jsonBody }) => post(url.PARTYITEM_FOR_MASTER, jsonBody)// post api
+export const ChannelItemGoBtnAdd_API = (jsonBody) => post(url.CHANNEL_ITEM_ADD_GO_BTN, jsonBody) // get api
+export const ChannelItem_Save_API = ({ jsonBody }) => post(url.CHANNEL_ITEM_SAVE_URL, jsonBody)// post api
 export const ChannelItem_List_API = () => get(url.PARTYITEM_FOR_LIST)// get api
 export const ChannelItem_Edit_API = (jsonBody) => post(url.PARTY_ITEM_FILTER, jsonBody) // get api
 
 
-export const PartyItemGoBtnAdd_List = (jsonBody) => post(url.PARTY_ITEM_FILTER, jsonBody) // get api
+export const PartyItemGoBtnAdd_API = (jsonBody) => post(url.PARTY_ITEM_FILTER, jsonBody) // get api
 export const PartyItem_Save_API = ({ jsonBody }) => post(url.PARTYITEM_FOR_MASTER, jsonBody)// post api
 export const PartyItem_List_API = () => get(url.PARTYITEM_FOR_LIST)// get api
 export const PartyItem_Edit_API = (jsonBody) => post(url.PARTY_ITEM_FILTER, jsonBody) // get api
