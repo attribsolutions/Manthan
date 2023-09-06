@@ -578,7 +578,7 @@ const StockEntry = (props) => {
 
                             </Row>
                         </div>
-                        <span style={{ color: "red", fontSize: "18px" }}  > Warning : If New Stock is Added Privious Stock Will be 0  </span>
+                        <span style={{ color: "red", fontSize: "18px" }}  > If new stock is added then previous stock will be zero.  </span>
 
                         <ToolkitProvider
                             keyField={"id"}
