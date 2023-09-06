@@ -510,7 +510,6 @@ export const reportFooter = (doc, data) => {
 export const tableBody = (doc, data) => {
 
     var options = {
-
         didParseCell: (data1) => {
 
             if (data1.row.cells[9].raw === "isaddition") {
@@ -594,9 +593,6 @@ export const tableBody = (doc, data) => {
                     doc.line(startX, startY, endX, endY);
                 }
             }
-
-
-
 
 
         },

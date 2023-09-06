@@ -16,7 +16,7 @@ function* InvoiceDataExport_Gen({ config }) {
     try {
         const response = yield call(InvoiceDataExport_GoBtn_API, config);
 
-        response.Data["goBtnMode"] = config.goBtnMode;
+        response["goBtnMode"] = config.goBtnMode;
 
         response.Data.map((i) => {
             // Convert quantity values to floats and format to remove trailing zeros

@@ -292,9 +292,10 @@ const Receipts = (props) => {
         return index.IsSelfDepositoryBank === true
     })
 
-    const BankListOptions = bankList.filter((index) => {
-        return index.IsSelfDepositoryBank === false
-    })
+    // const BankListOptions = bankList.filter((index) => {
+    //     debugger
+    //     return index.IsSelfDepositoryBank === false
+    // })
 
     const pagesListColumns = [
         {
@@ -738,7 +739,7 @@ const Receipts = (props) => {
                                                     }}
                                                     className="react-dropdown"
                                                     classNamePrefix="dropdown"
-                                                    options={BankListOptions}
+                                                    options={bankList}
                                                     onChange={(hasSelect, evn) => {
                                                         onChangeSelect({ hasSelect, evn, state, setState });
                                                     }}
@@ -824,7 +825,7 @@ const Receipts = (props) => {
                                                         altInput: true,
                                                         altFormat: "d-m-Y",
                                                         dateFormat: "Y-m-d",
-                                                      }}
+                                                    }}
                                                 />
                                             </Col>
                                         </FormGroup>
