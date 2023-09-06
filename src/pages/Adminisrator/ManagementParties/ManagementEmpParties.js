@@ -280,9 +280,10 @@ const ManagementEmpParties = (props) => {
                                         <BootstrapTable
                                             keyField={"id"}
                                             bordered={true}
-                                            striped={false}
+                                            striped={true}
                                             selectRow={selectAllCheck({
-                                                rowSelected: rowSelected()
+                                                rowSelected: rowSelected(),
+                                                bgColor:''
                                             })}
                                             noDataIndication={<div className="text-danger text-center ">Party Not available</div>}
                                             classes={"table align-middle table-nowrap table-hover"}
