@@ -32,7 +32,7 @@ import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { InvoiceNumberSuccess, SalesReturnAddBtn_Action, SalesReturnAddBtn_Action_Succcess, InvoiceNumber } from "../../../store/Sales/SalesReturnRedux/action";
 import { CInput, C_DatePicker, C_Select } from "../../../CustomValidateForm/index";
 import { decimalRegx, } from "../../../CustomValidateForm/RegexPattern";
-import { getpartyItemList } from "../../../store/Administrator/PartyItemsRedux/action";
+import { goButtonPartyItemAddPage } from "../../../store/Administrator/PartyItemsRedux/action";
 import { return_discountCalculate_Func } from "../../Sale/SalesReturn/SalesCalculation";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
@@ -101,7 +101,7 @@ const GoodsCreditNote = (props) => {
         dispatch(InvoiceNumberSuccess([]));
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_id));
-        dispatch(getpartyItemList(JSON.stringify(_cfunc.loginJsonBody())));
+        dispatch(goButtonPartyItemAddPage(JSON.stringify(_cfunc.loginJsonBody())));
 
         const jsonBody = JSON.stringify({
             Type: 1,
@@ -705,9 +705,9 @@ const GoodsCreditNote = (props) => {
             });
 
             const noteType_BySubPageMode = () => {
-                return (subPageMode === url.GOODS_CREDIT_NOTE)
-                    ? CreditDebitType.find((index) => index.Name === "Goods CreditNote").id
-                    : CreditDebitType.find((index) => index.Name === "Goods DeditNote").id;
+                return (subPageMode === url.GOODS_CREDIT_NOTE) ?
+                    CreditDebitType.find((index) => index.Name === "Goods CreditNote")?.id
+                    : CreditDebitType.find((index) => index.Name === "Goods DebitNote")?.id;
             };
 
             const jsonBody = JSON.stringify({

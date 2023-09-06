@@ -8,7 +8,7 @@ import {
     Button,
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
-import { BreadcrumbShowCountlabel, Breadcrumb_inputName, Retailer_List_Success, commonPageFieldSuccess, getPartyItemListSuccess } from "../../../store/actions";
+import { BreadcrumbShowCountlabel, Breadcrumb_inputName, Retailer_List_Success, commonPageFieldSuccess, goButtonPartyItemAddPageSuccess } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { commonPageField } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
@@ -29,7 +29,7 @@ import { saveSalesReturnMaster, InvoiceNumber, InvoiceNumberSuccess, saveSalesRe
 import "./salesReturn.scss";
 import { CInput, C_DatePicker, C_Select } from "../../../CustomValidateForm/index";
 import { decimalRegx, } from "../../../CustomValidateForm/RegexPattern";
-import { getpartyItemList } from "../../../store/Administrator/PartyItemsRedux/action";
+import { goButtonPartyItemAddPage } from "../../../store/Administrator/PartyItemsRedux/action";
 import { return_discountCalculate_Func } from "./SalesCalculation";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
@@ -103,7 +103,7 @@ const SalesReturn = (props) => {
         dispatch(InvoiceNumberSuccess([]))
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(pageId.SALES_RETURN))
-        dispatch(getpartyItemList(JSON.stringify(_cfunc.loginJsonBody())))
+        dispatch(goButtonPartyItemAddPage(JSON.stringify(_cfunc.loginJsonBody())))
 
         const jsonBody = JSON.stringify({
             Type: 1,
@@ -891,7 +891,7 @@ const SalesReturn = (props) => {
 
     const partyOnChngeButtonHandler = (e) => {
         dispatch(InvoiceNumberSuccess([]));
-        dispatch(getPartyItemListSuccess([]));
+        dispatch(goButtonPartyItemAddPageSuccess([]));
         dispatch(Retailer_List_Success([]));
         setState((i) => {
 

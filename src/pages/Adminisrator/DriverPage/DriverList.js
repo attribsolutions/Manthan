@@ -50,7 +50,7 @@ const DriverList = () => {
     const page_Id = pageId.DRIVER_lIST
     dispatch(commonPageFieldListSuccess(null))
     dispatch(commonPageFieldList(page_Id))
-    if (!(_cfunc.loginPartyID() === 0)) {
+    if (!(_cfunc.loginSelectedPartyID() === 0)) {
       goButtonHandler()
     }
     return () => {
@@ -60,7 +60,7 @@ const DriverList = () => {
 
   function goButtonHandler() {
     try {
-      if (_cfunc.loginPartyID() === 0) {
+      if ((_cfunc.loginSelectedPartyID() === 0)) {
         customAlert({ Type: 3, Message: "Please Select Party" });
         return;
       };

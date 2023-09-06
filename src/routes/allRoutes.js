@@ -281,6 +281,9 @@ const userRoutes = [
   { path: path.PARTYITEM, component: PartyItems },
   { path: path.PARTYITEM_LIST, component: PartyItemsList },
 
+  { path: path.CHANNEL_ITEM, component: PartyItems },
+  { path: path.CHANNEL_ITEM_LIST, component: PartyItemsList },
+
   { path: path.SUBGROUP, component: SubGroupMaster },
   { path: path.SUBGROUP_LIST, component: SubGroupList },
 

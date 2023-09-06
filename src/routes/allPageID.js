@@ -91,6 +91,9 @@ export const PARTY_SUB_PARTY_lIST = 58
 export const PARTYITEM = 36
 export const PARTYITEM_LIST = 62
 
+export const CHANNEL_ITEM = 228
+export const CHANNEL_ITEM_LIST = 229
+
 export const SUBGROUP = 61
 export const SUBGROUP_LIST = 63
 

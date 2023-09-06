@@ -47,8 +47,8 @@ const ManagementEmpParties = (props) => {
     const history = useHistory()
     const dispatch = useDispatch();
 
-    const [modalCss, setModalCss] = useState(false);
-    const [pageMode, setPageMode] = useState(mode.defaultsave);
+    const [modalCss] = useState(false);
+    const [pageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState(123);
 
     const fileds = {
@@ -281,7 +281,9 @@ const ManagementEmpParties = (props) => {
                                             keyField={"id"}
                                             bordered={true}
                                             striped={false}
-                                            selectRow={selectAllCheck(rowSelected())}
+                                            selectRow={selectAllCheck({
+                                                rowSelected: rowSelected()
+                                            })}
                                             noDataIndication={<div className="text-danger text-center ">Party Not available</div>}
                                             classes={"table align-middle table-nowrap table-hover"}
                                             headerWrapperClasses={"thead-light"}

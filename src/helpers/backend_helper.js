@@ -328,14 +328,17 @@ export const PartySubParty_Edit_API = ({ editId }) => get(`${url.PARTY_SUB_PARTY
 export const PartySubParty_Update_API = ({ jsonBody, updateId }) => put(`${url.PARTY_SUB_PARTY}/${updateId}`, jsonBody)// update api
 export const PartySubParty_Dropdown_Get_API = (id) => get(`${url.PARTY_SUB_PARTY}/${id}`)// PartySubParty dropdown Api
 
-// export const GoButton_API = (data) => post(url.PARTYITEM_FOR_LIST, data)//get api
-export const Save_Party_Items = ({ jsonBody }) => post(url.PARTYITEM_FOR_MASTER, jsonBody)// post api
-// export const get_Party_Item_List = (SupplierID) => get(`${url.PARTY_ITEM_FILTER}/${SupplierID}`)//get api
-export const get_Party_Item_List = (jsonBody) => post(url.PARTY_ITEM_FILTER, jsonBody) // get api
 
-export const GetPartyList_API = () => get(url.PARTYITEM_FOR_LIST)// get api
-// export const edit_PartyItem_List_Api = ({ editId, btnId }) => get(`${url.PARTYITEM_FOR_MASTER}/${editId}`, btnId)// edit api
-export const edit_PartyItem_List_Api = (jsonBody) => post(url.PARTY_ITEM_FILTER, jsonBody) // get api
+export const ChannelItemGoBtnAdd_List = (jsonBody) => post(url.PARTY_ITEM_FILTER, jsonBody) // get api
+export const ChannelItem_Save_API = ({ jsonBody }) => post(url.PARTYITEM_FOR_MASTER, jsonBody)// post api
+export const ChannelItem_List_API = () => get(url.PARTYITEM_FOR_LIST)// get api
+export const ChannelItem_Edit_API = (jsonBody) => post(url.PARTY_ITEM_FILTER, jsonBody) // get api
+
+
+export const PartyItemGoBtnAdd_List = (jsonBody) => post(url.PARTY_ITEM_FILTER, jsonBody) // get api
+export const PartyItem_Save_API = ({ jsonBody }) => post(url.PARTYITEM_FOR_MASTER, jsonBody)// post api
+export const PartyItem_List_API = () => get(url.PARTYITEM_FOR_LIST)// get api
+export const PartyItem_Edit_API = (jsonBody) => post(url.PARTY_ITEM_FILTER, jsonBody) // get api
 
 //Post api VendorSupplierCustomer 
 export const VendorSupplierCustomer = (jsonBody) => post(url.GET_SUPPLIER_VENDOR_CUSTOMER, jsonBody)//Post api

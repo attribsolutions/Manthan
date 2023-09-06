@@ -110,6 +110,28 @@ const CreditList = () => {
         }
     }, []);
 
+    // useEffect(() => {
+    //     const locationPath = history.location.pathname;
+    //     let userAcc = reducers.userAccess.find((inx) => {
+    //       return `/${inx.ActualPagePath}` === locationPath;
+    //     });
+    //     if (!(userAcc === undefined)) {
+    //         const isnewBtnView = userAcc.PageType === 2 && userAcc.RoleAccess_IsSave;
+    //         const isCountLabel = userAcc.CountLabel;
+    //         const isexcelBtnView =
+    //           userAcc.PageType === 2 && userAcc.RoleAccess_Exceldownload;
+    //         dispatch(
+    //           CommonBreadcrumbDetails({
+    //             newBtnPath: newBtnPath,
+    //             newBtnView: !forceNewBtnView ? forceNewBtnView : isnewBtnView,
+    //             excelBtnView: isexcelBtnView,
+    //             pageHeading: userAcc.PageHeading,
+    //             CountLabel: isCountLabel,
+    //           })
+    //         );
+    //     }
+    //   }, [userAccess]);
+
     //   Note Type Api for Type identify
     useEffect(() => {
         const jsonBody = JSON.stringify({

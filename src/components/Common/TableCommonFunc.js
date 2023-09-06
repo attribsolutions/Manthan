@@ -14,17 +14,22 @@ const selectRow = (row, event) => {
 
   row.selectCheck = event
 }
-export const selectAllCheck = (selected, nonSelectable, position, headLabel) => ({
+export const selectAllCheck = ({
+  rowSelected = '',
+  nonSelectable = '',
+  position,
+  headLabel,
+  bgColor = "#9dadf09e"
+}) => ({
 
   mode: "checkbox",
-  bgColor: "#9dadf09e",
+  bgColor: bgColor,
   onSelectAll: onSelectAll,
   onSelect: selectRow,
-  selected: selected,
+  selected: rowSelected,
   selectColumnPosition: position ? position : "right",
   nonSelectable: nonSelectable,
-  attrs: (cell, row, rowIndex, colIndex) => ({ 'data-label': "Select" }),
-
+  attrs: () => ({ 'data-label': "Select" }),
 
   selectionHeaderRenderer: (head) => {
 
@@ -187,7 +192,7 @@ const DynamicColumnHook = ({
             }
 
             if (i.ControlID === "Party" && row.Mode) {
-              
+
               let Staus = ""
               if (row.Mode === 1) {
                 Staus = `(Sale Return)`
