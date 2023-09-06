@@ -51,6 +51,7 @@ export const DetailsOfTransport = [
 ]
 
 export const RowsWithCGST_SGST = (data) => {
+
     const { CRDRNoteItems = [] } = data
     CRDRNoteItems.sort((firstItem, secondItem) => firstItem.GSTPercentage - secondItem.GSTPercentage);
     const returnArr = [];
@@ -74,7 +75,7 @@ export const RowsWithCGST_SGST = (data) => {
             UnitName, MRPValue, CGSTPercentage,
             SGSTPercentage, GSTPercentage,
             BatchCode, BatchDate, DiscountType,
-            PrimaryUnitName } = currentItem;
+            PrimaryUnitName, ItemComment } = currentItem;
         let PcsinNumber = ""
         let PcsinNumberUnit = ""
         const pattern = /\((.*?)\)/;
@@ -115,7 +116,8 @@ export const RowsWithCGST_SGST = (data) => {
                 BasicAmount: Number(BasicAmount), Quantity: Number(Quantity),
                 UnitName, CGSTPercentage, SGSTPercentage, GSTPercentage,
                 BatchDate, BatchCode: BatchCode, BatchDate: BatchDate,
-                quantityString: `  ${BatchCode}  ${BatchDate}`, PrimaryUnitName
+                quantityString: `  ${BatchCode}  ${BatchDate}`, PrimaryUnitName,
+                ItemComment
             };
         }
         return accumulator;
@@ -123,7 +125,8 @@ export const RowsWithCGST_SGST = (data) => {
 
     const TotalItemlength = Object.values(groupedItems).length;
     data["TotalItemlength"] = TotalItemlength;
-    CRDRNoteItems.forEach((element, key) => {
+
+    Object.values(groupedItems).forEach((element, key) => {
 
         let HSNcodes = ""
         if (element.HSNCode) {
@@ -137,7 +140,10 @@ export const RowsWithCGST_SGST = (data) => {
                 HSNcodes = element.HSNCode.slice(0, 8);
             }
         }
-        
+        debugger
+        data['ItemComment'] = element.ItemComment
+        data['ID'] = SrNO
+
         const tableitemRow = [
             SrNO++,
             `${HSNcodes} ${element.ItemName}`,
@@ -152,6 +158,7 @@ export const RowsWithCGST_SGST = (data) => {
             `${Number(element.SGSTPercentage).toFixed(1)}%`,
             `${numberWithCommas(Number(element.SGST).toFixed(2))}`,
             `${numberWithCommas(Number(element.Amount).toFixed(2))}`,
+
         ];
 
         function totalLots() {
@@ -162,9 +169,6 @@ export const RowsWithCGST_SGST = (data) => {
             totalBasicAmount = Number(totalBasicAmount) + Number(element.BasicAmount)
             TotalGst = totalCGst + totalSGst;
             GSTPercentage = Number(element.CGSTPercentage) + Number(element.SGSTPercentage)
-            let cgst = data["tableTot"].TotalCGst
-            return ({ TotalCGst: Number(totalCGst) + Number(cgst) })
-
         };
 
 
@@ -203,9 +207,6 @@ export const RowsWithCGST_SGST = (data) => {
         ]
 
         if (Gst === 0) { Gst = element.GSTPercentage };
-        let aa = { TotalCGst: 0, totalSGst: 0 }
-        if (data["tableTot"] === undefined) { data["tableTot"] = aa }
-
         if ((Gst === element.GSTPercentage)) {
             data["tableTot"] = totalLots()
             returnArr.push(tableitemRow)
@@ -260,15 +261,15 @@ export const RowsWithIGST = (data) => {
         let PcsinNumberUnit = ""
         const pattern = /\((.*?)\)/;
 
-        if (currentItem.UnitName !== "") {
-            const matchFound = currentItem.UnitName.match(pattern);
-            const extractedText = matchFound[1];
-            console.log(extractedText); // Output: "19.0 No"
-            const match = extractedText.split(" ")
-            PcsinNumber = match[0];
-            PcsinNumberUnit = match[1];
+        // if (currentItem.UnitName !== "") {
+        //     const matchFound = currentItem.UnitName.match(pattern);
+        //     const extractedText = matchFound[1];
+        //     console.log(extractedText); // Output: "19.0 No"
+        //     const match = extractedText.split(" ")
+        //     PcsinNumber = match[0];
+        //     PcsinNumberUnit = match[1];
 
-        }
+        // }
 
         const key = ItemName + '_' + MRP;
         if (accumulator[key]) {
@@ -301,7 +302,7 @@ export const RowsWithIGST = (data) => {
     }, {});
     const TotalItemlength = Object.values(groupedItems).length;
     data["TotalItemlength"] = TotalItemlength;
-    CRDRNoteItems.forEach((element, key) => {
+    Object.values(groupedItems).forEach((element, key) => {
 
         let HSNcodes = ""
         if (element.HSNCode) {
@@ -321,7 +322,7 @@ export const RowsWithIGST = (data) => {
 
             SrNO++,
             `${HSNcodes} ${element.ItemName}`,
-            element.UnitName === "" ? `${parseFloat(element.Quantity)} ${element.PrimaryUnitName}   ${element.UnitName}` : `${parseFloat(element.Quantity)} ${element.PrimaryUnitName}      (${element.PcsinNumber} ${element.PcsinNumberUnit})`,
+            `${parseFloat(element.Quantity)}   ${element.UnitName}`,
             `${numberWithCommas(Number(element.MRPValue).toFixed(2))}`,
             `${numberWithCommas(Number(element.Rate).toFixed(2))}`,
             `${element.Discount} ${element.DiscountType === "1" ? "Rs" : "%"}`,
@@ -381,13 +382,11 @@ export const RowsWithIGST = (data) => {
         if ((Gst === element.GSTPercentage)) {
             data["tableTot"] = totalLots()
             returnArr.push(tableitemRow)
-
         }
-
 
         else {
             returnArr.push(totalrow());
-            returnArr.push(tableitemRow);
+            // returnArr.push(tableitemRow);
             totalBasicAmount = 0
             totalAmount = 0
             totalQuantity = 0
@@ -395,9 +394,9 @@ export const RowsWithIGST = (data) => {
             data["tableTot"] = totalLots()
             Gst = element.GSTPercentage;
         }
-        if (data.SettingData.ShowBatchNoOnInvoicePrint === "1") {
-            returnArr.push((BatchRow))
-        }
+        // if (data.SettingData.ShowBatchNoOnInvoicePrint === "1") {
+        //     returnArr.push((BatchRow))
+        // }
 
         if (key === Object.keys(groupedItems).length - 1) {
 
@@ -471,7 +470,7 @@ export const DetailsOfTransportRow = (data) => {
     // if (data.InvoiceUploads.length > 0) {
     //     EwayData = data.InvoiceUploads[0]
     // }
-    
+
     var DetailsOfTransportArray = [
         [`                      ${data.NoteType}`],
         [`                      ${data.Narration === null ? "" : data.Narration}`],
