@@ -23,7 +23,11 @@ function reportBody(doc, data) {
 }
 
 function pageFooter(doc, data, islast, array) {
-    style.reportFooter(doc, data);                           //Report Footer
+    if (((data.NoteType === "DebitNote") || (data.NoteType === "CreditNote"))) {
+        style.reportFooterForPlainCredit_Debit(doc, data);                           //Report Footer
+    } else {
+        style.reportFooter(doc, data);                           //Report Footer
+    }
     style.pageFooter(doc, data, islast, array);              //page Footer
 }
 
@@ -46,7 +50,7 @@ const InvioceReporta5 = async (data) => {
             }
         });
     }
-    
+
     doc.setProperties({
         title: `Credit Note Report /${data.Customer}/${date_dmy_func(data.CRDRNoteDate)} `
     });

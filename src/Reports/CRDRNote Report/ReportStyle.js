@@ -18,13 +18,17 @@ export const pageBorder = (doc) => {
 let initial_y = 0
 
 export const pageHeder = (doc, data) => {
-
+    debugger
     doc.setFont('Tahoma')
     doc.setFont(undefined, 'bold')
     doc.setFontSize(15)
     if (data.NoteType === "Goods CreditNote") {
         doc.text('GOODS CREDIT NOTE', 180, 35,)
-    } else {
+    } else if (data.NoteType === "DebitNote") {
+        doc.text(' DEBIT NOTE', 180, 35,)
+    } else if (data.NoteType === "Goods DebitNote") {
+        doc.text('GOODS DEBIT NOTE', 180, 35,)
+    } else if (data.NoteType === "CreditNote") {
         doc.text('CREDIT NOTE', 180, 35,)
     }
     doc.setDrawColor(0, 0, 0);
@@ -116,7 +120,7 @@ export const reportHeder1 = (doc, data) => {
         bodyStyles: {
             columnWidth: 'wrap',
             textColor: "black",
-            cellPadding: 1,
+            cellPadding: ((data.NoteType === "DebitNote") || (data.NoteType === "CreditNote")) ? 3 : 1,
             fontSize: 8,
             fontStyle: 'normal',
             lineColor: [0, 0, 0]
@@ -200,7 +204,7 @@ export const reportHeder1 = (doc, data) => {
         bodyStyles: {
             columnWidth: 'wrap',
             textColor: "black",
-            cellPadding: 1,
+            cellPadding: ((data.NoteType === "DebitNote") || (data.NoteType === "CreditNote")) ? 3 : 1,
             fontSize: 8,
 
             fontStyle: 'normal',
@@ -279,7 +283,7 @@ export const reportHeder1 = (doc, data) => {
         bodyStyles: {
             columnWidth: 'wrap',
             textColor: [30, 30, 30],
-            cellPadding: 1,
+            cellPadding: ((data.NoteType === "DebitNote") || (data.NoteType === "CreditNote")) ? 3 : 1,
             fontSize: 8,
             textColor: "black",
             fontStyle: 'normal',
@@ -377,42 +381,47 @@ export const reportFooter = (doc, data) => {
 
 
     const isIGST = compareGSTINState(data.CustomerGSTIN, data.PartyGSTIN)
-    if (isIGST) {
-
-        doc.text(`Total Basic:`, 440, 312,)
-        doc.text(`${TotalBasicAmount.toFixed(2)}`, 567, 312, 'right')
-
-        doc.text(`Total Disc:`, 440, 322,)
-        doc.text(` ${TotalDiscount.toFixed(2)}`, 567, 322, 'right')
-
-        doc.text(`Total IGST:`, 440, 332)
-        doc.text(`${totalICGST.toFixed(2)}`, 567, 332, 'right')
-
-        doc.text(`Total GST:`, 440, 342,)
-        doc.text(` ${totalICGST.toFixed(2)}`, 567, 342, 'right')
-
+    if ((data.NoteType === "DebitNote") || (data.NoteType === "CreditNote")) {
 
     } else {
-        doc.text(`Total Basic:`, 440, 302,)
-        doc.text(`${numberWithCommas(TotalBasicAmount.toFixed(2))}`, 567, 302, 'right')
+        if (isIGST) {
 
-        doc.text(`Total Disc:`, 440, 312,)
-        doc.text(`${numberWithCommas(TotalDiscount.toFixed(2))}`, 567, 312, 'right')
+            doc.text(`Total Basic:`, 440, 312,)
+            doc.text(`${TotalBasicAmount.toFixed(2)}`, 567, 312, 'right')
 
-        doc.text(`Total CGST:`, 440, 322)
-        doc.text(`${numberWithCommas(totalCGST.toFixed(2))}`, 567, 322, 'right')
+            doc.text(`Total Disc:`, 440, 322,)
+            doc.text(` ${TotalDiscount.toFixed(2)}`, 567, 322, 'right')
 
-        doc.text(`Total SGST:`, 440, 332,)
-        doc.text(`${numberWithCommas(totalSGST.toFixed(2))}`, 567, 332, 'right')
+            doc.text(`Total IGST:`, 440, 332)
+            doc.text(`${totalICGST.toFixed(2)}`, 567, 332, 'right')
 
-        doc.text(`Total GST:`, 440, 342,)
-        doc.text(` ${numberWithCommas(TotalGST.toFixed(2))}`, 567, 342, 'right')
+            doc.text(`Total GST:`, 440, 342,)
+            doc.text(` ${totalICGST.toFixed(2)}`, 567, 342, 'right')
 
+
+        } else {
+            doc.text(`Total Basic:`, 440, 302,)
+            doc.text(`${numberWithCommas(TotalBasicAmount.toFixed(2))}`, 567, 302, 'right')
+
+            doc.text(`Total Disc:`, 440, 312,)
+            doc.text(`${numberWithCommas(TotalDiscount.toFixed(2))}`, 567, 312, 'right')
+
+            doc.text(`Total CGST:`, 440, 322)
+            doc.text(`${numberWithCommas(totalCGST.toFixed(2))}`, 567, 322, 'right')
+
+            doc.text(`Total SGST:`, 440, 332,)
+            doc.text(`${numberWithCommas(totalSGST.toFixed(2))}`, 567, 332, 'right')
+
+            doc.text(`Total GST:`, 440, 342,)
+            doc.text(` ${numberWithCommas(TotalGST.toFixed(2))}`, 567, 342, 'right')
+
+            doc.text(`Round Off:`, 440, 352,)
+            doc.text(` ${Number(data.RoundOffAmount).toFixed(2)}`, 567, 352, 'right')
+
+
+        }
     }
 
-
-    doc.text(`Round Off:`, 440, 352,)
-    doc.text(` ${Number(data.RoundOffAmount).toFixed(2)}`, 567, 352, 'right')
 
     // doc.text(`TCS Amount:`, 440, 362,)
     // doc.text(` ${numberWithCommas(Number(data.TCSAmount).toFixed(2))}`, 567, 362, 'right')
@@ -497,11 +506,64 @@ export const reportFooter = (doc, data) => {
 
     };
 
-
     doc.autoTable(table.Bankcolumn, table.BankRow(data), DetailsOfBankStyle,);
 
+}
+
+
+
+
+export const reportFooterForPlainCredit_Debit = (doc, data) => {
+    let stringNumber = toWords(Number(data.GrandTotal))
+
+    doc.setDrawColor(0, 0, 0);
+    doc.line(570, 295, 30, 295);//horizontal line Footer 2
+
+    doc.line(570, 308, 30, 308);//horizontal line Footer 3 Ruppe section
+    doc.line(570, 340, 30, 340);//horizontal line (Bottom)
+
+
+
+
+
+    // doc.text(`TCS Amount:`, 440, 362,)
+    // doc.text(` ${numberWithCommas(Number(data.TCSAmount).toFixed(2))}`, 567, 362, 'right')
+
+    doc.setFont(undefined, 'Normal')
+    doc.setFontSize(10)
+    doc.setFont(undefined, 'bold')
+    doc.text(`Total Amount :`, 33, 325,)
+    const Total = numberWithCommas(Number(data.GrandTotal).toFixed(2))
+    doc.text(`${Total}`, 130, 325, 'right')
+    doc.setFont(undefined, 'Normal')
+    doc.setFontSize(10)
+    doc.text(`Signature `, 450, 362,)
+    doc.text(`Prepared by :${data.Party} `, 35, 362,)
+    doc.setFont(undefined, 'bold')
+    doc.setFontSize(8)
+    doc.text(`Rupees:`, 33, 305,)
+    doc.text(`${stringNumber}`, 70, 305,)
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -594,6 +656,23 @@ export const tableBody = (doc, data) => {
                 }
             }
 
+
+
+            // if (colIdx === 1) {
+
+            //     if (data.ItemComment) {
+            //         if (data1.row.cells[0].raw === data.ID) {
+            //             debugger
+            //             const cell = data1.cell;
+            //             doc.setFontSize(7);
+            //             doc.setTextColor('red'); // Black text color
+            //             data1.row.cell.text[0] = ` ${data.ItemComment}`
+
+            //             // doc.text(`${data.ItemComment}`, cell.x + 5, cell.y + 13);
+            //         }
+            //     }
+
+            // }
 
         },
         margin: {
@@ -735,11 +814,11 @@ export const tableBodyWithIGST = (doc, data) => {
             if (data1.row.cells[1].raw === "HSN Item Name") {
 
                 let TotalBox = 0;
-                data.InvoiceItems.forEach((element, key) => {
-                    if (element.PrimaryUnitName === "Box") {
-                        TotalBox = Number(TotalBox) + Number(element.Quantity)
-                    }
-                })
+                // data.InvoiceItems.forEach((element, key) => {
+                //     if (element.PrimaryUnitName === "Box") {
+                //         TotalBox = Number(TotalBox) + Number(element.Quantity)
+                //     }
+                // })
                 if (TotalBox === 0) {
                     data1.row.cells[1].text[0] = ` HSN Item Name (${data.TotalItemlength})`
                 } else {
