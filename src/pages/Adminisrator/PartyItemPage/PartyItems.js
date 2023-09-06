@@ -279,7 +279,7 @@ const PartyItems = (props) => {
         try {
             const jsonBody = JSON.stringify(selectedItems.map((index) => ({
                 Item: index.Item,
-                // Party: partyIdSelect.value,
+                Party: partyIdSelect.value,
                 PatryType: channelTypeSelect.value
             })));
             dispatch(savePartyItemsAction({ jsonBody, subPageMode }));
