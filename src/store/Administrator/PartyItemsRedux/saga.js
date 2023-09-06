@@ -1,6 +1,6 @@
 import { call, put, takeLatest } from "redux-saga/effects";
 import { CommonConsole } from "../../../components/Common/CommonFunction";
-import { PartyItemGoBtnAdd_List, ChannelItemGoBtnAdd_List, PartyItem_List_API, ChannelItem_List_API, PartyItem_Save_API, ChannelItem_Save_API, PartyItem_Edit_API, ChannelItem_Edit_API, } from "../../../helpers/backend_helper";
+import { PartyItemGoBtnAdd_API, ChannelItemGoBtnAdd_API, PartyItem_List_API, ChannelItem_List_API, PartyItem_Save_API, ChannelItem_Save_API, PartyItem_Edit_API, ChannelItem_Edit_API, } from "../../../helpers/backend_helper";
 import { url } from "../../../routes";
 import { savePartyItemsActionSuccess, goButtonPartyItemAddPageSuccess, getPartyItemAssingListSuccess, editPartyItemIDSuccess, PartyItemApiErrorAction, } from "./action";
 import { SAVE_PARTY_ITEMS_ACTION, GO_BUTTON_PARTY_ITEM_ADD, GET_PARTY_ITEM_ASSING_LIST, EDIT_PARTY_ITEM_ID, } from "./actionType";
@@ -31,9 +31,9 @@ function* goButton_partyItem_Add_GenFunc(config) {
   try {
     let response = null
     if (subPageMode === url.CHANNEL_ITEM_LIST) {
-      response = yield call(PartyItemGoBtnAdd_List, jsonBody);
+      response = yield call(PartyItemGoBtnAdd_API, jsonBody);
     } else {
-      response = yield call(ChannelItemGoBtnAdd_List, jsonBody);
+      response = yield call(ChannelItemGoBtnAdd_API, jsonBody);
     }
     response.Data.map((item) => {
       item["selectCheck"] = false

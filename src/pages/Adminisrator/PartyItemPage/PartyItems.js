@@ -7,7 +7,7 @@ import { Breadcrumb_inputName, commonPageField, commonPageFieldSuccess } from ".
 import { useHistory } from "react-router-dom";
 import { editPartyItemIDSuccess, goButtonPartyItemAddPage, goButtonPartyItemAddPageSuccess, savePartyItemsAction, savePartyItemsActionSuccess } from "../../../store/Administrator/PartyItemsRedux/action";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
-import { PageLoadingSpinner, SaveButton } from "../../../components/Common/CommonButton";
+import { C_Button, PageLoadingSpinner, SaveButton } from "../../../components/Common/CommonButton";
 import { comAddPageFieldFunc, initialFiledFunc } from "../../../components/Common/validationFunction";
 import * as url from "../../../routes/route_url";
 import * as mode from "../../../routes/PageMode";
@@ -88,6 +88,8 @@ const PartyItems = (props) => {
         }
         return () => {
             dispatch(getPartyTypelistSuccess([]));
+            dispatch(goButtonPartyItemAddPageSuccess([]));
+
         }
     }, []);
 
@@ -234,15 +236,19 @@ const PartyItems = (props) => {
         },
     ];
 
-    function goButtonHandler() {
+    function goButtonHandler(event) {
+        debugger
         try {
-            if ((_cfunc.loginSelectedPartyID() === 0)) {
+            event?.persist();// Call event.persist() to remove the synthetic event from the pool
+
+            if ((_cfunc.loginSelectedPartyID() === 0 && !(subPageMode === url.CHANNEL_ITEM))) {
                 customAlert({ Type: 3, Message: "Please Select Party" });
                 return;
             };
             const jsonBody = {
                 ..._cfunc.loginJsonBody(),
-                PartyID: _cfunc.loginSelectedPartyID()
+                PartyID: _cfunc.loginSelectedPartyID(),
+                PatryType: channelTypeSelect.value
             };
             dispatch(goButtonPartyItemAddPage(jsonBody, subPageMode));
         }
@@ -273,13 +279,14 @@ const PartyItems = (props) => {
         try {
             const jsonBody = JSON.stringify(selectedItems.map((index) => ({
                 Item: index.Item,
-                Party: partyIdSelect.value,
+                // Party: partyIdSelect.value,
+                PatryType: channelTypeSelect.value
             })));
             dispatch(savePartyItemsAction({ jsonBody, subPageMode }));
         } catch (w) { }
     };
 
-    const PageHeaderDropdown = () => {
+    const AdminDivsionRoleDropdown = () => {
         if (subPageMode === url.PARTYITEM) {
             return (
                 <PartyDropdown_Common
@@ -289,6 +296,9 @@ const PartyItems = (props) => {
                 />
             )
         }
+        return null
+    };
+    const ChannelTypeDropdown = () => {
         if (subPageMode === url.CHANNEL_ITEM) {
             return (
                 <div className="px-2 c_card_header text-black mb-1">
@@ -314,13 +324,35 @@ const PartyItems = (props) => {
                                 </Col>
                             </FormGroup>
                         </Col>
+
+                        <Col sm="1">
+                            {((filterdItemWise_tableData.length === 0)) ? (
+                                <C_Button
+                                    type="button"
+                                    loading={GoBtnlistloading}
+                                    className="btn btn-outline-primary border-1 font-size-12 text-center"
+                                    onClick={(e) => {
+                                        goButtonHandler(e)
+                                    }}
+                                >
+                                    Select
+                                </C_Button>
+                            ) : (
+                                <C_Button
+                                    type="button"
+                                    spinnerColor={"info"}
+                                    className="btn btn-outline-info border-1 font-size-12 "
+                                    onClick={() => { dispatch(goButtonPartyItemAddPageSuccess([])); }}
+
+                                >Change</C_Button>
+                            )}
+                        </Col>
                     </div>
                 </div>
             );
         }
         return null
     };
-
     let IsEditMode_Css = "";
     if (modalCss || pageMode === mode.dropdownAdd) {
         IsEditMode_Css = "-5.5%";
@@ -333,6 +365,9 @@ const PartyItems = (props) => {
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                     <Container fluid>
                         <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
+
+                        <AdminDivsionRoleDropdown />
+
                         <Card className="text-black">
                             <CardHeader className="card-header   text-black c_card_header">
                                 <h4 className="card-title text-black">
@@ -345,7 +380,7 @@ const PartyItems = (props) => {
 
                             <CardBody style={{ backgroundColor: "#whitesmoke" }}>
 
-                                <PageHeaderDropdown />
+                                <ChannelTypeDropdown />
 
                                 {filterdItemWise_tableData.length > 0 ? (
                                     <>
