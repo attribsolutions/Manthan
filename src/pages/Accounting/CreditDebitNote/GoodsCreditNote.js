@@ -39,6 +39,23 @@ import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 
+function initialState(history) {
+
+    let page_Id = '';
+    let listPath = ''
+    let sub_Mode = history.location.pathname;
+
+    if (sub_Mode === url.GOODS_CREDIT_NOTE ) {
+        page_Id = pageId.GOODS_CREDIT_NOTE;
+        listPath = url.GOODS_CREDIT_LIST
+    }
+    else if (sub_Mode === url.GOODS_DEBIT_NOTE) {
+        page_Id = pageId.GOODS_DEBIT_NOTE;
+        listPath = url.GOODS_DEBIT_LIST
+    }
+
+    return { page_Id, listPath }
+};
 
 
 const GoodsCreditNote = (props) => {
@@ -51,7 +68,9 @@ const GoodsCreditNote = (props) => {
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState('');
     const [editCreatedBy, seteditCreatedBy] = useState("");
-    const [subPageMode] = useState(history.location.pathname);
+    const [page_id] = useState(() => initialState(history).page_Id)
+    const [listPath] = useState(() => initialState(history).listPath)
+    const [subPageMode] = useState(history.location.pathname)
 
     const fileds = {
         CRDRNoteDate: currentDate_ymd,
@@ -97,7 +116,6 @@ const GoodsCreditNote = (props) => {
 
 
     useEffect(() => {
-        const page_id = subPageMode === url.GOODS_CREDIT_NOTE ? pageId.GOODS_CREDIT_NOTE : pageId.GOODS_DEBIT_NOTE;
         dispatch(InvoiceNumberSuccess([]));
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_id));
@@ -216,7 +234,7 @@ const GoodsCreditNote = (props) => {
                     Message: postMsg.Message,
                 })
                 if (alertResponse) {
-                    history.push({ pathname: url.CREDIT_LIST })
+                    history.push({ pathname: listPath})
                 }
             }
         }

@@ -112,9 +112,6 @@ export const CityList = url.CITY
 export const CityMaster = url.CITY_LIST
 
 
-// export const CreditLimitMaster = url.CREDITLIMIT_LIST
-// export const CreditLimitList = url.CREDITLIMIT
-
 export const ImportFieldMap = url.IMPORT_EXCEL_FIELD_MAP
 export const ImportFieldMapList = url.IMPORT_EXCEL_FIELD_MAP
 
@@ -224,11 +221,21 @@ export const PaymentEntryList = url.PAYMENT_ENTRY;
 
 export const BankAssign = url.BANK_ASSIGN;
 
+
+
 export const Credit = url.CREDIT_LIST;
-export const CreditList = url.GOODS_CREDIT_NOTE;
+export const CreditList = url.CREDIT_NOTE;
 
 export const Debit = url.DEBIT_LIST;
-export const DebitList = url.GOODS_DEBIT_NOTE;
+export const DebitList = url.DEBIT_NOTE;
+
+export const GoodsCreditNote = url.GOODS_CREDIT_LIST;
+export const GoodsCreditNoteList = url.GOODS_CREDIT_NOTE;
+
+export const GoodsDebitNote = url.GOODS_DEBIT_LIST;
+export const GoodsDebitNoteList = url.GOODS_DEBIT_NOTE;
+
+
 
 export const SapLedger = url.SAP_LEDGER;
 

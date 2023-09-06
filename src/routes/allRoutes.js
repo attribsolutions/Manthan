@@ -142,6 +142,7 @@ import BankAssign from "../pages/Accounting/BankAssign/BankAssign";
 import LoadingSheetUpdate from "../pages/Sale/LoadingSheet/LoadingSheetUpdate";
 import SalesReturn from "../pages/Sale/SalesReturn/SalesReturn";
 import GoodsCreditNote from "../pages/Accounting/CreditDebitNote/GoodsCreditNote";
+import DebitNoteMaster from "../pages/Accounting/Debit/Debit";
 import CreditList from "../pages/Accounting/CreditDebitNote/CreditList";
 
 import ImportFieldAdd from "../pages/Adminisrator/ImportMaster/FieldAdd/ImportFieldAdd";
@@ -409,11 +410,22 @@ const userRoutes = [
   { path: path.PAYMENT_ENTRY, component: PaymentEntry },
   { path: path.PAYMENT_ENTRY_LIST, component: PaymentEntryList },
 
-  { path: path.CREDIT_LIST, component: CreditList },
-  { path: path.DEBIT_LIST, component: CreditList },
+// |||||||||||||||||||||||||||||||||||||||||||||||||||
 
+  { path: path.CREDIT_LIST, component: CreditList },
+  { path: path.CREDIT_NOTE, component: DebitNoteMaster },
+
+  { path: path.DEBIT_LIST, component: CreditList },
+  { path: path.DEBIT_NOTE, component: DebitNoteMaster },
+
+
+  { path: path.GOODS_CREDIT_LIST, component: CreditList },
   { path: path.GOODS_CREDIT_NOTE, component: GoodsCreditNote },
+  
+  { path: path.GOODS_DEBIT_LIST, component: CreditList },
   { path: path.GOODS_DEBIT_NOTE, component: GoodsCreditNote },
+  
+// |||||||||||||||||||||||||||||||||||||||||||||||||||
 
   //**************************** Reports ***********************************//
 

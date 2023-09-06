@@ -52,7 +52,6 @@ const CommonPurchaseList = (props) => {
   const {
     MasterModal,
     masterPath,
-    ButtonMsgLable,
     goButnFunc = () => { },
     makeBtnFunc = () => { },
     hideBtnFunc = () => { },
@@ -66,9 +65,8 @@ const CommonPurchaseList = (props) => {
     },
     selectCheckParams = { isShow: false },
     totalAmountShow = false,
-    isCustomBreadcrumb = false
   } = props;
-debugger
+
   const { PageFieldMaster = [] } = { ...pageField };
 
   useEffect(() => {
@@ -78,9 +76,7 @@ debugger
     });
     if (!(userAcc === undefined)) {
       setUserAccState(userAcc);
-      if (!isCustomBreadcrumb) {
-        breadcrumbReturnFunc({ dispatch, userAcc, newBtnPath, forceNewBtnView });
-      }
+      breadcrumbReturnFunc({ dispatch, userAcc, newBtnPath, forceNewBtnView });
     }
   }, [userAccess]);
 
@@ -340,9 +336,9 @@ debugger
                   selectAllCheck({
                     rowSelected: rowSelected(),
                     nonSelectedRow: nonSelectedRow(),
-                    position:"left",  
-                    headLabel:selectCheckParams.selectHeaderLabel,
-                    
+                    position: "left",
+                    headLabel: selectCheckParams.selectHeaderLabel,
+
                   })
                   : undefined}
                 defaultSorted={defaultSorted}
