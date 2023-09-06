@@ -18,7 +18,7 @@ export const pageBorder = (doc) => {
 let initial_y = 0
 
 export const pageHeder = (doc, data) => {
-    debugger
+
     doc.setFont('Tahoma')
     doc.setFont(undefined, 'bold')
     doc.setFontSize(15)
@@ -662,7 +662,7 @@ export const tableBody = (doc, data) => {
 
             //     if (data.ItemComment) {
             //         if (data1.row.cells[0].raw === data.ID) {
-            //             debugger
+            //             
             //             const cell = data1.cell;
             //             doc.setFontSize(7);
             //             doc.setTextColor('red'); // Black text color
@@ -768,8 +768,8 @@ export const tableBody = (doc, data) => {
 
 
 
-
-    if (data.NoteType === "Goods CreditNote") {
+    debugger
+    if ((data.NoteType === "Goods CreditNote") || (data.NoteType === "Goods DebitNote")) {
         doc.autoTable(table.columnsWithCGST_SGST, table.RowsWithCGST_SGST(data), options,);
     } else {
         return null
