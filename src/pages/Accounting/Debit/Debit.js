@@ -255,9 +255,6 @@ const Debit = (props) => {
         ReceiptDate: _cfunc.date_dmy_func(index.ReceiptDate)
     }));
 
-    const CreditDebitTypeId = CreditDebitType.find((index) => {
-        return index.Name === "DebitNote"
-    });
 
     function ReciptDateOnchange(e, date) {
         setState((i) => {
@@ -317,12 +314,21 @@ const Debit = (props) => {
         const btnId = event.target.id
         try {
             if (formValid(state, setState)) {
-                _cfunc.btnIsDissablefunc({ btnId, state: true })
-
+               
+                function noteType_BySubPageMode() {
+                    
+                   if (subPageMode === url.CREDIT_NOTE) {
+                        return CreditDebitType.find((index) => index.Name === "CreditNote")?.id
+                    }
+                    else if (subPageMode === url.DEBIT_NOTE) {
+                        return CreditDebitType.find((index) => index.Name === "DebitNote")?.id;
+                    }
+                
+               }
                 const jsonBody = JSON.stringify({
                     CRDRNoteDate: values.CRDRNoteDate,
                     Customer: values.Customer.value,
-                    NoteType: CreditDebitTypeId.id,
+                    NoteType: noteType_BySubPageMode(),
                     GrandTotal: values.GrandTotal,
                     Narration: values.Narration,
                     Comment: values.Comment,
