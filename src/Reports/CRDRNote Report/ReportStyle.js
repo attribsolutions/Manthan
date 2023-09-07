@@ -768,7 +768,7 @@ export const tableBody = (doc, data) => {
 
 
 
-    debugger
+    
     if ((data.NoteType === "Goods CreditNote") || (data.NoteType === "Goods DebitNote")) {
         doc.autoTable(table.columnsWithCGST_SGST, table.RowsWithCGST_SGST(data), options,);
     } else {

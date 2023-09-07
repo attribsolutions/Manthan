@@ -271,12 +271,18 @@ export function PageLoadingSpinner({ isLoading }) {
   const [isInitialLoad, setIsInitialLoad] = useState(true);
 
   useEffect(() => {
-
-    if (isLoading && isInitialLoad) {
-      document.getElementById('preloader').style.display = 'block';
-      setIsInitialLoad(false);
-    } else {
-      document.getElementById('preloader').style.display = 'none';
+    try {
+      if (isLoading && isInitialLoad) {
+        document.getElementById('preloader').style.display = 'block';
+        setIsInitialLoad(false);
+      } else {
+        document.getElementById('preloader').style.display = 'none';
+      }
+    } catch (w) { }
+    return () => {
+      try {
+        document.getElementById('preloader').style.display = 'none';
+      } catch (w) { }
     }
   }, [isLoading]);
 

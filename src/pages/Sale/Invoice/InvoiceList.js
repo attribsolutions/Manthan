@@ -90,7 +90,7 @@ const InvoiceList = () => {
         Update_Vehicle_Invoice,
         sendToScmMsg
     } = reducers;
-    debugger
+    
     const {
         fromdate,
         todate,

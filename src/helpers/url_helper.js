@@ -204,13 +204,13 @@ export const PARTY_SUB_PARTY_LIST = '/PartySubPartyList'
 export const PARTY_SUB_PARTY = '/PartySubParty' // FOR POST
 
 //PartyItems
-export const PARTYITEM_FOR_LIST = '/PartyItemList' // FOR Get
+
 export const PARTYITEM_FOR_MASTER = '/PartyItem' // FOR Get
 export const PARTY_ITEM_FILTER = '/PartyItemFilter' // FOR Get
 
-//channel Item 
-export const CHANNEL_ITEM_SAVE_URL = '/ChanelWiseItems';
-export const CHANNEL_ITEM_ADD_GO_BTN = '/PartyItemFilter' // FOR Get
+
+export const CHANNEL_ITEM_SAVE_URL = '/ItemChannelWise' ;
+export const CHANNEL_ITEM_ADD_GO_BTN = '/ItemsChannelWiseFilter' // FOR Get
 
 
 //Routes
