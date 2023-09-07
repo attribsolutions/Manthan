@@ -513,7 +513,7 @@ const LoadingSheet = (props) => {
                                                 <BootstrapTable
                                                     keyField={"id"}
                                                     id="table_Arrow"
-                                                    selectRow={selectAllCheck()}
+                                                    selectRow={selectAllCheck({})}
                                                     classes={"table  table-bordered table-hover"}
                                                     noDataIndication={
                                                         <div className="text-danger text-center ">
