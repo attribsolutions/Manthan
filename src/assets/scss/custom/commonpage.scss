@@ -82,26 +82,27 @@
   z-index: 435445 !important;
 }
 
-.abc1{
+.abc1 {
   width: 7cm;
   height: 7cm;
   // margin-block: 100px;
   z-index: 435445 !important;
-  background-color:burlywood;
+  background-color: burlywood;
   position: absolute;
   margin-top: -7cm;
-margin-left: 8cm;
-border-radius: 5%;
-border: #4CAF50;
-display: none;
+  margin-left: 8cm;
+  border-radius: 5%;
+  border: #4CAF50;
+  display: none;
 
 
 
 
 }
-.imgs{
-width: 9cm;
-height: 9cm;
+
+.imgs {
+  width: 9cm;
+  height: 9cm;
 }
 
 .button_add {
@@ -205,18 +206,18 @@ height: 9cm;
   color: $gray-600;
 
   img {
-      height: 24px;
+    height: 24px;
   }
 
   span {
-      display: block;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   &:hover {
-      background-color: rgb(218, 218, 219) !important;
+    background-color: rgb(218, 218, 219) !important;
   }
 }
 
@@ -245,8 +246,8 @@ height: 9cm;
   display: none;
   padding-left: 0px;
   // padding-bottom: -10px;
-  
-  
+
+
 }
 
 #Input:hover+.itemtag {
@@ -282,22 +283,44 @@ height: 9cm;
   display: block;
 }
 
-.liitem:hover{
-background-color: rgb(206, 223, 244);
-cursor: pointer;
+.liitem:hover {
+  background-color: rgb(206, 223, 244);
+  cursor: pointer;
 }
-.liitem{
+
+.liitem {
   margin-bottom: 10px;
   width: 300%;
   margin-left: -32px;
 }
 
- .savebtn{
+.savebtn {
   position: fixed;
- }
+}
 
 
- .alertDatanotfound{
- width: 400px !important;
- left: 600px !important;
- }
+.alertDatanotfound {
+  width: 400px !important;
+  left: 600px !important;
+}
+
+
+.sliding-text {
+  display: inline-block;
+  white-space: nowrap;
+  animation: slide 15s linear infinite;
+  transform: translateX(0);
+  /* Initially centered */
+}
+
+@keyframes slide {
+  0% {
+    transform: translateX(0);
+    /* Start from centered position */
+  }
+
+  100% {
+    transform: translateX(250%);
+    /* Slide to the left */
+  }
+}
