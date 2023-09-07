@@ -1,4 +1,6 @@
 import {
+  CANCLE_CREDIT_DEBIT_E_INVOICE_ACTION,
+  CANCLE_CREDIT_DEBIT_E_INVOICE_ACTION_SUCCESS,
   CREDITDEBIT_TYPE,
   CREDITDEBIT_TYPE_SUCCESS,
   CREDIT_DEBIT_API_ERROR_ACTION,
@@ -14,6 +16,8 @@ import {
   RECEIPT_NUMBER_LIST_SUCCESS,
   SAVE_CREDIT,
   SAVE_CREDIT_SUCCESS,
+  UPLOADED_CREDIT_DEBIT_E_INVOICE_ACTION,
+  UPLOADED_CREDIT_DEBIT_E_INVOICE_ACTION_SUCCESS,
 
 } from "./actionType";
 
@@ -91,3 +95,26 @@ export const Receipt_No_List_Success = (resp) => ({// Delete Success
 export const CreditDebitApiErrorAction = () => ({
   type: CREDIT_DEBIT_API_ERROR_ACTION,
 })
+
+
+//**************************** E-Invoice-Credit_Debit (upload ,cancel) ***************************************/
+
+export const Uploaded_Credit_Debit_EInvoiceAction = (config) => ({
+  type: UPLOADED_CREDIT_DEBIT_E_INVOICE_ACTION,
+  config
+});
+
+export const Uploaded_Credit_Debit_EInvoiceSuccess = (data) => ({
+  type: UPLOADED_CREDIT_DEBIT_E_INVOICE_ACTION_SUCCESS,
+  payload: data,
+});
+
+export const Cancel_Credit_Debit_EInvoiceAction = (config) => ({
+  type: CANCLE_CREDIT_DEBIT_E_INVOICE_ACTION,
+  config
+});
+
+export const Cancel_Credit_Debit_EInvoiceSuccess = (data) => ({
+  type: CANCLE_CREDIT_DEBIT_E_INVOICE_ACTION_SUCCESS,
+  payload: data,
+});

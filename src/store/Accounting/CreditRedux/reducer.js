@@ -1,4 +1,6 @@
 import {
+  CANCLE_CREDIT_DEBIT_E_INVOICE_ACTION,
+  CANCLE_CREDIT_DEBIT_E_INVOICE_ACTION_SUCCESS,
   CREDITDEBIT_TYPE_SUCCESS,
   CREDIT_DEBIT_API_ERROR_ACTION,
   DELETE_CREDIT_LIST_ID,
@@ -11,6 +13,8 @@ import {
   RECEIPT_NUMBER_LIST_SUCCESS,
   SAVE_CREDIT,
   SAVE_CREDIT_SUCCESS,
+  UPLOADED_CREDIT_DEBIT_E_INVOICE_ACTION,
+  UPLOADED_CREDIT_DEBIT_E_INVOICE_ACTION_SUCCESS,
 } from "./actionType";
 
 const INIT_STATE = {
@@ -23,7 +27,9 @@ const INIT_STATE = {
   InvoiceReturn: [],
   ReceiptNumber: [],
   saveBtnloading: false,
-  listBtnLoading: false
+  listBtnLoading: false,
+  Uploaded_Credit_Debit_EInvoice: { Status: false },
+  Cancel_Credit_Debit_EInvoice: { Status: false },
 }
 
 const CredietDebitReducer = (state = INIT_STATE, action) => {
@@ -79,7 +85,7 @@ const CredietDebitReducer = (state = INIT_STATE, action) => {
         CreditDebitType: action.payload,
       };
 
-      
+
     case EDIT_CREDIT_LIST_ID:
       return {
         ...state,
@@ -110,6 +116,30 @@ const CredietDebitReducer = (state = INIT_STATE, action) => {
         ...state,
         saveBtnloading: false,
         listBtnLoading: false,
+      }
+
+
+    case UPLOADED_CREDIT_DEBIT_E_INVOICE_ACTION:
+      return {
+        ...state,
+        listBtnLoading: action.config.btnId,
+      }
+    case UPLOADED_CREDIT_DEBIT_E_INVOICE_ACTION_SUCCESS:
+      return {
+        ...state,
+        listBtnLoading: false,
+        Uploaded_Credit_Debit_EInvoice: action.payload,
+      }
+    case CANCLE_CREDIT_DEBIT_E_INVOICE_ACTION:
+      return {
+        ...state,
+        listBtnLoading: action.config.btnId,
+      }
+    case CANCLE_CREDIT_DEBIT_E_INVOICE_ACTION_SUCCESS:
+      return {
+        ...state,
+        listBtnLoading: false,
+        Cancel_Credit_Debit_EInvoice: action.payload,
       }
 
     default:
