@@ -45,6 +45,7 @@ function* Get_Credit_List_GenFunc(data) {               // getList API
     const newList = yield response.Data.map((i) => {
 
       i["recordsAmountTotal"] = i.GrandTotal;  // Breadcrumb Count total
+      i["InvoiceUploads"] = []   // Added this blank Array to Show e Invoive Array   Further devlopment Remain 
       i.GrandTotal = amountCommaSeparateFunc(i.GrandTotal) //  GrandTotal show with commas
       var date = date_dmy_func(i.CRDRNoteDate)
       var time = convertTimefunc(i.CreatedOn)
