@@ -20,12 +20,19 @@ import {
     resetFunction,
 } from "../../../components/Common/validationFunction";
 import Select from "react-select";
-import { Change_Button, C_Button, SaveButton, } from "../../../components/Common/CommonButton";
+import { C_Button, SaveButton, } from "../../../components/Common/CommonButton";
 import { url, mode, pageId } from "../../../routes/index"
-import { GetVenderSupplierCustomer, Retailer_List } from "../../../store/CommonAPI/SupplierRedux/actions";
+import { Retailer_List } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { postSelect_Field_for_dropdown } from "../../../store/Administrator/PartyMasterBulkUpdateRedux/actions";
-import { saveSalesReturnMaster, InvoiceNumber, InvoiceNumberSuccess, saveSalesReturnMaster_Success, SalesReturnAddBtn_Action, SalesReturnAddBtn_Action_Succcess } from "../../../store/Sales/SalesReturnRedux/action";
+import {
+    saveSalesReturnMaster,
+    InvoiceNumber,
+    InvoiceNumberSuccess,
+    saveSalesReturnMaster_Success,
+    SalesReturnAddBtn_Action,
+    SalesReturnAddBtn_Action_Succcess
+} from "../../../store/Sales/SalesReturnRedux/action";
 import "./salesReturn.scss";
 import { CInput, C_DatePicker, C_Select } from "../../../CustomValidateForm/index";
 import { decimalRegx, } from "../../../CustomValidateForm/RegexPattern";
@@ -35,7 +42,6 @@ import * as _cfunc from "../../../components/Common/CommonFunction";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
-import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 
 const SalesReturn = (props) => {
 
@@ -103,7 +109,7 @@ const SalesReturn = (props) => {
         dispatch(InvoiceNumberSuccess([]))
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(pageId.SALES_RETURN))
-        dispatch(goButtonPartyItemAddPage(JSON.stringify(_cfunc.loginJsonBody())))
+        dispatch(goButtonPartyItemAddPage({ jsonBody: JSON.stringify(_cfunc.loginJsonBody()) }))
 
         const jsonBody = JSON.stringify({
             Type: 1,

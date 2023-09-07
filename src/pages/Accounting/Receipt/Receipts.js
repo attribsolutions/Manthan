@@ -292,12 +292,7 @@ const Receipts = (props) => {
         return index.IsSelfDepositoryBank === true
     })
 
-    // const BankListOptions = bankList.filter((index) => {
-    //     debugger
-    //     return index.IsSelfDepositoryBank === false
-    // })
-
-    const pagesListColumns = [
+      const pagesListColumns = [
         {
             text: "InvoiceDate",
             dataField: "InvoiceDate",

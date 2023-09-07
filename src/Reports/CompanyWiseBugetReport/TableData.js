@@ -23,7 +23,7 @@ export const ProductWisecolumns = [
 ];
 
 export const Rows = (table = []) => {
-    debugger
+    
     const returnArr = [];
     let TotalCXprimaryAmount = 0
     let TotalCXPurchaseAmount = 0

@@ -94,7 +94,6 @@ import GRNAdd3 from "../pages/Inventory/GRN/GRNAdd_3";
 
 import SubGroupMaster from "../pages/Adminisrator/SubGroupPages/SubGroupMaster";
 import SubGroupList from "../pages/Adminisrator/SubGroupPages/SubGroupList";
-import PartyItemsList from "../pages/Adminisrator/PartyItemPage/PartyItemList";
 
 import BOMMaster from "../pages/Production/BOM/BOMMaster/BOMIndex";
 import BOMList from "../pages/Production/BOM/BOMList/BOMList";
@@ -185,12 +184,11 @@ import ItemRegisterReport from "../Reports/ItemRegisterReport/ItemRegisterReport
 import ClaimSummaryList from "../Reports/ClaimReportSummary/ClaimSummaryList";
 import ClaimSummaryMaster from "../Reports/ClaimReportSummary/ClaimSummaryMaster";
 
-// import RetailerDataReport from "../Reports/RetailerDataReport/RetailerDataReport";
 
 const userRoutes = [
   // *************************** DashBord *******************************//
 
-  
+
   { path: path.DASHBORD_1, component: Dashboard_1 },
   { path: path.DASHBORD_2, component: Dashboard_1 },
 
@@ -279,10 +277,8 @@ const userRoutes = [
   { path: path.PARTY_SUB_PARTY_lIST, component: PartySubPartyList },
 
   { path: path.PARTYITEM, component: PartyItems },
-  { path: path.PARTYITEM_LIST, component: PartyItemsList },
-
   { path: path.CHANNEL_ITEM, component: PartyItems },
-  { path: path.CHANNEL_ITEM_LIST, component: PartyItemsList },
+
 
   { path: path.SUBGROUP, component: SubGroupMaster },
   { path: path.SUBGROUP_LIST, component: SubGroupList },
@@ -409,7 +405,7 @@ const userRoutes = [
   { path: path.PAYMENT_ENTRY, component: PaymentEntry },
   { path: path.PAYMENT_ENTRY_LIST, component: PaymentEntryList },
 
-// |||||||||||||||||||||||||||||||||||||||||||||||||||
+  // |||||||||||||||||||||||||||||||||||||||||||||||||||
 
   { path: path.CREDIT_LIST, component: CreditList },
   { path: path.CREDIT_NOTE, component: DebitNoteMaster },
@@ -420,11 +416,11 @@ const userRoutes = [
 
   { path: path.GOODS_CREDIT_LIST, component: CreditList },
   { path: path.GOODS_CREDIT_NOTE, component: GoodsCreditNote },
-  
+
   { path: path.GOODS_DEBIT_LIST, component: CreditList },
   { path: path.GOODS_DEBIT_NOTE, component: GoodsCreditNote },
-  
-// |||||||||||||||||||||||||||||||||||||||||||||||||||
+
+  // |||||||||||||||||||||||||||||||||||||||||||||||||||
 
   //**************************** Reports ***********************************//
 
