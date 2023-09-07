@@ -209,7 +209,7 @@ export const PARTYITEM_FOR_MASTER = '/PartyItem' // FOR Get
 export const PARTY_ITEM_FILTER = '/PartyItemFilter' // FOR Get
 
 //channel Item 
-export const CHANNEL_ITEM_SAVE_URL = '/ChanelWiseItems' ;
+export const CHANNEL_ITEM_SAVE_URL = '/ChanelWiseItems';
 export const CHANNEL_ITEM_ADD_GO_BTN = '/PartyItemFilter' // FOR Get
 
 
@@ -379,6 +379,11 @@ export const CREDIT_DEBIT = '/CreditDebitNote'
 export const CREDIT_DEBIT_FILTER = '/CreditDebitNoteFilter'
 export const INVOICE_RETURN = '/InvoiceReturnCRDR'
 export const RECEIPT_NUMBER_LIST = '/ReceiptNoList'
+export const UPLOADED_CREDIT_DEBIT_E_INVOICE = '/Uploaded_CreditDebitNotes_EInvoice'
+export const CANCEL_CREDIT_DEBIT_E_INVOICE = '/Cancel_CreditDebitNotes_EInvoice'
+
+
+
 
 export const PARTY_LEDGER_API = '/SAPLedger'
 export const PRODUCT_MARGIN_REPORT_API = '/ProductMarginReport'

@@ -4,6 +4,8 @@ import { CurrentTime, currentDate_dmy } from "../../components/Common/CommonFunc
 let initial_y = 0
 
 export const pageBorder = (doc) => {
+    doc.setDrawColor(0, 0, 0);
+    doc.setLineWidth(0.5)
     doc.line(570, 17, 30, 17);//horizontal line (Top)
     doc.line(30, 815, 30, 17);//vertical line (left)
     doc.line(570, 815, 570, 17);//vertical line (Right)
@@ -41,20 +43,6 @@ export const reportHeder1 = (doc, data) => {
     var options3 = {
 
         didParseCell: (data1) => {
-
-            // didParseCell: (data1) => {
-            //     
-            //     if (data1.row.cells[5].raw === data.CustomerName) {
-            //         data1.row.cells[0].colSpan = 2
-
-            //         data1.row.cells[0].styles.fontSize = 8
-
-            //         data1.row.cells[0].styles.fontStyle = "bold"
-
-            //     }
-            // },
-
-
             if (data1.row.cells[0].raw.includes("books")) {
                 data1.row.cells[0].colSpan = 2
             }
@@ -309,6 +297,7 @@ export const pageFooter = (doc, data) => {
     doc.setFontSize(8)
     for (var i = 1; i <= pageCount; i++) {
         doc.setPage(i)
+        pageBorder(doc)
         doc.text('Print Date :' + String(currentDate_dmy) + 'Time' + String(CurrentTime()), 30, 828,)
         doc.text('Page' + String(i) + ' of ' + String(pageCount), 500, 828,)
     }

@@ -617,6 +617,13 @@ export const Receipt_Number_API = (jsonBody) => post(url.RECEIPT_NUMBER_LIST, js
 export const PartyLedger_API = (FromDate, ToDate, SAPCode) => post(url.PARTY_LEDGER_API, FromDate, ToDate, SAPCode)//  postapi
 export const Get_Product_Margin_Report = (IsSCM_ID, PartyID) => get(`${url.PRODUCT_MARGIN_REPORT_API}/${IsSCM_ID}/${PartyID}`)
 
+//**************************** E-Invoice Credit Debit Note (upload ,cancel,print) ***************************************/
+
+export const EInvoice_Credit_Debit_Uploade_Get_API = ({ RowId, UserID }) => get(`${url.UPLOADED_CREDIT_DEBIT_E_INVOICE}/${RowId}/${UserID}`)// Uploade_EInvoice
+export const EInvoice_Credit_Debit_Cancel_Get_API = ({ RowId, UserID }) => get(`${url.CANCEL_CREDIT_DEBIT_E_INVOICE}/${RowId}/${UserID}`)// Cancel_EInvoice
+
+
+
 // Order Summary
 export const OderSummary_GoBtn_API = ({ jsonBody }) => post(url.ORDER_SUMMARY, jsonBody)//post api
 export const PartySettingApi = (Party_id, Comapny_id) => get(`${url.PARTY_SETTING}/${Party_id}/${Comapny_id}`)// Party Setting api

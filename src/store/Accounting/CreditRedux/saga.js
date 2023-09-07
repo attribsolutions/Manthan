@@ -8,6 +8,8 @@ import {
   saveCredit_Success,
   Receipt_No_List_Success,
   CreditDebitApiErrorAction,
+  Uploaded_Credit_Debit_EInvoiceSuccess,
+  Cancel_Credit_Debit_EInvoiceSuccess,
 } from "./action";
 import {
   Credit_Debit_Save_API,
@@ -17,6 +19,8 @@ import {
   InvoiceReturn_API,
   del_Credit_List_API,
   Receipt_Number_API,
+  EInvoice_Credit_Debit_Uploade_Get_API,
+  EInvoice_Credit_Debit_Cancel_Get_API,
 } from "../../../helpers/backend_helper";
 import {
   CREDITDEBIT_TYPE,
@@ -28,7 +32,7 @@ import {
   SAVE_CREDIT,
 } from "./actionType";
 
-import { date_dmy_func, convertTimefunc, amountCommaSeparateFunc } from "../../../components/Common/CommonFunction";
+import { date_dmy_func, convertTimefunc, amountCommaSeparateFunc, loginUserID } from "../../../components/Common/CommonFunction";
 
 function* Save_Method_ForCredit_GenFun({ config }) {   // Save API
   try {
@@ -89,6 +93,29 @@ function* InvoiceReturn_ID_GenFunc(id) {           // Invoice Return Api
   } catch (error) { yield put(CreditDebitApiErrorAction()) }
 }
 
+
+//**************************** E-Invoice (upload ,cancel,) ***************************************/
+
+function* Uploade_Credit_Debit_EInvoiceGenFunc({ config }) {
+  config["UserID"] = loginUserID();
+  try {
+    const response = yield call(EInvoice_Credit_Debit_Uploade_Get_API, config)
+    yield put(Uploaded_Credit_Debit_EInvoiceSuccess(response));
+  } catch (error) {
+    yield put(CreditDebitApiErrorAction())
+  }
+}
+
+function* Cancle_Credit_Debit_EInvoiceGenFunc({ config }) {
+  config["UserID"] = loginUserID();
+  try {
+    const response = yield call(EInvoice_Credit_Debit_Cancel_Get_API, config)
+    yield put(Cancel_Credit_Debit_EInvoiceSuccess(response));
+  } catch (error) {
+    yield put(CreditDebitApiErrorAction())
+  }
+}
+
 // Receipt No. dropdown Api for debit master page.
 function* Receipt_Number_GenFunc({ jsonBody }) {                // edit API 
 
@@ -106,6 +133,12 @@ function* CreditDebitSaga() {
   yield takeLatest(EDIT_CREDIT_LIST_ID, Edit_Creditlist_ID_GenFunc)
   yield takeLatest(INVOICE_RETURN_ID, InvoiceReturn_ID_GenFunc)
   yield takeLatest(RECEIPT_NUMBER_LIST, Receipt_Number_GenFunc)
+
+  yield takeLatest(RECEIPT_NUMBER_LIST, Uploade_Credit_Debit_EInvoiceGenFunc)
+  yield takeLatest(RECEIPT_NUMBER_LIST, Cancle_Credit_Debit_EInvoiceGenFunc)
+
+
+
 }
 
 export default CreditDebitSaga;
