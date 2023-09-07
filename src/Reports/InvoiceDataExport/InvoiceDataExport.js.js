@@ -30,6 +30,7 @@ const InvoiceDataExport = (props) => {
         ToDate: currentDate_ymd,
 
     }
+    const [subPageMode] = useState(history.location.pathname);
     const [state, setState] = useState(() => initialFiledFunc(fileds))
     const [userPageAccessState, setUserAccState] = useState('');
     const [PartyDropdown, setPartyDropdown] = useState("");
@@ -62,8 +63,14 @@ const InvoiceDataExport = (props) => {
     const hasShowModal = props.hasOwnProperty(mode.editValue)
 
     useEffect(() => {
+        let pageID
+        if (subPageMode === url.INVOICE_DATA_EXPORT) {
+            pageID = pageId.INVOICE_DATA_EXPORT
+        } else {
+            pageID = pageId.PURCHASE_DATA_EXPORT
+        }
         dispatch(commonPageFieldSuccess(null));
-        dispatch(commonPageField(pageId.INVOICE_DATA_EXPORT));
+        dispatch(commonPageField(pageID));
         dispatch(BreadcrumbShowCountlabel(`Count:${0}`));
         return () => {
             dispatch(commonPageFieldSuccess(null));
@@ -109,6 +116,8 @@ const InvoiceDataExport = (props) => {
     function goButtonHandler(goBtnMode) {
 
         try {
+            const isInvoiceMode = subPageMode === url.PURCHASE_DATA_EXPORT
+
             if ((isSCMParty) && (PartyDropdown === "")) {
                 customAlert({ Type: 3, Message: "Please Select Party" });
                 return;
@@ -116,7 +125,8 @@ const InvoiceDataExport = (props) => {
             const jsonBody = JSON.stringify({
                 "FromDate": values.FromDate,
                 "ToDate": values.ToDate,
-                "Party": PartyDropdown === "" ? _cfunc.loginPartyID() : PartyDropdown.value,
+                "Party": PartyDropdown === "" ? _cfunc.loginPartyID() : !(isInvoiceMode) ? PartyDropdown.value : 0,
+                "Customer": isInvoiceMode ? PartyDropdown.value : 0
             });
             const config = { jsonBody, goBtnMode: goBtnMode, btnId: goBtnMode };
             dispatch(postInvoiceDataExport_API(config))

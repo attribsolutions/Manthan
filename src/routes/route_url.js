@@ -281,6 +281,8 @@ export const PURCHASE_GST_REPORT = "/PurchaseGSTReport"
 
 export const INVOICE_DATA_EXPORT = "/InvoiceDataExport"
 
+export const PURCHASE_DATA_EXPORT = "/PurchaseDataExport"
+
 export const DELETE_INVOICE_DATA_EXPORT = "/DeleteInvoiceDataExport"
 
 export const DAMAGE_STOCK_REPORT = "/Damage_Stock_Report"

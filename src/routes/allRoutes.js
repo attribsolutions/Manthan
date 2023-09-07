@@ -448,6 +448,8 @@ const userRoutes = [
 
   { path: path.INVOICE_DATA_EXPORT, component: InvoiceDataExport },
 
+  { path: path.PURCHASE_DATA_EXPORT, component: InvoiceDataExport },
+
   { path: path.DELETE_INVOICE_DATA_EXPORT, component: DeleteInvoiceDataExport },
 
   { path: path.REPORT, component: Report },
