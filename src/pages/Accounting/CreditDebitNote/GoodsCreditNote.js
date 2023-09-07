@@ -45,7 +45,7 @@ function initialState(history) {
     let listPath = ''
     let sub_Mode = history.location.pathname;
 
-    if (sub_Mode === url.GOODS_CREDIT_NOTE ) {
+    if (sub_Mode === url.GOODS_CREDIT_NOTE) {
         page_Id = pageId.GOODS_CREDIT_NOTE;
         listPath = url.GOODS_CREDIT_LIST
     }
@@ -119,7 +119,7 @@ const GoodsCreditNote = (props) => {
         dispatch(InvoiceNumberSuccess([]));
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_id));
-        dispatch(goButtonPartyItemAddPage(JSON.stringify(_cfunc.loginJsonBody())));
+        dispatch(goButtonPartyItemAddPage({ jsonBody: JSON.stringify(_cfunc.loginJsonBody()) }));
 
         const jsonBody = JSON.stringify({
             Type: 1,
@@ -183,7 +183,7 @@ const GoodsCreditNote = (props) => {
                 if (hasEditVal) {
 
                     const { CRDRNoteDate, Customer, Narration, GrandTotal, CRDRInvoices = '', CustomerID, CRDRNoteItems = [] } = hasEditVal
-                    debugger
+                    
                     const { values, fieldLabel, hasValid, required, isError } = { ...state }
                     values.CRDRNoteDate = CRDRNoteDate;
                     values.Customer = { label: Customer, value: CustomerID };
@@ -234,7 +234,7 @@ const GoodsCreditNote = (props) => {
                     Message: postMsg.Message,
                 })
                 if (alertResponse) {
-                    history.push({ pathname: listPath})
+                    history.push({ pathname: listPath })
                 }
             }
         }

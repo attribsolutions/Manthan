@@ -44,7 +44,7 @@ const PriceList = () => {
   //  This UseEffect => Featch Modules List data  First Rendering
   useEffect(() => {
     dispatch(commonPageFieldListSuccess(null))
-    dispatch(commonPageFieldList(pageId.PARTYITEM_LIST))
+    dispatch(commonPageFieldList(pageId.PRICE_lIST))
     dispatch(priceListByCompay_Action());
   }, []);
 
