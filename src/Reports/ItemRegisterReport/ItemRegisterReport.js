@@ -73,7 +73,7 @@ const ItemRegisterReport = (props) => {
     useEffect(() => {
         dispatch(getBaseUnit_ForDropDown());
         const jsonBody = JSON.stringify({ ..._cfunc.loginJsonBody() });
-        dispatch(goButtonPartyItemAddPage(jsonBody));
+        dispatch(goButtonPartyItemAddPage({jsonBody}));
     }, [])
 
     useEffect(() => {

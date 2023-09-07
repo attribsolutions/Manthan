@@ -1,0 +1,173 @@
+// import React, { useEffect, useLayoutEffect, useState } from "react";
+// import { useDispatch, useSelector } from "react-redux";
+// import CommonListPage from "../../../components/Common/CommonMasterListPage";
+// import {
+//   commonPageFieldList,
+//   commonPageFieldListSuccess,
+//   deleteGrouplistSuccess,
+// } from "../../../store/actions";
+// import PartyItems from "./PartyItems";
+// import { editPartyItemID, getPartyItemAssingList, getPartyItemAssingListSuccess, } from "../../../store/Administrator/PartyItemsRedux/action";
+
+// import { url, mode, pageId } from "../../../routes/index"
+// import * as _cfunc from "../../../components/Common/CommonFunction";
+// import { loginJsonBody, } from "../../../components/Common/CommonFunction";
+// import CommonPurchaseList from "../../../components/Common/CommonPurchaseList";
+// import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
+// import { useHistory } from "react-router-dom";
+// import { PageLoadingSpinner } from "../../../components/Common/CommonButton";
+// import { customAlert } from "../../../CustomAlert/ConfirmDialog";
+
+
+
+// const PartyItemsList = (props) => {
+
+//   const dispatch = useDispatch();
+//   const history = useHistory();
+
+//   const [subPageMode] = useState(history.location.pathname);
+//   const [otherState, setOtherState] = useState({ masterPath: '', newBtnPath: '' });
+//   const [pageMode, setPageMode] = useState(mode.defaultList);
+//   const [partyId, setPartyId] = useState('');
+
+//   const reducers = useSelector(
+//     (state) => ({
+//       tableList: state.PartyItemsReducer.partyList,
+//       editData: state.PartyItemsReducer.editData,
+//       updateMsg: state.PartyItemsReducer.postMsg,
+//       deleteMsg: state.PartyItemsReducer.deleteMsg,
+//       postMsg: state.PartyItemsReducer.postMsg,
+//       userAccess: state.Login.RoleAccessUpdateData,
+//       pageField: state.CommonPageFieldReducer.pageFieldList,
+//       goBtnloading: state.PartyItemsReducer.goBtnloading
+//     })
+//   );
+
+//   const tableAction = {
+//     getList: getPartyItemAssingList,
+//     editId: editPartyItemID,
+//     deleteSucc: deleteGrouplistSuccess
+//   }
+
+//   useEffect(() => {
+
+//     let page_Id = '';
+//     let page_Mode = mode.defaultList;
+//     let masterPath = '';
+//     let newBtnPath = '';
+
+
+//     if (subPageMode === url.PARTYITEM_LIST) {
+//       page_Id = pageId.PARTYITEM_LIST;
+//       masterPath = url.PARTYITEM;
+//       newBtnPath = url.PARTYITEM;
+//     }
+//     else if (subPageMode === url.CHANNEL_ITEM_LIST) {
+//       page_Id = pageId.CHANNEL_ITEM_LIST
+//       masterPath = url.CHANNEL_ITEM;
+//       newBtnPath = url.CHANNEL_ITEM;
+//     }
+
+ 
+//     setOtherState({ masterPath, newBtnPath })
+//     setPageMode(page_Mode)
+//     dispatch(commonPageFieldListSuccess(null))
+//     dispatch(commonPageFieldList(page_Id))
+
+//     if (!(_cfunc.loginSelectedPartyID() === 0)) {
+//       goButtonHandler("event")
+//     } else if(subPageMode==url.CHANNEL_ITEM_LIST) {
+//       dispatch(getPartyItemAssingList({ subPageMode }));
+//     }
+
+//     return () => {
+//       dispatch(commonPageFieldListSuccess(null))
+//       dispatch(getPartyItemAssingListSuccess([]))
+//     }
+//   }, []);
+
+
+
+//   function goButtonHandler() {
+
+//     try {
+//       if ((_cfunc.loginSelectedPartyID() === 0)) {
+//         customAlert({ Type: 3, Message: "Please Select Party" });
+//         return;
+//       };
+//       dispatch(getPartyItemAssingList({subPageMode}));
+
+//     } catch (error) { }
+//   }
+
+//   function editBodyfunc(row) {
+
+//     const config = { ...row }
+//     config.PartyName = row.rowData.Name
+//     config.Party = row.rowData.id;
+//     config.editId = row.rowData.id
+
+//     const jsonBody = JSON.stringify({ ...loginJsonBody(), ...{ PartyID: config.editId } });
+
+//     dispatch(editPartyItemID({ jsonBody, config }))
+//   }
+
+
+
+
+//   function partySelectButtonHandler() {
+//     debugger
+//     goButtonHandler("event")
+//   }
+
+//   function partyOnChngeButtonHandler() {
+//     debugger
+//     dispatch(getPartyItemAssingListSuccess([]))
+//   }
+
+
+//   const { pageField } = reducers
+
+//   return (
+//     <React.Fragment>
+
+//       {/* <CommonListPage
+//             action={action}
+//             reducers={reducers}
+//             MasterModal={PartyItems}
+//             masterPath={url.PARTYITEM}
+//             ButtonMsgLable={"Party Items"}
+//             deleteName={"Name"}
+//             editBodyfunc={editBodyfunc}
+
+//           /> */}
+
+//       <PageLoadingSpinner isLoading={reducers.goBtnloading || !pageField} />
+
+//       <div className="page-content">
+//         {subPageMode == url.PARTYITEM_LIST && (
+//           <PartyDropdown_Common
+//             goButtonHandler={partySelectButtonHandler}
+//             changeButtonHandler={partyOnChngeButtonHandler} />
+//         )}
+//         {
+//           (pageField) ?
+//             <CommonPurchaseList
+//               action={tableAction}
+//               reducers={reducers}
+//               masterPath={otherState.masterPath}
+//               newBtnPath={otherState.newBtnPath}
+//               pageMode={pageMode}
+//               editBodyfunc={editBodyfunc}
+//             />
+//             : null
+//         }
+//       </div>
+
+
+
+//     </React.Fragment>
+//   )
+// }
+
+// export default PartyItemsList;

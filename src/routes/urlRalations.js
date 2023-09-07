@@ -95,13 +95,6 @@ export const TermsAndCondtionsList = url.TERMS_AND_CONDITION;
 export const PartySubParty = url.PARTY_SUB_PARTY_lIST;
 export const PartySubPartyList = url.PARTY_SUB_PARTY;
 
-export const PartyItems = url.PARTYITEM_LIST;
-export const PartyItemsList = url.PARTYITEM;
-
-export const ChannelItem = url.CHANNEL_ITEM_LIST;
-export const ChannelItemList = url.CHANNEL_ITEM;
-
-
 export const SubGroupList = url.SUBGROUP
 export const SubGroupMaster = url.SUBGROUP_LIST
 
