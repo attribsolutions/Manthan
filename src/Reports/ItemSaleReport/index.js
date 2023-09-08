@@ -904,7 +904,6 @@ const ItemSaleReport = (props) => {
                                                 value={ItemNameSelect}
                                                 isSearchable={true}
                                                 isLoading={ItemDropdownloading}
-                                                isMulti={true}
                                                 className="react-dropdown"
                                                 classNamePrefix="dropdown"
                                                 styles={{
