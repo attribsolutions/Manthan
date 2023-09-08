@@ -101,12 +101,17 @@ const InvoiceDataExport = (props) => {
 
     useEffect(() => {
         if (goBtnMode === "downloadExcel") {
-
+            let excelName
+            if (subPageMode === url.INVOICE_DATA_EXPORT) {
+                excelName = "Invoice Data Export"
+            } else {
+                excelName = "Purchase Data Export"
+            }
             if (Data.length > 0) {
                 ReportComponent({      // Download CSV
                     pageField,
                     excelData: Data,
-                    excelFileName: "Invoice Data Export"
+                    excelFileName: excelName
                 })
                 dispatch(postInvoiceDataExport_API_Success([]));   // Reset Excel Data
             }
