@@ -7,7 +7,7 @@ import { C_Select } from "../CustomValidateForm";
 import { loginIsSCMParty } from "../components/Common/CommonFunction";
 
 export function ReportComponent({ pageField, excelData, excelFileName }) {
-
+    debugger
     const csvColumns = pageField.PageFieldMaster
         .filter(column => column.ShowInListPage) // Only include columns where ShowInListPage is true
         .sort((a, b) => a.ListPageSeq - b.ListPageSeq) // Sort columns by ListPageSeq in ascending order

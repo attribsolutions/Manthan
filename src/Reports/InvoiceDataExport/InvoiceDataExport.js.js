@@ -30,6 +30,7 @@ const InvoiceDataExport = (props) => {
         ToDate: currentDate_ymd,
 
     }
+    const [subPageMode] = useState(history.location.pathname);
     const [state, setState] = useState(() => initialFiledFunc(fileds))
     const [userPageAccessState, setUserAccState] = useState('');
     const [PartyDropdown, setPartyDropdown] = useState("");
@@ -62,8 +63,14 @@ const InvoiceDataExport = (props) => {
     const hasShowModal = props.hasOwnProperty(mode.editValue)
 
     useEffect(() => {
+        let pageID
+        if (subPageMode === url.INVOICE_DATA_EXPORT) {
+            pageID = pageId.INVOICE_DATA_EXPORT
+        } else {
+            pageID = pageId.PURCHASE_DATA_EXPORT
+        }
         dispatch(commonPageFieldSuccess(null));
-        dispatch(commonPageField(pageId.INVOICE_DATA_EXPORT));
+        dispatch(commonPageField(pageID));
         dispatch(BreadcrumbShowCountlabel(`Count:${0}`));
         return () => {
             dispatch(commonPageFieldSuccess(null));
@@ -94,30 +101,51 @@ const InvoiceDataExport = (props) => {
 
     useEffect(() => {
         if (goBtnMode === "downloadExcel") {
-
+            let excelName
+            if (subPageMode === url.INVOICE_DATA_EXPORT) {
+                excelName = "Invoice Data Export"
+            } else {
+                excelName = "Purchase Data Export"
+            }
             if (Data.length > 0) {
                 ReportComponent({      // Download CSV
                     pageField,
                     excelData: Data,
-                    excelFileName: "Invoice Data Export"
+                    excelFileName: excelName
                 })
                 dispatch(postInvoiceDataExport_API_Success([]));   // Reset Excel Data
             }
         }
     }, [goBtnMode, Data, pageField]);
 
+
     function goButtonHandler(goBtnMode) {
 
         try {
+            let jsonBody
+
             if ((isSCMParty) && (PartyDropdown === "")) {
                 customAlert({ Type: 3, Message: "Please Select Party" });
                 return;
             };
-            const jsonBody = JSON.stringify({
-                "FromDate": values.FromDate,
-                "ToDate": values.ToDate,
-                "Party": PartyDropdown === "" ? _cfunc.loginPartyID() : PartyDropdown.value,
-            });
+
+            if (subPageMode === url.PURCHASE_DATA_EXPORT) {
+                jsonBody = JSON.stringify({
+                    "FromDate": values.FromDate,
+                    "ToDate": values.ToDate,
+                    "Party": 0,
+                    "Customer": (isSCMParty) ? PartyDropdown.value : _cfunc.loginPartyID()
+                });
+            }
+            else {
+                jsonBody = JSON.stringify({
+                    "FromDate": values.FromDate,
+                    "ToDate": values.ToDate,
+                    "Party": (isSCMParty) ? PartyDropdown.value : _cfunc.loginPartyID(),
+                    "Customer": 0
+                });
+            }
+
             const config = { jsonBody, goBtnMode: goBtnMode, btnId: goBtnMode };
             dispatch(postInvoiceDataExport_API(config))
 

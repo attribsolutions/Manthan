@@ -10,20 +10,19 @@ import { MetaTags } from "react-meta-tags";
 import { BreadcrumbShowCountlabel, GetVenderSupplierCustomer, GetVenderSupplierCustomerSuccess, commonPageField, commonPageFieldSuccess, getBaseUnit_ForDropDown, getGroupList, getItemList, getSubGroupList, get_Group_By_GroupType_ForDropDown, get_Sub_Group_By_Group_ForDropDown, get_Sub_Group_By_Group_ForDropDown_Success } from "../../store/actions";
 import { GetRoutesList, GetRoutesListSuccess } from "../../store/Administrator/RoutesRedux/actions";
 import { getPartyTypelist, getPartyTypelistSuccess } from "../../store/Administrator/PartyTypeRedux/action";
+
 import { ItemSaleGoButton_API, ItemSaleGoButton_API_Success, Items_On_Group_And_Subgroup_API, SupplierOnPartyType_API, SupplierOnPartyType_API_Success } from "../../store/Report/ItemSaleReport/action";
 import ShowTableComponent from "./showTable";
 import "../ItemSaleReport/ItemSaleCSS.scss";
 import { useMemo } from "react";
 import * as initail from "./hardcodeDetails";
 import { date_dmy_func } from "../../components/Common/CommonFunction";
-import Papa from 'papaparse';
 
 const ItemSaleReport = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory();
     const currentDate_ymd = _cfunc.date_ymd_func();
-    const isSCMParty = _cfunc.loginIsSCMParty();
 
     const [userPageAccessState, setUserAccState] = useState('');
     const [hederFilters, setHederFilters] = useState({
@@ -32,7 +31,7 @@ const ItemSaleReport = (props) => {
     })
 
     const [channelFromSelect, setChannelFromSelect] = useState(initail.initialSlected_zero);
-    const [channelToSelect, setChannelToSelect] = useState(initail.initialSlected_blank);
+    const [channelToSelect, setChannelToSelect] = useState(initail.initialSlected_blankArray);
     const [routeSelect, setRouteSelect] = useState(initail.initialSlected_blank);
     const [supplierSelect, setSupplierSelect] = useState(initail.initialSlected_zero);
     const [customerSelect, setCustomerSelect] = useState(initail.initialSlected_blank);
@@ -60,6 +59,7 @@ const ItemSaleReport = (props) => {
         ItemSaleReportGobtn,
         userAccess,
         supplierLoading,
+        pageField,
         supplier,
         RoutesList,
         routesDropLoading,
@@ -103,10 +103,12 @@ const ItemSaleReport = (props) => {
                 getSubProductbyProduct: state.ItemMastersReducer.SubGroupList,
 
                 userAccess: state.Login.RoleAccessUpdateData,
+                pageField: state.CommonPageFieldReducer.pageField
             })
         );
 
     const { fromdate, todate, } = hederFilters;
+
 
     const location = { ...history.location }
     const hasShowModal = props.hasOwnProperty(mode.editValue)
@@ -153,6 +155,7 @@ const ItemSaleReport = (props) => {
         }
     }, [ItemSaleReportGobtn]);
 
+
     const subProductDropdownOptions = useMemo(() => {
         let options = [];
         if (productSelect.value === 0) {
@@ -187,11 +190,15 @@ const ItemSaleReport = (props) => {
         return options;
     }, [channelFromSelect, supplier, supplierListOnPartyType]);
 
+
     const generateOptions = (sourceArray, labelField = "Name", valueField = "id") =>
         [initail.initialSlected_blank, ...sourceArray.map(item => ({ value: item[valueField], label: item[labelField] }))];
 
+    const generateOptions1 = (sourceArray, labelField = "Name", valueField = "id") =>
+        [...sourceArray.map(item => ({ value: item[valueField], label: item[labelField] }))];
+
     const routeDropdownOptions = useMemo(() => generateOptions(RoutesList.filter(route => route.IsActive)), [RoutesList]);
-    const channelDropdownOptions = useMemo(() => generateOptions(PartyTypes), [PartyTypes]);
+    const channelDropdownOptions = useMemo(() => generateOptions1(PartyTypes), [PartyTypes]);
     const itemNameDropdownOptions = useMemo(() => generateOptions(ItemNameList), [ItemNameList]);
     const productDropdownOptions = useMemo(() => generateOptions(productDropdown), [productDropdown]);
     const customerDropdownOptions = useMemo(() => generateOptions(customerDropdown), [customerDropdown]);
@@ -266,7 +273,7 @@ const ItemSaleReport = (props) => {
                 "FromDate": fromdate,
                 "ToDate": todate,
                 "PartyType": supplierSelect.value > 0 ? 0 : channelFromSelect.value,
-                "Party": !(isSCMParty) ? _cfunc.loginPartyID() : supplierSelect.value
+                "Party": supplierSelect.value
             });
             dispatch(ItemSaleGoButton_API({ jsonBody, btnId: url.ITEM_SALE_REPORT }))
 
@@ -310,6 +317,15 @@ const ItemSaleReport = (props) => {
         dispatch(BreadcrumbShowCountlabel(`Count:0 ₹ 0`))
     }
 
+    function channelTo_OnChange(e = []) {
+        if (e.length === 0) {
+            e = [{ value: 0, label: "All" }]
+        } else {
+            e = e.filter(i => !(i.value === 0))
+        }
+        setChannelToSelect(e);
+    }
+
     const dataManpulationFunction = (baseData = []) => {
 
         const buttonStateArray = [
@@ -317,7 +333,7 @@ const ItemSaleReport = (props) => {
                 text: 'FromDate',
                 dataField: 'InvoiceDate',
                 checkboxState: fromDateCheckbox,
-                selectValue: { value: "", label: "All" },
+                selectValue: [{ value: 0, label: "All" }],
                 sequence: 1,
                 sort: true,
                 groupBy: true,
@@ -327,7 +343,7 @@ const ItemSaleReport = (props) => {
                 text: 'Channel From',
                 dataField: 'SaleMadeFrom',
                 checkboxState: channelFromCheckbox,
-                selectValue: { value: "", label: "All" },
+                selectValue: [{ value: 0, label: "All" }],
                 sort: true,
                 groupBy: true,
                 sequence: 2
@@ -342,148 +358,157 @@ const ItemSaleReport = (props) => {
                 sequence: 3
             },
 
-            {
-                text: 'Supplier',
-                dataField: 'SupplierName',
-                checkboxState: supplierCheckbox,
-                selectValue: { value: "", label: "All" },
-                sort: true,
-                groupBy: true,
-                sequence: 4
-            },
-            {
-                text: 'FullInvoiceNumber',
-                dataField: 'FullInvoiceNumber',
-                checkboxState: showAlsoSelect.some(item => item.value === 1) ? true : false,
-                selectValue: showAlsoSelect,
-                sort: true,
-                groupBy: true,
-                sequence: 5
-            },
-            {
-                text: 'Route',
-                dataField: 'RouteName',
-                checkboxState: routeCheckbox,
-                selectValue: routeSelect,
-                sort: true,
-                groupBy: true,
-                sequence: 6
-            },
-            {
-                text: 'Customer',
-                dataField: 'CustomerName',
-                checkboxState: customerCheckbox,
-                selectValue: customerSelect,
-                sort: true,
-                groupBy: true,
-                sequence: 7
-            },
-            {
-                text: 'Product',
-                dataField: 'GroupName',
-                checkboxState: productCheckbox,
-                selectValue: productSelect,
-                sort: true,
-                groupBy: true,
-                sequence: 8
-            },
-            {
-                text: 'Sub Product',
-                dataField: 'SubGroupName',
-                checkboxState: subProductCheckbox,
-                selectValue: subProductSelect,
-                sort: true,
-                groupBy: true,
-                sequence: 9
-            },
-            {
-                text: 'ItemName',
-                dataField: 'ItemName',
-                checkboxState: itemNameCheckbox,
-                selectValue: ItemNameSelect,
-                sort: true,
-                groupBy: true,
-                sequence: 10
-            },
+            // {
+            //     text: 'Supplier',
+            //     dataField: 'SupplierName',
+            //     checkboxState: supplierCheckbox,
+            //     // selectValue: { value: "", label: "All" },
+            //     selectValue: [{ value: "", label: "All" }],
+            //     sort: true,
+            //     groupBy: true,
+            //     sequence: 4
+            // },
+            // {
+            //     text: 'FullInvoiceNumber',
+            //     dataField: 'FullInvoiceNumber',
+            //     checkboxState: showAlsoSelect.some(item => item.value === 1) ? true : false,
+            //     // selectValue: showAlsoSelect,
+            //     selectValue: [{ value: "", label: "All" }],
+            //     sort: true,
+            //     groupBy: true,
+            //     sequence: 5
+            // },
+            // {
+            //     text: 'Route',
+            //     dataField: 'RouteName',
+            //     checkboxState: routeCheckbox,
+            //     // selectValue: routeSelect,
+            //     selectValue: [{ value: "", label: "All" }],
+            //     sort: true,
+            //     groupBy: true,
+            //     sequence: 6
+            // },
+            // {
+            //     text: 'Customer',
+            //     dataField: 'CustomerName',
+            //     checkboxState: customerCheckbox,
+            //     // selectValue: customerSelect,
+            //     selectValue: [{ value: "", label: "All" }],
+            //     sort: true,
+            //     groupBy: true,
+            //     sequence: 7
+            // },
+            // {
+            //     text: 'Product',
+            //     dataField: 'GroupName',
+            //     checkboxState: productCheckbox,
+            //     // selectValue: productSelect,
+            //     selectValue: [{ value: "", label: "All" }],
+            //     sort: true,
+            //     groupBy: true,
+            //     sequence: 8
+            // },
+            // {
+            //     text: 'Sub Product',
+            //     dataField: 'SubGroupName',
+            //     checkboxState: subProductCheckbox,
+            //     // selectValue: subProductSelect,
+            //     selectValue: [{ value: "", label: "All" }],
+            //     sort: true,
+            //     groupBy: true,
+            //     sequence: 9
+            // },
+            // {
+            //     text: 'ItemName',
+            //     dataField: 'ItemName',
+            //     checkboxState: itemNameCheckbox,
+            //     // selectValue: ItemNameSelect,
+            //     selectValue: [{ value: "", label: "All" }],
+            //     sort: true,
+            //     groupBy: true,
+            //     sequence: 10
+            // },
 
-            {
-                text: 'QtyInNo',
-                dataField: 'QtyInNo',
-                checkboxState: unitDropdownSelect.value === 1 ? true : false,
-                sort: true,
-                isSum: true,
-                toFixed: 0,
-                sequence: 11
-            },
-            {
-                text: 'QtyInKg',
-                dataField: 'QtyInKg',
-                checkboxState: unitDropdownSelect.value === 2 ? true : false,
-                sort: true,
-                isSum: true,
-                toFixed: 3,
-                sequence: 12
-            },
-            {
-                text: 'QtyInBox',
-                dataField: 'QtyInBox',
-                checkboxState: unitDropdownSelect.value === 3 ? true : false,
-                sort: true,
-                isSum: true,
-                toFixed: 3,
-                sequence: 13
-            },
-            {
-                text: 'InvoiceGrandTotal',
-                dataField: 'GrandTotal',
-                checkboxState: showAlsoSelect.some(item => item.value === 5),
-                sort: true,
-                toFixed: 2,
-                sequence: 15
-            },
-            {
-                text: 'DiscountInRS',
-                dataField: 'DiscountAmount',
-                checkboxState: showAlsoSelect.some(item => item.value === 4),
-                sort: true,
-                isSum: true,
-                toFixed: 2,
-                sequence: 16
-            },
-            {
-                text: 'RoundOffAmount',
-                dataField: 'RoundOffAmount',
-                checkboxState: showAlsoSelect.some(item => item.value === 6),
-                isSum: true,
-                sort: true,
-                toFixed: 2,
-                sequence: 17,
-            },
-            {
-                text: 'TCSAmount',
-                dataField: 'TCSAmount',
-                checkboxState: showAlsoSelect.some(item => item.value === 7),
-                isSum: true,
-                sort: true,
-                sequence: 18,
-                toFixed: 2
-            },
-            {
-                text: 'GRNID',
-                dataField: 'FullGRNNumber',
-                checkboxState: showAlsoSelect.some(item => item.value === 3),
-                sort: true,
-                groupBy: true,
-                sequence: 19
-            },
-            { //this filed not Show intable 
-                text: "Show Discounted Items",
-                dataField: "ShowDiscountedItems",
-                selectValue: showAlsoSelect.find(item => item.value === 2),
-            },
+            // {
+            //     text: 'QtyInNo',
+            //     dataField: 'QtyInNo',
+            //     checkboxState: unitDropdownSelect.value === 1 ? true : false,
+            //     sort: true,
+            //     isSum: true,
+            //     toFixed: 0,
+            //     sequence: 11
+            // },
+            // {
+            //     text: 'QtyInKg',
+            //     dataField: 'QtyInKg',
+            //     checkboxState: unitDropdownSelect.value === 2 ? true : false,
+            //     sort: true,
+            //     isSum: true,
+            //     toFixed: 3,
+            //     sequence: 12
+            // },
+            // {
+            //     text: 'QtyInBox',
+            //     dataField: 'QtyInBox',
+            //     checkboxState: unitDropdownSelect.value === 3 ? true : false,
+            //     sort: true,
+            //     isSum: true,
+            //     toFixed: 3,
+            //     sequence: 13
+            // },
+            // {
+            //     text: 'InvoiceGrandTotal',
+            //     dataField: 'GrandTotal',
+            //     checkboxState: showAlsoSelect.some(item => item.value === 5),
+            //     sort: true,
+            //     toFixed: 2,
+            //     sequence: 15
+            // },
+            // {
+            //     text: 'DiscountInRS',
+            //     dataField: 'DiscountAmount',
+            //     checkboxState: showAlsoSelect.some(item => item.value === 4),
+            //     sort: true,
+            //     isSum: true,
+            //     toFixed: 2,
+            //     sequence: 16
+            // },
+            // {
+            //     text: 'RoundOffAmount',
+            //     dataField: 'RoundOffAmount',
+            //     checkboxState: showAlsoSelect.some(item => item.value === 6),
+            //     isSum: true,
+            //     sort: true,
+            //     toFixed: 2,
+            //     sequence: 17,
+            // },
+            // {
+            //     text: 'TCSAmount',
+            //     dataField: 'TCSAmount',
+            //     checkboxState: showAlsoSelect.some(item => item.value === 7),
+            //     isSum: true,
+            //     sort: true,
+            //     sequence: 18,
+            //     toFixed: 2
+            // },
+            // {
+            //     text: 'GRNID',
+            //     dataField: 'FullGRNNumber',
+            //     checkboxState: showAlsoSelect.some(item => item.value === 3),
+            //     sort: true,
+            //     groupBy: true,
+            //     sequence: 19
+            // },
+            // { //this filed not Show intable 
+            //     text: "Show Discounted Items",
+            //     dataField: "ShowDiscountedItems",
+            //     // selectValue: showAlsoSelect.find(item => item.value === 2),
+            //     selectValue: [{ value: "", label: "All" }],
+            // },
             {
                 text: "Amount",
                 dataField: "Amount",
+                selectValue: [{ value: 0, label: "All" }],
                 checkboxState: true,
                 sort: true,
                 isSum: true,
@@ -499,21 +524,19 @@ const ItemSaleReport = (props) => {
 
         let tableColumns = [];
 
-
-        const filterParameter = buttonStateArray.filter(option => (option.selectValue?.value > 0));
+        const filterParameter = buttonStateArray.filter(option => option.selectValue.some(index => index.value > 0));
 
         if (filterParameter.length > 0) {
             manupulatedData = baseData.filter(item => {
                 return filterParameter.every(option => {
-                    if ((option.dataField === 'ShowDiscountedItems') && (option.selectValue?.value > 0)) {
+
+                    if ((option.dataField === 'ShowDiscountedItems') && (option.selectValue.some(value => value.value > 0))) {
                         return (Number(item.DiscountAmount) > 0) ? true : false
                     }
-                    return item[option.dataField] === option.selectValue.label;
-
+                    return option.selectValue.some(valueObj => item[option.dataField] === valueObj.label);
                 });
             });
         }
-
 
         if (buttonStateArray.some(option => option.checkboxState)) {
 
@@ -567,35 +590,6 @@ const ItemSaleReport = (props) => {
         let commaSeparateAmount = _cfunc.amountCommaSeparateFunc(Number(totalAmount).toFixed(2));
 
         dispatch(BreadcrumbShowCountlabel(`Count:${manupulatedData.length} ₹ ${commaSeparateAmount}`));
-    }
-
-    function ExcelDownload() {
-
-        const csvColumns = selectedColumns.map(column => column.dataField); // Extract column headers
-
-        const csvHeaderColumns = selectedColumns.map(column => column.text); // Extract column headers
-
-        // Map the data to include only the properties corresponding to the columns
-        const csvData = tableData.map(item =>
-            csvColumns.map(column => item[column])
-        );
-
-        // Combine column headers and data into a single array
-        const csvContent = [csvHeaderColumns, ...csvData];
-
-        // Create the CSV content
-        const csvContentString = Papa.unparse(csvContent, { header: true });
-
-        // Create and trigger the download
-        const blob = new Blob([csvContentString], { type: "text/csv" });
-        const url = URL.createObjectURL(blob);
-
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = `Item Sale Report.csv`;
-        a.click();
-
-        URL.revokeObjectURL(url);
     }
 
     return (
@@ -661,7 +655,7 @@ const ItemSaleReport = (props) => {
                                                 isSearchable={true}
                                                 className="react-dropdown"
                                                 classNamePrefix="dropdown"
-                                                isDisabled={(tableData.length > 0 || !(isSCMParty)) && true}
+                                                isDisabled={(tableData.length > 0) && true}
                                                 styles={{
                                                     menu: provided => ({ ...provided, zIndex: 2 })
                                                 }}
@@ -685,13 +679,12 @@ const ItemSaleReport = (props) => {
                                         <Label className="col-sm-4 p-2">Supplier</Label>
                                         <Col>
                                             <C_Select
-
-                                                value={!(isSCMParty) ? { label: _cfunc.loginPartyName() } : supplierSelect}
+                                                value={supplierSelect}
                                                 isSearchable={true}
                                                 isLoading={supplierLoading}
                                                 className="react-dropdown"
                                                 classNamePrefix="dropdown"
-                                                isDisabled={(tableData.length > 0 || !(isSCMParty)) && true}
+                                                isDisabled={(tableData.length > 0) && true}
                                                 styles={{
                                                     menu: provided => ({ ...provided, zIndex: 2 })
                                                 }}
@@ -734,11 +727,13 @@ const ItemSaleReport = (props) => {
                                                 isSearchable={true}
                                                 className="react-dropdown"
                                                 classNamePrefix="dropdown"
+                                                isMulti={true}
                                                 styles={{
                                                     menu: provided => ({ ...provided, zIndex: 2 })
                                                 }}
                                                 options={channelDropdownOptions}
-                                                onChange={(e) => { setChannelToSelect(e) }}
+                                                // onChange={(e) => { setChannelToSelect(e) }}
+                                                onChange={channelTo_OnChange}
                                             />
                                         </Col>
                                     </FormGroup>
@@ -820,7 +815,6 @@ const ItemSaleReport = (props) => {
                                 </Col>
                             </Row>
                         </Col>
-
                         <Col sm="1" className="mt-1 mb-1 ">
                             {(initaialBaseData.length > 0) &&
                                 <C_Button
@@ -835,119 +829,103 @@ const ItemSaleReport = (props) => {
                     </Row>
 
                     <Row>
-                        <Col className="col col-11">
-                            <Row>
-                                <Col sm={3}>
-                                    <FormGroup className=" row mt-2">
-                                        <Input style={{ marginLeft: "5px", marginTop: "10px" }}
-                                            className="p-1"
-                                            type="checkbox"
-                                            checked={productCheckbox}
-                                            onChange={(e) => { setProductCheckbox(e.target.checked) }}
-                                        />
-                                        <Label className="col-sm-3 p-2">Product</Label>
-                                        <Col sm={6}>
-                                            <C_Select
-                                                value={productSelect}
-                                                isSearchable={true}
-                                                isLoading={productLoading}
-                                                className="react-dropdown"
-                                                classNamePrefix="dropdown"
-                                                styles={{
-                                                    menu: provided => ({ ...provided, zIndex: 2 })
-                                                }}
-                                                options={productDropdownOptions}
-                                                onChange={ProductOnchange}
+                        <Col sm={3}>
+                            <FormGroup className=" row mt-2">
+                                <Input style={{ marginLeft: "5px", marginTop: "10px" }}
+                                    className="p-1"
+                                    type="checkbox"
+                                    checked={productCheckbox}
+                                    onChange={(e) => { setProductCheckbox(e.target.checked) }}
+                                />
+                                <Label className="col-sm-3 p-2">Product</Label>
+                                <Col sm={6}>
+                                    <C_Select
+                                        value={productSelect}
+                                        isSearchable={true}
+                                        isLoading={productLoading}
+                                        className="react-dropdown"
+                                        classNamePrefix="dropdown"
+                                        styles={{
+                                            menu: provided => ({ ...provided, zIndex: 2 })
+                                        }}
+                                        options={productDropdownOptions}
+                                        onChange={ProductOnchange}
 
-                                            />
-                                        </Col>
-                                    </FormGroup>
+                                    />
                                 </Col>
-
-                                <Col sm={3}>
-                                    <FormGroup className=" row mt-2">
-                                        <Input style={{ marginLeft: "5px", marginTop: "10px" }}
-                                            className="p-1"
-                                            type="checkbox"
-                                            checked={subProductCheckbox}
-                                            onChange={(e) => { setSubProductCheckbox(e.target.checked) }}
-                                        />
-                                        <Label className="col-sm-4 p-2">Sub Product</Label>
-                                        <Col>
-                                            <C_Select
-                                                value={subProductSelect}
-                                                isSearchable={true}
-                                                isLoading={subProductLoading}
-                                                className="react-dropdown"
-                                                classNamePrefix="dropdown"
-                                                styles={{
-                                                    menu: provided => ({ ...provided, zIndex: 2 })
-                                                }}
-                                                options={subProductDropdownOptions}
-                                                onChange={(e) => { Sub_ProductOnChange(e) }}
-                                            />
-                                        </Col>
-                                    </FormGroup>
-                                </Col>
-
-                                <Col sm={3}>
-                                    <FormGroup className=" row mt-2">
-                                        <Input style={{ marginLeft: "5px", marginTop: "10px" }}
-                                            className="p-1"
-                                            type="checkbox"
-                                            checked={itemNameCheckbox}
-                                            onChange={(e) => { setItemNameCheckbox(e.target.checked) }}
-                                        />
-                                        <Label className="col-sm-4 p-2">Items</Label>
-                                        <Col>
-                                            <C_Select
-                                                value={ItemNameSelect}
-                                                isSearchable={true}
-                                                isLoading={ItemDropdownloading}
-                                                className="react-dropdown"
-                                                classNamePrefix="dropdown"
-                                                styles={{
-                                                    menu: provided => ({ ...provided, zIndex: 2 })
-                                                }}
-                                                options={itemNameDropdownOptions}
-                                                onChange={(e) => { setItemNameSelect(e) }}
-                                            />
-                                        </Col>
-                                    </FormGroup>
-                                </Col>
-
-                                <Col sm={3}>
-                                    <FormGroup className=" row mt-2">
-                                        <Label className="col-sm-4 p-2">Quantity</Label>
-                                        <Col>
-                                            <C_Select
-                                                value={unitDropdownSelect}
-                                                isSearchable={true}
-                                                //  isLoading={partyLoading}       
-                                                className="react-dropdown"
-                                                classNamePrefix="dropdown"
-                                                styles={{
-                                                    menu: provided => ({ ...provided, zIndex: 2 })
-                                                }}
-                                                options={initail.UnitDropdownOptions}
-                                                onChange={(e) => { setUnitDropdownSelect(e) }}
-                                            />
-                                        </Col>
-                                    </FormGroup>
-                                </Col>
-                            </Row>
+                            </FormGroup>
                         </Col>
 
-                        <Col sm="1" className="mt-1 mb-1 ">
-                            {(initaialBaseData.length > 0) &&
-                                <C_Button
-                                    type="button"
-                                    className="btn btn-primary border-1 font-size-12 text-center"
-                                    onClick={ExcelDownload} // Example field, you can change it
-                                >
-                                    <span className="font-weight-bold" style={{ fontWeight: "bold", fontSize: "14px" }}> Excel</span>
-                                </C_Button>
-                            }
+                        <Col sm={3}>
+                            <FormGroup className=" row mt-2">
+                                <Input style={{ marginLeft: "5px", marginTop: "10px" }}
+                                    className="p-1"
+                                    type="checkbox"
+                                    checked={subProductCheckbox}
+                                    onChange={(e) => { setSubProductCheckbox(e.target.checked) }}
+                                />
+                                <Label className="col-sm-4 p-2">Sub Product</Label>
+                                <Col>
+                                    <C_Select
+                                        value={subProductSelect}
+                                        isSearchable={true}
+                                        isLoading={subProductLoading}
+                                        className="react-dropdown"
+                                        classNamePrefix="dropdown"
+                                        styles={{
+                                            menu: provided => ({ ...provided, zIndex: 2 })
+                                        }}
+                                        options={subProductDropdownOptions}
+                                        onChange={(e) => { Sub_ProductOnChange(e) }}
+                                    />
+                                </Col>
+                            </FormGroup>
+                        </Col>
+
+                        <Col sm={3}>
+                            <FormGroup className=" row mt-2">
+                                <Input style={{ marginLeft: "5px", marginTop: "10px" }}
+                                    className="p-1"
+                                    type="checkbox"
+                                    checked={itemNameCheckbox}
+                                    onChange={(e) => { setItemNameCheckbox(e.target.checked) }}
+                                />
+                                <Label className="col-sm-4 p-2">Items</Label>
+                                <Col>
+                                    <C_Select
+                                        value={ItemNameSelect}
+                                        isSearchable={true}
+                                        isLoading={ItemDropdownloading}
+                                        className="react-dropdown"
+                                        classNamePrefix="dropdown"
+                                        styles={{
+                                            menu: provided => ({ ...provided, zIndex: 2 })
+                                        }}
+                                        options={itemNameDropdownOptions}
+                                        onChange={(e) => { setItemNameSelect(e) }}
+                                    />
+                                </Col>
+                            </FormGroup>
+                        </Col>
+
+                        <Col sm={3}>
+                            <FormGroup className=" row mt-2">
+                                <Label className="col-sm-4 p-2">Quantity</Label>
+                                <Col>
+                                    <C_Select
+                                        value={unitDropdownSelect}
+                                        isSearchable={true}
+                                        //  isLoading={partyLoading}       
+                                        className="react-dropdown"
+                                        classNamePrefix="dropdown"
+                                        styles={{
+                                            menu: provided => ({ ...provided, zIndex: 2 })
+                                        }}
+                                        options={initail.UnitDropdownOptions}
+                                        onChange={(e) => { setUnitDropdownSelect(e) }}
+                                    />
+                                </Col>
+                            </FormGroup>
                         </Col>
                     </Row>
                 </div>
