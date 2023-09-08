@@ -421,7 +421,7 @@ export const BilledByRow = (data) => {
         [`            ${data.Party}`],
         [`                 ${PartyAddress}`],
         [`            ${data.PartyState}`],
-        [`              ${data.PartyGSTIN}`],
+        [`              ${data.PartyGSTIN === null ? "" : data.PartyGSTIN}`],
         [`                   ${data.PartyFSSAINo}`],
         // [`                   ${data.PartyMobileNo}`],
 
@@ -441,7 +441,7 @@ export const BilledToRow = (data) => {
         [`                   ${data.Customer}`],
         [`                 ${CustomerAddress}`],
         [`           ${data.CustomerState}`],
-        [`             ${data.CustomerGSTIN}`,],
+        [`             ${data.CustomerGSTIN === null ? "" : data.CustomerGSTIN}`,],
         [`                   ${data.CustomerFSSAINo}`],
         // [`                   ${data.CustomerMobileNo}`],
     ]
