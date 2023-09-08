@@ -113,21 +113,34 @@ const InvoiceDataExport = (props) => {
         }
     }, [goBtnMode, Data, pageField]);
 
+
     function goButtonHandler(goBtnMode) {
 
         try {
-            const isInvoiceMode = subPageMode === url.PURCHASE_DATA_EXPORT
+            let jsonBody
 
             if ((isSCMParty) && (PartyDropdown === "")) {
                 customAlert({ Type: 3, Message: "Please Select Party" });
                 return;
             };
-            const jsonBody = JSON.stringify({
-                "FromDate": values.FromDate,
-                "ToDate": values.ToDate,
-                "Party": PartyDropdown === "" ? _cfunc.loginPartyID() : !(isInvoiceMode) ? PartyDropdown.value : 0,
-                "Customer": isInvoiceMode ? PartyDropdown.value : 0
-            });
+
+            if (subPageMode === url.PURCHASE_DATA_EXPORT) {
+                jsonBody = JSON.stringify({
+                    "FromDate": values.FromDate,
+                    "ToDate": values.ToDate,
+                    "Party": 0,
+                    "Customer": (isSCMParty) ? PartyDropdown.value : _cfunc.loginPartyID()
+                });
+            }
+            else {
+                jsonBody = JSON.stringify({
+                    "FromDate": values.FromDate,
+                    "ToDate": values.ToDate,
+                    "Party": (isSCMParty) ? PartyDropdown.value : _cfunc.loginPartyID(),
+                    "Customer": 0
+                });
+            }
+
             const config = { jsonBody, goBtnMode: goBtnMode, btnId: goBtnMode };
             dispatch(postInvoiceDataExport_API(config))
 
