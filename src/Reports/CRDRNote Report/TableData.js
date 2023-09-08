@@ -140,13 +140,13 @@ export const RowsWithCGST_SGST = (data) => {
                 HSNcodes = element.HSNCode.slice(0, 8);
             }
         }
-        debugger
-        data['ItemComment'] = element.ItemComment
+
+        data['ItemComment'] = 'good'
         data['ID'] = SrNO
 
         const tableitemRow = [
             SrNO++,
-            `${HSNcodes} ${element.ItemName}`,
+            `${HSNcodes} ${element.ItemName}                                ${element.ItemComment === null ? "" : element.ItemComment}`,
             `${parseFloat(element.Quantity)}   ${element.UnitName}`,
             `${Number(element.MRPValue).toFixed(2)}`,
             `${numberWithCommas(Number(element.Rate).toFixed(2))}`,
@@ -255,7 +255,7 @@ export const RowsWithIGST = (data) => {
             Amount, DiscountAmount, BasicAmount,
             Quantity, UnitName, MRPValue, CGSTPercentage,
             SGSTPercentage, GSTPercentage, BatchCode,
-            BatchDate, DiscountType, PrimaryUnitName, IGST } = currentItem;
+            BatchDate, DiscountType, PrimaryUnitName, IGST, ItemComment } = currentItem;
 
         let PcsinNumber = ""
         let PcsinNumberUnit = ""
@@ -295,7 +295,7 @@ export const RowsWithIGST = (data) => {
                 BasicAmount: Number(BasicAmount), Quantity: Number(Quantity),
                 UnitName, CGSTPercentage, SGSTPercentage, GSTPercentage,
                 BatchDate, BatchCode: BatchCode, BatchDate: BatchDate,
-                quantityString: `  ${BatchCode}  ${BatchDate}`, PrimaryUnitName, IGST
+                quantityString: `  ${BatchCode}  ${BatchDate}`, PrimaryUnitName, IGST, ItemComment
             };
         }
         return accumulator;
@@ -321,7 +321,7 @@ export const RowsWithIGST = (data) => {
         const tableitemRow = [
 
             SrNO++,
-            `${HSNcodes} ${element.ItemName}`,
+            `${HSNcodes} ${element.ItemName}                                ${element.ItemComment === null ? "" : element.ItemComment}`,
             `${parseFloat(element.Quantity)}   ${element.UnitName}`,
             `${numberWithCommas(Number(element.MRPValue).toFixed(2))}`,
             `${numberWithCommas(Number(element.Rate).toFixed(2))}`,
@@ -466,15 +466,21 @@ export const DetailsOfTransportRow = (data) => {
 
     }
 
-    let EwayData = ""
-    // if (data.InvoiceUploads.length > 0) {
-    //     EwayData = data.InvoiceUploads[0]
-    // }
+    let NoteType = ""
+    if ((data.NoteType === "DebitNote")) {
+        NoteType = "Debit Note"
+    } else if ((data.NoteType === "Goods DebitNote")) {
+        NoteType = "Goods Debit Note"
+    } else if ((data.NoteType === "CreditNote")) {
+        NoteType = "CreditNote"
+    } else if ((data.NoteType === "Goods CreditNote")) {
+        NoteType = "Goods Credit Note"
+    }
 
     var DetailsOfTransportArray = [
-        [`                      ${data.NoteType}`],
+        [`               ${NoteType}`],
         [`                      ${data.Narration === null ? "" : data.Narration}`],
-        [`                         ${data.NoteReason === null ? "" : data.NoteReason}`],
+        // [`                         ${data.NoteReason === null ? "" : data.NoteReason}`],
         // [`                          ${(EwayData.EwayBillNo === undefined) || (EwayData.EwayBillNo === null) ? "" : EwayData.EwayBillNo}`],
         // [`                          ${(EwayData.AckNo === undefined) || (EwayData.AckNo === null) ? "" : EwayData.AckNo}`]
     ]

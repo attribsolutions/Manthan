@@ -1,7 +1,4 @@
 
-
-// import reportHederPng from "../../assets/images/reportHeder.png"
-import upi_qr_code from "../../assets/images/upi_qr_code.png"
 import * as table from './TableData'
 import { numberWithCommas, toWords } from "../Report_common_function";
 import { date_dmy_func, convertOnlyTimefunc, convertTimefunc, currentDate_dmy, CurrentTime, compareGSTINState } from "../../components/Common/CommonFunction";
@@ -39,7 +36,7 @@ export const pageHeder = (doc, data) => {
 }
 
 export const reportHeder1 = (doc, data) => {
-    doc.setFont('Tahoma')
+
     doc.setFontSize(10)
     doc.setFont(undefined, 'bold')
     doc.text("Billed by", 80, 55)    //bill by 
@@ -222,9 +219,7 @@ export const reportHeder1 = (doc, data) => {
 
     };
     var DetailsOfTransportStyle = {
-
         didDrawCell: (data1) => {
-
             const rowIdx = data1.row.index;
             const colIdx = data1.column.index;
             if (rowIdx === 0 && colIdx === 0) {
@@ -232,7 +227,7 @@ export const reportHeder1 = (doc, data) => {
                 let y = data1.cursor.y + 8
                 doc.setFontSize(8)
                 doc.setFont(undefined, 'bold')
-                doc.text('Note Type: ', x, y)
+                doc.text('Type: ', x, y)
             };
             if (rowIdx === 1 && colIdx === 0) {
 
@@ -324,7 +319,6 @@ export const reportHeder1 = (doc, data) => {
 
 
 export const reportHeder3 = (doc, data) => {
-    doc.setFont('Tahoma')
     doc.setFontSize(9)
     doc.setDrawColor(0, 0, 0);
     doc.line(570, 30, 408, 30) //horizontal line 1 billby upper
@@ -332,18 +326,24 @@ export const reportHeder3 = (doc, data) => {
     // doc.line(570, 44, 408, 44) //horizontal line 1 billby upper
 
     doc.setFont(undefined, 'bold')
-    doc.text(`Note No:   ${data.FullNoteNumber}`, 415, 25) //Invoice Id
-    var date = date_dmy_func(data.CRDRNoteDate)
-    var time = convertOnlyTimefunc(data.CreatedOn)
-    doc.text(`Note Date: ${date}  ${time}`, 415, 40) //Invoice date
+
+    if (((data.NoteType === "DebitNote") || (data.NoteType === "Goods DebitNote"))) {
+        doc.text(`Debit Note No:   ${data.FullNoteNumber}`, 413, 25)
+        var date = date_dmy_func(data.CRDRNoteDate)
+        var time = convertOnlyTimefunc(data.CreatedOn)
+        doc.text(`Debit Note Date: ${date}  ${time}`, 413, 40)
+    } else if ((data.NoteType === "CreditNote") || (data.NoteType === "Goods CreditNote")) {
+        doc.text(`Credit Note No:   ${data.FullNoteNumber}`, 413, 25)
+        var date = date_dmy_func(data.CRDRNoteDate)
+        var time = convertOnlyTimefunc(data.CreatedOn)
+        doc.text(`Credit Note Date: ${date}  ${time}`, 413, 40)
+    }
 
 }
 
 
 export const reportFooter = (doc, data) => {
     let stringNumber = toWords(Number(data.GrandTotal))
-    // doc.setFont('Tahoma')
-    // doc.addImage(upi_qr_code, 'JPEG', 359, 310, 75, 65)
     doc.setDrawColor(0, 0, 0);
     doc.line(570, 295, 30, 295);//horizontal line Footer 2
     // doc.line(570, 340, 30, 340);//horizontal line Footer 3
@@ -385,6 +385,8 @@ export const reportFooter = (doc, data) => {
 
     } else {
         if (isIGST) {
+            doc.setFont(undefined, 'bold')
+
 
             doc.text(`Total Basic:`, 440, 312,)
             doc.text(`${TotalBasicAmount.toFixed(2)}`, 567, 312, 'right')
@@ -400,6 +402,8 @@ export const reportFooter = (doc, data) => {
 
 
         } else {
+            doc.setFont(undefined, 'bold')
+
             doc.text(`Total Basic:`, 440, 302,)
             doc.text(`${numberWithCommas(TotalBasicAmount.toFixed(2))}`, 567, 302, 'right')
 
@@ -477,7 +481,7 @@ export const reportFooter = (doc, data) => {
             textColor: "black",
             cellPadding: 1,
             fontSize: 8,
-            // fontStyle: 'bold',
+            font: 'Tahoma',
             lineColor: "black"
         },
         columnStyles: {
@@ -656,19 +660,16 @@ export const tableBody = (doc, data) => {
                 }
             }
 
-
-
             // if (colIdx === 1) {
 
             //     if (data.ItemComment) {
+
             //         if (data1.row.cells[0].raw === data.ID) {
-            //             
             //             const cell = data1.cell;
             //             doc.setFontSize(7);
-            //             doc.setTextColor('red'); // Black text color
-            //             data1.row.cell.text[0] = ` ${data.ItemComment}`
+            //             doc.setTextColor('red');
+            //             doc.text(`${data.ItemComment}`, cell.x + 5, cell.y + 13);
 
-            //             // doc.text(`${data.ItemComment}`, cell.x + 5, cell.y + 13);
             //         }
             //     }
 
@@ -768,7 +769,7 @@ export const tableBody = (doc, data) => {
 
 
 
-    
+
     if ((data.NoteType === "Goods CreditNote") || (data.NoteType === "Goods DebitNote")) {
         doc.autoTable(table.columnsWithCGST_SGST, table.RowsWithCGST_SGST(data), options,);
     } else {
