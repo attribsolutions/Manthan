@@ -710,6 +710,14 @@ const GoodsCreditNote = (props) => {
                 return;
             }
 
+            if (values.InvoiceNO === '') {
+                customAlert({
+                    Type: 4,
+                    Message: "Invoice Number is Required",
+                });
+                return;
+            }
+
             const creditNoteItems = filterData.map((i) => {
 
                 const calculate = return_discountCalculate_Func(i);
