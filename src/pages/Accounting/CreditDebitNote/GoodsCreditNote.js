@@ -31,7 +31,7 @@ import { Retailer_List } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { InvoiceNumberSuccess, SalesReturnAddBtn_Action, SalesReturnAddBtn_Action_Succcess, InvoiceNumber } from "../../../store/Sales/SalesReturnRedux/action";
 import { CInput, C_DatePicker, C_Select } from "../../../CustomValidateForm/index";
-import { decimalRegx, } from "../../../CustomValidateForm/RegexPattern";
+import { charRegx, decimalRegx, } from "../../../CustomValidateForm/RegexPattern";
 import { goButtonPartyItemAddPage } from "../../../store/Administrator/PartyItemsRedux/action";
 import { return_discountCalculate_Func } from "../../Sale/SalesReturn/SalesCalculation";
 import * as _cfunc from "../../../components/Common/CommonFunction";
@@ -83,7 +83,7 @@ const GoodsCreditNote = (props) => {
     const [state, setState] = useState(initialFiledFunc(fileds))
     const [discountDropOption] = useState([{ value: 1, label: "Rs" }, { value: 2, label: "%" }]);
     const [TableArr, setTableArr] = useState([]);
-
+    const [itemCommentError, setItemCommentError] = useState(false);
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
@@ -183,7 +183,7 @@ const GoodsCreditNote = (props) => {
                 if (hasEditVal) {
 
                     const { CRDRNoteDate, Customer, Narration, GrandTotal, CRDRInvoices = '', CustomerID, CRDRNoteItems = [] } = hasEditVal
-                    
+
                     const { values, fieldLabel, hasValid, required, isError } = { ...state }
                     values.CRDRNoteDate = CRDRNoteDate;
                     values.Customer = { label: Customer, value: CustomerID };
@@ -327,13 +327,23 @@ const GoodsCreditNote = (props) => {
         label: index.FullInvoiceNumber,
     }));
 
-
+    // function ItemCommentOnchange(e, row) {
+    //     debugger
+    //     const newValue = e.target.value;
+    //     if (newValue.length <= 10) {
+    //         row.ItemComment = newValue;
+    //     } else {
+    //         // Display a message or handle the error as needed
+    //         setItemCommentError(true)
+    //     }
+    // }
     const pagesListColumns = [
         {
             text: "Item Name",
             dataField: "ItemName",
             formatter: (cell, row) => (<Label style={{ minWidth: "200px" }}>{row.ItemName}</Label>)
         },
+
         {
             text: "Quantity",
             dataField: "",
@@ -504,20 +514,33 @@ const GoodsCreditNote = (props) => {
         {
             text: "Item Comment",
             dataField: "",
-            formatter: (_cell, row, key) => {
+            // headerFormatter: () => {
+            //     return (<>
+            //         <div className="mt-n1">
+            //             <Label>Item Comment</Label>
+            //         </div>
+            //         <span className="fs-6 text-muted ">
+            //             <small>*100 character accept</small>
+            //         </span>
+            //     </>)
+            // },
+            formatter: (cell, row, key) => {
+
                 return (<>
                     <div className="parent">
                         <div className="child">
-                            <Input
-                                placeholder="Enter Comment"
-                                defaultValue={row.ItemComment}
+                            <CInput
                                 type="text"
+                                id={`itemComment-${key}`}
+                                defaultValue={row.ItemComment}
+                                placeholder="Enter Comment"
+                                autoComplete='off'
+                                cpattern={charRegx}
                                 onChange={(event) => { row.ItemComment = event.target.value }}
                             />
                         </div>
                     </div>
-                </>
-                )
+                </>)
             }
         },
         {

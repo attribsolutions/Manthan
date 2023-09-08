@@ -201,9 +201,14 @@ const DriverMaster = (props) => {
     }, [pageField])
 
     const SaveHandler = async (event) => {
+       
         event.preventDefault();
         const btnId = event.target.id
         try {
+            if ((_cfunc.loginSelectedPartyID() === 0)) {
+                customAlert({ Type: 3, Message: "Please Select Party" });
+                return;
+            };
             if (formValid(state, setState)) {
                 _cfunc.btnIsDissablefunc({ btnId, state: true })
 
@@ -211,7 +216,7 @@ const DriverMaster = (props) => {
                     Name: values.Name,
                     Address: values.Address,
                     DOB: values.DOB,
-                    Party: _cfunc.loginPartyID(),
+                    Party: _cfunc.loginSelectedPartyID(),
                     Company: _cfunc.loginCompanyID(),
                     CreatedBy: _cfunc.loginUserID(),
                     UpdatedBy: _cfunc.loginUserID()
@@ -239,8 +244,8 @@ const DriverMaster = (props) => {
 
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                     <Container fluid>
-
-                        {/* <PartyDropdown_Common /> */}
+                     
+                        <PartyDropdown_Common />
 
                         <Card className="text-black" style={{ marginTop: "3px" }}>
                             <CardHeader className="card-header   text-black c_card_header"  >
