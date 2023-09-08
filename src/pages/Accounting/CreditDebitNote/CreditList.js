@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
+    BreadcrumbRadioButtonView,
     BreadcrumbShowCountlabel,
     commonPageFieldList,
     commonPageFieldListSuccess
@@ -119,7 +120,7 @@ const CreditList = () => {
         setpageMode(page_Mode)
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
-        // dispatch(BreadcrumbShowCountlabel(`Count : 0`));
+        dispatch(BreadcrumbRadioButtonView(true));
 
         return () => {
             dispatch(GetCreditListSuccess([]));
