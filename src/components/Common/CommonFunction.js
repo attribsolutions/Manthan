@@ -205,6 +205,16 @@ export const loginPartyID = () => {//+++++++++++++++++++++ Session loginPartyID 
   return 0;
 };
 
+export const loginPartyName = () => {//+++++++++++++++++++++ Session loginPartyID Id+++++++++++++++++++++++++++++++
+
+  try {
+    return loginUserDetails().PartyName;
+  } catch (e) {
+    CommonConsole("Common login PartyName Func  Error");
+  }
+  return '';
+};
+
 export const loginSelectedPartyID = () => {//+++++++++++++++++++++ Session common party dropdown id +++++++++++++++++++++++++++++++
   try {
     return JSON.parse(localStorage.getItem("selectedParty")).value;
@@ -586,7 +596,7 @@ export const tableInputArrowUpDounFunc = (tableId) => {
 }
 
 export function trailingZeros(value) {// +++++++++++Print Console.log Body+++++++++++++++++++++++++++++++
-  
+
   return parseFloat(value).toString()
 }
 

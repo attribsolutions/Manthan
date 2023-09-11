@@ -41,6 +41,7 @@ const LoadingSheetUpdate = (props) => {
         makeReceipt,
         OpeningBalance,
         pageField,
+        commonPartyDropSelect
     } = useSelector((state) => ({
         listBtnLoading: state.ReceiptReducer.listBtnLoading,
         LoadingSheetUpdateList: state.LoadingSheetReducer.LoadingSheetUpdate,
@@ -48,6 +49,7 @@ const LoadingSheetUpdate = (props) => {
         pageField: state.CommonPageFieldReducer.pageField,
         makeReceipt: state.ReceiptReducer.ReceiptGoButton,
         OpeningBalance: state.ReceiptReducer.OpeningBalance,
+        commonPartyDropSelect: state.CommonPartyDropdownReducer.commonPartyDropSelect
     }));
 
     // const { ReceiptFlag } = LoadingSheetUpdateList
@@ -174,7 +176,7 @@ const LoadingSheetUpdate = (props) => {
         const LoadingNumber = result.toString()
 
         const jsonBody = JSON.stringify({
-            PartyID: _cfunc.loginPartyID(),
+            PartyID: commonPartyDropSelect.value,
             CustomerID: "",
             InvoiceID: LoadingNumber
         });

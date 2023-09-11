@@ -7,25 +7,23 @@ import { C_DatePicker, C_Select } from "../../CustomValidateForm";
 import * as _cfunc from "../../components/Common/CommonFunction";
 import { mode, pageId, url } from "../../routes/index"
 import { MetaTags } from "react-meta-tags";
-import ToolkitProvider from "react-bootstrap-table2-toolkit";
-import BootstrapTable from "react-bootstrap-table-next";
-import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
 import { BreadcrumbShowCountlabel, GetVenderSupplierCustomer, GetVenderSupplierCustomerSuccess, commonPageField, commonPageFieldSuccess, getBaseUnit_ForDropDown, getGroupList, getItemList, getSubGroupList, get_Group_By_GroupType_ForDropDown, get_Sub_Group_By_Group_ForDropDown, get_Sub_Group_By_Group_ForDropDown_Success } from "../../store/actions";
 import { GetRoutesList, GetRoutesListSuccess } from "../../store/Administrator/RoutesRedux/actions";
 import { getPartyTypelist, getPartyTypelistSuccess } from "../../store/Administrator/PartyTypeRedux/action";
-
 import { ItemSaleGoButton_API, ItemSaleGoButton_API_Success, Items_On_Group_And_Subgroup_API, SupplierOnPartyType_API, SupplierOnPartyType_API_Success } from "../../store/Report/ItemSaleReport/action";
 import ShowTableComponent from "./showTable";
 import "../ItemSaleReport/ItemSaleCSS.scss";
 import { useMemo } from "react";
 import * as initail from "./hardcodeDetails";
 import { date_dmy_func } from "../../components/Common/CommonFunction";
+import Papa from 'papaparse';
 
 const ItemSaleReport = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory();
     const currentDate_ymd = _cfunc.date_ymd_func();
+    const isSCMParty = _cfunc.loginIsSCMParty();
 
     const [userPageAccessState, setUserAccState] = useState('');
     const [hederFilters, setHederFilters] = useState({
@@ -43,9 +41,6 @@ const ItemSaleReport = (props) => {
     const [productSelect, setProductSelect] = useState(initail.initialSlected_zero);
     const [subProductSelect, setSubProductSelect] = useState(initail.initialSlected_zero);
 
-
-
-
     const [customerCheckbox, setCustomerCheckbox] = useState(false);
     const [routeCheckbox, setRouteCheckbox] = useState(false);
     const [channelToCheckbox, setChannelToCheckbox] = useState(false);
@@ -57,7 +52,6 @@ const ItemSaleReport = (props) => {
     const [supplierCheckbox, setSupplierCheckbox] = useState(false);
     const [showAlsoSelect, setShowAlsoSelect] = useState([]);
 
-
     const [tableData, setTableData] = useState([]);
     const [initaialBaseData, setInitaialBaseData] = useState([]);
     const [selectedColumns, setSelectedColumns] = useState(initail.initialTableColumns);
@@ -66,7 +60,6 @@ const ItemSaleReport = (props) => {
         ItemSaleReportGobtn,
         userAccess,
         supplierLoading,
-        pageField,
         supplier,
         RoutesList,
         routesDropLoading,
@@ -110,12 +103,10 @@ const ItemSaleReport = (props) => {
                 getSubProductbyProduct: state.ItemMastersReducer.SubGroupList,
 
                 userAccess: state.Login.RoleAccessUpdateData,
-                pageField: state.CommonPageFieldReducer.pageField
             })
         );
 
     const { fromdate, todate, } = hederFilters;
-
 
     const location = { ...history.location }
     const hasShowModal = props.hasOwnProperty(mode.editValue)
@@ -162,7 +153,6 @@ const ItemSaleReport = (props) => {
         }
     }, [ItemSaleReportGobtn]);
 
-
     const subProductDropdownOptions = useMemo(() => {
         let options = [];
         if (productSelect.value === 0) {
@@ -197,7 +187,6 @@ const ItemSaleReport = (props) => {
         return options;
     }, [channelFromSelect, supplier, supplierListOnPartyType]);
 
-
     const generateOptions = (sourceArray, labelField = "Name", valueField = "id") =>
         [initail.initialSlected_blank, ...sourceArray.map(item => ({ value: item[valueField], label: item[labelField] }))];
 
@@ -206,9 +195,6 @@ const ItemSaleReport = (props) => {
     const itemNameDropdownOptions = useMemo(() => generateOptions(ItemNameList), [ItemNameList]);
     const productDropdownOptions = useMemo(() => generateOptions(productDropdown), [productDropdown]);
     const customerDropdownOptions = useMemo(() => generateOptions(customerDropdown), [customerDropdown]);
-
-
-
 
     function RouteOnChange(event) {
         dispatch(GetVenderSupplierCustomer({ subPageMode: url.ITEM_SALE_REPORT, RouteID: event.value, PartyID: supplierSelect.value }))
@@ -280,7 +266,7 @@ const ItemSaleReport = (props) => {
                 "FromDate": fromdate,
                 "ToDate": todate,
                 "PartyType": supplierSelect.value > 0 ? 0 : channelFromSelect.value,
-                "Party": supplierSelect.value
+                "Party": !(isSCMParty) ? _cfunc.loginPartyID() : supplierSelect.value
             });
             dispatch(ItemSaleGoButton_API({ jsonBody, btnId: url.ITEM_SALE_REPORT }))
 
@@ -312,6 +298,7 @@ const ItemSaleReport = (props) => {
         }
         setShowAlsoSelect(event);
     }
+
     function CustomerOnChange(e) {
         setCustomerSelect(e)
     }
@@ -582,6 +569,35 @@ const ItemSaleReport = (props) => {
         dispatch(BreadcrumbShowCountlabel(`Count:${manupulatedData.length} ₹ ${commaSeparateAmount}`));
     }
 
+    function ExcelDownload() {
+
+        const csvColumns = selectedColumns.map(column => column.dataField); // Extract column headers
+
+        const csvHeaderColumns = selectedColumns.map(column => column.text); // Extract column headers
+
+        // Map the data to include only the properties corresponding to the columns
+        const csvData = tableData.map(item =>
+            csvColumns.map(column => item[column])
+        );
+
+        // Combine column headers and data into a single array
+        const csvContent = [csvHeaderColumns, ...csvData];
+
+        // Create the CSV content
+        const csvContentString = Papa.unparse(csvContent, { header: true });
+
+        // Create and trigger the download
+        const blob = new Blob([csvContentString], { type: "text/csv" });
+        const url = URL.createObjectURL(blob);
+
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `Item Sale Report.csv`;
+        a.click();
+
+        URL.revokeObjectURL(url);
+    }
+
     return (
         <React.Fragment>
             <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
@@ -645,7 +661,7 @@ const ItemSaleReport = (props) => {
                                                 isSearchable={true}
                                                 className="react-dropdown"
                                                 classNamePrefix="dropdown"
-                                                isDisabled={(tableData.length > 0) && true}
+                                                isDisabled={(tableData.length > 0 || !(isSCMParty)) && true}
                                                 styles={{
                                                     menu: provided => ({ ...provided, zIndex: 2 })
                                                 }}
@@ -669,12 +685,13 @@ const ItemSaleReport = (props) => {
                                         <Label className="col-sm-4 p-2">Supplier</Label>
                                         <Col>
                                             <C_Select
-                                                value={supplierSelect}
+
+                                                value={!(isSCMParty) ? { label: _cfunc.loginPartyName() } : supplierSelect}
                                                 isSearchable={true}
                                                 isLoading={supplierLoading}
                                                 className="react-dropdown"
                                                 classNamePrefix="dropdown"
-                                                isDisabled={(tableData.length > 0) && true}
+                                                isDisabled={(tableData.length > 0 || !(isSCMParty)) && true}
                                                 styles={{
                                                     menu: provided => ({ ...provided, zIndex: 2 })
                                                 }}
@@ -803,6 +820,7 @@ const ItemSaleReport = (props) => {
                                 </Col>
                             </Row>
                         </Col>
+
                         <Col sm="1" className="mt-1 mb-1 ">
                             {(initaialBaseData.length > 0) &&
                                 <C_Button
@@ -817,103 +835,119 @@ const ItemSaleReport = (props) => {
                     </Row>
 
                     <Row>
-                        <Col sm={3}>
-                            <FormGroup className=" row mt-2">
-                                <Input style={{ marginLeft: "5px", marginTop: "10px" }}
-                                    className="p-1"
-                                    type="checkbox"
-                                    checked={productCheckbox}
-                                    onChange={(e) => { setProductCheckbox(e.target.checked) }}
-                                />
-                                <Label className="col-sm-3 p-2">Product</Label>
-                                <Col sm={6}>
-                                    <C_Select
-                                        value={productSelect}
-                                        isSearchable={true}
-                                        isLoading={productLoading}
-                                        className="react-dropdown"
-                                        classNamePrefix="dropdown"
-                                        styles={{
-                                            menu: provided => ({ ...provided, zIndex: 2 })
-                                        }}
-                                        options={productDropdownOptions}
-                                        onChange={ProductOnchange}
+                        <Col className="col col-11">
+                            <Row>
+                                <Col sm={3}>
+                                    <FormGroup className=" row mt-2">
+                                        <Input style={{ marginLeft: "5px", marginTop: "10px" }}
+                                            className="p-1"
+                                            type="checkbox"
+                                            checked={productCheckbox}
+                                            onChange={(e) => { setProductCheckbox(e.target.checked) }}
+                                        />
+                                        <Label className="col-sm-3 p-2">Product</Label>
+                                        <Col sm={6}>
+                                            <C_Select
+                                                value={productSelect}
+                                                isSearchable={true}
+                                                isLoading={productLoading}
+                                                className="react-dropdown"
+                                                classNamePrefix="dropdown"
+                                                styles={{
+                                                    menu: provided => ({ ...provided, zIndex: 2 })
+                                                }}
+                                                options={productDropdownOptions}
+                                                onChange={ProductOnchange}
 
-                                    />
+                                            />
+                                        </Col>
+                                    </FormGroup>
                                 </Col>
-                            </FormGroup>
+
+                                <Col sm={3}>
+                                    <FormGroup className=" row mt-2">
+                                        <Input style={{ marginLeft: "5px", marginTop: "10px" }}
+                                            className="p-1"
+                                            type="checkbox"
+                                            checked={subProductCheckbox}
+                                            onChange={(e) => { setSubProductCheckbox(e.target.checked) }}
+                                        />
+                                        <Label className="col-sm-4 p-2">Sub Product</Label>
+                                        <Col>
+                                            <C_Select
+                                                value={subProductSelect}
+                                                isSearchable={true}
+                                                isLoading={subProductLoading}
+                                                className="react-dropdown"
+                                                classNamePrefix="dropdown"
+                                                styles={{
+                                                    menu: provided => ({ ...provided, zIndex: 2 })
+                                                }}
+                                                options={subProductDropdownOptions}
+                                                onChange={(e) => { Sub_ProductOnChange(e) }}
+                                            />
+                                        </Col>
+                                    </FormGroup>
+                                </Col>
+
+                                <Col sm={3}>
+                                    <FormGroup className=" row mt-2">
+                                        <Input style={{ marginLeft: "5px", marginTop: "10px" }}
+                                            className="p-1"
+                                            type="checkbox"
+                                            checked={itemNameCheckbox}
+                                            onChange={(e) => { setItemNameCheckbox(e.target.checked) }}
+                                        />
+                                        <Label className="col-sm-4 p-2">Items</Label>
+                                        <Col>
+                                            <C_Select
+                                                value={ItemNameSelect}
+                                                isSearchable={true}
+                                                isLoading={ItemDropdownloading}
+                                                className="react-dropdown"
+                                                classNamePrefix="dropdown"
+                                                styles={{
+                                                    menu: provided => ({ ...provided, zIndex: 2 })
+                                                }}
+                                                options={itemNameDropdownOptions}
+                                                onChange={(e) => { setItemNameSelect(e) }}
+                                            />
+                                        </Col>
+                                    </FormGroup>
+                                </Col>
+
+                                <Col sm={3}>
+                                    <FormGroup className=" row mt-2">
+                                        <Label className="col-sm-4 p-2">Quantity</Label>
+                                        <Col>
+                                            <C_Select
+                                                value={unitDropdownSelect}
+                                                isSearchable={true}
+                                                //  isLoading={partyLoading}       
+                                                className="react-dropdown"
+                                                classNamePrefix="dropdown"
+                                                styles={{
+                                                    menu: provided => ({ ...provided, zIndex: 2 })
+                                                }}
+                                                options={initail.UnitDropdownOptions}
+                                                onChange={(e) => { setUnitDropdownSelect(e) }}
+                                            />
+                                        </Col>
+                                    </FormGroup>
+                                </Col>
+                            </Row>
                         </Col>
 
-                        <Col sm={3}>
-                            <FormGroup className=" row mt-2">
-                                <Input style={{ marginLeft: "5px", marginTop: "10px" }}
-                                    className="p-1"
-                                    type="checkbox"
-                                    checked={subProductCheckbox}
-                                    onChange={(e) => { setSubProductCheckbox(e.target.checked) }}
-                                />
-                                <Label className="col-sm-4 p-2">Sub Product</Label>
-                                <Col>
-                                    <C_Select
-                                        value={subProductSelect}
-                                        isSearchable={true}
-                                        isLoading={subProductLoading}
-                                        className="react-dropdown"
-                                        classNamePrefix="dropdown"
-                                        styles={{
-                                            menu: provided => ({ ...provided, zIndex: 2 })
-                                        }}
-                                        options={subProductDropdownOptions}
-                                        onChange={(e) => { Sub_ProductOnChange(e) }}
-                                    />
-                                </Col>
-                            </FormGroup>
-                        </Col>
-
-                        <Col sm={3}>
-                            <FormGroup className=" row mt-2">
-                                <Input style={{ marginLeft: "5px", marginTop: "10px" }}
-                                    className="p-1"
-                                    type="checkbox"
-                                    checked={itemNameCheckbox}
-                                    onChange={(e) => { setItemNameCheckbox(e.target.checked) }}
-                                />
-                                <Label className="col-sm-4 p-2">Items</Label>
-                                <Col>
-                                    <C_Select
-                                        value={ItemNameSelect}
-                                        isSearchable={true}
-                                        isLoading={ItemDropdownloading}
-                                        className="react-dropdown"
-                                        classNamePrefix="dropdown"
-                                        styles={{
-                                            menu: provided => ({ ...provided, zIndex: 2 })
-                                        }}
-                                        options={itemNameDropdownOptions}
-                                        onChange={(e) => { setItemNameSelect(e) }}
-                                    />
-                                </Col>
-                            </FormGroup>
-                        </Col>
-
-                        <Col sm={3}>
-                            <FormGroup className=" row mt-2">
-                                <Label className="col-sm-4 p-2">Quantity</Label>
-                                <Col>
-                                    <C_Select
-                                        value={unitDropdownSelect}
-                                        isSearchable={true}
-                                        //  isLoading={partyLoading}       
-                                        className="react-dropdown"
-                                        classNamePrefix="dropdown"
-                                        styles={{
-                                            menu: provided => ({ ...provided, zIndex: 2 })
-                                        }}
-                                        options={initail.UnitDropdownOptions}
-                                        onChange={(e) => { setUnitDropdownSelect(e) }}
-                                    />
-                                </Col>
-                            </FormGroup>
+                        <Col sm="1" className="mt-1 mb-1 ">
+                            {(initaialBaseData.length > 0) &&
+                                <C_Button
+                                    type="button"
+                                    className="btn btn-primary border-1 font-size-12 text-center"
+                                    onClick={ExcelDownload} // Example field, you can change it
+                                >
+                                    <span className="font-weight-bold" style={{ fontWeight: "bold", fontSize: "14px" }}> Excel</span>
+                                </C_Button>
+                            }
                         </Col>
                     </Row>
                 </div>

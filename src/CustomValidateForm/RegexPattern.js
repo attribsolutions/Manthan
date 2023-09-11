@@ -6,6 +6,8 @@ export const passwordRgx = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-
 
 export const onlyTextRegx = /^[a-zA-Z]+$/
 
+export const charRegx = /^[\s.]*([^\s.][\s.]*){0,100}$/
+
 
 
 
