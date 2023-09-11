@@ -487,7 +487,7 @@ export const DetailsOfTransportRow = (data) => {
 
 
 
-export const BankRow = (data) => {
+export const BankRow = (data, doc) => {
     if (data.BankData.length > 0) {
         let BankData = data.BankData[0]
         var reportArray = [
@@ -501,6 +501,9 @@ export const BankRow = (data) => {
             [],
             [, `Bank details not provided. Please update Bank details`]
         ]
+        doc.line(340, 345, 30, 345);//horizontal line  (4)
+
+
     }
     return reportArray;
 }
