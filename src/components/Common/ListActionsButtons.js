@@ -9,7 +9,7 @@ import { Cancel_Credit_Debit_EInvoiceAction, Cancel_EInvoiceAction, Cancel_EwayB
 
 const editBtnCss = "badge badge-soft-success font-size-12 btn btn-success waves-effect waves-light w-xxs border border-light"
 const editSelfBtnCss = "badge badge-soft-primary font-size-12 btn c_btn-primary waves-effect waves-light w-xxs border border-light"
-const vieBtnCss = "badge badge-soft-primary font-size-12 btn c_btn-primary waves-effect waves-light w-xxs border border-light"
+export const vieBtnCss = "badge badge-soft-primary font-size-12 btn c_btn-primary waves-effect waves-light w-xxs border border-light"
 const copyBtnCss = "badge badge-soft-primary font-size-12 btn c_btn-primary waves-effect waves-light w-xxs border border-light"
 const updateBtnCss = "badge badge-soft-info font-size-12 btn btn-info waves-effect waves-light w-xxs border border-light"
 export const deltBtnCss = "badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"

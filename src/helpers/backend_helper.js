@@ -331,6 +331,7 @@ export const PartySubParty_Dropdown_Get_API = (id) => get(`${url.PARTY_SUB_PARTY
 
 export const ChannelItemGoBtnAdd_API = (jsonBody) => post(url.CHANNEL_ITEM_ADD_GO_BTN, jsonBody) // get api
 export const ChannelItem_Save_API = ({ jsonBody }) => post(url.CHANNEL_ITEM_SAVE_URL, jsonBody)// post api
+export const ChannelItem_View_API = ({ jsonBody }) => post(url.CHANNEL_ITEM_ADD_VIEW_BTN, jsonBody)// post api
 
 
 
