@@ -28,7 +28,7 @@ import { getpdfReportdata } from "../../../store/Utilites/PdfReport/actions";
 import { Receipt_Print } from "../../../helpers/backend_helper";
 import { C_DatePicker, C_Select } from "../../../CustomValidateForm";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
-import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
+import NewCommonPartyDropdown from "../../../components/Common/NewCommonPartyDropdown";
 
 const ReceiptList = () => {
 
@@ -58,11 +58,12 @@ const ReceiptList = () => {
             RetailerList: state.CommonAPI_Reducer.RetailerList,
             ReceiptType: state.ReceiptReducer.ReceiptType,
             userAccess: state.Login.RoleAccessUpdateData,
-            pageField: state.CommonPageFieldReducer.pageFieldList
+            pageField: state.CommonPageFieldReducer.pageFieldList,
+            commonPartyDropSelect: state.CommonPartyDropdownReducer.commonPartyDropSelect
         })
     );
 
-    const { userAccess, pageField, RetailerList, ReceiptType, retailerDropLoading } = reducers;
+    const { userAccess, pageField, RetailerList, ReceiptType, retailerDropLoading, commonPartyDropSelect } = reducers;
     const values = { ...state.values }
 
     const action = {
@@ -78,11 +79,32 @@ const ReceiptList = () => {
         dispatch(commonPageFieldList(page_Id))
         // dispatch(BreadcrumbShowCountlabel(`${"Receipt Count"} :0`));
         return () => {
-            dispatch(ReceiptListAPISuccess([]));
-            dispatch(Retailer_List_Success([]));
             dispatch(commonPageFieldListSuccess(null))
         }
     }, []);
+
+    // Common Party Dropdown useEffect
+    useEffect(() => {
+
+        if (commonPartyDropSelect.value > 0) {
+            const jsonBody = JSON.stringify({
+                Type: 4,
+                PartyID: commonPartyDropSelect.value,
+                CompanyID: loginCompanyID()
+            });
+            dispatch(Retailer_List(jsonBody));
+        }
+        setState((i) => {
+            let a = { ...i }
+            a.values.Customer = { value: "", label: "All" }
+            return a
+        })
+        return () => {
+            dispatch(ReceiptListAPISuccess([]));
+            dispatch(Retailer_List_Success([]));
+        }
+
+    }, [commonPartyDropSelect]);
 
     useEffect(() => {
         const page_Id = pageId.RECEIPTS_LIST
@@ -109,15 +131,6 @@ const ReceiptList = () => {
         }
     }, [ReceiptType]);
 
-    useEffect(() => {
-        const jsonBody = JSON.stringify({
-            Type: 4,
-            PartyID: loginPartyID(),
-            CompanyID: loginCompanyID()
-        });
-        dispatch(Retailer_List(jsonBody));
-    }, []);
-
     const customerOptions = RetailerList.map((index) => ({
         value: index.id,
         label: index.Name,
@@ -130,7 +143,7 @@ const ReceiptList = () => {
 
     const goButtonHandler = () => {
         try {
-            if (loginPartyID() === 0) {
+            if (commonPartyDropSelect.value === 0) {
                 customAlert({ Type: 3, Message: "Please Select Party" });
                 return;
             };
@@ -142,7 +155,7 @@ const ReceiptList = () => {
                 FromDate: values.FromDate,
                 ToDate: values.ToDate,
                 CustomerID: values.Customer.value,
-                PartyID: loginPartyID(),
+                PartyID: commonPartyDropSelect.value,
                 ReceiptType: ReceiptTypeID.id,
             });
 
@@ -177,7 +190,7 @@ const ReceiptList = () => {
     useEffect(() => {
         const jsonBody = JSON.stringify({
             Type: 4,
-            PartyID: loginPartyID(),
+            PartyID: commonPartyDropSelect.value,
             CompanyID: loginCompanyID()
         });
         dispatch(Retailer_List(jsonBody));
@@ -253,34 +266,11 @@ const ReceiptList = () => {
         )
     }
 
-    function partySelectButtonHandler() {
-        const jsonBody = JSON.stringify({
-            Type: 4,
-            PartyID: loginPartyID(),
-            CompanyID: loginCompanyID()
-        });
-        dispatch(Retailer_List(jsonBody));
-    }
-
-    function partySelectOnChangeHandler() {
-        dispatch(ReceiptListAPISuccess([]));
-        dispatch(Retailer_List_Success([]));
-
-        setState((i) => {
-            const a = { ...i }
-            a.values.Customer = { value: "", label: "All" }
-            a.hasValid.Customer.valid = true
-            return a
-        })
-    }
-
     return (
         <React.Fragment>
             <PageLoadingSpinner isLoading={(reducers.loading || !pageField)} />
             <div className="page-content">
-                <PartyDropdown_Common
-                    goButtonHandler={partySelectButtonHandler}
-                    changeButtonHandler={partySelectOnChangeHandler} />
+                <NewCommonPartyDropdown />
                 {
                     (pageField) ?
                         <CommonPurchaseList

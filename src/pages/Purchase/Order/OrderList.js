@@ -188,8 +188,8 @@ const OrderList = () => {
         dispatch(_act.commonPageFieldListSuccess(null))
         dispatch(_act.commonPageFieldList(page_Id))
         // dispatch(_act.BreadcrumbShowCountlabel(`${"Order Count"} :0`))
-        dispatch(_act.GetVenderSupplierCustomer({ subPageMode, PartyID: _cfunc.loginSelectedPartyID() }))
         if (!(_cfunc.loginSelectedPartyID() === 0)) {
+            dispatch(_act.GetVenderSupplierCustomer({ subPageMode, PartyID: _cfunc.loginSelectedPartyID() }))
             goButtonHandler("event", IBType)
         }
         dispatch(priceListByCompay_Action());
@@ -392,7 +392,7 @@ const OrderList = () => {
                         Mode: isMode
                     })
 
-                    dispatch(_act.makeGRN_Mode_1Action({ jsonBody,subPageMode, pageMode, path: path, grnRef, challanNo, btnId: `btn-makeBtn-${obj.id}` }))
+                    dispatch(_act.makeGRN_Mode_1Action({ jsonBody, subPageMode, pageMode, path: path, grnRef, challanNo, btnId: `btn-makeBtn-${obj.id}` }))
 
                 } else {
                     alert("Please Select Order1")
@@ -531,7 +531,7 @@ const OrderList = () => {
     }
 
     const selectSaveBtnHandler = (row = []) => {
-        
+
 
         let ischeck = row.filter(i => (i.selectCheck))
         if (!ischeck.length > 0) {
