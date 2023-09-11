@@ -4,27 +4,35 @@ import BootstrapTable from "react-bootstrap-table-next";
 import { date_ymd_func, loginPartyID } from '../../../components/Common/CommonFunction';
 import { useDispatch, useSelector } from 'react-redux';
 import { mySearchProps } from '../../../components/Common/SearchBox/MySearch';
-import { salesReturnListAPI } from '../../../store/Sales/SalesReturnRedux/action';
+import { salesReturnListAPI, salesReturnListAPISuccess } from '../../../store/Sales/SalesReturnRedux/action';
 
 export default function SalesReturnListForDashboard() {
 
     const dispatch = useDispatch();
     const currentDate_ymd = date_ymd_func();
 
-    const { tableList, } = useSelector((state) => ({
+    const { tableList, commonPartyDropSelect } = useSelector((state) => ({
         tableList: state.SalesReturnReducer.salesReturnList,
+        commonPartyDropSelect: state.CommonPartyDropdownReducer.commonPartyDropSelect
     }));
 
+    // Common Party Dropdown useEffect
     useEffect(() => {
-        const jsonBody = JSON.stringify({
-            FromDate: currentDate_ymd,
-            ToDate: currentDate_ymd,
-            CustomerID: "",
-            PartyID: loginPartyID(),
-        });
-        dispatch(salesReturnListAPI(jsonBody));
-    }, [])
 
+        if (commonPartyDropSelect.value > 0) {
+            const jsonBody = JSON.stringify({
+                FromDate: currentDate_ymd,
+                ToDate: currentDate_ymd,
+                CustomerID: "",
+                PartyID: commonPartyDropSelect.value,
+            });
+            dispatch(salesReturnListAPI(jsonBody));
+        }
+        return () => {
+            dispatch(salesReturnListAPISuccess([]))
+        }
+
+    }, [commonPartyDropSelect]);
 
     const pagesListColumns = [
         {

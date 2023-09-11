@@ -240,6 +240,7 @@ const SalesReturnList = () => {
         });
         dispatch(Retailer_List(jsonBody));
         dispatch(GetVenderSupplierCustomer({ subPageMode, PartyID: _cfunc.loginSelectedPartyID() }))
+        goButtonHandler()
     }
 
     function partySelectOnChangeHandler() {

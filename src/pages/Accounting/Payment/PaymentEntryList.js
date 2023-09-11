@@ -137,7 +137,6 @@ const PaymentEntryList = () => {
         // dispatch(getSupplier())
         dispatch(getSupplier({ "PartyID": _cfunc.loginSelectedPartyID() }));
 
-
     }, []);
 
     useEffect(() => {
@@ -184,6 +183,7 @@ const PaymentEntryList = () => {
     });
 
     const goButtonHandler = async () => {
+        
         try {
             if ((_cfunc.loginSelectedPartyID() === 0)) {
                 customAlert({ Type: 3, Message: "Please Select Party" });
@@ -240,7 +240,7 @@ const PaymentEntryList = () => {
     }
 
     function partySelectButtonHandler() {
-
+        goButtonHandler()
         const jsonBody = JSON.stringify({
             Type: 4,
             PartyID: _cfunc.loginSelectedPartyID(),
