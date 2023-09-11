@@ -83,7 +83,6 @@ const GoodsCreditNote = (props) => {
     const [state, setState] = useState(initialFiledFunc(fileds))
     const [discountDropOption] = useState([{ value: 1, label: "Rs" }, { value: 2, label: "%" }]);
     const [TableArr, setTableArr] = useState([]);
-    const [itemCommentError, setItemCommentError] = useState(false);
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
@@ -327,16 +326,6 @@ const GoodsCreditNote = (props) => {
         label: index.FullInvoiceNumber,
     }));
 
-    // function ItemCommentOnchange(e, row) {
-    //     debugger
-    //     const newValue = e.target.value;
-    //     if (newValue.length <= 10) {
-    //         row.ItemComment = newValue;
-    //     } else {
-    //         // Display a message or handle the error as needed
-    //         setItemCommentError(true)
-    //     }
-    // }
     const pagesListColumns = [
         {
             text: "Item Name",

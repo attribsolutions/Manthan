@@ -26,20 +26,21 @@ const BulkRecipt = (props) => {
     const history = useHistory()
     const dispatch = useDispatch();
 
-    const [pageMode, setPageMode] = useState(mode.defaultsave)
+    const [pageMode] = useState(mode.defaultsave)
     const [userPageAccessState, setUserAccState] = useState(123);
-    const [editCreatedBy, seteditCreatedBy] = useState("");
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
         postMsg,
         ReceiptGoButton,
         saveBtnloading,
-        userAccess } = useSelector((state) => ({
+        userAccess,
+        commonPartyDropSelect } = useSelector((state) => ({
             postMsg: state.ReceiptReducer.postMsg,
             saveBtnloading: state.ReceiptReducer.saveBtnloading,
             ReceiptGoButton: state.ReceiptReducer.ReceiptGoButton,
             userAccess: state.Login.RoleAccessUpdateData,
+            commonPartyDropSelect: state.CommonPartyDropdownReducer.commonPartyDropSelect
         }));
 
     const location = { ...history.location }
@@ -188,7 +189,7 @@ const BulkRecipt = (props) => {
                     AdvancedAmountAjusted: "",
                     Customer: i.Customer,
                     ChequeDate: "",
-                    Party: _cfunc.loginPartyID(),
+                    Party: commonPartyDropSelect.value,
                     ReceiptMode: 31,
                     ReceiptType: 29,
                     CreatedBy: _cfunc.loginUserID(),
@@ -288,8 +289,6 @@ const BulkRecipt = (props) => {
                                         onClick={SaveHandler}
                                         loading={saveBtnloading}
                                         userAcc={userPageAccessState}
-                                        editCreatedBy={editCreatedBy}
-                                        module={"BulkRecipt"}
                                     />
 
                                 </Col>

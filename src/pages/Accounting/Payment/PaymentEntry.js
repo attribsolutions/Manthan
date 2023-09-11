@@ -7,7 +7,7 @@ import {
     Row,
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
-import { commonPageField, commonPageFieldSuccess } from "../../../store/actions";
+import { commonPageField, commonPageFieldListSuccess, commonPageFieldSuccess } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Select from "react-select";
@@ -20,13 +20,14 @@ import {
     resetFunction,
 } from "../../../components/Common/validationFunction";
 import { SaveButton } from "../../../components/Common/CommonButton";
-import { getSupplier } from "../../../store/CommonAPI/SupplierRedux/actions";
+import { getSupplier, getSupplierSuccess } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { BankListAPI, BankListAPISuccess, GetOpeningBalance, GetOpeningBalance_Success, ReceiptGoButtonMaster_Success, ReceiptTypeAPI, saveReceiptMaster, saveReceiptMaster_Success } from "../../../store/Accounting/Receipt/action";
 import { postSelect_Field_for_dropdown } from "../../../store/Administrator/PartyMasterBulkUpdateRedux/actions";
 import { C_DatePicker, C_Select } from "../../../CustomValidateForm";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { url, mode, pageId } from "../../../routes/index"
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
+import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 
 const PaymentEntry = (props) => {
 
@@ -81,9 +82,15 @@ const PaymentEntry = (props) => {
     useEffect(() => {
         const page_Id = pageId.PAYMENT_ENTRY
         dispatch(commonPageFieldSuccess(null));
-        dispatch(commonPageField(page_Id))
-        dispatch(getSupplier())
-        dispatch(GetOpeningBalance_Success([]))
+        dispatch(commonPageField(page_Id));
+        if (!(_cfunc.loginSelectedPartyID() === 0)) {
+            dispatch(getSupplier({ PartyID: _cfunc.loginSelectedPartyID() }));
+        }
+        return () => {
+            dispatch(commonPageFieldListSuccess(null));
+            dispatch(getSupplierSuccess([]));
+            dispatch(GetOpeningBalance_Success([]));
+        }
     }, []);
 
     useEffect(() => { // ReceiptMode Dropdown useEffect
@@ -219,7 +226,7 @@ const PaymentEntry = (props) => {
         })
         const jsonBody = JSON.stringify({
             PartyID: e.value,
-            CustomerID: _cfunc.loginPartyID(),
+            CustomerID: _cfunc.loginSelectedPartyID(),
             ReceiptDate: values.ReceiptDate
         });
 
@@ -282,7 +289,7 @@ const PaymentEntry = (props) => {
                     "DocumentNo": values.DocumentNo,
                     "AdvancedAmountAjusted": "",
                     "Bank": values.BankName.value,
-                    "Customer": _cfunc.loginPartyID(),
+                    "Customer": _cfunc.loginSelectedPartyID(),
                     "ChequeDate": values.ReceiptModeName.label === "Cheque" ? values.ChequeDate : "",
                     "Party": values.Customer.value,
                     "ReceiptMode": values.ReceiptModeName.value,
@@ -303,6 +310,21 @@ const PaymentEntry = (props) => {
         } catch (e) { _cfunc.btnIsDissablefunc({ btnId, state: false }) }
     };
 
+    function partySelectButtonHandler() {
+        dispatch(getSupplier({ PartyID: _cfunc.loginSelectedPartyID() }));
+    }
+
+    function partySelectOnChangeHandler() {
+        dispatch(getSupplierSuccess([]));
+        dispatch(GetOpeningBalance_Success([]));
+        setState((i) => {
+            let a = { ...i }
+            a.values.Customer = ''
+            a.hasValid.Customer.valid = true;
+            return a
+        })
+    }
+    
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
     if ((modalCss) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
@@ -313,7 +335,10 @@ const PaymentEntry = (props) => {
                 <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
 
                 <div className="page-content" style={{ marginBottom: "5cm" }}>
-
+                    <PartyDropdown_Common
+                        goButtonHandler={partySelectButtonHandler}
+                        changeButtonHandler={partySelectOnChangeHandler}
+                    />
                     <form noValidate>
                         <div className="px-2 c_card_filter header text-black mb-2" >
 
@@ -484,7 +509,7 @@ const PaymentEntry = (props) => {
                                                         altInput: true,
                                                         altFormat: "d-m-Y",
                                                         dateFormat: "Y-m-d",
-                                                      }}
+                                                    }}
                                                 />
                                             </Col>
                                         </FormGroup>
