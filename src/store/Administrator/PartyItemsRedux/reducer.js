@@ -57,7 +57,7 @@ const PartyItemsReducer = (state = INIT_STATE, action) => {
       }
 
     case CHANNEL_ITEM_VIEW_DETAIL_ACTION:
-      debugger
+      
       return {
         ...state,
         channeItemViewBtnLoading: action.config.btnId,

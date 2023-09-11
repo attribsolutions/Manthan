@@ -539,7 +539,7 @@ export const E_Invoice_ActionsButtonFunc = ({ dispatch, reducers, deleteName }) 
     const { listBtnLoading } = reducers;
 
     function Uploaded_EInvoiceHandler(btnId, rowData) {
-        debugger
+        
         try {
             if (rowData.PageMode === "CreditDebitList") {
                 dispatch(Uploaded_Credit_Debit_EInvoiceAction({ btnId, RowId: rowData.id, UserID: loginUserID() }));

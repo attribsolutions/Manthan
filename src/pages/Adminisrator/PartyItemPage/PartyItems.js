@@ -241,7 +241,7 @@ const PartyItems = (props) => {
                         onClick={() => {
                             const jsonBody = JSON.stringify({
                                 "Item": row.Item,
-                                "PartyType": _cfunc.loginSelectedPartyID(),
+                                "PartyType": channelTypeSelect.value,
                             })
                             dispatch(channalItemViewDetailAction({ jsonBody, btnId: row.Item }))
                         }}><i className="bx bxs-show font-size-16" /></C_Button>
