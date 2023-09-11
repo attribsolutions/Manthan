@@ -11,9 +11,9 @@ export const pageBorder = (doc) => {
     doc.setDrawColor(0, 0, 0);
     doc.setLineWidth(0.5)
     doc.line(570, 16, 30, 16);//horizontal line (Top)
-    doc.line(30, 379, 30, 16);//vertical line (left)
-    doc.line(570, 379, 570, 16);//vertical line (Right)
-    doc.line(570, 379, 30, 379);//horizontal line (Bottom)   
+    doc.line(30, 393, 30, 16);//vertical line (left)
+    doc.line(570, 393, 570, 16);//vertical line (Right)
+    doc.line(570, 393, 30, 393);//horizontal line (Bottom)   
 }
 let initial_y = 0
 
@@ -332,19 +332,14 @@ export const reportHeder3 = (doc, data) => {
 
 
 export const reportFooter = (doc, data) => {
-    let stringNumber = toWords(Number(data.GrandTotal))
-    // doc.setFont('Tahoma')
+
     // doc.addImage(upi_qr_code, 'JPEG', 359, 310, 75, 65)
     doc.setDrawColor(0, 0, 0);
-    doc.line(570, 295, 30, 295);//horizontal line Footer 2
-    // doc.line(570, 340, 30, 340);//horizontal line Footer 3
-    doc.line(435, 308, 30, 308);//horizontal line Footer 3 Ruppe section
-    doc.line(435, 295, 435, 379);//vertical right1 Qr Left 1
-    doc.line(360, 308, 360, 379);//vertical right1 Sub Total
-    doc.line(360, 340, 30, 340);//horizontal line (Bottom)
-    doc.line(360, 362, 30, 362); //horizontal line Sginature upper line
-    doc.line(570, 365, 435, 365); //horizontal line Sginature upper line 
+    doc.line(570, 308, 30, 308);//horizontal line  (4)
+    doc.line(570, 380, 435, 380);//horizontal line  (5)
 
+    doc.line(435, 308, 435, 393);//vertical line (3)
+    doc.line(340, 308, 340, 393);//vertical line (2)
 
     const a = data.InvoiceItems.map((data) => ({
 
@@ -374,69 +369,101 @@ export const reportFooter = (doc, data) => {
     const isIGST = compareGSTINState(data.CustomerGSTIN, data.PartyGSTIN)
     if (isIGST) {
 
-        doc.text(`Total Basic:`, 440, 312,)
-        doc.text(`${TotalBasicAmount.toFixed(2)}`, 567, 312, 'right')
+        doc.text(`Total Basic:`, 440, 327,)
+        doc.text(`${TotalBasicAmount.toFixed(2)}`, 567, 327, 'right')
 
-        doc.text(`Total Disc:`, 440, 322,)
-        doc.text(` ${TotalDiscount.toFixed(2)}`, 567, 322, 'right')
+        doc.text(`Total Disc:`, 440, 337,)
+        doc.text(` ${TotalDiscount.toFixed(2)}`, 567, 337, 'right')
 
-        doc.text(`Total IGST:`, 440, 332)
-        doc.text(`${totalICGST.toFixed(2)}`, 567, 332, 'right')
+        doc.text(`Total IGST:`, 440, 347)
+        doc.text(`${totalICGST.toFixed(2)}`, 567, 347, 'right')
 
-        doc.text(`Total GST:`, 440, 342,)
-        doc.text(` ${totalICGST.toFixed(2)}`, 567, 342, 'right')
+        doc.text(`Total GST:`, 440, 357,)
+        doc.text(` ${totalICGST.toFixed(2)}`, 567, 357, 'right')
 
 
     } else {
-        doc.text(`Total Basic:`, 440, 302,)
-        doc.text(`${numberWithCommas(TotalBasicAmount.toFixed(2))}`, 567, 302, 'right')
+        doc.text(`Total Basic:`, 440, 317,)
+        doc.text(`${numberWithCommas(TotalBasicAmount.toFixed(2))}`, 567, 317, 'right')
 
-        doc.text(`Total Disc:`, 440, 312,)
-        doc.text(`${numberWithCommas(TotalDiscount.toFixed(2))}`, 567, 312, 'right')
+        doc.text(`Total Disc:`, 440, 327,)
+        doc.text(`${numberWithCommas(TotalDiscount.toFixed(2))}`, 567, 327, 'right')
 
-        doc.text(`Total CGST:`, 440, 322)
-        doc.text(`${numberWithCommas(totalCGST.toFixed(2))}`, 567, 322, 'right')
+        doc.text(`Total CGST:`, 440, 337)
+        doc.text(`${numberWithCommas(totalCGST.toFixed(2))}`, 567, 337, 'right')
 
-        doc.text(`Total SGST:`, 440, 332,)
-        doc.text(`${numberWithCommas(totalSGST.toFixed(2))}`, 567, 332, 'right')
+        doc.text(`Total SGST:`, 440, 347,)
+        doc.text(`${numberWithCommas(totalSGST.toFixed(2))}`, 567, 347, 'right')
 
-        doc.text(`Total GST:`, 440, 342,)
-        doc.text(` ${numberWithCommas(TotalGST.toFixed(2))}`, 567, 342, 'right')
+        doc.text(`Total GST:`, 440, 357,)
+        doc.text(` ${numberWithCommas(TotalGST.toFixed(2))}`, 567, 357, 'right')
 
     }
 
 
-    doc.text(`Round Off:`, 440, 352,)
-    doc.text(` ${Number(data.RoundOffAmount).toFixed(2)}`, 567, 352, 'right')
+    doc.text(`Round Off:`, 440, 367,)
+    doc.text(` ${Number(data.RoundOffAmount).toFixed(2)}`, 567, 367, 'right')
 
-    doc.text(`TCS Amount:`, 440, 362,)
-    doc.text(` ${numberWithCommas(Number(data.TCSAmount).toFixed(2))}`, 567, 362, 'right')
+    doc.text(`TCS Amount:`, 440, 377,)
+    doc.text(` ${numberWithCommas(Number(data.TCSAmount).toFixed(2))}`, 567, 377, 'right')
 
     doc.setFont(undefined, 'Normal')
     doc.setFontSize(10)
     doc.setFont(undefined, 'bold')
-    doc.text(`Total Amount :`, 439, 375,)
+    doc.text(`Total Amount :`, 439, 390,)
     const Total = numberWithCommas(Number(data.GrandTotal).toFixed(2))
-    doc.text(`${Total}`, 567, 376, 'right')
-    doc.setFont(undefined, 'Normal')
-    // doc.setFont('Tahoma')
-    doc.setFontSize(9)
-    doc.setFontSize(8)
-    doc.text(`Prepared by `, 35, 785,)
-    doc.text(`Received By `, 180, 785,)
-    doc.setFontSize(10)
-    doc.text(`${data.PartyName} `, 390, 785,)
-    doc.setFontSize(10)
-    doc.text(`${data.CustomerName} `, 140, 811,)
-    doc.setFontSize(9)
-    doc.text(`I/we hearby certify that food/foods mentioned in this invoice is/are warranted to be
- of the nature and quantity which it/these purports to be `, 34, 348,)
-    doc.text(`Signature `, 280, 372,)
-    doc.text(`Prepared by :${data.PartyName} `, 35, 372,)
+    doc.text(`${Total}`, 567, 390, 'right')
+
     doc.setFont(undefined, 'bold')
-    doc.text(`Rupees:`, 33, 305,)
-    doc.text(`${stringNumber}`, 65, 305,)
-    var DetailsOfBankStyle = {
+
+    let DetailsOfRupeesStyle = {
+
+        didDrawCell: (data1) => {
+            const rowIdx = data1.row.index;
+            const colIdx = data1.column.index;
+            if (rowIdx === 0 && colIdx === 0) {
+                let x = data1.cursor.x + 2
+                let y = data1.cursor.y + 8
+                doc.setFontSize(8)
+                doc.setFont(undefined, 'bold')
+                doc.text('Rupees: ', x, y)
+            }
+        },
+
+        margin: {
+            top: 0, left: 30,
+        },
+        showHead: 'always',
+        theme: 'grid',
+        styles: {
+            overflow: 'linebreak',
+            fontSize: 8,
+            height: 0,
+        },
+        bodyStyles: {
+            columnWidth: 'wrap',
+            textColor: "black",
+            cellPadding: 1,
+            fontSize: 8,
+            lineColor: "black"
+        },
+        columnStyles: {
+            0: {
+                valign: "top",
+                columnWidth: 310,
+                halign: 'lfet',
+            }
+
+        },
+        tableLineColor: "black",
+        startY: 308,
+
+    };
+
+    doc.autoTable(table.Ruppescolumn, table.RupeesRow(data), DetailsOfRupeesStyle,);
+
+
+    let DetailsOfBankStyle = {
         didParseCell: (data1) => {
             if (data.BankData.length > 0) {
                 let BankData = data.BankData[0]
@@ -451,31 +478,32 @@ export const reportFooter = (doc, data) => {
             top: 0, left: 30, right: 35,
         },
         showHead: 'always',
-        theme: 'plain',
+        theme: (data.BankData.length > 0) ? 'grid' : 'plain',
         headerStyles: { cellPadding: 1, },
         styles: {
             overflow: 'linebreak',
-            fontSize: 8,
+            fontSize: 8.5,
             height: 0,
         },
         bodyStyles: {
             columnWidth: 'wrap',
             textColor: "black",
-            cellPadding: 1,
-            fontSize: 8,
-            // fontStyle: 'bold',
+            cellPadding: 2,
+            fontSize: 7,
             lineColor: "black"
         },
         columnStyles: {
             0: {
                 valign: "top",
-                columnWidth: (data.BankData.length > 0) ? 100 : 30,
+                columnWidth: (data.BankData.length > 0) ? 90 : 30,
                 halign: 'lfet',
             },
             1: {
                 valign: "top",
-                columnWidth: (data.BankData.length > 0) ? 100 : 300,
+                columnWidth: (data.BankData.length > 0) ? 90 : 300,
                 halign: 'lfet',
+
+
             },
             2: {
                 valign: "top",
@@ -486,14 +514,21 @@ export const reportFooter = (doc, data) => {
         },
         tableLineColor: "black",
 
-        startY: 308,
+        startY: doc.previousAutoTable.finalY,
 
     };
-
     doc.autoTable(table.Bankcolumn, table.BankRow(data), DetailsOfBankStyle,);
+
+    doc.setFontSize(8)
+    doc.setFont(undefined, 'Normal')
+
+    doc.text(`I/we hearby certify that food/foods mentioned in this invoice is/are warranted to be
+ of the nature and quantity which it/these purports to be `, 34, doc.previousAutoTable.finalY + (9),)
+    doc.line(340, doc.previousAutoTable.finalY + (21), 30, doc.previousAutoTable.finalY + (21)); //horizontal line (1)
+
+    doc.text(`Signature `, 280, 387,)
+    doc.text(`Prepared by :${data.PartyName} `, 35, 387,)
 }
-
-
 
 
 
@@ -873,8 +908,8 @@ export const pageFooter = (doc, data) => {
             pageBorder(doc)
             reportHeder3(doc, data)
 
-            doc.text('Page' + String(pageCount) + ' of ' + String(i), 532, 390,)
-            doc.text('Print Date :' + String(currentDate_dmy) + ' Time ' + String(CurrentTime()), 30, 390,)
+            doc.text('Page' + String(pageCount) + ' of ' + String(i), 532, 403,)
+            doc.text('Print Date :' + String(currentDate_dmy) + ' Time ' + String(CurrentTime()), 30, 403,)
         }
 
     } else {

@@ -1,6 +1,6 @@
 
 import { invoice } from "../ReportIndex";
-import { numberWithCommas } from "../Report_common_function";
+import { numberWithCommas, toWords } from "../Report_common_function";
 
 export const columnsWithCGST_SGST = [
     "SN",
@@ -32,10 +32,13 @@ export const columnsWithIGST = [
 ];
 
 
-
 export const Bankcolumn = [
     "",
     "",
+    "",
+]
+
+export const Ruppescolumn = [
     "",
 ]
 
@@ -476,7 +479,7 @@ export const DetailsOfTransportRow = (data) => {
         [data.DriverName === null ? "" : `                        ${data.DriverName}`],
         [`                      ${data.VehicleNo === null ? "" : data.VehicleNo}`],
         [`                          ${(EwayData.EwayBillNo === undefined) || (EwayData.EwayBillNo === null) ? "" : EwayData.EwayBillNo}`],
-        [`                          ${(EwayData.AckNo === undefined) || (EwayData.AckNo === null) ? "" : EwayData.AckNo}`]
+        [`              ${(EwayData.AckNo === undefined) || (EwayData.AckNo === null) ? "" : EwayData.AckNo}`]
     ]
 
     return DetailsOfTransportArray;
@@ -489,6 +492,7 @@ export const BankRow = (data) => {
         let BankData = data.BankData[0]
         var reportArray = [
             [`A/C No: ${BankData.AccountNo}`, `IFSC Code: ${BankData.IFSC}`, `Branch: ${BankData.BranchName}`],
+
             [`Bank Name :${BankData.BankName}`]
         ]
     } else {
@@ -499,6 +503,16 @@ export const BankRow = (data) => {
         ]
     }
     return reportArray;
+}
+
+export const RupeesRow = (data) => {
+    let stringNumber = toWords(Number(data.GrandTotal))
+
+    var RupeesArray = [
+        [`                  ${stringNumber}`],
+
+    ]
+    return RupeesArray;
 }
 
 
