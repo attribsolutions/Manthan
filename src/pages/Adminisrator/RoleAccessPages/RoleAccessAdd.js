@@ -320,7 +320,7 @@ const RoleAccessAdd = () => {
             function isAccessSelect(item) {
                 let accArray = [];
                 let isShowOnMenu_Id
-                
+
                 item.defaultSelectedValues.map(({ value, id }) => {
                     // -1 stands for "List", -2 stands for "Add", and -3 stands for "STP".
                     if ((value < 0)) {
@@ -330,7 +330,7 @@ const RoleAccessAdd = () => {
                         accArray.push({ "PageAccess": value })
                     }
                 })
-                
+
                 return { accArray, isShowOnMenu_Id }
             }
 
@@ -339,13 +339,13 @@ const RoleAccessAdd = () => {
 
                 let { accArray = [], isShowOnMenu_Id } = isAccessSelect(row);
                 // -1 stands for "List", -2 stands for "Add", and -3 stands for "STP".
-                let showList = row.defaultSelectedValues?.find(i => ((i.value === -1)||(i.value === -3)))
+                let showList = row.defaultSelectedValues?.find(i => ((i.value === -1) || (i.value === -3)))
                 let showAdd = row.defaultSelectedValues?.find(i => (i.value === -2))
                 let isAccess = accArray.length > 0;
                 let isrelated = row.RelatedPageID > 0;
                 let divisionID = division_dropdown_Select.value
                 let isSTP_page = row.PageType === 3 //PageTypeName :"SourceTransactionPage"
-                
+
                 const listRowOBJFunc = () => {
                     let showArray = [];
                     if (showList) {
@@ -648,11 +648,22 @@ const MultiSelectDopdown = (cell, item) => {
         </components.MultiValueRemove>
     );
 
-    const onChangehamdler = (seletedVal = []) => {
-        // e.sort((a, b) => a.value - b.value);
-        item.defaultSelectedValues = seletedVal
+
+    const onChangehamdler = (selectedVal = []) => {
+
+        // const  hasAddShow=selectedVal.some((item) => item.value == -2)
+        // const hasSave=selectedVal.some((item) => item.value == 2)
+        // const  lastSelect=selectedVal[selectedVal.length-1]?.value
+
+        // if (hasAddShow && lastSelect === -2) {// show add page dependancy************************
+        //     if (!hasSave) {
+        //         selectedVal.push({ value: 2, label: "IsSave" })
+        //     }
+        // }
+
+        item.defaultSelectedValues = selectedVal
     }
-    // item.dynamicOptions.sort((a, b) => a.value - b.value);
+
 
 
     return (
@@ -660,7 +671,7 @@ const MultiSelectDopdown = (cell, item) => {
             <Select
                 key={`select-${item.id}`}
                 isMulti
-                onChange={onChangehamdler}
+                onChange={(e) => onChangehamdler(e)}
                 defaultValue={item.defaultSelectedValues}
                 components={{
                     Option,

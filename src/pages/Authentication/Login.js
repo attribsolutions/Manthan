@@ -37,12 +37,18 @@ const Login = props => {
   const { session, updateSessionActivity } = useSession();
 
   useLayoutEffect(() => {
+
     dispatch(resetRoleAccessAction())
     dispatch(divisionDropdownSelectSuccess([]))
   }, []);
 
   useLayoutEffect(() => {
     try {
+      let forceReload = sessionStorage.getItem("foreceReload");
+      if (forceReload === "true") {
+        sessionStorage.setItem("foreceReload", false)
+        window.location.reload(true);
+      }
       if ((session.active === true && (localStorage.getItem("token")) && (localStorage.getItem("roleId")))) {
         history.push({ pathname: "/Dashboard" })
         return
@@ -61,7 +67,7 @@ const Login = props => {
         localStorage.setItem("token", (loginSuccess.token))
         localStorage.setItem("refreshToken", (loginSuccess.refreshtoken))
         localStorage.setItem("userId", (loginSuccess.UserID))
-
+        sessionStorage.setItem("foreceReload", true)
         dispatch(loginSuccessAction({ Status: false }))
         dispatch(getUserDetailsAction(loginSuccess.UserID))
       }
@@ -75,7 +81,7 @@ const Login = props => {
       if (user.Party_id === null) {
         user.Party_id = 0;
       }
-      
+
       if (session.active === true && (localStorage.getItem("token"))) {
         //api call roleAceessAction Api,partysetting Api , Party Dropdown Api and set localstorage roleId ;
         afterloginOneTimeAPI(user, dispatch);// all common function

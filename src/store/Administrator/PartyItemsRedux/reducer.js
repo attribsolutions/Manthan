@@ -1,8 +1,10 @@
 import {
+  CHANNEL_ITEM_VIEW_DETAIL_ACTION,
+  CHANNEL_ITEM_VIEW_DETAIL_ACTION_SUCCESS,
   EDIT_PARTY_ITEM_ID_SUCCESS,
   GO_BUTTON_PARTY_ITEM_ADD,
   GO_BUTTON_PARTY_ITEM_ADD_SUCCESS,
- 
+
   PARTY_ITEM_API_ERROR_ACTION,
   SAVE_PARTY_ITEMS_ACTION,
   SAVE_PARTY_ITEMS_ACTION_SUCCESS,
@@ -14,8 +16,10 @@ const INIT_STATE = {
   editData: { Status: false },
   updateMsg: { Status: false },
   partyItem: [],
+  channeItemViewDetail: { Status: false },
 
-  goBtnloading:false,
+  goBtnloading: false,
+  channeItemViewBtnLoading: false,
   partyItemListLoading: false,
   saveBtnloading: false
 }
@@ -52,6 +56,20 @@ const PartyItemsReducer = (state = INIT_STATE, action) => {
         partyItemListLoading: false,
       }
 
+    case CHANNEL_ITEM_VIEW_DETAIL_ACTION:
+      
+      return {
+        ...state,
+        channeItemViewBtnLoading: action.config.btnId,
+      }
+
+    case CHANNEL_ITEM_VIEW_DETAIL_ACTION_SUCCESS:
+      return {
+        ...state,
+        channeItemViewBtnLoading: false,
+        channeItemViewDetail: action.payload,
+      }
+
     case EDIT_PARTY_ITEM_ID_SUCCESS:
       return {
         ...state,
@@ -62,8 +80,9 @@ const PartyItemsReducer = (state = INIT_STATE, action) => {
       return {
         ...state,
         saveBtnloading: false,
-        goBtnloading:false,
+        goBtnloading: false,
         partyItemListLoading: false,
+        channeItemViewBtnLoading: false,
       }
 
     default:

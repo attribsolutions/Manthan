@@ -7,6 +7,8 @@ import {
   EDIT_PARTY_ITEM_ID,
   EDIT_PARTY_ITEM_ID_SUCCESS,
   PARTY_ITEM_API_ERROR_ACTION,
+  CHANNEL_ITEM_VIEW_DETAIL_ACTION,
+  CHANNEL_ITEM_VIEW_DETAIL_ACTION_SUCCESS
 } from "./actionType";
 
 
@@ -43,6 +45,19 @@ export const editPartyItemIDSuccess = (editData) => ({       // Edit  Success
   payload: editData,
 });
 
+export const channalItemViewDetailAction = (config) => ({     
+  type: CHANNEL_ITEM_VIEW_DETAIL_ACTION,
+  config
+});
+
+export const channalItemViewDetailActionSuccess = (editData) => ({ 
+  type: CHANNEL_ITEM_VIEW_DETAIL_ACTION_SUCCESS,
+  payload: editData,
+});
+
+
+
 export const PartyItemApiErrorAction = () => ({
   type: PARTY_ITEM_API_ERROR_ACTION,
 })
+

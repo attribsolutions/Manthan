@@ -1,9 +1,9 @@
 import { call, put, takeLatest } from "redux-saga/effects";
 import { CommonConsole } from "../../../components/Common/CommonFunction";
-import { PartyItemGoBtnAdd_API, ChannelItemGoBtnAdd_API, PartyItem_Save_API, ChannelItem_Save_API } from "../../../helpers/backend_helper";
+import { PartyItemGoBtnAdd_API, ChannelItemGoBtnAdd_API, PartyItem_Save_API, ChannelItem_Save_API, ChannelItem_View_API } from "../../../helpers/backend_helper";
 import { url } from "../../../routes";
-import { savePartyItemsActionSuccess, goButtonPartyItemAddPageSuccess, editPartyItemIDSuccess, PartyItemApiErrorAction, } from "./action";
-import { SAVE_PARTY_ITEMS_ACTION, GO_BUTTON_PARTY_ITEM_ADD, EDIT_PARTY_ITEM_ID, } from "./actionType";
+import { savePartyItemsActionSuccess, goButtonPartyItemAddPageSuccess, editPartyItemIDSuccess, PartyItemApiErrorAction, channalItemViewDetailActionSuccess, } from "./action";
+import { SAVE_PARTY_ITEMS_ACTION, GO_BUTTON_PARTY_ITEM_ADD, EDIT_PARTY_ITEM_ID, CHANNEL_ITEM_VIEW_DETAIL_ACTION, } from "./actionType";
 
 
 function* save_PartyItems_GenFunc({ config }) {
@@ -91,13 +91,26 @@ function* editPartyItems_ID_GenFunc({ body }) {     // edit API
 }
 
 
+function* viewChannelItem_GenFunc({ config }) {     // edit API 
+  
+ 
+  try {
+    let  response = yield call(ChannelItem_View_API, config);
+      yield put(channalItemViewDetailActionSuccess(response));
+  } catch (error) {
+    CommonConsole(error)
+    yield put(PartyItemApiErrorAction())
+  }
+}
+
 
 
 function* PartyItemsSaga() {
   yield takeLatest(SAVE_PARTY_ITEMS_ACTION, save_PartyItems_GenFunc)
   yield takeLatest(GO_BUTTON_PARTY_ITEM_ADD, goButton_partyItem_Add_GenFunc)
   yield takeLatest(EDIT_PARTY_ITEM_ID, editPartyItems_ID_GenFunc)
-
+  yield takeLatest(CHANNEL_ITEM_VIEW_DETAIL_ACTION, viewChannelItem_GenFunc)
+  
 
 }
 

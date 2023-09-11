@@ -211,6 +211,7 @@ export const PARTY_ITEM_FILTER = '/PartyItemFilter' // FOR Get
 
 export const CHANNEL_ITEM_SAVE_URL = '/ItemChannelWise' ;
 export const CHANNEL_ITEM_ADD_GO_BTN = '/ItemsChannelWiseFilter' // FOR Get
+export const CHANNEL_ITEM_ADD_VIEW_BTN = '/CheckPartiesInChannelItem' // FOR VIEW
 
 
 //Routes

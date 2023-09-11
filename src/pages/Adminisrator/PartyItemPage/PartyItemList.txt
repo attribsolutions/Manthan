@@ -116,12 +116,12 @@
 
 
 //   function partySelectButtonHandler() {
-//     debugger
+//     
 //     goButtonHandler("event")
 //   }
 
 //   function partyOnChngeButtonHandler() {
-//     debugger
+//     
 //     dispatch(getPartyItemAssingListSuccess([]))
 //   }
 
