@@ -90,7 +90,7 @@ const InvoiceList = () => {
         Update_Vehicle_Invoice,
         sendToScmMsg
     } = reducers;
-    
+
     const {
         fromdate,
         todate,
@@ -346,6 +346,7 @@ const InvoiceList = () => {
     }
 
     const partySelectButtonHandler = (e) => {
+        goButtonHandler()
         dispatch(GetVenderSupplierCustomer({ subPageMode, PartyID: _cfunc.loginSelectedPartyID() }));
     }
 

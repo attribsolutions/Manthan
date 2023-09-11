@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
-import { ReceiptListAPI } from '../../../store/Accounting/Receipt/action';
+import { ReceiptListAPI, ReceiptListAPISuccess } from '../../../store/Accounting/Receipt/action';
 import { currentDate_ymd, loginPartyID } from '../../../components/Common/CommonFunction';
 import { useDispatch, useSelector } from 'react-redux';
 import * as url from "../../../routes/route_url";
@@ -12,21 +12,33 @@ export default function PaymentEntryList() {
 
     const dispatch = useDispatch();
 
-    const { tableList, } = useSelector((state) => ({
+    const { tableList, commonPartyDropSelect } = useSelector((state) => ({
         tableList: state.ReceiptReducer.ReceiptList,
+        commonPartyDropSelect: state.CommonPartyDropdownReducer.commonPartyDropSelect
     }));
 
     useEffect(() => {
-        const jsonBody = JSON.stringify({
-            FromDate: currentDate_ymd,
-            ToDate: currentDate_ymd,
-            CustomerID: "",
-            PartyID: loginPartyID(),
-            ReceiptType: 30,
-        });
-        dispatch(ReceiptListAPI(jsonBody, url.PAYMENT_ENTRY_LIST));
+
     }, [])
 
+    // Common Party Dropdown useEffect
+    useEffect(() => {
+
+        if (commonPartyDropSelect.value > 0) {
+            const jsonBody = JSON.stringify({
+                FromDate: currentDate_ymd,
+                ToDate: currentDate_ymd,
+                CustomerID: "",
+                PartyID: commonPartyDropSelect.value,
+                ReceiptType: 30,
+            });
+            dispatch(ReceiptListAPI(jsonBody, url.PAYMENT_ENTRY_LIST));
+        }
+        return () => {
+            dispatch(ReceiptListAPISuccess([]))
+        }
+
+    }, [commonPartyDropSelect]);
 
     const pagesListColumns = [
         {
