@@ -517,7 +517,7 @@ export const reportFooter = (doc, data) => {
         startY: doc.previousAutoTable.finalY,
 
     };
-    doc.autoTable(table.Bankcolumn, table.BankRow(data), DetailsOfBankStyle,);
+    doc.autoTable(table.Bankcolumn, table.BankRow(data, doc), DetailsOfBankStyle,);
 
     doc.setFontSize(8)
     doc.setFont(undefined, 'Normal')
