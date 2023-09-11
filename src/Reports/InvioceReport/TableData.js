@@ -409,7 +409,7 @@ export const BilledToRow = (data) => {
 export const DetailsOfTransportRow = (data) => {
 
     let OrderNumber = " "
-    if (data.InvoicesReferences > 0) {
+    if (data.InvoicesReferences.length > 0) {
 
         const PoNumber = data.InvoicesReferences.map(index => ({
             SystemGenerate: index.FullOrderNumber,

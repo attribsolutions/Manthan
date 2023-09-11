@@ -447,9 +447,11 @@ export const BilledToRow = (data) => {
     return BilledToArray;
 }
 export const DetailsOfTransportRow = (data) => {
-    let OrderNumber = " "
 
-    if (data.InvoicesReferences > 0) {
+    let OrderNumber = " "
+    debugger
+    if (data.InvoicesReferences.length > 0) {
+        debugger
         const PoNumber = data.InvoicesReferences.map(index => ({
             SystemGenerate: index.FullOrderNumber,
             Description: index.Description,
