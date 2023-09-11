@@ -240,8 +240,8 @@ const PartyItems = (props) => {
                         spinnerColor='white'
                         onClick={() => {
                             const jsonBody = JSON.stringify({
-                                "Item": _cfunc.loginSelectedPartyID(),
-                                "PartyType": row.PartyType
+                                "Item": row.Item,
+                                "PartyType": _cfunc.loginSelectedPartyID(),
                             })
                             dispatch(channalItemViewDetailAction({ jsonBody, btnId: row.Item }))
                         }}><i className="bx bxs-show font-size-16" /></C_Button>
