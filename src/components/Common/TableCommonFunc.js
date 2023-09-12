@@ -19,7 +19,8 @@ export const selectAllCheck = ({
   nonSelectable = '',
   position,
   headLabel,
-  bgColor = "#9dadf09e"
+  bgColor = "#9dadf09e",
+  disabledWithMsg = ''
 }) => ({
 
   mode: "checkbox",
@@ -38,17 +39,21 @@ export const selectAllCheck = ({
       <label style={{ paddingLeft: "7px" }}>{headLabel ? headLabel : "SelectAll"}</label>
     </div>
   },
-  selectionRenderer: ({ mode, ...rest }) => {
+  selectionRenderer: ({ mode, checked, ...rest }) => {
     if (rest.disabled) {
-      return <Input
-        type="checkbox"
-        disabled
-        style={{
-          opacity: 0.5,
-          cursor: 'not-allowed',
-          backgroundColor: "#ababab82",
-        }}
-      />;
+      return <>
+        <Input
+          type="checkbox"
+          {...rest}
+          disabled
+          checked={checked}
+          style={!checked ? {
+            opacity: 0.5,
+            backgroundColor: "#ababab82",
+          } : {}}
+        />
+        &nbsp;&nbsp; <samp className="text-danger">{disabledWithMsg}</samp>
+      </>;
     }
     return <Input type="checkbox"  {...rest} />
 
