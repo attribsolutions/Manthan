@@ -80,8 +80,8 @@ var pageHeder = function (doc, data) {
         const pageCount = doc.internal.getNumberOfPages()
         doc.setFont('helvetica', 'Normal')
         doc.setFontSize(8)
-        doc.text('Page' + String(pageCount), 500, 390,)
-        doc.text('Print Date :' + String(currentDate_dmy) + ' Time ' + String(CurrentTime()), 30, 390,)
+        doc.text('Page' + String(pageCount), 500, 403,)
+        doc.text('Print Date :' + String(currentDate_dmy) + ' Time ' + String(CurrentTime()), 30, 403,)
 
     }
     style.pageBorder(doc, data);                           // Page Border

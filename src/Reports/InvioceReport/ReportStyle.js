@@ -391,12 +391,12 @@ export const reportFooter = (doc, data) => {
     // doc.addImage(upi_qr_code, 'PNG', 359, 747, 75, 65)
     doc.setDrawColor(0, 0, 0);
     doc.line(570, 730, 30, 730);//horizontal line Footer 1
-    doc.line(435, 745, 30, 745);//horizontal line Footer 2
-    doc.line(360, 775, 30, 775);//horizontal line Footer 3
-    doc.line(360, 795, 30, 795);//horizontal line Footer 3
+    // doc.line(435, 745, 30, 745);//horizontal line Footer 2
+    // doc.line(360, 775, 30, 775);//horizontal line Footer 3
+    // doc.line(360, 795, 30, 795);//horizontal line Footer 3
 
     doc.line(435, 730, 435, 815);//vertical right Sub Total
-    doc.line(360, 745, 360, 815);//vertical right Qr Code 
+    doc.line(340, 730, 340, 815);//vertical right Qr Code (1)
     doc.setFont('Tahoma')
 
     const a = data.InvoiceItems.map((data) => ({
@@ -471,6 +471,53 @@ export const reportFooter = (doc, data) => {
         doc.text(`TCS Amount:`, 440, 798,)
         doc.text(` ${numberWithCommas(Number(data.TCSAmount).toFixed(2))}`, 567, 798, 'right')
 
+
+        let DetailsOfRupeesStyle = {
+
+            didDrawCell: (data1) => {
+                const rowIdx = data1.row.index;
+                const colIdx = data1.column.index;
+                if (rowIdx === 0 && colIdx === 0) {
+                    let x = data1.cursor.x + 2
+                    let y = data1.cursor.y + 8
+                    doc.setFontSize(8)
+                    doc.setFont(undefined, 'bold')
+                    doc.text('Rupees: ', x, y)
+                }
+            },
+
+            margin: {
+                top: 0, left: 30,
+            },
+            showHead: 'always',
+            theme: 'grid',
+            styles: {
+                overflow: 'linebreak',
+                fontSize: 8,
+                height: 0,
+            },
+            bodyStyles: {
+                columnWidth: 'wrap',
+                textColor: "black",
+                cellPadding: 1,
+                fontSize: 8,
+                lineColor: "black"
+            },
+            columnStyles: {
+                0: {
+                    valign: "top",
+                    columnWidth: 310,
+                    halign: 'lfet',
+                }
+
+            },
+            tableLineColor: "black",
+            startY: 730,
+
+        };
+
+        doc.autoTable(table.Ruppescolumn, table.RupeesRow(data), DetailsOfRupeesStyle,);
+
         var DetailsOfBankStyle = {
             didParseCell: (data1) => {
                 if (data.BankData.length > 0) {
@@ -486,30 +533,29 @@ export const reportFooter = (doc, data) => {
                 top: 0, left: 30, right: 35,
             },
             showHead: 'always',
-            theme: 'plain',
+            theme: 'grid',
             headerStyles: { cellPadding: 1, },
             styles: {
                 overflow: 'linebreak',
-                fontSize: 8,
+                fontSize: 7,
                 height: 0,
             },
             bodyStyles: {
                 columnWidth: 'wrap',
                 textColor: [30, 30, 30],
                 cellPadding: 1,
-                fontSize: 8,
-                fontStyle: 'bold',
+                fontSize: 7,
                 lineColor: [0, 0, 0]
             },
             columnStyles: {
                 0: {
                     valign: "top",
-                    columnWidth: (data.BankData.length > 0) ? 100 : 30,
+                    columnWidth: (data.BankData.length > 0) ? 90 : 30,
                     halign: 'lfet',
                 },
                 1: {
                     valign: "top",
-                    columnWidth: (data.BankData.length > 0) ? 100 : 300,
+                    columnWidth: (data.BankData.length > 0) ? 90 : 300,
                     halign: 'lfet',
                 },
                 2: {
@@ -521,11 +567,21 @@ export const reportFooter = (doc, data) => {
             },
             tableLineColor: "black",
 
-            startY: 745,
+            startY: doc.previousAutoTable.finalY,
 
         };
 
         doc.autoTable(table.Bankcolumn, table.BankRow(data), DetailsOfBankStyle,);
+
+        doc.setFontSize(9)
+        doc.setFont(undefined, 'Normal')
+
+        doc.text(`I/we hearby certify that food/foods mentioned in this invoice is/are warranted to be
+     of the nature and quantity which it/these purports to be `, 34, doc.previousAutoTable.finalY + (9),)
+        doc.line(340, doc.previousAutoTable.finalY + (24), 30, doc.previousAutoTable.finalY + (24)); //horizontal line (1)
+
+        doc.text(`Signature `, 280, 810,)
+        doc.text(`Prepared by :${data.PartyName} `, 35, 810,)
 
     }
 
@@ -538,23 +594,23 @@ export const reportFooter = (doc, data) => {
 
     const Total = numberWithCommas((GrandTotal).toFixed(2))
     doc.text(`${Total}`, 567, 812, 'right')
-    doc.setFont(undefined, 'Normal')
-    doc.setFont('Tahoma')
-    doc.setFontSize(9)
-    doc.setFont('Tahoma')
-    doc.setFontSize(8)
-    doc.setFont("Arimo");
-    doc.text(`I/we hearby certify that food/foods mentioned in this invoice is/are warranted to be
-         of the nature and quantity which it/these purports to be `, 34, 782)
-    doc.setFontSize(10)
-    doc.text(`Signature `, 280, 810,)
-    doc.text(`Prepared by :${data.PartyName} `, 35, 810,)
-    doc.setFontSize(8)
+    // doc.setFont(undefined, 'Normal')
+    // doc.setFont('Tahoma')
+    // doc.setFontSize(9)
+    // doc.setFont('Tahoma')
+    // doc.setFontSize(8)
+    // doc.setFont("Arimo");
+    // doc.text(`I/we hearby certify that food/foods mentioned in this invoice is/are warranted to be
+    //      of the nature and quantity which it/these purports to be `, 34, 782)
+    // doc.setFontSize(10)
+    // doc.text(`Signature `, 280, 810,)
+    // doc.text(`Prepared by :${data.PartyName} `, 35, 810,)
+    // doc.setFontSize(8)
 
-    doc.setFont(undefined, 'bold')
-    doc.text(`Rupees:`, 33, 740,)
-    doc.addFont("Arial", 'Normal')
-    doc.text(`${stringNumber}`, 65, 740,)
+    // doc.setFont(undefined, 'bold')
+    // doc.text(`Rupees:`, 33, 740,)
+    // doc.addFont("Arial", 'Normal')
+    // doc.text(`${stringNumber}`, 65, 740,)
 
 }
 

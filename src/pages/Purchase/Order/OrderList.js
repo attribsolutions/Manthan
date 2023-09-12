@@ -652,6 +652,7 @@ const OrderList = () => {
     }
 
     function partySelectButtonHandler() {
+        goButtonHandler()
         dispatch(_act.GetVenderSupplierCustomer({ subPageMode, PartyID: _cfunc.loginSelectedPartyID() }));
     }
 

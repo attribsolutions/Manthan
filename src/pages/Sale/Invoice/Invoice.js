@@ -24,9 +24,6 @@ import { GotoInvoiceBtn, SaveAndDownloadPDF, SaveButton } from "../../../compone
 import {
     updateBOMListSuccess
 } from "../../../store/Production/BOMRedux/action";
-import ToolkitProvider from "react-bootstrap-table2-toolkit";
-import BootstrapTable from "react-bootstrap-table-next";
-import { Tbody, Thead } from "react-super-responsive-table";
 import * as mode from "../../../routes/PageMode";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url"
@@ -38,7 +35,7 @@ import {
     invoiceSaveActionSuccess,
     makeIB_InvoiceActionSuccess
 } from "../../../store/Sales/Invoice/action";
-import { GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
+import { GetVenderSupplierCustomer, GetVenderSupplierCustomerSuccess } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import {
     invoice_discountCalculate_Func,
@@ -51,8 +48,7 @@ import {
 import "./invoice.scss"
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { CInput, C_DatePicker, decimalRegx } from "../../../CustomValidateForm";
-import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
-import { getVehicleList } from "../../../store/Administrator/VehicleRedux/action";
+import { getVehicleList, getVehicleListSuccess } from "../../../store/Administrator/VehicleRedux/action";
 import { Invoice_1_Edit_API_Singel_Get } from "../../../helpers/backend_helper";
 import * as report from '../../../Reports/ReportIndex'
 import CustomTable from "../../../CustomTable2";
@@ -101,7 +97,8 @@ const Invoice = (props) => {
         VehicleNumber,
         goBtnloading,
         saveBtnloading,
-        saveAndPdfBtnLoading
+        saveAndPdfBtnLoading,
+        commonPartyDropSelect
     } = useSelector((state) => ({
         postMsg: state.InvoiceReducer.postMsg,
         updateMsg: state.BOMReducer.updateMsg,
@@ -115,6 +112,7 @@ const Invoice = (props) => {
         saveBtnloading: state.InvoiceReducer.saveBtnloading,
         goBtnloading: state.InvoiceReducer.goBtnloading,
         saveAndPdfBtnLoading: state.InvoiceReducer.saveAndPdfBtnLoading,
+        commonPartyDropSelect: state.CommonPartyDropdownReducer.commonPartyDropSelect
     }));
 
     const location = { ...history.location }
@@ -125,14 +123,26 @@ const Invoice = (props) => {
     const { fieldLabel } = state;
 
     useEffect(() => {
-
-        dispatch(GetVenderSupplierCustomer({ subPageMode, RouteID: "" }))
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(pageId.INVOICE_1))
         dispatch(GoButtonForinvoiceAddSuccess([]))
-        dispatch(getVehicleList())
 
     }, []);
+
+    // Common Party Dropdown useEffect
+    useEffect(() => {
+
+        if (commonPartyDropSelect.value > 0) {
+            dispatch(getVehicleList({ ..._cfunc.loginJsonBody(), "PartyID": commonPartyDropSelect.value }));
+            dispatch(GetVenderSupplierCustomer({ subPageMode, RouteID: "", "PartyID": commonPartyDropSelect.value }));
+        }
+
+        return () => {
+            dispatch(GetVenderSupplierCustomerSuccess([]));
+            dispatch(getVehicleListSuccess([]));
+        }
+
+    }, [commonPartyDropSelect]);
 
     // userAccess useEffect
     useEffect(() => {
@@ -192,7 +202,6 @@ const Invoice = (props) => {
             });
         }
     }, [postMsg]);
-
 
     useEffect(() => {
 
@@ -575,7 +584,7 @@ const Invoice = (props) => {
             const jsonBody = JSON.stringify({
                 FromDate: values.InvoiceDate,
                 Customer: makeIBInvoice ? makeIBInvoice.customer.value : values.Customer.value,
-                Party: _cfunc.loginPartyID(),
+                Party: commonPartyDropSelect.value,
                 OrderIDs: ""
             });
             dispatch(GoButtonForinvoiceAdd({ subPageMode, jsonBody, btnId }));
@@ -695,7 +704,7 @@ const Invoice = (props) => {
             TCSAmount: calcalateGrandTotal.TCS_Amount,
             Customer: values.Customer.value,
             Vehicle: values.VehicleNo.value ? values.VehicleNo.value : "",
-            Party: _cfunc.loginPartyID(),
+            Party: commonPartyDropSelect.value,
             CreatedBy: _cfunc.loginUserID(),
             UpdatedBy: _cfunc.loginUserID(),
         });
@@ -767,9 +776,7 @@ const Invoice = (props) => {
                                                 classNamePrefix="dropdown"
                                                 options={CustomerDropdown_Options}
                                                 onChange={CustomerOnchange}
-                                                styles={{
-                                                    menu: provided => ({ ...provided, zIndex: 2 })
-                                                }}
+                                                styles={{ menu: provided => ({ ...provided, zIndex: 3 }) }}
                                             />
                                             {isError.Customer.length > 0 && (
                                                 <span className="text-danger f-8"><small>{isError.Customer}</small></span>

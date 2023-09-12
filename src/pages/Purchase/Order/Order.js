@@ -9,14 +9,13 @@ import {
     Label,
     Modal,
     Row,
-    Spinner,
 } from "reactstrap";
 import { useDispatch, useSelector } from "react-redux";
 import Select from "react-select";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { orderCalculateFunc } from "./OrderPageCalulation";
-import { SaveButton, Go_Button, Change_Button, GotoInvoiceBtn, PageLoadingSpinner, Listloader, DashboardLoader } from "../../../components/Common/CommonButton";
+import { SaveButton, Go_Button, Change_Button, GotoInvoiceBtn, PageLoadingSpinner, DashboardLoader } from "../../../components/Common/CommonButton";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 
 import OrderPageTermsTable from "./OrderPageTermsTable";
@@ -36,9 +35,9 @@ import { pageFieldUseEffect, table_ArrowUseEffect, updateMsgUseEffect, userAcces
 import { orderApprovalFunc, orderApprovalMessage } from "./orderApproval";
 import { GetRoutesList, GetRoutesListSuccess } from "../../../store/Administrator/RoutesRedux/actions";
 import { ORDER_4 } from "../../../routes/route_url";
-import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
-import "./order.scss"
+import NewCommonPartyDropdown from "../../../components/Common/NewCommonPartyDropdown";
 import "../../../CustomTable2/CustomTable.scss"
+import "./order.scss"
 
 let editVal = {}
 let initial_BredcrumbMsg = "Order Amount :0.00"
@@ -73,8 +72,6 @@ const Order = (props) => {
     const dispatch = useDispatch();
     const history = useHistory();
     const currentDate_ymd = _cfunc.date_ymd_func();
-    const userAdminRole = _cfunc.loginUserAdminRole();
-
 
     const fileds = {
         id: "",
@@ -102,8 +99,7 @@ const Order = (props) => {
     const [orderdate, setorderdate] = useState(currentDate_ymd);
 
     const [supplierSelect, setsupplierSelect] = useState('');
-    const [routeSelect, setRouteSelect] = useState('');
-    const [partySelect, setPartySelect] = useState('');
+    const [routeSelect, setRouteSelect] = useState({ value: '', label: "All" });
     const [itemSelect, setItemSelect] = useState({ value: '', label: "All" });
     const [itemSelectDropOptions, setitemSelectOptions] = useState([]);
     const [selecedItemWiseOrder, setSelecedItemWiseOrder] = useState(true)
@@ -146,7 +142,8 @@ const Order = (props) => {
         supplierADDdropLoading,
         supplierDropLoading,
         orderTypeDropLoading,
-        routesDropLoading
+        routesDropLoading,
+        commonPartyDropSelect
     } = useSelector((state) => ({
         goBtnOrderdata: state.OrderReducer.goBtnOrderAdd,
 
@@ -180,6 +177,7 @@ const Order = (props) => {
         saveBtnloading: state.OrderReducer.saveBtnloading,
         gotoInvoiceBtnLoading: state.OrderReducer.gotoInvoiceBtnLoading,
 
+        commonPartyDropSelect: state.CommonPartyDropdownReducer.commonPartyDropSelect
     }));;
 
     const { fieldLabel } = state;
@@ -194,20 +192,12 @@ const Order = (props) => {
         dispatch(_act.commonPageField(page_id));
         dispatch(_act.getTermAndCondition());
         dispatch(_act.getOrderType());
-        dispatch(GetRoutesList());
-        dispatch(getPartyListAPI());
-        dispatch(_act.GetVenderSupplierCustomer({ subPageMode, RouteID: "" }));
-        if (!(subPageMode === url.ORDER_4)) {
-            dispatch(_act.getSupplierAddress(_cfunc.loginPartyID()))
-        }
         return () => {
             dispatch(_act.commonPageFieldSuccess(null));
             dispatch(_act.GoButton_For_Order_AddSuccess(null))
-            dispatch(getPartyListAPISuccess([]));
-            dispatch(GetRoutesListSuccess([]));
             dispatch(_act.getTermAndCondition_Success([]));
-            dispatch(_act.GetVenderSupplierCustomerSuccess([]));
         }
+
     }, []);
 
     useEffect(() => userAccessUseEffect({ // userAccess useEffect 
@@ -223,6 +213,33 @@ const Order = (props) => {
             setFindPartyItemAccess(true)
         }
     };
+
+    // Common Party Dropdown useEffect
+    useEffect(() => {
+
+        if (commonPartyDropSelect.value > 0) {
+            dispatch(GetRoutesList({ ..._cfunc.loginJsonBody(), "PartyID": commonPartyDropSelect.value }));
+            dispatch(getPartyListAPI({ ..._cfunc.loginJsonBody(), "PartyID": commonPartyDropSelect.value }));
+            dispatch(_act.GetVenderSupplierCustomer({ subPageMode, RouteID: "", "PartyID": commonPartyDropSelect.value }));
+            if (!(subPageMode === url.ORDER_4)) {
+                dispatch(_act.getSupplierAddress(commonPartyDropSelect.value))
+            }
+        }
+        setItemSelect({ value: '', label: "All" });
+        setRouteSelect({ value: '', label: "All" });
+        setsupplierSelect('')
+        return () => {
+            dispatch(getPartyListAPISuccess([]));
+            dispatch(GetRoutesListSuccess([]));
+            dispatch(_act.GetVenderSupplierCustomerSuccess([]));
+            setGoBtnDissable(false)
+            setSelecedItemWiseOrder(true)
+            setOrderItemTable([])
+            dispatch(_act.GoButton_For_Order_AddSuccess([]))
+        }
+
+
+    }, [commonPartyDropSelect]);
 
     useEffect(() => { // hasEditVal useEffect
 
@@ -318,7 +335,7 @@ const Order = (props) => {
                         OrderIDs: postMsg.OrderID.toString(),
                         FromDate: orderdate,
                         Customer: supplierSelect.value,
-                        Party: _cfunc.loginPartyID(),
+                        Party: commonPartyDropSelect.value,
                     });
                     dispatch(_act.GoButtonForinvoiceAdd({
                         jsonBody,
@@ -406,7 +423,6 @@ const Order = (props) => {
         orderApprovalFunc({ dispatch, approvalDetail })
     }, [approvalDetail]);
 
-
     useEffect(() => {
         orderApprovalMessage({ dispatch, orderApprovalMsg, listPath, history })
     }, [orderApprovalMsg]);
@@ -416,7 +432,6 @@ const Order = (props) => {
             document.getElementById("__assignItem_onClick").style.display = ((supplierSelect.value > 0) && (findPartyItemAccess) && !goBtnloading) ? "block" : "none"
         } catch (e) { }
     }, [goBtnloading, supplierSelect, findPartyItemAccess]);
-
 
     useEffect(() => {
         if (gobutton_Add_invoice.Status === true && gobutton_Add_invoice.StatusCode === 200) {
@@ -441,7 +456,6 @@ const Order = (props) => {
         value: i.id,
         label: i.Name,
     }));
-
 
     const RoutesListOptions = RoutesList.map((index) => ({
         value: index.id,
@@ -906,7 +920,6 @@ const Order = (props) => {
         },
     ];
 
-
     function supplierOnchange(e) {
 
         setsupplierSelect(e);
@@ -927,10 +940,6 @@ const Order = (props) => {
         goButtonHandler(e.value)
     };
 
-    function partyOnchange(e) {
-        setPartySelect(e)
-    };
-
     function itemSelectOnchange(e) {
         setItemSelect(e)
     };
@@ -944,13 +953,13 @@ const Order = (props) => {
 
     function RouteOnChange(event) {
         setsupplierSelect('')
-        dispatch(_act.GetVenderSupplierCustomer({ subPageMode, RouteID: event.value }))
+        dispatch(_act.GetVenderSupplierCustomer({ subPageMode, RouteID: event.value, "PartyID": commonPartyDropSelect.value }))
         setRouteSelect(event)
     }
 
     async function assignItem_onClick(event) {
         event.stopPropagation();
-        const isParty = subPageMode === url.ORDER_1 ? supplierSelect.value : _cfunc.loginPartyID()
+        const isParty = subPageMode === url.ORDER_1 ? supplierSelect.value : commonPartyDropSelect.value
         const config = {
             editId: isParty,
             Party: isParty,
@@ -980,7 +989,6 @@ const Order = (props) => {
         // setOrderAmount(sumOfAmount.toFixed(2))
         dispatch(_act.BreadcrumbShowCountlabel(`${"Order Amount"} :${_cfunc.amountCommaSeparateFunc(Number(sumOfAmount).toFixed(2))}`))
     };
-
 
     const item_AddButtonHandler = () => {
 
@@ -1017,14 +1025,14 @@ const Order = (props) => {
 
         let PO_Body = {
             Party: selectSupplier ? selectSupplier : supplierSelect.value,
-            Customer: _cfunc.loginPartyID(),
-            RateParty: _cfunc.loginPartyID(),
+            Customer: commonPartyDropSelect.value,
+            RateParty: commonPartyDropSelect.value,
             EffectiveDate: orderdate,
             OrderID: (pageMode === mode.defaultsave) ? 0 : editVal.id,
             OrderType: order_Type.PurchaseOrder,
         }
         let SO_body = {
-            Party: _cfunc.loginPartyID(), //swap  party and customer for sale oerder
+            Party: commonPartyDropSelect.value, //swap  party and customer for sale oerder
             Customer: selectSupplier ? selectSupplier : supplierSelect.value,//swap  party and customer for sale oerder
             RateParty: selectSupplier ? selectSupplier : supplierSelect.value,
             EffectiveDate: orderdate,
@@ -1044,8 +1052,6 @@ const Order = (props) => {
         dispatch(_act.GoButton_For_Order_Add(config))
     };
 
-
-
     // Function to handle the form submission
     const saveHandler = async (event) => {
         event.preventDefault();
@@ -1056,7 +1062,7 @@ const Order = (props) => {
 
         try {
             // Get the division from the loginPartyID function
-            const division = _cfunc.loginPartyID();
+            const division = commonPartyDropSelect.value;
             const supplier = supplierSelect.value;
 
             const validationMessages = []; // Stores validation messages for items
@@ -1291,9 +1297,6 @@ const Order = (props) => {
         }
     };
 
-
-
-
     if (!(userPageAccessState === "")) {
         return (
             <React.Fragment>
@@ -1310,37 +1313,8 @@ const Order = (props) => {
 
                     </div>}
                     <div className="page-content">
-                        {/* {userAdminRole === 2 ?
-                        <div className="px-2 mb-1 mt-n1 c_card_filter header text-black" >
-                            <div className=" mt-1 mb-2 row ">
-                                <Col sm="6">
-                                    <FormGroup className=" row mt-3 " >
-                                        <Label className="col-sm-5 p-2"
-                                            style={{ width: "115px" }}>Party</Label>
-                                        <Col sm="6">
-                                            <Select
-                                                value={partySelect}
-                                                classNamePrefix="select2-Customer"
-                                                isDisabled={(orderItemTable.length > 0 || pageMode === "edit") ? true : false}
-                                                options={Party_DropdownOptions}
-                                                onChange={partyOnchange}
-                                                styles={{
-                                                    menu: provided => ({ ...provided, zIndex: 2 })
-                                                }}
-                                            />
-                                        </Col>
-                                    </FormGroup>
-                                </Col>
 
-                            </div>
-                        </div>
-                        : null} */}
-
-                        {userAdminRole &&
-                            <PartyDropdown_Common
-                                partySelect={partySelect}
-                                setPartyFunc={partyOnchange} />
-                        }
+                        <NewCommonPartyDropdown />
 
                         <div>
                             <div className="px-2 c_card_filter header text-black" >{/* Order Date And Supplier Name,Go_Button*/}
@@ -1429,9 +1403,23 @@ const Order = (props) => {
                                                             loading={goBtnloading}
                                                             id={`go-btn${subPageMode}`}
                                                             onClick={(e) => {
+                                                                if (commonPartyDropSelect.value === 0) {
+                                                                    customAlert({
+                                                                        Type: 4,
+                                                                        Message: "Select Party",
+                                                                    });
+                                                                    return;
+                                                                }
+                                                                if (supplierSelect === '') {
+                                                                    customAlert({
+                                                                        Type: 4,
+                                                                        Message: `Please Select ${fieldLabel.Supplier}`
+                                                                    })
+                                                                    return;
+                                                                }
                                                                 setSelecedItemWiseOrder(false)
                                                                 setOrderItemTable(itemSelectDropOptions)
-                                                                setItemSelect('')
+                                                                setItemSelect({ value: '', label: "All" })
                                                                 setGoBtnDissable(true)
                                                             }} />
                                                         : (!selecedItemWiseOrder) &&
@@ -1442,7 +1430,7 @@ const Order = (props) => {
                                                                 setGoBtnDissable(false)
                                                                 setSelecedItemWiseOrder(true)
                                                                 setOrderItemTable([])
-                                                                setItemSelect('')
+                                                                setItemSelect({ value: '', label: "All" })
                                                                 dispatch(_act.GoButton_For_Order_AddSuccess([]))
                                                             }}
                                                         />

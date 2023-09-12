@@ -124,6 +124,11 @@ const LoadingSheetList = () => {
         dispatch(UpdateLoadingSheet({ RowId: list.rowData.id, path: url.LOADING_SHEET_LIST_UPDATE, btnId: `btn-otherBtn_1-${list.id}` }));
     };
 
+
+    const partySelectButtonHandler = () => {
+        goButtonHandler()
+    }
+
     function partyOnChngeButtonHandler() {
         dispatch(LoadingSheetListActionSuccess([]))
     }
@@ -134,7 +139,9 @@ const LoadingSheetList = () => {
 
             <div className="page-content">
 
-                <PartyDropdown_Common changeButtonHandler={partyOnChngeButtonHandler} />
+                <PartyDropdown_Common
+                    goButtonHandler={partySelectButtonHandler}
+                    changeButtonHandler={partyOnChngeButtonHandler} />
 
                 <div className="px-2  c_card_filter text-black " >
                     <div className="row">

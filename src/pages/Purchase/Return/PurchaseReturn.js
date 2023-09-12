@@ -7,6 +7,7 @@ import {
     Row,
     Button,
     Table,
+    Modal,
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
 import { BreadcrumbShowCountlabel, Breadcrumb_inputName, commonPageFieldSuccess } from "../../../store/actions";
@@ -23,20 +24,22 @@ import {
 import Select from "react-select";
 import { Change_Button, C_Button, SaveButton, } from "../../../components/Common/CommonButton";
 import { url, mode, pageId } from "../../../routes/index"
-import { GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
+import { GetVenderSupplierCustomer, GetVenderSupplierCustomerSuccess } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { postSelect_Field_for_dropdown } from "../../../store/Administrator/PartyMasterBulkUpdateRedux/actions";
 import { saveSalesReturnMaster, InvoiceNumber, InvoiceNumberSuccess, saveSalesReturnMaster_Success, SalesReturnAddBtn_Action, SalesReturnAddBtn_Action_Succcess } from "../../../store/Sales/SalesReturnRedux/action";
 import "./purchaseReturn.scss";
 import { CInput, C_DatePicker, C_Select } from "../../../CustomValidateForm/index";
 import { decimalRegx, } from "../../../CustomValidateForm/RegexPattern";
-import { goButtonPartyItemAddPage } from "../../../store/Administrator/PartyItemsRedux/action";
+import { goButtonPartyItemAddPage, goButtonPartyItemAddPageSuccess } from "../../../store/Administrator/PartyItemsRedux/action";
 import { innerStockCaculation, returnQtyOnChange, return_discountCalculate_Func, stockQtyOnChange } from "./PurchaseReturnCalculation";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import { Tbody, Thead } from "react-super-responsive-table";
+import Slidewithcaption from "../../../components/Common/CommonImageComponent";
+import NewCommonPartyDropdown from "../../../components/Common/NewCommonPartyDropdown";
 
 const PurchaseReturn = (props) => {
 
@@ -68,6 +71,9 @@ const PurchaseReturn = (props) => {
     const [discountDropOption] = useState([{ value: 1, label: "Rs" }, { value: 2, label: "%" }])
     const [changeAllDiscount, setChangeAllDiscount] = useState(false)
     const [forceReload, setForceReload] = useState(false)
+    const [modal_backdrop, setmodal_backdrop] = useState(false);   // Image Model open Or not
+
+
     // ****************************************************************************
 
     // for IsSaleableStock Checkbox functionality useSate ************************************
@@ -84,14 +90,17 @@ const PurchaseReturn = (props) => {
         InvoiceNo,
         pageField,
         userAccess,
+        supplierDrodownLoading,
         supplier,
         addButtonData,
         saveBtnloading,
         addBtnLoading,
         invoiceNoDropDownLoading,
+        commonPartyDropSelect
     } = useSelector((state) => ({
         addButtonData: state.SalesReturnReducer.addButtonData,
         postMsg: state.SalesReturnReducer.postMsg,
+        supplierDrodownLoading: state.CommonAPI_Reducer.vendorSupplierCustomerLoading,
         supplier: state.CommonAPI_Reducer.vendorSupplierCustomer,
         ItemList: state.PartyItemsReducer.partyItem,
         ReturnReasonListRedux: state.PartyMasterBulkUpdateReducer.SelectField,
@@ -101,17 +110,40 @@ const PurchaseReturn = (props) => {
         saveBtnloading: state.SalesReturnReducer.saveBtnloading,
         addBtnLoading: state.SalesReturnReducer.addBtnLoading,
         invoiceNoDropDownLoading: state.SalesReturnReducer.invoiceNoDropDownLoading,
-
+        commonPartyDropSelect: state.CommonPartyDropdownReducer.commonPartyDropSelect
     }));
 
     useEffect(() => {
         dispatch(InvoiceNumberSuccess([]))
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(pageId.PURCHASE_RETURN))
-        dispatch(goButtonPartyItemAddPage({ jsonBody: JSON.stringify(_cfunc.loginJsonBody()) }))
-        dispatch(GetVenderSupplierCustomer({ subPageMode: url.PURCHASE_RETURN, RouteID: "" }))
         dispatch(BreadcrumbShowCountlabel(`${"Total Amount"} :${0}`))
     }, []);
+
+    // Common Party Dropdown useEffect
+    useEffect(() => {
+
+        if (commonPartyDropSelect.value > 0) {
+            dispatch(goButtonPartyItemAddPage({ jsonBody: JSON.stringify({ ..._cfunc.loginJsonBody(), "PartyID": commonPartyDropSelect.value }) }))
+            dispatch(GetVenderSupplierCustomer({ subPageMode: url.PURCHASE_RETURN, RouteID: "", "PartyID": commonPartyDropSelect.value }))
+        }
+        setState((i) => {
+            let a = { ...i }
+            a.values.ItemName = ''
+            a.values.Customer = ""
+
+            a.hasValid.ItemName.valid = true;
+            a.hasValid.Customer.valid = true;
+            return a
+        });
+        return () => {
+            dispatch(GetVenderSupplierCustomerSuccess([]));
+            dispatch(goButtonPartyItemAddPageSuccess([]));
+            dispatch(InvoiceNumberSuccess([]));
+            setTableArr([]);
+        }
+
+    }, [commonPartyDropSelect]);
 
     useEffect(() => {
         if (TableArr.length === 0) {
@@ -156,6 +188,11 @@ const PurchaseReturn = (props) => {
             comAddPageFieldFunc({ state, setState, fieldArr })
         }
     }, [pageField])
+    useEffect(() => {
+        if (imageTable.length > 0) {
+            setmodal_backdrop(true)
+        }
+    }, [imageTable])
 
     useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
@@ -626,25 +663,37 @@ const PurchaseReturn = (props) => {
         {
             text: "Image",
             dataField: "",
-            hidden: true,
             classes: () => "sales-return-Image-row",
+            formatExtraData: { ReturnReasonOptions }, // Pass ReturnReasonOptions as part of formatExtraData
+
+
             formatter: (cellContent, row, key) => {
-                return (<span style={{ justifyContent: 'center' }}>
+
+                return (<span style={{ justifyContent: 'center', width: "100px" }}>
                     <div>
                         <div className="btn-group btn-group-example mb-3" role="group">
                             <Input
                                 type="file"
                                 className="form-control "
                                 name="image"
+                                multiple
                                 id="file"
                                 accept=".jpg, .jpeg, .png ,.pdf"
                                 onChange={(event) => { imageSelectHandler(event, row) }}
                             />
                             <button name="image"
                                 accept=".jpg, .jpeg, .png ,.pdf"
-                                onClick={() => { imageShowHandler(row) }}
-                                id="ImageId" type="button" className="btn btn-primary ">Show</button>
+                                onClick={(event) => {
+
+                                    if ((row.ImageURL) && (row.ImageURL.length === 0)) {
+                                        return setmodal_backdrop(false)
+                                    } else if ((row.ImageURL) && (row.ImageURL.length > 0)) {
+                                        imageShowHandler(row)
+                                    }
+                                }}
+                                id="ImageId" type="button" className="btn btn-primary "> Show </button>
                         </div>
+                        {/* Image Count: {row && row.ImageURL ? ImageCount : 0} */}
                     </div>
 
 
@@ -727,7 +776,7 @@ const PurchaseReturn = (props) => {
         const jsonBody = JSON.stringify({
             "ItemID": values.ItemName.value,
             "BatchCode": values.BatchCode,
-            "Customer": _cfunc.loginPartyID()// Customer Swipe when Po return
+            "Customer": commonPartyDropSelect.value// Customer Swipe when Po return
         })
 
         const InvoiceId = values.InvoiceNumber ? values.InvoiceNumber.value : ''
@@ -752,7 +801,7 @@ const PurchaseReturn = (props) => {
         setTableArr([])
 
         const jsonBody = JSON.stringify({
-            PartyID: _cfunc.loginPartyID(),
+            PartyID: commonPartyDropSelect.value,
             CustomerID: event.value
         });
 
@@ -783,41 +832,31 @@ const PurchaseReturn = (props) => {
         setReturnMode(2)
     }
 
-    const imageSelectHandler = async (event, row) => { // image onchange handler
+    const imageSelectHandler = async (event, row) => { // image Select  handler
 
-        const file = event.target.files[0]
-        const base64 = await convertBase64(file);
-        let ImageUpload = base64
-        row.Image = ImageUpload
-        setImageTable(ImageUpload)
-    }
-
-    const convertBase64 = (file) => {// image convert in string
-        return new Promise((resolve, reject) => {
-            const fileReader = new FileReader()
-            fileReader.readAsDataURL(file);
-
-            fileReader.onload = () => {
-                resolve(fileReader.result)
-            };
-            fileReader.onerror = (error) => {
-                reject(error)
-            }
+        const file = Array.from(event.target.files)
+        const slides = file.map(item => {  //Create File to URl to Show Image of Particular row
+            return URL.createObjectURL(item);
         })
+        row["Image"] = file
+        row["ImageURL"] = slides
     }
 
-    const imageShowHandler = (row) => {
+    const imageShowHandler = async (row) => { // image Show handler
 
-        var x = document.getElementById("add-img");
-        if (x.style.display === "none") {
-            x.src = imageTable
-            if (imageTable != "") {
-                x.style.display = "block";
-            }
+        const file = Array.from(row.Image)
+        const slides = file.map(item => {
+            return URL.createObjectURL(item);
+        })
+        setImageTable(slides)
+    }
 
-        } else {
-            x.style.display = "none";
-        }
+    function tog_backdrop() {
+        setmodal_backdrop(!modal_backdrop)
+        removeBodyCss()
+    }
+    function removeBodyCss() {
+        document.body.classList.add("no_padding")
     }
 
     const SaveHandler = async (event) => {
@@ -860,17 +899,28 @@ const PurchaseReturn = (props) => {
                 });
                 return;
             }
+            const formData = new FormData(); // Create a new FormData object
 
             // IsComparGstIn= compare Supplier and Customer are Same State by GSTIn Number
             const IsComparGstIn = { GSTIn_1: values.Customer.GSTIN, GSTIn_2: _cfunc.loginUserGSTIN() }
 
             const { processedItems, grandTotal } = filterData.reduce(({ processedItems, grandTotal }, index) => {
+                let ToatlImages = []
+                if (index.Image !== undefined) {
+                    ToatlImages = Array.from(index.Image).map((item, key) => {
+                        formData.append(`uploaded_images_${index.Item}`, index.Image[key]);  //Sending image As a file 
+                        return { Item_pic: `Purchase Return Image Count${key}` }
+                    })
+                } else {
+                    ToatlImages = []
+                }
 
                 index.StockDetails.forEach((ele) => {
                     if (ele.Qty > 0) {
+
+
                         //**calculate Amount, Discount Amount based on Discount type */
                         const calculate = return_discountCalculate_Func(ele, index, IsComparGstIn);
-
                         grandTotal += Number(calculate.roundedTotalAmount)
                         processedItems.push({
                             "Item": index.Item,
@@ -910,7 +960,7 @@ const PurchaseReturn = (props) => {
                             "ApprovedQuantity": "",
                             "PurchaseReturn": "",
                             "SubReturn": "",
-                            "ReturnItemImages": [],
+                            "ReturnItemImages": ToatlImages,
                         });
                     }
                 });
@@ -918,23 +968,23 @@ const PurchaseReturn = (props) => {
             }, { processedItems: [], grandTotal: 0 });
 
 
-            const jsonBody = JSON.stringify({
-                ReturnDate: values.ReturnDate,
-                ReturnReason: '',
-                BatchCode: values.BatchCode,
-                Customer: _cfunc.loginPartyID(),// Customer Swipe when Po return
-                Party: values.Customer.value,// Party Swipe when Po return
-                Comment: values.Comment,
-                GrandTotal: Number(grandTotal).toFixed(2),
-                RoundOffAmount: (grandTotal - Math.trunc(grandTotal)).toFixed(2),
-                CreatedBy: _cfunc.loginUserID(),
-                UpdatedBy: _cfunc.loginUserID(),
-                Mode: 2, //if puchase return then mode= 2 AND |Sale return then Mode =1
-                ReturnItems: processedItems,
-                PurchaseReturnReferences: [],
-            });
+            formData.append('ReturnDate', values.ReturnDate);
+            formData.append('ReturnReason', '');
+            formData.append('BatchCode', values.BatchCode);
+            formData.append('Customer', commonPartyDropSelect.value);
 
-            dispatch(saveSalesReturnMaster({ jsonBody }));
+            formData.append('Party', values.Customer.value);
+            formData.append('Comment', values.Comment);
+            formData.append('GrandTotal', Number(grandTotal).toFixed(2));
+            formData.append('RoundOffAmount', (grandTotal - Math.trunc(grandTotal)).toFixed(2));
+            formData.append('CreatedBy', _cfunc.loginUserID());
+            formData.append('UpdatedBy', _cfunc.loginUserID());
+            formData.append('Mode', 2);
+            formData.append('IsApproved', 0);
+            formData.append('ReturnItems', JSON.stringify(processedItems)); // Convert to JSON string
+            formData.append('PurchaseReturnReferences', JSON.stringify([])); // Convert to JSON string
+
+            dispatch(saveSalesReturnMaster({ formData }));
 
         } catch (e) { _cfunc.CommonConsole(e) }
     };
@@ -945,10 +995,21 @@ const PurchaseReturn = (props) => {
                 <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
 
                 <div className="page-content">
+                    <NewCommonPartyDropdown />
+                    <Modal
+                        isOpen={modal_backdrop}
+                        toggle={() => {
+                            tog_backdrop()
+                        }}
+
+                        style={{ width: "800px", height: "800px", borderRadius: "50%" }}
+                        className="modal-dialog-centered "
+                    >
+                        {(imageTable.length > 0) && <Slidewithcaption Images={imageTable} />}
+                    </Modal>
 
                     <form noValidate>
                         <div className="px-2 c_card_filter header text-black mb-1" >
-                            {/* < img id='add-img' className='abc1' src={''} style={{ top: "400px" }} /> */}
 
                             <Row>
                                 <Col sm="6">
@@ -975,6 +1036,7 @@ const PurchaseReturn = (props) => {
                                                 name="Customer"
                                                 value={values.Customer}
                                                 isSearchable={true}
+                                                isLoading={supplierDrodownLoading}
                                                 isDisabled={((TableArr.length > 0) || addBtnLoading) ? true : false}
                                                 options={supplierOptions}
                                                 styles={{

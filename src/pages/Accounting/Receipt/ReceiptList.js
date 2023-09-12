@@ -87,6 +87,7 @@ const ReceiptList = () => {
     useEffect(() => {
 
         if (commonPartyDropSelect.value > 0) {
+            goButtonHandler()
             const jsonBody = JSON.stringify({
                 Type: 4,
                 PartyID: commonPartyDropSelect.value,
