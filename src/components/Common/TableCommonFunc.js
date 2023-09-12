@@ -55,7 +55,7 @@ export const selectAllCheck = ({
         &nbsp;&nbsp; <samp className="text-danger">{disabledWithMsg}</samp>
       </>;
     }
-    return <Input type="checkbox"  {...rest} />
+    return <Input type="checkbox" checked={checked}  {...rest} />
 
   }
 
