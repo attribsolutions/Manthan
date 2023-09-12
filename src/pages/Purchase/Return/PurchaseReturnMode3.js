@@ -326,6 +326,7 @@ const PurchaseReturnMode3 = (props) => {
         const PurchaseReturnReferences = returnItemIDs
             .split(",")
             .map(item => ({ SubReturn: parseInt(item.trim()) }));
+        const formData = new FormData(); // Create a new FormData object
 
         const ReturnItems = tableData.reduce((filterdItem, i) => {
 
@@ -372,23 +373,23 @@ const PurchaseReturnMode3 = (props) => {
         }, [])
 
         try {
-            const jsonBody = JSON.stringify({
-                ReturnDate: values.ReturnDate,
-                ReturnReason: '',
-                BatchCode: values.BatchCode,
-                Customer: _cfunc.loginPartyID(),// Customer Swipe when Po return
-                Party: values.Customer.value,// Party Swipe when Po return
-                Comment: values.Comment,
-                GrandTotal: grand_total.toFixed(2),
-                RoundOffAmount: (grand_total - Math.trunc(grand_total)).toFixed(2),
-                CreatedBy: _cfunc.loginUserID(),
-                UpdatedBy: _cfunc.loginUserID(),
-                Mode: 3,
-                PurchaseReturnReferences: PurchaseReturnReferences,
-                ReturnItems: ReturnItems,
-            });
 
-            dispatch(saveSalesReturnMaster({ jsonBody, btnId }));
+            formData.append('ReturnDate', values.ReturnDate);
+            formData.append('ReturnReason', '');
+            formData.append('BatchCode', values.BatchCode);
+            formData.append('Customer', _cfunc.loginPartyID());
+            formData.append('Party', values.Customer.value);
+            formData.append('Comment', values.Comment);
+            formData.append('GrandTotal', grand_total.toFixed(2));
+            formData.append('RoundOffAmount', (grand_total - Math.trunc(grand_total)).toFixed(2))
+            formData.append('CreatedBy', _cfunc.loginUserID());
+            formData.append('UpdatedBy', _cfunc.loginUserID());
+            formData.append('Mode', 3);
+            formData.append('IsApproved', 1);
+            formData.append('PurchaseReturnReferences', JSON.stringify(PurchaseReturnReferences)); // Convert to JSON string
+            formData.append('ReturnItems', JSON.stringify(ReturnItems)); // Convert to JSON strin
+
+            dispatch(saveSalesReturnMaster({ formData, btnId }));
 
         } catch (e) { _cfunc.CommonConsole(e) }
     };
