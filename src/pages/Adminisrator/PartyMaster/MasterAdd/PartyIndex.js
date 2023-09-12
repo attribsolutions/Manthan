@@ -28,7 +28,7 @@ import {
     updatePartyIDSuccess
 } from "../../../../store/Administrator/PartyRedux/action"
 import { Breadcrumb_inputName, commonPageField, commonPageFieldSuccess } from "../../../../store/actions"
-import { btnIsDissablefunc, isEditMode_CssFun, loginCompanyID, loginPartyID, loginUserID, metaTagLabel } from "../../../../components/Common/CommonFunction"
+import { btnIsDissablefunc, isEditMode_CssFun, loginCompanyID, loginJsonBody, loginPartyID, loginUserID, metaTagLabel } from "../../../../components/Common/CommonFunction"
 import * as url from "../../../../routes/route_url";
 import * as pageId from "../../../../routes/allPageID"
 import * as mode from "../../../../routes/PageMode"
@@ -43,7 +43,8 @@ import BaseTabForm from "./FirstTab/index";
 import PrefixTab from "./PrefixTab/PrefixTab";
 import { priceListByPartyAction, priceListByPartyActionSuccess } from "../../../../store/Administrator/PriceList/action";
 import { userAccessUseEffect } from "../../../../components/Common/CommonUseEffect";
-import { GetRoutesList } from "../../../../store/Administrator/RoutesRedux/actions";
+import { GetRoutesList, GetRoutesListSuccess } from "../../../../store/Administrator/RoutesRedux/actions";
+import NewCommonPartyDropdown from "../../../../components/Common/NewCommonPartyDropdown";
 
 function initialState(history) {
 
@@ -92,7 +93,7 @@ const PartyMaster = (props) => {
         userAccess,
         editData,
         updateMsg,
-        saveBtnloading
+        saveBtnloading,
     } = useSelector((state) => ({
         saveBtnloading: state.PartyMasterReducer.saveBtnloading,
         postMsg: state.PartyMasterReducer.postMsg,
@@ -103,6 +104,7 @@ const PartyMaster = (props) => {
         PriceList: state.PartyMasterReducer.PriceList,
         AddressTypes: state.PartyMasterReducer.AddressTypes,
         userAccess: state.Login.RoleAccessUpdateData,
+
     }));
 
     const location = { ...history.location }
@@ -262,7 +264,6 @@ const PartyMaster = (props) => {
         dispatch(priceListByPartyActionSuccess([]));//clear privious priceList
         dispatch(commonPageField(page_id))
         dispatch(getState());
-        dispatch(GetRoutesList())
         dispatch(getPartyTypelist());
         dispatch(getcompanyList());
         dispatch(SSDD_List_under_Company())
@@ -453,7 +454,7 @@ const PartyMaster = (props) => {
                         "Demandprefix": prefixValue.DemandPrefix,
                         "IBChallanprefix": prefixValue.IBChallanPrefix,
                         "IBInwardprefix": prefixValue.IBInwardPrefix,
-                        "PurchaseReturnprefix":prefixValue.PurchaseReturnprefix,
+                        "PurchaseReturnprefix": prefixValue.PurchaseReturnprefix,
                     }
                 ],
 
@@ -475,8 +476,10 @@ const PartyMaster = (props) => {
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
+                <MetaTags> {metaTagLabel(userPageAccessState)}</MetaTags>
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
-                    <MetaTags> {metaTagLabel(userPageAccessState)}</MetaTags>
+                    {subPageMode === url.RETAILER_MASTER &&
+                        <NewCommonPartyDropdown />}
                     <Container fluid>
                         <Row>
                             <Col lg={12}>

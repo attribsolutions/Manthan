@@ -24,14 +24,14 @@ import {
 import Select from "react-select";
 import { Change_Button, C_Button, SaveButton, } from "../../../components/Common/CommonButton";
 import { url, mode, pageId } from "../../../routes/index"
-import { GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
+import { GetVenderSupplierCustomer, GetVenderSupplierCustomerSuccess } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { postSelect_Field_for_dropdown } from "../../../store/Administrator/PartyMasterBulkUpdateRedux/actions";
 import { saveSalesReturnMaster, InvoiceNumber, InvoiceNumberSuccess, saveSalesReturnMaster_Success, SalesReturnAddBtn_Action, SalesReturnAddBtn_Action_Succcess } from "../../../store/Sales/SalesReturnRedux/action";
 import "./purchaseReturn.scss";
 import { CInput, C_DatePicker, C_Select } from "../../../CustomValidateForm/index";
 import { decimalRegx, } from "../../../CustomValidateForm/RegexPattern";
-import { goButtonPartyItemAddPage } from "../../../store/Administrator/PartyItemsRedux/action";
+import { goButtonPartyItemAddPage, goButtonPartyItemAddPageSuccess } from "../../../store/Administrator/PartyItemsRedux/action";
 import { innerStockCaculation, returnQtyOnChange, return_discountCalculate_Func, stockQtyOnChange } from "./PurchaseReturnCalculation";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
@@ -39,6 +39,7 @@ import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import { Tbody, Thead } from "react-super-responsive-table";
 import Slidewithcaption from "../../../components/Common/CommonImageComponent";
+import NewCommonPartyDropdown from "../../../components/Common/NewCommonPartyDropdown";
 
 const PurchaseReturn = (props) => {
 
@@ -89,14 +90,17 @@ const PurchaseReturn = (props) => {
         InvoiceNo,
         pageField,
         userAccess,
+        supplierDrodownLoading,
         supplier,
         addButtonData,
         saveBtnloading,
         addBtnLoading,
         invoiceNoDropDownLoading,
+        commonPartyDropSelect
     } = useSelector((state) => ({
         addButtonData: state.SalesReturnReducer.addButtonData,
         postMsg: state.SalesReturnReducer.postMsg,
+        supplierDrodownLoading: state.CommonAPI_Reducer.vendorSupplierCustomerLoading,
         supplier: state.CommonAPI_Reducer.vendorSupplierCustomer,
         ItemList: state.PartyItemsReducer.partyItem,
         ReturnReasonListRedux: state.PartyMasterBulkUpdateReducer.SelectField,
@@ -106,17 +110,40 @@ const PurchaseReturn = (props) => {
         saveBtnloading: state.SalesReturnReducer.saveBtnloading,
         addBtnLoading: state.SalesReturnReducer.addBtnLoading,
         invoiceNoDropDownLoading: state.SalesReturnReducer.invoiceNoDropDownLoading,
-
+        commonPartyDropSelect: state.CommonPartyDropdownReducer.commonPartyDropSelect
     }));
 
     useEffect(() => {
         dispatch(InvoiceNumberSuccess([]))
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(pageId.PURCHASE_RETURN))
-        dispatch(goButtonPartyItemAddPage({ jsonBody: JSON.stringify(_cfunc.loginJsonBody()) }))
-        dispatch(GetVenderSupplierCustomer({ subPageMode: url.PURCHASE_RETURN, RouteID: "" }))
         dispatch(BreadcrumbShowCountlabel(`${"Total Amount"} :${0}`))
     }, []);
+
+    // Common Party Dropdown useEffect
+    useEffect(() => {
+
+        if (commonPartyDropSelect.value > 0) {
+            dispatch(goButtonPartyItemAddPage({ jsonBody: JSON.stringify({ ..._cfunc.loginJsonBody(), "PartyID": commonPartyDropSelect.value }) }))
+            dispatch(GetVenderSupplierCustomer({ subPageMode: url.PURCHASE_RETURN, RouteID: "", "PartyID": commonPartyDropSelect.value }))
+        }
+        setState((i) => {
+            let a = { ...i }
+            a.values.ItemName = ''
+            a.values.Customer = ""
+
+            a.hasValid.ItemName.valid = true;
+            a.hasValid.Customer.valid = true;
+            return a
+        });
+        return () => {
+            dispatch(GetVenderSupplierCustomerSuccess([]));
+            dispatch(goButtonPartyItemAddPageSuccess([]));
+            dispatch(InvoiceNumberSuccess([]));
+            setTableArr([]);
+        }
+
+    }, [commonPartyDropSelect]);
 
     useEffect(() => {
         if (TableArr.length === 0) {
@@ -749,7 +776,7 @@ const PurchaseReturn = (props) => {
         const jsonBody = JSON.stringify({
             "ItemID": values.ItemName.value,
             "BatchCode": values.BatchCode,
-            "Customer": _cfunc.loginPartyID()// Customer Swipe when Po return
+            "Customer": commonPartyDropSelect.value// Customer Swipe when Po return
         })
 
         const InvoiceId = values.InvoiceNumber ? values.InvoiceNumber.value : ''
@@ -774,7 +801,7 @@ const PurchaseReturn = (props) => {
         setTableArr([])
 
         const jsonBody = JSON.stringify({
-            PartyID: _cfunc.loginPartyID(),
+            PartyID: commonPartyDropSelect.value,
             CustomerID: event.value
         });
 
@@ -815,7 +842,6 @@ const PurchaseReturn = (props) => {
         row["ImageURL"] = slides
     }
 
-
     const imageShowHandler = async (row) => { // image Show handler
 
         const file = Array.from(row.Image)
@@ -832,8 +858,6 @@ const PurchaseReturn = (props) => {
     function removeBodyCss() {
         document.body.classList.add("no_padding")
     }
-
-
 
     const SaveHandler = async (event) => {
 
@@ -947,7 +971,7 @@ const PurchaseReturn = (props) => {
             formData.append('ReturnDate', values.ReturnDate);
             formData.append('ReturnReason', '');
             formData.append('BatchCode', values.BatchCode);
-            formData.append('Customer', _cfunc.loginPartyID());
+            formData.append('Customer', commonPartyDropSelect.value);
 
             formData.append('Party', values.Customer.value);
             formData.append('Comment', values.Comment);
@@ -971,6 +995,7 @@ const PurchaseReturn = (props) => {
                 <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
 
                 <div className="page-content">
+                    <NewCommonPartyDropdown />
                     <Modal
                         isOpen={modal_backdrop}
                         toggle={() => {
@@ -1011,6 +1036,7 @@ const PurchaseReturn = (props) => {
                                                 name="Customer"
                                                 value={values.Customer}
                                                 isSearchable={true}
+                                                isLoading={supplierDrodownLoading}
                                                 isDisabled={((TableArr.length > 0) || addBtnLoading) ? true : false}
                                                 options={supplierOptions}
                                                 styles={{
