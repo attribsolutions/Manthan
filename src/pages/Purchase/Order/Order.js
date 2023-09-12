@@ -990,7 +990,6 @@ const Order = (props) => {
         dispatch(_act.BreadcrumbShowCountlabel(`${"Order Amount"} :${_cfunc.amountCommaSeparateFunc(Number(sumOfAmount).toFixed(2))}`))
     };
 
-
     const item_AddButtonHandler = () => {
 
         setGoBtnDissable(true)
@@ -1404,6 +1403,20 @@ const Order = (props) => {
                                                             loading={goBtnloading}
                                                             id={`go-btn${subPageMode}`}
                                                             onClick={(e) => {
+                                                                if (commonPartyDropSelect.value === 0) {
+                                                                    customAlert({
+                                                                        Type: 4,
+                                                                        Message: "Select Party",
+                                                                    });
+                                                                    return;
+                                                                }
+                                                                if (supplierSelect === '') {
+                                                                    customAlert({
+                                                                        Type: 4,
+                                                                        Message: `Please Select ${fieldLabel.Supplier}`
+                                                                    })
+                                                                    return;
+                                                                }
                                                                 setSelecedItemWiseOrder(false)
                                                                 setOrderItemTable(itemSelectDropOptions)
                                                                 setItemSelect({ value: '', label: "All" })
