@@ -397,7 +397,7 @@ const PurchaseReturnMode3 = (props) => {
             formData.append('CreatedBy', _cfunc.loginUserID());
             formData.append('UpdatedBy', _cfunc.loginUserID());
             formData.append('Mode', 3);
-            formData.append('IsApproved', 1);
+            formData.append('IsApproved', 0);
             formData.append('PurchaseReturnReferences', JSON.stringify(PurchaseReturnReferences)); // Convert to JSON string
             formData.append('ReturnItems', JSON.stringify(ReturnItems)); // Convert to JSON strin
 
