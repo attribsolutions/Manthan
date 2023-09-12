@@ -15,7 +15,10 @@ function* Invoice_No_List_GenFunc({ jsonBody }) {
 
 // add button api for sales return
 function* save_SalesReturn_GenFunc({ config }) {
-
+    debugger
+    for (let pair of config.formData.entries()) {
+        console.log(pair[0], pair[1]);
+    }
     try {
         const response = yield call(apiCall.SalesReturn_post_API, config);
         yield put(action.saveSalesReturnMaster_Success(response));
@@ -26,7 +29,7 @@ function* save_SalesReturn_GenFunc({ config }) {
 function* SalesReturn_List_GenFun({ filters }) {
 
     try {
-        
+
         const response = yield call(apiCall.SalesReturn_list_API, filters);
         const newList = yield response.Data.map((i) => {
             i["recordsAmountTotal"] = i.GrandTotal;  // Breadcrumb Count total
