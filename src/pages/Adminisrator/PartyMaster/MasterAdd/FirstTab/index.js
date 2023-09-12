@@ -11,11 +11,11 @@ import PartyType from '../../../PartyTypes/PartyType'
 import * as url from "../../../../../routes/route_url";
 import AddMaster from "../../../EmployeePages/Drodown";
 import * as pageId from "../../../../../routes/allPageID"
-import { loginPartyID } from '../../../../../components/Common/CommonFunction'
+import { loginJsonBody } from '../../../../../components/Common/CommonFunction'
 import { getCityOnDistrict, getCityOnDistrictSuccess } from '../../../../../store/Administrator/EmployeeRedux/action'
 import CityMaster from '../../../CityPages/CityMaster'
-import { Link } from 'react-router-dom/cjs/react-router-dom.min'
 import { C_Select } from '../../../../../CustomValidateForm'
+import { GetRoutesList, GetRoutesListSuccess } from '../../../../../store/Administrator/RoutesRedux/actions'
 
 const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
 
@@ -77,7 +77,8 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
         RoutesList,
         userAccess,
         districtDropDownLoading,
-        cityDropDownLoading
+        cityDropDownLoading,
+        commonPartyDropSelect
     } = useSelector((state) => ({
         stateRedux: state.EmployeesReducer.State,
         DistrictOnState: state.PartyMasterReducer.DistrictOnState,
@@ -90,6 +91,7 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
         userAccess: state.Login.RoleAccessUpdateData,
         districtDropDownLoading: state.PartyMasterReducer.districtDropDownLoading,
         cityDropDownLoading: state.EmployeesReducer.cityDropDownLoading,
+        commonPartyDropSelect: state.CommonPartyDropdownReducer.commonPartyDropSelect
     }));
 
     useEffect(() => {
@@ -104,6 +106,23 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
         });
 
     }, [userAccess])
+
+    // Common Party Dropdown useEffect
+    useEffect(() => {
+
+        if (commonPartyDropSelect.value > 0) {
+            dispatch(GetRoutesList({ ...loginJsonBody(), "PartyID": commonPartyDropSelect.value }))
+        }
+        setState((i) => {
+            let a = { ...i }
+            a.values.Route = ''
+            a.hasValid.Route.valid = true;
+            return a
+        })
+        return () => {
+            dispatch(GetRoutesListSuccess([]));
+        }
+    }, [commonPartyDropSelect]);
 
     useEffect(() => {
         if (pageField) {
@@ -132,11 +151,11 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
         let retailerParty = PartyTypes.find(i => (i.IsRetailer))
 
         if ((subPageMode === url.RETAILER_MASTER) && !(retailerParty === undefined)) {
-
+            debugger
             setState((i) => {
                 let a = { ...i }
                 let supilerArr = [{
-                    value: loginPartyID()
+                    value: commonPartyDropSelect.value
                 }]
 
                 a.values.PartyType = {

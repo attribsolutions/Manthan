@@ -76,9 +76,9 @@ export const deleteDiscountIDSuccess = (resp) => ({  // Delete Success
 });
 
 //Discount PartyType drodown API
-export const DiscountPartyType_Dropdown_Action = (config = {}) => ({  // DiscountPartyType  Action
+export const DiscountPartyType_Dropdown_Action = (PartyID) => ({  // DiscountPartyType  Action
   type: DISCOUNT_PARTY_TYPE_DROPDOWN_ACTION,
-  config,
+  PartyID,
 });
 export const DiscountPartyType_Dropdown_Success = (resp) => ({  // DiscountPartyType Success
   type: DISCOUNT_PARTY_TYPE_DROPDOWN_SUCCESS,
