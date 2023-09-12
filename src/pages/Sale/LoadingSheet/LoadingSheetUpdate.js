@@ -273,7 +273,7 @@ const LoadingSheetUpdate = (props) => {
                                                 striped={false}
                                                 selectRow={selectAllCheck({
                                                     rowSelected: rowSelected(),
-                                                    nonSelectedRow: nonSelectedRow(),
+                                                    nonSelectable: nonSelectedRow(),
                                                 })}
                                                 noDataIndication={<div className="text-danger text-center ">Record Not available</div>}
                                                 classes={"table align-middle table-nowrap table-hover"}
