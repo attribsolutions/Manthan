@@ -5,6 +5,7 @@ import { C_Button } from "./CommonButton";
 import { C_Select } from "../../CustomValidateForm";
 import { loginUserAdminRole } from "./CommonFunction";
 import { commonPartyDropSelectAction } from "../../store/Utilites/PartyDrodown/action";
+import { customAlert } from "../../CustomAlert/ConfirmDialog";
 
 const NewCommonPartyDropdown = () => {
     const dispatch = useDispatch();
@@ -25,6 +26,10 @@ const NewCommonPartyDropdown = () => {
     }, []);
 
     const updateSelectedParty = () => {
+        if (selectedParty.value === 0) {
+            customAlert({ Type: 3, Message: "Please Select Party" });
+            return;
+        }
         setChangeButtonShow(true)
         dispatch(commonPartyDropSelectAction(selectedParty))
         localStorage.setItem("selectedParty", JSON.stringify(selectedParty));

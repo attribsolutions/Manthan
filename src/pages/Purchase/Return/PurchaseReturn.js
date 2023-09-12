@@ -324,13 +324,10 @@ const PurchaseReturn = (props) => {
         return index.itemCheck === true
     });
 
-
-
     const ReturnReasonOptions = ReturnReasonFilterData.map((index) => ({
         value: index.id,
         label: index.Name,
     }));
-
 
     const InvoiceNo_Options = InvoiceNo.map((index) => ({
         value: index.Invoice,
