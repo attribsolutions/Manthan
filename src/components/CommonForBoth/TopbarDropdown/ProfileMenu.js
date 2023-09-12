@@ -8,6 +8,7 @@ import {
   Input,
   FormGroup,
   Label,
+  DropdownItem,
 } from "reactstrap"
 
 //i18n
@@ -301,7 +302,7 @@ const ProfileMenu = props => {
 
           </div>
         </Modal>
-        <div
+        {/* <div
           id="user-detail-div"
           style={{ display: isMouseOver && !menu ? 'block' : 'none' }}
           onMouseEnter={handleMouseEnter}
@@ -312,7 +313,7 @@ const ProfileMenu = props => {
             <div className="dropdown-item"><label className="text-info">Role</label> : <span>{FooterDetails.RoleName}</span></div>
             <div className="dropdown-item"><label className="text-info">Company</label> : <span>{CompanyName}&nbsp;&nbsp;({IsSCMCompany})</span></div>
           </div>
-        </div>
+        </div> */}
 
 
         <Dropdown
@@ -322,8 +323,8 @@ const ProfileMenu = props => {
 
         >
           <div
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
+            // onMouseEnter={handleMouseEnter}
+            // onMouseLeave={handleMouseLeave}
           >
             <DropdownToggle
               className="btn header-item bg-soft-light border-start border-end"
@@ -337,25 +338,36 @@ const ProfileMenu = props => {
             </DropdownToggle>
           </div>
           <DropdownMenu className="dropdown-menu-end">
+            <DropdownItem>
+          <div className="text-left"><label className="text-info font-size-18">{FooterDetails.PartyName}</label> </div>
+            <div className="mb-1"><span className=" text-muted">Role</span> : <span className="text-black">{FooterDetails.RoleName}</span></div>
+            <div className=""><span>Company</span> : <span className="text-black">{CompanyName}&nbsp;&nbsp;({IsSCMCompany})</span></div>
+            </DropdownItem>
+            <DropdownItem divider />
 
             {localStorage.getItem("isMultipleDivision") && //If division  then only
-              <span onClick={onChangeDivisionHandler} className="dropdown-item">
-                <i className="bx bx-user font-size-16 align-middle me-1  text-primary" />
-                <span>{props.t("Change Division")}</span>
-              </span>}
+              <DropdownItem>
+                <span onClick={onChangeDivisionHandler} className="dropdown-item">
+                  <i className="bx bx-user font-size-16 align-middle me-1  text-primary" />
+                  <span>{props.t("Change Division")}</span>
+                </span>
+              </DropdownItem>}
 
-            <div style={{ cursor: "pointer" }} onClick={() => {
+            <DropdownItem style={{ cursor: "pointer" }} onClick={() => {
               tog_backdrop()
             }} className="dropdown-item">
               <i className="fas fa-lock" style={{ marginRight: "7px" }}></i>
               <span>{props.t("Change Password")}</span>
-            </div >
+            </DropdownItem >
 
-            <Link to="/logout" className="dropdown-item">
-              <i className="bx bx-power-off font-size-16 align-middle me-1 text-danger" />
-              <span>{props.t("Logout")}</span>
-            </Link>
 
+            <DropdownItem>
+              <Link to="/logout" >
+                <i className="bx bx-power-off font-size-16 align-middle me-1 text-danger fw-bold" />
+                <span className="">{props.t("Logout")}</span>
+              </Link>
+
+            </DropdownItem>
           </DropdownMenu>
         </Dropdown>
 
