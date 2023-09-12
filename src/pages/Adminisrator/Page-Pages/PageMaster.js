@@ -32,6 +32,8 @@ import {
   update_PageListId_Action,
   update_PageListId_Success,
   getPageType,
+  getFieldValidationsForALLType,
+  getControlTypes,
 } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
@@ -90,7 +92,8 @@ const PageMaster = (props) => {
     modulePostAPIResponse,
     PageList,
     PageType,
-    saveBtnloading
+    saveBtnloading,
+    fieldValidationsALLType
   } = useSelector((state) => ({
     postMsg: state.H_Pages.saveMessage,
     updateMsg: state.H_Pages.updateMessage,
@@ -101,6 +104,7 @@ const PageMaster = (props) => {
     PageList: state.H_Pages.PageList,
     PageType: state.H_Pages.PageType,
     saveBtnloading: state.H_Pages.saveBtnloading,
+    fieldValidationsALLType: state.H_Pages.fieldValidationsALLType,
 
   }));
 
@@ -137,12 +141,14 @@ const PageMaster = (props) => {
     dispatch(getModuleList());
     dispatch(getPageAccess_DropDown_API());
     dispatch(getPageType());
+    dispatch(getControlTypes());
+    dispatch(getFieldValidationsForALLType())
   }, [dispatch]);
 
   // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
   useEffect(() => {
 
-    if ((hasShowloction || hasShowModal)) {
+    if (((fieldValidationsALLType.length > 0) && (hasShowloction || hasShowModal))) {
 
       let hasEditVal = null
       if (hasShowloction) {
@@ -182,6 +188,10 @@ const PageMaster = (props) => {
             value: hasEditVal.PageType,
           });
         }
+        function validtionOptionAssing(controlType) {
+          let validationOptions = fieldValidationsALLType.find(item => item.type === controlType)?.data || []
+          return validationOptions.map(item => ({ value: item.id, label: item.Name }));
+        }
 
         let PageFieldMaster = hasEditVal.PageFieldMaster.map((index) => {
           return {
@@ -193,6 +203,7 @@ const PageMaster = (props) => {
               label: index.FieldValidationName,
               value: index.FieldValidation
             },
+            validationOptions: validtionOptionAssing(index.ControlType),
             ControlID: index.ControlID,
             FieldLabel: index.FieldLabel,
             InValidMsg: index.InValidMsg,
@@ -210,6 +221,7 @@ const PageMaster = (props) => {
         if (!(PageFieldMaster.length === 0) && (pageType_ID === 1) || (pageType_ID === 3)) {
           setPageFieldTabTable(PageFieldMaster)
         }
+        
 
         let PageFieldList = hasEditVal.PageFieldList.map((index) => {
           return {
@@ -221,6 +233,7 @@ const PageMaster = (props) => {
               label: index.FieldValidationName,
               value: index.FieldValidation
             },
+            validationOptions: validtionOptionAssing(index.ControlType),
             ControlID: index.ControlID,
             FieldLabel: index.FieldLabel,
             InValidMsg: index.InValidMsg,
@@ -251,7 +264,7 @@ const PageMaster = (props) => {
 
       dispatch(edit_PageListID_Success({ Status: false }));
     }
-  }, []);
+  }, [fieldValidationsALLType]);
 
   const pageAccessval = useMemo(() => {
     const arr = []
@@ -977,39 +990,7 @@ const PageMaster = (props) => {
                       </TabPane>
 
                     </TabContent>
-                    <Row >{/* +++++++++++++++++++++++++++ Save Button  ++++++++++++++++++++++++++++++++++++++++++ */}
-                      <Col sm={2}>
-
-
-
-
-
-                        {/* {
-                            pageMode === "edit" ?
-                              userPageAccessState.RoleAccess_IsEdit ?
-                                <button
-                                  type="submit"
-                                  data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Page"
-                                  className="btn btn-success w-md"
-                                >
-                                  <i class="fas fa-edit me-2"></i>Update
-                                </button>
-                                :
-                                <></>
-                              : (
-                                userPageAccessState.RoleAccess_IsSave ?
-                                  <button
-                                    type="submit"
-                                    data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Page"
-                                    className="btn btn-primary w-md"
-                                  > <i className="fas fa-save me-2"></i> Save
-                                  </button>
-                                  :
-                                  <></>
-                              )
-                          } */}
-                      </Col>
-                    </Row>
+                   
                   </CardBody>
                   <div style={{ paddingLeft: "30px", paddingBottom: "10px" }}>
                     <SaveButton
