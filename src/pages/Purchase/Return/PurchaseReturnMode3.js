@@ -21,7 +21,7 @@ import {
 
 } from "../../../components/Common/validationFunction";
 import { mode, pageId, url } from "../../../routes/index"
-import { GetVenderSupplierCustomer, } from "../../../store/CommonAPI/SupplierRedux/actions";
+import { GetVenderSupplierCustomer, GetVenderSupplierCustomerSuccess, } from "../../../store/CommonAPI/SupplierRedux/actions";
 import "../../Sale/SalesReturn/salesReturn.scss";
 import { CInput, C_DatePicker, C_Select, decimalRegx } from "../../../CustomValidateForm/index";
 import * as _cfunc from "../../../components/Common/CommonFunction";
@@ -58,6 +58,7 @@ const PurchaseReturnMode3 = (props) => {
         supplier,
         pageField,
         userAccess,
+        commonPartyDropSelect
     } = useSelector((state) => ({
         saveBtnloading: state.SalesReturnReducer.saveBtnloading,
         sendToSSbtnTableData: state.SalesReturnReducer.sendToSSbtnTableData,
@@ -65,6 +66,7 @@ const PurchaseReturnMode3 = (props) => {
         postMsg: state.SalesReturnReducer.postMsg,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
+        commonPartyDropSelect: state.CommonPartyDropdownReducer.commonPartyDropSelect
     }));
 
     useEffect(() => {
@@ -99,8 +101,18 @@ const PurchaseReturnMode3 = (props) => {
     useEffect(() => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(pageId.PURCHASE_RETURN_MODE_3))
-        dispatch(GetVenderSupplierCustomer({ subPageMode, RouteID: "" }))
     }, []);
+
+    // Common Party Dropdown useEffect
+    useEffect(() => {
+
+        if (commonPartyDropSelect.value > 0) {
+            dispatch(GetVenderSupplierCustomer({ subPageMode: url.PURCHASE_RETURN, RouteID: "", "PartyID": commonPartyDropSelect.value }))
+        }
+        return () => {
+            dispatch(GetVenderSupplierCustomerSuccess([]));
+        }
+    }, [commonPartyDropSelect]);
 
     const location = { ...history.location }
     const hasShowModal = props.hasOwnProperty(mode.editValue)
@@ -377,7 +389,7 @@ const PurchaseReturnMode3 = (props) => {
             formData.append('ReturnDate', values.ReturnDate);
             formData.append('ReturnReason', '');
             formData.append('BatchCode', values.BatchCode);
-            formData.append('Customer', _cfunc.loginPartyID());
+            formData.append('Customer', commonPartyDropSelect.value);
             formData.append('Party', values.Customer.value);
             formData.append('Comment', values.Comment);
             formData.append('GrandTotal', grand_total.toFixed(2));
