@@ -64,7 +64,7 @@ export const return_discountCalculate_Func = (row, index1, IsComparGstIn) => {
 // ************************************************************************
 
 export function stockDistributeFunc(index1, _key) {
-
+    debugger
     let itemTotalAmount = 0
     let orderqty = Number(index1.Quantity);
     let _ItemTotalStock = 0
