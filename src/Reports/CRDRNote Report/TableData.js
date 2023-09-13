@@ -1,6 +1,6 @@
 
 import { invoice } from "../ReportIndex";
-import { numberWithCommas } from "../Report_common_function";
+import { numberWithCommas, toWords } from "../Report_common_function";
 
 export const columnsWithCGST_SGST = [
     "SN",
@@ -48,6 +48,10 @@ export const BilledTo = [
 ]
 export const DetailsOfTransport = [
     "Billed by",
+]
+
+export const Ruppescolumn = [
+    "",
 ]
 
 export const RowsWithCGST_SGST = (data) => {
@@ -450,6 +454,7 @@ export const BilledToRow = (data) => {
 }
 export const DetailsOfTransportRow = (data) => {
     let OrderNumber = " "
+    let IRN_No = ""
 
     if (data.InvoicesReferences > 0) {
         const PoNumber = data.InvoicesReferences.map(index => ({
@@ -477,10 +482,17 @@ export const DetailsOfTransportRow = (data) => {
         NoteType = "Goods Credit Note"
     }
 
+    if (data.isQR) {
+        IRN_No = (data.CRDRNoteUploads[0].Irn === null ? "" : data.CRDRNoteUploads[0].Irn)
+    }
+
+
     var DetailsOfTransportArray = [
-        [`               ${NoteType}`],
-        [`                      ${data.Narration === null ? "" : data.Narration}`],
-        // [`                         ${data.NoteReason === null ? "" : data.NoteReason}`],
+
+
+        [`             ${NoteType}`],
+        [`                    ${data.Narration === null ? "" : data.Narration}`],
+        [`                ${IRN_No}`],
         // [`                          ${(EwayData.EwayBillNo === undefined) || (EwayData.EwayBillNo === null) ? "" : EwayData.EwayBillNo}`],
         // [`                          ${(EwayData.AckNo === undefined) || (EwayData.AckNo === null) ? "" : EwayData.AckNo}`]
     ]
@@ -505,6 +517,16 @@ export const BankRow = (data) => {
     ]
     // }
     return reportArray;
+}
+
+export const RupeesRow = (data) => {
+    let stringNumber = toWords(Number(data.GrandTotal))
+
+    var RupeesArray = [
+        [`                  ${stringNumber}`],
+
+    ]
+    return RupeesArray;
 }
 
 
