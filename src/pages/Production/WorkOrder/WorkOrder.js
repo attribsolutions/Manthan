@@ -205,11 +205,11 @@ const WorkOrder = (props) => {
         }
         else if (postMsg.Status === true) {
             dispatch(SaveWorkOrderMasterSuccess({ Status: false }))
-           customAlert({
+            dispatch(customAlert({
                 Type: 4,
                  Message: JSON.stringify(postMsg.Message),
             })
-            
+            )
         }
     }, [postMsg])
 

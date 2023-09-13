@@ -9,7 +9,7 @@ import MetisMenu from "metismenujs";
 import { useHistory, withRouter } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { roleAceessActionError } from "../../store/actions";
-import { CommonConsole, loginUserDetails } from "../Common/CommonFunction";
+import { loginUserDetails } from "../Common/CommonFunction";
 import * as urlRel from "../../routes/urlRalations";
 import { useDispatch, useSelector } from "react-redux";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
@@ -32,11 +32,11 @@ const SidebarContent = (props) => {
 
   useEffect(async () => {
     if (roleAccesssForSidbarError) {
-      // await customAlert({
-      //   Type: 2,
-      //   Message: `RoleAccess get Api Error `
-      // })
-      CommonConsole("SidebarContent ==> RoleAccess get Api Error")
+      await customAlert({
+        Type: 2,
+        Message: `RoleAccess get Api Error `
+      })
+
       dispatch(roleAceessActionError(false))
       history.push({ pathname: '/logout' })
     }

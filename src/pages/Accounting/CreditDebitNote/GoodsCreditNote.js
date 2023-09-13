@@ -63,6 +63,8 @@ const GoodsCreditNote = (props) => {
     const dispatch = useDispatch();
     const history = useHistory()
     const currentDate_ymd = _cfunc.date_ymd_func();
+    const systemSetting = _cfunc.loginSystemSetting();
+
 
 
     const [pageMode, setPageMode] = useState(mode.defaultsave);
@@ -747,12 +749,15 @@ const GoodsCreditNote = (props) => {
                     CreditDebitType.find((index) => index.Name === "Goods CreditNote")?.id
                     : CreditDebitType.find((index) => index.Name === "Goods DebitNote")?.id;
             };
+            debugger
+            const isGrandAmtRound = systemSetting.CreditDebitAmountRoundConfiguration === '1';
 
             const jsonBody = JSON.stringify({
                 CRDRNoteDate: values.CRDRNoteDate,
                 Customer: values.Customer.value,
                 NoteType: noteType_BySubPageMode(),
-                GrandTotal: grand_total.toFixed(2),
+                GrandTotal: isGrandAmtRound ? Math.round(grand_total).toFixed(2) : grand_total.toFixed(2),
+                RoundOffAmount: (grand_total - Math.trunc(grand_total)).toFixed(2),
                 Narration: values.Narration,
                 CRDRNoteItems: creditNoteItems,
                 Party: _cfunc.loginPartyID(),

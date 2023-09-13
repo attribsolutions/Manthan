@@ -15,7 +15,7 @@ import paginationFactory, { PaginationListStandalone, PaginationProvider } from 
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { postInward, postInwardSuccess } from "../../../store/Inter Branch/InwardRedux/action";
-import { mode, url } from "../../../routes/index";
+import  {mode,url} from "../../../routes/index";
 import { SaveButton } from "../../../components/Common/CommonButton";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { C_DatePicker } from "../../../CustomValidateForm";
@@ -64,17 +64,22 @@ const Inward = (props) => {
     useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(postInwardSuccess({ Status: false }))
-            customAlert({
+            dispatch(customAlert({
                 Type: 1,
+                Status: true,
                 Message: postMsg.Message,
-            })
+                RedirectPath: url.INWARD_LIST,
+            }))
 
         } else if (postMsg.Status === true) {
             dispatch(postInwardSuccess({ Status: false }))
-            customAlert({
+            dispatch(customAlert({
                 Type: 4,
+                Status: true,
                 Message: JSON.stringify(postMsg.Message),
-            });
+                RedirectPath: false,
+                AfterResponseAction: false
+            }));
         }
     }, [postMsg])
 
@@ -199,7 +204,7 @@ const Inward = (props) => {
 
     return (
         <React.Fragment>
-            <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
+           <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
 
             <div className="page-content">
 

@@ -151,7 +151,7 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
         let retailerParty = PartyTypes.find(i => (i.IsRetailer))
 
         if ((subPageMode === url.RETAILER_MASTER) && !(retailerParty === undefined)) {
-            
+            debugger
             setState((i) => {
                 let a = { ...i }
                 let supilerArr = [{

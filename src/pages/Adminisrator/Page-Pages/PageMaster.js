@@ -221,7 +221,7 @@ const PageMaster = (props) => {
         if (!(PageFieldMaster.length === 0) && (pageType_ID === 1) || (pageType_ID === 3)) {
           setPageFieldTabTable(PageFieldMaster)
         }
-
+        
 
         let PageFieldList = hasEditVal.PageFieldList.map((index) => {
           return {
@@ -270,9 +270,6 @@ const PageMaster = (props) => {
     const arr = []
     PageAccess.forEach(i => {
       i["hascheck"] = false;
-      if (i.Name === "IsShowOnMenu") {
-        i.hascheck = true;
-      }
       pageAccessData.forEach(ele => {
         if (ele.AccessName === i.Name) {
           i.hascheck = true
@@ -301,6 +298,7 @@ const PageMaster = (props) => {
       } else {
         let isPermission = await customAlert({
           Type: 1,
+          Status: true,
           Message: postMsg.Message,
         })
         if (isPermission) {
@@ -319,17 +317,21 @@ const PageMaster = (props) => {
   useEffect(() => {
     if ((modulePostAPIResponse.Status === true) && (modulePostAPIResponse.StatusCode === 200)) {
       dispatch(saveModuleMasterSuccess({ Status: false }))
-      customAlert({
+      dispatch(customAlert({
         Type: 1,
+        Status: true,
         Message: modulePostAPIResponse.Message,
-      })
+      }))
       tog_center()
     } else if (modulePostAPIResponse.Status === true) {
       dispatch(saveModuleMasterSuccess({ Status: false }))
-      customAlert({
+      dispatch(customAlert({
         Type: 4,
+        Status: true,
         Message: JSON.stringify(modulePostAPIResponse.Message),
-      });
+        RedirectPath: false,
+        AfterResponseAction: false
+      }));
     }
 
   }, [modulePostAPIResponse])
@@ -960,22 +962,14 @@ const PageMaster = (props) => {
                                           </Col>
 
                                           <Col className=" col col-6 ">
-                                            {
-                                              index.Name === "IsShowOnMenu" ?
-                                                <Input
-                                                  className="col col-2 text-black "
-                                                  type="checkbox"
-                                                  disabled
-                                                  defaultChecked={index.hascheck}
-                                                /> :
-                                                <Input
-                                                  className="col col-2 text-black "
-                                                  type="checkbox"
-                                                  defaultChecked={index.hascheck}
-                                                  onChange={e => {
-                                                    pageAccessval[key].hascheck = e.target.checked
-                                                  }}
-                                                />}
+                                            <Input
+                                              className="col col-2 text-black "
+                                              type="checkbox"
+                                              defaultChecked={index.hascheck}
+                                              onChange={e => {
+                                                pageAccessval[key].hascheck = e.target.checked
+                                              }}
+                                            />
                                           </Col>
                                         </Row>
                                       </li>
@@ -996,7 +990,7 @@ const PageMaster = (props) => {
                       </TabPane>
 
                     </TabContent>
-
+                   
                   </CardBody>
                   <div style={{ paddingLeft: "30px", paddingBottom: "10px" }}>
                     <SaveButton

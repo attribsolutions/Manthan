@@ -62,10 +62,11 @@ function CategoryTab(props) {
         });
 
         if (!(find === undefined)) {
-         customAlert({
+            dispatch(customAlert({
                 Type: 4,
+                Status: true,
                 Message: "Category alredy Select",
-            })
+            }))
             return
         }
         const val = {
