@@ -123,7 +123,7 @@ const GoodsCreditNote = (props) => {
         dispatch(goButtonPartyItemAddPage({ jsonBody: JSON.stringify(_cfunc.loginJsonBody()) }));
 
         const jsonBody = JSON.stringify({
-            Type: 1,
+            Type: 4,
             PartyID: _cfunc.loginPartyID(),
             CompanyID: _cfunc.loginCompanyID(),
         });
