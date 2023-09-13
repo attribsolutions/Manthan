@@ -215,7 +215,7 @@ const Debit = (props) => {
 
     useEffect(() => {
         const jsonBody = JSON.stringify({
-            Type: 1,
+            Type: 4,
             PartyID: _cfunc.loginPartyID(),
             CompanyID: _cfunc.loginCompanyID()
         });

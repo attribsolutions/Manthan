@@ -455,6 +455,8 @@ export const BilledToRow = (data) => {
 export const DetailsOfTransportRow = (data) => {
     let OrderNumber = " "
     let IRN_No = ""
+    let ACK_No = ""
+
 
     if (data.InvoicesReferences > 0) {
         const PoNumber = data.InvoicesReferences.map(index => ({
@@ -484,6 +486,8 @@ export const DetailsOfTransportRow = (data) => {
 
     if (data.isQR) {
         IRN_No = (data.CRDRNoteUploads[0].Irn === null ? "" : data.CRDRNoteUploads[0].Irn)
+        ACK_No = (data.CRDRNoteUploads[0].AckNo === null ? "" : data.CRDRNoteUploads[0].AckNo)
+
     }
 
 
@@ -493,7 +497,7 @@ export const DetailsOfTransportRow = (data) => {
         [`             ${NoteType}`],
         [`                    ${data.Narration === null ? "" : data.Narration}`],
         [`                ${IRN_No}`],
-        // [`                          ${(EwayData.EwayBillNo === undefined) || (EwayData.EwayBillNo === null) ? "" : EwayData.EwayBillNo}`],
+        [`                ${ACK_No}`],
         // [`                          ${(EwayData.AckNo === undefined) || (EwayData.AckNo === null) ? "" : EwayData.AckNo}`]
     ]
 
