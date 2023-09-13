@@ -176,7 +176,7 @@ const ProfileMenu = props => {
     };
   };
   // const handleMouseEnter = () => {
-  //   debugger
+
   //   document.getElementById('user-detail-div').style.display = 'block';
   // };
 

@@ -578,13 +578,10 @@ const ProductionReIssueAdd = (props) => {
 
         if (formValid(state, setState)) { // formValid  ++++++++++++++++++++++++++++
             if (validMsg.length > 0) {
-                dispatch(customAlert({
+          customAlert({
                     Type: 4,
-                    Status: true,
                     Message: JSON.stringify(validMsg),
-                    RedirectPath: false,
-                    AfterResponseAction: false
-                }));
+                });
                 return
             }
 

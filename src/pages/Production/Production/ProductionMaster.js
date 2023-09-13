@@ -10,7 +10,7 @@ import Select from "react-select";
 import React, { useEffect, useState } from "react";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
-import {  commonPageField, commonPageFieldSuccess } from "../../../store/actions";
+import { commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import { SaveButton } from "../../../components/Common/CommonButton";
 import { breadcrumbReturnFunc, btnIsDissablefunc, currentDate_ymd, metaTagLabel } from "../../../components/Common/CommonFunction";
 import {
@@ -193,21 +193,18 @@ const ProductionMaster = (props) => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(Save_ProductionSuccess({ Status: false }))
             setState(() => resetFunction(fileds, state))// Clear form values  
-            dispatch(customAlert({
+            customAlert({
                 Type: 1,
                 Status: true,
                 Message: postMsg.Message,
-                RedirectPath: url.PRODUCTION_LIST,
-            }))
+
+            })
         } else if (postMsg.Status === true) {
             dispatch(Save_ProductionSuccess({ Status: false }))
-            dispatch(customAlert({
+            customAlert({
                 Type: 4,
-                Status: true,
                 Message: JSON.stringify(postMsg.Message),
-                RedirectPath: false,
-                AfterResponseAction: false
-            }));
+            })
         }
     }, [postMsg]);
 
@@ -219,7 +216,7 @@ const ProductionMaster = (props) => {
             })
         } else if (updateMsg.Status === true && !modalCss) {
             dispatch(update_ProductionIdSuccess({ Status: false }));
-             customAlert({
+            customAlert({
                 Type: 3,
                 Message: JSON.stringify(updateMsg.Message),
             })
@@ -273,7 +270,7 @@ const ProductionMaster = (props) => {
 
                 dispatch(Save_Production({ jsonBody, btnId }));
             }
-        } catch (e) {btnIsDissablefunc({ btnId, state: false }) }
+        } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
     };
 
 
@@ -314,7 +311,7 @@ const ProductionMaster = (props) => {
     if (!(userPageAccessState === "")) {
         return (
             <React.Fragment>
-                 <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
+                <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
                 <div className="page-content" style={{ marginBottom: "16cm" }} >
 
                     <form onSubmit={SaveHandler} noValidate>

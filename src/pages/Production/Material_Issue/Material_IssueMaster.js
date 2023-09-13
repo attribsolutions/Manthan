@@ -556,16 +556,12 @@ const MaterialIssueMaster = (props) => {
         try {
             if (formValid(state, setState)) {
                 if (validMsg.length > 0) {
-                    dispatch(customAlert({
+                    customAlert({
                         Type: 4,
-                        Status: true,
                         Message: JSON.stringify(validMsg),
-                        RedirectPath: false,
-                        AfterResponseAction: false
-                    }));
+                    });
                     return
                 }
-                _cfunc.btnIsDissablefunc({ btnId, state: true })
 
                 const jsonBody = JSON.stringify({
                     MaterialIssueDate: values.MaterialIssueDate,

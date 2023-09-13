@@ -28,7 +28,6 @@ function pageFooter(doc, data) {
 }
 
 const invioceReport_A4 = async (data) => {
-    debugger
     if (data.InvoiceUploads.length > 0) {
         if (data.InvoiceUploads[0].QRCodeUrl !== null) {
             data["isQR"] = true;
