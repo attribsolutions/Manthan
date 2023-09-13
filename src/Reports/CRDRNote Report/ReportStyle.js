@@ -255,7 +255,7 @@ export const reportHeder1 = (doc, data) => {
                 let y = data1.cursor.y + 8
                 doc.setFontSize(8)
                 doc.setFont(undefined, 'bold')
-                doc.text('E-way Bill: ', x, y)
+                doc.text('ACK No: ', x, y)
             };
             if (rowIdx === 4 && colIdx === 0) {
 

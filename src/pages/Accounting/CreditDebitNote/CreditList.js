@@ -161,7 +161,7 @@ const CreditList = () => {
 
     useEffect(() => {
         const jsonBody = JSON.stringify({
-            Type: 1,
+            Type: 4,
             PartyID: _cfunc.loginSelectedPartyID(),
             CompanyID: _cfunc.loginCompanyID()
         });
