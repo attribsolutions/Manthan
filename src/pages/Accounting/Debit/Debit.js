@@ -65,6 +65,7 @@ const Debit = (props) => {
     const dispatch = useDispatch();
     const currentDate_ymd = _cfunc.date_ymd_func();
 
+
     const fileds = {
         CRDRNoteDate: currentDate_ymd,
         Customer: "",
@@ -314,17 +315,18 @@ const Debit = (props) => {
         const btnId = event.target.id
         try {
             if (formValid(state, setState)) {
-               
+
                 function noteType_BySubPageMode() {
-                    
-                   if (subPageMode === url.CREDIT_NOTE) {
+
+                    if (subPageMode === url.CREDIT_NOTE) {
                         return CreditDebitType.find((index) => index.Name === "CreditNote")?.id
                     }
                     else if (subPageMode === url.DEBIT_NOTE) {
                         return CreditDebitType.find((index) => index.Name === "DebitNote")?.id;
                     }
-                
-               }
+
+                }
+                debugger
                 const jsonBody = JSON.stringify({
                     CRDRNoteDate: values.CRDRNoteDate,
                     Customer: values.Customer.value,

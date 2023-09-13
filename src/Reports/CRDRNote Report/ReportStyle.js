@@ -255,7 +255,10 @@ export const reportHeder1 = (doc, data) => {
                 let y = data1.cursor.y + 8
                 doc.setFontSize(8)
                 doc.setFont(undefined, 'bold')
-                doc.text('ACK No: ', x, y)
+                if (data.isQR) {
+                    doc.text('ACK No: ', x, y)
+                }
+
             };
             if (rowIdx === 4 && colIdx === 0) {
 
@@ -421,8 +424,7 @@ export const reportFooter = (doc, data) => {
     doc.text(`Round Off:`, 440, 367,)
     doc.text(` ${Number(data.RoundOffAmount).toFixed(2)}`, 567, 367, 'right')
 
-    doc.text(`TCS Amount:`, 440, 377,)
-    doc.text(` ${numberWithCommas(Number(data.TCSAmount).toFixed(2))}`, 567, 377, 'right')
+
 
     doc.setFont(undefined, 'Normal')
     doc.setFontSize(10)
