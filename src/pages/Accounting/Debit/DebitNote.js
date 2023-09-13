@@ -236,7 +236,7 @@ const Credit = (props) => {
     // Retailer DropDown List Type 1 for credit list drop down
     useEffect(() => {
         const jsonBody = JSON.stringify({
-            Type: 1,
+            Type: 4,
             PartyID: loginPartyID(),
             CompanyID: loginCompanyID()
         });
@@ -392,7 +392,7 @@ const Credit = (props) => {
     }
 
     function val_onChange(val, row, type, key) {
-        
+
         if (type === "qty") {
             row["Quantity"] = val;
         }
@@ -643,7 +643,7 @@ const Credit = (props) => {
             }
 
             if (index.Quantity) {
-                
+
                 const CRDRNoteItems = {
                     CRDRNoteDate: values.CRDRNoteDate,
                     Item: index.Item,
