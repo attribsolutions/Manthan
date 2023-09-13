@@ -3,6 +3,13 @@ import "jspdf-autotable";
 import * as style from './ReportStyle';
 import { compareGSTINState, loginSystemSetting } from "../../components/Common/CommonFunction";
 import InvioceReporta5 from "../Invoice report a5/Page";
+import axios from "axios";
+
+
+
+
+
+
 
 const pageHeder = (doc, data) => {
     style.pageBorder(doc, data);
@@ -28,7 +35,13 @@ function pageFooter(doc, data) {
 }
 
 const invioceReport_A4 = async (data) => {
+
+
+
+
     if (data.InvoiceUploads.length > 0) {
+
+
         if (data.InvoiceUploads[0].QRCodeUrl !== null) {
             data["isQR"] = true;
         } else {
@@ -38,31 +51,40 @@ const invioceReport_A4 = async (data) => {
     var doc = new jsPDF('p', 'pt', 'a4');
 
     if (data.InvoiceUploads.length > 0) {
-        const url = data.InvoiceUploads[0].QRCodeUrl;
         try {
-            doc.addImage(url, 'JPEG', 323, 18, 83, 83);
-            const urlObject = new URL(url);
-            debugger
-        } catch (w) { }
+            if (data.InvoiceUploads.length > 0) {
+                debugger
+                const url = data.InvoiceUploads[0].QRCodeUrl;
+                let desiredPart = null;
+                const urlObject = new URL(url);
+                desiredPart = urlObject.pathname;
 
-        // const image = await loadImage(`/E_invoiceQRCode${desiredPart}`);
-        // if (image) {
-        //     doc.addImage(url, 'JPEG', 323, 18, 83, 83);
-        //     console.log(image.currentSrc)
-        // } else {
-        //     doc.text('Image Not Found', 323, 18);
-        // }
+                if (urlObject.host !== "pro.mastersindia.co") {
+                    doc.addImage(url, 'JPEG', 323, 18, 83, 83);
+                } else {
+                    const image = await loadImage(`/E_invoiceQRCode${desiredPart}`);
+                    debugger
+                    if (image) {
+                        doc.addImage(image.currentSrc, 'JPEG', 323, 18, 83, 83);
+                        console.log(image.currentSrc)
+                    } else {
+                        doc.text('Image Not Found', 323, 18);
+                    }
+                }
+
+            }
+
+        } catch (w) { }
     }
 
-    // function loadImage(url) {
-
-    //     return new Promise((resolve, reject) => {
-    //         const img = new Image();
-    //         img.onload = () => resolve(img);
-    //         img.onerror = () => reject();
-    //         img.src = url;
-    //     });
-    // }
+    function loadImage(url) {
+        return new Promise((resolve, reject) => {
+            const img = new Image();
+            img.onload = () => resolve(img);
+            img.onerror = () => reject();
+            img.src = url;
+        });
+    }
     pageHeder(doc, data);
     reportBody(doc, data);
     pageFooter(doc, data);
