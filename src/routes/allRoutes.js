@@ -183,7 +183,11 @@ import ItemSaleReport from "../Reports/ItemSaleReport";
 import ItemRegisterReport from "../Reports/ItemRegisterReport/ItemRegisterReport";
 import ClaimSummaryList from "../Reports/ClaimReportSummary/ClaimSummaryList";
 import ClaimSummaryMaster from "../Reports/ClaimReportSummary/ClaimSummaryMaster";
+
 import TransactionLog from "../pages/ActivityLog/TransactionLog";
+
+import StockAdjustment from "../pages/Inventory/StockAdjustment";
+
 
 
 const userRoutes = [
@@ -332,6 +336,8 @@ const userRoutes = [
   { path: path.GRN_STP_3, component: OrderList },
 
   { path: path.STOCK_ENTRY, component: StockEntry },
+
+  { path: path.STOCK_ADJUSTMENT, component: StockAdjustment },
 
   //******************************* Purchase Module ************************************//
 
