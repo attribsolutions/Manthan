@@ -177,6 +177,8 @@ export const StockEntry = url.STOCK_ENTRY;
 export const ChallanList = url.CHALLAN;
 export const Challan = url.CHALLAN_LIST;
 
+export const StockAdjustment = url.STOCK_ADJUSTMENT
+
 //******************************* Inter Branch ************************************//
 
 export const OrderList_3 = url.IB_ORDER;
