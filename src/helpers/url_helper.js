@@ -209,7 +209,7 @@ export const PARTYITEM_FOR_MASTER = '/PartyItem' // FOR Get
 export const PARTY_ITEM_FILTER = '/PartyItemFilter' // FOR Get
 
 
-export const CHANNEL_ITEM_SAVE_URL = '/ItemChannelWise' ;
+export const CHANNEL_ITEM_SAVE_URL = '/ItemChannelWise';
 export const CHANNEL_ITEM_ADD_GO_BTN = '/ItemsChannelWiseFilter' // FOR Get
 export const CHANNEL_ITEM_ADD_VIEW_BTN = '/CheckPartiesInChannelItem' // FOR VIEW
 
@@ -447,8 +447,8 @@ export const ITEM_LIST_API = '/ItemSaleItemList'
 //Deleted Invoice Data Export Report 
 export const DELETE_INVOICE_DATA_EXPORT = "/DeletedInvoiceData"
 
-
-
+//StockAdjustment
+export const GET_BATCH_CODE_BY_ITEM_ID = "/ShowBatchesForItem"
 
 
 

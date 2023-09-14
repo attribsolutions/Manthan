@@ -685,6 +685,11 @@ export const ItemSaleReport_GoBtn_API = ({ jsonBody }) => post(url.ITEM_SALE_REP
 export const SupplierDropdownApi = (employeeID, channelFromID) => get(`${url.SUPPLIER_API}/${employeeID}/${channelFromID}`)// Party Setting api
 export const ItemsList_On_Group_And_Subgroup_API = (jsonBody) => post(url.ITEM_LIST_API, jsonBody)
 
+
+//StockAdjustment
+
+export const getBatchCode_By_ItemID_api = (itemId, partyId) => get(`${url.GET_BATCH_CODE_BY_ITEM_ID}/${itemId}/${partyId}`)//add button get api for item
+
 export {
   getLoggedInUser,
   isUserAuthenticated,
