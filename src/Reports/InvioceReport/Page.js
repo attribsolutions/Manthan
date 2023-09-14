@@ -50,41 +50,43 @@ const invioceReport_A4 = async (data) => {
     }
     var doc = new jsPDF('p', 'pt', 'a4');
 
-    if (data.InvoiceUploads.length > 0) {
-        try {
-            if (data.InvoiceUploads.length > 0) {
-                debugger
-                const url = data.InvoiceUploads[0].QRCodeUrl;
-                let desiredPart = null;
-                const urlObject = new URL(url);
-                desiredPart = urlObject.pathname;
+    // if (data.InvoiceUploads.length > 0) {
+    //     try {
+    //         if (data.InvoiceUploads.length > 0) {
+    //             debugger
+    //             const url = data.InvoiceUploads[0].QRCodeUrl;
+    //             let desiredPart = null;
+    //             const urlObject = new URL(url);
+    //             desiredPart = urlObject.pathname;
 
-                if (urlObject.host !== "pro.mastersindia.co") {
-                    doc.addImage(url, 'JPEG', 323, 18, 83, 83);
-                } else {
-                    const image = await loadImage(`/E_invoiceQRCode${desiredPart}`);
-                    debugger
-                    if (image) {
-                        doc.addImage(image.currentSrc, 'JPEG', 323, 18, 83, 83);
-                        console.log(image.currentSrc)
-                    } else {
-                        doc.text('Image Not Found', 323, 18);
-                    }
-                }
+    //             if (urlObject.host !== "pro.mastersindia.co") {
+    //                 doc.addImage(url, 'JPEG', 323, 18, 83, 83);
+    //             } else {
+    //                 doc.addImage(`/E_invoiceQRCode${desiredPart}`, 'JPEG', 323, 18, 83, 83);
 
-            }
+    //                 // const image = await loadImage(`/E_invoiceQRCode${desiredPart}`);
+    //                 // debugger
+    //                 // if (image) {
+    //                 //     doc.addImage(image.currentSrc, 'JPEG', 323, 18, 83, 83);
+    //                 //     console.log(image.currentSrc)
+    //                 // } else {
+    //                 //     doc.text('Image Not Found', 323, 18);
+    //                 // }
+    //             }
 
-        } catch (w) { }
-    }
+    //         }
 
-    function loadImage(url) {
-        return new Promise((resolve, reject) => {
-            const img = new Image();
-            img.onload = () => resolve(img);
-            img.onerror = () => reject();
-            img.src = url;
-        });
-    }
+    //     } catch (w) { }
+    // }
+
+    // function loadImage(url) {
+    //     return new Promise((resolve, reject) => {
+    //         const img = new Image();
+    //         img.onload = () => resolve(img);
+    //         img.onerror = () => reject();
+    //         img.src = url;
+    //     });
+    // }
     pageHeder(doc, data);
     reportBody(doc, data);
     pageFooter(doc, data);
