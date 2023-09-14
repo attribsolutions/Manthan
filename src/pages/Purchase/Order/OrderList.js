@@ -424,11 +424,23 @@ const OrderList = () => {
 
 
 
-    function hideBtnFunc(rowdata) {
+    async function hideBtnFunc(rowdata) {
         const isHideValue = rowdata[0].isHideValue
         const RowInvoiceId = rowdata[0].id
         let config = { InvoiceId: RowInvoiceId, IsHide: isHideValue }
-        dispatch(_act.hideInvoiceForGRFAction(config))
+
+
+        const isConfirmed = await customAlert({
+            Type: 7,
+            Message: "Do you want To Unhide Invoice ?",
+        });
+
+        if (isConfirmed) {
+            dispatch(_act.hideInvoiceForGRFAction(config))
+        }
+
+
+
     }
 
     function viewApprovalBtnFunc(config) {
