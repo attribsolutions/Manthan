@@ -162,6 +162,8 @@ export const CHALLAN_LIST = "/ChallanList"
 export const CHALLAN = "/Challan"
 
 export const STOCK_ENTRY = "/Stock_Entry"
+
+export const STOCK_ADJUSTMENT = "/StockAdjustment"
 //*******************************All report page ************************************//
 export const REPORT = "/Report"
 
