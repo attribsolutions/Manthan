@@ -218,7 +218,7 @@ const TransactionLog = () => {
                                 <Label className="col-sm-3 p-2" htmlFor="party">
                                     Party
                                 </Label>
-                                <Col sm="4">
+                                <Col sm="5">
                                     <C_Select
                                         id="party"
                                         placeholder="Select Party"
