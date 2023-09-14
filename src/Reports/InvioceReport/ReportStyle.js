@@ -35,8 +35,12 @@ export const pageHeder = (doc, data) => {
 }
 
 export const reportHeder1 = (doc, data) => {
+
+    debugger
     let Y1 = 0
     if (data.isQR) {
+        doc.addImage(data.QRImage, 'JPEG', 323, 18, 83, 83);
+        console.log(data.QRImage)
         Y1 = 115;
     } else {
         Y1 = 75;
