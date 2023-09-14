@@ -286,7 +286,7 @@ const PartyItems = (props) => {
                 .map(row => row.Item);
         }else if (subPageMode === url.PARTYITEM) {
                 noSelectedIds = tableArray
-                    .filter(row => (row.InStock !== true))
+                    .filter(row => (row.InStock == true))
                     .map(row => row.Item);
         }
         return noSelectedIds;
@@ -435,7 +435,7 @@ const PartyItems = (props) => {
                                                         selectRow={selectAllCheck({
                                                             rowSelected: rowSelected(i.items),
                                                             nonSelectable: nonSelectedRow(i.items),
-                                                            disabledWithMsg:subPageMode==url.PARTYITEM?"In-stock":"Is-assing",
+                                                            disabledWithMsg:subPageMode==url.PARTYITEM&&"In-stock",
                                                             bgColor: '',
                                                         })}
                                                         noDataIndication={

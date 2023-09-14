@@ -360,8 +360,14 @@ const GRNAdd3 = (props) => {
         const btnId = event.target.id
 
         try {
+            const isvalidMsg = [];
+
             const itemArray = grnItemTableList.map(index => {
-                let { UnitDetails, GSToption, MRPOps, GSTDropdown, MRPDetails, ...item } = index
+                let { UnitDetails, GSToption, MRPOps, GSTDropdown, MRPDetails, ...item } = index;
+
+                if (!Number(item.Rate) > 0) {// rate validation check
+                    isvalidMsg.push({[item.ItemName]:" Rate not available." })
+                }
                 return {
                     ...item,
                     ActualQuantity: item.invoiceQuantity, //invoice actual quantity 
@@ -373,12 +379,14 @@ const GRNAdd3 = (props) => {
             })
 
             if (invoiceNo.length === 0) {
-                customAlert({
-                    Type: 3,
-                    Message: "Please Enter Invoice Number",
-                })
+                customAlert({ Type: 3, Message: "Please Enter Invoice Number" });
                 return
             }
+            if (isvalidMsg.length > 0) {
+                customAlert({ Type: 3, Message: isvalidMsg });
+                return
+            }
+
             const jsonBody = JSON.stringify({
                 GRNDate: grnDate,
                 Customer: grnDetail.Customer,
