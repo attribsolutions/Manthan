@@ -175,10 +175,22 @@ const StockAdjustment = (props) => {
         setItemNameSelect(e)
         setBatchCodeSelect('')
         dispatch(getBatchCode_By_ItemID_Action({ itemId: e.value, partyId: _cfunc.loginPartyID() }));
-      
     }
 
     const AddPartyHandler = async () => {
+        if (batchCodeSelect === '') {
+            customAlert({
+                Type: 4,
+                Message: `Batch Code is Required`
+            });
+            return;
+        }
+
+        setBatchCodeSelect('');
+        setItemNameSelect('');
+        
+        // Assuming TableArr is an array
+        const data = [...TableArr];
 
         const tableData = BatchCodeRedux.map((index) => ({
             ItemName: index.ItemName,
@@ -186,10 +198,12 @@ const StockAdjustment = (props) => {
             MRP: index.MRP,
             OriginalBaseUnitQuantity: index.OriginalBaseUnitQuantity,
             Unit: { value: index.UnitID, label: index.UnitName },
-
         }));
-        setTableArr(tableData)
 
+        // Concatenate the existing data array with the new tableData
+        data.push(...tableData);
+
+        setTableArr(data);
     }
 
     if (!(userPageAccessState === '')) {
