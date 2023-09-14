@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { useEffect } from 'react';
 import BootstrapTable from 'react-bootstrap-table-next';
 import ToolkitProvider from 'react-bootstrap-table2-toolkit';
@@ -6,9 +6,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { Col, FormGroup, Label, Row } from 'reactstrap';
 import { Go_Button, PageLoadingSpinner } from '../../components/Common/CommonButton';
-import { breadcrumbReturnFunc } from '../../components/Common/CommonFunction';
+import { breadcrumbReturnFunc, loginEmployeeID } from '../../components/Common/CommonFunction';
 import { mySearchProps } from '../../components/Common/SearchBox/MySearch';
 import { C_DatePicker, C_Select } from '../../CustomValidateForm';
+import { commonPartyDropdown_API, TransactionLog_Get_User_Api, TransactionLog_Go_Btn_Api, TransactionLog_transactionType_Api } from '../../helpers/backend_helper';
 
 const TransactionLog = () => {
     const dispatch = useDispatch();
@@ -17,18 +18,43 @@ const TransactionLog = () => {
 
 
     const [userPageAccessState, setUserAccState] = useState('');
+    const [transactionTypeSelect, setTransactionTypeSelect] = useState('');
+    const [userSelect, setUserSelect] = useState('');
+    const [partySelect, setPartySelect] = useState('');
+    const [formDateSelect, setFormDateSelect] = useState('');
+    const [toDateSelect, setToDateSelect] = useState('');
 
+    const [goBtnloading, setGoBtnloading] = useState(false);
+    const [tableData, setTableData] = useState([]);
+    const [transctionTypeReux, setTransctionTypeReux] = useState([]);
+    const [usersRedux, setUsersRedux] = useState([]);
+    const [partyRedux, setPartyRedux] = useState([]);
 
     //Access redux store Data /  'save_ModuleSuccess' action data
-    const {
-        goBtnloading,
-        userAccess,
-        pageField } = useSelector((state) => ({
-            userAccess: state.Login.RoleAccessUpdateData,
-            pageField: state.CommonPageFieldReducer.pageField
-        }));
+    const { userAccess } = useSelector((state) => ({ userAccess: state.Login.RoleAccessUpdateData }));
 
+    useEffect(async () => {//initioal Api
+        const resp1 = await TransactionLog_transactionType_Api()
+        if (resp1.StatusCode === 200) {
+            setTransctionTypeReux(resp1.Data)
+        }
+        const resp2 = await TransactionLog_Get_User_Api()
+        if (resp2.StatusCode === 200) {
+            setUsersRedux(resp2.Data)
+        }
+        const resp3 = await commonPartyDropdown_API(loginEmployeeID())
+        debugger
+        if (resp3.StatusCode === 200) {
+            setPartyRedux(resp3.Data)
+        }
+    }, [])
 
+    const generateOptions = (sourceArray, labelField = "Name", valueField = "id") =>
+        [{ value: '', label: "All" }, ...sourceArray.map(item => ({ value: item[valueField], label: item[labelField] }))];
+
+    const transactionTypeOptions = useMemo(() => generateOptions(transctionTypeReux), [transctionTypeReux])
+    const userOptions = useMemo(() => generateOptions(usersRedux), [usersRedux]);
+    const partyOptions = useMemo(() => generateOptions(partyRedux), [partyRedux]);
 
     // userAccess useEffect
     useEffect(() => {
@@ -42,113 +68,136 @@ const TransactionLog = () => {
         };
     }, [userAccess])
 
-    const HeaderContent = () => {
-        return <div className="px-2  c_card_filter text-black " >
-         
-                <div className=" row">
-                    <Col sm="3" className="">
-                        <FormGroup className="mb- row mt-3 " >
-                            <Label className="col-sm-5 p-2"
-                                style={{ width: "83px" }}>From Date</Label>
-                            <Col sm="7">
-                                <C_DatePicker
-                                    name='fromdate'
-                                // value={fromdate}
-                                // onChange={fromdateOnchange}
-                                />
-                            </Col>
-                        </FormGroup>
-                    </Col>
-                    <Col sm="3" className="">
-                        <FormGroup className="mb- row mt-3 " >
-                            <Label className="col-sm-5 p-2"
-                                style={{ width: "65px" }}>To Date</Label>
-                            <Col sm="7">
-                                <C_DatePicker
-                                    nane='todate'
-                                // value={todate}
-                                // onChange={todateOnchange}
-                                />
-                            </Col>
-                        </FormGroup>
-                    </Col>
+    const goButtonHandler = async() => {
+        try {
+            setGoBtnloading(true);
+            const jsonBody=''
+            const resp3 = await TransactionLog_Go_Btn_Api({jsonBody})
+            setGoBtnloading(false);
+            if (resp3.StatusCode === 200) {
+                setPartyRedux(resp3.Data);
+            };
+        } catch (w) { setGoBtnloading(false); }
 
-                    <Col sm="5">
-                        <FormGroup className="mb-2 row mt-3 " >
-                            <Label className="col-md-4 p-2"
-                                style={{ width: "115px" }}>Supplier Name</Label>
-                            <Col md="5">
-                                <C_Select
-                                    // value={venderSelect}
-                                    classNamePrefix="select2-Customer"
-                                    options={[]}
-                                    // onChange={venderOnchange}
-                                    styles={{
-                                        menu: provided => ({ ...provided, zIndex: 2 })
-                                    }}
-                                />
-                            </Col>
-                        </FormGroup>
-                    </Col >
-
-                </div>
-                <div className=" row">
-                    <Col sm="3" className="">
-                        <FormGroup className="mb- row mt-3 " >
-                            <Label className="col-sm-5 p-2"
-                                style={{ width: "83px" }}>From Date</Label>
-                            <Col sm="7">
-                                <C_DatePicker
-                                    name='fromdate'
-                                // value={fromdate}
-                                // onChange={fromdateOnchange}
-                                />
-                            </Col>
-                        </FormGroup>
-                    </Col>
-                    <Col sm="3" className="">
-                        <FormGroup className="mb- row mt-3 " >
-                            <Label className="col-sm-5 p-2"
-                                style={{ width: "65px" }}>To Date</Label>
-                            <Col sm="7">
-                                <C_DatePicker
-                                    nane='todate'
-                                // value={todate}
-                                // onChange={todateOnchange}
-                                />
-                            </Col>
-                        </FormGroup>
-                    </Col>
-
-                    <Col sm="5">
-                        <FormGroup className="mb-2 row mt-3 " >
-                            <Label className="col-md-4 p-2"
-                                style={{ width: "115px" }}>Supplier Name</Label>
-                            <Col md="5">
-                                <C_Select
-                                    // value={venderSelect}
-                                    classNamePrefix="select2-Customer"
-                                    options={[]}
-                                    // onChange={venderOnchange}
-                                    styles={{
-                                        menu: provided => ({ ...provided, zIndex: 2 })
-                                    }}
-                                />
-                            </Col>
-                        </FormGroup>
-                    </Col >
-
-                    <Col sm="1" className="mt-3 ">
-                        <Go_Button
-                        // id={gobtnId}
-                        // loading={reducers.loading}
-                        // onClick={goButtonHandler}
-                        />
-                    </Col>
-                </div>
-            
-        </div>
     }
+
+    const HeaderContent = () => {
+        return (
+            <div className="px-2 c_card_filter text-black">
+                <div className="row">
+                    <Col sm="3">
+                        <FormGroup>
+                            <div className="d-flex align-items-center">
+                                <Label className="col-sm-5 p-2" htmlFor="fromdate">
+                                    From Date
+                                </Label>
+                                <Col sm="7">
+                                    <C_DatePicker
+                                        id="fromdate"
+                                        value={formDateSelect}
+                                        onChange={(selectedDate) => setFormDateSelect(selectedDate)}
+                                        placeholder="Select From Date"
+                                        name="fromdate"
+                                    />
+                                </Col>
+                            </div>
+                        </FormGroup>
+                    </Col>
+                    <Col sm="3" >
+                        <FormGroup >
+                            <div className="d-flex align-items-center">
+                                <Label className="col-sm-5 p-2" htmlFor="todate">
+                                    To Date
+                                </Label>
+                                <Col sm="7">
+                                    <C_DatePicker
+                                        id="todate"
+                                        name="todate"
+                                        value={toDateSelect}
+                                        onChange={(selectedDate) => setToDateSelect(selectedDate)}
+                                        placeholder="Select To Date"
+                                    />
+                                </Col>
+                            </div>
+                        </FormGroup>
+                    </Col>
+                </div>
+                <div className="row">
+                    <Col sm="3" >
+                        <FormGroup>
+                            <div className="d-flex align-items-center">
+                                <Label className="col-sm-5 p-2" htmlFor="transactionType">
+                                    Transaction Type
+                                </Label>
+                                <Col sm="7">
+                                    <C_Select
+                                        id="transactionType"
+                                        placeholder="Select Transaction"
+                                        classNamePrefix="select2-Customer"
+                                        value={transactionTypeSelect}
+                                        onChange={(e => setTransactionTypeSelect(e))}
+                                        options={transactionTypeOptions}
+                                        styles={{
+                                            menu: (provided) => ({ ...provided, zIndex: 2 }),
+                                        }}
+                                    />
+                                </Col>
+                            </div>
+                        </FormGroup>
+                    </Col>
+                    <Col sm="3" >
+                        <FormGroup >
+                            <div className="d-flex align-items-center">
+                                <Label className="col-sm-5 p-2" htmlFor="userName">
+                                    User Name
+                                </Label>
+                                <Col sm="7">
+                                    <C_Select
+                                        id="userName"
+                                        placeholder="Select User"
+                                        classNamePrefix="select2-Customer"
+                                        value={userSelect}
+                                        onChange={(e => setUserSelect(e))}
+                                        options={userOptions}
+                                        styles={{
+                                            menu: (provided) => ({ ...provided, zIndex: 2 }),
+                                        }}
+                                    />
+                                </Col>
+                            </div>
+                        </FormGroup>
+                    </Col>
+                    <Col sm="5" >
+                        <FormGroup >
+                            <div className="d-flex align-items-center">
+                                <Label className="col-sm-3 p-2" htmlFor="party">
+                                    Party
+                                </Label>
+                                <Col sm="5">
+                                    <C_Select
+                                        id="party"
+                                        placeholder="Select Party"
+                                        classNamePrefix="select2-Customer"
+                                        value={partySelect}
+                                        options={partyOptions}
+                                        onChange={(e => setPartySelect(e))}
+                                        styles={{
+                                            menu: (provided) => ({ ...provided, zIndex: 2 }),
+                                        }}
+                                    />
+                                </Col>
+                            </div>
+                        </FormGroup>
+                    </Col>
+                    <Col sm="1" >
+                        <Go_Button
+                            loading={goBtnloading}
+                            onClick={goButtonHandler} />
+                    </Col>
+                </div>
+            </div>
+        );
+    };
 
     return (
         <React.Fragment>
@@ -176,7 +225,7 @@ const TransactionLog = () => {
                                             classes={"table  table-bordered table-hover"}
                                             noDataIndication={
                                                 <div className="text-danger text-center ">
-                                                    Items Not available
+                                                    Record Not available
                                                 </div>
                                             }
                                             onDataSizeChange={(e) => {

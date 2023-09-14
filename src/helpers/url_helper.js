@@ -447,6 +447,11 @@ export const ITEM_LIST_API = '/ItemSaleItemList'
 //Deleted Invoice Data Export Report 
 export const DELETE_INVOICE_DATA_EXPORT = "/DeletedInvoiceData"
 
+// transaction log
+export const TRANSACTION_LOG_TRANCTION_TYPE="/GetTransactionType"
+export const TRANSACTION_LOG_All_USER="/GetEmployeeFromUser"
+export const TRANSACTION_LOG_GO_BTN="/"
+
 
 
 
