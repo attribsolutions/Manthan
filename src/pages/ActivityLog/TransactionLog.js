@@ -8,7 +8,7 @@ import { Col, FormGroup, Label, Row } from 'reactstrap';
 import { Go_Button, PageLoadingSpinner } from '../../components/Common/CommonButton';
 import { breadcrumbReturnFunc, loginEmployeeID } from '../../components/Common/CommonFunction';
 import { mySearchProps } from '../../components/Common/SearchBox/MySearch';
-import { C_DatePicker, C_Select } from '../../CustomValidateForm';
+import { C_DatePicker, C_Select, C_TimePicker } from '../../CustomValidateForm';
 import { commonPartyDropdown_API, TransactionLog_Get_User_Api, TransactionLog_Go_Btn_Api, TransactionLog_transactionType_Api } from '../../helpers/backend_helper';
 
 const TransactionLog = () => {
@@ -18,9 +18,9 @@ const TransactionLog = () => {
 
 
     const [userPageAccessState, setUserAccState] = useState('');
-    const [transactionTypeSelect, setTransactionTypeSelect] = useState('');
-    const [userSelect, setUserSelect] = useState('');
-    const [partySelect, setPartySelect] = useState('');
+    const [transactionTypeSelect, setTransactionTypeSelect] = useState([]);
+    const [userSelect, setUserSelect] = useState([]);
+    const [partySelect, setPartySelect] = useState([]);
     const [formDateSelect, setFormDateSelect] = useState('');
     const [toDateSelect, setToDateSelect] = useState('');
 
@@ -43,7 +43,6 @@ const TransactionLog = () => {
             setUsersRedux(resp2.Data)
         }
         const resp3 = await commonPartyDropdown_API(loginEmployeeID())
-        debugger
         if (resp3.StatusCode === 200) {
             setPartyRedux(resp3.Data)
         }
@@ -68,11 +67,17 @@ const TransactionLog = () => {
         };
     }, [userAccess])
 
-    const goButtonHandler = async() => {
+    const goButtonHandler = async () => {
         try {
             setGoBtnloading(true);
-            const jsonBody=''
-            const resp3 = await TransactionLog_Go_Btn_Api({jsonBody})
+            const jsonBody = JSON.stringify({
+                "FromDate": formDateSelect,
+                "ToDate": toDateSelect,
+                "TransactionType": transactionTypeSelect.map(item => item.id).join(', '),
+                "User": userSelect.map(item => item.id).join(', '),
+                "Party": partySelect.map(item => item.id).join(', '),
+            })
+            const resp3 = await TransactionLog_Go_Btn_Api({ jsonBody })
             setGoBtnloading(false);
             if (resp3.StatusCode === 200) {
                 setPartyRedux(resp3.Data);
@@ -92,7 +97,7 @@ const TransactionLog = () => {
                                     From Date
                                 </Label>
                                 <Col sm="7">
-                                    <C_DatePicker
+                                    <C_TimePicker
                                         id="fromdate"
                                         value={formDateSelect}
                                         onChange={(selectedDate) => setFormDateSelect(selectedDate)}
@@ -110,7 +115,7 @@ const TransactionLog = () => {
                                     To Date
                                 </Label>
                                 <Col sm="7">
-                                    <C_DatePicker
+                                    <C_TimePicker
                                         id="todate"
                                         name="todate"
                                         value={toDateSelect}
@@ -121,6 +126,44 @@ const TransactionLog = () => {
                             </div>
                         </FormGroup>
                     </Col>
+                    {/* <Col sm="3">
+                        <FormGroup>
+                            <div className="d-flex align-items-center">
+                                <Label className="col-sm-5 p-2" htmlFor="fromtime">
+                                    From Time
+                                </Label>
+                                <Col sm="7">
+                                    <C_TimePicker
+                                        id="fromtime"
+                                        value={formDateSelect}
+                                        onChange={(selectedDate) => setFormDateSelect(selectedDate)}
+                                        placeholder="Select from time"
+                                        name="fromtime"
+                                    />
+                                </Col>
+                            </div>
+                        </FormGroup>
+                    </Col>
+                    <Col sm="3" >
+                        <FormGroup >
+                            <div className="d-flex align-items-center">
+                                <Label className="col-sm-5 p-2" htmlFor="totime">
+                                    To Time
+                                </Label>
+                                <Col sm="7">
+                                    <C_TimePicker
+                                        id="totime"
+                                        name="totime"
+                                        value={toDateSelect}
+                                        onChange={(selectedDate,a,b,c) => {
+                                            debugger
+                                            setToDateSelect(selectedDate)}}
+                                        placeholder="Select To time"
+                                    />
+                                </Col>
+                            </div>
+                        </FormGroup>
+                    </Col> */}
                 </div>
                 <div className="row">
                     <Col sm="3" >
@@ -134,6 +177,7 @@ const TransactionLog = () => {
                                         id="transactionType"
                                         placeholder="Select Transaction"
                                         classNamePrefix="select2-Customer"
+                                        isMulti
                                         value={transactionTypeSelect}
                                         onChange={(e => setTransactionTypeSelect(e))}
                                         options={transactionTypeOptions}
@@ -156,6 +200,7 @@ const TransactionLog = () => {
                                         id="userName"
                                         placeholder="Select User"
                                         classNamePrefix="select2-Customer"
+                                        isMulti
                                         value={userSelect}
                                         onChange={(e => setUserSelect(e))}
                                         options={userOptions}
@@ -173,11 +218,12 @@ const TransactionLog = () => {
                                 <Label className="col-sm-3 p-2" htmlFor="party">
                                     Party
                                 </Label>
-                                <Col sm="5">
+                                <Col sm="4">
                                     <C_Select
                                         id="party"
                                         placeholder="Select Party"
                                         classNamePrefix="select2-Customer"
+                                        isMulti
                                         value={partySelect}
                                         options={partyOptions}
                                         onChange={(e => setPartySelect(e))}

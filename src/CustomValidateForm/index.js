@@ -1,4 +1,5 @@
 export *from './CInput'
 export *from './C_DatePicker'
+export *from './C_TimePicker'
 export *from './RegexPattern'
 export *from './C_Select'
