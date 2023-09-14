@@ -603,14 +603,14 @@ const Invoice = (props) => {
 
         // IsComparGstIn= compare Supplier and Customer are Same State by GSTIn Number
         let IsComparGstIn = { GSTIn_1: values.Customer.GSTIN, GSTIn_2: _cfunc.loginUserGSTIN() }
-
+debugger
         orderItemDetails.forEach((index) => {
             if (index.StockInValid) {
-                validMsg.push(`${index.ItemName}:${index.StockInvalidMsg}`);
+                validMsg.push({ [index.ItemName]:` ${index.StockInvalidMsg}.`})
                 return
             };
 
-            let isSameMRPinStock = '';//this is check is Enterd stock Quantity is Same MRP
+            let isSameMRPinStock = ''; //this is check is Enterd stock Quantity is Same MRP
             index.StockDetails.forEach((ele) => {
 
                 if (Number(ele.Qty) > 0) {
@@ -620,6 +620,10 @@ const Invoice = (props) => {
                     } else if (isSameMRPinStock !== parseFloat(ele.MRP)) {
                         isSameMRPinStock = false
                     }
+                    if (!Number(ele.Rate) > 0) {//** */ rate validation check  */
+                        validMsg.push({ [index.ItemName]: " Rate not available." })
+                        return
+                    };
 
                     //**calculate Amount ,Discount Amount based on Discound type */
 
@@ -661,7 +665,7 @@ const Invoice = (props) => {
             })
 
             if (isSameMRPinStock === false) {
-                validMsg.push(`${index.ItemName}: Multiple MRP’S Invoice not allowed.`);
+                validMsg.push({ [index.ItemName]:" Multiple MRP’S Invoice not allowed."})
                 return
             };
         })
@@ -669,7 +673,7 @@ const Invoice = (props) => {
         if (validMsg.length > 0) {
             customAlert({
                 Type: 4,
-                Message: JSON.stringify(validMsg),
+                Message: validMsg,
             })
             return
         }
