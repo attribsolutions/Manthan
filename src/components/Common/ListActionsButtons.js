@@ -22,7 +22,7 @@ export const hideBtnCss = "badge badge-soft-primary font-size-12 btn btn-primary
 //******************** icon class ******************************
 const editIconClass = "mdi mdi-pencil font-size-16";
 const viewIconClass = "bx bxs-show font-size-16";
-const approvalviewIconClass = " far fa-check-circle font-size-16";
+const approvalviewIconClass = "mdi mdi-eye-check font-size-16";
 const makeBtnIconClass = "fas fa-file-invoice font-size-16";
 const printIconClass = "bx bx-printer font-size-16";
 const multiInvoiceIconClass = "fas fa-file-download";
@@ -257,7 +257,7 @@ export const listPageActionsButtonFunc = (props) => {
                         btnmode: mode.viewApproval,
                         iconClass: approvalviewIconClass,
                         actionFunc: viewApprovalBtnFunc,
-                        title: "Approval View",
+                        title: "View Items -",
                         buttonClasss: vieBtnCss,
                     })}
 
@@ -539,7 +539,7 @@ export const E_Invoice_ActionsButtonFunc = ({ dispatch, reducers, deleteName }) 
     const { listBtnLoading } = reducers;
 
     function Uploaded_EInvoiceHandler(btnId, rowData) {
-        
+
         try {
             if (rowData.PageMode === "CreditDebitList") {
                 dispatch(Uploaded_Credit_Debit_EInvoiceAction({ btnId, RowId: rowData.id, UserID: loginUserID() }));
