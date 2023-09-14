@@ -15,7 +15,7 @@ import { useHistory } from "react-router-dom";
 import { SaveButton } from "../../../components/Common/CommonButton";
 import { url, mode, pageId } from "../../../routes/index"
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
-import { C_Select } from "../../../CustomValidateForm/index";
+import { CInput, C_Select, decimalRegx } from "../../../CustomValidateForm/index";
 import { goButtonPartyItemAddPageSuccess, goButtonPartyItemAddPage } from "../../../store/Administrator/PartyItemsRedux/action";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import "../../../pages/Sale/SalesReturn/salesReturn.scss";
@@ -23,12 +23,15 @@ import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import { getBatchCode_By_ItemID_Action, getBatchCode_By_ItemID_Action_Success } from "../../../store/Inventory/StockAdjustmentRedux/action";
+import { saveStockEntryAction, saveStockEntrySuccess } from "../../../store/Inventory/StockEntryRedux/action";
 
 const StockAdjustment = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory()
+    const currentDate_ymd = _cfunc.date_ymd_func();
 
+    const [pageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState('');
 
     const [TableArr, setTableArr] = useState([]);
@@ -42,10 +45,15 @@ const StockAdjustment = (props) => {
         partyItemListLoading,
         BatchCodeRedux,
         batchCodeDropLoading,
+        postMsg,
+        saveBtnloading,
         userAccess,
     } = useSelector((state) => ({
         partyItemListLoading: state.PartyItemsReducer.partyItemListLoading,
         ItemList: state.PartyItemsReducer.partyItem,
+
+        saveBtnloading: state.StockEntryReducer.saveBtnloading,
+        postMsg: state.StockEntryReducer.postMsg,
 
         BatchCodeRedux: state.StockAdjustmentReducer.batchCode_By_ItemID,
         batchCodeDropLoading: state.StockAdjustmentReducer.batchCodeDropLoading,
@@ -104,6 +112,11 @@ const StockAdjustment = (props) => {
         return index.itemCheck === true
     });
 
+    function QunatityOnChange(e, row, key, TableArr) {
+        debugger
+        row.Quantity = e.target.value
+    }
+
     const pagesListColumns = [
         {
             text: "Item Name",
@@ -117,30 +130,29 @@ const StockAdjustment = (props) => {
             text: "MRP",
             dataField: "MRP",
         },
-
         {
             text: "Original Quantity",
             dataField: "OriginalBaseUnitQuantity",
         },
-
         {
             text: "Quantity",
             dataField: "",
             classes: () => "",
             formatter: (cellContent, row, key) => {
+                debugger
                 return (<span >
-                    <Input
+                    <CInput
                         id=""
-                        // key={row.id}
-                        // defaultValue={row.BatchCode}
+                        key={row.id}
+                        defaultValue={row.Quantity}
+                        cpattern={decimalRegx}
                         type="text"
-                        className=" text-center"
-                    // onChange={(event) => { row.BatchCode = event.target.value }}
+                        className=" text-end"
+                        onChange={(e) => { QunatityOnChange(e, row, key, TableArr) }}
                     />
                 </span>)
             }
         },
-
         {
             text: "Unit",
             dataField: "",
@@ -171,6 +183,25 @@ const StockAdjustment = (props) => {
 
     ];
 
+    useEffect(() => {
+        if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
+            dispatch(saveStockEntrySuccess({ Status: false }))
+            setTableArr([])
+            customAlert({
+                Type: 1,
+                Message: postMsg.Message,
+                RedirectPath: url.STOCK_ENTRY,
+            })
+        }
+        else if (postMsg.Status === true) {
+            dispatch(saveStockEntrySuccess({ Status: false }))
+            customAlert({
+                Type: 4,
+                Message: JSON.stringify(postMsg.Message),
+            })
+        }
+    }, [postMsg])
+
     function ItemNameOnChange(e) {
         setItemNameSelect(e)
         setBatchCodeSelect('')
@@ -193,11 +224,15 @@ const StockAdjustment = (props) => {
         const data = [...TableArr];
 
         const tableData = BatchCodeRedux.map((index) => ({
+            Item: index.Item,
             ItemName: index.ItemName,
             BatchCode: index.BatchCode,
             MRP: index.MRP,
+            MRPID: index.MRPID,
             OriginalBaseUnitQuantity: index.OriginalBaseUnitQuantity,
             Unit: { value: index.UnitID, label: index.UnitName },
+            BatchDate: index.BatchDate,
+            Quantity: ""
         }));
 
         // Concatenate the existing data array with the new tableData
@@ -205,6 +240,53 @@ const StockAdjustment = (props) => {
 
         setTableArr(data);
     }
+
+    const SaveHandler = async (event) => {
+
+        event.preventDefault();
+
+        const btnId = event.target.id
+
+        const ReturnItems = TableArr.map((index) => {
+
+            return ({
+                "Item": index.Item,
+                // "ItemName": index.ItemName,
+                "Quantity": index.Quantity,
+                "MRP": index.MRPID,
+                "Unit": index.Unit.value,
+                "GST": "",
+                "MRPValue": index.MRP,
+                "GSTPercentage": "",
+                "BatchDate": index.BatchDate,
+                "BatchCode": index.BatchCode
+            })
+        })
+
+        const filterData = ReturnItems.filter((i) => {
+            return i.Quantity > 0;
+        });
+        debugger
+        if (filterData.length === 0) {
+            customAlert({
+                Type: 4,
+                Message: " Please Enter One Item Quantity"
+            })
+            return _cfunc.btnIsDissablefunc({ btnId, state: false })
+        }
+
+        try {
+            const jsonBody = JSON.stringify({
+                "PartyID": _cfunc.loginPartyID(),
+                "CreatedBy": _cfunc.loginUserID(),
+                "Date": currentDate_ymd,
+                "StockItems": filterData
+            })
+            console.log(jsonBody)
+            // dispatch(saveStockEntryAction({ jsonBody, btnId }));
+        }
+        catch (e) { _cfunc.btnIsDissablefunc({ btnId, state: false }) }
+    };
 
     if (!(userPageAccessState === '')) {
         return (
@@ -308,11 +390,12 @@ const StockAdjustment = (props) => {
                             )}
                         </ToolkitProvider>
 
-                        {/* {
+                        {
                             TableArr.length > 0 ?
                                 <FormGroup>
                                     <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
-                                        <SaveButton pageMode={pageMode}
+                                        <SaveButton
+                                            pageMode={pageMode}
                                             loading={saveBtnloading}
                                             onClick={SaveHandler}
                                             userAcc={userPageAccessState}
@@ -321,7 +404,7 @@ const StockAdjustment = (props) => {
                                     </Col>
                                 </FormGroup >
                                 : null
-                        } */}
+                        }
 
                     </form >
                 </div >

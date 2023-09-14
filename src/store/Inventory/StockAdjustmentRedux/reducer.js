@@ -5,7 +5,7 @@ import {
 } from "./actionType";
 
 const INIT_STATE = {
-    batchCode_By_ItemID:[],
+    batchCode_By_ItemID: [],
     batchCodeDropLoading: false,
 }
 

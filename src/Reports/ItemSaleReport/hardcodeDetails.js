@@ -1,18 +1,18 @@
 
-export const initialTableColumns = [
+export const DEFAULT_TABLE_COLUMNS = [
     {
-        text: "Channel to",
-        dataField: "SaleMadeTo",
-        sort:true
+        text: "Product",
+        dataField: "GroupName",
+        sort: true
     },
-        {
+    {
         text: "	Amount",
         dataField: "Amount",
-        sort:true
+        sort: true
     },
 ];
 
-export const defaultTableColumns = [
+export const ALL_TABLE_COLUMNS = [
     {
         text: "FromDate",
         dataField: "InvoiceDate",
@@ -61,7 +61,7 @@ export const defaultTableColumns = [
         text: "	BasicAmount",
         dataField: "BasicAmount",
     },
-        {
+    {
         text: "	GSTPercentage",
         dataField: "GSTPercentage",
     },
@@ -73,15 +73,18 @@ export const defaultTableColumns = [
         text: "	Amount",
         dataField: "Amount",
     },
-       {
+    {
         text: "	FullGRNNumber",
         dataField: "FullGRNNumber",
     },
 ];
-export const initialSlected_zero={ value: 0, label: "All" };
-export const initialSlected_blank={ value: 0, label: "All" };
 
-export const showAlsoOption = [{
+export const INITIAL_ZERO = { value: 0, label: "All" };
+export const INITIAL_ARRAY = [{ value: 0, label: "All" }];
+
+// export const INITIAL_BLANK = { value: 0, label: "All" };
+
+export const SHOW_ALSO_OPTIONS = [{
     value: 1,
     label: "Invoice Number",
 },
@@ -110,7 +113,8 @@ export const showAlsoOption = [{
     label: "TCSAmount",
 }
 ]
-export const UnitDropdownOptions = [
+
+export const UNIT_DROPDOWN_OPTIONS = [
     {
         value: '', label: "Select..."
     },
