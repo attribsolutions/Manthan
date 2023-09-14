@@ -188,7 +188,7 @@ const StockAdjustment = (props) => {
 
         setBatchCodeSelect('');
         setItemNameSelect('');
-        
+        dispatch(getBatchCode_By_ItemID_Action_Success([]));
         // Assuming TableArr is an array
         const data = [...TableArr];
 
