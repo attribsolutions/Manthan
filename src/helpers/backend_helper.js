@@ -685,6 +685,15 @@ export const ItemSaleReport_GoBtn_API = ({ jsonBody }) => post(url.ITEM_SALE_REP
 export const SupplierDropdownApi = (employeeID, channelFromID) => get(`${url.SUPPLIER_API}/${employeeID}/${channelFromID}`)// Party Setting api
 export const ItemsList_On_Group_And_Subgroup_API = (jsonBody) => post(url.ITEM_LIST_API, jsonBody)
 
+
+
+
+//TransactionLog
+
+export const TransactionLog_transactionType_Api=()=>get(url.TRANSACTION_LOG_TRANCTION_TYPE);
+export const TransactionLog_Get_User_Api=()=>get(url.TRANSACTION_LOG_All_USER);
+export const TransactionLog_Go_Btn_Api=()=>get(url.TRANSACTION_LOG_GO_BTN);
+
 export {
   getLoggedInUser,
   isUserAuthenticated,

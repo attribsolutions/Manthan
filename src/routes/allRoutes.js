@@ -183,7 +183,11 @@ import ItemSaleReport from "../Reports/ItemSaleReport";
 import ItemRegisterReport from "../Reports/ItemRegisterReport/ItemRegisterReport";
 import ClaimSummaryList from "../Reports/ClaimReportSummary/ClaimSummaryList";
 import ClaimSummaryMaster from "../Reports/ClaimReportSummary/ClaimSummaryMaster";
+
+import TransactionLog from "../pages/ActivityLog/TransactionLog";
+
 import StockAdjustment from "../pages/Inventory/StockAdjustment";
+
 
 
 const userRoutes = [
@@ -476,7 +480,8 @@ const userRoutes = [
 
   { path: path.SEARCH_BOX2, component: SearchBoxSecond },
   { path: path.SEARCH_BOX3, component: SerachBox3 },
-
+  { path: path.TRANSACTION_LOG, component: TransactionLog },
+  
   { path: "/dashboard", component: Dashboard },
 
   { path: "/", exact: true, component: () => <Redirect to="/login" /> },

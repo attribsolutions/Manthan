@@ -7,6 +7,7 @@ export const DASHBORD_2 = "/Dashboard_2"
 
 export const SEARCH_BOX2 = "/SearchBoxSecond"
 export const SEARCH_BOX3 = "/SerachBox3"
+export const TRANSACTION_LOG = "/TransactionLog"
 
 // *************************** Administration *******************************//
 
