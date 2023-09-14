@@ -65,7 +65,39 @@ const TransactionLog = () => {
             setUserAccState(userAcc);
             breadcrumbReturnFunc({ dispatch, userAcc });
         };
-    }, [userAccess])
+    }, [userAccess]);
+
+    const tableColumns = [{
+        text: "Id",
+        dataField: "id",
+        sort: true
+    }, {
+        text: "Transaction Date",
+        dataField: "TransactionDate",
+        sort: true
+    }, {
+        text: "User Name",
+        dataField: "UserName",
+        sort: true
+    }, {
+        text: "Ip Address",
+        dataField: "IpAddress",
+        sort: true
+    },
+    {
+        text: "Transaction Type",
+        dataField: "TransactionType",
+        sort: true
+    },
+    {
+        text: "Transaction Id",
+        dataField: "TransactionId",
+        sort: true
+    },{
+        text: "Party Name",
+        dataField: "PartyName",
+        sort: true
+    },]
 
     const goButtonHandler = async () => {
         try {
@@ -80,11 +112,18 @@ const TransactionLog = () => {
             const resp3 = await TransactionLog_Go_Btn_Api({ jsonBody })
             setGoBtnloading(false);
             if (resp3.StatusCode === 200) {
-                setPartyRedux(resp3.Data);
+                setTableData(resp3.Data);
             };
         } catch (w) { setGoBtnloading(false); }
 
     }
+    // const jsonBody = JSON.stringify({
+    //     "FromDate": "2023-09-14 12:00",
+    //     "ToDate": "2023-09-14 12:00",
+    //     "TransactionType": "1,2,3",
+    //     "User": "1,2,3",
+    //     "Party": "1,2,3",
+    // })
 
     const HeaderContent = () => {
         return (
@@ -254,10 +293,10 @@ const TransactionLog = () => {
                     changeButtonHandler={partyOnChngeButtonHandler} /> */}
                 <HeaderContent />
                 <ToolkitProvider
-                    keyField={"Item_id"}
+                    keyField={"id"}
                     // defaultSorted={defaultSorted}
-                    data={[]}
-                    columns={[{}]}
+                    data={tableData}
+                    columns={tableColumns}
                     search
                 >
                     {(toolkitProps,) => (
@@ -266,7 +305,7 @@ const TransactionLog = () => {
                                 <Col xl="12">
                                     <div className="table-responsive table" style={{ minHeight: "45vh" }}>
                                         <BootstrapTable
-                                            keyField={"Item_id"}
+                                            keyField={"id"}
                                             id="table_Arrow"
                                             classes={"table  table-bordered table-hover"}
                                             noDataIndication={
