@@ -11,7 +11,42 @@ import { dataGenrator } from "../../../Reports/Invoice report a5/DemoData";
 function* getpdfData_GenFunc({ urlpath, config }) {
 
   try {
+
     const response = yield call(urlpath, config);
+    let image = ""
+    if (response.Data.InvoiceUploads.length > 0) {
+      try {
+        if (response.Data.InvoiceUploads.length > 0) {
+          debugger
+          const url = response.Data.InvoiceUploads[0].QRCodeUrl;
+          let desiredPart = null;
+          const urlObject = new URL(url);
+          desiredPart = urlObject.pathname;
+          if (urlObject.host !== "pro.mastersindia.co") {
+            image = url
+          } else {
+            const LoadedImage = yield loadImage(`/E_invoiceQRCode${desiredPart}`);
+            image = LoadedImage.currentSrc
+          }
+          response.Data["QRImage"] = image
+        }
+
+      } catch (w) { }
+    }
+
+    function loadImage(url) {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => resolve(img);
+        img.onerror = () => reject();
+        img.src = url;
+      });
+    }
+
+
+
+
+
     response["ReportType"] = config.ReportType
     response.Data["ReportType"] = config.ReportType
     response.Data["Period"] = config
