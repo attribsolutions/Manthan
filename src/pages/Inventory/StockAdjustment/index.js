@@ -294,7 +294,8 @@ const StockAdjustment = (props) => {
                 "MRPValue": index.MRP,
                 "GSTPercentage": index.GSTPercentage,
                 "BatchDate": index.BatchDate,
-                "BatchCode": index.BatchCode
+                "BatchCode": index.BatchCode,
+                "BatchCodeID": index.id
             })
         })
 
