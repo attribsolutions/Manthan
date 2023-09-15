@@ -200,7 +200,6 @@ const StockAdjustment = (props) => {
                 </span>)
             }
         },
-
     ];
 
     useEffect(() => {
@@ -250,29 +249,38 @@ const StockAdjustment = (props) => {
         // Assuming TableArr is an array
         const data = [...TableArr];
 
-        const tableData = BatchCodeRedux.map((index) => {
-            const defaultUnitOption = index.UnitOptions.find(option => option.UnitName.includes("No"));
+        // const tableData = BatchCodeRedux.map((index) => {
 
-            return {
-                id: index.id,
-                Item: index.Item,
-                ItemName: index.ItemName,
-                BatchCode: index.BatchCode,
-                MRP: index.MRP,
-                MRPID: index.MRPID,
-                GSTID: index.GSTID,
-                GSTPercentage: index.GSTPercentage,
-                OriginalBaseUnitQuantity: index.OriginalBaseUnitQuantity,
-                OriginalQtyUnitName: index.UnitName,
-                UnitOptions: index.UnitOptions.map(i => ({ value: i.Unit, label: i.UnitName })),
+        //     const defaultUnitOption = index.UnitOptions.find(option => option.UnitName.includes("No"));
+        const BatchCodeFind = BatchCodeRedux.find(i => i.id === batchCodeSelect.value);
+        console.log(BatchCodeFind)
+        // Check if BatchCodeFind exists before constructing the object
+        if (BatchCodeFind) {
+            debugger
+            const defaultUnitOption = BatchCodeFind.UnitOptions.find(option => option.UnitName.includes("No"));
+
+            data.push({
+                id: BatchCodeFind.id,
+                Item: BatchCodeFind.Item,
+                ItemName: BatchCodeFind.ItemName,
+                BatchCode: BatchCodeFind.BatchCode,
+                MRP: BatchCodeFind.MRP,
+                MRPID: BatchCodeFind.MRPID,
+                GSTID: BatchCodeFind.GSTID,
+                GSTPercentage: BatchCodeFind.GSTPercentage,
+                OriginalBaseUnitQuantity: BatchCodeFind.OriginalBaseUnitQuantity,
+                OriginalQtyUnitName: BatchCodeFind.UnitName,
+                UnitOptions: BatchCodeFind.UnitOptions.map(i => ({ value: i.Unit, label: i.UnitName })),
                 defaultUnit: defaultUnitOption ? { value: defaultUnitOption.Unit, label: defaultUnitOption.UnitName } : null,
-                BatchDate: index.BatchDate,
+                BatchDate: BatchCodeFind.BatchDate,
                 Quantity: ""
-            };
-        });
+            });
+        }
+        // });
+        debugger
         // Concatenate the existing data array with the new tableData
-        data.push(...tableData);
-
+        // data.push(...BatchCodeFind);
+        console.log(data)
         setTableArr(data);
     }
 
