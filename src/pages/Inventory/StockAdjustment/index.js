@@ -112,9 +112,16 @@ const StockAdjustment = (props) => {
         return index.itemCheck === true
     });
 
-    function QunatityOnChange(e, row, key, TableArr) {
-        debugger
-        row.Quantity = e.target.value
+    function QuantityHandler(event, row) {
+
+        let input = event.target.value
+
+        let v1 = Number(row.OriginalBaseUnitQuantity);
+        let v2 = Number(input)
+        if (!(v1 >= v2)) {
+            event.target.value = v1;
+        }
+        row.Quantity = input;
     }
 
     const pagesListColumns = [
@@ -134,29 +141,37 @@ const StockAdjustment = (props) => {
             text: "Original Quantity",
             dataField: "OriginalBaseUnitQuantity",
             formatter: (cellContent, row, key) => {
-                debugger
+
                 return (<span >
-                    <Label >{row.OriginalBaseUnitQuantity}&nbsp;&nbsp;&nbsp;&nbsp;{row.UnitName}</Label>
+                    <Label >{row.OriginalBaseUnitQuantity}&nbsp;&nbsp;&nbsp;&nbsp;{row.OriginalQtyUnitName}</Label>
                 </span>)
             }
         },
         {
             text: "Quantity",
             dataField: "",
-            classes: () => "",
-            formatter: (cellContent, row, key) => {
-                debugger
-                return (<span >
-                    <CInput
-                        id=""
-                        key={row.id}
-                        defaultValue={row.Quantity}
-                        cpattern={decimalRegx}
-                        type="text"
-                        className=" text-end"
-                        onChange={(e) => { QunatityOnChange(e, row, key, TableArr) }}
-                    />
-                </span>)
+            formatExtraData: { TableArr },
+            formatter: (cell, row, key, { TableArr }) => {
+                return (
+                    <div className="parent" >
+                        <div className="child" style={{ minWidth: "100px" }}>
+                            <CInput
+                                defaultValue={row.Quantity}
+                                autoComplete="off"
+                                type="text"
+                                cpattern={decimalRegx}
+                                className="col col-sm text-end"
+                                onChange={(event) => {
+                                    QuantityHandler(event, row, TableArr)
+                                }}
+                            />
+                        </div>
+
+                    </div>
+                )
+            },
+            headerStyle: () => {
+                return { width: '120px', textAlign: 'center' };
             }
         },
         {
@@ -165,14 +180,13 @@ const StockAdjustment = (props) => {
             classes: () => "",
             style: { minWidth: "10vw" },
             formatter: (cellContent, row, key,) => {
-                debugger
-                const unitOptions = row.UnitOptions
+
                 return (<span style={{ justifyContent: 'center' }}>
                     <C_Select
                         id={`Unit${key}`}
                         name="Unit"
                         isSearchable={true}
-                        defaultValue={row.Unit}
+                        defaultValue={row.defaultUnit}
                         className="react-dropdown"
                         classNamePrefix="dropdown"
                         options={row.UnitOptions}
@@ -180,7 +194,7 @@ const StockAdjustment = (props) => {
                             menu: provided => ({ ...provided, zIndex: 2 })
                         }}
                         onChange={(event) => {
-                            row.Unit = event
+                            row.defaultUnit = event
                         }}
                     />
                 </span>)
@@ -215,35 +229,47 @@ const StockAdjustment = (props) => {
     }
 
     const AddPartyHandler = async () => {
-        if (batchCodeSelect === '') {
-            customAlert({
-                Type: 4,
-                Message: `Batch Code is Required`
-            });
-            return;
+
+        let isfound = TableArr.find(i => i.id === batchCodeSelect.value);
+        if (itemNameSelect === '') {
+            return customAlert({ Type: 4, Message: `Please Select ItemName` })
+
+        }
+        else if (batchCodeSelect === '') {
+            return customAlert({ Type: 4, Message: `Please Select Batch Code` })
+
+        }
+        else if (!(isfound === undefined)) {
+            return customAlert({ Type: 3, Message: "This BatchCode Already Exist" })
         }
 
         setBatchCodeSelect('');
         setItemNameSelect('');
+
         dispatch(getBatchCode_By_ItemID_Action_Success([]));
         // Assuming TableArr is an array
         const data = [...TableArr];
-        debugger
-        const tableData = BatchCodeRedux.map((index) => ({
-            Item: index.Item,
-            ItemName: index.ItemName,
-            BatchCode: index.BatchCode,
-            MRP: index.MRP,
-            MRPID: index.MRPID,
-            GSTID: index.GSTID,
-            GSTPercentage: index.GSTPercentage,
-            OriginalBaseUnitQuantity: index.OriginalBaseUnitQuantity,
-            UnitName: index.UnitName,
-            UnitOptions: index.UnitOptions.map(i => ({ value: i.Unit, label: i.UnitName })),
-            BatchDate: index.BatchDate,
-            Quantity: ""
-        }));
 
+        const tableData = BatchCodeRedux.map((index) => {
+            const defaultUnitOption = index.UnitOptions.find(option => option.UnitName.includes("No"));
+
+            return {
+                id: index.id,
+                Item: index.Item,
+                ItemName: index.ItemName,
+                BatchCode: index.BatchCode,
+                MRP: index.MRP,
+                MRPID: index.MRPID,
+                GSTID: index.GSTID,
+                GSTPercentage: index.GSTPercentage,
+                OriginalBaseUnitQuantity: index.OriginalBaseUnitQuantity,
+                OriginalQtyUnitName: index.UnitName,
+                UnitOptions: index.UnitOptions.map(i => ({ value: i.Unit, label: i.UnitName })),
+                defaultUnit: defaultUnitOption ? { value: defaultUnitOption.Unit, label: defaultUnitOption.UnitName } : null,
+                BatchDate: index.BatchDate,
+                Quantity: ""
+            };
+        });
         // Concatenate the existing data array with the new tableData
         data.push(...tableData);
 
@@ -260,10 +286,9 @@ const StockAdjustment = (props) => {
 
             return ({
                 "Item": index.Item,
-                // "ItemName": index.ItemName,
                 "Quantity": index.Quantity,
                 "MRP": index.MRPID,
-                "Unit": index.Unit.value,
+                "Unit": index.defaultUnit.value,
                 "GST": index.GSTID,
                 "MRPValue": index.MRP,
                 "GSTPercentage": index.GSTPercentage,
@@ -275,7 +300,7 @@ const StockAdjustment = (props) => {
         const filterData = ReturnItems.filter((i) => {
             return i.Quantity > 0;
         });
-        debugger
+
         if (filterData.length === 0) {
             customAlert({
                 Type: 4,
@@ -291,7 +316,7 @@ const StockAdjustment = (props) => {
                 "Date": currentDate_ymd,
                 "StockItems": filterData
             })
-            console.log(jsonBody)
+
             dispatch(saveStockEntryAction({ jsonBody, btnId }));
         }
         catch (e) { _cfunc.btnIsDissablefunc({ btnId, state: false }) }
