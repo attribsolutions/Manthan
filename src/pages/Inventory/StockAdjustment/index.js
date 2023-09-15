@@ -229,6 +229,8 @@ const StockAdjustment = (props) => {
             BatchCode: index.BatchCode,
             MRP: index.MRP,
             MRPID: index.MRPID,
+            GSTID: index.GSTID,
+            GSTPercentage: index.GSTPercentage,
             OriginalBaseUnitQuantity: index.OriginalBaseUnitQuantity,
             Unit: { value: index.UnitID, label: index.UnitName },
             BatchDate: index.BatchDate,
@@ -255,9 +257,9 @@ const StockAdjustment = (props) => {
                 "Quantity": index.Quantity,
                 "MRP": index.MRPID,
                 "Unit": index.Unit.value,
-                "GST": "",
+                "GST": index.GSTID,
                 "MRPValue": index.MRP,
-                "GSTPercentage": "",
+                "GSTPercentage": index.GSTPercentage,
                 "BatchDate": index.BatchDate,
                 "BatchCode": index.BatchCode
             })
@@ -283,7 +285,7 @@ const StockAdjustment = (props) => {
                 "StockItems": filterData
             })
             console.log(jsonBody)
-            // dispatch(saveStockEntryAction({ jsonBody, btnId }));
+            dispatch(saveStockEntryAction({ jsonBody, btnId }));
         }
         catch (e) { _cfunc.btnIsDissablefunc({ btnId, state: false }) }
     };
