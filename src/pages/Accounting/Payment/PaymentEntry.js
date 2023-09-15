@@ -335,7 +335,7 @@ const PaymentEntry = (props) => {
                 <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
 
                 <div className="page-content" style={{ marginBottom: "5cm" }}>
-                    <PartyDropdown_Common
+                    <PartyDropdown_Common pageMode={pageMode}
                         goButtonHandler={partySelectButtonHandler}
                         changeButtonHandler={partySelectOnChangeHandler}
                     />

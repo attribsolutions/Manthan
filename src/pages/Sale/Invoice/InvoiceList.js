@@ -472,7 +472,7 @@ const InvoiceList = () => {
         <React.Fragment>
             <PageLoadingSpinner isLoading={reducers.listBtnLoading || !pageField} />
             <div className="page-content">
-                <PartyDropdown_Common
+                <PartyDropdown_Common pageMode={pageMode}
                     goButtonHandler={partySelectButtonHandler}
                     changeButtonHandler={partySelectOnChangeHandler} />
                 {

@@ -88,7 +88,7 @@ const DiscountList = () => {
         <React.Fragment>
             <PageLoadingSpinner isLoading={(goBtnLoading || !pageField)} />
             <div className="page-content">
-                <PartyDropdown_Common
+                <PartyDropdown_Common 
                     changeButtonHandler={partyOnChngeButtonHandler}
                 />
                 <div className="px-3 c_card_filter header text-black mb-1" >

@@ -919,7 +919,7 @@
 //                 <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
 
 //                 <div className="page-content" >
-//                     {/* <PartyDropdown_Common
+//                     {/* <PartyDropdown_Common pageMode={pageMode}
 //                         goButtonHandler={partySelectButtonHandler}
 //                         changeBtnShow={!(ReturnReasonFilterData.length === 0) && !(ItemList_Options.length === 0) && !(InvoiceNo_Options.length === 0)}
 //                         changeButtonHandler={partyOnChngeButtonHandler}

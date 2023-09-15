@@ -6,6 +6,7 @@ import { C_Select } from "../../CustomValidateForm";
 import { CommonConsole, loginUserAdminRole } from "./CommonFunction";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import { commonPartyDropSelectAction } from "../../store/Utilites/PartyDrodown/action";
+import { mode } from "../../routes";
 
 const initialLocalStorageParty = () => {
     try {
@@ -18,12 +19,13 @@ const initialLocalStorageParty = () => {
     return { value: 0, label: "Select..." }
 }
 
-const PartyDropdown = ({ goButtonHandler, changeButtonHandler, goBtnLoading, SAPLedgerOptions }) => {
+const PartyDropdown = ({ goButtonHandler, changeButtonHandler, goBtnLoading, SAPLedgerOptions, pageMode }) => {
+
     const dispatch = useDispatch();
 
     const [selectedParty, setSelectedParty] = useState(initialLocalStorageParty);
     const [changeButtonShow, setChangeButtonShow] = useState(() => !(initialLocalStorageParty().value === 0));
- 
+
     const { partyList, partyDropdownLoading } = useSelector((state) => ({
         partyList: state.CommonPartyDropdownReducer.commonPartyDropdown,
         partyDropdownLoading: state.CommonPartyDropdownReducer.partyDropdownLoading,
@@ -105,13 +107,15 @@ const PartyDropdown = ({ goButtonHandler, changeButtonHandler, goBtnLoading, SAP
                             >
                                 Select
                             </C_Button>
-                        ) : (
+                        ) : !(pageMode === mode.view || pageMode === mode.edit) && (
                             <C_Button
                                 type="button"
                                 spinnerColor={"info"}
                                 className="btn btn-outline-info border-1 font-size-12 "
                                 onClick={internalChangeBtnHandler}
-                                loading={goBtnLoading} >Change</C_Button>
+                                loading={goBtnLoading}
+                            // forceDisabled={pageMode === mode.view || pageMode === mode.edit}
+                            >Change</C_Button>
                         )}
                     </Col>
 

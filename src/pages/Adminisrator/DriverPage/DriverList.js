@@ -83,7 +83,7 @@ const DriverList = () => {
       <PageLoadingSpinner isLoading={(GoBtnlistloading || !pageField)} />
       <div className="page-content">
 
-        <PartyDropdown_Common
+        <PartyDropdown_Common 
           goBtnLoading={GoBtnlistloading}
           goButtonHandler={goButtonHandler}
           changeButtonHandler={partyOnChngeButtonHandler}

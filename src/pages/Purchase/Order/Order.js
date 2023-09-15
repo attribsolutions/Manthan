@@ -1314,7 +1314,7 @@ const Order = (props) => {
                     </div>}
                     <div className="page-content">
 
-                        <NewCommonPartyDropdown />
+                        <NewCommonPartyDropdown pageMode={pageMode} />
 
                         <div>
                             <div className="px-2 c_card_filter header text-black" >{/* Order Date And Supplier Name,Go_Button*/}

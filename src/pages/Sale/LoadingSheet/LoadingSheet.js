@@ -340,7 +340,7 @@ const LoadingSheet = (props) => {
                 <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
                 <div className="page-content" style={{ marginBottom: "5cm" }}>
 
-                    <NewCommonPartyDropdown />
+                    <NewCommonPartyDropdown pageMode={pageMode} />
 
                     <form noValidate>
                         <div className="px-2 c_card_filter header text-black mb-1" >

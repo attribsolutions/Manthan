@@ -6,9 +6,13 @@ import { C_Select } from "../../CustomValidateForm";
 import { loginUserAdminRole } from "./CommonFunction";
 import { commonPartyDropSelectAction } from "../../store/Utilites/PartyDrodown/action";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import { mode } from "../../routes";
 
-const NewCommonPartyDropdown = () => {
+const NewCommonPartyDropdown = ({ pageMode }) => {
+
     const dispatch = useDispatch();
+
     const [selectedParty, setSelectedParty] = useState('');
     const [changeButtonShow, setChangeButtonShow] = useState(false);
 
@@ -37,7 +41,7 @@ const NewCommonPartyDropdown = () => {
 
     const partyOnchange = () => {
         setChangeButtonShow(false)
-        setSelectedParty('')
+        setSelectedParty({ value: 0, label: "select...", SAPPartyCode: "" })
         dispatch(commonPartyDropSelectAction({ value: 0, label: "select...", SAPPartyCode: "" }))
         localStorage.setItem("selectedParty", JSON.stringify({ value: 0, label: "select...", SAPPartyCode: "" }));
     };
@@ -83,7 +87,7 @@ const NewCommonPartyDropdown = () => {
                                 Select
                             </C_Button>
                         )
-                            :
+                            : !(pageMode === mode.view || pageMode === mode.edit) &&
                             (
                                 <C_Button
                                     type="button"

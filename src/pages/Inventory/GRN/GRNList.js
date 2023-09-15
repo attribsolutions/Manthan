@@ -232,7 +232,7 @@ const GRNList = () => {
         <React.Fragment>
             <PageLoadingSpinner isLoading={reducers.loading || !pageField} />
             <div className="page-content">
-                <PartyDropdown_Common
+                <PartyDropdown_Common pageMode={pageMode}
                     goButtonHandler={partySelectButtonHandler}
                     changeButtonHandler={partyOnChngeButtonHandler} />
 

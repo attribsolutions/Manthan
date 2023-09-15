@@ -992,7 +992,7 @@ const PurchaseReturn = (props) => {
                 <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
 
                 <div className="page-content">
-                    <NewCommonPartyDropdown />
+                    <NewCommonPartyDropdown pageMode={pageMode} />
                     <Modal
                         isOpen={modal_backdrop}
                         toggle={() => {

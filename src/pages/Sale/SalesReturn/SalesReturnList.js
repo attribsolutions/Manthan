@@ -337,7 +337,7 @@ const SalesReturnList = () => {
             <div className="page-content">
                 <PageLoadingSpinner isLoading={(loading || !pageField)} />
 
-                <PartyDropdown_Common
+                <PartyDropdown_Common pageMode={pageMode}
                     goButtonHandler={partySelectButtonHandler}
                     changeButtonHandler={partySelectOnChangeHandler} />
 
