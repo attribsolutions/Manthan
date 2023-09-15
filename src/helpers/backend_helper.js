@@ -693,7 +693,7 @@ export const getBatchCode_By_ItemID_api = (itemId, partyId) => get(`${url.GET_BA
 
 export const TransactionLog_transactionType_Api=()=>get(url.TRANSACTION_LOG_TRANCTION_TYPE);
 export const TransactionLog_Get_User_Api=()=>get(url.TRANSACTION_LOG_All_USER);
-export const TransactionLog_Go_Btn_Api=()=>get(url.TRANSACTION_LOG_GO_BTN);
+export const TransactionLog_Go_Btn_Api=({jsonBody})=>post(url.TRANSACTION_LOG_GO_BTN,jsonBody);
 
 export {
   getLoggedInUser,

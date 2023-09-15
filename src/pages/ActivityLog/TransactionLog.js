@@ -139,7 +139,9 @@ const TransactionLog = () => {
                                     <C_TimePicker
                                         id="fromdate"
                                         value={formDateSelect}
-                                        onChange={(selectedDate) => setFormDateSelect(selectedDate)}
+                                        onChange={(obj,selectedDate) =>{ 
+                                            debugger
+                                            setFormDateSelect(selectedDate)}}
                                         placeholder="Select From Date"
                                         name="fromdate"
                                     />
@@ -158,7 +160,7 @@ const TransactionLog = () => {
                                         id="todate"
                                         name="todate"
                                         value={toDateSelect}
-                                        onChange={(selectedDate) => setToDateSelect(selectedDate)}
+                                        onChange={(obj,selectedDate) => setToDateSelect(selectedDate)}
                                         placeholder="Select To Date"
                                     />
                                 </Col>
