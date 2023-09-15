@@ -44,7 +44,10 @@ const TransactionLog = () => {
         }
         const resp3 = await commonPartyDropdown_API(loginEmployeeID())
         if (resp3.StatusCode === 200) {
-            setPartyRedux(resp3.Data)
+            setPartyRedux(resp3.Data.map((item, key) => {
+                item["id"] = key + 1
+                return item
+            }))
         }
     }, [])
 
@@ -73,15 +76,15 @@ const TransactionLog = () => {
         sort: true
     }, {
         text: "Transaction Date",
-        dataField: "TransactionDate",
+        dataField: "TranasactionDate",
         sort: true
     }, {
         text: "User Name",
         dataField: "UserName",
         sort: true
     }, {
-        text: "Ip Address",
-        dataField: "IpAddress",
+        text: "IP Address",
+        dataField: "IPaddress",
         sort: true
     },
     {
@@ -91,9 +94,9 @@ const TransactionLog = () => {
     },
     {
         text: "Transaction Id",
-        dataField: "TransactionId",
+        dataField: "TransactionID",
         sort: true
-    },{
+    }, {
         text: "Party Name",
         dataField: "PartyName",
         sort: true
@@ -139,9 +142,10 @@ const TransactionLog = () => {
                                     <C_TimePicker
                                         id="fromdate"
                                         value={formDateSelect}
-                                        onChange={(obj,selectedDate) =>{ 
+                                        onChange={(obj, selectedDate) => {
                                             debugger
-                                            setFormDateSelect(selectedDate)}}
+                                            setFormDateSelect(selectedDate)
+                                        }}
                                         placeholder="Select From Date"
                                         name="fromdate"
                                     />
@@ -160,7 +164,7 @@ const TransactionLog = () => {
                                         id="todate"
                                         name="todate"
                                         value={toDateSelect}
-                                        onChange={(obj,selectedDate) => setToDateSelect(selectedDate)}
+                                        onChange={(obj, selectedDate) => setToDateSelect(selectedDate)}
                                         placeholder="Select To Date"
                                     />
                                 </Col>
