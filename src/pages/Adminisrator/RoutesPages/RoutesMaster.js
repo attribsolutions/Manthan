@@ -282,7 +282,7 @@ const RoutesMaster = (props) => {
                 <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
 
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
-                    <PartyDropdown_Common />
+                    <PartyDropdown_Common pageMode={pageMode} />
 
                     <Container fluid>
                         <Card className="text-black" style={{ marginTop: "3px" }}>

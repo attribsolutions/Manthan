@@ -686,7 +686,7 @@ const OrderList = () => {
             <PageLoadingSpinner isLoading={reducers.goBtnloading || !pageField} />
 
             <div className="page-content">
-                <PartyDropdown_Common
+                <PartyDropdown_Common pageMode={pageMode}
                     goButtonHandler={partySelectButtonHandler}
                     changeButtonHandler={partyOnChngeButtonHandler} />
                 {

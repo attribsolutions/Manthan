@@ -139,7 +139,7 @@ const LoadingSheetList = () => {
 
             <div className="page-content">
 
-                <PartyDropdown_Common
+                <PartyDropdown_Common pageMode={pageMode}
                     goButtonHandler={partySelectButtonHandler}
                     changeButtonHandler={partyOnChngeButtonHandler} />
 

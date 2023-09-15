@@ -276,7 +276,7 @@ const VehicleMaster = (props) => {
                     <Container fluid>
                         <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
 
-                        <PartyDropdown_Common />
+                        <PartyDropdown_Common pageMode={pageMode} />
 
                         <Card className="text-black" style={{ marginTop: "3px" }}>
                             <CardHeader className="card-header   text-black c_card_header" >

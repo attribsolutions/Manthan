@@ -127,7 +127,7 @@ const PartyList = () => {
             <div className="page-content">
                 <PageLoadingSpinner isLoading={(goBtnLoading || !pageField)} />
                 {subPageMode === url.RETAILER_LIST &&
-                    <PartyDropdown_Common
+                    <PartyDropdown_Common pageMode={pageMode}
                         goBtnLoading={goBtnLoading}
                         goButtonHandler={goButtonHandler}
                         changeButtonHandler={partyOnChngeButtonHandler}

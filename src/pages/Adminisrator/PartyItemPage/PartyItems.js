@@ -318,7 +318,7 @@ const PartyItems = (props) => {
     const AdminDivsionRoleDropdown = () => {
         if (subPageMode === url.PARTYITEM) {
             return (
-                <PartyDropdown_Common
+                <PartyDropdown_Common pageMode={pageMode}
                     goBtnLoading={GoBtnlistloading}
                     goButtonHandler={goButtonHandler}
                     changeButtonHandler={partyOnChngeButtonHandler}

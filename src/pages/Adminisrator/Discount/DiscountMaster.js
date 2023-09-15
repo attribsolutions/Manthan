@@ -584,7 +584,7 @@ const DiscountMaster = (props) => {
                 <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
 
                 <div className="page-content" >
-                    <NewCommonPartyDropdown />
+                    <NewCommonPartyDropdown pageMode={pageMode} />
                     <form noValidate>
                         <div className="px-2 c_card_filter header text-black mb-1" >
 

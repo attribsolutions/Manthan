@@ -146,7 +146,7 @@
 
 //       <div className="page-content">
 //         {subPageMode == url.PARTYITEM_LIST && (
-//           <PartyDropdown_Common
+//           <PartyDropdown_Common pageMode={pageMode}
 //             goButtonHandler={partySelectButtonHandler}
 //             changeButtonHandler={partyOnChngeButtonHandler} />
 //         )}

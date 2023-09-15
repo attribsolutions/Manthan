@@ -479,7 +479,7 @@ const PartyMaster = (props) => {
                 <MetaTags> {metaTagLabel(userPageAccessState)}</MetaTags>
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                     {subPageMode === url.RETAILER_MASTER &&
-                        <NewCommonPartyDropdown />}
+                        <NewCommonPartyDropdown pageMode={pageMode} />}
                     <Container fluid>
                         <Row>
                             <Col lg={12}>

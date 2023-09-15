@@ -295,7 +295,7 @@ const SalesManMaster = (props) => {
                 <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
 
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
-                    <PartyDropdown_Common
+                    <PartyDropdown_Common pageMode={pageMode}
                         goButtonHandler={partySelectButtonHandler}
                         changeButtonHandler={partySelectOnChangeHandler}
                     />
