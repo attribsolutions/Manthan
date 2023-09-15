@@ -244,19 +244,16 @@ const StockAdjustment = (props) => {
 
         setBatchCodeSelect('');
         setItemNameSelect('');
-
         dispatch(getBatchCode_By_ItemID_Action_Success([]));
+
         // Assuming TableArr is an array
         const data = [...TableArr];
 
-        // const tableData = BatchCodeRedux.map((index) => {
-
-        //     const defaultUnitOption = index.UnitOptions.find(option => option.UnitName.includes("No"));
         const BatchCodeFind = BatchCodeRedux.find(i => i.id === batchCodeSelect.value);
-        console.log(BatchCodeFind)
+
         // Check if BatchCodeFind exists before constructing the object
         if (BatchCodeFind) {
-            debugger
+
             const defaultUnitOption = BatchCodeFind.UnitOptions.find(option => option.UnitName.includes("No"));
 
             data.push({
@@ -276,11 +273,7 @@ const StockAdjustment = (props) => {
                 Quantity: ""
             });
         }
-        // });
-        debugger
-        // Concatenate the existing data array with the new tableData
-        // data.push(...BatchCodeFind);
-        console.log(data)
+
         setTableArr(data);
     }
 
@@ -322,6 +315,7 @@ const StockAdjustment = (props) => {
                 "PartyID": _cfunc.loginPartyID(),
                 "CreatedBy": _cfunc.loginUserID(),
                 "Date": currentDate_ymd,
+                "Mode": 2,
                 "StockItems": filterData
             })
 

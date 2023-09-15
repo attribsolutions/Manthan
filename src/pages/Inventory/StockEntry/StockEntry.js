@@ -496,6 +496,7 @@ const StockEntry = (props) => {
                     "PartyID": _cfunc.loginPartyID(),
                     "CreatedBy": _cfunc.loginUserID(),
                     "Date": values.Date,
+                    "Mode": 1,
                     "StockItems": filterData
                 }
                 );
