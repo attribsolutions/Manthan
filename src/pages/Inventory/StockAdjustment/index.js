@@ -133,6 +133,12 @@ const StockAdjustment = (props) => {
         {
             text: "Original Quantity",
             dataField: "OriginalBaseUnitQuantity",
+            formatter: (cellContent, row, key) => {
+                debugger
+                return (<span >
+                    <Label >{row.OriginalBaseUnitQuantity}&nbsp;&nbsp;&nbsp;&nbsp;{row.UnitName}</Label>
+                </span>)
+            }
         },
         {
             text: "Quantity",
@@ -160,7 +166,7 @@ const StockAdjustment = (props) => {
             style: { minWidth: "10vw" },
             formatter: (cellContent, row, key,) => {
                 debugger
-                const unitOptions = [row.Unit]
+                const unitOptions = row.UnitOptions
                 return (<span style={{ justifyContent: 'center' }}>
                     <C_Select
                         id={`Unit${key}`}
@@ -169,7 +175,7 @@ const StockAdjustment = (props) => {
                         defaultValue={row.Unit}
                         className="react-dropdown"
                         classNamePrefix="dropdown"
-                        options={unitOptions}
+                        options={row.UnitOptions}
                         styles={{
                             menu: provided => ({ ...provided, zIndex: 2 })
                         }}
@@ -222,7 +228,7 @@ const StockAdjustment = (props) => {
         dispatch(getBatchCode_By_ItemID_Action_Success([]));
         // Assuming TableArr is an array
         const data = [...TableArr];
-
+        debugger
         const tableData = BatchCodeRedux.map((index) => ({
             Item: index.Item,
             ItemName: index.ItemName,
@@ -232,7 +238,8 @@ const StockAdjustment = (props) => {
             GSTID: index.GSTID,
             GSTPercentage: index.GSTPercentage,
             OriginalBaseUnitQuantity: index.OriginalBaseUnitQuantity,
-            Unit: { value: index.UnitID, label: index.UnitName },
+            UnitName: index.UnitName,
+            UnitOptions: index.UnitOptions.map(i => ({ value: i.Unit, label: i.UnitName })),
             BatchDate: index.BatchDate,
             Quantity: ""
         }));
