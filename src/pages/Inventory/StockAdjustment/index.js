@@ -123,7 +123,7 @@ const StockAdjustment = (props) => {
 
     const BatchCode_Options = BatchCodeRedux.map((index) => ({
         value: index.id,
-        label: `${index.BatchCode}(${index.SystemBatchCode}):${index.MRP}-(${index.OriginalBaseUnitQuantity})`,
+        label: `${index.BatchCode}(${index.SystemBatchCode})MRP:${index.MRP}Qty:${index.OriginalBaseUnitQuantity}`,
     }));
 
     function QuantityHandler(event, row) {
