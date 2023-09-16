@@ -168,6 +168,9 @@ export const CHALLAN = "/Challan"
 export const STOCK_ENTRY = "/Stock_Entry"
 
 export const STOCK_ADJUSTMENT = "/StockAdjustment"
+
+export const STOCK_ADJUSTMENT_MODE_2 = "/StockAdjustmentMode_2"
+
 //*******************************All report page ************************************//
 export const REPORT = "/Report"
 

@@ -188,6 +188,9 @@ export const GRN_STP_3 = 164
 export const STOCK_ENTRY = 205
 
 export const STOCK_ADJUSTMENT = 236
+
+export const STOCK_ADJUSTMENT_MODE_2 = 239
+
 //******************************* Inter Branch ************************************//
 
 export const INWARD = 128

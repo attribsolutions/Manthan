@@ -25,20 +25,6 @@ import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import { getBatchCode_By_ItemID_Action, getBatchCode_By_ItemID_Action_Success } from "../../../store/Inventory/StockAdjustmentRedux/action";
 import { saveStockEntryAction, saveStockEntrySuccess } from "../../../store/Inventory/StockEntryRedux/action";
 
-// function initialState(history) {
-
-//     let page_Id = '';
-//     let sub_Mode = history.location.pathname;
-
-//     if (sub_Mode === url.STOCK_ADJUSTMENT) {
-//         page_Id = pageId.PARTY;
-//     }
-//         else {
-//         page_Id = pageId.STO;
-//     }
-//     return { page_Id }
-// };
-
 const StockAdjustment = (props) => {
 
     const dispatch = useDispatch();
@@ -46,6 +32,7 @@ const StockAdjustment = (props) => {
     const currentDate_ymd = _cfunc.date_ymd_func();
 
     const [pageMode] = useState(mode.defaultsave);
+    const [subPageMode] = useState(history.location.pathname)
     const [userPageAccessState, setUserAccState] = useState('');
 
     const [TableArr, setTableArr] = useState([]);
@@ -76,7 +63,13 @@ const StockAdjustment = (props) => {
     }));
 
     useEffect(() => {
-        const page_Id = pageId.STOCK_ADJUSTMENT
+        let page_Id
+        if (subPageMode === url.STOCK_ADJUSTMENT) {
+            page_Id = pageId.STOCK_ADJUSTMENT;
+        }
+        else {
+            page_Id = pageId.STOCK_ADJUSTMENT_MODE_2;
+        }
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id));
 
@@ -330,7 +323,7 @@ const StockAdjustment = (props) => {
                 "PartyID": _cfunc.loginPartyID(),
                 "CreatedBy": _cfunc.loginUserID(),
                 "Date": currentDate_ymd,
-                "Mode": 2,
+                "Mode": subPageMode === url.STOCK_ADJUSTMENT ? 2 : 3,
                 "StockItems": filterData
             })
 
