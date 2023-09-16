@@ -342,6 +342,8 @@ const userRoutes = [
 
   { path: path.STOCK_ADJUSTMENT, component: StockAdjustment },
 
+  { path: path.STOCK_ADJUSTMENT_MODE_2, component: StockAdjustment },
+
   //******************************* Purchase Module ************************************//
 
   { path: path.ORDER_1, component: Order },

@@ -32,6 +32,7 @@ const StockAdjustment = (props) => {
     const currentDate_ymd = _cfunc.date_ymd_func();
 
     const [pageMode] = useState(mode.defaultsave);
+    const [subPageMode] = useState(history.location.pathname)
     const [userPageAccessState, setUserAccState] = useState('');
 
     const [TableArr, setTableArr] = useState([]);
@@ -62,7 +63,13 @@ const StockAdjustment = (props) => {
     }));
 
     useEffect(() => {
-        const page_Id = pageId.STOCK_ADJUSTMENT
+        let page_Id
+        if (subPageMode === url.STOCK_ADJUSTMENT) {
+            page_Id = pageId.STOCK_ADJUSTMENT;
+        }
+        else {
+            page_Id = pageId.STOCK_ADJUSTMENT_MODE_2;
+        }
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id));
 
@@ -103,14 +110,14 @@ const StockAdjustment = (props) => {
         itemCheck: index.selectCheck
     }));
 
-    const BatchCode_Options = BatchCodeRedux.map((index) => ({
-        value: index.id,
-        label: index.BatchCode,
-    }));
-
     const ItemList_Options = itemList.filter((index) => {
         return index.itemCheck === true
     });
+
+    const BatchCode_Options = BatchCodeRedux.map((index) => ({
+        value: index.id,
+        label: `${index.BatchCode} (${index.SystemBatchCode}) MRP:${index.MRP} Qty:${index.OriginalBaseUnitQuantity}`,
+    }));
 
     function QuantityHandler(event, row) {
 
@@ -316,7 +323,7 @@ const StockAdjustment = (props) => {
                 "PartyID": _cfunc.loginPartyID(),
                 "CreatedBy": _cfunc.loginUserID(),
                 "Date": currentDate_ymd,
-                "Mode": 2,
+                "Mode": subPageMode === url.STOCK_ADJUSTMENT ? 2 : 3,
                 "StockItems": filterData
             })
 

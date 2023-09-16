@@ -441,6 +441,19 @@ const Order = (props) => {
         }
     }, [gobutton_Add_invoice]);
 
+    useEffect(() => {
+        if (changeAllDiscount) {
+            
+            const updatedOrderItemTable = orderItemTable.map((item) => ({
+                ...item,
+                Discount: discountValueAll,
+                DiscountType: discountTypeAll.value,
+            }));
+
+            setOrderItemTable(updatedOrderItemTable);
+        }
+    }, [changeAllDiscount, discountValueAll, discountTypeAll.value]);
+
     const supplierOptions = vendorSupplierCustomer.map((i) => ({
         value: i.id,
         label: i.Name,
@@ -777,6 +790,7 @@ const Order = (props) => {
                                         value={discountValueAll}
                                         disabled={(subPageMode === url.ORDER_2)}
                                         onChange={(e) => {
+                                            debugger
                                             let e_val = Number(e.target.value);
 
                                             // Check if discount type is "percentage"
@@ -802,13 +816,14 @@ const Order = (props) => {
 
             classes: () => "order-discount-row",
             formatter: (cellContent, index1, key, formatExtraData) => {
+                debugger
                 let { tableList, discountValueAll, discountTypeAll } = formatExtraData;
 
-                if (formatExtraData.changeAllDiscount) {
-                    index1.Discount = discountValueAll;
-                    index1.DiscountType = discountTypeAll.value;
-                    itemWise_CalculationFunc(index1, undefined, tableList)
-                }
+                // if (formatExtraData.changeAllDiscount) {
+                //     index1.Discount = discountValueAll;
+                //     index1.DiscountType = discountTypeAll.value;
+                //     itemWise_CalculationFunc(index1, undefined, tableList)
+                // }
                 if (!index1.DiscountType) { index1.DiscountType = discountTypeAll.value }
 
                 const defaultDiscountTypelabel =
@@ -1312,6 +1327,7 @@ const Order = (props) => {
                         </div>
 
                     </div>}
+
                     <div className="page-content">
 
                         <NewCommonPartyDropdown pageMode={pageMode} />
