@@ -28,7 +28,7 @@ import {
     updatePartyIDSuccess
 } from "../../../../store/Administrator/PartyRedux/action"
 import { Breadcrumb_inputName, commonPageField, commonPageFieldSuccess } from "../../../../store/actions"
-import { btnIsDissablefunc, isEditMode_CssFun, loginCompanyID, loginJsonBody, loginPartyID, loginUserID, metaTagLabel } from "../../../../components/Common/CommonFunction"
+import { btnIsDissablefunc, isEditMode_CssFun, loginCompanyID, loginPartyID, loginUserID, metaTagLabel } from "../../../../components/Common/CommonFunction"
 import * as url from "../../../../routes/route_url";
 import * as pageId from "../../../../routes/allPageID"
 import * as mode from "../../../../routes/PageMode"
@@ -43,7 +43,6 @@ import BaseTabForm from "./FirstTab/index";
 import PrefixTab from "./PrefixTab/PrefixTab";
 import { priceListByPartyAction, priceListByPartyActionSuccess } from "../../../../store/Administrator/PriceList/action";
 import { userAccessUseEffect } from "../../../../components/Common/CommonUseEffect";
-import { GetRoutesList, GetRoutesListSuccess } from "../../../../store/Administrator/RoutesRedux/actions";
 import NewCommonPartyDropdown from "../../../../components/Common/NewCommonPartyDropdown";
 
 function initialState(history) {
@@ -62,7 +61,6 @@ function initialState(history) {
     }
     else if (sub_Mode === url.PARTY_SELF_EDIT) {
         page_Id = pageId.PARTY_SELF_EDIT;
-        // listPath = url.RETAILER_LIST
     }
     else {
         page_Id = pageId.RETAILER_MASTER;
@@ -177,7 +175,6 @@ const PartyMaster = (props) => {
                             },
                             SAPPartyCode: hasEditVal.SAPPartyCode,
 
-
                             Supplier: hasEditVal.PartySubParty.map(i => ({
                                 value: i.Party,
                                 label: i.PartyName,
@@ -207,7 +204,6 @@ const PartyMaster = (props) => {
                             },
                             GSTIN: hasEditVal.GSTIN,
                             isActive: hasEditVal.isActive,
-
 
                         };
 

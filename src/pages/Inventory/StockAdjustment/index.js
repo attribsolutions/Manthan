@@ -25,6 +25,20 @@ import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import { getBatchCode_By_ItemID_Action, getBatchCode_By_ItemID_Action_Success } from "../../../store/Inventory/StockAdjustmentRedux/action";
 import { saveStockEntryAction, saveStockEntrySuccess } from "../../../store/Inventory/StockEntryRedux/action";
 
+// function initialState(history) {
+
+//     let page_Id = '';
+//     let sub_Mode = history.location.pathname;
+
+//     if (sub_Mode === url.STOCK_ADJUSTMENT) {
+//         page_Id = pageId.PARTY;
+//     }
+//         else {
+//         page_Id = pageId.STO;
+//     }
+//     return { page_Id }
+// };
+
 const StockAdjustment = (props) => {
 
     const dispatch = useDispatch();
@@ -103,14 +117,14 @@ const StockAdjustment = (props) => {
         itemCheck: index.selectCheck
     }));
 
-    const BatchCode_Options = BatchCodeRedux.map((index) => ({
-        value: index.id,
-        label: index.BatchCode,
-    }));
-
     const ItemList_Options = itemList.filter((index) => {
         return index.itemCheck === true
     });
+
+    const BatchCode_Options = BatchCodeRedux.map((index) => ({
+        value: index.id,
+        label: `${index.BatchCode}(${index.SystemBatchCode}):${index.MRP}-(${index.OriginalBaseUnitQuantity})`,
+    }));
 
     function QuantityHandler(event, row) {
 
