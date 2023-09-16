@@ -25,7 +25,6 @@ import {
     btnIsDissablefunc,
     currentDate_ymd,
     loginCompanyID,
-    loginPartyID,
     loginUserID,
     metaTagLabel,
 } from "../../../components/Common/CommonFunction";
@@ -35,7 +34,7 @@ import * as mode from "../../../routes/PageMode"
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
-import { Retailer_List } from "../../../store/CommonAPI/SupplierRedux/actions";
+import { Retailer_List, Retailer_List_Success } from "../../../store/CommonAPI/SupplierRedux/actions";
 import {
     BankListAPI,
     BankListAPISuccess,
@@ -52,6 +51,7 @@ import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { CInput, C_DatePicker, C_Select } from "../../../CustomValidateForm/index";
 import { decimalRegx } from "../../../CustomValidateForm/RegexPattern";
 import * as _cfunc from "../../../components/Common/CommonFunction";
+import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 
 const Receipts = (props) => {
 
@@ -74,10 +74,9 @@ const Receipts = (props) => {
     const [state, setState] = useState(() => initialFiledFunc(fileds))
     const [modalCss, setModalCss] = useState(false);
     const [ID, setID] = useState("");
-    const [pageMode, setPageMode] = useState(mode.defaultsave);
+    const [pageMode] = useState(mode.defaultsave);
 
     const [userPageAccessState, setUserAccState] = useState(123);
-    const [editCreatedBy, seteditCreatedBy] = useState("");
     const [IsSystemSetting, setIsSystemSetting] = useState(false);
 
     //Access redux store Data /  'save_ModuleSuccess' action data
@@ -125,12 +124,14 @@ const Receipts = (props) => {
 
     // Customer dropdown Options
     useEffect(() => {
-        const jsonBody = JSON.stringify({
-            Type: 4,
-            PartyID: loginPartyID(),
-            CompanyID: loginCompanyID()
-        });
-        dispatch(Retailer_List(jsonBody));
+        if (!(_cfunc.loginSelectedPartyID() === 0)) {
+            const jsonBody = JSON.stringify({
+                Type: 4,
+                PartyID: _cfunc.loginSelectedPartyID(),
+                CompanyID: loginCompanyID()
+            });
+            dispatch(Retailer_List(jsonBody));
+        }
     }, []);
 
     // Receipt Mode dropdown Values
@@ -292,11 +293,6 @@ const Receipts = (props) => {
         return index.IsSelfDepositoryBank === true
     })
 
-    // const BankListOptions = bankList.filter((index) => {
-    //     debugger
-    //     return index.IsSelfDepositoryBank === false
-    // })
-
     const pagesListColumns = [
         {
             text: "InvoiceDate",
@@ -353,13 +349,13 @@ const Receipts = (props) => {
             return i
         })
         const jsonBody = JSON.stringify({
-            PartyID: loginPartyID(),
+            PartyID: _cfunc.loginSelectedPartyID(),
             CustomerID: e.value,
             InvoiceID: ""
         });
 
         const jsonBody1 = JSON.stringify({
-            PartyID: loginPartyID(),
+            PartyID: _cfunc.loginSelectedPartyID(),
             CustomerID: e.value,
             ReceiptDate: values.ReceiptDate
         });
@@ -587,7 +583,7 @@ const Receipts = (props) => {
                     "Customer": values.Customer.value,
                     "ChequeDate": values.ReceiptModeName.label === "Cheque" ? values.ChequeDate : "",
                     "DepositorBank": values.DepositorBankName.value,
-                    "Party": loginPartyID(),
+                    "Party": _cfunc.loginSelectedPartyID(),
                     "ReceiptMode": values.ReceiptModeName.value,
                     "ReceiptType": ReceiptTypeID.id,
                     "CreatedBy": loginUserID(),
@@ -610,6 +606,25 @@ const Receipts = (props) => {
         } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
     };
 
+    function partySelectButtonHandler() {
+        const jsonBody = JSON.stringify({
+            Type: 4,
+            PartyID: _cfunc.loginSelectedPartyID(),
+            CompanyID: loginCompanyID()
+        });
+        dispatch(Retailer_List(jsonBody));
+    }
+
+    function partyOnChngeButtonHandler() {
+        dispatch(Retailer_List_Success([]));
+        dispatch(GetOpeningBalance_Success([]));
+        setState((i) => {
+            let a = { ...i }
+            a.values.Customer = ''
+            a.hasValid.Customer.valid = true;
+            return a
+        })
+    }
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
     if ((modalCss) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
@@ -619,6 +634,10 @@ const Receipts = (props) => {
             <React.Fragment>
                 <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
                 <div className="page-content" style={{ marginBottom: "5cm" }}>
+
+                    <PartyDropdown_Common pageMode={pageMode}
+                        goButtonHandler={partySelectButtonHandler}
+                        changeButtonHandler={partyOnChngeButtonHandler} />
 
                     <form noValidate>
                         <div className="px-2 c_card_filter header text-black mb-1" >
@@ -921,7 +940,6 @@ const Receipts = (props) => {
                                             loading={saveBtnloading}
                                             onClick={saveHandeller}
                                             userAcc={userPageAccessState}
-                                            editCreatedBy={editCreatedBy}
                                         />
                                     </Col>
                                 </FormGroup > : null
@@ -931,7 +949,6 @@ const Receipts = (props) => {
                                         loading={saveBtnloading}
                                         onClick={saveHandeller}
                                         userAcc={userPageAccessState}
-                                        editCreatedBy={editCreatedBy}
                                     />
                                 </Col>
                             </FormGroup >

@@ -45,6 +45,7 @@ import {
     btnIsDissablefunc,
     metaTagLabel,
     loginUserAdminRole,
+    loginSelectedPartyID,
 } from "../../../components/Common/CommonFunction";
 import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 import * as pageId from "../../../routes/allPageID";
@@ -190,7 +191,7 @@ const VehicleMaster = (props) => {
             dispatch(getVehicleListSuccess({ Status: false }))
             customAlert({
                 Type: 4,
-                 Message: JSON.stringify(postMsg.Message),
+                Message: JSON.stringify(postMsg.Message),
             })
         }
     }, [postMsg])
@@ -203,7 +204,7 @@ const VehicleMaster = (props) => {
             })
         } else if (updateMsg.Status === true && !modalCss) {
             dispatch(updateVehicleID_Success({ Status: false }));
-             customAlert({
+            customAlert({
                 Type: 3,
                 Message: JSON.stringify(updateMsg.Message),
             })
@@ -234,7 +235,12 @@ const VehicleMaster = (props) => {
     const SaveHandler = async (event) => {
         event.preventDefault();
         const btnId = event.target.id
+        if ((loginSelectedPartyID() === 0)) {
+            customAlert({ Type: 3, Message: "Please Select Party" });
+            return;
+        };
         try {
+            
             if (formValid(state, setState)) {
                 btnIsDissablefunc({ btnId, state: true })
 
@@ -243,7 +249,7 @@ const VehicleMaster = (props) => {
                     VehicleNumber: values.VehicleNumber,
                     Description: values.Description,
                     VehicleType: values.VehicleTypeName.value,
-                    Party: userAdminRole ? values.Party.value : loginPartyID(),
+                    Party:loginSelectedPartyID(),
                     Company: loginCompanyID(),
                     CreatedBy: loginUserID(),
                     UpdatedBy: loginUserID()
@@ -270,11 +276,7 @@ const VehicleMaster = (props) => {
                     <Container fluid>
                         <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
 
-                        {/* {userAdminRole &&
-                            <PartyDropdown_Common
-                                partySelect={values.Party}
-                                setPartyFunc={partyOnChngeHandler} />
-                        } */}
+                        <PartyDropdown_Common pageMode={pageMode} />
 
                         <Card className="text-black" style={{ marginTop: "3px" }}>
                             <CardHeader className="card-header   text-black c_card_header" >

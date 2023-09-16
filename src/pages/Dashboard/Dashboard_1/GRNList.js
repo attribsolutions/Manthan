@@ -18,32 +18,38 @@ export default function InvoiceForGRN() {
     const history = useHistory();
     const currentDate_ymd = date_ymd_func();
 
-    const { tableList, GRNitem, listBtnLoading } = useSelector((state) => ({
+    const { tableList, GRNitem, listBtnLoading, commonPartyDropSelect } = useSelector((state) => ({
         tableList: state.OrderReducer.orderList,
         GRNitem: state.GRNReducer.GRNitem,
-        listBtnLoading: state.GRNReducer.listBtnLoading
+        listBtnLoading: state.GRNReducer.listBtnLoading,
+        commonPartyDropSelect: state.CommonPartyDropdownReducer.commonPartyDropSelect
     }));
 
 
     const TableListWithNonDeleteRecord = tableList.filter(i => i.IsRecordDeleted === false);
 
-
+    // Common Party Dropdown useEffect
     useEffect(() => {
 
-        dispatch(getOrderListPageSuccess([]))
-        let subPageMode = url.GRN_STP_3
-        const gobtnId = `gobtn-${subPageMode}`
-        const filtersBody = JSON.stringify({
-            FromDate: "",
-            ToDate: "",
-            Supplier: "",
-            Customer: loginPartyID(),
-            OrderType: order_Type.InvoiceToGRN,
-            IBType: ""
-        });
-        dispatch(getOrderListPage({ subPageMode, filtersBody, btnId: gobtnId }));
-    }, [])
+        if (commonPartyDropSelect.value > 0) {
 
+            let subPageMode = url.GRN_STP_3
+            const gobtnId = `gobtn-${subPageMode}`
+            const filtersBody = JSON.stringify({
+                FromDate: "",
+                ToDate: "",
+                Supplier: "",
+                Customer: commonPartyDropSelect.value,
+                OrderType: order_Type.InvoiceToGRN,
+                IBType: ""
+            });
+            dispatch(getOrderListPage({ subPageMode, filtersBody, btnId: gobtnId }));
+        }
+        return () => {
+            dispatch(getOrderListPageSuccess([]))
+        }
+
+    }, [commonPartyDropSelect]);
 
     useEffect(() => {
         if (GRNitem.Status === true && GRNitem.StatusCode === 200) {

@@ -31,7 +31,7 @@ import { Retailer_List } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { InvoiceNumberSuccess, SalesReturnAddBtn_Action, SalesReturnAddBtn_Action_Succcess, InvoiceNumber } from "../../../store/Sales/SalesReturnRedux/action";
 import { CInput, C_DatePicker, C_Select } from "../../../CustomValidateForm/index";
-import { decimalRegx, } from "../../../CustomValidateForm/RegexPattern";
+import { charRegx, decimalRegx, } from "../../../CustomValidateForm/RegexPattern";
 import { goButtonPartyItemAddPage } from "../../../store/Administrator/PartyItemsRedux/action";
 import { return_discountCalculate_Func } from "../../Sale/SalesReturn/SalesCalculation";
 import * as _cfunc from "../../../components/Common/CommonFunction";
@@ -45,7 +45,7 @@ function initialState(history) {
     let listPath = ''
     let sub_Mode = history.location.pathname;
 
-    if (sub_Mode === url.GOODS_CREDIT_NOTE ) {
+    if (sub_Mode === url.GOODS_CREDIT_NOTE) {
         page_Id = pageId.GOODS_CREDIT_NOTE;
         listPath = url.GOODS_CREDIT_LIST
     }
@@ -63,6 +63,8 @@ const GoodsCreditNote = (props) => {
     const dispatch = useDispatch();
     const history = useHistory()
     const currentDate_ymd = _cfunc.date_ymd_func();
+    const systemSetting = _cfunc.loginSystemSetting();
+
 
 
     const [pageMode, setPageMode] = useState(mode.defaultsave);
@@ -83,7 +85,6 @@ const GoodsCreditNote = (props) => {
     const [state, setState] = useState(initialFiledFunc(fileds))
     const [discountDropOption] = useState([{ value: 1, label: "Rs" }, { value: 2, label: "%" }]);
     const [TableArr, setTableArr] = useState([]);
-
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
@@ -119,10 +120,10 @@ const GoodsCreditNote = (props) => {
         dispatch(InvoiceNumberSuccess([]));
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_id));
-        dispatch(goButtonPartyItemAddPage(JSON.stringify(_cfunc.loginJsonBody())));
+        dispatch(goButtonPartyItemAddPage({ jsonBody: JSON.stringify(_cfunc.loginJsonBody()) }));
 
         const jsonBody = JSON.stringify({
-            Type: 1,
+            Type: 4,
             PartyID: _cfunc.loginPartyID(),
             CompanyID: _cfunc.loginCompanyID(),
         });
@@ -183,7 +184,7 @@ const GoodsCreditNote = (props) => {
                 if (hasEditVal) {
 
                     const { CRDRNoteDate, Customer, Narration, GrandTotal, CRDRInvoices = '', CustomerID, CRDRNoteItems = [] } = hasEditVal
-                    debugger
+
                     const { values, fieldLabel, hasValid, required, isError } = { ...state }
                     values.CRDRNoteDate = CRDRNoteDate;
                     values.Customer = { label: Customer, value: CustomerID };
@@ -234,7 +235,7 @@ const GoodsCreditNote = (props) => {
                     Message: postMsg.Message,
                 })
                 if (alertResponse) {
-                    history.push({ pathname: listPath})
+                    history.push({ pathname: listPath })
                 }
             }
         }
@@ -327,13 +328,13 @@ const GoodsCreditNote = (props) => {
         label: index.FullInvoiceNumber,
     }));
 
-
     const pagesListColumns = [
         {
             text: "Item Name",
             dataField: "ItemName",
             formatter: (cell, row) => (<Label style={{ minWidth: "200px" }}>{row.ItemName}</Label>)
         },
+
         {
             text: "Quantity",
             dataField: "",
@@ -504,20 +505,33 @@ const GoodsCreditNote = (props) => {
         {
             text: "Item Comment",
             dataField: "",
-            formatter: (_cell, row, key) => {
+            // headerFormatter: () => {
+            //     return (<>
+            //         <div className="mt-n1">
+            //             <Label>Item Comment</Label>
+            //         </div>
+            //         <span className="fs-6 text-muted ">
+            //             <small>*100 character accept</small>
+            //         </span>
+            //     </>)
+            // },
+            formatter: (cell, row, key) => {
+
                 return (<>
                     <div className="parent">
                         <div className="child">
-                            <Input
-                                placeholder="Enter Comment"
-                                defaultValue={row.ItemComment}
+                            <CInput
                                 type="text"
+                                id={`itemComment-${key}`}
+                                defaultValue={row.ItemComment}
+                                placeholder="Enter Comment"
+                                autoComplete='off'
+                                cpattern={charRegx}
                                 onChange={(event) => { row.ItemComment = event.target.value }}
                             />
                         </div>
                     </div>
-                </>
-                )
+                </>)
             }
         },
         {
@@ -687,6 +701,14 @@ const GoodsCreditNote = (props) => {
                 return;
             }
 
+            if (values.InvoiceNO === '') {
+                customAlert({
+                    Type: 4,
+                    Message: "Invoice Number is Required",
+                });
+                return;
+            }
+
             const creditNoteItems = filterData.map((i) => {
 
                 const calculate = return_discountCalculate_Func(i);
@@ -727,12 +749,15 @@ const GoodsCreditNote = (props) => {
                     CreditDebitType.find((index) => index.Name === "Goods CreditNote")?.id
                     : CreditDebitType.find((index) => index.Name === "Goods DebitNote")?.id;
             };
+            debugger
+            const isGrandAmtRound = systemSetting.CreditDebitAmountRoundConfiguration === '1';
 
             const jsonBody = JSON.stringify({
                 CRDRNoteDate: values.CRDRNoteDate,
                 Customer: values.Customer.value,
                 NoteType: noteType_BySubPageMode(),
-                GrandTotal: grand_total.toFixed(2),
+                GrandTotal: isGrandAmtRound ? Math.round(grand_total).toFixed(2) : grand_total.toFixed(2),
+                RoundOffAmount: (grand_total - Math.trunc(grand_total)).toFixed(2),
                 Narration: values.Narration,
                 CRDRNoteItems: creditNoteItems,
                 Party: _cfunc.loginPartyID(),

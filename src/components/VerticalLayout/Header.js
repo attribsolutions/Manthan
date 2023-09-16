@@ -177,7 +177,6 @@ const Header = props => {
             </div>
 
             <NotificationDropdown />
-
             <ProfileMenu />
 
           </div>

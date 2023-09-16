@@ -38,6 +38,52 @@ const generateReportPage = (doc, data) => {
 }
 
 const InvioceReporta5 = async (data) => {
+
+    if (data.CRDRNoteUploads.length > 0) {
+
+        if (data.CRDRNoteUploads[0].QRCodeUrl !== null) {
+            data["isQR"] = true;
+        } else {
+            data["isQR"] = false;
+        }
+    }
+    var doc = new jsPDF('p', 'pt', 'a4');
+
+    if (data.CRDRNoteUploads.length > 0) {
+        try {
+            if (data.CRDRNoteUploads.length > 0) {
+                const url = data.CRDRNoteUploads[0].QRCodeUrl;
+                let desiredPart = null;
+                const urlObject = new URL(url);
+                desiredPart = urlObject.pathname;
+                if (urlObject.host !== "pro.mastersindia.co") {
+                    data["url"] = url
+                } else {
+                    const image = await loadImage(`/E_invoiceQRCode${desiredPart}`);
+                    debugger
+                    if (image) {
+                        doc.addImage(image.currentSrc, 'JPEG', 323, 18, 83, 83);
+                        console.log(image.currentSrc)
+                    } else {
+                        doc.text('Image Not Found', 323, 18);
+                    }
+                }
+
+            }
+
+        } catch (w) { }
+    }
+
+    function loadImage(url) {
+        return new Promise((resolve, reject) => {
+            const img = new Image();
+            img.onload = () => resolve(img);
+            img.onerror = () => reject();
+            img.src = url;
+        });
+    }
+
+
     var doc = new jsPDF('l', 'pt', 'a5');
     if (Array.isArray(data)) {
     } else {

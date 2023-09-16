@@ -126,3 +126,20 @@ export function delwithPostBody(url, body) {
     });
 }
 
+
+export function postForFormData(url, body) {
+  
+  return axiosApi
+    .post(url, body, {
+      headers: {
+        Accept: "application/json",
+        'Content-Type': 'multipart/form-data',
+      },
+    })
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      return Promise.reject(error);
+    });
+}

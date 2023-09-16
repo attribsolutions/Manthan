@@ -86,7 +86,7 @@ const SalesManList = (props) => {
         <React.Fragment>
             <PageLoadingSpinner isLoading={(goBtnLoading || !pageField)} />
             <div className="page-content">
-                <PartyDropdown_Common
+                <PartyDropdown_Common 
                     goBtnLoading={goBtnLoading}
                     goButtonHandler={goButtonHandler}
                     changeButtonHandler={partyOnChngeButtonHandler}

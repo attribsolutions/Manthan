@@ -275,7 +275,11 @@ const CommonPurchaseList = (props) => {
   }
 
   const secondLastColumn = () => {  // ======================== for List Page Action Button ================================
-    if ((history.location.pathname === url.INVOICE_LIST_1)) {// INVOICE_LIST_1 E_Invoice buttons
+    if ((history.location.pathname === url.INVOICE_LIST_1 ||
+      history.location.pathname === url.CREDIT_LIST ||
+      history.location.pathname === url.DEBIT_LIST ||
+      history.location.pathname === url.GOODS_CREDIT_LIST ||
+      history.location.pathname === url.GOODS_DEBIT_LIST)) {// INVOICE_LIST_1 E_Invoice buttons
       return E_Invoice_ActionsButtonFunc({ ...props, dispatch, userAccState, })
     }
   }
@@ -335,7 +339,7 @@ const CommonPurchaseList = (props) => {
                 selectRow={selectCheckParams.isShow ?
                   selectAllCheck({
                     rowSelected: rowSelected(),
-                    nonSelectedRow: nonSelectedRow(),
+                    nonSelectable: nonSelectedRow(),
                     position: "left",
                     headLabel: selectCheckParams.selectHeaderLabel,
 
@@ -781,7 +785,7 @@ export const countlabelFunc = (toolkitProps, paginationProps, dispatch, ButtonMs
 //                             bootstrap4
 //                             bordered={false}
 //                             selectRow={selectCheckParams.isShow ?
-//                               selectAllCheck(rowSelected(), nonSelectedRow(), "left", selectCheckParams.selectHeaderLabel)
+//                               selectAllCheck(rowSelected(), nonSelectable(), "left", selectCheckParams.selectHeaderLabel)
 //                               : undefined}
 //                             defaultSorted={defaultSorted}
 //                             striped={true}

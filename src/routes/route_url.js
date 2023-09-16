@@ -7,6 +7,7 @@ export const DASHBORD_2 = "/Dashboard_2"
 
 export const SEARCH_BOX2 = "/SearchBoxSecond"
 export const SEARCH_BOX3 = "/SerachBox3"
+export const TRANSACTION_LOG = "/TransactionLog"
 
 // *************************** Administration *******************************//
 
@@ -97,11 +98,8 @@ export const PARTY_SUB_PARTY = "/PartySubParty"
 export const PARTY_SUB_PARTY_lIST = "/PartySubPartyList"
 
 export const PARTYITEM = '/PartyItems';
-export const PARTYITEM_LIST = '/PartyItemsList';
 
 export const CHANNEL_ITEM = '/ChannelItem';
-export const CHANNEL_ITEM_LIST = '/ChannelItemList';
-
 
 export const SUBGROUP = "/SubGroupMaster"
 export const SUBGROUP_LIST = "/SubGroupList"
@@ -165,6 +163,8 @@ export const CHALLAN_LIST = "/ChallanList"
 export const CHALLAN = "/Challan"
 
 export const STOCK_ENTRY = "/Stock_Entry"
+
+export const STOCK_ADJUSTMENT = "/StockAdjustment"
 //*******************************All report page ************************************//
 export const REPORT = "/Report"
 
@@ -280,6 +280,8 @@ export const CLAIM_SUMMARY_lIST = "/Claim_Summary_List"
 export const PURCHASE_GST_REPORT = "/PurchaseGSTReport"
 
 export const INVOICE_DATA_EXPORT = "/InvoiceDataExport"
+
+export const PURCHASE_DATA_EXPORT = "/PurchaseDataExport"
 
 export const DELETE_INVOICE_DATA_EXPORT = "/DeleteInvoiceDataExport"
 

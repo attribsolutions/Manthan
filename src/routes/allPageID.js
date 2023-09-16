@@ -89,10 +89,8 @@ export const PARTY_SUB_PARTY = 52
 export const PARTY_SUB_PARTY_lIST = 58
 
 export const PARTYITEM = 36
-export const PARTYITEM_LIST = 62
 
 export const CHANNEL_ITEM = 228
-export const CHANNEL_ITEM_LIST = 229
 
 export const SUBGROUP = 61
 export const SUBGROUP_LIST = 63
@@ -152,13 +150,6 @@ export const IB_ORDER_SO_LIST = 147
 export const ORDER_4 = 144
 export const ORDER_LIST_4 = 143
 
-export const GRN_ADD_1 = 55
-export const GRN_LIST_1 = 56
-export const GRN_STP_1 = 124
-
-export const GRN_ADD_3 = 165
-export const GRN_LIST_3 = 166
-export const GRN_STP_3 = 164
 
 export const BIllOf_MATERIALS = 69
 export const BIllOf_MATERIALS_LIST = 70
@@ -181,15 +172,19 @@ export const PRODUCTION_REISSUE_STP = 142
 export const INVOICE_1 = 121
 export const INVOICE_LIST_1 = 122
 
+//******************************* Inventory Module ************************************//
+
+export const GRN_ADD_1 = 55
+export const GRN_LIST_1 = 56
+export const GRN_STP_1 = 124
+
+export const GRN_ADD_3 = 165
+export const GRN_LIST_3 = 166
+export const GRN_STP_3 = 164
+
 export const STOCK_ENTRY = 205
 
-export const STOCK_REPORT = 208
-
-export const STOCK_REPORT_1 = 216
-
-export const PURCHASE_RETURN = 209
-export const PURCHASE_RETURN_LIST = 210
-
+export const STOCK_ADJUSTMENT = 236
 //******************************* Inter Branch ************************************//
 
 export const INWARD = 128
@@ -206,6 +201,9 @@ export const CHALLAN_LIST = 138
 // export const IB_INVOICE_STP = 132
 
 //******************************* Sales ************************************//
+
+export const PURCHASE_RETURN = 209
+export const PURCHASE_RETURN_LIST = 210
 
 export const LOADING_SHEET = 155
 export const LOADING_SHEET_LIST = 156
@@ -267,9 +265,17 @@ export const PURCHASE_GST_REPORT = 219
 
 export const INVOICE_DATA_EXPORT = 218
 
+export const PURCHASE_DATA_EXPORT = 234
+
 export const ITEM_SALE_REPORT = 224
 
 export const CLAIM_SUMMARY_MASTER = 226
 
 export const CLAIM_SUMMARY_lIST = 227
+
+export const STOCK_REPORT = 208
+
+export const STOCK_REPORT_1 = 216
+
+
 

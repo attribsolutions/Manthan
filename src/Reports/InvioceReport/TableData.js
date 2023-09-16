@@ -1,4 +1,4 @@
-import { numberWithCommas } from "../Report_common_function";
+import { numberWithCommas, toWords } from "../Report_common_function";
 
 
 export const columns = [
@@ -46,6 +46,10 @@ export const BilledTo = [
 ]
 export const DetailsOfTransport = [
     "Billed by",
+]
+
+export const Ruppescolumn = [
+    "",
 ]
 
 export const Bankcolumn = [
@@ -409,7 +413,7 @@ export const BilledToRow = (data) => {
 export const DetailsOfTransportRow = (data) => {
 
     let OrderNumber = " "
-    if (data.InvoicesReferences > 0) {
+    if (data.InvoicesReferences.length > 0) {
 
         const PoNumber = data.InvoicesReferences.map(index => ({
             SystemGenerate: index.FullOrderNumber,
@@ -463,7 +467,6 @@ export const IRNNumberRow = (data) => {
     if (data.isQR) {
         const IRN_No = (data.InvoiceUploads[0].Irn === null ? "" : data.InvoiceUploads[0].Irn)
 
-
         var IRNNumberArray = [
             [`IRN No :${IRN_No}`],
         ]
@@ -471,6 +474,17 @@ export const IRNNumberRow = (data) => {
     }
 
     return IRNNumberArray;
+}
+
+
+export const RupeesRow = (data) => {
+    let stringNumber = toWords(Number(data.GrandTotal))
+
+    var RupeesArray = [
+        [`                  ${stringNumber}`],
+
+    ]
+    return RupeesArray;
 }
 
 

@@ -1,10 +1,12 @@
-import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Col, FormGroup, Label } from "reactstrap";
 import { C_Button } from "./CommonButton";
 import { C_Select } from "../../CustomValidateForm";
 import { CommonConsole, loginUserAdminRole } from "./CommonFunction";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
+import { commonPartyDropSelectAction } from "../../store/Utilites/PartyDrodown/action";
+import { mode } from "../../routes";
 
 const initialLocalStorageParty = () => {
     try {
@@ -17,7 +19,9 @@ const initialLocalStorageParty = () => {
     return { value: 0, label: "Select..." }
 }
 
-const PartyDropdown = ({ goButtonHandler, changeButtonHandler, goBtnLoading, SAPLedgerOptions }) => {
+const PartyDropdown = ({ goButtonHandler, changeButtonHandler, goBtnLoading, SAPLedgerOptions, pageMode }) => {
+
+    const dispatch = useDispatch();
 
     const [selectedParty, setSelectedParty] = useState(initialLocalStorageParty);
     const [changeButtonShow, setChangeButtonShow] = useState(() => !(initialLocalStorageParty().value === 0));
@@ -31,11 +35,21 @@ const PartyDropdown = ({ goButtonHandler, changeButtonHandler, goBtnLoading, SAP
         setSelectedParty(newValue);
     };
 
+    useEffect(() => {
+
+        let party = JSON.parse(localStorage.getItem("selectedParty"));
+        if (party.value === 0) {
+            setSelectedParty({ value: 0, label: "Select...", SAPPartyCode: "" })
+            setChangeButtonShow(false)
+        }
+    }, []);
+
     const internalGoBtnHandler = async () => {
         if (selectedParty.value === 0) {
             customAlert({ Type: 3, Message: "Please Select Party" });
             return;
         }
+        dispatch(commonPartyDropSelectAction(selectedParty))  // new common party dropdown set
         localStorage.setItem("selectedParty", JSON.stringify(selectedParty));
         if (goButtonHandler) {
             await goButtonHandler();
@@ -47,6 +61,7 @@ const PartyDropdown = ({ goButtonHandler, changeButtonHandler, goBtnLoading, SAP
         if (changeButtonHandler) {
             changeButtonHandler();
         }
+        dispatch(commonPartyDropSelectAction({ value: 0, label: "select...", SAPPartyCode: "" }))// new common party dropdown set
         localStorage.setItem("selectedParty", JSON.stringify({ value: 0 }));
         setSelectedParty({ value: 0, label: "Select...", SAPPartyCode: "" })
         setChangeButtonShow(false)
@@ -83,7 +98,6 @@ const PartyDropdown = ({ goButtonHandler, changeButtonHandler, goBtnLoading, SAP
                         </FormGroup>
                     </Col>
 
-
                     <Col sm="1">
                         {(!(changeButtonShow)) ? (
                             <C_Button
@@ -93,13 +107,15 @@ const PartyDropdown = ({ goButtonHandler, changeButtonHandler, goBtnLoading, SAP
                             >
                                 Select
                             </C_Button>
-                        ) : (
+                        ) : !(pageMode === mode.view || pageMode === mode.edit) && (
                             <C_Button
                                 type="button"
                                 spinnerColor={"info"}
                                 className="btn btn-outline-info border-1 font-size-12 "
                                 onClick={internalChangeBtnHandler}
-                                loading={goBtnLoading} >Change</C_Button>
+                                loading={goBtnLoading}
+                            // forceDisabled={pageMode === mode.view || pageMode === mode.edit}
+                            >Change</C_Button>
                         )}
                     </Col>
 

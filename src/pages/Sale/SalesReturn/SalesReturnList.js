@@ -5,7 +5,6 @@ import {
     commonPageFieldListSuccess,
     getpdfReportdata
 } from "../../../store/actions";
-import Select from "react-select";
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList"
 import { Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
@@ -196,16 +195,6 @@ const SalesReturnList = () => {
         return
     };
 
-    const partySelectButtonHandler = (e) => {
-        const jsonBody = JSON.stringify({
-            Type: 1,
-            PartyID: _cfunc.loginSelectedPartyID(),
-            CompanyID: _cfunc.loginCompanyID()
-        });
-        dispatch(Retailer_List(jsonBody));
-    }
-
-
     function fromdateOnchange(e, date) {
         setState((i) => {
             const a = { ...i }
@@ -241,6 +230,17 @@ const SalesReturnList = () => {
     function downBtnFunc(config) {
         config["ReportType"] = report.Return;
         dispatch(getpdfReportdata(ReturnPrint_API, config))
+    }
+
+    const partySelectButtonHandler = () => {
+        const jsonBody = JSON.stringify({
+            Type: 1,
+            PartyID: _cfunc.loginSelectedPartyID(),
+            CompanyID: _cfunc.loginCompanyID()
+        });
+        dispatch(Retailer_List(jsonBody));
+        dispatch(GetVenderSupplierCustomer({ subPageMode, PartyID: _cfunc.loginSelectedPartyID() }))
+        goButtonHandler()
     }
 
     function partySelectOnChangeHandler() {
@@ -337,7 +337,7 @@ const SalesReturnList = () => {
             <div className="page-content">
                 <PageLoadingSpinner isLoading={(loading || !pageField)} />
 
-                <PartyDropdown_Common
+                <PartyDropdown_Common pageMode={pageMode}
                     goButtonHandler={partySelectButtonHandler}
                     changeButtonHandler={partySelectOnChangeHandler} />
 

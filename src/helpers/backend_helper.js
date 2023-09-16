@@ -1,5 +1,5 @@
 import axios from "axios"
-import { del, get, put, post, postWithoutToken, postRefreshToken, getWithotMsg, postMethodExcel, delwithPostBody, } from "./api_helper"
+import { del, get, put, post, postWithoutToken, postRefreshToken, getWithotMsg, postMethodExcel, delwithPostBody, postForFormData, } from "./api_helper"
 import * as url from "./url_helper"
 
 // Gets the logged in user data from local session
@@ -331,14 +331,15 @@ export const PartySubParty_Dropdown_Get_API = (id) => get(`${url.PARTY_SUB_PARTY
 
 export const ChannelItemGoBtnAdd_API = (jsonBody) => post(url.CHANNEL_ITEM_ADD_GO_BTN, jsonBody) // get api
 export const ChannelItem_Save_API = ({ jsonBody }) => post(url.CHANNEL_ITEM_SAVE_URL, jsonBody)// post api
-export const ChannelItem_List_API = () => get(url.PARTYITEM_FOR_LIST)// get api
-export const ChannelItem_Edit_API = (jsonBody) => post(url.PARTY_ITEM_FILTER, jsonBody) // get api
+export const ChannelItem_View_API = ({ jsonBody }) => post(url.CHANNEL_ITEM_ADD_VIEW_BTN, jsonBody)// post api
+
+
 
 
 export const PartyItemGoBtnAdd_API = (jsonBody) => post(url.PARTY_ITEM_FILTER, jsonBody) // get api
 export const PartyItem_Save_API = ({ jsonBody }) => post(url.PARTYITEM_FOR_MASTER, jsonBody)// post api
-export const PartyItem_List_API = () => get(url.PARTYITEM_FOR_LIST)// get api
-export const PartyItem_Edit_API = (jsonBody) => post(url.PARTY_ITEM_FILTER, jsonBody) // get api
+
+
 
 //Post api VendorSupplierCustomer 
 export const VendorSupplierCustomer = (jsonBody) => post(url.GET_SUPPLIER_VENDOR_CUSTOMER, jsonBody)//Post api
@@ -598,7 +599,7 @@ export const Make_Receipt_to_Payment_API = (jsonBody) => post(url.MAKE_RECEIPT_T
 export const Invoice_No_list_API = (jsonBody) => post(url.INVOICE_NUMBER_LIST, jsonBody)//Invoice No. dropdown api postapi
 export const SalesReturn_add_button_api_For_Item = (jsonBody) => post(url.ADD_BUTTON_API_FOR_ITEM, jsonBody)//add button get api for item
 export const SalesReturn_add_button_api_For_Invoice = (InvoiceID) => get(`${url.ADD_BUTTON_API_FOR_INVOICE}/${InvoiceID}`)//add button get api for invoice
-export const SalesReturn_post_API = ({ jsonBody }) => post(url.SALES_RETURN, jsonBody)//  postapi
+export const SalesReturn_post_API = ({ formData }) => postForFormData(url.SALES_RETURN, formData)//  postapi
 export const SalesReturn_list_API = (filters) => post(url.SALES_RETURN_LIST_API, filters)//Sales Return list api using post method
 export const SalesReturn_Delete_API = ({ deleteId }) => del(`${url.SALES_RETURN}/${deleteId}`)// Sales Return Delete API
 export const SalesReturn_SingleGet_API = ({ editId }) => get(`${url.SALES_RETURN_ITEM}/${editId}`)// Sales Return Delete API
@@ -616,6 +617,13 @@ export const Receipt_Number_API = (jsonBody) => post(url.RECEIPT_NUMBER_LIST, js
 
 export const PartyLedger_API = (FromDate, ToDate, SAPCode) => post(url.PARTY_LEDGER_API, FromDate, ToDate, SAPCode)//  postapi
 export const Get_Product_Margin_Report = (IsSCM_ID, PartyID) => get(`${url.PRODUCT_MARGIN_REPORT_API}/${IsSCM_ID}/${PartyID}`)
+
+//**************************** E-Invoice Credit Debit Note (upload ,cancel,print) ***************************************/
+
+export const EInvoice_Credit_Debit_Uploade_Get_API = ({ RowId, UserID }) => get(`${url.UPLOADED_CREDIT_DEBIT_E_INVOICE}/${RowId}/${UserID}`)// Uploade_EInvoice
+export const EInvoice_Credit_Debit_Cancel_Get_API = ({ RowId, UserID }) => get(`${url.CANCEL_CREDIT_DEBIT_E_INVOICE}/${RowId}/${UserID}`)// Cancel_EInvoice
+
+
 
 // Order Summary
 export const OderSummary_GoBtn_API = ({ jsonBody }) => post(url.ORDER_SUMMARY, jsonBody)//post api
@@ -676,6 +684,16 @@ export const ReturnReport_API = ({ jsonBody }) => post(url.RETURN_REPORT, jsonBo
 export const ItemSaleReport_GoBtn_API = ({ jsonBody }) => post(url.ITEM_SALE_REPORT_GO_BUTTON, jsonBody)//Go button api
 export const SupplierDropdownApi = (employeeID, channelFromID) => get(`${url.SUPPLIER_API}/${employeeID}/${channelFromID}`)// Party Setting api
 export const ItemsList_On_Group_And_Subgroup_API = (jsonBody) => post(url.ITEM_LIST_API, jsonBody)
+
+//StockAdjustment
+
+export const getBatchCode_By_ItemID_api = (itemId, partyId) => get(`${url.GET_BATCH_CODE_BY_ITEM_ID}/${itemId}/${partyId}`)//add button get api for item
+
+//TransactionLog
+
+export const TransactionLog_transactionType_Api=()=>get(url.TRANSACTION_LOG_TRANCTION_TYPE);
+export const TransactionLog_Get_User_Api=()=>get(url.TRANSACTION_LOG_All_USER);
+export const TransactionLog_Go_Btn_Api=()=>get(url.TRANSACTION_LOG_GO_BTN);
 
 export {
   getLoggedInUser,

@@ -45,8 +45,10 @@ const PartyList = () => {
             userAccess: state.Login.RoleAccessUpdateData,
             postMsg: state.PartyMasterReducer.postMsg,
             pageField: state.CommonPageFieldReducer.pageFieldList,
+            commonPartyDropSelect: state.CommonPartyDropdownReducer.commonPartyDropSelect
         })
     );
+    const { pageField, goBtnLoading, commonPartyDropSelect } = reducers
 
     const action = {
         editId: editPartyID,
@@ -55,6 +57,24 @@ const PartyList = () => {
         deleteSucc: deletePartyIDSuccess,
         postSucc: postPartyDataSuccess
     }
+    // Common Party Dropdown useEffect
+    useEffect(() => {
+
+        if (commonPartyDropSelect.value > 0) {
+            goButtonHandler()
+        }
+        else if (subPageMode === url.PARTY_lIST) {
+            dispatch(getPartyListAPI({
+                ..._cfunc.loginJsonBody(),
+                PartyID: _cfunc.loginPartyID(),
+                IsRetailer: 0
+            }));
+        }
+        return () => {
+            dispatch(updatePartyIDSuccess([])); //for clear privious order list 
+            dispatch(getPartyListAPISuccess([]));
+        }
+    }, [commonPartyDropSelect]);
 
     //  This UseEffect => Featch Modules List data  First Rendering
     useLayoutEffect(() => {
@@ -78,25 +98,10 @@ const PartyList = () => {
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
 
-        if (!(_cfunc.loginSelectedPartyID() === 0)) {
-            goButtonHandler()
-        }
-        else if (subPageMode === url.PARTY_lIST) {
-            dispatch(getPartyListAPI({
-                ..._cfunc.loginJsonBody(),
-                PartyID: _cfunc.loginPartyID(),
-                IsRetailer: 0
-            }));
-        }
-        return () => {
-            dispatch(updatePartyIDSuccess([])); //for clear privious order list 
-            dispatch(getPartyListAPISuccess([]));
-        }
     }, []);
 
-    const { pageField, goBtnLoading } = reducers
-
     function goButtonHandler() {
+
         try {
             if ((_cfunc.loginSelectedPartyID() === 0)) {
                 customAlert({ Type: 3, Message: "Please Select Party" });
@@ -122,7 +127,7 @@ const PartyList = () => {
             <div className="page-content">
                 <PageLoadingSpinner isLoading={(goBtnLoading || !pageField)} />
                 {subPageMode === url.RETAILER_LIST &&
-                    <PartyDropdown_Common
+                    <PartyDropdown_Common pageMode={pageMode}
                         goBtnLoading={goBtnLoading}
                         goButtonHandler={goButtonHandler}
                         changeButtonHandler={partyOnChngeButtonHandler}

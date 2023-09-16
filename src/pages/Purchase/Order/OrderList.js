@@ -188,8 +188,8 @@ const OrderList = () => {
         dispatch(_act.commonPageFieldListSuccess(null))
         dispatch(_act.commonPageFieldList(page_Id))
         // dispatch(_act.BreadcrumbShowCountlabel(`${"Order Count"} :0`))
-        dispatch(_act.GetVenderSupplierCustomer({ subPageMode, PartyID: _cfunc.loginSelectedPartyID() }))
         if (!(_cfunc.loginSelectedPartyID() === 0)) {
+            dispatch(_act.GetVenderSupplierCustomer({ subPageMode, PartyID: _cfunc.loginSelectedPartyID() }))
             goButtonHandler("event", IBType)
         }
         dispatch(priceListByCompay_Action());
@@ -392,7 +392,7 @@ const OrderList = () => {
                         Mode: isMode
                     })
 
-                    dispatch(_act.makeGRN_Mode_1Action({ jsonBody,subPageMode, pageMode, path: path, grnRef, challanNo, btnId: `btn-makeBtn-${obj.id}` }))
+                    dispatch(_act.makeGRN_Mode_1Action({ jsonBody, subPageMode, pageMode, path: path, grnRef, challanNo, btnId: `btn-makeBtn-${obj.id}` }))
 
                 } else {
                     alert("Please Select Order1")
@@ -424,11 +424,23 @@ const OrderList = () => {
 
 
 
-    function hideBtnFunc(rowdata) {
+    async function hideBtnFunc(rowdata) {
         const isHideValue = rowdata[0].isHideValue
         const RowInvoiceId = rowdata[0].id
         let config = { InvoiceId: RowInvoiceId, IsHide: isHideValue }
-        dispatch(_act.hideInvoiceForGRFAction(config))
+
+
+        const isConfirmed = await customAlert({
+            Type: 7,
+            Message: "Do you want To Unhide Invoice ?",
+        });
+
+        if (isConfirmed) {
+            dispatch(_act.hideInvoiceForGRFAction(config))
+        }
+
+
+
     }
 
     function viewApprovalBtnFunc(config) {
@@ -531,7 +543,7 @@ const OrderList = () => {
     }
 
     const selectSaveBtnHandler = (row = []) => {
-        
+
 
         let ischeck = row.filter(i => (i.selectCheck))
         if (!ischeck.length > 0) {
@@ -652,6 +664,7 @@ const OrderList = () => {
     }
 
     function partySelectButtonHandler() {
+        goButtonHandler()
         dispatch(_act.GetVenderSupplierCustomer({ subPageMode, PartyID: _cfunc.loginSelectedPartyID() }));
     }
 
@@ -673,7 +686,7 @@ const OrderList = () => {
             <PageLoadingSpinner isLoading={reducers.goBtnloading || !pageField} />
 
             <div className="page-content">
-                <PartyDropdown_Common
+                <PartyDropdown_Common pageMode={pageMode}
                     goButtonHandler={partySelectButtonHandler}
                     changeButtonHandler={partyOnChngeButtonHandler} />
                 {

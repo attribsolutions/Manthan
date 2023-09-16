@@ -3,9 +3,11 @@ import BootstrapTable from 'react-bootstrap-table-next'
 import ToolkitProvider from 'react-bootstrap-table2-toolkit'
 import { Col, Row } from 'reactstrap'
 import { mySearchProps } from '../../components/Common/SearchBox/MySearch'
+import { ItemSaleContext } from './ContextDataProvider'
 
-
-function ShowTable(initialProps) {
+function ShowTable() {
+    const { tableData, selectedColumns } = ItemSaleContext();
+    
     const sortCaretFunction = {
         sortCaret: (order, column) => {
             if (!order) {
@@ -19,10 +21,11 @@ function ShowTable(initialProps) {
         }
     };
     return (
-        <div className="mt-1">
+        <div className="mt-n5">
             <ToolkitProvider
                 keyField="id"
-                {...initialProps}
+                data={tableData}
+                columns={selectedColumns} 
                 search
             >
                 {(toolkitProps,) => (
@@ -30,7 +33,7 @@ function ShowTable(initialProps) {
                         <Row>
                             <Col xl="12">
                                 <div className="table-responsive table">
-                                    <BootstrapTable 
+                                    <BootstrapTable
                                         keyField="id"
                                         classes={"table  table-bordered "}
                                         sort={sortCaretFunction}

@@ -1,8 +1,9 @@
-import { COMMON_PARTY_DROPDOWN, COMMON_PARTY_DROPDOWN_SUCCESS } from "./actionType"
+import { COMMON_PARTY_DROPDOWN, COMMON_PARTY_DROPDOWN_SUCCESS, COMMON_PARTY_DROP_SELECT_ACTION, COMMON_PARTY_DROP_SELECT_ACTION_SUCCESS } from "./actionType"
 
 const INIT_STATE = {
     commonPartyDropdown: [],
-    partyDropdownLoading: false
+    partyDropdownLoading: false,
+    commonPartyDropSelect: { value: 0, label: "select...", SAPPartyCode: "" }
 }
 
 const CommonPartyDropdownReducer = (state = INIT_STATE, action) => {
@@ -19,6 +20,14 @@ const CommonPartyDropdownReducer = (state = INIT_STATE, action) => {
                 ...state,
                 commonPartyDropdown: action.payload,
                 partyDropdownLoading: false
+            }
+
+
+        case COMMON_PARTY_DROP_SELECT_ACTION:
+
+            return {
+                ...state,
+                commonPartyDropSelect: action.payload,
             }
 
         default:

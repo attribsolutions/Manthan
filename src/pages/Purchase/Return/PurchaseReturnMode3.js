@@ -21,7 +21,7 @@ import {
 
 } from "../../../components/Common/validationFunction";
 import { mode, pageId, url } from "../../../routes/index"
-import { GetVenderSupplierCustomer, } from "../../../store/CommonAPI/SupplierRedux/actions";
+import { GetVenderSupplierCustomer, GetVenderSupplierCustomerSuccess, } from "../../../store/CommonAPI/SupplierRedux/actions";
 import "../../Sale/SalesReturn/salesReturn.scss";
 import { CInput, C_DatePicker, C_Select, decimalRegx } from "../../../CustomValidateForm/index";
 import * as _cfunc from "../../../components/Common/CommonFunction";
@@ -58,6 +58,7 @@ const PurchaseReturnMode3 = (props) => {
         supplier,
         pageField,
         userAccess,
+        commonPartyDropSelect
     } = useSelector((state) => ({
         saveBtnloading: state.SalesReturnReducer.saveBtnloading,
         sendToSSbtnTableData: state.SalesReturnReducer.sendToSSbtnTableData,
@@ -65,6 +66,7 @@ const PurchaseReturnMode3 = (props) => {
         postMsg: state.SalesReturnReducer.postMsg,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
+        commonPartyDropSelect: state.CommonPartyDropdownReducer.commonPartyDropSelect
     }));
 
     useEffect(() => {
@@ -99,8 +101,18 @@ const PurchaseReturnMode3 = (props) => {
     useEffect(() => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(pageId.PURCHASE_RETURN_MODE_3))
-        dispatch(GetVenderSupplierCustomer({ subPageMode, RouteID: "" }))
     }, []);
+
+    // Common Party Dropdown useEffect
+    useEffect(() => {
+
+        if (commonPartyDropSelect.value > 0) {
+            dispatch(GetVenderSupplierCustomer({ subPageMode: url.PURCHASE_RETURN, RouteID: "", "PartyID": commonPartyDropSelect.value }))
+        }
+        return () => {
+            dispatch(GetVenderSupplierCustomerSuccess([]));
+        }
+    }, [commonPartyDropSelect]);
 
     const location = { ...history.location }
     const hasShowModal = props.hasOwnProperty(mode.editValue)
@@ -326,6 +338,7 @@ const PurchaseReturnMode3 = (props) => {
         const PurchaseReturnReferences = returnItemIDs
             .split(",")
             .map(item => ({ SubReturn: parseInt(item.trim()) }));
+        const formData = new FormData(); // Create a new FormData object
 
         const ReturnItems = tableData.reduce((filterdItem, i) => {
 
@@ -372,23 +385,23 @@ const PurchaseReturnMode3 = (props) => {
         }, [])
 
         try {
-            const jsonBody = JSON.stringify({
-                ReturnDate: values.ReturnDate,
-                ReturnReason: '',
-                BatchCode: values.BatchCode,
-                Customer: _cfunc.loginPartyID(),// Customer Swipe when Po return
-                Party: values.Customer.value,// Party Swipe when Po return
-                Comment: values.Comment,
-                GrandTotal: grand_total.toFixed(2),
-                RoundOffAmount: (grand_total - Math.trunc(grand_total)).toFixed(2),
-                CreatedBy: _cfunc.loginUserID(),
-                UpdatedBy: _cfunc.loginUserID(),
-                Mode: 3,
-                PurchaseReturnReferences: PurchaseReturnReferences,
-                ReturnItems: ReturnItems,
-            });
 
-            dispatch(saveSalesReturnMaster({ jsonBody, btnId }));
+            formData.append('ReturnDate', values.ReturnDate);
+            formData.append('ReturnReason', '');
+            formData.append('BatchCode', values.BatchCode);
+            formData.append('Customer', commonPartyDropSelect.value);
+            formData.append('Party', values.Customer.value);
+            formData.append('Comment', values.Comment);
+            formData.append('GrandTotal', grand_total.toFixed(2));
+            formData.append('RoundOffAmount', (grand_total - Math.trunc(grand_total)).toFixed(2))
+            formData.append('CreatedBy', _cfunc.loginUserID());
+            formData.append('UpdatedBy', _cfunc.loginUserID());
+            formData.append('Mode', 3);
+            formData.append('IsApproved', 0);
+            formData.append('PurchaseReturnReferences', JSON.stringify(PurchaseReturnReferences)); // Convert to JSON string
+            formData.append('ReturnItems', JSON.stringify(ReturnItems)); // Convert to JSON strin
+
+            dispatch(saveSalesReturnMaster({ formData, btnId }));
 
         } catch (e) { _cfunc.CommonConsole(e) }
     };

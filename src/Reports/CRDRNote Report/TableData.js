@@ -1,6 +1,6 @@
 
 import { invoice } from "../ReportIndex";
-import { numberWithCommas } from "../Report_common_function";
+import { numberWithCommas, toWords } from "../Report_common_function";
 
 export const columnsWithCGST_SGST = [
     "SN",
@@ -48,6 +48,10 @@ export const BilledTo = [
 ]
 export const DetailsOfTransport = [
     "Billed by",
+]
+
+export const Ruppescolumn = [
+    "",
 ]
 
 export const RowsWithCGST_SGST = (data) => {
@@ -140,13 +144,13 @@ export const RowsWithCGST_SGST = (data) => {
                 HSNcodes = element.HSNCode.slice(0, 8);
             }
         }
-        debugger
-        data['ItemComment'] = element.ItemComment
+
+        data['ItemComment'] = 'good'
         data['ID'] = SrNO
 
         const tableitemRow = [
             SrNO++,
-            `${HSNcodes} ${element.ItemName}`,
+            `${HSNcodes} ${element.ItemName}${element.ItemComment === null ? "" : `\n`} ${element.ItemComment === null ? "" : element.ItemComment}`,
             `${parseFloat(element.Quantity)}   ${element.UnitName}`,
             `${Number(element.MRPValue).toFixed(2)}`,
             `${numberWithCommas(Number(element.Rate).toFixed(2))}`,
@@ -255,7 +259,7 @@ export const RowsWithIGST = (data) => {
             Amount, DiscountAmount, BasicAmount,
             Quantity, UnitName, MRPValue, CGSTPercentage,
             SGSTPercentage, GSTPercentage, BatchCode,
-            BatchDate, DiscountType, PrimaryUnitName, IGST } = currentItem;
+            BatchDate, DiscountType, PrimaryUnitName, IGST, ItemComment } = currentItem;
 
         let PcsinNumber = ""
         let PcsinNumberUnit = ""
@@ -295,7 +299,7 @@ export const RowsWithIGST = (data) => {
                 BasicAmount: Number(BasicAmount), Quantity: Number(Quantity),
                 UnitName, CGSTPercentage, SGSTPercentage, GSTPercentage,
                 BatchDate, BatchCode: BatchCode, BatchDate: BatchDate,
-                quantityString: `  ${BatchCode}  ${BatchDate}`, PrimaryUnitName, IGST
+                quantityString: `  ${BatchCode}  ${BatchDate}`, PrimaryUnitName, IGST, ItemComment
             };
         }
         return accumulator;
@@ -321,7 +325,7 @@ export const RowsWithIGST = (data) => {
         const tableitemRow = [
 
             SrNO++,
-            `${HSNcodes} ${element.ItemName}`,
+            `${HSNcodes} ${element.ItemName}${element.ItemComment === null ? "" : `\n`} ${element.ItemComment === null ? "" : element.ItemComment}`,
             `${parseFloat(element.Quantity)}   ${element.UnitName}`,
             `${numberWithCommas(Number(element.MRPValue).toFixed(2))}`,
             `${numberWithCommas(Number(element.Rate).toFixed(2))}`,
@@ -421,7 +425,7 @@ export const BilledByRow = (data) => {
         [`            ${data.Party}`],
         [`                 ${PartyAddress}`],
         [`            ${data.PartyState}`],
-        [`              ${data.PartyGSTIN}`],
+        [`              ${data.PartyGSTIN === null ? "" : data.PartyGSTIN}`],
         [`                   ${data.PartyFSSAINo}`],
         // [`                   ${data.PartyMobileNo}`],
 
@@ -441,7 +445,7 @@ export const BilledToRow = (data) => {
         [`                   ${data.Customer}`],
         [`                 ${CustomerAddress}`],
         [`           ${data.CustomerState}`],
-        [`             ${data.CustomerGSTIN}`,],
+        [`             ${data.CustomerGSTIN === null ? "" : data.CustomerGSTIN}`,],
         [`                   ${data.CustomerFSSAINo}`],
         // [`                   ${data.CustomerMobileNo}`],
     ]
@@ -450,6 +454,9 @@ export const BilledToRow = (data) => {
 }
 export const DetailsOfTransportRow = (data) => {
     let OrderNumber = " "
+    let IRN_No = ""
+    let ACK_No = ""
+
 
     if (data.InvoicesReferences > 0) {
         const PoNumber = data.InvoicesReferences.map(index => ({
@@ -466,16 +473,31 @@ export const DetailsOfTransportRow = (data) => {
 
     }
 
-    let EwayData = ""
-    // if (data.InvoiceUploads.length > 0) {
-    //     EwayData = data.InvoiceUploads[0]
-    // }
+    let NoteType = ""
+    if ((data.NoteType === "DebitNote")) {
+        NoteType = "Debit Note"
+    } else if ((data.NoteType === "Goods DebitNote")) {
+        NoteType = "Goods Debit Note"
+    } else if ((data.NoteType === "CreditNote")) {
+        NoteType = "CreditNote"
+    } else if ((data.NoteType === "Goods CreditNote")) {
+        NoteType = "Goods Credit Note"
+    }
+
+    if (data.isQR) {
+        IRN_No = (data.CRDRNoteUploads[0].Irn === null ? "" : data.CRDRNoteUploads[0].Irn)
+        ACK_No = (data.CRDRNoteUploads[0].AckNo === null ? "" : data.CRDRNoteUploads[0].AckNo)
+
+    }
+
 
     var DetailsOfTransportArray = [
-        [`                      ${data.NoteType}`],
-        [`                      ${data.Narration === null ? "" : data.Narration}`],
-        [`                         ${data.NoteReason === null ? "" : data.NoteReason}`],
-        // [`                          ${(EwayData.EwayBillNo === undefined) || (EwayData.EwayBillNo === null) ? "" : EwayData.EwayBillNo}`],
+
+
+        [`             ${NoteType}`],
+        [`                    ${data.Narration === null ? "" : data.Narration}`],
+        [`                ${IRN_No}`],
+        [`                ${ACK_No}`],
         // [`                          ${(EwayData.AckNo === undefined) || (EwayData.AckNo === null) ? "" : EwayData.AckNo}`]
     ]
 
@@ -499,6 +521,16 @@ export const BankRow = (data) => {
     ]
     // }
     return reportArray;
+}
+
+export const RupeesRow = (data) => {
+    let stringNumber = toWords(Number(data.GrandTotal))
+
+    var RupeesArray = [
+        [`                  ${stringNumber}`],
+
+    ]
+    return RupeesArray;
 }
 
 

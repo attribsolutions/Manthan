@@ -1,43 +1,42 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { Card, CardBody, CardHeader, Col, Container, FormGroup, Label, Row } from "reactstrap";
-import Select from "react-select";
+import { Button, Card, CardBody, CardHeader, Col, Container, FormGroup, Label, Row } from "reactstrap";
+
 import { MetaTags } from "react-meta-tags";
 import { useDispatch, useSelector } from "react-redux";
 import { Breadcrumb_inputName, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
-import { editPartyItemIDSuccess, goButtonPartyItemAddPage, goButtonPartyItemAddPageSuccess, savePartyItemsAction, savePartyItemsActionSuccess } from "../../../store/Administrator/PartyItemsRedux/action";
+import { goButtonPartyItemAddPageSuccess, goButtonPartyItemAddPage, savePartyItemsAction, savePartyItemsActionSuccess, editPartyItemIDSuccess, channalItemViewDetailAction } from "../../../store/Administrator/PartyItemsRedux/action";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import { C_Button, PageLoadingSpinner, SaveButton } from "../../../components/Common/CommonButton";
-import { comAddPageFieldFunc, initialFiledFunc } from "../../../components/Common/validationFunction";
+
 import * as url from "../../../routes/route_url";
 import * as mode from "../../../routes/PageMode";
 import BootstrapTable from "react-bootstrap-table-next";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
-import { breadcrumbReturnFunc, loginIsSCMCompany, loginPartyID, metaTagLabel } from "../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, metaTagLabel } from "../../../components/Common/CommonFunction";
 import * as pageId from "../../../routes/allPageID";
 import { selectAllCheck } from "../../../components/Common/TableCommonFunc";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { C_Select } from "../../../CustomValidateForm";
 import { getPartyTypelist, getPartyTypelistSuccess } from "../../../store/Administrator/PartyTypeRedux/action";
+import ChannelViewDetails from "./ChannelViewDetails";
+import { vieBtnCss } from "../../../components/Common/ListActionsButtons";
 
 
 function initialState(history) {
 
     let page_Id = '';
-    let listPath = ''
     let sub_Mode = history.location.pathname;
 
     if (sub_Mode === url.PARTYITEM) {
         page_Id = pageId.PARTYITEM;
-        listPath = url.PARTYITEM_LIST
     }
     else if (sub_Mode === url.CHANNEL_ITEM) {
         page_Id = pageId.CHANNEL_ITEM;
-        listPath = url.CHANNEL_ITEM_LIST
     }
 
-    return { page_Id, listPath }
+    return { page_Id }
 };
 
 const PartyItems = (props) => {
@@ -51,14 +50,13 @@ const PartyItems = (props) => {
 
 
     const [page_id] = useState(() => initialState(history).page_Id)
-    const [listPath] = useState(() => initialState(history).listPath)
     const [partyIdSelect, setPartyIdSelect] = useState({ value: _cfunc.loginSelectedPartyID() })
     const [channelTypeSelect, setChannelTypeSelect] = useState('');
 
     const location = { ...history.location };
     const hasShowloction = location.hasOwnProperty(mode.editValue);
     const hasShowModal = props.hasOwnProperty(mode.editValue);
-    debugger
+
     const {
         postMsg,
         pageField,
@@ -66,7 +64,8 @@ const PartyItems = (props) => {
         saveBtnloading,
         GoBtnlistloading,
         userAccess,
-        PartyTypes
+        PartyTypes,
+        viewBtnLoading
     } = useSelector((state) => ({
         saveBtnloading: state.PartyItemsReducer.saveBtnloading,
         GoBtnlistloading: state.PartyItemsReducer.partyItemListLoading,
@@ -75,6 +74,7 @@ const PartyItems = (props) => {
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
         PartyTypes: state.PartyTypeReducer.ListData,
+        viewBtnLoading: state.PartyItemsReducer.channeItemViewBtnLoading,
     }));
 
     useEffect(() => {
@@ -83,7 +83,7 @@ const PartyItems = (props) => {
         dispatch(commonPageField(page_id));
         dispatch(getPartyTypelist());
 
-        if (!(_cfunc.loginSelectedPartyID() === 0) && !(hasShowloction && hasShowModal)) {
+        if (!(_cfunc.loginSelectedPartyID() === 0) && !(hasShowloction || hasShowModal)) {
             goButtonHandler()
         }
         return () => {
@@ -114,7 +114,7 @@ const PartyItems = (props) => {
     }, [userAccess]);
 
     useEffect(() => {
-        debugger
+
         if (hasShowloction || hasShowModal) {
             let hasEditVal = null;
             if (hasShowModal) {
@@ -145,29 +145,21 @@ const PartyItems = (props) => {
     useEffect(() => {
         if (postMsg.Status === true && postMsg.StatusCode === 200) {
             dispatch(savePartyItemsActionSuccess({ Status: false }));
+            dispatch(Breadcrumb_inputName(""));
             if (pageMode === mode.assingLink) {
                 customAlert({
                     Type: 1,
                     Message: postMsg.Message,
                 });
                 props.isOpenModal(false);
-            } else if (pageMode === mode.edit) {
+            } else {
                 customAlert({
                     Type: 1,
                     Message: postMsg.Message,
                 });
-                history.push({ pathname: listPath });
-            } else {
-                dispatch(Breadcrumb_inputName(""));
-                const promise = customAlert({
-                    Type: 1,
-                    Message: postMsg.Message,
-                });
-                if (promise) {
-                    history.push({ pathname: listPath });
-                }
             }
         } else if (postMsg.Status === true) {
+            dispatch(savePartyItemsActionSuccess({ Status: false }));
             customAlert({
                 Type: 3,
                 Message: JSON.stringify(postMsg.Message),
@@ -189,6 +181,7 @@ const PartyItems = (props) => {
 
     const groupWiseItemArray = useMemo(() => {
         const groupItemsByGroup = (items) => {
+
             const groupedItems = items.reduce((result, item) => {
                 const { GroupName, ...rest } = item;
                 if (!result[GroupName]) {
@@ -234,10 +227,32 @@ const PartyItems = (props) => {
                 width: "700px",
             },
         },
+        {
+            text: "View",
+            dataField: "",
+            hidden: (subPageMode === url.PARTYITEM),
+            formatExtraData: { viewBtnLoading },
+            formatter: (cell, row, __, { viewBtnLoading }) => {
+                return <div >
+                    <C_Button
+                        className={vieBtnCss}
+                        loading={(viewBtnLoading === row.Item) && true}
+                        spinnerColor='white'
+                        onClick={() => {
+                            const jsonBody = JSON.stringify({
+                                "Item": row.Item,
+                                "PartyType": channelTypeSelect.value,
+                            })
+                            dispatch(channalItemViewDetailAction({ jsonBody, btnId: row.Item }))
+                        }}><i className="bx bxs-show font-size-16" /></C_Button>
+                </div>
+            }
+
+        },
     ];
 
     function goButtonHandler(event) {
-        debugger
+
         try {
             event?.persist();// Call event.persist() to remove the synthetic event from the pool
 
@@ -248,9 +263,9 @@ const PartyItems = (props) => {
             const jsonBody = {
                 ..._cfunc.loginJsonBody(),
                 PartyID: _cfunc.loginSelectedPartyID(),
-                PatryType: channelTypeSelect.value
+                PartyTypeID: channelTypeSelect.value
             };
-            dispatch(goButtonPartyItemAddPage(jsonBody, subPageMode));
+            dispatch(goButtonPartyItemAddPage({ jsonBody, subPageMode }));
         }
         catch (error) { }
         return
@@ -262,6 +277,19 @@ const PartyItems = (props) => {
 
     const rowSelected = (tableArray) => {
         return tableArray.map((index) => (index.selectCheck && index.Item));
+    };
+    const nonSelectedRow = (tableArray) => {
+        var noSelectedIds = [];
+        if (subPageMode === url.CHANNEL_ITEM) {
+            noSelectedIds = tableArray
+                .filter(row => (row.InPartyItem == true))
+                .map(row => row.Item);
+        }else if (subPageMode === url.PARTYITEM) {
+                noSelectedIds = tableArray
+                    .filter(row => (row.InStock == true))
+                    .map(row => row.Item);
+        }
+        return noSelectedIds;
     };
 
     const SaveHandler = (event) => {
@@ -280,7 +308,8 @@ const PartyItems = (props) => {
             const jsonBody = JSON.stringify(selectedItems.map((index) => ({
                 Item: index.Item,
                 // Party: partyIdSelect.value,
-                PatryType: channelTypeSelect.value
+                Party: (pageMode === mode.assingLink) ? partyIdSelect.value : _cfunc.loginSelectedPartyID(),
+                PartyType: channelTypeSelect.value
             })));
             dispatch(savePartyItemsAction({ jsonBody, subPageMode }));
         } catch (w) { }
@@ -289,7 +318,7 @@ const PartyItems = (props) => {
     const AdminDivsionRoleDropdown = () => {
         if (subPageMode === url.PARTYITEM) {
             return (
-                <PartyDropdown_Common
+                <PartyDropdown_Common pageMode={pageMode}
                     goBtnLoading={GoBtnlistloading}
                     goButtonHandler={goButtonHandler}
                     changeButtonHandler={partyOnChngeButtonHandler}
@@ -312,7 +341,7 @@ const PartyItems = (props) => {
                                     <C_Select
                                         name="Name"
                                         value={channelTypeSelect}
-                                        isDisabled={pageMode === mode.assingLink ? true : false}
+                                        isDisabled={(filterdItemWise_tableData.length > 0)}
                                         className="react-dropdown"
                                         classNamePrefix="dropdown"
                                         styles={{
@@ -367,6 +396,7 @@ const PartyItems = (props) => {
                         <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
 
                         <AdminDivsionRoleDropdown />
+                        <ChannelViewDetails />
 
                         <Card className="text-black">
                             <CardHeader className="card-header   text-black c_card_header">
@@ -404,7 +434,9 @@ const PartyItems = (props) => {
                                                         Item="table_Arrow"
                                                         selectRow={selectAllCheck({
                                                             rowSelected: rowSelected(i.items),
-                                                            bgColor: ''
+                                                            nonSelectable: nonSelectedRow(i.items),
+                                                            disabledWithMsg:subPageMode==url.PARTYITEM&&"In-stock",
+                                                            bgColor: '',
                                                         })}
                                                         noDataIndication={
                                                             <div className="text-danger text-center ">

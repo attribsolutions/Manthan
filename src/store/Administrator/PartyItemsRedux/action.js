@@ -3,23 +3,15 @@ import {
   SAVE_PARTY_ITEMS_ACTION_SUCCESS,
   GO_BUTTON_PARTY_ITEM_ADD,
   GO_BUTTON_PARTY_ITEM_ADD_SUCCESS,
-  GET_PARTY_ITEM_ASSING_LIST,
-  GET_PARTY_ITEM_ASSING_LIST_SUCCESS,
+ 
   EDIT_PARTY_ITEM_ID,
   EDIT_PARTY_ITEM_ID_SUCCESS,
   PARTY_ITEM_API_ERROR_ACTION,
+  CHANNEL_ITEM_VIEW_DETAIL_ACTION,
+  CHANNEL_ITEM_VIEW_DETAIL_ACTION_SUCCESS
 } from "./actionType";
 
-export const getPartyItemAssingList = (config) => ({
-  type: GET_PARTY_ITEM_ASSING_LIST,
-  config,
-})
 
-
-export const getPartyItemAssingListSuccess = (pages) => ({ 
-  type: GET_PARTY_ITEM_ASSING_LIST_SUCCESS,
-  payload: pages,
-});
 
 export const savePartyItemsAction = (config = {}) => ({            // save Action
   type: SAVE_PARTY_ITEMS_ACTION,
@@ -32,9 +24,9 @@ export const savePartyItemsActionSuccess = (resp) => ({    // Save  success
 });
 
 // Get Item List for Party Item Master *** Go Button API
-export const goButtonPartyItemAddPage = (jsonBody,subPageMode) => ({   // After Supplier Select Item List API
+export const goButtonPartyItemAddPage = (config) => ({   // After Supplier Select Item List API
   type: GO_BUTTON_PARTY_ITEM_ADD,
-  jsonBody,subPageMode
+  config,
 });
 
 export const goButtonPartyItemAddPageSuccess = data => ({        // After Supplier Select Item List API success
@@ -53,6 +45,19 @@ export const editPartyItemIDSuccess = (editData) => ({       // Edit  Success
   payload: editData,
 });
 
+export const channalItemViewDetailAction = (config) => ({     
+  type: CHANNEL_ITEM_VIEW_DETAIL_ACTION,
+  config
+});
+
+export const channalItemViewDetailActionSuccess = (editData) => ({ 
+  type: CHANNEL_ITEM_VIEW_DETAIL_ACTION_SUCCESS,
+  payload: editData,
+});
+
+
+
 export const PartyItemApiErrorAction = () => ({
   type: PARTY_ITEM_API_ERROR_ACTION,
 })
+

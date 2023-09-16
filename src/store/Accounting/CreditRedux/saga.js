@@ -8,6 +8,8 @@ import {
   saveCredit_Success,
   Receipt_No_List_Success,
   CreditDebitApiErrorAction,
+  Uploaded_Credit_Debit_EInvoiceSuccess,
+  Cancel_Credit_Debit_EInvoiceSuccess,
 } from "./action";
 import {
   Credit_Debit_Save_API,
@@ -17,8 +19,11 @@ import {
   InvoiceReturn_API,
   del_Credit_List_API,
   Receipt_Number_API,
+  EInvoice_Credit_Debit_Uploade_Get_API,
+  EInvoice_Credit_Debit_Cancel_Get_API,
 } from "../../../helpers/backend_helper";
 import {
+  CANCLE_CREDIT_DEBIT_E_INVOICE_ACTION,
   CREDITDEBIT_TYPE,
   DELETE_CREDIT_LIST_ID,
   EDIT_CREDIT_LIST_ID,
@@ -26,9 +31,10 @@ import {
   INVOICE_RETURN_ID,
   RECEIPT_NUMBER_LIST,
   SAVE_CREDIT,
+  UPLOADED_CREDIT_DEBIT_E_INVOICE_ACTION,
 } from "./actionType";
 
-import { date_dmy_func, convertTimefunc, amountCommaSeparateFunc } from "../../../components/Common/CommonFunction";
+import { date_dmy_func, convertTimefunc, amountCommaSeparateFunc, loginUserID } from "../../../components/Common/CommonFunction";
 
 function* Save_Method_ForCredit_GenFun({ config }) {   // Save API
   try {
@@ -45,6 +51,8 @@ function* Get_Credit_List_GenFunc(data) {               // getList API
     const newList = yield response.Data.map((i) => {
 
       i["recordsAmountTotal"] = i.GrandTotal;  // Breadcrumb Count total
+      i["InvoiceUploads"] = i.CRDRNoteUploads  // Added this blank Array to Show e Invoive Array   Further devlopment Remain 
+      i["PageMode"] = "CreditDebitList"  //Mode Added  for e invoice  column condition check in list Action button in einvoice
       i.GrandTotal = amountCommaSeparateFunc(i.GrandTotal) //  GrandTotal show with commas
       var date = date_dmy_func(i.CRDRNoteDate)
       var time = convertTimefunc(i.CreatedOn)
@@ -88,6 +96,31 @@ function* InvoiceReturn_ID_GenFunc(id) {           // Invoice Return Api
   } catch (error) { yield put(CreditDebitApiErrorAction()) }
 }
 
+
+//**************************** E-Invoice (upload ,cancel,) ***************************************/
+
+function* Uploade_Credit_Debit_EInvoiceGenFunc({ config }) {
+  debugger
+  config["UserID"] = loginUserID();
+  try {
+
+    const response = yield call(EInvoice_Credit_Debit_Uploade_Get_API, config)
+    yield put(Uploaded_Credit_Debit_EInvoiceSuccess(response));
+  } catch (error) {
+    yield put(CreditDebitApiErrorAction())
+  }
+}
+
+function* Cancle_Credit_Debit_EInvoiceGenFunc({ config }) {
+  config["UserID"] = loginUserID();
+  try {
+    const response = yield call(EInvoice_Credit_Debit_Cancel_Get_API, config)
+    yield put(Cancel_Credit_Debit_EInvoiceSuccess(response));
+  } catch (error) {
+    yield put(CreditDebitApiErrorAction())
+  }
+}
+
 // Receipt No. dropdown Api for debit master page.
 function* Receipt_Number_GenFunc({ jsonBody }) {                // edit API 
 
@@ -105,6 +138,12 @@ function* CreditDebitSaga() {
   yield takeLatest(EDIT_CREDIT_LIST_ID, Edit_Creditlist_ID_GenFunc)
   yield takeLatest(INVOICE_RETURN_ID, InvoiceReturn_ID_GenFunc)
   yield takeLatest(RECEIPT_NUMBER_LIST, Receipt_Number_GenFunc)
+
+  yield takeLatest(UPLOADED_CREDIT_DEBIT_E_INVOICE_ACTION, Uploade_Credit_Debit_EInvoiceGenFunc)
+  yield takeLatest(CANCLE_CREDIT_DEBIT_E_INVOICE_ACTION, Cancle_Credit_Debit_EInvoiceGenFunc)
+
+
+
 }
 
 export default CreditDebitSaga;

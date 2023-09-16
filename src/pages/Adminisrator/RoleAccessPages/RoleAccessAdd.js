@@ -36,16 +36,15 @@ import * as url from "../../../routes/route_url"
 import { deltBtnCss } from "../../../components/Common/ListActionsButtons";
 import { C_Select } from "../../../CustomValidateForm";
 import "./style.scss";
-import CustomTable from "../../../CustomTable2/index"
+
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import BootstrapTable from "react-bootstrap-table-next";
 
 const RoleAccessAdd = () => {
+
     const dispatch = useDispatch();
     const history = useHistory()
-
-
 
     const [userPageAccessState, setUserAccState] = useState('');
     const [pageMode, setPageMode] = useState(mode.defaultsave);
@@ -56,12 +55,12 @@ const RoleAccessAdd = () => {
     const [module_DropdownSelect, setModule_DropdownSelect] = useState('');
     const [page_DropdownSelect, setPage_DropdownSelect] = useState({ value: 0, label: "All Pages" });
     const [company_dropdown_Select, setCompany_dropdown_Select] = useState({ label: "Select...", value: 0 });
+    const [forceRefresh, setForceRefresh] = useState(false);
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const location = { ...history.location };
 
     const {
-        PageAccess = [],
         ModuleData,
         PageDropdownRedux,
         postMsg,
@@ -197,7 +196,9 @@ const RoleAccessAdd = () => {
         {
             text: "Access",
             dataField: "",
+            formatExtraData: { tableList: tableDataRedux, forceRefresh, setForceRefresh },
             formatter: MultiSelectDopdown
+
         },
         {
             text: "Action",
@@ -320,7 +321,7 @@ const RoleAccessAdd = () => {
             function isAccessSelect(item) {
                 let accArray = [];
                 let isShowOnMenu_Id
-                
+
                 item.defaultSelectedValues.map(({ value, id }) => {
                     // -1 stands for "List", -2 stands for "Add", and -3 stands for "STP".
                     if ((value < 0)) {
@@ -330,7 +331,7 @@ const RoleAccessAdd = () => {
                         accArray.push({ "PageAccess": value })
                     }
                 })
-                
+
                 return { accArray, isShowOnMenu_Id }
             }
 
@@ -339,13 +340,13 @@ const RoleAccessAdd = () => {
 
                 let { accArray = [], isShowOnMenu_Id } = isAccessSelect(row);
                 // -1 stands for "List", -2 stands for "Add", and -3 stands for "STP".
-                let showList = row.defaultSelectedValues?.find(i => ((i.value === -1)||(i.value === -3)))
+                let showList = row.defaultSelectedValues?.find(i => ((i.value === -1) || (i.value === -3)))
                 let showAdd = row.defaultSelectedValues?.find(i => (i.value === -2))
                 let isAccess = accArray.length > 0;
                 let isrelated = row.RelatedPageID > 0;
                 let divisionID = division_dropdown_Select.value
                 let isSTP_page = row.PageType === 3 //PageTypeName :"SourceTransactionPage"
-                
+
                 const listRowOBJFunc = () => {
                     let showArray = [];
                     if (showList) {
@@ -615,10 +616,7 @@ const RoleAccTable = ({ data, columns }) => {
 }
 
 
-
-const MultiSelectDopdown = (cell, item) => {
-
-
+const MultiSelectDopdown = (cell, item, __key, { forceRefresh, setForceRefresh }) => {
 
 
     const Option = (props) => {
@@ -648,20 +646,71 @@ const MultiSelectDopdown = (cell, item) => {
         </components.MultiValueRemove>
     );
 
-    const onChangehamdler = (seletedVal = []) => {
-        // e.sort((a, b) => a.value - b.value);
-        item.defaultSelectedValues = seletedVal
-    }
-    // item.dynamicOptions.sort((a, b) => a.value - b.value);
+
+    const onChangehamdler = (selectedVal = []) => {
+        let updatedSelectedValues = [...selectedVal];
+      
+        const hasAddShow = updatedSelectedValues.some((item) => item.value === -2);
+        const hasSave = updatedSelectedValues.some((item) => item.value === 2);
+        const hasCopy = updatedSelectedValues.some((item) => item.value === 12);
+        const hasEdit = updatedSelectedValues.some((item) => item.value === 4);
+        const hasEditSelf = updatedSelectedValues.some((item) => item.value === 6);
+        const hasDelete = updatedSelectedValues.some((item) => item.value === 5);
+        const hasDeleteSelf = updatedSelectedValues.some((item) => item.value === 7);
+        const lastSelect = updatedSelectedValues[updatedSelectedValues.length - 1]?.value;
+      
+        // Refactor common logic for adding "IsSave" option
+        const addIsSaveOption = () => {
+          if (!hasSave) {
+            updatedSelectedValues.push({ value: 2, label: "IsSave" });
+          }
+        };
+      
+        if (hasAddShow && lastSelect === -2) {
+          addIsSaveOption();
+        }
+        if (hasCopy && lastSelect === 12) {
+          addIsSaveOption();
+        }
+      
+        if (hasEdit && hasEditSelf) {
+          if (lastSelect === 4) {
+            updatedSelectedValues = updatedSelectedValues.filter(
+              (item) => item.value !== 6
+            );
+          } else if (lastSelect === 6) {
+            updatedSelectedValues = updatedSelectedValues.filter(
+              (item) => item.value !== 4
+            );
+          }
+        }
+      
+        if (hasDelete && hasDeleteSelf) {
+          if (lastSelect === 5) {
+            updatedSelectedValues = updatedSelectedValues.filter(
+              (item) => item.value !== 7
+            );
+          } else if (lastSelect === 7) {
+            updatedSelectedValues = updatedSelectedValues.filter(
+              (item) => item.value !== 5
+            );
+          }
+        }
+      
+        // Set the updated selected values in the state
+        setForceRefresh(!forceRefresh);
+        item.defaultSelectedValues = updatedSelectedValues;
+      };
+      
 
 
     return (
         <div key={item.id}>
             <Select
-                key={`select-${item.id}`}
+                key={`select-${item.id}${item.defaultSelectedValues}`}
                 isMulti
-                onChange={onChangehamdler}
-                defaultValue={item.defaultSelectedValues}
+                onChange={(e) => onChangehamdler(e)}
+                value={item.defaultSelectedValues}
                 components={{
                     Option,
                     MultiValueLabel: CustomMultiValueLabel, // Custom icon + label for selected values

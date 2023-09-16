@@ -83,10 +83,9 @@ const GRNList = () => {
         setPageMode(page_Mode)
         dispatch(_act.commonPageFieldListSuccess(null))
         dispatch(_act.commonPageFieldList(page_Id))
-        dispatch(_act.GetVenderSupplierCustomer({ subPageMode, RouteID: "" }))
-
 
         if (!(loginSelectedPartyID() === 0)) {
+            dispatch(_act.GetVenderSupplierCustomer({ PartyID: loginSelectedPartyID(), subPageMode, RouteID: "" }))
             goButtonHandler()
         }
     }, []);
@@ -217,15 +216,25 @@ const GRNList = () => {
         </div>
     }
 
+    const partySelectButtonHandler = () => {
+        goButtonHandler()
+        dispatch(_act.GetVenderSupplierCustomer({ PartyID: loginSelectedPartyID(), subPageMode, RouteID: "" }))
+    }
+
     function partyOnChngeButtonHandler() {
         dispatch(_act.getGRNListPageSuccess([]));
+        let newObj = { ...hederFilters }
+        newObj.venderSelect = { value: '', label: "All" }
+        setHederFilters(newObj)
     }
 
     return (
         <React.Fragment>
             <PageLoadingSpinner isLoading={reducers.loading || !pageField} />
             <div className="page-content">
-                <PartyDropdown_Common changeButtonHandler={partyOnChngeButtonHandler} />
+                <PartyDropdown_Common pageMode={pageMode}
+                    goButtonHandler={partySelectButtonHandler}
+                    changeButtonHandler={partyOnChngeButtonHandler} />
 
                 {
                     (pageField) ?

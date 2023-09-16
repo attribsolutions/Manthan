@@ -3,13 +3,13 @@ import * as mode from "../../routes/PageMode"
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import { date_dmy_func, loginSystemSetting, loginUserID } from "./CommonFunction"
 import '../../assets/searchBox/searchBox.scss'
-import { Cancel_EInvoiceAction, Cancel_EwayBillAction, Uploaded_EInvoiceAction, Uploaded_EwayBillAction } from "../../store/actions";
+import { Cancel_Credit_Debit_EInvoiceAction, Cancel_EInvoiceAction, Cancel_EwayBillAction, Uploaded_Credit_Debit_EInvoiceAction, Uploaded_EInvoiceAction, Uploaded_EwayBillAction } from "../../store/actions";
 
 //******************** button class ******************************
 
 const editBtnCss = "badge badge-soft-success font-size-12 btn btn-success waves-effect waves-light w-xxs border border-light"
 const editSelfBtnCss = "badge badge-soft-primary font-size-12 btn c_btn-primary waves-effect waves-light w-xxs border border-light"
-const vieBtnCss = "badge badge-soft-primary font-size-12 btn c_btn-primary waves-effect waves-light w-xxs border border-light"
+export const vieBtnCss = "badge badge-soft-primary font-size-12 btn c_btn-primary waves-effect waves-light w-xxs border border-light"
 const copyBtnCss = "badge badge-soft-primary font-size-12 btn c_btn-primary waves-effect waves-light w-xxs border border-light"
 const updateBtnCss = "badge badge-soft-info font-size-12 btn btn-info waves-effect waves-light w-xxs border border-light"
 export const deltBtnCss = "badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
@@ -22,7 +22,7 @@ export const hideBtnCss = "badge badge-soft-primary font-size-12 btn btn-primary
 //******************** icon class ******************************
 const editIconClass = "mdi mdi-pencil font-size-16";
 const viewIconClass = "bx bxs-show font-size-16";
-const approvalviewIconClass = " far fa-check-circle font-size-16";
+const approvalviewIconClass = "mdi mdi-eye-check font-size-16";
 const makeBtnIconClass = "fas fa-file-invoice font-size-16";
 const printIconClass = "bx bx-printer font-size-16";
 const multiInvoiceIconClass = "fas fa-file-download";
@@ -117,7 +117,7 @@ export const listPageActionsButtonFunc = (props) => {
 
     const renderButtonWithSpinner = (btnmode, spinnerColor, iconClass) => {
         const style = (btnmode === mode.makeBtn) ? { marginLeft: "5px", marginRight: "6px" } : {};
-        
+
         return (
             <>
                 {listBtnLoading === btnmode ? (
@@ -183,7 +183,7 @@ export const listPageActionsButtonFunc = (props) => {
         const renderButtonIfNeeded = ({ condition, btnmode, iconClass, actionFunc, dispatchAction, title, buttonClasss, isDummyBtn }) => {
             if ((!condition && !isDummyBtn) || IsRecordDeleted) return null;
             if (!isDummyBtn) {
-                
+
                 return (
                     <Button
                         type="button"
@@ -257,7 +257,7 @@ export const listPageActionsButtonFunc = (props) => {
                         btnmode: mode.viewApproval,
                         iconClass: approvalviewIconClass,
                         actionFunc: viewApprovalBtnFunc,
-                        title: "Approval View",
+                        title: "View Items -",
                         buttonClasss: vieBtnCss,
                     })}
 
@@ -539,19 +539,30 @@ export const E_Invoice_ActionsButtonFunc = ({ dispatch, reducers, deleteName }) 
     const { listBtnLoading } = reducers;
 
     function Uploaded_EInvoiceHandler(btnId, rowData) {
+
         try {
-            dispatch(Uploaded_EInvoiceAction({ btnId, RowId: rowData.id, UserID: loginUserID() }));
+            if (rowData.PageMode === "CreditDebitList") {
+                dispatch(Uploaded_Credit_Debit_EInvoiceAction({ btnId, RowId: rowData.id, UserID: loginUserID() }));
+            } else {
+                dispatch(Uploaded_EInvoiceAction({ btnId, RowId: rowData.id, UserID: loginUserID() }));
+            }
         } catch (error) { }
     }
 
     async function Cancel_EInvoiceHandler(btnId, rowData) {
+
         try {
             let alertRepsponse = await customAlert({
                 Type: 8,
                 Message: `Are you sure you want to Cancel EInvoice : "${rowData[deleteName]}"`,
             })
             if (alertRepsponse) {
-                dispatch(Cancel_EInvoiceAction({ btnId, RowId: rowData.id, UserID: loginUserID() }));
+                if (rowData.PageMode === "CreditDebitList") {
+                    dispatch(Cancel_Credit_Debit_EInvoiceAction({ btnId, RowId: rowData.id, UserID: loginUserID() }));
+                } else {
+                    dispatch(Cancel_EInvoiceAction({ btnId, RowId: rowData.id, UserID: loginUserID() }));
+
+                }
             }
 
         } catch (error) { }

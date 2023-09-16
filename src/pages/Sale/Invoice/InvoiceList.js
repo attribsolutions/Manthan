@@ -90,7 +90,7 @@ const InvoiceList = () => {
         Update_Vehicle_Invoice,
         sendToScmMsg
     } = reducers;
-    debugger
+
     const {
         fromdate,
         todate,
@@ -346,6 +346,7 @@ const InvoiceList = () => {
     }
 
     const partySelectButtonHandler = (e) => {
+        goButtonHandler()
         dispatch(GetVenderSupplierCustomer({ subPageMode, PartyID: _cfunc.loginSelectedPartyID() }));
     }
 
@@ -471,7 +472,7 @@ const InvoiceList = () => {
         <React.Fragment>
             <PageLoadingSpinner isLoading={reducers.listBtnLoading || !pageField} />
             <div className="page-content">
-                <PartyDropdown_Common
+                <PartyDropdown_Common pageMode={pageMode}
                     goButtonHandler={partySelectButtonHandler}
                     changeButtonHandler={partySelectOnChangeHandler} />
                 {

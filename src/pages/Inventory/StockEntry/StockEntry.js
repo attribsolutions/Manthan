@@ -73,7 +73,12 @@ const StockEntry = (props) => {
         const page_Id = pageId.STOCK_ENTRY
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
-        dispatch(goButtonPartyItemAddPage(JSON.stringify({ ..._cfunc.loginJsonBody(), PartyID: _cfunc.loginSelectedPartyID() })))
+        dispatch(goButtonPartyItemAddPage({
+            jsonBody: JSON.stringify({
+                ..._cfunc.loginJsonBody(),
+                PartyID: _cfunc.loginSelectedPartyID()
+            })
+        }))
     }, []);
 
     const location = { ...history.location }
@@ -512,7 +517,9 @@ const StockEntry = (props) => {
     }
 
     function goButtonHandler() {
-        dispatch(goButtonPartyItemAddPage(JSON.stringify({ ..._cfunc.loginJsonBody(), PartyID: _cfunc.loginSelectedPartyID() })))
+        dispatch(goButtonPartyItemAddPage({
+            jsonBody: JSON.stringify({ ..._cfunc.loginJsonBody(), PartyID: _cfunc.loginSelectedPartyID() })
+        }))
     }
 
     if (!(userPageAccessState === '')) {
@@ -520,7 +527,7 @@ const StockEntry = (props) => {
             <React.Fragment>
                 <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
                 <div className="page-content">
-                    <PartyDropdown_Common
+                    <PartyDropdown_Common pageMode={pageMode}
                         goButtonHandler={goButtonHandler}
                         changeButtonHandler={partyOnChngeButtonHandler} />
 

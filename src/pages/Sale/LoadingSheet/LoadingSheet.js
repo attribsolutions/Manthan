@@ -41,6 +41,7 @@ import { C_DatePicker } from "../../../CustomValidateForm";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { GetRoutesListSuccess } from "../../../store/Administrator/RoutesRedux/actions";
 import { getVehicleListSuccess } from "../../../store/Administrator/VehicleRedux/action";
+import NewCommonPartyDropdown from "../../../components/Common/NewCommonPartyDropdown";
 
 const LoadingSheet = (props) => {
 
@@ -48,10 +49,8 @@ const LoadingSheet = (props) => {
     const history = useHistory()
     const currentDate_ymd = _cfunc.date_ymd_func();
 
-    const [pageMode, setPageMode] = useState(mode.defaultsave);
+    const [pageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState('');
-    const [editCreatedBy, seteditCreatedBy] = useState("");
-    const [party, setParty] = useState({ value: "", label: "Select..." });
 
     const fileds = {
         id: "",
@@ -75,6 +74,7 @@ const LoadingSheet = (props) => {
         Driver,
         saveBtnloading,
         goBtnloadingSpinner,
+        commonPartyDropSelect
     } = useSelector((state) => ({
         saveBtnloading: state.LoadingSheetReducer.saveBtnloading,
         postMsg: state.LoadingSheetReducer.postMsg,
@@ -86,6 +86,7 @@ const LoadingSheet = (props) => {
         VehicleNumber: state.VehicleReducer.VehicleList,
         RoutesList: state.RoutesReducer.RoutesList,
         Driver: state.DriverReducer.DriverList,
+        commonPartyDropSelect: state.CommonPartyDropdownReducer.commonPartyDropSelect
     }));
 
     const { Data = [] } = GoButton;
@@ -95,11 +96,35 @@ const LoadingSheet = (props) => {
         const page_Id = pageId.LOADING_SHEET
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
-        dispatch(GetRoutesList());
-        dispatch(getVehicleList())
-        dispatch(getDriverList())
-        dispatch(invoiceListGoBtnfilter())
     }, []);
+
+    // Common Party Dropdown useEffect
+    useEffect(() => {
+
+        if (commonPartyDropSelect.value > 0) {
+            dispatch(GetRoutesList({ ..._cfunc.loginJsonBody(), "PartyID": commonPartyDropSelect.value }));
+            dispatch(getVehicleList({ ..._cfunc.loginJsonBody(), "PartyID": commonPartyDropSelect.value }));
+            dispatch(getDriverList({ ..._cfunc.loginJsonBody(), "PartyID": commonPartyDropSelect.value }));
+        }
+        setState((i) => {
+            let a = { ...i }
+            a.values.RouteName = []
+            a.values.VehicleNumber = ""
+            a.values.DriverName = ''
+
+            a.hasValid.RouteName.valid = true;
+            a.hasValid.VehicleNumber.valid = true;
+            a.hasValid.DriverName.valid = true;
+            return a
+        });
+        return () => {
+            dispatch(GetRoutesListSuccess([]));
+            dispatch(getVehicleListSuccess([]));
+            dispatch(getDriverListSuccess([]));
+            dispatch(LoadingSheet_GoBtn_API_Succcess([]));
+        }
+
+    }, [commonPartyDropSelect]);
 
     useEffect(() => {
         dispatch(BreadcrumbShowCountlabel(`Count:${Data.length}`))
@@ -186,7 +211,6 @@ const LoadingSheet = (props) => {
         label: index.Name,
     }));
 
-
     const pagesListColumns = [
         {
             text: "Invoice Date",
@@ -205,31 +229,9 @@ const LoadingSheet = (props) => {
             dataField: "GrandTotal",
         },
     ];
+
     const onChangeBtnHandler = () => {
         dispatch(LoadingSheet_GoBtn_API_Succcess([]))
-    }
-
-    const partySelectButtonHandler = (e) => {
-        dispatch(GetRoutesList());
-        dispatch(getVehicleList())
-        dispatch(getDriverList())
-    }
-
-    const partyOnChngeButtonHandler = (e) => {
-        dispatch(GetRoutesListSuccess([]));
-        dispatch(getVehicleListSuccess([]));
-        dispatch(getDriverListSuccess([]));
-        setState((i) => {
-            let a = { ...i }
-            a.values.RouteName = []
-            a.values.VehicleNumber = ""
-            a.values.DriverName = ''
-
-            a.hasValid.RouteName.valid = true;
-            a.hasValid.VehicleNumber.valid = true;
-            a.hasValid.DriverName.valid = true;
-            return a
-        })
     }
 
     function goButtonHandler() {
@@ -248,7 +250,7 @@ const LoadingSheet = (props) => {
         const jsonBody = JSON.stringify({
             FromDate: values.FromDate,
             ToDate: values.ToDate,
-            Party: _cfunc.loginPartyID(),
+            Party: commonPartyDropSelect.value,
             Route: isRoute,
             LoadingSheetID: ""
         });
@@ -287,7 +289,7 @@ const LoadingSheet = (props) => {
                 const isRoute = values.RouteName.filter(i => !(i.value === '')).map(obj => obj.value).join(',');
                 const jsonBody = JSON.stringify({
                     Date: values.Date,
-                    Party: _cfunc.loginPartyID(),
+                    Party: commonPartyDropSelect.value,
                     Route: isRoute,
                     Vehicle: values.VehicleNumber.value,
                     Driver: values.DriverName.value,
@@ -338,11 +340,7 @@ const LoadingSheet = (props) => {
                 <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
                 <div className="page-content" style={{ marginBottom: "5cm" }}>
 
-                    {/* <PartyDropdown_Common
-                        goButtonHandler={partySelectButtonHandler}
-                        changeBtnShow={!(Driver_Options.length === 0) && !(VehicleNumber_Options.length === 0) && !(RouteName_Options.length === 0)}
-                        changeButtonHandler={partyOnChngeButtonHandler}
-                    /> */}
+                    <NewCommonPartyDropdown pageMode={pageMode} />
 
                     <form noValidate>
                         <div className="px-2 c_card_filter header text-black mb-1" >
@@ -513,7 +511,7 @@ const LoadingSheet = (props) => {
                                                 <BootstrapTable
                                                     keyField={"id"}
                                                     id="table_Arrow"
-                                                    selectRow={selectAllCheck()}
+                                                    selectRow={selectAllCheck({})}
                                                     classes={"table  table-bordered table-hover"}
                                                     noDataIndication={
                                                         <div className="text-danger text-center ">
@@ -542,8 +540,6 @@ const LoadingSheet = (props) => {
                                             forceDisabled={goBtnloadingSpinner}
                                             onClick={saveHandler}
                                             userAcc={userPageAccessState}
-                                            editCreatedBy={editCreatedBy}
-                                            module={"LoadingSheet"}
                                         />
 
                                     </Col>

@@ -25,16 +25,16 @@ export const sapApi_post = async (abc, body) => {
         .then(response => response.data)
 };
 
-export const E_invoiceQRCode = async () => {
+// export const E_invoiceQRCode = async () => {
 
-    let url = "/Einvoiceapis/printQRCode/64a40ecd34dca9247dfa923e"
-   
-    var a = await axios.get(`/E_invoiceQRCode${url}`).then(response => response.data).catch((w) => w)
- 
+//     let url = "/Einvoiceapis/printQRCode/64a40ecd34dca9247dfa923e"
 
-    // console.log("HJKKFDGHJKLFGHJK   E_invoiceQRCode****", a)
-    return a
-};
+//     var a = await axios.get(`/E_invoiceQRCode${url}`).then(response => response.data).catch((w) => w)
 
-E_invoiceQRCode()
+
+//     // console.log("HJKKFDGHJKLFGHJK   E_invoiceQRCode****", a)
+//     return a
+// };
+
+// E_invoiceQRCode()
 // curl --insecure https://pro.mastersindia.co

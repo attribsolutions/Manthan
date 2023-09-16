@@ -60,6 +60,7 @@ const InvoiceConfiguration = (props) => {
         AddressInInvoice: "",
         AutoEInvoice: "",
         EInvoiceApplicable: "",
+        CreditDebitAmountRound: ""
         // IsTCSPercentageforNonValidatedPANCustomer: "",
         // IsTCSPercentageforValidatedPANCustomer: ""
     }
@@ -209,7 +210,7 @@ const InvoiceConfiguration = (props) => {
             }
 
             setState((i) => {
-
+                debugger
                 const a = { ...i }
                 a.values.Invoicea4 = Data.A4Print;
                 a.values.AddressInInvoice = Data.AddressOnInvoice;
@@ -219,6 +220,9 @@ const InvoiceConfiguration = (props) => {
                 a.values.TCSAmountRound = Data.TCSAmountRoundConfiguration;
                 a.values.EInvoiceApplicable = Data.EInvoiceApplicable;
                 a.values.AutoEInvoice = Data.AutoEInvoice;
+                a.values.CreditDebitAmountRound = Data.CreditDebitAmountRoundConfiguration;
+
+
                 // a.values.IsTCSPercentageforValidatedPANCustomer = Data.IsTCSPercentageforValidatedPANCustomer;
                 // a.values.IsTCSPercentageforNonValidatedPANCustomer = Data.IsTCSPercentageforNonValidatedPANCustomer;
 
@@ -266,7 +270,7 @@ const InvoiceConfiguration = (props) => {
 
     const SaveHandler = async (event) => {
 
-        
+
         const BulkData = []
         event.preventDefault();
         const btnId = event.target.id
@@ -363,7 +367,7 @@ const InvoiceConfiguration = (props) => {
                                                 </Col>
                                                 {/* <Col sm={4}>
                                                     <FormGroup className="mb-3">
-                                                        <Label htmlFor="validationCustom01">  {fieldLabel.IsTCSPercentageforValidatedPANCustomer} </Label>
+                                                        <Label htmlFor="validationCustom01">  {fieldLabel.CreditDebitAmountRoundConfiguration} </Label>
                                                         <Col sm={7} >
                                                             <Input
                                                                 // style={{ marginLeft: "53px" }}
@@ -573,23 +577,22 @@ const InvoiceConfiguration = (props) => {
 
                                             <Row>
 
-                                                {/* <Col sm={4}>
+                                                <Col sm={4}>
                                                     <FormGroup className="mb-3">
                                                         <Row>
                                                             <Col sm={5} >
-                                                                <Label htmlFor="validationCustom01">  {fieldLabel.IsTCSPercentageforNonValidatedPANCustomer} </Label>
+                                                                <Label htmlFor="validationCustom01">  {fieldLabel.CreditDebitAmountRound} </Label>
                                                             </Col>
                                                             <Col sm={7} >
                                                                 <Input
                                                                     style={{ marginLeft: "53px" }}
                                                                     type="checkbox"
                                                                     className="p-2"
-                                                                    checked={values.IsTCSPercentageforNonValidatedPANCustomer.Value === "0" ? false : true}
+                                                                    checked={values.CreditDebitAmountRound.Value === "0" ? false : true}
                                                                     onChange={(e) => {
                                                                         setState((i) => {
                                                                             const a = { ...i }
-                                                                            a.values.IsTCSPercentageforNonValidatedPANCustomer.Value = e.target.checked === false ? "0" : "1";
-
+                                                                            a.values.CreditDebitAmountRound.Value = e.target.checked === false ? "0" : "1";
                                                                             return a
                                                                         })
                                                                     }}
@@ -599,7 +602,7 @@ const InvoiceConfiguration = (props) => {
                                                             </Col>
                                                         </Row>
                                                     </FormGroup>
-                                                </Col> */}
+                                                </Col>
                                             </Row>
 
 

@@ -240,7 +240,7 @@ const SapLedger = (props) => {
 
                 <div className="page-content" >
 
-                    <PartyDropdown_Common
+                    <PartyDropdown_Common 
                         changeButtonHandler={partySelectOnChangeHandler}
                         SAPLedgerOptions={PartyDropdownOptions} />
 
