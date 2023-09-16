@@ -59,8 +59,8 @@ const PartyList = () => {
     }
     // Common Party Dropdown useEffect
     useEffect(() => {
-
-        if (commonPartyDropSelect.value > 0) {
+        
+        if ((commonPartyDropSelect.value > 0 && (subPageMode === url.RETAILER_LIST || subPageMode === url.NON_RETAILER_PARTY))) {
             goButtonHandler()
         }
         else if (subPageMode === url.PARTY_lIST) {
@@ -78,6 +78,7 @@ const PartyList = () => {
 
     //  This UseEffect => Featch Modules List data  First Rendering
     useLayoutEffect(() => {
+        debugger
         let page_Id = '';
         let page_Mode = mode.defaultList;
         let masterPath = '';
@@ -101,7 +102,10 @@ const PartyList = () => {
         setPageMode(page_Mode)
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
-
+        return () => {
+            dispatch(updatePartyIDSuccess([])); //for clear privious order list 
+            dispatch(getPartyListAPISuccess([]));
+        }
     }, []);
 
     function goButtonHandler() {
