@@ -150,7 +150,7 @@ export const RowsWithCGST_SGST = (data) => {
 
         const tableitemRow = [
             SrNO++,
-            `${HSNcodes} ${element.ItemName}                                ${element.ItemComment === null ? "" : element.ItemComment}`,
+            `${HSNcodes} ${element.ItemName}${element.ItemComment === null ? "" : `\n`} ${element.ItemComment === null ? "" : element.ItemComment}`,
             `${parseFloat(element.Quantity)}   ${element.UnitName}`,
             `${Number(element.MRPValue).toFixed(2)}`,
             `${numberWithCommas(Number(element.Rate).toFixed(2))}`,
@@ -325,7 +325,7 @@ export const RowsWithIGST = (data) => {
         const tableitemRow = [
 
             SrNO++,
-            `${HSNcodes} ${element.ItemName}                                ${element.ItemComment === null ? "" : element.ItemComment}`,
+            `${HSNcodes} ${element.ItemName}${element.ItemComment === null ? "" : `\n`} ${element.ItemComment === null ? "" : element.ItemComment}`,
             `${parseFloat(element.Quantity)}   ${element.UnitName}`,
             `${numberWithCommas(Number(element.MRPValue).toFixed(2))}`,
             `${numberWithCommas(Number(element.Rate).toFixed(2))}`,

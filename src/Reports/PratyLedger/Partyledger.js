@@ -24,7 +24,7 @@ const PartyLedger = (props) => {
     const fileds = {
         FromDate: currentDate_ymd,
         ToDate: currentDate_ymd,
-        Customer: { value: "", label: "All" },
+        Customer: ''
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
@@ -101,6 +101,11 @@ const PartyLedger = (props) => {
             customAlert({ Type: 3, Message: "Please Select Party" });
             return;
         };
+        if (values.Customer === "") {
+            customAlert({ Type: 3, Message: "Please Select Customer" });
+            return;
+
+        }
 
         const jsonBody = JSON.stringify({
             "FromDate": values.FromDate,
@@ -159,7 +164,7 @@ const PartyLedger = (props) => {
         <React.Fragment>
             <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
             <div className="page-content">
-                <PartyDropdown_Common 
+                <PartyDropdown_Common
                     goButtonHandler={partySelectButtonHandler}
                     changeButtonHandler={partyOnChngeButtonHandler} />
 
