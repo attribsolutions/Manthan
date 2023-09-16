@@ -234,6 +234,9 @@ const userRoutes = [
   { path: path.RETAILER_LIST, component: PartyList },
   { path: path.RETAILER_MASTER, component: PartyMaster },
 
+  { path: path.NON_RETAILER_PARTY_lIST, component: PartyList },
+  { path: path.NON_RETAILER_PARTY, component: PartyMaster },
+
   { path: path.PARTY_SELF_EDIT, component: PartyMaster },
 
   { path: path.EMPLOYEETYPE, component: EmployeeTypesMaster },
@@ -481,7 +484,7 @@ const userRoutes = [
   { path: path.SEARCH_BOX2, component: SearchBoxSecond },
   { path: path.SEARCH_BOX3, component: SerachBox3 },
   { path: path.TRANSACTION_LOG, component: TransactionLog },
-  
+
   { path: "/dashboard", component: Dashboard },
 
   { path: "/", exact: true, component: () => <Redirect to="/login" /> },
