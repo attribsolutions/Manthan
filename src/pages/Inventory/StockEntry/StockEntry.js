@@ -446,7 +446,8 @@ const StockEntry = (props) => {
                 "MRPValue": index.defaultMRP.label,
                 "GSTPercentage": index.defaultGST.label,
                 "BatchDate": index.BatchDate,
-                "BatchCode": index.BatchCode
+                "BatchCode": index.BatchCode,
+                "BatchCodeID": 0
             })
         })
 
@@ -496,6 +497,7 @@ const StockEntry = (props) => {
                     "PartyID": _cfunc.loginPartyID(),
                     "CreatedBy": _cfunc.loginUserID(),
                     "Date": values.Date,
+                    "Mode": 1,
                     "StockItems": filterData
                 }
                 );

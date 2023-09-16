@@ -92,7 +92,11 @@ const PartyList = () => {
             masterPath = url.RETAILER_MASTER;
             newBtnPath = url.RETAILER_MASTER;
         }
-
+        else if (subPageMode === url.NON_RETAILER_PARTY_lIST) {
+            page_Id = pageId.NON_RETAILER_PARTY_lIST
+            masterPath = url.NON_RETAILER_PARTY;
+            newBtnPath = url.NON_RETAILER_PARTY;
+        }
         setOtherState({ masterPath, newBtnPath, })
         setPageMode(page_Mode)
         dispatch(commonPageFieldListSuccess(null))
@@ -126,7 +130,7 @@ const PartyList = () => {
         <React.Fragment>
             <div className="page-content">
                 <PageLoadingSpinner isLoading={(goBtnLoading || !pageField)} />
-                {subPageMode === url.RETAILER_LIST &&
+                {(subPageMode === url.RETAILER_LIST || (subPageMode === url.NON_RETAILER_PARTY_lIST)) &&
                     <PartyDropdown_Common pageMode={pageMode}
                         goBtnLoading={goBtnLoading}
                         goButtonHandler={goButtonHandler}

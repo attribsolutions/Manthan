@@ -56,6 +56,10 @@ function initialState(history) {
         page_Id = pageId.PARTY;
         listPath = url.PARTY_lIST
     }
+    else if (sub_Mode === url.NON_RETAILER_PARTY) {
+        page_Id = pageId.NON_RETAILER_PARTY;
+        listPath = url.NON_RETAILER_PARTY_lIST
+    }
     else if (sub_Mode === url.PARTY_SELF_EDIT) {
         page_Id = pageId.PARTY_SELF_EDIT;
         // listPath = url.RETAILER_LIST
@@ -478,7 +482,7 @@ const PartyMaster = (props) => {
             <React.Fragment>
                 <MetaTags> {metaTagLabel(userPageAccessState)}</MetaTags>
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
-                    {subPageMode === url.RETAILER_MASTER &&
+                    {(subPageMode === url.RETAILER_MASTER) &&
                         <NewCommonPartyDropdown pageMode={pageMode} />}
                     <Container fluid>
                         <Row>

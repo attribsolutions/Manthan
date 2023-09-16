@@ -441,7 +441,7 @@ const HeaderSection = (props) => {
                                                 isSearchable={true}
                                                 className="react-dropdown"
                                                 classNamePrefix="dropdown"
-                                                isDisabled={(states.tableData.length > 0) && true}
+                                                isDisabled={(states.tableData.length > 0 || !(isSCMParty)) && true}
                                                 styles={{
                                                     menu: provided => ({ ...provided, zIndex: 2 })
                                                 }}
@@ -471,7 +471,7 @@ const HeaderSection = (props) => {
                                                 isLoading={supplierLoading}
                                                 className="react-dropdown"
                                                 classNamePrefix="dropdown"
-                                                isDisabled={(states.tableData.length > 0) && true}
+                                                isDisabled={(states.tableData.length > 0 || !(isSCMParty)) && true}
                                                 styles={{
                                                     menu: provided => ({ ...provided, zIndex: 2 })
                                                 }}
