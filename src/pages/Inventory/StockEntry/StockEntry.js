@@ -446,7 +446,8 @@ const StockEntry = (props) => {
                 "MRPValue": index.defaultMRP.label,
                 "GSTPercentage": index.defaultGST.label,
                 "BatchDate": index.BatchDate,
-                "BatchCode": index.BatchCode
+                "BatchCode": index.BatchCode,
+                "BatchCodeID": 0
             })
         })
 
