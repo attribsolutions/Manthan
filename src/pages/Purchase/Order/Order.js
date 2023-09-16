@@ -441,15 +441,34 @@ const Order = (props) => {
         }
     }, [gobutton_Add_invoice]);
 
+    // useEffect(() => {
+    //     if (changeAllDiscount) {
+
+    //         const updatedOrderItemTable = orderItemTable.map((item) => ({
+    //             ...item,
+    //             Discount: discountValueAll,
+    //             DiscountType: discountTypeAll.value,
+    //         }));
+    //         itemWise_CalculationFunc(item, undefined, orderItemTable)
+    //         setOrderItemTable(updatedOrderItemTable);
+    //     }
+    // }, [changeAllDiscount, discountValueAll, discountTypeAll.value]);
+
     useEffect(() => {
+        debugger
         if (changeAllDiscount) {
-            
             const updatedOrderItemTable = orderItemTable.map((item) => ({
                 ...item,
                 Discount: discountValueAll,
                 DiscountType: discountTypeAll.value,
             }));
 
+            // Perform calculations based on the updated values for each item
+            updatedOrderItemTable.forEach((item) => {
+                itemWise_CalculationFunc(item, undefined, updatedOrderItemTable);
+            });
+
+            // Set the updated array as the new orderItemTable
             setOrderItemTable(updatedOrderItemTable);
         }
     }, [changeAllDiscount, discountValueAll, discountTypeAll.value]);
@@ -998,6 +1017,7 @@ const Order = (props) => {
     };
 
     function itemWise_CalculationFunc(row, IsComparGstIn, tableList) {
+        debugger
         const calculate = orderCalculateFunc(row) //order calculation function 
         row["Amount"] = calculate.roundedTotalAmount
         let sumOfAmount = tableList.reduce((accumulator, currentObject) => accumulator + (Number(currentObject["Amount"]) || 0), 0);
