@@ -108,9 +108,9 @@ const TransactionLog = () => {
             const jsonBody = JSON.stringify({
                 "FromDate": formDateSelect,
                 "ToDate": toDateSelect,
-                "TransactionType": transactionTypeSelect.map(item => item.id).join(', '),
-                "User": userSelect.map(item => item.id).join(', '),
-                "Party": partySelect.map(item => item.id).join(', '),
+                "TransactionType": transactionTypeSelect.map(item => item.value).join(','),
+                "User": userSelect.map(item => item.value).join(','),
+                "Party": partySelect.map(item => item.value).join(','),
             })
             const resp3 = await TransactionLog_Go_Btn_Api({ jsonBody })
             setGoBtnloading(false);
