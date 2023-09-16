@@ -695,20 +695,7 @@ export const tableBody = (doc, data) => {
                 }
             }
 
-            // if (colIdx === 1) {
-
-            //     if (data.ItemComment) {
-
-            //         if (data1.row.cells[0].raw === data.ID) {
-            //             const cell = data1.cell;
-            //             doc.setFontSize(7);
-            //             doc.setTextColor('red');
-            //             doc.text(`${data.ItemComment}`, cell.x + 5, cell.y + 13);
-
-            //         }
-            //     }
-
-            // }
+           
 
         },
         margin: {
