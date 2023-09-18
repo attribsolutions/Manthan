@@ -73,41 +73,41 @@ const TransactionLog = () => {
     }, [userAccess]);
 
     const tableColumns = [
-    {
-        text: "Transaction Date",
-        dataField: "TranasactionDate",
-        sort: true
-    }, {
-        text: "User Name",
-        dataField: "UserName",
-        sort: true
-    }, {
-        text: "IP Address",
-        dataField: "IPaddress",
-        sort: true
-    },
-    {
-        text: "Transaction Type",
-        dataField: "TransactionType",
-        sort: true
-    },
-    // {
-    //     text: "Transaction Id",
-    //     dataField: "TransactionID",
-    //     sort: true
+        {
+            text: "Transaction Date",
+            dataField: "TranasactionDate",
+            sort: true
+        }, {
+            text: "User Name",
+            dataField: "UserName",
+            sort: true
+        }, {
+            text: "IP Address",
+            dataField: "IPaddress",
+            sort: true
+        },
+        {
+            text: "Transaction Type",
+            dataField: "TransactionType",
+            sort: true
+        },
+        // {
+        //     text: "Transaction Id",
+        //     dataField: "TransactionID",
+        //     sort: true
 
-    // },
-    {
-        text: "Transaction Detail",
-        dataField: "TransactionDetails",
-        sort: true
+        // },
+        {
+            text: "Transaction Detail",
+            dataField: "TransactionDetails",
+            sort: true
 
-    },
-    {
-        text: "Party Name",
-        dataField: "PartyName",
-        sort: true
-    },]
+        },
+        {
+            text: "Party Name",
+            dataField: "PartyName",
+            sort: true
+        },]
 
     const goButtonHandler = async () => {
         try {
@@ -123,9 +123,10 @@ const TransactionLog = () => {
             const resp3 = await TransactionLog_Go_Btn_Api({ jsonBody })
             setGoBtnloading(false);
             if (resp3.StatusCode === 200) {
+
                 setTableData(resp3.Data);
                 dispatch(BreadcrumbShowCountlabel(`Count : ${resp3.Data.length}`))
-            }else{
+            } else if (!(resp3.StatusCode === 406)) {
                 showToastAlert()
             }
         } catch (w) { setGoBtnloading(false); }
@@ -323,7 +324,7 @@ const TransactionLog = () => {
                                                     Record Not available
                                                 </div>
                                             }
-                                            onDataSizeChange={({dataSize}) => {
+                                            onDataSizeChange={({ dataSize }) => {
                                                 dispatch(BreadcrumbShowCountlabel(`Count : ${dataSize}`))
                                             }}
                                             {...toolkitProps.baseProps}
