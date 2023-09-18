@@ -32,10 +32,10 @@ const SidebarContent = (props) => {
 
   useEffect(async () => {
     if (roleAccesssForSidbarError) {
-      await customAlert({
-        Type: 2,
-        Message: `RoleAccess get Api Error `
-      })
+      // await customAlert({
+      //   Type: 2,
+      //   Message: `RoleAccess get Api Error `
+      // })
 
       dispatch(roleAceessActionError(false))
       history.push({ pathname: '/logout' })

@@ -6,10 +6,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { Col, FormGroup, Label, Row } from 'reactstrap';
 import { Go_Button, PageLoadingSpinner } from '../../components/Common/CommonButton';
-import { breadcrumbReturnFunc, loginEmployeeID } from '../../components/Common/CommonFunction';
+import { breadcrumbReturnFunc, convertDateTime_ydm, date_dmy_func, loginEmployeeID } from '../../components/Common/CommonFunction';
 import { mySearchProps } from '../../components/Common/SearchBox/MySearch';
 import { C_DatePicker, C_Select, C_TimePicker } from '../../CustomValidateForm';
+import { showToastAlert } from '../../helpers/axios_Config';
 import { commonPartyDropdown_API, TransactionLog_Get_User_Api, TransactionLog_Go_Btn_Api, TransactionLog_transactionType_Api } from '../../helpers/backend_helper';
+import { BreadcrumbShowCountlabel } from '../../store/actions';
 
 const TransactionLog = () => {
     const dispatch = useDispatch();
@@ -21,8 +23,8 @@ const TransactionLog = () => {
     const [transactionTypeSelect, setTransactionTypeSelect] = useState([]);
     const [userSelect, setUserSelect] = useState([]);
     const [partySelect, setPartySelect] = useState([]);
-    const [formDateSelect, setFormDateSelect] = useState('');
-    const [toDateSelect, setToDateSelect] = useState('');
+    const [formDateSelect, setFormDateSelect] = useState(date_dmy_func);
+    const [toDateSelect, setToDateSelect] = useState(date_dmy_func);
 
     const [goBtnloading, setGoBtnloading] = useState(false);
     const [tableData, setTableData] = useState([]);
@@ -70,11 +72,8 @@ const TransactionLog = () => {
         };
     }, [userAccess]);
 
-    const tableColumns = [{
-        text: "Id",
-        dataField: "id",
-        sort: true
-    }, {
+    const tableColumns = [
+    {
         text: "Transaction Date",
         dataField: "TranasactionDate",
         sort: true
@@ -92,11 +91,19 @@ const TransactionLog = () => {
         dataField: "TransactionType",
         sort: true
     },
+    // {
+    //     text: "Transaction Id",
+    //     dataField: "TransactionID",
+    //     sort: true
+
+    // },
     {
-        text: "Transaction Id",
-        dataField: "TransactionID",
+        text: "Transaction Detail",
+        dataField: "TransactionDetails",
         sort: true
-    }, {
+
+    },
+    {
         text: "Party Name",
         dataField: "PartyName",
         sort: true
@@ -105,9 +112,10 @@ const TransactionLog = () => {
     const goButtonHandler = async () => {
         try {
             setGoBtnloading(true);
+            setTableData([])
             const jsonBody = JSON.stringify({
-                "FromDate": formDateSelect,
-                "ToDate": toDateSelect,
+                "FromDate": convertDateTime_ydm(formDateSelect),
+                "ToDate": convertDateTime_ydm(toDateSelect),
                 "TransactionType": transactionTypeSelect.map(item => item.value).join(','),
                 "User": userSelect.map(item => item.value).join(','),
                 "Party": partySelect.map(item => item.value).join(','),
@@ -116,17 +124,14 @@ const TransactionLog = () => {
             setGoBtnloading(false);
             if (resp3.StatusCode === 200) {
                 setTableData(resp3.Data);
-            };
+                dispatch(BreadcrumbShowCountlabel(`Count : ${resp3.Data.length}`))
+            }else{
+                showToastAlert()
+            }
         } catch (w) { setGoBtnloading(false); }
 
     }
-    // const jsonBody = JSON.stringify({
-    //     "FromDate": "2023-09-14 12:00",
-    //     "ToDate": "2023-09-14 12:00",
-    //     "TransactionType": "1,2,3",
-    //     "User": "1,2,3",
-    //     "Party": "1,2,3",
-    // })
+
 
     const HeaderContent = () => {
         return (
@@ -143,7 +148,6 @@ const TransactionLog = () => {
                                         id="fromdate"
                                         value={formDateSelect}
                                         onChange={(obj, selectedDate) => {
-                                            debugger
                                             setFormDateSelect(selectedDate)
                                         }}
                                         placeholder="Select From Date"
@@ -319,8 +323,8 @@ const TransactionLog = () => {
                                                     Record Not available
                                                 </div>
                                             }
-                                            onDataSizeChange={(e) => {
-                                                // _cfunc.tableInputArrowUpDounFunc("#table_Arrow")
+                                            onDataSizeChange={({dataSize}) => {
+                                                dispatch(BreadcrumbShowCountlabel(`Count : ${dataSize}`))
                                             }}
                                             {...toolkitProps.baseProps}
                                         />

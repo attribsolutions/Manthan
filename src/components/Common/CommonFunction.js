@@ -77,6 +77,13 @@ export function concatDateAndTime(date, time) {//+++++++++++time and date concat
   return `${d} ${t}`;
 }
 
+export function convertDateTime_ydm(inputDateTime) {
+  const [datePart, timePart="00:00"] = inputDateTime.split(' ');
+  const [day, month, year] = datePart.split('-');
+  return `${year}-${month}-${day} ${timePart}`;
+}
+
+
 export function CurrentTime() {
 
   function addLeadingZero(number) {

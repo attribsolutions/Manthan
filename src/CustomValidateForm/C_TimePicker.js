@@ -9,11 +9,12 @@ export const C_TimePicker = ({
     value,
     options = {
         enableTime: true, // Enable time picker
-        dateFormat: 'Y-m-d H:i', // Date and time format
+        dateFormat: 'd-m-Y H:i', // Date and time format
         time_24hr: true, // Use 24-hour time format
     },
     ...rest
 }) => {
+    
     return (
         <>{
             disabled ?
@@ -24,7 +25,6 @@ export const C_TimePicker = ({
                     value={value}
                     className="form-control d-block p-2 bg-white text-dark"
                     options={options}
-
                 />
         }
         </>

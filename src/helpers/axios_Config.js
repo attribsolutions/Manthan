@@ -123,7 +123,8 @@ axiosRetry(axiosApi, { retries: 3, retryDelay: axiosRetry.exponentialDelay });
 
 
 const activeToasts = new Set();
-export function showToastAlert(message, color = '') {
+
+export function showToastAlert(message = 'Oops! Something went wrong.', color = '') {
     if (!activeToasts.has(message)) {
         activeToasts.add(message);
 
