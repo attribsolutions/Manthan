@@ -69,7 +69,7 @@ function* GRNListfilterGerFunc({ config }) {          // Grn_List filter  genrat
 
       //tranzaction date is only for fiterand page field but UI show transactionDateLabel
       i["transactionDate"] = i.CreatedOn;
-      i["transactionDateLabel"] = _cfunc.concatDateAndTime(i.GRNDate, i.CreatedOn);
+      i["transactionDateLabel"] = _cfunc.listpageConcatDateAndTime(i.GRNDate, i.CreatedOn);
       return i
     })
     yield put(getGRNListPageSuccess(newList))

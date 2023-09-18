@@ -2,7 +2,7 @@ import { call, put, takeLatest } from "redux-saga/effects";
 import * as  apiCall from "../../../helpers/backend_helper";
 import * as actionType from "./actionTypes";
 import * as action from "./action";
-import { concatDateAndTime } from "../../../components/Common/CommonFunction";
+import { listpageConcatDateAndTime } from "../../../components/Common/CommonFunction";
 
 function* save_MRPMaster_GenFunc({ config }) {
   try {
@@ -19,7 +19,7 @@ function* get_MRPMaster_GenFunc() {
 
       //tranzaction date is only for fiterand page field but UI show transactionDateLabel
       i["transactionDate"] = i.CreatedOn;
-      i["transactionDateLabel"] = concatDateAndTime(i.EffectiveDate, i.CreatedOn);
+      i["transactionDateLabel"] = listpageConcatDateAndTime(i.EffectiveDate, i.CreatedOn);
     })
     yield put(action.getMRPList_Success(response.Data))
   } catch (error) { yield put(action.MRPApiErrorAction()) }

@@ -1,6 +1,6 @@
 import { call, put, takeLatest } from "redux-saga/effects";
-import { concatDateAndTime } from "../../../components/Common/CommonFunction";
-// import {concatDateAndTime} from "../../../components/Common/CommonFunction";
+import { listpageConcatDateAndTime } from "../../../components/Common/CommonFunction";
+// import {listpageConcatDateAndTime} from "../../../components/Common/CommonFunction";
 import {
   delete_MarginList_API,
   GetMarginList_For_Listpage,
@@ -39,7 +39,7 @@ function* get_Margin_GenFunc() {
 
       //tranzaction date is only for fiterand page field but UI show transactionDateLabel
       i["transactionDate"] = i.CreatedOn;
-      i["transactionDateLabel"] = concatDateAndTime(i.EffectiveDate, i.CreatedOn);
+      i["transactionDateLabel"] = listpageConcatDateAndTime(i.EffectiveDate, i.CreatedOn);
     })
     yield put(getMarginListSuccess(response.Data))
   } catch (error) { yield put(MarginApiErrorAction()) }

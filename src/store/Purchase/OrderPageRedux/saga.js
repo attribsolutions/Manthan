@@ -40,7 +40,7 @@ import {
   POST_ORDER_CONFIRM_API,
   ORDER_SINGLE_GET_API
 } from "./actionType";
-import { amountCommaSeparateFunc, concatDateAndTime, date_dmy_func, } from "../../../components/Common/CommonFunction";
+import { amountCommaSeparateFunc, listpageConcatDateAndTime, date_dmy_func, } from "../../../components/Common/CommonFunction";
 import *as url from "../../../routes/route_url"
 
 function* goButtonGenFunc({ config }) {                      // GO-Botton order Add Page by subPageMode  
@@ -165,7 +165,7 @@ function* orderList_GoBtn_GenFunc({ config }) {
       i.dashboardOrderDate = date_dmy_func(i.OrderDate); // Only for Dashoard 
       //tranzaction date is only for fiterand page field but UI show transactionDateLabel
       i["transactionDate"] = i.CreatedOn;
-      i["transactionDateLabel"] = concatDateAndTime(i.OrderDate, i.CreatedOn);
+      i["transactionDateLabel"] = listpageConcatDateAndTime(i.OrderDate, i.CreatedOn);
 
       i.DeliveryDate = (`${DeliveryDate}`)
 

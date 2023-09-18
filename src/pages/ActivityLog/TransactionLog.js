@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { Col, FormGroup, Label, Row } from 'reactstrap';
 import { Go_Button, PageLoadingSpinner } from '../../components/Common/CommonButton';
-import { breadcrumbReturnFunc, convertDateTime_ydm, date_dmy_func, loginEmployeeID } from '../../components/Common/CommonFunction';
+import { breadcrumbReturnFunc, convertDateTime_dmy, convertDateTime_ydm, date_dmy_func, getDateTime_dmy, loginEmployeeID } from '../../components/Common/CommonFunction';
 import { mySearchProps } from '../../components/Common/SearchBox/MySearch';
 import { C_DatePicker, C_Select, C_TimePicker } from '../../CustomValidateForm';
 import { showToastAlert } from '../../helpers/axios_Config';
@@ -23,8 +23,8 @@ const TransactionLog = () => {
     const [transactionTypeSelect, setTransactionTypeSelect] = useState([]);
     const [userSelect, setUserSelect] = useState([]);
     const [partySelect, setPartySelect] = useState([]);
-    const [formDateSelect, setFormDateSelect] = useState(date_dmy_func);
-    const [toDateSelect, setToDateSelect] = useState(date_dmy_func);
+    const [formDateSelect, setFormDateSelect] = useState(()=>getDateTime_dmy(1));//offSetTime 1 hour earlier
+    const [toDateSelect, setToDateSelect] = useState(getDateTime_dmy);
 
     const [goBtnloading, setGoBtnloading] = useState(false);
     const [tableData, setTableData] = useState([]);

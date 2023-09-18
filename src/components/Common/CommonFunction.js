@@ -6,17 +6,16 @@ import $ from 'jquery';
 
 export const history = createBrowserHistory();
 
+
+
 function isDateInitial(isdate) {
-
-  let current = (isdate) ? new Date(isdate) : new Date();
-
-  let month = current.getMonth() + 1;
-  let dd = current.getDate() < 10 ? `0${current.getDate()}` : `${current.getDate()}`;
-  let mm = month < 10 ? `0${month}` : `${month}`;
-  let yy = current.getFullYear();
-
-  return { dd, mm, yy }
-
+  const current = isdate ? new Date(isdate) : new Date();
+  const dd = String(current.getDate()).padStart(2, '0');
+  const mm = String(current.getMonth() + 1).padStart(2, '0');
+  const yy = current.getFullYear();
+  const hours = String(current.getHours()).padStart(2, '0');
+  const minutes = String(current.getMinutes()).padStart(2, '0');
+  return { dd, mm, yy, hours, minutes };
 }
 
 export const date_ymd_func = (isdate) => { //+++++++++++++++ Current Date by format (yyyy-dd-mm) ++++++++++++++++++++++++++++++++++++
@@ -39,46 +38,51 @@ export const currentDate_ymd = date_ymd_func();
 export const currentDate_dmy = date_dmy_func();
 
 
-export function convertTimefunc(inputDate) { //+++++++++++Convert Time Format+++++++++++++++++++++++++++++++
+export function convertTimefunc(inputDate) {
   const date = new Date(inputDate);
-  let month = date.getMonth() + 1;
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const year = date.getFullYear();
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
 
-  let convDate = `${date.getDate() < 10 ? `0${date.getDate()}` : `${date.getDate()}`
-    }-${month < 10 ? `0${month}` : `${month}`}`;
+  const meridian = hours < 12 ? 'AM' : 'PM';
+  const hour12 = (hours % 12) || 12;
 
-  let hours = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
-  let minutes =
-    date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
-  let timeString = hours + ":" + minutes;
-
-  let [hourString, minute] = timeString.split(":");
-  let hour = +hourString % 24;
-  let time = (hour % 12 || 12) + ":" + minute + (hour < 12 ? "AM" : "PM");
-  return `(${convDate} ${time})`;
+  return `(${day}-${month}-${year} ${hour12}:${minutes} ${meridian})`;
 }
 
-export function convertOnlyTimefunc(inputDate) { //+++++++++++Convert Time Format+++++++++++++++++++++++++++++++
+export function convertOnlyTimefunc(inputDate) {
   const date = new Date(inputDate);
 
-  let hours = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
-  let minutes =
-    date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
-  let timeString = hours + ":" + minutes;
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+  const meridian = hours < 12 ? 'AM' : 'PM';
+  const hour12 = (hours % 12) || 12;
 
-  let [hourString, minute] = timeString.split(":");
-  let hour = +hourString % 24;
-  let time = (hour % 12 || 12) + ":" + minute + (hour < 12 ? "AM" : "PM");
-  return `(${time})`;
+  return `(${hour12}:${minutes} ${meridian})`;
 }
 
-export function concatDateAndTime(date, time) {//+++++++++++time and date concate +++++++++++++++++++++++++++++++
+
+export function listpageConcatDateAndTime(date, time) {//+++++++++++time and date concate +++++++++++++++++++++++++++++++
   const d = date_dmy_func(date);
   const t = convertTimefunc(time);
   return `${d} ${t}`;
 }
 
+
+export function getDateTime_dmy(hourOffset = 0) {
+  const { dd, mm, yy } = isDateInitial();
+  const currentDate = new Date();
+  currentDate.setHours(currentDate.getHours() - hourOffset); // Subtract the specified number of hours
+  const hours = String(currentDate.getHours()).padStart(2, '0');
+  const minutes = String(currentDate.getMinutes()).padStart(2, '0');
+
+  return `${dd}-${mm}-${yy} ${hours}:${minutes}`;
+}
+
 export function convertDateTime_ydm(inputDateTime) {
-  const [datePart, timePart="00:00"] = inputDateTime.split(' ');
+  const [datePart, timePart = "00:00"] = inputDateTime.split(' ');
   const [day, month, year] = datePart.split('-');
   return `${year}-${month}-${day} ${timePart}`;
 }
@@ -308,7 +312,7 @@ export const compareGSTINState = (gstin1 = '', gstin2 = '') => {
 }
 
 export function breadcrumbReturnFunc({ dispatch, userAcc, newBtnPath = "", forceNewBtnView = true }) {
-  
+
   const isnewBtnView = userAcc.PageType === 2 && userAcc.RoleAccess_IsSave;
   const isCountLabel = userAcc.CountLabel;
   const isexcelBtnView =

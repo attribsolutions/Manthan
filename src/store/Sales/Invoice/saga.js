@@ -2,7 +2,7 @@ import { call, put, takeLatest } from "redux-saga/effects";
 import {
   CommonConsole,
   amountCommaSeparateFunc,
-  concatDateAndTime,
+  listpageConcatDateAndTime,
   loginSystemSetting,
   loginUserDetails,
   loginUserID,
@@ -120,7 +120,7 @@ function* InvoiceListGenFunc({ config }) {
 
       //tranzaction date is only for fiterand page field but UI show transactionDateLabel
       i["transactionDate"] = i.CreatedOn;
-      i["transactionDateLabel"] = concatDateAndTime(i.InvoiceDate, i.CreatedOn);
+      i["transactionDateLabel"] = listpageConcatDateAndTime(i.InvoiceDate, i.CreatedOn);
       return i
     })
     yield put(invoiceListGoBtnfilterSucccess(newList));
