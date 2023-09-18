@@ -44,7 +44,10 @@ const TransactionLog = () => {
         }
         const resp3 = await commonPartyDropdown_API(loginEmployeeID())
         if (resp3.StatusCode === 200) {
-            setPartyRedux(resp3.Data)
+            setPartyRedux(resp3.Data.map((item, key) => {
+                item["id"] = key + 1
+                return item
+            }))
         }
     }, [])
 
@@ -73,15 +76,15 @@ const TransactionLog = () => {
         sort: true
     }, {
         text: "Transaction Date",
-        dataField: "TransactionDate",
+        dataField: "TranasactionDate",
         sort: true
     }, {
         text: "User Name",
         dataField: "UserName",
         sort: true
     }, {
-        text: "Ip Address",
-        dataField: "IpAddress",
+        text: "IP Address",
+        dataField: "IPaddress",
         sort: true
     },
     {
@@ -91,9 +94,9 @@ const TransactionLog = () => {
     },
     {
         text: "Transaction Id",
-        dataField: "TransactionId",
+        dataField: "TransactionID",
         sort: true
-    },{
+    }, {
         text: "Party Name",
         dataField: "PartyName",
         sort: true
@@ -105,9 +108,9 @@ const TransactionLog = () => {
             const jsonBody = JSON.stringify({
                 "FromDate": formDateSelect,
                 "ToDate": toDateSelect,
-                "TransactionType": transactionTypeSelect.map(item => item.id).join(', '),
-                "User": userSelect.map(item => item.id).join(', '),
-                "Party": partySelect.map(item => item.id).join(', '),
+                "TransactionType": transactionTypeSelect.map(item => item.value).join(','),
+                "User": userSelect.map(item => item.value).join(','),
+                "Party": partySelect.map(item => item.value).join(','),
             })
             const resp3 = await TransactionLog_Go_Btn_Api({ jsonBody })
             setGoBtnloading(false);
@@ -139,7 +142,10 @@ const TransactionLog = () => {
                                     <C_TimePicker
                                         id="fromdate"
                                         value={formDateSelect}
-                                        onChange={(selectedDate) => setFormDateSelect(selectedDate)}
+                                        onChange={(obj, selectedDate) => {
+                                            debugger
+                                            setFormDateSelect(selectedDate)
+                                        }}
                                         placeholder="Select From Date"
                                         name="fromdate"
                                     />
@@ -158,7 +164,7 @@ const TransactionLog = () => {
                                         id="todate"
                                         name="todate"
                                         value={toDateSelect}
-                                        onChange={(selectedDate) => setToDateSelect(selectedDate)}
+                                        onChange={(obj, selectedDate) => setToDateSelect(selectedDate)}
                                         placeholder="Select To Date"
                                     />
                                 </Col>
