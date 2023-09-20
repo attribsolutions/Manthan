@@ -13,9 +13,18 @@ function* save_ClaimTrackingEntry_GenFunc({ config }) {
     } catch (error) { yield put(action.ClaimTrackingEntryApiErrorAction()) }
 }
 
+// List API
+function* Get_ClaimTrackingEntry_List_GenFunc({ config }) {     // getList API
+    debugger
+    try {
+        const response = yield call(apiCall.ClaimList_Get_Api, config);
+        yield put(action.getClaimTrackingEntrySuccess(response.Data));
+    } catch (error) { yield put(action.ClaimTrackingEntryApiErrorAction()) }
+}
+
 function* ClaimTrackingEntrySaga() {
     yield takeLatest(actionType.SAVE_CLAIM_TRACKING_ENTRY, save_ClaimTrackingEntry_GenFunc)
-
+    yield takeLatest(actionType.GET_CLAIM_TRACKING_ENTRY_LIST, Get_ClaimTrackingEntry_List_GenFunc)
 }
 
 export default ClaimTrackingEntrySaga;  

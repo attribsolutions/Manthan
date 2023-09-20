@@ -698,6 +698,7 @@ export const TransactionLog_Go_Btn_Api = ({ jsonBody }) => post(url.TRANSACTION_
 // Claim Tracking Entry
 export const ClaimListfortracking = (jsonBody) => post(url.CLAIM_LIST_FOR_TRACKING, jsonBody)// post api
 export const ClaimList_Post_API = ({ jsonBody }) => post(url.CLAIM_TRACKING, jsonBody)// post api
+export const ClaimList_Get_Api = (jsonBody) => post(url.CLAIM_LIST_FOR_TRACKING, jsonBody) // get api
 
 export {
   getLoggedInUser,
