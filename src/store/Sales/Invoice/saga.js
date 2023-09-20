@@ -108,6 +108,7 @@ function* InvoiceListGenFunc({ config }) {
     }
 
     const newList = yield response.Data.map((i) => {
+      i.forceDeleteHide = false;
       i["recordsAmountTotal"] = i.GrandTotal;  // Breadcrumb Count total
       i.GrandTotal = amountCommaSeparateFunc(i.GrandTotal);//  GrandTotal show with commas
       if (i.LoadingSheetCreated === true) {
@@ -120,7 +121,12 @@ function* InvoiceListGenFunc({ config }) {
 
       //tranzaction date is only for fiterand page field but UI show transactionDateLabel
       i["transactionDate"] = i.CreatedOn;
+
       i["transactionDateLabel"] = listpageConcatDateAndTime(i.InvoiceDate, i.CreatedOn);
+
+      if (i.InvoiceUploads.length > 0) {  // if InvoiceUploads array length is greater than 0 then delete button disabled
+        i.forceDeleteHide = true;
+      }
       return i
     })
     yield put(invoiceListGoBtnfilterSucccess(newList));
