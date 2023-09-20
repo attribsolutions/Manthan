@@ -5,10 +5,10 @@ import ToolkitProvider from 'react-bootstrap-table2-toolkit';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { Col, FormGroup, Label, Row } from 'reactstrap';
-import { Go_Button, PageLoadingSpinner } from '../../components/Common/CommonButton';
-import { breadcrumbReturnFunc, convertDateTime_dmy, convertDateTime_ydm, date_dmy_func, getDateTime_dmy, loginEmployeeID } from '../../components/Common/CommonFunction';
+import { Go_Button} from '../../components/Common/CommonButton';
+import { breadcrumbReturnFunc, convertDateTime_ydm,  getDateTime_dmy, loginEmployeeID } from '../../components/Common/CommonFunction';
 import { mySearchProps } from '../../components/Common/SearchBox/MySearch';
-import { C_DatePicker, C_Select, C_TimePicker } from '../../CustomValidateForm';
+import { C_Select, C_TimePicker } from '../../CustomValidateForm';
 import { showToastAlert } from '../../helpers/axios_Config';
 import { commonPartyDropdown_API, TransactionLog_Get_User_Api, TransactionLog_Go_Btn_Api, TransactionLog_transactionType_Api } from '../../helpers/backend_helper';
 import { BreadcrumbShowCountlabel } from '../../store/actions';
@@ -75,7 +75,7 @@ const TransactionLog = () => {
     const tableColumns = [
         {
             text: "Transaction Date",
-            dataField: "TranasactionDate",
+            dataField: "TransactionDate",
             sort: true
         }, {
             text: "User Name",
@@ -91,12 +91,6 @@ const TransactionLog = () => {
             dataField: "TransactionType",
             sort: true
         },
-        // {
-        //     text: "Transaction Id",
-        //     dataField: "TransactionID",
-        //     sort: true
-
-        // },
         {
             text: "Transaction Detail",
             dataField: "TransactionDetails",
