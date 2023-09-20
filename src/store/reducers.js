@@ -107,7 +107,7 @@ import GSTR1ReportReducer from "./Report/GSTR1ReportRedux/reducer"
 import ReturnReportReducer from "./Report/ReturnReportRedux/reducer"
 import ItemSaleReportReducer from "./Report/ItemSaleReport/reducer"
 import StockAdjustmentReducer from "./Inventory/StockAdjustmentRedux/reducer"
-
+import ClaimTrackingEntry_Reducer from "./Accounting/ClaimTrackingEntryRedux/reducer"
 
 const rootReducer = combineReducers({
   Layout,
@@ -194,6 +194,6 @@ const rootReducer = combineReducers({
   ReturnReportReducer,
   ItemSaleReportReducer,
   StockAdjustmentReducer,
- 
+  ClaimTrackingEntry_Reducer,
 })
 export default rootReducer

@@ -452,11 +452,14 @@ export const DELETE_INVOICE_DATA_EXPORT = "/DeletedInvoiceData"
 export const GET_BATCH_CODE_BY_ITEM_ID = "/ShowBatchesForItem"
 
 // transaction log
-export const TRANSACTION_LOG_TRANCTION_TYPE="/GetTransactionType"
-export const TRANSACTION_LOG_All_USER="/GetEmployeeFromUser"
-export const TRANSACTION_LOG_GO_BTN="/TransactionDetails"
+export const TRANSACTION_LOG_TRANCTION_TYPE = "/GetTransactionType"
+export const TRANSACTION_LOG_All_USER = "/GetEmployeeFromUser"
+export const TRANSACTION_LOG_GO_BTN = "/TransactionDetails"
 
+// Claim Tracking Entry
 
+export const CLAIM_LIST_FOR_TRACKING = "/ClaimListfortracking"
+export const CLAIM_TRACKING = "/ClaimTracking"
 
 
 

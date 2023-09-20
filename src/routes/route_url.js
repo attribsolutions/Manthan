@@ -237,7 +237,8 @@ export const PAYMENT_ENTRY_LIST = "/PaymentEntryList"
 
 export const BANK_ASSIGN = "/BankAssign"
 
-
+export const CLAIM_TRACKING_ENTRY = "/ClaimTrackingEntry"
+export const CLAIM_TRACKING_ENTRY_LIST = "/ClaimTrackingEntryList"
 
 export const INVOICE_CONFIGURATION = "/InvoiceConfiguration"
 

@@ -235,13 +235,9 @@ export const GoodsCreditNoteList = url.GOODS_CREDIT_NOTE;
 export const GoodsDebitNote = url.GOODS_DEBIT_LIST;
 export const GoodsDebitNoteList = url.GOODS_DEBIT_NOTE;
 
+export const ClaimTrackingEntry = url.CLAIM_TRACKING_ENTRY_LIST
+export const ClaimTrackingEntryList = url.CLAIM_TRACKING_ENTRY
 
-
-export const SapLedger = url.SAP_LEDGER;
-
-export const StockReport = url.STOCK_REPORT;
-
-export const Stock_Report_1 = url.STOCK_REPORT_1;
 
 //**************************** Reports ***********************************//
 
@@ -261,3 +257,8 @@ export const Claim_Summary_list = url.CLAIM_SUMMARY_MASTER;
 
 export const Claim_Summary_Master = url.CLAIM_SUMMARY_lIST;
 
+export const SapLedger = url.SAP_LEDGER;
+
+export const StockReport = url.STOCK_REPORT;
+
+export const Stock_Report_1 = url.STOCK_REPORT_1;

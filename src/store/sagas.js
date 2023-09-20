@@ -97,6 +97,7 @@ import GstR1ReportSaga from "./Report/GSTR1ReportRedux/saga"
 import ReturnReportSaga from "./Report/ReturnReportRedux/saga"
 import ItemSaleReportSaga from "./Report/ItemSaleReport/saga"
 import StockAdjustmentSaga from "./Inventory/StockAdjustmentRedux/saga"
+import ClaimTrackingEntrySaga from "./Accounting/ClaimTrackingEntryRedux/saga"
 
 export default function* rootSaga() {
   yield all([
@@ -187,6 +188,7 @@ export default function* rootSaga() {
     fork(GstR1ReportSaga),
     fork(ReturnReportSaga),
     fork(ItemSaleReportSaga),
-    fork(StockAdjustmentSaga)
+    fork(StockAdjustmentSaga),
+    fork(ClaimTrackingEntrySaga),
   ])
 }
