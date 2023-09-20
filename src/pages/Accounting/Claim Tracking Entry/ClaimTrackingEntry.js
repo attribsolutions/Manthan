@@ -587,6 +587,7 @@ const ClaimTrackingEntry = (props) => {
                                                 name="Remark"
                                                 id="Remark"
                                                 placeholder=""
+                                                autoComplete='off'
                                                 value={values.Remark}
                                                 onChange={(event) => { onChangeText({ event, state, setState }) }}
                                             />
