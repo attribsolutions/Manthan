@@ -180,6 +180,7 @@ export const onChangeDate = ({ v, e, state, setState }) => {
 }
 
 export const onChangeText = ({ event, state, setState }) => {
+    debugger
     formValChange({ event, state, setState })
 }
 

@@ -691,9 +691,13 @@ export const getBatchCode_By_ItemID_api = (itemId, partyId) => get(`${url.GET_BA
 
 //TransactionLog
 
-export const TransactionLog_transactionType_Api=()=>get(url.TRANSACTION_LOG_TRANCTION_TYPE);
-export const TransactionLog_Get_User_Api=()=>get(url.TRANSACTION_LOG_All_USER);
-export const TransactionLog_Go_Btn_Api=({jsonBody})=>post(url.TRANSACTION_LOG_GO_BTN,jsonBody);
+export const TransactionLog_transactionType_Api = () => get(url.TRANSACTION_LOG_TRANCTION_TYPE);
+export const TransactionLog_Get_User_Api = () => get(url.TRANSACTION_LOG_All_USER);
+export const TransactionLog_Go_Btn_Api = ({ jsonBody }) => post(url.TRANSACTION_LOG_GO_BTN, jsonBody);
+
+// Claim Tracking Entry
+export const ClaimListfortracking = (jsonBody) => post(url.CLAIM_LIST_FOR_TRACKING, jsonBody)// post api
+export const ClaimList_Post_API = ({ jsonBody }) => post(url.CLAIM_TRACKING, jsonBody)// post api
 
 export {
   getLoggedInUser,

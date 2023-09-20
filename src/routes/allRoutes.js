@@ -187,6 +187,7 @@ import ClaimSummaryMaster from "../Reports/ClaimReportSummary/ClaimSummaryMaster
 import TransactionLog from "../pages/ActivityLog/TransactionLog";
 
 import StockAdjustment from "../pages/Inventory/StockAdjustment";
+import ClaimTrackingEntry from "../pages/Accounting/Claim Tracking Entry/ClaimTrackingEntry";
 
 
 
@@ -432,6 +433,7 @@ const userRoutes = [
   { path: path.GOODS_DEBIT_LIST, component: CreditList },
   { path: path.GOODS_DEBIT_NOTE, component: GoodsCreditNote },
 
+  { path: path.CLAIM_TRACKING_ENTRY, component: ClaimTrackingEntry },
   // |||||||||||||||||||||||||||||||||||||||||||||||||||
 
   //**************************** Reports ***********************************//
