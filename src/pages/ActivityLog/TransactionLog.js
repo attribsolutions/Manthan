@@ -13,7 +13,10 @@ import { showToastAlert } from '../../helpers/axios_Config';
 import { commonPartyDropdown_API, TransactionLog_Get_User_Api, TransactionLog_Go_Btn_Api, TransactionLog_transactionType_Api } from '../../helpers/backend_helper';
 import { BreadcrumbShowCountlabel } from '../../store/actions';
 
+
 const TransactionLog = () => {
+
+
     const dispatch = useDispatch();
     const history = useHistory()
 
@@ -46,10 +49,7 @@ const TransactionLog = () => {
         }
         const resp3 = await commonPartyDropdown_API(loginEmployeeID())
         if (resp3.StatusCode === 200) {
-            setPartyRedux(resp3.Data.map((item, key) => {
-                item["id"] = key + 1
-                return item
-            }))
+            setPartyRedux(resp3.Data)
         }
     }, [])
 
@@ -170,44 +170,7 @@ const TransactionLog = () => {
                             </div>
                         </FormGroup>
                     </Col>
-                    {/* <Col sm="3">
-                        <FormGroup>
-                            <div className="d-flex align-items-center">
-                                <Label className="col-sm-5 p-2" htmlFor="fromtime">
-                                    From Time
-                                </Label>
-                                <Col sm="7">
-                                    <C_TimePicker
-                                        id="fromtime"
-                                        value={formDateSelect}
-                                        onChange={(selectedDate) => setFormDateSelect(selectedDate)}
-                                        placeholder="Select from time"
-                                        name="fromtime"
-                                    />
-                                </Col>
-                            </div>
-                        </FormGroup>
-                    </Col>
-                    <Col sm="3" >
-                        <FormGroup >
-                            <div className="d-flex align-items-center">
-                                <Label className="col-sm-5 p-2" htmlFor="totime">
-                                    To Time
-                                </Label>
-                                <Col sm="7">
-                                    <C_TimePicker
-                                        id="totime"
-                                        name="totime"
-                                        value={toDateSelect}
-                                        onChange={(selectedDate,a,b,c) => {
-                                            debugger
-                                            setToDateSelect(selectedDate)}}
-                                        placeholder="Select To time"
-                                    />
-                                </Col>
-                            </div>
-                        </FormGroup>
-                    </Col> */}
+                   
                 </div>
                 <div className="row">
                     <Col sm="3" >
@@ -290,6 +253,7 @@ const TransactionLog = () => {
     };
 
     return (
+        
         <React.Fragment>
             {/* <PageLoadingSpinner isLoading={goBtnloading || !pageField} /> */}
             <div className="page-content">
