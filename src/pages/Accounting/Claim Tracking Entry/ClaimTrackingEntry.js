@@ -259,7 +259,7 @@ const ClaimTrackingEntry = (props) => {
                     Message: postMsg.Message,
                 })
                 if (isPermission) {
-                    history.push({ pathname: url.CLAIM_TRACKING_ENTRY })
+                    history.push({ pathname: url.CLAIM_TRACKING_ENTRY_LIST })
                 }
             }
         }
@@ -600,7 +600,7 @@ const ClaimTrackingEntry = (props) => {
                             </Row>
 
 
-                            <Row>
+                            {/* <Row>
                                 <Col sm="6">
                                     <FormGroup className=" row mt-1 " >
                                         <Label className="col-sm-1 p-2"
@@ -628,7 +628,7 @@ const ClaimTrackingEntry = (props) => {
                                     </FormGroup>
                                 </Col >
 
-                            </Row>
+                            </Row> */}
 
                             <Row>
                                 <Col sm="6">
