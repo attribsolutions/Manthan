@@ -50,7 +50,7 @@ const ClaimTrackingEntry = (props) => {
     const [creditNoteStatusOption, setCreditNoteStatusOption] = useState([]);
     const [claimListfortrackingApi, setClaimListfortrackingApi] = useState([]);
 
-    const [yearAndMonth, setYearAndMonth] = useState(_cfunc.getCurrentMonthAndYear());
+    const [yearAndMonth, setYearAndMonth] = useState({ Year: '', Month: '' });
 
     const fileds = {
         Date: currentDate_ymd,
@@ -407,8 +407,8 @@ const ClaimTrackingEntry = (props) => {
                 const jsonBody = JSON.stringify({
 
                     "Date": values.Date,
-                    "Month": yearAndMonth.Month,
-                    "Year": yearAndMonth.Year,
+                    "Month": !(yearAndMonth.Month) ? CurrentMonthAndYear().Month : yearAndMonth.Month,
+                    "Year": !(yearAndMonth.Year) ? CurrentMonthAndYear().Year : yearAndMonth.Year,
                     "ClaimReceivedSource": values.ClaimReceivedSource,
                     "Type": values.Type.value,
                     "ClaimTrade": values.ClaimTrade.value,
@@ -492,7 +492,7 @@ const ClaimTrackingEntry = (props) => {
                                             )} */}
                                             <Input className="form-control"
                                                 type="month"
-                                                defaultValue={yearAndMonth}
+                                                defaultValue={values.ClaimForTheMonth}
                                                 id="example-month-input"
                                                 onChange={MonthAndYearOnchange}
                                                 max={currentMonth}
@@ -542,7 +542,7 @@ const ClaimTrackingEntry = (props) => {
                                                 type="text"
                                                 name="ClaimText"
                                                 id="ClaimText"
-                                                placeholder=""
+                                                // placeholder="Please Enter Claim ID"
                                                 disabled={values.ClaimId.value > 0 && true}
                                                 value={values.ClaimText}
                                                 onChange={(event) => { onChangeText({ event, state, setState }) }}
@@ -591,7 +591,7 @@ const ClaimTrackingEntry = (props) => {
                                                 type="text"
                                                 name="ClaimReceivedSource"
                                                 id="ClaimReceivedSource"
-                                                placeholder=""
+                                                placeholder="Please Enter Claim Received Source"
                                                 value={values.ClaimReceivedSource}
                                                 onChange={(event) => { onChangeText({ event, state, setState }) }}
                                             />
@@ -696,7 +696,7 @@ const ClaimTrackingEntry = (props) => {
                                                 value={values.ClaimAmount}
                                                 type="text"
                                                 className={isError.ClaimAmount.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                placeholder=""
+                                                placeholder="Please Enter Claim Amount"
                                                 autoComplete='off'
                                                 autoFocus={true}
                                                 onChange={(event) => {
@@ -722,7 +722,7 @@ const ClaimTrackingEntry = (props) => {
                                                 type="text"
                                                 name="Remark"
                                                 id="Remark"
-                                                placeholder=""
+                                                placeholder="Please Enter Remark"
                                                 autoComplete='off'
                                                 value={values.Remark}
                                                 onChange={(event) => { onChangeText({ event, state, setState }) }}
@@ -836,7 +836,7 @@ const ClaimTrackingEntry = (props) => {
                                                 value={values.CreditNoteNo}
                                                 type="text"
                                                 className={isError.CreditNoteNo.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                placeholder=""
+                                                placeholder="Please Enter Credit Note No."
                                                 autoComplete='off'
                                                 autoFocus={true}
                                                 onChange={(event) => {
@@ -879,7 +879,7 @@ const ClaimTrackingEntry = (props) => {
                                                 value={values.CreditNoteAmount}
                                                 type="text"
                                                 className={isError.CreditNoteAmount.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                placeholder=""
+                                                placeholder="Please Enter Credit Note Amount"
                                                 autoComplete='off'
                                                 autoFocus={true}
                                                 onChange={(event) => {
