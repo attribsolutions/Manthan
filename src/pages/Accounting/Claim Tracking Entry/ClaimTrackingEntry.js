@@ -290,7 +290,7 @@ const ClaimTrackingEntry = (props) => {
                     "ClaimReceivedSource": values.ClaimReceivedSource,
                     "Type": values.Type.value,
                     "ClaimTrade": values.ClaimTrade.value,
-                    "TypeOfClaim": values.TypeOfClaim.value,
+                    "TypeOfClaim": values.TypeOfClaim === '' ? null : values.TypeOfClaim.value,
                     "ClaimAmount": values.ClaimAmount,
                     "Remark": values.Remark,
                     "ClaimCheckBy": values.ClaimCheckBy.value,

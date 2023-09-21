@@ -5,7 +5,7 @@ import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
 import { Go_Button, PageLoadingSpinner } from "../../../components/Common/CommonButton";
 import ClaimTrackingEntry from "./ClaimTrackingEntry";
-import { getClaimTrackingEntrySuccess, getClaimTrackingEntrylist } from "../../../store/Accounting/ClaimTrackingEntryRedux/action";
+import { delete_ClaimTrackingEntryID_Success, delete_ClaimTrackingEntry_ID, editClaimTrackingEntryID, getClaimTrackingEntrySuccess, getClaimTrackingEntrylist, saveClaimTrackingEntry_Success, updateClaimTrackingEntryIDSuccess } from "../../../store/Accounting/ClaimTrackingEntryRedux/action";
 import { Col, FormGroup, Label, Row } from "reactstrap";
 import { ClaimForTheMonthOtion } from "./ClaimRelatedData";
 import Select from "react-select";
@@ -22,7 +22,9 @@ const ClaimTrackingEntryList = (props) => {
         (state) => ({
             goBtnLoading: state.ClaimTrackingEntry_Reducer.loading,
             tableList: state.ClaimTrackingEntry_Reducer.claimTrackingEntryList,
-            editData: state.CategoryReducer.editData,
+            editData: state.ClaimTrackingEntry_Reducer.editData,
+            updateMsg: state.ClaimTrackingEntry_Reducer.updateMessage,
+            deleteMsg: state.ClaimTrackingEntry_Reducer.deleteMessage,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList
         })
@@ -30,7 +32,11 @@ const ClaimTrackingEntryList = (props) => {
 
     const action = {
         getList: getClaimTrackingEntrylist,
-
+        editId: editClaimTrackingEntryID,
+        deleteId: delete_ClaimTrackingEntry_ID,
+        postSucc: saveClaimTrackingEntry_Success,
+        updateSucc: updateClaimTrackingEntryIDSuccess,
+        deleteSucc: delete_ClaimTrackingEntryID_Success
     }
 
     //  This UseEffect => Featch Modules List data  First Rendering
