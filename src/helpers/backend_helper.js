@@ -698,7 +698,7 @@ export const TransactionLog_Go_Btn_Api = ({ jsonBody }) => post(url.TRANSACTION_
 // Claim Tracking Entry
 export const ClaimListfortracking = (jsonBody) => post(url.CLAIM_LIST_FOR_TRACKING, jsonBody)// post api
 export const ClaimList_Post_API = ({ jsonBody }) => post(url.CLAIM_TRACKING, jsonBody)// post api
-export const ClaimList_Get_Api = (jsonBody) => post(url.CLAIM_LIST_FOR_TRACKING, jsonBody) // get api
+export const ClaimList_Get_Api = (jsonBody) => post(url.CLAIM_TRACKING_LIST, jsonBody) // get api
 export const edit_ClaimTrackingEntry_List_Api = ({ editId }) => get(`${url.CLAIM_TRACKING}/${editId}`) // edit api
 export const update_ClaimTrackingEntry_List_Api = ({ jsonBody, updateId }) => put(`${url.CLAIM_TRACKING}/${updateId}`, jsonBody)// update
 export const detelet_ClaimTrackingEntry_List_Api = ({ deleteId }) => del(`${url.CLAIM_TRACKING}/${deleteId}`) // delete api

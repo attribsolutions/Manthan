@@ -8,7 +8,7 @@ import {
 } from "reactstrap";
 import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
-import { commonPageField, commonPageFieldSuccess } from "../../../store/actions";
+import { Breadcrumb_inputName, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -25,23 +25,24 @@ import { C_DatePicker, C_Select } from "../../../CustomValidateForm";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { url, mode, pageId } from "../../../routes/index"
 import { ClaimListfortracking, GenralMasterSubType } from "../../../helpers/backend_helper";
-import { ClaimForTheMonthOtion } from './ClaimRelatedData';
+import { ClaimForTheMonthOtion, CurrentMonthAndYear } from './ClaimRelatedData';
 import { getcompanyList } from "../../../store/Administrator/CompanyRedux/actions";
 import { getPartyListAPI, getPartyListAPISuccess } from "../../../store/Administrator/PartyRedux/action";
 import { priceListByCompay_Action } from "../../../store/Administrator/PriceList/action";
-import { saveClaimTrackingEntry, saveClaimTrackingEntry_Success } from "../../../store/Accounting/ClaimTrackingEntryRedux/action";
+import { editClaimTrackingEntryIDSuccess, saveClaimTrackingEntry, saveClaimTrackingEntry_Success, updateClaimTrackingEntryID, updateClaimTrackingEntryIDSuccess } from "../../../store/Accounting/ClaimTrackingEntryRedux/action";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 
 const ClaimTrackingEntry = (props) => {
-
+    debugger
     const history = useHistory()
     const dispatch = useDispatch();
     const currentDate_ymd = _cfunc.date_ymd_func()
+    const SelectedMonth = () => _cfunc.getCurrentMonthAndYear()
 
-    const [modalCss] = useState(false);
-    const [pageMode] = useState(mode.defaultsave);
+    const [modalCss, setModalCss] = useState(false);
+    const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState(123);
-    const [editCreatedBy] = useState("");
+    const [editCreatedBy, seteditCreatedBy] = useState("");
 
     const [typeOption, setTypeOption] = useState([]);
     const [typeOfClaimOption, setTypeOfClaimOption] = useState([]);
@@ -49,7 +50,7 @@ const ClaimTrackingEntry = (props) => {
     const [creditNoteStatusOption, setCreditNoteStatusOption] = useState([]);
     const [claimListfortrackingApi, setClaimListfortrackingApi] = useState([]);
 
-    const [yearAndMonth, setYearAndMonth] = useState({ Year: '', Month: '' });
+    const [yearAndMonth, setYearAndMonth] = useState(_cfunc.getCurrentMonthAndYear());
 
     const fileds = {
         Date: currentDate_ymd,
@@ -60,7 +61,7 @@ const ClaimTrackingEntry = (props) => {
         ClaimReceivedSource: "",
         ClaimTrade: "",
         TypeOfClaim: "",
-        ClaimForTheMonth: "",
+        ClaimForTheMonth: SelectedMonth(),
         ClaimAmount: "",
         Remark: "",
         CompanyName: "",
@@ -79,15 +80,17 @@ const ClaimTrackingEntry = (props) => {
     const { partyList,
         postMsg,
         partyDropdownLoading,
-        companyList,
+
         PriceList,
+        updateMsg,
         pageField,
         userAccess } = useSelector((state) => ({
             postMsg: state.ClaimTrackingEntry_Reducer.postMsg,
             partyList: state.PartyMasterReducer.partyList,
             partyDropdownLoading: state.PartyMasterReducer.goBtnLoading,
-            companyList: state.Company.companyList,
+
             PriceList: state.PriceListReducer.priceListByCompany,
+            updateMsg: state.CategoryReducer.updateMessage,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageField
         }));
@@ -105,6 +108,7 @@ const ClaimTrackingEntry = (props) => {
     const { fieldLabel } = state;
 
     const location = { ...history.location }
+    const hasShowloction = location.hasOwnProperty(mode.editValue)
     const hasShowModal = props.hasOwnProperty(mode.editValue)
 
     // userAccess useEffect
@@ -160,12 +164,8 @@ const ClaimTrackingEntry = (props) => {
         fetchDataAndSetDropdown(79, setClaimCheckByOption);
         fetchDataAndSetDropdown(82, setCreditNoteStatusOption);
         dispatch(getcompanyList());
+        MonthAndYearOnchange('', CurrentMonthAndYear())
     }, []);
-
-    const companyListOptions = companyList.map((i) => ({
-        value: i.id,
-        label: i.Name,
-    }));
 
     const partyListOptions = partyList.map((i) => ({
         value: i.id,
@@ -174,7 +174,7 @@ const ClaimTrackingEntry = (props) => {
 
     const ClaimIdOptions = claimListfortrackingApi.map((i) => ({
         value: i.id,
-        label: `${i.id} (${i.ClaimAmount})`,
+        label: `${i.id} (${i.ClaimAmount} ${i.PartyName})`,
         Party: { value: i.PartyID, label: i.PartyName },
         ClaimAmount: i.ClaimAmount
     }));
@@ -184,33 +184,33 @@ const ClaimTrackingEntry = (props) => {
         label: i.Name,
     }));
 
-    async function ClaimForTheMonthOnchange(hasSelect, evn) {
+    // async function ClaimForTheMonthOnchange(hasSelect, evn) {
 
-        onChangeSelect({ hasSelect, evn, state, setState });
-        const jsonBody = JSON.stringify({
-            "Year": hasSelect.year,
-            "Month": hasSelect.monthNumber
-        })
-        setYearAndMonth({ Year: hasSelect.year, Month: hasSelect.monthNumber })
-        const resp = await ClaimListfortracking(jsonBody);
-        if (resp.StatusCode === 200) {
-            setClaimListfortrackingApi(resp.Data)
-        }
-        else {
-            setClaimListfortrackingApi([])
+    //     onChangeSelect({ hasSelect, evn, state, setState });
+    //     const jsonBody = JSON.stringify({
+    //         "Year": hasSelect.year,
+    //         "Month": hasSelect.monthNumber
+    //     })
+    //     setYearAndMonth({ Year: hasSelect.year, Month: hasSelect.monthNumber })
+    //     const resp = await ClaimListfortracking(jsonBody);
+    //     if (resp.StatusCode === 200) {
+    //         setClaimListfortrackingApi(resp.Data)
+    //     }
+    //     else {
+    //         setClaimListfortrackingApi([])
 
-        }
-        setState((i) => {
-            const a = { ...i }
-            a.values.ClaimAmount = '';
-            a.values.ClaimId = '';
-            a.values.PartyName = '';
-            a.hasValid.ClaimId.valid = true
-            a.hasValid.PartyName.valid = false
-            a.hasValid.ClaimAmount.valid = false
-            return a
-        })
-    }
+    //     }
+    //     setState((i) => {
+    //         const a = { ...i }
+    //         a.values.ClaimAmount = '';
+    //         a.values.ClaimId = '';
+    //         a.values.PartyName = '';
+    //         a.hasValid.ClaimId.valid = true
+    //         a.hasValid.PartyName.valid = false
+    //         a.hasValid.ClaimAmount.valid = false
+    //         return a
+    //     })
+    // }
 
     const Date_Onchange = (e, date) => {
         setState((i) => {
@@ -239,6 +239,113 @@ const ClaimTrackingEntry = (props) => {
             return a
         })
     };
+
+    async function MonthAndYearOnchange(e, InitialDate) {
+
+        let selectedMonth = InitialDate ? e : e.target.value;
+        const { Year, Month } = _cfunc.getFirstAndLastDateOfMonth(selectedMonth);
+
+        const jsonBody = JSON.stringify({
+            "Year": InitialDate ? CurrentMonthAndYear().Year : Year.toString(),
+            "Month": InitialDate ? CurrentMonthAndYear().Month : Month.toString().padStart(2, '0')
+        });
+
+        const resp = await ClaimListfortracking(jsonBody);
+        setClaimListfortrackingApi(resp.StatusCode === 200 ? resp.Data : []);
+
+        setYearAndMonth({ Year, Month });
+
+        setState((i) => {
+            const a = { ...i }
+            a.values.ClaimAmount = '';
+            a.values.ClaimId = '';
+            a.values.PartyName = '';
+            a.hasValid.ClaimId.valid = true
+            a.hasValid.PartyName.valid = false
+            a.hasValid.ClaimAmount.valid = false
+            return a
+        })
+    }
+
+    const getFormattedDate = (date, format) => {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        return format.replace('yyyy', year).replace('MM', month);
+    };
+
+    const currentMonth = getFormattedDate(new Date(), "yyyy-MM");
+
+    // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
+    useEffect(() => {
+
+        if ((hasShowloction || hasShowModal)) {
+
+            let hasEditVal = null
+            if (hasShowloction) {
+                setPageMode(location.pageMode)
+                hasEditVal = location.editValue
+            }
+            else if (hasShowModal) {
+                hasEditVal = props.editValue
+                setPageMode(props.pageMode)
+                setModalCss(true)
+            }
+
+            if (hasEditVal) {
+                const { id, Date, ClaimReceivedSource, ClaimAmount, Remark, CreditNoteNo, CreditNoteDate,
+                    CreditNoteAmount, ClaimSummaryDate, CreditNoteUpload, Claim, TypeName, Type,
+                    ClaimTradeName, ClaimTrade, TypeOfClaimName, TypeOfClaim, ClaimCheckByName, ClaimCheckBy,
+                    CreditNotestatusName, CreditNotestatus, PartyName, Party, Year, Month } = hasEditVal
+
+                const { values, fieldLabel, hasValid, required, isError } = { ...state }
+
+
+                hasValid.Date.valid = true;
+                hasValid.ClaimReceivedSource.valid = true;
+                hasValid.ClaimAmount.valid = true;
+                hasValid.Remark.valid = true;
+                hasValid.CreditNoteNo.valid = true;
+                hasValid.CreditNoteDate.valid = true;
+                hasValid.CreditNoteAmount.valid = true;
+                hasValid.ClaimSummaryDate.valid = true;
+                hasValid.CreditNoteUpload.valid = true;
+                hasValid.ClaimId.valid = true;
+                hasValid.Type.valid = true;
+                hasValid.ClaimTrade.valid = true;
+                hasValid.TypeOfClaim.valid = true;
+                hasValid.ClaimCheckBy.valid = true;
+                hasValid.CreditNotestatus.valid = true;
+                hasValid.PartyName.valid = true;
+                hasValid.ClaimForTheMonth.valid = true;
+
+                values.id = id
+                values.Date = Date
+                values.ClaimReceivedSource = ClaimReceivedSource
+                values.ClaimAmount = ClaimAmount
+                values.Remark = Remark
+                values.CreditNoteNo = CreditNoteNo
+                values.CreditNoteDate = CreditNoteDate
+                values.CreditNoteAmount = CreditNoteAmount
+                values.ClaimSummaryDate = ClaimSummaryDate
+                values.CreditNoteUpload = CreditNoteUpload
+
+                values.ClaimId = { label: `${id} (${ClaimAmount} ${PartyName})`, value: Claim };
+                // values.ClaimForTheMonth = { label: `${Month}(${Year})`, value: 0 };
+                values.Type = { label: TypeName, value: Type };
+                values.ClaimTrade = { label: ClaimTradeName, value: ClaimTrade };
+                values.TypeOfClaim = { label: TypeOfClaimName, value: TypeOfClaim };
+                values.ClaimCheckBy = { label: ClaimCheckByName, value: ClaimCheckBy };
+                values.CreditNotestatus = { label: CreditNotestatusName, value: CreditNotestatus };
+                values.PartyName = { label: PartyName, value: Party };
+
+                setYearAndMonth({ Year: Year, Month: Month })
+                setState({ values, fieldLabel, hasValid, required, isError })
+                dispatch(Breadcrumb_inputName(hasEditVal.Name))
+                seteditCreatedBy(hasEditVal.CreatedBy)
+            }
+            dispatch(editClaimTrackingEntryIDSuccess({ Status: false }))
+        }
+    }, [])
 
     useEffect(async () => {
 
@@ -272,14 +379,29 @@ const ClaimTrackingEntry = (props) => {
         }
     }, [postMsg])
 
+    useEffect(() => {
+        if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
+            setState(() => resetFunction(fileds, state)) // Clear form values 
+            history.push({
+                pathname: url.CLAIM_TRACKING_ENTRY_LIST,
+            })
+        } else if (updateMsg.Status === true && !modalCss) {
+            dispatch(updateClaimTrackingEntryIDSuccess({ Status: false }));
+            customAlert({
+                Type: 3,
+                Message: JSON.stringify(updateMsg.Message),
+            })
+        }
+    }, [updateMsg, modalCss]);
+
     const saveHandeller = async (event) => {
-        debugger
+
         event.preventDefault();
         const btnId = event.target.id
-        debugger
+
         try {
             if (formValid(state, setState)) {
-                debugger
+
                 _cfunc.btnIsDissablefunc({ btnId, state: true })
 
                 const jsonBody = JSON.stringify({
@@ -304,7 +426,13 @@ const ClaimTrackingEntry = (props) => {
                     "Party": values.PartyName.value,
 
                 })
-                dispatch(saveClaimTrackingEntry({ jsonBody }));
+                if (pageMode === mode.edit) {
+                    dispatch(updateClaimTrackingEntryID({ jsonBody, updateId: values.id, btnId }));
+                }
+
+                else {
+                    dispatch(saveClaimTrackingEntry({ jsonBody, btnId }));
+                }
 
             }
         } catch (e) { _cfunc.btnIsDissablefunc({ btnId, state: false }) }
@@ -345,9 +473,9 @@ const ClaimTrackingEntry = (props) => {
                                         <Label className="col-sm-1 p-2"
                                             style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.ClaimForTheMonth} </Label>
                                         <Col sm="7">
-                                            <Select
+                                            {/* <Select
                                                 name="ClaimForTheMonth"
-                                                value={values.ClaimForTheMonth}
+                                                value={yearAndMonth}
                                                 isSearchable={true}
                                                 className="react-dropdown"
                                                 classNamePrefix="dropdown"
@@ -361,7 +489,15 @@ const ClaimTrackingEntry = (props) => {
                                             />
                                             {isError.ClaimForTheMonth.length > 0 && (
                                                 <span className="text-danger f-8"><small>{isError.ClaimForTheMonth}</small></span>
-                                            )}
+                                            )} */}
+                                            <Input className="form-control"
+                                                type="month"
+                                                defaultValue={yearAndMonth}
+                                                id="example-month-input"
+                                                onChange={MonthAndYearOnchange}
+                                                max={currentMonth}
+                                            />
+
                                         </Col>
 
                                     </FormGroup>

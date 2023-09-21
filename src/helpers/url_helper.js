@@ -460,6 +460,8 @@ export const TRANSACTION_LOG_GO_BTN = "/TransactionDetails"
 
 export const CLAIM_LIST_FOR_TRACKING = "/ClaimListfortracking"
 export const CLAIM_TRACKING = "/ClaimTracking"
+export const CLAIM_TRACKING_LIST = "/ClaimTrackingList"
+
 
 
 

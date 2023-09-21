@@ -90,3 +90,14 @@ export function renderInput(name, value, isError, placeholder, onChange) {
         />
     );
 }
+
+export const CurrentMonthAndYear = () => {
+    const currentDate = new Date();
+    const year = String(currentDate.getFullYear());
+    const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // Month is zero-indexed
+
+    return {
+        Year: year,
+        Month: month
+    };
+}

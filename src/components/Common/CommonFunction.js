@@ -108,6 +108,7 @@ export function CurrentTime() {
 
 
 export const getFirstAndLastDateOfMonth = (inputDate) => {
+  
   const [year, month] = inputDate.split('-').map(Number);
   const firstDate = new Date(year, month - 1, 1);
   const lastDate = new Date(year, month, 0);
@@ -115,7 +116,9 @@ export const getFirstAndLastDateOfMonth = (inputDate) => {
   const formattedLastDate = `${year}-${String(month).padStart(2, '0')}-${String(lastDate.getDate()).padStart(2, '0')}`;
   return {
     firstDate: formattedFirstDate,
-    lastDate: formattedLastDate
+    lastDate: formattedLastDate,
+    Year: year,
+    Month: month
   };
 }
 
