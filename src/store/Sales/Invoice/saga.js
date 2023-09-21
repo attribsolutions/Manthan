@@ -58,8 +58,6 @@ import *as url from "../../../routes/route_url"
 import { invoice_discountCalculate_Func } from "../../../pages/Sale/Invoice/invoiceCaculations";
 import { orderApprovalActionSuccess } from "../../actions";
 
-
-
 //post api for Invoice Master
 function* save_Invoice_Genfun({ config }) {
   const { subPageMode, btnId, saveAndDownloadPdfMode } = config;
@@ -79,7 +77,6 @@ function* save_Invoice_Genfun({ config }) {
   }
 }
 
-
 function* Invoice_Send_To_Scm_GenFun({ config }) {         // Save API
 
   try {
@@ -87,9 +84,6 @@ function* Invoice_Send_To_Scm_GenFun({ config }) {         // Save API
     yield put(InvoiceSendToScmSuccess(response));
   } catch (error) { yield put(InvoiceApiErrorAction()) }
 }
-
-
-
 
 
 // Invoice List
@@ -371,7 +365,6 @@ function* UpdateVehicleInvoice_GenFunc({ config }) {
 
 // MAKE_IB_INVOICE_ACTION
 function* InvoiceSaga() {
-
 
   yield takeLatest(INVOICE_SEND_TO_SCM_ACTION, Invoice_Send_To_Scm_GenFun)
   yield takeLatest(INVOICE_SAVE_ADD_PAGE_ACTION, save_Invoice_Genfun)
