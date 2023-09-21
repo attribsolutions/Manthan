@@ -124,8 +124,16 @@ function* InvoiceListGenFunc({ config }) {
 
       i["transactionDateLabel"] = listpageConcatDateAndTime(i.InvoiceDate, i.CreatedOn);
 
-      if (i.InvoiceUploads.length > 0) {  // if InvoiceUploads array length is greater than 0 then delete button disabled
-        i.forceDeleteHide = true;
+      // if InvoiceUploads array length is greater than 0 then delete button disabled
+      if (i.InvoiceUploads.length > 0) {
+        i.InvoiceUploads.map((index) => {
+          if (!(index.EInvoicePdf === null) || !(index.EwayBillUrl === null)) {
+            i.forceDeleteHide = true;
+            if ((index.EInvoiceIsCancel) || (index.EwayBillIsCancel)) {
+              i.forceDeleteHide = false;
+            }
+          }
+        });
       }
       return i
     })
