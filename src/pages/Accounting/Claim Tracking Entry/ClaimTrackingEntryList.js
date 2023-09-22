@@ -15,11 +15,11 @@ const ClaimTrackingEntryList = (props) => {
 
     const dispatch = useDispatch();
 
-
     const [ClaimForTheMonthSelect, setClaimForTheMonthSelect] = useState('');
 
     const reducers = useSelector(
         (state) => ({
+            listBtnLoading: state.ClaimTrackingEntry_Reducer.listBtnLoading,
             goBtnLoading: state.ClaimTrackingEntry_Reducer.loading,
             tableList: state.ClaimTrackingEntry_Reducer.claimTrackingEntryList,
             editData: state.ClaimTrackingEntry_Reducer.editData,
@@ -54,7 +54,6 @@ const ClaimTrackingEntryList = (props) => {
 
     const { pageField, goBtnLoading } = reducers
 
-
     function goButtonHandler(e) {
 
         const jsonBody = JSON.stringify({
@@ -62,13 +61,12 @@ const ClaimTrackingEntryList = (props) => {
             "Month": ClaimForTheMonthSelect.monthNumber
         })
         dispatch(getClaimTrackingEntrylist(jsonBody));
-
     };
 
     return (
 
         <React.Fragment>
-            <PageLoadingSpinner isLoading={(!pageField)} />
+            <PageLoadingSpinner isLoading={(reducers.goBtnLoading || !pageField)} />
             <div className="page-content">
 
                 <div className="px-3 c_card_filter header text-black mb-1" >
@@ -106,14 +104,13 @@ const ClaimTrackingEntryList = (props) => {
                     </Row>
                 </div>
 
-
                 {
                     (pageField) &&
                     <div className="mt-n1">
                         <CommonPurchaseList
                             action={action}
                             reducers={reducers}
-                            showBreadcrumb={false}
+                            showBreadcrumb={true}
                             MasterModal={ClaimTrackingEntry}
                             masterPath={url.CLAIM_TRACKING_ENTRY}
                             newBtnPath={url.CLAIM_TRACKING_ENTRY}

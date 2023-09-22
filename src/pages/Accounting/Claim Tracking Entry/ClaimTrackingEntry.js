@@ -8,7 +8,7 @@ import {
 } from "reactstrap";
 import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
-import { Breadcrumb_inputName, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
+import { commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -33,7 +33,7 @@ import { editClaimTrackingEntryIDSuccess, saveClaimTrackingEntry, saveClaimTrack
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 
 const ClaimTrackingEntry = (props) => {
-    debugger
+
     const history = useHistory()
     const dispatch = useDispatch();
     const currentDate_ymd = _cfunc.date_ymd_func()
@@ -78,38 +78,25 @@ const ClaimTrackingEntry = (props) => {
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const { partyList,
+        saveBtnloading,
         postMsg,
         partyDropdownLoading,
-
         PriceList,
         updateMsg,
         pageField,
         userAccess } = useSelector((state) => ({
+            saveBtnloading: state.ClaimTrackingEntry_Reducer.saveBtnloading,
             postMsg: state.ClaimTrackingEntry_Reducer.postMsg,
-            partyList: state.PartyMasterReducer.partyList,
-            partyDropdownLoading: state.PartyMasterReducer.goBtnLoading,
+            partyList: state.CommonPartyDropdownReducer.commonPartyDropdown,
+            partyDropdownLoading: state.CommonPartyDropdownReducer.partyDropdownLoading,
 
+            // partyList: state.PartyMasterReducer.partyList,
+            // partyDropdownLoading: state.PartyMasterReducer.goBtnLoading,
             PriceList: state.PriceListReducer.priceListByCompany,
-            updateMsg: state.CategoryReducer.updateMessage,
+            updateMsg: state.ClaimTrackingEntry_Reducer.updateMessage,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageField
         }));
-
-    useEffect(() => {
-        if (pageField) {
-            const fieldArr = pageField.PageFieldMaster
-            comAddPageFieldFunc({ state, setState, fieldArr })
-        }
-    }, [pageField])
-
-    const values = { ...state.values }
-    const { isError } = state;
-
-    const { fieldLabel } = state;
-
-    const location = { ...history.location }
-    const hasShowloction = location.hasOwnProperty(mode.editValue)
-    const hasShowModal = props.hasOwnProperty(mode.editValue)
 
     // userAccess useEffect
     useEffect(() => {
@@ -131,10 +118,25 @@ const ClaimTrackingEntry = (props) => {
     }, [userAccess])
 
     useEffect(() => {
+        if (pageField) {
+            const fieldArr = pageField.PageFieldMaster
+            comAddPageFieldFunc({ state, setState, fieldArr })
+        }
+    }, [pageField])
+
+    const values = { ...state.values }
+    const { isError } = state;
+    const { fieldLabel } = state;
+
+    const location = { ...history.location }
+    const hasShowloction = location.hasOwnProperty(mode.editValue)
+    const hasShowModal = props.hasOwnProperty(mode.editValue)
+
+    useEffect(() => {
         const page_Id = pageId.CLAIM_TRACKING_ENTRY
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id));
-        dispatch(getPartyListAPI())
+        // dispatch(getPartyListAPI())
         dispatch(priceListByCompay_Action());
         return () => { dispatch(getPartyListAPISuccess([])) }
 
@@ -145,26 +147,35 @@ const ClaimTrackingEntry = (props) => {
             Company: _cfunc.loginCompanyID(),
             TypeID: TypeID,
         });
-
-
         const resp = await GenralMasterSubType(jsonBody);
         if (resp.StatusCode === 200) {
             setDropdown(
                 resp.Data.map((index) => ({
                     value: index.id,
                     label: index.Name,
-                }))
-            );
+                })));
         }
     };
 
-    useEffect(() => {
+    useEffect(async () => {
         fetchDataAndSetDropdown(76, setTypeOption);
         fetchDataAndSetDropdown(78, setTypeOfClaimOption);
         fetchDataAndSetDropdown(79, setClaimCheckByOption);
         fetchDataAndSetDropdown(82, setCreditNoteStatusOption);
         dispatch(getcompanyList());
-        MonthAndYearOnchange('', CurrentMonthAndYear())
+
+        let selectedMonth = SelectedMonth();
+        const { Year, Month } = _cfunc.getFirstAndLastDateOfMonth(selectedMonth);
+        const jsonBody = JSON.stringify({
+            "Year": CurrentMonthAndYear().Year,
+            "Month": CurrentMonthAndYear().Month
+        });
+
+        const resp = await ClaimListfortracking(jsonBody);
+        setClaimListfortrackingApi(resp.StatusCode === 200 ? resp.Data : []);
+
+        setYearAndMonth({ Year, Month });
+
     }, []);
 
     const partyListOptions = partyList.map((i) => ({
@@ -172,45 +183,19 @@ const ClaimTrackingEntry = (props) => {
         label: i.Name,
     }));
 
-    const ClaimIdOptions = claimListfortrackingApi.map((i) => ({
-        value: i.id,
-        label: `${i.id} (${i.ClaimAmount} ${i.PartyName})`,
+    const ClaimIdOptions = claimListfortrackingApi.map((i, index) => ({
+        value: index + 1,
+        claimId: i.id,
+        label: `${i.id} ${i.PartyName} /${i.PartyTypeName} (${i.ClaimAmount})`,
         Party: { value: i.PartyID, label: i.PartyName },
-        ClaimAmount: i.ClaimAmount
+        ClaimAmount: i.ClaimAmount,
+        PartyTypeID: i.PartyTypeID
     }));
 
     const ClaimTradeOptions = PriceList.map((i) => ({
         value: i.id,
         label: i.Name,
     }));
-
-    // async function ClaimForTheMonthOnchange(hasSelect, evn) {
-
-    //     onChangeSelect({ hasSelect, evn, state, setState });
-    //     const jsonBody = JSON.stringify({
-    //         "Year": hasSelect.year,
-    //         "Month": hasSelect.monthNumber
-    //     })
-    //     setYearAndMonth({ Year: hasSelect.year, Month: hasSelect.monthNumber })
-    //     const resp = await ClaimListfortracking(jsonBody);
-    //     if (resp.StatusCode === 200) {
-    //         setClaimListfortrackingApi(resp.Data)
-    //     }
-    //     else {
-    //         setClaimListfortrackingApi([])
-
-    //     }
-    //     setState((i) => {
-    //         const a = { ...i }
-    //         a.values.ClaimAmount = '';
-    //         a.values.ClaimId = '';
-    //         a.values.PartyName = '';
-    //         a.hasValid.ClaimId.valid = true
-    //         a.hasValid.PartyName.valid = false
-    //         a.hasValid.ClaimAmount.valid = false
-    //         return a
-    //     })
-    // }
 
     const Date_Onchange = (e, date) => {
         setState((i) => {
@@ -278,10 +263,11 @@ const ClaimTrackingEntry = (props) => {
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
 
-        if ((hasShowloction || hasShowModal)) {
+        if ((hasShowloction || hasShowModal) && pageField) {
 
             let hasEditVal = null
             if (hasShowloction) {
+
                 setPageMode(location.pageMode)
                 hasEditVal = location.editValue
             }
@@ -292,13 +278,13 @@ const ClaimTrackingEntry = (props) => {
             }
 
             if (hasEditVal) {
+
                 const { id, Date, ClaimReceivedSource, ClaimAmount, Remark, CreditNoteNo, CreditNoteDate,
                     CreditNoteAmount, ClaimSummaryDate, CreditNoteUpload, Claim, TypeName, Type,
                     ClaimTradeName, ClaimTrade, TypeOfClaimName, TypeOfClaim, ClaimCheckByName, ClaimCheckBy,
-                    CreditNotestatusName, CreditNotestatus, PartyName, Party, Year, Month } = hasEditVal
+                    CreditNotestatusName, CreditNotestatus, PartyName, Party, Year, Month, PartyTypeName } = hasEditVal
 
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
-
 
                 hasValid.Date.valid = true;
                 hasValid.ClaimReceivedSource.valid = true;
@@ -318,34 +304,35 @@ const ClaimTrackingEntry = (props) => {
                 hasValid.PartyName.valid = true;
                 hasValid.ClaimForTheMonth.valid = true;
 
-                values.id = id
-                values.Date = Date
-                values.ClaimReceivedSource = ClaimReceivedSource
-                values.ClaimAmount = ClaimAmount
-                values.Remark = Remark
-                values.CreditNoteNo = CreditNoteNo
-                values.CreditNoteDate = CreditNoteDate
-                values.CreditNoteAmount = CreditNoteAmount
-                values.ClaimSummaryDate = ClaimSummaryDate
-                values.CreditNoteUpload = CreditNoteUpload
+                values.id = id;
+                values.Date = Date;
+                values.ClaimReceivedSource = ClaimReceivedSource;
+                values.ClaimAmount = ClaimAmount;
+                values.Remark = Remark;
+                values.CreditNoteNo = CreditNoteNo;
+                values.CreditNoteDate = CreditNoteDate;
+                values.CreditNoteAmount = CreditNoteAmount;
+                values.ClaimSummaryDate = ClaimSummaryDate;
+                values.CreditNoteUpload = CreditNoteUpload;
 
-                values.ClaimId = { label: `${id} (${ClaimAmount} ${PartyName})`, value: Claim };
-                // values.ClaimForTheMonth = { label: `${Month}(${Year})`, value: 0 };
+                values.ClaimId = { label: `${id} ${PartyName} /${PartyTypeName} (${ClaimAmount})`, value: Claim };
                 values.Type = { label: TypeName, value: Type };
                 values.ClaimTrade = { label: ClaimTradeName, value: ClaimTrade };
-                values.TypeOfClaim = { label: TypeOfClaimName, value: TypeOfClaim };
+                values.TypeOfClaim = TypeOfClaimName === null ? { label: "Select...", value: null } : { label: TypeOfClaimName, value: TypeOfClaim };
                 values.ClaimCheckBy = { label: ClaimCheckByName, value: ClaimCheckBy };
                 values.CreditNotestatus = { label: CreditNotestatusName, value: CreditNotestatus };
                 values.PartyName = { label: PartyName, value: Party };
 
                 setYearAndMonth({ Year: Year, Month: Month })
+
                 setState({ values, fieldLabel, hasValid, required, isError })
-                dispatch(Breadcrumb_inputName(hasEditVal.Name))
+                // dispatch(Breadcrumb_inputName(hasEditVal.Name))
                 seteditCreatedBy(hasEditVal.CreatedBy)
             }
+
             dispatch(editClaimTrackingEntryIDSuccess({ Status: false }))
         }
-    }, [])
+    }, [pageField,])
 
     useEffect(async () => {
 
@@ -381,6 +368,7 @@ const ClaimTrackingEntry = (props) => {
 
     useEffect(() => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
+
             setState(() => resetFunction(fileds, state)) // Clear form values 
             history.push({
                 pathname: url.CLAIM_TRACKING_ENTRY_LIST,
@@ -422,10 +410,13 @@ const ClaimTrackingEntry = (props) => {
                     "CreditNoteAmount": values.CreditNoteAmount,
                     "ClaimSummaryDate": values.ClaimSummaryDate,
                     "CreditNoteUpload": null,
-                    "Claim": values.ClaimId.value,
+                    "Claim": values.ClaimId.claimId,
                     "Party": values.PartyName.value,
+                    "FullClaimNo": values.ClaimText ? values.ClaimText : values.ClaimId.claimId,
+                    "PartyType": values.ClaimId.PartyTypeID
 
                 })
+
                 if (pageMode === mode.edit) {
                     dispatch(updateClaimTrackingEntryID({ jsonBody, updateId: values.id, btnId }));
                 }
@@ -446,13 +437,12 @@ const ClaimTrackingEntry = (props) => {
         return (
             <React.Fragment>
                 <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
-
                 <div className="page-content" style={{ marginBottom: "5cm" }}>
 
                     <form noValidate>
-
                         <div className="px-2 c_card_filter header text-black mb-2" >
 
+                            {/* *******Claim Record Date***** &&& ******Claim For The Month********** */}
                             <Row>
                                 <Col sm="6">
                                     <FormGroup className="row mt-2" >
@@ -469,7 +459,7 @@ const ClaimTrackingEntry = (props) => {
                                 </Col >
 
                                 <Col sm="6">
-                                    <FormGroup className=" row mt-1 " >
+                                    <FormGroup className=" row mt-2 " >
                                         <Label className="col-sm-1 p-2"
                                             style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.ClaimForTheMonth} </Label>
                                         <Col sm="7">
@@ -492,18 +482,17 @@ const ClaimTrackingEntry = (props) => {
                                             )} */}
                                             <Input className="form-control"
                                                 type="month"
-                                                defaultValue={values.ClaimForTheMonth}
-                                                id="example-month-input"
+                                                defaultValue={yearAndMonth.Year === '' ? SelectedMonth() : yearAndMonth}
+                                                // id="example-month-input"
                                                 onChange={MonthAndYearOnchange}
                                                 max={currentMonth}
                                             />
-
                                         </Col>
-
                                     </FormGroup>
                                 </Col >
                             </Row>
 
+                            {/* *******Select Claim Id dropdown***** &&& ******Select Claim Id Inputbox********** */}
                             <Row>
                                 <Col sm="6">
                                     <FormGroup className=" row mt-1 " >
@@ -542,7 +531,7 @@ const ClaimTrackingEntry = (props) => {
                                                 type="text"
                                                 name="ClaimText"
                                                 id="ClaimText"
-                                                // placeholder="Please Enter Claim ID"
+                                                placeholder="Please Enter Full Claim No."
                                                 disabled={values.ClaimId.value > 0 && true}
                                                 value={values.ClaimText}
                                                 onChange={(event) => { onChangeText({ event, state, setState }) }}
@@ -552,6 +541,7 @@ const ClaimTrackingEntry = (props) => {
                                 </Col >
                             </Row>
 
+                            {/* *******Party***** &&& ********* Claim Received Source********** */}
                             <Row>
                                 <Col sm="6">
                                     <FormGroup className=" row mt-1 " >
@@ -603,8 +593,8 @@ const ClaimTrackingEntry = (props) => {
                                 </Col >
                             </Row>
 
+                            {/* *******Type***** &&& ********* Claim Trade********** */}
                             < Row >
-
                                 <Col sm="6">
                                     <FormGroup className=" row mt-1 " >
                                         <Label className="col-sm-1 p-2"
@@ -711,6 +701,7 @@ const ClaimTrackingEntry = (props) => {
                                 </Col >
                             </Row>
 
+                            {/* ************** Remark **************  */}
                             <Row>
                                 <Col sm="6">
                                     <FormGroup className=" row mt-1 " >
@@ -735,37 +726,7 @@ const ClaimTrackingEntry = (props) => {
                                 </Col >
                             </Row>
 
-
-                            {/* <Row>
-                                <Col sm="6">
-                                    <FormGroup className=" row mt-1 " >
-                                        <Label className="col-sm-1 p-2"
-                                            style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.CompanyName} </Label>
-                                        <Col sm="7">
-                                            <Select
-                                                name="CompanyName"
-                                                value={values.CompanyName}
-                                                isSearchable={true}
-                                                className="react-dropdown"
-                                                classNamePrefix="dropdown"
-                                                styles={{
-                                                    menu: provided => ({ ...provided, zIndex: 2 })
-                                                }}
-                                                options={companyListOptions}
-                                                onChange={(hasSelect, evn) => {
-                                                    onChangeSelect({ hasSelect, evn, state, setState });
-                                                }}
-                                            />
-                                            {isError.CompanyName.length > 0 && (
-                                                <span className="text-danger f-8"><small>{isError.CompanyName}</small></span>
-                                            )}
-                                        </Col>
-
-                                    </FormGroup>
-                                </Col >
-
-                            </Row> */}
-
+                            {/* ******* Claim Check By ***** &&& *********Credit Note status ********** */}
                             <Row>
                                 <Col sm="6">
                                     <FormGroup className=" row mt-1 " >
@@ -823,6 +784,7 @@ const ClaimTrackingEntry = (props) => {
 
                             </Row>
 
+                            {/* ******* Credit Note No ***** &&& ********* Credit Note Date ********** */}
                             <Row>
 
                                 <Col sm="6">
@@ -866,8 +828,8 @@ const ClaimTrackingEntry = (props) => {
 
                             </Row>
 
+                            {/* ******* Credit Note Amount ***** &&& ********* Credit Note Upload Date ********** */}
                             <Row>
-
                                 <Col sm="6">
                                     <FormGroup className=" row mt-1 " >
                                         <Label className="col-sm-1 p-2"
@@ -909,10 +871,11 @@ const ClaimTrackingEntry = (props) => {
 
                             </Row>
                         </div>
+
                         <FormGroup>
                             <Col>
                                 <SaveButton pageMode={pageMode}
-                                    // loading={saveBtnloading}
+                                    loading={saveBtnloading}
                                     onClick={saveHandeller}
                                     userAcc={userPageAccessState}
                                     editCreatedBy={editCreatedBy}
