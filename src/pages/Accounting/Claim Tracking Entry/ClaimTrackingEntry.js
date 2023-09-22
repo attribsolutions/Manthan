@@ -395,8 +395,8 @@ const ClaimTrackingEntry = (props) => {
                 const jsonBody = JSON.stringify({
 
                     "Date": values.Date,
-                    "Month": !(yearAndMonth.Month) ? CurrentMonthAndYear().Month : yearAndMonth.Month,
-                    "Year": !(yearAndMonth.Year) ? CurrentMonthAndYear().Year : yearAndMonth.Year,
+                    "Month": !(yearAndMonth.Month) ? CurrentMonthAndYear().Month : yearAndMonth.Month.toString().padStart(2, '0'),
+                    "Year": !(yearAndMonth.Year) ? CurrentMonthAndYear().Year : yearAndMonth.Year.toString(),
                     "ClaimReceivedSource": values.ClaimReceivedSource,
                     "Type": values.Type.value,
                     "ClaimTrade": values.ClaimTrade.value,
