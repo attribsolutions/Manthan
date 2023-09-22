@@ -11,11 +11,7 @@ import {
     Row
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
-import {
-    Breadcrumb_inputName,
-    commonPageField,
-    commonPageFieldSuccess,
-} from "../../../store/actions";
+import { Breadcrumb_inputName,   commonPageField, commonPageFieldSuccess,} from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import {
@@ -81,7 +77,6 @@ const BankMaster = (props) => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
     }, []);
-
 
     const values = { ...state.values }
     const { isError } = state;
@@ -197,7 +192,6 @@ const BankMaster = (props) => {
             comAddPageFieldFunc({ state, setState, fieldArr })
         }
     }, [pageField])
-
 
     const saveHandeller = async (event) => {
         event.preventDefault();
