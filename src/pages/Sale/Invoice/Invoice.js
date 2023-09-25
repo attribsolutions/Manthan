@@ -379,7 +379,7 @@ const Invoice = (props) => {
                     </div>
                     <div>
                         <samp className="theme-font text-muted" >Available stock :</samp>
-                        <label className="text-black">{parseFloat(Number(index1.ItemTotalStock).toFixed(3))}</label>
+                        <label className="text-black">{_cfunc.roundToDecimalPlaces(index1.ItemTotalStock, 3)}</label>
                     </div>
                 </>
             ),
@@ -427,7 +427,7 @@ const Invoice = (props) => {
                                     <td data-label='Basic Rate' style={{ textAlign: "right" }}>
                                         <span id={`stockItemRate-${index1.id}-${index2.id}`}>{_cfunc.amountCommaSeparateFunc(index2.Rate)}</span>
                                     </td>
-                                    <td data-label='MRP' style={{ textAlign: "right" }}>{_cfunc.amountCommaSeparateFunc(index2.MRP)}</td>
+                                    <td data-label='MRP' style={{ textAlign: "right" }}>{_cfunc.amountCommaSeparateFunc(_cfunc.roundToDecimalPlaces(index2.MRP, 2))}</td>
                                 </tr>
                             ))}
                         </tbody>
