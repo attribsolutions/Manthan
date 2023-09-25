@@ -5,15 +5,18 @@ import ToolkitProvider from 'react-bootstrap-table2-toolkit';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { Col, FormGroup, Label, Row } from 'reactstrap';
-import { Go_Button, PageLoadingSpinner } from '../../components/Common/CommonButton';
-import { breadcrumbReturnFunc, convertDateTime_dmy, convertDateTime_ydm, date_dmy_func, getDateTime_dmy, loginEmployeeID } from '../../components/Common/CommonFunction';
+import { Go_Button} from '../../components/Common/CommonButton';
+import { breadcrumbReturnFunc, convertDateTime_ydm,  getDateTime_dmy, loginEmployeeID } from '../../components/Common/CommonFunction';
 import { mySearchProps } from '../../components/Common/SearchBox/MySearch';
-import { C_DatePicker, C_Select, C_TimePicker } from '../../CustomValidateForm';
+import { C_Select, C_TimePicker } from '../../CustomValidateForm';
 import { showToastAlert } from '../../helpers/axios_Config';
 import { commonPartyDropdown_API, TransactionLog_Get_User_Api, TransactionLog_Go_Btn_Api, TransactionLog_transactionType_Api } from '../../helpers/backend_helper';
 import { BreadcrumbShowCountlabel } from '../../store/actions';
 
+
 const TransactionLog = () => {
+
+
     const dispatch = useDispatch();
     const history = useHistory()
 
@@ -46,10 +49,7 @@ const TransactionLog = () => {
         }
         const resp3 = await commonPartyDropdown_API(loginEmployeeID())
         if (resp3.StatusCode === 200) {
-            setPartyRedux(resp3.Data.map((item, key) => {
-                item["id"] = key + 1
-                return item
-            }))
+            setPartyRedux(resp3.Data)
         }
     }, [])
 
@@ -75,7 +75,7 @@ const TransactionLog = () => {
     const tableColumns = [
         {
             text: "Transaction Date",
-            dataField: "TranasactionDate",
+            dataField: "TransactionDate",
             sort: true
         }, {
             text: "User Name",
@@ -91,12 +91,6 @@ const TransactionLog = () => {
             dataField: "TransactionType",
             sort: true
         },
-        // {
-        //     text: "Transaction Id",
-        //     dataField: "TransactionID",
-        //     sort: true
-
-        // },
         {
             text: "Transaction Detail",
             dataField: "TransactionDetails",
@@ -176,44 +170,7 @@ const TransactionLog = () => {
                             </div>
                         </FormGroup>
                     </Col>
-                    {/* <Col sm="3">
-                        <FormGroup>
-                            <div className="d-flex align-items-center">
-                                <Label className="col-sm-5 p-2" htmlFor="fromtime">
-                                    From Time
-                                </Label>
-                                <Col sm="7">
-                                    <C_TimePicker
-                                        id="fromtime"
-                                        value={formDateSelect}
-                                        onChange={(selectedDate) => setFormDateSelect(selectedDate)}
-                                        placeholder="Select from time"
-                                        name="fromtime"
-                                    />
-                                </Col>
-                            </div>
-                        </FormGroup>
-                    </Col>
-                    <Col sm="3" >
-                        <FormGroup >
-                            <div className="d-flex align-items-center">
-                                <Label className="col-sm-5 p-2" htmlFor="totime">
-                                    To Time
-                                </Label>
-                                <Col sm="7">
-                                    <C_TimePicker
-                                        id="totime"
-                                        name="totime"
-                                        value={toDateSelect}
-                                        onChange={(selectedDate,a,b,c) => {
-                                            debugger
-                                            setToDateSelect(selectedDate)}}
-                                        placeholder="Select To time"
-                                    />
-                                </Col>
-                            </div>
-                        </FormGroup>
-                    </Col> */}
+                   
                 </div>
                 <div className="row">
                     <Col sm="3" >
@@ -296,6 +253,7 @@ const TransactionLog = () => {
     };
 
     return (
+        
         <React.Fragment>
             {/* <PageLoadingSpinner isLoading={goBtnloading || !pageField} /> */}
             <div className="page-content">
