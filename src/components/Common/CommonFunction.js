@@ -139,7 +139,7 @@ export const getCurrentMonthAndYear = () => {
 //   });
 // };
 
-export function formatAmountWithCommas(amount) {
+export function amountCommaSeparateFunc(amount) {
   const amountStr = amount.toString();
   const [integerPart, decimalPart] = amountStr.split('.');
 
