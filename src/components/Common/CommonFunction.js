@@ -139,9 +139,17 @@ export const getCurrentMonthAndYear = () => {
 //   });
 // };
 
-export function amountCommaSeparateFunc(x) {
+export function formatAmountWithCommas(amount) {
+  const amountStr = amount.toString();
+  const [integerPart, decimalPart] = amountStr.split('.');
 
-  return x.toString().split('.')[0].length > 3 ? x.toString().substring(0, x.toString().split('.')[0].length - 3).replace(/\B(?=(\d{2})+(?!\d))/g, ",") + "," + x.toString().substring(x.toString().split('.')[0].length - 3) : x.toString();
+  if (integerPart.length > 3) {
+    const formattedIntegerPart = integerPart.substring(0, integerPart.length - 3)
+      .replace(/\B(?=(\d{2})+(?!\d))/g, ",");
+    return formattedIntegerPart + "," + integerPart.substring(integerPart.length - 3) + (decimalPart ? "." + decimalPart : "");
+  }
+
+  return amountStr;
 }
 
 export const loginUserDetails = () => { //+++++++++++++++++++++ Session Company Id+++++++++++++++++++++++++++++

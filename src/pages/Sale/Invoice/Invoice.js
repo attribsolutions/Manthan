@@ -413,7 +413,7 @@ const Invoice = (props) => {
                                         <Input
                                             type="text"
                                             disabled={pageMode === 'edit' ? true : false}
-                                            placeholder= "Manually enter quantity"
+                                            placeholder="Manually enter quantity"
                                             className="right-aligned-placeholder"
                                             key={`batchQty${index1.id}-${index2.id}`}
                                             id={`batchQty${index1.id}-${index2.id}`}
@@ -425,7 +425,7 @@ const Invoice = (props) => {
                                         />
                                     </td>
                                     <td data-label='Basic Rate' style={{ textAlign: "right" }}>
-                                        <span id={`stockItemRate-${index1.id}-${index2.id}`}>{_cfunc.amountCommaSeparateFunc(Number(index2.Rate).toFixed(2))}</span>
+                                        <span id={`stockItemRate-${index1.id}-${index2.id}`}>{_cfunc.amountCommaSeparateFunc(index2.Rate)}</span>
                                     </td>
                                     <td data-label='MRP' style={{ textAlign: "right" }}>{index2.MRP}</td>
                                 </tr>
@@ -547,7 +547,7 @@ const Invoice = (props) => {
                                 </div>
                                 <div className="child">
                                     <CInput
-                                      
+
                                         id={`Dicount_${key}-${index1.id}`}
                                         className="right-aligned-placeholder"
                                         type="text"
