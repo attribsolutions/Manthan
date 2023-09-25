@@ -74,7 +74,7 @@ const Invoice = (props) => {
     const [orderItemDetails, setOrderItemDetails] = useState([])
     const [orderIDs, setOrderIDs] = useState([])
 
-    // for invoicer page heder dicount functionality useSate ************************************
+    // for invoice page heder discount functionality useSate ************************************
     const [discountValueAll, setDiscountValueAll] = useState("");
     const [discountTypeAll, setDiscountTypeAll] = useState({ value: 2, label: " % " });
     const [discountDropOption] = useState([{ value: 1, label: "Rs" }, { value: 2, label: "%" }])
@@ -477,7 +477,7 @@ const Invoice = (props) => {
                                         type="text"
                                         className="right-aligned-placeholder"
                                         cpattern={decimalRegx}
-                                        placeholder="Enter dicount value"
+                                        placeholder="Enter discount value"
                                         value={discountValueAll}
                                         onChange={(e) => {
                                             let e_val = Number(e.target.value);
@@ -551,7 +551,7 @@ const Invoice = (props) => {
                                         id={`Dicount_${key}-${index1.id}`}
                                         className="right-aligned-placeholder"
                                         type="text"
-                                        placeholder="Enter dicount value"
+                                        placeholder="Enter discount value"
                                         value={index1.Discount}
                                         cpattern={decimalRegx}
                                         onChange={(e) => {
