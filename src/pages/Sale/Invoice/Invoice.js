@@ -427,7 +427,7 @@ const Invoice = (props) => {
                                     <td data-label='Basic Rate' style={{ textAlign: "right" }}>
                                         <span id={`stockItemRate-${index1.id}-${index2.id}`}>{_cfunc.amountCommaSeparateFunc(index2.Rate)}</span>
                                     </td>
-                                    <td data-label='MRP' style={{ textAlign: "right" }}>{index2.MRP}</td>
+                                    <td data-label='MRP' style={{ textAlign: "right" }}>{_cfunc.amountCommaSeparateFunc(index2.MRP)}</td>
                                 </tr>
                             ))}
                         </tbody>
