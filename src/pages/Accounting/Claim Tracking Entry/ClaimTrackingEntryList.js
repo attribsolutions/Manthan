@@ -5,7 +5,15 @@ import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
 import { Go_Button, PageLoadingSpinner } from "../../../components/Common/CommonButton";
 import ClaimTrackingEntry from "./ClaimTrackingEntry";
-import { delete_ClaimTrackingEntryID_Success, delete_ClaimTrackingEntry_ID, editClaimTrackingEntryID, getClaimTrackingEntrySuccess, getClaimTrackingEntrylist, saveClaimTrackingEntry_Success, updateClaimTrackingEntryIDSuccess } from "../../../store/Accounting/ClaimTrackingEntryRedux/action";
+import {
+    delete_ClaimTrackingEntryID_Success,
+    delete_ClaimTrackingEntry_ID,
+    editClaimTrackingEntryID,
+    getClaimTrackingEntrySuccess,
+    getClaimTrackingEntrylist,
+    saveClaimTrackingEntry_Success,
+    updateClaimTrackingEntryIDSuccess
+} from "../../../store/Accounting/ClaimTrackingEntryRedux/action";
 import { Col, FormGroup, Input, Label, Row } from "reactstrap";
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList"
 import { getCurrent_Month_And_Year } from "./ClaimRelatedFunc";
@@ -121,7 +129,6 @@ const ClaimTrackingEntryList = (props) => {
                             goButnFunc={goButtonHandler}
                         />
                     </div>
-
                 }
             </div>
         </React.Fragment>
