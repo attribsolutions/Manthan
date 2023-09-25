@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
 import * as pageId from "../../../routes/allPageID"
@@ -6,16 +6,15 @@ import * as url from "../../../routes/route_url";
 import { Go_Button, PageLoadingSpinner } from "../../../components/Common/CommonButton";
 import ClaimTrackingEntry from "./ClaimTrackingEntry";
 import { delete_ClaimTrackingEntryID_Success, delete_ClaimTrackingEntry_ID, editClaimTrackingEntryID, getClaimTrackingEntrySuccess, getClaimTrackingEntrylist, saveClaimTrackingEntry_Success, updateClaimTrackingEntryIDSuccess } from "../../../store/Accounting/ClaimTrackingEntryRedux/action";
-import { Col, FormGroup, Label, Row } from "reactstrap";
-import { ClaimForTheMonthOtion } from "./ClaimRelatedData";
-import Select from "react-select";
+import { Col, FormGroup, Input, Label, Row } from "reactstrap";
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList"
+import { getCurrent_Month_And_Year } from "./ClaimRelatedFunc";
 
 const ClaimTrackingEntryList = (props) => {
 
     const dispatch = useDispatch();
 
-    const [ClaimForTheMonthSelect, setClaimForTheMonthSelect] = useState('');
+    const [yearAndMonth, setYearAndMonth] = useState(getCurrent_Month_And_Year);
 
     const reducers = useSelector(
         (state) => ({
@@ -39,13 +38,19 @@ const ClaimTrackingEntryList = (props) => {
         deleteSucc: delete_ClaimTrackingEntryID_Success
     }
 
+    //Max Month is current Month
+    const maxMonthCurrent = useMemo(() => {
+        const current = getCurrent_Month_And_Year();
+        return `${current.Year}-${current.Month}`
+    }, []);
+
     //  This UseEffect => Featch Modules List data  First Rendering
     useEffect(() => {
         const page_Id = pageId.CLAIM_TRACKING_ENTRY_LIST
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
         dispatch(getClaimTrackingEntrylist());
-
+        goButtonHandler()
         return () => {
             dispatch(getClaimTrackingEntrySuccess([]));
             dispatch(commonPageFieldListSuccess(null))
@@ -57,11 +62,16 @@ const ClaimTrackingEntryList = (props) => {
     function goButtonHandler(e) {
 
         const jsonBody = JSON.stringify({
-            "Year": ClaimForTheMonthSelect.year,
-            "Month": ClaimForTheMonthSelect.monthNumber
+            "Year": yearAndMonth.Year,
+            "Month": yearAndMonth.Month,
         })
         dispatch(getClaimTrackingEntrylist(jsonBody));
     };
+
+    async function MonthAndYearOnchange(e) {
+        const selectdMonth = getCurrent_Month_And_Year(e.target.value);
+        setYearAndMonth(selectdMonth);
+    }
 
     return (
 
@@ -77,30 +87,22 @@ const ClaimTrackingEntryList = (props) => {
                                 <Label className="col-sm-1 p-2"
                                     style={{ width: "115px", marginRight: "0.1cm" }}>Claim For The Month </Label>
                                 <Col sm="7">
-                                    <Select
-                                        name="ClaimForTheMonth"
-                                        value={ClaimForTheMonthSelect}
-                                        isSearchable={true}
-                                        className="react-dropdown"
-                                        classNamePrefix="dropdown"
-                                        styles={{
-                                            menu: provided => ({ ...provided, zIndex: 2 })
-                                        }}
-                                        options={ClaimForTheMonthOtion}
-                                        onChange={(e) => { { setClaimForTheMonthSelect(e) } }}
+                                    <Input className="form-control"
+                                        type="month"
+                                        value={`${yearAndMonth.Year}-${yearAndMonth.Month}`}
+                                        onChange={(e) => MonthAndYearOnchange(e)}
+                                        max={maxMonthCurrent}
                                     />
                                 </Col>
                             </FormGroup>
                         </Col >
-                        {/* <Col md={1}></Col> */}
+
                         <Col sm="1" className="mx-6 mt-3" >
                             < Go_Button
                                 loading={goBtnLoading}
                                 onClick={(e) => goButtonHandler()}
                             />
-
                         </Col>
-
                     </Row>
                 </div>
 
@@ -110,7 +112,7 @@ const ClaimTrackingEntryList = (props) => {
                         <CommonPurchaseList
                             action={action}
                             reducers={reducers}
-                            showBreadcrumb={true}
+                            // showBreadcrumb={false}
                             MasterModal={ClaimTrackingEntry}
                             masterPath={url.CLAIM_TRACKING_ENTRY}
                             newBtnPath={url.CLAIM_TRACKING_ENTRY}

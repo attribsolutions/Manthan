@@ -4,46 +4,11 @@ import {
     FormGroup,
     Input,
     Label,
-    Row,
+
 } from "reactstrap";
 import Select from "react-select";
-
-export function ClaimForTheMonthOtions() {
-    let currentYear = new Date().getFullYear(); // Get the current year
-    let currentMonth = new Date().getMonth() + 1; // Get the current month (0-based index)
-
-    let currentAndLastYear = [];
-
-    for (let year = currentYear - 1; year <= currentYear; year++) {
-        for (let month = 1; month <= 12; month++) {
-            if (year === currentYear && month > currentMonth) {
-                break; // Stop when reaching future months in the current year
-            }
-
-            const monthNames = [
-                "January", "February", "March", "April",
-                "May", "June", "July", "August",
-                "September", "October", "November", "December"
-            ];
-
-            currentAndLastYear.push({
-                year: year,
-                monthNumber: month.toString().padStart(2, '0'),
-                monthName: monthNames[month - 1]
-            });
-        }
-    }
-
-    return currentAndLastYear;
-}
-
-export const ClaimForTheMonthOtion = ClaimForTheMonthOtions().map((data, index, key) => ({
-    value: index + 1,
-    label: `${data.monthName}(${data.year})`,
-    monthNumber: data.monthNumber,
-    year: `${data.year}`
-}));
-
+import { GenralMasterSubType } from "../../../helpers/backend_helper";
+import { loginCompanyID } from "../../../components/Common/CommonFunction";
 
 // Reusable component for form groups with label and input/select
 export function FormGroupWithLabel(props) {
@@ -91,10 +56,38 @@ export function renderInput(name, value, isError, placeholder, onChange) {
     );
 }
 
-export const CurrentMonthAndYear = () => {
-    const currentDate = new Date();
-    const year = String(currentDate.getFullYear());
-    const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // Month is zero-indexed
+//GenralMasterSubType API call For Type ,TypeOfClaim,ClaimCheckBy ,CreditNoteStatus dropdowns
+export const fetchDataAndSetDropdown = async (TypeID, setDropdown) => {
+    const jsonBody = JSON.stringify({
+        Company: loginCompanyID(),
+        TypeID: TypeID,
+    });
+
+    const resp = await GenralMasterSubType(jsonBody);
+    if (resp.StatusCode === 200) {
+        setDropdown(
+            resp.Data.map((index) => ({
+                value: index.id,
+                label: index.Name,
+            })));
+    }
+};
+
+export const getCurrent_Month_And_Year = (inputDate) => {
+
+    let year = "";
+    let month = "";
+
+    if (!inputDate) {
+        const currentDate = new Date();
+        year = String(currentDate.getFullYear());
+        month = String(currentDate.getMonth() + 1).padStart(2, '0'); // Month is zero-indexed
+    }
+    else {
+        const [yy, mm] = inputDate.split('-').map(Number);
+        year = String(yy);
+        month = String(mm).padStart(2, '0'); // Month is zero-indexed
+    }
 
     return {
         Year: year,
