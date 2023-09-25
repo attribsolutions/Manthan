@@ -120,7 +120,6 @@ const ClaimTrackingEntryList = (props) => {
                         <CommonPurchaseList
                             action={action}
                             reducers={reducers}
-                            // showBreadcrumb={false}
                             MasterModal={ClaimTrackingEntry}
                             masterPath={url.CLAIM_TRACKING_ENTRY}
                             newBtnPath={url.CLAIM_TRACKING_ENTRY}

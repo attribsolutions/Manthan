@@ -220,7 +220,7 @@ const ClaimTrackingEntry = (props) => {
                 dispatch(editClaimTrackingEntryIDSuccess({ Status: false }))
             }
         }
-    }, [pageField,])
+    }, [hasShowloction,hasShowModal,pageField])
 
     // Post UseEffect
     useEffect(async () => {
