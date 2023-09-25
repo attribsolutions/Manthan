@@ -64,8 +64,8 @@ export const return_discountCalculate_Func = (row, index1, IsComparGstIn) => {
 // ************************************************************************
 
 export function stockDistributeFunc(index1, _key) {
-    debugger
-    let itemTotalAmount = 0
+    
+    let totalAmount = 0
     let orderqty = Number(index1.Quantity);
     let _ItemTotalStock = 0
 
@@ -88,7 +88,7 @@ export function stockDistributeFunc(index1, _key) {
 
         if (index2.Qty > 0) {
             const calculate = return_discountCalculate_Func(index2, index1)
-            itemTotalAmount = itemTotalAmount + Number(calculate.roundedTotalAmount)
+            totalAmount = totalAmount + Number(calculate.roundedTotalAmount)
         }
 
         try {
@@ -99,25 +99,21 @@ export function stockDistributeFunc(index1, _key) {
     });
 
     index1.ItemTotalStock = _ItemTotalStock;
+    index1.ItemTotalAmount = totalAmount.toFixed(2);
 
-    const t2 = index1.ItemTotalStock;
-    const tA4 = itemTotalAmount.toFixed(2);
-
-    index1.itemTotalAmount = tA4
-
-    if (orderqty > t2) {
+    if (orderqty > 0) {
         try {
-            document.getElementById(`returnQty-${index1.id}-${_key}`).value = t2.toFixed(3)
+            document.getElementById(`returnQty-${index1.id}-${_key}`).value = index1.ItemTotalStock.toFixed(3)
         } catch (e) { CommonConsole('stockDistributeFunc', e) }
-    };
+    } else {
+        try {
+            index1.StockInValid = false
+            index1.StockInvalidMsg = null
+            document.getElementById(`StockInvalidMsg-${index1.id}`).style.display = "none";
+        } catch (e) { CommonConsole('stockDistributeFunc ', e) };
+    }
     try {
-        index1.StockInValid = false
-        index1.StockInvalidMsg = null
-        document.getElementById(`StockInvalidMsg-${index1.id}`).style.display = "none";
-    } catch (e) { CommonConsole('stockDistributeFunc ', e) };
-
-    try {
-        document.getElementById(`itemTotalAmount-${index1.id}-${_key}`).innerText = amountCommaSeparateFunc(tA4);
+        document.getElementById(`item-TotalAmount-${index1.id}-${_key}`).innerText = amountCommaSeparateFunc(index1.ItemTotalAmount);
     } catch (e) { CommonConsole('stockDistributeFunc', e) };
 
 };
@@ -177,17 +173,17 @@ export function stockQtyOnChange(event, index1, index2, _key) {
 export const innerStockCaculation = (index1, _key) => {
 
     let QuantityTatal = 0
-    let itemTotalAmount = 0;
+    let totalAmount = 0;
 
     index1.StockDetails.forEach(index2 => {
         if (Number(index2.Qty) > 0) {
             const calculate = return_discountCalculate_Func(index2, index1);
-            itemTotalAmount += Number(calculate.roundedTotalAmount);
+            totalAmount += Number(calculate.roundedTotalAmount);
             QuantityTatal += Number(index2.Qty);
         }
     });
 
-    index1.itemTotalAmount = itemTotalAmount.toFixed(2)
+    index1.ItemTotalAmount = totalAmount.toFixed(2)
     index1.Quantity = QuantityTatal.toFixed(3);
 
     try {
@@ -195,7 +191,7 @@ export const innerStockCaculation = (index1, _key) => {
     } catch (e) { CommonConsole('innerStockCaculation', e) };
 
     try {
-        document.getElementById(`itemTotalAmount-${index1.id}-${_key}`).innerText = amountCommaSeparateFunc(index1.itemTotalAmount);
+        document.getElementById(`item-TotalAmount-${index1.id}-${_key}`).innerText = amountCommaSeparateFunc(index1.ItemTotalAmount);
     } catch (e) { CommonConsole('innerStockCaculation', e) };
 
 }

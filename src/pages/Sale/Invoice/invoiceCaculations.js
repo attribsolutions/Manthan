@@ -1,48 +1,9 @@
-import { amountCommaSeparateFunc, CommonConsole, compareGSTINState, groupBy, loginSystemSetting } from "../../../components/Common/CommonFunction"
+import { amountCommaSeparateFunc, CommonConsole, compareGSTINState, hasDecimalCheckFunc, loginSystemSetting, roundToDecimalPlaces } from "../../../components/Common/CommonFunction"
+import { decimalRegx_3dit, onlyNumberRegx } from "../../../CustomValidateForm";
 
-
-export function bulkSearch(text, data, columns) {
-
-    let search = text.toLowerCase()
-
-    const filter = data.filter((item) => {
-        let found = false
-
-        if (item.header) { return true }
-
-        for (let i = 0; i < columns.length; i++) {
-
-            let isCell = item[columns[i].dataField]
-            if (!(isCell === null)
-                && !(isCell === undefined)
-                && typeof isCell !== 'object'
-                && !Array.isArray(isCell)
-            ) {
-                if (!found) {
-                    isCell = JSON.stringify(isCell);
-                    isCell = isCell.toLowerCase(isCell)
-                    found = isCell.includes(search);
-                }
-            }
-        }
-        return found
-
-    })
-    let hasHedRow1 = []
-    const grouped = groupBy(filter, pet => pet.Party);
-    grouped.forEach(i => {
-        if (i.length > 1) {
-            i.forEach(k => {
-                hasHedRow1.push(k)
-            })
-        }
-    })
-    return hasHedRow1
-}
-// ************************************************************************
 
 export const invoice_discountCalculate_Func = (row, index1, IsComparGstIn) => {
-    
+
     // Extract values from the input parameters
     const rate = Number(row.Rate) || 0;
     const quantity = Number(row.Qty) || 0;
@@ -109,9 +70,9 @@ export const settingBaseRoundOffAmountFunc = (tableList = []) => {
     const isGrandAmtRound = systemSetting.InvoiceAmountRoundConfiguration === '1';
     const isTCS_AmtRound = systemSetting.TCSAmountRoundConfiguration === '1';
 
-    // Calculate the sum of the itemTotalAmount in the tableList
-    let sumOfGrandTotal = tableList.reduce((accumulator, currentObject) => {
-        return accumulator + Number(currentObject["itemTotalAmount"]) || 0
+    // Calculate the sum of the item TotalAmount in the tableList
+    let sumOfGrandTotal = tableList.reduce((accumulator, index1) => {
+        return accumulator + Number(index1.ItemTotalAmount) || 0
     }, 0);
 
 
@@ -138,91 +99,101 @@ export const settingBaseRoundOffAmountFunc = (tableList = []) => {
 };
 
 // ************************************************************************
-
 export function stockDistributeFunc(index1) {
+    let totalAmount = 0;
+    let remainingOrderQty = parseFloat(index1.Quantity); // Convert to a number
+    let totalStockQty = 0;
 
-    let itemTotalAmount = 0
-    let orderqty = Number(index1.Quantity);
-    let _ItemTotalStock = 0
+
 
     index1.StockDetails = index1.StockDetails.map(index2 => {
+        const stockQty = parseFloat(index2.ActualQuantity); // Convert to a number
+        totalStockQty += stockQty;
 
-        let stockqty = Number(index2.ActualQuantity);
+        const qtyToDeduct = Math.min(remainingOrderQty, stockQty);
+        index2.Qty = roundToDecimalPlaces(qtyToDeduct, 3); // Round to three decimal places
+        remainingOrderQty = roundToDecimalPlaces((remainingOrderQty - qtyToDeduct), 3); // Round the remaining order quantity
 
-        _ItemTotalStock = _ItemTotalStock + stockqty// addition of total index2.ActualQuantity
-
-        if ((orderqty > stockqty) && !(orderqty === 0)) {
-            orderqty = orderqty - stockqty
-            index2.Qty = stockqty.toFixed(3)
-        } else if ((orderqty <= stockqty) && (orderqty > 0)) {
-            index2.Qty = orderqty.toFixed(3)
-            orderqty = 0
-        }
-        else {
-            index2.Qty = 0;
-        }
-
-        if (index2.Qty > 0) {
-
-            const calculate = invoice_discountCalculate_Func(index2, index1)
-            itemTotalAmount = itemTotalAmount + Number(calculate.roundedTotalAmount)
+        if (qtyToDeduct > 0) {
+            const calculatedItem = invoice_discountCalculate_Func(index2, index1);
+            totalAmount += parseFloat(calculatedItem.roundedTotalAmount); // Convert to a number
         }
 
         try {
-            document.getElementById(`batchQty${index1.id}-${index2.id}`).value = index2.Qty
+            const batchQtyElement = document.getElementById(`batchQty${index1.id}-${index2.id}`);
+            batchQtyElement.value = index2.Qty; // Display with three decimal places
+        } catch (error) {
+            CommonConsole('stockDistributeFunc', error);
+        }
 
-        } catch (e) { CommonConsole('stockDistributeFunc', e) }
-
-        return index2
+        return index2;
     });
 
-    index1.ItemTotalStock = _ItemTotalStock;
 
-    const t2 = index1.ItemTotalStock;
-    const tA4 = itemTotalAmount.toFixed(2);
 
-    index1.itemTotalAmount = tA4
+    index1.ItemTotalStock = parseFloat(totalStockQty.toFixed(3)); // Convert to a number with three decimal places
+    index1.ItemTotalAmount = parseFloat(totalAmount.toFixed(2)); // Convert to a number with two decimal places
 
-    if (orderqty > t2) {
-        try {
-            document.getElementById(`OrderQty${index1.id}`).value = t2.toFixed(3)
-        } catch (e) { CommonConsole('stockDistributeFunc', e) }
-    };
-    try {
-        index1.StockInValid = false
-        index1.StockInvalidMsg = null
-        document.getElementById(`StockInvalidMsg-${index1.id}`).style.display = "none";
-    } catch (e) { CommonConsole('stockDistributeFunc ', e) };
+    const isUnitIs_NO = hasCheckUnitIs_NOFunc(index1);
+    const isQuantityDecimal = hasDecimalCheckFunc(index1.Quantity)
 
-    try {
-        document.getElementById(`itemTotalAmount-${index1.id}`).innerText = amountCommaSeparateFunc(tA4);
-    } catch (e) { CommonConsole('stockDistributeFunc', e) };
-};
 
-// ************************************************************************
-export function orderQtyOnChange(event, index) {
 
-    let input = Number(event.target.value)
-    let ItemTotalStock = Number(index.ItemTotalStock)
-    let result = /^\d*(\.\d{0,3})?$/.test(input);
+    if (remainingOrderQty > 0) {
 
-    if (result) {
-        if (!(ItemTotalStock >= input)) {
-            input = ItemTotalStock
-        };
+        const difference = Math.abs(index1.Quantity - index1.ItemTotalStock);//calculate short stock quantity
+        index1.StockInValid = true;
+        index1.StockInvalidMsg = `Short Stock Quantity ${difference.toFixed(3)}`;
+        stockValidation_DOM_MsgShowFunc(index1)
+    }
+    else if (isUnitIs_NO && isQuantityDecimal) {
 
-    } else if (((index.Quantity >= 0) && (!(input === '')))) {
-        input = index.Quantity
-    } else {
-        input = 0
+        index1.StockInValid = true;
+        index1.StockInvalidMsg = "Stock quantity decimal not allowed.";
+        stockValidation_DOM_MsgShowFunc(index1)
+
+    }
+    else {
+
+        index1.StockInValid = false;
+        index1.StockInvalidMsg = null;
+        stockValidation_DOM_MsgShowFunc(index1)
+
+
     }
 
-    event.target.value = input;
-    index.Quantity = input
+}
 
-    stockDistributeFunc(index)
-};
+export function orderQtyOnChange(event, index1) {
 
+    const hasUnit_NO = hasCheckUnitIs_NOFunc(index1);
+    const totalStock = parseFloat(index1.ItemTotalStock); // Convert to a number
+    const priviosValue = index1.Quantity;
+
+    let inputValue = event.target.value;
+    if (inputValue === '') { }
+    else if (hasUnit_NO) {
+        if (onlyNumberRegx.test(inputValue)) {
+            if (totalStock < inputValue) {
+                inputValue = Math.floor(totalStock).toString(); // Show stock quantity without decimals
+            }
+        } else {
+            inputValue = Number(priviosValue).toFixed(0) || ''
+        }
+    } else {
+        if (decimalRegx_3dit.test(inputValue)) {
+            if (totalStock < inputValue) {
+                inputValue = roundToDecimalPlaces(totalStock, 3); // Show stock quantity with up to 3 decimals
+            }
+        } else {
+            inputValue = priviosValue
+        }
+    }
+
+    event.target.value = inputValue;
+    index1.Quantity = inputValue
+    stockDistributeFunc(index1)
+}
 // ************************************************************************
 
 export function orderQtyUnit_SelectOnchange(event, index1) {
@@ -231,8 +202,10 @@ export function orderQtyUnit_SelectOnchange(event, index1) {
     index1.ConversionUnit = event.ConversionUnit;
 
     index1.StockDetails.forEach(index2 => {
-        index2.Rate = ((event.BaseUnitQuantity / event.BaseUnitQuantityNoUnit) * index2.initialRate).toFixed(2);
-        index2.ActualQuantity = (index2.BaseUnitQuantity / event.BaseUnitQuantity).toFixed(3);
+        const _hasRate = ((event.BaseUnitQuantity / event.BaseUnitQuantityNoUnit) * index2.initialRate);
+        const _hasActualQuantity = (index2.BaseUnitQuantity / event.BaseUnitQuantity);
+        index2.Rate = roundToDecimalPlaces(_hasRate, 2);//max 2 decimal 
+        index2.ActualQuantity = roundToDecimalPlaces(_hasActualQuantity, 3);//max 3 decimal 
 
         document.getElementById(`stockItemRate-${index1.id}-${index2.id}`).innerText = amountCommaSeparateFunc(index2.Rate);
         document.getElementById(`ActualQuantity-${index1.id}-${index2.id}`).innerText = index2.ActualQuantity;
@@ -245,52 +218,125 @@ export function orderQtyUnit_SelectOnchange(event, index1) {
 // ************************************************************************
 
 export function stockQtyOnChange(event, index1, index2) {
+    const hasUnit_NO = hasCheckUnitIs_NOFunc(index1);
+    const totalStock = parseFloat(index2.ActualQuantity); // Convert to a number
+    const priviosValue = index2.Qty;
 
-    let input = Number(event.target.value)
-    let result = /^\d*(\.\d{0,3})?$/.test(input);
-    let actualQuantity = Number(index2.ActualQuantity)
-
-    if (result) {
-        if (!(actualQuantity >= input)) {
-            input = actualQuantity
-        };
-
-    } else if (((index2.Qty >= 0) && (!(input === '')))) {
-        input = index2.Qty
+    let inputValue = event.target.value;
+    if (inputValue === '') { }
+    else if (hasUnit_NO) {
+        if (onlyNumberRegx.test(inputValue)) {
+            if (totalStock < inputValue) {
+                inputValue = Math.floor(totalStock).toString(); // Show stock quantity without decimals
+            }
+        } else {
+            inputValue = roundToDecimalPlaces(priviosValue, 0)
+        }
     } else {
-        input = 0
+
+        if (decimalRegx_3dit.test(inputValue)) {
+            if (totalStock < inputValue) {
+                inputValue = roundToDecimalPlaces(totalStock, 3); // Show stock quantity with up to 3 decimals
+            }
+        } else {
+            inputValue = priviosValue
+        }
     }
 
-    event.target.value = input;
-    index2.Qty = input
-
+    event.target.value = inputValue;
+    index2.Qty = inputValue
     innerStockCaculation(index1)
 
-};
+}
+
+
+
+//     let input = Number(event.target.value)
+//     let result = /^\d*(\.\d{0,3})?$/.test(input);
+//     let actualQuantity = Number(index2.ActualQuantity)
+
+//     if (result) {
+//         if (!(actualQuantity >= input)) {
+//             input = actualQuantity
+//         };
+
+//     } else if (((index2.Qty >= 0) && (!(input === '')))) {
+//         input = index2.Qty
+//     } else {
+//         input = 0
+//     }
+
+//     event.target.value = input;
+//     index2.Qty = input
+
+//     innerStockCaculation(index1)
+
+// };
 
 // ************************************************************************
 
 export const innerStockCaculation = (index1) => {
 
     let QuantityTatal = 0
-    let itemTotalAmount = 0;
+    let totalAmount = 0;
 
     index1.StockDetails.forEach(index2 => {
         if (Number(index2.Qty) > 0) {
             const calculate = invoice_discountCalculate_Func(index2, index1);
-            itemTotalAmount += Number(calculate.roundedTotalAmount);
+            totalAmount += Number(calculate.roundedTotalAmount);
             QuantityTatal += Number(index2.Qty);
         }
     });
 
-    index1.itemTotalAmount = itemTotalAmount.toFixed(2)
+    index1.ItemTotalAmount = totalAmount.toFixed(2)
     index1.Quantity = QuantityTatal.toFixed(3);
 
     try {
         document.getElementById(`OrderQty-${index1.id}`).value = index1.Quantity
-    } catch (e) { CommonConsole('innerStockCaculation', e) };
+    } catch (e) { CommonConsole('inner-Stock-Caculation', e) };
 
     try {
-        document.getElementById(`itemTotalAmount-${index1.id}`).innerText = amountCommaSeparateFunc(index1.itemTotalAmount);
-    } catch (e) { CommonConsole('innerStockCaculation', e) };
+        document.getElementById(`item-TotalAmount-${index1.id}`).innerText = amountCommaSeparateFunc(index1.ItemTotalAmount);
+    } catch (e) { CommonConsole('inner-Stock-Caculation', e) };
+}
+
+// Define a function to round numbers to a specified number of decimal places
+
+// function roundToDecimalPlaces(number, decimalPlaces) {
+//     if (isNaN(number) || typeof number !== "number" || number === "" || number === null) {
+//         return "";
+//     }
+//     const multiplier = Math.pow(10, decimalPlaces);
+//     return Math.round(number * multiplier) / multiplier;
+// }
+
+
+
+function hasCheckUnitIs_NOFunc(index1) {
+    return index1.default_UnitDropvalue?.Unitlabel === "No";
+}
+
+function stockValidation_DOM_MsgShowFunc(index1) {
+    try {
+        const hasInValid = index1.StockInValid;
+
+        const orderQtyElement = document.getElementById(`OrderQty-${index1.id}`);
+        if (orderQtyElement) {
+            orderQtyElement.style.border = hasInValid ? "2px solid red" : "1px solid #ced4da";
+        }
+        const stockInvalidMsgElement = document.getElementById(`StockInvalidMsg-${index1.id}`);
+        if (stockInvalidMsgElement) {
+            stockInvalidMsgElement.style.display = hasInValid ? "block" : "none";
+
+        }
+    } catch (error) {
+        CommonConsole('stockDistributeFunc', error);
+    }
+    //***************************************************************************************** */
+    try {
+        const itemTotalAmountElement = document.getElementById(`item-TotalAmount-${index1.id}`);
+        itemTotalAmountElement.innerText = amountCommaSeparateFunc(index1.ItemTotalAmount);
+    } catch (error) {
+        CommonConsole('stockDistributeFunc', error);
+    }
 }

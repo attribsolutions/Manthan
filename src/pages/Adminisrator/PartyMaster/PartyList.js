@@ -78,7 +78,7 @@ const PartyList = () => {
 
     //  This UseEffect => Featch Modules List data  First Rendering
     useLayoutEffect(() => {
-        debugger
+        
         let page_Id = '';
         let page_Mode = mode.defaultList;
         let masterPath = '';

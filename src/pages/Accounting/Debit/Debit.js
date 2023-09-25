@@ -326,7 +326,7 @@ const Debit = (props) => {
                     }
 
                 }
-                debugger
+                
                 const jsonBody = JSON.stringify({
                     CRDRNoteDate: values.CRDRNoteDate,
                     Customer: values.Customer.value,

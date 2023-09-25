@@ -749,7 +749,7 @@ const GoodsCreditNote = (props) => {
                     CreditDebitType.find((index) => index.Name === "Goods CreditNote")?.id
                     : CreditDebitType.find((index) => index.Name === "Goods DebitNote")?.id;
             };
-            debugger
+            
             const isGrandAmtRound = systemSetting.CreditDebitAmountRoundConfiguration === '1';
 
             const jsonBody = JSON.stringify({

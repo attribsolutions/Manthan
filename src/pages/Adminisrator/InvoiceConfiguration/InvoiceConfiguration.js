@@ -210,7 +210,7 @@ const InvoiceConfiguration = (props) => {
             }
 
             setState((i) => {
-                debugger
+                
                 const a = { ...i }
                 a.values.Invoicea4 = Data.A4Print;
                 a.values.AddressInInvoice = Data.AddressOnInvoice;

@@ -262,23 +262,17 @@ const PurchaseReturn = (props) => {
                     const newItemRow = {
                         ...i,
                         Quantity: '',
-                        itemTotalAmount: 0,
+                        ItemTotalAmount: 0,
                         InvoiceQuantity,
                         ItemTotalStock,
                         id: nextId,
                         MRPOptions,
                         GSTOptions,
                     }
-                    // const caculate = return_discountCalculate_Func(newItemRow)
-                    // newItemRow["roundedTotalAmount"] = caculate.roundedTotalAmount;
-
                     updateItemArr.push(newItemRow);
                     nextId++;
                 });
-
-                // let sumOfGrandTotal = updateItemArr.reduce((accumulator, currentObject) => accumulator + Number(currentObject["itemTotalAmount"]) || 0, 0);
-                // let count_label = `${"Total Amount"} :${Number(sumOfGrandTotal).toLocaleString()}`
-                // dispatch(BreadcrumbShowCountlabel(count_label));
+             
                 updateItemArr.sort((a, b) => b.id - a.id);
                 setTableArr(updateItemArr);
                 setState((i) => {
@@ -609,8 +603,8 @@ const PurchaseReturn = (props) => {
                         </div>
                         <div className="bottom-div">
                             <div>Amount:</div>
-                            <div id={`itemTotalAmount-${index1.id}-${_key}`}>
-                                {_cfunc.amountCommaSeparateFunc(index1.itemTotalAmount)}
+                            <div id={`item-TotalAmount-${index1.id}-${_key}`}>
+                                {_cfunc.amountCommaSeparateFunc(index1.ItemTotalAmount)}
                             </div>
                         </div>
                     </>
@@ -727,14 +721,14 @@ const PurchaseReturn = (props) => {
 
     const totalAmountCalcuationFunc = (tableList = []) => {
 
-        let sumOfGrandTotal = tableList.reduce((accumulator, currentObject) => accumulator + Number(currentObject["itemTotalAmount"]) || 0, 0);
+        let sumOfGrandTotal = tableList.reduce((accumulator, index1) => accumulator + Number(index1.ItemTotalAmount) || 0, 0);
         let count_label = `${"Total Amount"} :${Number(sumOfGrandTotal).toLocaleString()}`
         dispatch(BreadcrumbShowCountlabel(count_label))
     }
 
     const deleteButtonAction = (row, TablelistArray = []) => {
         const newArr = TablelistArray.filter((index) => !(index.id === row.id))
-        let sumOfGrandTotal = newArr.reduce((accumulator, currentObject) => accumulator + Number(currentObject["itemTotalAmount"]) || 0, 0);
+        let sumOfGrandTotal = newArr.reduce((accumulator, index1) => accumulator + Number(index1.ItemTotalAmount) || 0, 0);
         let count_label = `${"Total Amount"} :${Number(sumOfGrandTotal).toLocaleString()}`
         dispatch(BreadcrumbShowCountlabel(count_label));
         setTableArr(newArr)

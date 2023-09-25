@@ -31,7 +31,7 @@ import * as mode from "../../../routes/PageMode";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url"
 import {
-    editInvoiceListSuccess,
+    editInvoiceActionSuccess,
     GoButtonForinvoiceAdd,
     GoButtonForinvoiceAddSuccess,
     invoiceSaveAction,
@@ -166,7 +166,7 @@ const Invoice = (props) => {
                     OrderIDs: ""
                 });
                 dispatch(GoButtonForinvoiceAdd({ jsonBody, }));
-                dispatch(editInvoiceListSuccess({ Status: false }))
+                dispatch(editInvoiceActionSuccess({ Status: false }))
 
             }
         }

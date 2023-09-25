@@ -22,7 +22,7 @@ export function SaveButton(props) {
   }
   return null
 }
-const SaveBtn = ({ onClick, type = "button", userAcc, loading, forceDisabled }) => {
+const SaveBtn = ({ onClick, type = "button", userAcc, loading, forceDisabled, }) => {
   const { Name } = userAcc;
   const btnId = `Save-${Name.replace(/ /g, "")}`;
   return (
@@ -122,7 +122,7 @@ export function C_Button({
   spinnerColor = "primary",
   ...rest
 }) {
-  debugger
+
   if (loading) {
     return (
       <button
@@ -174,32 +174,37 @@ export const GotoInvoiceBtn = ({ onClick, userAcc, loading, forceDisabled }) => 
   )
 }
 
-export const SaveAndDownloadPDF = ({ onClick, userAcc, loading, forceDisabled, type = "button" }) => {
-  const { Name } = userAcc;
-  const btnId = `SaveAndDownloadPdfBtn-${Name.replace(/ /g, "")}`;
-  return (
-    <div>
-      {loading ?
-        <button
-          id={btnId}
-          type={type}
-          className="btn btn-info w-md"
-        >Saving.. &nbsp;
-          <Spinner style={{ height: "13px", width: "13px" }} color="white" />
-        </button>
-        :
-        <button
-          type={type}
-          id={btnId}
-          disabled={forceDisabled}
-          title={` save & goto Invoice ${Name}`}
-          className="btn btn-info w-md"
-          onClick={onClick}
-        >  Save & Print
-        </button>}
+export const SaveAndDownloadPDF = ({ onClick, pageMode,userAcc, loading, forceDisabled, type = "button" }) => {
 
-    </div>
-  )
+  const { Name } = userAcc;
+  if ((userAcc.RoleAccess_IsSave) && (pageMode === mode.defaultsave
+    || pageMode === mode.copy
+    || pageMode === mode.modeSTPsave
+    || pageMode === mode.dropdownAdd
+    || pageMode === mode.assingLink)) {
+    return (
+      <div>
+        {loading ?
+          <button
+            type={type}
+            className="btn btn-info w-md"
+          >Saving.. &nbsp;
+            <Spinner style={{ height: "13px", width: "13px" }} color="white" />
+          </button>
+          :
+          <button
+            type={type}
+            disabled={forceDisabled}
+            title={` save & goto Invoice ${Name}`}
+            className="btn btn-info w-md"
+            onClick={onClick}
+          >  Save & Print
+          </button>}
+
+      </div>
+    )
+  }
+  return null
 }
 
 export function Loader() {// linner component

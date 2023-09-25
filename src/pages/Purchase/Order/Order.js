@@ -39,9 +39,9 @@ import NewCommonPartyDropdown from "../../../components/Common/NewCommonPartyDro
 import "../../../CustomTable2/CustomTable.scss"
 import "./order.scss"
 
-let editVal = {}
-let initial_BredcrumbMsg = "Order Amount :0.00"
 
+let editVal = {}
+let initial_BredcrumbMsg = `Count:0 ₹ 0.00`
 function initialState(history) {
 
     let page_Id = '';
@@ -256,7 +256,7 @@ const Order = (props) => {
                 setModalCss(true)
             }
             if (hasEditVal) {
-                dispatch(_act.BreadcrumbShowCountlabel(`${"Order Amount"} :${_cfunc.amountCommaSeparateFunc(Number(hasEditVal.OrderAmount).toFixed(2))}`))
+
                 setorderdate(hasEditVal.OrderDate)
 
                 if (subPageMode === url.ORDER_4) {
@@ -295,9 +295,13 @@ const Order = (props) => {
                 });
                 setOrderItemTable(orderItems)
                 setTermsAndConTable(termsAndCondition)
+
+                const commaSeparateAmount = _cfunc.amountCommaSeparateFunc(Number(hasEditVal.OrderAmount));
+                dispatch(_act.BreadcrumbShowCountlabel(`Count:${orderItems.length} ₹ ${commaSeparateAmount}`))
+                seteditCreatedBy(hasEditVal.CreatedBy)
             }
             dispatch(_act.editOrderIdSuccess({ Status: false }))
-            seteditCreatedBy(hasEditVal.CreatedBy)
+
         } else {
             dispatch(_act.BreadcrumbShowCountlabel(initial_BredcrumbMsg))
         }
@@ -441,21 +445,8 @@ const Order = (props) => {
         }
     }, [gobutton_Add_invoice]);
 
-    // useEffect(() => {
-    //     if (changeAllDiscount) {
-
-    //         const updatedOrderItemTable = orderItemTable.map((item) => ({
-    //             ...item,
-    //             Discount: discountValueAll,
-    //             DiscountType: discountTypeAll.value,
-    //         }));
-    //         itemWise_CalculationFunc(item, undefined, orderItemTable)
-    //         setOrderItemTable(updatedOrderItemTable);
-    //     }
-    // }, [changeAllDiscount, discountValueAll, discountTypeAll.value]);
-
     useEffect(() => {
-        debugger
+
         if (changeAllDiscount) {
             const updatedOrderItemTable = orderItemTable.map((item) => ({
                 ...item,
@@ -505,7 +496,7 @@ const Order = (props) => {
     });
 
     const pagesListColumns = [
-        {
+        { //---------------"GroupName"------------
             dataField: "GroupName",
             text: "Group",
             classes: 'table-cursor-pointer',
@@ -515,7 +506,7 @@ const Order = (props) => {
                 return { minWidth: '100px', textAlign: 'center' };
             },
         },
-        {
+        {//-----------------"SubGroupName"------------------
             dataField: "SubGroupName",
             text: "SubGroup",
             classes: 'table-cursor-pointer',
@@ -809,19 +800,14 @@ const Order = (props) => {
                                         value={discountValueAll}
                                         disabled={(subPageMode === url.ORDER_2)}
                                         onChange={(e) => {
-                                            debugger
                                             let e_val = Number(e.target.value);
 
-                                            // Check if discount type is "percentage"
-                                            if (discountTypeAll.value === 2) {// Discount type 2 represents "percentage"
-                                                // Limit the input to the range of 0 to 100
-                                                if (e_val > 100) {
-                                                    e.target.value = 100; // Set the input value to 100 if it exceeds 100
-                                                } else if (!(e_val >= 0 && e_val < 100)) {
-                                                    e.target.value = ""; // Clear the input value if it is less than 0
-                                                }
+                                            if (discountTypeAll.value === 2) { // Check if discount type 2 is "percentage"
+                                                e_val = Math.min(100, Math.max(0, e_val));
+                                                e_val = e_val === 0 ? '' : e_val;
                                             }
 
+                                            e.target.value = e_val.toString();
                                             setChangeAllDiscount(true);
                                             setDiscountValueAll(e.target.value);
                                         }}
@@ -835,7 +821,7 @@ const Order = (props) => {
 
             classes: () => "order-discount-row",
             formatter: (cellContent, index1, key, formatExtraData) => {
-                debugger
+
                 let { tableList, discountValueAll, discountTypeAll } = formatExtraData;
 
                 // if (formatExtraData.changeAllDiscount) {
@@ -891,15 +877,13 @@ const Order = (props) => {
                                         onChange={(e) => {
 
                                             let e_val = Number(e.target.value);
-                                            // Check if discount type is "percentage"
-                                            if (index1.DiscountType === 2) { // Discount type 2 represents "percentage"
-                                                // Limit the input to the range of 0 to 100
-                                                if (e_val > 100) {
-                                                    e.target.value = 100; // Set the input value to 100 if it exceeds 100
-                                                } else if (!(e_val >= 0 && e_val < 100)) {
-                                                    e.target.value = ''; // Clear the input value if it is less than 0
-                                                }
+
+                                            if (index1.DiscountType === 2) { // Check if discount type 2 is "percentage"
+                                                e_val = Math.min(100, Math.max(0, e_val));
+                                                e_val = e_val === 0 ? '' : e_val;
                                             }
+                                           
+                                            e.target.value = e_val.toString();
                                             index1.Discount = e.target.value;
                                             setChangeAllDiscount(false);
                                             setForceReload(!forceReload);
@@ -1016,13 +1000,14 @@ const Order = (props) => {
         };
     };
 
-    function itemWise_CalculationFunc(row, IsComparGstIn, tableList) {
-        debugger
+    function itemWise_CalculationFunc(row, IsComparGstIn, tableList = []) {
+
         const calculate = orderCalculateFunc(row) //order calculation function 
         row["Amount"] = calculate.roundedTotalAmount
-        let sumOfAmount = tableList.reduce((accumulator, currentObject) => accumulator + (Number(currentObject["Amount"]) || 0), 0);
-        // setOrderAmount(sumOfAmount.toFixed(2))
-        dispatch(_act.BreadcrumbShowCountlabel(`${"Order Amount"} :${_cfunc.amountCommaSeparateFunc(Number(sumOfAmount).toFixed(2))}`))
+        const sumOfAmount = tableList.reduce((accumulator, currentObject) => accumulator + (Number(currentObject["Amount"]) || 0), 0);
+
+        const commaSeparateAmount = _cfunc.amountCommaSeparateFunc(sumOfAmount)
+        dispatch(_act.BreadcrumbShowCountlabel(`Count:${tableList.length} ₹ ${commaSeparateAmount}`))
     };
 
     const item_AddButtonHandler = () => {

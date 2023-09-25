@@ -261,6 +261,26 @@ const Invoice = (props) => {
         }
     }, [gobutton_Add]);
 
+    useEffect(() => {
+
+        if (changeAllDiscount) {
+            const updatedOrderItemTable = orderItemDetails.map((item) => ({
+                ...item,
+                Discount: discountValueAll,
+                DiscountType: discountTypeAll.value,
+            }));
+
+            // Perform calculations based on the updated values for each item
+            updatedOrderItemTable.forEach((index1) => {
+                innerStockCaculation(index1);
+            });
+            totalAmountCalcuationFunc(updatedOrderItemTable);
+            // Set the updated array as the new orderItemTable
+            setOrderItemDetails(updatedOrderItemTable);
+        }
+    }, [changeAllDiscount, discountValueAll, discountTypeAll.value]);
+
+
     useEffect(() => _cfunc.tableInputArrowUpDounFunc("#table_Arrow"), [orderItemDetails]);
 
     const CustomerDropdown_Options = vendorSupplierCustomer.map((index) => ({
@@ -283,12 +303,23 @@ const Invoice = (props) => {
                 return (
                     <>
                         <div>
-                            <samp id={`ItemName${index1.id}`}>{index1.ItemName}</samp>
+                            <samp className="theme-font"
+                                id={`ItemName${index1.id}`}>{index1.ItemName}</samp>
                         </div>
-                        {
-                            (index1.StockInValid) ? <div><samp id={`StockInvalidMsg-${index1.id}`} style={{ color: "red" }}> {index1.StockInvalidMsg}</samp></div>
-                                : <></>
-                        }
+                        <div style={{
+                            overflow: "hidden",
+                            whiteSpace: "nowrap",
+                            width: "100%", // Set the width to the desired container width
+                        }}>
+                            <samp id={`StockInvalidMsg-${index1.id}`}
+                                style={{
+                                    display: index1.StockInValid ? "block" : "none",
+                                    color: "red",
+                                    animation: "scrollRightToLeft 15s linear infinite",
+                                }}>
+                                {index1.StockInvalidMsg}
+                            </samp>
+                        </div>
                     </>
                 )
             },
@@ -305,13 +336,16 @@ const Invoice = (props) => {
                             type="text"
                             disabled={pageMode === 'edit' ? true : false}
                             id={`OrderQty-${index1.id}`}
-                            className="input"
-                            style={{ textAlign: "right" }}
-                            key={index1.id}
+                            placeholder="Enter quantity"
+                            className="right-aligned-placeholder mb-1"
+                            style={{
+                                border: index1.StockInValid ? '2px solid red' : "1px solid #ced4da"
+                            }}
+                            key={`OrderQty-${index1.id}`}
                             autoComplete="off"
                             defaultValue={index1.Quantity}
                             onChange={(event) => {
-                                orderQtyOnChange(event, index1);
+                                orderQtyOnChange(event, index1,);
                                 totalAmountCalcuationFunc(tableList);
                             }}
                         />
@@ -321,13 +355,13 @@ const Invoice = (props) => {
                             <Select
                                 classNamePrefix="select2-selection"
                                 id={"ddlUnit"}
-                                isDisabled={true}
+                                isDisabled={false}
                                 defaultValue={index1.default_UnitDropvalue}
                                 options={index1.UnitDetails.map(i => ({
                                     "label": i.UnitName,
                                     "value": i.UnitID,
                                     "ConversionUnit": i.ConversionUnit,
-                                    "Unitlabel": i.Unitlabel,
+                                    "Unitlabel": i.UnitName,
                                     "BaseUnitQuantity": i.BaseUnitQuantity,
                                     "BaseUnitQuantityNoUnit": i.BaseUnitQuantityNoUnit,
                                 }))}
@@ -338,10 +372,14 @@ const Invoice = (props) => {
                             ></Select>
                         </div>
                     </div>
-                    <div >
-                        <span>Order-Qty :</span>
-                        <samp>{index1.OrderQty}</samp>
+                    <div className="theme-font">
+                        <span className="text-muted">Order-Qty :</span>
+                        <samp>{index1.OrderQty}</samp>&nbsp;&nbsp;
                         <samp>{index1.UnitName}</samp>
+                    </div>
+                    <div>
+                        <samp className="theme-font text-muted" >Available stock :</samp>
+                        <label className="text-black">{parseFloat(Number(index1.ItemTotalStock).toFixed(3))}</label>
                     </div>
                 </>
             ),
@@ -349,9 +387,8 @@ const Invoice = (props) => {
         {//***************StockDetails********************************************************************* */
             text: "Stock Details",
             dataField: "StockDetails",
-            attrs: (cell, row, rowIndex, colIndex) => ({ 'data-label1': "Stock Details", "stock-header": "true" }),
+            attrs: () => ({ 'data-label1': "Stock Details", "stock-header": "true" }),
             headerStyle: { zIndex: "2" },
-            // classes: '_StockDetails-header',
             formatExtraData: { tableList: orderItemDetails },
             formatter: (cellContent, index1, keys_, { tableList = [] }) => (
                 <div className="table-responsive">
@@ -359,7 +396,7 @@ const Invoice = (props) => {
                         <thead >
                             <tr>
                                 <th>BatchCode</th>
-                                <th>Stock Quantity</th>
+                                <th>Stock </th>
                                 <th>Quantity</th>
                                 <th>Basic Rate</th>
                                 <th>MRP</th>
@@ -376,7 +413,8 @@ const Invoice = (props) => {
                                         <Input
                                             type="text"
                                             disabled={pageMode === 'edit' ? true : false}
-                                            style={{ textAlign: "right" }}
+                                            placeholder= "Manually enter quantity"
+                                            className="right-aligned-placeholder"
                                             key={`batchQty${index1.id}-${index2.id}`}
                                             id={`batchQty${index1.id}-${index2.id}`}
                                             defaultValue={index2.Qty}
@@ -437,22 +475,18 @@ const Invoice = (props) => {
                                 <div className="col col-6" style={{ width: "100px" }}>
                                     <CInput
                                         type="text"
-                                        className="input"
-                                        style={{ textAlign: "right" }}
+                                        className="right-aligned-placeholder"
                                         cpattern={decimalRegx}
+                                        placeholder="Enter dicount value"
                                         value={discountValueAll}
                                         onChange={(e) => {
                                             let e_val = Number(e.target.value);
 
-                                            // Check if discount type is "percentage"
-                                            if (discountTypeAll.value === 2) {// Discount type 2 represents "percentage"
-                                                // Limit the input to the range of 0 to 100
-                                                if (e_val > 100) {
-                                                    e.target.value = 100; // Set the input value to 100 if it exceeds 100
-                                                } else if (!(e_val >= 0 && e_val < 100)) {
-                                                    e.target.value = ""; // Clear the input value if it is less than 0
-                                                }
+                                            if (discountTypeAll.value === 2) { // Check if discount type 2 is "percentage"
+                                                e_val = Math.min(100, Math.max(0, e_val));
+                                                e_val = e_val === 0 ? '' : e_val;
                                             }
+                                            e.target.value = e_val.toString();
 
                                             setChangeAllDiscount(true);
                                             setDiscountValueAll(e.target.value);
@@ -467,14 +501,14 @@ const Invoice = (props) => {
 
             classes: () => "invoice-discount-row",
             formatter: (cellContent, index1, key, formatExtraData) => {
-                let { tableList, discountValueAll, discountTypeAll } = formatExtraData;
+                let { tableList, discountTypeAll } = formatExtraData;
 
-                if (formatExtraData.changeAllDiscount) {
-                    index1.Discount = discountValueAll;
-                    index1.DiscountType = discountTypeAll.value;
-                    innerStockCaculation(index1);
-                    totalAmountCalcuationFunc(tableList);
-                }
+                // if (formatExtraData.changeAllDiscount) {
+                //     index1.Discount = discountValueAll;
+                //     index1.DiscountType = discountTypeAll.value;
+                //     innerStockCaculation(index1);
+                //     totalAmountCalcuationFunc(tableList);
+                // }
                 if (!index1.DiscountType) { index1.DiscountType = discountTypeAll.value }
 
                 const defaultDiscountTypelabel =
@@ -513,24 +547,22 @@ const Invoice = (props) => {
                                 </div>
                                 <div className="child">
                                     <CInput
-                                        className="input"
+                                      
                                         id={`Dicount_${key}-${index1.id}`}
-                                        style={{ textAlign: "right" }}
+                                        className="right-aligned-placeholder"
                                         type="text"
+                                        placeholder="Enter dicount value"
                                         value={index1.Discount}
                                         cpattern={decimalRegx}
                                         onChange={(e) => {
-
                                             let e_val = Number(e.target.value);
-                                            // Check if discount type is "percentage"
-                                            if (index1.DiscountType === 2) { // Discount type 2 represents "percentage"
-                                                // Limit the input to the range of 0 to 100
-                                                if (e_val > 100) {
-                                                    e.target.value = 100; // Set the input value to 100 if it exceeds 100
-                                                } else if (!(e_val >= 0 && e_val < 100)) {
-                                                    e.target.value = ''; // Clear the input value if it is less than 0
-                                                }
+
+                                            if (index1.DiscountType === 2) { // Check if discount type 2 is "percentage"
+                                                e_val = Math.min(100, Math.max(0, e_val));
+                                                e_val = e_val === 0 ? '' : e_val;
                                             }
+
+                                            e.target.value = e_val.toString();
                                             index1.Discount = e.target.value;
                                             setChangeAllDiscount(false);
                                             setForceReload(!forceReload);
@@ -543,9 +575,9 @@ const Invoice = (props) => {
                             </div>
                         </div>
                         <div className="bottom-div">
-                            <span>Amount:</span>
-                            <samp id={`itemTotalAmount-${index1.id}`}>
-                                {_cfunc.amountCommaSeparateFunc(Number(index1.itemTotalAmount).toFixed(2))}
+                            <span className="theme-font text-muted">Amount:</span>
+                            <samp className='text-black' id={`item-TotalAmount-${index1.id}`}>
+                                {_cfunc.amountCommaSeparateFunc(index1.ItemTotalAmount)}
                             </samp>
                         </div>
                     </>
@@ -555,10 +587,13 @@ const Invoice = (props) => {
     ];
 
     const totalAmountCalcuationFunc = (tableList = []) => {
+
         const calcalateGrandTotal = settingBaseRoundOffAmountFunc(tableList)
-        //toLocaleString is convert comma saprate Amount
-        let count_label = `${"Total Amount"} :${_cfunc.amountCommaSeparateFunc(Number(calcalateGrandTotal.sumOfGrandTotal).toFixed(2))}`
-        dispatch(BreadcrumbShowCountlabel(count_label))
+        const dataCount = tableList.length;
+        const commaSeparateAmount = _cfunc.amountCommaSeparateFunc(Number(calcalateGrandTotal.sumOfGrandTotal));
+
+        dispatch(BreadcrumbShowCountlabel(`Count:${dataCount} ₹ ${commaSeparateAmount}`))
+
     }
 
     function InvoiceDateOnchange(y, v, e) {
@@ -603,10 +638,10 @@ const Invoice = (props) => {
 
         // IsComparGstIn= compare Supplier and Customer are Same State by GSTIn Number
         let IsComparGstIn = { GSTIn_1: values.Customer.GSTIN, GSTIn_2: _cfunc.loginUserGSTIN() }
-debugger
+
         orderItemDetails.forEach((index) => {
             if (index.StockInValid) {
-                validMsg.push({ [index.ItemName]:` ${index.StockInvalidMsg}.`})
+                validMsg.push({ [index.ItemName]: ` ${index.StockInvalidMsg}.` })
                 return
             };
 
@@ -665,7 +700,7 @@ debugger
             })
 
             if (isSameMRPinStock === false) {
-                validMsg.push({ [index.ItemName]:" Multiple MRP’S Invoice not allowed."})
+                validMsg.push({ [index.ItemName]: " Multiple MRP’S Invoice not allowed." })
                 return
             };
         })
@@ -821,7 +856,6 @@ debugger
                                 data={orderItemDetails}
                                 columns={pagesListColumns}
                                 id="table_Arrow"
-                                classes={"table  table-bordered "}
                                 noDataIndication={
                                     <div className="text-danger text-center ">
                                         Items Not available

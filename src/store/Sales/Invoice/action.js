@@ -1,8 +1,8 @@
 import {
     DELETE_INVOICE_LIST_PAGE,
     DELETE_INVOICE_LIST_PAGE_SUCCESS,
-    EDIT_INVOICE_LIST,
-    EDIT_INVOICE_LIST_SUCCESS,
+    EDIT_INVOICE_ACTION,
+    EDIT_INVOICE_ACTION_SUCCESS,
     INVOICE_LIST_GO_BUTTON_FILTER,
     INVOICE_LIST_GO_BUTTON_FILTER_SUCCESS,
     GO_BUTTON_FOR_INVOICE_ADD,
@@ -39,13 +39,13 @@ export const invoiceListGoBtnfilterSucccess = (resp) => ({
 });
 
 // edit api
-export const editInvoiceList = (config = {}) => ({
-    type: EDIT_INVOICE_LIST,
+export const editInvoiceAction = (config = {}) => ({
+    type: EDIT_INVOICE_ACTION,
     config,
 })
 
-export const editInvoiceListSuccess = (editData) => ({
-    type: EDIT_INVOICE_LIST_SUCCESS,
+export const editInvoiceActionSuccess = (editData) => ({
+    type: EDIT_INVOICE_ACTION_SUCCESS,
     payload: editData,
 })
 

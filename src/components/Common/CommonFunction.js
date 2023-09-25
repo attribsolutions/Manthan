@@ -342,7 +342,7 @@ export function metaTagLabel(userPageAccess = '') {
 
 }
 export function CommonConsole(msg1, msg2 = '', msg3 = '') {// +++++++++++Print Console.log Body+++++++++++++++++++++++++++++++
-  console.log(msg1, msg2, msg3);
+  // console.log(msg1, msg2, msg3);
 }
 
 export function groupBy(list, keyGetter) {// +++++++++++ Array Group By_kye Function +++++++++++++++++++++++++++++++
@@ -358,6 +358,30 @@ export function groupBy(list, keyGetter) {// +++++++++++ Array Group By_kye Func
   });
   return map;
 }
+
+
+
+
+
+
+//convert fixed decimal number 
+export function roundToDecimalPlaces(input, decimalPlaces = 3) { //convert fixed decimal number
+
+  const number = Number(input)
+  if (typeof number !== "number" || isNaN(number) || !isFinite(number)) {
+    return "";
+  }
+  const multiplier = Math.pow(10, decimalPlaces);
+  const roundedNumber = Math.round(number * multiplier) / multiplier;
+  const result= roundedNumber === 0 ? "" : roundedNumber;
+  return result;
+};
+
+export function hasDecimalCheckFunc(input) {
+  const number = Number(input); // Convert the input to a number
+  return isNaN(number) ? false : !Number.isInteger(number);
+}
+
 
 export function btnIsDissablefunc({ btnId, state = false }) {// +++++++++++ Button Dissable and Sppiner Function +++++++++++++++++++++++++++++++
 

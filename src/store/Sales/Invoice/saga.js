@@ -6,6 +6,7 @@ import {
   loginSystemSetting,
   loginUserDetails,
   loginUserID,
+  roundToDecimalPlaces,
 } from "../../../components/Common/CommonFunction";
 import {
   Invoice_1_GoButton_API,
@@ -27,7 +28,7 @@ import {
 } from "../../../helpers/backend_helper";
 import {
   deleteInvoiceIdSuccess,
-  editInvoiceListSuccess,
+  editInvoiceActionSuccess,
   invoiceListGoBtnfilterSucccess,
   GoButtonForinvoiceAddSuccess,
   invoiceSaveActionSuccess,
@@ -42,7 +43,7 @@ import {
 } from "./action";
 import {
   DELETE_INVOICE_LIST_PAGE,
-  EDIT_INVOICE_LIST, INVOICE_LIST_GO_BUTTON_FILTER,
+  EDIT_INVOICE_ACTION, INVOICE_LIST_GO_BUTTON_FILTER,
   GO_BUTTON_FOR_INVOICE_ADD,
   INVOICE_SAVE_ADD_PAGE_ACTION,
   MAKE_IB_INVOICE_ACTION,
@@ -151,7 +152,7 @@ function* editInvoiceListGenFunc({ config }) {
     }
 
     response.pageMode = btnmode
-    yield put(editInvoiceListSuccess(response))
+    yield put(editInvoiceActionSuccess(response))
   } catch (error) { CommonConsole(error) }
 }
 
@@ -174,17 +175,18 @@ function* DeleteInvoiceGenFunc({ config }) {
 }
 
 // GO-Botton SO-invoice Add Page API
-export function invoice_GoButton_dataConversion_Func(response, customer = '') {
-  const { IsTCSParty, ISCustomerPAN } = customer;
+function invoice_GoButton_dataConversion_Func(response, customer = '') {
 
+  debugger
   // Iterate over OrderItemDetails array and perform data conversion
   response.Data.OrderItemDetails = response.Data.OrderItemDetails.map(index1 => {
-    const defaultunit = index1.UnitDetails.find(findEle => findEle.UnitID === index1.Unit);
-    let itemTotalAmount = 0;
 
-    // Set properties for data conversion
-    index1["OrderQty"] = index1.Quantity;
-    index1["default_UnitDropvalue"] = {
+    const defaultunit = index1.UnitDetails.find(findEle => findEle.UnitID === index1.Unit);
+    const { IsTCSParty, ISCustomerPAN } = customer;
+
+    index1.Quantity = roundToDecimalPlaces(index1.Quantity, 3);  //initialize // Round to three decimal places
+    index1.OrderQty = index1.Quantity;//initialize
+    index1.default_UnitDropvalue = {//initialize
       value: index1.Unit,
       label: index1.UnitName,
       ConversionUnit: '1',
@@ -192,62 +194,59 @@ export function invoice_GoButton_dataConversion_Func(response, customer = '') {
       BaseUnitQuantity: defaultunit.BaseUnitQuantity,
       BaseUnitQuantityNoUnit: defaultunit.BaseUnitQuantity,
     };
+    index1.InpStockQtyTotal = `${Number(index1.Quantity) * Number(index1.ConversionUnit)}`;
+    index1.StockInValid = false;  //initialize
+    index1.StockInvalidMsg = '';  //initialize
+    index1.IsTCSParty = IsTCSParty  //initialize  //is tcsParty flag for
+    index1.IsCustomerPAN = ISCustomerPAN //initialize
 
-    index1["InpStockQtyTotal"] = `${Number(index1.Quantity) * Number(index1.ConversionUnit)}`;
-    index1["ItemTotalStock"] = 0;
-    index1["StockInValid"] = false;
-    index1["StockInvalidMsg"] = '';
 
-    index1["IsTCSParty"] = IsTCSParty//is tcsParty flag for  
-    index1["IsCustomerPAN"] = ISCustomerPAN//
-
-    let orderQty = Number(index1.Quantity);
+    let totalAmount = 0;
+    let remainingOrderQty = parseFloat(index1.Quantity); // Convert to a number
+    let totalStockQty = 0;
 
     // Iterate over StockDetails array and perform data conversion
     index1.StockDetails = index1.StockDetails.map(index2 => {
 
-      index2["initialRate"] = index2.Rate;
-      index2["Rate"] = ((defaultunit.BaseUnitQuantity / defaultunit.BaseUnitQuantityNoUnit) * index2.initialRate).toFixed(2);
-      index2["ActualQuantity"] = (index2.BaseUnitQuantity / defaultunit.BaseUnitQuantity).toFixed(3);
-      index1["Quantity"] = Number(index1.Quantity).toFixed(3);
+      index2.initialRate = index2.Rate;  //initialize
 
-      index1["ItemTotalStock"] += Number(index2.ActualQuantity);
+      const _hasRate = ((defaultunit.BaseUnitQuantity / defaultunit.BaseUnitQuantityNoUnit) * index2.initialRate);
+      const _hasActualQuantity = (index2.BaseUnitQuantity / defaultunit.BaseUnitQuantity);
 
-      let stockQty = Number(index2.ActualQuantity);
+      index2.Rate = roundToDecimalPlaces(_hasRate, 2);//max 2 decimal  //initialize
+      index2.ActualQuantity = roundToDecimalPlaces(_hasActualQuantity, 3);//max 3 decimal  //initialize
 
-      // Adjust order quantity based on stock availability
-      if (orderQty > stockQty && orderQty !== 0) {
-        orderQty -= stockQty;
-        index2.Qty = stockQty.toFixed(3);
-      } else if (orderQty <= stockQty && orderQty > 0) {
-        index2.Qty = orderQty.toFixed(3);
-        orderQty = 0;
-      } else {
-        index2.Qty = 0;
-      }
+      //+++++++++++++++++++++ stock Distribute +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      const stockQty = parseFloat(index2.ActualQuantity); // Convert to a number
+      totalStockQty += stockQty;
 
-      // Calculate total amount if quantity is greater than 0
-      if (index2.Qty > 0) {
-        const calculate = invoice_discountCalculate_Func(index2, index1);
-        itemTotalAmount += Number(calculate.roundedTotalAmount);
+      const qtyToDeduct = Math.min(remainingOrderQty, stockQty);
+      index2.Qty = roundToDecimalPlaces(qtyToDeduct, 3); // Round to three decimal places
+      remainingOrderQty = roundToDecimalPlaces(remainingOrderQty - qtyToDeduct, 3); // Round the remaining order quantity
+
+      if (qtyToDeduct > 0) {// Calculate total amount if quantity is greater than 0
+        const calculatedItem = invoice_discountCalculate_Func(index2, index1);
+        totalAmount += parseFloat(calculatedItem.roundedTotalAmount); // Convert to a number
       }
 
       return index2;
     });
+    //+++++++++++++++++++++++++++++++++++++++++++++++++++
 
-    const t1 = Number(index1.ItemTotalStock).toFixed(3);
-    const t2 = Number(index1.Quantity);
-    const tA4 = itemTotalAmount.toFixed(2);
 
-    index1["itemTotalAmount"] = tA4;
+
+
+
+    index1.ItemTotalStock = roundToDecimalPlaces(totalStockQty, 3); //max 3 decimal
+    index1.ItemTotalAmount = roundToDecimalPlaces(totalAmount, 2); //max 2 decimal
 
     // Check for stock availability and set corresponding message
-    if (t1 < t2) {
-      index1["StockInValid"] = true;
-      const diffrence = Math.abs(t1 - t2);
-      const msg1 = `Short Stock Quantity ${Number(index1.Quantity).toFixed(3)}`;
-      const msg2 = `Short Stock Quantity ${Number(diffrence).toFixed(3)}`;
-      index1["StockInvalidMsg"] = index1.ItemTotalStock === 0 ? msg1 : msg2;
+    if (index1.ItemTotalStock < index1.Quantity) {
+      index1.StockInValid = true;
+      const diffrence = Math.abs(index1.ItemTotalStock - index1.Quantity);
+      const msg1 = `Short Stock Quantity ${index1.Quantity}`;
+      const msg2 = `Short Stock Quantity ${diffrence}`;
+      index1.StockInvalidMsg = index1.ItemTotalStock === 0 ? msg1 : msg2;
     }
 
     return index1;
@@ -281,6 +280,7 @@ function* gobutton_invoiceAdd_genFunc({ config }) {
   } catch (error) {
 
     yield put(InvoiceApiErrorAction())
+    CommonConsole(error)
 
     if (errorMsg) {//if ErrorMsg True means the SO-Order GOTo-Invoice Button hit After GoBtnAdd Api Hitt and get error
       yield put(orderApprovalActionSuccess({
@@ -288,7 +288,6 @@ function* gobutton_invoiceAdd_genFunc({ config }) {
         Message: errorMsg
       }))
     }
-    CommonConsole(error)
   }
 }
 
@@ -369,7 +368,7 @@ function* InvoiceSaga() {
   yield takeLatest(INVOICE_SEND_TO_SCM_ACTION, Invoice_Send_To_Scm_GenFun)
   yield takeLatest(INVOICE_SAVE_ADD_PAGE_ACTION, save_Invoice_Genfun)
   yield takeLatest(INVOICE_LIST_GO_BUTTON_FILTER, InvoiceListGenFunc)
-  yield takeLatest(EDIT_INVOICE_LIST, editInvoiceListGenFunc)
+  yield takeLatest(EDIT_INVOICE_ACTION, editInvoiceListGenFunc)
   yield takeLatest(DELETE_INVOICE_LIST_PAGE, DeleteInvoiceGenFunc)
   yield takeLatest(GO_BUTTON_FOR_INVOICE_ADD, gobutton_invoiceAdd_genFunc)
   yield takeLatest(MAKE_IB_INVOICE_ACTION, makeIB_InvoiceGenFunc)
