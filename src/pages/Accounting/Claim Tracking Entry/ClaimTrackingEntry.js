@@ -325,8 +325,12 @@ const ClaimTrackingEntry = (props) => {
             const a = { ...i }
             a.values.ClaimAmount = hasSelect.ClaimAmount;
             a.values.PartyName = hasSelect.Party;
+
+            a.isError.PartyName = ""
+            a.isError.ClaimAmount = ""
             a.hasValid.PartyName.valid = true
             a.hasValid.ClaimAmount.valid = true
+
             return a
         })
     };

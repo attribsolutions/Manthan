@@ -100,7 +100,7 @@ function* InvoiceReturn_ID_GenFunc(id) {           // Invoice Return Api
 //**************************** E-Invoice (upload ,cancel,) ***************************************/
 
 function* Uploade_Credit_Debit_EInvoiceGenFunc({ config }) {
-  debugger
+  
   config["UserID"] = loginUserID();
   try {
 

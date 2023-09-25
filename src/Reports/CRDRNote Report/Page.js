@@ -60,7 +60,7 @@ const InvioceReporta5 = async (data) => {
                     data["url"] = url
                 } else {
                     const image = await loadImage(`/E_invoiceQRCode${desiredPart}`);
-                    debugger
+                    
                     if (image) {
                         doc.addImage(image.currentSrc, 'JPEG', 323, 18, 83, 83);
                         console.log(image.currentSrc)

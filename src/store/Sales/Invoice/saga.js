@@ -177,7 +177,7 @@ function* DeleteInvoiceGenFunc({ config }) {
 // GO-Botton SO-invoice Add Page API
 function invoice_GoButton_dataConversion_Func(response, customer = '') {
 
-  debugger
+  
   // Iterate over OrderItemDetails array and perform data conversion
   response.Data.OrderItemDetails = response.Data.OrderItemDetails.map(index1 => {
 
