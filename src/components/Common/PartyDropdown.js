@@ -37,8 +37,9 @@ const PartyDropdown = ({ goButtonHandler, changeButtonHandler, goBtnLoading, SAP
 
     useEffect(() => {
 
-        let party = JSON.parse(localStorage.getItem("selectedParty"));
-        if (party.value === 0) {
+        const selectedParty = JSON.parse(localStorage.getItem("selectedParty"));
+      
+        if (selectedParty.value === 0) {
             setSelectedParty({ value: 0, label: "Select...", SAPPartyCode: "" })
             setChangeButtonShow(false)
         }
