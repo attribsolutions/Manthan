@@ -38,7 +38,6 @@ const ClaimTrackingEntryList = (props) => {
     );
 
     const action = {
-        getList: getClaimTrackingEntrylist,
         editId: editClaimTrackingEntryID,
         deleteId: delete_ClaimTrackingEntry_ID,
         postSucc: saveClaimTrackingEntry_Success,
@@ -57,7 +56,6 @@ const ClaimTrackingEntryList = (props) => {
         const page_Id = pageId.CLAIM_TRACKING_ENTRY_LIST
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
-        dispatch(getClaimTrackingEntrylist());
         goButtonHandler()
         return () => {
             dispatch(getClaimTrackingEntrySuccess([]));
