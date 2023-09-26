@@ -323,8 +323,8 @@ const ProfileMenu = props => {
 
         >
           <div
-            // onMouseEnter={handleMouseEnter}
-            // onMouseLeave={handleMouseLeave}
+          // onMouseEnter={handleMouseEnter}
+          // onMouseLeave={handleMouseLeave}
           >
             <DropdownToggle
               className="btn header-item bg-soft-light border-start border-end"
@@ -333,15 +333,15 @@ const ProfileMenu = props => {
 
             >
 
-              <span className=" d-xl-inline-block ms-2 me-1">{employeeName}</span>
+              <span className=" d-xl-inline-block ms-2 me-1">{`${employeeName} (${FooterDetails.PartyName})`}</span>
               <i className="mdi mdi-chevron-down d-none d-xl-inline-block" />
             </DropdownToggle>
           </div>
           <DropdownMenu className="dropdown-menu-end">
             <DropdownItem>
-          <div className="text-left"><label className="text-info font-size-18">{FooterDetails.PartyName}</label> </div>
-            <div className="mb-1"><span className=" text-muted">Role</span> : <span className="text-black">{FooterDetails.RoleName}</span></div>
-            <div className=""><span>Company</span> : <span className="text-black">{CompanyName}&nbsp;&nbsp;({IsSCMCompany})</span></div>
+              <div className="text-left"><label className="text-info font-size-18">{FooterDetails.PartyName}</label> </div>
+              <div className="mb-1"><span className=" text-muted">Role</span> : <span className="text-black">{FooterDetails.RoleName}</span></div>
+              <div className=""><span>Company</span> : <span className="text-black">{CompanyName}&nbsp;&nbsp;({IsSCMCompany})</span></div>
             </DropdownItem>
             <DropdownItem divider />
 
@@ -361,13 +361,13 @@ const ProfileMenu = props => {
             </DropdownItem >
 
 
-          
-              <Link to="/logout" className="dropdown-item" >
-                <i className="bx bx-power-off font-size-16 align-middle me-1 text-danger fw-bold" />
-                <span className="">{props.t("Logout")}</span>
-              </Link>
 
-         
+            <Link to="/logout" className="dropdown-item" >
+              <i className="bx bx-power-off font-size-16 align-middle me-1 text-danger fw-bold" />
+              <span className="">{props.t("Logout")}</span>
+            </Link>
+
+
           </DropdownMenu>
         </Dropdown>
 

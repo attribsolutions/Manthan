@@ -78,7 +78,7 @@ const TransactionLog = () => {
             dataField: "TransactionDate",
             sort: true
         }, {
-            text: "User Name",
+            text: "Employee Name (User Name)",
             dataField: "UserName",
             sort: true
         }, {
