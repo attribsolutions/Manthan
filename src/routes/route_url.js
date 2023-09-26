@@ -261,9 +261,11 @@ export const GOODS_DEBIT_LIST = "/GoodsDebitNoteList"
 
 
 
-export const SAP_LEDGER = "/SapLedger"
+export const SAP_LEDGER = "/SapLedger";
 
-export const PARTY_LEDGER = "/PartyLedger"
+export const PARTY_LEDGER = "/PartyLedger";
+
+export const SELF_LEDGER = "/SelfLedger";
 
 export const STOCK_REPORT = "/StockReport"
 
