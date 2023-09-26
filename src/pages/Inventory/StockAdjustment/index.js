@@ -24,6 +24,7 @@ import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import { getBatchCode_By_ItemID_Action, getBatchCode_By_ItemID_Action_Success } from "../../../store/Inventory/StockAdjustmentRedux/action";
 import { saveStockEntryAction, saveStockEntrySuccess } from "../../../store/Inventory/StockEntryRedux/action";
+import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 
 const StockAdjustment = (props) => {
 
@@ -73,12 +74,15 @@ const StockAdjustment = (props) => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id));
 
-        dispatch(goButtonPartyItemAddPage({
-            jsonBody: JSON.stringify({
-                ..._cfunc.loginJsonBody(),
-                PartyID: _cfunc.loginSelectedPartyID()
-            })
-        }))
+        if ((_cfunc.loginSelectedPartyID() > 0)) {
+            dispatch(goButtonPartyItemAddPage({
+                jsonBody: JSON.stringify({
+                    ..._cfunc.loginJsonBody(),
+                    PartyID: _cfunc.loginSelectedPartyID()
+                })
+            }))
+        };
+
         return () => {
             dispatch(goButtonPartyItemAddPageSuccess([]));
             dispatch(getBatchCode_By_ItemID_Action_Success([]));
@@ -231,7 +235,23 @@ const StockAdjustment = (props) => {
     function ItemNameOnChange(e) {
         setItemNameSelect(e)
         setBatchCodeSelect('')
-        dispatch(getBatchCode_By_ItemID_Action({ itemId: e.value, partyId: _cfunc.loginPartyID() }));
+        dispatch(getBatchCode_By_ItemID_Action({ itemId: e.value, partyId: _cfunc.loginSelectedPartyID() }));
+    }
+
+    function partySelectButtonHandler() {
+        dispatch(goButtonPartyItemAddPage({
+            jsonBody: JSON.stringify({
+                ..._cfunc.loginJsonBody(),
+                PartyID: _cfunc.loginSelectedPartyID()
+            })
+        }))
+    }
+
+    function partyOnChngeButtonHandler() {
+        setBatchCodeSelect('');
+        setItemNameSelect('');
+        dispatch(getBatchCode_By_ItemID_Action_Success([]))
+        dispatch(goButtonPartyItemAddPageSuccess([]))
     }
 
     const AddPartyHandler = async () => {
@@ -320,7 +340,7 @@ const StockAdjustment = (props) => {
 
         try {
             const jsonBody = JSON.stringify({
-                "PartyID": _cfunc.loginPartyID(),
+                "PartyID": _cfunc.loginSelectedPartyID(),
                 "CreatedBy": _cfunc.loginUserID(),
                 "Date": currentDate_ymd,
                 "Mode": subPageMode === url.STOCK_ADJUSTMENT ? 2 : 3,
@@ -337,7 +357,9 @@ const StockAdjustment = (props) => {
             <React.Fragment>
                 <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
                 <div className="page-content">
-
+                    <PartyDropdown_Common
+                        goButtonHandler={partySelectButtonHandler}
+                        changeButtonHandler={partyOnChngeButtonHandler} />
                     <form noValidate>
                         <div className="px-3 c_card_filter header text-black mb-1" >
 
