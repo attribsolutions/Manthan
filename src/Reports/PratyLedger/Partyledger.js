@@ -6,7 +6,7 @@ import { initialFiledFunc, } from "../../components/Common/validationFunction";
 import { C_Button } from "../../components/Common/CommonButton";
 import { C_DatePicker, C_Select } from "../../CustomValidateForm";
 import * as _cfunc from "../../components/Common/CommonFunction";
-import { mode, } from "../../routes/index"
+import { mode, url, } from "../../routes/index"
 import { MetaTags } from "react-meta-tags";
 import { GetVenderSupplierCustomer, GetVenderSupplierCustomerSuccess, getpdfReportdata, getpdfReportdataSuccess } from "../../store/actions";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
@@ -24,7 +24,8 @@ const PartyLedger = (props) => {
     const fileds = {
         FromDate: currentDate_ymd,
         ToDate: currentDate_ymd,
-        Customer: ''
+        Customer: '',
+        Party: '',
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
@@ -38,26 +39,20 @@ const PartyLedger = (props) => {
             supplier: state.CommonAPI_Reducer.vendorSupplierCustomer,
             userAccess: state.Login.RoleAccessUpdateData,
             SSDD_List: state.CommonAPI_Reducer.SSDD_List,
-            CustomerLoading: state.CommonAPI_Reducer.vendorSupplierCustomerLoading,
+            customerDropdownLoading: state.CommonAPI_Reducer.vendorSupplierCustomerLoading,
+            // partyDropdownLoading: state.CommonPageFieldReducer.pageFieldList,
             pageField: state.CommonPageFieldReducer.pageFieldList
         })
     );
-    const { userAccess, supplier, pdfdata, CustomerLoading } = reducers;
+    const { userAccess, supplier, pdfdata, customerDropdownLoading, partyDropdownLoading } = reducers;
 
     const values = { ...state.values }
 
-    // Featch Modules List data  First Rendering
-    const location = { ...history.location }
-    const hasShowModal = props.hasOwnProperty(mode.editValue)
 
     // userAccess useEffect
     useEffect(() => {
-        let userAcc = null;
-        let locationPath = location.pathname;
-        if (hasShowModal) {
-            locationPath = props.masterPath;
-        };
-        userAcc = userAccess.find((inx) => {
+        let locationPath = history.location.pathname;
+        const userAcc = userAccess.find((inx) => {
             return (`/${inx.ActualPagePath}` === locationPath)
         })
         if (userAcc) {
@@ -81,16 +76,28 @@ const PartyLedger = (props) => {
         }
     }, [pdfdata])
 
-    const CustomerOptions = supplier.map((i) => ({
+    const customerDropdownOptions = supplier.map((i) => ({
+        value: i.id,
+        label: i.Name,
+    }))
+    const partyDropdounOptions = supplier.map((i) => ({
         value: i.id,
         label: i.Name,
     }))
 
-    const onselecthandel = (e) => {
+    const customerOnChangehandler = (e) => {
         setState((i) => {
             const a = { ...i }
             a.values.Customer = e;
             a.hasValid.Customer.valid = true
+            return a
+        })
+    }
+    const partyOnChangehandler = (e) => {
+        setState((i) => {
+            const a = { ...i }
+            a.values.Party = e;
+            a.hasValid.Party.valid = true
             return a
         })
     }
@@ -101,30 +108,28 @@ const PartyLedger = (props) => {
             customAlert({ Type: 3, Message: "Please Select Party" });
             return;
         };
-        if (values.Customer === "") {
-            customAlert({ Type: 3, Message: "Please Select Customer" });
-            return;
 
+        const isPartyLeger = subPageMode == url.PARTY_LEDGER;
+        const isSelfLeger = subPageMode == url.SELF_LEDGER;
+
+        if ((isPartyLeger && values.Customer === "") || (isSelfLeger && values.Party === "")) {
+            customAlert({
+                Type: 3,
+                Message: isPartyLeger ? "Please Select Customer" : "Please Select Party",
+            });
+            return;
         }
 
         const jsonBody = JSON.stringify({
             "FromDate": values.FromDate,
             "ToDate": values.ToDate,
-            "Customer": values.Customer.value,
-            "Party": _cfunc.loginSelectedPartyID()
+            "Customer": isPartyLeger ? values.Customer.value : _cfunc.loginSelectedPartyID(),
+            "Party": isPartyLeger ? _cfunc.loginSelectedPartyID() : values.Party.value,
         });
 
-        let config = { ReportType: report.PartyLedger, jsonBody }
+        let config = { ReportType: report.PartyLedger, jsonBody };
+        dispatch(getpdfReportdata(PartyLedgerReport_API, config));
 
-        if (values.Customer === "") {
-            customAlert({
-                Type: 3,
-                Message: "Please Select Customer",
-            })
-            return
-        } else {
-            dispatch(getpdfReportdata(PartyLedgerReport_API, config))
-        }
     }
 
     function fromdateOnchange(e, date) {
@@ -154,8 +159,8 @@ const PartyLedger = (props) => {
         dispatch(GetVenderSupplierCustomerSuccess([]));
         setState((i) => {
             let a = { ...i }
-            a.values.Customer = { value: "", label: "All" }
-            a.hasValid.Customer.valid = true;
+            a.values.Customer =''
+            a.values.Party = ''
             return a
         })
     }
@@ -198,29 +203,54 @@ const PartyLedger = (props) => {
                             </FormGroup>
                         </Col>
 
+                        {subPageMode === url.PARTY_LEDGER ? (
+                            <Col sm={3} className="">
+                                <FormGroup className="mb- row mt-3" >
+                                    <Label className="col-sm-4 p-2"
+                                        style={{ width: "80px" }}>Customer</Label>
+                                    <Col sm="7">
+                                        <C_Select
+                                            name="Customer"
+                                            value={values.Customer}
+                                            isSearchable={true}
+                                            isLoading={customerDropdownLoading}
+                                            className="react-dropdown"
+                                            classNamePrefix="dropdown"
+                                            styles={{
+                                                menu: provided => ({ ...provided, zIndex: 2 })
+                                            }}
+                                            options={customerDropdownOptions}
+                                            onChange={customerOnChangehandler}
 
-                        <Col sm={3} className="">
-                            <FormGroup className="mb- row mt-3" >
-                                <Label className="col-sm-4 p-2"
-                                    style={{ width: "80px" }}>Customer</Label>
-                                <Col sm="7">
-                                    <C_Select
-                                        name="Customer"
-                                        value={values.Customer}
-                                        isSearchable={true}
-                                        isLoading={CustomerLoading}
-                                        className="react-dropdown"
-                                        classNamePrefix="dropdown"
-                                        styles={{
-                                            menu: provided => ({ ...provided, zIndex: 2 })
-                                        }}
-                                        options={CustomerOptions}
-                                        onChange={(e) => { onselecthandel(e) }}
+                                        />
+                                    </Col>
+                                </FormGroup>
+                            </Col>
+                        ) : (
+                            <Col sm={3} className="">
+                                <FormGroup className="mb- row mt-3" >
+                                    <Label className="col-sm-4 p-2"
+                                        style={{ width: "80px" }}>Party</Label>
+                                    <Col sm="7">
+                                        <C_Select
+                                            name="Party"
+                                            value={values.Party}
+                                            isSearchable={true}
+                                            isLoading={partyDropdownLoading}
+                                            className="react-dropdown"
+                                            classNamePrefix="dropdown"
+                                            styles={{
+                                                menu: provided => ({ ...provided, zIndex: 2 })
+                                            }}
+                                            options={partyDropdounOptions}
+                                            onChange={partyOnChangehandler}
 
-                                    />
-                                </Col>
-                            </FormGroup>
-                        </Col>
+                                        />
+                                    </Col>
+                                </FormGroup>
+                            </Col>
+                        )}
+
 
 
                         <Col sm="1" className="mt-3 ">

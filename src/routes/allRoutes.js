@@ -443,6 +443,7 @@ const userRoutes = [
   { path: path.SAP_LEDGER, component: SapLedger },
 
   { path: path.PARTY_LEDGER, component: PartyLedger },
+  { path: path.SELF_LEDGER, component: PartyLedger },
 
   { path: path.STOCK_REPORT, component: StockReport },
 
