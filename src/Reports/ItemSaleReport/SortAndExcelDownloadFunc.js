@@ -273,7 +273,7 @@ export const SortButtonFunc = (props) => {
     //     });
     //     manupulatedData = Object.values(groupedData);
     // }
-    debugger
+    
     let manupulatedData = [...baseData];
     let tableColumns = [];
     let selectedColumns = [];
@@ -300,7 +300,7 @@ export const SortButtonFunc = (props) => {
     }
 
     if (buttonStateArray.some(option => option.checkboxState)) {
-        debugger
+        
         //*********************************************************** *******************************/
         tableColumns = buttonStateArray.filter(option => option.checkboxState);
 
@@ -348,7 +348,7 @@ export const SortButtonFunc = (props) => {
         item.id = key + 1
         return item
     });
-    debugger
+    
     return { selectedColumns, manupulatedData, totalAmount };
 }
 

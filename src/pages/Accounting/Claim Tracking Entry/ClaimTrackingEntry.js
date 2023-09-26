@@ -144,7 +144,6 @@ const ClaimTrackingEntry = (props) => {
 
     }, []);
 
-    // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
 
         if ((hasShowloction || hasShowModal) && pageField) {
@@ -166,27 +165,34 @@ const ClaimTrackingEntry = (props) => {
                 const { id, Date, ClaimReceivedSource, ClaimAmount, Remark, CreditNoteNo, CreditNoteDate,
                     CreditNoteAmount, ClaimSummaryDate, CreditNoteUpload, Claim, TypeName, Type,
                     ClaimTradeName, ClaimTrade, TypeOfClaimName, TypeOfClaim, ClaimCheckByName, ClaimCheckBy,
-                    CreditNotestatusName, CreditNotestatus, PartyName, Party, Year, Month, PartyTypeName } = hasEditVal
+                    CreditNotestatusName, CreditNotestatus, PartyName, Party, Year, Month, PartyTypeName, FullClaimNo } = hasEditVal
 
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
-                hasValid.Date.valid = true;
-                hasValid.ClaimReceivedSource.valid = true;
-                hasValid.ClaimAmount.valid = true;
-                hasValid.Remark.valid = true;
-                hasValid.CreditNoteNo.valid = true;
-                hasValid.CreditNoteDate.valid = true;
-                hasValid.CreditNoteAmount.valid = true;
-                hasValid.ClaimSummaryDate.valid = true;
-                hasValid.CreditNoteUpload.valid = true;
-                hasValid.ClaimId.valid = true;
-                hasValid.Type.valid = true;
-                hasValid.ClaimTrade.valid = true;
-                hasValid.TypeOfClaim.valid = true;
-                hasValid.ClaimCheckBy.valid = true;
-                hasValid.CreditNotestatus.valid = true;
-                hasValid.PartyName.valid = true;
-                hasValid.ClaimForTheMonth.valid = true;
+                // hasValid.Date.valid = true;
+                // hasValid.ClaimReceivedSource.valid = true;
+                // hasValid.ClaimAmount.valid = true;
+                // hasValid.Remark.valid = true;
+                // hasValid.CreditNoteNo.valid = true;
+                // hasValid.CreditNoteDate.valid = true;
+                // hasValid.CreditNoteAmount.valid = true;
+                // hasValid.ClaimSummaryDate.valid = true;
+                // hasValid.CreditNoteUpload.valid = true;
+                // hasValid.ClaimId.valid = true;
+                // hasValid.Type.valid = true;
+                // hasValid.ClaimTrade.valid = true;
+                // hasValid.TypeOfClaim.valid = true;
+                // hasValid.ClaimCheckBy.valid = true;
+                // hasValid.CreditNotestatus.valid = true;
+                // hasValid.PartyName.valid = true;
+                // hasValid.ClaimForTheMonth.valid = true;
+                // hasValid.ClaimText.valid = true;
+                // Set validation values to true
+                for (const key in hasValid) {
+                    if (hasValid.hasOwnProperty(key)) {
+                        hasValid[key].valid = true;
+                    }
+                }
 
                 values.id = id;
                 values.Date = Date;
@@ -198,6 +204,7 @@ const ClaimTrackingEntry = (props) => {
                 values.CreditNoteAmount = CreditNoteAmount;
                 values.ClaimSummaryDate = ClaimSummaryDate;
                 values.CreditNoteUpload = CreditNoteUpload;
+                values.ClaimText = FullClaimNo;
 
                 values.ClaimId = { label: `${id} ${PartyName} /${PartyTypeName} (${ClaimAmount})`, value: Claim };
                 values.Type = { label: TypeName, value: Type };
@@ -207,18 +214,13 @@ const ClaimTrackingEntry = (props) => {
                 values.CreditNotestatus = { label: CreditNotestatusName, value: CreditNotestatus };
                 values.PartyName = { label: PartyName, value: Party };
 
-
                 setYearAndMonth({ Year: Year, Month: Month })
-
-
                 setState({ values, fieldLabel, hasValid, required, isError })
-                // dispatch(Breadcrumb_inputName(hasEditVal.Name))
                 seteditCreatedBy(hasEditVal.CreatedBy)
                 dispatch(editClaimTrackingEntryIDSuccess({ Status: false }))
             }
-
         }
-    }, [pageField,])
+    }, [hasShowloction,hasShowModal,pageField])
 
     // Post UseEffect
     useEffect(async () => {
@@ -256,6 +258,7 @@ const ClaimTrackingEntry = (props) => {
     // update UseEffect
     useEffect(() => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
+
             setState(() => resetFunction(fileds, state)) // Clear form values 
             history.push({
                 pathname: url.CLAIM_TRACKING_ENTRY_LIST,
@@ -322,8 +325,12 @@ const ClaimTrackingEntry = (props) => {
             const a = { ...i }
             a.values.ClaimAmount = hasSelect.ClaimAmount;
             a.values.PartyName = hasSelect.Party;
+
+            a.isError.PartyName = ""
+            a.isError.ClaimAmount = ""
             a.hasValid.PartyName.valid = true
             a.hasValid.ClaimAmount.valid = true
+
             return a
         })
     };

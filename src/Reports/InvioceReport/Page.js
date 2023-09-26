@@ -53,7 +53,7 @@ const invioceReport_A4 = async (data) => {
     if (data.InvoiceUploads.length > 0) {
         try {
             if (data.InvoiceUploads.length > 0) {
-                debugger
+                
                 const url = data.InvoiceUploads[0].QRCodeUrl;
                 let desiredPart = null;
                 const urlObject = new URL(url);
@@ -65,7 +65,7 @@ const invioceReport_A4 = async (data) => {
                     doc.addImage(`/E_invoiceQRCode${desiredPart}`, 'JPEG', 323, 18, 83, 83);
 
                     const image = await loadImage(`/E_invoiceQRCode${desiredPart}`);
-                    debugger
+                    
                     if (image) {
                         doc.addImage(image.currentSrc, 'JPEG', 323, 18, 83, 83);
                         console.log(image.currentSrc)

@@ -15,7 +15,7 @@ function* Invoice_No_List_GenFunc({ jsonBody }) {
 
 // add button api for sales return
 function* save_SalesReturn_GenFunc({ config }) {
-    debugger
+    
     for (let pair of config.formData.entries()) {
         console.log(pair[0], pair[1]);
     }

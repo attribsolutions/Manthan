@@ -4,11 +4,12 @@ import {
     FormGroup,
     Input,
     Label,
-
+    Row,
 } from "reactstrap";
 import Select from "react-select";
 import { GenralMasterSubType } from "../../../helpers/backend_helper";
 import { loginCompanyID } from "../../../components/Common/CommonFunction";
+import { C_DatePicker, C_Select } from "../../../CustomValidateForm";
 
 // Reusable component for form groups with label and input/select
 export function FormGroupWithLabel(props) {
@@ -94,3 +95,43 @@ export const getCurrent_Month_And_Year = (inputDate) => {
         Month: month
     };
 }
+
+export const updateFormFieldsAndValidation = ({ hasEditVal, state }) => {
+    const {
+        id, Date, ClaimReceivedSource, ClaimAmount, Remark, CreditNoteNo, CreditNoteDate,
+        CreditNoteAmount, ClaimSummaryDate, CreditNoteUpload, Claim, TypeName, Type,
+        ClaimTradeName, ClaimTrade, TypeOfClaimName, TypeOfClaim, ClaimCheckByName, ClaimCheckBy,
+        CreditNotestatusName, CreditNotestatus, PartyName, Party, Year, Month, PartyTypeName, FullClaimNo,
+    } = hasEditVal;
+
+    const { values, fieldLabel, hasValid, required, isError } = { ...state };
+
+    // Set validation values to true
+    for (const key in hasValid) {
+        if (hasValid.hasOwnProperty(key)) {
+            hasValid[key].valid = true;
+        }
+    }
+
+    values.id = id;
+    values.Date = Date;
+    values.ClaimReceivedSource = ClaimReceivedSource;
+    values.ClaimAmount = ClaimAmount;
+    values.Remark = Remark;
+    values.CreditNoteNo = CreditNoteNo;
+    values.CreditNoteDate = CreditNoteDate;
+    values.CreditNoteAmount = CreditNoteAmount;
+    values.ClaimSummaryDate = ClaimSummaryDate;
+    values.CreditNoteUpload = CreditNoteUpload;
+    values.ClaimText = FullClaimNo;
+
+    values.ClaimId = { label: `${id} ${PartyName} / ${PartyTypeName} (${ClaimAmount})`, value: Claim };
+    values.Type = { label: TypeName, value: Type };
+    values.ClaimTrade = { label: ClaimTradeName, value: ClaimTrade };
+    values.TypeOfClaim = TypeOfClaimName === null ? { label: "Select...", value: null } : { label: TypeOfClaimName, value: TypeOfClaim };
+    values.ClaimCheckBy = { label: ClaimCheckByName, value: ClaimCheckBy };
+    values.CreditNotestatus = { label: CreditNotestatusName, value: CreditNotestatus };
+    values.PartyName = { label: PartyName, value: Party };
+};
+
+

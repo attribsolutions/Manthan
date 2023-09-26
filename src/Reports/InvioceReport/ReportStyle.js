@@ -36,7 +36,7 @@ export const pageHeder = (doc, data) => {
 
 export const reportHeder1 = (doc, data) => {
 
-    debugger
+    
     let Y1 = 0
     if (data.isQR) {
         Y1 = 115;
