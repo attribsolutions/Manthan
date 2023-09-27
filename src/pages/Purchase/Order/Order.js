@@ -219,7 +219,7 @@ const Order = (props) => {
 
         if (commonPartyDropSelect.value > 0) {
             dispatch(GetRoutesList({ ..._cfunc.loginJsonBody(), "PartyID": commonPartyDropSelect.value }));
-            dispatch(getPartyListAPI({ ..._cfunc.loginJsonBody(), "PartyID": commonPartyDropSelect.value }));
+            dispatch(getPartyListAPI({ ..._cfunc.loginJsonBody(), "PartyID": commonPartyDropSelect.value, IsRetailer: 0 }));
             dispatch(_act.GetVenderSupplierCustomer({ subPageMode, RouteID: "", "PartyID": commonPartyDropSelect.value }));
             if (!(subPageMode === url.ORDER_4)) {
                 dispatch(_act.getSupplierAddress(commonPartyDropSelect.value))
@@ -882,7 +882,7 @@ const Order = (props) => {
                                                 e_val = Math.min(100, Math.max(0, e_val));
                                                 e_val = e_val === 0 ? '' : e_val;
                                             }
-                                           
+
                                             e.target.value = e_val.toString();
                                             index1.Discount = e.target.value;
                                             setChangeAllDiscount(false);
