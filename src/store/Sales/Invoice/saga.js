@@ -12,7 +12,7 @@ import {
   Invoice_1_GoButton_API,
   Invoice_1_Save_API,
   Invoice_1_Delete_API,
-  Invoice_1_Edit_API_Singel_Get,
+  Invoice_Singel_Get_for_Report_Api,
   Invoice_1_Get_Filter_API,
   IB_Invoice_GoButton_API,
   IB_Invoice_Save_API,
@@ -25,6 +25,8 @@ import {
   EwayBill_Cancel_Get_API,
   Update_Vehicle_Invoice_API,
   Invoice_Send_To_Scm,
+  Invoice_1_Edit_API,
+  Invoice_1_Update_API,
 } from "../../../helpers/backend_helper";
 import {
   deleteInvoiceIdSuccess,
@@ -40,6 +42,7 @@ import {
   Cancel_EwayBillSuccess,
   UpdateVehicleInvoice_Success,
   InvoiceSendToScmSuccess,
+  updateInvoiceActionSuccess,
 } from "./action";
 import {
   DELETE_INVOICE_LIST_PAGE,
@@ -53,6 +56,7 @@ import {
   CANCLE_E_INVOICE_ACTION,
   UPDATE_VEHICLE_INVOICE_ACTION,
   INVOICE_SEND_TO_SCM_ACTION,
+  UPDATE_INVOICE_ACTION,
 
 } from "./actionType";
 import *as url from "../../../routes/route_url"
@@ -142,18 +146,30 @@ function* InvoiceListGenFunc({ config }) {
 // edit List page
 function* editInvoiceListGenFunc({ config }) {
   try {
-    const { subPageMode, btnmode } = config;
-    let response;
 
-    if (subPageMode === url.INVOICE_LIST_1) {
-      response = yield call(Invoice_1_Edit_API_Singel_Get, config);
-    } else if (subPageMode === url.IB_INVOICE_LIST) {
-      response = yield call(IB_Invoice_Edit_API_Singel_Get, config);
-    }
+    const { path, customer, btnmode, editId } = config;
 
-    response.pageMode = btnmode
-    yield put(editInvoiceActionSuccess(response))
+    let response = yield call(Invoice_1_Edit_API, config);
+
+    response["path"] = path;
+    response.editId = editId;
+    response.customer = customer;
+    response.pageMode = btnmode;
+
+    const updatedResp = invoice_GoButton_dataConversion_Func(response, customer);
+
+    yield put(editInvoiceActionSuccess(updatedResp))
   } catch (error) { CommonConsole(error) }
+}
+//update Invoice 
+function* updateInvoiceGenFunc({ config }) {
+  
+  try {
+    const response = yield call(Invoice_1_Update_API, config);
+    yield put(updateInvoiceActionSuccess(response))
+  } catch (error) {
+    yield put(InvoiceApiErrorAction())
+  }
 }
 
 // Invoice List delete List page
@@ -177,14 +193,17 @@ function* DeleteInvoiceGenFunc({ config }) {
 // GO-Botton SO-invoice Add Page API
 function invoice_GoButton_dataConversion_Func(response, customer = '') {
 
-  
+
   // Iterate over OrderItemDetails array and perform data conversion
   response.Data.OrderItemDetails = response.Data.OrderItemDetails.map(index1 => {
+    const isUnitIDPresent = index1.UnitDetails.find(findEle => findEle.UnitID === index1.Unit);
+    const isMCunitID = index1.UnitDetails.find(findEle => findEle.DeletedMCUnitsUnitID === index1.DeletedMCUnitsUnitID);
+    const defaultunit = isUnitIDPresent!==undefined ? isUnitIDPresent : isMCunitID;
 
-    const defaultunit = index1.UnitDetails.find(findEle => findEle.UnitID === index1.Unit);
     const { IsTCSParty, ISCustomerPAN } = customer;
 
-    index1.Quantity = roundToDecimalPlaces(index1.Quantity, 3);  //initialize // Round to three decimal places
+    index1.Quantity = roundToDecimalPlaces(index1.Quantity, 3);  //initialize // Round to 3 decimal places
+    index1.Discount = roundToDecimalPlaces(index1.Discount, 2);// Round to 2 decimal places
     index1.OrderQty = index1.Quantity;//initialize
     index1.default_UnitDropvalue = {//initialize
       value: index1.Unit,
@@ -213,6 +232,7 @@ function invoice_GoButton_dataConversion_Func(response, customer = '') {
       const _hasRate = ((defaultunit.BaseUnitQuantity / defaultunit.BaseUnitQuantityNoUnit) * index2.initialRate);
       const _hasActualQuantity = (index2.BaseUnitQuantity / defaultunit.BaseUnitQuantity);
 
+
       index2.Rate = roundToDecimalPlaces(_hasRate, 2);//max 2 decimal  //initialize
       index2.ActualQuantity = roundToDecimalPlaces(_hasActualQuantity, 3);//max 3 decimal  //initialize
 
@@ -232,7 +252,6 @@ function invoice_GoButton_dataConversion_Func(response, customer = '') {
       return index2;
     });
     //+++++++++++++++++++++++++++++++++++++++++++++++++++
-
 
 
 
@@ -267,6 +286,9 @@ function* gobutton_invoiceAdd_genFunc({ config }) {
     }
     else if (subPageMode === url.IB_INVOICE) {
       response = yield call(IB_Invoice_GoButton_API, config); // GO-Botton IB-invoice Add Page API
+    }
+    else if (subPageMode === url.INVOICE_LIST_1) {
+      response = yield call(Invoice_1_GoButton_API, config); // invoice Edit API
     }
 
     response["path"] = path
@@ -365,18 +387,19 @@ function* UpdateVehicleInvoice_GenFunc({ config }) {
 // MAKE_IB_INVOICE_ACTION
 function* InvoiceSaga() {
 
-  yield takeLatest(INVOICE_SEND_TO_SCM_ACTION, Invoice_Send_To_Scm_GenFun)
-  yield takeLatest(INVOICE_SAVE_ADD_PAGE_ACTION, save_Invoice_Genfun)
-  yield takeLatest(INVOICE_LIST_GO_BUTTON_FILTER, InvoiceListGenFunc)
-  yield takeLatest(EDIT_INVOICE_ACTION, editInvoiceListGenFunc)
-  yield takeLatest(DELETE_INVOICE_LIST_PAGE, DeleteInvoiceGenFunc)
-  yield takeLatest(GO_BUTTON_FOR_INVOICE_ADD, gobutton_invoiceAdd_genFunc)
-  yield takeLatest(MAKE_IB_INVOICE_ACTION, makeIB_InvoiceGenFunc)
-  yield takeLatest(UPLOADED_E_INVOICE_ACTION, Uploade_EInvoiceGenFunc)
-  yield takeLatest(UPLOADED_E_WAY_BILL_ACTION, Uploade_EwayBillGenFunc)
-  yield takeLatest(CANCLE_E_WAY_BILL_ACTION, Cancle_EwayBillGenFunc)
-  yield takeLatest(CANCLE_E_INVOICE_ACTION, Cancle_EInvoiceGenFunc)
-  yield takeLatest(UPDATE_VEHICLE_INVOICE_ACTION, UpdateVehicleInvoice_GenFunc)
+  yield takeLatest(INVOICE_SEND_TO_SCM_ACTION, Invoice_Send_To_Scm_GenFun);
+  yield takeLatest(INVOICE_SAVE_ADD_PAGE_ACTION, save_Invoice_Genfun);
+  yield takeLatest(INVOICE_LIST_GO_BUTTON_FILTER, InvoiceListGenFunc);
+  yield takeLatest(EDIT_INVOICE_ACTION, editInvoiceListGenFunc);
+  yield takeLatest(UPDATE_INVOICE_ACTION, updateInvoiceGenFunc);
+  yield takeLatest(DELETE_INVOICE_LIST_PAGE, DeleteInvoiceGenFunc);
+  yield takeLatest(GO_BUTTON_FOR_INVOICE_ADD, gobutton_invoiceAdd_genFunc);
+  yield takeLatest(MAKE_IB_INVOICE_ACTION, makeIB_InvoiceGenFunc);
+  yield takeLatest(UPLOADED_E_INVOICE_ACTION, Uploade_EInvoiceGenFunc);
+  yield takeLatest(UPLOADED_E_WAY_BILL_ACTION, Uploade_EwayBillGenFunc);
+  yield takeLatest(CANCLE_E_WAY_BILL_ACTION, Cancle_EwayBillGenFunc);
+  yield takeLatest(CANCLE_E_INVOICE_ACTION, Cancle_EInvoiceGenFunc);
+  yield takeLatest(UPDATE_VEHICLE_INVOICE_ACTION, UpdateVehicleInvoice_GenFunc);
 }
 
 export default InvoiceSaga;

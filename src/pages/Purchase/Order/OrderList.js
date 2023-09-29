@@ -402,8 +402,8 @@ const OrderList = () => {
     }
 
     function editBodyfunc(config) {
-        const { rowData, btnId } = config;
-        _cfunc.btnIsDissablefunc({ btnId, state: true })
+        const { rowData} = config;
+      
         try {
             const jsonBody = JSON.stringify({
                 Party: rowData.SupplierID,
@@ -414,7 +414,7 @@ const OrderList = () => {
                 OrderType: subPageMode === url.ORDER_4 ? order_Type.SaleOrder : order_Type.PurchaseOrder
             })
             dispatch(_act.editOrderId({ jsonBody, ...config }));
-        } catch (error) { _cfunc.btnIsDissablefunc({ btnId, state: false }) }
+        } catch (error) { }
     }
 
     function downBtnFunc(config) {

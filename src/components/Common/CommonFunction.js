@@ -350,7 +350,7 @@ export function metaTagLabel(userPageAccess = '') {
 
 }
 export function CommonConsole(msg1, msg2 = '', msg3 = '') {// +++++++++++Print Console.log Body+++++++++++++++++++++++++++++++
-  // console.log(msg1, msg2, msg3);
+  console.log(msg1, msg2, msg3);
 }
 
 export function groupBy(list, keyGetter) {// +++++++++++ Array Group By_kye Function +++++++++++++++++++++++++++++++
@@ -492,7 +492,7 @@ export const tableInputArrowUpDounFunc = (tableId) => {
 
 
             var tr = td.closest('tr');
-            var pos = td[0].cellIndex;
+            var pos = td[0]?.cellIndex;
             var ctd = tr.children('td')
 
             let prevTd = td
@@ -523,7 +523,7 @@ export const tableInputArrowUpDounFunc = (tableId) => {
           if (input.selectionEnd == input.value.length) {
 
             var tr = td.closest('tr');
-            var pos = td[0].cellIndex;
+            var pos = td[0]?.cellIndex;
             var ctd = tr.children('td')
 
             let nextTd = td
@@ -570,7 +570,7 @@ export const tableInputArrowUpDounFunc = (tableId) => {
             return
           }
           var tr = td.closest('tr');
-          var pos = td[0].cellIndex;
+          var pos = td[0]?.cellIndex;
           var moveToRow = tr.prev('tr');
 
 
@@ -610,7 +610,8 @@ export const tableInputArrowUpDounFunc = (tableId) => {
             return
           }
           var tr = td.closest('tr');
-          var pos = td[0].cellIndex;
+     
+          var pos = td[0]?.cellIndex;
 
           var moveToRow = tr.next('tr');
 

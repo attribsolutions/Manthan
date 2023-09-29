@@ -147,7 +147,7 @@ export const table_ArrowUseEffect = (tableId) => {
 
 
                         var tr = td.closest('tr');
-                        var pos = td[0].cellIndex;
+                        var pos = td[0]?.cellIndex;
                         var ctd = tr.children('td')
 
                         let prevTd = td
@@ -178,7 +178,7 @@ export const table_ArrowUseEffect = (tableId) => {
                     if (input.selectionEnd == input.value.length) {
 
                         var tr = td.closest('tr');
-                        var pos = td[0].cellIndex;
+                        var pos = td[0]?.cellIndex;
                         var ctd = tr.children('td')
 
                         let nextTd = td
@@ -224,7 +224,7 @@ export const table_ArrowUseEffect = (tableId) => {
                         return
                     }
                     var tr = td.closest('tr');
-                    var pos = td[0].cellIndex;
+                    var pos = td[0]?.cellIndex;
                     var moveToRow = tr.prev('tr');
 
 
@@ -262,7 +262,7 @@ export const table_ArrowUseEffect = (tableId) => {
                         return
                     }
                     var tr = td.closest('tr');
-                    var pos = td[0].cellIndex;
+                    var pos = td[0]?.cellIndex;
 
                     var moveToRow = tr.next('tr');
 

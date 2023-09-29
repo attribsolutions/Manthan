@@ -754,13 +754,9 @@ const Order = (props) => {
             text: "Discount/unit",
             dataField: "",
             formatExtraData: {
-                discountValueAll: discountValueAll,
-                discountTypeAll: discountTypeAll,
-                changeAllDiscount: changeAllDiscount,
-                forceReload: forceReload,
                 tableList: orderItemTable
             },
-            attrs: (cell, row, rowIndex, colIndex) => ({ 'data-label': "Discount/unit" }),
+            attrs: () => ({ 'data-label': "Discount/unit" }),
             headerStyle: () => {
                 return { width: '11%', textAlign: 'center' };
             },
@@ -800,14 +796,18 @@ const Order = (props) => {
                                         value={discountValueAll}
                                         disabled={(subPageMode === url.ORDER_2)}
                                         onChange={(e) => {
+                                            e.target.value = e.target.value.replace(/^\.+/, '');
+                                            e.target.value = e.target.value.replace(/^00+/, '0');
                                             let e_val = Number(e.target.value);
 
-                                            if (discountTypeAll.value === 2) { // Check if discount type 2 is "percentage"
-                                                e_val = Math.min(100, Math.max(0, e_val));
-                                                e_val = e_val === 0 ? '' : e_val;
+                                            if (discountTypeAll.value === 2) {// Discount type 2 represents "percentage"
+                                                if (e_val > 100) { // Limit the input to the range of 0 to 100
+                                                    e.target.value = 100; // Set the input value to 100 if it exceeds 100
+                                                } else if (!(e_val >= 0 && e_val < 100)) {
+                                                    e.target.value = ""; // Clear the input value if it is less than 0
+                                                }
                                             }
 
-                                            e.target.value = e_val.toString();
                                             setChangeAllDiscount(true);
                                             setDiscountValueAll(e.target.value);
                                         }}
@@ -822,18 +822,12 @@ const Order = (props) => {
             classes: () => "order-discount-row",
             formatter: (cellContent, index1, key, formatExtraData) => {
 
-                let { tableList, discountValueAll, discountTypeAll } = formatExtraData;
+                let { tableList } = formatExtraData;
 
-                // if (formatExtraData.changeAllDiscount) {
-                //     index1.Discount = discountValueAll;
-                //     index1.DiscountType = discountTypeAll.value;
-                //     itemWise_CalculationFunc(index1, undefined, tableList)
-                // }
                 if (!index1.DiscountType) { index1.DiscountType = discountTypeAll.value }
 
                 const defaultDiscountTypelabel =
                     index1.DiscountType === 1 ? discountDropOption[0] : discountDropOption[1];
-
                 return (
                     <>
                         <div className="mb-2">
@@ -851,7 +845,6 @@ const Order = (props) => {
                                         options={discountDropOption}
                                         onChange={(e) => {
                                             setChangeAllDiscount(false);
-                                            setForceReload(!forceReload);
                                             index1.DiscountType = e.value;
                                             index1.Discount = '';
                                             itemWise_CalculationFunc(index1, undefined, tableList)
@@ -876,17 +869,22 @@ const Order = (props) => {
                                         cpattern={decimalRegx}
                                         onChange={(e) => {
 
+                                            e.target.value = e.target.value.replace(/^\.+/, '');
+                                            e.target.value = e.target.value.replace(/^00+/, '0');
                                             let e_val = Number(e.target.value);
+                                            
 
-                                            if (index1.DiscountType === 2) { // Check if discount type 2 is "percentage"
-                                                e_val = Math.min(100, Math.max(0, e_val));
-                                                e_val = e_val === 0 ? '' : e_val;
+                                            if (index1.DiscountType === 2) {// Discount type 2 represents "percentage"
+                                                if (e_val > 100) { // Limit the input to the range of 0 to 100
+                                                    e.target.value = 100; // Set the input value to 100 if it exceeds 100
+                                                } else if (!(e_val >= 0 && e_val < 100)) {
+                                                    e.target.value = ""; // Clear the input value if it is less than 0
+                                                }
                                             }
 
-                                            e.target.value = e_val.toString();
+
                                             index1.Discount = e.target.value;
                                             setChangeAllDiscount(false);
-                                            setForceReload(!forceReload);
                                             itemWise_CalculationFunc(index1, undefined, tableList)
                                         }}
 
@@ -894,12 +892,7 @@ const Order = (props) => {
                                 </div>
                             </div>
                         </div>
-                        {/* <div className="bottom-div">
-                            <span>Amount:</span>
-                            <samp id={`roundedTotalAmount-${index1.id}`}>
-                                {_cfunc.amountCommaSeparateFunc(index1.roundedTotalAmount)}
-                            </samp>
-                        </div> */}
+                       
                     </>
                 );
             },

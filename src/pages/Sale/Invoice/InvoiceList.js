@@ -14,7 +14,7 @@ import * as report from '../../../Reports/ReportIndex'
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
-import { Invoice_1_Edit_API_Singel_Get } from "../../../helpers/backend_helper";
+import { Invoice_Singel_Get_for_Report_Api } from "../../../helpers/backend_helper";
 import { getpdfReportdata } from "../../../store/Utilites/PdfReport/actions";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import {
@@ -29,7 +29,10 @@ import {
     deleteInvoiceId,
     deleteInvoiceIdSuccess,
     invoiceListGoBtnfilter,
-    invoiceListGoBtnfilterSucccess
+    invoiceListGoBtnfilterSucccess,
+    GoButtonForinvoiceAdd,
+    editInvoiceAction,
+    updateInvoiceActionSuccess
 } from "../../../store/Sales/Invoice/action";
 import { makeInward } from "../../../store/Inter Branch/InwardRedux/action";
 import { C_DatePicker, C_Select } from "../../../CustomValidateForm";
@@ -57,7 +60,7 @@ const InvoiceList = () => {
             tableList: state.InvoiceReducer.Invoicelist,
             postMsg: state.OrderReducer.postMsg,
             editData: state.InvoiceReducer.editData,
-            updateMsg: state.OrderReducer.updateMsg,
+            updateMsg: state.InvoiceReducer.updateMsg,
             deleteMsg: state.InvoiceReducer.deleteMsg,
             userAccess: state.Login.RoleAccessUpdateData,
             supplier: state.CommonAPI_Reducer.vendorSupplierCustomer,
@@ -99,7 +102,8 @@ const InvoiceList = () => {
 
     const action = {
         deleteId: deleteInvoiceId,
-        deleteSucc: deleteInvoiceIdSuccess
+        deleteSucc: deleteInvoiceIdSuccess,
+        updateSucc: updateInvoiceActionSuccess
     }
 
     // Featch Modules List data  First Rendering
@@ -304,7 +308,7 @@ const InvoiceList = () => {
     function downBtnFunc(config) {
 
         config["ReportType"] = report.invoice;
-        dispatch(getpdfReportdata(Invoice_1_Edit_API_Singel_Get, config))
+        dispatch(getpdfReportdata(Invoice_Singel_Get_for_Report_Api, config))
     }
 
     function goButtonHandler(event, IBType) {
@@ -468,6 +472,26 @@ const InvoiceList = () => {
         }
     };
 
+    function editBodyfunc(config) {
+
+        const { rowData } = config;
+
+        const customer = {
+            value: rowData.CustomerID,
+            label: rowData.Customer,
+            GSTIN: rowData.CustomerGSTIN,
+            IsTCSParty: rowData.IsTCSParty,
+            ISCustomerPAN: rowData.CustomerPAN
+        }
+        dispatch(editInvoiceAction({
+            ...config,
+            customer,
+            subPageMode: url.INVOICE_1,
+            path: url.INVOICE_1,
+        }));
+
+    }
+
     return (
         <React.Fragment>
             <PageLoadingSpinner isLoading={reducers.listBtnLoading || !pageField} />
@@ -487,6 +511,7 @@ const InvoiceList = () => {
                             pageMode={pageMode}
                             goButnFunc={goButtonHandler}
                             downBtnFunc={downBtnFunc}
+                            editBodyfunc={editBodyfunc}
                             HeaderContent={HeaderContent}
                             makeBtnFunc={makeBtnFunc}
                             sendToScmBtnFunc={sendToScmBtnFunc}
