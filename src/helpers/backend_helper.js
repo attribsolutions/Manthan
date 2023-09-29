@@ -703,6 +703,8 @@ export const edit_ClaimTrackingEntry_List_Api = ({ editId }) => get(`${url.CLAIM
 export const update_ClaimTrackingEntry_List_Api = ({ jsonBody, updateId }) => put(`${url.CLAIM_TRACKING}/${updateId}`, jsonBody)// update
 export const detelet_ClaimTrackingEntry_List_Api = ({ deleteId }) => del(`${url.CLAIM_TRACKING}/${deleteId}`) // delete api
 
+//CreditDebitDataExport
+export const CreditDebitDataExport_GoBtn_API = ({ jsonBody }) => post(url.CREDIT_DEBIT_DATA_EXPORT, jsonBody)//Go button api
 export {
   getLoggedInUser,
   isUserAuthenticated,

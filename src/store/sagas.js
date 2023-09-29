@@ -98,6 +98,7 @@ import ReturnReportSaga from "./Report/ReturnReportRedux/saga"
 import ItemSaleReportSaga from "./Report/ItemSaleReport/saga"
 import StockAdjustmentSaga from "./Inventory/StockAdjustmentRedux/saga"
 import ClaimTrackingEntrySaga from "./Accounting/ClaimTrackingEntryRedux/saga"
+import CreditDebitDataExportSaga from "./Report/CreditDebitDataExportRedux/saga"
 
 export default function* rootSaga() {
   yield all([
@@ -190,5 +191,7 @@ export default function* rootSaga() {
     fork(ItemSaleReportSaga),
     fork(StockAdjustmentSaga),
     fork(ClaimTrackingEntrySaga),
+    fork(CreditDebitDataExportSaga),
+
   ])
 }
