@@ -163,7 +163,7 @@ function* editInvoiceListGenFunc({ config }) {
 }
 //update Invoice 
 function* updateInvoiceGenFunc({ config }) {
-  debugger
+  
   try {
     const response = yield call(Invoice_1_Update_API, config);
     yield put(updateInvoiceActionSuccess(response))
@@ -199,7 +199,7 @@ function invoice_GoButton_dataConversion_Func(response, customer = '') {
     const isUnitIDPresent = index1.UnitDetails.find(findEle => findEle.UnitID === index1.Unit);
     const isMCunitID = index1.UnitDetails.find(findEle => findEle.DeletedMCUnitsUnitID === index1.DeletedMCUnitsUnitID);
     const defaultunit = isUnitIDPresent!==undefined ? isUnitIDPresent : isMCunitID;
-debugger
+
     const { IsTCSParty, ISCustomerPAN } = customer;
 
     index1.Quantity = roundToDecimalPlaces(index1.Quantity, 3);  //initialize // Round to 3 decimal places
