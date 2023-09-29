@@ -691,7 +691,7 @@ export const ItemsList_On_Group_And_Subgroup_API = (jsonBody) => post(url.ITEM_L
 
 //StockAdjustment
 
-export const getBatchCode_By_ItemID_api = (itemId, partyId) => get(`${url.GET_BATCH_CODE_BY_ITEM_ID}/${itemId}/${partyId}`)//add button get api for item
+export const getBatchCode_By_ItemID_api = ({ itemId, partyId }) => get(`${url.GET_BATCH_CODE_BY_ITEM_ID}/${itemId}/${partyId}`)//add button get api for item
 
 //TransactionLog
 
@@ -707,6 +707,8 @@ export const edit_ClaimTrackingEntry_List_Api = ({ editId }) => get(`${url.CLAIM
 export const update_ClaimTrackingEntry_List_Api = ({ jsonBody, updateId }) => put(`${url.CLAIM_TRACKING}/${updateId}`, jsonBody)// update
 export const detelet_ClaimTrackingEntry_List_Api = ({ deleteId }) => del(`${url.CLAIM_TRACKING}/${deleteId}`) // delete api
 
+//CreditDebitDataExport
+export const CreditDebitDataExport_GoBtn_API = ({ jsonBody }) => post(url.CREDIT_DEBIT_DATA_EXPORT, jsonBody)//Go button api
 export {
   getLoggedInUser,
   isUserAuthenticated,

@@ -189,6 +189,7 @@ import TransactionLog from "../pages/ActivityLog/TransactionLog";
 import StockAdjustment from "../pages/Inventory/StockAdjustment";
 import ClaimTrackingEntry from "../pages/Accounting/Claim Tracking Entry/ClaimTrackingEntry";
 import ClaimTrackingEntryList from "../pages/Accounting/Claim Tracking Entry/ClaimTrackingEntryList";
+import CreditDebitDataExport from "../Reports/CreditDebitDataExport.js";
 
 
 
@@ -475,17 +476,16 @@ const userRoutes = [
 
   { path: path.RETURN_REPORT, component: ReturnReport },
 
-
-
   { path: path.CLAIM_SUMMARY_MASTER, component: ClaimSummaryMaster },
   { path: path.CLAIM_SUMMARY_lIST, component: ClaimSummaryList },
-
 
   { path: path.ITEM_SALE_REPORT, component: ItemSaleReport },
 
   { path: path.ITEM_REGISTER_REPORT, component: ItemRegisterReport },
 
+  { path: path.CREDIT_DATA_EXPORT, component: CreditDebitDataExport },
 
+  { path: path.DEBIT_DATA_EXPORT, component: CreditDebitDataExport },
   // ************************************ Utility **************************************//
 
   { path: path.SEARCH_BOX2, component: SearchBoxSecond },

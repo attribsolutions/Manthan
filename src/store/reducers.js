@@ -108,6 +108,7 @@ import ReturnReportReducer from "./Report/ReturnReportRedux/reducer"
 import ItemSaleReportReducer from "./Report/ItemSaleReport/reducer"
 import StockAdjustmentReducer from "./Inventory/StockAdjustmentRedux/reducer"
 import ClaimTrackingEntry_Reducer from "./Accounting/ClaimTrackingEntryRedux/reducer"
+import CreditDebitDataExportReducer from "./Report/CreditDebitDataExportRedux/reducer"
 
 const rootReducer = combineReducers({
   Layout,
@@ -195,5 +196,6 @@ const rootReducer = combineReducers({
   ItemSaleReportReducer,
   StockAdjustmentReducer,
   ClaimTrackingEntry_Reducer,
+  CreditDebitDataExportReducer
 })
 export default rootReducer

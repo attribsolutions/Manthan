@@ -304,6 +304,10 @@ export const ITEM_SALE_REPORT = "/Item_Sale_Report"
 
 export const ITEM_REGISTER_REPORT = "/ItemRegister"
 
+export const DEBIT_DATA_EXPORT = "/DebitDataExport"
+
+export const CREDIT_DATA_EXPORT = "/CreditDataExport"
+
 
 
 
