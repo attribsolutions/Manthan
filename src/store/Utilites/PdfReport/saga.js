@@ -1,4 +1,4 @@
-import { call, put, takeEvery, takeLatest } from "redux-saga/effects";
+import { call, put, takeLatest } from "redux-saga/effects";
 import { GET_PDF_MULTIPLEINVOICE_DATA, GET_PDF_REPORT_DATA } from "./actionType";
 // import { Data } from "./DemoData";
 
@@ -11,7 +11,7 @@ import { dataGenrator } from "../../../Reports/Invoice report a5/DemoData";
 function* getpdfData_GenFunc({ urlpath, config }) {
 
   try {
-    debugger
+    
     const response = yield call(urlpath, config);
    
     response["ReportType"] = config.ReportType

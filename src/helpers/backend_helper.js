@@ -532,7 +532,11 @@ export const Invoice_1_GoButton_API = ({ jsonBody }) => post(url.INVOICE_1_ADD_P
 export const Invoice_1_Save_API = ({ jsonBody }) => post(url.INVOICE_1_SAVE, jsonBody)//  postapi
 export const Invoice_1_Get_Filter_API = ({ filtersBody }) => post(url.INVOICE_1_lIST_FILTER, filtersBody)//  postapi
 export const Invoice_1_Delete_API = ({ deleteId }) => del(`${url.INVOICE_1_SAVE}/${deleteId}`)// delete api
-export const Invoice_1_Edit_API_Singel_Get = ({ editId }) => get(`${url.INVOICE_1_SAVE}/${editId}`)// delete api
+
+export const Invoice_1_Edit_API = ({ editId }) => get(`${url.INVOICE_1_Edit}/${editId}`)// delete api
+export const Invoice_1_Update_API = ({ updateId, jsonBody }) => put(`${url.INVOICE_1_Edit}/${updateId}`, jsonBody)// delete api
+
+export const Invoice_Singel_Get_for_Report_Api = ({ editId }) => get(`${url.INVOICE_1_SAVE}/${editId}`)// delete api
 export const Update_Vehicle_Invoice_API = ({ Invoiceid, vehicleid }) => get(`${url.UPDATE_VEHICLE_INVOICE}/${Invoiceid}/${vehicleid}`)// Cancel_EwayBill
 export const Invoice_Send_To_Scm = ({ jsonBody }) => post(url.INVOICE_SEND_TO_SCM, jsonBody)// delete api
 

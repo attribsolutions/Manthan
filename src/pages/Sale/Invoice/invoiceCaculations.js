@@ -288,8 +288,9 @@ export const innerStockCaculation = (index1) => {
         }
     });
 
-    index1.ItemTotalAmount = totalAmount.toFixed(2)
-    index1.Quantity = QuantityTatal.toFixed(3);
+   
+    index1.ItemTotalAmount = roundToDecimalPlaces(totalAmount, 2); //max 2 decimal
+    index1.Quantity = roundToDecimalPlaces(QuantityTatal, 3); //max 3 decimal
 
     try {
         document.getElementById(`OrderQty-${index1.id}`).value = index1.Quantity

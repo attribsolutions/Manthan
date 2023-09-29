@@ -24,6 +24,8 @@ import {
     UPDATE_VEHICLE_INVOICE_SUCCESS,
     INVOICE_SEND_TO_SCM_ACTION,
     INVOICE_SEND_TO_SCM_ACTION_SUCCESS,
+    UPDATE_INVOICE_ACTION,
+    UPDATE_INVOICE_ACTION_SUCCESS,
 
 } from "./actionType";
 
@@ -47,6 +49,16 @@ export const editInvoiceAction = (config = {}) => ({
 export const editInvoiceActionSuccess = (editData) => ({
     type: EDIT_INVOICE_ACTION_SUCCESS,
     payload: editData,
+})
+// edit api
+export const updateInvoiceAction = (config ) => ({
+    type: UPDATE_INVOICE_ACTION,
+    config,
+})
+
+export const updateInvoiceActionSuccess = (reps) => ({
+    type: UPDATE_INVOICE_ACTION_SUCCESS,
+    payload: reps,
 })
 
 // listpage api

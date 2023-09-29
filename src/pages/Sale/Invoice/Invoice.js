@@ -33,7 +33,10 @@ import {
     Uploaded_EInvoiceAction,
     invoiceSaveAction,
     invoiceSaveActionSuccess,
-    makeIB_InvoiceActionSuccess
+    makeIB_InvoiceActionSuccess,
+    editInvoiceActionSuccess,
+    updateInvoiceAction,
+    updateInvoiceActionSuccess
 } from "../../../store/Sales/Invoice/action";
 import { GetVenderSupplierCustomer, GetVenderSupplierCustomerSuccess } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
@@ -49,7 +52,7 @@ import "./invoice.scss"
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { CInput, C_DatePicker, decimalRegx } from "../../../CustomValidateForm";
 import { getVehicleList, getVehicleListSuccess } from "../../../store/Administrator/VehicleRedux/action";
-import { Invoice_1_Edit_API_Singel_Get } from "../../../helpers/backend_helper";
+import { Invoice_Singel_Get_for_Report_Api } from "../../../helpers/backend_helper";
 import * as report from '../../../Reports/ReportIndex'
 import CustomTable from "../../../CustomTable2";
 
@@ -73,17 +76,18 @@ const Invoice = (props) => {
     const [state, setState] = useState(() => initialFiledFunc(fileds))
     const [orderItemDetails, setOrderItemDetails] = useState([])
     const [orderIDs, setOrderIDs] = useState([])
+    const [editInvoiceData, setEditInvoiceData] = useState('')
 
     // for invoice page heder discount functionality useSate ************************************
     const [discountValueAll, setDiscountValueAll] = useState("");
     const [discountTypeAll, setDiscountTypeAll] = useState({ value: 2, label: " % " });
     const [discountDropOption] = useState([{ value: 1, label: "Rs" }, { value: 2, label: "%" }])
     const [changeAllDiscount, setChangeAllDiscount] = useState(false)
-    const [forceReload, setForceReload] = useState(false)
+
     // ****************************************************************************
 
     const [modalCss] = useState(false);
-    const [pageMode] = useState(mode.defaultsave);
+    const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState('');
 
     const {
@@ -96,12 +100,14 @@ const Invoice = (props) => {
         makeIBInvoice,
         VehicleNumber,
         goBtnloading,
+        editData,
         saveBtnloading,
         saveAndPdfBtnLoading,
         commonPartyDropSelect
     } = useSelector((state) => ({
         postMsg: state.InvoiceReducer.postMsg,
-        updateMsg: state.BOMReducer.updateMsg,
+        editData: state.InvoiceReducer.editData,
+        updateMsg: state.InvoiceReducer.updateMsg,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
         customer: state.CommonAPI_Reducer.customer,
@@ -172,7 +178,7 @@ const Invoice = (props) => {
                     editId: postMsg.InvoiceID,
                     ReportType: report.invoice,
                 };
-                dispatch(getpdfReportdata(Invoice_1_Edit_API_Singel_Get, config));
+                dispatch(getpdfReportdata(Invoice_Singel_Get_for_Report_Api, config));
             }
 
             // ***************** Upload E-Invoice if AutoEInvoice and EInvoiceApplicable are both "1"  *****/
@@ -207,10 +213,10 @@ const Invoice = (props) => {
 
         if ((updateMsg.Status === true) && (updateMsg.StatusCode === 200) && !(modalCss)) {
             history.push({
-                pathname: url.MATERIAL_ISSUE_LIST,
+                pathname: url.INVOICE_LIST_1,
             })
         } else if (updateMsg.Status === true && !modalCss) {
-            dispatch(updateBOMListSuccess({ Status: false }));
+            dispatch(updateInvoiceActionSuccess({ Status: false }));
             customAlert({
                 Type: 3,
                 Status: true,
@@ -260,6 +266,27 @@ const Invoice = (props) => {
             dispatch(GoButtonForinvoiceAddSuccess({ Status: false }))
         }
     }, [gobutton_Add]);
+
+    useEffect(() => {
+
+        if (editData.Status === true && editData.StatusCode === 200) {
+            setState((i) => {
+                const obj = { ...i }
+                obj.values.Customer = editData.customer;
+                obj.hasValid.Customer.valid = true;
+                return obj
+            })
+            setPageMode(editData.pageMode)
+            setEditInvoiceData(editData)
+            setOrderItemDetails(editData.Data.OrderItemDetails);
+
+            // **********************************************************
+            totalAmountCalcuationFunc(editData.Data.OrderItemDetails)// show breadcrump tolat amount function//passs table array 
+            //*********************************************************** */
+            setOrderIDs(editData.Data.OrderIDs)
+            dispatch(editInvoiceActionSuccess({ Status: false }))
+        }
+    }, [editData]);
 
     useEffect(() => {
 
@@ -328,13 +355,13 @@ const Invoice = (props) => {
             text: "Quantity/Unit",
             dataField: "",
             formatExtraData: { tableList: orderItemDetails },
-            attrs: (cell, row, rowIndex, colIndex) => ({ 'data-label': "Quantity/Unit" }),
+            attrs: () => ({ 'data-label': "Quantity/Unit" }),
             formatter: (cellContent, index1, keys_, { tableList = [] }) => (
                 <>
                     <div>
                         <Input
                             type="text"
-                            disabled={pageMode === 'edit' ? true : false}
+
                             id={`OrderQty-${index1.id}`}
                             placeholder="Enter quantity"
                             className="right-aligned-placeholder mb-1"
@@ -355,7 +382,7 @@ const Invoice = (props) => {
                             <Select
                                 classNamePrefix="select2-selection"
                                 id={"ddlUnit"}
-                                isDisabled={false}
+                                isDisabled={pageMode === mode.edit && true}
                                 defaultValue={index1.default_UnitDropvalue}
                                 options={index1.UnitDetails.map(i => ({
                                     "label": i.UnitName,
@@ -412,7 +439,6 @@ const Invoice = (props) => {
                                     <td data-label='Quantity'>
                                         <Input
                                             type="text"
-                                            disabled={pageMode === 'edit' ? true : false}
                                             placeholder="Manually enter quantity"
                                             className="right-aligned-placeholder"
                                             key={`batchQty${index1.id}-${index2.id}`}
@@ -438,12 +464,8 @@ const Invoice = (props) => {
         {//***************Discount********************************************************************* */
             text: "Discount/unit",
             dataField: "",
-            attrs: (cell, row, rowIndex, colIndex) => ({ 'data-label': "Discount/unit" }),
+            attrs: () => ({ 'data-label': "Discount/unit" }),
             formatExtraData: {
-                discountValueAll: discountValueAll,
-                discountTypeAll: discountTypeAll,
-                changeAllDiscount: changeAllDiscount,
-                forceReload: forceReload,
                 tableList: orderItemDetails
             },
             headerFormatter: () => {
@@ -480,13 +502,17 @@ const Invoice = (props) => {
                                         placeholder="Enter discount value"
                                         value={discountValueAll}
                                         onChange={(e) => {
+                                            e.target.value = e.target.value.replace(/^\.+/, '');
+                                            e.target.value = e.target.value.replace(/^00+/, '0');
                                             let e_val = Number(e.target.value);
 
-                                            if (discountTypeAll.value === 2) { // Check if discount type 2 is "percentage"
-                                                e_val = Math.min(100, Math.max(0, e_val));
-                                                e_val = e_val === 0 ? '' : e_val;
+                                            if (discountTypeAll.value === 2) {// Discount type 2 represents "percentage"
+                                                if (e_val >= 100) { // Limit the input to the range of 0 to 100
+                                                    e.target.value = 100; // Set the input value to 100 if it exceeds 100
+                                                } else if (!(e_val >= 0 && e_val < 100)) {
+                                                    e.target.value = ""; // Clear the input value if it is less than 0
+                                                }
                                             }
-                                            e.target.value = e_val.toString();
 
                                             setChangeAllDiscount(true);
                                             setDiscountValueAll(e.target.value);
@@ -501,14 +527,8 @@ const Invoice = (props) => {
 
             classes: () => "invoice-discount-row",
             formatter: (cellContent, index1, key, formatExtraData) => {
-                let { tableList, discountTypeAll } = formatExtraData;
+                let { tableList } = formatExtraData;
 
-                // if (formatExtraData.changeAllDiscount) {
-                //     index1.Discount = discountValueAll;
-                //     index1.DiscountType = discountTypeAll.value;
-                //     innerStockCaculation(index1);
-                //     totalAmountCalcuationFunc(tableList);
-                // }
                 if (!index1.DiscountType) { index1.DiscountType = discountTypeAll.value }
 
                 const defaultDiscountTypelabel =
@@ -530,7 +550,6 @@ const Invoice = (props) => {
                                         options={discountDropOption}
                                         onChange={(e) => {
                                             setChangeAllDiscount(false);
-                                            setForceReload(!forceReload);
                                             index1.DiscountType = e.value;
                                             index1.Discount = '';
                                             innerStockCaculation(index1);
@@ -555,17 +574,21 @@ const Invoice = (props) => {
                                         value={index1.Discount}
                                         cpattern={decimalRegx}
                                         onChange={(e) => {
+                                            e.target.value = e.target.value.replace(/^\.+/, '');
+                                            e.target.value = e.target.value.replace(/^00+/, '0');
                                             let e_val = Number(e.target.value);
 
-                                            if (index1.DiscountType === 2) { // Check if discount type 2 is "percentage"
-                                                e_val = Math.min(100, Math.max(0, e_val));
-                                                e_val = e_val === 0 ? '' : e_val;
+
+                                            if (index1.DiscountType === 2) {// Discount type 2 represents "percentage"
+                                                if (e_val >= 100) { // Limit the input to the range of 0 to 100
+                                                    e.target.value = 100; // Set the input value to 100 if it exceeds 100
+                                                } else if (!(e_val >= 0 && e_val < 100)) {
+                                                    e.target.value = ""; // Clear the input value if it is less than 0
+                                                }
                                             }
 
-                                            e.target.value = e_val.toString();
                                             index1.Discount = e.target.value;
                                             setChangeAllDiscount(false);
-                                            setForceReload(!forceReload);
                                             innerStockCaculation(index1);
                                             totalAmountCalcuationFunc(tableList);
                                         }}
@@ -613,22 +636,20 @@ const Invoice = (props) => {
 
     function goButtonHandler(makeIBInvoice) {
         const btnId = goBtnId;
-        _cfunc.btnIsDissablefunc({ btnId, state: true })
 
-        try {
-            const jsonBody = JSON.stringify({
-                FromDate: values.InvoiceDate,
-                Customer: makeIBInvoice ? makeIBInvoice.customer.value : values.Customer.value,
-                Party: commonPartyDropSelect.value,
-                OrderIDs: ""
-            });
-            dispatch(GoButtonForinvoiceAdd({ subPageMode, jsonBody, btnId }));
+        const jsonBody = JSON.stringify({
+            FromDate: values.InvoiceDate,
+            Customer: makeIBInvoice ? makeIBInvoice.customer.value : values.Customer.value,
+            Party: commonPartyDropSelect.value,
+            OrderIDs: ""
+        });
+        dispatch(GoButtonForinvoiceAdd({ subPageMode, jsonBody, btnId }));
 
-        } catch (e) { _cfunc.btnIsDissablefunc({ btnId, state: false }) }
+
     };
 
     const SaveHandler = async (event) => {
-
+        debugger
         event.preventDefault();
         const btnId = event.target.id
         const saveAndDownloadPdfMode = btnId.substring(0, 21) === "SaveAndDownloadPdfBtn";
@@ -648,7 +669,7 @@ const Invoice = (props) => {
             let isSameMRPinStock = ''; //this is check is Enterd stock Quantity is Same MRP
             index.StockDetails.forEach((ele) => {
 
-                if (Number(ele.Qty) > 0) {
+                if ((Number(ele.Qty) > 0) || (pageMode === mode.edit)) {
 
                     if ((isSameMRPinStock === "") && !(isSameMRPinStock === false)) {//this is check is Enterd stock Quantity is Same MRP
                         isSameMRPinStock = parseFloat(ele.MRP)
@@ -672,6 +693,8 @@ const Invoice = (props) => {
                         "BatchDate": ele.BatchDate,
                         "BatchID": ele.id,
                         "BaseUnitQuantity": Number(ele.BaseUnitQuantity).toFixed(3),
+                        "PreviousInvoiceBaseUnitQuantity": Number(ele.BaseUnitQuantity).toFixed(3),
+
                         "LiveBatch": ele.LiveBatche,
                         "MRP": ele.LiveBatcheMRPID,
                         "MRPValue": ele.MRP,//changes
@@ -712,6 +735,13 @@ const Invoice = (props) => {
             })
             return
         }
+        if (!state.values.Customer?.value > 0) {
+            customAlert({
+                Type: 4,
+                Message: "Customer is required.",
+            })
+            return
+        }
 
         if (!(invoiceItems.length > 0)) {
             customAlert({
@@ -727,7 +757,11 @@ const Invoice = (props) => {
         const forInvoice_1_json = () => ({  //** Json Body Generate For Invoice_1  Start+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
             InvoiceDate: values.InvoiceDate,
             InvoiceItems: invoiceItems,
-            InvoicesReferences: orderIDs.map(i => ({ Order: i }))
+            InvoicesReferences: orderIDs.map(i => ({ Order: i })),
+
+            FullInvoiceNumber: editInvoiceData.Data?.FullInvoiceNumber,//only invoice edit use
+            InvoiceNumber: editInvoiceData.Data?.InvoiceNumber,//only invoice edit use
+
         });
 
         const forIB_Invoice_json = async () => ({   //**   Json Body Generate For IB_Invoice  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
@@ -750,23 +784,25 @@ const Invoice = (props) => {
 
         try {
 
-            if (formValid(state, setState)) {
-                _cfunc.btnIsDissablefunc({ btnId, state: true })
-                let jsonBody;  //json body decleration 
-                if (subPageMode === url.INVOICE_1) {
-                    jsonBody = JSON.stringify({ ...for_common_json(), ...forInvoice_1_json() });
-                } else if (subPageMode === url.IB_INVOICE) {
-                    jsonBody = JSON.stringify({ ...for_common_json(), ...forIB_Invoice_json() });
-                }
-                // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-                if (pageMode === mode.edit) {
-                    return
-                }
-                else {
-                    dispatch(invoiceSaveAction({ subPageMode, jsonBody, btnId, saveAndDownloadPdfMode }));
-                }
+
+
+            let jsonBody;  //json body decleration 
+            if (subPageMode === url.INVOICE_1) {
+                jsonBody = JSON.stringify({ ...for_common_json(), ...forInvoice_1_json() });
+            } else if (subPageMode === url.IB_INVOICE) {
+                jsonBody = JSON.stringify({ ...for_common_json(), ...forIB_Invoice_json() });
             }
-        } catch (e) { _cfunc.CommonConsole("invode save Handler", e) }
+            // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+            if (pageMode === mode.edit) {
+                jsonBody = JSON.stringify({ ...for_common_json(), ...forInvoice_1_json() });
+                const config = { updateId: editInvoiceData.editId, jsonBody, subPageMode, jsonBody };
+                dispatch(updateInvoiceAction(config));
+            }
+            else {
+                dispatch(invoiceSaveAction({ subPageMode, jsonBody, btnId, saveAndDownloadPdfMode }));
+            }
+
+        } catch (e) { _cfunc.CommonConsole("invoice save Handler", e) }
 
     }
 

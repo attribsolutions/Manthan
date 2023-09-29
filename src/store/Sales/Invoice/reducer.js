@@ -18,13 +18,17 @@ import {
     UPLOADED_E_WAY_BILL_ACTION,
     UPDATE_VEHICLE_INVOICE_SUCCESS,
     INVOICE_SEND_TO_SCM_ACTION,
-    INVOICE_SEND_TO_SCM_ACTION_SUCCESS
+    INVOICE_SEND_TO_SCM_ACTION_SUCCESS,
+    EDIT_INVOICE_ACTION,
+    UPDATE_INVOICE_ACTION,
+    UPDATE_INVOICE_ACTION_SUCCESS
 } from "./actionType"
 
 const INIT_STATE = {
     gobutton_Add: { Status: false },
     makeIBInvoice: { Status: false },
     postMsg: { Status: false },
+    updateMsg: { Status: false },
     editData: { Status: false },
     Invoicelist: [],
     deleteMsg: { Status: false },
@@ -106,13 +110,34 @@ const InvoiceReducer = (state = INIT_STATE, action) => {
             }
         /**************************************** */
 
+        case EDIT_INVOICE_ACTION:
+            return {
+                ...state,
+                listBtnLoading: action.config.btnId,
+            }
 
         case EDIT_INVOICE_ACTION_SUCCESS:
             return {
                 ...state,
-                listBtnLoading: action.config.btnId,
+                listBtnLoading: false,
                 editData: action.payload,
             }
+        /**************************************** */
+        case UPDATE_INVOICE_ACTION:
+            // let { saveAndDownloadPdfMode = false } = action.config
+            return {
+                ...state,
+                saveBtnloading: true,
+
+            }
+        case UPDATE_INVOICE_ACTION_SUCCESS:
+            return {
+                ...state,
+                saveBtnloading: false,
+                updateMsg: action.payload,
+            }
+        /**************************************** */
+
         case DELETE_INVOICE_LIST_PAGE_SUCCESS:
             return {
                 ...state,

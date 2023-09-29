@@ -324,6 +324,7 @@ export const MAKE_INWARD_BUTTON_API = '/BranchInvoiceDetails'//Inward  addpage G
 
 export const INVOICE_1_lIST_FILTER = '/InvoicesFilter'//invoice_1_List filter Api
 export const INVOICE_1_SAVE = '/Invoice'// invoice_1  addpage save Api
+export const INVOICE_1_Edit = '/Invoicegetandupdate'// invoice_1  edit Api
 export const INVOICE_1_ADD_PAGE_GO_BTN = '/GetOrderDetails'// invoice_1 addpage GoButton Api 
 export const UPLOADED_E_INVOICE = '/Uploaded_EInvoicea' // Uploaded_EInvoicea
 export const UPLOADED_E_WAY_BILL = '/Uploaded_EwayBill' // Uploaded_E-wayBill
