@@ -754,13 +754,9 @@ const Order = (props) => {
             text: "Discount/unit",
             dataField: "",
             formatExtraData: {
-                discountValueAll: discountValueAll,
-                discountTypeAll: discountTypeAll,
-                changeAllDiscount: changeAllDiscount,
-                forceReload: forceReload,
                 tableList: orderItemTable
             },
-            attrs: (cell, row, rowIndex, colIndex) => ({ 'data-label': "Discount/unit" }),
+            attrs: () => ({ 'data-label': "Discount/unit" }),
             headerStyle: () => {
                 return { width: '11%', textAlign: 'center' };
             },
@@ -826,13 +822,12 @@ const Order = (props) => {
             classes: () => "order-discount-row",
             formatter: (cellContent, index1, key, formatExtraData) => {
 
-                let { tableList, discountTypeAll } = formatExtraData;
+                let { tableList } = formatExtraData;
 
                 if (!index1.DiscountType) { index1.DiscountType = discountTypeAll.value }
 
                 const defaultDiscountTypelabel =
                     index1.DiscountType === 1 ? discountDropOption[0] : discountDropOption[1];
-
                 return (
                     <>
                         <div className="mb-2">
@@ -850,7 +845,6 @@ const Order = (props) => {
                                         options={discountDropOption}
                                         onChange={(e) => {
                                             setChangeAllDiscount(false);
-                                            setForceReload(!forceReload);
                                             index1.DiscountType = e.value;
                                             index1.Discount = '';
                                             itemWise_CalculationFunc(index1, undefined, tableList)
@@ -891,7 +885,6 @@ const Order = (props) => {
 
                                             index1.Discount = e.target.value;
                                             setChangeAllDiscount(false);
-                                            setForceReload(!forceReload);
                                             itemWise_CalculationFunc(index1, undefined, tableList)
                                         }}
 
@@ -899,12 +892,7 @@ const Order = (props) => {
                                 </div>
                             </div>
                         </div>
-                        {/* <div className="bottom-div">
-                            <span>Amount:</span>
-                            <samp id={`roundedTotalAmount-${index1.id}`}>
-                                {_cfunc.amountCommaSeparateFunc(index1.roundedTotalAmount)}
-                            </samp>
-                        </div> */}
+                       
                     </>
                 );
             },
