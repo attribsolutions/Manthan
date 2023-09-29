@@ -453,8 +453,8 @@ export const BankRow = (data) => {
         ]
     } else {
         var reportArray = [
-            [],
-            [, `Bank details not provided. Please update Bank details`]
+            // [],
+            // [, `Bank details not provided. Please update Bank details`]
         ]
     }
 
