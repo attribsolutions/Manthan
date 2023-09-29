@@ -142,7 +142,7 @@ const StockAdjustment = (props) => {
     }
 
     function BatchCode_Add_Handler(event, index1, tableList, setTableList) {
-
+        
         let isfound = index1.StockDetails.find(i => i.id === index1.BatchCode.id);
 
         if (!(isfound === undefined)) {
@@ -157,6 +157,7 @@ const StockAdjustment = (props) => {
 
             setTableList([...tableList]);
             QuantityOnchange(event, index1, tableList,)
+            // stockQtyUnit_SelectOnchange(index1.defaultUnitOption, index1, tableList, setTableList)
         } else {
             console.error("Item not found in tableList.");
         }
@@ -197,6 +198,11 @@ const StockAdjustment = (props) => {
         }
     };
 
+    function BatchCodeHandler(event, index1, tableList) {
+        
+        index1["BatchCode"] = event
+    }
+
     const pagesListColumns = [
 
         {//*************** ItemName ********************************* */
@@ -231,27 +237,30 @@ const StockAdjustment = (props) => {
                                 defaultValue={index1.defaultUnitOption}
                                 options={index1.UnitDetails}
                                 onChange={(event) => {
+                                    index1.defaultUnitOption = event
                                     stockQtyUnit_SelectOnchange(event, index1, tableList);
                                 }}
                             />
                         </div>
                     </div>
 
-                    <div className=" mt-4">
+                    <div className="mt-2" >
                         <Row >
-                            <Col md={8}>
-                                <Label>BatchCode</Label>
+                            <Col md={9} >
+                                <Label className="text-black">BatchCode</Label>
                                 <C_Select
+
                                     id={`BatchCode-${index1.id}`}
                                     key={`BatchCode-${index1.id}`}
                                     classNamePrefix="select2-selection"
                                     options={index1.BatchCodeDetails}
                                     onChange={(event) => {
-                                        index1["BatchCode"] = event
+                                        BatchCodeHandler(event, index1, tableList)
+
                                     }}
                                 />
                             </Col>
-                            <Col sm="1" className="mx-2 mt-4">
+                            <Col sm="1" style={{ marginTop: "29px" }}>
                                 {
                                     < Button type="button" color="btn btn-outline-primary border-1 font-size-12 text-center"
                                         onClick={(event) => BatchCode_Add_Handler(event, index1, tableList, setTableList)}
@@ -340,36 +349,15 @@ const StockAdjustment = (props) => {
     ];
 
     const SaveHandler = async (event) => {
-        debugger
+
         event.preventDefault();
 
         const btnId = event.target.id
 
-        // const ReturnItems = TableArr.map((index) => {
-        //     debugger
-        //     return ({
-        //         "Item": index.Item,
-        //         "Quantity": index.Qty,
-        //         "MRP": index.MRPID,
-        //         "Unit": index.defaultUnitOption.value,
-        //         "GST": index.GSTID,
-        //         "MRPValue": index.MRP,
-        //         "GSTPercentage": index.GSTPercentage,
-        //         "BatchDate": index.BatchDate,
-        //         "BatchCode": index.BatchCode,
-        //         "BatchCodeID": index.id
-        //     })
-        // })
-        // debugger
-        // const filterData = ReturnItems.filter((i) => {
-        //     return i.Quantity > 0;
-        // });
         const ReturnItems = TableArr.map((tableItem) => {
-            debugger
-            // Access the StockDetails property within the tableItem object
+
             const stockDetails = tableItem.StockDetails;
 
-            // Map the StockDetails array to the desired format
             const formattedStockDetails = stockDetails.map((index) => ({
                 "Item": index.Item,
                 "Quantity": index.Qty,
@@ -391,7 +379,7 @@ const StockAdjustment = (props) => {
 
         // Return an array of filtered stock details
         const filterData = ReturnItems.flat(); // Use flat to flatten the array of arrays
-        debugger
+
         if (filterData.length === 0) {
             customAlert({
                 Type: 4,
@@ -408,7 +396,7 @@ const StockAdjustment = (props) => {
                 "Mode": subPageMode === url.STOCK_ADJUSTMENT ? 2 : 3,
                 "StockItems": filterData
             })
-            console.log("jsonBody", jsonBody)
+
             dispatch(saveStockEntryAction({ jsonBody, btnId }));
         }
         catch (e) { _cfunc.btnIsDissablefunc({ btnId, state: false }) }

@@ -1,25 +1,29 @@
-import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { loginSelectedPartyID } from "../../../components/Common/CommonFunction";
 import { getBatchCode_By_ItemID_api } from "../../../helpers/backend_helper";
 
 export function stockQtyUnit_SelectOnchange(event, index1) {
+    
+    try {
+        index1.default_UnitDropvalue = event;
+        let totalQuantity = 0;
 
-    index1.default_UnitDropvalue = event;
-    let totalQuantity = 0;
+        index1.StockDetails.forEach(index2 => {
+            
+            const _hasActualQuantity = Number(index2.BaseUnitQuantity / event.BaseUnitQuantity);
+            const _hasQuantity = Number(index2.Qty / event.BaseUnitQuantity);
+            totalQuantity += _hasQuantity;
 
-    index1.StockDetails.forEach(index2 => {
+            document.getElementById(`ActualQuantity-${index1.id}-${index2.id}`).innerText = _hasActualQuantity.toFixed(2);
+            document.getElementById(`batchQty${index1.id}-${index2.id}`).value = _hasQuantity.toFixed(2);
+            document.getElementById(`OrderQty-${index1.id}`).value = totalQuantity.toFixed(2);
+        })
 
-        const _hasActualQuantity = Number(index2.BaseUnitQuantity / event.BaseUnitQuantity);
-        const _hasQuantity = Number(index2.Qty / event.BaseUnitQuantity);
-        totalQuantity += _hasQuantity;
+    } catch (error) {
+        console.error("An error occurred when Stock Unit change:", error);
+    }
+}
 
-        document.getElementById(`ActualQuantity-${index1.id}-${index2.id}`).innerText = _hasActualQuantity.toFixed(2)
-        document.getElementById(`batchQty${index1.id}-${index2.id}`).value = _hasQuantity.toFixed(2)
-        document.getElementById(`OrderQty-${index1.id}`).value = totalQuantity.toFixed(2)
-    })
-};
-
-const getItemDefaultUnitOption = (unitOptions) => {
+export const getItemDefaultUnitOption = (unitOptions) => {
     return unitOptions.find(option => option.UnitName.includes("No"));
 };
 
@@ -32,7 +36,7 @@ const createStockDetail = (item) => ({
 const createBatchCodeDetail = (item) => ({
     id: item.id,
     value: item.id,
-    label: `${item.BatchCode} (${item.SystemBatchCode}) MRP:${item.MRP} Qty:${item.OriginalBaseUnitQuantity}`,
+    label: `${item.BatchCode} (${item.SystemBatchCode}) MRP:${item.MRP} Qty:${item.BaseUnitQuantity}`,
     Qty: item.BaseUnitQuantity,
     ...item, // Spread the rest of the properties
 });
