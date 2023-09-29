@@ -463,6 +463,9 @@ export const CLAIM_LIST_FOR_TRACKING = "/ClaimListfortracking"
 export const CLAIM_TRACKING = "/ClaimTracking"
 export const CLAIM_TRACKING_LIST = "/ClaimTrackingList"
 
+//CreditDebitDataExport
+export const CREDIT_DEBIT_DATA_EXPORT = "/CreditDebitDataExport"
+
 
 
 

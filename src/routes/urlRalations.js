@@ -262,3 +262,8 @@ export const SapLedger = url.SAP_LEDGER;
 export const StockReport = url.STOCK_REPORT;
 
 export const Stock_Report_1 = url.STOCK_REPORT_1;
+
+export const DebitDataExport = url.DEBIT_DATA_EXPORT
+
+export const CreditDataExport = url.CREDIT_DATA_EXPORT
+

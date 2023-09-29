@@ -286,5 +286,11 @@ export const STOCK_REPORT = 208
 
 export const STOCK_REPORT_1 = 216
 
+export const DEBIT_DATA_EXPORT = 243
+
+export const CREDIT_DATA_EXPORT = 244
+
+
+
 
 
