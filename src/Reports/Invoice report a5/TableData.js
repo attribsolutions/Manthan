@@ -498,10 +498,10 @@ export const BankRow = (data, doc) => {
     } else {
 
         var reportArray = [
-            [],
-            [, `Bank details not provided. Please update Bank details`]
+            // [],
+            // [, `Bank details not provided. Please update Bank details`]
         ]
-        doc.line(340, 345, 30, 345);//horizontal line  (4)
+        // doc.line(340, 345, 30, 345);//horizontal line  (4)
 
 
     }
