@@ -36,7 +36,7 @@ export const pageHeder = (doc, data) => {
 
 export const reportHeder1 = (doc, data) => {
 
-    
+
     let Y1 = 0
     if (data.isQR) {
         Y1 = 115;
@@ -474,118 +474,120 @@ export const reportFooter = (doc, data) => {
         doc.text(` ${numberWithCommas(Number(data.TCSAmount).toFixed(2))}`, 567, 798, 'right')
 
 
-        let DetailsOfRupeesStyle = {
 
-            didDrawCell: (data1) => {
-                const rowIdx = data1.row.index;
-                const colIdx = data1.column.index;
-                if (rowIdx === 0 && colIdx === 0) {
-                    let x = data1.cursor.x + 2
-                    let y = data1.cursor.y + 8
-                    doc.setFontSize(8)
-                    doc.setFont(undefined, 'bold')
-                    doc.text('Rupees: ', x, y)
-                }
-            },
-
-            margin: {
-                top: 0, left: 30,
-            },
-            showHead: 'always',
-            theme: 'grid',
-            styles: {
-                overflow: 'linebreak',
-                fontSize: 8,
-                height: 0,
-            },
-            bodyStyles: {
-                columnWidth: 'wrap',
-                textColor: "black",
-                cellPadding: 1,
-                fontSize: 8,
-                lineColor: "black"
-            },
-            columnStyles: {
-                0: {
-                    valign: "top",
-                    columnWidth: 310,
-                    halign: 'lfet',
-                }
-
-            },
-            tableLineColor: "black",
-            startY: 730,
-
-        };
-
-        doc.autoTable(table.Ruppescolumn, table.RupeesRow(data), DetailsOfRupeesStyle,);
-
-        var DetailsOfBankStyle = {
-            didParseCell: (data1) => {
-                if (data.BankData.length > 0) {
-                    let BankData = data.BankData[0]
-                    if (data1.row.cells[0].raw === `Bank Name :${BankData.BankName}`) {
-                        data1.row.cells[0].colSpan = 3
-                    }
-                }
-            },
-
-
-            margin: {
-                top: 0, left: 30, right: 35,
-            },
-            showHead: 'always',
-            theme: 'grid',
-            headerStyles: { cellPadding: 1, },
-            styles: {
-                overflow: 'linebreak',
-                fontSize: 7,
-                height: 0,
-            },
-            bodyStyles: {
-                columnWidth: 'wrap',
-                textColor: [30, 30, 30],
-                cellPadding: 1,
-                fontSize: 7,
-                lineColor: [0, 0, 0]
-            },
-            columnStyles: {
-                0: {
-                    valign: "top",
-                    columnWidth: (data.BankData.length > 0) ? 90 : 30,
-                    halign: 'lfet',
-                },
-                1: {
-                    valign: "top",
-                    columnWidth: (data.BankData.length > 0) ? 90 : 300,
-                    halign: 'lfet',
-                },
-                2: {
-                    valign: "top",
-                    columnWidth: 130,
-                    halign: 'lfet',
-                },
-
-            },
-            tableLineColor: "black",
-
-            startY: doc.previousAutoTable.finalY,
-
-        };
-
-        doc.autoTable(table.Bankcolumn, table.BankRow(data), DetailsOfBankStyle,);
-
-        doc.setFontSize(9)
-        doc.setFont(undefined, 'Normal')
-
-        doc.text(`I/we hearby certify that food/foods mentioned in this invoice is/are warranted to be
-     of the nature and quantity which it/these purports to be `, 34, doc.previousAutoTable.finalY + (9),)
-        doc.line(340, doc.previousAutoTable.finalY + (24), 30, doc.previousAutoTable.finalY + (24)); //horizontal line (1)
-
-        doc.text(`Signature `, 280, 810,)
-        doc.text(`Prepared by :${data.PartyName} `, 35, 810,)
 
     }
+
+    let DetailsOfRupeesStyle = {
+
+        didDrawCell: (data1) => {
+            const rowIdx = data1.row.index;
+            const colIdx = data1.column.index;
+            if (rowIdx === 0 && colIdx === 0) {
+                let x = data1.cursor.x + 2
+                let y = data1.cursor.y + 8
+                doc.setFontSize(8)
+                doc.setFont(undefined, 'bold')
+                doc.text('Rupees: ', x, y)
+            }
+        },
+
+        margin: {
+            top: 0, left: 30,
+        },
+        showHead: 'always',
+        theme: 'grid',
+        styles: {
+            overflow: 'linebreak',
+            fontSize: 8,
+            height: 0,
+        },
+        bodyStyles: {
+            columnWidth: 'wrap',
+            textColor: "black",
+            cellPadding: 1,
+            fontSize: 8,
+            lineColor: "black"
+        },
+        columnStyles: {
+            0: {
+                valign: "top",
+                columnWidth: 310,
+                halign: 'lfet',
+            }
+
+        },
+        tableLineColor: "black",
+        startY: 730,
+
+    };
+
+    doc.autoTable(table.Ruppescolumn, table.RupeesRow(data), DetailsOfRupeesStyle,);
+
+    var DetailsOfBankStyle = {
+        didParseCell: (data1) => {
+            if (data.BankData.length > 0) {
+                let BankData = data.BankData[0]
+                if (data1.row.cells[0].raw === `Bank Name :${BankData.BankName}`) {
+                    data1.row.cells[0].colSpan = 3
+                }
+            }
+        },
+
+
+        margin: {
+            top: 0, left: 30, right: 35,
+        },
+        showHead: 'always',
+        theme: 'grid',
+        headerStyles: { cellPadding: 1, },
+        styles: {
+            overflow: 'linebreak',
+            fontSize: 7,
+            height: 0,
+        },
+        bodyStyles: {
+            columnWidth: 'wrap',
+            textColor: [30, 30, 30],
+            cellPadding: 1,
+            fontSize: 7,
+            lineColor: [0, 0, 0]
+        },
+        columnStyles: {
+            0: {
+                valign: "top",
+                columnWidth: (data.BankData.length > 0) ? 90 : 30,
+                halign: 'lfet',
+            },
+            1: {
+                valign: "top",
+                columnWidth: (data.BankData.length > 0) ? 90 : 300,
+                halign: 'lfet',
+            },
+            2: {
+                valign: "top",
+                columnWidth: 130,
+                halign: 'lfet',
+            },
+
+        },
+        tableLineColor: "black",
+
+        startY: doc.previousAutoTable.finalY,
+
+    };
+
+    doc.autoTable(table.Bankcolumn, table.BankRow(data), DetailsOfBankStyle,);
+
+    doc.setFontSize(9)
+    doc.setFont(undefined, 'Normal')
+
+    doc.text(`I/we hearby certify that food/foods mentioned in this invoice is/are warranted to be
+ of the nature and quantity which it/these purports to be `, 34, doc.previousAutoTable.finalY + (9),)
+    doc.line(340, doc.previousAutoTable.finalY + (24), 30, doc.previousAutoTable.finalY + (24)); //horizontal line (1)
+
+    doc.text(`Signature `, 280, 810,)
+    doc.text(`Prepared by :${data.PartyName} `, 35, 810,)
 
 
     doc.setFont(undefined, 'Normal')
