@@ -429,7 +429,8 @@ const StockAdjustment = (props) => {
                 "CreatedBy": _cfunc.loginUserID(),
                 "Date": currentDate_ymd,
                 "Mode": subPageMode === url.STOCK_ADJUSTMENT ? 2 : 3,
-                "StockItems": flatStockTableArr
+                "StockItems": flatStockTableArr,
+                "IsStockAdjustment":1 //if stock  
             })
             console.log(flatStockTableArr);
 

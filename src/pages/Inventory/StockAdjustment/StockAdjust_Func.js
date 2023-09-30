@@ -32,6 +32,10 @@ export function stockQtyUnit_SelectOnchange(event, index1) {
 
 
 
+export const getItemDefaultUnitOption = (unitOptions) => {
+    return unitOptions.find(option => option.UnitName.includes("No"));
+};
+
 const createStockDetail = (item) => ({
     id: item.id,
     ActualQuantity: roundToDecimalPlaces(item.BaseUnitQuantity, 3),
@@ -78,33 +82,55 @@ export const AddItemInTableFunc = async ({ itemNameSelect, TableArr }) => {
             type: 3,
         };
     }
+    const respData = resp.Data;
+    const zeroIndexObject = resp.Data[0];
 
-    const totalOriginalBaseUnitQuantity = resp.Data.reduce(
+    const hasBaseUnit = zeroIndexObject.UnitOptions.find(i => i.IsBase === true);
+    debugger
+    if (hasBaseUnit === undefined) {
+        return {
+            TableArr,
+            data: [],
+            message: "base Unit Not find",
+            type: 3,
+        };
+    }
+    //************************************************************//
+    zeroIndexObject.UnitID = hasBaseUnit.Unit
+    zeroIndexObject.UnitName = hasBaseUnit.UnitName;
+    zeroIndexObject.BaseUnitQuantity = hasBaseUnit.BaseUnitQuantity
+
+    //**************************************************************//
+
+    const totalOriginalBaseUnitQuantity = respData.reduce(
         (total, item) => total + parseFloat(item.BaseUnitQuantity),
         0
     );
 
-    const stockDetails = resp.Data
+    const stockDetails = respData
         .filter((item) => parseFloat(item.BaseUnitQuantity) > 0)
         .map(createStockDetail);
 
-    const batchCodeDetails = resp.Data
+    const batchCodeDetails = respData
         .filter((item) => parseFloat(item.BaseUnitQuantity) === 0)
         .map(createBatchCodeDetail);
 
+
     data.push({
-        id: resp.Data[0].id,
-        Item: resp.Data[0].Item,
-        ItemName: resp.Data[0].ItemName,
-        UnitID: resp.Data[0].UnitID,
-        
+        id: zeroIndexObject.id,
+        Item: zeroIndexObject.Item,
+
+        ItemName: zeroIndexObject.ItemName,
+        UnitID: zeroIndexObject.UnitID,
+        BaseUnitQuantity: zeroIndexObject.BaseUnitQuantity,
+
         defaultUnitSelect: {
-            value: resp.Data[0].UnitID,
-            label: resp.Data[0].UnitName,
-            BaseUnitQuantity: resp.Data[0].BaseUnitQuantity
+            value: zeroIndexObject.UnitID,
+            label: zeroIndexObject.UnitName,
+            BaseUnitQuantity: zeroIndexObject.BaseUnitQuantity
         },
 
-        unitDetailsOptions: resp.Data[0].UnitOptions.map((i) => ({
+        unitDetailsOptions: zeroIndexObject.UnitOptions.map((i) => ({
             value: i.Unit,
             label: i.UnitName,
             BaseUnitQuantity: i.BaseUnitQuantity,

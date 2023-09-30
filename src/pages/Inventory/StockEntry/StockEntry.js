@@ -498,7 +498,8 @@ const StockEntry = (props) => {
                     "CreatedBy": _cfunc.loginUserID(),
                     "Date": values.Date,
                     "Mode": 1,
-                    "StockItems": filterData
+                    "StockItems": filterData,
+                    "IsStockAdjustment": 0 //if stock  
                 }
                 );
                 dispatch(saveStockEntryAction({ jsonBody, btnId }));
