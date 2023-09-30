@@ -1,4 +1,4 @@
-import React, { useEffect, useState, } from "react";
+import React, { useEffect, useLayoutEffect, useState, } from "react";
 import {
     Col,
     FormGroup,
@@ -269,9 +269,10 @@ const Invoice = (props) => {
         }
     }, [gobutton_Add]);
 
-    useEffect(() => {
+    useLayoutEffect(() => {
 
-        if (editData.Status === true && editData.StatusCode === 200) {
+        if (((editData.Status === true) && (editData.StatusCode === 200))) {
+
             setState((i) => {
                 const obj = { ...i }
                 obj.values.Customer = editData.customer;
@@ -279,6 +280,7 @@ const Invoice = (props) => {
 
                 obj.values.InvoiceDate = editData.Data.InvoiceDate;
                 obj.hasValid.InvoiceDate.valid = true;
+
                 return obj
             })
             setPageMode(editData.pageMode)
@@ -292,6 +294,22 @@ const Invoice = (props) => {
             dispatch(editInvoiceActionSuccess({ Status: false }))
         }
     }, [editData]);
+
+    useLayoutEffect(() => {
+
+        if ((VehicleNumber.length > 0) && editInvoiceData !== '' && pageMode == mode.edit) {
+            const foundVehicle = VehicleNumber.find(i => editInvoiceData.Data.Vehicle === i.id);
+
+            setState((i) => {
+                const obj = { ...i }
+                if (foundVehicle !== undefined) {
+                    obj.values.VehicleNo = { value: foundVehicle.id, label: foundVehicle.VehicleNumber };
+                    obj.hasValid.VehicleNo.valid = true;
+                }
+                return obj
+            })
+        }
+    }, [VehicleNumber, editInvoiceData, pageMode]);
 
     useEffect(() => {
 
