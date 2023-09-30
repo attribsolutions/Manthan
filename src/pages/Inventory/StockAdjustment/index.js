@@ -125,44 +125,6 @@ const StockAdjustment = (props) => {
         itemCheck: index.selectCheck
     })).filter((index) => index.itemCheck === true);
 
-    function QuantityOnchange(event, index1, index2) {
-
-        const InputQty = event.target.value;
-        index2.Qty = InputQty
-
-        const totalOriginalBaseUnitQuantity = index1.StockDetails.reduce(
-            (total, stockDetail) =>
-                total + Number(stockDetail.Qty) || 0,
-            0
-        );
-        try {
-            document.getElementById(`OrderQty-${index1.id}`).value = totalOriginalBaseUnitQuantity
-        } catch (e) { _cfunc.CommonConsole('inner-Stock-Caculation', e) };
-
-    }
-
-    function BatchCode_Add_Handler(event, index1, tableList, setTableList) {
-        
-        let isfound = index1.StockDetails.find(i => i.id === index1.BatchCode.id);
-
-        if (!(isfound === undefined)) {
-            return customAlert({ Type: 3, Message: "This BatchCode Already Exist" })
-        }
-
-        const itemIndex = tableList.indexOf(index1);
-
-        if (itemIndex !== -1) {
-
-            tableList[itemIndex].StockDetails.push(index1.BatchCode);
-
-            setTableList([...tableList]);
-            QuantityOnchange(event, index1, tableList,)
-            // stockQtyUnit_SelectOnchange(index1.defaultUnitOption, index1, tableList, setTableList)
-        } else {
-            console.error("Item not found in tableList.");
-        }
-    }
-
     const deleteHandeler = (id, tableList) => {
         let filterData = tableList.filter((i) => {
             return (i.Item !== id)
@@ -199,8 +161,56 @@ const StockAdjustment = (props) => {
     };
 
     function BatchCodeHandler(event, index1, tableList) {
-        
-        index1["BatchCode"] = event
+        index1["BatchCodeSelect"] = event
+    }
+
+    function QuantityOnchange(event, index1, index2) {
+
+        const InputQty = event.target.value;
+        index2.Qty = InputQty
+
+        const totalOriginalBaseUnitQuantity = index1.StockDetails.reduce(
+            (total, stockDetail) =>
+                total + Number(stockDetail.Qty) || 0,
+            0
+        );
+        try {
+            document.getElementById(`OrderQty-${index1.id}`).value = totalOriginalBaseUnitQuantity
+        } catch (e) { _cfunc.CommonConsole('inner-Stock-Caculation', e) };
+
+    }
+
+    function BatchCode_Add_Handler(event, index1, tableList, setTableList) {
+
+        let isfound = index1.StockDetails.find(i => i.id === index1.BatchCodeSelect?.id);
+
+        if (!(isfound === undefined)) {
+            return customAlert({ Type: 3, Message: "This BatchCode Already Exist" })
+        }
+
+        const itemIndex = tableList.indexOf(index1);
+
+        if (itemIndex !== -1) {
+
+            const bachcodeUnit = index1.BatchCodeSelect;
+            const isDifferntUnit = bachcodeUnit?.UnitID !== index1.UnitID;
+
+            if (isDifferntUnit) {
+
+                const _hasActualQuantity = _cfunc.roundToDecimalPlaces((index1.BaseUnitQuantity / bachcodeUnit.BaseUnitQuantity), 3);
+
+                index1.BatchCodeSelect.ActualQuantity = _hasActualQuantity
+                index1.BatchCodeSelect.Qty = _hasActualQuantity
+
+            }
+
+            tableList[itemIndex].StockDetails.push(index1.BatchCodeSelect);
+
+            setTableList([...tableList]);
+            QuantityOnchange(event, index1, tableList,)
+        } else {
+            console.error("Item not found in tableList.");
+        }
     }
 
     const pagesListColumns = [
@@ -215,7 +225,6 @@ const StockAdjustment = (props) => {
             dataField: "",
             formatExtraData: { tableList: TableArr, setTableList: setTableArr },
             formatter: (cellContent, index1, key, { tableList = [], setTableList }) => {
-
                 return (<>
                     <div>
                         <CInput
@@ -234,10 +243,10 @@ const StockAdjustment = (props) => {
                         <div >
                             <C_Select
                                 classNamePrefix="select2-selection"
-                                defaultValue={index1.defaultUnitOption}
-                                options={index1.UnitDetails}
+                                defaultValue={index1.defaultUnitSelect}
+                                options={index1.unitDetailsOptions}
                                 onChange={(event) => {
-                                    index1.defaultUnitOption = event
+
                                     stockQtyUnit_SelectOnchange(event, index1, tableList);
                                 }}
                             />
@@ -253,10 +262,21 @@ const StockAdjustment = (props) => {
                                     id={`BatchCode-${index1.id}`}
                                     key={`BatchCode-${index1.id}`}
                                     classNamePrefix="select2-selection"
-                                    options={index1.BatchCodeDetails}
+                                    options={index1.BatchCodeDetailsOptions}
                                     onChange={(event) => {
                                         BatchCodeHandler(event, index1, tableList)
 
+                                    }}
+                                    // styles={{
+                                    //     menu: provided => ({ ...provided, zIndex: 2 })
+                                    // }}
+                                    styles={{
+                                        menu: (provided) => ({
+                                            ...provided,
+                                            // zIndex: 10,
+                                            // maxHeight: "100px", // Set a fixed height for the dropdown
+                                            overflowY: "auto", // Add a scrollbar if the content exceeds the height
+                                        }),
                                     }}
                                 />
                             </Col>
@@ -295,7 +315,7 @@ const StockAdjustment = (props) => {
                                 <tr key={index1.id}>
                                     <td data-label="BatchCode">{index2.SystemBatchCode}</td>
                                     <td data-label="Stock Quantity" style={{ textAlign: "right" }} >
-                                        <samp id={`ActualQuantity-${index1.id}-${index2.id}`}>{index2.BaseUnitQuantity}</samp>
+                                        <samp id={`ActualQuantity-${index1.id}-${index2.id}`}>{index2.ActualQuantity}</samp>
                                     </td>
                                     <td data-label='Quantity'>
                                         <Input
@@ -307,7 +327,7 @@ const StockAdjustment = (props) => {
                                             id={`batchQty${index1.id}-${index2.id}`}
                                             defaultValue={index2.Qty}
                                             onChange={(event) => {
-                                                QuantityOnchange(event, index1, index2);
+                                                QuantityOnchange(event, index1, index2, tableList);
                                             }}
                                         />
                                     </td>
@@ -352,40 +372,55 @@ const StockAdjustment = (props) => {
 
         event.preventDefault();
 
-        const btnId = event.target.id
+        const flatStockTableArr = TableArr.reduce((accumulator, index1) => {
 
-        const ReturnItems = TableArr.map((tableItem) => {
+            index1.StockDetails.forEach((index2) => {
 
-            const stockDetails = tableItem.StockDetails;
+                index2.Qty = Number(_cfunc.roundToDecimalPlaces(index2.Qty, 3));
+                index2.ActualQuantity = Number(_cfunc.roundToDecimalPlaces(index2.ActualQuantity, 3));
 
-            const formattedStockDetails = stockDetails.map((index) => ({
-                "Item": index.Item,
-                "Quantity": index.Qty,
-                "MRP": index.MRPID,
-                "Unit": tableItem.defaultUnitOption.value,
-                "GST": index.GSTID,
-                "MRPValue": index.MRP,
-                "GSTPercentage": index.GSTPercentage,
-                "BatchDate": index.BatchDate,
-                "BatchCode": index.BatchCode,
-                "BatchCodeID": index.id
-            }));
+                const hasChange = index2.Qty !== index2.ActualQuantity;
 
-            // Filter the formatted stock details to include only items with Quantity > 0
-            const filteredStockDetails = formattedStockDetails.filter((item) => item.Quantity > 0);
+                function changebodyFunc() {
+                    accumulator.push({
+                        "Item": index2.Item,
+                        "Quantity": index2.Qty,
+                        "MRP": index2.MRPID,
+                        "Unit": index1.UnitID,
+                        "GST": index2.GSTID,
+                        "MRPValue": index2.MRP,
+                        "GSTPercentage": index2.GSTPercentage,
+                        "BatchDate": index2.BatchDate,
+                        "BatchCode": index2.BatchCode,
+                        "BatchCodeID": index2.id
+                    })
+                };
+                
+                if (hasChange) {
+                    if (index2.Qty > 0) {
+                        changebodyFunc()
+                    }
+                    else if (((index2.ActualQuantity > 0) && (index2.Qty === 0))) {
+                        changebodyFunc()
+                    } else if (((index2.ActualQuantity === 0) && (index2.Qty > 0))) {
+                        changebodyFunc()
+                    };
+                };
 
-            return filteredStockDetails;
-        });
 
-        // Return an array of filtered stock details
-        const filterData = ReturnItems.flat(); // Use flat to flatten the array of arrays
+            });
 
-        if (filterData.length === 0) {
+            return accumulator
+
+        }, [])
+
+
+        if (flatStockTableArr.length === 0) {
             customAlert({
                 Type: 4,
-                Message: " Please Enter One Item Quantity"
+                Message: "Please Enter One Changed Stock Quantity"
             })
-            return _cfunc.btnIsDissablefunc({ btnId, state: false })
+            return
         }
 
         try {
@@ -394,12 +429,13 @@ const StockAdjustment = (props) => {
                 "CreatedBy": _cfunc.loginUserID(),
                 "Date": currentDate_ymd,
                 "Mode": subPageMode === url.STOCK_ADJUSTMENT ? 2 : 3,
-                "StockItems": filterData
+                "StockItems": flatStockTableArr
             })
+            console.log(flatStockTableArr);
 
-            dispatch(saveStockEntryAction({ jsonBody, btnId }));
+            dispatch(saveStockEntryAction({ jsonBody }));
         }
-        catch (e) { _cfunc.btnIsDissablefunc({ btnId, state: false }) }
+        catch (w) { }
     };
 
     if (!(userPageAccessState === '')) {

@@ -1,35 +1,41 @@
-import { loginSelectedPartyID } from "../../../components/Common/CommonFunction";
+import { loginSelectedPartyID, roundToDecimalPlaces } from "../../../components/Common/CommonFunction";
 import { getBatchCode_By_ItemID_api } from "../../../helpers/backend_helper";
 
+
+
 export function stockQtyUnit_SelectOnchange(event, index1) {
-    
+
     try {
-        index1.default_UnitDropvalue = event;
+        index1.defaultUnitSelect = event
+        index1.UnitID = event.value
+
         let totalQuantity = 0;
 
         index1.StockDetails.forEach(index2 => {
-            
-            const _hasActualQuantity = Number(index2.BaseUnitQuantity / event.BaseUnitQuantity);
-            const _hasQuantity = Number(index2.Qty / event.BaseUnitQuantity);
-            totalQuantity += _hasQuantity;
 
-            document.getElementById(`ActualQuantity-${index1.id}-${index2.id}`).innerText = _hasActualQuantity.toFixed(2);
-            document.getElementById(`batchQty${index1.id}-${index2.id}`).value = _hasQuantity.toFixed(2);
-            document.getElementById(`OrderQty-${index1.id}`).value = totalQuantity.toFixed(2);
+            const _hasActualQuantity = Number(index2.BaseUnitQuantity / event.BaseUnitQuantity);
+            totalQuantity += _hasActualQuantity;
+
+            index2.ActualQuantity = roundToDecimalPlaces(_hasActualQuantity, 3);//max 3 decimal 
+            index2.Qty = index2.ActualQuantity
+
+
+            document.getElementById(`ActualQuantity-${index1.id}-${index2.id}`).innerText = index2.ActualQuantity
+            document.getElementById(`batchQty${index1.id}-${index2.id}`).value = index2.Qty;
         })
+        document.getElementById(`OrderQty-${index1.id}`).value = roundToDecimalPlaces(totalQuantity, 3);//max 3 decimal 
 
     } catch (error) {
         console.error("An error occurred when Stock Unit change:", error);
     }
 }
 
-export const getItemDefaultUnitOption = (unitOptions) => {
-    return unitOptions.find(option => option.UnitName.includes("No"));
-};
+
 
 const createStockDetail = (item) => ({
     id: item.id,
-    Qty: item.BaseUnitQuantity,
+    ActualQuantity: roundToDecimalPlaces(item.BaseUnitQuantity, 3),
+    Qty: roundToDecimalPlaces(item.BaseUnitQuantity, 3),
     ...item, // Spread the rest of the properties
 });
 
@@ -37,12 +43,17 @@ const createBatchCodeDetail = (item) => ({
     id: item.id,
     value: item.id,
     label: `${item.BatchCode} (${item.SystemBatchCode}) MRP:${item.MRP} Qty:${item.BaseUnitQuantity}`,
+    ActualQuantity: item.BaseUnitQuantity,
     Qty: item.BaseUnitQuantity,
     ...item, // Spread the rest of the properties
 });
 
-export const AddItemInTableFunc = async ({ itemNameSelect, TableArr }) => {
 
+
+
+
+export const AddItemInTableFunc = async ({ itemNameSelect, TableArr }) => {
+    debugger
     let isfound = TableArr.find(i => i.Item === itemNameSelect.value);
     if (!itemNameSelect) {
         return { TableArr, data: [], message: "Please Select ItemName", type: 4 };
@@ -68,7 +79,6 @@ export const AddItemInTableFunc = async ({ itemNameSelect, TableArr }) => {
         };
     }
 
-    const defaultUnitOption = getItemDefaultUnitOption(resp.Data[0].UnitOptions);
     const totalOriginalBaseUnitQuantity = resp.Data.reduce(
         (total, item) => total + parseFloat(item.BaseUnitQuantity),
         0
@@ -86,19 +96,23 @@ export const AddItemInTableFunc = async ({ itemNameSelect, TableArr }) => {
         id: resp.Data[0].id,
         Item: resp.Data[0].Item,
         ItemName: resp.Data[0].ItemName,
-        defaultUnitOption: {
-            value: defaultUnitOption.Unit,
-            label: defaultUnitOption.UnitName,
-            BaseUnitQuantity: defaultUnitOption.BaseUnitQuantity,
+        UnitID: resp.Data[0].UnitID,
+        
+        defaultUnitSelect: {
+            value: resp.Data[0].UnitID,
+            label: resp.Data[0].UnitName,
+            BaseUnitQuantity: resp.Data[0].BaseUnitQuantity
         },
-        UnitDetails: resp.Data[0].UnitOptions.map((i) => ({
+
+        unitDetailsOptions: resp.Data[0].UnitOptions.map((i) => ({
             value: i.Unit,
             label: i.UnitName,
             BaseUnitQuantity: i.BaseUnitQuantity,
         })),
+
         Quantity: totalOriginalBaseUnitQuantity,
         StockDetails: stockDetails,
-        BatchCodeDetails: batchCodeDetails,
+        BatchCodeDetailsOptions: batchCodeDetails,
     });
 
     return { TableArr: data, message: "", type: 0 };
