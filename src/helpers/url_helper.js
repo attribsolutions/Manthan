@@ -466,6 +466,9 @@ export const CLAIM_TRACKING_LIST = "/ClaimTrackingList"
 //CreditDebitDataExport
 export const CREDIT_DEBIT_DATA_EXPORT = "/CreditDebitDataExport"
 
+//ReceiptDataExport
+export const RECEIPT_DEBIT_DATA_EXPORT = "/ReceiptDataExport"
+
 
 
 

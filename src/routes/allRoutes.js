@@ -486,6 +486,8 @@ const userRoutes = [
   { path: path.CREDIT_DATA_EXPORT, component: CreditDebitDataExport },
 
   { path: path.DEBIT_DATA_EXPORT, component: CreditDebitDataExport },
+
+  { path: path.RECEIPT_DATA_EXPORT, component: CreditDebitDataExport },
   // ************************************ Utility **************************************//
 
   { path: path.SEARCH_BOX2, component: SearchBoxSecond },

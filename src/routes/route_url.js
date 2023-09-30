@@ -308,6 +308,7 @@ export const DEBIT_DATA_EXPORT = "/DebitDataExport"
 
 export const CREDIT_DATA_EXPORT = "/CreditDataExport"
 
+export const RECEIPT_DATA_EXPORT = "/ReceiptDataExport"
 
 
 
