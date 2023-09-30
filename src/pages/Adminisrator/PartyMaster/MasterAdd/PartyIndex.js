@@ -220,8 +220,8 @@ const PartyMaster = (props) => {
                             IBChallanPrefix: prefix.IBChallanprefix,
                             IBInwardPrefix: prefix.IBInwardprefix,
                             PurchaseReturnprefix: prefix.PurchaseReturnprefix,
-                            CreditPrefix: prefix.CreditPrefix,
-                            DebitPrefix: prefix.DebitPrefix
+                            CreditPrefix: prefix.Creditprefix,
+                            DebitPrefix: prefix.Debitprefix
                         };
 
                         let editPriceList = (hasEditVal.PriceList) ? {
