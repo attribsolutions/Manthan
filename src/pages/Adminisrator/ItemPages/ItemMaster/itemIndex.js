@@ -58,6 +58,8 @@ import { customAlert } from "../../../../CustomAlert/ConfirmDialog";
 import { SaveButton } from "../../../../components/Common/CommonButton";
 import WeightageTab from "./Weightage_Tab";
 import { C_Select } from "../../../../CustomValidateForm";
+import { showToastAlert } from "../../../../helpers/axios_Config";
+import { mobailApp_ProductAdd_Api, mobailApp_ProductUpdate_Api } from "../../../../helpers/backend_helper";
 
 export const unitConversionInitial = {
     id: 1,
@@ -280,7 +282,7 @@ const ItemsMaster = (props) => {
                 // })
                 // setImageTabTable(ItemImagesDetails)
 
-                
+
                 let ItemShelfLife = hasEditVal.ItemShelfLife.map((index) => {
 
                     return index.Days
@@ -352,9 +354,14 @@ const ItemsMaster = (props) => {
 
     useEffect(async () => {
 
-         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
+        if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(SaveItemMasterActionSuccess({ Status: false }))
-           
+
+            // //***************mobail app api*********************** */
+            // const mobilApiResp = await mobailApp_ProductAdd_Api(postMsg.TransactionID)
+            // if (mobilApiResp.StatusCode == 200) showToastAlert(mobilApiResp.Message);
+            // //************************************** */
+
             if (pageMode === mode.dropdownAdd) {
                 customAlert({
                     Type: 1,
@@ -385,6 +392,12 @@ const ItemsMaster = (props) => {
 
     useEffect(() => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
+
+            // //***************mobail app api*********************** */
+            // const mobilApiResp = await mobailApp_ProductUpdate_Api(updateMsg.TransactionID)
+            // if (mobilApiResp.StatusCode == 200) showToastAlert(mobilApiResp.Message);
+            // //************************************** */
+
             history.push({
                 pathname: url.ITEM_lIST,
             })

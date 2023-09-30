@@ -15,6 +15,8 @@ import { commonPageFieldList, commonPageFieldListSuccess, } from "../../../store
 import { ITEM } from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import { PageLoadingSpinner, Listloader } from "../../../components/Common/CommonButton";
+import { mobailApp_ProductDelete_Api } from "../../../helpers/backend_helper";
+import { showToastAlert } from "../../../helpers/axios_Config";
 
 const ItemsList = () => {
 
@@ -51,7 +53,15 @@ const ItemsList = () => {
       dispatch(getItemListSuccess([]));
     }
   }, []);
+  const mobaileDeleteApiFinc = async (deleteMsg) => {
 
+    // //***************mobail app api*********************** */
+    // const mobilApiResp = await mobailApp_ProductDelete_Api(deleteMsg.TransactionID)
+    // if (mobilApiResp.StatusCode == 200) showToastAlert(mobilApiResp.Message);
+    // //************************************** */
+
+    return // *note  return required 
+  }
 
   const { pageField, GoBtnlistloading } = reducers
 
@@ -65,6 +75,7 @@ const ItemsList = () => {
           reducers={reducers}
           MasterModal={ItemsMaster}
           masterPath={ITEM}
+          mobaileDeleteApiFinc={mobaileDeleteApiFinc}
           ButtonMsgLable={"Item"}
           deleteName={"Name"}
         />
