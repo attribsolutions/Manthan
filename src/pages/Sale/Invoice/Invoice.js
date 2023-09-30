@@ -55,6 +55,7 @@ import { getVehicleList, getVehicleListSuccess } from "../../../store/Administra
 import { Invoice_Singel_Get_for_Report_Api } from "../../../helpers/backend_helper";
 import * as report from '../../../Reports/ReportIndex'
 import CustomTable from "../../../CustomTable2";
+import NewCommonPartyDropdown from "../../../components/Common/NewCommonPartyDropdown";
 
 const Invoice = (props) => {
 
@@ -202,6 +203,7 @@ const Invoice = (props) => {
             }
         } else if (postMsg.Status === true) {
             // Show error alert message with the JSON stringified postMsg.Message
+            dispatch(invoiceSaveActionSuccess({ Status: false })); // Reset the status to false
             customAlert({
                 Type: 4,
                 Message: JSON.stringify(postMsg.Message),
@@ -649,7 +651,7 @@ const Invoice = (props) => {
     };
 
     const SaveHandler = async (event) => {
-        
+
         event.preventDefault();
         const btnId = event.target.id
         const saveAndDownloadPdfMode = btnId.substring(0, 21) === "SaveAndDownloadPdfBtn";
@@ -812,7 +814,7 @@ const Invoice = (props) => {
                 <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
 
                 <div className="page-content" >
-
+                    <NewCommonPartyDropdown pageMode={pageMode} />
                     <form noValidate>
                         <Col className="px-2 mb-1 c_card_filter header text-black" sm={12}>
 

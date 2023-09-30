@@ -23,11 +23,11 @@ const NewCommonPartyDropdown = ({ pageMode }) => {
     }));
 
     useEffect(() => {
-        setSelectedParty(commonPartyDropSelect);
         if (commonPartyDropSelect.value > 0) {
+            setSelectedParty(commonPartyDropSelect);
             setChangeButtonShow(true)
         }
-    }, []);
+    }, [commonPartyDropSelect]);
 
     const updateSelectedParty = () => {
         if (selectedParty.value === 0) {
