@@ -46,9 +46,8 @@ const CommonListPage = (props) => {
   const {
     getListbodyFunc = () => { },
     MasterModal,
-    ButtonMsgLable,
     masterPath,
-
+    mobaileDeleteApiFinc
   } = props;
 
   const { PageFieldMaster = [] } = { ...pageField };
@@ -89,7 +88,7 @@ const CommonListPage = (props) => {
     dispatch(CommonBreadcrumbDetails({ downBtnData: downList, defaultDownBtnData: listObj2 }))
   }, [tableList])
 
-  
+
   useEffect(async () => {// This UseEffect => UpadateModal Success/Unsucces  Show and Hide Control Alert_modal
 
     if (updateMsg.Status === true && updateMsg.StatusCode === 200) {
@@ -114,7 +113,13 @@ const CommonListPage = (props) => {
     if (deleteMsg.Status === true && deleteMsg.StatusCode === 200) {
       dispatch(deleteSucc({ Status: false }));
 
-      const promise = await customAlert({
+      //***************mobail app api*********************** */
+      if (mobaileDeleteApiFinc) {
+        await mobaileDeleteApiFinc(deleteMsg)
+      }
+      //************************************** */
+
+      await customAlert({
         Type: 1,
         Message: deleteMsg.Message,
       })
@@ -150,7 +155,7 @@ const CommonListPage = (props) => {
     }
   }, [postMsg])
 
-  
+
   useEffect(() => {// Edit Modal Show When Edit Data is true
     if (editData.Status === true) {
       if (pageField.IsEditPopuporComponent) {

@@ -108,6 +108,8 @@ function* InvoiceListGenFunc({ config }) {
 
     const newList = yield response.Data.map((i) => {
       i.forceDeleteHide = false;
+      i.forceEditHide = false;
+
       i["recordsAmountTotal"] = i.GrandTotal;  // Breadcrumb Count total
       i.GrandTotal = amountCommaSeparateFunc(i.GrandTotal);//  GrandTotal show with commas
       if (i.LoadingSheetCreated === true) {
@@ -128,8 +130,11 @@ function* InvoiceListGenFunc({ config }) {
         i.InvoiceUploads.map((index) => {
           if (!(index.EInvoicePdf === null) || !(index.EwayBillUrl === null)) {
             i.forceDeleteHide = true;
+            i.forceEditHide = true;
+
             if ((index.EInvoiceIsCancel) || (index.EwayBillIsCancel)) {
               i.forceDeleteHide = false;
+              i.forceEditHide = false;
             }
           }
         });
@@ -163,7 +168,7 @@ function* editInvoiceListGenFunc({ config }) {
 }
 //update Invoice 
 function* updateInvoiceGenFunc({ config }) {
-  
+
   try {
     const response = yield call(Invoice_1_Update_API, config);
     yield put(updateInvoiceActionSuccess(response))
@@ -198,7 +203,7 @@ function invoice_GoButton_dataConversion_Func(response, customer = '') {
   response.Data.OrderItemDetails = response.Data.OrderItemDetails.map(index1 => {
     const isUnitIDPresent = index1.UnitDetails.find(findEle => findEle.UnitID === index1.Unit);
     const isMCunitID = index1.UnitDetails.find(findEle => findEle.DeletedMCUnitsUnitID === index1.DeletedMCUnitsUnitID);
-    const defaultunit = isUnitIDPresent!==undefined ? isUnitIDPresent : isMCunitID;
+    const defaultunit = isUnitIDPresent !== undefined ? isUnitIDPresent : isMCunitID;
 
     const { IsTCSParty, ISCustomerPAN } = customer;
 
