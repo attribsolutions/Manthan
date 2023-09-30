@@ -98,7 +98,7 @@ export const AddItemInTableFunc = async ({ itemNameSelect, TableArr }) => {
     //************************************************************//
     zeroIndexObject.UnitID = hasBaseUnit.Unit
     zeroIndexObject.UnitName = hasBaseUnit.UnitName;
-    zeroIndexObject.BaseUnitQuantity = hasBaseUnit.BaseUnitQuantity
+    // zeroIndexObject.BaseUnitQuantity = hasBaseUnit.BaseUnitQuantity
 
     //**************************************************************//
 
