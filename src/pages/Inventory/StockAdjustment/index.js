@@ -107,7 +107,7 @@ const StockAdjustment = (props) => {
             customAlert({
                 Type: 1,
                 Message: postMsg.Message,
-                RedirectPath: url.STOCK_ENTRY,
+                // RedirectPath: url.STOCK_ENTRY,
             })
         }
         else if (postMsg.Status === true) {
@@ -325,6 +325,7 @@ const StockAdjustment = (props) => {
                                             className="right-aligned-placeholder"
                                             key={`batchQty${index1.id}-${index2.id}`}
                                             id={`batchQty${index1.id}-${index2.id}`}
+                                            autoComplete="off"
                                             defaultValue={index2.Qty}
                                             onChange={(event) => {
                                                 QuantityOnchange(event, index1, index2, tableList);
@@ -395,7 +396,7 @@ const StockAdjustment = (props) => {
                         "BatchCodeID": index2.id
                     })
                 };
-                
+
                 if (hasChange) {
                     if (index2.Qty > 0) {
                         changebodyFunc()
@@ -430,7 +431,7 @@ const StockAdjustment = (props) => {
                 "Date": currentDate_ymd,
                 "Mode": subPageMode === url.STOCK_ADJUSTMENT ? 2 : 3,
                 "StockItems": flatStockTableArr,
-                "IsStockAdjustment":1 //if stock  
+                "IsStockAdjustment": 1 //if stock  
             })
             console.log(flatStockTableArr);
 
