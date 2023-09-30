@@ -276,6 +276,9 @@ const Invoice = (props) => {
                 const obj = { ...i }
                 obj.values.Customer = editData.customer;
                 obj.hasValid.Customer.valid = true;
+
+                obj.values.InvoiceDate = editData.Data.InvoiceDate;
+                obj.hasValid.InvoiceDate.valid = true;
                 return obj
             })
             setPageMode(editData.pageMode)
@@ -760,16 +763,12 @@ const Invoice = (props) => {
             InvoiceDate: values.InvoiceDate,
             InvoiceItems: invoiceItems,
             InvoicesReferences: orderIDs.map(i => ({ Order: i })),
-
-            FullInvoiceNumber: editInvoiceData.Data?.FullInvoiceNumber,//only invoice edit use
-            InvoiceNumber: editInvoiceData.Data?.InvoiceNumber,//only invoice edit use
-
         });
 
         const forIB_Invoice_json = async () => ({   //**   Json Body Generate For IB_Invoice  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
             IBChallanDate: values.InvoiceDate,
             IBChallanItems: invoiceItems,
-            IBChallansReferences: await orderIDs.map(i => ({ Demand: i }))
+            IBChallansReferences: orderIDs.map(i => ({ Demand: i }))
         });
 
         const for_common_json = () => ({  //**  Json Body Generate Common for Both +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
