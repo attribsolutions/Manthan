@@ -271,14 +271,24 @@ const Invoice = (props) => {
 
     useEffect(() => {
 
-        if (editData.Status === true && editData.StatusCode === 200) {
+        if (((editData.Status === true) && (editData.StatusCode === 200) && VehicleNumber.length > 0)) {
+
+            const foundVehicle = VehicleNumber.find(i => editData.Data?.Vehicle === i.id);
+
             setState((i) => {
+                
                 const obj = { ...i }
                 obj.values.Customer = editData.customer;
                 obj.hasValid.Customer.valid = true;
 
                 obj.values.InvoiceDate = editData.Data.InvoiceDate;
                 obj.hasValid.InvoiceDate.valid = true;
+
+                if (foundVehicle !== undefined) {
+                    obj.values.VehicleNo = { value: foundVehicle.id, label: foundVehicle.VehicleNumber };
+                    obj.hasValid.VehicleNo.valid = true;
+                }
+
                 return obj
             })
             setPageMode(editData.pageMode)
@@ -291,7 +301,7 @@ const Invoice = (props) => {
             setOrderIDs(editData.Data.OrderIDs)
             dispatch(editInvoiceActionSuccess({ Status: false }))
         }
-    }, [editData]);
+    }, [editData, VehicleNumber]);
 
     useEffect(() => {
 
