@@ -1,4 +1,4 @@
-import React, { useEffect, useState, } from "react";
+import React, { useEffect, useLayoutEffect, useState, } from "react";
 import {
     Col,
     FormGroup,
@@ -269,25 +269,17 @@ const Invoice = (props) => {
         }
     }, [gobutton_Add]);
 
-    useEffect(() => {
+    useLayoutEffect(() => {
 
-        if (((editData.Status === true) && (editData.StatusCode === 200) && VehicleNumber.length > 0)) {
-
-            const foundVehicle = VehicleNumber.find(i => editData.Data?.Vehicle === i.id);
+        if (((editData.Status === true) && (editData.StatusCode === 200))) {
 
             setState((i) => {
-                
                 const obj = { ...i }
                 obj.values.Customer = editData.customer;
                 obj.hasValid.Customer.valid = true;
 
                 obj.values.InvoiceDate = editData.Data.InvoiceDate;
                 obj.hasValid.InvoiceDate.valid = true;
-
-                if (foundVehicle !== undefined) {
-                    obj.values.VehicleNo = { value: foundVehicle.id, label: foundVehicle.VehicleNumber };
-                    obj.hasValid.VehicleNo.valid = true;
-                }
 
                 return obj
             })
@@ -301,7 +293,23 @@ const Invoice = (props) => {
             setOrderIDs(editData.Data.OrderIDs)
             dispatch(editInvoiceActionSuccess({ Status: false }))
         }
-    }, [editData, VehicleNumber]);
+    }, [editData]);
+
+    useLayoutEffect(() => {
+
+        if ((VehicleNumber.length > 0) && editInvoiceData !== '' && pageMode == mode.edit) {
+            const foundVehicle = VehicleNumber.find(i => editInvoiceData.Data.Vehicle === i.id);
+
+            setState((i) => {
+                const obj = { ...i }
+                if (foundVehicle !== undefined) {
+                    obj.values.VehicleNo = { value: foundVehicle.id, label: foundVehicle.VehicleNumber };
+                    obj.hasValid.VehicleNo.valid = true;
+                }
+                return obj
+            })
+        }
+    }, [VehicleNumber, editInvoiceData, pageMode]);
 
     useEffect(() => {
 
