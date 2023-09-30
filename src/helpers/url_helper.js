@@ -470,5 +470,16 @@ export const CREDIT_DEBIT_DATA_EXPORT = "/CreditDebitDataExport"
 export const RECEIPT_DEBIT_DATA_EXPORT = "/ReceiptDataExport"
 
 
+////mobail Api
+
+export const MOBAIL_APP_PRODUCT_ADD = "/MobailAppAddProduct";
+export const MOBAIL_APP_PRODUCT_DELETE = "/MobailAppAddProduct";
+export const MOBAIL_APP_PRODUCT_UPDATE = "/MobailAppAddProduct";
+
+export const MOBAIL_APP_RETAILER_ADD = "/MobailAppAddRetailer";
+export const MOBAIL_APP_RETAILER_DELETE = "/MobailAppAddRetailer";
+export const MOBAIL_APP_RETAILER_UPDATE = "/MobailAppAddRetailer";
+
+
 
 
