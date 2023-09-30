@@ -134,7 +134,7 @@ function* InvoiceListGenFunc({ config }) {
 
             if ((index.EInvoiceIsCancel) || (index.EwayBillIsCancel)) {
               i.forceDeleteHide = false;
-              i.forceEditHide = false;
+              // i.forceEditHide = false;
             }
           }
         });
