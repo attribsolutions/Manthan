@@ -152,7 +152,7 @@ import RetailerExcelUpload from "../pages/Adminisrator/ImportMaster/RetailerExce
 
 import SalesReturnList from "../pages/Sale/SalesReturn/SalesReturnList";
 import ImportExcelPartyMap from "../pages/Adminisrator/ImportMaster/ImportExcelPartyMap/Index";
-import Debit from "../pages/Accounting/Debit/Debit";
+
 import Dashboard_1 from "../pages/Dashboard/Dashboard_1/Dashboard_1"
 import SapLedger from "../Reports/SapLedgerReport/SapLedger";
 import ProductMarginReport from "../Reports/ProductMarginReport/ProductMarginReport";

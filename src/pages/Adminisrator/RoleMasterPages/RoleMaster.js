@@ -183,7 +183,7 @@ const RoleMaster = (props) => {
   }, [])
 
   useEffect(async () => {
-    if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
+    if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
       dispatch(PostSuccess({ Status: false }))
       setState(() => resetFunction(fileds, state))// Clear form values  
       dispatch(Breadcrumb_inputName(''))
@@ -205,7 +205,7 @@ const RoleMaster = (props) => {
       }
       }
     }
-    else if ((postMsg.Status === true) && !(pageMode === "dropdownAdd")) {
+    else if ((postMsg.Status === true)) {
       dispatch(PostSuccess({ Status: false }))
       customAlert({
         Type: 4,

@@ -166,7 +166,7 @@ const CompanyModule = (props) => {
 
   useEffect(async () => {
 
-    if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
+    if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
       dispatch(saveCompany_Success({ Status: false }))
       setState(() => resetFunction(fileds, state))// Clear form values 
       dispatch(Breadcrumb_inputName(''))
@@ -188,7 +188,7 @@ const CompanyModule = (props) => {
       }
       }
     }
-    else if ((postMsg.Status === true) && !(pageMode === mode.dropdownAdd)) {
+    else if ((postMsg.Status === true)) {
       dispatch(saveCompany_Success({ Status: false }))
       customAlert({
         Type: 4,

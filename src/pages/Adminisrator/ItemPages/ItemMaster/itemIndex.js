@@ -352,8 +352,9 @@ const ItemsMaster = (props) => {
 
     useEffect(async () => {
 
-        if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === mode.dropdownAdd)) {
+         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(SaveItemMasterActionSuccess({ Status: false }))
+           
             if (pageMode === mode.dropdownAdd) {
                 customAlert({
                     Type: 1,

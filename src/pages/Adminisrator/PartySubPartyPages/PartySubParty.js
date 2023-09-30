@@ -163,7 +163,7 @@ const PartySubParty = (props) => {
     }, [])
 
     useEffect(async () => {
-        if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === mode.dropdownAdd)) {
+         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(savePartySubPartySuccess({ Status: false }))
             dispatch(Breadcrumb_inputName(''))
             if (pageMode === mode.dropdownAdd) {
@@ -183,7 +183,7 @@ const PartySubParty = (props) => {
                 }
             }
         }
-        else if ((postMsg.Status === true) && !(pageMode === mode.dropdownAdd)) {
+        else if ((postMsg.Status === true)) {
             dispatch(savePartySubPartySuccess({ Status: false }))
             customAlert({
                 Type: 4,

@@ -171,6 +171,38 @@ const MarginMaster = (props) => {
             dispatch(goButtonForMarginSuccess({ Status: false }))
         }
     }, [])
+    
+    useEffect(async () => {
+
+        if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
+            dispatch(saveMarginMasterSuccess({ Status: false }))
+            setState(() => resetFunction(fileds, state))// Clear form values  
+            if (pageMode === mode.dropdownAdd) {
+                customAlert({
+                    Type: 1,
+                    Message: postMsg.Message,
+                })
+            }
+            else {
+                let isPermission = await customAlert({
+                    Type: 1,
+                    Status: true,
+                    Message: postMsg.Message,
+                })
+                if (isPermission) {
+                    history.push({ pathname: url.MARGIN_lIST })
+                }
+            }
+        }
+
+        else if (postMsg.Status === true) {
+            dispatch(saveMarginMasterSuccess({ Status: false }))
+            customAlert({
+                Type: 4,
+                Message: JSON.stringify(postMsg.Message),
+            })
+        }
+    }, [postMsg])
 
     useEffect(() => {
         if (deleteMessage.Status === true && deleteMessage.StatusCode === 200) {
@@ -246,38 +278,7 @@ const MarginMaster = (props) => {
 
     };
 
-    useEffect(async () => {
-
-        if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
-            dispatch(saveMarginMasterSuccess({ Status: false }))
-            setState(() => resetFunction(fileds, state))// Clear form values  
-            if (pageMode === mode.dropdownAdd) {
-                customAlert({
-                    Type: 1,
-                    Message: postMsg.Message,
-                })
-            }
-            else {
-                let isPermission = await customAlert({
-                    Type: 1,
-                    Status: true,
-                    Message: postMsg.Message,
-                })
-                if (isPermission) {
-                    history.push({ pathname: url.MARGIN_lIST })
-                }
-            }
-        }
-
-        else if (postMsg.Status === true) {
-            dispatch(saveMarginMasterSuccess({ Status: false }))
-            customAlert({
-                Type: 4,
-                Message: JSON.stringify(postMsg.Message),
-            })
-        }
-    }, [postMsg])
-
+   
     const pageOptions = {
         sizePerPage: 10,
         totalSize: Data.length,

@@ -169,7 +169,7 @@ const PartyMasterBulkUpdate = (props) => {
     }, []);
 
     useEffect(async () => {
-        if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
+        if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(postParty_Master_Bulk_Update_Success({ Status: false }))
             setState(() => resetFunction(fileds, state))// Clear form values  
             dispatch(Breadcrumb_inputName(''))
@@ -191,7 +191,7 @@ const PartyMasterBulkUpdate = (props) => {
                 }
             }
         }
-        else if ((postMsg.Status === true) && !(pageMode === "dropdownAdd")) {
+        else if ((postMsg.Status === true)) {
             dispatch(GoButton_For_Party_Master_Bulk_Update_AddSuccess([]))
             dispatch(postParty_Master_Bulk_Update_Success({ Status: false }))
             customAlert({

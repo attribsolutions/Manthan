@@ -218,7 +218,7 @@ const AddUser = (props) => {
 
   useEffect(async () => {
 
-    if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === mode.dropdownAdd)) {
+     if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
       dispatch(saveUserMasterActionSuccess({ Status: false }))
 
       if (pageMode === mode.dropdownAdd) {
@@ -239,7 +239,7 @@ const AddUser = (props) => {
       }
     }
 
-    else if ((postMsg.Status === true) && !(pageMode === mode.dropdownAdd)) {
+    else if ((postMsg.Status === true)) {
       dispatch(saveUserMasterActionSuccess({ Status: false }))
       customAlert({
         Type: 4,

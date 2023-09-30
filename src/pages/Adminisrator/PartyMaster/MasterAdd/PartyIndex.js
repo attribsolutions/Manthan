@@ -270,7 +270,7 @@ const PartyMaster = (props) => {
     }, [])
 
     useEffect(async () => {
-        if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === mode.dropdownAdd)) {
+         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(postPartyDataSuccess({ Status: false }))
 
             if (pageMode === mode.dropdownAdd) {
@@ -291,7 +291,7 @@ const PartyMaster = (props) => {
                 }
             }
         }
-        else if ((postMsg.Status === true) && !(pageMode === mode.dropdownAdd)) {
+        else if ((postMsg.Status === true)) {
             dispatch(postPartyDataSuccess({ Status: false }))
             customAlert({
                 Type: 4,

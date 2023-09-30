@@ -709,6 +709,15 @@ export const detelet_ClaimTrackingEntry_List_Api = ({ deleteId }) => del(`${url.
 
 //CreditDebitDataExport
 export const CreditDebitDataExport_GoBtn_API = ({ jsonBody }) => post(url.CREDIT_DEBIT_DATA_EXPORT, jsonBody)//Go button api
+
+//mobail Api
+
+// mobailAppAddProduct_Api=(transactionId)=>post(`${url.CLAIM_TRACKING}/${transactionId}`)
+
+
+
+
+
 export {
   getLoggedInUser,
   isUserAuthenticated,
