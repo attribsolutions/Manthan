@@ -220,6 +220,8 @@ const PartyMaster = (props) => {
                             IBChallanPrefix: prefix.IBChallanprefix,
                             IBInwardPrefix: prefix.IBInwardprefix,
                             PurchaseReturnprefix: prefix.PurchaseReturnprefix,
+                            CreditPrefix: prefix.Creditprefix,
+                            DebitPrefix: prefix.Debitprefix
                         };
 
                         let editPriceList = (hasEditVal.PriceList) ? {
@@ -270,7 +272,7 @@ const PartyMaster = (props) => {
     }, [])
 
     useEffect(async () => {
-         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
+        if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(postPartyDataSuccess({ Status: false }))
 
             if (pageMode === mode.dropdownAdd) {
@@ -455,6 +457,8 @@ const PartyMaster = (props) => {
                         "IBChallanprefix": prefixValue.IBChallanPrefix,
                         "IBInwardprefix": prefixValue.IBInwardPrefix,
                         "PurchaseReturnprefix": prefixValue.PurchaseReturnprefix,
+                        "Creditprefix": prefixValue.CreditPrefix,
+                        "Debitprefix": prefixValue.DebitPrefix
                     }
                 ],
 

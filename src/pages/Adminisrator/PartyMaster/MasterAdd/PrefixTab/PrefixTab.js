@@ -7,17 +7,19 @@ import { url } from '../../../../../routes'
 const PrefixTab = forwardRef(({ subPageMode }, ref) => {
 
     const fileds = {
-        OrderPrefix: '',
-        InvoicePrefix: '',
-        GRNPrefix: '',
+        OrderPrefix: 'PO',
+        InvoicePrefix: 'IN',
+        GRNPrefix: 'GRN',
         ChallanPrefix: '',
-        ReceiptPrefix: '',
+        ReceiptPrefix: 'RE',
         WorkOrderPrefix: '',
         MaterialIssuePrefix: '',
         DemandPrefix: '',
         IBChallanPrefix: '',
         IBInwardPrefix: '',
-        PurchaseReturnprefix:'',
+        PurchaseReturnprefix: 'PR',
+        CreditPrefix: 'CR',
+        DebitPrefix: 'DR',
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
@@ -254,6 +256,49 @@ const PrefixTab = forwardRef(({ subPageMode }, ref) => {
                         {isError.PurchaseReturnprefix.length > 0 && (
                             <span className="invalid-feedback">{isError.PurchaseReturnprefix}</span>
                         )}
+
+                    </FormGroup>
+
+                    <FormGroup className="mb-3">
+                        <Label className='col col-4'>{fieldLabel.CreditPrefix} </Label>
+                        <Col sm={4}>
+                            <Input
+                                name="CreditPrefix"
+                                value={values.CreditPrefix}
+                                type="text"
+                                className={isError.CreditPrefix.length > 0 ? "is-invalid form-control" : "form-control"}
+                                placeholder="Please Enter Credit prefix"
+                                autoComplete='off'
+                                onChange={(event) => {
+                                    onChangeText({ event, state, setState })
+                                }}
+                            />
+                        </Col>
+                        {isError.CreditPrefix.length > 0 && (
+                            <span className="invalid-feedback">{isError.CreditPrefix}</span>
+                        )}
+
+                    </FormGroup>
+
+                    <FormGroup className="mb-3">
+                        <Label className='col col-4'>{fieldLabel.DebitPrefix} </Label>
+                        <Col sm={4}>
+                            <Input
+                                name="DebitPrefix"
+                                value={values.DebitPrefix}
+                                type="text"
+                                className={isError.DebitPrefix.length > 0 ? "is-invalid form-control" : "form-control"}
+                                placeholder="Please Enter Debit prefix"
+                                autoComplete='off'
+                                onChange={(event) => {
+                                    onChangeText({ event, state, setState })
+                                }}
+                            />
+                        </Col>
+                        {isError.DebitPrefix.length > 0 && (
+                            <span className="invalid-feedback">{isError.DebitPrefix}</span>
+                        )}
+
                     </FormGroup>
 
 
