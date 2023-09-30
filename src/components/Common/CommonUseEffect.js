@@ -37,7 +37,7 @@ export const userAccessUseEffect = ({ props,
 export const saveMsgUseEffect = async ({
     postMsg, postSuccss, pageMode, dispatch, history, status200, listPath, foreceRedirectList = false }) => {
 
-    if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === mode.dropdownAdd)) {
+     if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
         dispatch(postSuccss({ Status: false }))
 
         if (status200) { status200() };
@@ -60,7 +60,7 @@ export const saveMsgUseEffect = async ({
             }
         }
     }
-    else if ((postMsg.Status === true) && !(pageMode === mode.dropdownAdd)) {
+    else if ((postMsg.Status === true)) {
         dispatch(postSuccss({ Status: false }))
         customAlert({
             Type: 4,

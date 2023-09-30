@@ -26,7 +26,7 @@ import {
     saveGSTMaster,
     saveGSTMasterSuccess,
 } from "../../../store/actions";
-import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
+import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import {
     breadcrumbReturnFunc,
@@ -156,7 +156,7 @@ const GSTMaster = (props) => {
 
     useEffect(async () => {
 
-        if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
+        if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(saveGSTMasterSuccess({ Status: false }))
             setState(() => resetFunction(fileds, state))// Clear form values  
             if (pageMode === mode.dropdownAdd) {

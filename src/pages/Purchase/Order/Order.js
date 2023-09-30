@@ -308,7 +308,7 @@ const Order = (props) => {
     }, []);
 
     useEffect(async () => {
-        if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === mode.dropdownAdd)) {
+        if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(_act.saveOrderActionSuccess({ Status: false }))
             setSelecedItemWiseOrder(true)
             setGoBtnDissable(false)
@@ -365,7 +365,7 @@ const Order = (props) => {
 
             }
         }
-        else if ((postMsg.Status === true) && !(pageMode === mode.dropdownAdd)) {
+        else if ((postMsg.Status === true)) {
 
             dispatch(_act.saveOrderActionSuccess({ Status: false }))
             customAlert({

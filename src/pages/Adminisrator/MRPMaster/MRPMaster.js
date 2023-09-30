@@ -246,7 +246,7 @@ const MRPMaster = (props) => {
 
     useEffect(async () => {
 
-        if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === mode.dropdownAdd)) {
+         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(saveMRPMasterSuccess({ Status: false }))
             setState(() => resetFunction(fileds, state))// Clear form values  
             if (pageMode === mode.dropdownAdd) {
@@ -276,11 +276,6 @@ const MRPMaster = (props) => {
         }
     }, [postMsg])
 
-    const pageOptions = {
-        sizePerPage: 10,
-        totalSize: Data.length,
-        custom: true,
-    };
 
     const pagesListColumns = [
         {
