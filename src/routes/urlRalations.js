@@ -267,3 +267,5 @@ export const DebitDataExport = url.DEBIT_DATA_EXPORT
 
 export const CreditDataExport = url.CREDIT_DATA_EXPORT
 
+export const ReceiptDataExport =url.RECEIPT_DATA_EXPORT
+

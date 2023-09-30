@@ -290,6 +290,8 @@ export const DEBIT_DATA_EXPORT = 243
 
 export const CREDIT_DATA_EXPORT = 244
 
+export const RECEIPT_DATA_EXPORT = 245
+
 
 
 

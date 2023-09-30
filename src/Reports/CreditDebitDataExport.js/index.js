@@ -18,7 +18,7 @@ import DynamicColumnHook from "../../components/Common/TableCommonFunc";
 import { ReportComponent } from "../ReportComponent";
 import { postCreditDebitDataExport_API, postCreditDebitDataExport_API_Success } from "../../store/Report/CreditDebitDataExportRedux/action";
 
-const CreditDebitDataExport = (props) => {
+const CreditDebitDataExport = (props) => {  // also Receipt Data Export 
 
     const dispatch = useDispatch();
     const history = useHistory();
@@ -51,7 +51,7 @@ const CreditDebitDataExport = (props) => {
         pageField: state.CommonPageFieldReducer.pageField
     })
     );
-    
+
     const { Data = [], goBtnMode } = tableData;
 
     const values = { ...state.values }
@@ -64,8 +64,12 @@ const CreditDebitDataExport = (props) => {
         let pageID
         if (subPageMode === url.CREDIT_DATA_EXPORT) {
             pageID = pageId.CREDIT_DATA_EXPORT
-        } else {
+        }
+        else if (subPageMode === url.DEBIT_DATA_EXPORT) {
             pageID = pageId.DEBIT_DATA_EXPORT
+        }
+        else {
+            pageID = pageId.RECEIPT_DATA_EXPORT
         }
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(pageID));
@@ -102,9 +106,14 @@ const CreditDebitDataExport = (props) => {
             let excelName
             if (subPageMode === url.CREDIT_DATA_EXPORT) {
                 excelName = "Credit Data Export"
-            } else {
+            }
+            else if (subPageMode === url.DEBIT_DATA_EXPORT) {
                 excelName = "Debit Data Export"
             }
+            else {
+                excelName = "Receipt Data Export"
+            }
+
             if (Data.length > 0) {
                 ReportComponent({      // Download CSV
                     pageField,
@@ -130,10 +139,10 @@ const CreditDebitDataExport = (props) => {
                 "ToDate": values.ToDate,
                 "Party": (isSCMParty) ? PartyDropdown.value : _cfunc.loginPartyID(),
                 "Customer": 0,
-                "NoteTypeIDs": subPageMode === url.CREDIT_DATA_EXPORT ? "37,39" : "38,40"
+                "NoteTypeIDs": subPageMode === url.CREDIT_DATA_EXPORT ? "37,39" : subPageMode === url.DEBIT_DATA_EXPORT ? "38,40" : ''
             });
 
-            const config = { jsonBody, goBtnMode: goBtnMode, btnId: goBtnMode };
+            const config = { jsonBody, subPageMode, goBtnMode: goBtnMode, btnId: goBtnMode };
             dispatch(postCreditDebitDataExport_API(config))
 
         } catch (error) { _cfunc.CommonConsole(error) }
