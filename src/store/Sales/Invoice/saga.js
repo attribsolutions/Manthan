@@ -127,14 +127,15 @@ function* InvoiceListGenFunc({ config }) {
 
       // if InvoiceUploads array length is greater than 0 then delete button disabled
       if (i.InvoiceUploads.length > 0) {
+        
+        i.forceEditHide = true;// if InvoiceUploads array length then then edif not allowed
+
         i.InvoiceUploads.map((index) => {
           if (!(index.EInvoicePdf === null) || !(index.EwayBillUrl === null)) {
             i.forceDeleteHide = true;
-            i.forceEditHide = true;
 
             if ((index.EInvoiceIsCancel) || (index.EwayBillIsCancel)) {
               i.forceDeleteHide = false;
-              // i.forceEditHide = false;
             }
           }
         });
