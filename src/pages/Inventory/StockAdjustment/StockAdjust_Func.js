@@ -57,7 +57,7 @@ const createBatchCodeDetail = (item) => ({
 
 
 export const AddItemInTableFunc = async ({ itemNameSelect, TableArr }) => {
-    debugger
+    
     let isfound = TableArr.find(i => i.Item === itemNameSelect.value);
     if (!itemNameSelect) {
         return { TableArr, data: [], message: "Please Select ItemName", type: 4 };
@@ -86,7 +86,7 @@ export const AddItemInTableFunc = async ({ itemNameSelect, TableArr }) => {
     const zeroIndexObject = resp.Data[0];
 
     const hasBaseUnit = zeroIndexObject.UnitOptions.find(i => i.IsBase === true);
-    debugger
+    
     if (hasBaseUnit === undefined) {
         return {
             TableArr,

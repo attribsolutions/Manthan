@@ -159,7 +159,7 @@ const PartyMaster = (props) => {
                     }
 
                     if (hasEditVal) {
-
+                        
                         setEditData(hasEditVal);
                         dispatch(Breadcrumb_inputName(hasEditVal.Name))
                         seteditCreatedBy(hasEditVal.CreatedBy);
@@ -180,6 +180,7 @@ const PartyMaster = (props) => {
                                 label: i.PartyName,
                                 Creditlimit: i.Creditlimit,
                                 Route: i.Route,
+                                RouteName: i.RouteName,
                                 Distance: i.Distance,
                                 Subparty: i.Subparty
                             })),
@@ -242,8 +243,8 @@ const PartyMaster = (props) => {
                         let setAddressTab = addressTabRef.current.setCurrentState;
                         let setPriceList = baseTabRef.current.setPriceListSelect;
 
-                        bulkSetState(baseValue, getBaseTab, setBaseTab)
-                        bulkSetState(prefixValue, getPrefixtab, setPrefixtab)
+                        bulkSetState(baseValue, setBaseTab)
+                        bulkSetState(prefixValue, setPrefixtab)
                         setAddressTab(addressTabPreIncrementId)
                         setPriceList(editPriceList);
 
