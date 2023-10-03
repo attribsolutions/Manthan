@@ -116,7 +116,7 @@ const ItemsMaster = (props) => {
     let [isValidate, setIsValidate] = useState(initialInValid);
 
     const [formValue, setFormValue] = useState(initial);
-    console.log(formValue)
+  
     const [marginMaster, setMarginMaster] = useState([]);
 
     const [imageTabTable, setImageTabTable] = useState([{
@@ -763,11 +763,11 @@ const ItemsMaster = (props) => {
 
                 if (pageMode === mode.edit) {
                     dispatch(updateItemMasterAction({ jsonBody, updateId: EditData.id, btnId }));
-                    console.log(jsonBody)
+                    // console.log(jsonBody)
                 }
                 else {
                     dispatch(saveItemMasterAction({ jsonBody, btnId }));
-                    console.log(jsonBody)
+                    // console.log(jsonBody)
                 }
             }                                                            // ************* is valid if start 
             else {                                                       // ************* is valid esle start 

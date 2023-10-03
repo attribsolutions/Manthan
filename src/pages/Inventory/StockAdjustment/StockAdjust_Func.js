@@ -46,7 +46,8 @@ const createStockDetail = (item) => ({
 const createBatchCodeDetail = (item) => ({
     id: item.id,
     value: item.id,
-    label: `${item.BatchCode} (${item.SystemBatchCode}) MRP:${item.MRP} Qty:${item.BaseUnitQuantity}`,
+    // label: `${item.BatchCode} (${item.SystemBatchCode}) MRP:${item.MRP} Qty:${item.BaseUnitQuantity}`,
+    label: item.SystemBatchCode,
     ActualQuantity: item.BaseUnitQuantity,
     Qty: item.BaseUnitQuantity,
     ...item, // Spread the rest of the properties

@@ -25,6 +25,7 @@ import { saveStockEntryAction, saveStockEntrySuccess } from "../../../store/Inve
 import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 import { AddItemInTableFunc, stockQtyUnit_SelectOnchange } from "./StockAdjust_Func";
 import "../../../pages/Sale/SalesReturn/salesReturn.scss";
+import Select, { components } from "react-select";
 
 const StockAdjustment = (props) => {
 
@@ -213,6 +214,19 @@ const StockAdjustment = (props) => {
         }
     }
 
+    const customOption = (props) => {
+        const { innerProps, label, data } = props;
+        return (
+            <components.Option {...props}>
+                <div {...innerProps}>
+                    <div >Batch:{data.BatchCode}</div>
+                    <div>Stystem:{data.SystemBatchCode}</div>
+                    <div>MRP:{data.MRP}</div>
+                    <div>Quantity:{data.BaseUnitQuantity}</div>
+                </div>
+            </components.Option>
+        );
+    };
     const pagesListColumns = [
 
         {//*************** ItemName ********************************* */
@@ -225,6 +239,8 @@ const StockAdjustment = (props) => {
             dataField: "",
             formatExtraData: { tableList: TableArr, setTableList: setTableArr },
             formatter: (cellContent, index1, key, { tableList = [], setTableList }) => {
+
+
                 return (<>
                     <div>
                         <CInput
@@ -254,40 +270,31 @@ const StockAdjustment = (props) => {
                     </div>
 
                     <div className="mt-2" >
-                        <Row >
-                            <Col md={9} >
-                                <Label className="text-black">BatchCode</Label>
-                                <C_Select
+                        <Select
+                            id={`BatchCode-${index1.id}`}
+                            key={`BatchCode-${index1.id}`}
+                            classNamePrefix="select2-selection"
+                            options={index1.BatchCodeDetailsOptions}
+                            placeholder="Please Select Batch."
+                            onChange={(event) => {
+                                BatchCodeHandler(event, index1, tableList)
+                            }}
+                            components={{ Option: customOption }}
+                            styles={{
+                                menu: (provided) => ({
+                                    ...provided,
+                                    zIndex: 10,
+                                    overflowY: "auto", // Add a scrollbar if the content exceeds the height
+                                }),
+                            }}
+                        />
+                    </div>
+                    <div className="mt-1">
+                        <Label className="text-black pt-2" style={{ float: "left" }}>Add New Batch</Label>
+                        < Button type="button" style={{ float: "right" }} color="btn btn-btn-sm btn-outline-primary border-2 font-size-12 text-center"
+                            onClick={(event) => BatchCode_Add_Handler(event, index1, tableList, setTableList)}
+                        > <i className="dripicons-plus align-center " style={{ flot: "center" }}></i></Button>
 
-                                    id={`BatchCode-${index1.id}`}
-                                    key={`BatchCode-${index1.id}`}
-                                    classNamePrefix="select2-selection"
-                                    options={index1.BatchCodeDetailsOptions}
-                                    onChange={(event) => {
-                                        BatchCodeHandler(event, index1, tableList)
-
-                                    }}
-                                    // styles={{
-                                    //     menu: provided => ({ ...provided, zIndex: 2 })
-                                    // }}
-                                    styles={{
-                                        menu: (provided) => ({
-                                            ...provided,
-                                            // zIndex: 10,
-                                            // maxHeight: "100px", // Set a fixed height for the dropdown
-                                            overflowY: "auto", // Add a scrollbar if the content exceeds the height
-                                        }),
-                                    }}
-                                />
-                            </Col>
-                            <Col sm="1" style={{ marginTop: "29px" }}>
-                                {
-                                    < Button type="button" color="btn btn-outline-primary border-1 font-size-12 text-center"
-                                        onClick={(event) => BatchCode_Add_Handler(event, index1, tableList, setTableList)}
-                                    > <i className="dripicons-plus align-center"></i></Button>
-                                }
-                            </Col>
-                        </Row>
                     </div>
                 </>)
             }
@@ -501,7 +508,7 @@ const StockAdjustment = (props) => {
                                 <React.Fragment>
                                     <Row>
                                         <Col xl="12">
-                                            <div className="table-responsive table" style={{ minHeight: "45vh" }}>
+                                            <div className="table-responsive table" style={{ minHeight: "65vh" }}>
                                                 <BootstrapTable
                                                     keyField={"id"}
                                                     id="table_Arrow"
