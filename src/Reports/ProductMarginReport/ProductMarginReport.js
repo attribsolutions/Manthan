@@ -16,6 +16,7 @@ import { commonPageField, commonPageFieldSuccess } from '../../store/actions';
 import * as mode from "../../routes/PageMode"
 import { getExcel_Button_API, getExcel_Button_API_Success } from '../../store/Report/SapLedger Redux/action';
 import { useState } from 'react';
+import { ReportComponent } from '../ReportComponent';
 
 const ProductMarginReport = (props) => {
 
@@ -25,12 +26,15 @@ const ProductMarginReport = (props) => {
     
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
+        ProductMargin,
         userAccess,
         downloadProductMargin,
+        pageField
     } = useSelector((state) => ({
+        downloadProductMargin: state.SapLedgerReducer.downloadProductMargin,
+        ProductMargin:state.SapLedgerReducer.ProductMargin,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
-        downloadProductMargin: state.SapLedgerReducer.downloadProductMargin,
     }));
 
     useEffect(() => {
@@ -63,10 +67,86 @@ const ProductMarginReport = (props) => {
         };
     }, [userAccess])
 
+    useEffect(() => {
+                   
+            if (ProductMargin.length > 0) {
+                ReportComponent({      // Download CSV
+                    pageField,
+                    excelData: ProductMargin,
+                    excelFileName: "Product Margin Report"
+                })
+                dispatch(getExcel_Button_API_Success([]));   // Reset Excel Data
+            }
+     
+    }, [ ProductMargin, pageField]);
+
     function excelhandler() {
         const userDetails = loginUserDetails()
         dispatch(getExcel_Button_API(Number(userDetails.IsSCMPartyType) || 0, userDetails.Party_id))
     }
+
+    const pageField1 = [
+        {
+            id:1,
+            FE2ItemID: 1,
+            SAPCode: "1200033",
+            Barcode: "846203000375",
+            HSNCode: "21069099",
+            ItemName: "Mango Burfi 250 g",
+            ItemShortName: "Mango Burfi 250 g",
+            SKUActiveDeactivestatus: true,
+            BoxSize: "",
+            StoringCondition: "1",
+            MRP: 235,
+            GST: 5,
+            BaseUnit: "No",
+            SKUGr: "250 g",
+            Product: "Amba Burfi",
+            subProduct: "Amba Burfi (MAP)",
+            Company: "Chitale Bandhu Mithaiwale",
+            ShelfLife: 75,
+            PcsInBox: 20,
+            DistributorMargin: 7,
+            GeneralTradeMargin: 13,
+            ModernTradeMargin: 0,
+            DMartMargin: 15,
+            FOFOMargin: 16.5,
+            DistributorRateWithGST: 194.36,
+            DistributorRateWithOutGST: 185.1,
+            GeneralTradeRateWithGST: 207.96,
+            GeneralTradeRateWithOutGST: 198.06,
+            ModernTradeRateWithGST: 235,
+            ModernTradeRateWithOutGST: 223.81,
+            DMartRateWithGST: 199.75,
+            DMartRateWithOutGST: 190.24,
+            FOFORateWithGST: 201.72,
+            FOFORateWithOutGST: 192.11
+          }
+    ];
+
+    const PageFieldMaster = [];
+
+    // Add properties from pageField to PageFieldMaster
+    const pageFieldKeys = Object.keys(pageField1[0]);
+
+    for (let i = 0; i < pageFieldKeys.length; i++) {
+        const key = pageFieldKeys[i];
+        PageFieldMaster.push({
+            "ControlID": key,
+            "FieldLabel": key,
+            "InValidMsg": "",
+            "IsCompulsory": false,
+            "DefaultSort": 0,
+            "ListPageSeq": (i + 3).toString(), // Increment ListPageSeq
+            "ShowInListPage": true,
+            "ShowInDownload": true,
+            "ControlType": 1,
+            "FieldValidation": 40,
+            "DownloadDefaultSelect": true
+        });
+    }
+
+    console.log(JSON.stringify(PageFieldMaster));
 
     return (
         <React.Fragment>
