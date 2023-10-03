@@ -8,7 +8,7 @@ export const afterloginOneTimeAPI = (user, dispatch) => {
     const employeeId = user.Employee_id;
     const partyId = user.Party_id;
     const partyName = user.PartyName
-    debugger
+    
     if (user.PartyType === "Company Division") {
         const selectedParty = JSON.parse(localStorage.getItem("selectedParty")) || '';
         if (selectedParty.value > 0) {
