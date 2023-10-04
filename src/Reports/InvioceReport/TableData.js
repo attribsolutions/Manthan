@@ -264,7 +264,8 @@ export const RowsWithIGST = (data) => {
         }
         return accumulator;
     }, {});
-
+    const TotalItemlength = Object.values(groupedItems).length;
+    data["TotalItemlength"] = TotalItemlength;
     Object.values(groupedItems).forEach((element, key) => {
 
         let HSNcodes = ""
