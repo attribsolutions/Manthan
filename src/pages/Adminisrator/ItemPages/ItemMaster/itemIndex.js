@@ -357,11 +357,10 @@ const ItemsMaster = (props) => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(SaveItemMasterActionSuccess({ Status: false }))
 
-            // //***************mobail app api*********************** */
-            // const mobilApiResp = await mobileApp_ProductAdd_Api(postMsg.TransactionID)
-            // if (mobilApiResp.StatusCode == 200) { showToastAlert(mobilApiResp.Message) }
-            // else { showToastAlert(mobilApiResp.Message) };
-            // //************************************** */
+            //***************mobail app api*********************** */
+            const mobilApiResp = await mobileApp_ProductAdd_Api(postMsg.TransactionID)
+            if (mobilApiResp.StatusCode === 200) { showToastAlert(mobilApiResp.Message) }
+            //************************************** */
 
             if (pageMode === mode.dropdownAdd) {
                 customAlert({
@@ -393,24 +392,16 @@ const ItemsMaster = (props) => {
 
     useEffect(async () => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
-            // debugger
-            //***************mobail app api*********************** */
-            // const mobilApiResp = await mobileApp_ProductUpdate_Api(updateMsg.TransactionID)
-            // debugger
-            // if (mobilApiResp.StatusCode == 200) {
-            //     debugger
-            //     showToastAlert(mobilApiResp.Message)
-            // }
 
-            // else {
-            //     debugger
-            //     showToastAlert(mobilApiResp.Message)
-            // };
+            //***************mobail app api*********************** */
+            const mobilApiResp = await mobileApp_ProductUpdate_Api(updateMsg.TransactionID);
+            if (mobilApiResp.StatusCode === 200) { showToastAlert(mobilApiResp.Message); }
             //************************************** */
-            // debugger
+
             history.push({
                 pathname: url.ITEM_lIST,
-            })
+            });
+
         } else if (updateMsg.Status === true && !modalCss) {
             dispatch(updateItemMasterActionSuccess({ Status: false }));
             customAlert({

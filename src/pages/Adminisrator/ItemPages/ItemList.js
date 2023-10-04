@@ -56,11 +56,10 @@ const ItemsList = () => {
 
 
   const mobaileDeleteApiFinc = async (deleteMsg) => {
-    // //***************mobail app api*********************** */
-    // const mobilApiResp = await mobileApp_ProductDelete_Api(deleteMsg.TransactionID)
-    // if (mobilApiResp.StatusCode == 200) { showToastAlert(mobilApiResp.Message) }
-    // else { showToastAlert(mobilApiResp.Message) };
-    // //************************************** */
+    //***************mobail app api*********************** */
+    const mobilApiResp = await mobileApp_ProductDelete_Api(deleteMsg.TransactionID)
+    if (mobilApiResp.StatusCode === 200) { showToastAlert(mobilApiResp.Message,"success") }
+    //************************************** */
 
     return // *note  return required 
   }

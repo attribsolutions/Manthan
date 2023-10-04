@@ -67,8 +67,8 @@ axiosApi.interceptors.request.use(
         return config;
     },
     (error) => {
-        debugger
-        return Promise.reject(error)}
+        return Promise.reject(error)
+    }
 );
 
 axiosApi.interceptors.response.use(
@@ -79,7 +79,7 @@ axiosApi.interceptors.response.use(
         return response;
     },
     (error) => {
-        
+
         if (!error.response) {
             // Log network error using utility function
             const networkErrorResponse = {
@@ -111,7 +111,7 @@ axiosApi.interceptors.response.use(
             logRequestAndResponse(error.config, error.response);
             showToastAlert(errorMessage, 'error');
         }
-debugger
+
         return Promise.reject(error);
     }
 );
