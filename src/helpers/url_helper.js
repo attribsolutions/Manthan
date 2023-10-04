@@ -472,13 +472,13 @@ export const RECEIPT_DEBIT_DATA_EXPORT = "/ReceiptDataExport"
 
 ////mobail Api
 
-export const MOBAIL_APP_PRODUCT_ADD = "/MobailAppAddProduct";
-export const MOBAIL_APP_PRODUCT_DELETE = "/MobailAppAddProduct";
-export const MOBAIL_APP_PRODUCT_UPDATE = "/MobailAppAddProduct";
+export const MOBILE_APP_PRODUCT_ADD = "/MobileAppAddProduct";
+export const MOBILE_APP_PRODUCT_DELETE = "/MobileAppDeleteProduct";
+export const MOBILE_APP_PRODUCT_UPDATE = "/MobileAppUpdateProduct";
 
-export const MOBAIL_APP_RETAILER_ADD = "/MobailAppAddRetailer";
-export const MOBAIL_APP_RETAILER_DELETE = "/MobailAppAddRetailer";
-export const MOBAIL_APP_RETAILER_UPDATE = "/MobailAppAddRetailer";
+export const MOBILE_APP_RETAILER_ADD = "/MobileAppAddRetailer";
+export const MOBILE_APP_RETAILER_DELETE = "/MobileAppAddRetailer";
+export const MOBILE_APP_RETAILER_UPDATE = "/MobileAppAddRetailer";
 
 
 

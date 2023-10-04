@@ -59,7 +59,7 @@ import { SaveButton } from "../../../../components/Common/CommonButton";
 import WeightageTab from "./Weightage_Tab";
 import { C_Select } from "../../../../CustomValidateForm";
 import { showToastAlert } from "../../../../helpers/axios_Config";
-import { mobailApp_ProductAdd_Api, mobailApp_ProductUpdate_Api } from "../../../../helpers/backend_helper";
+import { mobileApp_ProductAdd_Api, mobileApp_ProductUpdate_Api } from "../../../../helpers/backend_helper";
 
 export const unitConversionInitial = {
     id: 1,
@@ -116,7 +116,7 @@ const ItemsMaster = (props) => {
     let [isValidate, setIsValidate] = useState(initialInValid);
 
     const [formValue, setFormValue] = useState(initial);
-  
+
     const [marginMaster, setMarginMaster] = useState([]);
 
     const [imageTabTable, setImageTabTable] = useState([{
@@ -358,8 +358,9 @@ const ItemsMaster = (props) => {
             dispatch(SaveItemMasterActionSuccess({ Status: false }))
 
             // //***************mobail app api*********************** */
-            // const mobilApiResp = await mobailApp_ProductAdd_Api(postMsg.TransactionID)
-            // if (mobilApiResp.StatusCode == 200) showToastAlert(mobilApiResp.Message);
+            // const mobilApiResp = await mobileApp_ProductAdd_Api(postMsg.TransactionID)
+            // if (mobilApiResp.StatusCode == 200) { showToastAlert(mobilApiResp.Message) }
+            // else { showToastAlert(mobilApiResp.Message) };
             // //************************************** */
 
             if (pageMode === mode.dropdownAdd) {
@@ -390,14 +391,23 @@ const ItemsMaster = (props) => {
         }
     }, [postMsg])
 
-    useEffect(() => {
+    useEffect(async () => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
+            // debugger
+            //***************mobail app api*********************** */
+            // const mobilApiResp = await mobileApp_ProductUpdate_Api(updateMsg.TransactionID)
+            // debugger
+            // if (mobilApiResp.StatusCode == 200) {
+            //     debugger
+            //     showToastAlert(mobilApiResp.Message)
+            // }
 
-            // //***************mobail app api*********************** */
-            // const mobilApiResp = await mobailApp_ProductUpdate_Api(updateMsg.TransactionID)
-            // if (mobilApiResp.StatusCode == 200) showToastAlert(mobilApiResp.Message);
-            // //************************************** */
-
+            // else {
+            //     debugger
+            //     showToastAlert(mobilApiResp.Message)
+            // };
+            //************************************** */
+            // debugger
             history.push({
                 pathname: url.ITEM_lIST,
             })

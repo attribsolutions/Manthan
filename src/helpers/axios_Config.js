@@ -66,7 +66,9 @@ axiosApi.interceptors.request.use(
 
         return config;
     },
-    (error) => Promise.reject(error)
+    (error) => {
+        debugger
+        return Promise.reject(error)}
 );
 
 axiosApi.interceptors.response.use(
@@ -77,6 +79,7 @@ axiosApi.interceptors.response.use(
         return response;
     },
     (error) => {
+        
         if (!error.response) {
             // Log network error using utility function
             const networkErrorResponse = {
@@ -100,6 +103,7 @@ axiosApi.interceptors.response.use(
                 404: 'Resource not found.',
                 226: 'The requested resource has been used in a different context',
                 406: 'Not Acceptable - The server cannot produce a response matching the list of acceptable values defined in the request',
+                500: "Internal Server Error",
                 0: () => axiosRetry(error.config),
             };
             const errorMessage = messages[status] || 'Oops! Something went wrong.';
@@ -107,7 +111,7 @@ axiosApi.interceptors.response.use(
             logRequestAndResponse(error.config, error.response);
             showToastAlert(errorMessage, 'error');
         }
-
+debugger
         return Promise.reject(error);
     }
 );

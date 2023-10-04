@@ -15,7 +15,7 @@ import { commonPageFieldList, commonPageFieldListSuccess, } from "../../../store
 import { ITEM } from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import { PageLoadingSpinner, Listloader } from "../../../components/Common/CommonButton";
-import { mobailApp_ProductDelete_Api } from "../../../helpers/backend_helper";
+import { mobileApp_ProductDelete_Api } from "../../../helpers/backend_helper";
 import { showToastAlert } from "../../../helpers/axios_Config";
 
 const ItemsList = () => {
@@ -53,11 +53,13 @@ const ItemsList = () => {
       dispatch(getItemListSuccess([]));
     }
   }, []);
-  const mobaileDeleteApiFinc = async (deleteMsg) => {
 
+
+  const mobaileDeleteApiFinc = async (deleteMsg) => {
     // //***************mobail app api*********************** */
-    // const mobilApiResp = await mobailApp_ProductDelete_Api(deleteMsg.TransactionID)
-    // if (mobilApiResp.StatusCode == 200) showToastAlert(mobilApiResp.Message);
+    // const mobilApiResp = await mobileApp_ProductDelete_Api(deleteMsg.TransactionID)
+    // if (mobilApiResp.StatusCode == 200) { showToastAlert(mobilApiResp.Message) }
+    // else { showToastAlert(mobilApiResp.Message) };
     // //************************************** */
 
     return // *note  return required 
