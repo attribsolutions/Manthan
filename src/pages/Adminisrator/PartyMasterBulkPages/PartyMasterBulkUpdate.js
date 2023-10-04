@@ -511,6 +511,8 @@ const PartyMasterBulkUpdate = (props) => {
             const jsonBody = JSON.stringify({
                 PartyID: loginPartyID(),
                 Type: SelectFieldName.label,
+                CreatedBy: _cfunc.loginUserID(),
+                UpdatedBy: _cfunc.loginUserID(),
                 UpdateData: arr1
 
             });
