@@ -11,7 +11,7 @@ export function get(url, param) {
       return response.data;
     })
     .catch((error) => {
-      return Promise.reject(error);
+      return error;
     });
 }
 
@@ -28,7 +28,7 @@ export function post(url, body) {
       return response.data;
     })
     .catch((error) => {
-      return Promise.reject(error);
+      return error;
     });
 }
 
@@ -44,7 +44,7 @@ export function put(url, body) {
       return response.data;
     })
     .catch((error) => {
-      return Promise.reject(error);
+      return error;
     });
 }
 
@@ -55,7 +55,7 @@ export function del(url) {
       return response.data;
     })
     .catch((error) => {
-      return Promise.reject(error);
+      return error;
     });
 }
 
@@ -140,6 +140,6 @@ export function postForFormData(url, body) {
       return response.data;
     })
     .catch((error) => {
-      return Promise.reject(error);
+      return error;
     });
 }

@@ -44,6 +44,8 @@ import PrefixTab from "./PrefixTab/PrefixTab";
 import { priceListByPartyAction, priceListByPartyActionSuccess } from "../../../../store/Administrator/PriceList/action";
 import { userAccessUseEffect } from "../../../../components/Common/CommonUseEffect";
 import NewCommonPartyDropdown from "../../../../components/Common/NewCommonPartyDropdown";
+import { mobileApp_RetailerAdd_Api, mobileApp_RetailerUpdate_Api } from "../../../../helpers/backend_helper";
+import { showToastAlert } from "../../../../helpers/axios_Config";
 
 function initialState(history) {
 
@@ -159,7 +161,7 @@ const PartyMaster = (props) => {
                     }
 
                     if (hasEditVal) {
-                        
+
                         setEditData(hasEditVal);
                         dispatch(Breadcrumb_inputName(hasEditVal.Name))
                         seteditCreatedBy(hasEditVal.CreatedBy);
@@ -274,7 +276,14 @@ const PartyMaster = (props) => {
 
     useEffect(async () => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-            dispatch(postPartyDataSuccess({ Status: false }))
+            dispatch(postPartyDataSuccess({ Status: false }));
+
+            //***************mobail app api*********************** */
+            if (subPageMode === url.RETAILER_MASTER) {
+                const mobilApiResp = await mobileApp_RetailerAdd_Api(postMsg.TransactionID);
+                if (mobilApiResp.StatusCode === 200) { showToastAlert(mobilApiResp.Message, "success"); };
+            }
+            //************************************** */
 
             if (pageMode === mode.dropdownAdd) {
                 customAlert({
@@ -303,7 +312,7 @@ const PartyMaster = (props) => {
         }
     }, [postMsg.Status])
 
-    useEffect(() => {
+    useEffect(async () => {
 
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
             if (subPageMode === url.PARTY_SELF_EDIT) {
@@ -313,7 +322,15 @@ const PartyMaster = (props) => {
                     Message: JSON.stringify(updateMsg.Message),
                 })
             }
+
             else {
+                //***************mobail app api*********************** */
+                if (subPageMode === url.RETAILER_MASTER) {
+                    const mobilApiResp = await mobileApp_RetailerUpdate_Api(updateMsg.TransactionID);
+                    if (mobilApiResp.StatusCode === 200) { showToastAlert(mobilApiResp.Message,'success'); };
+                }
+                //************************************** */
+
                 history.push({
                     pathname: listPath,
                 })

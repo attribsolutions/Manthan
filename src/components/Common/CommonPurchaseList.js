@@ -66,6 +66,7 @@ const CommonPurchaseList = (props) => {
     },
     selectCheckParams = { isShow: false },
     totalAmountShow = false,
+    mobaileDeleteApiFinc,
   } = props;
 
   const { PageFieldMaster = [] } = { ...pageField };
@@ -110,7 +111,7 @@ const CommonPurchaseList = (props) => {
 
   // This UseEffect => UpadateModal Success/Unsucces  Show and Hide Control Alert_modal
   useEffect(() => {
-    
+
     if (typeof userAccState === 'object') {
       if (updateMsg.Status === true && updateMsg.StatusCode === 200) {
 
@@ -130,8 +131,15 @@ const CommonPurchaseList = (props) => {
     }
   }, [updateMsg, userAccState]);
 
-  useEffect(() => {
+  useEffect(async() => {
     if (deleteMsg.Status === true && deleteMsg.StatusCode === 200) {
+
+      //***************mobail app api*********************** */
+      if (mobaileDeleteApiFinc) {
+        await mobaileDeleteApiFinc(deleteMsg)
+      }
+      //************************************** */
+
       dispatch(deleteSucc({ Status: false }));
       goButnFunc();
       isAlertFunc(1, deleteMsg);

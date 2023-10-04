@@ -20,6 +20,8 @@ import CommonPurchaseList from '../../../components/Common/CommonPurchaseList';
 import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { customAlert } from '../../../CustomAlert/ConfirmDialog';
+import { mobileApp_RetailerDelete_Api } from '../../../helpers/backend_helper';
+import { showToastAlert } from '../../../helpers/axios_Config';
 
 const PartyList = () => {
 
@@ -59,7 +61,7 @@ const PartyList = () => {
     }
     // Common Party Dropdown useEffect
     useEffect(() => {
-        
+
         if ((commonPartyDropSelect.value > 0 && (subPageMode === url.RETAILER_LIST || subPageMode === url.NON_RETAILER_PARTY))) {
             goButtonHandler()
         }
@@ -78,7 +80,7 @@ const PartyList = () => {
 
     //  This UseEffect => Featch Modules List data  First Rendering
     useLayoutEffect(() => {
-        
+
         let page_Id = '';
         let page_Mode = mode.defaultList;
         let masterPath = '';
@@ -130,6 +132,15 @@ const PartyList = () => {
         dispatch(getPartyListAPISuccess([]));
     }
 
+
+    const mobaileDeleteApiFinc = async (deleteMsg) => {
+        //***************mobail app api*********************** */
+        const mobilApiResp = await mobileApp_RetailerDelete_Api(deleteMsg.TransactionID)
+        if (mobilApiResp.StatusCode === 200) { showToastAlert(mobilApiResp.Message,"success") }
+        //************************************** */
+        return // *note  return required 
+    }
+
     return (
         <React.Fragment>
             <div className="page-content">
@@ -148,8 +159,10 @@ const PartyList = () => {
                         reducers={reducers}
                         showBreadcrumb={false}
                         MasterModal={PartyMaster}
+                        goButnFunc={goButtonHandler}
                         masterPath={otherState.masterPath}
                         newBtnPath={otherState.newBtnPath}
+                        mobaileDeleteApiFinc={mobaileDeleteApiFinc}
                         pageMode={pageMode}
                         ButtonMsgLable={"Party"}
                         deleteName={"Name"}
