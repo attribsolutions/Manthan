@@ -194,7 +194,7 @@ export const PRODUCTION_REISSUE = "/ProductionReIssue"
 export const PRODUCTION_REISSUE_LIST = "/ProductionReIssueList"
 export const PRODUCTION_REISSUE_STP = "/ProductionReIssue_STP"
 
-//******************************* Sale Module  ************************************//
+//******************************* Sale Module ************************************//
 
 export const INVOICE_1 = "/Invoice_1"
 export const INVOICE_LIST_1 = "/InvoiceList_1"
@@ -310,7 +310,7 @@ export const CREDIT_DATA_EXPORT = "/CreditDataExport"
 
 export const RECEIPT_DATA_EXPORT = "/ReceiptDataExport"
 
-
+export const PARTY_OUTSTANDING_REPORT = "/PartyOutstandingReport"
 
 
 

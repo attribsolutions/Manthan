@@ -480,6 +480,7 @@ export const MOBILE_APP_RETAILER_ADD = "/MobileAppAddRetailer";
 export const MOBILE_APP_RETAILER_DELETE = "/MobileAppDeleteRetailer";
 export const MOBILE_APP_RETAILER_UPDATE = "/MobileAppUpdateRetailer";
 
-
+//OutStandingBalance
+export const OUTSTANDING_BALANCE_REPORT_GO_BUTTON = '/OutStandingBalance'
 
 
