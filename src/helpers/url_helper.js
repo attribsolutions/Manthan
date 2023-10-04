@@ -477,8 +477,8 @@ export const MOBILE_APP_PRODUCT_DELETE = "/MobileAppDeleteProduct";
 export const MOBILE_APP_PRODUCT_UPDATE = "/MobileAppUpdateProduct";
 
 export const MOBILE_APP_RETAILER_ADD = "/MobileAppAddRetailer";
-export const MOBILE_APP_RETAILER_DELETE = "/MobileAppAddRetailer";
-export const MOBILE_APP_RETAILER_UPDATE = "/MobileAppAddRetailer";
+export const MOBILE_APP_RETAILER_DELETE = "/MobileAppDeleteRetailer";
+export const MOBILE_APP_RETAILER_UPDATE = "/MobileAppUpdateRetailer";
 
 
 
