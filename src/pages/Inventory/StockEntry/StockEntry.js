@@ -351,7 +351,7 @@ const StockEntry = (props) => {
                 }));
 
                 const Highest_GST = GST_DropdownOptions.reduce((prev, current) => {
-                    return prev.GST > current.GST ? prev : current;
+                    return prev.value > current.value ? prev : current;
                 });
 
                 return {
