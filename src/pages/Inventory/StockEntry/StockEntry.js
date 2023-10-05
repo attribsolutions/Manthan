@@ -320,12 +320,13 @@ const StockEntry = (props) => {
         }
 
         try {
+            debugger
             // Fetch data from the API
             const apiResponse = await StockEntry_GO_button_api_For_Item(values.ItemName.value);
 
             // Convert API response to desired format
             const convert_ApiResponse = apiResponse.Data.InvoiceItems.map((i) => {
-
+                debugger
                 const UnitDroupDownOptions = i.ItemUnitDetails.map((unit) => ({
                     label: unit.UnitName,
                     value: unit.Unit,
@@ -341,7 +342,7 @@ const StockEntry = (props) => {
                 }));
 
                 const Highest_MRP = MRP_DropdownOptions.reduce((prev, current) => {
-                    return prev.MRP > current.MRP ? prev : current;
+                    return prev.value > current.value ? prev : current;
                 });
 
                 const GST_DropdownOptions = i.ItemGSTDetails.map((gst) => ({
