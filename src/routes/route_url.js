@@ -312,8 +312,7 @@ export const RECEIPT_DATA_EXPORT = "/ReceiptDataExport"
 
 export const PARTY_OUTSTANDING_REPORT = "/PartyOutstandingReport"
 
-
-
+export const RETAILER_APPROVAL ="/RetailerApproval"
 
 
 
