@@ -281,17 +281,6 @@ const StockReport = (props) => {
 
                 </div>
 
-                {/* <CustomTable
-                    keyField={"id"}
-                    data={tableData}
-                    columns={tableColumns}
-                    paginationEnabled={false}
-                    onDataSizeChange={({ dataCount }) => {
-                        dispatch(BreadcrumbShowCountlabel(`Count:${dataCount}`));
-                    }}
-                    noDataIndication={<div className="text-danger text-center table-cursor-pointer"  >Data Not available</div>}
-                /> */}
-
                 <div className="mt-1">
                     <ToolkitProvider
                         keyField="id"
