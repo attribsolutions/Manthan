@@ -101,7 +101,14 @@ const TransactionLog = () => {
             text: "Party Name",
             dataField: "PartyName",
             sort: true
-        },]
+        },
+        {
+            text: "Customer Name",
+            dataField: "CustomerName",
+            sort: true
+        },
+        
+    ]
 
     const goButtonHandler = async () => {
         try {
