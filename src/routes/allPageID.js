@@ -294,5 +294,6 @@ export const RECEIPT_DATA_EXPORT = 245
 
 export const PARTY_OUTSTANDING_REPORT = 246
 
+export const RETAILER_APPROVAL = 247
 
 

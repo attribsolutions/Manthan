@@ -15,12 +15,18 @@ import {
     PARTY_ADDRESS_DELETE_ID_SUCCESS,
     DELETE_PARTY_ID,
     EDIT_PARTY_ID,
-    GET_DISTRICT_ON_STATE
+    GET_DISTRICT_ON_STATE,
+    PARTY_LIST_FOR_APPROVAL_ACTION,
+    PARTY_LIST_FOR_APPROVAL_SUCCESS,
+    GET_PARTY_LIST_FOR_APPROVAL_ACTION,
+    GET_PARTY_LIST_FOR_APPROVAL_SUCCESS
 } from "./actionTypes";
 
 const INIT_STATE = {
     goBtnLoading: false,
     partyList: [],
+    PartyListForApproval: [],
+    PartyListForApproval_ID:{ Status: false },
     postMsg: { Status: false },
     deleteMsg: { Status: false },
     editData: { Status: false },
@@ -147,6 +153,33 @@ const PartyMasterReducer = (state = INIT_STATE, action) => {
             return {
                 ...state,
                 PartyAddressDelete: action.payload,
+            };
+
+        case PARTY_LIST_FOR_APPROVAL_ACTION:
+            return {
+                ...state,
+                goBtnLoading: true,
+            }
+
+        case PARTY_LIST_FOR_APPROVAL_SUCCESS:
+            return {
+                ...state,
+                PartyListForApproval: action.payload,
+                goBtnLoading: false
+            }
+
+        case GET_PARTY_LIST_FOR_APPROVAL_ACTION:
+            return {
+                ...state,
+                listBtnLoading: action.config.btnId,
+            }
+
+        // edit api
+        case GET_PARTY_LIST_FOR_APPROVAL_SUCCESS:
+            return {
+                ...state,
+                listBtnLoading: false,
+                PartyListForApproval_ID: action.payload,
             };
 
         case PARTY_API_ERROR_ACTION:
