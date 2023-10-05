@@ -10,7 +10,7 @@ import Login from "../pages/Authentication/Login"
 import Logout from "../pages/Authentication/Logout"
 import ForgetPwd from "../pages/Authentication/ForgetPassword"
 
-//Import  Administrator 
+//Import Administrator 
 import Modules from "../pages/Adminisrator/ModulesPages/Modules";
 import ModulesList from "../pages/Adminisrator/ModulesPages/ModulesList";
 import CompanyModule from "../pages/Adminisrator/CompanyPages/CompanyModule";
@@ -190,331 +190,334 @@ import StockAdjustment from "../pages/Inventory/StockAdjustment";
 import ClaimTrackingEntry from "../pages/Accounting/Claim Tracking Entry/ClaimTrackingEntry";
 import ClaimTrackingEntryList from "../pages/Accounting/Claim Tracking Entry/ClaimTrackingEntryList";
 import CreditDebitDataExport from "../Reports/CreditDebitDataExport.js";
+import PartyOutstandingReport from "../Reports/PartyOutstandingReport";
 
 
 
 const userRoutes = [
-  // *************************** DashBord *******************************//
+	// *************************** DashBord *******************************//
 
 
-  { path: path.DASHBORD_1, component: Dashboard_1 },
-  { path: path.DASHBORD_2, component: Dashboard_1 },
+	{ path: path.DASHBORD_1, component: Dashboard_1 },
+	{ path: path.DASHBORD_2, component: Dashboard_1 },
 
-  // *************************** Administration *******************************//
-  { path: path.MODULE, component: Modules },
-  { path: path.MODULE_lIST, component: ModulesList },
+	// *************************** Administration *******************************//
+	{ path: path.MODULE, component: Modules },
+	{ path: path.MODULE_lIST, component: ModulesList },
 
-  { path: path.COMPANY, component: CompanyModule },
-  { path: path.COMPANY_lIST, component: CompanyList },
+	{ path: path.COMPANY, component: CompanyModule },
+	{ path: path.COMPANY_lIST, component: CompanyList },
 
-  { path: path.PAGE_lIST, component: PageList },
-  { path: path.PAGE, component: PageMaster },
+	{ path: path.PAGE_lIST, component: PageList },
+	{ path: path.PAGE, component: PageMaster },
 
-  { path: path.USER, component: AddUser },
-  { path: path.USER_lIST, component: UserList },
+	{ path: path.USER, component: AddUser },
+	{ path: path.USER_lIST, component: UserList },
 
-  { path: path.ROLEACCESS, component: RoleAccessAdd },
-  { path: path.ROLEACCESS_lIST, component: RoleAccessListPage },
-  { path: path.COPY_ROLEACCESS, component: RoleAccessCopyFunctionality },
+	{ path: path.ROLEACCESS, component: RoleAccessAdd },
+	{ path: path.ROLEACCESS_lIST, component: RoleAccessListPage },
+	{ path: path.COPY_ROLEACCESS, component: RoleAccessCopyFunctionality },
 
-  { path: path.ROLE, component: RoleMaster },
-  { path: path.ROLE_lIST, component: RoleList },
+	{ path: path.ROLE, component: RoleMaster },
+	{ path: path.ROLE_lIST, component: RoleList },
 
-  { path: path.COMPANYGROUP, component: CompanyGroupMaster },
-  { path: path.COMPANYGROUP_lIST, component: CompanyGroupList },
+	{ path: path.COMPANYGROUP, component: CompanyGroupMaster },
+	{ path: path.COMPANYGROUP_lIST, component: CompanyGroupList },
 
-  // ******************************* Master Module ******************************//
+	// ******************************* Master Module ******************************//
 
-  { path: path.EMPLOYEE, component: AddEmployee },
-  { path: path.EMPLOYEE_lIST, component: Employee_List },
+	{ path: path.EMPLOYEE, component: AddEmployee },
+	{ path: path.EMPLOYEE_lIST, component: Employee_List },
 
-  { path: path.ITEM, component: ItemsMaster },
-  { path: path.ITEM_lIST, component: ItemsList },
+	{ path: path.ITEM, component: ItemsMaster },
+	{ path: path.ITEM_lIST, component: ItemsList },
 
-  { path: path.PARTY_lIST, component: PartyList },
-  { path: path.PARTY, component: PartyMaster },
+	{ path: path.PARTY_lIST, component: PartyList },
+	{ path: path.PARTY, component: PartyMaster },
 
-  { path: path.RETAILER_LIST, component: PartyList },
-  { path: path.RETAILER_MASTER, component: PartyMaster },
+	{ path: path.RETAILER_LIST, component: PartyList },
+	{ path: path.RETAILER_MASTER, component: PartyMaster },
 
-  { path: path.NON_RETAILER_PARTY_lIST, component: PartyList },
-  { path: path.NON_RETAILER_PARTY, component: PartyMaster },
+	{ path: path.NON_RETAILER_PARTY_lIST, component: PartyList },
+	{ path: path.NON_RETAILER_PARTY, component: PartyMaster },
 
-  { path: path.PARTY_SELF_EDIT, component: PartyMaster },
+	{ path: path.PARTY_SELF_EDIT, component: PartyMaster },
 
-  { path: path.EMPLOYEETYPE, component: EmployeeTypesMaster },
-  { path: path.EMPLOYEETYPE_lIST, component: EmployeeTypeList },
+	{ path: path.EMPLOYEETYPE, component: EmployeeTypesMaster },
+	{ path: path.EMPLOYEETYPE_lIST, component: EmployeeTypeList },
 
-  { path: path.PARTYTYPE, component: PartyType },
-  { path: path.PARTYTYPE_lIST, component: PartyTypeList },
+	{ path: path.PARTYTYPE, component: PartyType },
+	{ path: path.PARTYTYPE_lIST, component: PartyTypeList },
 
-  { path: path.CATEGORYTYPE, component: CategoryTypeMaster },
-  { path: path.CATEGORYTYPE_lIST, component: CategoryTypeList },
+	{ path: path.CATEGORYTYPE, component: CategoryTypeMaster },
+	{ path: path.CATEGORYTYPE_lIST, component: CategoryTypeList },
 
-  { path: path.CATEGORY, component: CategoryMaster },
-  { path: path.CATEGORY_lIST, component: CategoryList },
+	{ path: path.CATEGORY, component: CategoryMaster },
+	{ path: path.CATEGORY_lIST, component: CategoryList },
 
-  { path: path.VEHICLE, component: VehicleMaster },
-  { path: path.VEHICLE_lIST, component: VehicleList },
+	{ path: path.VEHICLE, component: VehicleMaster },
+	{ path: path.VEHICLE_lIST, component: VehicleList },
 
-  { path: path.DRIVER, component: DriverMaster },
-  { path: path.DRIVER_lIST, component: DriverList },
+	{ path: path.DRIVER, component: DriverMaster },
+	{ path: path.DRIVER_lIST, component: DriverList },
 
-  { path: path.GROUPTYPE, component: GroupTypeMaster },
-  { path: path.GROUPTYPE_lIST, component: GroupTypeList },
+	{ path: path.GROUPTYPE, component: GroupTypeMaster },
+	{ path: path.GROUPTYPE_lIST, component: GroupTypeList },
 
-  { path: path.PARTY_SUB_PARTY, component: PartySubParty },
-  { path: path.PARTY_SUB_PARTY_lIST, component: PartySubPartyList },
+	{ path: path.PARTY_SUB_PARTY, component: PartySubParty },
+	{ path: path.PARTY_SUB_PARTY_lIST, component: PartySubPartyList },
 
-  { path: path.TERMS_AND_CONDITION, component: TermsAndConditionsMaster },
-  { path: path.TERMS_AND_CONDITION_LIST, component: TermsAndConditionsList },
+	{ path: path.TERMS_AND_CONDITION, component: TermsAndConditionsMaster },
+	{ path: path.TERMS_AND_CONDITION_LIST, component: TermsAndConditionsList },
 
-  { path: path.PRICE_lIST, component: PriceList },
-  { path: path.PRICE, component: PriceMaster },
+	{ path: path.PRICE_lIST, component: PriceList },
+	{ path: path.PRICE, component: PriceMaster },
 
-  { path: path.MRP, component: MRPMaster },
-  { path: path.MRP_lIST, component: MRPList },
+	{ path: path.MRP, component: MRPMaster },
+	{ path: path.MRP_lIST, component: MRPList },
 
-  { path: path.MARGIN, component: MarginMaster },
-  { path: path.MARGIN_lIST, component: MarginList },
+	{ path: path.MARGIN, component: MarginMaster },
+	{ path: path.MARGIN_lIST, component: MarginList },
 
-  { path: path.GROUP, component: GroupMaster },
-  { path: path.GROUP_lIST, component: GroupList },
+	{ path: path.GROUP, component: GroupMaster },
+	{ path: path.GROUP_lIST, component: GroupList },
 
-  { path: path.GST, component: GSTMaster },
-  { path: path.GST_LIST, component: GSTList },
+	{ path: path.GST, component: GSTMaster },
+	{ path: path.GST_LIST, component: GSTList },
 
-  { path: path.PARTY_SUB_PARTY, component: PartySubParty },
-  { path: path.PARTY_SUB_PARTY_lIST, component: PartySubPartyList },
+	{ path: path.PARTY_SUB_PARTY, component: PartySubParty },
+	{ path: path.PARTY_SUB_PARTY_lIST, component: PartySubPartyList },
 
-  { path: path.PARTYITEM, component: PartyItems },
-  { path: path.CHANNEL_ITEM, component: PartyItems },
+	{ path: path.PARTYITEM, component: PartyItems },
+	{ path: path.CHANNEL_ITEM, component: PartyItems },
 
 
-  { path: path.SUBGROUP, component: SubGroupMaster },
-  { path: path.SUBGROUP_LIST, component: SubGroupList },
+	{ path: path.SUBGROUP, component: SubGroupMaster },
+	{ path: path.SUBGROUP_LIST, component: SubGroupList },
 
-  { path: path.GENERAL, component: GeneralMaster },
-  { path: path.GENERAL_LIST, component: GeneralList },
+	{ path: path.GENERAL, component: GeneralMaster },
+	{ path: path.GENERAL_LIST, component: GeneralList },
 
-  { path: path.ROUTES, component: RoutesMaster },
-  { path: path.ROUTES_LIST, component: RoutesList },
+	{ path: path.ROUTES, component: RoutesMaster },
+	{ path: path.ROUTES_LIST, component: RoutesList },
 
-  { path: path.SALESMAN, component: SalesManMaster },
-  { path: path.SALESMAN_LIST, component: SalesManList },
+	{ path: path.SALESMAN, component: SalesManMaster },
+	{ path: path.SALESMAN_LIST, component: SalesManList },
 
-  { path: path.CITY, component: CityMaster },
-  { path: path.CITY_LIST, component: CityList },
+	{ path: path.CITY, component: CityMaster },
+	{ path: path.CITY_LIST, component: CityList },
 
-  { path: path.INVOICE_EXCEL_UPLOAD, component: InvoiceExcelUpload },
-  { path: path.RETAILER_EXCEL_UPLOAD, component: RetailerExcelUpload },
+	{ path: path.INVOICE_EXCEL_UPLOAD, component: InvoiceExcelUpload },
+	{ path: path.RETAILER_EXCEL_UPLOAD, component: RetailerExcelUpload },
 
-  { path: path.IMPORT_EXCEL_FIELD_MAP, component: ImportExcelFieldMap },
-  { path: path.IMPORT_FIELD_ADD, component: ImportFieldAdd },
-  { path: path.IMPORT_FIELD_ADD_LIST, component: ImportFieldAddList },
+	{ path: path.IMPORT_EXCEL_FIELD_MAP, component: ImportExcelFieldMap },
+	{ path: path.IMPORT_FIELD_ADD, component: ImportFieldAdd },
+	{ path: path.IMPORT_FIELD_ADD_LIST, component: ImportFieldAddList },
 
-  { path: path.IMPORT_EXCEL_PARTY_MAP, component: ImportExcelPartyMap },
+	{ path: path.IMPORT_EXCEL_PARTY_MAP, component: ImportExcelPartyMap },
 
-  { path: path.ROUTE_UPDATE, component: RouteUpdate },
+	{ path: path.ROUTE_UPDATE, component: RouteUpdate },
 
-  { path: path.PARTY_MASTER_BULK_UPDATE, component: PartyMasterBulkUpdate },
+	{ path: path.PARTY_MASTER_BULK_UPDATE, component: PartyMasterBulkUpdate },
 
-  { path: path.MANAGEMENT_PARTIES, component: ManagementEmpParties },
+	{ path: path.MANAGEMENT_PARTIES, component: ManagementEmpParties },
 
-  { path: path.BANK, component: BankMaster },
-  { path: path.BANK_LIST, component: BankList },
+	{ path: path.BANK, component: BankMaster },
+	{ path: path.BANK_LIST, component: BankList },
 
-  { path: path.INVOICE_CONFIGURATION, component: InvoiceConfiguration },
+	{ path: path.INVOICE_CONFIGURATION, component: InvoiceConfiguration },
 
-  { path: path.DISCOUNT_MASTER, component: DiscountMaster },
-  { path: path.DISCOUNT_LIST, component: DiscountList },
+	{ path: path.DISCOUNT_MASTER, component: DiscountMaster },
+	{ path: path.DISCOUNT_LIST, component: DiscountList },
 
-  //******************************* Inventory Module ************************************//
-  { path: path.CHALLAN_LIST, component: ChallanList },
-  { path: path.CHALLAN, component: Challan },
+	//******************************* Inventory Module ************************************//
+	{ path: path.CHALLAN_LIST, component: ChallanList },
+	{ path: path.CHALLAN, component: Challan },
 
-  { path: path.GRN_LIST_1, component: GRNList },
-  { path: path.GRN_ADD_1, component: GRNAdd },
-  { path: path.GRN_STP_1, component: OrderList },
+	{ path: path.GRN_LIST_1, component: GRNList },
+	{ path: path.GRN_ADD_1, component: GRNAdd },
+	{ path: path.GRN_STP_1, component: OrderList },
 
-  { path: path.GRN_LIST_3, component: GRNList },
-  { path: path.GRN_ADD_3, component: GRNAdd3 },
-  { path: path.GRN_STP_3, component: OrderList },
+	{ path: path.GRN_LIST_3, component: GRNList },
+	{ path: path.GRN_ADD_3, component: GRNAdd3 },
+	{ path: path.GRN_STP_3, component: OrderList },
 
-  { path: path.STOCK_ENTRY, component: StockEntry },
+	{ path: path.STOCK_ENTRY, component: StockEntry },
 
-  { path: path.STOCK_ADJUSTMENT, component: StockAdjustment },
+	{ path: path.STOCK_ADJUSTMENT, component: StockAdjustment },
 
-  { path: path.STOCK_ADJUSTMENT_MODE_2, component: StockAdjustment },
+	{ path: path.STOCK_ADJUSTMENT_MODE_2, component: StockAdjustment },
 
-  //******************************* Purchase Module ************************************//
+	//******************************* Purchase Module ************************************//
 
-  { path: path.ORDER_1, component: Order },
-  { path: path.ORDER_LIST_1, component: OrderList },
+	{ path: path.ORDER_1, component: Order },
+	{ path: path.ORDER_LIST_1, component: OrderList },
 
-  { path: path.ORDER_2, component: Order },
-  { path: path.ORDER_LIST_2, component: OrderList },
+	{ path: path.ORDER_2, component: Order },
+	{ path: path.ORDER_LIST_2, component: OrderList },
 
-  { path: path.ORDER_4, component: Order },
-  { path: path.ORDER_LIST_4, component: OrderList },
+	{ path: path.ORDER_4, component: Order },
+	{ path: path.ORDER_LIST_4, component: OrderList },
 
-  { path: path.PURCHASE_RETURN, component: PurchaseReturn },
-  { path: path.PURCHASE_RETURN_LIST, component: SalesReturnList },
-  { path: path.PURCHASE_RETURN_MODE_3, component: PurchaseReturnMode3 },
+	{ path: path.PURCHASE_RETURN, component: PurchaseReturn },
+	{ path: path.PURCHASE_RETURN_LIST, component: SalesReturnList },
+	{ path: path.PURCHASE_RETURN_MODE_3, component: PurchaseReturnMode3 },
 
-  //******************************* PRODUCTION  Module ************************************//
-  { path: path.BIllOf_MATERIALS, component: BOMMaster },
-  { path: path.BIllOf_MATERIALS_LIST, component: BOMList },
+	//******************************* PRODUCTION Module ************************************//
+	{ path: path.BIllOf_MATERIALS, component: BOMMaster },
+	{ path: path.BIllOf_MATERIALS_LIST, component: BOMList },
 
-  { path: path.WORK_ORDER, component: WorkOrder },
-  { path: path.WORK_ORDER_LIST, component: WorkOrderList },
+	{ path: path.WORK_ORDER, component: WorkOrder },
+	{ path: path.WORK_ORDER_LIST, component: WorkOrderList },
 
-  { path: path.MATERIAL_ISSUE, component: MaterialIssueMaster },
-  { path: path.MATERIAL_ISSUE_LIST, component: MaterialIssueList },
-  { path: path.MATERIAL_ISSUE_STP, component: WorkOrderList },
+	{ path: path.MATERIAL_ISSUE, component: MaterialIssueMaster },
+	{ path: path.MATERIAL_ISSUE_LIST, component: MaterialIssueList },
+	{ path: path.MATERIAL_ISSUE_STP, component: WorkOrderList },
 
-  { path: path.PRODUCTION_MASTER, component: ProductionMaster },
-  { path: path.PRODUCTION_LIST, component: ProductionList },
-  { path: path.PRODUCTION_STP, component: MaterialIssueList },
+	{ path: path.PRODUCTION_MASTER, component: ProductionMaster },
+	{ path: path.PRODUCTION_LIST, component: ProductionList },
+	{ path: path.PRODUCTION_STP, component: MaterialIssueList },
 
-  { path: path.PRODUCTION_REISSUE, component: ProductionReIssueAdd },
-  { path: path.PRODUCTION_REISSUE_LIST, component: ProductionReIssueList },
-  { path: path.PRODUCTION_REISSUE_STP, component: ProductionList },
+	{ path: path.PRODUCTION_REISSUE, component: ProductionReIssueAdd },
+	{ path: path.PRODUCTION_REISSUE_LIST, component: ProductionReIssueList },
+	{ path: path.PRODUCTION_REISSUE_STP, component: ProductionList },
 
-  //******************************* Sale Module ************************************//
+	//******************************* Sale Module ************************************//
 
-  { path: path.INVOICE_1, component: Invoice },
-  { path: path.INVOICE_LIST_1, component: InvoiceList },
+	{ path: path.INVOICE_1, component: Invoice },
+	{ path: path.INVOICE_LIST_1, component: InvoiceList },
 
-  { path: path.LOADING_SHEET, component: LoadingSheet },
-  { path: path.LOADING_SHEET_LIST, component: LoadingSheetList },
-  { path: path.LOADING_SHEET_LIST_UPDATE, component: LoadingSheetUpdate },
+	{ path: path.LOADING_SHEET, component: LoadingSheet },
+	{ path: path.LOADING_SHEET_LIST, component: LoadingSheetList },
+	{ path: path.LOADING_SHEET_LIST_UPDATE, component: LoadingSheetUpdate },
 
-  { path: path.SALES_RETURN, component: SalesReturn },
-  { path: path.SALES_RETURN_LIST, component: SalesReturnList },
+	{ path: path.SALES_RETURN, component: SalesReturn },
+	{ path: path.SALES_RETURN_LIST, component: SalesReturnList },
 
-  //************************************** Inter Branch ********************************//
-  { path: path.IB_ORDER, component: Order },
-  { path: path.IB_ORDER_PO_LIST, component: OrderList },
-  { path: path.IB_ORDER_SO_LIST, component: OrderList },
+	//************************************** Inter Branch ********************************//
+	{ path: path.IB_ORDER, component: Order },
+	{ path: path.IB_ORDER_PO_LIST, component: OrderList },
+	{ path: path.IB_ORDER_SO_LIST, component: OrderList },
 
-  { path: path.INWARD, component: Inward },
-  { path: path.INWARD_LIST, component: InwardList },
-  { path: path.IB_INWARD_STP, component: InvoiceList },
+	{ path: path.INWARD, component: Inward },
+	{ path: path.INWARD_LIST, component: InwardList },
+	{ path: path.IB_INWARD_STP, component: InvoiceList },
 
-  { path: path.IB_INVOICE_LIST, component: InvoiceList },
-  { path: path.IB_GRN_LIST, component: InvoiceList },
-  { path: path.IB_INVOICE, component: Invoice },
-  { path: path.IB_INVOICE_STP, component: OrderList },
+	{ path: path.IB_INVOICE_LIST, component: InvoiceList },
+	{ path: path.IB_GRN_LIST, component: InvoiceList },
+	{ path: path.IB_INVOICE, component: Invoice },
+	{ path: path.IB_INVOICE_STP, component: OrderList },
 
-  //********************************Accounting ***********************************//
-  { path: path.RECEIPTS, component: Receipts },
-  { path: path.RECEIPTS_LIST, component: ReceiptList },
+	//********************************Accounting ***********************************//
+	{ path: path.RECEIPTS, component: Receipts },
+	{ path: path.RECEIPTS_LIST, component: ReceiptList },
 
-  { path: path.RECEIPTS_LIST_2, component: PaymentEntryList },
+	{ path: path.RECEIPTS_LIST_2, component: PaymentEntryList },
 
-  { path: path.BULK_RECIPT, component: BulkRecipt },
+	{ path: path.BULK_RECIPT, component: BulkRecipt },
 
-  { path: path.BANK_ASSIGN, component: BankAssign },
+	{ path: path.BANK_ASSIGN, component: BankAssign },
 
-  { path: path.PAYMENT_ENTRY, component: PaymentEntry },
-  { path: path.PAYMENT_ENTRY_LIST, component: PaymentEntryList },
+	{ path: path.PAYMENT_ENTRY, component: PaymentEntry },
+	{ path: path.PAYMENT_ENTRY_LIST, component: PaymentEntryList },
 
-  // |||||||||||||||||||||||||||||||||||||||||||||||||||
+	// |||||||||||||||||||||||||||||||||||||||||||||||||||
 
-  { path: path.CREDIT_LIST, component: CreditList },
-  { path: path.CREDIT_NOTE, component: DebitNoteMaster },
+	{ path: path.CREDIT_LIST, component: CreditList },
+	{ path: path.CREDIT_NOTE, component: DebitNoteMaster },
 
-  { path: path.DEBIT_LIST, component: CreditList },
-  { path: path.DEBIT_NOTE, component: DebitNoteMaster },
+	{ path: path.DEBIT_LIST, component: CreditList },
+	{ path: path.DEBIT_NOTE, component: DebitNoteMaster },
 
 
-  { path: path.GOODS_CREDIT_LIST, component: CreditList },
-  { path: path.GOODS_CREDIT_NOTE, component: GoodsCreditNote },
+	{ path: path.GOODS_CREDIT_LIST, component: CreditList },
+	{ path: path.GOODS_CREDIT_NOTE, component: GoodsCreditNote },
 
-  { path: path.GOODS_DEBIT_LIST, component: CreditList },
-  { path: path.GOODS_DEBIT_NOTE, component: GoodsCreditNote },
+	{ path: path.GOODS_DEBIT_LIST, component: CreditList },
+	{ path: path.GOODS_DEBIT_NOTE, component: GoodsCreditNote },
 
-  { path: path.CLAIM_TRACKING_ENTRY, component: ClaimTrackingEntry },
-  { path: path.CLAIM_TRACKING_ENTRY_LIST, component: ClaimTrackingEntryList },
-  // |||||||||||||||||||||||||||||||||||||||||||||||||||
+	{ path: path.CLAIM_TRACKING_ENTRY, component: ClaimTrackingEntry },
+	{ path: path.CLAIM_TRACKING_ENTRY_LIST, component: ClaimTrackingEntryList },
+	// |||||||||||||||||||||||||||||||||||||||||||||||||||
 
-  //**************************** Reports ***********************************//
+	//**************************** Reports ***********************************//
 
-  { path: path.SAP_LEDGER, component: SapLedger },
+	{ path: path.SAP_LEDGER, component: SapLedger },
 
-  { path: path.PARTY_LEDGER, component: PartyLedger },
-  { path: path.SELF_LEDGER, component: PartyLedger },
+	{ path: path.PARTY_LEDGER, component: PartyLedger },
+	{ path: path.SELF_LEDGER, component: PartyLedger },
 
-  { path: path.STOCK_REPORT, component: StockReport },
+	{ path: path.STOCK_REPORT, component: StockReport },
 
-  { path: path.STOCK_REPORT_1, component: StockReport_1 },
+	{ path: path.STOCK_REPORT_1, component: StockReport_1 },
 
-  { path: path.GENERIC_SALE_REPORT, component: GenericSaleReport },
+	{ path: path.GENERIC_SALE_REPORT, component: GenericSaleReport },
 
-  { path: path.RETAILER_DATA_REPORT, component: RetailerDataReport },
+	{ path: path.RETAILER_DATA_REPORT, component: RetailerDataReport },
 
-  { path: path.ORDER_SUMMARY_REPORT, component: OrderSummary },
+	{ path: path.ORDER_SUMMARY_REPORT, component: OrderSummary },
 
-  { path: path.CLAIM_SUMMARY_REPORT, component: ClaimSummary },
+	{ path: path.CLAIM_SUMMARY_REPORT, component: ClaimSummary },
 
-  { path: path.PURCHASE_GST_REPORT, component: PurchaseGSTReport },
+	{ path: path.PURCHASE_GST_REPORT, component: PurchaseGSTReport },
 
-  { path: path.INVOICE_DATA_EXPORT, component: InvoiceDataExport },
+	{ path: path.INVOICE_DATA_EXPORT, component: InvoiceDataExport },
 
-  { path: path.PURCHASE_DATA_EXPORT, component: InvoiceDataExport },
+	{ path: path.PURCHASE_DATA_EXPORT, component: InvoiceDataExport },
 
-  { path: path.DELETE_INVOICE_DATA_EXPORT, component: DeleteInvoiceDataExport },
+	{ path: path.DELETE_INVOICE_DATA_EXPORT, component: DeleteInvoiceDataExport },
 
-  { path: path.REPORT, component: Report },
+	{ path: path.REPORT, component: Report },
 
-  { path: path.PRODUCT_MARGIN_REPORT, component: ProductMarginReport },
+	{ path: path.PRODUCT_MARGIN_REPORT, component: ProductMarginReport },
 
-  { path: path.DAMAGE_STOCK_REPORT, component: DamageStockReport },
+	{ path: path.DAMAGE_STOCK_REPORT, component: DamageStockReport },
 
-  { path: path.GST_R1_REPORT, component: GSTR1Report },
+	{ path: path.GST_R1_REPORT, component: GSTR1Report },
 
-  { path: path.RETURN_REPORT, component: ReturnReport },
+	{ path: path.RETURN_REPORT, component: ReturnReport },
 
-  { path: path.CLAIM_SUMMARY_MASTER, component: ClaimSummaryMaster },
-  { path: path.CLAIM_SUMMARY_lIST, component: ClaimSummaryList },
+	{ path: path.CLAIM_SUMMARY_MASTER, component: ClaimSummaryMaster },
+	{ path: path.CLAIM_SUMMARY_lIST, component: ClaimSummaryList },
 
-  { path: path.ITEM_SALE_REPORT, component: ItemSaleReport },
+	{ path: path.ITEM_SALE_REPORT, component: ItemSaleReport },
 
-  { path: path.ITEM_REGISTER_REPORT, component: ItemRegisterReport },
+	{ path: path.ITEM_REGISTER_REPORT, component: ItemRegisterReport },
 
-  { path: path.CREDIT_DATA_EXPORT, component: CreditDebitDataExport },
+	{ path: path.CREDIT_DATA_EXPORT, component: CreditDebitDataExport },
 
-  { path: path.DEBIT_DATA_EXPORT, component: CreditDebitDataExport },
+	{ path: path.DEBIT_DATA_EXPORT, component: CreditDebitDataExport },
 
-  { path: path.RECEIPT_DATA_EXPORT, component: CreditDebitDataExport },
-  // ************************************ Utility **************************************//
+	{ path: path.RECEIPT_DATA_EXPORT, component: CreditDebitDataExport },
 
-  { path: path.SEARCH_BOX2, component: SearchBoxSecond },
-  { path: path.SEARCH_BOX3, component: SerachBox3 },
-  { path: path.TRANSACTION_LOG, component: TransactionLog },
+	{ path: path.PARTY_OUTSTANDING_REPORT, component: PartyOutstandingReport },
+	// ************************************ Utility **************************************//
 
-  { path: "/dashboard", component: Dashboard },
+	{ path: path.SEARCH_BOX2, component: SearchBoxSecond },
+	{ path: path.SEARCH_BOX3, component: SerachBox3 },
+	{ path: path.TRANSACTION_LOG, component: TransactionLog },
 
-  { path: "/", exact: true, component: () => <Redirect to="/login" /> },
-  // { component:() => <Redirect to="/login" /> },
-  { path: "/auth-404", component: Error404 },
-  { path: "/auth-500", component: Error500 },
+	{ path: "/dashboard", component: Dashboard },
+
+	{ path: "/", exact: true, component: () => <Redirect to="/login" /> },
+	// { component:() => <Redirect to="/login" /> },
+	{ path: "/auth-404", component: Error404 },
+	{ path: "/auth-500", component: Error500 },
 
 ]
 
 const authRoutes = [
-  //authencation page
-  { path: "/division", component: SelectDivisionPage },
-  { path: "/logout", component: Logout },
-  { path: "/login", component: Login },
-  { path: "/forgot-password", component: ForgetPwd },
-  { path: "/ResetPassword", component: ResetPassword },
-  { path: "/SendOTP", component: SendOTP },
-  { path: "/EnterOTP", component: EnterOTP },
-  { path: "/pages-404", component: Error404 },
-  // { component:() => <Redirect to="/login" /> },
-  { path: "/pages-500", component: Error500 },
+	//authencation page
+	{ path: "/division", component: SelectDivisionPage },
+	{ path: "/logout", component: Logout },
+	{ path: "/login", component: Login },
+	{ path: "/forgot-password", component: ForgetPwd },
+	{ path: "/ResetPassword", component: ResetPassword },
+	{ path: "/SendOTP", component: SendOTP },
+	{ path: "/EnterOTP", component: EnterOTP },
+	{ path: "/pages-404", component: Error404 },
+	// { component:() => <Redirect to="/login" /> },
+	{ path: "/pages-500", component: Error500 },
 ]
 
 export { userRoutes, authRoutes }

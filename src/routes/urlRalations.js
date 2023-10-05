@@ -165,7 +165,7 @@ export const ProductionMaster = url.PRODUCTION_LIST;
 export const ProductionList = url.PRODUCTION_STP;
 export const Production_Add_Mode = url.PRODUCTION_LIST;
 
-//******************************* Inventory  ************************************//
+//******************************* Inventory ************************************//
 
 export const GRN_LIST_1 = url.GRN_STP_1;
 export const GRN_ADD_1 = url.GRN_LIST_1;
@@ -268,4 +268,6 @@ export const DebitDataExport = url.DEBIT_DATA_EXPORT
 export const CreditDataExport = url.CREDIT_DATA_EXPORT
 
 export const ReceiptDataExport =url.RECEIPT_DATA_EXPORT
+
+export const PartyOutstandingReport =url.PARTY_OUTSTANDING_REPORT
 

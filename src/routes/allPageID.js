@@ -292,7 +292,7 @@ export const CREDIT_DATA_EXPORT = 244
 
 export const RECEIPT_DATA_EXPORT = 245
 
-
+export const PARTY_OUTSTANDING_REPORT = 246
 
 
 

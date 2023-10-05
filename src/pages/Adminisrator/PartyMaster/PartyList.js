@@ -159,6 +159,7 @@ const PartyList = () => {
                         reducers={reducers}
                         showBreadcrumb={false}
                         MasterModal={PartyMaster}
+                        goButnFunc={goButtonHandler}
                         masterPath={otherState.masterPath}
                         newBtnPath={otherState.newBtnPath}
                         mobaileDeleteApiFinc={mobaileDeleteApiFinc}

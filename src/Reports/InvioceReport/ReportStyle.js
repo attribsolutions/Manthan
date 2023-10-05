@@ -17,7 +17,6 @@ export const pageBorder = (doc) => {
 }
 export const pageHeder = (doc, data) => {
 
-    // doc.addImage(cbm_logo, 'PNG', 33, 14, 85, 50)
     doc.setDrawColor(0, 0, 0);
     doc.line(408, 63, 408, 16);//vertical right 1
     doc.line(570, data.isQR ? 103 : 63, 30, data.isQR ? 103 : 63)  //horizontal line 1 billby upper for repeat header
@@ -55,9 +54,6 @@ export const reportHeder1 = (doc, data) => {
     doc.line(570, data.isQR ? 103 : 63, 30, data.isQR ? 103 : 63) //horizontal line 1 billby upper
     doc.line(570, 16, 30, 16);//horizontal line 2
     doc.line(570, data.isQR ? 120 : 80, 30, data.isQR ? 120 : 80);//horizontal line 3
-
-    // doc.line(408, data.isQR ? 210 : 170, 408, 16);//vertical line header section billby 
-    // doc.line(220, data.isQR ? 210 : 170, 220, data.isQR ? 103 : 63);//vertical  line header section billto
 
     var BilledByStyle = {
         didDrawCell: (data1) => {
@@ -365,22 +361,18 @@ export const reportHeder2 = (doc, data) => {
     doc.setFont('Tahoma')
     doc.setFontSize(10)
     doc.setFont(undefined, 'bold')
-    //     doc.text(`GSTIN:${data.PartyGSTIN}`, 38, 90)
-    //     doc.text(`GSTIN:${data.CustomerGSTIN}`, 238, 90)
+
 }
 
 export const reportHeder3 = (doc, data) => {
     var date = date_dmy_func(data.InvoiceDate)
-
     doc.setFont('Tahoma')
     doc.setFontSize(10)
     doc.line(570, 33, 408, 33) //horizontal line 1 billby upper
-    // doc.line(570, 49, 408, 49) //horizontal line 1 billby upper
 
     doc.setFont(undefined, 'bold')
     doc.text(`Invoice No:   ${data.FullInvoiceNumber}`, 415, 27) //Invoice Id
     doc.text(`Invoice Date: ${date}`, 415, 43) //Invoice date
-    // doc.text(`PONumber: ${data.InvoicesReferences[0].FullOrderNumber}`, 415, 60) //Invoice date
 
 
 
@@ -389,14 +381,8 @@ export const reportHeder3 = (doc, data) => {
 
 export const reportFooter = (doc, data) => {
 
-    let stringNumber = toWords(Number(data.GrandTotal))
-    // doc.addImage(upi_qr_code, 'PNG', 359, 747, 75, 65)
     doc.setDrawColor(0, 0, 0);
     doc.line(570, 730, 30, 730);//horizontal line Footer 1
-    // doc.line(435, 745, 30, 745);//horizontal line Footer 2
-    // doc.line(360, 775, 30, 775);//horizontal line Footer 3
-    // doc.line(360, 795, 30, 795);//horizontal line Footer 3
-
     doc.line(435, 730, 435, 815);//vertical right Sub Total
     doc.line(340, 730, 340, 815);//vertical right Qr Code (1)
     doc.setFont('Tahoma')
@@ -598,23 +584,6 @@ export const reportFooter = (doc, data) => {
 
     const Total = numberWithCommas((GrandTotal).toFixed(2))
     doc.text(`${Total}`, 567, 812, 'right')
-    // doc.setFont(undefined, 'Normal')
-    // doc.setFont('Tahoma')
-    // doc.setFontSize(9)
-    // doc.setFont('Tahoma')
-    // doc.setFontSize(8)
-    // doc.setFont("Arimo");
-    // doc.text(`I/we hearby certify that food/foods mentioned in this invoice is/are warranted to be
-    //      of the nature and quantity which it/these purports to be `, 34, 782)
-    // doc.setFontSize(10)
-    // doc.text(`Signature `, 280, 810,)
-    // doc.text(`Prepared by :${data.PartyName} `, 35, 810,)
-    // doc.setFontSize(8)
-
-    // doc.setFont(undefined, 'bold')
-    // doc.text(`Rupees:`, 33, 740,)
-    // doc.addFont("Arial", 'Normal')
-    // doc.text(`${stringNumber}`, 65, 740,)
 
 }
 
@@ -844,6 +813,30 @@ export const tableBodyWithIGST = (doc, data) => {
             if (data1.row.cells[1].raw === "Batch") {
                 data1.row.cells[0].colSpan = 12
 
+            }
+        },
+
+
+        didDrawCell: (data1) => {
+            const rowIdx = data1.row.index;
+            const colIdx = data1.column.index;
+            if (rowIdx === 0 && colIdx === 8) {
+                if (data1.row.cells[8].raw === "          IGST           %        Amount") {
+
+                    const cellWidth = data1.cell.width;
+                    const cellHeight = data1.cell.height;
+                    const startX = data1.cell.x;
+                    const startY = data1.cell.y + cellHeight / 2;
+                    const endX = startX + cellWidth;
+                    const endY = startY;
+
+                    const startXVertical = data1.cell.x + cellWidth / 2;  // X-coordinate at the middle of the cell
+                    const startY1vertical = data1.cell.y + 9;
+                    const endYvertical = startY + cellHeight;
+
+                    doc.line(startXVertical - 3, startY1vertical, startXVertical - 3, endYvertical);  // Draw a vertical line
+                    doc.line(startX, startY, endX, endY);
+                }
             }
         },
 
