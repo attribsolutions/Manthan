@@ -320,7 +320,6 @@ export const reportHeder1 = (doc, data) => {
     doc.autoTable(table.DetailsOfTransport, table.DetailsOfTransportRow(data), DetailsOfTransportStyle);
     console.log("third", doc.previousAutoTable.finalY)
     priLength()
-
 }
 
 
@@ -628,10 +627,6 @@ export const tableBody = (doc, data) => {
                     doc.line(startX, startY, endX, endY);
                 }
             }
-
-
-
-
 
         },
         margin: {
