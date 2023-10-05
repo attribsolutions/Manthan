@@ -138,6 +138,8 @@ export const RowsWithCGST_SGST = (data) => {
             }
             if (data.SettingData.HSNCodeDigit === "3") {
                 HSNcodes = element.HSNCode.slice(0, 8);
+            } else {
+                HSNcodes = element.HSNCode.slice(0, 8);
             }
         }
         const tableitemRow = [
@@ -316,7 +318,10 @@ export const RowsWithIGST = (data) => {
             }
             if (data.SettingData.HSNCodeDigit === "3") {
                 HSNcodes = element.HSNCode.slice(0, 8);
+            } else {
+                HSNcodes = element.HSNCode.slice(0, 8);
             }
+
         }
         const tableitemRow = [
             SrNO++,
@@ -452,9 +457,9 @@ export const BilledToRow = (data) => {
 export const DetailsOfTransportRow = (data) => {
 
     let OrderNumber = " "
-    
+
     if (data.InvoicesReferences.length > 0) {
-        
+
         const PoNumber = data.InvoicesReferences.map(index => ({
             SystemGenerate: index.FullOrderNumber,
             Description: index.Description,
