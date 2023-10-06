@@ -198,6 +198,8 @@ export const GetPartyTypes_For_Dropdown = () => get(url.PARTYTYPES)// get partyt
 export const GetPartyTypeByDivisionTypeID_For_Dropdown = (id) => get(`${url.GET_PARTYTYPE_BY_DIVISIONTYPES_ID}/${id}`)// GetDistrictOnState DropDown API
 export const GetCompanyByDivisionTypeID_For_Dropdown = (id) => get(`${url.GET_COMPANY_BY_DIVISIONTYPES_ID}/${id}`)// GetCompanyByDivisionTypeID DropDown API
 export const Party_Address_Delete_API = ({ deleteId }) => del(`${url.PARTY_ADDRESS_DELETE_API}/${deleteId}`)// delete api
+export const RetailerListForApproval = (jsonbody) => post(url.PARTY_LIST_FOR_APPROVAL_API, jsonbody)//get api
+export const RetailerListForApproval_ID = ({ transactionId }) => get(`${url.PARTY_LIST_FOR_APPROVAL_API}/${transactionId}`)// GetCompanyByDivisionTypeID DropDown API
 
 //RoleAccess
 
@@ -713,15 +715,15 @@ export const CreditDebitDataExport_GoBtn_API = ({ jsonBody }) => post(url.CREDIT
 
 //mobail Api
 
-export const mobileApp_ProductAdd_Api=(transactionId)=>post(`${url.MOBILE_APP_PRODUCT_ADD}/${transactionId}`)
-export const mobileApp_ProductDelete_Api=(transactionId)=>del(`${url.MOBILE_APP_PRODUCT_DELETE}/${transactionId}`)
-export const mobileApp_ProductUpdate_Api=(transactionId)=>put(`${url.MOBILE_APP_PRODUCT_UPDATE}/${transactionId}`)
+export const mobileApp_ProductAdd_Api = (transactionId) => post(`${url.MOBILE_APP_PRODUCT_ADD}/${transactionId}`)
+export const mobileApp_ProductDelete_Api = (transactionId) => del(`${url.MOBILE_APP_PRODUCT_DELETE}/${transactionId}`)
+export const mobileApp_ProductUpdate_Api = (transactionId) => put(`${url.MOBILE_APP_PRODUCT_UPDATE}/${transactionId}`)
 
-export const mobileApp_RetailerAdd_Api=(transactionId)=>post(`${url.MOBILE_APP_RETAILER_ADD}/${transactionId}`)
-export const mobileApp_RetailerDelete_Api=(transactionId)=>del(`${url.MOBILE_APP_RETAILER_DELETE}/${transactionId}`)
-export const mobileApp_RetailerUpdate_Api=async(transactionId)=>{
+export const mobileApp_RetailerAdd_Api = (transactionId) => post(`${url.MOBILE_APP_RETAILER_ADD}/${transactionId}`)
+export const mobileApp_RetailerDelete_Api = (transactionId) => del(`${url.MOBILE_APP_RETAILER_DELETE}/${transactionId}`)
+export const mobileApp_RetailerUpdate_Api = async (transactionId) => {
 	debugger
-	const a =await put(`${url.MOBILE_APP_RETAILER_UPDATE}/${transactionId}`)
+	const a = await put(`${url.MOBILE_APP_RETAILER_UPDATE}/${transactionId}`)
 	debugger
 	return a
 }

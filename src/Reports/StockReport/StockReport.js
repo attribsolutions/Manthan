@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Col, FormGroup, Label } from "reactstrap";
+import { Col, FormGroup, Label, Row } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import { C_Button } from "../../components/Common/CommonButton";
 import { C_DatePicker } from "../../CustomValidateForm";
@@ -15,6 +15,9 @@ import { mode, pageId } from "../../routes/index"
 import { stockReport_GoButton_API, stockReport_GoButton_API_Success } from "../../store/Report/StockReport/action";
 import { ReportComponent } from "../ReportComponent";
 import CustomTable from "../../CustomTable2";
+import ToolkitProvider from "react-bootstrap-table2-toolkit";
+import BootstrapTable from "react-bootstrap-table-next";
+import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
 
 const StockReport = (props) => {
 
@@ -278,16 +281,40 @@ const StockReport = (props) => {
 
                 </div>
 
-                <CustomTable
-                    keyField={"id"}
-                    data={tableData}
-                    columns={tableColumns}
-                    paginationEnabled={false}
-                    onDataSizeChange={({ dataCount }) => {
-                        dispatch(BreadcrumbShowCountlabel(`Count:${dataCount}`));
-                    }}
-                    noDataIndication={<div className="text-danger text-center table-cursor-pointer"  >Data Not available</div>}
-                />
+                <div className="mt-1">
+                    <ToolkitProvider
+                        keyField="id"
+                        data={tableData}
+                        columns={tableColumns}
+                        search
+                    >
+                        {(toolkitProps,) => (
+                            <React.Fragment>
+                                <Row>
+                                    <Col xl="12">
+                                        <div className="table-responsive table">
+                                            <BootstrapTable
+                                                keyField="PartyID"
+                                                classes={"table  table-bordered table-hover"}
+                                                noDataIndication={
+                                                    <div className="text-danger text-center ">
+                                                        Record Not available
+                                                    </div>
+                                                }
+                                                onDataSizeChange={({ dataSize }) => {
+                                                    dispatch(BreadcrumbShowCountlabel(`Count:${dataSize}`));
+                                                }}
+                                                {...toolkitProps.baseProps}
+                                            />
+                                            {mySearchProps(toolkitProps.searchProps)}
+                                        </div>
+                                    </Col>
+                                </Row>
+
+                            </React.Fragment>
+                        )}
+                    </ToolkitProvider>
+                </div>
             </div>
             <C_Report />
         </React.Fragment >

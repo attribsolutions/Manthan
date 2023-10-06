@@ -93,6 +93,8 @@ export const GET_PARTYTYPE_BY_DIVISIONTYPES_ID = "/GetPartyTypeByDivisionTypeID"
 export const GET_COMPANY_BY_DIVISIONTYPES_ID = "/GetCompanyByDivisionTypeID"
 export const PARTY_ADDRESS_DELETE_API = "/PartyAddressDelete"
 
+export const PARTY_LIST_FOR_APPROVAL_API = "/PartyListForApproval"
+
 //Role Access
 export const PAGE_DROPDOWN_FOR_ROLE_ACCESS_ADD_PAGE = "/RoleAccessGetPages"
 export const GET_ROLE_ACCESS_LIST_FOR_ROLE_ACCESS_PAGE = '/RoleAccessNewUpdated'

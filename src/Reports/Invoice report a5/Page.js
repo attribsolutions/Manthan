@@ -116,11 +116,6 @@ const InvioceReporta5 = async (data) => {
     const BATCH_SIZE = 40; // You can adjust the batch size according to your needs
 
     if (Array.isArray(data)) {
-
-        // doc.text('Page' + String("2") + ' of ' + String("1"), 500, 390,)
-        // doc.text('Print Date :' + String(currentDate_dmy) + ' Time ' + String(CurrentTime()), 30, 390,)
-
-
         for (let i = 0; i < data.length; i += BATCH_SIZE) {
             const batch = data.slice(i, i + BATCH_SIZE);
             batch.forEach((item, index) => {
@@ -133,8 +128,6 @@ const InvioceReporta5 = async (data) => {
                 }
             });
         }
-
-
 
     } else {
         const Data = [data];

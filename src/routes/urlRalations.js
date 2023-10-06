@@ -271,3 +271,5 @@ export const ReceiptDataExport =url.RECEIPT_DATA_EXPORT
 
 export const PartyOutstandingReport =url.PARTY_OUTSTANDING_REPORT
 
+export const RetailerApproval =url.RETAILER_APPROVAL
+

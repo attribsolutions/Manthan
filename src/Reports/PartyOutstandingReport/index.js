@@ -48,7 +48,7 @@ const PartyOutstandingReport = (props) => {
 		})
 	);
 
-	const { userAccess, pageField, RoutesList,RouteListLoading,goButtonData = [],listBtnLoading } = reducers;
+	const { userAccess, pageField, RoutesList, RouteListLoading, goButtonData = [], listBtnLoading } = reducers;
 	const { fromdate = currentDate_ymd, todate = currentDate_ymd } = headerFilters;
 
 
@@ -74,9 +74,9 @@ const PartyOutstandingReport = (props) => {
 
 	useEffect(() => {
 
-	if (goButtonData.StatusCode===200) {
-	setTableData(goButtonData.Data)
-	}
+		if (goButtonData.StatusCode === 200) {
+			setTableData(goButtonData.Data)
+		}
 	}, [goButtonData]);
 
 	useEffect(() => {
@@ -95,29 +95,29 @@ const PartyOutstandingReport = (props) => {
 
 	const [tableColumns] = DynamicColumnHook({ pageField })
 
-		const RoutesListOptions = RoutesList.map((data) => ({
+	const RoutesListOptions = RoutesList.map((data) => ({
 		value: data.id,
 		label: data.Name,
-		}))
+	}))
 
-async function goButtonHandler(e, btnMode) {
-	try {
-		setBtnMode(btnMode)
+	async function goButtonHandler(e, btnMode) {
+		try {
+			setBtnMode(btnMode)
 
 			if ((isSCMParty) && (partyDropdown === "")) {
-			customAlert({ Type: 3, Message: "Please Select Party" });
-			return;
-		}
+				customAlert({ Type: 3, Message: "Please Select Party" });
+				return;
+			}
 
 			const jsonBody = JSON.stringify({
-			"Date": fromdate,
-			"RouteID":routeDropdown===''?"": routeDropdown.value,
-			"PartyID": partyDropdown === "" ? _cfunc.loginPartyID() : partyDropdown.value,
-		});
+				"Date": fromdate,
+				"RouteID": routeDropdown === '' ? "" : routeDropdown.value,
+				"PartyID": partyDropdown === "" ? _cfunc.loginPartyID() : partyDropdown.value,
+			});
 
-		dispatch(damageStockReport_GoButton_API({ jsonBody,subPageMode }))
+			dispatch(damageStockReport_GoButton_API({ jsonBody, subPageMode }))
 
-	} catch (error) { _cfunc.CommonConsole(error) }
+		} catch (error) { _cfunc.CommonConsole(error) }
 	}
 
 	function fromdateOnchange(e, date) {
@@ -130,9 +130,9 @@ async function goButtonHandler(e, btnMode) {
 	function partyOnChangeHandler(e) {
 		setPartyDropdown(e);
 		setRouteDropdown('');
-		const jsonBody = JSON.stringify({CompanyID: _cfunc.loginCompanyID(),PartyID: e.value});
-			dispatch(GetRoutesList(jsonBody));
-			setTableData([]);
+		const jsonBody = JSON.stringify({ CompanyID: _cfunc.loginCompanyID(), PartyID: e.value });
+		dispatch(GetRoutesList(jsonBody));
+		setTableData([]);
 	}
 
 	return (
@@ -140,97 +140,97 @@ async function goButtonHandler(e, btnMode) {
 			<MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
 			<div className="page-content">
 
-		<div className="px-2 c_card_filter text-black mb-1">
-			<div className="row">
-				<Col sm={(isSCMParty) ? 4 : 3} className="">
-					<FormGroup className="mb-2 row mt-3">
-						<Label className="col-sm-4 p-2" style={{ width: "66px" }}>
-							Date
-						</Label>
-						<Col sm={7}>
-							<C_DatePicker
-								name='fromdate'
-								value={fromdate}
-								onChange={fromdateOnchange}
-							/>
-						</Col>
-					</FormGroup>
-				</Col>
-
-				<PartyDropdownForReport // Party Dropdown if isSCMParty true then Party dropdown show
-					partyValue={partyDropdown}
-					setPartyValue={partyOnChangeHandler}
-				/>
-				<Col sm={(isSCMParty) ? 4 : 3}>
-					<FormGroup className="row mt-3">
-						<Label className="col-sm-2 p-2" style={{ width: "85px" }}>
-							Route
-						</Label>
-						<Col sm={7}>
-							<C_Select
-								name="Route"
-								value={routeDropdown}
-								// isDisabled={tableData.length > 0 && true}
-								isSearchable={true}
-								className="react-dropdown"
-								isLoading={RouteListLoading}
-								classNamePrefix="dropdown"
-								styles={{
-									menu: (provided) => ({ ...provided, zIndex: 2 }),
-								}}
-								options={RoutesListOptions}
-								onChange={(e) => {
-									setRouteDropdown(e);
-									setTableData([]);
-								}}
-							/>
-						</Col>
-					</FormGroup>
-				</Col>
-				<Col sm="1" className="mt-3 mb-3">
-					<Go_Button onClick={goButtonHandler} loading={listBtnLoading}/>
-				</Col>
-
-			</div>
-		</div>
-
-		<div className="mt-1">
-			<ToolkitProvider
-				keyField="PartyID"
-				data={tableData}
-				columns={tableColumns}
-				search
-			>
-				{(toolkitProps,) => (
-					<React.Fragment>
-						<Row>
-							<Col xl="12">
-								<div className="table-responsive table">
-									<BootstrapTable
-										keyField="PartyID"
-										classes={"table  table-bordered table-hover"}
-										noDataIndication={
-											<div className="text-danger text-center ">
-												Record Not available
-											</div>
-										}
-										onDataSizeChange={({ dataSize }) => {
-											dispatch(BreadcrumbShowCountlabel(`Count:${dataSize}`));
-										}}
-										{...toolkitProps.baseProps}
+				<div className="px-2 c_card_filter text-black mb-1">
+					<div className="row">
+						<Col sm={(isSCMParty) ? 4 : 3} className="">
+							<FormGroup className="mb-2 row mt-3">
+								<Label className="col-sm-4 p-2" style={{ width: "66px" }}>
+									Date
+								</Label>
+								<Col sm={7}>
+									<C_DatePicker
+										name='fromdate'
+										value={fromdate}
+										onChange={fromdateOnchange}
 									/>
-									{mySearchProps(toolkitProps.searchProps)}
-								</div>
-							</Col>
-						</Row>
+								</Col>
+							</FormGroup>
+						</Col>
 
-					</React.Fragment>
-				)}
-			</ToolkitProvider>
+						<PartyDropdownForReport // Party Dropdown if isSCMParty true then Party dropdown show
+							partyValue={partyDropdown}
+							setPartyValue={partyOnChangeHandler}
+						/>
+						<Col sm={(isSCMParty) ? 4 : 3}>
+							<FormGroup className="row mt-3">
+								<Label className="col-sm-2 p-2" style={{ width: "85px" }}>
+									Route
+								</Label>
+								<Col sm={7}>
+									<C_Select
+										name="Route"
+										value={routeDropdown}
+										// isDisabled={tableData.length > 0 && true}
+										isSearchable={true}
+										className="react-dropdown"
+										isLoading={RouteListLoading}
+										classNamePrefix="dropdown"
+										styles={{
+											menu: (provided) => ({ ...provided, zIndex: 2 }),
+										}}
+										options={RoutesListOptions}
+										onChange={(e) => {
+											setRouteDropdown(e);
+											setTableData([]);
+										}}
+									/>
+								</Col>
+							</FormGroup>
+						</Col>
+						<Col sm="1" className="mt-3 mb-3">
+							<Go_Button onClick={goButtonHandler} loading={listBtnLoading} />
+						</Col>
+
+					</div>
+				</div>
+
+				<div className="mt-1">
+					<ToolkitProvider
+						keyField="PartyID"
+						data={tableData}
+						columns={tableColumns}
+						search
+					>
+						{(toolkitProps,) => (
+							<React.Fragment>
+								<Row>
+									<Col xl="12">
+										<div className="table-responsive table">
+											<BootstrapTable
+												keyField="PartyID"
+												classes={"table  table-bordered table-hover"}
+												noDataIndication={
+													<div className="text-danger text-center ">
+														Record Not available
+													</div>
+												}
+												onDataSizeChange={({ dataSize }) => {
+													dispatch(BreadcrumbShowCountlabel(`Count:${dataSize}`));
+												}}
+												{...toolkitProps.baseProps}
+											/>
+											{mySearchProps(toolkitProps.searchProps)}
+										</div>
+									</Col>
+								</Row>
+
+							</React.Fragment>
+						)}
+					</ToolkitProvider>
+				</div>
 			</div>
-	</div>
-	<C_Report />
-	</React.Fragment >
+			<C_Report />
+		</React.Fragment >
 	)
 }
 

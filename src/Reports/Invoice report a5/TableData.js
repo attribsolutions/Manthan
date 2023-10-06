@@ -138,6 +138,8 @@ export const RowsWithCGST_SGST = (data) => {
             }
             if (data.SettingData.HSNCodeDigit === "3") {
                 HSNcodes = element.HSNCode.slice(0, 8);
+            } else {
+                HSNcodes = element.HSNCode.slice(0, 8);
             }
         }
         const tableitemRow = [
@@ -316,7 +318,10 @@ export const RowsWithIGST = (data) => {
             }
             if (data.SettingData.HSNCodeDigit === "3") {
                 HSNcodes = element.HSNCode.slice(0, 8);
+            } else {
+                HSNcodes = element.HSNCode.slice(0, 8);
             }
+
         }
         const tableitemRow = [
             SrNO++,
@@ -383,7 +388,6 @@ export const RowsWithIGST = (data) => {
             returnArr.push(tableitemRow)
 
         }
-
 
         else {
             returnArr.push(totalrow());
@@ -452,9 +456,9 @@ export const BilledToRow = (data) => {
 export const DetailsOfTransportRow = (data) => {
 
     let OrderNumber = " "
-    
+
     if (data.InvoicesReferences.length > 0) {
-        
+
         const PoNumber = data.InvoicesReferences.map(index => ({
             SystemGenerate: index.FullOrderNumber,
             Description: index.Description,
@@ -497,12 +501,7 @@ export const BankRow = (data, doc) => {
         ]
     } else {
 
-        var reportArray = [
-            // [],
-            // [, `Bank details not provided. Please update Bank details`]
-        ]
-        // doc.line(340, 345, 30, 345);//horizontal line  (4)
-
+        var reportArray = []
 
     }
     return reportArray;

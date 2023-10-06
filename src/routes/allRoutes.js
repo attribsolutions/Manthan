@@ -191,6 +191,7 @@ import ClaimTrackingEntry from "../pages/Accounting/Claim Tracking Entry/ClaimTr
 import ClaimTrackingEntryList from "../pages/Accounting/Claim Tracking Entry/ClaimTrackingEntryList";
 import CreditDebitDataExport from "../Reports/CreditDebitDataExport.js";
 import PartyOutstandingReport from "../Reports/PartyOutstandingReport";
+import RetailerApprovalList from "../pages/Adminisrator/RetailerApproval";
 
 
 
@@ -329,6 +330,8 @@ const userRoutes = [
 
 	{ path: path.DISCOUNT_MASTER, component: DiscountMaster },
 	{ path: path.DISCOUNT_LIST, component: DiscountList },
+
+	{ path: path.RETAILER_APPROVAL, component: RetailerApprovalList },
 
 	//******************************* Inventory Module ************************************//
 	{ path: path.CHALLAN_LIST, component: ChallanList },
