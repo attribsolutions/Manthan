@@ -126,6 +126,8 @@ export const Rows = (data) => {
             }
             if (data.SettingData.HSNCodeDigit === "3") {
                 HSNcodes = element.HSNCode.slice(0, 8);
+            } else {
+                HSNcodes = element.HSNCode.slice(0, 8);
             }
         }
         const tableitemRow = [
@@ -277,6 +279,8 @@ export const RowsWithIGST = (data) => {
                 HSNcodes = element.HSNCode.slice(0, 6);
             }
             if (data.SettingData.HSNCodeDigit === "3") {
+                HSNcodes = element.HSNCode.slice(0, 8);
+            } else {
                 HSNcodes = element.HSNCode.slice(0, 8);
             }
         }
@@ -453,10 +457,7 @@ export const BankRow = (data) => {
             [`Bank Name :${BankData.BankName}`]
         ]
     } else {
-        var reportArray = [
-            // [],
-            // [, `Bank details not provided. Please update Bank details`]
-        ]
+        var reportArray = []
     }
 
     return reportArray;

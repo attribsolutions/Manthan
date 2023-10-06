@@ -109,6 +109,11 @@ export const reportHeder1 = (doc, data) => {
             };
 
         },
+        didParseCell: (data1) => {
+            if (data1.row.cells[0].raw === `            ${data.PartyName}`) {
+                data1.row.cells[0].styles.fontStyle = "bold"
+            }
+        },
 
         margin: {
             top: 45, left: 30, right: 35,
@@ -194,6 +199,11 @@ export const reportHeder1 = (doc, data) => {
             };
 
         },
+        didParseCell: (data1) => {
+            if (data1.row.cells[0].raw === `                   ${data.CustomerName}`) {
+                data1.row.cells[0].styles.fontStyle = "bold"
+            }
+        },
         margin: {
             top: 45, left: 220, right: 35,
         },
@@ -217,6 +227,7 @@ export const reportHeder1 = (doc, data) => {
                 valign: "top",
                 columnWidth: 188,
                 halign: 'lfet',
+
             },
         },
         tableLineColor: "black",
