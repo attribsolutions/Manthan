@@ -324,18 +324,18 @@ const HeaderSection = (props) => {
                 : false;
 
         if (isLastInvoice) {
-            if (event.some((item) => [2, 4].includes(item.value))) {
-                event = event.filter((item) => ![2, 4].includes(item.value));
-            }
+            // if (event.some((item) => [2, 4].includes(item.value))) {
+            //     event = event.filter((item) => ![2, 4].includes(item.value));
+            // }
             if (!event.some((item) => item.value === 1)) {
                 event.push(initail.SHOW_ALSO_OPTIONS[0]);
             }
         }
 
         if (event.some((item) => [2, 4].includes(item.value))) {
-            if (event.some((item) => [1, 5, 6, 7].includes(item.value))) {
-                event = event.filter((item) => ![1, 5, 6, 7].includes(item.value));
-            }
+            // if (event.some((item) => [1, 5, 6, 7].includes(item.value))) {
+            //     event = event.filter((item) => ![1, 5, 6, 7].includes(item.value));
+            // }
             if (!event.some((item) => item.value === 4)) {
                 event.push(initail.SHOW_ALSO_OPTIONS[3]);
             }
@@ -381,13 +381,13 @@ const HeaderSection = (props) => {
         <React.Fragment>
             <MetaTags>{_cfunc.metaTagLabel(states.userPageAccessState)}</MetaTags>
 
-            <div className="page-content">
+            <div>
                 <div className="item-Sale-card_1 px-2 text-black mt-n1 ">
                     <Row>
-                        <Col className="col col-11 mb-n1 mt-1">
-                            <Row>
+                        <Col className="col col-11  mt-1">
+                            <Row  className="mb-2 row ">
                                 <Col sm={3}>
-                                    <FormGroup className="mb-n3 row mt-1">
+                                    <FormGroup className="mb-n2 row mt-1">
                                         <Input style={{ marginLeft: "5px", marginTop: "10px" }}
                                             className="p-1"
                                             id="fromdate"
@@ -494,253 +494,277 @@ const HeaderSection = (props) => {
                         </Col>
                     </Row>
                 </div>
-
-                <div className="item-Sale-card_3 px-2 text-black mt-1 mb-1">
-                    <Row className="mb-1">
-                        <Col className="col col-11">
-                            <Row>
-                                <Col sm={3}>
-                                    <FormGroup className=" row mt-1 mb-n3">
-                                        <Input style={{ marginLeft: "5px", marginTop: "10px" }}
-                                            className="p-1"
-                                            type="checkbox"
-                                            checked={states.channelToCheckbox}
-                                            onChange={(e) => { states.setChannelToCheckbox(e.target.checked) }}
-                                        />
-                                        <Label className="col-sm-3 p-2">Channel to</Label>
-                                        <Col sm={6}>
-                                            <C_Select
-                                                value={states.channelToSelect}
-                                                isSearchable={true}
-                                                className="react-dropdown"
-                                                classNamePrefix="dropdown"
-                                                isMulti={true}
-                                                styles={{
-                                                    menu: provided => ({ ...provided, zIndex: 2 })
-                                                }}
-                                                options={channelToDropdownOptions}
-
-                                                onChange={(e) => { ChannelToOnchange(e) }}
+                {!states.pivotMode &&
+                    <div className="item-Sale-card_3 px-2 text-black mt-1 mb-1">
+                        <Row className="mb-1 ">
+                            <Col className="col col-11">
+                                <Row className="mt-1 ">
+                                    <Col sm={3}>
+                                        <FormGroup className=" row mt-1 mb-n3">
+                                            <Input style={{ marginLeft: "5px", marginTop: "10px" }}
+                                                className="p-1"
+                                                type="checkbox"
+                                                checked={states.channelToCheckbox}
+                                                onChange={(e) => { states.setChannelToCheckbox(e.target.checked) }}
                                             />
-                                        </Col>
-                                    </FormGroup>
-                                </Col>
+                                            <Label className="col-sm-3 p-2">Channel to</Label>
+                                            <Col sm={6}>
+                                                <C_Select
+                                                    value={states.channelToSelect}
+                                                    isSearchable={true}
+                                                    className="react-dropdown"
+                                                    classNamePrefix="dropdown"
+                                                    isMulti={true}
+                                                    styles={{
+                                                        menu: provided => ({ ...provided, zIndex: 2 })
+                                                    }}
+                                                    options={channelToDropdownOptions}
 
-                                <Col sm={3}>
-                                    <FormGroup className=" row mt-1">
-                                        <Input style={{ marginLeft: "5px", marginTop: "10px" }}
-                                            className="p-1"
-                                            type="checkbox"
-                                            checked={states.routeCheckbox}
-                                            onChange={(e) => { states.setRouteCheckbox(e.target.checked) }}
-                                        />
-                                        <Label className="col-sm-4 p-2">Route</Label>
-                                        <Col>
-                                            <C_Select
-                                                classNamePrefix="react-select"
-                                                value={states.routeSelect}
-                                                options={routeDropdownOptions}
-                                                // onChange={(e) => { states.setRouteSelect(e) }}
-                                                onChange={(e) => { RouteOnChange(e) }}
-                                                isMulti={true}
-                                                isLoading={routesDropLoading}
-                                                styles={{
-                                                    menu: provided => ({ ...provided, zIndex: 2 })
-                                                }}
+                                                    onChange={(e) => { ChannelToOnchange(e) }}
+                                                />
+                                            </Col>
+                                        </FormGroup>
+                                    </Col>
+
+                                    <Col sm={3}>
+                                        <FormGroup className=" row mt-1">
+                                            <Input style={{ marginLeft: "5px", marginTop: "10px" }}
+                                                className="p-1"
+                                                type="checkbox"
+                                                checked={states.routeCheckbox}
+                                                onChange={(e) => { states.setRouteCheckbox(e.target.checked) }}
                                             />
-                                        </Col>
-                                    </FormGroup>
-                                </Col>
+                                            <Label className="col-sm-4 p-2">Route</Label>
+                                            <Col>
+                                                <C_Select
+                                                    classNamePrefix="react-select"
+                                                    value={states.routeSelect}
+                                                    options={routeDropdownOptions}
+                                                    // onChange={(e) => { states.setRouteSelect(e) }}
+                                                    onChange={(e) => { RouteOnChange(e) }}
+                                                    isMulti={true}
+                                                    isLoading={routesDropLoading}
+                                                    styles={{
+                                                        menu: provided => ({ ...provided, zIndex: 2 })
+                                                    }}
+                                                />
+                                            </Col>
+                                        </FormGroup>
+                                    </Col>
 
-                                <Col sm={3}>
-                                    <FormGroup className=" row mt-1">
-                                        <Input style={{ marginLeft: "5px", marginTop: "10px" }}
-                                            className="p-1"
-                                            type="checkbox"
-                                            checked={states.customerCheckbox}
-                                            onChange={(e) => { states.setCustomerCheckbox(e.target.checked) }}
-                                        />
-                                        <Label className="col-sm-4 p-2">Customer</Label>
-
-                                        <Col>
-                                            <C_Select
-                                                value={states.customerSelect}
-                                                isSearchable={true}
-                                                isLoading={customerDropLoading}
-                                                isMulti={true}
-                                                className="react-dropdown"
-                                                classNamePrefix="dropdown"
-                                                styles={{
-                                                    menu: provided => ({ ...provided, zIndex: 2 })
-                                                }}
-                                                options={customerDropdownOptions}
-                                                onChange={(e) => { CustomerOnChange(e) }}
-
+                                    <Col sm={3}>
+                                        <FormGroup className=" row mt-1">
+                                            <Input style={{ marginLeft: "5px", marginTop: "10px" }}
+                                                className="p-1"
+                                                type="checkbox"
+                                                checked={states.customerCheckbox}
+                                                onChange={(e) => { states.setCustomerCheckbox(e.target.checked) }}
                                             />
-                                        </Col>
-                                    </FormGroup>
-                                </Col>
+                                            <Label className="col-sm-4 p-2">Customer</Label>
 
-                                <Col sm={3}>
-                                    <FormGroup className=" row mt-1">
-                                        <div style={{ marginLeft: "1px", marginTop: "10px", width: "5px", }}></div>
-                                        <Label className="col-sm-4 p-2">Show Also</Label>
+                                            <Col>
+                                                <C_Select
+                                                    value={states.customerSelect}
+                                                    isSearchable={true}
+                                                    isLoading={customerDropLoading}
+                                                    isMulti={true}
+                                                    className="react-dropdown"
+                                                    classNamePrefix="dropdown"
+                                                    styles={{
+                                                        menu: provided => ({ ...provided, zIndex: 2 })
+                                                    }}
+                                                    options={customerDropdownOptions}
+                                                    onChange={(e) => { CustomerOnChange(e) }}
 
-                                        <Col>
-                                            <C_Select
-                                                value={states.showAlsoSelect}
-                                                isSearchable={true}
-                                                isMulti={true}
-                                                className="react-dropdown"
-                                                classNamePrefix="dropdown"
-                                                styles={{
-                                                    menu: provided => ({ ...provided, zIndex: 2 })
-                                                }}
-                                                options={initail.SHOW_ALSO_OPTIONS}
-                                                onChange={showAlsoOnChange}
+                                                />
+                                            </Col>
+                                        </FormGroup>
+                                    </Col>
 
+                                    <Col sm={3}>
+                                        <FormGroup className=" row mt-1">
+                                            <div style={{ marginLeft: "1px", marginTop: "10px", width: "5px", }}></div>
+                                            <Label className="col-sm-4 p-2">Show Also</Label>
+
+                                            <Col>
+                                                <C_Select
+                                                    value={states.showAlsoSelect}
+                                                    isSearchable={true}
+                                                    isMulti={true}
+                                                    className="react-dropdown"
+                                                    classNamePrefix="dropdown"
+                                                    styles={{
+                                                        menu: provided => ({ ...provided, zIndex: 2 })
+                                                    }}
+                                                    options={initail.SHOW_ALSO_OPTIONS}
+                                                    onChange={showAlsoOnChange}
+
+                                                />
+                                            </Col>
+                                        </FormGroup>
+                                    </Col>
+                                </Row>
+                            </Col>
+
+                            <Col sm="1" className="mt-2 mb-1 ">
+
+                                {(states.initaialBaseData.length > 0) &&
+                                    <>
+                                        <samp>
+                                            <C_Button
+                                                type="button"
+                                                className="btn btn-success border-1 font-size-12 text-center"
+                                                onClick={() => { dataManpulationFunction(states.initaialBaseData) }} // Example field, you can change it
+                                            >
+                                                <span className="font-weight-bold" style={{ fontWeight: "bold", fontSize: "14px" }}> Sort</span>
+                                            </C_Button>
+                                        </samp>
+                                        <samp style={{paddingLeft:"8px"}}>
+                                            <C_Button
+                                                type="button"
+                                                title="Download List"
+                                                className="btn btn-sm btn-outline-primary "
+                                                onClick={ExcelDownload} // Example field, you can change it
+
+                                            >
+                                                <i className="bx bx-download font-size-14" ></i>
+                                            </C_Button>
+                                        </samp>
+                                    </>
+
+                                }
+
+
+                            </Col>
+                        </Row>
+
+                        <Row>
+                            <Col className="col col-11">
+                                <Row>
+                                    <Col sm={3}>
+                                        <FormGroup className=" row mt-2">
+                                            <Input style={{ marginLeft: "5px", marginTop: "10px" }}
+                                                className="p-1"
+                                                type="checkbox"
+                                                checked={states.productCheckbox}
+                                                onChange={(e) => { states.setProductCheckbox(e.target.checked) }}
                                             />
-                                        </Col>
-                                    </FormGroup>
-                                </Col>
-                            </Row>
-                        </Col>
+                                            <Label className="col-sm-3 p-2">Product</Label>
+                                            <Col sm={6}>
+                                                <C_Select
+                                                    value={states.productSelect}
+                                                    isSearchable={true}
+                                                    isLoading={productLoading}
+                                                    isMulti={true}
+                                                    className="react-dropdown"
+                                                    classNamePrefix="dropdown"
+                                                    styles={{
+                                                        menu: provided => ({ ...provided, zIndex: 2 })
+                                                    }}
+                                                    options={productDropdownOptions}
+                                                    onChange={ProductOnchange}
 
-                        <Col sm="1" className="mt-1 mb-1 ">
-                            {(states.initaialBaseData.length > 0) &&
-                                <C_Button
-                                    type="button"
-                                    className="btn btn-success border-1 font-size-12 text-center"
-                                    onClick={() => { dataManpulationFunction(states.initaialBaseData) }} // Example field, you can change it
-                                >
-                                    <span className="font-weight-bold" style={{ fontWeight: "bold", fontSize: "14px" }}> Sort</span>
-                                </C_Button>
-                            }
-                        </Col>
-                    </Row>
+                                                />
+                                            </Col>
+                                        </FormGroup>
+                                    </Col>
 
-                    <Row>
-                        <Col className="col col-11">
-                            <Row>
-                                <Col sm={3}>
-                                    <FormGroup className=" row mt-2">
-                                        <Input style={{ marginLeft: "5px", marginTop: "10px" }}
-                                            className="p-1"
-                                            type="checkbox"
-                                            checked={states.productCheckbox}
-                                            onChange={(e) => { states.setProductCheckbox(e.target.checked) }}
-                                        />
-                                        <Label className="col-sm-3 p-2">Product</Label>
-                                        <Col sm={6}>
-                                            <C_Select
-                                                value={states.productSelect}
-                                                isSearchable={true}
-                                                isLoading={productLoading}
-                                                isMulti={true}
-                                                className="react-dropdown"
-                                                classNamePrefix="dropdown"
-                                                styles={{
-                                                    menu: provided => ({ ...provided, zIndex: 2 })
-                                                }}
-                                                options={productDropdownOptions}
-                                                onChange={ProductOnchange}
-
+                                    <Col sm={3}>
+                                        <FormGroup className=" row mt-2">
+                                            <Input style={{ marginLeft: "5px", marginTop: "10px" }}
+                                                className="p-1"
+                                                type="checkbox"
+                                                checked={states.subProductCheckbox}
+                                                onChange={(e) => { states.setSubProductCheckbox(e.target.checked) }}
                                             />
-                                        </Col>
-                                    </FormGroup>
-                                </Col>
+                                            <Label className="col-sm-4 p-2">Sub Product</Label>
+                                            <Col>
+                                                <C_Select
+                                                    value={states.subProductSelect}
+                                                    isSearchable={true}
+                                                    isMulti={true}
+                                                    isLoading={subProductLoading}
+                                                    className="react-dropdown"
+                                                    classNamePrefix="dropdown"
+                                                    styles={{
+                                                        menu: provided => ({ ...provided, zIndex: 2 })
+                                                    }}
+                                                    options={subProductDropdownOptions}
+                                                    onChange={(e) => { Sub_ProductOnChange(e) }}
+                                                />
+                                            </Col>
+                                        </FormGroup>
+                                    </Col>
 
-                                <Col sm={3}>
-                                    <FormGroup className=" row mt-2">
-                                        <Input style={{ marginLeft: "5px", marginTop: "10px" }}
-                                            className="p-1"
-                                            type="checkbox"
-                                            checked={states.subProductCheckbox}
-                                            onChange={(e) => { states.setSubProductCheckbox(e.target.checked) }}
-                                        />
-                                        <Label className="col-sm-4 p-2">Sub Product</Label>
-                                        <Col>
-                                            <C_Select
-                                                value={states.subProductSelect}
-                                                isSearchable={true}
-                                                isMulti={true}
-                                                isLoading={subProductLoading}
-                                                className="react-dropdown"
-                                                classNamePrefix="dropdown"
-                                                styles={{
-                                                    menu: provided => ({ ...provided, zIndex: 2 })
-                                                }}
-                                                options={subProductDropdownOptions}
-                                                onChange={(e) => { Sub_ProductOnChange(e) }}
+                                    <Col sm={3}>
+                                        <FormGroup className=" row mt-2">
+                                            <Input style={{ marginLeft: "5px", marginTop: "10px" }}
+                                                className="p-1"
+                                                type="checkbox"
+                                                checked={states.itemNameCheckbox}
+                                                onChange={(e) => { states.setItemNameCheckbox(e.target.checked) }}
                                             />
-                                        </Col>
-                                    </FormGroup>
-                                </Col>
+                                            <Label className="col-sm-4 p-2">Items</Label>
+                                            <Col>
+                                                <C_Select
+                                                    value={states.itemNameSelect}
+                                                    isSearchable={true}
+                                                    isMulti={true}
+                                                    isLoading={ItemDropdownloading}
+                                                    className="react-dropdown"
+                                                    classNamePrefix="dropdown"
+                                                    styles={{
+                                                        menu: provided => ({ ...provided, zIndex: 2 })
+                                                    }}
+                                                    options={itemNameDropdownOptions}
+                                                    onChange={(e) => { ItemOnChange(e) }}
+                                                />
+                                            </Col>
+                                        </FormGroup>
+                                    </Col>
 
-                                <Col sm={3}>
-                                    <FormGroup className=" row mt-2">
-                                        <Input style={{ marginLeft: "5px", marginTop: "10px" }}
-                                            className="p-1"
-                                            type="checkbox"
-                                            checked={states.itemNameCheckbox}
-                                            onChange={(e) => { states.setItemNameCheckbox(e.target.checked) }}
-                                        />
-                                        <Label className="col-sm-4 p-2">Items</Label>
-                                        <Col>
-                                            <C_Select
-                                                value={states.itemNameSelect}
-                                                isSearchable={true}
-                                                isMulti={true}
-                                                isLoading={ItemDropdownloading}
-                                                className="react-dropdown"
-                                                classNamePrefix="dropdown"
-                                                styles={{
-                                                    menu: provided => ({ ...provided, zIndex: 2 })
-                                                }}
-                                                options={itemNameDropdownOptions}
-                                                onChange={(e) => { ItemOnChange(e) }}
-                                            />
-                                        </Col>
-                                    </FormGroup>
-                                </Col>
+                                    <Col sm={3}>
+                                        <FormGroup className=" row mt-2">
+                                            <div style={{ marginLeft: "1px", marginTop: "10px", width: "5px", }}></div>
+                                            <Label className="col-sm-4 p-2">Quantity</Label>
+                                            <Col>
+                                                <C_Select
+                                                    value={states.unitDropdownSelect}
+                                                    isSearchable={true}
+                                                    // isMulti={true}
+                                                    //  isLoading={partyLoading}       
+                                                    className="react-dropdown"
+                                                    classNamePrefix="dropdown"
+                                                    styles={{
+                                                        menu: provided => ({ ...provided, zIndex: 2 })
+                                                    }}
+                                                    options={initail.UNIT_DROPDOWN_OPTIONS}
+                                                    onChange={(e) => { states.setUnitDropdownSelect(e) }}
+                                                />
+                                            </Col>
+                                        </FormGroup>
+                                    </Col>
+                                </Row>
+                            </Col>
 
-                                <Col sm={3}>
-                                    <FormGroup className=" row mt-2">
-                                        <div style={{ marginLeft: "1px", marginTop: "10px", width: "5px", }}></div>
-                                        <Label className="col-sm-4 p-2">Quantity</Label>
-                                        <Col>
-                                            <C_Select
-                                                value={states.unitDropdownSelect}
-                                                isSearchable={true}
-                                                // isMulti={true}
-                                                //  isLoading={partyLoading}       
-                                                className="react-dropdown"
-                                                classNamePrefix="dropdown"
-                                                styles={{
-                                                    menu: provided => ({ ...provided, zIndex: 2 })
-                                                }}
-                                                options={initail.UNIT_DROPDOWN_OPTIONS}
-                                                onChange={(e) => { states.setUnitDropdownSelect(e) }}
-                                            />
-                                        </Col>
-                                    </FormGroup>
-                                </Col>
-                            </Row>
-                        </Col>
+                            <Col sm="1" className="mt-2 mb-1" >
+                                
+                                    {(states.initaialBaseData.length > 0) &&
 
-                        <Col sm="1" className="mt-1 mb-1 ">
-                            {(states.initaialBaseData.length > 0) &&
-                                <C_Button
-                                    type="button"
-                                    className="btn btn-primary border-1 font-size-12 text-center"
-                                    onClick={ExcelDownload} // Example field, you can change it
-                                >
-                                    <span className="font-weight-bold" style={{ fontWeight: "bold", fontSize: "14px" }}> Excel</span>
-                                </C_Button>
-                            }
-                        </Col>
-                    </Row>
-                </div>
+                                        <C_Button
+                                            type="button"
+                                            className="btn btn-warning border-1 font-size-12 text-center"
+                                            onClick={() => states.setPivotMode(pre => !pre)} // Example field, you can change it
+                                        >
+                                            <span className="font-weight-bold"
+                                                style={{ fontWeight: "bold", fontSize: "14px", color: 'black' }}>Pivot</span>
+                                        </C_Button>
+                                    }
+                              
+                            </Col>
+                        </Row>
+                    </div>}
+
             </div>
 
         </React.Fragment >

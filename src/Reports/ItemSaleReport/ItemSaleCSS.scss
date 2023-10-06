@@ -21,3 +21,18 @@
 .custom-to-date-col {
   width: 30%; /* Adjust the width as needed */
 }
+
+
+
+
+
+// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+.ag-grid-container {
+  width: 100%;
+  height: calc(100vh - 200px); /* Adjust the 200px to your desired margin or padding */
+  overflow: auto; /* Add scrollbars if necessary */
+}
+
