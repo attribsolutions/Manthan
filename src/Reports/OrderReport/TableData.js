@@ -52,7 +52,7 @@ export const Rows = (data) => {
 
     const { OrderItem = [] } = data
     let hasHedRow = []
-    
+
     const grouped = groupBy(OrderItem, ele => ele.GSTPercentage);
     console.log(grouped)
     grouped.forEach(i => {
@@ -71,8 +71,7 @@ export const Rows = (data) => {
             i.forEach(element => {
 
                 const tableitemRow = [
-                    `(${element.HSNCode}) ${element.ItemName}     
-                     ${element.Comment === null ? "" : element.Comment}`,
+                    `(${element.HSNCode}) ${element.ItemName}\n${element.Comment === null ? "" : element.Comment}`,
                     `${Number(element.Quantity).toFixed(2)} ${element.PrimaryUnitName}  ${element.UnitName}`,
                     `${(numberWithCommas(Number(element.MRPValue).toFixed(2)))}`,
                     `${(numberWithCommas(Number(element.Rate).toFixed(2)))}`,
@@ -144,8 +143,7 @@ export const RowsWithIGST = (data) => {
             i.forEach(element => {
 
                 const tableitemRow = [
-                    `(${element.HSNCode}) ${element.ItemName}     
-                     ${element.Comment === null ? "" : element.Comment}`,
+                    `(${element.HSNCode}) ${element.ItemName}\n${element.Comment === null ? "" : element.Comment}`,
                     `${Number(element.Quantity).toFixed(2)} ${element.PrimaryUnitName}                  ${element.UnitName}`,
                     `${numberWithCommas(Number(element.MRPValue).toFixed(2))}`,
                     `${numberWithCommas(Number(element.Rate).toFixed(2))}`,
