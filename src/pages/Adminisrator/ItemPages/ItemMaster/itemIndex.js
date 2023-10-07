@@ -563,15 +563,15 @@ const ItemsMaster = (props) => {
                 inValidMsg.push("Category: Is Requried")
             }
 
-            if (formValue.Division.length < 1) {
-                setInValidDrop(i => {
-                    const a = { ...i }
-                    a.Division = true
-                    return a
-                })
-                isvalid = false
-                inValidMsg.push("Division:Is Requried")
-            }
+            // if (formValue.Division.length < 1) {
+            //     setInValidDrop(i => {
+            //         const a = { ...i }
+            //         a.Division = true
+            //         return a
+            //     })
+            //     isvalid = false
+            //     inValidMsg.push("Division:Is Requried")
+            // }
 
             if (!Group_Tab_TableData.length > 0) {
                 isvalid = false
@@ -1170,7 +1170,7 @@ const ItemsMaster = (props) => {
 
                                                                 <Row>
                                                                     <FormGroup className=" col col-sm-4 ">
-                                                                        <div className="mb-3">
+                                                                        {/* <div className="mb-3">
                                                                             <Label >Division</Label>
                                                                             <Select
                                                                                 defaultValue={formValue.Division}
@@ -1187,7 +1187,7 @@ const ItemsMaster = (props) => {
                                                                                 onChange={(e) => { Division_Handler(e) }}
                                                                                 classNamePrefix="select2-selection"
                                                                             />
-                                                                        </div>
+                                                                        </div> */}
                                                                     </FormGroup>
 
                                                                     <FormGroup className=" col col-sm-4 " >
