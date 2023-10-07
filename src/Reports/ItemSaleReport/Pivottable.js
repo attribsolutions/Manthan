@@ -169,7 +169,7 @@ const GridExample = () => {
                                     onClick={() => { setPivotMode(pree => !pree) }}>
                                     <span className="font-weight-bold"
                                         style={{ fontWeight: "bold", fontSize: "14px", color: 'black' }}>
-                                        Black</span>
+                                        Back</span>
                                 </C_Button >
                             </samp>
                         </div>
