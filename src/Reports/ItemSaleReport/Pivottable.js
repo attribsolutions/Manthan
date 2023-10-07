@@ -31,11 +31,12 @@ function convertFieldsToNumber(obj) {
 const GridExample = () => {
     const gridRef = useRef();
 
-    const { tableData, setPivotMode } = ItemSaleContext();
-    const [rowData] = useState(() => tableData.map(item => {
+    const { initaialBaseData, setPivotMode } = ItemSaleContext();
+
+    const rowData = useMemo(() => initaialBaseData.map(item => {
         convertFieldsToNumber(item)
         return item
-    }));
+    },[initaialBaseData]));
 
     const [addRowSelect, setAddRowSelect] = useState([]);
     const [addColumnSelect, setAddColumnSelect] = useState([]);
@@ -109,7 +110,6 @@ const GridExample = () => {
                                     onChange={(selectedValues, event) => {
                                         setAddRowSelect(selectedValues)
                                         // showValueOnChange(selectedValues, addColumnSelect, addSumSelect)
-
                                     }
                                     }
                                 />
@@ -128,7 +128,7 @@ const GridExample = () => {
                                     value={addColumnSelect}
                                     onChange={(selectedValues) => {
                                         setAddColumnSelect(selectedValues);
-                                        // showValueOnChange(addRowSelect, selectedValues, addSumSelect)
+                                        // showValueOnChange(addRowSelect, addColumnSelect,selectedValues)
                                     }
                                     }
                                 />
@@ -147,6 +147,7 @@ const GridExample = () => {
                                     value={addSumSelect}
                                     onChange={(selectedValues) => {
                                         setAddSumSelect(selectedValues);
+                                        // showValueOnChange(addRowSelect, selectedValues, addSumSelect)
                                     }
                                     }
                                 />
