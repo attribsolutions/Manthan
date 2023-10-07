@@ -17,31 +17,60 @@ import * as mode from "../../routes/PageMode"
 import { getExcel_Button_API, getExcel_Button_API_Success } from '../../store/Report/SapLedger Redux/action';
 import { useState } from 'react';
 import { ReportComponent } from '../ReportComponent';
+import { url } from '../../routes';
+import { ManPower_Get_Action, ManPower_Get_Success } from '../../store/Report/ManPowerRedux/action';
 
-const ProductMarginReport = (props) => {
+function initialState(history) {
 
+    let page_Id = '';
+    let buttonLable = ''
+    let sub_Mode = history.location.pathname;
+
+    if (sub_Mode === url.PRODUCT_MARGIN_REPORT) {
+        page_Id = pageId.PRODUCT_MARGIN_REPORT;
+        buttonLable = "ProductMarginReport"
+    }
+    else if (sub_Mode === url.MAN_POWER_REPORT) {
+        page_Id = pageId.MAN_POWER_REPORT;
+        buttonLable = "Distributor & ManPower"
+    }
+    return { page_Id, buttonLable }
+};
+
+const ProductMarginReport = (props) => {           // this component also use for ManPower report 
+    
     const history = useHistory()
     const dispatch = useDispatch();
+
+    const [subPageMode] = useState(history.location.pathname);
     const [userPageAccessState, setUserAccState] = useState('');
-    
+
+    const [page_Id] = useState(() => initialState(history).page_Id);
+    const [buttonLable] = useState(() => initialState(history).buttonLable);
+   
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
         ProductMargin,
+        downloadManPower,
+        manPowerReportRedux,
         userAccess,
         downloadProductMargin,
         pageField
     } = useSelector((state) => ({
+        downloadManPower: state.ManPowerReportReducer.goBtnLoading,
         downloadProductMargin: state.SapLedgerReducer.downloadProductMargin,
         ProductMargin:state.SapLedgerReducer.ProductMargin,
+        manPowerReportRedux:state.ManPowerReportReducer.manPowerReportGobtn,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
     }));
 
     useEffect(() => {
-        const page_Id = pageId.PRODUCT_MARGIN_REPORT//changes
+              
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
-        dispatch(getExcel_Button_API_Success([]))
+        dispatch(getExcel_Button_API_Success([]));
+        dispatch(ManPower_Get_Success([]));
     }, []);
 
     const location = { ...history.location }
@@ -69,7 +98,7 @@ const ProductMarginReport = (props) => {
 
     useEffect(() => {
                    
-            if (ProductMargin.length > 0) {
+            if ((ProductMargin.length > 0)&&(subPageMode===url.PRODUCT_MARGIN_REPORT)) {
                 ReportComponent({      // Download CSV
                     pageField,
                     excelData: ProductMargin,
@@ -77,12 +106,25 @@ const ProductMarginReport = (props) => {
                 })
                 dispatch(getExcel_Button_API_Success([]));   // Reset Excel Data
             }
+            else if(manPowerReportRedux.length > 0){
+                ReportComponent({      // Download CSV
+                    pageField,
+                    excelData: manPowerReportRedux,
+                    excelFileName: "Distributor & ManPower Report"
+                })
+                dispatch(ManPower_Get_Success([]));   // Reset Excel Data
+            }
      
-    }, [ ProductMargin, pageField]);
+    }, [ ProductMargin, pageField,manPowerReportRedux]);
 
     function excelhandler() {
-        const userDetails = loginUserDetails()
-        dispatch(getExcel_Button_API(Number(userDetails.IsSCMPartyType) || 0, userDetails.Party_id))
+        if(subPageMode===url.PRODUCT_MARGIN_REPORT){
+            const userDetails = loginUserDetails()
+            dispatch(getExcel_Button_API(Number(userDetails.IsSCMPartyType) || 0, userDetails.Party_id))
+        }
+       else{
+        dispatch(ManPower_Get_Action({btnId:url.MAN_POWER_REPORT}))
+       }
     }
 
     return (
@@ -96,7 +138,7 @@ const ProductMarginReport = (props) => {
                             <CardBody>
                                 <Row>
                                     <Col lg={6}>
-                                        {downloadProductMargin ?
+                                        {downloadProductMargin ||downloadManPower ?
                                             <Button type='button'
                                                 className='btn btn-success'
                                                 id="excelbtn-id"
@@ -107,7 +149,7 @@ const ProductMarginReport = (props) => {
                                             <Button type='button'
                                                 className='btn btn-success'
                                                 id="excelbtn-id"
-                                                onClick={excelhandler}>ProductMarginReport
+                                                onClick={excelhandler}>{buttonLable}
                                             </Button>
                                         }
 

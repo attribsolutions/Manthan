@@ -11,7 +11,7 @@ import Profile from "./auth/profile/reducer"
 import ChangePasswordReducer from "./auth/changepassword/reducer"
 
 
-//  *********************** Administrator ***********************
+// *********************** Administrator ***********************
 
 
 import BreadcrumbReducer from './Utilites/Breadcrumb/reducer'
@@ -62,27 +62,27 @@ import CityReducer from "./Administrator/CityRedux/reducer"
 import PartySettingReducer from "./Administrator/PartySetting/reducer"
 import DiscountReducer from "./Administrator/DiscountRedux/reducer"
 
-//  *********************** Purchase ***********************
+// *********************** Purchase ***********************
 import OrderReducer from "./Purchase/OrderPageRedux/reducer"
 
-//  *********************** Production ***********************
+// *********************** Production ***********************
 import BOMReducer from "./Production/BOMRedux/reducer"
 import WorkOrderReducer from "./Production/WorkOrder/reducer"
 import MaterialIssueReducer from "./Production/Matrial_Issue/reducer"
 import ProductionReducer from "./Production/ProductionRedux/reducer"
 import ProductionReIssueReducer from "./Production/ProductionReissueRedux/reducer"
 
-//  *********************** Inventory ***********************
+// *********************** Inventory ***********************
 import GRNReducer from "./Inventory/GRNRedux/reducer"
 import ChallanReducer from "./Inventory/ChallanRedux/reducer"
 import StockEntryReducer from "./Inventory/StockEntryRedux/reducer"
 
-//  *********************** Sale ***********************
+// *********************** Sale ***********************
 import InvoiceReducer from "./Sales/Invoice/reducer"
 import LoadingSheetReducer from "./Sales/LoadingSheetRedux/reducer"
 import SalesReturnReducer from "./Sales/SalesReturnRedux/reducer"
 
-//  *********************** InterBranch ***********************
+// *********************** InterBranch ***********************
 import InwardReducer from "./Inter Branch/InwardRedux/reducer"
 import RouteUpdateReducer from "./Administrator/RouteUpdateRedux/reducer"
 import CredietDebitReducer from "./Accounting/CreditRedux/reducer"
@@ -109,93 +109,95 @@ import ItemSaleReportReducer from "./Report/ItemSaleReport/reducer"
 import StockAdjustmentReducer from "./Inventory/StockAdjustmentRedux/reducer"
 import ClaimTrackingEntry_Reducer from "./Accounting/ClaimTrackingEntryRedux/reducer"
 import CreditDebitDataExportReducer from "./Report/CreditDebitDataExportRedux/reducer"
+import ManPowerReportReducer from "./Report/ManPowerRedux/reducer"
 
 const rootReducer = combineReducers({
-  Layout,
-  Login,
-  Account,
-  ForgetPassword,
-  Profile,
-  // SpinnerReducer,
-  // AlertReducer,
-  // CommonError,
-  BreadcrumbReducer,
-  CommonPageFieldReducer,
-  CommonPartyDropdownReducer,
-  PdfReportReducers,
-  ImportExportFieldMap_Reducer,
-  ImportFieldAdd_Reducer,
-  ImportExcelPartyMap_Reducer,
-  Modules,
-  Company,
-  H_Pages,
-  User_Registration_Reducer,
-  CommonAPI_Reducer,
-  EmployeesReducer,
-  OrderReducer,
-  GRNReducer,
-  RoleMaster_Reducer,
-  ItemMastersReducer,
-  PartyMasterReducer,
-  RoleAccessReducer,
-  EmployeeTypeReducer,
-  PartyTypeReducer,
-  categoryTypeReducer,
-  CategoryReducer,
-  VehicleReducer,
-  GroupReducer,
-  SubGroupReducer,
-  GeneralReducer,
-  PartySubPartyReducer,
-  DriverReducer,
-  CompanyGroupReducer,
-  PriceListReducer,
-  MRPMasterReducer,
-  MarginMasterReducer,
-  TermsAndConditionsReducer,
-  RoutesReducer,
-  DiscountReducer,
-  CreditLimitReducer,
-  PartyMasterBulkUpdateReducer,
-  SalesManReducer,
-  GroupTypeReducer,
-  GSTReducer,
-  PartyItemsReducer,
-  BOMReducer,
-  WorkOrderReducer,
-  MaterialIssueReducer,
-  ProductionReducer,
-  BankReducer,
-  BankAssignReducer,
-  ProductionReIssueReducer,
-  InvoiceReducer,
-  InwardReducer,
-  ChallanReducer,
-  RouteUpdateReducer,
-  LoadingSheetReducer,
-  ManagementPartiesReducer,
-  ReceiptReducer,
-  SalesReturnReducer,
-  CredietDebitReducer,
-  DashboardReducer,
-  ChangePasswordReducer,
-  SapLedgerReducer,
-  CityReducer,
-  OrderSummaryReducer,
-  PartySettingReducer,
-  StockEntryReducer,
-  StockReportReducer,
-  RetailerDataReducer,
-  GenericSaleReportReducer,
-  ClaimSummaryReducer,
-  InvoiceDataExportReducer,
-  PurchaseGSTReportReducer,
-  DamageStockReportReducer,
-  GSTR1ReportReducer,
-  ReturnReportReducer,
-  ItemSaleReportReducer,
-  StockAdjustmentReducer,
-  ClaimTrackingEntry_Reducer,
-  CreditDebitDataExportReducer
+	Layout,
+	Login,
+	Account,
+	ForgetPassword,
+	Profile,
+	// SpinnerReducer,
+	// AlertReducer,
+	// CommonError,
+	BreadcrumbReducer,
+	CommonPageFieldReducer,
+	CommonPartyDropdownReducer,
+	PdfReportReducers,
+	ImportExportFieldMap_Reducer,
+	ImportFieldAdd_Reducer,
+	ImportExcelPartyMap_Reducer,
+	Modules,
+	Company,
+	H_Pages,
+	User_Registration_Reducer,
+	CommonAPI_Reducer,
+	EmployeesReducer,
+	OrderReducer,
+	GRNReducer,
+	RoleMaster_Reducer,
+	ItemMastersReducer,
+	PartyMasterReducer,
+	RoleAccessReducer,
+	EmployeeTypeReducer,
+	PartyTypeReducer,
+	categoryTypeReducer,
+	CategoryReducer,
+	VehicleReducer,
+	GroupReducer,
+	SubGroupReducer,
+	GeneralReducer,
+	PartySubPartyReducer,
+	DriverReducer,
+	CompanyGroupReducer,
+	PriceListReducer,
+	MRPMasterReducer,
+	MarginMasterReducer,
+	TermsAndConditionsReducer,
+	RoutesReducer,
+	DiscountReducer,
+	CreditLimitReducer,
+	PartyMasterBulkUpdateReducer,
+	SalesManReducer,
+	GroupTypeReducer,
+	GSTReducer,
+	PartyItemsReducer,
+	BOMReducer,
+	WorkOrderReducer,
+	MaterialIssueReducer,
+	ProductionReducer,
+	BankReducer,
+	BankAssignReducer,
+	ProductionReIssueReducer,
+	InvoiceReducer,
+	InwardReducer,
+	ChallanReducer,
+	RouteUpdateReducer,
+	LoadingSheetReducer,
+	ManagementPartiesReducer,
+	ReceiptReducer,
+	SalesReturnReducer,
+	CredietDebitReducer,
+	DashboardReducer,
+	ChangePasswordReducer,
+	SapLedgerReducer,
+	CityReducer,
+	OrderSummaryReducer,
+	PartySettingReducer,
+	StockEntryReducer,
+	StockReportReducer,
+	RetailerDataReducer,
+	GenericSaleReportReducer,
+	ClaimSummaryReducer,
+	InvoiceDataExportReducer,
+	PurchaseGSTReportReducer,
+	DamageStockReportReducer,
+	GSTR1ReportReducer,
+	ReturnReportReducer,
+	ItemSaleReportReducer,
+	StockAdjustmentReducer,
+	ClaimTrackingEntry_Reducer,
+	CreditDebitDataExportReducer,
+	ManPowerReportReducer
 })
 export default rootReducer

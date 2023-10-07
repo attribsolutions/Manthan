@@ -29,6 +29,7 @@ const StockReport = (props) => {
     const [headerFilters, setHeaderFilters] = useState('');
     const [userPageAccessState, setUserAccState] = useState('');
 
+
     const [partyDropdown, setPartyDropdown] = useState("");
     const [unitDropdown, setUnitDropdown] = useState("");
     const [tableData, setTableData] = useState([]);

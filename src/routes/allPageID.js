@@ -296,4 +296,6 @@ export const PARTY_OUTSTANDING_REPORT = 246
 
 export const RETAILER_APPROVAL = 247
 
+export const MAN_POWER_REPORT = 248
+
 

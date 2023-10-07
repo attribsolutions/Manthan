@@ -314,6 +314,8 @@ export const PARTY_OUTSTANDING_REPORT = "/PartyOutstandingReport"
 
 export const RETAILER_APPROVAL ="/RetailerApproval"
 
+export const MAN_POWER_REPORT = "/ManPowerReport"
+
 
 
 

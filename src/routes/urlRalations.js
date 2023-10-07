@@ -273,3 +273,6 @@ export const PartyOutstandingReport =url.PARTY_OUTSTANDING_REPORT
 
 export const RetailerApproval =url.RETAILER_APPROVAL
 
+export const ManPowerReport = url.MAN_POWER_REPORT
+
+

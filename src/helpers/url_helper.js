@@ -485,4 +485,5 @@ export const MOBILE_APP_RETAILER_UPDATE = "/MobileAppUpdateRetailer";
 //OutStandingBalance
 export const OUTSTANDING_BALANCE_REPORT_GO_BUTTON = '/OutStandingBalance'
 
-
+//ManPower Report
+export const MAN_POWER_GET_API = '/ManPowerReport'

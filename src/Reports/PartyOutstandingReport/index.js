@@ -32,8 +32,8 @@ const PartyOutstandingReport = (props) => {
 	const [userPageAccessState, setUserAccState] = useState('');
 	const [subPageMode] = useState(history.location.pathname)
 
-	const [partyDropdown, setPartyDropdown] = useState("");
-	const [routeDropdown, setRouteDropdown] = useState("");
+	const [partyDropdown, setPartyDropdown] = useState('');
+	const [routeDropdown, setRouteDropdown] = useState({value:"",label:"All"});
 	const [tableData, setTableData] = useState([]);
 	const [btnMode, setBtnMode] = useState(0);
 
@@ -49,8 +49,7 @@ const PartyOutstandingReport = (props) => {
 	);
 
 	const { userAccess, pageField, RoutesList, RouteListLoading, goButtonData = [], listBtnLoading } = reducers;
-	const { fromdate = currentDate_ymd, todate = currentDate_ymd } = headerFilters;
-
+	const { date = currentDate_ymd, todate = currentDate_ymd } = headerFilters;
 
 	// Featch Modules List data First Rendering
 	const location = { ...history.location }
@@ -92,13 +91,12 @@ const PartyOutstandingReport = (props) => {
 		}
 	}, [])
 
-
 	const [tableColumns] = DynamicColumnHook({ pageField })
 
-	const RoutesListOptions = RoutesList.map((data) => ({
-		value: data.id,
-		label: data.Name,
-	}))
+	const RoutesListOptions = RoutesList.reduce((options, data) => {
+		options.push({ value: data.id, label: data.Name });
+		return options;
+	  }, [{ value: "", label: "All" }]);
 
 	async function goButtonHandler(e, btnMode) {
 		try {
@@ -110,7 +108,7 @@ const PartyOutstandingReport = (props) => {
 			}
 
 			const jsonBody = JSON.stringify({
-				"Date": fromdate,
+				"Date": date,
 				"RouteID": routeDropdown === '' ? "" : routeDropdown.value,
 				"PartyID": partyDropdown === "" ? _cfunc.loginPartyID() : partyDropdown.value,
 			});
@@ -120,16 +118,16 @@ const PartyOutstandingReport = (props) => {
 		} catch (error) { _cfunc.CommonConsole(error) }
 	}
 
-	function fromdateOnchange(e, date) {
+	function dateOnchange(e, date) {
 		let newObj = { ...headerFilters }
-		newObj.fromdate = date
+		newObj.date = date
 		setHeaderFilters(newObj)
 		setTableData([]);
 	}
 
 	function partyOnChangeHandler(e) {
 		setPartyDropdown(e);
-		setRouteDropdown('');
+		setRouteDropdown({value:"",label:"All"});
 		const jsonBody = JSON.stringify({ CompanyID: _cfunc.loginCompanyID(), PartyID: e.value });
 		dispatch(GetRoutesList(jsonBody));
 		setTableData([]);
@@ -149,9 +147,9 @@ const PartyOutstandingReport = (props) => {
 								</Label>
 								<Col sm={7}>
 									<C_DatePicker
-										name='fromdate'
-										value={fromdate}
-										onChange={fromdateOnchange}
+										name='date'
+										value={date}
+										onChange={dateOnchange}
 									/>
 								</Col>
 							</FormGroup>

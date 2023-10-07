@@ -494,6 +494,8 @@ const userRoutes = [
 	{ path: path.RECEIPT_DATA_EXPORT, component: CreditDebitDataExport },
 
 	{ path: path.PARTY_OUTSTANDING_REPORT, component: PartyOutstandingReport },
+
+	{ path: path.MAN_POWER_REPORT, component: ProductMarginReport },
 	// ************************************ Utility **************************************//
 
 	{ path: path.SEARCH_BOX2, component: SearchBoxSecond },

@@ -735,6 +735,9 @@ export const ReceiptDataExport_GoBtn_API = ({ jsonBody }) => post(url.RECEIPT_DE
 //OutStandingBalance
 export const OutStandingBalance_GoBtn_API = ({ jsonBody, btnId }) => post(url.OUTSTANDING_BALANCE_REPORT_GO_BUTTON, jsonBody)//Go button api
 
+// ManPower Report
+export const ManPower_Get_Api = () => get(url.MAN_POWER_GET_API);
+
 export {
 	getLoggedInUser,
 	isUserAuthenticated,
