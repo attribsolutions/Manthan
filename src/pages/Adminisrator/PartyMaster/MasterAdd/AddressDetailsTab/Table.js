@@ -16,9 +16,9 @@ function AddressDetailsTable({ addressTable = [], setAddressTable }) {
 	}));
 
 	useEffect(() => {
-		debugger
+		
 		if (deleteMessage.Status === true && deleteMessage.StatusCode === 200) {
-			debugger
+			
 			dispatch(PartyAddressDeleteIDSuccess({ Status: false }));
 			if (!(deleteMessage.deleteId === 0)) {
 				var fil = addressTable.filter((i) => {

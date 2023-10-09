@@ -61,8 +61,8 @@ const PartyList = () => {
     }
     // Common Party Dropdown useEffect
     useEffect(() => {
-
-        if ((commonPartyDropSelect.value > 0 && (subPageMode === url.RETAILER_LIST || subPageMode === url.NON_RETAILER_PARTY))) {
+        
+        if ((commonPartyDropSelect.value > 0 && (subPageMode === url.RETAILER_LIST || subPageMode === url.NON_RETAILER_PARTY_lIST))) {
             goButtonHandler()
         }
         else if (subPageMode === url.PARTY_lIST) {
@@ -136,7 +136,7 @@ const PartyList = () => {
     const mobaileDeleteApiFinc = async (deleteMsg) => {
         //***************mobail app api*********************** */
         const mobilApiResp = await mobileApp_RetailerDelete_Api(deleteMsg.TransactionID)
-        if (mobilApiResp.StatusCode === 200) { showToastAlert(mobilApiResp.Message,"success") }
+        if (mobilApiResp.StatusCode === 200) { showToastAlert(mobilApiResp.Message, "success") }
         //************************************** */
         return // *note  return required 
     }

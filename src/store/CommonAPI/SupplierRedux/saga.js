@@ -87,7 +87,7 @@ function* getVendorGenFunc() {
 }
 
 function* getSupplierGenFunc({ jsonBody = '' }) {
-  
+
   const { PartyID = loginPartyID() } = jsonBody
   try {
     const response = yield call(VendorSupplierCustomer, { "Type": 2, "PartyID": PartyID, "Company": loginCompanyID(), Route: "" });
@@ -109,7 +109,7 @@ function* getCustomerGenFunc() {
 }
 
 function* vendorSupplierCustomer_genFunc({ data }) {
-  
+
   const {
     subPageMode,
     RouteID = "",
@@ -129,7 +129,7 @@ function* vendorSupplierCustomer_genFunc({ data }) {
     || subPageMode === url.PURCHASE_RETURN_LIST
     || subPageMode === url.PURCHASE_RETURN
     || subPageMode === url.PURCHASE_RETURN_MODE_3
-    || subPageMode===url. SELF_LEDGER );
+    || subPageMode === url.SELF_LEDGER);
 
   const isCustomer = (subPageMode === url.ORDER_4  //Customer mode 3
     || subPageMode === url.ORDER_LIST_4
@@ -138,6 +138,7 @@ function* vendorSupplierCustomer_genFunc({ data }) {
     || subPageMode === url.INVOICE_LIST_1
     || subPageMode === url.PARTY_LEDGER
     || subPageMode === url.GST_R1_REPORT
+    || subPageMode === url.MOBILE_RETAILER_SEND
 
   );
 
@@ -177,7 +178,11 @@ function* vendorSupplierCustomer_genFunc({ data }) {
     else {
       response = { Data: [] }
     }
-
+    response.Data.map((index) => {
+      index["selectCheck"] = false
+      return index
+    });
+    
     yield put(GetVenderSupplierCustomerSuccess(response.Data));
   }
   catch (error) {

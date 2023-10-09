@@ -192,6 +192,8 @@ import ClaimTrackingEntryList from "../pages/Accounting/Claim Tracking Entry/Cla
 import CreditDebitDataExport from "../Reports/CreditDebitDataExport.js";
 import PartyOutstandingReport from "../Reports/PartyOutstandingReport";
 import RetailerApprovalList from "../pages/Adminisrator/RetailerApproval";
+import MobailRetailersSend from "../pages/Adminisrator/mobileRetailerSend/Index";
+
 
 
 
@@ -332,6 +334,9 @@ const userRoutes = [
 	{ path: path.DISCOUNT_LIST, component: DiscountList },
 
 	{ path: path.RETAILER_APPROVAL, component: RetailerApprovalList },
+
+	{ path: path.MOBILE_RETAILER_SEND, component: MobailRetailersSend },
+	
 
 	//******************************* Inventory Module ************************************//
 	{ path: path.CHALLAN_LIST, component: ChallanList },

@@ -5,7 +5,7 @@ import { DamageStockReport_GoBtn_API, OutStandingBalance_GoBtn_API } from "../..
 import { url } from "../../../routes";
 
 function* damageStockReport_GenFunc({ config }) {
-	debugger
+	
 	const {subPageMode}=config
 	try {
 		let response 

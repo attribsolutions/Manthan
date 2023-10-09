@@ -28,13 +28,13 @@ import {
 	updatePartyIDSuccess
 } from "../../../../store/Administrator/PartyRedux/action"
 import { Breadcrumb_inputName, commonPageField, commonPageFieldSuccess } from "../../../../store/actions"
-import { btnIsDissablefunc, isEditMode_CssFun, loginCompanyID, loginPartyID, loginUserID, metaTagLabel } from "../../../../components/Common/CommonFunction"
+import { btnIsDissablefunc, isEditMode_CssFun, loginCompanyID, loginPartyID, loginSelectedPartyID, loginUserAdminRole, loginUserID, metaTagLabel } from "../../../../components/Common/CommonFunction"
 import * as url from "../../../../routes/route_url";
 import * as pageId from "../../../../routes/allPageID"
 import * as mode from "../../../../routes/PageMode"
 import { getPartyTypelist } from "../../../../store/Administrator/PartyTypeRedux/action";
 import { getcompanyList } from "../../../../store/Administrator/CompanyRedux/actions";
-import { SaveButton } from "../../../../components/Common/CommonButton";
+import { C_Button, SaveButton } from "../../../../components/Common/CommonButton";
 import { SSDD_List_under_Company } from "../../../../store/CommonAPI/SupplierRedux/actions";
 import AddressTabForm from "./AddressDetailsTab/index";
 import { customAlert } from "../../../../CustomAlert/ConfirmDialog";
@@ -44,8 +44,9 @@ import PrefixTab from "./PrefixTab/PrefixTab";
 import { priceListByPartyAction, priceListByPartyActionSuccess } from "../../../../store/Administrator/PriceList/action";
 import { userAccessUseEffect } from "../../../../components/Common/CommonUseEffect";
 import NewCommonPartyDropdown from "../../../../components/Common/NewCommonPartyDropdown";
-import { mobileApp_RetailerAdd_Api, mobileApp_RetailerUpdate_Api } from "../../../../helpers/backend_helper";
+import { mobileApp_RetailerUpdate_Api } from "../../../../helpers/backend_helper";
 import { showToastAlert } from "../../../../helpers/axios_Config";
+import { mobileApp_Send_Retailer_Api } from "../../../../helpers/backend_helper"
 
 function initialState(history) {
 
@@ -140,9 +141,9 @@ const PartyMaster = (props) => {
 	useEffect(() => {
 
 		if (editData.Status === true) {
-            debugger
+			
 			try {
-				
+
 				if ((hasShowloction || hasShowModal) || (subPageMode === url.PARTY_SELF_EDIT)) {
 
 					let hasEditVal = null
@@ -167,7 +168,7 @@ const PartyMaster = (props) => {
 						setEditData(hasEditVal);
 						dispatch(Breadcrumb_inputName(hasEditVal.Name))
 						seteditCreatedBy(hasEditVal.CreatedBy);
-                     
+
 						let baseValue = {
 							Name: hasEditVal.Name,
 							MobileNo: hasEditVal.MobileNo,
@@ -259,7 +260,7 @@ const PartyMaster = (props) => {
 						dispatch(editPartyIDSuccess({ Status: false }));
 					}
 				}
-			} catch (e) { debugger}
+			} catch (e) {  }
 		}
 
 	}, [editData]);
@@ -278,13 +279,16 @@ const PartyMaster = (props) => {
 	}, [])
 
 	useEffect(async () => {
+		
 		if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
 			dispatch(postPartyDataSuccess({ Status: false }));
 
 			//***************mobail app api*********************** */
 			if (subPageMode === url.RETAILER_MASTER) {
-				const mobilApiResp = await mobileApp_RetailerAdd_Api(postMsg.TransactionID);
-				if (mobilApiResp.StatusCode === 200) { showToastAlert(mobilApiResp.Message, "success"); };
+				
+				const jsonBody = JSON.stringify({ RetailerID: postMsg.TransactionID.toString() });
+				const mobilApiResp = await mobileApp_Send_Retailer_Api({ jsonBody });
+				if (mobilApiResp.Message.code === 200) { showToastAlert(mobilApiResp.Message.message, "success"); };
 			}
 			//************************************** */
 
@@ -330,7 +334,7 @@ const PartyMaster = (props) => {
 				//***************mobail app api*********************** */
 				if (subPageMode === url.RETAILER_MASTER) {
 					const mobilApiResp = await mobileApp_RetailerUpdate_Api(updateMsg.TransactionID);
-					if (mobilApiResp.StatusCode === 200) { showToastAlert(mobilApiResp.Message,'success'); };
+					if (mobilApiResp.StatusCode === 200) { showToastAlert(mobilApiResp.Message, 'success'); };
 				}
 				//************************************** */
 
@@ -356,7 +360,7 @@ const PartyMaster = (props) => {
 	}
 
 	const SaveHandler = (event) => {
-debugger
+		
 		event.preventDefault();
 		const btnId = event.target.id;
 
@@ -417,106 +421,104 @@ debugger
 			btnIsDissablefunc({ btnId, state: true })
 
 			const baseValue = baseTabDetail.values
+			let PartyDropCond = ((loginUserAdminRole()) && (subPageMode === url.RETAILER_MASTER))
+			const supplierArr = baseValue.Supplier.map((i) => ({
+				Party: PartyDropCond ? loginSelectedPartyID() : i.value,
+				Distance: i.value,
+				CreatedBy: loginUserID(),
+				UpdatedBy: loginUserID(),
+				Creditlimit: pageMode === mode.edit ? i.Creditlimit : "",
+				Route: baseValue.Route === "" ? "" : baseValue.Route.value,
+				Delete: 0,
+			}));
 
-                        const supplierArr = baseValue.Supplier.map((i) => ({
-                            Party: i.value,
-                            Distance: i.value,
-                            CreatedBy: loginUserID(),
-                            UpdatedBy: loginUserID(),
-                            Creditlimit: pageMode === mode.edit ? i.Creditlimit : "",
-                            Route: baseValue.Route === "" ? "" : baseValue.Route.value,
-                            Delete: 0,
-                          }));
-                          
-                          if(!(pageMode===mode.defaultsave)){
- // Determine items from EditData.PartySubParty that don't have matching "Party" values in supplierArr
- const itemsToPush = EditData.PartySubParty.filter((editItem) => {
-    debugger
-    return !supplierArr.some((supplier) => supplier.Party === editItem.Party);
-  });
-  
-  // Push these items into supplierArr
-  itemsToPush.forEach((item) => {
-    supplierArr.push({
-      Party: item.Party,
-      Distance: item.Distance,
-      CreatedBy: loginUserID(),
-      UpdatedBy: loginUserID(),
-      Creditlimit: "",
-      Route: "",
-      Delete: 1,
-    });
-  });
-                   }
-                         
-                       
+			if (!(pageMode === mode.defaultsave)) {
+				// Determine items from EditData.PartySubParty that don't have matching "Party" values in supplierArr
+				const itemsToPush = EditData.PartySubParty.filter((editItem) => {
+					
+					return !supplierArr.some((supplier) => supplier.Party === editItem.Party);
+				});
 
-	addressTabDetail.map((i) => {
-		if (i.id === undefined) {
-			i["id"] = "0"
-		}
-	})
-
-	if (((priceListSelect.label === "") || (priceListSelect.value === "")) && (subPageMode === url.RETAILER_MASTER)) {
-		customAlert({
-			Type: 4,
-			Message: "Please Select PriceList ",
-		})
-		return;
-	}
-
-	const jsonBody = JSON.stringify({
-		"Name": baseValue.Name,
-		"PriceList": priceListSelect.value,
-		"PartyType": baseValue.PartyType.value,
-		"Company": (pageMode === mode.defaultsave) ? loginCompanyID() : EditData.Company.id,
-		"PAN": baseValue.PAN,
-		"Email": baseValue.Email,
-		"MobileNo": baseValue.MobileNo,
-		"AlternateContactNo": baseValue.AlternateContactNo,
-		"State": baseValue.State.value,
-		"District": baseValue.District.value,
-		"City": (baseValue.CityName === "") ? "" : baseValue.CityName.value,
-		"SAPPartyCode": !(baseValue.SAPPartyCode === "") ? baseValue.SAPPartyCode : null,
-		"Taluka": 0,
-		"Latitude": baseValue.Latitude,
-		"Longitude": baseValue.Longitude,
-		"GSTIN": baseValue.GSTIN,
-		"isActive": baseValue.isActive,
-		"CreatedBy": loginUserID(),
-		"UpdatedBy": loginUserID(),
-		"PartySubParty": supplierArr,
-		"PartyAddress": addressTabDetail,
-
-		"PartyPrefix": [
-			{
-				"Orderprefix": prefixValue.OrderPrefix,
-				"Invoiceprefix": prefixValue.InvoicePrefix,
-				"Grnprefix": prefixValue.GRNPrefix,
-				"Receiptprefix": prefixValue.ReceiptPrefix,
-				"Challanprefix": prefixValue.Challanprefix,
-				"WorkOrderprefix": prefixValue.WorkOrderPrefix,
-				"MaterialIssueprefix": prefixValue.MaterialIssuePrefix,
-				"Demandprefix": prefixValue.DemandPrefix,
-				"IBChallanprefix": prefixValue.IBChallanPrefix,
-				"IBInwardprefix": prefixValue.IBInwardPrefix,
-				"PurchaseReturnprefix": prefixValue.PurchaseReturnprefix,
-				"Creditprefix": prefixValue.CreditPrefix,
-				"Debitprefix": prefixValue.DebitPrefix
+				// Push these items into supplierArr
+				itemsToPush.forEach((item) => {
+					supplierArr.push({
+						Party: item.Party,
+						Distance: item.Distance,
+						CreatedBy: loginUserID(),
+						UpdatedBy: loginUserID(),
+						Creditlimit: "",
+						Route: "",
+						Delete: 1,
+					});
+				});
 			}
-		],
 
-	});
+			addressTabDetail.map((i) => {
+				if (i.id === undefined) {
+					i["id"] = "0"
+				}
+			})
 
-	if (pageMode === mode.edit) {
+			if (((priceListSelect.label === "") || (priceListSelect.value === "")) && (subPageMode === url.RETAILER_MASTER)) {
+				customAlert({
+					Type: 4,
+					Message: "Please Select PriceList ",
+				})
+				return;
+			}
 
-		dispatch(updatePartyID({ jsonBody, updateId: EditData.id, btnId }));
-	}
-	else {
-		dispatch(postPartyData({ jsonBody, btnId }));
-	}
+			const jsonBody = JSON.stringify({
+				"Name": baseValue.Name,
+				"PriceList": priceListSelect.value,
+				"PartyType": baseValue.PartyType.value,
+				"Company": (pageMode === mode.defaultsave) ? loginCompanyID() : EditData.Company.id,
+				"PAN": baseValue.PAN,
+				"Email": baseValue.Email,
+				"MobileNo": baseValue.MobileNo,
+				"AlternateContactNo": baseValue.AlternateContactNo,
+				"State": baseValue.State.value,
+				"District": baseValue.District.value,
+				"City": (baseValue.CityName === "") ? "" : baseValue.CityName.value,
+				"SAPPartyCode": !(baseValue.SAPPartyCode === "") ? baseValue.SAPPartyCode : null,
+				"Taluka": 0,
+				"Latitude": baseValue.Latitude,
+				"Longitude": baseValue.Longitude,
+				"GSTIN": baseValue.GSTIN,
+				"isActive": baseValue.isActive,
+				"CreatedBy": loginUserID(),
+				"UpdatedBy": loginUserID(),
+				"PartySubParty": supplierArr,
+				"PartyAddress": addressTabDetail,
 
-	} catch (error) { btnIsDissablefunc({ btnId, state: false }) }
+				"PartyPrefix": [
+					{
+						"Orderprefix": prefixValue.OrderPrefix,
+						"Invoiceprefix": prefixValue.InvoicePrefix,
+						"Grnprefix": prefixValue.GRNPrefix,
+						"Receiptprefix": prefixValue.ReceiptPrefix,
+						"Challanprefix": prefixValue.Challanprefix,
+						"WorkOrderprefix": prefixValue.WorkOrderPrefix,
+						"MaterialIssueprefix": prefixValue.MaterialIssuePrefix,
+						"Demandprefix": prefixValue.DemandPrefix,
+						"IBChallanprefix": prefixValue.IBChallanPrefix,
+						"IBInwardprefix": prefixValue.IBInwardPrefix,
+						"PurchaseReturnprefix": prefixValue.PurchaseReturnprefix,
+						"Creditprefix": prefixValue.CreditPrefix,
+						"Debitprefix": prefixValue.DebitPrefix
+					}
+				],
+
+			});
+
+			if (pageMode === mode.edit) {
+
+				dispatch(updatePartyID({ jsonBody, updateId: EditData.id, btnId }));
+			}
+			else {
+				dispatch(postPartyData({ jsonBody, btnId }));
+			}
+
+		} catch (error) { btnIsDissablefunc({ btnId, state: false }) }
 	};
 
 	let IsEditMode_Css = isEditMode_CssFun();
@@ -628,6 +630,7 @@ debugger
 											module={"PartyMaster"}
 											onClick={SaveHandler}
 										/>
+
 									</div>
 								</Card>
 							</Col>
