@@ -13,7 +13,19 @@ function* Dashboard_Get_API_GenFunc() {
     } catch (error) { CommonConsole(error) }
 }
 
+
+function* Dashboard_Order_Data_Get_API_GenFunc({ config }) {
+    
+    try {
+        const response = yield call(apiCall.OrderList_get_Filter_API, config);
+        yield put(action.Get_Dashboard_Order_Data_Success(response.Data));
+    } catch (error) { CommonConsole(error) }
+}
+
 function* DashboardSaga() {
+
     yield takeLatest(actionType.GET_DASHBOARD_DETAILS, Dashboard_Get_API_GenFunc)
+    yield takeLatest(actionType.GET_DASHBOARD_ORDER_DATA_DETAILS, Dashboard_Order_Data_Get_API_GenFunc)
+
 }
 export default DashboardSaga;  
