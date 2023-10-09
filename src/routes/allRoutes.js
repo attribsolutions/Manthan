@@ -267,9 +267,6 @@ const userRoutes = [
 	{ path: path.GROUPTYPE, component: GroupTypeMaster },
 	{ path: path.GROUPTYPE_lIST, component: GroupTypeList },
 
-	{ path: path.PARTY_SUB_PARTY, component: PartySubParty },
-	{ path: path.PARTY_SUB_PARTY_lIST, component: PartySubPartyList },
-
 	{ path: path.TERMS_AND_CONDITION, component: TermsAndConditionsMaster },
 	{ path: path.TERMS_AND_CONDITION_LIST, component: TermsAndConditionsList },
 
