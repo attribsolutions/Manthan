@@ -89,7 +89,7 @@ export const Rows = (data) => {
             PcsinNumberUnit = match[1];
 
         }
-        const key = ItemName + '_' + MRP;
+        const key = ItemName + '_' + MRPValue;
         if (accumulator[key]) {
             accumulator[key].PcsinNumber += Number(PcsinNumber);
             accumulator[key].DiscountAmount += Number(DiscountAmount);
@@ -245,7 +245,7 @@ export const RowsWithIGST = (data) => {
     const groupedItems = InvoiceItems.reduce((accumulator, currentItem) => {
 
         const { HSNCode, ItemName, IGSTPercentage, MRP, Rate, Discount, CGST, SGST, Amount, DiscountAmount, BasicAmount, Quantity, UnitName, MRPValue, CGSTPercentage, SGSTPercentage, GSTPercentage, BatchCode, BatchDate, DiscountType, PrimaryUnitName, IGST } = currentItem;
-        const key = ItemName + '_' + MRP;
+        const key = ItemName + '_' + MRPValue;
         if (accumulator[key]) {
             accumulator[key].DiscountAmount += Number(DiscountAmount);
             accumulator[key].Quantity += Number(Quantity);

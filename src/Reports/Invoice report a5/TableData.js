@@ -92,7 +92,7 @@ export const RowsWithCGST_SGST = (data) => {
 
         }
 
-        const key = ItemName + '_' + MRP;
+        const key = ItemName + '_' + MRPValue;
         if (accumulator[key]) {
 
             accumulator[key].PcsinNumber += Number(PcsinNumber);
@@ -123,7 +123,7 @@ export const RowsWithCGST_SGST = (data) => {
         }
         return accumulator;
     }, {});
-
+    debugger
     const TotalItemlength = Object.values(groupedItems).length;
     data["TotalItemlength"] = TotalItemlength;
     Object.values(groupedItems).forEach((element, key) => {
@@ -274,7 +274,7 @@ export const RowsWithIGST = (data) => {
 
         }
 
-        const key = ItemName + '_' + MRP;
+        const key = ItemName + '_' + MRPValue;
         if (accumulator[key]) {
             accumulator[key].PcsinNumber += Number(PcsinNumber);
             accumulator[key].DiscountAmount += Number(DiscountAmount);
