@@ -144,6 +144,8 @@ import GoodsCreditNote from "../pages/Accounting/CreditDebitNote/GoodsCreditNote
 import DebitNoteMaster from "../pages/Accounting/Debit/Debit";
 import CreditList from "../pages/Accounting/CreditDebitNote/CreditList";
 
+import CreditNoteMode2 from "../pages/Accounting/CreditDebitNote/CreditNoteMode2";
+
 import ImportFieldAdd from "../pages/Adminisrator/ImportMaster/FieldAdd/ImportFieldAdd";
 import ImportFieldAddList from "../pages/Adminisrator/ImportMaster/FieldAdd/ImportFieldAddList";
 import ImportExcelFieldMap from "../pages/Adminisrator/ImportMaster/ImportExcelFieldMap/Index";
@@ -440,6 +442,10 @@ const userRoutes = [
 
 	{ path: path.GOODS_DEBIT_LIST, component: CreditList },
 	{ path: path.GOODS_DEBIT_NOTE, component: GoodsCreditNote },
+
+
+	// { path: path.CREDIT_LIST1, component: CreditList },
+	{ path: path.CREDIT_NOTE_MODE_2, component: CreditNoteMode2 },
 
 	{ path: path.CLAIM_TRACKING_ENTRY, component: ClaimTrackingEntry },
 	{ path: path.CLAIM_TRACKING_ENTRY_LIST, component: ClaimTrackingEntryList },
