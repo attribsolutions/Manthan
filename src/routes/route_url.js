@@ -258,6 +258,7 @@ export const GOODS_CREDIT_LIST = "/GoodsCreditNoteList"
 export const GOODS_DEBIT_NOTE = "/GoodsDebitNote"
 export const GOODS_DEBIT_LIST = "/GoodsDebitNoteList"
 
+export const CREDIT_NOTE_MODE_2 = "/credit_Note_Mode_2_Add"
 
 
 
