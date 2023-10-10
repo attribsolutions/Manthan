@@ -245,10 +245,8 @@ export const reportHeder1 = (doc, data) => {
                 let y = data1.cursor.y + 8
                 doc.setFontSize(8)
                 doc.setFont(undefined, 'bold')
+                doc.text('Invoice No: ', x, y)
 
-                if (data.isQR) {
-                    doc.text('Invoice No: ', x, y)
-                }
             };
             if (rowIdx === 3 && colIdx === 0) {
 
@@ -256,9 +254,8 @@ export const reportHeder1 = (doc, data) => {
                 let y = data1.cursor.y + 8
                 doc.setFontSize(8)
                 doc.setFont(undefined, 'bold')
-                if (data.isQR) {
-                    doc.text('Comment: ', x, y)
-                }
+                doc.text('Comment: ', x, y)
+
 
             };
             if (rowIdx === 4 && colIdx === 0) {
@@ -275,7 +272,7 @@ export const reportHeder1 = (doc, data) => {
                 let y = data1.cursor.y + 8
                 doc.setFontSize(8)
                 doc.setFont(undefined, 'bold')
-                doc.text('ACK_No: ', x, y)
+                doc.text('ACK No: ', x, y)
             };
 
 
