@@ -93,6 +93,8 @@ export const tableBody = (doc, data) => {
                 data1.row.cells[7].styles.fontSize = 8
                 data1.row.cells[8].styles.fontSize = 8
                 data1.row.cells[9].styles.fontSize = 8
+                data1.row.cells[10].styles.fontSize = 8
+
 
 
                 data1.row.cells[0].styles.fontStyle = "bold"
@@ -103,6 +105,8 @@ export const tableBody = (doc, data) => {
                 data1.row.cells[7].styles.fontStyle = "bold"
                 data1.row.cells[8].styles.fontStyle = "bold"
                 data1.row.cells[9].styles.fontStyle = "bold"
+                data1.row.cells[10].styles.fontStyle = "bold"
+
 
             }
 
@@ -139,16 +143,16 @@ export const tableBody = (doc, data) => {
         columnStyles: {
             0: {
                 valign: "top",
-                columnWidth: 80,
+                columnWidth: 70,
             },
             1: {
                 columnWidth: 80,
             },
             2: {
-                columnWidth: 145,
+                columnWidth: 125,
             },
             3: {
-                columnWidth: 80,
+                columnWidth: 70,
                 halign: 'right',
             },
             4: {
@@ -156,7 +160,7 @@ export const tableBody = (doc, data) => {
                 halign: 'right',
             },
             5: {
-                columnWidth: 60,
+                columnWidth: 55,
                 halign: 'right',
             },
             6: {
@@ -176,7 +180,11 @@ export const tableBody = (doc, data) => {
                 halign: 'right',
             },
             10: {
-                columnWidth: 57,
+                columnWidth: 58,
+                halign: 'right',
+            },
+            11: {
+                columnWidth: 45,
                 halign: 'right',
             },
 
