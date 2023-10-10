@@ -20,6 +20,7 @@ import InvoiceForGRN from './GRNList';
 import SalesReturnListForDashboard from './SalesReturnListForDashboard';
 import { DashboardLoader, PageLoadingSpinner } from '../../../components/Common/CommonButton';
 import NewCommonPartyDropdown from "../../../components/Common/NewCommonPartyDropdown";
+import MobileRetailerApprove from './MobileRetailerApprove';
 
 const Dashboard_1 = (props) => {
 
@@ -220,6 +221,26 @@ const Dashboard_1 = (props) => {
                             </Card>
                         </Col>
 
+                        <Col lg={6}>
+                            <Card >
+                                <div className='mb-n6'>
+                                    <CardHeader style={{ backgroundColor: "whitesmoke" }}
+                                        className="card-header align-items-center d-flex text-center">
+                                        <Label className="card-title mb-0 flex-grow-4 text-primary text-bold mb-n2 text-decoration-underline"
+                                            // onClick={mobileRetailerApprove_onClick}
+                                            disabled={SalesReturnListloading}
+                                            style={{ cursor: "pointer" }}
+
+                                        >
+                                            Mobile Retailer Approve</Label>
+                                        {(SalesReturnListloading) &&
+                                            <DashboardLoader />
+                                        }
+                                    </CardHeader>
+                                </div>
+                                <MobileRetailerApprove />
+                            </Card>
+                        </Col>
                     </Row>
 
                 </Container>

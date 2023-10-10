@@ -90,6 +90,7 @@ const PartyMaster = (props) => {
 	const [userPageAccessState, setUserAccState] = useState(11);
 	const [activeTab1, setactiveTab1] = useState("1")
 	const [modalCss, setModalCss] = useState(false);
+	const [isMobileRetailer, setIsMobileRetailer] = useState(false);
 
 	const [editCreatedBy, seteditCreatedBy] = useState("");
 
@@ -139,28 +140,31 @@ const PartyMaster = (props) => {
 	}, [])
 
 	useEffect(() => {
-
+		debugger
 		if (editData.Status === true) {
-			
-			try {
 
+			try {
+				debugger
 				if ((hasShowloction || hasShowModal) || (subPageMode === url.PARTY_SELF_EDIT)) {
 
 					let hasEditVal = null
 					if (hasShowloction) {
 						setPageMode(location.pageMode)
 						hasEditVal = location.editValue
+						setIsMobileRetailer(location.IsMobileRetailer)
 					}
 					else if (hasShowModal) {
 						hasEditVal = props.editValue
 						setPageMode(props.pageMode)
 						setModalCss(true)
+						// setIsMobileRetailer(true)
 					}
 					if ((editData.Status === true) && (subPageMode === url.PARTY_SELF_EDIT)) {
 						hasEditVal = editData.Data
 						setPageMode(mode.edit)
 						setModalCss(false)
 						dispatch(editPartyIDSuccess({ Status: false }));
+						// setIsMobileRetailer(true)
 					}
 
 					if (hasEditVal) {
@@ -260,7 +264,7 @@ const PartyMaster = (props) => {
 						dispatch(editPartyIDSuccess({ Status: false }));
 					}
 				}
-			} catch (e) {  }
+			} catch (e) { }
 		}
 
 	}, [editData]);
@@ -279,13 +283,13 @@ const PartyMaster = (props) => {
 	}, [])
 
 	useEffect(async () => {
-		
+
 		if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
 			dispatch(postPartyDataSuccess({ Status: false }));
 
 			//***************mobail app api*********************** */
 			if (subPageMode === url.RETAILER_MASTER) {
-				
+
 				const jsonBody = JSON.stringify({ RetailerID: postMsg.TransactionID.toString() });
 				const mobilApiResp = await mobileApp_Send_Retailer_Api({ jsonBody });
 				if (mobilApiResp.Message.code === 200) { showToastAlert(mobilApiResp.Message.message, "success"); };
@@ -320,7 +324,7 @@ const PartyMaster = (props) => {
 	}, [postMsg.Status])
 
 	useEffect(async () => {
-
+		debugger
 		if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
 			if (subPageMode === url.PARTY_SELF_EDIT) {
 				dispatch(updatePartyIDSuccess({ Status: false }));
@@ -331,8 +335,9 @@ const PartyMaster = (props) => {
 			}
 
 			else {
+				debugger
 				//***************mobail app api*********************** */
-				if (subPageMode === url.RETAILER_MASTER) {
+				if (subPageMode === url.RETAILER_MASTER && !(isMobileRetailer)) {
 					const mobilApiResp = await mobileApp_RetailerUpdate_Api(updateMsg.TransactionID);
 					if (mobilApiResp.StatusCode === 200) { showToastAlert(mobilApiResp.Message, 'success'); };
 				}
@@ -360,7 +365,7 @@ const PartyMaster = (props) => {
 	}
 
 	const SaveHandler = (event) => {
-		
+
 		event.preventDefault();
 		const btnId = event.target.id;
 
@@ -435,7 +440,7 @@ const PartyMaster = (props) => {
 			if (!(pageMode === mode.defaultsave)) {
 				// Determine items from EditData.PartySubParty that don't have matching "Party" values in supplierArr
 				const itemsToPush = EditData.PartySubParty.filter((editItem) => {
-					
+
 					return !supplierArr.some((supplier) => supplier.Party === editItem.Party);
 				});
 
@@ -487,6 +492,7 @@ const PartyMaster = (props) => {
 				"isActive": baseValue.isActive,
 				"CreatedBy": loginUserID(),
 				"UpdatedBy": loginUserID(),
+				"IsApprovedParty": isMobileRetailer && false,
 				"PartySubParty": supplierArr,
 				"PartyAddress": addressTabDetail,
 
