@@ -1,4 +1,5 @@
 
+import { date_dmy_func } from "../../components/Common/CommonFunction";
 import { invoice } from "../ReportIndex";
 import { numberWithCommas, toWords } from "../Report_common_function";
 
@@ -456,6 +457,8 @@ export const DetailsOfTransportRow = (data) => {
     let OrderNumber = " "
     let IRN_No = ""
     let ACK_No = ""
+    let InvoiceDate = ""
+    let FullInvoiceNumber = ""
 
 
     if (data.InvoicesReferences > 0) {
@@ -490,15 +493,21 @@ export const DetailsOfTransportRow = (data) => {
 
     }
 
+    if (data.CRDRInvoices.length > 0) {
+        InvoiceDate = data.CRDRInvoices[0].InvoiceDate === null ? "" : data.CRDRInvoices[0].InvoiceDate
+        FullInvoiceNumber = data.CRDRInvoices[0].FullInvoiceNumber === null ? "" : data.CRDRInvoices[0].FullInvoiceNumber
+    }
+
 
     var DetailsOfTransportArray = [
 
-
         [`             ${NoteType}`],
+        [`                        ${date_dmy_func(InvoiceDate)}`],
+        [`                      ${FullInvoiceNumber}`],
         [`                    ${data.Narration === null ? "" : data.Narration}`],
         [`                ${IRN_No}`],
         [`                ${ACK_No}`],
-        // [`                          ${(EwayData.AckNo === undefined) || (EwayData.AckNo === null) ? "" : EwayData.AckNo}`]
+
     ]
 
     return DetailsOfTransportArray;
