@@ -104,6 +104,7 @@ export const reportHeder1 = (doc, data) => {
                 doc.text('Mobile No: ', x, y)
             };
 
+
         },
         margin: {
             top: 45, left: 30, right: 35,
@@ -236,7 +237,7 @@ export const reportHeder1 = (doc, data) => {
                 let y = data1.cursor.y + 8
                 doc.setFontSize(8)
                 doc.setFont(undefined, 'bold')
-                doc.text('Comment: ', x, y)
+                doc.text('Invoice Date: ', x, y)
             };
             if (rowIdx === 2 && colIdx === 0) {
 
@@ -244,10 +245,8 @@ export const reportHeder1 = (doc, data) => {
                 let y = data1.cursor.y + 8
                 doc.setFontSize(8)
                 doc.setFont(undefined, 'bold')
+                doc.text('Invoice No: ', x, y)
 
-                if (data.isQR) {
-                    doc.text('IRN No: ', x, y)
-                }
             };
             if (rowIdx === 3 && colIdx === 0) {
 
@@ -255,9 +254,8 @@ export const reportHeder1 = (doc, data) => {
                 let y = data1.cursor.y + 8
                 doc.setFontSize(8)
                 doc.setFont(undefined, 'bold')
-                if (data.isQR) {
-                    doc.text('ACK No: ', x, y)
-                }
+                doc.text('Comment: ', x, y)
+
 
             };
             if (rowIdx === 4 && colIdx === 0) {
@@ -267,6 +265,14 @@ export const reportHeder1 = (doc, data) => {
                 doc.setFontSize(8)
                 doc.setFont(undefined, 'bold')
                 doc.text('IRN No: ', x, y)
+            };
+            if (rowIdx === 5 && colIdx === 0) {
+
+                let x = data1.cursor.x + 2
+                let y = data1.cursor.y + 8
+                doc.setFontSize(8)
+                doc.setFont(undefined, 'bold')
+                doc.text('ACK No: ', x, y)
             };
 
 
@@ -695,7 +701,7 @@ export const tableBody = (doc, data) => {
                 }
             }
 
-           
+
 
         },
         margin: {
@@ -801,7 +807,7 @@ export const tableBody = (doc, data) => {
 
     const Buttom_Hidden_Table_To_Avoid_FooterOverlap = {
         margin: {
-            left: 30, right: 30, bottom: 110
+            left: 30, right: 30, bottom: 100
         },
     };
 
@@ -967,7 +973,7 @@ export const tableBodyWithIGST = (doc, data) => {
     doc.autoTable(table.columnsWithIGST, table.RowsWithIGST(data), options,);
     const Buttom_Hidden_Table_To_Avoid_FooterOverlap = {
         margin: {
-            left: 30, right: 30, bottom: 110
+            left: 30, right: 30, bottom: 100
         },
     };
     doc.autoTable(Buttom_Hidden_Table_To_Avoid_FooterOverlap);
