@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { Button, Card, CardBody, CardHeader, Col, Container, FormGroup, Label, Row } from "reactstrap";
+import { Button, Card, CardBody, CardHeader, Col, Container, FormGroup, Input, Label, Row } from "reactstrap";
 
 import { MetaTags } from "react-meta-tags";
 import { useDispatch, useSelector } from "react-redux";
@@ -22,7 +22,7 @@ import { C_Select } from "../../../CustomValidateForm";
 import { getPartyTypelist, getPartyTypelistSuccess } from "../../../store/Administrator/PartyTypeRedux/action";
 import ChannelViewDetails from "./ChannelViewDetails";
 import { vieBtnCss } from "../../../components/Common/ListActionsButtons";
-
+import cellEditFactory from 'react-bootstrap-table2-editor';
 
 function initialState(history) {
 
@@ -284,13 +284,75 @@ const PartyItems = (props) => {
 			noSelectedIds = tableArray
 				.filter(row => (row.InPartyItem == true))
 				.map(row => row.Item);
-		}else if (subPageMode === url.PARTYITEM) {
+		} else if (subPageMode === url.PARTYITEM) {
 			noSelectedIds = tableArray
 				.filter(row => (row.InStock == true))
 				.map(row => row.Item);
 		}
 		return noSelectedIds;
 	};
+
+
+	const tableSelectCheckConfig = ({
+		rowSelected = '',
+		nonSelectable = [],
+		position,
+		headLabel,
+		bgColor = "#9dadf09e",
+		disabledWithMsg = '',
+		keyField,
+		tableData = []
+	}) => ({
+
+		mode: "checkbox",
+		bgColor: bgColor,
+		onSelectAll: (isSelecte) => {
+			tableData.forEach(ele => {
+				const isNonSelectable = nonSelectable.includes(ele[keyField]);
+				if (!isNonSelectable) {
+					ele.selectCheck = isSelecte
+				}
+			});
+		},
+		onSelect: (row, event) => {
+			const isNonSelectable = nonSelectable.includes(row[keyField]);
+			if (isNonSelectable) {
+					return
+			}
+			row.selectCheck = event
+		},
+		selected: rowSelected,
+		selectColumnPosition: position ? position : "right",
+		attrs: () => ({ 'data-label': "Select" }),
+		selectionHeaderRenderer: (head) => (
+			<div className="">
+				<Input type="checkbox" checked={head.checked} />
+				<label style={{ paddingLeft: "7px" }}>{headLabel ? headLabel : "SelectAll"}</label>
+			</div>
+		),
+		selectionRenderer: ({ mode, checked, rowKey, ...rest }) => {
+			const isNonSelectable = nonSelectable.includes(rowKey);
+			if (isNonSelectable) {
+				const rowData = tableData.find(r => r[keyField] === rowKey)
+				return <>
+					<Input
+						type="checkbox"
+						{...rest}
+						disabled
+						checked={rowData?.selectCheck}
+						style={!rowData?.selectCheck ? {
+							opacity: 0.5,
+							backgroundColor: "#ababab82",
+						} : {}}
+					/>
+					&nbsp;&nbsp; <samp className="text-danger">{disabledWithMsg}</samp>
+				</>;
+			}
+			return <Input type="checkbox" checked={checked}  {...rest} />
+		}
+
+	})
+
 
 	const SaveHandler = (event) => {
 		event.preventDefault();
@@ -432,14 +494,18 @@ const PartyItems = (props) => {
 														data={i.items}
 														columns={tableColumns}
 														Item="table_Arrow"
-														selectRow={selectAllCheck({
-															rowSelected: rowSelected(i.items),
-															nonSelectable: nonSelectedRow(i.items),
-															disabledWithMsg:subPageMode==url.PARTYITEM&&"In-stock",
-															bgColor: '',
-															keyField:"Item",
-															selectedDisabled:nonSelectedRow(i.items),
-														})}
+														selectRow={
+															tableSelectCheckConfig({
+																// selectAllCheck({
+																rowSelected: rowSelected(i.items),
+																disabledWithMsg: subPageMode == url.PARTYITEM && "In-stock",
+																keyField: "Item",
+																bgColor: '',
+																selectedDisabled: nonSelectedRow(i.items),
+																tableData: i.items,
+																nonSelectable: nonSelectedRow(i.items),
+															})}
+														// cellEdit={cellEditFactory({ mode: 'click', blurToSave: true })}
 														noDataIndication={
 															<div className="text-danger text-center ">
 																Items Not available
