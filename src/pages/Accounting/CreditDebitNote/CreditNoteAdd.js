@@ -45,7 +45,7 @@ import { InvoiceNumber, InvoiceNumberSuccess } from "../../../store/Sales/SalesR
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { C_DatePicker, C_Select } from "../../../CustomValidateForm";
 
-const CreditNoteMode2 = (props) => {
+const CreditNoteAdd = (props) => {
     const history = useHistory();
     const dispatch = useDispatch();
     const currentDate_ymd = _cfunc.date_ymd_func();
@@ -527,4 +527,4 @@ const CreditNoteMode2 = (props) => {
         )
     }
 };
-export default CreditNoteMode2;
+export default CreditNoteAdd;

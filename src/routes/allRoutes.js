@@ -144,7 +144,7 @@ import GoodsCreditNote from "../pages/Accounting/CreditDebitNote/GoodsCreditNote
 import DebitNoteMaster from "../pages/Accounting/Debit/Debit";
 import CreditList from "../pages/Accounting/CreditDebitNote/CreditList";
 
-import CreditNoteMode2 from "../pages/Accounting/CreditDebitNote/CreditNoteMode2";
+import CreditNoteAdd from "../pages/Accounting/CreditDebitNote/CreditNoteAdd";
 
 import ImportFieldAdd from "../pages/Adminisrator/ImportMaster/FieldAdd/ImportFieldAdd";
 import ImportFieldAddList from "../pages/Adminisrator/ImportMaster/FieldAdd/ImportFieldAddList";
@@ -431,7 +431,7 @@ const userRoutes = [
 	// |||||||||||||||||||||||||||||||||||||||||||||||||||
 
 	{ path: path.CREDIT_LIST, component: CreditList },
-	{ path: path.CREDIT_NOTE, component: CreditNoteMode2 },
+	{ path: path.CREDIT_NOTE, component: CreditNoteAdd },
 
 	{ path: path.DEBIT_LIST, component: CreditList },
 	{ path: path.DEBIT_NOTE, component: DebitNoteMaster },
