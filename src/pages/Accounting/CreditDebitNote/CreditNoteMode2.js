@@ -457,7 +457,7 @@ const CreditNoteMode2 = (props) => {
                                             cpattern={decimalRegx}
                                             value={values.GrandTotal}
                                             type="text"
-                                            className={isError.GrandTotal.length > 0 ? "is-invalid form-control" : "form-control"}
+                                            className={isError.GrandTotal.length > 0 ? "is-invalid form-control text-end" : " text-end form-control"}
                                             placeholder="Please Enter Amount"
                                             autoComplete='off'
                                             autoFocus={true}
