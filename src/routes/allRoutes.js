@@ -431,7 +431,7 @@ const userRoutes = [
 	// |||||||||||||||||||||||||||||||||||||||||||||||||||
 
 	{ path: path.CREDIT_LIST, component: CreditList },
-	{ path: path.CREDIT_NOTE, component: DebitNoteMaster },
+	{ path: path.CREDIT_NOTE, component: CreditNoteMode2 },
 
 	{ path: path.DEBIT_LIST, component: CreditList },
 	{ path: path.DEBIT_NOTE, component: DebitNoteMaster },
@@ -444,12 +444,9 @@ const userRoutes = [
 	{ path: path.GOODS_DEBIT_NOTE, component: GoodsCreditNote },
 
 
-	// { path: path.CREDIT_LIST1, component: CreditList },
-	{ path: path.CREDIT_NOTE_MODE_2, component: CreditNoteMode2 },
-
 	{ path: path.CLAIM_TRACKING_ENTRY, component: ClaimTrackingEntry },
 	{ path: path.CLAIM_TRACKING_ENTRY_LIST, component: ClaimTrackingEntryList },
-	// |||||||||||||||||||||||||||||||||||||||||||||||||||
+
 
 	//**************************** Reports ***********************************//
 
