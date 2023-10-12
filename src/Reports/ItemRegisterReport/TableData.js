@@ -11,6 +11,7 @@ export const columns = [
     "Stock",
     "Sale",
     "Purchase Return",
+    "Stock      Adjustment",
     "Balance",
 
 ];
@@ -42,7 +43,7 @@ export const Rows = (data) => {
     let Stock = 0
     let Sale = 0
     let PurchaseReturn = 0
-
+    let StockAdjustment = 0
 
 
 
@@ -54,7 +55,8 @@ export const Rows = (data) => {
         let RowStock = 0
         let RowSale = 0
         let RowPurchaseReturn = 0
-
+        let RowStockAdjustment = 0
+        debugger
 
         if (Unit === "No") {
             GRN = Number(element.QtyInNo)
@@ -62,6 +64,7 @@ export const Rows = (data) => {
             Stock = Number(element.QtyInNo)
             Sale = Number(element.QtyInNo)
             PurchaseReturn = Number(element.QtyInNo)
+            StockAdjustment = Number(element.QtyInNo)
         }
 
         if (Unit === "Kg") {
@@ -70,6 +73,8 @@ export const Rows = (data) => {
             Stock = Number(element.QtyInNo)
             Sale = Number(element.QtyInNo)
             PurchaseReturn = Number(element.QtyInNo)
+            StockAdjustment = Number(element.QtyInNo)
+
         }
         if (Unit === "Box") {
             GRN = Number(element.QtyInNo)
@@ -77,6 +82,7 @@ export const Rows = (data) => {
             Stock = Number(element.QtyInNo)
             Sale = Number(element.QtyInNo)
             PurchaseReturn = Number(element.QtyInNo)
+            StockAdjustment = Number(element.QtyInNo)
         }
 
         if (element.Sequence === 1) {
@@ -89,6 +95,8 @@ export const Rows = (data) => {
             RowSale = Sale
         } if (element.Sequence === 5) {
             RowPurchaseReturn = PurchaseReturn
+        } if (element.Sequence === 6) {
+            RowStockAdjustment = StockAdjustment
         }
 
         const rowGRN = Number(RowGRN);
@@ -99,8 +107,6 @@ export const Rows = (data) => {
             BalanceAmount = RowStock
         }
         BalanceAmount = (BalanceAmount + rowGRN + rowSalesReturn) - (rowSale + rowPurchaseReturn);
-
-
         const tableitemRow = [
             SN++,
             `${date_dmy_func(element.TransactionDate)} ${convertOnlyTimefunc(element.CreatedOn)}`,
@@ -111,6 +117,8 @@ export const Rows = (data) => {
             (element.Sequence === 3) ? (numberWithCommas(Number(Stock).toFixed(2))) : "0.00",
             (element.Sequence === 4) ? (numberWithCommas(Number(Sale).toFixed(2))) : "0.00",
             (element.Sequence === 5) ? (numberWithCommas(Number(PurchaseReturn).toFixed(2))) : "0.00",
+            (element.Sequence === 6) ? (numberWithCommas(Number(PurchaseReturn).toFixed(2))) : "0.00",
+
             element.TransactionNumber === "STOCK" ? numberWithCommas(Number(RowStock).toFixed(2)) : numberWithCommas(Number(BalanceAmount).toFixed(2))
         ];
 

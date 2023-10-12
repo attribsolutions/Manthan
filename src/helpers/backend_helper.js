@@ -717,19 +717,13 @@ export const CreditDebitDataExport_GoBtn_API = ({ jsonBody }) => post(url.CREDIT
 
 export const mobileApp_ProductAdd_Api = (transactionId) => post(`${url.MOBILE_APP_PRODUCT_ADD}/${transactionId}`)
 export const mobileApp_ProductDelete_Api = (transactionId) => del(`${url.MOBILE_APP_PRODUCT_DELETE}/${transactionId}`)
-export const mobileApp_ProductUpdate_Api = (transactionId) => put(`${url.MOBILE_APP_PRODUCT_UPDATE}/${transactionId}`)
+export const mobileApp_ProductUpdate_Api = ({ jsonBody }) => put(`${url.MOBILE_APP_PRODUCT_UPDATE}`, jsonBody)
 
-// export const mobileApp_RetailerAdd_Api = (transactionId) => post(`${url.MOBILE_APP_RETAILER_ADD}/${transactionId}`)
 
 export const mobileApp_Send_Retailer_Api = ({ jsonBody }) => post(url.MOBILE_APP_RETAILER_ADD, jsonBody)
-
-export const sXXC = (jsonBody) => post(url.MOBILE_APP_RETAILER_ADD, jsonBody) // get api
-
 export const mobileApp_RetailerDelete_Api = (transactionId) => del(`${url.MOBILE_APP_RETAILER_DELETE}/${transactionId}`)
-export const mobileApp_RetailerUpdate_Api = async (transactionId) => {
-	const a = await put(`${url.MOBILE_APP_RETAILER_UPDATE}/${transactionId}`)
-	return a
-}
+export const mobileApp_RetailerUpdate_Api = ({ jsonBody }) => put(`${url.MOBILE_APP_RETAILER_UPDATE}`, jsonBody)
+
 
 
 //ReceiptDataExport

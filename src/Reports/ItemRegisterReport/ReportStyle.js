@@ -222,7 +222,7 @@ export const tableBody = (doc, data) => {
 
 
             if (data1.row.cells[2].raw === "Total") {
-                
+
                 data1.row.cells[0].colSpan = 10
                 data1.row.cells[0].styles.fontSize = 9
                 data1.row.cells[0].styles.fontStyle = "bold"
@@ -310,32 +310,32 @@ export const tableBody = (doc, data) => {
 
             },
             1: {
-                columnWidth: 80,
+                columnWidth: 77,
                 halign: 'left',
 
             },
             2: {
-                columnWidth: 90,
+                columnWidth: 76,
                 halign: 'left',
             },
             3: {
-                columnWidth: 60,
+                columnWidth: 55,
                 halign: 'right',
             },
             4: {
-                columnWidth: 40,
+                columnWidth: 37,
                 halign: 'right',
             },
             5: {
-                columnWidth: 60,
+                columnWidth: 55,
                 halign: 'right',
             },
             6: {
-                columnWidth: 47,
+                columnWidth: 40,
                 halign: 'right',
             },
             7: {
-                columnWidth: 50,
+                columnWidth: 40,
                 halign: 'right',
             },
             8: {
@@ -343,7 +343,11 @@ export const tableBody = (doc, data) => {
                 halign: 'right',
             },
             9: {
-                columnWidth: 49,
+                columnWidth: 51,
+                halign: 'right',
+            },
+            10: {
+                columnWidth: 45,
                 halign: 'right',
             },
 

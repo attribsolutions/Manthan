@@ -5,19 +5,18 @@ import { DamageStockReport_GoBtn_API, OutStandingBalance_GoBtn_API } from "../..
 import { url } from "../../../routes";
 
 function* damageStockReport_GenFunc({ config }) {
-	
-	const {subPageMode}=config
+
+	const { subPageMode } = config
 	try {
-		let response 
+		let response
 
-		if(subPageMode===url.PARTY_OUTSTANDING_REPORT){
+		if (subPageMode === url.PARTY_OUTSTANDING_REPORT) {
 			response = yield call(OutStandingBalance_GoBtn_API, config);
-			}
-				else{
-					response = yield call(DamageStockReport_GoBtn_API, config);
-
-				}
-	yield put(damageStockReport_GoButton_API_Success(response))
+		}
+		else {
+			response = yield call(DamageStockReport_GoBtn_API, config);
+		}
+		yield put(damageStockReport_GoButton_API_Success(response))
 	} catch (error) { yield put(stockReportApiErrorAction()) }
 }
 

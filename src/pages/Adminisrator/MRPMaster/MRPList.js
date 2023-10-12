@@ -14,6 +14,8 @@ import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { deleteMRPList_Id, deleteMRPList_Id_Success, getMRPList, GoButtonForMRP_MasterSuccess } from "../../../store/Administrator/MRPMasterRedux/action";
 import MRPMaster from "./MRPMaster";
 import { Listloader } from "../../../components/Common/CommonButton";
+import { mobileApp_ProductUpdate_Api } from "../../../helpers/backend_helper";
+import { showToastAlert } from "../../../helpers/axios_Config";
 
 const MRPList = () => {
 
@@ -34,7 +36,7 @@ const MRPList = () => {
     })
   );
 
-  const {pageField, MRPGoButton, deleteMsg } = reducers;
+  const { pageField, MRPGoButton, deleteMsg } = reducers;
 
   const action = {
     getList: getMRPList,
@@ -52,6 +54,19 @@ const MRPList = () => {
     dispatch(getMRPList())
 
   }, []);
+
+  const mobaileDeleteApiFinc = async (deleteMsg) => {
+    debugger
+    //***************mobail app api*********************** */
+    const jsonBody = JSON.stringify({
+      products: deleteMsg.DeleteID
+    })
+    const mobilApiResp = await mobileApp_ProductUpdate_Api({ jsonBody })
+    if (mobilApiResp.StatusCode === 200) { showToastAlert(mobilApiResp.Message, "success") }
+    //************************************** */
+
+    return // *note  return required 
+  }
 
   useEffect(() => {
 
@@ -75,7 +90,7 @@ const MRPList = () => {
 
   function editBodyfunc(index) {
 
-    const { rowData} = index
+    const { rowData } = index
     let { Division_id, Party_id, EffectiveDate } = rowData;
     try {
       const jsonBody = JSON.stringify({
@@ -85,7 +100,7 @@ const MRPList = () => {
       })
       let config = { jsonBody, pathname: url.MRP, btnmode: mode.edit, rowData: rowData }
       dispatch(_act.GoButtonForMRP_Master(config));
-    } catch (error) {}
+    } catch (error) { }
   }
 
   async function deleteBodyfunc(index) {
@@ -101,7 +116,7 @@ const MRPList = () => {
         try {
           dispatch(deleteMRPList_Id(config))
         }
-        catch (error) {}
+        catch (error) { }
       }
     }
   }
@@ -123,6 +138,7 @@ const MRPList = () => {
                   MasterModal={MRPMaster}
                   masterPath={url.MRP}
                   newBtnPath={url.MRP}
+                  mobaileDeleteApiFinc={mobaileDeleteApiFinc}
                   ButtonMsgLable={"MRP"}
                   deleteName={"EffectiveDate"}
                   pageMode={pageMode}

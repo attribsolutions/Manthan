@@ -394,7 +394,10 @@ const ItemsMaster = (props) => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
 
             //***************mobail app api*********************** */
-            const mobilApiResp = await mobileApp_ProductUpdate_Api(updateMsg.TransactionID);
+            const jsonBody = JSON.stringify({
+                products: (updateMsg.TransactionID).toString()
+            })
+            const mobilApiResp = await mobileApp_ProductUpdate_Api({ jsonBody });
             if (mobilApiResp.StatusCode === 200) { showToastAlert(mobilApiResp.Message); }
             //************************************** */
 

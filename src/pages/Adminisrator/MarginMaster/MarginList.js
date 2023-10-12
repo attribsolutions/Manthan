@@ -14,6 +14,8 @@ import { delete_MarginList_ID, delete_MarginList_ID_Success, getMarginList, goBu
 import * as _act from "../../../store/actions";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { PageLoadingSpinner, Listloader } from "../../../components/Common/CommonButton";
+import { mobileApp_ProductDelete_Api, mobileApp_ProductUpdate_Api } from "../../../helpers/backend_helper";
+import { showToastAlert } from "../../../helpers/axios_Config";
 
 const MarginList = () => {
 
@@ -54,6 +56,19 @@ const MarginList = () => {
     dispatch(getMarginList())
 
   }, []);
+
+
+  const mobaileDeleteApiFinc = async (deleteMsg) => {
+    //***************mobail app api*********************** */
+    const jsonBody = JSON.stringify({
+      products: deleteMsg.DeleteID
+    })
+    const mobilApiResp = await mobileApp_ProductUpdate_Api({ jsonBody })
+    if (mobilApiResp.StatusCode === 200) { showToastAlert(mobilApiResp.Message, "success") }
+    //************************************** */
+
+    return // *note  return required 
+  }
 
   useEffect(() => {
     let userAcc = userAccess.find((inx) => {
@@ -133,6 +148,7 @@ const MarginList = () => {
               reducers={reducers}
               showBreadcrumb={false}
               MasterModal={MarginMaster}
+              mobaileDeleteApiFinc={mobaileDeleteApiFinc}
               masterPath={url.MARGIN}
               newBtnPath={url.MARGIN}
               ButtonMsgLable={"Margin"}
