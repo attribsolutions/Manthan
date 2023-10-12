@@ -10,14 +10,12 @@ import Select from "react-select";
 import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess, getBaseUnit_ForDropDown, getBaseUnit_ForDropDownSuccess } from "../../store/actions";
 import C_Report from "../../components/Common/C_Report";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
-import DynamicColumnHook from "../../components/Common/TableCommonFunc";
 import { mode, pageId } from "../../routes/index"
 import { stockReport_GoButton_API, stockReport_GoButton_API_Success } from "../../store/Report/StockReport/action";
-import { ReportComponent } from "../ReportComponent";
-import CustomTable from "../../CustomTable2";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
+import { ExcelDownloadFunc } from "./ExcelDownloadFunc";
 
 const StockReport = (props) => {
 
@@ -29,14 +27,14 @@ const StockReport = (props) => {
 	const [headerFilters, setHeaderFilters] = useState('');
 	const [userPageAccessState, setUserAccState] = useState('');
 
-
 	const [partyDropdown, setPartyDropdown] = useState("");
-	const [unitDropdown, setUnitDropdown] = useState("");
+	const [unitDropdown, setUnitDropdown] = useState({ value: 1, label: 'No' });
 	const [tableData, setTableData] = useState([]);
 
 	const [btnMode, setBtnMode] = useState(0);
 	const [mrpWise, setMrpWise] = useState(false);
 	const [originalTableData, setOriginalTableData] = useState([]);
+	const [stockTypeSelect, setStockTypeSelect] = useState({ value: 1, label: 'SaleableStock' });
 
 	const reducers = useSelector(
 		(state) => ({
@@ -86,49 +84,51 @@ const StockReport = (props) => {
 	}, [])
 
 	useEffect(() => {
-		// This useEffect handles the response from the API call
 		try {
-			
 			let nextId = 1;
 			let updatedReduxData = [];
-			if ((goButtonData.Status === true) && (goButtonData.StatusCode === 200)) {
-				// dispatch(stockReport_GoButton_API_Success([])); // Reset goButtonData
+			if (goButtonData.Status === true && goButtonData.StatusCode === 200) {
 				updatedReduxData = goButtonData.Data.map((obj) => {
-					const newObj = { ...obj, id: nextId };
+					const newObj = { ...obj, ID: nextId };
 					nextId++;
 					return newObj;
-				})
-				setTableData(updatedReduxData);
-				setOriginalTableData(updatedReduxData);
+				});
 
 				if (goButtonData.Data.length === 0) {
-					setBtnMode(0)
-				};
+					setBtnMode(0);
+				}
 
 				if (btnMode === 2) {
-					
-					MRPWise_TableChange(mrpWise, updatedReduxData);
-					ReportComponent({ // Download CSV
+					const { tData, MRPWise } = MRPWise_TableChange(mrpWise, updatedReduxData);
+					ExcelDownloadFunc({
 						pageField,
-						excelData: tableData,
-						excelFileName: "Current_Stock_Report"
-					})
-					setBtnMode(0); // Reset button mode
+						excelData: tData, // Use tableData here
+						excelFileName: "Current_Stock_Report",
+						mrpWise: MRPWise,
+					});
+
 				} else if (btnMode === 1) {
 					MRPWise_TableChange(mrpWise, updatedReduxData);
-					setBtnMode(0); // Reset button mode
 				}
-			} else if ((goButtonData.Status === true)) {
-				updatedReduxData = [];
-			};
 
+			} else if (goButtonData.Status === true) {
+				updatedReduxData = [];
+			}
+
+			// Sort the data by ItemName in ascending order
+			updatedReduxData.sort((a, b) => a.ItemName.localeCompare(b.ItemName));
+
+			setBtnMode(0); // Reset button mode
+			setTableData(updatedReduxData);
+			setOriginalTableData(updatedReduxData);
 		} catch (e) { }
 	}, [goButtonData]);
 
 	function MRPWise_TableChange(mrpWiseChecked, tableData) {
 
-		if (!(mrpWiseChecked)) {
-			
+		let updatedTableData;
+
+		if (!mrpWiseChecked) {
 			const combinedItems = {};
 			tableData.forEach((item) => {
 				const { Item, ActualQty } = item;
@@ -139,18 +139,17 @@ const StockReport = (props) => {
 				}
 			});
 
-			const combinedItemArray = Object.values(combinedItems);
+			updatedTableData = Object.values(combinedItems);
 
-			setTableData(combinedItemArray);
 		} else {
-			
-			setTableData(tableData);
+			updatedTableData = tableData;
 		}
-		setMrpWise(mrpWiseChecked)
+		updatedTableData.sort((a, b) => a.ItemName.localeCompare(b.ItemName));
+
+		setTableData(updatedTableData);
+		setMrpWise(mrpWiseChecked);
+		return { tData: updatedTableData, MRPWise: mrpWiseChecked }
 	}
-
-	const [tableColumns] = DynamicColumnHook({ pageField })
-
 	const BaseUnit_DropdownOptions = BaseUnit.filter(index => index.Name === "No" || index.Name === "Kg" || index.Name === "Box")
 		.map(data => ({
 			value: data.id,
@@ -161,6 +160,15 @@ const StockReport = (props) => {
 		value: i.id,
 		label: i.Name
 	}));
+
+	const StockTypeOptions = [{
+		value: 1,
+		label: "Saleable Stock"
+	},
+	{
+		value: 2,
+		label: "Damage Stock"
+	}]
 
 	function goButtonHandler(e, btnMode) {
 
@@ -186,7 +194,7 @@ const StockReport = (props) => {
 				"PartyID": partyDropdown === "" ? _cfunc.loginPartyID() : partyDropdown.value,
 			});
 
-			dispatch(stockReport_GoButton_API({ jsonBody }))
+			dispatch(stockReport_GoButton_API({ jsonBody, stockType: stockTypeSelect.value }))
 
 		} catch (error) { _cfunc.CommonConsole(error) }
 	}
@@ -203,14 +211,55 @@ const StockReport = (props) => {
 		setHeaderFilters(newObj)
 	}
 
+	const PageListColumns = [
+		{
+			text: "ItemName",
+			dataField: "ItemName",
+		},
+		{
+			text: "Quantity",
+			dataField: "ActualQty",
+			align: "right"
+		},
+		{
+			text: "Unit",
+			dataField: "Unit",
+		},
+	];
+
+	// // Conditionally add the "MRP" column based on the mrpWise condition
+	if (mrpWise) {
+		PageListColumns.push({
+			text: "MRP",
+			dataField: "MRP",
+			formatter: (value, row, k) => (
+				<div className="text-end">
+					<samp key={row.id} className="font-asian">
+						{Number(row.MRP)}
+					</samp>
+				</div>
+			),
+			headerStyle: () => ({
+				width: '100px',
+				textAlign: 'center',
+				text: 'end',
+			})
+		});
+	}
+
+	function StockTypeHandler(e) {
+		setStockTypeSelect(e);
+		setTableData([]);
+	}
+
 	return (
 		<React.Fragment>
 			<MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
 			<div className="page-content">
 				<div className="px-2 c_card_filter text-black mb-1" >
-					<div className="row" >
-						<Col sm={2} className="">
-							<FormGroup className=" mb-2 row mt-3 " >
+					<div className="row " >
+						<Col sm={3} className="">
+							<FormGroup className=" mb-2 row mt-2 " >
 								<Label className="col-sm-4 p-2"
 									style={{ width: "66px" }}>FromDate</Label>
 								<Col sm={7}>
@@ -224,8 +273,8 @@ const StockReport = (props) => {
 							</FormGroup>
 						</Col>
 
-						<Col sm={2} className="">
-							<FormGroup className=" row mt-3 " >
+						<Col sm={3} className="">
+							<FormGroup className=" row mt-2 " >
 								<Label className="col-sm-4 p-2"
 									style={{ width: "60px" }}>ToDate</Label>
 								<Col sm={7}>
@@ -239,8 +288,8 @@ const StockReport = (props) => {
 							</FormGroup>
 						</Col>
 
-						<Col sm={(isSCMParty) ? 2 : 3}>
-							<FormGroup className=" row mt-3 " >
+						<Col sm={3}>
+							<FormGroup className=" row mt-2 " >
 								<Label className="col-sm-2 p-2"
 									style={{ width: "85px" }}>Unit</Label>
 								<Col sm={7}>
@@ -264,8 +313,8 @@ const StockReport = (props) => {
 						</Col >
 
 						{isSCMParty &&
-							<Col sm={2}>
-								<FormGroup className=" row mt-3 " >
+							<Col sm={3}>
+								<FormGroup className=" row mt-2 " >
 									<Label className="col-md-3 p-2 "
 										style={{ width: "90px" }}>Party</Label>
 									<Col sm={7}>
@@ -288,9 +337,35 @@ const StockReport = (props) => {
 								</FormGroup>
 							</Col >
 						}
+					</div>
+
+					<div className="row" >
+						<Col sm={3} className="">
+							<FormGroup className=" mb-1 row mt-1 " >
+								<Label className="col-sm-4 p-2"
+									style={{ width: "66px" }}>Stock Type</Label>
+								<Col sm={7}>
+									<Select
+										name="stockType"
+										value={stockTypeSelect}
+										isSearchable={true}
+										className="react-dropdown"
+										classNamePrefix="dropdown"
+										styles={{
+											menu: provided => ({ ...provided, zIndex: 2 })
+										}}
+										options={StockTypeOptions}
+										onChange={(e) => {
+											StockTypeHandler(e)
+
+										}}
+									/>
+								</Col>
+							</FormGroup>
+						</Col>
 
 						<Col sm={2}>
-							<FormGroup className=" row mt-3 " >
+							<FormGroup className=" row mt-1 " >
 								<Label htmlFor="horizontal-firstname-input" className="col-sm-6 col-form-label" >MRP-Wise</Label>
 								<Col md={2} style={{ marginTop: '7px' }} >
 									<div className="form-check form-switch form-switch-md ">
@@ -304,7 +379,7 @@ const StockReport = (props) => {
 							</FormGroup>
 						</Col>
 
-						<Col sm={1} className="mt-3" >
+						<Col sm={1} className="mt-1" >
 							<C_Button
 								type="button"
 								spinnerColor="white"
@@ -317,7 +392,7 @@ const StockReport = (props) => {
 
 						</Col>
 
-						<Col sm={1} className="mt-3 ">
+						<Col sm={1} className="mt-1 ">
 							<C_Button
 								type="button"
 								spinnerColor="white"
@@ -334,9 +409,9 @@ const StockReport = (props) => {
 
 				<div className="mt-1">
 					<ToolkitProvider
-						keyField="id"
+						keyField="ID"
 						data={tableData}
-						columns={tableColumns}
+						columns={PageListColumns}
 						search
 					>
 						{(toolkitProps,) => (
@@ -345,7 +420,7 @@ const StockReport = (props) => {
 									<Col xl="12">
 										<div className="table-responsive table">
 											<BootstrapTable
-												keyField="PartyID"
+												keyField="ID"
 												classes={"table  table-bordered table-hover"}
 												noDataIndication={
 													<div className="text-danger text-center ">
