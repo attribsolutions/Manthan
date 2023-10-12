@@ -157,7 +157,7 @@ const CreditNoteAdd = (props) => {
                     key,
                     index.BalanceAmount = index.GrandTotal - index.PaidAmount
                 ));
-              
+
 
                 setState({ values, fieldLabel, hasValid, required, isError })
                 dispatch(Breadcrumb_inputName(hasEditVal.Name))
@@ -326,13 +326,14 @@ const CreditNoteAdd = (props) => {
                 Customer: values.Customer.value,
                 NoteType: creditNoteTypeId.id,
                 GrandTotal: values.GrandTotal,
+
                 Narration: values.Narration,
                 NoteReason: values.NoteReason.value,
                 Party: loginPartyID(),
                 CreatedBy: loginUserID(),
                 UpdatedBy: loginUserID(),
                 CRDRNoteItems: [],
-                CRDRInvoices: [],
+                CRDRInvoices: [{ Invoice: values.InvoiceNO.value, }],
             })
             dispatch(saveCredit({ jsonBody }));
 
