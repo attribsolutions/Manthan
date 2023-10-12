@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Col, FormGroup, Input, Label, Row } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import { C_Button } from "../../components/Common/CommonButton";
-import { C_DatePicker } from "../../CustomValidateForm";
+import { C_DatePicker, C_Select } from "../../CustomValidateForm";
 import * as _cfunc from "../../components/Common/CommonFunction";
 import { MetaTags } from "react-meta-tags";
 import Select from "react-select";
@@ -16,6 +16,7 @@ import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
 import { ExcelDownloadFunc } from "./ExcelDownloadFunc";
+import DynamicColumnHook from "../../components/Common/TableCommonFunc";
 
 const StockReport = (props) => {
 
@@ -227,8 +228,8 @@ const StockReport = (props) => {
 		},
 	];
 
-	// // Conditionally add the "MRP" column based on the mrpWise condition
-	// Check if the "MRP" column should be added
+	// Conditionally add the "MRP" column based on the mrpWise condition
+
 	if (mrpWise) {
 		const mrpColumn = {
 			text: "MRP",
@@ -255,7 +256,31 @@ const StockReport = (props) => {
 			PageListColumns.splice(unitColumnIndex, 0, mrpColumn);
 		}
 	}
-	
+
+	// const [tableColumns, defaultSorted, pageOptions, setTableColumns] = DynamicColumnHook({ pageField, })
+
+	// useEffect(() => {
+	// 	if (mrpWise) {
+	// 		// Set the "MRP" column's hidden property to true when MRPWise is true.
+	// 		setTableColumns((columns) =>
+	// 			columns.map((column) =>
+	// 				column.dataField === "MRP"
+	// 					? { ...column, hidden: true }
+	// 					: column
+	// 			)
+	// 		);
+	// 	} else {
+	// 		// Reset the "MRP" column's hidden property when MRPWise is false.
+	// 		setTableColumns((columns) =>
+	// 			columns.map((column) =>
+	// 				column.dataField === "MRP"
+	// 					? { ...column, hidden: false }
+	// 					: column
+	// 			)
+	// 		);
+	// 	}
+	// }, [mrpWise]);
+
 	function StockTypeHandler(e) {
 		setStockTypeSelect(e);
 		setTableData([]);
@@ -266,129 +291,90 @@ const StockReport = (props) => {
 			<MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
 			<div className="page-content">
 				<div className="px-2 c_card_filter text-black mb-1" >
-					<div className="row " >
-						<Col sm={3} className="">
-							<FormGroup className=" mb-2 row mt-2 " >
-								<Label className="col-sm-4 p-2"
-									style={{ width: "66px" }}>FromDate</Label>
-								<Col sm={7}>
-									<C_DatePicker
-										name='fromdate'
-										value={fromdate}
-										disabled={true}
-										onChange={fromdateOnchange}
-									/>
+
+					<Row>
+						<Col className="col col-11  mt-1">
+							<Row className="mb-2 row ">
+								<Col sm={3}>
+									<FormGroup className="mb-n2 row mt-1">
+
+										<Label className="col-sm-3 p-2">FromDate</Label>
+										<Col sm={6}>
+											<C_DatePicker
+												name='fromdate'
+												value={fromdate}
+												disabled={true}
+												onChange={fromdateOnchange}
+											/>
+										</Col>
+									</FormGroup>
 								</Col>
-							</FormGroup>
+
+								<Col sm={3} className="custom-to-date-col">
+									<FormGroup className="mb-n3 row mt-1">
+										<Label className="col-sm-4 p-2">ToDate</Label>
+										<Col>
+											<C_DatePicker
+												nane='todate'
+												value={todate}
+												disabled={true}
+												onChange={todateOnchange}
+											/>
+										</Col>
+									</FormGroup>
+								</Col>
+
+								<Col sm={3}>
+									<FormGroup className="mb-n3 row mt-1">
+
+										<Label className="col-sm-4 p-2">Unit</Label>
+										<Col>
+											<Select
+												name="Unit"
+												value={unitDropdown}
+												isSearchable={true}
+												className="react-dropdown"
+												classNamePrefix="dropdown"
+												styles={{
+													menu: provided => ({ ...provided, zIndex: 2 })
+												}}
+												options={BaseUnit_DropdownOptions}
+												onChange={(e) => {
+													setUnitDropdown(e);
+													setTableData([]);
+												}}
+											/>
+										</Col>
+									</FormGroup>
+								</Col>
+
+								{isSCMParty &&
+									<Col sm={3}>
+										<FormGroup className="mb-n3 row mt-1">
+											<Label className="col-sm-4 p-2">Party</Label>
+											<Col>
+												<Select
+													name="Party"
+													value={partyDropdown}
+													isSearchable={true}
+													className="react-dropdown"
+													classNamePrefix="dropdown"
+													styles={{
+														menu: provided => ({ ...provided, zIndex: 2 })
+													}}
+													options={Party_Option}
+													onChange={(e) => {
+														setPartyDropdown(e);
+														setTableData([]);
+													}}
+												/>
+											</Col>
+										</FormGroup>
+									</Col>}
+							</Row>
 						</Col>
 
-						<Col sm={3} className="">
-							<FormGroup className=" row mt-2 " >
-								<Label className="col-sm-4 p-2"
-									style={{ width: "60px" }}>ToDate</Label>
-								<Col sm={7}>
-									<C_DatePicker
-										nane='todate'
-										value={todate}
-										disabled={true}
-										onChange={todateOnchange}
-									/>
-								</Col>
-							</FormGroup>
-						</Col>
-
-						<Col sm={3}>
-							<FormGroup className=" row mt-2 " >
-								<Label className="col-sm-2 p-2"
-									style={{ width: "85px" }}>Unit</Label>
-								<Col sm={7}>
-									<Select
-										name="Unit"
-										value={unitDropdown}
-										isSearchable={true}
-										className="react-dropdown"
-										classNamePrefix="dropdown"
-										styles={{
-											menu: provided => ({ ...provided, zIndex: 2 })
-										}}
-										options={BaseUnit_DropdownOptions}
-										onChange={(e) => {
-											setUnitDropdown(e);
-											setTableData([]);
-										}}
-									/>
-								</Col>
-							</FormGroup>
-						</Col >
-
-						{isSCMParty &&
-							<Col sm={3}>
-								<FormGroup className=" row mt-2 " >
-									<Label className="col-md-3 p-2 "
-										style={{ width: "90px" }}>Party</Label>
-									<Col sm={7}>
-										<Select
-											name="Party"
-											value={partyDropdown}
-											isSearchable={true}
-											className="react-dropdown"
-											classNamePrefix="dropdown"
-											styles={{
-												menu: provided => ({ ...provided, zIndex: 2 })
-											}}
-											options={Party_Option}
-											onChange={(e) => {
-												setPartyDropdown(e);
-												setTableData([]);
-											}}
-										/>
-									</Col>
-								</FormGroup>
-							</Col >
-						}
-					</div>
-
-					<div className="row" >
-						<Col sm={3} className="">
-							<FormGroup className=" mb-1 row mt-1 " >
-								<Label className="col-sm-4 p-2"
-									style={{ width: "66px" }}>Stock Type</Label>
-								<Col sm={7}>
-									<Select
-										name="stockType"
-										value={stockTypeSelect}
-										isSearchable={true}
-										className="react-dropdown"
-										classNamePrefix="dropdown"
-										styles={{
-											menu: provided => ({ ...provided, zIndex: 2 })
-										}}
-										options={StockTypeOptions}
-										onChange={(e) => {
-											StockTypeHandler(e)
-
-										}}
-									/>
-								</Col>
-							</FormGroup>
-						</Col>
-
-						<Col sm={2}>
-							<FormGroup className=" row mt-1 " >
-								<Label htmlFor="horizontal-firstname-input" className="col-sm-6 col-form-label" >MRP-Wise</Label>
-								<Col md={2} style={{ marginTop: '7px' }} >
-									<div className="form-check form-switch form-switch-md ">
-										<Input type="checkbox" className="form-check-input"
-											checked={mrpWise}
-											name="mrpWise"
-											onChange={(e) => { MRPWise_TableChange(e.target.checked, originalTableData) }}
-										/>
-									</div>
-								</Col>
-							</FormGroup>
-						</Col>
-
-						<Col sm={1} className="mt-1" >
+						<Col sm="1" className="mt-2 mb-1 ">
 							<C_Button
 								type="button"
 								spinnerColor="white"
@@ -398,10 +384,55 @@ const StockReport = (props) => {
 							>
 								Show
 							</C_Button>
+						</Col>
+					</Row>
 
+					<Row>
+						<Col className="col col-11  mt-1">
+							<Row className="mb-2 row ">
+
+								<Col sm={3}>
+									<FormGroup className="mb-n2 row mt-1">
+
+										<Label className="col-sm-3 p-2">Stock Type</Label>
+										<Col sm={6}>
+											<Select
+												name="stockType"
+												value={stockTypeSelect}
+												isSearchable={true}
+												className="react-dropdown"
+												classNamePrefix="dropdown"
+												styles={{
+													menu: provided => ({ ...provided, zIndex: 2 })
+												}}
+												options={StockTypeOptions}
+												onChange={(e) => {
+													StockTypeHandler(e)
+
+												}}
+											/>
+										</Col>
+									</FormGroup>
+								</Col>
+								<Col sm={2}>
+									<FormGroup className=" row mt-1 " >
+										<Label htmlFor="horizontal-firstname-input" className="col-sm-6 col-form-label" >MRP-Wise</Label>
+										<Col md={2} style={{ marginTop: '7px' }} >
+											<div className="form-check form-switch form-switch-md ">
+												<Input type="checkbox" className="form-check-input"
+													checked={mrpWise}
+													name="mrpWise"
+													onChange={(e) => { MRPWise_TableChange(e.target.checked, originalTableData) }}
+												/>
+											</div>
+										</Col>
+									</FormGroup>
+								</Col>
+
+							</Row>
 						</Col>
 
-						<Col sm={1} className="mt-1 ">
+						<Col sm="1" className="mt-2 mb-1 ">
 							<C_Button
 								type="button"
 								spinnerColor="white"
@@ -412,10 +443,8 @@ const StockReport = (props) => {
 								Excel
 							</C_Button>
 						</Col>
-					</div>
-
+					</Row>
 				</div>
-
 				<div className="mt-1">
 					<ToolkitProvider
 						keyField="ID"
@@ -450,6 +479,7 @@ const StockReport = (props) => {
 						)}
 					</ToolkitProvider>
 				</div>
+
 			</div>
 			<C_Report />
 		</React.Fragment >
