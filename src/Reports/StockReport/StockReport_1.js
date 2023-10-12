@@ -24,7 +24,7 @@ const StockReport_1 = (props) => {
 
     const [headerFilters, setHeaderFilters] = useState('');
     const [userPageAccessState, setUserAccState] = useState('');
-    const [unitDropdown, setUnitDropdown] = useState("");
+    const [unitDropdown, setUnitDropdown] = useState({ value: 1, label: 'No' });
     const [tableData, setTableData] = useState([]);
     const [PartyDropdown, setPartyDropdown] = useState("");
 
@@ -325,7 +325,7 @@ const StockReport_1 = (props) => {
             Excel Download
         </C_Button>
     );
-  
+
     return (
         <React.Fragment>
             <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
