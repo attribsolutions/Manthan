@@ -118,8 +118,8 @@ const HeaderSection = (props) => {
     }, [])
 
     useEffect(async () => {
-        fetchDataAndSetDropdown(0, setChannelFromOption);   // set Type dropdown
-        fetchDataAndSetDropdown(_cfunc.loginCompanyID(), setChannelToOption);  // set TypeOfClaim dropdown
+        fetchDataAndSetDropdown(0, setChannelFromOption);   // set ChannelFrom dropdown (CompanyID is 0)
+        fetchDataAndSetDropdown(_cfunc.loginCompanyID(), setChannelToOption);  // set ChannelTo dropdown (CompanyID is loginCompanyID)
 
     }, []);
 
