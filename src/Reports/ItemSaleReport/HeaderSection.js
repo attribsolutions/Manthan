@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Col, FormGroup, Input, Label, Row } from "reactstrap";
 import { useHistory } from "react-router-dom";
@@ -15,7 +15,8 @@ import "../ItemSaleReport/ItemSaleCSS.scss";
 import { useMemo } from "react";
 import * as initail from "./hardcodeDetails";
 import { ItemSaleContext } from "./ContextDataProvider";
-import { ExcelButtonFunc } from "./SortAndExcelDownloadFunc";
+import { ExcelButtonFunc, fetchDataAndSetDropdown } from "./SortAndExcelDownloadFunc";
+import { get_PartyType_List_Api } from "../../helpers/backend_helper";
 
 const HeaderSection = (props) => {
 
@@ -24,6 +25,8 @@ const HeaderSection = (props) => {
     const dispatch = useDispatch();
     const history = useHistory();
     const isSCMParty = _cfunc.loginIsSCMParty();
+    const [channelFromOption, setChannelFromOption] = useState([]);
+    const [channelToOption, setChannelToOption] = useState([]);
 
     const { goBtnLoading,
         ItemSaleReportGobtn,
@@ -102,7 +105,6 @@ const HeaderSection = (props) => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(pageId.ITEM_SALE_REPORT));
         dispatch(GetRoutesList());
-        dispatch(getPartyTypelist());
         dispatch(GetVenderSupplierCustomer({ subPageMode: url.ITEM_SALE_REPORT, RouteID: 0 }));
         dispatch(getGroupList());
         dispatch(getSubGroupList())
@@ -114,6 +116,12 @@ const HeaderSection = (props) => {
             dispatch(ItemSaleGoButton_API_Success([]));
         }
     }, [])
+
+    useEffect(async () => {
+        fetchDataAndSetDropdown(0, setChannelFromOption);   // set Type dropdown
+        fetchDataAndSetDropdown(_cfunc.loginCompanyID(), setChannelToOption);  // set TypeOfClaim dropdown
+
+    }, []);
 
     useEffect(() => {
         if (ItemSaleReportGobtn.length > 0) {
@@ -158,15 +166,15 @@ const HeaderSection = (props) => {
         return options;
     }, [states.channelFromSelect, supplier, supplierListOnPartyType]);
 
-    const generateOptions = (sourceArray, labelField = "Name", valueField = "id") =>
-        [initail.INITIAL_ZERO, ...sourceArray.map(item => ({ value: item[valueField], label: item[labelField] }))];
+    // const generateOptions = (sourceArray, labelField = "Name", valueField = "id") =>
+    //     [initail.INITIAL_ZERO, ...sourceArray.map(item => ({ value: item[valueField], label: item[labelField] }))];
 
-    const channelFromDropdownOptions = useMemo(() => generateOptions(PartyTypes), [PartyTypes]);
+    // const channelFromDropdownOptions = useMemo(() => generateOptions(PartyTypes), [PartyTypes]);
 
     const generateOptions1 = (sourceArray, labelField = "Name", valueField = "id") =>
         [...sourceArray.map(item => ({ value: item[valueField], label: item[labelField] }))];
 
-    const channelToDropdownOptions = useMemo(() => generateOptions1(PartyTypes), [PartyTypes]);
+    // const channelToDropdownOptions = useMemo(() => generateOptions1(PartyTypes), [PartyTypes]);
     const routeDropdownOptions = useMemo(() => generateOptions1(RoutesList.filter(route => route.IsActive)), [RoutesList]);
     const itemNameDropdownOptions = useMemo(() => generateOptions1(ItemNameList), [ItemNameList]);
     const productDropdownOptions = useMemo(() => generateOptions1(productDropdown), [productDropdown]);
@@ -385,7 +393,7 @@ const HeaderSection = (props) => {
                 <div className="item-Sale-card_1 px-2 text-black mt-n1 ">
                     <Row>
                         <Col className="col col-11  mt-1">
-                            <Row  className="mb-2 row ">
+                            <Row className="mb-2 row ">
                                 <Col sm={3}>
                                     <FormGroup className="mb-n2 row mt-1">
                                         <Input style={{ marginLeft: "5px", marginTop: "10px" }}
@@ -445,7 +453,7 @@ const HeaderSection = (props) => {
                                                 styles={{
                                                     menu: provided => ({ ...provided, zIndex: 2 })
                                                 }}
-                                                options={channelFromDropdownOptions}
+                                                options={channelFromOption}
                                                 onChange={ChannelFromDropdown_Onchange}
 
                                             />
@@ -518,7 +526,7 @@ const HeaderSection = (props) => {
                                                     styles={{
                                                         menu: provided => ({ ...provided, zIndex: 2 })
                                                     }}
-                                                    options={channelToDropdownOptions}
+                                                    options={channelToOption}
 
                                                     onChange={(e) => { ChannelToOnchange(e) }}
                                                 />
@@ -619,7 +627,7 @@ const HeaderSection = (props) => {
                                                 <span className="font-weight-bold" style={{ fontWeight: "bold", fontSize: "14px" }}> Sort</span>
                                             </C_Button>
                                         </samp>
-                                        <samp style={{paddingLeft:"8px"}}>
+                                        <samp style={{ paddingLeft: "8px" }}>
                                             <C_Button
                                                 type="button"
                                                 title="Download List"
@@ -748,19 +756,19 @@ const HeaderSection = (props) => {
                             </Col>
 
                             <Col sm="1" className="mt-2 mb-1" >
-                                
-                                    {(states.initaialBaseData.length > 0) &&
 
-                                        <C_Button
-                                            type="button"
-                                            className="btn btn-warning border-1 font-size-12 text-center"
-                                            onClick={() => states.setPivotMode(pre => !pre)} // Example field, you can change it
-                                        >
-                                            <span className="font-weight-bold"
-                                                style={{ fontWeight: "bold", fontSize: "14px", color: 'black' }}>Pivot</span>
-                                        </C_Button>
-                                    }
-                              
+                                {(states.initaialBaseData.length > 0) &&
+
+                                    <C_Button
+                                        type="button"
+                                        className="btn btn-warning border-1 font-size-12 text-center"
+                                        onClick={() => states.setPivotMode(pre => !pre)} // Example field, you can change it
+                                    >
+                                        <span className="font-weight-bold"
+                                            style={{ fontWeight: "bold", fontSize: "14px", color: 'black' }}>Pivot</span>
+                                    </C_Button>
+                                }
+
                             </Col>
                         </Row>
                     </div>}

@@ -1,7 +1,8 @@
 
-import { date_dmy_func } from "../../components/Common/CommonFunction";
+import { date_dmy_func, loginJsonBody } from "../../components/Common/CommonFunction";
 import * as initail from "./hardcodeDetails";
 import Papa from 'papaparse';
+import { get_PartyType_List_Api } from "../../helpers/backend_helper";
 
 export const SortButtonFunc = (props) => {
 
@@ -273,7 +274,7 @@ export const SortButtonFunc = (props) => {
     //     });
     //     manupulatedData = Object.values(groupedData);
     // }
-    
+
     let manupulatedData = [...baseData];
     let tableColumns = [];
     let selectedColumns = [];
@@ -300,7 +301,7 @@ export const SortButtonFunc = (props) => {
     }
 
     if (buttonStateArray.some(option => option.checkboxState)) {
-        
+
         //*********************************************************** *******************************/
         tableColumns = buttonStateArray.filter(option => option.checkboxState);
 
@@ -348,7 +349,7 @@ export const SortButtonFunc = (props) => {
         item.id = key + 1
         return item
     });
-    
+
     return { selectedColumns, manupulatedData, totalAmount };
 }
 
@@ -380,3 +381,21 @@ export const ExcelButtonFunc = ({ selectedColumns, manupulatedData }) => {
 
     URL.revokeObjectURL(url);
 }
+
+export const fetchDataAndSetDropdown = async (CompanyID, setDropdown) => {
+    const jsonBody = {
+        ...loginJsonBody(),
+        "CompanyID": CompanyID,
+        "id": 0
+
+    };
+
+    const resp = await get_PartyType_List_Api(JSON.stringify(jsonBody));
+    if (resp.StatusCode === 200) {
+        setDropdown(
+            resp.Data.map((index) => ({
+                value: index.id,
+                label: index.Name,
+            })));
+    }
+};
