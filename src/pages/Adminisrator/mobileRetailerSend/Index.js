@@ -39,7 +39,7 @@ const Index = (props) => {
 	//Access redux store Data / 'save_ModuleSuccess' action data
 	const {
 		partyDropdownLoading,
-		partyList,
+		partyList=[],
 		RetailerList,
 
 		userAccess,
