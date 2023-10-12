@@ -228,8 +228,9 @@ const StockReport = (props) => {
 	];
 
 	// // Conditionally add the "MRP" column based on the mrpWise condition
+	// Check if the "MRP" column should be added
 	if (mrpWise) {
-		PageListColumns.push({
+		const mrpColumn = {
 			text: "MRP",
 			dataField: "MRP",
 			formatter: (value, row, k) => (
@@ -244,9 +245,17 @@ const StockReport = (props) => {
 				textAlign: 'center',
 				text: 'end',
 			})
-		});
-	}
+		};
 
+		// Find the index of the "Unit" column
+		const unitColumnIndex = PageListColumns.findIndex(column => column.dataField === "Unit");
+
+		// Insert the "MRP" column right before the "Unit" column
+		if (unitColumnIndex !== -1) {
+			PageListColumns.splice(unitColumnIndex, 0, mrpColumn);
+		}
+	}
+	
 	function StockTypeHandler(e) {
 		setStockTypeSelect(e);
 		setTableData([]);
