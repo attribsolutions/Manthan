@@ -34,6 +34,8 @@ import { Go_Button, SaveButton } from "../../../components/Common/CommonButton";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 
 import { deleteMRPMaster_Id, deleteMRPMaster_Id_Success, getMRPList, GoButtonForMRP_Master, GoButtonForMRP_MasterSuccess, saveMRPMaster, saveMRPMasterSuccess } from "../../../store/Administrator/MRPMasterRedux/action";
+import { mobileApp_ProductAdd_Api, mobileApp_ProductUpdate_Api } from "../../../helpers/backend_helper";
+import { showToastAlert } from "../../../helpers/axios_Config";
 
 const MRPMaster = (props) => {
     const dispatch = useDispatch();
@@ -51,6 +53,12 @@ const MRPMaster = (props) => {
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState("");
     const [editCreatedBy, seteditCreatedBy] = useState("");
+    const [selectedMrp, setSelectedMrp] = useState([]);
+    const [MRPDeleteId, setMRPDeleteId] = useState("");
+
+
+
+
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const { postMsg,
@@ -161,28 +169,29 @@ const MRPMaster = (props) => {
         }
     }, [])
 
-    useEffect(() => {
+    useEffect(async () => {
         if (deleteMessage.Status === true && deleteMessage.StatusCode === 200) {
             dispatch(deleteMRPMaster_Id_Success({ Status: false }));
+            //***************mobail app api*********************** */
+            const jsonBody = JSON.stringify({
+                products: MRPDeleteId.toString()
+            })
+            const mobilApiResp = await mobileApp_ProductUpdate_Api({ jsonBody });
+            if (mobilApiResp.StatusCode === 200) { showToastAlert(mobilApiResp.Message); }
+            //************************************** */
             dispatch(GoButtonForMRP_MasterSuccess([]))
             GoButton_Handler()
-            dispatch(
-                customAlert({
-                    Type: 1,
-                    Status: true,
-                    Message: deleteMessage.Message,
-                    AfterResponseAction: getMRPList,
-                })
-            );
+            customAlert({
+                Type: 1,
+                Message: deleteMessage.Message,
+            })
         } else if (deleteMessage.Status === true) {
             dispatch(deleteMRPMaster_Id_Success({ Status: false }));
-            dispatch(
-                customAlert({
-                    Type: 3,
-                    Status: true,
-                    Message: JSON.stringify(deleteMessage.Message),
-                })
-            );
+            customAlert({
+                Type: 3,
+                Status: true,
+                Message: JSON.stringify(deleteMessage.Message),
+            })
         }
     }, [deleteMessage]);
 
@@ -204,8 +213,6 @@ const MRPMaster = (props) => {
 
     const GoButton_Handler = (event) => {
 
-        event.preventDefault();
-        const btnId = event.target.id
         if (values.EffectiveDate === '') {
             customAlert({
                 Type: 4,
@@ -215,11 +222,6 @@ const MRPMaster = (props) => {
         }
         try {
             if (formValid(state, setState)) {
-
-                _cfunc.btnIsDissablefunc({ btnId, state: true })
-
-
-
                 const jsonBody = JSON.stringify({
                     Division: values.DivisionName.value ? values.DivisionName.value : 0,
                     Party: values.PartyName.value ? values.PartyName.value : 0,
@@ -227,27 +229,39 @@ const MRPMaster = (props) => {
                 });
                 dispatch(GoButtonForMRP_Master({ jsonBody }));
             }
-        } catch (e) { _cfunc.btnIsDissablefunc({ btnId, state: false }) }
+        } catch (e) { console.log(e) }
     };
 
     //select id for delete row
-    const deleteHandeler = (id, name) => {
-        dispatch(
-            customAlert({
-                Type: 5,
-                Status: true,
-                Message: `Are you sure you want to delete this Item : "${name}"`,
-                RedirectPath: false,
-                PermissionAction: deleteMRPMaster_Id,
-                ID: id,
-            })
-        );
+    const deleteHandeler = async (id, name, ItemID) => {
+
+        debugger
+        const isConfirmed = await customAlert({
+            Type: 7,
+            Message: `Are you sure you want to delete this Item : "${name}"`
+        });
+
+        if (isConfirmed) {
+            setMRPDeleteId(ItemID)
+            dispatch(deleteMRPMaster_Id(id))
+        }
     };
 
     useEffect(async () => {
 
-         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
+        if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
+            debugger
             dispatch(saveMRPMasterSuccess({ Status: false }))
+            //***************mobail app api*********************** */
+            let arrayOfMrpID = selectedMrp.map(function (i) {
+                return i.Item;
+            });
+            const jsonBody = JSON.stringify({
+                products: arrayOfMrpID.join(', ')
+            })
+            const mobilApiResp = await mobileApp_ProductUpdate_Api({ jsonBody })
+            if (mobilApiResp.StatusCode === 200) { showToastAlert(mobilApiResp.Message) }
+            //************************************** */
             setState(() => resetFunction(fileds, state))// Clear form values  
             if (pageMode === mode.dropdownAdd) {
                 customAlert({
@@ -367,7 +381,7 @@ const MRPMaster = (props) => {
                                 type="button"
                                 className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
                                 data-mdb-toggle="tooltip" data-mdb-placement="top" title='Delete MRP'
-                                onClick={() => { deleteHandeler(user.id, user.Name); }}
+                                onClick={() => { deleteHandeler(user.id, user.Name, user.Item); }}
                             >
                                 <i className="mdi mdi-delete font-size-18"></i>
                             </Button>}
@@ -400,8 +414,8 @@ const MRPMaster = (props) => {
             const Find = ItemData.filter((index) => {
                 return (Number(index.MRP) > 0)
             })
+            setSelectedMrp(Find)
             const jsonBody = JSON.stringify(Find)
-
             if (!(Find.length > 0)) {
                 customAlert({
                     Type: 4,

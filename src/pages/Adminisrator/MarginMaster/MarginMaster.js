@@ -47,6 +47,8 @@ import { comAddPageFieldFunc, formValid, initialFiledFunc, onChangeDate, onChang
 import { Go_Button, SaveButton } from "../../../components/Common/CommonButton";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import { async } from "q";
+import { mobileApp_ProductAdd_Api, mobileApp_ProductUpdate_Api } from "../../../helpers/backend_helper";
+import { showToastAlert } from "../../../helpers/axios_Config";
 
 const MarginMaster = (props) => {
     const dispatch = useDispatch();
@@ -63,6 +65,11 @@ const MarginMaster = (props) => {
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState("");
     const [editCreatedBy, seteditCreatedBy] = useState("");
+    const [selectedMargin, setSelectedMargin] = useState([]);
+    const [marginDeleteId, setMarginDeleteId] = useState("");
+
+
+
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const { postMsg,
@@ -171,11 +178,23 @@ const MarginMaster = (props) => {
             dispatch(goButtonForMarginSuccess({ Status: false }))
         }
     }, [])
-    
+
     useEffect(async () => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(saveMarginMasterSuccess({ Status: false }))
+
+            //***************mobail app api*********************** */
+            let arrayOfMrpID = selectedMargin.map(function (i) {
+                return i.Item;
+            });
+            const jsonBody = JSON.stringify({
+                products: arrayOfMrpID.join(', ')
+            })
+            const mobilApiResp = await mobileApp_ProductUpdate_Api({ jsonBody })
+            if (mobilApiResp.StatusCode === 200) { showToastAlert(mobilApiResp.Message) }
+            //************************************** */
+
             setState(() => resetFunction(fileds, state))// Clear form values  
             if (pageMode === mode.dropdownAdd) {
                 customAlert({
@@ -204,9 +223,18 @@ const MarginMaster = (props) => {
         }
     }, [postMsg])
 
-    useEffect(() => {
+    useEffect(async () => {
         if (deleteMessage.Status === true && deleteMessage.StatusCode === 200) {
+
             dispatch(deleteIdForMarginMasterSuccess({ Status: false }));
+            //***************mobail app api*********************** */
+            const jsonBody = JSON.stringify({
+                products: marginDeleteId.toString()
+            })
+            const mobilApiResp = await mobileApp_ProductUpdate_Api({ jsonBody });
+            if (mobilApiResp.StatusCode === 200) { showToastAlert(mobilApiResp.Message); }
+            //************************************** */
+
             dispatch(goButtonForMarginSuccess([]))
             GoButton_Handler()
             customAlert({
@@ -265,20 +293,21 @@ const MarginMaster = (props) => {
     };
 
     //select id for delete row
-    const deleteHandeler = async (id, name) => {
-
+    const deleteHandeler = async (id, name, ItemID) => {
+        debugger
         const isConfirmed = await customAlert({
             Type: 7,
             Message: `Are you sure you want to delete this Item : "${name}"`
         });
 
         if (isConfirmed) {
+            setMarginDeleteId(ItemID)
             dispatch(deleteIdForMarginMaster(id))
         }
 
     };
 
-   
+
     const pageOptions = {
         sizePerPage: 10,
         totalSize: Data.length,
@@ -375,7 +404,7 @@ const MarginMaster = (props) => {
                                 type="button"
                                 className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
                                 data-mdb-toggle="tooltip" data-mdb-placement="top" title='Delete MRP'
-                                onClick={() => { deleteHandeler(user.id, user.Name); }}
+                                onClick={() => { deleteHandeler(user.id, user.Name, user.Item); }}
                             >
                                 <i className="mdi mdi-delete font-size-18"></i>
                             </Button>}
@@ -408,7 +437,7 @@ const MarginMaster = (props) => {
             const Find = ItemData.filter((index) => {   // condition for margin save without 0
                 return (Number(index.Margin) > 0)
             })
-
+            setSelectedMargin(Find)
             const jsonBody = JSON.stringify(Find)
 
             if (!(Find.length > 0)) {

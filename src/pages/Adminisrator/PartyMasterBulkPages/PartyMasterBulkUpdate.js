@@ -52,6 +52,8 @@ import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { C_DatePicker, C_Select } from "../../../CustomValidateForm";
 import { getDistrictOnState } from "../../../store/Administrator/PartyRedux/action";
+import { mobileApp_ProductUpdate_Api, mobileApp_RetailerUpdate_Api } from "../../../helpers/backend_helper";
+import { showToastAlert } from "../../../helpers/axios_Config";
 
 
 const PartyMasterBulkUpdate = (props) => {
@@ -80,6 +82,9 @@ const PartyMasterBulkUpdate = (props) => {
     const [state, setState] = useState(() => initialFiledFunc(fileds))
     const [val, setvalue] = useState()
     const [key, setKey] = useState()
+    const [SelectedParty, SetSelectedParty] = useState([])
+
+
 
 
     //Access redux store Data /  'save_ModuleSuccess' action data
@@ -169,8 +174,19 @@ const PartyMasterBulkUpdate = (props) => {
     }, []);
 
     useEffect(async () => {
+        debugger
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(postParty_Master_Bulk_Update_Success({ Status: false }))
+            //***************mobail app api*********************** */
+            let arrayOfRetailerID = SelectedParty.map(function (i) {
+                return i.SubPartyID;
+            });
+            const jsonBody = JSON.stringify({
+                RetailerID: arrayOfRetailerID.join(', ')
+            })
+            const mobilApiResp = await mobileApp_RetailerUpdate_Api({ jsonBody })
+            if (mobilApiResp.StatusCode === 200) { showToastAlert(mobilApiResp.Message) }
+            //************************************** */
             setState(() => resetFunction(fileds, state))// Clear form values  
             dispatch(Breadcrumb_inputName(''))
 
@@ -508,6 +524,7 @@ const PartyMasterBulkUpdate = (props) => {
                 }
             })
 
+            SetSelectedParty(arr1)
             const jsonBody = JSON.stringify({
                 PartyID: loginPartyID(),
                 Type: SelectFieldName.label,
