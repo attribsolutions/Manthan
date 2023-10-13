@@ -39,6 +39,7 @@ const CreditList = () => {
     const dispatch = useDispatch();
     const history = useHistory();
     const currentDate_ymd = _cfunc.date_ymd_func();
+    const SystemData = _cfunc.loginSystemSetting()
 
     const fileds = {
         FromDate: currentDate_ymd,
@@ -227,6 +228,7 @@ const CreditList = () => {
 
     function downBtnFunc(config) {
         config["ReportType"] = report.Credit;
+        config["systemSetting"] = SystemData.A4Print
         dispatch(getpdfReportdata(Edit_Credit_List_API, config))
 
     }

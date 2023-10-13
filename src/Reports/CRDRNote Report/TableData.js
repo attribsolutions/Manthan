@@ -487,7 +487,7 @@ export const DetailsOfTransportRow = (data) => {
         NoteType = "Goods Credit Note"
     }
 
-    if (data.isQR) {
+    if (data.CRDRNoteUploads.length>0) {
         IRN_No = (data.CRDRNoteUploads[0].Irn === null ? "" : data.CRDRNoteUploads[0].Irn)
         ACK_No = (data.CRDRNoteUploads[0].AckNo === null ? "" : data.CRDRNoteUploads[0].AckNo)
 
