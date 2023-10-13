@@ -215,11 +215,13 @@ const StockReport = (props) => {
 		{
 			text: "ItemName",
 			dataField: "ItemName",
+			sort: true
 		},
 		{
 			text: "Quantity",
 			dataField: "ActualQty",
 			align: "right",
+			sort: true,
 			formatter: (cell, row) => <Label>{row.ActualQty.toFixed(2)}</Label>,
 		},
 		{
