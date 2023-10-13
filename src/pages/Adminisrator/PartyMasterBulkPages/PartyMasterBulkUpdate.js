@@ -477,6 +477,12 @@ const PartyMasterBulkUpdate = (props) => {
                     <Col sm={12}>
                         <FormGroup sm={6}>
                             <C_DatePicker
+                                options={{
+                                    minDate: "today",
+                                    altInput: true,
+                                    altFormat: "d-m-Y",
+                                    dateFormat: "Y-m-d",
+                                }}
                                 id={key}
                                 name='fromdate'
                                 onChange={(event) => fromdateOnchange(event, user)}
