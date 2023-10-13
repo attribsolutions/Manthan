@@ -109,7 +109,9 @@ const StockReport = (props) => {
 					});
 
 				} else if (btnMode === 1) {
-					MRPWise_TableChange(mrpWise, updatedReduxData);
+					const { tData, MRPWise } = MRPWise_TableChange(mrpWise, updatedReduxData);
+					setTableData(tData);
+					setMrpWise(MRPWise);
 				}
 
 			} else if (goButtonData.Status === true) {
@@ -117,16 +119,16 @@ const StockReport = (props) => {
 			}
 
 			// Sort the data by ItemName in ascending order
-			updatedReduxData.sort((a, b) => a.ItemName.localeCompare(b.ItemName));
+			// updatedReduxData.sort((a, b) => a.ItemName.localeCompare(b.ItemName));
 
 			setBtnMode(0); // Reset button mode
-			setTableData(updatedReduxData);
+			// setTableData(updatedReduxData);
 			setOriginalTableData(updatedReduxData);
 		} catch (e) { }
 	}, [goButtonData]);
 
 	function MRPWise_TableChange(mrpWiseChecked, tableData) {
-
+		debugger
 		let updatedTableData;
 
 		if (!mrpWiseChecked) {
@@ -151,6 +153,7 @@ const StockReport = (props) => {
 		setMrpWise(mrpWiseChecked);
 		return { tData: updatedTableData, MRPWise: mrpWiseChecked }
 	}
+
 	const BaseUnit_DropdownOptions = BaseUnit.filter(index => index.Name === "No" || index.Name === "Kg" || index.Name === "Box")
 		.map(data => ({
 			value: data.id,
@@ -256,30 +259,6 @@ const StockReport = (props) => {
 			PageListColumns.splice(unitColumnIndex, 0, mrpColumn);
 		}
 	}
-
-	// const [tableColumns, defaultSorted, pageOptions, setTableColumns] = DynamicColumnHook({ pageField, })
-
-	// useEffect(() => {
-	// 	if (mrpWise) {
-	// 		// Set the "MRP" column's hidden property to true when MRPWise is true.
-	// 		setTableColumns((columns) =>
-	// 			columns.map((column) =>
-	// 				column.dataField === "MRP"
-	// 					? { ...column, hidden: true }
-	// 					: column
-	// 			)
-	// 		);
-	// 	} else {
-	// 		// Reset the "MRP" column's hidden property when MRPWise is false.
-	// 		setTableColumns((columns) =>
-	// 			columns.map((column) =>
-	// 				column.dataField === "MRP"
-	// 					? { ...column, hidden: false }
-	// 					: column
-	// 			)
-	// 		);
-	// 	}
-	// }, [mrpWise]);
 
 	function StockTypeHandler(e) {
 		setStockTypeSelect(e);
