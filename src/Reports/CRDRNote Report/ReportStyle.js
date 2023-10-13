@@ -13,6 +13,15 @@ export const pageBorder = (doc) => {
     doc.line(570, 393, 570, 16);//vertical line (Right)
     doc.line(570, 393, 30, 393);//horizontal line (Bottom)   
 }
+export const pageBorderA4 = (doc) => {
+
+    doc.setDrawColor(0, 0, 0);
+    doc.line(570, 16, 30, 16);//horizontal line (Top)
+    doc.line(30, 815, 30, 16);//vertical line (left)
+    doc.line(570, 815, 570, 16);//vertical line (Right)
+    doc.line(570, 815, 30, 815);//horizontal line (Bottom)   
+}
+
 let initial_y = 0
 
 export const pageHeder = (doc, data) => {
@@ -21,32 +30,70 @@ export const pageHeder = (doc, data) => {
     doc.setFont(undefined, 'bold')
     doc.setFontSize(15)
     if (data.NoteType === "Goods CreditNote") {
-        doc.text('GOODS CREDIT NOTE', 180, 35,)
+        if (data.isQR) {
+            doc.text('GOODS CREDIT NOTE', 110, 62,)
+        } else {
+            doc.text('GOODS CREDIT NOTE', 180, 35,)
+        }
     } else if (data.NoteType === "DebitNote") {
         doc.text(' DEBIT NOTE', 180, 35,)
+
     } else if (data.NoteType === "Goods DebitNote") {
-        doc.text('GOODS DEBIT NOTE', 180, 35,)
+        if (data.isQR) {
+            doc.text('GOODS DEBIT NOTE', 110, 62,)
+        } else {
+            doc.text('GOODS DEBIT NOTE', 180, 35,)
+        }
     } else if (data.NoteType === "CreditNote") {
         doc.text('CREDIT NOTE', 180, 35,)
+
+    }
+
+    if (data.isQR) {
+        doc.addImage(data.url, 'JPEG', 317, 15, 90, 90);
+
     }
     doc.setDrawColor(0, 0, 0);
-    doc.line(570, 45, 30, 45) //Full horizontal line Bill by Upper line
-    doc.setFontSize(7)
+
+    doc.line(570, data.isQR ? 103 : 45, 30, data.isQR ? 103 : 45)  //horizontal line 1 billby upper for repeat header
+    doc.line(570, data.isQR ? 118 : 60, 30, data.isQR ? 118 : 60);// full horizontal bill by bill to below line 
+
+
+    doc.setFontSize(8)
     doc.text('Original For Buyer', 33, 28,)
 
 }
 
 export const reportHeder1 = (doc, data) => {
 
-    doc.setFontSize(10)
+
+    let Y1 = 0
+    if (data.isQR) {
+        Y1 = 115;
+    } else {
+        Y1 = 57;
+    }
+
+    doc.setFont('Tahoma')
+    doc.setFontSize(11)
     doc.setFont(undefined, 'bold')
-    doc.text("Billed by", 80, 55)    //bill by 
-    doc.text('Billed to', 280, 55)   //billed to
-    doc.text('Details of Note', 440, 55) //Details of Transport
-    doc.line(570, 45, 30, 45);//horizontal line  when header on next page bottom line
-    doc.line(570, 60, 30, 60);// full horizontal bill by bill to below line 
-    doc.line(30, 350, 30, 16);//vertical left 1
-    doc.line(570, 350, 570, 16);//vertical left 2
+    doc.text("Billed by", 80, Y1)  //bill by 
+    doc.text('Billed to', 280, Y1) //billed to
+    doc.text('Details of Note', 440, Y1)
+
+    // doc.setDrawColor(0, 0, 0);
+    // doc.line(570, data.isQR ? 103 : 63, 30, data.isQR ? 103 : 63) //horizontal line 1 billby upper
+    // doc.line(570, 16, 30, 16);//horizontal line 2
+    // doc.line(570, data.isQR ? 120 : 80, 30, data.isQR ? 120 : 80);//horizontal line 3
+
+    // doc.setFontSize(10)
+    // doc.setFont(undefined, 'bold')
+    // doc.text("Billed by", 80, 55)    //bill by 
+    // doc.text('Billed to', 280, 55)   //billed to
+    // doc.text('Details of Note', 440, 55) //Details of Transport
+    // doc.line(570, 45, 30, 45);//horizontal line  when header on next page bottom line
+    // doc.line(30, 350, 30, 16);//vertical left 1
+    // doc.line(570, 350, 570, 16);//vertical left 2
 
 
 
@@ -119,7 +166,7 @@ export const reportHeder1 = (doc, data) => {
         bodyStyles: {
             columnWidth: 'wrap',
             textColor: "black",
-            cellPadding: ((data.NoteType === "DebitNote") || (data.NoteType === "CreditNote")) ? 3 : 1,
+            cellPadding: 2,
             fontSize: 8,
             fontStyle: 'normal',
             lineColor: [0, 0, 0]
@@ -133,7 +180,7 @@ export const reportHeder1 = (doc, data) => {
 
         },
         tableLineColor: "black",
-        startY: 62,
+        startY: data.isQR ? 120 : 60
 
     };
     var BilledToStyle = {
@@ -203,7 +250,7 @@ export const reportHeder1 = (doc, data) => {
         bodyStyles: {
             columnWidth: 'wrap',
             textColor: "black",
-            cellPadding: ((data.NoteType === "DebitNote") || (data.NoteType === "CreditNote")) ? 3 : 1,
+            cellPadding: 2,
             fontSize: 8,
 
             fontStyle: 'normal',
@@ -217,7 +264,7 @@ export const reportHeder1 = (doc, data) => {
             },
         },
         tableLineColor: "black",
-        startY: 62,
+        startY: data.isQR ? 120 : 60
 
     };
     var DetailsOfTransportStyle = {
@@ -291,7 +338,7 @@ export const reportHeder1 = (doc, data) => {
         bodyStyles: {
             columnWidth: 'wrap',
             textColor: [30, 30, 30],
-            cellPadding: ((data.NoteType === "DebitNote") || (data.NoteType === "CreditNote")) ? 3 : 1,
+            cellPadding: 2,
             fontSize: 8,
             textColor: "black",
             fontStyle: 'normal',
@@ -305,8 +352,7 @@ export const reportHeder1 = (doc, data) => {
             },
         },
         tableLineColor: "black",
-
-        startY: 62,
+        startY: data.isQR ? 120 : 60
     };
 
     const priLength = () => {
@@ -328,6 +374,12 @@ export const reportHeder1 = (doc, data) => {
     console.log("third", doc.previousAutoTable.finalY)
     priLength()
 
+
+    doc.line(570, data.isQR ? initial_y : 144, 30, data.isQR ? initial_y : 144);// full horizontal bill by bill to below line 
+    debugger
+    doc.line(408, data.isQR ? initial_y : 144, 408, 16);//vertical line header section billby 
+    doc.line(220, data.isQR ? initial_y : 144, 220, data.isQR ? 103 : 46);//vertical  line header section billto
+
 }
 
 
@@ -335,7 +387,7 @@ export const reportHeder3 = (doc, data) => {
     doc.setFontSize(9)
     doc.setDrawColor(0, 0, 0);
     doc.line(570, 30, 408, 30) //horizontal line 1 billby upper
-    doc.line(408, 45, 408, 16);//vertical Line header
+    // doc.line(408, 45, 408, 16);//vertical Line header
     // doc.line(570, 44, 408, 44) //horizontal line 1 billby upper
 
     doc.setFont(undefined, 'bold')
@@ -356,9 +408,7 @@ export const reportHeder3 = (doc, data) => {
 
 
 export const reportFooter = (doc, data) => {
-    if (data.isQR) {
-        doc.addImage(data.url, 'JPEG', 340, 306, 95, 89)
-    }
+
 
     doc.setDrawColor(0, 0, 0);
     doc.line(570, 308, 30, 308);//horizontal line  (4)
@@ -488,62 +538,6 @@ export const reportFooter = (doc, data) => {
     doc.autoTable(table.Ruppescolumn, table.RupeesRow(data), DetailsOfRupeesStyle,);
 
 
-    // let DetailsOfBankStyle = {
-    //     didParseCell: (data1) => {
-    //         if (data.BankData.length > 0) {
-    //             let BankData = data.BankData[0]
-    //             if (data1.row.cells[0].raw === `Bank Name :${BankData.BankName}`) {
-    //                 data1.row.cells[0].colSpan = 3
-    //             }
-    //         }
-    //     },
-
-
-    //     margin: {
-    //         top: 0, left: 30, right: 35,
-    //     },
-    //     showHead: 'always',
-    //     theme: (data.BankData.length > 0) ? 'grid' : 'plain',
-    //     headerStyles: { cellPadding: 1, },
-    //     styles: {
-    //         overflow: 'linebreak',
-    //         fontSize: 8.5,
-    //         height: 0,
-    //     },
-    //     bodyStyles: {
-    //         columnWidth: 'wrap',
-    //         textColor: "black",
-    //         cellPadding: 2,
-    //         fontSize: 7,
-    //         lineColor: "black"
-    //     },
-    //     columnStyles: {
-    //         0: {
-    //             valign: "top",
-    //             columnWidth: (data.BankData.length > 0) ? 90 : 30,
-    //             halign: 'lfet',
-    //         },
-    //         1: {
-    //             valign: "top",
-    //             columnWidth: (data.BankData.length > 0) ? 90 : 300,
-    //             halign: 'lfet',
-
-
-    //         },
-    //         2: {
-    //             valign: "top",
-    //             columnWidth: 130,
-    //             halign: 'lfet',
-    //         },
-
-    //     },
-    //     tableLineColor: "black",
-
-    //     startY: doc.previousAutoTable.finalY,
-
-    // };
-    // doc.autoTable(table.Bankcolumn, table.BankRow(data, doc), DetailsOfBankStyle,);
-
     doc.setFontSize(9)
     doc.setFont(undefined, 'Normal')
 
@@ -567,13 +561,6 @@ export const reportFooterForPlainCredit_Debit = (doc, data) => {
     doc.line(570, 308, 30, 308);//horizontal line Footer 3 Ruppe section
     doc.line(570, 340, 30, 340);//horizontal line (Bottom)
 
-
-
-
-
-    // doc.text(`TCS Amount:`, 440, 362,)
-    // doc.text(` ${numberWithCommas(Number(data.TCSAmount).toFixed(2))}`, 567, 362, 'right')
-
     doc.setFont(undefined, 'Normal')
     doc.setFontSize(11)
     doc.setFont(undefined, 'bold')
@@ -591,6 +578,34 @@ export const reportFooterForPlainCredit_Debit = (doc, data) => {
 
 }
 
+
+export const reportFooterForPlainCredit_DebitA4 = (doc, data) => {
+    let stringNumber = toWords(Number(data.GrandTotal))
+
+    doc.setDrawColor(0, 0, 0);
+    doc.line(570, 710, 30, 710);//horizontal line Footer 2
+
+    doc.line(570, 730, 30, 730);//horizontal line Footer 3 Ruppe section
+    doc.line(570, 780, 30, 780);//horizontal line (Bottom)
+
+
+
+    doc.setFont(undefined, 'Normal')
+    doc.setFontSize(11)
+    doc.setFont(undefined, 'bold')
+    doc.text(`Total Amount :`, 430, 750,)
+    const Total = numberWithCommas(Number(data.GrandTotal).toFixed(2))
+    doc.text(`${Total}`, 540, 750, 'right')
+    doc.setFont(undefined, 'Normal')
+    doc.setFontSize(10)
+    doc.text(`Signature `, 450, 800,)
+    doc.text(`Prepared by :${data.Party} `, 35, 800,)
+    doc.setFont(undefined, 'bold')
+    doc.setFontSize(10)
+    doc.text(`Rupees:`, 33, 721,)
+    doc.text(`${stringNumber}`, 70, 721,)
+
+}
 
 
 
@@ -790,15 +805,14 @@ export const tableBody = (doc, data) => {
 
     };
     doc.setLineWidth(0.5);
-    ////  lines when report  header line when table cordinates
-    doc.line(408, initial_y, 408, 16);//vertical right 1
-    doc.line(220, initial_y, 220, 45);//vertical line between billby billto
-    doc.line(570, initial_y, 30, initial_y) //horizontal line 1 billby upper
+
+
 
 
 
 
     if ((data.NoteType === "Goods CreditNote") || (data.NoteType === "Goods DebitNote")) {
+
         doc.autoTable(table.columnsWithCGST_SGST, table.RowsWithCGST_SGST(data), options,);
     } else {
         return null
@@ -981,6 +995,166 @@ export const tableBodyWithIGST = (doc, data) => {
 
 
 
+export const reportFooterA4 = (doc, data) => {
+
+    doc.setDrawColor(0, 0, 0);
+    doc.line(570, 730, 30, 730);//horizontal line  (4)
+    doc.line(570, 815, 435, 815);//horizontal line  (5)
+    doc.line(435, 730, 435, 815);//vertical line (3)
+    doc.line(340, 730, 340, 815);//vertical line (2)
+
+    const a = data.CRDRNoteItems.map((data) => ({
+
+        CGST: Number(data.CGST),
+        SGST: Number(data.SGST),
+        BasicAmount: Number(data.BasicAmount),
+        Discount: Number(data.DiscountAmount),
+        IGST: Number(data.IGST)
+    }));
+    var totalCGST = 0;
+    var totalSGST = 0;
+    var TotalBasicAmount = 0;
+    var TotalDiscount = 0
+    var totalICGST = 0
+    a.forEach(arg => {
+        totalCGST += arg.CGST;
+        totalSGST += arg.SGST;
+        TotalBasicAmount += arg.BasicAmount;
+        TotalDiscount += arg.Discount;
+        totalICGST += arg.IGST
+
+    });
+    const TotalGST = totalCGST + totalSGST;
+    doc.setFontSize(8)
+
+
+    const isIGST = compareGSTINState(data.CustomerGSTIN, data.PartyGSTIN)
+    if (isIGST) {
+
+        doc.text(`Total Basic:`, 440, 748,)
+        doc.text(`${TotalBasicAmount.toFixed(2)}`, 567, 748, 'right')
+
+        doc.text(`Total Disc:`, 440, 758,)
+        doc.text(` ${TotalDiscount.toFixed(2)}`, 567, 758, 'right')
+
+        doc.text(`Total IGST:`, 440, 768)
+        doc.text(`${totalICGST.toFixed(2)}`, 567, 768, 'right')
+
+        doc.text(`Total GST:`, 440, 778,)
+        doc.text(` ${totalICGST.toFixed(2)}`, 567, 778, 'right')
+
+
+    } else {
+        doc.text(`Total Basic:`, 440, 738,)
+        doc.text(`${numberWithCommas(TotalBasicAmount.toFixed(2))}`, 567, 738, 'right')
+
+        doc.text(`Total Disc:`, 440, 748,)
+        doc.text(`${numberWithCommas(TotalDiscount.toFixed(2))}`, 567, 748, 'right')
+
+        doc.text(`Total CGST:`, 440, 758)
+        doc.text(`${numberWithCommas(totalCGST.toFixed(2))}`, 567, 758, 'right')
+
+        doc.text(`Total SGST:`, 440, 768,)
+        doc.text(`${numberWithCommas(totalSGST.toFixed(2))}`, 567, 768, 'right')
+
+        doc.text(`Total GST:`, 440, 778,)
+        doc.text(` ${numberWithCommas(TotalGST.toFixed(2))}`, 567, 778, 'right')
+
+    }
+
+
+    doc.text(`Round Off:`, 440, 788,)
+    doc.text(` ${Number(data.RoundOffAmount).toFixed(2)}`, 567, 788, 'right')
+
+
+
+    doc.setFont(undefined, 'Normal')
+    doc.setFontSize(10)
+    doc.setFont(undefined, 'bold')
+    doc.text(`Total Amount :`, 439, 812,)
+    const Total = numberWithCommas(Number(data.GrandTotal).toFixed(2))
+    doc.text(`${Total}`, 567, 812, 'right')
+
+    doc.setFont(undefined, 'bold')
+
+    let DetailsOfRupeesStyle = {
+
+        didDrawCell: (data1) => {
+            const rowIdx = data1.row.index;
+            const colIdx = data1.column.index;
+            if (rowIdx === 0 && colIdx === 0) {
+                let x = data1.cursor.x + 2
+                let y = data1.cursor.y + 8
+                doc.setFontSize(8)
+                doc.setFont(undefined, 'bold')
+                doc.text('Rupees: ', x, y)
+            }
+        },
+
+        margin: {
+            top: 0, left: 30,
+        },
+        showHead: 'always',
+        theme: 'grid',
+        styles: {
+            overflow: 'linebreak',
+            fontSize: 8,
+            height: 0,
+        },
+        bodyStyles: {
+            columnWidth: 'wrap',
+            textColor: "black",
+            cellPadding: 1,
+            fontSize: 8,
+            lineColor: "black"
+        },
+        columnStyles: {
+            0: {
+                valign: "top",
+                columnWidth: 310,
+                halign: 'lfet',
+            }
+
+        },
+        tableLineColor: "black",
+        startY: 730,
+
+    };
+
+    doc.autoTable(table.Ruppescolumn, table.RupeesRow(data), DetailsOfRupeesStyle,);
+
+
+    doc.setFontSize(9)
+    doc.setFont(undefined, 'Normal')
+
+    doc.text(`I/we hearby certify that food/foods mentioned in this invoice is/are warranted to be
+ of the nature and quantity which it/these purports to be `, 34, doc.previousAutoTable.finalY + (9),)
+    doc.line(340, doc.previousAutoTable.finalY + (28), 30, doc.previousAutoTable.finalY + (28)); //horizontal line (1)
+
+    doc.text(`Signature `, 280, 810,)
+    doc.text(`Prepared by :${data.Party} `, 35, 810,)
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 export const pageFooter = (doc, data) => {
     const pageCount = doc.internal.getNumberOfPages()
     doc.setFont('helvetica', 'Normal')
@@ -990,11 +1164,22 @@ export const pageFooter = (doc, data) => {
     for (let i = 1; i <= pageCount; i++) {
         doc.setPage(i)
         pageHeder(doc, data)
-        pageBorder(doc)
         reportHeder3(doc, data)
+        if (data.isA4) {
+            pageBorderA4(doc)
+            doc.text('Page ' + String(i) + ' of ' + String(pageCount), 520, 828,)
+            doc.text('Print Date :' + String(currentDate_dmy) + ' Time ' + String(CurrentTime()), 30, 828,)
+        } else {
+            pageBorder(doc)
+            doc.text('Page' + String(pageCount) + ' of ' + String(i), 532, 403,)
+            doc.text('Print Date :' + String(currentDate_dmy) + ' Time ' + String(CurrentTime()), 30, 403,)
+        }
 
-        doc.text('Page' + String(pageCount) + ' of ' + String(i), 532, 403,)
-        doc.text('Print Date :' + String(currentDate_dmy) + ' Time ' + String(CurrentTime()), 30, 403,)
+
+
+
+
+
     }
 
 }

@@ -957,7 +957,6 @@ export const pageFooter = (doc, data) => {
         doc.text('Page ' + String(i) + ' of ' + String(pageCount), 520, 828,)
 
         doc.text('Print Date :' + String(currentDate_dmy) + ' Time ' + String(CurrentTime()), 30, 828,)
-        console.log("aaa", doc.internal.pageSize.height)
     }
 }
 

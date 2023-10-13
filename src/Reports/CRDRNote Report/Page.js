@@ -4,14 +4,22 @@ import jsPDF from "jspdf";
 import "jspdf-autotable";
 import * as style from './ReportStyle'
 import { Data1, dataGenrator } from "./DemoData";
-import { CurrentTime, compareGSTINState, currentDate_dmy, date_dmy_func } from "../../components/Common/CommonFunction";
+import { CurrentTime, compareGSTINState, currentDate_dmy, date_dmy_func, loginSystemSetting } from "../../components/Common/CommonFunction";
+import { pageBorder } from "../InvioceReport/ReportStyle";
+
 
 var pageHeder = function (doc, data) {
-    style.pageBorder(doc, data);                           // Page Border
+    if (data.isA4) {
+        style.pageBorderA4(doc)
+    } else {
+        style.pageBorder(doc, data);                           // Page Border
+    }
     style.pageHeder(doc, data);                            // Report Title 
     style.reportHeder1(doc, data);
     style.reportHeder3(doc, data);                          //Invoice ID , Date 
 };
+
+
 
 function reportBody(doc, data) {
     const isIGST = compareGSTINState(data.CustomerGSTIN, data.PartyGSTIN)
@@ -24,9 +32,17 @@ function reportBody(doc, data) {
 
 function pageFooter(doc, data, islast, array) {
     if (((data.NoteType === "DebitNote") || (data.NoteType === "CreditNote"))) {
-        style.reportFooterForPlainCredit_Debit(doc, data);                           //Report Footer
+        if (data.isA4) {
+            style.reportFooterForPlainCredit_DebitA4(doc, data)
+        } else {
+            style.reportFooterForPlainCredit_Debit(doc, data);                           //Report Footer
+        }
     } else {
-        style.reportFooter(doc, data);                           //Report Footer
+        if (data.isA4) {
+            style.reportFooterA4(doc, data)
+        } else {
+            style.reportFooter(doc, data);                           //Report Footer
+        }
     }
     style.pageFooter(doc, data, islast, array);              //page Footer
 }
@@ -37,19 +53,28 @@ const generateReportPage = (doc, data) => {
     pageFooter(doc, data);
 }
 
-const InvioceReporta5 = async (data) => {
+const CreditNote = async (data) => {
+
+    let doc = ""
+    if (data.SettingData === "1") {
+        data["isA4"] = true
+        doc = new jsPDF('p', 'pt', 'a4');
+    } else {
+        data["isA4"] = false
+        doc = new jsPDF('l', 'pt', 'a5');
+    }
 
     if (data.CRDRNoteUploads.length > 0) {
 
         if (data.CRDRNoteUploads[0].QRCodeUrl !== null) {
-            data["isQR"] = true;
+            if (data.isA4) {
+                data["isQR"] = true;
+            } else {
+                data["isQR"] = false;
+            }
         } else {
             data["isQR"] = false;
         }
-    }
-    var doc = new jsPDF('p', 'pt', 'a4');
-
-    if (data.CRDRNoteUploads.length > 0) {
         try {
             if (data.CRDRNoteUploads.length > 0) {
                 const url = data.CRDRNoteUploads[0].QRCodeUrl;
@@ -60,7 +85,7 @@ const InvioceReporta5 = async (data) => {
                     data["url"] = url
                 } else {
                     const image = await loadImage(`/E_invoiceQRCode${desiredPart}`);
-                    
+
                     if (image) {
                         doc.addImage(image.currentSrc, 'JPEG', 323, 18, 83, 83);
                         console.log(image.currentSrc)
@@ -84,18 +109,16 @@ const InvioceReporta5 = async (data) => {
     }
 
 
-    var doc = new jsPDF('l', 'pt', 'a5');
-    if (Array.isArray(data)) {
-    } else {
-        const Data = [data];
-        Data.forEach((item, index) => {
-            item["isMultiPrint"] = false
-            generateReportPage(doc, item);
-            if (index !== Data.length - 1) {
-                doc.addPage();
-            }
-        });
-    }
+
+
+    const Data = [data];
+    Data.forEach((item, index) => {
+        generateReportPage(doc, item);
+        if (index !== Data.length - 1) {
+            doc.addPage();
+        }
+    });
+
 
     doc.setProperties({
         title: `Credit Note Report /${data.Customer}/${date_dmy_func(data.CRDRNoteDate)} `
@@ -109,4 +132,4 @@ const InvioceReporta5 = async (data) => {
 
 }
 
-export default InvioceReporta5;
+export default CreditNote;
