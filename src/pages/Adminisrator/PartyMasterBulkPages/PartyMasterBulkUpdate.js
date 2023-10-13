@@ -174,7 +174,7 @@ const PartyMasterBulkUpdate = (props) => {
     }, []);
 
     useEffect(async () => {
-        debugger
+
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(postParty_Master_Bulk_Update_Success({ Status: false }))
             //***************mobail app api*********************** */
@@ -244,7 +244,7 @@ const PartyMasterBulkUpdate = (props) => {
         value: index.id,
         label: index.Name,
     }));
-
+    debugger
     const DistrictOnStateValues = DistrictOnState.map((index) => ({
         value: index.id,
         label: index.Name
@@ -293,7 +293,8 @@ const PartyMasterBulkUpdate = (props) => {
     }
 
     function handllerState(event, user, key) {
-
+        debugger
+        dispatch(getDistrictOnState(event.value))
         user.Newvalue = event.value
         setState_DropDown_select(event)
         setKey(key)
@@ -522,14 +523,15 @@ const PartyMasterBulkUpdate = (props) => {
                     const arr = {
                         SubPartyID: i.SubPartyID,
                         Value1: i.Newvalue,
-                        Value2: i.NewFSSAIExipry,
-                        Value2: i.NewDistrict,
+                        Value2: i.NewFSSAIExipry || i.NewDistrict,
+                        // Value2: i.NewDistrict,
                         party: i.PartyName
                     }
+                    debugger
                     arr1.push(arr)
                 }
             })
-
+            debugger
             SetSelectedParty(arr1)
             const jsonBody = JSON.stringify({
                 PartyID: loginPartyID(),
