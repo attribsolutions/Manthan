@@ -118,17 +118,13 @@ const StockReport = (props) => {
 				updatedReduxData = [];
 			}
 
-			// Sort the data by ItemName in ascending order
-			// updatedReduxData.sort((a, b) => a.ItemName.localeCompare(b.ItemName));
-
 			setBtnMode(0); // Reset button mode
-			// setTableData(updatedReduxData);
 			setOriginalTableData(updatedReduxData);
 		} catch (e) { }
 	}, [goButtonData]);
 
 	function MRPWise_TableChange(mrpWiseChecked, tableData) {
-		debugger
+
 		let updatedTableData;
 
 		if (!mrpWiseChecked) {
@@ -147,8 +143,8 @@ const StockReport = (props) => {
 		} else {
 			updatedTableData = tableData;
 		}
-		updatedTableData.sort((a, b) => a.ItemName.localeCompare(b.ItemName));
 
+		updatedTableData.sort((a, b) => a.ItemName.localeCompare(b.ItemName));
 		setTableData(updatedTableData);
 		setMrpWise(mrpWiseChecked);
 		return { tData: updatedTableData, MRPWise: mrpWiseChecked }
@@ -232,7 +228,6 @@ const StockReport = (props) => {
 	];
 
 	// Conditionally add the "MRP" column based on the mrpWise condition
-
 	if (mrpWise) {
 		const mrpColumn = {
 			text: "MRP",
