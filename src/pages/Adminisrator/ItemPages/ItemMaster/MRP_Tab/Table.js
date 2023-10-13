@@ -70,8 +70,8 @@ function MRPTable(props) {
     return (
       <tr>
         {/* <td>{info.id}</td> */}
-        <td hidden={hasSCMhide}>{info.DivisionName}</td>
-        <td hidden={hasSCMhide}>{info.PartyName}</td>
+        {/* <td hidden={hasSCMhide}>{info.DivisionName}</td>
+        <td hidden={hasSCMhide}>{info.PartyName}</td> */}
         <td>{info.EffectiveDate}</td>
         <td>{info.MRP}</td>
         <td>
@@ -99,8 +99,8 @@ function MRPTable(props) {
 
             <Thead>
               <tr >
-                <th className="col col-sm-3" hidden={hasSCMhide}>Division</th>
-                <th className="col col-sm-3" hidden={hasSCMhide}>Party Name</th>
+                {/* <th className="col col-sm-3" hidden={hasSCMhide}>Division</th>
+                <th className="col col-sm-3" hidden={hasSCMhide}>Party Name</th> */}
                 <th className="col col-sm-3">Effective Date</th>
                 <th className="col col-sm-3" >MRP</th>
                 <th className="col col-sm-3">{"Action"}</th>

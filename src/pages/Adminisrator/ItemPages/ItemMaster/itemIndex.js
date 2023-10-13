@@ -720,6 +720,14 @@ const ItemsMaster = (props) => {
                     return btnIsDissablefunc({ btnId, state: false });
                 }
 
+                if (MRP_Tab_TableData.length === 0) {
+                    customAlert({
+                        Type: 4,
+                        Message: "MRP Details Required",
+                    })
+                    return btnIsDissablefunc({ btnId, state: false });
+                }
+
                 const isShelfLifeArr = [];
 
                 if (Number(editItemShelfLife) !== isShelfLife) {

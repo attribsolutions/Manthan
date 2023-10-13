@@ -106,10 +106,9 @@ function MRPTab(props) {
         <Card className="text-black">
           <CardBody className="c_card_body">
             <Row className="mt-3">
-              <Col className=" col col-11 ">
 
-                <Row>
-                  {!(IsSCMCompany === 1) &&
+
+              {/* {!(IsSCMCompany === 1) &&
                     <> <div className=" col col-sm-3 ">
                       <Label>Division</Label>
                       <Select
@@ -135,39 +134,38 @@ function MRPTab(props) {
                         />
                       </div>
                     </>
-                  }
+                  } */}
 
-                  <div className="mb-3 col col-sm-3 ">
-                    <Label>Effective Date</Label>
-                    <div id={`txtEffectiveDate${0}`}>
-                      <C_DatePicker
-                        id={`txtEffectiveDate${0}`}
-                        value={effectiveDate}
-                        placeholder="Please Enter EffectiveDate"
-                        onChange={EffectiveDateHandler}
-                        options={{
-                          altInput: true,
-                          altFormat: "d-m-Y",
-                          dateFormat: "Y-m-d",
-                        }}
-                      />
-                    </div>
-                  </div>
+              <div className="mb-3 col col-sm-3 ">
+                <Label>Effective Date</Label>
+                <div id={`txtEffectiveDate${0}`}>
+                  <C_DatePicker
+                    id={`txtEffectiveDate${0}`}
+                    value={effectiveDate}
+                    placeholder="Please Enter EffectiveDate"
+                    onChange={EffectiveDateHandler}
+                    options={{
+                      altInput: true,
+                      altFormat: "d-m-Y",
+                      dateFormat: "Y-m-d",
+                    }}
+                  />
+                </div>
+              </div>
 
-                  <div className="mb-3 col col-sm-3 ">
-                    <Label>MRP</Label>
-                    <Input
-                      type="text"
-                      id={`txtMRP${0}`}
-                      value={MRP}
-                      placeholder="Please Enter MRP"
-                      onChange={MRPHandler}
-                    />
-                  </div>
+              <div className="mb-3 col col-sm-3 ">
+                <Label>MRP</Label>
+                <Input
+                  type="text"
+                  id={`txtMRP${0}`}
+                  value={MRP}
+                  placeholder="Please Enter MRP"
+                  onChange={MRPHandler}
+                />
+              </div>
 
-                </Row>
-              </Col>
-              <Col sm={1}>
+
+              <Col sm={0}>
                 <Row className=" mt-3">
                   <Col >
                     <Button
