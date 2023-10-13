@@ -219,12 +219,14 @@ const StockReport = (props) => {
 		{
 			text: "Quantity",
 			dataField: "ActualQty",
-			align: "right"
+			align: "right",
+			formatter: (cell, row) => <Label>{row.ActualQty.toFixed(2)}</Label>,
 		},
 		{
 			text: "Unit",
 			dataField: "Unit",
 		},
+
 	];
 
 	// Conditionally add the "MRP" column based on the mrpWise condition
@@ -232,13 +234,16 @@ const StockReport = (props) => {
 		const mrpColumn = {
 			text: "MRP",
 			dataField: "MRP",
-			formatter: (value, row, k) => (
-				<div className="text-end">
-					<samp key={row.id} className="font-asian">
-						{Number(row.MRP)}
-					</samp>
-				</div>
-			),
+			formatter: (value, row, k) => {
+				let MRPValue = Number(row.MRP)
+				return (
+					<div className="text-end">
+						<samp key={row.id} className="font-asian">
+							{MRPValue.toFixed(2)}
+						</samp>
+					</div>
+				)
+			},
 			headerStyle: () => ({
 				width: '100px',
 				textAlign: 'center',
