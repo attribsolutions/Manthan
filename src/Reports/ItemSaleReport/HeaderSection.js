@@ -326,18 +326,21 @@ const HeaderSection = (props) => {
     }
 
     function showAlsoOnChange(event) {
+
         let isLastInvoice =
             event.length > 0
                 ? [1, 5, 6, 7].includes(event[event.length - 1].value)
                 : false;
 
         if (isLastInvoice) {
+
             // if (event.some((item) => [2, 4].includes(item.value))) {
             //     event = event.filter((item) => ![2, 4].includes(item.value));
             // }
             if (!event.some((item) => item.value === 1)) {
                 event.push(initail.SHOW_ALSO_OPTIONS[0]);
             }
+
         }
 
         if (event.some((item) => [2, 4].includes(item.value))) {
@@ -347,7 +350,15 @@ const HeaderSection = (props) => {
             if (!event.some((item) => item.value === 4)) {
                 event.push(initail.SHOW_ALSO_OPTIONS[3]);
             }
+
         }
+        if (event.some((item) => item.value === 8)) {
+            states.setItemNameCheckbox(true)
+        }
+        else {
+            states.setItemNameCheckbox(false)
+        }
+
         states.setShowAlsoSelect(event);
     }
 
@@ -710,6 +721,7 @@ const HeaderSection = (props) => {
                                                 className="p-1"
                                                 type="checkbox"
                                                 checked={states.itemNameCheckbox}
+                                                disabled={states.itemNameCheckbox && true}
                                                 onChange={(e) => { states.setItemNameCheckbox(e.target.checked) }}
                                             />
                                             <Label className="col-sm-4 p-2">Items</Label>
