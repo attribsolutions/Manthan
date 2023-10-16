@@ -721,7 +721,7 @@ const HeaderSection = (props) => {
                                                 className="p-1"
                                                 type="checkbox"
                                                 checked={states.itemNameCheckbox}
-                                                disabled={states.itemNameCheckbox && true}
+                                                disabled={states.showAlsoSelect.some(i => i.value === 8) && true}
                                                 onChange={(e) => { states.setItemNameCheckbox(e.target.checked) }}
                                             />
                                             <Label className="col-sm-4 p-2">Items</Label>
