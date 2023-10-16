@@ -11,6 +11,8 @@ import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { url } from "../../../routes";
 import { table_ArrowUseEffect } from "../../../components/Common/CommonUseEffect";
 import { CInput, onlyNumberRegx } from "../../../CustomValidateForm";
+import { C_Button } from "../../../components/Common/CommonButton";
+import Slidewithcaption from "../../../components/Common/CommonImageComponent";
 
 const ViewDetails_Modal = () => {
 
@@ -19,6 +21,10 @@ const ViewDetails_Modal = () => {
 
     const [modal_view, setModal_view] = useState(false);
     const [tableArray, setTableArray] = useState({});
+    const [imageTable, setImageTable] = useState([]);  // Selected Image Array
+    const [modal_backdrop, setmodal_backdrop] = useState(false);   // Image Model open Or not
+
+
 
     const { viewData_redux = [], ApprovrMsg, saveBtnloading } = useSelector((state) => ({
         viewData_redux: state.SalesReturnReducer.confirmBtnData, // modify Redux State
@@ -78,6 +84,13 @@ const ViewDetails_Modal = () => {
             event.target.value = v1;
         }
         row.ApprovedQuantity = input;
+    }
+
+    const imageShowHandler = async (row) => { // image Show handler
+
+        setImageTable(row.ReturnItemImages)
+        setmodal_backdrop(true)
+
     }
 
     const pagesListColumns = [
@@ -185,6 +198,31 @@ const ViewDetails_Modal = () => {
                 )
             },
         },
+        {
+            text: "Image",
+            dataField: "",
+            formatter: (value, row, k) => {
+                return (
+                    <div>
+                        <C_Button
+                            type="button"
+                            spinnerColor="white"
+                            className="btn btn-success   "
+                            onClick={(event) => {
+
+                                if ((row.ReturnItemImages) && (row.ReturnItemImages.length === 0)) {
+                                    return setmodal_backdrop(false)
+                                } else if ((row.ReturnItemImages) && (row.ReturnItemImages.length > 0)) {
+                                    imageShowHandler(row)
+                                }
+                            }}
+                        >
+                            Show
+                        </C_Button>
+                    </div>
+                )
+            },
+        },
     ];
 
     const SaveHandler = async (event) => {
@@ -194,7 +232,7 @@ const ViewDetails_Modal = () => {
             const tableItemArray = []
             let inValideUnits = []
             tableArray.ReturnItems.forEach(index => {
-                
+
                 const approvedQty = index.ApprovedQuantity ? index.ApprovedQuantity : index.Quantity
                 const Comment = index.ApproveComment ? index.ApproveComment : null
 
@@ -268,12 +306,36 @@ const ViewDetails_Modal = () => {
         } catch (e) { }
     };
 
+    function tog_backdrop() {
+        setmodal_backdrop(!modal_backdrop)
+        removeBodyCss()
+    }
+    function removeBodyCss() {
+        document.body.classList.add("no_padding")
+    }
+
     return (
+
+
         <Modal
             isOpen={modal_view}
             toggle={modalToggleFunc}
             size="xl"
         >
+
+            <Modal
+                isOpen={modal_backdrop}
+                toggle={() => {
+                    tog_backdrop()
+                }}
+
+                style={{ width: "800px", height: "800px", borderRadius: "50%" }}
+                className="modal-dialog-centered "
+
+            >
+                {(imageTable.length > 0) && <Slidewithcaption Images={imageTable} />}
+            </Modal>
+
             <Card>
                 <CardBody className="c_card_body">
                     <div className="modal-body">
