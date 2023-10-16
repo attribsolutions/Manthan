@@ -220,6 +220,7 @@ export const SortButtonFunc = (props) => {
             selectValue: [{ value: "", label: "All" }],
             sort: true,
             groupBy: true,
+            toFixed: 2,
             sequence: 20
         },
 
