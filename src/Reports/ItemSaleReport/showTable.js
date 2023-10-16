@@ -5,9 +5,13 @@ import { Col, Row } from 'reactstrap'
 import { mySearchProps } from '../../components/Common/SearchBox/MySearch'
 import { ItemSaleContext } from './ContextDataProvider'
 import GridExample from './Pivottable'
+import { useDispatch } from 'react-redux'
+import { BreadcrumbShowCountlabel } from '../../store/actions'
 
 function ShowTable() {
-    
+
+    const dispatch = useDispatch();
+
     const { tableData, selectedColumns, pivotMode } = ItemSaleContext();
 
     const sortCaretFunction = {
@@ -22,7 +26,7 @@ function ShowTable() {
             return null;
         }
     };
-    
+
     if (pivotMode) {
         return <GridExample></GridExample>
     };
@@ -47,9 +51,9 @@ function ShowTable() {
                                         Record Not available
                                     </div>
                                 }
-                                // onDataSizeChange={({ dataSize }) => {
-                                //     // dispatch(BreadcrumbShowCountlabel(`Count:${dataSize > 0 && dataSize - 1}`));
-                                // }}
+                                onDataSizeChange={({ dataSize }) => {
+                                    dispatch(BreadcrumbShowCountlabel(`Count:${dataSize}`));
+                                }}
                                 {...toolkitProps.baseProps}
                             />
                             {mySearchProps(toolkitProps.searchProps)}
