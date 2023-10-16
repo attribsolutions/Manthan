@@ -110,6 +110,7 @@ import StockAdjustmentReducer from "./Inventory/StockAdjustmentRedux/reducer"
 import ClaimTrackingEntry_Reducer from "./Accounting/ClaimTrackingEntryRedux/reducer"
 import CreditDebitDataExportReducer from "./Report/CreditDebitDataExportRedux/reducer"
 import ManPowerReportReducer from "./Report/ManPowerRedux/reducer"
+import PartyOutStanding_Reducer from "./Report/PartyOutstandingRedux/reducer"
 
 const rootReducer = combineReducers({
 	Layout,
@@ -198,6 +199,7 @@ const rootReducer = combineReducers({
 	StockAdjustmentReducer,
 	ClaimTrackingEntry_Reducer,
 	CreditDebitDataExportReducer,
-	ManPowerReportReducer
+	ManPowerReportReducer,
+	PartyOutStanding_Reducer
 })
 export default rootReducer
