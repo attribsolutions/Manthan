@@ -111,7 +111,12 @@ export const SHOW_ALSO_OPTIONS = [{
 {
     value: 7,
     label: "TCSAmount",
-}
+},
+{
+    value: 8,
+    label: "MRP",
+},
+
 ]
 
 export const UNIT_DROPDOWN_OPTIONS = [

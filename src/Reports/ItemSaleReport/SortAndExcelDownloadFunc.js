@@ -63,7 +63,7 @@ export const SortButtonFunc = (props) => {
             selectValue: [{ value: "", label: "All" }],
             sort: true,
             groupBy: true,
-            sequence: 4
+            sequence: 5
         },
         {
             text: 'Invoice Number',
@@ -72,8 +72,9 @@ export const SortButtonFunc = (props) => {
             selectValue: [{ value: "", label: "All" }],
             sort: true,
             groupBy: true,
-            sequence: 5
+            sequence: 6
         },
+
         {
             text: 'Route',
             dataField: 'RouteName',
@@ -81,7 +82,7 @@ export const SortButtonFunc = (props) => {
             selectValue: routeSelect,
             sort: true,
             groupBy: true,
-            sequence: 6
+            sequence: 7
         },
         {
             text: 'Customer',
@@ -90,7 +91,7 @@ export const SortButtonFunc = (props) => {
             selectValue: customerSelect,
             sort: true,
             groupBy: true,
-            sequence: 7
+            sequence: 4
         },
         {
             text: 'Product',
@@ -211,7 +212,16 @@ export const SortButtonFunc = (props) => {
             isSum: true,
             toFixed: 2,
             sequence: 14,
-        }
+        },
+        {
+            text: 'MRP',
+            dataField: 'MRPValue',
+            checkboxState: showAlsoSelect.some(item => item.value === 8) ? true : false,
+            selectValue: [{ value: "", label: "All" }],
+            sort: true,
+            groupBy: true,
+            sequence: 20
+        },
 
     ];
 
