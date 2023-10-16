@@ -798,9 +798,12 @@ const SalesReturn = (props) => {
 
     const imageShowHandler = async (row) => { // image Show handler
         const file = Array.from(row.Image)
-        const slides = file.map(item => {
-            return URL.createObjectURL(item);
-        })
+        // const slides = file.map(item => return {
+        //      Image: URL.createObjectURL(item)
+        // })
+        const slides = file.map(item => ({
+            Image: URL.createObjectURL(item)
+        }));
         setImageTable(slides)
     }
 
