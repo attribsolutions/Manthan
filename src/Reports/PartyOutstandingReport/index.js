@@ -5,21 +5,18 @@ import { useHistory } from "react-router-dom";
 import { C_DatePicker, C_Select } from "../../CustomValidateForm";
 import * as _cfunc from "../../components/Common/CommonFunction";
 import { MetaTags } from "react-meta-tags";
-import Select from "react-select";
-import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess, getBaseUnit_ForDropDown, getBaseUnit_ForDropDownSuccess } from "../../store/actions";
+import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess } from "../../store/actions";
 import C_Report from "../../components/Common/C_Report";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
-import { damageStockReport_GoButton_API, damageStockReport_GoButton_API_Success } from "../../store/Report/DamageStockReportRedux/action";
 import DynamicColumnHook from "../../components/Common/TableCommonFunc";
 import { mode, pageId } from "../../routes/index"
-import CustomTable from "../../CustomTable2";
-import PartyDropdownForReport, { ReportComponent, ShowAndExcelBtn } from "../ReportComponent";
+import PartyDropdownForReport from "../ReportComponent";
 import { Go_Button } from "../../components/Common/CommonButton";
 import { GetRoutesList, GetRoutesListSuccess } from "../../store/Administrator/RoutesRedux/actions";
-import { DamageStockReport_GoBtn_API, OutStandingBalance_GoBtn_API } from "../../helpers/backend_helper";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
+import { PartyOutstandingReport_GoButton_API, PartyOutstandingReport_GoButton_API_Success } from "../../store/Report/PartyOutstandingRedux/action";
 
 const PartyOutstandingReport = (props) => {
 
@@ -30,26 +27,24 @@ const PartyOutstandingReport = (props) => {
 
 	const [headerFilters, setHeaderFilters] = useState('');
 	const [userPageAccessState, setUserAccState] = useState('');
-	const [subPageMode] = useState(history.location.pathname)
-
+	
 	const [partyDropdown, setPartyDropdown] = useState('');
-	const [routeDropdown, setRouteDropdown] = useState({value:"",label:"All"});
+	const [routeDropdown, setRouteDropdown] = useState({ value: "", label: "All" });
 	const [tableData, setTableData] = useState([]);
-	const [btnMode, setBtnMode] = useState(0);
 
 	const reducers = useSelector(
 		(state) => ({
 			listBtnLoading: state.DamageStockReportReducer.listBtnLoading,
 			RouteListLoading: state.RoutesReducer.goBtnLoading,
 			RoutesList: state.RoutesReducer.RoutesList,
-			goButtonData: state.DamageStockReportReducer.StockReportGobtn,
+			goButtonData: state.PartyOutStanding_Reducer.partyOutStanding_Gobtn,
 			userAccess: state.Login.RoleAccessUpdateData,
 			pageField: state.CommonPageFieldReducer.pageField
 		})
 	);
 
 	const { userAccess, pageField, RoutesList, RouteListLoading, goButtonData = [], listBtnLoading } = reducers;
-	const { date = currentDate_ymd, todate = currentDate_ymd } = headerFilters;
+	const { date = currentDate_ymd, } = headerFilters;
 
 	// Featch Modules List data First Rendering
 	const location = { ...history.location }
@@ -87,7 +82,7 @@ const PartyOutstandingReport = (props) => {
 		return () => {
 			dispatch(commonPageFieldSuccess(null));
 			dispatch(GetRoutesListSuccess([]));
-			dispatch(damageStockReport_GoButton_API_Success([]));
+			dispatch(PartyOutstandingReport_GoButton_API_Success([]));
 		}
 	}, [])
 
@@ -96,11 +91,10 @@ const PartyOutstandingReport = (props) => {
 	const RoutesListOptions = RoutesList.reduce((options, data) => {
 		options.push({ value: data.id, label: data.Name });
 		return options;
-	  }, [{ value: "", label: "All" }]);
+	}, [{ value: "", label: "All" }]);
 
-	async function goButtonHandler(e, btnMode) {
+	async function goButtonHandler() {
 		try {
-			setBtnMode(btnMode)
 
 			if ((isSCMParty) && (partyDropdown === "")) {
 				customAlert({ Type: 3, Message: "Please Select Party" });
@@ -113,7 +107,7 @@ const PartyOutstandingReport = (props) => {
 				"PartyID": partyDropdown === "" ? _cfunc.loginPartyID() : partyDropdown.value,
 			});
 
-			dispatch(damageStockReport_GoButton_API({ jsonBody, subPageMode }))
+			dispatch(PartyOutstandingReport_GoButton_API({ jsonBody }))
 
 		} catch (error) { _cfunc.CommonConsole(error) }
 	}
@@ -127,7 +121,7 @@ const PartyOutstandingReport = (props) => {
 
 	function partyOnChangeHandler(e) {
 		setPartyDropdown(e);
-		setRouteDropdown({value:"",label:"All"});
+		setRouteDropdown({ value: "", label: "All" });
 		const jsonBody = JSON.stringify({ CompanyID: _cfunc.loginCompanyID(), PartyID: e.value });
 		dispatch(GetRoutesList(jsonBody));
 		setTableData([]);
