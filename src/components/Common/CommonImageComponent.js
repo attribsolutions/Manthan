@@ -13,7 +13,7 @@ import {
 class Slidewithcaption extends Component {
 
     constructor(props) {
-
+        debugger
         super(props)
         this.items = props.Images
         this.state = { activeIndex: 0 }

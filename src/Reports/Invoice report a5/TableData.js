@@ -123,7 +123,7 @@ export const RowsWithCGST_SGST = (data) => {
         }
         return accumulator;
     }, {});
-    debugger
+    
     const TotalItemlength = Object.values(groupedItems).length;
     data["TotalItemlength"] = TotalItemlength;
     Object.values(groupedItems).forEach((element, key) => {

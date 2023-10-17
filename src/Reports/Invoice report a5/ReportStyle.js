@@ -4,7 +4,7 @@
 import upi_qr_code from "../../assets/images/upi_qr_code.png"
 import * as table from './TableData'
 import { numberWithCommas, toWords } from "../Report_common_function";
-import { date_dmy_func, convertOnlyTimefunc, convertTimefunc, currentDate_dmy, CurrentTime, compareGSTINState } from "../../components/Common/CommonFunction";
+import { date_dmy_func, convertOnlyTimefunc, convertTimefunc, currentDate_dmy, CurrentTime, compareGSTINState, loginSystemSetting } from "../../components/Common/CommonFunction";
 
 
 export const pageBorder = (doc) => {
@@ -15,6 +15,7 @@ export const pageBorder = (doc) => {
     doc.line(570, 393, 570, 16);//vertical line (Right)
     doc.line(570, 393, 30, 393);//horizontal line (Bottom)   
 }
+
 let initial_y = 0
 
 export const pageHeder = (doc, data) => {
@@ -341,8 +342,7 @@ export const reportHeder3 = (doc, data) => {
 
 
 export const reportFooter = (doc, data) => {
-
-    // doc.addImage(upi_qr_code, 'JPEG', 359, 310, 75, 65)
+    doc.addImage(data.SettingData.PaymentQRCodeimageonInvoice, 'JPEG', 335, 303, 105, 96)
     doc.setDrawColor(0, 0, 0);
     doc.line(570, 308, 30, 308);//horizontal line  (4)
     doc.line(570, 380, 435, 380);//horizontal line  (5)

@@ -8,6 +8,7 @@ import {
     FormGroup,
     Input,
     Label,
+    Modal,
     Row
 } from "reactstrap";
 import Select from "react-select";
@@ -44,6 +45,8 @@ import { mode, url, pageId } from "../../../routes/index";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { saveMsgUseEffect, userAccessUseEffect } from "../../../components/Common/CommonUseEffect";
 import { getpartysetting_API, savePartySetting, savePartySettingMaster_Success } from "../../../store/Administrator/PartySetting/action";
+import Slidewithcaption from "../../../components/Common/CommonImageComponent";
+
 
 const InvoiceConfiguration = (props) => {
 
@@ -60,7 +63,8 @@ const InvoiceConfiguration = (props) => {
         AddressInInvoice: "",
         AutoEInvoice: "",
         EInvoiceApplicable: "",
-        CreditDebitAmountRound: ""
+        CreditDebitAmountRound: "",
+        PaymentQr: "",
         // IsTCSPercentageforNonValidatedPANCustomer: "",
         // IsTCSPercentageforValidatedPANCustomer: ""
     }
@@ -71,6 +75,10 @@ const InvoiceConfiguration = (props) => {
     const [userPageAccessState, setUserAccState] = useState('');
     const [hsnDropOption] = useState([{ value: "1", label: "4 Digits" }, { value: "2", label: "6 Digits" }, { value: "3", label: "8 Digits" }])
     const [editCreatedBy, seteditCreatedBy] = useState("");
+    const [imageTable, setImageTable] = useState([]);  // Selected Image Array
+    const [modal_backdrop, setmodal_backdrop] = useState(false);   // Image Model open Or not
+
+
 
 
     //Access redux store Data /  'save_ModuleSuccess' action data
@@ -93,7 +101,7 @@ const InvoiceConfiguration = (props) => {
     const { isError } = state;
     const { fieldLabel } = state;
 
-    const { Data = {} } = PartySettingdata;
+    const { Data = {}, SystemSetting = {} } = PartySettingdata;
 
 
     const location = { ...history.location }
@@ -191,6 +199,11 @@ const InvoiceConfiguration = (props) => {
             comAddPageFieldFunc({ state, setState, fieldArr })
         }
     }, [pageField])
+    useEffect(() => {
+        if (imageTable.length > 0) {
+            setmodal_backdrop(true)
+        }
+    }, [imageTable])
 
 
     useEffect(() => {
@@ -210,7 +223,7 @@ const InvoiceConfiguration = (props) => {
             }
 
             setState((i) => {
-                
+
                 const a = { ...i }
                 a.values.Invoicea4 = Data.A4Print;
                 a.values.AddressInInvoice = Data.AddressOnInvoice;
@@ -221,6 +234,8 @@ const InvoiceConfiguration = (props) => {
                 a.values.EInvoiceApplicable = Data.EInvoiceApplicable;
                 a.values.AutoEInvoice = Data.AutoEInvoice;
                 a.values.CreditDebitAmountRound = Data.CreditDebitAmountRoundConfiguration;
+                a.values.PaymentQr = Data.PaymentQRCodeimageonInvoice;
+                a.values.PaymentQr["Image"] = SystemSetting.PaymentQRCodeimageonInvoice
 
 
                 // a.values.IsTCSPercentageforValidatedPANCustomer = Data.IsTCSPercentageforValidatedPANCustomer;
@@ -246,65 +261,96 @@ const InvoiceConfiguration = (props) => {
 
     const onchangeHandler = async (event, key, type) => {
 
-        const file = event.target.files[0]
-        const convertBase64 = (file) => {
-            return new Promise((resolve, reject) => {
-                const fileReader = new FileReader()
-                fileReader.readAsDataURL(file);
-                fileReader.onload = () => {
-                    resolve(fileReader.result)
-                };
-                fileReader.onerror = (error) => {
-                    reject(error)
-                }
-            })
-        }
-        const base64 = await convertBase64(file);
+        const file = Array.from(event.target.files)
         setState((i) => {
             const a = { ...i }
-            a.values.PaymentQR = base64;
+            a.values.PaymentQr["Image"] = file;
             return a
         })
 
     }
 
+    const imageShowHandler = () => { // image Show handler
+        let slides = []
+        if (values.PaymentQr.Image.length > 0) {
+            slides = [{
+                Image: URL.createObjectURL(values.PaymentQr.Image[0])
+            }];
+        } else {
+            slides = [{
+                Image: SystemSetting.PaymentQRCodeimageonInvoice
+            }];
+        }
+        setImageTable(slides)
+    }
+
+    function convertImageToFile(imageUrl) {
+        return fetch(imageUrl)
+            .then(response => response.blob())
+            .then(blob => {
+                const filename = imageUrl.split('/').pop();
+                return new File([blob], filename);
+            });
+    }
+
+    useEffect(() => {
+        debugger
+        if (Object.keys(SystemSetting).length !== 0) {
+            const a = convertImageToFile(SystemSetting.PaymentQRCodeimageonInvoice)
+            debugger
+            a.then(file => {
+                setState((i) => {
+                    const a = { ...i }
+                    a.values.PaymentQr["Image"] = [file];
+                    return a
+                })
+            }).catch(error => {
+            });
+        }
+    }, [SystemSetting])
+
+
+
     const SaveHandler = async (event) => {
-
-
+        const formData = new FormData(); // Create a new FormData object
         const BulkData = []
-        event.preventDefault();
-        const btnId = event.target.id
 
         try {
-            if (formValid(state, setState)) {
-                btnIsDissablefunc({ btnId, state: true })
-                Object.values(values).forEach(i => {
 
+            Object.values(values).forEach(i => {
 
-                    if (i.SystemSetting === "HSN Code Digit") {
-                        i.Value = i.Value.value
-                    }
+                if (i.SystemSetting === "HSN Code Digit") {
+                    i.Value = i.Value.value
+                }
 
-                    const arr = {
-                        Setting: i.id,
-                        Party: loginUserDetails().Party_id,
-                        Company: loginCompanyID(),
-                        CreatedBy: loginUserID(),
-                        Value: i.Value
-                    }
-                    BulkData.push(arr)
+                const arr = {
+                    Setting: i.id,
+                    Party: loginUserDetails().Party_id,
+                    Company: loginCompanyID(),
+                    CreatedBy: loginUserID(),
+                    Value: i.Value
+                }
+                BulkData.push(arr)
 
-                })
+            })
 
-                const jsonBody = JSON.stringify({
-                    BulkData: BulkData
-                });
+            debugger
+            formData.append(`uploaded_images_${values.PaymentQr.id}`, values.PaymentQr.Image[0]); // Convert to JSON string
+            formData.append('BulkData', JSON.stringify(BulkData)); // Convert to JSON string
+            dispatch(savePartySetting({ formData }));
 
-                dispatch(savePartySetting({ jsonBody, btnId }));
-
-            }
-        } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
+        } catch (e) { console.log(e) }
     };
+
+
+
+    function tog_backdrop() {
+        setmodal_backdrop(!modal_backdrop)
+        removeBodyCss()
+    }
+    function removeBodyCss() {
+        document.body.classList.add("no_padding")
+    }
 
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
@@ -315,6 +361,18 @@ const InvoiceConfiguration = (props) => {
         return (
             <React.Fragment>
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
+                    <Modal
+                        isOpen={modal_backdrop}
+                        toggle={() => {
+                            tog_backdrop()
+                        }}
+
+                        style={{ width: "800px", height: "800px", borderRadius: "50%" }}
+                        className="modal-dialog-centered "
+
+                    >
+                        {(imageTable.length > 0) && <Slidewithcaption Images={imageTable} />}
+                    </Modal>
                     <Container fluid>
                         <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
 
@@ -335,12 +393,35 @@ const InvoiceConfiguration = (props) => {
                                                         <Label htmlFor="validationCustom01">Payment QR</Label>
                                                         <Col sm={7} >
 
-                                                            <Input type="file" className="form-control "
+                                                            <div>
+                                                                <div className="btn-group btn-group-example mb-3 col-7" role="group">
+                                                                    <Input
+                                                                        type="file"
+                                                                        className="form-control "
+                                                                        name="image"
+                                                                        id="file"
+                                                                        multiple
+                                                                        accept=".jpg, .jpeg, .png ,.pdf"
+                                                                        onChange={(event) => { onchangeHandler(event, "ImageUpload") }}
+                                                                    />
+                                                                    <button name="image"
+                                                                        accept=".jpg, .jpeg, .png ,.pdf"
+                                                                        onClick={() => {
+
+                                                                            if (SystemSetting.PaymentQRCodeimageonInvoice) { imageShowHandler() }
+                                                                        }}
+                                                                        id="ImageId" type="button" className="btn btn-primary "> Show </button>
+                                                                </div>
+                                                                {/* Image Count: {row && row.ImageURL ? ImageCount : 0} */}
+                                                            </div>
+
+
+                                                            {/* <Input type="file" className="form-control "
                                                                 name="image"
                                                                 id="file"
                                                                 accept=".jpg, .jpeg, .png"
                                                                 onChange={(event) => { onchangeHandler(event, "ImageUpload") }}
-                                                            />
+                                                            /> */}
                                                         </Col>
 
 
@@ -406,6 +487,7 @@ const InvoiceConfiguration = (props) => {
                                                                     onChange={(e) => {
                                                                         setState((i) => {
                                                                             const a = { ...i }
+
                                                                             a.values.TCSAmountRound.Value = e.target.checked === false ? "0" : "1";
                                                                             return a
                                                                         })
@@ -467,6 +549,7 @@ const InvoiceConfiguration = (props) => {
 
                                                                         setState((i) => {
                                                                             const a = { ...i }
+
                                                                             a.values.Invoicea4.Value = e.target.checked === false ? "0" : "1";
                                                                             return a
                                                                         })

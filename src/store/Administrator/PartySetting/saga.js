@@ -6,7 +6,9 @@ import { PartySettingApi, save_PartySetting_API } from "../../../helpers/backend
 
 
 function* Save_Method_ForPartySetting_GenFun({ config }) {
-
+    for (let pair of config.formData.entries()) {
+        console.log(pair[0], pair[1]);
+    }
     try {
 
         const response = yield call(save_PartySetting_API, config);
@@ -17,16 +19,20 @@ function* Save_Method_ForPartySetting_GenFun({ config }) {
 function* PartySetting_GenFunc(config) {
 
     try {
-        
+
         const response = yield call(PartySettingApi, config.Party_id, config.Comapny_id);
         const singleObject = {};
         const SystemSetting = {};
         for (const item of response.Data) {
+            
             SystemSetting[item.SystemSetting.replace(/\s/g, '')] = item.Value
+            if (item.Image) {
+                SystemSetting[item.SystemSetting.replace(/\s/g, '')] = item.Image
+            }
             singleObject[item.SystemSetting.replace(/\s/g, '')] = {
                 SystemSetting: item.SystemSetting,
                 Value: item.Value,
-                id: item.id
+                id: item.id,
             };
 
         }
