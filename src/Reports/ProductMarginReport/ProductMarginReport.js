@@ -155,7 +155,6 @@ const ProductMarginReport = (props) => {           // this component also use fo
 
             } else if (btnMode === "Excel") {
                 ReportComponent({      // Download CSV
-                    pageField,
                     excelData: manPowerReportRedux,
                     excelFileName: "Distributor & ManPower Report"
                 })
