@@ -7,6 +7,8 @@ import { ItemSaleContext } from './ContextDataProvider'
 import GridExample from './Pivottable'
 import { useDispatch } from 'react-redux'
 import { BreadcrumbShowCountlabel } from '../../store/actions'
+import CustomTable from '../../CustomTable2'
+import { amountCommaSeparateFunc } from '../../components/Common/CommonFunction'
 
 function ShowTable() {
 
@@ -31,39 +33,64 @@ function ShowTable() {
         return <GridExample></GridExample>
     };
 
-    return (<ToolkitProvider
-        keyField="id"
-        data={tableData}
-        columns={selectedColumns}
-        search
-    >
-        {(toolkitProps,) => (
-            <React.Fragment>
-                <Row>
-                    <Col xl="12">
-                        <div className="table-responsive table">
-                            <BootstrapTable
-                                keyField="id"
-                                classes={"table  table-bordered "}
-                                sort={sortCaretFunction}
-                                noDataIndication={
-                                    <div className="text-danger text-center ">
-                                        Record Not available
-                                    </div>
-                                }
-                                onDataSizeChange={({ dataSize }) => {
-                                    dispatch(BreadcrumbShowCountlabel(`Count:${dataSize}`));
-                                }}
-                                {...toolkitProps.baseProps}
-                            />
-                            {mySearchProps(toolkitProps.searchProps)}
-                        </div>
-                    </Col>
-                </Row>
+    return (
+        <CustomTable
+            keyField={"id"}
+            data={tableData}
+            columns={selectedColumns}
+            paginationEnabled={false}
+            // onDataSizeChange={({ dataCount }) => {
+            //     dispatch(BreadcrumbShowCountlabel(`Count:${dataCount}`));
+            // }}
+            onDataSizeChange={({ dataCount, filteredData = [] }) => {
+                debugger
+                let totalAmount = filteredData.reduce((total, item) => {
+                    return total + Number(item.Amount) || 0;
 
-            </React.Fragment>
-        )}
-    </ToolkitProvider>
+                }, 0);
+                let commaSeparateAmount = amountCommaSeparateFunc(Number(totalAmount).toFixed(2));
+
+                dispatch(BreadcrumbShowCountlabel(`Count:${dataCount} ₹ ${commaSeparateAmount}`));
+
+            }
+            }
+            noDataIndication={<div className="text-danger text-center table-cursor-pointer"  >Data Not available</div>}
+        />
+        // <ToolkitProvider
+        //     keyField="id"
+        //     data={tableData}
+        //     columns={selectedColumns}
+        //     search
+        // >
+        //     {(toolkitProps,) => (
+        //         <React.Fragment>
+        //             <Row>
+        //                 <Col xl="12">
+        //                     <div className="table-responsive table">
+        //                         <BootstrapTable
+        //                             keyField="id"
+        //                             classes={"table  table-bordered "}
+        //                             sort={sortCaretFunction}
+        //                             noDataIndication={
+        //                                 <div className="text-danger text-center ">
+        //                                     Record Not available
+        //                                 </div>
+        //                             }
+        //                             onDataSizeChange={({ dataSize, d }) => {
+        //                                 debugger
+        //                                 // dispatch(BreadcrumbShowCountlabel(`Count:${dataSize} ₹ 0`))
+        //                                 dispatch(BreadcrumbShowCountlabel(`Count:${dataSize}`));
+        //                             }}
+        //                             {...toolkitProps.baseProps}
+        //                         />
+        //                         {mySearchProps(toolkitProps.searchProps)}
+        //                     </div>
+        //                 </Col>
+        //             </Row>
+
+        //         </React.Fragment>
+        //     )}
+        // </ToolkitProvider>
 
     )
 }

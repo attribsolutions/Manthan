@@ -103,7 +103,7 @@ const TransactionLog = () => {
             sort: true
         },
         {
-            text: "Customer Name",
+            text: "Customer/Supplier Name",
             dataField: "CustomerName",
             sort: true
         },

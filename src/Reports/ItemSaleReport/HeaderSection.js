@@ -386,8 +386,8 @@ const HeaderSection = (props) => {
         const { selectedColumns = [{}], manupulatedData = [], totalAmount } = await states.sortManipulationFunc(baseData);
         states.setSelectedColumns(selectedColumns);
         states.setTableData(manupulatedData);
-        let commaSeparateAmount = _cfunc.amountCommaSeparateFunc(Number(totalAmount).toFixed(2));
-        dispatch(BreadcrumbShowCountlabel(`Count:${manupulatedData.length} ₹ ${commaSeparateAmount}`));
+        // let commaSeparateAmount = _cfunc.amountCommaSeparateFunc(Number(totalAmount).toFixed(2));
+        // dispatch(BreadcrumbShowCountlabel(`Count:${manupulatedData.length} ₹ ${commaSeparateAmount}`));
         return { selectedColumns, manupulatedData, totalAmount };
     }
 
