@@ -142,7 +142,6 @@ const ProductMarginReport = (props) => {           // this component also use fo
                 setTableData(ProductMargin)
             } else if (btnMode === "Excel") {
                 ReportComponent({  // Download CSV
-                    pageField,
                     excelData: ProductMargin,
                     excelFileName: "Product Margin Report"
                 })
