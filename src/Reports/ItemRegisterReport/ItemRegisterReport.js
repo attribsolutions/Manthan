@@ -25,7 +25,8 @@ const ItemRegisterReport = (props) => {
         FromDate: currentDate_ymd,
         ToDate: currentDate_ymd,
         Item: "",
-        Unit: "",
+        Unit: { value: 1, label: 'No' },
+
 
     }
 
@@ -73,7 +74,7 @@ const ItemRegisterReport = (props) => {
     useEffect(() => {
         dispatch(getBaseUnit_ForDropDown());
         const jsonBody = JSON.stringify({ ..._cfunc.loginJsonBody() });
-        dispatch(goButtonPartyItemAddPage({jsonBody}));
+        dispatch(goButtonPartyItemAddPage({ jsonBody }));
     }, [])
 
     useEffect(() => {
@@ -188,7 +189,7 @@ const ItemRegisterReport = (props) => {
         <React.Fragment>
             <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
             <div className="page-content">
-                <PartyDropdown_Common 
+                <PartyDropdown_Common
                     goButtonHandler={partySelectButtonHandler}
                     changeButtonHandler={partyOnChngeButtonHandler} />
 

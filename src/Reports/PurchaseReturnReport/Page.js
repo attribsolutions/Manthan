@@ -29,9 +29,10 @@ function pageFooter(doc, data) {
 }
 
 const ReturnReport = (data) => {
+    debugger
     const systemSetting = loginSystemSetting();
-    data["PrintType"] = (systemSetting.A4Print === "1" ? false : true)
-    if (systemSetting.A4Print === "1") {
+    data["PrintType"] = (systemSetting.ReturnA4Print === "1" ? false : true)
+    if (systemSetting.ReturnA4Print === "1") {
         var doc = new jsPDF('p', 'pt', 'a4');
     } else {
         var doc = new jsPDF('l', 'pt', 'a5');
@@ -43,7 +44,7 @@ const ReturnReport = (data) => {
     doc.setProperties({
         title: `Return Report (${date_dmy_func(data.ReturnDate)}) `
     });
-    
+
     function generateSaveAndOpenPDFReport() {
         const pdfUrl = URL.createObjectURL(doc.output('blob'));
         const options = { filename: "ReturnReport" }

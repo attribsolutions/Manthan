@@ -65,6 +65,8 @@ const InvoiceConfiguration = (props) => {
         EInvoiceApplicable: "",
         CreditDebitAmountRound: "",
         PaymentQr: "",
+        ReturnA4Print: "",
+        CRDRNoteA4Print: "",
         // IsTCSPercentageforNonValidatedPANCustomer: "",
         // IsTCSPercentageforValidatedPANCustomer: ""
     }
@@ -223,7 +225,7 @@ const InvoiceConfiguration = (props) => {
             }
 
             setState((i) => {
-
+                debugger
                 const a = { ...i }
                 a.values.Invoicea4 = Data.A4Print;
                 a.values.AddressInInvoice = Data.AddressOnInvoice;
@@ -236,10 +238,8 @@ const InvoiceConfiguration = (props) => {
                 a.values.CreditDebitAmountRound = Data.CreditDebitAmountRoundConfiguration;
                 a.values.PaymentQr = Data.PaymentQRCodeimageonInvoice;
                 a.values.PaymentQr["Image"] = SystemSetting.PaymentQRCodeimageonInvoice
-
-
-                // a.values.IsTCSPercentageforValidatedPANCustomer = Data.IsTCSPercentageforValidatedPANCustomer;
-                // a.values.IsTCSPercentageforNonValidatedPANCustomer = Data.IsTCSPercentageforNonValidatedPANCustomer;
+                a.values.ReturnA4Print = Data.ReturnA4Print;
+                a.values.CRDRNoteA4Print = Data.CRDRNoteA4Print;
 
                 return a
             })
@@ -271,8 +271,9 @@ const InvoiceConfiguration = (props) => {
     }
 
     const imageShowHandler = () => { // image Show handler
+
         let slides = []
-        if (values.PaymentQr.Image.length > 0) {
+        if (values.PaymentQr.Image[0] instanceof File) {
             slides = [{
                 Image: URL.createObjectURL(values.PaymentQr.Image[0])
             }];
@@ -285,6 +286,7 @@ const InvoiceConfiguration = (props) => {
     }
 
     function convertImageToFile(imageUrl) {
+
         return fetch(imageUrl)
             .then(response => response.blob())
             .then(blob => {
@@ -292,19 +294,28 @@ const InvoiceConfiguration = (props) => {
                 return new File([blob], filename);
             });
     }
+    function isURL(str) {
+        var urlPattern = /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/i;
+        return urlPattern.test(str);
+    }
 
     useEffect(() => {
-        debugger
+
         if (Object.keys(SystemSetting).length !== 0) {
-            const a = convertImageToFile(SystemSetting.PaymentQRCodeimageonInvoice)
-            debugger
-            a.then(file => {
+            const SaveImageUrl = convertImageToFile(SystemSetting.PaymentQRCodeimageonInvoice)
+
+            SaveImageUrl.then(file => {
                 setState((i) => {
                     const a = { ...i }
-                    a.values.PaymentQr["Image"] = [file];
+                    if (isURL(SaveImageUrl)) {
+                        a.values.PaymentQr["Image"] = [file];
+                    } else {
+                        a.values.PaymentQr["Image"] = [null];
+                    }
                     return a
                 })
             }).catch(error => {
+
             });
         }
     }, [SystemSetting])
@@ -318,7 +329,7 @@ const InvoiceConfiguration = (props) => {
         try {
 
             Object.values(values).forEach(i => {
-
+                debugger
                 if (i.SystemSetting === "HSN Code Digit") {
                     i.Value = i.Value.value
                 }
@@ -334,7 +345,7 @@ const InvoiceConfiguration = (props) => {
 
             })
 
-            debugger
+
             formData.append(`uploaded_images_${values.PaymentQr.id}`, values.PaymentQr.Image[0]); // Convert to JSON string
             formData.append('BulkData', JSON.stringify(BulkData)); // Convert to JSON string
             dispatch(savePartySetting({ formData }));
@@ -412,16 +423,9 @@ const InvoiceConfiguration = (props) => {
                                                                         }}
                                                                         id="ImageId" type="button" className="btn btn-primary "> Show </button>
                                                                 </div>
-                                                                {/* Image Count: {row && row.ImageURL ? ImageCount : 0} */}
+
                                                             </div>
 
-
-                                                            {/* <Input type="file" className="form-control "
-                                                                name="image"
-                                                                id="file"
-                                                                accept=".jpg, .jpeg, .png"
-                                                                onChange={(event) => { onchangeHandler(event, "ImageUpload") }}
-                                                            /> */}
                                                         </Col>
 
 
@@ -686,6 +690,66 @@ const InvoiceConfiguration = (props) => {
                                                         </Row>
                                                     </FormGroup>
                                                 </Col>
+                                                <Col sm={8}>
+                                                    <FormGroup className="mb-3">
+                                                        <Row>
+                                                            <Col sm={3} >
+                                                                <Label htmlFor="validationCustom01">  {fieldLabel.ReturnA4Print} </Label>
+                                                            </Col>
+                                                            <Col sm={9} >
+                                                                <Input
+                                                                    style={{ marginLeft: "53px" }}
+                                                                    type="checkbox"
+                                                                    className="p-2"
+                                                                    checked={values.ReturnA4Print.Value === "0" ? false : true}
+                                                                    onChange={(e) => {
+                                                                        setState((i) => {
+                                                                            const a = { ...i }
+                                                                            debugger
+                                                                            a.values.ReturnA4Print.Value = e.target.checked === false ? "0" : "1";
+                                                                            return a
+                                                                        })
+                                                                    }}
+                                                                >
+                                                                </Input>
+
+                                                            </Col>
+                                                        </Row>
+                                                    </FormGroup>
+                                                </Col>
+                                            </Row>
+
+                                            <Row>
+
+                                                <Col sm={4}>
+                                                    <FormGroup className="mb-3">
+                                                        <Row>
+                                                            <Col sm={5} >
+                                                                <Label htmlFor="validationCustom01">  {fieldLabel.CRDRNoteA4Print} </Label>
+                                                            </Col>
+                                                            <Col sm={7} >
+                                                                <Input
+                                                                    style={{ marginLeft: "53px" }}
+                                                                    type="checkbox"
+                                                                    className="p-2"
+                                                                    checked={values.CRDRNoteA4Print.Value === "0" ? false : true}
+                                                                    onChange={(e) => {
+
+                                                                        setState((i) => {
+                                                                            const a = { ...i }
+                                                                            debugger
+                                                                            a.values.CRDRNoteA4Print.Value = e.target.checked === false ? "0" : "1";
+                                                                            return a
+                                                                        })
+                                                                    }}
+                                                                >
+                                                                </Input>
+
+                                                            </Col>
+                                                        </Row>
+                                                    </FormGroup>
+                                                </Col>
+
                                             </Row>
 
 
