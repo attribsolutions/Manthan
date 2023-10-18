@@ -6,14 +6,15 @@ import { initialFiledFunc, } from "../../components/Common/validationFunction";
 import { C_Button } from "../../components/Common/CommonButton";
 import { C_DatePicker, C_Select } from "../../CustomValidateForm";
 import * as _cfunc from "../../components/Common/CommonFunction";
-import { mode, url, } from "../../routes/index"
+import { mode, pageId, url, } from "../../routes/index"
 import { MetaTags } from "react-meta-tags";
-import { GetVenderSupplierCustomer, GetVenderSupplierCustomerSuccess, getpdfReportdata, getpdfReportdataSuccess } from "../../store/actions";
+import { GetVenderSupplierCustomer, GetVenderSupplierCustomerSuccess, commonPageField, commonPageFieldSuccess, getpdfReportdata, getpdfReportdataSuccess } from "../../store/actions";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import * as report from '../ReportIndex'
 import { PartyLedgerReport_API } from "../../helpers/backend_helper";
 import C_Report from "../../components/Common/C_Report";
 import PartyDropdown_Common from "../../components/Common/PartyDropdown";
+import { ExcelDownloadFunc } from "../StockReport/ExcelDownloadFunc";
 
 const PartyLedger = (props) => {
 
@@ -31,6 +32,7 @@ const PartyLedger = (props) => {
     const [state, setState] = useState(() => initialFiledFunc(fileds))
     const [subPageMode] = useState(history.location.pathname);
     const [userPageAccessState, setUserAccState] = useState('');
+    const [tableData, setTableData] = useState([]);
 
     const reducers = useSelector(
         (state) => ({
@@ -41,13 +43,63 @@ const PartyLedger = (props) => {
             SSDD_List: state.CommonAPI_Reducer.SSDD_List,
             customerDropdownLoading: state.CommonAPI_Reducer.vendorSupplierCustomerLoading,
             // partyDropdownLoading: state.CommonPageFieldReducer.pageFieldList,
-            pageField: state.CommonPageFieldReducer.pageFieldList
+            pageField: state.CommonPageFieldReducer.pageField
         })
     );
-    const { userAccess, supplier, pdfdata, customerDropdownLoading, partyDropdownLoading } = reducers;
+    const { userAccess, supplier, pdfdata, customerDropdownLoading, partyDropdownLoading, pageField } = reducers;
 
     const values = { ...state.values }
 
+    const pageFieldForPageMaster = [
+        {
+            FormDate: "2023-10-01",
+            ToDate: "2023-10-18",
+            Distributor: "Shri Parasnath Agencies",
+            DistributorGSTIN: "27AEGPS2521A1ZX",
+            DistributorPAN: "AEGPS2521A",
+            CustomerName: "Shree Enterprises",
+            CustomerGSTIN: "27AUXPA2538A1ZS",
+            CustomerPAN: "AUXPA2538A",
+            Open: 1009540.5800000001,
+            Close: 1237495.58,
+            TaxFreeSale: 0,
+            TotalTaxableSale: 210999.62,
+            TaxableSale5: 119488.66,
+            TaxableSale12: 91510.95999999999,
+            TaxableSale18: 0,
+            GSTAmount5: 5974.4400000000005,
+            GSTAmount12: 10981.34,
+            GSTAmount18: 0,
+            TotalCreditNote: 0,
+            TotalDebitNote: 0,
+            TotalTCS: 0,
+
+        }
+    ];
+
+    const PageFieldMaster = [];
+
+    // Add properties from pageField to PageFieldMaster
+    const pageFieldKeys = Object.keys(pageFieldForPageMaster[0]);
+
+    for (let i = 0; i < pageFieldKeys.length; i++) {
+        const key = pageFieldKeys[i];
+        PageFieldMaster.push({
+            "ControlID": key,
+            "FieldLabel": key,
+            "InValidMsg": "",
+            "IsCompulsory": false,
+            "DefaultSort": 0,
+            "ListPageSeq": (i + 1).toString(), // Increment ListPageSeq
+            "ShowInListPage": true,
+            "ShowInDownload": true,
+            "ControlType": 1,
+            "FieldValidation": 40,
+            "DownloadDefaultSelect": true
+        });
+    }
+
+    console.log(JSON.stringify(PageFieldMaster));
 
     // userAccess useEffect
     useEffect(() => {
@@ -62,6 +114,8 @@ const PartyLedger = (props) => {
     }, [userAccess])
 
     useEffect(() => {
+        dispatch(commonPageFieldSuccess(null));
+        dispatch(commonPageField(pageId.PARTY_LEDGER));
         dispatch(GetVenderSupplierCustomer({ subPageMode, "PartyID": _cfunc.loginSelectedPartyID() }))
     }, [])
 
@@ -75,6 +129,21 @@ const PartyLedger = (props) => {
             return
         }
     }, [pdfdata])
+
+    useEffect(() => {
+        try {
+            debugger
+            if (tableData.length > 0) {
+                ExcelDownloadFunc({
+                    pageField,
+                    excelData: tableData, // Use tableData here
+                    excelFileName: "Party Ledger Report",
+                });
+
+            }
+
+        } catch (e) { }
+    }, [tableData]);
 
     const customerDropdownOptions = supplier.map((i) => ({
         value: i.id,
@@ -102,7 +171,7 @@ const PartyLedger = (props) => {
         })
     }
 
-    function goButtonHandler() {
+    async function goButtonHandler(e, btnMode) {
 
         if (_cfunc.loginSelectedPartyID() === 0) {
             customAlert({ Type: 3, Message: "Please Select Party" });
@@ -127,8 +196,14 @@ const PartyLedger = (props) => {
             "Party": isPartyLeger ? _cfunc.loginSelectedPartyID() : values.Party.value,
         });
 
-        let config = { ReportType: report.PartyLedger, jsonBody };
-        dispatch(getpdfReportdata(PartyLedgerReport_API, config));
+        if (btnMode === "excel") {
+            const resp = await PartyLedgerReport_API({ jsonBody });
+            setTableData(resp.Data)
+        }
+        else {
+            let config = { ReportType: report.PartyLedger, jsonBody };
+            dispatch(getpdfReportdata(PartyLedgerReport_API, config));
+        }
 
     }
 
@@ -159,11 +234,12 @@ const PartyLedger = (props) => {
         dispatch(GetVenderSupplierCustomerSuccess([]));
         setState((i) => {
             let a = { ...i }
-            a.values.Customer =''
+            a.values.Customer = ''
             a.values.Party = ''
             return a
         })
     }
+
 
     return (
         <React.Fragment>
@@ -175,7 +251,7 @@ const PartyLedger = (props) => {
 
                 <div className="px-2   c_card_filter text-black" >
                     <div className="row" >
-                        <Col sm={4} className="">
+                        <Col sm={3} className="">
                             <FormGroup className="mb- row mt-3 mb-2 " >
                                 <Label className="col-sm-4 p-2"
                                     style={{ width: "83px" }}>FromDate</Label>
@@ -189,7 +265,7 @@ const PartyLedger = (props) => {
                             </FormGroup>
                         </Col>
 
-                        <Col sm={4} className="">
+                        <Col sm={3} className="">
                             <FormGroup className="mb- row mt-3 mb-2" >
                                 <Label className="col-sm-4 p-2"
                                     style={{ width: "65px" }}>ToDate</Label>
@@ -251,13 +327,23 @@ const PartyLedger = (props) => {
                             </Col>
                         )}
 
-
+                        <Col sm="1" className="mt-3 ">
+                            <C_Button
+                                type="button"
+                                spinnerColor="white"
+                                // loading={btnMode === 2 && true}
+                                className="btn btn-primary"
+                                onClick={(e) => { goButtonHandler(e, "excel") }}
+                            >
+                                Excel
+                            </C_Button>
+                        </Col>
 
                         <Col sm="1" className="mt-3 ">
                             <C_Button
                                 type="button"
                                 className="btn btn-outline-primary border-1 font-size-12 text-center"
-                                onClick={goButtonHandler}
+                                onClick={(e) => { goButtonHandler(e, "print") }}
                                 loading={reducers.goBtnLoading} >
                                 Print</C_Button>
                         </Col>

@@ -1,6 +1,7 @@
 import Papa from 'papaparse';
 
 export function ExcelDownloadFunc({ pageField, excelData, excelFileName, mrpWise }) {
+    debugger
     // Define a flag to conditionally set ShowInListPage for the "MRP" column
     const shouldHideMRPColumn = mrpWise;
 
