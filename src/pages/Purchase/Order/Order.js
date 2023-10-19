@@ -262,12 +262,15 @@ const Order = (props) => {
                 if (subPageMode === url.ORDER_4) {
                     setSupplierSelect({
                         label: hasEditVal.CustomerName,
-                        value: hasEditVal.Customer
+                        value: hasEditVal.Customer,
+                        GSTIN: hasEditVal.CustomerGSTIN,
                     });
                 } else {
+
                     setSupplierSelect({
                         label: hasEditVal.SupplierName,
-                        value: hasEditVal.Supplier
+                        value: hasEditVal.Supplier,
+                        GSTIN: hasEditVal.SupplierGSTIN,
                     });
                 }
                 setdeliverydate(hasEditVal.DeliveryDate)
@@ -872,7 +875,7 @@ const Order = (props) => {
                                             e.target.value = e.target.value.replace(/^\.+/, '');
                                             e.target.value = e.target.value.replace(/^00+/, '0');
                                             let e_val = Number(e.target.value);
-                                            
+
 
                                             if (index1.DiscountType === 2) {// Discount type 2 represents "percentage"
                                                 if (e_val > 100) { // Limit the input to the range of 0 to 100
@@ -892,7 +895,7 @@ const Order = (props) => {
                                 </div>
                             </div>
                         </div>
-                       
+
                     </>
                 );
             },
