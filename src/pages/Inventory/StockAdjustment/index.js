@@ -438,7 +438,7 @@ const StockAdjustment = (props) => {
                 "Date": currentDate_ymd,
                 "Mode": subPageMode === url.STOCK_ADJUSTMENT ? 2 : 3,
                 "StockItems": flatStockTableArr,
-                "IsStockAdjustment": 1 //if stock  
+                "IsStockAdjustment": true //if stock  
             })
             console.log(flatStockTableArr);
 

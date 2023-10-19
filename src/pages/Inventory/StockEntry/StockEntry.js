@@ -527,10 +527,10 @@ const StockEntry = (props) => {
                     "Mode": 1,
                     "StockItems": filterData,
                     "IsAllStockZero": values.IsAllStockZero,
-                    "IsStockAdjustment": 0 //if stock  
+                    "IsStockAdjustment": false //if stock  
                 }
                 );
-                
+
                 dispatch(saveStockEntryAction({ jsonBody, btnId }));
             }
 
