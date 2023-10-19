@@ -363,10 +363,13 @@ const GRNAdd3 = (props) => {
             const isvalidMsg = [];
 
             const itemArray = grnItemTableList.map(index => {
-                let { UnitDetails, GSToption, MRPOps, GSTDropdown, MRPDetails, ...item } = index;
+                let { UnitDetails, GSToption, MRPOps, GSTDropdown, MRPDetails, PartyItemAssign, ...item } = index;
 
                 if (!Number(item.Rate) > 0) {// rate validation check
-                    isvalidMsg.push({[item.ItemName]:" Rate not available." })
+                    isvalidMsg.push({ [item.ItemName]: " Rate not available." })
+                }
+                if (!PartyItemAssign) {// rate validation check
+                    isvalidMsg.push({ [item.ItemName]: "Please Assign-Item." })
                 }
                 return {
                     ...item,

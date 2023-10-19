@@ -98,7 +98,7 @@ const Order = (props) => {
     const [poToDate, setpoToDate] = useState(currentDate_ymd);
     const [orderdate, setorderdate] = useState(currentDate_ymd);
 
-    const [supplierSelect, setsupplierSelect] = useState('');
+    const [supplierSelect, setSupplierSelect] = useState('');
     const [routeSelect, setRouteSelect] = useState({ value: '', label: "All" });
     const [itemSelect, setItemSelect] = useState({ value: '', label: "All" });
     const [itemSelectDropOptions, setitemSelectOptions] = useState([]);
@@ -117,7 +117,7 @@ const Order = (props) => {
     const [discountTypeAll, setDiscountTypeAll] = useState({ value: 2, label: " % " });
     const [discountDropOption] = useState([{ value: 1, label: "Rs" }, { value: 2, label: "%" }])
     const [changeAllDiscount, setChangeAllDiscount] = useState(false)
-    const [forceReload, setForceReload] = useState(false)
+
     // ****************************************************************************
 
     const {
@@ -227,7 +227,7 @@ const Order = (props) => {
         }
         setItemSelect({ value: '', label: "All" });
         setRouteSelect({ value: '', label: "All" });
-        setsupplierSelect('')
+        setSupplierSelect('')
         return () => {
             dispatch(getPartyListAPISuccess([]));
             dispatch(GetRoutesListSuccess([]));
@@ -260,12 +260,12 @@ const Order = (props) => {
                 setorderdate(hasEditVal.OrderDate)
 
                 if (subPageMode === url.ORDER_4) {
-                    setsupplierSelect({
+                    setSupplierSelect({
                         label: hasEditVal.CustomerName,
                         value: hasEditVal.Customer
                     });
                 } else {
-                    setsupplierSelect({
+                    setSupplierSelect({
                         label: hasEditVal.SupplierName,
                         value: hasEditVal.Supplier
                     });
@@ -317,7 +317,7 @@ const Order = (props) => {
             // setorderTypeSelect('');
             setisOpen_assignLink(false)
             setOrderItemTable([])
-            setsupplierSelect('');
+            setSupplierSelect('');
 
             // ??******************************+++++++++++++++++++++++++++++++++++++++++
             const liveMode = false  // temporary not working code thats why false use line no. 253 to 289
@@ -933,7 +933,7 @@ const Order = (props) => {
 
     function supplierOnchange(e) {
 
-        setsupplierSelect(e);
+        setSupplierSelect(e);
         if (subPageMode === url.ORDER_4) {
             dispatch(_act.getSupplierAddress(e.value))
             let Date = currentDate_ymd
@@ -963,7 +963,7 @@ const Order = (props) => {
     };
 
     function RouteOnChange(event) {
-        setsupplierSelect('')
+        setSupplierSelect('')
         dispatch(_act.GetVenderSupplierCustomer({ subPageMode, RouteID: event.value, "PartyID": commonPartyDropSelect.value }))
         setRouteSelect(event)
     }
@@ -1440,7 +1440,7 @@ const Order = (props) => {
                                                         <Change_Button
                                                             id={`change-btn${subPageMode}`}
                                                             onClick={(e) => {
-                                                                setsupplierSelect('')
+                                                                setSupplierSelect('')
                                                                 setGoBtnDissable(false)
                                                                 setSelecedItemWiseOrder(true)
                                                                 setOrderItemTable([])
@@ -1510,7 +1510,7 @@ const Order = (props) => {
                                                             className='text-blac1k'
                                                             disabled={goBtnloading}
                                                             onClick={() => {
-                                                                setsupplierSelect('')
+                                                                setSupplierSelect('')
                                                                 setGoBtnDissable(false)
                                                                 setSelecedItemWiseOrder(true)
                                                                 setOrderItemTable([])

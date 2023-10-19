@@ -308,19 +308,16 @@
 .sliding-text {
   display: inline-block;
   white-space: nowrap;
-  animation: slide 15s linear infinite;
+  animation: slideRightToLeft 20s linear infinite;
   transform: translateX(0);
   /* Initially centered */
 }
 
-@keyframes slide {
+@keyframes slideRightToLeft {
   0% {
-    transform: translateX(0);
-    /* Start from centered position */
+    transform: translateX(200%); /* Start off-screen to the right */
   }
-
   100% {
-    transform: translateX(250%);
-    /* Slide to the left */
+    transform: translateX(-100%); /* Move to off-screen to the left */
   }
 }

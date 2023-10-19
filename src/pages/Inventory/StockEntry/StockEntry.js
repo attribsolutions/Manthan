@@ -47,6 +47,7 @@ const StockEntry = (props) => {
     const fileds = {
         Date: currentDate_ymd,
         ItemName: "",
+        IsAllStockZero: false
     }
 
     const [state, setState] = useState(initialFiledFunc(fileds))
@@ -134,6 +135,14 @@ const StockEntry = (props) => {
             const a = { ...i }
             a.values.Date = date;
             a.hasValid.Date.valid = true
+            return a
+        })
+    }
+    function isAllStockZero_Onchange(e) {
+        setState((i) => {
+            const a = { ...i }
+            a.hasValid.IsAllStockZero.valid = true
+            a.values.IsAllStockZero = e.target.checked;
             return a
         })
     }
@@ -320,13 +329,13 @@ const StockEntry = (props) => {
         }
 
         try {
-            
+
             // Fetch data from the API
             const apiResponse = await StockEntry_GO_button_api_For_Item(values.ItemName.value);
 
             // Convert API response to desired format
             const convert_ApiResponse = apiResponse.Data.InvoiceItems.map((i) => {
-                
+
                 const UnitDroupDownOptions = i.ItemUnitDetails.map((unit) => ({
                     label: unit.UnitName,
                     value: unit.Unit,
@@ -429,6 +438,23 @@ const StockEntry = (props) => {
         setTableArr(newArr)
     }
 
+    function partyOnChngeButtonHandler() {
+        dispatch(goButtonPartyItemAddPageSuccess([]))
+        setTableArr([])
+        setState((i) => {
+            const a = { ...i }
+            a.values.ItemName = '';
+            a.hasValid.ItemName.valid = true
+            return a
+        })
+    }
+
+    function goButtonHandler() {
+        dispatch(goButtonPartyItemAddPage({
+            jsonBody: JSON.stringify({ ..._cfunc.loginJsonBody(), PartyID: _cfunc.loginSelectedPartyID() })
+        }))
+    }
+
     const SaveHandler = async (event) => {
 
         event.preventDefault();
@@ -500,31 +526,18 @@ const StockEntry = (props) => {
                     "Date": values.Date,
                     "Mode": 1,
                     "StockItems": filterData,
+                    "IsAllStockZero": values.IsAllStockZero,
                     "IsStockAdjustment": 0 //if stock  
                 }
                 );
+                
                 dispatch(saveStockEntryAction({ jsonBody, btnId }));
             }
 
         } catch (e) { _cfunc.btnIsDissablefunc({ btnId, state: false }) }
     };
 
-    function partyOnChngeButtonHandler() {
-        dispatch(goButtonPartyItemAddPageSuccess([]))
-        setTableArr([])
-        setState((i) => {
-            const a = { ...i }
-            a.values.ItemName = '';
-            a.hasValid.ItemName.valid = true
-            return a
-        })
-    }
 
-    function goButtonHandler() {
-        dispatch(goButtonPartyItemAddPage({
-            jsonBody: JSON.stringify({ ..._cfunc.loginJsonBody(), PartyID: _cfunc.loginSelectedPartyID() })
-        }))
-    }
 
     if (!(userPageAccessState === '')) {
         return (
@@ -539,7 +552,7 @@ const StockEntry = (props) => {
                         <div className="px-3 c_card_filter header text-black mb-1" >
 
                             <Row>
-                                <Col sm="6">
+                                <Col sm="3">
                                     <FormGroup className="row mt-2" >
                                         <Label className="col-sm-1 p-2"
                                             style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.Date}  </Label>
@@ -553,6 +566,24 @@ const StockEntry = (props) => {
                                     </FormGroup>
                                 </Col >
 
+                                <Col sm="3">
+                                    <FormGroup className="row mt-2" >
+                                        <Label className="col-sm-1 p-2"
+                                            style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.IsAllStockZero}  </Label>
+
+                                        <Col sm={7} style={{ marginTop: '5px' }} >
+                                            <div className="form-check form-switch form-switch-md mb-3">
+                                                <Input type="checkbox" className="form-check-input"
+                                                    checked={values.IsAllStockZero}
+                                                    name="IsAllStockZero"
+                                                    onChange={isAllStockZero_Onchange}
+
+                                                />
+                                            </div>
+                                        </Col>
+
+                                    </FormGroup>
+                                </Col >
                                 <Col sm="6">
                                     <FormGroup className=" row mt-2 " >
                                         <Label className="col-sm-1 p-2"
@@ -589,7 +620,7 @@ const StockEntry = (props) => {
 
                             </Row>
                         </div>
-                        <div style={{ color: "red", fontSize: "18px" }} className="sliding-text" >  Warning: If new stock is added then the previous whole item stock will become zero.  </div>
+                        <div style={{ color: "red", fontSize: "18px" }} className="sliding-text " >  Warning: If new stock is added then the previous whole item stock will become zero.  </div>
 
                         <ToolkitProvider
                             keyField={"id"}
