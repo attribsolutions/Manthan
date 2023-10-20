@@ -490,6 +490,14 @@ const StockEntry = (props) => {
             return _cfunc.btnIsDissablefunc({ btnId, state: false })
         }
 
+        if (values.IsAllStockZero) {
+            customAlert({
+                Type: 4,
+                Message: "If new stock is added then the previous whole item stock will become zero."
+            })
+            return _cfunc.btnIsDissablefunc({ btnId, state: false })
+        }
+
         const invalidMsg1 = []
 
         ReturnItems.forEach((i) => {
@@ -620,7 +628,7 @@ const StockEntry = (props) => {
 
                             </Row>
                         </div>
-                        <div style={{ color: "red", fontSize: "18px" }} className="sliding-text " >  Warning: If new stock is added then the previous whole item stock will become zero.  </div>
+                        {values.IsAllStockZero && <div style={{ color: "red", fontSize: "18px" }} className="sliding-text " >  Warning: If new stock is added then the previous whole item stock will become zero.  </div>}
 
                         <ToolkitProvider
                             keyField={"id"}
