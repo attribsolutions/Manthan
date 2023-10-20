@@ -43,6 +43,9 @@ const ImportExcelFieldMap = (props) => {
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState('');
     const [partySelect, SetPartySelect] = useState("")
+    const [SortTable, setSortTable] = useState([])
+
+
 
     const fileds = {
         id: "",
@@ -143,12 +146,15 @@ const ImportExcelFieldMap = (props) => {
             debugger
             if (a.Sequence === null && b.Sequence !== null) {
                 return 1; // 'a' with id 0 comes after 'b' with a non-zero id
-            } else if (a.Sequence !==null && b.Sequence === null) {
+            } else if (a.Sequence !== null && b.Sequence === null) {
                 return -1; // 'a' with a non-zero id comes before 'b' with id 0
             } else {
                 return a.Sequence - b.Sequence; // Sort other values in ascending order by id
             }
         });
+
+
+        setSortTable(goButtonItem)
         dispatch(BreadcrumbShowCountlabel(`${"Count"} :${goButtonItem.length}`))
     }, [goButtonItem])
 
@@ -200,7 +206,7 @@ const ImportExcelFieldMap = (props) => {
         {
             text: "Sequence",
             dataField: "Sequence",
-            sort: true,
+            // sort: true,
             formatter: (cellContent, row) => (
                 <>
                     <div style={{ justifyContent: 'center' }} >
@@ -331,7 +337,7 @@ const ImportExcelFieldMap = (props) => {
                     <div >
                         <ToolkitProvider
                             keyField="id"
-                            data={goButtonItem}
+                            data={SortTable}
                             columns={pagesListColumns}
 
                             search
