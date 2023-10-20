@@ -210,8 +210,8 @@ const ImportExcelPartyMap = (props) => {
     }
 
     async function SaveHandler(event) {
+        
         event.preventDefault();
-
 
         async function funcForParty() {
             let jsonArr = []
@@ -383,7 +383,7 @@ const ImportExcelPartyMap = (props) => {
                     <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
                         {(goButtonArr.length > 0) &&
                             <SaveButton
-                                onclick={SaveHandler}
+                                onClick={SaveHandler}
                                 pageMode={pageMode}
                                 userAcc={userPageAccessState}
                                 loading={saveBtnloading}
