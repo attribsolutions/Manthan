@@ -136,7 +136,19 @@ const ImportExcelFieldMap = (props) => {
     }, [postMsg])
 
 
+
     useEffect(() => {
+        debugger
+        goButtonItem.sort((a, b) => {
+            debugger
+            if (a.Sequence === null && b.Sequence !== null) {
+                return 1; // 'a' with id 0 comes after 'b' with a non-zero id
+            } else if (a.Sequence !==null && b.Sequence === null) {
+                return -1; // 'a' with a non-zero id comes before 'b' with id 0
+            } else {
+                return a.Sequence - b.Sequence; // Sort other values in ascending order by id
+            }
+        });
         dispatch(BreadcrumbShowCountlabel(`${"Count"} :${goButtonItem.length}`))
     }, [goButtonItem])
 
@@ -156,6 +168,12 @@ const ImportExcelFieldMap = (props) => {
             text: "Field Validation",
             dataField: "FieldValidationName",
         },
+        {
+            text: "Compulsory",
+            dataField: "IsCompulsory",
+
+        },
+
         {
             text: "Related Key Field",
             dataField: "Value",
@@ -178,7 +196,35 @@ const ImportExcelFieldMap = (props) => {
             ),
         },
 
+
+        {
+            text: "Sequence",
+            dataField: "Sequence",
+            sort: true,
+            formatter: (cellContent, row) => (
+                <>
+                    <div style={{ justifyContent: 'center' }} >
+                        <Col>
+                            <FormGroup className=" col col-sm-4 ">
+                                <Input
+                                    type="text"
+                                    key={`Value-${row.id}`}
+                                    defaultValue={cellContent}
+                                    onChange={(e) => row.Sequence = e.target.value}
+                                />
+                            </FormGroup>
+                        </Col>
+                    </div>
+
+                </>
+            ),
+        }
+
     ];
+    const defaultSorted = [{
+        dataField: "Sequence",
+        // order: 'desc'
+    }];
 
     async function goButtonHandler() {
 
@@ -199,9 +245,9 @@ const ImportExcelFieldMap = (props) => {
 
         let jsonArr = []
         const invalid = []
-        let partyId = ((_cfunc.loginIsSCMCompany() === 1)) ? _cfunc.loginPartyID() : partySelect.value;
+        let partyId = _cfunc.loginUserAdminRole() ? partySelect.value : _cfunc.loginPartyID()
         goButtonItem.forEach(i => {
-
+            debugger
             if ((((i.Value === '') || (i.Value === null)) && (i.IsCompulsory === true))) {
                 invalid.push({ [i.FieldName]: "this filed Requird." })
             }
@@ -213,6 +259,7 @@ const ImportExcelFieldMap = (props) => {
                     Company: _cfunc.loginCompanyID(),
                     CreatedBy: _cfunc.loginUserID(),
                     UpdatedBy: _cfunc.loginUserID(),
+                    Sequence: i.Sequence
                 }
                 jsonArr.push(obj)
             }
@@ -222,6 +269,7 @@ const ImportExcelFieldMap = (props) => {
             customAlert({ Type: 3, Message: invalid })
             return
         } else {
+
             const jsonBody = JSON.stringify(jsonArr);
             dispatch(save_ImportFiledMap({ jsonBody }));
         }
@@ -268,7 +316,7 @@ const ImportExcelFieldMap = (props) => {
                                         </Col>
                                     </FormGroup>
                                 </Col>
-                                <Col sm="1" className="mb-1">
+                                <Col sm="1" className="mb-2">
                                     {(goButtonItem.length === 0) ?
                                         <Go_Button
                                             loading={goBtnLoading}
@@ -285,12 +333,14 @@ const ImportExcelFieldMap = (props) => {
                             keyField="id"
                             data={goButtonItem}
                             columns={pagesListColumns}
+
                             search
                         >
                             {toolkitProps => (
                                 <React.Fragment>
                                     <div className="table mt-1">
                                         <BootstrapTable
+                                            // defaultSorted={defaultSorted}
                                             bordered={true}
                                             striped={false}
                                             id="table_Arrow"
