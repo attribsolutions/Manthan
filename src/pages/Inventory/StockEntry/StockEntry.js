@@ -460,7 +460,7 @@ const StockEntry = (props) => {
         event.preventDefault();
 
         const btnId = event.target.id
-
+        let isConfirmed = ""
         const ReturnItems = TableArr.map((index) => {
 
             return ({
@@ -486,14 +486,6 @@ const StockEntry = (props) => {
             customAlert({
                 Type: 4,
                 Message: " Please Enter One Item Quantity"
-            })
-            return _cfunc.btnIsDissablefunc({ btnId, state: false })
-        }
-
-        if (values.IsAllStockZero) {
-            customAlert({
-                Type: 4,
-                Message: "If new stock is added then the previous whole item stock will become zero."
             })
             return _cfunc.btnIsDissablefunc({ btnId, state: false })
         }
@@ -539,7 +531,16 @@ const StockEntry = (props) => {
                 }
                 );
 
-                dispatch(saveStockEntryAction({ jsonBody, btnId }));
+                if (values.IsAllStockZero) {
+                    isConfirmed = await customAlert({
+                        Type: 7,
+                        Message: "If new stock is added then the previous whole item stock will become zero.",
+                    });
+                }
+                if ((isConfirmed) || (!values.IsAllStockZero)) {
+                    dispatch(saveStockEntryAction({ jsonBody, btnId }));
+                };
+
             }
 
         } catch (e) { _cfunc.btnIsDissablefunc({ btnId, state: false }) }
