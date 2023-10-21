@@ -47,11 +47,20 @@ export const readExcelFile = async ({ file, compareParameter }) => {
       invalidMsg.push(`Import filed Not Map`)
     }
     jsonResult.forEach((r1, k) => {
-     
+
       comparefilter.forEach((c1) => {
-        if (c1.ControlTypeName === "Date") { r1[c1.Value] = date_ymd_func(r1[c1.Value]) }
-        const regExp = RegExp(c1.RegularExpression)
-        if (!(regExp.test(r1[c1.Value]))) {
+        if (c1.ControlTypeName === "Date") {
+          r1[c1.Value] = date_ymd_func(r1[c1.Value])
+        };
+        const regExp = RegExp(c1.RegularExpression);
+        debugger
+        if ((r1[c1.Value]) === "CustomerGSTTin") {
+          debugger
+        }
+        if (!c1.IsCompulsory && (r1[c1.Value] === '' || r1[c1.Value] === null || r1[c1.Value] === undefined)) {
+
+        }
+        else if (!(regExp.test(r1[c1.Value]))) {
           invalidMsg.push(`${c1.Value} :${r1[c1.Value]} is invalid Format`)
         }
       })
@@ -118,3 +127,55 @@ export async function fileDetails({ compareParameter = [], readjson = [] }) {
   return { fileFiled, invoice, invoiceDate, amount, invoiceNO, partyNO }
 }
 
+
+
+export async function dounloadDummyFormat_handler(jsonData) {
+
+
+  // / Extract unique column names for the header
+  const filteredColumns = jsonData.filter(entry => entry.Value !== '' || null);
+  filteredColumns.sort((a, b) => {
+    
+    if (a.Sequence === null && b.Sequence !== null) {
+      return 1; // 'a' with id 0 comes after 'b' with a non-zero id
+    } else if (a.Sequence !== null && b.Sequence === null) {
+      return -1; // 'a' with a non-zero id comes before 'b' with id 0
+    } else {
+      return a.Sequence - b.Sequence; // Sort other values in ascending order by id
+    }
+  });
+
+  const columnNames = Array.from(new Set(filteredColumns.map(entry => entry.Value)));
+  
+  // Create an empty data array with the same number of columns
+  const emptyData = columnNames.map(_ => '');
+
+  // Create a worksheet with only the header and an empty data row
+  const ws = XLSX.utils.aoa_to_sheet([columnNames, emptyData]);
+
+  // Set the background color for the "IsCompulsory" header cell to red
+  const headerCellStyle = {
+    fill: { fgColor: { rgb: "FFFF0000" } }, // Red background color
+  };
+
+  // Find the column index for "IsCompulsory"
+  const isCompulsoryColumnIndex = columnNames.indexOf("IsCompulsory");
+
+  // Apply the style to the "IsCompulsory" header cell
+  if (isCompulsoryColumnIndex !== -1) {
+    ws[XLSX.utils.encode_cell({ r: 0, c: isCompulsoryColumnIndex })] = {
+      v: columnNames[isCompulsoryColumnIndex],
+      s: headerCellStyle,
+    };
+  }
+
+  // Create a workbook
+  const wb = XLSX.utils.book_new();
+
+  // Append the worksheet to the workbook
+  XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+
+  // Save the workbook as an Excel file
+  XLSX.writeFile(wb, 'download Dummy Format.xlsx');
+
+}

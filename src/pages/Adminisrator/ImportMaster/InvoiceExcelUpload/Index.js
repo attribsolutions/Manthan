@@ -7,7 +7,7 @@ import {
     Row,
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
-import {commonPageFieldSuccess, } from "../../../../store/actions";
+import { commonPageFieldSuccess, } from "../../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
 import * as mode from "../../../../routes/PageMode";
@@ -15,7 +15,7 @@ import * as _cfunc from "../../../../components/Common/CommonFunction";
 
 import { getPartyListAPI, getPartyListAPISuccess } from "../../../../store/Administrator/PartyRedux/action";
 import Dropzone from "react-dropzone"
-import { fileDetails, readExcelFile } from "./readFile";
+import { dounloadDummyFormat_handler, fileDetails, readExcelFile } from "./readFile";
 import {
     GoButton_ImportFiledMap_Add,
     GoButton_ImportFiledMap_AddSuccess
@@ -254,10 +254,11 @@ const InvoiceExcelUpload = (props) => {
                 inv.forEach(ele => {
                     parentObj = {
                         "CustomerGSTTin": ele[parArr.CustomerGSTTin] ? ele[parArr.CustomerGSTTin] : '',
+                        "TCSAmount": ele[parArr.TCSAmount] ? ele[parArr.TCSAmount] : 0,
                         "GrandTotal": ele[parArr.GrandTotal] ? ele[parArr.GrandTotal] : '',
                         "RoundOffAmount": ele[parArr.RoundOffAmount] ? ele[parArr.RoundOffAmount] : 0,
                         "InvoiceNumber": ele[parArr.InvoiceNumber] ? ele[parArr.InvoiceNumber] : '',
-                        "FullInvoiceNumber": ele[parArr.FullInvoiceNumber] ? ele[parArr.FullInvoiceNumber] : '',
+                        "FullInvoiceNumber": ele[parArr.InvoiceNumber] ? ele[parArr.InvoiceNumber] : '',
                         "Customer": ele[parArr.Customer] ? ele[parArr.Customer] : '',
                         "Party": _cfunc.loginPartyID(),
                         CreatedBy: _cfunc.loginUserID(),
@@ -268,9 +269,9 @@ const InvoiceExcelUpload = (props) => {
                     invoiceItems.push({
                         "Item": ele[parArr.Item] ? ele[parArr.Item] : '',
                         "Unit": ele[parArr.Unit] ? ele[parArr.Unit] : '',
-                        "BatchCode": ele[parArr.BatchCode] ? ele[parArr.BatchCode] : '',
                         "Quantity": ele[parArr.Quantity] ? ele[parArr.Quantity] : 0,
-                        "BatchDate": ele[parArr.BatchDate] ? ele[parArr.BatchDate] : '',
+                        "BatchDate": ele[parArr.BatchDate] ? ele[parArr.BatchDate] : null,
+                        "BatchCode": ele[parArr.BatchCode] ? ele[parArr.BatchCode] : 0,
                         "BaseUnitQuantity": ele[parArr.BaseUnitQuantity] ? ele[parArr.BaseUnitQuantity] : '',
                         "LiveBatch": ele[parArr.LiveBatch] ? ele[parArr.LiveBatch] : '',
                         "MRP": ele[parArr.MRP] ? ele[parArr.MRP] : '',
@@ -288,10 +289,14 @@ const InvoiceExcelUpload = (props) => {
                         "SGSTPercentage": ele[parArr.SGSTPercentage] ? ele[parArr.SGSTPercentage] : 0,
                         "IGSTPercentage": ele[parArr.IGSTPercentage] ? ele[parArr.IGSTPercentage] : 0,
                         "Amount": ele[parArr.Amount] ? ele[parArr.Amount] : 0,
-                        "TaxType": ele[parArr.TaxType] ? ele[parArr.TaxType] : '',
                         "DiscountType": ele[parArr.DiscountType] ? ele[parArr.DiscountType] : '',
                         "Discount": ele[parArr.Discount] ? ele[parArr.Discount] : 0,
                         "DiscountAmount": ele[parArr.DiscountAmount] ? ele[parArr.DiscountAmount] : 0,
+
+                        "TaxType": "GST",
+                        "QtyInBox": ele[parArr.QtyInBox] ? ele[parArr.QtyInBox] : 0,
+                        "QtyInKg": ele[parArr.QtyInKg] ? ele[parArr.QtyInKg] : 0,
+                        "QtyInNo": ele[parArr.QtyInNo] ? ele[parArr.QtyInNo] : 0,
 
                     })
                 })
@@ -373,6 +378,7 @@ const InvoiceExcelUpload = (props) => {
                                                 :
                                                 <div >
                                                     <h4 className="pt-4 pb-4 text-primary" >{"Upload Your Excel."}</h4>
+                                                    <spam onClick={() => dounloadDummyFormat_handler(compareParameter)}>Download Dumy Format</spam>
                                                 </div>}
                                         </>
                                 }
