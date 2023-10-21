@@ -30,6 +30,9 @@ export const pageHeder = (doc, data) => {
     } else {
         doc.text('TAX INVOICE', 200, 45,)
     }
+    doc.setFontSize(9)
+    doc.text('Original For Buyer', 33, 28,)
+
 
 }
 
