@@ -76,8 +76,8 @@ const ImportExcelFieldMap = (props) => {
         pageField: state.CommonPageFieldReducer.pageField,
         goButtonItem: state.ImportExportFieldMap_Reducer.addGoButton,
 
-        partyList: state.PartyMasterReducer.partyList,
-        partyDropDownLoading: state.PartyMasterReducer.goBtnLoading,
+        partyList: state.CommonPartyDropdownReducer.commonPartyDropdown,
+        partyDropDownLoading: state.CommonPartyDropdownReducer.partyDropdownLoading,
 
     }));
 
@@ -85,7 +85,7 @@ const ImportExcelFieldMap = (props) => {
         const page_Id = pageId.IMPORT_EXCEL_FIELD_MAP
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
-        dispatch(getPartyListAPI());
+        // dispatch(getPartyListAPI());
         dispatch(GoButton_ImportFiledMap_AddSuccess([]));
         if (!userAdminRole) { goButtonHandler() }
     }, []);

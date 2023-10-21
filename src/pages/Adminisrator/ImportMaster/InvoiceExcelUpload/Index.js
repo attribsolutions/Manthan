@@ -57,8 +57,8 @@ const InvoiceExcelUpload = (props) => {
         postMsg: state.ImportExcelPartyMap_Reducer.invoiceExcelUploadMsg,
         saveBtnLoading: state.ImportExcelPartyMap_Reducer.invoiceUploadSaveLoading,
 
-        partyList: state.PartyMasterReducer.partyList,
-        partyDropDownLoading: state.PartyMasterReducer.goBtnLoading,
+        partyList: state.CommonPartyDropdownReducer.commonPartyDropdown,
+        partyDropDownLoading: state.CommonPartyDropdownReducer.partyDropdownLoading,
 
         compareParameter: state.ImportExportFieldMap_Reducer.addGoButton,
         compareParamLoading: state.ImportExportFieldMap_Reducer.goBtnLoading,
@@ -67,7 +67,7 @@ const InvoiceExcelUpload = (props) => {
     debugger
     useEffect(() => {
         dispatch(GoButton_ImportFiledMap_AddSuccess([]));
-        dispatch(getPartyListAPI());
+        // dispatch(getPartyListAPI());
         if (!userAdminRole) {
             goButtonHandler()
         }
