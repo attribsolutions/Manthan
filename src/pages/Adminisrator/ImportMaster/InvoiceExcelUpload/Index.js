@@ -15,7 +15,7 @@ import * as _cfunc from "../../../../components/Common/CommonFunction";
 
 import { getPartyListAPI, getPartyListAPISuccess } from "../../../../store/Administrator/PartyRedux/action";
 import Dropzone from "react-dropzone"
-import { dounloadDummyFormat_handler, fileDetails, readExcelFile } from "./readFile";
+import { dounloadDummyFormat_handler, downloadDummyFormatHandler, fileDetails, readExcelFile } from "./readFile";
 import {
     GoButton_ImportFiledMap_Add,
     GoButton_ImportFiledMap_AddSuccess
@@ -64,7 +64,7 @@ const InvoiceExcelUpload = (props) => {
         compareParamLoading: state.ImportExportFieldMap_Reducer.goBtnLoading,
         userAccess: state.Login.RoleAccessUpdateData,
     }));
-
+    debugger
     useEffect(() => {
         dispatch(GoButton_ImportFiledMap_AddSuccess([]));
         dispatch(getPartyListAPI());
@@ -125,6 +125,7 @@ const InvoiceExcelUpload = (props) => {
 
 
     function goButtonHandler() {
+
         let partyId = (!userAdminRole) ? _cfunc.loginPartyID() : partySelect.value;
         const jsonBody = JSON.stringify({
             PartyID: partyId,
@@ -320,70 +321,79 @@ const InvoiceExcelUpload = (props) => {
                 <form noValidate>
                     <div className="page-content">
 
-                        <div className="px-2 c_card_header text-black" >
-                            <div className="px-2   c_card_filter text-black" >
-                                {
-                                    userAdminRole ? <>
-                                        {/* <PartyDropdown_Common pageMode={pageMode}
-                                            partySelect={partySelect}
-                                            setPartyFunc={(e) => SetPartySelect(e)}
-                                            goButtonHandler={goButtonHandler}
-                                        /> */}
+                        <div className="px-2   c_card_filter text-black" >
 
-                                        <div className="row pt-2">
-                                            <Col sm="5">
-                                                <FormGroup className="row px-1">
-                                                    <Label className="col-sm-5 p-2" style={{ width: "83px" }}>
-                                                        Party
-                                                    </Label>
-                                                    <Col sm="6">
-                                                        <C_Select
-                                                            value={partySelect}
-                                                            isSearchable={true}
-                                                            isLoading={partyDropDownLoading}
-                                                            className="react-dropdown"
-                                                            classNamePrefix="dropdown"
-                                                            options={partyList.map((data) => ({
-                                                                value: data.id,
-                                                                label: data.Name,
-                                                            }))}
+                            {userAdminRole && <div className="row pt-2">
+                                <Col sm="5">
+                                    <FormGroup className="row px-1">
+                                        <Label className="col-sm-5 p-2" style={{ width: "83px" }}>
+                                            Party
+                                        </Label>
+                                        <Col sm="6">
+                                            <C_Select
+                                                value={partySelect}
+                                                isSearchable={true}
+                                                isLoading={partyDropDownLoading}
+                                                className="react-dropdown"
+                                                classNamePrefix="dropdown"
+                                                options={partyList.map((data) => ({
+                                                    value: data.id,
+                                                    label: data.Name,
+                                                }))}
 
-                                                            onChange={(e) => { SetPartySelect(e) }}
-                                                            styles={{ menu: (provided) => ({ ...provided, zIndex: 2 }) }}
-                                                        />
-                                                    </Col>
-                                                </FormGroup>
-                                            </Col>
-                                            <Col sm="1" className="mb-1">
-                                                <Go_Button
-                                                    // loading={reducers.loading}
-                                                    onClick={goButtonHandler} />
-                                            </Col>
+                                                onChange={(e) => { SetPartySelect(e) }}
+                                                styles={{ menu: (provided) => ({ ...provided, zIndex: 2 }) }}
+                                            />
+                                        </Col>
+                                    </FormGroup>
+                                </Col>
+                                <Col sm="1" className="mb-2">
+                                    <Go_Button
+                                        // loading={reducers.loading}
+                                        onClick={goButtonHandler} />
+                                </Col>
+                            </div>}
+                        </div>
+
+                        <div className="px-2 c_card_header text-black mt-2" >
+
+                            {(compareParamLoading) ?
+                                <div className="row ">
+                                    <div className="d-flex justify-content-start p-2 ">
+                                        <div>Please wait Downloading field Details. other wise check filed mapping </div>
+                                        <div >
+                                            <div className="dot-pulse">
+                                                <div className="bounce1"></div>
+                                                <div className="bounce2"></div>
+                                                <div className="bounce3"></div>
+                                            </div>
                                         </div>
-                                    </>
-                                        : <>
-                                            {(!(compareParameter.length > 0)) ?
-                                                <div className="row ">
-                                                    <div className="d-flex justify-content-start p-2 ">
-                                                        <div>Please wait Downloading field Details. other wise check filed mapping </div>
-                                                        <div >
-                                                            <div className="dot-pulse">
-                                                                <div className="bounce1"></div>
-                                                                <div className="bounce2"></div>
-                                                                <div className="bounce3"></div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                :
-                                                <div >
-                                                    <h4 className="pt-4 pb-4 text-primary" >{"Upload Your Excel."}</h4>
-                                                    <spam onClick={() => dounloadDummyFormat_handler(compareParameter)}>Download Dumy Format</spam>
-                                                </div>}
-                                        </>
-                                }
+                                    </div>
+                                </div>
+                                :
+                                compareParameter.length > 0 ? < Row >
+                                    <Col sm={10}>
+                                        <h4 className="pt-4 pb-4 text-primary" >{"Upload Your Excel."}</h4>
+                                    </Col>
+                                    <Col sm={2} className="mt-4">
+                                        <span className="mt-2 text-primary"
+                                            style={{ cursor: "pointer" }}
+                                            onClick={() => downloadDummyFormatHandler(compareParameter)}
+                                        >
+                                            Download Format
+                                        </span>
+                                    </Col>
 
-                            </div>
+                                </Row> : null
+
+                                // <div >
+                                //     <h4 className="pt-4 pb-4 text-primary" >{"Upload Your Excel."}</h4>
+                                //     <spam onClick={() => dounloadDummyFormat_handler(compareParameter)}>Download Dumy Format</spam>
+                                // </div>}
+                            }
+
+
+
 
                         </div>
 

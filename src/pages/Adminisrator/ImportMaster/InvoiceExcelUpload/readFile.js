@@ -129,7 +129,7 @@ export async function fileDetails({ compareParameter = [], readjson = [] }) {
 
 
 
-export async function dounloadDummyFormat_handler(jsonData) {
+export async function downloadDummyFormatHandler(jsonData) {
 
 
   // / Extract unique column names for the header
@@ -176,6 +176,6 @@ export async function dounloadDummyFormat_handler(jsonData) {
   XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
 
   // Save the workbook as an Excel file
-  XLSX.writeFile(wb, 'download Dummy Format.xlsx');
+  XLSX.writeFile(wb, 'download  Format.xlsx');
 
 }
