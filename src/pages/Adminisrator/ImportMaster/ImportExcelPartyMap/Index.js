@@ -38,6 +38,8 @@ import {
     save_ImportExcelPartyMap_Sucess
 } from "../../../../store/Administrator/ImportExcelPartyMapRedux/action";
 import * as _cfunc from "../../../../components/Common/CommonFunction";
+import NewCommonPartyDropdown from "../../../../components/Common/NewCommonPartyDropdown";
+
 
 const ImportExcelPartyMap = (props) => {
 
@@ -198,7 +200,7 @@ const ImportExcelPartyMap = (props) => {
         const btnId = event.target.id
         try {
             btnIsDissablefunc({ btnId, state: true })
-            let partyId = (((loginIsSCMCompany()) === 1)) ? loginPartyID() : values.Party.value;
+            let partyId = _cfunc.loginSelectedPartyID();
             let mapType = values.MapType.value;
 
             dispatch(GoButton_ImportExcelPartyMap({ partyId, mapType }))
@@ -210,7 +212,7 @@ const ImportExcelPartyMap = (props) => {
     }
 
     async function SaveHandler(event) {
-        
+
         event.preventDefault();
 
         async function funcForParty() {
@@ -281,6 +283,7 @@ const ImportExcelPartyMap = (props) => {
                 <PageLoadingSpinner isLoading={((partyDropDownLoading && !(loginIsSCMCompany() === 1)) || !pageField)} />
 
                 <div className="page-content">
+                    <NewCommonPartyDropdown />
                     <div className="px-2 c_card_header text-black" >
                         <div className="px-2   c_card_filter text-black" >
                             <form onSubmit={(event) => goButtonHandler(event)} noValidate>
