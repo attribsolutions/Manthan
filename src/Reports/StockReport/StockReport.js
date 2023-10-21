@@ -253,7 +253,7 @@ const StockReport = (props) => {
 		};
 
 		// Find the index of the "Unit" column
-		const unitColumnIndex = PageListColumns.findIndex(column => column.dataField === "Unit");
+		const unitColumnIndex = PageListColumns.findIndex(column => column.dataField === "ActualQty");
 
 		// Insert the "MRP" column right before the "Unit" column
 		if (unitColumnIndex !== -1) {
