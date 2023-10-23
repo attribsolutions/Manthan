@@ -5,55 +5,46 @@ import {
   commonPageFieldList,
   commonPageFieldListSuccess,
 } from "../../../store/actions";
-import GroupMaster from "./CentralServiceItemMaster";
-import {
-  deleteGrouplistSuccess,
-  delete_GroupList_ID,
-  editGroupID,
-  getGroupList,
-  getGroupListSuccess,
-  saveGroupMaster_Success,
-  updateGroupIDSuccess
-} from "../../../store/Administrator/GroupRedux/action";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
 import { PageLoadingSpinner } from "../../../components/Common/CommonButton";
 import CentralServiceItem from "./CentralServiceItemMaster";
+import { deleteCentralServiceItemListSuccess, delete_CentralServiceItemList_ID, editCentralServiceItemID, getCentralServiceItemList, getCentralServiceItemSuccess, saveCentralServiceItem_Success, updateCentralServiceItemIDSuccess } from "../../../store/Administrator/CentralServiceItemRedux/action";
 
 const CentralServiceItemList = () => {
 
   const dispatch = useDispatch();
   const reducers = useSelector(
     (state) => ({
-      listBtnLoading: state.GroupReducer.listBtnLoading,
-      goBtnLoading: state.GroupReducer.goBtnLoading,
-      tableList: state.GroupReducer.groupList,
-      editData: state.GroupReducer.editData,
-      updateMsg: state.GroupReducer.updateMsg,
-      deleteMsg: state.GroupReducer.deleteMsg,
-      postMsg: state.GroupReducer.postMsg,
+      listBtnLoading: state.CentralServiceItemReducer.listBtnLoading,
+      goBtnLoading: state.CentralServiceItemReducer.goBtnLoading,
+      tableList: state.CentralServiceItemReducer.groupList,
+      editData: state.CentralServiceItemReducer.editData,
+      updateMsg: state.CentralServiceItemReducer.updateMsg,
+      deleteMsg: state.CentralServiceItemReducer.deleteMsg,
+      postMsg: state.CentralServiceItemReducer.postMsg,
       userAccess: state.Login.RoleAccessUpdateData,
       pageField: state.CommonPageFieldReducer.pageFieldList
     })
   );
 
   const action = {
-    getList: getGroupList,
-    editId: editGroupID,
-    deleteId: delete_GroupList_ID,
-    postSucc: saveGroupMaster_Success,
-    updateSucc: updateGroupIDSuccess,
-    deleteSucc: deleteGrouplistSuccess
+    getList: getCentralServiceItemList,
+    editId: editCentralServiceItemID,
+    deleteId: delete_CentralServiceItemList_ID,
+    postSucc: saveCentralServiceItem_Success,
+    updateSucc: updateCentralServiceItemIDSuccess,
+    deleteSucc: deleteCentralServiceItemListSuccess
   }
 
   useEffect(() => {
     const page_Id = pageId.CENTRAL_SERVICE_ITEM_LIST
     dispatch(commonPageFieldListSuccess(null))
     dispatch(commonPageFieldList(page_Id))
-    dispatch(getGroupList());
+    dispatch(getCentralServiceItemList());
 
     return () => {
-      dispatch(getGroupListSuccess([]));
+      dispatch(getCentralServiceItemSuccess([]));
       dispatch(commonPageFieldListSuccess(null))
     }
   }, []);

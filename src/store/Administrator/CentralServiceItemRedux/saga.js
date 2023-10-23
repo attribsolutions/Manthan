@@ -1,31 +1,31 @@
 import { call, put, takeLatest } from "redux-saga/effects";
 import { CentralServiceItemApiErrorAction, deleteCentralServiceItemListSuccess, editCentralServiceItemSuccess, getCentralServiceItemSuccess, saveCentralServiceItem_Success, updateCentralServiceItemIDSuccess } from "./action";
 import {
-  del_Group_List_API,
-  edit_Group_List_Api,
-  get_Group_List_Api,
-  save_Group_API,
-  update_Group_List_Api
+  CentralServiceItem_Delete,
+  CentralServiceItem_Edit,
+  CentralServiceItem_Get,
+  CentralServiceItem_Post,
+  CentralServiceItem_Update,
 } from "../../../helpers/backend_helper";
 import { DELETE_CENTRAL_SERVICE_ITEM_LIST_ID, EDIT_CENTRAL_SERVICE_ITEM_ID, GET_CENTRAL_SERVICE_ITEM_LIST, SAVE_CENTRAL_SERVICE_ITEM, UPDATE_CENTRAL_SERVICE_ITEM_ID } from "./actionType";
 
 function* Save_Method_CentralServiceItem_GenFun({ config }) {              // Save API
   try {
-    const response = yield call(save_Group_API, config);
+    const response = yield call(CentralServiceItem_Post, config);
     yield put(saveCentralServiceItem_Success(response));
   } catch (error) { yield put(CentralServiceItemApiErrorAction()) }
 }
 
 function* Get_CentralServiceItem_List_GenFunc() {                                   // getList API
   try {
-    const response = yield call(get_Group_List_Api);
+    const response = yield call(CentralServiceItem_Get);
     yield put(getCentralServiceItemSuccess(response.Data));
   } catch (error) { yield put(CentralServiceItemApiErrorAction()) }
 }
 
 function* Delete_CentralServiceItem_ID_GenFunc({ config }) {                    // delete API
   try {
-    const response = yield call(del_Group_List_API, config);
+    const response = yield call(CentralServiceItem_Delete, config);
     yield put(deleteCentralServiceItemListSuccess(response))
   } catch (error) { yield put(CentralServiceItemApiErrorAction()) }
 }
@@ -33,7 +33,7 @@ function* Delete_CentralServiceItem_ID_GenFunc({ config }) {                    
 function* Edit_CentralServiceItem_ID_GenFunc({ config }) {                      // edit API 
   const { btnmode } = config;
   try {
-    const response = yield call(edit_Group_List_Api, config);
+    const response = yield call(CentralServiceItem_Edit, config);
     response.pageMode = btnmode;
     yield put(editCentralServiceItemSuccess(response));
   } catch (error) { yield put(CentralServiceItemApiErrorAction()) }
@@ -41,7 +41,7 @@ function* Edit_CentralServiceItem_ID_GenFunc({ config }) {                      
 
 function* Update_CentralServiceItem_ID_GenFunc({ config }) {                    // update API
   try {
-    const response = yield call(update_Group_List_Api, config);
+    const response = yield call(CentralServiceItem_Update, config);
     yield put(updateCentralServiceItemIDSuccess(response))
   } catch (error) { yield put(CentralServiceItemApiErrorAction()) }
 }

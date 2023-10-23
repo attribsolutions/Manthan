@@ -491,3 +491,8 @@ export const MAN_POWER_GET_API = '/ManPowerReport'
 //Cluster API
 export const CLUSTER = '/Cluster'
 export const SUB_CLUSTER = '/SubClusters'
+
+export const CENTRAL_SERVICE_ITEM = '/CentralItemService'
+
+
+

@@ -17,6 +17,7 @@ import {
     commonPageField,
     commonPageFieldSuccess,
     editGroupIDSuccess,
+    getBaseUnit_ForDropDown,
     saveGroupMaster,
     saveGroupMaster_Success,
     updateGroupID,
@@ -45,6 +46,7 @@ import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import GroupTypeMaster from "../GroupTypePage/GroupTypeMaster";
 import AddMaster from "../EmployeePages/Drodown";
 import { saveMsgUseEffect, userAccessUseEffect } from "../../../components/Common/CommonUseEffect";
+import { editCentralServiceItemSuccess, saveCentralServiceItem, saveCentralServiceItem_Success, updateCentralServiceItemID, updateCentralServiceItemIDSuccess } from "../../../store/Administrator/CentralServiceItemRedux/action";
 
 const CentralServiceItem = (props) => {
 
@@ -53,13 +55,14 @@ const CentralServiceItem = (props) => {
 
     const fileds = {
         id: "",
-        ItemName: "",
-        GST: "",
+        Name: "",
+        GSTPercentage: "",
         HSNCode: "",
         Rate: "",
-        IsActive: "",
+        isActive: "",
         Type: "",
         Unit: "",
+        Company: ""
 
     }
 
@@ -68,20 +71,20 @@ const CentralServiceItem = (props) => {
     const [modalCss, setModalCss] = useState(false);
     const [userPageAccessState, setUserAccState] = useState('');
     const [editCreatedBy, seteditCreatedBy] = useState("");
-    const [groupTypeMaster_AddAccess, setGroupTypeMaster_AddAccess] = useState(false)
+
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
         postMsg,
-        GroupTypeAPI,
         updateMsg,
         pageField,
+        BaseUnit,
         saveBtnloading,
         userAccess } = useSelector((state) => ({
-            saveBtnloading: state.GroupReducer.saveBtnloading,
-            postMsg: state.GroupReducer.postMsg,
-            updateMsg: state.GroupReducer.updateMsg,
-            GroupTypeAPI: state.GroupTypeReducer.GroupType,
+            BaseUnit: state.ItemMastersReducer.BaseUnit,
+            saveBtnloading: state.CentralServiceItemReducer.saveBtnloading,
+            postMsg: state.CentralServiceItemReducer.postMsg,
+            updateMsg: state.CentralServiceItemReducer.updateMsg,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageField
         }));
@@ -98,7 +101,8 @@ const CentralServiceItem = (props) => {
         const page_Id = pageId.CENTRAL_SERVICE_ITEM
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
-        dispatch(getGroupTypeslist())
+        dispatch(getBaseUnit_ForDropDown());
+
 
     }, []);
 
@@ -108,15 +112,9 @@ const CentralServiceItem = (props) => {
         userAccess,
         dispatch,
         setUserAccState,
-        otherloginAccss
     }), [userAccess]);
 
-    const otherloginAccss = (index) => {
-        if (index.id === pageId.GROUPTYPE) {
-            setGroupTypeMaster_AddAccess(true)
-        }
 
-    }
 
 
     useEffect(() => {
@@ -136,24 +134,36 @@ const CentralServiceItem = (props) => {
 
             if (hasEditVal) {
 
-
-                const { id, Name, GroupType, GroupTypeName, Sequence } = hasEditVal
+                debugger
+                const { id, Name, GSTPercentage, HSNCode, Rate, isActive, Type } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
                 values.Name = Name;
-                values.id = id
-                values.GroupTypeName = { label: GroupTypeName, value: GroupType };
-                values.Sequence = Sequence
+                values.id = id;
+                values.Rate = Rate
+                values.isActive = isActive
+                values.Type = Type
+                values.Unit = { label: id, value: Type };
+                values.GSTPercentage = GSTPercentage
+                values.HSNCode = HSNCode
+
+
 
                 hasValid.Name.valid = true;
-                hasValid.GroupTypeName.valid = true;
-                hasValid.Sequence.valid = true;
+                hasValid.Rate.valid = true;
+                hasValid.isActive.valid = true;
+                hasValid.Type.valid = true;
+                hasValid.Unit.valid = true;
+                hasValid.GSTPercentage.valid = true;
+                hasValid.HSNCode.valid = true;
+
+
 
                 setState({ values, fieldLabel, hasValid, required, isError })
-                dispatch(Breadcrumb_inputName(hasEditVal.Name))
+                dispatch(Breadcrumb_inputName(hasEditVal.ItemName))
                 seteditCreatedBy(hasEditVal.CreatedBy)
             }
-            dispatch(editGroupIDSuccess({ Status: false }))
+            dispatch(editCentralServiceItemSuccess({ Status: false }))
         }
     }, [])
 
@@ -161,20 +171,24 @@ const CentralServiceItem = (props) => {
     useEffect(() => saveMsgUseEffect({
         postMsg, pageMode,
         history, dispatch,
-        postSuccss: saveGroupMaster_Success,
+        postSuccss: saveCentralServiceItem_Success,
         resetFunc: { fileds, state, setState },
-        listPath: url.GROUP_lIST
+        listPath: url.CENTRAL_SERVICE_ITEM_lIST
     }), [postMsg])
 
 
+    const BaseUnit_DropdownOptions = BaseUnit.map((data) => ({
+        value: data.id,
+        label: data.Name
+    }));
     useEffect(() => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
             setState(() => resetFunction(fileds, state))// Clear form values
             history.push({
-                pathname: url.GROUP_lIST,
+                pathname: url.CENTRAL_SERVICE_ITEM_lIST,
             })
         } else if (updateMsg.Status === true && !modalCss) {
-            dispatch(updateGroupIDSuccess({ Status: false }));
+            dispatch(updateCentralServiceItemIDSuccess({ Status: false }));
             customAlert({
                 Type: 3,
                 Message: JSON.stringify(updateMsg.Message),
@@ -190,37 +204,34 @@ const CentralServiceItem = (props) => {
         }
     }, [pageField])
 
-    const GroupTypesValues = GroupTypeAPI.map((Data) => ({
-        value: Data.id,
-        label: Data.Name
-    }));
 
     const SaveHandler = async (event) => {
-        event.preventDefault();
-        const btnId = event.target.id
         try {
             if (formValid(state, setState)) {
-                btnIsDissablefunc({ btnId, state: true })
-
+                debugger
                 const jsonBody = JSON.stringify({
                     Name: values.Name,
-                    GroupType: values.GroupTypeName.value,
-                    Sequence: values.Sequence,
+                    GSTPercentage: values.GSTPercentage,
+                    HSNCode: values.HSNCode,
+                    Rate: values.Rate,
+                    isActive: values.isActive,
+                    // Type: values.Type,
+                    Company: 2,
+                    Unit: values.Unit.value,
                     CreatedBy: loginUserID(),
                     UpdatedBy: loginUserID(),
                 });
 
                 if (pageMode === mode.edit) {
-                    dispatch(updateGroupID({ jsonBody, updateId: values.id, btnId }));
+                    dispatch(updateCentralServiceItemID({ jsonBody, updateId: values.id }));
                 }
                 else {
-                    dispatch(saveGroupMaster({ jsonBody, btnId }));
+                    dispatch(saveCentralServiceItem({ jsonBody }));
                 }
 
             }
-        } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
+        } catch (e) { console.log(e) }
     };
-
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
@@ -250,13 +261,13 @@ const CentralServiceItem = (props) => {
 
                                                     <Row>
                                                         <FormGroup className="mb-2 col col-sm-8 ">
-                                                            <Label htmlFor="validationCustom01">{fieldLabel.ItemName} </Label>
+                                                            <Label htmlFor="validationCustom01">{fieldLabel.Name} </Label>
                                                             <Input
-                                                                name="ItemName"
+                                                                name="Name"
                                                                 id="txtName"
-                                                                value={values.ItemName}
+                                                                value={values.Name}
                                                                 type="text"
-                                                                className={isError.ItemName.length > 0 ? "is-invalid form-control" : "form-control"}
+                                                                className={isError.Name.length > 0 ? "is-invalid form-control" : "form-control"}
                                                                 placeholder="Please Enter ItemName"
                                                                 autoComplete='off'
                                                                 autoFocus={true}
@@ -265,8 +276,8 @@ const CentralServiceItem = (props) => {
                                                                     dispatch(Breadcrumb_inputName(event.target.value))
                                                                 }}
                                                             />
-                                                            {isError.ItemName.length > 0 && (
-                                                                <span className="invalid-feedback">{isError.ItemName}</span>
+                                                            {isError.Name.length > 0 && (
+                                                                <span className="invalid-feedback">{isError.Name}</span>
                                                             )}
                                                         </FormGroup>
                                                     </Row>
@@ -274,24 +285,24 @@ const CentralServiceItem = (props) => {
 
 
                                                         <FormGroup className="mb-2 col col-sm-8 ">
-                                                            <Label htmlFor="validationCustom01"> {fieldLabel.GST} </Label>
+                                                            <Label htmlFor="validationCustom01"> {fieldLabel.GSTPercentage} </Label>
                                                             <Col sm={12} >
 
                                                                 <Input
-                                                                    name="Type"
+                                                                    name="GSTPercentage"
                                                                     id="txtSequence"
-                                                                    value={values.GST}
+                                                                    value={values.GSTPercentage}
                                                                     type="text"
-                                                                    className={isError.GST.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                                    placeholder="Please Enter Type"
+                                                                    className={isError.GSTPercentage.length > 0 ? "is-invalid form-control" : "form-control"}
+                                                                    placeholder="Please Enter GST"
                                                                     autoComplete='off'
                                                                     onChange={(event) => {
                                                                         onChangeText({ event, state, setState })
                                                                     }}
                                                                 />
 
-                                                                {isError.GST.length > 0 && (
-                                                                    <span className="text-danger f-8"><small>{isError.GST}</small></span>
+                                                                {isError.GSTPercentage.length > 0 && (
+                                                                    <span className="text-danger f-8"><small>{isError.GSTPercentage}</small></span>
                                                                 )}
                                                             </Col>
                                                         </FormGroup>
@@ -324,16 +335,16 @@ const CentralServiceItem = (props) => {
                                                     <Row >
                                                         <Label
                                                             className="col-sm-2 col-form-label">
-                                                            {fieldLabel.IsActive}
+                                                            {fieldLabel.isActive}
                                                         </Label>
                                                         <Col md={4} style={{ marginTop: '7px' }} className=" form-check form-switch form-switch-sm ">
                                                             <div className="form-check form-switch form-switch-md mb-3">
                                                                 <Input
                                                                     type="checkbox"
                                                                     className="form-check-input"
-                                                                    checked={values.IsActive}
+                                                                    checked={values.isActive}
 
-                                                                    name="IsActive"
+                                                                    name="isActive"
                                                                     onChange={(event) => onChangeCheckbox({ event, state, setState })}
                                                                 />
                                                             </div>
@@ -365,19 +376,21 @@ const CentralServiceItem = (props) => {
                                                             )}
                                                         </FormGroup>
                                                     </Row>
+
+
                                                     <Row>
                                                         <FormGroup className="mb-2 col col-sm-8 ">
                                                             <Label htmlFor="validationCustom01">{fieldLabel.Unit} </Label>
-                                                            <Input
+                                                            <Select
                                                                 name="Unit"
-                                                                id="txtSequence"
+                                                                isSearchable={true}
+                                                                className="react-dropdown"
+                                                                classNamePrefix="dropdown"
                                                                 value={values.Unit}
-                                                                type="text"
-                                                                className={isError.Unit.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                                placeholder="Please Enter Unit"
-                                                                autoComplete='off'
-                                                                onChange={(event) => {
-                                                                    onChangeText({ event, state, setState })
+                                                                options={BaseUnit_DropdownOptions}
+                                                                onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
+                                                                styles={{
+                                                                    menu: provided => ({ ...provided, zIndex: 2 })
                                                                 }}
                                                             />
                                                             {isError.Unit.length > 0 && (
@@ -389,19 +402,22 @@ const CentralServiceItem = (props) => {
 
                                                     <Row>
                                                         <FormGroup className="mb-2 col col-sm-8 ">
-                                                            <Label htmlFor="validationCustom01">{fieldLabel.Type} </Label>
-                                                            <Select
-                                                                name="GST"
-                                                                value={values.Type}
-                                                                isSearchable={true}
-                                                                className="react-dropdown"
-                                                                classNamePrefix="dropdown"
-                                                                // options={GroupTypesValues}
-                                                                onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
+                                                            <Label htmlFor="validationCustom01">{fieldLabel.Company} </Label>
 
+                                                            <Input
+                                                                name="Company"
+                                                                id="txtSequence"
+                                                                value={values.Company}
+                                                                type="text"
+                                                                className={isError.Company.length > 0 ? "is-invalid form-control" : "form-control"}
+                                                                placeholder="Please Enter Unit"
+                                                                autoComplete='off'
+                                                                onChange={(event) => {
+                                                                    onChangeText({ event, state, setState })
+                                                                }}
                                                             />
                                                             {isError.Type.length > 0 && (
-                                                                <span className="invalid-feedback">{isError.Type}</span>
+                                                                <span className="invalid-feedback">{isError.Company}</span>
                                                             )}
                                                         </FormGroup>
                                                     </Row>
