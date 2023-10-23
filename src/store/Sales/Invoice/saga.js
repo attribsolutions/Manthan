@@ -127,7 +127,7 @@ function* InvoiceListGenFunc({ config }) {
 
       // if InvoiceUploads array length is greater than 0 then delete button disabled
       if (i.InvoiceUploads.length > 0) {
-        
+
         i.forceEditHide = true;// if InvoiceUploads array length then then edif not allowed
 
         i.InvoiceUploads.map((index) => {
@@ -165,7 +165,9 @@ function* editInvoiceListGenFunc({ config }) {
     const updatedResp = invoice_GoButton_dataConversion_Func(response, customer);
 
     yield put(editInvoiceActionSuccess(updatedResp))
-  } catch (error) { CommonConsole(error) }
+  } catch (error) {
+    yield put(InvoiceApiErrorAction())
+  }
 }
 //update Invoice 
 function* updateInvoiceGenFunc({ config }) {
