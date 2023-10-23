@@ -23,7 +23,7 @@ import NewCommonPartyDropdown from "../../../components/Common/NewCommonPartyDro
 import LineBar from '../../../components/Common/DashboardChart/MixLineChart';
 import TransactionLog from './TransactionLog';
 
-const Dashboard_1 = (props) => {
+const Dashboard_2 = (props) => {
 
     const history = useHistory()
     const dispatch = useDispatch();
@@ -391,9 +391,9 @@ const Dashboard_1 = (props) => {
                                 <Card >
                                     {/* <CardHeader style={{ backgroundColor: "whitesmoke" }} */}
 
-                                        {/* className="card-header align-items-center d-flex"> */}
+                                    {/* className="card-header align-items-center d-flex"> */}
 
-                                        {/* <Label
+                                    {/* <Label
                                             className="card-title mb-0 flex-grow-4 text-primary text-bold mb-n2 text-decoration-underline"
                                             disabled={GRNListLoading}
                                             onClick={InvoiceFoRGRN_onClick}
@@ -401,9 +401,9 @@ const Dashboard_1 = (props) => {
 
                                         >
                                             Invoices For GRN</Label> */}
-                                        {(GRNListLoading) &&
-                                            <DashboardLoader />
-                                        }
+                                    {(GRNListLoading) &&
+                                        <DashboardLoader />
+                                    }
                                     {/* </CardHeader> */}
                                     <TransactionLog />
 
@@ -419,4 +419,4 @@ const Dashboard_1 = (props) => {
     );
 }
 
-export default Dashboard_1;
+export default Dashboard_2;
