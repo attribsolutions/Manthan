@@ -134,12 +134,11 @@ export const Discount_List = url.DISCOUNT_MASTER
 export const Cluster_Master = url.CLUSTER_lIST
 export const Cluster_List = url.CLUSTER_MASTER
 
-export const SubCluster_Master = url.SUB_CLUSTER_lIST
-export const SubCluster_List = url.SUB_CLUSTER_MASTER
+export const SubCluster_Master =  url.SUB_CLUSTER_lIST
+export const SubCluster_List =  url.SUB_CLUSTER_MASTER
 
 export const CentralServiceItem = url.CENTRAL_SERVICE_ITEM_lIST
 export const CentralServiceItemList = url.CENTRAL_SERVICE_ITEM_MASTER
-
 
 //******************************* Purchase Module ************************************//
 

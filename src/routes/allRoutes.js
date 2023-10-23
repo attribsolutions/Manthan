@@ -195,12 +195,15 @@ import CreditDebitDataExport from "../Reports/CreditDebitDataExport.js";
 import PartyOutstandingReport from "../Reports/PartyOutstandingReport";
 import RetailerApprovalList from "../pages/Adminisrator/RetailerApproval";
 import MobailRetailersSend from "../pages/Adminisrator/mobileRetailerSend/Index";
+
 import ClusterMaster from "../pages/Adminisrator/Cluster_SubCluster/ClusterMaster";
 import ClusterList from "../pages/Adminisrator/Cluster_SubCluster/ClusterList";
+
+import SubClusterMaster from "../pages/Adminisrator/Cluster_SubCluster/SubClusterMaster";
+import SubClusterList from "../pages/Adminisrator/Cluster_SubCluster/SubClusterList";
+
 import CentralServiceItem from "../pages/Adminisrator/CentralServiceItem/CentralServiceItemMaster";
 import CentralServiceItemList from "../pages/Adminisrator/CentralServiceItem/CentralServiceItemList";
-
-
 
 
 const userRoutes = [
@@ -342,11 +345,12 @@ const userRoutes = [
 
 	{ path: path.CLUSTER_MASTER, component: ClusterMaster },
 	{ path: path.CLUSTER_lIST, component: ClusterList },
+	
+	{ path: path.SUB_CLUSTER_MASTER, component: SubClusterMaster },
+	{ path: path.SUB_CLUSTER_lIST, component: SubClusterList },
 
 	{ path: path.CENTRAL_SERVICE_ITEM_MASTER, component: CentralServiceItem },
 	{ path: path.CENTRAL_SERVICE_ITEM_lIST, component: CentralServiceItemList },
-
-
 
 	//******************************* Inventory Module ************************************//
 	{ path: path.CHALLAN_LIST, component: ChallanList },

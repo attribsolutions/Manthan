@@ -103,6 +103,7 @@ import ManPowerReportSaga from "./Report/ManPowerRedux/saga"
 import PartyOutstanding_Saga from "./Report/PartyOutstandingRedux/saga"
 import ClusterSaga from "./Administrator/ClusterRedux/saga"
 import CentralServiceItemSaga from "./Administrator/CentralServiceItemRedux/saga"
+import SubSubClusterSaga from "./Administrator/SubClusterRedux/saga"
 
 export default function* rootSaga() {
 	yield all([
@@ -200,7 +201,7 @@ export default function* rootSaga() {
 		fork(PartyOutstanding_Saga),
 		fork(ClusterSaga),
 		fork(CentralServiceItemSaga),
+		fork(SubSubClusterSaga)
 
-		
 	])
 }

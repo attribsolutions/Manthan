@@ -1,46 +1,37 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-
-import {
-  deleteCategoryIDSuccess,
-  delete_Category_ID,
-  editCategoryID,
-  getCategorylist,
-  getCategorylistSuccess,
-  saveCategoryMaster_Success,
-  updateCategoryIDSuccess
-} from "../../../store/Administrator/CategoryRedux/action";
 import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
 import CommonListPage from "../../../components/Common/CommonMasterListPage";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
 import { PageLoadingSpinner } from "../../../components/Common/CommonButton";
 import ClusterMaster from "./ClusterMaster";
+import { deleteClusterIDSuccess, delete_Cluster_ID, editClusterID, getClusterlist, getClusterlistSuccess, updateClusterIDSuccess } from "../../../store/Administrator/ClusterRedux/action";
 
-const ClusterList = (props) => {
+const ClusterList = () => {
 
   const dispatch = useDispatch();
   const reducers = useSelector(
     (state) => ({
-      listBtnLoading: state.CategoryReducer.listBtnLoading,
-      goBtnLoading: state.CategoryReducer.goBtnLoading,
-      tableList: state.CategoryReducer.CategoryListData,
-      editData: state.CategoryReducer.editData,
-      updateMsg: state.CategoryReducer.updateMessage,
-      deleteMsg: state.CategoryReducer.deleteMessage,
+      listBtnLoading: state.ClusterReducer.listBtnLoading,
+      goBtnLoading: state.ClusterReducer.goBtnLoading,
+      tableList: state.ClusterReducer.ClusterListData,
+      postMsg: state.ClusterReducer.postMsg,
+      editData: state.ClusterReducer.editData,
+      updateMsg: state.ClusterReducer.updateMessage,
+      deleteMsg: state.ClusterReducer.deleteMessage,
       userAccess: state.Login.RoleAccessUpdateData,
-      postMsg: state.CategoryReducer.postMsg,
       pageField: state.CommonPageFieldReducer.pageFieldList
     })
   );
 
   const action = {
-    getList: getCategorylist,
-    editId: editCategoryID,
-    deleteId: delete_Category_ID,
-    postSucc: saveCategoryMaster_Success,
-    updateSucc: updateCategoryIDSuccess,
-    deleteSucc: deleteCategoryIDSuccess
+    getList: getClusterlist,
+    editId: editClusterID,
+    deleteId: delete_Cluster_ID,
+    postSucc: deleteClusterIDSuccess,
+    updateSucc: updateClusterIDSuccess,
+    deleteSucc: deleteClusterIDSuccess,
   }
 
   //  This UseEffect => Featch Modules List data  First Rendering
@@ -48,15 +39,15 @@ const ClusterList = (props) => {
     const page_Id = pageId.CLUSTER_lIST
     dispatch(commonPageFieldListSuccess(null))
     dispatch(commonPageFieldList(page_Id))
-    dispatch(getCategorylist());
+    dispatch(getClusterlist());
 
     return () => {
-      dispatch(getCategorylistSuccess([]));
+      dispatch(getClusterlistSuccess([]));
       dispatch(commonPageFieldListSuccess(null))
     }
   }, []);
 
-  const { pageField, goBtnLoading } = reducers
+  const { pageField, goBtnLoading } = reducers;
 
   return (
     <React.Fragment>
@@ -67,10 +58,11 @@ const ClusterList = (props) => {
           action={action}
           reducers={reducers}
           MasterModal={ClusterMaster}
-          masterPath={url.CLUSTER_lIST}
+          masterPath={url.CLUSTER_MASTER}
           ButtonMsgLable={"Cluster"}
           deleteName={"Name"}
         />
+
       }
 
     </React.Fragment>

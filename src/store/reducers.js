@@ -112,8 +112,8 @@ import CreditDebitDataExportReducer from "./Report/CreditDebitDataExportRedux/re
 import ManPowerReportReducer from "./Report/ManPowerRedux/reducer"
 import PartyOutStanding_Reducer from "./Report/PartyOutstandingRedux/reducer"
 import ClusterReducer from "./Administrator/ClusterRedux/reducer"
+import SubClusterReducer from "./Administrator/SubClusterRedux/reducer"
 import CentralServiceItemReducer from "./Administrator/CentralServiceItemRedux/reducer"
-
 
 
 const rootReducer = combineReducers({
@@ -206,6 +206,7 @@ const rootReducer = combineReducers({
 	ManPowerReportReducer,
 	PartyOutStanding_Reducer,
 	ClusterReducer,
+	SubClusterReducer,
 	CentralServiceItemReducer
 })
 export default rootReducer

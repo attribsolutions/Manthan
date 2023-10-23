@@ -5,13 +5,14 @@ import ToolkitProvider from 'react-bootstrap-table2-toolkit';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { Col, FormGroup, Label, Row } from 'reactstrap';
-import { Go_Button} from '../../components/Common/CommonButton';
-import { breadcrumbReturnFunc, convertDateTime_ydm,  getDateTime_dmy, loginEmployeeID } from '../../components/Common/CommonFunction';
+import { Go_Button } from '../../components/Common/CommonButton';
+import { breadcrumbReturnFunc, convertDateTime_ydm, getDateTime_dmy, loginCompanyID, loginEmployeeID } from '../../components/Common/CommonFunction';
 import { mySearchProps } from '../../components/Common/SearchBox/MySearch';
 import { C_Select, C_TimePicker } from '../../CustomValidateForm';
 import { showToastAlert } from '../../helpers/axios_Config';
 import { commonPartyDropdown_API, TransactionLog_Get_User_Api, TransactionLog_Go_Btn_Api, TransactionLog_transactionType_Api } from '../../helpers/backend_helper';
-import { BreadcrumbShowCountlabel } from '../../store/actions';
+import { BreadcrumbShowCountlabel, postSelect_Field_for_dropdown } from '../../store/actions';
+import { GeneralMasterSubType } from '../../store/Administrator/GeneralRedux/action';
 
 
 const TransactionLog = () => {
@@ -26,7 +27,8 @@ const TransactionLog = () => {
     const [transactionTypeSelect, setTransactionTypeSelect] = useState([]);
     const [userSelect, setUserSelect] = useState([]);
     const [partySelect, setPartySelect] = useState([]);
-    const [formDateSelect, setFormDateSelect] = useState(()=>getDateTime_dmy(1));//offSetTime 1 hour earlier
+    const [categorySelect, setCategorySelect] = useState([]);
+    const [formDateSelect, setFormDateSelect] = useState(() => getDateTime_dmy(1));//offSetTime 1 hour earlier
     const [toDateSelect, setToDateSelect] = useState(getDateTime_dmy);
 
     const [goBtnloading, setGoBtnloading] = useState(false);
@@ -36,7 +38,10 @@ const TransactionLog = () => {
     const [partyRedux, setPartyRedux] = useState([]);
 
     //Access redux store Data /  'save_ModuleSuccess' action data
-    const { userAccess } = useSelector((state) => ({ userAccess: state.Login.RoleAccessUpdateData }));
+    const { userAccess, TransactionCategory } = useSelector((state) => ({
+        userAccess: state.Login.RoleAccessUpdateData,
+        TransactionCategory: state.PartyMasterBulkUpdateReducer.SelectField,
+    }));
 
     useEffect(async () => {//initioal Api
         const resp1 = await TransactionLog_transactionType_Api()
@@ -53,12 +58,21 @@ const TransactionLog = () => {
         }
     }, [])
 
+    useEffect(() => { // ReceiptMode Dropdown useEffect
+        const jsonBody = JSON.stringify({
+            Company: loginCompanyID(),
+            TypeID: 90
+        });
+        dispatch(postSelect_Field_for_dropdown(jsonBody));
+    }, []);
+
     const generateOptions = (sourceArray, labelField = "Name", valueField = "id") =>
         [{ value: '', label: "All" }, ...sourceArray.map(item => ({ value: item[valueField], label: item[labelField] }))];
 
     const transactionTypeOptions = useMemo(() => generateOptions(transctionTypeReux), [transctionTypeReux])
     const userOptions = useMemo(() => generateOptions(usersRedux), [usersRedux]);
     const partyOptions = useMemo(() => generateOptions(partyRedux), [partyRedux]);
+    const TransactionCategoryOptions = useMemo(() => generateOptions(TransactionCategory), [TransactionCategory]);
 
     // userAccess useEffect
     useEffect(() => {
@@ -107,7 +121,7 @@ const TransactionLog = () => {
             dataField: "CustomerName",
             sort: true
         },
-        
+
     ]
 
     const goButtonHandler = async () => {
@@ -120,6 +134,7 @@ const TransactionLog = () => {
                 "TransactionType": transactionTypeSelect.map(item => item.value).join(','),
                 "User": userSelect.map(item => item.value).join(','),
                 "Party": partySelect.map(item => item.value).join(','),
+                // "TransactionCategory":
             })
             const resp3 = await TransactionLog_Go_Btn_Api({ jsonBody })
             setGoBtnloading(false);
@@ -177,7 +192,7 @@ const TransactionLog = () => {
                             </div>
                         </FormGroup>
                     </Col>
-                   
+
                 </div>
                 <div className="row">
                     <Col sm="3" >
@@ -226,13 +241,13 @@ const TransactionLog = () => {
                             </div>
                         </FormGroup>
                     </Col>
-                    <Col sm="5" >
+                    <Col sm="2" >
                         <FormGroup >
                             <div className="d-flex align-items-center">
                                 <Label className="col-sm-3 p-2" htmlFor="party">
                                     Party
                                 </Label>
-                                <Col sm="5">
+                                <Col sm="9">
                                     <C_Select
                                         id="party"
                                         placeholder="Select Party"
@@ -241,6 +256,29 @@ const TransactionLog = () => {
                                         value={partySelect}
                                         options={partyOptions}
                                         onChange={(e => setPartySelect(e))}
+                                        styles={{
+                                            menu: (provided) => ({ ...provided, zIndex: 2 }),
+                                        }}
+                                    />
+                                </Col>
+                            </div>
+                        </FormGroup>
+                    </Col>
+                    <Col sm="3" >
+                        <FormGroup >
+                            <div className="d-flex align-items-center">
+                                <Label className="col-sm-3 p-2" htmlFor="party">
+                                    Category
+                                </Label>
+                                <Col sm="9">
+                                    <C_Select
+                                        id="party"
+                                        placeholder="Select Party"
+                                        classNamePrefix="select2-Customer"
+                                        isMulti
+                                        value={categorySelect}
+                                        options={TransactionCategoryOptions}
+                                        onChange={(e => setCategorySelect(e))}
                                         styles={{
                                             menu: (provided) => ({ ...provided, zIndex: 2 }),
                                         }}
@@ -260,7 +298,7 @@ const TransactionLog = () => {
     };
 
     return (
-        
+
         <React.Fragment>
             {/* <PageLoadingSpinner isLoading={goBtnloading || !pageField} /> */}
             <div className="page-content">

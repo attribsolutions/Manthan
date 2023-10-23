@@ -3,13 +3,16 @@ import { useState } from "react";
 import { useEffect } from "react";
 
 
-const onSelectAll = (event, allarray,) => {
-
-  allarray.forEach(ele => {
-    ele.selectCheck = event
-  })
+const onSelectAll = (event, allArray, keyField, selectedDisabled = []) => {
+  debugger
+  allArray.forEach(ele => {
+    let a = selectedDisabled.includes(ele[keyField])
+    debugger
+    if (!a) {
+      ele.selectCheck = event;
+    }
+  });
 }
-
 const selectRow = (row, event) => {
 
   row.selectCheck = event
@@ -17,15 +20,17 @@ const selectRow = (row, event) => {
 export const selectAllCheck = ({
   rowSelected = '',
   nonSelectable = '',
+  selectedDisabled = '',
   position,
   headLabel,
   bgColor = "#9dadf09e",
-  disabledWithMsg = ''
+  disabledWithMsg = '',
+  keyField = 'id'
 }) => ({
 
   mode: "checkbox",
   bgColor: bgColor,
-  onSelectAll: onSelectAll,
+  onSelectAll: (event, allarray) => onSelectAll(event, allarray, keyField, selectedDisabled),
   onSelect: selectRow,
   selected: rowSelected,
   selectColumnPosition: position ? position : "right",
@@ -33,7 +38,7 @@ export const selectAllCheck = ({
   attrs: () => ({ 'data-label': "Select" }),
 
   selectionHeaderRenderer: (head) => {
-
+    debugger
     return <div className="">
       <Input type="checkbox" checked={head.checked} />
       <label style={{ paddingLeft: "7px" }}>{headLabel ? headLabel : "SelectAll"}</label>
@@ -272,7 +277,7 @@ const DynamicColumnHook = ({
     });
   }, [pageField, userAccState, listBtnLoading]);
 
-  return [tableColumns, defaultSorted, pageOptions];
+  return [tableColumns, defaultSorted, pageOptions, setTableColumns];
 };
 
 export default DynamicColumnHook
