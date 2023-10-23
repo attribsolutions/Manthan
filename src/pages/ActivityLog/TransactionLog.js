@@ -13,14 +13,10 @@ import { showToastAlert } from '../../helpers/axios_Config';
 import { commonPartyDropdown_API, TransactionLog_Get_User_Api, TransactionLog_Go_Btn_Api, TransactionLog_transactionType_Api } from '../../helpers/backend_helper';
 import { BreadcrumbShowCountlabel } from '../../store/actions';
 
-
 const TransactionLog = () => {
-
 
     const dispatch = useDispatch();
     const history = useHistory()
-
-
 
     const [userPageAccessState, setUserAccState] = useState('');
     const [transactionTypeSelect, setTransactionTypeSelect] = useState([]);

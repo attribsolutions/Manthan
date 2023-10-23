@@ -735,6 +735,29 @@ export const OutStandingBalance_GoBtn_API = ({ jsonBody, btnId }) => post(url.OU
 // ManPower Report
 export const ManPower_Get_Api = () => get(url.MAN_POWER_GET_API);
 
+//Cluster API
+export const Cluster_Post_API = ({ jsonBody }) => post(url.CLUSTER, jsonBody)// post api
+export const Cluster_get_API = () => get(url.CLUSTER) // get api
+export const Cluster_delete_API = ({ deleteId }) => del(`${url.CLUSTER}/${deleteId}`) // delete api
+export const Cluster_edit_API = ({ editId }) => get(`${url.CLUSTER}/${editId}`) // edit api
+export const Cluster_update_API = ({ jsonBody, updateId }) => put(`${url.CLUSTER}/${updateId}`, jsonBody)// update
+
+
+//Sub Cluster API
+export const Sub_Cluster_Post_API = ({ jsonBody }) => post(url.SUB_CLUSTER, jsonBody)// post api
+export const Sub_Cluster_get_API = () => get(url.SUB_CLUSTER) // get api
+export const Sub_Cluster_delete_API = ({ deleteId }) => del(`${url.SUB_CLUSTER}/${deleteId}`) // delete api
+export const Sub_Cluster_edit_API = ({ editId }) => get(`${url.SUB_CLUSTER}/${editId}`) // edit api
+export const Sub_Cluster_update_API = ({ jsonBody, updateId }) => put(`${url.SUB_CLUSTER}/${updateId}`, jsonBody)// update
+
+// CentralServiceItem 
+export const CentralServiceItem_Post = ({ jsonBody }) => post(url.CENTRAL_SERVICE_ITEM, jsonBody)// post api
+export const CentralServiceItem_Get = () => get(url.CENTRAL_SERVICE_ITEM) // get api
+export const CentralServiceItem_Delete = ({ deleteId }) => del(`${url.CENTRAL_SERVICE_ITEM}/${deleteId}`) // delete api 
+export const CentralServiceItem_Edit = ({ editId }) => get(`${url.CENTRAL_SERVICE_ITEM}/${editId}`) // delete api 
+export const CentralServiceItem_Update = ({ jsonBody, updateId }) => put(`${url.CENTRAL_SERVICE_ITEM}/${updateId}`, jsonBody) // delete api 
+
+
 export {
 	getLoggedInUser,
 	isUserAuthenticated,
