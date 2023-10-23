@@ -337,7 +337,7 @@ const userRoutes = [
 	{ path: path.RETAILER_APPROVAL, component: RetailerApprovalList },
 
 	{ path: path.MOBILE_RETAILER_SEND, component: MobailRetailersSend },
-	
+
 	{ path: path.CLUSTER_MASTER, component: ClusterMaster },
 	{ path: path.CLUSTER_lIST, component: ClusterList },
 	//******************************* Inventory Module ************************************//

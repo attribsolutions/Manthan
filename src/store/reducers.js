@@ -111,6 +111,7 @@ import ClaimTrackingEntry_Reducer from "./Accounting/ClaimTrackingEntryRedux/red
 import CreditDebitDataExportReducer from "./Report/CreditDebitDataExportRedux/reducer"
 import ManPowerReportReducer from "./Report/ManPowerRedux/reducer"
 import PartyOutStanding_Reducer from "./Report/PartyOutstandingRedux/reducer"
+import ClusterReducer from "./Administrator/ClusterRedux/reducer"
 
 const rootReducer = combineReducers({
 	Layout,
@@ -200,6 +201,7 @@ const rootReducer = combineReducers({
 	ClaimTrackingEntry_Reducer,
 	CreditDebitDataExportReducer,
 	ManPowerReportReducer,
-	PartyOutStanding_Reducer
+	PartyOutStanding_Reducer,
+	ClusterReducer,
 })
 export default rootReducer
