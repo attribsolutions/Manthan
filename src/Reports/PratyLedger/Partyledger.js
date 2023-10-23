@@ -135,7 +135,7 @@ const PartyLedger = () => {
         try {
             debugger
             if (tableData.length > 0) {
-debugger
+                debugger
                 excelDownloadFunc(tableData)
 
                 // ExcelDownloadFunc({
@@ -179,14 +179,18 @@ debugger
         const wb = XLSX.utils.book_new();
         const ws = XLSX.utils.aoa_to_sheet([]);
 
+        const dataRows = [
+            ["Form Date", jsonData[0].FormDate],
+            ["To Date", jsonData[0].ToDate],
 
-        const dataRows = [];
-
-        for (const field of Object.keys(jsonData[0])) {
-            if (field !== "InvoiceItems") {
-                dataRows.push([field, jsonData[0][field]]);
-            }
-        }
+            ["Distributor Name", jsonData[0].Distributor, '', "Customer Name", jsonData[0].CustomerName],
+            ["Distributor GSTIN", jsonData[0].DistributorGSTIN, '', "Customer GSTIN", jsonData[0].CustomerGSTIN],
+            ["Distributor PAN", jsonData[0].DistributorPAN],
+            // ["Customer Name", jsonData[0].CustomerName],
+            // ["Customer GSTIN", jsonData[0].CustomerGSTIN],
+            ['', '', '', "Opening Balance", jsonData[0].Open],
+            ['', '', '', "Closing Balance", jsonData[0].Close]
+        ];
 
         const RowsFunc = (data) => {
 
@@ -249,7 +253,6 @@ debugger
 
         XLSX.utils.sheet_add_aoa(ws, dataRows, { origin: -1 });
         XLSX.utils.book_append_sheet(wb, ws, 'Data');
-
         XLSX.writeFile(wb, "Party Ledger Report.xlsx");
 
     }
