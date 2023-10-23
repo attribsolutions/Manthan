@@ -102,6 +102,7 @@ import CreditDebitDataExportSaga from "./Report/CreditDebitDataExportRedux/saga"
 import ManPowerReportSaga from "./Report/ManPowerRedux/saga"
 import PartyOutstanding_Saga from "./Report/PartyOutstandingRedux/saga"
 import ClusterSaga from "./Administrator/ClusterRedux/saga"
+import CentralServiceItemSaga from "./Administrator/CentralServiceItemRedux/saga"
 
 export default function* rootSaga() {
 	yield all([
@@ -197,6 +198,9 @@ export default function* rootSaga() {
 		fork(CreditDebitDataExportSaga),
 		fork(ManPowerReportSaga),
 		fork(PartyOutstanding_Saga),
-		fork(ClusterSaga)
+		fork(ClusterSaga),
+		fork(CentralServiceItemSaga),
+
+		
 	])
 }

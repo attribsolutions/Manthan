@@ -134,8 +134,12 @@ export const Discount_List = url.DISCOUNT_MASTER
 export const Cluster_Master = url.CLUSTER_lIST
 export const Cluster_List = url.CLUSTER_MASTER
 
-export const SubCluster_Master =  url.SUB_CLUSTER_lIST
-export const SubCluster_List =  url.SUB_CLUSTER_MASTER
+export const SubCluster_Master = url.SUB_CLUSTER_lIST
+export const SubCluster_List = url.SUB_CLUSTER_MASTER
+
+export const CentralServiceItem = url.CENTRAL_SERVICE_ITEM_lIST
+export const CentralServiceItemList = url.CENTRAL_SERVICE_ITEM_MASTER
+
 
 //******************************* Purchase Module ************************************//
 
@@ -273,11 +277,11 @@ export const DebitDataExport = url.DEBIT_DATA_EXPORT
 
 export const CreditDataExport = url.CREDIT_DATA_EXPORT
 
-export const ReceiptDataExport =url.RECEIPT_DATA_EXPORT
+export const ReceiptDataExport = url.RECEIPT_DATA_EXPORT
 
-export const PartyOutstandingReport =url.PARTY_OUTSTANDING_REPORT
+export const PartyOutstandingReport = url.PARTY_OUTSTANDING_REPORT
 
-export const RetailerApproval =url.RETAILER_APPROVAL
+export const RetailerApproval = url.RETAILER_APPROVAL
 
 export const ManPowerReport = url.MAN_POWER_REPORT
 
