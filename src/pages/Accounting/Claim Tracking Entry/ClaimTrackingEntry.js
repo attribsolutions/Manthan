@@ -454,10 +454,53 @@ const ClaimTrackingEntry = (props) => {
         <div className="page-content" style={{ marginBottom: "5cm" }}>
           <form noValidate>
             <div className="px-2 c_card_filter header text-black mb-2">
-              {/* *******Select Claim Id dropdown***** &&& ******Select Claim Id Inputbox********** */}
+           
+
+              {/* *******Claim Record Date***** &&& ******Claim For The Month********** */}
               <Row>
                 <Col sm="6">
+                  <FormGroup className="row mt-2 ">
+                    <Label
+                      className="col-sm-1 p-2"
+                      style={{ width: "115px", marginRight: "0.4cm" }}
+                    >
+                      {fieldLabel.Date}{" "}
+                    </Label>
+                    <Col sm="7">
+                      <C_DatePicker
+                        name="Date"
+                        value={values.Date}
+                        onChange={Date_Onchange}
+                      />
+                    </Col>
+                  </FormGroup>
+                </Col>
+
+                <Col sm="6">
                   <FormGroup className=" row mt-2 ">
+                    <Label
+                      className="col-sm-1 p-2"
+                      style={{ width: "115px", marginRight: "0.4cm" }}
+                    >
+                      {fieldLabel.ClaimForTheMonth}{" "}
+                    </Label>
+                    <Col sm="7">
+                      <Input
+                        className="form-control"
+                        type="month"
+                        value={`${yearAndMonth.Year}-${yearAndMonth.Month}`}
+                        onChange={(e) => MonthAndYearOnchange(e)}
+                        max={maxMonthCurrent}
+                      />
+                    </Col>
+                  </FormGroup>
+                </Col>
+              </Row>
+
+                 {/* *******Select Claim Id dropdown***** &&& ******Select Claim Id Inputbox********** */}
+                 <Row>
+                <Col sm="6">
+                  <FormGroup className=" row mt-n2 ">
                     <Label
                       className="col-sm-1 p-2"
                       style={{ width: "115px", marginRight: "0.4cm" }}
@@ -490,7 +533,7 @@ const ClaimTrackingEntry = (props) => {
                 </Col>
 
                 <Col sm="6">
-                  <FormGroup className=" row mt-2 ">
+                  <FormGroup className=" row mt-n2 ">
                     <Label
                       className="col-sm-1 p-2"
                       style={{ width: "115px", marginRight: "0.4cm" }}
@@ -509,47 +552,6 @@ const ClaimTrackingEntry = (props) => {
                         onChange={(event) => {
                           onChangeText({ event, state, setState });
                         }}
-                      />
-                    </Col>
-                  </FormGroup>
-                </Col>
-              </Row>
-
-              {/* *******Claim Record Date***** &&& ******Claim For The Month********** */}
-              <Row>
-                <Col sm="6">
-                  <FormGroup className="row mt-n3">
-                    <Label
-                      className="col-sm-1 p-2"
-                      style={{ width: "115px", marginRight: "0.4cm" }}
-                    >
-                      {fieldLabel.Date}{" "}
-                    </Label>
-                    <Col sm="7">
-                      <C_DatePicker
-                        name="Date"
-                        value={values.Date}
-                        onChange={Date_Onchange}
-                      />
-                    </Col>
-                  </FormGroup>
-                </Col>
-
-                <Col sm="6">
-                  <FormGroup className=" row mt-n3 ">
-                    <Label
-                      className="col-sm-1 p-2"
-                      style={{ width: "115px", marginRight: "0.4cm" }}
-                    >
-                      {fieldLabel.ClaimForTheMonth}{" "}
-                    </Label>
-                    <Col sm="7">
-                      <Input
-                        className="form-control"
-                        type="month"
-                        value={`${yearAndMonth.Year}-${yearAndMonth.Month}`}
-                        onChange={(e) => MonthAndYearOnchange(e)}
-                        max={maxMonthCurrent}
                       />
                     </Col>
                   </FormGroup>

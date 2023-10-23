@@ -27,7 +27,6 @@ import {
     initialFiledFunc,
     onChangeSelect,
 } from "../../../../components/Common/validationFunction";
-import { getPartyListAPI, getPartyListAPISuccess } from "../../../../store/Administrator/PartyRedux/action";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { customAlert } from "../../../../CustomAlert/ConfirmDialog";
@@ -38,6 +37,7 @@ import {
     save_ImportExcelPartyMap_Sucess
 } from "../../../../store/Administrator/ImportExcelPartyMapRedux/action";
 import * as _cfunc from "../../../../components/Common/CommonFunction";
+import PartyDropdown_Common from "../../../../components/Common/PartyDropdown";
 
 const ImportExcelPartyMap = (props) => {
 
@@ -66,7 +66,8 @@ const ImportExcelPartyMap = (props) => {
         partyList,
         listBtnLoading,
         saveBtnloading,
-        partyDropDownLoading
+        partyDropDownLoading,
+        commonPartyDropSelect
     } = useSelector((state) => ({
         saveBtnloading: state.GroupReducer.saveBtnloading,
         listBtnLoading: state.ImportExcelPartyMap_Reducer.listBtnLoading,
@@ -77,15 +78,16 @@ const ImportExcelPartyMap = (props) => {
         goButtonArr: state.ImportExcelPartyMap_Reducer.addGoButton,
         partyList: state.PartyMasterReducer.partyList,
         partyDropDownLoading: state.PartyMasterReducer.goBtnLoading,
+        commonPartyDropSelect: state.CommonPartyDropdownReducer.commonPartyDropSelect
     }));
     useEffect(() => {
         const page_Id = pageId.IMPORT_MASTER_MAP
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
-        dispatch(getPartyListAPI());
+        // dispatch(getPartyListAPI());
         dispatch(GoButton_ImportExcelPartyMap_Success([]));
         return () => {
-            dispatch(getPartyListAPISuccess([]))
+            // dispatch(getPartyListAPISuccess([]))
             dispatch(GoButton_ImportExcelPartyMap_Success([]));
             dispatch(commonPageFieldSuccess(null));
         }
@@ -198,7 +200,7 @@ const ImportExcelPartyMap = (props) => {
         const btnId = event.target.id
         try {
             btnIsDissablefunc({ btnId, state: true })
-            let partyId = (((loginIsSCMCompany()) === 1)) ? loginPartyID() : values.Party.value;
+            let partyId = _cfunc.loginSelectedPartyID();
             let mapType = values.MapType.value;
 
             dispatch(GoButton_ImportExcelPartyMap({ partyId, mapType }))
@@ -206,11 +208,17 @@ const ImportExcelPartyMap = (props) => {
     };
 
     function change_ButtonHandler(e) {
-        dispatch(GoButton_ImportExcelPartyMap_Success([]))
+        dispatch(GoButton_ImportExcelPartyMap_Success([]));
+        setState((i) => {
+            let a = { ...i }
+            a.values.MapType = ''
+            a.hasValid.MapType.valid = true;
+            return a
+        })
     }
 
     async function SaveHandler(event) {
-        
+
         event.preventDefault();
 
         async function funcForParty() {
@@ -274,6 +282,7 @@ const ImportExcelPartyMap = (props) => {
 
     };
 
+
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
@@ -281,6 +290,9 @@ const ImportExcelPartyMap = (props) => {
                 <PageLoadingSpinner isLoading={((partyDropDownLoading && !(loginIsSCMCompany() === 1)) || !pageField)} />
 
                 <div className="page-content">
+                    <PartyDropdown_Common
+                    changeButtonHandler={change_ButtonHandler} />
+
                     <div className="px-2 c_card_header text-black" >
                         <div className="px-2   c_card_filter text-black" >
                             <form onSubmit={(event) => goButtonHandler(event)} noValidate>
