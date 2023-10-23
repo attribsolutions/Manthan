@@ -195,6 +195,8 @@ import CreditDebitDataExport from "../Reports/CreditDebitDataExport.js";
 import PartyOutstandingReport from "../Reports/PartyOutstandingReport";
 import RetailerApprovalList from "../pages/Adminisrator/RetailerApproval";
 import MobailRetailersSend from "../pages/Adminisrator/mobileRetailerSend/Index";
+import ClusterMaster from "../pages/Adminisrator/Cluster_SubCluster/ClusterMaster";
+import ClusterList from "../pages/Adminisrator/Cluster_SubCluster/ClusterList";
 
 
 
@@ -336,7 +338,8 @@ const userRoutes = [
 
 	{ path: path.MOBILE_RETAILER_SEND, component: MobailRetailersSend },
 	
-
+	{ path: path.CLUSTER_MASTER, component: ClusterMaster },
+	{ path: path.CLUSTER_lIST, component: ClusterList },
 	//******************************* Inventory Module ************************************//
 	{ path: path.CHALLAN_LIST, component: ChallanList },
 	{ path: path.CHALLAN, component: Challan },

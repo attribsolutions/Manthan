@@ -139,6 +139,12 @@ export const PRODUCT_MARGIN_REPORT = 198
 export const DISCOUNT_MASTER = 212
 export const DISCOUNT_LIST = 213
 
+export const CLUSTER_MASTER = 252
+export const CLUSTER_lIST = 253
+
+export const SUB_CLUSTER_MASTER = 254
+export const SUB_CLUSTER_lIST = 255
+
 //******************************* Purchase Module ************************************//
 export const ORDER_1 = 53
 export const ORDER_LIST_1 = 54
@@ -298,4 +304,4 @@ export const RETAILER_APPROVAL = 247
 
 export const MAN_POWER_REPORT = 248
 
-export const PARTY_LEDGER=207
+export const PARTY_LEDGER = 207

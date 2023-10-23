@@ -138,6 +138,12 @@ export const PRODUCT_MARGIN_REPORT = "/ProductMarginReport"
 
 export const DISCOUNT_MASTER = "/Discount_Master"
 export const DISCOUNT_LIST = "/Discount_List"
+ 
+export const CLUSTER_MASTER = "/Cluster_Master"
+export const CLUSTER_lIST = "/Cluster_List"
+
+export const SUB_CLUSTER_MASTER = "/SubCluster_Master"
+export const SUB_CLUSTER_lIST = "/SubCluster_List"
 
 //******************************* Purchase Module ************************************//
 export const ORDER_1 = "/Order_1"
