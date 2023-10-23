@@ -6,7 +6,7 @@ import { initialFiledFunc, } from "../../components/Common/validationFunction";
 import { C_Button } from "../../components/Common/CommonButton";
 import { C_DatePicker, C_Select } from "../../CustomValidateForm";
 import * as _cfunc from "../../components/Common/CommonFunction";
-import { mode, pageId, url, } from "../../routes/index"
+import { pageId, url, } from "../../routes/index"
 import { MetaTags } from "react-meta-tags";
 import { GetVenderSupplierCustomer, GetVenderSupplierCustomerSuccess, commonPageField, commonPageFieldSuccess, getpdfReportdata, getpdfReportdataSuccess } from "../../store/actions";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
@@ -14,9 +14,10 @@ import * as report from '../ReportIndex'
 import { PartyLedgerReport_API } from "../../helpers/backend_helper";
 import C_Report from "../../components/Common/C_Report";
 import PartyDropdown_Common from "../../components/Common/PartyDropdown";
-import { ExcelDownloadFunc } from "../StockReport/ExcelDownloadFunc";
 
-const PartyLedger = (props) => {
+const XLSX = require('xlsx');
+
+const PartyLedger = () => {
 
     const dispatch = useDispatch();
     const history = useHistory();
@@ -134,11 +135,14 @@ const PartyLedger = (props) => {
         try {
             debugger
             if (tableData.length > 0) {
-                ExcelDownloadFunc({
-                    pageField,
-                    excelData: tableData, // Use tableData here
-                    excelFileName: "Party Ledger Report",
-                });
+                debugger
+                excelDownloadFunc(tableData)
+
+                // ExcelDownloadFunc({
+                //     pageField,
+                //     excelData: tableData, // Use tableData here
+                //     excelFileName: "Party Ledger Report",
+                // });
 
             }
 
@@ -169,6 +173,88 @@ const PartyLedger = (props) => {
             a.hasValid.Party.valid = true
             return a
         })
+    }
+
+    function excelDownloadFunc(jsonData) {
+        const wb = XLSX.utils.book_new();
+        const ws = XLSX.utils.aoa_to_sheet([]);
+
+        const dataRows = [
+            ["Form Date", jsonData[0].FormDate],
+            ["To Date", jsonData[0].ToDate],
+
+            ["Distributor Name", jsonData[0].Distributor, '', "Customer Name", jsonData[0].CustomerName],
+            ["Distributor GSTIN", jsonData[0].DistributorGSTIN, '', "Customer GSTIN", jsonData[0].CustomerGSTIN],
+            ["Distributor PAN", jsonData[0].DistributorPAN],
+            // ["Customer Name", jsonData[0].CustomerName],
+            // ["Customer GSTIN", jsonData[0].CustomerGSTIN],
+            ['', '', '', "Opening Balance", jsonData[0].Open],
+            ['', '', '', "Closing Balance", jsonData[0].Close]
+        ];
+
+        const RowsFunc = (data) => {
+
+            const { InvoiceItems = [] } = jsonData[0]
+            InvoiceItems.sort((firstItem, secondItem) => firstItem.GSTPercentage - secondItem.GSTPercentage);
+
+
+            let TotalRecieptAmount = 0
+            let TotalInAmount = 0
+
+
+            const tableHeader = ["Date", "Document No", "Particular", "DR-Amount", "CR-Amount", "Balance"];
+
+            InvoiceItems.forEach((element, key) => {
+
+
+                TotalInAmount = Number(TotalInAmount) + Number(element.Amount);
+                TotalRecieptAmount = Number(TotalRecieptAmount) + Number(element.RecieptAmount);
+
+                const tableItemRow = [
+                    _cfunc.date_dmy_func(element.Date),
+                    element.DocumentNO,
+                    element.Particular,
+                    _cfunc.roundToDecimalPlaces(element.Amount, 2, true),
+                    _cfunc.roundToDecimalPlaces(element.RecieptAmount, 2, true),
+                    _cfunc.roundToDecimalPlaces(element.Balance, 2, true)
+                ];
+
+
+                if (key === 0) {
+                    dataRows.push([]);
+                    dataRows.push([]);
+                    dataRows.push(tableHeader);
+                    dataRows.push(["", "", "Opening Balance", "", "", _cfunc.roundToDecimalPlaces(data.Open, 2, true)]);
+                }
+                dataRows.push(tableItemRow);
+
+                if (key === InvoiceItems.length - 1) {
+                    dataRows.push(["", "", "Monthly Total", _cfunc.roundToDecimalPlaces(TotalInAmount, 2, true), _cfunc.roundToDecimalPlaces(TotalRecieptAmount, 2, true), ""]);
+                    dataRows.push(['', '', "Closing Balance", '', '', _cfunc.roundToDecimalPlaces(data.Close, 2, true)]);
+                    dataRows.push(["", "", "Tax Free Sale", _cfunc.roundToDecimalPlaces(data.TaxFreeSale, 2, true), '', '']);
+                    dataRows.push(["", "", "Taxable sale 5.00 %", _cfunc.roundToDecimalPlaces(data.TaxableSale5, 2, true), '', '']);
+                    dataRows.push(["", '', "Tax 5.00 %", _cfunc.roundToDecimalPlaces(data.GSTAmount5, 2, true), '', '']);
+                    dataRows.push(['', '', "Taxable sale 12.00 %", _cfunc.roundToDecimalPlaces(data.TaxableSale12, 2, true), '', '']);
+                    dataRows.push(['', '', "Tax 12.00 %", _cfunc.roundToDecimalPlaces(data.GSTAmount12, 2, true), '', '']);
+                    dataRows.push(['', " ", "Taxable sale 18.00 %", _cfunc.roundToDecimalPlaces(data.TaxableSale18, 2, true), '', '']);
+                    dataRows.push(["", " ", "Tax 18.00 %", _cfunc.roundToDecimalPlaces(data.GSTAmount18, 2, true), '', '']);
+                    dataRows.push(["", " ", "Total Taxable Scale", _cfunc.roundToDecimalPlaces(data.TotalTaxableSale, 2, true), '', '']);
+                    dataRows.push(["", " ", "Total Credit Note", '', _cfunc.roundToDecimalPlaces(data.TotalCreditNote, 2, true), '']);
+                    dataRows.push(["", " ", "Total Debit Note", _cfunc.roundToDecimalPlaces(data.TotalDebitNote, 2, true), '', '']);
+                    dataRows.push(["", " ", "Total TCS", _cfunc.roundToDecimalPlaces(data.TotalTCS, 2, true), '', '']);
+                }
+            });
+
+            dataRows.push(["", "", ""]);
+
+        }
+
+        RowsFunc(jsonData[0])
+
+        XLSX.utils.sheet_add_aoa(ws, dataRows, { origin: -1 });
+        XLSX.utils.book_append_sheet(wb, ws, 'Data');
+        XLSX.writeFile(wb, "Party Ledger Report.xlsx");
+
     }
 
     async function goButtonHandler(e, btnMode) {

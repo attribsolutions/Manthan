@@ -15,6 +15,7 @@ function isDateInitial(isdate) {
   const yy = current.getFullYear();
   const hours = String(current.getHours()).padStart(2, '0');
   const minutes = String(current.getMinutes()).padStart(2, '0');
+
   return { dd, mm, yy, hours, minutes };
 }
 
@@ -108,7 +109,7 @@ export function CurrentTime() {
 
 
 export const getFirstAndLastDateOfMonth = (inputDate) => {
-  
+
   const [year, month] = inputDate.split('-').map(Number);
   const firstDate = new Date(year, month - 1, 1);
   const lastDate = new Date(year, month, 0);
@@ -373,15 +374,18 @@ export function groupBy(list, keyGetter) {// +++++++++++ Array Group By_kye Func
 
 
 //convert fixed decimal number 
-export function roundToDecimalPlaces(input, decimalPlaces = 3) { //convert fixed decimal number
+export function roundToDecimalPlaces(input, decimalPlaces = 3, returnZerro = false) { //convert fixed decimal number
 
   const number = Number(input)
   if (typeof number !== "number" || isNaN(number) || !isFinite(number)) {
-    return "";
+    return returnZerro ? 0 : '';
   }
   const multiplier = Math.pow(10, decimalPlaces);
   const roundedNumber = Math.round(number * multiplier) / multiplier;
-  const result= roundedNumber === 0 ? "" : roundedNumber;
+  if(returnZerro){
+    return roundedNumber;
+  }
+  const result = roundedNumber === 0 ? "" : roundedNumber;
   return result;
 };
 
@@ -610,7 +614,7 @@ export const tableInputArrowUpDounFunc = (tableId) => {
             return
           }
           var tr = td.closest('tr');
-     
+
           var pos = td[0]?.cellIndex;
 
           var moveToRow = tr.next('tr');
