@@ -28,6 +28,7 @@ import {
     comAddPageFieldFunc,
     formValid,
     initialFiledFunc,
+    onChangeCheckbox,
     onChangeSelect,
     onChangeText,
     resetFunction
@@ -52,9 +53,14 @@ const CentralServiceItem = (props) => {
 
     const fileds = {
         id: "",
-        Name: "",
-        GroupTypeName: "",
-        Sequence: ""
+        ItemName: "",
+        GST: "",
+        HSNCode: "",
+        Rate: "",
+        IsActive: "",
+        Type: "",
+        Unit: "",
+
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
@@ -89,7 +95,7 @@ const CentralServiceItem = (props) => {
     const hasShowModal = props.hasOwnProperty(mode.editValue)
 
     useEffect(() => {
-        const page_Id = pageId.GROUP
+        const page_Id = pageId.CENTRAL_SERVICE_ITEM
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
         dispatch(getGroupTypeslist())
@@ -239,78 +245,168 @@ const CentralServiceItem = (props) => {
                                     <Card>
                                         <CardBody className="c_card_body">
                                             <Row>
-                                                <FormGroup className="mb-2 col col-sm-4 ">
-                                                    <Label htmlFor="validationCustom01">{fieldLabel.Name} </Label>
-                                                    <Input
-                                                        name="Name"
-                                                        id="txtName"
-                                                        value={values.Name}
-                                                        type="text"
-                                                        className={isError.Name.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                        placeholder="Please Enter Name"
-                                                        autoComplete='off'
-                                                        autoFocus={true}
-                                                        onChange={(event) => {
-                                                            onChangeText({ event, state, setState })
-                                                            dispatch(Breadcrumb_inputName(event.target.value))
-                                                        }}
-                                                    />
-                                                    {isError.Name.length > 0 && (
-                                                        <span className="invalid-feedback">{isError.Name}</span>
-                                                    )}
-                                                </FormGroup>
-                                            </Row>
-                                            <Row>
 
-                                                <Col md="4" >
-                                                    <FormGroup className="mb-3">
-                                                        <Label htmlFor="validationCustom01"> {fieldLabel.GroupTypeName} </Label>
-                                                        <Col sm={12} >
+                                                <Col sm={6}>
+
+                                                    <Row>
+                                                        <FormGroup className="mb-2 col col-sm-8 ">
+                                                            <Label htmlFor="validationCustom01">{fieldLabel.ItemName} </Label>
+                                                            <Input
+                                                                name="ItemName"
+                                                                id="txtName"
+                                                                value={values.ItemName}
+                                                                type="text"
+                                                                className={isError.ItemName.length > 0 ? "is-invalid form-control" : "form-control"}
+                                                                placeholder="Please Enter ItemName"
+                                                                autoComplete='off'
+                                                                autoFocus={true}
+                                                                onChange={(event) => {
+                                                                    onChangeText({ event, state, setState })
+                                                                    dispatch(Breadcrumb_inputName(event.target.value))
+                                                                }}
+                                                            />
+                                                            {isError.ItemName.length > 0 && (
+                                                                <span className="invalid-feedback">{isError.ItemName}</span>
+                                                            )}
+                                                        </FormGroup>
+                                                    </Row>
+                                                    <Row>
+
+
+                                                        <FormGroup className="mb-2 col col-sm-8 ">
+                                                            <Label htmlFor="validationCustom01"> {fieldLabel.GST} </Label>
+                                                            <Col sm={12} >
+
+                                                                <Input
+                                                                    name="Type"
+                                                                    id="txtSequence"
+                                                                    value={values.GST}
+                                                                    type="text"
+                                                                    className={isError.GST.length > 0 ? "is-invalid form-control" : "form-control"}
+                                                                    placeholder="Please Enter Type"
+                                                                    autoComplete='off'
+                                                                    onChange={(event) => {
+                                                                        onChangeText({ event, state, setState })
+                                                                    }}
+                                                                />
+
+                                                                {isError.GST.length > 0 && (
+                                                                    <span className="text-danger f-8"><small>{isError.GST}</small></span>
+                                                                )}
+                                                            </Col>
+                                                        </FormGroup>
+
+
+                                                    </Row>
+
+                                                    <Row>
+                                                        <FormGroup className="mb-2 col col-sm-8 ">
+                                                            <Label htmlFor="validationCustom01">{fieldLabel.HSNCode} </Label>
+                                                            <Input
+                                                                name="HSNCode"
+                                                                id="txtSequence"
+                                                                value={values.HSNCode}
+                                                                type="text"
+                                                                className={isError.HSNCode.length > 0 ? "is-invalid form-control" : "form-control"}
+                                                                placeholder="Please Enter HSNCode"
+                                                                autoComplete='off'
+                                                                onChange={(event) => {
+                                                                    onChangeText({ event, state, setState })
+                                                                }}
+                                                            />
+                                                            {isError.HSNCode.length > 0 && (
+                                                                <span className="invalid-feedback">{isError.HSNCode}</span>
+                                                            )}
+                                                        </FormGroup>
+                                                    </Row>
+
+
+                                                    <Row >
+                                                        <Label
+                                                            className="col-sm-2 col-form-label">
+                                                            {fieldLabel.IsActive}
+                                                        </Label>
+                                                        <Col md={4} style={{ marginTop: '7px' }} className=" form-check form-switch form-switch-sm ">
+                                                            <div className="form-check form-switch form-switch-md mb-3">
+                                                                <Input
+                                                                    type="checkbox"
+                                                                    className="form-check-input"
+                                                                    checked={values.IsActive}
+
+                                                                    name="IsActive"
+                                                                    onChange={(event) => onChangeCheckbox({ event, state, setState })}
+                                                                />
+                                                            </div>
+                                                        </Col>
+                                                    </Row>
+
+                                                </Col>
+                                                <Col sm={6}>
+
+                                                    <Row>
+                                                        <FormGroup className="mb-2 col col-sm-8 ">
+                                                            <Label htmlFor="validationCustom01">{fieldLabel.Rate} </Label>
+                                                            <Input
+                                                                name="Rate"
+                                                                id="txtName"
+                                                                value={values.Rate}
+                                                                type="text"
+                                                                className={isError.Rate.length > 0 ? "is-invalid form-control" : "form-control"}
+                                                                placeholder="Please Enter Rate"
+                                                                autoComplete='off'
+                                                                autoFocus={true}
+                                                                onChange={(event) => {
+                                                                    onChangeText({ event, state, setState })
+                                                                    dispatch(Breadcrumb_inputName(event.target.value))
+                                                                }}
+                                                            />
+                                                            {isError.Rate.length > 0 && (
+                                                                <span className="invalid-feedback">{isError.Rate}</span>
+                                                            )}
+                                                        </FormGroup>
+                                                    </Row>
+                                                    <Row>
+                                                        <FormGroup className="mb-2 col col-sm-8 ">
+                                                            <Label htmlFor="validationCustom01">{fieldLabel.Unit} </Label>
+                                                            <Input
+                                                                name="Unit"
+                                                                id="txtSequence"
+                                                                value={values.Unit}
+                                                                type="text"
+                                                                className={isError.Unit.length > 0 ? "is-invalid form-control" : "form-control"}
+                                                                placeholder="Please Enter Unit"
+                                                                autoComplete='off'
+                                                                onChange={(event) => {
+                                                                    onChangeText({ event, state, setState })
+                                                                }}
+                                                            />
+                                                            {isError.Unit.length > 0 && (
+                                                                <span className="invalid-feedback">{isError.Unit}</span>
+                                                            )}
+                                                        </FormGroup>
+                                                    </Row>
+
+
+                                                    <Row>
+                                                        <FormGroup className="mb-2 col col-sm-8 ">
+                                                            <Label htmlFor="validationCustom01">{fieldLabel.Type} </Label>
                                                             <Select
-                                                                name="GroupTypeName"
-                                                                value={values.GroupTypeName}
+                                                                name="GST"
+                                                                value={values.Type}
                                                                 isSearchable={true}
                                                                 className="react-dropdown"
                                                                 classNamePrefix="dropdown"
-                                                                options={GroupTypesValues}
+                                                                // options={GroupTypesValues}
                                                                 onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
 
                                                             />
-                                                            {isError.GroupTypeName.length > 0 && (
-                                                                <span className="text-danger f-8"><small>{isError.GroupTypeName}</small></span>
+                                                            {isError.Type.length > 0 && (
+                                                                <span className="invalid-feedback">{isError.Type}</span>
                                                             )}
-                                                        </Col>
-                                                    </FormGroup>
+                                                        </FormGroup>
+                                                    </Row>
                                                 </Col>
 
-                                                {(groupTypeMaster_AddAccess) &&
-                                                    <Col md="1" className=" mt-3">
-                                                        <AddMaster
-                                                            masterModal={GroupTypeMaster}
-                                                            masterPath={url.GROUPTYPE}
-                                                        />
-                                                    </Col>}
-                                            </Row>
-
-                                            <Row>
-                                                <FormGroup className="mb-2 col col-sm-4 ">
-                                                    <Label htmlFor="validationCustom01">{fieldLabel.Sequence} </Label>
-                                                    <Input
-                                                        name="Sequence"
-                                                        id="txtSequence"
-                                                        value={values.Sequence}
-                                                        type="text"
-                                                        className={isError.Sequence.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                        placeholder="Please Enter Sequence"
-                                                        autoComplete='off'
-                                                        onChange={(event) => {
-                                                            onChangeText({ event, state, setState })
-                                                        }}
-                                                    />
-                                                    {isError.Sequence.length > 0 && (
-                                                        <span className="invalid-feedback">{isError.Sequence}</span>
-                                                    )}
-                                                </FormGroup>
                                             </Row>
 
                                             <FormGroup className="mt-1">
@@ -344,5 +440,5 @@ const CentralServiceItem = (props) => {
     }
 };
 
-export default CentralServiceItem ;
+export default CentralServiceItem;
 
