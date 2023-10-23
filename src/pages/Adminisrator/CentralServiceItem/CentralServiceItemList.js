@@ -18,6 +18,7 @@ import {
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
 import { PageLoadingSpinner } from "../../../components/Common/CommonButton";
+import CentralServiceItem from "./CentralServiceItemMaster";
 
 const CentralServiceItemList = () => {
 
@@ -46,7 +47,7 @@ const CentralServiceItemList = () => {
   }
 
   useEffect(() => {
-    const page_Id = pageId.GROUP_lIST
+    const page_Id = pageId.CENTRAL_SERVICE_ITEM_LIST
     dispatch(commonPageFieldListSuccess(null))
     dispatch(commonPageFieldList(page_Id))
     dispatch(getGroupList());
@@ -66,9 +67,9 @@ const CentralServiceItemList = () => {
         <CommonListPage
           action={action}
           reducers={reducers}
-          MasterModal={GroupMaster}
-          masterPath={url.GROUP}
-          ButtonMsgLable={"Group"}
+          MasterModal={CentralServiceItem}
+          masterPath={url.CENTRAL_SERVICE_ITEM_MASTER}
+          ButtonMsgLable={"Central Service Item"}
           deleteName={"Name"}
         />
 
