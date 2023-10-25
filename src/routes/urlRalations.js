@@ -140,6 +140,8 @@ export const SubCluster_List =  url.SUB_CLUSTER_MASTER
 export const CentralServiceItem = url.CENTRAL_SERVICE_ITEM_lIST
 export const CentralServiceItemList = url.CENTRAL_SERVICE_ITEM_MASTER
 
+export const SERVICE_ITEM_ASSIGN = url.SERVICE_ITEM_ASSIGN
+
 //******************************* Purchase Module ************************************//
 
 export const OrderList_1 = url.ORDER_1;
@@ -229,8 +231,6 @@ export const PaymentEntry = url.PAYMENT_ENTRY_LIST;
 export const PaymentEntryList = url.PAYMENT_ENTRY;
 
 export const BankAssign = url.BANK_ASSIGN;
-
-
 
 export const Credit = url.CREDIT_LIST;
 export const CreditList = url.CREDIT_NOTE;

@@ -494,5 +494,6 @@ export const SUB_CLUSTER = '/SubClusters'
 
 export const CENTRAL_SERVICE_ITEM = '/CentralItemService'
 
-
-
+// Service Item Assign
+export const SERVICE_ITEM_ASSIGN_SAVE = '/CentralServiceItemAssign';
+export const SERVICE_ITEM_ASSIGN_GO_BUTTON = '/CentralServiceItemAssignFilter';

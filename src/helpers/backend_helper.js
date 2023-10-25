@@ -757,6 +757,9 @@ export const CentralServiceItem_Delete = ({ deleteId }) => del(`${url.CENTRAL_SE
 export const CentralServiceItem_Edit = ({ editId }) => get(`${url.CENTRAL_SERVICE_ITEM}/${editId}`) // delete api 
 export const CentralServiceItem_Update = ({ jsonBody, updateId }) => put(`${url.CENTRAL_SERVICE_ITEM}/${updateId}`, jsonBody) // delete api 
 
+// Service Item Assign
+export const ServiceItemAssign_Save_API = ({ jsonBody }) => post(url.SERVICE_ITEM_ASSIGN_SAVE, jsonBody)// post api
+export const ServiceItemAssign_GoButton_API = ({jsonBody}) => post(url.SERVICE_ITEM_ASSIGN_GO_BUTTON, jsonBody) // get api
 
 export {
 	getLoggedInUser,

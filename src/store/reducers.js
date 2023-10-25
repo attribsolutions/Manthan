@@ -114,7 +114,7 @@ import PartyOutStanding_Reducer from "./Report/PartyOutstandingRedux/reducer"
 import ClusterReducer from "./Administrator/ClusterRedux/reducer"
 import SubClusterReducer from "./Administrator/SubClusterRedux/reducer"
 import CentralServiceItemReducer from "./Administrator/CentralServiceItemRedux/reducer"
-
+import ServiceItemAssignReducer from "./Administrator/ServiceItemAssignRedux/reducer"
 
 const rootReducer = combineReducers({
 	Layout,
@@ -207,6 +207,7 @@ const rootReducer = combineReducers({
 	PartyOutStanding_Reducer,
 	ClusterReducer,
 	SubClusterReducer,
-	CentralServiceItemReducer
+	CentralServiceItemReducer,
+	ServiceItemAssignReducer
 })
 export default rootReducer

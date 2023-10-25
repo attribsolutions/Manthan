@@ -204,6 +204,7 @@ import SubClusterList from "../pages/Adminisrator/Cluster_SubCluster/SubClusterL
 
 import CentralServiceItem from "../pages/Adminisrator/CentralServiceItem/CentralServiceItemMaster";
 import CentralServiceItemList from "../pages/Adminisrator/CentralServiceItem/CentralServiceItemList";
+import ServiceItemAssign from "../pages/Adminisrator/ServiceItemAssign";
 
 
 const userRoutes = [
@@ -299,8 +300,7 @@ const userRoutes = [
 
 	{ path: path.PARTYITEM, component: PartyItems },
 	{ path: path.CHANNEL_ITEM, component: PartyItems },
-
-
+	
 	{ path: path.SUBGROUP, component: SubGroupMaster },
 	{ path: path.SUBGROUP_LIST, component: SubGroupList },
 
@@ -345,12 +345,15 @@ const userRoutes = [
 
 	{ path: path.CLUSTER_MASTER, component: ClusterMaster },
 	{ path: path.CLUSTER_lIST, component: ClusterList },
-	
+
 	{ path: path.SUB_CLUSTER_MASTER, component: SubClusterMaster },
 	{ path: path.SUB_CLUSTER_lIST, component: SubClusterList },
 
 	{ path: path.CENTRAL_SERVICE_ITEM_MASTER, component: CentralServiceItem },
 	{ path: path.CENTRAL_SERVICE_ITEM_lIST, component: CentralServiceItemList },
+
+	{ path: path.SERVICE_ITEM_ASSIGN, component: ServiceItemAssign },
+
 
 	//******************************* Inventory Module ************************************//
 	{ path: path.CHALLAN_LIST, component: ChallanList },

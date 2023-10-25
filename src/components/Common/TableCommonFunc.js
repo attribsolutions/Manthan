@@ -7,13 +7,19 @@ const onSelectAll = (event, allarray,) => {
 
   allarray.forEach(ele => {
     ele.selectCheck = event
+    // try {
+    //   document.getElementById(`serviceItemAssign-${ele.ServiceItem}`).disabled = !(event)
+    // } catch (e) { }
   })
 }
 
 const selectRow = (row, event) => {
-
   row.selectCheck = event
+  // try {
+  //   document.getElementById(`serviceItemAssign-${row.ServiceItem}`).disabled = !(event)
+  // } catch (e) { }
 }
+
 export const selectAllCheck = ({
   rowSelected = '',
   nonSelectable = '',
