@@ -192,8 +192,8 @@ export const GROUP_API = '/Group'
 export const SUBGROUP_API = '/SubGroups'
 
 //General API
-export const GENERAL_API = '/GeneralMaster'
-export const TYPE_API = '/GeneralMasterType'
+export const GENERAL_MASTER_API = '/GeneralMaster'
+export const GENERAL_MASTER_TYPE_API = '/GeneralMasterType'
 export const GENERAL_MASTER_LIST = '/GeneralMasterList'
 
 // GST API

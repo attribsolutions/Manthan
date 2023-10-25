@@ -9,14 +9,15 @@ export const history = createBrowserHistory();
 
 
 function isDateInitial(isdate) {
-  const current = isdate ? new Date(isdate) : new Date();
-  const dd = String(current.getDate()).padStart(2, '0');
-  const mm = String(current.getMonth() + 1).padStart(2, '0');
-  const yy = current.getFullYear();
-  const hours = String(current.getHours()).padStart(2, '0');
-  const minutes = String(current.getMinutes()).padStart(2, '0');
+  const dateInstance = isdate ? new Date(isdate) : new Date();
+  const dd = String(dateInstance.getDate()).padStart(2, '0');
+  const mm = String(dateInstance.getMonth() + 1).padStart(2, '0');
+  const yy = dateInstance.getFullYear();
+  const hours = String(dateInstance.getHours()).padStart(2, '0');
+  const minutes = String(dateInstance.getMinutes()).padStart(2, '0');
+  const seconds = String(dateInstance.getSeconds()).padStart(2, '0');
 
-  return { dd, mm, yy, hours, minutes };
+  return { dd, mm, yy, hours, minutes, seconds, dateInstance };
 }
 
 export const date_ymd_func = (isdate) => { //+++++++++++++++ Current Date by format (yyyy-dd-mm) ++++++++++++++++++++++++++++++++++++
@@ -73,13 +74,14 @@ export function listpageConcatDateAndTime(date, time) {//+++++++++++time and dat
 
 
 export function getDateTime_dmy(hourOffset = 0) {
-  const { dd, mm, yy } = isDateInitial();
-  const currentDate = new Date();
-  currentDate.setHours(currentDate.getHours() - hourOffset); // Subtract the specified number of hours
-  const hours = String(currentDate.getHours()).padStart(2, '0');
-  const minutes = String(currentDate.getMinutes()).padStart(2, '0');
+  const { dd, mm, yy, dateInstance } = isDateInitial();
 
-  return `${dd}-${mm}-${yy} ${hours}:${minutes}`;
+  dateInstance.setHours(dateInstance.getHours() - hourOffset); // Subtract the specified number of hours
+  const hours = String(dateInstance.getHours()).padStart(2, '0');
+  const minutes = String(dateInstance.getMinutes()).padStart(2, '0');
+  const seconds = String(dateInstance.getSeconds()).padStart(2, '0');
+
+  return `${dd}-${mm}-${yy} ${hours}:${minutes}:${seconds}`;
 }
 
 export function convertDateTime_ydm(inputDateTime) {
@@ -382,7 +384,7 @@ export function roundToDecimalPlaces(input, decimalPlaces = 3, returnZerro = fal
   }
   const multiplier = Math.pow(10, decimalPlaces);
   const roundedNumber = Math.round(number * multiplier) / multiplier;
-  if(returnZerro){
+  if (returnZerro) {
     return roundedNumber;
   }
   const result = roundedNumber === 0 ? "" : roundedNumber;

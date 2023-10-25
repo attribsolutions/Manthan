@@ -5,12 +5,13 @@ import ToolkitProvider from 'react-bootstrap-table2-toolkit';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { Col, FormGroup, Label, Row } from 'reactstrap';
-import { Go_Button} from '../../components/Common/CommonButton';
-import { breadcrumbReturnFunc, convertDateTime_ydm,  getDateTime_dmy, loginEmployeeID } from '../../components/Common/CommonFunction';
+import { Go_Button } from '../../components/Common/CommonButton';
+import { breadcrumbReturnFunc, convertDateTime_ydm, getDateTime_dmy, loginCompanyID, loginEmployeeID } from '../../components/Common/CommonFunction';
 import { mySearchProps } from '../../components/Common/SearchBox/MySearch';
+import { customAlert } from '../../CustomAlert/ConfirmDialog';
 import { C_Select, C_TimePicker } from '../../CustomValidateForm';
 import { showToastAlert } from '../../helpers/axios_Config';
-import { commonPartyDropdown_API, TransactionLog_Get_User_Api, TransactionLog_Go_Btn_Api, TransactionLog_transactionType_Api } from '../../helpers/backend_helper';
+import { commonPartyDropdown_API, genaraMasterBy_Type_API, GenralMasterSubType, TransactionLog_Get_User_Api, TransactionLog_Go_Btn_Api, TransactionLog_transactionType_Api } from '../../helpers/backend_helper';
 import { BreadcrumbShowCountlabel } from '../../store/actions';
 
 
@@ -26,14 +27,16 @@ const TransactionLog = () => {
     const [transactionTypeSelect, setTransactionTypeSelect] = useState([]);
     const [userSelect, setUserSelect] = useState([]);
     const [partySelect, setPartySelect] = useState([]);
-    const [formDateSelect, setFormDateSelect] = useState(()=>getDateTime_dmy(1));//offSetTime 1 hour earlier
+    const [formDateSelect, setFormDateSelect] = useState(() => getDateTime_dmy(1));//offSetTime 1 hour earlier
     const [toDateSelect, setToDateSelect] = useState(getDateTime_dmy);
+    const [categoryTypeSelect, setCategoryTypeSelect] = useState('');
 
     const [goBtnloading, setGoBtnloading] = useState(false);
     const [tableData, setTableData] = useState([]);
     const [transctionTypeReux, setTransctionTypeReux] = useState([]);
     const [usersRedux, setUsersRedux] = useState([]);
     const [partyRedux, setPartyRedux] = useState([]);
+    const [categoryTypeRedux, setCategoryTypeRedux] = useState([]);
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const { userAccess } = useSelector((state) => ({ userAccess: state.Login.RoleAccessUpdateData }));
@@ -51,6 +54,15 @@ const TransactionLog = () => {
         if (resp3.StatusCode === 200) {
             setPartyRedux(resp3.Data)
         }
+
+        const resp4 = await GenralMasterSubType(JSON.stringify({//Api genral master
+            Company: loginCompanyID(),
+            TypeID: 90 //hardcode 90 id
+        }))
+        if (resp4.StatusCode === 200) {
+            setCategoryTypeRedux(resp4.Data)
+        }
+
     }, [])
 
     const generateOptions = (sourceArray, labelField = "Name", valueField = "id") =>
@@ -59,6 +71,7 @@ const TransactionLog = () => {
     const transactionTypeOptions = useMemo(() => generateOptions(transctionTypeReux), [transctionTypeReux])
     const userOptions = useMemo(() => generateOptions(usersRedux), [usersRedux]);
     const partyOptions = useMemo(() => generateOptions(partyRedux), [partyRedux]);
+    const categoryTypeOptions = useMemo(() => categoryTypeRedux.map(item => ({ value: item.id, label: item.Name })), [categoryTypeRedux]);
 
     // userAccess useEffect
     useEffect(() => {
@@ -107,19 +120,24 @@ const TransactionLog = () => {
             dataField: "CustomerName",
             sort: true
         },
-        
+
     ]
 
     const goButtonHandler = async () => {
         try {
+            if (!categoryTypeSelect.value > 0) {
+                showToastAlert("Please Select Category Type",'error');
+                return
+            }
+            setTableData([]);
             setGoBtnloading(true);
-            setTableData([])
             const jsonBody = JSON.stringify({
                 "FromDate": convertDateTime_ydm(formDateSelect),
                 "ToDate": convertDateTime_ydm(toDateSelect),
                 "TransactionType": transactionTypeSelect.map(item => item.value).join(','),
                 "User": userSelect.map(item => item.value).join(','),
                 "Party": partySelect.map(item => item.value).join(','),
+                "TransactionCategory": categoryTypeSelect.value,
             })
             const resp3 = await TransactionLog_Go_Btn_Api({ jsonBody })
             setGoBtnloading(false);
@@ -149,11 +167,20 @@ const TransactionLog = () => {
                                     <C_TimePicker
                                         id="fromdate"
                                         value={formDateSelect}
-                                        onChange={(obj, selectedDate) => {
-                                            setFormDateSelect(selectedDate)
-                                        }}
                                         placeholder="Select From Date"
                                         name="fromdate"
+                                        data-enable-time
+                                        data-enable-seconds
+                                        data-enable-input={true} // Enable manual input
+                                        options={{
+                                            altInput: true,
+                                            altFormat: 'd-m-Y H:i:S', // Updated date format with 24-hour time
+                                            dateFormat: 'd-m-Y H:i:S', // Updated date format with 24-hour time
+                                        }}
+                                        onChange={(obj, selectedDate) => {
+                                            debugger
+                                            setFormDateSelect(selectedDate)
+                                        }}
                                     />
                                 </Col>
                             </div>
@@ -169,15 +196,45 @@ const TransactionLog = () => {
                                     <C_TimePicker
                                         id="todate"
                                         name="todate"
-                                        value={toDateSelect}
-                                        onChange={(obj, selectedDate) => setToDateSelect(selectedDate)}
                                         placeholder="Select To Date"
+                                        value={toDateSelect}
+                                        data-enable-time
+                                        data-enable-seconds
+                                        data-enable-input={true} // Enable manual input
+                                        options={{
+                                            altInput: true,
+                                            altFormat: 'd-m-Y H:i:S', // Updated date format with 24-hour time
+                                            dateFormat: 'd-m-Y H:i:S', // Updated date format with 24-hour time
+                                        }}
+                                        onChange={(obj, selectedDate) => setToDateSelect(selectedDate)}
                                     />
                                 </Col>
                             </div>
                         </FormGroup>
                     </Col>
-                   
+
+                    <Col sm="3" >
+                        <FormGroup >
+                            <div className="d-flex align-items-center">
+                                <Label className="col-sm-5 p-2" >
+                                    Category Type
+                                </Label>
+                                <Col sm="7">
+                                    <C_Select
+                                        placeholder="Category Type"
+                                        classNamePrefix="select2-Customer"
+                                        value={categoryTypeSelect}
+                                        onChange={(e => setCategoryTypeSelect(e))}
+                                        options={categoryTypeOptions}
+                                        styles={{
+                                            menu: (provided) => ({ ...provided, zIndex: 2 }),
+                                        }}
+                                    />
+                                </Col>
+                            </div>
+                        </FormGroup>
+                    </Col>
+
                 </div>
                 <div className="row">
                     <Col sm="3" >
@@ -260,7 +317,7 @@ const TransactionLog = () => {
     };
 
     return (
-        
+
         <React.Fragment>
             {/* <PageLoadingSpinner isLoading={goBtnloading || !pageField} /> */}
             <div className="page-content">

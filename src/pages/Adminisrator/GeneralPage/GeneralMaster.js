@@ -24,8 +24,8 @@ import {
     editGeneralIDSuccess,
     updateGeneralID,
     updateGeneralIDSuccess,
-    PostType,
-    PostTypeSuccess
+    genaral_Master_By_Type_Action,
+    Genaral_Master_By_Type_ActionSuccess
 } from "../../../store/Administrator/GeneralRedux/action";
 import { useHistory } from "react-router-dom";
 import {
@@ -88,7 +88,7 @@ const GeneralMaster = (props) => {
         const page_Id = pageId.GENERAL
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
-        dispatch(PostTypeSuccess());
+        dispatch(Genaral_Master_By_Type_ActionSuccess());
     }, []);
 
     const values = { ...state.values }
@@ -161,7 +161,7 @@ const GeneralMaster = (props) => {
         const jsonBody = JSON.stringify({
             Company: loginCompanyID(),
         });
-        dispatch(PostType(jsonBody));
+        dispatch(genaral_Master_By_Type_Action(jsonBody));
     }, []);
 
     useEffect(async () => {

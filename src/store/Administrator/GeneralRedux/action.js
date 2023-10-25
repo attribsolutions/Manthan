@@ -10,8 +10,8 @@ import {
   POST_GENERAL_LIST_SUCCESS,
   UPDATE_GENERAL_ID,
   UPDATE_GENERAL_ID_SUCCESS,
-  POST_TYPE,
-  POST_TYPE_SUCCESS,
+  GENARAL_MASTER_BY_TYPE,
+  GENARAL_MASTER_BY_TYPE_SUCCESS,
   GENERAL_MASTER_SUB_TYPE,
   GENERAL_MASTER_SUB_TYPE_SUCCESS,
 } from "./actionType";
@@ -56,12 +56,12 @@ export const updateGeneralIDSuccess = (updateMessage) => ({          //Update ac
   payload: updateMessage,
 })
 
-export const PostType = (data) => ({                                    // Post type Action
-  type: POST_TYPE,
-  data,
+export const genaral_Master_By_Type_Action = (jsonBody) => ({                                    // Post type Action
+  type: GENARAL_MASTER_BY_TYPE,
+  jsonBody,
 });
-export const PostTypeSuccess = (data) => ({                              // Post type Action Success
-  type: POST_TYPE_SUCCESS,
+export const Genaral_Master_By_Type_ActionSuccess = (data) => ({                              // Post type Action Success
+  type: GENARAL_MASTER_BY_TYPE_SUCCESS,
   payload: data,
 
 });

@@ -395,11 +395,11 @@ export const update_SubGroup_List_Api = ({ jsonBody, updateId }) => put(`${url.S
 
 // General API
 export const Post_General_List_Api = (data) => post(url.GENERAL_MASTER_LIST, data)// get api
-export const Post_General_API = ({ jsonBody }) => post(url.GENERAL_API, jsonBody)// post api
-export const delete_General_List_Api = ({ deleteId }) => del(`${url.GENERAL_API}/${deleteId}`)// delete api
-export const edit_General_List_Api = ({ editId }) => get(`${url.GENERAL_API}/${editId}`)// edit api
-export const update_General_List_Api = ({ jsonBody, updateId }) => put(`${url.GENERAL_API}/${updateId}`, jsonBody)// update api
-export const post_Type_API = (data) => post(url.TYPE_API, data)// Type DropDown API
+export const Post_General_API = ({ jsonBody }) => post(url.GENERAL_MASTER_API, jsonBody)// post api
+export const delete_General_List_Api = ({ deleteId }) => del(`${url.GENERAL_MASTER_API}/${deleteId}`)// delete api
+export const edit_General_List_Api = ({ editId }) => get(`${url.GENERAL_MASTER_API}/${editId}`)// edit api
+export const update_General_List_Api = ({ jsonBody, updateId }) => put(`${url.GENERAL_MASTER_API}/${updateId}`, jsonBody)// update api
+export const genaraMasterBy_Type_API = (jsonBody) => post(url.GENERAL_MASTER_TYPE_API, jsonBody)// Type DropDown API
 
 //Routes API
 export const Routes_Get_API = (filters) => post(url.ROUTES_FILTER, filters)// post api
