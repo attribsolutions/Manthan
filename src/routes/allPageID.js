@@ -149,6 +149,10 @@ export const SUB_CLUSTER_lIST = 255
 export const CENTRAL_SERVICE_ITEM = 250
 export const CENTRAL_SERVICE_ITEM_LIST = 251
 
+export const SERVICE_ITEM_ASSIGN = 256
+
+
+
 //******************************* Purchase Module ************************************//
 export const ORDER_1 = 53
 export const ORDER_LIST_1 = 54

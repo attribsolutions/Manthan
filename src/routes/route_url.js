@@ -145,9 +145,10 @@ export const CLUSTER_lIST = "/Cluster_List"
 export const SUB_CLUSTER_MASTER = "/SubCluster_Master"
 export const SUB_CLUSTER_lIST = "/SubCluster_List"
 
-
 export const CENTRAL_SERVICE_ITEM_MASTER = "/CentralServiceItem"
 export const CENTRAL_SERVICE_ITEM_lIST = "/CentralServiceItemList"
+
+export const SERVICE_ITEM_ASSIGN = "/Service_Item_Assign"
 
 //******************************* Purchase Module ************************************//
 export const ORDER_1 = "/Order_1"
