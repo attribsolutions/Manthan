@@ -397,8 +397,8 @@ const ItemsMaster = (props) => {
             const jsonBody = JSON.stringify({
                 products: (updateMsg.TransactionID).toString()
             })
-            const mobilApiResp = await mobileApp_ProductUpdate_Api({ jsonBody });
-            if (mobilApiResp.StatusCode === 200) { showToastAlert(mobilApiResp.Message); }
+            // const mobilApiResp = await mobileApp_ProductUpdate_Api({ jsonBody });
+            // if (mobilApiResp.StatusCode === 200) { showToastAlert(mobilApiResp.Message); }
             //************************************** */
 
             history.push({
