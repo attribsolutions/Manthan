@@ -139,6 +139,16 @@ export const PRODUCT_MARGIN_REPORT = "/ProductMarginReport"
 export const DISCOUNT_MASTER = "/Discount_Master"
 export const DISCOUNT_LIST = "/Discount_List"
 
+export const CLUSTER_MASTER = "/Cluster_Master"
+export const CLUSTER_lIST = "/Cluster_List"
+
+export const SUB_CLUSTER_MASTER = "/SubCluster_Master"
+export const SUB_CLUSTER_lIST = "/SubCluster_List"
+
+
+export const CENTRAL_SERVICE_ITEM_MASTER = "/CentralServiceItem"
+export const CENTRAL_SERVICE_ITEM_lIST = "/CentralServiceItemList"
+
 //******************************* Purchase Module ************************************//
 export const ORDER_1 = "/Order_1"
 export const ORDER_LIST_1 = "/OrderList_1"
@@ -310,9 +320,9 @@ export const RECEIPT_DATA_EXPORT = "/ReceiptDataExport"
 
 export const PARTY_OUTSTANDING_REPORT = "/PartyOutstandingReport"
 
-export const RETAILER_APPROVAL ="/RetailerApproval"
+export const RETAILER_APPROVAL = "/RetailerApproval"
 
-export const MOBILE_RETAILER_SEND ="/MobileRetailerSend"
+export const MOBILE_RETAILER_SEND = "/MobileRetailerSend"
 
 export const MAN_POWER_REPORT = "/ManPowerReport"
 
