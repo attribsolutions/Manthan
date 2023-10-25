@@ -172,7 +172,7 @@ const ServiceItemAssign = (props) => {
 						key={`serviceItemAssign-${key}`}
 						cpattern={decimalRegx}
 						defaultValue={row.Rate}
-						disabled={!(row.selectCheck) && true}
+						// disabled={!(row.selectCheck) && true}
 						className="text-end"
 						onChange={(event) => { row.Rate = event.target.value }}
 					/>
