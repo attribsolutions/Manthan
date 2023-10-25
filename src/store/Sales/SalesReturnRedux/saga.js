@@ -15,7 +15,7 @@ function* Invoice_No_List_GenFunc({ jsonBody }) {
 
 // add button api for sales return
 function* save_SalesReturn_GenFunc({ config }) {
-    
+
     for (let pair of config.formData.entries()) {
         console.log(pair[0], pair[1]);
     }
@@ -58,6 +58,7 @@ function* SalesReturn_confirmID_GenFunc({ config }) {
 
     try {
         const response = yield call(apiCall.SalesReturn_SingleGet_API, config);
+        response["pageMode"] = config.pageMode;
         response.Data[0]["viewMode"] = config.viewMode;
         response.Data[0]["ReturnID"] = config.editId;
         response.Data[0].ReturnItems.map((index) => {

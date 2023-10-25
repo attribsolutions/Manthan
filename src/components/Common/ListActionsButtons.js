@@ -4,6 +4,7 @@ import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import { date_dmy_func, loginSystemSetting, loginUserID } from "./CommonFunction"
 import '../../assets/searchBox/searchBox.scss'
 import { Cancel_Credit_Debit_EInvoiceAction, Cancel_EInvoiceAction, Cancel_EwayBillAction, Uploaded_Credit_Debit_EInvoiceAction, Uploaded_EInvoiceAction, Uploaded_EwayBillAction } from "../../store/actions";
+import { url } from "../../routes";
 
 //******************** button class ******************************
 
@@ -36,6 +37,12 @@ const cancelIconClass = "mdi mdi-cancel font-size-14";
 const claimCustomerWisePrintIconClass = "fas fa-file-contract font-size-14";  //Icon Added For Claim Print on Claim list
 const claimItemWisePrintIconClass = "fas fa-file-signature";  //Icon Added For Claim Print on Claim list
 const claimMasterPrintIconClass = "far fa-file-alt font-size-14";  //Icon Added For Claim Print on Claim list
+const makeCreditNoteIconClass = "mdi mdi-file-move font-size-16";
+// const makeCreditNoteIconClass = "far fa-file-alt font-size-14";  //Icon Added For Claim Print on Claim list
+
+
+
+
 
 
 
@@ -168,7 +175,7 @@ export const listPageActionsButtonFunc = (props) => {
         const canItemWisePrint = hasRole("RoleAccess_IsPrint") && downClaimBtnFunc;
         const canMasterClaimPrint = hasRole("RoleAccess_IsPrint") && downClaimBtnFunc;
         const canSendToScm = isPartyTypeIDInSendToScm //  Currently Button  is remove From InVoice List of CX parties  further Development After Discussion  So condition is False
-
+        const canMakeCreditNoteBtn = (subPageMode === url.SALES_RETURN_LIST)
 
 
 
@@ -176,7 +183,9 @@ export const listPageActionsButtonFunc = (props) => {
         const dummyDisable_Edit = (userAccState.RoleAccess_IsEdit || userAccState.RoleAccess_IsEditSelf) && !canEdit && !canEditSelf && !canView && !viewApprovalBtnFunc;
         const dummyDisable_Delete = (hasRole("RoleAccess_IsDelete") || hasRole("RoleAccess_IsDeleteSelf")) && !canDelete && !canDeleteSelf;
         const dummyDisable_MakeBtn = !canMakeBtn && makeBtnShow;
-        const dummyDisable_SendToScm = !isPartyTypeIDInSendToScm && sendToScmBtnFunc
+        const dummyDisable_SendToScm = !isPartyTypeIDInSendToScm && sendToScmBtnFunc;
+        const dummyDisable_MakeCreditNoteBtn = !canMakeCreditNoteBtn;
+
 
 
 
@@ -273,6 +282,16 @@ export const listPageActionsButtonFunc = (props) => {
                         isDummyBtn: dummyDisable_MakeBtn
                     })}
 
+                    {renderButtonIfNeeded({   // Button Added For Make Goods Credit Note In Sales Return
+                        condition: canMakeCreditNoteBtn,
+                        btnmode: mode.makeBtn,
+                        iconClass: makeCreditNoteIconClass,
+                        actionFunc: makeButtonHandler,
+                        title: makeBtnName,
+                        buttonClasss: vieBtnCss,
+
+                    })}
+
                     {renderButtonIfNeeded({
                         condition: canPrint,
                         btnmode: mode.download,
@@ -321,7 +340,7 @@ export const listPageActionsButtonFunc = (props) => {
                         title: "Print Master ",
                         buttonClasss: printBtnCss,
                     })}
-                    {renderButtonIfNeeded({    //Button Added for Invoice send to SCM  in Invoice List Page
+                    {renderButtonIfNeeded({   //Button Added for Invoice send to SCM  in Invoice List Page
                         condition: canSendToScm,
                         btnmode: mode.isSendToScm,
                         iconClass: sendToScmIconClass,
@@ -329,9 +348,10 @@ export const listPageActionsButtonFunc = (props) => {
                         title: "Send To Scm",
                         buttonClasss: makeBtnCss,
                         isDummyBtn: dummyDisable_SendToScm
-
-
                     })}
+
+
+
                     {renderButtonIfNeeded({
                         condition: canDelete,
                         btnmode: mode.isdelete,

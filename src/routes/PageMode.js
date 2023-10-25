@@ -6,6 +6,8 @@ export const copy = "copy";
 export const isdelete = "isdelete";
 export const viewApproval = "viewApproval";
 export const isSendToScm = "isSendToScm";
+export const makeGoodsCreditNote = "makeGoodsCreditNote";
+
 
 
 export const dropdownAdd = "dropdownAdd";

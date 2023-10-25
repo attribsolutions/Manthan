@@ -12,7 +12,7 @@ import { initialFiledFunc } from "../../../components/Common/validationFunction"
 import { GetVenderSupplierCustomer, GetVenderSupplierCustomerSuccess, Retailer_List, Retailer_List_Success } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { Go_Button, PageLoadingSpinner } from "../../../components/Common/CommonButton";
 import SalesReturn from "./SalesReturn";
-import { confirm_SalesReturn_Id, delete_SalesReturn_Id, delete_SalesReturn_Id_Succcess, post_Send_to_superStockiest_Id, salesReturnListAPI, salesReturnListAPISuccess } from "../../../store/Sales/SalesReturnRedux/action";
+import { confirm_SalesReturn_Id, confirm_SalesReturn_Id_Succcess, delete_SalesReturn_Id, delete_SalesReturn_Id_Succcess, post_Send_to_superStockiest_Id, salesReturnListAPI, salesReturnListAPISuccess } from "../../../store/Sales/SalesReturnRedux/action";
 import { C_DatePicker, C_Select } from "../../../CustomValidateForm";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { url, mode, pageId } from "../../../routes/index"
@@ -58,6 +58,7 @@ const SalesReturnList = () => {
             ReceiptType: state.ReceiptReducer.ReceiptType,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList,
+            viewData_redux: state.SalesReturnReducer.confirmBtnData,
             ApprovrMsg: state.SalesReturnReducer.ApprovrMsg,
         })
     );
@@ -123,6 +124,7 @@ const SalesReturnList = () => {
         if ((sendToSSbtnTableData.Status === true) && (sendToSSbtnTableData.StatusCode === 200)) {
             history.push({
                 pathname: url.PURCHASE_RETURN_MODE_3
+
             })
         }
     }, [sendToSSbtnTableData])
@@ -142,6 +144,21 @@ const SalesReturnList = () => {
             goButtonHandler()
         }
     }, [ApprovrMsg])
+
+    useEffect(() => {
+        if ((reducers.viewData_redux.Status === true) && (reducers.viewData_redux.pageMode === mode.modeSTPsave)) {
+
+            history.push({
+                pathname: url.GOODS_CREDIT_NOTE,
+                editValue: reducers.viewData_redux.Data[0],
+                pageMode: mode.modeSTPsave
+            })
+        }
+        return () => {
+            dispatch(confirm_SalesReturn_Id_Succcess({ Status: false }))
+        }
+    }, [reducers.viewData_redux.pageMode])
+
 
     const customerOptions = RetailerList.map((index) => ({
         value: index.id,
@@ -226,6 +243,18 @@ const SalesReturnList = () => {
         config["viewMode"] = subPageMode
         dispatch(confirm_SalesReturn_Id(config))
     }
+
+    const makeBtnFunc = (List, btnId) => {
+        debugger
+        const id = List[0].id
+        const config = {
+            editId: id,
+            pageMode: mode.modeSTPsave,
+            btnId: btnId
+        };
+
+        dispatch(confirm_SalesReturn_Id(config))
+    };
 
     function downBtnFunc(config) {
         config["ReportType"] = report.Return;
@@ -350,8 +379,10 @@ const SalesReturnList = () => {
                             MasterModal={SalesReturn}
                             masterPath={otherState.masterPath}
                             newBtnPath={otherState.newBtnPath}
+                            subPageMode={subPageMode}
                             pageMode={pageMode}
                             viewApprovalBtnFunc={viewApprovalBtnFunc}
+                            makeBtnFunc={makeBtnFunc}
                             HeaderContent={HeaderContent}
                             downBtnFunc={downBtnFunc}
                             goButnFunc={goButtonHandler}

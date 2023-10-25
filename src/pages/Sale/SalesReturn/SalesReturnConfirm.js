@@ -8,14 +8,14 @@ import { CommonConsole, date_dmy_func, date_ymd_func, loginRoleID, loginSystemSe
 import { confirm_SalesReturn_Id_Succcess, returnApprove, returnApprove_Success } from "../../../store/actions";
 import { useState } from "react";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
-import { url } from "../../../routes";
+import { mode, url } from "../../../routes";
 import { table_ArrowUseEffect } from "../../../components/Common/CommonUseEffect";
 import { CInput, onlyNumberRegx } from "../../../CustomValidateForm";
 import { C_Button } from "../../../components/Common/CommonButton";
 import Slidewithcaption from "../../../components/Common/CommonImageComponent";
 
 const ViewDetails_Modal = () => {
-
+    
     const dispatch = useDispatch();
     const { ReturnFinalApprovalRole = '' } = loginSystemSetting()
 
@@ -33,7 +33,7 @@ const ViewDetails_Modal = () => {
     }))
 
     useEffect(() => {
-
+        
         try {
             if ((viewData_redux.Status === true)) {
                 if (viewData_redux.Data.length > 0) {

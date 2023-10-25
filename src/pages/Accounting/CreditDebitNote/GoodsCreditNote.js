@@ -81,7 +81,7 @@ const GoodsCreditNote = (props) => {
         InvoiceNO: "",
         ItemName: "",
     }
-
+    let internal_pageMode = ""
     const [state, setState] = useState(initialFiledFunc(fileds))
     const [discountDropOption] = useState([{ value: 1, label: "Rs" }, { value: 2, label: "%" }]);
     const [TableArr, setTableArr] = useState([]);
@@ -173,31 +173,55 @@ const GoodsCreditNote = (props) => {
             if ((hasShowloction || hasShowModal)) {
 
                 let hasEditVal = null
+
                 if (hasShowloction) {
                     setPageMode(location.pageMode)
+                    internal_pageMode = location.pageMode
                     hasEditVal = location.editValue
                 }
                 else if (hasShowModal) {
                     hasEditVal = props.editValue
+                    internal_pageMode = props.pageMode
                     setPageMode(props.pageMode)
                 }
                 if (hasEditVal) {
-
-                    const { CRDRNoteDate, Customer, Narration, GrandTotal, CRDRInvoices = '', CustomerID, CRDRNoteItems = [] } = hasEditVal
+                    debugger
+                    const { CRDRNoteDate, Customer, Narration, GrandTotal, CRDRInvoices = '', CustomerID, CRDRNoteItems = [], ReturnItems = [], CustomerName } = hasEditVal
 
                     const { values, fieldLabel, hasValid, required, isError } = { ...state }
-                    values.CRDRNoteDate = CRDRNoteDate;
-                    values.Customer = { label: Customer, value: CustomerID };
+                    let caculateGrandTotal = ""
+                    values.Customer = { label: CustomerName, value: Customer };
                     values.InvoiceNO = CRDRInvoices[0]
                         ? {
                             label: CRDRInvoices[0].FullInvoiceNumber,
                             value: CRDRInvoices[0].id
                         } : '';
                     values.Narration = Narration;
-                    setTableArr(CRDRNoteItems)
+                    let dataCount = ""
+                    if (internal_pageMode === mode.modeSTPsave) {
+                        setTableArr(ReturnItems)
+                        dataCount = ReturnItems.length;
+                        caculateGrandTotal = ""
+                        values.CRDRNoteDate = currentDate_ymd
+                        ReturnItems.forEach(i => {
+                            i.Quantity = ""
+                        });
+                        const jsonBody = JSON.stringify({
+                            PartyID: _cfunc.loginPartyID(),
+                            CustomerID: Customer
+                        });
 
-                    let dataCount = CRDRNoteItems.length;
-                    let commaSeparateAmount = _cfunc.amountCommaSeparateFunc(Number(GrandTotal).toFixed(2));
+                        dispatch(InvoiceNumber(jsonBody));
+
+                    } else {
+                        caculateGrandTotal = GrandTotal
+                        setTableArr(CRDRNoteItems)
+                        dataCount = CRDRNoteItems.length;
+                        values.CRDRNoteDate = CRDRNoteDate;
+                    }
+
+
+                    let commaSeparateAmount = _cfunc.amountCommaSeparateFunc(Number(caculateGrandTotal).toFixed(2));
                     dispatch(BreadcrumbShowCountlabel(`Count:${dataCount} ₹ ${commaSeparateAmount}`));
 
                     setState({ values, fieldLabel, hasValid, required, isError })
@@ -462,6 +486,7 @@ const GoodsCreditNote = (props) => {
                                         id={`Discount-${key}`}//this id use discount type onchange
                                         placeholder="Dist."
                                         className="text-end"
+                                        defaultValue={row.DiscountAmount}
                                         cpattern={decimalRegx}
                                         onChange={(e) => {
                                             let e_val = Number(e.target.value);
@@ -749,9 +774,9 @@ const GoodsCreditNote = (props) => {
                     CreditDebitType.find((index) => index.Name === "Goods CreditNote")?.id
                     : CreditDebitType.find((index) => index.Name === "Goods DebitNote")?.id;
             };
-            
-            const isGrandAmtRound = systemSetting.CreditDebitAmountRoundConfiguration === '1';
 
+            const isGrandAmtRound = systemSetting.CreditDebitAmountRoundConfiguration === '1';
+            debugger
             const jsonBody = JSON.stringify({
                 CRDRNoteDate: values.CRDRNoteDate,
                 Customer: values.Customer.value,
@@ -814,7 +839,7 @@ const GoodsCreditNote = (props) => {
                                                 value={values.Customer}
                                                 isSearchable={true}
                                                 isLoading={retailerDropLoading}
-                                                isDisabled={((TableArr.length > 0)) ? true : false}
+                                                isDisabled={((TableArr.length > 0) || (pageMode === mode.modeSTPsave)) ? true : false}
                                                 options={customerOptions}
                                                 styles={{
                                                     menu: provided => ({ ...provided, zIndex: 2 })
@@ -831,6 +856,7 @@ const GoodsCreditNote = (props) => {
                                             {TableArr.length > 0 &&
                                                 <Change_Button
                                                     type="button"
+                                                    forceDisabled={(pageMode === mode.modeSTPsave)}
                                                     onClick={changeButtonHandler}
                                                 />
                                             }
@@ -874,6 +900,8 @@ const GoodsCreditNote = (props) => {
                                                 id="ItemName "
                                                 name="ItemName"
                                                 value={values.ItemName}
+                                                isDisabled={(pageMode === mode.modeSTPsave)}
+
                                                 isSearchable={true}
                                                 className="react-dropdown"
                                                 classNamePrefix="dropdown"
@@ -886,9 +914,10 @@ const GoodsCreditNote = (props) => {
                                             />
                                         </Col>
 
-                                        <Col sm="1" className="mx-6 mt-1">
+                                        <Col sm="1" className="mx-6 mt-1"  >
                                             <C_Button
                                                 type="button"
+                                                forceDisabled={(pageMode === mode.modeSTPsave)}
                                                 loading={addBtnLoading}
                                                 className="btn btn-outline-primary border-1 font-size-12 text-center"
                                                 onClick={() => AddPartyHandler("ItemWise")}
@@ -963,7 +992,7 @@ const GoodsCreditNote = (props) => {
                         </div>
 
                         {
-                            TableArr.length > 0 ?
+                            TableArr.length ?
                                 <FormGroup>
                                     <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
                                         <SaveButton

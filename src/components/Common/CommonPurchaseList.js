@@ -29,7 +29,7 @@ export async function isAlertFunc(type, Msg) {
 }
 
 const CommonPurchaseList = (props) => {
-
+  
   const dispatch = useDispatch();
   const history = useHistory();
 
@@ -131,7 +131,7 @@ const CommonPurchaseList = (props) => {
     }
   }, [updateMsg, userAccState]);
 
-  useEffect(async() => {
+  useEffect(async () => {
     if (deleteMsg.Status === true && deleteMsg.StatusCode === 200) {
 
       //***************mobail app api*********************** */

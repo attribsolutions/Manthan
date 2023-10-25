@@ -216,7 +216,7 @@ const CentralServiceItem = (props) => {
                     Rate: values.Rate,
                     isActive: values.isActive,
                     // Type: values.Type,
-                    Company: 2,
+                    Company: 1,
                     Unit: values.Unit.value,
                     CreatedBy: loginUserID(),
                     UpdatedBy: loginUserID(),
@@ -400,7 +400,7 @@ const CentralServiceItem = (props) => {
                                                     </Row>
 
 
-                                                    <Row>
+                                                    {/* <Row>
                                                         <FormGroup className="mb-2 col col-sm-8 ">
                                                             <Label htmlFor="validationCustom01">{fieldLabel.Company} </Label>
 
@@ -420,7 +420,7 @@ const CentralServiceItem = (props) => {
                                                                 <span className="invalid-feedback">{isError.Company}</span>
                                                             )}
                                                         </FormGroup>
-                                                    </Row>
+                                                    </Row> */}
                                                 </Col>
 
                                             </Row>
