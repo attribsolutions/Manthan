@@ -10,9 +10,7 @@ export function get(url, param) {
     .then((response) => {
       return response.data;
     })
-    .catch((error) => {
-      return error;
-    });
+   
 }
 
 export function post(url, body) {
@@ -27,10 +25,7 @@ export function post(url, body) {
     .then((response) => {
       return response.data;
     })
-    .catch((error) => {
-      return error;
-    });
-}
+  }
 
 export function put(url, body) {
   return axiosApi
@@ -43,9 +38,7 @@ export function put(url, body) {
     .then((response) => {
       return response.data;
     })
-    .catch((error) => {
-      return error;
-    });
+   
 }
 
 export function del(url) {
@@ -54,9 +47,7 @@ export function del(url) {
     .then((response) => {
       return response.data;
     })
-    .catch((error) => {
-      return error;
-    });
+    
 }
 
 
@@ -139,7 +130,5 @@ export function postForFormData(url, body) {
     .then((response) => {
       return response.data;
     })
-    .catch((error) => {
-      return error;
-    });
+    
 }

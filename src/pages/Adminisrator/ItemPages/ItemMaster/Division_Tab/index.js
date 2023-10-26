@@ -23,10 +23,6 @@ function DivisionTab(props) {
         DivisionName: state.ItemMastersReducer.Division,
     }));
 
-    useEffect(() => {
-        dispatch(get_Division_ForDropDown());
-    }, [dispatch]);
-
     const Division_DropdownOptions = DivisionName.map((data) => ({
         value: data.id,
         label: data.Name,

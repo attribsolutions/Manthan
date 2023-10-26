@@ -1,17 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Button, Card, CardBody, Col, FormGroup, Input, Label, Row } from 'reactstrap';
 import Select from "react-select";
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import MarginTable from './Table';
-import { get_Party_ForDropDown, } from '../../../../../store/Administrator/ItemsRedux/action';
 import { loginUserID, loginCompanyID } from '../../../../../components/Common/CommonFunction';
-import { priceListByCompay_Action } from '../../../../../store/Administrator/PriceList/action';
 import { customAlert } from '../../../../../CustomAlert/ConfirmDialog';
 import { C_DatePicker } from '../../../../../CustomValidateForm';
 
 function Margin_Tab(props) {
-
-    const dispatch = useDispatch();
 
     const [priceList, setPriceList] = useState('');
     const [partyName, setPartyName] = useState('');
@@ -26,21 +22,16 @@ function Margin_Tab(props) {
         PriceList: state.PriceListReducer.priceListByCompany,
     }));
 
-    useEffect(() => {
-        dispatch(get_Party_ForDropDown());
-        dispatch(priceListByCompay_Action());
-    }, [dispatch]);
-
-
-    const Party_DropdownOptions = Party.map((data) => ({
+    const Party_DropdownOptions = useMemo(() => Party.map((data) => ({
         value: data.id,
         label: data.Name
-    }))
+    })), [Party])
 
-    const PriceList_DropdownOptions = PriceList.map((data) => ({
+
+    const PriceList_DropdownOptions = useMemo(() => PriceList.map((data) => ({
         value: data.id,
         label: data.Name
-    }));
+    })), [PriceList])
 
     const PriceListHandler = (event) => {
         setPriceList(event)
@@ -80,8 +71,13 @@ function Margin_Tab(props) {
             && !(margin === "")
             && !(effectiveDate === "")
         ) {
-            const totalTableData = props.tableData.length;
-            val.id = totalTableData + 1;
+            let highestId = -Infinity;
+            for (const item of props.tableData) {
+                if (item.id !== undefined && item.id > highestId) {
+                    highestId = item.id;
+                }
+            }
+            val.id = highestId + 1;
             const updatedTableData = [...props.tableData];
             updatedTableData.push(val);
             props.func(updatedTableData)
@@ -111,6 +107,9 @@ function Margin_Tab(props) {
                                         <Select
                                             id={`dropPriceList-${0}`}
                                             value={priceList}
+                                            styles={{
+                                                menu: provided => ({ ...provided, zIndex: 2 })
+                                            }}
                                             options={PriceList_DropdownOptions}
                                             onChange={PriceListHandler}
                                         />
@@ -121,6 +120,9 @@ function Margin_Tab(props) {
                                         <Select
                                             id={`dropPartyName-${0}`}
                                             value={partyName}
+                                            styles={{
+                                                menu: provided => ({ ...provided, zIndex: 2 })
+                                            }}
                                             options={Party_DropdownOptions}
                                             onChange={PartyNameHandler}
                                         />
@@ -183,6 +185,6 @@ function Margin_Tab(props) {
     );
 }
 
-export default Margin_Tab;
+export default React.memo(Margin_Tab);
 
 

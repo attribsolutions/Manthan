@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Button, Table, } from 'reactstrap';
 import { Tbody, Thead } from 'react-super-responsive-table';
 import { deleteGSTId_ForMaster, deleteGSTId_ForMaster_Success } from '../../../../../store/Administrator/GSTRedux/action';
@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { customAlert } from '../../../../../CustomAlert/ConfirmDialog';
 
 function GSTTable(props) {
-  
+
   const dispatch = useDispatch();
 
   const {
@@ -15,7 +15,7 @@ function GSTTable(props) {
     deleteMsg: state.GSTReducer.deleteMsg,
   }));
 
-  const onDeleteHandeler = (info) => {
+  const onDeleteHandeler = async (info) => {
     if (info.IsAdd) {
       var fil = props.tableData.filter((i) => {
         return !(i.id === info.id);
@@ -23,16 +23,15 @@ function GSTTable(props) {
       props.func(fil);
     }
     else {
-      dispatch(
-        customAlert({
-          Type: 5,
-          Status: true,
-          Message: `Are you sure you want to delete this GST"`,
-          RedirectPath: false,
-          PermissionAction: deleteGSTId_ForMaster,
-          ID: info.id,
-        })
-      );
+
+      const permission = await customAlert({
+        Type: 7,
+        Message: "Are you sure you want to delete this GST",
+      })
+      if (permission) {
+        dispatch(deleteGSTId_ForMaster(info.id))
+      }
+
     }
   };
 
@@ -45,48 +44,47 @@ function GSTTable(props) {
       });
       props.func(fil);
 
-      dispatch(
-        customAlert({
-          Type: 1,
-          Status: true,
-          Message: deleteMsg.Message,
-        })
-      );
+      customAlert({
+        Type: 1,
+        Status: true,
+        Message: deleteMsg.Message,
+      })
+
     } else if (deleteMsg.Status === true) {
       dispatch(deleteGSTId_ForMaster_Success({ Status: false }));
-      dispatch(
-        customAlert({
-          Type: 3,
-          Status: true,
-          Message: JSON.stringify(deleteMsg.Message),
-        })
-      );
+      customAlert({
+        Type: 3,
+        Status: true,
+        Message: JSON.stringify(deleteMsg.Message),
+      })
+
     }
   }, [deleteMsg]);
 
 
-  const tableRows = props.tableData.map((info) => {
+  const tableRows = useMemo(() => {
 
-    return (
-      <tr>
-        {/* <td>{info.id}</td> */}
-        <td>{info.EffectiveDate}</td>
-        <td>{info.GSTPercentage}</td>
-        <td>{info.HSNCode}</td>
-        <td>
-          <Button
-            className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
-            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Delete Party Type"
-            onClick={(e) => {
-              onDeleteHandeler(info);
-            }}
-          >
-            <i className="mdi mdi-delete font-size-18"></i>
-          </Button>
-        </td>
-      </tr>
-    );
+    return [...props.tableData].sort((a, b) => b.id - a.id)
+      .map((info) => (
+        <tr key={info.id} style={{ backgroundColor: info.IsAdd && "#9dadf09e" }}>
+          <td>{info.EffectiveDate}</td>
+          <td>{info.GSTPercentage}</td>
+          <td>{info.HSNCode}</td>
+          <td>
+            <Button
+              className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
+              data-mdb-toggle="tooltip" data-mdb-placement="top" title="Delete Party Type"
+              onClick={(e) => {
+                onDeleteHandeler(info);
+              }}
+            >
+              <i className="mdi mdi-delete font-size-18"></i>
+            </Button>
+          </td>
+        </tr>
+      ))
   });
+
   return (
     <>
       <div>
@@ -108,4 +106,4 @@ function GSTTable(props) {
   );
 }
 
-export default GSTTable;
+export default React.memo(GSTTable);
