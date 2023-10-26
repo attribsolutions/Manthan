@@ -107,6 +107,7 @@ const StockReport = (props) => {
 						excelData: tData, // Use tableData here
 						excelFileName: "Current_Stock_Report",
 						mrpWise: MRPWise,
+						batchWise:batchWise
 					});
 
 				} else if (btnMode === 1) {

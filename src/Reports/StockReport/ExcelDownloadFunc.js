@@ -1,17 +1,17 @@
 import Papa from 'papaparse';
 
-export function ExcelDownloadFunc({ pageField, excelData, excelFileName, mrpWise }) {
+export function ExcelDownloadFunc({ pageField, excelData, excelFileName, mrpWise, batchWise }) {
     debugger
     // Define a flag to conditionally set ShowInListPage for the "MRP" column
     const shouldHideMRPColumn = mrpWise;
 
     const csvColumns = pageField.PageFieldMaster
-        .filter(column => column.ShowInListPage || (shouldHideMRPColumn && column.ControlID === "MRP"))
+        .filter(column => column.ShowInListPage || (shouldHideMRPColumn && column.ControlID === "MRP") || (batchWise && column.ControlID === "BatchCode"))
         .sort((a, b) => a.ListPageSeq - b.ListPageSeq)
         .map(column => column.ControlID);
 
     const csvHeaderColumns = pageField.PageFieldMaster
-        .filter(column => column.ShowInListPage || (shouldHideMRPColumn && column.ControlID === "MRP"))
+        .filter(column => column.ShowInListPage || (shouldHideMRPColumn && column.ControlID === "MRP" || (batchWise && column.ControlID === "BatchCode")))
         .sort((a, b) => a.ListPageSeq - b.ListPageSeq)
         .map(column => column.FieldLabel);
 
