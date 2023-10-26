@@ -175,7 +175,10 @@ export const listPageActionsButtonFunc = (props) => {
         const canItemWisePrint = hasRole("RoleAccess_IsPrint") && downClaimBtnFunc;
         const canMasterClaimPrint = hasRole("RoleAccess_IsPrint") && downClaimBtnFunc;
         const canSendToScm = isPartyTypeIDInSendToScm //  Currently Button  is remove From InVoice List of CX parties  further Development After Discussion  So condition is False
-        const canMakeCreditNoteBtn = (subPageMode === url.SALES_RETURN_LIST)
+        const canMakeCreditNoteBtn = (subPageMode === url.SALES_RETURN_LIST) && hasRole("RoleAccess_IsSave")
+
+        const canUpdatebtn = otherBtn_1Func && hasRole("RoleAccess_IsSave")
+
 
 
 
@@ -308,7 +311,7 @@ export const listPageActionsButtonFunc = (props) => {
                         buttonClasss: printInvoiceBtnCss,
                     })}
                     {renderButtonIfNeeded({
-                        condition: otherBtn_1Func,
+                        condition: canUpdatebtn,
                         btnmode: mode.otherBtn_1,
                         iconClass: updateIconClass,
                         actionFunc: otherBtn_1Func,
