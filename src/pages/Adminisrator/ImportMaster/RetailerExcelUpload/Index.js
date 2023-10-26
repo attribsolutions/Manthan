@@ -39,7 +39,7 @@ const RetailerExcelUpload = (props) => {
     const history = useHistory()
     const userAdminRole = _cfunc.loginUserAdminRole();
 
-    const preDetails = { fileFiled: '', invoice: [], party: [], invoiceDate: '', amount: 0, invoiceNO: [], partyNO: [] }
+    const preDetails = { fileFiled: '', invoice: [], party: [], invoiceDate: [], amount: 0, invoiceNO: [], partyNO: [] }
 
     const [priceListSelect, setPriceListSelect] = useState({ value: '', label: "" })
 

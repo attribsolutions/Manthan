@@ -36,7 +36,7 @@ const InvoiceExcelUpload = (props) => {
     const history = useHistory()
     const userAdminRole = _cfunc.loginUserAdminRole();
 
-    const preDetails = { fileFiled: '', invoice: [], party: [], invoiceDate: '', amount: 0, invoiceNO: [], partyNO: [] }
+    const preDetails = { fileFiled: '', invoice: [], party: [], invoiceDate: [], amount: 0, invoiceNO: [], partyNO: [] }
 
     const [userPageAccessState, setUserAccState] = useState('');
     const [selectedFiles, setselectedFiles] = useState([])
@@ -125,7 +125,7 @@ const InvoiceExcelUpload = (props) => {
 
 
     function goButtonHandler() {
-        
+
         let partyId = userAdminRole ? partySelect.value : _cfunc.loginPartyID();
         const jsonBody = JSON.stringify({
             PartyID: partyId,
@@ -155,8 +155,8 @@ const InvoiceExcelUpload = (props) => {
         }
 
         var filename = files[0].name;
-        var extension = filename.substring(filename.lastIndexOf(".")).toUpperCase();
-        if (extension == '.CSV') {
+        var extension = filename.substring(filename.lastIndexOf(".")).toLowerCase();
+        if ((extension === '.csv') || extension === ".xlsx") {
             const readjson = await readExcelFile({ file: files[0], compareParameter, })
             if (readjson.length > 0) {
 
@@ -176,7 +176,7 @@ const InvoiceExcelUpload = (props) => {
         } else {
             customAlert({
                 Type: 3,
-                Message: "Please select a valid CSV file.",
+                Message: 'Unsupported file format. Please select an Excel (XLSX) or CSV file.',
             })
         }
     }
@@ -204,16 +204,7 @@ const InvoiceExcelUpload = (props) => {
 
         setReadJsonDetail(preDetails)
         setPreViewDivShow(false)
-        // try {
-        //     const btnerify = document.getElementById("btn-verify")
-        //     const btnupload = document.getElementById('btn-uploadBtnFunc')
-        //     const progDiv = document.getElementById("file-proccess")
-
-        //     btnerify.style.display = "block"
-        //     btnupload.style.display = "none"
-        //     progDiv.style.display = "none"
-        // } catch (d) { }
-
+        
         files.map(file =>
             Object.assign(file, {
                 preview: URL.createObjectURL(file),

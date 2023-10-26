@@ -25,16 +25,16 @@ export const readExcelFile = async ({ file, compareParameter }) => {
 
       reader.onload = (e) => {
         try {
-          const bstr = e.target.result;
-          const workbook = XLSX.read(bstr, { type: "binary", cellDates: true });
+          const fileData = e.target.result;
+          const workbook = XLSX.read(fileData, { type: "binary" });
           const sheetName = workbook.SheetNames[0];
           const worksheet = workbook.Sheets[sheetName];
           const result = XLSX.utils.sheet_to_json(worksheet);
+
           myResolve(result)
         } catch (g) {
           myReject([])
         }
-
       }
 
     });
@@ -46,19 +46,19 @@ export const readExcelFile = async ({ file, compareParameter }) => {
     if (comparefilter.length === 0) {
       invalidMsg.push(`Import filed Not Map`)
     }
-    jsonResult.forEach((r1, k) => {
+
+
+    jsonResult.forEach((r1) => {
 
       comparefilter.forEach((c1) => {
         if (c1.ControlTypeName === "Date") {
-          r1[c1.Value] = date_ymd_func(r1[c1.Value])
+          const date = new Date(Math.round((r1[c1.Value] - 25569) * 86400 * 1000));
+          r1[c1.Value] = date_ymd_func(date)
         };
         const regExp = RegExp(c1.RegularExpression);
-        debugger
-        if ((r1[c1.Value]) === "CustomerGSTTin") {
-          debugger
-        }
-        if (!c1.IsCompulsory && (r1[c1.Value] === '' || r1[c1.Value] === null || r1[c1.Value] === undefined)) {
 
+
+        if (!c1.IsCompulsory && (r1[c1.Value] === '' || r1[c1.Value] === null || r1[c1.Value] === undefined)) {
         }
         else if (!(regExp.test(r1[c1.Value]))) {
           invalidMsg.push(`${c1.Value} :${r1[c1.Value]} is invalid Format`)
@@ -74,7 +74,7 @@ export const readExcelFile = async ({ file, compareParameter }) => {
       })
       return []
     }
-
+    debugger
     return jsonResult
 
   } catch (e) { }
@@ -135,7 +135,7 @@ export async function downloadDummyFormatHandler(jsonData) {
   // / Extract unique column names for the header
   const filteredColumns = jsonData.filter(entry => entry.Value !== '' || null);
   filteredColumns.sort((a, b) => {
-    
+
     if (a.Sequence === null && b.Sequence !== null) {
       return 1; // 'a' with id 0 comes after 'b' with a non-zero id
     } else if (a.Sequence !== null && b.Sequence === null) {
@@ -146,7 +146,7 @@ export async function downloadDummyFormatHandler(jsonData) {
   });
 
   const columnNames = Array.from(new Set(filteredColumns.map(entry => entry.Value)));
-  
+
   // Create an empty data array with the same number of columns
   const emptyData = columnNames.map(_ => '');
 
