@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { mySearchProps } from '../../../components/Common/SearchBox/MySearch';
@@ -18,10 +18,14 @@ export default function InvoiceForGRN() {
     const history = useHistory();
     const currentDate_ymd = date_ymd_func();
 
-    const { tableList, GRNitem, listBtnLoading, commonPartyDropSelect } = useSelector((state) => ({
+    const [userAccState, setUserAccState] = useState('');
+
+
+    const { tableList, GRNitem, listBtnLoading, commonPartyDropSelect, userAccess } = useSelector((state) => ({
         tableList: state.OrderReducer.orderList,
         GRNitem: state.GRNReducer.GRNitem,
         listBtnLoading: state.GRNReducer.listBtnLoading,
+        userAccess: state.Login.RoleAccessUpdateData,
         commonPartyDropSelect: state.CommonPartyDropdownReducer.commonPartyDropSelect
     }));
 
@@ -29,6 +33,22 @@ export default function InvoiceForGRN() {
     const TableListWithNonDeleteRecord = tableList.filter(i => i.IsRecordDeleted === false);
 
     // Common Party Dropdown useEffect
+
+
+    useEffect(() => {
+
+        const locationPath = history.location.pathname
+        let userAcc = userAccess.find((inx) => {
+            return (`/${inx.ActualPagePath}` === `/GRN_ADD_3`)
+        })
+
+        if (!(userAcc === undefined)) {
+            setUserAccState(userAcc);
+        }
+    }, [userAccess]);
+
+    const hasRole = (role) => userAccState[role];
+
     useEffect(() => {
 
         if (commonPartyDropSelect.value > 0) {
@@ -61,7 +81,7 @@ export default function InvoiceForGRN() {
     }, [GRNitem])
 
     function makeBtnHandler(rowData, btnId) {
-        
+
         const list = [rowData]
         var isGRNSelect = ''
         var challanNo = ''
@@ -117,6 +137,7 @@ export default function InvoiceForGRN() {
         },
         {
             text: "Action",
+            hidden: !hasRole("RoleAccess_IsSave"),
             dataField: "",
             formatExtraData: { listBtnLoading: listBtnLoading, },
             formatter: (cellContent, rowData, key, formatExtra) => {
