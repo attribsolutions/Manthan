@@ -61,7 +61,7 @@ export default function InvoiceForGRN() {
     }, [GRNitem])
 
     function makeBtnHandler(rowData, btnId) {
-
+        
         const list = [rowData]
         var isGRNSelect = ''
         var challanNo = ''
@@ -89,7 +89,7 @@ export default function InvoiceForGRN() {
                     Mode: 3
                 })
 
-                dispatch(makeGRN_Mode_1Action({ jsonBody, pageMode: mode.modeSTPsave, path: path, grnRef, challanNo, btnId }))
+                dispatch(makeGRN_Mode_1Action({ jsonBody, pageMode: mode.modeSTPsave, path: path, grnRef, challanNo, btnId, InvoiceDate: rowData.dashboardOrderDate }))
 
             } else {
                 alert("Please Select Order1")
