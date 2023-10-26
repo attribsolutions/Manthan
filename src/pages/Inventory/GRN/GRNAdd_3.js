@@ -24,6 +24,7 @@ import { C_DatePicker } from "../../../CustomValidateForm";
 import { initialFiledFunc } from "../../../components/Common/validationFunction";
 import { pageFieldUseEffect, saveMsgUseEffect, table_ArrowUseEffect, userAccessUseEffect } from "../../../components/Common/CommonUseEffect";
 import { useLayoutEffect } from "react";
+import DatePicker from "react-flatpickr";
 
 const GRNAdd3 = (props) => {
 
@@ -40,7 +41,7 @@ const GRNAdd3 = (props) => {
     const [openPOdata, setopenPOdata] = useState([]);
     const [invoiceNo, setInvoiceNo] = useState('');
     const [InvoiceID, setInvoiceID] = useState('');
-
+    const [invoiceDate, setInvoiceDate] = useState('');
 
 
     const [editCreatedBy, seteditCreatedBy] = useState("");
@@ -115,11 +116,11 @@ const GRNAdd3 = (props) => {
     useEffect(() => {
 
         if ((items.Status === true)) {
-
+            
             const grnDetails = { ...items.Data }
             const InvoiceID = grnDetails.GRNReferences[0].Invoice
             setInvoiceID(InvoiceID)
-
+            setInvoiceDate(grnDetails.InvoiceDate)
             setGrnItemTableList(grnDetails.OrderItem)
 
             setInvoiceNo(grnDetails.InvoiceNumber)
@@ -463,7 +464,13 @@ const GRNAdd3 = (props) => {
                                     <Label className="col-md-4 p-2"
                                         style={{ width: "130px" }}>Invoice Date</Label>
                                     <Col md="7">
-                                        <C_DatePicker
+                                        <DatePicker
+                                            options={{
+                                                altInput: true,
+                                                altFormat: "d-m-Y",
+                                                dateFormat: "d-m-Y",
+                                            }}
+                                            value={invoiceDate}
                                             disabled={true}
                                         />
                                     </Col>
