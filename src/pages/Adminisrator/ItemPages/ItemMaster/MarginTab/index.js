@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import MarginTable from './Table';
 import { loginUserID, loginCompanyID } from '../../../../../components/Common/CommonFunction';
 import { customAlert } from '../../../../../CustomAlert/ConfirmDialog';
-import { C_DatePicker } from '../../../../../CustomValidateForm';
+import { C_DatePicker, C_Select } from '../../../../../CustomValidateForm';
 
 function Margin_Tab(props) {
 
@@ -16,9 +16,11 @@ function Margin_Tab(props) {
 
     const {
         Party,
+        partyApiLoading,
         PriceList
     } = useSelector((state) => ({
         Party: state.ItemMastersReducer.Party,
+        partyApiLoading: state.ItemMastersReducer.partyApiLoading,
         PriceList: state.PriceListReducer.priceListByCompany,
     }));
 
@@ -117,9 +119,10 @@ function Margin_Tab(props) {
 
                                     <FormGroup className="mb-3 col col-sm-3 " >
                                         <Label >Party Name</Label>
-                                        <Select
+                                        <C_Select
                                             id={`dropPartyName-${0}`}
                                             value={partyName}
+                                            isLoading={partyApiLoading}
                                             styles={{
                                                 menu: provided => ({ ...provided, zIndex: 2 })
                                             }}
