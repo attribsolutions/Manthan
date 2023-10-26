@@ -342,7 +342,8 @@ export const reportHeder3 = (doc, data) => {
 
 
 export const reportFooter = (doc, data) => {
-    doc.addImage(data.SettingData.PaymentQRCodeimageonInvoice, 'JPEG', 335, 303, 105, 96)
+    doc.addImage(`https://cors-anywhere.herokuapp.com/${data.SettingData.PaymentQRCodeimageonInvoice}`, 'JPEG', 335, 303, 105, 96);
+    console.log("QRCodeImageUrl", `https://cors-anywhere.herokuapp.com/${data.SettingData.PaymentQRCodeimageonInvoice}`)
     doc.setDrawColor(0, 0, 0);
     doc.line(570, 308, 30, 308);//horizontal line  (4)
     doc.line(570, 380, 435, 380);//horizontal line  (5)

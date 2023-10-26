@@ -409,7 +409,8 @@ export const reportHeder3 = (doc, data) => {
 
 export const reportFooter = (doc, data) => {
 
-    doc.addImage(data.Period.PaymentQr, 'JPEG', 335, 303, 105, 96)
+    doc.addImage(`https://cors-anywhere.herokuapp.com/${data.Period.PaymentQr}`, 'JPEG', 335, 303, 105, 96);
+    console.log("QRCodeImageUrl", `https://cors-anywhere.herokuapp.com/${data.Period.PaymentQr}`)
 
     doc.setDrawColor(0, 0, 0);
     doc.line(570, 308, 30, 308);//horizontal line  (4)
@@ -997,8 +998,9 @@ export const tableBodyWithIGST = (doc, data) => {
 
 
 export const reportFooterA4 = (doc, data) => {
-    debugger
-    doc.addImage(data.Period.PaymentQr, 'JPEG', 337, 728, 100, 86)
+    doc.addImage(`https://cors-anywhere.herokuapp.com/${data.Period.PaymentQr}`, 'JPEG', 337, 728, 100, 86);
+    console.log("QRCodeImageUrl", `https://cors-anywhere.herokuapp.com/${data.Period.PaymentQr}`)
+
     doc.setDrawColor(0, 0, 0);
     doc.line(570, 730, 30, 730);//horizontal line  (4)
     doc.line(570, 815, 435, 815);//horizontal line  (5)

@@ -4,7 +4,7 @@ import jsPDF from "jspdf";
 import "jspdf-autotable";
 import * as style from './ReportStyle'
 import { Data1, dataGenrator } from "./DemoData";
-import { CurrentTime, compareGSTINState, currentDate_dmy, date_dmy_func, loginSystemSetting } from "../../components/Common/CommonFunction";
+import {  compareGSTINState,  date_dmy_func,  } from "../../components/Common/CommonFunction";
 import { pageBorder } from "../InvioceReport/ReportStyle";
 
 
