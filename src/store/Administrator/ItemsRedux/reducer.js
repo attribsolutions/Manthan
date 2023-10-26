@@ -17,6 +17,7 @@ import {
     GET_ITEM_LIST_API,
     GET_ITEM_LIST_API_SUCCESS,
     GET_MRPTYPE_FOR_DROPDOWN_SUCCESS,
+    GET_PARTY_FOR_DROPDOWN,
     GET_PARTY_FOR_DROPDOWN_SUCCESS,
     GET_PRICE_LIST_FOR_DROPDOWN_SUCCESS,
     GET_SUB_GROUP_BY_GROUP_FOR_DROPDOWN,
@@ -42,6 +43,7 @@ const INIT_STATE = {
     MRPType: [],
     Division: [],
     Party: [],
+    partyApiLoading: false,
     GroupList: [],
     CategoryType: [],
     Category: [],
@@ -191,9 +193,16 @@ const ItemMastersReducer = (state = INIT_STATE, action) => {
                 ...state,
                 Division: action.payload,
             }
+        case GET_PARTY_FOR_DROPDOWN:
+            return {
+                ...state,
+                partyApiLoading: true,
+            }
+
         case GET_PARTY_FOR_DROPDOWN_SUCCESS:
             return {
                 ...state,
+                partyApiLoading: false,
                 Party: action.payload,
             }
 
@@ -207,7 +216,7 @@ const ItemMastersReducer = (state = INIT_STATE, action) => {
             return {
                 ...state,
                 GroupList: action.payload,
-                groupDropDownLoading:false
+                groupDropDownLoading: false
 
             }
 
@@ -215,16 +224,16 @@ const ItemMastersReducer = (state = INIT_STATE, action) => {
         case GET_SUB_GROUP_BY_GROUP_FOR_DROPDOWN:
             return {
                 ...state,
-                subgroupDropDownLoading:true
+                subgroupDropDownLoading: true
             }
 
-            case GET_SUB_GROUP_BY_GROUP_FOR_DROPDOWN_SUCCESS:
-                return {
-                    ...state,
-                    SubGroupList: action.payload,
-                    subgroupDropDownLoading:false
-                }
-    
+        case GET_SUB_GROUP_BY_GROUP_FOR_DROPDOWN_SUCCESS:
+            return {
+                ...state,
+                SubGroupList: action.payload,
+                subgroupDropDownLoading: false
+            }
+
 
         case GET_CATEGORY_BY_CATEGORYTYPE_FOR_DROPDOWN_API:
             return {
@@ -245,9 +254,10 @@ const ItemMastersReducer = (state = INIT_STATE, action) => {
                 saveBtnloading: false,
                 listBtnLoading: false,
                 loading: false,
+                partyApiLoading: false,
                 categotyDropDownLoading: false,
-                subgroupDropDownLoading:false,
-                groupDropDownLoading:false
+                subgroupDropDownLoading: false,
+                groupDropDownLoading: false
             };
 
         case "RESET_ALL":

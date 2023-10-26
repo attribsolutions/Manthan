@@ -354,6 +354,7 @@ const ItemsMaster = (props) => {
         dispatch(get_ImageType_ForDropDown());
         //++++++++++++++++++
         dispatch(get_Party_ForDropDown());//margin tab
+        
         dispatch(priceListByCompay_Action());
         //++++++++++++++++++
 

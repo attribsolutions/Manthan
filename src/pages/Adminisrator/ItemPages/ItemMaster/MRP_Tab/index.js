@@ -23,22 +23,22 @@ function MRPTab(props) {
   const [effectiveDate, setEffectiveDate] = useState("");
   const [MRP, setMRP] = useState("");
 
-  const { Party, Division } = useSelector((state) => ({
-    Division: state.ItemMastersReducer.Division,
-    Party: state.ItemMastersReducer.Party,
-  }));
+  // const { Party, Division } = useSelector((state) => ({
+  //   Division: state.ItemMastersReducer.Division,
+  //   Party: state.ItemMastersReducer.Party,
+  // }));
 
 
 
-  const Party_DropdownOptions = Party.map((data) => ({
-    value: data.id,
-    label: data.Name,
-  }));
+  // const Party_DropdownOptions = Party.map((data) => ({
+  //   value: data.id,
+  //   label: data.Name,
+  // }));
 
-  const Division_DropdownOptions = Division.map((data) => ({
-    value: data.id,
-    label: data.Name,
-  }));
+  // const Division_DropdownOptions = Division.map((data) => ({
+  //   value: data.id,
+  //   label: data.Name,
+  // }));
 
   const DivisiontHandler = (event) => {
     setDivision(event);
