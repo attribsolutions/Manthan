@@ -34,10 +34,6 @@ function GroupTab(props) {
         subgroupDropDownLoading: state.ItemMastersReducer.subgroupDropDownLoading,
     }));
 
-    useEffect(() => {
-        dispatch(getGroupTypeslist());
-    }, [dispatch]);
-
     const GroupType_DropdownOptions = GroupType.map((index) => ({
         value: index.id,
         label: index.Name,

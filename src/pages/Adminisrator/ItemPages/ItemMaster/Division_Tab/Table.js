@@ -3,9 +3,9 @@ import { Button, Table } from "reactstrap";
 import { Tbody, Thead } from "react-super-responsive-table";
 
 function DivisionTable(props) {
-    
+
   const ondeleteHandeler = (ele) => {
-    
+
     if (!(ele === 0)) {
       var fil = props.tableData.filter((i) => {
         return !(i.id === ele);
@@ -17,9 +17,7 @@ function DivisionTable(props) {
   const tableRows = props.tableData.map((info) => {
     return (
       <tr>
-        {/* <td>{info.id}</td> */}
         <td>{info.DivisionName}</td>
-      
         <td>
           <Button
             className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
@@ -56,4 +54,4 @@ function DivisionTable(props) {
   );
 }
 
-export default DivisionTable;
+export default React.memo(DivisionTable);

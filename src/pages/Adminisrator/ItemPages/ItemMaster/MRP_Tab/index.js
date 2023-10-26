@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {useState } from "react";
 import {
   Button,
   Card,
@@ -8,20 +8,15 @@ import {
   Label,
   Row,
 } from "reactstrap";
-import Select from "react-select";
-import { useDispatch, useSelector } from "react-redux";
+
+import { useSelector } from "react-redux";
 import MRPTable from "./Table";
-import {
-  get_Division_ForDropDown,
-  get_Party_ForDropDown,
-} from "../../../../../store/Administrator/ItemsRedux/action";
-import { loginUserID, loginCompanyID, loginIsSCMCompany } from "../../../../../components/Common/CommonFunction";
+
+import { loginUserID, loginCompanyID } from "../../../../../components/Common/CommonFunction";
 import { customAlert } from "../../../../../CustomAlert/ConfirmDialog";
 import { C_DatePicker } from "../../../../../CustomValidateForm";
 
 function MRPTab(props) {
-  const dispatch = useDispatch();
-  const IsSCMCompany = loginIsSCMCompany()
 
   const [division, setDivision] = useState("");
   const [partyName, setPartyName] = useState("");
@@ -33,10 +28,7 @@ function MRPTab(props) {
     Party: state.ItemMastersReducer.Party,
   }));
 
-  useEffect(() => {
-    dispatch(get_Division_ForDropDown());
-    dispatch(get_Party_ForDropDown());
-  }, [dispatch]);
+
 
   const Party_DropdownOptions = Party.map((data) => ({
     value: data.id,
@@ -82,8 +74,13 @@ function MRPTab(props) {
     };
 
     if (!(effectiveDate === "") && !(MRP === "")) {
-      const totalTableData = props.tableData.length;
-      val.id = totalTableData + 1;
+      let highestId = -Infinity;
+      for (const item of props.tableData) {
+          if (item.id !== undefined && item.id > highestId) {
+              highestId = item.id;
+          }
+      }
+      val.id = highestId + 1;
       const updatedTableData = [...props.tableData];
       updatedTableData.push(val);
       props.func(updatedTableData);

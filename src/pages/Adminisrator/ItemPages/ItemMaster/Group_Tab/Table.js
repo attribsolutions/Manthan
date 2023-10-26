@@ -4,16 +4,16 @@ import { Tbody, Thead } from "react-super-responsive-table";
 
 
 function GroupTable(props) {
-   
+
   const onDeleteHandeler = (ele) => {
-    
+
     if (!(ele === 0)) {
-        var fil = props.tableData.filter((i) => {
-            return !(i.id === ele);
-        });
-        props.func(fil);
+      var fil = props.tableData.filter((i) => {
+        return !(i.id === ele);
+      });
+      props.func(fil);
     }
-};
+  };
 
   const tableRows = props.tableData.map((info) => {
     return (
@@ -60,4 +60,4 @@ function GroupTable(props) {
   );
 }
 
-export default GroupTable;
+export default React.memo(GroupTable);

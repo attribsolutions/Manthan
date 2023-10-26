@@ -60,6 +60,8 @@ import WeightageTab from "./Weightage_Tab";
 import { C_Select } from "../../../../CustomValidateForm";
 import { showToastAlert } from "../../../../helpers/axios_Config";
 import { mobileApp_ProductAdd_Api, mobileApp_ProductUpdate_Api } from "../../../../helpers/backend_helper";
+import { getGroupTypeslist } from "../../../../store/Administrator/GroupTypeRedux/action";
+import { priceListByCompay_Action } from "../../../../store/Administrator/PriceList/action";
 
 export const unitConversionInitial = {
     id: 1,
@@ -228,6 +230,8 @@ const ItemsMaster = (props) => {
                     label: hasEditVal.ItemCategoryDetails[0].CategoryTypeName
                 }
 
+                dispatch(get_Category_By_CategoryType_ForDropDownAPI(editCategoryType.value));
+
                 const editCategory = hasEditVal.ItemCategoryDetails.map(index => ({
                     value: index.Category,
                     label: index.CategoryName
@@ -256,6 +260,7 @@ const ItemsMaster = (props) => {
                     IsSCM: hasEditVal.IsSCM,
                     BrandName: editBrandName
                 }
+
                 // ====================== Images tab ======================
 
 
@@ -337,16 +342,26 @@ const ItemsMaster = (props) => {
 
     }, [])
 
+
     useEffect(() => {
+        dispatch(get_Division_ForDropDown());//divsion tab
+        //++++++++++++++++++
+        dispatch(getCategoryTypelist());//Category tab
+        // dispatch(get_Category_By_CategoryType_ForDropDownAPI());
+        //++++++++++++++++++
+        dispatch(getGroupTypeslist());//group Tab
+        //++++++++++++++++++
+        dispatch(get_ImageType_ForDropDown());
+        //++++++++++++++++++
+        dispatch(get_Party_ForDropDown());//margin tab
+        dispatch(priceListByCompay_Action());
+        //++++++++++++++++++
+
         dispatch(getcompanyList());
         dispatch(getBaseUnit_ForDropDown());
         dispatch(get_CategoryTypes_ForDropDown());
         dispatch(getPartyListAPI());
-        dispatch(get_ImageType_ForDropDown());
-        dispatch(get_Division_ForDropDown());
-        dispatch(get_Party_ForDropDown());
-        // dispatch(priceListByCompay_Action());
-        dispatch(getCategoryTypelist());
+
         dispatch(getItemTagName())
         dispatch(getBrandTagName())
 
@@ -797,16 +812,16 @@ const ItemsMaster = (props) => {
 
     // When the user clicks anywhere outside of the modal, close it
     window.onclick = function (event) {
-        var x = document.getElementById("itemtag");
-        if (event.target == "") {
+        try {
             var x = document.getElementById("itemtag");
-            x.style.display = "none";
-        }
+            if (event.target == "") {
+                var x = document.getElementById("itemtag");
+                x.style.display = "none";
+            }
+        } catch (w) { }
     }
 
-    let data1 = BrandTagList.map((index) => {
-        return index.dta
-    })
+
 
     let data = ItemTagList.map((index) => {
         return index.dta
@@ -814,37 +829,42 @@ const ItemsMaster = (props) => {
 
     const handleChange = event => {
         // 
-        dispatch(Breadcrumb_inputName(event.target.value));
-        CommonTab_SimpleText_INPUT_handller_ForAll(event.target.value, "Name")
-        var searchtext = event.target.value
-        const results = data.filter(person =>
-            person.toLowerCase().includes(searchtext)
-        );
+        try {
+            dispatch(Breadcrumb_inputName(event.target.value));
+            CommonTab_SimpleText_INPUT_handller_ForAll(event.target.value, "Name")
+            var searchtext = event.target.value
+            const results = data.filter(person =>
+                person.toLowerCase().includes(searchtext)
+            );
 
-        setSearchResults(results);
-        var x = document.getElementById("itemtag");
-        document.addEventListener('click', function handleClickOutsideBox(event) {
-            if (!x.contains(event.target)) {
-                x.style.display = 'none';
+            setSearchResults(results);
+
+            var x = document.getElementById("itemtag");
+            document.addEventListener('click', function handleClickOutsideBox(event) {
+                if (!x.contains(event.target)) {
+                    x.style.display = 'none';
+                }
+            });
+
+            x.style.display = "block";
+            var di = "100Px"
+
+            if (event.target.value == "") {
+                di = `${x.style.display = "none"}`
             }
-        });
-        x.style.display = "block";
-        var di = "100Px"
+            else if (results.length == 0) {
+                di = `${x.style.display = "none"}`
+            }
+            else if (results.length < 2) {
+                di = "50Px"
+            } else if (results.length > 5) {
+                di = "300Px"
+            } else if (results.length < 2) {
+                di = "50Px"
+            }
+            x.style.height = di;
 
-        if (event.target.value == "") {
-            di = `${x.style.display = "none"}`
-        }
-        else if (results.length == 0) {
-            di = `${x.style.display = "none"}`
-        }
-        else if (results.length < 2) {
-            di = "50Px"
-        } else if (results.length > 5) {
-            di = "300Px"
-        } else if (results.length < 2) {
-            di = "50Px"
-        }
-        x.style.height = di
+        } catch (w) { }
 
     };
 
@@ -1023,165 +1043,165 @@ const ItemsMaster = (props) => {
                                             </Nav>
 
                                             <TabContent activeTab={activeTab1} className="p-3 text-muted">
+                                                {activeTab1 === "1" &&
+                                                    <TabPane tabId="1">{/* +++++++++++ TabPane tabId="1" ++++++++++++++++++++++++++++++++++++++++++ */}
+                                                        <Col md={12}  >
+                                                            <Card className="text-black">
+                                                                <CardBody className="c_card_body">
+                                                                    <Row>
+                                                                        <FormGroup className="mb-3 col col-sm-4 " >
+                                                                            <Label >Name</Label>
+                                                                            <Input type="text"
+                                                                                id='txtName0'
+                                                                                placeholder=" Please Enter Name "
+                                                                                defaultValue={EditData.Name}
+                                                                                autoComplete="off"
+                                                                                autoFocus={true}
+                                                                                // value={searchTerm}
+                                                                                onClick={onclickselect}
+                                                                                onChange={handleChange}
 
-                                                <TabPane tabId="1">{/* +++++++++++ TabPane tabId="1" ++++++++++++++++++++++++++++++++++++++++++ */}
-                                                    <Col md={12}  >
-                                                        <Card className="text-black">
-                                                            <CardBody className="c_card_body">
-                                                                <Row>
-                                                                    <FormGroup className="mb-3 col col-sm-4 " >
-                                                                        <Label >Name</Label>
-                                                                        <Input type="text"
-                                                                            id='txtName0'
-                                                                            placeholder=" Please Enter Name "
-                                                                            defaultValue={EditData.Name}
-                                                                            autoComplete="off"
-                                                                            autoFocus={true}
-                                                                            // value={searchTerm}
-                                                                            onClick={onclickselect}
-                                                                            onChange={handleChange}
+                                                                            />
+                                                                            <div id="itemtag" >
+                                                                                <ul style={{}}>
+                                                                                    {searchResults.map(item => (
+                                                                                        <li className="liitem" >{item}</li>
+                                                                                    ))}
+                                                                                </ul>
+                                                                            </div>
+                                                                        </FormGroup>
 
-                                                                        />
-                                                                        <div id="itemtag" >
-                                                                            <ul style={{}}>
-                                                                                {searchResults.map(item => (
-                                                                                    <li className="liitem" >{item}</li>
-                                                                                ))}
-                                                                            </ul>
-                                                                        </div>
-                                                                    </FormGroup>
+                                                                        <FormGroup className="mb-3 col col-sm-4 " >
+                                                                            <Label >ShortName</Label>
+                                                                            <Input type="text"
+                                                                                id='txtShortName0'
+                                                                                className=""
+                                                                                defaultValue={EditData.ShortName}
+                                                                                placeholder=" Please Enter ShortName "
+                                                                                autoComplete="off"
+                                                                                onChange={(e) => { CommonTab_SimpleText_INPUT_handller_ForAll(e.target.value, "ShortName") }}
+                                                                            />
+                                                                        </FormGroup>
 
-                                                                    <FormGroup className="mb-3 col col-sm-4 " >
-                                                                        <Label >ShortName</Label>
-                                                                        <Input type="text"
-                                                                            id='txtShortName0'
-                                                                            className=""
-                                                                            defaultValue={EditData.ShortName}
-                                                                            placeholder=" Please Enter ShortName "
-                                                                            autoComplete="off"
-                                                                            onChange={(e) => { CommonTab_SimpleText_INPUT_handller_ForAll(e.target.value, "ShortName") }}
-                                                                        />
-                                                                    </FormGroup>
+                                                                        <FormGroup className=" col col-sm-4 " >
+                                                                            <Label >Shelf Life<samp className="text-secondary">/Day</samp></Label>
+                                                                            <Input
+                                                                                type="text"
+                                                                                rows="1"
+                                                                                id='txtShelfLife0'
+                                                                                // defaultValue={pageMode === 'edit' ? isShelfLife : ''}
+                                                                                Value={isShelfLife}
+                                                                                placeholder=" Please Enter Days "
+                                                                                autoComplete="off"
+                                                                                onChange={(e) => { setIsShelfLife(e.target.value) }}
+                                                                            />
+                                                                        </FormGroup>
+                                                                    </Row>
 
-                                                                    <FormGroup className=" col col-sm-4 " >
-                                                                        <Label >Shelf Life<samp className="text-secondary">/Day</samp></Label>
-                                                                        <Input
-                                                                            type="text"
-                                                                            rows="1"
-                                                                            id='txtShelfLife0'
-                                                                            // defaultValue={pageMode === 'edit' ? isShelfLife : ''}
-                                                                            Value={isShelfLife}
-                                                                            placeholder=" Please Enter Days "
-                                                                            autoComplete="off"
-                                                                            onChange={(e) => { setIsShelfLife(e.target.value) }}
-                                                                        />
-                                                                    </FormGroup>
-                                                                </Row>
+                                                                    <Row>
+                                                                        <FormGroup className=" col col-sm-4 " >
+                                                                            <Label htmlFor="validationCustom21">Base Unit</Label>
+                                                                            <Select
+                                                                                id='dropBaseUnit-0'
+                                                                                value={formValue.BaseUnit}
+                                                                                options={BaseUnit_DropdownOptions}
+                                                                                isDisabled={pageMode === "edit" ? true : false}
+                                                                                styles={{
+                                                                                    control: base => ({
+                                                                                        ...base,
+                                                                                        border: inValidDrop.BaseUnit ? '1px solid red' : '',
 
-                                                                <Row>
-                                                                    <FormGroup className=" col col-sm-4 " >
-                                                                        <Label htmlFor="validationCustom21">Base Unit</Label>
-                                                                        <Select
-                                                                            id='dropBaseUnit-0'
-                                                                            value={formValue.BaseUnit}
-                                                                            options={BaseUnit_DropdownOptions}
-                                                                            isDisabled={pageMode === "edit" ? true : false}
-                                                                            styles={{
-                                                                                control: base => ({
-                                                                                    ...base,
-                                                                                    border: inValidDrop.BaseUnit ? '1px solid red' : '',
+                                                                                    })
+                                                                                }}
+                                                                                onChange={(event) => dropDownValidation(event, "BaseUnit")}
+                                                                            />
+                                                                        </FormGroup>
 
-                                                                                })
-                                                                            }}
-                                                                            onChange={(event) => dropDownValidation(event, "BaseUnit")}
-                                                                        />
-                                                                    </FormGroup>
+                                                                        <FormGroup className="mb-3 col col-sm-4 " >
+                                                                            <Label >BarCode</Label>
+                                                                            <Input
+                                                                                id='txtBarCode0'
+                                                                                placeholder=" Please Enter BarCode "
+                                                                                defaultValue={EditData.BarCode}
+                                                                                autoComplete="off"
+                                                                                onChange={(e) => { CommonTab_SimpleText_INPUT_handller_ForAll(e.target.value, "BarCode") }}
+                                                                            />
+                                                                        </FormGroup>
 
-                                                                    <FormGroup className="mb-3 col col-sm-4 " >
-                                                                        <Label >BarCode</Label>
-                                                                        <Input
-                                                                            id='txtBarCode0'
-                                                                            placeholder=" Please Enter BarCode "
-                                                                            defaultValue={EditData.BarCode}
-                                                                            autoComplete="off"
-                                                                            onChange={(e) => { CommonTab_SimpleText_INPUT_handller_ForAll(e.target.value, "BarCode") }}
-                                                                        />
-                                                                    </FormGroup>
+                                                                        <FormGroup className="mb-3 col col-sm-4 " >
+                                                                            <Label >SAP Code</Label>
+                                                                            <Input
+                                                                                id='txtSAPItemCode0'
+                                                                                defaultValue={EditData.SAPItemCode}
+                                                                                placeholder=" Please Enter SAP Code "
+                                                                                autoComplete="off"
+                                                                                onChange={(e) => { CommonTab_SimpleText_INPUT_handller_ForAll(e.target.value, "SAPItemCode") }}
+                                                                            />
 
-                                                                    <FormGroup className="mb-3 col col-sm-4 " >
-                                                                        <Label >SAP Code</Label>
-                                                                        <Input
-                                                                            id='txtSAPItemCode0'
-                                                                            defaultValue={EditData.SAPItemCode}
-                                                                            placeholder=" Please Enter SAP Code "
-                                                                            autoComplete="off"
-                                                                            onChange={(e) => { CommonTab_SimpleText_INPUT_handller_ForAll(e.target.value, "SAPItemCode") }}
-                                                                        />
+                                                                        </FormGroup>
+                                                                    </Row>
 
-                                                                    </FormGroup>
-                                                                </Row>
+                                                                    <Row>
+                                                                        <FormGroup className="mb-3 col col-sm-4 ">
+                                                                            <Label>Category Type</Label>
+                                                                            <Select
+                                                                                id={`dropCategoryType-${0}`}
+                                                                                value={formValue.CategoryType}
+                                                                                options={CategoryTypeList_DropdownOptions}
+                                                                                styles={{
+                                                                                    control: base => ({
+                                                                                        ...base,
+                                                                                        border: inValidDrop.CategoryType ? '1px solid red' : '',
+                                                                                    })
+                                                                                }}
+                                                                                onChange={(e) => { CategoryType_Handler(e) }}
+                                                                            />
+                                                                        </FormGroup>
 
-                                                                <Row>
-                                                                    <FormGroup className="mb-3 col col-sm-4 ">
-                                                                        <Label>Category Type</Label>
-                                                                        <Select
-                                                                            id={`dropCategoryType-${0}`}
-                                                                            value={formValue.CategoryType}
-                                                                            options={CategoryTypeList_DropdownOptions}
-                                                                            styles={{
-                                                                                control: base => ({
-                                                                                    ...base,
-                                                                                    border: inValidDrop.CategoryType ? '1px solid red' : '',
-                                                                                })
-                                                                            }}
-                                                                            onChange={(e) => { CategoryType_Handler(e) }}
-                                                                        />
-                                                                    </FormGroup>
+                                                                        <FormGroup className="mb-3 col col-sm-4 ">
+                                                                            <Label >Category</Label>
+                                                                            <C_Select
+                                                                                value={formValue.Category}
+                                                                                isMulti={true}
+                                                                                className="basic-multi-select"
+                                                                                options={CategoryList_DropdownOptions}
+                                                                                isLoading={categotyDropDownLoading}
+                                                                                styles={{
+                                                                                    control: base => ({
+                                                                                        ...base,
+                                                                                        border: inValidDrop.Category ? '1px solid red' : '',
 
-                                                                    <FormGroup className="mb-3 col col-sm-4 ">
-                                                                        <Label >Category</Label>
-                                                                        <C_Select
-                                                                            value={formValue.Category}
-                                                                            isMulti={true}
-                                                                            className="basic-multi-select"
-                                                                            options={CategoryList_DropdownOptions}
-                                                                            isLoading={categotyDropDownLoading}
-                                                                            styles={{
-                                                                                control: base => ({
-                                                                                    ...base,
-                                                                                    border: inValidDrop.Category ? '1px solid red' : '',
-
-                                                                                })
-                                                                            }}
-                                                                            onChange={(e) => { Category_Handler(e) }}
-                                                                            classNamePrefix="select2-selection"
-                                                                        />
-                                                                    </FormGroup>
+                                                                                    })
+                                                                                }}
+                                                                                onChange={(e) => { Category_Handler(e) }}
+                                                                                classNamePrefix="select2-selection"
+                                                                            />
+                                                                        </FormGroup>
 
 
-                                                                    <FormGroup className="mb-3 col col-sm-4 ">
-                                                                        <Label >Brand Name</Label>
-                                                                        <Select
-                                                                            defaultValue={formValue.BrandName}
-                                                                            isMulti={true}
-                                                                            className="basic-multi-select"
-                                                                            options={BrandName_DropdownOptions}
-                                                                            styles={{
-                                                                                control: base => ({
-                                                                                    ...base,
-                                                                                    border: inValidDrop.BrandName ? '1px solid red' : '',
+                                                                        <FormGroup className="mb-3 col col-sm-4 ">
+                                                                            <Label >Brand Name</Label>
+                                                                            <Select
+                                                                                defaultValue={formValue.BrandName}
+                                                                                isMulti={true}
+                                                                                className="basic-multi-select"
+                                                                                options={BrandName_DropdownOptions}
+                                                                                styles={{
+                                                                                    control: base => ({
+                                                                                        ...base,
+                                                                                        border: inValidDrop.BrandName ? '1px solid red' : '',
 
-                                                                                })
-                                                                            }}
-                                                                            onChange={(e) => { BrandName_Handler(e) }}
-                                                                            classNamePrefix="select2-selection"
-                                                                        />
-                                                                    </FormGroup>
-                                                                </Row>
+                                                                                    })
+                                                                                }}
+                                                                                onChange={(e) => { BrandName_Handler(e) }}
+                                                                                classNamePrefix="select2-selection"
+                                                                            />
+                                                                        </FormGroup>
+                                                                    </Row>
 
-                                                                <Row>
-                                                                    <FormGroup className=" col col-sm-4 ">
-                                                                        {/* <div className="mb-3">
+                                                                    <Row>
+                                                                        <FormGroup className=" col col-sm-4 ">
+                                                                            {/* <div className="mb-3">
                                                                             <Label >Division</Label>
                                                                             <Select
                                                                                 defaultValue={formValue.Division}
@@ -1199,159 +1219,169 @@ const ItemsMaster = (props) => {
                                                                                 classNamePrefix="select2-selection"
                                                                             />
                                                                         </div> */}
-                                                                    </FormGroup>
+                                                                        </FormGroup>
 
-                                                                    <FormGroup className=" col col-sm-4 " >
-                                                                        <Label >Item Tag</Label>
-                                                                        <Input
-                                                                            type="textarea"
-                                                                            rows="1"
-                                                                            id='txtTag0'
-                                                                            defaultValue={EditData.Tag}
-                                                                            placeholder=" Please Enter Item Tag "
-                                                                            autoComplete="off"
-                                                                            onChange={(e) => { CommonTab_SimpleText_INPUT_handller_ForAll(e.target.value, "Tag") }}
-                                                                        />
-                                                                    </FormGroup>
+                                                                        <FormGroup className=" col col-sm-4 " >
+                                                                            <Label >Item Tag</Label>
+                                                                            <Input
+                                                                                type="textarea"
+                                                                                rows="1"
+                                                                                id='txtTag0'
+                                                                                defaultValue={EditData.Tag}
+                                                                                placeholder=" Please Enter Item Tag "
+                                                                                autoComplete="off"
+                                                                                onChange={(e) => { CommonTab_SimpleText_INPUT_handller_ForAll(e.target.value, "Tag") }}
+                                                                            />
+                                                                        </FormGroup>
 
-                                                                    <FormGroup className=" col col-sm-4 " >
-                                                                        <Label >Sequence</Label>
-                                                                        <Input
-                                                                            type="text"
-                                                                            rows="1"
-                                                                            id='txtSequence0'
-                                                                            defaultValue={EditData.Sequence}
-                                                                            placeholder=" Please Enter Sequence "
-                                                                            autoComplete="off"
-                                                                            onChange={(e) => { CommonTab_SimpleText_INPUT_handller_ForAll(e.target.value, "Sequence") }}
-                                                                        />
-                                                                    </FormGroup>
+                                                                        <FormGroup className=" col col-sm-4 " >
+                                                                            <Label >Sequence</Label>
+                                                                            <Input
+                                                                                type="text"
+                                                                                rows="1"
+                                                                                id='txtSequence0'
+                                                                                defaultValue={EditData.Sequence}
+                                                                                placeholder=" Please Enter Sequence "
+                                                                                autoComplete="off"
+                                                                                onChange={(e) => { CommonTab_SimpleText_INPUT_handller_ForAll(e.target.value, "Sequence") }}
+                                                                            />
+                                                                        </FormGroup>
 
-                                                                </Row>
-                                                                <Row >
-                                                                    <FormGroup className=" col col-md-4">
-                                                                        <Row className="justify-content-ml-left ">
-                                                                            <Label htmlFor="horizontal-firstname-input"
-                                                                                className="col-md-3 col-form-label" >Active </Label>
-                                                                            <Col md={6} style={{ marginTop: '9px' }} >
+                                                                    </Row>
+                                                                    <Row >
+                                                                        <FormGroup className=" col col-md-4">
+                                                                            <Row className="justify-content-ml-left ">
+                                                                                <Label htmlFor="horizontal-firstname-input"
+                                                                                    className="col-md-3 col-form-label" >Active </Label>
+                                                                                <Col md={6} style={{ marginTop: '9px' }} >
 
-                                                                                <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
-                                                                                    <Input type="checkbox" className="form-check-input" id="customSwitchsizemd"
-                                                                                        defaultChecked={formValue.isActive}
-                                                                                        onChange={(e) => { formValue.isActive = e.target.checked }}
+                                                                                    <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
+                                                                                        <Input type="checkbox" className="form-check-input" id="customSwitchsizemd"
+                                                                                            defaultChecked={formValue.isActive}
+                                                                                            onChange={(e) => { formValue.isActive = e.target.checked }}
 
-                                                                                    />
-                                                                                </div>
-                                                                            </Col>
-                                                                        </Row>
-                                                                    </FormGroup>
-
-
-                                                                    <FormGroup className=" col col-md-4">
-                                                                        <Row className="justify-content-ml-left ">
-                                                                            <Label htmlFor="horizontal-firstname-input"
-                                                                                className="col-md-3 col-form-label" >IsSCM </Label>
-                                                                            <Col md={6} style={{ marginTop: '9px' }} >
-
-                                                                                <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
-                                                                                    <Input type="checkbox" className="form-check-input" id="customSwitchsizemd"
-                                                                                        defaultChecked={formValue.IsSCM}
-                                                                                        onChange={(e) => { formValue.IsSCM = e.target.checked }}
-
-                                                                                    />
-                                                                                </div>
-                                                                            </Col>
-                                                                        </Row>
-                                                                    </FormGroup>
-                                                                </Row>
+                                                                                        />
+                                                                                    </div>
+                                                                                </Col>
+                                                                            </Row>
+                                                                        </FormGroup>
 
 
-                                                            </CardBody>
-                                                        </Card>
-                                                    </Col>
+                                                                        <FormGroup className=" col col-md-4">
+                                                                            <Row className="justify-content-ml-left ">
+                                                                                <Label htmlFor="horizontal-firstname-input"
+                                                                                    className="col-md-3 col-form-label" >IsSCM </Label>
+                                                                                <Col md={6} style={{ marginTop: '9px' }} >
 
-                                                </TabPane>
+                                                                                    <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
+                                                                                        <Input type="checkbox" className="form-check-input" id="customSwitchsizemd"
+                                                                                            defaultChecked={formValue.IsSCM}
+                                                                                            onChange={(e) => { formValue.IsSCM = e.target.checked }}
 
-                                                <TabPane tabId="2">{/* +++++++++++ TabPane Group Type ++++++++++++++++++++++++++++++++++++++++++ */}
-                                                    <Row>
-                                                        <Col md={12}  >
-                                                            <Row className="mt-3">
-                                                                <Col className=" col col-12 ">
-                                                                    <GroupTab tableData={Group_Tab_TableData} func={setGroup_Tab_TableData} />
-                                                                </Col>
-                                                            </Row>
+                                                                                        />
+                                                                                    </div>
+                                                                                </Col>
+                                                                            </Row>
+                                                                        </FormGroup>
+                                                                    </Row>
+
+
+                                                                </CardBody>
+                                                            </Card>
                                                         </Col>
-                                                    </Row>
-                                                </TabPane>
 
+                                                    </TabPane>
 
-                                                <TabPane tabId="3">{/* ++++++++++++ TabPane UnitConverstion ++++++++++++++++++++++++++++++++++++++++++ */}
-                                                    <UnitConverstion
-                                                        state={{
-                                                            pageMode: pageMode,
-                                                            formValue: formValue,
-                                                            TableData: baseUnitTableData,
-                                                            BaseUnit: BaseUnit
+                                                }
+                                                {activeTab1 === "2" &&
+                                                    <TabPane tabId="2">{/* +++++++++++ TabPane Group Type ++++++++++++++++++++++++++++++++++++++++++ */}
+                                                        <Row>
+                                                            <Col md={12}  >
+                                                                <Row className="mt-3">
+                                                                    <Col className=" col col-12 ">
+                                                                        <GroupTab tableData={Group_Tab_TableData} func={setGroup_Tab_TableData} />
+                                                                    </Col>
+                                                                </Row>
+                                                            </Col>
+                                                        </Row>
+                                                    </TabPane>
+                                                }
+
+                                                {activeTab1 === "3" &&
+                                                    <TabPane tabId="3">{/* ++++++++++++ TabPane UnitConverstion ++++++++++++++++++++++++++++++++++++++++++ */}
+                                                        <UnitConverstion
+                                                            state={{
+                                                                pageMode: pageMode,
+                                                                formValue: formValue,
+                                                                TableData: baseUnitTableData,
+                                                                BaseUnit: BaseUnit
+                                                            }}
+                                                            settable={setBaseUnitTableData}
+                                                            setFormValue={setFormValue}
+                                                        />
+                                                    </TabPane>
+                                                }
+                                                {activeTab1 === "4" &&
+                                                    <TabPane tabId="4">{/* ++++++++++++ TabPane Item Image ++++++++++++++++++++++++++++++++++++++++++ */}
+                                                        <Image state={{
+                                                            imageTable: imageTabTable,
+                                                            setImageTable: setImageTabTable
                                                         }}
-                                                        settable={setBaseUnitTableData}
-                                                        setFormValue={setFormValue}
-                                                    />
-                                                </TabPane>
-                                                <TabPane tabId="4">{/* ++++++++++++ TabPane Item Image ++++++++++++++++++++++++++++++++++++++++++ */}
-                                                    <Image state={{
-                                                        imageTable: imageTabTable,
-                                                        setImageTable: setImageTabTable
-                                                    }}
-                                                    />
-                                                </TabPane>
-
-                                                <TabPane tabId="5">{/* ++++++++++++ TabPane MRP_Tab ++++++++++++++++++++++++++++++++++++++++++ */}
-                                                    <Row>
-                                                        <Col md={12}  >
-                                                            <Row className="mt-3">
-                                                                <Col className=" col col-12 ">
-                                                                    <MRPTab tableData={MRP_Tab_TableData} func={setMRP_Tab_TableData} />
-                                                                </Col>
-                                                            </Row>
-                                                        </Col>
-                                                    </Row>
-                                                </TabPane>
-
-                                                <TabPane tabId="6">{/* ++++++++++++ TabPane Margin ++++++++++++++++++++++++++++++++++++++++++ */}
-                                                    <Row>
-                                                        <Col md={12}  >
-                                                            <Row className="mt-3">
-                                                                <Col className=" col col-12 ">
-                                                                    <Margin_Tab tableData={marginMaster} func={setMarginMaster} />
-                                                                </Col>
-                                                            </Row>
-                                                        </Col>
-                                                    </Row>
-                                                </TabPane>
-
-                                                <TabPane tabId="7">{/* +++++++++++++ TabPane Gst ++++++++++++++++++++++++++++++++++++++++++ */}
-                                                    <Row>
-                                                        <Col md={12}  >
-                                                            <Row className="mt-3">
-                                                                <Col className=" col col-12 ">
-                                                                    <GSTTab tableData={GStDetailsMaster} func={setGStDetailsMaster} />
-                                                                </Col>
-                                                            </Row>
-                                                        </Col>
-                                                    </Row>
-                                                </TabPane>
-
-                                                <TabPane tabId="8">{/* +++++++++++++ TabPane Gst ++++++++++++++++++++++++++++++++++++++++++ */}
-                                                    <Row>
-                                                        <Col md={12}  >
-                                                            <Row className="mt-3">
-                                                                <Col className=" col col-12 ">
-                                                                    <WeightageTab weightageTabMaster={weightageTabMaster} setWeightageTabMaster={setWeightageTabMaster} />
-                                                                </Col>
-                                                            </Row>
-                                                        </Col>
-                                                    </Row>
-                                                </TabPane>
+                                                        />
+                                                    </TabPane>
+                                                }
+                                                {activeTab1 === "5" &&
+                                                    <TabPane tabId="5">{/* ++++++++++++ TabPane MRP_Tab ++++++++++++++++++++++++++++++++++++++++++ */}
+                                                        <Row>
+                                                            <Col md={12}  >
+                                                                <Row className="mt-3">
+                                                                    <Col className=" col col-12 ">
+                                                                        <MRPTab tableData={MRP_Tab_TableData} func={setMRP_Tab_TableData} />
+                                                                    </Col>
+                                                                </Row>
+                                                            </Col>
+                                                        </Row>
+                                                    </TabPane>
+                                                }
+                                                {activeTab1 === "6" &&
+                                                    <TabPane tabId="6">{/* ++++++++++++ TabPane Margin ++++++++++++++++++++++++++++++++++++++++++ */}
+                                                        <Row>
+                                                            <Col md={12}  >
+                                                                <Row className="mt-3">
+                                                                    <Col className=" col col-12 ">
+                                                                        <Margin_Tab tableData={marginMaster} func={setMarginMaster} />
+                                                                    </Col>
+                                                                </Row>
+                                                            </Col>
+                                                        </Row>
+                                                    </TabPane>
+                                                }
+                                                {activeTab1 === "7" &&
+                                                    <TabPane tabId="7">{/* +++++++++++++ TabPane Gst ++++++++++++++++++++++++++++++++++++++++++ */}
+                                                        <Row>
+                                                            <Col md={12}  >
+                                                                <Row className="mt-3">
+                                                                    <Col className=" col col-12 ">
+                                                                        <GSTTab tableData={GStDetailsMaster} func={setGStDetailsMaster} />
+                                                                    </Col>
+                                                                </Row>
+                                                            </Col>
+                                                        </Row>
+                                                    </TabPane>
+                                                }
+                                                {activeTab1 === "8" &&
+                                                    <TabPane tabId="8">{/* +++++++++++++ TabPane Gst ++++++++++++++++++++++++++++++++++++++++++ */}
+                                                        <Row>
+                                                            <Col md={12}  >
+                                                                <Row className="mt-3">
+                                                                    <Col className=" col col-12 ">
+                                                                        <WeightageTab weightageTabMaster={weightageTabMaster} setWeightageTabMaster={setWeightageTabMaster} />
+                                                                    </Col>
+                                                                </Row>
+                                                            </Col>
+                                                        </Row>
+                                                    </TabPane>
+                                                }
                                             </TabContent>
 
                                             <Row >{/* +++++++++++++++++++++++++++ Save Button  ++++++++++++++++++++++++++++++++++++++++++ */}
