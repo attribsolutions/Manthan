@@ -383,6 +383,7 @@ const SalesReturnList = () => {
                             pageMode={pageMode}
                             viewApprovalBtnFunc={viewApprovalBtnFunc}
                             makeBtnFunc={makeBtnFunc}
+                            makeBtnName={"Create Credit Note for"}
                             HeaderContent={HeaderContent}
                             downBtnFunc={downBtnFunc}
                             goButnFunc={goButtonHandler}

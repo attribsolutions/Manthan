@@ -79,7 +79,8 @@ function* CreditDeitType_ID_GenFunc(data) {                // edit API
   } catch (error) { yield put(CreditDebitApiErrorAction()) }
 }
 
-function* Edit_Creditlist_ID_GenFunc({ config }) {         //edit  Api              
+function* Edit_Creditlist_ID_GenFunc({ config }) {
+        //edit  Api              
   const { btnmode } = config;
   try {
     const response = yield call(Edit_Credit_List_API, config);
@@ -100,7 +101,7 @@ function* InvoiceReturn_ID_GenFunc(id) {           // Invoice Return Api
 //**************************** E-Invoice (upload ,cancel,) ***************************************/
 
 function* Uploade_Credit_Debit_EInvoiceGenFunc({ config }) {
-  
+
   config["UserID"] = loginUserID();
   try {
 

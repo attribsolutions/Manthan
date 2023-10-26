@@ -29,7 +29,7 @@ export async function isAlertFunc(type, Msg) {
 }
 
 const CommonPurchaseList = (props) => {
-  
+
   const dispatch = useDispatch();
   const history = useHistory();
 
@@ -49,7 +49,7 @@ const CommonPurchaseList = (props) => {
 
   const { getList, editId, deleteId, postSucc, updateSucc, deleteSucc, viewId } =
     props.action;
-
+  debugger
   const {
     MasterModal,
     masterPath,

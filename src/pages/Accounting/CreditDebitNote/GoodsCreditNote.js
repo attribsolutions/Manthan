@@ -169,6 +169,7 @@ const GoodsCreditNote = (props) => {
 
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
+        debugger
         try {
             if ((hasShowloction || hasShowModal)) {
 
@@ -185,12 +186,12 @@ const GoodsCreditNote = (props) => {
                     setPageMode(props.pageMode)
                 }
                 if (hasEditVal) {
-                    debugger
-                    const { CRDRNoteDate, Customer, Narration, GrandTotal, CRDRInvoices = '', CustomerID, CRDRNoteItems = [], ReturnItems = [], CustomerName } = hasEditVal
+
+                    const { CRDRNoteDate, Customer, Narration, CustomerID, GrandTotal, CRDRInvoices = '', CRDRNoteItems = [], ReturnItems = [], CustomerName } = hasEditVal
 
                     const { values, fieldLabel, hasValid, required, isError } = { ...state }
                     let caculateGrandTotal = ""
-                    values.Customer = { label: CustomerName, value: Customer };
+                    values.Customer = { label: Customer, value: CustomerID };
                     values.InvoiceNO = CRDRInvoices[0]
                         ? {
                             label: CRDRInvoices[0].FullInvoiceNumber,
@@ -198,7 +199,9 @@ const GoodsCreditNote = (props) => {
                         } : '';
                     values.Narration = Narration;
                     let dataCount = ""
+
                     if (internal_pageMode === mode.modeSTPsave) {
+                        values.Customer = { label: CustomerName, value: Customer };
                         setTableArr(ReturnItems)
                         dataCount = ReturnItems.length;
                         caculateGrandTotal = ""

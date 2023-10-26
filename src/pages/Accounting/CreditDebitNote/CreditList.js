@@ -56,7 +56,8 @@ const CreditList = () => {
     const [otherState, setOtherState] = useState({
         masterPath: '',
         buttonMsgLable: '',
-        page_Id: ''
+        page_Id: '',
+       
     });
 
     const reducers = useSelector(
@@ -78,7 +79,7 @@ const CreditList = () => {
 
     const { pageField, RetailerList, CreditDebitType, listBtnLoading, Cancel_Credit_Debit_EInvoice, Uploaded_Credit_Debit_EInvoice } = reducers;
     const values = { ...state.values }
-
+    
     const action = {
         editId: Edit_CreditList_ID,
         deleteId: delete_CreditList_ID,
@@ -97,6 +98,7 @@ const CreditList = () => {
             masterPath = url.CREDIT_NOTE;
             newBtnPath = url.CREDIT_NOTE;
             buttonMsgLable = "Credit"
+        
         }
         else if (subPageMode === url.DEBIT_LIST) {
             page_Id = pageId.DEBIT_LIST;
@@ -227,7 +229,7 @@ const CreditList = () => {
     }
 
     function downBtnFunc(config) {
-        debugger
+
         config["ReportType"] = report.Credit;
         config["systemSetting"] = SystemData.CRDRNoteA4Print
         config["PaymentQr"] = SystemData.PaymentQRCodeimageonInvoice
@@ -436,7 +438,7 @@ const CreditList = () => {
                             downBtnFunc={downBtnFunc}
                             ButtonMsgLable={otherState.buttonMsgLable}
                             deleteName={"FullNoteNumber"}
-                            MasterModal={otherState.MasterModal}
+
                             totalAmountShow={true}
 
                         />

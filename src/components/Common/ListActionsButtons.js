@@ -184,7 +184,6 @@ export const listPageActionsButtonFunc = (props) => {
         const dummyDisable_Delete = (hasRole("RoleAccess_IsDelete") || hasRole("RoleAccess_IsDeleteSelf")) && !canDelete && !canDeleteSelf;
         const dummyDisable_MakeBtn = !canMakeBtn && makeBtnShow;
         const dummyDisable_SendToScm = !isPartyTypeIDInSendToScm && sendToScmBtnFunc;
-        const dummyDisable_MakeCreditNoteBtn = !canMakeCreditNoteBtn;
 
 
 
