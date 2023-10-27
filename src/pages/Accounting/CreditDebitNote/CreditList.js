@@ -57,7 +57,7 @@ const CreditList = () => {
         masterPath: '',
         buttonMsgLable: '',
         page_Id: '',
-       
+
     });
 
     const reducers = useSelector(
@@ -79,7 +79,7 @@ const CreditList = () => {
 
     const { pageField, RetailerList, CreditDebitType, listBtnLoading, Cancel_Credit_Debit_EInvoice, Uploaded_Credit_Debit_EInvoice } = reducers;
     const values = { ...state.values }
-    
+
     const action = {
         editId: Edit_CreditList_ID,
         deleteId: delete_CreditList_ID,
@@ -98,7 +98,7 @@ const CreditList = () => {
             masterPath = url.CREDIT_NOTE;
             newBtnPath = url.CREDIT_NOTE;
             buttonMsgLable = "Credit"
-        
+
         }
         else if (subPageMode === url.DEBIT_LIST) {
             page_Id = pageId.DEBIT_LIST;
@@ -131,7 +131,6 @@ const CreditList = () => {
             dispatch(getSupplierSuccess([]));
         }
     }, []);
-
 
     //   Note Type Api for Type identify
     useEffect(() => {
@@ -195,9 +194,10 @@ const CreditList = () => {
     // NoteType.unshift({ value: "", label: " All" });
 
     useEffect(() => {
-        if (CreditDebitType.length > 0) {
+        if ((CreditDebitType.length > 0) && !(_cfunc.loginSelectedPartyID() === 0)) {
             goButtonHandler(true)
         }
+
     }, [CreditDebitType]);
 
     function noteType_BySubPageMode() {
@@ -327,6 +327,7 @@ const CreditList = () => {
     }
 
     function partySelectOnChangeHandler() {
+
         dispatch(GetCreditListSuccess([]));
         dispatch(Retailer_List_Success([]));
         setState((i) => {
@@ -338,6 +339,7 @@ const CreditList = () => {
             return a
         })
     }
+
     const HeaderContent = () => {
         return (
             <div className="px-2 c_card_filter text-black" >

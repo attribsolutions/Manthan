@@ -30,13 +30,13 @@ import * as mode from "../../../routes/PageMode"
 import {
     editBankIDSuccess,
 } from "../../../store/Accounting/BankRedux/action";
-import { Retailer_List } from "../../../store/CommonAPI/SupplierRedux/actions";
+import { Retailer_List, Retailer_List_Success } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { postSelect_Field_for_dropdown } from "../../../store/Administrator/PartyMasterBulkUpdateRedux/actions";
 import { CredietDebitType, Receipt_No_List, Receipt_No_List_Success, saveCredit, saveCredit_Success } from "../../../store/Accounting/CreditRedux/action";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { C_DatePicker } from "../../../CustomValidateForm";
 import * as _cfunc from "../../../components/Common/CommonFunction"
-
+import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 
 function initialState(history) {
 
@@ -56,15 +56,11 @@ function initialState(history) {
     return { page_Id, listPath }
 };
 
-
-
-
 const Debit = (props) => {
 
     const history = useHistory()
     const dispatch = useDispatch();
     const currentDate_ymd = _cfunc.date_ymd_func();
-
 
     const fileds = {
         CRDRNoteDate: currentDate_ymd,
@@ -217,7 +213,7 @@ const Debit = (props) => {
     useEffect(() => {
         const jsonBody = JSON.stringify({
             Type: 4,
-            PartyID: _cfunc.loginPartyID(),
+            PartyID: _cfunc.loginSelectedPartyID(),
             CompanyID: _cfunc.loginCompanyID()
         });
         dispatch(Retailer_List(jsonBody));
@@ -256,17 +252,7 @@ const Debit = (props) => {
         ReceiptDate: _cfunc.date_dmy_func(index.ReceiptDate)
     }));
 
-
-    function ReciptDateOnchange(e, date) {
-        setState((i) => {
-            const a = { ...i }
-            a.values.ReceiptDate = date;
-            a.hasValid.ReceiptDate.valid = true
-            return a
-        })
-    };
-
-    function CRDRNoteDateOnchange(e, date) {
+     function CRDRNoteDateOnchange(e, date) {
         setState((i) => {
             const a = { ...i }
             a.values.CRDRNoteDate = date;
@@ -289,7 +275,7 @@ const Debit = (props) => {
         dispatch(Receipt_No_List_Success([]))
 
         const jsonBody = JSON.stringify({
-            PartyID: _cfunc.loginPartyID(),
+            PartyID: _cfunc.loginSelectedPartyID(),
             CustomerID: hasSelect.value
         });
         dispatch(Receipt_No_List(jsonBody));
@@ -324,9 +310,8 @@ const Debit = (props) => {
                     else if (subPageMode === url.DEBIT_NOTE) {
                         return CreditDebitType.find((index) => index.Name === "DebitNote")?.id;
                     }
-
                 }
-                
+
                 const jsonBody = JSON.stringify({
                     CRDRNoteDate: values.CRDRNoteDate,
                     Customer: values.Customer.value,
@@ -338,7 +323,7 @@ const Debit = (props) => {
                     ReceiptDate: values.ReceiptDate,
                     CRDRNoteItems: [],
                     CRDRInvoices: [],
-                    Party: _cfunc.loginPartyID(),
+                    Party: _cfunc.loginSelectedPartyID(),
                     CreatedBy: _cfunc.loginUserID(),
                     UpdatedBy: _cfunc.loginUserID(),
                 });
@@ -353,6 +338,21 @@ const Debit = (props) => {
         } catch (e) { _cfunc.btnIsDissablefunc({ btnId, state: false }) }
     };
 
+    function partySelectButtonHandler() {
+        const jsonBody = JSON.stringify({
+            Type: 4,
+            PartyID: _cfunc.loginSelectedPartyID(),
+            CompanyID: _cfunc.loginCompanyID()
+        });
+        dispatch(Retailer_List(jsonBody));
+    }
+
+    function partyOnChngeButtonHandler() {
+        dispatch(Retailer_List_Success([]));
+        dispatch(Receipt_No_List_Success([]))
+        setState(() => resetFunction(fileds, state)) //Clear form values 
+    }
+
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
     if ((modalCss) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
@@ -361,11 +361,15 @@ const Debit = (props) => {
         return (
             <React.Fragment>
                 <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
+
                 <div className="page-content" style={{ marginTop: IsEditMode_Css, }}>
+                    <PartyDropdown_Common pageMode={pageMode}
+                        goButtonHandler={partySelectButtonHandler}
+                        changeButtonHandler={partyOnChngeButtonHandler}
+                    />
+
                     <form noValidate>
-
                         <div className="px-2 c_card_filter header text-black mb-2" >
-
                             <Row>
                                 <Col sm="6">
                                     <FormGroup className="row mt-2" >

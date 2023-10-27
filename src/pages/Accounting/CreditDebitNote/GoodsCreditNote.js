@@ -38,6 +38,8 @@ import * as _cfunc from "../../../components/Common/CommonFunction";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
+import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
+import { loginSelectedPartyID } from "../../../components/Common/CommonFunction";
 
 function initialState(history) {
 
@@ -120,11 +122,11 @@ const GoodsCreditNote = (props) => {
         dispatch(InvoiceNumberSuccess([]));
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_id));
-        dispatch(goButtonPartyItemAddPage({ jsonBody: JSON.stringify(_cfunc.loginJsonBody()) }));
+        dispatch(goButtonPartyItemAddPage({ jsonBody: { ..._cfunc.loginJsonBody(), "PartyID": loginSelectedPartyID() } }));
 
         const jsonBody = JSON.stringify({
             Type: 4,
-            PartyID: _cfunc.loginPartyID(),
+            PartyID: _cfunc.loginSelectedPartyID(),
             CompanyID: _cfunc.loginCompanyID(),
         });
         dispatch(Retailer_List(jsonBody));
@@ -169,7 +171,7 @@ const GoodsCreditNote = (props) => {
 
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
-        debugger
+
         try {
             if ((hasShowloction || hasShowModal)) {
 
@@ -210,7 +212,7 @@ const GoodsCreditNote = (props) => {
                             i.Quantity = ""
                         });
                         const jsonBody = JSON.stringify({
-                            PartyID: _cfunc.loginPartyID(),
+                            PartyID: _cfunc.loginSelectedPartyID(),
                             CustomerID: Customer
                         });
 
@@ -333,7 +335,6 @@ const GoodsCreditNote = (props) => {
             } catch (error) { _cfunc.CommonConsole(error); }
         }
     }, [addButtonData]);
-
 
     const customerOptions = RetailerList.map((index) => ({
         value: index.id,
@@ -654,7 +655,7 @@ const GoodsCreditNote = (props) => {
         setTableArr([])
 
         const jsonBody = JSON.stringify({
-            PartyID: _cfunc.loginPartyID(),
+            PartyID: _cfunc.loginSelectedPartyID(),
             CustomerID: event.value
         });
 
@@ -788,7 +789,7 @@ const GoodsCreditNote = (props) => {
                 RoundOffAmount: (grand_total - Math.trunc(grand_total)).toFixed(2),
                 Narration: values.Narration,
                 CRDRNoteItems: creditNoteItems,
-                Party: _cfunc.loginPartyID(),
+                Party: _cfunc.loginSelectedPartyID(),
                 CreatedBy: _cfunc.loginUserID(),
                 UpdatedBy: _cfunc.loginUserID(),
                 CRDRInvoices: [{ Invoice: values.InvoiceNO.value, }],
@@ -799,8 +800,31 @@ const GoodsCreditNote = (props) => {
         } catch (e) { _cfunc.CommonConsole(e) }
     };
 
+    function partySelectButtonHandler() {
+        const jsonBody = JSON.stringify({
+            Type: 4,
+            PartyID: _cfunc.loginSelectedPartyID(),
+            CompanyID: _cfunc.loginCompanyID(),
+        });
+        dispatch(Retailer_List(jsonBody));
+        dispatch(goButtonPartyItemAddPage({ jsonBody: { ..._cfunc.loginJsonBody(), "PartyID": loginSelectedPartyID() } }));
+    }
 
-
+    function partyOnChngeButtonHandler() {
+        dispatch(Retailer_List_Success([]));
+        dispatch(InvoiceNumberSuccess([]));
+        setTableArr([]);
+        setState((i) => {
+            let a = { ...i }
+            a.values.Customer = ''
+            a.values.InvoiceNO = ''
+            a.values.ItemName=''
+            a.hasValid.Customer.valid = true;
+            a.hasValid.InvoiceNO.valid = true;
+            a.hasValid.ItemName.valid = true;
+            return a
+        })
+    }
 
     if (!(userPageAccessState === '')) {
         return (
@@ -808,7 +832,10 @@ const GoodsCreditNote = (props) => {
                 <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
 
                 <div className="page-content" >
-
+                    <PartyDropdown_Common pageMode={pageMode}
+                        goButtonHandler={partySelectButtonHandler}
+                        changeButtonHandler={partyOnChngeButtonHandler}
+                    />
                     <form noValidate>
                         <div className="px-2 c_card_filter header text-black mb-1" >
                             <Row>
