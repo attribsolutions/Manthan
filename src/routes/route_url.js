@@ -327,6 +327,8 @@ export const MOBILE_RETAILER_SEND = "/MobileRetailerSend"
 
 export const MAN_POWER_REPORT = "/ManPowerReport"
 
+export const CLAIM_TRACKING_REPORT="/Claim_Tracking_Report"
+
 
 
 

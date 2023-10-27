@@ -205,6 +205,7 @@ import SubClusterList from "../pages/Adminisrator/Cluster_SubCluster/SubClusterL
 import CentralServiceItem from "../pages/Adminisrator/CentralServiceItem/CentralServiceItemMaster";
 import CentralServiceItemList from "../pages/Adminisrator/CentralServiceItem/CentralServiceItemList";
 import ServiceItemAssign from "../pages/Adminisrator/ServiceItemAssign";
+import ClaimTrackingReport from "../Reports/ClaimTrackingReport";
 
 
 const userRoutes = [
@@ -519,6 +520,8 @@ const userRoutes = [
 	{ path: path.PARTY_OUTSTANDING_REPORT, component: PartyOutstandingReport },
 
 	{ path: path.MAN_POWER_REPORT, component: ProductMarginReport },
+
+	{ path: path.CLAIM_TRACKING_REPORT, component: ClaimTrackingReport },
 	// ************************************ Utility **************************************//
 
 	{ path: path.SEARCH_BOX2, component: SearchBoxSecond },

@@ -2,13 +2,30 @@ import { call, put, takeLatest } from "redux-saga/effects";
 import * as  apiCall from "../../../helpers/backend_helper";
 import * as actionType from "./actionType";
 import * as action from "./action";
+import { url } from "../../../routes";
+import { date_dmy_func } from "../../../components/Common/CommonFunction";
 
 // List API
 function* Get_ClaimTrackingEntry_List_GenFunc({ config }) {     // getList API
-
+    debugger
+    const { jsonBody, subPageMode, goBtnMode } = config
     try {
-        const response = yield call(apiCall.ClaimList_Get_Api, config);
-        yield put(action.getClaimTrackingEntrySuccess(response.Data));
+        const response = yield call(apiCall.ClaimList_Get_Api, jsonBody);
+        response["goBtnMode"] = goBtnMode;
+        
+        response.Data.map((i) => {
+            i.CreditNoteDate = date_dmy_func(i.CreditNoteDate);
+            i.ClaimSummaryDate = date_dmy_func(i.ClaimSummaryDate);
+            i.Date = date_dmy_func(i.Date);
+            return i
+        })
+        
+        if (subPageMode === url.CLAIM_TRACKING_REPORT) {
+            yield put(action.getClaimTrackingEntrySuccess(response));
+        }
+        else {
+            yield put(action.getClaimTrackingEntrySuccess(response.Data));
+        }
     } catch (error) { yield put(action.ClaimTrackingEntryApiErrorAction()) }
 }
 
