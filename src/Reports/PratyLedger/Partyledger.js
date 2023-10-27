@@ -51,57 +51,6 @@ const PartyLedger = () => {
 
     const values = { ...state.values }
 
-    const pageFieldForPageMaster = [
-        {
-            FormDate: "2023-10-01",
-            ToDate: "2023-10-18",
-            Distributor: "Shri Parasnath Agencies",
-            DistributorGSTIN: "27AEGPS2521A1ZX",
-            DistributorPAN: "AEGPS2521A",
-            CustomerName: "Shree Enterprises",
-            CustomerGSTIN: "27AUXPA2538A1ZS",
-            CustomerPAN: "AUXPA2538A",
-            Open: 1009540.5800000001,
-            Close: 1237495.58,
-            TaxFreeSale: 0,
-            TotalTaxableSale: 210999.62,
-            TaxableSale5: 119488.66,
-            TaxableSale12: 91510.95999999999,
-            TaxableSale18: 0,
-            GSTAmount5: 5974.4400000000005,
-            GSTAmount12: 10981.34,
-            GSTAmount18: 0,
-            TotalCreditNote: 0,
-            TotalDebitNote: 0,
-            TotalTCS: 0,
-
-        }
-    ];
-
-    const PageFieldMaster = [];
-
-    // Add properties from pageField to PageFieldMaster
-    const pageFieldKeys = Object.keys(pageFieldForPageMaster[0]);
-
-    for (let i = 0; i < pageFieldKeys.length; i++) {
-        const key = pageFieldKeys[i];
-        PageFieldMaster.push({
-            "ControlID": key,
-            "FieldLabel": key,
-            "InValidMsg": "",
-            "IsCompulsory": false,
-            "DefaultSort": 0,
-            "ListPageSeq": (i + 1).toString(), // Increment ListPageSeq
-            "ShowInListPage": true,
-            "ShowInDownload": true,
-            "ControlType": 1,
-            "FieldValidation": 40,
-            "DownloadDefaultSelect": true
-        });
-    }
-
-    console.log(JSON.stringify(PageFieldMaster));
-
     // userAccess useEffect
     useEffect(() => {
         let locationPath = history.location.pathname;
