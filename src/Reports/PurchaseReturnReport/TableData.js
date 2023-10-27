@@ -208,7 +208,7 @@ export const ReturnToRow = (data) => {
 export const ReturnReason = (data) => {
 
     var ReturnReasonArray = [
-        [`Return Reason :${data.ReturnReason === null ? "" : data.ReturnReason}`],
+        [`Return Reason :${data.Comment === null ? "" : data.Comment}`],
     ]
 
     return ReturnReasonArray;

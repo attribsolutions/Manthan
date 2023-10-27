@@ -341,8 +341,7 @@ const InvoiceConfiguration = (props) => {
 
             })
 
-            debugger
-            formData.append(`uploaded_images_${values.PaymentQr.id}`, values.PaymentQr.Image[0]); // Convert to JSON string
+            formData.append(`uploaded_images_${values.PaymentQr.id}`, null); // Convert to JSON string
             formData.append('BulkData', JSON.stringify(BulkData)); // Convert to JSON string
             dispatch(savePartySetting({ formData }));
 

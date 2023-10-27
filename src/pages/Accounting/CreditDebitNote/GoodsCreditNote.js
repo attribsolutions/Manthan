@@ -189,7 +189,7 @@ const GoodsCreditNote = (props) => {
                 }
                 if (hasEditVal) {
 
-                    const { CRDRNoteDate, Customer, Narration, CustomerID, GrandTotal, CRDRInvoices = '', CRDRNoteItems = [], ReturnItems = [], CustomerName } = hasEditVal
+                    const { CRDRNoteDate, Customer, Narration, CustomerID, Comment, GrandTotal, ReturnReason, CRDRInvoices = '', CRDRNoteItems = [], ReturnItems = [], CustomerName } = hasEditVal
 
                     const { values, fieldLabel, hasValid, required, isError } = { ...state }
                     let caculateGrandTotal = ""
@@ -199,23 +199,21 @@ const GoodsCreditNote = (props) => {
                             label: CRDRInvoices[0].FullInvoiceNumber,
                             value: CRDRInvoices[0].id
                         } : '';
-                    values.Narration = Narration;
                     let dataCount = ""
 
                     if (internal_pageMode === mode.modeSTPsave) {
+                        debugger
                         values.Customer = { label: CustomerName, value: Customer };
                         setTableArr(ReturnItems)
                         dataCount = ReturnItems.length;
                         caculateGrandTotal = ""
                         values.CRDRNoteDate = currentDate_ymd
-                        ReturnItems.forEach(i => {
-                            i.Quantity = ""
-                        });
+
                         const jsonBody = JSON.stringify({
                             PartyID: _cfunc.loginSelectedPartyID(),
                             CustomerID: Customer
                         });
-
+                        values.Narration = Comment;
                         dispatch(InvoiceNumber(jsonBody));
 
                     } else {
@@ -223,6 +221,8 @@ const GoodsCreditNote = (props) => {
                         setTableArr(CRDRNoteItems)
                         dataCount = CRDRNoteItems.length;
                         values.CRDRNoteDate = CRDRNoteDate;
+                        values.Narration = Narration;
+
                     }
 
 
@@ -818,7 +818,7 @@ const GoodsCreditNote = (props) => {
             let a = { ...i }
             a.values.Customer = ''
             a.values.InvoiceNO = ''
-            a.values.ItemName=''
+            a.values.ItemName = ''
             a.hasValid.Customer.valid = true;
             a.hasValid.InvoiceNO.valid = true;
             a.hasValid.ItemName.valid = true;

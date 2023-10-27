@@ -458,6 +458,8 @@ export const GET_BATCH_CODE_BY_ITEM_ID = "/ShowBatchesForItem"
 export const TRANSACTION_LOG_TRANCTION_TYPE = "/GetTransactionType"
 export const TRANSACTION_LOG_All_USER = "/GetEmployeeFromUser"
 export const TRANSACTION_LOG_GO_BTN = "/TransactionDetails"
+export const TRANSACTION_JSON = "/TransactionJson"
+
 
 // Claim Tracking Entry
 
