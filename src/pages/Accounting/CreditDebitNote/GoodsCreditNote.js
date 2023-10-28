@@ -206,7 +206,7 @@ const GoodsCreditNote = (props) => {
                         values.Customer = { label: CustomerName, value: Customer };
                         setTableArr(ReturnItems)
                         dataCount = ReturnItems.length;
-                        caculateGrandTotal = ""
+                        caculateGrandTotal = GrandTotal
                         values.CRDRNoteDate = currentDate_ymd
 
                         const jsonBody = JSON.stringify({

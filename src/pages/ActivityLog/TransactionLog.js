@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import React, { useMemo, useRef, useState } from 'react'
 import { useEffect } from 'react';
 import BootstrapTable from 'react-bootstrap-table-next';
 import ToolkitProvider from 'react-bootstrap-table2-toolkit';
@@ -13,19 +13,22 @@ import { C_Select, C_TimePicker } from '../../CustomValidateForm';
 import { showToastAlert } from '../../helpers/axios_Config';
 import { commonPartyDropdown_API, genaraMasterBy_Type_API, GenralMasterSubType, TransactionLog_Get_User_Api, TransactionLog_getjson_for_Transation_Id, TransactionLog_Go_Btn_Api, TransactionLog_transactionType_Api } from '../../helpers/backend_helper';
 import { BreadcrumbShowCountlabel } from '../../store/actions';
+import SimpleBar from "simplebar-react"
+
 
 const TransactionLog = () => {
 
     const dispatch = useDispatch();
     const history = useHistory()
+    const jsonRef = useRef(null);
 
     const [userPageAccessState, setUserAccState] = useState('');
-    const [transactionTypeSelect, setTransactionTypeSelect] = useState([]);
-    const [userSelect, setUserSelect] = useState([]);
-    const [partySelect, setPartySelect] = useState([]);
+    const [transactionTypeSelect, setTransactionTypeSelect] = useState([{ value: '', label: "All" }]);
+    const [userSelect, setUserSelect] = useState([{ value: '', label: "All" }]);
+    const [partySelect, setPartySelect] = useState([{ value: '', label: "All" }]);
     const [formDateSelect, setFormDateSelect] = useState(() => getDateTime_dmy(1));//offSetTime 1 hour earlier
     const [toDateSelect, setToDateSelect] = useState(getDateTime_dmy);
-    const [categoryTypeSelect, setCategoryTypeSelect] = useState([]);
+    const [categoryTypeSelect, setCategoryTypeSelect] = useState([{ value: '', label: "All" }]);
 
     const [goBtnloading, setGoBtnloading] = useState(false);
     const [tableData, setTableData] = useState([]);
@@ -36,6 +39,11 @@ const TransactionLog = () => {
     const [modal_view, setModal_view] = useState(false);
     const [modal_backdrop, setmodal_backdrop] = useState(false);   // Image Model open Or not
     const [JsonData, setJsonData] = useState('');
+    const [UpdateJsonData, setUpdateJsonData] = useState('');
+    const [isCopy, setisCopy] = useState({});
+
+
+
     const [ViewbtnLoading, setViewbtnLoading] = useState('');
 
 
@@ -74,7 +82,9 @@ const TransactionLog = () => {
     const transactionTypeOptions = useMemo(() => generateOptions(transctionTypeReux), [transctionTypeReux])
     const userOptions = useMemo(() => generateOptions(usersRedux), [usersRedux]);
     const partyOptions = useMemo(() => generateOptions(partyRedux), [partyRedux]);
-    const categoryTypeOptions = useMemo(() => categoryTypeRedux.map(item => ({ value: item.id, label: item.Name })), [categoryTypeRedux]);
+    const categoryTypeOptions = useMemo(() => generateOptions(categoryTypeRedux), [categoryTypeRedux]);
+
+    // const categoryTypeOptions = useMemo(() => categoryTypeRedux.map(item => ({ value: item.id, label: item.Name })), [categoryTypeRedux]);
 
     // userAccess useEffect
     useEffect(() => {
@@ -97,7 +107,7 @@ const TransactionLog = () => {
             setViewbtnLoading(false)
             if (response.Data.length > 0) {
                 if (response.Data[0].JsonData2.length > 0) {
-                    setJsonData(response.Data[0].JsonData2)
+                    setJsonData(response.Data[0])
                     setModal_view(true)
                 }
             }
@@ -118,6 +128,7 @@ const TransactionLog = () => {
     }
     function modalToggleFunc() {
         setModal_view(false);
+        setisCopy({ isCopy: false })
     }
 
     function tog_backdrop() {
@@ -127,6 +138,77 @@ const TransactionLog = () => {
     function removeBodyCss() {
         document.body.classList.add("no_padding")
     }
+
+
+
+
+    useEffect(() => {
+
+        const transformedData = Object.keys(JsonData).map((key, index) => ({
+            key,
+            value: JsonData[key],
+            index: index
+        }));
+        setUpdateJsonData(transformedData)
+
+    }, [JsonData])
+
+
+
+
+    const copyToClipboard = (CopyValue, btnId) => {
+        navigator.clipboard.writeText(JSON.stringify(CopyValue, null, 2))
+            .then(() => {
+                setisCopy({ isCopy: true, btnId: btnId })
+            })
+            .catch((error) => {
+                console.error('Copy failed:', error);
+            });
+    };
+
+    const viewColumn = [
+        {
+            text: "Keys",
+            dataField: "key",
+            sort: true
+        }, {
+            text: "values",
+            dataField: "value",
+            sort: true
+        },
+        {
+            text: "Copy",
+            dataField: "",
+            formatExtraData: { isCopy: isCopy, },
+
+            formatter: (cellContent, rowData, key, formatExtra) => {
+                debugger
+                let { isCopy } = formatExtra;
+                return (<>
+                    < Button
+                        type="button"
+
+                        onClick={() => copyToClipboard(rowData.value, `Copy-${rowData.index}`)}
+                        title="Copy Field"
+                        className="badge badge-soft-primary font-size-12 btn c_btn-primary waves-effect waves-light w-xxs border border-light" >
+                        {(isCopy.isCopy) && (isCopy.btnId === `Copy-${rowData.index}`) ?
+                            <span
+                                style={{ marginLeft: "6px", marginRight: "6px" }}
+                                className=" bx bx-check font-size-16"
+                            ></span> : <span
+                                style={{ marginLeft: "6px", marginRight: "6px" }}
+                                className="bx bxs-copy font-size-16"
+                            ></span>
+
+                        }
+
+                    </Button>
+
+                </>)
+            }
+
+        }
+    ]
 
     const tableColumns = [
         {
@@ -185,9 +267,6 @@ const TransactionLog = () => {
                             makeBtnHandler(rowData.id)
                         }}
                     >
-
-
-
                         {(listBtnLoading === `btn-makeBtn-${rowData.id}`) ?
                             <Spinner style={{ height: "16px", width: "16px" }} color="white" />
                             : <span
@@ -205,7 +284,7 @@ const TransactionLog = () => {
     ]
 
     const goButtonHandler = async () => {
-        debugger
+
         try {
             if (!categoryTypeSelect.length > 0) {
                 showToastAlert("Please Select Category Type", 'error');
@@ -454,14 +533,46 @@ const TransactionLog = () => {
                     className="modal-dialog-centered "
                 >
                     <CardBody className="c_card_body">
-                        <div className="modal-body">
-                            <div style={{ fontSize: '20px' }}>
-                                Json Data :{JsonData}
+                        <h2 className="text-center">Transaction Log Details</h2>
+                        <ToolkitProvider
+                            keyField={"id"}
+                            // defaultSorted={defaultSorted}
+                            data={UpdateJsonData}
+                            columns={viewColumn}
+                            search
+                        >
+                            {(toolkitProps,) => (
+                                <React.Fragment>
+                                    <Row>
+                                        <Col xl="12">
+                                            {/* <div className="table-responsive table" style={{ minHeight: "45vh" }}> */}
+                                            <SimpleBar className="table-responsive ">
 
+                                                <BootstrapTable
+                                                    keyField={"id"}
+                                                    id="table_Arrow"
+                                                    classes={"table  table-bordered table-hover"}
+                                                    noDataIndication={
+                                                        <div className="text-danger text-center ">
+                                                            Record Not available
+                                                        </div>
+                                                    }
+                                                    onDataSizeChange={({ dataSize }) => {
+                                                        dispatch(BreadcrumbShowCountlabel(`Count : ${dataSize}`))
+                                                    }}
+                                                    {...toolkitProps.baseProps}
+                                                />
+                                                {mySearchProps(toolkitProps.searchProps)}
+                                            </SimpleBar>
 
+                                            {/* </div> */}
+                                        </Col>
+                                    </Row>
 
-                            </div>
-                        </div>
+                                </React.Fragment>
+                            )}
+                        </ToolkitProvider>
+
                     </CardBody>
 
                 </Modal>

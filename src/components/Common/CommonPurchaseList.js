@@ -49,7 +49,7 @@ const CommonPurchaseList = (props) => {
 
   const { getList, editId, deleteId, postSucc, updateSucc, deleteSucc, viewId } =
     props.action;
-  debugger
+  
   const {
     MasterModal,
     masterPath,
