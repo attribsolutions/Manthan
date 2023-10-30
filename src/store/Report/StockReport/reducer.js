@@ -13,25 +13,28 @@ const INIT_STATE = {
     StockProcessingBtn: [],
     StockReport_1_Gobtb: [],
 
-    listBtnLoading: false,
     stockProcessingLoading: false,
-    SR_GoBtnLoading: false
+    SR_GoBtnLoading: false,
+    GoBtnLoading: false,
+    ExcelBtnLoading: false,
 }
 
 const StockReportReducer = (state = INIT_STATE, action) => {
+    debugger
     switch (action.type) {
-
         case STOCK_REPORT_GO_BUTTON_API:
             return {
                 ...state,
-                listBtnLoading: action.config.btnId
+                GoBtnLoading: action.config.btnId,
+                ExcelBtnLoading:action.config.btnId,
             }
 
         case STOCK_REPORT_GO_BUTTON_API_SUCCESS:
             return {
                 ...state,
                 StockReportGobtn: action.payload,
-                listBtnLoading: false
+                GoBtnLoading: false,
+                ExcelBtnLoading: false,
             }
 
         //*************** */ Stock Report 1 ***************************
@@ -64,9 +67,10 @@ const StockReportReducer = (state = INIT_STATE, action) => {
         case STOCK_REPORT_API_ERROR_ACTION:
             return {
                 ...state,
-                listBtnLoading: false,
                 stockProcessingLoading: false,
-                SR_GoBtnLoading: false
+                SR_GoBtnLoading: false,
+                GoBtnLoading: false,
+                ExcelBtnLoading: false,
             };
 
         default:

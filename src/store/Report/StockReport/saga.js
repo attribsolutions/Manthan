@@ -4,9 +4,11 @@ import { STOCK_PROCESSING_ACTION, STOCK_REPORT_1_GO_BUTTON_API, STOCK_REPORT_GO_
 import { StockProcessing_API, StockReport_1_GoBtn_API, StockReport_GoBtn_API } from "../../../helpers/backend_helper";
 
 function* StockReport_GenFunc({ config }) {
-
+	
+	const { jsonBody,  btnId } = config
 	try {
-		const response = yield call(StockReport_GoBtn_API, config);
+		const response = yield call(StockReport_GoBtn_API, jsonBody);
+		response["goBtnMode"] = btnId;
 		yield put(stockReport_GoButton_API_Success(response))
 	} catch (error) { yield put(stockReportApiErrorAction()) }
 }

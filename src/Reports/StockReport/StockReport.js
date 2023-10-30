@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Col, FormGroup, Input, Label, Row } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import { C_Button } from "../../components/Common/CommonButton";
-import { C_DatePicker, C_Select } from "../../CustomValidateForm";
+import { C_DatePicker } from "../../CustomValidateForm";
 import * as _cfunc from "../../components/Common/CommonFunction";
 import { MetaTags } from "react-meta-tags";
 import Select from "react-select";
@@ -16,7 +16,6 @@ import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
 import { ExcelDownloadFunc } from "./ExcelDownloadFunc";
-import DynamicColumnHook from "../../components/Common/TableCommonFunc";
 
 const StockReport = (props) => {
 
@@ -30,26 +29,44 @@ const StockReport = (props) => {
 
 	const [partyDropdown, setPartyDropdown] = useState("");
 	const [unitDropdown, setUnitDropdown] = useState({ value: 1, label: 'No' });
-	const [tableData, setTableData] = useState([]);
 
-	const [btnMode, setBtnMode] = useState(0);
-	const [mrpWise, setMrpWise] = useState(false);
-	const [batchWise, setBatchWise] = useState(false);
 	const [originalTableData, setOriginalTableData] = useState([]);
 	const [stockTypeSelect, setStockTypeSelect] = useState({ value: 0, label: 'SaleableStock' });
 
+	const [batchWise, setBatchWise] = useState(false);
+	const [mrpWise, setMrpWise] = useState(false);
+	const [tableData, setTableData] = useState([]);
+	const [selectedColumns, setSelectedColumns] = useState([
+		{
+			text: "ItemName",
+			dataField: "ItemName",
+			sort: true
+		},
+		{
+			text: "Quantity",
+			dataField: "ActualQty",
+			sort: true
+		},
+		{
+			text: "Unit",
+			dataField: "Unit",
+			sort: true
+		},
+	]);
+
 	const reducers = useSelector(
 		(state) => ({
-			listBtnLoading: state.StockReportReducer.listBtnLoading,
 			goButtonData: state.StockReportReducer.StockReportGobtn,
 			BaseUnit: state.ItemMastersReducer.BaseUnit,
 			SSDD_List: state.CommonPartyDropdownReducer.commonPartyDropdown,
+			GoBtnLoading: state.StockReportReducer.GoBtnLoading,
+			ExcelBtnLoading: state.StockReportReducer.ExcelBtnLoading,
 			userAccess: state.Login.RoleAccessUpdateData,
 			pageField: state.CommonPageFieldReducer.pageField
 		})
 	);
 
-	const { userAccess, BaseUnit, SSDD_List, pageField, goButtonData = [], } = reducers;
+	const { userAccess, BaseUnit, SSDD_List, pageField, goButtonData = [], GoBtnLoading, ExcelBtnLoading } = reducers;
 	const { fromdate = currentDate_ymd, todate = currentDate_ymd } = headerFilters;
 
 	// Featch Modules List data First Rendering
@@ -90,72 +107,41 @@ const StockReport = (props) => {
 			let nextId = 1;
 			let updatedReduxData = [];
 			if (goButtonData.Status === true && goButtonData.StatusCode === 200) {
+				const { goBtnMode } = goButtonData;
 				updatedReduxData = goButtonData.Data.map((obj) => {
-					const newObj = { ...obj, ID: nextId };
-					nextId++;
-					return newObj;
+					return { ...obj, ID: nextId++ };
 				});
 
-				if (goButtonData.Data.length === 0) {
-					setBtnMode(0);
-				}
-
-				if (btnMode === 2) {
-					const { tData, MRPWise } = MRPWise_TableChange(mrpWise, updatedReduxData);
+				if (goBtnMode === "downloadExcel") {
+					const { filterTableData } = SortButtonFunc(updatedReduxData);
 					ExcelDownloadFunc({
 						pageField,
-						excelData: tData, // Use tableData here
+						excelData: filterTableData,
 						excelFileName: "Current_Stock_Report",
-						mrpWise: MRPWise,
-						batchWise:batchWise
+						mrpWise: mrpWise,
+						batchWise: batchWise
 					});
-
-				} else if (btnMode === 1) {
-					const { tData, MRPWise } = MRPWise_TableChange(mrpWise, updatedReduxData);
-					setTableData(tData);
-					setMrpWise(MRPWise);
+				}
+				else if (goBtnMode === "showOnTable") {
+					const { filterTableData } = SortButtonFunc(updatedReduxData)
+					setTableData(filterTableData)
 				}
 
 			} else if (goButtonData.Status === true) {
 				updatedReduxData = [];
 			}
 
-			setBtnMode(0); // Reset button mode
 			setOriginalTableData(updatedReduxData);
+
 		} catch (e) { }
 	}, [goButtonData]);
 
-	function MRPWise_TableChange(mrpWiseChecked, tableData) {
+	useEffect(() => {
 
-		let updatedTableData;
+		const { filterTableData } = SortButtonFunc(originalTableData)
+		setTableData(filterTableData)
 
-		if ((!mrpWiseChecked)) {
-			const combinedItems = {};
-			tableData.forEach((item) => {
-				const { Item, ActualQty } = item;
-				if (!combinedItems[Item]) {
-					combinedItems[Item] = { ...item };
-				} else {
-					combinedItems[Item].ActualQty += ActualQty;
-				}
-			});
-
-			updatedTableData = Object.values(combinedItems);
-
-		} else {
-			updatedTableData = tableData;
-		}
-
-		updatedTableData.sort((a, b) => a.ItemName.localeCompare(b.ItemName));
-		setTableData(updatedTableData);
-		setMrpWise(mrpWiseChecked);
-		return { tData: updatedTableData, MRPWise: mrpWiseChecked }
-	}
-
-	function BatchWise_TableChange(event, tableData) {
-		setBatchWise(event)
-		MRPWise_TableChange(event, tableData);
-	}
+	}, [mrpWise, batchWise, originalTableData])
 
 	const BaseUnit_DropdownOptions = BaseUnit.filter(index => index.Name === "No" || index.Name === "Kg" || index.Name === "Box")
 		.map(data => ({
@@ -177,20 +163,11 @@ const StockReport = (props) => {
 		label: "Damage Stock"
 	}]
 
-	function goButtonHandler(e, btnMode) {
+	function goButtonHandler(goBtnMode) {
 
 		try {
-			setBtnMode(btnMode)
-			if (unitDropdown === "") {
-				customAlert({
-					Type: 3,
-					Message: "Please Select Unit"
-				})
-				setBtnMode(0)
-				return
-			} else if ((isSCMParty) && (partyDropdown === "")) {
+			if ((isSCMParty) && (partyDropdown === "")) {
 				customAlert({ Type: 3, Message: "Please Select Party" });
-				setBtnMode(0)
 				return;
 			}
 
@@ -201,8 +178,8 @@ const StockReport = (props) => {
 				"PartyID": partyDropdown === "" ? _cfunc.loginPartyID() : partyDropdown.value,
 				"IsDamagePieces": stockTypeSelect.value
 			});
-
-			dispatch(stockReport_GoButton_API({ jsonBody }))
+			const config = { jsonBody, btnId: goBtnMode, };
+			dispatch(stockReport_GoButton_API(config))
 
 		} catch (error) { _cfunc.CommonConsole(error) }
 	}
@@ -219,69 +196,81 @@ const StockReport = (props) => {
 		setHeaderFilters(newObj)
 	}
 
-	const PageListColumns = [
-		{
-			text: "ItemName",
-			dataField: "ItemName",
-			sort: true
-		},
-		{
-			text: "Quantity",
-			dataField: "ActualQty",
-			align: "right",
-			sort: true,
-			formatter: (cell, row) => <Label>{row.ActualQty.toFixed(2)}</Label>,
-		},
-		{
-			text: "Unit",
-			dataField: "Unit",
-			formatter: (cell, row) => <Label>{row.Unit}</Label>,
-			headerStyle: () => ({
-				width: '200px',
-			})
-		},
-	];
+	function SortButtonFunc(baseData) {
 
-	// Conditionally add the "MRP" column based on the mrpWise condition
-	if (mrpWise) {
-		const mrpColumn = {
-			text: "MRP",
-			dataField: "MRP",
-			align: "right",
-			formatter: (value, row, k) => {
-				let MRPValue = Number(row.MRP)
-				return (
-					<Label>{MRPValue.toFixed(2)}</Label>
-				)
+		// Define an array of field names and their corresponding checkbox and select states
+		const buttonStateArray = [
+			{
+				fieldName: 'ItemName',
+				dataField: 'ItemName',
+				checkboxState: true,
+				sequence: 1
 			},
-			headerStyle: () => ({
-				width: '200px',
-				text: 'end',
-			})
-		};
+			{
+				fieldName: 'BatchCode',
+				dataField: 'BatchCode',
+				checkboxState: batchWise,
+				sequence: 2
+			},
+			{
+				fieldName: 'MRP',
+				dataField: 'MRP',
+				checkboxState: mrpWise,
+				sequence: 3
+			},
+			{
+				fieldName: 'Quantity',
+				dataField: 'ActualQty',
+				checkboxState: true,
+				sequence: 4
+			},
+			{
+				fieldName: 'Unit',
+				dataField: 'Unit',
+				checkboxState: true,
+				sequence: 5
+			},
+		];
 
-		// Find the index of the "Unit" column
-		const unitColumnIndex = PageListColumns.findIndex(column => column.dataField === "ActualQty");
+		let filterTableData = [...baseData];
+		const newSelectedColumns = buttonStateArray
+			.filter(option => option.checkboxState)
+			.map(option => ({ text: option.fieldName, dataField: option.dataField }));
 
-		// Insert the "MRP" column right before the "Unit" column
-		if (unitColumnIndex !== -1) {
-			PageListColumns.splice(unitColumnIndex, 0, mrpColumn);
+		// Add additional default columns here
+
+		setSelectedColumns(newSelectedColumns);
+
+		// Apply grouping and filtering logic for each checkbox option
+		if (buttonStateArray.some(option => option.checkboxState)) {
+			const groupedData = {};
+
+			filterTableData.forEach(item => {
+				const groupValues = buttonStateArray
+					.filter(option => option.checkboxState)
+					.map(option => item[option.fieldName]);
+
+				const groupKey = groupValues.join('-');
+				if (!groupedData[groupKey]) {
+					groupedData[groupKey] = {
+						...item,
+						ActualQty: 0,
+					};
+				}
+				groupedData[groupKey].ActualQty += parseFloat(item.ActualQty);
+			});
+
+			const groupedArray = Object.values(groupedData);
+			filterTableData = groupedArray;
+
+			// Apply filters based on selected options
+			buttonStateArray.forEach(option => {
+				if (option.checkboxState && option.selectValue && option.selectValue.value !== '') {
+					filterTableData = filterTableData.filter(item => item[option.fieldName] === option.selectValue.label);
+				}
+			});
 		}
-	}
-
-	if (batchWise) {
-		const batchCodeColumn = {
-			text: "BatchCode",
-			dataField: "BatchCode",
-		};
-
-		// Find the index of the "ItemName" column
-		const itemNameColumnIndex = PageListColumns.findIndex(column => column.dataField === "ItemName");
-
-		// Insert the "BatchCode" column right after the "ItemName" column
-		if (itemNameColumnIndex !== -1) {
-			PageListColumns.splice(itemNameColumnIndex + 1, 0, batchCodeColumn); // Add 1 to insert after the ItemName column
-		}
+		return { filterTableData };
 	}
 
 	function StockTypeHandler(e) {
@@ -381,9 +370,9 @@ const StockReport = (props) => {
 							<C_Button
 								type="button"
 								spinnerColor="white"
-								loading={btnMode === 1 && true}
+								loading={GoBtnLoading === "showOnTable"}
 								className="btn btn-success"
-								onClick={(e) => goButtonHandler(e, 1)}
+								onClick={() => goButtonHandler("showOnTable")}
 							>
 								Show
 							</C_Button>
@@ -393,7 +382,6 @@ const StockReport = (props) => {
 					<Row>
 						<Col className="col col-11  mt-1">
 							<Row className="mb-2 row ">
-
 								<Col sm={3}>
 									<FormGroup className="mb-n2 row mt-1">
 
@@ -426,8 +414,9 @@ const StockReport = (props) => {
 												<Input type="checkbox" className="form-check-input"
 													checked={mrpWise}
 													name="mrpWise"
-													disabled={batchWise && true}
-													onChange={(e) => { MRPWise_TableChange(e.target.checked, originalTableData) }}
+													onChange={(e) => {
+														setMrpWise(e.target.checked);
+													}}
 												/>
 											</div>
 										</Col>
@@ -443,8 +432,9 @@ const StockReport = (props) => {
 												<Input type="checkbox" className="form-check-input"
 													checked={batchWise}
 													name="batchWise"
-													// onChange={(e) => { BatchWise_TableChange(e.target.checked, originalTableData) }}
-													onChange={(e) => { BatchWise_TableChange(e.target.checked, originalTableData) }}
+													onChange={(e) => {
+														setBatchWise(e.target.checked);
+													}}
 												/>
 											</div>
 										</Col>
@@ -458,20 +448,21 @@ const StockReport = (props) => {
 							<C_Button
 								type="button"
 								spinnerColor="white"
-								loading={btnMode === 2 && true}
+								loading={ExcelBtnLoading === "downloadExcel"}
 								className="btn btn-primary"
-								onClick={(e) => goButtonHandler(e, 2)}
+								onClick={() => goButtonHandler("downloadExcel")}
 							>
 								Excel
 							</C_Button>
 						</Col>
 					</Row>
 				</div>
+
 				<div className="mt-1">
 					<ToolkitProvider
 						keyField="ID"
 						data={tableData}
-						columns={PageListColumns}
+						columns={selectedColumns}
 						search
 					>
 						{(toolkitProps,) => (

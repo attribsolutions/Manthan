@@ -139,15 +139,19 @@ const HeaderSection = (props) => {
     dispatch(commonPageFieldSuccess(null));
     dispatch(commonPageField(pageId.ITEM_SALE_REPORT));
 
-    dispatch(GetRoutesList());
+    const jsonBody = JSON.stringify({
+      CompanyID: _cfunc.loginCompanyID(),
+      PartyID: _cfunc.loginPartyID(),
+    });
+    dispatch(GetRoutesList(jsonBody));
     dispatch(
       GetVenderSupplierCustomer({
         subPageMode: url.ITEM_SALE_REPORT,
-        PartyID:_cfunc.loginSelectedPartyID(),
+        PartyID: _cfunc.loginPartyID(),
         RouteID: "",
       })
     );
-  
+
     dispatch(getGroupList());
     dispatch(getSubGroupList());
     dispatch(Items_On_Group_And_Subgroup_API({ Group: 0, SubGroup: 0 }));
@@ -215,11 +219,11 @@ const HeaderSection = (props) => {
     labelField = "Name",
     valueField = "id"
   ) => [
-    ...sourceArray.map((item) => ({
-      value: item[valueField],
-      label: item[labelField],
-    })),
-  ];
+      ...sourceArray.map((item) => ({
+        value: item[valueField],
+        label: item[labelField],
+      })),
+    ];
 
   // const channelToDropdownOptions = useMemo(() => generateOptions1(PartyTypes), [PartyTypes]);
   const routeDropdownOptions = useMemo(
@@ -437,9 +441,9 @@ const HeaderSection = (props) => {
       const jsonBody = JSON.stringify({
         FromDate: fromdate,
         ToDate: todate,
-        PartyType:states.supplierSelect.value > 0 ? 0 : states.channelFromSelect.value,
-        Party: !isSCMParty ? _cfunc.loginPartyID()  : states.supplierSelect.value,
-        Employee: !isSCMParty ? 0: _cfunc.loginEmployeeID(),
+        PartyType: states.supplierSelect.value > 0 ? 0 : states.channelFromSelect.value,
+        Party: !isSCMParty ? _cfunc.loginPartyID() : states.supplierSelect.value,
+        Employee: !isSCMParty ? 0 : _cfunc.loginEmployeeID(),
       });
       dispatch(ItemSaleGoButton_API({ jsonBody, btnId: url.ITEM_SALE_REPORT }));
     } catch (error) {
