@@ -63,7 +63,7 @@ const ImportFieldAdd = (props) => {
         ControlTypeName: "",
         FieldValidationName: "",
         IsCompulsory: false,
-        Format: ''
+        Format: ""
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
@@ -260,7 +260,7 @@ const ImportFieldAdd = (props) => {
                     ControlType: values.ControlTypeName.value,
                     ImportExcelType: values.ImportExcelTypeName.value,
                     FieldValidation: values.FieldValidationName.value,
-                    Format:values.Format,
+                    Format: values.Format,
                     Company: loginCompanyID(),
                     CreatedBy: loginUserID(),
                     UpdatedBy: loginUserID(),
@@ -399,7 +399,7 @@ const ImportFieldAdd = (props) => {
                                                     <FormGroup className="mb-2 col col-sm-4 " >
                                                         <Label htmlFor="validationCustom01">{fieldLabel.Format} </Label>
                                                         <Input
-                                                            name="FieldName"
+                                                            name="Format"
                                                             value={values.Format}
                                                             type="text"
                                                             className={isError.Format.length > 0 ? "is-invalid form-control" : "form-control"}
