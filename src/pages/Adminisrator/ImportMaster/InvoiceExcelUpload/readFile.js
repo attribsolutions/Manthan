@@ -133,49 +133,36 @@ export async function downloadDummyFormatHandler(jsonData) {
 
 
   // / Extract unique column names for the header
-  const filteredColumns = jsonData.filter(entry => entry.Value !== '' || null);
-  filteredColumns.sort((a, b) => {
+  const uniqueValuesAndFormats = jsonData.reduce((result, entry) => {
+    const value = entry.Value;
+    const format = entry.Format;
 
-    if (a.Sequence === null && b.Sequence !== null) {
-      return 1; // 'a' with id 0 comes after 'b' with a non-zero id
-    } else if (a.Sequence !== null && b.Sequence === null) {
-      return -1; // 'a' with a non-zero id comes before 'b' with id 0
-    } else {
-      return a.Sequence - b.Sequence; // Sort other values in ascending order by id
+    if (value !== '' && value !== null) {
+      const index = result.values.indexOf(value);
+      if (index === -1) {
+        result.values.push(value);
+        result.formats.push([format]);
+      } else {
+        result.formats[index].push(format);
+      }
     }
+
+    return result;
+  }, { values: [], formats: [] });
+
+  // Sorting after filtering and collecting unique values and formats
+  uniqueValuesAndFormats.values.sort();
+  uniqueValuesAndFormats.formats.sort((a, b) => {
+    return a[0].Sequence - b[0].Sequence;
   });
 
-  const columnNames = Array.from(new Set(filteredColumns.map(entry => entry.Value)));
+  const columnNames = uniqueValuesAndFormats.values;
+  const emptyData = uniqueValuesAndFormats.formats;
 
-  // Create an empty data array with the same number of columns
-  const emptyData = columnNames.map(_ => '');
-
-  // Create a worksheet with only the header and an empty data row
   const ws = XLSX.utils.aoa_to_sheet([columnNames, emptyData]);
 
-  // Set the background color for the "IsCompulsory" header cell to red
-  const headerCellStyle = {
-    fill: { fgColor: { rgb: "FFFF0000" } }, // Red background color
-  };
-
-  // Find the column index for "IsCompulsory"
-  const isCompulsoryColumnIndex = columnNames.indexOf("IsCompulsory");
-
-  // Apply the style to the "IsCompulsory" header cell
-  if (isCompulsoryColumnIndex !== -1) {
-    ws[XLSX.utils.encode_cell({ r: 0, c: isCompulsoryColumnIndex })] = {
-      v: columnNames[isCompulsoryColumnIndex],
-      s: headerCellStyle,
-    };
-  }
-
-  // Create a workbook
   const wb = XLSX.utils.book_new();
-
-  // Append the worksheet to the workbook
   XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
-
-  // Save the workbook as an Excel file
   XLSX.writeFile(wb, 'download  Format.xlsx');
 
 }
