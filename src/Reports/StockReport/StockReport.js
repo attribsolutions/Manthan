@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Col, FormGroup, Input, Label, Row } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import { C_Button } from "../../components/Common/CommonButton";
-import { C_DatePicker, C_Select } from "../../CustomValidateForm";
+import { C_DatePicker } from "../../CustomValidateForm";
 import * as _cfunc from "../../components/Common/CommonFunction";
 import { MetaTags } from "react-meta-tags";
 import Select from "react-select";
@@ -16,7 +16,6 @@ import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
 import { ExcelDownloadFunc } from "./ExcelDownloadFunc";
-import DynamicColumnHook from "../../components/Common/TableCommonFunc";
 
 const StockReport = (props) => {
 
@@ -31,7 +30,6 @@ const StockReport = (props) => {
 	const [partyDropdown, setPartyDropdown] = useState("");
 	const [unitDropdown, setUnitDropdown] = useState({ value: 1, label: 'No' });
 
-	const [btnMode, setBtnMode] = useState(0);
 	const [originalTableData, setOriginalTableData] = useState([]);
 	const [stockTypeSelect, setStockTypeSelect] = useState({ value: 0, label: 'SaleableStock' });
 
@@ -56,19 +54,19 @@ const StockReport = (props) => {
 		},
 	]);
 
-
 	const reducers = useSelector(
 		(state) => ({
-			listBtnLoading: state.StockReportReducer.listBtnLoading,
 			goButtonData: state.StockReportReducer.StockReportGobtn,
 			BaseUnit: state.ItemMastersReducer.BaseUnit,
 			SSDD_List: state.CommonPartyDropdownReducer.commonPartyDropdown,
+			GoBtnLoading: state.StockReportReducer.GoBtnLoading,
+			ExcelBtnLoading: state.StockReportReducer.ExcelBtnLoading,
 			userAccess: state.Login.RoleAccessUpdateData,
 			pageField: state.CommonPageFieldReducer.pageField
 		})
 	);
 
-	const { userAccess, BaseUnit, SSDD_List, pageField, goButtonData = [], } = reducers;
+	const { userAccess, BaseUnit, SSDD_List, pageField, goButtonData = [], GoBtnLoading, ExcelBtnLoading } = reducers;
 	const { fromdate = currentDate_ymd, todate = currentDate_ymd } = headerFilters;
 
 	// Featch Modules List data First Rendering
@@ -109,36 +107,30 @@ const StockReport = (props) => {
 			let nextId = 1;
 			let updatedReduxData = [];
 			if (goButtonData.Status === true && goButtonData.StatusCode === 200) {
+				const { goBtnMode } = goButtonData;
 				updatedReduxData = goButtonData.Data.map((obj) => {
-					const newObj = { ...obj, ID: nextId };
-					nextId++;
-					return newObj;
+					return { ...obj, ID: nextId++ };
 				});
 
-				if (goButtonData.Data.length === 0) {
-					setBtnMode(0);
-				}
-
-				if (btnMode === 2) {
-					const { filtered } = SortButtonFunc(updatedReduxData);
+				if (goBtnMode === "downloadExcel") {
+					const { filterTableData } = SortButtonFunc(updatedReduxData);
 					ExcelDownloadFunc({
 						pageField,
-						excelData: filtered,
+						excelData: filterTableData,
 						excelFileName: "Current_Stock_Report",
 						mrpWise: mrpWise,
 						batchWise: batchWise
 					});
 				}
-				else if (btnMode === 1) {
-					const { filtered } = SortButtonFunc(updatedReduxData)
-					setTableData(filtered)
+				else if (goBtnMode === "showOnTable") {
+					const { filterTableData } = SortButtonFunc(updatedReduxData)
+					setTableData(filterTableData)
 				}
 
 			} else if (goButtonData.Status === true) {
 				updatedReduxData = [];
 			}
 
-			setBtnMode(0); // Reset button mode
 			setOriginalTableData(updatedReduxData);
 
 		} catch (e) { }
@@ -146,10 +138,10 @@ const StockReport = (props) => {
 
 	useEffect(() => {
 
-		const { filtered } = SortButtonFunc(originalTableData)
-		setTableData(filtered)
+		const { filterTableData } = SortButtonFunc(originalTableData)
+		setTableData(filterTableData)
 
-	}, [mrpWise, batchWise])
+	}, [mrpWise, batchWise, originalTableData])
 
 	const BaseUnit_DropdownOptions = BaseUnit.filter(index => index.Name === "No" || index.Name === "Kg" || index.Name === "Box")
 		.map(data => ({
@@ -171,20 +163,11 @@ const StockReport = (props) => {
 		label: "Damage Stock"
 	}]
 
-	function goButtonHandler(e, btnMode) {
+	function goButtonHandler(goBtnMode) {
 
 		try {
-			setBtnMode(btnMode)
-			if (unitDropdown === "") {
-				customAlert({
-					Type: 3,
-					Message: "Please Select Unit"
-				})
-				setBtnMode(0)
-				return
-			} else if ((isSCMParty) && (partyDropdown === "")) {
+			if ((isSCMParty) && (partyDropdown === "")) {
 				customAlert({ Type: 3, Message: "Please Select Party" });
-				setBtnMode(0)
 				return;
 			}
 
@@ -195,8 +178,8 @@ const StockReport = (props) => {
 				"PartyID": partyDropdown === "" ? _cfunc.loginPartyID() : partyDropdown.value,
 				"IsDamagePieces": stockTypeSelect.value
 			});
-
-			dispatch(stockReport_GoButton_API({ jsonBody }))
+			const config = { jsonBody, btnId: goBtnMode, };
+			dispatch(stockReport_GoButton_API(config))
 
 		} catch (error) { _cfunc.CommonConsole(error) }
 	}
@@ -249,7 +232,7 @@ const StockReport = (props) => {
 			},
 		];
 
-		let filtered = [...baseData];
+		let filterTableData = [...baseData];
 		const newSelectedColumns = buttonStateArray
 			.filter(option => option.checkboxState)
 			.map(option => ({ text: option.fieldName, dataField: option.dataField }));
@@ -262,7 +245,7 @@ const StockReport = (props) => {
 		if (buttonStateArray.some(option => option.checkboxState)) {
 			const groupedData = {};
 
-			filtered.forEach(item => {
+			filterTableData.forEach(item => {
 				const groupValues = buttonStateArray
 					.filter(option => option.checkboxState)
 					.map(option => item[option.fieldName]);
@@ -278,16 +261,16 @@ const StockReport = (props) => {
 			});
 
 			const groupedArray = Object.values(groupedData);
-			filtered = groupedArray;
+			filterTableData = groupedArray;
 
 			// Apply filters based on selected options
 			buttonStateArray.forEach(option => {
 				if (option.checkboxState && option.selectValue && option.selectValue.value !== '') {
-					filtered = filtered.filter(item => item[option.fieldName] === option.selectValue.label);
+					filterTableData = filterTableData.filter(item => item[option.fieldName] === option.selectValue.label);
 				}
 			});
 		}
-		return { filtered };
+		return { filterTableData };
 	}
 
 	function StockTypeHandler(e) {
@@ -387,9 +370,9 @@ const StockReport = (props) => {
 							<C_Button
 								type="button"
 								spinnerColor="white"
-								loading={btnMode === 1 && true}
+								loading={GoBtnLoading === "showOnTable"}
 								className="btn btn-success"
-								onClick={(e) => goButtonHandler(e, 1)}
+								onClick={() => goButtonHandler("showOnTable")}
 							>
 								Show
 							</C_Button>
@@ -465,9 +448,9 @@ const StockReport = (props) => {
 							<C_Button
 								type="button"
 								spinnerColor="white"
-								loading={btnMode === 2 && true}
+								loading={ExcelBtnLoading === "downloadExcel"}
 								className="btn btn-primary"
-								onClick={(e) => goButtonHandler(e, 2)}
+								onClick={() => goButtonHandler("downloadExcel")}
 							>
 								Excel
 							</C_Button>
@@ -478,12 +461,8 @@ const StockReport = (props) => {
 				<div className="mt-1">
 					<ToolkitProvider
 						keyField="ID"
-						// data={tableData}
-						// columns={PageListColumns}
 						data={tableData}
 						columns={selectedColumns}
-						// cellEdit={cellEditFactory({ mode: 'click', blurToSave: true })}
-						// filter={filterFactory()}
 						search
 					>
 						{(toolkitProps,) => (

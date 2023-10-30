@@ -664,7 +664,7 @@ export const StockEntry_GO_button_api_For_Item = (ItemId) => get(`${url.STOCK_EN
 export const StockEntry_Post_API = ({ jsonBody }) => post(url.STOCK_ENTRY, jsonBody)//post api
 
 //Stock Report
-export const StockReport_GoBtn_API = ({ jsonBody }) => post(url.STOCK_REPORT, jsonBody)//Go button api
+export const StockReport_GoBtn_API = (jsonBody ) => post(url.STOCK_REPORT, jsonBody)//Go button api
 export const StockProcessing_API = ({ jsonBody }) => post(url.STOCK_PROCESSING, jsonBody)//Go button api
 export const StockReport_1_GoBtn_API = ({ jsonBody }) => post(url.STOCK_REPORT_1, jsonBody)//Go button api
 // Damage Stock Report 
