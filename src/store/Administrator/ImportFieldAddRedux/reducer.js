@@ -22,7 +22,7 @@ const INIT_STATE = {
   importExcelType: [],
   saveBtnloading: false,
   listBtnLoading: false,
-  loading:false
+  loading: false
 }
 
 const ImportFieldAdd_Reducer = (state = INIT_STATE, action) => {
@@ -110,13 +110,13 @@ const ImportFieldAdd_Reducer = (state = INIT_STATE, action) => {
         importExcelType: action.payload,
       };
 
-      case IMPORT_FIELD_ADD_API_ERROR_ACTION:
-        return {
-          ...state,
-          saveBtnloading: false,
-          listBtnLoading: false,
-          loading:false
-        };
+    case IMPORT_FIELD_ADD_API_ERROR_ACTION:
+      return {
+        ...state,
+        saveBtnloading: false,
+        listBtnLoading: false,
+        loading: false
+      };
 
     default:
       return state

@@ -62,7 +62,8 @@ const ImportFieldAdd = (props) => {
         FieldName: "",
         ControlTypeName: "",
         FieldValidationName: "",
-        IsCompulsory: false
+        IsCompulsory: false,
+        Format: ''
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
@@ -88,7 +89,7 @@ const ImportFieldAdd = (props) => {
             importExcelType: state.ImportFieldAdd_Reducer.importExcelType,
             validationType: state.H_Pages.FieldValidations,
             pageField: state.CommonPageFieldReducer.pageField,
-            fieldvalidationDropDownLoading:state.H_Pages.fieldvalidationDropDownLoading,
+            fieldvalidationDropDownLoading: state.H_Pages.fieldvalidationDropDownLoading,
         }));
 
     useEffect(() => {
@@ -146,7 +147,7 @@ const ImportFieldAdd = (props) => {
 
             if (hasEditVal) {
 
-                const { id, FieldName, ControlTypeName, ControlTypeID, IsCompulsory, FieldValidationName, FieldValidationID, ImportExcelTypeName,ImportExcelTypeID } = hasEditVal
+                const { id, FieldName, ControlTypeName, ControlTypeID, IsCompulsory, FieldValidationName, FieldValidationID, ImportExcelTypeName, ImportExcelTypeID } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
                 hasValid.FieldName.valid = true;
@@ -199,7 +200,7 @@ const ImportFieldAdd = (props) => {
             dispatch(save_ImportFiledAdd_Success({ Status: false }))
             customAlert({
                 Type: 4,
-                 Message: JSON.stringify(postMsg.Message),
+                Message: JSON.stringify(postMsg.Message),
             })
         }
     }, [postMsg])
@@ -259,6 +260,7 @@ const ImportFieldAdd = (props) => {
                     ControlType: values.ControlTypeName.value,
                     ImportExcelType: values.ImportExcelTypeName.value,
                     FieldValidation: values.FieldValidationName.value,
+                    Format:values.Format,
                     Company: loginCompanyID(),
                     CreatedBy: loginUserID(),
                     UpdatedBy: loginUserID(),
@@ -393,6 +395,25 @@ const ImportFieldAdd = (props) => {
                                                             </Col>
                                                         </Row>
                                                     </FormGroup>
+
+                                                    <FormGroup className="mb-2 col col-sm-4 " >
+                                                        <Label htmlFor="validationCustom01">{fieldLabel.Format} </Label>
+                                                        <Input
+                                                            name="FieldName"
+                                                            value={values.Format}
+                                                            type="text"
+                                                            className={isError.Format.length > 0 ? "is-invalid form-control" : "form-control"}
+                                                            placeholder="Please Enter Format"
+                                                            autoComplete='off'
+                                                            onChange={(event) => {
+                                                                onChangeText({ event, state, setState })
+                                                            }}
+                                                        />
+                                                        {isError.Format.length > 0 && (
+                                                            <span className="invalid-feedback">{isError.Format}</span>
+                                                        )}
+                                                    </FormGroup>
+
 
                                                     <FormGroup>
                                                         <Row >
