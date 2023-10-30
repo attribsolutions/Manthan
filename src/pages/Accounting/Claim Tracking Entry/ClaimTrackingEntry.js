@@ -341,11 +341,29 @@ const ClaimTrackingEntry = (props) => {
     label: i.Name,
   }));
 
-  const Date_Onchange = (e, date) => {
+  const ClaimRecordDate_Onchange = (e, date) => {
     setState((i) => {
       const a = { ...i };
       a.values.Date = date;
       a.hasValid.Date.valid = true;
+      return a;
+    });
+  };
+
+  const CreditNoteDate_Onchange = (e, date) => {
+    setState((i) => {
+      const a = { ...i };
+      a.values.CreditNoteDate = date;
+      a.hasValid.CreditNoteDate.valid = true;
+      return a;
+    });
+  };
+
+  const ClaimSummaryDate_Onchange = (e, date) => {
+    setState((i) => {
+      const a = { ...i };
+      a.values.ClaimSummaryDate = date;
+      a.hasValid.ClaimSummaryDate.valid = true;
       return a;
     });
   };
@@ -361,8 +379,8 @@ const ClaimTrackingEntry = (props) => {
       const a = { ...i };
       a.values.ClaimAmount = hasSelect.ClaimAmount;
       a.values.PartyName = hasSelect.Party;
-      a.values.Type = {value: 77, label: 'Return Claim'};
-      
+      a.values.Type = { value: 77, label: 'Return Claim' };
+
       a.isError.Type = "";
       a.isError.PartyName = "";
       a.isError.ClaimAmount = "";
@@ -454,7 +472,7 @@ const ClaimTrackingEntry = (props) => {
         <div className="page-content" style={{ marginBottom: "5cm" }}>
           <form noValidate>
             <div className="px-2 c_card_filter header text-black mb-2">
-           
+
 
               {/* *******Claim Record Date***** &&& ******Claim For The Month********** */}
               <Row>
@@ -470,7 +488,7 @@ const ClaimTrackingEntry = (props) => {
                       <C_DatePicker
                         name="Date"
                         value={values.Date}
-                        onChange={Date_Onchange}
+                        onChange={ClaimRecordDate_Onchange}
                       />
                     </Col>
                   </FormGroup>
@@ -497,8 +515,8 @@ const ClaimTrackingEntry = (props) => {
                 </Col>
               </Row>
 
-                 {/* *******Select Claim Id dropdown***** &&& ******Select Claim Id Inputbox********** */}
-                 <Row>
+              {/* *******Select Claim Id dropdown***** &&& ******Select Claim Id Inputbox********** */}
+              <Row>
                 <Col sm="6">
                   <FormGroup className=" row mt-n2 ">
                     <Label
@@ -558,7 +576,7 @@ const ClaimTrackingEntry = (props) => {
                 </Col>
               </Row>
             </div>
-            
+
             <div className="px-2 text-black mb-2 mt-n1" style={{ backgroundColor: "#f6f6f6" }}>
               {/* *******Party***** &&& ********* Claim Received Source********** */}
               <Row>
@@ -890,7 +908,7 @@ const ClaimTrackingEntry = (props) => {
                         onChange={(event) => {
                           onChangeText({ event, state, setState });
                         }}
-                        // style={{ width: "100%", height: "10px" }} // Adjust width and height as needed
+                      // style={{ width: "100%", height: "10px" }} // Adjust width and height as needed
                       />
                       {isError.CreditNoteNo.length > 0 && (
                         <span className="text-danger f-8">
@@ -912,7 +930,7 @@ const ClaimTrackingEntry = (props) => {
                       <C_DatePicker
                         name="CreditNoteDate"
                         value={values.CreditNoteDate}
-                        onChange={Date_Onchange}
+                        onChange={CreditNoteDate_Onchange}
                       />
                     </Col>
                   </FormGroup>
@@ -947,7 +965,7 @@ const ClaimTrackingEntry = (props) => {
                         onChange={(event) => {
                           onChangeText({ event, state, setState });
                         }}
-                        // style={{ width: "100%", height: "10px" }} // Adjust width and height as needed
+                      // style={{ width: "100%", height: "10px" }} // Adjust width and height as needed
                       />
                       {isError.CreditNoteAmount.length > 0 && (
                         <span className="text-danger f-8">
@@ -969,7 +987,7 @@ const ClaimTrackingEntry = (props) => {
                       <C_DatePicker
                         name="ClaimSummaryDate"
                         value={values.ClaimSummaryDate}
-                        onChange={Date_Onchange}
+                        onChange={ClaimSummaryDate_Onchange}
                       />
                     </Col>
                   </FormGroup>

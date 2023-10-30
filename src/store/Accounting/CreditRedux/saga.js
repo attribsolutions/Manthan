@@ -49,11 +49,11 @@ function* Get_Credit_List_GenFunc(data) {               // getList API
 
     const response = yield call(Go_Button_Credit_Debit_Post_API, data.data);
     const newList = yield response.Data.map((i) => {
-
+      debugger
       i["recordsAmountTotal"] = i.GrandTotal;  // Breadcrumb Count total
       i["InvoiceUploads"] = i.CRDRNoteUploads  // Added this blank Array to Show e Invoive Array   Further devlopment Remain 
       i["PageMode"] = "CreditDebitList"  //Mode Added  for e invoice  column condition check in list Action button in einvoice
-      i.GrandTotal = amountCommaSeparateFunc(i.GrandTotal) //  GrandTotal show with commas
+      i.GrandTotal = amountCommaSeparateFunc(parseFloat(i.GrandTotal).toFixed(2)) //  GrandTotal show with commas
       var date = date_dmy_func(i.CRDRNoteDate)
       var time = convertTimefunc(i.CreatedOn)
       i.CRDRNoteDate = (`${date} ${time}`)
@@ -80,7 +80,7 @@ function* CreditDeitType_ID_GenFunc(data) {                // edit API
 }
 
 function* Edit_Creditlist_ID_GenFunc({ config }) {
-        //edit  Api              
+  //edit  Api              
   const { btnmode } = config;
   try {
     const response = yield call(Edit_Credit_List_API, config);

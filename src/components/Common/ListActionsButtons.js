@@ -138,7 +138,6 @@ export const listPageActionsButtonFunc = (props) => {
 
     const renderActionButton = (__cell, rowData, __key, formatExtra) => {
 
-
         const { listBtnLoading } = formatExtra;
         const {
             forceEditHide,
@@ -175,7 +174,9 @@ export const listPageActionsButtonFunc = (props) => {
         const canItemWisePrint = hasRole("RoleAccess_IsPrint") && downClaimBtnFunc;
         const canMasterClaimPrint = hasRole("RoleAccess_IsPrint") && downClaimBtnFunc;
         const canSendToScm = isPartyTypeIDInSendToScm //  Currently Button  is remove From InVoice List of CX parties  further Development After Discussion  So condition is False
-        const canMakeCreditNoteBtn = (subPageMode === url.SALES_RETURN_LIST)
+        const canMakeCreditNoteBtn = (subPageMode === url.SALES_RETURN_LIST) && hasRole("RoleAccess_IsSave") && !rowData.IsApproved
+
+        const canUpdatebtn = otherBtn_1Func && hasRole("RoleAccess_IsSave")
 
 
 
@@ -184,11 +185,16 @@ export const listPageActionsButtonFunc = (props) => {
         const dummyDisable_Delete = (hasRole("RoleAccess_IsDelete") || hasRole("RoleAccess_IsDeleteSelf")) && !canDelete && !canDeleteSelf;
         const dummyDisable_MakeBtn = !canMakeBtn && makeBtnShow;
         const dummyDisable_SendToScm = !isPartyTypeIDInSendToScm && sendToScmBtnFunc;
+        const dummyDisable_CreditNoteBtn = rowData.IsApproved
+        
+
+
 
 
 
 
         const renderButtonIfNeeded = ({ condition, btnmode, iconClass, actionFunc, dispatchAction, title, buttonClasss, isDummyBtn }) => {
+
             if ((!condition && !isDummyBtn) || IsRecordDeleted) return null;
             if (!isDummyBtn) {
 
@@ -288,6 +294,7 @@ export const listPageActionsButtonFunc = (props) => {
                         actionFunc: makeButtonHandler,
                         title: makeBtnName,
                         buttonClasss: vieBtnCss,
+                        isDummyBtn: dummyDisable_CreditNoteBtn
 
                     })}
 
@@ -308,7 +315,7 @@ export const listPageActionsButtonFunc = (props) => {
                         buttonClasss: printInvoiceBtnCss,
                     })}
                     {renderButtonIfNeeded({
-                        condition: otherBtn_1Func,
+                        condition: canUpdatebtn,
                         btnmode: mode.otherBtn_1,
                         iconClass: updateIconClass,
                         actionFunc: otherBtn_1Func,

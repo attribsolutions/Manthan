@@ -21,8 +21,9 @@ const INIT_STATE = {
     deleteMessage: { Status: false },
 
     saveBtnloading: false,
-    loading: false,
     listBtnLoading: false,
+    GoBtnLoading: false,
+    ExcelBtnLoading: false
 
 }
 
@@ -32,14 +33,16 @@ const ClaimTrackingEntry_Reducer = (state = INIT_STATE, action) => {
         case GET_CLAIM_TRACKING_ENTRY_LIST:
             return {
                 ...state,
-                loading: true,
+                GoBtnLoading: true,
+                ExcelBtnLoading: true,
             }
 
         case GET_CLAIM_TRACKING_ENTRY_LIST_SUCCESS:
             return {
                 ...state,
                 claimTrackingEntryList: action.payload,
-                loading: false,
+                GoBtnLoading: false,
+                ExcelBtnLoading: false
             }
 
         case SAVE_CLAIM_TRACKING_ENTRY:
@@ -98,7 +101,8 @@ const ClaimTrackingEntry_Reducer = (state = INIT_STATE, action) => {
             return {
                 ...state,
                 saveBtnloading: false,
-                loading: false,
+                GoBtnLoading: false,
+                ExcelBtnLoading: false
             };
 
         default:

@@ -284,4 +284,7 @@ export const RetailerApproval = url.RETAILER_APPROVAL
 
 export const ManPowerReport = url.MAN_POWER_REPORT
 
+export const ClaimTrackingReport=url.CLAIM_TRACKING_REPORT
+
+
 

@@ -13,7 +13,7 @@ const NewCommonPartyDropdown = ({ pageMode }) => {
 
     const dispatch = useDispatch();
 
-    const [selectedParty, setSelectedParty] = useState('');
+    const [selectedParty, setSelectedParty] = useState({ value: 0, label: "select...", SAPPartyCode: "" });
     const [changeButtonShow, setChangeButtonShow] = useState(false);
 
     const { partyList, partyDropdownLoading, commonPartyDropSelect } = useSelector((state) => ({
@@ -30,6 +30,7 @@ const NewCommonPartyDropdown = ({ pageMode }) => {
     }, [commonPartyDropSelect]);
 
     const updateSelectedParty = () => {
+        debugger
         if (selectedParty.value === 0) {
             customAlert({ Type: 3, Message: "Please Select Party" });
             return;

@@ -34,8 +34,9 @@ const StockReport = (props) => {
 
 	const [btnMode, setBtnMode] = useState(0);
 	const [mrpWise, setMrpWise] = useState(false);
+	const [batchWise, setBatchWise] = useState(false);
 	const [originalTableData, setOriginalTableData] = useState([]);
-	const [stockTypeSelect, setStockTypeSelect] = useState({ value: 1, label: 'SaleableStock' });
+	const [stockTypeSelect, setStockTypeSelect] = useState({ value: 0, label: 'SaleableStock' });
 
 	const reducers = useSelector(
 		(state) => ({
@@ -106,6 +107,7 @@ const StockReport = (props) => {
 						excelData: tData, // Use tableData here
 						excelFileName: "Current_Stock_Report",
 						mrpWise: MRPWise,
+						batchWise:batchWise
 					});
 
 				} else if (btnMode === 1) {
@@ -127,7 +129,7 @@ const StockReport = (props) => {
 
 		let updatedTableData;
 
-		if (!mrpWiseChecked) {
+		if ((!mrpWiseChecked)) {
 			const combinedItems = {};
 			tableData.forEach((item) => {
 				const { Item, ActualQty } = item;
@@ -150,6 +152,11 @@ const StockReport = (props) => {
 		return { tData: updatedTableData, MRPWise: mrpWiseChecked }
 	}
 
+	function BatchWise_TableChange(event, tableData) {
+		setBatchWise(event)
+		MRPWise_TableChange(event, tableData);
+	}
+
 	const BaseUnit_DropdownOptions = BaseUnit.filter(index => index.Name === "No" || index.Name === "Kg" || index.Name === "Box")
 		.map(data => ({
 			value: data.id,
@@ -162,11 +169,11 @@ const StockReport = (props) => {
 	}));
 
 	const StockTypeOptions = [{
-		value: 1,
+		value: 0,
 		label: "Saleable Stock"
 	},
 	{
-		value: 2,
+		value: 1,
 		label: "Damage Stock"
 	}]
 
@@ -192,9 +199,10 @@ const StockReport = (props) => {
 				"ToDate": todate,
 				"Unit": unitDropdown.value,
 				"PartyID": partyDropdown === "" ? _cfunc.loginPartyID() : partyDropdown.value,
+				"IsDamagePieces": stockTypeSelect.value
 			});
 
-			dispatch(stockReport_GoButton_API({ jsonBody, stockType: stockTypeSelect.value }))
+			dispatch(stockReport_GoButton_API({ jsonBody }))
 
 		} catch (error) { _cfunc.CommonConsole(error) }
 	}
@@ -258,6 +266,21 @@ const StockReport = (props) => {
 		// Insert the "MRP" column right before the "Unit" column
 		if (unitColumnIndex !== -1) {
 			PageListColumns.splice(unitColumnIndex, 0, mrpColumn);
+		}
+	}
+
+	if (batchWise) {
+		const batchCodeColumn = {
+			text: "BatchCode",
+			dataField: "BatchCode",
+		};
+
+		// Find the index of the "ItemName" column
+		const itemNameColumnIndex = PageListColumns.findIndex(column => column.dataField === "ItemName");
+
+		// Insert the "BatchCode" column right after the "ItemName" column
+		if (itemNameColumnIndex !== -1) {
+			PageListColumns.splice(itemNameColumnIndex + 1, 0, batchCodeColumn); // Add 1 to insert after the ItemName column
 		}
 	}
 
@@ -394,6 +417,7 @@ const StockReport = (props) => {
 										</Col>
 									</FormGroup>
 								</Col>
+
 								<Col sm={2}>
 									<FormGroup className=" row mt-1 " >
 										<Label htmlFor="horizontal-firstname-input" className="col-sm-6 col-form-label" >MRP-Wise</Label>
@@ -402,7 +426,25 @@ const StockReport = (props) => {
 												<Input type="checkbox" className="form-check-input"
 													checked={mrpWise}
 													name="mrpWise"
+													disabled={batchWise && true}
 													onChange={(e) => { MRPWise_TableChange(e.target.checked, originalTableData) }}
+												/>
+											</div>
+										</Col>
+									</FormGroup>
+								</Col>
+
+								<Col sm={1}></Col>
+								<Col sm={2}>
+									<FormGroup className=" row mt-1 " >
+										<Label htmlFor="horizontal-firstname-input" className="col-sm-6 col-form-label" >Batch-Wise</Label>
+										<Col md={2} style={{ marginTop: '7px' }} >
+											<div className="form-check form-switch form-switch-md ">
+												<Input type="checkbox" className="form-check-input"
+													checked={batchWise}
+													name="batchWise"
+													// onChange={(e) => { BatchWise_TableChange(e.target.checked, originalTableData) }}
+													onChange={(e) => { BatchWise_TableChange(e.target.checked, originalTableData) }}
 												/>
 											</div>
 										</Col>

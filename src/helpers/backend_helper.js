@@ -700,6 +700,10 @@ export const getBatchCode_By_ItemID_api = ({ itemId, partyId }) => get(`${url.GE
 export const TransactionLog_transactionType_Api = () => get(url.TRANSACTION_LOG_TRANCTION_TYPE);
 export const TransactionLog_Get_User_Api = () => get(url.TRANSACTION_LOG_All_USER);
 export const TransactionLog_Go_Btn_Api = ({ jsonBody }) => post(url.TRANSACTION_LOG_GO_BTN, jsonBody);
+export const TransactionLog_getjson_for_Transation_Id = ({ TransctionID }) => get(`${url.TRANSACTION_JSON}/${TransctionID}`) // edit api
+
+
+
 
 // Claim Tracking Entry
 export const ClaimListfortracking = (jsonBody) => post(url.CLAIM_LIST_FOR_TRACKING, jsonBody)// post api
@@ -759,7 +763,7 @@ export const CentralServiceItem_Update = ({ jsonBody, updateId }) => put(`${url.
 
 // Service Item Assign
 export const ServiceItemAssign_Save_API = ({ jsonBody }) => post(url.SERVICE_ITEM_ASSIGN_SAVE, jsonBody)// post api
-export const ServiceItemAssign_GoButton_API = ({jsonBody}) => post(url.SERVICE_ITEM_ASSIGN_GO_BUTTON, jsonBody) // get api
+export const ServiceItemAssign_GoButton_API = ({ jsonBody }) => post(url.SERVICE_ITEM_ASSIGN_GO_BUTTON, jsonBody) // get api
 
 export {
 	getLoggedInUser,

@@ -884,7 +884,7 @@ const SalesReturn = (props) => {
                 "Rate": i.Rate,
                 "GST": i.GST,
                 "ItemReason": i.defaultReason ? i.defaultReason : "",
-                "Comment": i.ItemComment,
+                "ItemComment": i.ItemComment,
                 "CGST": Number(calculate.CGST_Amount).toFixed(2),
                 "SGST": Number(calculate.SGST_Amount).toFixed(2),
                 "IGST": Number(calculate.IGST_Amount).toFixed(2),

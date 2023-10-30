@@ -1,31 +1,34 @@
-import React, { useMemo, useState } from 'react'
+import React, { useMemo, useRef, useState } from 'react'
 import { useEffect } from 'react';
 import BootstrapTable from 'react-bootstrap-table-next';
 import ToolkitProvider from 'react-bootstrap-table2-toolkit';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { Col, FormGroup, Label, Row } from 'reactstrap';
+import { Button, Card, CardBody, Col, FormGroup, Label, Modal, Row, Spinner } from 'reactstrap';
 import { Go_Button } from '../../components/Common/CommonButton';
 import { breadcrumbReturnFunc, convertDateTime_ydm, getDateTime_dmy, loginCompanyID, loginEmployeeID } from '../../components/Common/CommonFunction';
 import { mySearchProps } from '../../components/Common/SearchBox/MySearch';
 import { customAlert } from '../../CustomAlert/ConfirmDialog';
 import { C_Select, C_TimePicker } from '../../CustomValidateForm';
 import { showToastAlert } from '../../helpers/axios_Config';
-import { commonPartyDropdown_API, genaraMasterBy_Type_API, GenralMasterSubType, TransactionLog_Get_User_Api, TransactionLog_Go_Btn_Api, TransactionLog_transactionType_Api } from '../../helpers/backend_helper';
+import { commonPartyDropdown_API, genaraMasterBy_Type_API, GenralMasterSubType, TransactionLog_Get_User_Api, TransactionLog_getjson_for_Transation_Id, TransactionLog_Go_Btn_Api, TransactionLog_transactionType_Api } from '../../helpers/backend_helper';
 import { BreadcrumbShowCountlabel } from '../../store/actions';
+import SimpleBar from "simplebar-react"
+
 
 const TransactionLog = () => {
 
     const dispatch = useDispatch();
     const history = useHistory()
+    const jsonRef = useRef(null);
 
     const [userPageAccessState, setUserAccState] = useState('');
-    const [transactionTypeSelect, setTransactionTypeSelect] = useState([]);
-    const [userSelect, setUserSelect] = useState([]);
-    const [partySelect, setPartySelect] = useState([]);
+    const [transactionTypeSelect, setTransactionTypeSelect] = useState([{ value: '', label: "All" }]);
+    const [userSelect, setUserSelect] = useState([{ value: '', label: "All" }]);
+    const [partySelect, setPartySelect] = useState([{ value: '', label: "All" }]);
     const [formDateSelect, setFormDateSelect] = useState(() => getDateTime_dmy(1));//offSetTime 1 hour earlier
     const [toDateSelect, setToDateSelect] = useState(getDateTime_dmy);
-    const [categoryTypeSelect, setCategoryTypeSelect] = useState('');
+    const [categoryTypeSelect, setCategoryTypeSelect] = useState([{ value: '', label: "All" }]);
 
     const [goBtnloading, setGoBtnloading] = useState(false);
     const [tableData, setTableData] = useState([]);
@@ -33,6 +36,18 @@ const TransactionLog = () => {
     const [usersRedux, setUsersRedux] = useState([]);
     const [partyRedux, setPartyRedux] = useState([]);
     const [categoryTypeRedux, setCategoryTypeRedux] = useState([]);
+    const [modal_view, setModal_view] = useState(false);
+    const [modal_backdrop, setmodal_backdrop] = useState(false);   // Image Model open Or not
+    const [JsonData, setJsonData] = useState('');
+    const [UpdateJsonData, setUpdateJsonData] = useState('');
+    const [isCopy, setisCopy] = useState({});
+
+
+
+    const [ViewbtnLoading, setViewbtnLoading] = useState('');
+
+
+
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const { userAccess } = useSelector((state) => ({ userAccess: state.Login.RoleAccessUpdateData }));
@@ -67,7 +82,9 @@ const TransactionLog = () => {
     const transactionTypeOptions = useMemo(() => generateOptions(transctionTypeReux), [transctionTypeReux])
     const userOptions = useMemo(() => generateOptions(usersRedux), [usersRedux]);
     const partyOptions = useMemo(() => generateOptions(partyRedux), [partyRedux]);
-    const categoryTypeOptions = useMemo(() => categoryTypeRedux.map(item => ({ value: item.id, label: item.Name })), [categoryTypeRedux]);
+    const categoryTypeOptions = useMemo(() => generateOptions(categoryTypeRedux), [categoryTypeRedux]);
+
+    // const categoryTypeOptions = useMemo(() => categoryTypeRedux.map(item => ({ value: item.id, label: item.Name })), [categoryTypeRedux]);
 
     // userAccess useEffect
     useEffect(() => {
@@ -80,6 +97,161 @@ const TransactionLog = () => {
             breadcrumbReturnFunc({ dispatch, userAcc });
         };
     }, [userAccess]);
+
+
+
+    const makeBtnHandler = async (TransactionID) => {
+        const response = await TransactionLog_getjson_for_Transation_Id({ TransctionID: TransactionID })
+
+        if (response.Status === true && response.StatusCode === 200) {
+            setViewbtnLoading(false)
+            if (response.Data.length > 0) {
+                if (response.Data[0].JsonData2.length > 0) {
+                    setJsonData(response.Data[0])
+                    setModal_view(true)
+                }
+            }
+
+        } else if (response.Status === false && response.StatusCode === 404) {
+            setViewbtnLoading(false)
+            customAlert({
+                Type: 4,
+                Message: JSON.stringify(response.Message),
+            });
+            return
+        } else {
+            setViewbtnLoading(false)
+        }
+
+
+
+    }
+    function modalToggleFunc() {
+        setModal_view(false);
+        setisCopy({ isCopy: false })
+    }
+
+    function tog_backdrop() {
+        setmodal_backdrop(!modal_backdrop)
+        removeBodyCss()
+    }
+    function removeBodyCss() {
+        document.body.classList.add("no_padding")
+    }
+
+
+    function onChangeCategoryType(e = []) {
+        if (e.length === 0) {
+            e = [{ value: "", label: "All" }]
+        } else {
+            e = e.filter(i => !(i.value === ''))
+        }
+        setCategoryTypeSelect(e);
+        setTableData([]);
+    }
+
+    function onChangeTransactionType(e = []) {
+        if (e.length === 0) {
+            e = [{ value: "", label: "All" }]
+        } else {
+            e = e.filter(i => !(i.value === ''))
+        }
+        setTransactionTypeSelect(e);
+        setTableData([]);
+    }
+
+    function onChangeUser(e = []) {
+        if (e.length === 0) {
+            e = [{ value: "", label: "All" }]
+        } else {
+            e = e.filter(i => !(i.value === ''))
+        }
+        setUserSelect(e);
+        setTableData([]);
+    }
+
+    function onChangeParty(e = []) {
+        if (e.length === 0) {
+            e = [{ value: "", label: "All" }]
+        } else {
+            e = e.filter(i => !(i.value === ''))
+        }
+        setPartySelect(e);
+        setTableData([]);
+    }
+
+
+
+
+
+    useEffect(() => {
+
+        const transformedData = Object.keys(JsonData).map((key, index) => ({
+            key,
+            value: JsonData[key],
+            index: index
+        }));
+        setUpdateJsonData(transformedData)
+
+    }, [JsonData])
+
+
+
+
+    const copyToClipboard = (CopyValue, btnId) => {
+        navigator.clipboard.writeText(JSON.stringify(CopyValue, null, 2))
+            .then(() => {
+                setisCopy({ isCopy: true, btnId: btnId })
+            })
+            .catch((error) => {
+                console.error('Copy failed:', error);
+            });
+    };
+
+
+
+    const viewColumn = [
+        {
+            text: "Keys",
+            dataField: "key",
+            sort: true
+        }, {
+            text: "values",
+            dataField: "value",
+            sort: true
+        },
+        {
+            text: "Copy",
+            dataField: "",
+            formatExtraData: { isCopy: isCopy, },
+
+            formatter: (cellContent, rowData, key, formatExtra) => {
+                debugger
+                let { isCopy } = formatExtra;
+                return (<>
+                    < Button
+                        type="button"
+                        onClick={() => copyToClipboard(rowData.value, `Copy-${rowData.index}`)}
+                        title="Copy Field"
+                        className="badge badge-soft-primary font-size-12 btn c_btn-primary waves-effect waves-light w-xxs border border-light" >
+                        {(isCopy.isCopy) && (isCopy.btnId === `Copy-${rowData.index}`) ?
+                            <span
+                                style={{ marginLeft: "6px", marginRight: "6px" }}
+                                className=" bx bx-check font-size-16"
+                            ></span> : <span
+                                style={{ marginLeft: "6px", marginRight: "6px" }}
+                                className="bx bxs-copy font-size-16"
+                            ></span>
+
+                        }
+
+                    </Button>
+
+                </>)
+            }
+
+        }
+    ]
 
     const tableColumns = [
         {
@@ -116,13 +288,49 @@ const TransactionLog = () => {
             dataField: "CustomerName",
             sort: true
         },
+        {
+            text: "Action",
+            dataField: "",
+            formatExtraData: { listBtnLoading: ViewbtnLoading, },
+
+
+            formatter: (cellContent, rowData, key, formatExtra) => {
+                let { listBtnLoading } = formatExtra;
+
+                return (<>
+                    < Button
+                        type="button"
+                        id={`btn-makeBtn-${rowData.id}`}
+                        className="badge badge-soft-primary font-size-12 btn c_btn-primary waves-effect waves-light w-xxs border border-light"
+                        title="View Json"
+                        disabled={listBtnLoading}
+                        onClick={() => {
+                            const btnId = `btn-makeBtn-${rowData.id}`
+                            setViewbtnLoading(btnId)
+                            makeBtnHandler(rowData.id)
+                        }}
+                    >
+                        {(listBtnLoading === `btn-makeBtn-${rowData.id}`) ?
+                            <Spinner style={{ height: "16px", width: "16px" }} color="white" />
+                            : <span
+                                style={{ marginLeft: "6px", marginRight: "6px" }}
+                                className="bx bxs-show font-size-16"
+                            ></span>
+                        }
+
+
+                    </Button>
+                </>)
+            }
+        },
 
     ]
 
     const goButtonHandler = async () => {
+
         try {
-            if (!categoryTypeSelect.value > 0) {
-                showToastAlert("Please Select Category Type",'error');
+            if (!categoryTypeSelect.length > 0) {
+                showToastAlert("Please Select Category Type", 'error');
                 return
             }
             setTableData([]);
@@ -133,7 +341,7 @@ const TransactionLog = () => {
                 "TransactionType": transactionTypeSelect.map(item => item.value).join(','),
                 "User": userSelect.map(item => item.value).join(','),
                 "Party": partySelect.map(item => item.value).join(','),
-                "TransactionCategory": categoryTypeSelect.value,
+                "TransactionCategory": categoryTypeSelect.map(item => item.value).join(',')
             })
             const resp3 = await TransactionLog_Go_Btn_Api({ jsonBody })
             setGoBtnloading(false);
@@ -174,7 +382,7 @@ const TransactionLog = () => {
                                             dateFormat: 'd-m-Y H:i:S', // Updated date format with 24-hour time
                                         }}
                                         onChange={(obj, selectedDate) => {
-                                            debugger
+
                                             setFormDateSelect(selectedDate)
                                         }}
                                     />
@@ -215,12 +423,16 @@ const TransactionLog = () => {
                                 <Label className="col-sm-5 p-2" >
                                     Category Type
                                 </Label>
+
+
                                 <Col sm="7">
                                     <C_Select
+                                        id="CategoryTypee"
                                         placeholder="Category Type"
                                         classNamePrefix="select2-Customer"
+                                        isMulti
                                         value={categoryTypeSelect}
-                                        onChange={(e => setCategoryTypeSelect(e))}
+                                        onChange={onChangeCategoryType}
                                         options={categoryTypeOptions}
                                         styles={{
                                             menu: (provided) => ({ ...provided, zIndex: 2 }),
@@ -246,7 +458,7 @@ const TransactionLog = () => {
                                         classNamePrefix="select2-Customer"
                                         isMulti
                                         value={transactionTypeSelect}
-                                        onChange={(e => setTransactionTypeSelect(e))}
+                                        onChange={onChangeTransactionType}
                                         options={transactionTypeOptions}
                                         styles={{
                                             menu: (provided) => ({ ...provided, zIndex: 2 }),
@@ -269,7 +481,7 @@ const TransactionLog = () => {
                                         classNamePrefix="select2-Customer"
                                         isMulti
                                         value={userSelect}
-                                        onChange={(e => setUserSelect(e))}
+                                        onChange={onChangeUser}
                                         options={userOptions}
                                         styles={{
                                             menu: (provided) => ({ ...provided, zIndex: 2 }),
@@ -279,13 +491,14 @@ const TransactionLog = () => {
                             </div>
                         </FormGroup>
                     </Col>
-                    <Col sm="5" >
-                        <FormGroup >
+
+                    <Col sm="3" >
+                        <FormGroup>
                             <div className="d-flex align-items-center">
-                                <Label className="col-sm-3 p-2" htmlFor="party">
+                                <Label className="col-sm-5 p-2" htmlFor="transactionType">
                                     Party
                                 </Label>
-                                <Col sm="5">
+                                <Col sm="7">
                                     <C_Select
                                         id="party"
                                         placeholder="Select Party"
@@ -293,7 +506,7 @@ const TransactionLog = () => {
                                         isMulti
                                         value={partySelect}
                                         options={partyOptions}
-                                        onChange={(e => setPartySelect(e))}
+                                        onChange={onChangeParty}
                                         styles={{
                                             menu: (provided) => ({ ...provided, zIndex: 2 }),
                                         }}
@@ -302,6 +515,7 @@ const TransactionLog = () => {
                             </div>
                         </FormGroup>
                     </Col>
+
                     <Col sm="1" >
                         <Go_Button
                             loading={goBtnloading}
@@ -355,6 +569,57 @@ const TransactionLog = () => {
                         </React.Fragment>
                     )}
                 </ToolkitProvider>
+                <Modal
+                    isOpen={modal_view}
+                    toggle={modalToggleFunc}
+                    size="xl"
+                    className="modal-dialog-centered "
+                >
+                    <CardBody className="c_card_body">
+                        <h2 className="text-center">Transaction Log Details</h2>
+                        <ToolkitProvider
+                            keyField={"id"}
+                            // defaultSorted={defaultSorted}
+                            data={UpdateJsonData}
+                            columns={viewColumn}
+                            search
+                        >
+                            {(toolkitProps,) => (
+                                <React.Fragment>
+                                    <Row>
+                                        <Col xl="12">
+                                            {/* <div className="table-responsive table" style={{ minHeight: "45vh" }}> */}
+                                            <SimpleBar className="table-responsive ">
+
+                                                <BootstrapTable
+                                                    keyField={"id"}
+                                                    id="table_Arrow"
+                                                    classes={"table  table-bordered table-hover"}
+                                                    noDataIndication={
+                                                        <div className="text-danger text-center ">
+                                                            Record Not available
+                                                        </div>
+                                                    }
+                                                    onDataSizeChange={({ dataSize }) => {
+                                                        dispatch(BreadcrumbShowCountlabel(`Count : ${dataSize}`))
+                                                    }}
+                                                    {...toolkitProps.baseProps}
+                                                />
+                                                {mySearchProps(toolkitProps.searchProps)}
+                                            </SimpleBar>
+
+                                            {/* </div> */}
+                                        </Col>
+                                    </Row>
+
+                                </React.Fragment>
+                            )}
+                        </ToolkitProvider>
+
+                    </CardBody>
+
+                </Modal>
+
             </div>
         </React.Fragment>
     )

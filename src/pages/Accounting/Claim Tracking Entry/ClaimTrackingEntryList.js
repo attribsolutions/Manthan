@@ -21,13 +21,13 @@ import { getCurrent_Month_And_Year } from "./ClaimRelatedFunc";
 const ClaimTrackingEntryList = (props) => {
 
     const dispatch = useDispatch();
-
+  
     const [yearAndMonth, setYearAndMonth] = useState(getCurrent_Month_And_Year);
 
     const reducers = useSelector(
         (state) => ({
             listBtnLoading: state.ClaimTrackingEntry_Reducer.listBtnLoading,
-            goBtnLoading: state.ClaimTrackingEntry_Reducer.loading,
+            goBtnLoading: state.ClaimTrackingEntry_Reducer.GoBtnLoading,
             tableList: state.ClaimTrackingEntry_Reducer.claimTrackingEntryList,
             editData: state.ClaimTrackingEntry_Reducer.editData,
             updateMsg: state.ClaimTrackingEntry_Reducer.updateMessage,
@@ -71,7 +71,7 @@ const ClaimTrackingEntryList = (props) => {
             "Year": yearAndMonth.Year,
             "Month": yearAndMonth.Month,
         })
-        dispatch(getClaimTrackingEntrylist(jsonBody));
+        dispatch(getClaimTrackingEntrylist({jsonBody}));
     };
 
     async function MonthAndYearOnchange(e) {

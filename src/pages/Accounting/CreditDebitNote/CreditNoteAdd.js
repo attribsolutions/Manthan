@@ -37,13 +37,14 @@ import * as mode from "../../../routes/PageMode"
 import { CInput } from "../../../CustomValidateForm/CInput";
 import { decimalRegx } from "../../../CustomValidateForm/RegexPattern"
 import { ReceiptGoButtonMaster, ReceiptGoButtonMaster_Success } from "../../../store/Accounting/Receipt/action";
-import { Retailer_List } from "../../../store/CommonAPI/SupplierRedux/actions";
+import { Retailer_List, Retailer_List_Success } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { postSelect_Field_for_dropdown } from "../../../store/Administrator/PartyMasterBulkUpdateRedux/actions";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { CredietDebitType, EditCreditlistSuccess, Invoice_Return_ID, Invoice_Return_ID_Success, saveCredit, saveCredit_Success } from "../../../store/Accounting/CreditRedux/action";
 import { InvoiceNumber, InvoiceNumberSuccess } from "../../../store/Sales/SalesReturnRedux/action";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { C_DatePicker, C_Select } from "../../../CustomValidateForm";
+import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 
 const CreditNoteAdd = (props) => {
     const history = useHistory();
@@ -124,7 +125,6 @@ const CreditNoteAdd = (props) => {
             breadcrumbReturnFunc({ dispatch, userAcc });
         };
     }, [userAccess])
-
 
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
@@ -209,7 +209,7 @@ const CreditNoteAdd = (props) => {
     useEffect(() => {
         const jsonBody = JSON.stringify({
             Type: 1,
-            PartyID: loginPartyID(),
+            PartyID: _cfunc.loginSelectedPartyID(),
             CompanyID: loginCompanyID()
         });
         dispatch(Retailer_List(jsonBody));
@@ -252,7 +252,6 @@ const CreditNoteAdd = (props) => {
         return index.Name === "CreditNote"
     });
 
-
     function DateOnchange(e, date) {
         setState((i) => {
             const a = { ...i }
@@ -280,7 +279,7 @@ const CreditNoteAdd = (props) => {
         })
 
         const jsonBody = JSON.stringify({
-            PartyID: loginPartyID(),
+            PartyID: _cfunc.loginSelectedPartyID(),
             CustomerID: e.value,
             InvoiceID: ""
         });
@@ -288,15 +287,12 @@ const CreditNoteAdd = (props) => {
         const body = { jsonBody, pageMode }
         dispatch(ReceiptGoButtonMaster(body));
         const jsonBody1 = JSON.stringify({
-            PartyID: loginPartyID(),
+            PartyID: _cfunc.loginSelectedPartyID(),
             CustomerID: e.value
         });
 
         dispatch(InvoiceNumber(jsonBody1));
     };
-
-
-
 
     const saveHandeller = async (event) => {
         event.preventDefault();
@@ -329,7 +325,7 @@ const CreditNoteAdd = (props) => {
 
                 Narration: values.Narration,
                 NoteReason: values.NoteReason.value,
-                Party: loginPartyID(),
+                Party: _cfunc.loginSelectedPartyID(),
                 CreatedBy: loginUserID(),
                 UpdatedBy: loginUserID(),
                 CRDRNoteItems: [],
@@ -338,9 +334,31 @@ const CreditNoteAdd = (props) => {
             dispatch(saveCredit({ jsonBody }));
 
         } catch (e) { }
-
     };
 
+    function partySelectButtonHandler() {
+        const jsonBody = JSON.stringify({
+            Type: 1,
+            PartyID: _cfunc.loginSelectedPartyID(),
+            CompanyID: loginCompanyID()
+        });
+        dispatch(Retailer_List(jsonBody));
+    }
+
+    function partyOnChngeButtonHandler() {
+        dispatch(Retailer_List_Success([]));
+        dispatch(Invoice_Return_ID_Success([]))
+        dispatch(ReceiptGoButtonMaster_Success([]));
+        dispatch(InvoiceNumberSuccess([]));
+        setState((i) => {
+            let a = { ...i }
+            a.values.Customer = ''
+            a.values.InvoiceNO = ''
+            a.hasValid.Customer.valid = true;
+            a.hasValid.InvoiceNO.valid = true;
+            return a
+        })
+    }
 
     var IsEditMode_Css = ''
     if ((modalCss) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
@@ -350,7 +368,10 @@ const CreditNoteAdd = (props) => {
             <React.Fragment>
                 <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
                 <div className="page-content" style={{ marginBottom: "5cm" }}>
-
+                    <PartyDropdown_Common pageMode={pageMode}
+                        goButtonHandler={partySelectButtonHandler}
+                        changeButtonHandler={partyOnChngeButtonHandler}
+                    />
                     <div className="px-2 c_card_filter header text-black mb-1" >
                         <Row>
                             <Col sm="6">

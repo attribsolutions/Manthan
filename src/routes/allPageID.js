@@ -313,3 +313,6 @@ export const RETAILER_APPROVAL = 247
 export const MAN_POWER_REPORT = 248
 
 export const PARTY_LEDGER = 207
+
+export const CLAIM_TRACKING_REPORT= 257
+
