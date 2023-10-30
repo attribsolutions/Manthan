@@ -296,6 +296,21 @@ const Order = (props) => {
                     ele["id"] = k + 1
                     return ele
                 });
+
+                orderItems.sort((a, b) => {
+                    if (a.Quantity === null && b.Quantity !== null) {
+                        return 1;
+                    } else if (a.Quantity !== null && b.Quantity === null) {
+                        return -1;
+                    } else if (a.Quantity === null && b.Quantity === null) {
+                        return 0;
+                    } else {
+                        return a.Quantity - b.Quantity;
+                    }
+                });
+
+
+
                 setOrderItemTable(orderItems)
                 setTermsAndConTable(termsAndCondition)
 
