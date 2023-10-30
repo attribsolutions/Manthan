@@ -138,13 +138,16 @@ const HeaderSection = (props) => {
   useEffect(() => {
     dispatch(commonPageFieldSuccess(null));
     dispatch(commonPageField(pageId.ITEM_SALE_REPORT));
+
     dispatch(GetRoutesList());
     dispatch(
       GetVenderSupplierCustomer({
         subPageMode: url.ITEM_SALE_REPORT,
-        RouteID: 0,
+        PartyID:_cfunc.loginSelectedPartyID(),
+        RouteID: "",
       })
     );
+  
     dispatch(getGroupList());
     dispatch(getSubGroupList());
     dispatch(Items_On_Group_And_Subgroup_API({ Group: 0, SubGroup: 0 }));
