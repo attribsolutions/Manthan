@@ -131,30 +131,25 @@ export async function fileDetails({ compareParameter = [], readjson = [] }) {
 
 export async function downloadDummyFormatHandler(jsonData) {
 
-
+  jsonData.sort((a, b) => {
+    return a.Sequence - b.Sequence;
+  });
   // / Extract unique column names for the header
   const uniqueValuesAndFormats = jsonData.reduce((result, entry) => {
     const value = entry.Value;
     const format = entry.Format;
-
     if (value !== '' && value !== null) {
       const index = result.values.indexOf(value);
       if (index === -1) {
         result.values.push(value);
         result.formats.push([format]);
-      } else {
-        result.formats[index].push(format);
       }
     }
 
     return result;
   }, { values: [], formats: [] });
 
-  // Sorting after filtering and collecting unique values and formats
-  uniqueValuesAndFormats.values.sort();
-  uniqueValuesAndFormats.formats.sort((a, b) => {
-    return a[0].Sequence - b[0].Sequence;
-  });
+
 
   const columnNames = uniqueValuesAndFormats.values;
   const emptyData = uniqueValuesAndFormats.formats;

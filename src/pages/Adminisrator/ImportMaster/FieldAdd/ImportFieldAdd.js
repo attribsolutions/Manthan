@@ -147,7 +147,7 @@ const ImportFieldAdd = (props) => {
 
             if (hasEditVal) {
 
-                const { id, FieldName, ControlTypeName, ControlTypeID, IsCompulsory, FieldValidationName, FieldValidationID, ImportExcelTypeName, ImportExcelTypeID } = hasEditVal
+                const { id, FieldName,Format, ControlTypeName, ControlTypeID, IsCompulsory, FieldValidationName, FieldValidationID, ImportExcelTypeName, ImportExcelTypeID } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
                 hasValid.FieldName.valid = true;
@@ -155,8 +155,10 @@ const ImportFieldAdd = (props) => {
                 hasValid.IsCompulsory.valid = true;
                 hasValid.FieldValidationName.valid = true;
                 hasValid.ImportExcelTypeName.valid = true;
+                hasValid.Format.valid = true;
 
                 values.FieldName = FieldName;
+                values.Format = Format;
                 values.ControlTypeName = { label: ControlTypeName, value: ControlTypeID };
                 values.IsCompulsory = IsCompulsory;
                 values.FieldValidationName = { label: FieldValidationName, value: FieldValidationID };
