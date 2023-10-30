@@ -140,6 +140,48 @@ const TransactionLog = () => {
     }
 
 
+    function onChangeCategoryType(e = []) {
+        if (e.length === 0) {
+            e = [{ value: "", label: "All" }]
+        } else {
+            e = e.filter(i => !(i.value === ''))
+        }
+        setCategoryTypeSelect(e);
+        setTableData([]);
+    }
+
+    function onChangeTransactionType(e = []) {
+        if (e.length === 0) {
+            e = [{ value: "", label: "All" }]
+        } else {
+            e = e.filter(i => !(i.value === ''))
+        }
+        setTransactionTypeSelect(e);
+        setTableData([]);
+    }
+
+    function onChangeUser(e = []) {
+        if (e.length === 0) {
+            e = [{ value: "", label: "All" }]
+        } else {
+            e = e.filter(i => !(i.value === ''))
+        }
+        setUserSelect(e);
+        setTableData([]);
+    }
+
+    function onChangeParty(e = []) {
+        if (e.length === 0) {
+            e = [{ value: "", label: "All" }]
+        } else {
+            e = e.filter(i => !(i.value === ''))
+        }
+        setPartySelect(e);
+        setTableData([]);
+    }
+
+
+
 
 
     useEffect(() => {
@@ -166,6 +208,8 @@ const TransactionLog = () => {
             });
     };
 
+
+
     const viewColumn = [
         {
             text: "Keys",
@@ -187,7 +231,6 @@ const TransactionLog = () => {
                 return (<>
                     < Button
                         type="button"
-
                         onClick={() => copyToClipboard(rowData.value, `Copy-${rowData.index}`)}
                         title="Copy Field"
                         className="badge badge-soft-primary font-size-12 btn c_btn-primary waves-effect waves-light w-xxs border border-light" >
@@ -389,7 +432,7 @@ const TransactionLog = () => {
                                         classNamePrefix="select2-Customer"
                                         isMulti
                                         value={categoryTypeSelect}
-                                        onChange={(e => setCategoryTypeSelect(e))}
+                                        onChange={onChangeCategoryType}
                                         options={categoryTypeOptions}
                                         styles={{
                                             menu: (provided) => ({ ...provided, zIndex: 2 }),
@@ -415,7 +458,7 @@ const TransactionLog = () => {
                                         classNamePrefix="select2-Customer"
                                         isMulti
                                         value={transactionTypeSelect}
-                                        onChange={(e => setTransactionTypeSelect(e))}
+                                        onChange={onChangeTransactionType}
                                         options={transactionTypeOptions}
                                         styles={{
                                             menu: (provided) => ({ ...provided, zIndex: 2 }),
@@ -438,7 +481,7 @@ const TransactionLog = () => {
                                         classNamePrefix="select2-Customer"
                                         isMulti
                                         value={userSelect}
-                                        onChange={(e => setUserSelect(e))}
+                                        onChange={onChangeUser}
                                         options={userOptions}
                                         styles={{
                                             menu: (provided) => ({ ...provided, zIndex: 2 }),
@@ -463,7 +506,7 @@ const TransactionLog = () => {
                                         isMulti
                                         value={partySelect}
                                         options={partyOptions}
-                                        onChange={(e => setPartySelect(e))}
+                                        onChange={onChangeParty}
                                         styles={{
                                             menu: (provided) => ({ ...provided, zIndex: 2 }),
                                         }}
