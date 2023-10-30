@@ -199,14 +199,30 @@ const TransactionLog = () => {
 
 
     const copyToClipboard = (CopyValue, btnId) => {
-        navigator.clipboard.writeText(JSON.stringify(CopyValue, null, 2))
-            .then(() => {
-                setisCopy({ isCopy: true, btnId: btnId })
-            })
-            .catch((error) => {
-                console.error('Copy failed:', error);
-            });
+        try {
+            const textToCopy = JSON.stringify(CopyValue, null, 2);
+            const textField = document.createElement('textarea');
+
+            textField.value = textToCopy;
+            document.body.appendChild(textField);
+
+            textField.select();
+            const success = document.execCommand('copy');
+
+            document.body.removeChild(textField);
+
+            if (success) {
+                setisCopy({ isCopy: true, btnId: btnId });
+            } else {
+                console.error('Copy to clipboard using execCommand failed.');
+            }
+        } catch (error) {
+            console.error('Error during copy:', error);
+        }
     };
+
+
+
 
 
 
