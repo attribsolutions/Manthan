@@ -133,7 +133,7 @@ const CentralServiceItem = (props) => {
             }
 
             if (hasEditVal) {
-                debugger
+                
                 const { id, Name, GSTPercentage, HSNCode, Rate, isActive, Type, Unit, UnitName } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
 

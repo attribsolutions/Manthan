@@ -30,7 +30,7 @@ function* goButton_ServiceItemAssign_GenFunc({ config }) {
       }
       return item
     });
-    debugger
+    
     yield put(goButton_ServiceItemAssign_Success(response.Data));
 
   } catch (error) {

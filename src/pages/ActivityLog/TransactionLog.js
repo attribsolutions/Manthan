@@ -242,7 +242,7 @@ const TransactionLog = () => {
             formatExtraData: { isCopy: isCopy, },
 
             formatter: (cellContent, rowData, key, formatExtra) => {
-                debugger
+                
                 let { isCopy } = formatExtra;
                 return (<>
                     < Button

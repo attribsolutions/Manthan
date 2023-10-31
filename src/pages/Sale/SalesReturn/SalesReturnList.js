@@ -245,7 +245,7 @@ const SalesReturnList = () => {
     }
 
     const makeBtnFunc = (List, btnId) => {
-        debugger
+        
         const id = List[0].id
         const config = {
             editId: id,

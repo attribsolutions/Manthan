@@ -82,9 +82,9 @@ const PartyLedger = () => {
 
     useEffect(() => {
         try {
-            debugger
+            
             if (tableData.length > 0) {
-                debugger
+                
                 excelDownloadFunc(tableData)
 
                 // ExcelDownloadFunc({

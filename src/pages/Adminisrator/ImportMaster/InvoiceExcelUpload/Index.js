@@ -64,7 +64,7 @@ const InvoiceExcelUpload = (props) => {
         compareParamLoading: state.ImportExportFieldMap_Reducer.goBtnLoading,
         userAccess: state.Login.RoleAccessUpdateData,
     }));
-    debugger
+    
     useEffect(() => {
         dispatch(GoButton_ImportFiledMap_AddSuccess([]));
         // dispatch(getPartyListAPI());

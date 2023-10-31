@@ -190,7 +190,7 @@ const ServiceItemAssign = (props) => {
 	}
 
 	const SaveHandler = (event) => {
-		debugger
+		
 		event.preventDefault();
 
 		const CheckArray = tableList.filter(index => index.selectCheck === true);
@@ -209,7 +209,7 @@ const ServiceItemAssign = (props) => {
 				"UpdatedBy": _cfunc.loginUserID(),
 			}))
 
-			debugger
+			
 			const jsonBody = JSON.stringify(PartiesJson);
 			dispatch(save_ServiceItemAssign_Action({ jsonBody }));
 

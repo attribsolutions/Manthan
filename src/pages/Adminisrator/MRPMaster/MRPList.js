@@ -56,7 +56,7 @@ const MRPList = () => {
   }, []);
 
   const mobaileDeleteApiFinc = async (deleteMsg) => {
-    debugger
+    
     //***************mobail app api*********************** */
     const jsonBody = JSON.stringify({
       products: deleteMsg.DeleteID

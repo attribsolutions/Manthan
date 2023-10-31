@@ -235,7 +235,7 @@ const MRPMaster = (props) => {
     //select id for delete row
     const deleteHandeler = async (id, name, ItemID) => {
 
-        debugger
+        
         const isConfirmed = await customAlert({
             Type: 7,
             Message: `Are you sure you want to delete this Item : "${name}"`
@@ -250,7 +250,7 @@ const MRPMaster = (props) => {
     useEffect(async () => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-            debugger
+            
             dispatch(saveMRPMasterSuccess({ Status: false }))
             //***************mobail app api*********************** */
             let arrayOfMrpID = selectedMrp.map(function (i) {

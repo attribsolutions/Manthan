@@ -43,7 +43,7 @@ function ShowTable() {
             //     dispatch(BreadcrumbShowCountlabel(`Count:${dataCount}`));
             // }}
             onDataSizeChange={({ dataCount, filteredData = [] }) => {
-                debugger
+                
                 let totalAmount = filteredData.reduce((total, item) => {
                     return total + Number(item.Amount) || 0;
 
@@ -77,7 +77,7 @@ function ShowTable() {
         //                                 </div>
         //                             }
         //                             onDataSizeChange={({ dataSize, d }) => {
-        //                                 debugger
+        //                                 
         //                                 // dispatch(BreadcrumbShowCountlabel(`Count:${dataSize} ₹ 0`))
         //                                 dispatch(BreadcrumbShowCountlabel(`Count:${dataSize}`));
         //                             }}

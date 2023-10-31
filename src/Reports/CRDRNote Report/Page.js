@@ -54,7 +54,7 @@ const generateReportPage = (doc, data) => {
 }
 
 const CreditNote = async (data) => {
-    debugger
+    
     let doc = ""
     if (data.SettingData === "1") {
         data["isA4"] = true

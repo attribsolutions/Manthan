@@ -244,7 +244,7 @@ const PartyMasterBulkUpdate = (props) => {
         value: index.id,
         label: index.Name,
     }));
-    debugger
+    
     const DistrictOnStateValues = DistrictOnState.map((index) => ({
         value: index.id,
         label: index.Name
@@ -293,7 +293,7 @@ const PartyMasterBulkUpdate = (props) => {
     }
 
     function handllerState(event, user, key) {
-        debugger
+        
         dispatch(getDistrictOnState(event.value))
         user.Newvalue = event.value
         setState_DropDown_select(event)
@@ -527,11 +527,11 @@ const PartyMasterBulkUpdate = (props) => {
                         // Value2: i.NewDistrict,
                         party: i.PartyName
                     }
-                    debugger
+                    
                     arr1.push(arr)
                 }
             })
-            debugger
+            
             SetSelectedParty(arr1)
             const jsonBody = JSON.stringify({
                 PartyID: loginPartyID(),

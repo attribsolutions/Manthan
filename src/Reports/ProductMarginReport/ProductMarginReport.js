@@ -137,7 +137,7 @@ const ProductMarginReport = (props) => {           // this component also use fo
     useEffect(() => {
 
         if ((ProductMargin.length > 0) && (subPageMode === url.PRODUCT_MARGIN_REPORT)) {
-            debugger
+            
             if (btnMode === "Show") {
                 setTableData(ProductMargin)
             } else if (btnMode === "Excel") {

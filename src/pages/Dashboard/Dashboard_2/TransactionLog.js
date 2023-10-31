@@ -228,7 +228,7 @@ export default function TransactionLog() {
     const handleScroll = () => {
 
         if (tableRef.current.scrollTop + tableRef.current.clientHeight >= tableRef.current.scrollHeight) {
-            debugger
+            
             setPageNumber(pageNumber + 1);
         }
     };
@@ -236,7 +236,7 @@ export default function TransactionLog() {
     useEffect(() => {
 
         if (tableRef.current) {
-            debugger
+            
             tableRef.current.addEventListener('scroll', handleScroll);
         }
 
@@ -257,13 +257,13 @@ export default function TransactionLog() {
         const scrollContent = () => {
             const scrollElem = tableRef.current;
             scrollElem.scrollTop += scrollSpeed;
-            debugger
+            
             if (scrollElem.scrollTop + scrollElem.clientHeight >= scrollElem.scrollHeight) {
-                debugger
+                
                 scrollElem.scrollTop = 0;
             }
         };
-        debugger
+        
         const intervalId = setInterval(scrollContent, scrollInterval);
 
         return () => {

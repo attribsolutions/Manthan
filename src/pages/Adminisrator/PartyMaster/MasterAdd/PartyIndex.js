@@ -140,11 +140,11 @@ const PartyMaster = (props) => {
 	}, [])
 
 	useEffect(() => {
-		debugger
+		
 		if (editData.Status === true) {
 
 			try {
-				debugger
+				
 				if ((hasShowloction || hasShowModal) || (subPageMode === url.PARTY_SELF_EDIT)) {
 
 					let hasEditVal = null
@@ -324,7 +324,7 @@ const PartyMaster = (props) => {
 	}, [postMsg.Status])
 
 	useEffect(async () => {
-		debugger
+		
 		if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
 			if (subPageMode === url.PARTY_SELF_EDIT) {
 				dispatch(updatePartyIDSuccess({ Status: false }));
@@ -335,7 +335,7 @@ const PartyMaster = (props) => {
 			}
 
 			else {
-				debugger
+				
 				//***************mobail app api*********************** */
 				if (subPageMode === url.RETAILER_MASTER && !(isMobileRetailer)) {
 					const jsonBody = JSON.stringify({

@@ -49,7 +49,7 @@ function* Get_Credit_List_GenFunc(data) {               // getList API
 
     const response = yield call(Go_Button_Credit_Debit_Post_API, data.data);
     const newList = yield response.Data.map((i) => {
-      debugger
+      
       i["recordsAmountTotal"] = i.GrandTotal;  // Breadcrumb Count total
       i["InvoiceUploads"] = i.CRDRNoteUploads  // Added this blank Array to Show e Invoive Array   Further devlopment Remain 
       i["PageMode"] = "CreditDebitList"  //Mode Added  for e invoice  column condition check in list Action button in einvoice

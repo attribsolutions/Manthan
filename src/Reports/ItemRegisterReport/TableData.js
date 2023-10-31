@@ -56,7 +56,7 @@ export const Rows = (data) => {
         let RowSale = 0
         let RowPurchaseReturn = 0
         let RowStockAdjustment = 0
-        debugger
+        
 
         if (Unit === "No") {
             GRN = Number(element.QtyInNo)

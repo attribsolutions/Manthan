@@ -20,7 +20,7 @@ const INIT_STATE = {
 }
 
 const StockReportReducer = (state = INIT_STATE, action) => {
-    debugger
+    
     switch (action.type) {
         case STOCK_REPORT_GO_BUTTON_API:
             return {

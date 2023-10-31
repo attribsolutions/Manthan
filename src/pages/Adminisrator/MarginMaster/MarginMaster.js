@@ -294,7 +294,7 @@ const MarginMaster = (props) => {
 
     //select id for delete row
     const deleteHandeler = async (id, name, ItemID) => {
-        debugger
+        
         const isConfirmed = await customAlert({
             Type: 7,
             Message: `Are you sure you want to delete this Item : "${name}"`

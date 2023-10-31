@@ -40,7 +40,7 @@ export const Rows = (data) => {
 
 
     StockDetails.forEach((element, key) => {
-        debugger
+        
         const tableitemRow = [
             `${element.GroupName}`,
             `${element.SubGroupName}`,
