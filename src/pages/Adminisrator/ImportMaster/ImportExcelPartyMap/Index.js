@@ -174,6 +174,20 @@ const ImportExcelPartyMap = (props) => {
             dataField: "fieldName",
         },
         {
+            text: "Customer Address",
+            dataField: "CustomerAddress",
+        },
+        {
+            text: "GSTIN No",
+            dataField: "GSTIN",
+        },
+        {
+            text: "Route",
+            dataField: "RouteName",
+        },
+
+
+        {
             text: "Related Key Field",
             dataField: "mapValue",
             formatter: (cellContent, row) => (
@@ -291,7 +305,7 @@ const ImportExcelPartyMap = (props) => {
 
                 <div className="page-content">
                     <PartyDropdown_Common
-                    changeButtonHandler={change_ButtonHandler} />
+                        changeButtonHandler={change_ButtonHandler} />
 
                     <div className="px-2 c_card_header text-black" >
                         <div className="px-2   c_card_filter text-black" >
