@@ -49,7 +49,7 @@ const CommonPurchaseList = (props) => {
 
   const { getList, editId, deleteId, postSucc, updateSucc, deleteSucc, viewId } =
     props.action;
-  
+
   const {
     MasterModal,
     masterPath,
@@ -290,17 +290,27 @@ const CommonPurchaseList = (props) => {
   }
 
   const secondLastColumn = () => {  // ======================== for List Page Action Button ================================
-    if ((history.location.pathname === url.INVOICE_LIST_1 ||
-      history.location.pathname === url.CREDIT_LIST ||
-      history.location.pathname === url.DEBIT_LIST ||
-      history.location.pathname === url.GOODS_CREDIT_LIST ||
-      history.location.pathname === url.GOODS_DEBIT_LIST)) {// INVOICE_LIST_1 E_Invoice buttons
+
+    const hasRole = (role) => userAccState[role];
+
+    const isUploadAccess = hasRole("RoleAccess_E-Invoice Upload");
+    const isCancelAccess = hasRole("RoleAccess_E-Invoice cancel");
+    const isPrintAccess = hasRole("RoleAccess_E-Invoice Print");
+
+    if (isUploadAccess || isCancelAccess || isPrintAccess) {// INVOICE_LIST_1 E_Invoice buttons
       return E_Invoice_ActionsButtonFunc({ ...props, dispatch, userAccState, })
     }
   }
 
   const thirdLastColumn = () => {  // ======================== for List Page Action Button ================================
-    if ((history.location.pathname === url.INVOICE_LIST_1)) {// INVOICE_LIST_1 E_WayBill buttons
+
+    const hasRole = (role) => userAccState[role];
+
+    const isUploadAccess = hasRole("RoleAccess_E-WayBill Upload");
+    const isCancelAccess = hasRole("RoleAccess_E-WayBill cancel");
+    const isPrintAccess = hasRole("RoleAccess_E-WayBill Print");
+
+    if (isUploadAccess || isCancelAccess || isPrintAccess) {// INVOICE_LIST_1 E_WayBill buttons
       return E_WayBill_ActionsButtonFunc({ ...props, dispatch, userAccState, })
     }
   }

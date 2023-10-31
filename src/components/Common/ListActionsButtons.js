@@ -186,7 +186,7 @@ export const listPageActionsButtonFunc = (props) => {
         const dummyDisable_MakeBtn = !canMakeBtn && makeBtnShow;
         const dummyDisable_SendToScm = !isPartyTypeIDInSendToScm && sendToScmBtnFunc;
         const dummyDisable_CreditNoteBtn = rowData.IsApproved
-        
+
 
 
 
@@ -423,7 +423,7 @@ export const listPageActionsButtonFunc = (props) => {
 };
 
 // ************************* E-Way Bill Button *****************************************************
-export const E_WayBill_ActionsButtonFunc = ({ dispatch, reducers, e_WayBill_ActionsBtnFunc, deleteName }) => {
+export const E_WayBill_ActionsButtonFunc = ({ dispatch, reducers, e_WayBill_ActionsBtnFunc, deleteName, userAccState }) => {
 
     const { listBtnLoading } = reducers;
 
@@ -474,8 +474,9 @@ export const E_WayBill_ActionsButtonFunc = ({ dispatch, reducers, e_WayBill_Acti
         }
     };
 
-    const renderButtonIfNeeded = ({ condition, btnmode, iconClass, actionFunc, title, rowData, isDummyBtn }) => {
-        if (!condition && !isDummyBtn) return null;
+    const renderButtonIfNeeded = ({ condition, btnmode, iconClass, actionFunc, title, rowData, isDummyBtn, isAccess }) => {
+        
+        if ((!condition && !isDummyBtn) || !isAccess) return null;
         if (!isDummyBtn) {
             return (
                 <Button
@@ -514,8 +515,17 @@ export const E_WayBill_ActionsButtonFunc = ({ dispatch, reducers, e_WayBill_Acti
 
     return {
         text: "E-Way Bill",
-        formatExtraData: { listBtnLoading },
-        formatter: (__cell, rowData,) => {
+        formatExtraData: { listBtnLoading, userAccState },
+        formatter: (__cell, rowData, rowIndex, formatExtraDat) => {
+
+            const { userAccState } = formatExtraDat
+            const hasRole = (role) => userAccState[role];
+
+
+            const isUploadAccess = hasRole("RoleAccess_E-WayBill Upload");
+            const isCancelAccess = hasRole("RoleAccess_E-WayBill cancel");
+            const isPrintAccess = hasRole("RoleAccess_E-WayBill Print");
+
 
             const canUpload = ((rowData.InvoiceUploads.length === 0) || (rowData.InvoiceUploads[0]?.EwayBillNo === null));
             const canCancel = (!canUpload && (rowData.InvoiceUploads[0]?.EwayBillIsCancel === false));
@@ -530,7 +540,8 @@ export const E_WayBill_ActionsButtonFunc = ({ dispatch, reducers, e_WayBill_Acti
                         actionFunc: Uploaded_EwayBillHandler,
                         title: "E-WayBill Upload",
                         rowData: rowData,
-                        isDummyBtn: !canUpload
+                        isDummyBtn: !canUpload,
+                        isAccess: isUploadAccess
                     })}
 
                     {renderButtonIfNeeded({
@@ -540,7 +551,8 @@ export const E_WayBill_ActionsButtonFunc = ({ dispatch, reducers, e_WayBill_Acti
                         actionFunc: Cancel_EwayBillHandler,
                         title: "Cancel E-WayBill",
                         rowData: rowData,
-                        isDummyBtn: !canCancel
+                        isDummyBtn: !canCancel,
+                        isAccess: isCancelAccess
                     })}
 
                     {renderButtonIfNeeded({
@@ -550,7 +562,8 @@ export const E_WayBill_ActionsButtonFunc = ({ dispatch, reducers, e_WayBill_Acti
                         actionFunc: Print_EwayBillHander,
                         title: "Print E-WayBill",
                         rowData: rowData,
-                        isDummyBtn: !canPrint
+                        isDummyBtn: !canPrint,
+                        isAccess: isPrintAccess
 
                     })}
                 </div>
@@ -559,9 +572,19 @@ export const E_WayBill_ActionsButtonFunc = ({ dispatch, reducers, e_WayBill_Acti
     };
 };
 
+
+
+
+
+
+
+
+
+
+
 // ************************* E-Invoice Button *****************************************************
 
-export const E_Invoice_ActionsButtonFunc = ({ dispatch, reducers, deleteName }) => {
+export const E_Invoice_ActionsButtonFunc = ({ dispatch, reducers, deleteName, userAccState }) => {
     const { listBtnLoading } = reducers;
 
     function Uploaded_EInvoiceHandler(btnId, rowData) {
@@ -613,8 +636,8 @@ export const E_Invoice_ActionsButtonFunc = ({ dispatch, reducers, deleteName }) 
         return "";
     };
 
-    const renderButtonIfNeeded = ({ condition, btnmode, iconClass, actionFunc, title, rowData, isDummyBtn }) => {
-        if (!condition && !isDummyBtn) return null;
+    const renderButtonIfNeeded = ({ condition, btnmode, iconClass, actionFunc, title, rowData, isDummyBtn, isAccess }) => {
+        if ((!condition && !isDummyBtn) || !isAccess) return null;
         if (!isDummyBtn) {
             return (
                 <Button
@@ -656,12 +679,20 @@ export const E_Invoice_ActionsButtonFunc = ({ dispatch, reducers, deleteName }) 
     }
     return {
         text: "E-Invoice",
-        formatExtraData: { listBtnLoading },
-        formatter: (__cell, rowData) => {
+        formatExtraData: { listBtnLoading, userAccState },
+        formatter: (__cell, rowData, rowIndex, formatExtraDat) => {
+
+            const { userAccState } = formatExtraDat
+            const hasRole = (role) => userAccState[role];
 
             const canUpload = ((rowData.InvoiceUploads.length === 0) || (rowData.InvoiceUploads[0]?.Irn === null));
             const canCancel = ((!canUpload) && (rowData.InvoiceUploads[0]?.EInvoiceIsCancel === false));
             const canPrint = ((!canUpload) && (rowData.InvoiceUploads[0]?.EInvoicePdf !== null));
+
+            const isUploadAccess = hasRole("RoleAccess_E-Invoice Upload");
+            const isCancelAccess = hasRole("RoleAccess_E-Invoice cancel");
+            const isPrintAccess = hasRole("RoleAccess_E-Invoice Print");
+
 
             return (
                 <div id="ActionBtn" >
@@ -673,6 +704,7 @@ export const E_Invoice_ActionsButtonFunc = ({ dispatch, reducers, deleteName }) 
                         title: "E-Invoice Upload",
                         rowData: rowData,
                         isDummyBtn: !canUpload,
+                        isAccess: isUploadAccess
                     })}
 
                     {renderButtonIfNeeded({
@@ -683,6 +715,9 @@ export const E_Invoice_ActionsButtonFunc = ({ dispatch, reducers, deleteName }) 
                         title: "Cancel E-Invoice",
                         rowData: rowData,
                         isDummyBtn: !canCancel,
+                        isAccess: isCancelAccess
+
+
                     })}
 
                     {renderButtonIfNeeded({
@@ -693,6 +728,7 @@ export const E_Invoice_ActionsButtonFunc = ({ dispatch, reducers, deleteName }) 
                         title: "Print E-Invoice",
                         rowData: rowData,
                         isDummyBtn: !canPrint,
+                        isAccess: isPrintAccess
                     })}
                 </div>
             );
