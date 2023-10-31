@@ -28,13 +28,13 @@ import {
 import './scss.scss'
 import { C_Button, Go_Button, PageLoadingSpinner } from "../../../../components/Common/CommonButton";
 import { C_Select } from "../../../../CustomValidateForm";
+import NewCommonPartyDropdown from "../../../../components/Common/NewCommonPartyDropdown";
 
 
 const InvoiceExcelUpload = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory()
-    const userAdminRole = _cfunc.loginUserAdminRole();
 
     const preDetails = { fileFiled: '', invoice: [], party: [], invoiceDate: [], amount: 0, invoiceNO: [], partyNO: [] }
 
@@ -42,17 +42,16 @@ const InvoiceExcelUpload = (props) => {
     const [selectedFiles, setselectedFiles] = useState([])
     const [readJsonDetail, setReadJsonDetail] = useState(preDetails)
     const [preViewDivShow, setPreViewDivShow] = useState(false)
-    const [partySelect, SetPartySelect] = useState([])
 
 
     const {
         postMsg,
         userAccess,
         compareParameter = [],
-        partyList,
         partyDropDownLoading,
         compareParamLoading,
         saveBtnLoading,
+        commonPartyDropSelect
     } = useSelector((state) => ({
         postMsg: state.ImportExcelPartyMap_Reducer.invoiceExcelUploadMsg,
         saveBtnLoading: state.ImportExcelPartyMap_Reducer.invoiceUploadSaveLoading,
@@ -63,12 +62,15 @@ const InvoiceExcelUpload = (props) => {
         compareParameter: state.ImportExportFieldMap_Reducer.addGoButton,
         compareParamLoading: state.ImportExportFieldMap_Reducer.goBtnLoading,
         userAccess: state.Login.RoleAccessUpdateData,
+
+        commonPartyDropSelect: state.CommonPartyDropdownReducer.commonPartyDropSelect
     }));
-    debugger
+
+    
+   // Common Party Dropdown useEffect
     useEffect(() => {
         dispatch(GoButton_ImportFiledMap_AddSuccess([]));
-        // dispatch(getPartyListAPI());
-        if (!userAdminRole) {
+        if (commonPartyDropSelect.value > 0) {
             goButtonHandler()
         }
         return () => {
@@ -77,7 +79,7 @@ const InvoiceExcelUpload = (props) => {
             dispatch(commonPageFieldSuccess(null));
         }
 
-    }, []);
+    }, [commonPartyDropSelect]);
 
     const location = { ...history.location }
     const hasShowModal = props.hasOwnProperty(mode.editValue)
@@ -99,8 +101,7 @@ const InvoiceExcelUpload = (props) => {
         };
     }, [userAccess])
 
-
-
+   
     useEffect(async () => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
@@ -111,7 +112,6 @@ const InvoiceExcelUpload = (props) => {
             });
             setselectedFiles([]);
             setPreViewDivShow(false);
-            SetPartySelect('');
             setReadJsonDetail(preDetails);
         }
         else if (postMsg.Status === true) {
@@ -126,9 +126,8 @@ const InvoiceExcelUpload = (props) => {
 
     function goButtonHandler() {
 
-        let partyId = userAdminRole ? partySelect.value : _cfunc.loginPartyID();
         const jsonBody = JSON.stringify({
-            PartyID: partyId,
+            PartyID: _cfunc.loginSelectedPartyID(),
             CompanyID: _cfunc.loginCompanyID()
         })
         dispatch(GoButton_ImportFiledMap_Add({ jsonBody }))
@@ -252,7 +251,7 @@ const InvoiceExcelUpload = (props) => {
                         "InvoiceNumber": ele[parArr.InvoiceNumber] ? ele[parArr.InvoiceNumber] : '',
                         "FullInvoiceNumber": ele[parArr.InvoiceNumber] ? ele[parArr.InvoiceNumber] : '',
                         "Customer": ele[parArr.Customer] ? ele[parArr.Customer] : '',
-                        "Party": userAdminRole ? partySelect.value : _cfunc.loginPartyID(),
+                        "Party":  _cfunc.loginSelectedPartyID(),
                         CreatedBy: _cfunc.loginUserID(),
                         UpdatedBy: _cfunc.loginUserID(),
                         "InvoiceDate": ele[parArr.InvoiceDate] ? ele[parArr.InvoiceDate] : '',
@@ -307,44 +306,11 @@ const InvoiceExcelUpload = (props) => {
         return (
             <React.Fragment>
                 <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
-                <PageLoadingSpinner isLoading={((partyDropDownLoading && (userAdminRole)) || compareParamLoading)} />
+                <PageLoadingSpinner isLoading={((partyDropDownLoading) || compareParamLoading)} />
 
-                <form noValidate>
                     <div className="page-content">
 
-                        <div className="px-2   c_card_filter text-black" >
-
-                            {userAdminRole && <div className="row pt-2">
-                                <Col sm="5">
-                                    <FormGroup className="row px-1">
-                                        <Label className="col-sm-5 p-2" style={{ width: "83px" }}>
-                                            Party
-                                        </Label>
-                                        <Col sm="6">
-                                            <C_Select
-                                                value={partySelect}
-                                                isSearchable={true}
-                                                isLoading={partyDropDownLoading}
-                                                className="react-dropdown"
-                                                classNamePrefix="dropdown"
-                                                options={partyList.map((data) => ({
-                                                    value: data.id,
-                                                    label: data.Name,
-                                                }))}
-
-                                                onChange={(e) => { SetPartySelect(e) }}
-                                                styles={{ menu: (provided) => ({ ...provided, zIndex: 2 }) }}
-                                            />
-                                        </Col>
-                                    </FormGroup>
-                                </Col>
-                                <Col sm="1" className="mb-2">
-                                    <Go_Button
-                                        // loading={reducers.loading}
-                                        onClick={goButtonHandler} />
-                                </Col>
-                            </div>}
-                        </div>
+                        <NewCommonPartyDropdown />
 
                         <div className="px-2 c_card_header text-black mt-2" >
 
@@ -521,8 +487,6 @@ const InvoiceExcelUpload = (props) => {
                         </div>
 
                     </div>
-
-                </form>
 
 
             </React.Fragment >
