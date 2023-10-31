@@ -29,7 +29,7 @@ function pageFooter(doc, data) {
 }
 
 const ReturnReport = (data) => {
-    debugger
+    
     const systemSetting = loginSystemSetting();
     data["PrintType"] = (systemSetting.ReturnA4Print === "1" ? false : true)
     if (systemSetting.ReturnA4Print === "1") {

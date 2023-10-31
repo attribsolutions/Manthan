@@ -30,7 +30,7 @@ const NewCommonPartyDropdown = ({ pageMode }) => {
     }, [commonPartyDropSelect]);
 
     const updateSelectedParty = () => {
-        debugger
+        
         if (selectedParty.value === 0) {
             customAlert({ Type: 3, Message: "Please Select Party" });
             return;

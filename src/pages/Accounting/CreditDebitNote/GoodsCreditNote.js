@@ -202,7 +202,7 @@ const GoodsCreditNote = (props) => {
                     let dataCount = ""
 
                     if (internal_pageMode === mode.modeSTPsave) {
-                        debugger
+                        
                         values.Customer = { label: CustomerName, value: Customer };
                         setTableArr(ReturnItems)
                         dataCount = ReturnItems.length;
@@ -780,7 +780,7 @@ const GoodsCreditNote = (props) => {
             };
 
             const isGrandAmtRound = systemSetting.CreditDebitAmountRoundConfiguration === '1';
-            debugger
+            
             const jsonBody = JSON.stringify({
                 CRDRNoteDate: values.CRDRNoteDate,
                 Customer: values.Customer.value,

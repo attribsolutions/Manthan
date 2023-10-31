@@ -7,7 +7,7 @@ import { date_dmy_func } from "../../../components/Common/CommonFunction";
 
 // List API
 function* Get_ClaimTrackingEntry_List_GenFunc({ config }) {     // getList API
-    debugger
+    
     const { jsonBody, subPageMode, goBtnMode } = config
     try {
         const response = yield call(apiCall.ClaimList_Get_Api, jsonBody);

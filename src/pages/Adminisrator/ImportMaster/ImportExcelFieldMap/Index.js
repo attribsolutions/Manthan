@@ -141,9 +141,9 @@ const ImportExcelFieldMap = (props) => {
 
 
     useEffect(() => {
-        debugger
+        
         goButtonItem.sort((a, b) => {
-            debugger
+            
             if (a.Sequence === null && b.Sequence !== null) {
                 return 1; // 'a' with id 0 comes after 'b' with a non-zero id
             } else if (a.Sequence !== null && b.Sequence === null) {
@@ -253,7 +253,7 @@ const ImportExcelFieldMap = (props) => {
         const invalid = []
         let partyId = _cfunc.loginUserAdminRole() ? partySelect.value : _cfunc.loginPartyID()
         goButtonItem.forEach(i => {
-            debugger
+            
             if ((((i.Value === '') || (i.Value === null)) && (i.IsCompulsory === true))) {
                 invalid.push({ [i.FieldName]: "this filed Requird." })
             }

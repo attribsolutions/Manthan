@@ -74,7 +74,7 @@ export const readExcelFile = async ({ file, compareParameter }) => {
       })
       return []
     }
-    debugger
+    
     return jsonResult
 
   } catch (e) { }
