@@ -99,6 +99,7 @@ const ImportExcelPartyMap = (props) => {
     const hasShowModal = props.hasOwnProperty(mode.editValue)
 
     const values = { ...state.values }
+    debugger
     const { isError } = state;
     const { fieldLabel } = state;
     // userAccess useEffect
@@ -174,18 +175,22 @@ const ImportExcelPartyMap = (props) => {
             dataField: "fieldName",
         },
         {
+            text: "Route",
+            dataField: "RouteName",
+            hidden: values.MapType.value !== 1
+        },
+
+        {
             text: "Customer Address",
             dataField: "CustomerAddress",
+            hidden: values.MapType.value !== 1
+
         },
         {
             text: "GSTIN No",
             dataField: "GSTIN",
+            hidden: values.MapType.value !== 1
         },
-        {
-            text: "Route",
-            dataField: "RouteName",
-        },
-
 
         {
             text: "Related Key Field",

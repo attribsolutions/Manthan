@@ -31,13 +31,18 @@ function* GoButtonExcel_ImportMaster_GenFun({ config }) {              // Go buu
   const { mapType, partyId } = config
 
   try {
+    debugger
     let newResp = []
     if (mapType === 1) {
       const response = yield call(ImportMaster_Map_Customer_GoButton_API, config);
+
       newResp = response.Data.map(i => ({
         "id": i.id,
         "party": !(i.Party_id === null) ? i.Party_id : partyId,
         "fieldName": i.CustomerName,
+        "CustomerAddress": i.CustomerAddress,
+        "GSTIN": i.GSTIN,
+        "RouteName": i.RouteName,
         "fieldId": i.Customer,
         "mapValue": i.MapCustomer,
       }))
@@ -49,6 +54,7 @@ function* GoButtonExcel_ImportMaster_GenFun({ config }) {              // Go buu
         "party": !(i.Party_id === null) ? i.Party_id : partyId,
         "fieldName": i.Name,
         "fieldId": i.Item_id,
+
         "mapValue": i.MapItem,
       }))
     } else {
@@ -58,6 +64,7 @@ function* GoButtonExcel_ImportMaster_GenFun({ config }) {              // Go buu
         "id": i.id,
         "party": !(i.Party_id === null) ? i.Party_id : partyId,
         "fieldName": i.Name,
+
         "fieldId": i.id,
         "mapValue": i.MapUnit,
       }))
