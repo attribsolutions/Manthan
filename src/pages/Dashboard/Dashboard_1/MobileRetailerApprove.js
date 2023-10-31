@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
 import * as pageId from "../../../routes/allPageID"
 import { mode, url } from "../../../routes";
-import { loginPartyID } from "../../../components/Common/CommonFunction";
+import { loginPartyID, loginSelectedPartyID } from "../../../components/Common/CommonFunction";
 import { PartyListforApproval_Action, PartyListforApproval_Success, editPartyID } from "../../../store/Administrator/PartyRedux/action";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
@@ -25,21 +25,24 @@ const MobileRetailerApprove = () => {
             editData: state.PartyMasterReducer.editData,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList,
+            commonPartyDropSelect: state.CommonPartyDropdownReducer.commonPartyDropSelect
         })
     );
 
-    const { goBtnLoading, tableList, editData } = reducers;
+    const { goBtnLoading, tableList, editData, commonPartyDropSelect } = reducers;
 
     //  This UseEffect => Featch Modules List data  First Rendering
     useEffect(() => {
         const page_Id = pageId.RETAILER_APPROVAL
         dispatch(commonPageFieldListSuccess(null));
         dispatch(commonPageFieldList(page_Id));
-        goButtonHandler();
+        if (commonPartyDropSelect.value > 0) {
+            goButtonHandler();
+        }
         return () => {
             dispatch(PartyListforApproval_Success([]));
         }
-    }, []);
+    }, [commonPartyDropSelect]);
 
     useEffect(() => {
 
@@ -56,7 +59,7 @@ const MobileRetailerApprove = () => {
     const goButtonHandler = () => {
         try {
             const jsonBody = JSON.stringify({
-                PartyID: loginPartyID(),
+                PartyID: loginSelectedPartyID()
             });
 
             dispatch(PartyListforApproval_Action(jsonBody));
