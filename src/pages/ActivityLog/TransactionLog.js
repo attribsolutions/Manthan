@@ -106,7 +106,7 @@ const TransactionLog = () => {
         if (response.Status === true && response.StatusCode === 200) {
             setViewbtnLoading(false)
             if (response.Data.length > 0) {
-                if (response.Data[0].JsonData2.length > 0) {
+                if (response.Data[0].TransactionlogJsondata.length > 0) {
                     setJsonData(response.Data[0])
                     setModal_view(true)
                 }
@@ -242,7 +242,7 @@ const TransactionLog = () => {
             formatExtraData: { isCopy: isCopy, },
 
             formatter: (cellContent, rowData, key, formatExtra) => {
-                
+
                 let { isCopy } = formatExtra;
                 return (<>
                     < Button
