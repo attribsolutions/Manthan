@@ -37,6 +37,8 @@ import { SaveButton } from "../../../components/Common/CommonButton";
 import {
     btnIsDissablefunc,
     loginCompanyID,
+    loginPartyName,
+    loginSelectedPartyID,
     loginUserDetails,
     loginUserID,
     metaTagLabel
@@ -46,6 +48,7 @@ import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { saveMsgUseEffect, userAccessUseEffect } from "../../../components/Common/CommonUseEffect";
 import { getpartysetting_API, savePartySetting, savePartySettingMaster_Success } from "../../../store/Administrator/PartySetting/action";
 import Slidewithcaption from "../../../components/Common/CommonImageComponent";
+import NewCommonPartyDropdown from "../../../components/Common/NewCommonPartyDropdown";
 
 
 const InvoiceConfiguration = (props) => {
@@ -114,7 +117,7 @@ const InvoiceConfiguration = (props) => {
         const page_Id = pageId.INVOICE_CONFIGURATION
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
-        dispatch(getpartysetting_API(loginUserDetails().Party_id, loginCompanyID()))
+        dispatch(getpartysetting_API(loginSelectedPartyID(), loginCompanyID()))
 
 
     }, []);
@@ -174,7 +177,7 @@ const InvoiceConfiguration = (props) => {
     }), [postMsg])
 
     useEffect(() => {
-        dispatch(getpartysetting_API(loginUserDetails().Party_id, loginCompanyID()))
+        dispatch(getpartysetting_API(loginSelectedPartyID(), loginCompanyID()))
     }, [postMsg])
 
 
@@ -225,7 +228,7 @@ const InvoiceConfiguration = (props) => {
             }
 
             setState((i) => {
-
+                debugger
                 const a = { ...i }
                 a.values.Invoicea4 = Data.A4Print;
                 a.values.AddressInInvoice = Data.AddressOnInvoice;
@@ -237,7 +240,7 @@ const InvoiceConfiguration = (props) => {
                 a.values.AutoEInvoice = Data.AutoEInvoice;
                 a.values.CreditDebitAmountRound = Data.CreditDebitAmountRoundConfiguration;
                 a.values.PaymentQr = Data.PaymentQRCodeimageonInvoice;
-                a.values.PaymentQr["Image"] = SystemSetting.PaymentQRCodeimageonInvoice;
+                a.values.PaymentQr["Image"] = SystemSetting.Qr_Image;
                 a.values.ReturnA4Print = Data.ReturnA4Print;
                 a.values.CRDRNoteA4Print = Data.CRDRNoteA4Print;
 
@@ -279,40 +282,52 @@ const InvoiceConfiguration = (props) => {
             }];
         } else {
             slides = [{
-                Image: SystemSetting.PaymentQRCodeimageonInvoice
+                Image: SystemSetting.Qr_Image
             }];
         }
         setImageTable(slides)
     }
 
     function convertImageToFile(imageUrl) {
-
-        return fetch(`https://cors-anywhere.herokuapp.com/${imageUrl}`)
+        const Party_Name = loginPartyName()
+        return fetch(imageUrl)
             .then(response => response.blob())
             .then(blob => {
-                const filename = imageUrl.split('/').pop();
+                const filename = `${Party_Name}_PaymentQr.jpeg`;
                 return new File([blob], filename);
             });
     }
     function isFile(obj) {
         return obj instanceof File || (obj instanceof Blob && typeof obj.name === "string");
     }
+    function isURL(str) {
+        const urlPattern = new RegExp('^(ftp|http|https):\/\/[^ "]+$');
+        return urlPattern.test(str);
+    }
 
     useEffect(async () => {
 
+
+
         if (Object.keys(SystemSetting).length !== 0) {
-            const file = await convertImageToFile(SystemSetting.PaymentQRCodeimageonInvoice)
+            const file = await convertImageToFile(SystemSetting.Qr_Image)
 
-            setState((i) => {
-                const a = { ...i }
-                if (isFile(file)) {
-                    a.values.PaymentQr["Image"] = [file];
-                } else {
+
+            if (!isURL(SystemSetting.Qr_Image)) {
+                setState((i) => {
+                    const a = { ...i }
                     a.values.PaymentQr["Image"] = [null];
-                }
-                return a
-            })
-
+                    return a
+                })
+            } else {
+                setState((i) => {
+                    const a = { ...i }
+                    if (isFile(file)) {
+                        a.values.PaymentQr["Image"] = [file];
+                    }
+                    return a
+                })
+            }
         }
     }, [SystemSetting])
 
@@ -332,7 +347,7 @@ const InvoiceConfiguration = (props) => {
 
                 const arr = {
                     Setting: i.id,
-                    Party: loginUserDetails().Party_id,
+                    Party: loginSelectedPartyID(),
                     Company: loginCompanyID(),
                     CreatedBy: loginUserID(),
                     Value: i.Value
@@ -340,8 +355,8 @@ const InvoiceConfiguration = (props) => {
                 BulkData.push(arr)
 
             })
-
-            formData.append(`uploaded_images_${values.PaymentQr.id}`, null); // Convert to JSON string
+            debugger
+            formData.append(`uploaded_images_${values.PaymentQr.id}`, values.PaymentQr.Image[0]); // Convert to JSON string
             formData.append('BulkData', JSON.stringify(BulkData)); // Convert to JSON string
             dispatch(savePartySetting({ formData }));
 
@@ -367,6 +382,7 @@ const InvoiceConfiguration = (props) => {
         return (
             <React.Fragment>
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
+                    <NewCommonPartyDropdown />
                     <Modal
                         isOpen={modal_backdrop}
                         toggle={() => {

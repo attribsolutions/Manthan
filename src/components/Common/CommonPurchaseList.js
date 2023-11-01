@@ -290,29 +290,41 @@ const CommonPurchaseList = (props) => {
   }
 
   const secondLastColumn = () => {  // ======================== for List Page Action Button ================================
-
     const hasRole = (role) => userAccState[role];
 
-    const isUploadAccess = hasRole("RoleAccess_E-Invoice Upload");
-    const isCancelAccess = hasRole("RoleAccess_E-Invoice cancel");
-    const isPrintAccess = hasRole("RoleAccess_E-Invoice Print");
+    const isUploadAccess = hasRole("RoleAccess_E-WayBillUpload");
+    const isCancelAccess = hasRole("RoleAccess_E-WayBillcancel");
+    const isPrintAccess = hasRole("RoleAccess_E-WayBillPrint");
 
-    if (isUploadAccess || isCancelAccess || isPrintAccess) {// INVOICE_LIST_1 E_Invoice buttons
-      return E_Invoice_ActionsButtonFunc({ ...props, dispatch, userAccState, })
+
+    if (isUploadAccess || isCancelAccess || isPrintAccess) {// INVOICE_LIST_1 E_WayBill buttons
+
+      return E_WayBill_ActionsButtonFunc({ ...props, dispatch, userAccState, })
     }
+
   }
 
   const thirdLastColumn = () => {  // ======================== for List Page Action Button ================================
 
+
+
+
     const hasRole = (role) => userAccState[role];
 
-    const isUploadAccess = hasRole("RoleAccess_E-WayBill Upload");
-    const isCancelAccess = hasRole("RoleAccess_E-WayBill cancel");
-    const isPrintAccess = hasRole("RoleAccess_E-WayBill Print");
+    const isUploadAccess = hasRole("RoleAccess_E-InvoiceUpload");
+    const isCancelAccess = hasRole("RoleAccess_E-Invoicecancel");
+    const isPrintAccess = hasRole("RoleAccess_E-InvoicePrint");
 
-    if (isUploadAccess || isCancelAccess || isPrintAccess) {// INVOICE_LIST_1 E_WayBill buttons
-      return E_WayBill_ActionsButtonFunc({ ...props, dispatch, userAccState, })
+    if (isUploadAccess || isCancelAccess || isPrintAccess) {// INVOICE_LIST_1 E_Invoice buttons
+      return E_Invoice_ActionsButtonFunc({ ...props, dispatch, userAccState, })
     }
+
+
+
+
+
+
+
   }
 
   const [tableColumns, defaultSorted] = DynamicColumnHook({

@@ -376,7 +376,7 @@ export const reportHeder1 = (doc, data) => {
 
 
     doc.line(570, data.isQR ? initial_y : 144, 30, data.isQR ? initial_y : 144);// full horizontal bill by bill to below line 
-    
+
     doc.line(408, data.isQR ? initial_y : 144, 408, 16);//vertical line header section billby 
     doc.line(220, data.isQR ? initial_y : 144, 220, data.isQR ? 103 : 46);//vertical  line header section billto
 
@@ -408,10 +408,8 @@ export const reportHeder3 = (doc, data) => {
 
 
 export const reportFooter = (doc, data) => {
-
-    doc.addImage(`https://cors-anywhere.herokuapp.com/${data.Period.PaymentQr}`, 'JPEG', 335, 303, 105, 96);
-    console.log("QRCodeImageUrl", `https://cors-anywhere.herokuapp.com/${data.Period.PaymentQr}`)
-
+    debugger
+    // doc.addImage(data.SettingData.Qr_Image, 'JPEG', 335, 303, 105, 96);
     doc.setDrawColor(0, 0, 0);
     doc.line(570, 308, 30, 308);//horizontal line  (4)
     doc.line(570, 380, 435, 380);//horizontal line  (5)
@@ -998,9 +996,8 @@ export const tableBodyWithIGST = (doc, data) => {
 
 
 export const reportFooterA4 = (doc, data) => {
-    doc.addImage(`https://cors-anywhere.herokuapp.com/${data.Period.PaymentQr}`, 'JPEG', 337, 728, 100, 86);
-    console.log("QRCodeImageUrl", `https://cors-anywhere.herokuapp.com/${data.Period.PaymentQr}`)
-
+    debugger
+    // doc.addImage(data.SettingData.Qr_Image, 'JPEG', 337, 728, 100, 86);
     doc.setDrawColor(0, 0, 0);
     doc.line(570, 730, 30, 730);//horizontal line  (4)
     doc.line(570, 815, 435, 815);//horizontal line  (5)

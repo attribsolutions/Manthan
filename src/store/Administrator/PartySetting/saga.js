@@ -21,20 +21,21 @@ function* PartySetting_GenFunc(config) {
     try {
 
         const response = yield call(PartySettingApi, config.Party_id, config.Comapny_id);
+        debugger
         const singleObject = {};
         const SystemSetting = {};
         for (const item of response.Data) {
-            
+
             SystemSetting[item.SystemSetting.replace(/\s/g, '')] = item.Value
-            if (item.Image) {
-                SystemSetting[item.SystemSetting.replace(/\s/g, '')] = item.Image
+            if (item.SystemSetting === "Payment QR Code image on Invoice") {
+                SystemSetting["Qr_Image"] = item.Image
             }
+
             singleObject[item.SystemSetting.replace(/\s/g, '')] = {
                 SystemSetting: item.SystemSetting,
                 Value: item.Value,
                 id: item.id,
             };
-
         }
         response["Data"] = singleObject
         sessionStorage.setItem("SystemSetting", JSON.stringify(SystemSetting))

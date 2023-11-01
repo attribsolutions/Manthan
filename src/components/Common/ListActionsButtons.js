@@ -174,7 +174,7 @@ export const listPageActionsButtonFunc = (props) => {
         const canItemWisePrint = hasRole("RoleAccess_IsPrint") && downClaimBtnFunc;
         const canMasterClaimPrint = hasRole("RoleAccess_IsPrint") && downClaimBtnFunc;
         const canSendToScm = isPartyTypeIDInSendToScm //  Currently Button  is remove From InVoice List of CX parties  further Development After Discussion  So condition is False
-        const canMakeCreditNoteBtn = (subPageMode === url.SALES_RETURN_LIST) && hasRole("RoleAccess_IsSave") && !rowData.IsApproved
+        const canMakeCreditNoteBtn = (subPageMode === url.SALES_RETURN_LIST) && hasRole("RoleAccess_IsSave") && rowData.IsApproved
 
         const canUpdatebtn = otherBtn_1Func && hasRole("RoleAccess_IsSave")
 
@@ -185,7 +185,8 @@ export const listPageActionsButtonFunc = (props) => {
         const dummyDisable_Delete = (hasRole("RoleAccess_IsDelete") || hasRole("RoleAccess_IsDeleteSelf")) && !canDelete && !canDeleteSelf;
         const dummyDisable_MakeBtn = !canMakeBtn && makeBtnShow;
         const dummyDisable_SendToScm = !isPartyTypeIDInSendToScm && sendToScmBtnFunc;
-        const dummyDisable_CreditNoteBtn = rowData.IsApproved
+
+        const dummyDisable_CreditNoteBtn = !rowData.IsApproved && (subPageMode === url.SALES_RETURN_LIST)
 
 
 
@@ -475,7 +476,7 @@ export const E_WayBill_ActionsButtonFunc = ({ dispatch, reducers, e_WayBill_Acti
     };
 
     const renderButtonIfNeeded = ({ condition, btnmode, iconClass, actionFunc, title, rowData, isDummyBtn, isAccess }) => {
-        
+
         if ((!condition && !isDummyBtn) || !isAccess) return null;
         if (!isDummyBtn) {
             return (
@@ -522,9 +523,10 @@ export const E_WayBill_ActionsButtonFunc = ({ dispatch, reducers, e_WayBill_Acti
             const hasRole = (role) => userAccState[role];
 
 
-            const isUploadAccess = hasRole("RoleAccess_E-WayBill Upload");
-            const isCancelAccess = hasRole("RoleAccess_E-WayBill cancel");
-            const isPrintAccess = hasRole("RoleAccess_E-WayBill Print");
+            const isUploadAccess = hasRole("RoleAccess_E-WayBillUpload");
+            const isCancelAccess = hasRole("RoleAccess_E-WayBillcancel");
+            const isPrintAccess = hasRole("RoleAccess_E-WayBillPrint");
+
 
 
             const canUpload = ((rowData.InvoiceUploads.length === 0) || (rowData.InvoiceUploads[0]?.EwayBillNo === null));
@@ -689,10 +691,9 @@ export const E_Invoice_ActionsButtonFunc = ({ dispatch, reducers, deleteName, us
             const canCancel = ((!canUpload) && (rowData.InvoiceUploads[0]?.EInvoiceIsCancel === false));
             const canPrint = ((!canUpload) && (rowData.InvoiceUploads[0]?.EInvoicePdf !== null));
 
-            const isUploadAccess = hasRole("RoleAccess_E-Invoice Upload");
-            const isCancelAccess = hasRole("RoleAccess_E-Invoice cancel");
-            const isPrintAccess = hasRole("RoleAccess_E-Invoice Print");
-
+            const isUploadAccess = hasRole("RoleAccess_E-InvoiceUpload");
+            const isCancelAccess = hasRole("RoleAccess_E-Invoicecancel");
+            const isPrintAccess = hasRole("RoleAccess_E-InvoicePrint");
 
             return (
                 <div id="ActionBtn" >
