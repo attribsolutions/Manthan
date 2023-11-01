@@ -103,7 +103,7 @@ export async function fileDetails({ compareParameter = [], readjson = [] }) {
   readjson.forEach((index) => {
 
     var invoiceFound = invoiceNO.find(i => (i === (index[fileFiled.InvoiceNumber])))
-    var partyFound = partyNO.find(i => (i === (index[fileFiled.Party])))
+    var partyFound = partyNO.find(i => (i === (index[fileFiled.Customer])))
     var dateFound = partyNO.find(i => (i === (index[fileFiled.InvoiceDate])))
     amount = Number(amount) + Number(index[fileFiled.GrandTotal]);
 
@@ -111,7 +111,7 @@ export async function fileDetails({ compareParameter = [], readjson = [] }) {
       invoiceNO.push((index[fileFiled.InvoiceNumber]))
     };
     if ((partyFound === undefined)) {
-      partyNO.push((index[fileFiled.Party]))
+      partyNO.push((index[fileFiled.Customer]))
     };
     if ((dateFound === undefined)) {
       invoiceDate.push(date_dmy_func((index[fileFiled.InvoiceDate])))

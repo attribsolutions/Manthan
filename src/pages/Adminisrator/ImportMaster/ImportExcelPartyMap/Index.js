@@ -46,8 +46,7 @@ const ImportExcelPartyMap = (props) => {
 
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState('');
-    const [mapTypeSelect, SetMapTypeSelect] = useState("")
-    const [partySelect, SetPartySelect] = useState("")
+
 
     const fileds = {
         Party: "",
@@ -59,7 +58,6 @@ const ImportExcelPartyMap = (props) => {
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
         postMsg,
-        updateMsg,
         pageField,
         userAccess,
         goButtonArr,
@@ -67,18 +65,15 @@ const ImportExcelPartyMap = (props) => {
         listBtnLoading,
         saveBtnloading,
         partyDropDownLoading,
-        commonPartyDropSelect
     } = useSelector((state) => ({
         saveBtnloading: state.GroupReducer.saveBtnloading,
         listBtnLoading: state.ImportExcelPartyMap_Reducer.listBtnLoading,
         postMsg: state.ImportExcelPartyMap_Reducer.postMsg,
-        updateMsg: state.BOMReducer.updateMsg,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
         goButtonArr: state.ImportExcelPartyMap_Reducer.addGoButton,
         partyList: state.PartyMasterReducer.partyList,
         partyDropDownLoading: state.PartyMasterReducer.goBtnLoading,
-        commonPartyDropSelect: state.CommonPartyDropdownReducer.commonPartyDropSelect
     }));
     useEffect(() => {
         const page_Id = pageId.IMPORT_MASTER_MAP
@@ -95,11 +90,9 @@ const ImportExcelPartyMap = (props) => {
     }, []);
 
     const location = { ...history.location }
-    const hasShowloction = location.hasOwnProperty(mode.editValue)
     const hasShowModal = props.hasOwnProperty(mode.editValue)
 
     const values = { ...state.values }
-    debugger
     const { isError } = state;
     const { fieldLabel } = state;
     // userAccess useEffect
@@ -175,22 +168,18 @@ const ImportExcelPartyMap = (props) => {
             dataField: "fieldName",
         },
         {
-            text: "Route",
-            dataField: "RouteName",
-            hidden: values.MapType.value !== 1
-        },
-
-        {
             text: "Customer Address",
             dataField: "CustomerAddress",
-            hidden: values.MapType.value !== 1
-
         },
         {
             text: "GSTIN No",
             dataField: "GSTIN",
-            hidden: values.MapType.value !== 1
         },
+        {
+            text: "Route",
+            dataField: "RouteName",
+        },
+
 
         {
             text: "Related Key Field",
@@ -216,14 +205,14 @@ const ImportExcelPartyMap = (props) => {
 
     async function goButtonHandler(event) {
         event.preventDefault();
-        const btnId = event.target.id
-        try {
-            btnIsDissablefunc({ btnId, state: true })
+        const   mapType = values.MapType.value;
+        if(mapType>0){
             let partyId = _cfunc.loginSelectedPartyID();
-            let mapType = values.MapType.value;
-
             dispatch(GoButton_ImportExcelPartyMap({ partyId, mapType }))
-        } catch (error) { }
+        }else{
+            customAlert({Type:3,
+            Message:"Please select mapping type"})
+        }
     };
 
     function change_ButtonHandler(e) {
@@ -240,64 +229,52 @@ const ImportExcelPartyMap = (props) => {
 
         event.preventDefault();
 
-        async function funcForParty() {
-            let jsonArr = []
-            await goButtonArr.forEach(i => {
-                if ((!(i.mapValue === '') && !(i.mapValue === null))) {
-                    jsonArr.push({
-                        "Party": i.party,
-                        "Customer": i.fieldId,
-                        "MapCustomer": i.mapValue,
-                        "CreatedBy": loginUserID(),
-                        "UpdatedBy": loginUserID()
-                    })
+        const mapType = values.MapType.value;
+        const jsonArr = [];
+        let mapValueToFieldIds = new Map();
+        let duplicateFieldIds = [];
+
+        await goButtonArr.forEach((i) => {
+            if (i.mapValue !== '' && i.mapValue !== null) {
+                const mapValue = i.mapValue;
+
+                if (!mapValueToFieldIds.has(mapValue)) {
+                    mapValueToFieldIds.set(mapValue, [i.fieldName]);
+                } else {
+                    mapValueToFieldIds.get(mapValue).push(i.fieldName);
                 }
-            })
+                const defaultBody = {
+                    Party: i.party,
+                    CreatedBy: loginUserID(),
+                    UpdatedBy: loginUserID(),
+                }
+                if (mapType === 1) {// 1==party/Customer
+                    jsonArr.push({ ...defaultBody, Customer: i.fieldId, MapCustomer: mapValue })
+                } else if (mapType === 2) {// 2==Item
+                    jsonArr.push({ ...defaultBody, Item: i.fieldId, MapItem: mapValue })
+                } else {
+                    jsonArr.push({ ...defaultBody, Unit: i.fieldId, MapUnit: mapValue })
+                }
+            }
 
+        });
+        
+        mapValueToFieldIds.forEach((fieldIds, mapValue) => {// Find fieldIds with duplicate mapValues
+            if (fieldIds.length > 1) {
+                duplicateFieldIds.push({ [`'${mapValue}'`]: ` This Is Duplicate MapValue of ${fieldIds.join(', ')}` });
+            }
+        });
 
-            return jsonArr
+        if (duplicateFieldIds.length > 0) {
+            // Show an alert indicating which FieldId values have duplicate mapValues
+            customAlert({
+                Type: 3,
+                Message: duplicateFieldIds
+            });
+            return
         }
 
-        async function funcForItem() {
-            let jsonArr = []
-            await goButtonArr.forEach(i => {
-                if ((!(i.mapValue === '') && !(i.mapValue === null))) {
-                    jsonArr.push({
-                        "Party": i.party,
-                        "Item": i.fieldId,
-                        "MapItem": i.mapValue,
-                        "CreatedBy": loginUserID(),
-                        "UpdatedBy": loginUserID()
-                    })
-                }
-            })
-            return jsonArr
-
-        }
-
-
-        async function funcForUnit() {
-            let jsonArr = []
-            await goButtonArr.forEach(i => {
-                if ((!(i.mapValue === '') && !(i.mapValue === null))) {
-                    jsonArr.push({
-                        "Party": i.party,
-                        "Unit": i.fieldId,
-                        "MapUnit": i.mapValue,
-                        "CreatedBy": loginUserID(),
-                        "UpdatedBy": loginUserID()
-                    })
-                }
-            })
-            return jsonArr
-        }
-        let mapType = values.MapType.value;
-
-        const jsonBody = JSON.stringify(
-            (mapType === 1) ? await funcForParty() :
-                (mapType === 2) ? await funcForItem() : await funcForUnit());
-
-        dispatch(save_ImportExcelPartyMap({ jsonBody, mapType, }));
+        dispatch(save_ImportExcelPartyMap({ jsonBody: JSON.stringify(jsonArr), mapType, }));
 
     };
 

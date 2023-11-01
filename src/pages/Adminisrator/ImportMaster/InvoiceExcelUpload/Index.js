@@ -66,8 +66,8 @@ const InvoiceExcelUpload = (props) => {
         commonPartyDropSelect: state.CommonPartyDropdownReducer.commonPartyDropSelect
     }));
 
-    
-   // Common Party Dropdown useEffect
+
+    // Common Party Dropdown useEffect
     useEffect(() => {
         dispatch(GoButton_ImportFiledMap_AddSuccess([]));
         if (commonPartyDropSelect.value > 0) {
@@ -101,7 +101,7 @@ const InvoiceExcelUpload = (props) => {
         };
     }, [userAccess])
 
-   
+
     useEffect(async () => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
@@ -203,7 +203,7 @@ const InvoiceExcelUpload = (props) => {
 
         setReadJsonDetail(preDetails)
         setPreViewDivShow(false)
-        
+
         files.map(file =>
             Object.assign(file, {
                 preview: URL.createObjectURL(file),
@@ -242,16 +242,18 @@ const InvoiceExcelUpload = (props) => {
             readJsonDetail.invoice.forEach(inv => {
                 let parentObj;
                 let invoiceItems = []
+                const invoiceTotalAmount = inv.reduce((total, invoice) => total + Number(invoice[parArr.Amount]), 0);
+
                 inv.forEach(ele => {
                     parentObj = {
                         "CustomerGSTTin": ele[parArr.CustomerGSTTin] ? ele[parArr.CustomerGSTTin] : '',
                         "TCSAmount": ele[parArr.TCSAmount] ? ele[parArr.TCSAmount] : 0,
-                        "GrandTotal": ele[parArr.GrandTotal] ? ele[parArr.GrandTotal] : '',
+                        "GrandTotal": ele[parArr.GrandTotal] ? ele[parArr.GrandTotal] : invoiceTotalAmount,
                         "RoundOffAmount": ele[parArr.RoundOffAmount] ? ele[parArr.RoundOffAmount] : 0,
                         "InvoiceNumber": ele[parArr.InvoiceNumber] ? ele[parArr.InvoiceNumber] : '',
                         "FullInvoiceNumber": ele[parArr.InvoiceNumber] ? ele[parArr.InvoiceNumber] : '',
                         "Customer": ele[parArr.Customer] ? ele[parArr.Customer] : '',
-                        "Party":  _cfunc.loginSelectedPartyID(),
+                        "Party": _cfunc.loginSelectedPartyID(),
                         CreatedBy: _cfunc.loginUserID(),
                         UpdatedBy: _cfunc.loginUserID(),
                         "InvoiceDate": ele[parArr.InvoiceDate] ? ele[parArr.InvoiceDate] : '',
@@ -308,185 +310,185 @@ const InvoiceExcelUpload = (props) => {
                 <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
                 <PageLoadingSpinner isLoading={((partyDropDownLoading) || compareParamLoading)} />
 
-                    <div className="page-content">
+                <div className="page-content">
 
-                        <NewCommonPartyDropdown />
+                    <NewCommonPartyDropdown />
 
-                        <div className="px-2 c_card_header text-black mt-2" >
+                    <div className="px-2 c_card_header text-black mt-2" >
 
-                            {(compareParamLoading) ?
-                                <div className="row ">
-                                    <div className="d-flex justify-content-start p-2 ">
-                                        <div>Please wait Downloading field Details. other wise check filed mapping </div>
-                                        <div >
-                                            <div className="dot-pulse">
-                                                <div className="bounce1"></div>
-                                                <div className="bounce2"></div>
-                                                <div className="bounce3"></div>
-                                            </div>
+                        {(compareParamLoading) ?
+                            <div className="row ">
+                                <div className="d-flex justify-content-start p-2 ">
+                                    <div>Please wait Downloading field Details. other wise check filed mapping </div>
+                                    <div >
+                                        <div className="dot-pulse">
+                                            <div className="bounce1"></div>
+                                            <div className="bounce2"></div>
+                                            <div className="bounce3"></div>
                                         </div>
                                     </div>
                                 </div>
-                                :
-                                compareParameter.length > 0 ? < Row >
-                                    <Col sm={10}>
-                                        <h4 className="pt-4 pb-4 text-primary" >{"Upload Your Excel."}</h4>
-                                    </Col>
-                                    <Col sm={2} className="mt-4">
-                                        <span className="mt-2 text-primary"
-                                            style={{ cursor: "pointer" }}
-                                            onClick={() => downloadDummyFormatHandler(compareParameter)}
-                                        >
-                                            Download Format
-                                        </span>
-                                    </Col>
-
-                                </Row> : null
-
-                                // <div >
-                                //     <h4 className="pt-4 pb-4 text-primary" >{"Upload Your Excel."}</h4>
-                                //     <spam onClick={() => dounloadDummyFormat_handler(compareParameter)}>Download Dumy Format</spam>
-                                // </div>}
-                            }
-
-
-
-
-                        </div>
-
-
-                        <div className="mb-3 mt-3">
-
-
-                            <Dropzone
-                                onDrop={acceptedFiles => {
-                                    document.getElementById("demo1").style.border = "4px dotted green";
-                                    handleAcceptedFiles(acceptedFiles)
-                                }}
-                            >
-                                {({ getRootProps, getInputProps }) => (
-                                    <div id='demo1' className="dropzone">
-                                        <div
-                                            className="dz-message needsclick mt-2"
-                                            {...getRootProps()}
-                                        >
-                                            <input {...getInputProps()} />
-                                            <div className="mb-3">
-                                                <i className="display-4 text-muted bx bxs-cloud-upload" />
-                                            </div>
-                                            <h4>Drop files here or click to upload.</h4>
-                                        </div>
-                                    </div>
-                                )}
-                            </Dropzone>
-
-                            <div className="dropzone-previews mt-3" id="file-previews">
-                                {selectedFiles.map((f, i) => {
-                                    return (
-                                        <Card
-                                            className="mt-1 mb-0 shadow-none border dz-processing dz-image-preview dz-success dz-complete"
-                                            key={i + "-file"}
-                                        >
-                                            <div className="p-2 d-flex justify-containt-space-between">
-
-                                                <Row className="align-items-center">
-                                                    <Col className="col-auto">
-                                                        <img
-                                                            data-dz-thumbnail=""
-                                                            height="80"
-                                                            className="avatar-sm rounded bg-light"
-                                                            alt={f.name}
-                                                            src={f.preview}
-                                                        />
-                                                    </Col>
-                                                    <Col>
-                                                        <Link
-                                                            to="#"
-                                                            className="text-muted font-weight-bold"
-                                                        >
-                                                            {f.name}
-                                                        </Link>
-                                                        <p className="mb-0">
-                                                            <strong>{f.formattedSize}</strong>
-                                                        </p>
-                                                    </Col>
-                                                </Row>
-                                            </div>
-
-                                        </Card>
-                                    )
-                                })}
-                                {preViewDivShow &&
-                                    <Card style={{ borderTop: "0px" }}>
-                                        <div id="filedetail">
-
-                                            <details>
-                                                <summary>No. of Invoice: {readJsonDetail.invoice.size}</summary>
-                                                <div className="error-msg">
-                                                    <p>
-                                                        {readJsonDetail.invoiceNO.map(i => (<Label>{i} ,&#160;</Label>))}
-                                                    </p>
-                                                </div>
-
-                                            </details>
-
-                                            <details>
-                                                <summary>No. of Party :{readJsonDetail.partyNO.length}</summary>
-                                                <div className="error-msg">
-                                                    <p>
-                                                        {readJsonDetail.partyNO.map(i => (<Label>{i} ,&#160;</Label>))}
-                                                    </p>
-                                                </div>
-                                            </details>
-
-                                            <details>
-                                                <summary>No. of Dates :{readJsonDetail.invoiceDate.length}</summary>
-                                                <div className="error-msg">
-                                                    <p>
-                                                        {readJsonDetail.invoiceDate.map(i => (<Label>{i} ,&#160;</Label>))}
-                                                    </p>
-                                                </div>
-                                            </details>
-
-                                            <details>
-                                                <summary>Total Amount :{readJsonDetail.amount}</summary>
-                                            </details>
-
-                                        </div>
-                                    </Card>
-                                }
                             </div>
+                            :
+                            compareParameter.length > 0 ? < Row >
+                                <Col sm={10}>
+                                    <h4 className="pt-4 pb-4 text-primary" >{"Upload Your Excel."}</h4>
+                                </Col>
+                                <Col sm={2} className="mt-4">
+                                    <span className="mt-2 text-primary"
+                                        style={{ cursor: "pointer" }}
+                                        onClick={() => downloadDummyFormatHandler(compareParameter)}
+                                    >
+                                        Download Format
+                                    </span>
+                                </Col>
+
+                            </Row> : null
+
+                            // <div >
+                            //     <h4 className="pt-4 pb-4 text-primary" >{"Upload Your Excel."}</h4>
+                            //     <spam onClick={() => dounloadDummyFormat_handler(compareParameter)}>Download Dumy Format</spam>
+                            // </div>}
+                        }
 
 
-                        </div>
 
-                        <div className="text- mt-4" >
-                            {preViewDivShow ?
-
-                                <C_Button
-                                    type="button"
-                                    id='btn-uploadBtnFunc'
-                                    className="btn btn-success"
-                                    loading={saveBtnLoading}
-                                    onClick={uploadSaveHandler}
-                                >
-                                    Upload Files
-                                </C_Button>
-                                :
-                                <C_Button
-                                    type="button"
-                                    id='btn-verify'
-                                    loading={saveBtnLoading}
-                                    className="btn btn-primary"
-                                    onClick={veifyExcelBtn_Handler}
-                                >
-                                    Verify Files
-                                </C_Button>
-
-                            }
-                        </div>
 
                     </div>
+
+
+                    <div className="mb-3 mt-3">
+
+
+                        <Dropzone
+                            onDrop={acceptedFiles => {
+                                document.getElementById("demo1").style.border = "4px dotted green";
+                                handleAcceptedFiles(acceptedFiles)
+                            }}
+                        >
+                            {({ getRootProps, getInputProps }) => (
+                                <div id='demo1' className="dropzone">
+                                    <div
+                                        className="dz-message needsclick mt-2"
+                                        {...getRootProps()}
+                                    >
+                                        <input {...getInputProps()} />
+                                        <div className="mb-3">
+                                            <i className="display-4 text-muted bx bxs-cloud-upload" />
+                                        </div>
+                                        <h4>Drop files here or click to upload.</h4>
+                                    </div>
+                                </div>
+                            )}
+                        </Dropzone>
+
+                        <div className="dropzone-previews mt-3" id="file-previews">
+                            {selectedFiles.map((f, i) => {
+                                return (
+                                    <Card
+                                        className="mt-1 mb-0 shadow-none border dz-processing dz-image-preview dz-success dz-complete"
+                                        key={i + "-file"}
+                                    >
+                                        <div className="p-2 d-flex justify-containt-space-between">
+
+                                            <Row className="align-items-center">
+                                                <Col className="col-auto">
+                                                    <img
+                                                        data-dz-thumbnail=""
+                                                        height="80"
+                                                        className="avatar-sm rounded bg-light"
+                                                        alt={f.name}
+                                                        src={f.preview}
+                                                    />
+                                                </Col>
+                                                <Col>
+                                                    <Link
+                                                        to="#"
+                                                        className="text-muted font-weight-bold"
+                                                    >
+                                                        {f.name}
+                                                    </Link>
+                                                    <p className="mb-0">
+                                                        <strong>{f.formattedSize}</strong>
+                                                    </p>
+                                                </Col>
+                                            </Row>
+                                        </div>
+
+                                    </Card>
+                                )
+                            })}
+                            {preViewDivShow &&
+                                <Card style={{ borderTop: "0px" }}>
+                                    <div id="filedetail">
+
+                                        <details>
+                                            <summary>No. of Invoice: {readJsonDetail.invoice.size}</summary>
+                                            <div className="error-msg">
+                                                <p>
+                                                    {readJsonDetail.invoiceNO.map(i => (<Label>{i} ,&#160;</Label>))}
+                                                </p>
+                                            </div>
+
+                                        </details>
+
+                                        <details>
+                                            <summary>No. of Party :{readJsonDetail.partyNO.length}</summary>
+                                            <div className="error-msg">
+                                                <p>
+                                                    {readJsonDetail.partyNO.map(i => (<Label>{i} ,&#160;</Label>))}
+                                                </p>
+                                            </div>
+                                        </details>
+
+                                        <details>
+                                            <summary>No. of Dates :{readJsonDetail.invoiceDate.length}</summary>
+                                            <div className="error-msg">
+                                                <p>
+                                                    {readJsonDetail.invoiceDate.map(i => (<Label>{i} ,&#160;</Label>))}
+                                                </p>
+                                            </div>
+                                        </details>
+
+                                        <details>
+                                            <summary>Total Amount :{readJsonDetail.amount}</summary>
+                                        </details>
+
+                                    </div>
+                                </Card>
+                            }
+                        </div>
+
+
+                    </div>
+
+                    <div className="text- mt-4" >
+                        {preViewDivShow ?
+
+                            <C_Button
+                                type="button"
+                                id='btn-uploadBtnFunc'
+                                className="btn btn-success"
+                                loading={saveBtnLoading}
+                                onClick={uploadSaveHandler}
+                            >
+                                Upload Files
+                            </C_Button>
+                            :
+                            <C_Button
+                                type="button"
+                                id='btn-verify'
+                                loading={saveBtnLoading}
+                                className="btn btn-primary"
+                                onClick={veifyExcelBtn_Handler}
+                            >
+                                Verify Files
+                            </C_Button>
+
+                        }
+                    </div>
+
+                </div>
 
 
             </React.Fragment >
