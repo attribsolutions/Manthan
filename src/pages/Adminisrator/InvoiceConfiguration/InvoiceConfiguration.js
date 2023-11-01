@@ -305,13 +305,14 @@ const InvoiceConfiguration = (props) => {
         return urlPattern.test(str);
     }
 
+
+
     useEffect(async () => {
 
-
-
         if (Object.keys(SystemSetting).length !== 0) {
-            const file = await convertImageToFile(SystemSetting.Qr_Image)
 
+            const file = await convertImageToFile(SystemSetting.Qr_Image)
+            debugger
 
             if (!isURL(SystemSetting.Qr_Image)) {
                 setState((i) => {
@@ -323,7 +324,7 @@ const InvoiceConfiguration = (props) => {
                 setState((i) => {
                     const a = { ...i }
                     if (isFile(file)) {
-                        a.values.PaymentQr["Image"] = [file];
+                        a.values.PaymentQr["Image"] = [null];
                     }
                     return a
                 })
@@ -355,7 +356,6 @@ const InvoiceConfiguration = (props) => {
                 BulkData.push(arr)
 
             })
-            debugger
             formData.append(`uploaded_images_${values.PaymentQr.id}`, values.PaymentQr.Image[0]); // Convert to JSON string
             formData.append('BulkData', JSON.stringify(BulkData)); // Convert to JSON string
             dispatch(savePartySetting({ formData }));
