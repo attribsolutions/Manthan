@@ -438,9 +438,9 @@ const StockAdjustment = (props) => {
                 "Date": currentDate_ymd,
                 "Mode": subPageMode === url.STOCK_ADJUSTMENT ? 2 : 3,
                 "StockItems": flatStockTableArr,
-                "IsStockAdjustment": true //if stock  
+                "IsStockAdjustment": true,//if stock  
+                "IsAllStockZero": false
             })
-            console.log(flatStockTableArr);
 
             dispatch(saveStockEntryAction({ jsonBody }));
         }
