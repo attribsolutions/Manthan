@@ -164,22 +164,25 @@ const ImportExcelPartyMap = (props) => {
 
     const pagesListColumns = [
         {
-            text: "Field Name",
+            text: "Retailer Name",
             dataField: "fieldName",
-        },
-        {
-            text: "Customer Address",
-            dataField: "CustomerAddress",
-        },
-        {
-            text: "GSTIN No",
-            dataField: "GSTIN",
+            sort: true
         },
         {
             text: "Route",
             dataField: "RouteName",
+            sort: true
         },
-
+        {
+            text: "Customer Address",
+            dataField: "CustomerAddress",
+            sort: true
+        },
+        {
+            text: "GSTIN No",
+            dataField: "GSTIN",
+            sort: true
+        },
 
         {
             text: "Related Key Field",
@@ -187,16 +190,13 @@ const ImportExcelPartyMap = (props) => {
             formatter: (cellContent, row) => (
                 <>
                     <div style={{ justifyContent: 'center' }} >
-                        <Col>
-                            <FormGroup className=" col col-sm-4 ">
-                                <Input
-                                    type="text"
-                                    key={`mapValue-${row.id}`}
-                                    defaultValue={cellContent}
-                                    onChange={(e) => row.mapValue = e.target.value}
-                                />
-                            </FormGroup>
-                        </Col>
+                        <Input
+                            type="text"
+                            key={`mapValue-${row.id}`}
+                            defaultValue={cellContent}
+                            onChange={(e) => row.mapValue = e.target.value}
+                        />
+
                     </div>
                 </>
             ),
@@ -205,13 +205,15 @@ const ImportExcelPartyMap = (props) => {
 
     async function goButtonHandler(event) {
         event.preventDefault();
-        const   mapType = values.MapType.value;
-        if(mapType>0){
+        const mapType = values.MapType.value;
+        if (mapType > 0) {
             let partyId = _cfunc.loginSelectedPartyID();
             dispatch(GoButton_ImportExcelPartyMap({ partyId, mapType }))
-        }else{
-            customAlert({Type:3,
-            Message:"Please select mapping type"})
+        } else {
+            customAlert({
+                Type: 3,
+                Message: "Please select mapping type"
+            })
         }
     };
 
@@ -258,7 +260,7 @@ const ImportExcelPartyMap = (props) => {
             }
 
         });
-        
+
         mapValueToFieldIds.forEach((fieldIds, mapValue) => {// Find fieldIds with duplicate mapValues
             if (fieldIds.length > 1) {
                 duplicateFieldIds.push({ [`'${mapValue}'`]: ` This Is Duplicate MapValue of ${fieldIds.join(', ')}` });
@@ -369,6 +371,10 @@ const ImportExcelPartyMap = (props) => {
                                     <div className="table">
                                         <BootstrapTable
                                             bordered={true}
+                                            defaultSorted={[{
+                                                dataField: 'fieldName',
+                                                order: 'asc'
+                                            }]}
                                             id="table_Arrow"
                                             striped={false}
                                             noDataIndication={<div className="text-danger text-center ">Items Not available</div>}
