@@ -93,13 +93,15 @@ const InvoiceConfiguration = (props) => {
         pageField,
         postMsg,
         saveBtnloading,
+        commonPartyDropSelect,
         userAccess } = useSelector((state) => ({
             saveBtnloading: state.GroupReducer.saveBtnloading,
             postMsg: state.PartySettingReducer.postMsg,
             PartySettingdata: state.PartySettingReducer.PartySettingdata,
             updateMsg: state.GroupReducer.updateMsg,
             userAccess: state.Login.RoleAccessUpdateData,
-            pageField: state.CommonPageFieldReducer.pageField
+            pageField: state.CommonPageFieldReducer.pageField,
+            commonPartyDropSelect: state.CommonPartyDropdownReducer.commonPartyDropSelect
         }));
 
     const { values } = state
@@ -117,10 +119,17 @@ const InvoiceConfiguration = (props) => {
         const page_Id = pageId.INVOICE_CONFIGURATION
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
-        dispatch(getpartysetting_API(loginSelectedPartyID(), loginCompanyID()))
 
 
     }, []);
+
+    useEffect(() => {
+
+        if (commonPartyDropSelect) {
+            dispatch(getpartysetting_API(commonPartyDropSelect.value, loginCompanyID()))
+        }
+    }, [commonPartyDropSelect]);
+
 
     // userAccess useEffect
     useEffect(() => userAccessUseEffect({
@@ -248,7 +257,7 @@ const InvoiceConfiguration = (props) => {
             })
         }
 
-    }, [Data])
+    }, [Data,])
 
 
     const onChangeSelecthandler = (e) => {
@@ -289,13 +298,18 @@ const InvoiceConfiguration = (props) => {
     }
 
     function convertImageToFile(imageUrl) {
+
         const Party_Name = loginPartyName()
-        return fetch(imageUrl)
-            .then(response => response.blob())
-            .then(blob => {
-                const filename = `${Party_Name}_PaymentQr.jpeg`;
-                return new File([blob], filename);
-            });
+        try {
+            return fetch(imageUrl)
+                .then(response => response.blob())
+                .then(blob => {
+                    const filename = `${Party_Name}_PaymentQr.jpeg`;
+                    return new File([blob], filename);
+                });
+        } catch (error) {
+            console.log(error)
+        }
     }
     function isFile(obj) {
         return obj instanceof File || (obj instanceof Blob && typeof obj.name === "string");
@@ -356,6 +370,7 @@ const InvoiceConfiguration = (props) => {
                 BulkData.push(arr)
 
             })
+            console.log(BulkData)
             formData.append(`uploaded_images_${values.PaymentQr.id}`, values.PaymentQr.Image[0]); // Convert to JSON string
             formData.append('BulkData', JSON.stringify(BulkData)); // Convert to JSON string
             dispatch(savePartySetting({ formData }));
@@ -439,8 +454,10 @@ const InvoiceConfiguration = (props) => {
 
                                                         </Col>
 
-
+                                                        <span> Note :</span>  <span style={{ color: "red" }}> If any changes in Invoice Configuration then kindly re-upload your payment QR Code.</span>
                                                     </FormGroup>
+
+
                                                 </Col>
 
                                                 <Col md={4} >

@@ -342,8 +342,13 @@ export const reportHeder3 = (doc, data) => {
 
 
 export const reportFooter = (doc, data) => {
-    debugger
-    // doc.addImage(data.SettingData.Qr_Image, 'JPEG', 335, 303, 105, 96);
+    if (data.SettingData.Qr_Image === null) {
+        doc.addImage(data.SettingData.Qr_Image, 'JPEG', 335, 303, 105, 96);
+    } else {
+        doc.addImage(data.SettingData.Qr_Image, 'JPEG', 335, 303, 105, 96);
+    }
+
+
     doc.setDrawColor(0, 0, 0);
     doc.line(570, 308, 30, 308);//horizontal line  (4)
     doc.line(570, 380, 435, 380);//horizontal line  (5)

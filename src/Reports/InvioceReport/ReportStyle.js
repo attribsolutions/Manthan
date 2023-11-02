@@ -349,7 +349,6 @@ export const reportHeder1 = (doc, data) => {
                 columnWidth: 162,
                 halign: 'lfet',
             },
-
         },
         tableLineColor: "black",
 
@@ -394,8 +393,11 @@ export const reportHeder3 = (doc, data) => {
 // original
 
 export const reportFooter = (doc, data) => {
-    debugger
-    // doc.addImage(data.SettingData.Qr_Image, 'JPEG', 337, 728, 100, 86);
+    if (data.SettingData.Qr_Image === null) {
+        doc.addImage("", 'JPEG', 337, 728, 100, 86);
+    } else {
+        doc.addImage(data.SettingData.Qr_Image, 'JPEG', 337, 728, 100, 86);
+    }
     doc.setDrawColor(0, 0, 0);
     doc.line(570, 730, 30, 730);//horizontal line Footer 1
     doc.line(435, 730, 435, 815);//vertical right Sub Total
