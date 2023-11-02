@@ -393,6 +393,7 @@ export const reportHeder3 = (doc, data) => {
 // original
 
 export const reportFooter = (doc, data) => {
+
     if (data.SettingData.Qr_Image === null) {
         doc.addImage("", 'JPEG', 337, 728, 100, 86);
     } else {

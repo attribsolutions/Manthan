@@ -342,8 +342,9 @@ export const reportHeder3 = (doc, data) => {
 
 
 export const reportFooter = (doc, data) => {
+    debugger
     if (data.SettingData.Qr_Image === null) {
-        doc.addImage(data.SettingData.Qr_Image, 'JPEG', 335, 303, 105, 96);
+        doc.addImage("", 'JPEG', 335, 303, 105, 96);
     } else {
         doc.addImage(data.SettingData.Qr_Image, 'JPEG', 335, 303, 105, 96);
     }
