@@ -79,7 +79,7 @@ const CreditList = () => {
 
     const { pageField, RetailerList, CreditDebitType, listBtnLoading, Cancel_Credit_Debit_EInvoice, Uploaded_Credit_Debit_EInvoice } = reducers;
     const values = { ...state.values }
-    console.log(CreditDebitType)
+
     const action = {
         editId: Edit_CreditList_ID,
         deleteId: delete_CreditList_ID,
@@ -223,7 +223,7 @@ const CreditList = () => {
             return CreditDebitType.find((index) => index.Name === "CreditNote")?.id;
         }
     }
-    
+
     function goButtonHandler() {
 
         const jsonBody = JSON.stringify({
