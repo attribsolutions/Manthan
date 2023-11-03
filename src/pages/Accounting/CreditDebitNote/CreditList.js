@@ -117,8 +117,14 @@ const CreditList = () => {
             masterPath = url.GOODS_DEBIT_NOTE;
             newBtnPath = url.GOODS_DEBIT_NOTE;
             buttonMsgLable = "Debit"
+        }
+        else if (subPageMode === url.CREDIT_NOTE_LIST_1) {
+            page_Id = pageId.CREDIT_NOTE_LIST_1;
+            masterPath = url.CREDIT_NOTE_1;
+            newBtnPath = url.CREDIT_NOTE_1;
+            buttonMsgLable = "Credit"
         };
-
+        
         setOtherState({ masterPath, newBtnPath, buttonMsgLable, page_Id })
         setpageMode(page_Mode)
         dispatch(commonPageFieldListSuccess(null))

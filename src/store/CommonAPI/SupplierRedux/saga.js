@@ -129,7 +129,8 @@ function* vendorSupplierCustomer_genFunc({ data }) {
     || subPageMode === url.PURCHASE_RETURN_LIST
     || subPageMode === url.PURCHASE_RETURN
     || subPageMode === url.PURCHASE_RETURN_MODE_3
-    || subPageMode === url.SELF_LEDGER);
+    || subPageMode === url.SELF_LEDGER
+    || subPageMode === url.PARTY_DETAILS);
 
   const isCustomer = (subPageMode === url.ORDER_4  //Customer mode 3
     || subPageMode === url.ORDER_LIST_4

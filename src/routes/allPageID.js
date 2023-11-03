@@ -151,7 +151,7 @@ export const CENTRAL_SERVICE_ITEM_LIST = 251
 
 export const SERVICE_ITEM_ASSIGN = 256
 
-
+export const PARTY_DETAILS = 260
 
 //******************************* Purchase Module ************************************//
 export const ORDER_1 = 53
@@ -250,6 +250,9 @@ export const GOODS_CREDIT_NOTE = 228
 
 export const GOODS_DEBIT_LIST = 230
 export const GOODS_DEBIT_NOTE = 231
+
+export const CREDIT_NOTE_1 = 258
+export const CREDIT_NOTE_LIST_1 = 259
 // ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 
 

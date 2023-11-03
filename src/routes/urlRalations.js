@@ -142,6 +142,8 @@ export const CentralServiceItemList = url.CENTRAL_SERVICE_ITEM_MASTER
 
 export const SERVICE_ITEM_ASSIGN = url.SERVICE_ITEM_ASSIGN
 
+export const Party_Details = url.PARTY_DETAILS
+
 //******************************* Purchase Module ************************************//
 
 export const OrderList_1 = url.ORDER_1;
@@ -243,6 +245,9 @@ export const GoodsCreditNoteList = url.GOODS_CREDIT_NOTE;
 
 export const GoodsDebitNote = url.GOODS_DEBIT_LIST;
 export const GoodsDebitNoteList = url.GOODS_DEBIT_NOTE;
+
+export const Credit_Note_1 = url.CREDIT_NOTE_LIST_1
+export const Credit_Note_List_1 = url.CREDIT_NOTE_1
 
 export const ClaimTrackingEntry = url.CLAIM_TRACKING_ENTRY_LIST
 export const ClaimTrackingEntryList = url.CLAIM_TRACKING_ENTRY

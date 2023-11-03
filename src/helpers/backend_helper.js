@@ -612,6 +612,8 @@ export const SalesReturn_SingleGet_API = ({ editId }) => get(`${url.SALES_RETURN
 export const Send_To_Superstockiest_button_post_API = ({ jsonBody }) => post(url.SEND_TO_SUPERSTOCKIEST_POST_API, jsonBody)// update api
 export const Return_Approve_API = ({ jsonBody }) => post(url.RETURN_ITEM_APPROVE_AIP, jsonBody)// update api
 export const ReturnPrint_API = ({ editId }) => get(`${url.PURCHASE_RETURN_PRINT}/${editId}`)//dropdown api
+export const SalesReturn_add_button_api_For_CreditNote1 = (jsonBody) => post(url.ADD_BUTTON_API_FOR_ITEM_CREDIT_NOTE_1, jsonBody)//add button get api for item
+
 
 // Credit and Debit 
 export const Go_Button_Credit_Debit_Post_API = (jsonBody) => post(url.CREDIT_DEBIT_FILTER, jsonBody)// postapi
@@ -664,7 +666,7 @@ export const StockEntry_GO_button_api_For_Item = (ItemId) => get(`${url.STOCK_EN
 export const StockEntry_Post_API = ({ jsonBody }) => post(url.STOCK_ENTRY, jsonBody)//post api
 
 //Stock Report
-export const StockReport_GoBtn_API = (jsonBody ) => post(url.STOCK_REPORT, jsonBody)//Go button api
+export const StockReport_GoBtn_API = (jsonBody) => post(url.STOCK_REPORT, jsonBody)//Go button api
 export const StockProcessing_API = ({ jsonBody }) => post(url.STOCK_PROCESSING, jsonBody)//Go button api
 export const StockReport_1_GoBtn_API = ({ jsonBody }) => post(url.STOCK_REPORT_1, jsonBody)//Go button api
 // Damage Stock Report 
@@ -729,7 +731,6 @@ export const mobileApp_RetailerDelete_Api = (transactionId) => del(`${url.MOBILE
 export const mobileApp_RetailerUpdate_Api = ({ jsonBody }) => put(`${url.MOBILE_APP_RETAILER_UPDATE}`, jsonBody)
 
 
-
 //ReceiptDataExport
 export const ReceiptDataExport_GoBtn_API = ({ jsonBody }) => post(url.RECEIPT_DEBIT_DATA_EXPORT, jsonBody)//Go button api
 
@@ -754,6 +755,8 @@ export const Sub_Cluster_delete_API = ({ deleteId }) => del(`${url.SUB_CLUSTER}/
 export const Sub_Cluster_edit_API = ({ editId }) => get(`${url.SUB_CLUSTER}/${editId}`) // edit api
 export const Sub_Cluster_update_API = ({ jsonBody, updateId }) => put(`${url.SUB_CLUSTER}/${updateId}`, jsonBody)// update
 
+export const Get_Subcluster_On_cluster_API = (clusterID) => get(`${url.GET_SUB_CLUSTER_ON_CLUSTER}/${clusterID}`)
+
 // CentralServiceItem 
 export const CentralServiceItem_Post = ({ jsonBody }) => post(url.CENTRAL_SERVICE_ITEM, jsonBody)// post api
 export const CentralServiceItem_Get = () => get(url.CENTRAL_SERVICE_ITEM) // get api
@@ -764,6 +767,10 @@ export const CentralServiceItem_Update = ({ jsonBody, updateId }) => put(`${url.
 // Service Item Assign
 export const ServiceItemAssign_Save_API = ({ jsonBody }) => post(url.SERVICE_ITEM_ASSIGN_SAVE, jsonBody)// post api
 export const ServiceItemAssign_GoButton_API = ({ jsonBody }) => post(url.SERVICE_ITEM_ASSIGN_GO_BUTTON, jsonBody) // get api
+
+// Party Details
+export const Get_PartyDetails_List = ({ employeeID }) => get(`${url.GET_PARTY_DETAILS_LIST}/${employeeID}`)
+export const post_PartyDetails = ({ jsonBody }) => post(url.POST_PARTY_DETAILS, jsonBody)// post api
 
 export {
 	getLoggedInUser,

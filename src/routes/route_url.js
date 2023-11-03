@@ -121,9 +121,7 @@ export const RETAILER_EXCEL_UPLOAD = "/Retailer_Excel_Upload"
 export const IMPORT_FIELD_ADD = "/ImportFieldAdd"
 export const IMPORT_FIELD_ADD_LIST = "/ImportFieldAddList"
 
-
 export const IMPORT_EXCEL_PARTY_MAP = "/ImportExcelPartyMap"
-
 
 export const ROUTE_UPDATE = "/RouteUpdate"
 
@@ -150,6 +148,7 @@ export const CENTRAL_SERVICE_ITEM_lIST = "/CentralServiceItemList"
 
 export const SERVICE_ITEM_ASSIGN = "/Service_Item_Assign"
 
+export const PARTY_DETAILS = "/Party_Details"
 //******************************* Purchase Module ************************************//
 export const ORDER_1 = "/Order_1"
 export const ORDER_LIST_1 = "/OrderList_1"
@@ -253,10 +252,6 @@ export const CLAIM_TRACKING_ENTRY_LIST = "/ClaimTrackingEntryList"
 
 export const INVOICE_CONFIGURATION = "/InvoiceConfiguration"
 
-
-
-
-
 export const CREDIT_NOTE = "/Credit"
 export const CREDIT_LIST = "/Credit_List"
 
@@ -269,6 +264,10 @@ export const GOODS_CREDIT_LIST = "/GoodsCreditNoteList"
 export const GOODS_DEBIT_NOTE = "/GoodsDebitNote"
 export const GOODS_DEBIT_LIST = "/GoodsDebitNoteList"
 
+export const CREDIT_NOTE_1 = "/Credit_Note_1"
+export const CREDIT_NOTE_LIST_1 = "/Credit_Note_List_1"
+
+//**************************** Reports ***********************************//
 
 export const SAP_LEDGER = "/SapLedger";
 
@@ -279,8 +278,6 @@ export const SELF_LEDGER = "/SelfLedger";
 export const STOCK_REPORT = "/StockReport"
 
 export const STOCK_REPORT_1 = "/Stock_Report_1"
-
-//**************************** Reports ***********************************//
 
 export const ORDER_SUMMARY_REPORT = "/OrderSummaryReport"
 
@@ -293,7 +290,6 @@ export const CLAIM_SUMMARY_REPORT = "/ClaimSummary"
 export const CLAIM_SUMMARY_MASTER = "/Claim_Summary_Master"
 
 export const CLAIM_SUMMARY_lIST = "/Claim_Summary_List"
-
 
 export const PURCHASE_GST_REPORT = "/PurchaseGSTReport"
 
@@ -327,7 +323,7 @@ export const MOBILE_RETAILER_SEND = "/MobileRetailerSend"
 
 export const MAN_POWER_REPORT = "/ManPowerReport"
 
-export const CLAIM_TRACKING_REPORT="/Claim_Tracking_Report"
+export const CLAIM_TRACKING_REPORT = "/Claim_Tracking_Report"
 
 
 

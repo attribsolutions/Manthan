@@ -115,6 +115,7 @@ import ClusterReducer from "./Administrator/ClusterRedux/reducer"
 import SubClusterReducer from "./Administrator/SubClusterRedux/reducer"
 import CentralServiceItemReducer from "./Administrator/CentralServiceItemRedux/reducer"
 import ServiceItemAssignReducer from "./Administrator/ServiceItemAssignRedux/reducer"
+import PartyDetailsReducer from "./Administrator/PartyDetailsRedux/reducer"
 
 const rootReducer = combineReducers({
 	Layout,
@@ -208,6 +209,7 @@ const rootReducer = combineReducers({
 	ClusterReducer,
 	SubClusterReducer,
 	CentralServiceItemReducer,
-	ServiceItemAssignReducer
+	ServiceItemAssignReducer,
+	PartyDetailsReducer
 })
 export default rootReducer

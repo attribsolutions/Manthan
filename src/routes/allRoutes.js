@@ -206,6 +206,7 @@ import CentralServiceItem from "../pages/Adminisrator/CentralServiceItem/Central
 import CentralServiceItemList from "../pages/Adminisrator/CentralServiceItem/CentralServiceItemList";
 import ServiceItemAssign from "../pages/Adminisrator/ServiceItemAssign";
 import ClaimTrackingReport from "../Reports/ClaimTrackingReport";
+import PartyDetails from "../pages/Adminisrator/PartyDetails";
 
 
 const userRoutes = [
@@ -301,7 +302,7 @@ const userRoutes = [
 
 	{ path: path.PARTYITEM, component: PartyItems },
 	{ path: path.CHANNEL_ITEM, component: PartyItems },
-	
+
 	{ path: path.SUBGROUP, component: SubGroupMaster },
 	{ path: path.SUBGROUP_LIST, component: SubGroupList },
 
@@ -355,6 +356,7 @@ const userRoutes = [
 
 	{ path: path.SERVICE_ITEM_ASSIGN, component: ServiceItemAssign },
 
+	{ path: path.PARTY_DETAILS, component: PartyDetails },
 
 	//******************************* Inventory Module ************************************//
 	{ path: path.CHALLAN_LIST, component: ChallanList },
@@ -462,6 +464,8 @@ const userRoutes = [
 	{ path: path.GOODS_DEBIT_LIST, component: CreditList },
 	{ path: path.GOODS_DEBIT_NOTE, component: GoodsCreditNote },
 
+	{ path: path.CREDIT_NOTE_LIST_1, component: CreditList },
+	{ path: path.CREDIT_NOTE_1, component: GoodsCreditNote },
 
 	{ path: path.CLAIM_TRACKING_ENTRY, component: ClaimTrackingEntry },
 	{ path: path.CLAIM_TRACKING_ENTRY_LIST, component: ClaimTrackingEntryList },

@@ -12,7 +12,7 @@ import {
     BreadcrumbShowCountlabel,
     Breadcrumb_inputName,
     Retailer_List_Success, commonPageFieldSuccess,
-    saveCredit, CredietDebitType, saveCredit_Success, EditCreditlistSuccess
+    saveCredit, CredietDebitType, saveCredit_Success, EditCreditlistSuccess, goButtonPartyItemAddPageSuccess
 } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { commonPageField } from "../../../store/actions";
@@ -40,6 +40,8 @@ import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 import { loginSelectedPartyID } from "../../../components/Common/CommonFunction";
+import { goButton_ServiceItemAssign } from "../../../store/Administrator/ServiceItemAssignRedux/action";
+import { goButton_ServiceItemAssign_Success } from "../../../store/Administrator/ServiceItemAssignRedux/action";
 
 function initialState(history) {
 
@@ -55,10 +57,13 @@ function initialState(history) {
         page_Id = pageId.GOODS_DEBIT_NOTE;
         listPath = url.GOODS_DEBIT_LIST
     }
+    else if (sub_Mode === url.CREDIT_NOTE_1) {
+        page_Id = pageId.CREDIT_NOTE_1;
+        listPath = url.CREDIT_NOTE_LIST_1
+    }
 
     return { page_Id, listPath }
 };
-
 
 const GoodsCreditNote = (props) => {
 
@@ -66,8 +71,6 @@ const GoodsCreditNote = (props) => {
     const history = useHistory()
     const currentDate_ymd = _cfunc.date_ymd_func();
     const systemSetting = _cfunc.loginSystemSetting();
-
-
 
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState('');
@@ -84,15 +87,22 @@ const GoodsCreditNote = (props) => {
         ItemName: "",
     }
     let internal_pageMode = ""
+
     const [state, setState] = useState(initialFiledFunc(fileds))
     const [discountDropOption] = useState([{ value: 1, label: "Rs" }, { value: 2, label: "%" }]);
     const [TableArr, setTableArr] = useState([]);
+
+    const [itemList_Options, setItemList_Options] = useState([]);
+    const [itemList_loading, setItemList_loading] = useState(false);
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
         postMsg,
         RetailerList,
+        ItemListLoading,
         ItemList,
+        ServiceItemListLoading,
+        ServiceItemAssignList,
         InvoiceNo,
         pageField,
         userAccess,
@@ -105,24 +115,39 @@ const GoodsCreditNote = (props) => {
     } = useSelector((state) => ({
         saveBtnloading: state.CredietDebitReducer.saveBtnloading,
         postMsg: state.CredietDebitReducer.postMsg,
+
         RetailerList: state.CommonAPI_Reducer.RetailerList,
+
+        ItemListLoading: state.PartyItemsReducer.partyItemListLoading,
         ItemList: state.PartyItemsReducer.partyItem,
-        userAccess: state.Login.RoleAccessUpdateData,
-        pageField: state.CommonPageFieldReducer.pageField,
-        addButtonData: state.SalesReturnReducer.addButtonData,
-        InvoiceNo: state.SalesReturnReducer.InvoiceNo,
-        addBtnLoading: state.SalesReturnReducer.addBtnLoading,
+
+        ServiceItemAssignList: state.ServiceItemAssignReducer.ServiceItemAssignList,
+        ServiceItemListLoading: state.ServiceItemAssignReducer.ServiceItemListLoading,
+
         invoiceNoDropDownLoading: state.SalesReturnReducer.invoiceNoDropDownLoading,
+        InvoiceNo: state.SalesReturnReducer.InvoiceNo,
+
         retailerDropLoading: state.CommonAPI_Reducer.retailerDropLoading,
         CreditDebitType: state.CredietDebitReducer.CreditDebitType,
-    }));
 
+        addButtonData: state.SalesReturnReducer.addButtonData,
+        addBtnLoading: state.SalesReturnReducer.addBtnLoading,
+
+        userAccess: state.Login.RoleAccessUpdateData,
+        pageField: state.CommonPageFieldReducer.pageField,
+    }));
 
     useEffect(() => {
         dispatch(InvoiceNumberSuccess([]));
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_id));
-        dispatch(goButtonPartyItemAddPage({ jsonBody: { ..._cfunc.loginJsonBody(), "PartyID": loginSelectedPartyID() } }));
+
+        if (subPageMode === url.CREDIT_NOTE_1) {
+            dispatch(goButton_ServiceItemAssign({ jsonBody: { CompanyID: 1, "PartyID": loginSelectedPartyID() } }));
+        }
+        else {
+            dispatch(goButtonPartyItemAddPage({ jsonBody: { ..._cfunc.loginJsonBody(), "PartyID": loginSelectedPartyID() } }));
+        }
 
         const jsonBody = JSON.stringify({
             Type: 4,
@@ -133,6 +158,8 @@ const GoodsCreditNote = (props) => {
         dispatch(BreadcrumbShowCountlabel(`${"Total Amount"} :${0}`));
         return () => {
             dispatch(Retailer_List_Success([]));
+            dispatch(goButtonPartyItemAddPageSuccess([]));
+            dispatch(goButton_ServiceItemAssign_Success([]));
         };
     }, []);
 
@@ -143,7 +170,6 @@ const GoodsCreditNote = (props) => {
     const values = { ...state.values };
     const { isError } = state;
     const { fieldLabel } = state;
-
 
     useEffect(() => {// userAccess useEffect
         let userAcc = null;
@@ -168,6 +194,21 @@ const GoodsCreditNote = (props) => {
         dispatch(CredietDebitType(credietDebitBody));
 
     }, []);
+
+    useEffect(() => {// Item Name dropdown useEffect
+
+        if (subPageMode === url.CREDIT_NOTE_1) {
+            // subPageMode CREDIT_NOTE_1 then this option showing on Item Name Dropdown
+            setItemList_Options(transformAndFilterList(ServiceItemAssignList, 'ServiceItem', 'ServiceItemName', 'selectCheck'))
+            setItemList_loading(ItemListLoading);
+        }
+        else {
+            // subPageMode GOODS_CREDIT_NOTE and GOODS_CREDIT_NOTE then this option showing on Item Name Dropdown
+            setItemList_Options(transformAndFilterList(ItemList, 'Item', 'ItemName', 'selectCheck'));
+            setItemList_loading(ServiceItemListLoading);
+        }
+
+    }, [ItemList, ServiceItemAssignList, ItemListLoading, ServiceItemListLoading]);
 
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
@@ -202,7 +243,7 @@ const GoodsCreditNote = (props) => {
                     let dataCount = ""
 
                     if (internal_pageMode === mode.modeSTPsave) {
-                        
+
                         values.Customer = { label: CustomerName, value: Customer };
                         setTableArr(ReturnItems)
                         dataCount = ReturnItems.length;
@@ -285,17 +326,22 @@ const GoodsCreditNote = (props) => {
                 const updateItemArr = [...TableArr];
                 let existingIds = updateItemArr.map(item => item.id);
                 let nextId = existingIds.length > 0 ? Math.max(...existingIds) + 1 : 1;
-
+                let highestGST
                 addButtonData.Data.forEach((i) => {
                     const MRPOptions = i.ItemMRPDetails.map(i => ({ label: i.MRPValue, value: i.MRP, Rate: i.Rate }));
                     const GSTOptions = i.ItemGSTDetails.map(i => ({ label: i.GSTPercentage, value: i.GST }));
 
+                    if (subPageMode === url.CREDIT_NOTE_1) {
+                        highestGST = ({ GSTPercentage: i.ItemGSTDetails[0].GSTPercentage, GST: "0" });
+                    }
+                    else {
+
+                        highestGST = i.ItemGSTDetails.reduce((prev, current) => {// Default  highest GST when Return mode "2==ItemWise"
+                            return (prev.GST > current.GST) ? prev : current;
+                        }, '');
+                    }
                     const highestMRP = i.ItemMRPDetails.reduce((prev, current) => {// Default highest GST when Return mode "2==ItemWise"
                         return (prev.MRP > current.MRP) ? prev : current;
-                    }, '');
-
-                    const highestGST = i.ItemGSTDetails.reduce((prev, current) => {// Default  highest GST when Return mode "2==ItemWise"
-                        return (prev.GST > current.GST) ? prev : current;
                     }, '');
 
                     i.Rate = highestMRP.Rate || "";
@@ -341,15 +387,15 @@ const GoodsCreditNote = (props) => {
         label: index.Name,
     }));
 
-    const itemList = ItemList.map((index) => ({
-        value: index.Item,
-        label: index.ItemName,
-        itemCheck: index.selectCheck
-    }));
-
-    const ItemList_Options = itemList.filter((index) => {
-        return index.itemCheck === true
-    });
+    function transformAndFilterList(inputList, valueKey, labelKey, checkKey) {
+        return inputList
+            .map((index) => ({
+                value: index[valueKey],
+                label: index[labelKey],
+                itemCheck: index[checkKey]
+            }))
+            .filter((index) => index.itemCheck === true);
+    }
 
     const InvoiceNo_Options = InvoiceNo.map((index) => ({
         value: index.Invoice,
@@ -399,6 +445,7 @@ const GoodsCreditNote = (props) => {
             text: "MRP",
             dataField: "MRP",
             formatExtraData: { TableArr },
+            hidden: (subPageMode === url.CREDIT_NOTE_1) && true,
             formatter: (cell, row, key, { TableArr }) => {
                 return (
                     <>
@@ -437,6 +484,7 @@ const GoodsCreditNote = (props) => {
 
             formatExtraData: { TableArr },
             formatter: (cell, row, key, { TableArr }) => {
+                debugger
                 return (<div style={{ minWidth: "90px" }}>
                     <Select
                         id={`GST${key}`}
@@ -636,7 +684,8 @@ const GoodsCreditNote = (props) => {
         })
 
         const InvoiceId = ''
-        dispatch(SalesReturnAddBtn_Action({ jsonBody, InvoiceId, returnMode: 2 }))//(returnMode === 2) ItemWise
+
+        dispatch(SalesReturnAddBtn_Action({ jsonBody, InvoiceId, returnMode: 2, subPageMode: subPageMode }))//(returnMode === 2) ItemWise
     }
 
     const RetailerHandler = (event) => {
@@ -683,7 +732,6 @@ const GoodsCreditNote = (props) => {
             return
         }
         onChangeSelect({ hasSelect, evn, state, setState, })
-        // setReturnMode(2)
     }
 
     const changeButtonHandler = async () => {
@@ -703,11 +751,11 @@ const GoodsCreditNote = (props) => {
                 if (i.Quantity > 0) {
                     let msgString = ' Please Select';
 
-                    if (i.MRP === '') { msgString = msgString + ', ' + "MRP" };
+                    if (i.MRP === '' && !(subPageMode === url.CREDIT_NOTE_1)) { msgString = msgString + ', ' + "MRP" };
                     if (i.GST === '') { msgString = msgString + ', ' + "GST" };
                     if (!(Number(i.Rate) > 0)) { msgString = msgString + ', ' + "Rate" };
 
-                    if (((i.MRP === '') || (i.GST === '') || !(Number(i.Rate) > 0))) {
+                    if (((i.MRP === '' && !(subPageMode === url.CREDIT_NOTE_1)) || (i.GST === '') || !(Number(i.Rate) > 0))) {
                         invalidMessages.push({ [i.ItemName]: msgString });
                     }
                     return true
@@ -730,7 +778,7 @@ const GoodsCreditNote = (props) => {
                 return;
             }
 
-            if (values.InvoiceNO === '') {
+            if ((values.InvoiceNO === '') && !(subPageMode === url.CREDIT_NOTE_1)) {
                 customAlert({
                     Type: 4,
                     Message: "Invoice Number is Required",
@@ -745,7 +793,8 @@ const GoodsCreditNote = (props) => {
 
                 return {
                     "CRDRNoteDate": "2023-09-04",
-                    "Item": i.Item,
+                    "Item": subPageMode === url.CREDIT_NOTE_1 ? null : i.Item,
+                    "ServiceItem_id": subPageMode === url.CREDIT_NOTE_1 ? i.Item : null,
                     "ItemName": i.ItemName,
                     "Quantity": i.Quantity,
                     "Unit": i.Unit,
@@ -754,7 +803,7 @@ const GoodsCreditNote = (props) => {
                     "MRP": i.MRP,
                     "MRPValue": i.MRPValue,
                     "Rate": i.Rate,
-                    "GST": i.GST,
+                    "GST": subPageMode === url.CREDIT_NOTE_1 ? "" : i.GST,
                     "ItemComment": i.ItemComment,
                     "CGST": Number(calculate.CGST_Amount).toFixed(2),
                     "SGST": Number(calculate.SGST_Amount).toFixed(2),
@@ -780,7 +829,7 @@ const GoodsCreditNote = (props) => {
             };
 
             const isGrandAmtRound = systemSetting.CreditDebitAmountRoundConfiguration === '1';
-            
+
             const jsonBody = JSON.stringify({
                 CRDRNoteDate: values.CRDRNoteDate,
                 Customer: values.Customer.value,
@@ -807,12 +856,19 @@ const GoodsCreditNote = (props) => {
             CompanyID: _cfunc.loginCompanyID(),
         });
         dispatch(Retailer_List(jsonBody));
-        dispatch(goButtonPartyItemAddPage({ jsonBody: { ..._cfunc.loginJsonBody(), "PartyID": loginSelectedPartyID() } }));
+        if (subPageMode === url.CREDIT_NOTE_1) {
+            dispatch(goButton_ServiceItemAssign({ jsonBody: { CompanyID: 1, "PartyID": loginSelectedPartyID() } }));
+        }
+        else {
+            dispatch(goButtonPartyItemAddPage({ jsonBody: { ..._cfunc.loginJsonBody(), "PartyID": loginSelectedPartyID() } }));
+        }
     }
 
     function partyOnChngeButtonHandler() {
         dispatch(Retailer_List_Success([]));
         dispatch(InvoiceNumberSuccess([]));
+        dispatch(goButtonPartyItemAddPageSuccess([]));
+        dispatch(goButton_ServiceItemAssign_Success([]));
         setTableArr([]);
         setState((i) => {
             let a = { ...i }
@@ -852,9 +908,6 @@ const GoodsCreditNote = (props) => {
                                         </Col>
                                     </FormGroup>
                                 </Col >
-
-
-
                             </Row>
 
                             <Row>
@@ -915,7 +968,6 @@ const GoodsCreditNote = (props) => {
                                                 <span className="invalid-feedback">{isError.Narration}</span>
                                             )}
                                         </Col>
-
                                     </FormGroup>
                                 </Col>
                             </Row>
@@ -931,7 +983,7 @@ const GoodsCreditNote = (props) => {
                                                 name="ItemName"
                                                 value={values.ItemName}
                                                 isDisabled={(pageMode === mode.modeSTPsave)}
-
+                                                isLoading={itemList_loading}
                                                 isSearchable={true}
                                                 className="react-dropdown"
                                                 classNamePrefix="dropdown"
@@ -939,7 +991,7 @@ const GoodsCreditNote = (props) => {
                                                     menu: provided => ({ ...provided, zIndex: 2 })
                                                 }}
 
-                                                options={ItemList_Options}
+                                                options={itemList_Options}
                                                 onChange={itemNameOnChangeHandler}
                                             />
                                         </Col>
@@ -977,11 +1029,9 @@ const GoodsCreditNote = (props) => {
                                                     menu: provided => ({ ...provided, zIndex: 2 })
                                                 }}
                                             />
-
                                         </Col>
                                     </FormGroup>
                                 </Col >
-
                             </Row>
                         </div>
 
@@ -1031,7 +1081,6 @@ const GoodsCreditNote = (props) => {
                                             loading={saveBtnloading}
                                             onClick={SaveHandler}
                                             userAcc={userPageAccessState}
-                                            module={"SalesReturn"}
                                         />
 
                                     </Col>
