@@ -38,6 +38,10 @@ const claimCustomerWisePrintIconClass = "fas fa-file-contract font-size-14";  //
 const claimItemWisePrintIconClass = "fas fa-file-signature";  //Icon Added For Claim Print on Claim list
 const claimMasterPrintIconClass = "far fa-file-alt font-size-14";  //Icon Added For Claim Print on Claim list
 const makeCreditNoteIconClass = "mdi mdi-file-move font-size-16";
+const ShowImageIconClass = "mdi mdi-image font-size-16";
+
+
+
 // const makeCreditNoteIconClass = "far fa-file-alt font-size-14";  //Icon Added For Claim Print on Claim list
 
 
@@ -175,9 +179,9 @@ export const listPageActionsButtonFunc = (props) => {
         const canMasterClaimPrint = hasRole("RoleAccess_IsPrint") && downClaimBtnFunc;
         const canSendToScm = isPartyTypeIDInSendToScm //  Currently Button  is remove From InVoice List of CX parties  further Development After Discussion  So condition is False
         const canMakeCreditNoteBtn = (subPageMode === url.SALES_RETURN_LIST) && hasRole("RoleAccess_IsSave") && rowData.IsApproved
-
         const canUpdatebtn = otherBtn_1Func && hasRole("RoleAccess_IsSave")
 
+        const canShowImages = downBtnFunc && (subPageMode === url.CLAIM_TRACKING_ENTRY_LIST)
 
 
         const dummyDisable_OrderApproval = !canOrderApproval && oderAprovalBtnFunc;
@@ -357,6 +361,16 @@ export const listPageActionsButtonFunc = (props) => {
                         isDummyBtn: dummyDisable_SendToScm
                     })}
 
+
+                    {renderButtonIfNeeded({   //Button Added for ClaimTraking list Show iamges
+                        condition: canShowImages,
+                        btnmode: mode.isShowImages,
+                        iconClass: ShowImageIconClass,
+                        actionFunc: downBtnFunc,
+                        title: "Show images",
+                        buttonClasss: printBtnCss,
+                        // isDummyBtn: dummyDisable_SendToScm
+                    })}
 
 
                     {renderButtonIfNeeded({

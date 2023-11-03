@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Col, FormGroup, Input, Label, Row } from "reactstrap";
+import { Col, FormGroup, Input, Label, Modal, Row } from "reactstrap";
 import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
 import {
@@ -36,6 +36,7 @@ import {
   fetchDataAndSetDropdown,
   getCurrent_Month_And_Year,
 } from "./ClaimRelatedFunc";
+import Slidewithcaption from "../../../components/Common/CommonImageComponent";
 
 const ClaimTrackingEntry = (props) => {
   const history = useHistory();
@@ -52,6 +53,12 @@ const ClaimTrackingEntry = (props) => {
   const [claimCheckByOption, setClaimCheckByOption] = useState([]);
   const [creditNoteStatusOption, setCreditNoteStatusOption] = useState([]);
   const [claimListfortrackingApi, setClaimListfortrackingApi] = useState([]);
+  const [modal_backdrop, setmodal_backdrop] = useState(false);   // Image Model open Or not
+
+
+  const [UploadFile, setUploadFile] = useState([]);
+
+
 
   const [yearAndMonth, setYearAndMonth] = useState(getCurrent_Month_And_Year);
 
@@ -75,6 +82,7 @@ const ClaimTrackingEntry = (props) => {
     ClaimSummaryDate: currentDate_ymd,
     CreditNoteAmount: "",
     CreditNoteUpload: "",
+    File: []
   };
 
   const [state, setState] = useState(() => initialFiledFunc(fileds));
@@ -151,6 +159,7 @@ const ClaimTrackingEntry = (props) => {
       dispatch(commonPageFieldSuccess(null));
     };
   }, []);
+
 
   useEffect(() => {
     if ((hasShowloction || hasShowModal) && pageField) {
@@ -236,6 +245,9 @@ const ClaimTrackingEntry = (props) => {
         values.CreditNoteUpload = CreditNoteUpload;
         values.ClaimText = FullClaimNo;
 
+
+
+
         values.ClaimId = {
           label: `${id} ${PartyName} /${PartyTypeName} (${ClaimAmount})`,
           value: Claim,
@@ -290,6 +302,21 @@ const ClaimTrackingEntry = (props) => {
       });
     }
   }, [postMsg]);
+
+  useEffect(() => {
+    if (UploadFile.length > 0) {
+      setmodal_backdrop(true)
+    }
+  }, [UploadFile])
+
+  function tog_backdrop() {
+    setmodal_backdrop(!modal_backdrop)
+    removeBodyCss()
+  }
+  function removeBodyCss() {
+    document.body.classList.add("no_padding")
+  }
+
 
   // update UseEffect
   useEffect(() => {
@@ -350,6 +377,8 @@ const ClaimTrackingEntry = (props) => {
     });
   };
 
+
+
   const CreditNoteDate_Onchange = (e, date) => {
     setState((i) => {
       const a = { ...i };
@@ -371,6 +400,27 @@ const ClaimTrackingEntry = (props) => {
   const partyOnChange = (hasSelect, evn) => {
     onChangeSelect({ hasSelect, evn, state, setState });
   };
+
+  const onchangeHandler = async (event, key, type) => {
+    const file = Array.from(event.target.files)
+    setState((i) => {
+      const a = { ...i }
+      a.values.File = file;
+      return a
+    })
+
+  }
+
+  const imageShowHandler = () => { // image Show handler
+    debugger
+    if (values.File[0] instanceof File) {
+      const slides = [{
+        Image: URL.createObjectURL(values.File[0])
+      }];
+      setUploadFile(slides)
+    }
+  }
+
 
   const ClaimIdOnChange = (hasSelect, evn) => {
     onChangeSelect({ hasSelect, evn, state, setState });
@@ -412,6 +462,63 @@ const ClaimTrackingEntry = (props) => {
     setClaimListfortrackingApi(resp.StatusCode === 200 ? resp.Data : []);
   }
 
+  // const saveHandeller = async (event) => {
+
+  //   event.preventDefault();
+  //   const btnId = event.target.id;
+
+  //   try {
+  //     if (formValid(state, setState)) {
+  //       _cfunc.btnIsDissablefunc({ btnId, state: true });
+
+  //       const jsonBody = JSON.stringify({
+  //         Date: values.Date,
+  //         Month: yearAndMonth.Month,
+  //         Year: yearAndMonth.Year,
+  //         ClaimReceivedSource: values.ClaimReceivedSource,
+  //         Type: values.Type.value,
+  //         ClaimTrade: values.ClaimTrade.value,
+  //         TypeOfClaim:
+  //           values.TypeOfClaim === "" ? null : values.TypeOfClaim.value,
+  //         ClaimAmount: values.ClaimAmount,
+  //         Remark: values.Remark,
+  //         ClaimCheckBy: values.ClaimCheckBy.value,
+  //         CreditNotestatus: values.CreditNotestatus.value,
+  //         CreditNoteNo: values.CreditNoteNo,
+  //         CreditNoteDate: values.CreditNoteDate,
+  //         CreditNoteAmount: values.CreditNoteAmount,
+  //         ClaimSummaryDate: values.ClaimSummaryDate,
+  //         CreditNoteUpload: null,
+  //         Claim: values.ClaimId.claimId,
+  //         Party: values.PartyName.value,
+  //         FullClaimNo: values.ClaimText
+  //           ? values.ClaimText
+  //           : values.ClaimId.claimId,
+  //         PartyType: values.ClaimId.PartyTypeID,
+  //       });
+
+  //       if (pageMode === mode.edit) {
+  //         dispatch(
+  //           updateClaimTrackingEntryID({ jsonBody, updateId: values.id, btnId })
+  //         );
+  //       } else {
+  //         dispatch(saveClaimTrackingEntry({ jsonBody, btnId }));
+  //       }
+  //     }
+  //   } catch (e) {
+  //     _cfunc.btnIsDissablefunc({ btnId, state: false });
+  //   }
+  // };
+
+
+  // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
+
+
+
+
+
+
+
   const saveHandeller = async (event) => {
     event.preventDefault();
     const btnId = event.target.id;
@@ -420,38 +527,36 @@ const ClaimTrackingEntry = (props) => {
       if (formValid(state, setState)) {
         _cfunc.btnIsDissablefunc({ btnId, state: true });
 
-        const jsonBody = JSON.stringify({
-          Date: values.Date,
-          Month: yearAndMonth.Month,
-          Year: yearAndMonth.Year,
-          ClaimReceivedSource: values.ClaimReceivedSource,
-          Type: values.Type.value,
-          ClaimTrade: values.ClaimTrade.value,
-          TypeOfClaim:
-            values.TypeOfClaim === "" ? null : values.TypeOfClaim.value,
-          ClaimAmount: values.ClaimAmount,
-          Remark: values.Remark,
-          ClaimCheckBy: values.ClaimCheckBy.value,
-          CreditNotestatus: values.CreditNotestatus.value,
-          CreditNoteNo: values.CreditNoteNo,
-          CreditNoteDate: values.CreditNoteDate,
-          CreditNoteAmount: values.CreditNoteAmount,
-          ClaimSummaryDate: values.ClaimSummaryDate,
-          CreditNoteUpload: null,
-          Claim: values.ClaimId.claimId,
-          Party: values.PartyName.value,
-          FullClaimNo: values.ClaimText
-            ? values.ClaimText
-            : values.ClaimId.claimId,
-          PartyType: values.ClaimId.PartyTypeID,
-        });
+        const formData = new FormData();
+        debugger
+        formData.append('Date', values.Date);
+        formData.append('Month', yearAndMonth.Month);
+        formData.append('Year', yearAndMonth.Year);
+        formData.append('ClaimReceivedSource', values.ClaimReceivedSource);
+        formData.append('Type', values.Type.value);
+        formData.append('ClaimTrade', values.ClaimTrade.value);
+        formData.append('TypeOfClaim', values.TypeOfClaim === "" ? 0 : values.TypeOfClaim.value);
+        formData.append('ClaimAmount', values.ClaimAmount);
+        formData.append('Remark', values.Remark);
+        formData.append('ClaimCheckBy', values.ClaimCheckBy.value);
+        formData.append('CreditNotestatus', values.CreditNotestatus.value);
+        formData.append('CreditNoteNo', values.CreditNoteNo);
+        formData.append('CreditNoteDate', values.CreditNoteDate);
+        formData.append('CreditNoteAmount', values.CreditNoteAmount);
+        formData.append('ClaimSummaryDate', values.ClaimSummaryDate);
+        // formData.append('CreditNoteUpload', null);
+        formData.append('Claim', values.ClaimId.claimId);
+        formData.append('Party', values.PartyName.value);
+        formData.append('FullClaimNo', values.ClaimText ? values.ClaimText : values.ClaimId.claimId);
+        formData.append('PartyType', values.ClaimId.PartyTypeID);
+        formData.append(`CreditNoteUpload`, values.File[0]);
 
         if (pageMode === mode.edit) {
           dispatch(
-            updateClaimTrackingEntryID({ jsonBody, updateId: values.id, btnId })
+            updateClaimTrackingEntryID({ formData, updateId: values.id, btnId })
           );
         } else {
-          dispatch(saveClaimTrackingEntry({ jsonBody, btnId }));
+          dispatch(saveClaimTrackingEntry({ formData }));
         }
       }
     } catch (e) {
@@ -459,7 +564,14 @@ const ClaimTrackingEntry = (props) => {
     }
   };
 
-  // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
+
+
+
+
+
+
+
+
   var IsEditMode_Css = "";
   if (modalCss || pageMode === mode.dropdownAdd) {
     IsEditMode_Css = "-5.5%";
@@ -470,6 +582,18 @@ const ClaimTrackingEntry = (props) => {
       <React.Fragment>
         <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
         <div className="page-content" style={{ marginBottom: "5cm" }}>
+
+          <Modal
+            isOpen={modal_backdrop}
+            toggle={() => {
+              tog_backdrop()
+            }}
+            style={{ width: "800px", height: "800px", borderRadius: "50%" }}
+            className="modal-dialog-centered "
+          >
+            {(UploadFile.length > 0) && <Slidewithcaption Images={UploadFile} />}
+          </Modal>
+
           <form noValidate>
             <div className="px-2 c_card_filter header text-black mb-2">
 
@@ -993,6 +1117,54 @@ const ClaimTrackingEntry = (props) => {
                   </FormGroup>
                 </Col>
               </Row>
+
+
+
+
+
+              <Row>
+                <Col sm="6">
+                  <FormGroup className="row mt-n2">
+                    <Label
+                      className="col-sm-1 p-2"
+                      style={{ width: "115px", marginRight: "0.4cm" }}
+                    >
+                      {"Upload Credit Note"}
+                    </Label>
+                    <Col sm="7">
+                      <div>
+                        <div className="btn-group btn-group-example col-8 " role="group">
+                          <Input
+                            type="file"
+                            className="form-control "
+                            name="image"
+                            id="file"
+                            multiple
+                            accept=".jpg, .jpeg, .png ,.pdf"
+                            onChange={(event) => { onchangeHandler(event, "ImageUpload") }}
+                          />
+
+                        </div>
+                        {/* <button name="image"
+                          accept=".jpg, .jpeg, .png ,.pdf"
+                          onClick={() => {
+                            imageShowHandler()
+                          }}
+                          id="ImageId" type="button" className="btn btn-primary "> Show </button> */}
+
+                      </div>
+
+                    </Col>
+                  </FormGroup>
+                </Col>
+              </Row>
+
+
+
+
+
+
+
             </div>
 
             <FormGroup>

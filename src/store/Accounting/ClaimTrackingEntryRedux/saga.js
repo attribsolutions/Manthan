@@ -7,19 +7,19 @@ import { date_dmy_func } from "../../../components/Common/CommonFunction";
 
 // List API
 function* Get_ClaimTrackingEntry_List_GenFunc({ config }) {     // getList API
-    
+
     const { jsonBody, subPageMode, goBtnMode } = config
     try {
         const response = yield call(apiCall.ClaimList_Get_Api, jsonBody);
         response["goBtnMode"] = goBtnMode;
-        
+
         response.Data.map((i) => {
             i.CreditNoteDate = date_dmy_func(i.CreditNoteDate);
             i.ClaimSummaryDate = date_dmy_func(i.ClaimSummaryDate);
             i.Date = date_dmy_func(i.Date);
             return i
         })
-        
+
         if (subPageMode === url.CLAIM_TRACKING_REPORT) {
             yield put(action.getClaimTrackingEntrySuccess(response));
         }
@@ -30,6 +30,10 @@ function* Get_ClaimTrackingEntry_List_GenFunc({ config }) {     // getList API
 }
 
 function* save_ClaimTrackingEntry_GenFunc({ config }) {    // Post API 
+
+    for (let pair of config.formData.entries()) {
+        console.log(pair[0], pair[1]);
+    }
 
     try {
         const response = yield call(apiCall.ClaimList_Post_API, config);
@@ -47,7 +51,10 @@ function* Edit_ClaimTrackingEntry_ID_GenFunc({ config }) {      // edit API
     } catch (error) { yield put(action.ClaimTrackingEntryApiErrorAction()) }
 }
 
-function* Update_ClaimTrackingEntry_ID_GenFunc({ config }) {         // update API
+function* Update_ClaimTrackingEntry_ID_GenFunc({ config }) {   // update API
+    for (let pair of config.formData.entries()) {
+        console.log(pair[0], pair[1]);
+    }
     try {
         const response = yield call(apiCall.update_ClaimTrackingEntry_List_Api, config);
         yield put(action.updateClaimTrackingEntryIDSuccess(response))

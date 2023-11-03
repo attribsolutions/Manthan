@@ -272,7 +272,7 @@ const InvoiceConfiguration = (props) => {
 
 
     const onchangeHandler = async (event, key, type) => {
-
+        debugger
         const file = Array.from(event.target.files)
         setState((i) => {
             const a = { ...i }
@@ -283,16 +283,21 @@ const InvoiceConfiguration = (props) => {
     }
 
     const imageShowHandler = () => { // image Show handler
-
+        debugger
         let slides = []
         if (values.PaymentQr.Image[0] instanceof File) {
             slides = [{
                 Image: URL.createObjectURL(values.PaymentQr.Image[0])
             }];
         } else {
-            slides = [{
-                Image: SystemSetting.Qr_Image
-            }];
+            if (SystemSetting.Qr_Image === null) {
+                slides = [];
+            } else {
+                slides = [{
+                    Image: SystemSetting.Qr_Image
+                }];
+            }
+
         }
         setImageTable(slides)
     }
@@ -338,7 +343,7 @@ const InvoiceConfiguration = (props) => {
                 setState((i) => {
                     const a = { ...i }
                     if (isFile(file)) {
-                        a.values.PaymentQr["Image"] = [null];
+                        a.values.PaymentQr["Image"] = [file];
                     }
                     return a
                 })

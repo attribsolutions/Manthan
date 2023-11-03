@@ -1,5 +1,5 @@
 import axios from "axios"
-import { del, get, put, post, postWithoutToken, postRefreshToken, getWithotMsg, postMethodExcel, delwithPostBody, postForFormData, } from "./api_helper"
+import { del, get, put, post, postWithoutToken, postRefreshToken, getWithotMsg, postMethodExcel, delwithPostBody, postForFormData, putForFormData, } from "./api_helper"
 import * as url from "./url_helper"
 
 // Gets the logged in user data from local session
@@ -709,10 +709,10 @@ export const TransactionLog_getjson_for_Transation_Id = ({ TransctionID }) => ge
 
 // Claim Tracking Entry
 export const ClaimListfortracking = (jsonBody) => post(url.CLAIM_LIST_FOR_TRACKING, jsonBody)// post api
-export const ClaimList_Post_API = ({ jsonBody }) => post(url.CLAIM_TRACKING, jsonBody)// post api
+export const ClaimList_Post_API = ({ formData }) => postForFormData(url.CLAIM_TRACKING, formData)// post api
 export const ClaimList_Get_Api = (jsonBody) => post(url.CLAIM_TRACKING_LIST, jsonBody) // get api
 export const edit_ClaimTrackingEntry_List_Api = ({ editId }) => get(`${url.CLAIM_TRACKING}/${editId}`) // edit api
-export const update_ClaimTrackingEntry_List_Api = ({ jsonBody, updateId }) => put(`${url.CLAIM_TRACKING}/${updateId}`, jsonBody)// update
+export const update_ClaimTrackingEntry_List_Api = ({ formData, updateId }) => putForFormData(`${url.CLAIM_TRACKING}/${updateId}`, formData)// update
 export const detelet_ClaimTrackingEntry_List_Api = ({ deleteId }) => del(`${url.CLAIM_TRACKING}/${deleteId}`) // delete api
 
 //CreditDebitDataExport
