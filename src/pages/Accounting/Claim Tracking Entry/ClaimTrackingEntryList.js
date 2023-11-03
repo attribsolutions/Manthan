@@ -14,15 +14,19 @@ import {
     saveClaimTrackingEntry_Success,
     updateClaimTrackingEntryIDSuccess
 } from "../../../store/Accounting/ClaimTrackingEntryRedux/action";
-import { Col, FormGroup, Input, Label, Row } from "reactstrap";
+import { Col, FormGroup, Input, Label, Modal, Row } from "reactstrap";
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList"
 import { getCurrent_Month_And_Year } from "./ClaimRelatedFunc";
 
 const ClaimTrackingEntryList = (props) => {
 
     const dispatch = useDispatch();
-  
+
     const [yearAndMonth, setYearAndMonth] = useState(getCurrent_Month_And_Year);
+    const [UploadFile, setUploadFile] = useState([]);
+    const [modal_backdrop, setmodal_backdrop] = useState(false);   // Image Model open Or not
+
+
 
     const reducers = useSelector(
         (state) => ({
@@ -63,6 +67,20 @@ const ClaimTrackingEntryList = (props) => {
         }
     }, []);
 
+    useEffect(() => {
+        if (UploadFile.length > 0) {
+            setmodal_backdrop(true)
+        }
+    }, [UploadFile])
+
+    function tog_backdrop() {
+        setmodal_backdrop(!modal_backdrop)
+        removeBodyCss()
+    }
+    function removeBodyCss() {
+        document.body.classList.add("no_padding")
+    }
+
     const { pageField, goBtnLoading } = reducers
 
     function goButtonHandler(e) {
@@ -71,7 +89,7 @@ const ClaimTrackingEntryList = (props) => {
             "Year": yearAndMonth.Year,
             "Month": yearAndMonth.Month,
         })
-        dispatch(getClaimTrackingEntrylist({jsonBody}));
+        dispatch(getClaimTrackingEntrylist({ jsonBody }));
     };
 
     async function MonthAndYearOnchange(e) {
@@ -79,14 +97,27 @@ const ClaimTrackingEntryList = (props) => {
         setYearAndMonth(selectdMonth);
     }
 
+    function downBtnFunc(config) {
+
+        if (config.rowData.CreditNoteUpload === null) {
+            return null
+        } else {
+            const link = document.createElement('a');
+            link.href = config.rowData.CreditNoteUpload;
+            link.setAttribute('download', 'yourFileName.pdf');
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            console.log(config.rowData.CreditNoteUpload)
+        }
+    }
+
     return (
 
         <React.Fragment>
             <PageLoadingSpinner isLoading={(reducers.goBtnLoading || !pageField)} />
             <div className="page-content">
-
                 <div className="px-3 c_card_filter header text-black mb-1" >
-
                     <Row >
                         <Col sm="6" className="mt-1 mb-n1">
                             <FormGroup className="row mt-2" >
@@ -118,6 +149,7 @@ const ClaimTrackingEntryList = (props) => {
                         <CommonPurchaseList
                             action={action}
                             reducers={reducers}
+                            downBtnFunc={downBtnFunc}
                             MasterModal={ClaimTrackingEntry}
                             masterPath={url.CLAIM_TRACKING_ENTRY}
                             newBtnPath={url.CLAIM_TRACKING_ENTRY}

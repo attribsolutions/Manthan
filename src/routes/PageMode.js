@@ -8,6 +8,9 @@ export const viewApproval = "viewApproval";
 export const isSendToScm = "isSendToScm";
 export const makeGoodsCreditNote = "makeGoodsCreditNote";
 
+export const isShowImages = "isShowImages";
+
+
 
 
 export const dropdownAdd = "dropdownAdd";

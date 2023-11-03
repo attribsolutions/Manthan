@@ -10,11 +10,11 @@ export function get(url, param) {
     .then((response) => {
       return response.data;
     })
-   
+
 }
 
 export function post(url, body) {
-  
+
   return axiosApi
     .post(url, body, {
       headers: {
@@ -25,7 +25,7 @@ export function post(url, body) {
     .then((response) => {
       return response.data;
     })
-  }
+}
 
 export function put(url, body) {
   return axiosApi
@@ -38,7 +38,7 @@ export function put(url, body) {
     .then((response) => {
       return response.data;
     })
-   
+
 }
 
 export function del(url) {
@@ -47,7 +47,7 @@ export function del(url) {
     .then((response) => {
       return response.data;
     })
-    
+
 }
 
 
@@ -119,7 +119,7 @@ export function delwithPostBody(url, body) {
 
 
 export function postForFormData(url, body) {
-  
+
   return axiosApi
     .post(url, body, {
       headers: {
@@ -130,5 +130,20 @@ export function postForFormData(url, body) {
     .then((response) => {
       return response.data;
     })
-    
+
+}
+
+
+export function putForFormData(url, body) {
+  return axiosApi
+    .put(url, body, {
+      headers: {
+        Accept: "application/json",
+        'Content-Type': 'multipart/form-data',
+      },
+    })
+    .then((response) => {
+      return response.data;
+    })
+
 }
