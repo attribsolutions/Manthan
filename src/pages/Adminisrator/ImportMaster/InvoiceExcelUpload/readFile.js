@@ -7,16 +7,7 @@ const XLSX = require('xlsx');
 
 export const readExcelFile = async ({ file, compareParameter }) => {
 
-
   try {
-
-    processing(5)
-
-    function processing(t) {
-      // progBar.style.width = `${t}%`
-      // progLabe.innerText = `${t}%`
-    }
-
 
     const reader = new FileReader();
     reader.readAsBinaryString(file);
@@ -41,7 +32,7 @@ export const readExcelFile = async ({ file, compareParameter }) => {
 
 
     let invalidMsg = []
-    let count = 0
+
     const comparefilter = compareParameter.filter(f => (f.Value !== null))
     if (comparefilter.length === 0) {
       invalidMsg.push(`Import filed Not Map`)
@@ -64,8 +55,7 @@ export const readExcelFile = async ({ file, compareParameter }) => {
           invalidMsg.push(`${c1.Value} :${r1[c1.Value]} is invalid Format`)
         }
       })
-      count = count + (70 / jsonResult.length)
-      processing(count)
+
     })
     if (invalidMsg.length > 0) {
       customAlert({
@@ -74,7 +64,7 @@ export const readExcelFile = async ({ file, compareParameter }) => {
       })
       return []
     }
-    
+
     return jsonResult
 
   } catch (e) { }

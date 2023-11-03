@@ -231,7 +231,8 @@ const ImportExcelFieldMap = (props) => {
 
         const jsonBody = JSON.stringify({
             PartyID: _cfunc.loginSelectedPartyID(),
-            CompanyID: _cfunc.loginCompanyID()
+            CompanyID: _cfunc.loginCompanyID(),
+            IsFieldType:1// type 1 is all Invoices fields
         })
         dispatch(GoButton_ImportFiledMap_Add({ jsonBody }))
     };

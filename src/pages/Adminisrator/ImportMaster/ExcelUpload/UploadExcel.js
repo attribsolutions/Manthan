@@ -141,7 +141,8 @@ const UploadExcel = (props) => {
         let partyId = ((commonFunc.loginIsSCMCompany() === 1)) ? commonFunc.loginPartyID() : e.value;
         const jsonBody = JSON.stringify({
             PartyID: partyId,
-            CompanyID: commonFunc.loginCompanyID()
+            CompanyID: commonFunc.loginCompanyID(),
+            IsFieldType:1// type 1 is all Invoices fields
         })
         dispatch(GoButton_ImportFiledMap_Add({ jsonBody }))
     };

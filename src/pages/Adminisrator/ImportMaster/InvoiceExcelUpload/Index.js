@@ -128,7 +128,8 @@ const InvoiceExcelUpload = (props) => {
 
         const jsonBody = JSON.stringify({
             PartyID: _cfunc.loginSelectedPartyID(),
-            CompanyID: _cfunc.loginCompanyID()
+            CompanyID: _cfunc.loginCompanyID(),
+            IsFieldType:1// type 1 is all Invoices fields
         })
         dispatch(GoButton_ImportFiledMap_Add({ jsonBody }))
     };
@@ -153,8 +154,8 @@ const InvoiceExcelUpload = (props) => {
             return;
         }
 
-        var filename = files[0].name;
-        var extension = filename.substring(filename.lastIndexOf(".")).toLowerCase();
+        const filename = files[0].name;
+        const extension = filename.substring(filename.lastIndexOf(".")).toLowerCase();
         if ((extension === '.csv') || extension === ".xlsx") {
             const readjson = await readExcelFile({ file: files[0], compareParameter, })
             if (readjson.length > 0) {

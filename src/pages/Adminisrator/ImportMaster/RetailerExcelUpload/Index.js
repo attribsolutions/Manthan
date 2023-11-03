@@ -28,10 +28,12 @@ import './scss.scss'
 import PriceDropOptions from "../../PartyMaster/MasterAdd/FirstTab/PriceDropOptions";
 import { priceListByPartyAction, priceListByPartyActionSuccess } from "../../../../store/Administrator/PriceList/action";
 import { getPartyTypelist, getPartyTypelistSuccess } from "../../../../store/Administrator/PartyTypeRedux/action";
-import { readExcelFile, retailer_SaveHandler } from "./AllHndlerFunc";
+import { retailer_FileDetails, retailer_SaveHandler } from "./AllHndlerFunc";
 import { C_Button, PageLoadingSpinner } from "../../../../components/Common/CommonButton";
 import { C_Select } from "../../../../CustomValidateForm";
-import { getPartyListAPI } from "../../../../store/Administrator/PartyRedux/action";
+// import { getPartyListAPI } from "../../../../store/Administrator/PartyRedux/action";
+import { readExcelFile } from "../InvoiceExcelUpload/readFile";
+import NewCommonPartyDropdown from "../../../../components/Common/NewCommonPartyDropdown";
 
 const RetailerExcelUpload = (props) => {
 
@@ -63,9 +65,10 @@ const RetailerExcelUpload = (props) => {
         compareParamLoading,
         saveBtnLoading,
         priceListDropDownLoading,
-        partyTypesDropDownLoading,
-        partyList,
-        partyDropDownLoading
+        // partyTypesDropDownLoading,
+        // partyList,
+        partyDropDownLoading,
+        commonPartyDropSelect
     } = useSelector((state) => ({
         postMsg: state.ImportExcelPartyMap_Reducer.partyExcelUploadMsg,
         saveBtnLoading: state.ImportExcelPartyMap_Reducer.partyUploadSaveLoading,
@@ -76,8 +79,8 @@ const RetailerExcelUpload = (props) => {
         partyTypes: state.PartyTypeReducer.ListData,
         partyTypesDropDownLoading: state.PartyTypeReducer.goBtnLoading,
 
-        partyList: state.PartyMasterReducer.partyList,
-        partyDropDownLoading: state.PartyMasterReducer.goBtnLoading,
+        // partyList: state.PartyMasterReducer.partyList,
+        // partyDropDownLoading: state.PartyMasterReducer.goBtnLoading,
 
         priceListByPartyType: state.PriceListReducer.priceListByPartyType,
         priceListDropDownLoading: state.PriceListReducer.priceListDropDownLoading,
@@ -85,26 +88,35 @@ const RetailerExcelUpload = (props) => {
         compareParameter: state.ImportExportFieldMap_Reducer.addGoButton,
         compareParamLoading: state.ImportExportFieldMap_Reducer.goBtnLoading,
 
+        commonPartyDropSelect: state.CommonPartyDropdownReducer.commonPartyDropSelect
     }));
 
     useLayoutEffect(() => {
         const page_Id = pageId.INVOICE_EXCEL_UPLOAD
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
-        dispatch(GoButton_ImportFiledMap_AddSuccess([]));
         dispatch(priceListByPartyActionSuccess([]))
         dispatch(getPartyTypelist());
-        dispatch(getPartyListAPI());
-        goButtonHandler()
-        if (!userAdminRole) {
-            SetPartySelect({ value: _cfunc.loginPartyID() })
-        }
+        // dispatch(getPartyListAPI());
+
         return () => {
             dispatch(commonPageFieldSuccess(null));
-            dispatch(GoButton_ImportFiledMap_AddSuccess([]));
             dispatch(priceListByPartyActionSuccess([]))
             dispatch(getPartyTypelistSuccess([]))
         }
+    }, []);
+
+    // Common Party Dropdown useEffect
+    useEffect(() => {
+        dispatch(GoButton_ImportFiledMap_AddSuccess([]));
+        goButtonHandler()
+        if (commonPartyDropSelect.value > 0) {
+        }
+        return () => {
+            dispatch(GoButton_ImportFiledMap_AddSuccess([]));
+
+        }
+
     }, []);
 
     const location = { ...history.location }
@@ -165,64 +177,91 @@ const RetailerExcelUpload = (props) => {
         }
     }, [partyTypes])
 
-    function goButtonHandler(e) {
+    function goButtonHandler() {
+
         const jsonBody = JSON.stringify({
-            PartyID: "",
-            CompanyID: ""
+            PartyID:'',
+            CompanyID: '',
+            // PartyID: commonPartyDropSelect.value,
+            // CompanyID: _cfunc.loginCompanyID(),
+            IsFieldType: 2// type 2 is all Retailer fields
         })
         dispatch(GoButton_ImportFiledMap_Add({ jsonBody }))
     };
 
 
     async function veifyExcelBtn_Handler() {
-
-        if (compareParameter.length === 0) {
-            customAlert({
-                Type: 3,
-                Message: "Please wait Downloading field Details.",
-            })
-            return
+        let alertMsg = ''
+        debugger
+        if (commonPartyDropSelect.value === 0) {
+            alertMsg = "Please Select Party.";
         }
+        else if (compareParameter.length === 0) {
+            alertMsg = "Please wait Downloading field Details.";
+        }
+        else if (selectedFiles.length === 0) {
+            alertMsg = "Please choose any file..."
+        };
 
-        var files = selectedFiles;
-        if (files.length == 0) {
+
+        if (alertMsg.length > 0) {
             customAlert({
                 Type: 3,
-                Message: "Please choose any file...",
+                Message: alertMsg,
             })
             return;
         }
 
-        var filename = files[0].name;
-        var extension = filename.substring(filename.lastIndexOf(".")).toUpperCase();
 
-        if (extension == '.CSV') {
-
-            const readjson = await readExcelFile({ file: files[0], compareParameter, })
+        const filename = selectedFiles[0].name;
+        const extension = filename.substring(filename.lastIndexOf(".")).toLowerCase();
+        if ((extension === '.csv') || extension === ".xlsx") {
+            const readjson = await readExcelFile({ file: selectedFiles[0], compareParameter, })
             if (readjson.length > 0) {
 
-                setPreUploadjson(readjson)
-                setPreViewDivShow(true)
-                setReadJsonDetail(readjson)
+                const isdetails = await retailer_FileDetails({ compareParameter, readjson })
+                let { invoiceNO } = isdetails;
+                if ((invoiceNO.length > 0)) {
+                    setPreUploadjson(readjson)
+                    setPreViewDivShow(true)
+                    setReadJsonDetail(readjson)
+
+                } else {
+                    customAlert({
+                        Type: 3,
+                        Message: "Mapping not match."
+                    })
+                }
             }
 
         } else {
             customAlert({
                 Type: 3,
-                Message: "Please select a valid CSV file.",
+                Message: 'Unsupported file format. Please select an Excel (XLSX) or CSV file.',
             })
         }
     }
 
 
     async function handleAcceptedFiles(files) {
-        if (compareParameter.length === 0) {
+
+        let alertMsg = ''
+        
+        if (commonPartyDropSelect.value === 0) {
+            alertMsg = "Please Select Party.";
+        }
+        else if (compareParameter.length === 0) {
+            alertMsg = "Please wait Downloading field Details.";
+        }
+
+        if (alertMsg.length > 0) {
             customAlert({
                 Type: 3,
-                Message: "Please wait Downloading field Details.",
+                Message: alertMsg,
             })
-            return
+            return;
         }
+
 
         if (selectedFiles.length > 0) {
             const isConfirmed = await customAlert({
@@ -230,7 +269,6 @@ const RetailerExcelUpload = (props) => {
                 Message: "Do you confirm your choice?",
             });
             if (!isConfirmed) {
-
                 return
             }
         };
@@ -276,7 +314,8 @@ const RetailerExcelUpload = (props) => {
     const uploadSaveHandler = (event) => {
 
         let validMsg = []
-        if ((partySelect === "")) {
+
+        if ((commonPartyDropSelect.value === "")) {
             validMsg.push({ Msg: "Please Select Party." })
         }
         if ((priceListSelect.value === '')) {
@@ -295,7 +334,7 @@ const RetailerExcelUpload = (props) => {
             dispatch,
             compareParameter,
             readJsonDetail,
-            partySelect,
+            partySelect:commonPartyDropSelect,
             priceListSelect,
             retailerId
         })
@@ -306,110 +345,61 @@ const RetailerExcelUpload = (props) => {
         return (
             <React.Fragment>
                 <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
-                <PageLoadingSpinner isLoading={(partyTypesDropDownLoading || partyDropDownLoading || compareParamLoading || !pageField)} />
+                <PageLoadingSpinner isLoading={(!pageField)} />
                 <form noValidate>
                     <div className="page-content">
-                        {
-                            userAdminRole ? <>
-                                <div className="px-2 c_card_header text-black" >
-                                    <div className="   c_card_filter text-black" style={{ paddingBottom: "3px" }} >
 
-                                        <Row className="pt-2">
-                                            <Col sm="5">
-                                                <FormGroup className="row px-1">
-                                                    <Label className="col-sm-5 p-2" style={{ width: "83px" }}>
-                                                        Party
-                                                    </Label>
-                                                    <Col sm="6">
-                                                        <C_Select
-                                                            value={partySelect}
-                                                            isSearchable={true}
-                                                            isLoading={partyDropDownLoading}
-                                                            className="react-dropdown"
-                                                            classNamePrefix="dropdown"
-                                                            options={partyList.map((data) => ({
-                                                                value: data.id,
-                                                                label: data.Name,
-                                                            }))}
-
-                                                            onChange={(e) => { SetPartySelect(e) }}
-                                                            styles={{ menu: (provided) => ({ ...provided, zIndex: 2 }) }}
-                                                        />
-                                                    </Col>
-                                                </FormGroup>
-                                            </Col>
-                                        </Row>
-
-                                        <row className='mb-2'>
-                                            < Col md={6}>
-                                                <FormGroup className=" row px-1">
-                                                    <Label className="col-sm-5 p-2" style={{ width: "83px" }}>PriceList </Label>
-                                                    <Col md={5}>
-                                                        <Input
-                                                            value={priceListSelect.label}
-                                                            disabled={partyDropDownLoading}
-                                                            autoComplete={"off"}
-                                                            placeholder="Select..."
-                                                            onClick={priceListOnClick}
-                                                        />
-                                                        <PriceDropOptions
-                                                            data={priceListByPartyType}
-                                                            priceList={priceListSelect}
-                                                            setPriceSelect={setPriceListSelect} />
-                                                    </Col>
-                                                </FormGroup>
-                                            </Col>
-                                        </row>
+                        {/* // userAdminRole ?  */}
+                        {/* 
+                        {(!(compareParameter.length > 0)) ?
+                            <div className="row ">
+                                <div className="d-flex justify-content-start p-2 ">
+                                    <div>Please wait Downloading field Details.</div>
+                                    <div >
+                                        <div className="dot-pulse">
+                                            <div className="bounce1"></div>
+                                            <div className="bounce2"></div>
+                                            <div className="bounce3"></div>
+                                        </div>
                                     </div>
                                 </div>
-                            </>
-                                : <>
-                                    {(!(compareParameter.length > 0)) ?
-                                        <div className="row ">
-                                            <div className="d-flex justify-content-start p-2 ">
-                                                <div>Please wait Downloading field Details.</div>
-                                                <div >
-                                                    <div className="dot-pulse">
-                                                        <div className="bounce1"></div>
-                                                        <div className="bounce2"></div>
-                                                        <div className="bounce3"></div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        :
-                                        <div >
-                                            <div className="px-2 c_card_header text-black" >
-                                                <div className="   c_card_filter text-black" style={{ paddingBottom: "5px", paddingTop: "7px" }} >
+                            </div>
+                            : */}
+                        <NewCommonPartyDropdown />
 
-                                                    <row className='mb-2'>
-                                                        < Col md={6}>
-                                                            <FormGroup className=" row px-1">
-                                                                <Label className="col col-sm-1  mt-2" style={{ width: "83px" }}>PriceList </Label>
-                                                                <Col md={5}>
-                                                                    <Input
-                                                                        value={priceListSelect.label}
-                                                                        disabled={partyDropDownLoading}
-                                                                        autoComplete={"off"}
-                                                                        placeholder="Select..."
-                                                                        onClick={priceListOnClick}
-                                                                    />
-                                                                    <PriceDropOptions
-                                                                        data={priceListByPartyType}
-                                                                        priceList={priceListSelect}
-                                                                        setPriceSelect={setPriceListSelect} />
-                                                                </Col>
-                                                            </FormGroup>
-                                                        </Col>
-                                                    </row>
-                                                </div>
-                                            </div>
-                                            <h4 className="pt-4 pb-4 text-primary" >{"Upload Your Excel."}</h4>
-                                        </div>}
+                        <div >
+                            <div className="px-2 c_card_header text-black" >
+                                <div className="   c_card_filter text-black" style={{ paddingBottom: "5px", paddingTop: "7px" }} >
+
+                                    <row className='mb-2'>
+                                        < Col md={6}>
+                                            <FormGroup className=" row px-1">
+                                                <Label className="col col-sm-1  mt-2" style={{ width: "83px" }}>PriceList </Label>
+                                                <Col md={5}>
+                                                    <Input
+                                                        value={priceListSelect.label}
+                                                        disabled={partyDropDownLoading}
+                                                        autoComplete={"off"}
+                                                        placeholder="Select..."
+                                                        onClick={priceListOnClick}
+                                                    />
+                                                    <PriceDropOptions
+                                                        data={priceListByPartyType}
+                                                        priceList={priceListSelect}
+                                                        setPriceSelect={setPriceListSelect} />
+                                                </Col>
+                                            </FormGroup>
+                                        </Col>
+                                    </row>
+                                </div>
+                            </div>
+                            <h4 className="pt-4 pb-4 text-primary" >{"Upload Your Excel."}</h4>
+                        </div>
 
 
-                                </>
-                        }
+
+
+
 
 
                         <div className="mb-3 mt-3">
