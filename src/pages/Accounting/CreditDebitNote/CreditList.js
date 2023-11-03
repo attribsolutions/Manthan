@@ -79,7 +79,7 @@ const CreditList = () => {
 
     const { pageField, RetailerList, CreditDebitType, listBtnLoading, Cancel_Credit_Debit_EInvoice, Uploaded_Credit_Debit_EInvoice } = reducers;
     const values = { ...state.values }
-
+    console.log(CreditDebitType)
     const action = {
         editId: Edit_CreditList_ID,
         deleteId: delete_CreditList_ID,
@@ -124,7 +124,7 @@ const CreditList = () => {
             newBtnPath = url.CREDIT_NOTE_1;
             buttonMsgLable = "Credit"
         };
-        
+
         setOtherState({ masterPath, newBtnPath, buttonMsgLable, page_Id })
         setpageMode(page_Mode)
         dispatch(commonPageFieldListSuccess(null))
@@ -219,8 +219,11 @@ const CreditList = () => {
         else if (subPageMode === url.DEBIT_LIST) {
             return CreditDebitType.find((index) => index.Name === "DebitNote")?.id;
         }
-
+        else if (subPageMode === url.CREDIT_NOTE_LIST_1) {
+            return CreditDebitType.find((index) => index.Name === "CreditNote")?.id;
+        }
     }
+    
     function goButtonHandler() {
 
         const jsonBody = JSON.stringify({

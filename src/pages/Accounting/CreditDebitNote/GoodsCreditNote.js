@@ -794,7 +794,7 @@ const GoodsCreditNote = (props) => {
                 return {
                     "CRDRNoteDate": "2023-09-04",
                     "Item": subPageMode === url.CREDIT_NOTE_1 ? null : i.Item,
-                    "ServiceItem_id": subPageMode === url.CREDIT_NOTE_1 ? i.Item : null,
+                    "ServiceItem": subPageMode === url.CREDIT_NOTE_1 ? i.Item : null,
                     "ItemName": i.ItemName,
                     "Quantity": i.Quantity,
                     "Unit": i.Unit,
@@ -824,8 +824,10 @@ const GoodsCreditNote = (props) => {
 
             const noteType_BySubPageMode = () => {
                 return (subPageMode === url.GOODS_CREDIT_NOTE) ?
-                    CreditDebitType.find((index) => index.Name === "Goods CreditNote")?.id
-                    : CreditDebitType.find((index) => index.Name === "Goods DebitNote")?.id;
+                    CreditDebitType.find((index) => index.Name === "Goods CreditNote")?.id :
+                    (subPageMode === url.CREDIT_NOTE_1) ?
+                        CreditDebitType.find((index) => index.Name === "CreditNote")?.id
+                        : CreditDebitType.find((index) => index.Name === "Goods DebitNote")?.id;
             };
 
             const isGrandAmtRound = systemSetting.CreditDebitAmountRoundConfiguration === '1';
