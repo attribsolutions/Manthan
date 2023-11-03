@@ -1,8 +1,9 @@
-import { call, delay, put, takeLatest } from "redux-saga/effects";
+import { call, put, takeLatest } from "redux-saga/effects";
 import * as  apiCall from "../../../helpers/backend_helper";
 import * as actionType from "./actionType";
 import * as action from "./action";
 import { amountCommaSeparateFunc, listpageConcatDateAndTime, date_dmy_func } from "../../../components/Common/CommonFunction";
+import { url } from "../../../routes";
 
 // Bank list Dropdown API
 function* Invoice_No_List_GenFunc({ jsonBody }) {
@@ -78,19 +79,21 @@ function* Return_Approve_GenFunc({ config }) {
 }
 
 function* addButton_saleReturn_GenFunc({ config }) {
+
     try {
-        const { jsonBody, InvoiceId, returnMode } = config;
-
-        if (returnMode === 2) {//returnMode 1 = "itemWise"
-            const response = yield call(apiCall.SalesReturn_add_button_api_For_Item, jsonBody);
-
-            yield put(action.SalesReturnAddBtn_Action_Succcess(response));
+        const { jsonBody, InvoiceId, returnMode, subPageMode } = config;
+        let response
+        if ((returnMode === 2) && !(subPageMode === url.CREDIT_NOTE_1)) {//returnMode 1 = "itemWise"
+            response = yield call(apiCall.SalesReturn_add_button_api_For_Item, jsonBody);
         }
-        else {//returnMode 2 = "invoiceWise"
-            let response = yield call(apiCall.SalesReturn_add_button_api_For_Invoice, InvoiceId);
+        else if (subPageMode === url.CREDIT_NOTE_1) {
+            response = yield call(apiCall.SalesReturn_add_button_api_For_CreditNote1, jsonBody);
+        }
+        else {//returnMode  else = "invoiceWise"
+            response = yield call(apiCall.SalesReturn_add_button_api_For_Invoice, InvoiceId);
             response.Data = response.Data.InvoiceItems
-            yield put(action.SalesReturnAddBtn_Action_Succcess(response))
         }
+        yield put(action.SalesReturnAddBtn_Action_Succcess(response))
 
     } catch (error) { yield put(action.SalesReturnApiErrorAction()) }
 }

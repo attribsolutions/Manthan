@@ -45,11 +45,18 @@ const StockReport = (props) => {
 		{
 			text: "Quantity",
 			dataField: "ActualQty",
+			align: "right",
 			sort: true
 		},
 		{
 			text: "Unit",
 			dataField: "Unit",
+			sort: true
+		},
+		{
+			text: "Amount",
+			dataField: "Amount",
+			align: "right",
 			sort: true
 		},
 	]);
@@ -201,63 +208,75 @@ const StockReport = (props) => {
 		// Define an array of field names and their corresponding checkbox and select states
 		const buttonStateArray = [
 			{
-				fieldName: 'ItemName',
+				text: 'ItemName',
 				dataField: 'ItemName',
-				checkboxState: true,
+				showing: true,
+				groupBy: true,
 				sequence: 1
 			},
 			{
-				fieldName: 'BatchCode',
+				text: 'BatchCode',
 				dataField: 'BatchCode',
-				checkboxState: batchWise,
+				showing: batchWise,
+				groupBy: batchWise,
 				sequence: 2
 			},
 			{
-				fieldName: 'MRP',
+				text: 'MRP',
 				dataField: 'MRP',
-				checkboxState: mrpWise,
+				align: "right",
+				showing: mrpWise,
+				groupBy: mrpWise,
 				sequence: 3
 			},
 			{
-				fieldName: 'Quantity',
+				text: 'Quantity',
 				dataField: 'ActualQty',
-				checkboxState: true,
+				align: "right",
+				showing: true,
+				groupBy: false,
 				sequence: 4
 			},
 			{
-				fieldName: 'Unit',
+				text: 'Unit',
 				dataField: 'Unit',
-				checkboxState: true,
+				showing: true,
+				groupBy: true,
 				sequence: 5
 			},
+
 		];
 
 		let filterTableData = [...baseData];
-		const newSelectedColumns = buttonStateArray
-			.filter(option => option.checkboxState)
-			.map(option => ({ text: option.fieldName, dataField: option.dataField }));
+		const newSelectedColumns = buttonStateArray.filter(option => option.showing)
 
-		// Add additional default columns here
+		newSelectedColumns.push(
+			{ text: 'Amount', dataField: 'Amount', sequence: 6, align: "right", },
+		);
 
 		setSelectedColumns(newSelectedColumns);
 
 		// Apply grouping and filtering logic for each checkbox option
-		if (buttonStateArray.some(option => option.checkboxState)) {
+		if (buttonStateArray.some(option => option.groupBy)) {
 			const groupedData = {};
 
 			filterTableData.forEach(item => {
 				const groupValues = buttonStateArray
-					.filter(option => option.checkboxState)
-					.map(option => item[option.fieldName]);
+					.filter(option => option.groupBy)
+					.map(option => item[option.text]);
 
 				const groupKey = groupValues.join('-');
 				if (!groupedData[groupKey]) {
 					groupedData[groupKey] = {
 						...item,
 						ActualQty: 0,
+						Amount: 0
 					};
 				}
+
 				groupedData[groupKey].ActualQty += parseFloat(item.ActualQty);
+				groupedData[groupKey].Amount += parseFloat(item.Amount);
+
 			});
 
 			const groupedArray = Object.values(groupedData);
@@ -265,11 +284,15 @@ const StockReport = (props) => {
 
 			// Apply filters based on selected options
 			buttonStateArray.forEach(option => {
-				if (option.checkboxState && option.selectValue && option.selectValue.value !== '') {
-					filterTableData = filterTableData.filter(item => item[option.fieldName] === option.selectValue.label);
+				if (option.groupBy && option.selectValue && option.selectValue.value !== '') {
+					filterTableData = filterTableData.filter(item => item[option.text] === option.selectValue.label);
 				}
 			});
 		}
+		// Format "Amount" to have exactly two decimal places using toFixed
+		filterTableData.forEach(item => {
+			item.Amount = parseFloat(item.Amount).toFixed(2);
+		});
 		return { filterTableData };
 	}
 
