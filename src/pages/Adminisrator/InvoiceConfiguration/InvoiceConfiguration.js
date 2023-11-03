@@ -459,7 +459,7 @@ const InvoiceConfiguration = (props) => {
 
                                                         </Col>
 
-                                                        <span> Note :</span>  <span style={{ color: "red" }}> If any changes in Invoice Configuration then kindly re-upload your payment QR Code.</span>
+
                                                     </FormGroup>
 
 
