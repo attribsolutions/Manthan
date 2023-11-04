@@ -171,17 +171,22 @@ const ImportExcelPartyMap = (props) => {
         {
             text: "Route",
             dataField: "RouteName",
-            sort: true
+            sort: true,
+            hidden: values.MapType.value !== 1
         },
         {
             text: "Customer Address",
             dataField: "CustomerAddress",
-            sort: true
+            sort: true,
+            hidden: values.MapType.value !== 1
+
         },
         {
             text: "GSTIN No",
             dataField: "GSTIN",
-            sort: true
+            sort: true,
+            hidden: values.MapType.value !== 1
+
         },
 
         {
