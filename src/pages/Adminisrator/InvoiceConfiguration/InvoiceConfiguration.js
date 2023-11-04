@@ -49,6 +49,7 @@ import { saveMsgUseEffect, userAccessUseEffect } from "../../../components/Commo
 import { getpartysetting_API, savePartySetting, savePartySettingMaster_Success } from "../../../store/Administrator/PartySetting/action";
 import Slidewithcaption from "../../../components/Common/CommonImageComponent";
 import NewCommonPartyDropdown from "../../../components/Common/NewCommonPartyDropdown";
+import { async } from "q";
 
 
 const InvoiceConfiguration = (props) => {
@@ -283,7 +284,6 @@ const InvoiceConfiguration = (props) => {
     }
 
     const imageShowHandler = () => { // image Show handler
-        debugger
         let slides = []
         if (values.PaymentQr.Image[0] instanceof File) {
             slides = [{
@@ -291,6 +291,7 @@ const InvoiceConfiguration = (props) => {
             }];
         } else {
             if (SystemSetting.Qr_Image === null) {
+                customAlert({ Type: 3, Message: "Payment QR not uploaded" });
                 slides = [];
             } else {
                 slides = [{
@@ -430,41 +431,61 @@ const InvoiceConfiguration = (props) => {
                                     <Card>
                                         <CardBody className="c_card_body">
                                             <Row>
+
                                                 <Col md={4} >
                                                     <FormGroup className="mb-3 ">
                                                         <Label htmlFor="validationCustom01">Payment QR</Label>
-                                                        <Col sm={7} >
+                                                        <Row>
+                                                            <Col sm={4} >
 
-                                                            <div>
-                                                                <div className="btn-group btn-group-example mb-3 col-7" role="group">
-                                                                    <Input
-                                                                        type="file"
-                                                                        className="form-control "
-                                                                        name="image"
-                                                                        id="file"
-                                                                        multiple
-                                                                        accept=".jpg, .jpeg, .png ,.pdf"
-                                                                        onChange={(event) => { onchangeHandler(event, "ImageUpload") }}
-                                                                    />
-                                                                    <button name="image"
-                                                                        accept=".jpg, .jpeg, .png ,.pdf"
-                                                                        onClick={() => {
+                                                                <div>
+                                                                    <div className="btn-group btn-group-example mb-3 col-12" role="group">
+                                                                        <Input
+                                                                            type="file"
+                                                                            className="form-control "
+                                                                            name="image"
+                                                                            id="file"
+                                                                            multiple
+                                                                            accept=".jpg, .jpeg, .png ,.pdf"
+                                                                            onChange={(event) => { onchangeHandler(event, "ImageUpload") }}
+                                                                        />
+                                                                        <button name="image"
+                                                                            accept=".jpg, .jpeg, .png ,.pdf"
+                                                                            onClick={() => {
+                                                                                imageShowHandler()
+                                                                            }}
+                                                                            id="ImageId" type="button" className="btn btn-primary ">Show</button>
+                                                                    </div>
 
-                                                                            if (SystemSetting.PaymentQRCodeimageonInvoice) { imageShowHandler() }
-                                                                        }}
-                                                                        id="ImageId" type="button" className="btn btn-primary "> Show </button>
                                                                 </div>
 
-                                                            </div>
 
-                                                        </Col>
+                                                            </Col>
+                                                            <Col sm={4}>
+                                                                <button name="image"
+                                                                    onClick={async () => {
+                                                                        const isConfirmed = await customAlert({
+                                                                            Type: 7,
+                                                                            Message: "Do you want To Remove Payment QR ?",
+                                                                        });
+
+                                                                        if (isConfirmed) {
+                                                                            setState((i) => {
+                                                                                const a = { ...i }
+                                                                                a.values.PaymentQr["Image"] = [null];
+                                                                                return a
+                                                                            })
+                                                                        }
+                                                                    }}
+                                                                    id="ImageId" type="button" className="btn btn-primary "> Remove QR</button>
+                                                            </Col>
+                                                        </Row>
 
 
                                                     </FormGroup>
 
 
                                                 </Col>
-
                                                 <Col md={4} >
                                                     <FormGroup className="mb-3">
                                                         <Label htmlFor="validationCustom01"> {fieldLabel.HSNCodeDigit} </Label>
