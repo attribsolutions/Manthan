@@ -377,7 +377,7 @@ export const SALES_RETURN_LIST_API = '/PurchaseReturnFilter'
 export const SALES_RETURN_ITEM = '/PurchaseReturn'
 export const SEND_TO_SUPERSTOCKIEST_POST_API = "/SalesReturnconsolidateItem"
 export const RETURN_ITEM_APPROVE_AIP = '/ReturnItemApprove'
-export const ADD_BUTTON_API_FOR_ITEM_CREDIT_NOTE_1 = '/ReturnCentralServiceItem' // privious Api  =>'/ReturnItemAdd'
+export const ADD_BUTTON_API_FOR_ITEM_CREDIT_NOTE_1 = '/CentralServiceItem' // privious Api  =>'/ReturnItemAdd'
 
 // Credit and Debit API
 export const CREDIT_DEBIT = '/CreditDebitNote'
@@ -501,6 +501,7 @@ export const CENTRAL_SERVICE_ITEM = '/CentralItemService'
 // Service Item Assign
 export const SERVICE_ITEM_ASSIGN_SAVE = '/CentralServiceItemAssign';
 export const SERVICE_ITEM_ASSIGN_GO_BUTTON = '/CentralServiceItemAssignFilter';
+
 
 // Party Details
 export const GET_PARTY_DETAILS_LIST = '/GetPartydetailsOncluster'
