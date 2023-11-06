@@ -7,7 +7,7 @@ import {
 } from "reactstrap";
 
 import { MetaTags } from "react-meta-tags";
-import { commonPageField, commonPageFieldSuccess, getGroupList } from "../../../store/actions";
+import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess, getGroupList } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -26,6 +26,7 @@ import { C_Select } from "../../../CustomValidateForm";
 import { Get_Subcluster_On_cluster_API, VendorSupplierCustomer } from "../../../helpers/backend_helper";
 import { getClusterlist } from "../../../store/Administrator/ClusterRedux/action";
 import { GoButton_For_PartyDetails, GoButton_For_PartyDetails_Success, savePartyDetails_Action, savePartyDetails_Success } from "../../../store/Administrator/PartyDetailsRedux/action";
+import CustomTable from "../../../CustomTable2";
 
 const PartyDetails = (props) => {
 
@@ -78,6 +79,7 @@ const PartyDetails = (props) => {
         dispatch(commonPageField(page_Id));
         dispatch(getClusterlist());
         dispatch(getGroupList());
+        dispatch(BreadcrumbShowCountlabel(`Count:${0}`));
         return () => {
             dispatch(GoButton_For_PartyDetails_Success([]));
         }
@@ -86,6 +88,10 @@ const PartyDetails = (props) => {
     useEffect(() => {
         fetchDistributorData(goBtnList)
     }, [goBtnList]);
+
+    // useEffect(() => {
+    //     dispatch(BreadcrumbShowCountlabel(`Count:${tableData.length}`));
+    // }, [tableData]);
 
     const location = { ...history.location }
     const hasShowModal = props.hasOwnProperty(mode.editValue)
@@ -205,7 +211,8 @@ const PartyDetails = (props) => {
             }
         }
         setGoBtnLoading(false);
-        setTableData(innterTableData)
+        setTableData(innterTableData);
+
     }
 
     const Cluster_Options = clusterDropdown.map((Data) => ({
@@ -423,13 +430,15 @@ const PartyDetails = (props) => {
                                             keyField="PartyID"
                                             id="table_Arrow"
                                             classes={"table  table-bordered table-hover"}
+
                                             noDataIndication={
                                                 <div className="text-danger text-center ">
                                                     Party Not available
                                                 </div>
                                             }
-                                            onDataSizeChange={(e) => {
-                                                _cfunc.tableInputArrowUpDounFunc("#table_Arrow")
+                                            onDataSizeChange={({ dataSize }) => {
+                                                debugger
+                                                dispatch(BreadcrumbShowCountlabel(`Count : ${dataSize}`))
                                             }}
                                             {...toolkitProps.baseProps}
                                         />
@@ -450,9 +459,17 @@ const PartyDetails = (props) => {
                                 </React.Fragment>
                             )}
                         </ToolkitProvider>
-
+                        {/* <CustomTable
+                            keyField={"id"}
+                            data={tableData}
+                            columns={pagesListColumns}
+                            paginationEnabled={false}
+                            onDataSizeChange={({ dataCount }) => {
+                                dispatch(BreadcrumbShowCountlabel(`Count:${dataCount}`));
+                            }}
+                            noDataIndication={<div className="text-danger text-center table-cursor-pointer"  >Data Not available</div>}
+                        /> */}
                     </div>
-
 
                 </div>
             </React.Fragment>
