@@ -32,7 +32,6 @@ const AddressTabForm = forwardRef((props, ref) => {
 
 	const [buttonShow, setButtonShow] = useState(false);
 
-	// const [selectedRow, setSelectedRow] = useState(null);
 	const { values } = state;
 	const { isError } = state;
 	const { fieldLabel } = state;
@@ -63,43 +62,7 @@ const AddressTabForm = forwardRef((props, ref) => {
 		}
 	}, [pageField])
 
-	// const addRowsHandler = (e) => {
-	// 	e.preventDefault();
-
-	// 	try {
-	// 		const isvalid = formValid(state, setState)
-	// 		if (isvalid) {
-
-	// 			const val = {
-	// 				Address: values.PartyAddress,
-	// 				FSSAINo: values.FSSAINo,
-	// 				FSSAIExipry: values.FSSAIExipry,
-	// 				PIN: values.PIN,
-	// 				IsDefault: values.IsDefault,
-	// 				fssaidocument: imageTable
-	// 			};
-	// 			// Check if updatedTableData length is zero and set IsDefault to true
-
-	// 			if (values.IsDefault) {
-	// 				addressTable.forEach(ele => {
-	// 					ele.IsDefault = false
-	// 				});
-	// 			}
-	// 			const tableleth = addressTable.length;
-	// 			val.RowId = tableleth + 1;
-	// 			const updatedTableData = [...addressTable];
-	// 			updatedTableData.push(val);
-
-	// 			if (updatedTableData.length === 1) {
-	// 				updatedTableData[0] = { ...updatedTableData[0], IsDefault: true };
-	// 			}
-	// 			setAddressTable(updatedTableData)
-	// 			setState(resetFunction(fileds, state))// Clear form values 
-	// 		}
-	// 	} catch (error) { }
-	// }
-
-	const addOrUpdateData = (e, btnMode) => {
+	const addOrUpdateDataHandler = (e, btnMode) => {
 
 		try {
 			if (btnMode === "update") { setButtonShow(true) }
@@ -135,7 +98,6 @@ const AddressTabForm = forwardRef((props, ref) => {
 						}
 					});
 					setAddressTable(updatedTableData);
-					// setSelectedRow(null); // Clear the selected row
 
 				} else {
 					// Add a new row
@@ -154,9 +116,7 @@ const AddressTabForm = forwardRef((props, ref) => {
 				setState(resetFunction(fileds, state)); // Clear form values
 
 			}
-		} catch (error) {
-			// Handle errors
-		}
+		} catch (error) { }
 	};
 
 	const onchangeHandler = async (event) => {
@@ -207,7 +167,6 @@ const AddressTabForm = forwardRef((props, ref) => {
 			a.hasValid.IsDefault.valid = true
 
 			return a
-
 		})
 	}
 
@@ -243,7 +202,7 @@ const AddressTabForm = forwardRef((props, ref) => {
 										<Button
 											className="button_add badge badge-soft-primary font-size-12 waves-effect  waves-light  btn-outline-primary  "
 											type="button"
-											onClick={(e) => addOrUpdateData(e, "add")}
+											onClick={(e) => addOrUpdateDataHandler(e, "add")}
 										>
 											<i className="dripicons-plus mt-3"> </i>
 										</Button>
@@ -258,7 +217,7 @@ const AddressTabForm = forwardRef((props, ref) => {
 											// style={{ backgroundColor: "#0762ab", color: "#fff" }}
 											type="button"
 											className="btn btn-info font-size-12 text-center"
-											onClick={(e) => addOrUpdateData(e, "update")}
+											onClick={(e) => addOrUpdateDataHandler(e, "update")}
 										>
 											Update
 										</C_Button>
@@ -326,10 +285,11 @@ const AddressTabForm = forwardRef((props, ref) => {
 						<Col md="4">
 							<FormGroup className="mb-3">
 								<Label htmlFor="validationCustom01">{fieldLabel.PIN} </Label>
-								<Input
+								<CInput
 									name="PIN"
 									value={values.PIN}
 									type="text"
+									cpattern={decimalRegx}
 									className={isError.PIN.length > 0 ? "is-invalid form-control" : "form-control"}
 									placeholder="Please Enter PIN"
 									autoComplete='off'
@@ -387,9 +347,9 @@ const AddressTabForm = forwardRef((props, ref) => {
 				<AddressDetailsTable
 					addressTable={addressTable}
 					onEdit={handleEditRow}
-					// selectedRow={selectedRow}
 					setAddressTable={setAddressTable}
 				/>
+
 				{/* <AddressDetailsTable addressTable={addressTable} setAddressTable={setAddressTable} /> */}
 			</Row>
 
