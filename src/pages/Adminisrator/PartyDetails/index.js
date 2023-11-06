@@ -7,24 +7,23 @@ import {
 } from "reactstrap";
 
 import { MetaTags } from "react-meta-tags";
-import { GetVenderSupplierCustomer, commonPageField, commonPageFieldSuccess, getGroupList } from "../../../store/actions";
+import { commonPageField, commonPageFieldSuccess, getGroupList } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
     comAddPageFieldFunc,
     initialFiledFunc,
 } from "../../../components/Common/validationFunction";
-import { Change_Button, Go_Button, PageLoadingSpinner, SaveButton, } from "../../../components/Common/CommonButton";
+import { Change_Button, Go_Button, SaveButton, } from "../../../components/Common/CommonButton";
 import { breadcrumbReturnFunc, metaTagLabel, } from "../../../components/Common/CommonFunction";
 import { mode, pageId, url } from "../../../routes/index"
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
-import { Post_RouteUpdateSuccess, } from "../../../store/Administrator/RouteUpdateRedux/action";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { C_Select } from "../../../CustomValidateForm";
-import { Get_PartyDetails_List, Get_Subcluster_On_cluster_API, VendorSupplierCustomer } from "../../../helpers/backend_helper";
+import { Get_Subcluster_On_cluster_API, VendorSupplierCustomer } from "../../../helpers/backend_helper";
 import { getClusterlist } from "../../../store/Administrator/ClusterRedux/action";
 import { GoButton_For_PartyDetails, GoButton_For_PartyDetails_Success, savePartyDetails_Action, savePartyDetails_Success } from "../../../store/Administrator/PartyDetailsRedux/action";
 
@@ -47,21 +46,18 @@ const PartyDetails = (props) => {
     const [tableData, setTableData] = useState([]);
     const [forceRefresh, setForceRefresh] = useState(false);
 
-    // const [forceRefresh_Cluster, setForceRefresh] = useState(false);
-    // const [forceRefresh_subCluster, setForceRefresh_subCluster] = useState(false);
+    const [groupSelect, setGroupSelect] = useState({ value: 0, label: "All" });
+    const [goBtnLoading, setGoBtnLoading] = useState(false);
 
-    const [groupSelect, setGroupSelect] = useState({ value: "", label: "All" });
-
-    const { goBtnLoading,
+    const {
         goBtnList,
+        saveBtnloading,
         postMsg,
         pageField,
         clusterDropdown,
         groupList,
         groupListLoading,
         userAccess } = useSelector((state) => ({
-
-            goBtnLoading: state.PartyDetailsReducer.loading,
             goBtnList: state.PartyDetailsReducer.goBtnList,
 
             clusterDropdown: state.ClusterReducer.ClusterListData,
@@ -118,7 +114,7 @@ const PartyDetails = (props) => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(savePartyDetails_Success({ Status: false }))
-
+            setTableData([]);
             if (pageMode === "other") {
                 customAlert({
                     Type: 1,
@@ -133,7 +129,8 @@ const PartyDetails = (props) => {
             }
         }
         else if (postMsg.Status === true) {
-            dispatch(savePartyDetails_Success({ Status: false }))
+            dispatch(savePartyDetails_Success({ Status: false }));
+            setTableData([]);
             customAlert({
                 Type: 4,
                 Message: JSON.stringify(postMsg.Message),
@@ -158,9 +155,9 @@ const PartyDetails = (props) => {
             "Route": "",
             "Type": 2,
         };
-
+        setGoBtnLoading(true);
         for (const distributor of data) {
-            jsonBody.PartyID = distributor.id;
+            jsonBody.PartyID = distributor.PartyID;
 
             try {
 
@@ -173,17 +170,17 @@ const PartyDetails = (props) => {
                 if (resp.StatusCode === 200) {
 
                     innterTableData.push({
-                        DistributorID: distributor.id,
-                        DistributorName: distributor.Name,
+                        DistributorID: distributor.PartyID,
+                        DistributorName: distributor.PartyName,
 
-                        SuperstokiestID: distributor.Supplier_id === null ? "" : distributor.Supplier_id,
-                        SuperstokiestName: distributor.Supplier_Name === null ? "Select..." : distributor.Supplier_Name,
+                        SuperstokiestID: distributor.Supplier_id,
+                        SuperstokiestName: distributor.SupplierName,
 
-                        clusterId: distributor.Cluster_id === null ? "" : distributor.Cluster_id,
-                        clusterName: distributor.Cluster_Name === null ? "Select..." : distributor.Cluster_Name,
+                        clusterId: distributor.Cluster_id,
+                        clusterName: distributor.ClusterName,
 
                         subClusterId: distributor.SubCluster_id === null ? "" : distributor.SubCluster_id,
-                        subClusterName: distributor.SubCluster_Name === null ? "Select..." : distributor.SubCluster_Name,
+                        subClusterName: distributor.SubClusterName === null ? "Select..." : distributor.SubClusterName,
 
                         subClusterOptions: (subClusterResponse === undefined) ? [] : subClusterResponse.Data.map((index) => ({
                             value: index.id,
@@ -199,13 +196,15 @@ const PartyDetails = (props) => {
                 } else {
                     customAlert({
                         Type: 1,
-                        Message: `Error for distributor :${distributor.Name}`,
+                        Message: `Error for distributor :${distributor.PartyName}`,
                     });
                 }
+
             } catch (error) {
-                _cfunc.CommonConsole(`Error for distributor :${distributor.Name}}`, error);
+                _cfunc.CommonConsole(`Error for distributor :${distributor.PartyName}}`, error);
             }
         }
+        setGoBtnLoading(false);
         setTableData(innterTableData)
     }
 
@@ -220,12 +219,11 @@ const PartyDetails = (props) => {
     }));
 
     GroupList_Options.unshift({
-        value: "",
+        value: 0,
         label: "All"
     });
 
     const fetchSubClusterOptions = async (clusterID, row) => {
-
         try {
             const response = await Get_Subcluster_On_cluster_API(clusterID);
             if (response.StatusCode === 200) {
@@ -256,8 +254,12 @@ const PartyDetails = (props) => {
             formatter: (cell, row) => {
                 return (
                     <C_Select
-                        defaultValue={{ value: row.SuperstokiestID, label: row.SuperstokiestName }}
+                        defaultValue={(row.SuperstokiestID === null || row.SuperstokiestName === undefined) ? "" : { value: row.SuperstokiestID, label: row.SuperstokiestName }}
                         options={row.SuperstokiestOptions}
+                        onChange={(e) => {
+                            row.SuperstokiestID = e.value;
+                            row.SuperstokiestName = e.label;
+                        }}
                         styles={{
                             menu: (provided) => ({
                                 ...provided,
@@ -279,7 +281,7 @@ const PartyDetails = (props) => {
                     <C_Select
                         id={`Cluster${key}`}
                         key={`Cluster${row.id}`}
-                        defaultValue={{ value: row.clusterId, label: row.clusterName }}
+                        defaultValue={(row.clusterId === null || row.clusterName === undefined) ? "" : { value: row.clusterId, label: row.clusterName }}
                         onChange={(e) => {
                             row.clusterId = e.value;
                             row.clusterName = e.label;
@@ -307,11 +309,11 @@ const PartyDetails = (props) => {
             style: () => ({ width: "20%" }),
             formatExtraData: { forceRefresh },
             formatter: (cell, row,) => {
-                debugger
+
                 return (
                     <C_Select
                         key={row.subClusterId}
-                        value={row.subClusterId === "" ?
+                        value={(row.subClusterId === "" || row.subClusterName === undefined) ?
                             { value: "", label: "Select..." }
                             : { value: row.subClusterId, label: row.subClusterName }}
                         onChange={(e) => {
@@ -335,25 +337,24 @@ const PartyDetails = (props) => {
     ];
 
     async function goButtonHandler() {
-        dispatch(GoButton_For_PartyDetails(_cfunc.loginEmployeeID()))
+        dispatch(GoButton_For_PartyDetails({ employeeID: _cfunc.loginEmployeeID(), groupID: groupSelect.value }))
     }
 
     const SaveHandler = async (event) => {
-        debugger
+
         event.preventDefault();
         const btnId = event.target.id
         try {
 
             const data = tableData.map((index) => ({
                 "Party": index.DistributorID,
-                "Group": "",
+                "Group": (groupSelect.value === 0) ? null : groupSelect.value,
                 "Cluster": index.clusterId,
                 "SubCluster": index.subClusterId,
                 "Supplier": index.SuperstokiestID,
             }))
 
             const jsonBody = JSON.stringify(data)
-            console.log(jsonBody)
             dispatch(savePartyDetails_Action({ jsonBody, btnId }));
 
         } catch (e) { _cfunc.btnIsDissablefunc({ btnId, state: false }) }
@@ -367,7 +368,6 @@ const PartyDetails = (props) => {
         return (
             <React.Fragment>
                 <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
-                {/* <PageLoadingSpinner  /> */}
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                     <div className="px-2  mb-1 c_card_filter text-black" >
                         <div className="row" >
@@ -383,7 +383,7 @@ const PartyDetails = (props) => {
                                             isSearchable={true}
                                             isLoading={groupListLoading}
                                             className="react-dropdown"
-                                            isDisabled={(goBtnList.length > 0) ? true : false}
+                                            isDisabled={(tableData.length > 0) ? true : false}
                                             classNamePrefix="dropdown"
                                             styles={{
                                                 menu: provided => ({ ...provided, zIndex: 2 })
@@ -396,7 +396,7 @@ const PartyDetails = (props) => {
                             </Col>
 
                             <Col sm="1" className="mt-3 mb-3">
-                                {goBtnList.length === 0 ?
+                                {tableData.length === 0 ?
                                     <Go_Button
                                         loading={goBtnLoading}
                                         onClick={goButtonHandler}
@@ -411,7 +411,7 @@ const PartyDetails = (props) => {
                     <div style={{ minHeight: "45vh" }}>
 
                         <ToolkitProvider
-                            keyField="id"
+                            keyField="PartyID"
                             data={tableData}
                             columns={pagesListColumns}
                             search
@@ -420,7 +420,7 @@ const PartyDetails = (props) => {
                                 <React.Fragment>
                                     <div className="table-responsive table" style={{ minHeight: "55vh" }}>
                                         <BootstrapTable
-                                            keyField="id"
+                                            keyField="PartyID"
                                             id="table_Arrow"
                                             classes={"table  table-bordered table-hover"}
                                             noDataIndication={
@@ -432,7 +432,6 @@ const PartyDetails = (props) => {
                                                 _cfunc.tableInputArrowUpDounFunc("#table_Arrow")
                                             }}
                                             {...toolkitProps.baseProps}
-                                        // {...paginationTableProps}
                                         />
                                         {mySearchProps(toolkitProps.searchProps)}
                                     </div>
@@ -440,7 +439,7 @@ const PartyDetails = (props) => {
                                     {tableData.length > 0 ?
                                         <div className="row save1" style={{ paddingBottom: 'center' }}>
                                             <SaveButton pageMode={pageMode}
-                                                // loading={saveBtnloading}
+                                                loading={saveBtnloading}
                                                 onClick={SaveHandler}
                                                 userAcc={userPageAccessState}
                                             />

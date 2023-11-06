@@ -16,9 +16,9 @@ export const savePartyDetails_Success = (resp) => ({// Save  success
     payload: resp,
 });
 
-export const GoButton_For_PartyDetails = (employeeID) => ({  // go button api
+export const GoButton_For_PartyDetails = (config = {}) => ({  // go button api
     type: GO_BUTTON_PARTY_DETAILS_LIST,
-    employeeID,
+    config,
 });
 
 export const GoButton_For_PartyDetails_Success = (resp) => ({

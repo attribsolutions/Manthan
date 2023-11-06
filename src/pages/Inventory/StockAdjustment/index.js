@@ -220,7 +220,7 @@ const StockAdjustment = (props) => {
             <components.Option {...props}>
                 <div {...innerProps}>
                     <div >Batch:{data.BatchCode}</div>
-                    <div>Stystem:{data.SystemBatchCode}</div>
+                    <div>BatchCode:{data.BatchCode}</div>
                     <div>MRP:{data.MRP}</div>
                     <div>Quantity:{data.BaseUnitQuantity}</div>
                 </div>
@@ -320,7 +320,7 @@ const StockAdjustment = (props) => {
                         <tbody>
                             {cellContent.map((index2) => (
                                 <tr key={index1.id}>
-                                    <td data-label="BatchCode">{index2.SystemBatchCode}</td>
+                                    <td data-label="BatchCode">{index2.BatchCode}</td>
                                     <td data-label="Stock Quantity" style={{ textAlign: "right" }} >
                                         <samp id={`ActualQuantity-${index1.id}-${index2.id}`}>{index2.ActualQuantity}</samp>
                                     </td>

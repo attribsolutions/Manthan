@@ -387,9 +387,6 @@ export const RECEIPT_NUMBER_LIST = '/ReceiptNoList'
 export const UPLOADED_CREDIT_DEBIT_E_INVOICE = '/Uploaded_CreditDebitNotes_EInvoice'
 export const CANCEL_CREDIT_DEBIT_E_INVOICE = '/Cancel_CreditDebitNotes_EInvoice'
 
-
-
-
 export const PARTY_LEDGER_API = '/SAPLedger'
 export const PRODUCT_MARGIN_REPORT_API = '/ProductMarginReport'
 
@@ -504,5 +501,5 @@ export const SERVICE_ITEM_ASSIGN_GO_BUTTON = '/CentralServiceItemAssignFilter';
 
 
 // Party Details
-export const GET_PARTY_DETAILS_LIST = '/GetPartydetailsOncluster'
+export const GET_PARTY_DETAILS_LIST = '/GetPartydetails'
 export const POST_PARTY_DETAILS = '/PartyDetails'

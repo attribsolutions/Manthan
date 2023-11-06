@@ -140,11 +140,11 @@ const PartyMaster = (props) => {
 	}, [])
 
 	useEffect(() => {
-		
+
 		if (editData.Status === true) {
 
 			try {
-				
+
 				if ((hasShowloction || hasShowModal) || (subPageMode === url.PARTY_SELF_EDIT)) {
 
 					let hasEditVal = null
@@ -324,7 +324,7 @@ const PartyMaster = (props) => {
 	}, [postMsg.Status])
 
 	useEffect(async () => {
-		
+
 		if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
 			if (subPageMode === url.PARTY_SELF_EDIT) {
 				dispatch(updatePartyIDSuccess({ Status: false }));
@@ -335,7 +335,7 @@ const PartyMaster = (props) => {
 			}
 
 			else {
-				
+
 				//***************mobail app api*********************** */
 				if (subPageMode === url.RETAILER_MASTER && !(isMobileRetailer)) {
 					const jsonBody = JSON.stringify({
@@ -387,7 +387,7 @@ const PartyMaster = (props) => {
 		if ((values.PartyAddress.length > 0) && (isError.PartyAddress === "")) {
 			customAlert({
 				Type: 4,
-				Message: "Please Address Details Add In Table",
+				Message: "Don't forget to fill in the address details in the table."
 			})
 			return;
 		}
