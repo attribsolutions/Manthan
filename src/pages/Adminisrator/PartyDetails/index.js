@@ -26,7 +26,6 @@ import { C_Select } from "../../../CustomValidateForm";
 import { Get_Subcluster_On_cluster_API, VendorSupplierCustomer } from "../../../helpers/backend_helper";
 import { getClusterlist } from "../../../store/Administrator/ClusterRedux/action";
 import { GoButton_For_PartyDetails, GoButton_For_PartyDetails_Success, savePartyDetails_Action, savePartyDetails_Success } from "../../../store/Administrator/PartyDetailsRedux/action";
-import CustomTable from "../../../CustomTable2";
 
 const PartyDetails = (props) => {
 
@@ -117,6 +116,7 @@ const PartyDetails = (props) => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(savePartyDetails_Success({ Status: false }))
             setTableData([]);
+            setGroupSelect({ value: 0, label: "All" })
             if (pageMode === "other") {
                 customAlert({
                     Type: 1,
@@ -433,7 +433,6 @@ const PartyDetails = (props) => {
                                                 </div>
                                             }
                                             onDataSizeChange={({ dataSize }) => {
-                                                debugger
                                                 dispatch(BreadcrumbShowCountlabel(`Count : ${dataSize}`))
                                             }}
                                             {...toolkitProps.baseProps}
