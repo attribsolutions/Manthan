@@ -10,10 +10,10 @@ function* save_PartyDetails_GenFunc({ config }) {
     } catch (error) { yield put(action.PartyDetailsApiErrorAction()) }
 }
 
-function* PartyDetailsList_GenFunc(employeeID) {  // go button api call     
-   
+function* PartyDetailsList_GenFunc({ config }) {  // go button api call     
+debugger
     try {
-        const response = yield call(apiCall.Get_PartyDetails_List, employeeID);
+        const response = yield call(apiCall.Get_PartyDetails_List, config);
         yield put(action.GoButton_For_PartyDetails_Success(response.Data));
     } catch (error) { yield put(action.PartyDetailsApiErrorAction()) }
 }

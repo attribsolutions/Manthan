@@ -46,8 +46,7 @@ const createStockDetail = (item) => ({
 const createBatchCodeDetail = (item) => ({
     id: item.id,
     value: item.id,
-    // label: `${item.BatchCode} (${item.SystemBatchCode}) MRP:${item.MRP} Qty:${item.BaseUnitQuantity}`,
-    label: item.SystemBatchCode,
+    label: item.BatchCode,
     ActualQuantity: item.BaseUnitQuantity,
     Qty: item.BaseUnitQuantity,
     ...item, // Spread the rest of the properties
@@ -58,7 +57,7 @@ const createBatchCodeDetail = (item) => ({
 
 
 export const AddItemInTableFunc = async ({ itemNameSelect, TableArr }) => {
-    
+
     let isfound = TableArr.find(i => i.Item === itemNameSelect.value);
     if (!itemNameSelect) {
         return { TableArr, data: [], message: "Please Select ItemName", type: 4 };
@@ -87,7 +86,7 @@ export const AddItemInTableFunc = async ({ itemNameSelect, TableArr }) => {
     const zeroIndexObject = resp.Data[0];
 
     const hasBaseUnit = zeroIndexObject.UnitOptions.find(i => i.IsBase === true);
-    
+
     if (hasBaseUnit === undefined) {
         return {
             TableArr,

@@ -11,7 +11,9 @@ import {
 	onChangeText,
 	resetFunction
 } from '../../../../../components/Common/validationFunction';
-import { C_DatePicker } from '../../../../../CustomValidateForm';
+import { CInput, C_DatePicker, decimalRegx } from '../../../../../CustomValidateForm';
+import { C_Button } from '../../../../../components/Common/CommonButton';
+import { date_ymd_func } from '../../../../../components/Common/CommonFunction';
 
 const AddressTabForm = forwardRef((props, ref) => {
 
@@ -28,6 +30,9 @@ const AddressTabForm = forwardRef((props, ref) => {
 	const [addressTable, setAddressTable] = useState([]);
 	const [imageTable, setImageTable] = useState('');
 
+	const [buttonShow, setButtonShow] = useState(false);
+
+	// const [selectedRow, setSelectedRow] = useState(null);
 	const { values } = state;
 	const { isError } = state;
 	const { fieldLabel } = state;
@@ -58,41 +63,101 @@ const AddressTabForm = forwardRef((props, ref) => {
 		}
 	}, [pageField])
 
-	const addRowsHandler = (e) => {
-		e.preventDefault();
+	// const addRowsHandler = (e) => {
+	// 	e.preventDefault();
 
-	try {
-		const isvalid = formValid(state, setState)
-		if (isvalid) {
+	// 	try {
+	// 		const isvalid = formValid(state, setState)
+	// 		if (isvalid) {
 
-	const val = {
-		Address: values.PartyAddress,
-		FSSAINo: values.FSSAINo,
-		FSSAIExipry: values.FSSAIExipry,
-		PIN: values.PIN,
-		IsDefault: values.IsDefault,
-		fssaidocument: imageTable
-	};
-		// Check if updatedTableData length is zero and set IsDefault to true
+	// 			const val = {
+	// 				Address: values.PartyAddress,
+	// 				FSSAINo: values.FSSAINo,
+	// 				FSSAIExipry: values.FSSAIExipry,
+	// 				PIN: values.PIN,
+	// 				IsDefault: values.IsDefault,
+	// 				fssaidocument: imageTable
+	// 			};
+	// 			// Check if updatedTableData length is zero and set IsDefault to true
 
-		if (values.IsDefault) {
-			addressTable.forEach(ele => {
-				ele.IsDefault = false
-			});
-		}
-		const tableleth = addressTable.length;
-		val.RowId = tableleth + 1;
-		const updatedTableData = [...addressTable];
-		updatedTableData.push(val);
+	// 			if (values.IsDefault) {
+	// 				addressTable.forEach(ele => {
+	// 					ele.IsDefault = false
+	// 				});
+	// 			}
+	// 			const tableleth = addressTable.length;
+	// 			val.RowId = tableleth + 1;
+	// 			const updatedTableData = [...addressTable];
+	// 			updatedTableData.push(val);
 
-			if (updatedTableData.length === 1) {
-				updatedTableData[0] = { ...updatedTableData[0], IsDefault: true };
+	// 			if (updatedTableData.length === 1) {
+	// 				updatedTableData[0] = { ...updatedTableData[0], IsDefault: true };
+	// 			}
+	// 			setAddressTable(updatedTableData)
+	// 			setState(resetFunction(fileds, state))// Clear form values 
+	// 		}
+	// 	} catch (error) { }
+	// }
+
+	const addOrUpdateData = (e, btnMode) => {
+
+		try {
+			if (btnMode === "update") { setButtonShow(true) }
+
+			const isvalid = formValid(state, setState);
+
+			let editRow = state.values
+
+			if (isvalid) {
+				const val = {
+					Address: values.PartyAddress,
+					FSSAINo: values.FSSAINo,
+					FSSAIExipry: values.FSSAIExipry,
+					PIN: values.PIN,
+					IsDefault: values.IsDefault,
+					fssaidocument: imageTable
+				};
+
+				if (values.IsDefault) {
+					addressTable.forEach(ele => {
+						ele.IsDefault = false;
+					});
+				}
+
+				if (btnMode === "update") {
+
+					// Update the selected row
+					const updatedTableData = addressTable.map((row) => {
+						if (row.RowId === editRow.RowId) {
+							return { ...editRow, ...val }; // Update the selected row
+						} else {
+							return row; // Keep other rows unchanged
+						}
+					});
+					setAddressTable(updatedTableData);
+					// setSelectedRow(null); // Clear the selected row
+
+				} else {
+					// Add a new row
+					const tableleth = addressTable.length;
+					val.RowId = tableleth + 1;
+					const updatedTableData = [...addressTable];
+					updatedTableData.push(val);
+
+					if (updatedTableData.length === 1) {
+						updatedTableData[0] = { ...updatedTableData[0], IsDefault: true };
+					}
+					setAddressTable(updatedTableData);
+				}
+				setButtonShow(false);
+
+				setState(resetFunction(fileds, state)); // Clear form values
+
 			}
-		setAddressTable(updatedTableData)
-		setState(resetFunction(fileds, state))// Clear form values 
-	}
-	} catch (error) { }
-	}
+		} catch (error) {
+			// Handle errors
+		}
+	};
 
 	const onchangeHandler = async (event) => {
 
@@ -121,9 +186,30 @@ const AddressTabForm = forwardRef((props, ref) => {
 		window.open("https://foscos.fssai.gov.in/");
 	}
 
+	const handleEditRow = (row) => {
 
+		setButtonShow(true);
+		setState((i) => {
 
+			const a = { ...i }
+			a.values.PartyAddress = row.Address;
+			a.values.FSSAINo = row.FSSAINo;
+			a.values.FSSAIExipry = date_ymd_func(row.FSSAIExipry)
+			a.values.PIN = row.PIN;
+			a.values.IsDefault = row.IsDefault;
+			a.values["RowId"] = row.RowId;
+			a.values["id"] = row.id
 
+			a.hasValid.PartyAddress.valid = true
+			a.hasValid.FSSAINo.valid = true
+			a.hasValid.FSSAIExipry.valid = true
+			a.hasValid.PIN.valid = true
+			a.hasValid.IsDefault.valid = true
+
+			return a
+
+		})
+	}
 
 	const AddressTab = (
 		<Row>
@@ -150,20 +236,35 @@ const AddressTabForm = forwardRef((props, ref) => {
 							</FormGroup>
 
 						</Col>
+						{!(buttonShow) ?
+							<Col md={1}>
+								<Row className=" mt-3">
+									<Col >
+										<Button
+											className="button_add badge badge-soft-primary font-size-12 waves-effect  waves-light  btn-outline-primary  "
+											type="button"
+											onClick={(e) => addOrUpdateData(e, "add")}
+										>
+											<i className="dripicons-plus mt-3"> </i>
+										</Button>
+									</Col>
+								</Row>
+							</Col> :
+							<Col md={1}>
+								<Row style={{ marginTop: "29px" }}>
+									<Col >
 
-						<Col md={1}>
-							<Row className=" mt-3">
-								<Col >
-									<Button
-										className="button_add badge badge-soft-primary font-size-12 waves-effect  waves-light  btn-outline-primary  "
-										type="button"
-										onClick={addRowsHandler}
-									>
-										<i className="dripicons-plus mt-3"> </i>
-									</Button>
-								</Col>
-							</Row>
-						</Col>
+										<C_Button
+											// style={{ backgroundColor: "#0762ab", color: "#fff" }}
+											type="button"
+											className="btn btn-info font-size-12 text-center"
+											onClick={(e) => addOrUpdateData(e, "update")}
+										>
+											Update
+										</C_Button>
+									</Col>
+								</Row>
+							</Col>}
 					</Row>
 
 					<Row>
@@ -283,7 +384,13 @@ const AddressTabForm = forwardRef((props, ref) => {
 				</CardBody>
 			</Card>
 			<Row>
-				<AddressDetailsTable addressTable={addressTable} setAddressTable={setAddressTable} />
+				<AddressDetailsTable
+					addressTable={addressTable}
+					onEdit={handleEditRow}
+					// selectedRow={selectedRow}
+					setAddressTable={setAddressTable}
+				/>
+				{/* <AddressDetailsTable addressTable={addressTable} setAddressTable={setAddressTable} /> */}
 			</Row>
 
 		</Row>

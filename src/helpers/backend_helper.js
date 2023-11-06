@@ -769,7 +769,7 @@ export const ServiceItemAssign_Save_API = ({ jsonBody }) => post(url.SERVICE_ITE
 export const ServiceItemAssign_GoButton_API = ({ jsonBody }) => post(url.SERVICE_ITEM_ASSIGN_GO_BUTTON, jsonBody) // get api
 
 // Party Details
-export const Get_PartyDetails_List = ({ employeeID }) => get(`${url.GET_PARTY_DETAILS_LIST}/${employeeID}`)
+export const Get_PartyDetails_List = ({ employeeID, groupID }) => get(`${url.GET_PARTY_DETAILS_LIST}/${employeeID}/${groupID}`)
 export const post_PartyDetails = ({ jsonBody }) => post(url.POST_PARTY_DETAILS, jsonBody)// post api
 
 export {
