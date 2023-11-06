@@ -89,10 +89,6 @@ const PartyDetails = (props) => {
         fetchDistributorData(goBtnList)
     }, [goBtnList]);
 
-    // useEffect(() => {
-    //     dispatch(BreadcrumbShowCountlabel(`Count:${tableData.length}`));
-    // }, [tableData]);
-
     const location = { ...history.location }
     const hasShowModal = props.hasOwnProperty(mode.editValue)
 
@@ -459,16 +455,6 @@ const PartyDetails = (props) => {
                                 </React.Fragment>
                             )}
                         </ToolkitProvider>
-                        {/* <CustomTable
-                            keyField={"id"}
-                            data={tableData}
-                            columns={pagesListColumns}
-                            paginationEnabled={false}
-                            onDataSizeChange={({ dataCount }) => {
-                                dispatch(BreadcrumbShowCountlabel(`Count:${dataCount}`));
-                            }}
-                            noDataIndication={<div className="text-danger text-center table-cursor-pointer"  >Data Not available</div>}
-                        /> */}
                     </div>
 
                 </div>
