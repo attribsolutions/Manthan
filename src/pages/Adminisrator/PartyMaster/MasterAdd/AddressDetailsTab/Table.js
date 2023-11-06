@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { Button, Col, Input, Row, Table, } from 'reactstrap';
+import React, { useEffect, useRef, } from 'react';
+import { Button, Input, Table, } from 'reactstrap';
 import { Tbody, Thead } from 'react-super-responsive-table';
 import { useDispatch, useSelector } from 'react-redux';
 import { PartyAddressDeleteID, PartyAddressDeleteIDSuccess } from '../../../../../store/Administrator/PartyRedux/action';
@@ -8,7 +8,9 @@ import { deltBtnCss, editBtnCss } from '../../../../../components/Common/ListAct
 import "./editDeleteCss.scss"
 import { date_dmy_func } from '../../../../../components/Common/CommonFunction';
 
-function AddressDetailsTable({ addressTable = [], setAddressTable, selectedRow, onEdit }) {
+function AddressDetailsTable({ addressTable = [], setAddressTable, onEdit }) {
+
+	const selectedRowIndexRef = useRef(-1);
 
 	const dispatch = useDispatch();
 
@@ -89,68 +91,10 @@ function AddressDetailsTable({ addressTable = [], setAddressTable, selectedRow, 
 		onEdit(row); // Pass the selected row to the parent component
 	}
 
-	// const tableRows = addressTable.map((info, key) => {
-	// 	debugger
-	// 	return (
-	// 		<tr>
-	// 			<td>{info.Address}</td>
-	// 			<td>{info.FSSAINo}</td>
-	// 			<td>{info.FSSAIExipry}</td>
-	// 			<td>
-	// 				<button
-	// 					type='button'
-	// 					onClick={() => { myFunction(info) }}
-	// 					className="badge badge-soft-info font-size-12 btn btn-info waves-effect waves-light w-xxs border border-light">
-	// 					Show Image
-	// 				</button>
-	// 			</td>
-	// 			<td>{info.PIN}</td>
-	// 			< td><Input type="radio"
-	// 				name="btnradio"
-	// 				id={`radioButton${key}`}
-	// 				defaultChecked={info.IsDefault ? true : false}
-	// 				onClick={(e) => defaultChangeHandler(key)} />
-	// 				{`${info.IsDefault}`}
-	// 			</td>
-
-	// 			<td >
-	// 				<Row >
-	// 					<div className="col col-6">
-	// 						<Button
-	// 							className={editBtnCss}
-	// 							data-mdb-toggle="tooltip" data-mdb-placement="top" title="Delete Party Type"
-	// 							onClick={(e) =>
-	// 								onEditHandlerHandeler(info)
-	// 							}
-	// 						>
-	// 							<i className="mdi mdi-pencil font-size-16"></i>
-	// 						</Button>
-	// 					</div>
-
-	// 					<div className="col col-6">
-	// 						<Button
-	// 							className={deltBtnCss}
-	// 							data-mdb-toggle="tooltip" data-mdb-placement="top" title="Delete Party Type"
-	// 							disabled={info.IsDefault === false ? false : true}
-	// 							onClick={(e) =>
-	// 								ondeleteHandeler(info)
-	// 							}
-	// 						>
-	// 							<i className="mdi mdi-delete font-size-18"></i>
-	// 						</Button>
-	// 					</div></Row>
-
-
-	// 			</td>
-
-	// 		</tr >
-	// 	);
-	// });
-
 	const tableRows = addressTable.map((info, key) => {
 
 		return (
-			<tr key={key}>
+			<tr key={key} className={key === selectedRowIndexRef.current ? 'selected' : ''}>
 				<td>{info.Address}</td>
 				<td>{info.FSSAINo}</td>
 				<td>{date_dmy_func(info.FSSAIExipry)}</td>
@@ -177,10 +121,11 @@ function AddressDetailsTable({ addressTable = [], setAddressTable, selectedRow, 
 						data-mdb-toggle="tooltip"
 						data-mdb-placement="top"
 						title="Edit Party Type"
-						onClick={() => onEditHandlerHandeler(info)}
-					>
-						<i className="mdi mdi-pencil font-size-18"></i>
-					</Button>
+						onClick={() => {
+							onEditHandlerHandeler(info);
+							selectedRowIndexRef.current = key; // Set the selected row index
+						}}
+					><i className="mdi mdi-pencil font-size-18"></i></Button>
 
 					<Button
 						className={`btn-delete ${deltBtnCss}`}
@@ -199,7 +144,8 @@ function AddressDetailsTable({ addressTable = [], setAddressTable, selectedRow, 
 
 	return (
 		<>
-			<div>
+			<div style={{ maxHeight: '400px', overflowY: 'auto' }}>
+
 				< img id='add-img' className='abc1' src={''} />
 				{addressTable.length > 0 ?
 					<Table className="table table-bordered table-hover">

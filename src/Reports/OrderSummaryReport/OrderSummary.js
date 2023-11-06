@@ -163,7 +163,7 @@ const OrderSummary = (props) => {
             dynamicColumn.push('CustomerName')
         }
 
-        let currentColumnName = [...dynamicColumn, ...['OrderNo','GroupName', 'SubGroup', 'MaterialName']]
+        let currentColumnName = [...dynamicColumn, ...['OrderNo', 'GroupName', 'SubGroup', 'MaterialName']]
         const columnSumsByGroup = jsonData.reduce((result, item) => {
             const groupKey = currentColumnName.map(columnName => item[columnName]).join('|');
 
@@ -242,7 +242,8 @@ const OrderSummary = (props) => {
             "FromDate": values.FromDate,
             "ToDate": values.ToDate,
             "CompanyID": _cfunc.loginCompanyID(),
-            "PartyID": isSCMParty ? values.PartyName.value : _cfunc.loginPartyID()
+            "PartyID": isSCMParty ? values.PartyName.value : _cfunc.loginPartyID(),
+            "Employee": !isSCMParty ? 0 : _cfunc.loginEmployeeID(),
 
         });
         dispatch(postOrderSummary_API({ jsonBody }));

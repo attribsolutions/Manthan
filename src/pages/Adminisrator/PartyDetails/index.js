@@ -40,7 +40,7 @@ const PartyDetails = (props) => {
     const [state, setState] = useState(() => initialFiledFunc(fileds))
 
     const [modalCss] = useState(false);
-    const [pageMode] = useState(mode.defaultsave);
+    const [pageMode, setPageMode] = useState(mode.edit);
     const [userPageAccessState, setUserAccState] = useState('');
 
     const [tableData, setTableData] = useState([]);
@@ -48,6 +48,7 @@ const PartyDetails = (props) => {
 
     const [groupSelect, setGroupSelect] = useState({ value: 0, label: "All" });
     const [goBtnLoading, setGoBtnLoading] = useState(false);
+
 
     const {
         goBtnList,
@@ -71,6 +72,8 @@ const PartyDetails = (props) => {
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageField
         }));
+
+
 
     useEffect(() => {
         const page_Id = pageId.PARTY_DETAILS
