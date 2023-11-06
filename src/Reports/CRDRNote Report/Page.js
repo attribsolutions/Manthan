@@ -4,7 +4,7 @@ import jsPDF from "jspdf";
 import "jspdf-autotable";
 import * as style from './ReportStyle'
 import { Data1, dataGenrator } from "./DemoData";
-import {  compareGSTINState,  date_dmy_func,  } from "../../components/Common/CommonFunction";
+import { compareGSTINState, date_dmy_func, } from "../../components/Common/CommonFunction";
 import { pageBorder } from "../InvioceReport/ReportStyle";
 
 
@@ -31,7 +31,7 @@ function reportBody(doc, data) {
 }
 
 function pageFooter(doc, data, islast, array) {
-    if (((data.NoteType === "DebitNote") || (data.NoteType === "CreditNote"))) {
+    if ((data.NoteType === "DebitNote")) {
         if (data.isA4) {
             style.reportFooterForPlainCredit_DebitA4(doc, data)
         } else {
@@ -54,7 +54,7 @@ const generateReportPage = (doc, data) => {
 }
 
 const CreditNote = async (data) => {
-    
+
     let doc = ""
     if (data.SettingData === "1") {
         data["isA4"] = true

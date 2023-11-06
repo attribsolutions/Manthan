@@ -301,7 +301,7 @@ export const reportHeder1 = (doc, data) => {
                 let y = data1.cursor.y + 8
                 doc.setFontSize(8)
                 doc.setFont(undefined, 'bold')
-                doc.text('Comment: ', x, y)
+                doc.text('Narration: ', x, y)
 
 
             };
@@ -409,7 +409,11 @@ export const reportHeder3 = (doc, data) => {
 
 export const reportFooter = (doc, data) => {
     debugger
-    // doc.addImage(data.SettingData.Qr_Image, 'JPEG', 335, 303, 105, 96);
+    if (data.Period.PaymentQr === null) {
+        doc.addImage("", 'JPEG', 335, 303, 105, 96);
+    } else {
+        doc.addImage(data.Period.PaymentQr, 'JPEG', 335, 303, 105, 96);
+    }
     doc.setDrawColor(0, 0, 0);
     doc.line(570, 308, 30, 308);//horizontal line  (4)
     doc.line(570, 380, 435, 380);//horizontal line  (5)
@@ -811,7 +815,7 @@ export const tableBody = (doc, data) => {
 
 
 
-    if ((data.NoteType === "Goods CreditNote") || (data.NoteType === "Goods DebitNote")) {
+    if ((data.NoteType === "Goods CreditNote") || (data.NoteType === "CreditNote")) {
 
         doc.autoTable(table.columnsWithCGST_SGST, table.RowsWithCGST_SGST(data), options,);
     } else {
@@ -997,7 +1001,14 @@ export const tableBodyWithIGST = (doc, data) => {
 
 export const reportFooterA4 = (doc, data) => {
     debugger
-    // doc.addImage(data.SettingData.Qr_Image, 'JPEG', 337, 728, 100, 86);
+    if (data.Period.PaymentQr === null) {
+        doc.addImage("", 'JPEG', 337, 728, 100, 86);
+    } else {
+        doc.addImage(data.Period.PaymentQr, 'JPEG', 337, 728, 100, 86);
+
+    }
+
+
     doc.setDrawColor(0, 0, 0);
     doc.line(570, 730, 30, 730);//horizontal line  (4)
     doc.line(570, 815, 435, 815);//horizontal line  (5)
