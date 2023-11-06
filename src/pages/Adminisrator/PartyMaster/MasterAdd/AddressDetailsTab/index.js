@@ -150,7 +150,7 @@ const AddressTabForm = forwardRef((props, ref) => {
 
 		setButtonShow(true);
 		setState((i) => {
-
+			
 			const a = { ...i }
 			a.values.PartyAddress = row.Address;
 			a.values.FSSAINo = row.FSSAINo;
@@ -166,6 +166,11 @@ const AddressTabForm = forwardRef((props, ref) => {
 			a.hasValid.PIN.valid = true
 			a.hasValid.IsDefault.valid = true
 
+			a.isError.PartyAddress = ""
+			a.isError.FSSAINo = ""
+			a.isError.FSSAIExipry = ""
+			a.isError.PIN = ""
+			a.isError.IsDefault = ""
 			return a
 		})
 	}
