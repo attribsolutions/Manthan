@@ -658,6 +658,7 @@ export function trailingZeros(value) {// +++++++++++Print Console.log Body++++++
 
 
 export const fetchFiles = async (linksArray) => {
+  debugger
   try {
     const filesArray = [];
 
