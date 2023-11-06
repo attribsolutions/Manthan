@@ -13,7 +13,7 @@ import {
 class Slidewithcaption extends Component {
 
     constructor(props) {
-        
+
         super(props)
         this.items = props.Images
         this.state = { activeIndex: 0 }
@@ -63,7 +63,7 @@ class Slidewithcaption extends Component {
         const { activeIndex } = this.state
 
         const slides = this.items.map((item, key) => {
-            
+            debugger
             return (
                 // <CarouselItem
                 //     onExiting={this.onExiting}

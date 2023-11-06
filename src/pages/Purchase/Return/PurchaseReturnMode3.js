@@ -5,6 +5,7 @@ import {
     Label,
     Input,
     Row,
+    Modal,
 
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
@@ -31,6 +32,8 @@ import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import { SaveButton } from "../../../components/Common/CommonButton";
 import { return_discountCalculate_Func } from "../../Sale/SalesReturn/SalesCalculation";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
+import Slidewithcaption from "../../../components/Common/CommonImageComponent";
+import { async } from "q";
 
 const PurchaseReturnMode3 = (props) => {
 
@@ -49,6 +52,10 @@ const PurchaseReturnMode3 = (props) => {
     const [subPageMode] = useState(history.location.pathname)
     const [tableData, setTableData] = useState([]);
     const [returnItemIDs, setReturnItemIDs] = useState("");
+    const [modal_backdrop, setmodal_backdrop] = useState(false);   // Image Model open Or not
+    const [imageTable, setImageTable] = useState([]);
+
+
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
@@ -69,39 +76,116 @@ const PurchaseReturnMode3 = (props) => {
         commonPartyDropSelect: state.CommonPartyDropdownReducer.commonPartyDropSelect
     }));
 
+    // useEffect(async () => {
+    //     if (sendToSSbtnTableData.Status === true) {
+
+    //         const { Data = [] } = sendToSSbtnTableData;
+
+    //         let grand_total = 0;
+    //         const UpdatedTableData = Data.map((item, index) => {
+    //             fetchFiles(item.ReturnItemImages)
+    //                 .then(files => {
+    //                     console.log('Array of files:', files);
+
+    //                 });
+
+    //             const calculate = return_discountCalculate_Func(item);
+
+    //             item["roundedTotalAmount"] = calculate.roundedTotalAmount
+    //             grand_total += Number(calculate.roundedTotalAmount);
+
+    //             return {
+    //                 ...item, id: index + 1,
+    //                 salesQuantity: item.Quantity,
+    //                 Quantity: item.ApprovedQuantity,
+    //                 tableBatchDate: _cfunc.date_dmy_func(item.BatchDate)
+
+    //             };
+    //         });
+
+
+
+
+
+    //         setTableData(UpdatedTableData);
+    //         let count_label = `${"Total Amount"} :${_cfunc.amountCommaSeparateFunc(grand_total)}`
+    //         dispatch(BreadcrumbShowCountlabel(count_label))
+    //         dispatch(post_Send_to_superStockiest_Id_Succcess({ Status: false }))
+    //         setReturnItemIDs(sendToSSbtnTableData.ReturnItemID)
+    //     }
+
+    // }, []);
+
+
+
     useEffect(() => {
-        if (sendToSSbtnTableData.Status === true) {
+        const fetchData = async () => {
+            if (sendToSSbtnTableData.Status === true) {
+                const { Data = [] } = sendToSSbtnTableData;
+                let grand_total = 0;
+                const updatedTableDataPromises = Data.map((item, index) => {
+                    return _cfunc.fetchFiles(item.ReturnItemImages)
+                        .then(files => {
+                            const calculate = return_discountCalculate_Func(item);
+                            item["roundedTotalAmount"] = calculate.roundedTotalAmount;
+                            grand_total += Number(calculate.roundedTotalAmount);
 
-            const { Data = [] } = sendToSSbtnTableData;
+                            return {
+                                ...item,
+                                id: index + 1,
+                                salesQuantity: item.Quantity,
+                                Quantity: item.ApprovedQuantity,
+                                tableBatchDate: _cfunc.date_dmy_func(item.BatchDate),
+                                File: files  // Adding files to the item object
 
-            let grand_total = 0;
-            const UpdatedTableData = Data.map((item, index) => {
-                const calculate = return_discountCalculate_Func(item);
+                            };
+                        });
+                });
 
-                item["roundedTotalAmount"] = calculate.roundedTotalAmount
-                grand_total += Number(calculate.roundedTotalAmount);
+                // Wait for all the file fetching and calculations to complete
+                const updatedTableData = await Promise.all(updatedTableDataPromises);
+                debugger
+                setTableData(updatedTableData);
 
-                return {
-                    ...item, id: index + 1,
-                    salesQuantity: item.Quantity,
-                    Quantity: item.ApprovedQuantity,
-                    tableBatchDate: _cfunc.date_dmy_func(item.BatchDate)
-                };
-            });
+                let count_label = `${"Total Amount"} :${_cfunc.amountCommaSeparateFunc(grand_total)}`;
+                dispatch(BreadcrumbShowCountlabel(count_label));
+                dispatch(post_Send_to_superStockiest_Id_Succcess({ Status: false }));
+                setReturnItemIDs(sendToSSbtnTableData.ReturnItemID);
+            }
+        };
 
-            setTableData(UpdatedTableData);
-            let count_label = `${"Total Amount"} :${_cfunc.amountCommaSeparateFunc(grand_total)}`
-            dispatch(BreadcrumbShowCountlabel(count_label))
-            dispatch(post_Send_to_superStockiest_Id_Succcess({ Status: false }))
-            setReturnItemIDs(sendToSSbtnTableData.ReturnItemID)
-        }
+        fetchData();
+    }, [sendToSSbtnTableData]);
 
-    }, []);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     useEffect(() => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(pageId.PURCHASE_RETURN_MODE_3))
     }, []);
+
+    useEffect(() => {
+        if (imageTable.length > 0) {
+            setmodal_backdrop(true)
+        }
+    }, [imageTable])
 
     // Common Party Dropdown useEffect
     useEffect(() => {
@@ -179,6 +263,20 @@ const PurchaseReturnMode3 = (props) => {
         }
         row.Quantity = input;
         totalAmountCalcuationFunc(row, tableData)
+    }
+
+    const imageShowHandler = async (row) => { // image Show handler
+        const Slide = row.ReturnItemImages
+        setImageTable(Slide)
+    }
+
+    function tog_backdrop() {
+        setmodal_backdrop(!modal_backdrop)
+        setImageTable([])
+        removeBodyCss()
+    }
+    function removeBodyCss() {
+        document.body.classList.add("no_padding")
     }
 
     const pagesListColumns = [
@@ -298,6 +396,37 @@ const PurchaseReturnMode3 = (props) => {
         },
 
         {
+            text: "Image",
+            dataField: "",
+            classes: () => "sales-return-Image-row",
+
+
+            formatter: (cellContent, row, key) => {
+
+                return (<span style={{ justifyContent: 'center', width: "100px" }}>
+                    <div>
+                        <div className="btn-group btn-group-example mb-3" role="group">
+
+                            <button name="image"
+                                accept=".jpg, .jpeg, .png ,.pdf"
+                                onClick={(event) => {
+
+                                    if ((row.ReturnItemImages.length === 0)) {
+                                        return setmodal_backdrop(false)
+                                    } else if ((row.ReturnItemImages) && (row.ReturnItemImages.length > 0)) {
+                                        imageShowHandler(row)
+                                    }
+                                }}
+                                id="ImageId" type="button" className="btn btn-primary "> Show </button>
+                        </div>
+                    </div>
+
+
+                </span>)
+            }
+        },
+
+        {
             text: "Comment",
             dataField: "ItemComment",
         },
@@ -341,6 +470,17 @@ const PurchaseReturnMode3 = (props) => {
         const formData = new FormData(); // Create a new FormData object
 
         const ReturnItems = tableData.reduce((filterdItem, i) => {
+            debugger
+            let ToatlImages = []
+            if (i.File !== undefined) {
+                ToatlImages = Array.from(i.File).map((item, key) => {
+
+                    formData.append(`uploaded_images_${i.Item}`, i.File[key]);  //Sending image As a file 
+                    return { Item_pic: `Purchase Return Image Count${key}` }
+                })
+            } else {
+                ToatlImages = []
+            }
 
             if (Number(i.Quantity) > 0) {
                 const calculate = return_discountCalculate_Func(i);
@@ -378,7 +518,7 @@ const PurchaseReturnMode3 = (props) => {
                     "PurchaseReturn": i.PurchaseReturn,
                     "SubReturn": i.PurchaseReturn,
                     "primarySourceID": i.primarySourceID,
-                    "ReturnItemImages": [],
+                    "ReturnItemImages": ToatlImages,
                 });
             }
             return filterdItem
@@ -412,6 +552,17 @@ const PurchaseReturnMode3 = (props) => {
                 <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
 
                 <div className="page-content" >
+                    <Modal
+                        isOpen={modal_backdrop}
+                        toggle={() => {
+                            tog_backdrop()
+                        }}
+
+                        style={{ width: "800px", height: "800px", borderRadius: "50%" }}
+                        className="modal-dialog-centered "
+                    >
+                        {<Slidewithcaption Images={imageTable} />}
+                    </Modal>
 
                     <form noValidate>
                         <div className="px-2 c_card_filter header text-black mb-1" >

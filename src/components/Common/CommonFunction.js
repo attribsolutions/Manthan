@@ -4,6 +4,7 @@ import { createBrowserHistory } from 'history';
 import * as mode from "../../routes/PageMode"
 import $ from 'jquery';
 
+
 export const history = createBrowserHistory();
 
 
@@ -653,5 +654,32 @@ export function trailingZeros(value) {// +++++++++++Print Console.log Body++++++
 
   return parseFloat(value).toString()
 }
+
+
+
+export const fetchFiles = async (linksArray) => {
+  try {
+    const filesArray = [];
+
+    for (const item of linksArray) {
+      const link = item.Image; // Access the URL from the object
+      const response = await fetch(link);
+      if (response.ok) {
+        const blob = await response.blob();
+        const filename = `ItemImage_.jpg`; // Creating a unique filename
+        const file = new File([blob], filename, { type: "image/jpeg" });
+        filesArray.push(file);
+      } else {
+        console.error(`Failed to fetch: ${link}. Status: ${response.status}`);
+      }
+    }
+
+    return filesArray;
+  } catch (error) {
+    console.error('Error fetching files:', error);
+    return [];
+  }
+};
+
 
 
