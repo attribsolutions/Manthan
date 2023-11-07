@@ -2,8 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import '../../../assets/searchBox/searchBox.scss';
 import { MySearch } from './MySearch';
+import { useHistory } from "react-router-dom";
 
 export const MainSearchBox = () => {
+  const history = useHistory();
+
   const [searchRoleData, setSearchRoleData] = useState([]);
   const { RoleAccessData, searchProps } = useSelector((state) => ({
     RoleAccessData: state.Login.roleAccessSidbarData,
@@ -16,6 +19,7 @@ export const MainSearchBox = () => {
   }, [RoleAccessData]);
 
   useEffect(() => {
+
     function autocomplete(inp, arr) {
       let currentFocus;
 
@@ -46,10 +50,15 @@ export const MainSearchBox = () => {
               itemDiv.innerHTML += `<input type='hidden' id='${index}' value='${item.Name}'>`;
 
               itemDiv.addEventListener('click', function (e) {
+                debugger
                 inp.value = this.getElementsByTagName('input')[0].value;
                 const inputId = this.getElementsByTagName('input')[0].id;
                 const actualPagePath = filteredItems[inputId].ActualPagePath;
-                window.location.href = actualPagePath;
+                history.push({
+                  pathname: `/${actualPagePath}`,
+                })
+
+                // window.location.href = actualPagePath;
                 closeAllLists();
               });
 
