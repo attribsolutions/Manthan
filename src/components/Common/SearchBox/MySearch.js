@@ -38,6 +38,7 @@ export const defaultSearch = (defaultid,) => {
 export const MySearch = () => {//compont start
 
     function handleClick(e) {
+
         var len = e.target.value
         input = e.target.value
         if (!(len[0] === "/")) {

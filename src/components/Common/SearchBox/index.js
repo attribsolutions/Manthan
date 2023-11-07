@@ -42,7 +42,7 @@ export const MainSearchBox = () => {
 
             filteredItems.forEach((item, index) => {
               const itemDiv = document.createElement('div');
-              itemDiv.innerHTML = `<strong>${item.Name}</strong>${item.Name.substring(1)}`;
+              itemDiv.innerHTML = `<strong>${item.Name}</strong>`;
               itemDiv.innerHTML += `<input type='hidden' id='${index}' value='${item.Name}'>`;
 
               itemDiv.addEventListener('click', function (e) {
