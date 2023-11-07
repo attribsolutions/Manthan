@@ -21,6 +21,8 @@ import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import * as report from '../../../Reports/ReportIndex'
 import { ReturnPrint_API } from "../../../helpers/backend_helper";
 import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
+import { async } from "q";
+import { return_discountCalculate_Func } from "./SalesCalculation";
 
 const SalesReturnList = () => {
 
@@ -119,12 +121,35 @@ const SalesReturnList = () => {
         }
     }, []);
 
-    useEffect(() => {
+    useEffect(async () => {
 
         if ((sendToSSbtnTableData.Status === true) && (sendToSSbtnTableData.StatusCode === 200)) {
-            history.push({
-                pathname: url.PURCHASE_RETURN_MODE_3
+            const { Data = [] } = sendToSSbtnTableData;
+            let grand_total = 0;
+            const updatedTableDataPromises = Data.map((item, index) => {
+                return _cfunc.fetchFiles(item.ReturnItemImages)
+                    .then(files => {
+                        const calculate = return_discountCalculate_Func(item);
+                        item["roundedTotalAmount"] = calculate.roundedTotalAmount;
+                        grand_total += Number(calculate.roundedTotalAmount);
 
+                        return {
+                            ...item,
+                            id: index + 1,
+                            salesQuantity: item.Quantity,
+                            Quantity: item.ApprovedQuantity,
+                            tableBatchDate: _cfunc.date_dmy_func(item.BatchDate),
+                            File: files  // Adding files to the item object
+                        };
+                    });
+            });
+            // Wait for all the file fetching and calculations to complete
+            const updatedTableData = await Promise.all(updatedTableDataPromises);
+
+            history.push({
+                pathname: url.PURCHASE_RETURN_MODE_3,
+                updatedTableData: updatedTableData,
+                GrandTotal: grand_total
             })
         }
     }, [sendToSSbtnTableData])
@@ -245,7 +270,7 @@ const SalesReturnList = () => {
     }
 
     const makeBtnFunc = (List, btnId) => {
-        
+
         const id = List[0].id
         const config = {
             editId: id,

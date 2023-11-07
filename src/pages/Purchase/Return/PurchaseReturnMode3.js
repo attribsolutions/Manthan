@@ -78,97 +78,14 @@ const PurchaseReturnMode3 = (props) => {
 
     useEffect(() => {
         if (sendToSSbtnTableData.Status === true) {
-
-            const { Data = [] } = sendToSSbtnTableData;
-
-            let grand_total = 0;
-            const UpdatedTableData = Data.map((item, index) => {
-
-                const calculate = return_discountCalculate_Func(item);
-
-                item["roundedTotalAmount"] = calculate.roundedTotalAmount
-                grand_total += Number(calculate.roundedTotalAmount);
-
-                return {
-                    ...item, id: index + 1,
-                    salesQuantity: item.Quantity,
-                    Quantity: item.ApprovedQuantity,
-                    tableBatchDate: _cfunc.date_dmy_func(item.BatchDate)
-
-                };
-            });
-
-
-
-            setTableData(UpdatedTableData);
-            let count_label = `${"Total Amount"} :${_cfunc.amountCommaSeparateFunc(grand_total)}`
+            setTableData(history.location.updatedTableData);
+            let count_label = `${"Total Amount"} :${_cfunc.amountCommaSeparateFunc(history.location.GrandTotal)}`
             dispatch(BreadcrumbShowCountlabel(count_label))
             dispatch(post_Send_to_superStockiest_Id_Succcess({ Status: false }))
             setReturnItemIDs(sendToSSbtnTableData.ReturnItemID)
         }
 
     }, []);
-
-
-
-    // useEffect(() => {
-    //     const fetchData = async () => {
-    //         if (sendToSSbtnTableData.Status === true) {
-    //             debugger
-    //             const { Data = [] } = sendToSSbtnTableData;
-    //             let grand_total = 0;
-    //             const updatedTableDataPromises = Data.map((item, index) => {
-    //                 return _cfunc.fetchFiles(item.ReturnItemImages)
-    //                     .then(files => {
-    //                         const calculate = return_discountCalculate_Func(item);
-    //                         item["roundedTotalAmount"] = calculate.roundedTotalAmount;
-    //                         grand_total += Number(calculate.roundedTotalAmount);
-
-    //                         return {
-    //                             ...item,
-    //                             id: index + 1,
-    //                             salesQuantity: item.Quantity,
-    //                             Quantity: item.ApprovedQuantity,
-    //                             tableBatchDate: _cfunc.date_dmy_func(item.BatchDate),
-    //                             File: files  // Adding files to the item object
-
-    //                         };
-    //                     });
-    //             });
-
-    //             // Wait for all the file fetching and calculations to complete
-    //             const updatedTableData = await Promise.all(updatedTableDataPromises);
-    //             debugger
-    //             setTableData(updatedTableData);
-
-    //             let count_label = `${"Total Amount"} :${_cfunc.amountCommaSeparateFunc(grand_total)}`;
-    //             dispatch(BreadcrumbShowCountlabel(count_label));
-    //             dispatch(post_Send_to_superStockiest_Id_Succcess({ Status: false }));
-    //             setReturnItemIDs(sendToSSbtnTableData.ReturnItemID);
-    //         }
-    //     };
-
-    //     fetchData();
-    // }, [sendToSSbtnTableData]);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     useEffect(() => {
         dispatch(commonPageFieldSuccess(null));
@@ -464,12 +381,12 @@ const PurchaseReturnMode3 = (props) => {
         const formData = new FormData(); // Create a new FormData object
 
         const ReturnItems = tableData.reduce((filterdItem, i) => {
-            debugger
+
             let ToatlImages = []
             if (i.File !== undefined) {
                 ToatlImages = Array.from(i.File).map((item, key) => {
 
-                    formData.append(`uploaded_images_${i.Item}`, null);  //Sending image As a file 
+                    formData.append(`uploaded_images_${i.Item}`, i.File[key]);  //Sending image As a file 
                     return { Item_pic: `Purchase Return Image Count${key}` }
                 })
             } else {

@@ -15,7 +15,7 @@ import { C_Button } from "../../../components/Common/CommonButton";
 import Slidewithcaption from "../../../components/Common/CommonImageComponent";
 
 const ViewDetails_Modal = () => {
-    
+
     const dispatch = useDispatch();
     const { ReturnFinalApprovalRole = '' } = loginSystemSetting()
 
@@ -33,7 +33,7 @@ const ViewDetails_Modal = () => {
     }))
 
     useEffect(() => {
-        
+
         try {
             if ((viewData_redux.Status === true)) {
                 if (viewData_redux.Data.length > 0) {
@@ -87,7 +87,7 @@ const ViewDetails_Modal = () => {
     }
 
     const imageShowHandler = async (row) => { // image Show handler
-
+        
         setImageTable(row.ReturnItemImages)
         setmodal_backdrop(true)
 
