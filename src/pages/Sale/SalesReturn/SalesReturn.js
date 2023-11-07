@@ -68,7 +68,6 @@ const SalesReturn = (props) => {
     const [state, setState] = useState(initialFiledFunc(fileds))
     const [discountDropOption] = useState([{ value: 1, label: "Rs" }, { value: 2, label: "%" }]);
     const [TableArr, setTableArr] = useState([]);
-    const [ImageCount, setImageCount] = useState(0);
 
     const [returnMode, setReturnMode] = useState(0); //(1==ItemWise) OR (2==invoiceWise)
     const [imageTable, setImageTable] = useState([]);  // Selected Image Array
@@ -622,6 +621,7 @@ const SalesReturn = (props) => {
 
 
             formatter: (cellContent, row, key) => {
+                debugger
 
                 return (<span style={{ justifyContent: 'center', width: "100px" }}>
                     <div>
@@ -638,7 +638,9 @@ const SalesReturn = (props) => {
                             <button name="image"
                                 accept=".jpg, .jpeg, .png ,.pdf"
                                 onClick={(event) => {
-                                    if ((row.ImageURL) && (row.ImageURL.length === 0)) {
+                                    debugger
+                                    if ((row.ImageURL === undefined)) {
+                                        customAlert({ Type: 3, Message: `${row.ItemName} Images not uploaded` });
                                         return setmodal_backdrop(false)
                                     } else if ((row.ImageURL) && (row.ImageURL.length > 0)) {
                                         imageShowHandler(row)
@@ -646,7 +648,7 @@ const SalesReturn = (props) => {
                                 }}
                                 id="ImageId" type="button" className="btn btn-primary "> Show </button>
                         </div>
-                        {/* Image Count: {row && row.ImageURL ? ImageCount : 0} */}
+
                     </div>
 
 
@@ -793,14 +795,11 @@ const SalesReturn = (props) => {
         })
         row["Image"] = file
         row["ImageURL"] = slides
-        setImageCount(slides.length)
+
     }
 
     const imageShowHandler = async (row) => { // image Show handler
         const file = Array.from(row.Image)
-        // const slides = file.map(item => return {
-        //      Image: URL.createObjectURL(item)
-        // })
         const slides = file.map(item => ({
             Image: URL.createObjectURL(item)
         }));
