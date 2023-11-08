@@ -544,12 +544,14 @@ const ClaimTrackingEntry = (props) => {
         formData.append('CreditNoteDate', values.CreditNoteDate);
         formData.append('CreditNoteAmount', values.CreditNoteAmount);
         formData.append('ClaimSummaryDate', values.ClaimSummaryDate);
-        // formData.append('CreditNoteUpload', null);
-        formData.append('Claim', values.ClaimId.claimId);
+        formData.append('Claim', values.ClaimId.claimId === undefined ? "" : values.ClaimId.claimId);
         formData.append('Party', values.PartyName.value);
         formData.append('FullClaimNo', values.ClaimText ? values.ClaimText : values.ClaimId.claimId);
-        formData.append('PartyType', values.ClaimId.PartyTypeID);
-        formData.append(`CreditNoteUpload`, values.File[0]);
+        formData.append('PartyType', values.ClaimId.PartyTypeID === undefined ? "" : values.ClaimId.PartyTypeID);
+        if (values.File[0] === undefined) {
+        } else {
+          formData.append(`CreditNoteUpload`, values.File[0]);
+        }
 
         if (pageMode === mode.edit) {
           dispatch(

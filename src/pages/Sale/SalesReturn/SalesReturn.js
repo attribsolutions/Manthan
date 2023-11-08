@@ -45,6 +45,7 @@ import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import Slidewithcaption from "../../../components/Common/CommonImageComponent";
 import NewCommonPartyDropdown from "../../../components/Common/NewCommonPartyDropdown";
+import { deltBtnCss } from "../../../components/Common/ListActionsButtons";
 
 const SalesReturn = (props) => {
 
@@ -68,6 +69,8 @@ const SalesReturn = (props) => {
     const [state, setState] = useState(initialFiledFunc(fileds))
     const [discountDropOption] = useState([{ value: 1, label: "Rs" }, { value: 2, label: "%" }]);
     const [TableArr, setTableArr] = useState([]);
+    const [isImage, setisImage] = useState({});
+
 
     const [returnMode, setReturnMode] = useState(0); //(1==ItemWise) OR (2==invoiceWise)
     const [imageTable, setImageTable] = useState([]);  // Selected Image Array
@@ -617,11 +620,10 @@ const SalesReturn = (props) => {
             text: "Image",
             dataField: "",
             classes: () => "sales-return-Image-row",
-            formatExtraData: { ReturnReasonOptions }, // Pass ReturnReasonOptions as part of formatExtraData
+            formatExtraData: { isImage },// Pass ReturnReasonOptions as part of formatExtraData
 
 
             formatter: (cellContent, row, key) => {
-                debugger
 
                 return (<span style={{ justifyContent: 'center', width: "100px" }}>
                     <div>
@@ -633,12 +635,17 @@ const SalesReturn = (props) => {
                                 multiple
                                 id="file"
                                 accept=".jpg, .jpeg, .png ,.pdf"
-                                onChange={(event) => { imageSelectHandler(event, row) }}
+                                onChange={(event) => {
+                                    let config = {
+                                        row: row, Row_Id: `Image_${row.id}`
+                                    }
+                                    imageSelectHandler(event, config)
+                                }}
                             />
                             <button name="image"
                                 accept=".jpg, .jpeg, .png ,.pdf"
                                 onClick={(event) => {
-                                    debugger
+
                                     if ((row.ImageURL === undefined)) {
                                         customAlert({ Type: 3, Message: `${row.ItemName} Images not uploaded` });
                                         return setmodal_backdrop(false)
@@ -648,6 +655,23 @@ const SalesReturn = (props) => {
                                 }}
                                 id="ImageId" type="button" className="btn btn-primary "> Show </button>
                         </div>
+                        {((row.ImageURL !== undefined)) ? < div > <span> Remove&nbsp;&nbsp;</span>
+                            <Button
+                                type="button"
+                                className={deltBtnCss}
+                                data-mdb-toggle="tooltip"
+                                data-mdb-placement="top"
+                                title={"Remove Images"}
+                                onClick={(event) => {
+                                    let config = { Type: "Remove", Row_Id: `Image_${row.id}`, row: row }
+                                    imageSelectHandler(event, config)
+                                }}
+                            >
+                                <span
+                                    style={{ marginLeft: "4px", marginRight: "4px" }}
+                                    className="mdi mdi-cancel"
+                                ></span></Button>
+                        </div> : null}
 
                     </div>
 
@@ -787,14 +811,22 @@ const SalesReturn = (props) => {
         setReturnMode(2)
     }
 
-    const imageSelectHandler = async (event, row) => { // image Select  handler
+    const imageSelectHandler = async (event, config = {}) => { // image Select  handler
+        debugger
+        if (config.Type === "Remove") {
+            config.row["Image"] = undefined
+            config.row["ImageURL"] = undefined
+            setisImage({ Row_Id: config.Row_Id, Slide: [] })
+        } else {
+            const file = Array.from(event.target.files)
+            const slides = file.map(item => {  //Create File to URl to Show Image of Particular row
+                return URL.createObjectURL(item);
+            })
+            config.row["Image"] = file
+            config.row["ImageURL"] = slides
+            setisImage({ Row_Id: config.Row_Id, Slide: slides })
 
-        const file = Array.from(event.target.files)
-        const slides = file.map(item => {  //Create File to URl to Show Image of Particular row
-            return URL.createObjectURL(item);
-        })
-        row["Image"] = file
-        row["ImageURL"] = slides
+        }
 
     }
 
