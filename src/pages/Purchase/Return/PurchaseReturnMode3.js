@@ -321,7 +321,7 @@ const PurchaseReturnMode3 = (props) => {
                             <button name="image"
                                 accept=".jpg, .jpeg, .png ,.pdf"
                                 onClick={(event) => {
-                                    debugger
+                                    
                                     if ((row.ReturnItemImages.length === 0)) {
                                         customAlert({ Type: 3, Message: `${row.ItemName} Images not uploaded` });
                                         return setmodal_backdrop(false)

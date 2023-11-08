@@ -238,7 +238,7 @@ const CreditList = () => {
     }
 
     function downBtnFunc(config) {
-        debugger
+        
         config["ReportType"] = report.Credit;
         config["systemSetting"] = SystemData.CRDRNoteA4Print
         config["PaymentQr"] = SystemData.Qr_Image

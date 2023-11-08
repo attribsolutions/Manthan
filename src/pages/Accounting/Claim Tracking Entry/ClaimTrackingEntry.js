@@ -412,7 +412,7 @@ const ClaimTrackingEntry = (props) => {
   }
 
   const imageShowHandler = () => { // image Show handler
-    debugger
+    
     if (values.File[0] instanceof File) {
       const slides = [{
         Image: URL.createObjectURL(values.File[0])
@@ -528,7 +528,7 @@ const ClaimTrackingEntry = (props) => {
         _cfunc.btnIsDissablefunc({ btnId, state: true });
 
         const formData = new FormData();
-        debugger
+        
         formData.append('Date', values.Date);
         formData.append('Month', yearAndMonth.Month);
         formData.append('Year', yearAndMonth.Year);

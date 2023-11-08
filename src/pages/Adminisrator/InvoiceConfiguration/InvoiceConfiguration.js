@@ -238,7 +238,7 @@ const InvoiceConfiguration = (props) => {
             }
 
             setState((i) => {
-                debugger
+                
                 const a = { ...i }
                 a.values.Invoicea4 = Data.A4Print;
                 a.values.AddressInInvoice = Data.AddressOnInvoice;
@@ -273,7 +273,7 @@ const InvoiceConfiguration = (props) => {
 
 
     const onchangeHandler = async (event, key, type) => {
-        debugger
+        
         const file = Array.from(event.target.files)
         setState((i) => {
             const a = { ...i }
@@ -332,7 +332,7 @@ const InvoiceConfiguration = (props) => {
         if (Object.keys(SystemSetting).length !== 0) {
 
             const file = await convertImageToFile(SystemSetting.Qr_Image)
-            debugger
+            
 
             if (!isURL(SystemSetting.Qr_Image)) {
                 setState((i) => {

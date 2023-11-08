@@ -1000,7 +1000,7 @@ export const tableBodyWithIGST = (doc, data) => {
 
 
 export const reportFooterA4 = (doc, data) => {
-    debugger
+    
     if (data.Period.PaymentQr === null) {
         doc.addImage("", 'JPEG', 337, 728, 100, 86);
     } else {

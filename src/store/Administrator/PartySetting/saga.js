@@ -21,7 +21,7 @@ function* PartySetting_GenFunc(config) {
     try {
 
         const response = yield call(PartySettingApi, config.Party_id, config.Comapny_id);
-        debugger
+        
         const singleObject = {};
         const SystemSetting = {};
         for (const item of response.Data) {

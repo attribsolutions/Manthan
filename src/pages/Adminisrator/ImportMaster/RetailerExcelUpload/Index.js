@@ -192,7 +192,7 @@ const RetailerExcelUpload = (props) => {
 
     async function veifyExcelBtn_Handler() {
         let alertMsg = ''
-        debugger
+        
         if (commonPartyDropSelect.value === 0) {
             alertMsg = "Please Select Party.";
         }
