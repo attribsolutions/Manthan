@@ -40,6 +40,7 @@ import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import { Tbody, Thead } from "react-super-responsive-table";
 import Slidewithcaption from "../../../components/Common/CommonImageComponent";
 import NewCommonPartyDropdown from "../../../components/Common/NewCommonPartyDropdown";
+import { deltBtnCss } from "../../../components/Common/ListActionsButtons";
 
 const PurchaseReturn = (props) => {
 
@@ -64,6 +65,10 @@ const PurchaseReturn = (props) => {
     const [TableArr, setTableArr] = useState([]);
     const [returnMode, setReturnMode] = useState(0); //(1==ItemWise) OR (2==invoiceWise)
     const [imageTable, setImageTable] = useState([]);
+    const [isImage, setisImage] = useState({});
+
+
+
 
     // for invoicer page heder dicount functionality useSate ************************************
     const [discountValueAll, setDiscountValueAll] = useState("");
@@ -272,7 +277,7 @@ const PurchaseReturn = (props) => {
                     updateItemArr.push(newItemRow);
                     nextId++;
                 });
-             
+
                 updateItemArr.sort((a, b) => b.id - a.id);
                 setTableArr(updateItemArr);
                 setState((i) => {
@@ -655,7 +660,7 @@ const PurchaseReturn = (props) => {
             text: "Image",
             dataField: "",
             classes: () => "sales-return-Image-row",
-            formatExtraData: { ReturnReasonOptions }, // Pass ReturnReasonOptions as part of formatExtraData
+            formatExtraData: { isImage }, // Pass ReturnReasonOptions as part of formatExtraData
 
 
             formatter: (cellContent, row, key) => {
@@ -670,13 +675,19 @@ const PurchaseReturn = (props) => {
                                 multiple
                                 id="file"
                                 accept=".jpg, .jpeg, .png ,.pdf"
-                                onChange={(event) => { imageSelectHandler(event, row) }}
+                                onChange={(event) => {
+                                    let config = {
+                                        row: row, Row_Id: `Image_${row.id}`
+                                    }
+                                    imageSelectHandler(event, config)
+                                }}
                             />
                             <button name="image"
                                 accept=".jpg, .jpeg, .png ,.pdf"
                                 onClick={(event) => {
-
-                                    if ((row.ImageURL) && (row.ImageURL.length === 0)) {
+                                    debugger
+                                    if ((row.ImageURL === undefined)) {
+                                        customAlert({ Type: 3, Message: `${row.ItemName} Images not uploaded` });
                                         return setmodal_backdrop(false)
                                     } else if ((row.ImageURL) && (row.ImageURL.length > 0)) {
                                         imageShowHandler(row)
@@ -684,11 +695,28 @@ const PurchaseReturn = (props) => {
                                 }}
                                 id="ImageId" type="button" className="btn btn-primary "> Show </button>
                         </div>
-                        {/* Image Count: {row && row.ImageURL ? ImageCount : 0} */}
+
+                        {(row.ImageURL !== undefined) ? < div > <span> Remove&nbsp;&nbsp;</span>
+                            <Button
+                                type="button"
+                                className={deltBtnCss}
+                                data-mdb-toggle="tooltip"
+                                data-mdb-placement="top"
+                                title={"Remove Images"}
+                                onClick={(event) => {
+                                    let config = { Type: "Remove", Row_Id: `Image_${row.id}`, row: row }
+                                    imageSelectHandler(event, config)
+                                }}
+                            >
+                                <span
+                                    style={{ marginLeft: "4px", marginRight: "4px" }}
+                                    className="mdi mdi-cancel"
+                                ></span></Button>
+                        </div> : null}
                     </div>
 
 
-                </span>)
+                </span >)
             }
         },
 
@@ -823,22 +851,33 @@ const PurchaseReturn = (props) => {
         setReturnMode(2)
     }
 
-    const imageSelectHandler = async (event, row) => { // image Select  handler
+    const imageSelectHandler = async (event, config = {}) => { // image Select  handler
+        debugger
+        if (config.Type === "Remove") {
+            config.row["Image"] = undefined
+            config.row["ImageURL"] = undefined
+            setisImage({ Row_Id: config.Row_Id, Slide: [] })
+        } else {
+            const file = Array.from(event.target.files)
+            const slides = file.map(item => {  //Create File to URl to Show Image of Particular row
+                return URL.createObjectURL(item);
+            })
+            config.row["Image"] = file
+            config.row["ImageURL"] = slides
+            setisImage({ Row_Id: config.Row_Id, Slide: slides })
 
-        const file = Array.from(event.target.files)
-        const slides = file.map(item => {  //Create File to URl to Show Image of Particular row
-            return URL.createObjectURL(item);
-        })
-        row["Image"] = file
-        row["ImageURL"] = slides
+        }
+
     }
 
     const imageShowHandler = async (row) => { // image Show handler
 
         const file = Array.from(row.Image)
-        const slides = file.map(item => {
-            return URL.createObjectURL(item);
-        })
+
+        const slides = file.map(item => ({
+            Image: URL.createObjectURL(item)
+        }));
+
         setImageTable(slides)
     }
 
@@ -854,9 +893,7 @@ const PurchaseReturn = (props) => {
 
         event.preventDefault();
         try {
-
             const invalidMessages = [];
-
             const filterData = TableArr.filter((index) => {
                 if (index.Quantity > 0) {
                     let msgString = ' Select';
