@@ -16,7 +16,7 @@ import {
 } from "../../../components/Common/validationFunction";
 import { Change_Button, Go_Button, SaveButton, } from "../../../components/Common/CommonButton";
 import { breadcrumbReturnFunc, metaTagLabel, } from "../../../components/Common/CommonFunction";
-import { mode, pageId, url } from "../../../routes/index"
+import { mode, pageId } from "../../../routes/index"
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
@@ -49,7 +49,6 @@ const PartyDetails = (props) => {
     const [groupSelect, setGroupSelect] = useState({ value: 0, label: "All" });
     const [goBtnLoading, setGoBtnLoading] = useState(false);
 
-
     const {
         goBtnList,
         saveBtnloading,
@@ -72,8 +71,6 @@ const PartyDetails = (props) => {
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageField
         }));
-
-
 
     useEffect(() => {
         const page_Id = pageId.PARTY_DETAILS
@@ -200,7 +197,7 @@ const PartyDetails = (props) => {
 
                 } else {
                     customAlert({
-                        Type: 1,
+                        Type: 4,
                         Message: `Error for distributor :${distributor.PartyName}`,
                     });
                 }
@@ -415,7 +412,6 @@ const PartyDetails = (props) => {
                     </div>
 
                     <div style={{ minHeight: "45vh" }}>
-
                         <ToolkitProvider
                             keyField="PartyID"
                             data={tableData}
