@@ -685,7 +685,7 @@ const PurchaseReturn = (props) => {
                             <button name="image"
                                 accept=".jpg, .jpeg, .png ,.pdf"
                                 onClick={(event) => {
-                                    debugger
+                                    
                                     if ((row.ImageURL === undefined)) {
                                         customAlert({ Type: 3, Message: `${row.ItemName} Images not uploaded` });
                                         return setmodal_backdrop(false)
@@ -852,7 +852,7 @@ const PurchaseReturn = (props) => {
     }
 
     const imageSelectHandler = async (event, config = {}) => { // image Select  handler
-        debugger
+        
         if (config.Type === "Remove") {
             config.row["Image"] = undefined
             config.row["ImageURL"] = undefined

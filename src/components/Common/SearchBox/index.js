@@ -50,7 +50,7 @@ export const MainSearchBox = () => {
               itemDiv.innerHTML += `<input type='hidden' id='${index}' value='${item.Name}'>`;
 
               itemDiv.addEventListener('click', function (e) {
-                debugger
+                
                 inp.value = this.getElementsByTagName('input')[0].value;
                 const inputId = this.getElementsByTagName('input')[0].id;
                 const actualPagePath = filteredItems[inputId].ActualPagePath;

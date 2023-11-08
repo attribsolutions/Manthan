@@ -31,7 +31,7 @@ function* GoButtonExcel_ImportMaster_GenFun({ config }) {              // Go buu
   const { mapType, partyId } = config
 
   try {
-    debugger
+    
     let newResp = []
     if (mapType === 1) {
       const response = yield call(ImportMaster_Map_Customer_GoButton_API, config);

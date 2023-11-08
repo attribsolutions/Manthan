@@ -812,7 +812,7 @@ const SalesReturn = (props) => {
     }
 
     const imageSelectHandler = async (event, config = {}) => { // image Select  handler
-        debugger
+        
         if (config.Type === "Remove") {
             config.row["Image"] = undefined
             config.row["ImageURL"] = undefined

@@ -63,7 +63,7 @@ class Slidewithcaption extends Component {
         const { activeIndex } = this.state
 
         const slides = this.items.map((item, key) => {
-            debugger
+            
             return (
                 // <CarouselItem
                 //     onExiting={this.onExiting}

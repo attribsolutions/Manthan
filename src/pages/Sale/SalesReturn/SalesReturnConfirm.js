@@ -87,7 +87,7 @@ const ViewDetails_Modal = () => {
     }
 
     const imageShowHandler = async (row) => { // image Show handler
-        debugger
+        
         // customAlert({ Type: 3, Message: "Payment QR not uploaded" });
 
         setImageTable(row.ReturnItemImages)

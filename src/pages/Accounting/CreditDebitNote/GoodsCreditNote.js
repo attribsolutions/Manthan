@@ -484,7 +484,7 @@ const GoodsCreditNote = (props) => {
 
             formatExtraData: { TableArr },
             formatter: (cell, row, key, { TableArr }) => {
-                debugger
+                
                 return (<div style={{ minWidth: "90px" }}>
                     <Select
                         id={`GST${key}`}

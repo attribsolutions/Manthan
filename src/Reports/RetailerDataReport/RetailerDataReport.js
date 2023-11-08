@@ -118,7 +118,7 @@ const RetailerDataReport = (props) => {
     useEffect(() => {
 
         if ((RetailerGobtn.Status === true) && (RetailerGobtn.StatusCode === 200)) {
-            debugger
+            
 
             const { Data } = RetailerGobtn
 

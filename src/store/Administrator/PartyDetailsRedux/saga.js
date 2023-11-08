@@ -11,7 +11,7 @@ function* save_PartyDetails_GenFunc({ config }) {
 }
 
 function* PartyDetailsList_GenFunc({ config }) {  // go button api call     
-debugger
+
     try {
         const response = yield call(apiCall.Get_PartyDetails_List, config);
         yield put(action.GoButton_For_PartyDetails_Success(response.Data));
