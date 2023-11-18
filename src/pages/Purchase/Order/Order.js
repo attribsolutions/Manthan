@@ -1363,6 +1363,7 @@ const Order = (props) => {
                                                             altInput: true,
                                                             altFormat: "d-m-Y",
                                                             dateFormat: "Y-m-d",
+                                                            minDate: "today",
                                                         }}
                                                         name="deliverydate"
                                                         value={deliverydate}
