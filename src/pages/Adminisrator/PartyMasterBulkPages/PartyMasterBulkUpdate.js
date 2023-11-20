@@ -52,7 +52,7 @@ import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { C_DatePicker, C_Select } from "../../../CustomValidateForm";
 import { getDistrictOnState } from "../../../store/Administrator/PartyRedux/action";
-import { mobileApp_ProductUpdate_Api, mobileApp_RetailerUpdate_Api } from "../../../helpers/backend_helper";
+import { GetDistrictOnState_For_Dropdown, mobileApp_ProductUpdate_Api, mobileApp_RetailerUpdate_Api } from "../../../helpers/backend_helper";
 import { showToastAlert } from "../../../helpers/axios_Config";
 
 
@@ -81,11 +81,8 @@ const PartyMasterBulkUpdate = (props) => {
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
     const [val, setvalue] = useState()
-    const [key, setKey] = useState()
+    const [forceRefresh, setForceRefresh] = useState(false);
     const [SelectedParty, SetSelectedParty] = useState([])
-
-
-
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
@@ -124,7 +121,6 @@ const PartyMasterBulkUpdate = (props) => {
     const { isError } = state;
     const { fieldLabel } = state;
 
-
     useEffect(() => {
         dispatch(GoButton_For_Party_Master_Bulk_Update_AddSuccess([]))
         const page_Id = pageId.PARTY_MASTER_BULK_UPDATE
@@ -155,7 +151,6 @@ const PartyMasterBulkUpdate = (props) => {
         };
     }, [userAccess])
 
-
     useEffect(() => {
         const jsonBody = JSON.stringify({
             Company: loginCompanyID(),
@@ -176,7 +171,8 @@ const PartyMasterBulkUpdate = (props) => {
     useEffect(async () => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-            dispatch(postParty_Master_Bulk_Update_Success({ Status: false }))
+            dispatch(postParty_Master_Bulk_Update_Success({ Status: false }));
+            dispatch(GoButton_For_Party_Master_Bulk_Update_AddSuccess([]));
             //***************mobail app api*********************** */
             let arrayOfRetailerID = SelectedParty.map(function (i) {
                 return i.SubPartyID;
@@ -208,8 +204,8 @@ const PartyMasterBulkUpdate = (props) => {
             }
         }
         else if ((postMsg.Status === true)) {
-            dispatch(GoButton_For_Party_Master_Bulk_Update_AddSuccess([]))
-            dispatch(postParty_Master_Bulk_Update_Success({ Status: false }))
+            dispatch(GoButton_For_Party_Master_Bulk_Update_AddSuccess([]));
+            dispatch(postParty_Master_Bulk_Update_Success({ Status: false }));
             customAlert({
                 Type: 4,
                 Message: JSON.stringify(postMsg.Message),
@@ -244,11 +240,7 @@ const PartyMasterBulkUpdate = (props) => {
         value: index.id,
         label: index.Name,
     }));
-    
-    const DistrictOnStateValues = DistrictOnState.map((index) => ({
-        value: index.id,
-        label: index.Name
-    }));
+
 
     const PartyDropdown_Options = PartyName.map(i => ({
         value: i.id,
@@ -256,6 +248,11 @@ const PartyMasterBulkUpdate = (props) => {
     }));
 
     const StateValues = State.map((index) => ({
+        value: index.id,
+        label: index.Name
+    }));
+
+    const DistrictOnStateValues = DistrictOnState.map((index) => ({
         value: index.id,
         label: index.Name
     }));
@@ -287,28 +284,48 @@ const PartyMasterBulkUpdate = (props) => {
         dispatch(GoButton_For_Party_Master_Bulk_Update_AddSuccess([]))
     }
 
-    function tableSelectHandler(event, user) {
+    function tableSelectHandler(event, row) {
         let input = event.target.value;
-        user.Newvalue = input
+        row.Newvalue = input
     }
 
-    function handllerState(event, user, key) {
-        
-        dispatch(getDistrictOnState(event.value))
-        user.Newvalue = event.value
-        setState_DropDown_select(event)
-        setKey(key)
+    // function handllerState(event, row, key) {
 
+    //     dispatch(getDistrictOnState(event.value))
+    //     row.Newvalue = event.value
+    //     setState_DropDown_select(event)
+    //     // setKey(key)
+
+    // }
+
+    const handllerState = async (stateID, row) => {
+
+        try {
+            const response = await GetDistrictOnState_For_Dropdown(stateID.value);
+            if (response.StatusCode === 200) {
+
+                row.Newvalue = stateID.value
+                row.selectedState=stateID
+                row.districtOptions = response.Data.map(item => ({ value: item.id, label: item.Name }));
+                setForceRefresh(i => !i)
+            } else {
+                customAlert({
+                    Type: 1,
+                    Message: `Error for State ID ${stateID.label}:`,
+                });
+            }
+        } catch (error) {
+            _cfunc.CommonConsole(`Error for State ID ${stateID.label}:`, error);
+        }
+    };
+
+    function divisionhandler(event, row) {
+        row.Newvalue = event.target.checked
     }
 
-    function divisionhandler(event, user) {
-        user.Newvalue = event.target.checked
+    function TCSPartyhandler(event, row) {
+        row.Newvalue = event.target.checked
     }
-
-    function TCSPartyhandler(event, user) {
-        user.Newvalue = event.target.checked
-    }
-
 
     function partyOnchange(e) {
         setState((i) => {
@@ -328,15 +345,13 @@ const PartyMasterBulkUpdate = (props) => {
         })
     }
 
-    function handllerDistrictOnState(event, user) {
-        user.NewDistrict = event.value
-        // setDistrict_dropdown_Select(event)
-        // dispatch(getDistrictOnState(event.value))
+    function handllerDistrictOnState(event, row) {
+        row.NewDistrict = event.value
     }
 
-    function fromdateOnchange(event, user) {
+    function fromdateOnchange(event, row) {
         const Date = date_ymd_func(event[0])
-        user.NewFSSAIExipry = Date
+        row.NewFSSAIExipry = Date
     }
 
     const pagesListColumns = [
@@ -377,12 +392,11 @@ const PartyMasterBulkUpdate = (props) => {
         pagesListColumns.push(District)
     }
 
-
     const Newvalue = {
         text: `New${SelectFieldName.label === undefined ? "Value" : SelectFieldName.label}`,
         dataField: "Newvalue",
 
-        formatter: (cellContent, user, key) => (
+        formatter: (cellContent, row, key) => (
 
             <>
                 {SelectFieldName.label === "State" ?
@@ -391,10 +405,13 @@ const PartyMasterBulkUpdate = (props) => {
                         <Col>
                             <FormGroup >
                                 <C_Select
-                                    id={key}
-                                    value={state_DropDown_select}
+                                    key={row.Newvalue}
+                                    // value={row.selectedState}
+                                    value={(row?.selectedState === "" ) ?
+                                    { value: "", label: "Select..." }
+                                    : row.selectedState }
                                     options={StateValues}
-                                    onChange={(event) => handllerState(event, user, key)}
+                                    onChange={(event) => handllerState(event, row, key)}
                                 />
                             </FormGroup>
                         </Col>
@@ -406,8 +423,8 @@ const PartyMasterBulkUpdate = (props) => {
                                 type="checkbox"
                                 id={key}
                                 className="p-2"
-                                defaultChecked={user.IsTCSParty}
-                                onChange={(event) => TCSPartyhandler(event, user)}
+                                defaultChecked={row.IsTCSParty}
+                                onChange={(event) => TCSPartyhandler(event, row)}
                             />
 
                         </Col> :
@@ -418,8 +435,8 @@ const PartyMasterBulkUpdate = (props) => {
                                 <div className="form-check form-switch form-switch-md mb-3">
                                     <Input type="checkbox" className="form-check-input"
                                         id={key}
-                                        defaultChecked={user.IsDivision}
-                                        onChange={(event) => divisionhandler(event, user)}
+                                        defaultChecked={row.IsDivision}
+                                        onChange={(event) => divisionhandler(event, row)}
                                         name="IsActive"
 
                                     />
@@ -433,9 +450,9 @@ const PartyMasterBulkUpdate = (props) => {
                                             id={key}
                                             type="text"
                                             placeholder={`Enter New ${SelectFieldName.label}`}
-                                            defaultValue={user.Newvalue}
+                                            defaultValue={row.Newvalue}
                                             className="col col-sm "
-                                            onChange={(event) => tableSelectHandler(event, user)}
+                                            onChange={(event) => tableSelectHandler(event, row)}
                                         />
                                     </FormGroup>
                                 </Col>
@@ -448,31 +465,31 @@ const PartyMasterBulkUpdate = (props) => {
     const DistrictColumn = {
         text: " New District",
         dataField: "",
-        formatter: (cellContent, user, key) => (
-            <>
+        formatExtraData: { forceRefresh },
+        formatter: (cellContent, row, key) => {
+
+            return (<>
                 <div style={{ width: "180px" }}>
                     <Col>
                         <FormGroup >
                             <C_Select
-                                id={`id${key}`}
+                                key={row.Newvalue}
                                 value={district_dropdown_Select}
-                                isLoading={districtDropDownLoading}
-                                options={DistrictOnStateValues}
-                                onChange={(event) => handllerDistrictOnState(event, user)}
+                                options={row.districtOptions}
+                                onChange={(event) => handllerDistrictOnState(event, row)}
                             />
                         </FormGroup>
                     </Col>
                 </div>
-            </>
-        ),
+            </>)
+        }
     }
-
 
     pagesListColumns.push(Newvalue)
     const dateColumn = {
         text: " New FSSAIExipry",
         dataField: "",
-        formatter: (cellContent, user, key) => (
+        formatter: (cellContent, row, key) => (
             <>
                 <div style={{ width: "180px" }} >
                     <Col sm={12}>
@@ -486,7 +503,7 @@ const PartyMasterBulkUpdate = (props) => {
                                 }}
                                 id={key}
                                 name='fromdate'
-                                onChange={(event) => fromdateOnchange(event, user)}
+                                onChange={(event) => fromdateOnchange(event, row)}
                             />
                         </FormGroup>
                     </Col>
@@ -501,7 +518,6 @@ const PartyMasterBulkUpdate = (props) => {
     if (SelectFieldName.label === "State") {
         pagesListColumns.push(DistrictColumn)
     }
-
 
     const pageOptions = {
         sizePerPage: 10,
@@ -527,11 +543,11 @@ const PartyMasterBulkUpdate = (props) => {
                         // Value2: i.NewDistrict,
                         party: i.PartyName
                     }
-                    
+
                     arr1.push(arr)
                 }
             })
-            
+
             SetSelectedParty(arr1)
             const jsonBody = JSON.stringify({
                 PartyID: loginPartyID(),
@@ -557,6 +573,17 @@ const PartyMasterBulkUpdate = (props) => {
                     const invalidMsg1 = []
                     arr1.forEach((i) => {
 
+                        if ((SelectFieldName.label === "State")) {
+                            
+                            if (!i.NewDistrict) {
+                                // customAlert({
+                                //     Type: 4,
+                                //     Message: `${i.party}:District Name is Required`
+                                // });
+                                // return
+                                invalidMsg1.push(`${i.party}:District Name is Required`)
+                            }
+                        };
                         if ((SelectFieldName.label === "MobileNo")) {
                             const regexExp1 = /^[6-9]\d{9}$/gi;
                             const IsMobile = regexExp1.test(i.Value1)
@@ -601,7 +628,7 @@ const PartyMasterBulkUpdate = (props) => {
                     if (invalidMsg1.length > 0) {
                         customAlert({
                             Type: 3,
-                            Message: invalidMsg1.toString()
+                            Message: invalidMsg1.toString(),
                         })
                         return btnIsDissablefunc({ btnId, state: false })
                     }
