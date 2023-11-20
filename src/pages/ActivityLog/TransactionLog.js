@@ -27,7 +27,7 @@ const TransactionLog = () => {
     const [userSelect, setUserSelect] = useState([{ value: '', label: "All" }]);
     const [partySelect, setPartySelect] = useState([{ value: '', label: "All" }]);
     const [formDateSelect, setFormDateSelect] = useState(() => getDateTime_dmy(1));//offSetTime 1 hour earlier
-    const [toDateSelect, setToDateSelect] = useState(getDateTime_dmy);
+    const [toDateSelect, setToDateSelect] = useState(getDateTime_dmy(-1));
     const [categoryTypeSelect, setCategoryTypeSelect] = useState([{ value: '', label: "All" }]);
 
     const [goBtnloading, setGoBtnloading] = useState(false);
