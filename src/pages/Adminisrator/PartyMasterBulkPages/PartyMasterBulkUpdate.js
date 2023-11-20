@@ -93,21 +93,18 @@ const PartyMasterBulkUpdate = (props) => {
         SelectField,
         PartyName,
         Data,
-        DistrictOnState,
         State,
         saveBtnloading,
         listBtnLoading,
-        districtDropDownLoading,
+     
     } = useSelector((state) => ({
         listBtnLoading: state.PartyMasterBulkUpdateReducer.listBtnLoading,
-        districtDropDownLoading: state.PartyMasterReducer.districtDropDownLoading,
         saveBtnloading: state.PartyMasterBulkUpdateReducer.saveBtnloading,
         postMsg: state.PartyMasterBulkUpdateReducer.postMsg,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
         Routes: state.CreditLimitReducer.Routes,
         State: state.EmployeesReducer.State,
-        DistrictOnState: state.PartyMasterReducer.DistrictOnState,
         Data: state.PartyMasterBulkUpdateReducer.goButton,
         RoutesList: state.RoutesReducer.RoutesList,
         SelectField: state.PartyMasterBulkUpdateReducer.SelectField,
@@ -173,6 +170,7 @@ const PartyMasterBulkUpdate = (props) => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(postParty_Master_Bulk_Update_Success({ Status: false }));
             dispatch(GoButton_For_Party_Master_Bulk_Update_AddSuccess([]));
+            setState(() => resetFunction(fileds, state))// Clear form values  
             //***************mobail app api*********************** */
             let arrayOfRetailerID = SelectedParty.map(function (i) {
                 return i.SubPartyID;
@@ -241,18 +239,12 @@ const PartyMasterBulkUpdate = (props) => {
         label: index.Name,
     }));
 
-
     const PartyDropdown_Options = PartyName.map(i => ({
         value: i.id,
         label: i.Name
     }));
 
     const StateValues = State.map((index) => ({
-        value: index.id,
-        label: index.Name
-    }));
-
-    const DistrictOnStateValues = DistrictOnState.map((index) => ({
         value: index.id,
         label: index.Name
     }));
@@ -288,16 +280,7 @@ const PartyMasterBulkUpdate = (props) => {
         let input = event.target.value;
         row.Newvalue = input
     }
-
-    // function handllerState(event, row, key) {
-
-    //     dispatch(getDistrictOnState(event.value))
-    //     row.Newvalue = event.value
-    //     setState_DropDown_select(event)
-    //     // setKey(key)
-
-    // }
-
+  
     const handllerState = async (stateID, row) => {
 
         try {
@@ -570,17 +553,14 @@ const PartyMasterBulkUpdate = (props) => {
                     })
                     btnIsDissablefunc({ btnId, state: false })
                 } else {
+                    
                     const invalidMsg1 = []
                     arr1.forEach((i) => {
 
                         if ((SelectFieldName.label === "State")) {
                             
-                            if (!i.NewDistrict) {
-                                // customAlert({
-                                //     Type: 4,
-                                //     Message: `${i.party}:District Name is Required`
-                                // });
-                                // return
+                            if (!(i.Value2)) {
+                              
                                 invalidMsg1.push(`${i.party}:District Name is Required`)
                             }
                         };
