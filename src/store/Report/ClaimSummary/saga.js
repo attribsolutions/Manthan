@@ -7,7 +7,7 @@ import {
 } from "./actionType";
 import { MasterClaimCreatApiErrorAction, OrderSummaryApiErrorAction, claimList_API_Success, deleteClaimSuccess, postMasterClaimCreat_API_Success, postOrderSummary_API_Success } from "./action";
 import { ClaimList_API, MasterClaimCreate_API, OderSummary_GoBtn_API, delete_Claim_API } from "../../../helpers/backend_helper";
-import { loginPartyID } from "../../../components/Common/CommonFunction";
+import { listpageConcatDateAndTime, loginPartyID } from "../../../components/Common/CommonFunction";
 
 function* MasterClaimCreat_GenFunc({ config }) {
 
@@ -37,6 +37,7 @@ function* ClaimList_GenFunc({ config }) {
                         MonthStartDate: config.MonthStartDate,
                         MonthEndDate: config.MonthEndDate,
                         forceDeleteHide: isDeleteDisable,
+                        ClaimDate: listpageConcatDateAndTime(item.ClaimDate, item.CreatedOn)
 
                     };
                     NewResponse.push(newItem);
