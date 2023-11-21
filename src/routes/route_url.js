@@ -1,5 +1,4 @@
 
-export const DASHBORD = "/Dashboard"
 
 export const DASHBORD_1 = "/Dashboard_1"
 export const DASHBORD_2 = "/Dashboard_2"

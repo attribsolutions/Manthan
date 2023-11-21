@@ -9,7 +9,7 @@ import {
     Col,
     Container, Label, Row, Spinner,
 } from "reactstrap";
-import { breadcrumbReturnFunc } from '../../../components/Common/CommonFunction';
+import { breadcrumbReturnFunc, loginSelectedPartyID } from '../../../components/Common/CommonFunction';
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import { commonPageField, commonPageFieldSuccess } from '../../../store/actions';
@@ -52,7 +52,7 @@ const Dashboard_1 = (props) => {
         const page_Id = pageId.DASHBORD_1//changes
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
-        dispatch(getDashbordDetails())
+        dispatch(getDashbordDetails({ loginPartyID: loginSelectedPartyID() }))
 
     }, []);
 

@@ -657,7 +657,7 @@ export const delete_Claim_API = ({ jsonBody }) => delwithPostBody(url.MASTER_CLA
 
 
 
-export const Dashboard_Get_API = (id) => get(`${url.DASHBOARD}/${id}`)// Dashboard grt api
+export const Dashboard_Get_API = ({loginPartyID}) => get(`${url.DASHBOARD}/${loginPartyID}`)// Dashboard grt api
 
 //StockEntry
 

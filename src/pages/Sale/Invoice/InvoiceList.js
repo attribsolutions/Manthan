@@ -80,7 +80,7 @@ const InvoiceList = () => {
             listBtnLoading: (state.InvoiceReducer.listBtnLoading || state.PdfReportReducers.ReportBtnLoading)
         })
     );
-
+    debugger
     const {
         pageField,
         supplier,
@@ -323,7 +323,9 @@ const InvoiceList = () => {
                 ToDate: todate,
                 Customer: supplierSelect.value === "" ? '' : supplierSelect.value,
                 Party: _cfunc.loginSelectedPartyID(),
-                IBType: IBType ? IBType : otherState.IBType
+                IBType: IBType ? IBType : otherState.IBType,
+                DashBoardMode: 0
+
             });
 
             dispatch(invoiceListGoBtnfilter({ subPageMode, filtersBody }));

@@ -465,7 +465,9 @@ const OrderList = () => {
                 "Customer": _cfunc.loginSelectedPartyID(),
                 "OrderType": order_Type.PurchaseOrder,
                 "CustomerType": "",
-                "IBType": IBType ? IBType : otherState.IBType
+                "IBType": IBType ? IBType : otherState.IBType,
+                "DashBoardMode": 0
+
             }
             const SO_filters = {
                 "FromDate": values.FromDate,
@@ -474,7 +476,9 @@ const OrderList = () => {
                 "Customer": values.Supplier.value,//customer swipe
                 "OrderType": order_Type.SaleOrder,
                 "CustomerType": isCustomerType,
-                "IBType": IBType ? IBType : otherState.IBType
+                "IBType": IBType ? IBType : otherState.IBType,
+                "DashBoardMode": 0
+
             }
             const GRN_STP_3_filters = {
                 "FromDate": values.FromDate,
@@ -483,7 +487,9 @@ const OrderList = () => {
                 "Customer": _cfunc.loginSelectedPartyID(),
                 "OrderType": order_Type.InvoiceToGRN,
                 "CustomerType": '',
-                "IBType": IBType ? IBType : otherState.IBType
+                "IBType": IBType ? IBType : otherState.IBType,
+                "DashBoardMode": 0
+
             }
             if (subPageMode === url.ORDER_LIST_4) {
                 filtersBody = JSON.stringify(SO_filters);

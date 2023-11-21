@@ -207,6 +207,8 @@ import CentralServiceItemList from "../pages/Adminisrator/CentralServiceItem/Cen
 import ServiceItemAssign from "../pages/Adminisrator/ServiceItemAssign";
 import ClaimTrackingReport from "../Reports/ClaimTrackingReport";
 import PartyDetails from "../pages/Adminisrator/PartyDetails";
+import Dashboard_Admin from "../pages/Dashboard/Dashboard_2/Dashboard_Admin.js"
+
 
 
 const userRoutes = [
@@ -214,7 +216,7 @@ const userRoutes = [
 
 
 	{ path: path.DASHBORD_1, component: Dashboard_1 },
-	{ path: path.DASHBORD_2, component: Dashboard_1 },
+	{ path: path.DASHBORD_2, component: Dashboard_Admin },
 
 	// *************************** Administration *******************************//
 	{ path: path.MODULE, component: Modules },

@@ -131,6 +131,8 @@ const GRNList = () => {
                 ToDate: todate,
                 Supplier: venderSelect === "" ? '' : venderSelect.value,
                 Party: loginSelectedPartyID(),
+                DashBoardMode: 0
+
             });
             dispatch(_act.getGRNListPage({ filtersBody }));
         } catch (error) { }
