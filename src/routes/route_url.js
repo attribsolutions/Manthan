@@ -148,6 +148,9 @@ export const CENTRAL_SERVICE_ITEM_lIST = "/CentralServiceItemList"
 export const SERVICE_ITEM_ASSIGN = "/Service_Item_Assign"
 
 export const PARTY_DETAILS = "/Party_Details"
+
+export const ITEM_MASTER_BULK_UPDATE = "/ItemMasterBulkUpdate"
+
 //******************************* Purchase Module ************************************//
 export const ORDER_1 = "/Order_1"
 export const ORDER_LIST_1 = "/OrderList_1"

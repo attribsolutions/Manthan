@@ -208,6 +208,7 @@ import ServiceItemAssign from "../pages/Adminisrator/ServiceItemAssign";
 import ClaimTrackingReport from "../Reports/ClaimTrackingReport";
 import PartyDetails from "../pages/Adminisrator/PartyDetails";
 import Dashboard_Admin from "../pages/Dashboard/Dashboard_2/Dashboard_Admin.js"
+import ItemMasterBulkUpdate from "../pages/Adminisrator/ItemMasterBulkUpdate";
 
 
 
@@ -359,6 +360,8 @@ const userRoutes = [
 	{ path: path.SERVICE_ITEM_ASSIGN, component: ServiceItemAssign },
 
 	{ path: path.PARTY_DETAILS, component: PartyDetails },
+
+	{ path: path.ITEM_MASTER_BULK_UPDATE, component: ItemMasterBulkUpdate },
 
 	//******************************* Inventory Module ************************************//
 	{ path: path.CHALLAN_LIST, component: ChallanList },

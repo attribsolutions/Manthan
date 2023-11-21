@@ -144,6 +144,8 @@ export const SERVICE_ITEM_ASSIGN = url.SERVICE_ITEM_ASSIGN
 
 export const Party_Details = url.PARTY_DETAILS
 
+export const ItemMasterBulkUpdate = url.ITEM_MASTER_BULK_UPDATE
+
 //******************************* Purchase Module ************************************//
 
 export const OrderList_1 = url.ORDER_1;
