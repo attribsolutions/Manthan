@@ -772,6 +772,11 @@ export const ServiceItemAssign_GoButton_API = ({ jsonBody }) => post(url.SERVICE
 export const Get_PartyDetails_List = ({ employeeID, groupID }) => get(`${url.GET_PARTY_DETAILS_LIST}/${employeeID}/${groupID}`)
 export const post_PartyDetails = ({ jsonBody }) => post(url.POST_PARTY_DETAILS, jsonBody)// post api
 
+//ItemWiseUpdate
+export const ItemWiseUpdate_GoButton_API = (jsonBody) => post(url.ITEM_WISE_UPDATE_API, jsonBody)// GO BUTTON API
+export const ItemWiseUpdate_Post_API = (jsonBody) => post(url.ITEM_WISE_UPDATE_POST_API, jsonBody)// POST API
+
+
 export {
 	getLoggedInUser,
 	isUserAuthenticated,

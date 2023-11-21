@@ -153,6 +153,8 @@ export const SERVICE_ITEM_ASSIGN = 256
 
 export const PARTY_DETAILS = 260
 
+export const ITEM_MASTER_BULK_UPDATE = 261
+
 //******************************* Purchase Module ************************************//
 export const ORDER_1 = 53
 export const ORDER_LIST_1 = 54

@@ -106,6 +106,7 @@ import CentralServiceItemSaga from "./Administrator/CentralServiceItemRedux/saga
 import SubSubClusterSaga from "./Administrator/SubClusterRedux/saga"
 import ServiceItemAssignSaga from "./Administrator/ServiceItemAssignRedux/saga"
 import PartyDetailsSaga from "./Administrator/PartyDetailsRedux/saga"
+import ItemWiseUpdateSaga from "./Administrator/ItemWiseUpdateRedux/saga"
 
 export default function* rootSaga() {
 	yield all([
@@ -206,6 +207,7 @@ export default function* rootSaga() {
 		fork(SubSubClusterSaga),
 		fork(ServiceItemAssignSaga),
 		fork(PartyDetailsSaga),
+		fork(ItemWiseUpdateSaga),
 
 	])
 }
