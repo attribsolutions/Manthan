@@ -4,6 +4,8 @@ import React, { useEffect, useState } from "react"
 import { Row, Col, Alert, Container, Input } from "reactstrap"
 import { useSelector, useDispatch } from "react-redux"
 import { withRouter, Link, useHistory } from "react-router-dom"
+
+
 import {
   divisionDropdownSelectSuccess,
   getUserDetailsAction,
@@ -25,6 +27,7 @@ const Login = props => {
 
   const [currentUserName, setcurrentUserName] = useState("");
   const [Password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
 
   const { loginError, loginSuccess, divisionDropdown_redux = [], userAccess, loading } = useSelector(state => ({
@@ -125,6 +128,10 @@ const Login = props => {
     dispatch(loginUser(values, props.history))
   };
 
+  const toggleShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+
   return (
     <React.Fragment>
       <MetaTags>
@@ -184,20 +191,29 @@ const Login = props => {
                           </div>
 
                           <div className="mb-3">
-                            <Input
-                              name="Password"
-                              defaultValue={Password}
-                              autoComplete="off"
-                              autoFocus={false}
-                              onChange={PasswordOnchange}
-                              type="password"
-                              className="form-control"
-                              required
-                              placeholder="Enter Password"
-                            />
+                            <div className="input-group">
+                              <Input
+                                name="Password"
+                                value={Password}
+                                autoComplete="off"
+                                onChange={PasswordOnchange}
+                                type={showPassword ? 'text' : 'password'}
+                                className="form-control"
+                                required
+                                placeholder="Enter Password"
+                              />
+                              <button
+                                className="btn btn-outline-primary"
+                                style={{ borderColor: "#d4d4d4" }}
+                                type="button"
+                                onClick={toggleShowPassword}
+                              >
+                                {showPassword ? <i className="mdi mdi-eye-off"></i> : <i className="mdi mdi-eye"></i>}
+                              </button>
+                            </div>
                           </div>
                         </div>
-                        <div className="row mb-4">
+                        <div className=" mb-4">
 
                           <Link to="/forgot-password" className="fw-semibold">Forgot password?</Link>
 
