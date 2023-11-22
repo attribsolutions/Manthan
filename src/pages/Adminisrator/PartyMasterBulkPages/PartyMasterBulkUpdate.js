@@ -35,7 +35,7 @@ import * as pageId from "../../../routes//allPageID";
 import * as url from "../../../routes/route_url";
 import * as mode from "../../../routes/PageMode";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect,  useState } from "react";
 import { GetRoutesList, GetRoutesListSuccess } from "../../../store/Administrator/RoutesRedux/actions";
 import {
     GoButton_For_Party_Master_Bulk_Update_Add,
@@ -51,24 +51,19 @@ import { getState, getStateESuccess } from "../../../store/Administrator/Employe
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { C_DatePicker, C_Select } from "../../../CustomValidateForm";
-import { getDistrictOnState } from "../../../store/Administrator/PartyRedux/action";
-import { GetDistrictOnState_For_Dropdown, mobileApp_ProductUpdate_Api, mobileApp_RetailerUpdate_Api } from "../../../helpers/backend_helper";
+import { GetDistrictOnState_For_Dropdown,  mobileApp_RetailerUpdate_Api } from "../../../helpers/backend_helper";
 import { showToastAlert } from "../../../helpers/axios_Config";
-
 
 const PartyMasterBulkUpdate = (props) => {
 
-    const count = useRef(0)
-
     const dispatch = useDispatch();
-    const history = useHistory()
-    const [modalCss, setModalCss] = useState(false);
-    const [pageMode, setPageMode] = useState(mode.defaultsave);
+    const history = useHistory();
+
+    const [modalCss] = useState(false);
+    const [pageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserPageAccessState] = useState('');
     const [SelectFieldName, setSelectFieldName] = useState([]);
-    const [state_DropDown_select, setState_DropDown_select] = useState();
     const [district_dropdown_Select, setDistrict_dropdown_Select] = useState();
-
 
     const fileds = {
         id: "",
@@ -96,7 +91,7 @@ const PartyMasterBulkUpdate = (props) => {
         State,
         saveBtnloading,
         listBtnLoading,
-     
+
     } = useSelector((state) => ({
         listBtnLoading: state.PartyMasterBulkUpdateReducer.listBtnLoading,
         saveBtnloading: state.PartyMasterBulkUpdateReducer.saveBtnloading,
@@ -280,7 +275,7 @@ const PartyMasterBulkUpdate = (props) => {
         let input = event.target.value;
         row.Newvalue = input
     }
-  
+
     const handllerState = async (stateID, row) => {
 
         try {
@@ -288,7 +283,7 @@ const PartyMasterBulkUpdate = (props) => {
             if (response.StatusCode === 200) {
 
                 row.Newvalue = stateID.value
-                row.selectedState=stateID
+                row.selectedState = stateID
                 row.districtOptions = response.Data.map(item => ({ value: item.id, label: item.Name }));
                 setForceRefresh(i => !i)
             } else {
@@ -389,10 +384,9 @@ const PartyMasterBulkUpdate = (props) => {
                             <FormGroup >
                                 <C_Select
                                     key={row.Newvalue}
-                                    // value={row.selectedState}
-                                    value={(row?.selectedState === "" ) ?
-                                    { value: "", label: "Select..." }
-                                    : row.selectedState }
+                                    value={(row?.selectedState === "") ?
+                                        { value: "", label: "Select..." }
+                                        : row.selectedState}
                                     options={StateValues}
                                     onChange={(event) => handllerState(event, row, key)}
                                 />
@@ -523,7 +517,6 @@ const PartyMasterBulkUpdate = (props) => {
                         SubPartyID: i.SubPartyID,
                         Value1: i.Newvalue,
                         Value2: i.NewFSSAIExipry || i.NewDistrict,
-                        // Value2: i.NewDistrict,
                         party: i.PartyName
                     }
 
@@ -553,30 +546,30 @@ const PartyMasterBulkUpdate = (props) => {
                     })
                     btnIsDissablefunc({ btnId, state: false })
                 } else {
-                    
+
                     const invalidMsg1 = []
                     arr1.forEach((i) => {
 
                         if ((SelectFieldName.label === "State")) {
-                            
                             if (!(i.Value2)) {
-                              
-                                invalidMsg1.push(`${i.party}:District Name is Required`)
+                                invalidMsg1.push({ [i.party]: 'District Name is Required' })
                             }
                         };
+
                         if ((SelectFieldName.label === "MobileNo")) {
                             const regexExp1 = /^[6-9]\d{9}$/gi;
                             const IsMobile = regexExp1.test(i.Value1)
                             if (!IsMobile) {
+                                invalidMsg1.push({ [i.party]: 'InValid Mobile No' })
 
-                                invalidMsg1.push(`InValid Mobile No ${i.party}`)
                             }
                         };
+
                         if ((SelectFieldName.label === "Email")) {
                             const regexExp2 = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
                             const IsEmail = regexExp2.test(i.Value1)
                             if (!IsEmail) {
-                                invalidMsg1.push(`InValid Email ${i.party} `)
+                                invalidMsg1.push({ [i.party]: 'InValid Email' })
                             }
                         };
 
@@ -584,7 +577,7 @@ const PartyMasterBulkUpdate = (props) => {
                             const regexExp3 = /[A-Z]{5}[0-9]{4}[A-Z]{1}/
                             const IsPan = regexExp3.test(i.Value1)
                             if (!IsPan) {
-                                invalidMsg1.push(`InValid Pan No ${i.party}`)
+                                invalidMsg1.push({ [i.party]: 'InValid Pan No ' })
                             }
                         };
 
@@ -592,7 +585,7 @@ const PartyMasterBulkUpdate = (props) => {
                             const regexExp4 = /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/
                             const IsGSTIN = regexExp4.test(i.Value1)
                             if (!IsGSTIN) {
-                                invalidMsg1.push(`InValid GSTIN No ${i.party}`)
+                                invalidMsg1.push({ [i.party]: 'InValid GSTIN No' })
                             }
                         };
 
@@ -600,24 +593,25 @@ const PartyMasterBulkUpdate = (props) => {
                             const regexExp5 = /^[A-Za-z]+$/
                             const IsName = regexExp5.test(i.Value1)
                             if (!IsName) {
-                                invalidMsg1.push(`InValid Name ${i.party}`)
+                                invalidMsg1.push({ [i.party]: 'InValid Name' })
                             }
                         };
 
                     })
+
                     if (invalidMsg1.length > 0) {
                         customAlert({
                             Type: 3,
-                            Message: invalidMsg1.toString(),
+                            Message: invalidMsg1
                         })
-                        return btnIsDissablefunc({ btnId, state: false })
+                        return;
                     }
 
                     dispatch(postParty_Master_Bulk_Update({ jsonBody, btnId }));
                 }
 
             }
-        } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
+        } catch (e) { }
     };
 
 
