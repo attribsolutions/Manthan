@@ -87,7 +87,7 @@ const ViewDetails_Modal = () => {
     }
 
     const imageShowHandler = async (row) => { // image Show handler
-        
+
         // customAlert({ Type: 3, Message: "Payment QR not uploaded" });
 
         setImageTable(row.ReturnItemImages)
@@ -213,7 +213,7 @@ const ViewDetails_Modal = () => {
                             onClick={(event) => {
 
                                 if ((row.ReturnItemImages) && (row.ReturnItemImages.length === 0)) {
-                                    customAlert({ Type: 3, Message: `${row.ItemName} Images not uploaded` });
+                                    customAlert({ Type: 3, Message: ` Images not uploaded` });
                                     return setmodal_backdrop(false)
                                 } else if ((row.ReturnItemImages) && (row.ReturnItemImages.length > 0)) {
                                     imageShowHandler(row)
@@ -407,3 +407,25 @@ const ViewDetails_Modal = () => {
 
 }
 export default ViewDetails_Modal;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
