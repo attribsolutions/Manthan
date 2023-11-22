@@ -197,7 +197,7 @@ const PartyDetails = (props) => {
 
                 } else {
                     customAlert({
-                        Type: 4,
+                        Type: 3,
                         Message: `Error for distributor :${distributor.PartyName}`,
                     });
                 }
@@ -235,7 +235,7 @@ const PartyDetails = (props) => {
                 setForceRefresh(i => !i)
             } else {
                 customAlert({
-                    Type: 1,
+                    Type: 3,
                     Message: `Error for Subcluster ID ${clusterID}:`,
                 });
             }

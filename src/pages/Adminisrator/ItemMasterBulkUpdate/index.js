@@ -6,13 +6,15 @@ import { Change_Button, Go_Button, SaveButton, } from "../../../components/Commo
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { mode, pageId } from "../../../routes/index"
 import { MetaTags } from "react-meta-tags";
-import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess, postSelect_Field_for_dropdown } from "../../../store/actions";
+import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess, get_Group_By_GroupType_ForDropDown, get_Group_By_GroupType_ForDropDown_Success, postSelect_Field_for_dropdown } from "../../../store/actions";
 import BootstrapTable from "react-bootstrap-table-next";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import { C_Select } from "../../../CustomValidateForm";
 import { ItemWiseUpdateGoButton_Action, ItemWiseUpdateGoButton_Success, ItemWiseUpdate_Save_Action, ItemWiseUpdate_Save_Success } from "../../../store/Administrator/ItemWiseUpdateRedux/action";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
+import { getGroupTypeslist, getGroupTypeslistSuccess } from "../../../store/Administrator/GroupTypeRedux/action";
+import { SubGroup_By_Group_DropDown_API } from "../../../helpers/backend_helper";
 
 const ItemMasterBulkUpdate = (props) => {
 
@@ -22,9 +24,13 @@ const ItemMasterBulkUpdate = (props) => {
     const [pageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState('');
     const [SelectFieldName, setSelectFieldName] = useState([]);
+    const [groupTypeSelect, setGroupTypeSelect] = useState([]);
+    const [forceRefresh, setForceRefresh] = useState(false);
 
     const reducers = useSelector(
         (state) => ({
+            GroupType: state.GroupTypeReducer.GroupType,
+            GroupList: state.ItemMastersReducer.GroupList,
             SelectDropdown: state.PartyMasterBulkUpdateReducer.SelectField,
             goBtnLoading: state.ItemWiseUpdateReducer.loading,
             goButtonData: state.ItemWiseUpdateReducer.goButtonData,
@@ -34,7 +40,7 @@ const ItemMasterBulkUpdate = (props) => {
             pageField: state.CommonPageFieldReducer.pageField
         })
     );
-    const { userAccess, SelectDropdown, goBtnLoading, goButtonData = [], postMsg, saveBtnloading } = reducers;
+    const { userAccess, SelectDropdown, goBtnLoading, goButtonData = [], postMsg, saveBtnloading, GroupType, GroupList } = reducers;
 
     // Featch Modules List data  First Rendering
     const location = { ...history.location }
@@ -59,9 +65,13 @@ const ItemMasterBulkUpdate = (props) => {
     useEffect(() => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(pageId.ITEM_MASTER_BULK_UPDATE));
+        dispatch(getGroupTypeslist());
+
         return () => {
             dispatch(commonPageFieldSuccess(null));
             dispatch(ItemWiseUpdateGoButton_Success([]));
+            dispatch(getGroupTypeslistSuccess([]));
+            dispatch(get_Group_By_GroupType_ForDropDown_Success([]));
         }
     }, [])
 
@@ -80,7 +90,9 @@ const ItemMasterBulkUpdate = (props) => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(ItemWiseUpdate_Save_Success({ Status: false }));
             dispatch(ItemWiseUpdateGoButton_Success([]));
-            setSelectFieldName([])
+            dispatch(get_Group_By_GroupType_ForDropDown_Success([]));
+            setSelectFieldName([]);
+            setGroupTypeSelect([]);
             customAlert({
                 Type: 1,
                 Message: postMsg.Message,
@@ -101,16 +113,38 @@ const ItemMasterBulkUpdate = (props) => {
         label: i.Name
     }));
 
+    const GroupType_DropdownOptions = GroupType.map((index) => ({
+        value: index.id,
+        label: index.Name,
+        IsReserved: index.IsReserved
+    }));
+
+    const Group_DropdownOptions = GroupList.map((index) => ({
+        value: index.id,
+        label: index.Name,
+    }));
+
     function goButtonHandler() {
 
         if (SelectFieldName.length === 0) {
             customAlert({
                 Type: 4,
-                Message: "Field selection is required."
+                Message: "Field selection is Required."
             })
             return;
         }
-        const jsonBody = JSON.stringify({ "Type": SelectFieldName.label });
+        if ((SelectFieldName.label === "Group") && (groupTypeSelect.length === 0)) {
+            customAlert({
+                Type: 4,
+                Message: "Group Type is Required."
+            })
+            return;
+        }
+        const jsonBody = JSON.stringify({
+            "Type": SelectFieldName.label,
+            "GroupType": SelectFieldName.label === "Group" ? groupTypeSelect.value : ""
+        });
+
         dispatch(ItemWiseUpdateGoButton_Action(jsonBody))
     }
 
@@ -118,9 +152,39 @@ const ItemMasterBulkUpdate = (props) => {
         setSelectFieldName(event)
     }
 
-    function tableSelectHandler(event, user) {
+    function tableSelectHandler(event, row) {
         let input = event.target.value;
-        user.Newvalue = input
+        row.Newvalue = input
+    }
+
+    function GroupTypeHandler(event) {
+        setGroupTypeSelect(event)
+        dispatch(get_Group_By_GroupType_ForDropDown(event.value))
+    }
+
+    const GroupNameHandler = async (GroupID, row) => {
+
+        try {
+            const response = await SubGroup_By_Group_DropDown_API(GroupID.value);
+            if (response.StatusCode === 200) {
+
+                row.Newvalue = GroupID.value
+                row.selectGroup = GroupID
+                row.subGroupOptions = response.Data.map(item => ({ value: item.id, label: item.Name }));
+                setForceRefresh(i => !i)
+            } else {
+                customAlert({
+                    Type: 1,
+                    Message: `Error for Group ID ${GroupID.label}:`,
+                });
+            }
+        } catch (error) {
+            _cfunc.CommonConsole(`Error for Group ID ${GroupID.label}:`, error);
+        }
+    };
+
+    function SubGroupType_Handler(event, row) {
+        row.NewSubGroup = event.value
     }
 
     const pagesListColumns = [
@@ -132,26 +196,40 @@ const ItemMasterBulkUpdate = (props) => {
             text: SelectFieldName.label,
             dataField: SelectFieldName.label,
         },
-
     ]
+
+    if (SelectFieldName.label === "Group") {
+        let SubGroup =
+        {
+            text: "SubGroup",
+            dataField: "SubGroupName",
+        }
+
+        for (let i = 0; i < pagesListColumns.length; i++) {
+            if (pagesListColumns[i].text === "Group") {
+                pagesListColumns[i].dataField = "GroupName";
+            }
+        }
+        pagesListColumns.push(SubGroup);
+    }
 
     const Newvalue = {
 
         text: `New${SelectFieldName.label === undefined ? "Value" : SelectFieldName.label}`,
         dataField: "Newvalue",
 
-        formatter: (cellContent, user, key) => (
+        formatter: (cellContent, row, key) => (
             <>
                 {(SelectFieldName.label === "ShortName" ||
                     SelectFieldName.label === "ShelfLife" ||
                     SelectFieldName.label === "BarCode" ||
                     SelectFieldName.label === "SAPItemCode" ||
-                    SelectFieldName.label === "Sequence"||
+                    SelectFieldName.label === "Sequence" ||
                     SelectFieldName.label === "Breadth" ||
                     SelectFieldName.label === "Grammage" ||
                     SelectFieldName.label === "Height" ||
                     SelectFieldName.label === "Length" ||
-                    SelectFieldName.label === "StoringCondition" )&&
+                    SelectFieldName.label === "StoringCondition") ?
                     <div style={{ width: "180px" }}>
                         <Col>
                             <FormGroup >
@@ -159,19 +237,61 @@ const ItemMasterBulkUpdate = (props) => {
                                     id={key}
                                     type="text"
                                     placeholder={`Enter New ${SelectFieldName.label}`}
-                                    defaultValue={user.Newvalue}
+                                    defaultValue={row.Newvalue}
                                     className="col col-sm "
-                                    onChange={(event) => tableSelectHandler(event, user)}
+                                    onChange={(event) => tableSelectHandler(event, row)}
                                 />
                             </FormGroup>
                         </Col>
                     </div>
+                    :
+                    <div style={{ width: "180px" }}>
+                        <Col>
+                            <FormGroup >
+                                <C_Select
+                                    key={row.Newvalue}
+                                    value={(row?.selectGroup === "") ?
+                                        { value: "", label: "Select..." }
+                                        : row.selectGroup}
+                                    options={Group_DropdownOptions}
+                                    onChange={(event) => GroupNameHandler(event, row, key)}
+                                />
+                            </FormGroup>
+                        </Col>
+                    </div>
+
                 }
             </>
         )
     }
 
+    const SubGroupColumn = {
+        text: " New SubGroup",
+        dataField: "",
+        formatExtraData: { forceRefresh },
+        formatter: (cellContent, row, key) => {
+
+            return (<>
+                <div style={{ width: "180px" }}>
+                    <Col>
+                        <FormGroup >
+                            <C_Select
+                                key={row.Newvalue}
+                                options={row.subGroupOptions}
+                                onChange={(event) => SubGroupType_Handler(event, row)}
+                            />
+                        </FormGroup>
+                    </Col>
+                </div>
+            </>)
+        }
+    }
+
     pagesListColumns.push(Newvalue)
+
+    if (SelectFieldName.label === "Group") {
+        pagesListColumns.push(SubGroupColumn)
+    }
 
     const SaveHandler = (event) => {
 
@@ -179,12 +299,15 @@ const ItemMasterBulkUpdate = (props) => {
         const btnId = event.target.id;
         try {
             const updatedData = [];
-
+            debugger
             goButtonData.forEach(i => {
                 if (i.Newvalue) {
                     const arr = {
+                        ItemName: i.ItemName,
                         ItemID: i.ItemID,
                         Value1: i.Newvalue,
+                        Value2: i.NewSubGroup
+
                     };
                     updatedData.push(arr);
                 }
@@ -197,17 +320,35 @@ const ItemMasterBulkUpdate = (props) => {
                 });
                 return;
             }
+            else {
+                const invalidMsg1 = []
+                updatedData.forEach((i) => {
 
-            const responseData = {
-                Type: SelectFieldName.label==="ShelfLife"?"Days": SelectFieldName.label,
-                UpdatedData: updatedData
-            };
+                    if ((SelectFieldName.label === "Group")) {
+                        if (!(i.Value2)) {
+                            invalidMsg1.push({ [i.ItemName]: 'SubGroup Name is Required' })
+                        }
+                    };
+                })
+                if (invalidMsg1.length > 0) {
+                    customAlert({
+                        Type: 4,
+                        Message: invalidMsg1
+                    })
+                    return
+                }
 
-            const jsonBody = JSON.stringify(responseData);
-            dispatch(ItemWiseUpdate_Save_Action(jsonBody));
-        } catch (e) {
-            _cfunc.btnIsDissablefunc({ btnId, state: false });
-        }
+                const responseData = {
+                    Type: SelectFieldName.label === "ShelfLife" ? "Days" : SelectFieldName.label,
+                    UpdatedData: updatedData
+                };
+
+                const jsonBody = JSON.stringify(responseData);
+                dispatch(ItemWiseUpdate_Save_Action(jsonBody));
+            }
+
+
+        } catch (e) { }
     };
 
     return (
@@ -219,7 +360,7 @@ const ItemMasterBulkUpdate = (props) => {
                     <div className="px-3 c_card_filter header text-black mb-1" >
 
                         <Row>
-                            <Col sm="6">
+                            <Col sm="5">
                                 <FormGroup className="row mt-2" >
                                     <Label className="col-sm-1 p-2"
                                         style={{ width: "115px", marginRight: "0.4cm" }}>SelectField </Label>
@@ -240,8 +381,31 @@ const ItemMasterBulkUpdate = (props) => {
                                     </Col>
                                 </FormGroup>
                             </Col >
+                            {SelectFieldName.label === "Group" &&
+                                <Col sm="5">
+                                    <FormGroup className="row mt-2" >
+                                        <Label className="col-sm-1 p-2"
+                                            style={{ width: "115px", marginRight: "0.4cm" }}>GroupType </Label>
+                                        <Col sm="7">
+                                            <C_Select
+                                                name="groupType"
+                                                value={groupTypeSelect}
+                                                isSearchable={true}
+                                                isDisabled={goButtonData.length > 0 && true}
+                                                className="react-dropdown"
+                                                classNamePrefix="dropdown"
+                                                styles={{
+                                                    menu: provided => ({ ...provided, zIndex: 2 })
+                                                }}
+                                                options={GroupType_DropdownOptions}
+                                                onChange={(event) => GroupTypeHandler(event)}
+                                            />
+                                        </Col>
+                                    </FormGroup>
+                                </Col >}
 
-                            <Col sm="6">
+
+                            <Col sm="2">
                                 <FormGroup className=" row mt-2 " >
                                     <Col sm="1" className="mx-6">
                                         {goButtonData.length === 0 ?
@@ -250,7 +414,10 @@ const ItemMasterBulkUpdate = (props) => {
                                                 loading={goBtnLoading}
                                             />
                                             :
-                                            <Change_Button onClick={(e) => { dispatch(ItemWiseUpdateGoButton_Success([])) }} />
+                                            <Change_Button onClick={(e) => {
+                                                dispatch(ItemWiseUpdateGoButton_Success([]));
+
+                                            }} />
                                         }
 
                                     </Col>
@@ -260,7 +427,7 @@ const ItemMasterBulkUpdate = (props) => {
                         </Row>
                     </div>
 
-                    <div className="mt-1">
+                    <div className="mt-1" style={{ minHeight: "45vh" }}>
                         <ToolkitProvider
                             keyField="id"
                             data={goButtonData}
@@ -271,7 +438,7 @@ const ItemMasterBulkUpdate = (props) => {
                                 <React.Fragment>
                                     <Row>
                                         <Col xl="12">
-                                            <div className="table-responsive table">
+                                            <div className="table-responsive table" style={{ minHeight: "55vh" }}>
                                                 <BootstrapTable
                                                     keyField="id"
                                                     classes={"table  table-bordered table-hover"}
