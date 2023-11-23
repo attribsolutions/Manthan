@@ -172,7 +172,7 @@ const StockReport_1 = (props) => {
         const jsonBody = JSON.stringify({
             "FromDate": fromdate,
             "ToDate": todate,
-            "Party": _cfunc.loginPartyID(),
+            "Party": isSCMParty ? PartyDropdown.value : _cfunc.loginPartyID()
         });
         dispatch(StockProcessing_Action({ jsonBody, btnId }))
     }
