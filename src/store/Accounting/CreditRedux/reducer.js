@@ -28,6 +28,7 @@ const INIT_STATE = {
   ReceiptNumber: [],
   saveBtnloading: false,
   listBtnLoading: false,
+  GobuttonLoading: false,
   Uploaded_Credit_Debit_EInvoice: { Status: false },
   Cancel_Credit_Debit_EInvoice: { Status: false },
 }
@@ -54,14 +55,14 @@ const CredietDebitReducer = (state = INIT_STATE, action) => {
     case GET_CREDIT_LIST:
       return {
         ...state,
-        listBtnLoading: true
+        GobuttonLoading: true
       }
 
     case GET_CREDIT_LIST_SUCCESS:
       return {
         ...state,
         CreditList: action.payload,
-        listBtnLoading: false
+        GobuttonLoading: false
       }
 
     //  del
@@ -116,6 +117,7 @@ const CredietDebitReducer = (state = INIT_STATE, action) => {
         ...state,
         saveBtnloading: false,
         listBtnLoading: false,
+        GobuttonLoading: false
       }
 
 

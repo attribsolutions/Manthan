@@ -63,6 +63,7 @@ const CreditList = () => {
     const reducers = useSelector(
         (state) => ({
             listBtnLoading: (state.CredietDebitReducer.listBtnLoading || state.PdfReportReducers.ReportBtnLoading),
+            GobuttonLoading: state.CredietDebitReducer.GobuttonLoading,
             tableList: state.CredietDebitReducer.CreditList,
             deleteMsg: state.CredietDebitReducer.deleteMsg,
             Uploaded_Credit_Debit_EInvoice: state.CredietDebitReducer.Uploaded_Credit_Debit_EInvoice,
@@ -77,7 +78,7 @@ const CreditList = () => {
         })
     );
 
-    const { pageField, RetailerList, CreditDebitType, listBtnLoading, Cancel_Credit_Debit_EInvoice, Uploaded_Credit_Debit_EInvoice } = reducers;
+    const { pageField, RetailerList, CreditDebitType, listBtnLoading, Cancel_Credit_Debit_EInvoice, Uploaded_Credit_Debit_EInvoice, GobuttonLoading } = reducers;
     const values = { ...state.values }
 
     const action = {
@@ -238,7 +239,7 @@ const CreditList = () => {
     }
 
     function downBtnFunc(config) {
-        
+
         config["ReportType"] = report.Credit;
         config["systemSetting"] = SystemData.CRDRNoteA4Print
         config["PaymentQr"] = SystemData.Qr_Image
@@ -420,7 +421,7 @@ const CreditList = () => {
                 </Col > */}
 
                     <Col sm={1} className="mt-3 " style={{ paddingLeft: "100px" }}>
-                        <Go_Button onClick={goButtonHandler} loading={listBtnLoading} />
+                        <Go_Button onClick={goButtonHandler} loading={GobuttonLoading} />
                     </Col>
                 </div>
             </div>
