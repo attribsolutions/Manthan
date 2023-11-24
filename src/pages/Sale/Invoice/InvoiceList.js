@@ -557,7 +557,7 @@ const InvoiceList = () => {
                             e_WayBill_ActionsBtnFunc={e_WayBill_ActionsBtnFunc}
                             totalAmountShow={true}
                             selectCheckParams={{
-                                isShow: (subPageMode === url.INVOICE_LIST_1) ,
+                                isShow: (false) ,
                                 selectSaveBtnHandler: selectDeleteBtnHandler,
                                 selectSaveBtnLabel: "Delete",
                                 selectHeaderLabel: "Select",
