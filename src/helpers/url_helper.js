@@ -335,7 +335,7 @@ export const CANCEL_E_WAY_BILL = '/Cancel_EwayBill' // Uploaded_E-wayBill
 export const UPDATE_VEHICLE_INVOICE = '/UpdateVehicleInvoice' // Uploaded_E-wayBill
 
 export const INVOICE_SEND_TO_SCM = '/InvoicetoSCM' // Uploaded_E-wayBill
-
+export const INVOICE_1_BULK_DELETE_API= '/InvoiceBulkDelete'// invoice_1 Bulk Delete Api
 
 
 

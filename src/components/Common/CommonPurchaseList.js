@@ -421,7 +421,8 @@ const CommonPurchaseList = (props) => {
                   className="btn btn-primary w-md  "
                   onClick={() => { selectCheckParams.selectSaveBtnHandler(tableList) }}
                 >
-                  <i class="fas fa-edit me-2"></i>{selectCheckParams.selectSaveBtnLabel}
+                  {/* <i class="fas fa-edit me-2"></i> */}
+                  {selectCheckParams.selectSaveBtnLabel}
                 </C_Button>
               </div>
               : null

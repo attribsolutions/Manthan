@@ -32,7 +32,9 @@ import {
     invoiceListGoBtnfilterSucccess,
     GoButtonForinvoiceAdd,
     editInvoiceAction,
-    updateInvoiceActionSuccess
+    updateInvoiceActionSuccess,
+    InvoiceBulkDelete_IDs_Action,
+    InvoiceBulkDelete_IDs_Succcess
 } from "../../../store/Sales/Invoice/action";
 import { makeInward } from "../../../store/Inter Branch/InwardRedux/action";
 import { C_DatePicker, C_Select } from "../../../CustomValidateForm";
@@ -76,11 +78,11 @@ const InvoiceList = () => {
             Update_Vehicle_Invoice: state.InvoiceReducer.Update_Vehicle_Invoice,
 
             sendToScmMsg: state.InvoiceReducer.sendToScmMsg,
-
+            invoiceBulkDelete: state.InvoiceReducer.invoiceBulkDelete,
             listBtnLoading: (state.InvoiceReducer.listBtnLoading || state.PdfReportReducers.ReportBtnLoading)
         })
     );
-    debugger
+    
     const {
         pageField,
         supplier,
@@ -91,7 +93,8 @@ const InvoiceList = () => {
         supplierDropLoading,
         VehicleNumber,
         Update_Vehicle_Invoice,
-        sendToScmMsg
+        sendToScmMsg,
+        invoiceBulkDelete
     } = reducers;
 
     const {
@@ -181,9 +184,6 @@ const InvoiceList = () => {
         }
     }, [Update_Vehicle_Invoice]);
 
-
-
-
     useEffect(() => {    // Vehicle Update against Invoice Id
         if (sendToScmMsg.Status === true && sendToScmMsg.StatusCode === 200) {
             dispatch(InvoiceSendToScmSuccess({ Status: false }));
@@ -199,13 +199,6 @@ const InvoiceList = () => {
             })
         }
     }, [sendToScmMsg]);
-
-
-
-
-
-
-
 
     useEffect(() => {   // Uploaded EInvoice useEffect 
         if (Uploaded_EInvoice.Status === true && Uploaded_EInvoice.StatusCode === 200) {
@@ -289,6 +282,31 @@ const InvoiceList = () => {
             return
         }
     }, [Cancel_EwayBill]);
+
+
+
+
+
+    useEffect(async () => {    // Uploaded Cancel E-way Bill useEffect 
+
+        if (invoiceBulkDelete.Status === true && invoiceBulkDelete.StatusCode === 200) {
+            dispatch(InvoiceBulkDelete_IDs_Succcess({ Status: false }))
+            goButtonHandler("event")
+            customAlert({
+                Type: 1,
+                Message: invoiceBulkDelete.Message,
+            })
+            return
+        }
+        else if (invoiceBulkDelete.Status === true) {
+            dispatch(InvoiceBulkDelete_IDs_Succcess({ Status: false }))
+            customAlert({
+                Type: 3,
+                Message: JSON.stringify(invoiceBulkDelete.Message),
+            })
+            return
+        }
+    }, [invoiceBulkDelete]);
 
     const supplierOptions = supplier.map((i) => ({
         value: i.id,
@@ -493,7 +511,21 @@ const InvoiceList = () => {
         }));
 
     }
+    
+    const selectDeleteBtnHandler = (row = []) => {
 
+        let ischeck = row.filter(i => (i.selectCheck))
+        if (!ischeck.length > 0) {
+            customAlert({
+                Type: 4,
+                Message: "Please Select One Checkbox",
+            });
+            return
+        }
+        let idString = ischeck.map(obj => obj.id).join(',')
+        let jsonBody = JSON.stringify({ Invoice_ID:idString })
+        dispatch(InvoiceBulkDelete_IDs_Action({ jsonBody}))
+    }
     return (
         <React.Fragment>
             <PageLoadingSpinner isLoading={reducers.listBtnLoading || !pageField} />
@@ -524,6 +556,14 @@ const InvoiceList = () => {
                             forceNewBtnView={false}
                             e_WayBill_ActionsBtnFunc={e_WayBill_ActionsBtnFunc}
                             totalAmountShow={true}
+                            selectCheckParams={{
+                                isShow: (subPageMode === url.INVOICE_LIST_1) ,
+                                selectSaveBtnHandler: selectDeleteBtnHandler,
+                                selectSaveBtnLabel: "Delete",
+                                selectHeaderLabel: "Select",
+                                // selectSaveBtnLoading: sendToSSbtnLoading
+                            }}
+
                         />
                         : null
                 }

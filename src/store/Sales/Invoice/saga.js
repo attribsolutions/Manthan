@@ -12,12 +12,10 @@ import {
   Invoice_1_GoButton_API,
   Invoice_1_Save_API,
   Invoice_1_Delete_API,
-  Invoice_Singel_Get_for_Report_Api,
   Invoice_1_Get_Filter_API,
   IB_Invoice_GoButton_API,
   IB_Invoice_Save_API,
   IB_Invoice_Get_Filter_API,
-  IB_Invoice_Edit_API_Singel_Get,
   IB_Invoice_Delete_API,
   EInvoice_Uploade_Get_API,
   EInvoice_Cancel_Get_API,
@@ -27,6 +25,7 @@ import {
   Invoice_Send_To_Scm,
   Invoice_1_Edit_API,
   Invoice_1_Update_API,
+  Invoice_1_Bulk_Delete_API,
 } from "../../../helpers/backend_helper";
 import {
   deleteInvoiceIdSuccess,
@@ -43,6 +42,7 @@ import {
   UpdateVehicleInvoice_Success,
   InvoiceSendToScmSuccess,
   updateInvoiceActionSuccess,
+  InvoiceBulkDelete_IDs_Succcess,
 } from "./action";
 import {
   DELETE_INVOICE_LIST_PAGE,
@@ -57,6 +57,7 @@ import {
   UPDATE_VEHICLE_INVOICE_ACTION,
   INVOICE_SEND_TO_SCM_ACTION,
   UPDATE_INVOICE_ACTION,
+  INVOICE_BULK_DELETE_IDS_ACTION,
 
 } from "./actionType";
 import *as url from "../../../routes/route_url"
@@ -107,6 +108,7 @@ function* InvoiceListGenFunc({ config }) {
     }
 
     const newList = yield response.Data.map((i) => {
+      i["selectCheck"] = false;
       i.forceDeleteHide = false;
       i.forceEditHide = false;
 
@@ -392,7 +394,16 @@ function* UpdateVehicleInvoice_GenFunc({ config }) {
   }
 }
 
-// MAKE_IB_INVOICE_ACTION
+function* InvoiceBulkDelete_GenFunc({ config }) { // Update Order by subPageMode
+
+  try {
+    debugger
+    // console.log(config.jsonBody)
+    const response = yield call(Invoice_1_Bulk_Delete_API,config);
+    yield put(InvoiceBulkDelete_IDs_Succcess(response))
+  } catch (error) { yield put(InvoiceApiErrorAction()) }
+}
+
 function* InvoiceSaga() {
 
   yield takeLatest(INVOICE_SEND_TO_SCM_ACTION, Invoice_Send_To_Scm_GenFun);
@@ -408,6 +419,8 @@ function* InvoiceSaga() {
   yield takeLatest(CANCLE_E_WAY_BILL_ACTION, Cancle_EwayBillGenFunc);
   yield takeLatest(CANCLE_E_INVOICE_ACTION, Cancle_EInvoiceGenFunc);
   yield takeLatest(UPDATE_VEHICLE_INVOICE_ACTION, UpdateVehicleInvoice_GenFunc);
+  yield takeLatest(INVOICE_BULK_DELETE_IDS_ACTION, InvoiceBulkDelete_GenFunc);
+
 }
 
 export default InvoiceSaga;
