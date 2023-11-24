@@ -542,7 +542,7 @@ export const Invoice_Singel_Get_for_Report_Api = ({ editId }) => get(`${url.INVO
 export const Update_Vehicle_Invoice_API = ({ Invoiceid, vehicleid }) => get(`${url.UPDATE_VEHICLE_INVOICE}/${Invoiceid}/${vehicleid}`)// Cancel_EwayBill
 export const Invoice_Send_To_Scm = ({ jsonBody }) => post(url.INVOICE_SEND_TO_SCM, jsonBody)// delete api
 
-
+export const Invoice_1_Bulk_Delete_API = ({ jsonBody }) => delwithPostBody(url.INVOICE_1_BULK_DELETE_API, jsonBody)//Bulk delete api
 
 //**************************** E-Invoice (upload ,cancel,print) ***************************************/
 
@@ -657,7 +657,7 @@ export const delete_Claim_API = ({ jsonBody }) => delwithPostBody(url.MASTER_CLA
 
 
 
-export const Dashboard_Get_API = ({loginPartyID}) => get(`${url.DASHBOARD}/${loginPartyID}`)// Dashboard grt api
+export const Dashboard_Get_API = ({ loginPartyID }) => get(`${url.DASHBOARD}/${loginPartyID}`)// Dashboard grt api
 
 //StockEntry
 

@@ -21,7 +21,9 @@ import {
     INVOICE_SEND_TO_SCM_ACTION_SUCCESS,
     EDIT_INVOICE_ACTION,
     UPDATE_INVOICE_ACTION,
-    UPDATE_INVOICE_ACTION_SUCCESS
+    UPDATE_INVOICE_ACTION_SUCCESS,
+    INVOICE_BULK_DELETE_IDS_ACTION,
+    INVOICE_BULK_DELETE_IDS_SUCCESS
 } from "./actionType"
 
 const INIT_STATE = {
@@ -37,6 +39,7 @@ const INIT_STATE = {
     Cancel_EInvoice: { Status: false },
     Cancel_EwayBill: { Status: false },
     Update_Vehicle_Invoice: [],
+    invoiceBulkDelete: { Status: false },
 
     listBtnLoading: false,
     saveAndPdfBtnLoading: false,
@@ -214,6 +217,20 @@ const InvoiceReducer = (state = INIT_STATE, action) => {
             }
         /**************************************** */
 
+        case INVOICE_BULK_DELETE_IDS_ACTION:
+            return {
+                ...state,
+                listBtnLoading: action.config.btnId,
+
+            }
+
+        case INVOICE_BULK_DELETE_IDS_SUCCESS:
+            return {
+                ...state,
+                listBtnLoading: false,
+                invoiceBulkDelete: action.payload,
+
+            }
         case INVOICE_API_ERROR_ACTION:
             return {
                 ...state,

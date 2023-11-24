@@ -26,6 +26,8 @@ import {
     INVOICE_SEND_TO_SCM_ACTION_SUCCESS,
     UPDATE_INVOICE_ACTION,
     UPDATE_INVOICE_ACTION_SUCCESS,
+    INVOICE_BULK_DELETE_IDS_ACTION,
+    INVOICE_BULK_DELETE_IDS_SUCCESS,
 
 } from "./actionType";
 
@@ -118,10 +120,6 @@ export const makeIB_InvoiceActionSuccess = (data) => ({
     payload: data,
 });
 
-export const InvoiceApiErrorAction = () => ({
-    type: INVOICE_API_ERROR_ACTION,
-})
-
 //**************************** E-Invoice (upload ,cancel) ***************************************/
 
 export const Uploaded_EInvoiceAction = (config) => ({
@@ -177,3 +175,18 @@ export const UpdateVehicleInvoice_Success = (data) => ({
     payload: data,
 });
 
+// Invoice Bulk Delete
+export const InvoiceBulkDelete_IDs_Action = (config = {}) => ({
+    type: INVOICE_BULK_DELETE_IDS_ACTION,
+    config,
+  });
+  
+  export const InvoiceBulkDelete_IDs_Succcess = (resp) => ({
+    type: INVOICE_BULK_DELETE_IDS_SUCCESS,
+    payload: resp,
+  });
+
+  // Invoice Error Action
+  export const InvoiceApiErrorAction = () => ({
+    type: INVOICE_API_ERROR_ACTION,
+})
