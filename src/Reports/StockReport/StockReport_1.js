@@ -169,6 +169,10 @@ const StockReport_1 = (props) => {
     function StockProccessHandler() {
 
         const btnId = `gobtn-${url.STOCK_REPORT_1}`
+        if ((isSCMParty) && (PartyDropdown === "")) {
+            customAlert({ Type: 4, Message: "Please Select Party" });
+            return;
+        }
         const jsonBody = JSON.stringify({
             "FromDate": fromdate,
             "ToDate": todate,
