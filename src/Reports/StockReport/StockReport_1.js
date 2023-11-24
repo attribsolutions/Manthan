@@ -43,7 +43,7 @@ const StockReport_1 = (props) => {
             pageField: state.CommonPageFieldReducer.pageField
         })
     );
-    const { StockReport_1_Gobtb, pdfdata, pageField, party } = reducers
+    const { StockReport_1_Gobtb, pdfdata, pageField, party, goBtnLoading } = reducers
 
     const { userAccess, BaseUnit, StockProcessingBtn, } = reducers;
     const { fromdate = currentDate_ymd, todate = currentDate_ymd } = headerFilters;
@@ -308,6 +308,7 @@ const StockReport_1 = (props) => {
             type="button"
             spinnerColor="white"
             className="btn btn-success"
+            loading={goBtnLoading}
             onClick={(e) => excel_And_GoBtnHandler(e, 1)}
         >
             Print
