@@ -2,6 +2,7 @@ import {
     GO_BUTTON_FOR_PARTY_MASTER_BULK_UPDATE_PAGE,
     GO_BUTTON_FOR_PARTY_MASTER_BULK_UPDATE_PAGE_SUCCESS,
     PARTYBULK_API_ERROR_ACTION,
+    POST_PARTY_MASTER_BULK_UPDATE_PAGE,
     POST_PARTY_MASTER_BULK_UPDATE_PAGE_SUCCESS,
     POST_PARTY_NAME_SUCCESS,
     POST_SELECT_FIELD_SUCCESS,
@@ -22,10 +23,17 @@ const INIT_STATE = {
 const PartyMasterBulkUpdateReducer = (state = INIT_STATE, action) => {
     switch (action.type) {
 
+        case POST_PARTY_MASTER_BULK_UPDATE_PAGE:
+            return {
+                ...state,
+                saveBtnloading: true,
+            }
+            
         case POST_PARTY_MASTER_BULK_UPDATE_PAGE_SUCCESS:
             return {
                 ...state,
                 postMsg: action.payload,
+                saveBtnloading: false,
             }
 
         case GO_BUTTON_FOR_PARTY_MASTER_BULK_UPDATE_PAGE:
