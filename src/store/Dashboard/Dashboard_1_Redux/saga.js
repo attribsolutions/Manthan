@@ -16,7 +16,6 @@ function* Dashboard_Get_API_GenFunc({ config }) {
     } catch (error) { CommonConsole(error) }
 }
 
-
 function* Dashboard_Order_Data_Get_API_GenFunc({ config }) {
 
     try {
@@ -25,10 +24,8 @@ function* Dashboard_Order_Data_Get_API_GenFunc({ config }) {
     } catch (error) { CommonConsole(error) }
 }
 
-
-
 function* InvoiceListGenFunc({ config }) {
-    debugger
+    
     try {
         const response = yield call(apiCall.Invoice_1_Get_Filter_API, config);
         yield put(action.Get_Dashboard_Invoice_Data_Success(response.Data));
@@ -36,7 +33,6 @@ function* InvoiceListGenFunc({ config }) {
         yield put(CommonConsole(error))
     }
 }
-
 
 function* GRNListfilterGerFunc({ config }) {          // Grn_List filter  genrator function
     try {

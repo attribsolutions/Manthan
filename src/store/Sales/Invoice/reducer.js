@@ -45,6 +45,7 @@ const INIT_STATE = {
     saveAndPdfBtnLoading: false,
     saveBtnloading: false,
     goBtnloading: false,
+    invoiceBulkDeleteLoading: false,
 
     sendToScmMsg: { Status: false }
 }
@@ -220,14 +221,14 @@ const InvoiceReducer = (state = INIT_STATE, action) => {
         case INVOICE_BULK_DELETE_IDS_ACTION:
             return {
                 ...state,
-                listBtnLoading: action.config.btnId,
+                invoiceBulkDeleteLoading: action.config.btnId,
 
             }
 
         case INVOICE_BULK_DELETE_IDS_SUCCESS:
             return {
                 ...state,
-                listBtnLoading: false,
+                invoiceBulkDeleteLoading: false,
                 invoiceBulkDelete: action.payload,
 
             }
@@ -238,6 +239,7 @@ const InvoiceReducer = (state = INIT_STATE, action) => {
                 goBtnloading: false,
                 saveBtnloading: false,
                 saveAndPdfBtnLoading: false,
+                invoiceBulkDeleteLoading: false,
             }
 
         default:
