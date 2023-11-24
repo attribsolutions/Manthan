@@ -129,7 +129,7 @@ const InvoiceExcelUpload = (props) => {
         const jsonBody = JSON.stringify({
             PartyID: _cfunc.loginSelectedPartyID(),
             CompanyID: _cfunc.loginCompanyID(),
-            IsFieldType:1// type 1 is all Invoices fields
+            IsFieldType: 1// type 1 is all Invoices fields
         })
         dispatch(GoButton_ImportFiledMap_Add({ jsonBody }))
     };
@@ -247,6 +247,7 @@ const InvoiceExcelUpload = (props) => {
 
                 inv.forEach(ele => {
                     parentObj = {
+                        "ImportFromExcel": 1,
                         "CustomerGSTTin": ele[parArr.CustomerGSTTin] ? ele[parArr.CustomerGSTTin] : '',
                         "TCSAmount": ele[parArr.TCSAmount] ? ele[parArr.TCSAmount] : 0,
                         "GrandTotal": ele[parArr.GrandTotal] ? ele[parArr.GrandTotal] : invoiceTotalAmount,
