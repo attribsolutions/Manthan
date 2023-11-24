@@ -78,11 +78,12 @@ const InvoiceList = () => {
             Update_Vehicle_Invoice: state.InvoiceReducer.Update_Vehicle_Invoice,
 
             sendToScmMsg: state.InvoiceReducer.sendToScmMsg,
+            invoiceBulkDeleteLoading: state.InvoiceReducer.invoiceBulkDeleteLoading,
             invoiceBulkDelete: state.InvoiceReducer.invoiceBulkDelete,
             listBtnLoading: (state.InvoiceReducer.listBtnLoading || state.PdfReportReducers.ReportBtnLoading)
         })
     );
-    
+
     const {
         pageField,
         supplier,
@@ -94,7 +95,9 @@ const InvoiceList = () => {
         VehicleNumber,
         Update_Vehicle_Invoice,
         sendToScmMsg,
-        invoiceBulkDelete
+        invoiceBulkDelete,
+        invoiceBulkDeleteLoading,
+
     } = reducers;
 
     const {
@@ -283,11 +286,7 @@ const InvoiceList = () => {
         }
     }, [Cancel_EwayBill]);
 
-
-
-
-
-    useEffect(async () => {    // Uploaded Cancel E-way Bill useEffect 
+    useEffect(async () => {    // Invoice bulk delete useEffect 
 
         if (invoiceBulkDelete.Status === true && invoiceBulkDelete.StatusCode === 200) {
             dispatch(InvoiceBulkDelete_IDs_Succcess({ Status: false }))
@@ -511,7 +510,7 @@ const InvoiceList = () => {
         }));
 
     }
-    
+
     const selectDeleteBtnHandler = (row = []) => {
 
         let ischeck = row.filter(i => (i.selectCheck))
@@ -523,8 +522,8 @@ const InvoiceList = () => {
             return
         }
         let idString = ischeck.map(obj => obj.id).join(',')
-        let jsonBody = JSON.stringify({ Invoice_ID:idString })
-        dispatch(InvoiceBulkDelete_IDs_Action({ jsonBody}))
+        let jsonBody = JSON.stringify({ Invoice_ID: idString })
+        dispatch(InvoiceBulkDelete_IDs_Action({ jsonBody }))
     }
     return (
         <React.Fragment>
@@ -557,11 +556,11 @@ const InvoiceList = () => {
                             e_WayBill_ActionsBtnFunc={e_WayBill_ActionsBtnFunc}
                             totalAmountShow={true}
                             selectCheckParams={{
-                                isShow: (false) ,
+                                isShow: (subPageMode === url.INVOICE_LIST_1) ,
                                 selectSaveBtnHandler: selectDeleteBtnHandler,
                                 selectSaveBtnLabel: "Delete",
                                 selectHeaderLabel: "Select",
-                                // selectSaveBtnLoading: sendToSSbtnLoading
+                                selectSaveBtnLoading: invoiceBulkDeleteLoading
                             }}
 
                         />

@@ -484,7 +484,7 @@ const GoodsCreditNote = (props) => {
 
             formatExtraData: { TableArr },
             formatter: (cell, row, key, { TableArr }) => {
-                
+
                 return (<div style={{ minWidth: "90px" }}>
                     <Select
                         id={`GST${key}`}
@@ -663,20 +663,23 @@ const GoodsCreditNote = (props) => {
     }
 
     const AddPartyHandler = async () => {
-
-        const invalidMsg1 = []
-        if ((values.ItemName === '')) {
-            invalidMsg1.push(`Select Item Name`)
-        }
-
-        if (invalidMsg1.length > 0) {
+        
+        let isfound = TableArr.find(i => i.Item === values.ItemName.value);
+        if (values.ItemName === '') {
             customAlert({
                 Type: 4,
-                Message: JSON.stringify(invalidMsg1)
+                Message: "Please Select ItemName"
             })
             return
         }
-
+        else if (!(isfound === undefined)) {
+            customAlert({
+                Type: 4,
+                Message:  "This ItemName Already Exist"
+            })
+            return
+        }
+       
         const jsonBody = JSON.stringify({
             "ItemID": values.ItemName.value,
             "BatchCode": "",

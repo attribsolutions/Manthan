@@ -1,4 +1,4 @@
-import { call, put, takeLatest } from "redux-saga/effects";
+import { call, delay, put, takeLatest } from "redux-saga/effects";
 import {
   CommonConsole,
   amountCommaSeparateFunc,
@@ -111,6 +111,7 @@ function* InvoiceListGenFunc({ config }) {
       i["selectCheck"] = false;
       i.forceDeleteHide = false;
       i.forceEditHide = false;
+      i.forceSelectDissabled = false;
 
       i["recordsAmountTotal"] = i.GrandTotal;  // Breadcrumb Count total
       i.GrandTotal = amountCommaSeparateFunc(i.GrandTotal);//  GrandTotal show with commas
@@ -141,6 +142,10 @@ function* InvoiceListGenFunc({ config }) {
             }
           }
         });
+      }
+
+      if (!(i.ImportFromExcel)) {
+        i.forceSelectDissabled = true;
       }
       return i
     })
@@ -397,9 +402,7 @@ function* UpdateVehicleInvoice_GenFunc({ config }) {
 function* InvoiceBulkDelete_GenFunc({ config }) { // Update Order by subPageMode
 
   try {
-    debugger
-    // console.log(config.jsonBody)
-    const response = yield call(Invoice_1_Bulk_Delete_API,config);
+    const response = yield call(Invoice_1_Bulk_Delete_API, config);
     yield put(InvoiceBulkDelete_IDs_Succcess(response))
   } catch (error) { yield put(InvoiceApiErrorAction()) }
 }
