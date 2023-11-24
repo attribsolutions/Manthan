@@ -105,16 +105,22 @@ const PartyMasterBulkUpdate = (props) => {
     const hasShowModal = props.hasOwnProperty(mode.editValue)
 
     const values = { ...state.values }
-    const { isError } = state;
-    const { fieldLabel } = state;
-
+  
     useEffect(() => {
         dispatch(GoButton_For_Party_Master_Bulk_Update_AddSuccess([]))
         const page_Id = pageId.PARTY_MASTER_BULK_UPDATE
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
-        dispatch(GetRoutesList({ ..._cfunc.loginJsonBody(), "PartyID": _cfunc.loginSelectedPartyID() }));
         dispatch(getState())
+        if (!(_cfunc.loginSelectedPartyID() === 0)) {
+            dispatch(GetRoutesList({ ..._cfunc.loginJsonBody(), "PartyID": _cfunc.loginSelectedPartyID() }));
+            const jsonBody = JSON.stringify({
+                CompanyID: loginCompanyID(),
+                PartyID: _cfunc.loginSelectedPartyID(),
+                Type: 1
+            });
+            dispatch(postPartyName_for_dropdown(jsonBody));
+        }
         return () => {
             dispatch(GetRoutesListSuccess([]))
             dispatch(getStateESuccess([]))
@@ -144,15 +150,6 @@ const PartyMasterBulkUpdate = (props) => {
             TypeID: 2
         });
         dispatch(postSelect_Field_for_dropdown(jsonBody));
-    }, []);
-
-    useEffect(() => {
-        const jsonBody = JSON.stringify({
-            CompanyID: loginCompanyID(),
-            PartyID: _cfunc.loginSelectedPartyID(),
-            Type: 1
-        });
-        dispatch(postPartyName_for_dropdown(jsonBody));
     }, []);
 
     useEffect(async () => {
@@ -240,7 +237,12 @@ const PartyMasterBulkUpdate = (props) => {
 
     const GoButton_Handler = () => {
 
-        if (SelectFieldName.length === 0) {
+        if ((_cfunc.loginSelectedPartyID() === 0)) {
+            customAlert({ Type: 3, Message: "Please Select Party" });
+            return;
+        }
+
+       else if (SelectFieldName.length === 0) {
             customAlert({
                 Type: 3,
                 Message: "Please select field",
@@ -627,6 +629,7 @@ const PartyMasterBulkUpdate = (props) => {
         })
         dispatch(GetRoutesListSuccess([]));
         dispatch(postPartyName_for_dropdown_Success([]));
+        dispatch(GoButton_For_Party_Master_Bulk_Update_AddSuccess([]));
     }
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
