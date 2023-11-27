@@ -63,7 +63,8 @@ function* Get_Party_GenFun({ jsonBody }) {   // Only CompanyID is Required
       index["District"] = index.District.Name;
       index['Company'] = index.Company.Name;
       index['PartyType'] = index.PartyType.Name;
-      index['Route'] = !(index.MCSubParty[0].Route === null) ? index.MCSubParty[0].Route.Name : "";
+
+      // index['Route'] = !(index.MCSubParty[0].Route === null) ? index.MCSubParty[0].Route.Name : "";
 
       if (!index.PriceList) { index.PriceList = '' }
       else { index["PriceList"] = index.PriceList.Name; }
