@@ -105,7 +105,7 @@ const PartyMasterBulkUpdate = (props) => {
     const hasShowModal = props.hasOwnProperty(mode.editValue)
 
     const values = { ...state.values }
-  
+
     useEffect(() => {
         dispatch(GoButton_For_Party_Master_Bulk_Update_AddSuccess([]))
         const page_Id = pageId.PARTY_MASTER_BULK_UPDATE
@@ -117,7 +117,7 @@ const PartyMasterBulkUpdate = (props) => {
             const jsonBody = JSON.stringify({
                 CompanyID: loginCompanyID(),
                 PartyID: _cfunc.loginSelectedPartyID(),
-                Type: 1
+                Type: 4
             });
             dispatch(postPartyName_for_dropdown(jsonBody));
         }
@@ -242,7 +242,7 @@ const PartyMasterBulkUpdate = (props) => {
             return;
         }
 
-       else if (SelectFieldName.length === 0) {
+        else if (SelectFieldName.length === 0) {
             customAlert({
                 Type: 3,
                 Message: "Please select field",
@@ -612,7 +612,7 @@ const PartyMasterBulkUpdate = (props) => {
         const jsonBody = JSON.stringify({
             CompanyID: loginCompanyID(),
             PartyID: _cfunc.loginSelectedPartyID(),
-            Type: 1
+            Type: 4
         });
         dispatch(postPartyName_for_dropdown(jsonBody));
         dispatch(GetRoutesList({ ..._cfunc.loginJsonBody(), "PartyID": _cfunc.loginSelectedPartyID() }));
@@ -662,6 +662,7 @@ const PartyMasterBulkUpdate = (props) => {
                                                     isSearchable={true}
                                                     className="react-dropdown"
                                                     classNamePrefix="dropdown"
+                                                    isDisabled={Data.length > 0 && true}
                                                     styles={{
                                                         menu: provided => ({ ...provided, zIndex: 2 })
                                                     }}
@@ -681,6 +682,7 @@ const PartyMasterBulkUpdate = (props) => {
                                                     value={values.Routes}
                                                     isSearchable={true}
                                                     className="react-dropdown"
+                                                    isDisabled={Data.length > 0 && true}
                                                     styles={{
                                                         menu: provided => ({ ...provided, zIndex: 2 })
                                                     }}
@@ -704,6 +706,7 @@ const PartyMasterBulkUpdate = (props) => {
                                                     isSearchable={true}
                                                     className="react-dropdown"
                                                     classNamePrefix="dropdown"
+                                                    isDisabled={Data.length > 0 && true}
                                                     styles={{
                                                         menu: provided => ({ ...provided, zIndex: 2 })
                                                     }}
