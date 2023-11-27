@@ -58,11 +58,12 @@ function* Get_Party_GenFun({ jsonBody }) {   // Only CompanyID is Required
       if (ind) { result = ind.Address }
       return result
     }
-    const data1 = response.Data.map((index) => {
+    const newArray = response.Data.map((index) => {
       index["State"] = index.State.Name;
       index["District"] = index.District.Name;
       index['Company'] = index.Company.Name;
       index['PartyType'] = index.PartyType.Name;
+      index['Route'] = !(index.MCSubParty[0].Route === null) ? index.MCSubParty[0].Route.Name : "";
 
       if (!index.PriceList) { index.PriceList = '' }
       else { index["PriceList"] = index.PriceList.Name; }
@@ -70,8 +71,7 @@ function* Get_Party_GenFun({ jsonBody }) {   // Only CompanyID is Required
       index["Check"] = false
       return index;
     });
-
-    yield put(getPartyListAPISuccess(data1))
+    yield put(getPartyListAPISuccess(newArray))
   } catch (error) {
     CommonConsole(error);
     yield put(PartyApiErrorAction());
@@ -196,7 +196,7 @@ function* PartyListforApproval_GenFun({ jsonBody }) {   // Only CompanyID is Req
 
 // get api for PartyListForApproval id
 function* PartyListforApproval_Id_GenFun({ config }) {
-  
+
   try {
     const response = yield call(RetailerListForApproval_ID, config);
     yield put(GetPartyListforApprovalID_Success(response));
