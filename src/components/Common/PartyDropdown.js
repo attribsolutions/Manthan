@@ -3,10 +3,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { Col, FormGroup, Label } from "reactstrap";
 import { C_Button } from "./CommonButton";
 import { C_Select } from "../../CustomValidateForm";
-import { CommonConsole, loginUserAdminRole } from "./CommonFunction";
+import { CommonConsole, loginCompanyID, loginUserAdminRole } from "./CommonFunction";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import { commonPartyDropSelectAction } from "../../store/Utilites/PartyDrodown/action";
 import { mode } from "../../routes";
+import { getpartysetting_API, getpartysetting_API_Success } from "../../store/Administrator/PartySetting/action";
+
 
 const initialLocalStorageParty = () => {
     try {
@@ -38,7 +40,7 @@ const PartyDropdown = ({ goButtonHandler, changeButtonHandler, goBtnLoading, SAP
     useEffect(() => {
 
         const selectedParty = JSON.parse(localStorage.getItem("selectedParty"));
-      
+
         if (selectedParty.value === 0) {
             setSelectedParty({ value: 0, label: "Select...", SAPPartyCode: "" })
             setChangeButtonShow(false)
@@ -50,6 +52,7 @@ const PartyDropdown = ({ goButtonHandler, changeButtonHandler, goBtnLoading, SAP
             customAlert({ Type: 3, Message: "Please Select Party" });
             return;
         }
+        dispatch(getpartysetting_API(selectedParty.value, loginCompanyID()));
         dispatch(commonPartyDropSelectAction(selectedParty))  // new common party dropdown set
         localStorage.setItem("selectedParty", JSON.stringify(selectedParty));
         if (goButtonHandler) {
@@ -63,6 +66,7 @@ const PartyDropdown = ({ goButtonHandler, changeButtonHandler, goBtnLoading, SAP
             changeButtonHandler();
         }
         dispatch(commonPartyDropSelectAction({ value: 0, label: "select...", SAPPartyCode: "" }))// new common party dropdown set
+        dispatch(getpartysetting_API_Success([]))
         localStorage.setItem("selectedParty", JSON.stringify({ value: 0 }));
         setSelectedParty({ value: 0, label: "Select...", SAPPartyCode: "" })
         setChangeButtonShow(false)
