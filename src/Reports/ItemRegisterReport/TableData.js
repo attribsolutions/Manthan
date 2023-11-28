@@ -23,6 +23,7 @@ export const PageHedercolumns = [
 ]
 
 export const Rows = (data) => {
+    debugger
     const openingBalance = Number(data[data.length - 1].OpeningBalance);
 
     // InvoiceItems.sort((firstItem, secondItem) => firstItem.GSTPercentage - secondItem.GSTPercentage);
@@ -50,13 +51,14 @@ export const Rows = (data) => {
     let BalanceAmount = Number(openingBalance)
 
     data.forEach((element, key) => {
+        debugger
         let RowGRN = 0
         let RowSalesReturn = 0
         let RowStock = 0
         let RowSale = 0
         let RowPurchaseReturn = 0
         let RowStockAdjustment = 0
-        
+
 
         if (Unit === "No") {
             GRN = Number(element.QtyInNo)
@@ -68,21 +70,21 @@ export const Rows = (data) => {
         }
 
         if (Unit === "Kg") {
-            GRN = Number(element.QtyInNo)
-            SalesReturn = Number(element.QtyInNo)
-            Stock = Number(element.QtyInNo)
-            Sale = Number(element.QtyInNo)
-            PurchaseReturn = Number(element.QtyInNo)
-            StockAdjustment = Number(element.QtyInNo)
+            GRN = Number(element.QtyInKg)
+            SalesReturn = Number(element.QtyInKg)
+            Stock = Number(element.QtyInKg)
+            Sale = Number(element.QtyInKg)
+            PurchaseReturn = Number(element.QtyInKg)
+            StockAdjustment = Number(element.QtyInKg)
 
         }
         if (Unit === "Box") {
-            GRN = Number(element.QtyInNo)
-            SalesReturn = Number(element.QtyInNo)
-            Stock = Number(element.QtyInNo)
-            Sale = Number(element.QtyInNo)
-            PurchaseReturn = Number(element.QtyInNo)
-            StockAdjustment = Number(element.QtyInNo)
+            GRN = Number(element.QtyInBox)
+            SalesReturn = Number(element.QtyInBox)
+            Stock = Number(element.QtyInBox)
+            Sale = Number(element.QtyInBox)
+            PurchaseReturn = Number(element.QtyInBox)
+            StockAdjustment = Number(element.QtyInBox)
         }
 
         if (element.Sequence === 1) {
