@@ -10,7 +10,7 @@ import {
     Row,
     Spinner,
 } from "reactstrap";
-import { breadcrumbReturnFunc, loginUserDetails, metaTagLabel } from '../../components/Common/CommonFunction';
+import { breadcrumbReturnFunc, loginSelectedPartyID, loginUserDetails, metaTagLabel } from '../../components/Common/CommonFunction';
 import * as pageId from "../../routes/allPageID"
 import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess } from '../../store/actions';
 import * as mode from "../../routes/PageMode"
@@ -24,7 +24,8 @@ import ToolkitProvider from 'react-bootstrap-table2-toolkit';
 import BootstrapTable from 'react-bootstrap-table-next';
 import { mySearchProps } from '../../components/Common/SearchBox/MySearch';
 import { C_Button } from '../../components/Common/CommonButton';
-
+import PartyDropdown_Common from "../../components/Common/PartyDropdown";
+import { customAlert } from '../../CustomAlert/ConfirmDialog';
 
 function initialState(history) {
 
@@ -57,10 +58,6 @@ const ProductMarginReport = (props) => {           // this component also use fo
     const [btnMode, setBtnMode] = useState("");
     const [columns, setcolumn] = useState([{}]);
     const [columnsCreated, setColumnsCreated] = useState(false)
-
-
-
-
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
@@ -110,8 +107,6 @@ const ProductMarginReport = (props) => {           // this component also use fo
         };
     }, [userAccess])
 
-
-
     const createColumns = () => {
         if ((ProductMargin.length > 0) || (manPowerReportRedux.length > 0)) {
             let columns = []
@@ -133,11 +128,10 @@ const ProductMarginReport = (props) => {           // this component also use fo
         createColumns();
     }
 
-
     useEffect(() => {
 
         if ((ProductMargin.length > 0) && (subPageMode === url.PRODUCT_MARGIN_REPORT)) {
-            
+
             if (btnMode === "Show") {
                 setTableData(ProductMargin)
             } else if (btnMode === "Excel") {
@@ -165,98 +159,105 @@ const ProductMarginReport = (props) => {           // this component also use fo
 
     }, [ProductMargin, pageField, manPowerReportRedux]);
 
-    function excelhandler(Type) {
+    function GobtnExcelhandler(Type) {
 
         setBtnMode(Type)
         if (subPageMode === url.PRODUCT_MARGIN_REPORT) {
+            if (loginSelectedPartyID() === 0) {
+                customAlert({ Type: 3, Message: "Please Select Party" });
+                return;
+            };
             const userDetails = loginUserDetails()
-            dispatch(getExcel_Button_API(Number(userDetails.IsSCMPartyType) || 0, userDetails.Party_id))
+            dispatch(getExcel_Button_API(Number(userDetails.IsSCMPartyType) || 0, loginSelectedPartyID()))
         }
         else {
             dispatch(ManPower_Get_Action({ btnId: url.MAN_POWER_REPORT }))
         }
     }
 
+    function partySelectOnChangeHandler() {
+        dispatch(getExcel_Button_API_Success([])); 
+        setTableData([]);
+    }
+
     return (
         <React.Fragment>
             <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
             <div className="page-content">
+                {subPageMode === url.PRODUCT_MARGIN_REPORT &&
+                    <PartyDropdown_Common
+                        changeButtonHandler={partySelectOnChangeHandler} />}
 
-                <Container fluid>
-                    <Row>
-                        <Col >
-                            <CardBody className=" c_card_filter text-black ">
+                <CardBody className=" c_card_filter text-black ">
 
-                                <Row className="justify-content-end">
-                                    <Col sm={1} className=" mt-n2 mb-n2" >
-                                        <C_Button
-                                            type="button"
-                                            spinnerColor="white"
-                                            loading={(downloadManPower || downloadProductMargin) && btnMode === "Show"}
-                                            className="btn btn-success"
-                                            onClick={() => excelhandler("Show")}
-                                        >
-                                            Show
-                                        </C_Button>
+                    <Row className="justify-content-end">
+                        <Col sm={1} className=" mt-n2 mb-n2" >
+                            <C_Button
+                                type="button"
+                                spinnerColor="white"
+                                loading={(downloadManPower || downloadProductMargin) && btnMode === "Show"}
+                                className="btn btn-success"
+                                onClick={() => GobtnExcelhandler("Show")}
+                            >
+                                Show
+                            </C_Button>
 
-                                    </Col>
-                                    <Col lg={2} className=" mt-n2 mb-n2 ">
-                                        {(downloadManPower || downloadProductMargin) && btnMode === "Excel" ?
-                                            <Button type="button"
-                                                color='btn btn-primary'
-                                                id="excelbtn-id"
-                                            > Downloading..    &nbsp;
-                                                <Spinner style={{ height: "13px", width: "13px" }} color="white" />
-                                            </Button> :
-
-                                            <Button type="button"
-                                                color='btn btn-primary'
-                                                id="excelbtn-id"
-                                                onClick={() => excelhandler("Excel")}>Excel Download
-                                            </Button>
-                                        }
-                                    </Col>
-
-                                </Row>
-                            </CardBody>
                         </Col>
+                        <Col lg={2} className=" mt-n2 mb-n2 ">
+                            {(downloadManPower || downloadProductMargin) && btnMode === "Excel" ?
+                                <Button type="button"
+                                    color='btn btn-primary'
+                                    id="excelbtn-id"
+                                > Downloading..    &nbsp;
+                                    <Spinner style={{ height: "13px", width: "13px" }} color="white" />
+                                </Button> :
+
+                                <Button type="button"
+                                    color='btn btn-primary'
+                                    id="excelbtn-id"
+                                    onClick={() => GobtnExcelhandler("Excel")}>Excel Download
+                                </Button>
+                            }
+                        </Col>
+
                     </Row>
+                </CardBody>
 
-                    <div className="mt-1">
-                        <ToolkitProvider
-                            keyField="id"
-                            data={tableData}
-                            columns={columns}
-                            search
-                        >
-                            {(toolkitProps,) => (
-                                <React.Fragment>
-                                    <Row>
-                                        <Col xl="12">
-                                            <div className="table-responsive table">
-                                                <BootstrapTable
-                                                    keyField="PartyID"
-                                                    classes={"table  table-bordered table-hover"}
-                                                    noDataIndication={
-                                                        <div className="text-danger text-center ">
-                                                            Record Not available
-                                                        </div>
-                                                    }
-                                                    onDataSizeChange={({ dataSize }) => {
-                                                        dispatch(BreadcrumbShowCountlabel(`Count:${dataSize}`));
-                                                    }}
-                                                    {...toolkitProps.baseProps}
-                                                />
-                                                {mySearchProps(toolkitProps.searchProps)}
-                                            </div>
-                                        </Col>
-                                    </Row>
+                <div className="mt-1">
+                    <ToolkitProvider
+                        keyField="id"
+                        data={tableData}
+                        columns={columns}
+                        search
+                    >
+                        {(toolkitProps,) => (
+                            <React.Fragment>
+                                <Row>
+                                    <Col xl="12">
+                                        <div className="table-responsive table">
+                                            <BootstrapTable
+                                                keyField="PartyID"
+                                                classes={"table  table-bordered table-hover"}
+                                                noDataIndication={
+                                                    <div className="text-danger text-center ">
+                                                        Record Not available
+                                                    </div>
+                                                }
+                                                onDataSizeChange={({ dataSize }) => {
+                                                    dispatch(BreadcrumbShowCountlabel(`Count:${dataSize}`));
+                                                }}
+                                                {...toolkitProps.baseProps}
+                                            />
+                                            {mySearchProps(toolkitProps.searchProps)}
+                                        </div>
+                                    </Col>
+                                </Row>
 
-                                </React.Fragment>
-                            )}
-                        </ToolkitProvider>
-                    </div>
-                </Container>
+                            </React.Fragment>
+                        )}
+                    </ToolkitProvider>
+                </div>
+
             </div>
         </React.Fragment>
     );
