@@ -134,6 +134,16 @@ export const getCurrentMonthAndYear = () => {
   return `${year}-${month}`;
 }
 
+
+export const getPreviousMonthAndYear = (date) => {
+  const previousMonthDate = new Date(date);
+  previousMonthDate.setMonth(previousMonthDate.getMonth() - 1);
+
+  const year = previousMonthDate.getFullYear();
+  const month = (previousMonthDate.getMonth() + 1).toString().padStart(2, '0'); // Adding padding if needed
+
+  return `${year}-${month}`;
+}
 // export const amountCommaSeparateFunc = (amount) => {
 //   return Number(amount).toLocaleString('en-IN', {
 //     // style: 'currency',

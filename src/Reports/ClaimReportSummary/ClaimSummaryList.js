@@ -22,9 +22,9 @@ import ClaimSummaryMaster from "./ClaimSummaryMaster";
 import { initialFiledFunc } from "../../components/Common/validationFunction";
 import { ClaimSummary_API, MasterClaimSummary_API } from "../../helpers/backend_helper";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
-import { update } from "plotly.js";
 
-const SelectedMonth = () => _cfunc.getCurrentMonthAndYear()
+
+const SelectedMonth = () => _cfunc.getPreviousMonthAndYear(new Date())
 const FirstAndLastDate = () => _cfunc.getFirstAndLastDateOfMonth(SelectedMonth());
 const fileds = () => ({
     FromDate: FirstAndLastDate().firstDate,
@@ -58,7 +58,7 @@ const ClaimSummaryList = () => {
     );
 
     const { pageField, pdfdata, deleteMsg, tableList } = reducers;
-    
+
     const values = { ...state.values }
 
     const action = {
@@ -197,16 +197,9 @@ const ClaimSummaryList = () => {
         dispatch(claimList_API(config))
     }
 
+    const currentDate = new Date(); // Current date
+    const currentMonth = _cfunc.getPreviousMonthAndYear(currentDate);
 
-
-
-    const getFormattedDate = (date, format) => {
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        return format.replace('yyyy', year).replace('MM', month);
-    };
-
-    const currentMonth = getFormattedDate(new Date(), "yyyy-MM");
 
     return (
         <React.Fragment>
