@@ -22,7 +22,7 @@ const createClaimBtnCss = "badge badge-soft-success font-size-18 btn btn-success
 const deltBtnCss = "badge badge-soft-danger font-size-18 btn btn-danger waves-effect waves-light w-xxs border border-light"
 
 
-const SelectedMonth = () => _cfunc.getCurrentMonthAndYear()
+const SelectedMonth = () => _cfunc.getPreviousMonthAndYear(new Date())
 const FirstAndLastDate = () => _cfunc.getFirstAndLastDateOfMonth(SelectedMonth());
 const fileds = () => ({
     FromDate: FirstAndLastDate().firstDate,
@@ -226,7 +226,8 @@ const ClaimSummaryMaster = (props) => {
         return format.replace('yyyy', year).replace('MM', month);
     };
 
-    const currentMonth = getFormattedDate(new Date(), "yyyy-MM");
+    const currentDate = new Date(); // Current date
+    const currentMonth = _cfunc.getPreviousMonthAndYear(currentDate);
 
     const pagesListColumns = [
 
