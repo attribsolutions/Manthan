@@ -34,8 +34,8 @@ export const Rows = (data) => {
     let TotalStock = 0
     let TotalPurchaseReturn = 0
     let TotalSale = 0
-
     let TotalBalance = 0
+    let TotalStockAdjustment = 0
 
 
     let Unit = data.Period.Unit.label
@@ -45,7 +45,6 @@ export const Rows = (data) => {
     let Sale = 0
     let PurchaseReturn = 0
     let StockAdjustment = 0
-
 
 
     let BalanceAmount = Number(openingBalance)
@@ -105,10 +104,12 @@ export const Rows = (data) => {
         const rowSalesReturn = Number(RowSalesReturn);
         const rowSale = Number(RowSale);
         const rowPurchaseReturn = Number(RowPurchaseReturn);
+        const rowStockAdjustment = Number(RowStockAdjustment);
+
         if (element.TransactionNumber === "STOCK") {
             BalanceAmount = RowStock
         }
-        BalanceAmount = (BalanceAmount + rowGRN + rowSalesReturn) - (rowSale + rowPurchaseReturn);
+        BalanceAmount = (BalanceAmount + rowGRN + rowSalesReturn + rowStockAdjustment) - (rowSale + rowPurchaseReturn);
         const tableitemRow = [
             SN++,
             `${date_dmy_func(element.TransactionDate)} ${convertOnlyTimefunc(element.CreatedOn)}`,
@@ -119,7 +120,7 @@ export const Rows = (data) => {
             (element.Sequence === 3) ? (numberWithCommas(Number(Stock).toFixed(2))) : "0.00",
             (element.Sequence === 4) ? (numberWithCommas(Number(Sale).toFixed(2))) : "0.00",
             (element.Sequence === 5) ? (numberWithCommas(Number(PurchaseReturn).toFixed(2))) : "0.00",
-            (element.Sequence === 6) ? (numberWithCommas(Number(PurchaseReturn).toFixed(2))) : "0.00",
+            (element.Sequence === 6) ? (numberWithCommas(Number(StockAdjustment).toFixed(2))) : "0.00",
 
             element.TransactionNumber === "STOCK" ? numberWithCommas(Number(RowStock).toFixed(2)) : numberWithCommas(Number(BalanceAmount).toFixed(2))
         ];
@@ -132,6 +133,7 @@ export const Rows = (data) => {
             TotalStock = Number(TotalStock) + Number(RowStock)
             TotalPurchaseReturn = Number(TotalPurchaseReturn) + Number(RowPurchaseReturn)
             TotalBalance = Number(TotalBalance) + Number(BalanceAmount)
+            TotalStockAdjustment = Number(TotalStockAdjustment) + Number(RowStockAdjustment)
 
         };
 
@@ -150,6 +152,7 @@ export const Rows = (data) => {
                 `${numberWithCommas(Number(TotalStock).toFixed(2))}`,
                 `${numberWithCommas(Number(TotalSale).toFixed(2))}`,
                 `${numberWithCommas(Number(TotalPurchaseReturn).toFixed(2))}`,
+                `${numberWithCommas(Number(TotalStockAdjustment).toFixed(2))}`,
                 ``,
 
             ];

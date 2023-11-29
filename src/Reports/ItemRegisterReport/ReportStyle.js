@@ -218,6 +218,12 @@ export const tableBody = (doc, data) => {
 
                 data1.row.cells[7].styles.fontSize = 8
                 data1.row.cells[7].styles.fontStyle = "bold"
+
+                data1.row.cells[8].styles.fontSize = 8
+                data1.row.cells[8].styles.fontStyle = "bold"
+
+                data1.row.cells[9].styles.fontSize = 8
+                data1.row.cells[9].styles.fontStyle = "bold"
             }
 
 
@@ -271,6 +277,13 @@ export const tableBody = (doc, data) => {
             if (data1.column.index === 8) {
                 if (data1.cell.raw !== "0.00") {
                     data1.row.cells[8].styles.fontStyle = "bold"
+
+                }
+
+            }
+            if (data1.column.index === 9) {
+                if (data1.cell.raw !== "0.00") {
+                    data1.row.cells[9].styles.fontStyle = "bold"
 
                 }
 
