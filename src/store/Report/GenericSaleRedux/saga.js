@@ -14,7 +14,8 @@ function* GenericSaleReport_GenFunc({ config }) {
             i["QtyInNo"] = trailingZeros(i.QtyInNo);
             i["QtyInKg"] = trailingZeros(i.QtyInKg);
             i["QtyInBox"] = trailingZeros(i.QtyInBox);
-
+            // [{ value: 1, label: "Rs" }, { value: 2, label: "%" }]
+            i.DiscountType = i.DiscountType === 1 ? "Rs" : "%"
             return i;
         });
         response.Data = newResponse;
