@@ -8,10 +8,10 @@ import { C_DatePicker, C_Select } from "../../CustomValidateForm";
 import * as _cfunc from "../../components/Common/CommonFunction";
 import { mode, } from "../../routes/index"
 import { MetaTags } from "react-meta-tags";
-import { GetVenderSupplierCustomer, GetVenderSupplierCustomerSuccess, getBaseUnit_ForDropDown, goButtonPartyItemAddPage, getpdfReportdata, getpdfReportdataSuccess } from "../../store/actions";
+import { getBaseUnit_ForDropDown, goButtonPartyItemAddPage, getpdfReportdata, getpdfReportdataSuccess, goButtonPartyItemAddPageSuccess } from "../../store/actions";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import * as report from '../ReportIndex'
-import { ItemRegister_API, PartyLedgerReport_API } from "../../helpers/backend_helper";
+import { ItemRegister_API } from "../../helpers/backend_helper";
 import C_Report from "../../components/Common/C_Report";
 import PartyDropdown_Common from "../../components/Common/PartyDropdown";
 
@@ -26,12 +26,9 @@ const ItemRegisterReport = (props) => {
         ToDate: currentDate_ymd,
         Item: "",
         Unit: { value: 1, label: 'No' },
-
-
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
-    const [subPageMode] = useState(history.location.pathname);
     const [userPageAccessState, setUserAccState] = useState('');
 
     const reducers = useSelector(
@@ -73,8 +70,11 @@ const ItemRegisterReport = (props) => {
 
     useEffect(() => {
         dispatch(getBaseUnit_ForDropDown());
-        const jsonBody = JSON.stringify({ ..._cfunc.loginJsonBody() });
-        dispatch(goButtonPartyItemAddPage({ jsonBody }));
+        if (!(_cfunc.loginSelectedPartyID() === 0)) {
+            const jsonBody = JSON.stringify({ ..._cfunc.loginJsonBody(), "PartyID": _cfunc.loginSelectedPartyID() });
+            dispatch(goButtonPartyItemAddPage({ jsonBody }));
+        };
+
     }, [])
 
     useEffect(() => {
@@ -98,6 +98,7 @@ const ItemRegisterReport = (props) => {
             value: data.id,
             label: data.Name
         }));
+        
     const onselecthandel = (e) => {
         setState((i) => {
             const a = { ...i }
@@ -141,12 +142,6 @@ const ItemRegisterReport = (props) => {
                 Message: "Please Select Item",
             })
             return
-        } else if (values.Unit === "") {
-            customAlert({
-                Type: 3,
-                Message: "Please Select Unit",
-            })
-            return
         } else {
             dispatch(getpdfReportdata(ItemRegister_API, config))
         }
@@ -171,15 +166,16 @@ const ItemRegisterReport = (props) => {
     }
 
     function partySelectButtonHandler() {
-        dispatch(GetVenderSupplierCustomer({ subPageMode, "PartyID": _cfunc.loginSelectedPartyID() }));
+        const jsonBody = JSON.stringify({ ..._cfunc.loginJsonBody(), "PartyID": _cfunc.loginSelectedPartyID() });
+        dispatch(goButtonPartyItemAddPage({ jsonBody }));
     }
 
     function partyOnChngeButtonHandler() {
         dispatch(getpdfReportdataSuccess({ Status: false }));
-        dispatch(GetVenderSupplierCustomerSuccess([]));
+        dispatch(goButtonPartyItemAddPageSuccess([]));
         setState((i) => {
             let a = { ...i }
-            a.values.Item = { value: "", label: "All" }
+            a.values.Item = ""
             a.hasValid.Item.valid = true;
             return a
         })
