@@ -106,7 +106,7 @@ const TransactionLog = () => {
         if (response.Status === true && response.StatusCode === 200) {
             setViewbtnLoading(false)
             if (response.Data.length > 0) {
-                if (response.Data[0].TransactionlogJsondata.length > 0) {
+                if (response.Data[0]) {
                     setJsonData(response.Data[0])
                     setModal_view(true)
                 }
