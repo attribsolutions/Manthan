@@ -331,7 +331,7 @@ const PartyItems = (props) => {
 			</div>
 		),
 		selectionRenderer: ({ mode, checked, rowKey, ...rest }) => {
-
+			
 			const isNonSelectable = nonSelectable.includes(rowKey);
 			if (isNonSelectable) {
 
@@ -371,7 +371,7 @@ const PartyItems = (props) => {
 			const UploadSalesDatafromExcelParty = _cfunc.loginUserDetails().UploadSalesDatafromExcelParty;
 
 			const filteredDataExists = selectedItems.some(row => {
-				debugger
+				
 				return UploadSalesDatafromExcelParty === 1 && row.isItemMap === true;
 			});
 

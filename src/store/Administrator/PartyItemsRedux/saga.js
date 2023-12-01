@@ -43,19 +43,23 @@ function* goButton_partyItem_Add_GenFunc({ config }) {
           item["selectCheck"] = true;
         }
       }
-      else if (item.Party > 0) {
 
+      else {
         let isItemMap = false
         const UploadSalesDatafromExcelParty = loginUserDetails().UploadSalesDatafromExcelParty
         if (UploadSalesDatafromExcelParty === 1 && item.MapItem === null) {
           isItemMap = true
         }
         item["isItemMap"] = isItemMap
-        item["selectCheck"] = true;
+        if (item.Party > 0) {
+          item["selectCheck"] = true;
+        }
       }
+
 
       return item
     });
+
     yield put(goButtonPartyItemAddPageSuccess(response.Data));
 
 
