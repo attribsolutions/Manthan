@@ -106,6 +106,18 @@ const Dashboard_Admin = (props) => {
     function salesReturn_onClick() {
         history.push(url.SALES_RETURN_LIST)
     }
+    const RedirectHandler = (Type) => {
+        if (Type === 1) {
+            history.push(url.ORDER_LIST_4)
+
+        } else if (Type === 2) {
+            history.push(url.INVOICE_LIST_1)
+        }
+        else {
+            history.push(url.GRN_LIST_3)
+        }
+
+    }
 
     useEffect(() => {
 
@@ -254,7 +266,7 @@ const Dashboard_Admin = (props) => {
 
                                             <Row>
                                                 <Col className='mt-1' sm={3}>
-                                                    Annual Orders
+                                                    <span style={{ cursor: "pointer" }} onClick={() => RedirectHandler(1)}> Annual Orders</span>
                                                 </Col>
                                                 <Col sm={2}>
                                                     <span style={{ fontSize: "20px" }}>
@@ -266,7 +278,8 @@ const Dashboard_Admin = (props) => {
 
                                                 </Col>
                                                 <Col className='mt-1' sm={3}>
-                                                    Todays Orders
+                                                    <span style={{ cursor: "pointer" }} onClick={() => RedirectHandler(1)} >Todays Orders</span>
+
                                                 </Col>
                                                 <Col sm={2}>
                                                     <span style={{ fontSize: "20px" }}> {OrderCount}</span>
@@ -297,7 +310,8 @@ const Dashboard_Admin = (props) => {
                                         <Card className="card-h-100">
                                             <Row>
                                                 <Col className='mt-1' sm={3}>
-                                                    Annual Invoice
+                                                    <span style={{ cursor: "pointer" }} onClick={() => RedirectHandler(2)}> Annual Invoice</span>
+
                                                 </Col>
                                                 <Col sm={2}>
                                                     <span style={{ fontSize: "20px" }}>
@@ -309,7 +323,8 @@ const Dashboard_Admin = (props) => {
 
                                                 </Col>
                                                 <Col className='mt-1' sm={3}>
-                                                    <span >Total Invoice</span>
+                                                    <span style={{ cursor: "pointer" }} onClick={() => RedirectHandler(2)} >Todays Invoice</span>
+
                                                 </Col>
                                                 <Col sm={2}>
                                                     <span style={{ fontSize: "20px" }}> {InvoiceCount}</span>
@@ -339,7 +354,9 @@ const Dashboard_Admin = (props) => {
                                         <Card className="card-h-100">
                                             <Row>
                                                 <Col className='mt-1' sm={3}>
-                                                    Annual GRNs
+                                                    <span style={{ cursor: "pointer" }} onClick={() => RedirectHandler(3)}> Annual GRNs</span>
+
+
                                                 </Col>
                                                 <Col sm={2}>
                                                     <span style={{ fontSize: "20px" }}>
@@ -351,7 +368,9 @@ const Dashboard_Admin = (props) => {
 
                                                 </Col>
                                                 <Col className='mt-1' sm={3}>
-                                                    <span >Total GRNs &nbsp;</span>
+                                                    <span style={{ cursor: "pointer" }} onClick={() => RedirectHandler(3)} className="">Todays GRNs</span>
+
+
                                                 </Col>
                                                 <Col sm={2}>
                                                     <span style={{ fontSize: "20px" }}> {GRNsCount}</span>

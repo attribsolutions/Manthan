@@ -76,7 +76,7 @@ export const readExcelFile = async ({ file, compareParameter }) => {
 
 
 export async function fileDetails({ compareParameter = [], readjson = [] }) {
-
+  
 
   const fileFiled = {}
 

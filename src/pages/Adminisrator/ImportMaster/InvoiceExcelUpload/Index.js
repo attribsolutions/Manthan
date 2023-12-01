@@ -154,6 +154,8 @@ const InvoiceExcelUpload = (props) => {
             return;
         }
 
+
+
         const filename = files[0].name;
         const extension = filename.substring(filename.lastIndexOf(".")).toLowerCase();
         if ((extension === '.csv') || extension === ".xlsx") {
@@ -161,6 +163,18 @@ const InvoiceExcelUpload = (props) => {
             if (readjson.length > 0) {
 
                 const isdetails = await fileDetails({ compareParameter, readjson })
+                debugger
+                const isUploadInvoiceOfSameDate = _cfunc.areAllDatesSame(isdetails.invoiceDate)
+                if (!isUploadInvoiceOfSameDate) {
+                    customAlert({
+                        Type: 3,
+                        Message: "Please upload only the invoices with the same date"
+
+                    })
+                    return
+                }
+
+
                 let { invoiceNO } = isdetails;
                 if ((invoiceNO.length > 0)) {
                     setReadJsonDetail(isdetails)
