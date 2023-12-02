@@ -7,7 +7,7 @@ import {
 } from "reactstrap";
 import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
-import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess, } from "../../../../store/actions";
+import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess, goButtonPartyItemAddPage, goButtonPartyItemAddPageSuccess, } from "../../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { mySearchProps } from "../../../../components/Common/SearchBox/MySearch";
@@ -54,6 +54,8 @@ const ImportExcelPartyMap = (props) => {
     }
 
     const [state, setState] = useState(initialFiledFunc(fileds))
+    const [UpdateTableList, setUpdateTableList] = useState([])
+
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
@@ -65,14 +67,17 @@ const ImportExcelPartyMap = (props) => {
         listBtnLoading,
         saveBtnloading,
         partyDropDownLoading,
+        ItemList,
     } = useSelector((state) => ({
         saveBtnloading: state.GroupReducer.saveBtnloading,
-        listBtnLoading: state.ImportExcelPartyMap_Reducer.listBtnLoading,
+        listBtnLoading: (state.ImportExcelPartyMap_Reducer.listBtnLoading || state.PartyItemsReducer.partyItemListLoading),
         postMsg: state.ImportExcelPartyMap_Reducer.postMsg,
         userAccess: state.Login.RoleAccessUpdateData,
+
         pageField: state.CommonPageFieldReducer.pageField,
         goButtonArr: state.ImportExcelPartyMap_Reducer.addGoButton,
         partyList: state.PartyMasterReducer.partyList,
+        ItemList: state.PartyItemsReducer.partyItem,
         partyDropDownLoading: state.PartyMasterReducer.goBtnLoading,
     }));
     useEffect(() => {
@@ -120,8 +125,21 @@ const ImportExcelPartyMap = (props) => {
 
 
     useEffect(() => {
-        dispatch(BreadcrumbShowCountlabel(`${"Count"} :${goButtonArr.length}`))
-    }, [goButtonArr])
+
+        if (values.MapType.value === 2) {
+            const newItemList = ItemList.map(i => ({
+                "party": _cfunc.loginSelectedPartyID(),
+                "fieldName": i.ItemName,
+                "fieldId": i.Item,
+                "mapValue": i.MapItem,
+            }))
+            debugger
+            setUpdateTableList(newItemList)
+        } else {
+            setUpdateTableList(goButtonArr)
+        }
+        dispatch(BreadcrumbShowCountlabel(`${"Count"} :${UpdateTableList.length}`))
+    }, [goButtonArr, ItemList])
 
     useEffect(async () => {
 
@@ -141,7 +159,7 @@ const ImportExcelPartyMap = (props) => {
         }
     }, [postMsg])
 
-    useEffect(() => _cfunc.tableInputArrowUpDounFunc("#table_Arrow"), [goButtonArr]);
+    useEffect(() => _cfunc.tableInputArrowUpDounFunc("#table_Arrow"), [UpdateTableList]);
 
     const partyDropdown_Options = partyList.map((index) => ({
         value: index.id,
@@ -164,7 +182,7 @@ const ImportExcelPartyMap = (props) => {
 
     const pagesListColumns = [
         {
-            text: "Retailer Name",
+            text: `${values.MapType.label === undefined ? "Party" : values.MapType.label}`,
             dataField: "fieldName",
             sort: true
         },
@@ -209,11 +227,22 @@ const ImportExcelPartyMap = (props) => {
     ];
 
     async function goButtonHandler(event) {
+
         event.preventDefault();
         const mapType = values.MapType.value;
         if (mapType > 0) {
             let partyId = _cfunc.loginSelectedPartyID();
-            dispatch(GoButton_ImportExcelPartyMap({ partyId, mapType }))
+            if (mapType === 2) {
+
+                const jsonBody = {
+                    ..._cfunc.loginJsonBody(),
+                    PartyID: partyId,
+                };
+                dispatch(goButtonPartyItemAddPage({ jsonBody }));
+            } else {
+                dispatch(GoButton_ImportExcelPartyMap({ partyId, mapType }))
+            }
+
         } else {
             customAlert({
                 Type: 3,
@@ -224,6 +253,8 @@ const ImportExcelPartyMap = (props) => {
 
     function change_ButtonHandler(e) {
         dispatch(GoButton_ImportExcelPartyMap_Success([]));
+        dispatch(goButtonPartyItemAddPageSuccess([]));
+
         setState((i) => {
             let a = { ...i }
             a.values.MapType = ''
@@ -241,7 +272,8 @@ const ImportExcelPartyMap = (props) => {
         let mapValueToFieldIds = new Map();
         let duplicateFieldIds = [];
 
-        await goButtonArr.forEach((i) => {
+        await UpdateTableList.forEach((i) => {
+
             if (i.mapValue !== '' && i.mapValue !== null) {
                 const mapValue = i.mapValue;
 
@@ -309,7 +341,7 @@ const ImportExcelPartyMap = (props) => {
                                                     name="Party"
                                                     value={values.Party}
                                                     isSearchable={true}
-                                                    isDisabled={!(goButtonArr.length === 0) && true}
+                                                    isDisabled={!(UpdateTableList.length === 0) && true}
                                                     className="react-dropdown"
                                                     classNamePrefix="dropdown"
                                                     styles={{
@@ -337,7 +369,7 @@ const ImportExcelPartyMap = (props) => {
                                                     styles={{
                                                         menu: provided => ({ ...provided, zIndex: 2 })
                                                     }}
-                                                    isDisabled={(!(goButtonArr.length === 0) || (partyDropDownLoading && !(loginIsSCMCompany() === 1)))}
+                                                    isDisabled={(!(UpdateTableList.length === 0) || (partyDropDownLoading && !(loginIsSCMCompany() === 1)))}
                                                     className="react-dropdown"
                                                     classNamePrefix="dropdown"
                                                     options={mapTypeDropdown_Options}
@@ -351,7 +383,7 @@ const ImportExcelPartyMap = (props) => {
                                     </Col>
 
                                     <Col sm="2" className="mt-3 ">
-                                        {(goButtonArr.length === 0) ?
+                                        {(UpdateTableList.length === 0) ?
                                             <Go_Button
                                                 forceDisabled={(partyDropDownLoading && !(loginIsSCMCompany() === 1))}
                                                 onClick={goButtonHandler} loading={listBtnLoading} />
@@ -367,7 +399,7 @@ const ImportExcelPartyMap = (props) => {
                     <div className="mt-1">
                         <ToolkitProvider
                             keyField="id"
-                            data={goButtonArr}
+                            data={UpdateTableList}
                             columns={pagesListColumns}
                             search
                         >
@@ -400,7 +432,7 @@ const ImportExcelPartyMap = (props) => {
 
                 <FormGroup>
                     <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
-                        {(goButtonArr.length > 0) &&
+                        {(UpdateTableList.length > 0) &&
                             <SaveButton
                                 onClick={SaveHandler}
                                 pageMode={pageMode}
