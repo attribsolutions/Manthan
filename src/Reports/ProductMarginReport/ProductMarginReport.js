@@ -10,7 +10,7 @@ import {
     Row,
     Spinner,
 } from "reactstrap";
-import { breadcrumbReturnFunc, loginSelectedPartyID, loginUserDetails, metaTagLabel } from '../../components/Common/CommonFunction';
+import { breadcrumbReturnFunc, loginPartyID, loginSelectedPartyID, loginUserDetails, metaTagLabel } from '../../components/Common/CommonFunction';
 import * as pageId from "../../routes/allPageID"
 import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess } from '../../store/actions';
 import * as mode from "../../routes/PageMode"
@@ -19,7 +19,6 @@ import { useState } from 'react';
 import { ReportComponent } from '../ReportComponent';
 import { url } from '../../routes';
 import { ManPower_Get_Action, ManPower_Get_Success } from '../../store/Report/ManPowerRedux/action';
-import DynamicColumnHook from "../../components/Common/TableCommonFunc";
 import ToolkitProvider from 'react-bootstrap-table2-toolkit';
 import BootstrapTable from 'react-bootstrap-table-next';
 import { mySearchProps } from '../../components/Common/SearchBox/MySearch';
@@ -163,30 +162,30 @@ const ProductMarginReport = (props) => {           // this component also use fo
 
         setBtnMode(Type)
         if (subPageMode === url.PRODUCT_MARGIN_REPORT) {
-            if (loginSelectedPartyID() === 0) {
-                customAlert({ Type: 3, Message: "Please Select Party" });
-                return;
-            };
+            // if (loginSelectedPartyID() === 0) {
+            //     customAlert({ Type: 3, Message: "Please Select Party" });
+            //     return;
+            // };
             const userDetails = loginUserDetails()
-            dispatch(getExcel_Button_API(Number(userDetails.IsSCMPartyType) || 0, loginSelectedPartyID()))
+            dispatch(getExcel_Button_API(Number(userDetails.IsSCMPartyType) || 0, loginPartyID()))
         }
         else {
             dispatch(ManPower_Get_Action({ btnId: url.MAN_POWER_REPORT }))
         }
     }
 
-    function partySelectOnChangeHandler() {
-        dispatch(getExcel_Button_API_Success([])); 
-        setTableData([]);
-    }
+    // function partySelectOnChangeHandler() {
+    //     dispatch(getExcel_Button_API_Success([])); 
+    //     setTableData([]);
+    // }
 
     return (
         <React.Fragment>
             <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
             <div className="page-content">
-                {subPageMode === url.PRODUCT_MARGIN_REPORT &&
+                {/* {subPageMode === url.PRODUCT_MARGIN_REPORT &&
                     <PartyDropdown_Common
-                        changeButtonHandler={partySelectOnChangeHandler} />}
+                        changeButtonHandler={partySelectOnChangeHandler} />} */}
 
                 <CardBody className=" c_card_filter text-black ">
 
