@@ -115,12 +115,12 @@ const Dashboard_1 = (props) => {
                 </MetaTags>
                 <Container fluid>
                     <Row>
-                        <Col xl={4} md={4} >
+                        <Col xl={3} md={3} >
                             <Card className="card-h-100">
                                 <CardBody>
                                     <Row className="align-items-center">
                                         <Col xs={4}>
-                                            <span style={{ cursor: "pointer" }} onClick={() => RedirectHandler(1)} className="text-black mb-3 lh-1 d-block text-truncate">Total Orders</span>
+                                            <span style={{ cursor: "pointer" }} onClick={() => RedirectHandler(1)} className="text-primary mb-3 lh-1 d-block  text-decoration-underline">Total Orders</span>
                                             <h4 className="mb-3">
                                                 <span className="counter-value">
                                                     {OrderCount}
@@ -133,29 +133,12 @@ const Dashboard_1 = (props) => {
                             </Card>
                         </Col>
 
-                        <Col xl={4} md={4} >
+                        <Col xl={3} md={3} >
                             <Card className="card-h-100">
                                 <CardBody>
                                     <Row className="align-items-center">
                                         <Col xs={4}>
-                                            <span style={{ cursor: "pointer" }} onClick={() => RedirectHandler(2)} className="text-black mb-3 lh-1 d-block text-truncate">Total Invoices</span>
-                                            <h4 className="mb-3">
-                                                <span className="counter-value">
-                                                    {InvoiceCount}
-                                                </span>
-                                            </h4>
-                                        </Col>
-                                    </Row>
-                                </CardBody>
-                            </Card>
-                        </Col>
-
-                        <Col xl={4} md={4} >
-                            <Card className="card-h-100">
-                                <CardBody>
-                                    <Row className="align-items-center">
-                                        <Col xs={4}>
-                                            <span style={{ cursor: "pointer" }} onClick={() => RedirectHandler(3)} className="text-black mb-3 lh-1 d-block text-truncate">Total GRNs</span>
+                                            <span style={{ cursor: "pointer" }} onClick={() => RedirectHandler(1)} className="text-primary mb-3 lh-1 d-block text-decoration-underline "> Mobile Orders</span>
                                             <h4 className="mb-3">
                                                 <span className="counter-value">
                                                     {GRNsCount}
@@ -167,6 +150,43 @@ const Dashboard_1 = (props) => {
                                 </CardBody>
                             </Card>
                         </Col>
+
+                        <Col xl={3} md={3} >
+                            <Card className="card-h-100">
+                                <CardBody>
+                                    <Row className="align-items-center">
+                                        <Col xs={4}>
+                                            <span style={{ cursor: "pointer" }} onClick={() => RedirectHandler(2)} className="text-primary mb-3 lh-1 d-block text-decoration-underline">Total Invoices</span>
+                                            <h4 className="mb-3">
+                                                <span className="counter-value">
+                                                    {InvoiceCount}
+                                                </span>
+                                            </h4>
+                                        </Col>
+                                    </Row>
+                                </CardBody>
+                            </Card>
+                        </Col>
+
+                        <Col xl={3} md={3} >
+                            <Card className="card-h-100">
+                                <CardBody>
+                                    <Row className="align-items-center">
+                                        <Col xs={4}>
+                                            <span style={{ cursor: "pointer" }} onClick={() => RedirectHandler(3)} className="text-primary mb-3 lh-1 d-block text-decoration-underline">Total GRNs</span>
+                                            <h4 className="mb-3">
+                                                <span className="counter-value">
+                                                    {GRNsCount}
+                                                </span>
+                                            </h4>
+                                        </Col>
+                                    </Row>
+
+                                </CardBody>
+                            </Card>
+                        </Col>
+
+
                     </Row>
 
                     <Row>
