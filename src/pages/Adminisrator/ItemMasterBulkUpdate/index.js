@@ -24,7 +24,7 @@ const ItemMasterBulkUpdate = (props) => {
     const [pageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState('');
     const [SelectFieldName, setSelectFieldName] = useState([]);
-    const [groupTypeSelect, setGroupTypeSelect] = useState([]);
+    const [groupTypeSelect, setGroupTypeSelect] = useState({ value: 1, label: "Primary" });
     const [forceRefresh, setForceRefresh] = useState(false);
 
     const reducers = useSelector(
@@ -66,6 +66,8 @@ const ItemMasterBulkUpdate = (props) => {
     useEffect(() => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(pageId.ITEM_MASTER_BULK_UPDATE));
+        dispatch(getGroupTypeslist());
+        dispatch(get_Group_By_GroupType_ForDropDown(groupTypeSelect.value))
 
         return () => {
             dispatch(commonPageFieldSuccess(null));
@@ -92,7 +94,6 @@ const ItemMasterBulkUpdate = (props) => {
             dispatch(ItemWiseUpdateGoButton_Success([]));
             dispatch(get_Group_By_GroupType_ForDropDown_Success([]));
             setSelectFieldName([]);
-            setGroupTypeSelect([]);
             customAlert({
                 Type: 1,
                 Message: postMsg.Message,
@@ -110,7 +111,6 @@ const ItemMasterBulkUpdate = (props) => {
 
     function SelectFieldHandler(event) {
         setSelectFieldName(event);
-        dispatch(getGroupTypeslist());
     }
 
     function tableSelectHandler(event, row) {
@@ -177,7 +177,7 @@ const ItemMasterBulkUpdate = (props) => {
 
         const jsonBody = JSON.stringify({
             "Type": SelectFieldName.label,
-            "GroupType": SelectFieldName.label === "Group" ? groupTypeSelect.value : ""
+            "GroupType": groupTypeSelect.value
         });
 
         dispatch(ItemWiseUpdateGoButton_Action(jsonBody));
@@ -206,7 +206,6 @@ const ItemMasterBulkUpdate = (props) => {
                                 </Col>
                             </div>
                             :
-
                             <div style={{ width: "180px" }}>
                                 <Col>
                                     <FormGroup>
@@ -258,6 +257,16 @@ const ItemMasterBulkUpdate = (props) => {
 
     const pagesListColumns = [
         {
+            text: "Group",
+            dataField: "GroupName",
+            // sort:true
+        },
+        {
+            text: "SubGroup",
+            dataField: "SubGroupName",
+            // sort:true
+        },
+        {
             text: "Name",
             dataField: "ItemName",
             // sort:true
@@ -265,17 +274,21 @@ const ItemMasterBulkUpdate = (props) => {
         {
             text: SelectFieldName.label,
             dataField: SelectFieldName.label,
+            // hidden: SelectFieldName.label === "Group" ? true : false
         },
     ];
 
+    // if (SelectFieldName.label === "Group") {
+    //     pagesListColumns[1].dataField = "GroupName";
+    //     pagesListColumns.push({
+    //         text: "SubGroup",
+    //         dataField: "SubGroupName",
+    //     });
+    // }
     if (SelectFieldName.label === "Group") {
-        pagesListColumns[1].dataField = "GroupName";
-        pagesListColumns.push({
-            text: "SubGroup",
-            dataField: "SubGroupName",
-        });
+        // Exclude the column based on the condition
+        pagesListColumns.pop();
     }
-
     pagesListColumns.push(createNewValueColumn());
 
     if (SelectFieldName.label === "Group") {
@@ -290,10 +303,11 @@ const ItemMasterBulkUpdate = (props) => {
             const updatedData = [];
 
             goButtonData.forEach(i => {
+                debugger
                 if (i.Newvalue) {
                     const arr = {
                         ItemName: i.ItemName,
-                        ItemID: i.ItemID,
+                        ItemID: i.id,
                         Value1: i.Newvalue,
                         Value2: i.NewSubGroup
 
