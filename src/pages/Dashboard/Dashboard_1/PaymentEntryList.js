@@ -6,6 +6,8 @@ import { currentDate_ymd, loginPartyID } from '../../../components/Common/Common
 import { useDispatch, useSelector } from 'react-redux';
 import * as url from "../../../routes/route_url";
 import { mySearchProps } from '../../../components/Common/SearchBox/MySearch';
+import SimpleBar from "simplebar-react"
+
 import "./table1.scss";
 
 export default function PaymentEntryList() {
@@ -75,7 +77,9 @@ export default function PaymentEntryList() {
         >
             {toolkitProps => (
                 <React.Fragment>
-                    <div className="table-container">
+                    <SimpleBar className="" style={{ maxHeight: "352px" }}>
+
+                        {/* <div className="table-container"> */}
                         <BootstrapTable
                             keyField={"Invoice"}
                             bordered={true}
@@ -89,7 +93,9 @@ export default function PaymentEntryList() {
                         />
 
                         {mySearchProps(toolkitProps.searchProps)}
-                    </div>
+                        {/* </div> */}
+                    </SimpleBar>
+
 
                 </React.Fragment>
             )

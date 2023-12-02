@@ -119,8 +119,8 @@ const Dashboard_1 = (props) => {
                             <Card className="card-h-100">
                                 <CardBody>
                                     <Row className="align-items-center">
-                                        <Col xs={4}>
-                                            <span style={{ cursor: "pointer" }} onClick={() => RedirectHandler(1)} className="text-primary mb-3 lh-1 d-block  text-decoration-underline">Total Orders</span>
+                                        <Col >
+                                            <span style={{ cursor: "pointer", fontWeight: "bold" }} onClick={() => RedirectHandler(1)} className="text-primary mb-3 lh-1 d-block  text-decoration-underline">Total Orders</span>
                                             <h4 className="mb-3">
                                                 <span className="counter-value">
                                                     {OrderCount}
@@ -137,11 +137,11 @@ const Dashboard_1 = (props) => {
                             <Card className="card-h-100">
                                 <CardBody>
                                     <Row className="align-items-center">
-                                        <Col xs={4}>
-                                            <span style={{ cursor: "pointer" }} onClick={() => RedirectHandler(1)} className="text-primary mb-3 lh-1 d-block text-decoration-underline "> Mobile Orders</span>
+                                        <Col >
+                                            <span style={{ cursor: "pointer", fontWeight: "bold" }} onClick={() => RedirectHandler(1)} className="text-primary mb-3 lh-1  d-block text-decoration-underline "> Mobile Orders</span>
                                             <h4 className="mb-3">
                                                 <span className="counter-value">
-                                                    {GRNsCount}
+                                                    0
                                                 </span>
                                             </h4>
                                         </Col>
@@ -155,8 +155,8 @@ const Dashboard_1 = (props) => {
                             <Card className="card-h-100">
                                 <CardBody>
                                     <Row className="align-items-center">
-                                        <Col xs={4}>
-                                            <span style={{ cursor: "pointer" }} onClick={() => RedirectHandler(2)} className="text-primary mb-3 lh-1 d-block text-decoration-underline">Total Invoices</span>
+                                        <Col >
+                                            <span style={{ cursor: "pointer", fontWeight: "bold" }} onClick={() => RedirectHandler(2)} className="text-primary mb-3 lh-1 d-block text-decoration-underline">Total Invoices</span>
                                             <h4 className="mb-3">
                                                 <span className="counter-value">
                                                     {InvoiceCount}
@@ -172,8 +172,8 @@ const Dashboard_1 = (props) => {
                             <Card className="card-h-100">
                                 <CardBody>
                                     <Row className="align-items-center">
-                                        <Col xs={4}>
-                                            <span style={{ cursor: "pointer" }} onClick={() => RedirectHandler(3)} className="text-primary mb-3 lh-1 d-block text-decoration-underline">Total GRNs</span>
+                                        <Col>
+                                            <span style={{ cursor: "pointer", fontWeight: "bold" }} onClick={() => RedirectHandler(3)} className="text-primary text-bold mb-3 lh-1 d-block text-decoration-underline">Total GRNs</span>
                                             <h4 className="mb-3">
                                                 <span className="counter-value">
                                                     {GRNsCount}

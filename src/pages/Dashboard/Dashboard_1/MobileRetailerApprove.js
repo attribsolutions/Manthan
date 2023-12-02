@@ -10,6 +10,8 @@ import BootstrapTable from "react-bootstrap-table-next";
 import { mySearchProps } from '../../../components/Common/SearchBox/MySearch';
 import { Button, Spinner } from "reactstrap";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import SimpleBar from "simplebar-react"
+
 
 const MobileRetailerApprove = () => {
 
@@ -137,7 +139,9 @@ const MobileRetailerApprove = () => {
         >
             {toolkitProps => (
                 <React.Fragment>
-                    <div className="table-container">
+                    {/* <div className="table-container"> */}
+                    <SimpleBar className="" style={{ maxHeight: "352px" }}>
+
                         <BootstrapTable
                             keyField={"Invoice"}
                             bordered={true}
@@ -150,7 +154,9 @@ const MobileRetailerApprove = () => {
 
                         />
                         {mySearchProps(toolkitProps.searchProps)}
-                    </div>
+                        {/* </div> */}
+                    </SimpleBar>
+
 
                 </React.Fragment>
             )}

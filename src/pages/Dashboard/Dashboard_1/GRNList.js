@@ -10,6 +10,8 @@ import { getOrderListPage, getOrderListPageSuccess } from '../../../store/Purcha
 import { Button, Spinner } from 'reactstrap';
 import { makeGRN_Mode_1Action } from '../../../store/Inventory/GRNRedux/actions';
 import { mode, url } from "../../../routes/index";
+import SimpleBar from "simplebar-react"
+
 
 
 export default function InvoiceForGRN() {
@@ -177,7 +179,9 @@ export default function InvoiceForGRN() {
         >
             {toolkitProps => (
                 <React.Fragment>
-                    <div className="table-container">
+                    {/* <div className="table-container"> */}
+                    <SimpleBar className="" style={{ maxHeight: "352px" }}>
+
                         <BootstrapTable
                             keyField={"Invoice"}
                             bordered={true}
@@ -190,7 +194,8 @@ export default function InvoiceForGRN() {
 
                         />
                         {mySearchProps(toolkitProps.searchProps)}
-                    </div>
+                        {/* </div> */}
+                    </SimpleBar >
 
                 </React.Fragment>
             )}
