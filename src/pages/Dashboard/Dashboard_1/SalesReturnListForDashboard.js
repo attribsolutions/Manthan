@@ -5,6 +5,8 @@ import { date_ymd_func, loginPartyID } from '../../../components/Common/CommonFu
 import { useDispatch, useSelector } from 'react-redux';
 import { mySearchProps } from '../../../components/Common/SearchBox/MySearch';
 import { salesReturnListAPI, salesReturnListAPISuccess } from '../../../store/Sales/SalesReturnRedux/action';
+import SimpleBar from "simplebar-react"
+
 
 export default function SalesReturnListForDashboard() {
 
@@ -66,7 +68,7 @@ export default function SalesReturnListForDashboard() {
         >
             {toolkitProps => (
                 <React.Fragment>
-                    <div className="table-container">
+                    <SimpleBar className="" style={{ maxHeight: "352px" }}>
                         <BootstrapTable
                             keyField={"id"}
                             bordered={true}
@@ -77,7 +79,9 @@ export default function SalesReturnListForDashboard() {
                             {...toolkitProps.baseProps}
                         />
                         {mySearchProps(toolkitProps.searchProps)}
-                    </div>
+
+                    </SimpleBar >
+
 
                 </React.Fragment>
             )
