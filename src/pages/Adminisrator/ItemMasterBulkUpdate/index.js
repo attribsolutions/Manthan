@@ -68,7 +68,7 @@ const ItemMasterBulkUpdate = (props) => {
         dispatch(commonPageField(pageId.ITEM_MASTER_BULK_UPDATE));
         dispatch(getGroupTypeslist());
         dispatch(get_Group_By_GroupType_ForDropDown(groupTypeSelect.value))
-        
+
         return () => {
             dispatch(commonPageFieldSuccess(null));
             dispatch(ItemWiseUpdateGoButton_Success([]));
@@ -94,7 +94,6 @@ const ItemMasterBulkUpdate = (props) => {
             dispatch(ItemWiseUpdateGoButton_Success([]));
             dispatch(get_Group_By_GroupType_ForDropDown_Success([]));
             setSelectFieldName([]);
-            setGroupTypeSelect([]);
             customAlert({
                 Type: 1,
                 Message: postMsg.Message,
@@ -304,10 +303,11 @@ const ItemMasterBulkUpdate = (props) => {
             const updatedData = [];
 
             goButtonData.forEach(i => {
+                debugger
                 if (i.Newvalue) {
                     const arr = {
                         ItemName: i.ItemName,
-                        ItemID: i.ItemID,
+                        ItemID: i.id,
                         Value1: i.Newvalue,
                         Value2: i.NewSubGroup
 
