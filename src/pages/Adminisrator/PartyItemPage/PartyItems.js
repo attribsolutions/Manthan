@@ -317,7 +317,7 @@ const PartyItems = (props) => {
 		onSelect: (row, event) => {
 			const isNonSelectable = nonSelectable.includes(row[keyField]);
 			if (isNonSelectable) {
-					return
+				return
 			}
 			row.selectCheck = event
 		},
@@ -331,8 +331,10 @@ const PartyItems = (props) => {
 			</div>
 		),
 		selectionRenderer: ({ mode, checked, rowKey, ...rest }) => {
+			
 			const isNonSelectable = nonSelectable.includes(rowKey);
 			if (isNonSelectable) {
+
 				const rowData = tableData.find(r => r[keyField] === rowKey)
 				return <>
 					<Input
@@ -345,10 +347,16 @@ const PartyItems = (props) => {
 							backgroundColor: "#ababab82",
 						} : {}}
 					/>
-					&nbsp;&nbsp; <samp className="text-danger">{disabledWithMsg}</samp>
+					&nbsp;&nbsp; <samp className="text-danger">{disabledWithMsg}</samp> &nbsp;&nbsp;{rowData.isItemMap ? <samp className="text-danger">{"(Item Not Map)"}</samp> : null}
 				</>;
+			} else {
+
+				const rowData = tableData.find(r => r[keyField] === rowKey)
+				return <>
+					<Input type="checkbox" checked={checked}  {...rest} />&nbsp;&nbsp;&nbsp;
+					{rowData.isItemMap ? <samp className="text-danger">{"Item Not Map"}</samp> : null}
+				</>
 			}
-			return <Input type="checkbox" checked={checked}  {...rest} />
 		}
 
 	})
@@ -358,6 +366,25 @@ const PartyItems = (props) => {
 		event.preventDefault();
 
 		const selectedItems = groupWiseItemArray.flatMap(group => group.items.filter(item => item.selectCheck));
+
+		if (subPageMode === url.PARTYITEM) {
+			const UploadSalesDatafromExcelParty = _cfunc.loginUserDetails().UploadSalesDatafromExcelParty;
+
+			const filteredDataExists = selectedItems.some(row => {
+				
+				return UploadSalesDatafromExcelParty === 1 && row.isItemMap === true;
+			});
+
+
+			if (filteredDataExists) {
+				customAlert({
+					Type: 4,
+					Message: "Item Not Map",
+				});
+				return;
+			}
+
+		}
 
 		if (selectedItems.length === 0) {
 			customAlert({

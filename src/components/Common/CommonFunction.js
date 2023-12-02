@@ -135,6 +135,16 @@ export const getCurrentMonthAndYear = () => {
 }
 
 
+export const areAllDatesSame = (Date) => {
+  for (let i = 1; i < Date.length; i++) {
+    if (Date[i] !== Date[0]) {
+      return false;
+    }
+  }
+  return true;
+}
+
+
 export const getPreviousMonthAndYear = (date) => {
   const previousMonthDate = new Date(date);
   previousMonthDate.setMonth(previousMonthDate.getMonth() - 1);

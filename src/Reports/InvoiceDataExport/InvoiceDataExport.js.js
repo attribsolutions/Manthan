@@ -33,7 +33,7 @@ const InvoiceDataExport = (props) => {
     const [subPageMode] = useState(history.location.pathname);
     const [state, setState] = useState(() => initialFiledFunc(fileds))
     const [userPageAccessState, setUserAccState] = useState('');
-    const [PartyDropdown, setPartyDropdown] = useState("");
+    const [PartyDropdown, setPartyDropdown] = useState({ value: "", label: "All" });
 
     const {
         userAccess,
@@ -134,7 +134,10 @@ const InvoiceDataExport = (props) => {
                     "FromDate": values.FromDate,
                     "ToDate": values.ToDate,
                     "Party": 0,
-                    "Customer": (isSCMParty) ? PartyDropdown.value : _cfunc.loginPartyID()
+                    "Customer": (isSCMParty) ? PartyDropdown.value : _cfunc.loginPartyID(),
+                    "Mode": 2,
+                    "Employee": !isSCMParty ? 0 : _cfunc.loginEmployeeID(),
+
                 });
             }
             else {
@@ -142,7 +145,10 @@ const InvoiceDataExport = (props) => {
                     "FromDate": values.FromDate,
                     "ToDate": values.ToDate,
                     "Party": (isSCMParty) ? PartyDropdown.value : _cfunc.loginPartyID(),
-                    "Customer": 0
+                    "Customer": 0,
+                    "Mode": 1,
+                    "Employee": !isSCMParty ? 0 : _cfunc.loginEmployeeID(),
+
                 });
             }
 
@@ -182,6 +188,10 @@ const InvoiceDataExport = (props) => {
         label: i.Name
     }));
 
+    Party_Option.unshift({
+        value: "",
+        label: " All"
+    });
 
 
     return (

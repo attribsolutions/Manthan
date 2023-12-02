@@ -91,6 +91,19 @@ const Dashboard_1 = (props) => {
         history.push(url.SALES_RETURN_LIST)
     }
 
+    const RedirectHandler = (Type) => {
+        if (Type === 1) {
+            history.push(url.ORDER_LIST_4)
+
+        } else if (Type === 2) {
+            history.push(url.INVOICE_LIST_1)
+        }
+        else {
+            history.push(url.GRN_LIST_3)
+        }
+
+    }
+
     return (
         <React.Fragment>
             <PageLoadingSpinner isLoading={GRNListLoading || PaymentEntryListloading || SalesReturnListloading || !pageField} />
@@ -107,7 +120,7 @@ const Dashboard_1 = (props) => {
                                 <CardBody>
                                     <Row className="align-items-center">
                                         <Col xs={4}>
-                                            <span className="text-black mb-3 lh-1 d-block text-truncate">Total Orders</span>
+                                            <span style={{ cursor: "pointer" }} onClick={() => RedirectHandler(1)} className="text-black mb-3 lh-1 d-block text-truncate">Total Orders</span>
                                             <h4 className="mb-3">
                                                 <span className="counter-value">
                                                     {OrderCount}
@@ -125,7 +138,7 @@ const Dashboard_1 = (props) => {
                                 <CardBody>
                                     <Row className="align-items-center">
                                         <Col xs={4}>
-                                            <span className="text-black mb-3 lh-1 d-block text-truncate">Total Invoices</span>
+                                            <span style={{ cursor: "pointer" }} onClick={() => RedirectHandler(2)} className="text-black mb-3 lh-1 d-block text-truncate">Total Invoices</span>
                                             <h4 className="mb-3">
                                                 <span className="counter-value">
                                                     {InvoiceCount}
@@ -142,7 +155,7 @@ const Dashboard_1 = (props) => {
                                 <CardBody>
                                     <Row className="align-items-center">
                                         <Col xs={4}>
-                                            <span className="text-black mb-3 lh-1 d-block text-truncate">Total GRNs</span>
+                                            <span style={{ cursor: "pointer" }} onClick={() => RedirectHandler(3)} className="text-black mb-3 lh-1 d-block text-truncate">Total GRNs</span>
                                             <h4 className="mb-3">
                                                 <span className="counter-value">
                                                     {GRNsCount}
