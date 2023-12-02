@@ -33,7 +33,7 @@ const InvoiceDataExport = (props) => {
     const [subPageMode] = useState(history.location.pathname);
     const [state, setState] = useState(() => initialFiledFunc(fileds))
     const [userPageAccessState, setUserAccState] = useState('');
-    const [PartyDropdown, setPartyDropdown] = useState("");
+    const [PartyDropdown, setPartyDropdown] = useState({ value: "", label: "All" });
 
     const {
         userAccess,
@@ -188,6 +188,10 @@ const InvoiceDataExport = (props) => {
         label: i.Name
     }));
 
+    Party_Option.unshift({
+        value: "",
+        label: " All"
+    });
 
 
     return (
