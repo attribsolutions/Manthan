@@ -75,6 +75,7 @@ const OrderSummary = (props) => {
     useEffect(() => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(pageId.ORDER_SUMMARY_REPORT));
+        dispatch(BreadcrumbShowCountlabel(`Count:${0}`));
         return () => {
             dispatch(commonPageFieldSuccess(null));
             dispatch(postOrderSummary_API_Success({ Status: false }));
@@ -130,7 +131,11 @@ const OrderSummary = (props) => {
 
     useEffect(() => {
         if (showTableData.length === 0) {
-            setBtnMode(0)
+            setBtnMode(0);
+            dispatch(BreadcrumbShowCountlabel(`Count:${0}`));
+        }
+        else {
+            dispatch(BreadcrumbShowCountlabel(`Count:${showTableData.length}`));
         }
     }, [showTableData]);
 
@@ -302,7 +307,6 @@ const OrderSummary = (props) => {
 
     }, [showTableData]);
 
-
     return (
         <React.Fragment>
             <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
@@ -453,7 +457,7 @@ const OrderSummary = (props) => {
                                     <Col xl="12">
                                         <div className="table-responsive table">
                                             <BootstrapTable
-                                                keyField={"id"}
+                                                keyField={"keyId"}
                                                 classes={"table  table-bordered table-hover"}
                                                 noDataIndication={
                                                     <div className="text-danger text-center ">
