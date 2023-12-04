@@ -14,7 +14,7 @@ import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import { commonPageField, commonPageFieldSuccess } from '../../../store/actions';
 import * as mode from "../../../routes/PageMode"
-import { getDashbordDetails } from '../../../store/Dashboard/Dashboard_1_Redux/action';
+import { getDashbordDetails, getDashbordDetails_Success } from '../../../store/Dashboard/Dashboard_1_Redux/action';
 import PaymentEntryList from './PaymentEntryList';
 import InvoiceForGRN from './GRNList';
 import SalesReturnListForDashboard from './SalesReturnListForDashboard';
@@ -36,7 +36,8 @@ const Dashboard_1 = (props) => {
         GRNListLoading,
         pageField,
         SalesReturnListloading,
-        PaymentEntryListloading } = useSelector((state) => ({
+        PaymentEntryListloading,
+        commonPartyDropSelect } = useSelector((state) => ({
             getDashboard: state.DashboardReducer.getDashboard,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageField,
@@ -44,17 +45,26 @@ const Dashboard_1 = (props) => {
             GRNListLoading: state.OrderReducer.goBtnLoading,
             SalesReturnListloading: state.SalesReturnReducer.loading,
             PaymentEntryListloading: state.ReceiptReducer.loading,
+            commonPartyDropSelect: state.CommonPartyDropdownReducer.commonPartyDropSelect
         }));
 
-    const { OrderCount, InvoiceCount, GRNsCount, } = getDashboard
+    const { OrderCount, InvoiceCount, GRNsCount, MobileAppOrderCount  } = getDashboard
 
     useEffect(() => {
         const page_Id = pageId.DASHBORD_1//changes
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
-        dispatch(getDashbordDetails({ loginPartyID: loginSelectedPartyID() }))
-
     }, []);
+
+    useEffect(() => {
+
+        if (commonPartyDropSelect.value > 0) {
+            dispatch(getDashbordDetails({ loginPartyID: loginSelectedPartyID() }));
+        }
+        return () => {
+            dispatch(getDashbordDetails_Success([]));
+        }
+    }, [commonPartyDropSelect]);
 
     const location = { ...history.location }
     const hasShowModal = props.hasOwnProperty(mode.editValue)//changes
@@ -138,10 +148,10 @@ const Dashboard_1 = (props) => {
                                 <CardBody>
                                     <Row className="align-items-center">
                                         <Col >
-                                            <span style={{ cursor: "pointer", fontWeight: "bold" }} onClick={() => RedirectHandler(1)} className="text-primary mb-3 lh-1  d-block text-decoration-underline "> Mobile Orders</span>
+                                            <span style={{ cursor: "pointer", fontWeight: "bold" }} onClick={() => RedirectHandler(1)} className="text-primary mb-3 lh-1  d-block text-decoration-underline "> MobileApp Order</span>
                                             <h4 className="mb-3">
                                                 <span className="counter-value">
-                                                    0
+                                                    {MobileAppOrderCount}
                                                 </span>
                                             </h4>
                                         </Col>
@@ -181,12 +191,9 @@ const Dashboard_1 = (props) => {
                                             </h4>
                                         </Col>
                                     </Row>
-
                                 </CardBody>
                             </Card>
                         </Col>
-
-
                     </Row>
 
                     <Row>
@@ -204,7 +211,6 @@ const Dashboard_1 = (props) => {
                                     {(PaymentEntryListloading) &&
                                         <DashboardLoader />
                                     }
-
                                 </CardHeader>
                                 <PaymentEntryList />
                             </Card>

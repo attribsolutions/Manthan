@@ -33,7 +33,7 @@ const InvoiceDataExport = (props) => {
     const [subPageMode] = useState(history.location.pathname);
     const [state, setState] = useState(() => initialFiledFunc(fileds))
     const [userPageAccessState, setUserAccState] = useState('');
-    const [PartyDropdown, setPartyDropdown] = useState({ value: "", label: "All" });
+    const [PartyDropdown, setPartyDropdown] = useState({ value: 0, label: "All" });
 
     const {
         userAccess,
@@ -118,7 +118,6 @@ const InvoiceDataExport = (props) => {
         }
     }, [goBtnMode, Data, pageField]);
 
-
     function goButtonHandler(goBtnMode) {
 
         try {
@@ -189,10 +188,9 @@ const InvoiceDataExport = (props) => {
     }));
 
     Party_Option.unshift({
-        value: "",
+        value: 0,
         label: " All"
     });
-
 
     return (
         <React.Fragment>
