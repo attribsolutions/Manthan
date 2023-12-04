@@ -67,8 +67,7 @@ const ItemMasterBulkUpdate = (props) => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(pageId.ITEM_MASTER_BULK_UPDATE));
         dispatch(getGroupTypeslist());
-        dispatch(get_Group_By_GroupType_ForDropDown(groupTypeSelect.value))
-
+        
         return () => {
             dispatch(commonPageFieldSuccess(null));
             dispatch(ItemWiseUpdateGoButton_Success([]));
@@ -76,6 +75,12 @@ const ItemMasterBulkUpdate = (props) => {
             dispatch(get_Group_By_GroupType_ForDropDown_Success([]));
         }
     }, [])
+
+    useEffect(() => {
+        if (SelectFieldName.label === "Group") {
+            dispatch(get_Group_By_GroupType_ForDropDown(groupTypeSelect.value))
+        }
+    }, [SelectFieldName])
 
     // Select Dropdown GeneralMasterSubType api call
     useEffect(() => {
@@ -94,6 +99,8 @@ const ItemMasterBulkUpdate = (props) => {
             dispatch(ItemWiseUpdateGoButton_Success([]));
             dispatch(get_Group_By_GroupType_ForDropDown_Success([]));
             setSelectFieldName([]);
+            setGroupTypeSelect({ value: 1, label: "Primary" });
+
             customAlert({
                 Type: 1,
                 Message: postMsg.Message,
@@ -188,6 +195,7 @@ const ItemMasterBulkUpdate = (props) => {
         return {
             text: `New${SelectFieldName.label === undefined ? "Value" : SelectFieldName.label}`,
             dataField: "Newvalue",
+            formatExtraData: { forceRefresh },
             formatter: (cellContent, row, key) => {
                 return (
                     <>
