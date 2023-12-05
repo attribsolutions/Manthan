@@ -47,7 +47,7 @@ function* GoButtonExcel_ImportMaster_GenFun({ config }) {              // Go buu
         "mapValue": i.MapCustomer,
       }))
 
-    } else {
+    } else if (mapType === 3) {
       const response = yield call(ImportMaster_Map_Unit_GoButton_API, config);
 
       newResp = response.Data.map(i => ({
@@ -58,6 +58,9 @@ function* GoButtonExcel_ImportMaster_GenFun({ config }) {              // Go buu
         "fieldId": i.id,
         "mapValue": i.MapUnit,
       }))
+    } else {
+      const response = yield call(ImportMaster_Map_Customer_GoButton_API, config);
+      newResp = response.Data
     }
 
     yield put(GoButton_ImportExcelPartyMap_Success(newResp));

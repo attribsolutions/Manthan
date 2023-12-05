@@ -22,6 +22,7 @@ import {
 } from "../../../../store/Administrator/ImportExportFieldMapRedux/action";
 import { customAlert } from "../../../../CustomAlert/ConfirmDialog";
 import {
+    GoButton_ImportExcelPartyMap,
     InvoiceExcelUpload_save_action,
     InvoiceExcelUpload_save_Success
 } from "../../../../store/Administrator/ImportExcelPartyMapRedux/action";
@@ -51,10 +52,12 @@ const InvoiceExcelUpload = (props) => {
         partyDropDownLoading,
         compareParamLoading,
         saveBtnLoading,
-        commonPartyDropSelect
+        commonPartyDropSelect,
+        PartyMapData
     } = useSelector((state) => ({
         postMsg: state.ImportExcelPartyMap_Reducer.invoiceExcelUploadMsg,
         saveBtnLoading: state.ImportExcelPartyMap_Reducer.invoiceUploadSaveLoading,
+        PartyMapData: state.ImportExcelPartyMap_Reducer.addGoButton,
 
         partyList: state.CommonPartyDropdownReducer.commonPartyDropdown,
         partyDropDownLoading: state.CommonPartyDropdownReducer.partyDropdownLoading,
@@ -124,6 +127,13 @@ const InvoiceExcelUpload = (props) => {
     }, [postMsg])
 
 
+    useEffect(() => {
+        let partyId = _cfunc.loginSelectedPartyID();
+        dispatch(GoButton_ImportExcelPartyMap({ partyId }))
+    }, [])
+
+
+
     function goButtonHandler() {
 
         const jsonBody = JSON.stringify({
@@ -136,6 +146,7 @@ const InvoiceExcelUpload = (props) => {
 
 
     async function veifyExcelBtn_Handler() {
+
 
         if (compareParameter.length === 0) {
             customAlert({
@@ -163,7 +174,7 @@ const InvoiceExcelUpload = (props) => {
             if (readjson.length > 0) {
 
                 const isdetails = await fileDetails({ compareParameter, readjson })
-                debugger
+
                 const isUploadInvoiceOfSameDate = _cfunc.areAllDatesSame(isdetails.invoiceDate)
                 if (!isUploadInvoiceOfSameDate) {
                     customAlert({
@@ -172,6 +183,39 @@ const InvoiceExcelUpload = (props) => {
 
                     })
                     return
+                }
+
+                if (PartyMapData.length > 0) {
+                    const PartyMap = isdetails.partyNO
+                    const NotMapCustomers = []
+
+                    const filteredArray = PartyMapData.filter(i => i.MapCustomer === null || i.MapCustomer === '');
+                    // filteredArray.for
+                    filteredArray.forEach(i => {
+                        NotMapCustomers.push({ [i.CustomerName]: 'Party is Not Map' })
+                    });
+
+
+                    if (NotMapCustomers.length > 0) {
+                        customAlert({
+                            Type: 3,
+                            Message: NotMapCustomers
+                        })
+                        return;
+                    }
+                    const arrayOfStrings = PartyMap.map(String);
+                    const mapCustomerValues = PartyMapData.map(obj => obj.MapCustomer);
+                    const notPresentValues = arrayOfStrings.filter(value => !mapCustomerValues.includes(value));
+                    if (notPresentValues.length > 0) {
+                        notPresentValues.forEach(i => {
+                            NotMapCustomers.push({ [i]: '                 Wrong Party Code' })
+                        });
+                        customAlert({
+                            Type: 3,
+                            Message: NotMapCustomers
+                        })
+                        return;
+                    }
                 }
 
 
