@@ -87,7 +87,7 @@ function* addButton_saleReturn_GenFunc({ config }) {
             response = yield call(apiCall.SalesReturn_add_button_api_For_Item, jsonBody);
         }
         else if (subPageMode === url.CREDIT_NOTE_1) {
-            response = yield call(apiCall.SalesReturn_add_button_api_For_CreditNote1, jsonBody);
+            response = yield call(apiCall.SalesReturn_add_button_api_For_Item, jsonBody);
         }
         else {//returnMode  else = "invoiceWise"
             response = yield call(apiCall.SalesReturn_add_button_api_For_Invoice, InvoiceId);
