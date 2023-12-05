@@ -142,12 +142,12 @@ const GoodsCreditNote = (props) => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_id));
 
-        if (subPageMode === url.CREDIT_NOTE_1) {
-            dispatch(goButton_ServiceItemAssign({ jsonBody: { CompanyID: 1, "PartyID": loginSelectedPartyID() } }));
-        }
-        else {
+        // if (subPageMode === url.CREDIT_NOTE_1) {
+        //     dispatch(goButton_ServiceItemAssign({ jsonBody: { CompanyID: 1, "PartyID": loginSelectedPartyID() } }));
+        // }
+        // else {
             dispatch(goButtonPartyItemAddPage({ jsonBody: { ..._cfunc.loginJsonBody(), "PartyID": loginSelectedPartyID() } }));
-        }
+        // }
 
         const jsonBody = JSON.stringify({
             Type: 4,
@@ -159,7 +159,7 @@ const GoodsCreditNote = (props) => {
         return () => {
             dispatch(Retailer_List_Success([]));
             dispatch(goButtonPartyItemAddPageSuccess([]));
-            dispatch(goButton_ServiceItemAssign_Success([]));
+            // dispatch(goButton_ServiceItemAssign_Success([]));
         };
     }, []);
 
@@ -197,16 +197,16 @@ const GoodsCreditNote = (props) => {
 
     useEffect(() => {// Item Name dropdown useEffect
 
-        if (subPageMode === url.CREDIT_NOTE_1) {
-            // subPageMode CREDIT_NOTE_1 then this option showing on Item Name Dropdown
-            setItemList_Options(transformAndFilterList(ServiceItemAssignList, 'ServiceItem', 'ServiceItemName', 'selectCheck'))
-            setItemList_loading(ItemListLoading);
-        }
-        else {
+        // if (subPageMode === url.CREDIT_NOTE_1) {
+        //     // subPageMode CREDIT_NOTE_1 then this option showing on Item Name Dropdown
+        //     setItemList_Options(transformAndFilterList(ServiceItemAssignList, 'ServiceItem', 'ServiceItemName', 'selectCheck'))
+        //     setItemList_loading(ItemListLoading);
+        // }
+        // else {
             // subPageMode GOODS_CREDIT_NOTE and GOODS_CREDIT_NOTE then this option showing on Item Name Dropdown
             setItemList_Options(transformAndFilterList(ItemList, 'Item', 'ItemName', 'selectCheck'));
-            setItemList_loading(ServiceItemListLoading);
-        }
+            setItemList_loading(ItemListLoading);
+        // }
 
     }, [ItemList, ServiceItemAssignList, ItemListLoading, ServiceItemListLoading]);
 
@@ -796,8 +796,8 @@ const GoodsCreditNote = (props) => {
 
                 return {
                     "CRDRNoteDate": "2023-09-04",
-                    "Item": subPageMode === url.CREDIT_NOTE_1 ? null : i.Item,
-                    "ServiceItem": subPageMode === url.CREDIT_NOTE_1 ? i.Item : null,
+                    "Item":  i.Item,
+                    "ServiceItem":null,
                     "ItemName": i.ItemName,
                     "Quantity": i.Quantity,
                     "Unit": i.Unit,
@@ -861,19 +861,19 @@ const GoodsCreditNote = (props) => {
             CompanyID: _cfunc.loginCompanyID(),
         });
         dispatch(Retailer_List(jsonBody));
-        if (subPageMode === url.CREDIT_NOTE_1) {
-            dispatch(goButton_ServiceItemAssign({ jsonBody: { CompanyID: 1, "PartyID": loginSelectedPartyID() } }));
-        }
-        else {
+        // if (subPageMode === url.CREDIT_NOTE_1) {
+        //     dispatch(goButton_ServiceItemAssign({ jsonBody: { CompanyID: 1, "PartyID": loginSelectedPartyID() } }));
+        // }
+        // else {
             dispatch(goButtonPartyItemAddPage({ jsonBody: { ..._cfunc.loginJsonBody(), "PartyID": loginSelectedPartyID() } }));
-        }
+        // }
     }
 
     function partyOnChngeButtonHandler() {
         dispatch(Retailer_List_Success([]));
         dispatch(InvoiceNumberSuccess([]));
         dispatch(goButtonPartyItemAddPageSuccess([]));
-        dispatch(goButton_ServiceItemAssign_Success([]));
+        // dispatch(goButton_ServiceItemAssign_Success([]));
         setTableArr([]);
         setState((i) => {
             let a = { ...i }
