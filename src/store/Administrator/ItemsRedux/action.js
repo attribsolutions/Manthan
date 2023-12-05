@@ -183,6 +183,17 @@ export const get_Category_By_CategoryType_ForDropDownAPI_Success = (data) => ({
 });
 
 
+export const Item_Image_Upload = (config = {}) => ({// save Action
+  type: actionType.ITEM_IMAGE_UPLOAD,
+  config,
+});
+
+export const Item_Image_Upload_Success = (resp) => ({// Save  success
+  type: actionType.ITEM_IMAGE_UPLOAD_SUCCESS,
+  payload: resp,
+});
+
+
 export const ItemsApiErrorAction = () => ({
   type: actionType.ITEMS_API_ERROR_ACTION,
 })

@@ -186,6 +186,10 @@ export const Get_Item_Tag = () => get(url.GET_ITEM_TAG)// Get Item Tag Api
 export const Get_Brand_Tag = () => get(url.GET_BRAND_TAG)// Get Item Tag Api
 export const GeneralMasterSubType_API = (data) => post(url.GENERAL_MASTER_BRAND_NAME, data)// post api
 
+export const ItemImageUpload = ({ formData }) => postForFormData(url.ITEM_IMAGE_UPLOAD, formData)// postapi
+
+
+
 // Party Master
 export const Party_Master_Get_API = (jsonbody) => post(url.PARTY_MASTER_FILTER_API, jsonbody)//get api
 export const Party_Master_Post_API = ({ jsonBody }) => post(url.PARTY_MASTER_API, jsonBody)// post api

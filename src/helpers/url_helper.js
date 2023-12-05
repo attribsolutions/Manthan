@@ -78,6 +78,11 @@ export const GET_SUBGROUP_BY_GROUP_ID = "/GetSubGroupByGroupID"
 export const GET_ITEM_TAG = "/ItemTag"
 export const GET_BRAND_TAG = "/ItemBrand"
 export const GENERAL_MASTER_BRAND_NAME = "/GeneralMasterBrandName"
+export const ITEM_IMAGE_UPLOAD = "/ImageUploads"
+
+
+
+
 
 // M_Items_group Api
 export const ITEMS_GROUP_API = "/ItemGroups"
@@ -335,7 +340,7 @@ export const CANCEL_E_WAY_BILL = '/Cancel_EwayBill' // Uploaded_E-wayBill
 export const UPDATE_VEHICLE_INVOICE = '/UpdateVehicleInvoice' // Uploaded_E-wayBill
 
 export const INVOICE_SEND_TO_SCM = '/InvoicetoSCM' // Uploaded_E-wayBill
-export const INVOICE_1_BULK_DELETE_API= '/InvoiceBulkDelete'// invoice_1 Bulk Delete Api
+export const INVOICE_1_BULK_DELETE_API = '/InvoiceBulkDelete'// invoice_1 Bulk Delete Api
 
 
 

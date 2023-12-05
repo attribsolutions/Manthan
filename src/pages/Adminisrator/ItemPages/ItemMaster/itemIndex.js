@@ -354,7 +354,7 @@ const ItemsMaster = (props) => {
         dispatch(get_ImageType_ForDropDown());
         //++++++++++++++++++
         dispatch(get_Party_ForDropDown());//margin tab
-        
+
         dispatch(priceListByCompay_Action());
         //++++++++++++++++++
 
@@ -952,7 +952,7 @@ const ItemsMaster = (props) => {
                                                         <span className="d-none d-sm-block">Unit Conversions</span>
                                                     </NavLink>
                                                 </NavItem>
-                                                <NavItem>
+                                                {/* <NavItem>
                                                     <NavLink
                                                         id="nave-link-5"
                                                         style={{ cursor: "pointer" }}
@@ -968,7 +968,7 @@ const ItemsMaster = (props) => {
                                                         </span>
                                                         <span className="d-none d-sm-block">Image</span>
                                                     </NavLink>
-                                                </NavItem>
+                                                </NavItem> */}
 
                                                 <NavItem>
                                                     <NavLink

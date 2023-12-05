@@ -23,6 +23,8 @@ import {
     GET_SUB_GROUP_BY_GROUP_FOR_DROPDOWN,
     GET_SUB_GROUP_BY_GROUP_FOR_DROPDOWN_SUCCESS,
     ITEMS_API_ERROR_ACTION,
+    ITEM_IMAGE_UPLOAD,
+    ITEM_IMAGE_UPLOAD_SUCCESS,
     SAVE_ITEM_MASTER,
     SAVE_ITEM_MASTER_SUCCESS,
     UPDATE_ITEM_ID,
@@ -55,7 +57,9 @@ const INIT_STATE = {
     loading: false,
     categotyDropDownLoading: false,
     subgroupDropDownLoading: false,
-    groupDropDownLoading: false
+    groupDropDownLoading: false,
+    UploadImage: [],
+    UploadImageLoading: false
 
 };
 
@@ -247,6 +251,31 @@ const ItemMastersReducer = (state = INIT_STATE, action) => {
                 Category: action.payload,
                 categotyDropDownLoading: false
             }
+
+
+
+
+
+
+
+        case ITEM_IMAGE_UPLOAD:
+            return {
+                ...state,
+                UploadImageLoading: true
+            }
+
+        case ITEM_IMAGE_UPLOAD_SUCCESS:
+            return {
+                ...state,
+                UploadImage: action.payload,
+                UploadImageLoading: false
+            }
+
+
+
+
+
+
 
         case ITEMS_API_ERROR_ACTION:
             return {

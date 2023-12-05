@@ -209,6 +209,7 @@ import ClaimTrackingReport from "../Reports/ClaimTrackingReport";
 import PartyDetails from "../pages/Adminisrator/PartyDetails";
 import Dashboard_Admin from "../pages/Dashboard/Dashboard_2/Dashboard_Admin.js"
 import ItemMasterBulkUpdate from "../pages/Adminisrator/ItemMasterBulkUpdate";
+import ItemImageUpload from "../pages/Adminisrator/ItemPages/ItemImageUpload/ItemImageUpload.js";
 
 
 
@@ -362,6 +363,10 @@ const userRoutes = [
 	{ path: path.PARTY_DETAILS, component: PartyDetails },
 
 	{ path: path.ITEM_MASTER_BULK_UPDATE, component: ItemMasterBulkUpdate },
+
+	{ path: path.ITEM_IMAGE_UPLOAD, component: ItemImageUpload },
+
+
 
 	//******************************* Inventory Module ************************************//
 	{ path: path.CHALLAN_LIST, component: ChallanList },
