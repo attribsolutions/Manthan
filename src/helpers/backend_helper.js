@@ -188,6 +188,9 @@ export const GeneralMasterSubType_API = (data) => post(url.GENERAL_MASTER_BRAND_
 
 export const ItemImageUpload = ({ formData }) => postForFormData(url.ITEM_IMAGE_UPLOAD, formData)// postapi
 
+export const GetItemImageUpload = ({ ItemId }) => get(`${url.ITEM_IMAGE_UPLOAD}/${ItemId}`)// Get Item Tag Api
+
+
 
 
 // Party Master

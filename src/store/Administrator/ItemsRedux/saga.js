@@ -173,7 +173,7 @@ function* Category_DropDown_API_GenFunc({ id }) {
 }
 
 function* Item_Image_Upload_GenFun({ config }) {
-
+  debugger
   for (let pair of config.formData.entries()) {
     console.log(pair[0], pair[1]);
   }

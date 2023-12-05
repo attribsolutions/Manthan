@@ -39,6 +39,8 @@ import { mode, url, pageId } from "../../../../routes/index";
 import { userAccessUseEffect } from "../../../../components/Common/CommonUseEffect";
 import { customAlert } from "../../../../CustomAlert/ConfirmDialog";
 import Slidewithcaption from "../../../../components/Common/CommonImageComponent";
+import { GetItemImageUpload } from "../../../../helpers/backend_helper";
+import { C_Button } from "../../../../components/Common/CommonButton";
 
 const ItemImageUpload = (props) => {
 
@@ -58,6 +60,10 @@ const ItemImageUpload = (props) => {
     const [Image, setImage] = useState({})
     const [imageTable, setImageTable] = useState([]);  // Selected Image Array
     const [modal_backdrop, setmodal_backdrop] = useState(false);   // Image Model open Or not
+    const [changeButtonShow, setChangeButtonShow] = useState(false);
+    const [ImageToUpload, setImageToUpload] = useState({})
+
+
 
 
 
@@ -122,6 +128,26 @@ const ItemImageUpload = (props) => {
     }, [UploadImage])
 
     useEffect(() => {
+        if (values.ItemName.value > 0) {
+            // setSelectedParty(commonPartyDropSelect);
+            setChangeButtonShow(true)
+        }
+    }, [values]);
+
+
+    const ItemOnChange = () => {
+
+        setChangeButtonShow(false)
+        setState((i) => {
+
+            const a = { ...i }
+            a.values.ItemName = { value: 0, label: "select..." }
+            return a
+        })
+        setImage([])
+    };
+
+    useEffect(() => {
         if (imageTable.length > 0) {
             setmodal_backdrop(true)
         }
@@ -148,39 +174,77 @@ const ItemImageUpload = (props) => {
         label: Data.Name
     }));
 
+    useEffect(async () => {
+        if (values.ItemName.value > 0) {
+            const response = await GetItemImageUpload({ ItemId: values.ItemName.value })
+            setImage(response.Data)
+        }
+    }, [values])
+
+
+
+
 
 
     const onchangeHandler = async ({ event, Type, TypeOf }) => {
 
         const obj = {
             file: event.target.files[0],
-            type: Type
+            ImageType: Type
         }
-        setImage({
-            ...Image, [TypeOf]: obj,
+        setImageToUpload({
+            ...ImageToUpload, [TypeOf]: obj,
         })
 
     }
 
-    const imageShowHandler = ({ Type }) => { // image Show handler
+    const imageShowHandler = async ({ Type }) => { // image Show handler
+
+        if ((values.ItemName === "") || (values.ItemName.value === 0)) {
+            customAlert({
+                Type: 3,
+                Message: "Please Select Item",
+            })
+            return
+        }
         debugger
         let slides = []
+        if (Object.values(ImageToUpload).length > 0) {
+            Object.values(ImageToUpload).forEach((element) => {
+                if (element.ImageType === Type) {
+                    if (element.file instanceof File) {
+                        slides = [{
+                            Image: URL.createObjectURL(element.file)
+                        }];
+                    }
 
-        Object.values(Image).forEach((element) => {
-            if (element.type === Type) {
-                slides = [{
-                    Image: URL.createObjectURL(element.file)
-                }];
-            }
-        });
+                }
+            });
+
+        } else {
+
+            Object.values(Image).forEach((element) => {
+                if (element.ImageType === Type) {
+                    if (!(element.file instanceof File)) {
+                        slides = [{
+                            Image: `http://cbmfooderp.com:8000${element.Item_pic}`
+                        }];
+                    }
+
+                }
+            });
+        }
+
+
 
         setImageTable(slides)
+
     }
 
 
     const imageUploadHandler = ({ Type }) => {
-
-        if (values.ItemName === "") {
+        debugger
+        if ((values.ItemName === "") || (values.ItemName.value === 0)) {
             customAlert({
                 Type: 3,
                 Message: "Please Select Item",
@@ -188,14 +252,13 @@ const ItemImageUpload = (props) => {
             return
         }
         const formData = new FormData()
-        console.log(Image)
         try {
             formData.append(`Item`, values.ItemName.value);
             formData.append(`ImageType`, Type);
-            Object.values(Image).forEach((element) => {
+            Object.values(ImageToUpload).forEach((element) => {
                 debugger
-                if (element.type === Type) {
-                    formData.append(`Item_pic_${values.ItemName.value}`, element.file);
+                if (element.ImageType === Type) {
+                    formData.append(`Item_pic`, element.file);
                     dispatch(Item_Image_Upload({ formData }));
                 }
             });
@@ -239,18 +302,40 @@ const ItemImageUpload = (props) => {
                                     {/* <div className="px-2 c_card_header text-black mb-1"> */}
 
                                     <Row>
-                                        <FormGroup className="mb-3 col col-sm-4 " >
+                                        <FormGroup className="mb-2 col col-sm-4 " >
                                             <Label >Item</Label>
                                             <Select
                                                 name="ItemName"
                                                 value={values.ItemName}
                                                 isSearchable={true}
-                                                className="react-dropdown"
+                                                className="react-dropdown mt-n1"
                                                 classNamePrefix="dropdown"
+                                                isDisabled={(changeButtonShow && !(values.ItemName.value === 0))}
                                                 options={Items}
                                                 onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
                                             />
                                         </FormGroup>
+
+
+                                        <Col sm="1" className="mt-2">
+                                            {(!(changeButtonShow)) ?
+                                                <C_Button
+                                                    type="button"
+                                                    className="btn btn-outline-primary border-1 font-size-12 text-center mt-3"
+                                                // onClick={updateSelectedParty}
+                                                >
+                                                    Select
+                                                </C_Button>
+                                                :
+                                                <C_Button
+                                                    type="button"
+                                                    spinnerColor={"info"}
+                                                    className="btn btn-outline-info border-1 font-size-12 mt-3 "
+                                                    onClick={ItemOnChange}
+                                                >Change</C_Button>
+
+                                            }
+                                        </Col>
 
                                     </Row>
                                     {/* </div> */}
