@@ -83,11 +83,11 @@ function* addButton_saleReturn_GenFunc({ config }) {
     try {
         const { jsonBody, InvoiceId, returnMode, subPageMode } = config;
         let response
-        if ((returnMode === 2) && !(subPageMode === url.CREDIT_NOTE_1)) {//returnMode 1 = "itemWise"
+        if (returnMode === 2) {//returnMode 1 = "itemWise"
             response = yield call(apiCall.SalesReturn_add_button_api_For_Item, jsonBody);
         }
-        else if (subPageMode === url.CREDIT_NOTE_1) {
-            response = yield call(apiCall.SalesReturn_add_button_api_For_Item, jsonBody);
+        else if (returnMode === 1) {
+            response = yield call(apiCall.SalesReturn_add_button_api_For_CreditNote1, jsonBody);
         }
         else {//returnMode  else = "invoiceWise"
             response = yield call(apiCall.SalesReturn_add_button_api_For_Invoice, InvoiceId);
