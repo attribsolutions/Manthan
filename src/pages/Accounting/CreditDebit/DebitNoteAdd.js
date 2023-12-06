@@ -44,11 +44,12 @@ function initialState(history) {
     let listPath = ''
     let sub_Mode = history.location.pathname;
 
-    if (sub_Mode === url.CREDIT_NOTE) {
-        page_Id = pageId.CREDIT_NOTE;
-        listPath = url.CREDIT_LIST
-    }
-    else if (sub_Mode === url.DEBIT_NOTE) {
+    // if (sub_Mode === url.CREDIT_NOTE) {
+    //     page_Id = pageId.CREDIT_NOTE;
+    //     listPath = url.CREDIT_LIST
+    // }
+    // else 
+    if (sub_Mode === url.DEBIT_NOTE) {
         page_Id = pageId.DEBIT_NOTE;
         listPath = url.DEBIT_LIST
     }

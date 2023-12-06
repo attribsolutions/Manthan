@@ -140,11 +140,11 @@ import BulkRecipt from "../pages/Accounting/Receipt/BulkReceipt";
 import BankAssign from "../pages/Accounting/BankAssign/BankAssign";
 import LoadingSheetUpdate from "../pages/Sale/LoadingSheet/LoadingSheetUpdate";
 import SalesReturn from "../pages/Sale/SalesReturn/SalesReturn";
-import GoodsCreditNote from "../pages/Accounting/CreditDebitNote/GoodsCreditNote";
-import DebitNoteMaster from "../pages/Accounting/Debit/Debit";
-import CreditList from "../pages/Accounting/CreditDebitNote/CreditList";
 
-import CreditNoteAdd from "../pages/Accounting/CreditDebitNote/CreditNoteAdd";
+import GoodsCredit_GoodsDebitAdd from "../pages/Accounting/CreditDebit/GoodsCreditAndGoodsDebitAdd";
+import DebitNoteAdd from "../pages/Accounting/CreditDebit/DebitNoteAdd";
+import CreditListAll from "../pages/Accounting/CreditDebit/CreditListAll";
+import CreditNoteAdd from "../pages/Accounting/CreditDebit/CreditNoteAdd";
 
 import ImportFieldAdd from "../pages/Adminisrator/ImportMaster/FieldAdd/ImportFieldAdd";
 import ImportFieldAddList from "../pages/Adminisrator/ImportMaster/FieldAdd/ImportFieldAddList";
@@ -210,7 +210,7 @@ import PartyDetails from "../pages/Adminisrator/PartyDetails";
 import Dashboard_Admin from "../pages/Dashboard/Dashboard_2/Dashboard_Admin.js"
 import ItemMasterBulkUpdate from "../pages/Adminisrator/ItemMasterBulkUpdate";
 import ItemImageUpload from "../pages/Adminisrator/ItemPages/ItemImageUpload/ItemImageUpload.js";
-
+import CreditNote_1 from "../pages/Accounting/CreditDebit/CreditNote1";
 
 
 const userRoutes = [
@@ -461,21 +461,20 @@ const userRoutes = [
 
 	// |||||||||||||||||||||||||||||||||||||||||||||||||||
 
-	{ path: path.CREDIT_LIST, component: CreditList },
+	{ path: path.CREDIT_LIST, component: CreditListAll },
 	{ path: path.CREDIT_NOTE, component: CreditNoteAdd },
 
-	{ path: path.DEBIT_LIST, component: CreditList },
-	{ path: path.DEBIT_NOTE, component: DebitNoteMaster },
+	{ path: path.DEBIT_LIST, component: CreditListAll },
+	{ path: path.DEBIT_NOTE, component: DebitNoteAdd },
 
+	{ path: path.GOODS_CREDIT_LIST, component: CreditListAll },
+	{ path: path.GOODS_CREDIT_NOTE, component: GoodsCredit_GoodsDebitAdd },
 
-	{ path: path.GOODS_CREDIT_LIST, component: CreditList },
-	{ path: path.GOODS_CREDIT_NOTE, component: GoodsCreditNote },
+	{ path: path.GOODS_DEBIT_LIST, component: CreditListAll },
+	{ path: path.GOODS_DEBIT_NOTE, component: GoodsCredit_GoodsDebitAdd },
 
-	{ path: path.GOODS_DEBIT_LIST, component: CreditList },
-	{ path: path.GOODS_DEBIT_NOTE, component: GoodsCreditNote },
-
-	{ path: path.CREDIT_NOTE_LIST_1, component: CreditList },
-	{ path: path.CREDIT_NOTE_1, component: GoodsCreditNote },
+	{ path: path.CREDIT_NOTE_LIST_1, component: CreditListAll },
+	{ path: path.CREDIT_NOTE_1, component: CreditNote_1 },
 
 	{ path: path.CLAIM_TRACKING_ENTRY, component: ClaimTrackingEntry },
 	{ path: path.CLAIM_TRACKING_ENTRY_LIST, component: ClaimTrackingEntryList },

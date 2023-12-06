@@ -39,7 +39,6 @@ import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
-import { loginSelectedPartyID } from "../../../components/Common/CommonFunction";
 import { goButton_ServiceItemAssign } from "../../../store/Administrator/ServiceItemAssignRedux/action";
 import { goButton_ServiceItemAssign_Success } from "../../../store/Administrator/ServiceItemAssignRedux/action";
 
@@ -49,15 +48,7 @@ function initialState(history) {
     let listPath = ''
     let sub_Mode = history.location.pathname;
 
-    if (sub_Mode === url.GOODS_CREDIT_NOTE) {
-        page_Id = pageId.GOODS_CREDIT_NOTE;
-        listPath = url.GOODS_CREDIT_LIST
-    }
-    else if (sub_Mode === url.GOODS_DEBIT_NOTE) {
-        page_Id = pageId.GOODS_DEBIT_NOTE;
-        listPath = url.GOODS_DEBIT_LIST
-    }
-    else if (sub_Mode === url.CREDIT_NOTE_1) {
+    if (sub_Mode === url.CREDIT_NOTE_1) {
         page_Id = pageId.CREDIT_NOTE_1;
         listPath = url.CREDIT_NOTE_LIST_1
     }
@@ -65,7 +56,7 @@ function initialState(history) {
     return { page_Id, listPath }
 };
 
-const GoodsCreditNote = (props) => {
+const CreditNote_1 = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory()
@@ -74,7 +65,6 @@ const GoodsCreditNote = (props) => {
 
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState('');
-    const [editCreatedBy, seteditCreatedBy] = useState("");
     const [page_id] = useState(() => initialState(history).page_Id)
     const [listPath] = useState(() => initialState(history).listPath)
     const [subPageMode] = useState(history.location.pathname)
@@ -85,8 +75,8 @@ const GoodsCreditNote = (props) => {
         Narration: "",
         InvoiceNO: "",
         ItemName: "",
+        Type: ""
     }
-    let internal_pageMode = ""
 
     const [state, setState] = useState(initialFiledFunc(fileds))
     const [discountDropOption] = useState([{ value: 1, label: "Rs" }, { value: 2, label: "%" }]);
@@ -94,6 +84,8 @@ const GoodsCreditNote = (props) => {
 
     const [itemList_Options, setItemList_Options] = useState([]);
     const [itemList_loading, setItemList_loading] = useState(false);
+
+    const [typeSelect, setTypeSelect] = useState({ value: 1, label: "Item" });
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
@@ -142,24 +134,22 @@ const GoodsCreditNote = (props) => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_id));
 
-        // if (subPageMode === url.CREDIT_NOTE_1) {
-        //     dispatch(goButton_ServiceItemAssign({ jsonBody: { CompanyID: 1, "PartyID": loginSelectedPartyID() } }));
-        // }
-        // else {
-            dispatch(goButtonPartyItemAddPage({ jsonBody: { ..._cfunc.loginJsonBody(), "PartyID": loginSelectedPartyID() } }));
-        // }
+        if (!(_cfunc.loginSelectedPartyID() === 0)) {
+            dispatch(goButton_ServiceItemAssign({ jsonBody: { CompanyID: 1, "PartyID": _cfunc.loginSelectedPartyID() } }));
+            dispatch(goButtonPartyItemAddPage({ jsonBody: { ..._cfunc.loginJsonBody(), "PartyID": _cfunc.loginSelectedPartyID() } }));
+            const jsonBody = JSON.stringify({
+                Type: 4,
+                PartyID: _cfunc.loginSelectedPartyID(),
+                CompanyID: _cfunc.loginCompanyID(),
+            });
+            dispatch(Retailer_List(jsonBody));
+        }
+        dispatch(BreadcrumbShowCountlabel(`${"Count"} :${0} ₹ :${0}`));
 
-        const jsonBody = JSON.stringify({
-            Type: 4,
-            PartyID: _cfunc.loginSelectedPartyID(),
-            CompanyID: _cfunc.loginCompanyID(),
-        });
-        dispatch(Retailer_List(jsonBody));
-        dispatch(BreadcrumbShowCountlabel(`${"Total Amount"} :${0}`));
         return () => {
             dispatch(Retailer_List_Success([]));
             dispatch(goButtonPartyItemAddPageSuccess([]));
-            // dispatch(goButton_ServiceItemAssign_Success([]));
+            dispatch(goButton_ServiceItemAssign_Success([]));
         };
     }, []);
 
@@ -197,87 +187,18 @@ const GoodsCreditNote = (props) => {
 
     useEffect(() => {// Item Name dropdown useEffect
 
-        // if (subPageMode === url.CREDIT_NOTE_1) {
-        //     // subPageMode CREDIT_NOTE_1 then this option showing on Item Name Dropdown
-        //     setItemList_Options(transformAndFilterList(ServiceItemAssignList, 'ServiceItem', 'ServiceItemName', 'selectCheck'))
-        //     setItemList_loading(ItemListLoading);
-        // }
-        // else {
+        if (typeSelect.value === 2) {
+            // subPageMode CREDIT_NOTE_1 then this option showing on Item Name Dropdown
+            setItemList_Options(transformAndFilterList(ServiceItemAssignList, 'ServiceItem', 'ServiceItemName', 'selectCheck'))
+            setItemList_loading(ServiceItemListLoading);
+        }
+        else {
             // subPageMode GOODS_CREDIT_NOTE and GOODS_CREDIT_NOTE then this option showing on Item Name Dropdown
             setItemList_Options(transformAndFilterList(ItemList, 'Item', 'ItemName', 'selectCheck'));
             setItemList_loading(ItemListLoading);
-        // }
+        }
 
-    }, [ItemList, ServiceItemAssignList, ItemListLoading, ServiceItemListLoading]);
-
-    // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
-    useEffect(() => {
-
-        try {
-            if ((hasShowloction || hasShowModal)) {
-
-                let hasEditVal = null
-
-                if (hasShowloction) {
-                    setPageMode(location.pageMode)
-                    internal_pageMode = location.pageMode
-                    hasEditVal = location.editValue
-                }
-                else if (hasShowModal) {
-                    hasEditVal = props.editValue
-                    internal_pageMode = props.pageMode
-                    setPageMode(props.pageMode)
-                }
-                if (hasEditVal) {
-
-                    const { CRDRNoteDate, Customer, Narration, CustomerID, Comment, GrandTotal, ReturnReason, CRDRInvoices = '', CRDRNoteItems = [], ReturnItems = [], CustomerName } = hasEditVal
-
-                    const { values, fieldLabel, hasValid, required, isError } = { ...state }
-                    let caculateGrandTotal = ""
-                    values.Customer = { label: Customer, value: CustomerID };
-                    values.InvoiceNO = CRDRInvoices[0]
-                        ? {
-                            label: CRDRInvoices[0].FullInvoiceNumber,
-                            value: CRDRInvoices[0].id
-                        } : '';
-                    let dataCount = ""
-
-                    if (internal_pageMode === mode.modeSTPsave) {
-
-                        values.Customer = { label: CustomerName, value: Customer };
-                        setTableArr(ReturnItems)
-                        dataCount = ReturnItems.length;
-                        caculateGrandTotal = GrandTotal
-                        values.CRDRNoteDate = currentDate_ymd
-
-                        const jsonBody = JSON.stringify({
-                            PartyID: _cfunc.loginSelectedPartyID(),
-                            CustomerID: Customer
-                        });
-                        values.Narration = Comment;
-                        dispatch(InvoiceNumber(jsonBody));
-
-                    } else {
-                        caculateGrandTotal = GrandTotal
-                        setTableArr(CRDRNoteItems)
-                        dataCount = CRDRNoteItems.length;
-                        values.CRDRNoteDate = CRDRNoteDate;
-                        values.Narration = Narration;
-
-                    }
-
-
-                    let commaSeparateAmount = _cfunc.amountCommaSeparateFunc(Number(caculateGrandTotal).toFixed(2));
-                    dispatch(BreadcrumbShowCountlabel(`Count:${dataCount} ₹ ${commaSeparateAmount}`));
-
-                    setState({ values, fieldLabel, hasValid, required, isError })
-                    dispatch(Breadcrumb_inputName(hasEditVal.Name))
-                    seteditCreatedBy(hasEditVal.CreatedBy)
-                }
-                dispatch(EditCreditlistSuccess({ Status: false }))
-            }
-        } catch (w) { _cfunc.CommonConsole(w) }
-    }, []);
+    }, [ItemList, ServiceItemAssignList, ItemListLoading, ServiceItemListLoading, typeSelect]);
 
     useEffect(() => {
         if (pageField) {
@@ -326,20 +247,13 @@ const GoodsCreditNote = (props) => {
                 const updateItemArr = [...TableArr];
                 let existingIds = updateItemArr.map(item => item.id);
                 let nextId = existingIds.length > 0 ? Math.max(...existingIds) + 1 : 1;
-                let highestGST
+
                 addButtonData.Data.forEach((i) => {
                     const MRPOptions = i.ItemMRPDetails.map(i => ({ label: i.MRPValue, value: i.MRP, Rate: i.Rate }));
                     const GSTOptions = i.ItemGSTDetails.map(i => ({ label: i.GSTPercentage, value: i.GST }));
 
-                    if (subPageMode === url.CREDIT_NOTE_1) {
-                        highestGST = ({ GSTPercentage: i.ItemGSTDetails[0].GSTPercentage, GST: "0" });
-                    }
-                    else {
+                    const highestGST = ({ GSTPercentage: i.ItemGSTDetails[0].GSTPercentage, GST: "0" });
 
-                        highestGST = i.ItemGSTDetails.reduce((prev, current) => {// Default  highest GST when Return mode "2==ItemWise"
-                            return (prev.GST > current.GST) ? prev : current;
-                        }, '');
-                    }
                     const highestMRP = i.ItemMRPDetails.reduce((prev, current) => {// Default highest GST when Return mode "2==ItemWise"
                         return (prev.MRP > current.MRP) ? prev : current;
                     }, '');
@@ -367,7 +281,7 @@ const GoodsCreditNote = (props) => {
                 });
 
                 let sumOfGrandTotal = updateItemArr.reduce((accumulator, currentObject) => accumulator + Number(currentObject["roundedTotalAmount"]) || 0, 0);
-                let count_label = `${"Total Amount"} :${Number(sumOfGrandTotal).toLocaleString()}`
+                let count_label = `${"Count"} :${updateItemArr.length} ₹ :${Number(sumOfGrandTotal).toLocaleString()}`
                 dispatch(BreadcrumbShowCountlabel(count_label));
                 updateItemArr.sort((a, b) => b.id - a.id);
                 setTableArr(updateItemArr);
@@ -386,6 +300,17 @@ const GoodsCreditNote = (props) => {
         value: index.id,
         label: index.Name,
     }));
+
+    const TypeOptions = [
+        {
+            value: 1,
+            label: "Item"
+        },
+        {
+            value: 2,
+            label: "Service Item"
+        }
+    ]
 
     function transformAndFilterList(inputList, valueKey, labelKey, checkKey) {
         return inputList
@@ -442,43 +367,6 @@ const GoodsCreditNote = (props) => {
         },
 
         {
-            text: "MRP",
-            dataField: "MRP",
-            formatExtraData: { TableArr },
-            hidden: (subPageMode === url.CREDIT_NOTE_1) && true,
-            formatter: (cell, row, key, { TableArr }) => {
-                return (
-                    <>
-                        <div style={{ minWidth: "90px" }}>
-                            <Select
-                                id={`MRP${key}`}
-                                name="MRP"
-                                defaultValue={(row.MRP === "") ? "" : { value: row.MRP, label: row.MRPValue }}
-                                isSearchable={true}
-                                className="react-dropdown"
-                                classNamePrefix="dropdown"
-                                options={row.MRPOptions}
-                                onChange={(event) => {
-                                    try {
-                                        row.MRP = event.value;
-                                        row.MRPValue = event.label;
-                                        row.Rate = event.Rate;
-                                        totalAmountCalcuationFunc(row, TableArr)
-                                        document.getElementById(`Rate-${key}-${row.id}`).value = event.Rate
-                                    } catch (error) {
-                                        _cfunc.CommonConsole(error)
-                                    }
-
-                                }}
-
-                            />
-                        </div>
-                    </>
-                )
-            }
-        },
-
-        {
             text: "GST",
             dataField: "",
 
@@ -491,7 +379,6 @@ const GoodsCreditNote = (props) => {
                         name="GST"
                         defaultValue={(row.GST === "") ? "" : { value: row.GST, label: row.GSTPercentage }}
                         isSearchable={true}
-                        // isDisabled={returnMode === 1 && true}
                         className="react-dropdown"
                         classNamePrefix="dropdown"
                         options={row.GSTOptions}
@@ -582,16 +469,6 @@ const GoodsCreditNote = (props) => {
         {
             text: "Item Comment",
             dataField: "",
-            // headerFormatter: () => {
-            //     return (<>
-            //         <div className="mt-n1">
-            //             <Label>Item Comment</Label>
-            //         </div>
-            //         <span className="fs-6 text-muted ">
-            //             <small>*100 character accept</small>
-            //         </span>
-            //     </>)
-            // },
             formatter: (cell, row, key) => {
 
                 return (<>
@@ -635,6 +512,18 @@ const GoodsCreditNote = (props) => {
         },
     ];
 
+    function TypeOnChangeHandler(e) {
+        setTypeSelect(e);
+        setTableArr([]);
+
+        setState((i) => {
+            let a = { ...i }
+            a.values.ItemName = ''
+            a.hasValid.ItemName.valid = true;
+            return a
+        })
+    }
+
     const totalAmountCalcuationFunc = (row, TablelistArray = []) => {
         const caculate = return_discountCalculate_Func(row)
         row.roundedTotalAmount = caculate.roundedTotalAmount;
@@ -642,13 +531,13 @@ const GoodsCreditNote = (props) => {
         let sumOfGrandTotal = TablelistArray.reduce((accumulator, currentObject) => accumulator + Number(currentObject["roundedTotalAmount"]) || 0, 0);
         let dataCount = TablelistArray.length;
         let commaSeparateAmount = _cfunc.amountCommaSeparateFunc(Number(sumOfGrandTotal).toFixed(2));
-        dispatch(BreadcrumbShowCountlabel(`Count:${dataCount} ₹ ${commaSeparateAmount}`));
+        dispatch(BreadcrumbShowCountlabel(`Count:${dataCount} ₹ :${commaSeparateAmount}`));
     }
 
     const deleteButtonAction = (row, TablelistArray = []) => {
         const newArr = TablelistArray.filter((index) => !(index.id === row.id))
         let sumOfGrandTotal = newArr.reduce((accumulator, currentObject) => accumulator + Number(currentObject["roundedTotalAmount"]) || 0, 0);
-        let count_label = `${"Total Amount"} :${Number(sumOfGrandTotal).toLocaleString()}`
+        let count_label = `${"Count"} :${newArr.length} ₹ :${Number(sumOfGrandTotal).toLocaleString()}`
         dispatch(BreadcrumbShowCountlabel(count_label));
         setTableArr(newArr)
     }
@@ -663,7 +552,7 @@ const GoodsCreditNote = (props) => {
     }
 
     const AddPartyHandler = async () => {
-        
+
         let isfound = TableArr.find(i => i.Item === values.ItemName.value);
         if (values.ItemName === '') {
             customAlert({
@@ -675,11 +564,11 @@ const GoodsCreditNote = (props) => {
         else if (!(isfound === undefined)) {
             customAlert({
                 Type: 4,
-                Message:  "This ItemName Already Exist"
+                Message: "This ItemName Already Exist"
             })
             return
         }
-       
+
         const jsonBody = JSON.stringify({
             "ItemID": values.ItemName.value,
             "BatchCode": "",
@@ -687,8 +576,12 @@ const GoodsCreditNote = (props) => {
         })
 
         const InvoiceId = ''
-
-        dispatch(SalesReturnAddBtn_Action({ jsonBody, InvoiceId, returnMode: 2, subPageMode: subPageMode }))//(returnMode === 2) ItemWise
+        if (typeSelect.value === 1) {
+            dispatch(SalesReturnAddBtn_Action({ jsonBody, InvoiceId, returnMode: 2, }))//(returnMode === 2) ItemWise
+        }
+        else {
+            dispatch(SalesReturnAddBtn_Action({ jsonBody, InvoiceId, returnMode: 1, }))//(returnMode === 2) ItemWise
+        }
     }
 
     const RetailerHandler = (event) => {
@@ -751,14 +644,14 @@ const GoodsCreditNote = (props) => {
             let grand_total = 0;
             const invalidMessages = [];
             const filterData = TableArr.filter((i) => {
+
                 if (i.Quantity > 0) {
                     let msgString = ' Please Select';
 
-                    if (i.MRP === '' && !(subPageMode === url.CREDIT_NOTE_1)) { msgString = msgString + ', ' + "MRP" };
                     if (i.GST === '') { msgString = msgString + ', ' + "GST" };
                     if (!(Number(i.Rate) > 0)) { msgString = msgString + ', ' + "Rate" };
 
-                    if (((i.MRP === '' && !(subPageMode === url.CREDIT_NOTE_1)) || (i.GST === '') || !(Number(i.Rate) > 0))) {
+                    if (((i.GST === '') || !(Number(i.Rate) > 0))) {
                         invalidMessages.push({ [i.ItemName]: msgString });
                     }
                     return true
@@ -781,14 +674,6 @@ const GoodsCreditNote = (props) => {
                 return;
             }
 
-            if ((values.InvoiceNO === '') && !(subPageMode === url.CREDIT_NOTE_1)) {
-                customAlert({
-                    Type: 4,
-                    Message: "Invoice Number is Required",
-                });
-                return;
-            }
-
             const creditNoteItems = filterData.map((i) => {
 
                 const calculate = return_discountCalculate_Func(i);
@@ -796,8 +681,8 @@ const GoodsCreditNote = (props) => {
 
                 return {
                     "CRDRNoteDate": "2023-09-04",
-                    "Item":  i.Item,
-                    "ServiceItem":null,
+                    "Item": typeSelect.value === 2 ? null : i.Item,
+                    "ServiceItem": typeSelect.value === 2 ? i.Item : null,
                     "ItemName": i.ItemName,
                     "Quantity": i.Quantity,
                     "Unit": i.Unit,
@@ -806,7 +691,7 @@ const GoodsCreditNote = (props) => {
                     "MRP": i.MRP,
                     "MRPValue": i.MRPValue,
                     "Rate": i.Rate,
-                    "GST": subPageMode === url.CREDIT_NOTE_1 ? "" : i.GST,
+                    "GST": "",
                     "ItemComment": i.ItemComment,
                     "CGST": Number(calculate.CGST_Amount).toFixed(2),
                     "SGST": Number(calculate.SGST_Amount).toFixed(2),
@@ -825,20 +710,12 @@ const GoodsCreditNote = (props) => {
                 };
             });
 
-            const noteType_BySubPageMode = () => {
-                return (subPageMode === url.GOODS_CREDIT_NOTE) ?
-                    CreditDebitType.find((index) => index.Name === "Goods CreditNote")?.id :
-                    (subPageMode === url.CREDIT_NOTE_1) ?
-                        CreditDebitType.find((index) => index.Name === "CreditNote")?.id
-                        : CreditDebitType.find((index) => index.Name === "Goods DebitNote")?.id;
-            };
-
             const isGrandAmtRound = systemSetting.CreditDebitAmountRoundConfiguration === '1';
 
             const jsonBody = JSON.stringify({
                 CRDRNoteDate: values.CRDRNoteDate,
                 Customer: values.Customer.value,
-                NoteType: noteType_BySubPageMode(),
+                NoteType: CreditDebitType.find((index) => index.Name === "CreditNote")?.id,
                 GrandTotal: isGrandAmtRound ? Math.round(grand_total).toFixed(2) : grand_total.toFixed(2),
                 RoundOffAmount: (grand_total - Math.trunc(grand_total)).toFixed(2),
                 Narration: values.Narration,
@@ -861,19 +738,15 @@ const GoodsCreditNote = (props) => {
             CompanyID: _cfunc.loginCompanyID(),
         });
         dispatch(Retailer_List(jsonBody));
-        // if (subPageMode === url.CREDIT_NOTE_1) {
-        //     dispatch(goButton_ServiceItemAssign({ jsonBody: { CompanyID: 1, "PartyID": loginSelectedPartyID() } }));
-        // }
-        // else {
-            dispatch(goButtonPartyItemAddPage({ jsonBody: { ..._cfunc.loginJsonBody(), "PartyID": loginSelectedPartyID() } }));
-        // }
+        dispatch(goButton_ServiceItemAssign({ jsonBody: { CompanyID: 1, "PartyID": _cfunc.loginSelectedPartyID() } }));
+        dispatch(goButtonPartyItemAddPage({ jsonBody: { ..._cfunc.loginJsonBody(), "PartyID": _cfunc.loginSelectedPartyID() } }));
     }
 
     function partyOnChngeButtonHandler() {
         dispatch(Retailer_List_Success([]));
         dispatch(InvoiceNumberSuccess([]));
         dispatch(goButtonPartyItemAddPageSuccess([]));
-        // dispatch(goButton_ServiceItemAssign_Success([]));
+        dispatch(goButton_ServiceItemAssign_Success([]));
         setTableArr([]);
         setState((i) => {
             let a = { ...i }
@@ -888,6 +761,7 @@ const GoodsCreditNote = (props) => {
     }
 
     if (!(userPageAccessState === '')) {
+
         return (
             <React.Fragment>
                 <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
@@ -897,6 +771,7 @@ const GoodsCreditNote = (props) => {
                         goButtonHandler={partySelectButtonHandler}
                         changeButtonHandler={partyOnChngeButtonHandler}
                     />
+
                     <form noValidate>
                         <div className="px-2 c_card_filter header text-black mb-1" >
                             <Row>
@@ -913,6 +788,26 @@ const GoodsCreditNote = (props) => {
                                         </Col>
                                     </FormGroup>
                                 </Col >
+
+                                <Col sm="6"> {/*Type dropdown*/}
+                                    <FormGroup className=" row mt-2 " >
+                                        <Label className="col-sm-1 p-2"
+                                            style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.Type} </Label>
+                                        <Col sm="7">
+                                            <C_Select
+                                                id="typeSelect "
+                                                name="typeSelect"
+                                                value={typeSelect}
+                                                isSearchable={true}
+                                                options={TypeOptions}
+                                                styles={{
+                                                    menu: provided => ({ ...provided, zIndex: 2 })
+                                                }}
+                                                onChange={(e) => { TypeOnChangeHandler(e) }}
+                                            />
+                                        </Col>
+                                    </FormGroup>
+                                </Col>
                             </Row>
 
                             <Row>
@@ -963,7 +858,7 @@ const GoodsCreditNote = (props) => {
                                                 value={values.Narration}
                                                 type="text"
                                                 className={isError.Narration.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                placeholder="Enter Comment"
+                                                placeholder="Enter Narration"
                                                 autoComplete='off'
                                                 onChange={(event) => {
                                                     onChangeText({ event, state, setState })
@@ -1105,7 +1000,7 @@ const GoodsCreditNote = (props) => {
     }
 };
 
-export default GoodsCreditNote
+export default CreditNote_1
 
 
 
