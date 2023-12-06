@@ -113,7 +113,7 @@ const ItemImageUpload = (props) => {
 
 
 
-    useEffect(() => {
+    useEffect(async () => {
 
         if (UploadImage.Status === true && UploadImage.StatusCode === 200) {
             dispatch(Item_Image_Upload_Success({ Status: false }));
@@ -121,7 +121,8 @@ const ItemImageUpload = (props) => {
                 Type: 3,
                 Message: JSON.stringify(UploadImage.Message),
             })
-
+            const response = await GetItemImageUpload({ ItemId: values.ItemName.value })
+            setImage(response.Data)
         }
 
 
@@ -145,6 +146,10 @@ const ItemImageUpload = (props) => {
             return a
         })
         setImage([])
+        document.getElementById('ResetForm1').reset();
+        document.getElementById('ResetForm2').reset();
+        document.getElementById('ResetForm3').reset();
+
     };
 
     useEffect(() => {
@@ -227,7 +232,8 @@ const ItemImageUpload = (props) => {
                 if (element.ImageType === Type) {
                     if (!(element.file instanceof File)) {
                         slides = [{
-                            Image: `http://cbmfooderp.com:8000${element.Item_pic}`
+                            // Image: `http://cbmfooderp.com:8000${element.Item_pic}`
+                            Image: `http://192.168.1.114:8000${element.Item_pic}`
                         }];
                     }
 
@@ -266,6 +272,20 @@ const ItemImageUpload = (props) => {
 
 
     }
+
+
+    const GetimageUrl = ({ Type }) => {
+        let imageUrl = '';
+
+        Object.values(Image).forEach((element) => {
+            if (element.ImageType === Type && !(element.file instanceof File) && element.Item_pic !== null) {
+                imageUrl = `http://192.168.1.114:8000${element.Item_pic}`;
+            }
+        });
+
+        return imageUrl; // Return the found image URL (or an empty string if not found)
+    };
+
 
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
@@ -349,12 +369,14 @@ const ItemImageUpload = (props) => {
                                                 <Col sm={4}>
                                                     <FormGroup className="mb-3  " >
                                                         <Label >Front View</Label>
-                                                        <Input type="file" className="form-control "
-                                                            name="image"
-                                                            id="file"
-                                                            accept=".jpg, .jpeg, .png"
-                                                            onChange={(event) => { onchangeHandler({ event, Type: 1, TypeOf: "FrontView" }) }}
-                                                        />
+                                                        <form id="ResetForm1">
+                                                            <Input type="file" className="form-control "
+                                                                name="image"
+                                                                id="file"
+                                                                accept=".jpg, .jpeg, .png"
+                                                                onChange={(event) => { onchangeHandler({ event, Type: 1, TypeOf: "FrontView" }) }}
+                                                            />
+                                                        </form>
                                                     </FormGroup>
                                                 </Col>
                                                 <Col sm={1} className="mt-4">
@@ -366,25 +388,29 @@ const ItemImageUpload = (props) => {
                                                         id="ImageId" type="button" className="btn btn-primary mt-1 ">Upload</button>
                                                 </Col>
 
-                                                <Col sm={3} className="mt-4">
+                                                {((values.ItemName.value > 0) && (GetimageUrl({ Type: 1 }) !== "")) ? <Col sm={3} className="mt-4">
                                                     <button name="image"
+                                                        style={{ backgroundImage: `url(${GetimageUrl({ Type: 1 })})`, backgroundSize: 'cover' }}
                                                         onClick={() => {
                                                             imageShowHandler({ Type: 1 })
                                                         }}
-                                                        id="ImageId" type="button" className="btn btn-success mt-1 ">Show</button>
-                                                </Col>
-
+                                                        id="ImageId" type="button" className="btn btn-success mt-1 ">  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</button>
+                                                </Col> : null}
                                             </Row>
                                             <Row>
                                                 <Col sm={4}>
                                                     <FormGroup className="mb-3  " >
                                                         <Label >Side View</Label>
-                                                        <Input type="file" className="form-control "
-                                                            name="image"
-                                                            id="file"
-                                                            accept=".jpg, .jpeg, .png"
-                                                            onChange={(event) => { onchangeHandler({ event, Type: 2, TypeOf: "SideView" }) }}
-                                                        />
+                                                        <form id="ResetForm2">
+
+                                                            <Input type="file" className="form-control "
+                                                                name="image"
+                                                                id="file"
+                                                                accept=".jpg, .jpeg, .png"
+                                                                onChange={(event) => { onchangeHandler({ event, Type: 2, TypeOf: "SideView" }) }}
+                                                            />
+                                                        </form >
+
                                                     </FormGroup>
                                                 </Col>
                                                 <Col sm={1} className="mt-4">
@@ -396,13 +422,15 @@ const ItemImageUpload = (props) => {
                                                         id="ImageId" type="button" className="btn btn-primary mt-1 ">Upload</button>
                                                 </Col>
 
-                                                <Col sm={3} className="mt-4">
+                                                {((values.ItemName.value > 0) && (GetimageUrl({ Type: 2 }) !== "")) ? <Col sm={3} className="mt-4">
                                                     <button name="image"
+                                                        style={{ backgroundImage: `url(${GetimageUrl({ Type: 2 })})`, backgroundSize: 'cover' }}
+
                                                         onClick={() => {
                                                             imageShowHandler({ Type: 2 })
                                                         }}
-                                                        id="ImageId" type="button" className="btn btn-success mt-1 ">Show</button>
-                                                </Col>
+                                                        id="ImageId" type="button" className="btn btn-success mt-1 ">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</button>
+                                                </Col> : null}
 
                                             </Row>
 
@@ -410,12 +438,14 @@ const ItemImageUpload = (props) => {
                                                 <Col sm={4}>
                                                     <FormGroup className="mb-3  " >
                                                         <Label >Top View</Label>
-                                                        <Input type="file" className="form-control "
-                                                            name="image"
-                                                            id="file"
-                                                            accept=".jpg, .jpeg, .png"
-                                                            onChange={(event) => { onchangeHandler({ event, Type: 3, TypeOf: "TopView" }) }}
-                                                        />
+                                                        <form id="ResetForm3">
+                                                            <Input type="file" className="form-control "
+                                                                name="image"
+                                                                id="file"
+                                                                accept=".jpg, .jpeg, .png"
+                                                                onChange={(event) => { onchangeHandler({ event, Type: 3, TypeOf: "TopView" }) }}
+                                                            />
+                                                        </form>
                                                     </FormGroup>
                                                 </Col>
                                                 <Col sm={1} className="mt-4">
@@ -428,13 +458,15 @@ const ItemImageUpload = (props) => {
                                                 </Col>
 
 
-                                                <Col sm={3} className="mt-4">
+                                                {((values.ItemName.value > 0) && (GetimageUrl({ Type: 3 }) !== "")) ? <Col sm={3} className="mt-4">
                                                     <button name="image"
+                                                        style={{ backgroundImage: `url(${GetimageUrl({ Type: 3 })})`, backgroundSize: 'cover' }}
+
                                                         onClick={() => {
                                                             imageShowHandler({ Type: 3 })
                                                         }}
-                                                        id="ImageId" type="button" className="btn btn-success mt-1 ">Show</button>
-                                                </Col>
+                                                        id="ImageId" type="button" className="btn btn-success mt-1 ">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</button>
+                                                </Col> : null}
 
                                             </Row>
 
