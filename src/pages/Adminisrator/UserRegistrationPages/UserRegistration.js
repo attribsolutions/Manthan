@@ -82,14 +82,14 @@ const AddUser = (props) => {
   const {
     postMsg,
     employeelistForDropdown,
-    Roles=[],
+    Roles = [],
     employePartyWiseRoleState,
     userAccess,
     pageField,
     saveBtnloading,
   } = useSelector((state) => ({
     saveBtnloading: state.User_Registration_Reducer.saveBtnloading,
-    postMsg:state.User_Registration_Reducer.postMsg,
+    postMsg: state.User_Registration_Reducer.postMsg,
     employePartyWiseRoleState: state.User_Registration_Reducer.userPartiesForUserMaster,
     employeelistForDropdown: state.User_Registration_Reducer.employeelistForDropdown,
     Roles: state.RoleMaster_Reducer.roleList,
@@ -218,24 +218,24 @@ const AddUser = (props) => {
 
   useEffect(async () => {
 
-     if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
+    if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
       dispatch(saveUserMasterActionSuccess({ Status: false }))
 
       if (pageMode === mode.dropdownAdd) {
         customAlert({
           Type: 1,
           Message: postMsg.Message,
-      })
+        })
       }
       else {
         let isPermission = await customAlert({
           Type: 1,
           Status: true,
           Message: postMsg.Message,
-      })
-      if (isPermission) {
+        })
+        if (isPermission) {
           history.push({ pathname: url.USER_lIST })
-      }
+        }
       }
     }
 
@@ -243,8 +243,8 @@ const AddUser = (props) => {
       dispatch(saveUserMasterActionSuccess({ Status: false }))
       customAlert({
         Type: 4,
-         Message: JSON.stringify(postMsg.Message),
-    })
+        Message: JSON.stringify(postMsg.Message),
+      })
     }
   }, [postMsg.Status])
 
@@ -257,7 +257,7 @@ const AddUser = (props) => {
     value: Data.id,
     label: Data.Name
   }));
-  
+
   function handllerEmployeeID(e) {
     dispatch(GetUserPartiesForUserMastePage({ id: e.value }))
   }
@@ -457,33 +457,38 @@ const AddUser = (props) => {
                               </FormGroup>
                             </Row>
 
-                            <Row>
-                              <FormGroup className="mb-2 col col-sm-4 ">
-                                <Label htmlFor="validationCustom01">Password</Label>
-                                <Input name="password" id="password"
-                                  type="password"
-                                  placeholder="Please Enter Password"
-                                  autoComplete="new-password"
-                                  className="form-control"
-                                  value={password}
-                                  onChange={(e) => { setPassword(e.target.value) }} />
-                              </FormGroup>
-                            </Row>
+                            {!(pageMode === mode.edit || pageMode === mode.view) &&
+                              <Row>
+                                <FormGroup className="mb-2 col col-sm-4 ">
+                                  <Label htmlFor="validationCustom01">Password</Label>
+                                  <Input name="password" id="password"
+                                    type="password"
+                                    placeholder="Please Enter Password"
+                                    autoComplete="new-password"
+                                    className="form-control"
+                                    value={password}
+                                    onChange={(e) => { setPassword(e.target.value) }} />
+                                </FormGroup>
+                              </Row>
+                            }
 
-                            <Row>
-                              <FormGroup className="mb-2 col col-sm-4 ">
-                                <Label htmlFor="validationCustom01">Confirm Password</Label>
-                                <Input
-                                  name="Password" id="password"
-                                  type="password"
-                                  placeholder="Please Enter Password"
-                                  autoComplete="new-password"
-                                  className={cPasswordClass}
-                                  value={cPassword}
-                                  onChange={handleCPassword} />
-                                {showErrorMessage && isCPassword ? <div> Passwords did not match </div> : ''}
-                              </FormGroup>
-                            </Row>
+                            {!(pageMode === mode.edit || pageMode === mode.view) &&
+                              <Row>
+                                <FormGroup className="mb-2 col col-sm-4 ">
+                                  <Label htmlFor="validationCustom01">Confirm Password</Label>
+                                  <Input
+                                    name="Password" id="password"
+                                    type="password"
+                                    placeholder="Please Enter Password"
+                                    autoComplete="new-password"
+                                    className={cPasswordClass}
+                                    value={cPassword}
+                                    onChange={handleCPassword} />
+                                  {showErrorMessage && isCPassword ? <div> Passwords did not match </div> : ''}
+                                </FormGroup>
+                              </Row>
+                            }
+
 
                             <Row className="mt-2">
                               <FormGroup className="mb-1 col col-sm-12 " >

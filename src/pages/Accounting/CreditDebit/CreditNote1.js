@@ -680,7 +680,7 @@ const CreditNote_1 = (props) => {
                 grand_total += Number(calculate.roundedTotalAmount);
 
                 return {
-                    "CRDRNoteDate": "2023-09-04",
+                    "CRDRNoteDate": values.CRDRNoteDate,
                     "Item": typeSelect.value === 2 ? null : i.Item,
                     "ServiceItem": typeSelect.value === 2 ? i.Item : null,
                     "ItemName": i.ItemName,
