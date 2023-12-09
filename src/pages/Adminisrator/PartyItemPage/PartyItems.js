@@ -22,7 +22,7 @@ import { C_Select } from "../../../CustomValidateForm";
 import { getPartyTypelist, getPartyTypelistSuccess } from "../../../store/Administrator/PartyTypeRedux/action";
 import ChannelViewDetails from "./ChannelViewDetails";
 import { vieBtnCss } from "../../../components/Common/ListActionsButtons";
-import cellEditFactory from 'react-bootstrap-table2-editor';
+
 
 function initialState(history) {
 
@@ -47,6 +47,10 @@ const PartyItems = (props) => {
 	const [modalCss, setModalCss] = useState(false);
 	const [userPageAccessState, setUserAccState] = useState("");
 	const [searchQuery, setSearchQuery] = useState("");
+
+	const [forceReferesh, setforceReferesh] = useState(false);
+
+
 
 
 	const [page_id] = useState(() => initialState(history).page_Id)
@@ -227,12 +231,14 @@ const PartyItems = (props) => {
 				width: "700px",
 			},
 		},
+
 		{
 			text: "View",
 			dataField: "",
 			hidden: (subPageMode === url.PARTYITEM),
 			formatExtraData: { viewBtnLoading },
 			formatter: (cell, row, __, { viewBtnLoading }) => {
+
 				return <div >
 					<C_Button
 						className={vieBtnCss}
@@ -245,6 +251,58 @@ const PartyItems = (props) => {
 							})
 							dispatch(channalItemViewDetailAction({ jsonBody, btnId: row.Item }))
 						}}><i className="bx bxs-show font-size-16" /></C_Button>
+				</div>
+			}
+
+		},
+		{
+			text: 'Is Available For Ordering',
+			dataField: '',
+			hidden: (subPageMode === url.PARTYITEM),
+			// formatExtraData: { forceReferesh },
+			// headerFormatter: (column, colIndex) => {
+
+			// 	const OrderAvailableHeaderHandler = ({ column, colIndex, event }) => {
+			// 		setforceReferesh(i => !i)
+			// 		let checked = event.target.checked
+			// 		const filterData = filterdItemWise_tableData.forEach((i, key) => {
+			// 			i.items.forEach(i => {
+			// 				if (i.selectCheck) {
+			// 					i["IsAvailableForOrdering"] = checked
+			// 				}
+			// 			});
+
+
+			// 		})
+
+			// 		// row["IsAvailableForOrdering"] = checked
+			// 	}
+			// 	return <div className="">
+
+			// 		<Input type="checkbox"
+			// 			onChange={(event) => { OrderAvailableHeaderHandler({ column: column, colIndex: colIndex, event: event }) }}
+			// 		/>
+			// 		<label style={{ paddingLeft: "7px" }}>{"Is Available For Ordering"}</label>
+			// 	</div>
+			// },
+			formatter: (cell, row) => {
+				debugger
+				const OrderAvailableHandler = ({ cell, row, event }) => {
+
+					let checked = event.target.checked
+					row["IsAvailableForOrdering"] = checked
+				}
+				return <div className="">
+					<Input type="checkbox"
+
+						onChange={(event) => { OrderAvailableHandler({ cell: cell, row: row, event: event }) }}
+						defaultChecked={row.IsAvailableForOrdering}
+						disabled={!row.selectCheck}
+						style={(!row.selectCheck) ? {
+							opacity: 0.5,
+							backgroundColor: "#ababab82",
+						} : {}}
+					/>
 				</div>
 			}
 
@@ -264,6 +322,8 @@ const PartyItems = (props) => {
 				..._cfunc.loginJsonBody(),
 				PartyID: _cfunc.loginSelectedPartyID(),
 				PartyTypeID: channelTypeSelect.value
+
+
 			};
 			dispatch(goButtonPartyItemAddPage({ jsonBody, subPageMode }));
 		}
@@ -331,7 +391,7 @@ const PartyItems = (props) => {
 			</div>
 		),
 		selectionRenderer: ({ mode, checked, rowKey, ...rest }) => {
-			
+
 			const isNonSelectable = nonSelectable.includes(rowKey);
 			if (isNonSelectable) {
 
@@ -371,7 +431,7 @@ const PartyItems = (props) => {
 			const UploadSalesDatafromExcelParty = _cfunc.loginUserDetails().UploadSalesDatafromExcelParty;
 
 			const filteredDataExists = selectedItems.some(row => {
-				
+
 				return UploadSalesDatafromExcelParty === 1 && row.isItemMap === true;
 			});
 
@@ -393,12 +453,15 @@ const PartyItems = (props) => {
 			});
 			return;
 		}
+
 		try {
 			const jsonBody = JSON.stringify(selectedItems.map((index) => ({
+
 				Item: index.Item,
 				// Party: partyIdSelect.value,
 				Party: (pageMode === mode.assingLink) ? partyIdSelect.value : _cfunc.loginSelectedPartyID(),
-				PartyType: channelTypeSelect.value
+				PartyType: channelTypeSelect.value,
+				IsAvailableForOrdering: index.IsAvailableForOrdering ? 1 : 0
 			})));
 			dispatch(savePartyItemsAction({ jsonBody, subPageMode }));
 		} catch (w) { }
@@ -532,6 +595,7 @@ const PartyItems = (props) => {
 																tableData: i.items,
 																nonSelectable: nonSelectedRow(i.items),
 															})}
+
 														// cellEdit={cellEditFactory({ mode: 'click', blurToSave: true })}
 														noDataIndication={
 															<div className="text-danger text-center ">
