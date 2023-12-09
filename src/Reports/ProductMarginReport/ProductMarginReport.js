@@ -211,10 +211,20 @@ const ProductMarginReport = (props) => {           // this component also use fo
         label: i.Name,
     }));
 
+    partyTypeOptions.unshift({
+        value: 0,
+        label: " All"
+    });
+
     const priceListOptions = PriceList.map((i) => ({
         value: i.id,
         label: i.Name,
     }));
+
+    priceListOptions.unshift({
+        value: 0,
+        label: " All"
+    });
 
     const subProductDropdownOptions = useMemo(() => {
         let options = [];
@@ -385,7 +395,7 @@ const ProductMarginReport = (props) => {           // this component also use fo
                             <C_Button
                                 type="button"
                                 spinnerColor="white"
-                                isLoading={(downloadProductMargin && btnMode === "showOnTable") && true}
+                                loading={(downloadProductMargin && btnMode === "showOnTable") && true}
                                 className="btn btn-success"
                                 onClick={() => GobtnExcelhandler("showOnTable")}
                             >
@@ -473,7 +483,7 @@ const ProductMarginReport = (props) => {           // this component also use fo
                             <C_Button
                                 type="button"
                                 spinnerColor="white"
-                                isLoading={(downloadProductMargin && btnMode === "downloadExcel") && true}
+                                loading={(downloadProductMargin && btnMode === "downloadExcel") && true}
                                 className="btn btn-primary"
                                 onClick={() => GobtnExcelhandler("downloadExcel")}
                             >
