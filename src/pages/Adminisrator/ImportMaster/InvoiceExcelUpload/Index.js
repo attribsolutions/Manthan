@@ -298,12 +298,14 @@ const InvoiceExcelUpload = (props) => {
                 }
             })
 
-            readJsonDetail.invoice.forEach(inv => {
+            readJsonDetail.invoice.forEach(async (inv) => {
                 let parentObj;
                 let invoiceItems = []
                 const invoiceTotalAmount = inv.reduce((total, invoice) => total + Number(invoice[parArr.Amount]), 0);
 
-                inv.forEach(ele => {
+
+                inv.forEach(async (ele) => {
+
                     parentObj = {
                         "ImportFromExcel": 1,
                         "CustomerGSTTin": ele[parArr.CustomerGSTTin] ? ele[parArr.CustomerGSTTin] : '',
@@ -332,14 +334,14 @@ const InvoiceExcelUpload = (props) => {
                         "Rate": ele[parArr.Rate] ? ele[parArr.Rate] : '',
                         "BasicAmount": ele[parArr.BasicAmount] ? ele[parArr.BasicAmount] : '',
                         "GSTAmount": ele[parArr.GSTAmount] ? ele[parArr.GSTAmount] : '',
-                        "GST": ele[parArr.GST] ? ele[parArr.GST] : '',
-                        "GSTValue": ele[parArr.GSTValue] ? ele[parArr.GSTValue] : 0,
-                        "CGST": ele[parArr.CGST] ? ele[parArr.CGST] : 0,
-                        "SGST": ele[parArr.SGST] ? ele[parArr.SGST] : 0,
+                        "GST": '',
+                        "GSTValue": ele[parArr.GSTValue] ? ele[parArr.GSTValue] : 0,       ///  Note ** GSTValue ===GST percentage
+                        "CGST": ele[parArr.CGST] ? ele[parArr.CGST] : (ele[parArr.GSTAmount] / 2),
+                        "SGST": ele[parArr.SGST] ? ele[parArr.SGST] : (ele[parArr.GSTAmount] / 2),
                         "IGST": ele[parArr.IGST] ? ele[parArr.IGST] : 0,
                         "GSTPercentage": ele[parArr.GSTPercentage] ? ele[parArr.GSTPercentage] : 0,
-                        "CGSTPercentage": ele[parArr.CGSTPercentage] ? ele[parArr.CGSTPercentage] : 0,
-                        "SGSTPercentage": ele[parArr.SGSTPercentage] ? ele[parArr.SGSTPercentage] : 0,
+                        "CGSTPercentage": ele[parArr.CGSTPercentage] ? ele[parArr.CGSTPercentage] : (ele[parArr.GSTPercentage] / 2),
+                        "SGSTPercentage": ele[parArr.SGSTPercentage] ? ele[parArr.SGSTPercentage] : (ele[parArr.GSTPercentage] / 2),
                         "IGSTPercentage": ele[parArr.IGSTPercentage] ? ele[parArr.IGSTPercentage] : 0,
                         "Amount": ele[parArr.Amount] ? ele[parArr.Amount] : 0,
                         "DiscountType": ele[parArr.DiscountType] ? ele[parArr.DiscountType] : '',

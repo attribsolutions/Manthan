@@ -173,7 +173,7 @@ function* Category_DropDown_API_GenFunc({ id }) {
 }
 
 function* Item_Image_Upload_GenFun({ config }) {
-  debugger
+
   for (let pair of config.formData.entries()) {
     console.log(pair[0], pair[1]);
   }
@@ -181,6 +181,10 @@ function* Item_Image_Upload_GenFun({ config }) {
 
     const response = yield call(apiCall.ItemImageUpload, config);
     debugger
+    if (config.Delete === "Delete") {
+      response["Delete"] = true
+
+    }
     yield put(action.Item_Image_Upload_Success(response));
   } catch (error) { yield put(action.ItemsApiErrorAction()) }
 }

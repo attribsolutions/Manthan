@@ -26,6 +26,9 @@ import { C_Select } from "../../../CustomValidateForm";
 import { Get_Subcluster_On_cluster_API, VendorSupplierCustomer } from "../../../helpers/backend_helper";
 import { getClusterlist } from "../../../store/Administrator/ClusterRedux/action";
 import { GoButton_For_PartyDetails, GoButton_For_PartyDetails_Success, savePartyDetails_Action, savePartyDetails_Success } from "../../../store/Administrator/PartyDetailsRedux/action";
+import { getEmployeedropdownList } from "../../../store/Administrator/ManagementPartiesRedux/action";
+import { width } from "dom-helpers";
+
 
 const PartyDetails = (props) => {
 
@@ -45,6 +48,17 @@ const PartyDetails = (props) => {
 
     const [tableData, setTableData] = useState([]);
     const [forceRefresh, setForceRefresh] = useState(false);
+    const [forceRefreshGM, setForceRefreshGM] = useState(false);
+    const [forceRefreshNH, setForceRefreshNH] = useState(false);
+    const [forceRefreshRH, setForceRefreshRH] = useState(false);
+    const [forceRefreshASM, setForceRefreshASM] = useState(false);
+    const [forceRefreshSE, setForceRefreshSE] = useState(false);
+    const [forceRefreshSR, setForceRefreshSR] = useState(false);
+    const [forceRefreshMT, setForceRefreshMT] = useState(false);
+    const [forceRefreshSO, setForceRefreshSO] = useState(false);
+
+
+
 
     const [groupSelect, setGroupSelect] = useState({ value: 0, label: "All" });
     const [goBtnLoading, setGoBtnLoading] = useState(false);
@@ -56,6 +70,7 @@ const PartyDetails = (props) => {
         pageField,
         clusterDropdown,
         groupList,
+        employeeList,
         groupListLoading,
         userAccess } = useSelector((state) => ({
             goBtnList: state.PartyDetailsReducer.goBtnList,
@@ -68,6 +83,8 @@ const PartyDetails = (props) => {
             groupListLoading: state.GroupReducer.goBtnLoading,
             groupList: state.GroupReducer.groupList,
 
+            employeeList: state.ManagementPartiesReducer.employeeList,
+
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageField
         }));
@@ -78,6 +95,8 @@ const PartyDetails = (props) => {
         dispatch(commonPageField(page_Id));
         dispatch(getClusterlist());
         dispatch(getGroupList());
+        dispatch(getEmployeedropdownList())
+
         dispatch(BreadcrumbShowCountlabel(`Count:${0}`));
         return () => {
             dispatch(GoButton_For_PartyDetails_Success([]));
@@ -85,6 +104,7 @@ const PartyDetails = (props) => {
     }, []);
 
     useEffect(() => {
+
         fetchDistributorData(goBtnList)
     }, [goBtnList]);
 
@@ -148,68 +168,96 @@ const PartyDetails = (props) => {
         }
     }, [pageField])
 
+
+
+
     async function fetchDistributorData(data) {
 
-        let innterTableData = []
+        try {
+            setGoBtnLoading(true);
 
-        const jsonBody = {
-            "Company": _cfunc.loginCompanyID(),
-            "Route": "",
-            "Type": 2,
-        };
-        setGoBtnLoading(true);
-        for (const distributor of data) {
-            jsonBody.PartyID = distributor.PartyID;
+            const requests = data.map(async (distributor) => {
 
-            try {
+                const jsonBody = {
+                    "Company": _cfunc.loginCompanyID(),
+                    "Route": "",
+                    "Type": 2,
+                    "PartyID": distributor.PartyID
+                };
 
-                let subClusterResponse
-                const resp = await VendorSupplierCustomer(JSON.stringify(jsonBody));
+                let subClusterResponse;
 
-                if (!(distributor.Cluster_id === null)) {
+                if (distributor.Cluster_id !== null) {
                     subClusterResponse = await Get_Subcluster_On_cluster_API(distributor.Cluster_id);
                 }
-                if (resp.StatusCode === 200) {
 
-                    innterTableData.push({
+                const resp = await VendorSupplierCustomer(JSON.stringify(jsonBody));
+
+                if (resp.StatusCode === 200) {
+                    const employeeOptions = employeeList.map((index) => ({
+                        value: index.id,
+                        label: index.Name,
+                    }));
+
+                    const subClusterOptions = (subClusterResponse && subClusterResponse.Data) ?
+                        subClusterResponse.Data.map((index) => ({
+                            value: index.id,
+                            label: index.Name,
+                        })) : [];
+
+                    const superstokiestOptions = resp.Data.map((index) => ({
+                        value: index.id,
+                        label: index.Name,
+                    }));
+
+                    return {
                         DistributorID: distributor.PartyID,
                         DistributorName: distributor.PartyName,
-
                         SuperstokiestID: distributor.Supplier_id,
                         SuperstokiestName: distributor.SupplierName,
-
                         clusterId: distributor.Cluster_id,
                         clusterName: distributor.ClusterName,
+                        subClusterId: distributor.SubCluster_id || "",
+                        subClusterName: distributor.SubClusterName || "Select...",
+                        EmployeesOption: employeeOptions,
+                        subClusterOptions: subClusterOptions,
+                        SuperstokiestOptions: superstokiestOptions,
+                        GMId: distributor.GM,
+                        NHId: distributor.NH,
+                        RHId: distributor.RH,
+                        ASMId: distributor.ASM,
+                        SEId: distributor.SE,
+                        SOId: distributor.SO,
+                        SRId: distributor.SR,
+                        MTId: distributor.MT,
 
-                        subClusterId: distributor.SubCluster_id === null ? "" : distributor.SubCluster_id,
-                        subClusterName: distributor.SubClusterName === null ? "Select..." : distributor.SubClusterName,
-
-                        subClusterOptions: (subClusterResponse === undefined) ? [] : subClusterResponse.Data.map((index) => ({
-                            value: index.id,
-                            label: index.Name,
-                        })),
-
-                        SuperstokiestOptions: resp.Data.map((index) => ({
-                            value: index.id,
-                            label: index.Name,
-                        }))
-                    })
-
+                    };
                 } else {
                     customAlert({
                         Type: 3,
-                        Message: `Error for distributor :${distributor.PartyName}`,
+                        Message: `Error for distributor: ${distributor.PartyName}`,
                     });
+                    return null;
                 }
+            });
 
-            } catch (error) {
-                _cfunc.CommonConsole(`Error for distributor :${distributor.PartyName}}`, error);
-            }
+            const innterTableData = await Promise.all(requests.filter(Boolean));
+
+            setTableData(innterTableData);
+        } catch (error) {
+            _cfunc.CommonConsole("Error occurred in fetchDistributorData", error);
+        } finally {
+            setGoBtnLoading(false);
         }
-        setGoBtnLoading(false);
-        setTableData(innterTableData);
-
     }
+
+
+
+
+
+
+
+
 
     const Cluster_Options = clusterDropdown.map((Data) => ({
         value: Data.id,
@@ -248,92 +296,315 @@ const PartyDetails = (props) => {
         {
             text: "Distributor",
             dataField: "DistributorName",
-            style: () => ({ width: "20%" }),
         },
         {
             text: "Superstokiest",
             dataField: "",
-            style: () => ({ width: "20%" }),
+
             formatter: (cell, row) => {
+
                 return (
-                    <C_Select
-                        defaultValue={(row.SuperstokiestID === null || row.SuperstokiestName === undefined) ? "" : { value: row.SuperstokiestID, label: row.SuperstokiestName }}
-                        options={row.SuperstokiestOptions}
-                        onChange={(e) => {
-                            row.SuperstokiestID = e.value;
-                            row.SuperstokiestName = e.label;
-                        }}
-                        styles={{
-                            menu: (provided) => ({
-                                ...provided,
-                                zIndex: 10,
-                                overflowY: "auto", // Add a scrollbar if the content exceeds the height
-                            }),
-                        }}
-                    >
-                    </C_Select>
+                    <Col style={{ width: "150px" }}>
+
+                        <C_Select
+                            defaultValue={(row.SuperstokiestID === null || row.SuperstokiestName === undefined) ? "" : { value: row.SuperstokiestID, label: row.SuperstokiestName }}
+                            options={row.SuperstokiestOptions}
+                            onChange={(e) => {
+                                row.SuperstokiestID = e.value;
+                                row.SuperstokiestName = e.label;
+                            }}
+
+                        >
+                        </C_Select>
+                    </Col >
+
                 );
             },
         },
         {
             text: "Cluster",
             dataField: "",
-            style: () => ({ width: "20%" }),
+
             formatter: (cell, row, key,) => {
                 return (
-                    <C_Select
-                        id={`Cluster${key}`}
-                        key={`Cluster${row.id}`}
-                        defaultValue={(row.clusterId === null || row.clusterName === undefined) ? "" : { value: row.clusterId, label: row.clusterName }}
-                        onChange={(e) => {
-                            row.clusterId = e.value;
-                            row.clusterName = e.label;
-                            row.subClusterId = "";
-                            row.subClusterName = "";
-                            fetchSubClusterOptions(e.value, row);
-                        }}
-                        options={Cluster_Options}
+                    <Col style={{ width: "150px" }}>
 
-                        styles={{
-                            menu: (provided) => ({
-                                ...provided,
-                                zIndex: 10,
-                                overflowY: "auto", // Add a scrollbar if the content exceeds the height
-                            }),
-                        }}
-                    >
-                    </C_Select>
+                        <C_Select
+                            id={`Cluster${key}`}
+                            key={`Cluster${row.id}`}
+                            defaultValue={(row.clusterId === null || row.clusterName === undefined) ? "" : { value: row.clusterId, label: row.clusterName }}
+                            onChange={(e) => {
+                                row.clusterId = e.value;
+                                row.clusterName = e.label;
+                                row.subClusterId = "";
+                                row.subClusterName = "";
+                                fetchSubClusterOptions(e.value, row);
+                            }}
+                            options={Cluster_Options}
+
+
+                        >
+                        </C_Select>
+                    </Col>
+
                 );
             },
         },
         {
             text: "Sub-Cluster",
             dataField: "",
-            style: () => ({ width: "20%" }),
+
             formatExtraData: { forceRefresh },
             formatter: (cell, row,) => {
 
                 return (
-                    <C_Select
-                        key={row.subClusterId}
-                        value={(row.subClusterId === "" || row.subClusterName === undefined) ?
-                            { value: "", label: "Select..." }
-                            : { value: row.subClusterId, label: row.subClusterName }}
-                        onChange={(e) => {
-                            setForceRefresh(i => !i)
-                            row.subClusterId = e.value;
-                            row.subClusterName = e.label;
-                        }}
-                        options={row.subClusterOptions}
-                        styles={{
-                            menu: (provided) => ({
-                                ...provided,
-                                zIndex: 10,
-                                overflowY: "auto", // Add a scrollbar if the content exceeds the height
-                            }),
-                        }}
-                    >
-                    </C_Select >
+                    <Col style={{ width: "150px" }}>
+                        <C_Select
+                            key={row.subClusterId}
+                            value={(row.subClusterId === "" || row.subClusterName === undefined) ?
+                                { value: "", label: "Select..." }
+                                : { value: row.subClusterId, label: row.subClusterName }}
+                            onChange={(e) => {
+                                setForceRefresh(i => !i)
+                                row.subClusterId = e.value;
+                                row.subClusterName = e.label;
+                            }}
+                            options={row.subClusterOptions}
+
+                        >
+                        </C_Select >
+                    </Col>
+                );
+            },
+        },
+
+
+
+
+        {
+            text: "GM",
+            dataField: "",
+
+            formatExtraData: { forceRefreshGM },
+            formatter: (cell, row,) => {
+
+                return (
+                    <Col style={{ width: "150px" }}>
+
+                        <C_Select
+                            key={row.GMId}
+                            value={(row.GMId === "" || row.GMName === undefined) ?
+                                { value: "", label: "Select..." }
+                                : { value: row.GMId, label: row.GMName }}
+                            onChange={(e) => {
+
+
+                                row.GMId = e.value;
+                                row.GMName = e.label;
+                                setForceRefreshGM(i => !i)
+
+                            }}
+                            options={row.EmployeesOption}
+
+                        >
+                        </C_Select >
+                    </Col>
+                );
+            },
+        },
+        {
+            text: "NH",
+            dataField: "",
+
+            formatExtraData: { forceRefreshNH },
+            formatter: (cell, row,) => {
+
+                return (
+                    <Col style={{ width: "150px" }}>
+
+                        <C_Select
+                            key={row.NHId}
+                            value={(row.NHId === "" || row.NHName === undefined) ?
+                                { value: "", label: "Select..." }
+                                : { value: row.NHId, label: row.NHName }}
+                            onChange={(e) => {
+                                setForceRefreshNH(i => !i)
+                                row.NHId = e.value;
+                                row.NHName = e.label;
+                            }}
+                            options={row.EmployeesOption}
+
+                        >
+                        </C_Select >
+
+                    </Col>
+                );
+            },
+        },
+
+        {
+            text: "RH",
+            dataField: "",
+
+            formatExtraData: { forceRefreshRH },
+            formatter: (cell, row,) => {
+
+                return (
+                    <Col style={{ width: "150px" }}>
+
+                        <C_Select
+                            key={row.RHId}
+                            value={(row.RHId === "" || row.RHName === undefined) ?
+                                { value: "", label: "Select..." }
+                                : { value: row.RHId, label: row.RHName }}
+                            onChange={(e) => {
+                                setForceRefreshRH(i => !i)
+                                row.RHId = e.value;
+                                row.RHName = e.label;
+                            }}
+                            options={row.EmployeesOption}
+
+
+                        >
+                        </C_Select >
+                    </Col>
+                );
+            },
+        },
+
+        {
+            text: "ASM",
+            dataField: "",
+
+            formatExtraData: { forceRefreshASM },
+            formatter: (cell, row,) => {
+
+                return (
+                    <Col style={{ width: "150px" }}>
+
+                        <C_Select
+                            key={row.ASMId}
+                            value={(row.ASMId === "" || row.ASMName === undefined) ?
+                                { value: "", label: "Select..." }
+                                : { value: row.ASMId, label: row.ASMName }}
+                            onChange={(e) => {
+                                setForceRefreshASM(i => !i)
+                                row.ASMId = e.value;
+                                row.ASMName = e.label;
+                            }}
+                            options={row.EmployeesOption}
+
+                        >
+                        </C_Select >
+                    </Col>
+                );
+            },
+        }, {
+            text: "SO",
+            dataField: "",
+
+            formatExtraData: { forceRefreshSO },
+            formatter: (cell, row,) => {
+
+                return (
+                    <Col style={{ width: "150px" }}>
+
+                        <C_Select
+                            key={row.SOId}
+                            value={(row.SOId === "" || row.SOName === undefined) ?
+                                { value: "", label: "Select..." }
+                                : { value: row.SOId, label: row.SOName }}
+                            onChange={(e) => {
+                                setForceRefreshSO(i => !i)
+                                row.SOId = e.value;
+                                row.SOName = e.label;
+                            }}
+                            options={row.EmployeesOption}
+
+                        >
+                        </C_Select >
+                    </Col>
+
+                );
+            },
+        }, {
+            text: "SE",
+            dataField: "",
+            formatExtraData: { forceRefreshSE },
+
+            formatter: (cell, row,) => {
+
+                return (
+                    <Col style={{ width: "150px" }}>
+
+                        <C_Select
+                            key={row.SEId}
+                            value={(row.SEId === "" || row.SEName === undefined) ?
+                                { value: "", label: "Select..." }
+                                : { value: row.SEId, label: row.SEName }}
+                            onChange={(e) => {
+                                setForceRefreshSE(i => !i)
+                                row.SEId = e.value;
+                                row.SEName = e.label;
+                            }}
+                            options={row.EmployeesOption}
+
+                        >
+                        </C_Select >
+                    </Col >
+
+                );
+            },
+        }, {
+            text: "SR",
+            dataField: "",
+
+            formatExtraData: { forceRefreshSR },
+            formatter: (cell, row,) => {
+
+                return (
+                    <Col style={{ width: "150px" }}>
+
+                        <C_Select
+                            key={row.SRId}
+                            value={(row.SRId === "" || row.SRName === undefined) ?
+                                { value: "", label: "Select..." }
+                                : { value: row.SRId, label: row.SRName }}
+                            onChange={(e) => {
+                                setForceRefreshSR(i => !i)
+                                row.SRId = e.value;
+                                row.SRName = e.label;
+                            }}
+                            options={row.EmployeesOption}
+
+                        >
+                        </C_Select >
+                    </Col>
+                );
+            },
+        },
+
+        {
+            text: "MT",
+            dataField: "",
+            formatExtraData: { forceRefreshMT },
+            formatter: (cell, row) => {
+                return (
+                    <Col style={{ width: "150px" }}>
+                        <C_Select
+                            key={row.MTId}
+                            value={(row.MTId === "" || row.MTName === undefined) ?
+                                { value: "", label: "Select..." }
+                                : { value: row.MTId, label: row.MTName }}
+                            onChange={(e) => {
+                                setForceRefreshMT(i => !i)
+                                row.MTId = e.value;
+                                row.MTName = e.label;
+                            }}
+                            options={row.EmployeesOption}
+                        >
+                        </C_Select >
+                    </Col >
                 );
             },
         }
@@ -349,13 +620,23 @@ const PartyDetails = (props) => {
         const btnId = event.target.id
         try {
 
-            const data = tableData.map((index) => ({
-                "Party": index.DistributorID,
-                "Group": (groupSelect.value === 0) ? null : groupSelect.value,
-                "Cluster": index.clusterId,
-                "SubCluster": index.subClusterId,
-                "Supplier": index.SuperstokiestID,
-            }))
+            const data = tableData.map((index) => (
+                {
+                    "Party": index.DistributorID,
+                    "Group": (groupSelect.value === 0) ? null : groupSelect.value,
+                    "Cluster": index.clusterId,
+                    "SubCluster": index.subClusterId,
+                    "Supplier": index.SuperstokiestID,
+                    "GM": index.GMId,
+                    "NH": index.NHId,
+                    "RH": index.RHId,
+                    "ASM": index.ASMId,
+                    "SE": index.SEId,
+                    "SO": index.SOId,
+                    "SR": index.SRId,
+                    "MT": index.MTId,
+
+                }))
 
             const jsonBody = JSON.stringify(data)
             dispatch(savePartyDetails_Action({ jsonBody, btnId }));
@@ -371,7 +652,7 @@ const PartyDetails = (props) => {
         return (
             <React.Fragment>
                 <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
-                <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
+                <div className="page-content" >
                     <div className="px-2  mb-1 c_card_filter text-black" >
                         <div className="row" >
 
@@ -411,50 +692,52 @@ const PartyDetails = (props) => {
                         </div>
                     </div>
 
-                    <div style={{ minHeight: "45vh" }}>
-                        <ToolkitProvider
-                            keyField="PartyID"
-                            data={tableData}
-                            columns={pagesListColumns}
-                            search
-                        >
-                            {toolkitProps => (
-                                <React.Fragment>
-                                    <div className="table-responsive table" style={{ minHeight: "55vh" }}>
-                                        <BootstrapTable
-                                            keyField="PartyID"
-                                            id="table_Arrow"
-                                            classes={"table  table-bordered table-hover"}
+                    {/* <div style={{ overflowX: 'auto', minHeight: "45vh" }}> */}
+                    <ToolkitProvider
+                        keyField="PartyID"
+                        data={tableData}
+                        columns={pagesListColumns}
+                        search
+                    >
+                        {toolkitProps => (
+                            <React.Fragment>
+                                <Row >
+                                    <Col xl="12" style={{ overflowX: "auto" }}>
+                                        <div className="table-responsive table">
 
-                                            noDataIndication={
-                                                <div className="text-danger text-center ">
-                                                    Party Not available
-                                                </div>
-                                            }
-                                            onDataSizeChange={({ dataSize }) => {
-                                                dispatch(BreadcrumbShowCountlabel(`Count : ${dataSize}`))
-                                            }}
-                                            {...toolkitProps.baseProps}
-                                        />
-                                        {mySearchProps(toolkitProps.searchProps)}
-                                    </div>
-
-                                    {tableData.length > 0 ?
-                                        <div className="row save1" style={{ paddingBottom: 'center' }}>
-                                            <SaveButton pageMode={pageMode}
-                                                loading={saveBtnloading}
-                                                onClick={SaveHandler}
-                                                userAcc={userPageAccessState}
+                                            <BootstrapTable
+                                                keyField="PartyID"
+                                                id="table_Arrow"
+                                                // classes={"table  table-bordered table-hover"}
+                                                noDataIndication={
+                                                    <div className="text-danger text-center ">
+                                                        Party Not available
+                                                    </div>
+                                                }
+                                                onDataSizeChange={({ dataSize }) => {
+                                                    dispatch(BreadcrumbShowCountlabel(`Count : ${dataSize}`))
+                                                }}
+                                                {...toolkitProps.baseProps}
                                             />
+                                            {mySearchProps(toolkitProps.searchProps)}
                                         </div>
-                                        : null
-                                    }
+                                    </Col>
+                                </Row>
+                                {tableData.length > 0 ?
+                                    <div className="row save1" style={{ paddingBottom: 'center' }}>
+                                        <SaveButton pageMode={pageMode}
+                                            loading={saveBtnloading}
+                                            onClick={SaveHandler}
+                                            userAcc={userPageAccessState}
+                                        />
+                                    </div>
+                                    : null
+                                }
 
-                                </React.Fragment>
-                            )}
-                        </ToolkitProvider>
-                    </div>
-
+                            </React.Fragment>
+                        )}
+                    </ToolkitProvider>
+                    {/* </div> */}
                 </div>
             </React.Fragment>
         );
@@ -467,4 +750,6 @@ const PartyDetails = (props) => {
 };
 
 export default PartyDetails
+
+
 
