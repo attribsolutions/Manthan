@@ -60,26 +60,32 @@ function* goBtn_Get_API_GenFun({ filters }) {
 	} catch (error) { yield put(LedgerApiErrorAction()) }
 }
 
-function* GetExcelButton_saga({ IsSCM_ID, PartyID }) {
+function* GetExcelButton_saga({ config }) {
 
 	try {
-		const response = yield call(Get_Product_Margin_Report, IsSCM_ID, PartyID);
+		const response = yield call(Get_Product_Margin_Report, config);
 
-			let newArray = []
+		let newArray = []
 		if (response.StatusCode === 200) {
-		response.Data.forEach(i => {
-		let obj = i
-		i.ItemMargins.forEach(ele => {
-		const keys = Object.keys(ele);
-		keys.forEach(key => {
-		obj[key] = ele[key]
-		})
-		})
-		delete obj.ItemMargins
-		newArray.push(obj)
-		})
+			response.Data.forEach(i => {
+				let obj = i;
 
+				// Merge ItemMargins and ItemImage properties into the main object
+				["ItemMargins", "ItemImage"].forEach(prop => {
+					i[prop].forEach(ele => {
+						const keys = Object.keys(ele);
+						keys.forEach(key => {
+							obj[key] = ele[key];
+						});
+					});
+					// Remove the property from the object
+					delete obj[prop];
+				});
+				// Add the modified object to newArray
+				newArray.push(obj);
+			});
 		}
+
 		yield put(getExcel_Button_API_Success(newArray));
 
 	} catch (error) {

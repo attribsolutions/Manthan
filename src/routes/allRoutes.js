@@ -211,6 +211,7 @@ import Dashboard_Admin from "../pages/Dashboard/Dashboard_2/Dashboard_Admin.js"
 import ItemMasterBulkUpdate from "../pages/Adminisrator/ItemMasterBulkUpdate";
 import ItemImageUpload from "../pages/Adminisrator/ItemPages/ItemImageUpload/ItemImageUpload.js";
 import CreditNote_1 from "../pages/Accounting/CreditDebit/CreditNote1";
+import ManPowerReport from "../Reports/ManPowerReport";
 
 
 const userRoutes = [
@@ -532,7 +533,7 @@ const userRoutes = [
 
 	{ path: path.PARTY_OUTSTANDING_REPORT, component: PartyOutstandingReport },
 
-	{ path: path.MAN_POWER_REPORT, component: ProductMarginReport },
+	{ path: path.MAN_POWER_REPORT, component: ManPowerReport },
 
 	{ path: path.CLAIM_TRACKING_REPORT, component: ClaimTrackingReport },
 	// ************************************ Utility **************************************//

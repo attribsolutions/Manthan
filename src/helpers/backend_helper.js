@@ -631,7 +631,7 @@ export const InvoiceReturn_API = (id) => get(`${url.INVOICE_RETURN}/${id}`)// In
 export const Receipt_Number_API = (jsonBody) => post(url.RECEIPT_NUMBER_LIST, jsonBody)// postapi
 
 export const PartyLedger_API = (FromDate, ToDate, SAPCode) => post(url.PARTY_LEDGER_API, FromDate, ToDate, SAPCode)// postapi
-export const Get_Product_Margin_Report = (IsSCM_ID, PartyID) => get(`${url.PRODUCT_MARGIN_REPORT_API}/${IsSCM_ID}/${PartyID}`)
+export const Get_Product_Margin_Report = ({ jsonBody }) => post(url.PRODUCT_MARGIN_REPORT_API, jsonBody)
 
 //**************************** E-Invoice Credit Debit Note (upload ,cancel,print) ***************************************/
 
