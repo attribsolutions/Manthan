@@ -6,15 +6,13 @@ import {
     Button,
     CardBody,
     Col,
-    Container,
     Row,
     Spinner,
 } from "reactstrap";
-import { breadcrumbReturnFunc, loginPartyID, loginSelectedPartyID, loginUserDetails, metaTagLabel } from '../../components/Common/CommonFunction';
+import { breadcrumbReturnFunc, metaTagLabel } from '../../components/Common/CommonFunction';
 import * as pageId from "../../routes/allPageID"
 import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess } from '../../store/actions';
 import * as mode from "../../routes/PageMode"
-import { getExcel_Button_API, getExcel_Button_API_Success } from '../../store/Report/SapLedger Redux/action';
 import { useState } from 'react';
 import { ReportComponent } from '../ReportComponent';
 import { url } from '../../routes';
@@ -23,8 +21,6 @@ import ToolkitProvider from 'react-bootstrap-table2-toolkit';
 import BootstrapTable from 'react-bootstrap-table-next';
 import { mySearchProps } from '../../components/Common/SearchBox/MySearch';
 import { C_Button } from '../../components/Common/CommonButton';
-import PartyDropdown_Common from "../../components/Common/PartyDropdown";
-import { customAlert } from '../../CustomAlert/ConfirmDialog';
 
 function initialState(history) {
 
@@ -44,11 +40,9 @@ const ManPowerReport = (props) => {           // this component also use for Man
     const history = useHistory()
     const dispatch = useDispatch();
 
-    const [subPageMode] = useState(history.location.pathname);
     const [userPageAccessState, setUserAccState] = useState('');
 
     const [page_Id] = useState(() => initialState(history).page_Id);
-    const [buttonLable] = useState(() => initialState(history).buttonLable);
     const [tableData, setTableData] = useState([]);
     const [btnMode, setBtnMode] = useState("");
     const [columns, setcolumn] = useState([{}]);
@@ -70,6 +64,7 @@ const ManPowerReport = (props) => {           // this component also use for Man
     useEffect(() => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
+        dispatch(BreadcrumbShowCountlabel(`Count:${0}`));
         dispatch(ManPower_Get_Success([]));
     }, []);
 
@@ -135,7 +130,6 @@ const ManPowerReport = (props) => {           // this component also use for Man
 
     function GobtnExcelhandler(Type) {
         setBtnMode(Type)
-        
         dispatch(ManPower_Get_Action({ btnId: url.MAN_POWER_REPORT }))
     }
 

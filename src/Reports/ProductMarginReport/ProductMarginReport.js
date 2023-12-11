@@ -3,16 +3,12 @@ import MetaTags from 'react-meta-tags';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import {
-    Button,
-    CardBody,
     Col,
-    Container,
     FormGroup,
     Label,
     Row,
-    Spinner,
 } from "reactstrap";
-import { breadcrumbReturnFunc, loginIsSCMCompany, loginIsSCMParty, loginPartyID, loginSelectedPartyID, loginUserDetails, metaTagLabel } from '../../components/Common/CommonFunction';
+import { breadcrumbReturnFunc, loginUserDetails, metaTagLabel } from '../../components/Common/CommonFunction';
 import * as pageId from "../../routes/allPageID"
 import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess, getGroupList, getGroupListSuccess, getSubGroupList, getSubGroupListSuccess, get_Sub_Group_By_Group_ForDropDown, get_Sub_Group_By_Group_ForDropDown_Success } from '../../store/actions';
 import * as mode from "../../routes/PageMode"
@@ -20,16 +16,13 @@ import { getExcel_Button_API, getExcel_Button_API_Success } from '../../store/Re
 import { useState } from 'react';
 import { ReportComponent } from '../ReportComponent';
 import { url } from '../../routes';
-import { ManPower_Get_Action, ManPower_Get_Success } from '../../store/Report/ManPowerRedux/action';
 import ToolkitProvider from 'react-bootstrap-table2-toolkit';
 import BootstrapTable from 'react-bootstrap-table-next';
 import { mySearchProps } from '../../components/Common/SearchBox/MySearch';
-import { C_Button, Go_Button } from '../../components/Common/CommonButton';
-import PartyDropdown_Common from "../../components/Common/PartyDropdown";
-import { customAlert } from '../../CustomAlert/ConfirmDialog';
+import { C_Button } from '../../components/Common/CommonButton';
 import { C_Select } from '../../CustomValidateForm';
 import { getPartyTypelist } from '../../store/Administrator/PartyTypeRedux/action';
-import { priceListByCompay_Action, priceListByCompay_ActionSuccess } from '../../store/Administrator/PriceList/action';
+import { priceListByPartyAction, priceListByPartyActionSuccess } from '../../store/Administrator/PriceList/action';
 import { getPartyTypelistSuccess } from '../../store/Administrator/PartyTypeRedux/action';
 import { Items_On_Group_And_Subgroup_API, Items_On_Group_And_Subgroup_API_Success } from '../../store/Report/ItemSaleReport/action';
 
@@ -46,16 +39,14 @@ function initialState(history) {
     return { page_Id, buttonLable }
 };
 
-const ProductMarginReport = (props) => {           // this component also use for ManPower report 
+const ProductMarginReport = (props) => {
 
     const history = useHistory()
     const dispatch = useDispatch();
 
-    const [subPageMode] = useState(history.location.pathname);
     const [userPageAccessState, setUserAccState] = useState('');
 
     const [page_Id] = useState(() => initialState(history).page_Id);
-    const [buttonLable] = useState(() => initialState(history).buttonLable);
     const [tableData, setTableData] = useState([]);
     const [btnMode, setBtnMode] = useState("");
     const [columns, setcolumn] = useState([{}]);
@@ -82,7 +73,8 @@ const ProductMarginReport = (props) => {           // this component also use fo
         productDropdown,
         subProductLoading,
         subProductDropdown,
-        getSubProductbyProduct
+        getSubProductbyProduct,
+        priceListDropDownLoading
     } = useSelector((state) => ({
 
         downloadProductMargin: state.SapLedgerReducer.downloadProductMargin,
@@ -94,7 +86,8 @@ const ProductMarginReport = (props) => {           // this component also use fo
         PartyTypeLoading: state.PartyTypeReducer.goBtnLoading,
         PartyType: state.PartyTypeReducer.ListData,
 
-        PriceList: state.PriceListReducer.priceListByCompany,
+        priceListDropDownLoading: state.PriceListReducer.priceListDropDownLoading,
+        PriceList: state.PriceListReducer.priceListByPartyType,
 
         ItemDropdownloading: state.ItemSaleReportReducer.itemListLoading,
         ItemNameList: state.ItemSaleReportReducer.itemList,
@@ -102,7 +95,7 @@ const ProductMarginReport = (props) => {           // this component also use fo
         productLoading: state.GroupReducer.goBtnLoading,
         productDropdown: state.GroupReducer.groupList,
 
-        subProductLoading: state.SubGroupReducer.goBtnLoading,
+        subProductLoading: (state.SubGroupReducer.goBtnLoading || state.ItemMastersReducer.subgroupDropDownLoading),
         subProductDropdown: state.SubGroupReducer.SubgroupList,
         getSubProductbyProduct: state.ItemMastersReducer.SubGroupList,
     }));
@@ -112,15 +105,15 @@ const ProductMarginReport = (props) => {           // this component also use fo
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
         dispatch(getPartyTypelist());
-        dispatch(priceListByCompay_Action());
         dispatch(getGroupList());
         dispatch(getSubGroupList());
         dispatch(Items_On_Group_And_Subgroup_API({ Group: 0, SubGroup: 0 }));
+        dispatch(BreadcrumbShowCountlabel(`Count:${0}`));
 
         return () => {
             dispatch(getExcel_Button_API_Success([]));
             dispatch(getPartyTypelistSuccess([]));
-            dispatch(priceListByCompay_ActionSuccess([]));
+            dispatch(priceListByPartyActionSuccess([]));
             dispatch(getGroupListSuccess([]));
             dispatch(getSubGroupListSuccess([]));
             dispatch(Items_On_Group_And_Subgroup_API_Success([]));
@@ -150,8 +143,7 @@ const ProductMarginReport = (props) => {           // this component also use fo
         };
     }, [userAccess])
 
-    const createColumns = () => {
-
+    useEffect(() => {
         if ((ProductMargin.length > 0)) {
             let columns = []
             const objectAtIndex0 = ((ProductMargin[0]));
@@ -167,10 +159,7 @@ const ProductMarginReport = (props) => {           // this component also use fo
             setcolumn(columns)
             setColumnsCreated(true)
         }
-    }
-    if (!columnsCreated) {
-        createColumns();
-    }
+    }, [columnsCreated, ProductMargin]);
 
     useEffect(() => {
 
@@ -217,8 +206,8 @@ const ProductMarginReport = (props) => {           // this component also use fo
     });
 
     const priceListOptions = PriceList.map((i) => ({
-        value: i.id,
-        label: i.Name,
+        value: i.value,
+        label: i.label,
     }));
 
     priceListOptions.unshift({
@@ -263,9 +252,29 @@ const ProductMarginReport = (props) => {           // this component also use fo
         [productDropdown]
     );
 
+    function PartyTypeOnchange(e) {
+        setPartyTypeSelect(e);
+        setPriceListSelect({ value: 0, label: "All" });
+        dispatch(getExcel_Button_API_Success([]));
+        setTableData([]);
+        setcolumn([{}]);
+        // setColumnsCreated(false);
+        dispatch(priceListByPartyAction(e.value))
+    }
+
+    function PriceListOnChange(e) {
+        setPriceListSelect(e);
+        dispatch(getExcel_Button_API_Success([]));
+        setTableData([]);
+        setcolumn([{}]);
+        // setColumnsCreated(false);
+    }
+
     function GroupOnchange(e = []) {
         dispatch(getExcel_Button_API_Success([]));
         setTableData([]);
+        setcolumn([{}]);
+        // setColumnsCreated(false);
         dispatch(getSubGroupListSuccess([]));
         dispatch(get_Sub_Group_By_Group_ForDropDown_Success([]));
         dispatch(Items_On_Group_And_Subgroup_API_Success([]));
@@ -297,6 +306,8 @@ const ProductMarginReport = (props) => {           // this component also use fo
     function Sub_GroupOnChange(e = []) {
         dispatch(getExcel_Button_API_Success([]));
         setTableData([]);
+        setcolumn([{}]);
+        // setColumnsCreated(false);
         dispatch(Items_On_Group_And_Subgroup_API_Success([]));
         setItemNameSelect([{ value: 0, label: "All" }]);
 
@@ -321,6 +332,8 @@ const ProductMarginReport = (props) => {           // this component also use fo
     function ItemOnChange(e = []) {
         dispatch(getExcel_Button_API_Success([]));
         setTableData([]);
+        setcolumn([{}]);
+        // setColumnsCreated(false);
         if (e.length === 0) {
             e = [{ value: 0, label: "All" }];
         } else {
@@ -347,17 +360,16 @@ const ProductMarginReport = (props) => {           // this component also use fo
                                         <C_Select
                                             classNamePrefix="select2-Customer"
                                             value={partyTypeSelect}
+                                            isLoading={PartyTypeLoading}
                                             onChange={(e) => {
-                                                setPartyTypeSelect(e);
-                                                dispatch(getExcel_Button_API_Success([]));
-                                                setTableData([]);
+                                                PartyTypeOnchange(e)
+
                                             }}
                                             options={partyTypeOptions}
                                             styles={{
                                                 menu: (provided) => ({ ...provided, zIndex: 2 }),
                                             }}
                                         />
-
                                     </Col>
                                 </div>
                             </FormGroup>
@@ -374,11 +386,8 @@ const ProductMarginReport = (props) => {           // this component also use fo
                                         <C_Select
                                             classNamePrefix="select2-Customer"
                                             value={priceListSelect}
-                                            onChange={(e) => {
-                                                setPriceListSelect(e);
-                                                dispatch(getExcel_Button_API_Success([]));
-                                                setTableData([]);
-                                            }}
+                                            isLoading={priceListDropDownLoading}
+                                            onChange={(e) => { PriceListOnChange(e) }}
                                             options={priceListOptions}
                                             styles={{
                                                 menu: (provided) => ({ ...provided, zIndex: 2 }),
@@ -495,7 +504,7 @@ const ProductMarginReport = (props) => {           // this component also use fo
 
                 <div className="mt-1">
                     <ToolkitProvider
-                        keyField="id"
+                        keyField="FE2ItemID"
                         data={tableData}
                         columns={columns}
                         search
@@ -506,7 +515,7 @@ const ProductMarginReport = (props) => {           // this component also use fo
                                     <Col xl="12">
                                         <div className="table-responsive table">
                                             <BootstrapTable
-                                                keyField="PartyID"
+                                                keyField="FE2ItemID"
                                                 classes={"table  table-bordered table-hover"}
                                                 noDataIndication={
                                                     <div className="text-danger text-center ">

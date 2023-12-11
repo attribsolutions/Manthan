@@ -81,6 +81,10 @@ function* GetExcelButton_saga({ config }) {
 					// Remove the property from the object
 					delete obj[prop];
 				});
+				// Remove specified keys from the object
+				["Product", "subProduct", "ProductID", "SubProductID"].forEach(key => {
+					delete obj[key];
+				});
 				// Add the modified object to newArray
 				newArray.push(obj);
 			});
