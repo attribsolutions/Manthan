@@ -133,37 +133,11 @@ const ManPowerReport = (props) => {           // this component also use for Man
         dispatch(ManPower_Get_Action({ btnId: url.MAN_POWER_REPORT }))
     }
 
-    const pageField1 = [
-        {
-            "id": 17,
-            "Cluster": "A - PUNE 1",
-            "SubCluster": "AA - Pune City",
-            "Party": 74,
-            "PartyName": "Vidhi Enterprises",
-            "FullClaimNo": "CR - 230106342",
-            "Claim": null,
-            "Date": "2023-12-04",
-            "Month": "12",
-            "Year": "2023",
-            "TypeName": "Return Claim",
-            "TypeOfClaimName": null,
-            "ClaimTradeName": "General Trade",
-            "ClaimAmount": "7339.58",
-            "CreditNotestatus": 83,
-            "CreditNoteNo": "230106342",
-            "CreditNoteDate": "2023-12-01",
-            "CreditNoteAmount": "7346.75",
-            "ClaimSummaryDate": "2023-12-04",
-            "CreditNoteUpload": "http://cbmfooderp.com:8000/downloadQr/17/2",
-            "ClaimReceivedSource": "Byhand"
-        }
-    ];
-
     return (
         <React.Fragment>
             <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
             <div className="page-content">
-
+               
                 <CardBody className=" c_card_filter text-black ">
 
                     <Row className="justify-content-end">
