@@ -209,7 +209,7 @@ const PartyDetails = (props) => {
                         value: index.id,
                         label: index.Name,
                     }));
-
+                    debugger
                     return {
                         DistributorID: distributor.PartyID,
                         DistributorName: distributor.PartyName,
@@ -222,14 +222,14 @@ const PartyDetails = (props) => {
                         EmployeesOption: employeeOptions,
                         subClusterOptions: subClusterOptions,
                         SuperstokiestOptions: superstokiestOptions,
-                        GMId: distributor.GM,
-                        NHId: distributor.NH,
-                        RHId: distributor.RH,
-                        ASMId: distributor.ASM,
-                        SEId: distributor.SE,
-                        SOId: distributor.SO,
-                        SRId: distributor.SR,
-                        MTId: distributor.MT,
+                        GMId: distributor.GM_id,
+                        NHId: distributor.NH_id,
+                        RHId: distributor.RH_id,
+                        ASMId: distributor.ASM_id,
+                        SEId: distributor.SE_id,
+                        SOId: distributor.SO_id,
+                        SRId: distributor.SR_id,
+                        MTId: distributor.MT_id,
 
                     };
                 } else {
@@ -250,12 +250,6 @@ const PartyDetails = (props) => {
             setGoBtnLoading(false);
         }
     }
-
-
-
-
-
-
 
 
 
@@ -365,6 +359,7 @@ const PartyDetails = (props) => {
                                 { value: "", label: "Select..." }
                                 : { value: row.subClusterId, label: row.subClusterName }}
                             onChange={(e) => {
+
                                 setForceRefresh(i => !i)
                                 row.subClusterId = e.value;
                                 row.subClusterName = e.label;
@@ -376,6 +371,7 @@ const PartyDetails = (props) => {
                     </Col>
                 );
             },
+
         },
 
 
@@ -386,18 +382,19 @@ const PartyDetails = (props) => {
             dataField: "",
 
             formatExtraData: { forceRefreshGM },
-            formatter: (cell, row,) => {
+            formatter: (cell, row, key) => {
 
                 return (
                     <Col style={{ width: "150px" }}>
 
                         <C_Select
+                            id={`GM_${key}`}
                             key={row.GMId}
                             value={(row.GMId === "" || row.GMName === undefined) ?
                                 { value: "", label: "Select..." }
                                 : { value: row.GMId, label: row.GMName }}
                             onChange={(e) => {
-
+                                const selectElement = document.getElementById(`GM_${key}`);
 
                                 row.GMId = e.value;
                                 row.GMName = e.label;
@@ -588,7 +585,8 @@ const PartyDetails = (props) => {
             text: "MT",
             dataField: "",
             formatExtraData: { forceRefreshMT },
-            formatter: (cell, row) => {
+            formatter: (cell, row, a, b) => {
+
                 return (
                     <Col style={{ width: "150px" }}>
                         <C_Select
@@ -750,6 +748,29 @@ const PartyDetails = (props) => {
 };
 
 export default PartyDetails
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
