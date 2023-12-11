@@ -195,7 +195,7 @@ const ProductMarginReport = (props) => {           // this component also use fo
         const userDetails = loginUserDetails();
 
         const jsonBody = JSON.stringify({
-            "IsSCM": Number(userDetails.IsSCMPartyType) || 0,
+            "IsSCM": (userDetails.IsSCMPartyType).toString(),
             "Party": 3,
             "PartyType": partyTypeSelect.value,
             "PriceList": priceListSelect.value,
