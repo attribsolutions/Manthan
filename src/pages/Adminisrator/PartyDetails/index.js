@@ -27,7 +27,6 @@ import { Get_Subcluster_On_cluster_API, VendorSupplierCustomer } from "../../../
 import { getClusterlist } from "../../../store/Administrator/ClusterRedux/action";
 import { GoButton_For_PartyDetails, GoButton_For_PartyDetails_Success, savePartyDetails_Action, savePartyDetails_Success } from "../../../store/Administrator/PartyDetailsRedux/action";
 import { getEmployeedropdownList } from "../../../store/Administrator/ManagementPartiesRedux/action";
-import { width } from "dom-helpers";
 
 
 const PartyDetails = (props) => {
@@ -178,12 +177,7 @@ const PartyDetails = (props) => {
 
             const requests = data.map(async (distributor) => {
 
-                const jsonBody = {
-                    "Company": _cfunc.loginCompanyID(),
-                    "Route": "",
-                    "Type": 2,
-                    "PartyID": distributor.PartyID
-                };
+
 
                 let subClusterResponse;
 
@@ -191,56 +185,59 @@ const PartyDetails = (props) => {
                     subClusterResponse = await Get_Subcluster_On_cluster_API(distributor.Cluster_id);
                 }
 
-                const resp = await VendorSupplierCustomer(JSON.stringify(jsonBody));
 
-                if (resp.StatusCode === 200) {
-                    const employeeOptions = employeeList.map((index) => ({
+                const employeeOptions = employeeList.map((index) => ({
+                    value: index.id,
+                    label: index.Name,
+                }));
+
+                const subClusterOptions = (subClusterResponse && subClusterResponse.Data) ?
+                    subClusterResponse.Data.map((index) => ({
                         value: index.id,
                         label: index.Name,
-                    }));
+                    })) : [];
+                debugger
+                const superstokiestOptions = distributor.Supplier.map((index) => ({
+                    value: index.Supplier_id,
+                    label: index.SupplierName,
+                }));
 
-                    const subClusterOptions = (subClusterResponse && subClusterResponse.Data) ?
-                        subClusterResponse.Data.map((index) => ({
-                            value: index.id,
-                            label: index.Name,
-                        })) : [];
-
-                    const superstokiestOptions = resp.Data.map((index) => ({
-                        value: index.id,
-                        label: index.Name,
-                    }));
-                    debugger
-                    return {
-                        DistributorID: distributor.PartyID,
-                        DistributorName: distributor.PartyName,
-                        SuperstokiestID: distributor.Supplier_id,
-                        SuperstokiestName: distributor.SupplierName,
-                        clusterId: distributor.Cluster_id,
-                        clusterName: distributor.ClusterName,
-                        subClusterId: distributor.SubCluster_id || "",
-                        subClusterName: distributor.SubClusterName || "Select...",
-                        EmployeesOption: employeeOptions,
-                        subClusterOptions: subClusterOptions,
-                        SuperstokiestOptions: superstokiestOptions,
-                        GMId: distributor.GM_id,
-                        NHId: distributor.NH_id,
-                        RHId: distributor.RH_id,
-                        ASMId: distributor.ASM_id,
-                        SEId: distributor.SE_id,
-                        SOId: distributor.SO_id,
-                        SRId: distributor.SR_id,
-                        MTId: distributor.MT_id,
-
-                    };
+                const objectWithIdZero = distributor.Supplier.find(item => item.seletedSupplier === 1);
+                let Supplier_id = ""
+                let SupplierName = "Select..."
+                if (objectWithIdZero) {
+                    Supplier_id = objectWithIdZero.Supplier_id
+                    SupplierName = objectWithIdZero.SupplierName
                 } else {
-                    customAlert({
-                        Type: 3,
-                        Message: `Error for distributor: ${distributor.PartyName}`,
-                    });
-                    return null;
+                    Supplier_id = ""
+                    SupplierName = "Select..."
                 }
-            });
 
+                return {
+                    DistributorID: distributor.PartyID,
+                    DistributorName: distributor.PartyName,
+                    SuperstokiestID: Supplier_id,
+                    SuperstokiestName: SupplierName,
+                    clusterId: distributor.Cluster_id,
+                    clusterName: distributor.ClusterName,
+                    subClusterId: distributor.SubCluster_id || "",
+                    subClusterName: distributor.SubClusterName || "Select...",
+                    EmployeesOption: employeeOptions,
+                    subClusterOptions: subClusterOptions,
+                    SuperstokiestOptions: superstokiestOptions,
+                    GMId: distributor.GM,
+                    NHId: distributor.NH,
+                    RHId: distributor.RH,
+                    ASMId: distributor.ASM,
+                    SEId: distributor.SE,
+                    SOId: distributor.SO,
+                    SRId: distributor.SR,
+                    MTId: distributor.MT,
+
+                };
+
+            });
+            debugger
             const innterTableData = await Promise.all(requests.filter(Boolean));
 
             setTableData(innterTableData);
@@ -385,21 +382,19 @@ const PartyDetails = (props) => {
             formatter: (cell, row, key) => {
 
                 return (
-                    <Col style={{ width: "150px" }}>
+                    <Col style={{ width: "200px" }}>
 
                         <C_Select
-                            id={`GM_${key}`}
+                            // id={`GM_${key}`}
                             key={row.GMId}
-                            value={(row.GMId === "" || row.GMName === undefined) ?
-                                { value: "", label: "Select..." }
-                                : { value: row.GMId, label: row.GMName }}
-                            onChange={(e) => {
-                                const selectElement = document.getElementById(`GM_${key}`);
-
-                                row.GMId = e.value;
-                                row.GMName = e.label;
+                            isMulti={true}
+                            value={(row.GMId?.length === 0) ?
+                                []
+                                : row.GMId}
+                            onChange={(e = []) => {
+                                e = e.filter(i => !(i.value === ''))
+                                row.GMId = e
                                 setForceRefreshGM(i => !i)
-
                             }}
                             options={row.EmployeesOption}
 
@@ -417,17 +412,19 @@ const PartyDetails = (props) => {
             formatter: (cell, row,) => {
 
                 return (
-                    <Col style={{ width: "150px" }}>
+                    <Col style={{ width: "200px" }}>
 
                         <C_Select
                             key={row.NHId}
-                            value={(row.NHId === "" || row.NHName === undefined) ?
-                                { value: "", label: "Select..." }
-                                : { value: row.NHId, label: row.NHName }}
+                            isMulti={true}
+
+                            value={(row.NHId?.length === 0) ?
+                                []
+                                : row.NHId}
                             onChange={(e) => {
+                                e = e.filter(i => !(i.value === ''))
+                                row.NHId = e
                                 setForceRefreshNH(i => !i)
-                                row.NHId = e.value;
-                                row.NHName = e.label;
                             }}
                             options={row.EmployeesOption}
 
@@ -447,17 +444,20 @@ const PartyDetails = (props) => {
             formatter: (cell, row,) => {
 
                 return (
-                    <Col style={{ width: "150px" }}>
+                    <Col style={{ width: "200px" }}>
 
                         <C_Select
                             key={row.RHId}
-                            value={(row.RHId === "" || row.RHName === undefined) ?
-                                { value: "", label: "Select..." }
-                                : { value: row.RHId, label: row.RHName }}
+                            isMulti={true}
+
+                            value={(row.RHId?.length === 0) ?
+                                []
+                                : row.RHId}
                             onChange={(e) => {
+                                e = e.filter(i => !(i.value === ''))
+                                row.RHId = e
                                 setForceRefreshRH(i => !i)
-                                row.RHId = e.value;
-                                row.RHName = e.label;
+
                             }}
                             options={row.EmployeesOption}
 
@@ -477,17 +477,20 @@ const PartyDetails = (props) => {
             formatter: (cell, row,) => {
 
                 return (
-                    <Col style={{ width: "150px" }}>
+                    <Col style={{ width: "200px" }}>
 
                         <C_Select
                             key={row.ASMId}
-                            value={(row.ASMId === "" || row.ASMName === undefined) ?
-                                { value: "", label: "Select..." }
-                                : { value: row.ASMId, label: row.ASMName }}
+                            isMulti={true}
+
+                            value={(row.ASMId?.length === 0) ?
+                                []
+                                : row.ASMId}
                             onChange={(e) => {
+                                e = e.filter(i => !(i.value === ''))
+                                row.ASMId = e
                                 setForceRefreshASM(i => !i)
-                                row.ASMId = e.value;
-                                row.ASMName = e.label;
+
                             }}
                             options={row.EmployeesOption}
 
@@ -504,17 +507,20 @@ const PartyDetails = (props) => {
             formatter: (cell, row,) => {
 
                 return (
-                    <Col style={{ width: "150px" }}>
+                    <Col style={{ width: "200px" }}>
 
                         <C_Select
                             key={row.SOId}
-                            value={(row.SOId === "" || row.SOName === undefined) ?
-                                { value: "", label: "Select..." }
-                                : { value: row.SOId, label: row.SOName }}
+                            isMulti={true}
+
+                            value={(row.SOId?.length === 0) ?
+                                []
+                                : row.SOId}
                             onChange={(e) => {
+                                e = e.filter(i => !(i.value === ''))
+                                row.SOId = e
                                 setForceRefreshSO(i => !i)
-                                row.SOId = e.value;
-                                row.SOName = e.label;
+
                             }}
                             options={row.EmployeesOption}
 
@@ -532,17 +538,20 @@ const PartyDetails = (props) => {
             formatter: (cell, row,) => {
 
                 return (
-                    <Col style={{ width: "150px" }}>
+                    <Col style={{ width: "200px" }}>
 
                         <C_Select
                             key={row.SEId}
-                            value={(row.SEId === "" || row.SEName === undefined) ?
-                                { value: "", label: "Select..." }
-                                : { value: row.SEId, label: row.SEName }}
+                            isMulti={true}
+
+                            value={(row.SEId?.length === 0) ?
+                                []
+                                : row.SEId}
                             onChange={(e) => {
+                                e = e.filter(i => !(i.value === ''))
+                                row.SEId = e
                                 setForceRefreshSE(i => !i)
-                                row.SEId = e.value;
-                                row.SEName = e.label;
+
                             }}
                             options={row.EmployeesOption}
 
@@ -560,17 +569,20 @@ const PartyDetails = (props) => {
             formatter: (cell, row,) => {
 
                 return (
-                    <Col style={{ width: "150px" }}>
+                    <Col style={{ width: "200px" }}>
 
                         <C_Select
                             key={row.SRId}
-                            value={(row.SRId === "" || row.SRName === undefined) ?
-                                { value: "", label: "Select..." }
-                                : { value: row.SRId, label: row.SRName }}
+                            isMulti={true}
+
+                            value={(row.SRId?.length === 0) ?
+                                []
+                                : row.SRId}
                             onChange={(e) => {
+                                e = e.filter(i => !(i.value === ''))
+                                row.SRId = e
                                 setForceRefreshSR(i => !i)
-                                row.SRId = e.value;
-                                row.SRName = e.label;
+
                             }}
                             options={row.EmployeesOption}
 
@@ -585,19 +597,23 @@ const PartyDetails = (props) => {
             text: "MT",
             dataField: "",
             formatExtraData: { forceRefreshMT },
-            formatter: (cell, row, a, b) => {
+            formatter: (cell, row, key) => {
 
                 return (
-                    <Col style={{ width: "150px" }}>
+                    <Col style={{ width: "200px" }}>
                         <C_Select
-                            key={row.MTId}
-                            value={(row.MTId === "" || row.MTName === undefined) ?
-                                { value: "", label: "Select..." }
-                                : { value: row.MTId, label: row.MTName }}
+                            id={`MT_${key}`}
+                            key={row.key}
+                            isMulti={true}
+
+                            value={(row.MTId?.length === 0) ?
+                                []
+                                : row.MTId}
                             onChange={(e) => {
+                                e = e.filter(i => !(i.value === ''))
+                                row.MTId = e
                                 setForceRefreshMT(i => !i)
-                                row.MTId = e.value;
-                                row.MTName = e.label;
+
                             }}
                             options={row.EmployeesOption}
                         >
@@ -618,24 +634,42 @@ const PartyDetails = (props) => {
         const btnId = event.target.id
         try {
 
+            const convertToArrayComaseprateID = (ArrayID = []) => {
+                debugger
+                let result = { "Id": [], "CommaSeprateID": "" };
+                if ((ArrayID !== null) && (Array.isArray(ArrayID))) {
+                    ArrayID.forEach(item => {
+                        result["Id"].push(item.value); // Push id into the corresponding label array
+                    });
+                    result["CommaSeprateID"] = result.Id.join(', ')
+
+                } else {
+                    result["CommaSeprateID"] = null;
+                }
+
+                return result.CommaSeprateID
+            }
+
             const data = tableData.map((index) => (
+
                 {
                     "Party": index.DistributorID,
                     "Group": (groupSelect.value === 0) ? null : groupSelect.value,
                     "Cluster": index.clusterId,
                     "SubCluster": index.subClusterId,
                     "Supplier": index.SuperstokiestID,
-                    "GM": index.GMId,
-                    "NH": index.NHId,
-                    "RH": index.RHId,
-                    "ASM": index.ASMId,
-                    "SE": index.SEId,
-                    "SO": index.SOId,
-                    "SR": index.SRId,
-                    "MT": index.MTId,
+                    "GM": convertToArrayComaseprateID(index.GMId),
+                    "NH": convertToArrayComaseprateID(index.NHId),
+                    "RH": convertToArrayComaseprateID(index.RHId),
+                    "ASM": convertToArrayComaseprateID(index.ASMId),
+                    "SE": convertToArrayComaseprateID(index.SEId),
+                    "SO": convertToArrayComaseprateID(index.SOId),
+                    "SR": convertToArrayComaseprateID(index.SRId),
+                    "MT": convertToArrayComaseprateID(index.MTId),
 
-                }))
-
+                }
+            ))
+            debugger
             const jsonBody = JSON.stringify(data)
             dispatch(savePartyDetails_Action({ jsonBody, btnId }));
 
