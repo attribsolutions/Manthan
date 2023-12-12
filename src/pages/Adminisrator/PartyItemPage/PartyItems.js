@@ -60,7 +60,7 @@ const PartyItems = (props) => {
 	const location = { ...history.location };
 	const hasShowloction = location.hasOwnProperty(mode.editValue);
 	const hasShowModal = props.hasOwnProperty(mode.editValue);
-
+	debugger
 	const {
 		postMsg,
 		pageField,
@@ -82,14 +82,14 @@ const PartyItems = (props) => {
 	}));
 
 	useEffect(() => {
-
+		debugger
 		dispatch(commonPageFieldSuccess(null));
 		dispatch(commonPageField(page_id));
 		dispatch(getPartyTypelist());
 
-		if (!(_cfunc.loginSelectedPartyID() === 0) && !(hasShowloction || hasShowModal)) {
-			goButtonHandler()
-		}
+		// if (!(_cfunc.loginSelectedPartyID() === 0) && !(hasShowloction || hasShowModal)) {
+		// 	goButtonHandler()
+		// }
 		return () => {
 			dispatch(getPartyTypelistSuccess([]));
 			dispatch(goButtonPartyItemAddPageSuccess([]));
@@ -258,7 +258,7 @@ const PartyItems = (props) => {
 		{
 			text: 'Is Available For Ordering',
 			dataField: '',
-			hidden: (subPageMode === url.PARTYITEM),
+			hidden: (subPageMode === url.PARTYITEM || hasShowModal === true),
 			// formatExtraData: { forceReferesh },
 			// headerFormatter: (column, colIndex) => {
 
