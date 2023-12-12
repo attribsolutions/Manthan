@@ -329,6 +329,8 @@ export const MAN_POWER_REPORT = "/ManPowerReport"
 
 export const CLAIM_TRACKING_REPORT = "/Claim_Tracking_Report"
 
+export const TCS_AMOUNT_REPORT= "/TCS_Amount_Report"
+
 
 
 

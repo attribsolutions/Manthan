@@ -212,6 +212,7 @@ import ItemMasterBulkUpdate from "../pages/Adminisrator/ItemMasterBulkUpdate";
 import ItemImageUpload from "../pages/Adminisrator/ItemPages/ItemImageUpload/ItemImageUpload.js";
 import CreditNote_1 from "../pages/Accounting/CreditDebit/CreditNote1";
 import ManPowerReport from "../Reports/ManPowerReport";
+import TCSAmountReport from "../Reports/TCSAmountReport";
 
 
 const userRoutes = [
@@ -536,6 +537,9 @@ const userRoutes = [
 	{ path: path.MAN_POWER_REPORT, component: ManPowerReport },
 
 	{ path: path.CLAIM_TRACKING_REPORT, component: ClaimTrackingReport },
+
+	{ path: path.TCS_AMOUNT_REPORT, component: TCSAmountReport },
+
 	// ************************************ Utility **************************************//
 
 	{ path: path.SEARCH_BOX2, component: SearchBoxSecond },

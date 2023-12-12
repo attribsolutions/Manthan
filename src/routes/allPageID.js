@@ -321,3 +321,4 @@ export const PARTY_LEDGER = 207
 
 export const CLAIM_TRACKING_REPORT= 257
 
+export const TCS_AMOUNT_REPORT= 263

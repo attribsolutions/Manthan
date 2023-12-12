@@ -512,3 +512,6 @@ export const POST_PARTY_DETAILS = '/PartyDetails'
 //ItemWiseUpdate
 export const ITEM_WISE_UPDATE_API = '/ItemWiseUpdate'
 export const ITEM_WISE_UPDATE_POST_API = '/ItemWiseSave'
+
+// TCS Amount Report
+export const TCS_AMOUNT_REPORT_GO_BUTTON_API = '/TCSAmountReport'

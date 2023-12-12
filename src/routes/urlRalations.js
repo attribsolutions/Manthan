@@ -293,5 +293,8 @@ export const ManPowerReport = url.MAN_POWER_REPORT
 
 export const ClaimTrackingReport=url.CLAIM_TRACKING_REPORT
 
+export const TCSAmountReport= url.TCS_AMOUNT_REPORT
+
+
 
 
