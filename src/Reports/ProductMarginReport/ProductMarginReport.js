@@ -5,10 +5,11 @@ import { useHistory } from 'react-router-dom';
 import {
     Col,
     FormGroup,
+    Input,
     Label,
     Row,
 } from "reactstrap";
-import { breadcrumbReturnFunc, loginUserDetails, metaTagLabel } from '../../components/Common/CommonFunction';
+import { breadcrumbReturnFunc, loginPartyID, loginUserDetails, metaTagLabel } from '../../components/Common/CommonFunction';
 import * as pageId from "../../routes/allPageID"
 import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess, getGroupList, getGroupListSuccess, getSubGroupList, getSubGroupListSuccess, get_Sub_Group_By_Group_ForDropDown, get_Sub_Group_By_Group_ForDropDown_Success } from '../../store/actions';
 import * as mode from "../../routes/PageMode"
@@ -25,6 +26,8 @@ import { getPartyTypelist } from '../../store/Administrator/PartyTypeRedux/actio
 import { priceListByPartyAction, priceListByPartyActionSuccess } from '../../store/Administrator/PriceList/action';
 import { getPartyTypelistSuccess } from '../../store/Administrator/PartyTypeRedux/action';
 import { Items_On_Group_And_Subgroup_API, Items_On_Group_And_Subgroup_API_Success } from '../../store/Report/ItemSaleReport/action';
+import { DiscountPartyType_Dropdown_Action, DiscountPartyType_Dropdown_Success } from '../../store/Administrator/DiscountRedux/actions';
+import PriceDropOptions from '../../pages/Adminisrator/PartyMaster/MasterAdd/FirstTab/PriceDropOptions';
 
 function initialState(history) {
 
@@ -39,6 +42,17 @@ function initialState(history) {
     return { page_Id, buttonLable }
 };
 
+//==========================================================================================
+const priceListAllObject = {// for Pricelist options, Zero index 'All; value 
+    "value": 0,
+    "label": "All",
+    "MkUpMkDn": false,
+    "BasePriceListID": 0,
+    "CalculationPath": [],
+    "children": []
+};
+
+//==========================================================================================
 const ProductMarginReport = (props) => {
 
     const history = useHistory()
@@ -66,7 +80,7 @@ const ProductMarginReport = (props) => {
         pageField,
         PartyTypeLoading,
         PartyType,
-        PriceList,
+        priceListByPartyType,
         ItemDropdownloading,
         ItemNameList,
         productLoading,
@@ -74,7 +88,6 @@ const ProductMarginReport = (props) => {
         subProductLoading,
         subProductDropdown,
         getSubProductbyProduct,
-        priceListDropDownLoading
     } = useSelector((state) => ({
 
         downloadProductMargin: state.SapLedgerReducer.downloadProductMargin,
@@ -83,11 +96,10 @@ const ProductMarginReport = (props) => {
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
 
-        PartyTypeLoading: state.PartyTypeReducer.goBtnLoading,
-        PartyType: state.PartyTypeReducer.ListData,
+        PartyTypeLoading: state.DiscountReducer.partyTypeDropDownLoading,
+        PartyType: state.DiscountReducer.partyType,
 
-        priceListDropDownLoading: state.PriceListReducer.priceListDropDownLoading,
-        PriceList: state.PriceListReducer.priceListByPartyType,
+        priceListByPartyType: state.PriceListReducer.priceListByPartyType,
 
         ItemDropdownloading: state.ItemSaleReportReducer.itemListLoading,
         ItemNameList: state.ItemSaleReportReducer.itemList,
@@ -104,21 +116,28 @@ const ProductMarginReport = (props) => {
 
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
-        dispatch(getPartyTypelist());
+        // dispatch(getPartyTypelist());
         dispatch(getGroupList());
         dispatch(getSubGroupList());
         dispatch(Items_On_Group_And_Subgroup_API({ Group: 0, SubGroup: 0 }));
         dispatch(BreadcrumbShowCountlabel(`Count:${0}`));
-
+        dispatch(DiscountPartyType_Dropdown_Action(loginPartyID()))
         return () => {
             dispatch(getExcel_Button_API_Success([]));
-            dispatch(getPartyTypelistSuccess([]));
+            dispatch(DiscountPartyType_Dropdown_Success([]));
             dispatch(priceListByPartyActionSuccess([]));
             dispatch(getGroupListSuccess([]));
             dispatch(getSubGroupListSuccess([]));
             dispatch(Items_On_Group_And_Subgroup_API_Success([]));
         }
     }, []);
+
+    const priceListByPartyType_WithAll = useMemo(() => {
+        if (priceListByPartyType.length > 0) {
+            return [priceListAllObject, ...priceListByPartyType,];
+        }
+        return priceListByPartyType;
+    }, [priceListByPartyType]);
 
     const location = { ...history.location }
     const hasShowloction = location.hasOwnProperty(mode.editValue)//changes
@@ -205,15 +224,15 @@ const ProductMarginReport = (props) => {
         label: " All"
     });
 
-    const priceListOptions = PriceList.map((i) => ({
-        value: i.value,
-        label: i.label,
-    }));
+    // const priceListOptions = PriceList.map((i) => ({
+    //     value: i.value,
+    //     label: i.label,
+    // }));
 
-    priceListOptions.unshift({
-        value: 0,
-        label: " All"
-    });
+    // priceListOptions.unshift({
+    //     value: 0,
+    //     label: " All"
+    // });
 
     const subProductDropdownOptions = useMemo(() => {
         let options = [];
@@ -342,6 +361,26 @@ const ProductMarginReport = (props) => {
         setItemNameSelect(e);
     }
 
+    const priceListOnClick = function () {
+       
+        const hasNone = document.getElementById("price-drop").style;
+
+        if ((priceListByPartyType_WithAll.length > 0)) {
+
+            if ((hasNone.display === "none") || (hasNone.display === "")) {
+                hasNone.display = "block";
+            } else {
+                hasNone.display = "none";
+            }
+        }
+    };
+
+    function priceListOnChange(){
+        dispatch(getExcel_Button_API_Success([]));
+        setTableData([]);
+        setcolumn([{}]);
+    }
+    
     return (
         <React.Fragment>
             <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
@@ -361,10 +400,7 @@ const ProductMarginReport = (props) => {
                                             classNamePrefix="select2-Customer"
                                             value={partyTypeSelect}
                                             isLoading={PartyTypeLoading}
-                                            onChange={(e) => {
-                                                PartyTypeOnchange(e)
-
-                                            }}
+                                            onChange={(e) => {PartyTypeOnchange(e)}}
                                             options={partyTypeOptions}
                                             styles={{
                                                 menu: (provided) => ({ ...provided, zIndex: 2 }),
@@ -383,21 +419,25 @@ const ProductMarginReport = (props) => {
                                         PriceList
                                     </Label>
                                     <Col sm="8">
-                                        <C_Select
-                                            classNamePrefix="select2-Customer"
-                                            value={priceListSelect}
-                                            isLoading={priceListDropDownLoading}
-                                            onChange={(e) => { PriceListOnChange(e) }}
-                                            options={priceListOptions}
-                                            styles={{
-                                                menu: (provided) => ({ ...provided, zIndex: 2 }),
-                                            }}
-                                        />
+
+                                        <Input
+                                            value={priceListSelect.label}
+                                            autoComplete={"off"}
+                                            placeholder="Select..."
+                                            onClick={priceListOnClick}
+                                            onChange={priceListOnChange}
+                                        >
+                                        </Input>
+
+                                        <PriceDropOptions
+                                            data={priceListByPartyType_WithAll}
+                                            priceList={priceListSelect}
+                                            setPriceSelect={setPriceListSelect} />
                                     </Col>
                                 </div>
                             </FormGroup>
                         </Col>
-
+                       
                         <Col sm="4 mt-1" ></Col>
 
                         <Col sm="1" className="mt-2 mb-1 ">
