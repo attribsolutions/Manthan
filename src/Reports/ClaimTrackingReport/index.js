@@ -76,6 +76,24 @@ const ClaimTrackingReport = (props) => {  // also Receipt Data Export
     const [tableColumns] = DynamicColumnHook({ pageField })
 
     useEffect(() => {
+
+        tableColumns.forEach(element => {
+            if (element.dataField === "CreditNoteUpload") {
+
+                let formatter = element.formatter = (cell, row) => {
+                    debugger
+                    return <a href={cell} style={{ cursor: "pointer", }}> Download Credit Note </a>
+                }
+                element["formatter"] = formatter
+            }
+
+        });
+
+    }, [tableColumns, Data])
+
+
+
+    useEffect(() => {
         if (goBtnMode === "downloadExcel") {
             if (Data.length > 0) {
                 ReportComponent({      // Download CSV
