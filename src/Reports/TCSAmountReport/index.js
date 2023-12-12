@@ -81,13 +81,6 @@ const TCSAmountReport = (props) => {
     }, [userAccess])
 
     useEffect(() => {
-        dispatch(BreadcrumbShowCountlabel(`Count:${0}`));
-        return () => {
-            dispatch(TCS_Amount_Gobtn_Success([]));
-        }
-    }, [])
-
-    useEffect(() => {
 
         if (btnMode === "excel") {
             if (tableData.length > 0) {
@@ -251,7 +244,7 @@ const TCSAmountReport = (props) => {
                                                     </div>
                                                 }
                                                 onDataSizeChange={({ dataSize }) => {
-                                                    dispatch(BreadcrumbShowCountlabel(`Count:${dataSize > 0 && dataSize - 1}`));
+                                                    dispatch(BreadcrumbShowCountlabel(`Count:${dataSize}`));
                                                 }}
                                                 {...toolkitProps.baseProps}
                                             />
