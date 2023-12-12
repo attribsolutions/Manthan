@@ -82,14 +82,19 @@ const PartyItems = (props) => {
 	}));
 
 	useEffect(() => {
-		debugger
-		dispatch(commonPageFieldSuccess(null));
-		dispatch(commonPageField(page_id));
-		dispatch(getPartyTypelist());
 
-		// if (!(_cfunc.loginSelectedPartyID() === 0) && !(hasShowloction || hasShowModal)) {
-		// 	goButtonHandler()
-		// }
+		dispatch(commonPageFieldSuccess(null));
+		dispatch(getPartyTypelist());
+		if (hasShowModal !== true) {
+			dispatch(commonPageField(page_id));
+		}
+
+		if (!(_cfunc.loginSelectedPartyID() === 0) && !(hasShowloction || hasShowModal)) {
+
+			if (subPageMode !== url.CHANNEL_ITEM) {
+				goButtonHandler()
+			}
+		}
 		return () => {
 			dispatch(getPartyTypelistSuccess([]));
 			dispatch(goButtonPartyItemAddPageSuccess([]));
