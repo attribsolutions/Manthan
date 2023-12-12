@@ -355,7 +355,7 @@ const OrderSummary = (props) => {
                             <Col sm={3} className="">
                                 <FormGroup className="mb- row mt-3" >
                                     <Label className="col-sm-4 p-2"
-                                        style={{ width: "65px" }}>Party</Label>
+                                        style={{ width: "65px" }}>Ordering Party</Label>
                                     <Col sm="7">
                                         <C_Select
                                             name="PartyName"

@@ -48,7 +48,8 @@ const TCSAmountReport = (props) => {
 
     useEffect(() => {
         dispatch(commonPageFieldSuccess(null));
-        dispatch(commonPageField(pageId.TCS_AMOUNT_REPORT))
+        dispatch(commonPageField(pageId.TCS_AMOUNT_REPORT));
+        dispatch(BreadcrumbShowCountlabel(`Count:${0}`));
         return () => {
             dispatch(commonPageFieldSuccess(null));
             dispatch(TCS_Amount_Gobtn_Success([]));
