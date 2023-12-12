@@ -760,9 +760,11 @@ const ItemImageUpload = (props) => {
         Object.values(Image).forEach((element) => {
             if (element.ImageType === Type) {
                 if (!(element.file instanceof File)) {
+                    debugger
+
                     slides = [{
-                        // Image: `http://cbmfooderp.com:8000${element.Item_pic}`
-                        Image: `http://192.168.1.114:8000${element.Item_pic}`
+                        Image: `http://cbmfooderp.com:8000${element.Item_pic}`
+                        // Image: `http://192.168.1.114:8000${element.Item_pic}`
                     }];
                 }
 
@@ -811,8 +813,8 @@ const ItemImageUpload = (props) => {
         Object.values(Image).forEach((element) => {
             if (element.ImageType === Type && !(element.file instanceof File) && element.Item_pic !== null) {
 
-                imageUrl = `http://192.168.1.114:8000${element.Item_pic}`;
-                // imageUrl = `http://cbmfooderp.com:8000${element.Item_pic}`
+                // imageUrl = `http://192.168.1.114:8000${element.Item_pic}`;
+                imageUrl = `http://cbmfooderp.com:8000${element.Item_pic}`
 
             }
         });
