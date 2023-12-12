@@ -117,6 +117,7 @@ import CentralServiceItemReducer from "./Administrator/CentralServiceItemRedux/r
 import ServiceItemAssignReducer from "./Administrator/ServiceItemAssignRedux/reducer"
 import PartyDetailsReducer from "./Administrator/PartyDetailsRedux/reducer"
 import ItemWiseUpdateReducer from "./Administrator/ItemWiseUpdateRedux/reducer"
+import TCSAmountReportReducer from "./Report/TCS_AmountRedux/reducer"
 
 const rootReducer = combineReducers({
 	Layout,
@@ -212,6 +213,7 @@ const rootReducer = combineReducers({
 	CentralServiceItemReducer,
 	ServiceItemAssignReducer,
 	PartyDetailsReducer,
-	ItemWiseUpdateReducer
+	ItemWiseUpdateReducer,
+	TCSAmountReportReducer,
 })
 export default rootReducer

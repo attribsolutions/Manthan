@@ -249,11 +249,14 @@ const CreditNote_1 = (props) => {
                 let nextId = existingIds.length > 0 ? Math.max(...existingIds) + 1 : 1;
 
                 addButtonData.Data.forEach((i) => {
+    
                     const MRPOptions = i.ItemMRPDetails.map(i => ({ label: i.MRPValue, value: i.MRP, Rate: i.Rate }));
                     const GSTOptions = i.ItemGSTDetails.map(i => ({ label: i.GSTPercentage, value: i.GST }));
 
-                    const highestGST = ({ GSTPercentage: i.ItemGSTDetails[0].GSTPercentage, GST: "0" });
-
+                    // const highestGST = ({ GSTPercentage: i.ItemGSTDetails[0].GSTPercentage, GST: i.ItemGSTDetails[0].GST });
+                    const highestGST = i.ItemGSTDetails.reduce((prev, current) => {// Default  highest GST when Return mode "2==ItemWise"
+                        return (prev.GST > current.GST) ? prev : current;
+                    }, '');
                     const highestMRP = i.ItemMRPDetails.reduce((prev, current) => {// Default highest GST when Return mode "2==ItemWise"
                         return (prev.MRP > current.MRP) ? prev : current;
                     }, '');
@@ -691,7 +694,7 @@ const CreditNote_1 = (props) => {
                     "MRP": i.MRP,
                     "MRPValue": i.MRPValue,
                     "Rate": i.Rate,
-                    "GST": "",
+                    "GST": i.GST,
                     "ItemComment": i.ItemComment,
                     "CGST": Number(calculate.CGST_Amount).toFixed(2),
                     "SGST": Number(calculate.SGST_Amount).toFixed(2),

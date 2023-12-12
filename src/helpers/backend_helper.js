@@ -783,6 +783,8 @@ export const post_PartyDetails = ({ jsonBody }) => post(url.POST_PARTY_DETAILS, 
 export const ItemWiseUpdate_GoButton_API = (jsonBody) => post(url.ITEM_WISE_UPDATE_API, jsonBody)// GO BUTTON API
 export const ItemWiseUpdate_Post_API = (jsonBody) => post(url.ITEM_WISE_UPDATE_POST_API, jsonBody)// POST API
 
+// TCS Amount Report
+export const TCS_Amount_Report_GoButton_API = (jsonBody) => post(url.TCS_AMOUNT_REPORT_GO_BUTTON_API, jsonBody)
 
 export {
 	getLoggedInUser,
