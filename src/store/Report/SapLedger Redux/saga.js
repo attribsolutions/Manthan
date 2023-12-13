@@ -5,6 +5,7 @@ import {
 } from "./action";
 import { Get_Product_Margin_Report, PartyLedger_API, } from "../../../helpers/backend_helper";
 import { GET_EXCELBUTTON_API, GO_BUTTON_API_SAP_LEDGER, } from "./actionType";
+import { API_URL_LIVE } from "../../../routes/route_url";
 
 function* goBtn_Get_API_GenFun({ filters }) {
 
@@ -72,17 +73,26 @@ function* GetExcelButton_saga({ config }) {
 
 				// Merge ItemMargins and ItemImage properties into the main object
 				["ItemMargins", "ItemImage"].forEach(prop => {
+
 					i[prop].forEach(ele => {
 						const keys = Object.keys(ele);
 						keys.forEach(key => {
-							obj[key] = ele[key];
+							
+							let imageColumns = ["Side2View", "TopView", "Side1View", "BackView", "BarCode", "Poster", "FrontView", "Nutrition"];
+							let isImageColumn = imageColumns.includes(key);
+							if (isImageColumn) {
+								
+								obj[key] = `${ele[key] === " " ? "" : `${API_URL_LIVE}/media/${ele[key]}`}`;
+							} else {
+								obj[key] = ele[key];
+							}
 						});
 					});
 					// Remove the property from the object
 					delete obj[prop];
 				});
 				// Remove specified keys from the object
-				["Product", "subProduct", "ProductID", "SubProductID"].forEach(key => {
+				["ProductID", "SubProductID"].forEach(key => {
 					delete obj[key];
 				});
 				// Add the modified object to newArray

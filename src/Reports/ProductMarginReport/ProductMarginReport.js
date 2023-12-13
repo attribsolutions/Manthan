@@ -7,9 +7,10 @@ import {
     FormGroup,
     Input,
     Label,
+    Modal,
     Row,
 } from "reactstrap";
-import { breadcrumbReturnFunc, loginPartyID, loginUserDetails, metaTagLabel } from '../../components/Common/CommonFunction';
+import { CurrentURl, breadcrumbReturnFunc, loginPartyID, loginUserDetails, metaTagLabel } from '../../components/Common/CommonFunction';
 import * as pageId from "../../routes/allPageID"
 import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess, getGroupList, getGroupListSuccess, getSubGroupList, getSubGroupListSuccess, get_Sub_Group_By_Group_ForDropDown, get_Sub_Group_By_Group_ForDropDown_Success } from '../../store/actions';
 import * as mode from "../../routes/PageMode"
@@ -28,6 +29,8 @@ import { getPartyTypelistSuccess } from '../../store/Administrator/PartyTypeRedu
 import { Items_On_Group_And_Subgroup_API, Items_On_Group_And_Subgroup_API_Success } from '../../store/Report/ItemSaleReport/action';
 import { DiscountPartyType_Dropdown_Action, DiscountPartyType_Dropdown_Success } from '../../store/Administrator/DiscountRedux/actions';
 import PriceDropOptions from '../../pages/Adminisrator/PartyMaster/MasterAdd/FirstTab/PriceDropOptions';
+import Slidewithcaption from '../../components/Common/CommonImageComponent';
+import { API_URL_LIVE } from '../../routes/route_url';
 
 function initialState(history) {
 
@@ -71,6 +74,12 @@ const ProductMarginReport = (props) => {
     const [itemNameSelect, setItemNameSelect] = useState([{ value: 0, label: "All" }]);
     const [groupSelect, setGroupSelect] = useState([{ value: 0, label: "All" }]);
     const [subGroupSelect, setSubGroupSelect] = useState([{ value: 0, label: "All" }]);
+
+
+    const [imageTable, setImageTable] = useState([]);  // Selected Image Array
+    const [modal_backdrop, setmodal_backdrop] = useState(false);   // Image Model open Or not
+
+
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
@@ -162,19 +171,90 @@ const ProductMarginReport = (props) => {
         };
     }, [userAccess])
 
+
+
+
+
+
+
+    useEffect(() => {
+        if (imageTable.length > 0) {
+            setmodal_backdrop(true)
+        }
+    }, [imageTable])
+
+    function tog_backdrop() {
+        setmodal_backdrop(!modal_backdrop)
+        removeBodyCss()
+    }
+    function removeBodyCss() {
+        document.body.classList.add("no_padding")
+    }
+
     useEffect(() => {
         if ((ProductMargin.length > 0)) {
             let columns = []
             const objectAtIndex0 = ((ProductMargin[0]));
             for (const key in objectAtIndex0) {
-                const column = {
-                    text: key,
-                    dataField: key,
-                    sort: true,
-                    classes: "table-cursor-pointer",
-                };
+                let column = {}
+                let imageColumns = ["Side2View", "TopView", "Side1View", "BackView", "BarCode", "Poster", "FrontView", "Nutrition"];
+                let isImageColumn = imageColumns.includes(key);
+                if (isImageColumn) {
+
+                    column = {
+                        text: key,
+                        dataField: key,
+                        sort: true,
+                        classes: "table-cursor-pointer",
+                        formatter: (cell, row, key) => {
+
+                            const imageShowHandler = async ({ ImageUrl, }) => { // image Show handler                               
+                                let slides = []
+                                if (ImageUrl !== "") {
+                                    slides = [{
+                                        Image: ImageUrl
+                                    }];
+                                }
+                                setImageTable(slides)
+                            }
+                            return (
+                                <>
+                                    {cell !== "" ?
+                                        <div className="d-flex justify-content-center"> {/* Center the column */}
+                                            <button
+                                                name="image"
+                                                style={{
+                                                    backgroundImage: `url(${cell})`,
+                                                    backgroundSize: 'cover'
+                                                }}
+                                                onClick={() => {
+                                                    imageShowHandler({ ImageUrl: cell })
+                                                }}
+                                                id={`ImageID_${key}`}
+                                                type="button"
+                                                className="btn btn-success mt-1"
+                                            >
+                                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                            </button>
+
+                                        </div>
+                                        : null}
+                                </>
+                            );
+                        },
+                    };
+                } else {
+                    column = {
+                        text: key,
+                        dataField: key,
+                        sort: true,
+                        classes: "table-cursor-pointer",
+                    };
+                }
+
                 columns.push(column);
             }
+
             setcolumn(columns)
             setColumnsCreated(true)
         }
@@ -362,7 +442,7 @@ const ProductMarginReport = (props) => {
     }
 
     const priceListOnClick = function () {
-       
+
         const hasNone = document.getElementById("price-drop").style;
 
         if ((priceListByPartyType_WithAll.length > 0)) {
@@ -375,19 +455,29 @@ const ProductMarginReport = (props) => {
         }
     };
 
-    function priceListOnChange(){
+    function priceListOnChange() {
         dispatch(getExcel_Button_API_Success([]));
         setTableData([]);
         setcolumn([{}]);
     }
-    
+
     return (
         <React.Fragment>
             <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
             <div className="page-content">
+                <Modal
+                    isOpen={modal_backdrop}
+                    toggle={() => {
+                        tog_backdrop()
+                    }}
 
+                    style={{ width: "800px", height: "800px", borderRadius: "50%" }}
+                    className="modal-dialog-centered "
+                >
+                    {(imageTable.length > 0) && <Slidewithcaption Images={imageTable} />}
+
+                </Modal>
                 <div className="px-2 c_card_filter text-black" >
-
                     <Row className="mb-1 row ">
                         <Col sm="3 mt-1" >
                             <FormGroup>
@@ -400,7 +490,7 @@ const ProductMarginReport = (props) => {
                                             classNamePrefix="select2-Customer"
                                             value={partyTypeSelect}
                                             isLoading={PartyTypeLoading}
-                                            onChange={(e) => {PartyTypeOnchange(e)}}
+                                            onChange={(e) => { PartyTypeOnchange(e) }}
                                             options={partyTypeOptions}
                                             styles={{
                                                 menu: (provided) => ({ ...provided, zIndex: 2 }),
@@ -437,7 +527,7 @@ const ProductMarginReport = (props) => {
                                 </div>
                             </FormGroup>
                         </Col>
-                       
+
                         <Col sm="4 mt-1" ></Col>
 
                         <Col sm="1" className="mt-2 mb-1 ">

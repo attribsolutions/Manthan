@@ -1,5 +1,12 @@
 
 
+
+export const API_URL_LIVE = "http://cbmfooderp.com:8000"
+
+// export const API_URL_LIVE = "http://192.168.1.114:8000"
+
+
+
 export const DASHBORD_1 = "/Dashboard_1"
 export const DASHBORD_2 = "/Dashboard_2"
 // ***************************** Utility **************************************//
@@ -329,7 +336,7 @@ export const MAN_POWER_REPORT = "/ManPowerReport"
 
 export const CLAIM_TRACKING_REPORT = "/Claim_Tracking_Report"
 
-export const TCS_AMOUNT_REPORT= "/TCS_Amount_Report"
+export const TCS_AMOUNT_REPORT = "/TCS_Amount_Report"
 
 
 
