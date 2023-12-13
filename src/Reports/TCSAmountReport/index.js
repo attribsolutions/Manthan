@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Col, FormGroup, Label, Row, } from "reactstrap";
 import { useHistory } from "react-router-dom";
@@ -34,6 +34,12 @@ const TCSAmountReport = (props) => {
     const [btnMode, setBtnMode] = useState("");
     const [PartyDropdown, setPartyDropdown] = useState({ value: "", label: "All" });
 
+    const [updatetableColumn, setupdatetableColumn] = useState([{}]);
+
+
+
+
+
     const reducers = useSelector(
         (state) => ({
             tableData: state.TCSAmountReportReducer.tcsAmtReportGobtn,
@@ -57,6 +63,24 @@ const TCSAmountReport = (props) => {
     }, []);
 
     const [tableColumns] = DynamicColumnHook({ pageField })
+
+
+    useEffect(() => {
+        const newColumn = [{
+            text: "PartyName",
+            dataField: "PartyName",
+        },
+        ...tableColumns
+        ];
+
+        if (!isSCMParty) {
+            newColumn.shift();
+        }
+        setupdatetableColumn(newColumn)
+
+    }, [tableColumns])
+
+
 
     const values = { ...state.values }
 
@@ -227,7 +251,7 @@ const TCSAmountReport = (props) => {
                     <ToolkitProvider
                         keyField="InvoiceNumber"
                         data={tableData}
-                        columns={tableColumns}
+                        columns={updatetableColumn}
                         search
                     >
                         {(toolkitProps,) => (
