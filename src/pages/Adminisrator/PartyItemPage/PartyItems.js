@@ -261,7 +261,7 @@ const PartyItems = (props) => {
 
 		},
 		{
-			text: 'Is Available For Ordering',
+			text: 'Not Available For Ordering',
 			dataField: '',
 			hidden: (subPageMode === url.PARTYITEM || hasShowModal === true),
 			// formatExtraData: { forceReferesh },

@@ -408,11 +408,15 @@ export const reportHeder3 = (doc, data) => {
 
 
 export const reportFooter = (doc, data) => {
-
+    debugger
     if (data.Period.PaymentQr === null) {
         doc.addImage("", 'JPEG', 335, 303, 105, 96);
     } else {
-        doc.addImage(data.Period.PaymentQr, 'JPEG', 335, 303, 105, 96);
+        if (data.subPageMode === "/Credit_Note_List_1") {
+            doc.addImage("", 'JPEG', 335, 303, 105, 96);
+        } else {
+            doc.addImage(data.Period.PaymentQr, 'JPEG', 335, 303, 105, 96);
+        }
     }
     doc.setDrawColor(0, 0, 0);
     doc.line(570, 308, 30, 308);//horizontal line  (4)
@@ -1000,12 +1004,15 @@ export const tableBodyWithIGST = (doc, data) => {
 
 
 export const reportFooterA4 = (doc, data) => {
-    
+
     if (data.Period.PaymentQr === null) {
         doc.addImage("", 'JPEG', 337, 728, 100, 86);
     } else {
-        doc.addImage(data.Period.PaymentQr, 'JPEG', 337, 728, 100, 86);
-
+        if (data.subPageMode === "/Credit_Note_List_1") {
+            doc.addImage("", 'JPEG', 337, 728, 100, 86);
+        } else {
+            doc.addImage(data.Period.PaymentQr, 'JPEG', 337, 728, 100, 86);
+        }
     }
 
 

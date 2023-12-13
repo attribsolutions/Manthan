@@ -405,7 +405,7 @@ const PartyDetails = (props) => {
             },
         },
         {
-            text: "NH",
+            text: "NSM",
             dataField: "",
 
             formatExtraData: { forceRefreshNH },
@@ -437,7 +437,7 @@ const PartyDetails = (props) => {
         },
 
         {
-            text: "RH",
+            text: "RSM",
             dataField: "",
 
             formatExtraData: { forceRefreshRH },
@@ -500,37 +500,6 @@ const PartyDetails = (props) => {
                 );
             },
         }, {
-            text: "SO",
-            dataField: "",
-
-            formatExtraData: { forceRefreshSO },
-            formatter: (cell, row,) => {
-
-                return (
-                    <Col style={{ width: "200px" }}>
-
-                        <C_Select
-                            key={row.SOId}
-                            isMulti={true}
-
-                            value={(row.SOId?.length === 0) ?
-                                []
-                                : row.SOId}
-                            onChange={(e) => {
-                                e = e.filter(i => !(i.value === ''))
-                                row.SOId = e
-                                setForceRefreshSO(i => !i)
-
-                            }}
-                            options={row.EmployeesOption}
-
-                        >
-                        </C_Select >
-                    </Col>
-
-                );
-            },
-        }, {
             text: "SE",
             dataField: "",
             formatExtraData: { forceRefreshSE },
@@ -561,7 +530,41 @@ const PartyDetails = (props) => {
 
                 );
             },
-        }, {
+        },
+        {
+            text: "SO",
+            dataField: "",
+
+            formatExtraData: { forceRefreshSO },
+            formatter: (cell, row,) => {
+
+                return (
+                    <Col style={{ width: "200px" }}>
+
+                        <C_Select
+                            key={row.SOId}
+                            isMulti={true}
+
+                            value={(row.SOId?.length === 0) ?
+                                []
+                                : row.SOId}
+                            onChange={(e) => {
+                                e = e.filter(i => !(i.value === ''))
+                                row.SOId = e
+                                setForceRefreshSO(i => !i)
+
+                            }}
+                            options={row.EmployeesOption}
+
+                        >
+                        </C_Select >
+                    </Col>
+
+                );
+            },
+        },
+
+        {
             text: "SR",
             dataField: "",
 

@@ -249,7 +249,7 @@ const CreditNote_1 = (props) => {
                 let nextId = existingIds.length > 0 ? Math.max(...existingIds) + 1 : 1;
 
                 addButtonData.Data.forEach((i) => {
-    
+
                     const MRPOptions = i.ItemMRPDetails.map(i => ({ label: i.MRPValue, value: i.MRP, Rate: i.Rate }));
                     const GSTOptions = i.ItemGSTDetails.map(i => ({ label: i.GSTPercentage, value: i.GST }));
 
@@ -409,8 +409,9 @@ const CreditNote_1 = (props) => {
                         <div className="">
                             <div className="parent  mb-1">
                                 <div className="child">
-                                    <Select
+                                    {url.CREDIT_NOTE_1 === "/Credit_Note_1" ? null : <Select
                                         id={`DicountType_${key}`}
+                                        isDisabled={url.CREDIT_NOTE_1 === "/Credit_Note_1"}
                                         classNamePrefix="select2-selection"
                                         defaultValue={discountDropOption[1]}
                                         options={discountDropOption}
@@ -420,10 +421,10 @@ const CreditNote_1 = (props) => {
                                             document.getElementById(`Discount-${key}`).value = ''//changr Discount value  by id
                                             totalAmountCalcuationFunc(row, TableArr);
                                         }}
-                                    />
+                                    />}
                                 </div>
                                 <div className="child">
-                                    <CInput
+                                    {url.CREDIT_NOTE_1 === "/Credit_Note_1" ? null : <CInput
                                         type="text"
                                         id={`Discount-${key}`}//this id use discount type onchange
                                         placeholder="Dist."
@@ -446,7 +447,7 @@ const CreditNote_1 = (props) => {
                                             totalAmountCalcuationFunc(row, TableArr)
                                         }}
 
-                                    />
+                                    />}
                                 </div>
                             </div>
                             <div className="parent">
