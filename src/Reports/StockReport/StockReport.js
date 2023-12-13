@@ -31,7 +31,7 @@ const StockReport = (props) => {
 	const [unitDropdown, setUnitDropdown] = useState({ value: 1, label: 'No' });
 
 	const [originalTableData, setOriginalTableData] = useState([]);
-	const [stockTypeSelect, setStockTypeSelect] = useState({ value: 0, label: 'SaleableStock' });
+	const [stockTypeSelect, setStockTypeSelect] = useState({ value: "", label: 'All' });
 
 	const [batchWise, setBatchWise] = useState(false);
 	const [mrpWise, setMrpWise] = useState(false);
@@ -161,14 +161,20 @@ const StockReport = (props) => {
 		label: i.Name
 	}));
 
-	const StockTypeOptions = [{
-		value: 0,
-		label: "Saleable Stock"
-	},
-	{
-		value: 1,
-		label: "Damage Stock"
-	}]
+	const StockTypeOptions = [
+		{
+			value: "",
+			label: "All"
+		},
+
+		{
+			value: 0,
+			label: "Saleable Stock"
+		},
+		{
+			value: 1,
+			label: "Damage Stock"
+		}]
 
 	function goButtonHandler(goBtnMode) {
 
@@ -208,19 +214,111 @@ const StockReport = (props) => {
 		// Define an array of field names and their corresponding checkbox and select states
 		const buttonStateArray = [
 			{
+				text: 'DistributorName',
+				dataField: 'DistributorName',
+				showing: stockTypeSelect.value === "",
+				groupBy: true,
+				sequence: 5
+			},
+			{
+				text: 'DistributorCode',
+				dataField: 'DistributorCode',
+				showing: stockTypeSelect.value === "",
+				groupBy: true,
+				sequence: 5
+			},
+			{
 				text: 'ItemName',
 				dataField: 'ItemName',
-				showing: true,
+				showing: ['', 0, 1].includes(stockTypeSelect.value),
 				groupBy: true,
 				sequence: 1
+			}, {
+				text: 'Group',
+				dataField: 'GroupName',
+				showing: stockTypeSelect.value === "",
+				groupBy: true,
+				sequence: 5
+			}, {
+				text: 'SubGroup',
+				dataField: 'SubGroupName',
+				showing: stockTypeSelect.value === "",
+				groupBy: true,
+				sequence: 5
+			}, {
+				text: 'GroupType',
+				dataField: 'GroupTypeName',
+				showing: stockTypeSelect.value === "",
+				groupBy: true,
+				sequence: 5
 			},
 			{
 				text: 'BatchCode',
 				dataField: 'BatchCode',
-				showing: batchWise,
+				showing: (batchWise || stockTypeSelect.value === ""),
 				groupBy: batchWise,
 				sequence: 2
+			}, {
+				text: 'SystemBatchCode',
+				dataField: 'SystemBatchCode',
+				showing: (batchWise || stockTypeSelect.value === ""),
+				groupBy: true,
+				sequence: 5
+			}, {
+				text: 'PurchaseRate',
+				dataField: 'PurchaseRate',
+				showing: stockTypeSelect.value === "",
+				groupBy: true,
+				sequence: 5
+			}, {
+				text: 'UnSaleableStock',
+				dataField: 'UnSaleableStock',
+				showing: ['', 1].includes(stockTypeSelect.value),
+				groupBy: true,
+				sequence: 5
+			}, {
+				text: 'SaleableStockValue',
+				dataField: 'SaleableStockValue',
+				showing: stockTypeSelect.value === "",
+				groupBy: true,
+				sequence: 5
+			}, {
+				text: 'SaleableStockTaxValue',
+				dataField: 'SaleableStockTaxValue',
+				showing: stockTypeSelect.value === "",
+				groupBy: true,
+				sequence: 5
+			}, {
+				text: 'UnSaleableStockValue',
+				dataField: 'UnSaleableStockValue',
+				showing: stockTypeSelect.value === "",
+				groupBy: true,
+				sequence: 5
 			},
+			{
+				text: 'UnSaleableStockTaxValue',
+				dataField: 'UnSaleableStockTaxValue',
+				showing: stockTypeSelect.value === "",
+				groupBy: true,
+				sequence: 5
+			}, {
+				text: 'TaxValue',
+				dataField: 'TaxValue',
+
+				groupBy: true,
+				sequence: 5
+			},
+
+
+			{
+				text: 'Stockvaluewithtax',
+				dataField: 'Stockvaluewithtax',
+				showing: stockTypeSelect.value === "",
+				groupBy: true,
+				sequence: 5
+			},
+
+
 			{
 				text: 'MRP',
 				dataField: 'MRP',
@@ -230,10 +328,10 @@ const StockReport = (props) => {
 				sequence: 3
 			},
 			{
-				text: 'Quantity',
-				dataField: 'ActualQty',
+				text: 'SaleableStock',
+				dataField: 'SaleableStock',
 				align: "right",
-				showing: true,
+				showing: ['', 0].includes(stockTypeSelect.value),
 				groupBy: false,
 				sequence: 4
 			},
@@ -244,15 +342,19 @@ const StockReport = (props) => {
 				groupBy: true,
 				sequence: 5
 			},
+			{
+				text: 'TotalStockValue',
+				dataField: 'TotalStockValue',
+				showing: ['', 0, 1].includes(stockTypeSelect.value),
+				groupBy: true,
+				sequence: 5
+			},
+
 
 		];
 
 		let filterTableData = [...baseData];
 		const newSelectedColumns = buttonStateArray.filter(option => option.showing)
-
-		newSelectedColumns.push(
-			{ text: 'Amount', dataField: 'Amount', sequence: 6, align: "right", },
-		);
 
 		setSelectedColumns(newSelectedColumns);
 
