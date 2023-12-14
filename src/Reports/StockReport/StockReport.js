@@ -1046,12 +1046,19 @@ const StockReport = (props) => {
 			const groupedItems = filterTableData.reduce((accumulator, currentItem) => {
 
 				const { SaleableStock, UnSaleableStock, TotalStockValue, UnSaleableStockTaxValue, UnSaleableStockValue, SaleableStockTaxValue, SaleableStockValue, MRP, BatchCode, Item, ItemName, PurchaseRate, DistributorCode, DistributorName, GroupName, SubGroupName, GroupTypeName, Stockvaluewithtax, Unit } = currentItem;
+				debugger
 				let key = "";
 				if (mrpWise) {
 					key = ItemName + '_' + MRP + '_' + Item;
+				} else if (batchWise) {
+					key = ItemName + '_' + BatchCode + '_' + Item;
+				} else if (mrpWise && batchWise) {
+					key = ItemName + '_' + BatchCode + '_' + MRP + '_' + Item;
 				} else {
 					key = ItemName + '_' + Item;
 				}
+
+
 				if (accumulator[key]) {
 					accumulator[key].SaleableStock += Number(SaleableStock);
 					accumulator[key].UnSaleableStock += Number(UnSaleableStock);
