@@ -884,6 +884,7 @@ const StockReport = (props) => {
 				dataField: 'DistributorCode',
 				showing: stockTypeSelect.value === "",
 				groupBy: false,
+				align: 'right',
 				sequence: 5
 			},
 			{
@@ -899,6 +900,7 @@ const StockReport = (props) => {
 				dataField: 'Item',
 				showing: ['', 0, 1].includes(stockTypeSelect.value),
 				groupBy: true,
+				align: 'right',
 				sequence: 1
 			},
 			{
@@ -947,6 +949,7 @@ const StockReport = (props) => {
 				dataField: 'PurchaseRate',
 				showing: stockTypeSelect.value === "",
 				groupBy: false,
+				align: 'right',
 				sequence: 5
 			},
 
@@ -956,6 +959,7 @@ const StockReport = (props) => {
 				align: "right",
 				showing: ['', 0].includes(stockTypeSelect.value),
 				groupBy: false,
+				align: 'right',
 				sequence: 4
 			},
 			{
@@ -963,6 +967,7 @@ const StockReport = (props) => {
 				dataField: 'UnSaleableStock',
 				showing: ['', 1].includes(stockTypeSelect.value),
 				groupBy: false,
+				align: 'right',
 				sequence: 5
 			},
 			{
@@ -970,6 +975,7 @@ const StockReport = (props) => {
 				dataField: 'SaleableStockValue',
 				showing: stockTypeSelect.value === "",
 				groupBy: false,
+				align: 'right',
 				sequence: 5
 			},
 
@@ -978,12 +984,14 @@ const StockReport = (props) => {
 				dataField: 'SaleableStockTaxValue',
 				showing: stockTypeSelect.value === "",
 				groupBy: false,
+				align: 'right',
 				sequence: 5
 			}, {
 				text: 'UnSaleableStockValue',
 				dataField: 'UnSaleableStockValue',
 				showing: stockTypeSelect.value === "",
 				groupBy: false,
+				align: 'right',
 				sequence: 5
 			},
 			{
@@ -991,6 +999,7 @@ const StockReport = (props) => {
 				dataField: 'UnSaleableStockTaxValue',
 				showing: stockTypeSelect.value === "",
 				groupBy: false,
+				align: 'right',
 				sequence: 5
 			},
 			{
@@ -998,6 +1007,7 @@ const StockReport = (props) => {
 				dataField: 'TotalStockValue',
 				showing: ['', 0, 1].includes(stockTypeSelect.value),
 				groupBy: false,
+				align: 'right',
 				sequence: 5
 			},
 
@@ -1005,6 +1015,7 @@ const StockReport = (props) => {
 				text: 'TaxValue',
 				dataField: 'TaxValue',
 				groupBy: false,
+				align: 'right',
 				sequence: 5
 			},
 			{
@@ -1012,6 +1023,7 @@ const StockReport = (props) => {
 				dataField: 'Stockvaluewithtax',
 				showing: stockTypeSelect.value === "",
 				groupBy: false,
+				align: 'right',
 				sequence: 5
 			},
 
