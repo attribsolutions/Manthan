@@ -351,7 +351,7 @@ const ItemMasterBulkUpdate = (props) => {
                 }
 
                 const responseData = {
-                    Type: SelectFieldName.label === "ShelfLife" ? "Days" : SelectFieldName.label,
+                    Type: SelectFieldName.label,
                     UpdatedData: updatedData
                 };
 
