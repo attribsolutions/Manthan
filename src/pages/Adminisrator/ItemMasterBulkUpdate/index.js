@@ -100,7 +100,7 @@ const ItemMasterBulkUpdate = (props) => {
             // dispatch(get_Group_By_GroupType_ForDropDown_Success([]));
             // setSelectFieldName([]);
             handleGoButton()
-            setGroupTypeSelect({ value: 1, label: "Primary" });
+            // setGroupTypeSelect({ value: 1, label: "Primary" });
 
             customAlert({
                 Type: 1,
