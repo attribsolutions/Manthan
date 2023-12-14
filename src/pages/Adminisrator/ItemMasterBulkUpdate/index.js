@@ -96,10 +96,11 @@ const ItemMasterBulkUpdate = (props) => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(ItemWiseUpdate_Save_Success({ Status: false }));
-            dispatch(ItemWiseUpdateGoButton_Success([]));
-            dispatch(get_Group_By_GroupType_ForDropDown_Success([]));
-            setSelectFieldName([]);
-            setGroupTypeSelect({ value: 1, label: "Primary" });
+            // dispatch(ItemWiseUpdateGoButton_Success([]));
+            // dispatch(get_Group_By_GroupType_ForDropDown_Success([]));
+            // setSelectFieldName([]);
+            handleGoButton()
+            // setGroupTypeSelect({ value: 1, label: "Primary" });
 
             customAlert({
                 Type: 1,
