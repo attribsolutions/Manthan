@@ -924,7 +924,7 @@ const StockReport = (props) => {
 			}, {
 				text: 'ProductType',
 				dataField: 'GroupTypeName',
-				showing: stockTypeSelect.value === "",
+				showing: false,
 				groupBy: false,
 				sequence: 5
 			},
@@ -1035,8 +1035,6 @@ const StockReport = (props) => {
 				sequence: 5
 			},
 
-
-
 		];
 
 		let filterTableData = [...baseData];
@@ -1044,15 +1042,16 @@ const StockReport = (props) => {
 
 		setSelectedColumns(newSelectedColumns);
 
-
-
-
 		if (buttonStateArray.some(option => option.groupBy)) {
-
 			const groupedItems = filterTableData.reduce((accumulator, currentItem) => {
 
 				const { SaleableStock, UnSaleableStock, TotalStockValue, UnSaleableStockTaxValue, UnSaleableStockValue, SaleableStockTaxValue, SaleableStockValue, MRP, BatchCode, Item, ItemName, PurchaseRate, DistributorCode, DistributorName, GroupName, SubGroupName, GroupTypeName, Stockvaluewithtax, Unit } = currentItem;
-				const key = ItemName + '_' + MRP + '_' + Item;
+				let key = "";
+				if (mrpWise) {
+					key = ItemName + '_' + MRP + '_' + Item;
+				} else {
+					key = ItemName + '_' + Item;
+				}
 				if (accumulator[key]) {
 					accumulator[key].SaleableStock += Number(SaleableStock);
 					accumulator[key].UnSaleableStock += Number(UnSaleableStock);
@@ -1079,7 +1078,7 @@ const StockReport = (props) => {
 			const groupedArray = Object.values(groupedItems);
 
 			groupedArray.forEach(i => {
-				debugger;
+				;
 				i.SaleableStock = i.SaleableStock.toFixed(2); // Update i.SaleableStock with rounded value
 				i.UnSaleableStock = i.UnSaleableStock.toFixed(2)
 				i.TotalStockValue = i.TotalStockValue.toFixed(2)
@@ -1325,3 +1324,32 @@ const StockReport = (props) => {
 }
 
 export default StockReport;
+
+
+
+
+
+
+
+
+
+
+
+
+
+// const Inatial_State = {
+// 	loading: false
+// }
+
+// const reducers = (state = { Inatial_State, action }) => {
+// 	switch (action.type) {
+// 		case value:
+
+// 			break;
+
+// 		default:
+// 			break;
+// 	}
+
+
+// }
