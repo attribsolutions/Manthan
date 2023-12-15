@@ -77,12 +77,12 @@ function* GetExcelButton_saga({ config }) {
 					i[prop].forEach(ele => {
 						const keys = Object.keys(ele);
 						keys.forEach(key => {
-							
+
 							let imageColumns = ["Side2View", "TopView", "Side1View", "BackView", "BarCode", "Poster", "FrontView", "Nutrition"];
 							let isImageColumn = imageColumns.includes(key);
 							if (isImageColumn) {
-								
-								obj[key] = `${ele[key] === " " ? "" : `${API_URL_LIVE}/media/${ele[key]}`}`;
+								debugger
+								obj[key] = `${ele[key] === " " || ele[key] === "" ? "" : `${API_URL_LIVE}/media/${ele[key]}`}`;
 							} else {
 								obj[key] = ele[key];
 							}

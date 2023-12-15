@@ -557,6 +557,7 @@ import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import { mySearchProps } from "../../../../components/Common/SearchBox/MySearch";
 import BootstrapTable from "react-bootstrap-table-next";
 import { deltBtnCss, hideBtnCss } from "../../../../components/Common/ListActionsButtons";
+import { API_URL_LIVE } from "../../../../routes/route_url";
 
 const ItemImageUpload = (props) => {
 
@@ -763,8 +764,7 @@ const ItemImageUpload = (props) => {
                     debugger
 
                     slides = [{
-                        Image: `http://cbmfooderp.com:8000${element.Item_pic}`
-                        // Image: `http://192.168.1.114:8000${element.Item_pic}`
+                        Image: `${API_URL_LIVE}${element.Item_pic}`
                     }];
                 }
 
@@ -812,10 +812,7 @@ const ItemImageUpload = (props) => {
 
         Object.values(Image).forEach((element) => {
             if (element.ImageType === Type && !(element.file instanceof File) && element.Item_pic !== null) {
-
-                // imageUrl = `http://192.168.1.114:8000${element.Item_pic}`;
-                imageUrl = `http://cbmfooderp.com:8000${element.Item_pic}`
-
+                imageUrl = `${API_URL_LIVE}${element.Item_pic}`;
             }
         });
 
@@ -885,7 +882,6 @@ const ItemImageUpload = (props) => {
                                         title={`Remove ${row.Name}`}
                                         id="ImageId"
                                         type="button"
-
                                         className={`${deltBtnCss} px-2`}
                                     >
                                         <i className="mdi mdi-delete" style={{ fontSize: "18px" }}></i>
