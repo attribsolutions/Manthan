@@ -114,6 +114,166 @@ const StockReport = (props) => {
 		}
 	}, [])
 
+	const buttonStateArray = [
+		{
+			text: 'DistributorCode',
+			dataField: 'DistributorCode',
+			showing: stockTypeSelect.value === "",
+			groupBy: false,
+			align: 'right',
+			sequence: 5
+		},
+		{
+			text: 'DistributorName',
+			dataField: 'DistributorName',
+			showing: stockTypeSelect.value === "",
+			groupBy: false,
+			sequence: 5
+		},
+
+		{
+			text: 'Productcode',
+			dataField: 'Item',
+			showing: ['', 0, 1].includes(stockTypeSelect.value),
+			groupBy: true,
+			align: 'right',
+			sequence: 1
+		},
+		{
+			text: 'Item',
+			dataField: 'ItemName',
+			showing: ['', 0, 1].includes(stockTypeSelect.value),
+			groupBy: true,
+			sequence: 1
+		}, {
+			text: 'Product',
+			dataField: 'GroupName',
+			showing: stockTypeSelect.value === "",
+			groupBy: false,
+			sequence: 5
+		}, {
+			text: 'SubProduct',
+			dataField: 'SubGroupName',
+			showing: stockTypeSelect.value === "",
+			groupBy: false,
+			sequence: 5
+		}, {
+			text: 'ProductType',
+			dataField: 'GroupTypeName',
+			showing: false,
+			groupBy: false,
+			sequence: 5
+		},
+		{
+			text: 'BatchCode',
+			dataField: 'BatchCode',
+			showing: batchWise,
+			groupBy: batchWise,
+			sequence: 2
+		},
+		{
+			text: 'MRP',
+			dataField: 'MRP',
+			align: "right",
+			showing: mrpWise,
+			groupBy: mrpWise,
+			sequence: 3
+		},
+
+		{
+			text: 'PurchaseRate',
+			dataField: 'PurchaseRate',
+			showing: stockTypeSelect.value === "",
+			groupBy: false,
+			align: 'right',
+			sequence: 5
+		},
+
+		{
+			text: 'SaleableStock',
+			dataField: 'SaleableStock',
+			align: "right",
+			showing: ['', 0].includes(stockTypeSelect.value),
+			groupBy: false,
+			align: 'right',
+			sequence: 4
+		},
+		{
+			text: 'UnSaleableStock',
+			dataField: 'UnSaleableStock',
+			showing: ['', 1].includes(stockTypeSelect.value),
+			groupBy: false,
+			align: 'right',
+			sequence: 5
+		},
+		{
+			text: 'SaleableStockValue',
+			dataField: 'SaleableStockValue',
+			showing: stockTypeSelect.value === "",
+			groupBy: false,
+			align: 'right',
+			sequence: 5
+		},
+
+		{
+			text: 'SaleableStockTaxValue',
+			dataField: 'SaleableStockTaxValue',
+			showing: stockTypeSelect.value === "",
+			groupBy: false,
+			align: 'right',
+			sequence: 5
+		}, {
+			text: 'UnSaleableStockValue',
+			dataField: 'UnSaleableStockValue',
+			showing: stockTypeSelect.value === "",
+			groupBy: false,
+			align: 'right',
+			sequence: 5
+		},
+		{
+			text: 'UnSaleableStockTaxValue',
+			dataField: 'UnSaleableStockTaxValue',
+			showing: stockTypeSelect.value === "",
+			groupBy: false,
+			align: 'right',
+			sequence: 5
+		},
+		{
+			text: 'TotalStockValue',
+			dataField: 'TotalStockValue',
+			showing: ['', 0, 1].includes(stockTypeSelect.value),
+			groupBy: false,
+			align: 'right',
+			sequence: 5
+		},
+
+		{
+			text: 'TaxValue',
+			dataField: 'TaxValue',
+			showing: [''].includes(stockTypeSelect.value),
+			groupBy: false,
+			align: 'right',
+			sequence: 5
+		},
+		{
+			text: 'Stockvaluewithtax',
+			dataField: 'Stockvaluewithtax',
+			showing: stockTypeSelect.value === "",
+			groupBy: false,
+			align: 'right',
+			sequence: 5
+		},
+
+		{
+			text: 'Unit',
+			dataField: 'Unit',
+			showing: true,
+			groupBy: false,
+			sequence: 5
+		},
+
+	];
+
 	useEffect(() => {
 
 		try {
@@ -127,13 +287,14 @@ const StockReport = (props) => {
 
 				if (goBtnMode === "downloadExcel") {
 					const { filterTableData } = SortButtonFunc(updatedReduxData);
-					debugger
+
 					ExcelDownloadFunc({
 						pageField,
 						excelData: filterTableData,
 						excelFileName: "Current_Stock_Report",
 						mrpWise: mrpWise,
-						batchWise: batchWise
+						batchWise: batchWise,
+						buttonStateArray: buttonStateArray
 					});
 				}
 				else if (goBtnMode === "showOnTable") {
@@ -217,166 +378,7 @@ const StockReport = (props) => {
 	}
 
 	function SortButtonFunc(baseData) {
-
 		// Define an array of field names and their corresponding checkbox and select states
-		const buttonStateArray = [
-			{
-				text: 'DistributorCode',
-				dataField: 'DistributorCode',
-				showing: stockTypeSelect.value === "",
-				groupBy: false,
-				align: 'right',
-				sequence: 5
-			},
-			{
-				text: 'DistributorName',
-				dataField: 'DistributorName',
-				showing: stockTypeSelect.value === "",
-				groupBy: false,
-				sequence: 5
-			},
-
-			{
-				text: 'Productcode',
-				dataField: 'Item',
-				showing: ['', 0, 1].includes(stockTypeSelect.value),
-				groupBy: true,
-				align: 'right',
-				sequence: 1
-			},
-			{
-				text: 'Item',
-				dataField: 'ItemName',
-				showing: ['', 0, 1].includes(stockTypeSelect.value),
-				groupBy: true,
-				sequence: 1
-			}, {
-				text: 'Product',
-				dataField: 'GroupName',
-				showing: stockTypeSelect.value === "",
-				groupBy: false,
-				sequence: 5
-			}, {
-				text: 'SubProduct',
-				dataField: 'SubGroupName',
-				showing: stockTypeSelect.value === "",
-				groupBy: false,
-				sequence: 5
-			}, {
-				text: 'ProductType',
-				dataField: 'GroupTypeName',
-				showing: false,
-				groupBy: false,
-				sequence: 5
-			},
-			{
-				text: 'BatchCode',
-				dataField: 'BatchCode',
-				showing: batchWise,
-				groupBy: batchWise,
-				sequence: 2
-			},
-			{
-				text: 'MRP',
-				dataField: 'MRP',
-				align: "right",
-				showing: mrpWise,
-				groupBy: mrpWise,
-				sequence: 3
-			},
-
-			{
-				text: 'PurchaseRate',
-				dataField: 'PurchaseRate',
-				showing: stockTypeSelect.value === "",
-				groupBy: false,
-				align: 'right',
-				sequence: 5
-			},
-
-			{
-				text: 'SaleableStock',
-				dataField: 'SaleableStock',
-				align: "right",
-				showing: ['', 0].includes(stockTypeSelect.value),
-				groupBy: false,
-				align: 'right',
-				sequence: 4
-			},
-			{
-				text: 'UnSaleableStock',
-				dataField: 'UnSaleableStock',
-				showing: ['', 1].includes(stockTypeSelect.value),
-				groupBy: false,
-				align: 'right',
-				sequence: 5
-			},
-			{
-				text: 'SaleableStockValue',
-				dataField: 'SaleableStockValue',
-				showing: stockTypeSelect.value === "",
-				groupBy: false,
-				align: 'right',
-				sequence: 5
-			},
-
-			{
-				text: 'SaleableStockTaxValue',
-				dataField: 'SaleableStockTaxValue',
-				showing: stockTypeSelect.value === "",
-				groupBy: false,
-				align: 'right',
-				sequence: 5
-			}, {
-				text: 'UnSaleableStockValue',
-				dataField: 'UnSaleableStockValue',
-				showing: stockTypeSelect.value === "",
-				groupBy: false,
-				align: 'right',
-				sequence: 5
-			},
-			{
-				text: 'UnSaleableStockTaxValue',
-				dataField: 'UnSaleableStockTaxValue',
-				showing: stockTypeSelect.value === "",
-				groupBy: false,
-				align: 'right',
-				sequence: 5
-			},
-			{
-				text: 'TotalStockValue',
-				dataField: 'TotalStockValue',
-				showing: ['', 0, 1].includes(stockTypeSelect.value),
-				groupBy: false,
-				align: 'right',
-				sequence: 5
-			},
-
-			{
-				text: 'TaxValue',
-				dataField: 'TaxValue',
-				groupBy: false,
-				align: 'right',
-				sequence: 5
-			},
-			{
-				text: 'Stockvaluewithtax',
-				dataField: 'Stockvaluewithtax',
-				showing: stockTypeSelect.value === "",
-				groupBy: false,
-				align: 'right',
-				sequence: 5
-			},
-
-			{
-				text: 'Unit',
-				dataField: 'Unit',
-				showing: true,
-				groupBy: false,
-				sequence: 5
-			},
-
-		];
 
 		let filterTableData = [...baseData];
 		const newSelectedColumns = buttonStateArray.filter(option => option.showing)
@@ -386,8 +388,12 @@ const StockReport = (props) => {
 		if (buttonStateArray.some(option => option.groupBy)) {
 			const groupedItems = filterTableData.reduce((accumulator, currentItem) => {
 
-				const { SaleableStock, UnSaleableStock, TotalStockValue, UnSaleableStockTaxValue, UnSaleableStockValue, SaleableStockTaxValue, SaleableStockValue, MRP, BatchCode, Item, ItemName, PurchaseRate, DistributorCode, DistributorName, GroupName, SubGroupName, GroupTypeName, Stockvaluewithtax, Unit } = currentItem;
-
+				const { SaleableStock, UnSaleableStock,
+					TotalStockValue, UnSaleableStockTaxValue,
+					UnSaleableStockValue, SaleableStockTaxValue,
+					SaleableStockValue, MRP, BatchCode, Item, ItemName,
+					PurchaseRate, DistributorCode, DistributorName, GroupName,
+					SubGroupName, GroupTypeName, Stockvaluewithtax, Unit, TaxValue } = currentItem;
 				let key = "";
 				if (mrpWise) {
 					key = ItemName + '_' + MRP + '_' + Item;
@@ -408,6 +414,10 @@ const StockReport = (props) => {
 					accumulator[key].UnSaleableStockValue += Number(UnSaleableStockValue);
 					accumulator[key].SaleableStockTaxValue += Number(SaleableStockTaxValue);
 					accumulator[key].SaleableStockValue += Number(SaleableStockValue);
+					accumulator[key].TaxValue += Number(TaxValue);
+
+
+
 					// accumulator[key].BatchCode += BatchCode;
 
 				} else {
@@ -416,7 +426,7 @@ const StockReport = (props) => {
 						MRP, PurchaseRate, SaleableStock: Number(SaleableStock),
 						UnSaleableStock: Number(UnSaleableStock), TotalStockValue: Number(TotalStockValue),
 						UnSaleableStockTaxValue: Number(UnSaleableStockTaxValue), UnSaleableStockValue: Number(UnSaleableStockValue),
-						SaleableStockTaxValue: Number(SaleableStockTaxValue), SaleableStockValue: Number(SaleableStockValue), BatchCode,
+						SaleableStockTaxValue: Number(SaleableStockTaxValue), SaleableStockValue: Number(SaleableStockValue), TaxValue: Number(TaxValue), BatchCode,
 						DistributorCode, DistributorName, Item, GroupName, SubGroupName, GroupTypeName, BatchCode, Stockvaluewithtax, Unit
 					};
 				}
