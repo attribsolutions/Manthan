@@ -10,7 +10,7 @@ import {
     Modal,
     Row,
 } from "reactstrap";
-import { CurrentURl, breadcrumbReturnFunc, loginPartyID, loginUserDetails, metaTagLabel } from '../../components/Common/CommonFunction';
+import { CurrentURl, breadcrumbReturnFunc, loginIsSCMParty, loginPartyID, loginUserDetails, metaTagLabel } from '../../components/Common/CommonFunction';
 import * as pageId from "../../routes/allPageID"
 import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess, getGroupList, getGroupListSuccess, getSubGroupList, getSubGroupListSuccess, get_Sub_Group_By_Group_ForDropDown, get_Sub_Group_By_Group_ForDropDown_Success } from '../../store/actions';
 import * as mode from "../../routes/PageMode"
@@ -60,6 +60,7 @@ const ProductMarginReport = (props) => {
 
     const history = useHistory()
     const dispatch = useDispatch();
+    const isSCMParty = loginIsSCMParty();
 
     const [userPageAccessState, setUserAccState] = useState('');
 
@@ -97,6 +98,8 @@ const ProductMarginReport = (props) => {
         subProductLoading,
         subProductDropdown,
         getSubProductbyProduct,
+        DiscountPartyTypeLoading,
+        DiscountPartyType
     } = useSelector((state) => ({
 
         downloadProductMargin: state.SapLedgerReducer.downloadProductMargin,
@@ -105,8 +108,12 @@ const ProductMarginReport = (props) => {
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
 
-        PartyTypeLoading: state.DiscountReducer.partyTypeDropDownLoading,
-        PartyType: state.DiscountReducer.partyType,
+
+
+
+        DiscountPartyTypeLoading: (state.DiscountReducer.partyTypeDropDownLoading || state.PartyTypeReducer.goBtnLoading),
+        DiscountPartyType: state.DiscountReducer.partyType,
+        PartyType: state.PartyTypeReducer.ListData,
 
         priceListByPartyType: state.PriceListReducer.priceListByPartyType,
 
@@ -124,14 +131,19 @@ const ProductMarginReport = (props) => {
     useEffect(() => {
 
         dispatch(commonPageFieldSuccess(null));
-        dispatch(commonPageField(page_Id))
-        // dispatch(getPartyTypelist());
+        dispatch(commonPageField(page_Id));
+        if (isSCMParty) {
+            dispatch(getPartyTypelist());
+        } else {
+            dispatch(DiscountPartyType_Dropdown_Action(loginPartyID()));
+        }
         dispatch(getGroupList());
         dispatch(getSubGroupList());
         dispatch(Items_On_Group_And_Subgroup_API({ Group: 0, SubGroup: 0 }));
         dispatch(BreadcrumbShowCountlabel(`Count:${0}`));
-        dispatch(DiscountPartyType_Dropdown_Action(loginPartyID()))
+
         return () => {
+            dispatch(getPartyTypelistSuccess([]));
             dispatch(getExcel_Button_API_Success([]));
             dispatch(DiscountPartyType_Dropdown_Success([]));
             dispatch(priceListByPartyActionSuccess([]));
@@ -140,6 +152,18 @@ const ProductMarginReport = (props) => {
             dispatch(Items_On_Group_And_Subgroup_API_Success([]));
         }
     }, []);
+
+    const partyTypeDropdownOptions = useMemo(() => {
+        const getOptions = (partyTypes) => [
+            { value: 0, label: " All" },
+            ...partyTypes.map((i) => ({ value: i.id, label: i.Name })),
+        ];
+
+        return isSCMParty
+            ? getOptions(PartyType)
+            : getOptions(DiscountPartyType);
+
+    }, [DiscountPartyTypeLoading, DiscountPartyType, PartyType, PartyTypeLoading]);
 
     const priceListByPartyType_WithAll = useMemo(() => {
         if (priceListByPartyType.length > 0) {
@@ -170,11 +194,6 @@ const ProductMarginReport = (props) => {
             breadcrumbReturnFunc({ dispatch, userAcc });
         };
     }, [userAccess])
-
-
-
-
-
 
 
     useEffect(() => {
@@ -489,9 +508,9 @@ const ProductMarginReport = (props) => {
                                         <C_Select
                                             classNamePrefix="select2-Customer"
                                             value={partyTypeSelect}
-                                            isLoading={PartyTypeLoading}
+                                            isLoading={DiscountPartyTypeLoading}
                                             onChange={(e) => { PartyTypeOnchange(e) }}
-                                            options={partyTypeOptions}
+                                            options={partyTypeDropdownOptions}
                                             styles={{
                                                 menu: (provided) => ({ ...provided, zIndex: 2 }),
                                             }}
