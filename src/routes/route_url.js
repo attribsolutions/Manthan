@@ -338,7 +338,7 @@ export const CLAIM_TRACKING_REPORT = "/Claim_Tracking_Report"
 
 export const TCS_AMOUNT_REPORT = "/TCS_Amount_Report"
 
-
+export const CX_DD_DIFFERENCE_REPORT= "/CX_DD_Difference"
 
 
 

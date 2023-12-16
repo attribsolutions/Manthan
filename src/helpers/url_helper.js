@@ -515,3 +515,6 @@ export const ITEM_WISE_UPDATE_POST_API = '/ItemWiseSave'
 
 // TCS Amount Report
 export const TCS_AMOUNT_REPORT_GO_BUTTON_API = '/TCSAmountReport'
+
+// Cx-DD Diffrence Report
+export const CX_DD_DIFFRENCE_REPORT = '/CxDDDiffReport'

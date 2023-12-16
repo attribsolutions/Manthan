@@ -213,6 +213,7 @@ import ItemImageUpload from "../pages/Adminisrator/ItemPages/ItemImageUpload/Ite
 import CreditNote_1 from "../pages/Accounting/CreditDebit/CreditNote1";
 import ManPowerReport from "../Reports/ManPowerReport";
 import TCSAmountReport from "../Reports/TCSAmountReport";
+import CX_DD_DiffrenceReport from "../Reports/CX_DD_DiffrenceReport";
 
 
 const userRoutes = [
@@ -540,6 +541,7 @@ const userRoutes = [
 
 	{ path: path.TCS_AMOUNT_REPORT, component: TCSAmountReport },
 
+	{ path: path.CX_DD_DIFFERENCE_REPORT, component: CX_DD_DiffrenceReport },
 	// ************************************ Utility **************************************//
 
 	{ path: path.SEARCH_BOX2, component: SearchBoxSecond },

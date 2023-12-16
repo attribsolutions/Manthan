@@ -786,6 +786,9 @@ export const ItemWiseUpdate_Post_API = (jsonBody) => post(url.ITEM_WISE_UPDATE_P
 // TCS Amount Report
 export const TCS_Amount_Report_GoButton_API = (jsonBody) => post(url.TCS_AMOUNT_REPORT_GO_BUTTON_API, jsonBody)
 
+// Cx-DD Diffrence Report
+export const Cx_DD_Diffrence_Report_GoButton_API = (jsonBody) => post(url.CX_DD_DIFFRENCE_REPORT, jsonBody)
+
 export {
 	getLoggedInUser,
 	isUserAuthenticated,
