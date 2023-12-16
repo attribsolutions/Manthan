@@ -118,6 +118,8 @@ import ServiceItemAssignReducer from "./Administrator/ServiceItemAssignRedux/red
 import PartyDetailsReducer from "./Administrator/PartyDetailsRedux/reducer"
 import ItemWiseUpdateReducer from "./Administrator/ItemWiseUpdateRedux/reducer"
 import TCSAmountReportReducer from "./Report/TCS_AmountRedux/reducer"
+import Cx_DD_Diffrence_Reducer from "./Report/CX_DD_Diffrence_Report/reducer"
+
 
 const rootReducer = combineReducers({
 	Layout,
@@ -215,5 +217,6 @@ const rootReducer = combineReducers({
 	PartyDetailsReducer,
 	ItemWiseUpdateReducer,
 	TCSAmountReportReducer,
+	Cx_DD_Diffrence_Reducer,
 })
 export default rootReducer

@@ -6,7 +6,8 @@ import { C_Button } from "../components/Common/CommonButton";
 import { C_Select } from "../CustomValidateForm";
 import { loginIsSCMParty } from "../components/Common/CommonFunction";
 
-export function ReportComponent({ pageField, excelData, excelFileName }) {
+export function ReportComponent({ pageField, excelData, excelFileName, extraColumn = "" }) {
+
     let csvColumns = []
     let csvHeaderColumns = []
     let csvData = []
@@ -20,6 +21,11 @@ export function ReportComponent({ pageField, excelData, excelFileName }) {
             .filter(column => column.ShowInListPage) // Only include columns where ShowInListPage is true
             .sort((a, b) => a.ListPageSeq - b.ListPageSeq) // Sort columns by ListPageSeq in ascending order
             .map(column => column.FieldLabel); // Extract FieldLabel as column headers
+
+        if (extraColumn !== "") {
+            csvColumns.unshift(extraColumn);
+            csvHeaderColumns.unshift(extraColumn);
+        }
 
         // Map the data to include only the properties corresponding to the columns
         csvData = excelData.map(item =>

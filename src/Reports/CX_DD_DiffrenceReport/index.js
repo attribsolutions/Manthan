@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Col, FormGroup, Label, Row, } from "reactstrap";
 import { useHistory } from "react-router-dom";
@@ -6,7 +6,7 @@ import { initialFiledFunc } from "../../components/Common/validationFunction";
 import { C_Button } from "../../components/Common/CommonButton";
 import { C_DatePicker } from "../../CustomValidateForm";
 import * as _cfunc from "../../components/Common/CommonFunction";
-import { mode, url, pageId } from "../../routes/index"
+import { mode, pageId } from "../../routes/index"
 import { MetaTags } from "react-meta-tags";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
@@ -15,9 +15,9 @@ import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
 import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess } from "../../store/actions";
 import DynamicColumnHook from "../../components/Common/TableCommonFunc";
 import { ReportComponent } from "../ReportComponent";
-import { TCS_Amount_Gobtn_Action, TCS_Amount_Gobtn_Success } from "../../store/Report/TCS_AmountRedux/action";
+import { Cx_DD_Diffrence_Gobtn_Action, Cx_DD_Diffrence_Gobtn_Success } from "../../store/Report/CX_DD_Diffrence_Report/action";
 
-const TCSAmountReport = (props) => {
+const CX_DD_DiffrenceReport = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory();
@@ -32,14 +32,14 @@ const TCSAmountReport = (props) => {
     const [state, setState] = useState(() => initialFiledFunc(fileds))
     const [userPageAccessState, setUserAccState] = useState('');
     const [btnMode, setBtnMode] = useState("");
-    const [PartyDropdown, setPartyDropdown] = useState({ value: "", label: "All" });
+    const [PartyDropdown, setPartyDropdown] = useState({ value: 0, label: "All" });
 
     const [updatetableColumn, setupdatetableColumn] = useState([{}]);
 
     const reducers = useSelector(
         (state) => ({
-            tableData: state.TCSAmountReportReducer.tcsAmtReportGobtn,
-            GoBtnLoading: state.TCSAmountReportReducer.goBtnLoading,
+            tableData: state.Cx_DD_Diffrence_Reducer.Cx_DD_Diff_ReportGobtn,
+            GoBtnLoading: state.Cx_DD_Diffrence_Reducer.goBtnLoading,
             PartyList: state.CommonPartyDropdownReducer.commonPartyDropdown,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageField
@@ -50,11 +50,11 @@ const TCSAmountReport = (props) => {
 
     useEffect(() => {
         dispatch(commonPageFieldSuccess(null));
-        dispatch(commonPageField(pageId.TCS_AMOUNT_REPORT));
+        dispatch(commonPageField(pageId.CX_DD_DIFFERENCE_REPORT));
         dispatch(BreadcrumbShowCountlabel(`Count:${0}`));
         return () => {
             dispatch(commonPageFieldSuccess(null));
-            dispatch(TCS_Amount_Gobtn_Success([]));
+            dispatch(Cx_DD_Diffrence_Gobtn_Success([]));
         }
     }, []);
 
@@ -62,8 +62,8 @@ const TCSAmountReport = (props) => {
 
     useEffect(() => {
         const newColumn = [{
-            text: "PartyName",
-            dataField: "PartyName",
+            text: "SupplierName",
+            dataField: "SupplierName",
         },
         ...tableColumns
         ];
@@ -104,25 +104,22 @@ const TCSAmountReport = (props) => {
                 ReportComponent({                // Download CSV
                     pageField,
                     excelData: tableData,
-                    excelFileName: "TCS Amount Report",
-                    extraColumn: isSCMParty ? "PartyName" : "",
+                    excelFileName: "CX-DD Difference Report",
+                    extraColumn: isSCMParty ? "SupplierName" : "",
                 })
-                dispatch(TCS_Amount_Gobtn_Success([]));
             }
         }
     }, [tableData]);
 
-    function goAndExcel_Btn_Handler(btnId) {
+    async function goAndExcel_Btn_Handler(btnId) {
         setBtnMode(btnId)
         try {
-
             const jsonBody = JSON.stringify({
                 "FromDate": values.FromDate,
                 "ToDate": values.ToDate,
                 "Party": isSCMParty ? PartyDropdown.value : _cfunc.loginPartyID()
             });
-
-            dispatch(TCS_Amount_Gobtn_Action(jsonBody))
+            dispatch(Cx_DD_Diffrence_Gobtn_Action(jsonBody));
 
         } catch (error) { _cfunc.CommonConsole(error) }
     }
@@ -134,7 +131,8 @@ const TCSAmountReport = (props) => {
             a.hasValid.FromDate.valid = true
             return a
         })
-        dispatch(TCS_Amount_Gobtn_Success([]))
+
+        dispatch(Cx_DD_Diffrence_Gobtn_Success([]));
     }
 
     function todateOnchange(e, date) {
@@ -144,19 +142,19 @@ const TCSAmountReport = (props) => {
             a.hasValid.ToDate.valid = true
             return a
         })
-        dispatch(TCS_Amount_Gobtn_Success([]))
+        dispatch(Cx_DD_Diffrence_Gobtn_Success([]));
     }
 
     const partyOnchange = (e) => {
         setPartyDropdown(e)
-        dispatch(TCS_Amount_Gobtn_Success([]));
+        dispatch(Cx_DD_Diffrence_Gobtn_Success([]));
     }
 
     const Party_Option = PartyList.map(i => ({
         value: i.id,
         label: i.Name
     }));
-    Party_Option.unshift({ value: "", label: "All" })
+    Party_Option.unshift({ value: 0, label: "All" })
 
     return (
         <React.Fragment>
@@ -220,7 +218,7 @@ const TCSAmountReport = (props) => {
                                 type="button"
                                 spinnerColor="white"
                                 loading={(GoBtnLoading && btnMode === "show") && true}
-                                className="btn btn-success   "
+                                className="btn btn-success"
                                 onClick={() => goAndExcel_Btn_Handler("show")}
                             >
                                 Show
@@ -232,7 +230,7 @@ const TCSAmountReport = (props) => {
                                 type="button"
                                 spinnerColor="white"
                                 loading={(GoBtnLoading && btnMode === "excel") && true}
-                                className="btn btn-primary   "
+                                className="btn btn-primary"
                                 onClick={() => goAndExcel_Btn_Handler("excel")}
                             >
                                 Excel Download
@@ -243,7 +241,7 @@ const TCSAmountReport = (props) => {
 
                 <div className="mt-1">
                     <ToolkitProvider
-                        keyField="InvoiceNumber"
+                        keyField="id"
                         data={tableData}
                         columns={updatetableColumn}
                         search
@@ -254,7 +252,7 @@ const TCSAmountReport = (props) => {
                                     <Col xl="12">
                                         <div className="table-responsive table">
                                             <BootstrapTable
-                                                keyField="InvoiceNumber"
+                                                keyField="id"
                                                 classes={"table  table-bordered table-hover"}
                                                 noDataIndication={
                                                     <div className="text-danger text-center ">
@@ -281,4 +279,4 @@ const TCSAmountReport = (props) => {
     )
 }
 
-export default TCSAmountReport;
+export default CX_DD_DiffrenceReport;
