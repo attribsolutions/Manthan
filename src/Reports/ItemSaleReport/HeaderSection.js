@@ -163,6 +163,13 @@ const HeaderSection = (props) => {
     };
   }, []);
 
+  const channelFrom_WithAll = useMemo(() => {
+    if (channelFromOption.length > 0) {
+      return [{ value: 0, label: "All" }, ...channelFromOption,];
+    }
+    return channelFromOption;
+  }, [channelFromOption]);
+
   useEffect(async () => {
     fetchDataAndSetDropdown(0, setChannelFromOption); // set ChannelFrom dropdown (CompanyID is 0)
     fetchDataAndSetDropdown(_cfunc.loginCompanyID(), setChannelToOption); // set ChannelTo dropdown (CompanyID is loginCompanyID)
@@ -244,22 +251,26 @@ const HeaderSection = (props) => {
   );
 
   function fromdateOnchange(e, date) {
+    states.setTableData([]);
+    dispatch(ItemSaleGoButton_API_Success([]));
     let newObj = { ...states.hederFilters };
     newObj.fromdate = date;
     states.setHederFilters(newObj);
-    states.setTableData([]);
     states.setInitaialBaseData([]);
   }
 
   function todateOnchange(e, date) {
+    states.setTableData([]);
+    dispatch(ItemSaleGoButton_API_Success([]));
     let newObj = { ...states.hederFilters };
     newObj.todate = date;
     states.setHederFilters(newObj);
-    states.setTableData([]);
     states.setInitaialBaseData([]);
   }
 
   function ChannelFromDropdown_Onchange(e) {
+    dispatch(ItemSaleGoButton_API_Success([]));
+    states.setTableData([]);
     states.setChannelFromSelect(e);
     states.setSupplierSelect(initail.INITIAL_ZERO);
     dispatch(
@@ -271,10 +282,11 @@ const HeaderSection = (props) => {
   }
 
   function SupplierOnChange(event) {
+    dispatch(ItemSaleGoButton_API_Success([]));
+    states.setTableData([]);
     states.setSupplierSelect(event);
     states.setRouteSelect([{ value: 0, label: "All" }]);
     states.setCustomerSelect([{ value: 0, label: "All" }]);
-    states.setTableData([]);
     states.setInitaialBaseData([]);
     dispatch(GetVenderSupplierCustomerSuccess([]));
     dispatch(GetRoutesListSuccess([]));
@@ -557,7 +569,7 @@ const HeaderSection = (props) => {
                         styles={{
                           menu: (provided) => ({ ...provided, zIndex: 2 }),
                         }}
-                        options={channelFromOption}
+                        options={channelFrom_WithAll}
                         onChange={ChannelFromDropdown_Onchange}
                       />
                     </Col>
