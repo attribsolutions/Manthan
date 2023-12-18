@@ -527,6 +527,9 @@ export const E_WayBill_ActionsButtonFunc = ({ dispatch, reducers, e_WayBill_Acti
             )
         }
     };
+    if (!(loginSystemSetting().EWayBillApplicable === "1")) {
+        return null; // Return null if the column should be hidden
+    }
 
     return {
         text: "E-Way Bill",

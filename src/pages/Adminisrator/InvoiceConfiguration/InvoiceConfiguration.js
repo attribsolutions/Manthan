@@ -71,6 +71,7 @@ const InvoiceConfiguration = (props) => {
         PaymentQr: "",
         ReturnA4Print: "",
         CRDRNoteA4Print: "",
+        EWayBillApplicable: ""
         // IsTCSPercentageforNonValidatedPANCustomer: "",
         // IsTCSPercentageforValidatedPANCustomer: ""
     }
@@ -238,7 +239,7 @@ const InvoiceConfiguration = (props) => {
             }
 
             setState((i) => {
-                
+
                 const a = { ...i }
                 a.values.Invoicea4 = Data.A4Print;
                 a.values.AddressInInvoice = Data.AddressOnInvoice;
@@ -253,6 +254,11 @@ const InvoiceConfiguration = (props) => {
                 a.values.PaymentQr["Image"] = SystemSetting.Qr_Image;
                 a.values.ReturnA4Print = Data.ReturnA4Print;
                 a.values.CRDRNoteA4Print = Data.CRDRNoteA4Print;
+                a.values.EWayBillApplicable = Data.EWayBillApplicable;
+
+
+
+
 
                 return a
             })
@@ -273,7 +279,7 @@ const InvoiceConfiguration = (props) => {
 
 
     const onchangeHandler = async (event, key, type) => {
-        
+
         const file = Array.from(event.target.files)
         setState((i) => {
             const a = { ...i }
@@ -332,7 +338,7 @@ const InvoiceConfiguration = (props) => {
         if (Object.keys(SystemSetting).length !== 0) {
 
             const file = await convertImageToFile(SystemSetting.Qr_Image)
-            
+
 
             if (!isURL(SystemSetting.Qr_Image)) {
                 setState((i) => {
@@ -722,9 +728,37 @@ const InvoiceConfiguration = (props) => {
                                                     <FormGroup className="mb-3">
                                                         <Row>
                                                             <Col sm={5} >
-                                                                <Label htmlFor="validationCustom01">  {fieldLabel.CreditDebitAmountRound} </Label>
+                                                                <Label htmlFor="validationCustom01">  {fieldLabel.EWayBillApplicable} </Label>
                                                             </Col>
                                                             <Col sm={7} >
+                                                                <Input
+                                                                    style={{ marginLeft: "53px" }}
+                                                                    type="checkbox"
+                                                                    className="p-2"
+                                                                    checked={values.EWayBillApplicable.Value === "0" ? false : true}
+                                                                    onChange={(e) => {
+                                                                        setState((i) => {
+                                                                            const a = { ...i }
+
+                                                                            a.values.EWayBillApplicable.Value = e.target.checked === false ? "0" : "1";
+                                                                            return a
+                                                                        })
+                                                                    }}
+                                                                >
+                                                                </Input>
+
+                                                            </Col>
+                                                        </Row>
+                                                    </FormGroup>
+                                                </Col>
+
+                                                <Col sm={8}>
+                                                    <FormGroup className="mb-3">
+                                                        <Row>
+                                                            <Col sm={3} >
+                                                                <Label htmlFor="validationCustom01">  {fieldLabel.CreditDebitAmountRound} </Label>
+                                                            </Col>
+                                                            <Col sm={9} >
                                                                 <Input
                                                                     style={{ marginLeft: "53px" }}
                                                                     type="checkbox"
@@ -744,33 +778,8 @@ const InvoiceConfiguration = (props) => {
                                                         </Row>
                                                     </FormGroup>
                                                 </Col>
-                                                <Col sm={8}>
-                                                    <FormGroup className="mb-3">
-                                                        <Row>
-                                                            <Col sm={3} >
-                                                                <Label htmlFor="validationCustom01">  {fieldLabel.ReturnA4Print} </Label>
-                                                            </Col>
-                                                            <Col sm={9} >
-                                                                <Input
-                                                                    style={{ marginLeft: "53px" }}
-                                                                    type="checkbox"
-                                                                    className="p-2"
-                                                                    checked={values.ReturnA4Print.Value === "0" ? false : true}
-                                                                    onChange={(e) => {
-                                                                        setState((i) => {
-                                                                            const a = { ...i }
 
-                                                                            a.values.ReturnA4Print.Value = e.target.checked === false ? "0" : "1";
-                                                                            return a
-                                                                        })
-                                                                    }}
-                                                                >
-                                                                </Input>
 
-                                                            </Col>
-                                                        </Row>
-                                                    </FormGroup>
-                                                </Col>
                                             </Row>
 
                                             <Row>
@@ -803,6 +812,37 @@ const InvoiceConfiguration = (props) => {
                                                         </Row>
                                                     </FormGroup>
                                                 </Col>
+
+
+                                                <Col sm={8}>
+                                                    <FormGroup className="mb-3">
+                                                        <Row>
+                                                            <Col sm={3} >
+                                                                <Label htmlFor="validationCustom01">  {fieldLabel.ReturnA4Print} </Label>
+                                                            </Col>
+                                                            <Col sm={9} >
+                                                                <Input
+                                                                    style={{ marginLeft: "53px" }}
+                                                                    type="checkbox"
+                                                                    className="p-2"
+                                                                    checked={values.ReturnA4Print.Value === "0" ? false : true}
+                                                                    onChange={(e) => {
+                                                                        setState((i) => {
+                                                                            const a = { ...i }
+
+                                                                            a.values.ReturnA4Print.Value = e.target.checked === false ? "0" : "1";
+                                                                            return a
+                                                                        })
+                                                                    }}
+                                                                >
+                                                                </Input>
+
+                                                            </Col>
+                                                        </Row>
+                                                    </FormGroup>
+                                                </Col>
+
+
 
                                             </Row>
 
