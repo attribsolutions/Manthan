@@ -513,7 +513,13 @@ const InvoiceList = () => {
 
     const selectDeleteBtnHandler = (row = []) => {
 
-        let ischeck = row.filter(i => (i.selectCheck))
+        let isAllcheck = row.filter(i => (i.hasAllSelect))
+        let ischeck = [];
+        if (isAllcheck.length > 0) {
+            ischeck = row.filter(i => !(i.forceSelectDissabled))
+        } else {
+            ischeck = row.filter(i => (i.selectCheck))
+        }
         if (!ischeck.length > 0) {
             customAlert({
                 Type: 4,
@@ -556,7 +562,7 @@ const InvoiceList = () => {
                             e_WayBill_ActionsBtnFunc={e_WayBill_ActionsBtnFunc}
                             totalAmountShow={true}
                             selectCheckParams={{
-                                isShow: (subPageMode === url.INVOICE_LIST_1) ,
+                                isShow: (subPageMode === url.INVOICE_LIST_1),
                                 selectSaveBtnHandler: selectDeleteBtnHandler,
                                 selectSaveBtnLabel: "Delete",
                                 selectHeaderLabel: "Select",

@@ -6,6 +6,7 @@ import BootstrapTable from 'react-bootstrap-table-next';
 import CustomPagination from './TablePagination';
 
 
+
 const CustomTable = ({
     data,
     columns,
@@ -94,6 +95,7 @@ const CustomTable = ({
                 classes='custom-table'
                 rowClasses={rowClesess}
                 sort={sortCaretFunction}
+
                 {...rest} />
 
             {paginationEnabled &&
@@ -101,8 +103,10 @@ const CustomTable = ({
                     pageCount={pageCount}
                     currentPage={currentPage}
                     handlePageChange={handlePageChange}
+                    tablelist={slicedData}
                 />
             }
+
         </div>
     );
 };
