@@ -96,23 +96,18 @@ export function Cx_DD_ExcelDownload({ pageField, excelData, excelFileName, Party
             fgColor: { argb: 'FFFFCC' } // Light yellow background color
         };
 
-
-
-        // const lastCell_I = worksheet.getCell(`I${lastRowIndex}`);
-        // lastCell_I.fill = {
-        //     type: 'pattern',
-        //     pattern: 'solid',
-        //     fgColor: { argb: 'FFFFCC' } // Light yellow background color
-        // };
     });
 
-    // Set the frozen rows to 2 to freeze the first two rows (including the header)
-
-
-
     worksheet.views = [
-        { state: 'frozen', xSplit: 0, ySplit: 1, activeCell: 'A3', showGridLines: true } // <-- Set showGridLines to true
+        {
+            state: 'frozen',
+            xSplit: 1,  // Set xSplit to 1 to freeze the first column
+            ySplit: 1,  // Set ySplit to 1 to freeze the top row
+            activeCell: 'B2',  // Set the active cell after freezing
+            showGridLines: true,
+        }
     ];
+
     //=============================================================================
 
     // Auto-fit width for all columns
@@ -143,22 +138,8 @@ export function Cx_DD_ExcelDownload({ pageField, excelData, excelFileName, Party
     // Call the function after populating the worksheet
     applyBordersToWorksheet(worksheet);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     function addRowWithFormulaAndFormatting(label, formula, bgColor, fontColor, startCol, endCol) {
-        debugger
+
         const lastRowIndex = worksheet.lastRow.number;
 
         // Add a new blank row
