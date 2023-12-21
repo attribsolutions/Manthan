@@ -60,15 +60,11 @@ export function Cx_DD_ExcelDownload({ pageField, excelData, excelFileName, Party
         const firstRowStart = mainExcelRowData.length - (dataRow.length);
         const lastRowIndex = worksheet.lastRow.number;
 
-
-
         worksheet.mergeCells(`A${firstRowStart}:A${lastRowIndex - 1}`);
         const mergedCellVerticalA = worksheet.getCell(`A${firstRowStart}`);
         mergedCellVerticalA.alignment = { vertical: 'top' };
         mergedCellVerticalA.font = { bold: true, };
         mergedCellVerticalA.value = xpressName
-
-
 
         // Merge cells A to G in the last row of the group
         worksheet.mergeCells(`A${lastRowIndex}:H${lastRowIndex}`);
@@ -84,7 +80,6 @@ export function Cx_DD_ExcelDownload({ pageField, excelData, excelFileName, Party
         };
         mergedCellA.alignment = { vertical: 'middle', horizontal: 'right' };
 
-
         // Set the formula for cell H in the last row of the group
         const sumFormula = `SUM(I${firstRowStart}:I${lastRowIndex - 1})`;
         const sumCellH = worksheet.getCell(`I${lastRowIndex}`);
@@ -95,7 +90,6 @@ export function Cx_DD_ExcelDownload({ pageField, excelData, excelFileName, Party
             pattern: 'solid',
             fgColor: { argb: 'FFFFCC' } // Light yellow background color
         };
-
     });
 
     worksheet.views = [
@@ -200,17 +194,15 @@ export function Cx_DD_ExcelDownload({ pageField, excelData, excelFileName, Party
             bottom: { style: 'dotted', color: { argb: '000000' } },
             right: { style: 'dotted', color: { argb: '000000' } }
         };
-
     }
 
-    const sumFormulaSheet = `SUM(F1:F${worksheet.lastRow.number})/2`;
+    const sumFormulaSheet = `SUM(I1:I${worksheet.lastRow.number})/2`;
     const basicAmount = `I${worksheet.lastRow.number + 1}`
 
     const without_GSTFormula = `${basicAmount} * 0.18`;
     const with_GSTFormula = `${basicAmount} + I${worksheet.lastRow.number + 2}`;
     const sumFormulaSheetForTDS = `${basicAmount} * 0.02`;
     const sumFormulaSheetForTDSLess = `I${worksheet.lastRow.number + 3}-I${worksheet.lastRow.number + 4}`;
-
 
     addRowWithFormulaAndFormatting(
         `${PartyName} Basic Amount Total`,
@@ -230,17 +222,14 @@ export function Cx_DD_ExcelDownload({ pageField, excelData, excelFileName, Party
     );
 
     addRowWithFormulaAndFormatting(
-
         "GST(18%) Addition Amount",
         with_GSTFormula,
         'b3cccc',
         '000000',
         7, 8
-
     );
 
     addRowWithFormulaAndFormatting(
-
         "TDS 2% On Basic",
         sumFormulaSheetForTDS,
         'b3cccc',
@@ -249,7 +238,6 @@ export function Cx_DD_ExcelDownload({ pageField, excelData, excelFileName, Party
     );
 
     addRowWithFormulaAndFormatting(
-
         "TDS Less Amt",
         sumFormulaSheetForTDSLess,
         'b3cccc',
