@@ -16,6 +16,7 @@ import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess } fro
 import DynamicColumnHook from "../../components/Common/TableCommonFunc";
 import { ReportComponent } from "../ReportComponent";
 import { Cx_DD_Diffrence_Gobtn_Action, Cx_DD_Diffrence_Gobtn_Success } from "../../store/Report/CX_DD_Diffrence_Report/action";
+import { Cx_DD_ExcelDownload } from "./excelDownload";
 
 const CX_DD_DiffrenceReport = (props) => {
 
@@ -101,11 +102,11 @@ const CX_DD_DiffrenceReport = (props) => {
 
         if (btnMode === "excel") {
             if (tableData.length > 0) {
-                ReportComponent({                // Download CSV
+                Cx_DD_ExcelDownload({                // Download CSV
                     pageField,
                     excelData: tableData,
                     excelFileName: "CX-DD Difference Report",
-                    extraColumn: isSCMParty ? "SupplierName" : "",
+                    PartyName: PartyDropdown.label,
                 })
             }
         }
@@ -119,6 +120,7 @@ const CX_DD_DiffrenceReport = (props) => {
                 "ToDate": values.ToDate,
                 "Party": isSCMParty ? PartyDropdown.value : _cfunc.loginPartyID()
             });
+            // dispatch(Cx_DD_Diffrence_Gobtn_Action({ "FromDate": "2023-12-01", "ToDate": "2023-12-19", "Party": 21 }));
             dispatch(Cx_DD_Diffrence_Gobtn_Action(jsonBody));
 
         } catch (error) { _cfunc.CommonConsole(error) }

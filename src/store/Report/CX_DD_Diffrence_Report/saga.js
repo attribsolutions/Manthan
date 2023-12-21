@@ -1,6 +1,6 @@
 import { call, put, takeLatest } from "redux-saga/effects";
 import { CX_DD_DIFFRENCE_GO_BUTTON_ACTION } from "./actionType";
-import { amountCommaSeparateFunc } from "../../../components/Common/CommonFunction";
+import { amountCommaSeparateFunc,roundToDecimalPlaces } from "../../../components/Common/CommonFunction";
 import { Cx_DD_Diffrence_Gobtn_Success, Cx_DD_Diffrence_ReportApiErrorAction, } from "./action";
 import { Cx_DD_Diffrence_Report_GoButton_API } from "../../../helpers/backend_helper"
 
@@ -11,12 +11,12 @@ function* Cx_DD_DiffrenceReport_GenFunc({ config }) {
 
         response.Data.map((i, index) => {
             i.id = index + 1
-            i.Quantity = amountCommaSeparateFunc(parseFloat(i.Quantity).toFixed(2)) //  Quantity show with commas
-            i.CXRate = amountCommaSeparateFunc(parseFloat(i.CXRate).toFixed(2)) //  CXRate show with commas
-            i.Diff = amountCommaSeparateFunc(parseFloat(i.Diff).toFixed(2)) //  Diff show with commas
-            i.MRP = amountCommaSeparateFunc(parseFloat(i.MRP).toFixed(2)) //  MRP show with commas
-            i.SumofDiff = amountCommaSeparateFunc(parseFloat(i.SumofDiff).toFixed(2)) //  SumofDiff show with commas
-            i.DDRate = amountCommaSeparateFunc(parseFloat(i.DDRate).toFixed(2)) //  GrandTotal show with commas
+            i.Quantity = roundToDecimalPlaces(i.Quantity,2,true) //  Quantity show with commas
+            i.CXRate = roundToDecimalPlaces(i.CXRate,2,true) //  CXRate show with commas
+            i.Diff = roundToDecimalPlaces(i.Diff,2,true) //  Diff show with commas
+            i.MRP = roundToDecimalPlaces(i.MRP,2,true) //  MRP show with commas
+            i.SumofDiff = roundToDecimalPlaces(i.SumofDiff,2,true)//  SumofDiff show with commas
+            i.DDRate = roundToDecimalPlaces(i.DDRate,2,true) //  GrandTotal show with commas
             return i;
         });
 
