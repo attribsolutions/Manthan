@@ -3,21 +3,20 @@ import { useState } from "react";
 import { useEffect } from "react";
 
 
-const onSelectAll = (event, allarray,) => {
-
-  allarray.forEach(ele => {
+export const onSelectAll = ({ event, allarray, }) => {  // event only call After all selection 
+  const indexToModify = 0;
+  allarray.forEach((ele, key) => {
     ele.selectCheck = event
-    // try {
-    //   document.getElementById(`serviceItemAssign-${ele.ServiceItem}`).disabled = !(event)
-    // } catch (e) { }
+    ele["hasAllSelect"] = event
+    if (indexToModify === key) {
+      allarray[indexToModify]["hasAllSelect"] = event;
+    }
   })
+
 }
 
-const selectRow = (row, event) => {
+export const selectRow = (row, event) => {
   row.selectCheck = event
-  // try {
-  //   document.getElementById(`serviceItemAssign-${row.ServiceItem}`).disabled = !(event)
-  // } catch (e) { }
 }
 
 export const selectAllCheck = ({
@@ -26,12 +25,15 @@ export const selectAllCheck = ({
   position,
   headLabel,
   bgColor = "#9dadf09e",
-  disabledWithMsg = ''
+  disabledWithMsg = '',
+  tableList = []
+
 }) => ({
+
 
   mode: "checkbox",
   bgColor: bgColor,
-  onSelectAll: onSelectAll,
+  onSelectAll: (event) => onSelectAll({ event: event, allarray: tableList }),
   onSelect: selectRow,
   selected: rowSelected,
   selectColumnPosition: position ? position : "right",
@@ -39,6 +41,12 @@ export const selectAllCheck = ({
   attrs: () => ({ 'data-label': "Select" }),
 
   selectionHeaderRenderer: (head) => {
+    if (tableList.length > 0) {
+      let isAllcheck = tableList.filter(i => (i.hasAllSelect))
+      if (isAllcheck.length > 0) {
+        head.checked = true
+      }
+    }
 
     return <div className="">
       <Input type="checkbox" checked={head.checked} />
@@ -46,6 +54,12 @@ export const selectAllCheck = ({
     </div>
   },
   selectionRenderer: ({ mode, checked, ...rest }) => {
+    if (tableList.length > 0) {
+      let isAllcheck = tableList.filter(i => (i.hasAllSelect))
+      if (isAllcheck.length > 0) {
+        checked = rest.disabled ? false : true
+      }
+    }
     if (rest.disabled) {
       return <>
         <Input
@@ -61,7 +75,7 @@ export const selectAllCheck = ({
         &nbsp;&nbsp; <samp className="text-danger">{disabledWithMsg}</samp>
       </>;
     }
-    return <Input type="checkbox" checked={checked}  {...rest} />
+    return <Input id="CheckBox_id" type="checkbox" checked={checked}  {...rest} />
 
   }
 

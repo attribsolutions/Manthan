@@ -344,7 +344,7 @@ const InvoiceExcelUpload = (props) => {
                         "SGSTPercentage": ele[parArr.SGSTPercentage] ? ele[parArr.SGSTPercentage] : (ele[parArr.GSTPercentage] / 2).toFixed(2),
                         "IGSTPercentage": ele[parArr.IGSTPercentage] ? ele[parArr.IGSTPercentage] : 0,
                         "Amount": ele[parArr.Amount] ? ele[parArr.Amount] : 0,
-                        "DiscountType": ele[parArr.DiscountType] ? ele[parArr.DiscountType] : '',
+                        "DiscountType": ele[parArr.DiscountType] ? ele[parArr.DiscountType] : 2,
                         "Discount": ele[parArr.Discount] ? ele[parArr.Discount] : 0,
                         "DiscountAmount": ele[parArr.DiscountAmount] ? ele[parArr.DiscountAmount] : 0,
 

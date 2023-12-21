@@ -1,5 +1,13 @@
+import { onSelectAll, } from "../components/Common/TableCommonFunc";
 
-function CustomPagination({ pageCount, currentPage, handlePageChange }) {
+function CustomPagination({ pageCount, currentPage, handlePageChange, tablelist }) {
+    if (tablelist.length > 0) {
+        let isAllcheck = tablelist.filter(i => (i.hasAllSelect))
+        if (isAllcheck.length > 0) {
+            onSelectAll({ event: true, allarray: tablelist });
+        }
+    }
+
     const pages = [];
     const maxVisiblePages = 5; // Total number of visible pagination items
 
