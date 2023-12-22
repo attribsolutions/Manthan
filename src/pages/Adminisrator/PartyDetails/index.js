@@ -298,7 +298,7 @@ const PartyDetails = (props) => {
                     <Col style={{ width: "150px" }}>
 
                         <C_Select
-                            defaultValue={(row.SuperstokiestID === null || row.SuperstokiestName === undefined) ? "" : { value: row.SuperstokiestID, label: row.SuperstokiestName }}
+                            value={(row.SuperstokiestID === null || row.SuperstokiestName === undefined) ? "" : { value: row.SuperstokiestID, label: row.SuperstokiestName }}
                             options={row.SuperstokiestOptions}
                             onChange={(e) => {
                                 row.SuperstokiestID = e.value;
@@ -323,7 +323,7 @@ const PartyDetails = (props) => {
                         <C_Select
                             id={`Cluster${key}`}
                             key={`Cluster${row.id}`}
-                            defaultValue={(row.clusterId === null || row.clusterName === undefined) ? "" : { value: row.clusterId, label: row.clusterName }}
+                            value={(row.clusterId === null || row.clusterName === undefined) ? "" : { value: row.clusterId, label: row.clusterName }}
                             onChange={(e) => {
                                 row.clusterId = e.value;
                                 row.clusterName = e.label;
