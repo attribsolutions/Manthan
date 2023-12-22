@@ -133,7 +133,7 @@ const ImportExcelPartyMap = (props) => {
                 "fieldId": i.Item,
                 "mapValue": i.MapItem,
             }))
-            debugger
+            
             setUpdateTableList(newItemList)
         } else {
             setUpdateTableList(goButtonArr)
@@ -172,7 +172,7 @@ const ImportExcelPartyMap = (props) => {
         label: index.Name,
     }));
 
-    const mapTypeDropdown_Options = [{
+    const mapTypeDropdown_Options = [{  // this map type also check in invoice excel upload   for mapping validation!!s
         value: 1,
         label: "Party",
     },

@@ -7,7 +7,7 @@ import {
     Row,
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
-import { commonPageFieldSuccess, } from "../../../../store/actions";
+import { commonPageFieldSuccess, goButtonPartyItemAddPage, } from "../../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
 import * as mode from "../../../../routes/PageMode";
@@ -30,6 +30,8 @@ import './scss.scss'
 import { C_Button, Go_Button, PageLoadingSpinner } from "../../../../components/Common/CommonButton";
 import { C_Select } from "../../../../CustomValidateForm";
 import NewCommonPartyDropdown from "../../../../components/Common/NewCommonPartyDropdown";
+import { async } from "q";
+import { ImportMaster_Map_Unit_GoButton_API } from "../../../../helpers/backend_helper";
 
 
 const InvoiceExcelUpload = (props) => {
@@ -43,6 +45,13 @@ const InvoiceExcelUpload = (props) => {
     const [selectedFiles, setselectedFiles] = useState([])
     const [readJsonDetail, setReadJsonDetail] = useState(preDetails)
     const [preViewDivShow, setPreViewDivShow] = useState(false)
+    const [verifyLoading, setverifyLoading] = useState(false)
+
+    const [unitMapData, setunitMapData] = useState([])
+
+
+
+
 
 
     const {
@@ -53,7 +62,8 @@ const InvoiceExcelUpload = (props) => {
         compareParamLoading,
         saveBtnLoading,
         commonPartyDropSelect,
-        PartyMapData
+        PartyMapData,
+        ItemList,
     } = useSelector((state) => ({
         postMsg: state.ImportExcelPartyMap_Reducer.invoiceExcelUploadMsg,
         saveBtnLoading: state.ImportExcelPartyMap_Reducer.invoiceUploadSaveLoading,
@@ -66,16 +76,32 @@ const InvoiceExcelUpload = (props) => {
         compareParamLoading: state.ImportExportFieldMap_Reducer.goBtnLoading,
         userAccess: state.Login.RoleAccessUpdateData,
 
+        ItemList: state.PartyItemsReducer.partyItem,
         commonPartyDropSelect: state.CommonPartyDropdownReducer.commonPartyDropSelect
     }));
 
 
     // Common Party Dropdown useEffect
-    useEffect(() => {
+    useEffect(async () => {
         dispatch(GoButton_ImportFiledMap_AddSuccess([]));
         if (commonPartyDropSelect.value > 0) {
+            let partyId = commonPartyDropSelect.value;
             goButtonHandler()
+            const jsonBody = {
+                ..._cfunc.loginJsonBody(),
+                PartyID: commonPartyDropSelect.value,
+            };
+            dispatch(GoButton_ImportExcelPartyMap({ partyId }))
+            dispatch(goButtonPartyItemAddPage({ jsonBody }));
+            dispatch(GoButton_ImportExcelPartyMap({ partyId, mapType: 3 }))
+            const resp = await ImportMaster_Map_Unit_GoButton_API({ partyId })
+
+            if (resp.StatusCode === 200) {
+                setunitMapData(resp.Data)
+            }
         }
+
+
         return () => {
             dispatch(GoButton_ImportFiledMap_AddSuccess([]));
             dispatch(getPartyListAPISuccess([]));
@@ -127,12 +153,6 @@ const InvoiceExcelUpload = (props) => {
     }, [postMsg])
 
 
-    useEffect(() => {
-        let partyId = _cfunc.loginSelectedPartyID();
-        dispatch(GoButton_ImportExcelPartyMap({ partyId }))
-    }, [])
-
-
 
     function goButtonHandler() {
 
@@ -147,12 +167,13 @@ const InvoiceExcelUpload = (props) => {
 
     async function veifyExcelBtn_Handler() {
 
-
+        setverifyLoading(true);
         if (compareParameter.length === 0) {
             customAlert({
                 Type: 3,
                 Message: "Please wait Downloading field Details.",
             })
+            setverifyLoading(false)
             return
         }
 
@@ -162,6 +183,7 @@ const InvoiceExcelUpload = (props) => {
                 Type: 3,
                 Message: "Please choose any file...",
             })
+            setverifyLoading(false)
             return;
         }
 
@@ -171,63 +193,150 @@ const InvoiceExcelUpload = (props) => {
         const extension = filename.substring(filename.lastIndexOf(".")).toLowerCase();
         if ((extension === '.csv') || extension === ".xlsx") {
             const readjson = await readExcelFile({ file: files[0], compareParameter, })
-            if (readjson.length > 0) {
 
-                const isdetails = await fileDetails({ compareParameter, readjson })
+            let Invalid_Invoice = [];
+            readjson.filter(i => i.shouldRemove).forEach(i => {
+                Invalid_Invoice.push({ [i.Invoice_No]: 'contains a negative value' })
+            });
+            if (Invalid_Invoice.length > 0) {
+                Invalid_Invoice.push({ [""]: 'Proceed to ignore this invoice?' })
 
-                const isUploadInvoiceOfSameDate = _cfunc.areAllDatesSame(isdetails.invoiceDate)
-                if (!isUploadInvoiceOfSameDate) {
-                    customAlert({
-                        Type: 3,
-                        Message: "Please upload only the invoices with the same date"
+            }
 
-                    })
-                    return
-                }
+            let isConfirmed = true
+            if (Invalid_Invoice.length > 0) {
+                isConfirmed = await customAlert({
+                    Type: 7,
+                    Message: Invalid_Invoice,
+                });
+            }
 
-                if (PartyMapData.length > 0) {
-                    const PartyMap = isdetails.partyNO
-                    const NotMapCustomers = []
+            if (isConfirmed) {
+                const filteredReadjson = readjson.filter(i => !i.shouldRemove);
 
-                    const filteredArray = PartyMapData.filter(i => i.MapCustomer === null || i.MapCustomer === '');
-                    // filteredArray.for
-                    filteredArray.forEach(i => {
-                        NotMapCustomers.push({ [i.CustomerName]: 'Party is Not Map' })
-                    });
+                if (readjson.length > 0) {
+
+                    const isdetails = await fileDetails({ compareParameter, filteredReadjson })
 
 
-                    if (NotMapCustomers.length > 0) {
+                    const isUploadInvoiceOfSameDate = _cfunc.areAllDatesSame(isdetails.invoiceDate)
+                    if (!isUploadInvoiceOfSameDate) {
                         customAlert({
                             Type: 3,
-                            Message: NotMapCustomers
+                            Message: "Please upload only the invoices with the same date"
+
                         })
-                        return;
+                        setverifyLoading(false)
+                        return
                     }
-                    const arrayOfStrings = PartyMap.map(String);
-                    const mapCustomerValues = PartyMapData.map(obj => obj.MapCustomer);
-                    const notPresentValues = arrayOfStrings.filter(value => !mapCustomerValues.includes(value));
-                    if (notPresentValues.length > 0) {
-                        notPresentValues.forEach(i => {
-                            NotMapCustomers.push({ [i]: '                 Wrong Party Code' })
+
+                    if (PartyMapData.length > 0) {
+                        const PartyMap = isdetails.partyNO;
+                        const itemMap = isdetails.itemCode;
+                        const unitMap = isdetails.unitCode;
+                        const NotMapCustomers = []
+                        ///////////////////////////////////////////////// Wrong unit Code///////////////////////////////////////////////////////////////////////
+
+                        const filteredUnitArray = unitMapData.filter(i => i.MapUnit === null || i.MapUnit === '');
+                        filteredUnitArray.forEach(i => {
+
+                            NotMapCustomers.push({ [i.Name]: 'Unit is Not Map' })
                         });
-                        customAlert({
-                            Type: 3,
-                            Message: NotMapCustomers
-                        })
-                        return;
+
+                        if (filteredUnitArray.length > 0) {
+                            customAlert({
+                                Type: 3,
+                                Message: NotMapCustomers
+                            })
+                            setverifyLoading(false)
+                            return;
+                        }
+
+                        const arrayOfUnitMapStrings = unitMap.map(String);
+                        const mapUnitValues = unitMapData.map(obj => obj.MapUnit);
+                        const notPresentUnitValues = arrayOfUnitMapStrings.filter(value => !mapUnitValues.includes(value));
+                        if (notPresentUnitValues.length > 0) {
+                            notPresentUnitValues.forEach(i => {
+                                NotMapCustomers.push({ [i === "undefined" ? "" : i]: `${i === "undefined" ? "Unit Code is missing" : "Wrong Unit Code"}` })
+                            });
+                            customAlert({
+                                Type: 3,
+                                Message: NotMapCustomers
+                            })
+                            setverifyLoading(false)
+                            return;
+                        }
+
+                        ///////////////////////////////////////////////// Wrong Item Code///////////////////////////////////////////////////////////////////////
+
+                        const filteredItemArray = ItemList.filter(i => i.MapItem === null || i.MapItem === '');
+                        filteredItemArray.forEach(i => {
+                            NotMapCustomers.push({ [i.ItemName]: 'Item is Not Map' })
+                        });
+
+                        if (filteredItemArray.length > 0) {
+                            customAlert({
+                                Type: 3,
+                                Message: NotMapCustomers
+                            })
+                            setverifyLoading(false)
+                            return;
+                        }
+
+                        const arrayOfItemMapStrings = itemMap.map(String);
+                        const mapItemValues = ItemList.map(obj => obj.MapItem);
+                        const notPresentItemValues = arrayOfItemMapStrings.filter(value => !mapItemValues.includes(value));
+                        if (notPresentItemValues.length > 0) {
+                            notPresentItemValues.forEach(i => {
+                                NotMapCustomers.push({ [i === "undefined" ? "" : i]: `${i === "undefined" ? "Item Code is missing" : "Wrong Item Code"}` })
+                            });
+                            customAlert({
+                                Type: 3,
+                                Message: NotMapCustomers
+                            })
+                            setverifyLoading(false)
+                            return;
+                        }
+
+                        ///////////////////////////////////////////////// Wrong Party Code///////////////////////////////////////////////////////////////////////
+
+                        const filteredArray = PartyMapData.filter(i => i.MapCustomer === null || i.MapCustomer === '');
+
+                        filteredArray.forEach(i => {
+                            NotMapCustomers.push({ [i.CustomerName]: 'Party is Not Map' })
+                        });
+
+                        if (NotMapCustomers.length > 0) {
+                            customAlert({
+                                Type: 3,
+                                Message: NotMapCustomers
+                            })
+                            setverifyLoading(false)
+                            return;
+                        }
+
+                        const arrayOfPartyMapStrings = PartyMap.map(String);
+                        const mapCustomerValues = PartyMapData.map(obj => obj.MapCustomer);
+                        const notPresentPartyValues = arrayOfPartyMapStrings.filter(value => !mapCustomerValues.includes(value));
+                        if (notPresentPartyValues.length > 0) {
+                            notPresentPartyValues.forEach(i => {
+                                NotMapCustomers.push({ [i]: '                 Wrong Party Code' })
+                            });
+                            customAlert({
+                                Type: 3,
+                                Message: NotMapCustomers
+                            })
+                            setverifyLoading(false)
+                            return;
+                        }
                     }
-                }
 
 
-                let { invoiceNO } = isdetails;
-                if ((invoiceNO.length > 0)) {
-                    setReadJsonDetail(isdetails)
-                    setPreViewDivShow(true)
-                } else {
-                    customAlert({
-                        Type: 3,
-                        Message: "Mapping not match."
-                    })
+                    let { invoiceNO } = isdetails;
+                    if ((invoiceNO.length > 0)) {
+                        setReadJsonDetail(isdetails)
+                        setPreViewDivShow(true)
+                    }
                 }
             }
 
@@ -237,6 +346,7 @@ const InvoiceExcelUpload = (props) => {
                 Message: 'Unsupported file format. Please select an Excel (XLSX) or CSV file.',
             })
         }
+        setverifyLoading(false)
     }
 
 
@@ -406,11 +516,6 @@ const InvoiceExcelUpload = (props) => {
                                 </Col>
 
                             </Row> : null
-
-                            // <div >
-                            //     <h4 className="pt-4 pb-4 text-primary" >{"Upload Your Excel."}</h4>
-                            //     <spam onClick={() => dounloadDummyFormat_handler(compareParameter)}>Download Dumy Format</spam>
-                            // </div>}
                         }
 
 
@@ -530,6 +635,7 @@ const InvoiceExcelUpload = (props) => {
                             <C_Button
                                 type="button"
                                 id='btn-uploadBtnFunc'
+                                spinnerColor={"white"}
                                 className="btn btn-success"
                                 loading={saveBtnLoading}
                                 onClick={uploadSaveHandler}
@@ -540,7 +646,8 @@ const InvoiceExcelUpload = (props) => {
                             <C_Button
                                 type="button"
                                 id='btn-verify'
-                                loading={saveBtnLoading}
+                                spinnerColor={"white"}
+                                loading={verifyLoading}
                                 className="btn btn-primary"
                                 onClick={veifyExcelBtn_Handler}
                             >

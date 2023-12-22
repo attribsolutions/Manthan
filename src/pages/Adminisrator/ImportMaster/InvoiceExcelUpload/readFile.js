@@ -6,7 +6,9 @@ const XLSX = require('xlsx');
 
 
 export const readExcelFile = async ({ file, compareParameter }) => {
-
+  function isFloat(num) {
+    return num % 1 !== 0;
+  }
   try {
 
     const reader = new FileReader();
@@ -40,23 +42,40 @@ export const readExcelFile = async ({ file, compareParameter }) => {
 
 
     jsonResult.forEach((r1) => {
-
+      let shouldRemove = false
+      let Invoice_No = ""
       comparefilter.forEach((c1) => {
+
         if (c1.ControlTypeName === "Date") {
           const date = new Date(Math.round((r1[c1.Value] - 25569) * 86400 * 1000));
           r1[c1.Value] = date_ymd_func(date)
         };
+        debugger
+        if (c1.FieldName === "InvoiceNumber") {
+          Invoice_No = r1[c1.Value]
+        };
         const regExp = RegExp(c1.RegularExpression);
 
 
+        if ((Number.isInteger(r1[c1.Value]) || (isFloat(r1[c1.Value]))) && r1[c1.Value] < 0) {   //  - figure only checking value  that are map in our system 
+
+          shouldRemove = true;
+        }
         if (!c1.IsCompulsory && (r1[c1.Value] === '' || r1[c1.Value] === null || r1[c1.Value] === undefined)) {
         }
         else if (!(regExp.test(r1[c1.Value]))) {
-          invalidMsg.push(`${c1.Value} :${r1[c1.Value]} is invalid Format`)
+
+          if (!((Number.isInteger(r1[c1.Value]) || (isFloat(r1[c1.Value]))) && (r1[c1.Value] < 0))) {
+            invalidMsg.push(`${c1.Value} :${r1[c1.Value]} is invalid Format`)
+          }
         }
       })
-
+      r1["Invoice_No"] = Invoice_No
+      r1["shouldRemove"] = shouldRemove
     })
+
+
+
     if (invalidMsg.length > 0) {
       customAlert({
         Type: 3,
@@ -75,8 +94,8 @@ export const readExcelFile = async ({ file, compareParameter }) => {
 
 
 
-export async function fileDetails({ compareParameter = [], readjson = [] }) {
-  
+export async function fileDetails({ compareParameter = [], filteredReadjson = [] }) {
+
 
   const fileFiled = {}
 
@@ -85,15 +104,21 @@ export async function fileDetails({ compareParameter = [], readjson = [] }) {
       fileFiled[ele.FieldName] = ele.Value
     }
   })
-  let invoiceNO = []
-  let partyNO = []
-  let invoiceDate = []
+  let invoiceNO = [];
+  let partyNO = [];
+  let invoiceDate = [];
+  let itemCode = [];
+  let unitCode = [];
+
   let amount = 0
 
-  readjson.forEach((index) => {
+  filteredReadjson.forEach((index) => {
 
     var invoiceFound = invoiceNO.find(i => (i === (index[fileFiled.InvoiceNumber])))
     var partyFound = partyNO.find(i => (i === (index[fileFiled.Customer])))
+    var ItemCodeFound = itemCode.find(i => (i === (index[fileFiled.Item])))
+    var UnitCodeFound = unitCode.find(i => (i === (index[fileFiled.Unit])))
+
     var dateFound = partyNO.find(i => (i === (index[fileFiled.InvoiceDate])))
     amount = Number(amount) + Number(index[fileFiled.GrandTotal]);
 
@@ -103,21 +128,26 @@ export async function fileDetails({ compareParameter = [], readjson = [] }) {
     if ((partyFound === undefined)) {
       partyNO.push((index[fileFiled.Customer]))
     };
+    if ((ItemCodeFound === undefined)) {
+      itemCode.push((index[fileFiled.Item]))
+    };
+
+    if ((UnitCodeFound === undefined)) {
+      unitCode.push((index[fileFiled.Unit]))
+    };
+
     if ((dateFound === undefined)) {
       invoiceDate.push(date_dmy_func((index[fileFiled.InvoiceDate])))
     };
 
   })
 
-  const invoice = await groupBy(readjson, (index) => {
+  const invoice = await groupBy(filteredReadjson, (index) => {
     return (index[fileFiled.InvoiceNumber])
   })
 
-
-  return { fileFiled, invoice, invoiceDate, amount, invoiceNO, partyNO }
+  return { fileFiled, invoice, invoiceDate, amount, invoiceNO, partyNO, itemCode, unitCode }
 }
-
-
 
 export async function downloadDummyFormatHandler(jsonData) {
 
