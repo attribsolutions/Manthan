@@ -168,6 +168,16 @@ const InvoiceExcelUpload = (props) => {
     async function veifyExcelBtn_Handler() {
 
         setverifyLoading(true);
+
+        if (commonPartyDropSelect.value === 0) {
+            customAlert({
+                Type: 3,
+                Message: "Please Select Party",
+            })
+            setverifyLoading(false)
+            return
+        }
+
         if (compareParameter.length === 0) {
             customAlert({
                 Type: 3,
@@ -271,7 +281,7 @@ const InvoiceExcelUpload = (props) => {
 
                         const filteredItemArray = ItemList.filter(i => i.MapItem === null || i.MapItem === '');
                         filteredItemArray.forEach(i => {
-                            
+
                             NotMapCustomers.push({ [i.ItemName]: 'Item is Not Map' })
                         });
 
