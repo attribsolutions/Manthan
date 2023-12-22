@@ -271,6 +271,7 @@ const InvoiceExcelUpload = (props) => {
 
                         const filteredItemArray = ItemList.filter(i => i.MapItem === null || i.MapItem === '');
                         filteredItemArray.forEach(i => {
+                            
                             NotMapCustomers.push({ [i.ItemName]: 'Item is Not Map' })
                         });
 
@@ -320,7 +321,7 @@ const InvoiceExcelUpload = (props) => {
                         const notPresentPartyValues = arrayOfPartyMapStrings.filter(value => !mapCustomerValues.includes(value));
                         if (notPresentPartyValues.length > 0) {
                             notPresentPartyValues.forEach(i => {
-                                NotMapCustomers.push({ [i]: '                 Wrong Party Code' })
+                                NotMapCustomers.push({ [i === "undefined" ? "" : i]: `${i === "undefined" ? "Party Code is missing" : "Wrong Party Code"}` })
                             });
                             customAlert({
                                 Type: 3,

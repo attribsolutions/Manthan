@@ -50,7 +50,7 @@ export const readExcelFile = async ({ file, compareParameter }) => {
           const date = new Date(Math.round((r1[c1.Value] - 25569) * 86400 * 1000));
           r1[c1.Value] = date_ymd_func(date)
         };
-        debugger
+        
         if (c1.FieldName === "InvoiceNumber") {
           Invoice_No = r1[c1.Value]
         };
