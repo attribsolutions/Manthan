@@ -206,7 +206,7 @@ const InvoiceExcelUpload = (props) => {
 
             let Invalid_Invoice = [];
             readjson.filter(i => i.shouldRemove).forEach(i => {
-                Invalid_Invoice.push({ [i.Invoice_No]: 'contains a negative value' })
+                Invalid_Invoice.push({ [i.Invoice_No]: ' contains zero or negative values' })
             });
             if (Invalid_Invoice.length > 0) {
                 Invalid_Invoice.push({ [""]: 'Proceed to ignore this invoice?' })

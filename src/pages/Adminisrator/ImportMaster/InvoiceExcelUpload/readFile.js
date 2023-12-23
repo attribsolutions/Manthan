@@ -50,14 +50,14 @@ export const readExcelFile = async ({ file, compareParameter }) => {
           const date = new Date(Math.round((r1[c1.Value] - 25569) * 86400 * 1000));
           r1[c1.Value] = date_ymd_func(date)
         };
-        
+
         if (c1.FieldName === "InvoiceNumber") {
           Invoice_No = r1[c1.Value]
         };
         const regExp = RegExp(c1.RegularExpression);
 
 
-        if ((Number.isInteger(r1[c1.Value]) || (isFloat(r1[c1.Value]))) && r1[c1.Value] < 0) {   //  - figure only checking value  that are map in our system 
+        if ((Number.isInteger(r1[c1.Value]) || (isFloat(r1[c1.Value]))) && r1[c1.Value] <= 0) {   //  - figure only checking value  that are map in our system 
 
           shouldRemove = true;
         }
@@ -65,7 +65,7 @@ export const readExcelFile = async ({ file, compareParameter }) => {
         }
         else if (!(regExp.test(r1[c1.Value]))) {
 
-          if (!((Number.isInteger(r1[c1.Value]) || (isFloat(r1[c1.Value]))) && (r1[c1.Value] < 0))) {
+          if (!((Number.isInteger(r1[c1.Value]) || (isFloat(r1[c1.Value]))) && (r1[c1.Value] <= 0))) {
             invalidMsg.push(`${c1.Value} :${r1[c1.Value]} is invalid Format`)
           }
         }
