@@ -788,6 +788,7 @@ export const TCS_Amount_Report_GoButton_API = (jsonBody) => post(url.TCS_AMOUNT_
 
 // Cx-DD Diffrence Report
 export const Cx_DD_Diffrence_Report_GoButton_API = (jsonBody) => post(url.CX_DD_DIFFRENCE_REPORT, jsonBody)
+export const Cx_DD_Diffrence_Report_Party_Dropdown_API = () => get(url.CX_DD_DIFFRENCE_PARTY_API) // get api
 
 export {
 	getLoggedInUser,

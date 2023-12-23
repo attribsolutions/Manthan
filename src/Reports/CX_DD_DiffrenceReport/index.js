@@ -4,7 +4,7 @@ import { Col, FormGroup, Label, Row, } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import { initialFiledFunc } from "../../components/Common/validationFunction";
 import { C_Button } from "../../components/Common/CommonButton";
-import { C_DatePicker } from "../../CustomValidateForm";
+import { C_DatePicker, C_Select } from "../../CustomValidateForm";
 import * as _cfunc from "../../components/Common/CommonFunction";
 import { mode, pageId } from "../../routes/index"
 import { MetaTags } from "react-meta-tags";
@@ -16,7 +16,9 @@ import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess } fro
 import DynamicColumnHook from "../../components/Common/TableCommonFunc";
 import { ReportComponent } from "../ReportComponent";
 import { Cx_DD_Diffrence_Gobtn_Action, Cx_DD_Diffrence_Gobtn_Success } from "../../store/Report/CX_DD_Diffrence_Report/action";
-import { Cx_DD_ExcelDownload } from "./excelDownload";
+import { Cx_DD_ExcelDownload, Cx_DD_ExcelDownload_PartyAll } from "./excelDownload";
+import { async } from "q";
+import { Cx_DD_Diffrence_Report_Party_Dropdown_API } from "../../helpers/backend_helper";
 
 const CX_DD_DiffrenceReport = (props) => {
 
@@ -33,7 +35,10 @@ const CX_DD_DiffrenceReport = (props) => {
     const [state, setState] = useState(() => initialFiledFunc(fileds))
     const [userPageAccessState, setUserAccState] = useState('');
     const [btnMode, setBtnMode] = useState("");
+
     const [PartyDropdown, setPartyDropdown] = useState({ value: 0, label: "All" });
+    const [partyDropdownOptions, setPartyDropdownOptions] = useState([]);
+    const [partyDropdownLoading, setpartyDropdownLoading] = useState(false);
 
     const [updatetableColumn, setupdatetableColumn] = useState([{}]);
 
@@ -41,13 +46,12 @@ const CX_DD_DiffrenceReport = (props) => {
         (state) => ({
             tableData: state.Cx_DD_Diffrence_Reducer.Cx_DD_Diff_ReportGobtn,
             GoBtnLoading: state.Cx_DD_Diffrence_Reducer.goBtnLoading,
-            PartyList: state.CommonPartyDropdownReducer.commonPartyDropdown,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageField
         })
     );
 
-    const { userAccess, tableData = [], GoBtnLoading, pageField, PartyList } = reducers;
+    const { userAccess, tableData = [], GoBtnLoading, pageField, } = reducers;
 
     useEffect(() => {
         dispatch(commonPageFieldSuccess(null));
@@ -57,6 +61,26 @@ const CX_DD_DiffrenceReport = (props) => {
             dispatch(commonPageFieldSuccess(null));
             dispatch(Cx_DD_Diffrence_Gobtn_Success([]));
         }
+    }, []);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            setpartyDropdownLoading(true);
+            try {
+                const partyAPIReposnse = await Cx_DD_Diffrence_Report_Party_Dropdown_API();
+                if (partyAPIReposnse.StatusCode === 200) {
+                    const options = partyAPIReposnse.Data.map((index) => ({
+                        value: index.SupplierID,
+                        label: index.SupplierName,
+                    }));
+                    setPartyDropdownOptions([{ value: 0, label: "All" }, ...options]);
+                }
+            } catch (e) { }
+            finally {
+                setpartyDropdownLoading(false);
+            }
+        };
+        fetchData();
     }, []);
 
     const [tableColumns] = DynamicColumnHook({ pageField })
@@ -101,13 +125,24 @@ const CX_DD_DiffrenceReport = (props) => {
     useEffect(() => {
 
         if (btnMode === "excel") {
+            let excelFileName = `CX-DD Difference Report ${_cfunc.date_dmy_func(values.FromDate)} - ${_cfunc.date_dmy_func(values.ToDate)}`
             if (tableData.length > 0) {
-                Cx_DD_ExcelDownload({                // Download CSV
-                    pageField,
-                    excelData: tableData,
-                    excelFileName: "CX-DD Difference Report",
-                    PartyName: PartyDropdown.label,
-                })
+                if (PartyDropdown.value === 0 && (isSCMParty)) {
+                    Cx_DD_ExcelDownload_PartyAll({                // Download CSV
+                        pageField,
+                        excelData: tableData,
+                        excelFileName: excelFileName,
+                        extraColumn: "SupplierName",
+                    })
+                } else {
+                    Cx_DD_ExcelDownload({            // Download CSV
+                        pageField,
+                        excelData: tableData,
+                        excelFileName: excelFileName,
+                        extraColumn: isSCMParty ? "SupplierName" : "",
+                        PartyName: isSCMParty ? PartyDropdown.label : _cfunc.loginPartyName(),
+                    })
+                }
             }
         }
     }, [tableData]);
@@ -133,7 +168,6 @@ const CX_DD_DiffrenceReport = (props) => {
             a.hasValid.FromDate.valid = true
             return a
         })
-
         dispatch(Cx_DD_Diffrence_Gobtn_Success([]));
     }
 
@@ -151,12 +185,6 @@ const CX_DD_DiffrenceReport = (props) => {
         setPartyDropdown(e)
         dispatch(Cx_DD_Diffrence_Gobtn_Success([]));
     }
-
-    const Party_Option = PartyList.map(i => ({
-        value: i.id,
-        label: i.Name
-    }));
-    Party_Option.unshift({ value: 0, label: "All" })
 
     return (
         <React.Fragment>
@@ -198,16 +226,17 @@ const CX_DD_DiffrenceReport = (props) => {
                                     <Label className="col-sm-4 p-2"
                                         style={{ width: "65px", marginRight: "20px" }}>Party</Label>
                                     <Col sm="8">
-                                        <Select
+                                        <C_Select
                                             name="Party"
                                             value={PartyDropdown}
                                             isSearchable={true}
+                                            isLoading={partyDropdownLoading}
                                             className="react-dropdown"
                                             classNamePrefix="dropdown"
                                             styles={{
                                                 menu: provided => ({ ...provided, zIndex: 2 })
                                             }}
-                                            options={Party_Option}
+                                            options={partyDropdownOptions}
                                             onChange={(e) => { partyOnchange(e) }}
                                         />
                                     </Col>
