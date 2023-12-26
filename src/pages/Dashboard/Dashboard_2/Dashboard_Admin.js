@@ -24,7 +24,6 @@ import { DashboardLoader, PageLoadingSpinner } from '../../../components/Common/
 import NewCommonPartyDropdown from "../../../components/Common/NewCommonPartyDropdown";
 import LineBar from '../../../components/Common/DashboardChart/MixLineChart';
 import TransactionLog from './TransactionLog';
-import { object } from 'prop-types';
 
 const Dashboard_Admin = (props) => {
 
@@ -53,7 +52,7 @@ const Dashboard_Admin = (props) => {
         GRNListLoading,
         pageField,
         SalesReturnListloading,
-        tableList,
+        tableList = [],
         InvoiceData,
         GrnData,
         grnDataLoading,
@@ -287,7 +286,7 @@ const Dashboard_Admin = (props) => {
                         <Col xl={3}  >
                             <Card className="card-h-100" >
                                 <CardBody>
-                                    {((orderDataLoading) && (object)) ? <> <Row> <Col sm={6}> <h5 className='mt-1'> Loading Chart</h5>  </Col><Col sm={4}><DashboardLoader /></Col>  </Row> </> :
+                                    {(orderDataLoading ) ? <> <Row> <Col sm={6}> <h5 className='mt-1'> Loading Chart</h5>  </Col><Col sm={4}><DashboardLoader /></Col>  </Row> </> :
 
                                         <Row className="align-items-center" >
 
@@ -313,9 +312,7 @@ const Dashboard_Admin = (props) => {
                                                     <Col sm={2} className='mt-1'>
                                                         <span style={{ fontSize: "15px" }}> {OrderCount}</span>
                                                     </Col>
-                                                    {/* <Col sm={2}>
-                                                    {orderDataLoading && <DashboardLoader />}
-                                                </Col> */}
+                                                   
                                                 </Row>
 
                                             </Card>
@@ -336,7 +333,7 @@ const Dashboard_Admin = (props) => {
                         <Col xl={3}  >
                             <Card className="card-h-100">
                                 <CardBody>
-                                    {((orderDataLoading) && (tableList.length > 0)) ? <> <Row> <Col sm={6}> <h5 className='mt-1'> Loading Chart</h5>  </Col><Col sm={4}><DashboardLoader /></Col>  </Row> </> : <Row className="align-items-center ">
+                                    {orderDataLoading ? <> <Row> <Col sm={6}> <h5 className='mt-1'> Loading Chart</h5>  </Col><Col sm={4}><DashboardLoader /></Col>  </Row> </> : <Row className="align-items-center ">
                                         <Card className="card-h-100">
                                             <Row>
                                                 <Col className='mt-1' sm={4}>
@@ -406,9 +403,7 @@ const Dashboard_Admin = (props) => {
                                                     <Col sm={2} className='mt-1'>
                                                         <span style={{ fontSize: "15px" }}> {InvoiceCount}</span>
                                                     </Col>
-                                                    {/* <Col sm={2}>
-                                                        {invoiceDataLoading && <DashboardLoader />}
-                                                    </Col> */}
+                                                   
                                                 </Row>
                                             </Card>
                                         </Row>}
