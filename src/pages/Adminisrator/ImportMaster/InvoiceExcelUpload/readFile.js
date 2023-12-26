@@ -56,10 +56,13 @@ export const readExcelFile = async ({ file, compareParameter }) => {
         };
         const regExp = RegExp(c1.RegularExpression);
 
-
+        debugger
         if ((Number.isInteger(r1[c1.Value]) || (isFloat(r1[c1.Value]))) && r1[c1.Value] <= 0) {   //  - figure only checking value  that are map in our system 
-
-          shouldRemove = true;
+          if (c1.IsCompulsory) {
+            shouldRemove = true;
+          } else {
+            shouldRemove = false;
+          }
         }
         if (!c1.IsCompulsory && (r1[c1.Value] === '' || r1[c1.Value] === null || r1[c1.Value] === undefined)) {
         }
