@@ -139,6 +139,7 @@ const PartyDetails = (props) => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(savePartyDetails_Success({ Status: false }))
+            goButtonHandler()
             setTableData([]);
             setGroupSelect({ value: 0, label: "All" })
             if (pageMode === "other") {
