@@ -24,6 +24,7 @@ import { DashboardLoader, PageLoadingSpinner } from '../../../components/Common/
 import NewCommonPartyDropdown from "../../../components/Common/NewCommonPartyDropdown";
 import LineBar from '../../../components/Common/DashboardChart/MixLineChart';
 import TransactionLog from './TransactionLog';
+import { object } from 'prop-types';
 
 const Dashboard_Admin = (props) => {
 
@@ -32,6 +33,11 @@ const Dashboard_Admin = (props) => {
     const [userPageAccessState, setUserAccState] = useState('');
 
     const [OrderMonthCount, setOrderMonthCount] = useState({});
+    const [MobileOrderMonthCount, setMobileOrderMonthCount] = useState({});
+
+
+
+
     const [InvoiceMonthCount, setInvoiceMonthCount] = useState({});
     const [GrnMonthCount, setGrnMonthCount] = useState({});
 
@@ -74,7 +80,7 @@ const Dashboard_Admin = (props) => {
 
         }));
 
-    const { OrderCount, InvoiceCount, GRNsCount, } = getDashboard
+    const { OrderCount, InvoiceCount, GRNsCount, MobileAppOrderCount } = getDashboard
 
     const location = { ...history.location }
     const hasShowModal = props.hasOwnProperty(mode.editValue)//changes
@@ -200,7 +206,12 @@ const Dashboard_Admin = (props) => {
     useEffect(() => {
         if (tableList !== undefined) {
             const monthCounts = Array(12).fill(0); // Initialize with zeros for all months
-            tableList.forEach(item => {
+            const appOrdermonthCounts = Array(12).fill(0); // Initialize with zeros for all months
+
+            const filtelistOrder = tableList.filter(i => i.MobileAppOrderFlag !== 1);
+
+
+            filtelistOrder.forEach(item => {
                 const parts = item.OrderDate.split('-');
                 const month = parseInt(parts[1]) - 1; // Subtract 1 to match array index
                 if (month >= 0 && month < 12) {
@@ -208,7 +219,23 @@ const Dashboard_Admin = (props) => {
                 }
             });
             const containsNonZeroNumber = monthCounts.some(item => item !== 0);
-            setOrderMonthCount({ monthCounts, containsNonZeroNumber })
+            setOrderMonthCount({ monthCounts, containsNonZeroNumber });
+
+            ////////////////////// mobile order chart/////////////////////
+            const filtelist = tableList.filter(i => i.MobileAppOrderFlag === 1);
+
+            filtelist.forEach(item => {
+                debugger
+                const parts = item.OrderDate.split('-');
+                const month = parseInt(parts[1]) - 1; // Subtract 1 to match array index
+                if (month >= 0 && month < 12) {
+                    appOrdermonthCounts[month]++;
+                }
+            });
+            const MobileOrdercontainsNonZeroNumber = appOrdermonthCounts.some(item => item !== 0);
+            debugger
+            setMobileOrderMonthCount({ appOrdermonthCounts, MobileOrdercontainsNonZeroNumber })
+
 
         }
     }, [tableList])
@@ -257,40 +284,42 @@ const Dashboard_Admin = (props) => {
                 </MetaTags>
                 <Container fluid>
                     <Row>
-                        <Col xl={4}  >
+                        <Col xl={3}  >
                             <Card className="card-h-100" >
                                 <CardBody>
-                                    <Row className="align-items-center" >
+                                    {((orderDataLoading) && (object)) ? <> <Row> <Col sm={6}> <h5 className='mt-1'> Loading Chart</h5>  </Col><Col sm={4}><DashboardLoader /></Col>  </Row> </> :
 
-                                        <Card className="card-h-100 ">
+                                        <Row className="align-items-center" >
 
-                                            <Row>
-                                                <Col className='mt-1' sm={3}>
-                                                    <span style={{ cursor: "pointer" }} onClick={() => RedirectHandler(1)}> Annual Orders</span>
-                                                </Col>
-                                                <Col sm={2}>
-                                                    <span style={{ fontSize: "20px" }}>
-                                                        {OrderMonthCount && OrderMonthCount.monthCounts ?
-                                                            OrderMonthCount.monthCounts.reduce((accumulator, currentValue) => accumulator + currentValue, 0)
-                                                            : 0
-                                                        }
-                                                    </span>
+                                            <Card className="card-h-100 ">
 
-                                                </Col>
-                                                <Col className='mt-1' sm={3}>
-                                                    <span style={{ cursor: "pointer" }} onClick={() => RedirectHandler(1)} >Todays Orders</span>
+                                                <Row>
+                                                    <Col className='mt-1' sm={3}>
+                                                        <span style={{ cursor: "pointer" }} onClick={() => RedirectHandler(1)}> Annual Orders</span>
+                                                    </Col>
+                                                    <Col sm={2} className='mt-1'>
+                                                        <span style={{ fontSize: "15px" }}>
+                                                            {OrderMonthCount && OrderMonthCount.monthCounts ?
+                                                                OrderMonthCount.monthCounts.reduce((accumulator, currentValue) => accumulator + currentValue, 0)
+                                                                : 0
+                                                            }
+                                                        </span>
 
-                                                </Col>
-                                                <Col sm={2}>
-                                                    <span style={{ fontSize: "20px" }}> {OrderCount}</span>
-                                                </Col>
-                                                <Col sm={2}>
+                                                    </Col>
+                                                    <Col className='mt-1' sm={3}>
+                                                        <span style={{ cursor: "pointer" }} onClick={() => RedirectHandler(1)} >Todays Orders</span>
+
+                                                    </Col>
+                                                    <Col sm={2} className='mt-1'>
+                                                        <span style={{ fontSize: "15px" }}> {OrderCount}</span>
+                                                    </Col>
+                                                    {/* <Col sm={2}>
                                                     {orderDataLoading && <DashboardLoader />}
-                                                </Col>
-                                            </Row>
+                                                </Col> */}
+                                                </Row>
 
-                                        </Card>
-                                    </Row>
+                                            </Card>
+                                        </Row>}
 
                                     <div id="mix-line-bar" className="e-chart">
                                         {OrderChartOpen && (OrderMonthCount.containsNonZeroNumber) &&
@@ -303,38 +332,86 @@ const Dashboard_Admin = (props) => {
                                 </CardBody>
                             </Card>
                         </Col>
-                        <Col xl={4}  >
-                            <Card className="card-h-100" >
+
+                        <Col xl={3}  >
+                            <Card className="card-h-100">
                                 <CardBody>
-                                    <Row className="align-items-center " >
+                                    {((orderDataLoading) && (tableList.length > 0)) ? <> <Row> <Col sm={6}> <h5 className='mt-1'> Loading Chart</h5>  </Col><Col sm={4}><DashboardLoader /></Col>  </Row> </> : <Row className="align-items-center ">
                                         <Card className="card-h-100">
                                             <Row>
-                                                <Col className='mt-1' sm={3}>
-                                                    <span style={{ cursor: "pointer" }} onClick={() => RedirectHandler(2)}> Annual Invoice</span>
+                                                <Col className='mt-1' sm={4}>
+                                                    <span style={{ cursor: "pointer" }} onClick={() => RedirectHandler(1)}> Annual App Orders</span>
 
                                                 </Col>
-                                                <Col sm={2}>
-                                                    <span style={{ fontSize: "20px" }}>
-                                                        {InvoiceMonthCount && InvoiceMonthCount.monthCounts ?
-                                                            InvoiceMonthCount.monthCounts.reduce((accumulator, currentValue) => accumulator + currentValue, 0)
+                                                <Col sm={2} className='mt-1'>
+                                                    <span style={{ fontSize: "15px" }}>
+                                                        {MobileOrderMonthCount && MobileOrderMonthCount.appOrdermonthCounts ?
+                                                            MobileOrderMonthCount.appOrdermonthCounts.reduce((accumulator, currentValue) => accumulator + currentValue, 0)
                                                             : 0
                                                         }
                                                     </span>
 
                                                 </Col>
-                                                <Col className='mt-1' sm={3}>
-                                                    <span style={{ cursor: "pointer" }} onClick={() => RedirectHandler(2)} >Todays Invoice</span>
+                                                <Col className='mt-1' sm={4}>
+                                                    <span style={{ cursor: "pointer" }} onClick={() => RedirectHandler(3)} className="">Todays App Orders</span>
+
 
                                                 </Col>
-                                                <Col sm={2}>
-                                                    <span style={{ fontSize: "20px" }}> {InvoiceCount}</span>
+                                                <Col sm={2} className='mt-1'>
+                                                    <span style={{ fontSize: "15px" }}> {MobileAppOrderCount}</span>
                                                 </Col>
                                                 <Col sm={2}>
-                                                    {invoiceDataLoading && <DashboardLoader />}
+                                                    {orderDataLoading && <DashboardLoader />}
                                                 </Col>
                                             </Row>
                                         </Card>
-                                    </Row>
+
+                                    </Row>}
+                                    <div id="mix-line-bar" className="e-chart">
+                                        {ChartOpen && (MobileOrderMonthCount.MobileOrdercontainsNonZeroNumber) &&
+                                            <LineBar
+                                                Data={MobileOrderMonthCount.appOrdermonthCounts}
+                                                Name={"Mobile app Orders"}
+                                                color={'#38a4f8'}
+                                            />}
+                                    </div>
+                                </CardBody>
+                            </Card>
+                        </Col>
+
+                        <Col xl={3}  >
+                            <Card className="card-h-100" >
+                                <CardBody>
+                                    {invoiceDataLoading ? <> <Row> <Col sm={6}> <h5 className='mt-1'> Loading Chart</h5>  </Col><Col sm={4}><DashboardLoader /></Col>  </Row> </> :
+                                        <Row className="align-items-center " >
+                                            <Card className="card-h-100">
+                                                <Row>
+                                                    <Col className='mt-1' sm={3}>
+                                                        <span style={{ cursor: "pointer" }} onClick={() => RedirectHandler(2)}> Annual Invoice</span>
+
+                                                    </Col>
+                                                    <Col sm={2} className='mt-1'>
+                                                        <span style={{ fontSize: "15px" }}>
+                                                            {InvoiceMonthCount && InvoiceMonthCount.monthCounts ?
+                                                                InvoiceMonthCount.monthCounts.reduce((accumulator, currentValue) => accumulator + currentValue, 0)
+                                                                : 0
+                                                            }
+                                                        </span>
+
+                                                    </Col>
+                                                    <Col className='mt-1' sm={3}>
+                                                        <span style={{ cursor: "pointer" }} onClick={() => RedirectHandler(2)} >Todays Invoice</span>
+
+                                                    </Col>
+                                                    <Col sm={2} className='mt-1'>
+                                                        <span style={{ fontSize: "15px" }}> {InvoiceCount}</span>
+                                                    </Col>
+                                                    {/* <Col sm={2}>
+                                                        {invoiceDataLoading && <DashboardLoader />}
+                                                    </Col> */}
+                                                </Row>
+                                            </Card>
+                                        </Row>}
                                     <div id="mix-line-bar" className="e-chart">
                                         {ChartOpen && (InvoiceMonthCount.containsNonZeroNumber) &&
                                             <LineBar
@@ -343,45 +420,46 @@ const Dashboard_Admin = (props) => {
                                                 color={'#02a499'}
                                             />}
                                     </div>
+
                                 </CardBody>
                             </Card>
                         </Col>
 
-                        <Col xl={4}  >
+                        <Col xl={3}  >
                             <Card className="card-h-100">
                                 <CardBody>
-                                    <Row className="align-items-center ">
-                                        <Card className="card-h-100">
-                                            <Row>
-                                                <Col className='mt-1' sm={3}>
-                                                    <span style={{ cursor: "pointer" }} onClick={() => RedirectHandler(3)}> Annual GRNs</span>
+                                    {grnDataLoading ? <> <Row> <Col sm={6}> <h5 className='mt-1'> Loading Chart</h5>  </Col><Col sm={4}><DashboardLoader /></Col>  </Row> </> :
+
+                                        <Row className="align-items-center ">
+                                            <Card className="card-h-100">
+                                                <Row>
+                                                    <Col className='mt-1' sm={3}>
+                                                        <span style={{ cursor: "pointer" }} onClick={() => RedirectHandler(3)}> Annual GRNs</span>
 
 
-                                                </Col>
-                                                <Col sm={2}>
-                                                    <span style={{ fontSize: "20px" }}>
-                                                        {GrnMonthCount && GrnMonthCount.monthCounts ?
-                                                            GrnMonthCount.monthCounts.reduce((accumulator, currentValue) => accumulator + currentValue, 0)
-                                                            : 0
-                                                        }
-                                                    </span>
+                                                    </Col>
+                                                    <Col sm={2} className='mt-1'>
+                                                        <span style={{ fontSize: "15px" }}>
+                                                            {GrnMonthCount && GrnMonthCount.monthCounts ?
+                                                                GrnMonthCount.monthCounts.reduce((accumulator, currentValue) => accumulator + currentValue, 0)
+                                                                : 0
+                                                            }
+                                                        </span>
 
-                                                </Col>
-                                                <Col className='mt-1' sm={3}>
-                                                    <span style={{ cursor: "pointer" }} onClick={() => RedirectHandler(3)} className="">Todays GRNs</span>
+                                                    </Col>
+                                                    <Col className='mt-1' sm={3}>
+                                                        <span style={{ cursor: "pointer" }} onClick={() => RedirectHandler(3)} className="">Todays GRNs</span>
 
 
-                                                </Col>
-                                                <Col sm={2}>
-                                                    <span style={{ fontSize: "20px" }}> {GRNsCount}</span>
-                                                </Col>
-                                                <Col sm={2}>
-                                                    {grnDataLoading && <DashboardLoader />}
-                                                </Col>
-                                            </Row>
-                                        </Card>
+                                                    </Col>
+                                                    <Col sm={2} className='mt-1'>
+                                                        <span style={{ fontSize: "15px" }}> {GRNsCount}</span>
+                                                    </Col>
 
-                                    </Row>
+                                                </Row>
+                                            </Card>
+
+                                        </Row>}
                                     <div id="mix-line-bar" className="e-chart">
                                         {ChartOpen && (GrnMonthCount.containsNonZeroNumber) &&
                                             <LineBar
@@ -462,7 +540,6 @@ const Dashboard_Admin = (props) => {
                                                 // onClick={mobileRetailerApprove_onClick}
                                                 disabled={SalesReturnListloading}
                                                 style={{ cursor: "pointer" }}
-
                                             >
                                                 Mobile Retailer Approve</Label>
                                             {(SalesReturnListloading) &&

@@ -1,7 +1,9 @@
 import React, { Component } from "react"
 import ReactEcharts from "echarts-for-react"
 class LineBar extends Component {
+
     constructor(props) {
+        debugger
         super(props)
         this.Data = props.Data
         this.Name = props.Name
@@ -74,8 +76,8 @@ class LineBar extends Component {
                     type: "value",
                     name: "Total",
                     min: 0,
-                    max: 150,
-                    interval: 50,
+                    max: 400,
+                    interval: 100,
                 },
                 {
                     interval: 0,

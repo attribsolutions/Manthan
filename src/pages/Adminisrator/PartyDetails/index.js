@@ -27,7 +27,8 @@ import { Get_Subcluster_On_cluster_API, VendorSupplierCustomer } from "../../../
 import { getClusterlist } from "../../../store/Administrator/ClusterRedux/action";
 import { GoButton_For_PartyDetails, GoButton_For_PartyDetails_Success, savePartyDetails_Action, savePartyDetails_Success } from "../../../store/Administrator/PartyDetailsRedux/action";
 import { getEmployeedropdownList } from "../../../store/Administrator/ManagementPartiesRedux/action";
-
+import paginationFactory from "react-bootstrap-table2-paginator";
+import SimpleBar from "simplebar-react"
 
 const PartyDetails = (props) => {
 
@@ -55,6 +56,10 @@ const PartyDetails = (props) => {
     const [forceRefreshSR, setForceRefreshSR] = useState(false);
     const [forceRefreshMT, setForceRefreshMT] = useState(false);
     const [forceRefreshSO, setForceRefreshSO] = useState(false);
+    const [forceRefreshSuperstokiest, setforceRefreshSuperstokiest] = useState(false);
+
+
+
 
 
 
@@ -196,7 +201,7 @@ const PartyDetails = (props) => {
                         value: index.id,
                         label: index.Name,
                     })) : [];
-                debugger
+
                 const superstokiestOptions = distributor.Supplier.map((index) => ({
                     value: index.Supplier_id,
                     label: index.SupplierName,
@@ -237,7 +242,7 @@ const PartyDetails = (props) => {
                 };
 
             });
-            debugger
+
             const innterTableData = await Promise.all(requests.filter(Boolean));
 
             setTableData(innterTableData);
@@ -291,6 +296,8 @@ const PartyDetails = (props) => {
         {
             text: "Superstokiest",
             dataField: "",
+            formatExtraData: { forceRefreshSuperstokiest },
+
 
             formatter: (cell, row) => {
 
@@ -301,6 +308,7 @@ const PartyDetails = (props) => {
                             value={(row.SuperstokiestID === null || row.SuperstokiestName === undefined) ? "" : { value: row.SuperstokiestID, label: row.SuperstokiestName }}
                             options={row.SuperstokiestOptions}
                             onChange={(e) => {
+                                setforceRefreshSuperstokiest(i => !i)
                                 row.SuperstokiestID = e.value;
                                 row.SuperstokiestName = e.label;
                             }}
@@ -315,14 +323,18 @@ const PartyDetails = (props) => {
         {
             text: "Cluster",
             dataField: "",
+            formatExtraData: { forceRefresh },
+
 
             formatter: (cell, row, key,) => {
+                debugger
                 return (
                     <Col style={{ width: "150px" }}>
 
                         <C_Select
                             id={`Cluster${key}`}
                             key={`Cluster${row.id}`}
+                            styles={{ menu: (provided) => ({ ...provided, zIndex: 2, position: "absolute" }) }}
                             value={(row.clusterId === null || row.clusterName === undefined) ? "" : { value: row.clusterId, label: row.clusterName }}
                             onChange={(e) => {
                                 row.clusterId = e.value;
@@ -638,7 +650,7 @@ const PartyDetails = (props) => {
         try {
 
             const convertToArrayComaseprateID = (ArrayID = []) => {
-                debugger
+
                 let result = { "Id": [], "CommaSeprateID": "" };
                 if ((ArrayID !== null) && (Array.isArray(ArrayID))) {
                     ArrayID.forEach(item => {
@@ -672,12 +684,19 @@ const PartyDetails = (props) => {
 
                 }
             ))
-            debugger
+
             const jsonBody = JSON.stringify(data)
             dispatch(savePartyDetails_Action({ jsonBody, btnId }));
 
         } catch (e) { _cfunc.btnIsDissablefunc({ btnId, state: false }) }
     };
+
+    const paginationOptions = {
+        sizePerPage: 6, // Number of rows per page
+        hideSizePerPage: true, // Hide the size per page dropdown
+        hidePageListOnlyOnePage: true, // Hide the pagination list when there's only one page
+    };
+
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
@@ -727,52 +746,48 @@ const PartyDetails = (props) => {
                         </div>
                     </div>
 
-                    {/* <div style={{ overflowX: 'auto', minHeight: "45vh" }}> */}
-                    <ToolkitProvider
-                        keyField="PartyID"
-                        data={tableData}
-                        columns={pagesListColumns}
-                        search
-                    >
-                        {toolkitProps => (
-                            <React.Fragment>
-                                <Row >
-                                    <Col xl="12" style={{ overflowX: "auto" }}>
-                                        <div className="table-responsive table">
+                    <div className="" >
+                        <ToolkitProvider
+                            keyField="PartyID"
+                            data={tableData}
+                            columns={pagesListColumns}
+                            search
+                        >
+                            {(toolkitProps) => (
+                                <React.Fragment>
+                                    <SimpleBar style={{ maxHeight: "70vh" }}  >
+                                        <div style={{ minHeight: "70vh" }} >
 
                                             <BootstrapTable
+
                                                 keyField="PartyID"
                                                 id="table_Arrow"
-                                                // classes={"table  table-bordered table-hover"}
-                                                noDataIndication={
-                                                    <div className="text-danger text-center ">
-                                                        Party Not available
-                                                    </div>
-                                                }
+                                                noDataIndication={<div className="text-danger text-center">Party Not available</div>}
                                                 onDataSizeChange={({ dataSize }) => {
-                                                    dispatch(BreadcrumbShowCountlabel(`Count : ${dataSize}`))
+                                                    dispatch(BreadcrumbShowCountlabel(`Count : ${dataSize}`));
                                                 }}
+                                                pagination={paginationFactory(paginationOptions)} // Add pagination options
                                                 {...toolkitProps.baseProps}
                                             />
                                             {mySearchProps(toolkitProps.searchProps)}
                                         </div>
-                                    </Col>
-                                </Row>
-                                {tableData.length > 0 ?
-                                    <div className="row save1" style={{ paddingBottom: 'center' }}>
-                                        <SaveButton pageMode={pageMode}
-                                            loading={saveBtnloading}
-                                            onClick={SaveHandler}
-                                            userAcc={userPageAccessState}
-                                        />
-                                    </div>
-                                    : null
-                                }
+                                    </SimpleBar >
 
-                            </React.Fragment>
-                        )}
-                    </ToolkitProvider>
-                    {/* </div> */}
+                                </React.Fragment>
+                            )}
+                        </ToolkitProvider>
+                    </div>
+                    {tableData.length > 0 ?
+                        <div className="row save1" style={{ paddingBottom: 'center' }}>
+                            <SaveButton pageMode={pageMode}
+                                loading={saveBtnloading}
+                                onClick={SaveHandler}
+                                userAcc={userPageAccessState}
+                            />
+                        </div>
+                        : null
+                    }
+
                 </div>
             </React.Fragment>
         );
