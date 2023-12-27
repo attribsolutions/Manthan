@@ -38,6 +38,7 @@ const OrderSummary = (props) => {
     const [showTableData, setShowTableData] = useState([]);
     const [orderSummaryApiData, setOrderSummaryApiData] = useState([]);
     const [btnMode, setBtnMode] = useState(0);
+    const [orderTypeSelect, setOrderTypeSelect] = useState({ value: 1, label: "Purchase Order" });
 
     const { userAccess, goButtonData, SSDD_List, partyLoading, goBtnLoading, pageField } = useSelector(
         (state) => ({
@@ -229,6 +230,15 @@ const OrderSummary = (props) => {
         label: " All"
     });
 
+    const orderType_Option = [{
+        value: 1,
+        label: "Purchase Order"
+    },
+    {
+        value: 2,
+        label: "Sales Order"
+    }]
+
     const partySlectHandler = (e) => {
 
         setState((i) => {
@@ -249,7 +259,7 @@ const OrderSummary = (props) => {
             "CompanyID": _cfunc.loginCompanyID(),
             "PartyID": isSCMParty ? values.PartyName.value : _cfunc.loginPartyID(),
             "Employee": !isSCMParty ? 0 : _cfunc.loginEmployeeID(),
-
+            "OrderType": orderTypeSelect.value
         });
         dispatch(postOrderSummary_API({ jsonBody }));
     }
@@ -312,12 +322,12 @@ const OrderSummary = (props) => {
             <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
             <div className="page-content">
                 <div className="px-2   c_card_filter text-black" >
-                    <div className="row" >
-                        <Col sm={3} className="">
-                            <FormGroup className="mb- row mt-3 mb-2 " >
-                                <Label className="col-sm-4 p-2"
-                                    style={{ width: "83px" }}>FromDate</Label>
-                                <Col sm="6">
+
+                    <div className="row">
+                        <Col sm={isSCMParty ? 2 : 3} >
+                            <FormGroup className="mb- row mt-3 mb-2">
+                                <Label className="col-sm-4 p-2" style={{ width: "83px" }}>FromDate</Label>
+                                <Col sm="7">
                                     <C_DatePicker
                                         options={{
                                             altInput: true,
@@ -332,11 +342,10 @@ const OrderSummary = (props) => {
                             </FormGroup>
                         </Col>
 
-                        <Col sm={3} className="">
-                            <FormGroup className="mb- row mt-3 mb-2" >
-                                <Label className="col-sm-4 p-2"
-                                    style={{ width: "65px" }}>ToDate</Label>
-                                <Col sm="6">
+                        <Col sm={isSCMParty ? 2 : 3} >
+                            <FormGroup className="mb- row mt-3 mb-2">
+                                <Label className="col-sm-4 p-2" style={{ width: "65px" }}>ToDate</Label>
+                                <Col sm="7">
                                     <C_DatePicker
                                         options={{
                                             altInput: true,
@@ -352,11 +361,10 @@ const OrderSummary = (props) => {
                         </Col>
 
                         {isSCMParty &&
-                            <Col sm={3} className="">
-                                <FormGroup className="mb- row mt-3" >
-                                    <Label className="col-sm-4 p-2"
-                                        style={{ width: "65px" }}>Ordering Party</Label>
-                                    <Col sm="7">
+                            <Col sm={3} >
+                                <FormGroup className="mb- row mt-3">
+                                    <Label className="col-sm-6 p-2" style={{ width: "65px" }}>Ordering Party</Label>
+                                    <Col sm="6">
                                         <C_Select
                                             name="PartyName"
                                             value={values.PartyName}
@@ -369,14 +377,35 @@ const OrderSummary = (props) => {
                                             }}
                                             options={Party_Option}
                                             onChange={partySlectHandler}
-
                                         />
                                     </Col>
                                 </FormGroup>
                             </Col>
                         }
+                        <Col sm={3} >
+                            <FormGroup className="mb- row mt-3 mb-2">
+                                <Label className="col-sm-4 p-2" style={{ width: "83px" }}>Order Type</Label>
+                                <Col sm="6">
+                                    <C_Select
+                                        name="orderTypeSelect"
+                                        value={orderTypeSelect}
+                                        isSearchable={true}
+                                        className="react-dropdown"
+                                        classNamePrefix="dropdown"
+                                        styles={{
+                                            menu: provided => ({ ...provided, zIndex: 2 })
+                                        }}
+                                        options={orderType_Option}
+                                        onChange={(e) => {
+                                            setOrderTypeSelect(e);
+                                            setShowTableData([]);
+                                        }}
+                                    />
+                                </Col>
+                            </FormGroup>
+                        </Col>
 
-                        <Col sm={1} className="mt-3" >
+                        <Col sm={1} className=" mt-3 mb-2">
                             <C_Button
                                 type="button"
                                 spinnerColor="white"
@@ -386,11 +415,9 @@ const OrderSummary = (props) => {
                             >
                                 Show
                             </C_Button>
-
                         </Col>
 
-                        <Col sm="2" className="mt-3 ">
-
+                        <Col sm="1" className="mt-3 mb-2">
                             <C_Button
                                 type="button"
                                 spinnerColor="white"
@@ -398,10 +425,13 @@ const OrderSummary = (props) => {
                                 className="btn btn-primary"
                                 onClick={(e) => excel_And_GoBtnHandler(e, 2)}
                             >
-                                Excel Download
+                                Excel
                             </C_Button>
                         </Col>
+
+
                     </div>
+
                 </div>
 
                 <Card className="mt-1">
@@ -444,7 +474,7 @@ const OrderSummary = (props) => {
                     </CardBody>
                 </Card>
 
-                <div className="">
+                <div >
                     <ToolkitProvider
                         keyField={"keyId"}
                         data={showTableData}
