@@ -115,7 +115,7 @@ const ViewDetails_Modal = () => {
             formatter: (value, row, k) => (
 
                 <>
-                    <div  > {`${tableArray.FullReturnNumber}- ${row.primarySource}`}</div>
+                    <div > {`${row.primarySource}`}</div>
                 </>
             )
 
