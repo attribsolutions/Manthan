@@ -113,8 +113,9 @@ const ViewDetails_Modal = () => {
             dataField: "primarySource",
             style: { width: "200px" },
             formatter: (value, row, k) => (
+
                 <>
-                    <div  >{`${row.primarySource}`}</div>
+                    <div  > {`${tableArray.FullReturnNumber}- ${row.primarySource}`}</div>
                 </>
             )
 
@@ -428,4 +429,3 @@ export default ViewDetails_Modal;
 
 
 
- 
