@@ -279,20 +279,20 @@ const InvoiceExcelUpload = (props) => {
 
                         ///////////////////////////////////////////////// Wrong Item Code///////////////////////////////////////////////////////////////////////
 
-                        const filteredItemArray = ItemList.filter(i => i.MapItem === null || i.MapItem === '');
-                        filteredItemArray.forEach(i => {
+                        // const filteredItemArray = ItemList.filter(i => i.MapItem === null || i.MapItem === '');
+                        // filteredItemArray.forEach(i => {
 
-                            NotMapCustomers.push({ [i.ItemName]: 'Item is Not Map' })
-                        });
+                        //     NotMapCustomers.push({ [i.ItemName]: 'Item is Not Map' })
+                        // });
 
-                        if (filteredItemArray.length > 0) {
-                            customAlert({
-                                Type: 3,
-                                Message: NotMapCustomers
-                            })
-                            setverifyLoading(false)
-                            return;
-                        }
+                        // if (filteredItemArray.length > 0) {
+                        //     customAlert({
+                        //         Type: 3,
+                        //         Message: NotMapCustomers
+                        //     })
+                        //     setverifyLoading(false)
+                        //     return;
+                        // }
 
                         const arrayOfItemMapStrings = itemMap.map(String);
                         const mapItemValues = ItemList.map(obj => obj.MapItem);
