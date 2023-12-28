@@ -258,11 +258,12 @@ const LoadingSheet = (props) => {
     }
 
     const saveHandler = async (event) => {
-
+        debugger
         event.preventDefault();
         const btnId = event.target.id;
 
         const { totalInvoices, GrandTotal, LoadingSheetDetails } = Data.reduce(
+
             (acc, index) => {
                 if (index.selectCheck === true) {
                     acc.totalInvoices++;
@@ -511,7 +512,7 @@ const LoadingSheet = (props) => {
                                                 <BootstrapTable
                                                     keyField={"id"}
                                                     id="table_Arrow"
-                                                    selectRow={selectAllCheck({})}
+                                                    selectRow={selectAllCheck({ tableList: Data })}
                                                     classes={"table  table-bordered table-hover"}
                                                     noDataIndication={
                                                         <div className="text-danger text-center ">
