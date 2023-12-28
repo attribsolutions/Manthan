@@ -38,7 +38,10 @@ const OrderSummary = (props) => {
     const [showTableData, setShowTableData] = useState([]);
     const [orderSummaryApiData, setOrderSummaryApiData] = useState([]);
     const [btnMode, setBtnMode] = useState(0);
-    const [orderTypeSelect, setOrderTypeSelect] = useState({ value: 1, label: "Purchase Order" });
+    const [orderTypeSelect, setOrderTypeSelect] = useState({
+        value: 2,
+        label: "Sales Order"
+    });
 
     const { userAccess, goButtonData, SSDD_List, partyLoading, goBtnLoading, pageField } = useSelector(
         (state) => ({
