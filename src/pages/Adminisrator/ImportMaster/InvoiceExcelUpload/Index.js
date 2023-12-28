@@ -247,20 +247,20 @@ const InvoiceExcelUpload = (props) => {
                         const NotMapCustomers = []
                         ///////////////////////////////////////////////// Wrong unit Code///////////////////////////////////////////////////////////////////////
 
-                        const filteredUnitArray = unitMapData.filter(i => i.MapUnit === null || i.MapUnit === '');
-                        filteredUnitArray.forEach(i => {
+                        // const filteredUnitArray = unitMapData.filter(i => i.MapUnit === null || i.MapUnit === '');
+                        // filteredUnitArray.forEach(i => {
 
-                            NotMapCustomers.push({ [i.Name]: 'Unit is Not Map' })
-                        });
+                        //     NotMapCustomers.push({ [i.Name]: 'Unit is Not Map' })
+                        // });
 
-                        if (filteredUnitArray.length > 0) {
-                            customAlert({
-                                Type: 3,
-                                Message: NotMapCustomers
-                            })
-                            setverifyLoading(false)
-                            return;
-                        }
+                        // if (filteredUnitArray.length > 0) {
+                        //     customAlert({
+                        //         Type: 3,
+                        //         Message: NotMapCustomers
+                        //     })
+                        //     setverifyLoading(false)
+                        //     return;
+                        // }
 
                         const arrayOfUnitMapStrings = unitMap.map(String);
                         const mapUnitValues = unitMapData.map(obj => obj.MapUnit);
