@@ -16,6 +16,7 @@ import BootstrapTable from "react-bootstrap-table-next";
 import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
 import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess } from "../../store/actions";
 import { ReportComponent } from "../ReportComponent";
+import { func } from "prop-types";
 
 const OrderSummary = (props) => {
 
@@ -145,6 +146,14 @@ const OrderSummary = (props) => {
 
     const downloadExcelFunction = (excelTableData) => {
         if ((btnMode === 2)) {
+            const { Data } = goButtonData
+            if (Data.length > 0) {
+                ReportComponent({      // Download CSV
+                    pageField,
+                    excelData: excelTableData,
+                    excelFileName: "Order Summary Report"
+                })
+            }
             // const groupData = groupByColumnsWithSumFunc(excelTableData);
             // _cfunc.CommonConsole(JSON.stringify("groupData", excelTableData))
             // const worksheet = XLSX.utils.json_to_sheet(groupData);
@@ -152,11 +161,7 @@ const OrderSummary = (props) => {
             // XLSX.utils.book_append_sheet(workbook, worksheet, "Order Summary Report");
             // XLSX.writeFile(workbook, `From ${values.FromDate} To ${values.ToDate} ${isSCMParty ? values.PartyName.label : _cfunc.loginUserDetails().PartyName}.XLSX`);
 
-            ReportComponent({      // Download CSV
-                pageField,
-                excelData: excelTableData,
-                excelFileName: "Order Summary Report"
-            })
+
         }
     }
 
@@ -254,6 +259,12 @@ const OrderSummary = (props) => {
         setShowTableData([]);
     }
 
+    const orderTypeSelectHandler = (e) => {
+        setOrderTypeSelect(e);
+        setShowTableData([]);
+        setOrderSummaryApiData([]);
+    }
+
     function excel_And_GoBtnHandler(e, Btnmode) {
         setBtnMode(Btnmode);
         const jsonBody = JSON.stringify({
@@ -275,6 +286,7 @@ const OrderSummary = (props) => {
             return a
         });
         setShowTableData([]);
+        setOrderSummaryApiData([]);
     }
 
     function todateOnchange(e, date) {
@@ -285,7 +297,9 @@ const OrderSummary = (props) => {
             return a
         });
         setShowTableData([]);
+        setOrderSummaryApiData([]);
     }
+
     function groupByDateHandler(e) {
         setGroupByDate(e.target.checked)
         setBtnMode(1)
@@ -399,10 +413,8 @@ const OrderSummary = (props) => {
                                             menu: provided => ({ ...provided, zIndex: 2 })
                                         }}
                                         options={orderType_Option}
-                                        onChange={(e) => {
-                                            setOrderTypeSelect(e);
-                                            setShowTableData([]);
-                                        }}
+                                        onChange={orderTypeSelectHandler}
+
                                     />
                                 </Col>
                             </FormGroup>
