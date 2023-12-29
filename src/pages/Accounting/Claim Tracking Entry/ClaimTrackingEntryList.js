@@ -17,19 +17,26 @@ import {
 import { Col, FormGroup, Input, Label, Modal, Row } from "reactstrap";
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList"
 import { getCurrent_Month_And_Year } from "./ClaimRelatedFunc";
+import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
+import { loginEmployeeID, loginIsSCMParty, loginPartyID } from "../../../components/Common/CommonFunction";
+import { C_Select } from "../../../CustomValidateForm";
 
 const ClaimTrackingEntryList = (props) => {
 
     const dispatch = useDispatch();
+    const isSCMParty = loginIsSCMParty();
 
     const [yearAndMonth, setYearAndMonth] = useState(getCurrent_Month_And_Year);
     const [UploadFile, setUploadFile] = useState([]);
     const [modal_backdrop, setmodal_backdrop] = useState(false);   // Image Model open Or not
-
-
+    const [partySelect, setPartySelect] = useState({
+        value: "",
+        label: " All"
+    });
 
     const reducers = useSelector(
         (state) => ({
+            partyList: state.CommonPartyDropdownReducer.commonPartyDropdown,
             listBtnLoading: state.ClaimTrackingEntry_Reducer.listBtnLoading,
             goBtnLoading: state.ClaimTrackingEntry_Reducer.GoBtnLoading,
             tableList: state.ClaimTrackingEntry_Reducer.claimTrackingEntryList,
@@ -77,6 +84,7 @@ const ClaimTrackingEntryList = (props) => {
         setmodal_backdrop(!modal_backdrop)
         removeBodyCss()
     }
+
     function removeBodyCss() {
         document.body.classList.add("no_padding")
     }
@@ -88,6 +96,8 @@ const ClaimTrackingEntryList = (props) => {
         const jsonBody = JSON.stringify({
             "Year": yearAndMonth.Year,
             "Month": yearAndMonth.Month,
+            "Party": isSCMParty ? partySelect.value : loginPartyID(),
+            "Employee": !isSCMParty ? 0 : loginEmployeeID(),
         })
         dispatch(getClaimTrackingEntrylist({ jsonBody }));
     };
@@ -111,15 +121,25 @@ const ClaimTrackingEntryList = (props) => {
             console.log(config.rowData.CreditNoteUpload)
         }
     }
+    const Party_Option = reducers.partyList.map(i => ({
+        value: i.id,
+        label: i.Name
+    }));
+
+    Party_Option.unshift({
+        value: "",
+        label: " All"
+    });
 
     return (
 
         <React.Fragment>
             <PageLoadingSpinner isLoading={(reducers.goBtnLoading || !pageField)} />
             <div className="page-content">
+
                 <div className="px-3 c_card_filter header text-black mb-1" >
                     <Row >
-                        <Col sm="6" className="mt-1 mb-n1">
+                        <Col sm="5" className="mt-1 mb-n1">
                             <FormGroup className="row mt-2" >
                                 <Label className="col-sm-1 p-2"
                                     style={{ width: "115px", marginRight: "0.1cm" }}>Claim For The Month </Label>
@@ -134,6 +154,31 @@ const ClaimTrackingEntryList = (props) => {
                             </FormGroup>
                         </Col >
 
+                        {isSCMParty &&
+                            <Col sm="5" className="mt-1 mb-n1">
+                                <FormGroup className="row mt-2" >
+                                    <Label className="col-sm-6 p-2" style={{ width: "65px" }}> Party</Label>
+                                    <Col sm="7">
+                                        <C_Select
+                                            name="PartyName"
+                                            value={partySelect}
+                                            isSearchable={true}
+                                            // isLoading={partyLoading}
+                                            className="react-dropdown"
+                                            classNamePrefix="dropdown"
+                                            styles={{
+                                                menu: provided => ({ ...provided, zIndex: 2 })
+                                            }}
+                                            options={Party_Option}
+                                            onChange={(e) => {
+                                                setPartySelect(e);
+                                                dispatch(getClaimTrackingEntrySuccess([]));
+                                            }}
+                                        />
+                                    </Col>
+                                </FormGroup>
+                            </Col>
+                        }
                         <Col sm="1" className="mx-6 mt-3" >
                             < Go_Button
                                 loading={goBtnLoading}
