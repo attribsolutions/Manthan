@@ -403,14 +403,16 @@ const ItemImageUpload = (props) => {
                                     name="image"
                                     style={{
                                         backgroundImage: `url(${GetimageUrl({ Type: row.id })})`,
-                                        backgroundSize: 'cover'
+                                        backgroundSize: 'cover',
+                                        border: "1px solid #a6b0cf",
+                                        padding: "13px"
                                     }}
                                     onClick={() => {
                                         imageShowHandler({ Type: row.id })
                                     }}
                                     id="ImageId"
                                     type="button"
-                                    className="btn btn-success mt-1"
+                                    className="btn mt-1"
                                 >
                                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                 </button>
