@@ -133,7 +133,7 @@ const ImportExcelPartyMap = (props) => {
                 "fieldId": i.Item,
                 "mapValue": i.MapItem,
             }))
-            
+
             setUpdateTableList(newItemList)
         } else {
             setUpdateTableList(goButtonArr)
@@ -411,7 +411,7 @@ const ImportExcelPartyMap = (props) => {
                         >
                             {toolkitProps => (
                                 <React.Fragment>
-                                    <div className="table">
+                                    <div className="table-responsive">
                                         <BootstrapTable
                                             bordered={true}
                                             defaultSorted={[{

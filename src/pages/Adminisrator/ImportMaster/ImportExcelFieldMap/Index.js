@@ -232,7 +232,7 @@ const ImportExcelFieldMap = (props) => {
         const jsonBody = JSON.stringify({
             PartyID: _cfunc.loginSelectedPartyID(),
             CompanyID: _cfunc.loginCompanyID(),
-            IsFieldType:1// type 1 is all Invoices fields
+            IsFieldType: 1// type 1 is all Invoices fields
         })
         dispatch(GoButton_ImportFiledMap_Add({ jsonBody }))
     };
@@ -275,12 +275,12 @@ const ImportExcelFieldMap = (props) => {
         return (
             <React.Fragment>
                 <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
-                <PageLoadingSpinner isLoading={((partyDropDownLoading ) || !pageField)} />
+                <PageLoadingSpinner isLoading={((partyDropDownLoading) || !pageField)} />
 
 
                 <div className="page-content">
-                <NewCommonPartyDropdown />
-                   
+                    <NewCommonPartyDropdown />
+
                     <div >
                         <ToolkitProvider
                             keyField="id"
@@ -290,7 +290,7 @@ const ImportExcelFieldMap = (props) => {
                         >
                             {toolkitProps => (
                                 <React.Fragment>
-                                    <div className="table mt-1">
+                                    <div className="table-responsive">
                                         <BootstrapTable
                                             bordered={true}
                                             striped={false}
