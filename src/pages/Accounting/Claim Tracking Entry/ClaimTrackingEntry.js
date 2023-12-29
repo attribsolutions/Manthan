@@ -256,7 +256,7 @@ const ClaimTrackingEntry = (props) => {
         values.ClaimTrade = { label: ClaimTradeName, value: ClaimTrade };
         values.TypeOfClaim =
           TypeOfClaimName === null
-            ? { label: "Select...", value: null }
+            ? { label: "Select...", value: 0 }
             : { label: TypeOfClaimName, value: TypeOfClaim };
         values.ClaimCheckBy = { label: ClaimCheckByName, value: ClaimCheckBy };
         values.CreditNotestatus = {
@@ -412,7 +412,7 @@ const ClaimTrackingEntry = (props) => {
   }
 
   const imageShowHandler = () => { // image Show handler
-    
+
     if (values.File[0] instanceof File) {
       const slides = [{
         Image: URL.createObjectURL(values.File[0])
@@ -528,14 +528,14 @@ const ClaimTrackingEntry = (props) => {
         _cfunc.btnIsDissablefunc({ btnId, state: true });
 
         const formData = new FormData();
-        
+        debugger
         formData.append('Date', values.Date);
         formData.append('Month', yearAndMonth.Month);
         formData.append('Year', yearAndMonth.Year);
         formData.append('ClaimReceivedSource', values.ClaimReceivedSource);
         formData.append('Type', values.Type.value);
         formData.append('ClaimTrade', values.ClaimTrade.value);
-        formData.append('TypeOfClaim', values.TypeOfClaim === "" ? 0 : values.TypeOfClaim.value);
+        formData.append('TypeOfClaim', (values.TypeOfClaim === "" || values.TypeOfClaim === 0) ? 0 : values.TypeOfClaim.value);
         formData.append('ClaimAmount', values.ClaimAmount);
         formData.append('Remark', values.Remark);
         formData.append('ClaimCheckBy', values.ClaimCheckBy.value);

@@ -14,14 +14,20 @@ import DynamicColumnHook from "../../components/Common/TableCommonFunc";
 import { ReportComponent } from "../ReportComponent";
 import { getCurrent_Month_And_Year } from "../../pages/Accounting/Claim Tracking Entry/ClaimRelatedFunc";
 import { getClaimTrackingEntrySuccess, getClaimTrackingEntrylist } from "../../store/Accounting/ClaimTrackingEntryRedux/action";
+import { C_Select } from "../../CustomValidateForm";
 
 const ClaimTrackingReport = (props) => {  // also Receipt Data Export 
 
     const dispatch = useDispatch();
     const history = useHistory();
+    const isSCMParty = _cfunc.loginIsSCMParty();
 
     const [userPageAccessState, setUserAccState] = useState('');
     const [yearAndMonth, setYearAndMonth] = useState(getCurrent_Month_And_Year);
+    const [partySelect, setPartySelect] = useState({
+        value: "",
+        label: " All"
+    });
 
     const location = { ...history.location }
     const hasShowModal = props.hasOwnProperty(mode.editValue)
@@ -31,11 +37,13 @@ const ClaimTrackingReport = (props) => {  // also Receipt Data Export
         tableData,
         ExcelBtnLoading,
         GoBtnLoading,
+        partyList,
         pageField
     } = useSelector((state) => ({
         tableData: state.ClaimTrackingEntry_Reducer.claimTrackingEntryList,
         GoBtnLoading: state.ClaimTrackingEntry_Reducer.GoBtnLoading,
         ExcelBtnLoading: state.ClaimTrackingEntry_Reducer.ExcelBtnLoading,
+        partyList: state.CommonPartyDropdownReducer.commonPartyDropdown,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField
     }));
@@ -86,12 +94,9 @@ const ClaimTrackingReport = (props) => {  // also Receipt Data Export
                 }
                 element["formatter"] = formatter
             }
-
         });
 
     }, [tableColumns, Data])
-
-
 
     useEffect(() => {
         if (goBtnMode === "downloadExcel") {
@@ -112,6 +117,8 @@ const ClaimTrackingReport = (props) => {  // also Receipt Data Export
             const jsonBody = JSON.stringify({
                 "Year": yearAndMonth.Year,
                 "Month": yearAndMonth.Month,
+                "Party": isSCMParty ? partySelect.value : _cfunc.loginPartyID(),
+                "Employee": !isSCMParty ? 0 : _cfunc.loginEmployeeID(),
             })
 
             const config = { jsonBody, goBtnMode: goBtnMode, subPageMode: url.CLAIM_TRACKING_REPORT };
@@ -123,7 +130,18 @@ const ClaimTrackingReport = (props) => {  // also Receipt Data Export
     async function MonthAndYearOnchange(e) {
         const selectdMonth = getCurrent_Month_And_Year(e.target.value);
         setYearAndMonth(selectdMonth);
+        dispatch(getClaimTrackingEntrySuccess([]));
     }
+
+    const Party_Option = partyList.map(i => ({
+        value: i.id,
+        label: i.Name
+    }));
+
+    Party_Option.unshift({
+        value: "",
+        label: " All"
+    });
 
     return (
         <React.Fragment>
@@ -133,7 +151,7 @@ const ClaimTrackingReport = (props) => {  // also Receipt Data Export
                 <div className="px-3 c_card_filter header text-black mb-1" >
 
                     <Row >
-                        <Col sm="6" className="mt-1 mb-n1">
+                        <Col sm="5" className="mt-1 mb-n1">
                             <FormGroup className="row mt-2" >
                                 <Label className="col-sm-1 p-2"
                                     style={{ width: "115px", marginRight: "0.1cm" }}>Claim For The Month </Label>
@@ -148,28 +166,52 @@ const ClaimTrackingReport = (props) => {  // also Receipt Data Export
                             </FormGroup>
                         </Col >
 
+                        {isSCMParty &&
+                            <Col sm="5" className="mt-1 mb-n1">
+                                <FormGroup className="row mt-2" >
+                                    <Label className="col-sm-6 p-2" style={{ width: "65px" }}> Party</Label>
+                                    <Col sm="7">
+                                        <C_Select
+                                            name="PartyName"
+                                            value={partySelect}
+                                            isSearchable={true}
+                                            // isLoading={partyLoading}
+                                            className="react-dropdown"
+                                            classNamePrefix="dropdown"
+                                            styles={{
+                                                menu: provided => ({ ...provided, zIndex: 2 })
+                                            }}
+                                            options={Party_Option}
+                                            onChange={(e) => {
+                                                setPartySelect(e);
+                                                dispatch(getClaimTrackingEntrySuccess([]));
+                                            }}
+                                        />
+                                    </Col>
+                                </FormGroup>
+                            </Col>
+                        }
                         <Col sm={1} className="mt-3 ">
                             <C_Button
                                 type="button"
                                 spinnerColor="white"
-                                loading={GoBtnLoading === "showOnTable"}
+                                loading={GoBtnLoading}
                                 className="btn btn-success"
                                 onClick={() => goButtonHandler("showOnTable")}
                             >
                                 Show
                             </C_Button>
-
                         </Col>
 
-                        <Col sm={2} className="mt-3 ">
+                        <Col sm={1} className="mt-3 ">
                             <C_Button
                                 type="button"
                                 spinnerColor="white"
-                                loading={ExcelBtnLoading === "downloadExcel"}
+                                loading={ExcelBtnLoading}
                                 className="btn btn-primary"
                                 onClick={() => goButtonHandler("downloadExcel")}
                             >
-                                Excel Download
+                                Excel
                             </C_Button>
                         </Col>
                     </Row>
