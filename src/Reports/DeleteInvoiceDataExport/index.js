@@ -18,6 +18,7 @@ import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess } fro
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import DynamicColumnHook from "../../components/Common/TableCommonFunc";
 import { ReportComponent } from "../ReportComponent";
+import { ExcelReportComponent } from "../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS";
 
 const DeleteInvoiceDataExport = (props) => {
 
@@ -93,9 +94,9 @@ const DeleteInvoiceDataExport = (props) => {
 
         if (tableData.btnId === "excel_btnId") {
             if (DeletedInvoiceExportSerializerDetails.length > 0) {
-                ReportComponent({                // Download CSV
+                ExcelReportComponent({                // Download CSV
                     pageField,
-                    excelData: DeletedInvoiceExportSerializerDetails,
+                    excelTableData: DeletedInvoiceExportSerializerDetails,
                     excelFileName: "Deleted Invoice Data Export"
                 })
                 dispatch(postDeleteInvoiceDataExport_API_Success([]));

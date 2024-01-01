@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Col, FormGroup, Label, Row } from "reactstrap";
+import { Button, Col, FormGroup, Label, Row } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import { C_Button } from "../../components/Common/CommonButton";
 import { C_DatePicker, C_Select } from "../../CustomValidateForm";
@@ -14,8 +14,7 @@ import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
 import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess } from "../../store/actions";
 import DynamicColumnHook from "../../components/Common/TableCommonFunc";
 import { Return_Report_Action, Return_Report_Action_Success } from "../../store/Report/ReturnReportRedux/action";
-import { ReportComponent } from "../ReportComponent";
-
+import { ExcelReportComponent } from "../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS";
 
 const ReturnReport = (props) => {
 
@@ -102,9 +101,9 @@ const ReturnReport = (props) => {
 
                 if (btnMode === 2) {
 
-                    ReportComponent({      // Download CSV
+                    ExcelReportComponent({      // Download CSV
                         pageField,
-                        excelData: goButtonData.Data,
+                        excelTableData: goButtonData.Data,
                         excelFileName: "ReturnReport"
                     })
                     // const worksheet = XLSX.utils.json_to_sheet(goButtonData.Data);
@@ -189,6 +188,7 @@ const ReturnReport = (props) => {
             <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
 
             <div className="page-content">
+
                 <div className="px-2   c_card_filter text-black mb-1" >
                     <div className="row" >
                         <Col sm={3} className="">

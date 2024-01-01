@@ -17,6 +17,7 @@ import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess } fro
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import DynamicColumnHook from "../../components/Common/TableCommonFunc";
 import { ReportComponent } from "../ReportComponent";
+import { ExcelReportComponent } from "../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS";
 
 const InvoiceDataExport = (props) => {
 
@@ -108,9 +109,9 @@ const InvoiceDataExport = (props) => {
                 excelName = "Purchase Data Export"
             }
             if (Data.length > 0) {
-                ReportComponent({      // Download CSV
+                ExcelReportComponent({      // Download CSV
                     pageField,
-                    excelData: Data,
+                    excelTableData: Data,
                     excelFileName: excelName
                 })
                 dispatch(postInvoiceDataExport_API_Success([]));   // Reset Excel Data

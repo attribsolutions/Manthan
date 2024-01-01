@@ -17,6 +17,7 @@ import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
 import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess } from "../../store/actions";
 import { ReportComponent } from "../ReportComponent";
 import { func } from "prop-types";
+import { ExcelReportComponent } from "../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS";
 
 const OrderSummary = (props) => {
 
@@ -148,9 +149,9 @@ const OrderSummary = (props) => {
         if ((btnMode === 2)) {
             const { Data } = goButtonData
             if (Data.length > 0) {
-                ReportComponent({      // Download CSV
+                ExcelReportComponent({      // Download CSV
                     pageField,
-                    excelData: excelTableData,
+                    excelTableData: excelTableData,
                     excelFileName: "Order Summary Report"
                 })
             }
@@ -160,8 +161,6 @@ const OrderSummary = (props) => {
             // const workbook = XLSX.utils.book_new();
             // XLSX.utils.book_append_sheet(workbook, worksheet, "Order Summary Report");
             // XLSX.writeFile(workbook, `From ${values.FromDate} To ${values.ToDate} ${isSCMParty ? values.PartyName.label : _cfunc.loginUserDetails().PartyName}.XLSX`);
-
-
         }
     }
 

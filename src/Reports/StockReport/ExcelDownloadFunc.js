@@ -1,40 +1,67 @@
 
-import Papa from 'papaparse';
+import * as ExcelJS from 'exceljs';
+import { autoFitColumnWidths, freezeHeaderRow, saveWorkbookAsExcel, setDateValue, setNumberValue, setTextValue, styleHeaderRow } from '../../components/Common/ReportCommonFunc/ExcelFunctions';
 
-export function ExcelDownloadFunc({ pageField, excelData, excelFileName, buttonStateArray }) {
+export function ExcelDownloadFunc({ excelTableData, excelFileName, buttonStateArray }) {
+    debugger
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet('Sheet1');
+
+    let dataRow = [];
+    let controlTypeName = [];
+    let csvHeaderColumns = [];
+    let columnsKey = [];
 
     const newSelectedColumns = buttonStateArray.filter(option => option.showing)
-    debugger
 
-    const csvColumns = newSelectedColumns
+    controlTypeName = newSelectedColumns.map((i) => {
+        return i.controlTypeName
+    })
+
+    columnsKey = newSelectedColumns
         .filter(column => column.showing)
         .map(column => column.dataField);
 
-    const csvHeaderColumns = newSelectedColumns
+    csvHeaderColumns = newSelectedColumns
         .filter(column => column.showing)
         .map(column => column.text);
 
-    // Map the data to include only the properties corresponding to the columns
-    const csvData = excelData.map(item =>
-        csvColumns.map(column => item[column])
+    dataRow = excelTableData.map((item) =>
+        columnsKey.map((column) => item[column] || "")
     );
 
-    // Combine column headers and data into a single array
-    const csvContent = [csvHeaderColumns, ...csvData];
+    worksheet.addRow(csvHeaderColumns);
 
-    // Create the CSV content
-    const csvContentString = Papa.unparse(csvContent, { header: true });
+    styleHeaderRow(worksheet);  // Header Style
 
-    // Create and trigger the download
-    const blob = new Blob([csvContentString], { type: "text/csv" });
-    const url = URL.createObjectURL(blob);
+    function formatCellByDataType(cell, controlType, value) {
+        switch (controlType) {
+            case 'Date':
+                setDateValue(cell, value);
+                break;
+            case 'Number':
+                setNumberValue(cell, value);
+                break;
+            case 'Text':
+                setTextValue(cell, value);
+                break;
+            default:
+                break;
+        }
+    }
 
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `${excelFileName}.csv`;
-    a.click();
+    dataRow.forEach((item) => {
+        const row = worksheet.addRow(item);
 
-    URL.revokeObjectURL(url);
+        row.eachCell((cell, colNumber) => {
+            const controlType = controlTypeName[colNumber - 1];
+            formatCellByDataType(cell, controlType, item[colNumber - 1]);
+        });
+    });
+
+    freezeHeaderRow(worksheet);  // freeze Header Row
+    autoFitColumnWidths(worksheet, csvHeaderColumns, dataRow); // Auto Fit Columns
+    saveWorkbookAsExcel(workbook, excelFileName);  // Save Work Book
 }
 
 

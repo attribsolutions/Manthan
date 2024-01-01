@@ -15,6 +15,7 @@ import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
 import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess } from "../../store/actions";
 import DynamicColumnHook from "../../components/Common/TableCommonFunc";
 import { ReportComponent } from "../ReportComponent";
+import { ExcelReportComponent } from "../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS";
 
 const GenericSaleReport = (props) => {
 
@@ -100,9 +101,9 @@ const GenericSaleReport = (props) => {
                 setBtnMode(0);
                 const { Data } = goButtonData
                 if (btnMode === 2) {
-                    ReportComponent({      // Download CSV
+                    ExcelReportComponent({      // Download CSV
                         pageField,
-                        excelData: Data,
+                        excelTableData: Data,
                         excelFileName: "Generic Sale Report"
                     })
                     dispatch(GoButton_For_GenericSale_Success([]));

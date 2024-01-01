@@ -17,6 +17,7 @@ import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import DynamicColumnHook from "../../components/Common/TableCommonFunc";
 import { ReportComponent } from "../ReportComponent";
 import { postCreditDebitDataExport_API, postCreditDebitDataExport_API_Success } from "../../store/Report/CreditDebitDataExportRedux/action";
+import { ExcelReportComponent } from "../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS";
 
 const CreditDebitDataExport = (props) => {  // also Receipt Data Export 
 
@@ -115,9 +116,9 @@ const CreditDebitDataExport = (props) => {  // also Receipt Data Export
             }
 
             if (Data.length > 0) {
-                ReportComponent({      // Download CSV
+                ExcelReportComponent({      // Download CSV
                     pageField,
-                    excelData: Data,
+                    excelTableData: Data,
                     excelFileName: excelName
                 })
                 dispatch(postCreditDebitDataExport_API_Success([]));   // Reset Excel Data

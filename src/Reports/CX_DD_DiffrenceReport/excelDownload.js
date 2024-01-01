@@ -55,7 +55,7 @@ export function Cx_DD_ExcelDownload({ pageField, excelData, excelFileName, extra
                 cell.fill = {
                     type: 'pattern',
                     pattern: 'solid',
-                    fgColor: { argb: 'b3d9ff' } // Yellow background color
+                    fgColor: { argb: 'cce6f6' }
                 };
                 cell.font = { bold: true };
             });
@@ -371,7 +371,7 @@ export function Cx_DD_ExcelDownload_PartyAll({ pageField, excelData, excelFileNa
         cell.fill = {
             type: 'pattern',
             pattern: 'solid',
-            fgColor: { argb: 'b3d9ff' } // Yellow background color
+            fgColor: { argb: 'cce6f6' } // Yellow background color
         };
         cell.font = { bold: true };
     });

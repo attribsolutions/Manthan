@@ -15,6 +15,7 @@ import { ReportComponent } from "../ReportComponent";
 import { getCurrent_Month_And_Year } from "../../pages/Accounting/Claim Tracking Entry/ClaimRelatedFunc";
 import { getClaimTrackingEntrySuccess, getClaimTrackingEntrylist } from "../../store/Accounting/ClaimTrackingEntryRedux/action";
 import { C_Select } from "../../CustomValidateForm";
+import { ExcelReportComponent } from "../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS";
 
 const ClaimTrackingReport = (props) => {  // also Receipt Data Export 
 
@@ -28,6 +29,7 @@ const ClaimTrackingReport = (props) => {  // also Receipt Data Export
         value: "",
         label: " All"
     });
+    const [btnMode, setBtnMode] = useState("");
 
     const location = { ...history.location }
     const hasShowModal = props.hasOwnProperty(mode.editValue)
@@ -99,20 +101,20 @@ const ClaimTrackingReport = (props) => {  // also Receipt Data Export
     }, [tableColumns, Data])
 
     useEffect(() => {
-        if (goBtnMode === "downloadExcel") {
+        if (btnMode === "downloadExcel") {
             if (Data.length > 0) {
-                ReportComponent({      // Download CSV
+                ExcelReportComponent({      // Download CSV
                     pageField,
-                    excelData: Data,
+                    excelTableData: Data,
                     excelFileName: "Claim Tracking Report"
                 })
                 dispatch(getClaimTrackingEntrySuccess([]));   // Reset Excel Data
             }
         }
-    }, [goBtnMode, Data, pageField]);
+    }, [Data, pageField]);
 
     function goButtonHandler(goBtnMode) {
-
+        setBtnMode(goBtnMode)
         try {
             const jsonBody = JSON.stringify({
                 "Year": yearAndMonth.Year,
@@ -121,7 +123,7 @@ const ClaimTrackingReport = (props) => {  // also Receipt Data Export
                 "Employee": !isSCMParty ? 0 : _cfunc.loginEmployeeID(),
             })
 
-            const config = { jsonBody, goBtnMode: goBtnMode, subPageMode: url.CLAIM_TRACKING_REPORT };
+            const config = { jsonBody, subPageMode: url.CLAIM_TRACKING_REPORT };
             dispatch(getClaimTrackingEntrylist(config))
 
         } catch (error) { _cfunc.CommonConsole(error) }
@@ -195,7 +197,7 @@ const ClaimTrackingReport = (props) => {  // also Receipt Data Export
                             <C_Button
                                 type="button"
                                 spinnerColor="white"
-                                loading={GoBtnLoading}
+                                loading={((GoBtnLoading) && (btnMode === "showOnTable")) && true}
                                 className="btn btn-success"
                                 onClick={() => goButtonHandler("showOnTable")}
                             >
@@ -207,7 +209,7 @@ const ClaimTrackingReport = (props) => {  // also Receipt Data Export
                             <C_Button
                                 type="button"
                                 spinnerColor="white"
-                                loading={ExcelBtnLoading}
+                                loading={((GoBtnLoading) && (btnMode === "downloadExcel")) && true}
                                 className="btn btn-primary"
                                 onClick={() => goButtonHandler("downloadExcel")}
                             >
