@@ -5,7 +5,7 @@ import { customAlert } from '../../../../CustomAlert/ConfirmDialog';
 const XLSX = require('xlsx');
 
 
-export const readExcelFile = async ({ file, compareParameter }) => {
+export const readExcelFile = async ({ file, compareParameter, ItemList = [] }) => {
   function isFloat(num) {
     return num % 1 !== 0;
   }
@@ -42,8 +42,10 @@ export const readExcelFile = async ({ file, compareParameter }) => {
 
 
     jsonResult.forEach((r1) => {
-      let shouldRemove = false
-      let Invoice_No = ""
+      let shouldRemove = false;
+      let Invoice_No = "";
+      let Item_Code = "";
+
       comparefilter.forEach((c1) => {
 
         if (c1.ControlTypeName === "Date") {
@@ -51,12 +53,16 @@ export const readExcelFile = async ({ file, compareParameter }) => {
           r1[c1.Value] = date_ymd_func(date)
         };
 
+        if (c1.FieldName === "Item") {
+          Item_Code = r1[c1.Value]
+        }
+
         if (c1.FieldName === "InvoiceNumber") {
           Invoice_No = r1[c1.Value]
         };
         const regExp = RegExp(c1.RegularExpression);
 
-        debugger
+
         if ((Number.isInteger(r1[c1.Value]) || (isFloat(r1[c1.Value]))) && r1[c1.Value] <= 0) {   //  - figure only checking value  that are map in our system 
           if (c1.IsCompulsory) {
             shouldRemove = true;
@@ -73,7 +79,9 @@ export const readExcelFile = async ({ file, compareParameter }) => {
           }
         }
       })
-      r1["Invoice_No"] = Invoice_No
+      r1["Invoice_No"] = Invoice_No;
+      r1["Item_Code"] = Item_Code;
+
       r1["shouldRemove"] = shouldRemove
     })
 
@@ -97,8 +105,8 @@ export const readExcelFile = async ({ file, compareParameter }) => {
 
 
 
-export async function fileDetails({ compareParameter = [], filteredReadjson = [] }) {
-
+export async function fileDetails({ compareParameter = [], Not_Ignore_Item_Array = [], }) {
+  
 
   const fileFiled = {}
 
@@ -115,7 +123,7 @@ export async function fileDetails({ compareParameter = [], filteredReadjson = []
 
   let amount = 0
 
-  filteredReadjson.forEach((index) => {
+  Not_Ignore_Item_Array.forEach((index) => {
 
     var invoiceFound = invoiceNO.find(i => (i === (index[fileFiled.InvoiceNumber])))
     var partyFound = partyNO.find(i => (i === (index[fileFiled.Customer])))
@@ -145,7 +153,7 @@ export async function fileDetails({ compareParameter = [], filteredReadjson = []
 
   })
 
-  const invoice = await groupBy(filteredReadjson, (index) => {
+  const invoice = await groupBy(Not_Ignore_Item_Array, (index) => {
     return (index[fileFiled.InvoiceNumber])
   })
 
