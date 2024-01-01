@@ -20,13 +20,13 @@ const INIT_STATE = {
 }
 
 const StockReportReducer = (state = INIT_STATE, action) => {
-    
+
     switch (action.type) {
         case STOCK_REPORT_GO_BUTTON_API:
             return {
                 ...state,
                 GoBtnLoading: action.config.btnId,
-                ExcelBtnLoading:action.config.btnId,
+                ExcelBtnLoading: action.config.btnId,
             }
 
         case STOCK_REPORT_GO_BUTTON_API_SUCCESS:
@@ -54,7 +54,7 @@ const StockReportReducer = (state = INIT_STATE, action) => {
         case STOCK_REPORT_1_GO_BUTTON_API:
             return {
                 ...state,
-                SR_GoBtnLoading: action.config.btnId
+                SR_GoBtnLoading: true
             }
 
         case STOCK_REPORT_1_GO_BUTTON_API_SUCCESS:
