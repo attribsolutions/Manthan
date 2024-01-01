@@ -208,174 +208,171 @@ const InvoiceExcelUpload = (props) => {
             readjson.filter(i => i.shouldRemove).forEach(i => {
                 Invalid_Invoice.push({ [i.Invoice_No]: ' contains zero or negative values' })
             });
-            if (Invalid_Invoice.length > 0) {
-                Invalid_Invoice.push({ [""]: 'Proceed to ignore this invoice?' })
 
-            }
 
             let isConfirmed = true
-            if (Invalid_Invoice.length > 0) {
-                isConfirmed = await customAlert({
-                    Type: 7,
-                    Message: Invalid_Invoice,
+            // if (Invalid_Invoice.length > 0) {
+            //     isConfirmed = await customAlert({
+            //         Type: 7,
+            //         Message: Invalid_Invoice,
+            //     });
+            // }
+
+            // if (isConfirmed) {
+            const filteredReadjson = readjson.filter(i => !i.shouldRemove);
+
+            // const arrayOfItemMapStrings = filteredReadjson.map(String);
+            const mapItemValues = ItemList.map(obj => obj.MapItem);
+            const Not_Ignore_Item_Array = filteredReadjson.filter(value => {
+                const itemCodeAsString = value.Item_Code.toString();
+                return mapItemValues.includes(itemCodeAsString);
+            });
+
+
+            const Ignore_Item_Array = filteredReadjson.filter(value => {
+                const itemCodeAsString = value.Item_Code.toString();
+                return !mapItemValues.includes(itemCodeAsString);
+            });
+
+            if (Ignore_Item_Array.length > 0) {
+                Ignore_Item_Array.forEach(i => {
+
+                    Invalid_Invoice.push({ [i.Item_Code === "undefined" ? "" : i.Item_Code]: `${i.Item_Code === "undefined" ? "Item Code is missing" : "Wrong Item Code"}` })
                 });
+                if (Invalid_Invoice.length > 0) {
+                    Invalid_Invoice.push({ [""]: 'Proceed to ignore this item?' })
+
+                }
+
+                if (Invalid_Invoice.length > 0) {
+                    isConfirmed = await customAlert({
+                        Type: 7,
+                        Message: Invalid_Invoice,
+                    });
+                }
+
             }
 
             if (isConfirmed) {
-                const filteredReadjson = readjson.filter(i => !i.shouldRemove);
 
-                // const arrayOfItemMapStrings = filteredReadjson.map(String);
-                const mapItemValues = ItemList.map(obj => obj.MapItem);
-                const Not_Ignore_Item_Array = filteredReadjson.filter(value => {
-                    const itemCodeAsString = value.Item_Code.toString();
-                    return mapItemValues.includes(itemCodeAsString);
-                });
+                if (readjson.length > 0) {
 
+                    const isdetails = await fileDetails({ compareParameter, Not_Ignore_Item_Array })
+                    const isUploadInvoiceOfSameDate = _cfunc.areAllDatesSame(isdetails.invoiceDate)
+                    if (!isUploadInvoiceOfSameDate) {
+                        customAlert({
+                            Type: 3,
+                            Message: "Please upload only the invoices with the same date"
 
-                const Ignore_Item_Array = filteredReadjson.filter(value => {
-                    const itemCodeAsString = value.Item_Code.toString();
-                    return !mapItemValues.includes(itemCodeAsString);
-                });
-
-                if (Ignore_Item_Array.length > 0) {
-                    Ignore_Item_Array.forEach(i => {
-
-                        Invalid_Invoice.push({ [i.Item_Code === "undefined" ? "" : i.Item_Code]: `${i.Item_Code === "undefined" ? "Item Code is missing" : "Wrong Item Code"}` })
-                    });
-                    if (Invalid_Invoice.length > 0) {
-                        Invalid_Invoice.push({ [""]: 'Proceed to ignore this item?' })
-
+                        })
+                        setverifyLoading(false)
+                        return
                     }
 
-                    if (Invalid_Invoice.length > 0) {
-                        isConfirmed = await customAlert({
-                            Type: 7,
-                            Message: Invalid_Invoice,
-                        });
-                    }
+                    if (PartyMapData.length > 0) {
+                        const PartyMap = isdetails.partyNO;
+                        const itemMap = isdetails.itemCode;
+                        const unitMap = isdetails.unitCode;
 
-                }
 
-                if (isConfirmed) {
+                        ///////////////////////////////////////////////// Wrong Item Code///////////////////////////////////////////////////////////////////////
 
-                    if (readjson.length > 0) {
+                        // const arrayOfItemMapStrings = itemMap.map(String);
+                        // const mapItemValues = ItemList.map(obj => obj.MapItem);
+                        // const notPresentItemValues = arrayOfItemMapStrings.filter(value => !mapItemValues.includes(value));
+                        // 
+                        // if (notPresentItemValues.length > 0) {
+                        //     notPresentItemValues.forEach(i => {
+                        //         NotMapCustomers.push({ [i === "undefined" ? "" : i]: `${i === "undefined" ? "Item Code is missing" : "Wrong Item Code"}` })
+                        //     });
+                        //     customAlert({
+                        //         Type: 3,
+                        //         Message: NotMapCustomers
+                        //     })
+                        //     setverifyLoading(false)
+                        //     return;
+                        // }
 
-                        const isdetails = await fileDetails({ compareParameter, Not_Ignore_Item_Array })
-                        const isUploadInvoiceOfSameDate = _cfunc.areAllDatesSame(isdetails.invoiceDate)
-                        if (!isUploadInvoiceOfSameDate) {
+
+
+                        ///////////////////////////////////////////////// Wrong unit Code///////////////////////////////////////////////////////////////////////
+
+                        // const filteredUnitArray = unitMapData.filter(i => i.MapUnit === null || i.MapUnit === '');
+                        // filteredUnitArray.forEach(i => {
+
+                        //     NotMapCustomers.push({ [i.Name]: 'Unit is Not Map' })
+                        // });
+
+                        // if (filteredUnitArray.length > 0) {
+                        //     customAlert({
+                        //         Type: 3,
+                        //         Message: NotMapCustomers
+                        //     })
+                        //     setverifyLoading(false)
+                        //     return;
+                        // }
+
+                        const arrayOfUnitMapStrings = unitMap.map(String);
+                        const mapUnitValues = unitMapData.map(obj => obj.MapUnit);
+                        const notPresentUnitValues = arrayOfUnitMapStrings.filter(value => !mapUnitValues.includes(value));
+
+                        if (notPresentUnitValues.length > 0) {
+                            notPresentUnitValues.forEach(i => {
+                                NotMapCustomers.push({ [i === "undefined" ? "" : i]: `${i === "undefined" ? "Unit Code is missing" : "Wrong Unit Code"}` })
+                            });
                             customAlert({
                                 Type: 3,
-                                Message: "Please upload only the invoices with the same date"
-
+                                Message: NotMapCustomers
                             })
                             setverifyLoading(false)
-                            return
+                            return;
                         }
 
-                        if (PartyMapData.length > 0) {
-                            const PartyMap = isdetails.partyNO;
-                            const itemMap = isdetails.itemCode;
-                            const unitMap = isdetails.unitCode;
 
 
-                            ///////////////////////////////////////////////// Wrong Item Code///////////////////////////////////////////////////////////////////////
+                        ///////////////////////////////////////////////// Wrong Party Code///////////////////////////////////////////////////////////////////////
 
-                            // const arrayOfItemMapStrings = itemMap.map(String);
-                            // const mapItemValues = ItemList.map(obj => obj.MapItem);
-                            // const notPresentItemValues = arrayOfItemMapStrings.filter(value => !mapItemValues.includes(value));
-                            // 
-                            // if (notPresentItemValues.length > 0) {
-                            //     notPresentItemValues.forEach(i => {
-                            //         NotMapCustomers.push({ [i === "undefined" ? "" : i]: `${i === "undefined" ? "Item Code is missing" : "Wrong Item Code"}` })
-                            //     });
-                            //     customAlert({
-                            //         Type: 3,
-                            //         Message: NotMapCustomers
-                            //     })
-                            //     setverifyLoading(false)
-                            //     return;
-                            // }
+                        const filteredArray = PartyMapData.filter(i => i.MapCustomer === null || i.MapCustomer === '');
 
+                        filteredArray.forEach(i => {
+                            NotMapCustomers.push({ [i.CustomerName]: 'Party is Not Map' })
+                        });
 
+                        if (NotMapCustomers.length > 0) {
+                            customAlert({
+                                Type: 3,
+                                Message: NotMapCustomers
+                            })
+                            setverifyLoading(false)
+                            return;
+                        }
 
-                            ///////////////////////////////////////////////// Wrong unit Code///////////////////////////////////////////////////////////////////////
-
-                            // const filteredUnitArray = unitMapData.filter(i => i.MapUnit === null || i.MapUnit === '');
-                            // filteredUnitArray.forEach(i => {
-
-                            //     NotMapCustomers.push({ [i.Name]: 'Unit is Not Map' })
-                            // });
-
-                            // if (filteredUnitArray.length > 0) {
-                            //     customAlert({
-                            //         Type: 3,
-                            //         Message: NotMapCustomers
-                            //     })
-                            //     setverifyLoading(false)
-                            //     return;
-                            // }
-
-                            const arrayOfUnitMapStrings = unitMap.map(String);
-                            const mapUnitValues = unitMapData.map(obj => obj.MapUnit);
-                            const notPresentUnitValues = arrayOfUnitMapStrings.filter(value => !mapUnitValues.includes(value));
-
-                            if (notPresentUnitValues.length > 0) {
-                                notPresentUnitValues.forEach(i => {
-                                    NotMapCustomers.push({ [i === "undefined" ? "" : i]: `${i === "undefined" ? "Unit Code is missing" : "Wrong Unit Code"}` })
-                                });
-                                customAlert({
-                                    Type: 3,
-                                    Message: NotMapCustomers
-                                })
-                                setverifyLoading(false)
-                                return;
-                            }
-
-
-
-                            ///////////////////////////////////////////////// Wrong Party Code///////////////////////////////////////////////////////////////////////
-
-                            const filteredArray = PartyMapData.filter(i => i.MapCustomer === null || i.MapCustomer === '');
-
-                            filteredArray.forEach(i => {
-                                NotMapCustomers.push({ [i.CustomerName]: 'Party is Not Map' })
+                        const arrayOfPartyMapStrings = PartyMap.map(String);
+                        const mapCustomerValues = PartyMapData.map(obj => obj.MapCustomer);
+                        const notPresentPartyValues = arrayOfPartyMapStrings.filter(value => !mapCustomerValues.includes(value));
+                        if (notPresentPartyValues.length > 0) {
+                            notPresentPartyValues.forEach(i => {
+                                NotMapCustomers.push({ [i === "undefined" ? "" : i]: `${i === "undefined" ? "Party Code is missing" : "Wrong Party Code"}` })
                             });
-
-                            if (NotMapCustomers.length > 0) {
-                                customAlert({
-                                    Type: 3,
-                                    Message: NotMapCustomers
-                                })
-                                setverifyLoading(false)
-                                return;
-                            }
-
-                            const arrayOfPartyMapStrings = PartyMap.map(String);
-                            const mapCustomerValues = PartyMapData.map(obj => obj.MapCustomer);
-                            const notPresentPartyValues = arrayOfPartyMapStrings.filter(value => !mapCustomerValues.includes(value));
-                            if (notPresentPartyValues.length > 0) {
-                                notPresentPartyValues.forEach(i => {
-                                    NotMapCustomers.push({ [i === "undefined" ? "" : i]: `${i === "undefined" ? "Party Code is missing" : "Wrong Party Code"}` })
-                                });
-                                customAlert({
-                                    Type: 3,
-                                    Message: NotMapCustomers
-                                })
-                                setverifyLoading(false)
-                                return;
-                            }
+                            customAlert({
+                                Type: 3,
+                                Message: NotMapCustomers
+                            })
+                            setverifyLoading(false)
+                            return;
                         }
+                    }
 
 
-                        let { invoiceNO } = isdetails;
+                    let { invoiceNO } = isdetails;
 
-                        if ((invoiceNO.length > 0)) {
-                            setReadJsonDetail(isdetails)
-                            setPreViewDivShow(true)
-                        }
+                    if ((invoiceNO.length > 0)) {
+                        setReadJsonDetail(isdetails)
+                        setPreViewDivShow(true)
                     }
                 }
             }
+            // }
 
         } else {
             customAlert({
