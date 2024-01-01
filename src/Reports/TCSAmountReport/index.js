@@ -14,8 +14,8 @@ import Select from "react-select";
 import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
 import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess } from "../../store/actions";
 import DynamicColumnHook from "../../components/Common/TableCommonFunc";
-import { ReportComponent } from "../ReportComponent";
 import { TCS_Amount_Gobtn_Action, TCS_Amount_Gobtn_Success } from "../../store/Report/TCS_AmountRedux/action";
+import { ExcelReportComponent } from "../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS";
 
 const TCSAmountReport = (props) => {
 
@@ -101,9 +101,9 @@ const TCSAmountReport = (props) => {
 
         if (btnMode === "excel") {
             if (tableData.length > 0) {
-                ReportComponent({                // Download CSV
+                ExcelReportComponent({                // Download CSV
                     pageField,
-                    excelData: tableData,
+                    excelTableData: tableData,
                     excelFileName: "TCS Amount Report",
                     extraColumn: isSCMParty ? "PartyName" : "",
                 })

@@ -10,12 +10,10 @@ import { BreadcrumbShowCountlabel, SSDD_List_under_Company, commonPageField, com
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import { postRetailerData_API, postRetailerData_API_Success } from "../../store/Report/RetailerDataRedux/action";
 import { C_Select } from "../../CustomValidateForm";
-import { ReportComponent } from "../ReportComponent";
 import BootstrapTable from "react-bootstrap-table-next";
 import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
-import paginationFactory from "react-bootstrap-table2-paginator";
-
+import { ExcelReportComponent } from "../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS";
 
 const RetailerDataReport = (props) => {
 
@@ -26,7 +24,6 @@ const RetailerDataReport = (props) => {
     const [partydropdown, setPartydropdown] = useState({ value: 0, label: " All" })
     const [tableData, setTableData] = useState([]);
     const [btnMode, setBtnMode] = useState("");
-
 
     const [columns, setcolumn] = useState([{}]);
     const [columnsCreated, setColumnsCreated] = useState(false)
@@ -74,8 +71,6 @@ const RetailerDataReport = (props) => {
         }
     }, [])
 
-
-
     const createColumns = () => {
 
         const { Data } = RetailerGobtn
@@ -99,35 +94,21 @@ const RetailerDataReport = (props) => {
         createColumns();
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     useEffect(() => {
 
         if ((RetailerGobtn.Status === true) && (RetailerGobtn.StatusCode === 200)) {
-            
+
 
             const { Data } = RetailerGobtn
 
             if (btnMode === "Show") {
                 setTableData(Data.ReportExportSerializerDetails)
             } else if (btnMode === "Excel") {
-                ReportComponent({  // Download CSV
-                    excelData: Data.ReportExportSerializerDetails,
-                    excelFileName: "Retailer Data Report"
+                ExcelReportComponent({  // Download CSV
+                    excelTableData: Data.ReportExportSerializerDetails,
+                    excelFileName: "Retailer Data Report",
+                    numericHeaders: ['id', 'MobileNo', 'AlternateContactNo', 'FSSAINo', 'PIN', 'Routeid', 'Supplierid'],
+                    dateHeader: 'FSSAIExipry'
                 })
             }
 
@@ -142,33 +123,6 @@ const RetailerDataReport = (props) => {
         }
 
     }, [RetailerGobtn]);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     // useEffect(() => {
     //     try {
@@ -208,7 +162,7 @@ const RetailerDataReport = (props) => {
         dispatch(postRetailerData_API(JSON.stringify({ "Party": partydropdown.value })));
     }
 
-   
+
 
     return (
         <React.Fragment>
@@ -299,7 +253,7 @@ const RetailerDataReport = (props) => {
                                                 }}
                                                 {...toolkitProps.baseProps}
 
-                                              
+
                                             />
                                             {mySearchProps(toolkitProps.searchProps)}
                                         </div>

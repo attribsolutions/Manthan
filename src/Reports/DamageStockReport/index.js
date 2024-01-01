@@ -14,6 +14,7 @@ import DynamicColumnHook from "../../components/Common/TableCommonFunc";
 import { mode, pageId } from "../../routes/index"
 import CustomTable from "../../CustomTable2";
 import PartyDropdownForReport, { ReportComponent, ShowAndExcelBtn } from "../ReportComponent";
+import { ExcelReportComponent } from "../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS";
 
 const DamageStockReport = (props) => {
 
@@ -88,9 +89,9 @@ const DamageStockReport = (props) => {
             if ((goButtonData.Status === true) && (goButtonData.StatusCode === 200)) {
                 setBtnMode(0);
                 if (btnMode === 2) {
-                    ReportComponent({      // Download CSV
+                    ExcelReportComponent({      // Download CSV
                         pageField,
-                        excelData: goButtonData.Data,
+                        excelTableData: goButtonData.Data,
                         excelFileName: "Damage Stock Export"
                     })
                     dispatch(damageStockReport_GoButton_API_Success([]));

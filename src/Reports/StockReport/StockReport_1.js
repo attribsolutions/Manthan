@@ -13,7 +13,7 @@ import { commonPageField, commonPageFieldSuccess, getBaseUnit_ForDropDown, getBa
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import { StockReport_1_GoBtn_API } from "../../helpers/backend_helper";
 import * as report from '../ReportIndex'
-import { ReportComponent } from "../ReportComponent";
+import { ExcelReportComponent } from "../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS";
 
 const StockReport_1 = (props) => {
 
@@ -25,14 +25,13 @@ const StockReport_1 = (props) => {
     const [headerFilters, setHeaderFilters] = useState('');
     const [userPageAccessState, setUserAccState] = useState('');
     const [unitDropdown, setUnitDropdown] = useState({ value: 1, label: 'No' });
-    const [tableData, setTableData] = useState([]);
     const [PartyDropdown, setPartyDropdown] = useState("");
-
-    const [btnMode, setBtnMode] = useState(0);
+    const [btnMode, setBtnMode] = useState("");
 
     const reducers = useSelector(
         (state) => ({
             goBtnLoading: state.PdfReportReducers.goBtnLoading,
+            excelLoading: state.StockReportReducer.SR_GoBtnLoading,
             stockProcessingLoading: state.StockReportReducer.stockProcessingLoading,
             StockProcessingBtn: state.StockReportReducer.StockProcessingBtn,
             StockReport_1_Gobtb: state.StockReportReducer.StockReport_1_Gobtb,
@@ -43,7 +42,7 @@ const StockReport_1 = (props) => {
             pageField: state.CommonPageFieldReducer.pageField
         })
     );
-    const { StockReport_1_Gobtb, pdfdata, pageField, party, goBtnLoading } = reducers
+    const { StockReport_1_Gobtb, pdfdata, pageField, party, goBtnLoading, excelLoading } = reducers
 
     const { userAccess, BaseUnit, StockProcessingBtn, } = reducers;
     const { fromdate = currentDate_ymd, todate = currentDate_ymd } = headerFilters;
@@ -81,21 +80,14 @@ const StockReport_1 = (props) => {
     }, [])
 
     useEffect(() => {
-        if (tableData.length === 0) {
-            setBtnMode(0)
-        }
-    }, [tableData]);
-
-    useEffect(() => {
         try {
 
             if ((StockReport_1_Gobtb.Status === true) && (StockReport_1_Gobtb.StatusCode === 200)) {
-                setBtnMode(0);
                 const { StockDetails } = StockReport_1_Gobtb.Data[0]
-                if (btnMode === 2) {
-                    ReportComponent({      // Download CSV
+                if (btnMode === "excel") {
+                    ExcelReportComponent({      // Download CSV
                         pageField,
-                        excelData: StockDetails,
+                        excelTableData: StockDetails,
                         excelFileName: "SNS Report"
                     })
                     dispatch(stockReport_1_GoButton_API_Success([]));
@@ -107,11 +99,9 @@ const StockReport_1 = (props) => {
                     Type: 3,
                     Message: "Records Not available ",
                 })
-                setBtnMode(0);
                 dispatch(stockReport_1_GoButton_API_Success([]));
                 return
             }
-            setBtnMode(0);
         }
         catch (e) { console.log(e) }
 
@@ -119,17 +109,15 @@ const StockReport_1 = (props) => {
 
     useEffect(() => {
         try {
-            if (btnMode === 1) {
+            if (btnMode === "print") {
                 if ((pdfdata.Status === true) && (pdfdata.StatusCode === 204)) {
                     customAlert({
                         Type: 3,
                         Message: "Records Not available ",
                     })
-                    setBtnMode(0);
                     return
                 }
             }
-            setBtnMode(0);
             dispatch(stockReport_1_GoButton_API_Success([]));
         }
         catch (e) { console.log(e) }
@@ -144,7 +132,6 @@ const StockReport_1 = (props) => {
                 Type: 1,
                 Message: StockProcessingBtn.Message,
             })
-
         }
         else if (StockProcessingBtn.Status === true) {
             dispatch(StockProcessing_API_Success([]))
@@ -182,14 +169,12 @@ const StockReport_1 = (props) => {
     }
 
     function excel_And_GoBtnHandler(e, btnMode) {
-
-        setBtnMode(btnMode);
+        setBtnMode(btnMode)
         if (unitDropdown === "") {
             customAlert({
                 Type: 4,
                 Message: "Please Select Unit"
             })
-            setBtnMode(0);
             return
         }
         if ((isSCMParty) && (PartyDropdown === "")) {
@@ -204,7 +189,7 @@ const StockReport_1 = (props) => {
         });
 
         let config = { ReportType: report.Stock, jsonBody }
-        if (btnMode === 2) {
+        if (btnMode === "excel") {
             dispatch(stockReport_1_GoButton_API(config))
         }
         else {
@@ -260,7 +245,6 @@ const StockReport_1 = (props) => {
                 <C_Select
                     name="Unit"
                     value={unitDropdown}
-                    isDisabled={tableData.length > 0 && true}
                     isSearchable={true}
                     className="react-dropdown"
                     classNamePrefix="dropdown"
@@ -313,7 +297,7 @@ const StockReport_1 = (props) => {
             spinnerColor="white"
             className="btn btn-success"
             loading={goBtnLoading}
-            onClick={(e) => excel_And_GoBtnHandler(e, 1)}
+            onClick={(e) => excel_And_GoBtnHandler(e, "print")}
         >
             Print
         </C_Button>
@@ -323,9 +307,9 @@ const StockReport_1 = (props) => {
         <C_Button
             type="button"
             spinnerColor="white"
-            loading={btnMode === 2 && true}
+            loading={excelLoading}
             className="btn btn-primary"
-            onClick={(e) => excel_And_GoBtnHandler(e, 2)}
+            onClick={(e) => excel_And_GoBtnHandler(e, "excel")}
         >
             Excel Download
         </C_Button>

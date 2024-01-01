@@ -34,7 +34,7 @@ const ClaimTrackingEntry_Reducer = (state = INIT_STATE, action) => {
             return {
                 ...state,
                 GoBtnLoading: true,
-                ExcelBtnLoading: true,
+                // ExcelBtnLoading: action.config.goBtnMode,
             }
 
         case GET_CLAIM_TRACKING_ENTRY_LIST_SUCCESS:
@@ -42,7 +42,7 @@ const ClaimTrackingEntry_Reducer = (state = INIT_STATE, action) => {
                 ...state,
                 claimTrackingEntryList: action.payload,
                 GoBtnLoading: false,
-                ExcelBtnLoading: false
+                // ExcelBtnLoading: false
             }
 
         case SAVE_CLAIM_TRACKING_ENTRY:

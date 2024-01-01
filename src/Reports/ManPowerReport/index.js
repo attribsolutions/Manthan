@@ -21,6 +21,7 @@ import ToolkitProvider from 'react-bootstrap-table2-toolkit';
 import BootstrapTable from 'react-bootstrap-table-next';
 import { mySearchProps } from '../../components/Common/SearchBox/MySearch';
 import { C_Button } from '../../components/Common/CommonButton';
+import { ExcelReportComponent } from '../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS';
 
 function initialState(history) {
 
@@ -118,9 +119,11 @@ const ManPowerReport = (props) => {           // this component also use for Man
                 setTableData(manPowerReportRedux)
 
             } else if (btnMode === "Excel") {
-                ReportComponent({      // Download CSV
-                    excelData: manPowerReportRedux,
-                    excelFileName: "Distributor & ManPower Report"
+                ExcelReportComponent({      // Download CSV
+                    excelTableData: manPowerReportRedux,
+                    excelFileName: "Distributor & ManPower Report",
+                    numericHeaders: ['SAPCode', 'FEParty_id', 'SS_id', 'PIN', 'Mobile', 'FSSAINo'],
+                    dateHeader: 'FSSAIExpiry'
                 })
             }
             dispatch(ManPower_Get_Success([]));   // Reset Excel Data
@@ -137,7 +140,7 @@ const ManPowerReport = (props) => {           // this component also use for Man
         <React.Fragment>
             <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
             <div className="page-content">
-               
+
                 <CardBody className=" c_card_filter text-black ">
 
                     <Row className="justify-content-end">

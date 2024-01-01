@@ -105,6 +105,7 @@ const ClaimTrackingEntryList = (props) => {
     async function MonthAndYearOnchange(e) {
         const selectdMonth = getCurrent_Month_And_Year(e.target.value);
         setYearAndMonth(selectdMonth);
+        dispatch(getClaimTrackingEntrySuccess([]));
     }
 
     function downBtnFunc(config) {

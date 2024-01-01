@@ -12,12 +12,13 @@ import Select from "react-select";
 import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess, getBaseUnit_ForDropDown, getBaseUnit_ForDropDownSuccess } from "../../store/actions";
 import C_Report from "../../components/Common/C_Report";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
-import { mode, pageId } from "../../routes/index"
+import { url, mode, pageId } from "../../routes/index"
 import { stockReport_GoButton_API, stockReport_GoButton_API_Success } from "../../store/Report/StockReport/action";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
 import { ExcelDownloadFunc } from "./ExcelDownloadFunc";
+import { ExcelReportComponent } from "../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS";
 
 const StockReport = (props) => {
 
@@ -45,24 +46,28 @@ const StockReport = (props) => {
 		{
 			text: "ItemName",
 			dataField: "ItemName",
-			sort: true
+			sort: true,
+			controlTypeName: "Text"
 		},
 		{
 			text: "Quantity",
 			dataField: "ActualQty",
 			align: "right",
-			sort: true
+			sort: true,
+			controlTypeName: "Number"
 		},
 		{
 			text: "Unit",
 			dataField: "Unit",
-			sort: true
+			sort: true,
+			controlTypeName: "Text"
 		},
 		{
 			text: "Amount",
 			dataField: "Amount",
 			align: "right",
-			sort: true
+			sort: true,
+			controlTypeName: "Number"
 		},
 	]);
 
@@ -121,14 +126,16 @@ const StockReport = (props) => {
 			showing: stockTypeSelect.value === "",
 			groupBy: false,
 			align: 'right',
-			sequence: 5
+			sequence: 5,
+			controlTypeName: "Text"
 		},
 		{
 			text: 'DistributorName',
 			dataField: 'DistributorName',
 			showing: stockTypeSelect.value === "",
 			groupBy: false,
-			sequence: 5
+			sequence: 5,
+			controlTypeName: "Text"
 		},
 
 		{
@@ -137,39 +144,45 @@ const StockReport = (props) => {
 			showing: ['', 0, 1].includes(stockTypeSelect.value),
 			groupBy: true,
 			align: 'right',
-			sequence: 1
+			sequence: 1,
+			controlTypeName: "Number"
 		},
 		{
 			text: 'Item',
 			dataField: 'ItemName',
 			showing: ['', 0, 1].includes(stockTypeSelect.value),
 			groupBy: true,
-			sequence: 1
+			sequence: 1,
+			controlTypeName: "Text"
 		}, {
 			text: 'Product',
 			dataField: 'GroupName',
 			showing: stockTypeSelect.value === "",
 			groupBy: false,
-			sequence: 5
+			sequence: 5,
+			controlTypeName: "Text"
 		}, {
 			text: 'SubProduct',
 			dataField: 'SubGroupName',
 			showing: stockTypeSelect.value === "",
 			groupBy: false,
-			sequence: 5
+			sequence: 5,
+			controlTypeName: "Text"
 		}, {
 			text: 'ProductType',
 			dataField: 'GroupTypeName',
 			showing: false,
 			groupBy: false,
-			sequence: 5
+			sequence: 5,
+			controlTypeName: "Text"
 		},
 		{
 			text: 'BatchCode',
 			dataField: 'BatchCode',
 			showing: batchWise,
 			groupBy: batchWise,
-			sequence: 2
+			sequence: 2,
+			controlTypeName: "Text"
 		},
 		{
 			text: 'MRP',
@@ -177,7 +190,8 @@ const StockReport = (props) => {
 			align: "right",
 			showing: mrpWise,
 			groupBy: mrpWise,
-			sequence: 3
+			sequence: 3,
+			controlTypeName: "Number"
 		},
 
 		{
@@ -186,7 +200,8 @@ const StockReport = (props) => {
 			showing: stockTypeSelect.value === "",
 			groupBy: false,
 			align: 'right',
-			sequence: 5
+			sequence: 5,
+			controlTypeName: "Number"
 		},
 
 		{
@@ -196,7 +211,8 @@ const StockReport = (props) => {
 			showing: ['', 0].includes(stockTypeSelect.value),
 			groupBy: false,
 			align: 'right',
-			sequence: 4
+			sequence: 4,
+			controlTypeName: "Number"
 		},
 		{
 			text: 'UnSaleableStock',
@@ -204,7 +220,8 @@ const StockReport = (props) => {
 			showing: ['', 1].includes(stockTypeSelect.value),
 			groupBy: false,
 			align: 'right',
-			sequence: 5
+			sequence: 5,
+			controlTypeName: "Number"
 		},
 		{
 			text: 'SaleableStockValue',
@@ -212,7 +229,8 @@ const StockReport = (props) => {
 			showing: stockTypeSelect.value === "",
 			groupBy: false,
 			align: 'right',
-			sequence: 5
+			sequence: 5,
+			controlTypeName: "Number"
 		},
 
 		{
@@ -221,14 +239,16 @@ const StockReport = (props) => {
 			showing: stockTypeSelect.value === "",
 			groupBy: false,
 			align: 'right',
-			sequence: 5
+			sequence: 5,
+			controlTypeName: "Number"
 		}, {
 			text: 'UnSaleableStockValue',
 			dataField: 'UnSaleableStockValue',
 			showing: stockTypeSelect.value === "",
 			groupBy: false,
 			align: 'right',
-			sequence: 5
+			sequence: 5,
+			controlTypeName: "Number"
 		},
 		{
 			text: 'UnSaleableStockTaxValue',
@@ -236,7 +256,8 @@ const StockReport = (props) => {
 			showing: stockTypeSelect.value === "",
 			groupBy: false,
 			align: 'right',
-			sequence: 5
+			sequence: 5,
+			controlTypeName: "Number"
 		},
 		{
 			text: 'TotalStockValue',
@@ -244,7 +265,8 @@ const StockReport = (props) => {
 			showing: ['', 0, 1].includes(stockTypeSelect.value),
 			groupBy: false,
 			align: 'right',
-			sequence: 5
+			sequence: 5,
+			controlTypeName: "Number"
 		},
 
 		{
@@ -253,7 +275,8 @@ const StockReport = (props) => {
 			showing: [''].includes(stockTypeSelect.value),
 			groupBy: false,
 			align: 'right',
-			sequence: 5
+			sequence: 5,
+			controlTypeName: "Number"
 		},
 		{
 			text: 'Stockvaluewithtax',
@@ -261,7 +284,8 @@ const StockReport = (props) => {
 			showing: stockTypeSelect.value === "",
 			groupBy: false,
 			align: 'right',
-			sequence: 5
+			sequence: 5,
+			controlTypeName: "Number"
 		},
 
 		{
@@ -269,7 +293,9 @@ const StockReport = (props) => {
 			dataField: 'Unit',
 			showing: true,
 			groupBy: false,
-			sequence: 5
+			sequence: 5,
+			controlTypeName: "Text"
+
 		},
 
 	];
@@ -289,11 +315,8 @@ const StockReport = (props) => {
 					const { filterTableData } = SortButtonFunc(updatedReduxData);
 
 					ExcelDownloadFunc({
-						pageField,
-						excelData: filterTableData,
+						excelTableData: filterTableData,
 						excelFileName: "Current_Stock_Report",
-						mrpWise: mrpWise,
-						batchWise: batchWise,
 						buttonStateArray: buttonStateArray
 					});
 				}

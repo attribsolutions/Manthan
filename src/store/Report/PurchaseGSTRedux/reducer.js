@@ -13,8 +13,8 @@ const PurchaseGSTReportReducer = (state = INIT_STATE, action) => {
         case POST_PURCHASE_GST_REPORT_API:
             return {
                 ...state,
-                GoBtnLoading: action.config.btnId,
-                ExcelBtnLoading: action.config.btnId
+                GoBtnLoading: true,
+                ExcelBtnLoading: true,
 
             }
 

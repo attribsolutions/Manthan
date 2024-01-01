@@ -67,7 +67,11 @@ const PartyLedger = () => {
     useEffect(() => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(pageId.PARTY_LEDGER));
-        dispatch(GetVenderSupplierCustomer({ subPageMode, "PartyID": _cfunc.loginSelectedPartyID() }))
+        dispatch(GetVenderSupplierCustomer({ subPageMode, "PartyID": _cfunc.loginSelectedPartyID() }));
+        return () => {
+            dispatch(GetVenderSupplierCustomerSuccess([]));
+            dispatch(commonPageFieldSuccess(null));
+        };
     }, [])
 
     useEffect(() => {
@@ -350,17 +354,15 @@ const PartyLedger = () => {
 
             const a = document.createElement("a");
             a.href = url;
-            a.download = "Party Ledger Report.xlsx";
+            a.download = subPageMode == url.PARTY_LEDGER ? "Party Ledger Report.xlsx" : "Self  Ledger Report.xlsx";
             a.click();
 
             URL.revokeObjectURL(url);
         });
     }
 
-
-
     async function goButtonHandler(e, mode) {
-        setBtnMode(true)
+
         if (_cfunc.loginSelectedPartyID() === 0) {
             customAlert({ Type: 3, Message: "Please Select Party" });
             return;
@@ -385,6 +387,7 @@ const PartyLedger = () => {
         });
 
         if (mode === "excel") {
+            setBtnMode(true)
             const resp = await PartyLedgerReport_API({ jsonBody });
             setTableData(resp.Data)
         }
@@ -427,7 +430,6 @@ const PartyLedger = () => {
             return a
         })
     }
-
 
     return (
         <React.Fragment>

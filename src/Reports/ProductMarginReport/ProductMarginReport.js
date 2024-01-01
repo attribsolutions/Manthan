@@ -31,6 +31,7 @@ import { DiscountPartyType_Dropdown_Action, DiscountPartyType_Dropdown_Success }
 import PriceDropOptions from '../../pages/Adminisrator/PartyMaster/MasterAdd/FirstTab/PriceDropOptions';
 import Slidewithcaption from '../../components/Common/CommonImageComponent';
 import { API_URL_LIVE } from '../../routes/route_url';
+import { ExcelReportComponent } from '../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS';
 
 function initialState(history) {
 
@@ -287,9 +288,25 @@ const ProductMarginReport = (props) => {
                 setTableData(ProductMargin)
             } else if (btnMode === "downloadExcel") {
 
-                ReportComponent({  // Download CSV
-                    excelData: ProductMargin,
-                    excelFileName: "Product Margin Report"
+                ExcelReportComponent({  // Download CSV
+                    excelTableData: ProductMargin,
+                    excelFileName: "Product Margin Report",
+                    numericHeaders: ['FE2ItemID', 'SAPCode', 'Barcode', 'HSNCode', 'MRP',
+                        // 'GST', 'SKUVol', 'ShelfLife', 'PcsInBox', 'PcsInKG', 'FranchisesMargin', 'GeneralTradeMargin',
+                        // 'DistributorMargin', 'SuperStokiestMargin', 'ModernTradeMargin', 'DMartMargin', 'ChitaleXpressMargin',
+                        // 'COFOMargin', 'FOFOMargin', 'AirportCXMargin', 'OMHRRMargin', 'OMHDDMargin', 'OMHSSMargin',
+                        // 'DirectRetailerMargin', 'HaikoMargin', 'BigBasketMargin', 'RelianceMartMargin', 'StarBazarMargin',
+                        // 'FranchisesRateWithGST', 'FranchisesRateWithOutGST', 'GeneralTradeRateWithGST', 'GeneralTradeRateWithOutGST',
+                        // 'DistributorRateWithGST', 'DistributorRateWithOutGST', 'SuperStokiestRateWithGST', 'SuperStokiestRateWithOutGST',
+                        // 'ModernTradeRateWithGST', 'ModernTradeRateWithOutGST', 'DMartRateWithGST', 'DMartRateWithOutGST',
+                        // 'ChitaleXpressRateWithGST', 'ChitaleXpressRateWithOutGST', 'COFORateWithGST', 'COFORateWithOutGST',
+                        // 'FOFORateWithGST', 'FOFORateWithOutGST', 'AirportCXRateWithGST', 'AirportCXRateWithOutGST', 'OMHRRRateWithGST',
+                        // 'OMHRRRateWithOutGST', 'OMHDDRateWithGST', 'OMHDDRateWithOutGST', 'OMHSSRateWithGST', 'OMHSSRateWithOutGST',
+                        // 'DirectRetailerRateWithGST', 'DirectRetailerRateWithOutGST', 'HaikoRateWithGST', 'HaikoRateWithOutGST',
+                        // 'BigBasketRateWithGST', 'BigBasketRateWithOutGST', 'RelianceMartRateWithGST', 'RelianceMartRateWithOutGST',
+                        // 'StarBazarRateWithGST', 'StarBazarRateWithOutGST'
+                    ],
+                    dateHeader: ''
                 })
             }
             dispatch(getExcel_Button_API_Success([]));   // Reset Excel Data
