@@ -191,8 +191,6 @@ export const ItemImageUpload = ({ formData }) => postForFormData(url.ITEM_IMAGE_
 export const GetItemImageUpload = ({ ItemId }) => get(`${url.ITEM_IMAGE_UPLOAD}/${ItemId}`)// Get Item Tag Api
 
 
-
-
 // Party Master
 export const Party_Master_Get_API = (jsonbody) => post(url.PARTY_MASTER_FILTER_API, jsonbody)//get api
 export const Party_Master_Post_API = ({ jsonBody }) => post(url.PARTY_MASTER_API, jsonBody)// post api
@@ -281,7 +279,6 @@ export const Save_PriceList_API = ({ jsonBody }) => post(url.PRICE_LIST, jsonBod
 export const get_PriceListByPartyType_API = (partyType) => get(`${url.PRICE_LIST}/${partyType}`)// post api
 export const get_PriceListByCompay_API = (compayId) => get(`${url.PRICE_LIST_BY_COMPANY}/${compayId}`)// post api
 
-export const GetPriceList_For_Listpage = () => get(url.PRICELIST)// get priceList
 export const delete_PriceList_API = ({ deleteId }) => del(`${url.PRICE_LIST}/${deleteId}`)// delete api
 export const edit_PriceList = ({ editId }) => get(`${url.PRICE_LIST}/${editId}`) // edit api
 export const update_PriceList = ({ updateId, jsonBody }) => put(`${url.PRICE_LIST}/${updateId}`, jsonBody)// update
@@ -337,17 +334,13 @@ export const PartySubParty_Edit_API = ({ editId }) => get(`${url.PARTY_SUB_PARTY
 export const PartySubParty_Update_API = ({ jsonBody, updateId }) => put(`${url.PARTY_SUB_PARTY}/${updateId}`, jsonBody)// update api
 export const PartySubParty_Dropdown_Get_API = (id) => get(`${url.PARTY_SUB_PARTY}/${id}`)// PartySubParty dropdown Api
 
-
 export const ChannelItemGoBtnAdd_API = (jsonBody) => post(url.CHANNEL_ITEM_ADD_GO_BTN, jsonBody) // get api
 export const ChannelItem_Save_API = ({ jsonBody }) => post(url.CHANNEL_ITEM_SAVE_URL, jsonBody)// post api
 export const ChannelItem_View_API = ({ jsonBody }) => post(url.CHANNEL_ITEM_ADD_VIEW_BTN, jsonBody)// post api
 
 
-
-
 export const PartyItemGoBtnAdd_API = (jsonBody) => post(url.PARTY_ITEM_FILTER, jsonBody) // get api
 export const PartyItem_Save_API = ({ jsonBody }) => post(url.PARTYITEM_FOR_MASTER, jsonBody)// post api
-
 
 
 //Post api VendorSupplierCustomer 
@@ -482,9 +475,6 @@ export const GRN_update_API = ({ jsonBody, updateId }) => put(`${url.GRN}/${upda
 export const GRN_delete_API = ({ deleteId }) => del(`${url.GRN}/${deleteId}`)//Delete Order
 export const GRN_Make_API = ({ jsonBody }) => post(url.GRN_MAKE_API, jsonBody)
 export const Hide_Invoice_For_GRN_API = ({ InvoiceId, IsHide }) => del(`${url.HIDE_INVOICE_FOR_GRN}/${InvoiceId}/${IsHide}`)
-
-
-
 
 //Challan API
 export const Challan_get_API = (filter) => post(url.CHALLAN_LIST_BY_FILTERS, filter)
@@ -638,8 +628,6 @@ export const Get_Product_Margin_Report = ({ jsonBody }) => post(url.PRODUCT_MARG
 export const EInvoice_Credit_Debit_Uploade_Get_API = ({ RowId, UserID }) => get(`${url.UPLOADED_CREDIT_DEBIT_E_INVOICE}/${RowId}/${UserID}`)// Uploade_EInvoice
 export const EInvoice_Credit_Debit_Cancel_Get_API = ({ RowId, UserID }) => get(`${url.CANCEL_CREDIT_DEBIT_E_INVOICE}/${RowId}/${UserID}`)// Cancel_EInvoice
 
-
-
 // Order Summary
 export const OderSummary_GoBtn_API = ({ jsonBody }) => post(url.ORDER_SUMMARY, jsonBody)//post api
 export const PartySettingApi = (Party_id, Comapny_id) => get(`${url.PARTY_SETTING}/${Party_id}/${Comapny_id}`)// Party Setting api
@@ -649,27 +637,12 @@ export const ClaimSummary_API = ({ jsonBody }) => post(url.CLAIM_SUMMARY, jsonBo
 export const MasterClaimSummary_API = ({ jsonBody }) => post(url.MASTER_CLAIM_SUMMARY, jsonBody)// postapi
 export const MasterClaimCreate_API = ({ jsonBody }) => post(url.MASTER_CLAIM_CREATE, jsonBody)// postapi
 export const ClaimList_API = ({ jsonBody }) => post(url.CLAIM_LIST, jsonBody)// postapi
-
 export const ItemRegister_API = ({ jsonBody }) => post(url.ITEM_REGISTER, jsonBody)// postapi
-
-
-
 export const delete_Claim_API = ({ jsonBody }) => delwithPostBody(url.MASTER_CLAIM_CREATE, jsonBody)// postapi
-
-
-
-
-
-
-
-
-
 export const Dashboard_Get_API = ({ loginPartyID }) => get(`${url.DASHBOARD}/${loginPartyID}`)// Dashboard grt api
 
 //StockEntry
-
 export const StockEntry_GO_button_api_For_Item = (ItemId) => get(`${url.STOCK_ENTRY_GO_BUTTON}/${ItemId}`)//add button get api for item
-
 export const StockEntry_Post_API = ({ jsonBody }) => post(url.STOCK_ENTRY, jsonBody)//post api
 
 //Stock Report
@@ -701,18 +674,13 @@ export const SupplierDropdownApi = (employeeID, channelFromID) => get(`${url.SUP
 export const ItemsList_On_Group_And_Subgroup_API = (jsonBody) => post(url.ITEM_LIST_API, jsonBody)
 
 //StockAdjustment
-
 export const getBatchCode_By_ItemID_api = ({ itemId, partyId }) => get(`${url.GET_BATCH_CODE_BY_ITEM_ID}/${itemId}/${partyId}`)//add button get api for item
 
 //TransactionLog
-
 export const TransactionLog_transactionType_Api = () => get(url.TRANSACTION_LOG_TRANCTION_TYPE);
 export const TransactionLog_Get_User_Api = () => get(url.TRANSACTION_LOG_All_USER);
 export const TransactionLog_Go_Btn_Api = ({ jsonBody }) => post(url.TRANSACTION_LOG_GO_BTN, jsonBody);
 export const TransactionLog_getjson_for_Transation_Id = ({ TransctionID }) => get(`${url.TRANSACTION_JSON}/${TransctionID}`) // edit api
-
-
-
 
 // Claim Tracking Entry
 export const ClaimListfortracking = (jsonBody) => post(url.CLAIM_LIST_FOR_TRACKING, jsonBody)// post api
@@ -721,13 +689,12 @@ export const ClaimList_Get_Api = (jsonBody) => post(url.CLAIM_TRACKING_LIST, jso
 export const edit_ClaimTrackingEntry_List_Api = ({ editId }) => get(`${url.CLAIM_TRACKING}/${editId}`) // edit api
 export const update_ClaimTrackingEntry_List_Api = ({ formData, updateId }) => putForFormData(`${url.CLAIM_TRACKING}/${updateId}`, formData)// update
 export const detelet_ClaimTrackingEntry_List_Api = ({ deleteId }) => del(`${url.CLAIM_TRACKING}/${deleteId}`) // delete api
+export const PriceList_Dropdown_API = () => get(url.PRICE_LIST)// get priceList
 
 //CreditDebitDataExport
 export const CreditDebitDataExport_GoBtn_API = ({ jsonBody }) => post(url.CREDIT_DEBIT_DATA_EXPORT, jsonBody)//Go button api
 
-
 //mobail Api
-
 export const mobileApp_ProductAdd_Api = (transactionId) => post(`${url.MOBILE_APP_PRODUCT_ADD}/${transactionId}`)
 export const mobileApp_ProductDelete_Api = (transactionId) => del(`${url.MOBILE_APP_PRODUCT_DELETE}/${transactionId}`)
 export const mobileApp_ProductUpdate_Api = ({ jsonBody }) => put(`${url.MOBILE_APP_PRODUCT_UPDATE}`, jsonBody)
@@ -801,13 +768,3 @@ export {
 	postJwtProfile,
 
 }
-
-
-
-
-
-
-
-
-
-
