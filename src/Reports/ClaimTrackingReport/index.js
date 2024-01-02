@@ -15,6 +15,7 @@ import { getCurrent_Month_And_Year } from "../../pages/Accounting/Claim Tracking
 import { getClaimTrackingEntrySuccess, getClaimTrackingEntrylist } from "../../store/Accounting/ClaimTrackingEntryRedux/action";
 import { C_Select } from "../../CustomValidateForm";
 import { ExcelReportComponent } from "../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS";
+import { API_URL_LIVE } from "../../routes/route_url";
 
 const ClaimTrackingReport = (props) => {  // also Receipt Data Export 
 
@@ -90,8 +91,11 @@ const ClaimTrackingReport = (props) => {  // also Receipt Data Export
             if (element.dataField === "CreditNoteUpload") {
 
                 let formatter = element.formatter = (cell, row) => {
-                    
-                    return <a href={cell} style={{ cursor: "pointer", }}> Download Credit Note </a>
+
+                    if (cell !== "") {
+                        return <a href={`${API_URL_LIVE}/media/${cell}`} style={{ cursor: "pointer", }} target="_blank" rel="noopener noreferrer" > Download Credit Note </a>
+
+                    }
                 }
                 element["formatter"] = formatter
             }
