@@ -20,9 +20,8 @@ import { SaveButton } from "../../../components/Common/CommonButton";
 import { C_DatePicker, C_Select } from "../../../CustomValidateForm";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { url, mode, pageId } from "../../../routes/index";
-import { ClaimListfortracking } from "../../../helpers/backend_helper";
+import { ClaimListfortracking, PriceList_Dropdown_API } from "../../../helpers/backend_helper";
 import { getcompanyList } from "../../../store/Administrator/CompanyRedux/actions";
-import { priceListByCompay_Action } from "../../../store/Administrator/PriceList/action";
 import {
   editClaimTrackingEntryIDSuccess,
   saveClaimTrackingEntry,
@@ -54,11 +53,9 @@ const ClaimTrackingEntry = (props) => {
   const [creditNoteStatusOption, setCreditNoteStatusOption] = useState([]);
   const [claimListfortrackingApi, setClaimListfortrackingApi] = useState([]);
   const [modal_backdrop, setmodal_backdrop] = useState(false);   // Image Model open Or not
-
+  const [claimTradefortrackingApi, setClaimTradefortrackingApi] = useState([]);
 
   const [UploadFile, setUploadFile] = useState([]);
-
-
 
   const [yearAndMonth, setYearAndMonth] = useState(getCurrent_Month_And_Year);
 
@@ -93,7 +90,6 @@ const ClaimTrackingEntry = (props) => {
     saveBtnloading,
     postMsg,
     partyDropdownLoading,
-    PriceList,
     updateMsg,
     pageField,
     userAccess,
@@ -102,7 +98,6 @@ const ClaimTrackingEntry = (props) => {
     postMsg: state.ClaimTrackingEntry_Reducer.postMsg,
     partyList: state.CommonPartyDropdownReducer.commonPartyDropdown,
     partyDropdownLoading: state.CommonPartyDropdownReducer.partyDropdownLoading,
-    PriceList: state.PriceListReducer.priceListByCompany,
     updateMsg: state.ClaimTrackingEntry_Reducer.updateMessage,
     userAccess: state.Login.RoleAccessUpdateData,
     pageField: state.CommonPageFieldReducer.pageField,
@@ -153,13 +148,12 @@ const ClaimTrackingEntry = (props) => {
     const page_Id = pageId.CLAIM_TRACKING_ENTRY;
     dispatch(commonPageFieldSuccess(null));
     dispatch(commonPageField(page_Id));
-    dispatch(priceListByCompay_Action());
+    // dispatch(priceListByCompay_Action());
 
     return () => {
       dispatch(commonPageFieldSuccess(null));
     };
   }, []);
-
 
   useEffect(() => {
     if ((hasShowloction || hasShowModal) && pageField) {
@@ -316,8 +310,6 @@ const ClaimTrackingEntry = (props) => {
   function removeBodyCss() {
     document.body.classList.add("no_padding")
   }
-
-
   // update UseEffect
   useEffect(() => {
     if (
@@ -347,6 +339,9 @@ const ClaimTrackingEntry = (props) => {
 
     const resp = await ClaimListfortracking(JSON.stringify(yearAndMonth));
     setClaimListfortrackingApi(resp.StatusCode === 200 ? resp.Data : []);
+
+    const resp1 = await PriceList_Dropdown_API();
+    setClaimTradefortrackingApi(resp1.StatusCode === 200 ? resp1.Data : []);
   }, []);
 
   const partyListOptions = partyList.map((i) => ({
@@ -363,7 +358,7 @@ const ClaimTrackingEntry = (props) => {
     PartyTypeID: i.PartyTypeID,
   }));
 
-  const ClaimTradeOptions = PriceList.map((i) => ({
+  const ClaimTradeOptions = claimTradefortrackingApi.map((i) => ({
     value: i.id,
     label: i.Name,
   }));
@@ -376,8 +371,6 @@ const ClaimTrackingEntry = (props) => {
       return a;
     });
   };
-
-
 
   const CreditNoteDate_Onchange = (e, date) => {
     setState((i) => {
@@ -408,19 +401,7 @@ const ClaimTrackingEntry = (props) => {
       a.values.File = file;
       return a
     })
-
   }
-
-  const imageShowHandler = () => { // image Show handler
-
-    if (values.File[0] instanceof File) {
-      const slides = [{
-        Image: URL.createObjectURL(values.File[0])
-      }];
-      setUploadFile(slides)
-    }
-  }
-
 
   const ClaimIdOnChange = (hasSelect, evn) => {
     onChangeSelect({ hasSelect, evn, state, setState });
@@ -461,63 +442,6 @@ const ClaimTrackingEntry = (props) => {
     const resp = await ClaimListfortracking(JSON.stringify(selectdMonth));
     setClaimListfortrackingApi(resp.StatusCode === 200 ? resp.Data : []);
   }
-
-  // const saveHandeller = async (event) => {
-
-  //   event.preventDefault();
-  //   const btnId = event.target.id;
-
-  //   try {
-  //     if (formValid(state, setState)) {
-  //       _cfunc.btnIsDissablefunc({ btnId, state: true });
-
-  //       const jsonBody = JSON.stringify({
-  //         Date: values.Date,
-  //         Month: yearAndMonth.Month,
-  //         Year: yearAndMonth.Year,
-  //         ClaimReceivedSource: values.ClaimReceivedSource,
-  //         Type: values.Type.value,
-  //         ClaimTrade: values.ClaimTrade.value,
-  //         TypeOfClaim:
-  //           values.TypeOfClaim === "" ? null : values.TypeOfClaim.value,
-  //         ClaimAmount: values.ClaimAmount,
-  //         Remark: values.Remark,
-  //         ClaimCheckBy: values.ClaimCheckBy.value,
-  //         CreditNotestatus: values.CreditNotestatus.value,
-  //         CreditNoteNo: values.CreditNoteNo,
-  //         CreditNoteDate: values.CreditNoteDate,
-  //         CreditNoteAmount: values.CreditNoteAmount,
-  //         ClaimSummaryDate: values.ClaimSummaryDate,
-  //         CreditNoteUpload: null,
-  //         Claim: values.ClaimId.claimId,
-  //         Party: values.PartyName.value,
-  //         FullClaimNo: values.ClaimText
-  //           ? values.ClaimText
-  //           : values.ClaimId.claimId,
-  //         PartyType: values.ClaimId.PartyTypeID,
-  //       });
-
-  //       if (pageMode === mode.edit) {
-  //         dispatch(
-  //           updateClaimTrackingEntryID({ jsonBody, updateId: values.id, btnId })
-  //         );
-  //       } else {
-  //         dispatch(saveClaimTrackingEntry({ jsonBody, btnId }));
-  //       }
-  //     }
-  //   } catch (e) {
-  //     _cfunc.btnIsDissablefunc({ btnId, state: false });
-  //   }
-  // };
-
-
-  // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
-
-
-
-
-
-
 
   const saveHandeller = async (event) => {
     event.preventDefault();
@@ -566,14 +490,7 @@ const ClaimTrackingEntry = (props) => {
     }
   };
 
-
-
-
-
-
-
-
-
+  // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
   var IsEditMode_Css = "";
   if (modalCss || pageMode === mode.dropdownAdd) {
     IsEditMode_Css = "-5.5%";
@@ -1120,12 +1037,8 @@ const ClaimTrackingEntry = (props) => {
                 </Col>
               </Row>
 
-
-
-
-
               <Row>
-                <Col sm="6">
+                <Col sm="10">
                   <FormGroup className="row mt-n2">
                     <Label
                       className="col-sm-1 p-2"
@@ -1133,7 +1046,7 @@ const ClaimTrackingEntry = (props) => {
                     >
                       {"Upload Credit Note"}
                     </Label>
-                    <Col sm="7">
+                    <Col sm="6">
                       <div>
                         <div className="btn-group btn-group-example col-8 " role="group">
                           <Input
@@ -1145,28 +1058,13 @@ const ClaimTrackingEntry = (props) => {
                             accept=".jpg, .jpeg, .png ,.pdf"
                             onChange={(event) => { onchangeHandler(event, "ImageUpload") }}
                           />
-
                         </div>
-                        {/* <button name="image"
-                          accept=".jpg, .jpeg, .png ,.pdf"
-                          onClick={() => {
-                            imageShowHandler()
-                          }}
-                          id="ImageId" type="button" className="btn btn-primary "> Show </button> */}
-
                       </div>
 
                     </Col>
                   </FormGroup>
                 </Col>
               </Row>
-
-
-
-
-
-
-
             </div>
 
             <FormGroup>
