@@ -312,7 +312,7 @@ const ItemMasterBulkUpdate = (props) => {
             const updatedData = [];
 
             goButtonData.forEach(i => {
-                debugger
+                
                 if (i.Newvalue) {
                     const arr = {
                         ItemName: i.ItemName,

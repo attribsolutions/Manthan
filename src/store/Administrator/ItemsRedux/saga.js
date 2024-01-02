@@ -180,7 +180,7 @@ function* Item_Image_Upload_GenFun({ config }) {
   try {
 
     const response = yield call(apiCall.ItemImageUpload, config);
-    debugger
+    
     if (config.Delete === "Delete") {
       response["Delete"] = true
 

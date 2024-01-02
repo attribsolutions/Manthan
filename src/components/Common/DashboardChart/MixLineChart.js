@@ -3,7 +3,7 @@ import ReactEcharts from "echarts-for-react"
 class LineBar extends Component {
 
     constructor(props) {
-        debugger
+        
         super(props)
         this.Data = props.Data
         this.Name = props.Name

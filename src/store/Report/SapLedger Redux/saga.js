@@ -81,7 +81,7 @@ function* GetExcelButton_saga({ config }) {
 							let imageColumns = ["Side2View", "TopView", "Side1View", "BackView", "BarCode", "Poster", "FrontView", "Nutrition"];
 							let isImageColumn = imageColumns.includes(key);
 							if (isImageColumn) {
-								debugger
+								
 								obj[key] = `${ele[key] === " " || ele[key] === "" ? "" : `${API_URL_LIVE}/media/${ele[key]}`}`;
 							} else {
 								obj[key] = ele[key];

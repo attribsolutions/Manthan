@@ -60,7 +60,7 @@ const PartyItems = (props) => {
 	const location = { ...history.location };
 	const hasShowloction = location.hasOwnProperty(mode.editValue);
 	const hasShowModal = props.hasOwnProperty(mode.editValue);
-	debugger
+	
 	const {
 		postMsg,
 		pageField,
@@ -291,7 +291,7 @@ const PartyItems = (props) => {
 			// 	</div>
 			// },
 			formatter: (cell, row) => {
-				debugger
+				
 				const OrderAvailableHandler = ({ cell, row, event }) => {
 
 					let checked = event.target.checked

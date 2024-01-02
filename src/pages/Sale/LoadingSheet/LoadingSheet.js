@@ -258,7 +258,7 @@ const LoadingSheet = (props) => {
     }
 
     const saveHandler = async (event) => {
-        debugger
+        
         event.preventDefault();
         const btnId = event.target.id;
 

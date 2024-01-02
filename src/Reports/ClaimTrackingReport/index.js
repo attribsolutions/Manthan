@@ -90,7 +90,7 @@ const ClaimTrackingReport = (props) => {  // also Receipt Data Export
             if (element.dataField === "CreditNoteUpload") {
 
                 let formatter = element.formatter = (cell, row) => {
-                    debugger
+                    
                     return <a href={cell} style={{ cursor: "pointer", }}> Download Credit Note </a>
                 }
                 element["formatter"] = formatter

@@ -328,7 +328,7 @@ const PartyDetails = (props) => {
 
 
             formatter: (cell, row, key,) => {
-                debugger
+                
                 return (
                     <Col style={{ width: "150px" }}>
 
