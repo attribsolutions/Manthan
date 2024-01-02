@@ -1,66 +1,65 @@
-import React, { useState } from "react";
+import React from "react";
 import { useSelector } from "react-redux";
 import { Col, FormGroup, Label } from "reactstrap";
-import Papa from 'papaparse';
 import { C_Button } from "../components/Common/CommonButton";
 import { C_Select } from "../CustomValidateForm";
 import { loginIsSCMParty } from "../components/Common/CommonFunction";
+import Papa from 'papaparse';
 
-export function ReportComponent({ pageField, excelData, excelFileName, extraColumn = "" }) {
+// export function ReportComponent({ pageField, excelData, excelFileName, extraColumn = "" }) {
 
-    let csvColumns = []
-    let csvHeaderColumns = []
-    let csvData = []
-    if (pageField) {
-        csvColumns = pageField.PageFieldMaster
-            .filter(column => column.ShowInListPage) // Only include columns where ShowInListPage is true
-            .sort((a, b) => a.ListPageSeq - b.ListPageSeq) // Sort columns by ListPageSeq in ascending order
-            .map(column => column.ControlID); // Extract ControlID as column headers
+//     let csvColumns = []
+//     let csvHeaderColumns = []
+//     let csvData = []
+//     if (pageField) {
+//         csvColumns = pageField.PageFieldMaster
+//             .filter(column => column.ShowInListPage) // Only include columns where ShowInListPage is true
+//             .sort((a, b) => a.ListPageSeq - b.ListPageSeq) // Sort columns by ListPageSeq in ascending order
+//             .map(column => column.ControlID); // Extract ControlID as column headers
 
-        csvHeaderColumns = pageField.PageFieldMaster
-            .filter(column => column.ShowInListPage) // Only include columns where ShowInListPage is true
-            .sort((a, b) => a.ListPageSeq - b.ListPageSeq) // Sort columns by ListPageSeq in ascending order
-            .map(column => column.FieldLabel); // Extract FieldLabel as column headers
+//         csvHeaderColumns = pageField.PageFieldMaster
+//             .filter(column => column.ShowInListPage) // Only include columns where ShowInListPage is true
+//             .sort((a, b) => a.ListPageSeq - b.ListPageSeq) // Sort columns by ListPageSeq in ascending order
+//             .map(column => column.FieldLabel); // Extract FieldLabel as column headers
 
-        if (extraColumn !== "") {
-            csvColumns.unshift(extraColumn);
-            csvHeaderColumns.unshift(extraColumn);
-        }
+//         if (extraColumn !== "") {
+//             csvColumns.unshift(extraColumn);
+//             csvHeaderColumns.unshift(extraColumn);
+//         }
 
-        // Map the data to include only the properties corresponding to the columns
-        csvData = excelData.map(item =>
-            csvColumns.map(column => item[column])
-        );
-    } else {
-        const objectAtIndex0 = ((excelData[0]));
-        for (const key in objectAtIndex0) {
-            csvHeaderColumns.push(key)
-        }
-        // Map the data to include only the properties corresponding to the columns
-        csvData = excelData.map(item =>
-            csvHeaderColumns.map(column => item[column])
-        );
-    }
+//         // Map the data to include only the properties corresponding to the columns
+//         csvData = excelData.map(item =>
+//             csvColumns.map(column => item[column])
+//         );
+//     } else {
+//         const objectAtIndex0 = ((excelData[0]));
+//         for (const key in objectAtIndex0) {
+//             csvHeaderColumns.push(key)
+//         }
+//         // Map the data to include only the properties corresponding to the columns
+//         csvData = excelData.map(item =>
+//             csvHeaderColumns.map(column => item[column])
+//         );
+//     }
 
+//     // Combine column headers and data into a single array
+//     const csvContent = [csvHeaderColumns, ...csvData];
 
-    // Combine column headers and data into a single array
-    const csvContent = [csvHeaderColumns, ...csvData];
+//     // Create the CSV content
+//     const csvContentString = Papa.unparse(csvContent, { header: true });
 
-    // Create the CSV content
-    const csvContentString = Papa.unparse(csvContent, { header: true });
+//     // Create and trigger the download
+//     const blob = new Blob([csvContentString], { type: "text/csv" });
+//     const url = URL.createObjectURL(blob);
 
-    // Create and trigger the download
-    const blob = new Blob([csvContentString], { type: "text/csv" });
-    const url = URL.createObjectURL(blob);
+//     const a = document.createElement("a");
+//     a.href = url;
+//     a.download = `${excelFileName}.csv`;
+//     a.click();
 
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `${excelFileName}.csv`;
-    a.click();
+//     URL.revokeObjectURL(url);
 
-    URL.revokeObjectURL(url);
-
-}
+// }
 
 export const ShowAndExcelBtn = (props) => {
     const { showLoading, excelLoading, showOnClick, excelOnClick } = props

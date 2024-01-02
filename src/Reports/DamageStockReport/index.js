@@ -13,7 +13,7 @@ import { damageStockReport_GoButton_API, damageStockReport_GoButton_API_Success 
 import DynamicColumnHook from "../../components/Common/TableCommonFunc";
 import { mode, pageId } from "../../routes/index"
 import CustomTable from "../../CustomTable2";
-import PartyDropdownForReport, { ReportComponent, ShowAndExcelBtn } from "../ReportComponent";
+import PartyDropdownForReport, { ShowAndExcelBtn } from "../ReportComponent";
 import { ExcelReportComponent } from "../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS";
 
 const DamageStockReport = (props) => {

@@ -3,6 +3,8 @@ import { date_dmy_func, loginJsonBody } from "../../components/Common/CommonFunc
 import * as initail from "./hardcodeDetails";
 import Papa from 'papaparse';
 import { get_PartyType_List_Api } from "../../helpers/backend_helper";
+import * as ExcelJS from 'exceljs';
+import { autoFitColumnWidths, freezeHeaderRow, saveWorkbookAsExcel, setDateValue, setNumberValue, setTextValue, styleHeaderRow } from "../../components/Common/ReportCommonFunc/ExcelFunctions";
 
 export const SortButtonFunc = (props) => {
 
@@ -34,6 +36,7 @@ export const SortButtonFunc = (props) => {
             checkboxState: fromDateCheckbox,
             selectValue: [{ value: "", label: "All" }],
             sequence: 1,
+            controlTypeName: "Date",
             sort: true,
             groupBy: true,
             formatter: (cell) => <>{date_dmy_func(cell)}</>
@@ -44,6 +47,7 @@ export const SortButtonFunc = (props) => {
             checkboxState: channelFromCheckbox,
             selectValue: [{ value: "", label: "All" }],
             sort: true,
+            controlTypeName: "Text",
             groupBy: true,
             sequence: 2
         },
@@ -53,6 +57,7 @@ export const SortButtonFunc = (props) => {
             checkboxState: channelToCheckbox,
             selectValue: channelToSelect,
             sort: true,
+            controlTypeName: "Text",
             groupBy: true,
             sequence: 3
         },
@@ -63,7 +68,8 @@ export const SortButtonFunc = (props) => {
             selectValue: [{ value: "", label: "All" }],
             sort: true,
             groupBy: true,
-            sequence: 5
+            sequence: 5,
+            controlTypeName: "Text",
         },
         {
             text: 'Invoice Number',
@@ -72,7 +78,8 @@ export const SortButtonFunc = (props) => {
             selectValue: [{ value: "", label: "All" }],
             sort: true,
             groupBy: true,
-            sequence: 6
+            sequence: 6,
+            controlTypeName: "Text",
         },
 
         {
@@ -82,7 +89,8 @@ export const SortButtonFunc = (props) => {
             selectValue: routeSelect,
             sort: true,
             groupBy: true,
-            sequence: 7
+            sequence: 7,
+            controlTypeName: "Text",
         },
         {
             text: 'Customer',
@@ -91,7 +99,8 @@ export const SortButtonFunc = (props) => {
             selectValue: customerSelect,
             sort: true,
             groupBy: true,
-            sequence: 4
+            sequence: 4,
+            controlTypeName: "Text",
         },
         {
             text: 'Product',
@@ -100,7 +109,8 @@ export const SortButtonFunc = (props) => {
             selectValue: productSelect,
             sort: true,
             groupBy: true,
-            sequence: 8
+            sequence: 8,
+            controlTypeName: "Text",
         },
         {
             text: 'Sub Product',
@@ -109,7 +119,8 @@ export const SortButtonFunc = (props) => {
             selectValue: subProductSelect,
             sort: true,
             groupBy: true,
-            sequence: 9
+            sequence: 9,
+            controlTypeName: "Text",
         },
         {
             text: 'ItemName',
@@ -118,7 +129,8 @@ export const SortButtonFunc = (props) => {
             selectValue: itemNameSelect,
             sort: true,
             groupBy: true,
-            sequence: 10
+            sequence: 10,
+            controlTypeName: "Text",
         },
         {
             text: 'QtyInNo',
@@ -128,7 +140,8 @@ export const SortButtonFunc = (props) => {
             sort: true,
             isSum: true,
             toFixed: 0,
-            sequence: 11
+            sequence: 11,
+            controlTypeName: "Number",
         },
         {
             text: 'QtyInKg',
@@ -138,7 +151,8 @@ export const SortButtonFunc = (props) => {
             sort: true,
             isSum: true,
             toFixed: 3,
-            sequence: 12
+            sequence: 12,
+            controlTypeName: "Number",
         },
         {
             text: 'QtyInBox',
@@ -148,7 +162,8 @@ export const SortButtonFunc = (props) => {
             sort: true,
             isSum: true,
             toFixed: 3,
-            sequence: 13
+            sequence: 13,
+            controlTypeName: "Number",
         },
         {
             text: 'InvoiceGrandTotal',
@@ -157,7 +172,8 @@ export const SortButtonFunc = (props) => {
             checkboxState: showAlsoSelect.some(item => item.value === 5),
             sort: true,
             toFixed: 2,
-            sequence: 15
+            sequence: 15,
+            controlTypeName: "Number",
         },
         {
             text: 'DiscountInRS',
@@ -167,7 +183,8 @@ export const SortButtonFunc = (props) => {
             sort: true,
             isSum: true,
             toFixed: 2,
-            sequence: 16
+            sequence: 16,
+            controlTypeName: "Number",
         },
         {
             text: 'RoundOffAmount',
@@ -178,6 +195,7 @@ export const SortButtonFunc = (props) => {
             sort: true,
             toFixed: 2,
             sequence: 17,
+            controlTypeName: "Number",
         },
         {
             text: 'TCSAmount',
@@ -187,7 +205,8 @@ export const SortButtonFunc = (props) => {
             isSum: true,
             sort: true,
             sequence: 18,
-            toFixed: 2
+            toFixed: 2,
+            controlTypeName: "Number",
         },
         {
             text: 'GRNID',
@@ -196,12 +215,14 @@ export const SortButtonFunc = (props) => {
             checkboxState: showAlsoSelect.some(item => item.value === 3),
             sort: true,
             groupBy: true,
-            sequence: 19
+            sequence: 19,
+            controlTypeName: "Text",
         },
         { //this filed not Show intable 
             text: "Show Discounted Items",
             dataField: "ShowDiscountedItems",
             selectValue: showAlsoSelect.find(item => item.value === 2),
+            controlTypeName: "Text",
         },
         {
             text: "Amount",
@@ -212,6 +233,7 @@ export const SortButtonFunc = (props) => {
             isSum: true,
             toFixed: 2,
             sequence: 14,
+            controlTypeName: "Number",
         },
         {
             text: 'MRP',
@@ -221,78 +243,19 @@ export const SortButtonFunc = (props) => {
             sort: true,
             groupBy: true,
             toFixed: 2,
-            sequence: 20
+            sequence: 20,
+            controlTypeName: "Number",
         },
 
     ];
 
     //************************************************************************************************** */
 
-    // let manupulatedData = [...baseData];
-    // let tableColumns = [];
-    // let selectedColumns = [];
-
-    // const filterParameter = buttonStateArray.filter(option => (option.selectValue?.value > 0));
-
-    // if (filterParameter.length > 0) {
-    //     manupulatedData = baseData.filter(item => {
-    //         return filterParameter.every(option => {
-    //             if ((option.dataField === 'ShowDiscountedItems') && (option.selectValue?.value > 0)) {
-    //                 return (Number(item.DiscountAmount) > 0) ? true : false
-    //             }
-    //             return item[option.dataField] === option.selectValue.label;
-
-    //         });
-    //     });
-    // }
-
-    // if (buttonStateArray.some(option => option.checkboxState)) {
-
-    //     //*********************************************************** *******************************/
-    //     tableColumns = buttonStateArray.filter(option => option.checkboxState);
-
-    //     tableColumns.sort((a, b) => a.sequence - b.sequence);
-    //     selectedColumns = tableColumns;
-    //     // **********************************************************************************************
-    //     const groupedData = {};
-
-    //     manupulatedData.forEach(item => {
-    //         const groupValues = buttonStateArray
-    //             .filter(option => option.checkboxState && (option.groupBy === true))
-    //             .map(option => item[option.dataField]);
-
-    //         const groupKey = groupValues.join('-');
-    //         if (!groupedData[groupKey]) {
-    //             groupedData[groupKey] = {
-    //                 ...item,
-    //                 Amount: 0,
-    //                 QtyInNo: 0,
-    //                 QtyInKg: 0,
-    //                 QtyInBox: 0,
-    //                 DiscountAmount: 0,
-    //                 RoundOffAmount: 0,
-    //                 TCSAmount: 0
-    //             };
-    //         }
-
-    //         buttonStateArray.forEach(field => {
-    //             if (field.isSum === true) {
-    //                 groupedData[groupKey][field.dataField] += parseFloat(item[field.dataField]);
-    //                 groupedData[groupKey][field.dataField] = parseFloat((groupedData[groupKey][field.dataField]).toFixed(field.toFixed));
-    //             }
-    //         })
-
-    //     });
-    //     manupulatedData = Object.values(groupedData);
-    // }
-
     let manupulatedData = [...baseData];
     let tableColumns = [];
     let selectedColumns = [];
 
-    // const filterParameter = buttonStateArray.filter(option => {
 
-    //      option.selectValue.some(index => index.value > 0) });
     const filterParameter = buttonStateArray.filter(option => {
         // Check if option.selectValue is an array and has at least one element with a value > 0
         return Array.isArray(option.selectValue) &&
@@ -362,35 +325,6 @@ export const SortButtonFunc = (props) => {
     });
 
     return { selectedColumns, manupulatedData, totalAmount };
-}
-
-export const ExcelButtonFunc = ({ selectedColumns, manupulatedData }) => {
-
-    const csvColumns = selectedColumns.map(column => column.dataField); // Extract column headers
-
-    const csvHeaderColumns = selectedColumns.map(column => column.text); // Extract column headers
-
-    // Map the data to include only the properties corresponding to the columns
-    const csvData = manupulatedData.map(item =>
-        csvColumns.map(column => item[column])
-    );
-
-    // Combine column headers and data into a single array
-    const csvContent = [csvHeaderColumns, ...csvData];
-
-    // Create the CSV content
-    const csvContentString = Papa.unparse(csvContent, { header: true });
-
-    // Create and trigger the download
-    const blob = new Blob([csvContentString], { type: "text/csv" });
-    const url = URL.createObjectURL(blob);
-
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `Item Sale Report.csv`;
-    a.click();
-
-    URL.revokeObjectURL(url);
 }
 
 export const fetchDataAndSetDropdown = async (CompanyID, setDropdown) => {

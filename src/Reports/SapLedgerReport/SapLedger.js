@@ -10,23 +10,19 @@ import {
 import { MetaTags } from "react-meta-tags";
 import { BreadcrumbShowCountlabel, commonPageFieldSuccess } from "../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
-
 import { useHistory } from "react-router-dom";
 import { mode, pageId } from "../../routes/index"
-
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
-
 import * as _cfunc from "../../components/Common/CommonFunction";
 import { C_DatePicker } from "../../CustomValidateForm";
 import { commonPageField } from "../../store/actions";
 import { SapLedger_Go_Button_API, SapLedger_Go_Button_API_Success } from "../../store/Report/SapLedger Redux/action";
-import { C_Button, Go_Button } from "../../components/Common/CommonButton";
+import { C_Button} from "../../components/Common/CommonButton";
 import PartyDropdown_Common from "../../components/Common/PartyDropdown";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
-import { ReportComponent } from "../ReportComponent";
-import { async } from "q";
+import { ExcelReportComponent } from "../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS";
 
 const SapLedger = (props) => {
 
@@ -148,10 +144,11 @@ const SapLedger = (props) => {
             if ((gobuttonReduxData.Status === true) && (gobuttonReduxData.StatusCode === 200)) {
                 setBtnMode(0); // Reset button mode
                 if (btnMode === 2) {
-                    ReportComponent({      // Download CSV
+                    ExcelReportComponent({      // Download CSV
                         pageField,
-                        excelData: gobuttonReduxData.tableData,
-                        excelFileName: "Sap Ledger Report"
+                        excelTableData: tableData,
+                        excelFileName: "Sap Ledger Report",
+                        lastRowStyle: true
                     })
                     dispatch(SapLedger_Go_Button_API_Success([])); // Reset goButtonData
                     setBtnMode(0); // Reset button mode
@@ -240,7 +237,7 @@ const SapLedger = (props) => {
 
                 <div className="page-content" >
 
-                    <PartyDropdown_Common 
+                    <PartyDropdown_Common
                         changeButtonHandler={partySelectOnChangeHandler}
                         SAPLedgerOptions={PartyDropdownOptions} />
 
@@ -336,7 +333,8 @@ const SapLedger = (props) => {
                                         classes={"table align-middle table-nowrap table-hover"}
                                         headerWrapperClasses={"thead-light"}
                                         onDataSizeChange={({ dataSize }) => {
-                                            dispatch(BreadcrumbShowCountlabel(`Count:${dataSize > 0 ? dataSize - 1 : 0}`));
+                                            dispatch(BreadcrumbShowCountlabel(`Count:${dataSize}`));
+                                            // dispatch(BreadcrumbShowCountlabel(`Count:${dataSize > 0 ? dataSize - 1 : 0}`));
                                         }}
                                         {...toolkitProps.baseProps}
 

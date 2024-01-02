@@ -98,7 +98,6 @@ const RetailerDataReport = (props) => {
 
         if ((RetailerGobtn.Status === true) && (RetailerGobtn.StatusCode === 200)) {
 
-
             const { Data } = RetailerGobtn
 
             if (btnMode === "Show") {
@@ -124,29 +123,6 @@ const RetailerDataReport = (props) => {
 
     }, [RetailerGobtn]);
 
-    // useEffect(() => {
-    //     try {
-    //         if ((RetailerGobtn.Status === true) && (RetailerGobtn.StatusCode === 200)) {
-    //             const { Data } = RetailerGobtn
-    //             ReportComponent({      // Download CSV
-    //                 pageField,
-    //                 excelData: Data.ReportExportSerializerDetails,
-    //                 excelFileName: "Retailer Data Report"
-    //             })
-    //             dispatch(postRetailerData_API_Success([]));
-    //         }
-    //         else if ((RetailerGobtn.Status === true) && (RetailerGobtn.StatusCode === 204)) {
-    //             dispatch(postRetailerData_API_Success([]));
-    //             customAlert({
-    //                 Type: 3,
-    //                 Message: JSON.stringify(RetailerGobtn.Message),
-    //             })
-    //         }
-    //     }
-    //     catch (e) { { _cfunc.CommonConsole(e) } }
-
-    // }, [RetailerGobtn]);
-
     const Party_Option = SSDD_List.map(i => ({
         value: i.id,
         label: i.Name
@@ -161,8 +137,6 @@ const RetailerDataReport = (props) => {
         setBtnMode(Type)
         dispatch(postRetailerData_API(JSON.stringify({ "Party": partydropdown.value })));
     }
-
-
 
     return (
         <React.Fragment>

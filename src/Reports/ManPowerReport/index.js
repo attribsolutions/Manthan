@@ -14,7 +14,6 @@ import * as pageId from "../../routes/allPageID"
 import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess } from '../../store/actions';
 import * as mode from "../../routes/PageMode"
 import { useState } from 'react';
-import { ReportComponent } from '../ReportComponent';
 import { url } from '../../routes';
 import { ManPower_Get_Action, ManPower_Get_Success } from '../../store/Report/ManPowerRedux/action';
 import ToolkitProvider from 'react-bootstrap-table2-toolkit';

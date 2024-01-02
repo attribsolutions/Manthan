@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Button, Col, FormGroup, Label, Row } from "reactstrap";
+import { Col, FormGroup, Label, Row } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import { C_Button } from "../../components/Common/CommonButton";
 import { C_DatePicker, C_Select } from "../../CustomValidateForm";
 import * as _cfunc from "../../components/Common/CommonFunction";
 import { mode, pageId } from "../../routes/index"
 import { MetaTags } from "react-meta-tags";
-import * as XLSX from 'xlsx';
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
@@ -106,11 +105,6 @@ const ReturnReport = (props) => {
                         excelTableData: goButtonData.Data,
                         excelFileName: "ReturnReport"
                     })
-                    // const worksheet = XLSX.utils.json_to_sheet(goButtonData.Data);
-                    // const workbook = XLSX.utils.book_new();
-                    // XLSX.utils.book_append_sheet(workbook, worksheet, "ReturnReport");
-                    // XLSX.writeFile(workbook, `Return Report From ${_cfunc.date_dmy_func(fromdate)} To ${_cfunc.date_dmy_func(todate)}.xlsx`);
-
                     dispatch(Return_Report_Action_Success([]));
                     setDistributorDropdown([{ value: "", label: "All" }])
                 }
@@ -182,7 +176,19 @@ const ReturnReport = (props) => {
         setDistributorDropdown(e);
         setTableData([]);
     }
+    var name = "punam";
 
+    function reverseName(str) {
+        debugger
+        var newString = "";
+        for (var i = str.length - 1; i >= 0; i--) {
+            debugger
+            newString += str[i];
+        }
+        return newString;
+    }
+
+    console.log(reverseName(name));
     return (
         <React.Fragment>
             <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
