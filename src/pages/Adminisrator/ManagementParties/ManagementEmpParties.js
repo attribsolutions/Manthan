@@ -283,7 +283,8 @@ const ManagementEmpParties = (props) => {
                                             striped={true}
                                             selectRow={selectAllCheck({
                                                 rowSelected: rowSelected(),
-                                                bgColor:''
+                                                bgColor: '',
+                                                tableList: partyList
                                             })}
                                             noDataIndication={<div className="text-danger text-center ">Party Not available</div>}
                                             classes={"table align-middle table-nowrap table-hover"}
