@@ -10,14 +10,11 @@ import { mode, pageId } from "../../routes/index"
 import { MetaTags } from "react-meta-tags";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
-import Select from "react-select";
 import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
 import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess } from "../../store/actions";
 import DynamicColumnHook from "../../components/Common/TableCommonFunc";
-import { ReportComponent } from "../ReportComponent";
 import { Cx_DD_Diffrence_Gobtn_Action, Cx_DD_Diffrence_Gobtn_Success } from "../../store/Report/CX_DD_Diffrence_Report/action";
 import { Cx_DD_ExcelDownload, Cx_DD_ExcelDownload_PartyAll } from "./excelDownload";
-import { async } from "q";
 import { Cx_DD_Diffrence_Report_Party_Dropdown_API } from "../../helpers/backend_helper";
 
 const CX_DD_DiffrenceReport = (props) => {

@@ -17,12 +17,9 @@ import {
   GetVenderSupplierCustomerSuccess,
   commonPageField,
   commonPageFieldSuccess,
-  getBaseUnit_ForDropDown,
   getGroupList,
-  getItemList,
   getSubGroupList,
   getSubGroupListSuccess,
-  get_Group_By_GroupType_ForDropDown,
   get_Sub_Group_By_Group_ForDropDown,
   get_Sub_Group_By_Group_ForDropDown_Success,
 } from "../../store/actions";
@@ -31,7 +28,6 @@ import {
   GetRoutesListSuccess,
 } from "../../store/Administrator/RoutesRedux/actions";
 import {
-  getPartyTypelist,
   getPartyTypelistSuccess,
 } from "../../store/Administrator/PartyTypeRedux/action";
 import {
@@ -40,17 +36,16 @@ import {
   Items_On_Group_And_Subgroup_API,
   Items_On_Group_And_Subgroup_API_Success,
   SupplierOnPartyType_API,
-  SupplierOnPartyType_API_Success,
 } from "../../store/Report/ItemSaleReport/action";
 import "../ItemSaleReport/ItemSaleCSS.scss";
 import { useMemo } from "react";
 import * as initail from "./hardcodeDetails";
 import { ItemSaleContext } from "./ContextDataProvider";
 import {
-  ExcelButtonFunc,
   fetchDataAndSetDropdown,
 } from "./SortAndExcelDownloadFunc";
-import { get_PartyType_List_Api } from "../../helpers/backend_helper";
+import { generateExcel } from "../ReportComponent";
+import { ExcelReportComponent } from "../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS";
 
 const HeaderSection = (props) => {
   const states = ItemSaleContext();
@@ -60,6 +55,7 @@ const HeaderSection = (props) => {
   const isSCMParty = _cfunc.loginIsSCMParty();
   const [channelFromOption, setChannelFromOption] = useState([]);
   const [channelToOption, setChannelToOption] = useState([]);
+  const [excelLoading, setExcelLoading] = useState(false);
 
   const {
     goBtnLoading,
@@ -69,7 +65,6 @@ const HeaderSection = (props) => {
     supplier,
     RoutesList,
     routesDropLoading,
-    PartyTypes,
     customerDropdown,
     customerDropLoading,
     ItemDropdownloading,
@@ -79,7 +74,6 @@ const HeaderSection = (props) => {
     subProductLoading,
     subProductDropdown,
     getSubProductbyProduct,
-    supplierListLoading,
     supplierListOnPartyType,
   } = useSelector((state) => ({
     goBtnLoading: state.ItemSaleReportReducer.goBtnLoading,
@@ -90,7 +84,6 @@ const HeaderSection = (props) => {
       state.ItemSaleReportReducer.supplierListLoading,
 
     supplier: state.CommonPartyDropdownReducer.commonPartyDropdown,
-    // supplierListLoading:state.ItemSaleReportReducer.supplierListLoading ,
     supplierListOnPartyType: state.ItemSaleReportReducer.supplierList,
 
     RoutesList: state.RoutesReducer.RoutesList,
@@ -484,10 +477,14 @@ const HeaderSection = (props) => {
   };
 
   async function ExcelDownload() {
-    const { selectedColumns, manupulatedData } = await dataManpulationFunction(
-      states.initaialBaseData
-    );
-    ExcelButtonFunc({ selectedColumns, manupulatedData });
+    setExcelLoading(true);
+    const { selectedColumns, manupulatedData } = await dataManpulationFunction(states.initaialBaseData);
+    ExcelReportComponent({
+      excelTableData: manupulatedData,
+      excelFileName: 'Item Sale Report',
+      customKeyColumns: { tableData: selectedColumns, isButton: false },
+    });
+    setExcelLoading(false);
   }
 
   return (
@@ -778,6 +775,8 @@ const HeaderSection = (props) => {
                       <C_Button
                         type="button"
                         title="Download List"
+                        spinnerColor={"white"}
+                        loading={excelLoading}
                         className="btn btn-sm btn-outline-primary "
                         onClick={ExcelDownload} // Example field, you can change it
                       >

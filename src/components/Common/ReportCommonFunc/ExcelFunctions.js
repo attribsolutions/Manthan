@@ -84,8 +84,13 @@ export function freezeHeaderRow(worksheet,) {
     ];
 }
 
-// Function to auto-fit width for all columns in the worksheet
 export function autoFitColumnWidths(worksheet, excelHeaderLabel, mainExcelRowData, buffer = 2) {
+
+    if (!worksheet || !worksheet.columns) {
+        console.error("Worksheet or columns not properly initialized.");
+        return;
+    }
+
     const columnCount = excelHeaderLabel.length;
     const maxContentLengths = Array(columnCount).fill(0);
 
@@ -140,3 +145,66 @@ export function styleHeaderRow(worksheet) {
     });
 }
 
+export function styleLastRow(worksheet) {
+    // Style the last row with data
+    let lastRowWithData = null;
+
+    worksheet.eachRow({ reverse: true }, (row, rowNumber) => {
+        if (row.values.some(cellValue => cellValue !== undefined && cellValue !== null && cellValue !== '')) {
+            lastRowWithData = row;
+            return false; // Stop iterating after finding the last non-empty row
+        }
+    });
+
+    if (lastRowWithData) {
+        lastRowWithData.eachCell({ includeEmpty: true }, (cell) => {
+            cell.fill = {
+                type: 'pattern',
+                pattern: 'solid',
+                fgColor: { argb: 'FFFFCC' } // Yellow color code for the last row
+            };
+            cell.font = { bold: true };
+        });
+    }
+}
+
+export function generateTableData({ pageField, customKeyColumns, excelTableData, extraColumn, numericHeaders, dateHeader }) {
+    let columnsKey = [];
+    let HeaderColumns = [];
+    let dataRow = [];
+    let controlTypeName = [];
+    
+    if (pageField) {
+        const listPageColumns = (pageField?.PageFieldMaster || []).filter(({ ShowInListPage }) => ShowInListPage).sort((a, b) => a.ListPageSeq - b.ListPageSeq);
+
+        columnsKey = [extraColumn, ...listPageColumns.map(({ ControlID }) => ControlID)].filter(Boolean);
+        HeaderColumns = [extraColumn, ...listPageColumns.map(({ FieldLabel }) => FieldLabel)].filter(Boolean);
+        controlTypeName = [extraColumn && "Text", ...listPageColumns.map(({ ControlTypeName }) => ControlTypeName)].filter(Boolean);
+    } else if (customKeyColumns) {
+        const { tableData, isButton } = customKeyColumns;
+        const selectedColumns = isButton ? tableData.filter(option => option.showing) : tableData;
+
+        controlTypeName = selectedColumns.map(({ controlTypeName }) => controlTypeName);
+        columnsKey = selectedColumns.map(({ dataField }) => dataField);
+        HeaderColumns = selectedColumns.map(({ text }) => text);
+    } else {
+        const keys = Object.keys(excelTableData[0] || {});
+        HeaderColumns = keys;
+        columnsKey = keys;
+        controlTypeName = HeaderColumns.map((header) => {
+            if (numericHeaders.includes(header)) {
+                return 'Number';
+            } else if (header === dateHeader) {
+                return 'Date';
+            } else {
+                return 'Text';
+            }
+        });
+    }
+
+    dataRow = excelTableData.map(item =>
+        columnsKey.map(column => item[column] || "")
+    );
+
+    return { HeaderColumns, dataRow, controlTypeName };
+}

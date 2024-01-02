@@ -44,6 +44,7 @@ export default function ContextDataProvider({ children }) {
     const [initaialBaseData, setInitaialBaseData] = useState([]);
     const [pivotMode, setPivotMode] = useState(false);
 
+
     async function sortManipulationFunc(baseData) {
 
         let baseState = await SortButtonFunc({

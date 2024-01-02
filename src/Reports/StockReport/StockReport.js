@@ -17,7 +17,6 @@ import { stockReport_GoButton_API, stockReport_GoButton_API_Success } from "../.
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
-import { ExcelDownloadFunc } from "./ExcelDownloadFunc";
 import { ExcelReportComponent } from "../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS";
 
 const StockReport = (props) => {
@@ -300,7 +299,7 @@ const StockReport = (props) => {
 
 	];
 
-	useEffect(() => {
+	useEffect(async () => {
 
 		try {
 			let nextId = 1;
@@ -312,14 +311,15 @@ const StockReport = (props) => {
 				});
 
 				if (goBtnMode === "downloadExcel") {
-					const { filterTableData } = SortButtonFunc(updatedReduxData);
+					const { filterTableData } = await SortButtonFunc(updatedReduxData);
 
-					ExcelDownloadFunc({
+					ExcelReportComponent({
 						excelTableData: filterTableData,
-						excelFileName: "Current_Stock_Report",
-						buttonStateArray: buttonStateArray
+						excelFileName: 'Current Stock Report',
+						customKeyColumns: { tableData: selectedColumns, isButton: true },
 					});
 				}
+
 				else if (goBtnMode === "showOnTable") {
 					const { filterTableData } = SortButtonFunc(updatedReduxData)
 					setTableData(filterTableData)

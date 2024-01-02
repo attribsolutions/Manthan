@@ -8,7 +8,6 @@ import { C_DatePicker } from "../../CustomValidateForm";
 import * as _cfunc from "../../components/Common/CommonFunction";
 import { mode, url, pageId } from "../../routes/index"
 import { MetaTags } from "react-meta-tags";
-import * as XLSX from 'xlsx';
 import { postDeleteInvoiceDataExport_API, postDeleteInvoiceDataExport_API_Success } from "../../store/Report/InvoiceDataExportRedux/action";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
@@ -17,7 +16,6 @@ import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
 import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess } from "../../store/actions";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import DynamicColumnHook from "../../components/Common/TableCommonFunc";
-import { ReportComponent } from "../ReportComponent";
 import { ExcelReportComponent } from "../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS";
 
 const DeleteInvoiceDataExport = (props) => {
