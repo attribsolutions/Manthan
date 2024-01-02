@@ -452,7 +452,7 @@ const ClaimTrackingEntry = (props) => {
         _cfunc.btnIsDissablefunc({ btnId, state: true });
 
         const formData = new FormData();
-        debugger
+        
         formData.append('Date', values.Date);
         formData.append('Month', yearAndMonth.Month);
         formData.append('Year', yearAndMonth.Year);

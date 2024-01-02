@@ -408,7 +408,7 @@ export const reportHeder3 = (doc, data) => {
 
 
 export const reportFooter = (doc, data) => {
-    debugger
+    
     if (data.Period.PaymentQr === null) {
         doc.addImage("", 'JPEG', 335, 303, 105, 96);
     } else {

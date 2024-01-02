@@ -23,7 +23,7 @@ export const PageHedercolumns = [
 ]
 
 export const Rows = (data) => {
-    debugger
+    
     const openingBalance = Number(data[data.length - 1].OpeningBalance);
 
     // InvoiceItems.sort((firstItem, secondItem) => firstItem.GSTPercentage - secondItem.GSTPercentage);
@@ -50,7 +50,7 @@ export const Rows = (data) => {
     let BalanceAmount = Number(openingBalance)
 
     data.forEach((element, key) => {
-        debugger
+        
         let RowGRN = 0
         let RowSalesReturn = 0
         let RowStock = 0

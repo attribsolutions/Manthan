@@ -70,7 +70,7 @@ const ItemImageUpload = (props) => {
 
 
 
-    debugger
+    
 
 
     //Access redux store Data /  'save_ModuleSuccess' action data
@@ -237,7 +237,7 @@ const ItemImageUpload = (props) => {
         Object.values(Image).forEach((element) => {
             if (element.ImageType === Type) {
                 if (!(element.file instanceof File)) {
-                    debugger
+                    
 
                     slides = [{
                         Image: `${API_URL_LIVE}${element.Item_pic}`

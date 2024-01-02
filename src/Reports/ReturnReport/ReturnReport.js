@@ -176,19 +176,7 @@ const ReturnReport = (props) => {
         setDistributorDropdown(e);
         setTableData([]);
     }
-    var name = "punam";
-
-    function reverseName(str) {
-        debugger
-        var newString = "";
-        for (var i = str.length - 1; i >= 0; i--) {
-            debugger
-            newString += str[i];
-        }
-        return newString;
-    }
-
-    console.log(reverseName(name));
+  
     return (
         <React.Fragment>
             <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>

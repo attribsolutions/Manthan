@@ -224,7 +224,7 @@ const Dashboard_Admin = (props) => {
             const filtelist = tableList.filter(i => i.MobileAppOrderFlag === 1);
 
             filtelist.forEach(item => {
-                debugger
+                
                 const parts = item.OrderDate.split('-');
                 const month = parseInt(parts[1]) - 1; // Subtract 1 to match array index
                 if (month >= 0 && month < 12) {
@@ -232,7 +232,7 @@ const Dashboard_Admin = (props) => {
                 }
             });
             const MobileOrdercontainsNonZeroNumber = appOrdermonthCounts.some(item => item !== 0);
-            debugger
+            
             setMobileOrderMonthCount({ appOrdermonthCounts, MobileOrdercontainsNonZeroNumber })
 
 
