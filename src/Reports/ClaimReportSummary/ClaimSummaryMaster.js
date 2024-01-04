@@ -5,9 +5,9 @@ import { useHistory } from "react-router-dom";
 import { initialFiledFunc } from "../../components/Common/validationFunction";
 import { C_Button } from "../../components/Common/CommonButton";
 import * as _cfunc from "../../components/Common/CommonFunction";
-import { mode, pageId, url } from "../../routes/index"
+import { mode, url } from "../../routes/index"
 import { MetaTags } from "react-meta-tags";
-import { commonPageField, commonPageFieldSuccess, getpdfReportdata, getpdfReportdataSuccess } from "../../store/actions";
+import { getpdfReportdata, getpdfReportdataSuccess } from "../../store/actions";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import * as report from '../ReportIndex'
 import { ClaimSummary_API, MasterClaimSummary_API } from "../../helpers/backend_helper";
@@ -17,7 +17,6 @@ import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
 
-const CWClaimBtnCss = "badge badge-soft-primary font-size-18 btn btn-primary waves-effect waves-light w-xxs border border-light"
 const createClaimBtnCss = "badge badge-soft-success font-size-18 btn btn-success waves-effect waves-light w-xxs border border-light"
 const deltBtnCss = "badge badge-soft-danger font-size-18 btn btn-danger waves-effect waves-light w-xxs border border-light"
 
@@ -40,9 +39,7 @@ const ClaimSummaryMaster = (props) => {
     const dispatch = useDispatch();
     const history = useHistory();
     //function to convert selected month and year to date format initial date
-
     const [state, setState] = useState(() => initialFiledFunc(fileds()))
-    const [subPageMode] = useState(history.location.pathname);
     const [userPageAccessState, setUserAccState] = useState('');
     const [jsonBody, setjsonBody] = useState({});
 
@@ -62,16 +59,11 @@ const ClaimSummaryMaster = (props) => {
             pageField: state.CommonPageFieldReducer.pageFieldList
         })
     );
-    const { userAccess, supplier, pdfdata, ClaimSummaryGobtn, deleteMsg, ClaimListData } = reducers;
-    // const filteredData = ClaimListData.filter(Party => Party.id === null);
+    const { userAccess, pdfdata, ClaimSummaryGobtn, deleteMsg, ClaimListData } = reducers;
     ClaimListData.sort((a, b) => b.returncnt - a.returncnt);
-
     const values = { ...state.values }
-
-    // Featch Modules List data  First Rendering
     const location = { ...history.location }
     const hasShowModal = props.hasOwnProperty(mode.editValue)
-
 
 
     // userAccess useEffect
@@ -94,9 +86,6 @@ const ClaimSummaryMaster = (props) => {
 
 
     useEffect(() => {
-        // const page_Id = pageId.CLAIM_SUMMARY_MASTER//changes
-        // dispatch(commonPageFieldSuccess(null));
-        // dispatch(commonPageField(page_Id))
         MonthAndYearOnchange(values.SelectedMonth, "InitialDate")
         return () => {
             dispatch(claimList_API_Success([]))
@@ -168,23 +157,6 @@ const ClaimSummaryMaster = (props) => {
         }
     }
 
-    const deleteHandler = async (row, btnId) => {
-        const jsonBody = JSON.stringify({
-            "FromDate": row.selectedDate.FromDate,
-            "ToDate": row.selectedDate.ToDate,
-            "Party": row.PartyID,
-        });
-        let config = { jsonBody, btnId: btnId }
-
-        const isConfirmed = await customAlert({
-            Type: 7,
-            Message: "Do you want To Delete Claim ?",
-        });
-
-        if (isConfirmed) {
-            dispatch(delete_Claim_ID(config))
-        }
-    }
 
     function MonthAndYearOnchange(e, InitialDate) {
         dispatch(claimList_API_Success([]))
@@ -220,17 +192,10 @@ const ClaimSummaryMaster = (props) => {
         dispatch(claimList_API(config))
     }
 
-    const getFormattedDate = (date, format) => {
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        return format.replace('yyyy', year).replace('MM', month);
-    };
 
     const currentDate = new Date(); // Current date
     const currentMonth = _cfunc.getPreviousMonthAndYear(currentDate);
-
     const pagesListColumns = [
-
         {
             text: "Party",
             dataField: "PartyName",
@@ -243,9 +208,7 @@ const ClaimSummaryMaster = (props) => {
                     <div >{`${Number(index.returncnt) === 0 ? "0" : index.returncnt}`}</div>
                 </>
             )
-
         },
-
         {
             text: "Action",
             dataField: "",

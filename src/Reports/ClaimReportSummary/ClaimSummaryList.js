@@ -1,23 +1,17 @@
 import React, { useEffect, useState, } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
-    BreadcrumbShowCountlabel,
     commonPageFieldList,
     commonPageFieldListSuccess
 } from "../../store/actions";
 import { claimList_API, claimList_API_Success, deleteClaimSuccess, delete_Claim_ID } from "../../store/Report/ClaimSummary/action";
-// import { LoadingSheet_API, MultipleInvoice_API } from "../../../helpers/backend_helper";
 import * as report from '../../Reports/ReportIndex'
 import { getpdfReportdata, getpdfReportdataSuccess } from "../../store/Utilites/PdfReport/actions";
 import { Col, FormGroup, Input, Label } from "reactstrap";
 import CommonPurchaseList from "../../components/Common/CommonPurchaseList";
-import { useHistory } from "react-router-dom";
 import * as _cfunc from "../../components/Common/CommonFunction";
-// import { url, mode, pageId } from "../../../routes/index"
 import { url, mode, pageId } from "../../routes/index"
-
 import { PageLoadingSpinner } from "../../components/Common/CommonButton";
-import PartyDropdown_Common from "../../components/Common/PartyDropdown";
 import ClaimSummaryMaster from "./ClaimSummaryMaster";
 import { initialFiledFunc } from "../../components/Common/validationFunction";
 import { ClaimSummary_API, MasterClaimSummary_API } from "../../helpers/backend_helper";
@@ -34,12 +28,8 @@ const fileds = () => ({
 })
 
 const ClaimSummaryList = () => {
-    const history = useHistory();
     const dispatch = useDispatch();
-
     const [state, setState] = useState(() => initialFiledFunc(fileds()))
-
-
 
     const [jsonBody, setjsonBody] = useState({});
     const [pageMode] = useState(mode.defaultList);
@@ -57,7 +47,7 @@ const ClaimSummaryList = () => {
         })
     );
 
-    const { pageField, pdfdata, deleteMsg, tableList } = reducers;
+    const { pageField, pdfdata, deleteMsg } = reducers;
 
     const values = { ...state.values }
 
@@ -100,12 +90,7 @@ const ClaimSummaryList = () => {
         }
     }, [deleteMsg])
 
-
-
     function downClaimBtnFunc(config) {
-
-
-
         const jsonBody = JSON.stringify({
             "FromDate": config.rowData.MonthStartDate,
             "ToDate": config.rowData.MonthEndDate,
@@ -137,15 +122,12 @@ const ClaimSummaryList = () => {
     }
 
 
-
     async function deleteBodyfunc(config) {
-
         const jsonBody = JSON.stringify({
             "FromDate": config.rowData.MonthStartDate,
             "ToDate": config.rowData.MonthEndDate,
             "Party": config.rowData.PartyID,
         });
-
 
         let DeleteData = { jsonBody, btnId: config.btnId }
 
@@ -160,11 +142,7 @@ const ClaimSummaryList = () => {
     }
 
 
-
-
-
     function MonthAndYearOnchange(e, InitialDate) {
-
         dispatch(claimList_API_Success([]))
         let selectedMonth = ""
         if (InitialDate) {
@@ -172,6 +150,7 @@ const ClaimSummaryList = () => {
         } else {
             selectedMonth = e.target.value
         }
+
         //function to convert selected month and year to date format first and last date of month
 
         const { firstDate, lastDate } = _cfunc.getFirstAndLastDateOfMonth(selectedMonth);
