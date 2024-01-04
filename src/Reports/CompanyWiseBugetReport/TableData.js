@@ -8,7 +8,7 @@ export const columns = [
     "Net Purchase Value",
     "Budget Only Expiry ",
     "Claim Amount",
-    "Claim Against % Net Sale",
+    "Claim Against % Purchase Amount",
 ];
 
 export const ProductWisecolumns = [
@@ -19,11 +19,11 @@ export const ProductWisecolumns = [
     "Net Sale Value",
     "Budget Generated",
     "Claim Amount",
-    "Claim Against % Net Sale",
+    "Claim Against % Purchase Amount",
 ];
 
 export const Rows = (table = []) => {
-    
+
     const returnArr = [];
     let TotalCXprimaryAmount = 0
     let TotalCXPurchaseAmount = 0
