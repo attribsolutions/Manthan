@@ -16,7 +16,7 @@ import ClaimSummaryMaster from "./ClaimSummaryMaster";
 import { initialFiledFunc } from "../../components/Common/validationFunction";
 import { ClaimSummary_API, MasterClaimSummary_API } from "../../helpers/backend_helper";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
-
+import PartyDropdown_Common from "../../components/Common/PartyDropdown";
 
 const SelectedMonth = () => _cfunc.getPreviousMonthAndYear(new Date())
 const FirstAndLastDate = () => _cfunc.getFirstAndLastDateOfMonth(SelectedMonth());
@@ -29,10 +29,14 @@ const fileds = () => ({
 
 const ClaimSummaryList = () => {
     const dispatch = useDispatch();
+
     const [state, setState] = useState(() => initialFiledFunc(fileds()))
 
     const [jsonBody, setjsonBody] = useState({});
     const [pageMode] = useState(mode.defaultList);
+
+    const currentDate = new Date(); // Current date
+    const currentMonth = _cfunc.getPreviousMonthAndYear(currentDate);
 
     const reducers = useSelector(
         (state) => ({
@@ -57,19 +61,18 @@ const ClaimSummaryList = () => {
         deleteSucc: deleteClaimSuccess
     }
 
-    let page_Id = pageId.CLAIM_SUMMARY_lIST
     // Featch Modules List data  First Rendering
     useEffect(() => {
         dispatch(commonPageFieldListSuccess(null))
-        dispatch(commonPageFieldList(page_Id))
-        MonthAndYearOnchange(values.SelectedMonth, "InitialDate")
-        return () => {
-            dispatch(claimList_API_Success([]))
+        dispatch(commonPageFieldList(pageId.CLAIM_SUMMARY_lIST))
 
+        if (!(_cfunc.loginSelectedPartyID() === 0)) {
+            MonthAndYearOnchange(values.SelectedMonth, "InitialDate")
+        }
+        return () => {
+            dispatch(claimList_API_Success([]));
         }
     }, []);
-
-
 
     useEffect(() => {
         if ((pdfdata.Status === true) && (pdfdata.StatusCode === 204)) {
@@ -121,7 +124,6 @@ const ClaimSummaryList = () => {
         }
     }
 
-
     async function deleteBodyfunc(config) {
         const jsonBody = JSON.stringify({
             "FromDate": config.rowData.MonthStartDate,
@@ -141,8 +143,8 @@ const ClaimSummaryList = () => {
         }
     }
 
-
     function MonthAndYearOnchange(e, InitialDate) {
+
         dispatch(claimList_API_Success([]))
         let selectedMonth = ""
         if (InitialDate) {
@@ -176,14 +178,18 @@ const ClaimSummaryList = () => {
         dispatch(claimList_API(config))
     }
 
-    const currentDate = new Date(); // Current date
-    const currentMonth = _cfunc.getPreviousMonthAndYear(currentDate);
-
+    function partySelectOnChangeHandler() {
+        dispatch(claimList_API_Success([]));
+    }
 
     return (
         <React.Fragment>
             <PageLoadingSpinner isLoading={reducers.loading || !pageField} />
             <div className="page-content">
+
+                <PartyDropdown_Common pageMode={pageMode}
+                    changeButtonHandler={partySelectOnChangeHandler} />
+
                 <div className="px-2   c_card_filter text-black" >
                     <div className="row" >
                         <Col sm={6}>
