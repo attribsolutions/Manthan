@@ -1,6 +1,6 @@
 import { call, put, select, takeLatest } from "redux-saga/effects";
 import {
-    
+
     deletePartySubPartySuccess,
     editPartySubPartySuccess,
     getPartySubPartylistSuccess,
@@ -42,10 +42,10 @@ function* Save_Method_ForPartySubParty_GenFun({ config }) {                     
 function* Get_PartySubParty_List_GenFunc() {                                   //get List API                         
     try {
         const response = yield call(PartySubParty_Get_API);
-        yield put(getPartySubPartylistSuccess(response.Data));
+        const updatedData = response.Data.map((i) => ({ ...i, id: i.Party_id }))
+        yield put(getPartySubPartylistSuccess(updatedData));
     } catch (error) { CommonConsole(error) }
 }
-
 
 function* Delete_PartySubParty_ID_GenFunc({ config }) {                             //Delete API
     try {
@@ -80,19 +80,6 @@ function* getPartySubPartyGenFunc({ id }) {                                     
         yield put(getPartySubParty_For_party_dropdownSuccess(newArr));
     } catch (error) { CommonConsole(error) }
 }
-
-
-
-// function* deletePartySubPartyGenFunc({ id }) {                                        // get API
-//     try {
-//         const response = yield call(PartySubParty_Dropdown_Get_API, id);
-//         const newArr = response.Data.map((i, k) => {
-//             i.id = k
-//             return i
-//         })
-//         yield put(deleteIDForMasterPageSuccess(newArr));
-//     } catch (error) { CommonConsole(error) }
-// }
 
 function* deletePartySubPartyGenFunc({ id }) {
     const getState = (state) => state.PartySubPartyReducer.PartySubParty;

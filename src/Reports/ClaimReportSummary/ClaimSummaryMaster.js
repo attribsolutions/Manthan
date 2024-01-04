@@ -12,14 +12,14 @@ import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import * as report from '../ReportIndex'
 import { ClaimSummary_API, MasterClaimSummary_API } from "../../helpers/backend_helper";
 import C_Report from "../../components/Common/C_Report";
-import { claimList_API, claimList_API_Success, deleteClaimSuccess, delete_Claim_ID, postClaimMasterCreate_API, postMasterClaimCreat_API_Success } from "../../store/Report/ClaimSummary/action";
+import { claimList_API, claimList_API_Success, deleteClaimSuccess, postClaimMasterCreate_API, postMasterClaimCreat_API_Success } from "../../store/Report/ClaimSummary/action";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
+import PartyDropdown_Common from "../../components/Common/PartyDropdown";
 
 const createClaimBtnCss = "badge badge-soft-success font-size-18 btn btn-success waves-effect waves-light w-xxs border border-light"
 const deltBtnCss = "badge badge-soft-danger font-size-18 btn btn-danger waves-effect waves-light w-xxs border border-light"
-
 
 const SelectedMonth = () => _cfunc.getPreviousMonthAndYear(new Date())
 const FirstAndLastDate = () => _cfunc.getFirstAndLastDateOfMonth(SelectedMonth());
@@ -32,8 +32,6 @@ const fileds = () => ({
     SelectedMonth: SelectedMonth(),
 })
 
-
-
 const ClaimSummaryMaster = (props) => {
 
     const dispatch = useDispatch();
@@ -42,9 +40,6 @@ const ClaimSummaryMaster = (props) => {
     const [state, setState] = useState(() => initialFiledFunc(fileds()))
     const [userPageAccessState, setUserAccState] = useState('');
     const [jsonBody, setjsonBody] = useState({});
-
-
-
 
     const reducers = useSelector(
         (state) => ({
@@ -60,11 +55,12 @@ const ClaimSummaryMaster = (props) => {
         })
     );
     const { userAccess, pdfdata, ClaimSummaryGobtn, deleteMsg, ClaimListData } = reducers;
+
     ClaimListData.sort((a, b) => b.returncnt - a.returncnt);
+
     const values = { ...state.values }
     const location = { ...history.location }
     const hasShowModal = props.hasOwnProperty(mode.editValue)
-
 
     // userAccess useEffect
     useEffect(() => {
@@ -83,15 +79,14 @@ const ClaimSummaryMaster = (props) => {
         };
     }, [userAccess])
 
-
-
     useEffect(() => {
-        MonthAndYearOnchange(values.SelectedMonth, "InitialDate")
+        if (!(_cfunc.loginSelectedPartyID() === 0)) {
+            MonthAndYearOnchange(values.SelectedMonth, "InitialDate")
+        }
         return () => {
             dispatch(claimList_API_Success([]))
         }
     }, [])
-
 
     useEffect(() => {
         if ((pdfdata.Status === true) && (pdfdata.StatusCode === 204)) {
@@ -118,7 +113,6 @@ const ClaimSummaryMaster = (props) => {
         }
     }, [ClaimSummaryGobtn])
 
-
     useEffect(() => {
         if ((deleteMsg.Status === true) && (deleteMsg.StatusCode === 200)) {
             dispatch(deleteClaimSuccess({ Status: false }))
@@ -130,8 +124,6 @@ const ClaimSummaryMaster = (props) => {
             return
         }
     }, [deleteMsg])
-
-
 
     function goButtonHandler(reportType, row, btnId) {
 
@@ -156,7 +148,6 @@ const ClaimSummaryMaster = (props) => {
             dispatch(getpdfReportdata(ClaimSummary_API, config))
         }
     }
-
 
     function MonthAndYearOnchange(e, InitialDate) {
         dispatch(claimList_API_Success([]))
@@ -192,7 +183,6 @@ const ClaimSummaryMaster = (props) => {
         dispatch(claimList_API(config))
     }
 
-
     const currentDate = new Date(); // Current date
     const currentMonth = _cfunc.getPreviousMonthAndYear(currentDate);
     const pagesListColumns = [
@@ -224,7 +214,6 @@ const ClaimSummaryMaster = (props) => {
                 // 3) If Return Count Is greater than 0 then only claim create  
                 return (
                     <>
-
                         <div className=" d-flex justify-content-start  gap-2" >
                             <div
                                 className="mt-3  mb-3">
@@ -253,13 +242,20 @@ const ClaimSummaryMaster = (props) => {
                 )
             },
         },
-
-
     ];
+
+    function partySelectOnChangeHandler() {
+        dispatch(claimList_API_Success([]));
+    }
+
     return (
         <React.Fragment>
             <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
             <div className="page-content">
+
+                <PartyDropdown_Common
+                    changeButtonHandler={partySelectOnChangeHandler} />
+
                 <div className="px-2   c_card_filter text-black" >
                     <div className="row" >
                         <Col sm={6}>

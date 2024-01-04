@@ -3,14 +3,13 @@ import {
     CLAIM_LIST_API,
     DELETE_CLAIM_ID,
     POST_CLAIM_CREATE_SUMMARY_API,
-    POST_ORDER_SUMMARY_API,
+
 } from "./actionType";
-import { MasterClaimCreatApiErrorAction, OrderSummaryApiErrorAction, claimList_API_Success, deleteClaimSuccess, postMasterClaimCreat_API_Success, postOrderSummary_API_Success } from "./action";
-import { ClaimList_API, MasterClaimCreate_API, OderSummary_GoBtn_API, delete_Claim_API } from "../../../helpers/backend_helper";
+import { MasterClaimCreatApiErrorAction, claimList_API_Success, deleteClaimSuccess, postMasterClaimCreat_API_Success } from "./action";
+import { ClaimList_API, MasterClaimCreate_API, delete_Claim_API } from "../../../helpers/backend_helper";
 import { listpageConcatDateAndTime, loginPartyID } from "../../../components/Common/CommonFunction";
 
 function* MasterClaimCreat_GenFunc({ config }) {
-
     try {
         const response = yield call(MasterClaimCreate_API, config);
         yield put(postMasterClaimCreat_API_Success(response))
@@ -31,7 +30,6 @@ function* ClaimList_GenFunc({ config }) {
                     if (item.PartyID === Party_ID) {
                         isDeleteDisable = true
                     }
-
                     const newItem = {
                         ...item,
                         MonthStartDate: config.MonthStartDate,
@@ -59,7 +57,6 @@ function* ClaimList_GenFunc({ config }) {
                     NewResponse.push(newItem);
                 }
             }
-
         }
 
         yield put(claimList_API_Success(NewResponse))

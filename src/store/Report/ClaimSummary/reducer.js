@@ -1,4 +1,12 @@
-import { CLAIM_LIST_API, CLAIM_LIST_API_SUCCESS, DELETE_CLAIM_ID, DELETE_CLAIM_ID_SUCCESS, POST_CLAIM_CREATE_SUMMARY_API, POST_CLAIM_CREATE_SUMMARY_API_ERROR_ACTION, POST_CLAIM_CREATE_SUMMARY_API_SUCCESS, POST_ORDER_SUMMARY_API, POST_ORDER_SUMMARY_API_SUCCESS } from "./actionType"
+import {
+    CLAIM_LIST_API,
+    CLAIM_LIST_API_SUCCESS,
+    DELETE_CLAIM_ID,
+    DELETE_CLAIM_ID_SUCCESS,
+    POST_CLAIM_CREATE_SUMMARY_API,
+    POST_CLAIM_CREATE_SUMMARY_API_ERROR_ACTION,
+    POST_CLAIM_CREATE_SUMMARY_API_SUCCESS
+} from "./actionType"
 
 const INIT_STATE = {
     ClaimSummaryGobtn: [],
@@ -6,8 +14,6 @@ const INIT_STATE = {
     deleteMsg: { Status: false },
     DeleteBtnLoading: false,
     ClaimListData: [],
-
-
 }
 
 const ClaimSummaryReducer = (state = INIT_STATE, action) => {
@@ -60,8 +66,6 @@ const ClaimSummaryReducer = (state = INIT_STATE, action) => {
                 DeleteBtnLoading: false,
                 CreateClaimLoading: false
             };
-
-
         default:
             return state
     }
