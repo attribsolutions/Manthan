@@ -50,7 +50,7 @@ const InvoiceExcelUpload = (props) => {
     const [isIgnoreItem, setisIgnoreItem] = useState(false);
     const [unitMapData, setunitMapData] = useState([]);
     const [unitVerify, setUnitVerify] = useState({ Wrong_Unit_Code_Array: [], Not_Verify_Unit: undefined });
-    const [allpartyVerify, setAllPartyVerify] = useState({ Not_Map_Party_Code_Array: [], Not_Map_Party: undefined });
+    // const [allpartyVerify, setAllPartyVerify] = useState({ Not_Map_Party_Code_Array: [], Not_Map_Party: undefined });
     const [partyVerify, setPartyVerify] = useState({ Wrong_Party_Code_Array: [], Not_Verify_Party: undefined });
     const [itemVerify, setItemVerify] = useState({ Wrong_Item_Code_Array: [], Not_Verify_Item: undefined });
     const [negativeFigureVerify, setNegativeFigureVerify] = useState({ Negative_Figure_Array: [], Not_Verify_Negative_Figure: undefined });
@@ -149,7 +149,7 @@ const InvoiceExcelUpload = (props) => {
             setPreViewDivShow(false);
             setReadJsonDetail(preDetails);
             setUnitVerify({ Wrong_Unit_Code_Array: [], Not_Verify_Unit: undefined });
-            setAllPartyVerify({ Not_Map_Party_Code_Array: [], Not_Map_Party: undefined });
+            // setAllPartyVerify({ Not_Map_Party_Code_Array: [], Not_Map_Party: undefined });
             setPartyVerify({ Wrong_Party_Code_Array: [], Not_Verify_Party: undefined });
             setItemVerify({ Wrong_Item_Code_Array: [], Not_Verify_Item: undefined });
             setNegativeFigureVerify({ Negative_Figure_Array: [], Not_Verify_Negative_Figure: undefined });
@@ -166,7 +166,7 @@ const InvoiceExcelUpload = (props) => {
             setPreViewDivShow(false);
             setReadJsonDetail(preDetails);
             setUnitVerify({ Wrong_Unit_Code_Array: [], Not_Verify_Unit: undefined })
-            setAllPartyVerify({ Not_Map_Party_Code_Array: [], Not_Map_Party: undefined })
+            // setAllPartyVerify({ Not_Map_Party_Code_Array: [], Not_Map_Party: undefined })
             setPartyVerify({ Wrong_Party_Code_Array: [], Not_Verify_Party: undefined })
             setItemVerify({ Wrong_Item_Code_Array: [], Not_Verify_Item: undefined })
             setNegativeFigureVerify({ Negative_Figure_Array: [], Not_Verify_Negative_Figure: undefined })
@@ -277,12 +277,9 @@ const InvoiceExcelUpload = (props) => {
         // if ((extension === '.csv') || extension === ".xlsx") {
 
         if (extension === ".xlsx") {
-
             const readjson = await readExcelFile({ file: files[0], compareParameter, ItemList })
 
-
             //////////////////////////////////////// Check  in valid format Value Or Not //////////////////////////////////////////////////////
-
 
             if (readjson.InvalidFormat.length > 0) {
                 setInvalidFormat({ Invalid_Format_Array: readjson.InvalidFormat, Not_Verify_Invalid_Format: true })
@@ -352,12 +349,12 @@ const InvoiceExcelUpload = (props) => {
                 ///////////////////////////////////////////////// Verifiy All Party Mapping  Done or Not ///////////////////////////////////////////////////////////////////////
 
                 const PartyMap = isdetails.partyNO;
-                const filteredArray = PartyMapData.filter(i => i.MapCustomer === null || i.MapCustomer === '');
-                if (filteredArray.length > 0) {
-                    setAllPartyVerify({ Not_Map_Party_Code_Array: filteredArray, Not_Map_Party: true })
-                } else {
-                    setAllPartyVerify({ Not_Map_Party_Code_Array: [], Not_Map_Party: false })
-                };
+                // const filteredArray = PartyMapData.filter(i => i.MapCustomer === null || i.MapCustomer === '');
+                // if (filteredArray.length > 0) {
+                //     setAllPartyVerify({ Not_Map_Party_Code_Array: filteredArray, Not_Map_Party: true })
+                // } else {
+                //     setAllPartyVerify({ Not_Map_Party_Code_Array: [], Not_Map_Party: false })
+                // };
 
                 ///////////////////////////////////////////////// Verifiy  Party Mapping code ///////////////////////////////////////////////////////////////////////
 
@@ -388,7 +385,7 @@ const InvoiceExcelUpload = (props) => {
     ////////////////////////////////////////////////////  Verify condition Check If all condition fullfill then only file verified /////////////////////////////
 
     const isVerify = (
-        (allpartyVerify.Not_Map_Party === false) &&
+        // (allpartyVerify.Not_Map_Party === false) &&
         (partyVerify.Not_Verify_Party === false) &&
         ((isIgnoreItem) || itemVerify.Not_Verify_Item === false)
         &&
@@ -423,7 +420,7 @@ const InvoiceExcelUpload = (props) => {
         setReadJsonDetail(preDetails)
         setPreViewDivShow(false)
         setUnitVerify({ Wrong_Unit_Code_Array: [], Not_Verify_Unit: undefined })
-        setAllPartyVerify({ Not_Map_Party_Code_Array: [], Not_Map_Party: undefined })
+        // setAllPartyVerify({ Not_Map_Party_Code_Array: [], Not_Map_Party: undefined })
         setPartyVerify({ Wrong_Party_Code_Array: [], Not_Verify_Party: undefined })
         setItemVerify({ Wrong_Item_Code_Array: [], Not_Verify_Item: undefined })
         setNegativeFigureVerify({ Negative_Figure_Array: [], Not_Verify_Negative_Figure: undefined })
@@ -669,7 +666,7 @@ const InvoiceExcelUpload = (props) => {
                                 }
 
 
-                                {allpartyVerify.Not_Map_Party !== undefined ? <details >
+                                {/* {allpartyVerify.Not_Map_Party !== undefined ? <details >
                                     {allpartyVerify.Not_Map_Party === false ? null : "Note: Before uploading invoice, all parties must be mapped. The following parties have not been mapped in the system."}
                                     <summary>&nbsp; &nbsp; All Party mapping&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -688,7 +685,7 @@ const InvoiceExcelUpload = (props) => {
                                             ))}
                                         </p>
                                     </div>}
-                                </details> : null}
+                                </details> : null} */}
 
                                 {invalidFormat.Not_Verify_Invalid_Format !== undefined ? <details>
                                     <summary>&nbsp; &nbsp; Invalid Format&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
