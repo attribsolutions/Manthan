@@ -135,14 +135,29 @@ export const getCurrentMonthAndYear = () => {
 }
 
 
-export const areAllDatesSame = (Date) => {
-  for (let i = 1; i < Date.length; i++) {
-    if (Date[i] !== Date[0]) {
-      return false;
-    }
+// export const areAllDatesSame = (Date) => {
+//   for (let i = 1; i < Date.length; i++) {
+//     if (Date[i] !== Date[0]) {
+//       return false;
+//     }
+//   }
+//   return true;
+// }
+
+export const areAllDatesSame = (dates) => {
+  if (!Array.isArray(dates) || dates.length === 0) {
+    return null; // Return null for empty arrays or non-array inputs
   }
-  return true;
-}
+
+  const uniqueDates = Array.from(new Set(dates)); // Get unique dates in the array
+
+  return {
+    allSame: uniqueDates.length === 1,
+    dates: uniqueDates,
+  };
+};
+
+
 
 
 export const getPreviousMonthAndYear = (date) => {

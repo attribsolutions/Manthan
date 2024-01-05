@@ -174,7 +174,7 @@ export const GotoInvoiceBtn = ({ onClick, userAcc, loading, forceDisabled }) => 
   )
 }
 
-export const SaveAndDownloadPDF = ({ onClick, pageMode,userAcc, loading, forceDisabled, type = "button" }) => {
+export const SaveAndDownloadPDF = ({ onClick, pageMode, userAcc, loading, forceDisabled, type = "button" }) => {
 
   const { Name } = userAcc;
   if ((userAcc.RoleAccess_IsSave) && (pageMode === mode.defaultsave
@@ -302,3 +302,36 @@ export function PageLoadingSpinner({ isLoading }) {
 }
 
 
+
+export function Verifiy_Button({
+  loading,
+  color,
+  onClick,
+  forceDisabled,
+  children,
+  spinnerColor = "primary",
+  ...rest
+}) {
+
+  if (loading) {
+    return (
+      <button
+        disabled
+        title={`Add Button Loading...`}
+        {...rest}
+      >
+        Verifying Details&nbsp;&nbsp;<Spinner style={{ height: "12px", width: "12px" }} color={spinnerColor} />
+      </button>
+    );
+  }
+
+  return (
+    <button
+      disabled={forceDisabled}
+      onClick={onClick}
+      {...rest}
+    >
+      {children}
+    </button>
+  );
+}
