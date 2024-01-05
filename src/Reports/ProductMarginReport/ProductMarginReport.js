@@ -318,7 +318,7 @@ const ProductMarginReport = (props) => {
 
         const jsonBody = JSON.stringify({
             "IsSCM": (userDetails.IsSCMPartyType).toString(),
-            "Party": 3,
+            "Party": loginPartyID(),// if IsSCM 0 then Party ID ignore.
             "PartyType": partyTypeSelect.value,
             "PriceList": priceListSelect.value,
             "Group": groupSelect[0].value === 0 ? "" : groupSelect.map(i => i.value).join(','),
@@ -337,16 +337,6 @@ const ProductMarginReport = (props) => {
         value: 0,
         label: " All"
     });
-
-    // const priceListOptions = PriceList.map((i) => ({
-    //     value: i.value,
-    //     label: i.label,
-    // }));
-
-    // priceListOptions.unshift({
-    //     value: 0,
-    //     label: " All"
-    // });
 
     const subProductDropdownOptions = useMemo(() => {
         let options = [];
