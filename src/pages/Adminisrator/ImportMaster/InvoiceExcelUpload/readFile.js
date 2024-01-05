@@ -106,7 +106,7 @@ export const readExcelFile = async ({ file, compareParameter, ItemList = [] }) =
 
 
 export async function fileDetails({ compareParameter = [], Not_Ignore_Item_Array = [], }) {
-  
+
 
   const fileFiled = {}
 
@@ -192,3 +192,25 @@ export async function downloadDummyFormatHandler(jsonData) {
   XLSX.writeFile(wb, 'download  Format.xlsx');
 
 }
+
+
+
+
+
+
+
+
+export const filterArraysInEntries = (map, conditionFn) => {
+
+  const filteredEntries = Array.from(map.entries()).map(([key, value]) => {
+    const filteredArray = value.filter(conditionFn); // Filtering each array based on condition
+    if (filteredArray.length === 0) {
+      return null
+    } else {
+      return [key, filteredArray]; // Return the filtered entry
+    }
+  });
+  const nonNullEntries = filteredEntries.filter(entry => entry !== null);
+
+  return new Map(nonNullEntries);
+};
