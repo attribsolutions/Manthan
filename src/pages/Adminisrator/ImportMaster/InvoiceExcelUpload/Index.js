@@ -56,6 +56,10 @@ const InvoiceExcelUpload = (props) => {
     const [negativeFigureVerify, setNegativeFigureVerify] = useState({ Negative_Figure_Array: [], Not_Verify_Negative_Figure: undefined });
     const [nonCBMItemVerify, setNonCBMItemVerify] = useState({ Non_CBM_Item_Array: [], Not_Verify_Non_CBM_Item: undefined });
     const [invoiceWithsameDateVerify, setInvoiceWithsameDateVerify] = useState({ Invoice_Date: [], Not_Verify_Same_Date: undefined });
+    const [invalidFormat, setInvalidFormat] = useState({ Invalid_Format_Array: [], Not_Verify_Invalid_Format: undefined });
+
+
+
 
     const {
         postMsg,
@@ -96,7 +100,6 @@ const InvoiceExcelUpload = (props) => {
             };
             dispatch(GoButton_ImportExcelPartyMap({ partyId }));
             dispatch(goButtonPartyItemAddPage({ jsonBody }));
-            dispatch(GoButton_ImportExcelPartyMap({ partyId, mapType: 3 }));
             const resp = await ImportMaster_Map_Unit_GoButton_API({ partyId });
 
             if (resp.StatusCode === 200) {
@@ -145,13 +148,15 @@ const InvoiceExcelUpload = (props) => {
             setselectedFiles([]);
             setPreViewDivShow(false);
             setReadJsonDetail(preDetails);
-            setUnitVerify({ Wrong_Unit_Code_Array: [], Not_Verify_Unit: undefined })
-            setAllPartyVerify({ Not_Map_Party_Code_Array: [], Not_Map_Party: undefined })
-            setPartyVerify({ Wrong_Party_Code_Array: [], Not_Verify_Party: undefined })
-            setItemVerify({ Wrong_Item_Code_Array: [], Not_Verify_Item: undefined })
-            setNegativeFigureVerify({ Negative_Figure_Array: [], Not_Verify_Negative_Figure: undefined })
-            setNonCBMItemVerify({ Non_CBM_Item_Array: [], Not_Verify_Non_CBM_Item: undefined })
-            setInvoiceWithsameDateVerify({ Invoice_Date: [], Not_Verify_Same_Date: undefined })
+            setUnitVerify({ Wrong_Unit_Code_Array: [], Not_Verify_Unit: undefined });
+            setAllPartyVerify({ Not_Map_Party_Code_Array: [], Not_Map_Party: undefined });
+            setPartyVerify({ Wrong_Party_Code_Array: [], Not_Verify_Party: undefined });
+            setItemVerify({ Wrong_Item_Code_Array: [], Not_Verify_Item: undefined });
+            setNegativeFigureVerify({ Negative_Figure_Array: [], Not_Verify_Negative_Figure: undefined });
+            setNonCBMItemVerify({ Non_CBM_Item_Array: [], Not_Verify_Non_CBM_Item: undefined });
+            setInvoiceWithsameDateVerify({ Invoice_Date: [], Not_Verify_Same_Date: undefined });
+            setInvalidFormat({ Invalid_Format_Array: [], Not_Verify_Invalid_Format: undefined });
+
             document.getElementById("demo1").style.border = "";
 
 
@@ -167,6 +172,8 @@ const InvoiceExcelUpload = (props) => {
             setNegativeFigureVerify({ Negative_Figure_Array: [], Not_Verify_Negative_Figure: undefined })
             setNonCBMItemVerify({ Non_CBM_Item_Array: [], Not_Verify_Non_CBM_Item: undefined })
             setInvoiceWithsameDateVerify({ Invoice_Date: [], Not_Verify_Same_Date: undefined })
+            setInvalidFormat({ Invalid_Format_Array: [], Not_Verify_Invalid_Format: undefined });
+
             document.getElementById("demo1").style.border = "";
             dispatch(InvoiceExcelUpload_save_Success({ Status: false }))
             customAlert({
@@ -267,11 +274,29 @@ const InvoiceExcelUpload = (props) => {
 
         const filename = files[0].name;
         const extension = filename.substring(filename.lastIndexOf(".")).toLowerCase();
-        if ((extension === '.csv') || extension === ".xlsx") {
+        // if ((extension === '.csv') || extension === ".xlsx") {
+
+        if (extension === ".xlsx") {
+
             const readjson = await readExcelFile({ file: files[0], compareParameter, ItemList })
+
+
+            //////////////////////////////////////// Check  in valid format Value Or Not //////////////////////////////////////////////////////
+
+
+            if (readjson.InvalidFormat.length > 0) {
+                setInvalidFormat({ Invalid_Format_Array: readjson.InvalidFormat, Not_Verify_Invalid_Format: true })
+            } else {
+                setInvalidFormat({ Invalid_Format_Array: [], Not_Verify_Invalid_Format: false })
+            }
+
+
             //////////////////////////////////////// Check  Invoice  Item Contain Negative Value Or Not //////////////////////////////////////////////////////
 
             const Negative_Value_Item_Array = readjson.filter(i => i.shouldRemove)
+
+
+
 
             if (Negative_Value_Item_Array.length > 0) {
                 setNegativeFigureVerify({ Negative_Figure_Array: Negative_Value_Item_Array, Not_Verify_Negative_Figure: true })
@@ -296,6 +321,7 @@ const InvoiceExcelUpload = (props) => {
 
             ////////////////////////////////////////////////////  Verifying All Field Mapping with System //////////////////////////////////
             let Not_Ignore_Item_Array = readjson
+
             const isdetails = await fileDetails({ compareParameter, Not_Ignore_Item_Array })
 
             ////////////////////////////////////////////////// Verifying All Uploaded Invoice Is Of Same Date ///////////////////////////////
@@ -403,6 +429,8 @@ const InvoiceExcelUpload = (props) => {
         setNegativeFigureVerify({ Negative_Figure_Array: [], Not_Verify_Negative_Figure: undefined })
         setNonCBMItemVerify({ Non_CBM_Item_Array: [], Not_Verify_Non_CBM_Item: undefined })
         setInvoiceWithsameDateVerify({ Invoice_Date: [], Not_Verify_Same_Date: undefined })
+        setInvalidFormat({ Invalid_Format_Array: [], Not_Verify_Invalid_Format: undefined });
+
 
 
         files.map(file =>
@@ -661,6 +689,27 @@ const InvoiceExcelUpload = (props) => {
                                         </p>
                                     </div>}
                                 </details> : null}
+
+                                {invalidFormat.Not_Verify_Invalid_Format !== undefined ? <details>
+                                    <summary>&nbsp; &nbsp; Invalid Format&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{invalidFormat.Not_Verify_Invalid_Format === true ?
+                                            <i style={{ color: "tomato", }} className="mdi mdi-close-circle font-size-18  "></i> :
+                                            <i style={{ color: "green", }} className="mdi mdi-check-decagram  font-size-18  "></i>}</summary>
+                                    {invalidFormat.Not_Verify_Invalid_Format === false ? null : <div className="error-msg">
+                                        <p>
+                                            <span style={{ fontWeight: "bold", fontSize: "15px" }} >Invalid Format:&nbsp;&nbsp;</span>
+                                            {invalidFormat.Invalid_Format_Array.map((i, index) => (
+                                                <span key={index}>
+                                                    <span key={index}>
+                                                        <span style={{ fontWeight: "bold" }}>{`${index + 1})`}</span>    {` ${i}`}&nbsp;&nbsp;&nbsp;&nbsp;
+                                                    </span>
+                                                </span>
+                                            ))}
+                                        </p>
+                                    </div>}
+                                </details> : null}
+
 
 
                                 {partyVerify.Not_Verify_Party !== undefined ? <details>

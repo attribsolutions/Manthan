@@ -49,6 +49,7 @@ export const readExcelFile = async ({ file, compareParameter, ItemList = [] }) =
       comparefilter.forEach((c1) => {
 
         if (c1.ControlTypeName === "Date") {
+
           const date = new Date(Math.round((r1[c1.Value] - 25569) * 86400 * 1000));
           r1[c1.Value] = date_ymd_func(date)
         };
@@ -62,7 +63,6 @@ export const readExcelFile = async ({ file, compareParameter, ItemList = [] }) =
         };
         const regExp = RegExp(c1.RegularExpression);
 
-
         if ((Number.isInteger(r1[c1.Value]) || (isFloat(r1[c1.Value]))) && r1[c1.Value] <= 0) {   //  - figure only checking value  that are map in our system 
           if (c1.IsCompulsory) {
             shouldRemove = true;
@@ -70,6 +70,7 @@ export const readExcelFile = async ({ file, compareParameter, ItemList = [] }) =
             shouldRemove = false;
           }
         }
+
         if (!c1.IsCompulsory && (r1[c1.Value] === '' || r1[c1.Value] === null || r1[c1.Value] === undefined)) {
         }
         else if (!(regExp.test(r1[c1.Value]))) {
@@ -81,19 +82,19 @@ export const readExcelFile = async ({ file, compareParameter, ItemList = [] }) =
       })
       r1["Invoice_No"] = Invoice_No;
       r1["Item_Code"] = Item_Code;
-
       r1["shouldRemove"] = shouldRemove
+
     })
 
+    jsonResult["InvalidFormat"] = invalidMsg
 
-
-    if (invalidMsg.length > 0) {
-      customAlert({
-        Type: 3,
-        Message: JSON.stringify(invalidMsg),
-      })
-      return []
-    }
+    // if (invalidMsg.length > 0) {
+    //   customAlert({
+    //     Type: 3,
+    //     Message: JSON.stringify(invalidMsg),
+    //   })
+    //   return []
+    // }
 
     return jsonResult
 
