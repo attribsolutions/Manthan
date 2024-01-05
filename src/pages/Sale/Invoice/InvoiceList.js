@@ -419,6 +419,11 @@ const InvoiceList = () => {
                                 style={{ width: "83px" }}>From Date</Label>
                             <Col sm="7">
                                 <C_DatePicker
+                                    options={{
+                                        altInput: true,
+                                        altFormat: "d-m-Y",
+                                        dateFormat: "Y-m-d",
+                                    }}
                                     name='fromdate'
                                     value={fromdate}
                                     onChange={fromdateOnchange}
@@ -426,12 +431,18 @@ const InvoiceList = () => {
                             </Col>
                         </FormGroup>
                     </Col>
+
                     <Col sm="3" className="">
                         <FormGroup className="mb- row mt-3 " >
                             <Label className="col-sm-5 p-2"
                                 style={{ width: "65px" }}>To Date</Label>
                             <Col sm="7">
                                 <C_DatePicker
+                                    options={{
+                                        altInput: true,
+                                        altFormat: "d-m-Y",
+                                        dateFormat: "Y-m-d",
+                                    }}
                                     name="todate"
                                     value={todate}
                                     onChange={todateOnchange}
