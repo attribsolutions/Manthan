@@ -1,13 +1,13 @@
 import { call, put, takeLatest } from "redux-saga/effects";
 import {
 	LedgerApiErrorAction,
-	SapLedger_Go_Button_API_Success, getExcel_Button_API_Success
+	SapLedger_Go_Button_API_Success, ProductMargin_Go_Btn_Success
 } from "./action";
 import { Get_Product_Margin_Report, PartyLedger_API, } from "../../../helpers/backend_helper";
-import { GET_EXCELBUTTON_API, GO_BUTTON_API_SAP_LEDGER, } from "./actionType";
+import { PRODUCTMARGIN_GO_BTN_ACTION, GO_BUTTON_API_SAP_LEDGER, } from "./actionType";
 import { API_URL_LIVE } from "../../../routes/route_url";
 
-function* goBtn_Get_API_GenFun({ filters }) {
+function* SapLedger_GoBtn_GenFuc({ filters }) {
 
 	try {
 
@@ -61,13 +61,14 @@ function* goBtn_Get_API_GenFun({ filters }) {
 	} catch (error) { yield put(LedgerApiErrorAction()) }
 }
 
-function* GetExcelButton_saga({ config }) {
+function* ProductMarginGoBtn_GenFuc({ config }) {
 
 	try {
 		const response = yield call(Get_Product_Margin_Report, config);
 
 		let newArray = []
 		if (response.StatusCode === 200) {
+
 			response.Data.forEach(i => {
 				let obj = i;
 
@@ -81,7 +82,7 @@ function* GetExcelButton_saga({ config }) {
 							let imageColumns = ["Side2View", "TopView", "Side1View", "BackView", "BarCode", "Poster", "FrontView", "Nutrition"];
 							let isImageColumn = imageColumns.includes(key);
 							if (isImageColumn) {
-								
+
 								obj[key] = `${ele[key] === " " || ele[key] === "" ? "" : `${API_URL_LIVE}/media/${ele[key]}`}`;
 							} else {
 								obj[key] = ele[key];
@@ -91,26 +92,36 @@ function* GetExcelButton_saga({ config }) {
 					// Remove the property from the object
 					delete obj[prop];
 				});
+
 				// Remove specified keys from the object
 				["ProductID", "SubProductID"].forEach(key => {
 					delete obj[key];
 				});
+
+				// Delete PriceListID and keys matching the pattern "BaseUnitRateWithOutGST"
+				delete obj.PriceListID;
+				Object.keys(obj).forEach(key => {
+					if (key.match(/BaseUnitRateWithOutGST/i)) {
+						delete obj[key];
+					}
+				});
+
 				// Add the modified object to newArray
 				newArray.push(obj);
 			});
 		}
 
-		yield put(getExcel_Button_API_Success(newArray));
+		yield put(ProductMargin_Go_Btn_Success(newArray));
 
 	} catch (error) {
-		yield put(getExcel_Button_API_Success([]));
+		yield put(ProductMargin_Go_Btn_Success([]));
 		LedgerApiErrorAction()
 	}
 }
 
 function* SapLedgerSaga() {
-	yield takeLatest(GO_BUTTON_API_SAP_LEDGER, goBtn_Get_API_GenFun)
-	yield takeLatest(GET_EXCELBUTTON_API, GetExcelButton_saga)
+	yield takeLatest(GO_BUTTON_API_SAP_LEDGER, SapLedger_GoBtn_GenFuc)
+	yield takeLatest(PRODUCTMARGIN_GO_BTN_ACTION, ProductMarginGoBtn_GenFuc)
 }
 
 export default SapLedgerSaga;
