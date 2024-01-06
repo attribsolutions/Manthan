@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import MetaTags from 'react-meta-tags';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
@@ -75,11 +75,8 @@ const ProductMarginReport = (props) => {
     const [groupSelect, setGroupSelect] = useState([{ value: 0, label: "All" }]);
     const [subGroupSelect, setSubGroupSelect] = useState([{ value: 0, label: "All" }]);
 
-
     const [imageTable, setImageTable] = useState([]);  // Selected Image Array
     const [modal_backdrop, setmodal_backdrop] = useState(false);   // Image Model open Or not
-
-
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
@@ -106,9 +103,6 @@ const ProductMarginReport = (props) => {
 
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
-
-
-
 
         DiscountPartyTypeLoading: (state.DiscountReducer.partyTypeDropDownLoading || state.PartyTypeReducer.goBtnLoading),
         DiscountPartyType: state.DiscountReducer.partyType,
@@ -381,23 +375,13 @@ const ProductMarginReport = (props) => {
         dispatch(ProductMargin_Go_Btn_Success([]));
         setTableData([]);
         setcolumn([{}]);
-        // setColumnsCreated(false);
         dispatch(priceListByPartyAction(e.value))
     }
 
-    function PriceListOnChange(e) {
-        setPriceListSelect(e);
+       function GroupOnchange(e = []) {
         dispatch(ProductMargin_Go_Btn_Success([]));
         setTableData([]);
         setcolumn([{}]);
-        // setColumnsCreated(false);
-    }
-
-    function GroupOnchange(e = []) {
-        dispatch(ProductMargin_Go_Btn_Success([]));
-        setTableData([]);
-        setcolumn([{}]);
-        // setColumnsCreated(false);
         dispatch(getSubGroupListSuccess([]));
         dispatch(get_Sub_Group_By_Group_ForDropDown_Success([]));
         dispatch(Items_On_Group_And_Subgroup_API_Success([]));
@@ -430,7 +414,7 @@ const ProductMarginReport = (props) => {
         dispatch(ProductMargin_Go_Btn_Success([]));
         setTableData([]);
         setcolumn([{}]);
-        // setColumnsCreated(false);
+       
         dispatch(Items_On_Group_And_Subgroup_API_Success([]));
         setItemNameSelect([{ value: 0, label: "All" }]);
 
@@ -456,7 +440,6 @@ const ProductMarginReport = (props) => {
         dispatch(ProductMargin_Go_Btn_Success([]));
         setTableData([]);
         setcolumn([{}]);
-        // setColumnsCreated(false);
         if (e.length === 0) {
             e = [{ value: 0, label: "All" }];
         } else {
@@ -466,7 +449,7 @@ const ProductMarginReport = (props) => {
     }
 
     const priceListOnClick = function () {
-
+     
         const hasNone = document.getElementById("price-drop").style;
 
         if ((priceListByPartyType_WithAll.length > 0)) {
@@ -539,14 +522,14 @@ const ProductMarginReport = (props) => {
                                             autoComplete={"off"}
                                             placeholder="Select..."
                                             onClick={priceListOnClick}
-                                            onChange={priceListOnChange}
                                         >
                                         </Input>
 
                                         <PriceDropOptions
                                             data={priceListByPartyType_WithAll}
                                             priceList={priceListSelect}
-                                            setPriceSelect={setPriceListSelect} />
+                                            setPriceSelect={setPriceListSelect}
+                                            onChange={priceListOnChange} />
                                     </Col>
                                 </div>
                             </FormGroup>
