@@ -14,7 +14,7 @@ import { CurrentURl, breadcrumbReturnFunc, loginIsSCMParty, loginPartyID, loginU
 import * as pageId from "../../routes/allPageID"
 import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess, getGroupList, getGroupListSuccess, getSubGroupList, getSubGroupListSuccess, get_Sub_Group_By_Group_ForDropDown, get_Sub_Group_By_Group_ForDropDown_Success } from '../../store/actions';
 import * as mode from "../../routes/PageMode"
-import { getExcel_Button_API, getExcel_Button_API_Success } from '../../store/Report/SapLedger Redux/action';
+import { ProductMargin_Go_Btn_Action, ProductMargin_Go_Btn_Success } from '../../store/Report/SapLedger Redux/action';
 import { useState } from 'react';
 import { url } from '../../routes';
 import ToolkitProvider from 'react-bootstrap-table2-toolkit';
@@ -143,7 +143,7 @@ const ProductMarginReport = (props) => {
 
         return () => {
             dispatch(getPartyTypelistSuccess([]));
-            dispatch(getExcel_Button_API_Success([]));
+            dispatch(ProductMargin_Go_Btn_Success([]));
             dispatch(DiscountPartyType_Dropdown_Success([]));
             dispatch(priceListByPartyActionSuccess([]));
             dispatch(getGroupListSuccess([]));
@@ -307,7 +307,7 @@ const ProductMarginReport = (props) => {
                     dateHeader: ''
                 })
             }
-            dispatch(getExcel_Button_API_Success([]));   // Reset Excel Data
+            dispatch(ProductMargin_Go_Btn_Success([]));   // Reset Excel Data
         }
     }, [ProductMargin, pageField]);
 
@@ -325,7 +325,7 @@ const ProductMarginReport = (props) => {
             "SubGroup": subGroupSelect[0].value === 0 ? "" : subGroupSelect.map(i => i.value).join(','),
             "Item": itemNameSelect[0].value === 0 ? "" : itemNameSelect.map(i => i.value).join(',')
         });
-        dispatch(getExcel_Button_API({ jsonBody }))
+        dispatch(ProductMargin_Go_Btn_Action({ jsonBody }))
     }
 
     const partyTypeOptions = PartyType.map((i) => ({
@@ -378,7 +378,7 @@ const ProductMarginReport = (props) => {
     function PartyTypeOnchange(e) {
         setPartyTypeSelect(e);
         setPriceListSelect({ value: 0, label: "All" });
-        dispatch(getExcel_Button_API_Success([]));
+        dispatch(ProductMargin_Go_Btn_Success([]));
         setTableData([]);
         setcolumn([{}]);
         // setColumnsCreated(false);
@@ -387,14 +387,14 @@ const ProductMarginReport = (props) => {
 
     function PriceListOnChange(e) {
         setPriceListSelect(e);
-        dispatch(getExcel_Button_API_Success([]));
+        dispatch(ProductMargin_Go_Btn_Success([]));
         setTableData([]);
         setcolumn([{}]);
         // setColumnsCreated(false);
     }
 
     function GroupOnchange(e = []) {
-        dispatch(getExcel_Button_API_Success([]));
+        dispatch(ProductMargin_Go_Btn_Success([]));
         setTableData([]);
         setcolumn([{}]);
         // setColumnsCreated(false);
@@ -427,7 +427,7 @@ const ProductMarginReport = (props) => {
     }
 
     function Sub_GroupOnChange(e = []) {
-        dispatch(getExcel_Button_API_Success([]));
+        dispatch(ProductMargin_Go_Btn_Success([]));
         setTableData([]);
         setcolumn([{}]);
         // setColumnsCreated(false);
@@ -453,7 +453,7 @@ const ProductMarginReport = (props) => {
     }
 
     function ItemOnChange(e = []) {
-        dispatch(getExcel_Button_API_Success([]));
+        dispatch(ProductMargin_Go_Btn_Success([]));
         setTableData([]);
         setcolumn([{}]);
         // setColumnsCreated(false);
@@ -480,7 +480,7 @@ const ProductMarginReport = (props) => {
     };
 
     function priceListOnChange() {
-        dispatch(getExcel_Button_API_Success([]));
+        dispatch(ProductMargin_Go_Btn_Success([]));
         setTableData([]);
         setcolumn([{}]);
     }
