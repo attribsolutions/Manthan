@@ -1,43 +1,50 @@
-import React, { useEffect } from 'react'
-import './Tree.scss'
+import React, { useEffect } from 'react';
+import './Tree.scss';
 
 const PriceDropOptions = (props) => {
-
     useEffect(() => {
         window.addEventListener('mouseup', handleClosePriceDropOptions);
-        return () => { // cleanup this component
+        return () => {
             window.removeEventListener('mouseup', handleClosePriceDropOptions);
         };
     }, []);
 
-    function handleClosePriceDropOptions(event) {
+    const handleClosePriceDropOptions = (event) => {
         try {
             var pol = document.getElementById('price-drop');
-            if (event.target != pol && event.target.parentNode != pol) {
+            if (event.target !== pol && event.target.parentNode !== pol) {
                 pol.style.display = 'none';
             }
         } catch (e) { }
     };
 
+    const handleOptionClick = (node) => {
+        props.setPriceSelect(node);
+        // Trigger the onChange function passed from the parent component
+        if (props.onChange) {
+            props.onChange(node);
+        }
+    };
+
     const ChildNode = (node) => (
-        <li >
+        <li key={node.label}>
             <div className="classmt">
-                <span id="price-option" className=" text-black  form-control"
-                    onClick={(e) => {
-                        props.setPriceSelect(node);
-                        // onchange(e);
-                    }}>{node.label}</span>
+                <span
+                    id="price-option"
+                    className="text-black form-control"
+                    onClick={() => handleOptionClick(node)}
+                >
+                    {node.label}
+                </span>
             </div>
-            <div >
-                <ul >
-                    {ParentNode(node.children)}
-                </ul>
+            <div>
+                <ul>{ParentNode(node.children)}</ul>
             </div>
         </li>
     );
 
     const ParentNode = (tree1) => (
-        <ul className='list-group'>
+        <ul className="list-group">
             {tree1.map((tree) => (
                 ChildNode(tree)
             ))}
@@ -45,15 +52,16 @@ const PriceDropOptions = (props) => {
     );
 
     return (
-        <div id="price-drop" className='price-drop-options' >
-            <div className='price-drop-body'>
-                <ul style={{ paddingLeft: '0px' }}>
-                    {ParentNode(props.data)}</ul>
+        <div id="price-drop" className="price-drop-options">
+            <div className="price-drop-body">
+                <ul style={{ paddingLeft: '0px' }}>{ParentNode(props.data)}</ul>
             </div>
         </div>
-    )
-}
+    );
+};
+
 export default PriceDropOptions;
+
 
 
 
