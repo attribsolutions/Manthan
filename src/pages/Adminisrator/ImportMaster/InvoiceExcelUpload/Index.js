@@ -206,6 +206,7 @@ const InvoiceExcelUpload = (props) => {
                 return !item.shouldRemove && mapItemValues.includes(itemCodeAsString);
             };
             updatereadJsonDetail.invoice = filterArraysInEntries(readJsonDetail.invoice, conditionFunction);
+
         } else if (isIgnoreNegativeValue) {
             const conditionFunction = (item) => {
                 return !item.shouldRemove;
@@ -498,7 +499,7 @@ const InvoiceExcelUpload = (props) => {
                         "LiveBatch": ele[parArr.LiveBatch] ? ele[parArr.LiveBatch] : '',
                         "MRP": ele[parArr.MRP] ? ele[parArr.MRP] : '',
                         "MRPValue": ele[parArr.MRPValue] ? ele[parArr.MRPValue] : '',
-                        "Rate": ele[parArr.Rate] ? ele[parArr.Rate] : '',
+                        "Rate": ele[parArr.Rate] ? ele[parArr.Rate]?.toFixed(2) : '',
                         "BasicAmount": ele[parArr.BasicAmount] ? ele[parArr.BasicAmount] : '',
                         "GSTAmount": ele[parArr.GSTAmount] ? ele[parArr.GSTAmount] : '',
                         "GST": '',

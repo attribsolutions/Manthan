@@ -221,7 +221,7 @@ const ImportExcelPartyMap = (props) => {
                     <div style={{ justifyContent: 'center' }} >
                         <Input
                             type="text"
-                            key={`mapValue-${row.id}`}
+                            key={`mapValue-${row.fieldId}`}
                             defaultValue={cellContent}
                             onChange={(e) => row.mapValue = e.target.value}
                         />
