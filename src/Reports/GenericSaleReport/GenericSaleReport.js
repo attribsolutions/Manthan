@@ -22,7 +22,7 @@ const GenericSaleReport = (props) => {
     const dispatch = useDispatch();
     const history = useHistory();
     const currentDate_ymd = _cfunc.date_ymd_func();
-    const isSCMParty = _cfunc.loginIsSCMParty();
+    const userAdminRole = _cfunc.loginUserAdminRole();
 
     const [headerFilters, setHeaderFilters] = useState('');
     const [userPageAccessState, setUserAccState] = useState('');
@@ -144,8 +144,9 @@ const GenericSaleReport = (props) => {
         const jsonBody = JSON.stringify({
             "FromDate": fromdate,
             "ToDate": todate,
-            "Party": !(isSCMParty) ? _cfunc.loginPartyID().toString() : isDistributorDropdown,
+            "Party": !(userAdminRole) ? _cfunc.loginPartyID().toString() : isDistributorDropdown,
         });
+
         let config = { jsonBody }
         dispatch(GoButton_For_GenericSale_Action(config));
     }
@@ -212,7 +213,7 @@ const GenericSaleReport = (props) => {
                             </FormGroup>
                         </Col>
 
-                        {isSCMParty &&
+                        {userAdminRole &&
                             <Col sm={3} className="">
                                 <FormGroup className="mb- row mt-3" >
                                     <Label className="col-sm-4 p-2"
