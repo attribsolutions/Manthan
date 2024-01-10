@@ -35,17 +35,19 @@ const Index = (props) => {
 	const [userPageAccessState, setUserAccState] = useState(123);
 
 	const [partyName, setPartyName] = useState([]);
-	const [loading, setLoading] = useState(false);
+	const [saveBtnLoading, setSaveBtnLoading] = useState(false);
+	
 	//Access redux store Data / 'save_ModuleSuccess' action data
 	const {
 		partyDropdownLoading,
 		partyList = [],
 		RetailerList,
-
+		goBtnLoading,
 		userAccess,
 	} = useSelector((state) => ({
 		partyList: state.CommonPartyDropdownReducer.commonPartyDropdown,
 		partyDropdownLoading: state.CommonPartyDropdownReducer.partyDropdownLoading,
+		goBtnLoading: state.CommonAPI_Reducer.vendorSupplierCustomerLoading,
 		RetailerList: state.CommonAPI_Reducer.vendorSupplierCustomer,
 		userAccess: state.Login.RoleAccessUpdateData,
 	}));
@@ -100,7 +102,6 @@ const Index = (props) => {
 				Message: "Please Select Party"
 			})
 		}
-		dispatch(GetVenderSupplierCustomerSuccess([]));
 		dispatch(GetVenderSupplierCustomer({ subPageMode: url.MOBILE_RETAILER_SEND, PartyID: partyName.value }));
 	}
 
@@ -111,8 +112,6 @@ const Index = (props) => {
 	const SaveHandler = async (event) => {
 
 		event.preventDefault();
-		const btnId = event.target.id;
-
 		const CheckArray = RetailerList.filter(index => index.selectCheck === true);
 
 		if (CheckArray.length === 0) {
@@ -127,7 +126,7 @@ const Index = (props) => {
 		const jsonBody = JSON.stringify(RetailerJson);
 
 		try {
-			setLoading(true);
+			setSaveBtnLoading(true);
 			const mobilApiResp = await mobileApp_Send_Retailer_Api({ jsonBody });
 
 			if (mobilApiResp.StatusCode === 200) {
@@ -140,9 +139,13 @@ const Index = (props) => {
 			}
 		} catch (e) { }
 		finally {
-			setLoading(false);
+			setSaveBtnLoading(false);
 		}
 	};
+
+	const nonSelectedRow = () => {
+		return RetailerList.filter(row => (!(row.SkyggeID === null))).map(row => row.id)
+	}
 
 	// IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
 	var IsEditMode_Css = ''
@@ -184,7 +187,9 @@ const Index = (props) => {
 
 							<Col sm="1" className="mt-2">
 								{RetailerList.length === 0 ?
-									<Go_Button onClick={goButtonOnchange} />
+									<Go_Button
+										loading={goBtnLoading}
+										onClick={goButtonOnchange} />
 									:
 									<Change_Button onClick={() => { dispatch(GetVenderSupplierCustomerSuccess([])) }} />
 								}
@@ -210,6 +215,7 @@ const Index = (props) => {
 											striped={true}
 											selectRow={selectAllCheck({
 												rowSelected: rowSelected(),
+												nonSelectable: nonSelectedRow(),
 												bgColor: ''
 											})}
 											noDataIndication={<div className="text-danger text-center ">Record Not Found</div>}
@@ -238,7 +244,7 @@ const Index = (props) => {
 											className="btn btn-primary w-md"
 											type="button"
 											onClick={SaveHandler}
-											loading={loading}
+											loading={saveBtnLoading}
 											spinnerColor="white"
 										><i className="bx bx-send"></i> Send</C_Button>
 									</div>
