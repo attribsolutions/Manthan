@@ -226,6 +226,8 @@ export const SalesReturnList = url.SALES_RETURN;
 
 export const Purchase_Return_Mode_3 = url.SALES_RETURN_LIST;
 
+export const Bulk_Invoice = url.BULK_INVOICE
+
 //********************************Accounting ***********************************//
 export const Receipts = url.RECEIPTS_LIST;
 export const ReceiptList = url.RECEIPTS;

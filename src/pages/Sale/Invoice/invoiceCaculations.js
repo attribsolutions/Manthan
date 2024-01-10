@@ -64,7 +64,6 @@ export const invoice_discountCalculate_Func = (row, index1, IsComparGstIn) => {
 // ************************************************************************
 
 export const settingBaseRoundOffAmountFunc = (tableList = []) => {
-
     // Get the system settings
     const systemSetting = loginSystemSetting();
     const isGrandAmtRound = systemSetting.InvoiceAmountRoundConfiguration === '1';
@@ -197,7 +196,6 @@ export function orderQtyOnChange(event, index1) {
 // ************************************************************************
 
 export function orderQtyUnit_SelectOnchange(event, index1) {
-
     index1.default_UnitDropvalue = event;
     index1.ConversionUnit = event.ConversionUnit;
 
@@ -288,7 +286,7 @@ export const innerStockCaculation = (index1) => {
         }
     });
 
-   
+
     index1.ItemTotalAmount = roundToDecimalPlaces(totalAmount, 2); //max 2 decimal
     index1.Quantity = roundToDecimalPlaces(QuantityTatal, 3); //max 3 decimal
 

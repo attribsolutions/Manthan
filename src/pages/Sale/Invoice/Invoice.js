@@ -249,7 +249,6 @@ const Invoice = (props) => {
     }, [makeIBInvoice]);
 
     useEffect(() => {
-
         if (gobutton_Add.Status === true && gobutton_Add.StatusCode === 200) {
             setState((i) => {
                 const obj = { ...i }

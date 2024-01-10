@@ -214,6 +214,7 @@ import CreditNote_1 from "../pages/Accounting/CreditDebit/CreditNote1";
 import ManPowerReport from "../Reports/ManPowerReport";
 import TCSAmountReport from "../Reports/TCSAmountReport";
 import CX_DD_DiffrenceReport from "../Reports/CX_DD_DiffrenceReport";
+import Bulk_Invoice from "../pages/Sale/Bulk_Invoice/index";
 
 
 const userRoutes = [
@@ -435,6 +436,7 @@ const userRoutes = [
 	{ path: path.SALES_RETURN, component: SalesReturn },
 	{ path: path.SALES_RETURN_LIST, component: SalesReturnList },
 
+	{ path: path.BULK_INVOICE, component: Bulk_Invoice },
 	//************************************** Inter Branch ********************************//
 	{ path: path.IB_ORDER, component: Order },
 	{ path: path.IB_ORDER_PO_LIST, component: OrderList },

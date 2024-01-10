@@ -229,6 +229,7 @@ export const SALES_RETURN_LIST = "/SalesReturnList"
 
 export const PURCHASE_RETURN_MODE_3 = "/Purchase_Return_Mode_3"
 
+export const BULK_INVOICE = "/Bulk_Invoice"
 //******************************* InterBranch Module ************************************//
 
 export const IB_ORDER = "/IB_Order" // IB Order
@@ -338,7 +339,7 @@ export const CLAIM_TRACKING_REPORT = "/Claim_Tracking_Report"
 
 export const TCS_AMOUNT_REPORT = "/TCS_Amount_Report"
 
-export const CX_DD_DIFFERENCE_REPORT= "/CX_DD_Difference"
+export const CX_DD_DIFFERENCE_REPORT = "/CX_DD_Difference"
 
 
 
