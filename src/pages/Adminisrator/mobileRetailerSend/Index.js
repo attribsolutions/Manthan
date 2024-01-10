@@ -36,7 +36,7 @@ const Index = (props) => {
 
 	const [partyName, setPartyName] = useState([]);
 	const [saveBtnLoading, setSaveBtnLoading] = useState(false);
-	
+
 	//Access redux store Data / 'save_ModuleSuccess' action data
 	const {
 		partyDropdownLoading,
@@ -100,7 +100,8 @@ const Index = (props) => {
 			customAlert({
 				Type: 4,
 				Message: "Please Select Party"
-			})
+			});
+			return;
 		}
 		dispatch(GetVenderSupplierCustomer({ subPageMode: url.MOBILE_RETAILER_SEND, PartyID: partyName.value }));
 	}
