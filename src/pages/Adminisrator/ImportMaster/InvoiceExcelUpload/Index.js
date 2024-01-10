@@ -55,7 +55,7 @@ const InvoiceExcelUpload = (props) => {
     const [itemVerify, setItemVerify] = useState({ Wrong_Item_Code_Array: [], Not_Verify_Item: undefined });
     const [negativeFigureVerify, setNegativeFigureVerify] = useState({ Negative_Figure_Array: [], Not_Verify_Negative_Figure: undefined });
     const [nonCBMItemVerify, setNonCBMItemVerify] = useState({ Non_CBM_Item_Array: [], Not_Verify_Non_CBM_Item: undefined });
-    const [invoiceWithsameDateVerify, setInvoiceWithsameDateVerify] = useState({ Invoice_Date: [], Not_Verify_Same_Date: undefined });
+    const [invoiceWithsameDateVerify, setInvoiceWithsameDateVerify] = useState({ Invoice_Date: [], Not_Verify_Same_Date: undefined, isFutureDate: false });
     const [invalidFormat, setInvalidFormat] = useState({ Invalid_Format_Array: [], Not_Verify_Invalid_Format: undefined });
 
 
@@ -154,7 +154,7 @@ const InvoiceExcelUpload = (props) => {
             setItemVerify({ Wrong_Item_Code_Array: [], Not_Verify_Item: undefined });
             setNegativeFigureVerify({ Negative_Figure_Array: [], Not_Verify_Negative_Figure: undefined });
             setNonCBMItemVerify({ Non_CBM_Item_Array: [], Not_Verify_Non_CBM_Item: undefined });
-            setInvoiceWithsameDateVerify({ Invoice_Date: [], Not_Verify_Same_Date: undefined });
+            setInvoiceWithsameDateVerify({ Invoice_Date: [], Not_Verify_Same_Date: undefined, isFutureDate: false })
             setInvalidFormat({ Invalid_Format_Array: [], Not_Verify_Invalid_Format: undefined });
 
             document.getElementById("demo1").style.border = "";
@@ -171,7 +171,7 @@ const InvoiceExcelUpload = (props) => {
             setItemVerify({ Wrong_Item_Code_Array: [], Not_Verify_Item: undefined })
             setNegativeFigureVerify({ Negative_Figure_Array: [], Not_Verify_Negative_Figure: undefined })
             setNonCBMItemVerify({ Non_CBM_Item_Array: [], Not_Verify_Non_CBM_Item: undefined })
-            setInvoiceWithsameDateVerify({ Invoice_Date: [], Not_Verify_Same_Date: undefined })
+            setInvoiceWithsameDateVerify({ Invoice_Date: [], Not_Verify_Same_Date: undefined, isFutureDate: false })
             setInvalidFormat({ Invalid_Format_Array: [], Not_Verify_Invalid_Format: undefined });
 
             document.getElementById("demo1").style.border = "";
@@ -325,9 +325,12 @@ const InvoiceExcelUpload = (props) => {
             ////////////////////////////////////////////////// Verifying All Uploaded Invoice Is Of Same Date ///////////////////////////////
 
             const isUploadInvoiceOfSameDate = _cfunc.areAllDatesSame(isdetails.invoiceDate)
-            if (!isUploadInvoiceOfSameDate.allSame) {
+            debugger
+            if (!(isUploadInvoiceOfSameDate.allSame) || (isUploadInvoiceOfSameDate.futureDate)) {
                 setInvoiceWithsameDateVerify({
-                    Not_Verify_Same_Date: true, Invoice_Date: isUploadInvoiceOfSameDate.dates
+                    Not_Verify_Same_Date: true,
+                    Invoice_Date: isUploadInvoiceOfSameDate.dates,
+                    isFutureDate: isUploadInvoiceOfSameDate.futureDate
                 })
             } else {
                 setInvoiceWithsameDateVerify({ Not_Verify_Same_Date: false, Invoice_Date: isUploadInvoiceOfSameDate.dates })
@@ -426,7 +429,7 @@ const InvoiceExcelUpload = (props) => {
         setItemVerify({ Wrong_Item_Code_Array: [], Not_Verify_Item: undefined })
         setNegativeFigureVerify({ Negative_Figure_Array: [], Not_Verify_Negative_Figure: undefined })
         setNonCBMItemVerify({ Non_CBM_Item_Array: [], Not_Verify_Non_CBM_Item: undefined })
-        setInvoiceWithsameDateVerify({ Invoice_Date: [], Not_Verify_Same_Date: undefined })
+        setInvoiceWithsameDateVerify({ Invoice_Date: [], Not_Verify_Same_Date: undefined, isFutureDate: false })
         setInvalidFormat({ Invalid_Format_Array: [], Not_Verify_Invalid_Format: undefined });
 
 
@@ -822,6 +825,9 @@ const InvoiceExcelUpload = (props) => {
                                 </details> : null}
 
                                 {invoiceWithsameDateVerify.Not_Verify_Same_Date !== undefined ? <details>
+                                    {invoiceWithsameDateVerify.isFutureDate ? <Row className="mt-2 error-msg" style={{ margin: "unset", backgroundColor: "#c1cfed" }}> <Col style={{ fontWeight: "bold", fontSize: "15px", paddingLeft: "unset" }}>
+                                        Note: Future date invoice are not allow to upload
+                                    </Col>   </Row> : null}
                                     <summary>&nbsp; &nbsp;Invoices with same date  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{invoiceWithsameDateVerify.Not_Verify_Same_Date === true ?
                                             <i style={{ color: "tomato", }} className="mdi mdi-close-circle font-size-18  "></i> :
