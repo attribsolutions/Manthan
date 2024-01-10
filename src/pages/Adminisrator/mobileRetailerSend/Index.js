@@ -7,10 +7,10 @@ import {
 } from "reactstrap";
 
 import { MetaTags } from "react-meta-tags";
-import { GetVenderSupplierCustomer, GetVenderSupplierCustomerSuccess } from "../../../store/actions";
+import { BreadcrumbShowCountlabel, GetVenderSupplierCustomer, GetVenderSupplierCustomerSuccess } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { C_Button } from "../../../components/Common/CommonButton";
+import { Change_Button, C_Button, Go_Button } from "../../../components/Common/CommonButton";
 import {
 	breadcrumbReturnFunc,
 	metaTagLabel,
@@ -34,12 +34,12 @@ const Index = (props) => {
 	const [pageMode] = useState(mode.defaultsave);
 	const [userPageAccessState, setUserAccState] = useState(123);
 
-	const [partyName, setPartyName] = useState('');
+	const [partyName, setPartyName] = useState([]);
 	const [loading, setLoading] = useState(false);
 	//Access redux store Data / 'save_ModuleSuccess' action data
 	const {
 		partyDropdownLoading,
-		partyList=[],
+		partyList = [],
 		RetailerList,
 
 		userAccess,
@@ -71,6 +71,7 @@ const Index = (props) => {
 
 	// userAccess useEffect
 	useEffect(() => {
+		dispatch(BreadcrumbShowCountlabel(`Count:${0}`));
 		return () => {
 			dispatch(GetVenderSupplierCustomerSuccess([]));
 		}
@@ -92,10 +93,15 @@ const Index = (props) => {
 		}
 	];
 
-	function PartySelectHandler(e) {
+	function goButtonOnchange() {
+		if (partyName.length === 0) {
+			customAlert({
+				Type: 4,
+				Message: "Please Select Party"
+			})
+		}
 		dispatch(GetVenderSupplierCustomerSuccess([]));
-		setPartyName(e)
-		dispatch(GetVenderSupplierCustomer({ subPageMode: url.MOBILE_RETAILER_SEND, PartyID: e.value }));
+		dispatch(GetVenderSupplierCustomer({ subPageMode: url.MOBILE_RETAILER_SEND, PartyID: partyName.value }));
 	}
 
 	function rowSelected() {
@@ -124,16 +130,18 @@ const Index = (props) => {
 			setLoading(true);
 			const mobilApiResp = await mobileApp_Send_Retailer_Api({ jsonBody });
 
-	if (mobilApiResp.Message.code === 200) {
-		customAlert({ Type: 1, Status: true, Message: mobilApiResp.Message.message });
-		dispatch(GetVenderSupplierCustomerSuccess([]));
-		setPartyName('');
-	}
-	} catch (e) {} 
+			if (mobilApiResp.StatusCode === 200) {
+				customAlert({ Type: 1, Status: true, Message: mobilApiResp.Message });
+				dispatch(GetVenderSupplierCustomerSuccess([]));
+				setPartyName('');
+			}
+			else {
+				customAlert({ Type: 4, Status: true, Message: mobilApiResp.Message });
+			}
+		} catch (e) { }
 		finally {
-		setLoading(false);
-	}
-
+			setLoading(false);
+		}
 	};
 
 	// IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
@@ -162,9 +170,9 @@ const Index = (props) => {
 											autoFocus={true}
 											options={partyListOptions}
 											isLoading={partyDropdownLoading}
-
+											isDisabled={RetailerList.length > 0 && true}
 											onChange={(e) => {
-												PartySelectHandler(e)
+												setPartyName(e)
 											}}
 											styles={{
 												menu: provided => ({ ...provided, zIndex: 2 })
@@ -172,6 +180,15 @@ const Index = (props) => {
 										/>
 									</Col>
 								</FormGroup>
+							</Col>
+
+							<Col sm="1" className="mt-2">
+								{RetailerList.length === 0 ?
+									<Go_Button onClick={goButtonOnchange} />
+									:
+									<Change_Button onClick={() => { dispatch(GetVenderSupplierCustomerSuccess([])) }} />
+								}
+
 							</Col>
 
 						</div>
@@ -199,6 +216,9 @@ const Index = (props) => {
 											classes={"table align-middle table-nowrap table-hover"}
 											headerWrapperClasses={"thead-light"}
 											{...toolkitProps.baseProps}
+											onDataSizeChange={({ dataSize }) => {
+												dispatch(BreadcrumbShowCountlabel(`Count:${dataSize}`));
+											}}
 										/>
 
 										{mySearchProps(toolkitProps.searchProps)}
@@ -219,7 +239,7 @@ const Index = (props) => {
 											type="button"
 											onClick={SaveHandler}
 											loading={loading}
-												spinnerColor ="white"
+											spinnerColor="white"
 										><i className="bx bx-send"></i> Send</C_Button>
 									</div>
 									</Col>

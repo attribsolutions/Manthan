@@ -80,7 +80,10 @@ const ManagementEmpParties = (props) => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
         dispatch(getEmployeedropdownList())
-        dispatch(getPartyTableListSuccess([]))
+        dispatch(BreadcrumbShowCountlabel(`Count:${0}`));
+        return () => {
+            dispatch(getPartyTableListSuccess([]));
+        }
     }, []);
 
     const values = { ...state.values }
@@ -150,7 +153,6 @@ const ManagementEmpParties = (props) => {
             })
         }
     }, [postMsg])
-
 
     useEffect(() => {
         dispatch(BreadcrumbShowCountlabel(`${"Count"} :${partyList.length}`))
@@ -290,6 +292,9 @@ const ManagementEmpParties = (props) => {
                                             classes={"table align-middle table-nowrap table-hover"}
                                             headerWrapperClasses={"thead-light"}
                                             {...toolkitProps.baseProps}
+                                            onDataSizeChange={({ dataSize }) => {
+                                                dispatch(BreadcrumbShowCountlabel(`Count:${dataSize}`));
+                                            }}
                                         />
 
                                         {mySearchProps(toolkitProps.searchProps)}
