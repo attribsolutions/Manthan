@@ -215,6 +215,10 @@ const GoodsCreditNote = (props) => {
                     if (internal_pageMode === mode.modeSTPsave) {
 
                         values.Customer = { label: CustomerName, value: Customer };
+
+                        ReturnItems.forEach((i) => {
+                            i["Quantity"] = i.ApprovedQuantity
+                        })
                         setTableArr(ReturnItems)
                         dataCount = ReturnItems.length;
                         caculateGrandTotal = GrandTotal
@@ -794,7 +798,6 @@ const GoodsCreditNote = (props) => {
                 UpdatedBy: _cfunc.loginUserID(),
                 CRDRInvoices: [{ Invoice: values.InvoiceNO.value, }],
             });
-
             dispatch(saveCredit({ jsonBody, btnId }));
 
         } catch (e) { _cfunc.CommonConsole(e) }
