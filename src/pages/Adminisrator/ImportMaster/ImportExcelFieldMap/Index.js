@@ -298,7 +298,9 @@ const ImportExcelFieldMap = (props) => {
                                             noDataIndication={<div className="text-danger text-center ">Items Not available</div>}
                                             classes={"table align-middle  table-hover"}
                                             headerWrapperClasses={"thead-light"}
-
+                                            onDataSizeChange={({ dataSize }) => {
+                                                dispatch(BreadcrumbShowCountlabel(`Count:${dataSize}`));
+                                            }}
                                             {...toolkitProps.baseProps}
                                         />
                                         {mySearchProps(toolkitProps.searchProps)}
