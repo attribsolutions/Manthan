@@ -325,7 +325,7 @@ const InvoiceExcelUpload = (props) => {
             ////////////////////////////////////////////////// Verifying All Uploaded Invoice Is Of Same Date ///////////////////////////////
 
             const isUploadInvoiceOfSameDate = _cfunc.areAllDatesSame(isdetails.invoiceDate)
-            debugger
+
             if (!(isUploadInvoiceOfSameDate.allSame) || (isUploadInvoiceOfSameDate.futureDate)) {
                 setInvoiceWithsameDateVerify({
                     Not_Verify_Same_Date: true,
@@ -353,12 +353,6 @@ const InvoiceExcelUpload = (props) => {
                 ///////////////////////////////////////////////// Verifiy All Party Mapping  Done or Not ///////////////////////////////////////////////////////////////////////
 
                 const PartyMap = isdetails.partyNO;
-                // const filteredArray = PartyMapData.filter(i => i.MapCustomer === null || i.MapCustomer === '');
-                // if (filteredArray.length > 0) {
-                //     setAllPartyVerify({ Not_Map_Party_Code_Array: filteredArray, Not_Map_Party: true })
-                // } else {
-                //     setAllPartyVerify({ Not_Map_Party_Code_Array: [], Not_Map_Party: false })
-                // };
 
                 ///////////////////////////////////////////////// Verifiy  Party Mapping code ///////////////////////////////////////////////////////////////////////
 
@@ -389,7 +383,6 @@ const InvoiceExcelUpload = (props) => {
     ////////////////////////////////////////////////////  Verify condition Check If all condition fullfill then only file verified /////////////////////////////
 
     const isVerify = (
-        // (allpartyVerify.Not_Map_Party === false) &&
         (partyVerify.Not_Verify_Party === false) &&
         ((isIgnoreItem) || itemVerify.Not_Verify_Item === false)
         &&
@@ -424,7 +417,6 @@ const InvoiceExcelUpload = (props) => {
         setReadJsonDetail(preDetails)
         setPreViewDivShow(false)
         setUnitVerify({ Wrong_Unit_Code_Array: [], Not_Verify_Unit: undefined })
-        // setAllPartyVerify({ Not_Map_Party_Code_Array: [], Not_Map_Party: undefined })
         setPartyVerify({ Wrong_Party_Code_Array: [], Not_Verify_Party: undefined })
         setItemVerify({ Wrong_Item_Code_Array: [], Not_Verify_Item: undefined })
         setNegativeFigureVerify({ Negative_Figure_Array: [], Not_Verify_Negative_Figure: undefined })
@@ -491,7 +483,7 @@ const InvoiceExcelUpload = (props) => {
                         UpdatedBy: _cfunc.loginUserID(),
                         "InvoiceDate": ele[parArr.InvoiceDate] ? ele[parArr.InvoiceDate] : '',
                     }
-
+                    debugger
                     invoiceItems.push({
                         "Item": ele[parArr.Item] ? ele[parArr.Item] : '',
                         "Unit": ele[parArr.Unit] ? ele[parArr.Unit] : '',
@@ -500,8 +492,8 @@ const InvoiceExcelUpload = (props) => {
                         "BatchCode": ele[parArr.BatchCode] ? ele[parArr.BatchCode] : 0,
                         "BaseUnitQuantity": ele[parArr.BaseUnitQuantity] ? ele[parArr.BaseUnitQuantity] : '',
                         "LiveBatch": ele[parArr.LiveBatch] ? ele[parArr.LiveBatch] : '',
-                        "MRP": ele[parArr.MRP] ? ele[parArr.MRP] : '',
-                        "MRPValue": ele[parArr.MRPValue] ? ele[parArr.MRPValue] : '',
+                        // "MRP": ele[parArr.MRP] ? ele[parArr.MRP] : '',
+                        "MRPValue": ele[parArr.MRP] ? ele[parArr.MRP] : '', //Actul MRP That Map in System
                         "Rate": ele[parArr.Rate] ? ele[parArr.Rate]?.toFixed(2) : '',
                         "BasicAmount": ele[parArr.BasicAmount] ? ele[parArr.BasicAmount] : '',
                         "GSTAmount": ele[parArr.GSTAmount] ? ele[parArr.GSTAmount] : '',

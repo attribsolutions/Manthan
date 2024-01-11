@@ -149,7 +149,7 @@ export async function fileDetails({ compareParameter = [], Not_Ignore_Item_Array
   const invoice = await groupBy(Not_Ignore_Item_Array, (index) => {
     return (index[fileFiled.InvoiceNumber])
   })
-
+  debugger
   return { fileFiled, invoice, invoiceDate, amount, invoiceNO, partyNO, itemCode, unitCode }
 }
 
