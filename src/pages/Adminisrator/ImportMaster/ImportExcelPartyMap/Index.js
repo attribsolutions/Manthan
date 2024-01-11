@@ -424,6 +424,9 @@ const ImportExcelPartyMap = (props) => {
                                             classes={"table align-middle  table-hover"}
                                             headerWrapperClasses={"thead-light"}
                                             {...toolkitProps.baseProps}
+                                            onDataSizeChange={({ dataSize }) => {
+                                                dispatch(BreadcrumbShowCountlabel(`Count:${dataSize}`));
+                                            }}
                                         />
                                         {mySearchProps(toolkitProps.searchProps)}
                                     </div>
