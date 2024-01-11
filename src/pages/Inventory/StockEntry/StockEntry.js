@@ -392,11 +392,11 @@ const StockEntry = (props) => {
                     }
                 });
 
-                let newBatchCode = `${dateString}_${itemId}_${_cfunc.loginPartyID()}_${batchCodeCounter}`;
+                let newBatchCode = `${dateString}_${itemId}_${_cfunc.loginSelectedPartyID()}_${batchCodeCounter}`;
 
                 while (existingBatchCodes[newBatchCode]) {
                     batchCodeCounter++;
-                    newBatchCode = `${dateString}_${itemId}_${_cfunc.loginPartyID()}_${batchCodeCounter}`;
+                    newBatchCode = `${dateString}_${itemId}_${_cfunc.loginSelectedPartyID()}_${batchCodeCounter}`;
                 }
 
                 existingBatchCodes[newBatchCode] = true;// Record the new batch code as existing
@@ -527,7 +527,7 @@ const StockEntry = (props) => {
                     "Mode": 1,
                     "StockItems": filterData,
                     "IsAllStockZero": values.IsAllStockZero,
-                    "IsStockAdjustment": false 
+                    "IsStockAdjustment": false
                 }
                 );
 
