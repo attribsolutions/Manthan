@@ -521,13 +521,13 @@ const StockEntry = (props) => {
                 _cfunc.btnIsDissablefunc({ btnId, state: true })
 
                 const jsonBody = JSON.stringify({
-                    "PartyID": _cfunc.loginPartyID(),
+                    "PartyID": _cfunc.loginSelectedPartyID(),
                     "CreatedBy": _cfunc.loginUserID(),
                     "Date": values.Date,
                     "Mode": 1,
                     "StockItems": filterData,
                     "IsAllStockZero": values.IsAllStockZero,
-                    "IsStockAdjustment": false //if stock  
+                    "IsStockAdjustment": false 
                 }
                 );
 
