@@ -88,14 +88,6 @@ export const readExcelFile = async ({ file, compareParameter, ItemList = [] }) =
 
     jsonResult["InvalidFormat"] = invalidMsg
 
-    // if (invalidMsg.length > 0) {
-    //   customAlert({
-    //     Type: 3,
-    //     Message: JSON.stringify(invalidMsg),
-    //   })
-    //   return []
-    // }
-
     return jsonResult
 
   } catch (e) { }

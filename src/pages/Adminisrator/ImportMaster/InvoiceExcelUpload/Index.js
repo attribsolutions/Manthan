@@ -825,10 +825,16 @@ const InvoiceExcelUpload = (props) => {
                                 </details> : null}
 
                                 {invoiceWithsameDateVerify.Not_Verify_Same_Date !== undefined ? <details>
-                                    {invoiceWithsameDateVerify.isFutureDate ? <Row className="mt-2 error-msg" style={{ margin: "unset", backgroundColor: "#c1cfed" }}> <Col style={{ fontWeight: "bold", fontSize: "15px", paddingLeft: "unset" }}>
-                                        Note: Future date invoice are not allow to upload
+
+                                    {((invoiceWithsameDateVerify.isFutureDate) || (invoiceWithsameDateVerify.Not_Verify_Same_Date)) ? <Row className="mt-2 error-msg" style={{ margin: "unset", backgroundColor: "#c1cfed" }}> <Col style={{ fontWeight: "bold", fontSize: "15px", paddingLeft: "unset" }}>
+                                        Note:{invoiceWithsameDateVerify.isFutureDate ? <div>
+                                            &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;{"Future date invoice are not allow to upload."}
+
+                                        </div> : null}
+                                        &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; {invoiceWithsameDateVerify.Not_Verify_Same_Date ? "Different Date invoices are not allow to upload." : null}
+
                                     </Col>   </Row> : null}
-                                    <summary>&nbsp; &nbsp;Invoices with same date  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <summary>&nbsp; &nbsp;Invoices  date&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{invoiceWithsameDateVerify.Not_Verify_Same_Date === true ?
                                             <i style={{ color: "tomato", }} className="mdi mdi-close-circle font-size-18  "></i> :
                                             <i style={{ color: "green", }} className="mdi mdi-check-decagram  font-size-18  "></i>}</summary>

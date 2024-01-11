@@ -167,11 +167,11 @@ export const areAllDatesSame = (dates) => {
 
   const uniqueDates = Array.from(new Set(dates)); // Get unique dates in the array
   const futureDates = uniqueDates.filter(date => isFutureDate(date));
-
+  debugger
   return {
     allSame: uniqueDates.length === 1,
     dates: uniqueDates,
-    futureDate: isFutureDate(uniqueDates[0]), // Check if the first unique date is a future date
+    futureDate: futureDates.length > 0 ? true : false, // Check if the first unique date is a future date
     futureDates: futureDates, // Array of future dates
   };
 };
