@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Table } from 'reactstrap';
 
-const GlobalStock = {}; // Define your initial stock quantities for each item here
-const GlobalDistrubution = {}; // Define your initial stock quantities for each item here
 
 const Invoice = ({ data }) => {
-  const [globlestokDetail, setGloblestokDetail] = useState(GlobalStock);
-  const [globlestokDistrubution, setGloblestokDistrubution] = useState(GlobalDistrubution);
+  const [globlestokDetail, setGloblestokDetail] = useState({});
+  const [globlestokDistrubution, setGloblestokDistrubution] = useState({});
 
 
 
@@ -14,7 +12,7 @@ const Invoice = ({ data }) => {
 
 
   const calculateRemainingStock = () => {
-    const newGlobalStock = { ...GlobalStock };
+    const newGlobalStock = {  };
 
     data.forEach((order) => {
 
@@ -25,107 +23,50 @@ const Invoice = ({ data }) => {
         const stockDetails = item.StockDetails || [];
 
         let totalItemStock = 0
-        const batchWiseStock = {}
+
 
         stockDetails.forEach((stock) => {
-
-          const stockID = stock.id;
           const bachStock = parseFloat(stock.BaseUnitQuantity) || 0;
           totalItemStock += bachStock;
-
-          if (batchWiseStock[stockID] === undefined) {
-            batchWiseStock[stockID] = bachStock
-          }
-
         });
 
         if (newGlobalStock[itemId] === undefined) {
-          newGlobalStock[itemId] = {
-            totalItemStock: totalItemStock,
-            batchWiseStock: batchWiseStock,
-            // remainingItemStock: remainingItemStock,
-          };
+          newGlobalStock[itemId] = itemId
         }
+
+        newGlobalStock[itemId] = {
+          ...newGlobalStock[itemId],
+          totalItemStock: totalItemStock,
+        };
+
+
       });
     });
-
-
-    // data.forEach((order) => {
-
-    //   order.OrderItemDetails.forEach((item) => {
-    //     const itemId = item.Item;
-    //     const stockDetails = item.StockDetails || [];
-
-
-    //     let remainingItemStock = parseFloat(newGlobalStock[itemId].totalItemStock);
-
-    //     const batchWiseStock = {}
-
-
-    //     stockDetails.forEach((stock) => {
-
-    //       const stockID = stock.id;
-    //       const bachStock = parseFloat(stock.BaseUnitQuantity) || 0;
-    //       if (totalItemStock > bachStock) {
-
-    //         totalItemStock -= bachStock;
-    //         newGlobalStock[itemId].batchWiseStock[stockID] = {
-    //           baseQty: bachStock,
-    //           remainingQty: 0,
-    //           distributQty: bachStock,
-    //         };
-    //       } else {
-    //         newGlobalStock[itemId].batchWiseStock[stockID] = {
-    //           baseQty: bachStock,
-    //           remainingQty: 0,
-    //           distributQty: totalItemStock,
-    //         };
-    //         totalItemStock = 0;
-    //       }
-    //     });
-
-
-    //     newGlobalStock[itemId] = {
-    //       totalItemStock: totalItemStock,
-    //       batchWiseStock: batchWiseStock,
-    //       remainingItemStock: remainingItemStock,
-    //     };
-
-    //   });
-    // });
 
     setGloblestokDetail(newGlobalStock);
     calculateRemainingStock1(newGlobalStock)
   };
 
 
-  const calculateRemainingStock1 = (globlestokDistrubution) => {
+  const calculateRemainingStock1 = (globle) => {
+    const globlestokDetail = globle;
+
     const newGlobalDistrubution = { ...globlestokDistrubution };
-debugger
+    debugger
     data.forEach((order) => {
 
-      const orderId = order.id;
+      const orderId = `orderId-${order.OrderIDs[0]}`;
 
       if (newGlobalDistrubution[orderId] === undefined) {
         newGlobalDistrubution[orderId] = {
           qty: '',
           unitId: '',
           unitName: "",
+          stock: '',
         };
       }
 
-      let a = {
-        1: {
-          qty: '',
-          unitId: '',
-          unitName: "",
-          1: {
-            baseQty: "",
-            remainingQty: '',
-            distributedQty: ''
-          }
-        }
-      }
+
 
 
 
@@ -136,43 +77,74 @@ debugger
 
         let remainingItemStock = parseFloat(globlestokDetail[itemId].totalItemStock);
 
-
-
+        let itemDitrubutQty = parseFloat(item.Quantity);
+        let lessItemQty = 0
 
         stockDetails.forEach((stock) => {
 
           const stockID = stock.id;
           const bachStock = parseFloat(stock.BaseUnitQuantity) || 0;
 
-          if (remainingItemStock > bachStock) {
+          if (newGlobalDistrubution[orderId][itemId] == undefined) {
+            newGlobalDistrubution[orderId] = {
+              ...newGlobalDistrubution[orderId],
+              [itemId]: itemId
+            }
+          }
+          if (newGlobalDistrubution[orderId][itemId][stockID] == undefined) {
+            newGlobalDistrubution[orderId][itemId] = {
+              ...newGlobalDistrubution[orderId][itemId],
+              [stockID]: stockID
+            }
+          }
 
-            remainingItemStock -= bachStock;
+          if (remainingItemStock > itemDitrubutQty) {
+            // remainingItemStock -= itemDitrubutQty;
+
+            if (itemDitrubutQty > bachStock) {
+
+              remainingItemStock -= bachStock;
 
 
-            newGlobalDistrubution[orderId][itemId][stockID] = {
-              baseQty: bachStock,
-              remainingQty: 0,
-              distributQty: bachStock,
-            };
+              newGlobalDistrubution[orderId][itemId][stockID] = {
+                baseQty: bachStock,
+                remainingQty: 0,
+                distributQty: bachStock,
+              };
+            } else {
+              remainingItemStock -= itemDitrubutQty;
+              newGlobalDistrubution[orderId][itemId][stockID] = {
+                baseQty: bachStock,
+                remainingQty: bachStock - itemDitrubutQty,
+                distributQty: itemDitrubutQty,
+              };
+              itemDitrubutQty = 0;
+            }
           } else {
+            remainingItemStock -= itemDitrubutQty;
             newGlobalDistrubution[orderId][itemId][stockID] = {
               baseQty: bachStock,
               remainingQty: 0,
               distributQty: remainingItemStock,
             };
-            remainingItemStock = 0;
+            itemDitrubutQty = itemDitrubutQty - remainingItemStock;
+            remainingItemStock = 0
+            lessItemQty = remainingItemStock - itemDitrubutQty
           }
+
         })
 
 
         newGlobalDistrubution[orderId] = {
+          ...newGlobalDistrubution[orderId],
           totalItemStock: globlestokDetail[itemId].totalItemStock,
           remainingItemStock: remainingItemStock,
+          lessItemQty: lessItemQty
         };
 
       });
     });
-debugger
+    debugger
     setGloblestokDistrubution(newGlobalDistrubution);
   };
 
@@ -203,7 +175,8 @@ debugger
         <OrderTable
           key={index}
           order={order}
-          globlestokDetail={globlestokDetail}
+         
+          globleDistrubution={globlestokDistrubution}
           onQuantityChange={handleQuantityChange}
         />
       ))}
@@ -211,8 +184,8 @@ debugger
   );
 };
 
-const OrderTable = ({ order, globlestokDetail, onQuantityChange }) => {
-  //debugger
+const OrderTable = ({ order, globleDistrubution, onQuantityChange }) => {
+  console.log("OrderTable",order, globleDistrubution,  onQuantityChange)
   return (
     <div>
       <h3>Order {order.OrderIDs[0]}</h3>
@@ -251,8 +224,9 @@ const OrderTable = ({ order, globlestokDetail, onQuantityChange }) => {
                 <td>
                   <StockDetailsTable
                     stockDetails={item.StockDetails}
-                    globlestokDetail={globlestokDetail}
+                    globleDistrubution={globleDistrubution}
                     itemId={item.Item}
+                    orderId={order.OrderIDs?.[0]}
                   />
                 </td>
                 <td>{/* Discount input box */}</td>
@@ -265,7 +239,8 @@ const OrderTable = ({ order, globlestokDetail, onQuantityChange }) => {
   );
 };
 
-const StockDetailsTable = ({ stockDetails, globlestokDetail, itemId }) => {
+const StockDetailsTable = ({ stockDetails, globleDistrubution, orderId, itemId }) => {
+  console.log('StockDetailsTable', orderId, itemId)
   return (
     <div>
       {/* <div>Remaining Stock: {globlestokDetail[itemId]?.totalItemStock}</div> */}
@@ -288,7 +263,7 @@ const StockDetailsTable = ({ stockDetails, globlestokDetail, itemId }) => {
               <td>
                 <input
                   type="text"
-                  value={globlestokDetail[itemId]?.batchWiseStock[stock.id]}
+                  value={globleDistrubution[`orderId-${orderId}`]?.[itemId]?.[stock.id]?.distributQty}
 
                 />
               </td>
