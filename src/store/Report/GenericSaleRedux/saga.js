@@ -11,10 +11,11 @@ function* GenericSaleReport_GenFunc({ config }) {
 
         const newResponse = response.Data.map((i) => {
             i["InvoiceDate"]=date_dmy_func(i.InvoiceDate);
+            i["OrderDate"]=date_dmy_func(i.OrderDate);
             // Convert quantity values to floats and format to remove trailing zeros
-            i["QtyInNo"] = trailingZeros(i.QtyInNo);
-            i["QtyInKg"] = trailingZeros(i.QtyInKg);
-            i["QtyInBox"] = trailingZeros(i.QtyInBox);
+            // i["QtyInNo"] = trailingZeros(i.QtyInNo);
+            // i["QtyInKg"] = trailingZeros(i.QtyInKg);
+            // i["QtyInBox"] = trailingZeros(i.QtyInBox);
             // [{ value: 1, label: "Rs" }, { value: 2, label: "%" }]
             i.DiscountType = i.DiscountType === 1 ? "Rs" : "%"
             return i;

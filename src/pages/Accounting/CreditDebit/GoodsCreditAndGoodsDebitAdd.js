@@ -141,7 +141,7 @@ const GoodsCreditNote = (props) => {
             dispatch(Retailer_List(jsonBody));
         }
         dispatch(BreadcrumbShowCountlabel(`${"Count"} :${0} ₹ :${0}`));
-     
+
         return () => {
             dispatch(Retailer_List_Success([]));
             dispatch(goButtonPartyItemAddPageSuccess([]));
@@ -215,6 +215,10 @@ const GoodsCreditNote = (props) => {
                     if (internal_pageMode === mode.modeSTPsave) {
 
                         values.Customer = { label: CustomerName, value: Customer };
+
+                        ReturnItems.forEach((i) => {
+                            i["Quantity"] = i.ApprovedQuantity
+                        })
                         setTableArr(ReturnItems)
                         dataCount = ReturnItems.length;
                         caculateGrandTotal = GrandTotal
@@ -348,7 +352,7 @@ const GoodsCreditNote = (props) => {
         value: index.Item,
         label: index.ItemName,
         itemCheck: index.selectCheck
-    })) .filter((index) => index.itemCheck === true);
+    })).filter((index) => index.itemCheck === true);
 
     const customerOptions = RetailerList.map((index) => ({
         value: index.id,
@@ -381,6 +385,7 @@ const GoodsCreditNote = (props) => {
                                 defaultValue={row.Quantity}
                                 autoComplete="off"
                                 type="text"
+                                disabled={((subPageMode === url.GOODS_CREDIT_NOTE) && (pageMode === mode.modeSTPsave)) && true}
                                 cpattern={decimalRegx}
                                 placeholder="Enter Quantity"
                                 className="col col-sm text-end"
@@ -793,7 +798,6 @@ const GoodsCreditNote = (props) => {
                 UpdatedBy: _cfunc.loginUserID(),
                 CRDRInvoices: [{ Invoice: values.InvoiceNO.value, }],
             });
-
             dispatch(saveCredit({ jsonBody, btnId }));
 
         } catch (e) { _cfunc.CommonConsole(e) }

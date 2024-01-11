@@ -392,11 +392,11 @@ const StockEntry = (props) => {
                     }
                 });
 
-                let newBatchCode = `${dateString}_${itemId}_${_cfunc.loginPartyID()}_${batchCodeCounter}`;
+                let newBatchCode = `${dateString}_${itemId}_${_cfunc.loginSelectedPartyID()}_${batchCodeCounter}`;
 
                 while (existingBatchCodes[newBatchCode]) {
                     batchCodeCounter++;
-                    newBatchCode = `${dateString}_${itemId}_${_cfunc.loginPartyID()}_${batchCodeCounter}`;
+                    newBatchCode = `${dateString}_${itemId}_${_cfunc.loginSelectedPartyID()}_${batchCodeCounter}`;
                 }
 
                 existingBatchCodes[newBatchCode] = true;// Record the new batch code as existing
@@ -521,13 +521,13 @@ const StockEntry = (props) => {
                 _cfunc.btnIsDissablefunc({ btnId, state: true })
 
                 const jsonBody = JSON.stringify({
-                    "PartyID": _cfunc.loginPartyID(),
+                    "PartyID": _cfunc.loginSelectedPartyID(),
                     "CreatedBy": _cfunc.loginUserID(),
                     "Date": values.Date,
                     "Mode": 1,
                     "StockItems": filterData,
                     "IsAllStockZero": values.IsAllStockZero,
-                    "IsStockAdjustment": false //if stock  
+                    "IsStockAdjustment": false
                 }
                 );
 

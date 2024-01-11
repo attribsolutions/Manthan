@@ -55,7 +55,7 @@ const InvoiceExcelUpload = (props) => {
     const [itemVerify, setItemVerify] = useState({ Wrong_Item_Code_Array: [], Not_Verify_Item: undefined });
     const [negativeFigureVerify, setNegativeFigureVerify] = useState({ Negative_Figure_Array: [], Not_Verify_Negative_Figure: undefined });
     const [nonCBMItemVerify, setNonCBMItemVerify] = useState({ Non_CBM_Item_Array: [], Not_Verify_Non_CBM_Item: undefined });
-    const [invoiceWithsameDateVerify, setInvoiceWithsameDateVerify] = useState({ Invoice_Date: [], Not_Verify_Same_Date: undefined });
+    const [invoiceWithsameDateVerify, setInvoiceWithsameDateVerify] = useState({ Invoice_Date: [], Not_Verify_Same_Date: undefined, isFutureDate: false });
     const [invalidFormat, setInvalidFormat] = useState({ Invalid_Format_Array: [], Not_Verify_Invalid_Format: undefined });
 
 
@@ -154,7 +154,7 @@ const InvoiceExcelUpload = (props) => {
             setItemVerify({ Wrong_Item_Code_Array: [], Not_Verify_Item: undefined });
             setNegativeFigureVerify({ Negative_Figure_Array: [], Not_Verify_Negative_Figure: undefined });
             setNonCBMItemVerify({ Non_CBM_Item_Array: [], Not_Verify_Non_CBM_Item: undefined });
-            setInvoiceWithsameDateVerify({ Invoice_Date: [], Not_Verify_Same_Date: undefined });
+            setInvoiceWithsameDateVerify({ Invoice_Date: [], Not_Verify_Same_Date: undefined, isFutureDate: false })
             setInvalidFormat({ Invalid_Format_Array: [], Not_Verify_Invalid_Format: undefined });
 
             document.getElementById("demo1").style.border = "";
@@ -171,7 +171,7 @@ const InvoiceExcelUpload = (props) => {
             setItemVerify({ Wrong_Item_Code_Array: [], Not_Verify_Item: undefined })
             setNegativeFigureVerify({ Negative_Figure_Array: [], Not_Verify_Negative_Figure: undefined })
             setNonCBMItemVerify({ Non_CBM_Item_Array: [], Not_Verify_Non_CBM_Item: undefined })
-            setInvoiceWithsameDateVerify({ Invoice_Date: [], Not_Verify_Same_Date: undefined })
+            setInvoiceWithsameDateVerify({ Invoice_Date: [], Not_Verify_Same_Date: undefined, isFutureDate: false })
             setInvalidFormat({ Invalid_Format_Array: [], Not_Verify_Invalid_Format: undefined });
 
             document.getElementById("demo1").style.border = "";
@@ -325,9 +325,12 @@ const InvoiceExcelUpload = (props) => {
             ////////////////////////////////////////////////// Verifying All Uploaded Invoice Is Of Same Date ///////////////////////////////
 
             const isUploadInvoiceOfSameDate = _cfunc.areAllDatesSame(isdetails.invoiceDate)
-            if (!isUploadInvoiceOfSameDate.allSame) {
+
+            if (!(isUploadInvoiceOfSameDate.allSame) || (isUploadInvoiceOfSameDate.futureDate)) {
                 setInvoiceWithsameDateVerify({
-                    Not_Verify_Same_Date: true, Invoice_Date: isUploadInvoiceOfSameDate.dates
+                    Not_Verify_Same_Date: true,
+                    Invoice_Date: isUploadInvoiceOfSameDate.dates,
+                    isFutureDate: isUploadInvoiceOfSameDate.futureDate
                 })
             } else {
                 setInvoiceWithsameDateVerify({ Not_Verify_Same_Date: false, Invoice_Date: isUploadInvoiceOfSameDate.dates })
@@ -350,12 +353,6 @@ const InvoiceExcelUpload = (props) => {
                 ///////////////////////////////////////////////// Verifiy All Party Mapping  Done or Not ///////////////////////////////////////////////////////////////////////
 
                 const PartyMap = isdetails.partyNO;
-                // const filteredArray = PartyMapData.filter(i => i.MapCustomer === null || i.MapCustomer === '');
-                // if (filteredArray.length > 0) {
-                //     setAllPartyVerify({ Not_Map_Party_Code_Array: filteredArray, Not_Map_Party: true })
-                // } else {
-                //     setAllPartyVerify({ Not_Map_Party_Code_Array: [], Not_Map_Party: false })
-                // };
 
                 ///////////////////////////////////////////////// Verifiy  Party Mapping code ///////////////////////////////////////////////////////////////////////
 
@@ -386,7 +383,6 @@ const InvoiceExcelUpload = (props) => {
     ////////////////////////////////////////////////////  Verify condition Check If all condition fullfill then only file verified /////////////////////////////
 
     const isVerify = (
-        // (allpartyVerify.Not_Map_Party === false) &&
         (partyVerify.Not_Verify_Party === false) &&
         ((isIgnoreItem) || itemVerify.Not_Verify_Item === false)
         &&
@@ -421,12 +417,11 @@ const InvoiceExcelUpload = (props) => {
         setReadJsonDetail(preDetails)
         setPreViewDivShow(false)
         setUnitVerify({ Wrong_Unit_Code_Array: [], Not_Verify_Unit: undefined })
-        // setAllPartyVerify({ Not_Map_Party_Code_Array: [], Not_Map_Party: undefined })
         setPartyVerify({ Wrong_Party_Code_Array: [], Not_Verify_Party: undefined })
         setItemVerify({ Wrong_Item_Code_Array: [], Not_Verify_Item: undefined })
         setNegativeFigureVerify({ Negative_Figure_Array: [], Not_Verify_Negative_Figure: undefined })
         setNonCBMItemVerify({ Non_CBM_Item_Array: [], Not_Verify_Non_CBM_Item: undefined })
-        setInvoiceWithsameDateVerify({ Invoice_Date: [], Not_Verify_Same_Date: undefined })
+        setInvoiceWithsameDateVerify({ Invoice_Date: [], Not_Verify_Same_Date: undefined, isFutureDate: false })
         setInvalidFormat({ Invalid_Format_Array: [], Not_Verify_Invalid_Format: undefined });
 
 
@@ -488,7 +483,7 @@ const InvoiceExcelUpload = (props) => {
                         UpdatedBy: _cfunc.loginUserID(),
                         "InvoiceDate": ele[parArr.InvoiceDate] ? ele[parArr.InvoiceDate] : '',
                     }
-
+                    debugger
                     invoiceItems.push({
                         "Item": ele[parArr.Item] ? ele[parArr.Item] : '',
                         "Unit": ele[parArr.Unit] ? ele[parArr.Unit] : '',
@@ -497,8 +492,8 @@ const InvoiceExcelUpload = (props) => {
                         "BatchCode": ele[parArr.BatchCode] ? ele[parArr.BatchCode] : 0,
                         "BaseUnitQuantity": ele[parArr.BaseUnitQuantity] ? ele[parArr.BaseUnitQuantity] : '',
                         "LiveBatch": ele[parArr.LiveBatch] ? ele[parArr.LiveBatch] : '',
-                        "MRP": ele[parArr.MRP] ? ele[parArr.MRP] : '',
-                        "MRPValue": ele[parArr.MRPValue] ? ele[parArr.MRPValue] : '',
+                        // "MRP": ele[parArr.MRP] ? ele[parArr.MRP] : '',
+                        "MRPValue": ele[parArr.MRP] ? ele[parArr.MRP] : '', //Actul MRP That Map in System
                         "Rate": ele[parArr.Rate] ? ele[parArr.Rate]?.toFixed(2) : '',
                         "BasicAmount": ele[parArr.BasicAmount] ? ele[parArr.BasicAmount] : '',
                         "GSTAmount": ele[parArr.GSTAmount] ? ele[parArr.GSTAmount] : '',
@@ -822,7 +817,16 @@ const InvoiceExcelUpload = (props) => {
                                 </details> : null}
 
                                 {invoiceWithsameDateVerify.Not_Verify_Same_Date !== undefined ? <details>
-                                    <summary>&nbsp; &nbsp;Invoices with same date  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+                                    {((invoiceWithsameDateVerify.isFutureDate) || (invoiceWithsameDateVerify.Not_Verify_Same_Date)) ? <Row className="mt-2 error-msg" style={{ margin: "unset", backgroundColor: "#c1cfed" }}> <Col style={{ fontWeight: "bold", fontSize: "15px", paddingLeft: "unset" }}>
+                                        Note:{invoiceWithsameDateVerify.isFutureDate ? <div>
+                                            &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;{"Future date invoice are not allow to upload."}
+
+                                        </div> : null}
+                                        &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; {invoiceWithsameDateVerify.Not_Verify_Same_Date ? "Different Date invoices are not allow to upload." : null}
+
+                                    </Col>   </Row> : null}
+                                    <summary>&nbsp; &nbsp;Invoices  date&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{invoiceWithsameDateVerify.Not_Verify_Same_Date === true ?
                                             <i style={{ color: "tomato", }} className="mdi mdi-close-circle font-size-18  "></i> :
                                             <i style={{ color: "green", }} className="mdi mdi-check-decagram  font-size-18  "></i>}</summary>

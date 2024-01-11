@@ -88,14 +88,6 @@ export const readExcelFile = async ({ file, compareParameter, ItemList = [] }) =
 
     jsonResult["InvalidFormat"] = invalidMsg
 
-    // if (invalidMsg.length > 0) {
-    //   customAlert({
-    //     Type: 3,
-    //     Message: JSON.stringify(invalidMsg),
-    //   })
-    //   return []
-    // }
-
     return jsonResult
 
   } catch (e) { }
@@ -157,7 +149,7 @@ export async function fileDetails({ compareParameter = [], Not_Ignore_Item_Array
   const invoice = await groupBy(Not_Ignore_Item_Array, (index) => {
     return (index[fileFiled.InvoiceNumber])
   })
-
+  debugger
   return { fileFiled, invoice, invoiceDate, amount, invoiceNO, partyNO, itemCode, unitCode }
 }
 

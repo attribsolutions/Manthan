@@ -135,14 +135,30 @@ export const getCurrentMonthAndYear = () => {
 }
 
 
-// export const areAllDatesSame = (Date) => {
-//   for (let i = 1; i < Date.length; i++) {
-//     if (Date[i] !== Date[0]) {
-//       return false;
-//     }
+
+
+// export const areAllDatesSame = (dates) => {
+//   if (!Array.isArray(dates) || dates.length === 0) {
+//     return null; // Return null for empty arrays or non-array inputs
 //   }
-//   return true;
-// }
+
+//   const uniqueDates = Array.from(new Set(dates)); // Get unique dates in the array
+
+//   return {
+//     allSame: uniqueDates.length === 1,
+//     dates: uniqueDates,
+//   };
+// };
+
+export const isFutureDate = (date) => {
+  const currentDate = new Date(); // Get the current date
+
+  const [day, month, year] = date.split('-').map(Number);
+  // JavaScript months are 0-indexed, so subtract 1 from the month
+  const inputDate = new Date(year, month - 1, day);
+
+  return inputDate > currentDate; // Return true if the input date is in the future
+};
 
 export const areAllDatesSame = (dates) => {
   if (!Array.isArray(dates) || dates.length === 0) {
@@ -150,14 +166,15 @@ export const areAllDatesSame = (dates) => {
   }
 
   const uniqueDates = Array.from(new Set(dates)); // Get unique dates in the array
-
+  const futureDates = uniqueDates.filter(date => isFutureDate(date));
+  debugger
   return {
     allSame: uniqueDates.length === 1,
     dates: uniqueDates,
+    futureDate: futureDates.length > 0 ? true : false, // Check if the first unique date is a future date
+    futureDates: futureDates, // Array of future dates
   };
 };
-
-
 
 
 export const getPreviousMonthAndYear = (date) => {
@@ -169,14 +186,6 @@ export const getPreviousMonthAndYear = (date) => {
 
   return `${year}-${month}`;
 }
-// export const amountCommaSeparateFunc = (amount) => {
-//   return Number(amount).toLocaleString('en-IN', {
-//     // style: 'currency',
-//     currency: 'INR',
-//     // minimumFractionDigits: 2,
-//     // maximumFractionDigits: 2,
-//   });
-// };
 
 export function amountCommaSeparateFunc(amount) {
   const amountStr = amount.toString();
