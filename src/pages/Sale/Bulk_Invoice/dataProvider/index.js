@@ -66,6 +66,9 @@ export const BulkInvoiceProvider = ({ children, data }) => {
                     orderDistribution[orderId][itemId] = orderDistribution[orderId][itemId] || { lessStock: 0, orderQty: orderQty };
                     orderDistribution[orderId][itemId].discount = orderItem.Discount;
                     orderDistribution[orderId][itemId].discountType = orderItem.DiscountType;
+                    orderDistribution[orderId][itemId].rate = orderItem.Rate;
+                    orderDistribution[orderId][itemId].quantity = orderQty;
+                    orderDistribution[orderId][itemId].gstPercentage = orderItem.GST;
 
                     orderItem.StockDetails.forEach(stockDetail => {
                         const stockId = `stockId-${stockDetail.id}`;
@@ -126,7 +129,7 @@ export const BulkInvoiceProvider = ({ children, data }) => {
                         break; // This will break out of the inner loop
                     }
                 }
-            
+
                 if (found) {
                     break; // This will break out of the outer loop
                 }
@@ -136,29 +139,84 @@ export const BulkInvoiceProvider = ({ children, data }) => {
 
     const handleDiscountTypeChange = useCallback(
         debounce((orderID, itemID, newDiscountType) => {
-            for (const order of data) {
-                for (const item of order.OrderItemDetails) {
+            let found = false;
+
+            for (let i = 0; i < data.length; i++) {
+                const order = data[i];
+                for (let j = 0; j < order.OrderItemDetails.length; j++) {
+                    const item = order.OrderItemDetails[j];
                     if (order.OrderIDs[0] === orderID && item.Item === itemID) {
                         item.DiscountType = newDiscountType;
-                        return; // This will break out of the inner loop
+                        found = true;
+                        break; // This will break out of the inner loop
                     }
                 }
-            }
+
+                if (found) {
+                    break; // This will break out of the outer loop
+                }
+            };
+
             distributeItemStockGlobally();
-        }, 100), [data]);
+        }, 100), [data, distributeItemStockGlobally]);
 
     const handleDiscountChange = useCallback(
         debounce((orderID, itemID, newDiscount) => {
-            for (const order of data) {
-                for (const item of order.OrderItemDetails) {
+            let found = false;
+
+            for (let i = 0; i < data.length; i++) {
+                const order = data[i];
+                for (let j = 0; j < order.OrderItemDetails.length; j++) {
+                    const item = order.OrderItemDetails[j];
                     if (order.OrderIDs[0] === orderID && item.Item === itemID) {
                         item.Discount = newDiscount;
-                        return; // This will break out of the inner loop
+                        found = true;
+                        break; // This will break out of the inner loop
                     }
                 }
-            }
+
+                if (found) {
+                    break; // This will break out of the outer loop
+                }
+            };
+
             distributeItemStockGlobally();
-        }, 300), [data]);
+        }, 100), [data, distributeItemStockGlobally]);
+
+    const handleOrderDiscount = useCallback(
+        debounce((orderID, newDiscount) => {
+
+            for (let i = 0; i < data.length; i++) {
+                const order = data[i];
+                for (let j = 0; j < order.OrderItemDetails.length; j++) {
+                    const item = order.OrderItemDetails[j];
+                    item.Discount = newDiscount;
+                }
+                if (order.OrderIDs[0] === orderID) {
+
+                    break; // This will break out of the outer loop
+                }
+            };
+            distributeItemStockGlobally();
+        }, 100), [data, distributeItemStockGlobally]);
+
+    const handleOrderDiscountType = useCallback(
+        debounce((orderID, newDiscountType) => {
+            debugger
+            for (let i = 0; i < data.length; i++) {
+                const order = data[i];
+                for (let j = 0; j < order.OrderItemDetails.length; j++) {
+                    const item = order.OrderItemDetails[j];
+                    item.DiscountType = newDiscountType;
+                }
+                if (order.OrderIDs[0] === orderID) {
+
+                    break; // This will break out of the outer loop
+                }
+            };
+            debugger
+            distributeItemStockGlobally();
+        }, 100), [data, distributeItemStockGlobally]);
 
 
 
@@ -170,7 +228,9 @@ export const BulkInvoiceProvider = ({ children, data }) => {
         globleStockDistribute,
         handleItemQuantityChange,
         handleDiscountChange,
-        handleDiscountTypeChange
+        handleDiscountTypeChange,
+        handleOrderDiscount,
+        handleOrderDiscountType,
     }
     return (
         <BulkInvoiceContext.Provider value={contextValue}>

@@ -1,0 +1,38 @@
+/* Common styles for the table header */
+.table-header {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px;
+  background-color: #E1D8F0;
+  border-radius: 5px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Styles for the order details section */
+.order-details {
+  display: flex;
+  gap: 16px;
+}
+
+/* Styles for individual detail items */
+.detail-item {
+  display: flex;
+  align-items: center;
+}
+
+/* Font size for detail item text */
+.detail-item div {
+  font-size: 16px;
+}
+
+/* Style for the input box */
+.detail-item input {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+/* Additional styles for the order amount section if needed */
+.order-amount {
+  /* Add styles specific to the OrderAmountSection if needed */
+}

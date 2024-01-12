@@ -1,110 +1,113 @@
-import { hasDecimalCheckFunc, roundToDecimalPlaces } from "../../../../components/Common/CommonFunction";
-import { invoice_discountCalculate_Func } from "../../Invoice/invoiceCaculations";
+// import { compareGSTINState } from "../../../../components/Common/CommonFunction";
 
-function hasCheckUnitIs_NOFunc(index1) {
-    return index1.default_UnitDropvalue?.Unitlabel === "No";
-}
-
-
-// ************************************************************************
- function stockDistributeFunc(index1) {
-    let totalAmount = 0;
-    let remainingOrderQty = parseFloat(index1.Quantity); // Convert to a number
-    let totalStockQty = 0;
+import { compareGSTINState, loginSystemSetting } from "../../../../components/Common/CommonFunction";
 
 
 
-    index1.StockDetails = index1.StockDetails.map(index2 => {
-        const stockQty = parseFloat(index2.ActualQuantity); // Convert to a number
-        totalStockQty += stockQty;
+export const settingBaseRoundOffOrderAmountFunc = ({
+    IsTCSParty = false,
+    IsCustomerPAN = false,
+    orderInfo
+}) => {
+    if (!orderInfo) return { sumOfGrandTotal: 0, RoundOffAmount: 0, TCS_Amount: 0 };
 
-        const qtyToDeduct = Math.min(remainingOrderQty, stockQty);
-        index2.Qty = roundToDecimalPlaces(qtyToDeduct, 3); // Round to three decimal places
-        remainingOrderQty = roundToDecimalPlaces((remainingOrderQty - qtyToDeduct), 3); // Round the remaining order quantity
+    // Get the system settings
+    const systemSetting = loginSystemSetting();
+    const isGrandAmtRound = systemSetting.InvoiceAmountRoundConfiguration === '1';
+    const isTCS_AmtRound = systemSetting.TCSAmountRoundConfiguration === '1';
+    const TCSValidatedPAN = Number(systemSetting.IsTCSPercentageforValidatedPANCustomer);
+    const TCSNonValidatedPAN = Number(systemSetting.IsTCSPercentageforNonValidatedPANCustomer);
 
-        if (qtyToDeduct > 0) {
-            const calculatedItem = invoice_discountCalculate_Func(index2, index1);
-            totalAmount += parseFloat(calculatedItem.roundedTotalAmount); // Convert to a number
-        }
+    // Calculate the sum of the item TotalAmount in the tableList
+    let sumOfGrandTotal = 0;
 
-        try {
-            const batchQtyElement = document.getElementById(`batchQty${index1.id}-${index2.id}`);
-            batchQtyElement.value = index2.Qty; // Display with three decimal places
-        } catch (error) {
-            CommonConsole('stockDistributeFunc', error);
-        }
-
-        return index2;
+    Object.values(orderInfo).forEach(itemInfo => {
+        
+        const { roundedTotalAmount } = itemAmounWithGst(itemInfo);
+        sumOfGrandTotal += Number(roundedTotalAmount) || 0;
     });
 
+    let TCS_Amount = 0; // Initial TCS Amount
 
-
-    index1.ItemTotalStock = parseFloat(totalStockQty.toFixed(3)); // Convert to a number with three decimal places
-    index1.ItemTotalAmount = parseFloat(totalAmount.toFixed(2)); // Convert to a number with two decimal places
-
-    const isUnitIs_NO = hasCheckUnitIs_NOFunc(index1);
-    const isQuantityDecimal = hasDecimalCheckFunc(index1.Quantity)
-
-
-
-    if (remainingOrderQty > 0) {
-
-        const difference = Math.abs(index1.Quantity - index1.ItemTotalStock);//calculate short stock quantity
-        index1.StockInValid = true;
-        index1.StockInvalidMsg = `Short Stock Quantity ${difference.toFixed(3)}`;
-        stockValidation_DOM_MsgShowFunc(index1)
-    }
-    else if (isUnitIs_NO && isQuantityDecimal) {
-
-        index1.StockInValid = true;
-        index1.StockInvalidMsg = "Stock quantity decimal not allowed.";
-        stockValidation_DOM_MsgShowFunc(index1)
-
-    }
-    else {
-
-        index1.StockInValid = false;
-        index1.StockInvalidMsg = null;
-        stockValidation_DOM_MsgShowFunc(index1)
-
-
-    }
-
-}
-
- function orderQtyOnChange(event, index1) {
-
-    const hasUnit_NO = hasCheckUnitIs_NOFunc(index1);
-    const totalStock = parseFloat(index1.ItemTotalStock); // Convert to a number
-    const priviosValue = index1.Quantity;
-
-    let inputValue = event.target.value;
-    if (inputValue === '') { }
-    else if (hasUnit_NO) {
-        if (onlyNumberRegx.test(inputValue)) {
-            if (totalStock < inputValue) {
-                inputValue = Math.floor(totalStock).toString(); // Show stock quantity without decimals
-            }
+    if (IsTCSParty) {
+        // Calculate TCS tax only if IsTCSParty flag is true
+        if (IsCustomerPAN) {
+            // Calculate TCS for validated PAN customer (IsCustomerPAN has value true)
+            TCS_Amount = sumOfGrandTotal * (TCSValidatedPAN / 100);
+            sumOfGrandTotal += TCS_Amount;
         } else {
-            inputValue = Number(priviosValue).toFixed(0) || ''
-        }
-    } else {
-        if (decimalRegx_3dit.test(inputValue)) {
-            if (totalStock < inputValue) {
-                inputValue = roundToDecimalPlaces(totalStock, 3); // Show stock quantity with up to 3 decimals
-            }
-        } else {
-            inputValue = priviosValue
+            // Calculate TCS for non-validated PAN customer
+            TCS_Amount = sumOfGrandTotal * (TCSNonValidatedPAN / 100);
+            sumOfGrandTotal += TCS_Amount;
         }
     }
 
-    event.target.value = inputValue;
-    index1.Quantity = inputValue
-    // stockDistributeFunc(index1)
-}
-// ************************************************************************
+    return {
+        sumOfGrandTotal: isGrandAmtRound ? Math.round(sumOfGrandTotal) : Number(sumOfGrandTotal).toFixed(2), // Round off or format the sumOfGrandTotal
+        RoundOffAmount: (sumOfGrandTotal - Math.trunc(sumOfGrandTotal)).toFixed(2), // Calculate the round-off amount
+        TCS_Amount: isTCS_AmtRound ? Math.round(TCS_Amount) : Number(TCS_Amount).toFixed(2) // Round off or format the TCS Amount
+    };
+};
 
-export default {
-    orderQtyOnChange ,
-    stockDistributeFunc,
-}
+
+export const itemAmounWithGst = (props) => {
+
+    // Extract values from the input parameters
+    const rate = Number(props.rate) || 0;
+    const quantity = Number(props.quantity) || 0;
+    const gstPercentage = Number(props.gstPercentage) || 0;
+    const discount = Number(props.discount) || 0;
+    const discountType = props.discountType?.value || 2;
+    const IsComparGstIn = props.IsComparGstIn;
+
+    // Calculate the base amount
+    const basicAmount = rate * quantity;
+
+    // Calculate the discount amount based on the discount type
+    const disCountAmt = discountType === 2 ? basicAmount - (basicAmount / ((100 + discount) / 100)) : quantity * discount;
+
+    // Calculate the discounted base amount
+    const discountBaseAmt = basicAmount - disCountAmt;
+
+    // Calculate the GST amount
+    let gstAmt = discountBaseAmt * (gstPercentage / 100);
+    let CGST_Amount = Number((gstAmt / 2).toFixed(2));
+    let SGST_Amount = CGST_Amount;
+    let IGST_Amount = 0 //initial GST Amount 
+
+    // Calculate the total amount after discount and GST
+    const roundedGstAmount = CGST_Amount + SGST_Amount;
+    let totalAmount = roundedGstAmount + discountBaseAmt;
+
+    let GST_Percentage = Number(gstPercentage) || 0;
+    let IGST_Percentage = 0;
+    let SGST_Percentage = (GST_Percentage / 2);
+    let CGST_Percentage = (GST_Percentage / 2);
+
+    if (IsComparGstIn) {  //compare Supplier and Customer are Same State by GSTIn Number
+        let isSameSate = compareGSTINState(IsComparGstIn?.GSTIn_1, IsComparGstIn?.GSTIn_2)
+        if (isSameSate) {// iF isSameSate = true ===not same GSTIn
+            CGST_Amount = 0;
+            SGST_Amount = 0;
+            IGST_Amount = Number(roundedGstAmount.toFixed(2))
+            IGST_Percentage = GST_Percentage;
+            SGST_Percentage = 0;
+            CGST_Percentage = 0;
+        }
+    }
+    // Return the calculated values as an object
+    return {
+        discountBaseAmt: Number(discountBaseAmt.toFixed(2)),
+        disCountAmt: Number(disCountAmt.toFixed(2)),
+        roundedGstAmount: Number(roundedGstAmount.toFixed(2)),
+        roundedTotalAmount: Number(totalAmount.toFixed(2)),
+        CGST_Amount,
+        SGST_Amount,
+        IGST_Amount,
+        GST_Percentage: GST_Percentage.toFixed(2),
+        CGST_Percentage: CGST_Percentage.toFixed(2),
+        SGST_Percentage: SGST_Percentage.toFixed(2),
+        IGST_Percentage: IGST_Percentage.toFixed(2),
+    };
+};
+
