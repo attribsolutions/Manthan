@@ -37,6 +37,7 @@ function* goButton_partyItem_Add_GenFunc({ config }) {
     }
     response.Data.map((item) => {
       item["selectCheck"] = false;
+      item["GST"] = Number(item.GST)
 
       if (subPageMode === url.CHANNEL_ITEM) {
         if (item.PartyType > 0) {
