@@ -14,7 +14,6 @@ const DiscountColumn = React.memo(({
   handleDiscountTypeChange
 }) => {
 
-debugger
   //render
   return (
     <div className="mb-2">
