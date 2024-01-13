@@ -485,7 +485,7 @@ const InvoiceExcelUpload = (props) => {
             })
 
             updatereadJsonDetail.invoice.forEach(async (inv) => {
-                debugger
+
                 let parentObj;
                 let invoiceItems = []
                 let invoiceTotalAmount = 0

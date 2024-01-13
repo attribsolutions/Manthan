@@ -167,7 +167,7 @@ export const areAllDatesSame = (dates) => {
 
   const uniqueDates = Array.from(new Set(dates)); // Get unique dates in the array
   const futureDates = uniqueDates.filter(date => isFutureDate(date));
-  debugger
+
   return {
     allSame: uniqueDates.length === 1,
     dates: uniqueDates,

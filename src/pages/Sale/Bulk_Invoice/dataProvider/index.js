@@ -1,6 +1,7 @@
 
 import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
 import debounce from 'lodash/debounce';
+import { roundToDecimalPlaces } from '../../../../components/Common/CommonFunction';
 
 const BulkInvoiceContext = createContext();
 
@@ -67,6 +68,8 @@ export const BulkInvoiceProvider = ({ children, data }) => {
                     orderDistribution[orderId][itemId].discount = orderItem.Discount;
                     orderDistribution[orderId][itemId].discountType = orderItem.DiscountType;
                     orderDistribution[orderId][itemId].rate = orderItem.Rate;
+                    orderDistribution[orderId][itemId].unitId = orderItem.UnitId;
+                    orderDistribution[orderId][itemId].unitName = orderItem.UnitName;
                     orderDistribution[orderId][itemId].quantity = orderQty;
                     orderDistribution[orderId][itemId].gstPercentage = orderItem.GST;
 
@@ -78,22 +81,38 @@ export const BulkInvoiceProvider = ({ children, data }) => {
                         let distribute = 0;
                         let remaining = 0;
 
+                        // if (itemStock > 0) {
+                        //     if (batchStock >= orderQty) {
+
+                        //         distribute = orderQty;
+                        //         remaining = batchStock - orderQty;
+                        //         newGlobalStock[itemId].totalStock = itemStock - orderQty;
+                        //         newGlobalStock[itemId][stockId].baseQty = batchStock - orderQty;
+                        //         orderQty = 0;
+
+                        //     } else if (batchStock > 0) {
+
+                        //         distribute = batchStock;
+                        //         remaining = 0;
+                        //         newGlobalStock[itemId].totalStock = itemStock - batchStock;
+                        //         newGlobalStock[itemId][stockId].baseQty = 0;
+                        //         orderQty = orderQty - batchStock;
+                        //     }
+                        // }
+
                         if (itemStock > 0) {
                             if (batchStock >= orderQty) {
-
-                                distribute = orderQty;
-                                remaining = batchStock - orderQty;
-                                newGlobalStock[itemId].totalStock = itemStock - orderQty;
-                                newGlobalStock[itemId][stockId].baseQty = batchStock - orderQty;
-                                orderQty = 0;
-
+                                distribute = Math.min(orderQty, batchStock);
+                                remaining = Math.max(0, batchStock - orderQty);
+                                newGlobalStock[itemId].totalStock = Math.max(0, itemStock - distribute);
+                                newGlobalStock[itemId][stockId].baseQty = Math.max(0, batchStock - distribute);
+                                orderQty = Math.max(0, orderQty - distribute); // Subtract the distributed quantity from the original orderQty
                             } else if (batchStock > 0) {
-
                                 distribute = batchStock;
                                 remaining = 0;
-                                newGlobalStock[itemId].totalStock = itemStock - batchStock;
+                                newGlobalStock[itemId].totalStock = Math.max(0, itemStock - distribute);
                                 newGlobalStock[itemId][stockId].baseQty = 0;
-                                orderQty = orderQty - batchStock;
+                                orderQty = Math.max(0, orderQty - distribute); // Subtract the distributed quantity from the original orderQty
                             }
                         }
 
@@ -102,8 +121,8 @@ export const BulkInvoiceProvider = ({ children, data }) => {
                             "remaining": remaining
                         };
                     });
-                    if (orderQty > 0) {
-                        orderDistribution[orderId][itemId].lessStock = orderQty
+                    if (orderQty > 0.0) {
+                        orderDistribution[orderId][itemId].lessStock = roundToDecimalPlaces(orderQty);
                     }
                 });
             });
@@ -124,7 +143,8 @@ export const BulkInvoiceProvider = ({ children, data }) => {
                 for (let j = 0; j < order.OrderItemDetails.length; j++) {
                     const item = order.OrderItemDetails[j];
                     if (order.OrderIDs[0] === orderID && item.Item === itemID) {
-                        item.modifiedQuantity = parseFloat(newQuantity);
+                        item.modifiedQuantity = roundToDecimalPlaces(newQuantity, 3, true);
+
                         found = true;
                         break; // This will break out of the inner loop
                     }
@@ -202,7 +222,7 @@ export const BulkInvoiceProvider = ({ children, data }) => {
 
     const handleOrderDiscountType = useCallback(
         debounce((orderID, newDiscountType) => {
-            debugger
+
             for (let i = 0; i < data.length; i++) {
                 const order = data[i];
                 for (let j = 0; j < order.OrderItemDetails.length; j++) {
@@ -214,7 +234,7 @@ export const BulkInvoiceProvider = ({ children, data }) => {
                     break; // This will break out of the outer loop
                 }
             };
-            debugger
+
             distributeItemStockGlobally();
         }, 100), [data, distributeItemStockGlobally]);
 

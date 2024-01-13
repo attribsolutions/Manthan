@@ -4,7 +4,7 @@ import DiscountHeader from "../util/DiscountHeader";
 import { useBulkInvoiceContext } from '../dataProvider';
 import DiscountColumn from '../orderTable/columns/DiscountColumn';
 import StockDetailsTable from '../orderTable/columns/StockDetailsColumn';
-import { C_Select } from '../../../../CustomValidateForm';
+import { CInput, C_Select, decimalRegx_3dit } from '../../../../CustomValidateForm';
 import ItemAmountSection from '../util/ItemAmountSection';
 import OrderTableHeaderSection from './header';
 import { discountDropOption } from '../util/constent';
@@ -46,7 +46,6 @@ const OrdersTable = React.memo(({ order }) => {
       const value = event.target.value;
       const newDiscount = discountDropOption.find((option) => option.value == value);
 
-      debugger
       handleOrderDiscountType(orderId, newDiscount)
     },
     [orderId]
@@ -82,6 +81,7 @@ const OrdersTable = React.memo(({ order }) => {
             const itemQuantity = itemInfo?.orderQty;
             const isLessStock = itemInfo?.lessStock || 0;
             const rate = itemInfo?.rate || 0;
+            const unitName = itemInfo?.unitName || "";
             const quantity = itemInfo?.quantity || 0;
             const discount = itemInfo?.discount;
             const discountType = itemInfo?.discountType;
@@ -91,24 +91,27 @@ const OrdersTable = React.memo(({ order }) => {
 
 
             return (
-              <tr key={item.id}>
-                <td style={{ width: "35%" }}><strong>{item.ItemName}</strong>
-                  <samp
-                    style={{
-                      display: isLessStock ? "block" : "none",
-                      color: "red",
-                      // animation: "scrollRightToLeft 15s linear infinite",
-                    }}>
-                    {`Short Stock Quantity ${isLessStock}`}
-                  </samp>
+              <tr key={item.Item}>
+                <td style={{ width: "35%" }}>
+                  <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-between", height: "100%" }}>
+                    <div>
+                      <strong>{item.ItemName}</strong>
+                    </div>
+                    <div style={{ display: isLessStock ? "block" : "none", color: "red" }}>
+                      {`Short Stock Quantity ${isLessStock} ${unitName?.split(" ")[0]}`}
+                    </div>
+                  </div>
                 </td>
+
+
                 <td style={{ width: "15%" }}>
                   <div className='d-flex  flex-column  justify-content-start gap-2'>
-                    <Input
-                      type="text"
+                    <CInput
+                      cpattern={decimalRegx_3dit}
+                      key={`order-input${item.Item}-${_key}`}
                       style={{ borderColor: isLessStock ? "red" : '' }}
                       defaultValue={itemQuantity}
-                      onChange={(e) => {
+                      onInput={(e) => {
                         handleItemQuantityChange(orderId, item.Item, e.target.value)
                       }
                       }
