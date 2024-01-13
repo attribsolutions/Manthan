@@ -3,6 +3,27 @@
 import { compareGSTINState, loginSystemSetting } from "../../../../components/Common/CommonFunction";
 
 
+export const balkInvoiceAllOrderAmountFunc = ({
+    IsTCSParty = false,
+    IsCustomerPAN = false,
+    bulkInvoceInfo
+}) => {
+    if (!bulkInvoceInfo) return { sumOfInvoiceTotal: 0 };
+
+
+    // Calculate the sum of the item TotalAmount in the tableList
+    let sumOfInvoiceTotal = 0;
+
+    Object.values(bulkInvoceInfo).forEach(orderInfo => {
+
+        const { sumOfGrandTotal } = settingBaseRoundOffOrderAmountFunc({
+            orderInfo: orderInfo, IsTCSParty, IsCustomerPAN,
+        })
+        sumOfInvoiceTotal += Number(sumOfGrandTotal) || 0;
+    });
+
+    return { sumOfInvoiceTotal };
+};
 
 export const settingBaseRoundOffOrderAmountFunc = ({
     IsTCSParty = false,
@@ -22,7 +43,7 @@ export const settingBaseRoundOffOrderAmountFunc = ({
     let sumOfGrandTotal = 0;
 
     Object.values(orderInfo).forEach(itemInfo => {
-        
+
         const { roundedTotalAmount } = itemAmounWithGst(itemInfo);
         sumOfGrandTotal += Number(roundedTotalAmount) || 0;
     });

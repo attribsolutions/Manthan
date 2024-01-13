@@ -92,7 +92,7 @@ const OrdersTable = React.memo(({ order }) => {
 
             return (
               <tr key={item.id}>
-                <td style={{ width: "35%" }}>{item.ItemName}
+                <td style={{ width: "35%" }}><strong>{item.ItemName}</strong>
                   <samp
                     style={{
                       display: isLessStock ? "block" : "none",

@@ -50,13 +50,9 @@ import { Invoice_Singel_Get_for_Report_Api } from "../../../helpers/backend_help
 import * as report from '../../../Reports/ReportIndex'
 import CustomTable from "../../../CustomTable2";
 import NewCommonPartyDropdown from "../../../components/Common/NewCommonPartyDropdown";
-import { useMemo } from "react";
-import BulkTableComponent from "./table/index";
-import TesBulInvoce from "./test";
-// import { bulkdata,data } from './data'
 import bulkdata from './data2'
-// import { StockProvider } from './context/index';
-import { BulkInvoiceProvider } from "./contex";
+import BulkInvoce from "./bulkInvoce";
+import { BulkInvoiceProvider } from "./dataProvider";
 
 const Bulk_Invoice2 = (props) => {
 
@@ -170,7 +166,7 @@ const Bulk_Invoice2 = (props) => {
 
 
 
-    if (!(userPageAccessState === '')) {
+  
         return (
             <React.Fragment>
                 <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
@@ -178,28 +174,22 @@ const Bulk_Invoice2 = (props) => {
                 <div className="page-content" >
 
                     <BulkInvoiceProvider data={bulkdata}>
-                        <TesBulInvoce />
+                        <BulkInvoce />
                     </BulkInvoiceProvider>
 
 
-                    {/* {bulkInvoiceData.map((i, key) => (
-                                <BulkTableComponent
-                                    parentKey={key}
-                                    singleInvoiceData={i.OrderItemDetails}
-                                />
-                            ))} */}
-
+                   
 
                 </div>
 
             </React.Fragment >
         );
-    }
-    else {
-        return (
-            <React.Fragment></React.Fragment>
-        )
-    }
+    //}
+    // else {
+    //     return (
+    //         <React.Fragment></React.Fragment>
+    //     )
+    // }
 };
 
 export default Bulk_Invoice2
