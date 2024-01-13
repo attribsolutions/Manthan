@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useCallback, createContext } from 'react';
-import { Input, Table } from 'reactstrap';
+import { Card, Input, Table } from 'reactstrap';
 import DiscountHeader from "../util/DiscountHeader";
 import { useBulkInvoiceContext } from '../dataProvider';
 import DiscountColumn from '../orderTable/columns/DiscountColumn';
@@ -54,7 +54,7 @@ const OrdersTable = React.memo(({ order }) => {
 
 
   return (
-    <div>
+    <Card >
       <OrderTableHeaderSection orderId={orderId} orderInfo={orderInfo} />
       <Table className=" custom-table">
         <thead>
@@ -153,7 +153,7 @@ const OrdersTable = React.memo(({ order }) => {
           })}
         </tbody>
       </Table>
-    </div>
+    </Card>
   );
 });
 

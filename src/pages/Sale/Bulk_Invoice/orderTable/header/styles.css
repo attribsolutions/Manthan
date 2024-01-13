@@ -3,6 +3,9 @@
   display: flex;
   justify-content: space-between;
   padding: 8px;
+  margin: 2px;
+  margin-block: 5px;
+  margin-bottom: 1px;
   background-color: rgba(156, 148, 189, 0.747);
   /* background-color: #E1D8F0; */
   border-radius: 5px;
