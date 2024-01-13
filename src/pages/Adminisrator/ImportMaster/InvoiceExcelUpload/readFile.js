@@ -149,7 +149,7 @@ export async function fileDetails({ compareParameter = [], Not_Ignore_Item_Array
   const invoice = await groupBy(Not_Ignore_Item_Array, (index) => {
     return (index[fileFiled.InvoiceNumber])
   })
-  debugger
+  
   return { fileFiled, invoice, invoiceDate, amount, invoiceNO, partyNO, itemCode, unitCode }
 }
 
@@ -186,15 +186,7 @@ export async function downloadDummyFormatHandler(jsonData) {
 
 }
 
-
-
-
-
-
-
-
 export const filterArraysInEntries = (map, conditionFn) => {
-
   const filteredEntries = Array.from(map.entries()).map(([key, value]) => {
     const filteredArray = value.filter(conditionFn); // Filtering each array based on condition
     if (filteredArray.length === 0) {
@@ -204,6 +196,26 @@ export const filterArraysInEntries = (map, conditionFn) => {
     }
   });
   const nonNullEntries = filteredEntries.filter(entry => entry !== null);
-
   return new Map(nonNullEntries);
 };
+
+
+export const InvoiceUploadCalculation = ({ Quantity, Rate, GST }) => {
+  
+  const GSTPersentage = GST;
+  const BasicAmount = Quantity * Rate;
+  const GSTAmount = BasicAmount * (GSTPersentage / 100);
+  const CGST_Amount = Number((GSTAmount / 2).toFixed(2));
+  const SGSTAmount = CGST_Amount;
+  const Amount = BasicAmount + GSTAmount;
+
+  return {
+    BasicAmount: BasicAmount,
+    GSTAmount: GSTAmount,
+    GSTPersentage: GSTPersentage,
+    SGSTAmount: SGSTAmount,
+    CGSTAmount: CGST_Amount,
+    Amount: Amount,
+
+  }
+}

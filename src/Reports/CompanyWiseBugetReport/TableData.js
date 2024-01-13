@@ -16,7 +16,7 @@ export const ProductWisecolumns = [
     "Purchase Amount",
     "Sale Amount",
     "Return Value",
-    "Net Sale Value",
+    "Net Purchase Value",
     "Budget Generated",
     "Claim Amount",
     "Claim % Against Purchase Amount",

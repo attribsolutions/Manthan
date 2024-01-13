@@ -16,7 +16,7 @@ import * as _cfunc from "../../../../components/Common/CommonFunction";
 
 import { getPartyListAPISuccess } from "../../../../store/Administrator/PartyRedux/action";
 import Dropzone from "react-dropzone"
-import { downloadDummyFormatHandler, fileDetails, filterArraysInEntries, readExcelFile } from "./readFile";
+import { InvoiceUploadCalculation, downloadDummyFormatHandler, fileDetails, filterArraysInEntries, readExcelFile } from "./readFile";
 import {
     GoButton_ImportFiledMap_Add,
     GoButton_ImportFiledMap_AddSuccess
@@ -303,7 +303,9 @@ const InvoiceExcelUpload = (props) => {
             }
 
             //////////////////////////////////////check Invoice Item Mapping Code exist in system or not ///////////////////////////////////////
+
             const mapItemValues = ItemList.map(obj => obj.MapItem);
+
             const Wrong_Item_Code_Array = readjson.filter(value => {
                 const itemCodeAsString = value.Item_Code.toString();
                 return !mapItemValues.includes(itemCodeAsString);
@@ -313,12 +315,33 @@ const InvoiceExcelUpload = (props) => {
             if (Wrong_Item_Code_Array.length > 0) {
                 setItemVerify({ Wrong_Item_Code_Array: Wrong_Item_Code_Array, Not_Verify_Item: true })
             } else {
+
+                ////////////////////////////////////////////////    GST of Matching Item Code ////////////////////////////////////////////////////////
+                const MapItemList = ItemList.filter(obj => obj.MapItem !== null && obj.MapItem !== "");
+                MapItemList.forEach(function (i) {
+                    let Item_Code = i.MapItem;
+                    let GST = i.GST;
+
+                    let Matching_ItemCode_Objects = readjson.filter(inx => {
+                        return inx.Item_Code === Item_Code;
+                    });
+
+                    Matching_ItemCode_Objects.forEach(matchingObject => {
+                        matchingObject.GST = GST;
+                    });
+
+                    if (Matching_ItemCode_Objects) {
+                        Matching_ItemCode_Objects.GST = GST;
+                    }
+                    console.log(readjson)
+
+                });
                 setItemVerify({ Wrong_Item_Code_Array: [], Not_Verify_Item: false })
             }
 
+            let Not_Ignore_Item_Array = readjson;
 
             ////////////////////////////////////////////////////  Verifying All Field Mapping with System //////////////////////////////////
-            let Not_Ignore_Item_Array = readjson
 
             const isdetails = await fileDetails({ compareParameter, Not_Ignore_Item_Array })
 
@@ -462,12 +485,70 @@ const InvoiceExcelUpload = (props) => {
             })
 
             updatereadJsonDetail.invoice.forEach(async (inv) => {
+                debugger
                 let parentObj;
                 let invoiceItems = []
-                const invoiceTotalAmount = inv.reduce((total, invoice) => total + Number(invoice[parArr.Amount]), 0);
+                let invoiceTotalAmount = 0
+                // const invoiceTotalAmount = inv.reduce((total, invoice) => total + Number(invoice[parArr.Amount]), 0);
 
+                // inv.forEach(async (ele) => {
+
+                //     const calculate = InvoiceUploadCalculation({ Quantity: ele[parArr.Quantity], Rate: ele[parArr.Rate], GST: ele.GST })
+
+                //     parentObj = {
+                //         "ImportFromExcel": 1,
+                //         "CustomerGSTTin": ele[parArr.CustomerGSTTin] ? ele[parArr.CustomerGSTTin] : '',
+                //         "TCSAmount": ele[parArr.TCSAmount] ? ele[parArr.TCSAmount] : 0,
+                //         "GrandTotal": ele[parArr.GrandTotal] ? ele[parArr.GrandTotal] : invoiceTotalAmount.toFixed(2),
+                //         "RoundOffAmount": ele[parArr.RoundOffAmount] ? ele[parArr.RoundOffAmount] : 0,
+                //         "InvoiceNumber": ele[parArr.InvoiceNumber] ? ele[parArr.InvoiceNumber] : '',
+                //         "FullInvoiceNumber": ele[parArr.InvoiceNumber] ? ele[parArr.InvoiceNumber] : '',
+                //         "Customer": ele[parArr.Customer] ? ele[parArr.Customer] : '',
+                //         "Party": _cfunc.loginSelectedPartyID(),
+                //         CreatedBy: _cfunc.loginUserID(),
+                //         UpdatedBy: _cfunc.loginUserID(),
+                //         "InvoiceDate": ele[parArr.InvoiceDate] ? ele[parArr.InvoiceDate] : '',
+                //     }
+
+
+                //     invoiceItems.push({
+                //         "Item": ele[parArr.Item] ? ele[parArr.Item] : '',
+                //         "Unit": ele[parArr.Unit] ? ele[parArr.Unit] : '',
+                //         "Quantity": ele[parArr.Quantity] ? ele[parArr.Quantity] : 0,
+                //         "BatchDate": ele[parArr.BatchDate] ? ele[parArr.BatchDate] : null,
+                //         "BatchCode": ele[parArr.BatchCode] ? ele[parArr.BatchCode] : 0,
+                //         "BaseUnitQuantity": ele[parArr.BaseUnitQuantity] ? ele[parArr.BaseUnitQuantity] : '',
+                //         "LiveBatch": ele[parArr.LiveBatch] ? ele[parArr.LiveBatch] : '',
+                //         "MRPValue": ele[parArr.MRP] ? ele[parArr.MRP] : '', //Actul MRP That Map in System
+                //         "Rate": ele[parArr.Rate] ? ele[parArr.Rate]?.toFixed(2) : '',
+                //         "BasicAmount": ele[parArr.BasicAmount] ? ele[parArr.BasicAmount] : '',
+                //         "GSTAmount": ele[parArr.GSTAmount] ? ele[parArr.GSTAmount] : '',
+                //         "GST": '',
+                //         "GSTValue": ele[parArr.GSTValue] ? ele[parArr.GSTValue] : 0,       ///  Note ** GSTValue ===GST percentage
+                //         "CGST": ele[parArr.CGST] ? ele[parArr.CGST] : (ele[parArr.GSTAmount] / 2).toFixed(2),
+                //         "SGST": ele[parArr.SGST] ? ele[parArr.SGST] : (ele[parArr.GSTAmount] / 2).toFixed(2),
+                //         "IGST": ele[parArr.IGST] ? ele[parArr.IGST] : 0,
+                //         "GSTPercentage": ele[parArr.GSTPercentage] ? ele[parArr.GSTPercentage] : 0,
+                //         "CGSTPercentage": ele[parArr.CGSTPercentage] ? ele[parArr.CGSTPercentage] : (ele[parArr.GSTPercentage] / 2).toFixed(2),
+                //         "SGSTPercentage": ele[parArr.SGSTPercentage] ? ele[parArr.SGSTPercentage] : (ele[parArr.GSTPercentage] / 2).toFixed(2),
+                //         "IGSTPercentage": ele[parArr.IGSTPercentage] ? ele[parArr.IGSTPercentage] : 0,
+                //         "Amount": ele[parArr.Amount] ? ele[parArr.Amount] : 0,
+                //         "DiscountType": ele[parArr.DiscountType] ? ele[parArr.DiscountType] : 2,
+                //         "Discount": ele[parArr.Discount] ? ele[parArr.Discount] : 0,
+                //         "DiscountAmount": ele[parArr.DiscountAmount] ? ele[parArr.DiscountAmount] : 0,
+
+                //         "TaxType": "GST",
+                //         "QtyInBox": ele[parArr.QtyInBox] ? ele[parArr.QtyInBox] : 0,
+                //         "QtyInKg": ele[parArr.QtyInKg] ? ele[parArr.QtyInKg] : 0,
+                //         "QtyInNo": ele[parArr.QtyInNo] ? ele[parArr.QtyInNo] : 0,
+
+                //     })
+                // })
 
                 inv.forEach(async (ele) => {
+
+                    const calculate = InvoiceUploadCalculation({ Quantity: ele[parArr.Quantity], Rate: ele[parArr.Rate], GST: ele.GST });
+                    invoiceTotalAmount = invoiceTotalAmount + calculate.Amount;
 
                     parentObj = {
                         "ImportFromExcel": 1,
@@ -483,7 +564,8 @@ const InvoiceExcelUpload = (props) => {
                         UpdatedBy: _cfunc.loginUserID(),
                         "InvoiceDate": ele[parArr.InvoiceDate] ? ele[parArr.InvoiceDate] : '',
                     }
-                    debugger
+
+
                     invoiceItems.push({
                         "Item": ele[parArr.Item] ? ele[parArr.Item] : '',
                         "Unit": ele[parArr.Unit] ? ele[parArr.Unit] : '',
@@ -492,21 +574,20 @@ const InvoiceExcelUpload = (props) => {
                         "BatchCode": ele[parArr.BatchCode] ? ele[parArr.BatchCode] : 0,
                         "BaseUnitQuantity": ele[parArr.BaseUnitQuantity] ? ele[parArr.BaseUnitQuantity] : '',
                         "LiveBatch": ele[parArr.LiveBatch] ? ele[parArr.LiveBatch] : '',
-                        // "MRP": ele[parArr.MRP] ? ele[parArr.MRP] : '',
                         "MRPValue": ele[parArr.MRP] ? ele[parArr.MRP] : '', //Actul MRP That Map in System
                         "Rate": ele[parArr.Rate] ? ele[parArr.Rate]?.toFixed(2) : '',
-                        "BasicAmount": ele[parArr.BasicAmount] ? ele[parArr.BasicAmount] : '',
-                        "GSTAmount": ele[parArr.GSTAmount] ? ele[parArr.GSTAmount] : '',
+                        "BasicAmount": ele[parArr.BasicAmount] ? ele[parArr.BasicAmount] : calculate.BasicAmount,
+                        "GSTAmount": ele[parArr.GSTAmount] ? ele[parArr.GSTAmount] : (calculate.GSTAmount).toFixed(2),
                         "GST": '',
-                        "GSTValue": ele[parArr.GSTValue] ? ele[parArr.GSTValue] : 0,       ///  Note ** GSTValue ===GST percentage
-                        "CGST": ele[parArr.CGST] ? ele[parArr.CGST] : (ele[parArr.GSTAmount] / 2).toFixed(2),
-                        "SGST": ele[parArr.SGST] ? ele[parArr.SGST] : (ele[parArr.GSTAmount] / 2).toFixed(2),
+                        // "GSTValue": ele[parArr.GSTValue] ? ele[parArr.GSTValue] : ,       ///  Note ** GSTValue ===GST percentage
+                        "CGST": ele[parArr.CGST] ? ele[parArr.CGST] : (calculate.GSTAmount / 2).toFixed(2),
+                        "SGST": ele[parArr.SGST] ? ele[parArr.SGST] : (calculate.GSTAmount / 2).toFixed(2),
                         "IGST": ele[parArr.IGST] ? ele[parArr.IGST] : 0,
-                        "GSTPercentage": ele[parArr.GSTPercentage] ? ele[parArr.GSTPercentage] : 0,
-                        "CGSTPercentage": ele[parArr.CGSTPercentage] ? ele[parArr.CGSTPercentage] : (ele[parArr.GSTPercentage] / 2).toFixed(2),
-                        "SGSTPercentage": ele[parArr.SGSTPercentage] ? ele[parArr.SGSTPercentage] : (ele[parArr.GSTPercentage] / 2).toFixed(2),
+                        "GSTPercentage": ele[parArr.GSTPercentage] ? ele[parArr.GSTPercentage] : calculate.GSTPersentage,
+                        "CGSTPercentage": ele[parArr.CGSTPercentage] ? ele[parArr.CGSTPercentage] : (calculate.GSTPersentage / 2).toFixed(2),
+                        "SGSTPercentage": ele[parArr.SGSTPercentage] ? ele[parArr.SGSTPercentage] : (calculate.GSTPersentage / 2).toFixed(2),
                         "IGSTPercentage": ele[parArr.IGSTPercentage] ? ele[parArr.IGSTPercentage] : 0,
-                        "Amount": ele[parArr.Amount] ? ele[parArr.Amount] : 0,
+                        "Amount": ele[parArr.Amount] ? ele[parArr.Amount] : (calculate.Amount).toFixed(2),
                         "DiscountType": ele[parArr.DiscountType] ? ele[parArr.DiscountType] : 2,
                         "Discount": ele[parArr.Discount] ? ele[parArr.Discount] : 0,
                         "DiscountAmount": ele[parArr.DiscountAmount] ? ele[parArr.DiscountAmount] : 0,
@@ -518,6 +599,19 @@ const InvoiceExcelUpload = (props) => {
 
                     })
                 })
+
+
+
+
+
+
+
+
+
+
+
+
+
 
                 outerArr.push({ ...parentObj, InvoiceItems: invoiceItems })
             });
@@ -537,11 +631,8 @@ const InvoiceExcelUpload = (props) => {
                 <PageLoadingSpinner isLoading={((partyDropDownLoading) || compareParamLoading)} />
 
                 <div className="page-content">
-
                     <NewCommonPartyDropdown />
-
                     <div className="px-2 c_card_header text-black mt-2" >
-
                         {(compareParamLoading) ?
                             <div className="row ">
                                 <div className="d-flex justify-content-start p-2 ">
@@ -572,9 +663,7 @@ const InvoiceExcelUpload = (props) => {
                             </Row> : null
                         }
 
-
                     </div>
-
 
                     <div className="mb-3 mt-3">
                         <Dropzone
@@ -660,28 +749,6 @@ const InvoiceExcelUpload = (props) => {
 
                                 </Card > : null
                                 }
-
-
-                                {/* {allpartyVerify.Not_Map_Party !== undefined ? <details >
-                                    {allpartyVerify.Not_Map_Party === false ? null : "Note: Before uploading invoice, all parties must be mapped. The following parties have not been mapped in the system."}
-                                    <summary>&nbsp; &nbsp; All Party mapping&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{allpartyVerify.Not_Map_Party === true ?
-                                            <i style={{ color: "tomato", }} className="mdi mdi-close-circle font-size-18  "></i> :
-                                            <i style={{ color: "green", }} className="mdi mdi-check-decagram  font-size-18  "></i>}</summary>
-                                    {allpartyVerify.Not_Map_Party === false ? null : <div className="error-msg">
-                                        <p>
-                                            <span style={{ fontWeight: "bold", fontSize: "15px" }} >Parties:&nbsp;&nbsp;</span>
-                                            {allpartyVerify.Not_Map_Party_Code_Array.map((party, index) => (
-
-                                                <span key={index}>
-                                                    {`${index + 1}) ${party.CustomerName}`}
-                                                    {index !== allpartyVerify.Not_Map_Party_Code_Array.length - 1 ? " ," : ''}
-                                                </span>
-                                            ))}
-                                        </p>
-                                    </div>}
-                                </details> : null} */}
 
                                 {invalidFormat.Not_Verify_Invalid_Format !== undefined ? <details>
                                     <summary>&nbsp; &nbsp; Invalid Format&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
