@@ -8,14 +8,10 @@ import * as _cfunc from "../../components/Common/CommonFunction";
 import { mode, pageId } from "../../routes/index"
 import { MetaTags } from "react-meta-tags";
 import { GoButton_For_GenericSale_Action, GoButton_For_GenericSale_Success } from "../../store/Report/GenericSaleRedux/action";
-
-import ToolkitProvider from "react-bootstrap-table2-toolkit";
-import BootstrapTable from "react-bootstrap-table-next";
-import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
 import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess } from "../../store/actions";
 import DynamicColumnHook from "../../components/Common/TableCommonFunc";
-
 import { ExcelReportComponent } from "../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS";
+import CustomTable from "../../CustomTable2";
 
 const GenericSaleReport = (props) => {
 
@@ -265,42 +261,28 @@ const GenericSaleReport = (props) => {
                     </div>
                 </div>
 
-                <div>
-                    <ToolkitProvider
+                <div className="mb-1">
+                    <CustomTable
                         keyField={"id"}
                         data={tableData}
                         columns={tableColumns}
-                        search
-                    >
-                        {(toolkitProps,) => (
-                            <React.Fragment>
-                                <Row>
-                                    <Col xl="12">
-                                        <div className="table-responsive table">
-                                            <BootstrapTable
-                                                keyField={"id"}
-                                                classes={"table  table-bordered table-hover"}
-                                                noDataIndication={
-                                                    <div className="text-danger text-center ">
-                                                        Record Not available
-                                                    </div>
-                                                }
-                                                onDataSizeChange={({ dataSize }) => {
-                                                    dispatch(BreadcrumbShowCountlabel(`Count:${dataSize}`));
-                                                }}
-                                                {...toolkitProps.baseProps}
-                                            />
-                                            {mySearchProps(toolkitProps.searchProps)}
-                                        </div>
-                                    </Col>
-                                </Row>
+                        id="table_Arrow"
+                        noDataIndication={
+                            <div className="text-danger text-center ">
+                                Items Not available
+                            </div>
+                        }
+                        onDataSizeChange={({ dataCount, filteredData = [] }) => {
+                            let totalAmount = filteredData.reduce((total, item) => {
+                                return total + Number(item.recordsAmountTotal) || 0;
 
-                            </React.Fragment>
-                        )}
-                    </ToolkitProvider>
+                            }, 0);
+                            let commaSeparateAmount = _cfunc.amountCommaSeparateFunc(Number(totalAmount).toFixed(2));
 
+                            dispatch(BreadcrumbShowCountlabel(`Count:${dataCount} ₹ ${commaSeparateAmount}`));
+                        }}
+                    />
                 </div>
-
             </div>
 
         </React.Fragment >

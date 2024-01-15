@@ -11,12 +11,10 @@ import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import DynamicColumnHook from "../../components/Common/TableCommonFunc";
 import { mode, pageId } from "../../routes/index"
 import PartyDropdownForReport from "../ReportComponent";
-import { Go_Button } from "../../components/Common/CommonButton";
+import { Change_Button, Go_Button } from "../../components/Common/CommonButton";
 import { GetRoutesList, GetRoutesListSuccess } from "../../store/Administrator/RoutesRedux/actions";
-import ToolkitProvider from "react-bootstrap-table2-toolkit";
-import BootstrapTable from "react-bootstrap-table-next";
-import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
 import { PartyOutstandingReport_GoButton_API, PartyOutstandingReport_GoButton_API_Success } from "../../store/Report/PartyOutstandingRedux/action";
+import CustomTable from "../../CustomTable2";
 
 const PartyOutstandingReport = (props) => {
 
@@ -27,7 +25,7 @@ const PartyOutstandingReport = (props) => {
 
 	const [headerFilters, setHeaderFilters] = useState('');
 	const [userPageAccessState, setUserAccState] = useState('');
-	
+
 	const [partyDropdown, setPartyDropdown] = useState('');
 	const [routeDropdown, setRouteDropdown] = useState({ value: "", label: "All" });
 	const [tableData, setTableData] = useState([]);
@@ -68,16 +66,9 @@ const PartyOutstandingReport = (props) => {
 
 	useEffect(() => {
 
-		if (goButtonData.StatusCode === 200) {
-			setTableData(goButtonData.Data)
-		}
-	}, [goButtonData]);
-
-	useEffect(() => {
-
 		dispatch(commonPageFieldSuccess(null));
 		dispatch(commonPageField(pageId.PARTY_OUTSTANDING_REPORT))
-		dispatch(BreadcrumbShowCountlabel(`Count:${0}`));
+		dispatch(BreadcrumbShowCountlabel(`Count:${0} ₹ ${0.00}`));
 		dispatch(GetRoutesList());
 		return () => {
 			dispatch(commonPageFieldSuccess(null));
@@ -116,7 +107,7 @@ const PartyOutstandingReport = (props) => {
 		let newObj = { ...headerFilters }
 		newObj.date = date
 		setHeaderFilters(newObj)
-		setTableData([]);
+		dispatch(PartyOutstandingReport_GoButton_API_Success([]));
 	}
 
 	function partyOnChangeHandler(e) {
@@ -124,7 +115,7 @@ const PartyOutstandingReport = (props) => {
 		setRouteDropdown({ value: "", label: "All" });
 		const jsonBody = JSON.stringify({ CompanyID: _cfunc.loginCompanyID(), PartyID: e.value });
 		dispatch(GetRoutesList(jsonBody));
-		setTableData([]);
+		dispatch(PartyOutstandingReport_GoButton_API_Success([]));
 	}
 
 	return (
@@ -173,52 +164,44 @@ const PartyOutstandingReport = (props) => {
 										options={RoutesListOptions}
 										onChange={(e) => {
 											setRouteDropdown(e);
-											setTableData([]);
+											dispatch(PartyOutstandingReport_GoButton_API_Success([]));
 										}}
 									/>
 								</Col>
 							</FormGroup>
 						</Col>
 						<Col sm="1" className="mt-3 mb-3">
-							<Go_Button onClick={goButtonHandler} loading={listBtnLoading} />
+							{
+								goButtonData.length === 0 ?
+									<Go_Button onClick={goButtonHandler} loading={listBtnLoading} />
+									: <Change_Button onClick={() => dispatch(PartyOutstandingReport_GoButton_API_Success([]))} />
+							}
 						</Col>
 
 					</div>
 				</div>
 
-				<div className="mt-1">
-					<ToolkitProvider
-						keyField="PartyID"
-						data={tableData}
+				<div className="mb-1">
+					<CustomTable
+						keyField={"id"}
+						data={goButtonData}
 						columns={tableColumns}
-						search
-					>
-						{(toolkitProps,) => (
-							<React.Fragment>
-								<Row>
-									<Col xl="12">
-										<div className="table-responsive table">
-											<BootstrapTable
-												keyField="PartyID"
-												classes={"table  table-bordered table-hover"}
-												noDataIndication={
-													<div className="text-danger text-center ">
-														Record Not available
-													</div>
-												}
-												onDataSizeChange={({ dataSize }) => {
-													dispatch(BreadcrumbShowCountlabel(`Count:${dataSize}`));
-												}}
-												{...toolkitProps.baseProps}
-											/>
-											{mySearchProps(toolkitProps.searchProps)}
-										</div>
-									</Col>
-								</Row>
+						id="table_Arrow"
+						noDataIndication={
+							<div className="text-danger text-center ">
+								Items Not available
+							</div>
+						}
+						onDataSizeChange={({ dataCount, filteredData = [] }) => {
+							let totalAmount = filteredData.reduce((total, item) => {
+								return total + Number(item.recordsAmountTotal) || 0;
 
-							</React.Fragment>
-						)}
-					</ToolkitProvider>
+							}, 0);
+							let commaSeparateAmount = _cfunc.amountCommaSeparateFunc(Number(totalAmount).toFixed(2));
+
+							dispatch(BreadcrumbShowCountlabel(`Count:${dataCount} ₹ ${commaSeparateAmount}`));
+						}}
+					/>
 				</div>
 			</div>
 			<C_Report />
