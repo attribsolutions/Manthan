@@ -3,7 +3,8 @@ import { onSelectAll, } from "../components/Common/TableCommonFunc";
 function CustomPagination({ pageCount, currentPage, handlePageChange, tablelist }) {
     if (tablelist.length > 0) {
         let isAllcheck = tablelist.filter(i => (i.hasAllSelect))
-        if (isAllcheck.length > 0) {
+        let ischeck = tablelist.filter(i => (i.selectCheck))
+        if (isAllcheck.length > 0 && ischeck.length > 0 && isAllcheck.length === ischeck.length) {
             onSelectAll({ event: true, allarray: tablelist });
         }
     }

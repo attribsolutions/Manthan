@@ -190,7 +190,7 @@ const ServiceItemAssign = (props) => {
 	}
 
 	const SaveHandler = (event) => {
-		
+
 		event.preventDefault();
 
 		const CheckArray = tableList.filter(index => index.selectCheck === true);
@@ -209,7 +209,7 @@ const ServiceItemAssign = (props) => {
 				"UpdatedBy": _cfunc.loginUserID(),
 			}))
 
-			
+
 			const jsonBody = JSON.stringify(PartiesJson);
 			dispatch(save_ServiceItemAssign_Action({ jsonBody }));
 
@@ -271,7 +271,8 @@ const ServiceItemAssign = (props) => {
 														striped={true}
 														selectRow={selectAllCheck({
 															rowSelected: rowSelected(),
-															bgColor: ''
+															bgColor: '',
+															tableList: tableList
 														})}
 														noDataIndication={<div className="text-danger text-center ">Party Not available</div>}
 														classes={"table align-middle table-nowrap table-hover"}
