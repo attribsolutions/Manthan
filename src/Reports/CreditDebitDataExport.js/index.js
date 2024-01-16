@@ -17,6 +17,7 @@ import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import DynamicColumnHook from "../../components/Common/TableCommonFunc";
 import { postCreditDebitDataExport_API, postCreditDebitDataExport_API_Success } from "../../store/Report/CreditDebitDataExportRedux/action";
 import { ExcelReportComponent } from "../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS";
+import { alertMessages } from "../../components/Common/CommonErrorMsg/alertMsg";
 
 const CreditDebitDataExport = (props) => {  // also Receipt Data Export 
 
@@ -130,7 +131,7 @@ const CreditDebitDataExport = (props) => {  // also Receipt Data Export
         try {
 
             if ((isSCMParty) && (PartyDropdown === "")) {
-                customAlert({ Type: 3, Message: "Please Select Party" });
+                customAlert({ Type: 3, Message: alertMessages.requiredPartySelection });
                 return;
             };
 

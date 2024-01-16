@@ -52,6 +52,7 @@ import * as pageId from "../../../routes/allPageID";
 import * as url from "../../../routes/route_url";
 import * as mode from "../../../routes/PageMode";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
+import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 
 const VehicleMaster = (props) => {
 
@@ -236,7 +237,7 @@ const VehicleMaster = (props) => {
         event.preventDefault();
         const btnId = event.target.id
         if ((loginSelectedPartyID() === 0)) {
-            customAlert({ Type: 3, Message: "Please Select Party" });
+            customAlert({ Type: 3, Message: alertMessages.requiredPartySelection });
             return;
         };
         try {

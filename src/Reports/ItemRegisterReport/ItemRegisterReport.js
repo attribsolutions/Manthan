@@ -14,6 +14,7 @@ import * as report from '../ReportIndex'
 import { ItemRegister_API } from "../../helpers/backend_helper";
 import C_Report from "../../components/Common/C_Report";
 import PartyDropdown_Common from "../../components/Common/PartyDropdown";
+import { alertMessages } from "../../components/Common/CommonErrorMsg/alertMsg";
 
 const ItemRegisterReport = (props) => {
 
@@ -120,7 +121,7 @@ const ItemRegisterReport = (props) => {
     function goButtonHandler() {
 
         if (_cfunc.loginSelectedPartyID() === 0) {
-            customAlert({ Type: 3, Message: "Please Select Party" });
+            customAlert({ Type: 3, Message: alertMessages.requiredPartySelection });
             return;
         };
 

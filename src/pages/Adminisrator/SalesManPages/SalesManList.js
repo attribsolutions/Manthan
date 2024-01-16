@@ -18,6 +18,7 @@ import CommonPurchaseList from "../../../components/Common/CommonPurchaseList";
 import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 import { PageLoadingSpinner } from "../../../components/Common/CommonButton";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
+import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 
 const SalesManList = (props) => {
 
@@ -66,7 +67,7 @@ const SalesManList = (props) => {
         try {
             const loginParty = loginSelectedPartyID();
             if (loginParty === 0) {
-                customAlert({ Type: 3, Message: "Please Select Party" });
+                customAlert({ Type: 3, Message: alertMessages.requiredPartySelection });
                 return;
             };
             dispatch(getSalesManlist({

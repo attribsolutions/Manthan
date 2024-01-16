@@ -22,6 +22,7 @@ import * as _cfunc from "../../../components/Common/CommonFunction";
 import { customAlert } from '../../../CustomAlert/ConfirmDialog';
 import { mobileApp_RetailerDelete_Api } from '../../../helpers/backend_helper';
 import { showToastAlert } from '../../../helpers/axios_Config';
+import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 
 const PartyList = () => {
 
@@ -114,7 +115,7 @@ const PartyList = () => {
 
         try {
             if ((_cfunc.loginSelectedPartyID() === 0)) {
-                customAlert({ Type: 3, Message: "Please Select Party" });
+                customAlert({ Type: 3, Message: alertMessages.requiredPartySelection });
                 return;
             };
             const jsonBody = {

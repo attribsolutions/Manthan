@@ -14,6 +14,7 @@ import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import { StockReport_1_GoBtn_API } from "../../helpers/backend_helper";
 import * as report from '../ReportIndex'
 import { ExcelReportComponent } from "../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS";
+import { alertMessages } from "../../components/Common/CommonErrorMsg/alertMsg";
 
 const StockReport_1 = (props) => {
 
@@ -157,7 +158,7 @@ const StockReport_1 = (props) => {
 
         const btnId = `gobtn-${url.STOCK_REPORT_1}`
         if ((isSCMParty) && (PartyDropdown === "")) {
-            customAlert({ Type: 4, Message: "Please Select Party" });
+            customAlert({ Type: 4, Message: alertMessages.requiredPartySelection });
             return;
         }
         const jsonBody = JSON.stringify({
@@ -178,7 +179,7 @@ const StockReport_1 = (props) => {
             return
         }
         if ((isSCMParty) && (PartyDropdown === "")) {
-            customAlert({ Type: 4, Message: "Please Select Party" });
+            customAlert({ Type: 4, Message: alertMessages.requiredPartySelection });
             return;
         }
         const jsonBody = JSON.stringify({

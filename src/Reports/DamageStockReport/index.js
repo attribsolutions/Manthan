@@ -15,6 +15,7 @@ import { mode, pageId } from "../../routes/index"
 import CustomTable from "../../CustomTable2";
 import PartyDropdownForReport, { ShowAndExcelBtn } from "../ReportComponent";
 import { ExcelReportComponent } from "../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS";
+import { alertMessages } from "../../components/Common/CommonErrorMsg/alertMsg";
 
 const DamageStockReport = (props) => {
 
@@ -129,7 +130,7 @@ const DamageStockReport = (props) => {
                 return
             }
             else if ((isSCMParty) && (partyDropdown === "")) {
-                customAlert({ Type: 3, Message: "Please Select Party" });
+                customAlert({ Type: 3, Message: alertMessages.requiredPartySelection });
                 setBtnMode(0)
                 return;
             }

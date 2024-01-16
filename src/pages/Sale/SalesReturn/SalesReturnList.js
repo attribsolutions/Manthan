@@ -23,6 +23,7 @@ import { ReturnPrint_API } from "../../../helpers/backend_helper";
 import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 import { async } from "q";
 import { return_discountCalculate_Func } from "./SalesCalculation";
+import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 
 const SalesReturnList = () => {
 
@@ -209,7 +210,7 @@ const SalesReturnList = () => {
 
         try {
             if (_cfunc.loginSelectedPartyID() === 0) {
-                customAlert({ Type: 3, Message: "Please Select Party" });
+                customAlert({ Type: 3, Message: alertMessages.requiredPartySelection });
                 return;
             };
             const salesReturnJsonBody = JSON.stringify({

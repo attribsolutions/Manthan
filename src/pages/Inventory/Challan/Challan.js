@@ -33,6 +33,7 @@ import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { Amount, basicAmount, orderCalculateFunc, roundedGstAmount } from "../../Purchase/Order/OrderPageCalulation";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { C_DatePicker } from "../../../CustomValidateForm";
+import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 
 const Challan = (props) => {
 
@@ -432,7 +433,7 @@ const Challan = (props) => {
             validMsg.push({ Item: "Please Select Item" })
         };
         if (!(values.Party.value)) {
-            validMsg.push({ Party: "Please Select Party" })
+            validMsg.push({ Party: alertMessages.requiredPartySelection })
         };
         if (validMsg.length > 0) {
             customAlert({

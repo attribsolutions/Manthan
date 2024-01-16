@@ -22,7 +22,7 @@ import { C_Select } from "../../../CustomValidateForm";
 import { getPartyTypelist, getPartyTypelistSuccess } from "../../../store/Administrator/PartyTypeRedux/action";
 import ChannelViewDetails from "./ChannelViewDetails";
 import { vieBtnCss } from "../../../components/Common/ListActionsButtons";
-
+import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 
 function initialState(history) {
 
@@ -320,7 +320,7 @@ const PartyItems = (props) => {
 			event?.persist();// Call event.persist() to remove the synthetic event from the pool
 
 			if ((_cfunc.loginSelectedPartyID() === 0 && !(subPageMode === url.CHANNEL_ITEM))) {
-				customAlert({ Type: 3, Message: "Please Select Party" });
+				customAlert({ Type: 3, Message: alertMessages.requiredPartySelection });
 				return;
 			};
 			const jsonBody = {

@@ -41,6 +41,7 @@ import { C_DatePicker, C_Select } from "../../../CustomValidateForm";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 import { getVehicleList } from "../../../store/Administrator/VehicleRedux/action";
+import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 
 const InvoiceList = () => {
 
@@ -332,7 +333,7 @@ const InvoiceList = () => {
 
         try {
             if (_cfunc.loginSelectedPartyID() === 0) {
-                customAlert({ Type: 3, Message: "Please Select Party" });
+                customAlert({ Type: 3, Message: alertMessages.requiredPartySelection });
                 return;
             };
             const filtersBody = JSON.stringify({

@@ -8,7 +8,7 @@ import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import { commonPartyDropSelectAction } from "../../store/Utilites/PartyDrodown/action";
 import { mode } from "../../routes";
 import { getpartysetting_API, getpartysetting_API_Success } from "../../store/Administrator/PartySetting/action";
-
+import { alertMessages } from '../../components/Common/CommonErrorMsg/alertMsg';
 
 const initialLocalStorageParty = () => {
     try {
@@ -49,7 +49,7 @@ const PartyDropdown = ({ goButtonHandler, changeButtonHandler, goBtnLoading, SAP
 
     const internalGoBtnHandler = async () => {
         if (selectedParty.value === 0) {
-            customAlert({ Type: 3, Message: "Please Select Party" });
+            customAlert({ Type: 3, Message: alertMessages.requiredPartySelection });
             return;
         }
         dispatch(getpartysetting_API(selectedParty.value, loginCompanyID()));

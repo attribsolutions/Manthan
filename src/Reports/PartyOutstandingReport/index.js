@@ -15,6 +15,8 @@ import { Change_Button, Go_Button } from "../../components/Common/CommonButton";
 import { GetRoutesList, GetRoutesListSuccess } from "../../store/Administrator/RoutesRedux/actions";
 import { PartyOutstandingReport_GoButton_API, PartyOutstandingReport_GoButton_API_Success } from "../../store/Report/PartyOutstandingRedux/action";
 import CustomTable from "../../CustomTable2";
+import { alertMessages } from "../../components/Common/CommonErrorMsg/alertMsg";
+
 
 const PartyOutstandingReport = (props) => {
 
@@ -88,7 +90,7 @@ const PartyOutstandingReport = (props) => {
 		try {
 
 			if ((isSCMParty) && (partyDropdown === "")) {
-				customAlert({ Type: 3, Message: "Please Select Party" });
+				customAlert({ Type: 3, Message: alertMessages.requiredPartySelection });
 				return;
 			}
 

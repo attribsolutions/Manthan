@@ -170,6 +170,8 @@ export const ORDER_LIST_2 = "/OrderList_2"
 export const ORDER_4 = '/Order_4'
 export const ORDER_LIST_4 = '/OrderList_4'
 
+export const SALES_ORDER_LIST_2 = "/Sales_Order_List_2"
+
 export const PURCHASE_RETURN = "/PurchaseReturn"
 export const PURCHASE_RETURN_LIST = "/PurchaseReturnList"
 

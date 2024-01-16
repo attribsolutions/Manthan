@@ -29,6 +29,8 @@ import { Receipt_Print } from "../../../helpers/backend_helper";
 import { C_DatePicker, C_Select } from "../../../CustomValidateForm";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import NewCommonPartyDropdown from "../../../components/Common/NewCommonPartyDropdown";
+import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
+
 
 const ReceiptList = () => {
 
@@ -145,7 +147,7 @@ const ReceiptList = () => {
     const goButtonHandler = () => {
         try {
             if (commonPartyDropSelect.value === 0) {
-                customAlert({ Type: 3, Message: "Please Select Party" });
+                customAlert({ Type: 3, Message: alertMessages.requiredPartySelection });
                 return;
             };
             const ReceiptTypeID = ReceiptType.find((index) => {

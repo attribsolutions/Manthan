@@ -12,6 +12,7 @@ import GRNAdd from "./GRNAdd";
 import { C_DatePicker } from "../../../CustomValidateForm";
 import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
+import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 
 const GRNList = () => {
 
@@ -123,7 +124,7 @@ const GRNList = () => {
     function goButtonHandler() {
         try {
             if (loginSelectedPartyID() === 0) {
-                customAlert({ Type: 3, Message: "Please Select Party" });
+                customAlert({ Type: 3, Message: alertMessages.requiredPartySelection });
                 return;
             };
             const filtersBody = JSON.stringify({
