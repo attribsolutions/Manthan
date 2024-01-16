@@ -306,7 +306,7 @@ const StockEntry = (props) => {
                                     type="button"
                                     className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
                                     data-mdb-toggle="tooltip" data-mdb-placement="top" title='Delete MRP'
-                                    onClick={(e) => { deleteButtonAction(row, formatExtraData) }}
+                                    onClick={(e) => { deleteButtonAction(row, _key, formatExtraData) }}
                                 >
                                     <i className="mdi mdi-delete font-size-18"></i>
                                 </Button>
@@ -433,9 +433,9 @@ const StockEntry = (props) => {
         } catch (w) { }
     }
 
-    function deleteButtonAction(row, { TableArr = [], setTableArr }) {
-
-        const newArr = TableArr.filter((index) => !(index.id === row.id))
+    function deleteButtonAction(row, key, { TableArr = [], setTableArr }) {
+        
+        const newArr = TableArr.filter((index, key1) => !(key === key1))
         setTableArr(newArr)
         dispatch(BreadcrumbShowCountlabel(`Count:${newArr.length}`));
 
