@@ -214,6 +214,7 @@ import CreditNote_1 from "../pages/Accounting/CreditDebit/CreditNote1";
 import ManPowerReport from "../Reports/ManPowerReport";
 import TCSAmountReport from "../Reports/TCSAmountReport";
 import CX_DD_DiffrenceReport from "../Reports/CX_DD_DiffrenceReport";
+import POSRoleAccess from "../pages/SweetPOS/Adminstration/POSRoleAccess.js";
 
 
 const userRoutes = [
@@ -542,7 +543,16 @@ const userRoutes = [
 	{ path: path.TCS_AMOUNT_REPORT, component: TCSAmountReport },
 
 	{ path: path.CX_DD_DIFFERENCE_REPORT, component: CX_DD_DiffrenceReport },
+
+
+
+	//******************************* Sweet Pos ************************************//
+
+	{ path: path.POS_ROLE_ACCESS, component: POSRoleAccess },
+
 	// ************************************ Utility **************************************//
+
+
 
 	{ path: path.SEARCH_BOX2, component: SearchBoxSecond },
 	{ path: path.SEARCH_BOX3, component: SerachBox3 },
