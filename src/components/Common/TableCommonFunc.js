@@ -4,18 +4,15 @@ import { useEffect } from "react";
 
 
 export const onSelectAll = ({ event, allarray, }) => {  // event only call After all selection 
-  const indexToModify = 0;
-  allarray.forEach((ele, key) => {
+  allarray.forEach((ele,) => {
     ele.selectCheck = event
     ele["hasAllSelect"] = event
-    if (indexToModify === key) {
-      allarray[indexToModify]["hasAllSelect"] = event;
-    }
   })
 
 }
 
 export const selectRow = (row, event) => {
+  debugger
   row.selectCheck = event
 }
 
@@ -26,7 +23,8 @@ export const selectAllCheck = ({
   headLabel,
   bgColor = "#9dadf09e",
   disabledWithMsg = '',
-  tableList = []
+  tableList = [],
+  pageloading = false
 
 }) => ({
 
@@ -37,13 +35,15 @@ export const selectAllCheck = ({
   onSelect: selectRow,
   selected: rowSelected,
   selectColumnPosition: position ? position : "right",
-  nonSelectable: nonSelectable,
+  nonSelectable: pageloading ? tableList.map(row => row.id) : nonSelectable,
   attrs: () => ({ 'data-label': "Select" }),
 
   selectionHeaderRenderer: (head) => {
+
     if (tableList.length > 0) {
       let isAllcheck = tableList.filter(i => (i.hasAllSelect))
-      if (isAllcheck.length > 0) {
+      let ischeck = tableList.filter(i => (i.selectCheck))
+      if (isAllcheck.length > 0 && ischeck.length > 0 && isAllcheck.length === ischeck.length) {
         head.checked = true
       }
     }
@@ -54,13 +54,16 @@ export const selectAllCheck = ({
     </div>
   },
   selectionRenderer: ({ mode, checked, ...rest }) => {
+    
     if (tableList.length > 0) {
       let isAllcheck = tableList.filter(i => (i.hasAllSelect))
-      if (isAllcheck.length > 0) {
+      let ischeck = tableList.filter(i => (i.selectCheck))
+      if (isAllcheck.length > 0 && ischeck.length > 0 && isAllcheck.length === ischeck.length) {
         checked = rest.disabled ? false : true
       }
     }
     if (rest.disabled) {
+
       return <>
         <Input
           type="checkbox"

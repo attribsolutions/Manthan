@@ -40,6 +40,7 @@ import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 import { loginSelectedPartyID } from "../../../components/Common/CommonFunction";
+import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 
 function initialState(history) {
 
@@ -728,7 +729,7 @@ const GoodsCreditNote = (props) => {
             if (filterData.length === 0) {
                 customAlert({
                     Type: 4,
-                    Message: "Please Enter One Item Quantity",
+                    Message: alertMessages.requiredItemQty
                 });
                 return;
             }
@@ -736,7 +737,7 @@ const GoodsCreditNote = (props) => {
             if (values.InvoiceNO === '') {
                 customAlert({
                     Type: 4,
-                    Message: "Invoice Number is Required",
+                    Message: alertMessages.invoiceNoIsRequired,
                 });
                 return;
             }

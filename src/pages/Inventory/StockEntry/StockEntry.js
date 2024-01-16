@@ -8,7 +8,7 @@ import {
     Button
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
-import { commonPageFieldSuccess } from "../../../store/actions";
+import { BreadcrumbShowCountlabel, commonPageFieldSuccess } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { commonPageField } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
@@ -79,7 +79,8 @@ const StockEntry = (props) => {
                 ..._cfunc.loginJsonBody(),
                 PartyID: _cfunc.loginSelectedPartyID()
             })
-        }))
+        }));
+        dispatch(BreadcrumbShowCountlabel(`Count:${0}`));
     }, []);
 
     const location = { ...history.location }
@@ -305,7 +306,7 @@ const StockEntry = (props) => {
                                     type="button"
                                     className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
                                     data-mdb-toggle="tooltip" data-mdb-placement="top" title='Delete MRP'
-                                    onClick={(e) => { deleteButtonAction(row, formatExtraData) }}
+                                    onClick={(e) => { deleteButtonAction(row, _key, formatExtraData) }}
                                 >
                                     <i className="mdi mdi-delete font-size-18"></i>
                                 </Button>
@@ -427,15 +428,17 @@ const StockEntry = (props) => {
 
             initialTableData.sort((a, b) => b.id - a.id);
             setTableArr(initialTableData);
-
+            dispatch(BreadcrumbShowCountlabel(`Count:${initialTableData.length}`));
 
         } catch (w) { }
     }
 
-    function deleteButtonAction(row, { TableArr = [], setTableArr }) {
-
-        const newArr = TableArr.filter((index) => !(index.id === row.id))
+    function deleteButtonAction(row, key, { TableArr = [], setTableArr }) {
+        
+        const newArr = TableArr.filter((index, key1) => !(key === key1))
         setTableArr(newArr)
+        dispatch(BreadcrumbShowCountlabel(`Count:${newArr.length}`));
+
     }
 
     function partyOnChngeButtonHandler() {
@@ -654,6 +657,7 @@ const StockEntry = (props) => {
                                                     onDataSizeChange={(e) => {
                                                         _cfunc.tableInputArrowUpDounFunc("#table_Arrow")
                                                     }}
+
                                                     {...toolkitProps.baseProps}
                                                 />
                                                 {mySearchProps(toolkitProps.searchProps)}

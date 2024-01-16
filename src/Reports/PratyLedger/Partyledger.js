@@ -14,6 +14,7 @@ import * as report from '../ReportIndex'
 import { PartyLedgerReport_API } from "../../helpers/backend_helper";
 import C_Report from "../../components/Common/C_Report";
 import PartyDropdown_Common from "../../components/Common/PartyDropdown";
+import { alertMessages } from "../../components/Common/CommonErrorMsg/alertMsg";
 import * as ExcelJS from 'exceljs';
 const XLSX = require('xlsx');
 
@@ -364,7 +365,7 @@ const PartyLedger = () => {
     async function goButtonHandler(e, mode) {
 
         if (_cfunc.loginSelectedPartyID() === 0) {
-            customAlert({ Type: 3, Message: "Please Select Party" });
+            customAlert({ Type: 3, Message: alertMessages.requiredPartySelection });
             return;
         };
 
@@ -374,7 +375,7 @@ const PartyLedger = () => {
         if ((isPartyLeger && values.Customer === "") || (isSelfLeger && values.Party === "")) {
             customAlert({
                 Type: 3,
-                Message: isPartyLeger ? "Please Select Customer" : "Please Select Party",
+                Message: isPartyLeger ? "Please Select Customer" : alertMessages.requiredPartySelection,
             });
             return;
         }

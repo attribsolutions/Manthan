@@ -379,7 +379,8 @@ const CommonPurchaseList = (props) => {
                     nonSelectable: nonSelectedRow(),
                     position: "left",
                     headLabel: selectCheckParams.selectHeaderLabel,
-                    tableList: tableList
+                    tableList: tableList,
+                    pageloading: selectCheckParams.pageloading
                   })
                   : undefined}
                 defaultSorted={defaultSorted}

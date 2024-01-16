@@ -53,6 +53,7 @@ import { C_DatePicker, C_Select } from "../../../CustomValidateForm";
 import { GetDistrictOnState_For_Dropdown, mobileApp_RetailerUpdate_Api } from "../../../helpers/backend_helper";
 import { showToastAlert } from "../../../helpers/axios_Config";
 import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
+import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 
 const PartyMasterBulkUpdate = (props) => {
 
@@ -238,7 +239,7 @@ const PartyMasterBulkUpdate = (props) => {
     const GoButton_Handler = () => {
 
         if ((_cfunc.loginSelectedPartyID() === 0)) {
-            customAlert({ Type: 3, Message: "Please Select Party" });
+            customAlert({ Type: 3, Message: alertMessages.requiredPartySelection });
             return;
         }
 

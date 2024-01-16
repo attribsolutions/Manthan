@@ -215,6 +215,7 @@ import ManPowerReport from "../Reports/ManPowerReport";
 import TCSAmountReport from "../Reports/TCSAmountReport";
 import CX_DD_DiffrenceReport from "../Reports/CX_DD_DiffrenceReport";
 import Bulk_Invoice from "../pages/Sale/Bulk_Invoice/index";
+import POSRoleAccess from "../pages/SweetPOS/Adminstration/POSRoleAccess.js";
 
 
 const userRoutes = [
@@ -401,6 +402,8 @@ const userRoutes = [
 	{ path: path.ORDER_4, component: Order },
 	{ path: path.ORDER_LIST_4, component: OrderList },
 
+	{ path: path.SALES_ORDER_LIST_2, component: OrderList },
+
 	{ path: path.PURCHASE_RETURN, component: PurchaseReturn },
 	{ path: path.PURCHASE_RETURN_LIST, component: SalesReturnList },
 	{ path: path.PURCHASE_RETURN_MODE_3, component: PurchaseReturnMode3 },
@@ -544,7 +547,16 @@ const userRoutes = [
 	{ path: path.TCS_AMOUNT_REPORT, component: TCSAmountReport },
 
 	{ path: path.CX_DD_DIFFERENCE_REPORT, component: CX_DD_DiffrenceReport },
+
+
+
+	//******************************* Sweet Pos ************************************//
+
+	{ path: path.POS_ROLE_ACCESS, component: POSRoleAccess },
+
 	// ************************************ Utility **************************************//
+
+
 
 	{ path: path.SEARCH_BOX2, component: SearchBoxSecond },
 	{ path: path.SEARCH_BOX3, component: SerachBox3 },

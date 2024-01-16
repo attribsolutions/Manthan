@@ -169,6 +169,7 @@ export const IB_ORDER_SO_LIST = 147
 export const ORDER_4 = 144
 export const ORDER_LIST_4 = 143
 
+export const SALES_ORDER_LIST_2 = 267
 
 export const BIllOf_MATERIALS = 69
 export const BIllOf_MATERIALS_LIST = 70
@@ -292,7 +293,8 @@ export const RETURN_REPORT = 223
 
 export const PURCHASE_GST_REPORT = 219
 
-export const INVOICE_DATA_EXPORT = 218
+export const
+    INVOICE_DATA_EXPORT = 218
 
 export const PURCHASE_DATA_EXPORT = 234
 
@@ -325,3 +327,8 @@ export const CLAIM_TRACKING_REPORT = 257
 export const TCS_AMOUNT_REPORT = 263
 
 export const CX_DD_DIFFERENCE_REPORT = 264
+
+export const POS_ROLE_ACCESS = 266
+
+
+

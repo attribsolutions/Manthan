@@ -131,18 +131,17 @@ function* UpdateOrder_ID_GenFunc({ config }) {         // Update Order by subPag
   } catch (error) {
     yield put(orderApiErrorAction())
   }
-
 }
 
 function* orderList_GoBtn_GenFunc({ config }) {
 
   //  Order List Filter by subPageMode
   try {
-  
+
     const { subPageMode } = config
     let response;
     let newList;
-    if ((subPageMode === url.ORDER_LIST_1) || (subPageMode === url.ORDER_LIST_2) || (subPageMode === url.ORDER_LIST_4)) {
+    if ((subPageMode === url.ORDER_LIST_1) || (subPageMode === url.ORDER_LIST_2) || (subPageMode === url.ORDER_LIST_4) || (subPageMode === url.SALES_ORDER_LIST_2)) {
       response = yield call(OrderList_get_Filter_API, config); // GO-Botton Purchase Order 1 && 2 Add Page API
     }
     else if ((subPageMode === url.GRN_STP_1) || subPageMode === url.GRN_STP_3) {
@@ -157,7 +156,7 @@ function* orderList_GoBtn_GenFunc({ config }) {
     // }
 
     newList = yield response.Data.map((i) => {
-      
+
       i["recordsAmountTotal"] = i.OrderAmount;  // Breadcrumb Count total
       i.OrderAmount = amountCommaSeparateFunc(i.OrderAmount) //  GrandTotal show with commas
       var DeliveryDate = date_dmy_func(i.DeliveryDate);

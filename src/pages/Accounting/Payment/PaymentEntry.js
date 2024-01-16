@@ -28,6 +28,7 @@ import * as _cfunc from "../../../components/Common/CommonFunction";
 import { url, mode, pageId } from "../../../routes/index"
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
+import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 
 const PaymentEntry = (props) => {
 
@@ -251,10 +252,10 @@ const PaymentEntry = (props) => {
             const invalidMsg1 = []
 
             if (values.BankName === "") {
-                invalidMsg1.push(`BankName Is Required`)
+                invalidMsg1.push(alertMessages.bankNameIsRequired)
             }
             if (values.DocumentNo === "") {
-                invalidMsg1.push(`DocumentNo Is Required`)
+                invalidMsg1.push(alertMessages.documentNoIsRequired)
             };
 
             if ((values.BankName === "")
@@ -276,7 +277,7 @@ const PaymentEntry = (props) => {
                 if (Number(values.AmountPaid) === 0) {
                     customAlert({
                         Type: 4,
-                        Message: `The payment amount must be greater than zero.`,
+                        Message: alertMessages.amountGreaterThanZero,
                     })
                     return _cfunc.btnIsDissablefunc({ btnId, state: false })
                 }
@@ -324,7 +325,7 @@ const PaymentEntry = (props) => {
             return a
         })
     }
-    
+
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
     if ((modalCss) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };

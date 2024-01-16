@@ -19,6 +19,7 @@ import * as _cfunc from "../../../components/Common/CommonFunction";
 import { CInput, decimalRegx } from "../../../CustomValidateForm";
 import { goButton_ServiceItemAssign, goButton_ServiceItemAssign_Success, save_ServiceItemAssign_Action, save_ServiceItemAssign_Success } from "../../../store/Administrator/ServiceItemAssignRedux/action";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
+import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 
 const ServiceItemAssign = (props) => {
 	const history = useHistory();
@@ -124,7 +125,7 @@ const ServiceItemAssign = (props) => {
 			event?.persist();// Call event.persist() to remove the synthetic event from the pool
 
 			if ((_cfunc.loginSelectedPartyID() === 0)) {
-				customAlert({ Type: 3, Message: "Please Select Party" });
+				customAlert({ Type: 3, Message: alertMessages.requiredPartySelection });
 				return;
 			};
 			const jsonBody = {
@@ -190,7 +191,7 @@ const ServiceItemAssign = (props) => {
 	}
 
 	const SaveHandler = (event) => {
-		
+
 		event.preventDefault();
 
 		const CheckArray = tableList.filter(index => index.selectCheck === true);
@@ -209,7 +210,7 @@ const ServiceItemAssign = (props) => {
 				"UpdatedBy": _cfunc.loginUserID(),
 			}))
 
-			
+
 			const jsonBody = JSON.stringify(PartiesJson);
 			dispatch(save_ServiceItemAssign_Action({ jsonBody }));
 
@@ -271,7 +272,8 @@ const ServiceItemAssign = (props) => {
 														striped={true}
 														selectRow={selectAllCheck({
 															rowSelected: rowSelected(),
-															bgColor: ''
+															bgColor: '',
+															tableList: tableList
 														})}
 														noDataIndication={<div className="text-danger text-center ">Party Not available</div>}
 														classes={"table align-middle table-nowrap table-hover"}

@@ -17,6 +17,7 @@ import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import { mode, url, pageId } from "../../routes/index"
 import DynamicColumnHook from "../../components/Common/TableCommonFunc";
 import { ExcelReportComponent } from "../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS";
+import { alertMessages } from "../../components/Common/CommonErrorMsg/alertMsg";
 
 const PurchaseGSTReport = (props) => {
 
@@ -106,7 +107,7 @@ const PurchaseGSTReport = (props) => {
         setBtnMode(btnMode)
         try {
             if (isSCMParty && PartyDropdown === "") {
-                customAlert({ Type: 3, Message: "Please Select Party" });
+                customAlert({ Type: 3, Message: alertMessages.requiredPartySelection });
                 return;
             }
 

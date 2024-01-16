@@ -41,6 +41,7 @@ import { C_DatePicker, C_Select } from "../../../CustomValidateForm";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 import { getVehicleList } from "../../../store/Administrator/VehicleRedux/action";
+import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 
 const InvoiceList = () => {
 
@@ -332,7 +333,7 @@ const InvoiceList = () => {
 
         try {
             if (_cfunc.loginSelectedPartyID() === 0) {
-                customAlert({ Type: 3, Message: "Please Select Party" });
+                customAlert({ Type: 3, Message: alertMessages.requiredPartySelection });
                 return;
             };
             const filtersBody = JSON.stringify({
@@ -523,13 +524,14 @@ const InvoiceList = () => {
     }
 
     const selectDeleteBtnHandler = (row = []) => {
-
+        debugger
         let isAllcheck = row.filter(i => (i.hasAllSelect))
+        let isRowcheck = row.filter(i => (i.selectCheck))
         let ischeck = [];
-        if (isAllcheck.length > 0) {
+        if (isAllcheck.length > 0 && isRowcheck.length > 0 && isAllcheck.length === isRowcheck.length) {
             ischeck = row.filter(i => !(i.forceSelectDissabled))
         } else {
-            ischeck = row.filter(i => (i.selectCheck))
+            ischeck = row.filter(i => (!i.forceSelectDissabled && i.selectCheck))
         }
         if (!ischeck.length > 0) {
             customAlert({
@@ -544,7 +546,7 @@ const InvoiceList = () => {
     }
     return (
         <React.Fragment>
-            <PageLoadingSpinner isLoading={reducers.listBtnLoading || !pageField} />
+            <PageLoadingSpinner isLoading={reducers.listBtnLoading || !pageField || supplierDropLoading} />
             <div className="page-content">
                 <PartyDropdown_Common pageMode={pageMode}
                     goButtonHandler={partySelectButtonHandler}
@@ -577,7 +579,8 @@ const InvoiceList = () => {
                                 selectSaveBtnHandler: selectDeleteBtnHandler,
                                 selectSaveBtnLabel: "Delete",
                                 selectHeaderLabel: "Select",
-                                selectSaveBtnLoading: invoiceBulkDeleteLoading
+                                selectSaveBtnLoading: invoiceBulkDeleteLoading,
+                                pageloading: reducers.listBtnLoading || supplierDropLoading    ////   non selectable  till page loading
                             }}
 
                         />

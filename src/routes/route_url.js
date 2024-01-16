@@ -170,6 +170,8 @@ export const ORDER_LIST_2 = "/OrderList_2"
 export const ORDER_4 = '/Order_4'
 export const ORDER_LIST_4 = '/OrderList_4'
 
+export const SALES_ORDER_LIST_2 = "/Sales_Order_List_2"
+
 export const PURCHASE_RETURN = "/PurchaseReturn"
 export const PURCHASE_RETURN_LIST = "/PurchaseReturnList"
 
@@ -341,5 +343,10 @@ export const TCS_AMOUNT_REPORT = "/TCS_Amount_Report"
 
 export const CX_DD_DIFFERENCE_REPORT = "/CX_DD_Difference"
 
+
+
+//**************************** Sweet Pos ***********************************//
+
+export const POS_ROLE_ACCESS = "/POS_RoleAccess"
 
 

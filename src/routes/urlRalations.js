@@ -134,8 +134,8 @@ export const Discount_List = url.DISCOUNT_MASTER
 export const Cluster_Master = url.CLUSTER_lIST
 export const Cluster_List = url.CLUSTER_MASTER
 
-export const SubCluster_Master =  url.SUB_CLUSTER_lIST
-export const SubCluster_List =  url.SUB_CLUSTER_MASTER
+export const SubCluster_Master = url.SUB_CLUSTER_lIST
+export const SubCluster_List = url.SUB_CLUSTER_MASTER
 
 export const CentralServiceItem = url.CENTRAL_SERVICE_ITEM_lIST
 export const CentralServiceItemList = url.CENTRAL_SERVICE_ITEM_MASTER
@@ -293,10 +293,12 @@ export const RetailerApproval = url.RETAILER_APPROVAL
 
 export const ManPowerReport = url.MAN_POWER_REPORT
 
-export const ClaimTrackingReport=url.CLAIM_TRACKING_REPORT
+export const ClaimTrackingReport = url.CLAIM_TRACKING_REPORT
 
-export const TCSAmountReport= url.TCS_AMOUNT_REPORT
+export const TCSAmountReport = url.TCS_AMOUNT_REPORT
 
-export const CX_DD_Difference= url.CX_DD_DIFFERENCE_REPORT
+export const CX_DD_Difference = url.CX_DD_DIFFERENCE_REPORT
+
+export const Sales_Order_List_2 = url.SALES_ORDER_LIST_2
 
 

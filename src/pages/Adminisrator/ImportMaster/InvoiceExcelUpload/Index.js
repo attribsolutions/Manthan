@@ -31,7 +31,7 @@ import './scss.scss'
 import { PageLoadingSpinner, Verifiy_Button } from "../../../../components/Common/CommonButton";
 import NewCommonPartyDropdown from "../../../../components/Common/NewCommonPartyDropdown";
 import { ImportMaster_Map_Unit_GoButton_API } from "../../../../helpers/backend_helper";
-
+import { alertMessages } from "../../../../components/Common/CommonErrorMsg/alertMsg";
 
 const InvoiceExcelUpload = (props) => {
 
@@ -246,7 +246,7 @@ const InvoiceExcelUpload = (props) => {
         if (commonPartyDropSelect.value === 0) {
             customAlert({
                 Type: 3,
-                Message: "Please Select Party",
+                Message: alertMessages.requiredPartySelection,
             })
             setverifyLoading(false)
             return
@@ -576,7 +576,7 @@ const InvoiceExcelUpload = (props) => {
                         "LiveBatch": ele[parArr.LiveBatch] ? ele[parArr.LiveBatch] : '',
                         "MRPValue": ele[parArr.MRP] ? ele[parArr.MRP] : '', //Actul MRP That Map in System
                         "Rate": ele[parArr.Rate] ? ele[parArr.Rate]?.toFixed(2) : '',
-                        "BasicAmount": ele[parArr.BasicAmount] ? ele[parArr.BasicAmount] : calculate.BasicAmount,
+                        "BasicAmount": ele[parArr.BasicAmount] ? ele[parArr.BasicAmount] :(calculate.BasicAmount).toFixed(2),
                         "GSTAmount": ele[parArr.GSTAmount] ? ele[parArr.GSTAmount] : (calculate.GSTAmount).toFixed(2),
                         "GST": '',
                         // "GSTValue": ele[parArr.GSTValue] ? ele[parArr.GSTValue] : ,       ///  Note ** GSTValue ===GST percentage

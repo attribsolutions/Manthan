@@ -17,6 +17,7 @@ import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess } fro
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import DynamicColumnHook from "../../components/Common/TableCommonFunc";
 import { ExcelReportComponent } from "../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS";
+import { alertMessages } from "../../components/Common/CommonErrorMsg/alertMsg";
 
 const DeleteInvoiceDataExport = (props) => {
 
@@ -106,7 +107,7 @@ const DeleteInvoiceDataExport = (props) => {
 
         try {
             if ((isSCMParty) && (PartyDropdown === "")) {
-                customAlert({ Type: 3, Message: "Please Select Party" });
+                customAlert({ Type: 3, Message: alertMessages.requiredPartySelection });
                 return;
             };
             const jsonBody = JSON.stringify({
@@ -125,7 +126,7 @@ const DeleteInvoiceDataExport = (props) => {
         try {
             const btnId = `gobtn-${url.DELETE_INVOICE_DATA_EXPORT}`
             if ((isSCMParty) && (PartyDropdown === "")) {
-                customAlert({ Type: 3, Message: "Please Select Party" });
+                customAlert({ Type: 3, Message: alertMessages.requiredPartySelection });
                 return;
             };
             const jsonBody = JSON.stringify({

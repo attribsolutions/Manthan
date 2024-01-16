@@ -45,6 +45,7 @@ import { InvoiceNumber, InvoiceNumberSuccess } from "../../../store/Sales/SalesR
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { C_DatePicker, C_Select } from "../../../CustomValidateForm";
 import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
+import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 
 const CreditNoteAdd = (props) => {
     const history = useHistory();
@@ -300,16 +301,16 @@ const CreditNoteAdd = (props) => {
         const validMsg = []
 
         if (!values.Customer?.value > 0) {
-            validMsg.push({ "Customer": 'Is Required.' })
+            validMsg.push({ "Customer": alertMessages.IsRequired })
         };
         if (!values.NoteReason?.value > 0) {
-            validMsg.push({ "Note Reason": 'Is Required.' })
+            validMsg.push({ "Note Reason": alertMessages.IsRequired })
         };
         if (!values.InvoiceNO?.value > 0) {
-            validMsg.push({ "InvoiceNO": 'Is Required.' })
+            validMsg.push({ "InvoiceNO": alertMessages.IsRequired })
         };
         if (!Number(values.GrandTotal) > 0) {
-            validMsg.push({ "Amount": 'Is Required.' })
+            validMsg.push({ "Amount": alertMessages.IsRequired })
         };
         if (validMsg.length > 0) {
             customAlert({ Type: 3, Message: validMsg });

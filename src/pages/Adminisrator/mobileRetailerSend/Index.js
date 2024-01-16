@@ -24,6 +24,7 @@ import { selectAllCheck } from "../../../components/Common/TableCommonFunc";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { C_Select } from "../../../CustomValidateForm";
 import { mobileApp_Send_Retailer_Api } from "../../../helpers/backend_helper"
+import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 
 const Index = (props) => {
 
@@ -99,7 +100,7 @@ const Index = (props) => {
 		if (partyName.length === 0) {
 			customAlert({
 				Type: 4,
-				Message: "Please Select Party"
+				Message: alertMessages.requiredPartySelection
 			});
 			return;
 		}
