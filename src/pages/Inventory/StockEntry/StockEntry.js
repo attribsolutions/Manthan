@@ -8,7 +8,7 @@ import {
     Button
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
-import { commonPageFieldSuccess } from "../../../store/actions";
+import { BreadcrumbShowCountlabel, commonPageFieldSuccess } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { commonPageField } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
@@ -79,7 +79,8 @@ const StockEntry = (props) => {
                 ..._cfunc.loginJsonBody(),
                 PartyID: _cfunc.loginSelectedPartyID()
             })
-        }))
+        }));
+        dispatch(BreadcrumbShowCountlabel(`Count:${0}`));
     }, []);
 
     const location = { ...history.location }
@@ -427,7 +428,7 @@ const StockEntry = (props) => {
 
             initialTableData.sort((a, b) => b.id - a.id);
             setTableArr(initialTableData);
-
+            dispatch(BreadcrumbShowCountlabel(`Count:${initialTableData.length}`));
 
         } catch (w) { }
     }
@@ -436,6 +437,8 @@ const StockEntry = (props) => {
 
         const newArr = TableArr.filter((index) => !(index.id === row.id))
         setTableArr(newArr)
+        dispatch(BreadcrumbShowCountlabel(`Count:${newArr.length}`));
+
     }
 
     function partyOnChngeButtonHandler() {
@@ -654,6 +657,7 @@ const StockEntry = (props) => {
                                                     onDataSizeChange={(e) => {
                                                         _cfunc.tableInputArrowUpDounFunc("#table_Arrow")
                                                     }}
+
                                                     {...toolkitProps.baseProps}
                                                 />
                                                 {mySearchProps(toolkitProps.searchProps)}
