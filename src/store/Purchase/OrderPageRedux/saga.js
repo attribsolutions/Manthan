@@ -137,7 +137,6 @@ function* orderList_GoBtn_GenFunc({ config }) {
 
   //  Order List Filter by subPageMode
   try {
-
     const { subPageMode } = config
     let response;
     let newList;
@@ -151,9 +150,7 @@ function* orderList_GoBtn_GenFunc({ config }) {
     else if ((subPageMode === url.IB_ORDER_PO_LIST) || (subPageMode === url.IB_ORDER_SO_LIST) || (subPageMode === url.IB_INVOICE_STP)) {
       response = yield call(IBOrderList_get_Filter_API, config); // GO-Botton IB-invoice Add Page API
     }
-    // else if ((subPageMode === url.ORDER_LIST_4)) {
-    //   response = yield call(IBOrderList_get_Filter_API, config); // GO-Botton IB-invoice Add Page API
-    // }
+
 
     newList = yield response.Data.map((i) => {
 
@@ -211,7 +208,12 @@ function* orderList_GoBtn_GenFunc({ config }) {
       if (i.IsConfirm === true) {// is confirm is true the show force delete and edit true "PO" ans "SO" mode 
         i.forceEditHide = true;
         i.forceDeleteHide = true;
-        i.forceSelectDissabled = true;//select row check box dessible 
+        if (subPageMode === url.SALES_ORDER_LIST_2) {
+          i.forceSelectDissabled = false;//select row check box dessible 
+        }
+        else {
+          i.forceSelectDissabled = true;//select row check box dessible 
+        }
       }
 
       //**********sap_code order page********************************************************************************************
@@ -226,7 +228,11 @@ function* orderList_GoBtn_GenFunc({ config }) {
 
       return i
     })
-
+    if (subPageMode === url.ORDER_LIST_4) {
+      newList = newList.filter(i => i.MobileAppOrderFlag === null);
+    } else if (subPageMode === url.SALES_ORDER_LIST_2) {
+      newList = newList.filter(i => i.MobileAppOrderFlag !== null);
+    }
     yield put(getOrderListPageSuccess(newList))
 
   } catch (error) {
