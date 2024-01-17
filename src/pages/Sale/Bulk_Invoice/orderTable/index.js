@@ -4,43 +4,32 @@ import DiscountHeader from "../util/DiscountHeader";
 import { useBulkInvoiceContext } from '../dataProvider';
 import DiscountColumn from '../orderTable/columns/DiscountColumn';
 import StockDetailsTable from '../orderTable/columns/StockDetailsColumn';
-import { CInput, C_Select, decimalRegx_3dit } from '../../../../CustomValidateForm';
-import ItemAmountSection from '../util/ItemAmountSection';
 import OrderTableHeaderSection from './header';
 import { discountDropOption } from '../util/constent';
+import ItemNameColumn from './columns/ItemNameColumn';
+import QuantityUnitColumn from './columns/QuantityUnitColumn';
 
 
 const OrdersTable = React.memo(({ order }) => {
 
   const {
-    globleStockDistribute,
     handleItemQuantityChange,
-    handleDiscountChange,
     handleOrderDiscount,
     handleOrderDiscountType,
   } = useBulkInvoiceContext();
 
   const orderId = order.OrderIDs[0];
-  const orderInfo = globleStockDistribute?.[`orderId-${orderId}`];
+  const orderAmountWithGst = order.orderAmountWithGst || 0
+  const orderDate = order?.OrderDate || "20-02-2024"
+  const customerName = "Test Customer"
 
-  const handleItemDiscountChange = useCallback(
-    (orderId, itemId, newDiscountType) => {
-      handleDiscountChange(orderId, itemId, newDiscountType)
-    },
-    [orderId]
-  )
-  const handleItemDiscountTypeChange = useCallback(
-    (orderId, itemId, newDiscount) => {
-      handleDiscountChange(orderId, itemId, newDiscount)
-    },
-    [orderId]
-  )
   const handleOrderDiscountChange = useCallback(
     (orderId, newDiscountType) => {
       handleOrderDiscount(orderId, newDiscountType)
     },
     [orderId]
-  )
+  );
+  
   const handleOrderDiscountTypeChange = useCallback(
     (orderId, event) => {
       const value = event.target.value;
@@ -55,7 +44,13 @@ const OrdersTable = React.memo(({ order }) => {
 
   return (
     <Card >
-      <OrderTableHeaderSection orderId={orderId} orderInfo={orderInfo} />
+      <OrderTableHeaderSection
+        orderId={orderId}
+        orderAmountWithGst={orderAmountWithGst}
+        orderDate={orderDate}
+        customerName={customerName}
+      />
+
       <Table className=" custom-table">
         <thead>
           <tr>
@@ -76,51 +71,38 @@ const OrdersTable = React.memo(({ order }) => {
         </thead>
         <tbody>
           {order.OrderItemDetails.map((item, _key) => {
-            const itemId = item.Item;
-            const itemInfo = globleStockDistribute?.[`orderId-${orderId}`]?.[`itemId-${itemId}`]
-            const itemQuantity = itemInfo?.orderQty;
-            const isLessStock = itemInfo?.lessStock || 0;
-            const rate = itemInfo?.rate || 0;
-            const unitname = itemInfo?.unitname || "";
-            const quantity = itemInfo?.quantity || 0;
-            const discount = itemInfo?.discount;
-            const discountType = itemInfo?.discounttype;
-            const gstpercentage = itemInfo?.gstpercentage;
-            const IsComparGstIn = {};
 
+            const itemId = item.Item;
+            const itemInfo = item;
+            const itemName = itemInfo?.ItemName;
+            const itemQuantity = itemInfo?.modifiedQuantity;
+            const isLessStock = itemInfo?.lessStock || 0;
+            const unitName = itemInfo?.UnitName;
+            const unitId = itemInfo?.Unit;
+            const discount = itemInfo?.Discount;
+            const discountType = itemInfo?.DiscountType;
+            const itemAmount = item.itemAmountWithGst;
 
 
             return (
               <tr key={item.Item}>
                 <td style={{ width: "35%" }}>
-                  <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-between", height: "100%" }}>
-                    <div>
-                      <strong>{item.ItemName}</strong>
-                    </div>
-                    <div style={{ display: isLessStock ? "block" : "none", color: "red" }}>
-                      {`Short Stock Quantity ${isLessStock} ${unitname?.split(" ")[0]}`}
-                    </div>
-                  </div>
+                  <ItemNameColumn
+                    unitName={unitName}
+                    itemName={itemName}
+                    isLessStock={isLessStock}
+                  />
                 </td>
-
-
                 <td style={{ width: "15%" }}>
-                  <div className='d-flex  flex-column  justify-content-start gap-2'>
-                    <CInput
-                      cpattern={decimalRegx_3dit}
-                      key={`order-input${item.Item}-${_key}`}
-                      style={{ borderColor: isLessStock ? "red" : '' }}
-                      defaultValue={itemQuantity}
-                      onInput={(e) => {
-                        handleItemQuantityChange(orderId, item.Item, e.target.value)
-                      }
-                      }
-                    />
-                    <C_Select
-                      isDisabled
-                      value={{ label: item.UnitName, value: item.UnitID }}
-                    />
-                  </div>
+                  <QuantityUnitColumn
+                    orderId={orderId}
+                    itemId={itemId}
+                    handleItemQuantityChange={handleItemQuantityChange}
+                    itemQuantity={itemQuantity}
+                    unitName={unitName}
+                    unitId={unitId}
+                    isLessStock={isLessStock}
+                  />
                 </td>
                 <td>
                   <StockDetailsTable
@@ -134,18 +116,9 @@ const OrdersTable = React.memo(({ order }) => {
                   <DiscountColumn
                     discount={discount}
                     discountType={discountType}
-                    handleDiscountChange={handleItemDiscountChange}
-                    handleDiscountTypeChange={handleItemDiscountTypeChange}
                     itemId={itemId}
                     orderId={orderId}
-                  />
-                  <ItemAmountSection
-                    rate={rate}
-                    quantity={quantity}
-                    gstpercentage={gstpercentage}
-                    discount={discount}
-                    discountType={discountType}
-                    IsComparGstIn={IsComparGstIn}
+                    itemAmount={itemAmount}
                   />
                 </td>
               </tr>

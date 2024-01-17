@@ -12,6 +12,8 @@ export const onlyTextRegx = /^[a-zA-Z]+$/;
 
 export const charRegx = /^[\s.]*([^\s.][\s.]*){0,100}$/;
 
+export const zeroTo100AllowWithDecimal_Regx = /^(\d{1,2}(\.\d{1,2})?|100(\.0{1,2})?)$/;
+
 
 
 

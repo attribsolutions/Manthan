@@ -1,52 +1,35 @@
 import React from 'react';
-import { Input } from 'reactstrap';
 import * as _cfunc from "../../../../../components/Common/CommonFunction";
+import { CInput, C_Select, decimalRegx_3dit } from '../../../../../CustomValidateForm';
 
 const QuantityUnitColumn = React.memo(({
-  index1,
-  qtyOnChangeCallBack,
-  unitChangeCallback
+  orderId,
+  itemId,
+  handleItemQuantityChange,
+  itemQuantity,
+  unitName,
+  unitId,
+  isLessStock,
 }) => {
-  console.log("QuantityUnitColumn : ",index1);
+  // console.log("QuantityUnitColumn : ", itemQuantity);
 
-  
+
   return (
-    <div>
-      <div>
-        <Input
-          type="text"
-          id={`OrderQty-${index1.id}`}
-          placeholder="Enter quantity"
-          className="right-aligned-placeholder mb-1"
-          style={{
-            border: index1.StockInValid ? '2px solid red' : '1px solid #ced4da',
-          }}
-          autoComplete="off"
-          defaultValue={index1.Quantity}
-          onChange={(event) => {
-            qtyOnChangeCallBack(event, index1)
-          }}
-        />
-      </div>
-      <div>
-        <SelectUnit
-          index1={index1}
-          onSelectChange={unitChangeCallback}
-          unitSelected={index1.default_UnitDropvalue}
-          unitOptions={index1.UnitDetails}
-        />
-      </div>
-      <div className="theme-font">
-        <span className="text-muted">Order-Qty :</span>
-        <samp>{index1.OrderQty}</samp>&nbsp;&nbsp;
-        <samp>{index1.UnitName}</samp>
-      </div>
-      <div>
-        <samp className="theme-font text-muted">Available stock :</samp>
-        <label className="text-black">
-          {_cfunc.roundToDecimalPlaces(index1.ItemTotalStock, 3)}
-        </label>
-      </div>
+    <div className='d-flex  flex-column  justify-content-start gap-2'>
+      <CInput
+        cpattern={decimalRegx_3dit}
+        key={`order-input${itemId}`}
+        style={{ borderColor: isLessStock ? "red" : '' }}
+        defaultValue={itemQuantity}
+        onInput={(e) => {
+          handleItemQuantityChange(orderId, itemId, e.target.value)
+        }
+        }
+      />
+      <C_Select
+        isDisabled
+        value={{ label: unitName, value: unitId }}
+      />
     </div>
   );
 });

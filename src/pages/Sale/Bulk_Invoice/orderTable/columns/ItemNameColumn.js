@@ -1,28 +1,13 @@
 import React from 'react';
 
-const ItemNameColumn = React.memo(({ index1 }) => {
+const ItemNameColumn = React.memo(({ unitName, itemName, isLessStock }) => {
   return (
-    <div>
-      <div className="theme-font" id={`ItemName${index1.id}`}>
-        {index1.ItemName}
+    <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-between", height: "100%" }}>
+      <div>
+        <strong>{itemName}</strong>
       </div>
-      <div
-        style={{
-          overflow: 'hidden',
-          whiteSpace: 'nowrap',
-          width: '100%',
-        }}
-      >
-        <samp
-          id={`StockInvalidMsg-${index1.id}`}
-          style={{
-            display: index1.StockInValid ? 'block' : 'none',
-            color: 'red',
-            animation: 'scrollRightToLeft 15s linear infinite',
-          }}
-        >
-          {index1.StockInValid ? index1.StockInvalidMsg : ''}
-        </samp>
+      <div style={{ display: isLessStock ? "block" : "none", color: "red" }}>
+        {`Short Stock Quantity ${isLessStock} ${unitName?.split(" ")[0]}`}
       </div>
     </div>
   );

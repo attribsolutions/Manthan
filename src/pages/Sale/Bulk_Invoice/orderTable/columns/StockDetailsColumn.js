@@ -20,7 +20,7 @@ const StockDetailsTable = React.memo(({ stockDetails, itemInfo, orderId, itemId 
           <tbody>
             {stockDetails.map((stock) => {
               const stockInfo = itemInfo?.[`stockId-${stock.id}`];
-              const distributeStock = stockInfo?.distribute;
+              const distributeStock = stock?.distribute;
   
               return (
                 <tr key={stock.id}>

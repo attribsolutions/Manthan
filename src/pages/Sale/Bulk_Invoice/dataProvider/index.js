@@ -2,14 +2,16 @@
 import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
 import debounce from 'lodash/debounce';
 import { roundToDecimalPlaces } from '../../../../components/Common/CommonFunction';
+import { itemAmounWithGst, settingBaseRoundOffOrderAmountFunc } from '../util/calculationFunc';
 
 const BulkInvoiceContext = createContext();
 
 export const BulkInvoiceProvider = ({ children, data }) => {
 
     const [globleStockDistribute, setGlobleStockDistribute] = useState({});
+    const [globlebulkInvoiceData, setGloblebulkInvoiceData] = useState(data);
     const discountDropOption = [{ value: 1, label: "Rs" }, { value: 2, label: "%" }];
-
+    debugger
     const globleItemStock = useMemo(() => {
         const newGlobalStock = {};
 
@@ -36,7 +38,7 @@ export const BulkInvoiceProvider = ({ children, data }) => {
 
                 item.modifiedQuantity = item.Quantity;
                 item.DiscountType = item.DiscountType == 1 ? discountDropOption[0] : discountDropOption[1]
-
+debugger
             });
         });
 
@@ -46,33 +48,21 @@ export const BulkInvoiceProvider = ({ children, data }) => {
 
 
     useEffect(() => {
-        distributeItemStockGlobally()
+        distributeItemStockGlobally(globlebulkInvoiceData)
     }, [globleItemStock])
 
     const distributeItemStockGlobally = useCallback(
-        () => {
-            let newGlobalStock = JSON.parse(JSON.stringify(globleItemStock))
+        (oldData) => {
+            const newGlobalStock = JSON.parse(JSON.stringify(globleItemStock))
+            const newGlobalData = JSON.parse(JSON.stringify(oldData))
 
-            let orderDistribution = {};
-
-
-            data.forEach(order => {
-
-                const orderId = `orderId-${order.OrderIDs[0]}`;
+            newGlobalData.forEach(order => {
+                let orderAmountWithGst = 0
 
                 order.OrderItemDetails.forEach(orderItem => {
                     const itemId = `itemId-${orderItem.Item}`;
                     let orderQty = parseFloat(orderItem.modifiedQuantity);
-
-                    orderDistribution[orderId] = orderDistribution[orderId] || {};
-                    orderDistribution[orderId][itemId] = orderDistribution[orderId][itemId] || { lessStock: 0, orderQty: orderQty };
-                    orderDistribution[orderId][itemId].discount = orderItem.Discount;
-                    orderDistribution[orderId][itemId].discounttype = orderItem.DiscountType;
-                    orderDistribution[orderId][itemId].rate = orderItem.Rate;
-                    orderDistribution[orderId][itemId].unitid = orderItem.UnitId;
-                    orderDistribution[orderId][itemId].unitname = orderItem.UnitName;
-                    orderDistribution[orderId][itemId].quantity = orderQty;
-                    orderDistribution[orderId][itemId].gstpercentage = orderItem.GST;
+                    let itemAmountWithGst = 0;
 
                     orderItem.StockDetails.forEach(stockDetail => {
                         const stockId = `stockId-${stockDetail.id}`;
@@ -82,24 +72,6 @@ export const BulkInvoiceProvider = ({ children, data }) => {
                         let distribute = 0;
                         let remaining = 0;
 
-                        // if (itemStock > 0) {
-                        //     if (batchStock >= orderQty) {
-
-                        //         distribute = orderQty;
-                        //         remaining = batchStock - orderQty;
-                        //         newGlobalStock[itemId].totalStock = itemStock - orderQty;
-                        //         newGlobalStock[itemId][stockId].baseQty = batchStock - orderQty;
-                        //         orderQty = 0;
-
-                        //     } else if (batchStock > 0) {
-
-                        //         distribute = batchStock;
-                        //         remaining = 0;
-                        //         newGlobalStock[itemId].totalStock = itemStock - batchStock;
-                        //         newGlobalStock[itemId][stockId].baseQty = 0;
-                        //         orderQty = orderQty - batchStock;
-                        //     }
-                        // }
 
                         if (itemStock > 0) {
                             if (batchStock >= orderQty) {
@@ -115,39 +87,54 @@ export const BulkInvoiceProvider = ({ children, data }) => {
                                 newGlobalStock[itemId][stockId].baseStock = 0;
                                 orderQty = Math.max(0, orderQty - distribute); // Subtract the distributed quantity from the original orderQty
                             }
+
+                        }
+                        if (distribute > 0.0) {
+
+                            const calculatedBachAmount = itemAmounWithGst({
+                                Rate: stockDetail.Rate,
+                                modifiedQuantity: distribute,
+                                GSTPercentage: orderItem.GSTPercentage,
+                                Discount: orderItem.Discount,
+                                DiscountType: orderItem.DiscountType?.value,
+                                IsComparGstIn: true
+                            });
+                            itemAmountWithGst += calculatedBachAmount?.roundedTotalAmount || 0
+                            stockDetail.calculatedBachAmount = calculatedBachAmount;
                         }
 
-                        orderDistribution[orderId][itemId][stockId] = {
-                            "distribute": distribute,
-                            "remaining": remaining,
-                            "batchcode": '',
-                            "batchdate": '',
-                            "livebatch": '',
-                            "mrp": '',
-                            "rate": '',
-
-                        };
+                        stockDetail.distribute = distribute;
+                        stockDetail.remaining = remaining;
                     });
 
                     if (orderQty > 0.0) {
-                        orderDistribution[orderId][itemId].lessStock = roundToDecimalPlaces(orderQty);
+                        orderItem.lessStock = roundToDecimalPlaces(orderQty);
                     }
+                    const orderAmountCalculation = settingBaseRoundOffOrderAmountFunc({
+                        IsTCSParty: false,
+                        IsCustomerPAN: false,
+                        sumOfItemAmount: itemAmountWithGst
+                    });
+                    orderItem.orderAmountCalculation = orderAmountCalculation;
+                    orderItem.itemAmountWithGst = orderAmountCalculation?.sumOfItemAmount;
+                    orderAmountWithGst += itemAmountWithGst;
+
                 });
+                order.orderAmountWithGst = roundToDecimalPlaces(orderAmountWithGst, 2);
             });
 
-            // Update global distribution after processing all orders
-            setGlobleStockDistribute(orderDistribution);
-
-            // console.log("orderDistribution", JSON.stringify(orderDistribution, null, 2));
-        }, [globleItemStock]);
+debugger
+            setGloblebulkInvoiceData(newGlobalData)
+        }, []);
 
 
     const handleItemQuantityChange = useCallback(
         debounce((orderID, itemID, newQuantity) => {
+            const oldData = JSON.parse(JSON.stringify(globlebulkInvoiceData));
             let found = false;
 
-            for (let i = 0; i < data.length; i++) {
-                const order = data[i];
+            for (let i = 0; i < oldData.length; i++) {
+                const order = oldData[i];
                 for (let j = 0; j < order.OrderItemDetails.length; j++) {
                     const item = order.OrderItemDetails[j];
                     if (order.OrderIDs[0] === orderID && item.Item === itemID) {
@@ -162,15 +149,17 @@ export const BulkInvoiceProvider = ({ children, data }) => {
                     break; // This will break out of the outer loop
                 }
             }
-            distributeItemStockGlobally();
-        }, 300), [data]);
+            distributeItemStockGlobally(oldData);
+        }, 300), [globlebulkInvoiceData]);
 
     const handleDiscountTypeChange = useCallback(
         debounce((orderID, itemID, newDiscountType) => {
-            let found = false;
 
-            for (let i = 0; i < data.length; i++) {
-                const order = data[i];
+            const oldData = JSON.parse(JSON.stringify(globlebulkInvoiceData ));
+            let found = false;
+debugger
+            for (let i = 0; i < oldData.length; i++) {
+                const order = oldData[i];
                 for (let j = 0; j < order.OrderItemDetails.length; j++) {
                     const item = order.OrderItemDetails[j];
                     if (order.OrderIDs[0] === orderID && item.Item === itemID) {
@@ -185,15 +174,15 @@ export const BulkInvoiceProvider = ({ children, data }) => {
                 }
             };
 
-            distributeItemStockGlobally();
-        }, 100), [data, distributeItemStockGlobally]);
+            distributeItemStockGlobally(oldData);
+        }, 100), [globlebulkInvoiceData]);
 
     const handleDiscountChange = useCallback(
         debounce((orderID, itemID, newDiscount) => {
+            const oldData = JSON.parse(JSON.stringify(globlebulkInvoiceData));
             let found = false;
-
-            for (let i = 0; i < data.length; i++) {
-                const order = data[i];
+            for (let i = 0; i < oldData.length; i++) {
+                const order = oldData[i];
                 for (let j = 0; j < order.OrderItemDetails.length; j++) {
                     const item = order.OrderItemDetails[j];
                     if (order.OrderIDs[0] === orderID && item.Item === itemID) {
@@ -208,14 +197,16 @@ export const BulkInvoiceProvider = ({ children, data }) => {
                 }
             };
 
-            distributeItemStockGlobally();
-        }, 100), [data, distributeItemStockGlobally]);
+            distributeItemStockGlobally(oldData);
+        }, 100), [globlebulkInvoiceData]);
+
 
     const handleOrderDiscount = useCallback(
         debounce((orderID, newDiscount) => {
-
-            for (let i = 0; i < data.length; i++) {
-                const order = data[i];
+            const oldData = JSON.parse(JSON.stringify(globlebulkInvoiceData));
+            debugger
+            for (let i = 0; i < oldData.length; i++) {
+                const order = oldData[i];
                 for (let j = 0; j < order.OrderItemDetails.length; j++) {
                     const item = order.OrderItemDetails[j];
                     item.Discount = newDiscount;
@@ -225,14 +216,15 @@ export const BulkInvoiceProvider = ({ children, data }) => {
                     break; // This will break out of the outer loop
                 }
             };
-            distributeItemStockGlobally();
-        }, 100), [data, distributeItemStockGlobally]);
+            distributeItemStockGlobally(oldData);
+        }, 100), [globlebulkInvoiceData]);
 
     const handleOrderDiscountType = useCallback(
         debounce((orderID, newDiscountType) => {
+            const oldData = JSON.parse(JSON.stringify(globlebulkInvoiceData));
 
-            for (let i = 0; i < data.length; i++) {
-                const order = data[i];
+            for (let i = 0; i < oldData.length; i++) {
+                const order = oldData[i];
                 for (let j = 0; j < order.OrderItemDetails.length; j++) {
                     const item = order.OrderItemDetails[j];
                     item.DiscountType = newDiscountType;
@@ -243,20 +235,22 @@ export const BulkInvoiceProvider = ({ children, data }) => {
                 }
             };
 
-            distributeItemStockGlobally();
-        }, 100), [data, distributeItemStockGlobally]);
+            distributeItemStockGlobally(oldData);
+        }, 100), [globlebulkInvoiceData]);
 
 
 
     const contextValue = {//Memoize the context value to prevent unnecessary re-renders
-        bulkData: data,
+        bulkData: globlebulkInvoiceData,
         globleItemStock,
         discountDropOption,
         setGlobleStockDistribute,
         globleStockDistribute,
         handleItemQuantityChange,
+
         handleDiscountChange,
         handleDiscountTypeChange,
+
         handleOrderDiscount,
         handleOrderDiscountType,
     }

@@ -28,9 +28,9 @@ export const balkInvoiceAllOrderAmountFunc = ({
 export const settingBaseRoundOffOrderAmountFunc = ({
     IsTCSParty = false,
     IsCustomerPAN = false,
-    orderInfo
+    sumOfItemAmount
 }) => {
-    if (!orderInfo) return { sumOfGrandTotal: 0, RoundOffAmount: 0, TCS_Amount: 0 };
+  
 
     // Get the system settings
     const systemSetting = loginSystemSetting();
@@ -39,37 +39,25 @@ export const settingBaseRoundOffOrderAmountFunc = ({
     const TCSValidatedPAN = Number(systemSetting.IsTCSPercentageforValidatedPANCustomer);
     const TCSNonValidatedPAN = Number(systemSetting.IsTCSPercentageforNonValidatedPANCustomer);
 
-    // Calculate the sum of the item TotalAmount in the tableList
-    let sumOfGrandTotal = 0;
-    const orderItemsCalculations = {};
-    
-    for (const [itemIds, itemInfo] of Object.entries(orderInfo)) {
-        const calculatedItem = itemAmounWithGst(itemInfo);
-        sumOfGrandTotal += Number(calculatedItem.roundedTotalAmount) || 0;
-        orderItemsCalculations[itemIds] = calculatedItem;
-    };
-    
-
     let TCS_Amount = 0; // Initial TCS Amount
 
     if (IsTCSParty) {
         // Calculate TCS tax only if IsTCSParty flag is true
         if (IsCustomerPAN) {
             // Calculate TCS for validated PAN customer (IsCustomerPAN has value true)
-            TCS_Amount = sumOfGrandTotal * (TCSValidatedPAN / 100);
-            sumOfGrandTotal += TCS_Amount;
+            TCS_Amount = sumOfItemAmount * (TCSValidatedPAN / 100);
+            sumOfItemAmount += TCS_Amount;
         } else {
             // Calculate TCS for non-validated PAN customer
-            TCS_Amount = sumOfGrandTotal * (TCSNonValidatedPAN / 100);
-            sumOfGrandTotal += TCS_Amount;
+            TCS_Amount = sumOfItemAmount * (TCSNonValidatedPAN / 100);
+            sumOfItemAmount += TCS_Amount;
         }
     }
 
     return {
-        sumOfGrandTotal: isGrandAmtRound ? Math.round(sumOfGrandTotal) : Number(sumOfGrandTotal).toFixed(2), // Round off or format the sumOfGrandTotal
-        RoundOffAmount: (sumOfGrandTotal - Math.trunc(sumOfGrandTotal)).toFixed(2), // Calculate the round-off amount
+        sumOfItemAmount: isGrandAmtRound ? Math.round(sumOfItemAmount) : Number(sumOfItemAmount).toFixed(2), // Round off or format the sumOfGrandTotal
+        RoundOffAmount: (sumOfItemAmount - Math.trunc(sumOfItemAmount)).toFixed(2), // Calculate the round-off amount
         TCS_Amount: isTCS_AmtRound ? Math.round(TCS_Amount) : Number(TCS_Amount).toFixed(2), // Round off or format the TCS Amount
-        orderItemsCalculations: orderItemsCalculations,
     };
 };
 
@@ -77,11 +65,11 @@ export const settingBaseRoundOffOrderAmountFunc = ({
 export const itemAmounWithGst = (props) => {
 
     // Extract values from the input parameters
-    const rate = Number(props.rate) || 0;
-    const quantity = Number(props.quantity) || 0;
-    const gstpercentage = Number(props.gstpercentage) || 0;
-    const discount = Number(props.discount) || 0;
-    const discountType = props.discounttype?.value || 2;
+    const rate = Number(props.Rate) || 0;
+    const quantity = Number(props.modifiedQuantity) || 0;
+    const gstpercentage = Number(props.GSTPercentage) || 0;
+    const discount = Number(props.Discount) || 0;
+    const discountType = props.DiscountType?.value || 2;
     const IsComparGstIn = props.IsComparGstIn;
 
     // Calculate the base amount
