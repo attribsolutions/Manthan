@@ -241,7 +241,7 @@ const VehicleMaster = (props) => {
             return;
         };
         try {
-            
+
             if (formValid(state, setState)) {
                 btnIsDissablefunc({ btnId, state: true })
 
@@ -250,7 +250,7 @@ const VehicleMaster = (props) => {
                     VehicleNumber: values.VehicleNumber,
                     Description: values.Description,
                     VehicleType: values.VehicleTypeName.value,
-                    Party:loginSelectedPartyID(),
+                    Party: loginSelectedPartyID(),
                     Company: loginCompanyID(),
                     CreatedBy: loginUserID(),
                     UpdatedBy: loginUserID()
@@ -354,19 +354,7 @@ const VehicleMaster = (props) => {
                                                     </FormGroup>
 
                                                     <Col md="1">  </Col>
-
-                                                    {/* {RoleID === 2 ?
-                                                        <FormGroup className="mb-2 col col-sm-3 ">
-                                                            <PartyDropdownMaster
-                                                                fieldLabel={fieldLabel.Party}
-                                                                state={values.Party}
-                                                                setState={setState}
-                                                            />
-                                                        </FormGroup>
-                                                        : null} */}
-
                                                 </Row>
-
 
                                                 <FormGroup>
                                                     <Row>
