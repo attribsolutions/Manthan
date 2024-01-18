@@ -323,7 +323,7 @@ const InvoiceExcelUpload = (props) => {
                     let GST = i.GST;
 
                     let Matching_ItemCode_Objects = readjson.filter(inx => {
-                        return inx.Item_Code === Item_Code;
+                        return parseInt(inx.Item_Code) === parseInt(Item_Code);
                     });
 
                     Matching_ItemCode_Objects.forEach(matchingObject => {
@@ -485,7 +485,7 @@ const InvoiceExcelUpload = (props) => {
             })
 
             updatereadJsonDetail.invoice.forEach(async (inv) => {
-                debugger
+
                 let parentObj;
                 let invoiceItems = []
                 let invoiceTotalAmount = 0
@@ -546,7 +546,7 @@ const InvoiceExcelUpload = (props) => {
                 // })
 
                 inv.forEach(async (ele) => {
-
+                    F
                     const calculate = InvoiceUploadCalculation({ Quantity: ele[parArr.Quantity], Rate: ele[parArr.Rate], GST: ele.GST });
                     invoiceTotalAmount = invoiceTotalAmount + calculate.Amount;
 
@@ -576,7 +576,7 @@ const InvoiceExcelUpload = (props) => {
                         "LiveBatch": ele[parArr.LiveBatch] ? ele[parArr.LiveBatch] : '',
                         "MRPValue": ele[parArr.MRP] ? ele[parArr.MRP] : '', //Actul MRP That Map in System
                         "Rate": ele[parArr.Rate] ? ele[parArr.Rate]?.toFixed(2) : '',
-                        "BasicAmount": ele[parArr.BasicAmount] ? ele[parArr.BasicAmount] :(calculate.BasicAmount).toFixed(2),
+                        "BasicAmount": ele[parArr.BasicAmount] ? ele[parArr.BasicAmount] : (calculate.BasicAmount).toFixed(2),
                         "GSTAmount": ele[parArr.GSTAmount] ? ele[parArr.GSTAmount] : (calculate.GSTAmount).toFixed(2),
                         "GST": '',
                         // "GSTValue": ele[parArr.GSTValue] ? ele[parArr.GSTValue] : ,       ///  Note ** GSTValue ===GST percentage
