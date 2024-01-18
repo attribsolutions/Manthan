@@ -329,4 +329,9 @@ export const CX_DD_DIFFERENCE_REPORT = 264
 
 export const POS_ROLE_ACCESS = 266
 
+export const SYSTEM_SETTING = 268
+
+export const SYSTEM_SETTING_LIST = 269
+
+
 
