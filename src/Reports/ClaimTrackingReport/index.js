@@ -21,7 +21,7 @@ const ClaimTrackingReport = (props) => {  // also Receipt Data Export
 
     const dispatch = useDispatch();
     const history = useHistory();
-    const isSCMParty = _cfunc.loginIsSCMParty();
+    const userAdminRole = _cfunc.loginUserAdminRole();
 
     const [userPageAccessState, setUserAccState] = useState('');
     const [yearAndMonth, setYearAndMonth] = useState(getCurrent_Month_And_Year);
@@ -122,8 +122,8 @@ const ClaimTrackingReport = (props) => {  // also Receipt Data Export
             const jsonBody = JSON.stringify({
                 "Year": yearAndMonth.Year,
                 "Month": yearAndMonth.Month,
-                "Party": isSCMParty ? partySelect.value : _cfunc.loginPartyID(),
-                "Employee": !isSCMParty ? 0 : _cfunc.loginEmployeeID(),
+                "Party": userAdminRole ? partySelect.value : _cfunc.loginPartyID(),
+                "Employee": !userAdminRole ? 0 : _cfunc.loginEmployeeID(),
             })
 
             const config = { jsonBody, subPageMode: url.CLAIM_TRACKING_REPORT };
@@ -171,7 +171,7 @@ const ClaimTrackingReport = (props) => {  // also Receipt Data Export
                             </FormGroup>
                         </Col >
 
-                        {isSCMParty &&
+                        {userAdminRole &&
                             <Col sm="5" className="mt-1 mb-n1">
                                 <FormGroup className="row mt-2" >
                                     <Label className="col-sm-6 p-2" style={{ width: "65px" }}> Party</Label>
