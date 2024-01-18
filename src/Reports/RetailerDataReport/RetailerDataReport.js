@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Button, Col, FormGroup, Label, Row, Spinner } from "reactstrap";
 import { useHistory } from "react-router-dom";
-import { C_Button, Go_Button } from "../../components/Common/CommonButton";
+import { C_Button } from "../../components/Common/CommonButton";
 import * as _cfunc from "../../components/Common/CommonFunction";
 import { mode, pageId } from "../../routes/index"
 import { MetaTags } from "react-meta-tags";
@@ -32,14 +32,14 @@ const RetailerDataReport = (props) => {
         (state) => ({
             listBtnLoading: state.RetailerDataReducer.listBtnLoading,
             partyLoading: state.CommonAPI_Reducer.SSDD_ListLoading,
+            partyList: state.CommonAPI_Reducer.SSDD_List,
             RetailerGobtn: state.RetailerDataReducer.RetailerGobtn,
+            pageField: state.CommonPageFieldReducer.pageField,
             userAccess: state.Login.RoleAccessUpdateData,
-            SSDD_List: state.CommonAPI_Reducer.SSDD_List,
-            pageField: state.CommonPageFieldReducer.pageField
         })
     );
-    const { userAccess, SSDD_List, listBtnLoading, partyLoading, pageField } = reducers;
-    const { RetailerGobtn = {} } = reducers
+    const { userAccess, partyList, listBtnLoading, partyLoading, pageField } = reducers;
+    const { RetailerGobtn } = reducers
 
     // Featch Modules List data  First Rendering
     const location = { ...history.location }
@@ -73,8 +73,8 @@ const RetailerDataReport = (props) => {
 
     const createColumns = () => {
 
-        const { Data } = RetailerGobtn
-        if (RetailerGobtn.Status === true && RetailerGobtn.StatusCode === 200) {
+        if ((RetailerGobtn.Status === true) && (RetailerGobtn.StatusCode === 200)) {
+            const { Data } = RetailerGobtn
             let columns = []
             const objectAtIndex0 = (Data.ReportExportSerializerDetails[0]);
             for (const key in objectAtIndex0) {
@@ -90,17 +90,17 @@ const RetailerDataReport = (props) => {
             setColumnsCreated(true)
         }
     }
-    if (!columnsCreated) {
-        createColumns();
-    }
+    useEffect(() => {
+        if (!columnsCreated) {
+            createColumns();
+        }
+    }, [RetailerGobtn]);
 
     useEffect(() => {
 
         if ((RetailerGobtn.Status === true) && (RetailerGobtn.StatusCode === 200)) {
-
             const { Data } = RetailerGobtn
-
-            if (btnMode === "Show") {
+            if ((btnMode === "Show") && (Data.ReportExportSerializerDetails.length > 0)) {
                 setTableData(Data.ReportExportSerializerDetails)
             } else if (btnMode === "Excel") {
                 ExcelReportComponent({  // Download CSV
@@ -123,7 +123,7 @@ const RetailerDataReport = (props) => {
 
     }, [RetailerGobtn]);
 
-    const Party_Option = SSDD_List.map(i => ({
+    const Party_Option = partyList.map(i => ({
         value: i.id,
         label: i.Name
     }));
@@ -136,6 +136,12 @@ const RetailerDataReport = (props) => {
     function excelhandler(Type) {
         setBtnMode(Type)
         dispatch(postRetailerData_API(JSON.stringify({ "Party": partydropdown.value })));
+    }
+
+    function PartyDropdown_OnChange_Handler(e) {
+        setPartydropdown(e)
+        dispatch(postRetailerData_API_Success([]));
+        setTableData([]);
     }
 
     return (
@@ -161,7 +167,7 @@ const RetailerDataReport = (props) => {
                                             menu: provided => ({ ...provided, zIndex: 2 })
                                         }}
                                         options={Party_Option}
-                                        onChange={(e) => { setPartydropdown(e) }}
+                                        onChange={(e) => { PartyDropdown_OnChange_Handler(e) }}
                                     />
                                 </Col>
                             </FormGroup>
@@ -196,11 +202,8 @@ const RetailerDataReport = (props) => {
                                 </Button>
                             }
                         </Col>
-
-
                     </div>
                 </div>
-
 
                 <div className="mt-1">
                     <ToolkitProvider
@@ -226,8 +229,6 @@ const RetailerDataReport = (props) => {
                                                     dispatch(BreadcrumbShowCountlabel(`Count:${dataSize}`));
                                                 }}
                                                 {...toolkitProps.baseProps}
-
-
                                             />
                                             {mySearchProps(toolkitProps.searchProps)}
                                         </div>
