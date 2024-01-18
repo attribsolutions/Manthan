@@ -8,7 +8,9 @@ export function ExcelReportComponent({ pageField,
     numericHeaders,
     dateHeader,
     lastRowStyle = false,
-    customKeyColumns }) {
+    customKeyColumns,
+    listExcelDownload
+}) {
 
     const workbook = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet('Sheet1');
@@ -19,7 +21,8 @@ export function ExcelReportComponent({ pageField,
         excelTableData,
         extraColumn,
         numericHeaders,
-        dateHeader
+        dateHeader,
+        listExcelDownload
     });
 
     // Add headers to the worksheet

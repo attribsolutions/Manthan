@@ -41,6 +41,7 @@ import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 import { goButton_ServiceItemAssign } from "../../../store/Administrator/ServiceItemAssignRedux/action";
 import { goButton_ServiceItemAssign_Success } from "../../../store/Administrator/ServiceItemAssignRedux/action";
+import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 
 function initialState(history) {
 
@@ -561,14 +562,14 @@ const CreditNote_1 = (props) => {
         if (values.ItemName === '') {
             customAlert({
                 Type: 4,
-                Message: "Please Select ItemName"
+                Message: alertMessages.requiredItemName
             })
             return
         }
         else if (!(isfound === undefined)) {
             customAlert({
                 Type: 4,
-                Message: "This ItemName Already Exist"
+                Message: alertMessages.ItemNameAlreadyExists
             })
             return
         }
@@ -635,7 +636,7 @@ const CreditNote_1 = (props) => {
     }
 
     const changeButtonHandler = async () => {
-        const permission = await customAlert({ Type: 7, Message: "Are you sure you want to change the customer?" })
+        const permission = await customAlert({ Type: 7, Message: alertMessages.changeCustomerName })
         if (permission) {
             setTableArr([])
         }
@@ -673,7 +674,7 @@ const CreditNote_1 = (props) => {
             if (filterData.length === 0) {
                 customAlert({
                     Type: 4,
-                    Message: "Please Enter One Item Quantity",
+                    Message: alertMessages.requiredItemQty,
                 });
                 return;
             }

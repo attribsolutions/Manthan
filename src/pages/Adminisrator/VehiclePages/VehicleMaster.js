@@ -52,6 +52,7 @@ import * as pageId from "../../../routes/allPageID";
 import * as url from "../../../routes/route_url";
 import * as mode from "../../../routes/PageMode";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
+import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 
 const VehicleMaster = (props) => {
 
@@ -236,11 +237,11 @@ const VehicleMaster = (props) => {
         event.preventDefault();
         const btnId = event.target.id
         if ((loginSelectedPartyID() === 0)) {
-            customAlert({ Type: 3, Message: "Please Select Party" });
+            customAlert({ Type: 3, Message: alertMessages.requiredPartySelection });
             return;
         };
         try {
-            
+
             if (formValid(state, setState)) {
                 btnIsDissablefunc({ btnId, state: true })
 
@@ -249,7 +250,7 @@ const VehicleMaster = (props) => {
                     VehicleNumber: values.VehicleNumber,
                     Description: values.Description,
                     VehicleType: values.VehicleTypeName.value,
-                    Party:loginSelectedPartyID(),
+                    Party: loginSelectedPartyID(),
                     Company: loginCompanyID(),
                     CreatedBy: loginUserID(),
                     UpdatedBy: loginUserID()
@@ -353,19 +354,7 @@ const VehicleMaster = (props) => {
                                                     </FormGroup>
 
                                                     <Col md="1">  </Col>
-
-                                                    {/* {RoleID === 2 ?
-                                                        <FormGroup className="mb-2 col col-sm-3 ">
-                                                            <PartyDropdownMaster
-                                                                fieldLabel={fieldLabel.Party}
-                                                                state={values.Party}
-                                                                setState={setState}
-                                                            />
-                                                        </FormGroup>
-                                                        : null} */}
-
                                                 </Row>
-
 
                                                 <FormGroup>
                                                     <Row>

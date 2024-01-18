@@ -401,6 +401,8 @@ const userRoutes = [
 	{ path: path.ORDER_4, component: Order },
 	{ path: path.ORDER_LIST_4, component: OrderList },
 
+	{ path: path.SALES_ORDER_LIST_2, component: OrderList },
+
 	{ path: path.PURCHASE_RETURN, component: PurchaseReturn },
 	{ path: path.PURCHASE_RETURN_LIST, component: SalesReturnList },
 	{ path: path.PURCHASE_RETURN_MODE_3, component: PurchaseReturnMode3 },

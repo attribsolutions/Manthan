@@ -59,7 +59,7 @@ const CommonListPage = (props) => {
     })
     if (!(userAcc === undefined)) {
       setUserAccState(userAcc);
-      breadcrumbReturnFunc({ dispatch, userAcc, newBtnPath: masterPath });
+      breadcrumbReturnFunc({ dispatch, userAcc, newBtnPath: masterPath, pageField: pageField });
     }
   }, [userAccess]);
 
@@ -173,7 +173,7 @@ const CommonListPage = (props) => {
 
   function tog_center() {
     if (modal_edit) {
-      breadcrumbReturnFunc({ dispatch, userAcc: userAccState, newBtnPath: masterPath });
+      breadcrumbReturnFunc({ dispatch, userAcc: userAccState, newBtnPath: masterPath, pageField: pageField });
     }
     setmodal_edit(false)
   }

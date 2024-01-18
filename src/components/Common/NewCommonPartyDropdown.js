@@ -8,6 +8,7 @@ import { commonPartyDropSelectAction } from "../../store/Utilites/PartyDrodown/a
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import { mode } from "../../routes";
+import { alertMessages } from '../../components/Common/CommonErrorMsg/alertMsg';
 
 const NewCommonPartyDropdown = ({ pageMode }) => {
 
@@ -32,7 +33,7 @@ const NewCommonPartyDropdown = ({ pageMode }) => {
     const updateSelectedParty = () => {
         
         if (selectedParty.value === 0) {
-            customAlert({ Type: 3, Message: "Please Select Party" });
+            customAlert({ Type: 3, Message: alertMessages.requiredPartySelection });
             return;
         }
         setChangeButtonShow(true)

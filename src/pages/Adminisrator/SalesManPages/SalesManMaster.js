@@ -50,6 +50,7 @@ import * as mode from "../../../routes/PageMode"
 import { GetRoutesList, GetRoutesListSuccess } from "../../../store/Administrator/RoutesRedux/actions";
 import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
+import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 
 const SalesManMaster = (props) => {
 
@@ -254,7 +255,7 @@ const SalesManMaster = (props) => {
         const btnId = event.target.id
         try {
             if ((loginSelectedPartyID() === 0)) {
-                customAlert({ Type: 3, Message: "Please Select Party" });
+                customAlert({ Type: 3, Message: alertMessages.requiredPartySelection });
                 return;
             };
             if (formValid(state, setState)) {

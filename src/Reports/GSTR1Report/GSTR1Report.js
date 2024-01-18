@@ -13,6 +13,7 @@ import C_Report from "../../components/Common/C_Report";
 import { GST_R1_Report_API, GST_R1_Report_API_Success, GST_R3B_Report_API, GST_R3B_Report_API_Success } from "../../store/Report/GSTR1ReportRedux/action";
 import PartyDropdown_Common from "../../components/Common/PartyDropdown";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
+import { alertMessages } from "../../components/Common/CommonErrorMsg/alertMsg";
 
 const GSTR1Report = (props) => {
     const dispatch = useDispatch();
@@ -98,7 +99,7 @@ const GSTR1Report = (props) => {
     function goButtonHandler(Type) {
 
         if (_cfunc.loginSelectedPartyID() === 0) {
-            customAlert({ Type: 3, Message: "Please Select Party" });
+            customAlert({ Type: 3, Message: alertMessages.requiredPartySelection });
             return;
         };
 

@@ -18,6 +18,7 @@ import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
 import { ExcelReportComponent } from "../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS";
+import { alertMessages } from "../../components/Common/CommonErrorMsg/alertMsg";
 
 const StockReport = (props) => {
 
@@ -371,7 +372,7 @@ const StockReport = (props) => {
 
 		try {
 			if ((isSCMParty) && (partyDropdown === "")) {
-				customAlert({ Type: 3, Message: "Please Select Party" });
+				customAlert({ Type: 3, Message: alertMessages.requiredPartySelection });
 				return;
 			}
 

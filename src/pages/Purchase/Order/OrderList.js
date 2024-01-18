@@ -21,7 +21,7 @@ import { priceListByCompay_Action, priceListByCompay_ActionSuccess } from "../..
 import OrderView from "./OrderView";
 import OrderView_Modal from "./OrderView";
 import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
-
+import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 
 const OrderList = () => {
 
@@ -39,6 +39,8 @@ const OrderList = () => {
     const [state, setState] = useState(() => initialFiledFunc(fileds))
     const [subPageMode] = useState(history.location.pathname);
     const [pageMode, setPageMode] = useState(mode.defaultList);
+
+    const Is_OrderList4_Or_SalesOrderList4 = (subPageMode === url.ORDER_LIST_4) || (subPageMode === url.SALES_ORDER_LIST_2)
 
     const [otherState, setOtherState] = useState({
         masterPath: '',
@@ -114,8 +116,6 @@ const OrderList = () => {
         deleteSucc: _act.deleteOrderIdSuccess,
     }
 
-
-
     // Featch Modules List data  First Rendering
     useLayoutEffect(() => {
 
@@ -162,6 +162,17 @@ const OrderList = () => {
             showAprovalBtn = true                      //Showing  AprovalBtn  in sales order list
 
         }
+
+        else if (subPageMode === url.SALES_ORDER_LIST_2) {
+            page_Id = pageId.SALES_ORDER_LIST_2
+            masterPath = url.ORDER_4;
+            page_Mode = mode.modeSTPList
+            newBtnPath = url.ORDER_4;
+            makeBtnShow = true;
+            makeBtnName = "Make Invoice"
+            // showAprovalBtn = true                      //Showing  AprovalBtn  in sales order list
+        }
+
         else if (subPageMode === url.IB_INVOICE_STP) {
             page_Id = pageId.IB_INVOICE_STP
             page_Mode = mode.modeSTPsave
@@ -292,8 +303,6 @@ const OrderList = () => {
 
     }, [unhideMsg]);
 
-
-
     const supplierOptions = supplier.map((i) => ({
         value: i.id,
         label: i.Name,
@@ -344,7 +353,7 @@ const OrderList = () => {
                 btnId
             }));
         }
-        else if (subPageMode === url.ORDER_LIST_4) {
+        else if (Is_OrderList4_Or_SalesOrderList4) {
             dispatch(_act.GoButtonForinvoiceAdd({
                 jsonBody,
                 btnId,
@@ -422,8 +431,6 @@ const OrderList = () => {
         dispatch(_act.getpdfReportdata(OrderPage_Edit_ForDownload_API, config))
     }
 
-
-
     async function hideBtnFunc(rowdata) {
         const isHideValue = rowdata[0].isHideValue
         const RowInvoiceId = rowdata[0].id
@@ -438,9 +445,6 @@ const OrderList = () => {
         if (isConfirmed) {
             dispatch(_act.hideInvoiceForGRFAction(config))
         }
-
-
-
     }
 
     function viewApprovalBtnFunc(config) {
@@ -452,7 +456,7 @@ const OrderList = () => {
         _cfunc.btnIsDissablefunc({ btnId: gobtnId, state: true })
         try {
             if ((_cfunc.loginSelectedPartyID() === 0)) {
-                customAlert({ Type: 3, Message: "Please Select Party" });
+                customAlert({ Type: 3, Message: alertMessages.requiredPartySelection });
                 return;
             };
             let filtersBody = {}
@@ -491,7 +495,7 @@ const OrderList = () => {
                 "DashBoardMode": 0
 
             }
-            if (subPageMode === url.ORDER_LIST_4) {
+            if (Is_OrderList4_Or_SalesOrderList4) {
                 filtersBody = JSON.stringify(SO_filters);
             }
             else if (subPageMode === url.GRN_STP_3) {
@@ -548,7 +552,7 @@ const OrderList = () => {
         })
     }
 
-    const selectSaveBtnHandler = (row = []) => {
+    const OrderConfirm_Handler = (row = []) => {
 
 
         let ischeck = row.filter(i => (i.selectCheck))
@@ -564,12 +568,27 @@ const OrderList = () => {
         dispatch(postOrderConfirms_API({ jsonBody }))
     }
 
+    const BulkInvoice_Handler = (row = []) => {
+
+        // let ischeck = row.filter(i => (i.selectCheck))
+        // if (!ischeck.length > 0) {
+        //     customAlert({
+        //         Type: 4,
+        //         Message: "Please Select One Order",
+        //     });
+        //     return
+        // }
+        // let idString = ischeck.map(obj => obj.id).join(',')
+        // let jsonBody = { OrderIDs: idString }
+        // dispatch(postOrderConfirms_API({ jsonBody }))
+    }
+
     const HeaderContent = () => {
         return (
             <div className="px-2   c_card_filter text-black" >
                 <div className="row" >
 
-                    <Col lg={subPageMode === url.ORDER_LIST_4 ? 0 : 3} >
+                    <Col lg={(Is_OrderList4_Or_SalesOrderList4) ? 0 : 3} >
                         <FormGroup className="mb- row mt-3 " >
                             <Label className="col-sm-5 p-2"
                                 style={{ width: "65px" }}>
@@ -590,7 +609,7 @@ const OrderList = () => {
                         </FormGroup>
                     </Col>
 
-                    <Col lg={subPageMode === url.ORDER_LIST_4 ? 0 : 3} >
+                    <Col lg={(Is_OrderList4_Or_SalesOrderList4) ? 0 : 3} >
                         <FormGroup className="mb- row mt-3 " >
                             <Label className="col-sm-5 p-2"
                                 style={{ width: "65px" }}>
@@ -611,7 +630,7 @@ const OrderList = () => {
                         </FormGroup>
                     </Col>
 
-                    {subPageMode === url.ORDER_LIST_4 ?
+                    {(Is_OrderList4_Or_SalesOrderList4) ?
                         <Col lg={3}>
                             <FormGroup className="mb-1 row mt-3 " >
                                 <Label className="col-sm p-2"
@@ -719,10 +738,10 @@ const OrderList = () => {
                             ViewModal={OrderView}
                             oderAprovalBtnFunc={otherState.showAprovalBtn && oderAprovalBtnFunc}
                             selectCheckParams={{
-                                isShow: (subPageMode === url.ORDER_LIST_4),
-                                selectSaveBtnHandler: selectSaveBtnHandler,
-                                selectSaveBtnLabel: "Confirm",
-                                selectHeaderLabel: "Confirm"
+                                isShow: (Is_OrderList4_Or_SalesOrderList4),
+                                selectSaveBtnHandler: (subPageMode === url.ORDER_LIST_4) ? OrderConfirm_Handler : BulkInvoice_Handler,
+                                selectSaveBtnLabel: (subPageMode === url.ORDER_LIST_4) ? "Confirm" : "Bulk Invoice",
+                                selectHeaderLabel: (subPageMode === url.ORDER_LIST_4) ? "Confirm" : "Bulk Invoice"
                             }}
                             totalAmountShow={true}
                         />

@@ -20,6 +20,7 @@ import { PageLoadingSpinner } from "../../../components/Common/CommonButton";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import NewCommonPartyDropdown from "../../../components/Common/NewCommonPartyDropdown";
 import { mode } from "../../../routes";
+import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 
 const RoutesList = (props) => {
 
@@ -77,7 +78,7 @@ const RoutesList = (props) => {
 
     try {
       if (commonPartyDropSelect.value === 0) {
-        customAlert({ Type: 3, Message: "Please Select Party" });
+        customAlert({ Type: 3, Message: alertMessages.requiredPartySelection });
         return;
       };
       const jsonBody = JSON.stringify({

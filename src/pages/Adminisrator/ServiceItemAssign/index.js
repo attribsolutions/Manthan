@@ -19,6 +19,7 @@ import * as _cfunc from "../../../components/Common/CommonFunction";
 import { CInput, decimalRegx } from "../../../CustomValidateForm";
 import { goButton_ServiceItemAssign, goButton_ServiceItemAssign_Success, save_ServiceItemAssign_Action, save_ServiceItemAssign_Success } from "../../../store/Administrator/ServiceItemAssignRedux/action";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
+import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 
 const ServiceItemAssign = (props) => {
 	const history = useHistory();
@@ -124,7 +125,7 @@ const ServiceItemAssign = (props) => {
 			event?.persist();// Call event.persist() to remove the synthetic event from the pool
 
 			if ((_cfunc.loginSelectedPartyID() === 0)) {
-				customAlert({ Type: 3, Message: "Please Select Party" });
+				customAlert({ Type: 3, Message: alertMessages.requiredPartySelection });
 				return;
 			};
 			const jsonBody = {

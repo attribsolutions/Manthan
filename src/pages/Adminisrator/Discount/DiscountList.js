@@ -12,6 +12,7 @@ import { C_DatePicker } from "../../../CustomValidateForm";
 import { deleteDiscountIDSuccess, deleteDiscount_ID, getDiscountList, getDiscountListSuccess } from "../../../store/Administrator/DiscountRedux/actions";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
+import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 
 const DiscountList = () => {
 
@@ -54,7 +55,7 @@ const DiscountList = () => {
     const goButtonHandler = () => {
         try {
             if (_cfunc.loginSelectedPartyID() === 0) {
-                customAlert({ Type: 3, Message: "Please Select Party" });
+                customAlert({ Type: 3, Message: alertMessages.requiredPartySelection });
                 return;
             };
             const jsonBody = JSON.stringify({
