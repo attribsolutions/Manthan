@@ -168,13 +168,21 @@ export function styleLastRow(worksheet) {
     }
 }
 
-export function generateTableData({ pageField, customKeyColumns, excelTableData, extraColumn, numericHeaders, dateHeader }) {
+export function generateTableData({
+    pageField,
+    customKeyColumns,
+    excelTableData,
+    extraColumn,
+    numericHeaders,
+    dateHeader,
+    listExcelDownload }) {
     let columnsKey = [];
     let HeaderColumns = [];
     let dataRow = [];
     let controlTypeName = [];
-    
-    if (pageField) {
+
+    if ((pageField) && (listExcelDownload === undefined)) {
+
         const listPageColumns = (pageField?.PageFieldMaster || []).filter(({ ShowInListPage }) => ShowInListPage).sort((a, b) => a.ListPageSeq - b.ListPageSeq);
 
         columnsKey = [extraColumn, ...listPageColumns.map(({ ControlID }) => ControlID)].filter(Boolean);
@@ -187,7 +195,14 @@ export function generateTableData({ pageField, customKeyColumns, excelTableData,
         controlTypeName = selectedColumns.map(({ controlTypeName }) => controlTypeName);
         columnsKey = selectedColumns.map(({ dataField }) => dataField);
         HeaderColumns = selectedColumns.map(({ text }) => text);
-    } else {
+    }
+    else if (listExcelDownload) {
+
+        controlTypeName = findProperties(listExcelDownload, pageField.PageFieldMaster, "ControlTypeName");
+        columnsKey = findProperties(listExcelDownload, pageField.PageFieldMaster, "ControlID",);
+        HeaderColumns = findProperties(listExcelDownload, pageField.PageFieldMaster, "FieldLabel");
+    }
+    else {
         const keys = Object.keys(excelTableData[0] || {});
         HeaderColumns = keys;
         columnsKey = keys;
@@ -207,4 +222,16 @@ export function generateTableData({ pageField, customKeyColumns, excelTableData,
     );
 
     return { HeaderColumns, dataRow, controlTypeName };
+}
+
+function findProperties(checkedValues, pageFieldMaster, propertyName) {
+    const result = [];
+    checkedValues.forEach((value) => {
+        const foundItem = pageFieldMaster.find((item) => item.ControlID === value);
+        if (foundItem) {
+            const propertyValue = foundItem[propertyName];
+            result.push({ [propertyName]: propertyValue });
+        }
+    });
+    return result.map((item) => item[propertyName]);
 }

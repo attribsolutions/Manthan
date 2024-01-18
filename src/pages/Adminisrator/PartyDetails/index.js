@@ -328,7 +328,7 @@ const PartyDetails = (props) => {
 
 
             formatter: (cell, row, key,) => {
-                
+
                 return (
                     <Col style={{ width: "150px" }}>
 
@@ -565,7 +565,6 @@ const PartyDetails = (props) => {
                                 e = e.filter(i => !(i.value === ''))
                                 row.SOId = e
                                 setForceRefreshSO(i => !i)
-
                             }}
                             options={row.EmployeesOption}
 
@@ -651,9 +650,9 @@ const PartyDetails = (props) => {
         try {
 
             const convertToArrayComaseprateID = (ArrayID = []) => {
-
-                let result = { "Id": [], "CommaSeprateID": "" };
-                if ((ArrayID !== null) && (Array.isArray(ArrayID))) {
+                debugger
+                let result = { "Id": [], "CommaSeprateID": null };
+                if ((ArrayID !== null) && (Array.isArray(ArrayID)) && ((ArrayID.length > 0))) {
                     ArrayID.forEach(item => {
                         result["Id"].push(item.value); // Push id into the corresponding label array
                     });

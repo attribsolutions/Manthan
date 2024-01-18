@@ -313,6 +313,25 @@ const InvoiceExcelUpload = (props) => {
 
 
             if (Wrong_Item_Code_Array.length > 0) {
+                const MapItemList = ItemList.filter(obj => obj.MapItem !== null && obj.MapItem !== "");
+                MapItemList.forEach(function (i) {
+                    let Item_Code = i.MapItem;
+                    let GST = i.GST;
+
+                    let Matching_ItemCode_Objects = readjson.filter(inx => {
+                        return (inx.Item_Code).toString() === (Item_Code).toString();
+                    });
+
+                    Matching_ItemCode_Objects.forEach(matchingObject => {
+                        matchingObject.GST = GST;
+                    });
+
+                    if (Matching_ItemCode_Objects) {
+                        Matching_ItemCode_Objects.GST = GST;
+                    }
+                    console.log(readjson)
+
+                });
                 setItemVerify({ Wrong_Item_Code_Array: Wrong_Item_Code_Array, Not_Verify_Item: true })
             } else {
 
@@ -323,7 +342,7 @@ const InvoiceExcelUpload = (props) => {
                     let GST = i.GST;
 
                     let Matching_ItemCode_Objects = readjson.filter(inx => {
-                        return inx.Item_Code === Item_Code;
+                        return (inx.Item_Code).toString() === (Item_Code).toString();
                     });
 
                     Matching_ItemCode_Objects.forEach(matchingObject => {
@@ -576,7 +595,7 @@ const InvoiceExcelUpload = (props) => {
                         "LiveBatch": ele[parArr.LiveBatch] ? ele[parArr.LiveBatch] : '',
                         "MRPValue": ele[parArr.MRP] ? ele[parArr.MRP] : '', //Actul MRP That Map in System
                         "Rate": ele[parArr.Rate] ? ele[parArr.Rate]?.toFixed(2) : '',
-                        "BasicAmount": ele[parArr.BasicAmount] ? ele[parArr.BasicAmount] :(calculate.BasicAmount).toFixed(2),
+                        "BasicAmount": ele[parArr.BasicAmount] ? ele[parArr.BasicAmount] : (calculate.BasicAmount).toFixed(2),
                         "GSTAmount": ele[parArr.GSTAmount] ? ele[parArr.GSTAmount] : (calculate.GSTAmount).toFixed(2),
                         "GST": '',
                         // "GSTValue": ele[parArr.GSTValue] ? ele[parArr.GSTValue] : ,       ///  Note ** GSTValue ===GST percentage
