@@ -546,7 +546,7 @@ const InvoiceExcelUpload = (props) => {
                 // })
 
                 inv.forEach(async (ele) => {
-                    F
+
                     const calculate = InvoiceUploadCalculation({ Quantity: ele[parArr.Quantity], Rate: ele[parArr.Rate], GST: ele.GST });
                     invoiceTotalAmount = invoiceTotalAmount + calculate.Amount;
 
