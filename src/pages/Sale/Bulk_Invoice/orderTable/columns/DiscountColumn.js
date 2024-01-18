@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import { Input } from 'reactstrap';
-import { C_Select, decimalRegx } from '../../../../../CustomValidateForm';
+import { CInput, C_Select, decimalRegx } from '../../../../../CustomValidateForm';
 import { useBulkInvoiceContext } from '../../dataProvider';
 import { discountDropOption } from "../../util/constent"
 
@@ -13,6 +13,11 @@ const DiscountColumn = React.memo(({
 }) => {
   const { handleDiscountChange, handleDiscountTypeChange, } = useBulkInvoiceContext();
 
+  console.log("***********", discount,
+    discountType,
+    orderId,
+    itemId,
+    itemAmount)
   const handleDiscount = (event) => {
     const newDiscount = event.target.value
     handleDiscountChange(orderId, itemId, newDiscount)
@@ -21,7 +26,6 @@ const DiscountColumn = React.memo(({
   const handleDiscountType = (newDiscountType) => {
     handleDiscountTypeChange(orderId, itemId, newDiscountType)
   };
-
 
   //render
   return (
@@ -35,8 +39,8 @@ const DiscountColumn = React.memo(({
           />
         </div>
 
-        <Input
-          id={`Dicount_${orderId}-${itemId}`}
+        <CInput
+          key={`Dicount_${orderId}-${itemId}-${discount}`}
           className="right-aligned-placeholder"
           placeholder="Enter discount value"
           defaultValue={discount}
@@ -45,9 +49,10 @@ const DiscountColumn = React.memo(({
         />
 
       </div>
-      <div>
-        Item Amount: {itemAmount}
+      <div className='bg-warning text-dark rounded'>
+        <samp className='text-muted p-2'>Amount:</samp><strong>₹{itemAmount}</strong>
       </div>
+
     </Fragment>
   );
 });

@@ -72,6 +72,7 @@ import CommonPartyDrodown_Saga from "./Utilites/PartyDrodown/saga"
 
 // *********************** Sale ***********************
 import InvoiceSaga from "./Sales/Invoice/saga"
+import BulkInvoiceSaga from "./Sales/bulkInvoice/saga"
 import InwardSaga from "./Inter Branch/InwardRedux/saga"
 import CreditLimitSaga from "./Administrator/CreditLimitRedux/saga"
 import RouteUpdateSaga from "./Administrator/RouteUpdateRedux/saga"
@@ -168,6 +169,7 @@ export default function* rootSaga() {
 		fork(MaterialIssueSaga),
 		fork(ProductionSaga),
 		fork(InvoiceSaga),
+		fork(BulkInvoiceSaga),
 		fork(InwardSaga),
 		fork(ChallanSaga),
 		fork(Production_ReIssueSaga),

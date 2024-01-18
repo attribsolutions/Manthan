@@ -8,6 +8,7 @@ import OrderTableHeaderSection from './header';
 import { discountDropOption } from '../util/constent';
 import ItemNameColumn from './columns/ItemNameColumn';
 import QuantityUnitColumn from './columns/QuantityUnitColumn';
+import { date_dmy_func } from '../../../../components/Common/CommonFunction';
 
 
 const OrdersTable = React.memo(({ order }) => {
@@ -18,28 +19,22 @@ const OrdersTable = React.memo(({ order }) => {
     handleOrderDiscountType,
   } = useBulkInvoiceContext();
 
-  const orderId = order.OrderIDs[0];
+  const orderId = order.OrderIDs;
   const orderAmountWithGst = order.orderAmountWithGst || 0
-  const orderDate = order?.OrderDate || "20-02-2024"
-  const customerName = "Test Customer"
+  const orderDate = date_dmy_func(order.OrderDate)
+  const customerName = order?.CustomerName
+  const orderItemCount=order?.OrderItemDetails?.length;
+  const handleOrderDiscountChange = (orderId, newDiscountType) => {
+    handleOrderDiscount(orderId, newDiscountType)
+  }
 
-  const handleOrderDiscountChange = useCallback(
-    (orderId, newDiscountType) => {
-      handleOrderDiscount(orderId, newDiscountType)
-    },
-    [orderId]
-  );
-  
-  const handleOrderDiscountTypeChange = useCallback(
-    (orderId, event) => {
-      const value = event.target.value;
-      const newDiscount = discountDropOption.find((option) => option.value == value);
 
-      handleOrderDiscountType(orderId, newDiscount)
-    },
-    [orderId]
-  )
+  const handleOrderDiscountTypeChange = (orderId, event) => {
+    const value = event.target.value;
+    const newDiscount = discountDropOption.find((option) => option.value == value);
 
+    handleOrderDiscountType(orderId, newDiscount)
+  }
 
 
   return (
@@ -49,6 +44,7 @@ const OrdersTable = React.memo(({ order }) => {
         orderAmountWithGst={orderAmountWithGst}
         orderDate={orderDate}
         customerName={customerName}
+        orderItemCount={orderItemCount}
       />
 
       <Table className=" custom-table">
@@ -76,13 +72,13 @@ const OrdersTable = React.memo(({ order }) => {
             const itemInfo = item;
             const itemName = itemInfo?.ItemName;
             const itemQuantity = itemInfo?.modifiedQuantity;
-            const isLessStock = itemInfo?.lessStock || 0;
+            const isLessStock = itemInfo?.lessStock;
             const unitName = itemInfo?.UnitName;
             const unitId = itemInfo?.Unit;
             const discount = itemInfo?.Discount;
             const discountType = itemInfo?.DiscountType;
             const itemAmount = item.itemAmountWithGst;
-
+            const initialOrderQuantity=itemInfo.Quantity;
 
             return (
               <tr key={item.Item}>
@@ -102,6 +98,7 @@ const OrdersTable = React.memo(({ order }) => {
                     unitName={unitName}
                     unitId={unitId}
                     isLessStock={isLessStock}
+                    initialOrderQuantity={initialOrderQuantity}
                   />
                 </td>
                 <td>

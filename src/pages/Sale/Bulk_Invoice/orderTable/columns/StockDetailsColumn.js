@@ -2,26 +2,26 @@ import React from 'react';
 import { Input, Table } from 'reactstrap';
 
 const StockDetailsTable = React.memo(({ stockDetails, itemInfo, orderId, itemId }) => {
-    // console.log('StockDetailsTable', orderId, itemId)
-    return (
-      <div>
-        {/* <div>Remaining Stock: {globlestokDetail[itemId]?.totalItemStock}</div> */}
-  
-        <Table style={{ borderCollapse: 'collapse', border: '1px solid black', width: '100%' }}>
-          <thead>
-            <tr>
-              <th>BatchCode</th>
-              <th>Stock</th>
-              <th>Distribute</th>
-              <th>Rate</th>
-              <th>MRP</th>
-            </tr>
-          </thead>
-          <tbody>
-            {stockDetails.map((stock) => {
-              const stockInfo = itemInfo?.[`stockId-${stock.id}`];
-              const distributeStock = stock?.distribute;
-  
+  // console.log('StockDetailsTable', orderId, itemId)
+  return (
+    <div>
+      {/* <div>Remaining Stock: {globlestokDetail[itemId]?.totalItemStock}</div> */}
+
+      <Table style={{ borderCollapse: 'collapse', border: '1px solid black', width: '100%' }}>
+        <thead>
+          <tr>
+            <th>BatchCode</th>
+            <th>Stock</th>
+            <th>Distribute</th>
+            <th>Rate</th>
+            <th>MRP</th>
+          </tr>
+        </thead>
+        <tbody>
+          {stockDetails.map((stock) => {
+            
+            const distributeStock = stock?.distribute;
+            if (distributeStock > 0) {
               return (
                 <tr key={stock.id}>
                   <td>{stock.BatchCode}</td>
@@ -36,12 +36,14 @@ const StockDetailsTable = React.memo(({ stockDetails, itemInfo, orderId, itemId 
                   <td>{stock.MRP}</td>
                 </tr>
               )
-            })}
-          </tbody>
-        </Table>
-  
-      </div>
-    );
-  });
+            }
+              return null
+          })}
+        </tbody>
+      </Table>
 
-  export default StockDetailsTable
+    </div>
+  );
+});
+
+export default StockDetailsTable

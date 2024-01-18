@@ -7,6 +7,7 @@ const QuantityUnitColumn = React.memo(({
   itemId,
   handleItemQuantityChange,
   itemQuantity,
+  initialOrderQuantity,
   unitName,
   unitId,
   isLessStock,
@@ -30,6 +31,7 @@ const QuantityUnitColumn = React.memo(({
         isDisabled
         value={{ label: unitName, value: unitId }}
       />
+      <span className='text-muted '>Order Quantity : {initialOrderQuantity}</span>
     </div>
   );
 });

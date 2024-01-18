@@ -81,6 +81,7 @@ import StockEntryReducer from "./Inventory/StockEntryRedux/reducer"
 import InvoiceReducer from "./Sales/Invoice/reducer"
 import LoadingSheetReducer from "./Sales/LoadingSheetRedux/reducer"
 import SalesReturnReducer from "./Sales/SalesReturnRedux/reducer"
+import BulkInvoiceReducer from "./Sales/bulkInvoice/reducer";
 
 // *********************** InterBranch ***********************
 import InwardReducer from "./Inter Branch/InwardRedux/reducer"
@@ -180,6 +181,7 @@ const rootReducer = combineReducers({
 	BankAssignReducer,
 	ProductionReIssueReducer,
 	InvoiceReducer,
+	BulkInvoiceReducer,
 	InwardReducer,
 	ChallanReducer,
 	RouteUpdateReducer,

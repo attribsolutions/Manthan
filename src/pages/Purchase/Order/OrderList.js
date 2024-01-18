@@ -22,6 +22,7 @@ import OrderView from "./OrderView";
 import OrderView_Modal from "./OrderView";
 import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
+import { getOrdersMakeInvoiceDataAction, getOrdersMakeInvoiceDataActionSuccess } from "../../../store/Sales/bulkInvoice/action";
 
 const OrderList = () => {
 
@@ -86,6 +87,8 @@ const OrderList = () => {
                 || state.InvoiceReducer.listBtnLoading
                 || state.GRNReducer.listBtnLoading
                 || state.PdfReportReducers.ReportBtnLoading),
+
+
         })
     );
 
@@ -102,8 +105,12 @@ const OrderList = () => {
         gobutton_Add_invoice,
         customerTypeDropLoading,
         supplierDropLoading,
-        unhideMsg
+        unhideMsg,
+
     } = reducers;
+
+    const ordersBulkInvoiceData = useSelector(state => state.BulkInvoiceReducer.ordersBulkInvoiceData);
+    const makeBulkInvoiceLoading = useSelector(state => state.BulkInvoiceReducer.makeBulkInvoiceLoading);
 
     const values = { ...state.values }
     const { fieldLabel } = state;
@@ -254,6 +261,16 @@ const OrderList = () => {
             })
         }
     }, [gobutton_Add_invoice]);
+
+    useEffect(() => {
+        if (ordersBulkInvoiceData.Status === true && ordersBulkInvoiceData.StatusCode === 200) {
+            dispatch(getOrdersMakeInvoiceDataActionSuccess({ ...ordersBulkInvoiceData, Status: false }));
+            history.push({
+                pathname: url.BULK_INVOICE,
+            })
+
+        }
+    }, [ordersBulkInvoiceData]);
 
     useEffect(() => {
 
@@ -568,19 +585,21 @@ const OrderList = () => {
         dispatch(postOrderConfirms_API({ jsonBody }))
     }
 
-    const BulkInvoice_Handler = (row = []) => {
-
-        // let ischeck = row.filter(i => (i.selectCheck))
-        // if (!ischeck.length > 0) {
-        //     customAlert({
-        //         Type: 4,
-        //         Message: "Please Select One Order",
-        //     });
-        //     return
-        // }
-        // let idString = ischeck.map(obj => obj.id).join(',')
-        // let jsonBody = { OrderIDs: idString }
-        // dispatch(postOrderConfirms_API({ jsonBody }))
+    const BulkInvoice_Handler = (allList = []) => {
+        
+        let checkRows = allList.filter(i => (i.selectCheck))
+        if (!checkRows.length > 0) {
+            customAlert({
+                Type: 4,
+                Message: "Please Select One Order",
+            });
+            return
+        }
+        let idString = checkRows.map(row => row.id).join(',')
+        let jsonBody = {
+            OrderIDs: idString, "Customer": null, "Party": _cfunc.loginSelectedPartyID(),
+        }
+        dispatch(getOrdersMakeInvoiceDataAction({ jsonBody }))
     }
 
     const HeaderContent = () => {

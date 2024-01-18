@@ -12,7 +12,6 @@ export const onSelectAll = ({ event, allarray, }) => {  // event only call After
 }
 
 export const selectRow = (row, event) => {
-  debugger
   row.selectCheck = event
 }
 

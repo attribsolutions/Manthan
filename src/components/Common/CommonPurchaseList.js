@@ -218,11 +218,11 @@ const CommonPurchaseList = (props) => {
     ) {
       return {
         text: "Action",
-        dataField: "hasSelect",
+        dataField: "",
         sort: true,
         attrs: (cell, row, rowIndex, colIndex) => ({ 'data-label': 'Action', "sticky-col": (colIndex === 0) ? "true" : "false" }),
         formatter: (cellContent, rowData) => {
-          rowData["hasSelect"] = false;
+         
           if (rowData.IsRecordDeleted === true) {   ///hide button in GRN list 3 STP page last action column for Make Button
             return (
               <div>

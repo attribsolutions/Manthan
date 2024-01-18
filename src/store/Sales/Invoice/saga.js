@@ -210,7 +210,7 @@ function invoice_GoButton_dataConversion_Func(response, customer = '') {
 
 
   // Iterate over OrderItemDetails array and perform data conversion
-  response.Data.OrderItemDetails = response.Data.OrderItemDetails.map(index1 => {
+  response.Data.OrderItemDetails = response.Data[0].OrderItemDetails.map(index1 => {
     const isUnitIDPresent = index1.UnitDetails.find(findEle => findEle.UnitID === index1.Unit);
     const isMCunitID = index1.UnitDetails.find(findEle => findEle.DeletedMCUnitsUnitID === index1.DeletedMCUnitsUnitID);
     const defaultunit = isUnitIDPresent !== undefined ? isUnitIDPresent : isMCunitID;

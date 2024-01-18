@@ -1,17 +1,18 @@
 
 import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
 import debounce from 'lodash/debounce';
-import { roundToDecimalPlaces } from '../../../../components/Common/CommonFunction';
+import { loginUserGSTIN, roundToDecimalPlaces } from '../../../../components/Common/CommonFunction';
 import { itemAmounWithGst, settingBaseRoundOffOrderAmountFunc } from '../util/calculationFunc';
 
 const BulkInvoiceContext = createContext();
 
-export const BulkInvoiceProvider = ({ children, data }) => {
+export const BulkInvoiceProvider = ({ children, data = [] }) => {
 
     const [globleStockDistribute, setGlobleStockDistribute] = useState({});
-    const [globlebulkInvoiceData, setGloblebulkInvoiceData] = useState(data);
+    const [globlebulkInvoiceData, setGloblebulkInvoiceData] = useState([]);
     const discountDropOption = [{ value: 1, label: "Rs" }, { value: 2, label: "%" }];
-    debugger
+    const loginPartyGstIn = loginUserGSTIN();
+
     const globleItemStock = useMemo(() => {
         const newGlobalStock = {};
 
@@ -36,9 +37,9 @@ export const BulkInvoiceProvider = ({ children, data }) => {
                 newGlobalStock[itemId].totalStock = newGlobalStock[itemId].totalStock || 0;
                 newGlobalStock[itemId].totalStock = totalItemStock;
 
-                item.modifiedQuantity = item.Quantity;
+                item.modifiedQuantity = roundToDecimalPlaces(item.Quantity, 3, true);
                 item.DiscountType = item.DiscountType == 1 ? discountDropOption[0] : discountDropOption[1]
-debugger
+
             });
         });
 
@@ -48,16 +49,20 @@ debugger
 
 
     useEffect(() => {
-        distributeItemStockGlobally(globlebulkInvoiceData)
+        distributeItemStockGlobally(data)
     }, [globleItemStock])
 
     const distributeItemStockGlobally = useCallback(
         (oldData) => {
+
             const newGlobalStock = JSON.parse(JSON.stringify(globleItemStock))
             const newGlobalData = JSON.parse(JSON.stringify(oldData))
 
             newGlobalData.forEach(order => {
-                let orderAmountWithGst = 0
+                let orderAmountWithGst = 0;
+                const IsTCSParty = order.IsTCSParty;
+                const IsCustomerPAN = order.IsTCSParty;
+                const IsComparGstIn = { GSTIn_1: order.customerGSTIn, GSTIn_2:loginPartyGstIn  }
 
                 order.OrderItemDetails.forEach(orderItem => {
                     const itemId = `itemId-${orderItem.Item}`;
@@ -97,7 +102,7 @@ debugger
                                 GSTPercentage: orderItem.GSTPercentage,
                                 Discount: orderItem.Discount,
                                 DiscountType: orderItem.DiscountType?.value,
-                                IsComparGstIn: true
+                                IsComparGstIn,
                             });
                             itemAmountWithGst += calculatedBachAmount?.roundedTotalAmount || 0
                             stockDetail.calculatedBachAmount = calculatedBachAmount;
@@ -109,10 +114,11 @@ debugger
 
                     if (orderQty > 0.0) {
                         orderItem.lessStock = roundToDecimalPlaces(orderQty);
-                    }
+                    } else { orderItem.lessStock = 0; };
+
                     const orderAmountCalculation = settingBaseRoundOffOrderAmountFunc({
-                        IsTCSParty: false,
-                        IsCustomerPAN: false,
+                        IsTCSParty,
+                        IsCustomerPAN,
                         sumOfItemAmount: itemAmountWithGst
                     });
                     orderItem.orderAmountCalculation = orderAmountCalculation;
@@ -123,7 +129,7 @@ debugger
                 order.orderAmountWithGst = roundToDecimalPlaces(orderAmountWithGst, 2);
             });
 
-debugger
+
             setGloblebulkInvoiceData(newGlobalData)
         }, []);
 
@@ -137,7 +143,7 @@ debugger
                 const order = oldData[i];
                 for (let j = 0; j < order.OrderItemDetails.length; j++) {
                     const item = order.OrderItemDetails[j];
-                    if (order.OrderIDs[0] === orderID && item.Item === itemID) {
+                    if (order.OrderIDs === orderID && item.Item === itemID) {
                         item.modifiedQuantity = roundToDecimalPlaces(newQuantity, 3, true);
 
                         found = true;
@@ -155,14 +161,14 @@ debugger
     const handleDiscountTypeChange = useCallback(
         debounce((orderID, itemID, newDiscountType) => {
 
-            const oldData = JSON.parse(JSON.stringify(globlebulkInvoiceData ));
+            const oldData = JSON.parse(JSON.stringify(globlebulkInvoiceData));
             let found = false;
-debugger
+
             for (let i = 0; i < oldData.length; i++) {
                 const order = oldData[i];
                 for (let j = 0; j < order.OrderItemDetails.length; j++) {
                     const item = order.OrderItemDetails[j];
-                    if (order.OrderIDs[0] === orderID && item.Item === itemID) {
+                    if (order.OrderIDs === orderID && item.Item === itemID) {
                         item.DiscountType = newDiscountType;
                         found = true;
                         break; // This will break out of the inner loop
@@ -175,7 +181,7 @@ debugger
             };
 
             distributeItemStockGlobally(oldData);
-        }, 100), [globlebulkInvoiceData]);
+        }, 200), [globlebulkInvoiceData]);
 
     const handleDiscountChange = useCallback(
         debounce((orderID, itemID, newDiscount) => {
@@ -185,7 +191,7 @@ debugger
                 const order = oldData[i];
                 for (let j = 0; j < order.OrderItemDetails.length; j++) {
                     const item = order.OrderItemDetails[j];
-                    if (order.OrderIDs[0] === orderID && item.Item === itemID) {
+                    if (order.OrderIDs === orderID && item.Item === itemID) {
                         item.Discount = newDiscount;
                         found = true;
                         break; // This will break out of the inner loop
@@ -198,26 +204,26 @@ debugger
             };
 
             distributeItemStockGlobally(oldData);
-        }, 100), [globlebulkInvoiceData]);
+        }, 200), [globlebulkInvoiceData]);
 
 
     const handleOrderDiscount = useCallback(
         debounce((orderID, newDiscount) => {
             const oldData = JSON.parse(JSON.stringify(globlebulkInvoiceData));
-            debugger
+
             for (let i = 0; i < oldData.length; i++) {
                 const order = oldData[i];
-                for (let j = 0; j < order.OrderItemDetails.length; j++) {
-                    const item = order.OrderItemDetails[j];
-                    item.Discount = newDiscount;
-                }
-                if (order.OrderIDs[0] === orderID) {
+                if (order.OrderIDs === orderID) {
+                    for (let j = 0; j < order.OrderItemDetails.length; j++) {
+                        const item = order.OrderItemDetails[j];
+                        item.Discount = newDiscount;
+                    }
 
                     break; // This will break out of the outer loop
                 }
             };
             distributeItemStockGlobally(oldData);
-        }, 100), [globlebulkInvoiceData]);
+        }, 200), [globlebulkInvoiceData]);
 
     const handleOrderDiscountType = useCallback(
         debounce((orderID, newDiscountType) => {
@@ -225,18 +231,18 @@ debugger
 
             for (let i = 0; i < oldData.length; i++) {
                 const order = oldData[i];
-                for (let j = 0; j < order.OrderItemDetails.length; j++) {
-                    const item = order.OrderItemDetails[j];
-                    item.DiscountType = newDiscountType;
-                }
-                if (order.OrderIDs[0] === orderID) {
+                if (order.OrderIDs === orderID) {
+                    for (let j = 0; j < order.OrderItemDetails.length; j++) {
+                        const item = order.OrderItemDetails[j];
+                        item.DiscountType = newDiscountType;
+                    }
 
                     break; // This will break out of the outer loop
                 }
             };
 
             distributeItemStockGlobally(oldData);
-        }, 100), [globlebulkInvoiceData]);
+        }, 200), [globlebulkInvoiceData]);
 
 
 
@@ -247,10 +253,8 @@ debugger
         setGlobleStockDistribute,
         globleStockDistribute,
         handleItemQuantityChange,
-
         handleDiscountChange,
         handleDiscountTypeChange,
-
         handleOrderDiscount,
         handleOrderDiscountType,
     }

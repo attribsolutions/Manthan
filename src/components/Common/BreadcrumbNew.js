@@ -13,7 +13,7 @@ import { ExcelReportComponent } from "./ReportCommonFunc/ExcelDownloadWithCSS";
 const BreadcrumbNew = () => {
   const history = useHistory();
   const dispatch = useDispatch();
-
+  const [opacity, setOpacity] = useState(1);
   const [modal_scroll, setmodal_scroll] = useState(false);
   const [downListKey, setDownListKey] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
@@ -75,7 +75,25 @@ const BreadcrumbNew = () => {
       const defaultDownBtnArray = Object.entries(defaultDownBtnData).map(([key, value]) => ({ [key]: value }));
       setDownListKey(defaultDownBtnArray);
     }
-  }, [defaultDownBtnData])
+  }, [defaultDownBtnData]);
+
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const newOpacity = 1 - window.scrollY * 0.01;
+      setOpacity(newOpacity > 0 ? newOpacity : 0);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    // Cleanup the event listener when the component unmounts
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
+
+
 
   const nondeleteHandler = (event) => {
     let CheckedValue = event.target.checked
@@ -207,7 +225,7 @@ const BreadcrumbNew = () => {
 
   return (
     <React.Fragment>
-      <header id="page-topbar1" style={{ zIndex: "1" }}  >
+      <header id="page-topbar1" style={{ zIndex: "1",opacity }}  >
         <div className="navbar-header blur1" style={{ paddingRight: "-10px", zIndex: "-1" }}>
           <div className="d-flex" >
             <div className="navbar-brand-box d-none d-lg-block" style={{ backgroundColor: "white" }} ></div>

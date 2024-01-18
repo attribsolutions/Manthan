@@ -1,107 +1,39 @@
 import React from 'react';
 import { useBulkInvoiceContext } from './dataProvider';
 import OrderTable from "./orderTable/index"
-import { balkInvoiceAllOrderAmountFunc, itemAmounWithGst, settingBaseRoundOffOrderAmountFunc } from './util/calculationFunc';
 import { useEffect } from 'react';
 import { BreadcrumbShowCountlabel } from '../../../store/actions';
 import { useDispatch } from 'react-redux';
+import { roundToDecimalPlaces } from '../../../components/Common/CommonFunction';
+import { SaveButton } from '../../../components/Common/CommonButton';
 
 
-const Invoice = ({ }) => {
+const Invoice = ({
+  saveHandleCallBack,
+  saveBtnloading,
+  userPageAccessState,
+  pageMode
+}) => {
 
   const dispatch = useDispatch();
-  const { bulkData = [], globleStockDistribute, globleItemStock } = useBulkInvoiceContext();
+  const { bulkData = [] } = useBulkInvoiceContext();
 
   useEffect(() => {
-    const { sumOfInvoiceTotal } = balkInvoiceAllOrderAmountFunc({
-      IsTCSParty: false,
-      IsCustomerPAN: false,
-      bulkInvoceInfo: globleStockDistribute
-    });
-    const dataCount = bulkData.length;
+    let sumofOrdersAmount = 0
+    let ordersCount = 0
 
-    dispatch(BreadcrumbShowCountlabel(`Count:${dataCount} ₹ ${sumOfInvoiceTotal}`))
-
-  }, [globleStockDistribute, bulkData]);
-
-  const savehandle = () => {
-    const newGlobleItemStock = JSON.parse(JSON.stringify(globleItemStock));
-    const newGlobleStockDistribute = JSON.parse(JSON.stringify(globleStockDistribute));
-    const bulkInvoiceJsonBody = []
-
-    for (const [orderId, orderInfo] of Object.entries(newGlobleStockDistribute)) {
-
-      // const { sumOfGrandTotal, RoundOffAmount, TCS_Amount, orderItemsCalculations } = settingBaseRoundOffOrderAmountFunc({
-      //   IsTCSParty: false,
-      //   IsCustomerPAN: false,
-      //   orderInfo
-      // })
-
-      for (const [itemId, itemInfo] of Object.entries(orderInfo)) {
-
-        for (const [sockId, stockInfo] of Object.entries(itemInfo)) {
-          const calculate = itemAmounWithGst({});
-
-          const orderInvoiceItems = {
-            "Item": itemInfo.Item,
-            "Unit": itemInfo.unitid,
-            "BatchCode": stockInfo.BatchCode,
-            "Quantity": stockInfo.distribute.toFixed(3),
-            "BatchDate": '',
-            "BatchID": sockId,
-            "BaseUnitQuantity": "Number(ele.BaseUnitQuantity).toFixed(3)",
-            "PreviousInvoiceBaseUnitQuantity": "Number(ele.BaseUnitQuantity).toFixed(3)",
-
-            "LiveBatch": "ele.LiveBatche",
-            "MRP": "ele.LiveBatcheMRPID",
-            "MRPValue": "ele.MRP",//changes
-            "Rate": itemInfo.rate.toFixed(2),
-
-            "GST": "ele.LiveBatcheGSTID",
-            "CGST": Number(calculate.CGST_Amount).toFixed(2),
-            "SGST": Number(calculate.SGST_Amount).toFixed(2),
-            "IGST": Number(calculate.IGST_Amount).toFixed(2),
-
-            "GSTPercentage": calculate.GST_Percentage,
-            "CGSTPercentage": calculate.CGST_Percentage,
-            "SGSTPercentage": calculate.SGST_Percentage,
-            "IGSTPercentage": calculate.IGST_Percentage,
-
-            "BasicAmount": Number(calculate.discountBaseAmt).toFixed(2),
-            "GSTAmount": Number(calculate.roundedGstAmount).toFixed(2),
-            "Amount": Number(calculate.roundedTotalAmount).toFixed(2),
-
-            "TaxType": 'GST',
-            "DiscountType": itemId.DiscountType,
-            "Discount": Number(itemId.Discount) || 0,
-            "DiscountAmount": Number(calculate.disCountAmt).toFixed(2),
-          };
-          orderJsonBody.InvoiceItems.push(orderInvoiceItems)
-        }
-
-      }
-
-
-
-
+    for (const orderInfo of bulkData) {
+      sumofOrdersAmount += orderInfo.orderAmountWithGst || 0
+      ordersCount++
     }
-    const orderJsonBody = {
-      CustomerGSTTin: "values.Customer.GSTIN",
-      GrandTotal: '',//sumOfGrandTotal,
-      RoundOffAmount:'',// RoundOffAmount,
-      TCSAmount:'',// TCS_Amount,
-      Customer: "values.Customer.value",
-      Vehicle: '', //values.VehicleNo.value ? values.VehicleNo.value : "",
-      Party: 1,// commonPartyDropSelect.value,
-      CreatedBy: 1,// _cfunc.loginUserID(),
-      UpdatedBy: 1,// _cfunc.loginUserID(),
-      InvoiceItems: []
-    };
+    dispatch(BreadcrumbShowCountlabel(`Count:${ordersCount} ₹ ${roundToDecimalPlaces(sumofOrdersAmount, 2, true)}`))
 
+  }, [, bulkData]);
+
+
+  const onClickSavehandle = () => {
+    saveHandleCallBack(bulkData)
   }
-
-
-
   return (
     <div>
       {bulkData.map((order, index) => (
@@ -110,6 +42,18 @@ const Invoice = ({ }) => {
           order={order}
         />
       ))}
+      {
+        (bulkData.length > 0) &&
+        <div className="row save1" style={{ paddingBottom: 'center' }}>
+          <SaveButton
+            loading={saveBtnloading}
+            pageMode={pageMode}
+            userAcc={userPageAccessState}
+            onClick={onClickSavehandle}
+            forceDisabled={saveBtnloading}
+          />
+        </div>
+      }
     </div>
   );
 };
