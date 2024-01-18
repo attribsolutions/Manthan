@@ -147,7 +147,7 @@ const ReceiptList = () => {
     const goButtonHandler = () => {
         try {
             if (commonPartyDropSelect.value === 0) {
-                customAlert({ Type: 3, Message: alertMessages.requiredPartySelection });
+                customAlert({ Type: 3, Message: alertMessages.commonPartySelectionIsRequired });
                 return;
             };
             const ReceiptTypeID = ReceiptType.find((index) => {

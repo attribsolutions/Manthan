@@ -34,6 +34,7 @@ import { C_Select } from "../../../../CustomValidateForm";
 // import { getPartyListAPI } from "../../../../store/Administrator/PartyRedux/action";
 import { readExcelFile } from "../InvoiceExcelUpload/readFile";
 import NewCommonPartyDropdown from "../../../../components/Common/NewCommonPartyDropdown";
+import { alertMessages } from "../../../../components/Common/CommonErrorMsg/alertMsg";
 
 const RetailerExcelUpload = (props) => {
 
@@ -180,7 +181,7 @@ const RetailerExcelUpload = (props) => {
     function goButtonHandler() {
 
         const jsonBody = JSON.stringify({
-            PartyID:'',
+            PartyID: '',
             CompanyID: '',
             // PartyID: commonPartyDropSelect.value,
             // CompanyID: _cfunc.loginCompanyID(),
@@ -192,15 +193,15 @@ const RetailerExcelUpload = (props) => {
 
     async function veifyExcelBtn_Handler() {
         let alertMsg = ''
-        
+
         if (commonPartyDropSelect.value === 0) {
-            alertMsg = "Please Select Party.";
+            alertMsg = alertMessages.commonPartySelectionIsRequired;
         }
         else if (compareParameter.length === 0) {
-            alertMsg = "Please wait Downloading field Details.";
+            alertMsg = alert.waitForDownloadFieldDetails;
         }
         else if (selectedFiles.length === 0) {
-            alertMsg = "Please choose any file..."
+            alertMsg = alertMessages.chooseAnyFile
         };
 
 
@@ -229,7 +230,7 @@ const RetailerExcelUpload = (props) => {
                 } else {
                     customAlert({
                         Type: 3,
-                        Message: "Mapping not match."
+                        Message: alertMessages.mappingNotMatch
                     })
                 }
             }
@@ -237,7 +238,7 @@ const RetailerExcelUpload = (props) => {
         } else {
             customAlert({
                 Type: 3,
-                Message: 'Unsupported file format. Please select an Excel (XLSX) or CSV file.',
+                Message: alertMessages.unSupportedFileFormat,
             })
         }
     }
@@ -246,12 +247,12 @@ const RetailerExcelUpload = (props) => {
     async function handleAcceptedFiles(files) {
 
         let alertMsg = ''
-        
+
         if (commonPartyDropSelect.value === 0) {
-            alertMsg = "Please Select Party.";
+            alertMsg = alertMessages.commonPartySelectionIsRequired;
         }
         else if (compareParameter.length === 0) {
-            alertMsg = "Please wait Downloading field Details.";
+            alertMsg = alertMessages.waitForDownloadFieldDetails;
         }
 
         if (alertMsg.length > 0) {
@@ -266,7 +267,7 @@ const RetailerExcelUpload = (props) => {
         if (selectedFiles.length > 0) {
             const isConfirmed = await customAlert({
                 Type: 8,
-                Message: "Do you confirm your choice?",
+                Message: alertMessages.doYouConfirmChoice,
             });
             if (!isConfirmed) {
                 return
@@ -316,10 +317,10 @@ const RetailerExcelUpload = (props) => {
         let validMsg = []
 
         if ((commonPartyDropSelect.value === "")) {
-            validMsg.push({ Msg: "Please Select Party." })
+            validMsg.push({ Msg: alertMessages.commonPartySelectionIsRequired })
         }
         if ((priceListSelect.value === '')) {
-            validMsg.push({ Msg: "Please Select PriceList." })
+            validMsg.push({ Msg: alertMessages.PricelistIsRequired })
         }
         if (validMsg.length > 0) {
             customAlert({
@@ -334,7 +335,7 @@ const RetailerExcelUpload = (props) => {
             dispatch,
             compareParameter,
             readJsonDetail,
-            partySelect:commonPartyDropSelect,
+            partySelect: commonPartyDropSelect,
             priceListSelect,
             retailerId
         })

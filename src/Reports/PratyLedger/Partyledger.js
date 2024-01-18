@@ -365,7 +365,7 @@ const PartyLedger = () => {
     async function goButtonHandler(e, mode) {
 
         if (_cfunc.loginSelectedPartyID() === 0) {
-            customAlert({ Type: 3, Message: alertMessages.requiredPartySelection });
+            customAlert({ Type: 3, Message: alertMessages.commonPartySelectionIsRequired });
             return;
         };
 
@@ -375,7 +375,7 @@ const PartyLedger = () => {
         if ((isPartyLeger && values.Customer === "") || (isSelfLeger && values.Party === "")) {
             customAlert({
                 Type: 3,
-                Message: isPartyLeger ? "Please Select Customer" : alertMessages.requiredPartySelection,
+                Message: isPartyLeger ? "Please Select Customer" : alertMessages.commonPartySelectionIsRequired,
             });
             return;
         }

@@ -52,6 +52,7 @@ import { CInput, C_DatePicker, C_Select } from "../../../CustomValidateForm/inde
 import { decimalRegx } from "../../../CustomValidateForm/RegexPattern";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
+import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 
 const Receipts = (props) => {
 
@@ -494,7 +495,7 @@ const Receipts = (props) => {
             if (Number(values.AmountPaid) < calSum) {
                 customAlert({
                     Type: 4,
-                    Message: `Amount Paid value is Excess ${diffrence}`,
+                    Message: `${alertMessages.amountPaidValueIsExcess} ${diffrence}`,
                 })
                 return btnIsDissablefunc({ btnId, state: false })
 
@@ -502,17 +503,16 @@ const Receipts = (props) => {
             else if (Number(values.AmountPaid) > calSum) {
                 customAlert({
                     Type: 4,
-                    Message: `Amount Paid value is Short ${diffrence}`,
+                    Message: `${alertMessages.amountPaidValueIsShort} ${diffrence}`,
                 })
                 return btnIsDissablefunc({ btnId, state: false })
-
             }
         }
 
         if ((values.ReceiptModeName.value === undefined) || values.ReceiptModeName.value === "") {
             customAlert({
                 Type: 4,
-                Message: "Receipt Mode Is Required",
+                Message: alertMessages.receiptModeIsRequired,
             })
             return btnIsDissablefunc({ btnId, state: false })
         }
@@ -524,7 +524,7 @@ const Receipts = (props) => {
             || (values.AmountPaid === "0")) {
             customAlert({
                 Type: 4,
-                Message: `The Receipt amount must be greater than zero.`,
+                Message: alertMessages.receiptAmountGreaterThanZero,
             })
             return btnIsDissablefunc({ btnId, state: false })
         }
@@ -533,13 +533,13 @@ const Receipts = (props) => {
         if (values.ReceiptModeName.label === "Cheque") {
 
             if (values.BankName === "") {
-                invalidMsg1.push(`Bank Name Is Required`)
+                invalidMsg1.push(alertMessages.bankNameIsRequired)
             }
             if (values.DepositorBankName === "") {
-                invalidMsg1.push(`Depositor Bank Name Is Required`)
+                invalidMsg1.push(alertMessages.depositorBankIsRequired)
             };
             if (values.DocumentNo === "") {
-                invalidMsg1.push(`Cheque Number Is Required`)
+                invalidMsg1.push(alertMessages.chequeIsRequired)
             };
 
             if (invalidMsg1.length > 0) {

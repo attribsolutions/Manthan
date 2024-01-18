@@ -131,7 +131,7 @@ const CreditDebitDataExport = (props) => {  // also Receipt Data Export
         try {
 
             if ((isSCMParty) && (PartyDropdown === "")) {
-                customAlert({ Type: 3, Message: alertMessages.requiredPartySelection });
+                customAlert({ Type: 3, Message: alertMessages.commonPartySelectionIsRequired });
                 return;
             };
 

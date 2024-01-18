@@ -158,7 +158,7 @@ const StockReport_1 = (props) => {
 
         const btnId = `gobtn-${url.STOCK_REPORT_1}`
         if ((isSCMParty) && (PartyDropdown === "")) {
-            customAlert({ Type: 4, Message: alertMessages.requiredPartySelection });
+            customAlert({ Type: 4, Message: alertMessages.commonPartySelectionIsRequired });
             return;
         }
         const jsonBody = JSON.stringify({
@@ -179,7 +179,7 @@ const StockReport_1 = (props) => {
             return
         }
         if ((isSCMParty) && (PartyDropdown === "")) {
-            customAlert({ Type: 4, Message: alertMessages.requiredPartySelection });
+            customAlert({ Type: 4, Message: alertMessages.commonPartySelectionIsRequired });
             return;
         }
         const jsonBody = JSON.stringify({

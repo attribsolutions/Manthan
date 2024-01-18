@@ -33,7 +33,7 @@ const NewCommonPartyDropdown = ({ pageMode }) => {
     const updateSelectedParty = () => {
         
         if (selectedParty.value === 0) {
-            customAlert({ Type: 3, Message: alertMessages.requiredPartySelection });
+            customAlert({ Type: 3, Message: alertMessages.commonPartySelectionIsRequired });
             return;
         }
         setChangeButtonShow(true)

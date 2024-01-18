@@ -49,6 +49,7 @@ import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import { async } from "q";
 import { mobileApp_ProductAdd_Api, mobileApp_ProductUpdate_Api } from "../../../helpers/backend_helper";
 import { showToastAlert } from "../../../helpers/axios_Config";
+import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 
 const MarginMaster = (props) => {
     const dispatch = useDispatch();
@@ -275,7 +276,7 @@ const MarginMaster = (props) => {
         if (values.EffectiveDate === '') {
             customAlert({
                 Type: 4,
-                Message: "Please select EffectiveDate",
+                Message: alertMessages.effectiveDateIsRequired,
             })
             return
         }
@@ -297,7 +298,7 @@ const MarginMaster = (props) => {
         
         const isConfirmed = await customAlert({
             Type: 7,
-            Message: `Are you sure you want to delete this Item : "${name}"`
+            Message: `${alertMessages.deleteThisItem} : "${name}"`
         });
 
         if (isConfirmed) {

@@ -41,6 +41,7 @@ import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { comAddPageFieldFunc, initialFiledFunc, onChangeDate, resetFunction } from "../../../components/Common/validationFunction";
 import { Go_Button, SaveButton } from "../../../components/Common/CommonButton";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
+import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 
 const GSTMaster = (props) => {
     const dispatch = useDispatch();
@@ -218,7 +219,7 @@ const GSTMaster = (props) => {
         if (values.EffectiveDate === '') {
             customAlert({
                 Type: 4,
-                Message: "Please select EffectiveDate",
+                Message: alertMessages.effectiveDateIsRequired,
             })
             return
         }
@@ -237,7 +238,7 @@ const GSTMaster = (props) => {
             customAlert({
                 Type: 5,
                 Status: true,
-                Message: `Are you sure you want to delete this Item : "${name}"`,
+                Message: `${alertMessages.deleteThisItem} : "${name}"`,
                 RedirectPath: false,
                 PermissionAction: deleteGSTId_ForMaster,
                 ID: id,

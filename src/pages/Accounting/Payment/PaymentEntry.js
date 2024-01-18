@@ -277,7 +277,7 @@ const PaymentEntry = (props) => {
                 if (Number(values.AmountPaid) === 0) {
                     customAlert({
                         Type: 4,
-                        Message: alertMessages.amountGreaterThanZero,
+                        Message: alertMessages.paymentAmountGreaterThanZero,
                     })
                     return _cfunc.btnIsDissablefunc({ btnId, state: false })
                 }

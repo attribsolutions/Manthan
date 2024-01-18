@@ -38,6 +38,7 @@ import { ORDER_4 } from "../../../routes/route_url";
 import NewCommonPartyDropdown from "../../../components/Common/NewCommonPartyDropdown";
 import "../../../CustomTable2/CustomTable.scss"
 import "./order.scss"
+import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 
 
 let editVal = {}
@@ -999,7 +1000,7 @@ const Order = (props) => {
 
         const isConfirmed = await customAlert({
             Type: 7,
-            Message: "Do you confirm your choice?",
+            Message: alertMessages.doYouConfirmChoice,
         });
 
         if (isConfirmed) {

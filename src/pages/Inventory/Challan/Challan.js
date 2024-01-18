@@ -433,7 +433,7 @@ const Challan = (props) => {
             validMsg.push({ Item: "Please Select Item" })
         };
         if (!(values.Party.value)) {
-            validMsg.push({ Party: alertMessages.requiredPartySelection })
+            validMsg.push({ Party: alertMessages.commonPartySelectionIsRequired })
         };
         if (validMsg.length > 0) {
             customAlert({

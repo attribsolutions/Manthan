@@ -125,7 +125,7 @@ const ServiceItemAssign = (props) => {
 			event?.persist();// Call event.persist() to remove the synthetic event from the pool
 
 			if ((_cfunc.loginSelectedPartyID() === 0)) {
-				customAlert({ Type: 3, Message: alertMessages.requiredPartySelection });
+				customAlert({ Type: 3, Message: alertMessages.commonPartySelectionIsRequired });
 				return;
 			};
 			const jsonBody = {

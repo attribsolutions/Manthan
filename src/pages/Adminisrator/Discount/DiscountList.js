@@ -55,7 +55,7 @@ const DiscountList = () => {
     const goButtonHandler = () => {
         try {
             if (_cfunc.loginSelectedPartyID() === 0) {
-                customAlert({ Type: 3, Message: alertMessages.requiredPartySelection });
+                customAlert({ Type: 3, Message: alertMessages.commonPartySelectionIsRequired });
                 return;
             };
             const jsonBody = JSON.stringify({
