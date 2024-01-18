@@ -1,3 +1,4 @@
+import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 import { loginSelectedPartyID, roundToDecimalPlaces } from "../../../components/Common/CommonFunction";
 import { getBatchCode_By_ItemID_api } from "../../../helpers/backend_helper";
 
@@ -60,10 +61,10 @@ export const AddItemInTableFunc = async ({ itemNameSelect, TableArr }) => {
 
     let isfound = TableArr.find(i => i.Item === itemNameSelect.value);
     if (!itemNameSelect) {
-        return { TableArr, data: [], message: "Please Select ItemName", type: 4 };
+        return { TableArr, data: [], message: alertMessages.itemNameIsRequired, type: 4 };
     }
     else if (!(isfound === undefined)) {
-        return { TableArr, data: [], message: "This ItemName Already Exist", type: 3 };
+        return { TableArr, data: [], message: alertMessages.ItemNameAlreadyExists, type: 3 };
     }
 
     const data = [...TableArr];

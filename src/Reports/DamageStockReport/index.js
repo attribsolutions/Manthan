@@ -130,7 +130,7 @@ const DamageStockReport = (props) => {
                 return
             }
             else if ((isSCMParty) && (partyDropdown === "")) {
-                customAlert({ Type: 3, Message: alertMessages.requiredPartySelection });
+                customAlert({ Type: 3, Message: alertMessages.commonPartySelectionIsRequired });
                 setBtnMode(0)
                 return;
             }

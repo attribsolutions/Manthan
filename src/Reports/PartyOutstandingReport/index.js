@@ -90,7 +90,7 @@ const PartyOutstandingReport = (props) => {
 		try {
 
 			if ((isSCMParty) && (partyDropdown === "")) {
-				customAlert({ Type: 3, Message: alertMessages.requiredPartySelection });
+				customAlert({ Type: 3, Message: alertMessages.commonPartySelectionIsRequired });
 				return;
 			}
 

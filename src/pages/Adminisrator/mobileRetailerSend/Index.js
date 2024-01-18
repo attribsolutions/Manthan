@@ -100,7 +100,7 @@ const Index = (props) => {
 		if (partyName.length === 0) {
 			customAlert({
 				Type: 4,
-				Message: alertMessages.requiredPartySelection
+				Message: alertMessages.commonPartySelectionIsRequired
 			});
 			return;
 		}
@@ -117,7 +117,7 @@ const Index = (props) => {
 		const CheckArray = RetailerList.filter(index => index.selectCheck === true);
 
 		if (CheckArray.length === 0) {
-			customAlert({ Type: 4, Status: true, Message: "At least One Retailer is Selected" });
+			customAlert({ Type: 4, Status: true, Message: alertMessages.atLeastOneRetailerIsRequired });
 			return;
 		}
 

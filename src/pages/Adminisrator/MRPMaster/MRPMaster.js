@@ -36,6 +36,7 @@ import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import { deleteMRPMaster_Id, deleteMRPMaster_Id_Success, getMRPList, GoButtonForMRP_Master, GoButtonForMRP_MasterSuccess, saveMRPMaster, saveMRPMasterSuccess } from "../../../store/Administrator/MRPMasterRedux/action";
 import { mobileApp_ProductAdd_Api, mobileApp_ProductUpdate_Api } from "../../../helpers/backend_helper";
 import { showToastAlert } from "../../../helpers/axios_Config";
+import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 
 const MRPMaster = (props) => {
     const dispatch = useDispatch();
@@ -216,7 +217,7 @@ const MRPMaster = (props) => {
         if (values.EffectiveDate === '') {
             customAlert({
                 Type: 4,
-                Message: "Please select EffectiveDate",
+                Message: alertMessages.effectiveDateIsRequired,
             })
             return
         }
@@ -235,10 +236,10 @@ const MRPMaster = (props) => {
     //select id for delete row
     const deleteHandeler = async (id, name, ItemID) => {
 
-        
+
         const isConfirmed = await customAlert({
             Type: 7,
-            Message: `Are you sure you want to delete this Item : "${name}"`
+            Message: `${alertMessages.deleteThisItem} : "${name}"`
         });
 
         if (isConfirmed) {
@@ -250,7 +251,7 @@ const MRPMaster = (props) => {
     useEffect(async () => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-            
+
             dispatch(saveMRPMasterSuccess({ Status: false }))
             //***************mobail app api*********************** */
             let arrayOfMrpID = selectedMrp.map(function (i) {
@@ -419,7 +420,7 @@ const MRPMaster = (props) => {
             if (!(Find.length > 0)) {
                 customAlert({
                     Type: 4,
-                    Message: "Please Enter MRP"
+                    Message: alertMessages.MRPIsRequired
                 })
                 return _cfunc.btnIsDissablefunc({ btnId, state: false })
             }

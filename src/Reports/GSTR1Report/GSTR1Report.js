@@ -99,7 +99,7 @@ const GSTR1Report = (props) => {
     function goButtonHandler(Type) {
 
         if (_cfunc.loginSelectedPartyID() === 0) {
-            customAlert({ Type: 3, Message: alertMessages.requiredPartySelection });
+            customAlert({ Type: 3, Message: alertMessages.commonPartySelectionIsRequired });
             return;
         };
 
