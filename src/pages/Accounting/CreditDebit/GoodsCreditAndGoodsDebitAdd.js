@@ -621,14 +621,14 @@ const GoodsCreditNote = (props) => {
         if (values.ItemName === '') {
             customAlert({
                 Type: 4,
-                Message: "Please Select ItemName"
+                Message: alertMessages.itemNameIsRequired
             })
             return
         }
         else if (!(isfound === undefined)) {
             customAlert({
                 Type: 4,
-                Message: "This ItemName Already Exist"
+                Message: alertMessages.ItemNameAlreadyExists
             })
             return
         }
@@ -691,7 +691,7 @@ const GoodsCreditNote = (props) => {
     }
 
     const changeButtonHandler = async () => {
-        const permission = await customAlert({ Type: 7, Message: "Are you sure you want to change the customer?" })
+        const permission = await customAlert({ Type: 7, Message: alertMessages.changeCustomerName })
         if (permission) {
             setTableArr([])
         }
@@ -729,7 +729,7 @@ const GoodsCreditNote = (props) => {
             if (filterData.length === 0) {
                 customAlert({
                     Type: 4,
-                    Message: alertMessages.requiredItemQty
+                    Message: alertMessages.itemQtyIsRequired
                 });
                 return;
             }

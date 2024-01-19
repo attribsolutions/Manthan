@@ -107,7 +107,7 @@ const DeleteInvoiceDataExport = (props) => {
 
         try {
             if ((isSCMParty) && (PartyDropdown === "")) {
-                customAlert({ Type: 3, Message: alertMessages.requiredPartySelection });
+                customAlert({ Type: 3, Message: alertMessages.commonPartySelectionIsRequired });
                 return;
             };
             const jsonBody = JSON.stringify({
@@ -126,7 +126,7 @@ const DeleteInvoiceDataExport = (props) => {
         try {
             const btnId = `gobtn-${url.DELETE_INVOICE_DATA_EXPORT}`
             if ((isSCMParty) && (PartyDropdown === "")) {
-                customAlert({ Type: 3, Message: alertMessages.requiredPartySelection });
+                customAlert({ Type: 3, Message: alertMessages.commonPartySelectionIsRequired });
                 return;
             };
             const jsonBody = JSON.stringify({

@@ -191,7 +191,7 @@ const SapLedger = (props) => {
             setBtnMode(btnMode)
 
             if ((userAdminRole) && (SelectedPartyDropdown().value === 0)) {
-                customAlert({ Type: 3, Message: alertMessages.requiredPartySelection });
+                customAlert({ Type: 3, Message: alertMessages.commonPartySelectionIsRequired });
                 setBtnMode(0);
                 return;
 

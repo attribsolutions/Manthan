@@ -31,6 +31,7 @@ import {
     ExcelUpload_save_action_Success
 } from "../../../../store/Administrator/ImportMasterMapRedux/action";
 import './scss.scss'
+import { alertMessages } from "../../../../components/Common/CommonErrorMsg/alertMsg";
 
 
 const UploadExcel = (props) => {
@@ -193,7 +194,7 @@ const UploadExcel = (props) => {
         if (selectedFiles.length > 0) {
             const isConfirmed = await customAlert({
                 Type: 8,
-                Message: "Do you confirm your choice?",
+                Message: alertMessages.doYouConfirmChoice,
             });
             if (!isConfirmed) {
                 return

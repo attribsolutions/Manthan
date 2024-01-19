@@ -41,7 +41,7 @@ const OrderList = () => {
     const [subPageMode] = useState(history.location.pathname);
     const [pageMode, setPageMode] = useState(mode.defaultList);
 
-    const Is_OrderList4_Or_SalesOrderList4 = (subPageMode === url.ORDER_LIST_4) || (subPageMode === url.SALES_ORDER_LIST_2)
+    const Is_OrderList4_Or_SalesOrderList4 = (subPageMode === url.ORDER_LIST_4)
 
     const [otherState, setOtherState] = useState({
         masterPath: '',
@@ -170,8 +170,8 @@ const OrderList = () => {
 
         }
 
-        else if (subPageMode === url.SALES_ORDER_LIST_2) {
-            page_Id = pageId.SALES_ORDER_LIST_2
+        else if (subPageMode === url.APP_ORDER_LIST) {
+            page_Id = pageId.APP_ORDER_LIST
             masterPath = url.ORDER_4;
             page_Mode = mode.modeSTPList
             newBtnPath = url.ORDER_4;
@@ -473,7 +473,7 @@ const OrderList = () => {
         _cfunc.btnIsDissablefunc({ btnId: gobtnId, state: true })
         try {
             if ((_cfunc.loginSelectedPartyID() === 0)) {
-                customAlert({ Type: 3, Message: alertMessages.requiredPartySelection });
+                customAlert({ Type: 3, Message: alertMessages.commonPartySelectionIsRequired });
                 return;
             };
             let filtersBody = {}

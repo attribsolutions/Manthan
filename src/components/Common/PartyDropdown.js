@@ -49,7 +49,7 @@ const PartyDropdown = ({ goButtonHandler, changeButtonHandler, goBtnLoading, SAP
 
     const internalGoBtnHandler = async () => {
         if (selectedParty.value === 0) {
-            customAlert({ Type: 3, Message: alertMessages.requiredPartySelection });
+            customAlert({ Type: 3, Message: alertMessages.commonPartySelectionIsRequired });
             return;
         }
         dispatch(getpartysetting_API(selectedParty.value, loginCompanyID()));

@@ -239,7 +239,7 @@ const PartyMasterBulkUpdate = (props) => {
     const GoButton_Handler = () => {
 
         if ((_cfunc.loginSelectedPartyID() === 0)) {
-            customAlert({ Type: 3, Message: alertMessages.requiredPartySelection });
+            customAlert({ Type: 3, Message: alertMessages.commonPartySelectionIsRequired });
             return;
         }
 

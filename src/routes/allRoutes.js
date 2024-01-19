@@ -216,6 +216,8 @@ import TCSAmountReport from "../Reports/TCSAmountReport";
 import CX_DD_DiffrenceReport from "../Reports/CX_DD_DiffrenceReport";
 import Bulk_Invoice from "../pages/Sale/Bulk_Invoice/index";
 import POSRoleAccess from "../pages/SweetPOS/Adminstration/POSRoleAccess.js";
+// import SystemSetting from "../pages/Utility/SystemSetting/SystemSetting.js";
+// import SystemSettingList from "../pages/Utility/SystemSetting/SystemSettingList.js";
 
 
 const userRoutes = [
@@ -402,7 +404,7 @@ const userRoutes = [
 	{ path: path.ORDER_4, component: Order },
 	{ path: path.ORDER_LIST_4, component: OrderList },
 
-	{ path: path.SALES_ORDER_LIST_2, component: OrderList },
+	{ path: path.APP_ORDER_LIST, component: OrderList },
 
 	{ path: path.PURCHASE_RETURN, component: PurchaseReturn },
 	{ path: path.PURCHASE_RETURN_LIST, component: SalesReturnList },
@@ -555,6 +557,14 @@ const userRoutes = [
 	{ path: path.POS_ROLE_ACCESS, component: POSRoleAccess },
 
 	// ************************************ Utility **************************************//
+
+	// { path: path.SYSTEM_SETTING, component: SystemSetting },
+
+	// { path: path.SYSTEM_SETTING_LIST, component: SystemSettingList },
+
+
+
+
 
 
 

@@ -140,7 +140,7 @@ function* orderList_GoBtn_GenFunc({ config }) {
     const { subPageMode } = config
     let response;
     let newList;
-    if ((subPageMode === url.ORDER_LIST_1) || (subPageMode === url.ORDER_LIST_2) || (subPageMode === url.ORDER_LIST_4) || (subPageMode === url.SALES_ORDER_LIST_2)) {
+    if ((subPageMode === url.ORDER_LIST_1) || (subPageMode === url.ORDER_LIST_2) || (subPageMode === url.ORDER_LIST_4) || (subPageMode === url.APP_ORDER_LIST)) {
       response = yield call(OrderList_get_Filter_API, config); // GO-Botton Purchase Order 1 && 2 Add Page API
     }
     else if ((subPageMode === url.GRN_STP_1) || subPageMode === url.GRN_STP_3) {
@@ -208,7 +208,7 @@ function* orderList_GoBtn_GenFunc({ config }) {
       if (i.IsConfirm === true) {// is confirm is true the show force delete and edit true "PO" ans "SO" mode 
         i.forceEditHide = true;
         i.forceDeleteHide = true;
-        if (subPageMode === url.SALES_ORDER_LIST_2) {
+        if (subPageMode === url.APP_ORDER_LIST) {
           i.forceSelectDissabled = false;//select row check box dessible 
         }
         else {
@@ -230,7 +230,7 @@ function* orderList_GoBtn_GenFunc({ config }) {
     })
     if (subPageMode === url.ORDER_LIST_4) {
       newList = newList.filter(i => i.MobileAppOrderFlag === null);
-    } else if (subPageMode === url.SALES_ORDER_LIST_2) {
+    } else if (subPageMode === url.APP_ORDER_LIST) {
       newList = newList.filter(i => i.MobileAppOrderFlag !== null);
     }
     yield put(getOrderListPageSuccess(newList))

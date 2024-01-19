@@ -677,7 +677,7 @@ const GoodsCreditNote = (props) => {
         if (values.ItemName === '') {
             customAlert({
                 Type: 4,
-                Message: "Please Select ItemName"
+                Message: alertMessages.itemNameIsRequired
             })
             return
         }

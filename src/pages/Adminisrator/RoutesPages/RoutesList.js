@@ -78,7 +78,7 @@ const RoutesList = (props) => {
 
     try {
       if (commonPartyDropSelect.value === 0) {
-        customAlert({ Type: 3, Message: alertMessages.requiredPartySelection });
+        customAlert({ Type: 3, Message: alertMessages.commonPartySelectionIsRequired });
         return;
       };
       const jsonBody = JSON.stringify({

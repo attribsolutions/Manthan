@@ -562,7 +562,7 @@ const CreditNote_1 = (props) => {
         if (values.ItemName === '') {
             customAlert({
                 Type: 4,
-                Message: alertMessages.requiredItemName
+                Message: alertMessages.itemNameIsRequired
             })
             return
         }
@@ -674,7 +674,7 @@ const CreditNote_1 = (props) => {
             if (filterData.length === 0) {
                 customAlert({
                     Type: 4,
-                    Message: alertMessages.requiredItemQty,
+                    Message: alertMessages.itemQtyIsRequired,
                 });
                 return;
             }

@@ -237,7 +237,7 @@ const VehicleMaster = (props) => {
         event.preventDefault();
         const btnId = event.target.id
         if ((loginSelectedPartyID() === 0)) {
-            customAlert({ Type: 3, Message: alertMessages.requiredPartySelection });
+            customAlert({ Type: 3, Message: alertMessages.commonPartySelectionIsRequired });
             return;
         };
         try {

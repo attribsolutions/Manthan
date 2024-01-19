@@ -124,7 +124,7 @@ const GRNList = () => {
     function goButtonHandler() {
         try {
             if (loginSelectedPartyID() === 0) {
-                customAlert({ Type: 3, Message: alertMessages.requiredPartySelection });
+                customAlert({ Type: 3, Message: alertMessages.commonPartySelectionIsRequired });
                 return;
             };
             const filtersBody = JSON.stringify({

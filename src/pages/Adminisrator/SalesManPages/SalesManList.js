@@ -67,7 +67,7 @@ const SalesManList = (props) => {
         try {
             const loginParty = loginSelectedPartyID();
             if (loginParty === 0) {
-                customAlert({ Type: 3, Message: alertMessages.requiredPartySelection });
+                customAlert({ Type: 3, Message: alertMessages.commonPartySelectionIsRequired });
                 return;
             };
             dispatch(getSalesManlist({

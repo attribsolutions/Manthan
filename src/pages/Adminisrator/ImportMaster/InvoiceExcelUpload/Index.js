@@ -255,7 +255,7 @@ const InvoiceExcelUpload = (props) => {
         if (compareParameter.length === 0) {
             customAlert({
                 Type: 3,
-                Message: "Please wait Downloading field Details.",
+                Message: alertMessages.waitForDownloadFieldDetails,
             })
             setverifyLoading(false)
             return
@@ -265,7 +265,7 @@ const InvoiceExcelUpload = (props) => {
         if (files.length == 0) {
             customAlert({
                 Type: 3,
-                Message: "Please choose any file...",
+                Message: alertMessages.chooseAnyFile,
             })
             setverifyLoading(false)
             return;
@@ -416,7 +416,7 @@ const InvoiceExcelUpload = (props) => {
         } else {
             customAlert({
                 Type: 3,
-                Message: 'Unsupported file format. Please select an Excel (XLSX) or CSV file.',
+                Message: alertMessages.unSupportedFileFormat,
             })
         }
         setverifyLoading(false)
@@ -439,7 +439,7 @@ const InvoiceExcelUpload = (props) => {
         if (compareParameter.length === 0) {
             customAlert({
                 Type: 3,
-                Message: "Please wait Downloading field Details.",
+                Message: alertMessages.waitForDownloadFieldDetails,
             })
             return
         }
@@ -447,7 +447,7 @@ const InvoiceExcelUpload = (props) => {
         if (selectedFiles.length > 0) {
             const isConfirmed = await customAlert({
                 Type: 8,
-                Message: "Do you confirm your choice?",
+                Message: alertMessages.doYouConfirmChoice,
             });
             if (!isConfirmed) {
                 return
