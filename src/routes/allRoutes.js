@@ -556,9 +556,9 @@ const userRoutes = [
 
 	// ************************************ Utility **************************************//
 
-	{ path: path.SYSTEM_SETTING, component: SystemSetting },
+	// { path: path.SYSTEM_SETTING, component: SystemSetting },
 
-	{ path: path.SYSTEM_SETTING_LIST, component: SystemSettingList },
+	// { path: path.SYSTEM_SETTING_LIST, component: SystemSettingList },
 
 
 
