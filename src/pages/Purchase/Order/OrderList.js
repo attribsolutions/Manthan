@@ -40,7 +40,7 @@ const OrderList = () => {
     const [subPageMode] = useState(history.location.pathname);
     const [pageMode, setPageMode] = useState(mode.defaultList);
 
-    const Is_OrderList4_Or_SalesOrderList4 = (subPageMode === url.ORDER_LIST_4)
+    const Is_OrderList4_Or_SalesOrderList4 = ((subPageMode === url.ORDER_LIST_4) || (subPageMode === url.APP_ORDER_LIST))
 
     const [otherState, setOtherState] = useState({
         masterPath: '',
@@ -165,9 +165,9 @@ const OrderList = () => {
 
         else if (subPageMode === url.APP_ORDER_LIST) {
             page_Id = pageId.APP_ORDER_LIST
-            masterPath = url.ORDER_4;
+            // masterPath = url.ORDER_4;
             page_Mode = mode.modeSTPList
-            newBtnPath = url.ORDER_4;
+            // newBtnPath = url.ORDER_4;
             makeBtnShow = true;
             makeBtnName = "Make Invoice"
             // showAprovalBtn = true                      //Showing  AprovalBtn  in sales order list
@@ -420,7 +420,7 @@ const OrderList = () => {
                 EffectiveDate: rowData.OrderDate,
                 OrderID: rowData.id,
                 RateParty: rowData.CustomerID,
-                OrderType: subPageMode === url.ORDER_4 ? order_Type.SaleOrder : order_Type.PurchaseOrder
+                OrderType: ((subPageMode === url.ORDER_4) || (subPageMode === url.APP_ORDER_LIST)) ? order_Type.SaleOrder : order_Type.PurchaseOrder
             })
             dispatch(_act.editOrderId({ jsonBody, ...config }));
         } catch (error) { }
@@ -738,7 +738,7 @@ const OrderList = () => {
                             ViewModal={OrderView}
                             oderAprovalBtnFunc={otherState.showAprovalBtn && oderAprovalBtnFunc}
                             selectCheckParams={{
-                                isShow: (Is_OrderList4_Or_SalesOrderList4),
+                                isShow: (subPageMode === url.ORDER_LIST_4),
                                 selectSaveBtnHandler: (subPageMode === url.ORDER_LIST_4) ? OrderConfirm_Handler : BulkInvoice_Handler,
                                 selectSaveBtnLabel: (subPageMode === url.ORDER_LIST_4) ? "Confirm" : "Bulk Invoice",
                                 selectHeaderLabel: (subPageMode === url.ORDER_LIST_4) ? "Confirm" : "Bulk Invoice"
