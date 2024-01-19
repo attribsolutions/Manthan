@@ -35,12 +35,13 @@ const OrderList = () => {
         Supplier: { value: "", label: "All" },
         CustomerType: [{ value: "", label: "All" }]
     }
+   
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
     const [subPageMode] = useState(history.location.pathname);
     const [pageMode, setPageMode] = useState(mode.defaultList);
 
-    const Is_OrderList4_Or_SalesOrderList4 = ((subPageMode === url.ORDER_LIST_4) || (subPageMode === url.APP_ORDER_LIST))
+    const orderList4_or_app_orderList = ((subPageMode === url.ORDER_LIST_4) || (subPageMode === url.APP_ORDER_LIST))
 
     const [otherState, setOtherState] = useState({
         masterPath: '',
@@ -117,7 +118,7 @@ const OrderList = () => {
     }
 
     // Featch Modules List data  First Rendering
-    useLayoutEffect(() => {
+    useEffect(() => {
 
         let page_Id = '';
         let page_Mode = mode.defaultList;
@@ -160,7 +161,6 @@ const OrderList = () => {
             makeBtnShow = true;
             makeBtnName = "Make Invoice"
             showAprovalBtn = true                      //Showing  AprovalBtn  in sales order list
-
         }
 
         else if (subPageMode === url.APP_ORDER_LIST) {
@@ -170,7 +170,6 @@ const OrderList = () => {
             // newBtnPath = url.ORDER_4;
             makeBtnShow = true;
             makeBtnName = "Make Invoice"
-            // showAprovalBtn = true                      //Showing  AprovalBtn  in sales order list
         }
 
         else if (subPageMode === url.IB_INVOICE_STP) {
@@ -206,11 +205,11 @@ const OrderList = () => {
         dispatch(priceListByCompay_Action());
 
         return () => {
-            dispatch(_act.commonPageFieldListSuccess(null))
-            dispatch(_act.getOrderListPageSuccess([]))//for clear privious order list  
-            dispatch(_act.orderSinglegetSuccess({ Status: false }))
-            dispatch(_act.GetVenderSupplierCustomerSuccess([]))
-            dispatch(priceListByCompay_ActionSuccess([]))
+            dispatch(_act.commonPageFieldListSuccess(null));
+            dispatch(_act.getOrderListPageSuccess([]));//for clear privious order list  
+            dispatch(_act.orderSinglegetSuccess({ Status: false }));
+            dispatch(_act.GetVenderSupplierCustomerSuccess([]));
+            dispatch(priceListByCompay_ActionSuccess([]));
         }
     }, []);
 
@@ -219,7 +218,6 @@ const OrderList = () => {
             dispatch(_act.BreadcrumbRadioButtonView(true));
         }
     }, [])
-
 
     useEffect(() => {
         if (pageField) {
@@ -353,7 +351,7 @@ const OrderList = () => {
                 btnId
             }));
         }
-        else if (Is_OrderList4_Or_SalesOrderList4) {
+        else if (orderList4_or_app_orderList) {
             dispatch(_act.GoButtonForinvoiceAdd({
                 jsonBody,
                 btnId,
@@ -495,7 +493,7 @@ const OrderList = () => {
                 "DashBoardMode": 0
 
             }
-            if (Is_OrderList4_Or_SalesOrderList4) {
+            if (orderList4_or_app_orderList) {
                 filtersBody = JSON.stringify(SO_filters);
             }
             else if (subPageMode === url.GRN_STP_3) {
@@ -588,7 +586,7 @@ const OrderList = () => {
             <div className="px-2   c_card_filter text-black" >
                 <div className="row" >
 
-                    <Col lg={(Is_OrderList4_Or_SalesOrderList4) ? 0 : 3} >
+                    <Col lg={(orderList4_or_app_orderList) ? 0 : 3} >
                         <FormGroup className="mb- row mt-3 " >
                             <Label className="col-sm-5 p-2"
                                 style={{ width: "65px" }}>
@@ -609,7 +607,7 @@ const OrderList = () => {
                         </FormGroup>
                     </Col>
 
-                    <Col lg={(Is_OrderList4_Or_SalesOrderList4) ? 0 : 3} >
+                    <Col lg={(orderList4_or_app_orderList) ? 0 : 3} >
                         <FormGroup className="mb- row mt-3 " >
                             <Label className="col-sm-5 p-2"
                                 style={{ width: "65px" }}>
@@ -630,7 +628,7 @@ const OrderList = () => {
                         </FormGroup>
                     </Col>
 
-                    {(Is_OrderList4_Or_SalesOrderList4) ?
+                    {(orderList4_or_app_orderList) ?
                         <Col lg={3}>
                             <FormGroup className="mb-1 row mt-3 " >
                                 <Label className="col-sm p-2"
@@ -661,7 +659,7 @@ const OrderList = () => {
                         <FormGroup className="mb-1 row mt-3 " >
                             <Label className="col-md-4 p-2"
                                 style={{ width: "90px" }}>
-                                {!(fieldLabel.Supplier === '') ? fieldLabel.Supplier : "Supplier"}
+                                {(!(fieldLabel.Supplier === '')) ? fieldLabel.Supplier : (orderList4_or_app_orderList ? "Customer" : "Supplier")}
                             </Label>
                             <Col sm="7">
                                 <C_Select

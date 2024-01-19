@@ -7,13 +7,11 @@ import { C_DatePicker, C_Select } from "../../CustomValidateForm";
 import * as _cfunc from "../../components/Common/CommonFunction";
 import { mode, pageId } from "../../routes/index"
 import { MetaTags } from "react-meta-tags";
-import ToolkitProvider from "react-bootstrap-table2-toolkit";
-import BootstrapTable from "react-bootstrap-table-next";
-import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
 import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess } from "../../store/actions";
 import DynamicColumnHook from "../../components/Common/TableCommonFunc";
 import { Return_Report_Action, Return_Report_Action_Success } from "../../store/Report/ReturnReportRedux/action";
 import { ExcelReportComponent } from "../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS";
+import CustomTable from "../../CustomTable2";
 
 const ReturnReport = (props) => {
 
@@ -45,15 +43,17 @@ const ReturnReport = (props) => {
 
     const { fromdate = currentDate_ymd, todate = currentDate_ymd } = headerFilters;
 
-    // Featch Modules List data  First Rendering
     const location = { ...history.location }
     const hasShowModal = props.hasOwnProperty(mode.editValue)
 
     useEffect(() => {
-
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(pageId.RETURN_REPORT))
-
+        dispatch(BreadcrumbShowCountlabel(`Count:${0} ₹ ${0.00}`));
+        return () => {
+            dispatch(Return_Report_Action_Success([]));
+            setTableData([]);
+        }
     }, []);
 
     // userAccess useEffect
@@ -73,16 +73,9 @@ const ReturnReport = (props) => {
     }, [userAccess])
 
     useEffect(() => {
-        return () => {
-            setTableData([]);
-        }
-    }, [])
-
-    useEffect(() => {
         if (tableData.length === 0) {
             setBtnMode(0)
         }
-        dispatch(BreadcrumbShowCountlabel(`Return Count:${tableData.length}`));
     }, [tableData]);
 
     const Party_Option = Distributor.map(i => ({
@@ -99,7 +92,6 @@ const ReturnReport = (props) => {
                 setBtnMode(0);
 
                 if (btnMode === 2) {
-
                     ExcelReportComponent({      // Download CSV
                         pageField,
                         excelTableData: goButtonData.Data,
@@ -110,14 +102,12 @@ const ReturnReport = (props) => {
                 }
                 else {
                     const UpdatedTableData = goButtonData.Data.map((item, index) => {
-
                         return {
                             ...item, id: index + 1,
                         };
                     });
                     setTableData(UpdatedTableData);
                     dispatch(Return_Report_Action_Success([]));
-
                 }
             }
             else if ((goButtonData.Status === true)) {
@@ -176,7 +166,7 @@ const ReturnReport = (props) => {
         setDistributorDropdown(e);
         setTableData([]);
     }
-  
+
     return (
         <React.Fragment>
             <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
@@ -265,37 +255,27 @@ const ReturnReport = (props) => {
                     </div>
                 </div>
 
-                <div>
-                    <ToolkitProvider
+                <div className="mb-1">
+                    <CustomTable
                         keyField={"id"}
                         data={tableData}
                         columns={tableColumns}
-                        search
-                    >
-                        {(toolkitProps,) => (
-                            <React.Fragment>
-                                <Row>
-                                    <Col xl="12">
-                                        <div className="table-responsive table">
-                                            <BootstrapTable
-                                                keyField={"id"}
-                                                classes={"table  table-bordered table-hover"}
-                                                noDataIndication={
-                                                    <div className="text-danger text-center ">
-                                                        Record Not available
-                                                    </div>
-                                                }
-                                                {...toolkitProps.baseProps}
-                                            />
-                                            {mySearchProps(toolkitProps.searchProps)}
-                                        </div>
-                                    </Col>
-                                </Row>
+                        id="table_Arrow"
+                        noDataIndication={
+                            <div className="text-danger text-center ">
+                                Items Not available
+                            </div>
+                        }
+                        onDataSizeChange={({ dataCount, filteredData = [] }) => {
+                            let totalAmount = filteredData.reduce((total, item) => {
+                                return total + Number(item.recordsAmountTotal) || 0;
 
-                            </React.Fragment>
-                        )}
-                    </ToolkitProvider>
+                            }, 0);
+                            let commaSeparateAmount = _cfunc.amountCommaSeparateFunc(Number(totalAmount).toFixed(2));
 
+                            dispatch(BreadcrumbShowCountlabel(`Count:${dataCount} ₹ ${commaSeparateAmount}`));
+                        }}
+                    />
                 </div>
 
             </div>

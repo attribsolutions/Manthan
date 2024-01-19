@@ -599,7 +599,6 @@ const DiscountMaster = (props) => {
                                                     altInput: true,
                                                     altFormat: "d-m-Y",
                                                     dateFormat: "Y-m-d",
-                                                    maxDate: new Date(new Date().setMonth(new Date().getMonth() + 1)),// Set the maximum date
                                                 }}
                                                 name='FromDate'
                                                 disabled={(tableData.length > 0) && true}
@@ -620,7 +619,6 @@ const DiscountMaster = (props) => {
                                                     altInput: true,
                                                     altFormat: "d-m-Y",
                                                     dateFormat: "Y-m-d",
-                                                    maxDate: new Date(new Date().setMonth(new Date().getMonth() + 1)),// Set the maximum date
                                                 }}
                                                 name='ToDate'
                                                 disabled={(tableData.length > 0) && true}
