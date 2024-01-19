@@ -89,7 +89,7 @@ const DiscountList = () => {
         <React.Fragment>
             <PageLoadingSpinner isLoading={(goBtnLoading || !pageField)} />
             <div className="page-content">
-                <PartyDropdown_Common 
+                <PartyDropdown_Common
                     changeButtonHandler={partyOnChngeButtonHandler}
                 />
                 <div className="px-3 c_card_filter header text-black mb-1" >
@@ -105,7 +105,6 @@ const DiscountList = () => {
                                             altInput: true,
                                             altFormat: "d-m-Y",
                                             dateFormat: "Y-m-d",
-                                            maxDate: new Date(new Date().setMonth(new Date().getMonth() + 1)),// Set the maximum date
                                         }}
                                         name='Date'
                                         value={fromdate}
@@ -125,7 +124,6 @@ const DiscountList = () => {
                                             altInput: true,
                                             altFormat: "d-m-Y",
                                             dateFormat: "Y-m-d",
-                                            maxDate: new Date(new Date().setMonth(new Date().getMonth() + 1)),// Set the maximum date
                                         }}
                                         name='Date'
                                         value={todate}

@@ -134,6 +134,7 @@ function* vendorSupplierCustomer_genFunc({ data }) {
 
   const isCustomer = (subPageMode === url.ORDER_4  //Customer mode 3
     || subPageMode === url.ORDER_LIST_4
+    || subPageMode === url.APP_ORDER_LIST
     || subPageMode === url.ITEM_SALE_REPORT
     || subPageMode === url.INVOICE_1
     || subPageMode === url.INVOICE_LIST_1
@@ -183,7 +184,7 @@ function* vendorSupplierCustomer_genFunc({ data }) {
       index["selectCheck"] = false
       return index
     });
-    
+
     yield put(GetVenderSupplierCustomerSuccess(response.Data));
   }
   catch (error) {
