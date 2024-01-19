@@ -48,7 +48,7 @@ const Dashboard_1 = (props) => {
             commonPartyDropSelect: state.CommonPartyDropdownReducer.commonPartyDropSelect
         }));
 
-    const { OrderCount, InvoiceCount, GRNsCount, MobileAppOrderCount  } = getDashboard
+    const { OrderCount, InvoiceCount, GRNsCount, MobileAppOrderCount } = getDashboard
 
     useEffect(() => {
         const page_Id = pageId.DASHBORD_1//changes
@@ -108,7 +108,9 @@ const Dashboard_1 = (props) => {
         } else if (Type === 2) {
             history.push(url.INVOICE_LIST_1)
         }
-        else {
+        else if (Type === 3) {
+            history.push(url.APP_ORDER_LIST)
+        } else {
             history.push(url.GRN_LIST_3)
         }
 
@@ -148,7 +150,7 @@ const Dashboard_1 = (props) => {
                                 <CardBody>
                                     <Row className="align-items-center">
                                         <Col >
-                                            <span style={{ cursor: "pointer", fontWeight: "bold" }} onClick={() => RedirectHandler(1)} className="text-primary mb-3 lh-1  d-block text-decoration-underline "> MobileApp Order</span>
+                                            <span style={{ cursor: "pointer", fontWeight: "bold" }} onClick={() => RedirectHandler(3)} className="text-primary mb-3 lh-1  d-block text-decoration-underline "> MobileApp Order</span>
                                             <h4 className="mb-3">
                                                 <span className="counter-value">
                                                     {MobileAppOrderCount}

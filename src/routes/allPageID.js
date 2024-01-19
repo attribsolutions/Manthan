@@ -169,7 +169,7 @@ export const IB_ORDER_SO_LIST = 147
 export const ORDER_4 = 144
 export const ORDER_LIST_4 = 143
 
-export const SALES_ORDER_LIST_2 = 267
+export const APP_ORDER_LIST = 267
 
 export const BIllOf_MATERIALS = 69
 export const BIllOf_MATERIALS_LIST = 70

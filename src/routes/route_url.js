@@ -170,7 +170,7 @@ export const ORDER_LIST_2 = "/OrderList_2"
 export const ORDER_4 = '/Order_4'
 export const ORDER_LIST_4 = '/OrderList_4'
 
-export const SALES_ORDER_LIST_2 = "/Sales_Order_List_2"
+export const APP_ORDER_LIST = "/App_Order_List"
 
 export const PURCHASE_RETURN = "/PurchaseReturn"
 export const PURCHASE_RETURN_LIST = "/PurchaseReturnList"
@@ -341,6 +341,12 @@ export const CLAIM_TRACKING_REPORT = "/Claim_Tracking_Report"
 export const TCS_AMOUNT_REPORT = "/TCS_Amount_Report"
 
 export const CX_DD_DIFFERENCE_REPORT = "/CX_DD_Difference"
+
+export const SYSTEM_SETTING = "/System_Setting"
+
+export const SYSTEM_SETTING_LIST = "/System_Setting_List"
+
+
 
 
 
