@@ -215,8 +215,8 @@ import ManPowerReport from "../Reports/ManPowerReport";
 import TCSAmountReport from "../Reports/TCSAmountReport";
 import CX_DD_DiffrenceReport from "../Reports/CX_DD_DiffrenceReport";
 import POSRoleAccess from "../pages/SweetPOS/Adminstration/POSRoleAccess.js";
-import SystemSetting from "../pages/Utility/SystemSetting/SystemSetting.js";
-import SystemSettingList from "../pages/Utility/SystemSetting/SystemSettingList.js";
+// import SystemSetting from "../pages/Utility/SystemSetting/SystemSetting.js";
+// import SystemSettingList from "../pages/Utility/SystemSetting/SystemSettingList.js";
 
 
 const userRoutes = [
