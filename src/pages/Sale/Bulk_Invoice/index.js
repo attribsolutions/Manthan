@@ -131,10 +131,10 @@ const Bulk_Invoice2 = (props) => {
             for (const orderInfo of newBulkData) {
 
                 const orderId = orderInfo.OrderIDs;
-                const customerId = orderInfo.Customer;
+                const customerId = orderInfo.CustomerID;
                 const IsTCSParty = orderInfo.IsTCSParty;
                 const IsCustomerPAN = orderInfo.IsTCSParty;
-                const IsComparGstIn = { GSTIn_1: orderInfo.customerGSTIn, GSTIn_2: loginPartyGstIn };
+                const IsComparGstIn = { GSTIn_1: orderInfo.CustomerGSTIN, GSTIn_2: loginPartyGstIn };
                 const orderIncoiceItems = [];
                 let sumOfItemAmount = 0;
 
@@ -167,7 +167,7 @@ const Bulk_Invoice2 = (props) => {
                                 "Item": itemInfo.Item,
                                 "Unit": itemInfo.Unit,
                                 "BatchCode": stockInfo.BatchCode,
-                                "Quantity": Number(stockInfo.distribut).toFixed(3),
+                                "Quantity": Number(stockInfo.distribute.toFixed(3)),
                                 "BatchDate": stockInfo.BatchDate,
                                 "BatchID": stockInfo.id,
                                 "BaseUnitQuantity": Number(stockInfo.BaseUnitQuantity).toFixed(3),
@@ -193,7 +193,7 @@ const Bulk_Invoice2 = (props) => {
                                 "Amount": Number(calculate.roundedTotalAmount).toFixed(2),
 
                                 "TaxType": 'GST',
-                                "DiscountType": itemInfo.DiscountType,
+                                "DiscountType": itemInfo.DiscountType.value,
                                 "Discount": Number(itemInfo.Discount) || 0,
                                 "DiscountAmount": Number(calculate.disCountAmt).toFixed(2),
                             };
@@ -223,10 +223,26 @@ const Bulk_Invoice2 = (props) => {
 
                 orderIncoiceItems.length > 0 && bulkInvoiceJsonBody.push(orderInvoiceJsonBody)
             }
+            const jsonBody = JSON.stringify({ InvoiceData: bulkInvoiceJsonBody })
 
-            console.log(bulkInvoiceJsonBody)
+            if (validMsg.length > 0) {
+                customAlert({
+                    Type: 4,
+                    Message: validMsg,
+                })
+                return
+            }
 
-            dispatch(saveBulkInvoiceAction({jsonBody:bulkInvoiceJsonBody}))
+
+            if (!(bulkInvoiceJsonBody.length > 0)) {
+                customAlert({
+                    Type: 4,
+                    Message: "Please Enter One Item Quantity",
+                })
+                return
+            }
+            console.log(jsonBody)
+            dispatch(saveBulkInvoiceAction({ jsonBody: jsonBody }))
 
         }, [])
 

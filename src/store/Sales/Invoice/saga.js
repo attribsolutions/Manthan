@@ -168,7 +168,7 @@ function* editInvoiceListGenFunc({ config }) {
     response.editId = editId;
     response.customer = customer;
     response.pageMode = btnmode;
-
+    response.Data[0] = response.Data
     const updatedResp = invoice_GoButton_dataConversion_Func(response, customer);
 
     yield put(editInvoiceActionSuccess(updatedResp))
@@ -210,7 +210,7 @@ function invoice_GoButton_dataConversion_Func(response, customer = '') {
 
 
   // Iterate over OrderItemDetails array and perform data conversion
-  response.Data.OrderItemDetails = response.Data[0].OrderItemDetails.map(index1 => {
+  response.Data.OrderItemDetails = response.Data.OrderItemDetails.map(index1 => {
     const isUnitIDPresent = index1.UnitDetails.find(findEle => findEle.UnitID === index1.Unit);
     const isMCunitID = index1.UnitDetails.find(findEle => findEle.DeletedMCUnitsUnitID === index1.DeletedMCUnitsUnitID);
     const defaultunit = isUnitIDPresent !== undefined ? isUnitIDPresent : isMCunitID;
@@ -309,7 +309,7 @@ function* gobutton_invoiceAdd_genFunc({ config }) {
     response["path"] = path
     response["page_Mode"] = pageMode
     response["customer"] = customer
-
+    response.Data=response.Data[0];
     const updatedResp = invoice_GoButton_dataConversion_Func(response, customer)
 
     yield put(GoButtonForinvoiceAddSuccess(updatedResp));

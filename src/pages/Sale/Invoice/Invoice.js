@@ -76,7 +76,7 @@ const Invoice = (props) => {
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
     const [orderItemDetails, setOrderItemDetails] = useState([])
-    const [orderIDs, setOrderIDs] = useState([])
+    const [orderIDs, setOrderIDs] = useState('')
     const [editInvoiceData, setEditInvoiceData] = useState('')
 
     // for invoice page heder discount functionality useSate ************************************
@@ -172,21 +172,22 @@ const Invoice = (props) => {
     useEffect(async () => {
         if (postMsg.Status === true && postMsg.StatusCode === 200) {
             dispatch(invoiceSaveActionSuccess({ Status: false })); // Reset the status to false
-
+            const config = {
+                editId: postMsg.TransactionID                ,////for saveAndDownloadPdfMode
+                ReportType: report.invoice,//for saveAndDownloadPdfMode
+                btnId: `btn-E-Invoice-Upload-${postMsg.InvoiceID}`,
+                RowId: postMsg.TransactionID,
+                UserID: _cfunc.loginUserID(),
+            };
             //************************* / Fetch PDF report data if saveAndDownloadPdfMode is true /
             if (postMsg.saveAndDownloadPdfMode) {
-                const config = {
-                    editId: postMsg.InvoiceID,
-                    ReportType: report.invoice,
-                };
                 dispatch(getpdfReportdata(Invoice_Singel_Get_for_Report_Api, config));
             }
 
             // ***************** Upload E-Invoice if AutoEInvoice and EInvoiceApplicable are both "1"  *****/
             if (systemSetting.AutoEInvoice === "1" && systemSetting.EInvoiceApplicable === "1") {
-                let btnId = `btn-E-Invoice-Upload-${postMsg.InvoiceID}`;
                 try {
-                    dispatch(Uploaded_EInvoiceAction({ btnId, RowId: postMsg.InvoiceID, UserID: _cfunc.loginUserID() }));
+                    dispatch(Uploaded_EInvoiceAction(config));
                 } catch (error) { }
             }
 
@@ -196,8 +197,9 @@ const Invoice = (props) => {
             });
 
             // Redirect to appropriate page based on subPageMode
+            debugger
             if (subPageMode === url.INVOICE_1) {
-                history.push({ pathname: url.INVOICE_LIST_1 });
+                history.push({ pathname: url.INVOICE_LIST_1, updatedRowBlinkId: postMsg.TransactionID });
             } else if (subPageMode === url.IB_INVOICE) {
                 history.push({ pathname: url.IB_INVOICE_LIST });
             }
@@ -262,7 +264,6 @@ const Invoice = (props) => {
             // **********************************************************
             totalAmountCalcuationFunc(gobutton_Add.Data.OrderItemDetails)// show breadcrump tolat amount function//passs table array 
             //*********************************************************** */
-
             setOrderIDs(gobutton_Add.Data.OrderIDs)
             dispatch(GoButtonForinvoiceAddSuccess({ Status: false }))
         }
@@ -779,13 +780,13 @@ const Invoice = (props) => {
         const forInvoice_1_json = () => ({  //** Json Body Generate For Invoice_1  Start+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
             InvoiceDate: values.InvoiceDate,
             InvoiceItems: invoiceItems,
-            InvoicesReferences: orderIDs.map(i => ({ Order: i })),
+            InvoicesReferences: [{ Order: orderIDs }],
         });
 
         const forIB_Invoice_json = async () => ({   //**   Json Body Generate For IB_Invoice  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
             IBChallanDate: values.InvoiceDate,
             IBChallanItems: invoiceItems,
-            IBChallansReferences: orderIDs.map(i => ({ Demand: i }))
+            IBChallansReferences: [{ Order: orderIDs }],
         });
 
         const for_common_json = () => ({  //**  Json Body Generate Common for Both +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -806,14 +807,15 @@ const Invoice = (props) => {
 
             let jsonBody;  //json body decleration 
             if (subPageMode === url.INVOICE_1) {
-                jsonBody = JSON.stringify({ ...for_common_json(), ...forInvoice_1_json() });
+                const body = { InvoiceData: [{ ...for_common_json(), ...forInvoice_1_json() }] }
+                jsonBody = JSON.stringify(body);
             } else if (subPageMode === url.IB_INVOICE) {
                 jsonBody = JSON.stringify({ ...for_common_json(), ...forIB_Invoice_json() });
             }
             // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
             if (pageMode === mode.edit) {
                 jsonBody = JSON.stringify({ ...for_common_json(), ...forInvoice_1_json() });
-                const config = { updateId: editInvoiceData.editId, jsonBody, subPageMode, jsonBody };
+                const config = { updateId: editInvoiceData.editId, subPageMode, jsonBody };
                 dispatch(updateInvoiceAction(config));
             }
             else {

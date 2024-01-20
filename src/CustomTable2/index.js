@@ -20,7 +20,7 @@ const CustomTable = ({
     ...rest
 }) => {
 
-
+    const updatedRowBlinkIds_string = updatedRowBlinkId?.toString() || '';
     const [searchText, setSearchText] = useState(defaultSearchText || '');
     const [currentPage, setCurrentPage] = useState(1);
 
@@ -40,7 +40,8 @@ const CustomTable = ({
         if (row.IsRecordDeleted) {
             cs += '_deleted-Row '; // Add a space after the class name
         }
-        if ((row[keyField] === updatedRowBlinkId)) {
+        // debugger
+        if (updatedRowBlinkIds_string.includes(row[keyField])) {
             cs += '_row-blink '; // Add a space after the class name
         }
         return cs;
