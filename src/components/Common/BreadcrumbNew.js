@@ -67,13 +67,18 @@ const BreadcrumbNew = () => {
     return () => {
       dispatch(BreadcrumbNonDeleteButton(true));
       dispatch(BreadcrumbDeleteButton(false));
+      setSelectAll(false);
     }
   }, [history.location.pathname]);
 
   useEffect(() => {
+
     if (defaultDownBtnData && Object.keys(defaultDownBtnData).length > 0) {
       const defaultDownBtnArray = Object.entries(defaultDownBtnData).map(([key, value]) => ({ [key]: value }));
       setDownListKey(defaultDownBtnArray);
+      const allValuesTrue = defaultDownBtnArray.every((item) => Object.values(item)[0] === true);
+      setSelectAll(allValuesTrue);
+
     }
   }, [defaultDownBtnData])
 
@@ -128,14 +133,20 @@ const BreadcrumbNew = () => {
       const updatedList = [...prevListKey];
       const key = Object.keys(updatedList[index])[0];
       updatedList[index][key] = !updatedList[index][key];
+
+      // Check if all checkboxes are selected
+      const allValuesTrue = updatedList.every((item) => Object.values(item)[0] === true);
+      setSelectAll(allValuesTrue);
+
       return updatedList;
     });
   };
 
-  useEffect(() => {
-    if (selectAll) {
-      setDownListKey((prevListKey) => {
+  function handleSelectAllChange(e) {
+    setSelectAll((prevSelectAll) => !prevSelectAll);
 
+    if (e.target.checked) {
+      setDownListKey((prevListKey) => {
         const updatedList = prevListKey.map((item) => {
           const key = Object.keys(item)[0];
           return {
@@ -144,10 +155,8 @@ const BreadcrumbNew = () => {
         });
         return updatedList;
       });
-    }
-    else {
+    } else {
       setDownListKey((prevListKey) => {
-
         const updatedList = prevListKey.map((item) => {
           const key = Object.keys(item)[0];
           return {
@@ -157,7 +166,7 @@ const BreadcrumbNew = () => {
         return updatedList;
       });
     }
-  }, [selectAll]);
+  }
 
   const ExcelCheckBox = React.memo(() => {
     const trueValues = downListKey.filter(item => Object.values(item)[0]);
@@ -172,7 +181,7 @@ const BreadcrumbNew = () => {
                 type="checkbox"
                 id={`selectAllCheckbox`}
                 checked={selectAll}
-                onChange={(e) => { setSelectAll(e.target.checked) }}
+                onChange={(e) => handleSelectAllChange(e)}
               />
               &nbsp;&nbsp;&nbsp;
               <Label className="form-label text-black" style={{ fontSize: '15px', color: 'black', fontWeight: 'bold' }}> Select All</Label>

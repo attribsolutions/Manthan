@@ -15,6 +15,7 @@ import { ItemWiseUpdateGoButton_Action, ItemWiseUpdateGoButton_Success, ItemWise
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { getGroupTypeslist, getGroupTypeslistSuccess } from "../../../store/Administrator/GroupTypeRedux/action";
 import { SubGroup_By_Group_DropDown_API } from "../../../helpers/backend_helper";
+import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 
 const ItemMasterBulkUpdate = (props) => {
 
@@ -67,7 +68,7 @@ const ItemMasterBulkUpdate = (props) => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(pageId.ITEM_MASTER_BULK_UPDATE));
         dispatch(getGroupTypeslist());
-        
+
         return () => {
             dispatch(commonPageFieldSuccess(null));
             dispatch(ItemWiseUpdateGoButton_Success([]));
@@ -96,12 +97,7 @@ const ItemMasterBulkUpdate = (props) => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(ItemWiseUpdate_Save_Success({ Status: false }));
-            // dispatch(ItemWiseUpdateGoButton_Success([]));
-            // dispatch(get_Group_By_GroupType_ForDropDown_Success([]));
-            // setSelectFieldName([]);
             handleGoButton()
-            // setGroupTypeSelect({ value: 1, label: "Primary" });
-
             customAlert({
                 Type: 1,
                 Message: postMsg.Message,
@@ -147,11 +143,11 @@ const ItemMasterBulkUpdate = (props) => {
             } else {
                 customAlert({
                     Type: 1,
-                    Message: `Error for Group ID ${GroupID.label}:`,
+                    Message: `${alertMessages.GroupIDError} ${GroupID.label}:`,
                 });
             }
         } catch (error) {
-            _cfunc.CommonConsole(`Error for Group ID ${GroupID.label}:`, error);
+            _cfunc.CommonConsole(`${alertMessages.GroupIDError} ${GroupID.label}:`, error);
         }
     };
 
@@ -170,7 +166,7 @@ const ItemMasterBulkUpdate = (props) => {
         if (SelectFieldName.length === 0) {
             customAlert({
                 Type: 4,
-                Message: "Field selection is Required."
+                Message: alertMessages.fieldSelectionIsRequired
             });
             return;
         }
@@ -178,7 +174,7 @@ const ItemMasterBulkUpdate = (props) => {
         if (SelectFieldName.label === "Group" && groupTypeSelect.length === 0) {
             customAlert({
                 Type: 4,
-                Message: "Group Type is Required."
+                Message: alertMessages.groupTypeIsRequired
             });
             return;
         }
@@ -268,34 +264,22 @@ const ItemMasterBulkUpdate = (props) => {
         {
             text: "Group",
             dataField: "GroupName",
-            // sort:true
         },
         {
             text: "SubGroup",
             dataField: "SubGroupName",
-            // sort:true
         },
         {
             text: "Name",
             dataField: "ItemName",
-            // sort:true
         },
         {
             text: SelectFieldName.label,
             dataField: SelectFieldName.label,
-            // hidden: SelectFieldName.label === "Group" ? true : false
         },
     ];
 
-    // if (SelectFieldName.label === "Group") {
-    //     pagesListColumns[1].dataField = "GroupName";
-    //     pagesListColumns.push({
-    //         text: "SubGroup",
-    //         dataField: "SubGroupName",
-    //     });
-    // }
     if (SelectFieldName.label === "Group") {
-        // Exclude the column based on the condition
         pagesListColumns.pop();
     }
     pagesListColumns.push(createNewValueColumn());
@@ -312,7 +296,7 @@ const ItemMasterBulkUpdate = (props) => {
             const updatedData = [];
 
             goButtonData.forEach(i => {
-                
+
                 if (i.Newvalue) {
                     const arr = {
                         ItemName: i.ItemName,
@@ -328,7 +312,7 @@ const ItemMasterBulkUpdate = (props) => {
             if (updatedData.length === 0) {
                 customAlert({
                     Type: 3,
-                    Message: "Update At least One Field"
+                    Message: alertMessages.updateOneFieldIsRequired
                 });
                 return;
             }
@@ -338,7 +322,7 @@ const ItemMasterBulkUpdate = (props) => {
 
                     if ((SelectFieldName.label === "Group")) {
                         if (!(i.Value2)) {
-                            invalidMsg1.push({ [i.ItemName]: 'SubGroup Name is Required' })
+                            invalidMsg1.push({ [i.ItemName]: alertMessages.subGroupNameIsRequired })
                         }
                     };
                 })

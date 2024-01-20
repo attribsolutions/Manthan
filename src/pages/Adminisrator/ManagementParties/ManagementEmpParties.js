@@ -41,6 +41,7 @@ import {
 import { selectAllCheck } from "../../../components/Common/TableCommonFunc";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { C_Select } from "../../../CustomValidateForm";
+import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 
 const ManagementEmpParties = (props) => {
 
@@ -206,7 +207,7 @@ const ManagementEmpParties = (props) => {
         const CheckArray = partyList.filter(index => index.selectCheck === true);
 
         if (CheckArray.length === 0) {
-            customAlert({ Type: 4, Status: true, Message: "At least One Party is Selected" });
+            customAlert({ Type: 4, Status: true, Message: alertMessages.atLeastOnePartySelectionRequired });
             return;
         }
         const PartiesJson = CheckArray.map(index => ({ Employee: values.Employee.value, Party: index.id }));

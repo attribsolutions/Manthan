@@ -445,7 +445,7 @@ const MarginMaster = (props) => {
 
                 customAlert({
                     Type: 4,
-                    Message: "Please Enter Margin"
+                    Message:alertMessages.marginISRequired
                 })
                 return _cfunc.btnIsDissablefunc({ btnId, state: false })
             }

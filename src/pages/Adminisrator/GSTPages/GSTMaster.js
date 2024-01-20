@@ -412,7 +412,7 @@ const GSTMaster = (props) => {
                     customAlert({
                         Type: 4,
                         Status: true,
-                        Message: "Please Enter One GSTPercentage & HSNCode",
+                        Message: alertMessages.enterGSTPercentage_HSNCodeIsRequired
                     })
                 );
                 return _cfunc.btnIsDissablefunc({ btnId, state: false })

@@ -182,7 +182,7 @@ const StockAdjustment = (props) => {
     }
 
     function BatchCode_Add_Handler(event, index1, tableList, setTableList) {
-
+        
         let isfound = index1.StockDetails.find(i => i.id === index1.BatchCodeSelect?.id);
 
         if (!(isfound === undefined)) {
@@ -197,9 +197,9 @@ const StockAdjustment = (props) => {
             const isDifferntUnit = bachcodeUnit?.UnitID !== index1.UnitID;
 
             if (isDifferntUnit) {
-
+                
                 const _hasActualQuantity = _cfunc.roundToDecimalPlaces((index1.BaseUnitQuantity / bachcodeUnit.BaseUnitQuantity), 3);
-
+                
                 index1.BatchCodeSelect.ActualQuantity = _hasActualQuantity
                 index1.BatchCodeSelect.Qty = _hasActualQuantity
 
@@ -227,6 +227,24 @@ const StockAdjustment = (props) => {
             </components.Option>
         );
     };
+
+    function batchDeleteHandler(event, index1, index2, tableList) {
+
+        const filterData = tableList.map((item1) => {
+
+            const filteredStockDetails = item1.StockDetails.filter((item2) => {
+
+                return index2.id !== item2.id;
+            });
+            return {
+                ...item1,
+                StockDetails: filteredStockDetails,
+            };
+        });
+
+        setTableArr(filterData);
+    }
+
     const pagesListColumns = [
 
         {//*************** ItemName ********************************* */
@@ -306,47 +324,65 @@ const StockAdjustment = (props) => {
             attrs: () => ({ 'data-label1': "Stock Details", "stock-header": "true" }),
             headerStyle: { zIndex: "2" },
             formatExtraData: { tableList: TableArr },
-            formatter: (cellContent, index1, keys_, { tableList = [] }) => (
-                <div className="table-responsive">
-                    <table className="custom-table ">
-                        <thead >
-                            <tr>
-                                <th>BatchCode</th>
-                                <th>Stock </th>
-                                <th>Quantity</th>
-                                <th>MRP</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {cellContent.map((index2) => (
-                                <tr key={index1.id}>
-                                    <td data-label="BatchCode">{index2.BatchCode}</td>
-                                    <td data-label="Stock Quantity" style={{ textAlign: "right" }} >
-                                        <samp id={`ActualQuantity-${index1.id}-${index2.id}`}>{index2.ActualQuantity}</samp>
-                                    </td>
-                                    <td data-label='Quantity'>
-                                        <Input
-                                            type="text"
-                                            disabled={pageMode === 'edit' ? true : false}
-                                            placeholder="Manually enter quantity"
-                                            className="right-aligned-placeholder"
-                                            key={`batchQty${index1.id}-${index2.id}`}
-                                            id={`batchQty${index1.id}-${index2.id}`}
-                                            autoComplete="off"
-                                            defaultValue={index2.Qty}
-                                            onChange={(event) => {
-                                                QuantityOnchange(event, index1, index2, tableList);
-                                            }}
-                                        />
-                                    </td>
-                                    <td data-label="MRP">{index2.MRP}</td>
+            formatter: (cellContent, index1, keys_, { tableList = [] }) => {
 
+                return <>
+                    <div className="table-responsive">
+                        <table className="custom-table ">
+                            <thead >
+                                <tr>
+                                    <th>BatchCode</th>
+                                    <th>Stock </th>
+                                    <th>Quantity</th>
+                                    <th>MRP</th>
+                                    <th></th>
                                 </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
-            ),
+                            </thead>
+                            <tbody>
+                                {cellContent.map((index2) => (
+                                    <tr key={index1.id}>
+                                        <td data-label="BatchCode">{index2.BatchCode}</td>
+                                        <td data-label="Stock Quantity" style={{ textAlign: "right" }} >
+                                            <samp id={`ActualQuantity-${index1.id}-${index2.id}`}>{index2.ActualQuantity}</samp>
+                                        </td>
+                                        <td data-label='Quantity'>
+                                            <Input
+                                                type="text"
+                                                disabled={pageMode === 'edit' ? true : false}
+                                                placeholder="Manually enter quantity"
+                                                className="right-aligned-placeholder"
+                                                key={`batchQty${index1.id}-${index2.id}`}
+                                                id={`batchQty${index1.id}-${index2.id}`}
+                                                autoComplete="off"
+                                                defaultValue={index2.Qty}
+                                                onChange={(event) => {
+                                                    QuantityOnchange(event, index1, index2, tableList);
+                                                }}
+                                            />
+                                        </td>
+                                        <td data-label="MRP">{index2.MRP}</td>
+                                        < td >
+                                            <span className="d-flex justify-content-center align-items-center">
+                                                <Button
+                                                    id={"deleteid"}
+                                                    type="button"
+                                                    disabled={!(index2.ActualQuantity === "0.000" || index2.ActualQuantity === "") && true}
+
+                                                    className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light btn btn-secondary"
+                                                    data-mdb-toggle="tooltip" data-mdb-placement="top" title='Delete Item'
+                                                    onClick={(event) => { batchDeleteHandler(event, index1, index2, tableList); }}
+                                                >
+                                                    <i className="mdi mdi-delete font-size-16"></i>
+                                                </Button>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div ></>
+            }
+
         },
 
         //*************** Delete Action ********************************** */

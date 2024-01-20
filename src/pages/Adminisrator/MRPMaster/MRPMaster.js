@@ -32,9 +32,8 @@ import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { comAddPageFieldFunc, formValid, initialFiledFunc, onChangeDate, onChangeSelect, resetFunction } from "../../../components/Common/validationFunction";
 import { Go_Button, SaveButton } from "../../../components/Common/CommonButton";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
-
-import { deleteMRPMaster_Id, deleteMRPMaster_Id_Success, getMRPList, GoButtonForMRP_Master, GoButtonForMRP_MasterSuccess, saveMRPMaster, saveMRPMasterSuccess } from "../../../store/Administrator/MRPMasterRedux/action";
-import { mobileApp_ProductAdd_Api, mobileApp_ProductUpdate_Api } from "../../../helpers/backend_helper";
+import { deleteMRPMaster_Id, deleteMRPMaster_Id_Success, GoButtonForMRP_Master, GoButtonForMRP_MasterSuccess, saveMRPMaster, saveMRPMasterSuccess } from "../../../store/Administrator/MRPMasterRedux/action";
+import { mobileApp_ProductUpdate_Api } from "../../../helpers/backend_helper";
 import { showToastAlert } from "../../../helpers/axios_Config";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 
@@ -56,10 +55,6 @@ const MRPMaster = (props) => {
     const [editCreatedBy, seteditCreatedBy] = useState("");
     const [selectedMrp, setSelectedMrp] = useState([]);
     const [MRPDeleteId, setMRPDeleteId] = useState("");
-
-
-
-
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const { postMsg,
@@ -161,7 +156,6 @@ const MRPMaster = (props) => {
                 hasValid.PartyName.valid = true;
                 hasValid.EffectiveDate.valid = true;
                 setState({ values, fieldLabel, hasValid, required, isError })
-                // dispatch(Breadcrumb_inputName(hasEditVal.DivisionName))
                 seteditCreatedBy(hasEditVal.CreatedBy)
             }
         }
@@ -235,7 +229,6 @@ const MRPMaster = (props) => {
 
     //select id for delete row
     const deleteHandeler = async (id, name, ItemID) => {
-
 
         const isConfirmed = await customAlert({
             Type: 7,
