@@ -34,6 +34,7 @@ import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
+import { ItemAPIResponseFunc } from "./stockEntryFunctions";
 
 const StockEntry = (props) => {
 
@@ -52,6 +53,9 @@ const StockEntry = (props) => {
 
     const [state, setState] = useState(initialFiledFunc(fileds))
     const [TableArr, setTableArr] = useState([]);
+
+    const [itemAPIData, setItemAPIData] = useState([]);
+    const [itemAPIDataLoading, setItemAPIDataLoading] = useState(false);
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
@@ -139,6 +143,7 @@ const StockEntry = (props) => {
             return a
         })
     }
+
     function isAllStockZero_Onchange(e) {
         setState((i) => {
             const a = { ...i }
@@ -318,9 +323,20 @@ const StockEntry = (props) => {
         },
     ];
 
-    const AddPartyHandler = async () => {
+    async function ItemAPICall(itemID) {
+        try {
+            const apiResponse = await StockEntry_GO_button_api_For_Item(itemID);
 
-        // Display alert if Item Name is empty
+            const initialTableData = await ItemAPIResponseFunc(apiResponse, [...itemAPIData]);
+            setItemAPIData(initialTableData);
+            return initialTableData;
+        } catch (error) {
+            console.error('Error in ItemAPICall:', error);
+            return null;
+        }
+    }
+
+    async function AddPartyHandler() {
         if (values.ItemName === '') {
             customAlert({
                 Type: 4,
@@ -330,95 +346,10 @@ const StockEntry = (props) => {
         }
 
         try {
-
-            // Fetch data from the API
             const apiResponse = await StockEntry_GO_button_api_For_Item(values.ItemName.value);
 
-            // Convert API response to desired format
-            const convert_ApiResponse = apiResponse.Data.InvoiceItems.map((i) => {
+            const updatedTableData = await ItemAPIResponseFunc(apiResponse, [...TableArr]);
 
-                const UnitDroupDownOptions = i.ItemUnitDetails.map((unit) => ({
-                    label: unit.UnitName,
-                    value: unit.Unit,
-                    IsBase: unit.IsBase,
-                    BaseUnitQuantity: unit.BaseUnitQuantity,
-                }));
-
-                const Default_Unit = UnitDroupDownOptions.find(unit => unit.IsBase);
-
-                const MRP_DropdownOptions = i.ItemMRPDetails.map((mrp) => ({
-                    label: mrp.MRPValue,
-                    value: mrp.MRP,
-                }));
-
-                const Highest_MRP = MRP_DropdownOptions.reduce((prev, current) => {
-                    return prev.value > current.value ? prev : current;
-                });
-
-                const GST_DropdownOptions = i.ItemGSTDetails.map((gst) => ({
-                    label: gst.GSTPercentage,
-                    value: gst.GST,
-                }));
-
-                const Highest_GST = GST_DropdownOptions.reduce((prev, current) => {
-                    return prev.value > current.value ? prev : current;
-                });
-
-                return {
-                    UnitDroupDownOptions,
-                    MRP_DropdownOptions,
-                    GST_DropdownOptions,
-                    Default_Unit,
-                    Highest_MRP,
-                    Highest_GST,
-                    ItemName: i.ItemName,
-                    ItemId: i.Item,
-                    Quantity: i.Quantity,
-                };
-            });
-
-            const initialTableData = [...TableArr];
-            const dateString = currentDate_ymd.replace(/-/g, "");//Convert date To DateString 
-
-            const existingBatchCodes = {};//existing Batch Codes form compare in table 
-
-            convert_ApiResponse.forEach((index) => {
-                const itemId = index.ItemId;
-
-                let batchCodeCounter = 0;
-                initialTableData.forEach((tableItem) => {
-                    if (tableItem.ItemId === itemId) {
-                        const existingBatchCode = tableItem.BatchCode.split('_').pop(); // Extract the batchCode from existing BatchCode
-                        batchCodeCounter = Math.max(batchCodeCounter, parseInt(existingBatchCode, 10) + 1);
-                    }
-                });
-
-                let newBatchCode = `${dateString}_${itemId}_${_cfunc.loginSelectedPartyID()}_${batchCodeCounter}`;
-
-                while (existingBatchCodes[newBatchCode]) {
-                    batchCodeCounter++;
-                    newBatchCode = `${dateString}_${itemId}_${_cfunc.loginSelectedPartyID()}_${batchCodeCounter}`;
-                }
-
-                existingBatchCodes[newBatchCode] = true;// Record the new batch code as existing
-
-                initialTableData.push({
-                    id: initialTableData.length + 1, // Use initialTableData length+1 as the ID
-                    Unit_DropdownOptions: index.UnitDroupDownOptions,
-                    MRP_DropdownOptions: index.MRP_DropdownOptions,
-                    ItemGSTHSNDetails: index.GST_DropdownOptions,
-                    ItemName: index.ItemName,
-                    ItemId: itemId,
-                    Quantity: index.Quantity,
-                    BatchDate: currentDate_ymd,
-                    BatchCode: newBatchCode,
-                    defaultUnit: index.Default_Unit,
-                    defaultMRP: index.Highest_MRP,
-                    defaultGST: index.Highest_GST,
-                });
-
-
-            });
             setState((prevState) => {
                 const newState = { ...prevState };
                 newState.values.ItemName = "";
@@ -426,15 +357,16 @@ const StockEntry = (props) => {
                 return newState;
             });
 
-            initialTableData.sort((a, b) => b.id - a.id);
-            setTableArr(initialTableData);
-            dispatch(BreadcrumbShowCountlabel(`Count:${initialTableData.length}`));
+            setTableArr(updatedTableData);
+            dispatch(BreadcrumbShowCountlabel(`Count:${updatedTableData.length}`));
 
-        } catch (w) { }
+        } catch (error) {
+            console.error('Error in AddPartyHandler:', error);
+        }
     }
 
     function deleteButtonAction(row, key, { TableArr = [], setTableArr }) {
-        
+
         const newArr = TableArr.filter((index, key1) => !(key === key1))
         setTableArr(newArr)
         dispatch(BreadcrumbShowCountlabel(`Count:${newArr.length}`));
@@ -464,22 +396,24 @@ const StockEntry = (props) => {
 
         const btnId = event.target.id
         let isConfirmed = ""
-        const ReturnItems = TableArr.map((index) => {
+        let updatedTableData = []
+        let ReturnItemsArr = []
+        let StockItemsArray = []
 
-            return ({
-                "Item": index.ItemId,
-                "ItemName": index.ItemName,
-                "Quantity": index.Qty,
-                "MRP": index.defaultMRP.value,
-                "Unit": index.defaultUnit.value,
-                "GST": index.defaultGST.value,
-                "MRPValue": index.defaultMRP.label,
-                "GSTPercentage": index.defaultGST.label,
-                "BatchDate": index.BatchDate,
-                "BatchCode": index.BatchCode,
-                "BatchCodeID": 0
-            })
-        })
+        const mapItemArray = (index) => ({
+            "Item": index.ItemId,
+            "Quantity": index.Qty === undefined ? 0 : index.Qty,
+            "MRP": index.defaultMRP.value,
+            "Unit": index.defaultUnit.value,
+            "GST": index.defaultGST.value,
+            "MRPValue": index.defaultMRP.label,
+            "GSTPercentage": index.defaultGST.label,
+            "BatchDate": index.BatchDate,
+            "BatchCode": index.BatchCode,
+            "BatchCodeID": 0
+        });
+
+        const ReturnItems = TableArr.map(mapItemArray);
 
         const filterData = ReturnItems.map(({ ItemName, ...rest }) => rest).filter((i) => {
             return i.Quantity > 0;
@@ -519,6 +453,33 @@ const StockEntry = (props) => {
             return _cfunc.btnIsDissablefunc({ btnId, state: false })
         }
 
+        if (values.IsAllStockZero) {
+
+            setItemAPIDataLoading(true)
+            const filterDataItems = filterData.map(item => item.Item);
+            const ItemListOptionsItems = ItemList_Options.map(item => item.value);
+
+            // Find items that are present in ItemListOptionsItems but not in filterDataItems
+            const ItemIDs = ItemListOptionsItems.filter(item => !filterDataItems.includes(item));
+
+            try {
+                const results = await Promise.all(ItemIDs.map(ItemID => ItemAPICall(ItemID)));
+                updatedTableData = [...itemAPIData, ...results];
+                updatedTableData.sort((a, b) => b.id - a.id);
+                setItemAPIData(updatedTableData);
+
+            } catch (error) {
+                console.error(error);
+            } finally {
+                setItemAPIDataLoading(false);
+            }
+            const newArray = updatedTableData.flat().map(item => ({ ...item }));
+
+            ReturnItemsArr = newArray.map(mapItemArray);
+        }
+
+        StockItemsArray = [...filterData, ...ReturnItemsArr];
+
         try {
             if (formValid(state, setState)) {
                 _cfunc.btnIsDissablefunc({ btnId, state: true })
@@ -528,7 +489,7 @@ const StockEntry = (props) => {
                     "CreatedBy": _cfunc.loginUserID(),
                     "Date": values.Date,
                     "Mode": 1,
-                    "StockItems": filterData,
+                    "StockItems": StockItemsArray,
                     "IsAllStockZero": values.IsAllStockZero,
                     "IsStockAdjustment": false
                 }
@@ -543,13 +504,10 @@ const StockEntry = (props) => {
                 if ((isConfirmed) || (!values.IsAllStockZero)) {
                     dispatch(saveStockEntryAction({ jsonBody, btnId }));
                 };
-
             }
 
         } catch (e) { _cfunc.btnIsDissablefunc({ btnId, state: false }) }
     };
-
-
 
     if (!(userPageAccessState === '')) {
         return (
@@ -675,7 +633,7 @@ const StockEntry = (props) => {
                                 <FormGroup>
                                     <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
                                         <SaveButton pageMode={pageMode}
-                                            loading={saveBtnloading}
+                                            loading={saveBtnloading || itemAPIDataLoading}
                                             onClick={SaveHandler}
                                             userAcc={userPageAccessState}
                                         />
