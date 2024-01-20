@@ -4,7 +4,7 @@ import { toast, Bounce } from 'react-toastify';
 
 // const API_URL = "http://cbmfooderp.com:8000";
 
-const API_URL = "http://192.168.1.114:8001";
+const API_URL = "http://192.168.1.114:8000";
 // const API_URL = "http://127.0.0.1:8000";
 
 
