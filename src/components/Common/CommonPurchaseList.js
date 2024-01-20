@@ -410,7 +410,7 @@ const CommonPurchaseList = (props) => {
                 }
               />)}
           </ExtraTableWrapper>
-          {
+          {//  check box handler buttons
 
             ((tableList.length > 0) && (selectCheckParams.isShow)) ?
 

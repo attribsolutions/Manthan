@@ -36,7 +36,7 @@ const OrderList = () => {
         Supplier: { value: "", label: "All" },
         CustomerType: [{ value: "", label: "All" }]
     }
-   
+
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
     const [subPageMode] = useState(history.location.pathname);
@@ -584,7 +584,7 @@ const OrderList = () => {
     }
 
     const BulkInvoice_Handler = (allList = []) => {
-        
+
         let checkRows = allList.filter(i => (i.selectCheck))
         if (!checkRows.length > 0) {
             customAlert({
@@ -755,10 +755,11 @@ const OrderList = () => {
                             ViewModal={OrderView}
                             oderAprovalBtnFunc={otherState.showAprovalBtn && oderAprovalBtnFunc}
                             selectCheckParams={{
-                                isShow: (subPageMode === url.ORDER_LIST_4||subPageMode === url.APP_ORDER_LIST),
+                                isShow: (subPageMode === url.ORDER_LIST_4 || subPageMode === url.APP_ORDER_LIST),
                                 selectSaveBtnHandler: (subPageMode === url.ORDER_LIST_4) ? OrderConfirm_Handler : BulkInvoice_Handler,
                                 selectSaveBtnLabel: (subPageMode === url.ORDER_LIST_4) ? "Confirm" : "Bulk Invoice",
-                                selectHeaderLabel: (subPageMode === url.ORDER_LIST_4) ? "Confirm" : "Bulk Invoice"
+                                selectHeaderLabel: (subPageMode === url.ORDER_LIST_4) ? "Confirm" : "Bulk Invoice",
+                                selectSaveBtnLoading: subPageMode === url.APP_ORDER_LIST && makeBulkInvoiceLoading,
                             }}
                             totalAmountShow={true}
                         />

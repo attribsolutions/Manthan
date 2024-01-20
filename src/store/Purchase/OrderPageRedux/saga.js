@@ -208,7 +208,7 @@ function* orderList_GoBtn_GenFunc({ config }) {
       if (i.IsConfirm === true) {// is confirm is true the show force delete and edit true "PO" ans "SO" mode 
         i.forceEditHide = true;
         i.forceDeleteHide = true;
-        if (subPageMode === url.APP_ORDER_LIST) {
+        if ((subPageMode === url.APP_ORDER_LIST) && (!i.InvoiceCreated === true)) {
           i.forceSelectDissabled = false;//select row check box dessible 
         }
         else {

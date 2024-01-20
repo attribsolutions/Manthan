@@ -173,11 +173,10 @@ const Invoice = (props) => {
         if (postMsg.Status === true && postMsg.StatusCode === 200) {
             dispatch(invoiceSaveActionSuccess({ Status: false })); // Reset the status to false
             const config = {
-                editId: postMsg.TransactionID                ,////for saveAndDownloadPdfMode
+                editId: postMsg.TransactionID.join(', '),////for saveAndDownloadPdfMode
                 ReportType: report.invoice,//for saveAndDownloadPdfMode
-                btnId: `btn-E-Invoice-Upload-${postMsg.InvoiceID}`,
-                RowId: postMsg.TransactionID,
-                UserID: _cfunc.loginUserID(),
+                RowId: postMsg.TransactionID.join(', '),//for Invoice-Upload
+                UserID: _cfunc.loginUserID(),//for Invoice-Upload
             };
             //************************* / Fetch PDF report data if saveAndDownloadPdfMode is true /
             if (postMsg.saveAndDownloadPdfMode) {
@@ -197,9 +196,8 @@ const Invoice = (props) => {
             });
 
             // Redirect to appropriate page based on subPageMode
-            debugger
             if (subPageMode === url.INVOICE_1) {
-                history.push({ pathname: url.INVOICE_LIST_1, updatedRowBlinkId: postMsg.TransactionID });
+                history.push({ pathname: url.INVOICE_LIST_1, updatedRowBlinkId: postMsg.TransactionID.join(', ') });
             } else if (subPageMode === url.IB_INVOICE) {
                 history.push({ pathname: url.IB_INVOICE_LIST });
             }

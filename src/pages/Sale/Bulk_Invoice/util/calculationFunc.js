@@ -53,12 +53,13 @@ export const settingBaseRoundOffOrderAmountFunc = ({
             sumOfItemAmount += TCS_Amount;
         }
     }
-
+debugger
     return {
-        sumOfItemAmount: isGrandAmtRound ? Math.round(sumOfItemAmount) : Number(sumOfItemAmount).toFixed(2), // Round off or format the sumOfGrandTotal
-        RoundOffAmount: (sumOfItemAmount - Math.trunc(sumOfItemAmount)).toFixed(2), // Calculate the round-off amount
-        TCS_Amount: isTCS_AmtRound ? Math.round(TCS_Amount) : Number(TCS_Amount).toFixed(2), // Round off or format the TCS Amount
+        sumOfItemAmount: isGrandAmtRound ? Math.round(sumOfItemAmount) : Number(sumOfItemAmount).toFixed(2),
+        RoundOffAmount: (Math.round(sumOfItemAmount) - sumOfItemAmount).toFixed(2),
+        TCS_Amount: isTCS_AmtRound ? Math.round(TCS_Amount) : Number(TCS_Amount).toFixed(2),
     };
+    
 };
 
 

@@ -92,8 +92,8 @@ export const settingBaseRoundOffAmountFunc = (tableList = []) => {
 
     return {
         sumOfGrandTotal: isGrandAmtRound ? Math.round(sumOfGrandTotal) : Number(sumOfGrandTotal).toFixed(2), // Round off or format the sumOfGrandTotal
-        RoundOffAmount: (sumOfGrandTotal - Math.trunc(sumOfGrandTotal)).toFixed(2), // Calculate the round-off amount
-        TCS_Amount: isTCS_AmtRound ? Math.round(TCS_Amount) : Number(TCS_Amount).toFixed(2) // Round off or format the TCS Amount
+        RoundOffAmount: (Math.round(sumOfGrandTotal) - sumOfGrandTotal).toFixed(2),// Calculate the round-off amount
+        TCS_Amount: isTCS_AmtRound ? Math.round(TCS_Amount) : Number(TCS_Amount).toFixed(2),// Round off or format the TCS Amount
     };
 };
 

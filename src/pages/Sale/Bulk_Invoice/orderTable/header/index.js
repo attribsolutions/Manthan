@@ -7,7 +7,9 @@ const OrderTableHeaderSection = ({
   orderId,
   orderAmountWithGst,
   customerName,
-  orderItemCount
+  orderItemCount,
+  TCSAmount,
+  roundOffAmount
 }) => {
   return (
     <div className='table-header '>
@@ -26,6 +28,12 @@ const OrderTableHeaderSection = ({
         <div className='d-flex gap-2 '>
           <div className='p-1'>
             <samp className='text-muted'>Count:&nbsp;</samp><samp >#{orderItemCount}</samp>
+          </div>
+          <div className='p-1'>
+            <samp className='text-muted'>TCS:</samp><samp >{TCSAmount}</samp>
+          </div>
+          <div className='p-1'>
+            <samp className='text-muted'>Round:</samp><samp >{roundOffAmount}</samp>
           </div>
           <div className='bg-dark text-white p-1 rounded'>
             <samp className='text-muted'>Total:</samp><strong>₹{orderAmountWithGst}</strong>

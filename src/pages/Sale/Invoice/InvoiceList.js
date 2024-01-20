@@ -524,7 +524,7 @@ const InvoiceList = () => {
     }
 
     const selectDeleteBtnHandler = (row = []) => {
-        debugger
+        
         let isAllcheck = row.filter(i => (i.hasAllSelect))
         let isRowcheck = row.filter(i => (i.selectCheck))
         let ischeck = [];

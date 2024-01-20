@@ -24,10 +24,13 @@ const OrdersTable = React.memo(({ order }) => {
   const orderDate = date_dmy_func(order.OrderDate)
   const customerName = order?.CustomerName
   const orderItemCount=order?.OrderItemDetails?.length;
+  const TCSAmount=order?.orderTCS_Amount;
+  const roundOffAmount=order?.orderRoundOffAmount;
+
+
   const handleOrderDiscountChange = (orderId, newDiscountType) => {
     handleOrderDiscount(orderId, newDiscountType)
   }
-
 
   const handleOrderDiscountTypeChange = (orderId, event) => {
     const value = event.target.value;
@@ -45,6 +48,8 @@ const OrdersTable = React.memo(({ order }) => {
         orderDate={orderDate}
         customerName={customerName}
         orderItemCount={orderItemCount}
+        TCSAmount={TCSAmount}
+        roundOffAmount={roundOffAmount}
       />
 
       <Table className=" custom-table">

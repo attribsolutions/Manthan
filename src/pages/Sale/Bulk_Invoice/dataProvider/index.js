@@ -62,7 +62,7 @@ export const BulkInvoiceProvider = ({ children, data = [] }) => {
                 let orderAmountWithGst = 0;
                 const IsTCSParty = order.IsTCSParty;
                 const IsCustomerPAN = order.IsTCSParty;
-                const IsComparGstIn = { GSTIn_1: order.CustomerGSTIN, GSTIn_2:loginPartyGstIn  }
+                const IsComparGstIn = { GSTIn_1: order.CustomerGSTIN, GSTIn_2: loginPartyGstIn }
 
                 order.OrderItemDetails.forEach(orderItem => {
                     const itemId = `itemId-${orderItem.Item}`;
@@ -96,7 +96,7 @@ export const BulkInvoiceProvider = ({ children, data = [] }) => {
                         }
                         if (distribute > 0.0) {
 
-                            const calculatedBachAmount = itemAmounWithGst({
+                            const {roundedTotalAmount} = itemAmounWithGst({
                                 Rate: stockDetail.Rate,
                                 modifiedQuantity: distribute,
                                 GSTPercentage: orderItem.GSTPercentage,
@@ -104,29 +104,37 @@ export const BulkInvoiceProvider = ({ children, data = [] }) => {
                                 DiscountType: orderItem.DiscountType,
                                 IsComparGstIn,
                             });
-                            itemAmountWithGst += calculatedBachAmount?.roundedTotalAmount || 0
-                            stockDetail.calculatedBachAmount = calculatedBachAmount;
+                            itemAmountWithGst += roundedTotalAmount;
                         }
 
-                        stockDetail.distribute = distribute;
-                        stockDetail.remaining = remaining;
+                        Object.assign(stockDetail, {
+                            distribute: distribute,
+                            remaining: remaining,
+                        });
                     });
 
                     if (orderQty > 0.0) {
                         orderItem.lessStock = roundToDecimalPlaces(orderQty);
                     } else { orderItem.lessStock = 0; };
 
-                    const orderAmountCalculation = settingBaseRoundOffOrderAmountFunc({
-                        IsTCSParty,
-                        IsCustomerPAN,
-                        sumOfItemAmount: itemAmountWithGst
+                    Object.assign(orderItem, {
+                        itemAmountWithGst: itemAmountWithGst,
                     });
-                    orderItem.orderAmountCalculation = orderAmountCalculation;
-                    orderItem.itemAmountWithGst = orderAmountCalculation?.sumOfItemAmount;
                     orderAmountWithGst += itemAmountWithGst;
 
                 });
-                order.orderAmountWithGst = roundToDecimalPlaces(orderAmountWithGst, 2);
+                //=================================================================================
+                const { sumOfItemAmount, RoundOffAmount, TCS_Amount } = settingBaseRoundOffOrderAmountFunc({
+                    IsTCSParty,
+                    IsCustomerPAN,
+                    sumOfItemAmount: orderAmountWithGst
+                });
+
+                Object.assign(order, {
+                    orderAmountWithGst: sumOfItemAmount,
+                    orderRoundOffAmount: RoundOffAmount,
+                    orderTCS_Amount: TCS_Amount
+                });
             });
 
 

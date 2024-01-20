@@ -168,7 +168,8 @@ function* editInvoiceListGenFunc({ config }) {
     response.editId = editId;
     response.customer = customer;
     response.pageMode = btnmode;
-    response.Data[0] = response.Data
+    response.Data.OrderIDs = response?.Data.OrderIDs[0];
+
     const updatedResp = invoice_GoButton_dataConversion_Func(response, customer);
 
     yield put(editInvoiceActionSuccess(updatedResp))
@@ -309,7 +310,7 @@ function* gobutton_invoiceAdd_genFunc({ config }) {
     response["path"] = path
     response["page_Mode"] = pageMode
     response["customer"] = customer
-    response.Data=response.Data[0];
+    response.Data = response.Data[0];
     const updatedResp = invoice_GoButton_dataConversion_Func(response, customer)
 
     yield put(GoButtonForinvoiceAddSuccess(updatedResp));

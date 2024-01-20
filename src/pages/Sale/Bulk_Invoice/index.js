@@ -105,12 +105,30 @@ const Bulk_Invoice2 = (props) => {
     useEffect(async () => {
         if (postMsg.Status === true && postMsg.StatusCode === 200) {
             dispatch(saveBulkInvoiceActionSuccess({ Status: false })); // Reset the status to false
+            // ***************** Upload E-Invoice if AutoEInvoice and EInvoiceApplicable are both "1"  *****/
+            try {
+                const systemSetting = _cfunc.loginSystemSetting();
+                if (systemSetting.AutoEInvoice === "1" && systemSetting.EInvoiceApplicable === "1") {
+                    for (const tranasactionId of postMsg.TransactionID) {
+                        const config = {
+                            RowId: tranasactionId,//for Invoice-Upload
+                            UserID: _cfunc.loginUserID(),//for Invoice-Upload
+                        };
+                        dispatch(Uploaded_EInvoiceAction(config));
+                    }
+                }
+            } catch (error) { }
 
             customAlert({
                 Type: 1,
                 Message: postMsg.Message,
             });
-            history.push({ pathname: url.INVOICE_LIST_1 });
+
+            history.push({
+                pathname: url.INVOICE_LIST_1,
+                updatedRowBlinkId: postMsg.TransactionID.join(', ')
+            });
+
         } else if (postMsg.Status === true) {
             // Show error alert message with the JSON stringified postMsg.Message
             dispatch(saveBulkInvoiceActionSuccess({ Status: false })); // Reset the status to false
