@@ -129,7 +129,7 @@ export function C_Button({
         disabled
         title={`Add Button Loading...`}
         {...rest}
-      >
+      > {children}..&nbsp;
         <Spinner style={{ height: "12px", width: "12px" }} color={spinnerColor} />
       </button>
     );
