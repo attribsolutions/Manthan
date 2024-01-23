@@ -264,7 +264,7 @@ const Bulk_Invoice2 = (props) => {
 
         }, [])
 
-    if (!(userPageAccessState === '')) {
+    if (userPageAccessState === '') {
         return null //if roll access absent for this page then  not vissile 
     };
     return (
