@@ -518,3 +518,17 @@ export const TCS_AMOUNT_REPORT_GO_BUTTON_API = '/TCSAmountReport'
 // Cx-DD Diffrence Report
 export const CX_DD_DIFFRENCE_REPORT = '/CxDDDiffReport'
 export const CX_DD_DIFFRENCE_PARTY_API = '/CxDDDiffParty'
+
+
+export const SYSTEM_SETTING_API = '/SettingsDataSave'
+
+
+export const SYSTEM_SETTING = '/SystemSettings'
+
+
+
+
+
+
+
+

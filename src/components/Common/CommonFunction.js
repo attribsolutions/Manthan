@@ -41,6 +41,22 @@ export const currentDate_ymd = date_ymd_func();
 export const currentDate_dmy = date_dmy_func();
 
 
+
+export function isDissableForParticularDate(date, type) {
+
+  const currentDate = new Date();
+  const currentDay = currentDate.getDate();
+  const lastDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate();
+  if (type === "Actual") {
+    return date > currentDay && date < lastDayOfMonth;
+  } else {
+
+    return currentDay === date;
+
+  }
+
+}
+
 export function convertTimefunc(inputDate) {
   const date = new Date(inputDate);
   const day = String(date.getDate()).padStart(2, '0');
@@ -226,6 +242,13 @@ export const loginUserAdminRole = () => { //+++++++++++++++++++++ Session Compan
   return false;
 };
 
+export const isSuperAdmin = () => {
+
+  const detail = loginUserDetails();
+  return detail.id === 1
+}
+
+
 export const loginRoleID = () => { //+++++++++++++++++++++ Session Company Id+++++++++++++++++++++++++++++
 
   try {
@@ -371,7 +394,7 @@ export const compareGSTINState = (gstin1 = '', gstin2 = '') => {
 }
 
 export function breadcrumbReturnFunc({ dispatch, userAcc, newBtnPath = "", forceNewBtnView = true, pageField: pageField }) {
-  
+
   const isnewBtnView = userAcc.PageType === 2 && userAcc.RoleAccess_IsSave;
   const isCountLabel = userAcc.CountLabel;
   const isexcelBtnView =
@@ -440,6 +463,34 @@ export function roundToDecimalPlaces(input, decimalPlaces = 3, returnZerro = fal
 export function hasDecimalCheckFunc(input) {
   const number = Number(input); // Convert the input to a number
   return isNaN(number) ? false : !Number.isInteger(number);
+}
+
+export const isButtonEnable = ({ ConditionDetails = {} }) => {   /////// button disable based on condiition ///////
+  let isEnable = false;
+  let isEnablePriviousAlert = false;
+  const CustomerPartyTypeID = loginUserDetails().PartyTypeID
+  if (Object.keys(ConditionDetails).length > 0) {
+    isEnablePriviousAlert = false;
+    isEnable = false
+    if (ConditionDetails.Supplierid?.includes(ConditionDetails.SelectedSupplierId) && ConditionDetails?.Coustomerid.includes(CustomerPartyTypeID)) {
+      isEnable = isDissableForParticularDate(ConditionDetails.ActualDate, "Actual");
+      isEnablePriviousAlert = isDissableForParticularDate(ConditionDetails.WarningDate, "warning")
+    }
+  } else {
+    isEnablePriviousAlert = true
+    isEnable = true
+  }
+
+  return { isEnable: isEnable, isEnablePriviousAlert: isEnablePriviousAlert, }
+}
+
+export const DateFormat = (day) => {
+
+  var currentDate = new Date();
+  var day = parseInt(day);
+  var month = currentDate.getMonth() + 1; // Months are zero-based, so we add 1
+  var year = currentDate.getFullYear();
+  return (day < 10 ? '0' : '') + day + '-' + (month < 10 ? '0' : '') + month + '-' + year;
 }
 
 

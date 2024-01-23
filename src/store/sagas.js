@@ -110,6 +110,8 @@ import PartyDetailsSaga from "./Administrator/PartyDetailsRedux/saga"
 import ItemWiseUpdateSaga from "./Administrator/ItemWiseUpdateRedux/saga"
 import TCSAmountReportSaga from "./Report/TCS_AmountRedux/saga"
 import Cx_DD_DiffrenceReportSaga from "./Report/CX_DD_Diffrence_Report/saga"
+import SystemSettingSaga from "./Utilites/SystemSettingRedux/saga"
+
 
 export default function* rootSaga() {
 	yield all([
@@ -214,5 +216,9 @@ export default function* rootSaga() {
 		fork(ItemWiseUpdateSaga),
 		fork(TCSAmountReportSaga),
 		fork(Cx_DD_DiffrenceReportSaga),
+		fork(SystemSettingSaga),
+
+
+
 	])
 }
