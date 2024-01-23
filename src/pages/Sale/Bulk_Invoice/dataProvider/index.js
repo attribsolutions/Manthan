@@ -118,7 +118,7 @@ export const BulkInvoiceProvider = ({ children, data = [] }) => {
                     } else { orderItem.lessStock = 0; };
 
                     Object.assign(orderItem, {
-                        itemAmountWithGst: itemAmountWithGst,
+                        itemAmountWithGst: roundToDecimalPlaces(itemAmountWithGst, 2, true),
                     });
                     orderAmountWithGst += itemAmountWithGst;
 

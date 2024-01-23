@@ -20,12 +20,13 @@ const OrdersTable = React.memo(({ order }) => {
   } = useBulkInvoiceContext();
 
   const orderId = order.OrderIDs;
+  const orderNumber = order.OrderNumber;
   const orderAmountWithGst = order.orderAmountWithGst || 0
   const orderDate = date_dmy_func(order.OrderDate)
   const customerName = order?.CustomerName
-  const orderItemCount=order?.OrderItemDetails?.length;
-  const TCSAmount=order?.orderTCS_Amount;
-  const roundOffAmount=order?.orderRoundOffAmount;
+  const orderItemCount = order?.OrderItemDetails?.length;
+  const TCSAmount = order?.orderTCS_Amount;
+  const roundOffAmount = order?.orderRoundOffAmount;
 
 
   const handleOrderDiscountChange = (orderId, newDiscountType) => {
@@ -43,7 +44,7 @@ const OrdersTable = React.memo(({ order }) => {
   return (
     <Card >
       <OrderTableHeaderSection
-        orderId={orderId}
+        orderNumber={orderNumber}
         orderAmountWithGst={orderAmountWithGst}
         orderDate={orderDate}
         customerName={customerName}
@@ -83,7 +84,7 @@ const OrdersTable = React.memo(({ order }) => {
             const discount = itemInfo?.Discount;
             const discountType = itemInfo?.DiscountType;
             const itemAmount = item.itemAmountWithGst;
-            const initialOrderQuantity=itemInfo.Quantity;
+            const initialOrderQuantity = itemInfo.Quantity;
 
             return (
               <tr key={item.Item}>

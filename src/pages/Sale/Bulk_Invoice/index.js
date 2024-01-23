@@ -1,57 +1,17 @@
-import React, { useCallback, useEffect, useLayoutEffect, useState, } from "react";
-import {
-    Col,
-    FormGroup,
-    Input,
-    Label,
-} from "reactstrap";
+import React, { useCallback, useEffect, useState, } from "react";
 import { MetaTags } from "react-meta-tags";
-import { BreadcrumbShowCountlabel, commonPageFieldSuccess, getpdfReportdata } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
-import { commonPageField } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
-import {
-    comAddPageFieldFunc,
-    initialFiledFunc,
-    onChangeDate,
-    onChangeSelect,
-} from "../../../components/Common/validationFunction";
-import Select from "react-select";
-import { SaveAndDownloadPDF, SaveButton } from "../../../components/Common/CommonButton";
 import * as mode from "../../../routes/PageMode";
-import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url"
 import {
-    GoButtonForinvoiceAdd,
-    GoButtonForinvoiceAddSuccess,
     Uploaded_EInvoiceAction,
-    invoiceSaveAction,
-    invoiceSaveActionSuccess,
-    makeIB_InvoiceActionSuccess,
-    editInvoiceActionSuccess,
-    updateInvoiceAction,
-    updateInvoiceActionSuccess
 } from "../../../store/Sales/Invoice/action";
-import { GetVenderSupplierCustomer, GetVenderSupplierCustomerSuccess } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
-import {
-    invoice_discountCalculate_Func,
-    innerStockCaculation,
-    orderQtyOnChange,
-    orderQtyUnit_SelectOnchange,
-    stockQtyOnChange,
-    settingBaseRoundOffAmountFunc
-} from "../Invoice/invoiceCaculations";
-import "../Invoice/invoice.scss"
 import * as _cfunc from "../../../components/Common/CommonFunction";
-import { CInput, C_DatePicker, decimalRegx } from "../../../CustomValidateForm";
-import { getVehicleList, getVehicleListSuccess } from "../../../store/Administrator/VehicleRedux/action";
-import { Invoice_Singel_Get_for_Report_Api } from "../../../helpers/backend_helper";
-import * as report from '../../../Reports/ReportIndex'
-import CustomTable from "../../../CustomTable2";
-import NewCommonPartyDropdown from "../../../components/Common/NewCommonPartyDropdown";
+
 // import bulkdata from './data2'
-import BulkInvoce from "./bulkInvoce";
+import BulkInvoce from "./allOrderTable";
 import { BulkInvoiceProvider } from "./dataProvider";
 import { useMemo } from "react";
 import { itemAmounWithGst, settingBaseRoundOffOrderAmountFunc } from "./util/calculationFunc";
@@ -109,7 +69,7 @@ const Bulk_Invoice2 = (props) => {
             try {
                 const systemSetting = _cfunc.loginSystemSetting();
                 if (systemSetting.AutoEInvoice === "1" && systemSetting.EInvoiceApplicable === "1") {
-                    for (const tranasactionId of postMsg.TransactionID) {
+                    for (const tranasactionId of postMsg.TransactionID) {//multiple  transcation ids (comma separate)
                         const config = {
                             RowId: tranasactionId,//for Invoice-Upload
                             UserID: _cfunc.loginUserID(),//for Invoice-Upload
@@ -158,7 +118,12 @@ const Bulk_Invoice2 = (props) => {
 
                 for (const itemInfo of orderInfo.OrderItemDetails) {
 
-                    let isSameMRPinStock = ''
+                    let isSameMRPinStock = '';
+
+                    if (itemInfo.lessStock) {//** */ if Short Short validation check  */
+                        validMsg.push({ [itemInfo.ItemName]: `Short Short Quantity ${itemInfo.lessStock} ${itemInfo.UnitName?.split(" ")[0]}` })
+                    };
+
                     for (const stockInfo of itemInfo.StockDetails) {
 
                         if (isSameMRPinStock === "" || isSameMRPinStock === parseFloat(stockInfo.MRP)) {
