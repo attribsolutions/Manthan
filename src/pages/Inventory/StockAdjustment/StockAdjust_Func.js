@@ -2,8 +2,6 @@ import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMs
 import { loginSelectedPartyID, roundToDecimalPlaces } from "../../../components/Common/CommonFunction";
 import { getBatchCode_By_ItemID_api } from "../../../helpers/backend_helper";
 
-
-
 export function stockQtyUnit_SelectOnchange(event, index1) {
 
     try {
@@ -31,8 +29,6 @@ export function stockQtyUnit_SelectOnchange(event, index1) {
     }
 }
 
-
-
 export const getItemDefaultUnitOption = (unitOptions) => {
     return unitOptions.find(option => option.UnitName.includes("No"));
 };
@@ -52,10 +48,6 @@ const createBatchCodeDetail = (item) => ({
     Qty: item.BaseUnitQuantity,
     ...item, // Spread the rest of the properties
 });
-
-
-
-
 
 export const AddItemInTableFunc = async ({ itemNameSelect, TableArr }) => {
 

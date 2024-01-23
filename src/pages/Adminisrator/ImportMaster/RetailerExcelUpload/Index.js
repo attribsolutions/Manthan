@@ -230,7 +230,7 @@ const RetailerExcelUpload = (props) => {
                 } else {
                     customAlert({
                         Type: 3,
-                        Message: alertMessages.mappingNotMatch
+                        Message: alertMessages.mappingNotMatchError
                     })
                 }
             }

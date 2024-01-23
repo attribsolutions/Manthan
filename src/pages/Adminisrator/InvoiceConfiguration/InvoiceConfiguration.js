@@ -50,6 +50,7 @@ import { getpartysetting_API, savePartySetting, savePartySettingMaster_Success }
 import Slidewithcaption from "../../../components/Common/CommonImageComponent";
 import NewCommonPartyDropdown from "../../../components/Common/NewCommonPartyDropdown";
 import { async } from "q";
+import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 
 
 const InvoiceConfiguration = (props) => {
@@ -297,7 +298,7 @@ const InvoiceConfiguration = (props) => {
             }];
         } else {
             if (SystemSetting.Qr_Image === null) {
-                customAlert({ Type: 3, Message: "Payment QR not uploaded" });
+                customAlert({ Type: 3, Message: alertMessages.paymentORcodeIsRequired });
                 slides = [];
             } else {
                 slides = [{

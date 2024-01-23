@@ -15,6 +15,7 @@ import {
 } from "../../../../../store/Administrator/ItemsRedux/action";
 import CategoryTable from "./Table";
 import { customAlert } from "../../../../../CustomAlert/ConfirmDialog";
+import { alertMessages } from "../../../../../components/Common/CommonErrorMsg/alertMsg";
 
 function CategoryTab(props) {
     const dispatch = useDispatch();
@@ -58,7 +59,7 @@ function CategoryTab(props) {
             dispatch(customAlert({
                 Type: 4,
                 Status: true,
-                Message: "Category alredy Select",
+                Message: alertMessages.categoryAlreadyExists,
             }))
             return
         }
