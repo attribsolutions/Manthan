@@ -109,6 +109,7 @@ const Bulk_Invoice2 = (props) => {
             for (const orderInfo of newBulkData) {
 
                 const orderId = orderInfo.OrderIDs;
+                const orderNumber = orderInfo.OrderNumber;
                 const customerId = orderInfo.CustomerID;
                 const IsTCSParty = orderInfo.IsTCSParty;
                 const IsCustomerPAN = orderInfo.IsTCSParty;
@@ -129,7 +130,7 @@ const Bulk_Invoice2 = (props) => {
                         if (isSameMRPinStock === "" || isSameMRPinStock === parseFloat(stockInfo.MRP)) {
                             isSameMRPinStock = parseFloat(stockInfo.MRP);
                         } else {
-                            validMsg.push({ [`${orderId}${itemInfo.ItemName}`]: "Multiple MRP’S Invoice not allowed." });
+                            validMsg.push({ [`Order Number ${orderNumber}  (${itemInfo.ItemName})`]: "Multiple MRP’S Invoice not allowed." });
                         }
                         if (!Number(stockInfo.Rate) > 0) {//** */ rate validation check  */
                             validMsg.push({ [itemInfo.ItemName]: " Rate not available." })

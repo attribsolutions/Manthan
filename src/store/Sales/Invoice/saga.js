@@ -209,7 +209,6 @@ function* DeleteInvoiceGenFunc({ config }) {
 // GO-Botton SO-invoice Add Page API
 function invoice_GoButton_dataConversion_Func(response, customer = '') {
 
-
   // Iterate over OrderItemDetails array and perform data conversion
   response.Data.OrderItemDetails = response.Data.OrderItemDetails.map(index1 => {
     const isUnitIDPresent = index1.UnitDetails.find(findEle => findEle.UnitID === index1.Unit);
@@ -227,7 +226,7 @@ function invoice_GoButton_dataConversion_Func(response, customer = '') {
       ConversionUnit: '1',
       Unitlabel: index1.UnitName,
       BaseUnitQuantity: defaultunit.BaseUnitQuantity,
-      BaseUnitQuantityNoUnit: defaultunit.BaseUnitQuantity,
+      BaseUnitQuantityNoUnit: defaultunit.BaseUnitQuantityNoUnit,
     };
     index1.InpStockQtyTotal = `${Number(index1.Quantity) * Number(index1.ConversionUnit)}`;
     index1.StockInValid = false;  //initialize

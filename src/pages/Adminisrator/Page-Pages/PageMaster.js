@@ -52,7 +52,7 @@ const PageMaster = (props) => {
   const dispatch = useDispatch();
   const history = useHistory()
 
-  const [EditData, setEditData] = useState([]);
+  const [EditData, setEditData] = useState({});
   const [modalCss, setModalCss] = useState(false);
   const [pageMode, setPageMode] = useState(mode.defaultsave);
   const [userPageAccessState, setUserAccState] = useState('');
@@ -374,6 +374,44 @@ const PageMaster = (props) => {
     }
   };
 
+
+  // for module dropdown
+  const Module_DropdownSelectHandller = (e) => {
+    setModule_DropdownSelect(e);
+  };
+
+  //  for PageType deropDown
+  const PageType_DropdownSelectHandller = (e) => {
+
+    if (e.value === 2) {
+      relatedPage_DropdownSelectHandller()
+      setRelatedPageListShowUI(true)
+      dispatch(RelatedPageListDropdownAction(e.value));
+      setPageAccessDropDownView(true);
+    }
+    else if (e.value === 1) {
+      setRelatedPageListShowUI(false)
+      setPageAccessDropDownView(false);
+      dispatch(RelatedPageListDropdownSuccess([]));
+      setrelatedPage_DropdownSelect({ value: 0 });
+    }
+    else if (e.value === 3) {
+      setRelatedPageListShowUI(false)
+
+      setPageAccessDropDownView(true);
+      dispatch(RelatedPageListDropdownSuccess([]));
+      // setrelatedPage_DropdownSelect({ value: 0 });
+    }
+    setPageType_DropdownSelect(e);
+  };
+
+  const relatedPage_DropdownSelectHandller = (e) => {
+    setrelatedPage_DropdownSelect(e);
+  };
+
+  function tog_center() {
+    setmodal_center(!modal_center)
+  }
   const SaveHandler = (event, values) => {
 
     event.preventDefault();
@@ -477,45 +515,8 @@ const PageMaster = (props) => {
     }
   };
 
-  // for module dropdown
-  const Module_DropdownSelectHandller = (e) => {
-    setModule_DropdownSelect(e);
-  };
-
-  //  for PageType deropDown
-  const PageType_DropdownSelectHandller = (e) => {
-
-    if (e.value === 2) {
-      relatedPage_DropdownSelectHandller()
-      setRelatedPageListShowUI(true)
-      dispatch(RelatedPageListDropdownAction(e.value));
-      setPageAccessDropDownView(true);
-    }
-    else if (e.value === 1) {
-      setRelatedPageListShowUI(false)
-      setPageAccessDropDownView(false);
-      dispatch(RelatedPageListDropdownSuccess([]));
-      setrelatedPage_DropdownSelect({ value: 0 });
-    }
-    else if (e.value === 3) {
-      setRelatedPageListShowUI(false)
-
-      setPageAccessDropDownView(true);
-      dispatch(RelatedPageListDropdownSuccess([]));
-      // setrelatedPage_DropdownSelect({ value: 0 });
-    }
-    setPageType_DropdownSelect(e);
-  };
-
-  const relatedPage_DropdownSelectHandller = (e) => {
-    setrelatedPage_DropdownSelect(e);
-  };
-
-  function tog_center() {
-    setmodal_center(!modal_center)
-  }
-
-
+let aa=EditData
+debugger
   // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
   var IsEditMode_Css = ''
   if ((modalCss) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
@@ -800,7 +801,7 @@ const PageMaster = (props) => {
                             <Row>
                               <Col md="3">
                                 <FormGroup className="mb-3">
-                                  <Label htmlFor="validationCustom01"> Show Count Label</Label>
+                                  <Label >Count Label</Label>
                                   <AvField
                                     name="ShowCountLabel"
                                     value={EditData.ShowCountLabel}
@@ -818,7 +819,7 @@ const PageMaster = (props) => {
                                     htmlFor="horizontal-firstname-input"
                                     className="col-sm-4 col-form-label mt-4"
                                   >
-                                    Count Label
+                                   Show Count Label
                                   </Label>
                                   <Col md={5} style={{ marginTop: "15px" }}>
                                     <div
@@ -829,12 +830,11 @@ const PageMaster = (props) => {
                                         type="checkbox"
                                         className="form-check-input mt-4"
                                         id="customSwitchsizemd"
-                                        defaultChecked={EditData.CountLabel}
+                                        checked={EditData.CountLabel}
                                         name="CountLabel"
                                       />
                                       <label
                                         className="form-check-label"
-                                        htmlFor="customSwitchsizemd"
                                       ></label>
                                     </div>
                                   </Col>
@@ -892,7 +892,7 @@ const PageMaster = (props) => {
                                         type="checkbox"
                                         className="form-check-input mt-4"
                                         id="customSwitchsizemd"
-                                        defaultChecked={EditData.IsDivisionRequired}
+                                        checked={EditData.IsDivisionRequired}
                                         name="IsDivisionRequired"
                                       />
                                       <label
@@ -923,7 +923,7 @@ const PageMaster = (props) => {
                                           type="checkbox"
                                           className="form-check-input mt-4"
                                           id="customSwitchsizemd"
-                                          defaultChecked={EditData.IsEditPopuporComponent}
+                                          checked={EditData.IsEditPopuporComponent}
                                           name="IsEditPopuporComponent"
                                         />
                                         <label
