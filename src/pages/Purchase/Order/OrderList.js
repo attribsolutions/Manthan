@@ -41,6 +41,7 @@ const OrderList = () => {
     const [state, setState] = useState(() => initialFiledFunc(fileds))
     const [subPageMode] = useState(history.location.pathname);
     const [pageMode, setPageMode] = useState(mode.defaultList);
+    const [hasBulkinvoiceSaveAccess, setHasBulkinvoiceSaveAccess] = useState(false);
 
     const orderList4_or_app_orderList = ((subPageMode === url.ORDER_LIST_4) || (subPageMode === url.APP_ORDER_LIST))
 
@@ -73,7 +74,6 @@ const OrderList = () => {
             customerTypeDropLoading: state.PriceListReducer.listBtnLoading,
 
             orderConfirmMsg: state.OrderReducer.orderConfirmMsg,
-            userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList,
 
             supplier: state.CommonAPI_Reducer.vendorSupplierCustomer,
@@ -107,7 +107,7 @@ const OrderList = () => {
         customerTypeDropLoading,
         supplierDropLoading,
         unhideMsg,
-
+        userAccess,
     } = reducers;
 
     const ordersBulkInvoiceData = useSelector(state => state.BulkInvoiceReducer.ordersBulkInvoiceData);
@@ -219,6 +219,19 @@ const OrderList = () => {
             dispatch(priceListByCompay_ActionSuccess([]));
         }
     }, []);
+
+
+
+    // check bulk-invoice access useEffect
+    useEffect(() => {//only of app order list then check bulk-invoice Access
+        if (subPageMode === url.APP_ORDER_LIST) {
+            userAccess.find((index) => {
+                if (index.id === pageId.BULK_INVOICE) {
+                    return setHasBulkinvoiceSaveAccess(true)
+                }
+            });
+        };
+    }, [userAccess]);
 
     useEffect(() => {
         if (subPageMode === url.GRN_STP_3) {
@@ -755,7 +768,7 @@ const OrderList = () => {
                             ViewModal={OrderView}
                             oderAprovalBtnFunc={otherState.showAprovalBtn && oderAprovalBtnFunc}
                             selectCheckParams={{
-                                isShow: (subPageMode === url.ORDER_LIST_4 || subPageMode === url.APP_ORDER_LIST),
+                                isShow: (subPageMode === url.ORDER_LIST_4 || (hasBulkinvoiceSaveAccess && subPageMode === url.APP_ORDER_LIST)),
                                 selectSaveBtnHandler: (subPageMode === url.ORDER_LIST_4) ? OrderConfirm_Handler : BulkInvoice_Handler,
                                 selectSaveBtnLabel: (subPageMode === url.ORDER_LIST_4) ? "Confirm" : "Bulk Invoice",
                                 selectHeaderLabel: (subPageMode === url.ORDER_LIST_4) ? "Confirm" : "Bulk Invoice",

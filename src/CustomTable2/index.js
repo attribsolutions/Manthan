@@ -40,7 +40,7 @@ const CustomTable = ({
         if (row.IsRecordDeleted) {
             cs += '_deleted-Row '; // Add a space after the class name
         }
-        // debugger
+        
         if (updatedRowBlinkIds_string.includes(row[keyField])) {
             cs += '_row-blink '; // Add a space after the class name
         }

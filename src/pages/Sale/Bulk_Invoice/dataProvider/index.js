@@ -96,7 +96,7 @@ export const BulkInvoiceProvider = ({ children, data = [] }) => {
                         }
                         if (distribute > 0.0) {
 
-                            const {roundedTotalAmount} = itemAmounWithGst({
+                            const { roundedTotalAmount } = itemAmounWithGst({
                                 Rate: stockDetail.Rate,
                                 modifiedQuantity: distribute,
                                 GSTPercentage: orderItem.GSTPercentage,

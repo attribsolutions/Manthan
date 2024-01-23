@@ -50,7 +50,7 @@ import { Invoice_Singel_Get_for_Report_Api } from "../../../helpers/backend_help
 import * as report from '../../../Reports/ReportIndex'
 import CustomTable from "../../../CustomTable2";
 import NewCommonPartyDropdown from "../../../components/Common/NewCommonPartyDropdown";
-import bulkdata from './data2'
+// import bulkdata from './data2'
 import BulkInvoce from "./bulkInvoce";
 import { BulkInvoiceProvider } from "./dataProvider";
 import { useMemo } from "react";
@@ -264,7 +264,9 @@ const Bulk_Invoice2 = (props) => {
 
         }, [])
 
-
+    if (!(userPageAccessState === '')) {
+        return null //if roll access absent for this page then  not vissile 
+    };
     return (
         <React.Fragment>
             <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
