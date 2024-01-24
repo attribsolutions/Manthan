@@ -221,7 +221,7 @@ const PageMaster = (props) => {
         if (!(PageFieldMaster.length === 0) && (pageType_ID === 1) || (pageType_ID === 3)) {
           setPageFieldTabTable(PageFieldMaster)
         }
-        
+
 
         let PageFieldList = hasEditVal.PageFieldList.map((index) => {
           return {
@@ -515,8 +515,7 @@ const PageMaster = (props) => {
     }
   };
 
-let aa=EditData
-debugger
+
   // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
   var IsEditMode_Css = ''
   if ((modalCss) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
@@ -759,7 +758,7 @@ debugger
                               <Col md="1"> </Col>
                               <Col md="3">
                                 <FormGroup className="mb-3">
-                                  <Label htmlFor="validationCustom01">Page Path</Label>
+                                  <Label>Page Path</Label>
                                   <AvField
                                     name="pagePath"
                                     id="pagePathid"
@@ -780,7 +779,7 @@ debugger
                               <Col md="1"> </Col>
                               <Col md="3">
                                 <FormGroup className="mb-3">
-                                  <Label htmlFor="validationCustom01">Icon</Label>
+                                  <Label>Icon</Label>
                                   <AvField
                                     name="Icon"
                                     value={EditData.Icon}
@@ -819,7 +818,7 @@ debugger
                                     htmlFor="horizontal-firstname-input"
                                     className="col-sm-4 col-form-label mt-4"
                                   >
-                                   Show Count Label
+                                    Show Count Label
                                   </Label>
                                   <Col md={5} style={{ marginTop: "15px" }}>
                                     <div
@@ -829,8 +828,8 @@ debugger
                                       <AvInput
                                         type="checkbox"
                                         className="form-check-input mt-4"
-                                        id="customSwitchsizemd"
-                                        checked={EditData.CountLabel}
+                                        key={EditData.CountLabel}
+                                        defaultChecked={EditData.CountLabel}
                                         name="CountLabel"
                                       />
                                       <label
@@ -860,8 +859,7 @@ debugger
                                       <AvInput
                                         type="checkbox"
                                         className="form-check-input mt-4"
-                                        id="customSwitchsizemd"
-                                        checked={EditData.isActive}
+                                        key={EditData.isActive}
                                         name="isActive"
                                         defaultChecked={true}
                                       />
@@ -891,8 +889,8 @@ debugger
                                       <AvInput
                                         type="checkbox"
                                         className="form-check-input mt-4"
-                                        id="customSwitchsizemd"
-                                        checked={EditData.IsDivisionRequired}
+                                        key={EditData.IsDivisionRequired}
+                                        defaultChecked={EditData.IsDivisionRequired}
                                         name="IsDivisionRequired"
                                       />
                                       <label
@@ -921,9 +919,9 @@ debugger
                                       >
                                         <AvInput
                                           type="checkbox"
+                                          key={EditData.IsEditPopuporComponent}
                                           className="form-check-input mt-4"
-                                          id="customSwitchsizemd"
-                                          checked={EditData.IsEditPopuporComponent}
+                                          defaultChecked={EditData.IsEditPopuporComponent}
                                           name="IsEditPopuporComponent"
                                         />
                                         <label
@@ -990,7 +988,7 @@ debugger
                       </TabPane>
 
                     </TabContent>
-                   
+
                   </CardBody>
                   <div style={{ paddingLeft: "30px", paddingBottom: "10px" }}>
                     <SaveButton
