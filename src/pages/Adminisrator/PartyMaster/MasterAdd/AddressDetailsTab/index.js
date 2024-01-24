@@ -182,11 +182,11 @@ const AddressTabForm = forwardRef((props, ref) => {
 					<Row >
 						<Col md="9" >
 							<FormGroup className="mb-3">
-								<Label htmlFor="validationCustom01">{fieldLabel.PartyAddress} </Label>
+								<Label>{fieldLabel.PartyAddress} </Label>
 								<Input
 									name="PartyAddress"
 									value={values.PartyAddress}
-									type="text"
+									type="textarea"
 									className={isError.PartyAddress.length > 0 ? "is-invalid form-control" : "form-control"}
 									placeholder="Please Enter Address"
 									autoComplete='off'

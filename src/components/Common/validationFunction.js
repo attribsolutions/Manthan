@@ -25,7 +25,8 @@ export const formValChange = ({ event, state, setState }) => {
         event.preventDefault();
         const { name, value, type, checked } = event.target;
         switch (type) {
-            case "text": {
+            case "text":
+            case "textarea": {
                 const regExp = RegExp(hasValid[name].regExp)
                 if (regExp.test(value)) {
                     isError[name] = "";
@@ -243,7 +244,7 @@ export const resetFunction = (field, state) => {
 }
 
 export const bulkSetState = (field, setState) => {
-    
+
 
     setState((i) => {
         let preState = { ...i }
