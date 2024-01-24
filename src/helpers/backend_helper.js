@@ -757,6 +757,16 @@ export const TCS_Amount_Report_GoButton_API = (jsonBody) => post(url.TCS_AMOUNT_
 export const Cx_DD_Diffrence_Report_GoButton_API = (jsonBody) => post(url.CX_DD_DIFFRENCE_REPORT, jsonBody)
 export const Cx_DD_Diffrence_Report_Party_Dropdown_API = () => get(url.CX_DD_DIFFRENCE_PARTY_API) // get api
 
+//Setting api
+
+export const save_SystemSetting_API = ({ jsonBody }) => post(url.SYSTEM_SETTING_API, jsonBody)// post api
+
+
+export const del_SystemSetting_List_API = ({ deleteId }) => del(`${url.SYSTEM_SETTING}/${deleteId}`)// delete api
+export const edit_SystemSetting_List_Api = ({ editId }) => get(`${url.SYSTEM_SETTING}/${editId}`)// edit api
+export const update_SystemSetting_List_Api = ({ jsonBody, updateId }) => put(`${url.SYSTEM_SETTING}/${updateId}`, jsonBody)// update api
+
+
 export {
 	getLoggedInUser,
 	isUserAuthenticated,

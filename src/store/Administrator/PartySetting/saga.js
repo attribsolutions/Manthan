@@ -21,7 +21,7 @@ function* PartySetting_GenFunc(config) {
     try {
 
         const response = yield call(PartySettingApi, config.Party_id, config.Comapny_id);
-        
+
         const singleObject = {};
         const SystemSetting = {};
         for (const item of response.Data) {
@@ -35,6 +35,11 @@ function* PartySetting_GenFunc(config) {
                 SystemSetting: item.SystemSetting,
                 Value: item.Value,
                 id: item.id,
+                Description: item.Description,
+                DefaultValue: item.DefaultValue,
+                IsPartyRelatedSetting: item.IsPartyRelatedSetting,
+                IsActive: item.IsActive
+
             };
         }
         response["Data"] = singleObject

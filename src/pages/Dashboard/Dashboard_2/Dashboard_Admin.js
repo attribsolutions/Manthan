@@ -118,6 +118,9 @@ const Dashboard_Admin = (props) => {
         } else if (Type === 2) {
             history.push(url.INVOICE_LIST_1)
         }
+        else if (Type === 3) {
+            history.push(url.APP_ORDER_LIST)
+        }
         else {
             history.push(url.GRN_LIST_3)
         }
@@ -224,7 +227,7 @@ const Dashboard_Admin = (props) => {
             const filtelist = tableList.filter(i => i.MobileAppOrderFlag === 1);
 
             filtelist.forEach(item => {
-                
+
                 const parts = item.OrderDate.split('-');
                 const month = parseInt(parts[1]) - 1; // Subtract 1 to match array index
                 if (month >= 0 && month < 12) {
@@ -232,7 +235,7 @@ const Dashboard_Admin = (props) => {
                 }
             });
             const MobileOrdercontainsNonZeroNumber = appOrdermonthCounts.some(item => item !== 0);
-            
+
             setMobileOrderMonthCount({ appOrdermonthCounts, MobileOrdercontainsNonZeroNumber })
 
 
@@ -286,7 +289,7 @@ const Dashboard_Admin = (props) => {
                         <Col xl={3}  >
                             <Card className="card-h-100" >
                                 <CardBody>
-                                    {(orderDataLoading ) ? <> <Row> <Col sm={6}> <h5 className='mt-1'> Loading Chart</h5>  </Col><Col sm={4}><DashboardLoader /></Col>  </Row> </> :
+                                    {(orderDataLoading) ? <> <Row> <Col sm={6}> <h5 className='mt-1'> Loading Chart</h5>  </Col><Col sm={4}><DashboardLoader /></Col>  </Row> </> :
 
                                         <Row className="align-items-center" >
 
@@ -312,7 +315,7 @@ const Dashboard_Admin = (props) => {
                                                     <Col sm={2} className='mt-1'>
                                                         <span style={{ fontSize: "15px" }}> {OrderCount}</span>
                                                     </Col>
-                                                   
+
                                                 </Row>
 
                                             </Card>
@@ -337,7 +340,7 @@ const Dashboard_Admin = (props) => {
                                         <Card className="card-h-100">
                                             <Row>
                                                 <Col className='mt-1' sm={4}>
-                                                    <span style={{ cursor: "pointer" }} onClick={() => RedirectHandler(1)}> Annual App Orders</span>
+                                                    <span style={{ cursor: "pointer" }} onClick={() => RedirectHandler(3)}> Annual App Orders</span>
 
                                                 </Col>
                                                 <Col sm={2} className='mt-1'>
@@ -403,7 +406,7 @@ const Dashboard_Admin = (props) => {
                                                     <Col sm={2} className='mt-1'>
                                                         <span style={{ fontSize: "15px" }}> {InvoiceCount}</span>
                                                     </Col>
-                                                   
+
                                                 </Row>
                                             </Card>
                                         </Row>}

@@ -121,6 +121,9 @@ import ItemWiseUpdateReducer from "./Administrator/ItemWiseUpdateRedux/reducer"
 import TCSAmountReportReducer from "./Report/TCS_AmountRedux/reducer"
 import Cx_DD_Diffrence_Reducer from "./Report/CX_DD_Diffrence_Report/reducer"
 
+import SystemSettingReducer from "./Utilites/SystemSettingRedux/reducer"
+
+
 
 const rootReducer = combineReducers({
 	Layout,
@@ -220,5 +223,6 @@ const rootReducer = combineReducers({
 	ItemWiseUpdateReducer,
 	TCSAmountReportReducer,
 	Cx_DD_Diffrence_Reducer,
+	SystemSettingReducer
 })
 export default rootReducer

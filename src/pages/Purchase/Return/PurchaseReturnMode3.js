@@ -33,7 +33,7 @@ import { SaveButton } from "../../../components/Common/CommonButton";
 import { return_discountCalculate_Func } from "../../Sale/SalesReturn/SalesCalculation";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import Slidewithcaption from "../../../components/Common/CommonImageComponent";
-import { async } from "q";
+
 
 const PurchaseReturnMode3 = (props) => {
 
@@ -54,6 +54,9 @@ const PurchaseReturnMode3 = (props) => {
     const [returnItemIDs, setReturnItemIDs] = useState("");
     const [modal_backdrop, setmodal_backdrop] = useState(false);   // Image Model open Or not
     const [imageTable, setImageTable] = useState([]);
+    const [alertDate, setAlertDate] = useState({ ActualDate: "", WarningDate: "", Coustomerid: [], Supplierid: [], date: [], SelectedCustomerId: null })
+
+    const [ButtonCondition, setButtonCondition] = useState({ isEnable: false, isEnablePriviousAlert: false });
 
 
 
@@ -190,6 +193,44 @@ const PurchaseReturnMode3 = (props) => {
         document.body.classList.add("no_padding")
     }
 
+
+
+
+   
+///////////////////// code  Block sales return send to supplier based on setting setting format   "PartyTypeID(Customer)-PartyTypeID(Supplier)-Date(Start Date of Block)"
+    useEffect(() => {
+        const CustomerPartyTypeID = _cfunc.loginUserDetails().PartyTypeID
+        const systemsetting = _cfunc.loginSystemSetting().IsSalesReturnSendToSupplier;
+        var ConditionArray = systemsetting?.split(',');
+        const SupplierPartyTypeId = supplier.filter(i => i.id === values.Customer.value)[0]?.PartyTypeID
+        let Coustomerid = [];
+        let Supplierid = [];
+        let date = [];
+
+        if ((ConditionArray?.length > 0) && (ConditionArray !== undefined)) {
+            try {
+                for (let i = 0; i < ConditionArray.length; i++) {
+                    let parts = ConditionArray[i].split('-');
+                    Supplierid.push(parseInt(parts[1]));
+                    Coustomerid.push(parseInt(parts[0]));
+                    date.push({ Coustomerid: parseInt(parts[0]), date: parseInt(parts[2]), Supplierid: parseInt(parts[1]) });
+                }
+                if (date.filter(i => (i.Coustomerid === CustomerPartyTypeID && i.Supplierid === SupplierPartyTypeId))[0]) {
+                    const ActualDate = date.filter(i => (i.Coustomerid === CustomerPartyTypeID && i.Supplierid === SupplierPartyTypeId))[0].date
+                    setAlertDate({ ActualDate: ActualDate, WarningDate: ActualDate - 1, Coustomerid: Coustomerid, Supplierid: Supplierid, date: date, SelectedSupplierId: SupplierPartyTypeId });
+                } else {
+                    setAlertDate({});
+                }
+            } catch (error) {
+                console.log(error)
+            }
+        }
+    }, [values.Customer.value])
+
+    useEffect(() => {
+        setButtonCondition({ isEnable: _cfunc.isButtonEnable({ ConditionDetails: alertDate }).isEnable, isEnablePriviousAlert: _cfunc.isButtonEnable({ ConditionDetails: alertDate }).isEnablePriviousAlert })
+    }, [alertDate])
+
     const pagesListColumns = [
         {
             text: "Item Name",
@@ -321,7 +362,7 @@ const PurchaseReturnMode3 = (props) => {
                             <button name="image"
                                 accept=".jpg, .jpeg, .png ,.pdf"
                                 onClick={(event) => {
-                                    
+
                                     if ((row.ReturnItemImages.length === 0)) {
                                         customAlert({ Type: 3, Message: `${row.ItemName} Images not uploaded` });
                                         return setmodal_backdrop(false)
@@ -457,7 +498,6 @@ const PurchaseReturnMode3 = (props) => {
 
         } catch (e) { _cfunc.CommonConsole(e) }
     };
-
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
@@ -475,7 +515,8 @@ const PurchaseReturnMode3 = (props) => {
                     >
                         {<Slidewithcaption Images={imageTable} />}
                     </Modal>
-
+                    {(!ButtonCondition.isEnable && values.Customer !== "" && alertDate.ActualDate !== "") && <div style={{ color: "red", fontSize: "18px" }} className="sliding-text " >  Warning: cannot send the sales return to the supplier from {_cfunc.DateFormat(alertDate.ActualDate)} of the month to the end of the month.</div>}
+                    {(ButtonCondition.isEnablePriviousAlert && values.Customer !== "" && alertDate.ActualDate !== undefined) && <div style={{ color: "red", fontSize: "18px" }} className="sliding-text " >  Warning:Sales return send to suppliers will be unavailable from {_cfunc.DateFormat(alertDate.ActualDate)} to month-end.  </div>}
                     <form noValidate>
                         <div className="px-2 c_card_filter header text-black mb-1" >
 
@@ -511,6 +552,7 @@ const PurchaseReturnMode3 = (props) => {
                                                     menu: provided => ({ ...provided, zIndex: 2 })
                                                 }}
                                                 onChange={(hasSelect, evn) => {
+
                                                     onChangeSelect({ hasSelect, evn, state, setState });
                                                 }
                                                 }
@@ -599,6 +641,7 @@ const PurchaseReturnMode3 = (props) => {
                                             pageMode={mode.modeSTPsave}
                                             loading={saveBtnloading}
                                             onClick={SaveHandler}
+                                            forceDisabled={!ButtonCondition.isEnable}
                                             userAcc={userPageAccessState}
                                             module={"SalesReturn"}
                                         />

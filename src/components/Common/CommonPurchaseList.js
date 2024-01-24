@@ -79,7 +79,7 @@ const CommonPurchaseList = (props) => {
     });
     if (!(userAcc === undefined)) {
       setUserAccState(userAcc);
-      breadcrumbReturnFunc({ dispatch, userAcc, newBtnPath, forceNewBtnView, pageField: pageField });
+      breadcrumbReturnFunc({ dispatch, userAcc, newBtnPath, forceNewBtnView });
     }
   }, [userAccess]);
 
@@ -119,7 +119,6 @@ const CommonPurchaseList = (props) => {
           dispatch,
           userAcc: userAccState,
           newBtnPath: masterPath,
-          pageField: pageField
         });
         dispatch(updateSucc({ Status: false }));
         goButnFunc();
@@ -204,7 +203,6 @@ const CommonPurchaseList = (props) => {
         dispatch,
         userAcc: userAccState,
         newBtnPath: masterPath,
-        pageField: pageField
       });
     }
     setmodal_edit(false);
