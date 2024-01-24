@@ -30,7 +30,7 @@ const StockReport = (props) => {
 	const [headerFilters, setHeaderFilters] = useState('');
 	const [userPageAccessState, setUserAccState] = useState('');
 
-	const [partyDropdown, setPartyDropdown] = useState("");
+	const [partyDropdown, setPartyDropdown] = useState({ value: 0, label: 'All' });
 	const [unitDropdown, setUnitDropdown] = useState({ value: 1, label: 'No' });
 
 	const [originalTableData, setOriginalTableData] = useState([]);
@@ -352,6 +352,10 @@ const StockReport = (props) => {
 		value: i.id,
 		label: i.Name
 	}));
+	Party_Option.unshift({
+		value: 0,
+		label: "All"
+	})
 
 	const StockTypeOptions = [
 		{
