@@ -381,7 +381,8 @@ const StockReport = (props) => {
 				"ToDate": todate,
 				"Unit": unitDropdown.value,
 				"PartyID": partyDropdown === "" ? _cfunc.loginPartyID() : partyDropdown.value,
-				"IsDamagePieces": stockTypeSelect.value
+				"IsDamagePieces": stockTypeSelect.value,
+				"Employee": !isSCMParty ? 0 : _cfunc.loginEmployeeID(),
 			});
 			const config = { jsonBody, btnId: goBtnMode, };
 			dispatch(stockReport_GoButton_API(config))
