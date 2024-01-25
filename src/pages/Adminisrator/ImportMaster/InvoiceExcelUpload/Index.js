@@ -60,6 +60,7 @@ const InvoiceExcelUpload = (props) => {
 
 
 
+    const [colunmMap, setColunmMap] = useState({ Not_Map_Column_Array: [], Not_Map_Columnt: undefined });
 
     const {
         postMsg,
@@ -156,6 +157,7 @@ const InvoiceExcelUpload = (props) => {
             setNonCBMItemVerify({ Non_CBM_Item_Array: [], Not_Verify_Non_CBM_Item: undefined });
             setInvoiceWithsameDateVerify({ Invoice_Date: [], Not_Verify_Same_Date: undefined, isFutureDate: false })
             setInvalidFormat({ Invalid_Format_Array: [], Not_Verify_Invalid_Format: undefined });
+            setColunmMap({ Not_Map_Column_Array: [], Not_Map_Columnt: undefined })
 
             document.getElementById("demo1").style.border = "";
 
@@ -173,6 +175,7 @@ const InvoiceExcelUpload = (props) => {
             setNonCBMItemVerify({ Non_CBM_Item_Array: [], Not_Verify_Non_CBM_Item: undefined })
             setInvoiceWithsameDateVerify({ Invoice_Date: [], Not_Verify_Same_Date: undefined, isFutureDate: false })
             setInvalidFormat({ Invalid_Format_Array: [], Not_Verify_Invalid_Format: undefined });
+            setColunmMap({ Not_Map_Column_Array: [], Not_Map_Columnt: undefined })
 
             document.getElementById("demo1").style.border = "";
             dispatch(InvoiceExcelUpload_save_Success({ Status: false }))
@@ -280,6 +283,19 @@ const InvoiceExcelUpload = (props) => {
         if (extension === ".xlsx") {
             const readjson = await readExcelFile({ file: files[0], compareParameter, ItemList })
 
+
+            //////////////////////////////////////// Check  in valid format Value Or Not //////////////////////////////////////////////////////
+
+            if (readjson.NotMapColumn.length > 0) {
+                setColunmMap({ Not_Map_Column_Array: readjson.NotMapColumn, Not_Map_Columnt: true });
+                setverifyLoading(false);
+                return
+            } else {
+                setColunmMap({ Not_Map_Column_Array: [], Not_Map_Columnt: false })
+            }
+
+
+
             //////////////////////////////////////// Check  in valid format Value Or Not //////////////////////////////////////////////////////
 
             if (readjson.InvalidFormat.length > 0) {
@@ -307,55 +323,63 @@ const InvoiceExcelUpload = (props) => {
             const mapItemValues = ItemList.map(obj => obj.MapItem);
 
             const Wrong_Item_Code_Array = readjson.filter(value => {
-                const itemCodeAsString = value.Item_Code.toString();
+                const itemCodeAsString = value.Item_Code.toString().trim();
                 return !mapItemValues.includes(itemCodeAsString);
             });
 
 
             if (Wrong_Item_Code_Array.length > 0) {
-                const MapItemList = ItemList.filter(obj => obj.MapItem !== null && obj.MapItem !== "");
-                MapItemList.forEach(function (i) {
-                    let Item_Code = i.MapItem;
-                    let GST = i.GST;
+                try {
+                    const MapItemList = ItemList.filter(obj => obj.MapItem !== null && obj.MapItem !== "");
+                    MapItemList.forEach(function (i) {
+                        let Item_Code = i.MapItem;
+                        let GST = i.GST;
 
-                    let Matching_ItemCode_Objects = readjson.filter(inx => {
-                        return (inx.Item_Code).toString() === (Item_Code).toString();
+                        let Matching_ItemCode_Objects = readjson.filter(inx => {
+                            return (inx.Item_Code).toString() === (Item_Code).toString();
+                        });
+
+                        Matching_ItemCode_Objects.forEach(matchingObject => {
+                            matchingObject.GST = GST;
+                        });
+
+                        if (Matching_ItemCode_Objects) {
+                            Matching_ItemCode_Objects.GST = GST;
+                        }
+                        console.log(readjson)
+
                     });
+                    setItemVerify({ Wrong_Item_Code_Array: Wrong_Item_Code_Array, Not_Verify_Item: true });
+                } catch (error) {
 
-                    Matching_ItemCode_Objects.forEach(matchingObject => {
-                        matchingObject.GST = GST;
-                    });
-
-                    if (Matching_ItemCode_Objects) {
-                        Matching_ItemCode_Objects.GST = GST;
-                    }
-                    console.log(readjson)
-
-                });
-                setItemVerify({ Wrong_Item_Code_Array: Wrong_Item_Code_Array, Not_Verify_Item: true })
+                }
             } else {
 
                 ////////////////////////////////////////////////    GST of Matching Item Code ////////////////////////////////////////////////////////
-                const MapItemList = ItemList.filter(obj => obj.MapItem !== null && obj.MapItem !== "");
-                MapItemList.forEach(function (i) {
-                    let Item_Code = i.MapItem;
-                    let GST = i.GST;
+                try {
+                    const MapItemList = ItemList.filter(obj => obj.MapItem !== null && obj.MapItem !== "");
+                    MapItemList.forEach(function (i) {
+                        let Item_Code = i.MapItem;
+                        let GST = i.GST;
 
-                    let Matching_ItemCode_Objects = readjson.filter(inx => {
-                        return (inx.Item_Code).toString() === (Item_Code).toString();
+                        let Matching_ItemCode_Objects = readjson.filter(inx => {
+                            return (inx.Item_Code).toString() === (Item_Code).toString();
+                        });
+
+                        Matching_ItemCode_Objects.forEach(matchingObject => {
+                            matchingObject.GST = GST;
+                        });
+
+                        if (Matching_ItemCode_Objects) {
+                            Matching_ItemCode_Objects.GST = GST;
+                        }
+                        console.log(readjson)
+
                     });
+                    setItemVerify({ Wrong_Item_Code_Array: [], Not_Verify_Item: false })
+                } catch (error) {
 
-                    Matching_ItemCode_Objects.forEach(matchingObject => {
-                        matchingObject.GST = GST;
-                    });
-
-                    if (Matching_ItemCode_Objects) {
-                        Matching_ItemCode_Objects.GST = GST;
-                    }
-                    console.log(readjson)
-
-                });
-                setItemVerify({ Wrong_Item_Code_Array: [], Not_Verify_Item: false })
+                }
             }
 
             let Not_Ignore_Item_Array = readjson;
@@ -385,7 +409,16 @@ const InvoiceExcelUpload = (props) => {
                 const unitMap = isdetails.unitCode;
                 const arrayOfUnitMapStrings = unitMap.map(String);
                 const mapUnitValues = unitMapData.map(obj => obj.MapUnit);
-                const Wrong_Unit_Code_Array = arrayOfUnitMapStrings.filter(value => !mapUnitValues.includes(value));
+
+
+
+                const Wrong_Unit_Code_Array = arrayOfUnitMapStrings.filter(value => {
+                    const unitCodeAsString = value.toString().trim();
+                    return !mapUnitValues.includes(unitCodeAsString);
+                });
+
+                // const Wrong_Unit_Code_Array = arrayOfUnitMapStrings.filter(value => !mapUnitValues.includes(value));
+
                 if (Wrong_Unit_Code_Array.length > 0) {
                     setUnitVerify({ Wrong_Unit_Code_Array: Wrong_Unit_Code_Array, Not_Verify_Unit: true })
                 } else {
@@ -400,7 +433,16 @@ const InvoiceExcelUpload = (props) => {
 
                 const arrayOfPartyMapStrings = PartyMap.map(String);
                 const mapCustomerValues = PartyMapData.map(obj => obj.MapCustomer);
-                const Wrong_Party_Code_Array = arrayOfPartyMapStrings.filter(value => !mapCustomerValues.includes(value));
+
+
+                const Wrong_Party_Code_Array = arrayOfPartyMapStrings.filter(value => {
+                    const partyCodeAsString = value.toString().trim();
+                    return !mapCustomerValues.includes(partyCodeAsString);
+                });
+
+
+                // const Wrong_Party_Code_Array = arrayOfPartyMapStrings.filter(value => !mapCustomerValues.includes(value));
+
                 if (Wrong_Party_Code_Array.length > 0) {
                     setPartyVerify({ Wrong_Party_Code_Array: Wrong_Party_Code_Array, Not_Verify_Party: true })
                 } else {
@@ -431,7 +473,7 @@ const InvoiceExcelUpload = (props) => {
         ((isIgnoreNegativeValue) || (negativeFigureVerify.Not_Verify_Negative_Figure === false))
         &&
         (invoiceWithsameDateVerify.Not_Verify_Same_Date === false) &&
-        (unitVerify.Not_Verify_Unit === false)
+        (unitVerify.Not_Verify_Unit === false) && (colunmMap.Not_Map_Columnt === false)
     );
 
 
@@ -465,7 +507,6 @@ const InvoiceExcelUpload = (props) => {
         setNonCBMItemVerify({ Non_CBM_Item_Array: [], Not_Verify_Non_CBM_Item: undefined })
         setInvoiceWithsameDateVerify({ Invoice_Date: [], Not_Verify_Same_Date: undefined, isFutureDate: false })
         setInvalidFormat({ Invalid_Format_Array: [], Not_Verify_Invalid_Format: undefined });
-
 
 
         files.map(file =>
@@ -508,61 +549,6 @@ const InvoiceExcelUpload = (props) => {
                 let parentObj;
                 let invoiceItems = []
                 let invoiceTotalAmount = 0
-                // const invoiceTotalAmount = inv.reduce((total, invoice) => total + Number(invoice[parArr.Amount]), 0);
-
-                // inv.forEach(async (ele) => {
-
-                //     const calculate = InvoiceUploadCalculation({ Quantity: ele[parArr.Quantity], Rate: ele[parArr.Rate], GST: ele.GST })
-
-                //     parentObj = {
-                //         "ImportFromExcel": 1,
-                //         "CustomerGSTTin": ele[parArr.CustomerGSTTin] ? ele[parArr.CustomerGSTTin] : '',
-                //         "TCSAmount": ele[parArr.TCSAmount] ? ele[parArr.TCSAmount] : 0,
-                //         "GrandTotal": ele[parArr.GrandTotal] ? ele[parArr.GrandTotal] : invoiceTotalAmount.toFixed(2),
-                //         "RoundOffAmount": ele[parArr.RoundOffAmount] ? ele[parArr.RoundOffAmount] : 0,
-                //         "InvoiceNumber": ele[parArr.InvoiceNumber] ? ele[parArr.InvoiceNumber] : '',
-                //         "FullInvoiceNumber": ele[parArr.InvoiceNumber] ? ele[parArr.InvoiceNumber] : '',
-                //         "Customer": ele[parArr.Customer] ? ele[parArr.Customer] : '',
-                //         "Party": _cfunc.loginSelectedPartyID(),
-                //         CreatedBy: _cfunc.loginUserID(),
-                //         UpdatedBy: _cfunc.loginUserID(),
-                //         "InvoiceDate": ele[parArr.InvoiceDate] ? ele[parArr.InvoiceDate] : '',
-                //     }
-
-
-                //     invoiceItems.push({
-                //         "Item": ele[parArr.Item] ? ele[parArr.Item] : '',
-                //         "Unit": ele[parArr.Unit] ? ele[parArr.Unit] : '',
-                //         "Quantity": ele[parArr.Quantity] ? ele[parArr.Quantity] : 0,
-                //         "BatchDate": ele[parArr.BatchDate] ? ele[parArr.BatchDate] : null,
-                //         "BatchCode": ele[parArr.BatchCode] ? ele[parArr.BatchCode] : 0,
-                //         "BaseUnitQuantity": ele[parArr.BaseUnitQuantity] ? ele[parArr.BaseUnitQuantity] : '',
-                //         "LiveBatch": ele[parArr.LiveBatch] ? ele[parArr.LiveBatch] : '',
-                //         "MRPValue": ele[parArr.MRP] ? ele[parArr.MRP] : '', //Actul MRP That Map in System
-                //         "Rate": ele[parArr.Rate] ? ele[parArr.Rate]?.toFixed(2) : '',
-                //         "BasicAmount": ele[parArr.BasicAmount] ? ele[parArr.BasicAmount] : '',
-                //         "GSTAmount": ele[parArr.GSTAmount] ? ele[parArr.GSTAmount] : '',
-                //         "GST": '',
-                //         "GSTValue": ele[parArr.GSTValue] ? ele[parArr.GSTValue] : 0,       ///  Note ** GSTValue ===GST percentage
-                //         "CGST": ele[parArr.CGST] ? ele[parArr.CGST] : (ele[parArr.GSTAmount] / 2).toFixed(2),
-                //         "SGST": ele[parArr.SGST] ? ele[parArr.SGST] : (ele[parArr.GSTAmount] / 2).toFixed(2),
-                //         "IGST": ele[parArr.IGST] ? ele[parArr.IGST] : 0,
-                //         "GSTPercentage": ele[parArr.GSTPercentage] ? ele[parArr.GSTPercentage] : 0,
-                //         "CGSTPercentage": ele[parArr.CGSTPercentage] ? ele[parArr.CGSTPercentage] : (ele[parArr.GSTPercentage] / 2).toFixed(2),
-                //         "SGSTPercentage": ele[parArr.SGSTPercentage] ? ele[parArr.SGSTPercentage] : (ele[parArr.GSTPercentage] / 2).toFixed(2),
-                //         "IGSTPercentage": ele[parArr.IGSTPercentage] ? ele[parArr.IGSTPercentage] : 0,
-                //         "Amount": ele[parArr.Amount] ? ele[parArr.Amount] : 0,
-                //         "DiscountType": ele[parArr.DiscountType] ? ele[parArr.DiscountType] : 2,
-                //         "Discount": ele[parArr.Discount] ? ele[parArr.Discount] : 0,
-                //         "DiscountAmount": ele[parArr.DiscountAmount] ? ele[parArr.DiscountAmount] : 0,
-
-                //         "TaxType": "GST",
-                //         "QtyInBox": ele[parArr.QtyInBox] ? ele[parArr.QtyInBox] : 0,
-                //         "QtyInKg": ele[parArr.QtyInKg] ? ele[parArr.QtyInKg] : 0,
-                //         "QtyInNo": ele[parArr.QtyInNo] ? ele[parArr.QtyInNo] : 0,
-
-                //     })
-                // })
 
                 inv.forEach(async (ele) => {
 
@@ -598,7 +584,6 @@ const InvoiceExcelUpload = (props) => {
                         "BasicAmount": ele[parArr.BasicAmount] ? ele[parArr.BasicAmount] : (calculate.BasicAmount).toFixed(2),
                         "GSTAmount": ele[parArr.GSTAmount] ? ele[parArr.GSTAmount] : (calculate.GSTAmount).toFixed(2),
                         "GST": '',
-                        // "GSTValue": ele[parArr.GSTValue] ? ele[parArr.GSTValue] : ,       ///  Note ** GSTValue ===GST percentage
                         "CGST": ele[parArr.CGST] ? ele[parArr.CGST] : (calculate.GSTAmount / 2).toFixed(2),
                         "SGST": ele[parArr.SGST] ? ele[parArr.SGST] : (calculate.GSTAmount / 2).toFixed(2),
                         "IGST": ele[parArr.IGST] ? ele[parArr.IGST] : 0,
@@ -615,23 +600,8 @@ const InvoiceExcelUpload = (props) => {
                         "QtyInBox": ele[parArr.QtyInBox] ? ele[parArr.QtyInBox] : 0,
                         "QtyInKg": ele[parArr.QtyInKg] ? ele[parArr.QtyInKg] : 0,
                         "QtyInNo": ele[parArr.QtyInNo] ? ele[parArr.QtyInNo] : 0,
-
                     })
                 })
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                 outerArr.push({ ...parentObj, InvoiceItems: invoiceItems })
             });
 
@@ -768,6 +738,29 @@ const InvoiceExcelUpload = (props) => {
 
                                 </Card > : null
                                 }
+
+
+                                {colunmMap.Not_Map_Columnt !== undefined ? <details>
+                                    <summary>&nbsp; &nbsp; Column Mapping&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{colunmMap.Not_Map_Columnt === true ?
+                                            <i style={{ color: "tomato", }} className="mdi mdi-close-circle font-size-18  "></i> :
+                                            <i style={{ color: "green", }} className="mdi mdi-check-decagram  font-size-18  "></i>}</summary>
+                                    {colunmMap.Not_Map_Columnt === false ? null : <div className="error-msg">
+                                        <p>
+                                            <span style={{ fontWeight: "bold", fontSize: "15px" }} >Column Mapping:&nbsp;&nbsp;</span>
+                                            {colunmMap.Not_Map_Column_Array.map((i, index) => (
+                                                <span key={index}>
+                                                    <span key={index}>
+                                                        <span style={{ fontWeight: "bold" }}>{`${index + 1})`}</span> {` ${i}`}&nbsp;&nbsp;&nbsp;&nbsp;
+                                                    </span>
+                                                </span>
+                                            ))}
+                                        </p>
+                                    </div>}
+                                </details> : null}
+
+
 
                                 {invalidFormat.Not_Verify_Invalid_Format !== undefined ? <details>
                                     <summary>&nbsp; &nbsp; Invalid Format&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;

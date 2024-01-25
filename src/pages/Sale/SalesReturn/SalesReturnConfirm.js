@@ -75,7 +75,7 @@ const ViewDetails_Modal = () => {
     useEffect(() => table_ArrowUseEffect("#table_Arrow"), [viewData_redux]);
 
     function QuantityHandler(event, row,) {
-
+        debugger
         let input = event.target.value
 
         let v1 = Number(row.Quantity);
@@ -83,7 +83,7 @@ const ViewDetails_Modal = () => {
         if (!(v1 >= v2)) {
             event.target.value = v1;
         }
-        row.ApprovedQuantity = input;
+        row.ApprovedQuantity = event.target.value;
     }
 
     const imageShowHandler = async (row) => { // image Show handler
@@ -135,6 +135,11 @@ const ViewDetails_Modal = () => {
         {
             text: "Basic Rate",
             dataField: "Rate",
+        },
+
+        {
+            text: "MRP",
+            dataField: "MRPValue",
         },
         {
             text: "Batch",

@@ -34,6 +34,7 @@ export const readExcelFile = async ({ file, compareParameter, ItemList = [] }) =
 
 
     let invalidMsg = []
+    let NotMapColumn = []
 
     const comparefilter = compareParameter.filter(f => (f.Value !== null))
     if (comparefilter.length === 0) {
@@ -70,7 +71,12 @@ export const readExcelFile = async ({ file, compareParameter, ItemList = [] }) =
             shouldRemove = false;
           }
         }
-
+        if (c1.IsCompulsory && r1[c1.Value] === undefined) {
+          const errorMessage = `${c1.Value} : Column Required`;
+          if (!NotMapColumn.includes(errorMessage)) {
+            NotMapColumn.push(errorMessage);
+          }
+        }
         if (!c1.IsCompulsory && (r1[c1.Value] === '' || r1[c1.Value] === null || r1[c1.Value] === undefined)) {
         }
         else if (!(regExp.test(r1[c1.Value]))) {
@@ -85,8 +91,9 @@ export const readExcelFile = async ({ file, compareParameter, ItemList = [] }) =
       r1["shouldRemove"] = shouldRemove
 
     })
-
     jsonResult["InvalidFormat"] = invalidMsg
+    jsonResult["NotMapColumn"] = NotMapColumn
+
 
     return jsonResult
 
@@ -149,7 +156,7 @@ export async function fileDetails({ compareParameter = [], Not_Ignore_Item_Array
   const invoice = await groupBy(Not_Ignore_Item_Array, (index) => {
     return (index[fileFiled.InvoiceNumber])
   })
-  
+
   return { fileFiled, invoice, invoiceDate, amount, invoiceNO, partyNO, itemCode, unitCode }
 }
 
@@ -201,7 +208,7 @@ export const filterArraysInEntries = (map, conditionFn) => {
 
 
 export const InvoiceUploadCalculation = ({ Quantity, Rate, GST }) => {
-  
+
   const GSTPersentage = GST;
   const BasicAmount = Quantity * Rate;
   const GSTAmount = BasicAmount * (GSTPersentage / 100);

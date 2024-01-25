@@ -196,8 +196,8 @@ const PurchaseReturnMode3 = (props) => {
 
 
 
-   
-///////////////////// code  Block sales return send to supplier based on setting setting format   "PartyTypeID(Customer)-PartyTypeID(Supplier)-Date(Start Date of Block)"
+
+    ///////////////////// code  Block sales return send to supplier based on setting setting format   "PartyTypeID(Customer)-PartyTypeID(Supplier)-Date(Start Date of Block)"
     useEffect(() => {
         const CustomerPartyTypeID = _cfunc.loginUserDetails().PartyTypeID
         const systemsetting = _cfunc.loginSystemSetting().IsSalesReturnSendToSupplier;
@@ -208,6 +208,7 @@ const PurchaseReturnMode3 = (props) => {
         let date = [];
 
         if ((ConditionArray?.length > 0) && (ConditionArray !== undefined)) {
+            ///////////////////////////////////////////////////// split according to condition /////////////////////////////////////////////////////////////////////////
             try {
                 for (let i = 0; i < ConditionArray.length; i++) {
                     let parts = ConditionArray[i].split('-');
