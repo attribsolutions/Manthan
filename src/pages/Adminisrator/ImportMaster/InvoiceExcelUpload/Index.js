@@ -507,6 +507,7 @@ const InvoiceExcelUpload = (props) => {
         setNonCBMItemVerify({ Non_CBM_Item_Array: [], Not_Verify_Non_CBM_Item: undefined })
         setInvoiceWithsameDateVerify({ Invoice_Date: [], Not_Verify_Same_Date: undefined, isFutureDate: false })
         setInvalidFormat({ Invalid_Format_Array: [], Not_Verify_Invalid_Format: undefined });
+        setColunmMap({ Not_Map_Column_Array: [], Not_Map_Columnt: undefined })
 
 
         files.map(file =>
