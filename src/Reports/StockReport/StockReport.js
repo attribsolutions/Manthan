@@ -384,7 +384,7 @@ const StockReport = (props) => {
 				"FromDate": fromdate,
 				"ToDate": todate,
 				"Unit": unitDropdown.value,
-				"PartyID": partyDropdown === "" ? _cfunc.loginPartyID() : partyDropdown.value,
+				"PartyID": (partyDropdown.value === 0 && !(isSCMParty)) ? _cfunc.loginPartyID() : partyDropdown.value,
 				"IsDamagePieces": stockTypeSelect.value,
 				"Employee": !isSCMParty ? 0 : _cfunc.loginEmployeeID(),
 			});
