@@ -75,15 +75,13 @@ const ViewDetails_Modal = () => {
     useEffect(() => table_ArrowUseEffect("#table_Arrow"), [viewData_redux]);
 
     function QuantityHandler(event, row,) {
-
         let input = event.target.value
-
         let v1 = Number(row.Quantity);
         let v2 = Number(input)
         if (!(v1 >= v2)) {
             event.target.value = v1;
         }
-        row.ApprovedQuantity = input;
+        row.ApprovedQuantity = event.target.value;
     }
 
     const imageShowHandler = async (row) => { // image Show handler
@@ -135,6 +133,11 @@ const ViewDetails_Modal = () => {
         {
             text: "Basic Rate",
             dataField: "Rate",
+        },
+
+        {
+            text: "MRP",
+            dataField: "MRPValue",
         },
         {
             text: "Batch",
@@ -235,6 +238,8 @@ const ViewDetails_Modal = () => {
         try {
             const tableItemArray = []
             let inValideUnits = []
+
+
             tableArray.ReturnItems.forEach(index => {
 
                 const approvedQty = index.ApprovedQuantity ? index.ApprovedQuantity : index.Quantity
@@ -242,6 +247,7 @@ const ViewDetails_Modal = () => {
 
                 if (index.ApprovedQuantity === "") {
                     inValideUnits.push({ [`${index.ItemName}`]: `Please Enter Approve Quantity` })
+
                 } else if (Number(approvedQty) >= 0) {
                     const ReturnItems = {
                         "id": index.id,
@@ -290,10 +296,11 @@ const ViewDetails_Modal = () => {
                     tableItemArray.push(ReturnItems)
                 }
             })
-
+            const allZeroQuantity = tableItemArray.every(item => item.ApprovedQuantity === "0");
             const jsonBody = JSON.stringify({
                 "ReturnID": viewData_redux.Data[0].ReturnID,
                 "UserID": loginUserID(),
+                "IsApproved": allZeroQuantity ? 2 : 1,
                 "ReturnItem": tableItemArray
             });
 
