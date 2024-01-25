@@ -46,6 +46,8 @@ export const readExcelFile = async ({ file, compareParameter, ItemList = [] }) =
       let shouldRemove = false;
       let Invoice_No = "";
       let Item_Code = "";
+      let Party_Code = "";
+
 
       comparefilter.forEach((c1) => {
 
@@ -57,6 +59,10 @@ export const readExcelFile = async ({ file, compareParameter, ItemList = [] }) =
 
         if (c1.FieldName === "Item") {
           Item_Code = r1[c1.Value]
+        }
+
+        if (c1.FieldName === "Customer") {
+          Party_Code = r1[c1.Value]
         }
 
         if (c1.FieldName === "InvoiceNumber") {
@@ -88,7 +94,10 @@ export const readExcelFile = async ({ file, compareParameter, ItemList = [] }) =
       })
       r1["Invoice_No"] = Invoice_No;
       r1["Item_Code"] = Item_Code;
-      r1["shouldRemove"] = shouldRemove
+      r1["shouldRemove"] = shouldRemove;
+      r1["Party_Code"] = Party_Code;
+
+
 
     })
     jsonResult["InvalidFormat"] = invalidMsg
