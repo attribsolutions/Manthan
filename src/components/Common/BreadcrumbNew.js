@@ -9,14 +9,23 @@ import {
 } from "../../store/Utilites/Breadcrumb/actions";
 import { AvForm } from "availity-reactstrap-validation";
 import { ExcelReportComponent } from "./ReportCommonFunc/ExcelDownloadWithCSS";
+import { url } from "../../routes";
+import { edit_PageListID_Action, edit_PageListID_Success, } from "../../store/actions";
+import { loginRoleID, } from "./CommonFunction";
 
-const BreadcrumbNew = () => {
+const BreadcrumbNew = (props) => {
   const history = useHistory();
   const dispatch = useDispatch();
+  const roleId = loginRoleID();
   const [opacity, setOpacity] = useState(1);
+
   const [modal_scroll, setmodal_scroll] = useState(false);
+
   const [downListKey, setDownListKey] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
+
+  const [listPagePath, setListPagePath] = useState("");
+  const [relatedPageId, setRelatedPageId] = useState(0);
 
   let {
     showCountlabel = '',
@@ -24,7 +33,9 @@ const BreadcrumbNew = () => {
     breadcrumbDetail,
     IsRadioButtonView,
     radioButtonNonDelete,
-    radioButtonDelete
+    radioButtonDelete,
+    editData,
+
   } = useSelector((state) => ({
     showCountlabel: state.BreadcrumbReducer.showCountlabel,
     bredcrumbItemName: state.BreadcrumbReducer.bredcrumbItemName,
@@ -32,6 +43,9 @@ const BreadcrumbNew = () => {
     IsRadioButtonView: state.BreadcrumbReducer.IsRadioButtonView,
     radioButtonNonDelete: state.BreadcrumbReducer.radioButtonNonDelete,
     radioButtonDelete: state.BreadcrumbReducer.radioButtonDelete,
+
+    editData: state.H_Pages.editData,
+    updateMsg: state.H_Pages.updateMessage,
   }));
 
   const {
@@ -43,8 +57,24 @@ const BreadcrumbNew = () => {
     pageMode = "",
     downBtnData = [],
     defaultDownBtnData = {},
-    pageField = {}
+    pageField = {},
+    userAcc,
+
   } = breadcrumbDetail;
+
+  useEffect(() => {
+
+    if (userAcc) {
+      if ((userAcc.PageType === 1) || (userAcc.PageType === 3)) {
+        setRelatedPageId(userAcc.id);
+      }
+      else {
+        setRelatedPageId(userAcc.RelatedPageID);
+      }
+      setListPagePath(userAcc.ActualPagePath)
+    }
+  }, [userAcc]);
+
 
   function tog_scroll() {
     setmodal_scroll(!modal_scroll);
@@ -82,7 +112,6 @@ const BreadcrumbNew = () => {
     }
   }, [defaultDownBtnData]);
 
-
   useEffect(() => {
     const handleScroll = () => {
       const newOpacity = 1 - window.scrollY * 0.01;
@@ -96,9 +125,6 @@ const BreadcrumbNew = () => {
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
-
-
-
 
   const nondeleteHandler = (event) => {
     let CheckedValue = event.target.checked
@@ -119,14 +145,12 @@ const BreadcrumbNew = () => {
   }
 
   const DownloadInExcelButtonHanler = (event, values) => {
-    let list = []
+    let tableData = []
     let object1 = {}
 
     const filteredValues = downListKey
       .filter(obj => obj[Object.keys(obj)[0]]) // Filter objects with true values
       .map(obj => Object.keys(obj)[0]); // Extract keys
-
-    console.log(filteredValues);
 
     downBtnData.map((index1) => {
       filteredValues.map((index2) => {
@@ -134,12 +158,12 @@ const BreadcrumbNew = () => {
           object1[index2] = index1[index2]
         }
       })
-      list.push(object1)
+      tableData.push(object1)
       object1 = {}
     })
     ExcelReportComponent({
       pageField,
-      excelTableData: list,
+      excelTableData: tableData,
       excelFileName: pageHeading,
       listExcelDownload: filteredValues,
     });
@@ -232,9 +256,26 @@ const BreadcrumbNew = () => {
     );
   });
 
+  useEffect(() => {
+    if (editData.Status === true) {
+      dispatch(edit_PageListID_Success({ ...editData, Status: false }));
+      history.push({
+        pathname: url.PAGE,  // The target URL
+        editValue: editData.Data,
+        pageMode: "edit",
+        actualPagePath: listPagePath
+      });
+    }
+  }, [editData]);
+
+  function NavigateHandler() {
+    dispatch(edit_PageListID_Action({ editId: relatedPageId, }))
+  }
+
   return (
+
     <React.Fragment>
-      <header id="page-topbar1" style={{ zIndex: "1",opacity }}  >
+      <header id="page-topbar1" style={{ zIndex: "1", opacity }}  >
         <div className="navbar-header blur1" style={{ paddingRight: "-10px", zIndex: "-1" }}>
           <div className="d-flex" >
             <div className="navbar-brand-box d-none d-lg-block" style={{ backgroundColor: "white" }} ></div>
@@ -248,11 +289,14 @@ const BreadcrumbNew = () => {
                       onClick={NewButtonHandeller}>
                       New
                     </button>
-                    <label className="font-size-18 form-label text-black " style={{ paddingLeft: "7px", }} >{pageHeading}</label>
+                    <label onClick={() => roleId === 13 && NavigateHandler()}
+                      className="font-size-18 form-label text-black " style={{ paddingLeft: "7px", }} >{pageHeading}</label>
                   </div>
                   :
-                  <div>
-                    <label className="font-size-18  col-ls-6 col-form-label text-black" style={{ marginLeft: "6px" }}>
+                  <div onClick={() => roleId === 13 && NavigateHandler()}>
+                    <label className="font-size-18  col-ls-6 col-form-label text-black"
+                      style={{ marginLeft: "6px" }}
+                    >
                       {pageHeading}</label>
                     {(bredcrumbItemName.length > 0) ?
                       <label className="font-size-24 form-label  text-nowrap bd-highlight text-primary"
@@ -312,8 +356,6 @@ const BreadcrumbNew = () => {
                 null
             }
           </div>
-
-
         </div>
       </header>
 
@@ -367,4 +409,4 @@ const BreadcrumbNew = () => {
 }
 
 
-export default BreadcrumbNew
+export default BreadcrumbNew;

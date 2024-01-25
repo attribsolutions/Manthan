@@ -72,14 +72,20 @@ const CommonPurchaseList = (props) => {
   const { PageFieldMaster = [] } = { ...pageField };
 
   useEffect(() => {
-
+    
     const locationPath = history.location.pathname;
     let userAcc = userAccess.find((inx) => {
       return `/${inx.ActualPagePath}` === locationPath;
     });
     if (!(userAcc === undefined)) {
       setUserAccState(userAcc);
-      breadcrumbReturnFunc({ dispatch, userAcc, newBtnPath, forceNewBtnView });
+      breadcrumbReturnFunc({
+        dispatch,
+        userAcc,
+        newBtnPath,
+        forceNewBtnView,
+        pageField: pageField
+      });
     }
   }, [userAccess]);
 
@@ -220,7 +226,7 @@ const CommonPurchaseList = (props) => {
         sort: true,
         attrs: (cell, row, rowIndex, colIndex) => ({ 'data-label': 'Action', "sticky-col": (colIndex === 0) ? "true" : "false" }),
         formatter: (cellContent, rowData) => {
-         
+
           if (rowData.IsRecordDeleted === true) {   ///hide button in GRN list 3 STP page last action column for Make Button
             return (
               <div>

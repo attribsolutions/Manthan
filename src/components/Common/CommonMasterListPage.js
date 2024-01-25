@@ -53,6 +53,7 @@ const CommonListPage = (props) => {
   const { PageFieldMaster = [] } = { ...pageField };
 
   useEffect(() => {
+
     const locationPath = history.location.pathname
     let userAcc = userAccess.find((inx) => {
       return (`/${inx.ActualPagePath}` === locationPath)
