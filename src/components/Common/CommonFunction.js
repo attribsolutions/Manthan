@@ -393,8 +393,8 @@ export const compareGSTINState = (gstin1 = '', gstin2 = '') => {
   return (!(stateCode1 === stateCode2) && !(gstin1 === "") && !(gstin2 === ""));
 }
 
-export function breadcrumbReturnFunc({ dispatch, userAcc, newBtnPath = "", forceNewBtnView = true, pageField: pageField }) {
-
+export function breadcrumbReturnFunc({ dispatch, userAcc, newBtnPath = "", forceNewBtnView = true, pageField }) {
+  
   const isnewBtnView = userAcc.PageType === 2 && userAcc.RoleAccess_IsSave;
   const isCountLabel = userAcc.CountLabel;
   const isexcelBtnView =
@@ -406,7 +406,8 @@ export function breadcrumbReturnFunc({ dispatch, userAcc, newBtnPath = "", force
       excelBtnView: isexcelBtnView,
       pageHeading: userAcc.PageHeading,
       CountLabel: isCountLabel,
-      pageField: pageField
+      pageField: pageField,
+      userAcc: userAcc,
     })
   );
 }

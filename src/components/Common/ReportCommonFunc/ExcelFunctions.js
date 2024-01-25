@@ -1,3 +1,5 @@
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
+
 function parseAndFormatDate(dateString) {
     if (dateString) {
         const dateParts = dateString.split(/[-/]/);
@@ -184,10 +186,17 @@ export function generateTableData({
     if ((pageField) && (listExcelDownload === undefined)) {
 
         const listPageColumns = (pageField?.PageFieldMaster || []).filter(({ ShowInListPage }) => ShowInListPage).sort((a, b) => a.ListPageSeq - b.ListPageSeq);
-
+        if (listPageColumns.length === 0) {
+            customAlert({
+                Type: 4,
+                Message: "No fields selected for download"
+            })
+            return { noDataForDownload: true };
+        }
         columnsKey = [extraColumn, ...listPageColumns.map(({ ControlID }) => ControlID)].filter(Boolean);
         HeaderColumns = [extraColumn, ...listPageColumns.map(({ FieldLabel }) => FieldLabel)].filter(Boolean);
         controlTypeName = [extraColumn && "Text", ...listPageColumns.map(({ ControlTypeName }) => ControlTypeName)].filter(Boolean);
+
     } else if (customKeyColumns) {
         const { tableData, isButton } = customKeyColumns;
         const selectedColumns = isButton ? tableData.filter(option => option.showing) : tableData;
@@ -221,7 +230,7 @@ export function generateTableData({
         columnsKey.map(column => item[column] || "")
     );
 
-    return { HeaderColumns, dataRow, controlTypeName };
+    return { HeaderColumns, dataRow, controlTypeName, noDataForDownload: false };
 }
 
 function findProperties(checkedValues, pageFieldMaster, propertyName) {

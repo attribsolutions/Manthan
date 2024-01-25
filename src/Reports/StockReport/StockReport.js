@@ -30,7 +30,7 @@ const StockReport = (props) => {
 	const [headerFilters, setHeaderFilters] = useState('');
 	const [userPageAccessState, setUserAccState] = useState('');
 
-	const [partyDropdown, setPartyDropdown] = useState("");
+	const [partyDropdown, setPartyDropdown] = useState({ value: 0, label: 'All' });
 	const [unitDropdown, setUnitDropdown] = useState({ value: 1, label: 'No' });
 
 	const [originalTableData, setOriginalTableData] = useState([]);
@@ -352,6 +352,10 @@ const StockReport = (props) => {
 		value: i.id,
 		label: i.Name
 	}));
+	Party_Option.unshift({
+		value: 0,
+		label: "All"
+	})
 
 	const StockTypeOptions = [
 		{
@@ -381,7 +385,8 @@ const StockReport = (props) => {
 				"ToDate": todate,
 				"Unit": unitDropdown.value,
 				"PartyID": partyDropdown === "" ? _cfunc.loginPartyID() : partyDropdown.value,
-				"IsDamagePieces": stockTypeSelect.value
+				"IsDamagePieces": stockTypeSelect.value,
+				"Employee": !isSCMParty ? 0 : _cfunc.loginEmployeeID(),
 			});
 			const config = { jsonBody, btnId: goBtnMode, };
 			dispatch(stockReport_GoButton_API(config))

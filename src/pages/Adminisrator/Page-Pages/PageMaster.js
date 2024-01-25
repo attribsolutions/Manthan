@@ -37,7 +37,6 @@ import {
 } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { PAGE_lIST } from "../../../routes/route_url";
 import { breadcrumbReturnFunc, loginUserID, metaTagLabel } from "../../../components/Common/CommonFunction";
 import PageFieldMaster_Tab from "./PageFieldMaster";
 import * as mode from "../../../routes/PageMode"
@@ -49,6 +48,7 @@ import * as url from "../../../routes/route_url";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 
 const PageMaster = (props) => {
+
   const dispatch = useDispatch();
   const history = useHistory()
 
@@ -56,6 +56,7 @@ const PageMaster = (props) => {
   const [modalCss, setModalCss] = useState(false);
   const [pageMode, setPageMode] = useState(mode.defaultsave);
   const [userPageAccessState, setUserAccState] = useState('');
+  const [actualPagePath, setActualPagePath] = useState('');
 
   const [customActiveTab, setcustomActiveTab] = useState("1");
   const [relatedPageListShowUI, setRelatedPageListShowUI] = useState(false);
@@ -109,6 +110,7 @@ const PageMaster = (props) => {
   }));
 
   const location = { ...history.location }
+  // const hasBreadcrumb = location.state.hasOwnProperty(mode.editValue)
   const hasShowloction = location.hasOwnProperty(mode.editValue)
   const hasShowModal = props.hasOwnProperty(mode.editValue)
 
@@ -147,12 +149,13 @@ const PageMaster = (props) => {
 
   // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
   useEffect(() => {
-
+    
     if (((fieldValidationsALLType.length > 0) && (hasShowloction || hasShowModal))) {
 
       let hasEditVal = null
       if (hasShowloction) {
         setPageMode(location.pageMode)
+        setActualPagePath(location.actualPagePath)
         hasEditVal = location.editValue
       }
       else if (hasShowModal) {
@@ -337,12 +340,21 @@ const PageMaster = (props) => {
   }, [modulePostAPIResponse])
 
   useEffect(() => {
-
+    
     if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
-      history.push({
-        pathname: PAGE_lIST,
-      })
-    } else if (updateMsg.Status === true && !modalCss) {
+      dispatch(update_PageListId_Success({ Status: false }));
+      if (actualPagePath) {
+        history.push({
+          pathname: actualPagePath
+        })
+      }
+      else {
+        history.push({
+          pathname: url.PAGE_lIST,
+        })
+      }
+
+    } else if (updateMsg.Status === true && (!modalCss)) {
       dispatch(update_PageListId_Success({ Status: false }));
       customAlert({
         Type: 3,
@@ -412,6 +424,7 @@ const PageMaster = (props) => {
   function tog_center() {
     setmodal_center(!modal_center)
   }
+
   const SaveHandler = (event, values) => {
 
     event.preventDefault();
@@ -678,6 +691,7 @@ const PageMaster = (props) => {
                                   <Select
                                     value={module_DropdownSelect}
                                     options={Module_DropdownOption}
+                                    isDisabled={(actualPagePath) && true}
                                     autoComplete="off"
                                     onChange={(e) => {
                                       Module_DropdownSelectHandller(e);
@@ -701,6 +715,7 @@ const PageMaster = (props) => {
                                   <Select
                                     value={pageType_DropdownSelect}
                                     options={PageType_DropdownOption}
+                                    isDisabled={(actualPagePath) && true}
                                     autoComplete="off"
                                     onChange={(e) => {
                                       PageType_DropdownSelectHandller(e);
@@ -764,6 +779,7 @@ const PageMaster = (props) => {
                                     id="pagePathid"
                                     value={EditData.ActualPagePath}
                                     type="text"
+                                    disabled={(actualPagePath) && true}
                                     placeholder="Please Enter Page Path"
                                     validate={{
                                       required: {

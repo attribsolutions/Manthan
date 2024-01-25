@@ -15,7 +15,7 @@ export function ExcelReportComponent({ pageField,
     const workbook = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet('Sheet1');
 
-    const { HeaderColumns, dataRow, controlTypeName } = generateTableData({
+    const { HeaderColumns, dataRow, controlTypeName, noDataForDownload } = generateTableData({
         pageField,
         customKeyColumns,
         excelTableData,
@@ -25,41 +25,44 @@ export function ExcelReportComponent({ pageField,
         listExcelDownload
     });
 
-    // Add headers to the worksheet
-    worksheet.addRow(HeaderColumns);
+    if (!(noDataForDownload)) {
 
-    styleHeaderRow(worksheet, dataRow);  // Header Style
+        // Add headers to the worksheet
+        worksheet.addRow(HeaderColumns);
 
-    function formatCellByDataType(cell, controlType, value) {
-        switch (controlType) {
-            case 'Date':
-                setDateValue(cell, value);
-                break;
-            case 'Number':
-                setNumberValue(cell, value);
-                break;
-            case 'Text':
-                setTextValue(cell, value);
-                break;
-            default:
-                break;
+        styleHeaderRow(worksheet, dataRow);  // Header Style
+
+        function formatCellByDataType(cell, controlType, value) {
+            switch (controlType) {
+                case 'Date':
+                    setDateValue(cell, value);
+                    break;
+                case 'Number':
+                    setNumberValue(cell, value);
+                    break;
+                case 'Text':
+                    setTextValue(cell, value);
+                    break;
+                default:
+                    break;
+            }
         }
-    }
 
-    dataRow.forEach((item) => {
-        const row = worksheet.addRow(item);
+        dataRow.forEach((item) => {
+            const row = worksheet.addRow(item);
 
-        row.eachCell((cell, colNumber) => {
-            const controlType = controlTypeName[colNumber - 1];
-            formatCellByDataType(cell, controlType, item[colNumber - 1]);
+            row.eachCell((cell, colNumber) => {
+                const controlType = controlTypeName[colNumber - 1];
+                formatCellByDataType(cell, controlType, item[colNumber - 1]);
+            });
         });
-    });
 
-    if (lastRowStyle) {
-        styleLastRow(worksheet, dataRow);
+        if (lastRowStyle) {
+            styleLastRow(worksheet, dataRow);
+        }
+
+        freezeHeaderRow(worksheet);  // freeze Header Row
+        autoFitColumnWidths(worksheet, HeaderColumns, dataRow); // Auto Fit Columns
+        saveWorkbookAsExcel(workbook, excelFileName);  // Save Work Book
     }
-
-    freezeHeaderRow(worksheet);  // freeze Header Row
-    autoFitColumnWidths(worksheet, HeaderColumns, dataRow); // Auto Fit Columns
-    saveWorkbookAsExcel(workbook, excelFileName);  // Save Work Book
 }
