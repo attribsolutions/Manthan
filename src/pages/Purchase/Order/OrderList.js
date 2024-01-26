@@ -92,6 +92,7 @@ const OrderList = () => {
 
         })
     );
+    const { commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
 
     const gobtnId = `gobtn-${subPageMode}`
     const {
@@ -330,6 +331,32 @@ const OrderList = () => {
         }
 
     }, [unhideMsg]);
+
+
+    // Common Party Dropdown useEffect
+    useEffect(() => {
+
+        if (commonPartyDropSelect.value > 0) {
+            goButtonHandler()
+            dispatch(_act.GetVenderSupplierCustomer({ subPageMode, PartyID: commonPartyDropSelect.value }));
+
+        } else {
+            dispatch(_act.getOrderListPageSuccess([]));
+            dispatch(_act.GetVenderSupplierCustomerSuccess([]));
+            setState((i) => {
+                let a = { ...i }
+                a.values.CustomerType = [{ value: "", label: "All" }]
+                a.values.Supplier = { value: "", label: "All" }
+                a.hasValid.CustomerType.valid = true;
+                a.hasValid.Supplier.valid = true;
+                return a
+            })
+        }
+
+    }, [commonPartyDropSelect]);
+
+
+
 
     const supplierOptions = supplier.map((i) => ({
         value: i.id,
@@ -741,9 +768,9 @@ const OrderList = () => {
             <PageLoadingSpinner isLoading={reducers.goBtnloading || !pageField} />
 
             <div className="page-content">
-                <PartyDropdown_Common pageMode={pageMode}
+                {/* <PartyDropdown_Common pageMode={pageMode}
                     goButtonHandler={partySelectButtonHandler}
-                    changeButtonHandler={partyOnChngeButtonHandler} />
+                    changeButtonHandler={partyOnChngeButtonHandler} /> */}
                 {
                     (pageField) ?
                         <CommonPurchaseList

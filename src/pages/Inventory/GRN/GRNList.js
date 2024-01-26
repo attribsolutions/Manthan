@@ -100,7 +100,23 @@ const GRNList = () => {
             })
         }
 
-    }, [makeChallan])
+    }, [makeChallan]);
+    const { commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
+
+    // Common Party Dropdown useEffect
+    useEffect(() => {
+        if (commonPartyDropSelect.value > 0) {
+            goButtonHandler()
+            dispatch(_act.GetVenderSupplierCustomer({ PartyID: commonPartyDropSelect.value, subPageMode, RouteID: "" }))
+
+        } else {
+            dispatch(_act.getGRNListPageSuccess([]));
+            let newObj = { ...hederFilters }
+            newObj.venderSelect = { value: '', label: "All" }
+            setHederFilters(newObj)
+        }
+
+    }, [commonPartyDropSelect]);
 
     const venderOptions = customer.map((i) => ({
         value: i.id,
@@ -235,9 +251,9 @@ const GRNList = () => {
         <React.Fragment>
             <PageLoadingSpinner isLoading={reducers.loading || !pageField} />
             <div className="page-content">
-                <PartyDropdown_Common pageMode={pageMode}
+                {/* <PartyDropdown_Common pageMode={pageMode}
                     goButtonHandler={partySelectButtonHandler}
-                    changeButtonHandler={partyOnChngeButtonHandler} />
+                    changeButtonHandler={partyOnChngeButtonHandler} /> */}
 
                 {
                     (pageField) ?

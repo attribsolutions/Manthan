@@ -287,6 +287,35 @@ const SalesReturnList = () => {
         dispatch(getpdfReportdata(ReturnPrint_API, config))
     }
 
+    const { commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
+
+    // Common Party Dropdown useEffect
+    useEffect(() => {
+
+        if (commonPartyDropSelect.value > 0) {
+            const jsonBody = JSON.stringify({
+                Type: 1, PartyID: commonPartyDropSelect.value, CompanyID: _cfunc.loginCompanyID()
+            });
+            dispatch(Retailer_List(jsonBody));
+            dispatch(GetVenderSupplierCustomer({ subPageMode, PartyID: commonPartyDropSelect.value }))
+            goButtonHandler()
+
+        } else {
+            dispatch(salesReturnListAPISuccess([]));
+            dispatch(Retailer_List_Success([]));
+            dispatch(GetVenderSupplierCustomerSuccess([]));
+
+            setState((i) => {
+                let a = { ...i }
+                a.values.Customer = { value: "", label: "All" }
+                a.hasValid.Customer.valid = true;
+                return a
+            })
+        }
+
+    }, [commonPartyDropSelect]);
+
+
     const partySelectButtonHandler = () => {
         const jsonBody = JSON.stringify({
             Type: 1,
@@ -392,9 +421,9 @@ const SalesReturnList = () => {
             <div className="page-content">
                 <PageLoadingSpinner isLoading={(loading || !pageField)} />
 
-                <PartyDropdown_Common pageMode={pageMode}
+                {/* <PartyDropdown_Common pageMode={pageMode}
                     goButtonHandler={partySelectButtonHandler}
-                    changeButtonHandler={partySelectOnChangeHandler} />
+                    changeButtonHandler={partySelectOnChangeHandler} /> */}
 
                 {
                     (pageField) ?

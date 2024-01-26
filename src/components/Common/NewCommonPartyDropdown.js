@@ -31,7 +31,7 @@ const NewCommonPartyDropdown = ({ pageMode }) => {
     }, [commonPartyDropSelect]);
 
     const updateSelectedParty = () => {
-        
+
         if (selectedParty.value === 0) {
             customAlert({ Type: 3, Message: alertMessages.commonPartySelectionIsRequired });
             return;
@@ -53,7 +53,7 @@ const NewCommonPartyDropdown = ({ pageMode }) => {
         label: data.Name,
         SAPPartyCode: data.SAPPartyCode
     }))
-
+    return null
     return (
         loginUserAdminRole() && (
             <div className="px-2 c_card_header text-black mb-1">

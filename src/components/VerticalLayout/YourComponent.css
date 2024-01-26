@@ -1,0 +1,65 @@
+/* YourComponent.css */
+
+.change-party-contener {
+  cursor: pointer !important;
+}
+
+.party-label-wapper {
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  padding-inline: 25px;
+  /* padding-block: 5px; */
+  color: rgba(252, 247, 228, 0.877);
+  font-size: 18;
+  margin-bottom: -10px;
+  margin-top: 6px;
+  border: solid;
+  border-color: #f2f2f28a;
+  /* A light color close to white */
+  border-width: 0.5px;
+  /* Reduce border width for a lighter appearance */
+
+}
+
+.party-label {
+  cursor: pointer;
+
+  font-size: large;
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 5px;
+
+  max-width: 190px; /* Adjust the maximum width according to your layout */
+  overflow: hidden;
+}
+
+.party-label-name {
+  display: block;
+  cursor: pointer !important;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-right: 2px;
+}
+
+.mini-drawer {
+  position: fixed;
+  top: 75px;
+  left: 250px;
+  /* height: 100%; */
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.modal-content1 {
+  width: 350px;
+  /* background-color: #f0f0f0; */
+  background-color: white;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
