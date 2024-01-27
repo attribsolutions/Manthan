@@ -1329,12 +1329,13 @@ const Order = (props) => {
         }
     };
 
+
     if (!(userPageAccessState === "")) {
         return (
             <React.Fragment>
                 <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
                 <PageLoadingSpinner isLoading={!pageField} />
-                <div className="page-container1">
+                <div>
                     {invoiceGoBtnloading && <div className="c_spinner-container">
                         <div className="d-flex">
                             <div className="">
@@ -1552,29 +1553,6 @@ const Order = (props) => {
                             </div>
 
                             <div className="px-2  mb-1 c_card_body text-black" >              {/*  Description and Delivery Date  field */}
-                                <div className="row">                                         {/*  Description and Delivery Date  field */}
-
-
-                                    {/*  Delivery Date field */}
-                                    {/* {!(subPageMode === url.IB_ORDER) ?
-                                    <div className="col col-6" >
-                                        <FormGroup className=" row mt-3 " >
-                                            <Label className=" p-2"
-                                                style={{ width: "130px" }}>Delivery Date</Label>
-                                            <div className="col col-6 sm-1">
-                                                <C_DatePicker
-                                                    id="deliverydate"
-                                                    name="deliverydate"
-                                                    value={deliverydate}
-                                                    disabled={pageMode === "edit" ? true : false}
-                                                    onChange={(e, date) => { setdeliverydate(date) }}
-                                                />
-                                            </div>
-
-                                        </FormGroup>
-                                    </div > : null} */}
-
-                                </div>
 
                                 {subPageMode === url.ORDER_1 ? <div>                             {/*  Billing Address   and Shipping Address*/}
                                     <div className="row mt-2 ">
@@ -1688,29 +1666,24 @@ const Order = (props) => {
                         >
                             {(toolkitProps,) => (
                                 <React.Fragment>
-                                    <Row>
-                                        <Col xl="12">
-                                            <div className="table-responsive table " style={{ minHeight: "45vh" }} >
-                                                <BootstrapTable
-                                                    keyField={"Item_id"}
-                                                    id="table_Arrow"
-                                                    defaultSorted={!selecedItemWiseOrder ? defaultSorted : ''}
-                                                    classes='custom-table'
-                                                    // headerClasses="custom-table"
-                                                    noDataIndication={
-                                                        <div className="text-danger text-center table-cursor-pointer">
-                                                            Items Not available
-                                                        </div>
-                                                    }
-                                                    onDataSizeChange={(e) => {
-                                                        _cfunc.tableInputArrowUpDounFunc("#table_Arrow")
-                                                    }}
-                                                    {...toolkitProps.baseProps}
-                                                />
-                                                {mySearchProps(toolkitProps.searchProps)}
+
+                                    <BootstrapTable
+                                        keyField={"Item_id"}
+                                        id="table_Arrow"
+                                        defaultSorted={!selecedItemWiseOrder ? defaultSorted : ''}
+                                        classes='custom-table'
+                                        noDataIndication={
+                                            <div className="text-danger text-center table-cursor-pointer">
+                                                Items Not available
                                             </div>
-                                        </Col>
-                                    </Row>
+                                        }
+                                        onDataSizeChange={(e) => {
+                                            _cfunc.tableInputArrowUpDounFunc("#table_Arrow")
+                                        }}
+                                        {...toolkitProps.baseProps}
+                                    />
+                                    {mySearchProps(toolkitProps.searchProps)}
+
 
                                 </React.Fragment>
                             )}

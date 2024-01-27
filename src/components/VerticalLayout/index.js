@@ -18,6 +18,8 @@ import Footer from "./Footer";
 import { useSelector, useDispatch } from "react-redux";
 import BreadcrumbNew from "../../components/Common/BreadcrumbNew"
 import "./loader.scss";
+import SimpleBar from "simplebar-react";
+import './changeParty.scss';
 
 const Layout = props => {
   const dispatch = useDispatch();
@@ -111,17 +113,24 @@ const Layout = props => {
 
   return (
     <React.Fragment>
-     
+
       <div id="layout-wrapper">
         <Header toggleMenuCallback={toggleMenuCallback} onChangeLayoutMode={onChangeLayoutMode} />
-        <BreadcrumbNew />
         <Sidebar
           theme={leftSideBarTheme}
           type={leftSideBarType}
           isMobile={isMobile}
         />
-        <div className="main-content">{props.children}</div>
-        <Footer />
+        <div className="main-page-content" >
+          <BreadcrumbNew />
+          {/* <SimpleBar style={{ maxHeight: "100%" }} > */}
+          <div style={{paddingTop:"50px"}}>
+            {props.children}
+          </div>
+
+          {/* </SimpleBar> */}
+        </div>
+        {/* <Footer /> */}
       </div>
 
     </React.Fragment>

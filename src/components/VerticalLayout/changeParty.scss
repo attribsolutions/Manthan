@@ -1,0 +1,147 @@
+/* YourComponent.css */
+
+// @import '../../assets/scss/variables';
+
+.change-party-contener {
+  cursor: pointer !important;
+}
+
+.party-label-wapper {
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  padding-inline: 25px;
+  /* padding-block: 5px; */
+  color: rgba(252, 247, 228, 0.877);
+  font-size: 18;
+  margin-bottom: -10px;
+  margin-top: 6px;
+  border: solid;
+  border-color: #f2f2f28a;
+  /* A light color close to white */
+  border-width: 0.5px;
+  /* Reduce border width for a lighter appearance */
+
+}
+
+.party-label {
+  cursor: pointer;
+
+  /* font-size: medium; */
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 5px;
+
+  max-width: 190px;
+  /* Adjust the maximum width according to your layout */
+  overflow: hidden;
+}
+
+.party-label-name {
+  display: block;
+  cursor: pointer !important;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-right: 2px;
+}
+
+.mini-drawer {
+  position: fixed;
+  top: 75px;
+  left: 250px;
+  /* height: 100%; */
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.modal-content1 {
+  width: 350px;
+  /* background-color: #f0f0f0; */
+  background-color: white;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+//========================================================================================================
+
+
+//
+// _menu.scss
+// 
+
+
+// _variables.scss
+$header-height: 60px !default;
+$sidebar-width: 250px;
+$footer-height: 10px;
+$sidebar-collapsed-width: 70px;
+$sidebar-width-sm: 160px;
+
+// Mixin for Scrollbar Styles
+@mixin scrollbar-styles {
+  &::-webkit-scrollbar {
+    width: 6px;
+    /* Adjust the width as needed */
+    height: 6px;
+    /* Adjust the width as needed */
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+    /* Color of the thumb */
+    border-radius: 4px;
+    /* Rounded corners for the thumb */
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: #f3f1f1;
+    /* Color of the track */
+  }
+}
+
+// Main Page Content Styles
+.main-page-content {
+  top: calc(#{$header-height} + 5px);
+  position: fixed;
+  right: 5px;
+  left: $sidebar-width;
+  bottom: 0;
+  overflow-x: auto;  // Allow horizontal scrolling
+  height: calc(100% - #{$header-height} - 5px);
+  margin: 0;
+
+  @include scrollbar-styles;  // Include the scrollbar styles mixin
+
+
+  @media (max-width: 992px) {
+    margin-left: 0 !important;
+  }
+
+  @media (max-width: 380px) {
+    left: 0px
+  }
+
+}
+
+// [data-sidebar-size="sm"],
+body[data-sidebar-size="sm"] {
+  min-height: 1000px;
+
+  .main-page-content {
+    left: $sidebar-collapsed-width;
+  }
+}
+
+body[data-sidebar-size="md"] {
+  .main-page-content {
+    left: $sidebar-width-sm;
+  }
+}
+
+
+

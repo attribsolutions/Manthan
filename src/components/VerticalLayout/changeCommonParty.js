@@ -7,7 +7,7 @@ import { loginUserAdminRole } from "../Common/CommonFunction";
 import { commonPartyDropSelectAction } from "../../store/Utilites/PartyDrodown/action";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import { mode } from "../../routes";
-import './YourComponent.css'; // Add your styles here
+import './changeParty.scss'; // Add your styles here
 import { useRef } from "react";
 
 const ChangeCommonParty = ({ pageMode }) => {

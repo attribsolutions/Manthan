@@ -17,7 +17,6 @@ import {
 import { Col, FormGroup, Input, Label, Modal, Row } from "reactstrap";
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList"
 import { getCurrent_Month_And_Year } from "./ClaimRelatedFunc";
-import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 import { loginEmployeeID, loginIsSCMParty, loginPartyID } from "../../../components/Common/CommonFunction";
 import { C_Select } from "../../../CustomValidateForm";
 

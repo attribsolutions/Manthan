@@ -83,9 +83,9 @@
  /* Common styles for both desktop and mobile */
  .custom-table {
      width: 100%;
-     border-collapse: collapse;
+     border-collapse: collapse !important;
 
-     tr:nth-child(odd) {
+     tr:nth-child(even) {
          background-color: #f2f2f2;
      }
 
