@@ -8,10 +8,10 @@ import {
   BreadcrumbReset
 } from "../../store/Utilites/Breadcrumb/actions";
 import { AvForm } from "availity-reactstrap-validation";
-import { ExcelReportComponent } from "./ReportCommonFunc/ExcelDownloadWithCSS";
+import { ExcelReportComponent } from "../Common/ReportCommonFunc/ExcelDownloadWithCSS";
 import { url } from "../../routes";
 import { edit_PageListID_Action, edit_PageListID_Success, } from "../../store/actions";
-import { loginRoleID, } from "./CommonFunction";
+import { loginRoleID, } from "../Common/CommonFunction";
 
 const BreadcrumbNew = (props) => {
   const history = useHistory();
@@ -275,96 +275,94 @@ const BreadcrumbNew = (props) => {
   return (
 
     <React.Fragment>
-      <header id="page-topbar1" style={{ zIndex: "1", opacity }}  >
-        <div className="navbar-header blur1" style={{ paddingRight: "-10px", zIndex: "-1" }}>
-          <div className="d-flex" >
-            <div className="navbar-brand-box d-none d-lg-block" style={{ backgroundColor: "white" }} ></div>
-            <div style={{ paddingLeft: "7px" }} >
 
-              {
-                newBtnView ?
-                  <div  >
-                    <button type="button" className="btn btn-success "
-                      style={{
-                        padding: "2px", paddingInline: "5px", color: "white",
-                        // border: "solid",
-                        // borderColor: "green",
-                        // backgroundColor: "hsla(0,0%,100%,.5)"
-                      }}
-                      data-mdb-toggle="tooltip" data-mdb-placement="top" title="Create New"
-                      onClick={NewButtonHandeller}>
-                      New
-                    </button>
-                    <label onClick={() => roleId === 13 && NavigateHandler()}
-                      className="font-size-16 form-label text-black " style={{ paddingLeft: "7px", }} >{pageHeading}</label>
-                  </div>
-                  :
-                  <div onClick={() => roleId === 13 && NavigateHandler()}>
-                    <label className="font-size-16  col-ls-6 col-form-label text-black"
-                      style={{ marginLeft: "6px" }}
-                    >
-                      {pageHeading}</label>
-                    {(bredcrumbItemName.length > 0) ?
-                      <label className="font-size-21 form-label  text-nowrap bd-highlight text-primary"
-                        style={{ paddingLeft: "7px", color: "#5156be" }} >&nbsp;/&nbsp;{bredcrumbItemName}</label>
-                      : null
-                    }
-                  </div>
-              }
-            </div>
-          </div>
+      <div className="breadcrumb-header" >
+        <div className="d-flex" >
+          <div style={{ paddingLeft: "7px" }} >
 
-          <div className=" d-flex gap-2 justify-content-end"  >
-
-            {(excelBtnView && !(downBtnData.length === 0)) ?
-              <div className="px-2 ">
-                <Button
-                  type="button"
-                  title="Download List"
-                  style={{padding: "2px" ,paddingInline:"5px"}}
-                  color="btn btn-sm btn-outline-primary "
-                  onClick={() => { tog_scroll(); }}
-                  data-toggle="modal"
-                >
-                  <i className="bx bx-download font-size-14" ></i>
-                </Button>
-              </div>
-              : null}
-            {IsRadioButtonView ?
-              <div >
-                <div className="btn-group mt-1"
-                  role="group" aria-label="Basic checkbox toggle button group">
-
-                  <input type="checkbox"
-                    id='btncheckNonDeleted'
-                    className="btn-check" autoComplete="off"
-                    checked={radioButtonNonDelete}
-                    onChange={nondeleteHandler}
-                  />
-                  <label className="btn btn-outline-secondary" htmlFor="btncheckNonDeleted">NonDeleted</label>
-
-                  <input type="checkbox" className="btn-check"
-                    id='btncheckDeleted'
-                    autoComplete="off"
-                    checked={radioButtonDelete}
-                    onChange={deleteHandler} />
-                  <label className="btn btn-outline-secondary" htmlFor="btncheckDeleted" > Deleted</label>
-
-                </div>
-              </div>
-              : null}
             {
-              (((CountLabel) && (showCountlabel.length > 0))) ?
-                <div className="bg-dark text-center text-light external-event col-form-label border border-Success rounded-2"
-                  style={{ width: "100%", padding: "3px" }}>
-                  <samp className="px-1  ">{showCountlabel}</samp>
+              newBtnView ?
+                <div  >
+                  <button type="button" className="btn btn-success "
+                    style={{
+                      padding: "2px", paddingInline: "5px", color: "white",
+                      // border: "solid",
+                      // borderColor: "green",
+                      // backgroundColor: "hsla(0,0%,100%,.5)"
+                    }}
+                    data-mdb-toggle="tooltip" data-mdb-placement="top" title="Create New"
+                    onClick={NewButtonHandeller}>
+                    New
+                  </button>
+                  <label onClick={() => roleId === 13 && NavigateHandler()}
+                    className="font-size-16 form-label text-black " style={{ paddingLeft: "7px", }} >{pageHeading}</label>
                 </div>
                 :
-                null
+                <div onClick={() => roleId === 13 && NavigateHandler()}>
+                  <label className="font-size-16  col-ls-6 col-form-label text-black"
+                    style={{ marginLeft: "6px" }}
+                  >
+                    {pageHeading}</label>
+                  {(bredcrumbItemName.length > 0) ?
+                    <label className="font-size-21 form-label  text-nowrap bd-highlight text-primary"
+                      style={{ paddingLeft: "7px", color: "#5156be" }} >&nbsp;/&nbsp;{bredcrumbItemName}</label>
+                    : null
+                  }
+                </div>
             }
           </div>
         </div>
-      </header>
+
+        <div className=" d-flex gap-2 justify-content-end pr-1"  >
+
+          {(excelBtnView && !(downBtnData.length === 0)) ?
+            <div className="px-2 ">
+              <Button
+                type="button"
+                title="Download List"
+                style={{ padding: "2px", paddingInline: "5px" }}
+                color="btn btn-sm btn-outline-primary "
+                onClick={() => { tog_scroll(); }}
+                data-toggle="modal"
+              >
+                <i className="bx bx-download font-size-14" ></i>
+              </Button>
+            </div>
+            : null}
+          {IsRadioButtonView ?
+            <div >
+              <div className="btn-group mt-1"
+                role="group" aria-label="Basic checkbox toggle button group">
+
+                <input type="checkbox"
+                  id='btncheckNonDeleted'
+                  className="btn-check" autoComplete="off"
+                  checked={radioButtonNonDelete}
+                  onChange={nondeleteHandler}
+                />
+                <label className="btn btn-outline-secondary" htmlFor="btncheckNonDeleted">NonDeleted</label>
+
+                <input type="checkbox" className="btn-check"
+                  id='btncheckDeleted'
+                  autoComplete="off"
+                  checked={radioButtonDelete}
+                  onChange={deleteHandler} />
+                <label className="btn btn-outline-secondary" htmlFor="btncheckDeleted" > Deleted</label>
+
+              </div>
+            </div>
+            : null}
+          {
+            ((CountLabel && (showCountlabel.length > 0))) ?
+              <div className="bg-dark text-center text-light external-event col-form-label border border-Success rounded-2"
+                style={{ width: "100%", padding: "3px" }}>
+                <samp className="px-1  ">{showCountlabel}</samp>
+              </div>
+              :
+              null
+          }
+        </div>
+      </div>
 
       <Modal
         isOpen={modal_scroll}

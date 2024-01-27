@@ -16,10 +16,9 @@ import Footer from "./Footer";
 
 //redux
 import { useSelector, useDispatch } from "react-redux";
-import BreadcrumbNew from "../../components/Common/BreadcrumbNew"
+import BreadcrumbNew from "./BreadcrumbNew"
 import "./loader.scss";
-import SimpleBar from "simplebar-react";
-import './changeParty.scss';
+import './_layout.scss';
 
 const Layout = props => {
   const dispatch = useDispatch();
@@ -121,10 +120,10 @@ const Layout = props => {
           type={leftSideBarType}
           isMobile={isMobile}
         />
-        <div className="main-page-content" >
+        <div className="custom-page-wrapper" >
           <BreadcrumbNew />
           {/* <SimpleBar style={{ maxHeight: "100%" }} > */}
-          <div style={{paddingTop:"50px"}}>
+          <div className="custom-page-content">
             {props.children}
           </div>
 
