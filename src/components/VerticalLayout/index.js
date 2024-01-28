@@ -19,6 +19,9 @@ import { useSelector, useDispatch } from "react-redux";
 import BreadcrumbNew from "./BreadcrumbNew"
 import "./loader.scss";
 import './_layout.scss';
+import { useState } from "react";
+import { useRef } from "react";
+import PageDetailsSection from "./PageDetailsSection";
 
 const Layout = props => {
   const dispatch = useDispatch();
@@ -110,31 +113,82 @@ const Layout = props => {
   };
 
 
-  return (
-    <React.Fragment>
+  const customPageWrapperRef = useRef(null);
+  const sidebarRef = useRef(null);
+  const detailedDivRef = useRef(null);
+  const isCustomPageWrapperVisibleRef = useRef(false);
 
-      <div id="layout-wrapper">
+  let previousScrollPos = window.scrollY;
+
+  const handleScroll = () => {
+    const customPageWrapper = customPageWrapperRef.current;
+    const sidebar = sidebarRef.current;
+    const detailedDiv = detailedDivRef.current;
+    const currentScrollPos = customPageWrapper.scrollTop;
+
+    // Adjust display based on scroll position
+    if (currentScrollPos > 100 && currentScrollPos > previousScrollPos) {
+      // Scrolling down more than 50 pixels
+      sidebar.style.display = 'none';
+      detailedDiv.style.display = 'block';
+    } else {
+      // Scrolling up or custom-page-wrapper not visible
+      sidebar.style.display = 'block';
+      detailedDiv.style.display = 'none';
+    }
+
+    previousScrollPos = currentScrollPos;
+  };
+
+
+
+
+
+  return (
+    <div>
+
+      <div id="layout-wrapper1">
         <Header toggleMenuCallback={toggleMenuCallback} onChangeLayoutMode={onChangeLayoutMode} />
-        <Sidebar
-          theme={leftSideBarTheme}
-          type={leftSideBarType}
-          isMobile={isMobile}
-        />
-        <div className="custom-page-wrapper" >
+
+        <div ref={customPageWrapperRef} className="custom-page-wrapper" onScroll={handleScroll}>
           <BreadcrumbNew />
-          {/* <SimpleBar style={{ maxHeight: "100%" }} > */}
           <div className="custom-page-content">
             {props.children}
-          </div>
 
-          {/* </SimpleBar> */}
+          </div>
         </div>
-        {/* <Footer /> */}
+
+        <div ref={sidebarRef} className="sidebar-wrapper" >
+          <Sidebar
+            theme={leftSideBarTheme}
+            type={leftSideBarType}
+            isMobile={isMobile}
+          />
+        </div>
+
+        <div ref={detailedDivRef} style={{ display: "none" }} >
+          <div className="vertical-menu" >
+            <div data-simplebar >
+              <div id="sidebar-menu" className="detailed-div" >
+
+                <PageDetailsSection />
+
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Transparent scrollable element */}
+        {/* <div  style={{ width: '100%', height: '100%', position: 'fixed', top: 0, left: 0, pointerEvents: 'none' }}></div> */}
       </div>
 
-    </React.Fragment>
+    </div>
   );
 };
+
+
+
 
 Layout.propTypes = {
   changeLayoutWidth: PropTypes.func,
@@ -154,3 +208,4 @@ Layout.propTypes = {
 
 
 export default Layout;
+
