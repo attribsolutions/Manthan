@@ -20,6 +20,8 @@ import { getCurrent_Month_And_Year } from "./ClaimRelatedFunc";
 import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 import { loginEmployeeID, loginIsSCMParty, loginPartyID } from "../../../components/Common/CommonFunction";
 import { C_Select } from "../../../CustomValidateForm";
+import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 
 const ClaimTrackingEntryList = (props) => {
 
@@ -109,17 +111,22 @@ const ClaimTrackingEntryList = (props) => {
     }
 
     function downBtnFunc(config) {
-
-        if (config.rowData.CreditNoteUpload === null) {
-            return null
+        debugger
+        if (config.rowData.CreditNoteUpload === null || config.rowData.CreditNoteUpload === "") {
+            customAlert({
+                Type: 4,
+                Status: true,
+                Message: alertMessages.CreditNoteUpload,
+            })
+            return
         } else {
             const link = document.createElement('a');
-            link.href = config.rowData.CreditNoteUpload;
-            link.setAttribute('download', 'yourFileName.pdf');
+            link.href = `${url.API_URL_LIVE}/media/${config.rowData.CreditNoteUpload}`;
+            link.setAttribute('target', '_blank');
+            link.setAttribute('rel', 'noopener noreferrer');
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
-            console.log(config.rowData.CreditNoteUpload)
         }
     }
     const Party_Option = reducers.partyList.map(i => ({

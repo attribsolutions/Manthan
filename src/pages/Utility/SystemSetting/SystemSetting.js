@@ -16,7 +16,7 @@ import {
     Breadcrumb_inputName,
     commonPageField,
     commonPageFieldSuccess,
- 
+
 } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
@@ -118,9 +118,9 @@ const SystemSetting = (props) => {
             }
 
             if (hasEditVal) {
+                
 
-
-                const { id, SystemSetting, IsActive, Description, DefaultValue, IsPartyRelatedSetting } = hasEditVal
+                const { id, SystemSetting, IsActive, Description, DefaultValue, IsPartyRelatedSetting } = hasEditVal[0]
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
                 values.id = id
@@ -130,13 +130,11 @@ const SystemSetting = (props) => {
                 values.DefaultValue = DefaultValue
                 values.IsPartyRelatedSetting = IsPartyRelatedSetting
 
-
                 hasValid.SystemSetting.valid = true;
                 hasValid.IsActive.valid = true;
                 hasValid.Description.valid = true;
                 hasValid.DefaultValue.valid = true;
                 hasValid.IsPartyRelatedSetting.valid = true;
-
 
                 setState({ values, fieldLabel, hasValid, required, isError })
                 dispatch(Breadcrumb_inputName(hasEditVal.Name))

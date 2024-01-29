@@ -38,7 +38,9 @@ const groupTypeIsRequired = "Group Type is Required."
 const updateOneFieldIsRequired = "Update At least One Field"
 const subGroupNameIsRequired = 'SubGroup Name is Required'
 const GroupIDError = "Error for Group ID"
-const categoryAlreadyExists ="Category alredy Select"
+const categoryAlreadyExists = "Category alredy Select"
+const CreditNoteUpload = "Credit Note Not Uploaded"
+
 
 export const alertMessages = {
     commonPartySelectionIsRequired,
@@ -78,8 +80,9 @@ export const alertMessages = {
     subGroupNameIsRequired,
     GroupIDError,
     paymentORcodeIsRequired,
-    categoryAlreadyExists
-  
+    categoryAlreadyExists,
+    CreditNoteUpload
+
 };
 
 
