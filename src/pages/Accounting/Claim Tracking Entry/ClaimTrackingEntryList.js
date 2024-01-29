@@ -14,22 +14,20 @@ import {
     saveClaimTrackingEntry_Success,
     updateClaimTrackingEntryIDSuccess
 } from "../../../store/Accounting/ClaimTrackingEntryRedux/action";
-import { Col, FormGroup, Input, Label, Modal, Row } from "reactstrap";
+import { Col, FormGroup, Label, } from "reactstrap";
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList"
-import { getCurrent_Month_And_Year } from "./ClaimRelatedFunc";
-import { loginEmployeeID, loginIsSCMParty, loginPartyID } from "../../../components/Common/CommonFunction";
-import { C_Select } from "../../../CustomValidateForm";
-import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
-import { customAlert } from "../../../CustomAlert/ConfirmDialog";
+import { date_ymd_func, loginEmployeeID, loginIsSCMParty, loginPartyID } from "../../../components/Common/CommonFunction";
+import { C_DatePicker, C_Select } from "../../../CustomValidateForm";
 
 const ClaimTrackingEntryList = (props) => {
 
     const dispatch = useDispatch();
+    const currentDate_ymd = date_ymd_func();
     const isSCMParty = loginIsSCMParty();
 
-    const [yearAndMonth, setYearAndMonth] = useState(getCurrent_Month_And_Year);
-    const [UploadFile, setUploadFile] = useState([]);
-    const [modal_backdrop, setmodal_backdrop] = useState(false);   // Image Model open Or not
+    const [fromDate, setFromDate] = useState(currentDate_ymd)
+    const [toDate, setToDate] = useState(currentDate_ymd)
+
     const [partySelect, setPartySelect] = useState({
         value: "",
         label: " All"
@@ -56,12 +54,7 @@ const ClaimTrackingEntryList = (props) => {
         updateSucc: updateClaimTrackingEntryIDSuccess,
         deleteSucc: delete_ClaimTrackingEntryID_Success
     }
-
-    //Max Month is current Month
-    const maxMonthCurrent = useMemo(() => {
-        const current = getCurrent_Month_And_Year();
-        return `${current.Year}-${current.Month}`
-    }, []);
+    const { pageField, goBtnLoading } = reducers
 
     //  This UseEffect => Featch Modules List data  First Rendering
     useEffect(() => {
@@ -75,59 +68,32 @@ const ClaimTrackingEntryList = (props) => {
         }
     }, []);
 
-    useEffect(() => {
-        if (UploadFile.length > 0) {
-            setmodal_backdrop(true)
-        }
-    }, [UploadFile])
-
-    function tog_backdrop() {
-        setmodal_backdrop(!modal_backdrop)
-        removeBodyCss()
-    }
-
-    function removeBodyCss() {
-        document.body.classList.add("no_padding")
-    }
-
-    const { pageField, goBtnLoading } = reducers
-
     function goButtonHandler(e) {
 
         const jsonBody = JSON.stringify({
-            "Year": yearAndMonth.Year,
-            "Month": yearAndMonth.Month,
+            "FromDate": fromDate,
+            "ToDate": toDate,
             "Party": isSCMParty ? partySelect.value : loginPartyID(),
             "Employee": !isSCMParty ? 0 : loginEmployeeID(),
         })
         dispatch(getClaimTrackingEntrylist({ jsonBody }));
     };
 
-    async function MonthAndYearOnchange(e) {
-        const selectdMonth = getCurrent_Month_And_Year(e.target.value);
-        setYearAndMonth(selectdMonth);
-        dispatch(getClaimTrackingEntrySuccess([]));
-    }
-
     function downBtnFunc(config) {
-        debugger
-        if (config.rowData.CreditNoteUpload === null || config.rowData.CreditNoteUpload === "") {
-            customAlert({
-                Type: 4,
-                Status: true,
-                Message: alertMessages.CreditNoteUpload,
-            })
-            return
+
+        if (config.rowData.CreditNoteUpload === null) {
+            return null
         } else {
             const link = document.createElement('a');
-            link.href = `${url.API_URL_LIVE}/media/${config.rowData.CreditNoteUpload}`;
-            link.setAttribute('target', '_blank');
-            link.setAttribute('rel', 'noopener noreferrer');
+            link.href = config.rowData.CreditNoteUpload;
+            link.setAttribute('download', 'yourFileName.pdf');
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
+            console.log(config.rowData.CreditNoteUpload)
         }
     }
+
     const Party_Option = reducers.partyList.map(i => ({
         value: i.id,
         label: i.Name
@@ -138,6 +104,16 @@ const ClaimTrackingEntryList = (props) => {
         label: " All"
     });
 
+    function fromdateOnchange(e, date) {
+        setFromDate(date);
+        dispatch(getClaimTrackingEntrySuccess([]));
+    }
+
+    function todateOnchange(e, date) {
+        setToDate(date);
+        dispatch(getClaimTrackingEntrySuccess([]));
+    }
+
     return (
 
         <React.Fragment>
@@ -145,32 +121,45 @@ const ClaimTrackingEntryList = (props) => {
             <div className="page-content">
 
                 <div className="px-3 c_card_filter header text-black mb-1" >
-                    <Row >
-                        <Col sm="5" className="mt-1 mb-n1">
-                            <FormGroup className="row mt-2" >
-                                <Label className="col-sm-1 p-2"
-                                    style={{ width: "115px", marginRight: "0.1cm" }}>Claim For The Month </Label>
-                                <Col sm="7">
-                                    <Input className="form-control"
-                                        type="month"
-                                        value={`${yearAndMonth.Year}-${yearAndMonth.Month}`}
-                                        onChange={(e) => MonthAndYearOnchange(e)}
-                                        max={maxMonthCurrent}
+
+                    <div className="row" >
+                        <Col sm={3} className="">
+                            <FormGroup className="mb- row mt-3 mb-2 " >
+                                <Label className="col-sm-4 p-2"
+                                    style={{ width: "83px" }}>FromDate</Label>
+                                <Col sm="6">
+                                    <C_DatePicker
+                                        name='FromDate'
+                                        value={fromDate}
+                                        onChange={fromdateOnchange}
                                     />
                                 </Col>
                             </FormGroup>
-                        </Col >
+                        </Col>
+                        <Col sm={3} className="">
+                            <FormGroup className="mb- row mt-3 mb-2" >
+                                <Label className="col-sm-4 p-2"
+                                    style={{ width: "65px" }}>ToDate</Label>
+                                <Col sm="6">
+                                    <C_DatePicker
+                                        name="ToDate"
+                                        value={toDate}
+                                        onChange={todateOnchange}
+                                    />
+                                </Col>
+                            </FormGroup>
+                        </Col>
 
                         {isSCMParty &&
-                            <Col sm="5" className="mt-1 mb-n1">
-                                <FormGroup className="row mt-2" >
-                                    <Label className="col-sm-6 p-2" style={{ width: "65px" }}> Party</Label>
-                                    <Col sm="7">
+                            <Col sm={3} className="">
+                                <FormGroup className="mb- row mt-3" >
+                                    <Label className="col-sm-4 p-2"
+                                        style={{ width: "65px", marginRight: "20px" }}>Party</Label>
+                                    <Col sm="8">
                                         <C_Select
                                             name="PartyName"
                                             value={partySelect}
                                             isSearchable={true}
-                                            // isLoading={partyLoading}
                                             className="react-dropdown"
                                             classNamePrefix="dropdown"
                                             styles={{
@@ -186,13 +175,14 @@ const ClaimTrackingEntryList = (props) => {
                                 </FormGroup>
                             </Col>
                         }
+
                         <Col sm="1" className="mx-6 mt-3" >
                             < Go_Button
                                 loading={goBtnLoading}
                                 onClick={(e) => goButtonHandler()}
                             />
                         </Col>
-                    </Row>
+                    </div>
                 </div>
 
                 {
