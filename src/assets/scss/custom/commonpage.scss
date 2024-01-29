@@ -315,9 +315,17 @@
 
 @keyframes slideRightToLeft {
   0% {
-    transform: translateX(200%); /* Start off-screen to the right */
+    transform: translateX(200%);
+    /* Start off-screen to the right */
   }
+
   100% {
-    transform: translateX(-100%); /* Move to off-screen to the left */
+    transform: translateX(-100%);
+    /* Move to off-screen to the left */
   }
+}
+
+.labelHover:hover {
+  color: $primary;
+  text-decoration: underline;
 }

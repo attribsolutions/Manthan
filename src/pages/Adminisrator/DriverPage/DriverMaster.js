@@ -21,6 +21,7 @@ import {
     editDriverID_Success,
     updateDriverID,
     updateDriverID_Success,
+    getDriverList,
 } from "../../../store/Administrator/DriverRedux/action";
 import { useHistory } from "react-router-dom";
 import {
@@ -153,11 +154,15 @@ const DriverMaster = (props) => {
             dispatch(saveDriverMasterSuccess({ Status: false }))
             setState(() => resetFunction(fileds, state))// Clear form values 
             dispatch(Breadcrumb_inputName(''))
-            if (pageMode === mode.dropdownAdd) {
+            if (props.pageMode === mode.dropdownAdd) {
                 customAlert({
                     Type: 1,
                     Message: postMsg.Message,
                 })
+
+                dispatch(getDriverList())
+
+                props.isOpenModal(false)
             }
             else {
                 let isPermission = await customAlert({
@@ -202,7 +207,7 @@ const DriverMaster = (props) => {
     }, [pageField])
 
     const SaveHandler = async (event) => {
-       
+
         event.preventDefault();
         const btnId = event.target.id
         try {
@@ -245,7 +250,7 @@ const DriverMaster = (props) => {
 
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                     <Container fluid>
-                     
+
                         <PartyDropdown_Common pageMode={pageMode} />
 
                         <Card className="text-black" style={{ marginTop: "3px" }}>

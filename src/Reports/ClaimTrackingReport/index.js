@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Col, FormGroup, Input, Label, Row, } from "reactstrap";
+import { Col, FormGroup, Label, Row, } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import { C_Button } from "../../components/Common/CommonButton";
 import * as _cfunc from "../../components/Common/CommonFunction";
@@ -11,9 +11,8 @@ import BootstrapTable from "react-bootstrap-table-next";
 import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
 import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess } from "../../store/actions";
 import DynamicColumnHook from "../../components/Common/TableCommonFunc";
-import { getCurrent_Month_And_Year } from "../../pages/Accounting/Claim Tracking Entry/ClaimRelatedFunc";
 import { getClaimTrackingEntrySuccess, getClaimTrackingEntrylist } from "../../store/Accounting/ClaimTrackingEntryRedux/action";
-import { C_Select } from "../../CustomValidateForm";
+import { C_DatePicker, C_Select } from "../../CustomValidateForm";
 import { ExcelReportComponent } from "../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS";
 import { API_URL_LIVE } from "../../routes/route_url";
 
@@ -21,10 +20,14 @@ const ClaimTrackingReport = (props) => {  // also Receipt Data Export
 
     const dispatch = useDispatch();
     const history = useHistory();
-    const userAdminRole = _cfunc.loginUserAdminRole();
+    const currentDate_ymd = _cfunc.date_ymd_func();
+    const isSCMParty = _cfunc.loginIsSCMParty();
+
+    const [fromDate, setFromDate] = useState(currentDate_ymd)
+    const [toDate, setToDate] = useState(currentDate_ymd)
 
     const [userPageAccessState, setUserAccState] = useState('');
-    const [yearAndMonth, setYearAndMonth] = useState(getCurrent_Month_And_Year);
+
     const [partySelect, setPartySelect] = useState({
         value: "",
         label: " All"
@@ -59,12 +62,6 @@ const ClaimTrackingReport = (props) => {  // also Receipt Data Export
             dispatch(commonPageFieldSuccess(null));
             dispatch(getClaimTrackingEntrySuccess([]));
         }
-    }, []);
-
-    //Max Month is current Month
-    const maxMonthCurrent = useMemo(() => {
-        const current = getCurrent_Month_And_Year();
-        return `${current.Year}-${current.Month}`
     }, []);
 
     // userAccess useEffect
@@ -120,22 +117,16 @@ const ClaimTrackingReport = (props) => {  // also Receipt Data Export
         setBtnMode(goBtnMode)
         try {
             const jsonBody = JSON.stringify({
-                "Year": yearAndMonth.Year,
-                "Month": yearAndMonth.Month,
-                "Party": userAdminRole ? partySelect.value : _cfunc.loginPartyID(),
-                "Employee": !userAdminRole ? 0 : _cfunc.loginEmployeeID(),
+                "FromDate": fromDate,
+                "ToDate": toDate,
+                "Party": isSCMParty ? partySelect.value : _cfunc.loginPartyID(),
+                "Employee": !isSCMParty ? 0 : _cfunc.loginEmployeeID(),
             })
 
             const config = { jsonBody, subPageMode: url.CLAIM_TRACKING_REPORT };
             dispatch(getClaimTrackingEntrylist(config))
 
         } catch (error) { _cfunc.CommonConsole(error) }
-    }
-
-    async function MonthAndYearOnchange(e) {
-        const selectdMonth = getCurrent_Month_And_Year(e.target.value);
-        setYearAndMonth(selectdMonth);
-        dispatch(getClaimTrackingEntrySuccess([]));
     }
 
     const Party_Option = partyList.map(i => ({
@@ -148,39 +139,60 @@ const ClaimTrackingReport = (props) => {  // also Receipt Data Export
         label: " All"
     });
 
+    function fromdateOnchange(e, date) {
+        setFromDate(date)
+        dispatch(getClaimTrackingEntrySuccess([]));
+    }
+
+    function todateOnchange(e, date) {
+        setToDate(date);
+        dispatch(getClaimTrackingEntrySuccess([]));
+    }
+
     return (
         <React.Fragment>
             <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
             <div className="page-content">
 
                 <div className="px-3 c_card_filter header text-black mb-1" >
-
-                    <Row >
-                        <Col sm="5" className="mt-1 mb-n1">
-                            <FormGroup className="row mt-2" >
-                                <Label className="col-sm-1 p-2"
-                                    style={{ width: "115px", marginRight: "0.1cm" }}>Claim For The Month </Label>
-                                <Col sm="7">
-                                    <Input className="form-control"
-                                        type="month"
-                                        value={`${yearAndMonth.Year}-${yearAndMonth.Month}`}
-                                        onChange={(e) => MonthAndYearOnchange(e)}
-                                        max={maxMonthCurrent}
+                    <div className="row" >
+                        <Col sm={3} className="">
+                            <FormGroup className="mb- row mt-3 mb-2 " >
+                                <Label className="col-sm-4 p-2"
+                                    style={{ width: "83px" }}>FromDate</Label>
+                                <Col sm="6">
+                                    <C_DatePicker
+                                        name='FromDate'
+                                        value={fromDate}
+                                        onChange={fromdateOnchange}
                                     />
                                 </Col>
                             </FormGroup>
-                        </Col >
+                        </Col>
+                        <Col sm={3} className="">
+                            <FormGroup className="mb- row mt-3 mb-2" >
+                                <Label className="col-sm-4 p-2"
+                                    style={{ width: "65px" }}>ToDate</Label>
+                                <Col sm="6">
+                                    <C_DatePicker
+                                        name="ToDate"
+                                        value={toDate}
+                                        onChange={todateOnchange}
+                                    />
+                                </Col>
+                            </FormGroup>
+                        </Col>
 
-                        {userAdminRole &&
-                            <Col sm="5" className="mt-1 mb-n1">
-                                <FormGroup className="row mt-2" >
-                                    <Label className="col-sm-6 p-2" style={{ width: "65px" }}> Party</Label>
-                                    <Col sm="7">
+                        {isSCMParty &&
+                            <Col sm={3} className="">
+                                <FormGroup className="mb- row mt-3" >
+                                    <Label className="col-sm-4 p-2"
+                                        style={{ width: "65px", marginRight: "20px" }}>Party</Label>
+                                    <Col sm="8">
                                         <C_Select
                                             name="PartyName"
                                             value={partySelect}
                                             isSearchable={true}
-                                            // isLoading={partyLoading}
                                             className="react-dropdown"
                                             classNamePrefix="dropdown"
                                             styles={{
@@ -196,6 +208,7 @@ const ClaimTrackingReport = (props) => {  // also Receipt Data Export
                                 </FormGroup>
                             </Col>
                         }
+
                         <Col sm={1} className="mt-3 ">
                             <C_Button
                                 type="button"
@@ -208,7 +221,7 @@ const ClaimTrackingReport = (props) => {  // also Receipt Data Export
                             </C_Button>
                         </Col>
 
-                        <Col sm={1} className="mt-3 ">
+                        <Col sm={2} className="mt-3 ">
                             <C_Button
                                 type="button"
                                 spinnerColor="white"
@@ -219,7 +232,7 @@ const ClaimTrackingReport = (props) => {  // also Receipt Data Export
                                 Excel
                             </C_Button>
                         </Col>
-                    </Row>
+                    </div>
                 </div>
 
                 <div className="mt-1">

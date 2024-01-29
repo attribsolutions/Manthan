@@ -269,9 +269,19 @@ const BreadcrumbNew = (props) => {
   }, [editData]);
 
   function NavigateHandler() {
-    dispatch(edit_PageListID_Action({ editId: relatedPageId, }))
+    if (roleId === 13) {
+      dispatch(edit_PageListID_Action({ editId: relatedPageId, }))
+    }
   }
 
+  const commonLabelProps = {
+    className: "font-size-18 col-ls-6 col-form-label",
+    style: {
+      marginLeft: roleId === 13 ? "6px" : "7px",
+      cursor: roleId === 13 ? "pointer" : "default",
+    },
+  };
+  
   return (
 
     <React.Fragment>
@@ -289,13 +299,19 @@ const BreadcrumbNew = (props) => {
                       onClick={NewButtonHandeller}>
                       New
                     </button>
-                    <label onClick={() => roleId === 13 && NavigateHandler()}
-                      className="font-size-18 form-label text-black " style={{ paddingLeft: "7px", }} >{pageHeading}</label>
+                    <label onClick={NavigateHandler}
+                      className={roleId === 13 ? "font-size-18 col-ls-6 col-form-label labelHover" : "font-size-18 col-ls-6 col-form-label"}
+                      style={{ paddingLeft: "7px", cursor: roleId === 13 ? 'pointer' : 'default', }}
+                      title={roleId === 13 && `Edit ${pageHeading}`}
+                    >
+                      {pageHeading}</label>
                   </div>
                   :
-                  <div onClick={() => roleId === 13 && NavigateHandler()}>
-                    <label className="font-size-18  col-ls-6 col-form-label text-black"
-                      style={{ marginLeft: "6px" }}
+                  <div onClick={NavigateHandler}>
+                    <label
+                      className={roleId === 13 ? "font-size-18 col-ls-6 col-form-label labelHover" : "font-size-18 col-ls-6 col-form-label"}
+                      style={{ marginLeft: "6px", cursor: roleId === 13 ? 'pointer' : 'default', }}
+                      title={`Edit ${pageHeading}`}
                     >
                       {pageHeading}</label>
                     {(bredcrumbItemName.length > 0) ?
