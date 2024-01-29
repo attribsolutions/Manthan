@@ -207,8 +207,11 @@ const InvoiceExcelUpload = (props) => {
         const mapItemValues = ItemList.map(obj => obj.MapItem);
         const mapCustomerValues = PartyMapData.map(obj => obj.MapCustomer);
         /////////////////////////////////////////////////////////// check Ignore Negative Value in excel file /////////////////////////////////
+
         if (isIgnoreNegativeValue && isIgnoreItem && isIgnoreParty) {
+
             const conditionFunction = (item) => {
+
                 const itemCodeAsString = item.Item_Code.toString().trim();
                 const CustomerCodeAsString = item.Party_Code.toString().trim();
                 return !item.shouldRemove && mapItemValues.includes(itemCodeAsString) && mapCustomerValues.includes(CustomerCodeAsString);
@@ -356,14 +359,19 @@ const InvoiceExcelUpload = (props) => {
 
 
             if (Wrong_Item_Code_Array.length > 0) {
+
                 try {
+
                     const MapItemList = ItemList.filter(obj => obj.MapItem !== null && obj.MapItem !== "");
+                    debugger
                     MapItemList.forEach(function (i) {
+
                         let Item_Code = i.MapItem;
                         let GST = i.GST;
 
                         let Matching_ItemCode_Objects = readjson.filter(inx => {
-                            return (inx.Item_Code).toString() === (Item_Code).toString();
+
+                            return (inx.Item_Code).toString().trim() === (Item_Code).toString().trim();
                         });
 
                         Matching_ItemCode_Objects.forEach(matchingObject => {
@@ -374,7 +382,6 @@ const InvoiceExcelUpload = (props) => {
                             Matching_ItemCode_Objects.GST = GST;
                         }
                         console.log(readjson)
-
                     });
                     setItemVerify({ Wrong_Item_Code_Array: Wrong_Item_Code_Array, Not_Verify_Item: true });
                 } catch (error) {
@@ -390,7 +397,8 @@ const InvoiceExcelUpload = (props) => {
                         let GST = i.GST;
 
                         let Matching_ItemCode_Objects = readjson.filter(inx => {
-                            return (inx.Item_Code).toString() === (Item_Code).toString();
+
+                            return (inx.Item_Code).toString().trim() === (Item_Code).toString().trim();
                         });
 
                         Matching_ItemCode_Objects.forEach(matchingObject => {
@@ -591,7 +599,7 @@ const InvoiceExcelUpload = (props) => {
                         "RoundOffAmount": ele[parArr.RoundOffAmount] ? ele[parArr.RoundOffAmount] : 0,
                         "InvoiceNumber": ele[parArr.InvoiceNumber] ? ele[parArr.InvoiceNumber] : '',
                         "FullInvoiceNumber": ele[parArr.InvoiceNumber] ? ele[parArr.InvoiceNumber] : '',
-                        "Customer": ele[parArr.Customer] ? ele[parArr.Customer] : '',
+                        "Customer": ele[parArr.Customer] ? ele[parArr.Customer].trim() : '',
                         "Party": _cfunc.loginSelectedPartyID(),
                         CreatedBy: _cfunc.loginUserID(),
                         UpdatedBy: _cfunc.loginUserID(),
@@ -600,8 +608,8 @@ const InvoiceExcelUpload = (props) => {
 
 
                     invoiceItems.push({
-                        "Item": ele[parArr.Item] ? ele[parArr.Item] : '',
-                        "Unit": ele[parArr.Unit] ? ele[parArr.Unit] : '',
+                        "Item": ele[parArr.Item] ? ele[parArr.Item].trim() : '',
+                        "Unit": ele[parArr.Unit] ? ele[parArr.Unit].trim() : '',
                         "Quantity": ele[parArr.Quantity] ? ele[parArr.Quantity] : 0,
                         "BatchDate": ele[parArr.BatchDate] ? ele[parArr.BatchDate] : null,
                         "BatchCode": ele[parArr.BatchCode] ? ele[parArr.BatchCode] : 0,

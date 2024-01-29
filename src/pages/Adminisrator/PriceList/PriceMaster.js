@@ -621,7 +621,7 @@ const PriceMaster = (props) => {
                                                         </Row>
 
                                                         <Row className="mt-2">
-                                                            <Label className="col-3 col-form-label" >MkUp </Label>
+                                                            <Label className="col-3 col-form-label" >MkDown </Label>
                                                             <Col className="mt-2">
                                                                 <Input type={"checkbox"} id='mkupMkdown'
                                                                     defaultChecked={currentPrice.MkUpMkDn} />

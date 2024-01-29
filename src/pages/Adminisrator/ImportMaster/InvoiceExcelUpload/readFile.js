@@ -203,7 +203,9 @@ export async function downloadDummyFormatHandler(jsonData) {
 }
 
 export const filterArraysInEntries = (map, conditionFn) => {
+
   const filteredEntries = Array.from(map.entries()).map(([key, value]) => {
+    
     const filteredArray = value.filter(conditionFn); // Filtering each array based on condition
     if (filteredArray.length === 0) {
       return null
