@@ -1,0 +1,96 @@
+
+
+// _variables.scss
+$header-height: 60px !default;
+$sidebar-width: 250px;
+$footer-height: 10px;
+$sidebar-collapsed-width: 70px;
+$sidebar-width-sm: 160px;
+$border-color:                #e9e9ef;
+
+// Mixin for Scrollbar Styles
+@mixin scrollbar-styles {
+  &::-webkit-scrollbar {
+    width: 6px;
+    /* Adjust the width as needed */
+    height: 6px;
+    /* Adjust the width as needed */
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+    /* Color of the thumb */
+    border-radius: 4px;
+    /* Rounded corners for the thumb */
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: #f3f1f1;
+    /* Color of the track */
+  }
+}
+
+// Main Page Content Styles
+.custom-page-wrapper {
+  top: calc(#{$header-height});
+  position: fixed;
+  right: 0;
+  left: $sidebar-width;
+  bottom: 0;
+  overflow-x: auto;  // Allow horizontal scrolling
+  height: calc(100% - #{$header-height} - 5px);
+  margin: 0;
+
+  @include scrollbar-styles;  // Include the scrollbar styles mixin
+
+
+  @media (max-width: 992px) {
+    margin-left: 0 !important;
+  }
+
+  @media (max-width: 380px) {
+    left: 0px
+  }
+
+}
+
+// [data-sidebar-size="sm"],
+body[data-sidebar-size="sm"] {
+  min-height: 1000px;
+
+  .custom-page-wrapper {
+    left: $sidebar-collapsed-width;
+  }
+}
+
+body[data-sidebar-size="md"] {
+  .custom-page-wrapper {
+    left: $sidebar-width-sm;
+  }
+}
+
+
+.custom-page-content{
+  padding-top:5px ;
+  padding-right: 5px;
+  padding-left: 5px;
+}
+
+
+//breadcrumb
+
+
+
+.breadcrumb-header {
+display: flex;
+-ms-flex-pack: justify;
+justify-content: space-between;
+align-items: center;
+margin: 0 auto;
+height: 40px;
+top: 0;
+right: 0;
+left: 0;
+border-bottom: 1px solid $border-color;
+
+}

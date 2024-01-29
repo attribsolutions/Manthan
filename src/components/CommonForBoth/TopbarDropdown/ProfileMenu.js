@@ -333,7 +333,8 @@ const ProfileMenu = props => {
 
             >
 
-              <span className=" d-xl-inline-block ms-2 me-1">{`${employeeName} (${FooterDetails.PartyName})`}</span>
+              <span className=" d-xl-inline-block ms-2 me-1">{`${employeeName} `}</span>
+              <span className=" d-xl-inline-block ms-2 me-1">{` (${FooterDetails.PartyName})`}</span>
               <i className="mdi mdi-chevron-down d-none d-xl-inline-block" />
             </DropdownToggle>
           </div>

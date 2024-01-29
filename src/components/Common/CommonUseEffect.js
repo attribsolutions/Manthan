@@ -13,7 +13,7 @@ export const userAccessUseEffect = ({ props,
     let hasShowModal = props.hasOwnProperty(mode.editValue)
 
     let locationPath;
-
+    debugger
     if ((props.pageMode === mode.dropdownAdd) || hasShowModal) {
         locationPath = props.masterPath;
     } else {
@@ -22,6 +22,7 @@ export const userAccessUseEffect = ({ props,
 
     userAccess.forEach((inx) => {
         if ((`/${inx.ActualPagePath}` === locationPath) && setUserAccState) {
+            debugger
             setUserAccState(inx);
             if (!props.isdropdown) {
                 breadcrumbReturnFunc({ dispatch, userAcc: inx });
@@ -37,7 +38,7 @@ export const userAccessUseEffect = ({ props,
 export const saveMsgUseEffect = async ({
     postMsg, postSuccss, pageMode, dispatch, history, status200, listPath, foreceRedirectList = false }) => {
 
-     if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
+    if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
         dispatch(postSuccss({ Status: false }))
 
         if (status200) { status200() };

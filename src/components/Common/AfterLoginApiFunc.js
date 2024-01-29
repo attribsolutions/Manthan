@@ -15,8 +15,8 @@ export const afterloginOneTimeAPI = (user, dispatch) => {
             dispatch(commonPartyDropSelectAction(selectedParty))
         }
         else {
-            dispatch(commonPartyDropSelectAction({ value: 0, label: "select...", SAPPartyCode: "" }))
-            localStorage.setItem("selectedParty", JSON.stringify({ value: 0, label: "select...", SAPPartyCode: "" }));
+            dispatch(commonPartyDropSelectAction({ value: 0, label: "select party...", SAPPartyCode: "" }))
+            localStorage.setItem("selectedParty", JSON.stringify({ value: 0, label: "select party...", SAPPartyCode: "" }));
         }
     }
     else {

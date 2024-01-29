@@ -90,7 +90,7 @@ const CustomTable = ({
 
 
     return (
-        <div className="table-responsive"  >
+        <>
             <BootstrapTable data={slicedData} columns={columns}
                 keyField={keyField}
                 classes='custom-table'
@@ -108,7 +108,7 @@ const CustomTable = ({
                 />
             }
 
-        </div>
+        </>
     );
 };
 

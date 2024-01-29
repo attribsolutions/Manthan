@@ -32,6 +32,7 @@ const SaveBtn = ({ onClick, type = "button", userAcc, loading, forceDisabled, })
           id={btnId}
           title={`Save ${Name} Loging...`}
           type={type}
+          style={{ padding: "3px", paddingInline: "5px" }}
           className="btn btn-primary w-md"
         >  Saving.. &nbsp;
           <Spinner style={{ height: "13px", width: "13px" }} color="white" />
@@ -41,6 +42,7 @@ const SaveBtn = ({ onClick, type = "button", userAcc, loading, forceDisabled, })
         <button
           type={type}
           id={btnId}
+          style={{ padding: "3px", paddingInline: "5px" }}
           disabled={forceDisabled}
           title={`Save ${Name}`}
           className="btn btn-primary w-md"
@@ -62,6 +64,7 @@ const UpdateBtn = ({ onClick, userAcc, loading, type = 'button' }) => {
           id={btnId}
           title={`Updating.. ${Name} `}
           type={type}
+          style={{ padding: "3px", paddingInline: "5px" }}
           className="btn btn-success w-md"
         >  Updating.. &nbsp;
           <Spinner style={{ height: "13px", width: "13px" }} color="white" />
@@ -69,6 +72,7 @@ const UpdateBtn = ({ onClick, userAcc, loading, type = 'button' }) => {
         :
         <button
           type={type}
+          style={{ padding: "3px", paddingInline: "5px" }}
           id={btnId}
           title={`Update ${Name}`}
           className="btn btn-success w-md"
@@ -92,12 +96,14 @@ export function Go_Button(props) {
       disabled
       title={`Go Button Loging...`}
       color="btn btn-outline-success border-1"
+      style={{ padding: "3px", paddingInline: "5px" }}
       onClick={onClick} >
       <Spinner style={{ height: "13px", width: "13px" }} color="success" />
     </Button>
     : <Button
       id={id}
       type={type}
+      style={{ padding: "3px", paddingInline: "5px" }}
       disabled={forceDisabled}
       color="btn btn-success border-1 font-size-12"
       onClick={onClick} > <span className="font-weight-bold" style={{ fontWeight: "bold", fontSize: "16px" }}>Go</span></Button>
@@ -108,6 +114,7 @@ export function Change_Button(props) {
   return <Button
     id={id}
     disabled={forceDisabled}
+    style={{ padding: "3px", paddingInline: "5px" }}
     type={type}
     color="btn btn-outline-info border-1 font-size-12 "
     onClick={onClick}>Change</Button>
@@ -129,6 +136,7 @@ export function C_Button({
         disabled
         title={`Add Button Loading...`}
         {...rest}
+        style={{ padding: "3px", paddingInline: "5px" }}
       > {children}..&nbsp;
         <Spinner style={{ height: "12px", width: "12px" }} color={spinnerColor} />
       </button>
@@ -139,6 +147,7 @@ export function C_Button({
     <button
       disabled={forceDisabled}
       onClick={onClick}
+      style={{ padding: "3px", paddingInline: "5px" }}
       {...rest}
     >
       {children}
@@ -156,6 +165,7 @@ export const GotoInvoiceBtn = ({ onClick, userAcc, loading, forceDisabled }) => 
         <button
           id={btnId}
           type="button"
+          style={{ padding: "3px", paddingInline: "5px" }}
           className="btn btn-info w-md"
         >  Saving.. &nbsp;
           <Spinner style={{ height: "13px", width: "13px" }} color="white" />
@@ -164,6 +174,7 @@ export const GotoInvoiceBtn = ({ onClick, userAcc, loading, forceDisabled }) => 
         <button
           type="button"
           id={btnId}
+          style={{ padding: "3px", paddingInline: "5px" }}
           disabled={forceDisabled}
           title={` save & goto Invoice ${Name}`}
           className="btn btn-info w-md"
@@ -188,12 +199,14 @@ export const SaveAndDownloadPDF = ({ onClick, pageMode, userAcc, loading, forceD
           <button
             type={type}
             className="btn btn-info w-md"
+            style={{ padding: "3px", paddingInline: "5px" }}
           >Saving.. &nbsp;
             <Spinner style={{ height: "13px", width: "13px" }} color="white" />
           </button>
           :
           <button
             type={type}
+            style={{ padding: "3px", paddingInline: "5px" }}
             disabled={forceDisabled}
             title={` save & goto Invoice ${Name}`}
             className="btn btn-info w-md"
@@ -317,6 +330,7 @@ export function Verifiy_Button({
     return (
       <button
         disabled
+        style={{ padding: "3px", paddingInline: "5px" }}
         title={`Add Button Loading...`}
         {...rest}
       >
@@ -329,6 +343,7 @@ export function Verifiy_Button({
     <button
       disabled={forceDisabled}
       onClick={onClick}
+      style={{ padding: "3px", paddingInline: "5px" }}
       {...rest}
     >
       {children}

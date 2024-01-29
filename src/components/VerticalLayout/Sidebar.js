@@ -6,6 +6,7 @@ import { withRouter } from "react-router-dom";
 //i18n
 import { withTranslation } from "react-i18next";
 import SidebarContent from "./SidebarContent";
+import ChangeCommonParty from "./chnageParty/changeCommonParty";
 
 const Sidebar = props => {
 
@@ -13,7 +14,9 @@ const Sidebar = props => {
     <React.Fragment>
       <div className="vertical-menu" >
         <div data-simplebar className="h-100">
-          {props.type !== "condensed" ? <SidebarContent />:<SidebarContent />}
+          <ChangeCommonParty  />
+          {props.type !== "condensed" ? <SidebarContent /> : <SidebarContent />}
+
         </div>
       </div>
     </React.Fragment>
