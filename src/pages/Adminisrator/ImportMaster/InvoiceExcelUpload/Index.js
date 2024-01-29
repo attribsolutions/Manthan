@@ -48,6 +48,10 @@ const InvoiceExcelUpload = (props) => {
     const [verifyLoading, setverifyLoading] = useState(false);
     const [isIgnoreNegativeValue, setisIgnoreNegativeValue] = useState(false);
     const [isIgnoreItem, setisIgnoreItem] = useState(false);
+    const [isIgnoreParty, setisIgnoreParty] = useState(false);
+
+
+
     const [unitMapData, setunitMapData] = useState([]);
     const [unitVerify, setUnitVerify] = useState({ Wrong_Unit_Code_Array: [], Not_Verify_Unit: undefined });
     // const [allpartyVerify, setAllPartyVerify] = useState({ Not_Map_Party_Code_Array: [], Not_Map_Party: undefined });
@@ -201,36 +205,59 @@ const InvoiceExcelUpload = (props) => {
         }
 
         const mapItemValues = ItemList.map(obj => obj.MapItem);
+        const mapCustomerValues = PartyMapData.map(obj => obj.MapCustomer);
         /////////////////////////////////////////////////////////// check Ignore Negative Value in excel file /////////////////////////////////
-        if (isIgnoreNegativeValue && isIgnoreItem) {
-
+        if (isIgnoreNegativeValue && isIgnoreItem && isIgnoreParty) {
             const conditionFunction = (item) => {
-                const itemCodeAsString = item.Item_Code.toString();
-                return !item.shouldRemove && mapItemValues.includes(itemCodeAsString);
+                const itemCodeAsString = item.Item_Code.toString().trim();
+                const CustomerCodeAsString = item.Party_Code.toString().trim();
+                return !item.shouldRemove && mapItemValues.includes(itemCodeAsString) && mapCustomerValues.includes(CustomerCodeAsString);
             };
             updatereadJsonDetail.invoice = filterArraysInEntries(readJsonDetail.invoice, conditionFunction);
 
+        } else if (isIgnoreNegativeValue && isIgnoreItem) {
+            const conditionFunction = (item) => {
+                const itemCodeAsString = item.Item_Code.toString().trim();
+                return !item.shouldRemove && mapItemValues.includes(itemCodeAsString);
+            };
+            updatereadJsonDetail.invoice = filterArraysInEntries(readJsonDetail.invoice, conditionFunction);
+        } else if (isIgnoreNegativeValue && isIgnoreParty) {
+            const conditionFunction = (item) => {
+                const CustomerCodeAsString = item.Party_Code.toString().trim();
+                return !item.shouldRemove && mapCustomerValues.includes(CustomerCodeAsString);
+            };
+            updatereadJsonDetail.invoice = filterArraysInEntries(readJsonDetail.invoice, conditionFunction);
+        } else if (isIgnoreItem && isIgnoreParty) {
+            const conditionFunction = (item) => {
+                const itemCodeAsString = item.Item_Code.toString().trim();
+                const CustomerCodeAsString = item.Party_Code.toString().trim();
+                return mapItemValues.includes(itemCodeAsString) && mapCustomerValues.includes(CustomerCodeAsString);
+            };
+            updatereadJsonDetail.invoice = filterArraysInEntries(readJsonDetail.invoice, conditionFunction);
         } else if (isIgnoreNegativeValue) {
             const conditionFunction = (item) => {
                 return !item.shouldRemove;
             };
             updatereadJsonDetail.invoice = filterArraysInEntries(readJsonDetail.invoice, conditionFunction);
-
             /////////////////////////////////////////////////////////// check Ignore Not Map Item  in excel file /////////////////////////////////
-
         } else if (isIgnoreItem) {
             const conditionFunction = (item) => {
-                const itemCodeAsString = item.Item_Code.toString();
+                const itemCodeAsString = item.Item_Code.toString().trim();
                 return mapItemValues.includes(itemCodeAsString);
             };
             updatereadJsonDetail.invoice = filterArraysInEntries(readJsonDetail.invoice, conditionFunction);
-
             /////////////////////////////////////////////////////////// check Ignore both Not Map Item and Negative Value  in excel file /////////////////////////////////
-
+        } else if (isIgnoreParty) {
+            const conditionFunction = (item) => {
+                const CustomerCodeAsString = item.Party_Code.toString().trim();
+                return mapCustomerValues.includes(CustomerCodeAsString);
+            };
+            updatereadJsonDetail.invoice = filterArraysInEntries(readJsonDetail.invoice, conditionFunction);
         }
+
         setUpdateReadJsonDetail(updatereadJsonDetail)
 
-    }, [isIgnoreItem, isIgnoreNegativeValue, readJsonDetail])
+    }, [isIgnoreItem, isIgnoreNegativeValue, readJsonDetail, isIgnoreParty])
 
 
     function goButtonHandler() {
@@ -373,7 +400,7 @@ const InvoiceExcelUpload = (props) => {
                         if (Matching_ItemCode_Objects) {
                             Matching_ItemCode_Objects.GST = GST;
                         }
-                        console.log(readjson)
+
 
                     });
                     setItemVerify({ Wrong_Item_Code_Array: [], Not_Verify_Item: false })
@@ -467,7 +494,7 @@ const InvoiceExcelUpload = (props) => {
     ////////////////////////////////////////////////////  Verify condition Check If all condition fullfill then only file verified /////////////////////////////
 
     const isVerify = (
-        (partyVerify.Not_Verify_Party === false) &&
+        ((partyVerify.Not_Verify_Party === false) || (isIgnoreParty)) &&
         ((isIgnoreItem) || itemVerify.Not_Verify_Item === false)
         &&
         ((isIgnoreNegativeValue) || (negativeFigureVerify.Not_Verify_Negative_Figure === false))
@@ -786,9 +813,21 @@ const InvoiceExcelUpload = (props) => {
 
 
                                 {partyVerify.Not_Verify_Party !== undefined ? <details>
+                                    {partyVerify.Not_Verify_Party === false ? null : <Row className="mt-2 error-msg" style={{ margin: "unset", backgroundColor: "#c1cfed" }}>
+                                        <Col sm={3} style={{ fontWeight: "bold", fontSize: "15px", paddingLeft: "unset" }} className="col-xl-auto">Ignore this Party </Col>
+                                        <Col >
+                                            <div className="form-check form-switch form-switch-md " style={{ marginTop: "-3px" }}>
+                                                <Input type="checkbox" className="form-check-input"
+                                                    name="itemVerify"
+                                                    onChange={(e) => { setisIgnoreParty(e.target.checked) }}
+
+                                                />
+                                            </div>
+                                        </Col>
+                                    </Row>}
                                     <summary>&nbsp; &nbsp; Party mapping&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{partyVerify.Not_Verify_Party === true ?
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{((partyVerify.Not_Verify_Party === true) && (!isIgnoreParty)) ?
                                             <i style={{ color: "tomato", }} className="mdi mdi-close-circle font-size-18  "></i> :
                                             <i style={{ color: "green", }} className="mdi mdi-check-decagram  font-size-18  "></i>}</summary>
                                     {partyVerify.Not_Verify_Party === false ? null : <div className="error-msg">
@@ -807,7 +846,7 @@ const InvoiceExcelUpload = (props) => {
 
                                 {itemVerify.Not_Verify_Item !== undefined ? <details>
                                     {itemVerify.Not_Verify_Item === false ? null : <Row className="mt-2 error-msg" style={{ margin: "unset", backgroundColor: "#c1cfed" }}>
-                                        <Col sm={3} style={{ fontWeight: "bold", fontSize: "15px", paddingLeft: "unset" }} className="col-xl-auto">Ignore this item Item </Col>
+                                        <Col sm={3} style={{ fontWeight: "bold", fontSize: "15px", paddingLeft: "unset" }} className="col-xl-auto">Ignore this Item </Col>
                                         <Col >
                                             <div className="form-check form-switch form-switch-md " style={{ marginTop: "-3px" }}>
                                                 <Input type="checkbox" className="form-check-input"
