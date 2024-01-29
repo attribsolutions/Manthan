@@ -78,7 +78,20 @@ const LoadingSheetList = () => {
                 pathname: LoadingSheetUpdateList.path,
             })
         }
-    }, [LoadingSheetUpdateList])
+    }, [LoadingSheetUpdateList]);
+    
+    const { commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
+
+    // Common Party Dropdown useEffect
+    useEffect(() => {
+        if (commonPartyDropSelect.value > 0) {
+            goButtonHandler()
+
+        } else {
+            dispatch(LoadingSheetListActionSuccess([]))
+        }
+
+    }, [commonPartyDropSelect]);
 
     const goButtonHandler = () => {
         try {
@@ -126,6 +139,9 @@ const LoadingSheetList = () => {
     };
 
 
+ 
+
+
     const partySelectButtonHandler = () => {
         goButtonHandler()
     }
@@ -140,9 +156,9 @@ const LoadingSheetList = () => {
 
             <div className="page-content">
 
-                <PartyDropdown_Common pageMode={pageMode}
+                {/* <PartyDropdown_Common pageMode={pageMode}
                     goButtonHandler={partySelectButtonHandler}
-                    changeButtonHandler={partyOnChngeButtonHandler} />
+                    changeButtonHandler={partyOnChngeButtonHandler} /> */}
 
                 <div className="px-2  c_card_filter text-black " >
                     <div className="row">

@@ -72,7 +72,7 @@ const CommonPurchaseList = (props) => {
   const { PageFieldMaster = [] } = { ...pageField };
 
   useEffect(() => {
-    
+
     const locationPath = history.location.pathname;
     let userAcc = userAccess.find((inx) => {
       return `/${inx.ActualPagePath}` === locationPath;
@@ -422,7 +422,8 @@ const CommonPurchaseList = (props) => {
                 <C_Button
                   forceDisabled={listBtnLoading}
                   loading={selectCheckParams.selectSaveBtnLoading}
-                  style={{ marginTop: "-10px" }}
+
+                  style={{ marginTop: "-10px", padding: "3px", paddingInline: "5px" }}
                   type="button"
                   spinnerColor="white"
                   className="btn btn-primary w-md  "

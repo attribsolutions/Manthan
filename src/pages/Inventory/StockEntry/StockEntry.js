@@ -133,7 +133,27 @@ const StockEntry = (props) => {
                 Message: JSON.stringify(postMsg.Message),
             })
         }
-    }, [postMsg])
+    }, [postMsg]);
+
+    const { commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
+
+    // Common Party Dropdown useEffect
+    useEffect(() => {
+        if (commonPartyDropSelect.value > 0) {
+            goButtonHandler()
+
+        } else {
+            dispatch(goButtonPartyItemAddPageSuccess([]))
+            setTableArr([])
+            setState((i) => {
+                const a = { ...i }
+                a.values.ItemName = '';
+                a.hasValid.ItemName.valid = true
+                return a
+            })
+        }
+
+    }, [commonPartyDropSelect]);
 
     function Date_Onchange(e, date) {
         setState((i) => {
@@ -514,9 +534,9 @@ const StockEntry = (props) => {
             <React.Fragment>
                 <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
                 <div className="page-content">
-                    <PartyDropdown_Common pageMode={pageMode}
+                    {/* <PartyDropdown_Common pageMode={pageMode}
                         goButtonHandler={goButtonHandler}
-                        changeButtonHandler={partyOnChngeButtonHandler} />
+                        changeButtonHandler={partyOnChngeButtonHandler} /> */}
 
                     <form noValidate>
                         <div className="px-3 c_card_filter header text-black mb-1" >

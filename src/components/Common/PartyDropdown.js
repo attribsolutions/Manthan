@@ -14,11 +14,11 @@ const initialLocalStorageParty = () => {
     try {
         let party = JSON.parse(localStorage.getItem("selectedParty"));
         if (party.value === 0) {
-            return { value: 0, label: "Select..." }
+            return { value: 0, label: "select party..." }
         }
         return party
     } catch (w) { CommonConsole(w) }
-    return { value: 0, label: "Select..." }
+    return { value: 0, label: "select party..." }
 }
 
 const PartyDropdown = ({ goButtonHandler, changeButtonHandler, goBtnLoading, SAPLedgerOptions, pageMode }) => {
@@ -42,7 +42,7 @@ const PartyDropdown = ({ goButtonHandler, changeButtonHandler, goBtnLoading, SAP
         const selectedParty = JSON.parse(localStorage.getItem("selectedParty"));
 
         if (selectedParty.value === 0) {
-            setSelectedParty({ value: 0, label: "Select...", SAPPartyCode: "" })
+            setSelectedParty({ value: 0, label: "select party...", SAPPartyCode: "" })
             setChangeButtonShow(false)
         }
     }, []);
@@ -65,10 +65,10 @@ const PartyDropdown = ({ goButtonHandler, changeButtonHandler, goBtnLoading, SAP
         if (changeButtonHandler) {
             changeButtonHandler();
         }
-        dispatch(commonPartyDropSelectAction({ value: 0, label: "select...", SAPPartyCode: "" }))// new common party dropdown set
+        dispatch(commonPartyDropSelectAction({ value: 0, label: "select party...", SAPPartyCode: "" }))// new common party dropdown set
         dispatch(getpartysetting_API_Success([]))
         localStorage.setItem("selectedParty", JSON.stringify({ value: 0 }));
-        setSelectedParty({ value: 0, label: "Select...", SAPPartyCode: "" })
+        setSelectedParty({ value: 0, label: "select party...", SAPPartyCode: "" })
         setChangeButtonShow(false)
     };
 

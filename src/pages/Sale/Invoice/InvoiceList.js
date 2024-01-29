@@ -368,6 +368,26 @@ const InvoiceList = () => {
         newObj.supplierSelect = e
         setHederFilters(newObj);
     }
+    const { commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
+
+       // Common Party Dropdown useEffect
+       useEffect(() => {
+
+        if (commonPartyDropSelect.value > 0) {
+            goButtonHandler()
+            dispatch(GetVenderSupplierCustomer({ subPageMode, PartyID: commonPartyDropSelect.value  }));
+
+        } else {
+            dispatch(invoiceListGoBtnfilterSucccess([]));
+            dispatch(GetVenderSupplierCustomerSuccess([]));
+            let newObj = { ...hederFilters }
+            newObj.supplierSelect = { value: '', label: "All" }
+            setHederFilters(newObj)
+        }
+
+    }, [commonPartyDropSelect]);
+
+
 
     const partySelectButtonHandler = (e) => {
         goButtonHandler()
@@ -548,9 +568,9 @@ const InvoiceList = () => {
         <React.Fragment>
             <PageLoadingSpinner isLoading={reducers.listBtnLoading || !pageField || supplierDropLoading} />
             <div className="page-content">
-                <PartyDropdown_Common pageMode={pageMode}
+                {/* <PartyDropdown_Common pageMode={pageMode}
                     goButtonHandler={partySelectButtonHandler}
-                    changeButtonHandler={partySelectOnChangeHandler} />
+                    changeButtonHandler={partySelectOnChangeHandler} /> */}
                 {
                     (pageField) ?
                         <CommonPurchaseList

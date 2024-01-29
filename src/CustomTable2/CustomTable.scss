@@ -83,14 +83,14 @@
  /* Common styles for both desktop and mobile */
  .custom-table {
      width: 100%;
-     border-collapse: collapse;
+     border-collapse: collapse !important;
 
-     tr:nth-child(odd) {
-         background-color: #f2f2f2;
+     tr:nth-child(even) {
+         background-color: #f2f2f25c;
      }
 
      thead th {
-         padding: 10px;
+         padding: 12px;
          border: 1px solid #ddd;
      }
      
