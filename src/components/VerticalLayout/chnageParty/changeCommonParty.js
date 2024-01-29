@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Label } from "reactstrap";
-import { C_Button } from "../Common/CommonButton";
-import { C_Select } from "../../CustomValidateForm";
-import { loginUserAdminRole } from "../Common/CommonFunction";
-import { commonPartyDropSelectAction } from "../../store/Utilites/PartyDrodown/action";
-import { customAlert } from "../../CustomAlert/ConfirmDialog";
-import { mode } from "../../routes";
+import { C_Button } from "../../Common/CommonButton";
+import { C_Select } from "../../../CustomValidateForm";
+import { loginUserAdminRole } from "../../Common/CommonFunction";
+import { commonPartyDropSelectAction } from "../../../store/Utilites/PartyDrodown/action";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
+import { mode } from "../../../routes";
 import './changeParty.scss'; // Add your styles here
 import { useRef } from "react";
 

@@ -6,7 +6,7 @@ import { withRouter } from "react-router-dom";
 //i18n
 import { withTranslation } from "react-i18next";
 import SidebarContent from "./SidebarContent";
-import ChangeCommonParty from "./changeCommonParty";
+import ChangeCommonParty from "./chnageParty/changeCommonParty";
 
 const Sidebar = props => {
 

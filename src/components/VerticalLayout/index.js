@@ -12,16 +12,14 @@ import {
 // Layout Related Components
 import Header from "./Header";
 import Sidebar from "./Sidebar";
-import Footer from "./Footer";
 
 //redux
 import { useSelector, useDispatch } from "react-redux";
-import BreadcrumbNew from "./BreadcrumbNew"
+import BreadcrumbVertical from "./breadcrumb/index"
 import "./loader.scss";
 import './_layout.scss';
-import { useState } from "react";
 import { useRef } from "react";
-import PageDetailsSection from "./PageDetailsSection";
+import PageDetailsSection from "./breadcrumb/PageDetailsSection";
 
 const Layout = props => {
   const dispatch = useDispatch();
@@ -151,7 +149,7 @@ const Layout = props => {
         <Header toggleMenuCallback={toggleMenuCallback} onChangeLayoutMode={onChangeLayoutMode} />
 
         <div ref={customPageWrapperRef} className="custom-page-wrapper" onScroll={handleScroll}>
-          <BreadcrumbNew />
+          <BreadcrumbVertical />
           <div className="custom-page-content">
             {props.children}
 
