@@ -30,7 +30,7 @@ const StockReport = (props) => {
 	const [headerFilters, setHeaderFilters] = useState('');
 	const [userPageAccessState, setUserAccState] = useState('');
 
-	const [partyDropdown, setPartyDropdown] = useState({ value: 0, label: 'All' });
+	const [partyDropdown, setPartyDropdown] = useState({ value: "", label: 'All' });
 	const [unitDropdown, setUnitDropdown] = useState({ value: 1, label: 'No' });
 
 	const [originalTableData, setOriginalTableData] = useState([]);
@@ -384,7 +384,7 @@ const StockReport = (props) => {
 				"FromDate": fromdate,
 				"ToDate": todate,
 				"Unit": unitDropdown.value,
-				"PartyID": (partyDropdown.value === 0 && !(isSCMParty)) ? _cfunc.loginPartyID() : partyDropdown.value,
+				"PartyID": (partyDropdown.value === "" && !(isSCMParty)) ? _cfunc.loginPartyID() : partyDropdown.value,
 				"IsDamagePieces": stockTypeSelect.value,
 				"Employee": !isSCMParty ? 0 : _cfunc.loginEmployeeID(),
 			});
