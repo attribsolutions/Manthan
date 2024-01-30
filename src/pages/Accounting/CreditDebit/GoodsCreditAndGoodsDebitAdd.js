@@ -83,6 +83,7 @@ const GoodsCreditNote = (props) => {
         Narration: "",
         InvoiceNO: "",
         ItemName: "",
+        ReturnID: ""
     }
     let internal_pageMode = ""
 
@@ -201,7 +202,7 @@ const GoodsCreditNote = (props) => {
                 }
                 if (hasEditVal) {
 
-                    const { CRDRNoteDate, Customer, Narration, CustomerID, Comment, GrandTotal, ReturnReason, CRDRInvoices = '', CRDRNoteItems = [], ReturnItems = [], CustomerName } = hasEditVal
+                    const { CRDRNoteDate, Customer, Narration, CustomerID, Comment, GrandTotal, ReturnID, CRDRInvoices = '', CRDRNoteItems = [], ReturnItems = [], CustomerName } = hasEditVal
 
                     const { values, fieldLabel, hasValid, required, isError } = { ...state }
                     let caculateGrandTotal = ""
@@ -214,8 +215,13 @@ const GoodsCreditNote = (props) => {
                     let dataCount = ""
 
                     if (internal_pageMode === mode.modeSTPsave) {
-
                         values.Customer = { label: CustomerName, value: Customer };
+                        setState((i) => {
+                            let a = { ...i }
+                            a.values.ReturnID = ReturnID
+                            a.hasValid.ReturnID.valid = true;
+                            return a
+                        })
 
                         ReturnItems.forEach((i) => {
                             i["Quantity"] = i.ApprovedQuantity
@@ -797,7 +803,7 @@ const GoodsCreditNote = (props) => {
                 Party: _cfunc.loginSelectedPartyID(),
                 CreatedBy: _cfunc.loginUserID(),
                 UpdatedBy: _cfunc.loginUserID(),
-                CRDRInvoices: [{ Invoice: values.InvoiceNO.value, }],
+                CRDRInvoices: [{ Invoice: values.InvoiceNO.value, Return: values?.ReturnID }],
             });
             dispatch(saveCredit({ jsonBody, btnId }));
 
