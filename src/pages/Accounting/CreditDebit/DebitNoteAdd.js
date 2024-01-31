@@ -36,19 +36,12 @@ import { CredietDebitType, Receipt_No_List, Receipt_No_List_Success, saveCredit,
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { C_DatePicker } from "../../../CustomValidateForm";
 import * as _cfunc from "../../../components/Common/CommonFunction"
-// import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 
 function initialState(history) {
 
     let page_Id = '';
     let listPath = ''
     let sub_Mode = history.location.pathname;
-
-    // if (sub_Mode === url.CREDIT_NOTE) {
-    //     page_Id = pageId.CREDIT_NOTE;
-    //     listPath = url.CREDIT_LIST
-    // }
-    // else 
     if (sub_Mode === url.DEBIT_NOTE) {
         page_Id = pageId.DEBIT_NOTE;
         listPath = url.DEBIT_LIST
@@ -376,11 +369,6 @@ const Debit = (props) => {
                 <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
 
                 <div className="page-content" style={{ marginTop: IsEditMode_Css, }}>
-                    {/* <PartyDropdown_Common pageMode={pageMode}
-                        goButtonHandler={partySelectButtonHandler}
-                        changeButtonHandler={partySelectOnChangeHandler}
-                    /> */}
-
                     <form noValidate>
                         <div className="px-2 c_card_filter header text-black mb-2" >
                             <Row>

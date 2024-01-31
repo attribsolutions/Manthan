@@ -11,7 +11,6 @@ import * as url from "../../../routes/route_url";
 import * as mode from "../../../routes/PageMode";
 import BootstrapTable from "react-bootstrap-table-next";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
-import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 import { breadcrumbReturnFunc, metaTagLabel } from "../../../components/Common/CommonFunction";
 import * as pageId from "../../../routes/allPageID";
 import { selectAllCheck } from "../../../components/Common/TableCommonFunc";
@@ -20,6 +19,7 @@ import { CInput, decimalRegx } from "../../../CustomValidateForm";
 import { goButton_ServiceItemAssign, goButton_ServiceItemAssign_Success, save_ServiceItemAssign_Action, save_ServiceItemAssign_Success } from "../../../store/Administrator/ServiceItemAssignRedux/action";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
+import { changeCommonPartyDropDetailsAction } from "../../../store/Utilites/PartyDrodown/action";
 
 const ServiceItemAssign = (props) => {
 	const history = useHistory();
@@ -51,16 +51,30 @@ const ServiceItemAssign = (props) => {
 		pageField: state.CommonPageFieldReducer.pageField,
 	}));
 
+	const { commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
+
+	// Common Party select Dropdown useEffect
+	useEffect(() => {
+		if (commonPartyDropSelect.value > 0) {
+			goButtonHandler()
+		} else {
+			partyOnChngeButtonHandler()
+		}
+	}, [commonPartyDropSelect])
+
 	useEffect(() => {
 
 		dispatch(commonPageFieldSuccess(null));
 		dispatch(commonPageField(pageId.SERVICE_ITEM_ASSIGN));
 
-		if (!(_cfunc.loginSelectedPartyID() === 0)) {
-			goButtonHandler()
+		if (subPageMode === url.SERVICE_ITEM_ASSIGN) {
+			dispatch(changeCommonPartyDropDetailsAction({ isShow: false }))//change party drop-down restore state
+
 		}
 		return () => {
 			dispatch(goButton_ServiceItemAssign_Success([]));
+			dispatch(changeCommonPartyDropDetailsAction({ isShow: false }))//change party drop-down restore state
+
 		}
 	}, []);
 
@@ -124,12 +138,12 @@ const ServiceItemAssign = (props) => {
 		try {
 			event?.persist();// Call event.persist() to remove the synthetic event from the pool
 
-			if ((_cfunc.loginSelectedPartyID() === 0)) {
+			if ((commonPartyDropSelect.value === 0)) {
 				customAlert({ Type: 3, Message: alertMessages.commonPartySelectionIsRequired });
 				return;
 			};
 			const jsonBody = {
-				PartyID: _cfunc.loginSelectedPartyID(),
+				PartyID: commonPartyDropSelect.value,
 				CompanyID: 1
 
 			};
@@ -204,7 +218,7 @@ const ServiceItemAssign = (props) => {
 		try {
 			const PartiesJson = CheckArray.map((index) => ({
 				"CentralServiceItem": index.ServiceItem,
-				"Party": _cfunc.loginSelectedPartyID(),
+				"Party": commonPartyDropSelect.value,
 				"Rate": index.Rate,
 				"CreatedBy": _cfunc.loginUserID(),
 				"UpdatedBy": _cfunc.loginUserID(),
@@ -217,18 +231,6 @@ const ServiceItemAssign = (props) => {
 		} catch (w) { }
 	};
 
-	const AdminDivsionRoleDropdown = () => {
-		if (subPageMode === url.SERVICE_ITEM_ASSIGN) {
-			return (
-				<PartyDropdown_Common pageMode={pageMode}
-					goBtnLoading={GoBtnlistloading}
-					goButtonHandler={goButtonHandler}
-					changeButtonHandler={partyOnChngeButtonHandler}
-				/>
-			)
-		}
-		return null
-	};
 
 	let IsEditMode_Css = "";
 	if (modalCss || pageMode === mode.dropdownAdd) {
@@ -242,8 +244,6 @@ const ServiceItemAssign = (props) => {
 				<div className="page-content" style={{ marginTop: IsEditMode_Css }}>
 					<Container fluid>
 						<MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
-
-						<AdminDivsionRoleDropdown />
 
 						<Card className="text-black">
 							<CardHeader className="card-header   text-black c_card_header">
@@ -300,46 +300,6 @@ const ServiceItemAssign = (props) => {
 									</div>
 
 								</form>
-								{/* {filterdItemWise_tableData.length > 0 ? (
-									<>
-										{filterdItemWise_tableData.map((i, key) => (
-											<div key={i.group}>
-												<Label
-													style={{
-														background: "#efefef",
-														padding: "7px 10px 0px 8px",
-														borderRadius: "3px",
-													}}
-												>
-													<h6> Group : {i.group ? i.group : `No Group Assign`}</h6>
-												</Label>
-												<div className="table">
-													<BootstrapTable
-														keyField={"Item"}
-														key={`table-key-${i.group}-${key}`}
-														data={i.items}
-														columns={tableColumns}
-														Item="table_Arrow"
-														selectRow={selectAllCheck({
-															rowSelected: rowSelected(i.items),
-															bgColor: ''
-														})}
-
-														noDataIndication={
-															<div className="text-danger text-center ">
-																Items Not available
-															</div>
-														}
-														classes={"table align-middle table-nowrap table-hover"}
-													/>
-												</div>
-											</div>
-										))}
-									</>
-								) : ( */}
-
-								{/* )} */}
-
 
 							</CardBody>
 						</Card>

@@ -15,7 +15,6 @@ import {
 } from "../../../store/Administrator/SalesManRedux/actions";
 import { loginJsonBody, loginSelectedPartyID } from "../../../components/Common/CommonFunction";
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList";
-// import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 import { PageLoadingSpinner } from "../../../components/Common/CommonButton";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
@@ -99,11 +98,6 @@ const SalesManList = (props) => {
         <React.Fragment>
             <PageLoadingSpinner isLoading={(goBtnLoading || !pageField)} />
             <div className="page-content">
-                {/* <PartyDropdown_Common
-                    goBtnLoading={goBtnLoading}
-                    goButtonHandler={goButtonHandler}
-                    changeButtonHandler={partyOnChngeButtonHandler}
-                /> */}
                 {
                     (pageField) &&
                     <>

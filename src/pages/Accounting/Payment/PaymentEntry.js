@@ -27,7 +27,6 @@ import { C_DatePicker, C_Select } from "../../../CustomValidateForm";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { url, mode, pageId } from "../../../routes/index"
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
-// import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 
 const PaymentEntry = (props) => {
@@ -347,10 +346,6 @@ const PaymentEntry = (props) => {
                 <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
 
                 <div className="page-content" style={{ marginBottom: "5cm" }}>
-                    {/* <PartyDropdown_Common pageMode={pageMode}
-                        goButtonHandler={partySelectButtonHandler}
-                        changeButtonHandler={partySelectOnChangeHandler}
-                    /> */}
                     <form noValidate>
                         <div className="px-2 c_card_filter header text-black mb-2" >
 

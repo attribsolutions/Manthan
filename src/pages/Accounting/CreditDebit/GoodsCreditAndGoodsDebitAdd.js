@@ -38,7 +38,6 @@ import * as _cfunc from "../../../components/Common/CommonFunction";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
-// import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 import { loginSelectedPartyID } from "../../../components/Common/CommonFunction";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 
@@ -857,10 +856,6 @@ const GoodsCreditNote = (props) => {
                 <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
 
                 <div className="page-content" >
-                    {/* <PartyDropdown_Common pageMode={pageMode}
-                        goButtonHandler={partySelectButtonHandler}
-                        changeButtonHandler={partyOnChngeButtonHandler}
-                    /> */}
                     <form noValidate>
                         <div className="px-2 c_card_filter header text-black mb-1" >
                             <Row>

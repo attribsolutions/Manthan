@@ -547,9 +547,6 @@ const TransactionLog = () => {
         <React.Fragment>
             {/* <PageLoadingSpinner isLoading={goBtnloading || !pageField} /> */}
             <div className="page-content">
-                {/* <PartyDropdown_Common pageMode={pageMode}
-                    goButtonHandler={partySelectButtonHandler}
-                    changeButtonHandler={partyOnChngeButtonHandler} /> */}
                 <HeaderContent />
                 <ToolkitProvider
                     keyField={"id"}

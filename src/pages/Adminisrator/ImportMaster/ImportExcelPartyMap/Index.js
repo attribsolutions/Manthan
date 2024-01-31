@@ -37,7 +37,6 @@ import {
     save_ImportExcelPartyMap_Sucess
 } from "../../../../store/Administrator/ImportExcelPartyMapRedux/action";
 import * as _cfunc from "../../../../components/Common/CommonFunction";
-// import PartyDropdown_Common from "../../../../components/Common/PartyDropdown";
 
 const ImportExcelPartyMap = (props) => {
 
@@ -342,9 +341,6 @@ const ImportExcelPartyMap = (props) => {
                 <PageLoadingSpinner isLoading={((partyDropDownLoading && !(loginIsSCMCompany() === 1)) || !pageField)} />
 
                 <div className="page-content">
-                    {/* <PartyDropdown_Common
-                        changeButtonHandler={change_ButtonHandler} /> */}
-
                     <div className="px-2 c_card_header text-black" >
                         <div className="px-2   c_card_filter text-black" >
                             <form onSubmit={(event) => goButtonHandler(event)} noValidate>

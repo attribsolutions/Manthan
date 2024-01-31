@@ -11,7 +11,6 @@ import { Col, FormGroup, Label, Row } from "reactstrap";
 import { C_DatePicker } from "../../../CustomValidateForm";
 import { deleteDiscountIDSuccess, deleteDiscount_ID, getDiscountList, getDiscountListSuccess } from "../../../store/Administrator/DiscountRedux/actions";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
-// import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 
 const DiscountList = () => {
@@ -103,9 +102,6 @@ const DiscountList = () => {
         <React.Fragment>
             <PageLoadingSpinner isLoading={(goBtnLoading || !pageField)} />
             <div className="page-content">
-                {/* <PartyDropdown_Common
-                    changeButtonHandler={partySelectOnChangeHandler}
-                /> */}
                 <div className="px-3 c_card_filter header text-black mb-1" >
 
                     <Row >
