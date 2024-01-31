@@ -227,7 +227,9 @@ const LoadingSheetUpdate = (props) => {
 
                 <div className="page-content" style={{ marginBottom: "5cm" }}>
                     <div id="id1"></div>
-                    <NewCommonPartyDropdown />
+
+                    {/* <NewCommonPartyDropdown /> */}
+                    
                     <form noValidate>
                         <div className="px-2 c_card_filter header text-black mb-2" >
 

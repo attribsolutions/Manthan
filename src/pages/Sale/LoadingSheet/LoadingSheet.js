@@ -377,8 +377,6 @@ const LoadingSheet = (props) => {
                 <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
                 <div className="page-content" style={{ marginBottom: "5cm" }}>
 
-                    <NewCommonPartyDropdown pageMode={pageMode} />
-
                     <DropdownMaster
                         modalShow={dropDownMasterIsOpen?.show}
                         setModalShow={(e) => { setDropDownMasterIsOpen(null) }}

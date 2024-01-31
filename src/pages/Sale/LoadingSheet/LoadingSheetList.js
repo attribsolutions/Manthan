@@ -12,7 +12,6 @@ import {
     LoadingSheetListAction,
     LoadingSheetListActionSuccess,
     UpdateLoadingSheet,
-
 } from "../../../store/Sales/LoadingSheetRedux/action";
 import { LoadingSheet_API, MultipleInvoice_API } from "../../../helpers/backend_helper";
 import * as report from '../../../Reports/ReportIndex'
@@ -24,7 +23,6 @@ import { C_DatePicker } from "../../../CustomValidateForm";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { url, mode, pageId } from "../../../routes/index"
 import { Go_Button, PageLoadingSpinner } from "../../../components/Common/CommonButton";
-import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 
@@ -51,6 +49,18 @@ const LoadingSheetList = () => {
     const { fromdate = currentDate_ymd, todate = currentDate_ymd } = headerFilters;
     const { pageField, LoadingSheetUpdateList } = reducers;
 
+    const { commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
+
+    // Common Party Dropdown useEffect
+    useEffect(() => {
+        if (commonPartyDropSelect.value > 0) {
+            goButtonHandler()
+
+        } else {
+            dispatch(LoadingSheetListActionSuccess([]))
+        }
+
+    }, [commonPartyDropSelect]);
 
     const action = {
         getList: LoadingSheetListAction,
@@ -58,13 +68,11 @@ const LoadingSheetList = () => {
         deleteSucc: DeleteLoadingSheetSucccess
     }
 
-    let page_Id = pageId.LOADING_SHEET_LIST
     // Featch Modules List data  First Rendering
     useEffect(() => {
         dispatch(commonPageFieldListSuccess(null))
-        dispatch(commonPageFieldList(page_Id))
-        // dispatch(BreadcrumbShowCountlabel(`${"LoadingSheet Count"} :0`))
-        if (!(_cfunc.loginSelectedPartyID() === 0)) {
+        dispatch(commonPageFieldList(pageId.LOADING_SHEET_LIST))
+        if (!( commonPartyDropSelect.value === 0)) {
             goButtonHandler()
         }
         return () => {
@@ -79,30 +87,17 @@ const LoadingSheetList = () => {
             })
         }
     }, [LoadingSheetUpdateList]);
-    
-    const { commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
-
-    // Common Party Dropdown useEffect
-    useEffect(() => {
-        if (commonPartyDropSelect.value > 0) {
-            goButtonHandler()
-
-        } else {
-            dispatch(LoadingSheetListActionSuccess([]))
-        }
-
-    }, [commonPartyDropSelect]);
 
     const goButtonHandler = () => {
         try {
-            if ((_cfunc.loginSelectedPartyID() === 0)) {
+            if (( commonPartyDropSelect.value === 0)) {
                 customAlert({ Type: 3, Message: alertMessages.commonPartySelectionIsRequired });
                 return;
             };
             const jsonBody = JSON.stringify({
                 FromDate: fromdate,
                 ToDate: todate,
-                PartyID: _cfunc.loginSelectedPartyID(),
+                PartyID:  commonPartyDropSelect.value,
             });
 
             dispatch(LoadingSheetListAction(jsonBody));
@@ -138,27 +133,11 @@ const LoadingSheetList = () => {
         dispatch(UpdateLoadingSheet({ RowId: list.rowData.id, path: url.LOADING_SHEET_LIST_UPDATE, btnId: `btn-otherBtn_1-${list.id}` }));
     };
 
-
- 
-
-
-    const partySelectButtonHandler = () => {
-        goButtonHandler()
-    }
-
-    function partyOnChngeButtonHandler() {
-        dispatch(LoadingSheetListActionSuccess([]))
-    }
-
     return (
         <React.Fragment>
             <PageLoadingSpinner isLoading={reducers.loading || !pageField} />
 
             <div className="page-content">
-
-                {/* <PartyDropdown_Common pageMode={pageMode}
-                    goButtonHandler={partySelectButtonHandler}
-                    changeButtonHandler={partyOnChngeButtonHandler} /> */}
 
                 <div className="px-2  c_card_filter text-black " >
                     <div className="row">

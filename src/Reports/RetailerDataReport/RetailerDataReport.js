@@ -14,6 +14,7 @@ import BootstrapTable from "react-bootstrap-table-next";
 import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import { ExcelReportComponent } from "../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS";
+import { changeCommonPartyDropDetailsAction } from "../../store/Utilites/PartyDrodown/action";
 
 const RetailerDataReport = (props) => {
 
@@ -65,9 +66,12 @@ const RetailerDataReport = (props) => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(pageId.RETAILER_DATA_REPORT));
         dispatch(SSDD_List_under_Company());
+        dispatch(changeCommonPartyDropDetailsAction({ isShow: false }))//change party drop-down  hide
+        
         return () => {
             dispatch(commonPageFieldSuccess(null));
             dispatch(postRetailerData_API_Success([]));
+            dispatch(changeCommonPartyDropDetailsAction({ isShow: true }))//change party drop-down restore state
         }
     }, [])
 

@@ -19,6 +19,7 @@ import BootstrapTable from "react-bootstrap-table-next";
 import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
 import { ExcelReportComponent } from "../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS";
 import { alertMessages } from "../../components/Common/CommonErrorMsg/alertMsg";
+import { changeCommonPartyDropDetailsAction } from "../../store/Utilites/PartyDrodown/action";
 
 const StockReport = (props) => {
 
@@ -112,11 +113,13 @@ const StockReport = (props) => {
 		dispatch(commonPageFieldSuccess(null));
 		dispatch(commonPageField(pageId.STOCK_REPORT));
 		dispatch(BreadcrumbShowCountlabel(`Count:${0}`));
-		return () => {
-			dispatch(commonPageFieldSuccess(null));
+		dispatch(changeCommonPartyDropDetailsAction({ isShow: false }))//change party drop-down  hide
+        return () => {
+            dispatch(commonPageFieldSuccess(null));
 			dispatch(stockReport_GoButton_API_Success([]));
 			dispatch(getBaseUnit_ForDropDownSuccess([]));
-		}
+            dispatch(changeCommonPartyDropDetailsAction({ isShow: true }))//change party drop-down restore state
+        }
 	}, [])
 
 	const buttonStateArray = [

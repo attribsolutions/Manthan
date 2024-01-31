@@ -37,8 +37,9 @@ const VehicleList = () => {
       pageField: state.CommonPageFieldReducer.pageFieldList,
     })
   );
-  const { pageField, goBtnLoading } = reducers;
   const { commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
+  
+  const { pageField, goBtnLoading } = reducers;
 
     // Common Party select Dropdown useEffect
     useEffect(() => {

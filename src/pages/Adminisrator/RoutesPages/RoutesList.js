@@ -39,11 +39,11 @@ const RoutesList = (props) => {
       deleteMsg: state.RoutesReducer.deleteMessage,
       userAccess: state.Login.RoleAccessUpdateData,
       pageField: state.CommonPageFieldReducer.pageFieldList,
-      commonPartyDropSelect: state.CommonPartyDropdownReducer.commonPartyDropSelect
     })
   );
+  const { commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
 
-  const { pageField, goBtnLoading, commonPartyDropSelect } = reducers;
+  const { pageField, goBtnLoading } = reducers;
 
   // Common Party select Dropdown useEffect
   useEffect(() => {
@@ -90,7 +90,7 @@ const RoutesList = (props) => {
     } catch (error) { }
     return
   };
-  
+
   function partySelectButtonHandler() {
     goButtonHandler()
   }

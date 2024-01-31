@@ -37,6 +37,8 @@ const DriverList = () => {
       GoBtnlistloading: state.DriverReducer.loading
     })
   );
+  const { commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
+  
   const { pageField, GoBtnlistloading } = reducers
 
   const action = {
@@ -47,7 +49,6 @@ const DriverList = () => {
     deleteSucc: deleteDriverID_Success
   }
 
-  const { commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
 
   // Common Party select Dropdown useEffect
   useEffect(() => {

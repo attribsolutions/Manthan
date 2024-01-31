@@ -12,6 +12,7 @@ import DynamicColumnHook from "../../components/Common/TableCommonFunc";
 import { Return_Report_Action, Return_Report_Action_Success } from "../../store/Report/ReturnReportRedux/action";
 import { ExcelReportComponent } from "../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS";
 import CustomTable from "../../CustomTable2";
+import { changeCommonPartyDropDetailsAction } from "../../store/Utilites/PartyDrodown/action";
 
 const ReturnReport = (props) => {
 
@@ -50,9 +51,11 @@ const ReturnReport = (props) => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(pageId.RETURN_REPORT))
         dispatch(BreadcrumbShowCountlabel(`Count:${0} ₹ ${0.00}`));
+        dispatch(changeCommonPartyDropDetailsAction({ isShow: false }))//change party drop-down  hide
         return () => {
             dispatch(Return_Report_Action_Success([]));
             setTableData([]);
+            dispatch(changeCommonPartyDropDetailsAction({ isShow: true }))//change party drop-down restore state
         }
     }, []);
 

@@ -9,15 +9,13 @@ import * as _cfunc from "../../components/Common/CommonFunction";
 import { mode, pageId } from "../../routes/index"
 import { MetaTags } from "react-meta-tags";
 import { postOrderSummary_API, postOrderSummary_API_Success } from "../../store/Report/OrderSummaryRedux/action";
-
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
 import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess } from "../../store/actions";
-
-import { func } from "prop-types";
 import { ExcelReportComponent } from "../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS";
+import { changeCommonPartyDropDetailsAction } from "../../store/Utilites/PartyDrodown/action";
 
 const OrderSummary = (props) => {
 
@@ -82,9 +80,11 @@ const OrderSummary = (props) => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(pageId.ORDER_SUMMARY_REPORT));
         dispatch(BreadcrumbShowCountlabel(`Count:${0}`));
+        dispatch(changeCommonPartyDropDetailsAction({ isShow: false }))//change party drop-down  hide
         return () => {
             dispatch(commonPageFieldSuccess(null));
             dispatch(postOrderSummary_API_Success({ Status: false }));
+            dispatch(changeCommonPartyDropDetailsAction({ isShow: true }))//change party drop-down restore state
         }
     }, [])
 

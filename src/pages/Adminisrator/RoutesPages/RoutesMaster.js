@@ -45,6 +45,7 @@ import * as mode from "../../../routes/PageMode"
 // import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
+import { changeCommonPartyDropDetailsAction } from "../../../store/Utilites/PartyDrodown/action";
 
 const RoutesMaster = (props) => {
 
@@ -86,8 +87,6 @@ const RoutesMaster = (props) => {
         }));
 
     const { commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
-
-
 
     useEffect(() => {
         const page_Id = pageId.ROUTES
@@ -178,8 +177,12 @@ const RoutesMaster = (props) => {
                 setState({ values, fieldLabel, hasValid, required, isError })
                 dispatch(Breadcrumb_inputName(hasEditVal.Name))
                 seteditCreatedBy(hasEditVal.CreatedBy)
+                dispatch(changeCommonPartyDropDetailsAction({ forceDisable: true }))//change party drop-down disable when edit/view
             }
             dispatch(editRoutesIDSuccess({ Status: false }))
+        }
+        return () => {
+            dispatch(changeCommonPartyDropDetailsAction({ forceDisable: false }))//change party drop-down restore state
         }
     }, [])
 

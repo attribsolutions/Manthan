@@ -21,6 +21,7 @@ import BootstrapTable from 'react-bootstrap-table-next';
 import { mySearchProps } from '../../components/Common/SearchBox/MySearch';
 import { C_Button } from '../../components/Common/CommonButton';
 import { ExcelReportComponent } from '../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS';
+import { changeCommonPartyDropDetailsAction } from '../../store/Utilites/PartyDrodown/action';
 
 function initialState(history) {
 
@@ -66,6 +67,10 @@ const ManPowerReport = (props) => {           // this component also use for Man
         dispatch(commonPageField(page_Id))
         dispatch(BreadcrumbShowCountlabel(`Count:${0}`));
         dispatch(ManPower_Get_Success([]));
+        dispatch(changeCommonPartyDropDetailsAction({ isShow: false }))//change party drop-down  hide
+        return () => {
+            dispatch(changeCommonPartyDropDetailsAction({ isShow: true }))//change party drop-down restore state
+        }
     }, []);
 
     const location = { ...history.location }

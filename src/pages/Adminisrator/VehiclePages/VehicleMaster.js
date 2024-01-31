@@ -55,6 +55,7 @@ import * as url from "../../../routes/route_url";
 import * as mode from "../../../routes/PageMode";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
+import { changeCommonPartyDropDetailsAction } from "../../../store/Utilites/PartyDrodown/action";
 
 const VehicleMaster = (props) => {
 
@@ -174,7 +175,11 @@ const VehicleMaster = (props) => {
                 dispatch(Breadcrumb_inputName(hasEditVal.RoleMaster))
                 dispatch(editVehicleID_Success({ Status: false }))
                 seteditCreatedBy(hasEditVal.CreatedBy)
+                dispatch(changeCommonPartyDropDetailsAction({ forceDisable: true }))//change party drop-down disable when edit/view
             }
+        }
+        return () => {
+            dispatch(changeCommonPartyDropDetailsAction({ forceDisable: false }))//change party drop-down restore state
         }
     }, []);
 
@@ -192,9 +197,9 @@ const VehicleMaster = (props) => {
                 const jsonBody = {
                     ...loginJsonBody(),
                     PartyID: commonPartyDropSelect.value
-                  };
-            
-                  dispatch(getVehicleList(jsonBody));
+                };
+
+                dispatch(getVehicleList(jsonBody));
 
                 props.isOpenModal(false)
             }
