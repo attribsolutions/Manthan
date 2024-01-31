@@ -21,6 +21,8 @@ export const hide = "hide";
 
 export const makeBtn = "makeBtn";
 export const download = "download";
+export const upload = "upload";
+
 export const otherBtn_1 = "otherBtn_1";
 export const MultiInvoice = "MultiInvoice";
 
