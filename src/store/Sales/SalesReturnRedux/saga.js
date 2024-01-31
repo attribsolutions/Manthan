@@ -39,7 +39,8 @@ function* SalesReturn_List_GenFun({ filters }) {
             i.dashboardReturnDate = date_dmy_func(i.ReturnDate);
             i["transactionDate"] = i.CreatedOn;
             i["transactionDateLabel"] = listpageConcatDateAndTime(i.ReturnDate, i.CreatedOn);
-
+            i["IsCreditNoteCreated"] = i.IsCreditNoteCreated === 1 ? true : false
+            i["IsApproved"] = i.IsApproved === 1 ? true : false
             return i
         })
         yield put(action.salesReturnListAPISuccess(newList));

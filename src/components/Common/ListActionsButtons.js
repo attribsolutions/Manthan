@@ -161,7 +161,7 @@ export const listPageActionsButtonFunc = (props) => {
         }
 
         const isUploadAccess = loginSystemSetting().PurchaseReturnPrintUpload?.split(',').map(value => parseInt(value)).includes(rowData.PartyTypeID);
-        debugger
+
         const hasRole = (role) => userAccState[role];
 
         const canEdit = hasRole("RoleAccess_IsEdit") && !forceEditHide;
@@ -180,13 +180,14 @@ export const listPageActionsButtonFunc = (props) => {
         const canItemWisePrint = hasRole("RoleAccess_IsPrint") && downClaimBtnFunc;
         const canMasterClaimPrint = hasRole("RoleAccess_IsPrint") && downClaimBtnFunc;
         const canSendToScm = isPartyTypeIDInSendToScm //  Currently Button  is remove From InVoice List of CX parties  further Development After Discussion  So condition is False
-        const canMakeCreditNoteBtn = (subPageMode === url.SALES_RETURN_LIST) && hasRole("RoleAccess_IsSave") && rowData.IsApproved
+        debugger
+        const canMakeCreditNoteBtn = (subPageMode === url.SALES_RETURN_LIST) && hasRole("RoleAccess_IsSave") && rowData.IsApproved && !rowData.IsCreditNoteCreated
         const canUpdatebtn = otherBtn_1Func && hasRole("RoleAccess_IsSave")
 
         const canShowImages = downBtnFunc && (subPageMode === url.CLAIM_TRACKING_ENTRY_LIST)
 
 
-        const canUpload = hasRole("RoleAccess_Pdfupload") && upBtnFunc && isUploadAccess;
+        const canUpload = hasRole("RoleAccess_Upload") && upBtnFunc && isUploadAccess;
 
 
 
@@ -197,10 +198,10 @@ export const listPageActionsButtonFunc = (props) => {
         const dummyDisable_MakeBtn = !canMakeBtn && makeBtnShow;
         const dummyDisable_SendToScm = !isPartyTypeIDInSendToScm && sendToScmBtnFunc;
 
-        const dummyDisable_CreditNoteBtn = !rowData.IsApproved && (subPageMode === url.SALES_RETURN_LIST)
+        const dummyDisable_CreditNoteBtn = (!rowData.IsApproved && (subPageMode === url.SALES_RETURN_LIST)) || rowData.IsCreditNoteCreated
 
 
-        const dummyDisable_upload = hasRole("RoleAccess_Pdfupload") && !isUploadAccess
+        const dummyDisable_upload = hasRole("RoleAccess_Upload") && !isUploadAccess
 
 
 
