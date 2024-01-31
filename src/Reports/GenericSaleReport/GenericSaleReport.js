@@ -12,6 +12,7 @@ import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess } fro
 import DynamicColumnHook from "../../components/Common/TableCommonFunc";
 import { ExcelReportComponent } from "../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS";
 import CustomTable from "../../CustomTable2";
+import { changeCommonPartyDropDetailsAction } from "../../store/Utilites/PartyDrodown/action";
 
 const GenericSaleReport = (props) => {
 
@@ -35,7 +36,7 @@ const GenericSaleReport = (props) => {
     } = useSelector((state) => ({
         goButtonData: state.GenericSaleReportReducer.genericSaleGobtn,
         partyDropdownLoading: state.CommonPartyDropdownReducer.partyDropdownLoading,
-        Distributor: state.CommonPartyDropdownReducer.commonPartyDropdown,
+        Distributor: state.CommonPartyDropdownReducer.commonPartyDropdownOption,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField
     })
@@ -71,8 +72,10 @@ const GenericSaleReport = (props) => {
 
     useEffect(() => {
         dispatch(BreadcrumbShowCountlabel(`Count:${0} ₹ ${0.00}`));
+        dispatch(changeCommonPartyDropDetailsAction({ isShow: false }))//change party drop-down  hide
         return () => {
             setTableData([]);
+            dispatch(changeCommonPartyDropDetailsAction({ isShow: true }))//change party drop-down restore state
         }
     }, [])
 

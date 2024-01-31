@@ -44,7 +44,7 @@ const PurchaseGSTReport = (props) => {
             tableData: state.PurchaseGSTReportReducer.PurchaseGSTGobtn,
             ExcelBtnLoading: state.PurchaseGSTReportReducer.ExcelBtnLoading,
             GoBtnLoading: state.PurchaseGSTReportReducer.GoBtnLoading,
-            Distributor: state.CommonPartyDropdownReducer.commonPartyDropdown,
+            Distributor: state.CommonPartyDropdownReducer.commonPartyDropdownOption,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageField
         })

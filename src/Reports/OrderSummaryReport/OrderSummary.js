@@ -50,7 +50,7 @@ const OrderSummary = (props) => {
             goButtonData: state.OrderSummaryReducer.orderSummaryGobtn,
             goBtnLoading: state.OrderSummaryReducer.goBtnLoading,
             userAccess: state.Login.RoleAccessUpdateData,
-            SSDD_List: state.CommonPartyDropdownReducer.commonPartyDropdown,
+            SSDD_List: state.CommonPartyDropdownReducer.commonPartyDropdownOption,
             partyLoading: state.CommonAPI_Reducer.SSDD_ListLoading,
             pageField: state.CommonPageFieldReducer.pageField
         })

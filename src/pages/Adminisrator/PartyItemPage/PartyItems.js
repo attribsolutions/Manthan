@@ -48,10 +48,6 @@ const PartyItems = (props) => {
 	const [userPageAccessState, setUserAccState] = useState("");
 	const [searchQuery, setSearchQuery] = useState("");
 
-	const [forceReferesh, setforceReferesh] = useState(false);
-
-
-
 
 	const [page_id] = useState(() => initialState(history).page_Id)
 	const [partyIdSelect, setPartyIdSelect] = useState({ value: _cfunc.loginSelectedPartyID() })

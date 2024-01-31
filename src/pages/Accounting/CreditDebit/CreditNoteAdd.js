@@ -44,7 +44,7 @@ import { CredietDebitType, EditCreditlistSuccess, Invoice_Return_ID, Invoice_Ret
 import { InvoiceNumber, InvoiceNumberSuccess } from "../../../store/Sales/SalesReturnRedux/action";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { C_DatePicker, C_Select } from "../../../CustomValidateForm";
-import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
+// import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 
 const CreditNoteAdd = (props) => {
@@ -69,6 +69,16 @@ const CreditNoteAdd = (props) => {
     const [userPageAccessState, setUserAccState] = useState(198);
     const [editCreatedBy, seteditCreatedBy] = useState("");
 
+    const values = { ...state.values }
+    const { isError } = state;
+    const { fieldLabel } = state;
+
+    const location = { ...history.location };
+    const hasShowloction = location.hasOwnProperty(mode.editValue)//changes
+    const hasShowModal = props.hasOwnProperty(mode.editValue)//changes
+
+
+
     const {
         postMsg,
         pageField,
@@ -91,6 +101,18 @@ const CreditNoteAdd = (props) => {
             pageField: state.CommonPageFieldReducer.pageField
         }));
 
+    const { commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
+
+    // Common Party Dropdown useEffect
+    useEffect(() => {
+        if (commonPartyDropSelect.value > 0) {
+            partySelectButtonHandler();
+        } else {
+            partySelectOnChangeHandler();
+        };
+    }, [commonPartyDropSelect]);
+
+    //initial page load dispatch actions
     useEffect(() => {
         const page_Id = pageId.CREDIT_NOTE//changes
         dispatch(commonPageFieldSuccess(null));
@@ -99,14 +121,6 @@ const CreditNoteAdd = (props) => {
         dispatch(Invoice_Return_ID_Success([]))
         dispatch(InvoiceNumberSuccess([]))
     }, []);
-
-    const values = { ...state.values }
-    const { isError } = state;
-    const { fieldLabel } = state;
-
-    const location = { ...history.location };
-    const hasShowloction = location.hasOwnProperty(mode.editValue)//changes
-    const hasShowModal = props.hasOwnProperty(mode.editValue)//changes
 
     // userAccess useEffect
     useEffect(() => {
@@ -210,7 +224,7 @@ const CreditNoteAdd = (props) => {
     useEffect(() => {
         const jsonBody = JSON.stringify({
             Type: 1,
-            PartyID: _cfunc.loginSelectedPartyID(),
+            PartyID: commonPartyDropSelect.value,
             CompanyID: loginCompanyID()
         });
         dispatch(Retailer_List(jsonBody));
@@ -280,7 +294,7 @@ const CreditNoteAdd = (props) => {
         })
 
         const jsonBody = JSON.stringify({
-            PartyID: _cfunc.loginSelectedPartyID(),
+            PartyID: commonPartyDropSelect.value,
             CustomerID: e.value,
             InvoiceID: ""
         });
@@ -288,11 +302,35 @@ const CreditNoteAdd = (props) => {
         const body = { jsonBody, pageMode }
         dispatch(ReceiptGoButtonMaster(body));
         const jsonBody1 = JSON.stringify({
-            PartyID: _cfunc.loginSelectedPartyID(),
+            PartyID: commonPartyDropSelect.value,
             CustomerID: e.value
         });
 
         dispatch(InvoiceNumber(jsonBody1));
+    };
+
+    function partySelectButtonHandler() {
+        const jsonBody = JSON.stringify({
+            Type: 1,
+            PartyID: commonPartyDropSelect.value,
+            CompanyID: loginCompanyID()
+        });
+        dispatch(Retailer_List(jsonBody));
+    };
+
+    function partySelectOnChangeHandler() {
+        dispatch(Retailer_List_Success([]));
+        dispatch(Invoice_Return_ID_Success([]))
+        dispatch(ReceiptGoButtonMaster_Success([]));
+        dispatch(InvoiceNumberSuccess([]));
+        setState((i) => {
+            let a = { ...i }
+            a.values.Customer = ''
+            a.values.InvoiceNO = ''
+            a.hasValid.Customer.valid = true;
+            a.hasValid.InvoiceNO.valid = true;
+            return a
+        })
     };
 
     const saveHandeller = async (event) => {
@@ -326,7 +364,7 @@ const CreditNoteAdd = (props) => {
 
                 Narration: values.Narration,
                 NoteReason: values.NoteReason.value,
-                Party: _cfunc.loginSelectedPartyID(),
+                Party: commonPartyDropSelect.value,
                 CreatedBy: loginUserID(),
                 UpdatedBy: loginUserID(),
                 CRDRNoteItems: [],
@@ -337,30 +375,6 @@ const CreditNoteAdd = (props) => {
         } catch (e) { }
     };
 
-    function partySelectButtonHandler() {
-        const jsonBody = JSON.stringify({
-            Type: 1,
-            PartyID: _cfunc.loginSelectedPartyID(),
-            CompanyID: loginCompanyID()
-        });
-        dispatch(Retailer_List(jsonBody));
-    }
-
-    function partyOnChngeButtonHandler() {
-        dispatch(Retailer_List_Success([]));
-        dispatch(Invoice_Return_ID_Success([]))
-        dispatch(ReceiptGoButtonMaster_Success([]));
-        dispatch(InvoiceNumberSuccess([]));
-        setState((i) => {
-            let a = { ...i }
-            a.values.Customer = ''
-            a.values.InvoiceNO = ''
-            a.hasValid.Customer.valid = true;
-            a.hasValid.InvoiceNO.valid = true;
-            return a
-        })
-    }
-
     var IsEditMode_Css = ''
     if ((modalCss) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
 
@@ -369,10 +383,10 @@ const CreditNoteAdd = (props) => {
             <React.Fragment>
                 <MetaTags> <title>{userAccess.PageHeading}| FoodERP-React FrontEnd</title></MetaTags>
                 <div className="page-content" style={{ marginBottom: "5cm" }}>
-                    <PartyDropdown_Common pageMode={pageMode}
+                    {/* <PartyDropdown_Common pageMode={pageMode}
                         goButtonHandler={partySelectButtonHandler}
-                        changeButtonHandler={partyOnChngeButtonHandler}
-                    />
+                        changeButtonHandler={partySelectOnChangeHandler}
+                    /> */}
                     <div className="px-2 c_card_filter header text-black mb-1" >
                         <Row>
                             <Col sm="6">

@@ -51,7 +51,7 @@ import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { CInput, C_DatePicker, C_Select } from "../../../CustomValidateForm/index";
 import { decimalRegx } from "../../../CustomValidateForm/RegexPattern";
 import * as _cfunc from "../../../components/Common/CommonFunction";
-import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
+// import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 
 const Receipts = (props) => {
@@ -115,7 +115,19 @@ const Receipts = (props) => {
     const hasShowModal = props.hasOwnProperty(mode.editValue)
 
     const { Data = [] } = ReceiptGoButton
-    const { OpeningBalanceAmount = '' } = OpeningBalance
+    const { OpeningBalanceAmount = '' } = OpeningBalance;
+
+    const { commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
+
+    // Common Party select Dropdown useEffect
+    useEffect(() => {
+        if (commonPartyDropSelect.value > 0) {
+            partySelectButtonHandler();
+        } else {
+            partySelectOnChangeHandler();
+        }
+    }, [commonPartyDropSelect]);
+
 
     useEffect(() => {
         const page_Id = pageId.RECEIPTS
@@ -125,10 +137,10 @@ const Receipts = (props) => {
 
     // Customer dropdown Options
     useEffect(() => {
-        if (!(_cfunc.loginSelectedPartyID() === 0)) {
+        if (!(commonPartyDropSelect.value === 0)) {
             const jsonBody = JSON.stringify({
                 Type: 4,
-                PartyID: _cfunc.loginSelectedPartyID(),
+                PartyID: commonPartyDropSelect.value,
                 CompanyID: loginCompanyID()
             });
             dispatch(Retailer_List(jsonBody));
@@ -350,13 +362,13 @@ const Receipts = (props) => {
             return i
         })
         const jsonBody = JSON.stringify({
-            PartyID: _cfunc.loginSelectedPartyID(),
+            PartyID: commonPartyDropSelect.value,
             CustomerID: e.value,
             InvoiceID: ""
         });
 
         const jsonBody1 = JSON.stringify({
-            PartyID: _cfunc.loginSelectedPartyID(),
+            PartyID: commonPartyDropSelect.value,
             CustomerID: e.value,
             ReceiptDate: values.ReceiptDate
         });
@@ -583,7 +595,7 @@ const Receipts = (props) => {
                     "Customer": values.Customer.value,
                     "ChequeDate": values.ReceiptModeName.label === "Cheque" ? values.ChequeDate : "",
                     "DepositorBank": values.DepositorBankName.value,
-                    "Party": _cfunc.loginSelectedPartyID(),
+                    "Party": commonPartyDropSelect.value,
                     "ReceiptMode": values.ReceiptModeName.value,
                     "ReceiptType": ReceiptTypeID.id,
                     "CreatedBy": loginUserID(),
@@ -609,13 +621,13 @@ const Receipts = (props) => {
     function partySelectButtonHandler() {
         const jsonBody = JSON.stringify({
             Type: 4,
-            PartyID: _cfunc.loginSelectedPartyID(),
+            PartyID: commonPartyDropSelect.value,
             CompanyID: loginCompanyID()
         });
         dispatch(Retailer_List(jsonBody));
     }
 
-    function partyOnChngeButtonHandler() {
+    function partySelectOnChangeHandler() {
         dispatch(Retailer_List_Success([]));
         dispatch(GetOpeningBalance_Success([]));
         setState((i) => {
@@ -635,9 +647,9 @@ const Receipts = (props) => {
                 <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
                 <div className="page-content" style={{ marginBottom: "5cm" }}>
 
-                    <PartyDropdown_Common pageMode={pageMode}
+                    {/* <PartyDropdown_Common pageMode={pageMode}
                         goButtonHandler={partySelectButtonHandler}
-                        changeButtonHandler={partyOnChngeButtonHandler} />
+                        changeButtonHandler={partyOnChngeButtonHandler} /> */}
 
                     <form noValidate>
                         <div className="px-2 c_card_filter header text-black mb-1" >

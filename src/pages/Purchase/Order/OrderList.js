@@ -20,7 +20,7 @@ import { orderApprovalFunc, orderApprovalMessage } from "./orderApproval";
 import { priceListByCompay_Action, priceListByCompay_ActionSuccess } from "../../../store/Administrator/PriceList/action";
 import OrderView from "./OrderView";
 import OrderView_Modal from "./OrderView";
-import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
+// import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 import { getOrdersMakeInvoiceDataAction, getOrdersMakeInvoiceDataActionSuccess } from "../../../store/Sales/bulkInvoice/action";
 
@@ -92,7 +92,6 @@ const OrderList = () => {
 
         })
     );
-    const { commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
 
     const gobtnId = `gobtn-${subPageMode}`
     const {
@@ -113,6 +112,7 @@ const OrderList = () => {
 
     const ordersBulkInvoiceData = useSelector(state => state.BulkInvoiceReducer.ordersBulkInvoiceData);
     const makeBulkInvoiceLoading = useSelector(state => state.BulkInvoiceReducer.makeBulkInvoiceLoading);
+    const { commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
 
     const values = { ...state.values }
     const { fieldLabel } = state;
@@ -124,6 +124,17 @@ const OrderList = () => {
         updateSucc: _act.updateOrderIdSuccess,
         deleteSucc: _act.deleteOrderIdSuccess,
     }
+
+
+    // Common Party select Dropdown useEffect
+    useEffect(() => {
+        if (commonPartyDropSelect.value > 0) {
+            partySelectButtonHandler();
+        } else {
+            partySelectOnChangeHandler();
+        }
+    }, [commonPartyDropSelect]);
+
 
     // Featch Modules List data  First Rendering
     useEffect(() => {
@@ -750,7 +761,7 @@ const OrderList = () => {
         dispatch(_act.GetVenderSupplierCustomer({ subPageMode, PartyID: _cfunc.loginSelectedPartyID() }));
     }
 
-    function partyOnChngeButtonHandler() {
+    function partySelectOnChangeHandler() {
         dispatch(_act.getOrderListPageSuccess([]));
         dispatch(_act.GetVenderSupplierCustomerSuccess([]));
         setState((i) => {

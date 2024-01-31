@@ -11,7 +11,7 @@ import { Col, FormGroup, Label, Row } from "reactstrap";
 import { C_DatePicker } from "../../../CustomValidateForm";
 import { deleteDiscountIDSuccess, deleteDiscount_ID, getDiscountList, getDiscountListSuccess } from "../../../store/Administrator/DiscountRedux/actions";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
-import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
+// import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 
 const DiscountList = () => {
@@ -38,12 +38,23 @@ const DiscountList = () => {
         deleteSucc: deleteDiscountIDSuccess
     }
 
+    const { commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
+
+    // Common Party select Dropdown useEffect
+    useEffect(() => {
+        if (commonPartyDropSelect.value > 0) {
+            partySelectButtonHandler();
+        } else {
+            partySelectOnChangeHandler();
+        }
+    }, [commonPartyDropSelect]);
+
     useEffect(() => {
         const page_Id = pageId.DISCOUNT_LIST;
         dispatch(commonPageFieldListSuccess(null));
         dispatch(BreadcrumbRadioButtonView(true));
         dispatch(commonPageFieldList(page_Id));
-        if (!(_cfunc.loginSelectedPartyID() === 0)) {
+        if (!(commonPartyDropSelect.value === 0)) {
             goButtonHandler()
         }
         return () => {
@@ -54,14 +65,14 @@ const DiscountList = () => {
 
     const goButtonHandler = () => {
         try {
-            if (_cfunc.loginSelectedPartyID() === 0) {
+            if (commonPartyDropSelect.value === 0) {
                 customAlert({ Type: 3, Message: alertMessages.commonPartySelectionIsRequired });
                 return;
             };
             const jsonBody = JSON.stringify({
                 "FromDate": fromdate,
                 "ToDate": todate,
-                "Party": _cfunc.loginSelectedPartyID()
+                "Party": commonPartyDropSelect.value
             });
 
             dispatch(getDiscountList(jsonBody));
@@ -81,7 +92,10 @@ const DiscountList = () => {
         setHeaderFilters(newObj)
     }
 
-    function partyOnChngeButtonHandler() {
+    function partySelectButtonHandler() {
+        goButtonHandler();
+    }
+    function partySelectOnChangeHandler() {
         dispatch(getDiscountListSuccess([]));
     }
 
@@ -89,9 +103,9 @@ const DiscountList = () => {
         <React.Fragment>
             <PageLoadingSpinner isLoading={(goBtnLoading || !pageField)} />
             <div className="page-content">
-                <PartyDropdown_Common
-                    changeButtonHandler={partyOnChngeButtonHandler}
-                />
+                {/* <PartyDropdown_Common
+                    changeButtonHandler={partySelectOnChangeHandler}
+                /> */}
                 <div className="px-3 c_card_filter header text-black mb-1" >
 
                     <Row >

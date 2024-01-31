@@ -27,7 +27,7 @@ import { getpdfReportdata } from "../../../store/Utilites/PdfReport/actions";
 import { C_DatePicker } from "../../../CustomValidateForm";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { url, mode, pageId } from "../../../routes/index"
-import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
+// import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 
@@ -77,6 +77,18 @@ const PaymentEntryList = () => {
         deleteSucc: deleteReceiptList_Success
     }
 
+    const { commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
+
+    // Common Party select Dropdown useEffect
+    useEffect(() => {
+        if (commonPartyDropSelect.value > 0) {
+            partySelectButtonHandler();
+        } else {
+            partySelectOnChangeHandler();
+        }
+    }, [commonPartyDropSelect]);
+
+
     useEffect(() => {
         return () => {
             dispatch(ReceiptListAPISuccess([]))
@@ -96,7 +108,7 @@ const PaymentEntryList = () => {
     useEffect(() => {
         const jsonBody = JSON.stringify({
             Type: 4,
-            PartyID: _cfunc.loginSelectedPartyID(),
+            PartyID: commonPartyDropSelect.value,
             CompanyID: _cfunc.loginCompanyID()
         });
         dispatch(Retailer_List(jsonBody));
@@ -137,7 +149,7 @@ const PaymentEntryList = () => {
         dispatch(commonPageFieldList(page_Id))
         // dispatch(BreadcrumbShowCountlabel(`${"Payment Entry Count"} :0`))
         // dispatch(getSupplier())
-        dispatch(getSupplier({ "PartyID": _cfunc.loginSelectedPartyID() }));
+        dispatch(getSupplier({ "PartyID": commonPartyDropSelect.value }));
 
     }, []);
 
@@ -185,9 +197,9 @@ const PaymentEntryList = () => {
     });
 
     const goButtonHandler = async () => {
-        
+
         try {
-            if ((_cfunc.loginSelectedPartyID() === 0)) {
+            if ((commonPartyDropSelect.value === 0)) {
                 customAlert({ Type: 3, Message: alertMessages.commonPartySelectionIsRequired });
                 return;
             };
@@ -199,7 +211,7 @@ const PaymentEntryList = () => {
                 FromDate: values.FromDate,
                 ToDate: values.ToDate,
                 CustomerID: values.Customer.value,
-                PartyID: _cfunc.loginSelectedPartyID(),
+                PartyID: commonPartyDropSelect.value,
                 ReceiptType: ReceiptTypeID.id,
             });
 
@@ -245,11 +257,11 @@ const PaymentEntryList = () => {
         goButtonHandler()
         const jsonBody = JSON.stringify({
             Type: 4,
-            PartyID: _cfunc.loginSelectedPartyID(),
+            PartyID: commonPartyDropSelect.value,
             CompanyID: _cfunc.loginCompanyID()
         });
         dispatch(Retailer_List(jsonBody));
-        dispatch(getSupplier({ "PartyID": _cfunc.loginSelectedPartyID() }));
+        dispatch(getSupplier({ "PartyID": commonPartyDropSelect.value }));
     }
 
     function partySelectOnChangeHandler() {
@@ -271,13 +283,13 @@ const PaymentEntryList = () => {
 
         try {
             const jsonBody = JSON.stringify({
-                PartyID: _cfunc.loginSelectedPartyID(),
+                PartyID: commonPartyDropSelect.value,
                 CustomerID: CustomerID,
                 InvoiceID: ""
             });
 
             const jsonBody1 = JSON.stringify({
-                PartyID: _cfunc.loginSelectedPartyID(),
+                PartyID: commonPartyDropSelect.value,
                 CustomerID: CustomerID,
                 ReceiptDate: currentDate_ymd
             });
@@ -353,9 +365,9 @@ const PaymentEntryList = () => {
         <React.Fragment>
             <PageLoadingSpinner isLoading={(reducers.loading || !pageField)} />
             <div className="page-content">
-                <PartyDropdown_Common pageMode={pageMode}
+                {/* <PartyDropdown_Common pageMode={pageMode}
                     goButtonHandler={partySelectButtonHandler}
-                    changeButtonHandler={partySelectOnChangeHandler} />
+                    changeButtonHandler={partySelectOnChangeHandler} /> */}
                 {
                     (pageField) ?
                         <CommonPurchaseList

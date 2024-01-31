@@ -80,7 +80,7 @@ const ItemSaleReport = (props) => {
                 ItemSaleReportGobtn: state.ItemSaleReportReducer.ItemSaleReportGobtn,
 
                 supplierLoading: state.CommonAPI_Reducer.SSDD_ListLoading,
-                supplier: state.CommonPartyDropdownReducer.commonPartyDropdown,
+                supplier: state.CommonPartyDropdownReducer.commonPartyDropdownOption,
                 supplierListLoading: state.ItemSaleReportReducer.supplierListLoading,
                 supplierListOnPartyType: state.ItemSaleReportReducer.supplierList,
 

@@ -10,7 +10,7 @@ import { mode } from "../../../routes";
 import './changeParty.scss'; // Add your styles here
 import { useRef } from "react";
 
-const ChangeCommonParty = ({ pageMode }) => {
+const ChangeCommonParty = () => {
 
     const dispatch = useDispatch();
     const componentRef = useRef(null);
@@ -21,7 +21,7 @@ const ChangeCommonParty = ({ pageMode }) => {
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
     // Selectors from Redux store
-    const { commonPartyDropdown, partyDropdownLoading, commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
+    const { commonPartyDropdownOption, partyDropdownLoading, commonPartyDropSelect, forceDisable ,isShow} = useSelector((state) => state.CommonPartyDropdownReducer);
 
     // useEffect to update selected party when commonPartyDropSelect changes
     useEffect(() => {
@@ -71,7 +71,7 @@ const ChangeCommonParty = ({ pageMode }) => {
     };
 
     // Mapping Party for Select options
-    const PartyDropdownOptions = commonPartyDropdown.map((data) => ({
+    const PartyDropdownOptions = commonPartyDropdownOption.map((data) => ({
         value: data.id,
         label: data.Name,
         SAPPartyCode: data.SAPPartyCode
@@ -89,7 +89,8 @@ const ChangeCommonParty = ({ pageMode }) => {
 
     // Render component
     const formattedPartyLabel = commonPartyDropSelect?.label ? commonPartyDropSelect.label.charAt(0).toUpperCase() + commonPartyDropSelect.label.slice(1).toLowerCase() : '';
-
+   
+    if (!isShow) { return null };
     return (
         <div className="change-party-contener" ref={componentRef}>
             <div className="party-label-wapper" onClick={handleLabelClick}>
@@ -127,7 +128,9 @@ const ChangeCommonParty = ({ pageMode }) => {
                                 >
                                     Select
                                 </C_Button>
-                            ) : !(pageMode === mode.view || pageMode === mode.edit) && (
+
+                            ) : (!forceDisable) && (
+                                // ) : !(pageMode === mode.view || pageMode === mode.edit) && (
                                 <C_Button
                                     type="button"
                                     spinnerColor={"info"}

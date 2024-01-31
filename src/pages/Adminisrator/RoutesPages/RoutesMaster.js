@@ -34,17 +34,14 @@ import { SaveButton } from "../../../components/Common/CommonButton";
 import {
     breadcrumbReturnFunc,
     loginCompanyID,
-    loginPartyID,
     loginUserID,
     btnIsDissablefunc,
     metaTagLabel,
-    loginSelectedPartyID,
-
 } from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
-import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
+// import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 
@@ -86,6 +83,10 @@ const RoutesMaster = (props) => {
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageField
         }));
+
+    const { commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
+
+
 
     useEffect(() => {
         const page_Id = pageId.ROUTES
@@ -239,7 +240,7 @@ const RoutesMaster = (props) => {
         const btnId = event.target.id
 
         try {
-            if ((loginSelectedPartyID() === 0)) {
+            if ((commonPartyDropSelect.value === 0)) {
                 customAlert({ Type: 3, Message: alertMessages.commonPartySelectionIsRequired });
                 return;
             };
@@ -249,7 +250,7 @@ const RoutesMaster = (props) => {
                 const jsonBody = JSON.stringify({
                     Name: values.Name,
                     IsActive: values.IsActive,
-                    Party: loginSelectedPartyID(),
+                    Party: commonPartyDropSelect.value,
                     Sunday: values.Sunday,
                     Monday: values.Monday,
                     Tuesday: values.Tuesday,
@@ -283,7 +284,7 @@ const RoutesMaster = (props) => {
                 <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
 
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
-                    <PartyDropdown_Common pageMode={pageMode} />
+                    {/* <PartyDropdown_Common pageMode={pageMode} /> */}
 
                     <Container fluid>
                         <Card className="text-black" style={{ marginTop: "3px" }}>

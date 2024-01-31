@@ -96,7 +96,7 @@ const ClaimTrackingEntry = (props) => {
   } = useSelector((state) => ({
     saveBtnloading: state.ClaimTrackingEntry_Reducer.saveBtnloading,
     postMsg: state.ClaimTrackingEntry_Reducer.postMsg,
-    partyList: state.CommonPartyDropdownReducer.commonPartyDropdown,
+    partyList: state.CommonPartyDropdownReducer.commonPartyDropdownOption,
     partyDropdownLoading: state.CommonPartyDropdownReducer.partyDropdownLoading,
     updateMsg: state.ClaimTrackingEntry_Reducer.updateMessage,
     userAccess: state.Login.RoleAccessUpdateData,

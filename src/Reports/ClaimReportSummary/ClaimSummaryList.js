@@ -16,7 +16,7 @@ import ClaimSummaryMaster from "./ClaimSummaryMaster";
 import { initialFiledFunc } from "../../components/Common/validationFunction";
 import { ClaimSummary_API, MasterClaimSummary_API } from "../../helpers/backend_helper";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
-import PartyDropdown_Common from "../../components/Common/PartyDropdown";
+// import PartyDropdown_Common from "../../components/Common/PartyDropdown";
 
 const SelectedMonth = () => _cfunc.getPreviousMonthAndYear(new Date())
 const FirstAndLastDate = () => _cfunc.getFirstAndLastDateOfMonth(SelectedMonth());
@@ -52,8 +52,18 @@ const ClaimSummaryList = () => {
     );
 
     const { pageField, pdfdata, deleteMsg } = reducers;
-
     const values = { ...state.values }
+    const { commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
+
+    // Common Party select Dropdown useEffect
+    useEffect(() => {
+        if (commonPartyDropSelect.value > 0) {
+            // partySelectButtonHandler();
+        } else {
+            partySelectOnChangeHandler();
+        }
+    }, [commonPartyDropSelect]);
+
 
     const action = {
         getList: claimList_API,
@@ -66,7 +76,7 @@ const ClaimSummaryList = () => {
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(pageId.CLAIM_SUMMARY_lIST))
 
-        if (!(_cfunc.loginSelectedPartyID() === 0)) {
+        if (!(commonPartyDropSelect.value === 0)) {
             MonthAndYearOnchange(values.SelectedMonth, "InitialDate")
         }
         return () => {
@@ -170,7 +180,7 @@ const ClaimSummaryList = () => {
         const jsonBody = JSON.stringify({
             "FromDate": firstDate,
             "ToDate": lastDate,
-            "Party": _cfunc.loginSelectedPartyID()
+            "Party": commonPartyDropSelect.value
         });
 
         let config = { jsonBody, Type: "List", MonthStartDate: firstDate, MonthEndDate: lastDate }
@@ -187,8 +197,8 @@ const ClaimSummaryList = () => {
             <PageLoadingSpinner isLoading={reducers.loading || !pageField} />
             <div className="page-content">
 
-                <PartyDropdown_Common pageMode={pageMode}
-                    changeButtonHandler={partySelectOnChangeHandler} />
+                {/* <PartyDropdown_Common pageMode={pageMode}
+                    changeButtonHandler={partySelectOnChangeHandler} /> */}
 
                 <div className="px-2   c_card_filter text-black" >
                     <div className="row" >

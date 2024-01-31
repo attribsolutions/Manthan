@@ -39,7 +39,7 @@ const DeleteInvoiceDataExport = (props) => {
         (state) => ({
             tableData: state.InvoiceDataExportReducer.DeleteInvoiceDataExportGobtn,
             GoBtnLoading: state.InvoiceDataExportReducer.GoBtnLoading,
-            Distributor: state.CommonPartyDropdownReducer.commonPartyDropdown,
+            Distributor: state.CommonPartyDropdownReducer.commonPartyDropdownOption,
             ExcelBtnLoading: state.InvoiceDataExportReducer.ExcelBtnLoading,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageField

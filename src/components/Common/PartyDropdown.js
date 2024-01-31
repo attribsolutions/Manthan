@@ -29,7 +29,7 @@ const PartyDropdown = ({ goButtonHandler, changeButtonHandler, goBtnLoading, SAP
     const [changeButtonShow, setChangeButtonShow] = useState(() => !(initialLocalStorageParty().value === 0));
 
     const { partyList, partyDropdownLoading } = useSelector((state) => ({
-        partyList: state.CommonPartyDropdownReducer.commonPartyDropdown,
+        partyList: state.CommonPartyDropdownReducer.commonPartyDropdownOption,
         partyDropdownLoading: state.CommonPartyDropdownReducer.partyDropdownLoading,
     }));
 

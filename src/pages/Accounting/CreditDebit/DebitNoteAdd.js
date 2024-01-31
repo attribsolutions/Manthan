@@ -36,7 +36,7 @@ import { CredietDebitType, Receipt_No_List, Receipt_No_List_Success, saveCredit,
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { C_DatePicker } from "../../../CustomValidateForm";
 import * as _cfunc from "../../../components/Common/CommonFunction"
-import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
+// import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 
 function initialState(history) {
 
@@ -82,6 +82,14 @@ const Debit = (props) => {
     const [userPageAccessState, setUserAccState] = useState(123);
     const [editCreatedBy, seteditCreatedBy] = useState("");
 
+    const values = { ...state.values }
+    const { isError } = state;
+    const { fieldLabel } = state;
+
+    const location = { ...history.location }
+    const hasShowloction = location.hasOwnProperty(mode.editValue)
+    const hasShowModal = props.hasOwnProperty(mode.editValue)
+
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
         postMsg,
@@ -102,6 +110,17 @@ const Debit = (props) => {
             pageField: state.CommonPageFieldReducer.pageField,
         }));
 
+    const { commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
+
+    // Common Party Dropdown useEffect
+    useEffect(() => {
+        if (commonPartyDropSelect.value > 0) {
+            partySelectButtonHandler();
+        } else {
+            partySelectOnChangeHandler();
+        };
+    }, [commonPartyDropSelect]);
+
     useEffect(() => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_id))
@@ -110,13 +129,6 @@ const Debit = (props) => {
         }
     }, []);
 
-    const values = { ...state.values }
-    const { isError } = state;
-    const { fieldLabel } = state;
-
-    const location = { ...history.location }
-    const hasShowloction = location.hasOwnProperty(mode.editValue)
-    const hasShowModal = props.hasOwnProperty(mode.editValue)
 
     // userAccess useEffect
     useEffect(() => {
@@ -214,7 +226,7 @@ const Debit = (props) => {
     useEffect(() => {
         const jsonBody = JSON.stringify({
             Type: 4,
-            PartyID: _cfunc.loginSelectedPartyID(),
+            PartyID: commonPartyDropSelect.value,
             CompanyID: _cfunc.loginCompanyID()
         });
         dispatch(Retailer_List(jsonBody));
@@ -253,7 +265,7 @@ const Debit = (props) => {
         ReceiptDate: _cfunc.date_dmy_func(index.ReceiptDate)
     }));
 
-     function CRDRNoteDateOnchange(e, date) {
+    function CRDRNoteDateOnchange(e, date) {
         setState((i) => {
             const a = { ...i }
             a.values.CRDRNoteDate = date;
@@ -276,7 +288,7 @@ const Debit = (props) => {
         dispatch(Receipt_No_List_Success([]))
 
         const jsonBody = JSON.stringify({
-            PartyID: _cfunc.loginSelectedPartyID(),
+            PartyID: commonPartyDropSelect.value,
             CustomerID: hasSelect.value
         });
         dispatch(Receipt_No_List(jsonBody));
@@ -295,6 +307,21 @@ const Debit = (props) => {
         })
         onChangeSelect({ hasSelect, evn, state, setState, })
     }
+
+    function partySelectButtonHandler() {
+        const jsonBody = JSON.stringify({
+            Type: 4,
+            PartyID: commonPartyDropSelect.value,
+            CompanyID: _cfunc.loginCompanyID()
+        });
+        dispatch(Retailer_List(jsonBody));
+    };
+
+    function partySelectOnChangeHandler() {
+        dispatch(Retailer_List_Success([]));
+        dispatch(Receipt_No_List_Success([]))
+        setState(() => resetFunction(fileds, state)) //Clear form values 
+    };
 
     const saveHandeller = async (event) => {
 
@@ -324,7 +351,7 @@ const Debit = (props) => {
                     ReceiptDate: values.ReceiptDate,
                     CRDRNoteItems: [],
                     CRDRInvoices: [],
-                    Party: _cfunc.loginSelectedPartyID(),
+                    Party: commonPartyDropSelect.value,
                     CreatedBy: _cfunc.loginUserID(),
                     UpdatedBy: _cfunc.loginUserID(),
                 });
@@ -339,21 +366,6 @@ const Debit = (props) => {
         } catch (e) { _cfunc.btnIsDissablefunc({ btnId, state: false }) }
     };
 
-    function partySelectButtonHandler() {
-        const jsonBody = JSON.stringify({
-            Type: 4,
-            PartyID: _cfunc.loginSelectedPartyID(),
-            CompanyID: _cfunc.loginCompanyID()
-        });
-        dispatch(Retailer_List(jsonBody));
-    }
-
-    function partyOnChngeButtonHandler() {
-        dispatch(Retailer_List_Success([]));
-        dispatch(Receipt_No_List_Success([]))
-        setState(() => resetFunction(fileds, state)) //Clear form values 
-    }
-
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
     if ((modalCss) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
@@ -364,10 +376,10 @@ const Debit = (props) => {
                 <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
 
                 <div className="page-content" style={{ marginTop: IsEditMode_Css, }}>
-                    <PartyDropdown_Common pageMode={pageMode}
+                    {/* <PartyDropdown_Common pageMode={pageMode}
                         goButtonHandler={partySelectButtonHandler}
-                        changeButtonHandler={partyOnChngeButtonHandler}
-                    />
+                        changeButtonHandler={partySelectOnChangeHandler}
+                    /> */}
 
                     <form noValidate>
                         <div className="px-2 c_card_filter header text-black mb-2" >

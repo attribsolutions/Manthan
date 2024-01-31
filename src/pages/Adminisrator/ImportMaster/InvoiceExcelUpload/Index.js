@@ -81,7 +81,7 @@ const InvoiceExcelUpload = (props) => {
         saveBtnLoading: state.ImportExcelPartyMap_Reducer.invoiceUploadSaveLoading,
         PartyMapData: state.ImportExcelPartyMap_Reducer.addGoButton,
 
-        partyList: state.CommonPartyDropdownReducer.commonPartyDropdown,
+        partyList: state.CommonPartyDropdownReducer.commonPartyDropdownOption,
         partyDropDownLoading: state.CommonPartyDropdownReducer.partyDropdownLoading,
 
         compareParameter: state.ImportExportFieldMap_Reducer.addGoButton,

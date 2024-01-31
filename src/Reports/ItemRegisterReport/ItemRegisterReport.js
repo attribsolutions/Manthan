@@ -13,7 +13,7 @@ import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import * as report from '../ReportIndex'
 import { ItemRegister_API } from "../../helpers/backend_helper";
 import C_Report from "../../components/Common/C_Report";
-import PartyDropdown_Common from "../../components/Common/PartyDropdown";
+// import PartyDropdown_Common from "../../components/Common/PartyDropdown";
 import { alertMessages } from "../../components/Common/CommonErrorMsg/alertMsg";
 
 const ItemRegisterReport = (props) => {
@@ -51,7 +51,18 @@ const ItemRegisterReport = (props) => {
 
     // Featch Modules List data  First Rendering
     const location = { ...history.location }
-    const hasShowModal = props.hasOwnProperty(mode.editValue)
+    const hasShowModal = props.hasOwnProperty(mode.editValue);
+
+    const { commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
+
+    // Common Party select Dropdown useEffect
+    useEffect(() => {
+        if (commonPartyDropSelect.value > 0) {
+            partySelectButtonHandler();
+        } else {
+            partySelectOnChangeHandler();
+        }
+    }, [commonPartyDropSelect]);
 
     // userAccess useEffect
     useEffect(() => {
@@ -71,8 +82,8 @@ const ItemRegisterReport = (props) => {
 
     useEffect(() => {
         dispatch(getBaseUnit_ForDropDown());
-        if (!(_cfunc.loginSelectedPartyID() === 0)) {
-            const jsonBody = JSON.stringify({ ..._cfunc.loginJsonBody(), "PartyID": _cfunc.loginSelectedPartyID() });
+        if (!(commonPartyDropSelect.value === 0)) {
+            const jsonBody = JSON.stringify({ ..._cfunc.loginJsonBody(), "PartyID": commonPartyDropSelect.value });
             dispatch(goButtonPartyItemAddPage({ jsonBody }));
         };
 
@@ -120,7 +131,7 @@ const ItemRegisterReport = (props) => {
 
     function goButtonHandler() {
 
-        if (_cfunc.loginSelectedPartyID() === 0) {
+        if (commonPartyDropSelect.value === 0) {
             customAlert({ Type: 3, Message: alertMessages.commonPartySelectionIsRequired });
             return;
         };
@@ -130,7 +141,7 @@ const ItemRegisterReport = (props) => {
             "ToDate": values.ToDate,
             "Item": values.Item.value,
             "Unit": values.Unit.value,
-            "Party": _cfunc.loginSelectedPartyID()
+            "Party": commonPartyDropSelect.value
         });
 
         let config = {
@@ -167,11 +178,11 @@ const ItemRegisterReport = (props) => {
     }
 
     function partySelectButtonHandler() {
-        const jsonBody = JSON.stringify({ ..._cfunc.loginJsonBody(), "PartyID": _cfunc.loginSelectedPartyID() });
+        const jsonBody = JSON.stringify({ ..._cfunc.loginJsonBody(), "PartyID": commonPartyDropSelect.value });
         dispatch(goButtonPartyItemAddPage({ jsonBody }));
     }
 
-    function partyOnChngeButtonHandler() {
+    function partySelectOnChangeHandler() {
         dispatch(getpdfReportdataSuccess({ Status: false }));
         dispatch(goButtonPartyItemAddPageSuccess([]));
         setState((i) => {
@@ -186,9 +197,9 @@ const ItemRegisterReport = (props) => {
         <React.Fragment>
             <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
             <div className="page-content">
-                <PartyDropdown_Common
+                {/* <PartyDropdown_Common
                     goButtonHandler={partySelectButtonHandler}
-                    changeButtonHandler={partyOnChngeButtonHandler} />
+                    changeButtonHandler={partyOnChngeButtonHandler} /> */}
 
                 <div className="px-2   c_card_filter text-black" >
                     <div className="row" >

@@ -31,7 +31,7 @@ import {
 import { Retailer_List, Retailer_List_Success, getSupplierSuccess } from "../../../store/CommonAPI/SupplierRedux/actions";
 import * as _cfunc from "../../../components/Common/CommonFunction"
 import { C_DatePicker } from "../../../CustomValidateForm";
-import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
+// import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 
 const CreditList = () => {
@@ -78,6 +78,7 @@ const CreditList = () => {
         })
     );
 
+    const { commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
     const { pageField, RetailerList, CreditDebitType, listBtnLoading, Cancel_Credit_Debit_EInvoice, Uploaded_Credit_Debit_EInvoice, GobuttonLoading } = reducers;
     const values = { ...state.values }
 
@@ -148,15 +149,87 @@ const CreditList = () => {
         dispatch(CredietDebitType(jsonBody));
     }, []);
 
+
+    // Common Party Dropdown useEffect
+    useEffect(() => {
+        if (commonPartyDropSelect.value > 0) {
+            partySelectButtonHandler()
+
+        } else {
+            partySelectOnChangeHandler()
+        }
+
+    }, [commonPartyDropSelect]);
+
     // Retailer DropDown List Type 1 for credit list drop down
     useEffect(() => {
         const jsonBody = JSON.stringify({
             Type: 1,
-            PartyID: _cfunc.loginSelectedPartyID(),
+            PartyID: commonPartyDropSelect.value,
             CompanyID: _cfunc.loginCompanyID()
         });
         dispatch(Retailer_List(jsonBody));
     }, []);
+
+
+
+    useEffect(() => {
+        const jsonBody = JSON.stringify({
+            Type: 4,
+            PartyID: commonPartyDropSelect.value,
+            CompanyID: _cfunc.loginCompanyID()
+        });
+        dispatch(Retailer_List(jsonBody));
+    }, []);
+
+
+    useEffect(() => {
+        if ((CreditDebitType.length > 0) && !(commonPartyDropSelect.value === 0)) {
+            goButtonHandler(true)
+        };
+    }, [CreditDebitType]);
+
+    useEffect(() => {   // Uploaded EInvoice useEffect 
+        if (Uploaded_Credit_Debit_EInvoice.Status === true && Uploaded_Credit_Debit_EInvoice.StatusCode === 200) {
+            dispatch(Uploaded_Credit_Debit_EInvoiceSuccess({ Status: false }))
+            goButtonHandler("event")
+            customAlert({
+                Type: 1,
+                Message: JSON.stringify(Uploaded_Credit_Debit_EInvoice.Message),
+            })
+        }
+
+        else if (Uploaded_Credit_Debit_EInvoice.Status === true) {
+            dispatch(Uploaded_Credit_Debit_EInvoiceSuccess({ Status: false }))
+            customAlert({
+                Type: 3,
+                Message: JSON.stringify(Uploaded_Credit_Debit_EInvoice.Message),
+            })
+        }
+    }, [Uploaded_Credit_Debit_EInvoice]);
+
+    useEffect(async () => {   // Uploaded Cancel E-Invoice useEffect 
+
+        if (Cancel_Credit_Debit_EInvoice.Status === true && Cancel_Credit_Debit_EInvoice.StatusCode === 200) {
+            dispatch(Cancel_Credit_Debit_EInvoiceSuccess({ Status: false }))
+            goButtonHandler("event")
+            customAlert({
+                Type: 1,
+                Message: Cancel_Credit_Debit_EInvoice.Message,
+            })
+            return
+        }
+
+        else if (Cancel_Credit_Debit_EInvoice.Status === true) {
+            dispatch(Cancel_Credit_Debit_EInvoiceSuccess({ Status: false }))
+            customAlert({
+                Type: 3,
+                Message: JSON.stringify(Cancel_Credit_Debit_EInvoice.Message),
+            })
+            return
+        }
+    }, [Cancel_Credit_Debit_EInvoice]);
+
 
     const customerOptions = RetailerList.map((index) => ({
         value: index.id,
@@ -168,44 +241,28 @@ const CreditList = () => {
         label: " All"
     });
 
-    useEffect(() => {
+    function partySelectButtonHandler() {
         const jsonBody = JSON.stringify({
             Type: 4,
-            PartyID: _cfunc.loginSelectedPartyID(),
+            PartyID: commonPartyDropSelect.value,
             CompanyID: _cfunc.loginCompanyID()
         });
         dispatch(Retailer_List(jsonBody));
-    }, []);
+    }
 
-    // const NoteType = []
-    // CreditDebitType.forEach(index => {
-    //     if (otherState.buttonMsgLable === "Credit") {
-    //         if ((index.Name === "CreditNote") || (index.Name === "Goods CreditNote")) {
-    //             const arr = {
-    //                 value: index.id,
-    //                 label: index.Name,
-    //             }
-    //             NoteType.push(arr)
-    //         }
-    //     }
-    //     else {
-    //         if ((index.Name === "DebitNote") || (index.Name === "Goods DebitNote")) {
-    //             const arr = {
-    //                 value: index.id,
-    //                 label: index.Name,
-    //             }
-    //             NoteType.push(arr)
-    //         }
-    //     }
-    // })
-    // NoteType.unshift({ value: "", label: " All" });
+    function partySelectOnChangeHandler() {
 
-    useEffect(() => {
-        if ((CreditDebitType.length > 0) && !(_cfunc.loginSelectedPartyID() === 0)) {
-            goButtonHandler(true)
-        }
-
-    }, [CreditDebitType]);
+        dispatch(GetCreditListSuccess([]));
+        dispatch(Retailer_List_Success([]));
+        setState((i) => {
+            const a = { ...i }
+            a.values.Customer = { value: "", label: "All" }
+            a.values.NoteType = { value: "", label: "All" }
+            a.hasValid.Customer.valid = true;
+            a.hasValid.NoteType.valid = true;
+            return a
+        })
+    }
 
     function noteType_BySubPageMode() {
         if (subPageMode === url.GOODS_CREDIT_LIST) {
@@ -231,7 +288,7 @@ const CreditList = () => {
             FromDate: values.FromDate,
             ToDate: values.ToDate,
             CustomerID: values.Customer.value,
-            PartyID: _cfunc.loginSelectedPartyID(),
+            PartyID: commonPartyDropSelect.value,
             NoteType: noteType_BySubPageMode(),
             Note: otherState.buttonMsgLable
         });
@@ -275,80 +332,7 @@ const CreditList = () => {
         })
     }
 
-    useEffect(() => {   // Uploaded EInvoice useEffect 
-        if (Uploaded_Credit_Debit_EInvoice.Status === true && Uploaded_Credit_Debit_EInvoice.StatusCode === 200) {
-            dispatch(Uploaded_Credit_Debit_EInvoiceSuccess({ Status: false }))
-            goButtonHandler("event")
-            customAlert({
-                Type: 1,
-                Message: JSON.stringify(Uploaded_Credit_Debit_EInvoice.Message),
-            })
-        }
 
-        else if (Uploaded_Credit_Debit_EInvoice.Status === true) {
-            dispatch(Uploaded_Credit_Debit_EInvoiceSuccess({ Status: false }))
-            customAlert({
-                Type: 3,
-                Message: JSON.stringify(Uploaded_Credit_Debit_EInvoice.Message),
-            })
-        }
-    }, [Uploaded_Credit_Debit_EInvoice]);
-
-
-
-    useEffect(async () => {   // Uploaded Cancel E-Invoice useEffect 
-
-        if (Cancel_Credit_Debit_EInvoice.Status === true && Cancel_Credit_Debit_EInvoice.StatusCode === 200) {
-            dispatch(Cancel_Credit_Debit_EInvoiceSuccess({ Status: false }))
-            goButtonHandler("event")
-            customAlert({
-                Type: 1,
-                Message: Cancel_Credit_Debit_EInvoice.Message,
-            })
-            return
-        }
-
-        else if (Cancel_Credit_Debit_EInvoice.Status === true) {
-            dispatch(Cancel_Credit_Debit_EInvoiceSuccess({ Status: false }))
-            customAlert({
-                Type: 3,
-                Message: JSON.stringify(Cancel_Credit_Debit_EInvoice.Message),
-            })
-            return
-        }
-    }, [Cancel_Credit_Debit_EInvoice]);
-
-    function NoteTypeOnChange(e) {
-        setState((i) => {
-            const a = { ...i }
-            a.values.NoteType = e;
-            a.hasValid.NoteType.valid = true
-            return a
-        })
-    }
-
-    function partySelectButtonHandler() {
-        const jsonBody = JSON.stringify({
-            Type: 4,
-            PartyID: _cfunc.loginSelectedPartyID(),
-            CompanyID: _cfunc.loginCompanyID()
-        });
-        dispatch(Retailer_List(jsonBody));
-    }
-
-    function partySelectOnChangeHandler() {
-
-        dispatch(GetCreditListSuccess([]));
-        dispatch(Retailer_List_Success([]));
-        setState((i) => {
-            const a = { ...i }
-            a.values.Customer = { value: "", label: "All" }
-            a.values.NoteType = { value: "", label: "All" }
-            a.hasValid.Customer.valid = true;
-            a.hasValid.NoteType.valid = true;
-            return a
-        })
-    }
 
     const HeaderContent = () => {
         return (
@@ -432,9 +416,9 @@ const CreditList = () => {
         <React.Fragment>
             <PageLoadingSpinner isLoading={(listBtnLoading || !pageField)} />
             <div className="page-content">
-                <PartyDropdown_Common pageMode={pageMode}
+                {/* <PartyDropdown_Common pageMode={pageMode}
                     goButtonHandler={partySelectButtonHandler}
-                    changeButtonHandler={partySelectOnChangeHandler} />
+                    changeButtonHandler={partySelectOnChangeHandler} /> */}
                 {
                     (pageField) ?
                         <CommonPurchaseList

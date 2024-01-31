@@ -46,7 +46,7 @@ const Index = (props) => {
 		goBtnLoading,
 		userAccess,
 	} = useSelector((state) => ({
-		partyList: state.CommonPartyDropdownReducer.commonPartyDropdown,
+		partyList: state.CommonPartyDropdownReducer.commonPartyDropdownOption,
 		partyDropdownLoading: state.CommonPartyDropdownReducer.partyDropdownLoading,
 		goBtnLoading: state.CommonAPI_Reducer.vendorSupplierCustomerLoading,
 		RetailerList: state.CommonAPI_Reducer.vendorSupplierCustomer,

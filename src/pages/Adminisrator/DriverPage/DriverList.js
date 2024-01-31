@@ -15,7 +15,7 @@ import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList";
-import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
+// import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 import { PageLoadingSpinner } from "../../../components/Common/CommonButton";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
@@ -47,11 +47,22 @@ const DriverList = () => {
     deleteSucc: deleteDriverID_Success
   }
 
+  const { commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
+
+  // Common Party select Dropdown useEffect
+  useEffect(() => {
+    if (commonPartyDropSelect.value > 0) {
+      partySelectButtonHandler();
+    } else {
+      partySelectOnChangeHandler();
+    }
+  }, [commonPartyDropSelect]);
+
   useEffect(() => {
     const page_Id = pageId.DRIVER_lIST
     dispatch(commonPageFieldListSuccess(null))
     dispatch(commonPageFieldList(page_Id))
-    if (!(_cfunc.loginSelectedPartyID() === 0)) {
+    if (!(commonPartyDropSelect.value === 0)) {
       goButtonHandler()
     }
     return () => {
@@ -61,13 +72,13 @@ const DriverList = () => {
 
   function goButtonHandler() {
     try {
-      if ((_cfunc.loginSelectedPartyID() === 0)) {
+      if ((commonPartyDropSelect.value === 0)) {
         customAlert({ Type: 3, Message: alertMessages.commonPartySelectionIsRequired });
         return;
       };
       const jsonBody = {
         ..._cfunc.loginJsonBody(),
-        PartyID: _cfunc.loginSelectedPartyID()
+        PartyID: commonPartyDropSelect.value
       };
       dispatch(getDriverList(jsonBody));
     }
@@ -75,7 +86,11 @@ const DriverList = () => {
     return
   };
 
-  function partyOnChngeButtonHandler() {
+  function partySelectButtonHandler() {
+    goButtonHandler()
+  }
+
+  function partySelectOnChangeHandler() {
     dispatch(getDriverListSuccess([]));
   }
 
@@ -84,11 +99,11 @@ const DriverList = () => {
       <PageLoadingSpinner isLoading={(GoBtnlistloading || !pageField)} />
       <div className="page-content">
 
-        <PartyDropdown_Common 
+        {/* <PartyDropdown_Common 
           goBtnLoading={GoBtnlistloading}
           goButtonHandler={goButtonHandler}
-          changeButtonHandler={partyOnChngeButtonHandler}
-        />
+          changeButtonHandler={partySelectOnChangeHandler}
+        /> */}
 
         {
           (pageField) &&

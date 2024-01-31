@@ -83,7 +83,7 @@ const HeaderSection = (props) => {
       state.CommonAPI_Reducer.SSDD_ListLoading ||
       state.ItemSaleReportReducer.supplierListLoading,
 
-    supplier: state.CommonPartyDropdownReducer.commonPartyDropdown,
+    supplier: state.CommonPartyDropdownReducer.commonPartyDropdownOption,
     supplierListOnPartyType: state.ItemSaleReportReducer.supplierList,
 
     RoutesList: state.RoutesReducer.RoutesList,

@@ -38,7 +38,7 @@ import * as _cfunc from "../../../components/Common/CommonFunction";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
-import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
+// import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 import { loginSelectedPartyID } from "../../../components/Common/CommonFunction";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 
@@ -91,6 +91,14 @@ const GoodsCreditNote = (props) => {
     const [discountDropOption] = useState([{ value: 1, label: "Rs" }, { value: 2, label: "%" }]);
     const [TableArr, setTableArr] = useState([]);
 
+    const location = { ...history.location };
+    const hasShowloction = location.hasOwnProperty(mode.editValue);//changes
+    const hasShowModal = props.hasOwnProperty(mode.editValue);//changes
+
+    const values = { ...state.values };
+    const { isError } = state;
+    const { fieldLabel } = state;
+
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
         postMsg,
@@ -128,16 +136,27 @@ const GoodsCreditNote = (props) => {
         pageField: state.CommonPageFieldReducer.pageField,
     }));
 
+    const { commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
+
+    // Common Party Dropdown useEffect
+    useEffect(() => {
+        if (commonPartyDropSelect.value > 0) {
+            partySelectButtonHandler();
+        } else {
+            partySelectOnChangeHandler();
+        };
+    }, [commonPartyDropSelect]);
+
     useEffect(() => {
         dispatch(InvoiceNumberSuccess([]));
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_id));
 
-        if (!(_cfunc.loginSelectedPartyID() === 0)) {
+        if (!(commonPartyDropSelect.value === 0)) {
             dispatch(goButtonPartyItemAddPage({ jsonBody: { ..._cfunc.loginJsonBody(), "PartyID": loginSelectedPartyID() } }));
             const jsonBody = JSON.stringify({
                 Type: 4,
-                PartyID: _cfunc.loginSelectedPartyID(),
+                PartyID: commonPartyDropSelect.value,
                 CompanyID: _cfunc.loginCompanyID(),
             });
             dispatch(Retailer_List(jsonBody));
@@ -150,13 +169,7 @@ const GoodsCreditNote = (props) => {
         };
     }, []);
 
-    const location = { ...history.location };
-    const hasShowloction = location.hasOwnProperty(mode.editValue);//changes
-    const hasShowModal = props.hasOwnProperty(mode.editValue);//changes
 
-    const values = { ...state.values };
-    const { isError } = state;
-    const { fieldLabel } = state;
 
     useEffect(() => {// userAccess useEffect
         let userAcc = null;
@@ -232,7 +245,7 @@ const GoodsCreditNote = (props) => {
                         values.CRDRNoteDate = currentDate_ymd
 
                         const jsonBody = JSON.stringify({
-                            PartyID: _cfunc.loginSelectedPartyID(),
+                            PartyID: commonPartyDropSelect.value,
                             CustomerID: Customer
                         });
                         values.Narration = Comment;
@@ -666,7 +679,7 @@ const GoodsCreditNote = (props) => {
         setTableArr([])
 
         const jsonBody = JSON.stringify({
-            PartyID: _cfunc.loginSelectedPartyID(),
+            PartyID: commonPartyDropSelect.value,
             CustomerID: event.value
         });
 
@@ -702,6 +715,34 @@ const GoodsCreditNote = (props) => {
             setTableArr([])
         }
     }
+
+    function partySelectButtonHandler() {
+        const jsonBody = JSON.stringify({
+            Type: 4,
+            PartyID: commonPartyDropSelect.value,
+            CompanyID: _cfunc.loginCompanyID(),
+        });
+        dispatch(Retailer_List(jsonBody));
+        dispatch(goButtonPartyItemAddPage({ jsonBody: { ..._cfunc.loginJsonBody(), "PartyID": loginSelectedPartyID() } }));
+    };
+
+    function partySelectOnChangeHandler() {
+        dispatch(Retailer_List_Success([]));
+        dispatch(InvoiceNumberSuccess([]));
+        dispatch(goButtonPartyItemAddPageSuccess([]));
+        setTableArr([]);
+
+        setState((i) => {
+            let a = { ...i }
+            a.values.Customer = ''
+            a.values.InvoiceNO = ''
+            a.values.ItemName = ''
+            a.hasValid.Customer.valid = true;
+            a.hasValid.InvoiceNO.valid = true;
+            a.hasValid.ItemName.valid = true;
+            return a
+        })
+    };
 
     const SaveHandler = async (event) => {
         try {
@@ -800,7 +841,7 @@ const GoodsCreditNote = (props) => {
                 RoundOffAmount: (grand_total - Math.trunc(grand_total)).toFixed(2),
                 Narration: values.Narration,
                 CRDRNoteItems: creditNoteItems,
-                Party: _cfunc.loginSelectedPartyID(),
+                Party: commonPartyDropSelect.value,
                 CreatedBy: _cfunc.loginUserID(),
                 UpdatedBy: _cfunc.loginUserID(),
                 CRDRInvoices: [{ Invoice: values.InvoiceNO.value, Return: values?.ReturnID }],
@@ -810,44 +851,16 @@ const GoodsCreditNote = (props) => {
         } catch (e) { _cfunc.CommonConsole(e) }
     };
 
-    function partySelectButtonHandler() {
-        const jsonBody = JSON.stringify({
-            Type: 4,
-            PartyID: _cfunc.loginSelectedPartyID(),
-            CompanyID: _cfunc.loginCompanyID(),
-        });
-        dispatch(Retailer_List(jsonBody));
-        dispatch(goButtonPartyItemAddPage({ jsonBody: { ..._cfunc.loginJsonBody(), "PartyID": loginSelectedPartyID() } }));
-    }
-
-    function partyOnChngeButtonHandler() {
-        dispatch(Retailer_List_Success([]));
-        dispatch(InvoiceNumberSuccess([]));
-        dispatch(goButtonPartyItemAddPageSuccess([]));
-        setTableArr([]);
-
-        setState((i) => {
-            let a = { ...i }
-            a.values.Customer = ''
-            a.values.InvoiceNO = ''
-            a.values.ItemName = ''
-            a.hasValid.Customer.valid = true;
-            a.hasValid.InvoiceNO.valid = true;
-            a.hasValid.ItemName.valid = true;
-            return a
-        })
-    }
-
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
                 <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
 
                 <div className="page-content" >
-                    <PartyDropdown_Common pageMode={pageMode}
+                    {/* <PartyDropdown_Common pageMode={pageMode}
                         goButtonHandler={partySelectButtonHandler}
                         changeButtonHandler={partyOnChngeButtonHandler}
-                    />
+                    /> */}
                     <form noValidate>
                         <div className="px-2 c_card_filter header text-black mb-1" >
                             <Row>

@@ -35,7 +35,7 @@ const ClaimTrackingEntryList = (props) => {
 
     const reducers = useSelector(
         (state) => ({
-            partyList: state.CommonPartyDropdownReducer.commonPartyDropdown,
+            partyList: state.CommonPartyDropdownReducer.commonPartyDropdownOption,
             listBtnLoading: state.ClaimTrackingEntry_Reducer.listBtnLoading,
             goBtnLoading: state.ClaimTrackingEntry_Reducer.GoBtnLoading,
             tableList: state.ClaimTrackingEntry_Reducer.claimTrackingEntryList,

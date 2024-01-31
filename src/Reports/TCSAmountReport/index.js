@@ -40,7 +40,7 @@ const TCSAmountReport = (props) => {
         (state) => ({
             tableData: state.TCSAmountReportReducer.tcsAmtReportGobtn,
             GoBtnLoading: state.TCSAmountReportReducer.goBtnLoading,
-            PartyList: state.CommonPartyDropdownReducer.commonPartyDropdown,
+            PartyList: state.CommonPartyDropdownReducer.commonPartyDropdownOption,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageField
         })

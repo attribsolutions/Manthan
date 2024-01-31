@@ -18,7 +18,7 @@ const NewCommonPartyDropdown = ({ pageMode }) => {
     const [changeButtonShow, setChangeButtonShow] = useState(false);
 
     const { partyList, partyDropdownLoading, commonPartyDropSelect } = useSelector((state) => ({
-        partyList: state.CommonPartyDropdownReducer.commonPartyDropdown,
+        partyList: state.CommonPartyDropdownReducer.commonPartyDropdownOption,
         partyDropdownLoading: state.CommonPartyDropdownReducer.partyDropdownLoading,
         commonPartyDropSelect: state.CommonPartyDropdownReducer.commonPartyDropSelect
     }));

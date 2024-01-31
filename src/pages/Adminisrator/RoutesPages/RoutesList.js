@@ -15,7 +15,7 @@ import {
 } from "../../../store/Administrator/RoutesRedux/actions";
 import { loginCompanyID, loginSelectedPartyID } from "../../../components/Common/CommonFunction";
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList";
-import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
+// import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 import { PageLoadingSpinner } from "../../../components/Common/CommonButton";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import NewCommonPartyDropdown from "../../../components/Common/NewCommonPartyDropdown";
@@ -45,6 +45,15 @@ const RoutesList = (props) => {
 
   const { pageField, goBtnLoading, commonPartyDropSelect } = reducers;
 
+  // Common Party select Dropdown useEffect
+  useEffect(() => {
+    if (commonPartyDropSelect.value > 0) {
+      partySelectButtonHandler();
+    } else {
+      partySelectOnChangeHandler();
+    }
+  }, [commonPartyDropSelect]);
+
   const action = {
     getList: GetRoutesList,
     editId: editRoutesID,
@@ -64,15 +73,6 @@ const RoutesList = (props) => {
     }
   }, []);
 
-  // Common Party Dropdown useEffect
-  useEffect(() => {
-    if (commonPartyDropSelect.value > 0) {
-      goButtonHandler()
-    }
-    return () => {
-      dispatch(GetRoutesListSuccess([]));
-    }
-  }, [commonPartyDropSelect]);
 
   const goButtonHandler = () => {
 
@@ -90,7 +90,13 @@ const RoutesList = (props) => {
     } catch (error) { }
     return
   };
-
+  
+  function partySelectButtonHandler() {
+    goButtonHandler()
+  }
+  function partySelectOnChangeHandler() {
+    dispatch(GetRoutesListSuccess([]));
+  }
 
   return (
     <React.Fragment>

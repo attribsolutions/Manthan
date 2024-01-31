@@ -46,7 +46,7 @@ const InvoiceDataExport = (props) => {
     } = useSelector((state) => ({
         tableData: state.InvoiceDataExportReducer.InvoiceDataExportGobtn,
         GoBtnLoading: state.InvoiceDataExportReducer.GoBtnLoading,
-        Distributor: state.CommonPartyDropdownReducer.commonPartyDropdown,
+        Distributor: state.CommonPartyDropdownReducer.commonPartyDropdownOption,
         ExcelBtnLoading: state.InvoiceDataExportReducer.ExcelBtnLoading,
         supplier: state.CommonAPI_Reducer.vendorSupplierCustomer,
         userAccess: state.Login.RoleAccessUpdateData,

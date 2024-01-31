@@ -36,7 +36,7 @@ const StockReport_1 = (props) => {
             stockProcessingLoading: state.StockReportReducer.stockProcessingLoading,
             StockProcessingBtn: state.StockReportReducer.StockProcessingBtn,
             StockReport_1_Gobtb: state.StockReportReducer.StockReport_1_Gobtb,
-            party: state.CommonPartyDropdownReducer.commonPartyDropdown,
+            party: state.CommonPartyDropdownReducer.commonPartyDropdownOption,
             pdfdata: state.PdfReportReducers.pdfdata,
             BaseUnit: state.ItemMastersReducer.BaseUnit,
             userAccess: state.Login.RoleAccessUpdateData,

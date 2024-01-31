@@ -75,7 +75,7 @@ const StockReport = (props) => {
 		(state) => ({
 			goButtonData: state.StockReportReducer.StockReportGobtn,
 			BaseUnit: state.ItemMastersReducer.BaseUnit,
-			SSDD_List: state.CommonPartyDropdownReducer.commonPartyDropdown,
+			SSDD_List: state.CommonPartyDropdownReducer.commonPartyDropdownOption,
 			GoBtnLoading: state.StockReportReducer.GoBtnLoading,
 			ExcelBtnLoading: state.StockReportReducer.ExcelBtnLoading,
 			userAccess: state.Login.RoleAccessUpdateData,

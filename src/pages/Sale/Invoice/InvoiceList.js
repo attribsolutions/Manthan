@@ -39,7 +39,7 @@ import {
 import { makeInward } from "../../../store/Inter Branch/InwardRedux/action";
 import { C_DatePicker, C_Select } from "../../../CustomValidateForm";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
-import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
+// import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 import { getVehicleList } from "../../../store/Administrator/VehicleRedux/action";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 
@@ -85,6 +85,7 @@ const InvoiceList = () => {
         })
     );
 
+
     const {
         pageField,
         supplier,
@@ -112,6 +113,17 @@ const InvoiceList = () => {
         deleteSucc: deleteInvoiceIdSuccess,
         updateSucc: updateInvoiceActionSuccess
     }
+    const { commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
+
+    // Common Party select Dropdown useEffect
+    useEffect(() => {
+        if (commonPartyDropSelect.value > 0) {
+            partySelectButtonHandler();
+        } else {
+            partySelectOnChangeHandler();
+        }
+    }, [commonPartyDropSelect]);
+
 
     // Featch Modules List data  First Rendering
     useEffect(() => {
@@ -151,10 +163,10 @@ const InvoiceList = () => {
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
         // dispatch(BreadcrumbShowCountlabel(`${"Count"} :0`))
-        dispatch(GetVenderSupplierCustomer({ subPageMode, PartyID: _cfunc.loginSelectedPartyID() }))
+        dispatch(GetVenderSupplierCustomer({ subPageMode, PartyID: commonPartyDropSelect.value }))
 
         setmodal(false);
-        if (!(_cfunc.loginSelectedPartyID() === 0)) {
+        if (!(commonPartyDropSelect.value === 0)) {
             goButtonHandler("event", IBType)
         }
         return () => {
@@ -332,7 +344,7 @@ const InvoiceList = () => {
     function goButtonHandler(event, IBType) {
 
         try {
-            if (_cfunc.loginSelectedPartyID() === 0) {
+            if (commonPartyDropSelect.value === 0) {
                 customAlert({ Type: 3, Message: alertMessages.commonPartySelectionIsRequired });
                 return;
             };
@@ -340,7 +352,7 @@ const InvoiceList = () => {
                 FromDate: fromdate,
                 ToDate: todate,
                 Customer: supplierSelect.value === "" ? '' : supplierSelect.value,
-                Party: _cfunc.loginSelectedPartyID(),
+                Party: commonPartyDropSelect.value,
                 IBType: IBType ? IBType : otherState.IBType,
                 DashBoardMode: 0
 
@@ -368,30 +380,12 @@ const InvoiceList = () => {
         newObj.supplierSelect = e
         setHederFilters(newObj);
     }
-    const { commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
-
-       // Common Party Dropdown useEffect
-       useEffect(() => {
-
-        if (commonPartyDropSelect.value > 0) {
-            goButtonHandler()
-            dispatch(GetVenderSupplierCustomer({ subPageMode, PartyID: commonPartyDropSelect.value  }));
-
-        } else {
-            dispatch(invoiceListGoBtnfilterSucccess([]));
-            dispatch(GetVenderSupplierCustomerSuccess([]));
-            let newObj = { ...hederFilters }
-            newObj.supplierSelect = { value: '', label: "All" }
-            setHederFilters(newObj)
-        }
-
-    }, [commonPartyDropSelect]);
 
 
 
     const partySelectButtonHandler = (e) => {
         goButtonHandler()
-        dispatch(GetVenderSupplierCustomer({ subPageMode, PartyID: _cfunc.loginSelectedPartyID() }));
+        dispatch(GetVenderSupplierCustomer({ subPageMode, PartyID: commonPartyDropSelect.value }));
     }
 
     function partySelectOnChangeHandler() {
@@ -544,7 +538,7 @@ const InvoiceList = () => {
     }
 
     const selectDeleteBtnHandler = (row = []) => {
-        
+
         let isAllcheck = row.filter(i => (i.hasAllSelect))
         let isRowcheck = row.filter(i => (i.selectCheck))
         let ischeck = [];

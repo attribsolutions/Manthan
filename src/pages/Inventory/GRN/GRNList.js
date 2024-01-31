@@ -10,7 +10,7 @@ import { useHistory } from "react-router-dom";
 import { Go_Button, PageLoadingSpinner } from "../../../components/Common/CommonButton";
 import GRNAdd from "./GRNAdd";
 import { C_DatePicker } from "../../../CustomValidateForm";
-import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
+// import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 
@@ -27,6 +27,10 @@ const GRNList = () => {
         makeBtnShow: false, makeBtnShow: '', makeBtnName: '', IBType: '', orderType: ''
     });
     const [hederFilters, setHederFilters] = useState({ fromdate: currentDate_ymd, todate: currentDate_ymd, venderSelect: { value: '', label: "All" } })
+   
+    const gobtnId = `gobtn-${subPageMode}`
+    const { pageField, customer, makeChallan } = reducers;
+    const { fromdate, todate, venderSelect } = hederFilters;
 
     const reducers = useSelector(
         (state) => ({
@@ -45,9 +49,16 @@ const GRNList = () => {
         })
     );
 
-    const gobtnId = `gobtn-${subPageMode}`
-    const { pageField, customer, makeChallan } = reducers;
-    const { fromdate, todate, venderSelect } = hederFilters;
+    const { commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
+
+    // Common Party select Dropdown useEffect
+    useEffect(() => {
+        if (commonPartyDropSelect.value > 0) {
+            partySelectButtonHandler();
+        } else {
+            partySelectOnChangeHandler();
+        }
+    }, [commonPartyDropSelect]);
 
     const action = {
         editId: _act.editGRNAction,
@@ -101,22 +112,6 @@ const GRNList = () => {
         }
 
     }, [makeChallan]);
-    const { commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
-
-    // Common Party Dropdown useEffect
-    useEffect(() => {
-        if (commonPartyDropSelect.value > 0) {
-            goButtonHandler()
-            dispatch(_act.GetVenderSupplierCustomer({ PartyID: commonPartyDropSelect.value, subPageMode, RouteID: "" }))
-
-        } else {
-            dispatch(_act.getGRNListPageSuccess([]));
-            let newObj = { ...hederFilters }
-            newObj.venderSelect = { value: '', label: "All" }
-            setHederFilters(newObj)
-        }
-
-    }, [commonPartyDropSelect]);
 
     const venderOptions = customer.map((i) => ({
         value: i.id,
@@ -240,7 +235,7 @@ const GRNList = () => {
         dispatch(_act.GetVenderSupplierCustomer({ PartyID: loginSelectedPartyID(), subPageMode, RouteID: "" }))
     }
 
-    function partyOnChngeButtonHandler() {
+    function partySelectOnChangeHandler() {
         dispatch(_act.getGRNListPageSuccess([]));
         let newObj = { ...hederFilters }
         newObj.venderSelect = { value: '', label: "All" }

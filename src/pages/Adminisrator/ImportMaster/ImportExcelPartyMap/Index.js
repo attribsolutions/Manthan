@@ -37,7 +37,7 @@ import {
     save_ImportExcelPartyMap_Sucess
 } from "../../../../store/Administrator/ImportExcelPartyMapRedux/action";
 import * as _cfunc from "../../../../components/Common/CommonFunction";
-import PartyDropdown_Common from "../../../../components/Common/PartyDropdown";
+// import PartyDropdown_Common from "../../../../components/Common/PartyDropdown";
 
 const ImportExcelPartyMap = (props) => {
 
@@ -80,6 +80,17 @@ const ImportExcelPartyMap = (props) => {
         ItemList: state.PartyItemsReducer.partyItem,
         partyDropDownLoading: state.PartyMasterReducer.goBtnLoading,
     }));
+    const { commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
+
+    // Common Party select Dropdown useEffect
+    useEffect(() => {
+        if (commonPartyDropSelect.value > 0) {
+            // partySelectButtonHandler();
+        } else {
+            partySelectOnChangeHandler();
+        }
+    }, [commonPartyDropSelect]);
+
     useEffect(() => {
         const page_Id = pageId.IMPORT_MASTER_MAP
         dispatch(commonPageFieldSuccess(null));
@@ -128,7 +139,7 @@ const ImportExcelPartyMap = (props) => {
 
         if (values.MapType.value === 2) {
             const newItemList = ItemList.map(i => ({
-                "party": _cfunc.loginSelectedPartyID(),
+                "party": commonPartyDropSelect.value,
                 "fieldName": i.ItemName,
                 "fieldId": i.Item,
                 "mapValue": i.MapItem,
@@ -237,7 +248,7 @@ const ImportExcelPartyMap = (props) => {
         event.preventDefault();
         const mapType = values.MapType.value;
         if (mapType > 0) {
-            let partyId = _cfunc.loginSelectedPartyID();
+            let partyId = commonPartyDropSelect.value;
             if (mapType === 2) {
 
                 const jsonBody = {
@@ -257,7 +268,7 @@ const ImportExcelPartyMap = (props) => {
         }
     };
 
-    function change_ButtonHandler(e) {
+    function partySelectOnChangeHandler(e) {
         dispatch(GoButton_ImportExcelPartyMap_Success([]));
         dispatch(goButtonPartyItemAddPageSuccess([]));
 
@@ -331,8 +342,8 @@ const ImportExcelPartyMap = (props) => {
                 <PageLoadingSpinner isLoading={((partyDropDownLoading && !(loginIsSCMCompany() === 1)) || !pageField)} />
 
                 <div className="page-content">
-                    <PartyDropdown_Common
-                        changeButtonHandler={change_ButtonHandler} />
+                    {/* <PartyDropdown_Common
+                        changeButtonHandler={change_ButtonHandler} /> */}
 
                     <div className="px-2 c_card_header text-black" >
                         <div className="px-2   c_card_filter text-black" >
@@ -394,7 +405,7 @@ const ImportExcelPartyMap = (props) => {
                                                 forceDisabled={(partyDropDownLoading && !(loginIsSCMCompany() === 1))}
                                                 onClick={goButtonHandler} loading={listBtnLoading} />
                                             :
-                                            <Change_Button onClick={change_ButtonHandler} />
+                                            <Change_Button onClick={partySelectOnChangeHandler} />
                                         }
                                     </Col>
                                 </div>

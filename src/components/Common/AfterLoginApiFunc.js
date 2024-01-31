@@ -1,6 +1,6 @@
 import { roleAceessAction } from "../../store/actions";
 import { getpartysetting_API } from "../../store/Administrator/PartySetting/action";
-import { commonPartyDrodown, commonPartyDropSelectAction } from "../../store/Utilites/PartyDrodown/action";
+import { getCommonPartyDrodownOptionAction, commonPartyDropSelectAction } from "../../store/Utilites/PartyDrodown/action";
 import { loginCompanyID } from "./CommonFunction";
 
 export const afterloginOneTimeAPI = (user, dispatch) => {
@@ -28,6 +28,6 @@ export const afterloginOneTimeAPI = (user, dispatch) => {
     localStorage.setItem("roleId2", JSON.stringify(user));
     dispatch(roleAceessAction(partyId, employeeId, loginCompanyID()))
     dispatch(getpartysetting_API(partyId, loginCompanyID()))//login party id pass to getpartysetting_API
-    dispatch(commonPartyDrodown())  // Party Dropdown Action 
+    dispatch(getCommonPartyDrodownOptionAction())  // Party Dropdown Action 
 
 }

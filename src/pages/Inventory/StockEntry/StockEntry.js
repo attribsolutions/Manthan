@@ -33,7 +33,7 @@ import { saveStockEntryAction, saveStockEntrySuccess } from "../../../store/Inve
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
-import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
+// import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 import { ItemAPIResponseFunc } from "./stockEntryFunctions";
 
 const StockEntry = (props) => {
@@ -57,6 +57,12 @@ const StockEntry = (props) => {
     const [itemAPIData, setItemAPIData] = useState([]);
     const [itemAPIDataLoading, setItemAPIDataLoading] = useState(false);
 
+    const location = { ...history.location }
+    const hasShowModal = props.hasOwnProperty(mode.editValue)
+
+    const values = { ...state.values }
+    const { fieldLabel } = state;
+
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
         postMsg,
@@ -74,6 +80,17 @@ const StockEntry = (props) => {
         pageField: state.CommonPageFieldReducer.pageField,
     }));
 
+    const { commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
+
+    // Common Party select Dropdown useEffect
+    useEffect(() => {
+        if (commonPartyDropSelect.value > 0) {
+            partySelectButtonHandler();
+        } else {
+            partySelectOnChangeHandler();
+        }
+    }, [commonPartyDropSelect]);
+
     useEffect(() => {
         const page_Id = pageId.STOCK_ENTRY
         dispatch(commonPageFieldSuccess(null));
@@ -81,17 +98,11 @@ const StockEntry = (props) => {
         dispatch(goButtonPartyItemAddPage({
             jsonBody: JSON.stringify({
                 ..._cfunc.loginJsonBody(),
-                PartyID: _cfunc.loginSelectedPartyID()
+                PartyID: commonPartyDropSelect.value
             })
         }));
         dispatch(BreadcrumbShowCountlabel(`Count:${0}`));
     }, []);
-
-    const location = { ...history.location }
-    const hasShowModal = props.hasOwnProperty(mode.editValue)
-
-    const values = { ...state.values }
-    const { fieldLabel } = state;
 
     // userAccess useEffect
     useEffect(() => {
@@ -135,25 +146,7 @@ const StockEntry = (props) => {
         }
     }, [postMsg]);
 
-    const { commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
 
-    // Common Party Dropdown useEffect
-    useEffect(() => {
-        if (commonPartyDropSelect.value > 0) {
-            goButtonHandler()
-
-        } else {
-            dispatch(goButtonPartyItemAddPageSuccess([]))
-            setTableArr([])
-            setState((i) => {
-                const a = { ...i }
-                a.values.ItemName = '';
-                a.hasValid.ItemName.valid = true
-                return a
-            })
-        }
-
-    }, [commonPartyDropSelect]);
 
     function Date_Onchange(e, date) {
         setState((i) => {
@@ -393,7 +386,13 @@ const StockEntry = (props) => {
 
     }
 
-    function partyOnChngeButtonHandler() {
+    function partySelectButtonHandler() {
+        dispatch(goButtonPartyItemAddPage({
+            jsonBody: JSON.stringify({ ..._cfunc.loginJsonBody(), PartyID: commonPartyDropSelect.value })
+        }))
+    }
+
+    function partySelectOnChangeHandler() {
         dispatch(goButtonPartyItemAddPageSuccess([]))
         setTableArr([])
         setState((i) => {
@@ -404,11 +403,6 @@ const StockEntry = (props) => {
         })
     }
 
-    function goButtonHandler() {
-        dispatch(goButtonPartyItemAddPage({
-            jsonBody: JSON.stringify({ ..._cfunc.loginJsonBody(), PartyID: _cfunc.loginSelectedPartyID() })
-        }))
-    }
 
     const SaveHandler = async (event) => {
 
@@ -505,7 +499,7 @@ const StockEntry = (props) => {
                 _cfunc.btnIsDissablefunc({ btnId, state: true })
 
                 const jsonBody = JSON.stringify({
-                    "PartyID": _cfunc.loginSelectedPartyID(),
+                    "PartyID": commonPartyDropSelect.value,
                     "CreatedBy": _cfunc.loginUserID(),
                     "Date": values.Date,
                     "Mode": 1,
@@ -535,7 +529,7 @@ const StockEntry = (props) => {
                 <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
                 <div className="page-content">
                     {/* <PartyDropdown_Common pageMode={pageMode}
-                        goButtonHandler={goButtonHandler}
+                        goButtonHandler={partySelectButtonHandler}
                         changeButtonHandler={partyOnChngeButtonHandler} /> */}
 
                     <form noValidate>

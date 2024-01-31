@@ -11,7 +11,7 @@ import { MetaTags } from "react-meta-tags";
 import * as report from '../ReportIndex'
 import C_Report from "../../components/Common/C_Report";
 import { GST_R1_Report_API, GST_R1_Report_API_Success, GST_R3B_Report_API, GST_R3B_Report_API_Success } from "../../store/Report/GSTR1ReportRedux/action";
-import PartyDropdown_Common from "../../components/Common/PartyDropdown";
+// import PartyDropdown_Common from "../../components/Common/PartyDropdown";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import { alertMessages } from "../../components/Common/CommonErrorMsg/alertMsg";
 
@@ -49,7 +49,18 @@ const GSTR1Report = (props) => {
 
     // Featch Modules List data  First Rendering
     const location = { ...history.location }
-    const hasShowModal = props.hasOwnProperty(mode.editValue)
+    const hasShowModal = props.hasOwnProperty(mode.editValue);
+
+    const { commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
+
+    // Common Party select Dropdown useEffect
+    useEffect(() => {
+        if (commonPartyDropSelect.value > 0) {
+            // partySelectButtonHandler();
+        } else {
+            partySelectOnChangeHandler();
+        }
+    }, [commonPartyDropSelect]);
 
     // userAccess useEffect
     useEffect(() => {
@@ -98,7 +109,7 @@ const GSTR1Report = (props) => {
 
     function goButtonHandler(Type) {
 
-        if (_cfunc.loginSelectedPartyID() === 0) {
+        if (commonPartyDropSelect.value === 0) {
             customAlert({ Type: 3, Message: alertMessages.commonPartySelectionIsRequired });
             return;
         };
@@ -106,7 +117,7 @@ const GSTR1Report = (props) => {
         const jsonBody = JSON.stringify({
             "FromDate": values.FromDate,
             "ToDate": values.ToDate,
-            "Party": _cfunc.loginSelectedPartyID()
+            "Party": commonPartyDropSelect.value
         });
 
         let config = { jsonBody }
@@ -135,7 +146,7 @@ const GSTR1Report = (props) => {
         })
     }
 
-    function partyOnChngeButtonHandler() {
+    function partySelectOnChangeHandler() {
         dispatch(GST_R3B_Report_API_Success([]))
         dispatch(GST_R1_Report_API_Success([]))
     }
@@ -144,9 +155,9 @@ const GSTR1Report = (props) => {
         <React.Fragment>
             <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
             <div className="page-content">
-
+{/* 
                 <PartyDropdown_Common
-                    changeButtonHandler={partyOnChngeButtonHandler} />
+                    changeButtonHandler={partySelectOnChangeHandler} /> */}
 
                 <div className="px-2   c_card_filter text-black" >
                     <div className="row" >

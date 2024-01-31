@@ -22,7 +22,7 @@ import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import { saveStockEntryAction, saveStockEntrySuccess } from "../../../store/Inventory/StockEntryRedux/action";
-import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
+// import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 import { AddItemInTableFunc, stockQtyUnit_SelectOnchange } from "./StockAdjust_Func";
 import "../../../pages/Sale/SalesReturn/salesReturn.scss";
 import Select, { components } from "react-select";
@@ -39,6 +39,10 @@ const StockAdjustment = (props) => {
 
     const [TableArr, setTableArr] = useState([]);
     const [itemNameSelect, setItemNameSelect] = useState('');
+
+    
+    const location = { ...history.location }
+    const hasShowModal = props.hasOwnProperty(mode.editValue);
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
@@ -57,6 +61,16 @@ const StockAdjustment = (props) => {
         userAccess: state.Login.RoleAccessUpdateData,
     }));
 
+    const { commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
+
+    // Common Party select Dropdown useEffect
+    useEffect(() => {
+        if (commonPartyDropSelect.value > 0) {
+            partySelectButtonHandler();
+        } else {
+            partySelectOnChangeHandler();
+        }
+    }, [commonPartyDropSelect]);
     useEffect(() => {
         let page_Id
         if (subPageMode === url.STOCK_ADJUSTMENT) {
@@ -68,11 +82,11 @@ const StockAdjustment = (props) => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id));
 
-        if ((_cfunc.loginSelectedPartyID() > 0)) {
+        if ((commonPartyDropSelect.value > 0)) {
             dispatch(goButtonPartyItemAddPage({
                 jsonBody: JSON.stringify({
                     ..._cfunc.loginJsonBody(),
-                    PartyID: _cfunc.loginSelectedPartyID()
+                    PartyID: commonPartyDropSelect.value
                 })
             }))
         };
@@ -82,8 +96,6 @@ const StockAdjustment = (props) => {
         }
     }, []);
 
-    const location = { ...history.location }
-    const hasShowModal = props.hasOwnProperty(mode.editValue)
 
     // userAccess useEffect
     useEffect(() => {
@@ -137,12 +149,12 @@ const StockAdjustment = (props) => {
         dispatch(goButtonPartyItemAddPage({
             jsonBody: JSON.stringify({
                 ..._cfunc.loginJsonBody(),
-                PartyID: _cfunc.loginSelectedPartyID()
+                PartyID: commonPartyDropSelect.value
             })
         }))
     }
 
-    function partyOnChngeButtonHandler() {
+    function partySelectOnChangeHandler() {
         setItemNameSelect('');
         setTableArr([]);
         dispatch(goButtonPartyItemAddPageSuccess([]))
@@ -469,7 +481,7 @@ const StockAdjustment = (props) => {
 
         try {
             const jsonBody = JSON.stringify({
-                "PartyID": _cfunc.loginSelectedPartyID(),
+                "PartyID": commonPartyDropSelect.value,
                 "CreatedBy": _cfunc.loginUserID(),
                 "Date": currentDate_ymd,
                 "Mode": subPageMode === url.STOCK_ADJUSTMENT ? 2 : 3,
@@ -488,9 +500,9 @@ const StockAdjustment = (props) => {
             <React.Fragment>
                 <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
                 <div className="page-content">
-                    <PartyDropdown_Common
+                    {/* <PartyDropdown_Common
                         goButtonHandler={partySelectButtonHandler}
-                        changeButtonHandler={partyOnChngeButtonHandler} />
+                        changeButtonHandler={partyOnChngeButtonHandler} /> */}
                     <form noValidate>
                         <div className="px-3 c_card_filter header text-black mb-1" >
 

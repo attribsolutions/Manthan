@@ -52,7 +52,7 @@ import * as _cfunc from "../../../components/Common/CommonFunction";
 import { C_DatePicker, C_Select } from "../../../CustomValidateForm";
 import { GetDistrictOnState_For_Dropdown, mobileApp_RetailerUpdate_Api } from "../../../helpers/backend_helper";
 import { showToastAlert } from "../../../helpers/axios_Config";
-import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
+// import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 
 const PartyMasterBulkUpdate = (props) => {
@@ -74,6 +74,11 @@ const PartyMasterBulkUpdate = (props) => {
     const [forceRefresh, setForceRefresh] = useState(false);
     const [SelectedParty, SetSelectedParty] = useState([])
     const [SelectFieldName, setSelectFieldName] = useState([]);
+
+    const location = { ...history.location }
+    const hasShowModal = props.hasOwnProperty(mode.editValue)
+
+    const values = { ...state.values }
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
@@ -102,10 +107,17 @@ const PartyMasterBulkUpdate = (props) => {
         PartyName: state.PartyMasterBulkUpdateReducer.PartyName,
     }));
 
-    const location = { ...history.location }
-    const hasShowModal = props.hasOwnProperty(mode.editValue)
 
-    const values = { ...state.values }
+    const { commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
+
+    // Common Party select Dropdown useEffect
+    useEffect(() => {
+        if (commonPartyDropSelect.value > 0) {
+            partySelectButtonHandler();
+        } else {
+            partySelectOnChangeHandler();
+        }
+    }, [commonPartyDropSelect]);
 
     useEffect(() => {
         dispatch(GoButton_For_Party_Master_Bulk_Update_AddSuccess([]))
@@ -113,11 +125,11 @@ const PartyMasterBulkUpdate = (props) => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
         dispatch(getState())
-        if (!(_cfunc.loginSelectedPartyID() === 0)) {
-            dispatch(GetRoutesList({ ..._cfunc.loginJsonBody(), "PartyID": _cfunc.loginSelectedPartyID() }));
+        if (!(commonPartyDropSelect.value === 0)) {
+            dispatch(GetRoutesList({ ..._cfunc.loginJsonBody(), "PartyID": commonPartyDropSelect.value }));
             const jsonBody = JSON.stringify({
                 CompanyID: loginCompanyID(),
-                PartyID: _cfunc.loginSelectedPartyID(),
+                PartyID: commonPartyDropSelect.value,
                 Type: 4
             });
             dispatch(postPartyName_for_dropdown(jsonBody));
@@ -238,7 +250,7 @@ const PartyMasterBulkUpdate = (props) => {
 
     const GoButton_Handler = () => {
 
-        if ((_cfunc.loginSelectedPartyID() === 0)) {
+        if ((commonPartyDropSelect.value === 0)) {
             customAlert({ Type: 3, Message: alertMessages.commonPartySelectionIsRequired });
             return;
         }
@@ -253,7 +265,7 @@ const PartyMasterBulkUpdate = (props) => {
 
         const jsonBody = JSON.stringify({
 
-            PartyID: _cfunc.loginSelectedPartyID(),
+            PartyID: commonPartyDropSelect.value,
             Route: values.Routes.value === "" ? 0 : values.Routes.value,
             Type: SelectFieldName.length === 0 ? 0 : SelectFieldName.label,
             FilterPartyID: values.Party.value === "" ? 0 : values.Party.value
@@ -497,6 +509,30 @@ const PartyMasterBulkUpdate = (props) => {
         custom: true,
     };
 
+    function partySelectButtonHandler() {
+        const jsonBody = JSON.stringify({
+            CompanyID: loginCompanyID(),
+            PartyID: commonPartyDropSelect.value,
+            Type: 4
+        });
+        dispatch(postPartyName_for_dropdown(jsonBody));
+        dispatch(GetRoutesList({ ..._cfunc.loginJsonBody(), "PartyID": commonPartyDropSelect.value }));
+    }
+
+    function partySelectOnChangeHandler() {
+        setState((i) => {
+            const a = { ...i }
+            a.values.Party = { value: "", label: "All" }
+            a.values.Routes = { value: "", label: "All" }
+            a.hasValid.Party.valid = true;
+            a.hasValid.Routes.valid = true;
+            return a
+        })
+        dispatch(GetRoutesListSuccess([]));
+        dispatch(postPartyName_for_dropdown_Success([]));
+        dispatch(GoButton_For_Party_Master_Bulk_Update_AddSuccess([]));
+    }
+
     const SaveHandler = (event) => {
 
         const arr1 = []
@@ -521,7 +557,7 @@ const PartyMasterBulkUpdate = (props) => {
 
             SetSelectedParty(arr1)
             const jsonBody = JSON.stringify({
-                PartyID: _cfunc.loginSelectedPartyID(),
+                PartyID: commonPartyDropSelect.value,
                 Type: SelectFieldName.label,
                 CreatedBy: _cfunc.loginUserID(),
                 UpdatedBy: _cfunc.loginUserID(),
@@ -609,30 +645,6 @@ const PartyMasterBulkUpdate = (props) => {
         } catch (e) { }
     };
 
-    function partySelectButtonHandler() {
-        const jsonBody = JSON.stringify({
-            CompanyID: loginCompanyID(),
-            PartyID: _cfunc.loginSelectedPartyID(),
-            Type: 4
-        });
-        dispatch(postPartyName_for_dropdown(jsonBody));
-        dispatch(GetRoutesList({ ..._cfunc.loginJsonBody(), "PartyID": _cfunc.loginSelectedPartyID() }));
-    }
-
-    function partySelectOnChangeHandler() {
-        setState((i) => {
-            const a = { ...i }
-            a.values.Party = { value: "", label: "All" }
-            a.values.Routes = { value: "", label: "All" }
-            a.hasValid.Party.valid = true;
-            a.hasValid.Routes.valid = true;
-            return a
-        })
-        dispatch(GetRoutesListSuccess([]));
-        dispatch(postPartyName_for_dropdown_Success([]));
-        dispatch(GoButton_For_Party_Master_Bulk_Update_AddSuccess([]));
-    }
-
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
     if ((modalCss) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
@@ -643,9 +655,9 @@ const PartyMasterBulkUpdate = (props) => {
                 <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
 
                 <div className="page-content" style={{ marginTop: IsEditMode_Css, }}>
-                    <PartyDropdown_Common pageMode={pageMode}
+                    {/* <PartyDropdown_Common pageMode={pageMode}
                         goButtonHandler={partySelectButtonHandler}
-                        changeButtonHandler={partySelectOnChangeHandler} />
+                        changeButtonHandler={partySelectOnChangeHandler} /> */}
 
                     <form noValidate>
 

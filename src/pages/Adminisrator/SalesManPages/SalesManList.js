@@ -15,7 +15,7 @@ import {
 } from "../../../store/Administrator/SalesManRedux/actions";
 import { loginJsonBody, loginSelectedPartyID } from "../../../components/Common/CommonFunction";
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList";
-import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
+// import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 import { PageLoadingSpinner } from "../../../components/Common/CommonButton";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
@@ -38,7 +38,7 @@ const SalesManList = (props) => {
         })
     );
 
-    const { pageField, goBtnLoading, tableList } = reducers;
+    const { pageField, goBtnLoading } = reducers;
 
     const action = {
         getList: getSalesManlist,
@@ -49,14 +49,23 @@ const SalesManList = (props) => {
         deleteSucc: deleteSalesManID_Success,
     }
 
+    const { commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
+
+    // Common Party select Dropdown useEffect
+    useEffect(() => {
+        if (commonPartyDropSelect.value > 0) {
+            partySelectButtonHandler();
+        } else {
+            partySelectOnChangeHandler();
+        }
+    }, [commonPartyDropSelect]);
+
     //  This UseEffect => Featch Modules List data  First Rendering
     useEffect(() => {
         const page_Id = pageId.SALESMAN_LIST
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
-        if (!(loginSelectedPartyID() === 0)) {
-            goButtonHandler()
-        }
+
         return () => {
             dispatch(getSalesManlistSuccess([]));
             dispatch(commonPageFieldListSuccess(null))
@@ -65,20 +74,23 @@ const SalesManList = (props) => {
 
     const goButtonHandler = () => {
         try {
-            const loginParty = loginSelectedPartyID();
+            const loginParty = commonPartyDropSelect.value;
             if (loginParty === 0) {
                 customAlert({ Type: 3, Message: alertMessages.commonPartySelectionIsRequired });
                 return;
             };
             dispatch(getSalesManlist({
                 ...loginJsonBody(),
-                PartyID: loginSelectedPartyID()
+                PartyID: commonPartyDropSelect.value
             }));
         } catch (error) { }
         return
     };
 
-    const partyOnChngeButtonHandler = (e) => {
+    function partySelectButtonHandler() {
+        goButtonHandler();
+    }
+    const partySelectOnChangeHandler = (e) => {
         dispatch(getSalesManlistSuccess([]));
     }
 
@@ -87,11 +99,11 @@ const SalesManList = (props) => {
         <React.Fragment>
             <PageLoadingSpinner isLoading={(goBtnLoading || !pageField)} />
             <div className="page-content">
-                <PartyDropdown_Common 
+                {/* <PartyDropdown_Common
                     goBtnLoading={goBtnLoading}
                     goButtonHandler={goButtonHandler}
                     changeButtonHandler={partyOnChngeButtonHandler}
-                />
+                /> */}
                 {
                     (pageField) &&
                     <>

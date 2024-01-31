@@ -100,7 +100,7 @@ const PartyDropdownForReport = (props) => {
     const { partyValue, setPartyValue } = props
 
     const { partyList, partyDropdownLoading } = useSelector((state) => ({
-        partyList: state.CommonPartyDropdownReducer.commonPartyDropdown,
+        partyList: state.CommonPartyDropdownReducer.commonPartyDropdownOption,
         partyDropdownLoading: state.CommonPartyDropdownReducer.partyDropdownLoading,
     }));
 

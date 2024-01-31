@@ -35,7 +35,7 @@ const ReturnReport = (props) => {
     } = useSelector((state) => ({
         goButtonData: state.ReturnReportReducer.returnReportData,
         partyDropdownLoading: state.CommonPartyDropdownReducer.partyDropdownLoading,
-        Distributor: state.CommonPartyDropdownReducer.commonPartyDropdown,
+        Distributor: state.CommonPartyDropdownReducer.commonPartyDropdownOption,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField
     })

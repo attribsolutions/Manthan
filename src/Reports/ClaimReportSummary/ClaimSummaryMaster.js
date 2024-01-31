@@ -16,7 +16,7 @@ import { claimList_API, claimList_API_Success, deleteClaimSuccess, postClaimMast
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
-import PartyDropdown_Common from "../../components/Common/PartyDropdown";
+// import PartyDropdown_Common from "../../components/Common/PartyDropdown";
 
 const createClaimBtnCss = "badge badge-soft-success font-size-18 btn btn-success waves-effect waves-light w-xxs border border-light"
 const deltBtnCss = "badge badge-soft-danger font-size-18 btn btn-danger waves-effect waves-light w-xxs border border-light"
@@ -62,6 +62,16 @@ const ClaimSummaryMaster = (props) => {
     const location = { ...history.location }
     const hasShowModal = props.hasOwnProperty(mode.editValue)
 
+    const { commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
+
+    // Common Party select Dropdown useEffect
+    useEffect(() => {
+        if (commonPartyDropSelect.value > 0) {
+            // partySelectButtonHandler();
+        } else {
+            partySelectOnChangeHandler();
+        }
+    }, [commonPartyDropSelect]);
     // userAccess useEffect
     useEffect(() => {
 
@@ -80,7 +90,7 @@ const ClaimSummaryMaster = (props) => {
     }, [userAccess])
 
     useEffect(() => {
-        if (!(_cfunc.loginSelectedPartyID() === 0)) {
+        if (!(commonPartyDropSelect.value === 0)) {
             MonthAndYearOnchange(values.SelectedMonth, "InitialDate")
         }
         return () => {
@@ -132,7 +142,7 @@ const ClaimSummaryMaster = (props) => {
             "ToDate": row.selectedDate.ToDate,
             "Party": row.PartyID,
             "Mode": (reportType === report.ClaimSummary) ? 1 : 2,
-            "LoginParty": (reportType === "createClaim") ? _cfunc.loginSelectedPartyID() : undefined,
+            "LoginParty": (reportType === "createClaim") ? commonPartyDropSelect.value : undefined,
         });
         let config = { ReportType: reportType, jsonBody, btnId: btnId, ToDate: row.selectedDate.ToDate, FromDate: row.selectedDate.FromDate, ClaimID: row.id, PartyName: row.PartyName }
 
@@ -174,7 +184,7 @@ const ClaimSummaryMaster = (props) => {
         const jsonBody = JSON.stringify({
             "FromDate": firstDate,
             "ToDate": lastDate,
-            "Party": _cfunc.loginSelectedPartyID()
+            "Party": commonPartyDropSelect.value
         });
 
 
@@ -253,8 +263,8 @@ const ClaimSummaryMaster = (props) => {
             <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
             <div className="page-content">
 
-                <PartyDropdown_Common
-                    changeButtonHandler={partySelectOnChangeHandler} />
+                {/* <PartyDropdown_Common
+                    changeButtonHandler={partySelectOnChangeHandler} /> */}
 
                 <div className="px-2   c_card_filter text-black" >
                     <div className="row" >

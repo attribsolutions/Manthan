@@ -46,7 +46,7 @@ const CreditDebitDataExport = (props) => {  // also Receipt Data Export
     } = useSelector((state) => ({
         tableData: state.CreditDebitDataExportReducer.CreditDebit_DataExportGobtn,
         GoBtnLoading: state.CreditDebitDataExportReducer.GoBtnLoading,
-        Distributor: state.CommonPartyDropdownReducer.commonPartyDropdown,
+        Distributor: state.CommonPartyDropdownReducer.commonPartyDropdownOption,
         ExcelBtnLoading: state.CreditDebitDataExportReducer.ExcelBtnLoading,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField

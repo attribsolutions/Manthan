@@ -47,7 +47,7 @@ import {
     loginUserAdminRole,
     loginSelectedPartyID,
 } from "../../../components/Common/CommonFunction";
-import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
+// import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 import * as pageId from "../../../routes/allPageID";
 import * as url from "../../../routes/route_url";
 import * as mode from "../../../routes/PageMode";
@@ -58,7 +58,7 @@ const VehicleMaster = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory()
-    const userAdminRole = loginUserAdminRole();
+
 
     const fileds = {
         id: "",
@@ -91,6 +91,10 @@ const VehicleMaster = (props) => {
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageField,
         }));
+
+    const { commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
+
+
 
     useEffect(() => {
         const page_Id = pageId.VEHICLE
@@ -225,18 +229,11 @@ const VehicleMaster = (props) => {
         label: data.Name
     }));
 
-    const partyOnChngeHandler = (e) => {
-        setState((i) => {
-            const a = { ...i }
-            a.values.Party = e;
-            return a
-        })
-    }
 
     const SaveHandler = async (event) => {
         event.preventDefault();
         const btnId = event.target.id
-        if ((loginSelectedPartyID() === 0)) {
+        if ((commonPartyDropSelect.value === 0)) {
             customAlert({ Type: 3, Message: alertMessages.commonPartySelectionIsRequired });
             return;
         };
@@ -250,7 +247,7 @@ const VehicleMaster = (props) => {
                     VehicleNumber: values.VehicleNumber,
                     Description: values.Description,
                     VehicleType: values.VehicleTypeName.value,
-                    Party: loginSelectedPartyID(),
+                    Party: commonPartyDropSelect.value,
                     Company: loginCompanyID(),
                     CreatedBy: loginUserID(),
                     UpdatedBy: loginUserID()
@@ -277,7 +274,7 @@ const VehicleMaster = (props) => {
                     <Container fluid>
                         <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
 
-                        <PartyDropdown_Common pageMode={pageMode} />
+                        {/* <PartyDropdown_Common pageMode={pageMode} /> */}
 
                         <Card className="text-black" style={{ marginTop: "3px" }}>
                             <CardHeader className="card-header   text-black c_card_header" >

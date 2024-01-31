@@ -48,7 +48,7 @@ const ClaimTrackingReport = (props) => {
         tableData: state.ClaimTrackingEntry_Reducer.claimTrackingEntryList,
         GoBtnLoading: state.ClaimTrackingEntry_Reducer.GoBtnLoading,
         ExcelBtnLoading: state.ClaimTrackingEntry_Reducer.ExcelBtnLoading,
-        partyList: state.CommonPartyDropdownReducer.commonPartyDropdown,
+        partyList: state.CommonPartyDropdownReducer.commonPartyDropdownOption,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField
     }));

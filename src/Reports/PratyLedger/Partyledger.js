@@ -13,7 +13,7 @@ import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import * as report from '../ReportIndex'
 import { PartyLedgerReport_API } from "../../helpers/backend_helper";
 import C_Report from "../../components/Common/C_Report";
-import PartyDropdown_Common from "../../components/Common/PartyDropdown";
+// import PartyDropdown_Common from "../../components/Common/PartyDropdown";
 import { alertMessages } from "../../components/Common/CommonErrorMsg/alertMsg";
 import * as ExcelJS from 'exceljs';
 const XLSX = require('xlsx');
@@ -53,6 +53,17 @@ const PartyLedger = () => {
 
     const values = { ...state.values }
 
+    const { commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
+
+    // Common Party select Dropdown useEffect
+    useEffect(() => {
+        if (commonPartyDropSelect.value > 0) {
+            partySelectButtonHandler();
+        } else {
+            partySelectOnChangeHandler();
+        }
+    }, [commonPartyDropSelect]);
+
     // userAccess useEffect
     useEffect(() => {
         let locationPath = history.location.pathname;
@@ -68,7 +79,7 @@ const PartyLedger = () => {
     useEffect(() => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(pageId.PARTY_LEDGER));
-        dispatch(GetVenderSupplierCustomer({ subPageMode, "PartyID": _cfunc.loginSelectedPartyID() }));
+        dispatch(GetVenderSupplierCustomer({ subPageMode, "PartyID": commonPartyDropSelect.value }));
         return () => {
             dispatch(GetVenderSupplierCustomerSuccess([]));
             dispatch(commonPageFieldSuccess(null));
@@ -364,7 +375,7 @@ const PartyLedger = () => {
 
     async function goButtonHandler(e, mode) {
 
-        if (_cfunc.loginSelectedPartyID() === 0) {
+        if (commonPartyDropSelect.value === 0) {
             customAlert({ Type: 3, Message: alertMessages.commonPartySelectionIsRequired });
             return;
         };
@@ -383,8 +394,8 @@ const PartyLedger = () => {
         const jsonBody = JSON.stringify({
             "FromDate": values.FromDate,
             "ToDate": values.ToDate,
-            "Customer": isPartyLeger ? values.Customer.value : _cfunc.loginSelectedPartyID(),
-            "Party": isPartyLeger ? _cfunc.loginSelectedPartyID() : values.Party.value,
+            "Customer": isPartyLeger ? values.Customer.value : commonPartyDropSelect.value,
+            "Party": isPartyLeger ? commonPartyDropSelect.value : values.Party.value,
         });
 
         if (mode === "excel") {
@@ -418,10 +429,10 @@ const PartyLedger = () => {
     }
 
     function partySelectButtonHandler() {
-        dispatch(GetVenderSupplierCustomer({ subPageMode, "PartyID": _cfunc.loginSelectedPartyID() }));
+        dispatch(GetVenderSupplierCustomer({ subPageMode, "PartyID": commonPartyDropSelect.value }));
     }
 
-    function partyOnChngeButtonHandler() {
+    function partySelectOnChangeHandler() {
         dispatch(getpdfReportdataSuccess({ Status: false }));
         dispatch(GetVenderSupplierCustomerSuccess([]));
         setState((i) => {
@@ -436,9 +447,9 @@ const PartyLedger = () => {
         <React.Fragment>
             <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
             <div className="page-content">
-                <PartyDropdown_Common
+                {/* <PartyDropdown_Common
                     goButtonHandler={partySelectButtonHandler}
-                    changeButtonHandler={partyOnChngeButtonHandler} />
+                    changeButtonHandler={partyOnChngeButtonHandler} /> */}
 
                 <div className="px-2   c_card_filter text-black" >
                     <div className="row" >

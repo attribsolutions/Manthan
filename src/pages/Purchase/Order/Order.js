@@ -35,10 +35,11 @@ import { pageFieldUseEffect, table_ArrowUseEffect, updateMsgUseEffect, userAcces
 import { orderApprovalFunc, orderApprovalMessage } from "./orderApproval";
 import { GetRoutesList, GetRoutesListSuccess } from "../../../store/Administrator/RoutesRedux/actions";
 import { ORDER_4 } from "../../../routes/route_url";
-import NewCommonPartyDropdown from "../../../components/Common/NewCommonPartyDropdown";
+// import NewCommonPartyDropdown from "../../../components/Common/NewCommonPartyDropdown";
 import "../../../CustomTable2/CustomTable.scss"
 import "./order.scss"
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
+import { changeCommonPartyDropDetailsAction } from "../../../store/Utilites/PartyDrodown/action";
 
 
 let editVal = {}
@@ -320,9 +321,12 @@ const Order = (props) => {
                 seteditCreatedBy(hasEditVal.CreatedBy)
             }
             dispatch(_act.editOrderIdSuccess({ Status: false }))
-
+            dispatch(changeCommonPartyDropDetailsAction({ forceDisable: true }))//change party drop-down disable when edit/view
         } else {
             dispatch(_act.BreadcrumbShowCountlabel(initial_BredcrumbMsg))
+        }
+        return () => {
+            dispatch(changeCommonPartyDropDetailsAction({ forceDisable: false }))//change party drop-down restore state
         }
     }, []);
 
@@ -1347,8 +1351,6 @@ const Order = (props) => {
                     </div>}
 
                     <div className="page-content">
-
-                        <NewCommonPartyDropdown pageMode={pageMode} />
 
                         <div>
                             <div className="px-2 c_card_filter header text-black" >{/* Order Date And Supplier Name,Go_Button*/}

@@ -42,7 +42,7 @@ const SapLedger = (props) => {
         partyList,
         pageField
     } = useSelector((state) => ({
-        partyList: state.CommonPartyDropdownReducer.commonPartyDropdown,
+        partyList: state.CommonPartyDropdownReducer.commonPartyDropdownOption,
         gobuttonReduxData: state.SapLedgerReducer.goBtnSapLedger,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField
