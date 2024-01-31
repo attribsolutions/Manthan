@@ -42,7 +42,6 @@ import {
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
-// import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 import { changeCommonPartyDropDetailsAction } from "../../../store/Utilites/PartyDrodown/action";
@@ -288,7 +287,6 @@ const RoutesMaster = (props) => {
                 if (pageMode === mode.edit) {
                     dispatch(updateRoutesID({ jsonBody, updateId: values.id, btnId }));
                 }
-
                 else {
                     dispatch(SaveRoutesMaster({ jsonBody, btnId }));
                 }
@@ -306,7 +304,6 @@ const RoutesMaster = (props) => {
                 <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
 
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
-                    {/* <PartyDropdown_Common pageMode={pageMode} /> */}
 
                     <Container fluid>
                         <Card className="text-black" style={{ marginTop: "3px" }}>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import RoutesMaster from "./RoutesMaster";
 import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
@@ -13,20 +13,16 @@ import {
   updateRoutesIDSuccess,
   GetRoutesListSuccess
 } from "../../../store/Administrator/RoutesRedux/actions";
-import { loginCompanyID, loginSelectedPartyID } from "../../../components/Common/CommonFunction";
+import { loginCompanyID } from "../../../components/Common/CommonFunction";
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList";
-// import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 import { PageLoadingSpinner } from "../../../components/Common/CommonButton";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import NewCommonPartyDropdown from "../../../components/Common/NewCommonPartyDropdown";
-import { mode } from "../../../routes";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 
 const RoutesList = (props) => {
 
   const dispatch = useDispatch();
-
-  const [pageMode] = useState(mode.defaultList);
 
   const reducers = useSelector(
     (state) => ({
@@ -73,7 +69,6 @@ const RoutesList = (props) => {
     }
   }, []);
 
-
   const goButtonHandler = () => {
 
     try {
@@ -103,7 +98,6 @@ const RoutesList = (props) => {
       <PageLoadingSpinner isLoading={(goBtnLoading || !pageField)} />
       <div className="page-content">
 
-        <NewCommonPartyDropdown />
         {
           (pageField) &&
           <div className="mt-n1">

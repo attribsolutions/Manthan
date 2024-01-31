@@ -14,7 +14,6 @@ import { commonPageFieldList, commonPageFieldListSuccess, } from "../../../store
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList";
-// import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { PageLoadingSpinner } from "../../../components/Common/CommonButton";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
@@ -38,17 +37,17 @@ const VehicleList = () => {
     })
   );
   const { commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
-  
+
   const { pageField, goBtnLoading } = reducers;
 
-    // Common Party select Dropdown useEffect
-    useEffect(() => {
-        if (commonPartyDropSelect.value > 0) {
-            partySelectButtonHandler();
-        } else {
-            partySelectOnChangeHandler();
-        }
-    }, [commonPartyDropSelect]);
+  // Common Party select Dropdown useEffect
+  useEffect(() => {
+    if (commonPartyDropSelect.value > 0) {
+      partySelectButtonHandler();
+    } else {
+      partySelectOnChangeHandler();
+    }
+  }, [commonPartyDropSelect]);
 
   const action = {
     getList: getVehicleList,
@@ -58,7 +57,6 @@ const VehicleList = () => {
     updateSucc: updateVehicleID_Success,
     deleteSucc: deleteVehicleID_Success,
   }
-  
 
   //  This UseEffect => Featch Modules List data  First Rendering
   useEffect(() => {
@@ -95,12 +93,6 @@ const VehicleList = () => {
     <React.Fragment>
       <PageLoadingSpinner isLoading={(goBtnLoading || !pageField)} />
       <div className="page-content">
-
-        {/* <PartyDropdown_Common 
-          goBtnLoading={goBtnLoading}
-          goButtonHandler={goButtonHandler}
-          changeButtonHandler={partyOnChngeButtonHandler}
-        /> */}
 
         {
           (pageField) &&

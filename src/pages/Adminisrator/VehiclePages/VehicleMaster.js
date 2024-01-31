@@ -41,15 +41,11 @@ import { SaveButton } from "../../../components/Common/CommonButton";
 import {
     breadcrumbReturnFunc,
     loginCompanyID,
-    loginPartyID,
     loginUserID,
     btnIsDissablefunc,
     metaTagLabel,
-    loginUserAdminRole,
-    loginSelectedPartyID,
     loginJsonBody,
 } from "../../../components/Common/CommonFunction";
-// import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 import * as pageId from "../../../routes/allPageID";
 import * as url from "../../../routes/route_url";
 import * as mode from "../../../routes/PageMode";
@@ -61,7 +57,6 @@ const VehicleMaster = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory()
-
 
     const fileds = {
         id: "",
@@ -251,7 +246,6 @@ const VehicleMaster = (props) => {
         label: data.Name
     }));
 
-
     const SaveHandler = async (event) => {
         event.preventDefault();
         const btnId = event.target.id
@@ -295,8 +289,6 @@ const VehicleMaster = (props) => {
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                     <Container fluid>
                         <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
-
-                        {/* <PartyDropdown_Common pageMode={pageMode} /> */}
 
                         <Card className="text-black" style={{ marginTop: "3px" }}>
                             <CardHeader className="card-header   text-black c_card_header" >
