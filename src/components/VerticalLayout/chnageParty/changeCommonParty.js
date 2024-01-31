@@ -21,7 +21,14 @@ const ChangeCommonParty = () => {
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
     // Selectors from Redux store
-    const { commonPartyDropdownOption, partyDropdownLoading, commonPartyDropSelect, forceDisable ,isShow} = useSelector((state) => state.CommonPartyDropdownReducer);
+    const {
+        commonPartyDropdownOption,
+        partyDropdownLoading,
+        commonPartyDropSelect,
+        forceDisable,
+        isShow,
+        isShowOnlySAPParty
+    } = useSelector((state) => state.CommonPartyDropdownReducer);
 
     // useEffect to update selected party when commonPartyDropSelect changes
     useEffect(() => {
@@ -70,12 +77,12 @@ const ChangeCommonParty = () => {
         localStorage.setItem("selectedParty", JSON.stringify({ value: 0, label: "select...", SAPPartyCode: "" }));
     };
 
-    // Mapping Party for Select options
-    const PartyDropdownOptions = commonPartyDropdownOption.map((data) => ({
+    // Mapping Party for Select options and filtering based on condition
+    const PartyDropdownOptions = commonPartyDropdownOption.map(data => ({
         value: data.id,
         label: data.Name,
         SAPPartyCode: data.SAPPartyCode
-    }));
+    })).filter(index => !isShowOnlySAPParty || index.SAPPartyCode !== null);
 
     // Function to toggle drawer
     const handleLabelClick = () => {
@@ -89,7 +96,7 @@ const ChangeCommonParty = () => {
 
     // Render component
     const formattedPartyLabel = commonPartyDropSelect?.label ? commonPartyDropSelect.label.charAt(0).toUpperCase() + commonPartyDropSelect.label.slice(1).toLowerCase() : '';
-   
+
     if (!isShow) { return null };
     return (
         <div className="change-party-contener" ref={componentRef}>
