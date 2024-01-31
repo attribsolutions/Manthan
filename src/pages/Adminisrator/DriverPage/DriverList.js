@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import DriverMaster from "./DriverMaster";
 import {
@@ -15,7 +15,6 @@ import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList";
-// import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 import { PageLoadingSpinner } from "../../../components/Common/CommonButton";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
@@ -38,7 +37,7 @@ const DriverList = () => {
     })
   );
   const { commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
-  
+
   const { pageField, GoBtnlistloading } = reducers
 
   const action = {
@@ -48,7 +47,6 @@ const DriverList = () => {
     updateSucc: updateDriverID_Success,
     deleteSucc: deleteDriverID_Success
   }
-
 
   // Common Party select Dropdown useEffect
   useEffect(() => {
@@ -99,13 +97,6 @@ const DriverList = () => {
     <React.Fragment>
       <PageLoadingSpinner isLoading={(GoBtnlistloading || !pageField)} />
       <div className="page-content">
-
-        {/* <PartyDropdown_Common 
-          goBtnLoading={GoBtnlistloading}
-          goButtonHandler={goButtonHandler}
-          changeButtonHandler={partySelectOnChangeHandler}
-        /> */}
-
         {
           (pageField) &&
           <div className="mt-n1">
