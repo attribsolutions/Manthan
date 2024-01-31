@@ -218,7 +218,9 @@ const Index = (props) => {
 											selectRow={selectAllCheck({
 												rowSelected: rowSelected(),
 												nonSelectable: nonSelectedRow(),
-												bgColor: ''
+												bgColor: '',
+												tableList: RetailerList
+
 											})}
 											noDataIndication={<div className="text-danger text-center ">Record Not Found</div>}
 											classes={"table align-middle table-nowrap table-hover"}

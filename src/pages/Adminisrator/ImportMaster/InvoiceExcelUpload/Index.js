@@ -363,7 +363,7 @@ const InvoiceExcelUpload = (props) => {
                 try {
 
                     const MapItemList = ItemList.filter(obj => obj.MapItem !== null && obj.MapItem !== "");
-                    debugger
+
                     MapItemList.forEach(function (i) {
 
                         let Item_Code = i.MapItem;
@@ -474,7 +474,6 @@ const InvoiceExcelUpload = (props) => {
                     const partyCodeAsString = value.toString().trim();
                     return !mapCustomerValues.includes(partyCodeAsString);
                 });
-
 
                 // const Wrong_Party_Code_Array = arrayOfPartyMapStrings.filter(value => !mapCustomerValues.includes(value));
 
@@ -599,7 +598,7 @@ const InvoiceExcelUpload = (props) => {
                         "RoundOffAmount": ele[parArr.RoundOffAmount] ? ele[parArr.RoundOffAmount] : 0,
                         "InvoiceNumber": ele[parArr.InvoiceNumber] ? ele[parArr.InvoiceNumber] : '',
                         "FullInvoiceNumber": ele[parArr.InvoiceNumber] ? ele[parArr.InvoiceNumber] : '',
-                        "Customer": ele[parArr.Customer] ? ele[parArr.Customer].trim() : '',
+                        "Customer": ele[parArr.Customer] ? ele[parArr.Customer].toString().trim() : '',
                         "Party": _cfunc.loginSelectedPartyID(),
                         CreatedBy: _cfunc.loginUserID(),
                         UpdatedBy: _cfunc.loginUserID(),
@@ -608,8 +607,8 @@ const InvoiceExcelUpload = (props) => {
 
 
                     invoiceItems.push({
-                        "Item": ele[parArr.Item] ? ele[parArr.Item].trim() : '',
-                        "Unit": ele[parArr.Unit] ? ele[parArr.Unit].trim() : '',
+                        "Item": ele[parArr.Item] ? ele[parArr.Item].toString().trim() : '',
+                        "Unit": ele[parArr.Unit] ? ele[parArr.Unit].toString().trim() : '',
                         "Quantity": ele[parArr.Quantity] ? ele[parArr.Quantity] : 0,
                         "BatchDate": ele[parArr.BatchDate] ? ele[parArr.BatchDate] : null,
                         "BatchCode": ele[parArr.BatchCode] ? ele[parArr.BatchCode] : 0,
@@ -637,7 +636,9 @@ const InvoiceExcelUpload = (props) => {
                         "QtyInKg": ele[parArr.QtyInKg] ? ele[parArr.QtyInKg] : 0,
                         "QtyInNo": ele[parArr.QtyInNo] ? ele[parArr.QtyInNo] : 0,
                     })
+
                 })
+
                 outerArr.push({ ...parentObj, InvoiceItems: invoiceItems })
             });
 

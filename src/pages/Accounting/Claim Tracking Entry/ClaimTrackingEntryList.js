@@ -120,7 +120,7 @@ const ClaimTrackingEntryList = (props) => {
             <PageLoadingSpinner isLoading={(reducers.goBtnLoading || !pageField)} />
             <div className="page-content">
 
-                <div className="px-3 c_card_filter header text-black mb-1" >
+                <div className="px-3 c_card_filter header text-black mb-2" >
 
                     <div className="row" >
                         <Col sm={3} className="">
