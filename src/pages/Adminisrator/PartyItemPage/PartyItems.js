@@ -13,16 +13,14 @@ import * as url from "../../../routes/route_url";
 import * as mode from "../../../routes/PageMode";
 import BootstrapTable from "react-bootstrap-table-next";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
-import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 import { breadcrumbReturnFunc, metaTagLabel } from "../../../components/Common/CommonFunction";
 import * as pageId from "../../../routes/allPageID";
-import { selectAllCheck } from "../../../components/Common/TableCommonFunc";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { C_Select } from "../../../CustomValidateForm";
 import { getPartyTypelist, getPartyTypelistSuccess } from "../../../store/Administrator/PartyTypeRedux/action";
 import ChannelViewDetails from "./ChannelViewDetails";
 import { vieBtnCss } from "../../../components/Common/ListActionsButtons";
-import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
+import { changeCommonPartyDropDetailsAction } from "../../../store/Utilites/PartyDrodown/action";
 
 function initialState(history) {
 
@@ -44,9 +42,10 @@ const PartyItems = (props) => {
 	const dispatch = useDispatch();
 	const [subPageMode] = useState(history.location.pathname)
 	const [pageMode, setPageMode] = useState(mode.defaultsave);
-	const [modalCss, setModalCss] = useState(false);
 	const [userPageAccessState, setUserAccState] = useState("");
 	const [searchQuery, setSearchQuery] = useState("");
+
+
 
 
 	const [page_id] = useState(() => initialState(history).page_Id)
@@ -56,7 +55,7 @@ const PartyItems = (props) => {
 	const location = { ...history.location };
 	const hasShowloction = location.hasOwnProperty(mode.editValue);
 	const hasShowModal = props.hasOwnProperty(mode.editValue);
-	
+
 	const {
 		postMsg,
 		pageField,
@@ -77,6 +76,17 @@ const PartyItems = (props) => {
 		viewBtnLoading: state.PartyItemsReducer.channeItemViewBtnLoading,
 	}));
 
+	const { commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
+
+	// Common Party select Dropdown useEffect
+	useEffect(() => {
+		if ((commonPartyDropSelect.value > 0) && !(subPageMode === url.CHANNEL_ITEM)) {
+			goButtonHandler()
+		} else {
+			partyOnChngeButtonHandler()
+		}
+	}, [commonPartyDropSelect])
+
 	useEffect(() => {
 
 		dispatch(commonPageFieldSuccess(null));
@@ -84,14 +94,12 @@ const PartyItems = (props) => {
 		if (hasShowModal !== true) {
 			dispatch(commonPageField(page_id));
 		}
-
-		if (!(_cfunc.loginSelectedPartyID() === 0) && !(hasShowloction || hasShowModal)) {
-
-			if (subPageMode !== url.CHANNEL_ITEM) {
-				goButtonHandler()
-			}
+		if (!(subPageMode === url.PARTYITEM)) {
+			dispatch(changeCommonPartyDropDetailsAction({ isShow: false }))//change party drop-down restore state	
 		}
+
 		return () => {
+			dispatch(changeCommonPartyDropDetailsAction({ isShow: true }))//change party drop-down restore state	
 			dispatch(getPartyTypelistSuccess([]));
 			dispatch(goButtonPartyItemAddPageSuccess([]));
 
@@ -125,7 +133,6 @@ const PartyItems = (props) => {
 			if (hasShowModal) {
 				hasEditVal = props.editValue;
 				setPageMode(props.pageMode);
-				setModalCss(true);
 			} else if (hasShowloction) {
 				setPageMode(location.pageMode);
 				hasEditVal = location.editValue;
@@ -287,7 +294,7 @@ const PartyItems = (props) => {
 			// 	</div>
 			// },
 			formatter: (cell, row) => {
-				
+
 				const OrderAvailableHandler = ({ cell, row, event }) => {
 
 					let checked = event.target.checked
@@ -313,15 +320,9 @@ const PartyItems = (props) => {
 	function goButtonHandler(event) {
 
 		try {
-			event?.persist();// Call event.persist() to remove the synthetic event from the pool
-
-			if ((_cfunc.loginSelectedPartyID() === 0 && !(subPageMode === url.CHANNEL_ITEM))) {
-				customAlert({ Type: 3, Message: alertMessages.commonPartySelectionIsRequired });
-				return;
-			};
 			const jsonBody = {
 				..._cfunc.loginJsonBody(),
-				PartyID: _cfunc.loginSelectedPartyID(),
+				PartyID: commonPartyDropSelect.value,
 				PartyTypeID: channelTypeSelect.value
 
 
@@ -460,7 +461,7 @@ const PartyItems = (props) => {
 
 				Item: index.Item,
 				// Party: partyIdSelect.value,
-				Party: (pageMode === mode.assingLink) ? partyIdSelect.value : _cfunc.loginSelectedPartyID(),
+				Party: (pageMode === mode.assingLink) ? partyIdSelect.value : commonPartyDropSelect.value,
 				PartyType: channelTypeSelect.value,
 				IsAvailableForOrdering: index.IsAvailableForOrdering ? 1 : 0
 			})));
@@ -468,18 +469,7 @@ const PartyItems = (props) => {
 		} catch (w) { }
 	};
 
-	const AdminDivsionRoleDropdown = () => {
-		if (subPageMode === url.PARTYITEM) {
-			return (
-				<PartyDropdown_Common pageMode={pageMode}
-					goBtnLoading={GoBtnlistloading}
-					goButtonHandler={goButtonHandler}
-					changeButtonHandler={partyOnChngeButtonHandler}
-				/>
-			)
-		}
-		return null
-	};
+
 	const ChannelTypeDropdown = () => {
 		if (subPageMode === url.CHANNEL_ITEM) {
 			return (
@@ -535,20 +525,16 @@ const PartyItems = (props) => {
 		}
 		return null
 	};
-	let IsEditMode_Css = "";
-	if (modalCss || pageMode === mode.dropdownAdd) {
-		IsEditMode_Css = "-5.5%";
-	}
+
 
 	return (
 		<>
 			<PageLoadingSpinner isLoading={(GoBtnlistloading || !pageField)} />
 			{userPageAccessState && (
-				<div className="page-content" style={{ marginTop: IsEditMode_Css }}>
+				<div className="page-content">
 					<Container fluid>
 						<MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
 
-						<AdminDivsionRoleDropdown />
 						<ChannelViewDetails />
 
 						<Card className="text-black">
