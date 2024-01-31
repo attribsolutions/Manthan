@@ -96,14 +96,14 @@ export function Go_Button(props) {
       disabled
       title={`Go Button Loging...`}
       color="btn btn-outline-success border-1"
-      style={{ padding: "3px", paddingInline: "5px" }}
+      style={{ paddingBlock: "3px", paddingInline: "7px" }}
       onClick={onClick} >
       <Spinner style={{ height: "13px", width: "13px" }} color="success" />
     </Button>
     : <Button
       id={id}
       type={type}
-      style={{ padding: "3px", paddingInline: "5px" }}
+      style={{ paddingBlock: "1px", paddingInline: "7px" }}
       disabled={forceDisabled}
       color="btn btn-success border-1 font-size-12"
       onClick={onClick} > <span className="font-weight-bold" style={{ fontWeight: "bold", fontSize: "16px" }}>Go</span></Button>
@@ -114,7 +114,7 @@ export function Change_Button(props) {
   return <Button
     id={id}
     disabled={forceDisabled}
-    style={{ padding: "3px", paddingInline: "5px" }}
+    style={{ paddingBlock: "3px", paddingInline: "7px" }}
     type={type}
     color="btn btn-outline-info border-1 font-size-12 "
     onClick={onClick}>Change</Button>
@@ -127,6 +127,7 @@ export function C_Button({
   forceDisabled,
   children,
   spinnerColor = "primary",
+  style,
   ...rest
 }) {
 
@@ -136,7 +137,7 @@ export function C_Button({
         disabled
         title={`Add Button Loading...`}
         {...rest}
-        style={{ padding: "3px", paddingInline: "5px" }}
+        style={{ paddingBlock: "3px", paddingInline: "7px", ...style }}
       > {children}..&nbsp;
         <Spinner style={{ height: "12px", width: "12px" }} color={spinnerColor} />
       </button>
@@ -147,7 +148,7 @@ export function C_Button({
     <button
       disabled={forceDisabled}
       onClick={onClick}
-      style={{ padding: "3px", paddingInline: "5px" }}
+      style={{ paddingBlock: "4px", paddingInline: "7px", ...style }}
       {...rest}
     >
       {children}

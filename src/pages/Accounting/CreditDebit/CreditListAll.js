@@ -31,7 +31,6 @@ import {
 import { Retailer_List, Retailer_List_Success, getSupplierSuccess } from "../../../store/CommonAPI/SupplierRedux/actions";
 import * as _cfunc from "../../../components/Common/CommonFunction"
 import { C_DatePicker } from "../../../CustomValidateForm";
-// import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 
 const CreditList = () => {
@@ -416,9 +415,6 @@ const CreditList = () => {
         <React.Fragment>
             <PageLoadingSpinner isLoading={(listBtnLoading || !pageField)} />
             <div className="page-content">
-                {/* <PartyDropdown_Common pageMode={pageMode}
-                    goButtonHandler={partySelectButtonHandler}
-                    changeButtonHandler={partySelectOnChangeHandler} /> */}
                 {
                     (pageField) ?
                         <CommonPurchaseList

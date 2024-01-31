@@ -22,7 +22,6 @@ import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import { saveStockEntryAction, saveStockEntrySuccess } from "../../../store/Inventory/StockEntryRedux/action";
-// import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 import { AddItemInTableFunc, stockQtyUnit_SelectOnchange } from "./StockAdjust_Func";
 import "../../../pages/Sale/SalesReturn/salesReturn.scss";
 import Select, { components } from "react-select";
@@ -71,6 +70,7 @@ const StockAdjustment = (props) => {
             partySelectOnChangeHandler();
         }
     }, [commonPartyDropSelect]);
+
     useEffect(() => {
         let page_Id
         if (subPageMode === url.STOCK_ADJUSTMENT) {
@@ -500,9 +500,6 @@ const StockAdjustment = (props) => {
             <React.Fragment>
                 <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
                 <div className="page-content">
-                    {/* <PartyDropdown_Common
-                        goButtonHandler={partySelectButtonHandler}
-                        changeButtonHandler={partyOnChngeButtonHandler} /> */}
                     <form noValidate>
                         <div className="px-3 c_card_filter header text-black mb-1" >
 

@@ -15,7 +15,7 @@ import Select from "react-select";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { orderCalculateFunc } from "./OrderPageCalulation";
-import { SaveButton, Go_Button, Change_Button, GotoInvoiceBtn, PageLoadingSpinner, DashboardLoader } from "../../../components/Common/CommonButton";
+import { SaveButton, Go_Button, Change_Button, GotoInvoiceBtn, PageLoadingSpinner, DashboardLoader, C_Button } from "../../../components/Common/CommonButton";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 
 import OrderPageTermsTable from "./OrderPageTermsTable";
@@ -1519,13 +1519,12 @@ const Order = (props) => {
                                             {pageMode === mode.defaultsave ?
                                                 <div className="row mt-2 pr-1"  >
                                                     {(selecedItemWiseOrder && itemSelectDropOptions.length > 0) ?
-                                                        <Button
-                                                            className
-                                                            color="btn btn-outline-info border-1 font-size-12 "
+                                                        <C_Button
+                                                            className="btn btn-outline-info border-1 font-size-12 "
                                                             disabled={goBtnloading}
                                                             onClick={() => item_AddButtonHandler()} >
                                                             Add Item
-                                                        </Button>
+                                                        </C_Button>
                                                         :
                                                         ((itemSelectDropOptions.length > 0)) &&
                                                         <Button

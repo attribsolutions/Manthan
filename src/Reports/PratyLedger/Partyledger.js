@@ -13,7 +13,6 @@ import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import * as report from '../ReportIndex'
 import { PartyLedgerReport_API } from "../../helpers/backend_helper";
 import C_Report from "../../components/Common/C_Report";
-// import PartyDropdown_Common from "../../components/Common/PartyDropdown";
 import { alertMessages } from "../../components/Common/CommonErrorMsg/alertMsg";
 import * as ExcelJS from 'exceljs';
 const XLSX = require('xlsx');
@@ -45,7 +44,6 @@ const PartyLedger = () => {
             userAccess: state.Login.RoleAccessUpdateData,
             SSDD_List: state.CommonAPI_Reducer.SSDD_List,
             customerDropdownLoading: state.CommonAPI_Reducer.vendorSupplierCustomerLoading,
-            // partyDropdownLoading: state.CommonPageFieldReducer.pageFieldList,
             pageField: state.CommonPageFieldReducer.pageField
         })
     );
@@ -447,10 +445,6 @@ const PartyLedger = () => {
         <React.Fragment>
             <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
             <div className="page-content">
-                {/* <PartyDropdown_Common
-                    goButtonHandler={partySelectButtonHandler}
-                    changeButtonHandler={partyOnChngeButtonHandler} /> */}
-
                 <div className="px-2   c_card_filter text-black" >
                     <div className="row" >
                         <Col sm={3} className="">

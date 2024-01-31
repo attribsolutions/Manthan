@@ -15,7 +15,7 @@
   color: rgba(252, 247, 228, 0.877);
   font-size: 18;
   margin-bottom: -10px;
-  margin-top: 6px;
+  margin-top: 2px;
   border: solid;
   border-color: #f2f2f28a;
   /* A light color close to white */
@@ -50,10 +50,8 @@
 
 .mini-drawer {
   position: fixed;
-  top: 75px;
-  left: 250px;
-  /* height: 100%; */
-  background: rgba(0, 0, 0, 0.5);
+  top: 61px;
+  left: 254px;
   display: flex;
   align-items: center;
   justify-content: flex-end;

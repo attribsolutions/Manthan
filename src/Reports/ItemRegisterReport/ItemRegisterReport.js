@@ -13,7 +13,6 @@ import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import * as report from '../ReportIndex'
 import { ItemRegister_API } from "../../helpers/backend_helper";
 import C_Report from "../../components/Common/C_Report";
-// import PartyDropdown_Common from "../../components/Common/PartyDropdown";
 import { alertMessages } from "../../components/Common/CommonErrorMsg/alertMsg";
 
 const ItemRegisterReport = (props) => {
@@ -197,10 +196,6 @@ const ItemRegisterReport = (props) => {
         <React.Fragment>
             <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
             <div className="page-content">
-                {/* <PartyDropdown_Common
-                    goButtonHandler={partySelectButtonHandler}
-                    changeButtonHandler={partyOnChngeButtonHandler} /> */}
-
                 <div className="px-2   c_card_filter text-black" >
                     <div className="row" >
                         <Col lg={0} className="">

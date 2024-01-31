@@ -81,7 +81,7 @@ body:not([data-sidebar-size="sm"]) {
 /* Search */
 
 .app-search {
-    padding: calc(#{$header-height - 40px} / 2) 0;
+    // padding: calc(#{$header-height - 40px} / 2) 0;
     position: relative;
 
     .form-control {

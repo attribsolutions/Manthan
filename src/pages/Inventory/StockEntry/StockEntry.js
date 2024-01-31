@@ -33,7 +33,6 @@ import { saveStockEntryAction, saveStockEntrySuccess } from "../../../store/Inve
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
-// import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 import { ItemAPIResponseFunc } from "./stockEntryFunctions";
 
 const StockEntry = (props) => {
@@ -528,10 +527,6 @@ const StockEntry = (props) => {
             <React.Fragment>
                 <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
                 <div className="page-content">
-                    {/* <PartyDropdown_Common pageMode={pageMode}
-                        goButtonHandler={partySelectButtonHandler}
-                        changeButtonHandler={partyOnChngeButtonHandler} /> */}
-
                     <form noValidate>
                         <div className="px-3 c_card_filter header text-black mb-1" >
 

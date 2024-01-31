@@ -38,7 +38,6 @@ import * as _cfunc from "../../../components/Common/CommonFunction";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
-// import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 import { goButton_ServiceItemAssign } from "../../../store/Administrator/ServiceItemAssignRedux/action";
 import { goButton_ServiceItemAssign_Success } from "../../../store/Administrator/ServiceItemAssignRedux/action";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
@@ -784,11 +783,6 @@ const CreditNote_1 = (props) => {
                 <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
 
                 <div className="page-content" >
-                    {/* <PartyDropdown_Common pageMode={pageMode}
-                        goButtonHandler={partySelectButtonHandler}
-                        changeButtonHandler={partySelectOnChangeHandler}
-                    /> */}
-
                     <form noValidate>
                         <div className="px-2 c_card_filter header text-black mb-1" >
                             <Row>

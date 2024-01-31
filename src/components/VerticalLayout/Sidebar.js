@@ -13,8 +13,8 @@ const Sidebar = props => {
   return (
     <React.Fragment>
       <div className="vertical-menu" >
+          <ChangeCommonParty />
         <div data-simplebar className="h-100">
-          <ChangeCommonParty  />
           {props.type !== "condensed" ? <SidebarContent /> : <SidebarContent />}
 
         </div>

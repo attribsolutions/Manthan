@@ -20,8 +20,6 @@ import SalesReturnView_Modal from "./SalesReturnConfirm";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import * as report from '../../../Reports/ReportIndex'
 import { ReturnPrint_API } from "../../../helpers/backend_helper";
-import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
-import { async } from "q";
 import { return_discountCalculate_Func } from "./SalesCalculation";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 
@@ -420,11 +418,6 @@ const SalesReturnList = () => {
         <React.Fragment>
             <div className="page-content">
                 <PageLoadingSpinner isLoading={(loading || !pageField)} />
-
-                {/* <PartyDropdown_Common pageMode={pageMode}
-                    goButtonHandler={partySelectButtonHandler}
-                    changeButtonHandler={partySelectOnChangeHandler} /> */}
-
                 {
                     (pageField) ?
                         <CommonPurchaseList
