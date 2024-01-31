@@ -47,6 +47,7 @@ import NewCommonPartyDropdown from "../../../../components/Common/NewCommonParty
 import { mobileApp_RetailerUpdate_Api } from "../../../../helpers/backend_helper";
 import { showToastAlert } from "../../../../helpers/axios_Config";
 import { mobileApp_Send_Retailer_Api } from "../../../../helpers/backend_helper"
+import { changeCommonPartyDropDetailsAction } from "../../../../store/Utilites/PartyDrodown/action";
 
 function initialState(history) {
 
@@ -110,8 +111,8 @@ const PartyMaster = (props) => {
 		PriceList: state.PartyMasterReducer.PriceList,
 		AddressTypes: state.PartyMasterReducer.AddressTypes,
 		userAccess: state.Login.RoleAccessUpdateData,
-
 	}));
+	const { commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
 
 	const location = { ...history.location }
 	const hasShowloction = location.hasOwnProperty(mode.editValue)
@@ -123,6 +124,25 @@ const PartyMaster = (props) => {
 		dispatch,
 		setUserAccState
 	}), [userAccess]);
+
+	useLayoutEffect(() => {
+
+		dispatch(getDistrictOnStateSuccess([]))//clear district privious options
+		dispatch(getCityOnDistrictSuccess([]))//clear City privious options
+		dispatch(commonPageFieldSuccess(null));//clear privious PageField
+		dispatch(priceListByPartyActionSuccess([]));//clear privious priceList
+		dispatch(commonPageField(page_id))
+		dispatch(getState());
+		dispatch(getPartyTypelist());
+		dispatch(getcompanyList());
+		dispatch(SSDD_List_under_Company())
+		if (!(subPageMode === url.RETAILER_MASTER)) {
+			dispatch(changeCommonPartyDropDetailsAction({ isShow: false }))//change party drop-down  hide
+		}
+		return () => {
+			dispatch(changeCommonPartyDropDetailsAction({ isShow: true }))//change party drop-down restore state
+		}
+	}, [])
 
 	useEffect(() => {
 		if (subPageMode === url.PARTY_SELF_EDIT) {
@@ -268,19 +288,6 @@ const PartyMaster = (props) => {
 		}
 
 	}, [editData]);
-
-	useLayoutEffect(() => {
-
-		dispatch(getDistrictOnStateSuccess([]))//clear district privious options
-		dispatch(getCityOnDistrictSuccess([]))//clear City privious options
-		dispatch(commonPageFieldSuccess(null));//clear privious PageField
-		dispatch(priceListByPartyActionSuccess([]));//clear privious priceList
-		dispatch(commonPageField(page_id))
-		dispatch(getState());
-		dispatch(getPartyTypelist());
-		dispatch(getcompanyList());
-		dispatch(SSDD_List_under_Company())
-	}, [])
 
 	useEffect(async () => {
 
@@ -431,7 +438,7 @@ const PartyMaster = (props) => {
 			const baseValue = baseTabDetail.values
 			let PartyDropCond = ((loginUserAdminRole()) && (subPageMode === url.RETAILER_MASTER))
 			const supplierArr = baseValue.Supplier.map((i) => ({
-				Party: PartyDropCond ? loginSelectedPartyID() : i.value,
+				Party: PartyDropCond ? commonPartyDropSelect.value : i.value,
 				Distance: i.value,
 				CreatedBy: loginUserID(),
 				UpdatedBy: loginUserID(),

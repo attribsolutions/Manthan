@@ -18,6 +18,7 @@ import { mode, url, pageId } from "../../routes/index"
 import DynamicColumnHook from "../../components/Common/TableCommonFunc";
 import { ExcelReportComponent } from "../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS";
 import { alertMessages } from "../../components/Common/CommonErrorMsg/alertMsg";
+import { changeCommonPartyDropDetailsAction } from '../../store/Utilites/PartyDrodown/action';
 
 const PurchaseGSTReport = (props) => {
 
@@ -79,7 +80,10 @@ const PurchaseGSTReport = (props) => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(pageId.PURCHASE_GST_REPORT));
         dispatch(BreadcrumbShowCountlabel(`Count:${0}`));
+        dispatch(changeCommonPartyDropDetailsAction({ isShow: false }))//change party drop-down  hide
+
         return () => {
+            dispatch(changeCommonPartyDropDetailsAction({ isShow: true }))//change party drop-down restore state
             dispatch(commonPageFieldSuccess(null));
             dispatch(postPurchaseGSTReport_API_Success([]));
         }
