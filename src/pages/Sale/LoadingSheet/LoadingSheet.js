@@ -2,9 +2,7 @@ import React, { useEffect, useState } from "react";
 import {
     Col,
     FormGroup,
-    Input,
     Label,
-    Modal,
     Row
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
@@ -20,7 +18,7 @@ import {
     resetFunction,
 } from "../../../components/Common/validationFunction";
 import Select from "react-select";
-import { C_Button, Change_Button, Go_Button, SaveButton } from "../../../components/Common/CommonButton";
+import { Change_Button, Go_Button, SaveButton } from "../../../components/Common/CommonButton";
 import * as pageId from "../../../routes//allPageID";
 import * as url from "../../../routes/route_url";
 import * as mode from "../../../routes/PageMode";
@@ -44,9 +42,10 @@ import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { GetRoutesListSuccess } from "../../../store/Administrator/RoutesRedux/actions";
 import { getVehicleListSuccess } from "../../../store/Administrator/VehicleRedux/action";
 import NewCommonPartyDropdown from "../../../components/Common/NewCommonPartyDropdown";
-import AddMaster from "../../Adminisrator/EmployeePages/Drodown";
-import DropdownMaster from "./dropdownOpen";
 import DriverMaster from "../../Adminisrator/DriverPage/DriverMaster";
+import RoutesMaster from "../../Adminisrator/RoutesPages/RoutesMaster";
+import VehicleMaster from "../../Adminisrator/VehiclePages/VehicleMaster";
+import DropdownMaster from "../../../components/Common/DropdownMaster";
 
 const LoadingSheet = (props) => {
 
@@ -56,6 +55,11 @@ const LoadingSheet = (props) => {
 
     const [pageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState('');
+
+    const [dropDownMasterIsOpen, setDropDownMasterIsOpen] = useState(null);
+    const [driverMasterAccess, setDriverMasterAccess] = useState(false);
+    const [vehicleMasterAccess, setVehicleMasterAccess] = useState(false);
+    const [routeMasterAccess, setRouteMasterAccess] = useState(false);
 
     const fileds = {
         id: "",
@@ -68,7 +72,6 @@ const LoadingSheet = (props) => {
     }
 
     const [state, setState] = useState(initialFiledFunc(fileds))
-    const [modal_scroll, setmodal_scroll] = useState(false);
 
     const {
         postMsg,
@@ -157,6 +160,19 @@ const LoadingSheet = (props) => {
             setUserAccState(userAcc)
             _cfunc.breadcrumbReturnFunc({ dispatch, userAcc });
         };
+        userAccess.forEach((index) => {
+            if (index.id === pageId.DRIVER) {
+                return setDriverMasterAccess(true)
+            }
+            if (index.id === pageId.VEHICLE) {
+
+                return setVehicleMasterAccess(true)
+            }
+            if (index.id === pageId.ROUTES) {
+                return setRouteMasterAccess(true)
+            }
+        });
+
     }, [userAccess])
 
     useEffect(async () => {
@@ -341,9 +357,19 @@ const LoadingSheet = (props) => {
         })
     }
 
-    const NavigateHandler = () => {
-        setmodal_scroll(true);
+    const handleLabelClick = ({ showModal = false, masterModal, masterPath }) => {
+        setDropDownMasterIsOpen({ show: showModal, masterModal: masterModal, masterPath: masterPath })
     };
+
+    const dropdownLabelFunc = ({ IsAccess, masterModal, masterPath, label }) => {
+        return <Label
+            className={`col-sm-1 p-2 ${IsAccess ? 'c_labelHover' : 'text-black'}`}
+            onClick={() => handleLabelClick({ showModal: IsAccess, masterModal, masterPath })}
+            style={{ width: "115px", marginRight: "0.4cm" }}
+        >
+            {label}
+        </Label>
+    }
 
     if (!(userPageAccessState === '')) {
         return (
@@ -354,10 +380,10 @@ const LoadingSheet = (props) => {
                     <NewCommonPartyDropdown pageMode={pageMode} />
 
                     <DropdownMaster
-                        modal_scroll={modal_scroll}
-                        setmodal_scroll={setmodal_scroll}
-                        masterModal={DriverMaster}
-                        masterPath={url.DRIVER}
+                        modalShow={dropDownMasterIsOpen?.show}
+                        setModalShow={(e) => { setDropDownMasterIsOpen(null) }}
+                        masterModal={dropDownMasterIsOpen?.masterModal}
+                        masterPath={dropDownMasterIsOpen?.masterPath}
                     />
 
                     <form noValidate>
@@ -385,16 +411,20 @@ const LoadingSheet = (props) => {
                                     </FormGroup>
                                 </Col >
 
-                                <Col sm="6" onClick={NavigateHandler} className="labelHover">
+                                <Col sm="6">
                                     <FormGroup className=" row mt-2 " >
-                                        <Label className="col-sm-1 p-2"
-                                            style={{ width: "115px", marginRight: "0.4cm" }}> {fieldLabel.DriverName}</Label>
+                                        {dropdownLabelFunc({         // Label Show Function
+                                            IsAccess: driverMasterAccess,
+                                            masterModal: DriverMaster,
+                                            masterPath: url.DRIVER,
+                                            label: fieldLabel.DriverName
+                                        })}
                                         <Col sm="7">
                                             <Select
                                                 name="DriverName"
                                                 value={values.DriverName}
                                                 isSearchable={true}
-                                                className="react-dropdown "
+                                                className="react-dropdown"
                                                 classNamePrefix="dropdown"
                                                 styles={{
                                                     menu: provided => ({ ...provided, zIndex: 2 })
@@ -408,17 +438,6 @@ const LoadingSheet = (props) => {
                                             {isError.DriverName.length > 0 && (
                                                 <span className="text-danger f-8"><small>{isError.DriverName}</small></span>
                                             )}
-
-                                        </Col>
-                                        <Col sm="1" className="mx-6 mt-n2">
-                                            {
-                                                <AddMaster
-                                                // masterModal={EmployeeTypesMaster}
-                                                // masterPath={url.EMPLOYEETYPE}
-                                                />
-
-                                            }
-
                                         </Col>
                                     </FormGroup>
                                 </Col >
@@ -459,39 +478,15 @@ const LoadingSheet = (props) => {
                             </div>
 
                             <div className="row ">
-                                {/* <Col sm="6">
-                                    <FormGroup className=" row mt-2" >
-                                        <Label className="col-sm-1 p-2"
-                                            style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.RouteName} </Label>
-                                        <Col sm="7">
-                                            <Select
-                                                name="RouteName"
-                                                value={values.RouteName}
-                                                isSearchable={true}
-                                                isMulti={true}
-                                                isDisabled={Data.length > 0 && true}
-                                                className="react-dropdown"
-                                                classNamePrefix="dropdown"
-                                                styles={{
-                                                    menu: provided => ({ ...provided, zIndex: 2 })
-                                                }}
-                                                options={RouteName_Options}
-                                                onChange={(hasSelect, evn) => {
-                                                    onChangeSelect({ hasSelect, evn, state, setState });
-                                                }
-                                                }
-                                            />
-
-                                        </Col>
-
-                                    </FormGroup>
-                                </Col > */}
-
-
                                 <Col sm="6">
-                                    <FormGroup className=" row mt-2 " >
-                                        <Label className="col-sm-1 p-2"
-                                            style={{ width: "115px", marginRight: "0.4cm" }}> {fieldLabel.RouteName}</Label>
+                                    <FormGroup className=" row mt-2" >
+                                        {dropdownLabelFunc({         // Label Show Function
+                                            IsAccess: routeMasterAccess,
+                                            masterModal: RoutesMaster,
+                                            masterPath: url.ROUTES,
+                                            label: fieldLabel.RouteName
+                                        })}
+
                                         <Col sm="7">
                                             <Select
                                                 name="RouteName"
@@ -510,73 +505,20 @@ const LoadingSheet = (props) => {
                                                 }
                                                 }
                                             />
-                                        </Col>
-                                        <Col sm="1" className="mx-6 mt-n2">
-                                            {
-                                                <AddMaster
-                                                // masterModal={EmployeeTypesMaster}
-                                                // masterPath={url.EMPLOYEETYPE}
-                                                />
-
-                                            }
 
                                         </Col>
+
                                     </FormGroup>
                                 </Col >
 
-
-                                <Row>
-                                    <Col sm="6">
-                                        <FormGroup className=" row mt-2 " >
-                                            <Label className="col-sm-1 p-2"
-                                                style={{ width: "115px", marginRight: "0.4cm" }}> {fieldLabel.RouteName}</Label>
-                                            <Col sm="7">
-                                                <Select
-                                                    name="VehicleNumber"
-                                                    value={values.VehicleNumber}
-                                                    isSearchable={true}
-                                                    className="react-dropdown"
-                                                    classNamePrefix="dropdown"
-                                                    styles={{
-                                                        menu: provided => ({ ...provided, zIndex: 2 })
-                                                    }}
-                                                    options={VehicleNumber_Options}
-                                                    onChange={(hasSelect, evn) => {
-                                                        onChangeSelect({ hasSelect, evn, state, setState });
-                                                    }
-                                                    }
-                                                />
-                                                {isError.VehicleNumber.length > 0 && (
-                                                    <span className="text-danger f-8"><small>{isError.VehicleNumber}</small></span>
-                                                )}
-                                            </Col>
-                                            <Col sm="1" className="mx-6 mt-n2">
-                                                {
-                                                    <AddMaster
-                                                    // masterModal={EmployeeTypesMaster}
-                                                    // masterPath={url.EMPLOYEETYPE}
-                                                    />
-                                                }
-
-                                            </Col>
-                                            <Col sm="1" className="mx-4 ">
-                                                {!Data.length > 0 ?
-                                                    < Go_Button loading={goBtnloadingSpinner} onClick={(e) => goButtonHandler()} />
-                                                    : <Change_Button
-                                                        onClick={(e) => onChangeBtnHandler()}
-                                                    />
-                                                }
-
-
-                                            </Col>
-                                        </FormGroup>
-                                    </Col >
-                                </Row>
-
-                                {/* <Col sm="6">
+                                <Col sm="6">
                                     <FormGroup className=" row mt-2" >
-                                        <Label className="col-sm-1 p-2"
-                                            style={{ width: "115px", marginRight: "0.4cm" }}> {fieldLabel.VehicleNumber}</Label>
+                                        {dropdownLabelFunc({         // Label Show Function
+                                            IsAccess: vehicleMasterAccess,
+                                            masterModal: VehicleMaster,
+                                            masterPath: url.VEHICLE,
+                                            label: fieldLabel.VehicleNumber
+                                        })}
                                         <Col sm="7">
                                             <Select
                                                 name="VehicleNumber"
@@ -608,7 +550,7 @@ const LoadingSheet = (props) => {
 
                                         </Col>
                                     </FormGroup>
-                                </Col > */}
+                                </Col >
                             </div>
                         </div>
 

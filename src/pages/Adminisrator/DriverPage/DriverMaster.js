@@ -89,11 +89,17 @@ const DriverMaster = (props) => {
     const { isError } = state;
     const { fieldLabel } = state;
 
-    // userAccess useEffect
-    useEffect(() => {
+       // userAccess useEffect
+       useEffect(() => {
 
         let userAcc = null;
-        let locationPath = location.pathname;
+        let locationPath;
+
+        if (props.pageMode === mode.dropdownAdd) {
+            locationPath = props.masterPath;
+        } else {
+            locationPath = location.pathname;
+        }
 
         if (hasShowModal) {
             locationPath = props.masterPath;
@@ -104,8 +110,10 @@ const DriverMaster = (props) => {
         })
 
         if (userAcc) {
-            setUserAccState(userAcc)
-            _cfunc.breadcrumbReturnFunc({ dispatch, userAcc });
+            setUserAccState(userAcc);
+            if (!props.isdropdown) {
+               _cfunc.breadcrumbReturnFunc({ dispatch, userAcc });
+            }
         };
     }, [userAccess])
 
@@ -160,7 +168,11 @@ const DriverMaster = (props) => {
                     Message: postMsg.Message,
                 })
 
-                dispatch(getDriverList())
+                const jsonBody = {
+                    ..._cfunc.loginJsonBody(),
+                    PartyID: _cfunc.loginSelectedPartyID()
+                  };
+                  dispatch(getDriverList(jsonBody));
 
                 props.isOpenModal(false)
             }

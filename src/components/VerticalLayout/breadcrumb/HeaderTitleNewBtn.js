@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { edit_PageListID_Action, edit_PageListID_Success } from "../../../store/actions";
 import { url } from "../../../routes";
-import { loginRoleID } from "../../Common/CommonFunction";
+import { loginUserName } from "../../Common/CommonFunction";
 import { useState } from "react";
 
 const HeaderTitleNewBtn = ({
@@ -14,7 +14,8 @@ const HeaderTitleNewBtn = ({
 
     const dispatch = useDispatch();
     const history = useHistory();
-    const roleId = loginRoleID();
+    const userName = loginUserName();
+
     const [listPagePath, setListPagePath] = useState("");
     const [relatedPageId, setRelatedPageId] = useState(0);
     const {
@@ -29,7 +30,6 @@ const HeaderTitleNewBtn = ({
         ...BreadcrumbReducer.breadcrumbDetail,
         editData: H_Pages.editData,
     }));
-    debugger
 
     useEffect(() => {
 
@@ -43,6 +43,7 @@ const HeaderTitleNewBtn = ({
             setListPagePath(userAcc.ActualPagePath)
         }
     }, [userAcc]);
+
     useEffect(() => {
 
         if (editData.Status === true) {
@@ -64,10 +65,11 @@ const HeaderTitleNewBtn = ({
     }
 
     function NavigateHandler() {
-        if (roleId === 13) {
+        if (userName === "Attrib") {
             dispatch(edit_PageListID_Action({ editId: relatedPageId, }))
         }
     }
+
     if (newBtnView) {
         return (
             <div>
@@ -82,7 +84,10 @@ const HeaderTitleNewBtn = ({
                 >
                     New
                 </button>
-                <label onClick={NavigateHandler} className="font-size-16 form-label " style={{ color: hederTextColor, paddingLeft: "7px" }}>
+                <label
+                    onClick={NavigateHandler}
+                    className={userName === "Attrib" ? "font-size-18 col-ls-6 col-form-label labelHover" : "font-size-18 col-ls-6 col-form-label text-black"}
+                    style={{ paddingLeft: "7px", cursor: userName === "Attrib" ? 'pointer' : 'default', }}>
                     {pageHeading}
                 </label>
             </div>
@@ -90,7 +95,8 @@ const HeaderTitleNewBtn = ({
     } else {
         return (
             <div onClick={NavigateHandler}>
-                <label className="font-size-16 col-ls-6 col-form-label" style={{ color: hederTextColor, marginLeft: "6px" }}>
+                <label className={userName === "Attrib" ? "font-size-18 col-ls-6 col-form-label labelHover" : "font-size-18 col-ls-6 col-form-label text-black"}
+                    style={{ marginLeft: "6px", cursor: userName === "Attrib" ? 'pointer' : 'default', }}>
                     {pageHeading}
                 </label>
                 {bredcrumbItemName.length > 0 && (

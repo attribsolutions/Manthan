@@ -22,6 +22,7 @@ import {
     updateRoutesID,
     GetRoutesListSuccess,
     updateRoutesIDSuccess,
+    GetRoutesList,
 } from "../../../store/Administrator/RoutesRedux/actions";
 import {
     comAddPageFieldFunc,
@@ -104,8 +105,15 @@ const RoutesMaster = (props) => {
 
     // userAccess useEffect
     useEffect(() => {
+
         let userAcc = null;
-        let locationPath = location.pathname;
+        let locationPath;
+
+        if (props.pageMode === mode.dropdownAdd) {
+            locationPath = props.masterPath;
+        } else {
+            locationPath = location.pathname;
+        }
 
         if (hasShowModal) {
             locationPath = props.masterPath;
@@ -116,8 +124,10 @@ const RoutesMaster = (props) => {
         })
 
         if (userAcc) {
-            setUserAccState(userAcc)
-            breadcrumbReturnFunc({ dispatch, userAcc });
+            setUserAccState(userAcc);
+            if (!props.isdropdown) {
+                breadcrumbReturnFunc({ dispatch, userAcc });
+            }
         };
     }, [userAccess])
 
@@ -179,11 +189,20 @@ const RoutesMaster = (props) => {
             dispatch(SaveRoutesMasterSuccess({ Status: false }))
             setState(() => resetFunction(fileds, state)) // Clear form values 
             dispatch(Breadcrumb_inputName(''))
-            if (pageMode === "other") {
+            if (props.pageMode === mode.dropdownAdd) {
                 customAlert({
                     Type: 1,
                     Message: postMsg.Message,
                 })
+
+                const jsonBody = JSON.stringify({
+                    CompanyID: loginCompanyID(),
+                    PartyID: commonPartyDropSelect.value,
+                });
+
+                dispatch(GetRoutesList(jsonBody));
+
+                props.isOpenModal(false)
             }
 
             else {

@@ -25,7 +25,8 @@ import {
     getVehicleListSuccess,
     editVehicleID_Success,
     updateVehicleID,
-    updateVehicleID_Success
+    updateVehicleID_Success,
+    getVehicleList
 } from "../../../store/Administrator/VehicleRedux/action";
 import { useHistory } from "react-router-dom";
 import {
@@ -46,6 +47,7 @@ import {
     metaTagLabel,
     loginUserAdminRole,
     loginSelectedPartyID,
+    loginJsonBody,
 } from "../../../components/Common/CommonFunction";
 // import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 import * as pageId from "../../../routes/allPageID";
@@ -94,8 +96,6 @@ const VehicleMaster = (props) => {
 
     const { commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
 
-
-
     useEffect(() => {
         const page_Id = pageId.VEHICLE
         dispatch(commonPageFieldSuccess(null));
@@ -113,8 +113,15 @@ const VehicleMaster = (props) => {
 
     // userAccess useEffect
     useEffect(() => {
+
         let userAcc = null;
-        let locationPath = location.pathname;
+        let locationPath;
+
+        if (props.pageMode === mode.dropdownAdd) {
+            locationPath = props.masterPath;
+        } else {
+            locationPath = location.pathname;
+        }
 
         if (hasShowModal) {
             locationPath = props.masterPath;
@@ -125,8 +132,10 @@ const VehicleMaster = (props) => {
         })
 
         if (userAcc) {
-            setUserAccState(userAcc)
-            breadcrumbReturnFunc({ dispatch, userAcc });
+            setUserAccState(userAcc);
+            if (!props.isdropdown) {
+                breadcrumbReturnFunc({ dispatch, userAcc });
+            }
         };
     }, [userAccess])
 
@@ -175,11 +184,19 @@ const VehicleMaster = (props) => {
             setState(() => resetFunction(fileds, state))// Clear form values  
             dispatch(Breadcrumb_inputName(''))
 
-            if (pageMode === mode.dropdownAdd) {
+            if (props.pageMode === mode.dropdownAdd) {
                 customAlert({
                     Type: 1,
                     Message: postMsg.Message,
                 })
+                const jsonBody = {
+                    ...loginJsonBody(),
+                    PartyID: commonPartyDropSelect.value
+                  };
+            
+                  dispatch(getVehicleList(jsonBody));
+
+                props.isOpenModal(false)
             }
             else {
                 let isPermission = await customAlert({

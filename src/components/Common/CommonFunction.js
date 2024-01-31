@@ -270,6 +270,16 @@ export const loginUserID = () => {//++++++++++++++++++++++ Session User Id++++++
   return created_By;
 };
 
+export const loginUserName = () => {//++++++++++++++++++++++ Session User Id+++++++++++++++++++++++++++++
+  let userName = "";
+  try {
+    userName = localStorage.getItem("UserName");
+  } catch (e) {
+    CommonConsole("Common UserName Error");
+  }
+  return userName;
+};
+
 export const loginCompanyID = () => { //+++++++++++++++++++++ Session Company Id+++++++++++++++++++++++++++++
   try {
     return JSON.parse(localStorage.getItem("Company"));
