@@ -16,7 +16,6 @@ import ClaimSummaryMaster from "./ClaimSummaryMaster";
 import { initialFiledFunc } from "../../components/Common/validationFunction";
 import { ClaimSummary_API, MasterClaimSummary_API } from "../../helpers/backend_helper";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
-// import PartyDropdown_Common from "../../components/Common/PartyDropdown";
 
 const SelectedMonth = () => _cfunc.getPreviousMonthAndYear(new Date())
 const FirstAndLastDate = () => _cfunc.getFirstAndLastDateOfMonth(SelectedMonth());
@@ -196,9 +195,6 @@ const ClaimSummaryList = () => {
         <React.Fragment>
             <PageLoadingSpinner isLoading={reducers.loading || !pageField} />
             <div className="page-content">
-
-                {/* <PartyDropdown_Common pageMode={pageMode}
-                    changeButtonHandler={partySelectOnChangeHandler} /> */}
 
                 <div className="px-2   c_card_filter text-black" >
                     <div className="row" >

@@ -39,7 +39,6 @@ import {
 import { makeInward } from "../../../store/Inter Branch/InwardRedux/action";
 import { C_DatePicker, C_Select } from "../../../CustomValidateForm";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
-// import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 import { getVehicleList } from "../../../store/Administrator/VehicleRedux/action";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 
@@ -562,9 +561,7 @@ const InvoiceList = () => {
         <React.Fragment>
             <PageLoadingSpinner isLoading={reducers.listBtnLoading || !pageField || supplierDropLoading} />
             <div className="page-content">
-                {/* <PartyDropdown_Common pageMode={pageMode}
-                    goButtonHandler={partySelectButtonHandler}
-                    changeButtonHandler={partySelectOnChangeHandler} /> */}
+              
                 {
                     (pageField) ?
                         <CommonPurchaseList

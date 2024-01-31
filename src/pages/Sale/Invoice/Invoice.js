@@ -55,7 +55,6 @@ import { getVehicleList, getVehicleListSuccess } from "../../../store/Administra
 import { Invoice_Singel_Get_for_Report_Api } from "../../../helpers/backend_helper";
 import * as report from '../../../Reports/ReportIndex'
 import CustomTable from "../../../CustomTable2";
-import NewCommonPartyDropdown from "../../../components/Common/NewCommonPartyDropdown";
 
 const Invoice = (props) => {
 
@@ -100,7 +99,6 @@ const Invoice = (props) => {
         vendorSupplierCustomer,
         makeIBInvoice,
         VehicleNumber,
-        goBtnloading,
         editData,
         saveBtnloading,
         saveAndPdfBtnLoading,
@@ -117,7 +115,6 @@ const Invoice = (props) => {
         VehicleNumber: state.VehicleReducer.VehicleList,
         makeIBInvoice: state.InvoiceReducer.makeIBInvoice,
         saveBtnloading: state.InvoiceReducer.saveBtnloading,
-        goBtnloading: state.InvoiceReducer.goBtnloading,
         saveAndPdfBtnLoading: state.InvoiceReducer.saveAndPdfBtnLoading,
         commonPartyDropSelect: state.CommonPartyDropdownReducer.commonPartyDropSelect
     }));
@@ -655,20 +652,7 @@ const Invoice = (props) => {
         })
     };
 
-    function goButtonHandler(makeIBInvoice) {
-        const btnId = goBtnId;
-
-        const jsonBody = JSON.stringify({
-            FromDate: values.InvoiceDate,
-            Customer: makeIBInvoice ? makeIBInvoice.customer.value : values.Customer.value,
-            Party: commonPartyDropSelect.value,
-            OrderIDs: ""
-        });
-        dispatch(GoButtonForinvoiceAdd({ subPageMode, jsonBody, btnId }));
-
-
-    };
-
+   
     const SaveHandler = async (event) => {
 
         event.preventDefault();
@@ -830,7 +814,7 @@ const Invoice = (props) => {
                 <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
 
                 <div className="page-content" >
-                    <NewCommonPartyDropdown pageMode={pageMode} />
+
                     <form noValidate>
                         <Col className="px-2 mb-1 c_card_filter header text-black" sm={12}>
 

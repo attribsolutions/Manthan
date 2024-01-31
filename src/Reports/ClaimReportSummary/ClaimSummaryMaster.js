@@ -16,7 +16,6 @@ import { claimList_API, claimList_API_Success, deleteClaimSuccess, postClaimMast
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
-// import PartyDropdown_Common from "../../components/Common/PartyDropdown";
 
 const createClaimBtnCss = "badge badge-soft-success font-size-18 btn btn-success waves-effect waves-light w-xxs border border-light"
 const deltBtnCss = "badge badge-soft-danger font-size-18 btn btn-danger waves-effect waves-light w-xxs border border-light"
@@ -262,9 +261,6 @@ const ClaimSummaryMaster = (props) => {
         <React.Fragment>
             <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
             <div className="page-content">
-
-                {/* <PartyDropdown_Common
-                    changeButtonHandler={partySelectOnChangeHandler} /> */}
 
                 <div className="px-2   c_card_filter text-black" >
                     <div className="row" >

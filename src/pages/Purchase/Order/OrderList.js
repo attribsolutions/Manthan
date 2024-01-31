@@ -20,7 +20,6 @@ import { orderApprovalFunc, orderApprovalMessage } from "./orderApproval";
 import { priceListByCompay_Action, priceListByCompay_ActionSuccess } from "../../../store/Administrator/PriceList/action";
 import OrderView from "./OrderView";
 import OrderView_Modal from "./OrderView";
-// import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 import { getOrdersMakeInvoiceDataAction, getOrdersMakeInvoiceDataActionSuccess } from "../../../store/Sales/bulkInvoice/action";
 
@@ -779,9 +778,6 @@ const OrderList = () => {
             <PageLoadingSpinner isLoading={reducers.goBtnloading || !pageField} />
 
             <div className="page-content">
-                {/* <PartyDropdown_Common pageMode={pageMode}
-                    goButtonHandler={partySelectButtonHandler}
-                    changeButtonHandler={partyOnChngeButtonHandler} /> */}
                 {
                     (pageField) ?
                         <CommonPurchaseList
