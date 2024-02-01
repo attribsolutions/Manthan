@@ -224,154 +224,153 @@ const userRoutes = [
 	// *************************** DashBord *******************************//
 
 
-	{ path: path.DASHBORD_1, component: Dashboard_1 },
-	{ path: path.DASHBORD_2, component: Dashboard_Admin },
+	{ path: path.DASHBORD_1, component: Dashboard_1, isPartyWisePage: true },
+	{ path: path.DASHBORD_2, component: Dashboard_Admin, isPartyWisePage: true },
 
 	// *************************** Administration *******************************//
-	{ path: path.MODULE, component: Modules },
-	{ path: path.MODULE_lIST, component: ModulesList },
+	{ path: path.MODULE, component: Modules },//not party wise
+	{ path: path.MODULE_lIST, component: ModulesList },//not party wise
 
-	{ path: path.COMPANY, component: CompanyModule },
-	{ path: path.COMPANY_lIST, component: CompanyList },
+	{ path: path.COMPANY, component: CompanyModule },//not party wise
+	{ path: path.COMPANY_lIST, component: CompanyList },//not party wise
 
-	{ path: path.PAGE_lIST, component: PageList },
-	{ path: path.PAGE, component: PageMaster },
+	{ path: path.PAGE_lIST, component: PageList },//not party wise
+	{ path: path.PAGE, component: PageMaster },//not party wise
 
-	{ path: path.USER, component: AddUser },
-	{ path: path.USER_lIST, component: UserList },
+	{ path: path.USER, component: AddUser },//not party wise
+	{ path: path.USER_lIST, component: UserList },//not party wise
 
-	{ path: path.ROLEACCESS, component: RoleAccessAdd },
-	{ path: path.ROLEACCESS_lIST, component: RoleAccessListPage },
-	{ path: path.COPY_ROLEACCESS, component: RoleAccessCopyFunctionality },
+	{ path: path.ROLEACCESS, component: RoleAccessAdd },//not party wise
+	{ path: path.ROLEACCESS_lIST, component: RoleAccessListPage },//not party wise
+	{ path: path.COPY_ROLEACCESS, component: RoleAccessCopyFunctionality },//not party wise
 
-	{ path: path.ROLE, component: RoleMaster },
-	{ path: path.ROLE_lIST, component: RoleList },
+	{ path: path.ROLE, component: RoleMaster },//not party wise
+	{ path: path.ROLE_lIST, component: RoleList },//not party wise
 
-	{ path: path.COMPANYGROUP, component: CompanyGroupMaster },
-	{ path: path.COMPANYGROUP_lIST, component: CompanyGroupList },
+	{ path: path.COMPANYGROUP, component: CompanyGroupMaster },//not party wise
+	{ path: path.COMPANYGROUP_lIST, component: CompanyGroupList },//not party wise
 
 	// ******************************* Master Module ******************************//
 
-	{ path: path.EMPLOYEE, component: AddEmployee },
-	{ path: path.EMPLOYEE_lIST, component: Employee_List },
+	{ path: path.EMPLOYEE, component: AddEmployee, },//not party wise
+	{ path: path.EMPLOYEE_lIST, component: Employee_List },//not party wise
 
-	{ path: path.ITEM, component: ItemsMaster },
-	{ path: path.ITEM_lIST, component: ItemsList },
+	{ path: path.ITEM, component: ItemsMaster },//not party wise
+	{ path: path.ITEM_lIST, component: ItemsList },//not party wise
 
-	{ path: path.PARTY_lIST, component: PartyList },
-	{ path: path.PARTY, component: PartyMaster },
+	{ path: path.PARTY_lIST, component: PartyList },//not party wise
+	{ path: path.PARTY, component: PartyMaster },//not party wise
 
-	{ path: path.RETAILER_LIST, component: PartyList },
-	{ path: path.RETAILER_MASTER, component: PartyMaster },
+	{ path: path.RETAILER_LIST, component: PartyList, isPartyWisePage: true },
+	{ path: path.RETAILER_MASTER, component: PartyMaster, isPartyWisePage: true },
 
-	{ path: path.NON_RETAILER_PARTY_lIST, component: PartyList },
-	{ path: path.NON_RETAILER_PARTY, component: PartyMaster },
+	{ path: path.NON_RETAILER_PARTY_lIST, component: PartyList, isPartyWisePage: true },
+	{ path: path.NON_RETAILER_PARTY, component: PartyMaster, isPartyWisePage: true },
 
-	{ path: path.PARTY_SELF_EDIT, component: PartyMaster },
+	{ path: path.PARTY_SELF_EDIT, component: PartyMaster },//not party wise
 
-	{ path: path.EMPLOYEETYPE, component: EmployeeTypesMaster },
-	{ path: path.EMPLOYEETYPE_lIST, component: EmployeeTypeList },
+	{ path: path.EMPLOYEETYPE, component: EmployeeTypesMaster },//not party wise
+	{ path: path.EMPLOYEETYPE_lIST, component: EmployeeTypeList },//not party wise
 
-	{ path: path.PARTYTYPE, component: PartyType },
-	{ path: path.PARTYTYPE_lIST, component: PartyTypeList },
+	{ path: path.PARTYTYPE, component: PartyType },//not party wise
+	{ path: path.PARTYTYPE_lIST, component: PartyTypeList },//not party wise
 
-	{ path: path.CATEGORYTYPE, component: CategoryTypeMaster },
-	{ path: path.CATEGORYTYPE_lIST, component: CategoryTypeList },
+	{ path: path.CATEGORYTYPE, component: CategoryTypeMaster },//not party wise
+	{ path: path.CATEGORYTYPE_lIST, component: CategoryTypeList },//not party wise
 
-	{ path: path.CATEGORY, component: CategoryMaster },
-	{ path: path.CATEGORY_lIST, component: CategoryList },
+	{ path: path.CATEGORY, component: CategoryMaster },//not party wise
+	{ path: path.CATEGORY_lIST, component: CategoryList },//not party wise
 
-	{ path: path.VEHICLE, component: VehicleMaster },
-	{ path: path.VEHICLE_lIST, component: VehicleList },
+	{ path: path.VEHICLE, component: VehicleMaster, isPartyWisePage: true },
+	{ path: path.VEHICLE_lIST, component: VehicleList, isPartyWisePage: true },
 
-	{ path: path.DRIVER, component: DriverMaster },
-	{ path: path.DRIVER_lIST, component: DriverList },
+	{ path: path.DRIVER, component: DriverMaster, isPartyWisePage: true },
+	{ path: path.DRIVER_lIST, component: DriverList, isPartyWisePage: true },
 
-	{ path: path.GROUPTYPE, component: GroupTypeMaster },
-	{ path: path.GROUPTYPE_lIST, component: GroupTypeList },
+	{ path: path.GROUPTYPE, component: GroupTypeMaster },//not party wise
+	{ path: path.GROUPTYPE_lIST, component: GroupTypeList },//not party wise
 
-	{ path: path.TERMS_AND_CONDITION, component: TermsAndConditionsMaster },
-	{ path: path.TERMS_AND_CONDITION_LIST, component: TermsAndConditionsList },
+	{ path: path.TERMS_AND_CONDITION, component: TermsAndConditionsMaster },//not party wise
+	{ path: path.TERMS_AND_CONDITION_LIST, component: TermsAndConditionsList },//not party wise
 
-	{ path: path.PRICE_lIST, component: PriceList },
-	{ path: path.PRICE, component: PriceMaster },
+	{ path: path.PRICE_lIST, component: PriceList },//not party wise
+	{ path: path.PRICE, component: PriceMaster },//not party wise
 
-	{ path: path.MRP, component: MRPMaster },
-	{ path: path.MRP_lIST, component: MRPList },
+	{ path: path.MRP, component: MRPMaster },//not party wise
+	{ path: path.MRP_lIST, component: MRPList },//not party wise
 
-	{ path: path.MARGIN, component: MarginMaster },
-	{ path: path.MARGIN_lIST, component: MarginList },
+	{ path: path.MARGIN, component: MarginMaster },//not party wise
+	{ path: path.MARGIN_lIST, component: MarginList },//not party wise
 
-	{ path: path.GROUP, component: GroupMaster },
-	{ path: path.GROUP_lIST, component: GroupList },
+	{ path: path.GROUP, component: GroupMaster },//not party wise
+	{ path: path.GROUP_lIST, component: GroupList },//not party wise
 
-	{ path: path.GST, component: GSTMaster },
-	{ path: path.GST_LIST, component: GSTList },
+	{ path: path.GST, component: GSTMaster },//not party wise
+	{ path: path.GST_LIST, component: GSTList },//not party wise
 
-	{ path: path.PARTY_SUB_PARTY, component: PartySubParty },
-	{ path: path.PARTY_SUB_PARTY_lIST, component: PartySubPartyList },
+	{ path: path.PARTY_SUB_PARTY, component: PartySubParty },// use self party drop-down
+	{ path: path.PARTY_SUB_PARTY_lIST, component: PartySubPartyList },//not party wise
 
-	{ path: path.PARTYITEM, component: PartyItems },
-	{ path: path.CHANNEL_ITEM, component: PartyItems },
+	{ path: path.PARTYITEM, component: PartyItems, isPartyWisePage: true },
+	{ path: path.CHANNEL_ITEM, component: PartyItems },//not party wise
 
-	{ path: path.SUBGROUP, component: SubGroupMaster },
-	{ path: path.SUBGROUP_LIST, component: SubGroupList },
+	{ path: path.SUBGROUP, component: SubGroupMaster },//not party wise
+	{ path: path.SUBGROUP_LIST, component: SubGroupList },//not party wise
 
-	{ path: path.GENERAL, component: GeneralMaster },
-	{ path: path.GENERAL_LIST, component: GeneralList },
+	{ path: path.GENERAL, component: GeneralMaster },//not party wise
+	{ path: path.GENERAL_LIST, component: GeneralList },//not party wise
 
-	{ path: path.ROUTES, component: RoutesMaster },
-	{ path: path.ROUTES_LIST, component: RoutesList },
+	{ path: path.ROUTES, component: RoutesMaster, isPartyWisePage: true },
+	{ path: path.ROUTES_LIST, component: RoutesList, isPartyWisePage: true },
+	{ path: path.ROUTE_UPDATE, component: RouteUpdate },//not party wise
 
-	{ path: path.SALESMAN, component: SalesManMaster },
-	{ path: path.SALESMAN_LIST, component: SalesManList },
+	{ path: path.SALESMAN, component: SalesManMaster, isPartyWisePage: true },
+	{ path: path.SALESMAN_LIST, component: SalesManList, isPartyWisePage: true },
 
-	{ path: path.CITY, component: CityMaster },
-	{ path: path.CITY_LIST, component: CityList },
+	{ path: path.CITY, component: CityMaster },//not party wise
+	{ path: path.CITY_LIST, component: CityList },//not party wise
 
-	{ path: path.INVOICE_EXCEL_UPLOAD, component: InvoiceExcelUpload },
-	{ path: path.RETAILER_EXCEL_UPLOAD, component: RetailerExcelUpload },
+	{ path: path.INVOICE_EXCEL_UPLOAD, component: InvoiceExcelUpload, isPartyWisePage: true },
+	{ path: path.RETAILER_EXCEL_UPLOAD, component: RetailerExcelUpload, isPartyWisePage: true },
 
-	{ path: path.IMPORT_EXCEL_FIELD_MAP, component: ImportExcelFieldMap },
-	{ path: path.IMPORT_FIELD_ADD, component: ImportFieldAdd },
-	{ path: path.IMPORT_FIELD_ADD_LIST, component: ImportFieldAddList },
+	{ path: path.IMPORT_EXCEL_FIELD_MAP, component: ImportExcelFieldMap, isPartyWisePage: true },
+	{ path: path.IMPORT_FIELD_ADD, component: ImportFieldAdd, isPartyWisePage: true },
+	{ path: path.IMPORT_FIELD_ADD_LIST, component: ImportFieldAddList, isPartyWisePage: true },
 
-	{ path: path.IMPORT_EXCEL_PARTY_MAP, component: ImportExcelPartyMap },
+	{ path: path.IMPORT_EXCEL_PARTY_MAP, component: ImportExcelPartyMap, isPartyWisePage: true },
 
-	{ path: path.ROUTE_UPDATE, component: RouteUpdate },
+	{ path: path.PARTY_MASTER_BULK_UPDATE, component: PartyMasterBulkUpdate, isPartyWisePage: true },
 
-	{ path: path.PARTY_MASTER_BULK_UPDATE, component: PartyMasterBulkUpdate },
+	{ path: path.MANAGEMENT_PARTIES, component: ManagementEmpParties },//not party wise
 
-	{ path: path.MANAGEMENT_PARTIES, component: ManagementEmpParties },
+	{ path: path.BANK, component: BankMaster },//not party wise
+	{ path: path.BANK_LIST, component: BankList },//not party wise
 
-	{ path: path.BANK, component: BankMaster },
-	{ path: path.BANK_LIST, component: BankList },
+	{ path: path.INVOICE_CONFIGURATION, component: InvoiceConfiguration, isPartyWisePage: true },
 
-	{ path: path.INVOICE_CONFIGURATION, component: InvoiceConfiguration },
-
-	{ path: path.DISCOUNT_MASTER, component: DiscountMaster },
-	{ path: path.DISCOUNT_LIST, component: DiscountList },
+	{ path: path.DISCOUNT_MASTER, component: DiscountMaster, isPartyWisePage: true },
+	{ path: path.DISCOUNT_LIST, component: DiscountList, isPartyWisePage: true },
 
 	{ path: path.RETAILER_APPROVAL, component: RetailerApprovalList },
 
-	{ path: path.MOBILE_RETAILER_SEND, component: MobailRetailersSend },
+	{ path: path.MOBILE_RETAILER_SEND, component: MobailRetailersSend },// use self party drop-down
 
-	{ path: path.CLUSTER_MASTER, component: ClusterMaster },
-	{ path: path.CLUSTER_lIST, component: ClusterList },
+	{ path: path.CLUSTER_MASTER, component: ClusterMaster },//not party wise
+	{ path: path.CLUSTER_lIST, component: ClusterList },//not party wise
 
-	{ path: path.SUB_CLUSTER_MASTER, component: SubClusterMaster },
-	{ path: path.SUB_CLUSTER_lIST, component: SubClusterList },
+	{ path: path.SUB_CLUSTER_MASTER, component: SubClusterMaster },//not party wise
+	{ path: path.SUB_CLUSTER_lIST, component: SubClusterList },//not party wise
 
-	{ path: path.CENTRAL_SERVICE_ITEM_MASTER, component: CentralServiceItem },
-	{ path: path.CENTRAL_SERVICE_ITEM_lIST, component: CentralServiceItemList },
+	{ path: path.CENTRAL_SERVICE_ITEM_MASTER, component: CentralServiceItem },//not party wise
+	{ path: path.CENTRAL_SERVICE_ITEM_lIST, component: CentralServiceItemList },//not party wise
 
-	{ path: path.SERVICE_ITEM_ASSIGN, component: ServiceItemAssign },
+	{ path: path.SERVICE_ITEM_ASSIGN, component: ServiceItemAssign },//not party wise
 
-	{ path: path.PARTY_DETAILS, component: PartyDetails },
+	{ path: path.PARTY_DETAILS, component: PartyDetails },//not party wise
 
-	{ path: path.ITEM_MASTER_BULK_UPDATE, component: ItemMasterBulkUpdate },
+	{ path: path.ITEM_MASTER_BULK_UPDATE, component: ItemMasterBulkUpdate },//not party wise
 
-	{ path: path.ITEM_IMAGE_UPLOAD, component: ItemImageUpload },
+	{ path: path.ITEM_IMAGE_UPLOAD, component: ItemImageUpload },//not party wise
 
 
 
@@ -379,36 +378,38 @@ const userRoutes = [
 	{ path: path.CHALLAN_LIST, component: ChallanList },
 	{ path: path.CHALLAN, component: Challan },
 
-	{ path: path.GRN_LIST_1, component: GRNList },
-	{ path: path.GRN_ADD_1, component: GRNAdd },
-	{ path: path.GRN_STP_1, component: OrderList },
+	{ path: path.GRN_LIST_1, component: GRNList, isPartyWisePage: true },
+	{ path: path.GRN_ADD_1, component: GRNAdd, isPartyWisePage: true },
+	{ path: path.GRN_STP_1, component: OrderList, isPartyWisePage: true },
 
-	{ path: path.GRN_LIST_3, component: GRNList },
-	{ path: path.GRN_ADD_3, component: GRNAdd3 },
-	{ path: path.GRN_STP_3, component: OrderList },
+	{ path: path.GRN_LIST_3, component: GRNList, isPartyWisePage: true },
+	{ path: path.GRN_ADD_3, component: GRNAdd3, isPartyWisePage: true },
+	{ path: path.GRN_STP_3, component: OrderList, isPartyWisePage: true },
 
-	{ path: path.STOCK_ENTRY, component: StockEntry },
+	{ path: path.STOCK_ENTRY, component: StockEntry, isPartyWisePage: true },
 
-	{ path: path.STOCK_ADJUSTMENT, component: StockAdjustment },
+	{ path: path.STOCK_ADJUSTMENT, component: StockAdjustment, isPartyWisePage: true },
 
-	{ path: path.STOCK_ADJUSTMENT_MODE_2, component: StockAdjustment },
+	{ path: path.STOCK_ADJUSTMENT_MODE_2, component: StockAdjustment, isPartyWisePage: true },
 
 	//******************************* Purchase Module ************************************//
 
-	{ path: path.ORDER_1, component: Order },
-	{ path: path.ORDER_LIST_1, component: OrderList },
+	{ path: path.ORDER_1, component: Order, isPartyWisePage: true },
+	{ path: path.ORDER_LIST_1, component: OrderList, isPartyWisePage: true },
 
-	{ path: path.ORDER_2, component: Order },
-	{ path: path.ORDER_LIST_2, component: OrderList },
+	{ path: path.ORDER_2, component: Order, isPartyWisePage: true },
+	{ path: path.ORDER_LIST_2, component: OrderList, isPartyWisePage: true },
 
-	{ path: path.ORDER_4, component: Order },
-	{ path: path.ORDER_LIST_4, component: OrderList },
+	{ path: path.ORDER_4, component: Order, isPartyWisePage: true },
+	{ path: path.ORDER_LIST_4, component: OrderList, isPartyWisePage: true },
 
-	{ path: path.APP_ORDER_LIST, component: OrderList },
+	{ path: path.APP_ORDER_LIST, component: OrderList, isPartyWisePage: true },
 
-	{ path: path.PURCHASE_RETURN, component: PurchaseReturn },
-	{ path: path.PURCHASE_RETURN_LIST, component: SalesReturnList },
-	{ path: path.PURCHASE_RETURN_MODE_3, component: PurchaseReturnMode3 },
+	{ path: path.PURCHASE_RETURN, component: PurchaseReturn, isPartyWisePage: true },
+	{ path: path.PURCHASE_RETURN_LIST, component: SalesReturnList, isPartyWisePage: true },
+	{ path: path.PURCHASE_RETURN_MODE_3, component: PurchaseReturnMode3, isPartyWisePage: true },
+
+
 
 	//******************************* PRODUCTION Module ************************************//
 	{ path: path.BIllOf_MATERIALS, component: BOMMaster },
@@ -429,19 +430,22 @@ const userRoutes = [
 	{ path: path.PRODUCTION_REISSUE_LIST, component: ProductionReIssueList },
 	{ path: path.PRODUCTION_REISSUE_STP, component: ProductionList },
 
+
+
 	//******************************* Sale Module ************************************//
+	{ path: path.INVOICE_1, component: Invoice, isPartyWisePage: true },
+	{ path: path.INVOICE_LIST_1, component: InvoiceList, isPartyWisePage: true },
 
-	{ path: path.INVOICE_1, component: Invoice },
-	{ path: path.INVOICE_LIST_1, component: InvoiceList },
+	{ path: path.LOADING_SHEET, component: LoadingSheet, isPartyWisePage: true },
+	{ path: path.LOADING_SHEET_LIST, component: LoadingSheetList, isPartyWisePage: true },
+	{ path: path.LOADING_SHEET_LIST_UPDATE, component: LoadingSheetUpdate, isPartyWisePage: true },
 
-	{ path: path.LOADING_SHEET, component: LoadingSheet },
-	{ path: path.LOADING_SHEET_LIST, component: LoadingSheetList },
-	{ path: path.LOADING_SHEET_LIST_UPDATE, component: LoadingSheetUpdate },
+	{ path: path.SALES_RETURN, component: SalesReturn, isPartyWisePage: true },
+	{ path: path.SALES_RETURN_LIST, component: SalesReturnList, isPartyWisePage: true },
 
-	{ path: path.SALES_RETURN, component: SalesReturn },
-	{ path: path.SALES_RETURN_LIST, component: SalesReturnList },
+	{ path: path.BULK_INVOICE, component: Bulk_Invoice, isPartyWisePage: true },
 
-	{ path: path.BULK_INVOICE, component: Bulk_Invoice },
+
 	//************************************** Inter Branch ********************************//
 	{ path: path.IB_ORDER, component: Order },
 	{ path: path.IB_ORDER_PO_LIST, component: OrderList },
@@ -456,111 +460,113 @@ const userRoutes = [
 	{ path: path.IB_INVOICE, component: Invoice },
 	{ path: path.IB_INVOICE_STP, component: OrderList },
 
+
+
 	//********************************Accounting ***********************************//
-	{ path: path.RECEIPTS, component: Receipts },
-	{ path: path.RECEIPTS_LIST, component: ReceiptList },
+	{ path: path.RECEIPTS, component: Receipts, isPartyWisePage: true },
+	{ path: path.RECEIPTS_LIST, component: ReceiptList, isPartyWisePage: true },
 
-	{ path: path.RECEIPTS_LIST_2, component: PaymentEntryList },
+	{ path: path.RECEIPTS_LIST_2, component: PaymentEntryList, isPartyWisePage: true },
 
-	{ path: path.BULK_RECIPT, component: BulkRecipt },
+	{ path: path.BULK_RECIPT, component: BulkRecipt, isPartyWisePage: true },
 
-	{ path: path.BANK_ASSIGN, component: BankAssign },
+	{ path: path.BANK_ASSIGN, component: BankAssign, },//not party wise
 
-	{ path: path.PAYMENT_ENTRY, component: PaymentEntry },
-	{ path: path.PAYMENT_ENTRY_LIST, component: PaymentEntryList },
+	{ path: path.PAYMENT_ENTRY, component: PaymentEntry, isPartyWisePage: true },
+	{ path: path.PAYMENT_ENTRY_LIST, component: PaymentEntryList, isPartyWisePage: true },
 
 	// |||||||||||||||||||||||||||||||||||||||||||||||||||
 
-	{ path: path.CREDIT_LIST, component: CreditListAll },
-	{ path: path.CREDIT_NOTE, component: CreditNoteAdd },
+	{ path: path.CREDIT_LIST, component: CreditListAll, isPartyWisePage: true },
+	{ path: path.CREDIT_NOTE, component: CreditNoteAdd, isPartyWisePage: true },
 
-	{ path: path.DEBIT_LIST, component: CreditListAll },
-	{ path: path.DEBIT_NOTE, component: DebitNoteAdd },
+	{ path: path.DEBIT_LIST, component: CreditListAll, isPartyWisePage: true },
+	{ path: path.DEBIT_NOTE, component: DebitNoteAdd, isPartyWisePage: true },
 
-	{ path: path.GOODS_CREDIT_LIST, component: CreditListAll },
-	{ path: path.GOODS_CREDIT_NOTE, component: GoodsCredit_GoodsDebitAdd },
+	{ path: path.GOODS_CREDIT_LIST, component: CreditListAll, isPartyWisePage: true },
+	{ path: path.GOODS_CREDIT_NOTE, component: GoodsCredit_GoodsDebitAdd, isPartyWisePage: true },
 
-	{ path: path.GOODS_DEBIT_LIST, component: CreditListAll },
-	{ path: path.GOODS_DEBIT_NOTE, component: GoodsCredit_GoodsDebitAdd },
+	{ path: path.GOODS_DEBIT_LIST, component: CreditListAll, isPartyWisePage: true },
+	{ path: path.GOODS_DEBIT_NOTE, component: GoodsCredit_GoodsDebitAdd, isPartyWisePage: true },
 
-	{ path: path.CREDIT_NOTE_LIST_1, component: CreditListAll },
-	{ path: path.CREDIT_NOTE_1, component: CreditNote_1 },
+	{ path: path.CREDIT_NOTE_LIST_1, component: CreditListAll, isPartyWisePage: true },
+	{ path: path.CREDIT_NOTE_1, component: CreditNote_1, isPartyWisePage: true },
 
-	{ path: path.CLAIM_TRACKING_ENTRY, component: ClaimTrackingEntry },
-	{ path: path.CLAIM_TRACKING_ENTRY_LIST, component: ClaimTrackingEntryList },
+	{ path: path.CLAIM_TRACKING_ENTRY, component: ClaimTrackingEntry, isPartyWisePage: true },
+	{ path: path.CLAIM_TRACKING_ENTRY_LIST, component: ClaimTrackingEntryList, isPartyWisePage: true },
 
 
 	//**************************** Reports ***********************************//
 
-	{ path: path.SAP_LEDGER, component: SapLedger },
+	{ path: path.SAP_LEDGER, component: SapLedger, isPartyWisePage: true },
+	{ path: path.PARTY_LEDGER, component: PartyLedger, isPartyWisePage: true },
+	{ path: path.SELF_LEDGER, component: PartyLedger, isPartyWisePage: true },
 
-	{ path: path.PARTY_LEDGER, component: PartyLedger },
-	{ path: path.SELF_LEDGER, component: PartyLedger },
+	// stock report is current report 
+	{ path: path.STOCK_REPORT, component: StockReport },// use self party drop-down
+	// stock StockReport_1 is SNSstock report 
+	{ path: path.STOCK_REPORT_1, component: StockReport_1 },// use self party drop-down
 
-	{ path: path.STOCK_REPORT, component: StockReport },
+	{ path: path.GENERIC_SALE_REPORT, component: GenericSaleReport },// use self party drop-down
 
-	{ path: path.STOCK_REPORT_1, component: StockReport_1 },
+	{ path: path.RETAILER_DATA_REPORT, component: RetailerDataReport },// use self party drop-down
 
-	{ path: path.GENERIC_SALE_REPORT, component: GenericSaleReport },
+	{ path: path.ORDER_SUMMARY_REPORT, component: OrderSummary },// use self party drop-down
 
-	{ path: path.RETAILER_DATA_REPORT, component: RetailerDataReport },
+	{ path: path.CLAIM_SUMMARY_REPORT, component: ClaimSummary, isPartyWisePage: true },
 
-	{ path: path.ORDER_SUMMARY_REPORT, component: OrderSummary },
+	{ path: path.PURCHASE_GST_REPORT, component: PurchaseGSTReport },// use self party drop-down
 
-	{ path: path.CLAIM_SUMMARY_REPORT, component: ClaimSummary },
+	{ path: path.INVOICE_DATA_EXPORT, component: InvoiceDataExport },// use self party drop-down
 
-	{ path: path.PURCHASE_GST_REPORT, component: PurchaseGSTReport },
+	{ path: path.PURCHASE_DATA_EXPORT, component: InvoiceDataExport },// use self party drop-down
 
-	{ path: path.INVOICE_DATA_EXPORT, component: InvoiceDataExport },
+	{ path: path.DELETE_INVOICE_DATA_EXPORT, component: DeleteInvoiceDataExport },// use self party drop-down
 
-	{ path: path.PURCHASE_DATA_EXPORT, component: InvoiceDataExport },
+	{ path: path.REPORT, component: Report },//current not use in production
 
-	{ path: path.DELETE_INVOICE_DATA_EXPORT, component: DeleteInvoiceDataExport },
+	{ path: path.PRODUCT_MARGIN_REPORT, component: ProductMarginReport },//not party wise
 
-	{ path: path.REPORT, component: Report },
+	{ path: path.DAMAGE_STOCK_REPORT, component: DamageStockReport },//current not use in production
 
-	{ path: path.PRODUCT_MARGIN_REPORT, component: ProductMarginReport },
+	{ path: path.GST_R1_REPORT, component: GSTR1Report, isPartyWisePage: true },
 
-	{ path: path.DAMAGE_STOCK_REPORT, component: DamageStockReport },
+	{ path: path.RETURN_REPORT, component: ReturnReport },// use self party drop-down
 
-	{ path: path.GST_R1_REPORT, component: GSTR1Report },
+	{ path: path.CLAIM_SUMMARY_MASTER, component: ClaimSummaryMaster, isPartyWisePage: true },
+	{ path: path.CLAIM_SUMMARY_lIST, component: ClaimSummaryList, isPartyWisePage: true },
 
-	{ path: path.RETURN_REPORT, component: ReturnReport },
+	{ path: path.ITEM_SALE_REPORT, component: ItemSaleReport, isPartyWisePage: true },
 
-	{ path: path.CLAIM_SUMMARY_MASTER, component: ClaimSummaryMaster },
-	{ path: path.CLAIM_SUMMARY_lIST, component: ClaimSummaryList },
+	{ path: path.ITEM_REGISTER_REPORT, component: ItemRegisterReport },// use self party drop-down
 
-	{ path: path.ITEM_SALE_REPORT, component: ItemSaleReport },
+	{ path: path.CREDIT_DATA_EXPORT, component: CreditDebitDataExport },// use self party drop-down
 
-	{ path: path.ITEM_REGISTER_REPORT, component: ItemRegisterReport },
+	{ path: path.DEBIT_DATA_EXPORT, component: CreditDebitDataExport },// use self party drop-down
 
-	{ path: path.CREDIT_DATA_EXPORT, component: CreditDebitDataExport },
+	{ path: path.RECEIPT_DATA_EXPORT, component: CreditDebitDataExport },// use self party drop-down
 
-	{ path: path.DEBIT_DATA_EXPORT, component: CreditDebitDataExport },
+	{ path: path.PARTY_OUTSTANDING_REPORT, component: PartyOutstandingReport },// use self party drop-down
 
-	{ path: path.RECEIPT_DATA_EXPORT, component: CreditDebitDataExport },
+	{ path: path.MAN_POWER_REPORT, component: ManPowerReport },//not party wise
 
-	{ path: path.PARTY_OUTSTANDING_REPORT, component: PartyOutstandingReport },
+	{ path: path.CLAIM_TRACKING_REPORT, component: ClaimTrackingReport },// use self party drop-down
 
-	{ path: path.MAN_POWER_REPORT, component: ManPowerReport },
+	{ path: path.TCS_AMOUNT_REPORT, component: TCSAmountReport },// use self party drop-down
 
-	{ path: path.CLAIM_TRACKING_REPORT, component: ClaimTrackingReport },
-
-	{ path: path.TCS_AMOUNT_REPORT, component: TCSAmountReport },
-
-	{ path: path.CX_DD_DIFFERENCE_REPORT, component: CX_DD_DiffrenceReport },
+	{ path: path.CX_DD_DIFFERENCE_REPORT, component: CX_DD_DiffrenceReport },// use self party drop-down
 
 
 
 	//******************************* Sweet Pos ************************************//
 
-	{ path: path.POS_ROLE_ACCESS, component: POSRoleAccess },
+	{ path: path.POS_ROLE_ACCESS, component: POSRoleAccess },//not party wise
 
 	// ************************************ Utility **************************************//
 
-	{ path: path.SYSTEM_SETTING, component: SystemSetting },
+	{ path: path.SYSTEM_SETTING, component: SystemSetting },//not party wise
 
-	{ path: path.SYSTEM_SETTING_LIST, component: SystemSettingList },
+	{ path: path.SYSTEM_SETTING_LIST, component: SystemSettingList },//not party wise
 
 
 
@@ -572,7 +578,7 @@ const userRoutes = [
 	{ path: path.SEARCH_BOX3, component: SerachBox3 },
 	{ path: path.TRANSACTION_LOG, component: TransactionLog },
 
-	{ path: "/dashboard", component: Dashboard },
+	{ path: "/dashboard", component: Dashboard, isPartyWisePage: true },
 
 	{ path: "/", exact: true, component: () => <Redirect to="/login" /> },
 	// { component:() => <Redirect to="/login" /> },

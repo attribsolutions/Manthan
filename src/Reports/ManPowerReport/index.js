@@ -67,9 +67,10 @@ const ManPowerReport = (props) => {           // this component also use for Man
         dispatch(commonPageField(page_Id))
         dispatch(BreadcrumbShowCountlabel(`Count:${0}`));
         dispatch(ManPower_Get_Success([]));
-        dispatch(changeCommonPartyDropDetailsAction({ isShow: false }))//change party drop-down  hide
+        dispatch(changeCommonPartyDropDetailsAction({ isShow: false }))//change party drop-down show false
+
         return () => {
-            dispatch(changeCommonPartyDropDetailsAction({ isShow: true }))//change party drop-down restore state
+            dispatch(changeCommonPartyDropDetailsAction({ isShow: true }))//change party drop-down restore show state
         }
     }, []);
 

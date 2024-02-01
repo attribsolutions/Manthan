@@ -9,8 +9,9 @@ import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { mode } from "../../../routes";
 import './changeParty.scss'; // Add your styles here
 import { useRef } from "react";
+import { Bounce, toast } from "react-toastify";
 
-const ChangeCommonParty = () => {
+const ChangeCommonParty = (props) => {
 
     const dispatch = useDispatch();
     const componentRef = useRef(null);
@@ -86,24 +87,41 @@ const ChangeCommonParty = () => {
 
     // Function to toggle drawer
     const handleLabelClick = () => {
+        if (!props.isPartyWisePage || !isShow) {
+            toast("This page does not require party information.", {
+                type: "warning",
+                transition: Bounce,
+                position: toast.POSITION.TOP_RIGHT,
+                autoClose: 3000,
+            });
+            return
+        }
         setIsDrawerOpen(!isDrawerOpen);
     };
 
+
+
+    // Function to check is party wise page and has show true
+    function funcSelectedPartylabel() {
+        if (!props.isPartyWisePage || !isShow) {
+            return "Party not required."
+        }
+        //to capitalize the first letter and convert the rest to lowercase
+        const partylable = commonPartyDropSelect?.label || ''
+        return partylable.charAt(0).toUpperCase() + partylable.slice(1).toLowerCase();
+    }
+
     // Check user role, if not admin return null
+    
     if (!loginUserAdminRole()) {
         return null;
     }
-
-    // Render component
-    const formattedPartyLabel = commonPartyDropSelect?.label ? commonPartyDropSelect.label.charAt(0).toUpperCase() + commonPartyDropSelect.label.slice(1).toLowerCase() : '';
-
-    if (!isShow) { return null };
     return (
         <div className="change-party-contener" ref={componentRef}>
             <div className="party-label-wapper" onClick={handleLabelClick}>
                 <div className="party-label"  >
                     <i className="fas fa-user pr-1" style={{ paddingTop: "7px", fontSize: "small" }}></i>
-                    <span className="party-label-name">{formattedPartyLabel}</span>
+                    <span className="party-label-name">{funcSelectedPartylabel()}</span>
                 </div>
                 <div style={{ alignSelf: "center" }}>
                     {isDrawerOpen ? <i className="fas fa-times"></i> : <i className="fas fa-angle-right"></i>}

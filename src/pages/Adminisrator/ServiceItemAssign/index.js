@@ -67,12 +67,12 @@ const ServiceItemAssign = (props) => {
 		dispatch(commonPageField(pageId.SERVICE_ITEM_ASSIGN));
 
 		if (subPageMode === url.SERVICE_ITEM_ASSIGN) {
-			dispatch(changeCommonPartyDropDetailsAction({ isShow: false }))//change party drop-down restore state
+			dispatch(changeCommonPartyDropDetailsAction({ isShow: false }))//change party drop-down show false
 
 		}
 		return () => {
 			dispatch(goButton_ServiceItemAssign_Success([]));
-			dispatch(changeCommonPartyDropDetailsAction({ isShow: false }))//change party drop-down restore state
+			dispatch(changeCommonPartyDropDetailsAction({ isShow: true }))//change party drop-down restore show state
 
 		}
 	}, []);

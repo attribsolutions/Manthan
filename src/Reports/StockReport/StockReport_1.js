@@ -73,12 +73,12 @@ const StockReport_1 = (props) => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(pageId.STOCK_REPORT_1));
         dispatch(getBaseUnit_ForDropDown());
-        dispatch(changeCommonPartyDropDetailsAction({ isShow: false }))//change party drop-down  hide
+        dispatch(changeCommonPartyDropDetailsAction({ isShow: false }))//change party drop-down show false
         return () => {
             dispatch(commonPageFieldSuccess(null));
             dispatch(stockReport_1_GoButton_API_Success([]))
             dispatch(getBaseUnit_ForDropDownSuccess([]));
-            dispatch(changeCommonPartyDropDetailsAction({ isShow: true }))//change party drop-down restore state
+            dispatch(changeCommonPartyDropDetailsAction({ isShow: true }))//change party drop-down restore show state
         }
     }, [])
 

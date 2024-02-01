@@ -9,11 +9,11 @@ import SidebarContent from "./SidebarContent";
 import ChangeCommonParty from "./chnageParty/changeCommonParty";
 
 const Sidebar = props => {
-
+  debugger
   return (
     <React.Fragment>
       <div className="vertical-menu" >
-          <ChangeCommonParty />
+        <ChangeCommonParty {...props} />
         <div data-simplebar className="h-100">
           {props.type !== "condensed" ? <SidebarContent /> : <SidebarContent />}
 
