@@ -211,7 +211,7 @@ const SalesReturnList = () => {
             })
             customAlert({
                 Type: 1,
-                Message: "Return Remove Successfully",
+                Message: "Return Iamge Remove Successfully",
             })
 
         } else if ((UploadMsg.Status === true) && (UploadMsg.StatusCode === 200)) {
@@ -340,7 +340,7 @@ const SalesReturnList = () => {
 
         if (Image === null && isUploadAccess) {
             isMadalOpen = false
-            customAlert({ Type: 3, Message: "Return Not Uploaded" });
+            customAlert({ Type: 3, Message: "Return Image Not Uploaded" });
             return;
         } else {
             isMadalOpen = true
