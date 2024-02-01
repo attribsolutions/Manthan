@@ -15,6 +15,7 @@ import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import { ExcelReportComponent } from "../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS";
 import { changeCommonPartyDropDetailsAction } from "../../store/Utilites/PartyDrodown/action";
+import DynamicColumnHook from "../../components/Common/TableCommonFunc";
 
 const RetailerDataReport = (props) => {
 
@@ -66,8 +67,9 @@ const RetailerDataReport = (props) => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(pageId.RETAILER_DATA_REPORT));
         dispatch(SSDD_List_under_Company());
+
+        dispatch(BreadcrumbShowCountlabel(`Count:${tableData.length}`));
         dispatch(changeCommonPartyDropDetailsAction({ isShow: false }))//change party drop-down show false
-        
         return () => {
             dispatch(commonPageFieldSuccess(null));
             dispatch(postRetailerData_API_Success([]));
@@ -75,30 +77,32 @@ const RetailerDataReport = (props) => {
         }
     }, [])
 
-    const createColumns = () => {
+    const [tableColumns] = DynamicColumnHook({ pageField })
 
-        if ((RetailerGobtn.Status === true) && (RetailerGobtn.StatusCode === 200)) {
-            const { Data } = RetailerGobtn
-            let columns = []
-            const objectAtIndex0 = (Data.ReportExportSerializerDetails[0]);
-            for (const key in objectAtIndex0) {
-                const column = {
-                    text: key,
-                    dataField: key,
-                    sort: true,
-                    classes: "table-cursor-pointer",
-                };
-                columns.push(column);
-            }
-            setcolumn(columns)
-            setColumnsCreated(true)
-        }
-    }
-    useEffect(() => {
-        if (!columnsCreated) {
-            createColumns();
-        }
-    }, [RetailerGobtn]);
+    // const createColumns = () => {
+
+    //     if ((RetailerGobtn.Status === true) && (RetailerGobtn.StatusCode === 200)) {
+    //         const { Data } = RetailerGobtn
+    //         let columns = []
+    //         const objectAtIndex0 = (Data.ReportExportSerializerDetails[0]);
+    //         for (const key in objectAtIndex0) {
+    //             const column = {
+    //                 text: key,
+    //                 dataField: key,
+    //                 sort: true,
+    //                 classes: "table-cursor-pointer",
+    //             };
+    //             columns.push(column);
+    //         }
+    //         setcolumn(columns)
+    //         setColumnsCreated(true)
+    //     }
+    // }
+    // useEffect(() => {
+    //     if (!columnsCreated) {
+    //         createColumns();
+    //     }
+    // }, [RetailerGobtn]);
 
     useEffect(() => {
 
@@ -213,14 +217,14 @@ const RetailerDataReport = (props) => {
                     <ToolkitProvider
                         keyField="id"
                         data={tableData}
-                        columns={columns}
+                        columns={tableColumns}
                         search
                     >
                         {(toolkitProps,) => (
                             <React.Fragment>
                                 <Row>
                                     <Col xl="12">
-                                        <div className="table-responsive table">
+                                        <div >
                                             <BootstrapTable
                                                 keyField="PartyID"
                                                 classes={"table  table-bordered table-hover"}

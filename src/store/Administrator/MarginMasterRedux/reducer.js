@@ -14,11 +14,11 @@ const INIT_STATE = {
     postMsg: { Status: false },
     MarginList: [],
     deleteMsg: { Status: false },
-    MarginGoButton: { Status: false },
+    MarginGoButton: [],
     deleteId_For_MarginMaster: { Status: false },
     saveBtnloading: false,
     listBtnLoading: false,
-    loading :false,
+    loading: false,
 };
 
 const MarginMasterReducer = (state = INIT_STATE, action) => {
