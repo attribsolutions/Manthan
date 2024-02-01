@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
     Button,
     Card,
@@ -25,6 +25,7 @@ import {
     deleteIDForMasterPage,
 } from "../../../store/Administrator/PartySubPartyRedux/action";
 import {
+    BreadcrumbShowCountlabel,
     Breadcrumb_inputName,
     commonPageField,
     commonPageFieldSuccess
@@ -50,6 +51,7 @@ import * as mode from "../../../routes/PageMode"
 import { Retailer_List, SSDD_List_under_Company, } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { Tbody, Thead } from "react-super-responsive-table";
+import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 
 const PartySubParty = (props) => {
 
@@ -72,6 +74,12 @@ const PartySubParty = (props) => {
     const [partyTableArr, setPartyTableArr] = useState([]);
     const [userPageAccessState, setUserPageAccessState] = useState(123);
     const [editCreatedBy, seteditCreatedBy] = useState("");
+    const [searchQuery, setSearchQuery] = useState("");
+
+    const [TableRow, setTableRow] = useState([]);
+
+
+
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const { postMsg,
@@ -163,7 +171,7 @@ const PartySubParty = (props) => {
     }, [])
 
     useEffect(async () => {
-         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
+        if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(savePartySubPartySuccess({ Status: false }))
             dispatch(Breadcrumb_inputName(''))
             if (pageMode === mode.dropdownAdd) {
@@ -295,7 +303,7 @@ const PartySubParty = (props) => {
 
     // Role Table Validation
     function AddPartyHandler() {
-
+        debugger
         const find = partyTableArr.find((element) => {
             return element.value === values.Subparty.value
         });
@@ -315,6 +323,13 @@ const PartySubParty = (props) => {
         }
         else if (find === undefined) {
             setPartyTableArr([...partyTableArr, values.Subparty]);
+
+            setState((i) => {
+                const a = { ...i }
+                a.values.Subparty = '';
+                a.hasValid.Subparty.valid = true
+                return a
+            })
         }
         else {
             customAlert({
@@ -367,26 +382,52 @@ const PartySubParty = (props) => {
         setPartyTableArr(filerData)
     };
 
-    const tableRows = partyTableArr.map((info) => {
-        return (
-            <tr>
-                <td>{info.label}</td>
-                <td>
-                    <Button
-                        className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
-                        data-mdb-toggle="tooltip"
-                        data-mdb-placement="top"
-                        title="Delete Party Type"
-                        onClick={(e) => {
-                            onDeleteHandeler(info.value);
-                        }}
-                    >
-                        <i className="mdi mdi-delete font-size-18"></i>
-                    </Button>
-                </td>
-            </tr>
-        );
+
+    mySearchProps({
+        onSearch: (text) => {
+            setSearchQuery(text);
+        },
     });
+
+    const filterdItemWise_tableData = useMemo(() => {
+
+        return partyTableArr.filter((item) => {
+            debugger
+            return (
+                item.label.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                String(item.value).toLowerCase().includes(searchQuery.toLowerCase())
+            );
+        })
+    }, [searchQuery, partyTableArr]);
+
+    useEffect(() => {
+        dispatch(BreadcrumbShowCountlabel(`Count:${filterdItemWise_tableData.length}`))
+        const tableRows = filterdItemWise_tableData.map((info) => {
+            return (
+                <tr>
+                    <td>{info.label}</td>
+                    <td>
+                        <Button
+                            className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
+                            data-mdb-toggle="tooltip"
+                            data-mdb-placement="top"
+                            title="Delete Party Type"
+                            onClick={(e) => {
+                                onDeleteHandeler(info.value);
+                            }}
+                        >
+                            <i className="mdi mdi-delete font-size-18"></i>
+                        </Button>
+                    </td>
+                </tr>
+            );
+        });
+        setTableRow(tableRows)
+    }, [filterdItemWise_tableData])
+
+
+
+
 
     const SaveHandler = async (event) => {
 
@@ -662,7 +703,7 @@ const PartySubParty = (props) => {
                                                         <th className="col col-sm-3">{"Action"}</th>
                                                     </tr>
                                                 </Thead>
-                                                <Tbody>{tableRows}</Tbody>
+                                                <Tbody>{TableRow}</Tbody>
                                             </Table>
 
                                             <FormGroup>

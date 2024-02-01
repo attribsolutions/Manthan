@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
+import { BreadcrumbRadioButtonView, commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
 import { Go_Button, PageLoadingSpinner } from "../../../components/Common/CommonButton";
@@ -63,6 +63,7 @@ const ClaimTrackingEntryList = (props) => {
         const page_Id = pageId.CLAIM_TRACKING_ENTRY_LIST
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
+        dispatch(BreadcrumbRadioButtonView(true));
         goButtonHandler()
         return () => {
             dispatch(getClaimTrackingEntrySuccess([]));
