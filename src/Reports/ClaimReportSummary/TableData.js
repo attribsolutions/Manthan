@@ -152,6 +152,8 @@ export const BilledToRow = (data) => {
     var BilledToArray = [
         [`                   ${data.PartyDetails.GSTIN}`],
         [`                  ${data.PartyDetails.FSSAINo}`],
+        [`                            ${data.PartyDetails.FullReturnNumbers}`],
+
     ]
 
     return BilledToArray;
