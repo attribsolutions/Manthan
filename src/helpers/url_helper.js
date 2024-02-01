@@ -381,6 +381,13 @@ export const SALES_RETURN_LIST_API = '/PurchaseReturnFilter'
 export const SALES_RETURN_ITEM = '/PurchaseReturn'
 export const SEND_TO_SUPERSTOCKIEST_POST_API = "/SalesReturnconsolidateItem"
 export const RETURN_ITEM_APPROVE_AIP = '/ReturnItemApprove'
+
+export const RETURN_UPLOAD = '/ReturnImageUpdate'
+
+
+
+
+
 export const ADD_BUTTON_API_FOR_ITEM_CREDIT_NOTE_1 = '/CentralServiceItem' // privious Api  =>'/ReturnItemAdd'
 
 // Credit and Debit API

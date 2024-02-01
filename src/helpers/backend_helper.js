@@ -611,6 +611,10 @@ export const Return_Approve_API = ({ jsonBody }) => post(url.RETURN_ITEM_APPROVE
 export const ReturnPrint_API = ({ editId }) => get(`${url.PURCHASE_RETURN_PRINT}/${editId}`)//dropdown api
 export const SalesReturn_add_button_api_For_CreditNote1 = (jsonBody) => post(url.ADD_BUTTON_API_FOR_ITEM_CREDIT_NOTE_1, jsonBody)//add button get api for item
 
+export const Upload_Return_Api = ({ formData, updateId }) => putForFormData(`${url.RETURN_UPLOAD}/${updateId}`, formData)// update
+
+
+
 
 // Credit and Debit 
 export const Go_Button_Credit_Debit_Post_API = (jsonBody) => post(url.CREDIT_DEBIT_FILTER, jsonBody)// postapi

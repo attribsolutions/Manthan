@@ -1,7 +1,7 @@
 import { Button, Spinner } from "reactstrap";
 import * as mode from "../../routes/PageMode"
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
-import { date_dmy_func, loginSystemSetting, loginUserID } from "./CommonFunction"
+import { date_dmy_func, loginSystemSetting, loginUserDetails, loginUserID } from "./CommonFunction"
 import '../../assets/searchBox/searchBox.scss'
 import { Cancel_Credit_Debit_EInvoiceAction, Cancel_EInvoiceAction, Cancel_EwayBillAction, Uploaded_Credit_Debit_EInvoiceAction, Uploaded_EInvoiceAction, Uploaded_EwayBillAction } from "../../store/actions";
 import { url } from "../../routes";
@@ -32,7 +32,7 @@ const deleteIconClass = "mdi mdi-delete font-size-16";
 const sendToScmIconClass = "fas fa-share font-size-16";  //Icon Added For Invoice send to SCM Button In Invoice Listf
 const copyIconClass = "bx bxs-copy font-size-16";
 const orderApprovalIconClass = "bx bx-check-shield font-size-20";
-const uploadIconClass = "bx bx-upload font-size-14";
+const uploadIconClass = "bx bx-upload font-size-16";
 const cancelIconClass = "mdi mdi-cancel font-size-14";
 const claimCustomerWisePrintIconClass = "fas fa-file-contract font-size-14";  //Icon Added For Claim Print on Claim list
 const claimItemWisePrintIconClass = "fas fa-file-signature";  //Icon Added For Claim Print on Claim list
@@ -42,13 +42,8 @@ const ShowImageIconClass = "mdi mdi-image font-size-16";
 
 
 
+
 // const makeCreditNoteIconClass = "far fa-file-alt font-size-14";  //Icon Added For Claim Print on Claim list
-
-
-
-
-
-
 
 
 
@@ -65,6 +60,7 @@ export const listPageActionsButtonFunc = (props) => {
         ButtonMsgLable,
         deleteName,
         downBtnFunc,
+        upBtnFunc,
         editBodyfunc,
         deleteBodyfunc,
         copyBodyfunc,
@@ -126,6 +122,9 @@ export const listPageActionsButtonFunc = (props) => {
         }
     };
 
+
+
+
     const renderButtonWithSpinner = (btnmode, spinnerColor, iconClass) => {
         const style = (btnmode === mode.makeBtn) ? { marginLeft: "5px", marginRight: "6px" } : {};
 
@@ -161,7 +160,10 @@ export const listPageActionsButtonFunc = (props) => {
                 .includes(rowData.CustomerPartyType);
         }
 
+        const isUploadAccess = loginSystemSetting().PurchaseReturnPrintUpload?.split(',').map(value => parseInt(value)).includes(rowData.PartyTypeID);
+
         const hasRole = (role) => userAccState[role];
+
         const canEdit = hasRole("RoleAccess_IsEdit") && !forceEditHide;
         const canEditSelf = hasRole("RoleAccess_IsEditSelf") && !canEdit && rowData.CreatedBy === userCreated && !forceEditHide;
         const canView = hasRole("RoleAccess_IsView") && !canEdit && !canEditSelf && !viewApprovalBtnFunc;
@@ -178,10 +180,16 @@ export const listPageActionsButtonFunc = (props) => {
         const canItemWisePrint = hasRole("RoleAccess_IsPrint") && downClaimBtnFunc;
         const canMasterClaimPrint = hasRole("RoleAccess_IsPrint") && downClaimBtnFunc;
         const canSendToScm = isPartyTypeIDInSendToScm //  Currently Button  is remove From InVoice List of CX parties  further Development After Discussion  So condition is False
-        const canMakeCreditNoteBtn = (subPageMode === url.SALES_RETURN_LIST) && hasRole("RoleAccess_IsSave") && rowData.IsApproved
+        debugger
+        const canMakeCreditNoteBtn = (subPageMode === url.SALES_RETURN_LIST) && hasRole("RoleAccess_IsSave") && rowData.IsApproved && !rowData.IsCreditNoteCreated
         const canUpdatebtn = otherBtn_1Func && hasRole("RoleAccess_IsSave")
 
         const canShowImages = downBtnFunc && (subPageMode === url.CLAIM_TRACKING_ENTRY_LIST)
+
+
+        const canUpload = hasRole("RoleAccess_Upload") && upBtnFunc && isUploadAccess;
+
+
 
 
         const dummyDisable_OrderApproval = !canOrderApproval && oderAprovalBtnFunc;
@@ -190,7 +198,10 @@ export const listPageActionsButtonFunc = (props) => {
         const dummyDisable_MakeBtn = !canMakeBtn && makeBtnShow;
         const dummyDisable_SendToScm = !isPartyTypeIDInSendToScm && sendToScmBtnFunc;
 
-        const dummyDisable_CreditNoteBtn = !rowData.IsApproved && (subPageMode === url.SALES_RETURN_LIST)
+        const dummyDisable_CreditNoteBtn = (!rowData.IsApproved && (subPageMode === url.SALES_RETURN_LIST)) || rowData.IsCreditNoteCreated
+
+
+        const dummyDisable_upload = hasRole("RoleAccess_Upload") && !isUploadAccess
 
 
 
@@ -198,7 +209,8 @@ export const listPageActionsButtonFunc = (props) => {
 
 
 
-        const renderButtonIfNeeded = ({ condition, btnmode, iconClass, actionFunc, dispatchAction, title, buttonClasss, isDummyBtn }) => {
+
+        const renderButtonIfNeeded = ({ condition, btnmode, iconClass, actionFunc, dispatchAction, title, buttonClasss, isDummyBtn, }) => {
 
             if ((!condition && !isDummyBtn) || IsRecordDeleted) return null;
             if (!isDummyBtn) {
@@ -226,6 +238,7 @@ export const listPageActionsButtonFunc = (props) => {
                         {renderButtonWithSpinner(`btn-${btnmode}-${rowData.id}`, "white", iconClass)}
                     </Button>
                 );
+
             }
             else {
                 return (
@@ -271,6 +284,16 @@ export const listPageActionsButtonFunc = (props) => {
                         buttonClasss: vieBtnCss,
                     })}
 
+                    {renderButtonIfNeeded({    //Can Upload 
+                        condition: canUpload,
+                        btnmode: mode.upload,
+                        iconClass: uploadIconClass,
+                        actionFunc: upBtnFunc,
+                        title: "Upload",
+                        buttonClasss: printBtnCss,
+                        isDummyBtn: dummyDisable_upload
+                    })}
+
                     {renderButtonIfNeeded({
                         condition: canApprovalView,
                         btnmode: mode.viewApproval,
@@ -302,6 +325,8 @@ export const listPageActionsButtonFunc = (props) => {
                         isDummyBtn: dummyDisable_CreditNoteBtn
 
                     })}
+
+
 
                     {renderButtonIfNeeded({
                         condition: canPrint,

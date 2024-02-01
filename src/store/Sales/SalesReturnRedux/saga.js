@@ -39,7 +39,8 @@ function* SalesReturn_List_GenFun({ filters }) {
             i.dashboardReturnDate = date_dmy_func(i.ReturnDate);
             i["transactionDate"] = i.CreatedOn;
             i["transactionDateLabel"] = listpageConcatDateAndTime(i.ReturnDate, i.CreatedOn);
-
+            i["IsCreditNoteCreated"] = i.IsCreditNoteCreated === 1 ? true : false
+            i["IsApproved"] = i.IsApproved === 1 ? true : false
             return i
         })
         yield put(action.salesReturnListAPISuccess(newList));
@@ -108,6 +109,20 @@ function* sendToSSButton_GenFunc({ config }) { // Update Order by subPageMode
     } catch (error) { yield put(action.SalesReturnApiErrorAction()) }
 }
 
+
+function* Upload_Return_GenFunc({ config }) {   // update API
+
+    for (let pair of config.formData.entries()) {
+        console.log(pair[0], pair[1]);
+    }
+    try {
+        const response = yield call(apiCall.Upload_Return_Api, config);
+        response["Type"] = config.Type
+        yield put(action.Upload_Return_Succcess(response))
+    } catch (error) { yield put(action.SalesReturnApiErrorAction()) }
+}
+
+
 function* SalesReturnSaga() {
     yield takeLatest(actionType.INVOICE_NUMBER, Invoice_No_List_GenFunc)
     yield takeLatest(actionType.SAVE_SALES_RETURN_MASTER, save_SalesReturn_GenFunc)
@@ -117,6 +132,9 @@ function* SalesReturnSaga() {
     yield takeLatest(actionType.SALES_RETURN_CONFIRM_BUTTON_ACTION, SalesReturn_confirmID_GenFunc)
     yield takeLatest(actionType.POST_SENT_TO_SUPERSTOCKIEST_ID, sendToSSButton_GenFunc)
     yield takeLatest(actionType.RETURN_APPROVE_ACTION, Return_Approve_GenFunc)
+
+    yield takeLatest(actionType.RETURN_UPLOAD_ACTION, Upload_Return_GenFunc)
+
 
 }
 export default SalesReturnSaga;  
