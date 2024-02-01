@@ -161,6 +161,7 @@ const Layout = props => {
             theme={leftSideBarTheme}
             type={leftSideBarType}
             isMobile={isMobile}
+            isPartyWisePage={props.isPartyWisePage}
           />
         </div>
 

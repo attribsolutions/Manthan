@@ -11,6 +11,7 @@ const Authmiddleware = ({
   component: Component,
   layout: Layout,
   isAuthProtected,
+  isPartyWisePage,
   ...rest
 }) => {
   const { session } = useSession();
@@ -30,7 +31,7 @@ const Authmiddleware = ({
             }
           }
           return (
-            <Layout>
+            <Layout isPartyWisePage={isPartyWisePage}>
               <Component {...props} />
             </Layout>
           )

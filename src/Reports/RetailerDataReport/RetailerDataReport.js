@@ -66,12 +66,12 @@ const RetailerDataReport = (props) => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(pageId.RETAILER_DATA_REPORT));
         dispatch(SSDD_List_under_Company());
-        dispatch(changeCommonPartyDropDetailsAction({ isShow: false }))//change party drop-down  hide
+        dispatch(changeCommonPartyDropDetailsAction({ isShow: false }))//change party drop-down show false
         
         return () => {
             dispatch(commonPageFieldSuccess(null));
             dispatch(postRetailerData_API_Success([]));
-            dispatch(changeCommonPartyDropDetailsAction({ isShow: true }))//change party drop-down restore state
+            dispatch(changeCommonPartyDropDetailsAction({ isShow: true }))//change party drop-down restore show state
         }
     }, [])
 

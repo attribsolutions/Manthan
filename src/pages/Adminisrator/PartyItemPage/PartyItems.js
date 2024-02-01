@@ -95,11 +95,11 @@ const PartyItems = (props) => {
 			dispatch(commonPageField(page_id));
 		}
 		if (!(subPageMode === url.PARTYITEM)) {
-			dispatch(changeCommonPartyDropDetailsAction({ isShow: false }))//change party drop-down restore state	
+			dispatch(changeCommonPartyDropDetailsAction({ isShow: false }))//change party drop-down show false
 		}
 
 		return () => {
-			dispatch(changeCommonPartyDropDetailsAction({ isShow: true }))//change party drop-down restore state	
+			dispatch(changeCommonPartyDropDetailsAction({ isShow: true }))//change party drop-down restore show state	
 			dispatch(getPartyTypelistSuccess([]));
 			dispatch(goButtonPartyItemAddPageSuccess([]));
 

@@ -9,7 +9,7 @@ import { userRoutes, authRoutes } from "./routes/allRoutes"
 
 // Import all middleware
 import Authmiddleware from "./routes/middleware/Authmiddleware"
-import {SessionProvider} from "./routes/middleware/SessionContext"
+import { SessionProvider } from "./routes/middleware/SessionContext"
 
 // layouts Format
 import VerticalLayout from "./components/VerticalLayout/"
@@ -64,6 +64,7 @@ const App = props => {
                 isAuthProtected={true}
                 userPageAccess={userPageAccess}
                 history={history}
+                isPartyWisePage={route.isPartyWisePage}
                 exact
               />
             ))}

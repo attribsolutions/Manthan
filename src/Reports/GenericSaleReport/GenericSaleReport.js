@@ -72,10 +72,10 @@ const GenericSaleReport = (props) => {
 
     useEffect(() => {
         dispatch(BreadcrumbShowCountlabel(`Count:${0} ₹ ${0.00}`));
-        dispatch(changeCommonPartyDropDetailsAction({ isShow: false }))//change party drop-down  hide
+        dispatch(changeCommonPartyDropDetailsAction({ isShow: false }))//change party drop-down show false
         return () => {
             setTableData([]);
-            dispatch(changeCommonPartyDropDetailsAction({ isShow: true }))//change party drop-down restore state
+            dispatch(changeCommonPartyDropDetailsAction({ isShow: true }))//change party drop-down restore show state
         }
     }, [])
 

@@ -100,21 +100,17 @@ const SalesManList = (props) => {
             <div className="page-content">
                 {
                     (pageField) &&
-                    <>
-                        <div className="mt-n1">
-                            <CommonPurchaseList
-                                action={action}
-                                reducers={reducers}
-                                showBreadcrumb={false}
-                                MasterModal={SalesManMaster}
-                                masterPath={url.SALESMAN}
-                                newBtnPath={url.SALESMAN}
-                                ButtonMsgLable={"SalesMan"}
-                                deleteName={"Name"}
-                                goButnFunc={goButtonHandler}
-                            />
-                        </div>
-                    </>
+                    <CommonPurchaseList
+                        action={action}
+                        reducers={reducers}
+                        showBreadcrumb={false}
+                        MasterModal={SalesManMaster}
+                        masterPath={url.SALESMAN}
+                        newBtnPath={url.SALESMAN}
+                        ButtonMsgLable={"SalesMan"}
+                        deleteName={"Name"}
+                        goButnFunc={goButtonHandler}
+                    />
                 }
             </div>
         </React.Fragment>
