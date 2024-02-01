@@ -9,7 +9,7 @@ import SidebarContent from "./SidebarContent";
 import ChangeCommonParty from "./chnageParty/changeCommonParty";
 
 const Sidebar = props => {
-  debugger
+  
   return (
     <React.Fragment>
       <div className="vertical-menu" >
