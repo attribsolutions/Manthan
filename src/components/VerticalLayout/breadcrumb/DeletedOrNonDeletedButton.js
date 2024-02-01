@@ -44,7 +44,7 @@ const DeletedOrNonDeletedButton = () => {
 
     return (
         <div>
-            <div className="btn-group mt-1" role="group" aria-label="Basic checkbox toggle button group">
+            <div className="btn-group mt-2" role="group" aria-label="Basic checkbox toggle button group">
 
                 <input
                     type="checkbox"

@@ -76,7 +76,6 @@ const HeaderTitleNewBtn = ({
                 <button
                     type="button"
                     className="btn btn-success"
-                    style={{ padding: "2px", paddingInline: "5px", color: "white" }}
                     data-mdb-toggle="tooltip"
                     data-mdb-placement="top"
                     title="Create New"

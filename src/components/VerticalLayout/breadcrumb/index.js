@@ -17,18 +17,18 @@ const BreadcrumbVertical = () => {
 
 
   return (
-
     <React.Fragment>
-
-      <div className="breadcrumb-header" >
-        <div className="d-flex" style={{ paddingLeft: "7px" }} >
+      <div className="breadcrumb-header">
+        <div className="d-flex flex-grow-0"  >
           <HeaderTitleNewBtn />
         </div>
 
-        <div className=" d-flex gap-2 justify-content-end pr-1"  >
+        <div className=" d-flex gap-2 justify-content-end  align-items-center"  >
           <ExcelDownloadButton />
           <DeletedOrNonDeletedButton />
-          <CountLabelComp />
+          <div className="align-items-center">
+            <CountLabelComp />
+          </div>
         </div>
       </div>
 

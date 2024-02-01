@@ -32,7 +32,7 @@ const SaveBtn = ({ onClick, type = "button", userAcc, loading, forceDisabled, })
           id={btnId}
           title={`Save ${Name} Loging...`}
           type={type}
-          style={{ padding: "3px", paddingInline: "5px" }}
+          // style={{ padding: "3px", paddingInline: "5px" }}
           className="btn btn-primary w-md"
         >  Saving.. &nbsp;
           <Spinner style={{ height: "13px", width: "13px" }} color="white" />
@@ -42,7 +42,7 @@ const SaveBtn = ({ onClick, type = "button", userAcc, loading, forceDisabled, })
         <button
           type={type}
           id={btnId}
-          style={{ padding: "3px", paddingInline: "5px" }}
+          // style={{ padding: "3px", paddingInline: "5px" }}
           disabled={forceDisabled}
           title={`Save ${Name}`}
           className="btn btn-primary w-md"
@@ -64,7 +64,6 @@ const UpdateBtn = ({ onClick, userAcc, loading, type = 'button' }) => {
           id={btnId}
           title={`Updating.. ${Name} `}
           type={type}
-          style={{ padding: "3px", paddingInline: "5px" }}
           className="btn btn-success w-md"
         >  Updating.. &nbsp;
           <Spinner style={{ height: "13px", width: "13px" }} color="white" />
@@ -72,7 +71,6 @@ const UpdateBtn = ({ onClick, userAcc, loading, type = 'button' }) => {
         :
         <button
           type={type}
-          style={{ padding: "3px", paddingInline: "5px" }}
           id={btnId}
           title={`Update ${Name}`}
           className="btn btn-success w-md"
@@ -90,23 +88,29 @@ export function Go_Button(props) {
   const { onClick, id, type = "button", loading, forceDisabled } = props
 
   return loading ?
-    <Button
+    <button
       id={id}
       type={type}
-      disabled
+      className="btn btn-success"
+      data-mdb-toggle="tooltip"
+      data-mdb-placement="top"
       title={`Go Button Loging...`}
-      color="btn btn-outline-success border-1"
-      style={{ paddingBlock: "3px", paddingInline: "7px" }}
-      onClick={onClick} >
-      <Spinner style={{ height: "13px", width: "13px" }} color="success" />
-    </Button>
-    : <Button
+      disabled
+    >
+      <Spinner style={{ height: "12px", width: "12px" }} color="white" />
+    </button>
+
+    :
+    <button
       id={id}
-      type={type}
-      style={{ paddingBlock: "1px", paddingInline: "7px" }}
+      type="button"
+      className="btn btn-success"
+      data-mdb-toggle="tooltip"
+      data-mdb-placement="top"
+      title="Go get details"
+      onClick={onClick}
       disabled={forceDisabled}
-      color="btn btn-success border-1 font-size-12"
-      onClick={onClick} > <span className="font-weight-bold" style={{ fontWeight: "bold", fontSize: "16px" }}>Go</span></Button>
+    > Go </button>
 }
 
 export function Change_Button(props) {
@@ -114,7 +118,6 @@ export function Change_Button(props) {
   return <Button
     id={id}
     disabled={forceDisabled}
-    style={{ paddingBlock: "3px", paddingInline: "7px" }}
     type={type}
     color="btn btn-outline-info border-1 font-size-12 "
     onClick={onClick}>Change</Button>
@@ -127,7 +130,6 @@ export function C_Button({
   forceDisabled,
   children,
   spinnerColor = "primary",
-  style,
   ...rest
 }) {
 
@@ -137,7 +139,6 @@ export function C_Button({
         disabled
         title={`Add Button Loading...`}
         {...rest}
-        style={{ paddingBlock: "3px", paddingInline: "7px", ...style }}
       > {children}..&nbsp;
         <Spinner style={{ height: "12px", width: "12px" }} color={spinnerColor} />
       </button>
@@ -148,7 +149,6 @@ export function C_Button({
     <button
       disabled={forceDisabled}
       onClick={onClick}
-      style={{ paddingBlock: "4px", paddingInline: "7px", ...style }}
       {...rest}
     >
       {children}
@@ -166,7 +166,6 @@ export const GotoInvoiceBtn = ({ onClick, userAcc, loading, forceDisabled }) => 
         <button
           id={btnId}
           type="button"
-          style={{ padding: "3px", paddingInline: "5px" }}
           className="btn btn-info w-md"
         >  Saving.. &nbsp;
           <Spinner style={{ height: "13px", width: "13px" }} color="white" />
@@ -175,7 +174,6 @@ export const GotoInvoiceBtn = ({ onClick, userAcc, loading, forceDisabled }) => 
         <button
           type="button"
           id={btnId}
-          style={{ padding: "3px", paddingInline: "5px" }}
           disabled={forceDisabled}
           title={` save & goto Invoice ${Name}`}
           className="btn btn-info w-md"
@@ -221,6 +219,9 @@ export const SaveAndDownloadPDF = ({ onClick, pageMode, userAcc, loading, forceD
   return null
 }
 
+// 
+
+
 export function Loader() {// linner component
   return <div className="dot-pulse"> <span> </span>     &nbsp;
     <div className="bounce1" style={{ background: "white" }}></div>
@@ -251,30 +252,6 @@ export function Listloader1({ show = false }) {// common Listcomponent
 }
 
 
-// export function PageLoadingSpinner({ isLoading }) {// common Listcomponent
-//   // if (!isLoading) {
-//   //   return null
-//   // }
-//   useEffect(() => {
-//     //init body click event fot toggle rightbar
-//     // document.body.addEventListener("click", hideRightbar, true);
-//     try {
-//       if (isLoading === true) {
-//         document.getElementById("preloader").style.display = "block";
-//       } else {
-//         document.getElementById("preloader").style.display = "none";
-//       }
-//     } catch (w) { }
-//   }, [isLoading]);
-
-//   return <></>
-//   // return <div id="api_spinner" >
-//   //   <div className="api_spinner_body " >
-//   //     <span className="spinner" style={{ marginLeft: "-20vw" }} ></span>
-//   //   </div>
-//   // </div>
-
-// }
 
 export function DashboardLoader() {// linner component
   return <div className="dot-pulse mt-2"> &nbsp; &nbsp;&nbsp;
@@ -351,3 +328,4 @@ export function Verifiy_Button({
     </button>
   );
 }
+
