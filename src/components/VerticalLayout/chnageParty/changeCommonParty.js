@@ -112,18 +112,19 @@ const ChangeCommonParty = (props) => {
     }
 
     // Check user role, if not admin return null
-    
     if (!loginUserAdminRole()) {
         return null;
     }
+    const partylabelStyle = !props.isPartyWisePage || !isShow ? { color: "gray" } : {};
+
     return (
         <div className="change-party-contener" ref={componentRef}>
             <div className="party-label-wapper" onClick={handleLabelClick}>
-                <div className="party-label"  >
+                <div className="party-label" style={partylabelStyle}  >
                     <i className="fas fa-user pr-1" style={{ paddingTop: "7px", fontSize: "small" }}></i>
                     <span className="party-label-name">{funcSelectedPartylabel()}</span>
                 </div>
-                <div style={{ alignSelf: "center" }}>
+                <div style={{ alignSelf: "center",...partylabelStyle }}>
                     {isDrawerOpen ? <i className="fas fa-times"></i> : <i className="fas fa-angle-right"></i>}
                 </div>
             </div>
