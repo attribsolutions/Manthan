@@ -149,6 +149,7 @@ const Layout = props => {
         <Header toggleMenuCallback={toggleMenuCallback} onChangeLayoutMode={onChangeLayoutMode} />
 
         <div ref={customPageWrapperRef} className="custom-page-wrapper" onScroll={handleScroll}>
+          {/* <div ref={customPageWrapperRef} className="custom-page-wrapper"> */}
           <BreadcrumbVertical />
           <div className="custom-page-content">
             {props.children}
@@ -166,20 +167,9 @@ const Layout = props => {
         </div>
 
         <div ref={detailedDivRef} style={{ display: "none" }} >
-          <div className="vertical-menu" >
-            <div data-simplebar >
-              <div id="sidebar-menu" className="detailed-div" >
-
-                <PageDetailsSection />
-
-
-              </div>
-            </div>
-          </div>
+          <PageDetailsSection isPartyWisePage={props.isPartyWisePage} />
         </div>
 
-        {/* Transparent scrollable element */}
-        {/* <div  style={{ width: '100%', height: '100%', position: 'fixed', top: 0, left: 0, pointerEvents: 'none' }}></div> */}
       </div>
 
     </div>

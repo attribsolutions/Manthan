@@ -4,17 +4,24 @@ import CountLabelComp from './CountLabelComp';
 import HeaderTitleNewBtn from './HeaderTitleNewBtn';
 // import BreadcrumbVertical from '.';
 
-const PageDetailsSection = () => {
+const PageDetailsSection = (props) => {
     return (
-        <div style={{ padding: "5px", paddingTop: "10px" }}>
-            <ChangeCommonParty />
-            <div style={{ padding: "20px", borderRadius: "8px", boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)", backgroundColor: "#4fa2eb3d", color: "#f4f4f4", height: "100%" }}>
-                <HeaderTitleNewBtn hederTextColor={"white"} />
-                <div className='mt-1'>
-                    <CountLabelComp />
-                </div>
+        <div className="vertical-menu" >
+            <ChangeCommonParty {...props} />
+            <div data-simplebar >
+                <div id="sidebar-menu" className="detailed-div" >
+                    <div style={{ padding: "1px", paddingTop: "2px" }}>
+                        <div style={{
+                            padding: "5px", borderRadius: "8px",
+                            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+                            backgroundColor: "#4fa2eb3d", color: "#f4f4f4", height: "100%"
+                        }}>
+                            <HeaderTitleNewBtn hederTextColor={"white"} />
+                            <CountLabelComp />
+                            <div className='mt-1'>
+                            </div>
 
-                <div style={{ marginBottom: "15px", marginTop: "15px" }}>
+                            {/* <div style={{ marginBottom: "15px", marginTop: "15px" }}>
                     <h5 style={{ color: "#f4f4f4eb" }}>Summary</h5>
                     <ul style={{ listStyle: "none", padding: 0 }}>
                         <li>
@@ -46,8 +53,9 @@ const PageDetailsSection = () => {
 
                 <div style={{ marginBottom: "15px" }}>
                     <h5 style={{ color: "#f4f4f4eb" }}>Transaction History</h5>
-                    {/* Include your transaction history or other relevant content here */}
-                    {/* You may use tables, lists, or other components based on your design */}
+                </div> */}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
