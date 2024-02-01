@@ -514,7 +514,7 @@ const SalesReturnList = () => {
                             Image: isFile(values.UploadedFile) ? URL.createObjectURL(values.UploadedFile) : `${API_URL_LIVE}${values.listData.rowData?.ASMApprovalImgUpload}`
 
                         }]} />}
-                        {!isUploadAccess ? <div className=" px-2 col-12" role="group">
+                        {!isUploadAccess && !values.listData.rowData?.IsApproved ? <div className=" px-2 col-12" role="group">
                             <Row>
                                 <Col sm={2}>
                                     <Label className=" mt-2 p-2"

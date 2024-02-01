@@ -118,6 +118,14 @@ export const reportHeder1 = (doc, data) => {
                 doc.text('FSSAI No: ', x, y)
             };
 
+            if (rowIdx === 2 && colIdx === 0) {
+                let x = data1.cursor.x + 2
+                let y = data1.cursor.y + 9
+                doc.setFontSize(8)
+                doc.setFont(undefined, 'bold')
+                doc.text('Full Return No: ', x, y)
+            };
+
 
 
         },
