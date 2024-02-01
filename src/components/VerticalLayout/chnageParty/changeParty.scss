@@ -4,6 +4,9 @@
 
 .change-party-contener {
   cursor: pointer !important;
+  position: relative;
+  background-color: #383440;
+  z-index: 2; /* Set a higher z-index */
 }
 
 .party-label-wapper {
