@@ -140,7 +140,6 @@ const MarginList = () => {
     <React.Fragment>
       <PageLoadingSpinner isLoading={(GoBtnlistloading || !pageField)} />
       <div className="page-content">
-        <div className="mt-n1">
           {
             (pageField) &&
             <CommonPurchaseList
@@ -160,8 +159,6 @@ const MarginList = () => {
 
           }
         </div>
-
-      </div>
     </React.Fragment>
   )
 }

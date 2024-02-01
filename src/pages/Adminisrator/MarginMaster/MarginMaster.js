@@ -15,22 +15,17 @@ import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { Breadcrumb_inputName, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
-import paginationFactory, {
-    PaginationListStandalone,
-    PaginationProvider,
-} from "react-bootstrap-table2-paginator";
+import { BreadcrumbShowCountlabel, Breadcrumb_inputName, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
-import { get_Party_ForDropDown } from "../../../store/Administrator/ItemsRedux/action";
+import { get_Party_ForDropDown, get_Party_ForDropDown_Success } from "../../../store/Administrator/ItemsRedux/action";
 import BootstrapTable from "react-bootstrap-table-next";
 import {
     deleteIdForMarginMaster,
     deleteIdForMarginMasterSuccess,
-    getMarginList,
     goButtonForMargin,
     goButtonForMarginSuccess,
     saveMarginMaster,
-    saveMarginMasterSuccess
+    saveMarginMasterSuccess,
 } from "../../../store/Administrator/MarginMasterRedux/action";
 import {
     breadcrumbReturnFunc,
@@ -40,16 +35,17 @@ import {
 } from "../../../components/Common/CommonFunction";
 import { priceListByCompay_Action } from "../../../store/Administrator/PriceList/action";
 import * as _cfunc from "../../../components/Common/CommonFunction";
-import { CInput, C_DatePicker, decimalRegx } from "../../../CustomValidateForm";
+import { CInput, C_DatePicker, C_Select, decimalRegx } from "../../../CustomValidateForm";
 import { mode, pageId, url } from "../../../routes";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { comAddPageFieldFunc, formValid, initialFiledFunc, onChangeDate, onChangeSelect, resetFunction } from "../../../components/Common/validationFunction";
-import { Go_Button, SaveButton } from "../../../components/Common/CommonButton";
+import { Change_Button, Go_Button, SaveButton } from "../../../components/Common/CommonButton";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
-import { async } from "q";
-import { mobileApp_ProductAdd_Api, mobileApp_ProductUpdate_Api } from "../../../helpers/backend_helper";
+import { mobileApp_ProductUpdate_Api } from "../../../helpers/backend_helper";
 import { showToastAlert } from "../../../helpers/axios_Config";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
+import { priceListByCompay_ActionSuccess } from "../../../store/Administrator/PriceList/action";
+import { DISCOUNT_API_ERROR_ACTION } from "../../../store/Administrator/DiscountRedux/actionType";
 
 const MarginMaster = (props) => {
     const dispatch = useDispatch();
@@ -69,14 +65,15 @@ const MarginMaster = (props) => {
     const [selectedMargin, setSelectedMargin] = useState([]);
     const [marginDeleteId, setMarginDeleteId] = useState("");
 
-
-
-
-    //Access redux store Data /  'save_ModuleSuccess' action data
+    const [btnForceDisabled, setBtnForceDisabled] = useState(false);
+    const [mobileApiLoading, setMobileApiLoading] = useState(false);
+    console.log(btnForceDisabled)
+    //Access redux store tableData /  'save_ModuleSuccess' action data
     const { postMsg,
         tableData,
         deleteMessage,
         Party,
+        partyDropLoading,
         PriceList,
         userAccess,
         pageField,
@@ -88,19 +85,34 @@ const MarginMaster = (props) => {
         tableData: state.MarginMasterReducer.MarginGoButton,
         deleteMessage: state.MarginMasterReducer.deleteId_For_MarginMaster,
         postMsg: state.MarginMasterReducer.postMsg,
+
         Party: state.ItemMastersReducer.Party,
+        partyDropLoading: state.ItemMastersReducer.partyApiLoading,
+
         PriceList: state.PriceListReducer.priceListByCompany,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField
     }));
 
-    const { Data = [] } = tableData
+    // const { tableData = [] } = tableData
 
     useEffect(() => {
-        const page_Id = pageId.MARGIN
         dispatch(commonPageFieldSuccess(null));
-        dispatch(commonPageField(page_Id))
+        dispatch(commonPageField(pageId.MARGIN));
+        dispatch(priceListByCompay_Action());
+        dispatch(get_Party_ForDropDown());
+        return () => {
+            dispatch(get_Party_ForDropDown_Success([]));
+            dispatch(priceListByCompay_ActionSuccess([]));
+            dispatch(goButtonForMarginSuccess([]));
+        }
     }, []);
+
+    useEffect(() => {
+        if (tableData.length > 0) {
+            dispatch(BreadcrumbShowCountlabel(`Count:${tableData.length}`));
+        }
+    }, [tableData]);
 
     const values = { ...state.values }
     const { isError } = state;
@@ -109,11 +121,6 @@ const MarginMaster = (props) => {
     const location = { ...history.location }
     const hasShowloction = location.hasOwnProperty(mode.editValue)
     const hasShowModal = props.hasOwnProperty(mode.editValue)
-
-    useEffect(() => {
-        dispatch(priceListByCompay_Action());
-        dispatch(get_Party_ForDropDown());
-    }, [dispatch]);
 
     // userAccess useEffect
     useEffect(() => {
@@ -176,13 +183,14 @@ const MarginMaster = (props) => {
             }
         }
         else {
-            dispatch(goButtonForMarginSuccess({ Status: false }))
+            dispatch(goButtonForMarginSuccess([]));
         }
     }, [])
 
     useEffect(async () => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
+            setMobileApiLoading(true)
             dispatch(saveMarginMasterSuccess({ Status: false }))
 
             //***************mobail app api*********************** */
@@ -222,11 +230,13 @@ const MarginMaster = (props) => {
                 Message: JSON.stringify(postMsg.Message),
             })
         }
+        setMobileApiLoading(false)
+        dispatch(goButtonForMarginSuccess([]));
     }, [postMsg])
 
     useEffect(async () => {
         if (deleteMessage.Status === true && deleteMessage.StatusCode === 200) {
-
+            setBtnForceDisabled(true);
             dispatch(deleteIdForMarginMasterSuccess({ Status: false }));
             //***************mobail app api*********************** */
             const jsonBody = JSON.stringify({
@@ -253,13 +263,14 @@ const MarginMaster = (props) => {
             })
 
         }
+        setBtnForceDisabled(false)
     }, [deleteMessage]);
 
-    useEffect(() => _cfunc.tableInputArrowUpDounFunc("#table_Arrow"), [Data]);
+    useEffect(() => _cfunc.tableInputArrowUpDounFunc("#table_Arrow"), [tableData]);
 
-    const PartyTypeDropdown_Options = Party.map((Data) => ({
-        value: Data.id,
-        label: Data.Name
+    const PartyTypeDropdown_Options = Party.map((tableData) => ({
+        value: tableData.id,
+        label: tableData.Name
     }));
     PartyTypeDropdown_Options.unshift({
         value: "",
@@ -280,6 +291,7 @@ const MarginMaster = (props) => {
             })
             return
         }
+
         try {
             if (formValid(state, setState)) {
 
@@ -295,23 +307,22 @@ const MarginMaster = (props) => {
 
     //select id for delete row
     const deleteHandeler = async (id, name, ItemID) => {
-        
+
         const isConfirmed = await customAlert({
             Type: 7,
             Message: `${alertMessages.deleteThisItem} : "${name}"`
         });
 
         if (isConfirmed) {
+            setBtnForceDisabled(true);
             setMarginDeleteId(ItemID)
             dispatch(deleteIdForMarginMaster(id))
         }
-
     };
-
 
     const pageOptions = {
         sizePerPage: 10,
-        totalSize: Data.length,
+        totalSize: tableData.length,
         custom: true,
     };
 
@@ -403,6 +414,7 @@ const MarginMaster = (props) => {
                             <Button
                                 id={"deleteid"}
                                 type="button"
+                                disabled={btnForceDisabled}
                                 className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
                                 data-mdb-toggle="tooltip" data-mdb-placement="top" title='Delete MRP'
                                 onClick={() => { deleteHandeler(user.id, user.Name, user.Item); }}
@@ -422,7 +434,7 @@ const MarginMaster = (props) => {
             // if (formValid(state, setState)) {
             _cfunc.btnIsDissablefunc({ btnId, state: true })
 
-            var ItemData = Data.map((index) => ({
+            var ItemData = tableData.map((index) => ({
                 PriceList: values.PriceListName.value,
                 Party: values.PartyName.value,
                 EffectiveDate: values.EffectiveDate,
@@ -445,7 +457,7 @@ const MarginMaster = (props) => {
 
                 customAlert({
                     Type: 4,
-                    Message:alertMessages.marginISRequired
+                    Message: alertMessages.marginISRequired
                 })
                 return _cfunc.btnIsDissablefunc({ btnId, state: false })
             }
@@ -510,13 +522,14 @@ const MarginMaster = (props) => {
                                             <FormGroup className="mb-3 row ">
                                                 <Label htmlFor="validationCustom01" className="col-sm-3 p-2" style={{ width: "2.5cm" }}>{fieldLabel.PartyName}</Label>
                                                 <Col sm={8} >
-                                                    <Select
+                                                    <C_Select
                                                         name="PartyName"
                                                         value={values.PartyName}
                                                         id={"PartyName"}
                                                         options={PartyTypeDropdown_Options}
                                                         isDisabled={pageMode === mode.edit ? true : false}
                                                         isSearchable={true}
+                                                        isLoading={partyDropLoading}
                                                         styles={{
                                                             menu: provided => ({ ...provided, zIndex: 2 })
                                                         }}
@@ -556,16 +569,19 @@ const MarginMaster = (props) => {
                                             </FormGroup>
                                         </Col>
                                         <Col sm={1}>
-                                            <Go_Button onClick={(event) => { GoButton_Handler(event) }} loading={listBtnLoading} />
+                                            {
+                                                !(tableData.length > 0) ?
+                                                    <Go_Button onClick={(event) => { GoButton_Handler(event) }} loading={listBtnLoading} />
+                                                    : <Change_Button onClick={() => { dispatch(goButtonForMarginSuccess([])) }} />}
                                         </Col>
                                     </Row>
                                 </CardHeader>
                             </Card>
 
-                            {Data.length > 0 ?
+                            {tableData.length > 0 ?
                                 <ToolkitProvider
                                     keyField="Item"
-                                    data={Data}
+                                    data={tableData}
                                     columns={pagesListColumns}
                                     search
                                 >
@@ -573,7 +589,7 @@ const MarginMaster = (props) => {
                                         <React.Fragment>
                                             <Row>
                                                 <Col xl="12">
-                                                    <div className="table-responsive">
+                                                    <div >
                                                         <BootstrapTable
                                                             keyField={"Item"}
                                                             id="table_Arrow"
@@ -583,6 +599,9 @@ const MarginMaster = (props) => {
                                                             classes={"table  table-bordered"}
                                                             noDataIndication={<div className="text-danger text-center ">Items Not available</div>}
                                                             {...toolkitProps.baseProps}
+                                                            onDataSizeChange={({ dataSize }) => {
+                                                                dispatch(BreadcrumbShowCountlabel(`Count:${dataSize}`));
+                                                            }}
                                                         />
                                                         {mySearchProps(toolkitProps.searchProps)}
 
@@ -596,11 +615,12 @@ const MarginMaster = (props) => {
                                 : null
                             }
 
-                            {Data.length > 0 ?
+                            {tableData.length > 0 ?
                                 <FormGroup>
                                     <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
                                         <SaveButton pageMode={pageMode}
-                                            loading={saveBtnloading}
+                                            loading={(saveBtnloading) || (mobileApiLoading)}
+                                            forceDisabled={mobileApiLoading}
                                             onClick={SaveHandler}
                                             userAcc={userPageAccessState}
                                             editCreatedBy={editCreatedBy}

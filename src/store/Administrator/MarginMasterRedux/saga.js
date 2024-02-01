@@ -62,7 +62,7 @@ function* goButton_Margin_GenFunc({ data }) {
     response.pageMode = btnmode
     response.pathname = pathname
     response.rowData = rowData
-    yield put(goButtonForMarginSuccess(response));
+    yield put(goButtonForMarginSuccess(response.Data));
   } catch (error) { yield put(MarginApiErrorAction()) }
 }
 
