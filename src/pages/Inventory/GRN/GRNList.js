@@ -26,9 +26,7 @@ const GRNList = () => {
         makeBtnShow: false, makeBtnShow: '', makeBtnName: '', IBType: '', orderType: ''
     });
     const [hederFilters, setHederFilters] = useState({ fromdate: currentDate_ymd, todate: currentDate_ymd, venderSelect: { value: '', label: "All" } })
-   
-    const gobtnId = `gobtn-${subPageMode}`
-    const { pageField, customer, makeChallan } = reducers;
+
     const { fromdate, todate, venderSelect } = hederFilters;
 
     const reducers = useSelector(
@@ -47,7 +45,7 @@ const GRNList = () => {
 
         })
     );
-
+    const { pageField, customer, makeChallan } = reducers;
     const { commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
 
     // Common Party select Dropdown useEffect
@@ -218,7 +216,7 @@ const GRNList = () => {
 
                     <Col sm="1" className="mt-3 ">
                         <Go_Button
-                            id={gobtnId}
+                            // id={gobtnId}
                             loading={reducers.loading}
                             onClick={goButtonHandler}
                         />
