@@ -106,7 +106,7 @@ const StockReport_1 = (props) => {
                 return
             }
         }
-        catch (e) { console.log(e) }
+        catch (e) {  }
 
     }, [StockReport_1_Gobtb]);
 
@@ -123,7 +123,7 @@ const StockReport_1 = (props) => {
             }
             dispatch(stockReport_1_GoButton_API_Success([]));
         }
-        catch (e) { console.log(e) }
+        catch (e) {  }
 
     }, [pdfdata]);
 

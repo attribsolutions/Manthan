@@ -29,6 +29,7 @@ import {
 } from "../../../components/Common/validationFunction";
 import { SaveButton } from "../../../components/Common/CommonButton";
 import {
+    CommonConsole,
     isSuperAdmin,
     loginCompanyID,
     loginUserID,
@@ -211,7 +212,7 @@ const SystemSetting = (props) => {
                 }
 
             }
-        } catch (e) { console.log(e) }
+        } catch (e) { CommonConsole(e) }
     };
 
 

@@ -387,7 +387,6 @@ const RoleAccessAdd = () => {
                 }
             })
             const jsonBody = JSON.stringify(jsonArray)
-            console.log("jsonArray", jsonArray)
             dispatch(saveRoleAccessAddAction({ jsonBody, btnId }));
 
         } catch (w) { CommonConsole(w) }
@@ -649,7 +648,7 @@ const MultiSelectDopdown = (cell, item, __key, { forceRefresh, setForceRefresh }
 
     const onChangehamdler = (selectedVal = []) => {
         let updatedSelectedValues = [...selectedVal];
-      
+
         const hasAddShow = updatedSelectedValues.some((item) => item.value === -2);
         const hasSave = updatedSelectedValues.some((item) => item.value === 2);
         const hasCopy = updatedSelectedValues.some((item) => item.value === 12);
@@ -658,50 +657,50 @@ const MultiSelectDopdown = (cell, item, __key, { forceRefresh, setForceRefresh }
         const hasDelete = updatedSelectedValues.some((item) => item.value === 5);
         const hasDeleteSelf = updatedSelectedValues.some((item) => item.value === 7);
         const lastSelect = updatedSelectedValues[updatedSelectedValues.length - 1]?.value;
-      
+
         // Refactor common logic for adding "IsSave" option
         const addIsSaveOption = () => {
-          if (!hasSave) {
-            updatedSelectedValues.push({ value: 2, label: "IsSave" });
-          }
+            if (!hasSave) {
+                updatedSelectedValues.push({ value: 2, label: "IsSave" });
+            }
         };
-      
+
         if (hasAddShow && lastSelect === -2) {
-          addIsSaveOption();
+            addIsSaveOption();
         }
         if (hasCopy && lastSelect === 12) {
-          addIsSaveOption();
+            addIsSaveOption();
         }
-      
+
         if (hasEdit && hasEditSelf) {
-          if (lastSelect === 4) {
-            updatedSelectedValues = updatedSelectedValues.filter(
-              (item) => item.value !== 6
-            );
-          } else if (lastSelect === 6) {
-            updatedSelectedValues = updatedSelectedValues.filter(
-              (item) => item.value !== 4
-            );
-          }
+            if (lastSelect === 4) {
+                updatedSelectedValues = updatedSelectedValues.filter(
+                    (item) => item.value !== 6
+                );
+            } else if (lastSelect === 6) {
+                updatedSelectedValues = updatedSelectedValues.filter(
+                    (item) => item.value !== 4
+                );
+            }
         }
-      
+
         if (hasDelete && hasDeleteSelf) {
-          if (lastSelect === 5) {
-            updatedSelectedValues = updatedSelectedValues.filter(
-              (item) => item.value !== 7
-            );
-          } else if (lastSelect === 7) {
-            updatedSelectedValues = updatedSelectedValues.filter(
-              (item) => item.value !== 5
-            );
-          }
+            if (lastSelect === 5) {
+                updatedSelectedValues = updatedSelectedValues.filter(
+                    (item) => item.value !== 7
+                );
+            } else if (lastSelect === 7) {
+                updatedSelectedValues = updatedSelectedValues.filter(
+                    (item) => item.value !== 5
+                );
+            }
         }
-      
+
         // Set the updated selected values in the state
         setForceRefresh(!forceRefresh);
         item.defaultSelectedValues = updatedSelectedValues;
-      };
-      
+    };
+
 
 
     return (

@@ -67,11 +67,6 @@ export const readExcelFile = async ({ file, compareParam }) => {
       return []
     }
 
-
-    // groupBy(jsonResult, (party) => (party))
-    // console.log('Upload data', jsonResult)
-    // const aad = await commonPageFiled_API(184)
-
     return jsonResult
 
   } catch (e) { }
@@ -116,79 +111,3 @@ export async function fileDetails({ compareParam = [], readjson = [] }) {
 
   return { fileFiled, invoice, party, invoiceDate, amount, invoiceNO, partyNO }
 }
-
-
-
-
-
-
-// var date = datValid('28-03-2022') ;
-// date.format("dddd, MMMM, YYYY")
-// date.isValid()
-
-
-// console.log(date)
-
-// console.log(date.isValid())
-
-
-
-
-
-
-
-// // var dateRegex = /^[0-9]{1,2}\-[0-9]{1,2}\-[0-9]{4}$/;
-// var dateRegex = /^[0-9]{4}\-[0-9]{1,2}\-[0-9]{1,2}$/;
-
-// // Extract date from a string
-// dateRegex.test(dateString); // Returns true
-
-// console.log(dateRegex.test(dateString))
-
-// var dateRegexG = /[0-9]{1,2}\/[0-9]{1,2}\/[0-9]{4}/g;
-
-
-// console.log(valDate("20/02/2022"))
-// function valDate(date) {
-//   let dateformat = /^(0?[1-9]|[1-2][0-9]|3[01])[\/](0?[1-9]|1[0-2])/;
-
-//   // Matching the date through regular expression
-//   if (date.match(dateformat)) {
-//       let operator = date.split('-');
-
-//       // Extract the string into month, date and year
-//       let datepart = [];
-//       if (operator.length > 1) {
-//           datepart = date.split('-');
-//       }
-//       let day = parseInt(datepart[0]);
-//       let month = parseInt(datepart[1]);
-//       let year = parseInt(datepart[2]);
-
-//       // Create a list of days of a month
-//       let ListofDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-//       if (month == 1 || month > 2) {
-//           if (day > ListofDays[month - 1]) {
-//               //to check if the date is out of range
-//               console.log("Invalid date")
-//               return false;
-//           }
-//       } else if (month == 2) {
-//           let leapYear = false;
-//           if ((!(year % 4) && year % 100) || !(year % 400)) leapYear = true;
-//           if ((leapYear == false) && (day >= 29)) {
-//               console.log("Invalid date")
-//               return false;
-//           }
-//           else
-//               if ((leapYear == true) && (day > 29)) {
-//                   console.log('Invalid date format!');
-//                   return false;
-//               }
-//       }
-//   } else {
-//       console.log("Invalid date format!");
-//       return false;
-//   }
-//   return "Valid date";
-// }

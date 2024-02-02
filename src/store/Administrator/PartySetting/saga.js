@@ -6,9 +6,6 @@ import { PartySettingApi, save_PartySetting_API } from "../../../helpers/backend
 
 
 function* Save_Method_ForPartySetting_GenFun({ config }) {
-    for (let pair of config.formData.entries()) {
-        console.log(pair[0], pair[1]);
-    }
     try {
 
         const response = yield call(save_PartySetting_API, config);

@@ -1,4 +1,5 @@
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
+import { CommonConsole } from "../CommonFunction";
 
 function parseAndFormatDate(dateString) {
     if (dateString) {
@@ -89,7 +90,7 @@ export function freezeHeaderRow(worksheet,) {
 export function autoFitColumnWidths(worksheet, excelHeaderLabel, mainExcelRowData, buffer = 2) {
 
     if (!worksheet || !worksheet.columns) {
-        console.error("Worksheet or columns not properly initialized.");
+        CommonConsole("Worksheet or columns not properly initialized.");
         return;
     }
 

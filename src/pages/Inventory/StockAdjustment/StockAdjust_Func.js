@@ -1,5 +1,5 @@
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
-import { loginSelectedPartyID, roundToDecimalPlaces } from "../../../components/Common/CommonFunction";
+import { CommonConsole, loginSelectedPartyID, roundToDecimalPlaces } from "../../../components/Common/CommonFunction";
 import { getBatchCode_By_ItemID_api } from "../../../helpers/backend_helper";
 
 export function stockQtyUnit_SelectOnchange(event, index1) {
@@ -25,7 +25,7 @@ export function stockQtyUnit_SelectOnchange(event, index1) {
         document.getElementById(`OrderQty-${index1.id}`).value = roundToDecimalPlaces(totalQuantity, 3);//max 3 decimal 
 
     } catch (error) {
-        console.error("An error occurred when Stock Unit change:", error);
+        CommonConsole("An error occurred when Stock Unit change:", error);
     }
 }
 

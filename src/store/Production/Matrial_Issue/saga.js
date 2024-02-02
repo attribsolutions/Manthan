@@ -72,7 +72,6 @@ function* edit_Metrialissue_listpage_GenFunc({ config }) {                      
     yield obj.MaterialIssueItems = newArr
     yield response.Data = obj;
     yield put(editMaterialIssueIdSuccess(response));
-    // console.log("editmaterial", JSON.stringify(response.Data))
   } catch (error) { CommonConsole(error) }
 }
 

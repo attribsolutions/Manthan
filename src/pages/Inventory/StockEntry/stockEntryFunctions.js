@@ -92,7 +92,7 @@ export async function ItemAPIResponseFunc(apiResponse, tableData) {
 
     } catch (error) {
         // Handle errors if needed
-        console.error('Error in ItemAPIResponseFunc:', error);
+        _cfunc.CommonConsole('Error in ItemAPIResponseFunc:', error);
         return null;
     }
 }

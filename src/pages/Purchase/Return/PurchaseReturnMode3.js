@@ -223,7 +223,7 @@ const PurchaseReturnMode3 = (props) => {
                     setAlertDate({});
                 }
             } catch (error) {
-                console.log(error)
+                _cfunc.CommonConsole(error)
             }
         }
     }, [values.Customer.value])

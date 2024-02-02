@@ -43,7 +43,6 @@ export const BulkInvoiceProvider = ({ children, data = [] }) => {
             });
         });
 
-        // console.log("newGlobalStock=", JSON.stringify(newGlobalStock));
         return newGlobalStock;
     }, [data]);
 

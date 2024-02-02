@@ -298,7 +298,6 @@ const UploadExcel = (props) => {
             outerArr.push({ ...parentObj, InvoiceItems: invoiceItems })
         });
 
-        console.log('Upload data', outerArr)
         const jsonBody = JSON.stringify({ "BulkData": outerArr })
         dispatch(ExcelUpload_save_action({ jsonBody, }));
     };

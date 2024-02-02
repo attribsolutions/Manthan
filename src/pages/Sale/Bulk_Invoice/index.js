@@ -225,7 +225,6 @@ const Bulk_Invoice2 = (props) => {
                 })
                 return
             }
-            console.log(jsonBody)
             dispatch(saveBulkInvoiceAction({ jsonBody: jsonBody }))
 
         }, [])

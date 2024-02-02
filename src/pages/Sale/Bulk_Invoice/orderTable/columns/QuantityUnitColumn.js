@@ -12,9 +12,6 @@ const QuantityUnitColumn = React.memo(({
   unitId,
   isLessStock,
 }) => {
-  // console.log("QuantityUnitColumn : ", itemQuantity);
-
-
   return (
     <div className='d-flex  flex-column  justify-content-start gap-2'>
       <CInput

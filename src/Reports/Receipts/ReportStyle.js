@@ -229,7 +229,6 @@ export const pageFooter = (doc, data) => {
         doc.text('Page ' + String(i) + ' of ' + String(pageCount), doc.internal.pageSize.width / 10, 828, {
             align: 'center'
         })
-        console.log("aaa", doc.internal.pageSize.height)
     }
 }
 

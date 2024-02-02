@@ -32,6 +32,7 @@ import {
 
 import {
 
+    CommonConsole,
     metaTagLabel
 } from "../../../../components/Common/CommonFunction";
 import { mode, url, pageId } from "../../../../routes/index";
@@ -289,7 +290,7 @@ const ItemImageUpload = (props) => {
                 }
             });
 
-        } catch (e) { console.log(e) }
+        } catch (e) { CommonConsole(e) }
     }
 
     const GetimageUrl = ({ Type }) => {
@@ -298,7 +299,6 @@ const ItemImageUpload = (props) => {
         Object.values(Image).forEach((element) => {
             if (element.ImageType === Type && !(element.file instanceof File) && element.Item_pic !== null) {
                 imageUrl = `${API_URL_LIVE}${element.Item_pic}`;
-                console.log(`${API_URL_LIVE}${element.Item_pic}`)
 
             }
         });

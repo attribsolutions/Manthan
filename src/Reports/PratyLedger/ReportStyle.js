@@ -87,7 +87,6 @@ export const reportHeder1 = (doc, data) => {
 }
 export const tableBody = (doc, data) => {
     const tableRow = table.Rows(data);
-    console.log(tableRow)
     var options = {
 
         didParseCell: (data1) => {

@@ -278,6 +278,7 @@ const Invoice = (props) => {
 
                 return obj
             })
+            debugger
             setPageMode(editData.pageMode)
             setEditInvoiceData(editData)
             setOrderItemDetails(editData.Data.OrderItemDetails);

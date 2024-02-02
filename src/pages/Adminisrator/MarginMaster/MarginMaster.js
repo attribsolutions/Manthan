@@ -67,7 +67,7 @@ const MarginMaster = (props) => {
 
     const [btnForceDisabled, setBtnForceDisabled] = useState(false);
     const [mobileApiLoading, setMobileApiLoading] = useState(false);
-    console.log(btnForceDisabled)
+
     //Access redux store tableData /  'save_ModuleSuccess' action data
     const { postMsg,
         tableData,
@@ -302,7 +302,7 @@ const MarginMaster = (props) => {
                 });
                 dispatch(goButtonForMargin({ jsonBody }));
             }
-        } catch (e) { console.log(e) }
+        } catch (e) { _cfunc.CommonConsole(e) }
     };
 
     //select id for delete row

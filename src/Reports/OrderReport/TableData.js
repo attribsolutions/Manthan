@@ -54,7 +54,6 @@ export const Rows = (data) => {
     let hasHedRow = []
 
     const grouped = groupBy(OrderItem, ele => ele.GSTPercentage);
-    console.log(grouped)
     grouped.forEach(i => {
 
         if (i.length > 0) {
@@ -126,7 +125,6 @@ export const RowsWithIGST = (data) => {
     const { OrderItem = [] } = data
     let hasHedRow = []
     const grouped = groupBy(OrderItem, ele => ele.GSTPercentage);
-    console.log(grouped)
     grouped.forEach(i => {
 
         if (i.length > 0) {

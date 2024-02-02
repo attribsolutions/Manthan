@@ -136,9 +136,7 @@ export const reportFooter = (doc) => {
 }
 export const pageFooter = (doc) => {
     let finalY = doc.previousAutoTable.finalY;
-    console.log("finally", finalY)
     if (finalY > 675) {
-        console.log("final in side", finalY)
         doc.addPage();
         pageBorder(doc)
         reportFooter(doc)
@@ -153,6 +151,5 @@ export const pageFooter = (doc) => {
         doc.text('Page ' + String(i) + ' of ' + String(pageCount), doc.internal.pageSize.width / 10, 828, {
             align: 'center'
         })
-        console.log("aaa", doc.internal.pageSize.height)
     }
 }

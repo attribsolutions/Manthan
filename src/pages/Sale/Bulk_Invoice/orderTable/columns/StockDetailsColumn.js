@@ -2,11 +2,8 @@ import React from 'react';
 import { Input, Table } from 'reactstrap';
 
 const StockDetailsTable = React.memo(({ stockDetails, itemInfo, orderId, itemId }) => {
-  // console.log('StockDetailsTable', orderId, itemId)
   return (
     <div>
-      {/* <div>Remaining Stock: {globlestokDetail[itemId]?.totalItemStock}</div> */}
-
       <Table style={{ borderCollapse: 'collapse', border: '1px solid black', width: '100%' }}>
         <thead>
           <tr>
