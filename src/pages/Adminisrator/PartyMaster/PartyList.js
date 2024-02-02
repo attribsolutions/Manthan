@@ -111,7 +111,6 @@ const PartyList = () => {
         if (subPageMode === url.PARTY_lIST) {
             dispatch(changeCommonPartyDropDetailsAction({ isShow: false }))//change party drop-down  hide
         }
-        
     }, []);
 
     function goButtonHandler() {
