@@ -78,6 +78,7 @@ const PartyList = () => {
         return () => {
             dispatch(updatePartyIDSuccess([])); //for clear privious order list 
             dispatch(getPartyListAPISuccess([]));
+            dispatch(changeCommonPartyDropDetailsAction({ isShow: true }))//change party drop-down restore state
         }
     }, [commonPartyDropSelect]);
 
@@ -109,11 +110,6 @@ const PartyList = () => {
         dispatch(commonPageFieldList(page_Id))
         if (subPageMode === url.PARTY_lIST) {
             dispatch(changeCommonPartyDropDetailsAction({ isShow: false }))//change party drop-down  hide
-        }
-        return () => {
-            dispatch(changeCommonPartyDropDetailsAction({ isShow: true }))//change party drop-down restore state
-            dispatch(updatePartyIDSuccess([])); //for clear privious order list 
-            dispatch(getPartyListAPISuccess([]));
         }
     }, []);
 
