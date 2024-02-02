@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
     commonPageFieldList,
@@ -47,12 +47,16 @@ const SalesReturnList = () => {
     const [pageMode, setPageMode] = useState(mode.defaultList)
     const [subPageMode, setSubPageMode] = useState(history.location.pathname);
     const [otherState, setOtherState] = useState({ masterPath: '', newBtnPath: '', buttonMsgLable: '' });
-    const [PurchaseReturnMode_3_Access, setPurchaseReturnMode_3_Access] = useState(false)
+    const [PurchaseReturnMode_3_Access, setPurchaseReturnMode_3_Access] = useState(false);
+    const customerdropdownLabel = subPageMode === url.SALES_RETURN_LIST ? "Customer" : "Supplier";
 
+    const values = { ...state.values };
 
-
-
-    let customerdropdownLabel = subPageMode === url.SALES_RETURN_LIST ? "Customer" : "Supplier"
+    const action = {
+        getList: salesReturnListAPI,
+        deleteId: delete_SalesReturn_Id,
+        deleteSucc: delete_SalesReturn_Id_Succcess
+    }
 
     const reducers = useSelector(
         (state) => ({
@@ -62,7 +66,6 @@ const SalesReturnList = () => {
             loading: state.SalesReturnReducer.loading,
 
             UploadMsg: state.SalesReturnReducer.UploadMsg,
-
 
             supplier: state.CommonAPI_Reducer.vendorSupplierCustomer,
             listBtnLoading: (state.SalesReturnReducer.listBtnLoading || state.PdfReportReducers.ReportBtnLoading),
@@ -80,15 +83,16 @@ const SalesReturnList = () => {
 
     const { pageField, RetailerList, supplier, sendToSSbtnTableData, userAccess, ApprovrMsg, loading, sendToSSbtnLoading, retailerDropLoading, vendorSupplierCustomerLoading, UploadMsg } = reducers;
 
-    const values = { ...state.values }
+    const { commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
 
-    const isUploadAccess = _cfunc.loginSystemSetting().PurchaseReturnPrintUpload?.split(',').map(value => parseInt(value)).includes(_cfunc.loginUserDetails().PartyTypeID);
-
-    const action = {
-        getList: salesReturnListAPI,
-        deleteId: delete_SalesReturn_Id,
-        deleteSucc: delete_SalesReturn_Id_Succcess
-    }
+    // Common Party select Dropdown useEffect
+    useEffect(() => {
+        if (commonPartyDropSelect.value > 0) {
+            partySelectButtonHandler();
+        } else {
+            partySelectOnChangeHandler();
+        }
+    }, [commonPartyDropSelect]);
 
     // userAccess useEffect
     useEffect(() => {
@@ -171,11 +175,11 @@ const SalesReturnList = () => {
     useEffect(() => {
         const jsonBody = JSON.stringify({
             Type: 1,
-            PartyID: _cfunc.loginSelectedPartyID(),
+            PartyID: commonPartyDropSelect.value,
             CompanyID: _cfunc.loginCompanyID()
         });
         dispatch(Retailer_List(jsonBody));
-        dispatch(GetVenderSupplierCustomer({ subPageMode, PartyID: _cfunc.loginSelectedPartyID() }))
+        dispatch(GetVenderSupplierCustomer({ subPageMode, PartyID: commonPartyDropSelect.value }))
     }, []);
 
     useEffect(() => {
@@ -229,7 +233,17 @@ const SalesReturnList = () => {
         }
     }, [UploadMsg])
 
+    const isUploadAccess = useMemo(() => {
+        const systemSetting = _cfunc.loginSystemSetting()?.PurchaseReturnPrintUpload;
+        const partyTypeId = _cfunc.loginUserDetails()?.PartyTypeID;
 
+        if (systemSetting && partyTypeId) {
+            const allowedPartyTypes = systemSetting.split(',').map(value => parseInt(value));
+            return allowedPartyTypes.includes(partyTypeId);
+        }
+
+        return false; // Default value if any of the required properties is missing
+    }, [_cfunc.loginSystemSetting, _cfunc.loginUserDetails]);
 
     const customerOptions = RetailerList.map((index) => ({
         value: index.id,
@@ -262,12 +276,12 @@ const SalesReturnList = () => {
                 FromDate: values.FromDate,
                 ToDate: values.ToDate,
                 CustomerID: values.Customer.value,
-                PartyID: _cfunc.loginSelectedPartyID(),
+                PartyID: commonPartyDropSelect.value,
             });
             const purchaseReturnJsonBody = JSON.stringify({
                 FromDate: values.FromDate,
                 ToDate: values.ToDate,
-                CustomerID: _cfunc.loginSelectedPartyID(),
+                CustomerID: commonPartyDropSelect.value,
                 PartyID: values.Customer.value,
             });
 
@@ -332,9 +346,7 @@ const SalesReturnList = () => {
         dispatch(getpdfReportdata(ReturnPrint_API, config))
     }
 
-
     function upBtnFunc(config) {
-        debugger
         let isMadalOpen = false
         const Image = config.rowData.ASMApprovalImgUpload
 
@@ -391,15 +403,14 @@ const SalesReturnList = () => {
         document.body.classList.add("no_padding")
     }
 
-
     const partySelectButtonHandler = () => {
         const jsonBody = JSON.stringify({
             Type: 1,
-            PartyID: _cfunc.loginSelectedPartyID(),
+            PartyID: commonPartyDropSelect.value,
             CompanyID: _cfunc.loginCompanyID()
         });
         dispatch(Retailer_List(jsonBody));
-        dispatch(GetVenderSupplierCustomer({ subPageMode, PartyID: _cfunc.loginSelectedPartyID() }))
+        dispatch(GetVenderSupplierCustomer({ subPageMode, PartyID: commonPartyDropSelect.value }))
         goButtonHandler()
     }
 
@@ -488,7 +499,7 @@ const SalesReturnList = () => {
             return
         }
         let idString = ischeck.map(obj => obj.id).join(',')
-        let jsonBody = JSON.stringify({ PartyID: _cfunc.loginSelectedPartyID(), ReturnID: idString })
+        let jsonBody = JSON.stringify({ PartyID: commonPartyDropSelect.value, ReturnID: idString })
         dispatch(post_Send_to_superStockiest_Id({ jsonBody, ReturnID: idString }))
     }
 
@@ -496,88 +507,12 @@ const SalesReturnList = () => {
         return obj instanceof File || (obj instanceof Blob && typeof obj.name === "string");
     }
 
-
-
     return (
         <React.Fragment>
             <div className="page-content">
-                <Modal
-                    isOpen={values.UploadModalOpen}
-                    toggle={() => {
-                        tog_backdrop()
-                    }}
-                    style={{ width: "800px", height: "800px", borderRadius: "50%" }}
-                    className="modal-dialog-centered"
-                >
-                    <div>
-                        {((values.UploadedFile !== null)) && <Slidewithcaption Images={[{
-                            Image: isFile(values.UploadedFile) ? URL.createObjectURL(values.UploadedFile) : `${API_URL_LIVE}${values.listData.rowData?.ASMApprovalImgUpload}`
-
-                        }]} />}
-                        {!isUploadAccess && !values.listData.rowData?.IsApproved ? <div className=" px-2 col-12" role="group">
-                            <Row>
-                                <Col sm={2}>
-                                    <Label className=" mt-2 p-2"
-                                        style={{ width: "60px" }}>Upload</Label>
-
-                                </Col>
-                                <Col sm={5}>
-                                    <Input
-                                        type="file"
-                                        className="form-control mt-2"
-                                        name="image"
-                                        id="file" f
-                                        accept=".jpg, .jpeg, .png ,.pdf"
-                                        onChange={(event) => {
-                                            setState((i) => {
-                                                let a = { ...i }
-                                                a.values.UploadedFile = event.target.files[0]
-                                                a.hasValid.UploadedFile.valid = true;
-                                                return a
-                                            })
-
-                                        }}
-                                    />
-                                </Col>
-                                {values.UploadedFile !== null ? null : <Col sm={2}></Col>}
-                                <Col sm={2}>
-                                    <button name="image"
-                                        accept=".jpg, .jpeg, .png ,.pdf"
-                                        onClick={() => {
-                                            UploadHandler("Upload")
-                                        }}
-                                        id="ImageId" type="button" className="btn btn-primary mt-2">Upload</button>
-                                </Col>
-                                {values.UploadedFile !== null ? <Col sm={1}>
-                                    <button name="image"
-                                        accept=".jpg, .jpeg, .png ,.pdf"
-                                        onClick={() => {
-                                            UploadHandler("Remove")
-                                        }}
-                                        id="ImageId" type="button" className="btn btn-danger mt-2 ">Remove</button>
-                                </Col> : null}
-                            </Row>
-                        </div> : null}
-
-
-                    </div>
-
-
-
-
-                </Modal>
-
-
-
-
                 <PageLoadingSpinner isLoading={(loading || !pageField)} />
-
-                <PartyDropdown_Common pageMode={pageMode}
-                    goButtonHandler={partySelectButtonHandler}
-                    changeButtonHandler={partySelectOnChangeHandler} />
-
                 {
-                    (pageField) ?
+                    (pageField) &&
                         <CommonPurchaseList
                             action={action}
                             reducers={reducers}
@@ -606,10 +541,77 @@ const SalesReturnList = () => {
                             }}
 
                         />
-                        : null
                 }
             </div >
             <SalesReturnView_Modal />
+
+            {/* image  show and upload modal  */}
+            <Modal
+                isOpen={values.UploadModalOpen}
+                toggle={() => {
+                    tog_backdrop()
+                }}
+                style={{ width: "800px", height: "800px", borderRadius: "50%" }}
+                className="modal-dialog-centered"
+            >
+                <div>
+                    {((values.UploadedFile !== null)) && <Slidewithcaption Images={[{
+                        Image: isFile(values.UploadedFile) ? URL.createObjectURL(values.UploadedFile) : `${API_URL_LIVE}${values.listData.rowData?.ASMApprovalImgUpload}`
+
+                    }]} />}
+                    {!isUploadAccess && !values.listData.rowData?.IsApproved ? <div className=" px-2 col-12" role="group">
+                        <Row>
+                            <Col sm={2}>
+                                <Label className=" mt-2 p-2"
+                                    style={{ width: "60px" }}>Upload</Label>
+
+                            </Col>
+                            <Col sm={5}>
+                                <Input
+                                    type="file"
+                                    className="form-control mt-2"
+                                    name="image"
+                                    id="file" f
+                                    accept=".jpg, .jpeg, .png ,.pdf"
+                                    onChange={(event) => {
+                                        setState((i) => {
+                                            let a = { ...i }
+                                            a.values.UploadedFile = event.target.files[0]
+                                            a.hasValid.UploadedFile.valid = true;
+                                            return a
+                                        })
+
+                                    }}
+                                />
+                            </Col>
+                            {values.UploadedFile !== null ? null : <Col sm={2}></Col>}
+                            <Col sm={2}>
+                                <button name="image"
+                                    accept=".jpg, .jpeg, .png ,.pdf"
+                                    onClick={() => {
+                                        UploadHandler("Upload")
+                                    }}
+                                    id="ImageId" type="button" className="btn btn-primary mt-2">Upload</button>
+                            </Col>
+                            {values.UploadedFile !== null ? <Col sm={1}>
+                                <button name="image"
+                                    accept=".jpg, .jpeg, .png ,.pdf"
+                                    onClick={() => {
+                                        UploadHandler("Remove")
+                                    }}
+                                    id="ImageId" type="button" className="btn btn-danger mt-2 ">Remove</button>
+                            </Col> : null}
+                        </Row>
+                    </div> : null}
+
+
+                </div>
+
+
+
+
+            </Modal>
+
         </React.Fragment >
     )
 }
