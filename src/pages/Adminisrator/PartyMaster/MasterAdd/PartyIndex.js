@@ -139,9 +139,7 @@ const PartyMaster = (props) => {
 		if (!(subPageMode === url.RETAILER_MASTER)) {
 			dispatch(changeCommonPartyDropDetailsAction({ isShow: false }))//change party drop-down  hide
 		}
-		return () => {
-			dispatch(changeCommonPartyDropDetailsAction({ isShow: true }))//change party drop-down restore state
-		}
+		
 	}, [])
 
 	useEffect(() => {
@@ -156,7 +154,9 @@ const PartyMaster = (props) => {
 		}
 		return () => {
 			dispatch(priceListByPartyActionSuccess([]));//clear privious priceList
+			dispatch(changeCommonPartyDropDetailsAction({isShow: true, forceDisable: false }))//change party drop-down restore state
 		}
+	
 	}, [])
 
 	useEffect(() => {
@@ -282,8 +282,10 @@ const PartyMaster = (props) => {
 						dispatch(getCityOnDistrict(hasEditVal.District.id))
 						dispatch(priceListByPartyAction(hasEditVal.PartyType.id,))
 						dispatch(editPartyIDSuccess({ Status: false }));
+						dispatch(changeCommonPartyDropDetailsAction({ forceDisable: true }))//change party drop-down disable when edit/view
 					}
 				}
+				
 			} catch (e) { }
 		}
 
