@@ -8,8 +8,8 @@ function* StockReport_GenFunc({ config }) {
 	const { jsonBody, btnId } = config
 	try {
 		let response = yield call(StockReport_GoBtn_API, jsonBody);
-		const FilterData = response.Data.filter(i => i.SaleableStock > 0);
-		response.Data = FilterData
+		// const FilterData = response.Data.filter(i => i.SaleableStock > 0);
+		// response.Data = FilterData
 		response["goBtnMode"] = btnId;
 		yield put(stockReport_GoButton_API_Success(response))
 	} catch (error) { yield put(stockReportApiErrorAction()) }

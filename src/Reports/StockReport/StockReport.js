@@ -114,19 +114,19 @@ const StockReport = (props) => {
 		dispatch(commonPageField(pageId.STOCK_REPORT));
 		dispatch(BreadcrumbShowCountlabel(`Count:${0}`));
 		dispatch(changeCommonPartyDropDetailsAction({ isShow: false }))//change party drop-down show false
-        return () => {
-            dispatch(commonPageFieldSuccess(null));
+		return () => {
+			dispatch(commonPageFieldSuccess(null));
 			dispatch(stockReport_GoButton_API_Success([]));
 			dispatch(getBaseUnit_ForDropDownSuccess([]));
 			dispatch(changeCommonPartyDropDetailsAction({ isShow: true }))//change party drop-down restore show state
-        }
+		}
 	}, [])
 
 	const buttonStateArray = [
 		{
 			text: 'DistributorCode',
 			dataField: 'DistributorCode',
-			showing: stockTypeSelect.value === "",
+			showing: partyDropdown.value === "",
 			groupBy: false,
 			align: 'right',
 			sequence: 5,
@@ -135,7 +135,7 @@ const StockReport = (props) => {
 		{
 			text: 'DistributorName',
 			dataField: 'DistributorName',
-			showing: stockTypeSelect.value === "",
+			showing: partyDropdown.value === "",
 			groupBy: false,
 			sequence: 5,
 			controlTypeName: "Text"
@@ -303,8 +303,7 @@ const StockReport = (props) => {
 
 	];
 
-	useEffect(async () => {
-
+	useEffect(() => {
 		try {
 			let nextId = 1;
 			let updatedReduxData = [];
@@ -315,7 +314,7 @@ const StockReport = (props) => {
 				});
 
 				if (goBtnMode === "downloadExcel") {
-					const { filterTableData } = await SortButtonFunc(updatedReduxData);
+					const { filterTableData } = SortButtonFunc(updatedReduxData);
 
 					ExcelReportComponent({
 						excelTableData: filterTableData,
@@ -325,7 +324,9 @@ const StockReport = (props) => {
 				}
 
 				else if (goBtnMode === "showOnTable") {
+
 					const { filterTableData } = SortButtonFunc(updatedReduxData)
+
 					setTableData(filterTableData)
 				}
 
@@ -337,6 +338,7 @@ const StockReport = (props) => {
 
 		} catch (e) { }
 	}, [goButtonData]);
+
 
 	useEffect(() => {
 
@@ -356,7 +358,7 @@ const StockReport = (props) => {
 		label: i.Name
 	}));
 	Party_Option.unshift({
-		value: 0,
+		value: "",
 		label: "All"
 	})
 
@@ -426,17 +428,18 @@ const StockReport = (props) => {
 					SaleableStockValue, MRP, BatchCode, Item, ItemName,
 					PurchaseRate, DistributorCode, DistributorName, GroupName,
 					SubGroupName, GroupTypeName, Stockvaluewithtax, Unit, TaxValue } = currentItem;
-				let key = "";
-				if (mrpWise) {
-					key = ItemName + '_' + MRP + '_' + Item;
-				} else if (batchWise) {
-					key = ItemName + '_' + BatchCode + '_' + Item;
-				} else if (mrpWise && batchWise) {
-					key = ItemName + '_' + BatchCode + '_' + MRP + '_' + Item;
-				} else {
-					key = ItemName + '_' + Item;
-				}
 
+				let key = "";
+
+				if (mrpWise && batchWise) {
+					key = ItemName + '_' + BatchCode + '_' + MRP + '_' + Item + '_' + DistributorCode;
+				} else if (batchWise) {
+					key = ItemName + '_' + BatchCode + '_' + Item + '_' + DistributorCode;
+				} else if (mrpWise) {
+					key = ItemName + '_' + MRP + '_' + Item + '_' + DistributorCode;
+				} else {
+					key = ItemName + '_' + Item + '_' + DistributorCode;
+				}
 
 				if (accumulator[key]) {
 					accumulator[key].SaleableStock += Number(SaleableStock);
@@ -447,11 +450,6 @@ const StockReport = (props) => {
 					accumulator[key].SaleableStockTaxValue += Number(SaleableStockTaxValue);
 					accumulator[key].SaleableStockValue += Number(SaleableStockValue);
 					accumulator[key].TaxValue += Number(TaxValue);
-
-
-
-					// accumulator[key].BatchCode += BatchCode;
-
 				} else {
 					accumulator[key] = {
 						ItemName,
@@ -462,23 +460,18 @@ const StockReport = (props) => {
 						DistributorCode, DistributorName, Item, GroupName, SubGroupName, GroupTypeName, BatchCode, Stockvaluewithtax, Unit
 					};
 				}
-
 				return accumulator;
 			}, {});
-			const groupedArray = Object.values(groupedItems);
 
-			groupedArray.forEach(i => {
-				;
-				i.SaleableStock = i.SaleableStock.toFixed(2); // Update i.SaleableStock with rounded value
-				i.UnSaleableStock = i.UnSaleableStock.toFixed(2)
-				i.TotalStockValue = i.TotalStockValue.toFixed(2)
-				i.UnSaleableStockTaxValue = i.UnSaleableStockTaxValue.toFixed(2)
-				i.UnSaleableStockValue = i.UnSaleableStockValue.toFixed(2)
-				i.SaleableStockTaxValue = i.SaleableStockTaxValue.toFixed(2)
-				i.SaleableStockValue = i.SaleableStockValue.toFixed(2)
-				i.Stockvaluewithtax = i.Stockvaluewithtax.toFixed(2)
+			let groupedArray = []
 
-			});
+			if (stockTypeSelect.value === 0) {
+				groupedArray = Object.values(groupedItems).filter(i => i.SaleableStock > 0) // Remove SaleableStock Stock If 0 
+			} else if (stockTypeSelect.value === 1) {
+				groupedArray = Object.values(groupedItems).filter(i => i.UnSaleableStock > 0) // Remove UnSaleableStock Stock If 0 
+			} else {
+				groupedArray = Object.values(groupedItems);
+			}
 
 			filterTableData = groupedArray;
 
