@@ -26,6 +26,7 @@ import { return_discountCalculate_Func } from "./SalesCalculation";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 import Slidewithcaption from "../../../components/Common/CommonImageComponent";
 import { API_URL_LIVE } from "../../../routes/route_url";
+import { changeCommonPartyDropDetailsAction } from "../../../store/Utilites/PartyDrodown/action";
 
 const SalesReturnList = () => {
 
@@ -96,7 +97,6 @@ const SalesReturnList = () => {
 
     // userAccess useEffect
     useEffect(() => {
-
         userAccess.find((index) => {
             if (index.id === pageId.PURCHASE_RETURN_MODE_3) {
                 return setPurchaseReturnMode_3_Access(true)
@@ -204,7 +204,7 @@ const SalesReturnList = () => {
 
 
     useEffect(() => {
-        debugger
+
         if ((UploadMsg.Status === true) && (UploadMsg.StatusCode === 200) && UploadMsg.Type === "Remove") {
             dispatch(Upload_Return_Succcess({ Status: false }))
             setState((i) => {
@@ -513,34 +513,34 @@ const SalesReturnList = () => {
                 <PageLoadingSpinner isLoading={(loading || !pageField)} />
                 {
                     (pageField) &&
-                        <CommonPurchaseList
-                            action={action}
-                            reducers={reducers}
-                            showBreadcrumb={false}
-                            MasterModal={SalesReturn}
-                            masterPath={otherState.masterPath}
-                            newBtnPath={otherState.newBtnPath}
-                            subPageMode={subPageMode}
-                            pageMode={pageMode}
-                            viewApprovalBtnFunc={viewApprovalBtnFunc}
-                            makeBtnFunc={makeBtnFunc}
-                            makeBtnName={"Create Credit Note for"}
-                            HeaderContent={HeaderContent}
-                            downBtnFunc={downBtnFunc}
-                            upBtnFunc={upBtnFunc}
-                            goButnFunc={goButtonHandler}
-                            ButtonMsgLable={otherState.buttonMsgLable}
-                            deleteName={"FullReturnNumber"}
-                            totalAmountShow={true}
-                            selectCheckParams={{
-                                isShow: ((subPageMode === url.SALES_RETURN_LIST) && PurchaseReturnMode_3_Access),
-                                selectSaveBtnHandler: selectSaveBtnHandler,
-                                selectSaveBtnLabel: "Send To Supplier",
-                                selectHeaderLabel: "Select",
-                                selectSaveBtnLoading: sendToSSbtnLoading
-                            }}
+                    <CommonPurchaseList
+                        action={action}
+                        reducers={reducers}
+                        showBreadcrumb={false}
+                        MasterModal={SalesReturn}
+                        masterPath={otherState.masterPath}
+                        newBtnPath={otherState.newBtnPath}
+                        subPageMode={subPageMode}
+                        pageMode={pageMode}
+                        viewApprovalBtnFunc={viewApprovalBtnFunc}
+                        makeBtnFunc={makeBtnFunc}
+                        makeBtnName={"Create Credit Note for"}
+                        HeaderContent={HeaderContent}
+                        downBtnFunc={downBtnFunc}
+                        upBtnFunc={upBtnFunc}
+                        goButnFunc={goButtonHandler}
+                        ButtonMsgLable={otherState.buttonMsgLable}
+                        deleteName={"FullReturnNumber"}
+                        totalAmountShow={true}
+                        selectCheckParams={{
+                            isShow: ((subPageMode === url.SALES_RETURN_LIST) && PurchaseReturnMode_3_Access),
+                            selectSaveBtnHandler: selectSaveBtnHandler,
+                            selectSaveBtnLabel: "Send To Supplier",
+                            selectHeaderLabel: "Select",
+                            selectSaveBtnLoading: sendToSSbtnLoading
+                        }}
 
-                        />
+                    />
                 }
             </div >
             <SalesReturnView_Modal />
