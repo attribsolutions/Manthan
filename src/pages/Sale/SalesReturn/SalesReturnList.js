@@ -20,13 +20,10 @@ import SalesReturnView_Modal from "./SalesReturnConfirm";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import * as report from '../../../Reports/ReportIndex'
 import { ReturnPrint_API } from "../../../helpers/backend_helper";
-import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
-import { async } from "q";
 import { return_discountCalculate_Func } from "./SalesCalculation";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 import Slidewithcaption from "../../../components/Common/CommonImageComponent";
 import { API_URL_LIVE } from "../../../routes/route_url";
-import { changeCommonPartyDropDetailsAction } from "../../../store/Utilites/PartyDrodown/action";
 
 const SalesReturnList = () => {
 
