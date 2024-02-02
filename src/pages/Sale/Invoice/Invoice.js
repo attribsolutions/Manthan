@@ -55,6 +55,7 @@ import { getVehicleList, getVehicleListSuccess } from "../../../store/Administra
 import { Invoice_Singel_Get_for_Report_Api } from "../../../helpers/backend_helper";
 import * as report from '../../../Reports/ReportIndex'
 import CustomTable from "../../../CustomTable2";
+import { changeCommonPartyDropDetailsAction } from "../../../store/Utilites/PartyDrodown/action";
 
 const Invoice = (props) => {
 
@@ -144,8 +145,8 @@ const Invoice = (props) => {
         return () => {
             dispatch(GetVenderSupplierCustomerSuccess([]));
             dispatch(getVehicleListSuccess([]));
+            dispatch(changeCommonPartyDropDetailsAction({ forceDisable: false }))//change party drop-down restore state
         }
-
     }, [commonPartyDropSelect]);
 
     // userAccess useEffect
@@ -278,10 +279,14 @@ const Invoice = (props) => {
 
                 return obj
             })
-            debugger
-            setPageMode(editData.pageMode)
-            setEditInvoiceData(editData)
+
+            setPageMode(editData.pageMode);
+            setEditInvoiceData(editData);
             setOrderItemDetails(editData.Data.OrderItemDetails);
+
+            if (editData.pageMode === mode.edit) {
+                dispatch(changeCommonPartyDropDetailsAction({ forceDisable: true }))//change party drop-down disable when edit/view
+            };
 
             // **********************************************************
             totalAmountCalcuationFunc(editData.Data.OrderItemDetails)// show breadcrump tolat amount function//passs table array 
@@ -289,6 +294,7 @@ const Invoice = (props) => {
             setOrderIDs(editData.Data.OrderIDs)
             dispatch(editInvoiceActionSuccess({ Status: false }))
         }
+
     }, [editData]);
 
     useLayoutEffect(() => {
@@ -653,7 +659,7 @@ const Invoice = (props) => {
         })
     };
 
-   
+
     const SaveHandler = async (event) => {
 
         event.preventDefault();
