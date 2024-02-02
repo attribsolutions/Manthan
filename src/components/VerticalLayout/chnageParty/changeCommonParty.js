@@ -87,7 +87,7 @@ const ChangeCommonParty = (props) => {
 
     // Function to toggle drawer
     const handleLabelClick = () => {
-        if (!props.isPartyWisePage || !isShow) {
+        if (!props.isPartyWisePage || !isShow || forceDisable) {
             toast("This page does not require party information.", {
                 type: "warning",
                 transition: Bounce,
@@ -114,8 +114,9 @@ const ChangeCommonParty = (props) => {
     // Check user role, if not admin return null
     if (!loginUserAdminRole()) {
         return null;
-    }
-    const partylabelStyle = !props.isPartyWisePage || !isShow ? { color: "gray" } : {};
+    };
+
+    const partylabelStyle = !props.isPartyWisePage || !isShow || forceDisable ? { color: "gray" } : {};
 
     return (
         <div className="change-party-contener" ref={componentRef}>
@@ -124,7 +125,7 @@ const ChangeCommonParty = (props) => {
                     <i className="fas fa-user pr-1" style={{ paddingTop: "7px", fontSize: "small" }}></i>
                     <span className="party-label-name">{funcSelectedPartylabel()}</span>
                 </div>
-                <div style={{ alignSelf: "center",...partylabelStyle }}>
+                <div style={{ alignSelf: "center", ...partylabelStyle }}>
                     {isDrawerOpen ? <i className="fas fa-times"></i> : <i className="fas fa-angle-right"></i>}
                 </div>
             </div>
