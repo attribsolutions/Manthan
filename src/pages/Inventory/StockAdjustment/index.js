@@ -39,7 +39,7 @@ const StockAdjustment = (props) => {
     const [TableArr, setTableArr] = useState([]);
     const [itemNameSelect, setItemNameSelect] = useState('');
 
-    
+
     const location = { ...history.location }
     const hasShowModal = props.hasOwnProperty(mode.editValue);
 
@@ -194,7 +194,7 @@ const StockAdjustment = (props) => {
     }
 
     function BatchCode_Add_Handler(event, index1, tableList, setTableList) {
-        
+
         let isfound = index1.StockDetails.find(i => i.id === index1.BatchCodeSelect?.id);
 
         if (!(isfound === undefined)) {
@@ -209,9 +209,9 @@ const StockAdjustment = (props) => {
             const isDifferntUnit = bachcodeUnit?.UnitID !== index1.UnitID;
 
             if (isDifferntUnit) {
-                
+
                 const _hasActualQuantity = _cfunc.roundToDecimalPlaces((index1.BaseUnitQuantity / bachcodeUnit.BaseUnitQuantity), 3);
-                
+
                 index1.BatchCodeSelect.ActualQuantity = _hasActualQuantity
                 index1.BatchCodeSelect.Qty = _hasActualQuantity
 
@@ -222,7 +222,7 @@ const StockAdjustment = (props) => {
             setTableList([...tableList]);
             QuantityOnchange(event, index1, tableList,)
         } else {
-            console.error("Item not found in tableList.");
+            _cfunc.CommonConsole("Item not found in tableList.");
         }
     }
 

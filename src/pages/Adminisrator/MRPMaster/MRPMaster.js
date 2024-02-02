@@ -224,7 +224,7 @@ const MRPMaster = (props) => {
                 });
                 dispatch(GoButtonForMRP_Master({ jsonBody }));
             }
-        } catch (e) { console.log(e) }
+        } catch (e) { _cfunc.CommonConsole(e) }
     };
 
     //select id for delete row

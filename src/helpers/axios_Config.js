@@ -18,33 +18,33 @@ function logRequestAndResponse(config, response) {
 
     if (config) {
         // Log request
-        const logMessage = `%cRequest`;
-        const logStyle = 'font-weight: bold; color: blue;';
-        const logData = config.data !== undefined ? JSON.parse(JSON.stringify(config.data, null, 2)) : 'Data is undefined.';
-        console.groupCollapsed(logMessage, logStyle, `${config.method} ${requestUrl}`);
-        console.log('Data:', logData);
-        console.groupEnd();
+        // const logMessage = `%cRequest`;
+        // const logStyle = 'font-weight: bold; color: blue;';
+        // const logData = config.data !== undefined ? JSON.parse(JSON.stringify(config.data, null, 2)) : 'Data is undefined.';
+        // console.groupCollapsed(logMessage, logStyle, `${config.method} ${requestUrl}`);
+        // console.log('Data:', logData);
+        // console.groupEnd();
     }
 
     if (response) {
         if (response.status === 'Network Error') {
             // Log network error response separately
-            const logMessage = `%c${response.status}`;
-            const logStyle = 'font-weight: bold; color: red;';
-            console.groupCollapsed(logMessage, logStyle, `${requestUrl}`);
-            console.log('Data:', 'Data is undefined.');
-            console.groupEnd();
+            // const logMessage = `%c${response.status}`;
+            // const logStyle = 'font-weight: bold; color: red;';
+            // console.groupCollapsed(logMessage, logStyle, `${requestUrl}`);
+            // console.log('Data:', 'Data is undefined.');
+            // console.groupEnd();
         } else {
             // Determine response log color
-            const logColor = response.status === 200 ? 'green' : 'orange';
+            // const logColor = response.status === 200 ? 'green' : 'orange';
 
-            // Log regular response
-            const logMessage = `%cResponse (${response.status})`;
-            const logStyle = `font-weight: bold; color: ${logColor};`;
-            const logData = response.data !== undefined ? response.data : 'Data is undefined.';
-            console.groupCollapsed(logMessage, logStyle, `${requestUrl}`);
-            console.log('Data:', logData);
-            console.groupEnd();
+            // // Log regular response
+            // const logMessage = `%cResponse (${response.status})`;
+            // const logStyle = `font-weight: bold; color: ${logColor};`;
+            // const logData = response.data !== undefined ? response.data : 'Data is undefined.';
+            // console.groupCollapsed(logMessage, logStyle, `${requestUrl}`);
+            // console.log('Data:', logData);
+            // console.groupEnd();
         }
     }
 }

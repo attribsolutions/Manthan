@@ -118,7 +118,7 @@ const ReturnReport = (props) => {
             }
             setBtnMode(0);
         }
-        catch (e) { console.log(e) }
+        catch (e) { }
 
     }, [goButtonData]);
 

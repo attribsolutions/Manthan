@@ -311,15 +311,12 @@ export const reportHeder1 = (doc, data) => {
     }
 
     doc.autoTable(table.BilledBy, table.BilledByRow(data), BilledByStyle);
-    console.log("first", doc.previousAutoTable.finalY)
     priLength()
 
     doc.autoTable(table.BilledTo, table.BilledToRow(data), BilledToStyle);
-    console.log("Second", doc.previousAutoTable.finalY)
     priLength()
 
     doc.autoTable(table.DetailsOfTransport, table.DetailsOfTransportRow(data), DetailsOfTransportStyle);
-    console.log("third", doc.previousAutoTable.finalY)
     priLength()
 }
 

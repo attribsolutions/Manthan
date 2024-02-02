@@ -83,17 +83,6 @@ export const RowsWithCGST_SGST = (data) => {
             PrimaryUnitName, ItemComment } = currentItem;
         let PcsinNumber = ""
         let PcsinNumberUnit = ""
-        const pattern = /\((.*?)\)/;
-
-        // if (currentItem.UnitName !== "") {
-        //     const matchFound = currentItem.UnitName.match(pattern);
-        //     const extractedText = matchFound[1];
-        //     console.log(extractedText); // Output: "19.0 No"
-        //     const match = extractedText.split(" ")
-        //     PcsinNumber = match[0];
-        //     PcsinNumberUnit = match[1];
-
-        // }
 
         const key = ItemName + '_' + MRP;
         if (accumulator[key]) {
@@ -263,18 +252,6 @@ export const RowsWithIGST = (data) => {
             BatchDate, DiscountType, PrimaryUnitName, IGST, ItemComment } = currentItem;
 
         let PcsinNumber = ""
-        let PcsinNumberUnit = ""
-        const pattern = /\((.*?)\)/;
-
-        // if (currentItem.UnitName !== "") {
-        //     const matchFound = currentItem.UnitName.match(pattern);
-        //     const extractedText = matchFound[1];
-        //     console.log(extractedText); // Output: "19.0 No"
-        //     const match = extractedText.split(" ")
-        //     PcsinNumber = match[0];
-        //     PcsinNumberUnit = match[1];
-
-        // }
 
         const key = ItemName + '_' + MRP;
         if (accumulator[key]) {

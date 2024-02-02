@@ -343,7 +343,7 @@ const StockEntry = (props) => {
             setItemAPIData(initialTableData);
             return initialTableData;
         } catch (error) {
-            console.error('Error in ItemAPICall:', error);
+            _cfunc.CommonConsole('Error in ItemAPICall:', error);
             return null;
         }
     }
@@ -373,7 +373,7 @@ const StockEntry = (props) => {
             dispatch(BreadcrumbShowCountlabel(`Count:${updatedTableData.length}`));
 
         } catch (error) {
-            console.error('Error in AddPartyHandler:', error);
+            _cfunc.CommonConsole('Error in AddPartyHandler:', error);
         }
     }
 
@@ -482,7 +482,7 @@ const StockEntry = (props) => {
                 setItemAPIData(updatedTableData);
 
             } catch (error) {
-                console.error(error);
+                _cfunc.CommonConsole(error);
             } finally {
                 setItemAPIDataLoading(false);
             }

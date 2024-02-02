@@ -36,6 +36,7 @@ import { getGroupTypeslist } from "../../../store/Administrator/GroupTypeRedux/a
 import { SaveButton } from "../../../components/Common/CommonButton";
 import {
     btnIsDissablefunc,
+    CommonConsole,
     loginCompanyID,
     loginPartyName,
     loginSelectedPartyID,
@@ -361,7 +362,7 @@ const InvoiceConfiguration = (props) => {
 
 
 
-    const SaveHandler = async (event) => {
+    const SaveHandler = async () => {
         const formData = new FormData(); // Create a new FormData object
         const BulkData = []
 
@@ -383,12 +384,11 @@ const InvoiceConfiguration = (props) => {
                 BulkData.push(arr)
 
             })
-            console.log(BulkData)
             formData.append(`uploaded_images_${values.PaymentQr.id}`, values.PaymentQr.Image[0]); // Convert to JSON string
             formData.append('BulkData', JSON.stringify(BulkData)); // Convert to JSON string
             dispatch(savePartySetting({ formData }));
 
-        } catch (e) { console.log(e) }
+        } catch (e) { CommonConsole("SaveHandler :invoice configration", e) }
     };
 
 

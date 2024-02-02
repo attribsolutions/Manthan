@@ -16,10 +16,6 @@ function* Invoice_No_List_GenFunc({ jsonBody }) {
 
 // add button api for sales return
 function* save_SalesReturn_GenFunc({ config }) {
-
-    for (let pair of config.formData.entries()) {
-        console.log(pair[0], pair[1]);
-    }
     try {
         const response = yield call(apiCall.SalesReturn_post_API, config);
         yield put(action.saveSalesReturnMaster_Success(response));
@@ -112,9 +108,6 @@ function* sendToSSButton_GenFunc({ config }) { // Update Order by subPageMode
 
 function* Upload_Return_GenFunc({ config }) {   // update API
 
-    for (let pair of config.formData.entries()) {
-        console.log(pair[0], pair[1]);
-    }
     try {
         const response = yield call(apiCall.Upload_Return_Api, config);
         response["Type"] = config.Type

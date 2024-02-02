@@ -83,7 +83,6 @@ export const Rows = (data) => {
         if (currentItem.UnitName !== "") {
             const matchFound = currentItem.UnitName.match(pattern);
             const extractedText = matchFound[1];
-            console.log(extractedText); // Output: "19.0 No"
             const match = extractedText.split(" ")
             PcsinNumber = match[0];
             PcsinNumberUnit = match[1];

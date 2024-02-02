@@ -1,5 +1,5 @@
 import * as ExcelJS from 'exceljs';
-import { groupBy } from '../../components/Common/CommonFunction';
+import { CommonConsole, groupBy } from '../../components/Common/CommonFunction';
 
 export function Cx_DD_ExcelDownload({ pageField, excelData, excelFileName, extraColumn = '', PartyName }) {
 
@@ -420,6 +420,6 @@ export function Cx_DD_ExcelDownload_PartyAll({ pageField, excelData, excelFileNa
             URL.revokeObjectURL(link.href);
         })
         .catch((error) => {
-            console.error('Error creating Excel file:', error);
+            CommonConsole('Error creating Excel file:', error);
         });
 }

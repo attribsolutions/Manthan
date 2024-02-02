@@ -2,7 +2,7 @@ import jsPDF from "jspdf";
 import "jspdf-autotable";
 import * as style from './ReportStyle'
 import { Data } from "./DemoData";
-import { date_dmy_func } from "../../components/Common/CommonFunction";
+import { CommonConsole, date_dmy_func } from "../../components/Common/CommonFunction";
 
 var pageHeder = function (doc, data) {
     style.pageBorder(doc, data);
@@ -34,7 +34,7 @@ const CompanyWiseBudgetReport = (data) => {
         }
         generateSaveAndOpenPDFReport();
     } catch (error) {
-        console.log("MasterClaim_Report Error", error)
+        CommonConsole("MasterClaim_Report Error", error)
     }
 
 

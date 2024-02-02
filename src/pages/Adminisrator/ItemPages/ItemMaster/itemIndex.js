@@ -791,11 +791,9 @@ const ItemsMaster = (props) => {
 
                 if (pageMode === mode.edit) {
                     dispatch(updateItemMasterAction({ jsonBody, updateId: EditData.id, btnId }));
-                    // console.log(jsonBody)
                 }
                 else {
                     dispatch(saveItemMasterAction({ jsonBody, btnId }));
-                    // console.log(jsonBody)
                 }
             }                                                            // ************* is valid if start 
             else {                                                       // ************* is valid esle start 

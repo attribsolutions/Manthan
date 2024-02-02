@@ -381,7 +381,6 @@ const InvoiceExcelUpload = (props) => {
                         if (Matching_ItemCode_Objects) {
                             Matching_ItemCode_Objects.GST = GST;
                         }
-                        console.log(readjson)
                     });
                     setItemVerify({ Wrong_Item_Code_Array: Wrong_Item_Code_Array, Not_Verify_Item: true });
                 } catch (error) {

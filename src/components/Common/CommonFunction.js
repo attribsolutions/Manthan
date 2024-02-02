@@ -404,7 +404,7 @@ export const compareGSTINState = (gstin1 = '', gstin2 = '') => {
 }
 
 export function breadcrumbReturnFunc({ dispatch, userAcc, newBtnPath = "", forceNewBtnView = true, pageField }) {
-  
+
   const isnewBtnView = userAcc.PageType === 2 && userAcc.RoleAccess_IsSave;
   const isCountLabel = userAcc.CountLabel;
   const isexcelBtnView =
@@ -433,7 +433,7 @@ export function metaTagLabel(userPageAccess = '') {
 
 }
 export function CommonConsole(msg1, msg2 = '', msg3 = '') {// +++++++++++Print Console.log Body+++++++++++++++++++++++++++++++
-  console.log(msg1, msg2, msg3);
+  // console.log(msg1, msg2, msg3);
 }
 
 export function groupBy(list, keyGetter) {// +++++++++++ Array Group By_kye Function +++++++++++++++++++++++++++++++
@@ -778,13 +778,13 @@ export const fetchFiles = async (linksArray) => {
         const file = new File([blob], filename, { type: "image/jpeg" });
         filesArray.push(file);
       } else {
-        console.error(`Failed to fetch: ${link}. Status: ${response.status}`);
+        CommonConsole(`Failed to fetch: ${link}. Status: ${response.status}`);
       }
     }
 
     return filesArray;
   } catch (error) {
-    console.error('Error fetching files:', error);
+    CommonConsole('Error fetching files:', error);
     return [];
   }
 };

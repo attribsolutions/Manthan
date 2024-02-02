@@ -161,7 +161,7 @@ const SapLedger = (props) => {
             }
 
         } catch (e) {
-            console.log(e); // Log any errors
+           _cfunc.CommonConsole(e)
         }
     }, [gobuttonReduxData, btnMode]);
 

@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { Button, Card, CardBody, Col, FormGroup, Label, Modal, Row, Spinner } from 'reactstrap';
 import { Go_Button } from '../../components/Common/CommonButton';
-import { breadcrumbReturnFunc, convertDateTime_ydm, getDateTime_dmy, loginCompanyID, loginEmployeeID } from '../../components/Common/CommonFunction';
+import { breadcrumbReturnFunc, CommonConsole, convertDateTime_ydm, getDateTime_dmy, loginCompanyID, loginEmployeeID } from '../../components/Common/CommonFunction';
 import { mySearchProps } from '../../components/Common/SearchBox/MySearch';
 import { customAlert } from '../../CustomAlert/ConfirmDialog';
 import { C_Select, C_TimePicker } from '../../CustomValidateForm';
@@ -214,10 +214,10 @@ const TransactionLog = () => {
             if (success) {
                 setisCopy({ isCopy: true, btnId: btnId });
             } else {
-                console.error('Copy to clipboard using execCommand failed.');
+                CommonConsole('Copy to clipboard using execCommand failed.');
             }
         } catch (error) {
-            console.error('Error during copy:', error);
+            CommonConsole('Error during copy:', error);
         }
     };
 

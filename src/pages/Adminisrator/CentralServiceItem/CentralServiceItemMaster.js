@@ -38,6 +38,7 @@ import { getGroupTypeslist } from "../../../store/Administrator/GroupTypeRedux/a
 import { SaveButton } from "../../../components/Common/CommonButton";
 import {
     btnIsDissablefunc,
+    CommonConsole,
     loginUserID,
     metaTagLabel
 } from "../../../components/Common/CommonFunction";
@@ -229,7 +230,7 @@ const CentralServiceItem = (props) => {
                 }
 
             }
-        } catch (e) { console.log(e) }
+        } catch (e) { CommonConsole(e) }
     };
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)

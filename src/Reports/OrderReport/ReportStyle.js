@@ -268,15 +268,12 @@ export const reportHeder1 = (doc, data) => {
     }
 
     doc.autoTable(table.BilledBy, table.BilledByRow(data), BilledByStyle);
-    console.log("first", doc.previousAutoTable.finalY)
     priLength()
 
     doc.autoTable(table.BilledTo, table.BilledToRow(data), BilledToStyle);
-    console.log("Second", doc.previousAutoTable.finalY)
     priLength()
 
     doc.autoTable(table.DetailsOfTransport, table.DetailsOfTransportRow(data), DetailsOfTransportStyle);
-    console.log("third", doc.previousAutoTable.finalY)
     priLength()
 }
 
@@ -362,8 +359,6 @@ export const reportFooter = (doc, data) => {
 
 
 export const tableBody = (doc, data) => {
-    const tableRow = table.Rows(data);
-    console.log(tableRow)
     const { OrderItem = [] } = data
     var options = {
         didParseCell: (data1) => {
@@ -556,8 +551,7 @@ export const tableBody = (doc, data) => {
 }
 
 export const tableBodyWithIGST = (doc, data) => {
-    const tableRow = table.Rows(data);
-    console.log(tableRow)
+   
     const { OrderItem = [] } = data
     //Body table  Css
     var options = {
@@ -748,7 +742,6 @@ export const pageFooter = (doc, data) => {
     });
 
     const TotalGST = totalCGST + totalSGST;
-    // console.log(arr)
 
     const isIGST = compareGSTINState(data.CustomerGSTIN, data.SupplierGSTIN)
     if (isIGST) {

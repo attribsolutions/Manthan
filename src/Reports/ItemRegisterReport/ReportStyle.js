@@ -190,8 +190,6 @@ export const reportFooter = (doc, data) => {
     doc.setFontSize(9)
 }
 export const tableBody = (doc, data) => {
-    const tableRow = table.Rows(data);
-    console.log(tableRow)
     var options = {
 
         didParseCell: (data1) => {

@@ -16,7 +16,7 @@ import {
 } from "../../../store/Accounting/ClaimTrackingEntryRedux/action";
 import { Col, FormGroup, Label, } from "reactstrap";
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList"
-import { date_ymd_func, loginEmployeeID, loginIsSCMParty, loginPartyID } from "../../../components/Common/CommonFunction";
+import { CommonConsole, date_ymd_func, loginEmployeeID, loginIsSCMParty, loginPartyID } from "../../../components/Common/CommonFunction";
 import { C_DatePicker, C_Select } from "../../../CustomValidateForm";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
@@ -101,7 +101,7 @@ const ClaimTrackingEntryList = (props) => {
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
-            console.log(config.rowData.CreditNoteUpload)
+            CommonConsole(config.rowData.CreditNoteUpload)
         }
     }
 

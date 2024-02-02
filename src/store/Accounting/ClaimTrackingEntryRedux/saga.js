@@ -31,10 +31,6 @@ function* Get_ClaimTrackingEntry_List_GenFunc({ config }) {     // getList API
 
 function* save_ClaimTrackingEntry_GenFunc({ config }) {    // Post API 
 
-    for (let pair of config.formData.entries()) {
-        console.log(pair[0], pair[1]);
-    }
-
     try {
         const response = yield call(apiCall.ClaimList_Post_API, config);
         yield put(action.saveClaimTrackingEntry_Success(response));
@@ -52,9 +48,6 @@ function* Edit_ClaimTrackingEntry_ID_GenFunc({ config }) {      // edit API
 }
 
 function* Update_ClaimTrackingEntry_ID_GenFunc({ config }) {   // update API
-    for (let pair of config.formData.entries()) {
-        console.log(pair[0], pair[1]);
-    }
     try {
         const response = yield call(apiCall.update_ClaimTrackingEntry_List_Api, config);
         yield put(action.updateClaimTrackingEntryIDSuccess(response))

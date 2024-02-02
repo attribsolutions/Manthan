@@ -31,8 +31,6 @@ export const SessionProvider = ({ history, children }) => {
         resetSessionTimeout,
     }) => {
 
-        console.log('logOut function ....');
-
         window.removeEventListener('mousemove', resetSessionTimeout);
         window.removeEventListener('keydown', resetSessionTimeout);
         localStorage.clear();
@@ -46,7 +44,6 @@ export const SessionProvider = ({ history, children }) => {
         let refreshTokenIntervalId;
 
         const startSessionTimeout = () => {
-            // console.log('startSessionTimeout...');
             localStorage.setItem("lastActivity", Date.now())
             sessionTimeout = setTimeout(() => {
 
