@@ -16,7 +16,6 @@ export const getCommonPartyDrodownOptionActionSuccess = (data) => ({
 });
 
 
-
 export const commonPartyDropSelectAction = (data ) => ({
     type: COMMON_PARTY_DROP_SELECT_ACTION,
     payload: data,

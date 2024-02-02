@@ -303,7 +303,7 @@ const PartySubParty = (props) => {
 
     // Role Table Validation
     function AddPartyHandler() {
-        debugger
+        
         const find = partyTableArr.find((element) => {
             return element.value === values.Subparty.value
         });
@@ -392,7 +392,6 @@ const PartySubParty = (props) => {
     const filterdItemWise_tableData = useMemo(() => {
 
         return partyTableArr.filter((item) => {
-            debugger
             return (
                 item.label.toLowerCase().includes(searchQuery.toLowerCase()) ||
                 String(item.value).toLowerCase().includes(searchQuery.toLowerCase())
