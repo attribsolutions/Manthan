@@ -322,7 +322,7 @@ const InvoiceConfiguration = (props) => {
                     return new File([blob], filename);
                 });
         } catch (error) {
-            console.log(error)
+            CommonConsole("SaveHandler :invoice configration", error)
         }
     }
     function isFile(obj) {
