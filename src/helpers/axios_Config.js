@@ -1,6 +1,7 @@
 import axios from 'axios';
 import axiosRetry from 'axios-retry';
 import { toast, Bounce } from 'react-toastify';
+import { loginPartyID, loginSystemSetting, loginUserID } from '../components/Common/CommonFunction';
 
 // const API_URL = "http://cbmfooderp.com:8000";
 
@@ -13,38 +14,43 @@ const axiosApi = axios.create({ baseURL: API_URL });
 const requestUrls = {};
 
 function logRequestAndResponse(config, response) {
+    const userId = String(loginUserID());
+    const isUsershowConsole = loginSystemSetting()?.isConsoleShow?.split(',')?.includes(userId) || false;
+    if (!isUsershowConsole) {
+        return
+    }
     // Get the stored request URL for this request or response
     const requestUrl = requestUrls[config?.url] || requestUrls[response?.config.url];
 
     if (config) {
         // Log request
-        // const logMessage = `%cRequest`;
-        // const logStyle = 'font-weight: bold; color: blue;';
-        // const logData = config.data !== undefined ? JSON.parse(JSON.stringify(config.data, null, 2)) : 'Data is undefined.';
-        // console.groupCollapsed(logMessage, logStyle, `${config.method} ${requestUrl}`);
-        // console.log('Data:', logData);
-        // console.groupEnd();
+        const logMessage = `%cRequest`;
+        const logStyle = 'font-weight: bold; color: blue;';
+        const logData = config.data !== undefined ? JSON.parse(JSON.stringify(config.data, null, 2)) : 'Data is undefined.';
+        console.groupCollapsed(logMessage, logStyle, `${config.method} ${requestUrl}`);
+        console.log('Data:', logData);
+        console.groupEnd();
     }
 
     if (response) {
         if (response.status === 'Network Error') {
             // Log network error response separately
-            // const logMessage = `%c${response.status}`;
-            // const logStyle = 'font-weight: bold; color: red;';
-            // console.groupCollapsed(logMessage, logStyle, `${requestUrl}`);
-            // console.log('Data:', 'Data is undefined.');
-            // console.groupEnd();
+            const logMessage = `%c${response.status}`;
+            const logStyle = 'font-weight: bold; color: red;';
+            console.groupCollapsed(logMessage, logStyle, `${requestUrl}`);
+            console.log('Data:', 'Data is undefined.');
+            console.groupEnd();
         } else {
             // Determine response log color
-            // const logColor = response.status === 200 ? 'green' : 'orange';
+            const logColor = response.status === 200 ? 'green' : 'orange';
 
-            // // Log regular response
-            // const logMessage = `%cResponse (${response.status})`;
-            // const logStyle = `font-weight: bold; color: ${logColor};`;
-            // const logData = response.data !== undefined ? response.data : 'Data is undefined.';
-            // console.groupCollapsed(logMessage, logStyle, `${requestUrl}`);
-            // console.log('Data:', logData);
-            // console.groupEnd();
+            // Log regular response
+            const logMessage = `%cResponse (${response.status})`;
+            const logStyle = `font-weight: bold; color: ${logColor};`;
+            const logData = response.data !== undefined ? response.data : 'Data is undefined.';
+            console.groupCollapsed(logMessage, logStyle, `${requestUrl}`);
+            console.log('Data:', logData);
+            console.groupEnd();
         }
     }
 }
