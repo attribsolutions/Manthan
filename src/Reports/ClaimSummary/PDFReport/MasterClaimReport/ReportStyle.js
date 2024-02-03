@@ -1,6 +1,6 @@
 
-import { CurrentTime, currentDate_dmy, date_dmy_func } from '../../components/Common/CommonFunction';
-import { numberWithCommas } from '../Report_common_function';
+import { CurrentTime, currentDate_dmy, date_dmy_func } from '../../../../components/Common/CommonFunction';
+import { numberWithCommas } from '../../../Report_common_function';
 import * as table from './TableData'
 let initial_y = 0
 

@@ -56,7 +56,7 @@ import DriverMaster from "../pages/Adminisrator/DriverPage/DriverMaster";
 import DriverList from "../pages/Adminisrator/DriverPage/DriverList";
 import CompanyGroupMaster from "../pages/Adminisrator/CompanyGroupPages/CompanyGroupMaster";
 import CompanyGroupList from "../pages/Adminisrator/CompanyGroupPages/CompanyGroupList";
- 
+
 import PriceMaster from "../pages/Adminisrator/PriceList/PriceMaster";
 import PriceList from "../pages/Adminisrator/PriceList/PriceList";
 
@@ -169,7 +169,6 @@ import GenericSaleReport from "../Reports/GenericSaleReport/GenericSaleReport";
 import RetailerDataReport from "../Reports/RetailerDataReport/RetailerDataReport";
 import DiscountList from "../pages/Adminisrator/Discount/DiscountList";
 import PurchaseReturn from "../pages/Purchase/Return/PurchaseReturn";
-import ClaimSummary from "../Reports/ClaimReportSummary/ClaimReport";
 import InvoiceDataExport from "../Reports/InvoiceDataExport/InvoiceDataExport.js";
 import PurchaseGSTReport from "../Reports/PurchaseGSTReport/PurchaseGSTReport.js";
 import DamageStockReport from "../Reports/DamageStockReport";
@@ -180,8 +179,8 @@ import ReturnReport from "../Reports/ReturnReport/ReturnReport";
 import ItemSaleReport from "../Reports/ItemSaleReport";
 
 import ItemRegisterReport from "../Reports/ItemRegisterReport/ItemRegisterReport";
-import ClaimSummaryList from "../Reports/ClaimReportSummary/ClaimSummaryList";
-import ClaimSummaryMaster from "../Reports/ClaimReportSummary/ClaimSummaryMaster";
+import ClaimSummaryList from "../Reports/ClaimSummary/ClaimSummaryList.js";
+import ClaimSummaryMaster from "../Reports/ClaimSummary/ClaimSummaryMaster.js";
 
 import TransactionLog from "../pages/ActivityLog/TransactionLog";
 
@@ -511,8 +510,6 @@ const userRoutes = [
 	{ path: path.RETAILER_DATA_REPORT, component: RetailerDataReport },// use self party drop-down
 
 	{ path: path.ORDER_SUMMARY_REPORT, component: OrderSummary },// use self party drop-down
-
-	{ path: path.CLAIM_SUMMARY_REPORT, component: ClaimSummary, isPartyWisePage: true },
 
 	{ path: path.PURCHASE_GST_REPORT, component: PurchaseGSTReport },// use self party drop-down
 

@@ -1,12 +1,11 @@
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import * as style from './ReportStyle'
-import { CommonConsole, date_dmy_func } from "../../components/Common/CommonFunction";
+import { CommonConsole, date_dmy_func } from "../../../../components/Common/CommonFunction";
 
 var pageHeder = function (doc, data) {
     style.pageBorder(doc, data);
     style.pageHeder(doc, data);
-    // style.reportHeder1(doc, data);
 
 };
 function reportBody(doc, data) {
@@ -16,7 +15,7 @@ function pageFooter(doc, data) {
     style.pageFooter(doc, data);
 }
 
-const CompanyWiseBudgetReport = (data) => {
+const MasterClaimReport = (data) => {
 
     var doc = new jsPDF('p', 'pt', 'a4');
     try {
@@ -38,4 +37,4 @@ const CompanyWiseBudgetReport = (data) => {
 
 
 }
-export default CompanyWiseBudgetReport;
+export default MasterClaimReport;
