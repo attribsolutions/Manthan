@@ -53,7 +53,7 @@ export const selectAllCheck = ({
     </div>
   },
   selectionRenderer: ({ mode, checked, ...rest }) => {
-    
+
     if (tableList.length > 0) {
       let isAllcheck = tableList.filter(i => (i.hasAllSelect))
       let ischeck = tableList.filter(i => (i.selectCheck))
@@ -82,6 +82,43 @@ export const selectAllCheck = ({
   }
 
 })
+
+const LABEL_COLORS = {
+  "Invoice Created": "green_label",
+  "Order Confirm": "yellow_label",
+  "Open": "blue_lable",
+  "Send To Supplier": "indigo_label",
+  "Approved": "green_label",
+  "Order send To SAP": "indigo_label",
+  "Reject": "red_label"
+};
+
+
+const listColomnformatter = (cell, row) => {
+  if (LABEL_COLORS[cell]) {
+    return (
+      <span className={`label  ${LABEL_COLORS[cell]}`} >
+        {cell}
+      </span>
+    );
+  }
+
+  if (cell === "transactionDate") {
+    return <>{row.transactionDateLabel}</>;
+  }
+
+  if (cell === "Party" && row.Mode) {
+    const statusMap = { 1: "(Sale Return)", 2: "(Purchase Return)", 3: "(Send To Supplier)" };
+    return (
+      <>
+        <div>{`${row.Party}`}</div>
+        <div>{statusMap[row.Mode] || ""}</div>
+      </>
+    );
+  }
+
+  return <>{typeof cell === "boolean" ? String(cell) : cell}</>;
+};
 
 const DynamicColumnHook = ({
   reducers = "",
@@ -124,122 +161,9 @@ const DynamicColumnHook = ({
           dataField: i.ControlID,
           hidden: false,
           sort: true,
-          // key: `column-${k}`,
-          // classes: "table-cursor-pointer",
           align: i.Alignment || null,
           attrs: (cell, row, rowIndex, colIndex) => ({ 'data-label': i.FieldLabel, "sticky-col": (colIndex === 0) ? "true" : "false" }),
-
-          formatter: (cell, row) => {
-            if (i.ControlID === "transactionDate") {
-              return (
-                <>
-                  {row.transactionDateLabel}
-                </>
-              )
-            }
-            if (cell === "Invoice Created") {
-              return (
-                <span
-                  className="label label-"
-                  style={{
-                    backgroundColor: "#b6efdcf7",
-                    color: "#0e0d0d",
-                    fontSize: "12px",
-                    padding: "2px 4px 2px 4px",
-                    borderRadius: "5px",
-                  }}
-                >
-                  {cell}
-                </span>
-              );
-            }
-            if (cell === "Order Confirm") {
-              return (
-                <span
-                  className="label label"
-                  style={{
-                    backgroundColor: "#f7dfb6",
-                    color: "#0e0d0d",
-                    fontSize: "12px",
-                    padding: "2px 4px 2px 4px",
-                    borderRadius: "5px",
-                  }}
-                >
-                  {cell}
-                </span>
-              );
-            }
-            if (cell === "Open") {
-              return (
-                <span
-                  className="label label"
-                  style={{
-                    backgroundColor: "#c3bfc7a6",
-                    color: "#0e0d0d",
-                    fontSize: "12px",
-                    padding: "2px 4px 2px 4px",
-                    borderRadius: "5px",
-                  }}
-                >
-                  {cell}
-                </span>
-              );
-            }
-            if (cell === "Send To Supplier") {
-              return (
-                <span
-                  className="label label-"
-                  style={{
-                    backgroundColor: "#b6efdcf7",
-                    color: "#0e0d0d",
-                    fontSize: "12px",
-                    padding: "2px 4px 2px 4px",
-                    borderRadius: "5px",
-                  }}
-                >
-                  {cell}
-                </span>
-              );
-            }
-            if (cell === "Approved") {
-              return (
-                <span
-                  className="label label"
-                  style={{
-                    backgroundColor: "#f7dfb6",
-                    color: "#0e0d0d",
-                    fontSize: "12px",
-                    padding: "2px 4px 2px 4px",
-                    borderRadius: "5px",
-                  }}
-                >
-                  {cell}
-                </span>
-              );
-            }
-
-            if (i.ControlID === "Party" && row.Mode) {
-
-              let Staus = ""
-              if (row.Mode === 1) {
-                Staus = `(Sale Return)`
-              } else if (row.Mode === 2) {
-                Staus = `(Purchase Return)`
-              } else if (row.Mode === 3) {
-                Staus = `(Send To Supplier)`
-              }
-              return (
-                <>
-                  <div >{`${row.Party}`}</div>
-                  <div >{`${Staus}`}</div>
-                </>
-              );
-            }
-
-
-            return <>
-              {typeof cell === "boolean" ? String(cell) : cell}</>;
-          },
+          formatter: listColomnformatter
         };
 
         columns.push(column);
