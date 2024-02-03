@@ -1,5 +1,5 @@
-import { numberWithCommas } from "../Report_common_function";
-import { date_dmy_func } from "../../components/Common/CommonFunction";
+import { numberWithCommas } from "../../Report_common_function";
+import { date_dmy_func } from "../../../components/Common/CommonFunction";
 
 export const columns = [
     "Group Name",

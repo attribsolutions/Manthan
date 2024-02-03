@@ -1,2 +1,0 @@
-1. Incoice report /Ib Invoice report code in InvoiceReport folder
-2. Van Loading Party Wise InvoiceList /Van Loading Sheet SKU Summwery

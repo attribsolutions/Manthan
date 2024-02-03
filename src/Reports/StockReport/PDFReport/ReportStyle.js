@@ -1,6 +1,6 @@
 
 import * as table from './TableData'
-import { CurrentTime, currentDate_dmy } from "../../components/Common/CommonFunction";
+import { CurrentTime, currentDate_dmy } from "../../../components/Common/CommonFunction";
 
 export const pageBorder = (doc) => {
     doc.line(817, 16, 30, 16);//horizontal line (Top)

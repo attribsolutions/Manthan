@@ -277,9 +277,9 @@ export const Claim_Summary_Master = url.CLAIM_SUMMARY_lIST;
 
 export const SapLedger = url.SAP_LEDGER;
 
-export const StockReport = url.STOCK_REPORT;
+export const CurrentStockReport = url.CURRENT_STOCK_REPORT;
 
-export const Stock_Report_1 = url.STOCK_REPORT_1;
+export const SNS_Report = url.SNS_REPORT;
 
 export const DebitDataExport = url.DEBIT_DATA_EXPORT
 

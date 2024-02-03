@@ -4,7 +4,7 @@ import { Col, FormGroup, Label } from "reactstrap";
 import { C_Button } from "../components/Common/CommonButton";
 import { C_Select } from "../CustomValidateForm";
 import { loginIsSCMParty } from "../components/Common/CommonFunction";
-import Papa from 'papaparse';
+
 
 // export function ReportComponent({ pageField, excelData, excelFileName, extraColumn = "" }) {
 

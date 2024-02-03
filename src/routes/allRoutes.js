@@ -126,7 +126,6 @@ import SalesManList from "../pages/Adminisrator/SalesManPages/SalesManList";
 import LoadingSheet from "../pages/Sale/LoadingSheet/LoadingSheet";
 import LoadingSheetList from "../pages/Sale/LoadingSheet/LoadingSheetList";
 
-import Report from "../Reports/AllReportPage";
 import RouteUpdate from "../pages/Adminisrator/RouteUpdate/RouteUpdate";
 import PartyMasterBulkUpdate from "../pages/Adminisrator/PartyMasterBulkPages/PartyMasterBulkUpdate";
 import ManagementEmpParties from "../pages/Adminisrator/ManagementParties/ManagementEmpParties";
@@ -164,14 +163,12 @@ import OrderSummary from "../Reports/OrderSummaryReport/OrderSummary";
 import InvoiceConfiguration from "../pages/Adminisrator/InvoiceConfiguration/InvoiceConfiguration";
 import StockEntry from "../pages/Inventory/StockEntry/StockEntry";
 import PartyLedger from "../Reports/PratyLedger/Partyledger";
-import StockReport from "../Reports/StockReport/StockReport";
 import PurchaseReturnMode3 from "../pages/Purchase/Return/PurchaseReturnMode3";
 import DiscountMaster from "../pages/Adminisrator/Discount/DiscountMaster";
 import GenericSaleReport from "../Reports/GenericSaleReport/GenericSaleReport";
 import RetailerDataReport from "../Reports/RetailerDataReport/RetailerDataReport";
 import DiscountList from "../pages/Adminisrator/Discount/DiscountList";
 import PurchaseReturn from "../pages/Purchase/Return/PurchaseReturn";
-import StockReport_1 from "../Reports/StockReport/StockReport_1";
 import ClaimSummary from "../Reports/ClaimReportSummary/ClaimReport";
 import InvoiceDataExport from "../Reports/InvoiceDataExport/InvoiceDataExport.js";
 import PurchaseGSTReport from "../Reports/PurchaseGSTReport/PurchaseGSTReport.js";
@@ -218,6 +215,8 @@ import Bulk_Invoice from "../pages/Sale/Bulk_Invoice/index";
 import POSRoleAccess from "../pages/SweetPOS/Adminstration/POSRoleAccess.js";
 import SystemSetting from "../pages/Utility/SystemSetting/SystemSetting.js";
 import SystemSettingList from "../pages/Utility/SystemSetting/SystemSettingList.js";
+import SNSReport from "../Reports/StockReport/SNSReport.js";
+import CurrentStockReport from "../Reports/StockReport/CurrentStockReport.js";
 
 
 const userRoutes = [
@@ -503,9 +502,9 @@ const userRoutes = [
 	{ path: path.SELF_LEDGER, component: PartyLedger, isPartyWisePage: true },
 
 	// stock report is current report 
-	{ path: path.STOCK_REPORT, component: StockReport },// use self party drop-down
-	// stock StockReport_1 is SNSstock report 
-	{ path: path.STOCK_REPORT_1, component: StockReport_1 },// use self party drop-down
+	{ path: path.CURRENT_STOCK_REPORT, component: CurrentStockReport },// use self party drop-down
+
+	{ path: path.SNS_REPORT, component: SNSReport },// use self party drop-down
 
 	{ path: path.GENERIC_SALE_REPORT, component: GenericSaleReport },// use self party drop-down
 
@@ -522,8 +521,6 @@ const userRoutes = [
 	{ path: path.PURCHASE_DATA_EXPORT, component: InvoiceDataExport },// use self party drop-down
 
 	{ path: path.DELETE_INVOICE_DATA_EXPORT, component: DeleteInvoiceDataExport },// use self party drop-down
-
-	{ path: path.REPORT, component: Report },//current not use in production
 
 	{ path: path.PRODUCT_MARGIN_REPORT, component: ProductMarginReport },//not party wise
 
