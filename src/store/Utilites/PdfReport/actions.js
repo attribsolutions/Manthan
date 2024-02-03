@@ -1,5 +1,4 @@
 import {
-  GET_PDF_MULTIPLEINVOICE_DATA,
   GET_PDF_REPORT_DATA,
   GET_PDF_REPORT_DATA_ERROR,
   GET_PDF_REPORT_DATA_SUCCESS
@@ -23,11 +22,6 @@ export const getpdfReportdataError = (data) => ({
 });
 
 
-
-export const postpdfMultipleReportdata = (API, jsonBody, ReportType, Id) => ({
-  type: GET_PDF_MULTIPLEINVOICE_DATA,
-  API, jsonBody, ReportType, Id
-});
 
 
 

@@ -1,8 +1,6 @@
 
-import cbm_logo from "../../assets/images/cbm_logo.png"
-import upi_qr_code from "../../assets/images/upi_qr_code.png"
 import { CurrentTime, compareGSTINState, currentDate_dmy, date_dmy_func } from "../../components/Common/CommonFunction";
-import { numberWithCommas, toWords } from "../Report_common_function";
+import { numberWithCommas } from "../Report_common_function";
 import * as table from './TableData'
 
 let initial_y = 0

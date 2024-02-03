@@ -1,22 +1,11 @@
 
-import { CurrentTime, compareGSTINState, currentDate_dmy, date_dmy_func } from "../../components/Common/CommonFunction";
+import { CurrentTime, currentDate_dmy, date_dmy_func } from "../../components/Common/CommonFunction";
 import { numberWithCommas, toWords } from "../Report_common_function";
 import * as table from './TableData'
 import { url } from "../../routes";
 
 
 let initial_y = 0
-
-// export const pageBorder = (doc) => {
-
-//     doc.setDrawColor(0, 0, 0);
-//     doc.line(570, 16, 30, 16);//horizontal line (Top)
-//     doc.line(30, 815, 30, 16);//vertical line (left)
-//     doc.line(570, 815, 570, 16);//vertical line (Right)
-//     doc.line(570, 815, 30, 815);//horizontal line (Bottom)   
-// }
-
-
 
 export const pageBorder = (doc, data) => {
 
@@ -26,11 +15,6 @@ export const pageBorder = (doc, data) => {
     doc.line(570, data.PrintType ? 379 : 815, 570, 16);//vertical line (Right)
     doc.line(570, data.PrintType ? 379 : 815, 30, data.PrintType ? 379 : 815);//horizontal line (Bottom)   
 }
-
-
-
-
-
 
 export const pageHeder = (doc, data) => {
     doc.setDrawColor(0, 0, 0);

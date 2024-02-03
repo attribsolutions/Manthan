@@ -1,10 +1,7 @@
 
-
-// import reportHederPng from "../../assets/images/reportHeder.png"
-import upi_qr_code from "../../assets/images/upi_qr_code.png"
 import * as table from './TableData'
-import { numberWithCommas, toWords } from "../Report_common_function";
-import { date_dmy_func, convertOnlyTimefunc, convertTimefunc, currentDate_dmy, CurrentTime, compareGSTINState, loginSystemSetting } from "../../components/Common/CommonFunction";
+import { numberWithCommas } from "../Report_common_function";
+import { date_dmy_func, convertOnlyTimefunc, currentDate_dmy, CurrentTime, compareGSTINState } from "../../components/Common/CommonFunction";
 
 
 export const pageBorder = (doc) => {
@@ -339,7 +336,7 @@ export const reportHeder3 = (doc, data) => {
 
 
 export const reportFooter = (doc, data) => {
-    
+
     if (data.SettingData.Qr_Image === null) {
         doc.addImage("", 'JPEG', 335, 303, 105, 96);
     } else {
