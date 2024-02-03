@@ -1,4 +1,4 @@
-import { numberWithCommas } from "../Report_common_function";
+import { numberWithCommas } from "../../Report_common_function";
 
 
 export const columns = [

@@ -2,7 +2,7 @@ import jsPDF from "jspdf";
 import "jspdf-autotable";
 import * as style from './ReportStyle';
 import { compareGSTINState, loginSystemSetting } from "../../components/Common/CommonFunction";
-import InvioceReporta5 from "../Invoice report a5/Page";
+import InvioceReporta5 from "../InvoiceA5PDFReport/Page";
 
 
 const pageHeder = (doc, data) => {

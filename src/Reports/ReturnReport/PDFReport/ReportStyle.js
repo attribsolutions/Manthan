@@ -1,8 +1,8 @@
 
-import { CurrentTime, currentDate_dmy, date_dmy_func } from "../../components/Common/CommonFunction";
-import { numberWithCommas, toWords } from "../Report_common_function";
+import { CurrentTime, currentDate_dmy, date_dmy_func } from "../../../components/Common/CommonFunction";
+import { numberWithCommas, toWords } from "../../Report_common_function";
 import * as table from './TableData'
-import { url } from "../../routes";
+import { url } from "../../../routes";
 
 
 let initial_y = 0

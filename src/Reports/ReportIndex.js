@@ -1,12 +1,12 @@
-import InvioceReport from "./InvioceReport/Page";
-import ordeRreport from "./OrderReport/Page";
+import InvioceReport from "./InvioceA4PDFReport/Page";
+import ordeRreport from "./OrderPDFReport/Page";
 import StockReport from "./StockReport/PDFReport/Page";
 import ItemRegisterReport from "./ItemRegisterReport/PDFReport/Page";
 import VanLoadingSheet from "./Van Loading Party Wise InvoiceList/Page";
-import Receipts from "./Receipts/Page";
-import CreditNote from "./CRDRNote Report/Page";
+import Receipts from "./ReceiptsPDFReport/Page";
+import CreditNote from "./CreditDebitPDFReport/Page";
 import PartyLedgerReport from "./PratyLedger/PDFReport/Page";
-import ReturnReport from "./PurchaseReturnReport/Page";
+import ReturnReport from "./ReturnReport/PDFReport/Page";
 import MasterClaimReport from "./ClaimSummary/PDFReport/MasterClaimReport/Page";
 import ItemWiseClaimReport from "./ClaimSummary/PDFReport/ItemWiseClaimReport/Page";
 import CustomerWiseClaimReport from "./ClaimSummary/PDFReport/CustomerWiseClaimReport/Page";
