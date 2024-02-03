@@ -123,7 +123,7 @@ export const reportHeder1 = (doc, data) => {
                 let y = data1.cursor.y + 9
                 doc.setFontSize(8)
                 doc.setFont(undefined, 'bold')
-                doc.text('Full Return No: ', x, y)
+                doc.text('Return No: ', x, y)
             };
 
 
