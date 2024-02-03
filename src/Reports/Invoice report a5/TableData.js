@@ -1,5 +1,4 @@
 
-import { invoice } from "../ReportIndex";
 import { numberWithCommas, toWords } from "../Report_common_function";
 
 export const columnsWithCGST_SGST = [
@@ -122,7 +121,7 @@ export const RowsWithCGST_SGST = (data) => {
         }
         return accumulator;
     }, {});
-    
+
     const TotalItemlength = Object.values(groupedItems).length;
     data["TotalItemlength"] = TotalItemlength;
     Object.values(groupedItems).forEach((element, key) => {

@@ -1,9 +1,6 @@
-import CheckBox from "jspdf";
-import reportHederPng from "../../assets/images/reportHeder.png"
-import upi_qr_code from "../../assets/images/upi_qr_code.png"
-import { CurrentTime, currentDate_dmy, date_dmy_func } from "../../components/Common/CommonFunction";
-import { invoice } from "../ReportIndex";
-import { numberWithCommas, toWords } from "../Report_common_function";
+
+import { CurrentTime, currentDate_dmy } from "../../components/Common/CommonFunction";
+import { numberWithCommas } from "../Report_common_function";
 import * as table from './TableData'
 let initial_y = 0
 export const pageBorder = (doc) => {
@@ -139,7 +136,7 @@ export const Receipts = (doc, data) => {
         doc.text(`Bank Name :`, 40, final_y + 55, 'left');
         doc.setFont(undefined, 'bold')
         doc.text(`${data.DocumentNo}/${data.BankName}`, 100, final_y + 55,);
-        
+
         var bankwidth = doc.getTextWidth(`${data.DocumentNo}/${data.BankName}`);
         doc.setFont(undefined, 'Normal')
         doc.text(`Depository Bank Name :`, 40 + bankwidth + 80, final_y + 55, 'left');
@@ -176,46 +173,9 @@ export const Receipts = (doc, data) => {
 
 
 
-
-
-
-
-
-
-
-
     doc.autoTable(table.Address, table.AddressDetails(data), BilledByStyle);
 
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 export const pageFooter = (doc, data) => {

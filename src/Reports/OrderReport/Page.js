@@ -1,7 +1,6 @@
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import * as style from './ReportStyle'
-import { Data } from "./demo";
 import { compareGSTINState } from "../../components/Common/CommonFunction";
 
 

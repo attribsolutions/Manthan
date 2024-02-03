@@ -3,9 +3,8 @@
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import * as style from './ReportStyle'
-import { Data1, dataGenrator } from "./DemoData";
 import { compareGSTINState, date_dmy_func, } from "../../components/Common/CommonFunction";
-import { pageBorder } from "../InvioceReport/ReportStyle";
+
 
 
 var pageHeder = function (doc, data) {

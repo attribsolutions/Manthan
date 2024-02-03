@@ -1,8 +1,6 @@
 
-import reportHederPng from "../../assets/images/reportHeder.png"
-import upi_qr_code from "../../assets/images/upi_qr_code.png"
+
 import * as table from './TableData'
-import { toWords } from "../Report_common_function";
 import { CurrentTime, currentDate_dmy, date_dmy_func, loginUserDetails } from "../../components/Common/CommonFunction";
 
 
