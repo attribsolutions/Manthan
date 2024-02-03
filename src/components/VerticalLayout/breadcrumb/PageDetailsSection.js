@@ -8,13 +8,13 @@ const PageDetailsSection = (props) => {
     return (
         <div className="vertical-menu" >
             <ChangeCommonParty {...props} />
-            <div data-simplebar >
-                <div id="sidebar-menu" className="detailed-div" >
-                    <div style={{ padding: "1px", paddingTop: "2px" }}>
+            <div >
+                <div id="sidebar-menu" className="detailed-div" style={{ boxShadow: "#c19c464a", }} >
+                    <div style={{ padding: "2px", paddingTop: "3px" }}>
                         <div style={{
-                            padding: "5px", borderRadius: "8px",
-                            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-                            backgroundColor: "#4fa2eb3d", color: "#f4f4f4", height: "100%"
+                            padding: "5px",
+                            borderRadius: "3px",
+                            backgroundColor: "#977f4a2b", color: "#f4f4f4", height: "100%"
                         }}>
                             <HeaderTitleNewBtn hederTextColor={"white"} />
                             <CountLabelComp />
