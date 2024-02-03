@@ -1,6 +1,6 @@
 import InvioceReport from "./InvioceReport/Page";
 import ordeRreport from "./OrderReport/Page";
-import StockReport from "./StockReport/Page";
+import StockReport from "./StockReport/PDFReport/Page";
 import ItemRegisterReport from "./ItemRegisterReport/Page";
 import VanLoadingSheet from "./Van Loading Party Wise InvoiceList/Page";
 import Receipts from "./Receipts/Page";

@@ -289,9 +289,9 @@ export const PARTY_LEDGER = "/PartyLedger";
 
 export const SELF_LEDGER = "/SelfLedger";
 
-export const STOCK_REPORT = "/StockReport"
+export const CURRENT_STOCK_REPORT = "/StockReport"
 
-export const STOCK_REPORT_1 = "/Stock_Report_1"
+export const SNS_REPORT = "/Stock_Report_1"
 
 export const ORDER_SUMMARY_REPORT = "/OrderSummaryReport"
 

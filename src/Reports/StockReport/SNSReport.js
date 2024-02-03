@@ -17,7 +17,7 @@ import { ExcelReportComponent } from "../../components/Common/ReportCommonFunc/E
 import { alertMessages } from "../../components/Common/CommonErrorMsg/alertMsg";
 import { changeCommonPartyDropDetailsAction } from "../../store/Utilites/PartyDrodown/action";
 
-const StockReport_1 = (props) => {
+const SNSReport = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory();
@@ -370,4 +370,4 @@ const StockReport_1 = (props) => {
     )
 }
 
-export default StockReport_1;
+export default SNSReport;

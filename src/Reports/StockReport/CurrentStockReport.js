@@ -12,7 +12,7 @@ import Select from "react-select";
 import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess, getBaseUnit_ForDropDown, getBaseUnit_ForDropDownSuccess } from "../../store/actions";
 import C_Report from "../../components/Common/C_Report";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
-import { url, mode, pageId } from "../../routes/index"
+import {  mode, pageId } from "../../routes/index"
 import { stockReport_GoButton_API, stockReport_GoButton_API_Success } from "../../store/Report/StockReport/action";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
@@ -21,7 +21,7 @@ import { ExcelReportComponent } from "../../components/Common/ReportCommonFunc/E
 import { alertMessages } from "../../components/Common/CommonErrorMsg/alertMsg";
 import { changeCommonPartyDropDetailsAction } from "../../store/Utilites/PartyDrodown/action";
 
-const StockReport = (props) => {
+const CurrentStockReport = (props) => {
 
 	const dispatch = useDispatch();
 	const history = useHistory();
@@ -706,7 +706,7 @@ const StockReport = (props) => {
 	)
 }
 
-export default StockReport;
+export default CurrentStockReport;
 
 
 
