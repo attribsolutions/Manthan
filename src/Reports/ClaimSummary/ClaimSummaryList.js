@@ -5,7 +5,7 @@ import {
     commonPageFieldListSuccess
 } from "../../store/actions";
 import { claimList_API, claimList_API_Success, deleteClaimSuccess, delete_Claim_ID } from "../../store/Report/ClaimSummary/action";
-import * as report from '../../Reports/ReportIndex'
+import * as report from '../ReportIndex'
 import { getpdfReportdata, getpdfReportdataSuccess } from "../../store/Utilites/PdfReport/actions";
 import { Col, FormGroup, Input, Label } from "reactstrap";
 import CommonPurchaseList from "../../components/Common/CommonPurchaseList";

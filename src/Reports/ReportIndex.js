@@ -7,9 +7,9 @@ import Receipts from "./Receipts/Page";
 import CreditNote from "./CRDRNote Report/Page";
 import PartyLedgerReport from "./PratyLedger/Page";
 import ReturnReport from "./PurchaseReturnReport/Page";
-import CompanyWiseBudgetReport from "./CompanyWiseBugetReport/Page";
-import ClaimSummaryReport from "./ClaimReportSummary/Page";
-import CustomerWiseReturnReport from "./CustomerWiseReturnReport/Page";
+import MasterClaimReport from "./ClaimSummary/PDFReport/MasterClaimReport/Page";
+import ClaimSummaryReport from "./ClaimSummary/PDFReport/ItemWiseClaimReport/Page";
+import CustomerWiseReturnReport from "./ClaimSummary/PDFReport/CustomerWiseClaimReport/Page";
 
 
 export const order1 = "order1"
@@ -63,7 +63,7 @@ const generateReport = (resp) => {
             ReturnReport(resp.Data)
             break;
         case CompanyWiseBudget:
-            CompanyWiseBudgetReport(resp.Data)
+            MasterClaimReport(resp.Data)
             break;
         case ClaimSummary:
             ClaimSummaryReport(resp.Data)

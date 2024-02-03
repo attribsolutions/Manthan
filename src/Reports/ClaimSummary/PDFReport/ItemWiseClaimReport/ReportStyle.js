@@ -1,8 +1,7 @@
 
-import { CurrentTime, compareGSTINState, currentDate_dmy, date_dmy_func } from "../../components/Common/CommonFunction";
+import { CurrentTime, currentDate_dmy, date_dmy_func } from "../../../../components/Common/CommonFunction";
 import * as table from './TableData'
-import { url } from "../../routes";
-import { numberWithCommas, toWords } from "../Report_common_function";
+import { numberWithCommas, toWords } from "../../../Report_common_function";
 
 
 let initial_y = 0
@@ -19,21 +18,21 @@ export const pageBorder = (doc) => {
 
 export const pageHeder = (doc, data) => {
     doc.setDrawColor(0, 0, 0);
-    doc.line(408, 63, 408, 16);//vertical right 1
-    doc.line(570, 63, 30, 63)  //horizontal line 1 billby upper for repeat header
+    doc.line(408, 63, 408, 16);//vertical Line header repeat header
+    doc.line(570, 63, 30, 63)  //horizontal line upper for repeat header
     doc.addFont("Arial", 'Normal')
     doc.setFont('Arial')
     doc.setFontSize(18)
-    doc.text(' CUSTOMER WISE RETURN SUMMARY', 70, 45,)
+    doc.text(' ITEM WISE CLAIM SUMMARY', 110, 45,)
 }
 
 export const reportHeder1 = (doc, data) => {
+
     doc.setFont('Tahoma')
     doc.setFontSize(11)
     doc.setFont(undefined, 'bold')
     doc.setDrawColor(0, 0, 0);
     doc.line(570, 63, 30, 63) //horizontal line 1 billby upper
-    doc.line(408, 63, 408, 16);//vertical line header section billby 
     doc.line(570, 32, 408, 32);//horizontal line 3
     doc.line(570, 47, 408, 47);//horizontal line 3
 
@@ -118,6 +117,14 @@ export const reportHeder1 = (doc, data) => {
                 doc.text('FSSAI No: ', x, y)
             };
 
+            if (rowIdx === 2 && colIdx === 0) {
+                let x = data1.cursor.x + 2
+                let y = data1.cursor.y + 9
+                doc.setFontSize(8)
+                doc.setFont(undefined, 'bold')
+                doc.text('Return No: ', x, y)
+            };
+
 
 
         },
@@ -171,14 +178,15 @@ export const reportHeder1 = (doc, data) => {
 }
 
 export const reportHeder3 = (doc, data) => {
-    doc.line(570, 32, 408, 32);// horizontal line Repeat
-    doc.line(570, 47, 408, 47);// horizontal line Repeat
+
+    doc.line(570, 32, 408, 32);//horizontal Line repeat on next page
+    doc.line(570, 47, 408, 47);//horizontal Line repeat on next pagef
     doc.setFont('Tahoma')
     doc.setFontSize(10)
     doc.setFont(undefined, 'bold')
-    doc.text(`From Date:  ${date_dmy_func(data.Period.FromDate)}`, 415, 25)
-    doc.text(`To Date:       ${date_dmy_func(data.Period.ToDate)}`, 415, 40)
-    doc.text(`Claim ID :       ${data.Period.ClaimID}`, 415, 57)
+    doc.text(`From Date:  ${date_dmy_func(data.Period.FromDate)}`, 415, 26)
+    doc.text(`To Date:       ${date_dmy_func(data.Period.ToDate)}`, 415, 42)
+    doc.text(`Claim ID:       ${data.Period.ClaimID}`, 415, 58)
 
 
 }
@@ -186,28 +194,26 @@ export const reportHeder3 = (doc, data) => {
 export const tableBody = (doc, data) => {
     var options = {
         didParseCell: (data1) => {
-
-            if (data1.row.cells[0].raw === "Total") {
-                data1.row.cells[1].colSpan = 3
+            if (data1.row.cells[1].raw === "Total") {
+                data1.row.cells[0].colSpan = 2
 
                 data1.row.cells[0].styles.fontSize = 7
-                data1.row.cells[5].styles.fontSize = 7
-                data1.row.cells[6].styles.fontSize = 7
-                data1.row.cells[9].styles.fontSize = 7
-                data1.row.cells[11].styles.fontSize = 7
-                data1.row.cells[6].styles.fontSize = 7
-                data1.row.cells[10].styles.fontSize = 7
-                data1.row.cells[12].styles.fontSize = 7
+                data1.row.cells[2].styles.fontSize = 7
+                data1.row.cells[3].styles.fontSize = 7
 
+                data1.row.cells[1].styles.fontSize = 7
+                data1.row.cells[9].styles.fontSize = 7
+                data1.row.cells[10].styles.fontSize = 7
+                data1.row.cells[11].styles.fontSize = 7
 
                 data1.row.cells[0].styles.fontStyle = "bold"
-                data1.row.cells[5].styles.fontStyle = "bold"
-                data1.row.cells[6].styles.fontStyle = "bold"
-                data1.row.cells[9].styles.fontStyle = "bold"
-                data1.row.cells[11].styles.fontStyle = "bold"
-                data1.row.cells[10].styles.fontStyle = "bold"
-                data1.row.cells[12].styles.fontStyle = "bold"
+                data1.row.cells[2].styles.fontStyle = "bold"
+                data1.row.cells[3].styles.fontStyle = "bold"
 
+                data1.row.cells[1].styles.fontStyle = "bold"
+                data1.row.cells[9].styles.fontStyle = "bold"
+                data1.row.cells[10].styles.fontStyle = "bold"
+                data1.row.cells[11].styles.fontStyle = "bold"
 
             }
 
@@ -223,9 +229,9 @@ export const tableBody = (doc, data) => {
             lineWidth: 1,
             valign: 'top',
             fontStyle: 'bold',
-            halign: 'center',
+            halign: 'center',    //'center' or 'right'
             fillColor: "white",
-            textColor: [0, 0, 0],
+            textColor: [0, 0, 0], //Black     
             fontSize: 7,
             rowHeight: 10,
             lineColor: [0, 0, 0]
@@ -241,35 +247,35 @@ export const tableBody = (doc, data) => {
 
             0: {
                 valign: "top",
-                columnWidth: 42,
+                columnWidth: 110,
             },
             1: {
-                columnWidth: 25,
+                columnWidth: 35,
                 halign: 'right',
             },
             2: {
-                columnWidth: 79,
-                halign: 'left',
+                columnWidth: 40,
+                halign: 'right',
             },
             3: {
-                columnWidth: 75,
-                halign: 'left',
+                columnWidth: 40,
+                halign: 'right',
             },
             4: {
-                columnWidth: 30,
+                columnWidth: 35,
                 halign: 'right',
             },
             5: {
-                columnWidth: 37,
+                columnWidth: 40,
                 halign: 'right',
             },
 
             6: {
-                columnWidth: 37,
+                columnWidth: 40,
                 halign: 'right',
             },
             7: {
-                columnWidth: 35,
+                columnWidth: 40,
                 halign: 'right',
             },
             8: {
@@ -277,21 +283,18 @@ export const tableBody = (doc, data) => {
                 halign: 'right',
             },
             9: {
-                columnWidth: 37,
+                columnWidth: 40,
                 halign: 'right',
             },
             10: {
-                columnWidth: 33,
+                columnWidth: 40,
                 halign: 'right',
             },
             11: {
-                columnWidth: 34,
+                columnWidth: 40,
                 halign: 'right',
             },
-            12: {
-                columnWidth: 36,
-                halign: 'right',
-            },
+
         },
         tableLineColor: "black",
         startY: initial_y,
@@ -308,12 +311,16 @@ export const tableBody = (doc, data) => {
 }
 
 export const reportFooter = (doc, data) => {
+
+    // doc.addImage(upi_qr_code, 'PNG', 359, 747, 75, 65)
     doc.setDrawColor(0, 0, 0);
     doc.line(570, 730, 30, 730);//horizontal line Footer 1
     doc.line(435, 745, 30, 745);//horizontal line Footer 2
     doc.line(435, 775, 30, 775);//horizontal line Footer 3
     doc.line(435, 795, 30, 795);//horizontal line Footer 3
+
     doc.line(435, 730, 435, 815);//vertical right Sub Total
+    // doc.line(360, 745, 360, 815);//vertical right Qr Code    /////////////////
     doc.setFont('Tahoma')
 
     const a = data.ClaimSummaryItemDetails.map((data) => ({
@@ -337,17 +344,18 @@ export const reportFooter = (doc, data) => {
 
     });
     const TotalGST = totalCGST + totalSGST;
+    // const GrandTotal = TotalGST + TotalAmount;
     let stringNumber = toWords(Number(TotalAmount))
 
 
     doc.setFontSize(8)
 
 
-    doc.text(`Total Amount:`, 440, 748,)
-    doc.text(`${numberWithCommas(Number(TotalAmount).toFixed(2))}`, 567, 748, 'right')
+    doc.text(`Total Amount:`, 440, 738,)
+    doc.text(`${numberWithCommas(Number(TotalAmount).toFixed(2))}`, 567, 738, 'right')
 
-    // doc.text(`Total Disc:`, 440, 748,)
-    // doc.text(` ${numberWithCommas(Number(TotalDiscount).toFixed(2))}`, 567, 748, 'right')
+    doc.text(`Total Disc:`, 440, 748,)
+    doc.text(` ${numberWithCommas(Number(TotalDiscount).toFixed(2))}`, 567, 748, 'right')
 
     doc.text(`Total CGST:`, 440, 758)
     doc.text(`${numberWithCommas(Number(totalCGST).toFixed(2))}`, 567, 758, 'right')
@@ -373,19 +381,60 @@ export const reportFooter = (doc, data) => {
     doc.setFont('Tahoma')
     doc.setFontSize(8)
     doc.setFont("Arimo");
+    // doc.text(`I/we hearby certify that food/foods mentioned in this invoice is/are warranted to be
+    //      of the nature and quantity which it/these purports to be `, 34, 782)
     doc.setFontSize(10)
     doc.text(`Signature `, 280, 810,)
     doc.text(`Prepared by :${data.PartyDetails.PartyName} `, 35, 810,)
     doc.setFontSize(8)
     doc.text(`${stringNumber}`, 65, 740,)
 
+
     doc.setFont(undefined, 'bold')
     doc.text(`Rupees:`, 33, 740,)
     doc.addFont("Arial", 'Normal')
     doc.setFont("Arimo");
+
+
+    let ReturnReasonDetails = {
+        margin: {
+            top: 45, left: 30, right: 35,
+        },
+        showHead: 'always',
+        theme: 'plain',
+        styles: {
+            overflow: 'linebreak',
+            fontSize: 8,
+            height: 0,
+        },
+        bodyStyles: {
+            columnWidth: 'wrap',
+            textColor: [30, 30, 30],
+            cellPadding: 4,
+            fontSize: 8,
+            fontStyle: 'bold',
+            lineColor: [0, 0, 0]
+        },
+        columnStyles: {
+            0: {
+                valign: "top",
+                columnWidth: 250,
+                halign: 'lfet',
+            },
+
+        },
+        tableLineColor: "black",
+
+        startY: 745,
+
+    };
+
+    // doc.autoTable(table.Return, table.ReturnReason(data), ReturnReasonDetails);
 }
 
+
 export const pageFooter = (doc, data) => {
+
     const pageCount = doc.internal.getNumberOfPages()
     doc.setFont('helvetica', 'Normal')
     doc.setFontSize(8)

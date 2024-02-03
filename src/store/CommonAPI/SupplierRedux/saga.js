@@ -153,7 +153,7 @@ function* vendorSupplierCustomer_genFunc({ data }) {
     || subPageMode === url.INWARD_LIST
   );
 
-  const isPartyWithoutRetailers = (subPageMode === url.CLAIM_SUMMARY_REPORT)
+
 
   const jsonBody = {
     "PartyID": PartyID,
@@ -173,11 +173,7 @@ function* vendorSupplierCustomer_genFunc({ data }) {
     }
     else if (isDivisions) {
       response = yield call(VendorSupplierCustomer, JSON.stringify({ ...jsonBody, "Type": 4, }));//divisions mode 4
-    }
-    else if (isPartyWithoutRetailers) {
-      response = yield call(VendorSupplierCustomer, JSON.stringify({ ...jsonBody, "Type": 5, }));//divisions mode 4
-    }
-    else {
+    } else {
       response = { Data: [] }
     }
     response.Data.map((index) => {
