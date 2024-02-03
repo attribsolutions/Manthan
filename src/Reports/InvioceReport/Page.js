@@ -3,12 +3,6 @@ import "jspdf-autotable";
 import * as style from './ReportStyle';
 import { compareGSTINState, loginSystemSetting } from "../../components/Common/CommonFunction";
 import InvioceReporta5 from "../Invoice report a5/Page";
-import axios from "axios";
-
-
-
-
-
 
 
 const pageHeder = (doc, data) => {

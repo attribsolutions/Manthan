@@ -2,7 +2,7 @@ import jsPDF from "jspdf";
 import "jspdf-autotable";
 import * as style from './ReportStyle';
 import { date_dmy_func } from "../../components/Common/CommonFunction";
-import { Data } from "./DemoData";
+
 
 const pageHeder = (doc, data) => {
     style.pageBorder(doc, data);
