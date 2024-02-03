@@ -1,6 +1,6 @@
 
 import * as table from './TableData'
-import { CurrentTime, currentDate_dmy } from "../../components/Common/CommonFunction";
+import { CurrentTime, currentDate_dmy } from "../../../components/Common/CommonFunction";
 let initial_y = 0
 
 export const pageBorder = (doc) => {

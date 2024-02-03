@@ -5,7 +5,7 @@ import ItemRegisterReport from "./ItemRegisterReport/Page";
 import VanLoadingSheet from "./Van Loading Party Wise InvoiceList/Page";
 import Receipts from "./Receipts/Page";
 import CreditNote from "./CRDRNote Report/Page";
-import PartyLedgerReport from "./PratyLedger/Page";
+import PartyLedgerReport from "./PratyLedger/PDFReport/Page";
 import ReturnReport from "./PurchaseReturnReport/Page";
 import MasterClaimReport from "./ClaimSummary/PDFReport/MasterClaimReport/Page";
 import ClaimSummaryReport from "./ClaimSummary/PDFReport/ItemWiseClaimReport/Page";
