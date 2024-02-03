@@ -213,7 +213,7 @@ const CommonListPage = (props) => {
           />
 
           <Modal isOpen={modal_edit} toggle={() => { tog_center() }} size="xl">
-            <MasterModal editValue={editData.Data} masterPath={masterPath} pageMode={editData.pageMode} pageHeading={userAccess.pageHeading} />
+              <MasterModal editValue={editData.Data} masterPath={masterPath} pageMode={editData.pageMode}  />
           </Modal>
         </div>
 

@@ -22,6 +22,7 @@ import { mySearchProps } from '../../components/Common/SearchBox/MySearch';
 import { C_Button } from '../../components/Common/CommonButton';
 import { ExcelReportComponent } from '../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS';
 import { changeCommonPartyDropDetailsAction } from '../../store/Utilites/PartyDrodown/action';
+import DynamicColumnHook from '../../components/Common/TableCommonFunc';
 
 function initialState(history) {
 
@@ -46,8 +47,6 @@ const ManPowerReport = (props) => {           // this component also use for Man
     const [page_Id] = useState(() => initialState(history).page_Id);
     const [tableData, setTableData] = useState([]);
     const [btnMode, setBtnMode] = useState("");
-    const [columns, setcolumn] = useState([{}]);
-    const [columnsCreated, setColumnsCreated] = useState(false)
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
@@ -96,26 +95,7 @@ const ManPowerReport = (props) => {           // this component also use for Man
         };
     }, [userAccess])
 
-    const createColumns = () => {
-        if ((manPowerReportRedux.length > 0)) {
-            let columns = []
-            const objectAtIndex0 = ((manPowerReportRedux[0]));
-            for (const key in objectAtIndex0) {
-                const column = {
-                    text: key,
-                    dataField: key,
-                    sort: true,
-                    classes: "table-cursor-pointer",
-                };
-                columns.push(column);
-            }
-            setcolumn(columns)
-            setColumnsCreated(true)
-        }
-    }
-    if (!columnsCreated) {
-        createColumns();
-    }
+    const [tableColumns] = DynamicColumnHook({ pageField });
 
     useEffect(() => {
 
@@ -125,10 +105,9 @@ const ManPowerReport = (props) => {           // this component also use for Man
 
             } else if (btnMode === "Excel") {
                 ExcelReportComponent({      // Download CSV
+                    pageField,
                     excelTableData: manPowerReportRedux,
                     excelFileName: "Distributor & ManPower Report",
-                    numericHeaders: ['SAPCode', 'FEParty_id', 'SS_id', 'PIN', 'Mobile', 'FSSAINo'],
-                    dateHeader: 'FSSAIExpiry'
                 })
             }
             dispatch(ManPower_Get_Success([]));   // Reset Excel Data
@@ -184,7 +163,7 @@ const ManPowerReport = (props) => {           // this component also use for Man
                     <ToolkitProvider
                         keyField="id"
                         data={tableData}
-                        columns={columns}
+                        columns={tableColumns}
                         search
                     >
                         {(toolkitProps,) => (
