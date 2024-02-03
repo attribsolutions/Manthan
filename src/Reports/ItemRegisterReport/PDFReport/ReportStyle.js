@@ -1,7 +1,7 @@
 
 
 import * as table from './TableData'
-import { CurrentTime, currentDate_dmy, date_dmy_func, loginUserDetails } from "../../components/Common/CommonFunction";
+import { CurrentTime, currentDate_dmy, date_dmy_func, loginUserDetails } from "../../../components/Common/CommonFunction";
 
 
 export const pageBorder = (doc) => {

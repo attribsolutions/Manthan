@@ -1,15 +1,15 @@
 import InvioceReport from "./InvioceReport/Page";
 import ordeRreport from "./OrderReport/Page";
 import StockReport from "./StockReport/PDFReport/Page";
-import ItemRegisterReport from "./ItemRegisterReport/Page";
+import ItemRegisterReport from "./ItemRegisterReport/PDFReport/Page";
 import VanLoadingSheet from "./Van Loading Party Wise InvoiceList/Page";
 import Receipts from "./Receipts/Page";
 import CreditNote from "./CRDRNote Report/Page";
 import PartyLedgerReport from "./PratyLedger/PDFReport/Page";
 import ReturnReport from "./PurchaseReturnReport/Page";
 import MasterClaimReport from "./ClaimSummary/PDFReport/MasterClaimReport/Page";
-import ClaimSummaryReport from "./ClaimSummary/PDFReport/ItemWiseClaimReport/Page";
-import CustomerWiseReturnReport from "./ClaimSummary/PDFReport/CustomerWiseClaimReport/Page";
+import ItemWiseClaimReport from "./ClaimSummary/PDFReport/ItemWiseClaimReport/Page";
+import CustomerWiseClaimReport from "./ClaimSummary/PDFReport/CustomerWiseClaimReport/Page";
 
 
 export const order1 = "order1"
@@ -23,9 +23,9 @@ export const Receipt = "Receipt"
 export const Credit = "Credit"
 export const PartyLedger = "PartyLedger"
 export const Return = "Return"
-export const CompanyWiseBudget = "CompanyWiseBudget"
-export const ClaimSummary = "ClaimSummary"
-export const CustomerWiseReturn = "CustomerWiseReturn"
+export const MasterClaim = "MasterClaim"
+export const ItemWiseClaim = "ItemWiseClaim"
+export const CustomerWiseClaim = "CustomerWiseClaim"
 
 
 
@@ -62,14 +62,14 @@ const generateReport = (resp) => {
         case Return:
             ReturnReport(resp.Data)
             break;
-        case CompanyWiseBudget:
+        case MasterClaim:
             MasterClaimReport(resp.Data)
             break;
-        case ClaimSummary:
-            ClaimSummaryReport(resp.Data)
+        case ItemWiseClaim:
+            ItemWiseClaimReport(resp.Data)
             break;
-        case CustomerWiseReturn:
-            CustomerWiseReturnReport(resp.Data)
+        case CustomerWiseClaim:
+            CustomerWiseClaimReport(resp.Data)
             break;
 
 

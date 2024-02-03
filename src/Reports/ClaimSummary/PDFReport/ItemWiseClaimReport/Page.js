@@ -20,7 +20,7 @@ function pageFooter(doc, data) {
     style.reportFooter(doc, data);
 }
 
-const ClaimSummaryReport = (data) => {
+const ItemWiseClaimReport = (data) => {
 
     var doc = new jsPDF('p', 'pt', 'a4');
     pageHeder(doc, data);
@@ -39,6 +39,6 @@ const ClaimSummaryReport = (data) => {
 
 }
 
-export default ClaimSummaryReport;
+export default ItemWiseClaimReport;
 
 

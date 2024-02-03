@@ -119,15 +119,15 @@ const ClaimSummaryList = () => {
         }
 
         if (config.btnmode === "MastarClaimSummary") {
-            ReportData["ReportType"] = report.CompanyWiseBudget;
+            ReportData["ReportType"] = report.MasterClaim;
             dispatch(getpdfReportdata(MasterClaimSummary_API, ReportData))
         }
 
         if ((config.btnmode === "CustomerWiseSummary") || (config.btnmode === "ItemWiseSummary")) {
             if (config.btnmode === "CustomerWiseSummary") {
-                ReportData["ReportType"] = report.CustomerWiseReturn;
+                ReportData["ReportType"] = report.CustomerWiseClaim;
             } else {
-                ReportData["ReportType"] = report.ClaimSummary;
+                ReportData["ReportType"] = report.ItemWiseClaim;
             }
             dispatch(getpdfReportdata(ClaimSummary_API, ReportData))
         }

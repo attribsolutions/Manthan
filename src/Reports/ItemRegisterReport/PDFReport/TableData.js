@@ -1,5 +1,5 @@
-import { convertOnlyTimefunc, date_dmy_func, loginUserDetails } from "../../components/Common/CommonFunction";
-import { numberWithCommas } from "../Report_common_function";
+import { convertOnlyTimefunc, date_dmy_func, loginUserDetails } from "../../../components/Common/CommonFunction";
+import { numberWithCommas } from "../../Report_common_function";
 
 export const columns = [
     "SN",

@@ -140,12 +140,12 @@ const ClaimSummaryMaster = (props) => {
             "FromDate": row.selectedDate.FromDate,
             "ToDate": row.selectedDate.ToDate,
             "Party": row.PartyID,
-            "Mode": (reportType === report.ClaimSummary) ? 1 : 2,
+            "Mode": (reportType === report.ItemWiseClaim) ? 1 : 2,
             "LoginParty": (reportType === "createClaim") ? commonPartyDropSelect.value : undefined,
         });
         let config = { ReportType: reportType, jsonBody, btnId: btnId, ToDate: row.selectedDate.ToDate, FromDate: row.selectedDate.FromDate, ClaimID: row.id, PartyName: row.PartyName }
 
-        if (reportType === report.CompanyWiseBudget) {
+        if (reportType === report.MasterClaim) {
             dispatch(getpdfReportdata(MasterClaimSummary_API, config))
 
         }
@@ -153,7 +153,7 @@ const ClaimSummaryMaster = (props) => {
             dispatch(postClaimMasterCreate_API(config))
         }
 
-        if ((reportType === report.CustomerWiseReturn) || (reportType === report.ClaimSummary)) {
+        if ((reportType === report.CustomerWiseClaim) || (reportType === report.ItemWiseClaim)) {
             dispatch(getpdfReportdata(ClaimSummary_API, config))
         }
     }
