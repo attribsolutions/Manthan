@@ -298,9 +298,62 @@ textarea:focus {
   // line-height: 1.5;
   color: #495057;
 }
+
 .right-aligned-placeholder::placeholder {
   text-align: right;
 }
+
 .right-aligned-placeholder {
   text-align: right;
+}
+
+
+// Define a placeholder for common styles
+%common-list-label {
+  font-size: 12px;
+  padding: 2px 10px 2px 10px;
+  border-radius: 8px;
+  font-weight: bold;
+
+}
+
+$opacity: 0.16;
+
+
+$c_red: RED;
+
+.green_label {
+  @extend %common-list-label;
+  background-color: rgba($green, $opacity); // Use a different main color
+  color: $green;
+}
+
+.yellow_label {
+  @extend %common-list-label;
+  background-color: rgba($yellow, $opacity); // Use your main color
+  color: $yellow;
+}
+
+.purple_label {
+  @extend %common-list-label;
+  background-color: rgba($purple, 0.09);
+  color: $purple;
+}
+
+.indigo_label {
+  @extend %common-list-label;
+  background-color: rgba($indigo, 0.09);
+  color: $indigo;
+}
+
+.blue_lable {
+  @extend %common-list-label;
+  background-color: rgba($cyan, $opacity);
+  color: $cyan;
+}
+
+.red_label {
+  @extend %common-list-label;
+  background-color: rgba($c_red, $opacity);
+  color: $c_red;
 }

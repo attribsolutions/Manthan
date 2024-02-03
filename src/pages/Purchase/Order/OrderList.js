@@ -659,7 +659,7 @@ const OrderList = () => {
                         <FormGroup className="mb- row mt-3 " >
                             <Label className="col-sm-5 p-2"
                                 style={{ width: "65px" }}>
-                                {!(fieldLabel.FromDate === '') ? fieldLabel.FromDate : "FromDate"}
+                                {!(fieldLabel.FromDate === '') ? fieldLabel.FromDate : "From Date"}
                             </Label>
                             <Col sm="8">
                                 <C_DatePicker
@@ -680,7 +680,7 @@ const OrderList = () => {
                         <FormGroup className="mb- row mt-3 " >
                             <Label className="col-sm-5 p-2"
                                 style={{ width: "65px" }}>
-                                {!(fieldLabel.ToDate === '') ? fieldLabel.ToDate : "ToDate"}
+                                {!(fieldLabel.ToDate === '') ? fieldLabel.ToDate : "To Date"}
                             </Label>
                             <Col sm="8">
                                 <C_DatePicker
