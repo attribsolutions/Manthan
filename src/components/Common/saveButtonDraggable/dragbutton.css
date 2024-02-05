@@ -31,15 +31,12 @@
 }
 
 #draggable-section {
-    display: flex;
-    flex-direction: row;
-    align-items: start;
     cursor: grab;
     background: linear-gradient(to right, rgb(113 119 223 / 84%),rgb(245 204 197 / 35%));
     animation-name: animation-left-Right-swipe;
     animation-duration: 2s;
     animation-direction: alternate;
-    margin-right: 50px;
+   
     width: 100%;
     position: relative;
 }
@@ -62,7 +59,11 @@
     margin: 10px;
     margin-bottom: 5px;
     margin-left: 5px;
-    /* margin-right: 50px; */
+    margin-right: 50px;
+    display: flex;
+    flex-direction: row;
+    align-items: start;
+    gap:10px;
 }
 
 .save-Btn {

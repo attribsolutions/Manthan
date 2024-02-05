@@ -197,18 +197,17 @@ export const SaveAndDownloadPDF = ({ onClick, pageMode, userAcc, loading, forceD
         {loading ?
           <button
             type={type}
-            className="btn btn-info w-md"
-            style={{ padding: "3px", paddingInline: "5px" }}
+            className="btn btn-info "
           >Saving.. &nbsp;
             <Spinner style={{ height: "13px", width: "13px" }} color="white" />
           </button>
           :
           <button
             type={type}
-            style={{ padding: "3px", paddingInline: "5px" }}
+           
             disabled={forceDisabled}
             title={` save & goto Invoice ${Name}`}
-            className="btn btn-info w-md"
+            className="btn btn-info"
             onClick={onClick}
           >  Save & Print
           </button>}
