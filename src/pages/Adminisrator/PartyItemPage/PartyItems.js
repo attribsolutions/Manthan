@@ -21,6 +21,7 @@ import { getPartyTypelist, getPartyTypelistSuccess } from "../../../store/Admini
 import ChannelViewDetails from "./ChannelViewDetails";
 import { vieBtnCss } from "../../../components/Common/ListActionsButtons";
 import { changeCommonPartyDropDetailsAction } from "../../../store/Utilites/PartyDrodown/action";
+import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 
 function initialState(history) {
 
@@ -610,7 +611,7 @@ const PartyItems = (props) => {
 									</>
 								)}
 
-								<div className="row save1">
+								<SaveButtonDraggable>
 									<SaveButton
 										loading={saveBtnloading}
 										pageMode={pageMode}
@@ -618,7 +619,7 @@ const PartyItems = (props) => {
 										module={"PartyItems"}
 										onClick={SaveHandler}
 									/>
-								</div>
+								</SaveButtonDraggable>
 							</CardBody>
 						</Card>
 					</Container>

@@ -2,6 +2,7 @@ import React, { useEffect, useLayoutEffect, useState } from "react";
 import { MetaTags } from "react-meta-tags"
 import { useHistory } from "react-router-dom";
 import {
+    Alert,
     Button,
     Col,
     FormGroup,
@@ -40,6 +41,7 @@ import "../../../CustomTable2/CustomTable.scss"
 import "./order.scss"
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 import { changeCommonPartyDropDetailsAction } from "../../../store/Utilites/PartyDrodown/action";
+import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 
 
 let editVal = {}
@@ -1089,12 +1091,7 @@ const Order = (props) => {
     };
 
     // Function to handle the form submission
-    const saveHandler = async (event) => {
-        event.preventDefault();
-
-        // Extract the ID from the target element
-        const buttonId = event.target.id;
-        const gotoInvoiceMode = buttonId.substring(0, 14) === "gotoInvoiceBtn";
+    const saveHandler = async (gotoInvoiceMode = false) => {
 
         try {
             // Get the division from the loginPartyID function
@@ -1693,31 +1690,36 @@ const Order = (props) => {
                         <OrderPageTermsTable tableList={termsAndConTable} setfunc={setTermsAndConTable} privious={editVal.TermsAndConditions} tableData={orderItemTable} />
 
                         {
-                            ((orderItemTable.length > 0) && (!isOpen_assignLink)) ? <div className="row save1" style={{ paddingBottom: 'center' }}>
-                                <Col>
-                                    <SaveButton
-                                        loading={saveBtnloading}
-                                        editCreatedBy={editCreatedBy}
+                            ((orderItemTable.length > 0) && (!isOpen_assignLink)) &&
+
+                            <SaveButtonDraggable>
+
+                                <SaveButton
+                                    loading={saveBtnloading}
+                                    editCreatedBy={editCreatedBy}
+                                    pageMode={pageMode}
+                                    userAcc={userPageAccessState}
+                                    onClick={() => saveHandler(false)}
+                                    forceDisabled={gotoInvoiceBtnLoading}
+                                />
+                                {
+                                    (subPageMode === url.ORDER_4) && (pageMode === mode.defaultsave) &&
+
+                                    <GotoInvoiceBtn
+                                        forceDisabled={gotoInvoiceBtnLoading}
+                                        loading={gotoInvoiceBtnLoading}
                                         pageMode={pageMode}
                                         userAcc={userPageAccessState}
-                                        onClick={saveHandler}
-                                        forceDisabled={gotoInvoiceBtnLoading}
+                                        onClick={() => saveHandler(true)}
                                     />
-                                </Col>
-                                {
-                                    (subPageMode === url.ORDER_4) && (pageMode === mode.defaultsave) ?
-                                        <Col>
-                                            <GotoInvoiceBtn
-                                                forceDisabled={gotoInvoiceBtnLoading}
-                                                loading={gotoInvoiceBtnLoading}
-                                                pageMode={pageMode}
-                                                userAcc={userPageAccessState}
-                                                onClick={saveHandler}
-                                            />
-                                        </Col> : null}
-                            </div>
-                                : <div className="row save1"></div>
+                                }
+
+                            </SaveButtonDraggable>
+
+
+
                         }
+
                     </div >
                 </div>
                 <Modal

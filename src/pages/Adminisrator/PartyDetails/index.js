@@ -29,6 +29,7 @@ import { GoButton_For_PartyDetails, GoButton_For_PartyDetails_Success, saveParty
 import { getEmployeedropdownList } from "../../../store/Administrator/ManagementPartiesRedux/action";
 import paginationFactory from "react-bootstrap-table2-paginator";
 import SimpleBar from "simplebar-react"
+import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 
 const PartyDetails = (props) => {
 
@@ -650,7 +651,7 @@ const PartyDetails = (props) => {
         try {
 
             const convertToArrayComaseprateID = (ArrayID = []) => {
-                
+
                 let result = { "Id": [], "CommaSeprateID": null };
                 if ((ArrayID !== null) && (Array.isArray(ArrayID)) && ((ArrayID.length > 0))) {
                     ArrayID.forEach(item => {
@@ -777,19 +778,18 @@ const PartyDetails = (props) => {
                             )}
                         </ToolkitProvider>
                     </div>
-                    {tableData.length > 0 ?
-                        <div className="row save1" style={{ paddingBottom: 'center' }}>
+                    {tableData.length > 0 &&
+                        < SaveButtonDraggable >
                             <SaveButton pageMode={pageMode}
                                 loading={saveBtnloading}
                                 onClick={SaveHandler}
                                 userAcc={userPageAccessState}
                             />
-                        </div>
-                        : null
+                        </SaveButtonDraggable>
                     }
 
                 </div>
-            </React.Fragment>
+            </React.Fragment >
         );
     }
     else {

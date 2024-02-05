@@ -28,6 +28,7 @@ import {
 } from "../../../../store/Administrator/ImportExportFieldMapRedux/action";
 import { customAlert } from "../../../../CustomAlert/ConfirmDialog";
 import NewCommonPartyDropdown from "../../../../components/Common/NewCommonPartyDropdown";
+import SaveButtonDraggable from "../../../../components/Common/saveButtonDraggable";
 
 const ImportExcelFieldMap = (props) => {
 
@@ -312,17 +313,16 @@ const ImportExcelFieldMap = (props) => {
                     </div>
                 </div>
 
-                <FormGroup>
-                    <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
-                        {(goButtonItem.length > 0) &&
-                            <SaveButton
-                                pageMode={pageMode}
-                                loading={saveBtnLoading}
-                                userAcc={userPageAccessState}
-                                onClick={SaveHandler}
-                            />}
-                    </Col>
-                </FormGroup >
+                {(goButtonItem.length > 0) &&
+                    <SaveButtonDraggable>
+                        <SaveButton
+                            pageMode={pageMode}
+                            loading={saveBtnLoading}
+                            userAcc={userPageAccessState}
+                            onClick={SaveHandler}
+                        />
+                    </SaveButtonDraggable>
+                }
 
             </React.Fragment>
         );

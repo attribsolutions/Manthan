@@ -16,6 +16,7 @@ import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { getGroupTypeslist, getGroupTypeslistSuccess } from "../../../store/Administrator/GroupTypeRedux/action";
 import { SubGroup_By_Group_DropDown_API } from "../../../helpers/backend_helper";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
+import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 
 const ItemMasterBulkUpdate = (props) => {
 
@@ -461,18 +462,14 @@ const ItemMasterBulkUpdate = (props) => {
                     </div>
 
                     {goButtonData.length > 0 &&
-                        <FormGroup className="row row-cols-2 save1" >
-                            <Row >
-                                <Col sm={2} className="mt-n4">
-                                    <SaveButton pageMode={pageMode}
-                                        loading={saveBtnloading}
-                                        onClick={SaveHandler}
-                                        userAcc={userPageAccessState}
-                                        module={"PartyMasterBulkUpdate"}
-                                    />
-                                </Col>
-                            </Row>
-                        </FormGroup >
+                        <SaveButtonDraggable>
+                            <SaveButton pageMode={pageMode}
+                                loading={saveBtnloading}
+                                onClick={SaveHandler}
+                                userAcc={userPageAccessState}
+                                module={"PartyMasterBulkUpdate"}
+                            />
+                        </SaveButtonDraggable>
                     }
                 </form>
 

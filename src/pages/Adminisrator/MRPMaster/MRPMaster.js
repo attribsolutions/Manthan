@@ -36,6 +36,7 @@ import { deleteMRPMaster_Id, deleteMRPMaster_Id_Success, GoButtonForMRP_Master, 
 import { mobileApp_ProductUpdate_Api } from "../../../helpers/backend_helper";
 import { showToastAlert } from "../../../helpers/axios_Config";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
+import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 
 const MRPMaster = (props) => {
     const dispatch = useDispatch();
@@ -570,18 +571,15 @@ const MRPMaster = (props) => {
 
                                     : null}
 
-                                {Data.length > 0 ?
-                                    <FormGroup>
-                                        <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
-                                            <SaveButton pageMode={pageMode}
-                                                loading={saveBtnloading}
-                                                onClick={SaveHandler}
-                                                userAcc={userPageAccessState}
-                                                editCreatedBy={editCreatedBy}
-                                            />
-                                        </Col>
-                                    </FormGroup >
-                                    : null
+                                {Data.length > 0 &&
+                                    <SaveButtonDraggable>
+                                        <SaveButton pageMode={pageMode}
+                                            loading={saveBtnloading}
+                                            onClick={SaveHandler}
+                                            userAcc={userPageAccessState}
+                                            editCreatedBy={editCreatedBy}
+                                        />
+                                    </SaveButtonDraggable>
                                 }
 
                             </CardBody>

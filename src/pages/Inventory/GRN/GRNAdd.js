@@ -24,6 +24,7 @@ import { C_DatePicker } from "../../../CustomValidateForm";
 import { initialFiledFunc } from "../../../components/Common/validationFunction";
 import { useLayoutEffect } from "react";
 import { pageFieldUseEffect, saveMsgUseEffect, table_ArrowUseEffect, userAccessUseEffect } from "../../../components/Common/CommonUseEffect";
+import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 
 let initialTableData = []
 
@@ -833,17 +834,15 @@ const GRNAdd = (props) => {
                     </ToolkitProvider>
 
                     {
-                        (grnItemList.length > 0) ?
-                            <div className="row save1" style={{ paddingBottom: 'center', marginTop: "-30px" }}>
-                                <SaveButton pageMode={pageMode}
-                                    loading={saveBtnloading}
-                                    editCreatedBy={editCreatedBy}
-                                    userAcc={userPageAccessState}
-                                    module={"GRN"} onClick={saveHandeller}
-                                />
-                            </div>
-                            :
-                            <div className="row save1"></div>
+                        (grnItemList.length > 0) &&
+                        <SaveButtonDraggable>
+                            <SaveButton pageMode={pageMode}
+                                loading={saveBtnloading}
+                                editCreatedBy={editCreatedBy}
+                                userAcc={userPageAccessState}
+                                module={"GRN"} onClick={saveHandeller}
+                            />
+                        </SaveButtonDraggable>
                     }
                 </div >
 

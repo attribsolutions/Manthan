@@ -13,7 +13,7 @@ import BootstrapTable from "react-bootstrap-table-next";
 import { useHistory } from "react-router-dom";
 import { BreadcrumbShowCountlabel, Breadcrumb_inputName, commonPageField, commonPageFieldSuccess, postSelect_Field_for_dropdown } from "../../../store/actions";
 import { orderCalculateFunc } from "../../Purchase/Order/OrderPageCalulation";
-import { SaveButton } from "../../../components/Common/CommonButton";
+import { C_Button, SaveButton } from "../../../components/Common/CommonButton";
 import { editGRNIdSuccess, hideInvoiceForGRFAction, hideInvoiceForGRFActionSuccess, makeGRN_Mode_1ActionSuccess, saveGRNAction, saveGRNSuccess } from "../../../store/Inventory/GRNRedux/actions";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import Select from "react-select";
@@ -25,6 +25,7 @@ import { initialFiledFunc } from "../../../components/Common/validationFunction"
 import { pageFieldUseEffect, saveMsgUseEffect, table_ArrowUseEffect, userAccessUseEffect } from "../../../components/Common/CommonUseEffect";
 import { useLayoutEffect } from "react";
 import DatePicker from "react-flatpickr";
+import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 
 const GRNAdd3 = (props) => {
 
@@ -116,7 +117,7 @@ const GRNAdd3 = (props) => {
     useEffect(() => {
 
         if ((items.Status === true)) {
-            
+
             const grnDetails = { ...items.Data }
             const InvoiceID = grnDetails.GRNReferences[0].Invoice
             setInvoiceID(InvoiceID)
@@ -338,10 +339,9 @@ const GRNAdd3 = (props) => {
         },
     ];
 
-    const hideHandler = async (event) => {
-        let isHide = event.target.checked
-        const HideValue = isHide ? "1" : "0"
-        let config = { InvoiceId: InvoiceID, IsHide: HideValue }
+    const hideHandler = async () => {
+        //if want to hide grn then pass IsHide="1" otherwise IsHide="0"
+        let config = { InvoiceId: InvoiceID, IsHide: "1" }
 
         const isConfirmed = await customAlert({
             Type: 7,
@@ -419,7 +419,7 @@ const GRNAdd3 = (props) => {
 
                 <div className="page-content">
 
-                    <div className="px-2 mb-1  c_card_header " >
+                    <div className="px-2 mb-1  c_card_filter" >
                         <Row>
                             <Col sm={5}>
 
@@ -504,8 +504,19 @@ const GRNAdd3 = (props) => {
                                         />
 
                                     </Col>
+
                                 </FormGroup>
 
+
+                            </Col>
+                            <Col className="mt-2">
+                                {pageMode !== mode.view &&
+                                    <C_Button
+                                        className="btn btn-outline-primary"
+                                        onClick={hideHandler}
+                                    >Hide
+                                    </C_Button>
+                                }
                             </Col>
                         </Row>
                     </div>
@@ -521,11 +532,11 @@ const GRNAdd3 = (props) => {
                             <React.Fragment>
                                 <Row>
                                     <Col xl="12">
-                                        <div className="table-responsive table" style={{ minHeight: "45vh" }}>
+                                        <div >
                                             <BootstrapTable
                                                 keyField={"Item_id"}
                                                 id="table_Arrow"
-                                                classes={"table  table-bordered table-hover"}
+                                                classes={"custom-table"}
                                                 noDataIndication={
                                                     <div className="text-danger text-center ">
                                                         Items Not available
@@ -546,32 +557,20 @@ const GRNAdd3 = (props) => {
                     </ToolkitProvider>
 
                     {
-                        (grnItemTableList.length > 0) ?
-                            <div>
-                                <div className="row row-cols-2 save1" style={{ paddingBottom: 'center' }}>
-                                    <Col sm={6}>
-                                        <SaveButton pageMode={pageMode}
-                                            loading={saveBtnloading}
-                                            editCreatedBy={editCreatedBy}
-                                            userAcc={userPageAccessState}
-                                            module={"GRN"} onClick={saveHandeller}
-                                        />
-                                    </Col>
-                                </div>
-                                <div className="HideButton">
-                                    <Col sm={6}>
-                                        {pageMode === mode.view ? null :
-                                            <div className="btn-group" role="group" aria-label="Basic checkbox toggle button group">
-                                                <input type="checkbox" className="btn-check" id="btncheck1" autoComplete="off" onChange={(event) => { hideHandler(event) }} />
-                                                <label className="btn btn-outline-primary" htmlFor="btncheck1">Hide</label>
-                                            </div>}
-                                    </Col>
-                                </div>
+                        (grnItemTableList.length > 0) &&
 
-                            </div>
+                        <SaveButtonDraggable>
+                            <SaveButton pageMode={pageMode}
+                                loading={saveBtnloading}
+                                editCreatedBy={editCreatedBy}
+                                userAcc={userPageAccessState}
+                                module={"GRN"} onClick={saveHandeller}
+                            />
+                        </SaveButtonDraggable>
 
-                            :
-                            null
+
+
+
                     }
                 </div >
 

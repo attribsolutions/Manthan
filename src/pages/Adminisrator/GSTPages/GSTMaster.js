@@ -42,6 +42,7 @@ import { comAddPageFieldFunc, initialFiledFunc, onChangeDate, resetFunction } fr
 import { Go_Button, SaveButton } from "../../../components/Common/CommonButton";
 import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
+import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 
 const GSTMaster = (props) => {
     const dispatch = useDispatch();
@@ -512,18 +513,15 @@ const GSTMaster = (props) => {
                                     </ToolkitProvider>
                                     : null}
 
-                                {Data.length > 0 ?
-                                    <FormGroup>
-                                        <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
-                                            <SaveButton pageMode={pageMode}
-                                                loading={saveBtnloading}
-                                                onClick={SaveHandler}
-                                                userAcc={userPageAccessState}
-                                                editCreatedBy={editCreatedBy}
-                                            />
-                                        </Col>
-                                    </FormGroup >
-                                    : null
+                                {Data.length > 0 &&
+                                    <SaveButtonDraggable>
+                                        <SaveButton pageMode={pageMode}
+                                            loading={saveBtnloading}
+                                            onClick={SaveHandler}
+                                            userAcc={userPageAccessState}
+                                            editCreatedBy={editCreatedBy}
+                                        />
+                                    </SaveButtonDraggable>
                                 }
 
                             </CardBody>

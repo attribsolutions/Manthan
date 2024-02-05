@@ -25,6 +25,7 @@ import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { C_Select } from "../../../CustomValidateForm";
 import { mobileApp_Send_Retailer_Api } from "../../../helpers/backend_helper"
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
+import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 
 const Index = (props) => {
 
@@ -239,23 +240,17 @@ const Index = (props) => {
 							}
 						</ToolkitProvider>
 
-						{RetailerList.length > 0 ?
-							<FormGroup style={{ marginTop: "-25px" }}>
-								<Row >
-									<Col sm={2} className="mt-n4"> <div className="row save1" style={{ paddingBottom: 'center' }}>
-										<C_Button
-											title={`Send Retailer`}
-											className="btn btn-primary w-md"
-											type="button"
-											onClick={SaveHandler}
-											loading={saveBtnLoading}
-											spinnerColor="white"
-										><i className="bx bx-send"></i> Send</C_Button>
-									</div>
-									</Col>
-								</Row>
-							</FormGroup >
-							: null
+						{RetailerList.length > 0 &&
+							<SaveButtonDraggable>
+								<C_Button
+									title={`Send Retailer`}
+									className="btn btn-primary w-md"
+									type="button"
+									onClick={SaveHandler}
+									loading={saveBtnLoading}
+									spinnerColor="white"
+								><i className="bx bx-send"></i> Send</C_Button>
+							</SaveButtonDraggable>
 						}
 
 					</form>

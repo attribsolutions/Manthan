@@ -25,6 +25,7 @@ import { saveStockEntryAction, saveStockEntrySuccess } from "../../../store/Inve
 import { AddItemInTableFunc, stockQtyUnit_SelectOnchange } from "./StockAdjust_Func";
 import "../../../pages/Sale/SalesReturn/salesReturn.scss";
 import Select, { components } from "react-select";
+import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 
 const StockAdjustment = (props) => {
 
@@ -578,19 +579,16 @@ const StockAdjustment = (props) => {
                         </ToolkitProvider>
 
                         {
-                            TableArr.length > 0 ?
-                                <FormGroup>
-                                    <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
-                                        <SaveButton
-                                            pageMode={pageMode}
-                                            loading={saveBtnloading}
-                                            onClick={SaveHandler}
-                                            userAcc={userPageAccessState}
-                                        />
+                            TableArr.length > 0 &&
+                            <SaveButtonDraggable>
+                                <SaveButton
+                                    pageMode={pageMode}
+                                    loading={saveBtnloading}
+                                    onClick={SaveHandler}
+                                    userAcc={userPageAccessState}
+                                />
 
-                                    </Col>
-                                </FormGroup >
-                                : null
+                            </SaveButtonDraggable>
                         }
 
                     </form >

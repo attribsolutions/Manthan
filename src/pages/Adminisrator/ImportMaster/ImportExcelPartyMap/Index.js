@@ -37,6 +37,7 @@ import {
     save_ImportExcelPartyMap_Sucess
 } from "../../../../store/Administrator/ImportExcelPartyMapRedux/action";
 import * as _cfunc from "../../../../components/Common/CommonFunction";
+import SaveButtonDraggable from "../../../../components/Common/saveButtonDraggable";
 
 const ImportExcelPartyMap = (props) => {
 
@@ -446,19 +447,18 @@ const ImportExcelPartyMap = (props) => {
                     </div>
                 </div>
 
-                <FormGroup>
-                    <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
-                        {(UpdateTableList.length > 0) &&
-                            <SaveButton
-                                onClick={SaveHandler}
-                                pageMode={pageMode}
-                                userAcc={userPageAccessState}
-                                loading={saveBtnloading}
-                            // module={"Import Master Map"} 
-                            />
-                        }
-                    </Col>
-                </FormGroup>
+
+                {(UpdateTableList.length > 0) &&
+                    <SaveButtonDraggable>
+                        <SaveButton
+                            onClick={SaveHandler}
+                            pageMode={pageMode}
+                            userAcc={userPageAccessState}
+                            loading={saveBtnloading}
+                        />
+                    </SaveButtonDraggable>
+                }
+
 
             </React.Fragment>
         );

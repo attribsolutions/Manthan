@@ -10,7 +10,7 @@ import {
 import { MetaTags } from "react-meta-tags";
 import { Breadcrumb_inputName, commonPageFieldSuccess } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
-import {  commonPageField } from "../../../store/actions";
+import { commonPageField } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import {
     comAddPageFieldFunc,
@@ -32,7 +32,7 @@ import {
     loginPartyID,
     metaTagLabel
 }
- from "../../../components/Common/CommonFunction";
+    from "../../../components/Common/CommonFunction";
 import {
     goButtonForMaterialIssue_Master_Action,
     goButtonForMaterialIssue_Master_ActionSuccess,
@@ -54,6 +54,7 @@ import {
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { C_DatePicker } from "../../../CustomValidateForm";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
+import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 
 const ProductionReIssueAdd = (props) => {
 
@@ -234,7 +235,7 @@ const ProductionReIssueAdd = (props) => {
             dispatch(saveBOMMasterSuccess({ Status: false }))
             customAlert({
                 Type: 4,
-                 Message: JSON.stringify(postMsg.Message),
+                Message: JSON.stringify(postMsg.Message),
             })
         }
     }, [postMsg])
@@ -248,7 +249,7 @@ const ProductionReIssueAdd = (props) => {
             })
         } else if (updateMsg.Status === true && !modalCss) {
             dispatch(updateBOMListSuccess({ Status: false }));
-             customAlert({
+            customAlert({
                 Type: 3,
                 Message: JSON.stringify(updateMsg.Message),
             })
@@ -616,113 +617,111 @@ const ProductionReIssueAdd = (props) => {
                 <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
                 <div className="page-content" >
 
-                    <form onSubmit={SaveHandler} noValidate>
-                        <Col className="px-2 mb-1 c_card_filter header text-black" sm={12}>
-                            <Row>
-                                <Col className=" mt-1 row" sm={11} >
-                                    <Col sm="6">
-                                        <FormGroup className="row mt-2  ">
-                                            <Label className="mt-1" style={{ width: "150px" }}>{fieldLabel.ProductionReIssueDate} </Label>
-                                            <Col sm="7">
-                                                <C_DatePicker
-                                                    name="ProductionReIssueDate"
-                                                    value={values.ProductionReIssueDate}
-                                                    onChange={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
-                                                />
-                                                {isError.ProductionReIssueDate.length > 0 && (
-                                                    <span className="invalid-feedback">{isError.ProductionReIssueDate}</span>
-                                                )}
-                                            </Col>
-                                        </FormGroup>
-                                    </Col>
 
-                                    <Col sm="6">
-                                        <FormGroup className="row mt-2 ">
-                                            <Label className="mt-2" style={{ width: "100px" }}> {fieldLabel.ItemName} </Label>
-                                            <Col sm={7}>
-                                                <Select
-                                                    name="ItemName"
-                                                    value={values.ItemName}
-                                                    isDisabled={goButtonList.length > 0 ? true : false}
-                                                    isSearchable={true}
-                                                    className="react-dropdown"
-                                                    classNamePrefix="dropdown"
-                                                    options={itemOption}
-                                                    onChange={ItemOnchange}
-                                                />
-                                                {isError.ItemName.length > 0 && (
-                                                    <span className="text-danger f-8"><small>{isError.ItemName}</small></span>
-                                                )}
-                                            </Col>
-                                        </FormGroup>
-                                    </Col >
-
-
+                    <Col className="px-2 mb-1 c_card_filter header text-black" sm={12}>
+                        <Row>
+                            <Col className=" mt-1 row" sm={11} >
+                                <Col sm="6">
+                                    <FormGroup className="row mt-2  ">
+                                        <Label className="mt-1" style={{ width: "150px" }}>{fieldLabel.ProductionReIssueDate} </Label>
+                                        <Col sm="7">
+                                            <C_DatePicker
+                                                name="ProductionReIssueDate"
+                                                value={values.ProductionReIssueDate}
+                                                onChange={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
+                                            />
+                                            {isError.ProductionReIssueDate.length > 0 && (
+                                                <span className="invalid-feedback">{isError.ProductionReIssueDate}</span>
+                                            )}
+                                        </Col>
+                                    </FormGroup>
                                 </Col>
-                                <Col sm={1} className="mt-2 mb-2">
-                                    {(pageMode === mode.modeSTPsave) ?
-                                        (goButtonList.length === 0) ?
-                                            < Go_Button onClick={(e) => goButtonHandler()} />
-                                            :
-                                            <Change_Button onClick={(e) => setGoButtonList([])} />
-                                        : null
-                                    }
-                                </Col>
-                                <Col>
-                                </Col>
-                            </Row>
-                        </Col>
 
-                        <PaginationProvider pagination={paginationFactory(pageOptions)}>
-                            {({ paginationProps, paginationTableProps }) => (
-                                <ToolkitProvider
-                                    keyField={"id"}
-                                    data={goButtonList}
-                                    columns={pagesListColumns}
-                                    search
-                                >
-                                    {(toolkitProps) => (
-                                        <React.Fragment>
-                                            <Row>
-                                                <Col xl="12">
-                                                    <div className="table-responsive">
-                                                        <BootstrapTable
-                                                            keyField={"id"}
-                                                            id="table_Arrow"
-                                                            responsive
-                                                            bordered={false}
-                                                            striped={false}
-                                                            classes={"table  table-bordered"}
-                                                            {...toolkitProps.baseProps}
-                                                            {...paginationTableProps}
-                                                        />
-                                                        {countlabelFunc(toolkitProps, paginationProps, dispatch, "Material Issue")}
-                                                        {/* {mySearchProps(toolkitProps.searchProps, pageField.id)} */}
-                                                    </div>
-                                                </Col>
-                                            </Row>
-                                            <Row className="align-items-md-center mt-30">
-                                                <Col className="pagination pagination-rounded justify-content-end mb-2">
-                                                    <PaginationListStandalone {...paginationProps} />
-                                                </Col>
-                                            </Row>
-                                        </React.Fragment>
-                                    )}
-                                </ToolkitProvider>
-                            )}
+                                <Col sm="6">
+                                    <FormGroup className="row mt-2 ">
+                                        <Label className="mt-2" style={{ width: "100px" }}> {fieldLabel.ItemName} </Label>
+                                        <Col sm={7}>
+                                            <Select
+                                                name="ItemName"
+                                                value={values.ItemName}
+                                                isDisabled={goButtonList.length > 0 ? true : false}
+                                                isSearchable={true}
+                                                className="react-dropdown"
+                                                classNamePrefix="dropdown"
+                                                options={itemOption}
+                                                onChange={ItemOnchange}
+                                            />
+                                            {isError.ItemName.length > 0 && (
+                                                <span className="text-danger f-8"><small>{isError.ItemName}</small></span>
+                                            )}
+                                        </Col>
+                                    </FormGroup>
+                                </Col >
 
-                        </PaginationProvider>
 
-                        {goButtonList.length > 0 ? <FormGroup>
-                            <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
-                                <SaveButton pageMode={pageMode}
-                                    //   onClick={onsave}
-                                    userAcc={userPageAccessState}
-                                    module={"Material Issue"}
-                                />
                             </Col>
-                        </FormGroup > : null}
-                    </form>
+                            <Col sm={1} className="mt-2 mb-2">
+                                {(pageMode === mode.modeSTPsave) ?
+                                    (goButtonList.length === 0) ?
+                                        < Go_Button onClick={(e) => goButtonHandler()} />
+                                        :
+                                        <Change_Button onClick={(e) => setGoButtonList([])} />
+                                    : null
+                                }
+                            </Col>
+                            <Col>
+                            </Col>
+                        </Row>
+                    </Col>
+
+                    <PaginationProvider pagination={paginationFactory(pageOptions)}>
+                        {({ paginationProps, paginationTableProps }) => (
+                            <ToolkitProvider
+                                keyField={"id"}
+                                data={goButtonList}
+                                columns={pagesListColumns}
+                                search
+                            >
+                                {(toolkitProps) => (
+                                    <React.Fragment>
+                                        <Row>
+                                            <Col xl="12">
+                                                <div className="table-responsive">
+                                                    <BootstrapTable
+                                                        keyField={"id"}
+                                                        id="table_Arrow"
+                                                        responsive
+                                                        bordered={false}
+                                                        striped={false}
+                                                        classes={"table  table-bordered"}
+                                                        {...toolkitProps.baseProps}
+                                                        {...paginationTableProps}
+                                                    />
+                                                    {countlabelFunc(toolkitProps, paginationProps, dispatch, "Material Issue")}
+                                                    {/* {mySearchProps(toolkitProps.searchProps, pageField.id)} */}
+                                                </div>
+                                            </Col>
+                                        </Row>
+                                        <Row className="align-items-md-center mt-30">
+                                            <Col className="pagination pagination-rounded justify-content-end mb-2">
+                                                <PaginationListStandalone {...paginationProps} />
+                                            </Col>
+                                        </Row>
+                                    </React.Fragment>
+                                )}
+                            </ToolkitProvider>
+                        )}
+
+                    </PaginationProvider>
+
+                    {goButtonList.length > 0 && <SaveButtonDraggable>
+                        <SaveButton pageMode={pageMode}
+                            onClick={SaveHandler}
+                            userAcc={userPageAccessState}
+                            module={"Material Issue"}
+                        />
+                    </SaveButtonDraggable>}
+
                 </div>
             </React.Fragment>
         );

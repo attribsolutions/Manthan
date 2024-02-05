@@ -41,6 +41,7 @@ import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import { goButton_ServiceItemAssign } from "../../../store/Administrator/ServiceItemAssignRedux/action";
 import { goButton_ServiceItemAssign_Success } from "../../../store/Administrator/ServiceItemAssignRedux/action";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
+import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 
 function initialState(history) {
 
@@ -983,20 +984,17 @@ const CreditNote_1 = (props) => {
                         </div>
 
                         {
-                            TableArr.length ?
-                                <FormGroup>
-                                    <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
-                                        <SaveButton
-                                            pageMode={pageMode}
-                                            forceDisabled={addBtnLoading}
-                                            loading={saveBtnloading}
-                                            onClick={SaveHandler}
-                                            userAcc={userPageAccessState}
-                                        />
+                            TableArr.length &&
+                            <SaveButtonDraggable>
+                                <SaveButton
+                                    pageMode={pageMode}
+                                    forceDisabled={addBtnLoading}
+                                    loading={saveBtnloading}
+                                    onClick={SaveHandler}
+                                    userAcc={userPageAccessState}
+                                />
 
-                                    </Col>
-                                </FormGroup >
-                                : null
+                            </SaveButtonDraggable>
                         }
 
                     </form >
