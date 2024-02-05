@@ -5,52 +5,31 @@ import './styles.css';
 
 const SaveButtonDraggable = ({ children }) => {
   useEffect(() => {
-    // Check if jQuery is available
-    if (typeof $ !== 'undefined') {
-      $(document).ready(() => {
-        const ball = $("#draggable-section");
+    try {
+      const ball = $("#draggable-section");
 
-        const containmentBounds = {
-          left: 250,
-          top: 75,
-          rightOffset: 20, // Offset from the right of the page
-          bottomOffset: 50, // Maximum distance from the bottom
-        };
+      const containmentBounds = {
+        left: 250,
+        top: 65,
+        right: 20,
+        bottom: 50,
+      };
 
-        const calculateRightConstraint = () => {
-          const windowWidth = $(window).width();
-          return windowWidth - containmentBounds.rightOffset;
-        };
-
-        const calculateBottomConstraint = () => {
-          const windowHeight = $(window).height();
-          const scrollTop = $(window).scrollTop();
-          const maxBottom = scrollTop + windowHeight - containmentBounds.bottomOffset;
-
-          return Math.min(maxBottom, windowHeight + scrollTop);
-        };
-
-        ball.draggable({
-          containment: [
-            containmentBounds.left,
-            containmentBounds.top,
-            calculateRightConstraint(),
-            calculateBottomConstraint(),
-          ],
-        });
-
-        // Update containment when the window is resized or scrolled
-        $(window).on('resize scroll', () => {
-          ball.draggable('option', 'containment', [
-            containmentBounds.left,
-            containmentBounds.top,
-            calculateRightConstraint(),
-            calculateBottomConstraint(),
-          ]);
-        });
+      ball.draggable({
+        containment: [
+          containmentBounds.left,
+          containmentBounds.top,
+          window.innerWidth - containmentBounds.right,
+          window.innerHeight - containmentBounds.bottom,
+        ],
+        scroll: false
       });
-    } else {
-      console.error("jQuery is not available. Make sure it is properly loaded.");
+
+      return () => {
+        ball.draggable("destroy");
+      };
+    } catch (error) {
+      console.error("Error in SaveButtonDraggable useEffect:", error);
     }
   }, []);
 
