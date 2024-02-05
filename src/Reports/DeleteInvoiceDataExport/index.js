@@ -250,7 +250,7 @@ const DeleteInvoiceDataExport = (props) => {
                                 className="btn btn-primary   "
                                 onClick={(e) => { excelhandler() }}
                             >
-                                Excel Download
+                                Excel 
                             </C_Button>
                         </Col>
 

@@ -258,7 +258,7 @@ const CreditDebitDataExport = (props) => {  // also Receipt Data Export
                                 className="btn btn-primary"
                                 onClick={() => goButtonHandler("downloadExcel")}
                             >
-                                Excel Download
+                                Excel 
                             </C_Button>
                         </Col>
 

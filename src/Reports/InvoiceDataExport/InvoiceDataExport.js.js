@@ -272,7 +272,7 @@ const InvoiceDataExport = (props) => {
                                 className="btn btn-primary"
                                 onClick={() => goButtonHandler("downloadExcel")}
                             >
-                                Excel Download
+                                Excel 
                             </C_Button>
                         </Col>
 

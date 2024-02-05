@@ -220,7 +220,7 @@ const RetailerDataReport = (props) => {
                   id="excelbtn-id"
                   onClick={() => excelhandler("Excel")}
                 >
-                  Excel Download
+                  Excel 
                 </Button>
               )}
             </Col>

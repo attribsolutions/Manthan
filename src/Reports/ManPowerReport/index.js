@@ -152,7 +152,7 @@ const ManPowerReport = (props) => {           // this component also use for Man
                                 <Button type="button"
                                     color='btn btn-primary'
                                     id="excelbtn-id"
-                                    onClick={() => GobtnExcelhandler("Excel")}>Excel Download
+                                    onClick={() => GobtnExcelhandler("Excel")}> Excel 
                                 </Button>
                             }
                         </Col>

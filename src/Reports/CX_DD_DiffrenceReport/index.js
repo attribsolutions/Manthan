@@ -261,7 +261,7 @@ const CX_DD_DiffrenceReport = (props) => {
                                 className="btn btn-primary"
                                 onClick={() => goAndExcel_Btn_Handler("excel")}
                             >
-                                Excel Download
+                                Excel 
                             </C_Button>
                         </Col>
                     </div>
