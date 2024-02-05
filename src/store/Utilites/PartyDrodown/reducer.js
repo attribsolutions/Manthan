@@ -4,8 +4,10 @@ const INIT_STATE = {
     commonPartyDropdownOption: [],
     partyDropdownLoading: false,
     commonPartyDropSelect: { value: 0, label: "select...", SAPPartyCode: "" },
-    forceDisable:false,
-    isShow:true
+    forceDisable: false,
+    isShow: true,
+    isShowOnlySAPParty: false
+
 }
 
 const CommonPartyDropdownReducer = (state = INIT_STATE, action) => {
@@ -25,6 +27,7 @@ const CommonPartyDropdownReducer = (state = INIT_STATE, action) => {
             }
 
         case CHANGE_COMMON_PARTY_DROPDWON_DETAILS_ACTION:
+            
             return {
                 ...state,
                 ...action.payload

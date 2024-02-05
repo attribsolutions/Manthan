@@ -257,7 +257,7 @@ const GenericSaleReport = (props) => {
                                 className="btn btn-primary"
                                 onClick={(e) => excel_And_GoBtnHandler(e, 2)}
                             >
-                                Excel Download
+                                Excel 
                             </C_Button>
                         </Col>
                     </div>

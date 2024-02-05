@@ -87,7 +87,7 @@ export const ShowAndExcelBtn = (props) => {
                     className="btn btn-primary"
                     onClick={excelOnClick}
                 >
-                    Excel Download
+                    Excel 
                 </C_Button>
             </Col>
         </>)

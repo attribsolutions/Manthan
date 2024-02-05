@@ -291,7 +291,7 @@ const PurchaseGSTReport = (props) => {
                                 className="btn btn-primary  "
                                 onClick={(e) => excel_And_GoBtnHandler(e, "excel")}
                             >
-                                Excel Download
+                                Excel 
                             </C_Button>
                         </Col>
 
