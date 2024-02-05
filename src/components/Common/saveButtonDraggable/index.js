@@ -4,44 +4,54 @@ import "jquery-ui/ui/widgets/draggable";
 import './styles.css';
 
 const SaveButtonDraggable = ({ children }) => {
-
   useEffect(() => {
-    
-    const containmentBounds = {
-      left: 250,
-      top: 65,
-      right: 20,
-      bottomOffset: 50, // Offset from the bottom of the page
-    };
-    
-    const calculateBottomConstraint = () => {
-      const windowHeight = $(window).height();
-      return windowHeight - containmentBounds.bottomOffset;
-    };
-    const ball = $('#draggable-section'); // Replace with your actual ball element
+    // Check if jQuery is available
+    if (typeof $ !== 'undefined') {
+      $(document).ready(() => {
+        const ball = $("#draggable-section");
 
-    ball.draggable({
-      containment: [
-        containmentBounds.left,
-        containmentBounds.top,
-        window.innerWidth - containmentBounds.right,
-        calculateBottomConstraint(),
-      ],
-    });
-    
-    // Update containment when the window is resized
-    $(window).resize(() => {
-      ball.draggable('option', 'containment', [
-        containmentBounds.left,
-        containmentBounds.top,
-        window.innerWidth - containmentBounds.right,
-        calculateBottomConstraint(),
-      ]);
-    });
-    return () => {
-      // Clean up event handlers and draggable functionality
-      ball.draggable("destroy");
-    };
+        const containmentBounds = {
+          left: 250,
+          top: 75,
+          rightOffset: 20, // Offset from the right of the page
+          bottomOffset: 50, // Maximum distance from the bottom
+        };
+
+        const calculateRightConstraint = () => {
+          const windowWidth = $(window).width();
+          return windowWidth - containmentBounds.rightOffset;
+        };
+
+        const calculateBottomConstraint = () => {
+          const windowHeight = $(window).height();
+          const scrollTop = $(window).scrollTop();
+          const maxBottom = scrollTop + windowHeight - containmentBounds.bottomOffset;
+
+          return Math.min(maxBottom, windowHeight + scrollTop);
+        };
+
+        ball.draggable({
+          containment: [
+            containmentBounds.left,
+            containmentBounds.top,
+            calculateRightConstraint(),
+            calculateBottomConstraint(),
+          ],
+        });
+
+        // Update containment when the window is resized or scrolled
+        $(window).on('resize scroll', () => {
+          ball.draggable('option', 'containment', [
+            containmentBounds.left,
+            containmentBounds.top,
+            calculateRightConstraint(),
+            calculateBottomConstraint(),
+          ]);
+        });
+      });
+    } else {
+      console.error("jQuery is not available. Make sure it is properly loaded.");
+    }
   }, []);
 
   return (
