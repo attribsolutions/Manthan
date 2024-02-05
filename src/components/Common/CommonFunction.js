@@ -327,6 +327,15 @@ export const loginSelectedPartyID = () => {//+++++++++++++++++++++ Session commo
   return 0;
 };
 
+export const CommonPartyDropValue = () => {//+++++++++++++++++++++ Session common party dropdown id +++++++++++++++++++++++++++++++
+  try {
+    return JSON.parse(localStorage.getItem("selectedParty"));
+  } catch (e) {
+    CommonConsole("Common login PartyID Func  Error");
+  }
+  return '';
+};
+
 export const loginEmployeeID = () => {//+++++++++++++++++++++ Session loginPartyID Id+++++++++++++++++++++++++++++++
 
   try {

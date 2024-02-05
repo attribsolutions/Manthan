@@ -1,14 +1,19 @@
 
 // Common Error Messages
+const commonPartySelectionIsRequired = "Please Select Party"
 
-const commonPartySelectionIsRequired = "Please Select Party"   // Common Party Dropdown
 const IsRequired = 'Is Required.'
+const changeCustomerName = "Are you sure you want to change the customer ?"
+
+// Loading Sheet Master
 const routeNameIsRequired = "RouteName Is Required"
-const itemQtyIsRequired = "Please Enter One Item Quantity"
+
+//Item Dropdown Add button Error Message
 const itemNameIsRequired = "Please Select ItemName"
 const ItemNameAlreadyExists = "This ItemName Already Exists"
-const changeCustomerName = "Are you sure you want to change the customer ?"
-const deleteThisItem = "Are you sure you want to delete this Item"
+const itemQtyIsRequired = "Please Enter One Item Quantity"
+
+//Payment and Receipt Pages Error Message
 const bankNameIsRequired = 'Bank Name Is Required'
 const depositorBankIsRequired = "Depositor Bank Name Is Required"
 const documentNoIsRequired = "DocumentNo Is Required"
@@ -20,6 +25,8 @@ const amountPaidValueIsExcess = "Amount Paid value is Excess "
 const amountPaidValueIsShort = "Amount Paid value is Short "
 const paymentAmountGreaterThanZero = "The payment amount must be greater than zero."
 const receiptAmountGreaterThanZero = "The Receipt amount must be greater than zero."
+
+// Import Excel Field Map , Party Map and Invoice Excel Upload pages Error Message
 const chooseAnyFile = "Please choose any file..."
 const waitForDownloadFieldDetails = "Please wait Downloading field Details."
 const unSupportedFileFormat = "Unsupported file format. Please select an Excel (XLSX) or CSV file."
@@ -27,19 +34,32 @@ const doYouConfirmChoice = "Do you confirm your choice?"
 const mappingNotMatchError = "Mapping not match."
 const PricelistIsRequired = "Please Select PriceList"
 const paymentORcodeIsRequired = "Payment QR not uploaded"
+
+// Mobile Retailer Send Save Button Error Message
 const atLeastOneRetailerIsRequired = "At least One Retailer is Selected"
-const effectiveDateIsRequired = "Please select EffectiveDate"
+
+// Management Parties (Party Assign) Save Button Error Message
 const atLeastOnePartySelectionRequired = "At least One Party is Selected"
+
+// MRP , GST and Margin Page Error Messages
+const deleteThisItem = "Are you sure you want to delete this Item"
+const effectiveDateIsRequired = "Please select EffectiveDate"
 const MRPIsRequired = "Please Enter MRP"
 const marginISRequired = "Please Enter Margin"
 const enterGSTPercentage_HSNCodeIsRequired = "Please Enter One GSTPercentage & HSNCode"
+
+//Item Master Bulk Update 
 const fieldSelectionIsRequired = "Field selection is Required."
+
+//Item Master 
 const groupTypeIsRequired = "Group Type is Required."
 const updateOneFieldIsRequired = "Update At least One Field"
 const subGroupNameIsRequired = 'SubGroup Name is Required'
 const GroupIDError = "Error for Group ID"
 const categoryAlreadyExists = "Category alredy Select"
-const CreditNoteUpload = "Credit Note Not Uploaded"
+
+// claim Tracking Entry 
+const CreditNote_Not_Upload = "Credit Note Not Uploaded"
 
 
 export const alertMessages = {
@@ -81,8 +101,7 @@ export const alertMessages = {
     GroupIDError,
     paymentORcodeIsRequired,
     categoryAlreadyExists,
-    CreditNoteUpload
-
+    CreditNote_Not_Upload
 };
 
 

@@ -45,7 +45,6 @@ import { mobileApp_ProductUpdate_Api } from "../../../helpers/backend_helper";
 import { showToastAlert } from "../../../helpers/axios_Config";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 import { priceListByCompay_ActionSuccess } from "../../../store/Administrator/PriceList/action";
-import { DISCOUNT_API_ERROR_ACTION } from "../../../store/Administrator/DiscountRedux/actionType";
 
 const MarginMaster = (props) => {
     const dispatch = useDispatch();
@@ -93,8 +92,6 @@ const MarginMaster = (props) => {
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField
     }));
-
-    // const { tableData = [] } = tableData
 
     useEffect(() => {
         dispatch(commonPageFieldSuccess(null));
@@ -320,12 +317,6 @@ const MarginMaster = (props) => {
         }
     };
 
-    const pageOptions = {
-        sizePerPage: 10,
-        totalSize: tableData.length,
-        custom: true,
-    };
-
     const pagesListColumns = [
         {
             text: "Item Name",
@@ -431,7 +422,6 @@ const MarginMaster = (props) => {
         event.preventDefault();
         const btnId = event.target.id
         try {
-            // if (formValid(state, setState)) {
             _cfunc.btnIsDissablefunc({ btnId, state: true })
 
             var ItemData = tableData.map((index) => ({
@@ -478,7 +468,6 @@ const MarginMaster = (props) => {
                 <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
                 <Container fluid>
 
-                    {/* <form noValidate> */}
                     <Card className="text-black ">
                         <CardHeader className="card-header  text-black c_card_header" >
                             <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
@@ -632,7 +621,6 @@ const MarginMaster = (props) => {
 
                         </CardBody>
                     </Card>
-                    {/* </form> */}
                 </Container>
             </div>
         </React.Fragment>

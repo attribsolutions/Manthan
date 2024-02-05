@@ -73,6 +73,9 @@ const SNSReport = (props) => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(pageId.STOCK_REPORT_1));
         dispatch(getBaseUnit_ForDropDown());
+        if (_cfunc.CommonPartyDropValue().value > 0) {
+            setPartyDropdown(_cfunc.CommonPartyDropValue())
+        }
         dispatch(changeCommonPartyDropDetailsAction({ isShow: false }))//change party drop-down show false
         return () => {
             dispatch(commonPageFieldSuccess(null));

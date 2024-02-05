@@ -89,7 +89,7 @@ const ClaimTrackingEntryList = (props) => {
                 customAlert({
                     Type: 4,
                     Status: true,
-                    Message: alertMessages.CreditNoteUpload,
+                    Message: alertMessages.CreditNote_Not_Upload,
                 })
                 return
             }

@@ -80,6 +80,9 @@ const PurchaseGSTReport = (props) => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(pageId.PURCHASE_GST_REPORT));
         dispatch(BreadcrumbShowCountlabel(`Count:${0}`));
+        if (_cfunc.CommonPartyDropValue().value > 0) {
+            setPartyDropdown(_cfunc.CommonPartyDropValue())
+        }
         dispatch(changeCommonPartyDropDetailsAction({ isShow: false }))//change party drop-down  hide
 
         return () => {

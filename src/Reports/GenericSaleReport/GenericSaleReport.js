@@ -48,12 +48,6 @@ const GenericSaleReport = (props) => {
     const location = { ...history.location }
     const hasShowModal = props.hasOwnProperty(mode.editValue)
 
-    useEffect(() => {
-        dispatch(commonPageFieldSuccess(null));
-        dispatch(commonPageField(pageId.GENERIC_SALE_REPORT))
-
-    }, []);
-
     // userAccess useEffect
     useEffect(() => {
         let userAcc = null;
@@ -71,11 +65,17 @@ const GenericSaleReport = (props) => {
     }, [userAccess])
 
     useEffect(() => {
+        dispatch(commonPageFieldSuccess(null));
+        dispatch(commonPageField(pageId.GENERIC_SALE_REPORT))
+        if (_cfunc.CommonPartyDropValue().value > 0) {
+            setDistributorDropdown([_cfunc.CommonPartyDropValue()]);
+        }
         dispatch(BreadcrumbShowCountlabel(`Count:${0} ₹ ${0.00}`));
         dispatch(changeCommonPartyDropDetailsAction({ isShow: false }))//change party drop-down show false
         return () => {
             setTableData([]);
             dispatch(changeCommonPartyDropDetailsAction({ isShow: true }))//change party drop-down restore show state
+            dispatch(GoButton_For_GenericSale_Success([]));
         }
     }, [])
 
@@ -83,7 +83,6 @@ const GenericSaleReport = (props) => {
         if (tableData.length === 0) {
             setBtnMode(0)
         }
-
     }, [tableData]);
 
     const Party_Option = Distributor.map(i => ({

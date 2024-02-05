@@ -22,7 +22,6 @@ const FirstAndLastDate = () => _cfunc.getFirstAndLastDateOfMonth(SelectedMonth()
 const fileds = () => ({
     FromDate: FirstAndLastDate().firstDate,
     ToDate: FirstAndLastDate().lastDate,
-    PartyName: "",
     SelectedMonth: SelectedMonth(),
 })
 
@@ -56,10 +55,8 @@ const ClaimSummaryList = () => {
 
     // Common Party select Dropdown useEffect
     useEffect(() => {
-        if (commonPartyDropSelect.value > 0) {
-            // partySelectButtonHandler();
-        } else {
-            partySelectOnChangeHandler();
+        if (commonPartyDropSelect.value === 0) {
+            dispatch(claimList_API_Success([]));
         }
     }, [commonPartyDropSelect]);
 
@@ -185,10 +182,6 @@ const ClaimSummaryList = () => {
         let config = { jsonBody, Type: "List", MonthStartDate: firstDate, MonthEndDate: lastDate }
         setjsonBody(config)
         dispatch(claimList_API(config))
-    }
-
-    function partySelectOnChangeHandler() {
-        dispatch(claimList_API_Success([]));
     }
 
     return (

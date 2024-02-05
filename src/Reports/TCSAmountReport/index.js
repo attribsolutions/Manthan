@@ -49,9 +49,13 @@ const TCSAmountReport = (props) => {
     const { userAccess, tableData = [], GoBtnLoading, pageField, PartyList } = reducers;
 
     useEffect(() => {
+        
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(pageId.TCS_AMOUNT_REPORT));
         dispatch(BreadcrumbShowCountlabel(`Count:${0}`));
+        if (_cfunc.CommonPartyDropValue().value > 0) {
+            setPartyDropdown(_cfunc.CommonPartyDropValue())
+        }
         return () => {
             dispatch(commonPageFieldSuccess(null));
             dispatch(TCS_Amount_Gobtn_Success([]));
