@@ -94,7 +94,8 @@ const LABEL_COLORS = {
 };
 
 
-const listColomnformatter = (cell, row) => {
+const listColomnformatter = (cell, row, pagefield) => {
+
   if (LABEL_COLORS[cell]) {
     return (
       <span className={`label  ${LABEL_COLORS[cell]}`} >
@@ -103,7 +104,7 @@ const listColomnformatter = (cell, row) => {
     );
   }
 
-  if (cell === "transactionDate") {
+  if (pagefield.ControlID === "transactionDate") {
     return <>{row.transactionDateLabel}</>;
   }
 
@@ -163,7 +164,7 @@ const DynamicColumnHook = ({
           sort: true,
           align: i.Alignment || null,
           attrs: (cell, row, rowIndex, colIndex) => ({ 'data-label': i.FieldLabel, "sticky-col": (colIndex === 0) ? "true" : "false" }),
-          formatter: listColomnformatter
+          formatter: (cell, row) => listColomnformatter(cell, row, i)
         };
 
         columns.push(column);

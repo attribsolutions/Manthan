@@ -41,6 +41,7 @@ import { Tbody, Thead } from "react-super-responsive-table";
 import Slidewithcaption from "../../../components/Common/CommonImageComponent";
 import NewCommonPartyDropdown from "../../../components/Common/NewCommonPartyDropdown";
 import { deltBtnCss } from "../../../components/Common/ListActionsButtons";
+import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 
 const PurchaseReturn = (props) => {
 
@@ -1066,7 +1067,7 @@ const PurchaseReturn = (props) => {
                 <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
 
                 <div className="page-content">
-                 
+
                     <Modal
                         isOpen={modal_backdrop}
                         toggle={() => {
@@ -1080,266 +1081,214 @@ const PurchaseReturn = (props) => {
                     </Modal>
                     {(!ButtonCondition.isEnable && values.Customer !== "" && alertDate.ActualDate !== "") && <div style={{ color: "red", fontSize: "18px" }} className="sliding-text " >  Warning: cannot send the sales return to the supplier from {_cfunc.DateFormat(alertDate.ActualDate)} of the month to the end of the month.</div>}
                     {(ButtonCondition.isEnablePriviousAlert && values.Customer !== "" && alertDate.ActualDate !== undefined) && <div style={{ color: "red", fontSize: "18px" }} className="sliding-text " >  Warning:Sales return send to suppliers will be unavailable from {_cfunc.DateFormat(alertDate.ActualDate)} to month-end.  </div>}
-                    <form noValidate>
-                        <div className="px-2 c_card_filter header text-black mb-1" >
 
-                            <Row>
-                                <Col sm="6">
-                                    <FormGroup className="row mt-2" >
-                                        <Label className="col-sm-1 p-2"
-                                            style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.ReturnDate}  </Label>
-                                        <Col sm="7">
-                                            <C_DatePicker
-                                                name='ReturnDate'
-                                                value={values.ReturnDate}
-                                                onChange={ReturnDate_Onchange}
-                                            />
-                                        </Col>
-                                    </FormGroup>
-                                </Col >
+                    <div className="px-2 c_card_filter header text-black mb-1" >
 
-                                <Col sm="6">
-                                    <FormGroup className=" row mt-2 " >
-                                        <Label className="col-sm-1 p-2"
-                                            style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.Customer} </Label>
-                                        <Col sm="7">
-                                            <C_Select
-                                                id="Customer "
-                                                name="Customer"
-                                                value={values.Customer}
-                                                isSearchable={true}
-                                                isLoading={supplierDrodownLoading}
-                                                isDisabled={((TableArr.length > 0) || addBtnLoading) ? true : false}
-                                                options={supplierOptions}
-                                                styles={{
-                                                    menu: provided => ({ ...provided, zIndex: 2 })
-                                                }}
-                                                onChange={RetailerHandler}
-                                                onCancelClick={RetailerOnCancelClickHandler}
-                                            />
-                                            {isError.Customer.length > 0 && (
-                                                <span className="text-danger f-8"><small>{isError.Customer}</small></span>
-                                            )}
-                                        </Col>
-
-                                    </FormGroup>
-                                </Col >
-                            </Row>
-
-                            <Row>
-                                <Col sm="6">
-                                    <FormGroup className=" row mt-1 " >
-                                        <Label className="col-sm-1 p-2"
-                                            style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.ItemName} </Label>
-                                        <Col sm="7">
-                                            <C_Select
-                                                id="ItemName "
-                                                name="ItemName"
-                                                value={values.ItemName}
-                                                isDisabled={(returnMode === 1) ? true : false}
-                                                isSearchable={true}
-                                                className="react-dropdown"
-                                                classNamePrefix="dropdown"
-                                                styles={{
-                                                    menu: provided => ({ ...provided, zIndex: 2 })
-                                                }}
-                                                options={ItemList_Options}
-                                                onChange={itemNameOnChangeHandler}
-                                            />
-                                        </Col>
-                                    </FormGroup>
-                                </Col >
-
-                                <Col sm="6">
-                                    <FormGroup className=" row mt-1 " >
-                                        <Label className="col-sm-1 p-2"
-                                            style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.Comment} </Label>
-                                        <Col sm="7">
-                                            <Input
-                                                name="Comment"
-                                                id="Comment"
-                                                value={values.Comment}
-                                                type="text"
-                                                className={isError.Comment.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                placeholder="Enter Comment"
-                                                autoComplete='off'
-                                                onChange={(event) => {
-                                                    onChangeText({ event, state, setState })
-                                                }}
-                                            />
-                                            {isError.Comment.length > 0 && (
-                                                <span className="invalid-feedback">{isError.Comment}</span>
-                                            )}
-                                        </Col>
-
-                                    </FormGroup>
-                                </Col >
-                            </Row>
-
-                            <Row>
-                                <Col sm="6">
-                                    <FormGroup className=" row mt-1 " >
-                                        <Label className="col-sm-1 p-2"
-                                            style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.BatchCode}</Label>
-                                        <Col sm="7">
-                                            <Input
-                                                name="BatchCode"
-                                                value={values.BatchCode}
-                                                placeholder="Enter BatchCode"
-                                                type='text'
-                                                onChange={(event) => {
-                                                    onChangeText({ event, state, setState })
-                                                }}
-                                            />
-                                            {isError.BatchCode.length > 0 && (
-                                                <span className="text-danger f-8"><small>{isError.BatchCode}</small></span>
-                                            )}
-
-                                        </Col>
-                                        <Col sm="1" className="mx-6 mt-1">
-                                            {
-                                                (!(returnMode === 1)) &&///(returnMode === 1) InvoiceWise
-                                                <C_Button
-                                                    type="button"
-                                                    loading={addBtnLoading}
-                                                    className="btn btn-outline-primary border-1 font-size-12 text-center"
-                                                    onClick={() => AddPartyHandler("ItemWise")}>
-                                                    Add
-                                                </C_Button>
-                                            }
-
-                                        </Col>
-                                    </FormGroup>
-                                </Col >
-                                {/* <Col sm="6">
-                                    <FormGroup className=" row mt-1 " >
-                                        <Label className="col-sm-1 p-2"
-                                            style={{ width: "115px", marginRight: "0.4cm" }}>  {fieldLabel.InvoiceNumber}</Label>
-                                        <Col sm="7">
-                                            <C_Select
-                                                id="InvoiceNumber "
-                                                name="InvoiceNumber"
-                                                value={values.InvoiceNumber}
-                                                //(returnMode === 2) ItemWise
-                                                // isDisabled={((returnMode === 2) || invoiceNoDropDownLoading || (TableArr.length > 0)) ? true : false}
-                                                isDisabled={true}
-                                                isSearchable={true}
-                                                isLoading={invoiceNoDropDownLoading}
-                                                styles={{
-                                                    menu: provided => ({ ...provided, zIndex: 2 })
-                                                }}
-                                                options={InvoiceNo_Options}
-                                                onChange={(hasSelect, evn) => {
-                                                    onChangeSelect({ hasSelect, evn, state, setState, })
-                                                    setReturnMode(1)
-                                                }}
-                                            />
-
-                                        </Col>
-                                        <Col sm="1" className="mx-6 mt-1 ">
-                                            {((TableArr.length > 0) || (!(values.ItemName === ""))) ?
-                                                <Change_Button
-                                                    forceDisabled={addBtnLoading}
-                                                    onClick={(e) => {
-                                                        setTableArr([])
-                                                        setState((i) => {
-                                                            let a = { ...i }
-                                                            a.values.ItemName = ""
-                                                            a.values.InvoiceNumber = ""
-                                                            return a
-                                                        })
-                                                    }} />
-                                                :
-                                                (!(returnMode === 2)) &&//(returnMode === 2) ItemWise
-                                                <C_Button
-                                                    type="button"
-                                                    loading={addBtnLoading}
-                                                    className="btn btn-outline-primary border-1 font-size-12 text-center"
-                                                    onClick={() => AddPartyHandler("InvoiceWise")}>
-                                                    Select
-                                                </C_Button>
-                                            }
-                                        </Col>
-                                    </FormGroup>
-                                </Col > */}
-
-                                <Col sm="6">
-                                    <FormGroup className=" row mt-1 " >
-                                        <Label className="col-sm-1 p-2"
-                                            style={{ width: "115px", marginRight: "0.4cm" }}>IsSaleableStock</Label>
-                                        <Col sm="7">
-                                            <Input
-                                                style={{ marginRight: "0.4cm", marginTop: "10px", width: "15px", height: "15px" }}
-                                                type="checkbox"
-                                                disabled={TableArr.length > 0 && true}
-                                                defaultChecked={isSaleableStock}
-                                                onChange={(event) => { setIsSaleableStock(event.target.checked) }}
-                                            />
-
-                                        </Col>
-
-                                    </FormGroup>
-                                </Col >
-                            </Row>
-
-                        </div>
-
-                        <div>
-                            <ToolkitProvider
-                                keyField={"id"}
-                                data={TableArr}
-                                columns={pagesListColumns}
-                                search
-                            >
-                                {(toolkitProps) => (
-                                    <React.Fragment>
-                                        <Row>
-                                            <Col xl="12">
-                                                <div className="table-responsive table" style={{ minHeight: "60vh" }}>
-                                                    <BootstrapTable
-                                                        keyField={"id"}
-                                                        key={`table-key-${returnMode}`}
-                                                        id="table_Arrow"
-                                                        classes={"table  table-bordered "}
-                                                        noDataIndication={
-                                                            <div className="text-danger text-center ">
-                                                                Items Not available
-                                                            </div>
-                                                        }
-                                                        {...toolkitProps.baseProps}
-                                                        onDataSizeChange={(e) => {
-                                                            _cfunc.tableInputArrowUpDounFunc("#table_Arrow")
-                                                        }}
-                                                    />
-                                                </div>
-                                            </Col>
-                                            {mySearchProps(toolkitProps.searchProps,)}
-                                        </Row>
-
-                                    </React.Fragment>
-                                )}
-                            </ToolkitProvider>
-                        </div>
-
-                        {
-                            TableArr.length > 0 ?
-                                <FormGroup>
-                                    <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
-                                        <SaveButton
-                                            pageMode={pageMode}
-                                            forceDisabled={addBtnLoading || !ButtonCondition.isEnable}
-                                            loading={saveBtnloading}
-
-                                            onClick={SaveHandler}
-                                            userAcc={userPageAccessState}
-                                            module={"SalesReturn"}
+                        <Row>
+                            <Col sm="6">
+                                <FormGroup className="row mt-2" >
+                                    <Label className="col-sm-1 p-2"
+                                        style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.ReturnDate}  </Label>
+                                    <Col sm="7">
+                                        <C_DatePicker
+                                            name='ReturnDate'
+                                            value={values.ReturnDate}
+                                            onChange={ReturnDate_Onchange}
                                         />
                                     </Col>
-                                </FormGroup >
-                                : null
-                        }
+                                </FormGroup>
+                            </Col >
 
-                    </form >
+                            <Col sm="6">
+                                <FormGroup className=" row mt-2 " >
+                                    <Label className="col-sm-1 p-2"
+                                        style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.Customer} </Label>
+                                    <Col sm="7">
+                                        <C_Select
+                                            id="Customer "
+                                            name="Customer"
+                                            value={values.Customer}
+                                            isSearchable={true}
+                                            isLoading={supplierDrodownLoading}
+                                            isDisabled={((TableArr.length > 0) || addBtnLoading) ? true : false}
+                                            options={supplierOptions}
+                                            styles={{
+                                                menu: provided => ({ ...provided, zIndex: 2 })
+                                            }}
+                                            onChange={RetailerHandler}
+                                            onCancelClick={RetailerOnCancelClickHandler}
+                                        />
+                                        {isError.Customer.length > 0 && (
+                                            <span className="text-danger f-8"><small>{isError.Customer}</small></span>
+                                        )}
+                                    </Col>
+
+                                </FormGroup>
+                            </Col >
+                        </Row>
+
+                        <Row>
+                            <Col sm="6">
+                                <FormGroup className=" row mt-1 " >
+                                    <Label className="col-sm-1 p-2"
+                                        style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.ItemName} </Label>
+                                    <Col sm="7">
+                                        <C_Select
+                                            id="ItemName "
+                                            name="ItemName"
+                                            value={values.ItemName}
+                                            isDisabled={(returnMode === 1) ? true : false}
+                                            isSearchable={true}
+                                            className="react-dropdown"
+                                            classNamePrefix="dropdown"
+                                            styles={{
+                                                menu: provided => ({ ...provided, zIndex: 2 })
+                                            }}
+                                            options={ItemList_Options}
+                                            onChange={itemNameOnChangeHandler}
+                                        />
+                                    </Col>
+                                </FormGroup>
+                            </Col >
+
+                            <Col sm="6">
+                                <FormGroup className=" row mt-1 " >
+                                    <Label className="col-sm-1 p-2"
+                                        style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.Comment} </Label>
+                                    <Col sm="7">
+                                        <Input
+                                            name="Comment"
+                                            id="Comment"
+                                            value={values.Comment}
+                                            type="text"
+                                            className={isError.Comment.length > 0 ? "is-invalid form-control" : "form-control"}
+                                            placeholder="Enter Comment"
+                                            autoComplete='off'
+                                            onChange={(event) => {
+                                                onChangeText({ event, state, setState })
+                                            }}
+                                        />
+                                        {isError.Comment.length > 0 && (
+                                            <span className="invalid-feedback">{isError.Comment}</span>
+                                        )}
+                                    </Col>
+
+                                </FormGroup>
+                            </Col >
+                        </Row>
+
+                        <Row>
+                            <Col sm="6">
+                                <FormGroup className=" row mt-1 " >
+                                    <Label className="col-sm-1 p-2"
+                                        style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.BatchCode}</Label>
+                                    <Col sm="7">
+                                        <Input
+                                            name="BatchCode"
+                                            value={values.BatchCode}
+                                            placeholder="Enter BatchCode"
+                                            type='text'
+                                            onChange={(event) => {
+                                                onChangeText({ event, state, setState })
+                                            }}
+                                        />
+                                        {isError.BatchCode.length > 0 && (
+                                            <span className="text-danger f-8"><small>{isError.BatchCode}</small></span>
+                                        )}
+
+                                    </Col>
+                                    <Col sm="1" className="mx-6 mt-1">
+                                        {
+                                            (!(returnMode === 1)) &&///(returnMode === 1) InvoiceWise
+                                            <C_Button
+                                                type="button"
+                                                loading={addBtnLoading}
+                                                className="btn btn-outline-primary border-1 font-size-12 text-center"
+                                                onClick={() => AddPartyHandler("ItemWise")}>
+                                                Add
+                                            </C_Button>
+                                        }
+
+                                    </Col>
+                                </FormGroup>
+                            </Col >
+
+
+                            <Col sm="6">
+                                <FormGroup className=" row mt-1 " >
+                                    <Label className="col-sm-1 p-2"
+                                        style={{ width: "115px", marginRight: "0.4cm" }}>IsSaleableStock</Label>
+                                    <Col sm="7">
+                                        <Input
+                                            style={{ marginRight: "0.4cm", marginTop: "10px", width: "15px", height: "15px" }}
+                                            type="checkbox"
+                                            disabled={TableArr.length > 0 && true}
+                                            defaultChecked={isSaleableStock}
+                                            onChange={(event) => { setIsSaleableStock(event.target.checked) }}
+                                        />
+
+                                    </Col>
+
+                                </FormGroup>
+                            </Col >
+                        </Row>
+
+                    </div>
+
+                    <div>
+                        <ToolkitProvider
+                            keyField={"id"}
+                            data={TableArr}
+                            columns={pagesListColumns}
+                            search
+                        >
+                            {(toolkitProps) => (
+                                <React.Fragment>
+                                    <Row>
+                                        <Col xl="12">
+                                            <div className="table-responsive table" style={{ minHeight: "60vh" }}>
+                                                <BootstrapTable
+                                                    keyField={"id"}
+                                                    key={`table-key-${returnMode}`}
+                                                    id="table_Arrow"
+                                                    classes={"table  table-bordered "}
+                                                    noDataIndication={
+                                                        <div className="text-danger text-center ">
+                                                            Items Not available
+                                                        </div>
+                                                    }
+                                                    {...toolkitProps.baseProps}
+                                                    onDataSizeChange={(e) => {
+                                                        _cfunc.tableInputArrowUpDounFunc("#table_Arrow")
+                                                    }}
+                                                />
+                                            </div>
+                                        </Col>
+                                        {mySearchProps(toolkitProps.searchProps,)}
+                                    </Row>
+
+                                </React.Fragment>
+                            )}
+                        </ToolkitProvider>
+                    </div>
+
+                    {
+                        TableArr.length > 0 &&
+                        <SaveButtonDraggable>
+                            <SaveButton
+                                pageMode={pageMode}
+                                forceDisabled={addBtnLoading || !ButtonCondition.isEnable}
+                                loading={saveBtnloading}
+
+                                onClick={SaveHandler}
+                                userAcc={userPageAccessState}
+                                module={"SalesReturn"}
+                            />
+                        </SaveButtonDraggable>
+
+                    }
+
+
                 </div >
             </React.Fragment >
         );

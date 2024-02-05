@@ -21,6 +21,7 @@ import { ReceiptGoButtonMaster_Success, saveReceiptMaster, saveReceiptMaster_Suc
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { C_DatePicker } from "../../../CustomValidateForm";
 import NewCommonPartyDropdown from "../../../components/Common/NewCommonPartyDropdown";
+import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 
 const BulkRecipt = (props) => {
 
@@ -223,7 +224,7 @@ const BulkRecipt = (props) => {
                 <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
                 <div className="page-content" style={{ marginBottom: "5cm" }}>
                     <NewCommonPartyDropdown />
-                    
+
                     <form noValidate>
                         <div className="px-2 c_card_filter header text-black mb-1" >
                             <div className=" row ">
@@ -284,18 +285,15 @@ const BulkRecipt = (props) => {
                             }
                         </ToolkitProvider>
 
-                        {Data.length > 0 ?
-                            <FormGroup>
-                                <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
-                                    <SaveButton pageMode={pageMode}
-                                        onClick={SaveHandler}
-                                        loading={saveBtnloading}
-                                        userAcc={userPageAccessState}
-                                    />
+                        {Data.length > 0 &&
+                            <SaveButtonDraggable>
+                                <SaveButton pageMode={pageMode}
+                                    onClick={SaveHandler}
+                                    loading={saveBtnloading}
+                                    userAcc={userPageAccessState}
+                                />
 
-                                </Col>
-                            </FormGroup >
-                            : null
+                            </SaveButtonDraggable>
                         }
 
                     </form >

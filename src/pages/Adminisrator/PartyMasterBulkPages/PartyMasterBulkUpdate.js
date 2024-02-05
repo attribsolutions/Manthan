@@ -53,6 +53,7 @@ import { C_DatePicker, C_Select } from "../../../CustomValidateForm";
 import { GetDistrictOnState_For_Dropdown, mobileApp_RetailerUpdate_Api } from "../../../helpers/backend_helper";
 import { showToastAlert } from "../../../helpers/axios_Config";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
+import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 
 const PartyMasterBulkUpdate = (props) => {
 
@@ -784,19 +785,15 @@ const PartyMasterBulkUpdate = (props) => {
                             }
                         </PaginationProvider>
 
-                        {Data.length > 0 ? <FormGroup className="row row-cols-2 save1" >
-                            <Row >
-                                <Col sm={2} className="mt-n4">
-                                    <SaveButton pageMode={pageMode}
-                                        loading={saveBtnloading}
-                                        onClick={SaveHandler}
-                                        userAcc={userPageAccessState}
-                                        module={"PartyMasterBulkUpdate"}
-                                    />
-                                </Col>
-                            </Row>
-                        </FormGroup >
-                            : null
+                        {Data.length > 0 &&
+                            <SaveButtonDraggable>
+                                <SaveButton pageMode={pageMode}
+                                    loading={saveBtnloading}
+                                    onClick={SaveHandler}
+                                    userAcc={userPageAccessState}
+                                    module={"PartyMasterBulkUpdate"}
+                                />
+                            </SaveButtonDraggable>
                         }
                     </form>
 

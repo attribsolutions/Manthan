@@ -56,6 +56,7 @@ import { Invoice_Singel_Get_for_Report_Api } from "../../../helpers/backend_help
 import * as report from '../../../Reports/ReportIndex'
 import CustomTable from "../../../CustomTable2";
 import { changeCommonPartyDropDetailsAction } from "../../../store/Utilites/PartyDrodown/action";
+import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 
 const Invoice = (props) => {
 
@@ -911,35 +912,30 @@ const Invoice = (props) => {
                                 }}
                             />
                         </div>
-                        {
-                            (orderItemDetails.length > 0) ? <div className="row save1" style={{ paddingBottom: 'center' }}>
-                                <Col>
-                                    <SaveButton
-                                        loading={saveBtnloading}
-                                        id={saveBtnid}
+                        {(orderItemDetails.length > 0) &&
+                            <SaveButtonDraggable>
+                                <SaveButton
+                                    loading={saveBtnloading}
+                                    id={saveBtnid}
+                                    pageMode={pageMode}
+                                    userAcc={userPageAccessState}
+                                    onClick={SaveHandler}
+                                    forceDisabled={saveAndPdfBtnLoading}
+                                />
+                                {(pageMode === mode.defaultsave) &&
+                                    <SaveAndDownloadPDF
+                                        loading={saveAndPdfBtnLoading}
                                         pageMode={pageMode}
+                                        id={saveBtnid}
                                         userAcc={userPageAccessState}
                                         onClick={SaveHandler}
-                                        forceDisabled={saveAndPdfBtnLoading}
+                                        forceDisabled={saveBtnloading}
                                     />
-                                </Col>
-                                {
-                                    (pageMode === mode.defaultsave) ?
-                                        <Col>
-                                            <SaveAndDownloadPDF
-                                                loading={saveAndPdfBtnLoading}
-                                                pageMode={pageMode}
-                                                id={saveBtnid}
-                                                userAcc={userPageAccessState}
-                                                onClick={SaveHandler}
-                                                forceDisabled={saveBtnloading}
-                                            />
-                                        </Col> : null}
-                            </div>
-                                : <div className="row save1"></div>
+                                }
+                            </SaveButtonDraggable>
                         }
                     </form>
-                </div>
+                </div >
 
             </React.Fragment >
         );

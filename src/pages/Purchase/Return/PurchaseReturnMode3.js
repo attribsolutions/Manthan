@@ -33,6 +33,7 @@ import { SaveButton } from "../../../components/Common/CommonButton";
 import { return_discountCalculate_Func } from "../../Sale/SalesReturn/SalesCalculation";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import Slidewithcaption from "../../../components/Common/CommonImageComponent";
+import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 
 
 const PurchaseReturnMode3 = (props) => {
@@ -634,23 +635,19 @@ const PurchaseReturnMode3 = (props) => {
                     </form >
 
                     {
-                        tableData.length > 0 ?
-                            <div >
-                                <FormGroup>
-                                    <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"} >
-                                        <SaveButton
-                                            pageMode={mode.modeSTPsave}
-                                            loading={saveBtnloading}
-                                            onClick={SaveHandler}
-                                            forceDisabled={!ButtonCondition.isEnable}
-                                            userAcc={userPageAccessState}
-                                            module={"SalesReturn"}
-                                        />
+                        tableData.length > 0 &&
+                        <SaveButtonDraggable>
+                            <SaveButton
+                                pageMode={mode.modeSTPsave}
+                                loading={saveBtnloading}
+                                onClick={SaveHandler}
+                                forceDisabled={!ButtonCondition.isEnable}
+                                userAcc={userPageAccessState}
+                                module={"SalesReturn"}
+                            />
 
-                                    </Col>
-                                </FormGroup >
-                            </div>
-                            : null
+
+                        </SaveButtonDraggable>
                     }
 
                 </div >

@@ -1,0 +1,74 @@
+
+#draggable-section::after {
+    content: "Grab me!";
+    font-size: 14px;
+    color: rgb(248, 246, 246);
+    background-color: #2a3042de;
+    padding: 5px;
+    margin-bottom: 5px;
+    border-radius: 3px;
+    position: absolute;
+    bottom: 100%; /* Change from top to bottom */
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+}
+
+#draggable-section:hover::after {
+    opacity: 1;
+    animation: tooltipDisappear 3s ease-in-out;
+}
+
+@keyframes tooltipDisappear {
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+#draggable-section {
+    display: flex;
+    flex-direction: row;
+    align-items: start;
+    cursor: grab;
+    background: linear-gradient(to right, rgb(113 119 223 / 84%),rgb(245 204 197 / 35%));
+    animation-name: animation-left-Right-swipe;
+    animation-duration: 2s;
+    animation-direction: alternate;
+    margin-right: 50px;
+    width: 100%;
+    position: relative;
+}
+
+@keyframes animation-left-Right-swipe {
+    0% {
+        background-color: rgba(123, 102, 196, 0.822);
+        left: -100px;
+        bottom: 0px;
+    }
+
+    100% {
+        background-color: rgb(235, 221, 214);
+        left: 100px;
+        bottom: 0px;
+    }
+}
+
+#draggable-section>div {
+    margin: 10px;
+    margin-bottom: 5px;
+    margin-left: 5px;
+    /* margin-right: 50px; */
+}
+
+.save-Btn {
+    position: fixed;
+    bottom: 0vh;
+    left: 250px;
+    z-index: 1101;
+    cursor: pointer;
+}

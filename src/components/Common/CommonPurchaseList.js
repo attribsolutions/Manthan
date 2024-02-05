@@ -18,6 +18,7 @@ import { C_Button } from "./CommonButton";
 import CustomTable from "../../CustomTable2";
 import ExtraTableWrapper from "../../CustomTable2/TableWrapper";
 import { object } from "prop-types";
+import SaveButtonDraggable from "./saveButtonDraggable";
 
 
 export async function isAlertFunc(type, Msg) {
@@ -416,24 +417,26 @@ const CommonPurchaseList = (props) => {
           </ExtraTableWrapper>
           {//  check box handler buttons
 
-            ((tableList.length > 0) && (selectCheckParams.isShow)) ?
+            ((tableList.length > 0) && (selectCheckParams.isShow)) &&
 
-              <div className="row save1 " style={{ paddingBottom: 'center' }}>
+            <SaveButtonDraggable>
+              <div>
                 <C_Button
                   forceDisabled={listBtnLoading}
                   loading={selectCheckParams.selectSaveBtnLoading}
 
-                  style={{ marginTop: "-10px", padding: "3px", paddingInline: "5px" }}
+                  // style={{ marginTop: "-10px", padding: "3px", paddingInline: "5px" }}
                   type="button"
                   spinnerColor="white"
-                  className="btn btn-primary w-md  "
+                  className="btn btn-primary"
                   onClick={() => { selectCheckParams.selectSaveBtnHandler(tableList) }}
                 >
-                  {/* <i class="fas fa-edit me-2"></i> */}
                   {selectCheckParams.selectSaveBtnLabel}
                 </C_Button>
               </div>
-              : null
+
+            </SaveButtonDraggable>
+
           }
 
           <Modal

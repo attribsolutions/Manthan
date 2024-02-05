@@ -46,6 +46,7 @@ import DriverMaster from "../../Adminisrator/DriverPage/DriverMaster";
 import RoutesMaster from "../../Adminisrator/RoutesPages/RoutesMaster";
 import VehicleMaster from "../../Adminisrator/VehiclePages/VehicleMaster";
 import DropdownMaster from "../../../components/Common/DropdownMaster";
+import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 
 const LoadingSheet = (props) => {
 
@@ -587,19 +588,16 @@ const LoadingSheet = (props) => {
                             )}
                         </ToolkitProvider>
                         {
-                            Data.length > 0 ?
-                                <FormGroup>
-                                    <Col sm={2} style={{ marginLeft: "-70px" }} className={"row save1"}>
-                                        <SaveButton pageMode={pageMode}
-                                            loading={saveBtnloading}
-                                            forceDisabled={goBtnloadingSpinner}
-                                            onClick={saveHandler}
-                                            userAcc={userPageAccessState}
-                                        />
+                            Data.length > 0 &&
+                            <SaveButtonDraggable>
+                                <SaveButton pageMode={pageMode}
+                                    loading={saveBtnloading}
+                                    forceDisabled={goBtnloadingSpinner}
+                                    onClick={saveHandler}
+                                    userAcc={userPageAccessState}
+                                />
 
-                                    </Col>
-                                </FormGroup >
-                                : null
+                            </SaveButtonDraggable>
                         }
 
                     </form >

@@ -46,6 +46,7 @@ import { showToastAlert } from "../../../helpers/axios_Config";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 import { priceListByCompay_ActionSuccess } from "../../../store/Administrator/PriceList/action";
 import { DISCOUNT_API_ERROR_ACTION } from "../../../store/Administrator/DiscountRedux/actionType";
+import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 
 const MarginMaster = (props) => {
     const dispatch = useDispatch();
@@ -615,19 +616,16 @@ const MarginMaster = (props) => {
                                 : null
                             }
 
-                            {tableData.length > 0 ?
-                                <FormGroup>
-                                    <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
-                                        <SaveButton pageMode={pageMode}
-                                            loading={(saveBtnloading) || (mobileApiLoading)}
-                                            forceDisabled={mobileApiLoading}
-                                            onClick={SaveHandler}
-                                            userAcc={userPageAccessState}
-                                            editCreatedBy={editCreatedBy}
-                                        />
-                                    </Col>
-                                </FormGroup >
-                                : null
+                            {tableData.length > 0 &&
+                                <SaveButtonDraggable>
+                                    <SaveButton pageMode={pageMode}
+                                        loading={(saveBtnloading) || (mobileApiLoading)}
+                                        forceDisabled={mobileApiLoading}
+                                        onClick={SaveHandler}
+                                        userAcc={userPageAccessState}
+                                        editCreatedBy={editCreatedBy}
+                                    />
+                                </SaveButtonDraggable>
                             }
 
                         </CardBody>

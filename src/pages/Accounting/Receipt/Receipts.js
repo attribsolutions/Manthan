@@ -52,6 +52,7 @@ import { CInput, C_DatePicker, C_Select } from "../../../CustomValidateForm/inde
 import { decimalRegx } from "../../../CustomValidateForm/RegexPattern";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
+import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 
 const Receipts = (props) => {
 
@@ -939,25 +940,21 @@ const Receipts = (props) => {
                         }
 
                         {!(IsSystemSetting) ?
-                            Data.length > 0 ?
-                                <FormGroup>
-                                    <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
-                                        <SaveButton pageMode={pageMode}
-                                            loading={saveBtnloading}
-                                            onClick={saveHandeller}
-                                            userAcc={userPageAccessState}
-                                        />
-                                    </Col>
-                                </FormGroup > : null
-                            : <FormGroup >
-                                <Col style={{ marginTop: "8px" }}>
-                                    <SaveButton pageMode={pageMode}
-                                        loading={saveBtnloading}
-                                        onClick={saveHandeller}
-                                        userAcc={userPageAccessState}
-                                    />
-                                </Col>
-                            </FormGroup >
+                            Data.length > 0 &&
+                            <SaveButtonDraggable>
+                                <SaveButton pageMode={pageMode}
+                                    loading={saveBtnloading}
+                                    onClick={saveHandeller}
+                                    userAcc={userPageAccessState}
+                                />
+                            </SaveButtonDraggable>
+                            : <SaveButtonDraggable>
+                                <SaveButton pageMode={pageMode}
+                                    loading={saveBtnloading}
+                                    onClick={saveHandeller}
+                                    userAcc={userPageAccessState}
+                                />
+                            </SaveButtonDraggable>
                         }
 
                     </form>

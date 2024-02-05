@@ -15,11 +15,12 @@ import paginationFactory, { PaginationListStandalone, PaginationProvider } from 
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { postInward, postInwardSuccess } from "../../../store/Inter Branch/InwardRedux/action";
-import  {mode,url} from "../../../routes/index";
+import { mode, url } from "../../../routes/index";
 import { SaveButton } from "../../../components/Common/CommonButton";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { C_DatePicker } from "../../../CustomValidateForm";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
+import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 
 const Inward = (props) => {
 
@@ -204,7 +205,7 @@ const Inward = (props) => {
 
     return (
         <React.Fragment>
-           <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
+            <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
 
             <div className="page-content">
 
@@ -297,12 +298,13 @@ const Inward = (props) => {
 
                     </PaginationProvider>
                 </div>
-                <div className="row save1" style={{ paddingBottom: 'center', marginTop: "-30px" }}>
+                <SaveButtonDraggable>
                     <SaveButton pageMode={pageMode}
                         userAcc={userPageAccessState}
-                        module={"Inward"} onClick={saveHandeller}
+                        module={"Inward"}
+                        onClick={saveHandeller}
                     />
-                </div>
+                </SaveButtonDraggable>
             </div>
         </React.Fragment>
     )

@@ -6,6 +6,7 @@ import { BreadcrumbShowCountlabel } from '../../../store/actions';
 import { useDispatch } from 'react-redux';
 import { roundToDecimalPlaces } from '../../../components/Common/CommonFunction';
 import { SaveButton } from '../../../components/Common/CommonButton';
+import SaveButtonDraggable from '../../../components/Common/saveButtonDraggable';
 
 
 const Invoice = ({
@@ -44,7 +45,7 @@ const Invoice = ({
       ))}
       {
         (bulkData.length > 0) &&
-        <div className="row save1" style={{ paddingBottom: 'center' }}>
+        <SaveButtonDraggable>
           <SaveButton
             loading={saveBtnloading}
             pageMode={pageMode}
@@ -52,7 +53,7 @@ const Invoice = ({
             onClick={onClickSavehandle}
             forceDisabled={saveBtnloading}
           />
-        </div>
+       </SaveButtonDraggable>
       }
     </div>
   );

@@ -34,6 +34,7 @@ import { Amount, basicAmount, orderCalculateFunc, roundedGstAmount } from "../..
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { C_DatePicker } from "../../../CustomValidateForm";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
+import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 
 const Challan = (props) => {
 
@@ -152,7 +153,7 @@ const Challan = (props) => {
         else if (postMsg.Status === true) {
             customAlert({
                 Type: 4,
-                 Message: JSON.stringify(postMsg.Message),
+                Message: JSON.stringify(postMsg.Message),
             })
         }
     }, [postMsg])
@@ -164,7 +165,7 @@ const Challan = (props) => {
                 pathname: url.MATERIAL_ISSUE_LIST,
             })
         } else if (updateMsg.Status === true && !modalCss) {
-             customAlert({
+            customAlert({
                 Type: 3,
                 Message: JSON.stringify(updateMsg.Message),
             })
@@ -647,15 +648,14 @@ const Challan = (props) => {
 
                         </PaginationProvider>
 
-                        {GoButton.length > 0 ? <FormGroup>
-                            <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
+                        {GoButton.length > 0 &&
+                            <SaveButtonDraggable>
                                 <SaveButton pageMode={pageMode}
                                     onClick={saveHandeller}
                                     id={saveBtnid}
                                     userAcc={userPageAccessState}
                                 />
-                            </Col>
-                        </FormGroup > : null}
+                            </SaveButtonDraggable>}
                     </form>
                 </div>
             </React.Fragment>

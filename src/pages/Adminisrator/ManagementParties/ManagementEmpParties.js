@@ -42,6 +42,7 @@ import { selectAllCheck } from "../../../components/Common/TableCommonFunc";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { C_Select } from "../../../CustomValidateForm";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
+import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 
 const ManagementEmpParties = (props) => {
 
@@ -306,21 +307,15 @@ const ManagementEmpParties = (props) => {
                             }
                         </ToolkitProvider>
 
-                        {partyList.length > 0 ?
-                            <FormGroup style={{ marginTop: "-25px" }}>
-                                <Row >
-                                    <Col sm={2} className="mt-n4">  <div className="row save1" style={{ paddingBottom: 'center' }}>
-                                        <SaveButton pageMode={pageMode}
-                                            loading={saveBtnloading}
-                                            onClick={SaveHandler}
-                                            userAcc={userPageAccessState}
-                                            module={"RouteUpdate"}
-                                        />
-                                    </div>
-                                    </Col>
-                                </Row>
-                            </FormGroup >
-                            : null
+                        {partyList.length > 0 &&
+                            <SaveButtonDraggable>
+                                <SaveButton pageMode={pageMode}
+                                    loading={saveBtnloading}
+                                    onClick={SaveHandler}
+                                    userAcc={userPageAccessState}
+                                    module={"RouteUpdate"}
+                                />
+                            </SaveButtonDraggable>
                         }
 
                     </form>

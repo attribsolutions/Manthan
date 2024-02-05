@@ -34,6 +34,7 @@ import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import { ItemAPIResponseFunc } from "./stockEntryFunctions";
+import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 
 const StockEntry = (props) => {
 
@@ -638,18 +639,14 @@ const StockEntry = (props) => {
 
 
                         {
-                            TableArr.length > 0 ?
-                                <FormGroup>
-                                    <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
-                                        <SaveButton pageMode={pageMode}
-                                            loading={saveBtnloading || itemAPIDataLoading}
-                                            onClick={SaveHandler}
-                                            userAcc={userPageAccessState}
-                                        />
-
-                                    </Col>
-                                </FormGroup >
-                                : null
+                            TableArr.length > 0 &&
+                            <SaveButtonDraggable>
+                                <SaveButton pageMode={pageMode}
+                                    loading={saveBtnloading || itemAPIDataLoading}
+                                    onClick={SaveHandler}
+                                    userAcc={userPageAccessState}
+                                />
+                            </SaveButtonDraggable>
                         }
 
                     </form >

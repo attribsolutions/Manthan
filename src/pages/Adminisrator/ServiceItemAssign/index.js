@@ -19,6 +19,7 @@ import { goButton_ServiceItemAssign, goButton_ServiceItemAssign_Success, save_Se
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 import { changeCommonPartyDropDetailsAction } from "../../../store/Utilites/PartyDrodown/action";
+import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 
 const ServiceItemAssign = (props) => {
 	const history = useHistory();
@@ -288,7 +289,7 @@ const ServiceItemAssign = (props) => {
 										}
 									</ToolkitProvider>
 
-									<div className="row save1">
+									<SaveButtonDraggable>
 										<SaveButton
 											loading={saveBtnloading}
 											pageMode={pageMode}
@@ -296,7 +297,7 @@ const ServiceItemAssign = (props) => {
 											module={"PartyItems"}
 											onClick={SaveHandler}
 										/>
-									</div>
+									</SaveButtonDraggable>
 
 								</form>
 

@@ -45,6 +45,7 @@ import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import Slidewithcaption from "../../../components/Common/CommonImageComponent";
 import { deltBtnCss } from "../../../components/Common/ListActionsButtons";
+import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 
 const SalesReturn = (props) => {
 
@@ -811,7 +812,7 @@ const SalesReturn = (props) => {
     }
 
     const imageSelectHandler = async (event, config = {}) => { // image Select  handler
-        
+
         if (config.Type === "Remove") {
             config.row["Image"] = undefined
             config.row["ImageURL"] = undefined
@@ -1228,21 +1229,20 @@ const SalesReturn = (props) => {
                         </div>
 
                         {
-                            TableArr.length > 0 ?
-                                <FormGroup>
-                                    <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
-                                        <SaveButton
-                                            pageMode={pageMode}
-                                            forceDisabled={addBtnLoading}
-                                            loading={saveBtnloading}
-                                            onClick={SaveHandler}
-                                            userAcc={userPageAccessState}
-                                            module={"SalesReturn"}
-                                        />
+                            TableArr.length > 0 &&
+                            <SaveButtonDraggable>
+                                <SaveButton
+                                    pageMode={pageMode}
+                                    forceDisabled={addBtnLoading}
+                                    loading={saveBtnloading}
+                                    onClick={SaveHandler}
+                                    userAcc={userPageAccessState}
+                                    module={"SalesReturn"}
+                                />
+                            </SaveButtonDraggable>
 
-                                    </Col>
-                                </FormGroup >
-                                : null
+
+
                         }
 
                     </form >

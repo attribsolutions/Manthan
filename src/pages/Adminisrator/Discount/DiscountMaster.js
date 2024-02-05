@@ -35,6 +35,7 @@ import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { goBtnDiscountAddAction } from "../../../store/Administrator/DiscountRedux/actions";
 import { priceListByPartyActionSuccess } from "../../../store/Administrator/PriceList/action";
 import NewCommonPartyDropdown from "../../../components/Common/NewCommonPartyDropdown";
+import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 
 const DiscountMaster = (props) => {
 
@@ -763,17 +764,16 @@ const DiscountMaster = (props) => {
 
                     {
                         (tableData.length > 0) &&
-                        <div className="row save1" >
+                        <SaveButtonDraggable>
                             <SaveButton
                                 loading={saveBtnloading}
                                 editCreatedBy={"editCreatedBy"}
                                 pageMode={pageMode}
                                 userAcc={userPageAccessState}
                                 onClick={saveHandler}
-                            // forceDisabled={goBtnloading}
                             />
 
-                        </div>
+                        </SaveButtonDraggable>
                     }
 
                 </div >

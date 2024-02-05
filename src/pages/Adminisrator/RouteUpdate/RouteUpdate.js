@@ -26,6 +26,7 @@ import * as _cfunc from "../../../components/Common/CommonFunction";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { C_Select } from "../../../CustomValidateForm";
 import { GetRoutesList } from "../../../store/Administrator/RoutesRedux/actions";
+import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 
 const RouteUpdate = (props) => {
 
@@ -269,16 +270,15 @@ const RouteUpdate = (props) => {
                         </PaginationProvider>
                     </div>
 
-                    {Data.length > 0 ?
-                        <div className="row save1" style={{ paddingBottom: 'center' }}>
+                    {Data.length > 0 &&
+                       <SaveButtonDraggable>
                             <SaveButton pageMode={pageMode}
                                 loading={saveBtnloading}
                                 onClick={SaveHandler}
                                 userAcc={userPageAccessState}
                                 module={"RouteUpdate"}
                             />
-                        </div>
-                        : null
+                        </SaveButtonDraggable>
                     }
 
                 </div>

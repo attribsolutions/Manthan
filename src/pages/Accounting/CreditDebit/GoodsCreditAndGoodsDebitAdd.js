@@ -40,6 +40,7 @@ import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import { loginSelectedPartyID } from "../../../components/Common/CommonFunction";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
+import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 
 function initialState(history) {
 
@@ -1036,20 +1037,17 @@ const GoodsCreditNote = (props) => {
                         </div>
 
                         {
-                            TableArr.length ?
-                                <FormGroup>
-                                    <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
-                                        <SaveButton
-                                            pageMode={pageMode}
-                                            forceDisabled={addBtnLoading}
-                                            loading={saveBtnloading}
-                                            onClick={SaveHandler}
-                                            userAcc={userPageAccessState}
-                                        />
+                            TableArr.length &&
+                            <SaveButtonDraggable>
+                                <SaveButton
+                                    pageMode={pageMode}
+                                    forceDisabled={addBtnLoading}
+                                    loading={saveBtnloading}
+                                    onClick={SaveHandler}
+                                    userAcc={userPageAccessState}
+                                />
+                            </SaveButtonDraggable>
 
-                                    </Col>
-                                </FormGroup >
-                                : null
                         }
 
                     </form >

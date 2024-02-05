@@ -40,6 +40,7 @@ import { countlabelFunc } from "../../../components/Common/CommonPurchaseList";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { C_DatePicker } from "../../../CustomValidateForm";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
+import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 
 const MaterialIssueMaster = (props) => {
 
@@ -741,15 +742,14 @@ const MaterialIssueMaster = (props) => {
                             )}
 
                         </PaginationProvider>
-                        {goButtonList.length > 0 ? <FormGroup>
-                            <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
-                                <SaveButton pageMode={pageMode}
-                                    onClick={SaveHandler}
-                                    userAcc={userPageAccessState}
-                                    module={"Material Issue"}
-                                />
-                            </Col>
-                        </FormGroup > : null}
+                        {goButtonList.length > 0 &&
+                         <SaveButtonDraggable>
+                            <SaveButton pageMode={pageMode}
+                                onClick={SaveHandler}
+                                userAcc={userPageAccessState}
+                                module={"Material Issue"}
+                            />
+                        </SaveButtonDraggable>}
 
                     </form>
                 </div>

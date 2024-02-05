@@ -22,6 +22,8 @@ import DynamicColumnHook, { selectAllCheck } from "../../../components/Common/Ta
 import { C_DatePicker } from "../../../CustomValidateForm";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import NewCommonPartyDropdown from "../../../components/Common/NewCommonPartyDropdown";
+import { C_Button } from "../../../components/Common/CommonButton";
+import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 
 const LoadingSheetUpdate = (props) => {
 
@@ -229,7 +231,7 @@ const LoadingSheetUpdate = (props) => {
                     <div id="id1"></div>
 
                     {/* <NewCommonPartyDropdown /> */}
-                    
+
                     <form noValidate>
                         <div className="px-2 c_card_filter header text-black mb-2" >
 
@@ -296,16 +298,13 @@ const LoadingSheetUpdate = (props) => {
                         </div>
 
                         {
-                            tableListData.length > 0 ?
-                                <FormGroup>
-                                    <Col sm={2} className={"row save1"}>
-                                        <button type="button" style={{ width: "120px" }}
-                                            onClick={MakeReceiptForAll}
-                                            className="btn btn-primary  waves-effect waves-light">
-                                            Make Receipt</button>
-                                    </Col>
-                                </FormGroup >
-                                : null
+                            <SaveButtonDraggable>
+                                <C_Button type="button"
+                                    onClick={MakeReceiptForAll}
+                                    className="btn btn-primary  waves-effect waves-light">
+                                    Make Receipt</C_Button>
+                            </SaveButtonDraggable>
+
                         }
 
 
