@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import $ from "jquery";
 import "jquery-ui/ui/widgets/draggable";
-import './styles.css';
+import './dragbutton.css';
 
 const SaveButtonDraggable = ({ children }) => {
   useEffect(() => {
