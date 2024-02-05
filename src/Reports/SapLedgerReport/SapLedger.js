@@ -238,9 +238,9 @@ const SapLedger = (props) => {
 
                 <div className="page-content" >
 
-                    <PartyDropdown_Common
+                    {/* <PartyDropdown_Common
                         changeButtonHandler={partySelectOnChangeHandler}
-                        SAPLedgerOptions={PartyDropdownOptions} />
+                        SAPLedgerOptions={PartyDropdownOptions} /> */}
 
                     <div className="px-2  c_card_filter text-black " >
                         <div className="row">

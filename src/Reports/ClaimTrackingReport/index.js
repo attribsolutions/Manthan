@@ -58,6 +58,9 @@ const ClaimTrackingReport = (props) => {
     useEffect(() => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(pageId.CLAIM_TRACKING_REPORT));
+        if (_cfunc.CommonPartyDropValue().value > 0) {
+            setPartySelect(_cfunc.CommonPartyDropValue());
+        }
         return () => {
             dispatch(commonPageFieldSuccess(null));
             dispatch(getClaimTrackingEntrySuccess([]));

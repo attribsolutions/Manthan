@@ -81,7 +81,14 @@ const OrderSummary = (props) => {
         dispatch(commonPageField(pageId.ORDER_SUMMARY_REPORT));
         dispatch(BreadcrumbShowCountlabel(`Count:${0}`));
         dispatch(changeCommonPartyDropDetailsAction({ isShow: false }))//change party drop-down show false
-
+        if (_cfunc.CommonPartyDropValue().value > 0) {
+            setState((i) => {
+                const a = { ...i }
+                a.values.PartyName = _cfunc.CommonPartyDropValue();
+                a.hasValid.PartyName.valid = true
+                return a
+            })
+        }
         return () => {
             dispatch(commonPageFieldSuccess(null));
             dispatch(postOrderSummary_API_Success({ Status: false }));

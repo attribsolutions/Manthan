@@ -13,8 +13,8 @@ import MarginMaster from "./MarginMaster";
 import { delete_MarginList_ID, delete_MarginList_ID_Success, getMarginList, goButtonForMarginSuccess } from "../../../store/Administrator/MarginMasterRedux/action";
 import * as _act from "../../../store/actions";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
-import { PageLoadingSpinner, Listloader } from "../../../components/Common/CommonButton";
-import { mobileApp_ProductDelete_Api, mobileApp_ProductUpdate_Api } from "../../../helpers/backend_helper";
+import { PageLoadingSpinner } from "../../../components/Common/CommonButton";
+import { mobileApp_ProductUpdate_Api } from "../../../helpers/backend_helper";
 import { showToastAlert } from "../../../helpers/axios_Config";
 
 const MarginList = () => {
@@ -140,25 +140,25 @@ const MarginList = () => {
     <React.Fragment>
       <PageLoadingSpinner isLoading={(GoBtnlistloading || !pageField)} />
       <div className="page-content">
-          {
-            (pageField) &&
-            <CommonPurchaseList
-              action={action}
-              reducers={reducers}
-              showBreadcrumb={false}
-              MasterModal={MarginMaster}
-              mobaileDeleteApiFinc={mobaileDeleteApiFinc}
-              masterPath={url.MARGIN}
-              newBtnPath={url.MARGIN}
-              ButtonMsgLable={"Margin"}
-              deleteName={"EffectiveDate"}
-              pageMode={pageMode}
-              editBodyfunc={editBodyfunc}
-              deleteBodyfunc={deleteBodyfunc}
-            />
+        {
+          (pageField) &&
+          <CommonPurchaseList
+            action={action}
+            reducers={reducers}
+            showBreadcrumb={false}
+            MasterModal={MarginMaster}
+            mobaileDeleteApiFinc={mobaileDeleteApiFinc}
+            masterPath={url.MARGIN}
+            newBtnPath={url.MARGIN}
+            ButtonMsgLable={"Margin"}
+            deleteName={"EffectiveDate"}
+            pageMode={pageMode}
+            editBodyfunc={editBodyfunc}
+            deleteBodyfunc={deleteBodyfunc}
+          />
 
-          }
-        </div>
+        }
+      </div>
     </React.Fragment>
   )
 }

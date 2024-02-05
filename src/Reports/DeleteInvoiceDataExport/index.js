@@ -51,7 +51,10 @@ const DeleteInvoiceDataExport = (props) => {
 
     useEffect(() => {
         dispatch(commonPageFieldSuccess(null));
-        dispatch(commonPageField(pageId.DELETE_INVOICE_DATA_EXPORT))
+        dispatch(commonPageField(pageId.DELETE_INVOICE_DATA_EXPORT));
+        if (_cfunc.CommonPartyDropValue().value > 0) {
+            setPartyDropdown(_cfunc.CommonPartyDropValue());
+        }
         return () => {
             dispatch(commonPageFieldSuccess(null));
             dispatch(postDeleteInvoiceDataExport_API_Success([]))

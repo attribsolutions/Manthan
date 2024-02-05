@@ -52,6 +52,9 @@ const ReturnReport = (props) => {
         dispatch(commonPageField(pageId.RETURN_REPORT))
         dispatch(BreadcrumbShowCountlabel(`Count:${0} ₹ ${0.00}`));
         dispatch(changeCommonPartyDropDetailsAction({ isShow: false }))//change party drop-down show false
+        if (_cfunc.CommonPartyDropValue().value > 0) {
+            setDistributorDropdown([_cfunc.CommonPartyDropValue()]);
+        }
         return () => {
             dispatch(Return_Report_Action_Success([]));
             setTableData([]);

@@ -73,6 +73,9 @@ const InvoiceDataExport = (props) => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(pageID));
         dispatch(BreadcrumbShowCountlabel(`Count:${0}`));
+        if (_cfunc.CommonPartyDropValue().value > 0) {
+            setPartyDropdown(_cfunc.CommonPartyDropValue())
+        }
         return () => {
             dispatch(commonPageFieldSuccess(null));
         }

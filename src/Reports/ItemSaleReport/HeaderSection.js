@@ -149,6 +149,9 @@ const HeaderSection = (props) => {
     dispatch(getSubGroupList());
     dispatch(Items_On_Group_And_Subgroup_API({ Group: 0, SubGroup: 0 }));
     dispatch(BreadcrumbShowCountlabel(`Count:0 ₹ 0`));
+    if (_cfunc.CommonPartyDropValue().value > 0) {
+      states.setSupplierSelect(_cfunc.CommonPartyDropValue())
+    }
     return () => {
       dispatch(commonPageFieldSuccess(null));
       dispatch(getPartyTypelistSuccess([]));
