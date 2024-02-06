@@ -13,6 +13,7 @@ import DynamicColumnHook from "../../components/Common/TableCommonFunc";
 import { ExcelReportComponent } from "../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS";
 import CustomTable from "../../CustomTable2";
 import { changeCommonPartyDropDetailsAction } from "../../store/Utilites/PartyDrodown/action";
+import { allLabelWithBlank } from "../../components/Common/CommonErrorMsg/HarderCodeData";
 
 const GenericSaleReport = (props) => {
 
@@ -23,7 +24,7 @@ const GenericSaleReport = (props) => {
 
     const [headerFilters, setHeaderFilters] = useState('');
     const [userPageAccessState, setUserAccState] = useState('');
-    const [distributorDropdown, setDistributorDropdown] = useState([{ value: "", label: "All" }]);
+    const [distributorDropdown, setDistributorDropdown] = useState([allLabelWithBlank]);
     const [tableData, setTableData] = useState([]);
     const [btnMode, setBtnMode] = useState(0);
 
@@ -105,7 +106,7 @@ const GenericSaleReport = (props) => {
                         excelFileName: "Generic Sale Report"
                     })
                     dispatch(GoButton_For_GenericSale_Success([]));
-                    setDistributorDropdown([{ value: "", label: "All" }])
+                    setDistributorDropdown([allLabelWithBlank])
                 }
                 else {
                     const UpdatedTableData = Data.map((item, index) => {
@@ -168,7 +169,7 @@ const GenericSaleReport = (props) => {
     function PartyDrodownOnChange(e = []) {
 
         if (e.length === 0) {
-            e = [{ value: "", label: "All" }]
+            e = [allLabelWithBlank]
         } else {
             e = e.filter(i => !(i.value === ''))
         }

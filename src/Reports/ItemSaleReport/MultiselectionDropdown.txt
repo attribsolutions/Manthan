@@ -218,8 +218,8 @@ const ItemSaleReport = (props) => {
     function SupplierOnChange(event) {
 
         setSupplierSelect(event)
-        setRouteSelect({ value: "", label: "All" })
-        setCustomerSelect({ value: "", label: "All" })
+        setRouteSelect(allLabelWithBlank)
+        setCustomerSelect(allLabelWithBlank)
         setTableData([]);
         setInitaialBaseData([]);
         dispatch(GetVenderSupplierCustomerSuccess([]))
@@ -319,7 +319,7 @@ const ItemSaleReport = (props) => {
 
     function channelTo_OnChange(e = []) {
         if (e.length === 0) {
-            e = [{ value: 0, label: "All" }]
+            e = [allLabelWithZero]
         } else {
             e = e.filter(i => !(i.value === 0))
         }
@@ -333,7 +333,7 @@ const ItemSaleReport = (props) => {
                 text: 'FromDate',
                 dataField: 'InvoiceDate',
                 checkboxState: fromDateCheckbox,
-                selectValue: [{ value: 0, label: "All" }],
+                selectValue: [allLabelWithZero],
                 sequence: 1,
                 sort: true,
                 groupBy: true,
@@ -343,7 +343,7 @@ const ItemSaleReport = (props) => {
                 text: 'Channel From',
                 dataField: 'SaleMadeFrom',
                 checkboxState: channelFromCheckbox,
-                selectValue: [{ value: 0, label: "All" }],
+                selectValue: [allLabelWithZero],
                 sort: true,
                 groupBy: true,
                 sequence: 2
@@ -362,8 +362,8 @@ const ItemSaleReport = (props) => {
             //     text: 'Supplier',
             //     dataField: 'SupplierName',
             //     checkboxState: supplierCheckbox,
-            //     // selectValue: { value: "", label: "All" },
-            //     selectValue: [{ value: "", label: "All" }],
+            //     // selectValue: allLabelWithBlank,
+            //     selectValue: [allLabelWithBlank],
             //     sort: true,
             //     groupBy: true,
             //     sequence: 4
@@ -373,7 +373,7 @@ const ItemSaleReport = (props) => {
             //     dataField: 'FullInvoiceNumber',
             //     checkboxState: showAlsoSelect.some(item => item.value === 1) ? true : false,
             //     // selectValue: showAlsoSelect,
-            //     selectValue: [{ value: "", label: "All" }],
+            //     selectValue: [allLabelWithBlank],
             //     sort: true,
             //     groupBy: true,
             //     sequence: 5
@@ -383,7 +383,7 @@ const ItemSaleReport = (props) => {
             //     dataField: 'RouteName',
             //     checkboxState: routeCheckbox,
             //     // selectValue: routeSelect,
-            //     selectValue: [{ value: "", label: "All" }],
+            //     selectValue: [allLabelWithBlank],
             //     sort: true,
             //     groupBy: true,
             //     sequence: 6
@@ -393,7 +393,7 @@ const ItemSaleReport = (props) => {
             //     dataField: 'CustomerName',
             //     checkboxState: customerCheckbox,
             //     // selectValue: customerSelect,
-            //     selectValue: [{ value: "", label: "All" }],
+            //     selectValue: [allLabelWithBlank],
             //     sort: true,
             //     groupBy: true,
             //     sequence: 7
@@ -403,7 +403,7 @@ const ItemSaleReport = (props) => {
             //     dataField: 'GroupName',
             //     checkboxState: productCheckbox,
             //     // selectValue: productSelect,
-            //     selectValue: [{ value: "", label: "All" }],
+            //     selectValue: [allLabelWithBlank],
             //     sort: true,
             //     groupBy: true,
             //     sequence: 8
@@ -413,7 +413,7 @@ const ItemSaleReport = (props) => {
             //     dataField: 'SubGroupName',
             //     checkboxState: subProductCheckbox,
             //     // selectValue: subProductSelect,
-            //     selectValue: [{ value: "", label: "All" }],
+            //     selectValue: [allLabelWithBlank],
             //     sort: true,
             //     groupBy: true,
             //     sequence: 9
@@ -423,7 +423,7 @@ const ItemSaleReport = (props) => {
             //     dataField: 'ItemName',
             //     checkboxState: itemNameCheckbox,
             //     // selectValue: ItemNameSelect,
-            //     selectValue: [{ value: "", label: "All" }],
+            //     selectValue: [allLabelWithBlank],
             //     sort: true,
             //     groupBy: true,
             //     sequence: 10
@@ -503,12 +503,12 @@ const ItemSaleReport = (props) => {
             //     text: "Show Discounted Items",
             //     dataField: "ShowDiscountedItems",
             //     // selectValue: showAlsoSelect.find(item => item.value === 2),
-            //     selectValue: [{ value: "", label: "All" }],
+            //     selectValue: [allLabelWithBlank],
             // },
             {
                 text: "Amount",
                 dataField: "Amount",
-                selectValue: [{ value: 0, label: "All" }],
+                selectValue: [allLabelWithZero],
                 checkboxState: true,
                 sort: true,
                 isSum: true,

@@ -42,6 +42,7 @@ import "./order.scss"
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 import { changeCommonPartyDropDetailsAction } from "../../../store/Utilites/PartyDrodown/action";
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
+import { allLabelWithBlank } from "../../../components/Common/CommonErrorMsg/HarderCodeData";
 
 
 let editVal = {}
@@ -103,8 +104,8 @@ const Order = (props) => {
     const [orderdate, setorderdate] = useState(currentDate_ymd);
 
     const [supplierSelect, setSupplierSelect] = useState('');
-    const [routeSelect, setRouteSelect] = useState({ value: '', label: "All" });
-    const [itemSelect, setItemSelect] = useState({ value: '', label: "All" });
+    const [routeSelect, setRouteSelect] = useState(allLabelWithBlank);
+    const [itemSelect, setItemSelect] = useState(allLabelWithBlank);
     const [itemSelectDropOptions, setitemSelectOptions] = useState([]);
     const [selecedItemWiseOrder, setSelecedItemWiseOrder] = useState(true)
     const [goBtnDissable, setGoBtnDissable] = useState(false)
@@ -229,8 +230,8 @@ const Order = (props) => {
                 dispatch(_act.getSupplierAddress(commonPartyDropSelect.value))
             }
         }
-        setItemSelect({ value: '', label: "All" });
-        setRouteSelect({ value: '', label: "All" });
+        setItemSelect(allLabelWithBlank);
+        setRouteSelect(allLabelWithBlank);
         setSupplierSelect('')
         return () => {
             dispatch(getPartyListAPISuccess([]));
@@ -1453,7 +1454,7 @@ const Order = (props) => {
                                                                 }
                                                                 setSelecedItemWiseOrder(false)
                                                                 setOrderItemTable(itemSelectDropOptions)
-                                                                setItemSelect({ value: '', label: "All" })
+                                                                setItemSelect(allLabelWithBlank)
                                                                 setGoBtnDissable(true)
                                                             }} />
                                                         : (!selecedItemWiseOrder) &&
@@ -1464,7 +1465,7 @@ const Order = (props) => {
                                                                 setGoBtnDissable(false)
                                                                 setSelecedItemWiseOrder(true)
                                                                 setOrderItemTable([])
-                                                                setItemSelect({ value: '', label: "All" })
+                                                                setItemSelect(allLabelWithBlank)
                                                                 dispatch(_act.GoButton_For_Order_AddSuccess([]))
                                                             }}
                                                         />

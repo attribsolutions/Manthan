@@ -46,6 +46,7 @@ import {
 } from "./SortAndExcelDownloadFunc";
 import { generateExcel } from "../ReportComponent";
 import { ExcelReportComponent } from "../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS";
+import { allLabelWithZero } from "../../components/Common/CommonErrorMsg/HarderCodeData";
 
 const HeaderSection = (props) => {
   const states = ItemSaleContext();
@@ -161,7 +162,7 @@ const HeaderSection = (props) => {
 
   const channelFrom_WithAll = useMemo(() => {
     if (channelFromOption.length > 0) {
-      return [{ value: 0, label: "All" }, ...channelFromOption,];
+      return [allLabelWithZero, ...channelFromOption,];
     }
     return channelFromOption;
   }, [channelFromOption]);
@@ -281,8 +282,8 @@ const HeaderSection = (props) => {
     dispatch(ItemSaleGoButton_API_Success([]));
     states.setTableData([]);
     states.setSupplierSelect(event);
-    states.setRouteSelect([{ value: 0, label: "All" }]);
-    states.setCustomerSelect([{ value: 0, label: "All" }]);
+    states.setRouteSelect([allLabelWithZero]);
+    states.setCustomerSelect([allLabelWithZero]);
     states.setInitaialBaseData([]);
     dispatch(GetVenderSupplierCustomerSuccess([]));
     dispatch(GetRoutesListSuccess([]));
@@ -304,7 +305,7 @@ const HeaderSection = (props) => {
 
   function ChannelToOnchange(e = []) {
     if (e.length === 0) {
-      e = [{ value: 0, label: "All" }];
+      e = [allLabelWithZero];
     } else {
       e = e.filter((i) => i.value > 0);
     }
@@ -312,11 +313,11 @@ const HeaderSection = (props) => {
   }
 
   function RouteOnChange(e = []) {
-    states.setCustomerSelect([{ value: 0, label: "All" }]);
+    states.setCustomerSelect([allLabelWithZero]);
     dispatch(GetVenderSupplierCustomerSuccess([]));
 
     if (e.length === 0) {
-      e = [{ value: 0, label: "All" }];
+      e = [allLabelWithZero];
       dispatch(
         GetVenderSupplierCustomer({
           subPageMode: url.ITEM_SALE_REPORT,
@@ -344,7 +345,7 @@ const HeaderSection = (props) => {
 
   function CustomerOnChange(e = []) {
     if (e.length === 0) {
-      e = [{ value: 0, label: "All" }];
+      e = [allLabelWithZero];
     } else {
       e = e.filter((i) => i.value > 0);
     }
@@ -359,7 +360,7 @@ const HeaderSection = (props) => {
     states.setItemNameSelect(initail.INITIAL_ARRAY);
 
     if (e.length === 0) {
-      e = [{ value: 0, label: "All" }];
+      e = [allLabelWithZero];
       dispatch(getGroupList());
       dispatch(getSubGroupList());
       dispatch(Items_On_Group_And_Subgroup_API({ Group: 0, SubGroup: 0 }));
@@ -385,7 +386,7 @@ const HeaderSection = (props) => {
     states.setItemNameSelect(initail.INITIAL_ARRAY);
 
     if (e.length === 0) {
-      e = [{ value: 0, label: "All" }];
+      e = [allLabelWithZero];
       dispatch(Items_On_Group_And_Subgroup_API({ Group: 0, SubGroup: 0 }));
       states.setItemNameSelect(initail.INITIAL_ARRAY);
     } else {
@@ -405,7 +406,7 @@ const HeaderSection = (props) => {
 
   function ItemOnChange(e = []) {
     if (e.length === 0) {
-      e = [{ value: 0, label: "All" }];
+      e = [allLabelWithZero];
     } else {
       e = e.filter((i) => i.value > 0);
     }

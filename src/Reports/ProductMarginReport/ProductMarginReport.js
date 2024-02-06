@@ -30,6 +30,7 @@ import { DiscountPartyType_Dropdown_Action, DiscountPartyType_Dropdown_Success }
 import PriceDropOptions from '../../pages/Adminisrator/PartyMaster/MasterAdd/FirstTab/PriceDropOptions';
 import Slidewithcaption from '../../components/Common/CommonImageComponent';
 import { ExcelReportComponent } from '../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS';
+import { allLabelWithZero } from '../../components/Common/CommonErrorMsg/HarderCodeData';
 
 function initialState(history) {
 
@@ -69,11 +70,11 @@ const ProductMarginReport = (props) => {
     const [columns, setcolumn] = useState([{}]);
     const [columnsCreated, setColumnsCreated] = useState(false)
 
-    const [partyTypeSelect, setPartyTypeSelect] = useState({ value: 0, label: "All" });
-    const [priceListSelect, setPriceListSelect] = useState({ value: 0, label: "All" });
-    const [itemNameSelect, setItemNameSelect] = useState([{ value: 0, label: "All" }]);
-    const [groupSelect, setGroupSelect] = useState([{ value: 0, label: "All" }]);
-    const [subGroupSelect, setSubGroupSelect] = useState([{ value: 0, label: "All" }]);
+    const [partyTypeSelect, setPartyTypeSelect] = useState(allLabelWithZero);
+    const [priceListSelect, setPriceListSelect] = useState(allLabelWithZero);
+    const [itemNameSelect, setItemNameSelect] = useState([allLabelWithZero]);
+    const [groupSelect, setGroupSelect] = useState([allLabelWithZero]);
+    const [subGroupSelect, setSubGroupSelect] = useState([allLabelWithZero]);
 
     const [imageTable, setImageTable] = useState([]);  // Selected Image Array
     const [modal_backdrop, setmodal_backdrop] = useState(false);   // Image Model open Or not
@@ -371,7 +372,7 @@ const ProductMarginReport = (props) => {
 
     function PartyTypeOnchange(e) {
         setPartyTypeSelect(e);
-        setPriceListSelect({ value: 0, label: "All" });
+        setPriceListSelect(allLabelWithZero);
         dispatch(ProductMargin_Go_Btn_Success([]));
         setTableData([]);
         setcolumn([{}]);
@@ -385,11 +386,11 @@ const ProductMarginReport = (props) => {
         dispatch(getSubGroupListSuccess([]));
         dispatch(get_Sub_Group_By_Group_ForDropDown_Success([]));
         dispatch(Items_On_Group_And_Subgroup_API_Success([]));
-        setSubGroupSelect([{ value: 0, label: "All" }]);
-        setItemNameSelect([{ value: 0, label: "All" }]);
+        setSubGroupSelect([allLabelWithZero]);
+        setItemNameSelect([allLabelWithZero]);
 
         if (e.length === 0) {
-            e = [{ value: 0, label: "All" }];
+            e = [allLabelWithZero];
             dispatch(getGroupList());
             dispatch(getSubGroupList());
             dispatch(Items_On_Group_And_Subgroup_API({ Group: 0, SubGroup: 0 }));
@@ -403,8 +404,8 @@ const ProductMarginReport = (props) => {
             } else {
                 dispatch(get_Sub_Group_By_Group_ForDropDown_Success([]));
                 dispatch(Items_On_Group_And_Subgroup_API_Success([]));
-                setSubGroupSelect([{ value: 0, label: "All" }]);
-                setItemNameSelect([{ value: 0, label: "All" }]);
+                setSubGroupSelect([allLabelWithZero]);
+                setItemNameSelect([allLabelWithZero]);
             }
         }
         setGroupSelect(e);
@@ -416,12 +417,12 @@ const ProductMarginReport = (props) => {
         setcolumn([{}]);
        
         dispatch(Items_On_Group_And_Subgroup_API_Success([]));
-        setItemNameSelect([{ value: 0, label: "All" }]);
+        setItemNameSelect([allLabelWithZero]);
 
         if (e.length === 0) {
-            e = [{ value: 0, label: "All" }];
+            e = [allLabelWithZero];
             dispatch(Items_On_Group_And_Subgroup_API({ Group: 0, SubGroup: 0 }));
-            setItemNameSelect([{ value: 0, label: "All" }]);
+            setItemNameSelect([allLabelWithZero]);
         } else {
             e = e.filter((i) => i.value > 0);
             if (e.length === 1) {
@@ -430,7 +431,7 @@ const ProductMarginReport = (props) => {
                 );
             } else {
                 dispatch(Items_On_Group_And_Subgroup_API_Success([]));
-                setItemNameSelect([{ value: 0, label: "All" }]);
+                setItemNameSelect([allLabelWithZero]);
             }
         }
         setSubGroupSelect(e);
@@ -441,7 +442,7 @@ const ProductMarginReport = (props) => {
         setTableData([]);
         setcolumn([{}]);
         if (e.length === 0) {
-            e = [{ value: 0, label: "All" }];
+            e = [allLabelWithZero];
         } else {
             e = e.filter((i) => i.value > 0);
         }

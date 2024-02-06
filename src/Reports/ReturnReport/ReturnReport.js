@@ -13,6 +13,7 @@ import { Return_Report_Action, Return_Report_Action_Success } from "../../store/
 import { ExcelReportComponent } from "../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS";
 import CustomTable from "../../CustomTable2";
 import { changeCommonPartyDropDetailsAction } from "../../store/Utilites/PartyDrodown/action";
+import { allLabelWithBlank } from "../../components/Common/CommonErrorMsg/HarderCodeData";
 
 const ReturnReport = (props) => {
 
@@ -23,7 +24,7 @@ const ReturnReport = (props) => {
 
     const [headerFilters, setHeaderFilters] = useState('');
     const [userPageAccessState, setUserAccState] = useState('');
-    const [distributorDropdown, setDistributorDropdown] = useState([{ value: "", label: "All" }]);
+    const [distributorDropdown, setDistributorDropdown] = useState([allLabelWithBlank]);
     const [tableData, setTableData] = useState([]);
     const [btnMode, setBtnMode] = useState(0);
 
@@ -104,7 +105,7 @@ const ReturnReport = (props) => {
                         excelFileName: "ReturnReport"
                     })
                     dispatch(Return_Report_Action_Success([]));
-                    setDistributorDropdown([{ value: "", label: "All" }])
+                    setDistributorDropdown([allLabelWithBlank])
                 }
                 else {
                     const UpdatedTableData = goButtonData.Data.map((item, index) => {
@@ -165,7 +166,7 @@ const ReturnReport = (props) => {
     function PartyDrodownOnChange(e = []) {
 
         if (e.length === 0) {
-            e = [{ value: "", label: "All" }]
+            e = [allLabelWithBlank]
         } else {
             e = e.filter(i => !(i.value === ''))
         }

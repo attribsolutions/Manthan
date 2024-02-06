@@ -61,6 +61,10 @@ const categoryAlreadyExists = "Category alredy Select"
 // claim Tracking Entry 
 const CreditNote_Not_Upload = "Credit Note Not Uploaded"
 
+// Invoice Master
+const rateNotAvailable = " Rate not available."
+const multiple_MRP_notAllowed = " Multiple MRP’S Invoice not allowed."
+const customerIsRequired = "Customer is required."
 
 export const alertMessages = {
     commonPartySelectionIsRequired,
@@ -101,7 +105,10 @@ export const alertMessages = {
     GroupIDError,
     paymentORcodeIsRequired,
     categoryAlreadyExists,
-    CreditNote_Not_Upload
+    CreditNote_Not_Upload,
+    rateNotAvailable,
+    multiple_MRP_notAllowed,
+    customerIsRequired
 };
 
 

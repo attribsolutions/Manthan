@@ -14,6 +14,7 @@ import { currentDate_ymd, loginPartyID } from "../../../components/Common/Common
 import {  GetVenderSupplierCustomer } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { Go_Button } from "../../../components/Common/CommonButton";
 import { C_DatePicker } from "../../../CustomValidateForm";
+import { allLabelWithBlank } from "../../../components/Common/CommonErrorMsg/HarderCodeData";
 
 const InwardList = () => {
 
@@ -23,7 +24,7 @@ const InwardList = () => {
     const subPageMode = history.location.pathname
 
     const [pageMode, setpageMode] = useState(mode.defaultList)
-    const [inwardlistFiltersState, setInwardlistFilter] = useState({ todate: currentDate_ymd, fromdate: currentDate_ymd, SupplierSelect: { value: '', label: "All" } });
+    const [inwardlistFiltersState, setInwardlistFilter] = useState({ todate: currentDate_ymd, fromdate: currentDate_ymd, SupplierSelect: allLabelWithBlank });
 
     const reducers = useSelector(
         (state) => ({

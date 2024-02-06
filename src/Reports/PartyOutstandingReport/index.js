@@ -16,6 +16,7 @@ import { GetRoutesList, GetRoutesListSuccess } from "../../store/Administrator/R
 import { PartyOutstandingReport_GoButton_API, PartyOutstandingReport_GoButton_API_Success } from "../../store/Report/PartyOutstandingRedux/action";
 import CustomTable from "../../CustomTable2";
 import { alertMessages } from "../../components/Common/CommonErrorMsg/alertMsg";
+import { allLabelWithBlank } from "../../components/Common/CommonErrorMsg/HarderCodeData";
 
 
 const PartyOutstandingReport = (props) => {
@@ -29,7 +30,7 @@ const PartyOutstandingReport = (props) => {
 	const [userPageAccessState, setUserAccState] = useState('');
 
 	const [partyDropdown, setPartyDropdown] = useState('');
-	const [routeDropdown, setRouteDropdown] = useState({ value: "", label: "All" });
+	const [routeDropdown, setRouteDropdown] = useState(allLabelWithBlank);
 	const [tableData, setTableData] = useState([]);
 
 	const reducers = useSelector(
@@ -87,7 +88,7 @@ const PartyOutstandingReport = (props) => {
 	const RoutesListOptions = RoutesList.reduce((options, data) => {
 		options.push({ value: data.id, label: data.Name });
 		return options;
-	}, [{ value: "", label: "All" }]);
+	}, [allLabelWithBlank]);
 
 	async function goButtonHandler() {
 		try {
@@ -117,7 +118,7 @@ const PartyOutstandingReport = (props) => {
 
 	function partyOnChangeHandler(e) {
 		setPartyDropdown(e);
-		setRouteDropdown({ value: "", label: "All" });
+		setRouteDropdown(allLabelWithBlank);
 		const jsonBody = JSON.stringify({ CompanyID: _cfunc.loginCompanyID(), PartyID: e.value });
 		dispatch(GetRoutesList(jsonBody));
 		dispatch(PartyOutstandingReport_GoButton_API_Success([]));

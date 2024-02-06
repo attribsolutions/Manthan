@@ -29,6 +29,7 @@ import * as _cfunc from "../../../components/Common/CommonFunction";
 import { url, mode, pageId } from "../../../routes/index"
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
+import { allLabelWithBlank } from "../../../components/Common/CommonErrorMsg/HarderCodeData";
 
 
 const PaymentEntryList = () => {
@@ -41,7 +42,7 @@ const PaymentEntryList = () => {
     const fileds = {
         FromDate: currentDate_ymd,
         ToDate: currentDate_ymd,
-        Customer: { value: "", label: "All" }
+        Customer: allLabelWithBlank
     }
     const [state, setState] = useState(() => initialFiledFunc(fileds))
 
@@ -270,7 +271,7 @@ const PaymentEntryList = () => {
 
         setState((i) => {
             const a = { ...i }
-            a.values.Customer = { value: "", label: "All" }
+            a.values.Customer = allLabelWithBlank
             a.hasValid.Customer.valid = true
             return a
         })

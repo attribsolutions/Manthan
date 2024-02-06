@@ -1,3 +1,4 @@
+import { allLabelWithZero } from "../../components/Common/CommonErrorMsg/HarderCodeData";
 
 export const DEFAULT_TABLE_COLUMNS = [
     {
@@ -79,10 +80,10 @@ export const ALL_TABLE_COLUMNS = [
     },
 ];
 
-export const INITIAL_ZERO = { value: 0, label: "All" };
-export const INITIAL_ARRAY = [{ value: 0, label: "All" }];
+export const INITIAL_ZERO = allLabelWithZero;
+export const INITIAL_ARRAY = [allLabelWithZero];
 
-// export const INITIAL_BLANK = { value: 0, label: "All" };
+// export const INITIAL_BLANK = allLabelWithZero;
 
 export const SHOW_ALSO_OPTIONS = [{
     value: 1,

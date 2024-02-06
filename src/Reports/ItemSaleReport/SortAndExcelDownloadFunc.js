@@ -5,6 +5,7 @@ import Papa from 'papaparse';
 import { get_PartyType_List_Api } from "../../helpers/backend_helper";
 import * as ExcelJS from 'exceljs';
 import { autoFitColumnWidths, freezeHeaderRow, saveWorkbookAsExcel, setDateValue, setNumberValue, setTextValue, styleHeaderRow } from "../../components/Common/ReportCommonFunc/ExcelFunctions";
+import { allLabelWithBlank } from "../../components/Common/CommonErrorMsg/HarderCodeData";
 
 export const SortButtonFunc = (props) => {
 
@@ -34,7 +35,7 @@ export const SortButtonFunc = (props) => {
             text: 'FromDate',
             dataField: 'InvoiceDate',
             checkboxState: fromDateCheckbox,
-            selectValue: [{ value: "", label: "All" }],
+            selectValue: [allLabelWithBlank],
             sequence: 1,
             controlTypeName: "Date",
             sort: true,
@@ -45,7 +46,7 @@ export const SortButtonFunc = (props) => {
             text: 'Channel From',
             dataField: 'SaleMadeFrom',
             checkboxState: channelFromCheckbox,
-            selectValue: [{ value: "", label: "All" }],
+            selectValue: [allLabelWithBlank],
             sort: true,
             controlTypeName: "Text",
             groupBy: true,
@@ -65,7 +66,7 @@ export const SortButtonFunc = (props) => {
             text: 'Supplier',
             dataField: 'SupplierName',
             checkboxState: supplierCheckbox,
-            selectValue: [{ value: "", label: "All" }],
+            selectValue: [allLabelWithBlank],
             sort: true,
             groupBy: true,
             sequence: 5,
@@ -75,7 +76,7 @@ export const SortButtonFunc = (props) => {
             text: 'Invoice Number',
             dataField: 'FullInvoiceNumber',
             checkboxState: showAlsoSelect.some(item => item.value === 1) ? true : false,
-            selectValue: [{ value: "", label: "All" }],
+            selectValue: [allLabelWithBlank],
             sort: true,
             groupBy: true,
             sequence: 6,
@@ -135,7 +136,7 @@ export const SortButtonFunc = (props) => {
         {
             text: 'QtyInNo',
             dataField: 'QtyInNo',
-            selectValue: [{ value: "", label: "All" }],
+            selectValue: [allLabelWithBlank],
             checkboxState: unitDropdownSelect.value === 1 ? true : false,
             sort: true,
             isSum: true,
@@ -146,7 +147,7 @@ export const SortButtonFunc = (props) => {
         {
             text: 'QtyInKg',
             dataField: 'QtyInKg',
-            selectValue: [{ value: "", label: "All" }],
+            selectValue: [allLabelWithBlank],
             checkboxState: unitDropdownSelect.value === 2 ? true : false,
             sort: true,
             isSum: true,
@@ -157,7 +158,7 @@ export const SortButtonFunc = (props) => {
         {
             text: 'QtyInBox',
             dataField: 'QtyInBox',
-            selectValue: [{ value: "", label: "All" }],
+            selectValue: [allLabelWithBlank],
             checkboxState: unitDropdownSelect.value === 3 ? true : false,
             sort: true,
             isSum: true,
@@ -168,7 +169,7 @@ export const SortButtonFunc = (props) => {
         {
             text: 'InvoiceGrandTotal',
             dataField: 'GrandTotal',
-            selectValue: [{ value: "", label: "All" }],
+            selectValue: [allLabelWithBlank],
             checkboxState: showAlsoSelect.some(item => item.value === 5),
             sort: true,
             toFixed: 2,
@@ -178,7 +179,7 @@ export const SortButtonFunc = (props) => {
         {
             text: 'DiscountInRS',
             dataField: 'DiscountAmount',
-            selectValue: [{ value: "", label: "All" }],
+            selectValue: [allLabelWithBlank],
             checkboxState: showAlsoSelect.some(item => item.value === 4),
             sort: true,
             isSum: true,
@@ -189,7 +190,7 @@ export const SortButtonFunc = (props) => {
         {
             text: 'RoundOffAmount',
             dataField: 'RoundOffAmount',
-            selectValue: [{ value: "", label: "All" }],
+            selectValue: [allLabelWithBlank],
             checkboxState: showAlsoSelect.some(item => item.value === 6),
             isSum: true,
             sort: true,
@@ -200,7 +201,7 @@ export const SortButtonFunc = (props) => {
         {
             text: 'TCSAmount',
             dataField: 'TCSAmount',
-            selectValue: [{ value: "", label: "All" }],
+            selectValue: [allLabelWithBlank],
             checkboxState: showAlsoSelect.some(item => item.value === 7),
             isSum: true,
             sort: true,
@@ -211,7 +212,7 @@ export const SortButtonFunc = (props) => {
         {
             text: 'GRNID',
             dataField: 'FullGRNNumber',
-            selectValue: [{ value: "", label: "All" }],
+            selectValue: [allLabelWithBlank],
             checkboxState: showAlsoSelect.some(item => item.value === 3),
             sort: true,
             groupBy: true,
@@ -227,7 +228,7 @@ export const SortButtonFunc = (props) => {
         {
             text: "Amount",
             dataField: "Amount",
-            selectValue: [{ value: "", label: "All" }],
+            selectValue: [allLabelWithBlank],
             checkboxState: true,
             sort: true,
             isSum: true,
@@ -239,7 +240,7 @@ export const SortButtonFunc = (props) => {
             text: 'MRP',
             dataField: 'MRPValue',
             checkboxState: showAlsoSelect.some(item => item.value === 8) ? true : false,
-            selectValue: [{ value: "", label: "All" }],
+            selectValue: [allLabelWithBlank],
             sort: true,
             groupBy: true,
             toFixed: 2,

@@ -24,6 +24,7 @@ import { return_discountCalculate_Func } from "./SalesCalculation";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 import Slidewithcaption from "../../../components/Common/CommonImageComponent";
 import { API_URL_LIVE } from "../../../routes/route_url";
+import { allLabelWithBlank } from "../../../components/Common/CommonErrorMsg/HarderCodeData";
 
 const SalesReturnList = () => {
 
@@ -34,7 +35,7 @@ const SalesReturnList = () => {
     const fileds = {
         FromDate: currentDate_ymd,
         ToDate: currentDate_ymd,
-        Customer: { value: "", label: "All" },
+        Customer: allLabelWithBlank,
         listData: {},
         UploadModalOpen: false,
         UploadedFile: ""
@@ -418,7 +419,7 @@ const SalesReturnList = () => {
 
         setState((i) => {
             let a = { ...i }
-            a.values.Customer = { value: "", label: "All" }
+            a.values.Customer = allLabelWithBlank
             a.hasValid.Customer.valid = true;
             return a
         })

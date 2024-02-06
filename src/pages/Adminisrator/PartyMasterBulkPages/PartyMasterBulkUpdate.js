@@ -54,6 +54,7 @@ import { GetDistrictOnState_For_Dropdown, mobileApp_RetailerUpdate_Api } from ".
 import { showToastAlert } from "../../../helpers/axios_Config";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
+import { allLabelWithBlank } from "../../../components/Common/CommonErrorMsg/HarderCodeData";
 
 const PartyMasterBulkUpdate = (props) => {
 
@@ -66,8 +67,8 @@ const PartyMasterBulkUpdate = (props) => {
 
     const fileds = {
         id: "",
-        Party: { value: "", label: "All" },
-        Routes: { value: "", label: "All" }
+        Party: allLabelWithBlank,
+        Routes: allLabelWithBlank
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
@@ -522,8 +523,8 @@ const PartyMasterBulkUpdate = (props) => {
     function partySelectOnChangeHandler() {
         setState((i) => {
             const a = { ...i }
-            a.values.Party = { value: "", label: "All" }
-            a.values.Routes = { value: "", label: "All" }
+            a.values.Party = allLabelWithBlank
+            a.values.Routes = allLabelWithBlank
             a.hasValid.Party.valid = true;
             a.hasValid.Routes.valid = true;
             return a

@@ -41,6 +41,7 @@ import { C_DatePicker, C_Select } from "../../../CustomValidateForm";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { getVehicleList } from "../../../store/Administrator/VehicleRedux/action";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
+import { allLabelWithBlank } from "../../../components/Common/CommonErrorMsg/HarderCodeData";
 
 const InvoiceList = () => {
 
@@ -50,7 +51,7 @@ const InvoiceList = () => {
 
     const [pageMode, setPageMode] = useState(url.ORDER_LIST_1)
     const [subPageMode, setSubPageMode] = useState(history.location.pathname);
-    const [hederFilters, setHederFilters] = useState({ todate: currentDate_ymd, fromdate: currentDate_ymd, supplierSelect: { value: '', label: "All" } });
+    const [hederFilters, setHederFilters] = useState({ todate: currentDate_ymd, fromdate: currentDate_ymd, supplierSelect: allLabelWithBlank });
     const [otherState, setOtherState] = useState({ masterPath: '', makeBtnShow: false, newBtnPath: '', IBType: '' });
     const [VehicleNoDropdown, setVehicleNoDropdown] = useState('')
     const [modal, setmodal] = useState(false);
@@ -391,7 +392,7 @@ const InvoiceList = () => {
         dispatch(invoiceListGoBtnfilterSucccess([]));
         dispatch(GetVenderSupplierCustomerSuccess([]));
         let newObj = { ...hederFilters }
-        newObj.supplierSelect = { value: '', label: "All" }
+        newObj.supplierSelect = allLabelWithBlank
         setHederFilters(newObj)
     }
 

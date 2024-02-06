@@ -14,6 +14,7 @@ import { showToastAlert } from '../../helpers/axios_Config';
 import { commonPartyDropdown_API, genaraMasterBy_Type_API, GenralMasterSubType, TransactionLog_Get_User_Api, TransactionLog_getjson_for_Transation_Id, TransactionLog_Go_Btn_Api, TransactionLog_transactionType_Api } from '../../helpers/backend_helper';
 import { BreadcrumbShowCountlabel } from '../../store/actions';
 import SimpleBar from "simplebar-react"
+import { allLabelWithBlank } from '../../components/Common/CommonErrorMsg/HarderCodeData';
 
 
 const TransactionLog = () => {
@@ -23,12 +24,12 @@ const TransactionLog = () => {
     const jsonRef = useRef(null);
 
     const [userPageAccessState, setUserAccState] = useState('');
-    const [transactionTypeSelect, setTransactionTypeSelect] = useState([{ value: '', label: "All" }]);
-    const [userSelect, setUserSelect] = useState([{ value: '', label: "All" }]);
-    const [partySelect, setPartySelect] = useState([{ value: '', label: "All" }]);
+    const [transactionTypeSelect, setTransactionTypeSelect] = useState([allLabelWithBlank]);
+    const [userSelect, setUserSelect] = useState([allLabelWithBlank]);
+    const [partySelect, setPartySelect] = useState([allLabelWithBlank]);
     const [formDateSelect, setFormDateSelect] = useState(() => getDateTime_dmy(1));//offSetTime 1 hour earlier
     const [toDateSelect, setToDateSelect] = useState(getDateTime_dmy(-1));
-    const [categoryTypeSelect, setCategoryTypeSelect] = useState([{ value: '', label: "All" }]);
+    const [categoryTypeSelect, setCategoryTypeSelect] = useState([allLabelWithBlank]);
 
     const [goBtnloading, setGoBtnloading] = useState(false);
     const [tableData, setTableData] = useState([]);
@@ -77,7 +78,7 @@ const TransactionLog = () => {
     }, [])
 
     const generateOptions = (sourceArray, labelField = "Name", valueField = "id") =>
-        [{ value: '', label: "All" }, ...sourceArray.map(item => ({ value: item[valueField], label: item[labelField] }))];
+        [allLabelWithBlank, ...sourceArray.map(item => ({ value: item[valueField], label: item[labelField] }))];
 
     const transactionTypeOptions = useMemo(() => generateOptions(transctionTypeReux), [transctionTypeReux])
     const userOptions = useMemo(() => generateOptions(usersRedux), [usersRedux]);
@@ -142,7 +143,7 @@ const TransactionLog = () => {
 
     function onChangeCategoryType(e = []) {
         if (e.length === 0) {
-            e = [{ value: "", label: "All" }]
+            e = [allLabelWithBlank]
         } else {
             e = e.filter(i => !(i.value === ''))
         }
@@ -152,7 +153,7 @@ const TransactionLog = () => {
 
     function onChangeTransactionType(e = []) {
         if (e.length === 0) {
-            e = [{ value: "", label: "All" }]
+            e = [allLabelWithBlank]
         } else {
             e = e.filter(i => !(i.value === ''))
         }
@@ -162,7 +163,7 @@ const TransactionLog = () => {
 
     function onChangeUser(e = []) {
         if (e.length === 0) {
-            e = [{ value: "", label: "All" }]
+            e = [allLabelWithBlank]
         } else {
             e = e.filter(i => !(i.value === ''))
         }
@@ -172,7 +173,7 @@ const TransactionLog = () => {
 
     function onChangeParty(e = []) {
         if (e.length === 0) {
-            e = [{ value: "", label: "All" }]
+            e = [allLabelWithBlank]
         } else {
             e = e.filter(i => !(i.value === ''))
         }

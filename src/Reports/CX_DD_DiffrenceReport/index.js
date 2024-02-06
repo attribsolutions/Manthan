@@ -16,6 +16,7 @@ import DynamicColumnHook from "../../components/Common/TableCommonFunc";
 import { Cx_DD_Diffrence_Gobtn_Action, Cx_DD_Diffrence_Gobtn_Success } from "../../store/Report/CX_DD_Diffrence_Report/action";
 import { Cx_DD_ExcelDownload, Cx_DD_ExcelDownload_PartyAll } from "./excelDownload";
 import { Cx_DD_Diffrence_Report_Party_Dropdown_API } from "../../helpers/backend_helper";
+import { allLabelWithZero } from "../../components/Common/CommonErrorMsg/HarderCodeData";
 
 const CX_DD_DiffrenceReport = (props) => {
 
@@ -33,7 +34,7 @@ const CX_DD_DiffrenceReport = (props) => {
     const [userPageAccessState, setUserAccState] = useState('');
     const [btnMode, setBtnMode] = useState("");
 
-    const [PartyDropdown, setPartyDropdown] = useState({ value: 0, label: "All" });
+    const [PartyDropdown, setPartyDropdown] = useState(allLabelWithZero);
     const [partyDropdownOptions, setPartyDropdownOptions] = useState([]);
     const [partyDropdownLoading, setpartyDropdownLoading] = useState(false);
 
@@ -70,7 +71,7 @@ const CX_DD_DiffrenceReport = (props) => {
                         value: index.SupplierID,
                         label: index.SupplierName,
                     }));
-                    setPartyDropdownOptions([{ value: 0, label: "All" }, ...options]);
+                    setPartyDropdownOptions([allLabelWithZero, ...options]);
                 }
             } catch (e) { }
             finally {

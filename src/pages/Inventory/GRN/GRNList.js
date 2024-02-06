@@ -12,6 +12,7 @@ import GRNAdd from "./GRNAdd";
 import { C_DatePicker } from "../../../CustomValidateForm";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
+import { allLabelWithBlank } from "../../../components/Common/CommonErrorMsg/HarderCodeData";
 
 const GRNList = () => {
 
@@ -25,7 +26,7 @@ const GRNList = () => {
         masterPath: '',
         makeBtnShow: false, makeBtnShow: '', makeBtnName: '', IBType: '', orderType: ''
     });
-    const [hederFilters, setHederFilters] = useState({ fromdate: currentDate_ymd, todate: currentDate_ymd, venderSelect: { value: '', label: "All" } })
+    const [hederFilters, setHederFilters] = useState({ fromdate: currentDate_ymd, todate: currentDate_ymd, venderSelect: allLabelWithBlank })
 
     const { fromdate, todate, venderSelect } = hederFilters;
 
@@ -235,7 +236,7 @@ const GRNList = () => {
     function partySelectOnChangeHandler() {
         dispatch(_act.getGRNListPageSuccess([]));
         let newObj = { ...hederFilters }
-        newObj.venderSelect = { value: '', label: "All" }
+        newObj.venderSelect = {  }
         setHederFilters(newObj)
     }
 

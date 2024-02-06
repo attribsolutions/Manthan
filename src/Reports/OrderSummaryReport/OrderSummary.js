@@ -16,6 +16,7 @@ import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
 import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess } from "../../store/actions";
 import { ExcelReportComponent } from "../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS";
 import { changeCommonPartyDropDetailsAction } from "../../store/Utilites/PartyDrodown/action";
+import { allLabelWithBlank } from "../../components/Common/CommonErrorMsg/HarderCodeData";
 
 const OrderSummary = (props) => {
 
@@ -27,7 +28,7 @@ const OrderSummary = (props) => {
     const fileds = {
         FromDate: currentDate_ymd,
         ToDate: currentDate_ymd,
-        PartyName: { value: "", label: "All" },
+        PartyName: allLabelWithBlank,
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
