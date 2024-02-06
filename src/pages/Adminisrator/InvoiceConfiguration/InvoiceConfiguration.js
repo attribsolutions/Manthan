@@ -49,7 +49,6 @@ import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { saveMsgUseEffect, userAccessUseEffect } from "../../../components/Common/CommonUseEffect";
 import { getpartysetting_API, savePartySetting, savePartySettingMaster_Success } from "../../../store/Administrator/PartySetting/action";
 import Slidewithcaption from "../../../components/Common/CommonImageComponent";
-import NewCommonPartyDropdown from "../../../components/Common/NewCommonPartyDropdown";
 import { async } from "q";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 
@@ -410,7 +409,6 @@ const InvoiceConfiguration = (props) => {
         return (
             <React.Fragment>
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
-                    <NewCommonPartyDropdown />
                     <Modal
                         isOpen={modal_backdrop}
                         toggle={() => {

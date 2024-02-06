@@ -43,7 +43,6 @@ import BaseTabForm from "./FirstTab/index";
 import PrefixTab from "./PrefixTab/PrefixTab";
 import { priceListByPartyAction, priceListByPartyActionSuccess } from "../../../../store/Administrator/PriceList/action";
 import { userAccessUseEffect } from "../../../../components/Common/CommonUseEffect";
-import NewCommonPartyDropdown from "../../../../components/Common/NewCommonPartyDropdown";
 import { mobileApp_RetailerUpdate_Api } from "../../../../helpers/backend_helper";
 import { showToastAlert } from "../../../../helpers/axios_Config";
 import { mobileApp_Send_Retailer_Api } from "../../../../helpers/backend_helper"
@@ -546,8 +545,7 @@ const PartyMaster = (props) => {
 			<React.Fragment>
 				<MetaTags> {metaTagLabel(userPageAccessState)}</MetaTags>
 				<div className="page-content" style={{ marginTop: IsEditMode_Css }}>
-					{(subPageMode === url.RETAILER_MASTER) &&
-						<NewCommonPartyDropdown pageMode={pageMode} />}
+				
 					<Container fluid>
 						<Row>
 							<Col lg={12}>

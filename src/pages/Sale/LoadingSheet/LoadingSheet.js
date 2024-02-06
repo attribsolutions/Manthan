@@ -41,7 +41,6 @@ import { C_DatePicker } from "../../../CustomValidateForm";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { GetRoutesListSuccess } from "../../../store/Administrator/RoutesRedux/actions";
 import { getVehicleListSuccess } from "../../../store/Administrator/VehicleRedux/action";
-import NewCommonPartyDropdown from "../../../components/Common/NewCommonPartyDropdown";
 import DriverMaster from "../../Adminisrator/DriverPage/DriverMaster";
 import RoutesMaster from "../../Adminisrator/RoutesPages/RoutesMaster";
 import VehicleMaster from "../../Adminisrator/VehiclePages/VehicleMaster";

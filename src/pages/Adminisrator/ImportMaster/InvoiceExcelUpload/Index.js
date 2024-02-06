@@ -29,7 +29,6 @@ import {
 } from "../../../../store/Administrator/ImportExcelPartyMapRedux/action";
 import './scss.scss'
 import { PageLoadingSpinner, Verifiy_Button } from "../../../../components/Common/CommonButton";
-import NewCommonPartyDropdown from "../../../../components/Common/NewCommonPartyDropdown";
 import { ImportMaster_Map_Unit_GoButton_API } from "../../../../helpers/backend_helper";
 import { alertMessages } from "../../../../components/Common/CommonErrorMsg/alertMsg";
 
@@ -656,7 +655,6 @@ const InvoiceExcelUpload = (props) => {
                 <PageLoadingSpinner isLoading={((partyDropDownLoading) || compareParamLoading)} />
 
                 <div className="page-content">
-                    <NewCommonPartyDropdown />
                     <div className="px-2 c_card_header text-black mt-2" >
                         {(compareParamLoading) ?
                             <div className="row ">

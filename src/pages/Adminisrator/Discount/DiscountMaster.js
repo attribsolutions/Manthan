@@ -34,7 +34,6 @@ import { DiscountCustomer_Dropdown_Action, DiscountCustomer_Dropdown_Success, Di
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { goBtnDiscountAddAction } from "../../../store/Administrator/DiscountRedux/actions";
 import { priceListByPartyActionSuccess } from "../../../store/Administrator/PriceList/action";
-import NewCommonPartyDropdown from "../../../components/Common/NewCommonPartyDropdown";
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 
 const DiscountMaster = (props) => {
@@ -585,7 +584,6 @@ const DiscountMaster = (props) => {
                 <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
 
                 <div className="page-content" >
-                    <NewCommonPartyDropdown pageMode={pageMode} />
                     <form noValidate>
                         <div className="px-2 c_card_filter header text-black mb-1" >
 

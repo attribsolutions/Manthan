@@ -33,7 +33,6 @@ import { C_Button, PageLoadingSpinner } from "../../../../components/Common/Comm
 import { C_Select } from "../../../../CustomValidateForm";
 // import { getPartyListAPI } from "../../../../store/Administrator/PartyRedux/action";
 import { readExcelFile } from "../InvoiceExcelUpload/readFile";
-import NewCommonPartyDropdown from "../../../../components/Common/NewCommonPartyDropdown";
 import { alertMessages } from "../../../../components/Common/CommonErrorMsg/alertMsg";
 
 const RetailerExcelUpload = (props) => {
@@ -366,7 +365,6 @@ const RetailerExcelUpload = (props) => {
                                 </div>
                             </div>
                             : */}
-                        <NewCommonPartyDropdown />
 
                         <div >
                             <div className="px-2 c_card_header text-black" >

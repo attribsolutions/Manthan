@@ -27,7 +27,6 @@ import {
     save_ImportFiledMap_Success
 } from "../../../../store/Administrator/ImportExportFieldMapRedux/action";
 import { customAlert } from "../../../../CustomAlert/ConfirmDialog";
-import NewCommonPartyDropdown from "../../../../components/Common/NewCommonPartyDropdown";
 import SaveButtonDraggable from "../../../../components/Common/saveButtonDraggable";
 
 const ImportExcelFieldMap = (props) => {
@@ -280,7 +279,6 @@ const ImportExcelFieldMap = (props) => {
 
 
                 <div className="page-content">
-                    <NewCommonPartyDropdown />
 
                     <div >
                         <ToolkitProvider
