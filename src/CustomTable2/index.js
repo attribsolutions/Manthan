@@ -1,9 +1,16 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import './CustomTable.scss';
-import { customTableSearch } from '../components/Common/SearchBox/MySearch';
 import BootstrapTable from 'react-bootstrap-table-next';
-import CustomPagination from './TablePagination';
+import { customTableSearch } from '../components/Common/SearchBox/MySearch';
+import _debounce from 'lodash/debounce';
+import paginationFactory, {
+    PaginationProvider,
+    PaginationListStandalone,
+    SizePerPageDropdownStandalone,
+    PaginationTotalStandalone
+} from 'react-bootstrap-table2-paginator';
+
 
 
 
@@ -12,58 +19,35 @@ const CustomTable = ({
     columns,
     keyField,
     defaultSearchText,
-    onDataSizeChange,
-    itemsPerPage = 25,
-    paginationEnabled = false,
     classes,
     updatedRowBlinkId,
+    onDataSizeChange,
     ...rest
 }) => {
-
     const updatedRowBlinkIds_string = updatedRowBlinkId?.toString() || '';
     const [searchText, setSearchText] = useState(defaultSearchText || '');
-    const [currentPage, setCurrentPage] = useState(1);
 
-    const handleSearch = (val) => {
+
+    const debounceHandleSearch = _debounce((val) => {
         setSearchText(val);
-        setCurrentPage(1);
-    };
+    }, 300);
 
-    customTableSearch({ onSearch: handleSearch });
+    useEffect(() => {
+        customTableSearch({ onSearch: debounceHandleSearch });
+    }, []); // Ensure that customTableSearch is called after mounting
 
-    const handlePageChange = (page) => {
-        setCurrentPage(page);
-    };
 
-    const rowClesess = (row) => {
+    const rowClasses = (row) => {
         let cs = '';
         if (row.IsRecordDeleted) {
-            cs += '_deleted-Row '; // Add a space after the class name
+            cs += '_deleted-Row ';
         }
-        
+
         if (updatedRowBlinkIds_string.includes(row[keyField])) {
-            cs += '_row-blink '; // Add a space after the class name
+            cs += '_row-blink ';
         }
         return cs;
     };
-
-    const sortCaretFunction = {
-        sortCaret: (order, column) => {
-            if (!order) {
-                return null;
-            } else if (order === 'asc') {
-                return <i className="fas fa-arrow-up pl-1 font-size-12"></i>;
-            } else if (order === 'desc') {
-                return <i className="fas fa-arrow-down pl-1 font-size-12"></i>;
-            }
-            return null;
-        }
-    };
-
-
-    useEffect(() => {
-        handleSearch(searchText);
-    }, []);
 
     const filteredData = useMemo(() => {
         return data.filter((row) =>
@@ -79,36 +63,93 @@ const CustomTable = ({
         );
     }, [data, searchText, columns]);
 
-    const pageCount = Math.ceil(filteredData.length / itemsPerPage);
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = currentPage * itemsPerPage;
 
-    const slicedData = useMemo(() => {
-        onDataSizeChange({ dataCount: filteredData.length, filteredData: filteredData }); // Notify the parent about the filtered data count
-        return paginationEnabled ? filteredData.slice(startIndex, endIndex) : filteredData;
-    }, [filteredData, startIndex, endIndex, paginationEnabled]);
+    const debounceIsDataChangeFunc = _debounce(() => {
+        if (onDataSizeChange) {
+            onDataSizeChange({ dataCount: filteredData.length, filteredData: filteredData });
+        }
+    }, 300);
 
+
+
+
+    const options = {
+        page: 1,
+        paginationSize: 5,
+        pageStartIndex: 1,
+        sizePerPage: 25,
+        // hideSizePerPage: true,
+        custom: true,
+        totalSize: filteredData.length,
+        hidePageListOnlyOnePage: true,
+     
+        sizePerPageList: [{
+            text: '10', value: 10
+        }, {
+            text: '25', value: 25
+        },
+        {
+            text: '50', value: 50
+        }, {
+            text: 'All', value: filteredData.length
+        }]
+    };
+
+
+    const sortCaretFunction = {
+        sortCaret: (order, column) => {
+            if (!order) {
+                return null;
+            } else if (order === 'asc') {
+                return <i className="fas fa-sort-up pl-1 font-size-12"></i>;
+            } else if (order === 'desc') {
+                return <i className="fas fa-sort-down pl-1 font-size-12"></i>;
+            }
+            return null;
+        }
+    };
 
     return (
-        <>
-            <BootstrapTable data={slicedData} columns={columns}
-                keyField={keyField}
-                classes='custom-table'
-                rowClasses={rowClesess}
-                sort={sortCaretFunction}
+        <PaginationProvider
+            data={filteredData}
+            columns={columns}
+            keyField={keyField}
+            pagination={paginationFactory(options)}
+        >
+            {
+                ({
+                    paginationProps,
+                    paginationTableProps
+                }) => (
+                    <div>
 
-                {...rest} />
+                        <BootstrapTable
+                            data={filteredData}
+                            columns={columns}
+                            keyField={keyField}
+                            classes='custom-table '
+                            rowClasses={rowClasses}
+                            sort={sortCaretFunction} // Include the sortCaret function
+                            onDataSizeChange={debounceIsDataChangeFunc}
+                            {...rest}
+                            {...paginationTableProps}
+                            bootstrap4
+                        />
+                        <PaginationTotalStandalone
+                            {...paginationProps}
+                        />
+                        <div className=" pagination pagination-rounded justify-content-end  mb-3" style={{ marginTop: "-20px" }}>
+                            <PaginationListStandalone
+                                {...paginationProps}
+                            />
+                        </div>
 
-            {paginationEnabled &&
-                <CustomPagination
-                    pageCount={pageCount}
-                    currentPage={currentPage}
-                    handlePageChange={handlePageChange}
-                    tablelist={slicedData}
-                />
+                    </div>
+                )
             }
+        </PaginationProvider>
 
-        </>
+
     );
 };
 
@@ -117,25 +158,8 @@ CustomTable.propTypes = {
     data: PropTypes.array.isRequired,
     columns: PropTypes.array.isRequired,
     defaultSearchText: PropTypes.string,
-    onDataSizeChange: PropTypes.func,
-    itemsPerPage: PropTypes.number,
-    paginationEnabled: PropTypes.bool,
     classes: PropTypes.string,
     // ... Add any other props here
 };
-export default CustomTable;
 
-
-function rowClesess(row) {
-
-    let cs = '';
-
-    if (row.IsRecordDeleted) {
-        cs += '_deleted-Row '; // Add a space after the class name
-    }
-    if ((row[this.keyField] === this.updatedRowBlinkId)) {
-        cs += '_row-blink '; // Add a space after the class name
-    }
-
-    return cs;
-};
+export default React.memo(CustomTable);
