@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Label } from "reactstrap";
+import { Card, CardBody, CardFooter, CardHeader, Label } from "reactstrap";
 import { C_Button } from "../../Common/CommonButton";
 import { C_Select } from "../../../CustomValidateForm";
 import { loginUserAdminRole } from "../../Common/CommonFunction";
@@ -10,6 +10,7 @@ import { mode } from "../../../routes";
 import './changeParty.scss'; // Add your styles here
 import { useRef } from "react";
 import { Bounce, toast } from "react-toastify";
+import { showToastAlert } from "../../../helpers/axios_Config";
 
 const ChangeCommonParty = (props) => {
 
@@ -88,12 +89,7 @@ const ChangeCommonParty = (props) => {
     // Function to toggle drawer
     const handleLabelClick = () => {
         if (!props.isPartyWisePage || !isShow || forceDisable) {
-            toast("This page does not require party information.", {
-                type: "warning",
-                transition: Bounce,
-                position: toast.POSITION.TOP_RIGHT,
-                autoClose: 3000,
-            });
+            showToastAlert("This page does not require party information.", "warning");
             return
         }
         setIsDrawerOpen(!isDrawerOpen);
@@ -133,41 +129,56 @@ const ChangeCommonParty = (props) => {
             {isDrawerOpen && (
                 <div className="mini-drawer">
                     <div className="modal-content1">
-                        <div>
-                            <C_Select
-                                value={selectedParty}
-                                styles={{ menu: (provided) => ({ ...provided, zIndex: 2 }) }}
-                                isSearchable={true}
-                                isLoading={partyDropdownLoading}
-                                className="react-dropdown"
-                                classNamePrefix="dropdown"
-                                options={PartyDropdownOptions}
-                                isDisabled={changeButtonShow && !(selectedParty.value === 0)}
-                                onChange={(e) => setSelectedParty(e)}
-                            />
-                        </div>
-                        <div style={{ paddingTop: "10px" }}>
-                            {!changeButtonShow ? (
-                                <C_Button
-                                    type="button"
-                                    className="btn btn-outline-primary border-1 font-size-12 text-center"
-                                    onClick={updateSelectedParty}
-                                >
-                                    Select
-                                </C_Button>
+                        <Card>
+                            <CardHeader className=" c_card_filter text-black">
+                                <strong> Party selection </strong></CardHeader>
+                            <CardBody>
+                                <C_Select
+                                    value={selectedParty}
+                                    styles={{ menu: (provided) => ({ ...provided, zIndex: 2 }) }}
+                                    isSearchable={true}
+                                    isLoading={partyDropdownLoading}
+                                    className="react-dropdown"
+                                    classNamePrefix="dropdown"
+                                    options={PartyDropdownOptions}
+                                    isDisabled={changeButtonShow && !(selectedParty.value === 0)}
+                                    onChange={(e) => setSelectedParty(e)}
+                                />
+                                {/* <CardFooter> */}
+                                <div className="_modal-footer">
+                                    {!changeButtonShow ? (
+                                        <C_Button
+                                            type="button"
+                                            className="btn btn-primary border-1 font-size-12 text-center"
+                                            onClick={updateSelectedParty}
+                                        >
+                                            Select
+                                        </C_Button>
 
-                            ) : (!forceDisable) && (
-                                // ) : !(pageMode === mode.view || pageMode === mode.edit) && (
-                                <C_Button
-                                    type="button"
-                                    spinnerColor={"info"}
-                                    className="btn btn-outline-info border-1 font-size-12 "
-                                    onClick={partyOnchange}
-                                >
-                                    Change
-                                </C_Button>
-                            )}
-                        </div>
+                                    ) : (!forceDisable) && (
+                                        // ) : !(pageMode === mode.view || pageMode === mode.edit) && (
+                                        <C_Button
+                                            type="button"
+                                            spinnerColor={"info"}
+                                            className="btn btn-info border-1 font-size-12 "
+                                            onClick={partyOnchange}
+                                        >
+                                            Change
+                                        </C_Button>
+                                    )}
+                                    <C_Button
+                                        type="button"
+                                        className="btn btn-danger border-1 font-size-12 text-center"
+                                        onClick={updateSelectedParty}
+                                    >
+                                        Select
+                                    </C_Button>
+                                </div>
+                            </CardBody>
+
+                        </Card>
+
+
                     </div>
                 </div>
             )}

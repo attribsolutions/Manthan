@@ -6,7 +6,8 @@
   cursor: pointer !important;
   position: relative;
   background-color: #383440;
-  z-index: 2; /* Set a higher z-index */
+  z-index: 2;
+  /* Set a higher z-index */
 }
 
 .party-label-wapper {
@@ -64,7 +65,14 @@
   width: 350px;
   /* background-color: #f0f0f0; */
   background-color: white;
-  padding: 20px;
+  padding: 5px;
+  padding-bottom: 0;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
 
+._modal-footer {
+  padding-top: 20px;
+  display: flex;
+  justify-content: end;
+  gap: 5px;
+}
