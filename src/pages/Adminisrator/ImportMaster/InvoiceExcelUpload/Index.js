@@ -586,7 +586,7 @@ const InvoiceExcelUpload = (props) => {
 
                 inv.forEach(async (ele) => {
 
-                    const calculate = InvoiceUploadCalculation({ Quantity: ele[parArr.Quantity], Rate: ele[parArr.Rate], GST: ele.GST });
+                    const calculate = InvoiceUploadCalculation({ Quantity: ele[parArr.Quantity], Rate: ele[parArr.Rate], GST: ele.GST, Discount: ele[parArr.Discount], DiscountType: ele[parArr.DiscountType] });
                     invoiceTotalAmount = invoiceTotalAmount + calculate.Amount;
 
                     parentObj = {
@@ -628,7 +628,7 @@ const InvoiceExcelUpload = (props) => {
                         "Amount": ele[parArr.Amount] ? ele[parArr.Amount] : (calculate.Amount).toFixed(2),
                         "DiscountType": ele[parArr.DiscountType] ? ele[parArr.DiscountType] : 2,
                         "Discount": ele[parArr.Discount] ? ele[parArr.Discount] : 0,
-                        "DiscountAmount": ele[parArr.DiscountAmount] ? ele[parArr.DiscountAmount] : 0,
+                        "DiscountAmount": ele[parArr.DiscountAmount] ? ele[parArr.DiscountAmount] : (calculate.DiscountAmount).toFixed(2),
 
                         "TaxType": "GST",
                         "QtyInBox": ele[parArr.QtyInBox] ? ele[parArr.QtyInBox] : 0,

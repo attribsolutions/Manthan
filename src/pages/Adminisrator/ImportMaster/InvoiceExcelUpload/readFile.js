@@ -61,6 +61,10 @@ export const readExcelFile = async ({ file, compareParameter, ItemList = [] }) =
           Item_Code = r1[c1.Value]
         }
 
+        if (c1.FieldName === "DiscountType") {
+          r1[c1.Value] = r1[c1.Value] === "%" ? r1[c1.Value] = 2 : r1[c1.Value] = 1
+        }
+
         if (c1.FieldName === "Customer") {
           Party_Code = r1[c1.Value]
         }
@@ -71,7 +75,8 @@ export const readExcelFile = async ({ file, compareParameter, ItemList = [] }) =
         const regExp = RegExp(c1.RegularExpression);
 
         if ((Number.isInteger(r1[c1.Value]) || (isFloat(r1[c1.Value]))) && r1[c1.Value] <= 0) {   //  - figure only checking value  that are map in our system 
-          if (c1.IsCompulsory) {
+
+          if (c1.IsCompulsory && c1.FieldName !== "Discount") {
             shouldRemove = true;
           } else {
             shouldRemove = false;
@@ -205,7 +210,7 @@ export async function downloadDummyFormatHandler(jsonData) {
 export const filterArraysInEntries = (map, conditionFn) => {
 
   const filteredEntries = Array.from(map.entries()).map(([key, value]) => {
-    
+
     const filteredArray = value.filter(conditionFn); // Filtering each array based on condition
     if (filteredArray.length === 0) {
       return null
@@ -218,22 +223,24 @@ export const filterArraysInEntries = (map, conditionFn) => {
 };
 
 
-export const InvoiceUploadCalculation = ({ Quantity, Rate, GST }) => {
-
+export const InvoiceUploadCalculation = ({ Quantity, Rate, GST, DiscountType, Discount }) => {
+  Discount = Discount ? Discount : 0;
   const GSTPersentage = GST;
   const BasicAmount = Quantity * Rate;
-  const GSTAmount = BasicAmount * (GSTPersentage / 100);
+  const DiscountAmount = DiscountType === 2 ? BasicAmount - (BasicAmount / ((100 + Discount) / 100)) : Quantity * Discount;
+  const DiscountBaseAmount = BasicAmount - DiscountAmount;
+  const GSTAmount = DiscountBaseAmount * (GSTPersentage / 100);
   const CGST_Amount = Number((GSTAmount / 2).toFixed(2));
   const SGSTAmount = CGST_Amount;
-  const Amount = BasicAmount + GSTAmount;
+  const Amount = DiscountBaseAmount + GSTAmount;
 
   return {
-    BasicAmount: BasicAmount,
+    BasicAmount: DiscountBaseAmount,
     GSTAmount: GSTAmount,
     GSTPersentage: GSTPersentage,
     SGSTAmount: SGSTAmount,
     CGSTAmount: CGST_Amount,
     Amount: Amount,
-
+    DiscountAmount: DiscountAmount,
   }
 }
