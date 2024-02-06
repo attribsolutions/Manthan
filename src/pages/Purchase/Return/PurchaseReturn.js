@@ -42,6 +42,7 @@ import Slidewithcaption from "../../../components/Common/CommonImageComponent";
 import NewCommonPartyDropdown from "../../../components/Common/NewCommonPartyDropdown";
 import { deltBtnCss } from "../../../components/Common/ListActionsButtons";
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
+import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 
 const PurchaseReturn = (props) => {
 
@@ -292,6 +293,13 @@ const PurchaseReturn = (props) => {
                 })
 
             } catch (error) { _cfunc.CommonConsole(error) }
+        }
+        else if (addButtonData.Status === true) {
+            dispatch(SalesReturnAddBtn_Action_Succcess({ StatusCode: false }))
+            customAlert({
+                Type: 3,
+                Message: alertMessages.batchCode_notAvailable,
+            })
         }
     }, [addButtonData])
 
@@ -1188,6 +1196,7 @@ const PurchaseReturn = (props) => {
                                             value={values.BatchCode}
                                             placeholder="Enter BatchCode"
                                             type='text'
+                                            autoComplete='off'
                                             onChange={(event) => {
                                                 onChangeText({ event, state, setState })
                                             }}

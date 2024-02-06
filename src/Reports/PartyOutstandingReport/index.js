@@ -73,9 +73,9 @@ const PartyOutstandingReport = (props) => {
 		dispatch(commonPageField(pageId.PARTY_OUTSTANDING_REPORT))
 		dispatch(BreadcrumbShowCountlabel(`Count:${0} ₹ ${0.00}`));
 		if (_cfunc.CommonPartyDropValue().value > 0) {
-            setPartyDropdown(_cfunc.CommonPartyDropValue())
-        }
-		dispatch(GetRoutesList());
+			setPartyDropdown(_cfunc.CommonPartyDropValue())
+			dispatch(GetRoutesList({ ..._cfunc.loginJsonBody(), "PartyID": _cfunc.loginSelectedPartyID() }))
+		}
 		return () => {
 			dispatch(commonPageFieldSuccess(null));
 			dispatch(GetRoutesListSuccess([]));

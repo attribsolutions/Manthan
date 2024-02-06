@@ -100,33 +100,6 @@ const Dashboard_Admin = (props) => {
         };
     }, [userAccess])
 
-    function paymentEntry_onClick() {
-        history.push(url.PAYMENT_ENTRY)
-    }
-
-    function InvoiceFoRGRN_onClick() {
-        history.push(url.GRN_STP_3)
-    }
-
-    function salesReturn_onClick() {
-        history.push(url.SALES_RETURN_LIST)
-    }
-    const RedirectHandler = (Type) => {
-        if (Type === 1) {
-            history.push(url.ORDER_LIST_4)
-
-        } else if (Type === 2) {
-            history.push(url.INVOICE_LIST_1)
-        }
-        else if (Type === 3) {
-            history.push(url.APP_ORDER_LIST)
-        }
-        else {
-            history.push(url.GRN_LIST_3)
-        }
-
-    }
-
     useEffect(() => {
 
         const page_Id = pageId.DASHBORD_1//changes
@@ -185,7 +158,6 @@ const Dashboard_Admin = (props) => {
             dispatch(invoiceListGoBtnfilterSucccess([]));
         }
     }, [commonPartyDropSelect])
-
 
     function getFirstAndLastDateOfYear(year) {
         // Create a date object for January 1st of the given year
@@ -275,6 +247,37 @@ const Dashboard_Admin = (props) => {
             setGrnMonthCount({ monthCounts, containsNonZeroNumber })
         }
     }, [GrnData])
+   
+    function paymentEntry_onClick() {
+        history.push(url.PAYMENT_ENTRY_LIST)
+    }
+
+    function InvoiceFoRGRN_onClick() {
+        history.push(url.GRN_STP_3)
+    }
+
+    function salesReturn_onClick() {
+        history.push(url.SALES_RETURN_LIST)
+    }
+    
+    const RedirectHandler = (Type) => {
+        if (Type === 1) {
+            history.push(url.ORDER_LIST_4)
+
+        } else if (Type === 2) {
+            history.push(url.INVOICE_LIST_1)
+        }
+        else if (Type === 3) {
+            history.push(url.APP_ORDER_LIST)
+        }
+        else {
+            history.push(url.GRN_LIST_3)
+        }
+    }
+
+    function mobileOrder_OnClick() {
+        history.push(url.APP_ORDER_LIST)
+    }
 
     return (
         <React.Fragment>
@@ -535,7 +538,7 @@ const Dashboard_Admin = (props) => {
                                         <CardHeader style={{ backgroundColor: "whitesmoke" }}
                                             className="card-header align-items-center d-flex text-center">
                                             <Label className="card-title mb-0 flex-grow-4 text-primary text-bold mb-n2 text-decoration-underline"
-                                                // onClick={mobileRetailerApprove_onClick}
+                                                onClick={mobileOrder_OnClick}
                                                 disabled={SalesReturnListloading}
                                                 style={{ cursor: "pointer" }}
                                             >
