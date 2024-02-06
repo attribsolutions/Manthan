@@ -37,7 +37,7 @@ function initialState(history) {
     return { page_Id, buttonLable }
 };
 
-const ManPowerReport = (props) => {           // this component also use for ManPower report 
+const ManPowerReport = (props) => { 
 
     const history = useHistory()
     const dispatch = useDispatch();
@@ -140,6 +140,7 @@ const ManPowerReport = (props) => {           // this component also use for Man
                             </C_Button>
 
                         </Col>
+                        
                         <Col lg={2} className=" mt-n2 mb-n2 ">
                             {(downloadManPower) && btnMode === "Excel" ?
                                 <Button type="button"
@@ -170,10 +171,10 @@ const ManPowerReport = (props) => {           // this component also use for Man
                             <React.Fragment>
                                 <Row>
                                     <Col xl="12">
-                                        <div className="table-responsive table">
+                                        <div >
                                             <BootstrapTable
                                                 keyField="PartyID"
-                                                classes={"table  table-bordered table-hover"}
+                                                classes={"custom-table"}
                                                 noDataIndication={
                                                     <div className="text-danger text-center ">
                                                         Record Not available

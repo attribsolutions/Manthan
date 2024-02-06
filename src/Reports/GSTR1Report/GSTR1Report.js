@@ -12,6 +12,7 @@ import C_Report from "../../components/Common/C_Report";
 import { GST_R1_Report_API, GST_R1_Report_API_Success, GST_R3B_Report_API, GST_R3B_Report_API_Success } from "../../store/Report/GSTR1ReportRedux/action";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import { alertMessages } from "../../components/Common/CommonErrorMsg/alertMsg";
+import { allLabelWithBlank } from "../../components/Common/CommonErrorMsg/HarderCodeData";
 
 const GSTR1Report = (props) => {
     const dispatch = useDispatch();
@@ -21,7 +22,7 @@ const GSTR1Report = (props) => {
     const fileds = {
         FromDate: currentDate_ymd,
         ToDate: currentDate_ymd,
-        Customer: { value: "", label: "All" },
+        Customer: allLabelWithBlank,
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))

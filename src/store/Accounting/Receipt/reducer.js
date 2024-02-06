@@ -1,3 +1,4 @@
+import { allLabelWithBlank } from "../../../components/Common/CommonErrorMsg/HarderCodeData"
 import { currentDate_ymd } from "../../../components/Common/CommonFunction"
 import {
   DEPOSITOR_BANK_FILTER_SUCCESS,
@@ -28,8 +29,8 @@ const INIT_STATE = {
   deleteMsg: { Status: false },
   OpeningBalance: '',
   bankList: [],
-  receiptlistFilters: { fromdate: currentDate_ymd, todate: currentDate_ymd, Customer: { value: '', label: "All" } },
-  paymentEntrylistFilters: { fromdate: currentDate_ymd, todate: currentDate_ymd, Customer: { value: '', label: "All" } }
+  receiptlistFilters: { fromdate: currentDate_ymd, todate: currentDate_ymd, Customer: allLabelWithBlank },
+  paymentEntrylistFilters: { fromdate: currentDate_ymd, todate: currentDate_ymd, Customer: allLabelWithBlank }
 }
 
 const ReceiptReducer = (state = INIT_STATE, action) => {

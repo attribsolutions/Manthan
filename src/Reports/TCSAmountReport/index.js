@@ -16,6 +16,7 @@ import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess } fro
 import DynamicColumnHook from "../../components/Common/TableCommonFunc";
 import { TCS_Amount_Gobtn_Action, TCS_Amount_Gobtn_Success } from "../../store/Report/TCS_AmountRedux/action";
 import { ExcelReportComponent } from "../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS";
+import { allLabelWithBlank } from "../../components/Common/CommonErrorMsg/HarderCodeData";
 
 const TCSAmountReport = (props) => {
 
@@ -32,7 +33,7 @@ const TCSAmountReport = (props) => {
     const [state, setState] = useState(() => initialFiledFunc(fileds))
     const [userPageAccessState, setUserAccState] = useState('');
     const [btnMode, setBtnMode] = useState("");
-    const [PartyDropdown, setPartyDropdown] = useState({ value: "", label: "All" });
+    const [PartyDropdown, setPartyDropdown] = useState(allLabelWithBlank);
 
     const [updatetableColumn, setupdatetableColumn] = useState([{}]);
 
@@ -160,7 +161,7 @@ const TCSAmountReport = (props) => {
         value: i.id,
         label: i.Name
     }));
-    Party_Option.unshift({ value: "", label: "All" })
+    Party_Option.unshift(allLabelWithBlank)
 
     return (
         <React.Fragment>

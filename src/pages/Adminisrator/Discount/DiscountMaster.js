@@ -36,6 +36,7 @@ import { goBtnDiscountAddAction } from "../../../store/Administrator/DiscountRed
 import { priceListByPartyActionSuccess } from "../../../store/Administrator/PriceList/action";
 import NewCommonPartyDropdown from "../../../components/Common/NewCommonPartyDropdown";
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
+import { allLabelWithBlank } from "../../../components/Common/CommonErrorMsg/HarderCodeData";
 
 const DiscountMaster = (props) => {
 
@@ -50,7 +51,7 @@ const DiscountMaster = (props) => {
         FromDate: currentDate_ymd,
         ToDate: currentDate_ymd,
         Partytype: "",
-        CustomerName: { value: "", label: "All" },
+        CustomerName: allLabelWithBlank,
         PriceListName: "",
     }
 
@@ -118,7 +119,7 @@ const DiscountMaster = (props) => {
         setState((i) => {
 
             let a = { ...i }
-            a.values.CustomerName = { value: "", label: "All" };
+            a.values.CustomerName = allLabelWithBlank;
             a.values.Partytype = ""
             a.values.PriceListName = ''
 
@@ -229,7 +230,7 @@ const DiscountMaster = (props) => {
         }
         setState((i) => {
             const a = { ...i }
-            a.values.CustomerName = { value: "", label: "All" };
+            a.values.CustomerName = allLabelWithBlank;
             a.hasValid.CustomerName.valid = false
             return a
         })
@@ -245,7 +246,7 @@ const DiscountMaster = (props) => {
         label: index.Name,
     }));
 
-    customerOptions.unshift({ value: "", label: "All" });
+    customerOptions.unshift(allLabelWithBlank);
 
     const pagesListColumns = [
         {
@@ -494,7 +495,7 @@ const DiscountMaster = (props) => {
         setPriceListSelect({ label: "", value: "" })
         setState((i) => {
             const a = { ...i }
-            a.values.CustomerName = { value: "", label: "All" };
+            a.values.CustomerName = allLabelWithBlank;
             a.hasValid.CustomerName.valid = false
             return a
         })

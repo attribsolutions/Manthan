@@ -13,6 +13,7 @@ import Challan from "./Challan";
 import { C_DatePicker } from "../../../CustomValidateForm";
 import { url, mode, pageId } from "../../../routes/index"
 import { PageLoadingSpinner } from "../../../components/Common/CommonButton";
+import { allLabelWithBlank } from "../../../components/Common/CommonErrorMsg/HarderCodeData";
 
 const ChallanList = () => {
 
@@ -23,7 +24,7 @@ const ChallanList = () => {
     const [subPageMode, setSubPageMode] = useState(history.location.pathname);
     const [pageMode, setPageMode] = useState(mode.defaultList);
     const [otherState, setOtherState] = useState({ masterPath: '', makeBtnShow: false, newBtnPath: '' });
-    const [hederFilters, setHederFilters] = useState({ fromdate: currentDate_ymd, todate: currentDate_ymd, venderSelect: { value: '', label: "All" } })
+    const [hederFilters, setHederFilters] = useState({ fromdate: currentDate_ymd, todate: currentDate_ymd, venderSelect: allLabelWithBlank })
     const reducers = useSelector(
         (state) => ({
             vender: state.CommonAPI_Reducer.vender,

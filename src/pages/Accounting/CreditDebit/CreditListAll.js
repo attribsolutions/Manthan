@@ -32,6 +32,7 @@ import { Retailer_List, Retailer_List_Success, getSupplierSuccess } from "../../
 import * as _cfunc from "../../../components/Common/CommonFunction"
 import { C_DatePicker } from "../../../CustomValidateForm";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
+import { allLabelWithBlank } from "../../../components/Common/CommonErrorMsg/HarderCodeData";
 
 const CreditList = () => {
 
@@ -43,8 +44,8 @@ const CreditList = () => {
     const fileds = {
         FromDate: currentDate_ymd,
         ToDate: currentDate_ymd,
-        Customer: { value: "", label: "All" },
-        NoteType: { value: "", label: "All" },
+        Customer: allLabelWithBlank,
+        NoteType: allLabelWithBlank,
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
@@ -255,8 +256,8 @@ const CreditList = () => {
         dispatch(Retailer_List_Success([]));
         setState((i) => {
             const a = { ...i }
-            a.values.Customer = { value: "", label: "All" }
-            a.values.NoteType = { value: "", label: "All" }
+            a.values.Customer = allLabelWithBlank
+            a.values.NoteType = allLabelWithBlank
             a.hasValid.Customer.valid = true;
             a.hasValid.NoteType.valid = true;
             return a

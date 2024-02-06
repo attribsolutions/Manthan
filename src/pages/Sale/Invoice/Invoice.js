@@ -57,6 +57,7 @@ import * as report from '../../../Reports/ReportIndex'
 import CustomTable from "../../../CustomTable2";
 import { changeCommonPartyDropDetailsAction } from "../../../store/Utilites/PartyDrodown/action";
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
+import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 
 const Invoice = (props) => {
 
@@ -690,7 +691,7 @@ const Invoice = (props) => {
                         isSameMRPinStock = false
                     }
                     if (!Number(ele.Rate) > 0) {//** */ rate validation check  */
-                        validMsg.push({ [index.ItemName]: " Rate not available." })
+                        validMsg.push({ [index.ItemName]: alertMessages.rateNotAvailable })
                         return
                     };
 
@@ -736,7 +737,7 @@ const Invoice = (props) => {
             })
 
             if (isSameMRPinStock === false) {
-                validMsg.push({ [index.ItemName]: " Multiple MRP’S Invoice not allowed." })
+                validMsg.push({ [index.ItemName]: alertMessages.multiple_MRP_notAllowed })
                 return
             };
         })
@@ -751,7 +752,7 @@ const Invoice = (props) => {
         if (!state.values.Customer?.value > 0) {
             customAlert({
                 Type: 4,
-                Message: "Customer is required.",
+                Message: alertMessages.customerIsRequired,
             })
             return
         }
@@ -759,7 +760,7 @@ const Invoice = (props) => {
         if (!(invoiceItems.length > 0)) {
             customAlert({
                 Type: 4,
-                Message: "Please Enter One Item Quantity",
+                Message: alertMessages.itemQtyIsRequired,
             })
             return
         }
@@ -792,9 +793,6 @@ const Invoice = (props) => {
         });
 
         try {
-
-
-
             let jsonBody;  //json body decleration 
             if (subPageMode === url.INVOICE_1) {
                 const body = { InvoiceData: [{ ...for_common_json(), ...forInvoice_1_json() }] }
@@ -813,7 +811,6 @@ const Invoice = (props) => {
             }
 
         } catch (e) { _cfunc.CommonConsole("invoice save Handler", e) }
-
     }
 
     if (!(userPageAccessState === '')) {

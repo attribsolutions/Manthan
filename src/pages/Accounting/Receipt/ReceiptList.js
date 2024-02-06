@@ -30,6 +30,7 @@ import { C_DatePicker, C_Select } from "../../../CustomValidateForm";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import NewCommonPartyDropdown from "../../../components/Common/NewCommonPartyDropdown";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
+import { allLabelWithBlank } from "../../../components/Common/CommonErrorMsg/HarderCodeData";
 
 
 const ReceiptList = () => {
@@ -41,7 +42,7 @@ const ReceiptList = () => {
     const fileds = {
         FromDate: currentDate_ymd,
         ToDate: currentDate_ymd,
-        Customer: { value: "", label: "All" }
+        Customer: allLabelWithBlank
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
@@ -99,7 +100,7 @@ const ReceiptList = () => {
         }
         setState((i) => {
             let a = { ...i }
-            a.values.Customer = { value: "", label: "All" }
+            a.values.Customer = allLabelWithBlank
             return a
         })
         return () => {

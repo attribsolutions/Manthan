@@ -23,13 +23,14 @@ import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { C_Select } from "../../../CustomValidateForm";
-import { Get_Subcluster_On_cluster_API, VendorSupplierCustomer } from "../../../helpers/backend_helper";
+import { Get_Subcluster_On_cluster_API } from "../../../helpers/backend_helper";
 import { getClusterlist } from "../../../store/Administrator/ClusterRedux/action";
 import { GoButton_For_PartyDetails, GoButton_For_PartyDetails_Success, savePartyDetails_Action, savePartyDetails_Success } from "../../../store/Administrator/PartyDetailsRedux/action";
 import { getEmployeedropdownList } from "../../../store/Administrator/ManagementPartiesRedux/action";
 import paginationFactory from "react-bootstrap-table2-paginator";
 import SimpleBar from "simplebar-react"
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
+import { allLabelWithZero } from "../../../components/Common/CommonErrorMsg/HarderCodeData";
 
 const PartyDetails = (props) => {
 
@@ -59,13 +60,7 @@ const PartyDetails = (props) => {
     const [forceRefreshSO, setForceRefreshSO] = useState(false);
     const [forceRefreshSuperstokiest, setforceRefreshSuperstokiest] = useState(false);
 
-
-
-
-
-
-
-    const [groupSelect, setGroupSelect] = useState({ value: 0, label: "All" });
+    const [groupSelect, setGroupSelect] = useState(allLabelWithZero);
     const [goBtnLoading, setGoBtnLoading] = useState(false);
 
     const {
@@ -124,11 +119,9 @@ const PartyDetails = (props) => {
         if (hasShowModal) {
             locationPath = props.masterPath;
         };
-
         userAcc = userAccess.find((inx) => {
             return (`/${inx.ActualPagePath}` === locationPath)
         })
-
         if (userAcc) {
             setUserAccState(userAcc)
             breadcrumbReturnFunc({ dispatch, userAcc });
@@ -142,7 +135,7 @@ const PartyDetails = (props) => {
             dispatch(savePartyDetails_Success({ Status: false }))
             goButtonHandler()
             setTableData([]);
-            setGroupSelect({ value: 0, label: "All" })
+            setGroupSelect(allLabelWithZero)
             if (pageMode === "other") {
                 customAlert({
                     Type: 1,
@@ -174,36 +167,25 @@ const PartyDetails = (props) => {
         }
     }, [pageField])
 
-
-
-
     async function fetchDistributorData(data) {
-
         try {
             setGoBtnLoading(true);
-
             const requests = data.map(async (distributor) => {
-
-
 
                 let subClusterResponse;
 
                 if (distributor.Cluster_id !== null) {
                     subClusterResponse = await Get_Subcluster_On_cluster_API(distributor.Cluster_id);
                 }
-
-
                 const employeeOptions = employeeList.map((index) => ({
                     value: index.id,
                     label: index.Name,
                 }));
-
                 const subClusterOptions = (subClusterResponse && subClusterResponse.Data) ?
                     subClusterResponse.Data.map((index) => ({
                         value: index.id,
                         label: index.Name,
                     })) : [];
-
                 const superstokiestOptions = distributor.Supplier.map((index) => ({
                     value: index.Supplier_id,
                     label: index.SupplierName,
@@ -240,9 +222,7 @@ const PartyDetails = (props) => {
                     SOId: distributor.SO,
                     SRId: distributor.SR,
                     MTId: distributor.MT,
-
                 };
-
             });
 
             const innterTableData = await Promise.all(requests.filter(Boolean));
@@ -254,8 +234,6 @@ const PartyDetails = (props) => {
             setGoBtnLoading(false);
         }
     }
-
-
 
     const Cluster_Options = clusterDropdown.map((Data) => ({
         value: Data.id,
@@ -300,7 +278,6 @@ const PartyDetails = (props) => {
             dataField: "",
             formatExtraData: { forceRefreshSuperstokiest },
 
-
             formatter: (cell, row) => {
 
                 return (
@@ -314,7 +291,6 @@ const PartyDetails = (props) => {
                                 row.SuperstokiestID = e.value;
                                 row.SuperstokiestName = e.label;
                             }}
-
                         >
                         </C_Select>
                     </Col >
@@ -326,7 +302,6 @@ const PartyDetails = (props) => {
             text: "Cluster",
             dataField: "",
             formatExtraData: { forceRefresh },
-
 
             formatter: (cell, row, key,) => {
 
@@ -346,8 +321,6 @@ const PartyDetails = (props) => {
                                 fetchSubClusterOptions(e.value, row);
                             }}
                             options={Cluster_Options}
-
-
                         >
                         </C_Select>
                     </Col>
@@ -382,24 +355,16 @@ const PartyDetails = (props) => {
                     </Col>
                 );
             },
-
         },
-
-
-
 
         {
             text: "GM",
             dataField: "",
-
             formatExtraData: { forceRefreshGM },
             formatter: (cell, row, key) => {
-
                 return (
                     <Col style={{ width: "200px" }}>
-
                         <C_Select
-                            // id={`GM_${key}`}
                             key={row.GMId}
                             isMulti={true}
                             value={(row.GMId?.length === 0) ?
@@ -431,7 +396,6 @@ const PartyDetails = (props) => {
                         <C_Select
                             key={row.NHId}
                             isMulti={true}
-
                             value={(row.NHId?.length === 0) ?
                                 []
                                 : row.NHId}
@@ -441,10 +405,8 @@ const PartyDetails = (props) => {
                                 setForceRefreshNH(i => !i)
                             }}
                             options={row.EmployeesOption}
-
                         >
                         </C_Select >
-
                     </Col>
                 );
             },
@@ -453,17 +415,14 @@ const PartyDetails = (props) => {
         {
             text: "RSM",
             dataField: "",
-
             formatExtraData: { forceRefreshRH },
             formatter: (cell, row,) => {
 
                 return (
                     <Col style={{ width: "200px" }}>
-
                         <C_Select
                             key={row.RHId}
                             isMulti={true}
-
                             value={(row.RHId?.length === 0) ?
                                 []
                                 : row.RHId}
@@ -471,11 +430,8 @@ const PartyDetails = (props) => {
                                 e = e.filter(i => !(i.value === ''))
                                 row.RHId = e
                                 setForceRefreshRH(i => !i)
-
                             }}
                             options={row.EmployeesOption}
-
-
                         >
                         </C_Select >
                     </Col>
@@ -486,7 +442,6 @@ const PartyDetails = (props) => {
         {
             text: "ASM",
             dataField: "",
-
             formatExtraData: { forceRefreshASM },
             formatter: (cell, row,) => {
 
@@ -496,7 +451,6 @@ const PartyDetails = (props) => {
                         <C_Select
                             key={row.ASMId}
                             isMulti={true}
-
                             value={(row.ASMId?.length === 0) ?
                                 []
                                 : row.ASMId}
@@ -504,10 +458,8 @@ const PartyDetails = (props) => {
                                 e = e.filter(i => !(i.value === ''))
                                 row.ASMId = e
                                 setForceRefreshASM(i => !i)
-
                             }}
                             options={row.EmployeesOption}
-
                         >
                         </C_Select >
                     </Col>
@@ -517,16 +469,13 @@ const PartyDetails = (props) => {
             text: "SE",
             dataField: "",
             formatExtraData: { forceRefreshSE },
-
             formatter: (cell, row,) => {
-
                 return (
                     <Col style={{ width: "200px" }}>
 
                         <C_Select
                             key={row.SEId}
                             isMulti={true}
-
                             value={(row.SEId?.length === 0) ?
                                 []
                                 : row.SEId}
@@ -534,10 +483,8 @@ const PartyDetails = (props) => {
                                 e = e.filter(i => !(i.value === ''))
                                 row.SEId = e
                                 setForceRefreshSE(i => !i)
-
                             }}
                             options={row.EmployeesOption}
-
                         >
                         </C_Select >
                     </Col >
@@ -548,17 +495,14 @@ const PartyDetails = (props) => {
         {
             text: "SO",
             dataField: "",
-
             formatExtraData: { forceRefreshSO },
             formatter: (cell, row,) => {
 
                 return (
                     <Col style={{ width: "200px" }}>
-
                         <C_Select
                             key={row.SOId}
                             isMulti={true}
-
                             value={(row.SOId?.length === 0) ?
                                 []
                                 : row.SOId}
@@ -568,11 +512,9 @@ const PartyDetails = (props) => {
                                 setForceRefreshSO(i => !i)
                             }}
                             options={row.EmployeesOption}
-
                         >
                         </C_Select >
                     </Col>
-
                 );
             },
         },
@@ -580,17 +522,14 @@ const PartyDetails = (props) => {
         {
             text: "SR",
             dataField: "",
-
             formatExtraData: { forceRefreshSR },
             formatter: (cell, row,) => {
 
                 return (
                     <Col style={{ width: "200px" }}>
-
                         <C_Select
                             key={row.SRId}
                             isMulti={true}
-
                             value={(row.SRId?.length === 0) ?
                                 []
                                 : row.SRId}
@@ -601,7 +540,6 @@ const PartyDetails = (props) => {
 
                             }}
                             options={row.EmployeesOption}
-
                         >
                         </C_Select >
                     </Col>
@@ -614,14 +552,12 @@ const PartyDetails = (props) => {
             dataField: "",
             formatExtraData: { forceRefreshMT },
             formatter: (cell, row, key) => {
-
                 return (
                     <Col style={{ width: "200px" }}>
                         <C_Select
                             id={`MT_${key}`}
                             key={row.key}
                             isMulti={true}
-
                             value={(row.MTId?.length === 0) ?
                                 []
                                 : row.MTId}
@@ -629,7 +565,6 @@ const PartyDetails = (props) => {
                                 e = e.filter(i => !(i.value === ''))
                                 row.MTId = e
                                 setForceRefreshMT(i => !i)
-
                             }}
                             options={row.EmployeesOption}
                         >
@@ -682,7 +617,6 @@ const PartyDetails = (props) => {
                     "SO": convertToArrayComaseprateID(index.SOId),
                     "SR": convertToArrayComaseprateID(index.SRId),
                     "MT": convertToArrayComaseprateID(index.MTId),
-
                 }
             ))
 

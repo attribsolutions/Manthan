@@ -22,6 +22,7 @@ import OrderView from "./OrderView";
 import OrderView_Modal from "./OrderView";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 import { getOrdersMakeInvoiceDataAction, getOrdersMakeInvoiceDataActionSuccess } from "../../../store/Sales/bulkInvoice/action";
+import { allLabelWithBlank } from "../../../components/Common/CommonErrorMsg/HarderCodeData";
 
 const OrderList = () => {
 
@@ -32,8 +33,8 @@ const OrderList = () => {
     const fileds = {
         FromDate: currentDate_ymd,
         ToDate: currentDate_ymd,
-        Supplier: { value: "", label: "All" },
-        CustomerType: [{ value: "", label: "All" }]
+        Supplier: allLabelWithBlank,
+        CustomerType: [allLabelWithBlank]
     }
 
 
@@ -355,8 +356,8 @@ const OrderList = () => {
             dispatch(_act.GetVenderSupplierCustomerSuccess([]));
             setState((i) => {
                 let a = { ...i }
-                a.values.CustomerType = [{ value: "", label: "All" }]
-                a.values.Supplier = { value: "", label: "All" }
+                a.values.CustomerType = [allLabelWithBlank]
+                a.values.Supplier = allLabelWithBlank
                 a.hasValid.CustomerType.valid = true;
                 a.hasValid.Supplier.valid = true;
                 return a
@@ -605,7 +606,7 @@ const OrderList = () => {
     function customerTypeOnchange(e = []) {
 
         if (e.length === 0) {
-            e = [{ value: "", label: "All" }]
+            e = [allLabelWithBlank]
         } else {
             e = e.filter(i => !(i.value === ''))
         }
@@ -765,8 +766,8 @@ const OrderList = () => {
         dispatch(_act.GetVenderSupplierCustomerSuccess([]));
         setState((i) => {
             let a = { ...i }
-            a.values.CustomerType = [{ value: "", label: "All" }]
-            a.values.Supplier = { value: "", label: "All" }
+            a.values.CustomerType = [allLabelWithBlank]
+            a.values.Supplier = allLabelWithBlank
             a.hasValid.CustomerType.valid = true;
             a.hasValid.Supplier.valid = true;
             return a

@@ -23,21 +23,16 @@ import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import { ExcelReportComponent } from "../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS";
 import DynamicColumnHook from "../../components/Common/TableCommonFunc";
+import { allLabelWithZero } from "../../components/Common/CommonErrorMsg/HarderCodeData";
 
 const RetailerDataReport = (props) => {
   const dispatch = useDispatch();
   const history = useHistory();
 
   const [userPageAccessState, setUserAccState] = useState("");
-  const [partydropdown, setPartydropdown] = useState({
-    value: 0,
-    label: " All",
-  });
+  const [partydropdown, setPartydropdown] = useState(allLabelWithZero);
   const [tableData, setTableData] = useState([]);
   const [btnMode, setBtnMode] = useState("");
-
-  const [columns, setcolumn] = useState([{}]);
-  const [columnsCreated, setColumnsCreated] = useState(false);
 
   const reducers = useSelector((state) => ({
     listBtnLoading: state.RetailerDataReducer.listBtnLoading,
@@ -47,8 +42,7 @@ const RetailerDataReport = (props) => {
     pageField: state.CommonPageFieldReducer.pageField,
     userAccess: state.Login.RoleAccessUpdateData,
   }));
-  const { userAccess, partyList, listBtnLoading, partyLoading, pageField } =
-    reducers;
+  const { userAccess, partyList, listBtnLoading, partyLoading, pageField } = reducers;
   const { RetailerGobtn } = reducers;
 
   // Featch Modules List data  First Rendering
@@ -84,44 +78,16 @@ const RetailerDataReport = (props) => {
 
   const [tableColumns] = DynamicColumnHook({ pageField });
 
-  // const createColumns = () => {
-
-  //     if ((RetailerGobtn.Status === true) && (RetailerGobtn.StatusCode === 200)) {
-  //         const { Data } = RetailerGobtn
-  //         let columns = []
-  //         const objectAtIndex0 = (Data.ReportExportSerializerDetails[0]);
-  //         for (const key in objectAtIndex0) {
-  //             const column = {
-  //                 text: key,
-  //                 dataField: key,
-  //                 sort: true,
-  //                 classes: "table-cursor-pointer",
-  //             };
-  //             columns.push(column);
-  //         }
-  //         setcolumn(columns)
-  //         setColumnsCreated(true)
-  //     }
-  // }
-  // useEffect(() => {
-  //     if (!columnsCreated) {
-  //         createColumns();
-  //     }
-  // }, [RetailerGobtn]);
-
   useEffect(() => {
     if (RetailerGobtn.Status === true && RetailerGobtn.StatusCode === 200) {
       const { Data } = RetailerGobtn;
       if (btnMode === "Show" && Data.ReportExportSerializerDetails.length > 0) {
         setTableData(Data.ReportExportSerializerDetails);
       } else if (btnMode === "Excel") {
-        ExcelReportComponent({
-          // Download CSV
+        ExcelReportComponent({                   // Download CSV
           pageField,
           excelTableData: Data.ReportExportSerializerDetails,
           excelFileName: "Retailer Data Report",
-          // numericHeaders: ['id', 'MobileNo', 'AlternateContactNo', 'FSSAINo', 'PIN', 'Routeid', 'Supplierid'],
-          // dateHeader: 'FSSAIExipry'
         });
       }
 
@@ -143,10 +109,7 @@ const RetailerDataReport = (props) => {
     label: i.Name,
   }));
 
-  Party_Option.unshift({
-    value: 0,
-    label: "All",
-  });
+  Party_Option.unshift(allLabelWithZero);
 
   function excelhandler(Type) {
     setBtnMode(Type);
@@ -220,7 +183,7 @@ const RetailerDataReport = (props) => {
                   id="excelbtn-id"
                   onClick={() => excelhandler("Excel")}
                 >
-                  Excel 
+                  Excel
                 </Button>
               )}
             </Col>

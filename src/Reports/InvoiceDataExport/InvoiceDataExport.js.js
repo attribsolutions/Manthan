@@ -18,6 +18,7 @@ import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import DynamicColumnHook from "../../components/Common/TableCommonFunc";
 import { alertMessages } from "../../components/Common/CommonErrorMsg/alertMsg";
 import { ExcelReportComponent } from "../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS";
+import { allLabelWithZero } from "../../components/Common/CommonErrorMsg/HarderCodeData";
 
 const InvoiceDataExport = (props) => {
 
@@ -34,7 +35,7 @@ const InvoiceDataExport = (props) => {
     const [subPageMode] = useState(history.location.pathname);
     const [state, setState] = useState(() => initialFiledFunc(fileds))
     const [userPageAccessState, setUserAccState] = useState('');
-    const [PartyDropdown, setPartyDropdown] = useState({ value: 0, label: "All" });
+    const [PartyDropdown, setPartyDropdown] = useState(allLabelWithZero);
 
     const {
         userAccess,
