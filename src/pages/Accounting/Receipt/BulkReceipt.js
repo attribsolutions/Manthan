@@ -6,7 +6,7 @@ import {
     Label,
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
-import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
+import {  commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { SaveButton } from "../../../components/Common/CommonButton";
@@ -20,7 +20,6 @@ import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
 import { ReceiptGoButtonMaster_Success, saveReceiptMaster, saveReceiptMaster_Success } from "../../../store/Accounting/Receipt/action";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { C_DatePicker } from "../../../CustomValidateForm";
-import NewCommonPartyDropdown from "../../../components/Common/NewCommonPartyDropdown";
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 
 const BulkRecipt = (props) => {
@@ -223,7 +222,6 @@ const BulkRecipt = (props) => {
             <React.Fragment>
                 <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
                 <div className="page-content" style={{ marginBottom: "5cm" }}>
-                    <NewCommonPartyDropdown />
 
                     <form noValidate>
                         <div className="px-2 c_card_filter header text-black mb-1" >

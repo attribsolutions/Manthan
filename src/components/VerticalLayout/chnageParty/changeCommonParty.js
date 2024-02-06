@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Label } from "reactstrap";
 import { C_Button } from "../../Common/CommonButton";
 import { C_Select } from "../../../CustomValidateForm";
 import { loginUserAdminRole } from "../../Common/CommonFunction";
 import { commonPartyDropSelectAction } from "../../../store/Utilites/PartyDrodown/action";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
-import { mode } from "../../../routes";
 import './changeParty.scss'; // Add your styles here
 import { useRef } from "react";
-import { Bounce, toast } from "react-toastify";
+import { showToastAlert } from "../../../helpers/axios_Config";
 
 const ChangeCommonParty = (props) => {
 
@@ -18,7 +16,6 @@ const ChangeCommonParty = (props) => {
 
     // Local state
     const [selectedParty, setSelectedParty] = useState({ value: 0, label: "select party...", SAPPartyCode: "" });
-    const [changeButtonShow, setChangeButtonShow] = useState(false);
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
     // Selectors from Redux store
@@ -35,7 +32,6 @@ const ChangeCommonParty = (props) => {
     useEffect(() => {
         if (commonPartyDropSelect.value > 0) {
             setSelectedParty(commonPartyDropSelect);
-            setChangeButtonShow(true);
         }
     }, [commonPartyDropSelect]);
 
@@ -65,20 +61,18 @@ const ChangeCommonParty = (props) => {
             return;
         }
         setIsDrawerOpen(false);
-        setChangeButtonShow(true);
         dispatch(commonPartyDropSelectAction(selectedParty));
         localStorage.setItem("selectedParty", JSON.stringify(selectedParty));
     };
 
-    // Function to handle party change
-    const partyOnchange = () => {
-        setChangeButtonShow(false);
+
+    // Function to handle to Cancel button
+    const handleClearBtn = () => {
         setSelectedParty({ value: 0, label: "select party...", SAPPartyCode: "" });
         dispatch(commonPartyDropSelectAction({ value: 0, label: "select party...", SAPPartyCode: "" }));
         localStorage.setItem("selectedParty", JSON.stringify({ value: 0, label: "select...", SAPPartyCode: "" }));
     };
 
-    // Mapping Party for Select options and filtering based on condition
     const PartyDropdownOptions = commonPartyDropdownOption.map(data => ({
         value: data.id,
         label: data.Name,
@@ -88,12 +82,7 @@ const ChangeCommonParty = (props) => {
     // Function to toggle drawer
     const handleLabelClick = () => {
         if (!props.isPartyWisePage || !isShow || forceDisable) {
-            toast("This page does not require party information.", {
-                type: "warning",
-                transition: Bounce,
-                position: toast.POSITION.TOP_RIGHT,
-                autoClose: 3000,
-            });
+            showToastAlert("This page does not require party information.", "warning");
             return
         }
         setIsDrawerOpen(!isDrawerOpen);
@@ -132,8 +121,20 @@ const ChangeCommonParty = (props) => {
 
             {isDrawerOpen && (
                 <div className="mini-drawer">
-                    <div className="modal-content1">
-                        <div>
+                    <div className="c_modal-content">
+                        <div className="modal-header c_card_filter text-black"                                >
+                            <strong> Party selection </strong>
+                            <button
+                                type="button"
+                                onClick={() => setIsDrawerOpen(false)}
+                                className="close"
+                                data-dismiss="modal"
+                                aria-label="Close"
+                                style={{ color: "black", fontWeight: "bold" }}
+                            >
+                            </button>
+                        </div>
+                        <div className="modal-body">
                             <C_Select
                                 value={selectedParty}
                                 styles={{ menu: (provided) => ({ ...provided, zIndex: 2 }) }}
@@ -142,31 +143,27 @@ const ChangeCommonParty = (props) => {
                                 className="react-dropdown"
                                 classNamePrefix="dropdown"
                                 options={PartyDropdownOptions}
-                                isDisabled={changeButtonShow && !(selectedParty.value === 0)}
+                                // isDisabled={changeButtonShow && !(selectedParty.value === 0)}
                                 onChange={(e) => setSelectedParty(e)}
                             />
                         </div>
-                        <div style={{ paddingTop: "10px" }}>
-                            {!changeButtonShow ? (
-                                <C_Button
-                                    type="button"
-                                    className="btn btn-outline-primary border-1 font-size-12 text-center"
-                                    onClick={updateSelectedParty}
-                                >
-                                    Select
-                                </C_Button>
+                        <div className="modal-footer mt-2">
 
-                            ) : (!forceDisable) && (
-                                // ) : !(pageMode === mode.view || pageMode === mode.edit) && (
-                                <C_Button
-                                    type="button"
-                                    spinnerColor={"info"}
-                                    className="btn btn-outline-info border-1 font-size-12 "
-                                    onClick={partyOnchange}
-                                >
-                                    Change
-                                </C_Button>
-                            )}
+                            <C_Button
+                                type="button"
+                                className="btn btn-primary border-1 font-size-12 text-center"
+                                onClick={updateSelectedParty}
+                            >
+                                Select
+                            </C_Button>
+
+                            <C_Button
+                                type="button"
+                                className="btn btn-danger border-1 font-size-12 text-center"
+                                onClick={handleClearBtn}
+                            >
+                                Clear
+                            </C_Button>
                         </div>
                     </div>
                 </div>

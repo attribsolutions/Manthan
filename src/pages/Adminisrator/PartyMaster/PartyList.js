@@ -17,7 +17,6 @@ import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { PageLoadingSpinner } from '../../../components/Common/CommonButton';
 import CommonPurchaseList from '../../../components/Common/CommonPurchaseList';
-import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { customAlert } from '../../../CustomAlert/ConfirmDialog';
 import { mobileApp_RetailerDelete_Api } from '../../../helpers/backend_helper';

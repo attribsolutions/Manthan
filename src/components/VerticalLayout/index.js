@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import {
   changeLayout,
   changeSidebarTheme,
@@ -138,7 +138,12 @@ const Layout = props => {
     previousScrollPos = currentScrollPos;
   };
 
-
+  const handleCloseDetaildDiv = useCallback(() => {
+    const sidebar = sidebarRef.current;
+    const detailedDiv = detailedDivRef.current;
+    sidebar.style.display = 'block';
+    detailedDiv.style.display = 'none';
+  }, []);
 
 
 
@@ -167,7 +172,8 @@ const Layout = props => {
         </div>
 
         <div ref={detailedDivRef} style={{ display: "none" }} >
-          <PageDetailsSection isPartyWisePage={props.isPartyWisePage} />
+          <PageDetailsSection isPartyWisePage={props.isPartyWisePage}
+            handleClose={handleCloseDetaildDiv} />
         </div>
 
       </div>

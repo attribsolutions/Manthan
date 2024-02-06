@@ -21,7 +21,6 @@ import SalesReturnListForDashboard from '../Dashboard_1/SalesReturnListForDashbo
 import MobileRetailerApprove from '../Dashboard_1/MobileRetailerApprove';
 
 import { DashboardLoader, PageLoadingSpinner } from '../../../components/Common/CommonButton';
-import NewCommonPartyDropdown from "../../../components/Common/NewCommonPartyDropdown";
 import LineBar from '../../../components/Common/DashboardChart/MixLineChart';
 import TransactionLog from './TransactionLog';
 
@@ -283,7 +282,6 @@ const Dashboard_Admin = (props) => {
         <React.Fragment>
             <PageLoadingSpinner isLoading={GRNListLoading || PaymentEntryListloading || SalesReturnListloading || !pageField} />
             <div className="page-content">
-                <NewCommonPartyDropdown />
                 <MetaTags>
                     <title>Dashboard | FoodERP 2.0 - React Admin & Dashboard Template</title>
                 </MetaTags>

@@ -13,7 +13,6 @@
 // import * as _cfunc from "../../../components/Common/CommonFunction";
 // import { loginJsonBody, } from "../../../components/Common/CommonFunction";
 // import CommonPurchaseList from "../../../components/Common/CommonPurchaseList";
-// import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 // import { useHistory } from "react-router-dom";
 // import { PageLoadingSpinner } from "../../../components/Common/CommonButton";
 // import { customAlert } from "../../../CustomAlert/ConfirmDialog";
