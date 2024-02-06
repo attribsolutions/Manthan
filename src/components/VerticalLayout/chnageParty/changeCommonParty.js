@@ -80,7 +80,7 @@ const ChangeCommonParty = (props) => {
     };
 
         // Function to handle to Cancel button
-        const handleCancelBtn = () => {
+        const handleCloseBtn = () => {
             setIsDrawerOpen(false);
         };
 
@@ -173,9 +173,9 @@ const ChangeCommonParty = (props) => {
                                     <C_Button
                                         type="button"
                                         className="btn btn-danger border-1 font-size-12 text-center"
-                                        onClick={handleCancelBtn}
+                                        onClick={handleCloseBtn}
                                     >
-                                        Cancel
+                                        Close
                                     </C_Button>
                                 </div>
                             </CardBody>
