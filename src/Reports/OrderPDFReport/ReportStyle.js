@@ -533,7 +533,7 @@ export const tableBody = (doc, data) => {
 
     const optionsTable4 = {
         margin: {
-            left: 30, right: 30, bottom: 50
+            left: 30, right: 30, bottom: 80
         },
     };
 
@@ -551,7 +551,7 @@ export const tableBody = (doc, data) => {
 }
 
 export const tableBodyWithIGST = (doc, data) => {
-   
+
     const { OrderItem = [] } = data
     //Body table  Css
     var options = {

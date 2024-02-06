@@ -257,6 +257,13 @@ export const ClaimTrackingEntry = url.CLAIM_TRACKING_ENTRY_LIST
 export const ClaimTrackingEntryList = url.CLAIM_TRACKING_ENTRY
 
 
+
+export const System_Setting = url.SYSTEM_SETTING_LIST;
+export const System_Setting_List = url.SYSTEM_SETTING;
+
+
+
+
 //**************************** Reports ***********************************//
 
 export const OrderSummaryReport = url.ORDER_SUMMARY_REPORT;

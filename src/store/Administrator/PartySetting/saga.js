@@ -34,8 +34,8 @@ function* PartySetting_GenFunc(config) {
                 id: item.id,
                 Description: item.Description,
                 DefaultValue: item.DefaultValue,
-                IsPartyRelatedSetting: item.IsPartyRelatedSetting,
-                IsActive: item.IsActive
+                IsPartyRelatedSetting: item.IsPartyRelatedSetting === 0 ? false : true,
+                IsActive: item.IsActive === 0 ? false : true
 
             };
         }

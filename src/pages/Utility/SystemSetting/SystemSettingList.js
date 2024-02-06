@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import CommonListPage from "../../../components/Common/CommonMasterListPage";
 import {
+    BreadcrumbShowCountlabel,
     commonPageFieldList,
     commonPageFieldListSuccess,
 } from "../../../store/actions";
@@ -65,6 +66,7 @@ const SystemSettingList = () => {
                 UpdatedData.push(element);
             })
             setUpdateData(UpdatedData)
+            dispatch(BreadcrumbShowCountlabel(`Count:${UpdatedData.length}`));
         }
     }, [tableList])
     reducers.tableList = updateData

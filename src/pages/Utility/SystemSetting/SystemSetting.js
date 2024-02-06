@@ -119,7 +119,7 @@ const SystemSetting = (props) => {
             }
 
             if (hasEditVal) {
-                
+
 
                 const { id, SystemSetting, IsActive, Description, DefaultValue, IsPartyRelatedSetting } = hasEditVal[0]
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
@@ -216,14 +216,10 @@ const SystemSetting = (props) => {
     };
 
 
-    // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
-    var IsEditMode_Css = ''
-    if ((modalCss) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
-
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
-                <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
+                <div className="page-content">
                     <Container fluid>
                         <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
 
@@ -337,6 +333,7 @@ const SystemSetting = (props) => {
                                                     <div className="form-check form-switch form-switch-md  " dir="ltr">
                                                         <Input type="checkbox" className="form-check-input mt-2  "
                                                             checked={values.IsPartyRelatedSetting}
+                                                            disabled={pageMode === mode.edit}
                                                             name="IsActive"
                                                             onChange={(event) => {
                                                                 setState((i) => {
