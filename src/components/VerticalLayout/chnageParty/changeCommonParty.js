@@ -79,8 +79,12 @@ const ChangeCommonParty = (props) => {
         localStorage.setItem("selectedParty", JSON.stringify({ value: 0, label: "select...", SAPPartyCode: "" }));
     };
 
-    // Mapping Party for Select options and filtering based on condition
-    const PartyDropdownOptions = commonPartyDropdownOption.map(data => ({
+        // Function to handle to Cancel button
+        const handleCancelBtn = () => {
+            setIsDrawerOpen(false);
+        };
+
+        const PartyDropdownOptions = commonPartyDropdownOption.map(data => ({
         value: data.id,
         label: data.Name,
         SAPPartyCode: data.SAPPartyCode
@@ -169,9 +173,9 @@ const ChangeCommonParty = (props) => {
                                     <C_Button
                                         type="button"
                                         className="btn btn-danger border-1 font-size-12 text-center"
-                                        onClick={updateSelectedParty}
+                                        onClick={handleCancelBtn}
                                     >
-                                        Select
+                                        Cancel
                                     </C_Button>
                                 </div>
                             </CardBody>
