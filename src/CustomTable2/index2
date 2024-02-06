@@ -2,17 +2,9 @@ import React, { useState, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import './CustomTable.scss';
 import BootstrapTable from 'react-bootstrap-table-next';
+import paginationFactory from 'react-bootstrap-table2-paginator';
 import { customTableSearch } from '../components/Common/SearchBox/MySearch';
 import _debounce from 'lodash/debounce';
-import paginationFactory, {
-    PaginationProvider,
-    PaginationListStandalone,
-    SizePerPageDropdownStandalone,
-    PaginationTotalStandalone
-} from 'react-bootstrap-table2-paginator';
-
-
-
 
 const CustomTable = ({
     data,
@@ -71,31 +63,12 @@ const CustomTable = ({
     }, 300);
 
 
-
-
     const options = {
-        page: 1,
         paginationSize: 5,
         pageStartIndex: 1,
         sizePerPage: 25,
-        // hideSizePerPage: true,
-        custom: true,
-        totalSize: filteredData.length,
-        hidePageListOnlyOnePage: true,
-     
-        sizePerPageList: [{
-            text: '10', value: 10
-        }, {
-            text: '25', value: 25
-        },
-        {
-            text: '50', value: 50
-        }, {
-            text: 'All', value: filteredData.length
-        }]
+        hideSizePerPage: true,
     };
-
-
     const sortCaretFunction = {
         sortCaret: (order, column) => {
             if (!order) {
@@ -108,48 +81,22 @@ const CustomTable = ({
             return null;
         }
     };
-
     return (
-        <PaginationProvider
+        <BootstrapTable
             data={filteredData}
             columns={columns}
             keyField={keyField}
+            classes='custom-table'
+            rowClasses={rowClasses}
             pagination={paginationFactory(options)}
-        >
-            {
-                ({
-                    paginationProps,
-                    paginationTableProps
-                }) => (
-                    <div>
-
-                        <BootstrapTable
-                            data={filteredData}
-                            columns={columns}
-                            keyField={keyField}
-                            classes='custom-table '
-                            rowClasses={rowClasses}
-                            sort={sortCaretFunction} // Include the sortCaret function
-                            onDataSizeChange={debounceIsDataChangeFunc}
-                            {...rest}
-                            {...paginationTableProps}
-                            bootstrap4
-                        />
-                        <PaginationTotalStandalone
-                            {...paginationProps}
-                        />
-                        <div className=" pagination pagination-rounded justify-content-end  mb-3" style={{ marginTop: "-20px" }}>
-                            <PaginationListStandalone
-                                {...paginationProps}
-                            />
-                        </div>
-
-                    </div>
-                )
-            }
-        </PaginationProvider>
-
-
+            defaultSorted={[{ dataField: keyField, order: 'asc' }]} // Set default sorting
+            defaultSortDirection="asc"
+            sort={sortCaretFunction} // Include the sortCaret function
+            onDataSizeChange={debounceIsDataChangeFunc}
+            {...rest}
+            search
+      
+        />
     );
 };
 
