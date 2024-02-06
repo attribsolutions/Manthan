@@ -1,7 +1,7 @@
 // ExcelDownloadButton.js
 
 import React, { useEffect, useState } from "react";
-import { Modal, Button, Input, Label } from "reactstrap";
+import { Modal, Button, Input, Label, Card, CardBody } from "reactstrap";
 import { AvForm } from "availity-reactstrap-validation";
 import { ExcelReportComponent } from "../../Common/ReportCommonFunc/ExcelDownloadWithCSS";
 import { useSelector } from "react-redux";
@@ -164,43 +164,43 @@ const ExcelDownloadButton = ({ }) => {
         toggle={() => setmodal_scroll(false)}
         scrollable={true}
       >
-        <div className="modal-header" style={{ backgroundColor: "#cce6f6" }}>
-          <h5 className="modal-title mt-0">{pageHeading}</h5>
+        <div >
+          <div className="modal-header c_card_filter text-black" style={{ backgroundColor: "#cce6f6" }}>
+            <h5 className="modal-title mt-0">{pageHeading}</h5>
 
-          <button
-            type="button"
-            onClick={() => setmodal_scroll(false)}
-            className="close"
-            data-dismiss="modal"
-            aria-label="Close"
-            style={{ color: "black", fontWeight: "bold" }}
-          >
-            ×
-          </button>
-        </div>
-        <div className="modal-body">
-          <AvForm
-            onValidSubmit={(event, values) => {
-              DownloadInExcelButtonHanler(event, values);
-            }}
-          >
-            <ExcelCheckBox />
+            <button
+              type="button"
+              onClick={() => setmodal_scroll(false)}
+              className="close"
+              data-dismiss="modal"
+              aria-label="Close"
+              style={{ color: "black", fontWeight: "bold" }}
+            >
+            </button>
+          </div>
+          <div className="modal-body">
+            <AvForm
+              onValidSubmit={(event, values) => {
+                DownloadInExcelButtonHanler(event, values);
+              }}
+            >
+              <ExcelCheckBox />
 
-            <div className="modal-body">
-              <div className="modal-footer">
-                <button
-                  type="button"
-                  className="btn btn-secondary"
-                  onClick={() => setmodal_scroll(false)}
-                >
-                  Cancel
-                </button>
-                <button type="submit" className="btn btn-primary">
-                  Download in Excel
-                </button>
-              </div>
-            </div>
-          </AvForm>
+                <div className="modal-footer">
+                 
+                  <button type="submit" className="btn btn-primary">
+                    Download in Excel
+                  </button>
+                  <button
+                    type="button"
+                    className="btn btn-danger"
+                    onClick={() => setmodal_scroll(false)}
+                  >
+                    Cancel
+                  </button>
+                </div>
+            </AvForm>
+          </div>
         </div>
       </Modal>
     </>

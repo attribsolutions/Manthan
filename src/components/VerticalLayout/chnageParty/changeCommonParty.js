@@ -1,15 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Card, CardBody, CardFooter, CardHeader, Label } from "reactstrap";
 import { C_Button } from "../../Common/CommonButton";
 import { C_Select } from "../../../CustomValidateForm";
 import { loginUserAdminRole } from "../../Common/CommonFunction";
 import { commonPartyDropSelectAction } from "../../../store/Utilites/PartyDrodown/action";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
-import { mode } from "../../../routes";
 import './changeParty.scss'; // Add your styles here
 import { useRef } from "react";
-import { Bounce, toast } from "react-toastify";
 import { showToastAlert } from "../../../helpers/axios_Config";
 
 const ChangeCommonParty = (props) => {
@@ -19,7 +16,6 @@ const ChangeCommonParty = (props) => {
 
     // Local state
     const [selectedParty, setSelectedParty] = useState({ value: 0, label: "select party...", SAPPartyCode: "" });
-    const [changeButtonShow, setChangeButtonShow] = useState(false);
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
     // Selectors from Redux store
@@ -36,7 +32,6 @@ const ChangeCommonParty = (props) => {
     useEffect(() => {
         if (commonPartyDropSelect.value > 0) {
             setSelectedParty(commonPartyDropSelect);
-            setChangeButtonShow(true);
         }
     }, [commonPartyDropSelect]);
 
@@ -66,25 +61,19 @@ const ChangeCommonParty = (props) => {
             return;
         }
         setIsDrawerOpen(false);
-        setChangeButtonShow(true);
         dispatch(commonPartyDropSelectAction(selectedParty));
         localStorage.setItem("selectedParty", JSON.stringify(selectedParty));
     };
 
-    // Function to handle party change
-    const partyOnchange = () => {
-        setChangeButtonShow(false);
+
+    // Function to handle to Cancel button
+    const handleClearBtn = () => {
         setSelectedParty({ value: 0, label: "select party...", SAPPartyCode: "" });
         dispatch(commonPartyDropSelectAction({ value: 0, label: "select party...", SAPPartyCode: "" }));
         localStorage.setItem("selectedParty", JSON.stringify({ value: 0, label: "select...", SAPPartyCode: "" }));
     };
 
-        // Function to handle to Cancel button
-        const handleCloseBtn = () => {
-            setIsDrawerOpen(false);
-        };
-
-        const PartyDropdownOptions = commonPartyDropdownOption.map(data => ({
+    const PartyDropdownOptions = commonPartyDropdownOption.map(data => ({
         value: data.id,
         label: data.Name,
         SAPPartyCode: data.SAPPartyCode
@@ -132,57 +121,50 @@ const ChangeCommonParty = (props) => {
 
             {isDrawerOpen && (
                 <div className="mini-drawer">
-                    <div className="modal-content1">
-                        <Card>
-                            <CardHeader className=" c_card_filter text-black">
-                                <strong> Party selection </strong></CardHeader>
-                            <CardBody>
-                                <C_Select
-                                    value={selectedParty}
-                                    styles={{ menu: (provided) => ({ ...provided, zIndex: 2 }) }}
-                                    isSearchable={true}
-                                    isLoading={partyDropdownLoading}
-                                    className="react-dropdown"
-                                    classNamePrefix="dropdown"
-                                    options={PartyDropdownOptions}
-                                    isDisabled={changeButtonShow && !(selectedParty.value === 0)}
-                                    onChange={(e) => setSelectedParty(e)}
-                                />
-                                {/* <CardFooter> */}
-                                <div className="_modal-footer">
-                                    {!changeButtonShow ? (
-                                        <C_Button
-                                            type="button"
-                                            className="btn btn-primary border-1 font-size-12 text-center"
-                                            onClick={updateSelectedParty}
-                                        >
-                                            Select
-                                        </C_Button>
+                    <div className="c_modal-content">
+                        <div className="modal-header c_card_filter text-black"                                >
+                            <strong> Party selection </strong>
+                            <button
+                                type="button"
+                                onClick={() => setIsDrawerOpen(false)}
+                                className="close"
+                                data-dismiss="modal"
+                                aria-label="Close"
+                                style={{ color: "black", fontWeight: "bold" }}
+                            >
+                            </button>
+                        </div>
+                        <div className="modal-body">
+                            <C_Select
+                                value={selectedParty}
+                                styles={{ menu: (provided) => ({ ...provided, zIndex: 2 }) }}
+                                isSearchable={true}
+                                isLoading={partyDropdownLoading}
+                                className="react-dropdown"
+                                classNamePrefix="dropdown"
+                                options={PartyDropdownOptions}
+                                // isDisabled={changeButtonShow && !(selectedParty.value === 0)}
+                                onChange={(e) => setSelectedParty(e)}
+                            />
+                        </div>
+                        <div className="modal-footer mt-2">
 
-                                    ) : (!forceDisable) && (
-                                        // ) : !(pageMode === mode.view || pageMode === mode.edit) && (
-                                        <C_Button
-                                            type="button"
-                                            spinnerColor={"info"}
-                                            className="btn btn-info border-1 font-size-12 "
-                                            onClick={partyOnchange}
-                                        >
-                                            Change
-                                        </C_Button>
-                                    )}
-                                    <C_Button
-                                        type="button"
-                                        className="btn btn-danger border-1 font-size-12 text-center"
-                                        onClick={handleCloseBtn}
-                                    >
-                                        Close
-                                    </C_Button>
-                                </div>
-                            </CardBody>
+                            <C_Button
+                                type="button"
+                                className="btn btn-primary border-1 font-size-12 text-center"
+                                onClick={updateSelectedParty}
+                            >
+                                Select
+                            </C_Button>
 
-                        </Card>
-
-
+                            <C_Button
+                                type="button"
+                                className="btn btn-danger border-1 font-size-12 text-center"
+                                onClick={handleClearBtn}
+                            >
+                                Clear
+                            </C_Button>
+                        </div>
                     </div>
                 </div>
             )}
