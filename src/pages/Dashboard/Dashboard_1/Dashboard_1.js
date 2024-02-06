@@ -90,7 +90,7 @@ const Dashboard_1 = (props) => {
 
 
     function paymentEntry_onClick() {
-        history.push(url.PAYMENT_ENTRY)
+        history.push(url.PAYMENT_ENTRY_LIST)
     }
 
     function InvoiceFoRGRN_onClick() {
@@ -100,6 +100,11 @@ const Dashboard_1 = (props) => {
     function salesReturn_onClick() {
         history.push(url.SALES_RETURN_LIST)
     }
+
+    function mobileOrder_OnClick() {
+        history.push(url.APP_ORDER_LIST)
+    }
+
 
     const RedirectHandler = (Type) => {
         if (Type === 1) {
@@ -268,7 +273,7 @@ const Dashboard_1 = (props) => {
                                     <CardHeader style={{ backgroundColor: "whitesmoke" }}
                                         className="card-header align-items-center d-flex text-center">
                                         <Label className="card-title mb-0 flex-grow-4 text-primary text-bold mb-n2 text-decoration-underline"
-                                            // onClick={mobileRetailerApprove_onClick}
+                                            onClick={mobileOrder_OnClick}
                                             disabled={SalesReturnListloading}
                                             style={{ cursor: "pointer" }}
 

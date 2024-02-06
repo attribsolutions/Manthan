@@ -44,7 +44,6 @@ import { ItemSaleContext } from "./ContextDataProvider";
 import {
   fetchDataAndSetDropdown,
 } from "./SortAndExcelDownloadFunc";
-import { generateExcel } from "../ReportComponent";
 import { ExcelReportComponent } from "../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS";
 import { allLabelWithZero } from "../../components/Common/CommonErrorMsg/HarderCodeData";
 
@@ -135,13 +134,13 @@ const HeaderSection = (props) => {
 
     const jsonBody = JSON.stringify({
       CompanyID: _cfunc.loginCompanyID(),
-      PartyID: _cfunc.loginPartyID(),
+      PartyID: _cfunc.loginSelectedPartyID(),
     });
     dispatch(GetRoutesList(jsonBody));
     dispatch(
       GetVenderSupplierCustomer({
         subPageMode: url.ITEM_SALE_REPORT,
-        PartyID: _cfunc.loginPartyID(),
+        PartyID: _cfunc.loginSelectedPartyID(),
         RouteID: "",
       })
     );
@@ -213,11 +212,6 @@ const HeaderSection = (props) => {
     return options;
   }, [states.channelFromSelect, supplier, supplierListOnPartyType]);
 
-  // const generateOptions = (sourceArray, labelField = "Name", valueField = "id") =>
-  //     [initail.INITIAL_ZERO, ...sourceArray.map(item => ({ value: item[valueField], label: item[labelField] }))];
-
-  // const channelFromDropdownOptions = useMemo(() => generateOptions(PartyTypes), [PartyTypes]);
-
   const generateOptions1 = (
     sourceArray,
     labelField = "Name",
@@ -229,7 +223,6 @@ const HeaderSection = (props) => {
       })),
     ];
 
-  // const channelToDropdownOptions = useMemo(() => generateOptions1(PartyTypes), [PartyTypes]);
   const routeDropdownOptions = useMemo(
     () => generateOptions1(RoutesList.filter((route) => route.IsActive)),
     [RoutesList]
@@ -400,7 +393,6 @@ const HeaderSection = (props) => {
         states.setItemNameSelect(initail.INITIAL_ARRAY);
       }
     }
-
     states.setSubProductSelect(e);
   }
 
@@ -420,18 +412,12 @@ const HeaderSection = (props) => {
         : false;
 
     if (isLastInvoice) {
-      // if (event.some((item) => [2, 4].includes(item.value))) {
-      //     event = event.filter((item) => ![2, 4].includes(item.value));
-      // }
       if (!event.some((item) => item.value === 1)) {
         event.push(initail.SHOW_ALSO_OPTIONS[0]);
       }
     }
 
     if (event.some((item) => [2, 4].includes(item.value))) {
-      // if (event.some((item) => [1, 5, 6, 7].includes(item.value))) {
-      //     event = event.filter((item) => ![1, 5, 6, 7].includes(item.value));
-      // }
       if (!event.some((item) => item.value === 4)) {
         event.push(initail.SHOW_ALSO_OPTIONS[3]);
       }
@@ -451,7 +437,7 @@ const HeaderSection = (props) => {
         FromDate: fromdate,
         ToDate: todate,
         PartyType: states.supplierSelect.value > 0 ? 0 : states.channelFromSelect.value,
-        Party: !isSCMParty ? _cfunc.loginPartyID() : states.supplierSelect.value,
+        Party: !isSCMParty ? _cfunc.loginSelectedPartyID() : states.supplierSelect.value,
         Employee: !isSCMParty ? 0 : _cfunc.loginEmployeeID(),
       });
       dispatch(ItemSaleGoButton_API({ jsonBody, btnId: url.ITEM_SALE_REPORT }));
@@ -475,8 +461,6 @@ const HeaderSection = (props) => {
     } = await states.sortManipulationFunc(baseData);
     states.setSelectedColumns(selectedColumns);
     states.setTableData(manupulatedData);
-    // let commaSeparateAmount = _cfunc.amountCommaSeparateFunc(Number(totalAmount).toFixed(2));
-    // dispatch(BreadcrumbShowCountlabel(`Count:${manupulatedData.length} ₹ ${commaSeparateAmount}`));
     return { selectedColumns, manupulatedData, totalAmount };
   };
 
@@ -678,10 +662,7 @@ const HeaderSection = (props) => {
                           classNamePrefix="react-select"
                           value={states.routeSelect}
                           options={routeDropdownOptions}
-                          // onChange={(e) => { states.setRouteSelect(e) }}
-                          onChange={(e) => {
-                            RouteOnChange(e);
-                          }}
+                          onChange={(e) => { RouteOnChange(e); }}
                           isMulti={true}
                           isLoading={routesDropLoading}
                           styles={{
@@ -764,7 +745,7 @@ const HeaderSection = (props) => {
                         className="btn btn-success border-1 font-size-12 text-center"
                         onClick={() => {
                           dataManpulationFunction(states.initaialBaseData);
-                        }} // Example field, you can change it
+                        }}
                       >
                         <span
                           className="font-weight-bold"
@@ -782,7 +763,7 @@ const HeaderSection = (props) => {
                         spinnerColor={"white"}
                         loading={excelLoading}
                         className="btn btn-sm btn-outline-primary "
-                        onClick={ExcelDownload} // Example field, you can change it
+                        onClick={ExcelDownload}
                       >
                         <i className="bx bx-download font-size-14"></i>
                       </C_Button>
@@ -864,10 +845,7 @@ const HeaderSection = (props) => {
                         className="p-1"
                         type="checkbox"
                         checked={states.itemNameCheckbox}
-                        disabled={
-                          states.showAlsoSelect.some((i) => i.value === 8) &&
-                          true
-                        }
+                        disabled={states.showAlsoSelect.some((i) => i.value === 8) && true}
                         onChange={(e) => {
                           states.setItemNameCheckbox(e.target.checked);
                         }}
@@ -907,13 +885,9 @@ const HeaderSection = (props) => {
                         <C_Select
                           value={states.unitDropdownSelect}
                           isSearchable={true}
-                          // isMulti={true}
-                          //  isLoading={partyLoading}
                           className="react-dropdown"
                           classNamePrefix="dropdown"
-                          styles={{
-                            menu: (provided) => ({ ...provided, zIndex: 2 }),
-                          }}
+                          styles={{ menu: (provided) => ({ ...provided, zIndex: 2 }) }}
                           options={initail.UNIT_DROPDOWN_OPTIONS}
                           onChange={(e) => {
                             states.setUnitDropdownSelect(e);
@@ -930,7 +904,7 @@ const HeaderSection = (props) => {
                   <C_Button
                     type="button"
                     className="btn btn-warning border-1 font-size-12 text-center"
-                    onClick={() => states.setPivotMode((pre) => !pre)} // Example field, you can change it
+                    onClick={() => states.setPivotMode((pre) => !pre)}
                   >
                     <span
                       className="font-weight-bold"

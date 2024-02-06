@@ -66,6 +66,9 @@ const rateNotAvailable = " Rate not available."
 const multiple_MRP_notAllowed = " Multiple MRP’S Invoice not allowed."
 const customerIsRequired = "Customer is required."
 
+// Sales Return 
+const batchCode_notAvailable = "Item Name and batch code not available"
+
 export const alertMessages = {
     commonPartySelectionIsRequired,
     routeNameIsRequired,
@@ -108,7 +111,8 @@ export const alertMessages = {
     CreditNote_Not_Upload,
     rateNotAvailable,
     multiple_MRP_notAllowed,
-    customerIsRequired
+    customerIsRequired,
+    batchCode_notAvailable
 };
 
 

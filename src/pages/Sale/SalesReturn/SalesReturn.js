@@ -46,6 +46,7 @@ import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import Slidewithcaption from "../../../components/Common/CommonImageComponent";
 import { deltBtnCss } from "../../../components/Common/ListActionsButtons";
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
+import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 
 const SalesReturn = (props) => {
 
@@ -289,6 +290,13 @@ const SalesReturn = (props) => {
                 })
 
             } catch (error) { _cfunc.CommonConsole(error) }
+        }
+        else if (addButtonData.Status === true) {
+            dispatch(SalesReturnAddBtn_Action_Succcess({ StatusCode: false }))
+            customAlert({
+                Type: 3,
+                Message: alertMessages.batchCode_notAvailable,
+            })
         }
     }, [addButtonData])
 
@@ -1092,6 +1100,7 @@ const SalesReturn = (props) => {
                                                 value={values.BatchCode}
                                                 placeholder="Enter BatchCode"
                                                 type='text'
+                                                autoComplete='off'
                                                 onChange={(event) => {
                                                     onChangeText({ event, state, setState })
                                                 }}
@@ -1099,12 +1108,9 @@ const SalesReturn = (props) => {
                                             {isError.BatchCode.length > 0 && (
                                                 <span className="text-danger f-8"><small>{isError.BatchCode}</small></span>
                                             )}
-
-
                                         </Col>
 
                                         <Col sm="1" className="mx-6 mt-1">
-
                                             {(!(returnMode === 1)) &&///(returnMode === 1) InvoiceWise */}
                                                 <C_Button
                                                     type="button"
@@ -1115,7 +1121,6 @@ const SalesReturn = (props) => {
                                                     Add
                                                 </C_Button>
                                             }
-
                                         </Col>
                                     </FormGroup>
                                 </Col >
@@ -1240,9 +1245,6 @@ const SalesReturn = (props) => {
                                     module={"SalesReturn"}
                                 />
                             </SaveButtonDraggable>
-
-
-
                         }
 
                     </form >
