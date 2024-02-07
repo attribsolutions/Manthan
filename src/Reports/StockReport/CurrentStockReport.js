@@ -12,7 +12,7 @@ import Select from "react-select";
 import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess, getBaseUnit_ForDropDown, getBaseUnit_ForDropDownSuccess } from "../../store/actions";
 import C_Report from "../../components/Common/C_Report";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
-import {  mode, pageId } from "../../routes/index"
+import { mode, pageId } from "../../routes/index"
 import { stockReport_GoButton_API, stockReport_GoButton_API_Success } from "../../store/Report/StockReport/action";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
@@ -113,9 +113,6 @@ const CurrentStockReport = (props) => {
 		dispatch(commonPageFieldSuccess(null));
 		dispatch(commonPageField(pageId.STOCK_REPORT));
 		dispatch(BreadcrumbShowCountlabel(`Count:${0}`));
-		if (_cfunc.CommonPartyDropValue().value > 0) {
-            setPartyDropdown(_cfunc.CommonPartyDropValue())
-        }
 		dispatch(changeCommonPartyDropDetailsAction({ isShow: false }))//change party drop-down show false
 		return () => {
 			dispatch(commonPageFieldSuccess(null));
@@ -129,7 +126,7 @@ const CurrentStockReport = (props) => {
 		{
 			text: 'DistributorCode',
 			dataField: 'DistributorCode',
-			showing: partyDropdown.value === "",
+			showing: false,
 			groupBy: false,
 			align: 'right',
 			sequence: 5,
@@ -147,7 +144,7 @@ const CurrentStockReport = (props) => {
 		{
 			text: 'Productcode',
 			dataField: 'Item',
-			showing: ['', 0, 1].includes(stockTypeSelect.value),
+			showing: false,
 			groupBy: true,
 			align: 'right',
 			sequence: 1,
