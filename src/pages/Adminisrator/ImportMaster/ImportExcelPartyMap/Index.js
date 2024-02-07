@@ -355,72 +355,71 @@ const ImportExcelPartyMap = (props) => {
                 <PageLoadingSpinner isLoading={((partyDropDownLoading && !(loginIsSCMCompany() === 1)) || !pageField)} />
 
                 <div className="page-content">
-                    <div className="px-2 c_card_header text-black" >
-                        <div className="px-2   c_card_filter text-black" >
-                            <form onSubmit={(event) => goButtonHandler(event)} noValidate>
-                                <div className="row">
-                                    <Col sm="5" style={{ display: (loginIsSCMCompany() === 1) ? "none" : "block" }}>
-                                        <FormGroup className="mb-2 row mt-3 " >
-                                            <Label className=" p-2"
-                                                style={{ maxWidth: "115px" }}>{fieldLabel.Party}</Label>
-                                            <Col style={{ maxWidth: "300px" }} >
-                                                <Select
-                                                    name="Party"
-                                                    value={values.Party}
-                                                    isSearchable={true}
-                                                    isDisabled={!(UpdateTableList.length === 0) && true}
-                                                    className="react-dropdown"
-                                                    classNamePrefix="dropdown"
-                                                    styles={{
-                                                        menu: provided => ({ ...provided, zIndex: 2 })
-                                                    }}
-                                                    options={partyDropdown_Options}
-                                                    onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
-                                                />
-                                                {isError.Party.length > 0 && (
-                                                    <span className="text-danger f-8"><small>{isError.Party}</small></span>
-                                                )}
 
-                                            </Col>
-                                        </FormGroup>
-                                    </Col >
-                                    <Col sm="5">
-                                        <FormGroup className="mb-2 row mt-3 " >
-                                            <Label className=" p-2"
-                                                style={{ maxWidth: "115px" }}>{fieldLabel.MapType}</Label>
-                                            <Col style={{ maxWidth: "300px" }} >
-                                                <Select
-                                                    name="MapType"
-                                                    value={values.MapType}
-                                                    isSearchable={true}
-                                                    styles={{
-                                                        menu: provided => ({ ...provided, zIndex: 2 })
-                                                    }}
-                                                    isDisabled={(!(UpdateTableList.length === 0) || (partyDropDownLoading && !(loginIsSCMCompany() === 1)))}
-                                                    className="react-dropdown"
-                                                    classNamePrefix="dropdown"
-                                                    options={mapTypeDropdown_Options}
-                                                    onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
-                                                />
-                                                {isError.MapType.length > 0 && (
-                                                    <span className="text-danger f-8"><small>{isError.MapType}</small></span>
-                                                )}
-                                            </Col>
-                                        </FormGroup>
-                                    </Col>
+                    <div className="px-2 c_card_filter text-black" >
+                        <form onSubmit={(event) => goButtonHandler(event)} noValidate>
+                            <div className="row">
+                                <Col sm="5" style={{ display: (loginIsSCMCompany() === 1) ? "none" : "block" }}>
+                                    <FormGroup className="mb-2 row mt-3 " >
+                                        <Label className=" p-2"
+                                            style={{ maxWidth: "115px" }}>{fieldLabel.Party}</Label>
+                                        <Col style={{ maxWidth: "300px" }} >
+                                            <Select
+                                                name="Party"
+                                                value={values.Party}
+                                                isSearchable={true}
+                                                isDisabled={!(UpdateTableList.length === 0) && true}
+                                                className="react-dropdown"
+                                                classNamePrefix="dropdown"
+                                                styles={{
+                                                    menu: provided => ({ ...provided, zIndex: 2 })
+                                                }}
+                                                options={partyDropdown_Options}
+                                                onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
+                                            />
+                                            {isError.Party.length > 0 && (
+                                                <span className="text-danger f-8"><small>{isError.Party}</small></span>
+                                            )}
 
-                                    <Col sm="2" className="mt-3 ">
-                                        {(UpdateTableList.length === 0) ?
-                                            <Go_Button
-                                                forceDisabled={(partyDropDownLoading && !(loginIsSCMCompany() === 1))}
-                                                onClick={goButtonHandler} loading={listBtnLoading} />
-                                            :
-                                            <Change_Button onClick={partyOnChangeHandler} />
-                                        }
-                                    </Col>
-                                </div>
-                            </form>
-                        </div>
+                                        </Col>
+                                    </FormGroup>
+                                </Col >
+                                <Col sm="5">
+                                    <FormGroup className="mb-2 row mt-3 " >
+                                        <Label className=" p-2"
+                                            style={{ maxWidth: "115px" }}>{fieldLabel.MapType}</Label>
+                                        <Col style={{ maxWidth: "300px" }} >
+                                            <Select
+                                                name="MapType"
+                                                value={values.MapType}
+                                                isSearchable={true}
+                                                styles={{
+                                                    menu: provided => ({ ...provided, zIndex: 2 })
+                                                }}
+                                                isDisabled={(!(UpdateTableList.length === 0) || (partyDropDownLoading && !(loginIsSCMCompany() === 1)))}
+                                                className="react-dropdown"
+                                                classNamePrefix="dropdown"
+                                                options={mapTypeDropdown_Options}
+                                                onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
+                                            />
+                                            {isError.MapType.length > 0 && (
+                                                <span className="text-danger f-8"><small>{isError.MapType}</small></span>
+                                            )}
+                                        </Col>
+                                    </FormGroup>
+                                </Col>
+
+                                <Col sm="2" className="mt-3 ">
+                                    {(UpdateTableList.length === 0) ?
+                                        <Go_Button
+                                            forceDisabled={(partyDropDownLoading && !(loginIsSCMCompany() === 1))}
+                                            onClick={goButtonHandler} loading={listBtnLoading} />
+                                        :
+                                        <Change_Button onClick={partyOnChangeHandler} />
+                                    }
+                                </Col>
+                            </div>
+                        </form>
                     </div>
 
                     <div className="mt-1">
@@ -432,25 +431,23 @@ const ImportExcelPartyMap = (props) => {
                         >
                             {toolkitProps => (
                                 <React.Fragment>
-                                    <div className="table-responsive">
-                                        <BootstrapTable
-                                            bordered={true}
-                                            defaultSorted={[{
-                                                dataField: 'fieldName',
-                                                order: 'asc'
-                                            }]}
-                                            id="table_Arrow"
-                                            striped={false}
-                                            noDataIndication={<div className="text-danger text-center ">Items Not available</div>}
-                                            classes={"table align-middle  table-hover"}
-                                            headerWrapperClasses={"thead-light"}
-                                            {...toolkitProps.baseProps}
-                                            onDataSizeChange={({ dataSize }) => {
-                                                dispatch(BreadcrumbShowCountlabel(`Count:${dataSize}`));
-                                            }}
-                                        />
-                                        {globalTableSearchProps(toolkitProps.searchProps)}
-                                    </div>
+                                    <BootstrapTable
+                                        keyField="id"
+                                        bordered={true}
+                                        defaultSorted={[{
+                                            dataField: 'fieldName',
+                                            order: 'asc'
+                                        }]}
+                                        id="table_Arrow"
+                                        noDataIndication={<div className="text-danger text-center ">Items Not available</div>}
+                                        classes={"custom-table"}
+                                        {...toolkitProps.baseProps}
+                                        onDataSizeChange={({ dataSize }) => {
+                                            dispatch(BreadcrumbShowCountlabel(`Count:${dataSize}`));
+                                        }}
+                                    />
+                                    {globalTableSearchProps(toolkitProps.searchProps)}
+
                                 </React.Fragment>
                             )
                             }
