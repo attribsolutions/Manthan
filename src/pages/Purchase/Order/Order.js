@@ -10,6 +10,7 @@ import {
     Label,
     Modal,
     Row,
+    Spinner,
 } from "reactstrap";
 import { useDispatch, useSelector } from "react-redux";
 import Select from "react-select";
@@ -147,7 +148,8 @@ const Order = (props) => {
         supplierDropLoading,
         orderTypeDropLoading,
         routesDropLoading,
-        commonPartyDropSelect
+        commonPartyDropSelect,
+        partyItemListLoading
     } = useSelector((state) => ({
         goBtnOrderdata: state.OrderReducer.goBtnOrderAdd,
 
@@ -180,6 +182,8 @@ const Order = (props) => {
         goBtnloading: state.OrderReducer.goBtnLoading,
         saveBtnloading: state.OrderReducer.saveBtnloading,
         gotoInvoiceBtnLoading: state.OrderReducer.gotoInvoiceBtnLoading,
+
+        partyItemListLoading: state.PartyItemsReducer.partyItemListLoading,
 
         commonPartyDropSelect: state.CommonPartyDropdownReducer.commonPartyDropSelect
     }));;
@@ -559,9 +563,13 @@ const Order = (props) => {
                             Item Name
                         </div>
                         <div onClick={assignItem_onClick}>
-                            <samp id={"__assignItem_onClick"} style={{ display: "none", cursor: "pointer" }} className="text-primary fst-italic text-decoration-underline"
+                            <samp id={"__assignItem_onClick"}
+                                style={{ display: "none", cursor: "pointer" }}
+                                className="text-primary fst-italic text-decoration-underline"
                             >
-                                Assign-Items</samp>
+                                Assign-Items
+                                {partyItemListLoading && <Spinner style={{ height: "13px", width: "13px" }} color="primary" />}
+                            </samp>
                         </div>
 
                     </div>

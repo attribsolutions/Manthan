@@ -8,7 +8,6 @@ import { useHistory } from "react-router-dom";
 import { goButtonPartyItemAddPageSuccess, goButtonPartyItemAddPage, savePartyItemsAction, savePartyItemsActionSuccess, editPartyItemIDSuccess, channalItemViewDetailAction } from "../../../store/Administrator/PartyItemsRedux/action";
 import { globalTableSearchProps } from "../../../components/Common/SearchBox/MySearch";
 import { C_Button, PageLoadingSpinner, SaveButton } from "../../../components/Common/CommonButton";
-
 import * as url from "../../../routes/route_url";
 import * as mode from "../../../routes/PageMode";
 import BootstrapTable from "react-bootstrap-table-next";
@@ -45,9 +44,6 @@ const PartyItems = (props) => {
 	const [pageMode, setPageMode] = useState(mode.defaultsave);
 	const [userPageAccessState, setUserAccState] = useState("");
 	const [searchQuery, setSearchQuery] = useState("");
-
-
-
 
 	const [page_id] = useState(() => initialState(history).page_Id)
 	const [partyIdSelect, setPartyIdSelect] = useState({ value: _cfunc.loginSelectedPartyID() })
@@ -103,7 +99,6 @@ const PartyItems = (props) => {
 			dispatch(changeCommonPartyDropDetailsAction({ isShow: true }))//change party drop-down restore show state	
 			dispatch(getPartyTypelistSuccess([]));
 			dispatch(goButtonPartyItemAddPageSuccess([]));
-
 		}
 	}, []);
 
@@ -421,9 +416,7 @@ const PartyItems = (props) => {
 				</>
 			}
 		}
-
 	})
-
 
 	const SaveHandler = (event) => {
 		event.preventDefault();
@@ -438,7 +431,6 @@ const PartyItems = (props) => {
 				return UploadSalesDatafromExcelParty === 1 && row.isItemMap === true;
 			});
 
-
 			if (filteredDataExists) {
 				customAlert({
 					Type: 4,
@@ -446,7 +438,6 @@ const PartyItems = (props) => {
 				});
 				return;
 			}
-
 		}
 
 		if (selectedItems.length === 0) {
@@ -526,20 +517,21 @@ const PartyItems = (props) => {
 		}
 		return null
 	};
-
+	var IsEditMode_Css = ''
+	if (props.isAssing) { IsEditMode_Css = "1%" };
 
 	return (
 		<>
 			<PageLoadingSpinner isLoading={(GoBtnlistloading || !pageField)} />
 			{userPageAccessState && (
-				<div className="page-content">
+				<div className="page-content" style={{ marginTop: IsEditMode_Css }}>
 					<Container fluid>
 						<MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
 
 						<ChannelViewDetails />
 
 						<Card className="text-black">
-							<CardHeader className="card-header   text-black c_card_header">
+							<CardHeader className="card-header text-black c_card_header">
 								<h4 className="card-title text-black">
 									{userPageAccessState.PageDescription}
 								</h4>
