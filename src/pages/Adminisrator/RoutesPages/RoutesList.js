@@ -17,7 +17,6 @@ import { loginCompanyID } from "../../../components/Common/CommonFunction";
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList";
 import { PageLoadingSpinner } from "../../../components/Common/CommonButton";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
-import NewCommonPartyDropdown from "../../../components/Common/NewCommonPartyDropdown";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 
 const RoutesList = (props) => {

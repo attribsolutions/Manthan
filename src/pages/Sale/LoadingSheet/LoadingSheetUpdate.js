@@ -21,7 +21,6 @@ import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import DynamicColumnHook, { selectAllCheck } from "../../../components/Common/TableCommonFunc";
 import { C_DatePicker } from "../../../CustomValidateForm";
 import * as _cfunc from "../../../components/Common/CommonFunction";
-import NewCommonPartyDropdown from "../../../components/Common/NewCommonPartyDropdown";
 import { C_Button } from "../../../components/Common/CommonButton";
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 
@@ -228,10 +227,6 @@ const LoadingSheetUpdate = (props) => {
                 <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
 
                 <div className="page-content" style={{ marginBottom: "5cm" }}>
-                    <div id="id1"></div>
-
-                    {/* <NewCommonPartyDropdown /> */}
-
                     <form noValidate>
                         <div className="px-2 c_card_filter header text-black mb-2" >
 
