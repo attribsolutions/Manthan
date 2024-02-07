@@ -113,6 +113,7 @@ const CurrentStockReport = (props) => {
 		dispatch(commonPageFieldSuccess(null));
 		dispatch(commonPageField(pageId.STOCK_REPORT));
 		dispatch(BreadcrumbShowCountlabel(`Count:${0}`));
+
 		dispatch(changeCommonPartyDropDetailsAction({ isShow: false }))//change party drop-down show false
 		return () => {
 			dispatch(commonPageFieldSuccess(null));
@@ -126,7 +127,7 @@ const CurrentStockReport = (props) => {
 		{
 			text: 'DistributorCode',
 			dataField: 'DistributorCode',
-			showing: false,
+			showing: partyDropdown.value === "",
 			groupBy: false,
 			align: 'right',
 			sequence: 5,
@@ -144,7 +145,7 @@ const CurrentStockReport = (props) => {
 		{
 			text: 'Productcode',
 			dataField: 'Item',
-			showing: false,
+			showing: ['', 0, 1].includes(stockTypeSelect.value),
 			groupBy: true,
 			align: 'right',
 			sequence: 1,
