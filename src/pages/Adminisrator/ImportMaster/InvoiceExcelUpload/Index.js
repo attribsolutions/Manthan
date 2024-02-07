@@ -587,7 +587,7 @@ const InvoiceExcelUpload = (props) => {
 
                     const calculate = InvoiceUploadCalculation({ Quantity: ele[parArr.Quantity], Rate: ele[parArr.Rate], GST: ele.GST, Discount: ele[parArr.Discount], DiscountType: ele[parArr.DiscountType] });
                     invoiceTotalAmount = invoiceTotalAmount + calculate.Amount;
-
+                    debugger
                     parentObj = {
                         "ImportFromExcel": 1,
                         "CustomerGSTTin": ele[parArr.CustomerGSTTin] ? ele[parArr.CustomerGSTTin] : '',

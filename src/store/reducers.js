@@ -123,6 +123,11 @@ import Cx_DD_Diffrence_Reducer from "./Report/CX_DD_Diffrence_Report/reducer"
 
 import SystemSettingReducer from "./Utilites/SystemSettingRedux/reducer"
 
+import PosRoleAccessReducer from "./SweetPOSStore/Administrator/POSRoleAccessRedux/reducer"
+
+
+
+
 
 
 const rootReducer = combineReducers({
@@ -223,6 +228,7 @@ const rootReducer = combineReducers({
 	ItemWiseUpdateReducer,
 	TCSAmountReportReducer,
 	Cx_DD_Diffrence_Reducer,
-	SystemSettingReducer
+	SystemSettingReducer,
+	PosRoleAccessReducer
 })
 export default rootReducer

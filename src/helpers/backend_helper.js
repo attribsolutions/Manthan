@@ -771,6 +771,18 @@ export const edit_SystemSetting_List_Api = ({ editId }) => get(`${url.SYSTEM_SET
 export const update_SystemSetting_List_Api = ({ jsonBody, updateId }) => put(`${url.SYSTEM_SETTING}/${updateId}`, jsonBody)// update api
 
 
+
+
+//Sweet POS Role Access
+
+
+export const get_POSRoleAccess_List_Api = () => get(url.SWEET_POS_API) // get api
+export const Post_POSRoleAccess_API = ({ jsonBody }) => post(url.SWEET_POS_API, jsonBody)// post api
+
+
+
+
+
 export {
 	getLoggedInUser,
 	isUserAuthenticated,

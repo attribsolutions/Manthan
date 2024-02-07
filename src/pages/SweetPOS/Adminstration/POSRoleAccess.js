@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Col, Input, Row, } from "reactstrap";
 import { useHistory } from "react-router-dom";
-import { initialFiledFunc } from "../../../components/Common/validationFunction";
 
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { mode, pageId, } from "../../../routes/index"
@@ -14,6 +13,11 @@ import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess } fro
 import DynamicColumnHook from "../../../components/Common/TableCommonFunc";
 import { Data } from './Data';
 import SimpleBar from "simplebar-react"
+import { getPosRoleAccesslist, savePosRoleAccess, savePosRoleAccess_Success } from "../../../store/SweetPOSStore/Administrator/POSRoleAccessRedux/action";
+import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
+import { SaveButton } from "../../../components/Common/CommonButton";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
+
 
 
 const POSRoleAccess = (props) => {
@@ -25,13 +29,21 @@ const POSRoleAccess = (props) => {
     const [tableData, settableData] = useState({ data: [], tableColumns: [{}] })
     const [cellReferesh, setcellReferesh] = useState(false)
     const [userPageAccessState, setUserAccState] = useState('');
+    const [pageMode, setPageMode] = useState(mode.defaultsave);
 
     const {
         userAccess,
-        pageField
+        pageField,
+        tableList,
+        saveBtnloading,
+        postMsg
     } = useSelector((state) => ({
         userAccess: state.Login.RoleAccessUpdateData,
-        pageField: state.CommonPageFieldReducer.pageField
+        pageField: state.CommonPageFieldReducer.pageField,
+        saveBtnloading: state.PosRoleAccessReducer.saveBtnloading,
+        postMsg: state.PosRoleAccessReducer.postMsg,
+
+        tableList: state.PosRoleAccessReducer.PosRoleAccessListData
     })
     );
 
@@ -42,6 +54,7 @@ const POSRoleAccess = (props) => {
         let pageID = pageId.POS_ROLE_ACCESS
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(pageID));
+        dispatch(getPosRoleAccesslist())
         return () => {
             dispatch(commonPageFieldSuccess(null));
         }
@@ -64,6 +77,16 @@ const POSRoleAccess = (props) => {
     }, [userAccess])
 
 
+    useEffect(() => {
+        if (postMsg.Status === true && postMsg.StatusCode === 200) {
+            dispatch(savePosRoleAccess_Success({ Status: false }));
+            customAlert({
+                Type: 3,
+                Message: JSON.stringify(postMsg.Message),
+            })
+        }
+    }, [postMsg]);
+
     /////////////////////////////////////////////////// column From Page master////////////////////////////////////////////////
 
     const [tableColumns] = DynamicColumnHook({ pageField })
@@ -75,7 +98,7 @@ const POSRoleAccess = (props) => {
             let columns = []
             tableColumns.forEach(i => {
                 let column = {}
-                let Not_RoleAccessColumn = ["Id", "DivName", "DivisionID"];
+                let Not_RoleAccessColumn = ["Name"];
                 let isColumn = Not_RoleAccessColumn.includes(i.dataField);
                 if (!isColumn) {
                     column = {
@@ -85,18 +108,21 @@ const POSRoleAccess = (props) => {
                         classes: "table-cursor-pointer",
                         formatExtraData: { cellReferesh },
                         formatter: (cell, row, key) => {
+
                             return (
                                 <>
                                     <Input
-                                        id={`checkbox_${row.Id}_${key}`}
+                                        id={`checkbox_${row.id}_${key}`}
                                         type="checkbox"
                                         className="p-1"
                                         name={`${row.DivName}`}
                                         defaultChecked={cell}
                                         onChange={(e) => {
-                                            if (e.target.id === `checkbox_${row.Id}_${key}`) {
+                                            debugger
+                                            if (e.target.id === `checkbox_${row.id}_${key}`) {
+                                                debugger
                                                 setcellReferesh(i => !i)
-                                                row[i.dataField] = e.target.checked
+                                                row[i.dataField] = (e.target.checked === true ? e.target.checked = 1 : e.target.checked = 0)
                                             }
                                         }}
                                     >
@@ -118,7 +144,7 @@ const POSRoleAccess = (props) => {
                             zIndex: 2,
                             position: "sticky",
                             left: 0,
-                            background: "white"
+                            background: "#e9e9ef"
                         },
                         sort: true,
                         classes: "table-cursor-pointer",
@@ -126,17 +152,74 @@ const POSRoleAccess = (props) => {
                 }
                 columns.push(column);
             });
-            settableData({ data: Data, tableColumns: columns })
+
+            settableData({ data: tableList, tableColumns: columns })
             dispatch(BreadcrumbShowCountlabel(`Count:${Data.length}`));
         }
-    }, [tableColumns.length > 1, Data, cellReferesh])
+    }, [tableColumns.length > 1, tableList, cellReferesh])
+
+
+
+    const saveHandler = () => {
+        const TableData = tableList.map(i => ({
+            Division: i.id,
+            IsAddNewItem: i.IsAddNewItem,
+            IsImportItems: i.IsImportItems,
+            IsImportGroups: i.IsImportGroups,
+            IsUpdateItem: i.IsUpdateItem,
+            IsCItemId: i.IsCItemId,
+            IsItemName: i.IsItemName,
+            IsSalesModify: i.IsSalesModify,
+            IsSalesDelete: i.IsSalesDelete,
+            IsUnitModify: i.IsUnitModify,
+            IsShowVoucherButton: i.IsShowVoucherButton,
+            IsGiveSweetPOSUpdate: i.IsGiveSweetPOSUpdate,
+            IsSweetPOSAutoUpdate: i.IsSweetPOSAutoUpdate,
+            IsSweetPOSServiceAutoUpdate: i.IsSweetPOSServiceAutoUpdate,
+            IsEayBillUploadExist: i.IsEayBillUploadExist,
+            CreatedBy: 4,
+            CreatedOn: "2024-02-05",
+            UpdatedBy: 3,
+            UpdatedOn: "2024-02-05",
+        }));
+
+
+        // const TableData = tableList.map(i => ({
+
+        //     Division: i.id,
+        //     IsAddNewItem: 0,
+        //     IsImportItems: 0,
+        //     IsImportGroups: 0,
+        //     IsUpdateItem: 0,
+        //     IsCItemId: 0,
+        //     IsItemName: 0,
+        //     IsSalesModify: 0,
+        //     IsSalesDelete: 0,
+        //     IsUnitModify: 0,
+        //     IsShowVoucherButton: 0,
+        //     IsGiveSweetPOSUpdate: 1,
+        //     IsSweetPOSAutoUpdate: 1,
+        //     IsSweetPOSServiceAutoUpdate: 1,
+        //     IsEayBillUploadExist: 1,
+        //     CreatedBy: 4,
+        //     CreatedOn: "2024-02-05",
+        //     UpdatedBy: 3,
+        //     UpdatedOn: "2024-02-05"
+
+        // }));
+
+        const jsonBody = JSON.stringify(TableData);
+        dispatch(savePosRoleAccess({ jsonBody }));
+    }
+
+
     return (
         <React.Fragment>
             <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
             <div className="page-content">
                 <div className="mt-1">
                     <ToolkitProvider
-                        keyField="Id"
+                        keyField="id"
                         data={tableData.data}
                         columns={tableData.tableColumns}
                         search
@@ -144,28 +227,36 @@ const POSRoleAccess = (props) => {
                         {(toolkitProps,) => (
                             <React.Fragment>
                                 <Row>
-                                    <SimpleBar className="" style={{ maxHeight: "80vh" }}>
-                                        <Col xl="12">
-                                            <BootstrapTable
-                                                keyField="Id"
-                                                classes={"table  table-bordered table-hover"}
-                                                noDataIndication={
-                                                    <div className="text-danger text-center ">
-                                                        Record Not available
-                                                    </div>
-                                                }
-                                                onDataSizeChange={({ dataSize }) => {
-                                                    dispatch(BreadcrumbShowCountlabel(`Count:${dataSize}`));
-                                                }}
-                                                {...toolkitProps.baseProps}
-                                            />
-                                            {globalTableSearchProps(toolkitProps.searchProps)}
-                                        </Col>
-                                    </SimpleBar>
+                                    {/* <SimpleBar className="" style={{ maxHeight: "81vh" }}> */}
+                                    <Col xl="12">
+                                        <BootstrapTable
+                                            keyField="id"
+                                            classes={"table  table-bordered table-hover"}
+                                            noDataIndication={
+                                                <div className="text-danger text-center ">
+                                                    Record Not available
+                                                </div>
+                                            }
+                                            onDataSizeChange={({ dataSize }) => {
+                                                dispatch(BreadcrumbShowCountlabel(`Count:${dataSize}`));
+                                            }}
+                                            {...toolkitProps.baseProps}
+                                        />
+                                        {globalTableSearchProps(toolkitProps.searchProps)}
+                                    </Col>
+                                    {/* </SimpleBar> */}
                                 </Row>
                             </React.Fragment>
                         )}
                     </ToolkitProvider>
+                    <SaveButtonDraggable>
+                        <SaveButton
+                            loading={saveBtnloading}
+                            pageMode={pageMode}
+                            userAcc={userPageAccessState}
+                            module={"POS RoleAccess"} onClick={saveHandler}
+                        />
+                    </SaveButtonDraggable>
                 </div>
             </div>
         </React.Fragment >
