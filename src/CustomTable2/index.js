@@ -82,7 +82,7 @@ const CustomTable = ({
         page: 1,
         paginationSize: 5,
         pageStartIndex: 1,
-        sizePerPage: paginationEnabled ? filteredData.length : 25,
+        sizePerPage: paginationEnabled ? 25 : data.length,
         // hideSizePerPage: true,
         custom: true,
         totalSize: filteredData.length,
