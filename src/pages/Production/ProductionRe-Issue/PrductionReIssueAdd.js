@@ -698,7 +698,7 @@ const ProductionReIssueAdd = (props) => {
                                                         {...paginationTableProps}
                                                     />
                                                     {countlabelFunc(toolkitProps, paginationProps, dispatch, "Material Issue")}
-                                                    {/* {mySearchProps(toolkitProps.searchProps, pageField.id)} */}
+                                                    {/* {globalTableSearchProps(toolkitProps.searchProps, pageField.id)} */}
                                                 </div>
                                             </Col>
                                         </Row>

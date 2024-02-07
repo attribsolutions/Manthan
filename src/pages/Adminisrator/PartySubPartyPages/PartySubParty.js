@@ -51,7 +51,7 @@ import * as mode from "../../../routes/PageMode"
 import { Retailer_List, SSDD_List_under_Company, } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { Tbody, Thead } from "react-super-responsive-table";
-import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
+import { globalTableSearchProps } from "../../../components/Common/SearchBox/MySearch";
 
 const PartySubParty = (props) => {
 
@@ -383,7 +383,7 @@ const PartySubParty = (props) => {
     };
 
 
-    mySearchProps({
+    globalTableSearchProps({
         onSearch: (text) => {
             setSearchQuery(text);
         },
@@ -676,7 +676,7 @@ const PartySubParty = (props) => {
                                                                         {...paginationTableProps}
                                                                     />
                                                                     {countlabelFunc(toolkitProps, paginationProps, dispatch, "MRP")}
-                                                                    {mySearchProps(toolkitProps.searchProps)}
+                                                                    {globalTableSearchProps(toolkitProps.searchProps)}
                                                                 </div>
 
                                                                 <Row className="align-items-md-center mt-30">

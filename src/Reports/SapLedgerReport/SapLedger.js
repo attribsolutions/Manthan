@@ -13,7 +13,7 @@ import { useHistory } from "react-router-dom";
 import { mode, pageId } from "../../routes/index"
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
-import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
+import { globalTableSearchProps } from "../../components/Common/SearchBox/MySearch";
 import * as _cfunc from "../../components/Common/CommonFunction";
 import { C_DatePicker } from "../../CustomValidateForm";
 import { commonPageField } from "../../store/actions";
@@ -333,7 +333,7 @@ const SapLedger = (props) => {
                                         {...toolkitProps.baseProps}
 
                                     />
-                                    {mySearchProps(toolkitProps.searchProps)}
+                                    {globalTableSearchProps(toolkitProps.searchProps)}
                                 </div>
                             </React.Fragment>
                         )

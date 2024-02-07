@@ -15,7 +15,7 @@ import { url, mode, pageId } from "../../../routes/index"
 import { LoadingSheet_GoBtn_API_Succcess, UpdateLoadingSheetSucccess } from "../../../store/Sales/LoadingSheetRedux/action";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
-import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
+import { globalTableSearchProps } from "../../../components/Common/SearchBox/MySearch";
 import { GetOpeningBalance, ReceiptGoButtonMaster, ReceiptGoButtonMaster_Success } from "../../../store/Accounting/Receipt/action";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import DynamicColumnHook, { selectAllCheck } from "../../../components/Common/TableCommonFunc";
@@ -283,7 +283,7 @@ const LoadingSheetUpdate = (props) => {
                                                 {...toolkitProps.baseProps}
 
                                             />
-                                            {mySearchProps(toolkitProps.searchProps)}
+                                            {globalTableSearchProps(toolkitProps.searchProps)}
                                         </div>
 
                                     </React.Fragment>

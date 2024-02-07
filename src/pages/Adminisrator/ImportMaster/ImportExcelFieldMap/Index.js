@@ -12,7 +12,7 @@ import {
 } from "../../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { mySearchProps } from "../../../../components/Common/SearchBox/MySearch";
+import { globalTableSearchProps } from "../../../../components/Common/SearchBox/MySearch";
 import * as pageId from "../../../../routes/allPageID";
 import * as mode from "../../../../routes/PageMode";
 import { PageLoadingSpinner, SaveButton } from "../../../../components/Common/CommonButton";
@@ -302,7 +302,7 @@ const ImportExcelFieldMap = (props) => {
                                             }}
                                             {...toolkitProps.baseProps}
                                         />
-                                        {mySearchProps(toolkitProps.searchProps)}
+                                        {globalTableSearchProps(toolkitProps.searchProps)}
                                     </div>
                                 </React.Fragment>
                             )

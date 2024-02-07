@@ -40,7 +40,7 @@ import { mode, pageId, url } from "../../../routes";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { comAddPageFieldFunc, initialFiledFunc, onChangeDate, resetFunction } from "../../../components/Common/validationFunction";
 import { Go_Button, SaveButton } from "../../../components/Common/CommonButton";
-import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
+import { globalTableSearchProps } from "../../../components/Common/SearchBox/MySearch";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 
@@ -502,7 +502,7 @@ const GSTMaster = (props) => {
                                                                 noDataIndication={<div className="text-danger text-center ">Items Not available</div>}
                                                                 {...toolkitProps.baseProps}
                                                             />
-                                                            {mySearchProps(toolkitProps.searchProps)}
+                                                            {globalTableSearchProps(toolkitProps.searchProps)}
 
                                                         </div>
                                                     </Col>

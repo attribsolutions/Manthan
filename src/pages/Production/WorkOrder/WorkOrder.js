@@ -45,7 +45,7 @@ import * as pageId from "../../../routes//allPageID";
 import * as url from "../../../routes/route_url";
 import * as mode from "../../../routes/PageMode";
 import { countlabelFunc } from "../../../components/Common/CommonPurchaseList";
-import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
+import { globalTableSearchProps } from "../../../components/Common/SearchBox/MySearch";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { C_DatePicker } from "../../../CustomValidateForm";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
@@ -648,7 +648,7 @@ const WorkOrder = (props) => {
                                                                 {...paginationTableProps}
                                                             />
                                                             {countlabelFunc(toolkitProps, paginationProps, dispatch, "WorkOrder")}
-                                                            {mySearchProps(toolkitProps.searchProps, pageField.id)}
+                                                            {globalTableSearchProps(toolkitProps.searchProps, pageField.id)}
                                                             <div>
                                                                 <label >EstimatedOutputQty :&nbsp;&nbsp;
                                                                     <span style={{ color: "#000000" }}>

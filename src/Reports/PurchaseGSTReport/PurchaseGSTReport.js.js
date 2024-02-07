@@ -12,7 +12,7 @@ import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import Select from "react-select";
 import { postPurchaseGSTReport_API, postPurchaseGSTReport_API_Success } from "../../store/Report/PurchaseGSTRedux/action";
-import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
+import { globalTableSearchProps } from "../../components/Common/SearchBox/MySearch";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import { mode, url, pageId } from "../../routes/index"
 import DynamicColumnHook from "../../components/Common/TableCommonFunc";
@@ -328,7 +328,7 @@ const PurchaseGSTReport = (props) => {
                                             }}
                                             {...toolkitProps.baseProps}
                                         />
-                                        {mySearchProps(toolkitProps.searchProps)}
+                                        {globalTableSearchProps(toolkitProps.searchProps)}
                                     </div>
                                 </Col>
                             </Row>

@@ -1,21 +1,15 @@
 import React from "react";
 
-let props1 = { onSearch: () => { } }
 let input = '';
 let priviousSerach = []
 let pageid = ''
 
-let props22 = { onSearch: () => { } }
+let tableProps = { onSearch: () => { } }
 
-export const mySearchProps = (props, pageID) => {
-
-    props1 = props;
+export const globalTableSearchProps = (props, pageID) => {
+    tableProps = props;
     pageid = pageID
 };
-
-export const customTableSearch = (props) => {
-    props22 = props
-}
 
 
 export const defaultSearch = (defaultid,) => {
@@ -24,10 +18,8 @@ export const defaultSearch = (defaultid,) => {
     let found = priviousSerach.find((i, k) => {
         return (i.id === defaultid)
     });
-    // document.getElementById("myInput").focus()
 
     if (found) {
-        // document.getElementById("myInput").select()
         document.getElementById("myInput").value = found.text
         retn = { defaultSearch: found.text }
     }
@@ -42,8 +34,8 @@ export const MySearch = () => {//compont start
         var len = e.target.value
         input = e.target.value
         if (!(len[0] === "/")) {
-            props1.onSearch(len);
-            props22.onSearch(len);
+            tableProps.onSearch(len);
+
             const found = priviousSerach.find((i, k) => {
                 if ((i.id === pageid)) {
                     priviousSerach[k] = { id: i.id, text: len }

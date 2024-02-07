@@ -33,7 +33,7 @@ import {
 } from "../../../store/Sales/LoadingSheetRedux/action";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
-import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
+import { globalTableSearchProps } from "../../../components/Common/SearchBox/MySearch";
 import { getDriverList, getDriverListSuccess } from "../../../store/Administrator/DriverRedux/action";
 import { selectAllCheck } from "../../../components/Common/TableCommonFunc";
 import * as _cfunc from "../../../components/Common/CommonFunction";
@@ -578,7 +578,7 @@ const LoadingSheet = (props) => {
                                                     }}
                                                     {...toolkitProps.baseProps}
                                                 />
-                                                {mySearchProps(toolkitProps.searchProps)}
+                                                {globalTableSearchProps(toolkitProps.searchProps)}
                                             </div>
                                         </Col>
                                     </Row>

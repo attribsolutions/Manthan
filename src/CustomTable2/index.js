@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import './CustomTable.scss';
 import BootstrapTable from 'react-bootstrap-table-next';
-import { customTableSearch } from '../components/Common/SearchBox/MySearch';
+import { globalTableSearchProps } from '../components/Common/SearchBox/MySearch';
 import _debounce from 'lodash/debounce';
 import paginationFactory, {
     PaginationProvider,
@@ -33,8 +33,8 @@ const CustomTable = ({
     }, 300);
 
     useEffect(() => {
-        customTableSearch({ onSearch: debounceHandleSearch });
-    }, []); // Ensure that customTableSearch is called after mounting
+        globalTableSearchProps({ onSearch: debounceHandleSearch });
+    }, []); // Ensure that globalTableSearchProps is called after mounting
 
 
     const rowClasses = (row) => {
@@ -71,7 +71,11 @@ const CustomTable = ({
     }, 300);
 
 
-
+    const customTotal = (from, to, size) => (
+        <span className="react-bootstrap-table-pagination-total" style={{ display: size > 0 ? 'block' : 'none' }}>
+            Showing {from} to {to} of {size} Results
+        </span>
+    );
 
     const options = {
         page: 1,
@@ -82,7 +86,7 @@ const CustomTable = ({
         custom: true,
         totalSize: filteredData.length,
         hidePageListOnlyOnePage: true,
-     
+        paginationTotalRenderer: customTotal,
         sizePerPageList: [{
             text: '10', value: 10
         }, {

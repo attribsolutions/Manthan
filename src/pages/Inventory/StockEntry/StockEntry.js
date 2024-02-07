@@ -30,7 +30,7 @@ import { StockEntry_GO_button_api_For_Item } from "../../../helpers/backend_help
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import "../../../pages/Sale/SalesReturn/salesReturn.scss";
 import { saveStockEntryAction, saveStockEntrySuccess } from "../../../store/Inventory/StockEntryRedux/action";
-import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
+import { globalTableSearchProps } from "../../../components/Common/SearchBox/MySearch";
 import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import { ItemAPIResponseFunc } from "./stockEntryFunctions";
@@ -628,7 +628,7 @@ const StockEntry = (props) => {
 
                                                     {...toolkitProps.baseProps}
                                                 />
-                                                {mySearchProps(toolkitProps.searchProps)}
+                                                {globalTableSearchProps(toolkitProps.searchProps)}
                                             </div>
                                         </Col>
                                     </Row>

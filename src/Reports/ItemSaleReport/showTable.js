@@ -2,7 +2,7 @@ import React from 'react'
 import BootstrapTable from 'react-bootstrap-table-next'
 import ToolkitProvider from 'react-bootstrap-table2-toolkit'
 import { Col, Row } from 'reactstrap'
-import { mySearchProps } from '../../components/Common/SearchBox/MySearch'
+import { globalTableSearchProps } from '../../components/Common/SearchBox/MySearch'
 import { ItemSaleContext } from './ContextDataProvider'
 import GridExample from './Pivottable'
 import { useDispatch } from 'react-redux'
@@ -83,7 +83,7 @@ function ShowTable() {
         //                             }}
         //                             {...toolkitProps.baseProps}
         //                         />
-        //                         {mySearchProps(toolkitProps.searchProps)}
+        //                         {globalTableSearchProps(toolkitProps.searchProps)}
         //                     </div>
         //                 </Col>
         //             </Row>

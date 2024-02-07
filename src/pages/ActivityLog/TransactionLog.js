@@ -7,7 +7,7 @@ import { useHistory } from 'react-router-dom';
 import { Button, Card, CardBody, Col, FormGroup, Label, Modal, Row, Spinner } from 'reactstrap';
 import { Go_Button } from '../../components/Common/CommonButton';
 import { breadcrumbReturnFunc, CommonConsole, convertDateTime_ydm, getDateTime_dmy, loginCompanyID, loginEmployeeID } from '../../components/Common/CommonFunction';
-import { mySearchProps } from '../../components/Common/SearchBox/MySearch';
+import { globalTableSearchProps } from '../../components/Common/SearchBox/MySearch';
 import { customAlert } from '../../CustomAlert/ConfirmDialog';
 import { C_Select, C_TimePicker } from '../../CustomValidateForm';
 import { showToastAlert } from '../../helpers/axios_Config';
@@ -575,7 +575,7 @@ const TransactionLog = () => {
                                             }}
                                             {...toolkitProps.baseProps}
                                         />
-                                        {mySearchProps(toolkitProps.searchProps)}
+                                        {globalTableSearchProps(toolkitProps.searchProps)}
                                     </div>
                                 </Col>
                             </Row>
@@ -619,7 +619,7 @@ const TransactionLog = () => {
                                                     }}
                                                     {...toolkitProps.baseProps}
                                                 />
-                                                {mySearchProps(toolkitProps.searchProps)}
+                                                {globalTableSearchProps(toolkitProps.searchProps)}
                                             </SimpleBar>
 
                                             {/* </div> */}
