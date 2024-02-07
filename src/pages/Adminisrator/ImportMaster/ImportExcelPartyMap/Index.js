@@ -82,12 +82,25 @@ const ImportExcelPartyMap = (props) => {
     }));
     const { commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
 
-    // Common Party select Dropdown useEffect
     useEffect(() => {
         if (commonPartyDropSelect.value > 0) {
-            // partySelectButtonHandler();
+            const mapType = values.MapType.value;
+            if (mapType > 0) {
+                let partyId = commonPartyDropSelect.value;
+                if (mapType === 2) {
+
+                    const jsonBody = {
+                        ..._cfunc.loginJsonBody(),
+                        PartyID: partyId,
+                    };
+                    dispatch(goButtonPartyItemAddPage({ jsonBody }));
+                } else {
+                    dispatch(GoButton_ImportExcelPartyMap({ partyId, mapType }))
+                }
+
+            }
         } else {
-            partySelectOnChangeHandler();
+            partyOnChangeHandler();
         }
     }, [commonPartyDropSelect]);
 
@@ -245,7 +258,7 @@ const ImportExcelPartyMap = (props) => {
 
     async function goButtonHandler(event) {
 
-        event.preventDefault();
+        // event.preventDefault();
         const mapType = values.MapType.value;
         if (mapType > 0) {
             let partyId = commonPartyDropSelect.value;
@@ -268,7 +281,7 @@ const ImportExcelPartyMap = (props) => {
         }
     };
 
-    function partySelectOnChangeHandler(e) {
+    function partyOnChangeHandler(e) {
         dispatch(GoButton_ImportExcelPartyMap_Success([]));
         dispatch(goButtonPartyItemAddPageSuccess([]));
 
@@ -402,7 +415,7 @@ const ImportExcelPartyMap = (props) => {
                                                 forceDisabled={(partyDropDownLoading && !(loginIsSCMCompany() === 1))}
                                                 onClick={goButtonHandler} loading={listBtnLoading} />
                                             :
-                                            <Change_Button onClick={partySelectOnChangeHandler} />
+                                            <Change_Button onClick={partyOnChangeHandler} />
                                         }
                                     </Col>
                                 </div>
