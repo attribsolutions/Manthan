@@ -17,7 +17,7 @@ import { getGroupTypeslist, getGroupTypeslistSuccess } from "../../../store/Admi
 import { SubGroup_By_Group_DropDown_API } from "../../../helpers/backend_helper";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
-
+import GlobalCustomTable from "../../../GlobalCustomTable"
 const ItemMasterBulkUpdate = (props) => {
 
     const dispatch = useDispatch();
@@ -424,7 +424,7 @@ const ItemMasterBulkUpdate = (props) => {
                         </Row>
                     </div>
 
-                    <div className="mt-1" style={{ minHeight: "45vh" }}>
+                    <div className="mt-1">
                         <ToolkitProvider
                             keyField="id"
                             data={goButtonData}
@@ -433,28 +433,20 @@ const ItemMasterBulkUpdate = (props) => {
                         >
                             {(toolkitProps,) => (
                                 <React.Fragment>
-                                    <Row>
-                                        <Col xl="12">
-                                            <div className="table-responsive table" style={{ minHeight: "55vh" }}>
-                                                <BootstrapTable
-                                                    keyField="id"
-                                                    classes={"table  table-bordered table-hover"}
-                                                    noDataIndication={
-                                                        <div className="text-danger text-center ">
-                                                            Record Not available
-                                                        </div>
-                                                    }
-                                                    onDataSizeChange={({ dataSize }) => {
-                                                        dispatch(BreadcrumbShowCountlabel(`Count:${dataSize}`));
-                                                    }}
-                                                    {...toolkitProps.baseProps}
-
-
-                                                />
-                                                {globalTableSearchProps(toolkitProps.searchProps)}
+                                    <BootstrapTable
+                                        keyField="id"
+                                        classes={"custom-table"}
+                                        noDataIndication={
+                                            <div className="text-danger text-center ">
+                                                Record Not available
                                             </div>
-                                        </Col>
-                                    </Row>
+                                        }
+                                        onDataSizeChange={({ dataSize }) => {
+                                            dispatch(BreadcrumbShowCountlabel(`Count:${dataSize}`));
+                                        }}
+                                        {...toolkitProps.baseProps}
+                                    />
+                                    {globalTableSearchProps(toolkitProps.searchProps)}
 
                                 </React.Fragment>
                             )}
