@@ -30,7 +30,7 @@ import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
-import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
+import { globalTableSearchProps } from "../../../components/Common/SearchBox/MySearch";
 import {
     getEmployeedropdownList,
     getPartyTableList,
@@ -299,7 +299,7 @@ const ManagementEmpParties = (props) => {
                                             }}
                                         />
 
-                                        {mySearchProps(toolkitProps.searchProps)}
+                                        {globalTableSearchProps(toolkitProps.searchProps)}
                                     </div>
 
                                 </React.Fragment>

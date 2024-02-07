@@ -19,7 +19,7 @@ import { breadcrumbReturnFunc, metaTagLabel, } from "../../../components/Common/
 import { mode, pageId } from "../../../routes/index"
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
-import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
+import { globalTableSearchProps } from "../../../components/Common/SearchBox/MySearch";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { C_Select } from "../../../CustomValidateForm";
@@ -704,7 +704,7 @@ const PartyDetails = (props) => {
                                                 pagination={paginationFactory(paginationOptions)} // Add pagination options
                                                 {...toolkitProps.baseProps}
                                             />
-                                            {mySearchProps(toolkitProps.searchProps)}
+                                            {globalTableSearchProps(toolkitProps.searchProps)}
                                         </div>
                                     </SimpleBar >
 

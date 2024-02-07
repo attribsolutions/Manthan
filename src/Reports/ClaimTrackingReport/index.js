@@ -8,7 +8,7 @@ import { mode, pageId, url } from "../../routes/index"
 import { MetaTags } from "react-meta-tags";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
-import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
+import { globalTableSearchProps } from "../../components/Common/SearchBox/MySearch";
 import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess } from "../../store/actions";
 import DynamicColumnHook from "../../components/Common/TableCommonFunc";
 import { getClaimTrackingEntrySuccess, getClaimTrackingEntrylist } from "../../store/Accounting/ClaimTrackingEntryRedux/action";
@@ -263,7 +263,7 @@ const ClaimTrackingReport = (props) => {
                                                 }}
                                                 {...toolkitProps.baseProps}
                                             />
-                                            {mySearchProps(toolkitProps.searchProps)}
+                                            {globalTableSearchProps(toolkitProps.searchProps)}
                                         </div>
                                     </Col>
                                 </Row>

@@ -33,7 +33,7 @@ import {
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
-import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
+import { globalTableSearchProps } from "../../../components/Common/SearchBox/MySearch";
 import { countlabelFunc } from "../../../components/Common/CommonPurchaseList";
 import {
     PartyBankfilter,
@@ -369,7 +369,7 @@ const BankAssign = (props) => {
                                                                                 {...paginationTableProps}
                                                                             />
                                                                             {countlabelFunc(toolkitProps, paginationProps, dispatch, "Bank Assign")}
-                                                                            {mySearchProps(toolkitProps.searchProps)}
+                                                                            {globalTableSearchProps(toolkitProps.searchProps)}
                                                                         </div>
 
                                                                         <Row className="align-items-md-center mt-30">

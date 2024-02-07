@@ -4,7 +4,7 @@ import { MetaTags } from "react-meta-tags";
 import { useDispatch, useSelector } from "react-redux";
 import { Breadcrumb_inputName, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
-import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
+import { globalTableSearchProps } from "../../../components/Common/SearchBox/MySearch";
 import { PageLoadingSpinner, SaveButton } from "../../../components/Common/CommonButton";
 import * as url from "../../../routes/route_url";
 import * as mode from "../../../routes/PageMode";
@@ -127,7 +127,7 @@ const ServiceItemAssign = (props) => {
 
 	useEffect(() => _cfunc.tableInputArrowUpDounFunc("#table_Arrow"), [tableList]);
 
-	mySearchProps({
+	globalTableSearchProps({
 		onSearch: (text) => {
 			setSearchQuery(text);
 		},
@@ -281,7 +281,7 @@ const ServiceItemAssign = (props) => {
 														{...toolkitProps.baseProps}
 													/>
 
-													{mySearchProps(toolkitProps.searchProps)}
+													{globalTableSearchProps(toolkitProps.searchProps)}
 												</div>
 
 											</React.Fragment>

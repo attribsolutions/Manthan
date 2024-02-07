@@ -42,7 +42,7 @@ import Slidewithcaption from "../../../../components/Common/CommonImageComponent
 import { GetItemImageUpload } from "../../../../helpers/backend_helper";
 import { C_Button } from "../../../../components/Common/CommonButton";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
-import { mySearchProps } from "../../../../components/Common/SearchBox/MySearch";
+import { globalTableSearchProps } from "../../../../components/Common/SearchBox/MySearch";
 import BootstrapTable from "react-bootstrap-table-next";
 import { deltBtnCss, hideBtnCss } from "../../../../components/Common/ListActionsButtons";
 import { API_URL_LIVE } from "../../../../routes/route_url";
@@ -533,7 +533,7 @@ const ItemImageUpload = (props) => {
                                                     />
                                                 </div>
                                             </Col>
-                                            {mySearchProps(toolkitProps.searchProps)}
+                                            {globalTableSearchProps(toolkitProps.searchProps)}
 
                                         </Row>
 

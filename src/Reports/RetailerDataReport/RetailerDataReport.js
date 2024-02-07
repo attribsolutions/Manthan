@@ -19,7 +19,7 @@ import {
 } from "../../store/Report/RetailerDataRedux/action";
 import { C_Select } from "../../CustomValidateForm";
 import BootstrapTable from "react-bootstrap-table-next";
-import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
+import { globalTableSearchProps } from "../../components/Common/SearchBox/MySearch";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import { ExcelReportComponent } from "../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS";
 import DynamicColumnHook from "../../components/Common/TableCommonFunc";
@@ -217,7 +217,7 @@ const RetailerDataReport = (props) => {
                         }}
                         {...toolkitProps.baseProps}
                       />
-                      {mySearchProps(toolkitProps.searchProps)}
+                      {globalTableSearchProps(toolkitProps.searchProps)}
                     </div>
                   </Col>
                 </Row>

@@ -40,7 +40,7 @@ import { mode, pageId, url } from "../../../routes";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { comAddPageFieldFunc, formValid, initialFiledFunc, onChangeDate, onChangeSelect, resetFunction } from "../../../components/Common/validationFunction";
 import { Change_Button, Go_Button, SaveButton } from "../../../components/Common/CommonButton";
-import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
+import { globalTableSearchProps } from "../../../components/Common/SearchBox/MySearch";
 import { mobileApp_ProductUpdate_Api } from "../../../helpers/backend_helper";
 import { showToastAlert } from "../../../helpers/axios_Config";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
@@ -595,7 +595,7 @@ const MarginMaster = (props) => {
                                                                 dispatch(BreadcrumbShowCountlabel(`Count:${dataSize}`));
                                                             }}
                                                         />
-                                                        {mySearchProps(toolkitProps.searchProps)}
+                                                        {globalTableSearchProps(toolkitProps.searchProps)}
 
                                                     </div>
                                                 </Col>
