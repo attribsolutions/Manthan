@@ -22,6 +22,7 @@ const CustomTable = ({
     classes,
     updatedRowBlinkId,
     onDataSizeChange,
+    paginationEnabled = false,
     ...rest
 }) => {
     const updatedRowBlinkIds_string = updatedRowBlinkId?.toString() || '';
@@ -81,7 +82,7 @@ const CustomTable = ({
         page: 1,
         paginationSize: 5,
         pageStartIndex: 1,
-        sizePerPage: 25,
+        sizePerPage: paginationEnabled ? filteredData.length : 25,
         // hideSizePerPage: true,
         custom: true,
         totalSize: filteredData.length,
