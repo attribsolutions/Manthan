@@ -112,6 +112,11 @@ import TCSAmountReportSaga from "./Report/TCS_AmountRedux/saga"
 import Cx_DD_DiffrenceReportSaga from "./Report/CX_DD_Diffrence_Report/saga"
 import SystemSettingSaga from "./Utilites/SystemSettingRedux/saga"
 
+import PosRoleAccessSaga from "./SweetPOSStore/Administrator/POSRoleAccessRedux/saga"
+
+
+
+
 
 export default function* rootSaga() {
 	yield all([
@@ -217,6 +222,10 @@ export default function* rootSaga() {
 		fork(TCSAmountReportSaga),
 		fork(Cx_DD_DiffrenceReportSaga),
 		fork(SystemSettingSaga),
+		fork(PosRoleAccessSaga),
+
+
+
 
 
 

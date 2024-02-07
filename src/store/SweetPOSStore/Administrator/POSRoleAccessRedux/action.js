@@ -9,21 +9,21 @@ import {
 
 
 export const getPosRoleAccesslist = () => ({
-  type: SAVE_POS_ROLEACCESS,
+  type: GET_POS_ROLEACCESS,
 });
 
 export const getPosRoleAccesslistSuccess = (pages) => ({
-  type: SAVE_POS_ROLEACCESS_SUCCESS,
+  type: GET_POS_ROLEACCESS_SUCCESS,
   payload: pages,
 });
 
 export const savePosRoleAccess = (config = {}) => ({
-  type: GET_POS_ROLEACCESS,
+  type: SAVE_POS_ROLEACCESS,
   config,
 });
 
 export const savePosRoleAccess_Success = (resp) => ({
-  type: GET_POS_ROLEACCESS_SUCCESS,
+  type: SAVE_POS_ROLEACCESS_SUCCESS,
   payload: resp,
 });
 

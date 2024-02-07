@@ -28,6 +28,7 @@ import {
 } from "../../../../store/Administrator/ImportExportFieldMapRedux/action";
 import { customAlert } from "../../../../CustomAlert/ConfirmDialog";
 import SaveButtonDraggable from "../../../../components/Common/saveButtonDraggable";
+import CustomTable2 from "../../../../CustomTable2";
 
 const ImportExcelFieldMap = (props) => {
 
@@ -276,40 +277,21 @@ const ImportExcelFieldMap = (props) => {
             <React.Fragment>
                 <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
                 <PageLoadingSpinner isLoading={((partyDropDownLoading) || !pageField)} />
-
-
                 <div className="page-content">
-
-                    <div >
-                        <ToolkitProvider
-                            keyField="id"
-                            data={SortTable}
-                            columns={pagesListColumns}
-                            search
-                        >
-                            {toolkitProps => (
-                                <React.Fragment>
-                                    <div className="table-responsive">
-                                        <BootstrapTable
-                                            bordered={true}
-                                            striped={false}
-                                            id="table_Arrow"
-                                            noDataIndication={<div className="text-danger text-center ">Items Not available</div>}
-                                            classes={"table align-middle  table-hover"}
-                                            headerWrapperClasses={"thead-light"}
-                                            onDataSizeChange={({ dataSize }) => {
-                                                dispatch(BreadcrumbShowCountlabel(`Count:${dataSize}`));
-                                            }}
-                                            {...toolkitProps.baseProps}
-                                        />
-                                        {globalTableSearchProps(toolkitProps.searchProps)}
-                                    </div>
-                                </React.Fragment>
-                            )
-                            }
-                        </ToolkitProvider>
-                    </div>
+                    <CustomTable2
+                        keyField="id"
+                        data={SortTable}
+                        columns={pagesListColumns}
+                        paginationEnabled
+                        id="table_Arrow"
+                        noDataIndication={<div className="text-danger text-center ">Items Not available</div>}
+                        classes={"custom-table"}
+                        onDataSizeChange={({ dataSize }) => {
+                            dispatch(BreadcrumbShowCountlabel(`Count:${dataSize}`));
+                        }}
+                    />
                 </div>
+
 
                 {(goButtonItem.length > 0) &&
                     <SaveButtonDraggable>

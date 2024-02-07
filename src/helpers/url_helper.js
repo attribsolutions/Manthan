@@ -535,6 +535,16 @@ export const SYSTEM_SETTING = '/SystemSettings'
 
 
 
+//Sweet POS Role Access 
+
+
+
+export const SWEET_POS_API = '/SweetPOS/SPOSroleaccess'
+
+
+
+
+
 
 
 

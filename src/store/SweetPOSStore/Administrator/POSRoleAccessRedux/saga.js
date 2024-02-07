@@ -4,25 +4,30 @@ import {
   SAVE_POS_ROLEACCESS
 } from "./actionTypes";
 import {
-  Post_Category_API,
-  get_Category_List_Api,
-} from "../../../helpers/backend_helper";
-import {
   PosRoleAccessApiErrorAction,
   getPosRoleAccesslistSuccess,
   savePosRoleAccess_Success,
 } from "./action";
+import { Post_POSRoleAccess_API, get_POSRoleAccess_List_Api } from "../../../../helpers/backend_helper";
 
-function* Save_Pos_RoleAccess_GenFun({ config }) {              
+function* Save_Pos_RoleAccess_GenFun({ config }) {
   try {
-    const response = yield call(Post_Category_API, config);
+    const response = yield call(Post_POSRoleAccess_API, config);
     yield put(savePosRoleAccess_Success(response));
   } catch (error) { yield put(PosRoleAccessApiErrorAction()) }
 }
 
-function* Get_Pos_RoleAccess_GenFun() {                    
+function* Get_Pos_RoleAccess_GenFun() {
+
   try {
-    const response = yield call(get_Category_List_Api);
+    const response = yield call(get_POSRoleAccess_List_Api);
+    response.Data.forEach(i => {
+      for (let key in i) {
+        if (i.hasOwnProperty(key) && i[key] === null) {
+          i[key] = 0;
+        }
+      }
+    });
     yield put(getPosRoleAccesslistSuccess(response.Data));
   } catch (error) { yield put(PosRoleAccessApiErrorAction()) }
 }

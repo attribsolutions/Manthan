@@ -10,6 +10,7 @@ const INIT_STATE = {
   postMsg: { Status: false },
   PosRoleAccessListData: [],
   listBtnLoading: false,
+  saveBtnloading: false
 }
 
 const PosRoleAccessReducer = (state = INIT_STATE, action) => {
