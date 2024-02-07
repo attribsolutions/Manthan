@@ -15,8 +15,8 @@ import { E_Invoice_ActionsButtonFunc, E_WayBill_ActionsButtonFunc, hideBtnCss, l
 import DynamicColumnHook, { selectAllCheck } from "./TableCommonFunc";
 import { url } from "../../routes";
 import { C_Button } from "./CommonButton";
-import CustomTable from "../../CustomTable2";
-import ExtraTableWrapper from "../../CustomTable2/TableWrapper";
+import GlobalCustomTable from "../../GlobalCustomTable";
+import ExtraTableWrapper from "../../GlobalCustomTable/TableWrapper";
 import { object } from "prop-types";
 import SaveButtonDraggable from "./saveButtonDraggable";
 
@@ -376,7 +376,7 @@ const CommonPurchaseList = (props) => {
             data={tableList}
           >
             {(tableProps) => (
-              <CustomTable
+              <GlobalCustomTable
                 keyField={"id"}
                 data={tableProps}
                 columns={tableColumns}

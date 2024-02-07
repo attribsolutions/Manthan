@@ -12,7 +12,7 @@ import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import { damageStockReport_GoButton_API, damageStockReport_GoButton_API_Success } from "../../store/Report/DamageStockReportRedux/action";
 import DynamicColumnHook from "../../components/Common/TableCommonFunc";
 import { mode, pageId } from "../../routes/index"
-import CustomTable from "../../CustomTable2";
+import GlobalCustomTable from "../../GlobalCustomTable";
 import PartyDropdownForReport, { ShowAndExcelBtn } from "../ReportComponent";
 import { ExcelReportComponent } from "../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS";
 import { alertMessages } from "../../components/Common/CommonErrorMsg/alertMsg";
@@ -240,7 +240,7 @@ const DamageStockReport = (props) => {
                     </div>
                 </div>
 
-                <CustomTable
+                <GlobalCustomTable
                     keyField={"id"}
                     data={tableData}
                     columns={tableColumns}

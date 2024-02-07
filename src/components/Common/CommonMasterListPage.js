@@ -10,7 +10,7 @@ import { breadcrumbReturnFunc, metaTagLabel, }
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import { listPageActionsButtonFunc } from "./ListActionsButtons";
 import DynamicColumnHook from "./TableCommonFunc";
-import CustomTable from "../../CustomTable2";
+import GlobalCustomTable from "../../GlobalCustomTable";
 
 
 
@@ -200,7 +200,7 @@ const CommonListPage = (props) => {
         <MetaTags> {metaTagLabel(userAccState)}</MetaTags>
         <div className="page-content">
 
-          <CustomTable
+          <GlobalCustomTable
             keyField={"id"}
             data={tableList}
             columns={tableColumns}

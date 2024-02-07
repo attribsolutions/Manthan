@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import './CustomTable.scss';
+import './GlobalCustomTable.scss';
 import BootstrapTable from 'react-bootstrap-table-next';
 import { globalTableSearchProps } from '../components/Common/SearchBox/MySearch';
 import _debounce from 'lodash/debounce';
@@ -14,7 +14,7 @@ import paginationFactory, {
 
 
 
-const CustomTable = ({
+const GlobalCustomTable = ({
     data,
     columns,
     keyField,
@@ -158,7 +158,7 @@ const CustomTable = ({
     );
 };
 
-CustomTable.propTypes = {
+GlobalCustomTable.propTypes = {
     keyField: PropTypes.string.isRequired,
     data: PropTypes.array.isRequired,
     columns: PropTypes.array.isRequired,
@@ -167,4 +167,4 @@ CustomTable.propTypes = {
     // ... Add any other props here
 };
 
-export default React.memo(CustomTable);
+export default React.memo(GlobalCustomTable);

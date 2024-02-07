@@ -28,7 +28,7 @@ import {
 } from "../../../../store/Administrator/ImportExportFieldMapRedux/action";
 import { customAlert } from "../../../../CustomAlert/ConfirmDialog";
 import SaveButtonDraggable from "../../../../components/Common/saveButtonDraggable";
-import CustomTable2 from "../../../../CustomTable2";
+import GlobalCustomTable from "../../../../GlobalCustomTable";
 
 const ImportExcelFieldMap = (props) => {
 
@@ -278,7 +278,7 @@ const ImportExcelFieldMap = (props) => {
                 <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
                 <PageLoadingSpinner isLoading={((partyDropDownLoading) || !pageField)} />
                 <div className="page-content">
-                    <CustomTable2
+                    <GlobalCustomTable
                         keyField="id"
                         data={SortTable}
                         columns={pagesListColumns}

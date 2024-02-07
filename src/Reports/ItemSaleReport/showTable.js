@@ -7,7 +7,7 @@ import { ItemSaleContext } from './ContextDataProvider'
 import GridExample from './Pivottable'
 import { useDispatch } from 'react-redux'
 import { BreadcrumbShowCountlabel } from '../../store/actions'
-import CustomTable from '../../CustomTable2'
+import GlobalCustomTable from '../../GlobalCustomTable'
 import { amountCommaSeparateFunc } from '../../components/Common/CommonFunction'
 
 function ShowTable() {
@@ -34,7 +34,7 @@ function ShowTable() {
     };
 
     return (
-        <CustomTable
+        <GlobalCustomTable
             keyField={"id"}
             data={tableData}
             columns={selectedColumns}

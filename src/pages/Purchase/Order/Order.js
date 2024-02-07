@@ -37,7 +37,7 @@ import { pageFieldUseEffect, table_ArrowUseEffect, updateMsgUseEffect, userAcces
 import { orderApprovalFunc, orderApprovalMessage } from "./orderApproval";
 import { GetRoutesList, GetRoutesListSuccess } from "../../../store/Administrator/RoutesRedux/actions";
 import { ORDER_4 } from "../../../routes/route_url";
-import "../../../CustomTable2/CustomTable.scss"
+import "../../../GlobalCustomTable/GlobalCustomTable.scss"
 import "./order.scss"
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 import { changeCommonPartyDropDetailsAction } from "../../../store/Utilites/PartyDrodown/action";

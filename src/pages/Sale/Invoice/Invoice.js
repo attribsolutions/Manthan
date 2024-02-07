@@ -54,7 +54,7 @@ import { CInput, C_DatePicker, decimalRegx } from "../../../CustomValidateForm";
 import { getVehicleList, getVehicleListSuccess } from "../../../store/Administrator/VehicleRedux/action";
 import { Invoice_Singel_Get_for_Report_Api } from "../../../helpers/backend_helper";
 import * as report from '../../../Reports/ReportIndex'
-import CustomTable from "../../../CustomTable2";
+import GlobalCustomTable from "../../../GlobalCustomTable";
 import { changeCommonPartyDropDetailsAction } from "../../../store/Utilites/PartyDrodown/action";
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
@@ -894,7 +894,7 @@ const Invoice = (props) => {
                             </div>
                         </Col>
                         <div className="mb-1">
-                            <CustomTable
+                            <GlobalCustomTable
                                 keyField={"id"}
                                 data={orderItemDetails}
                                 columns={pagesListColumns}

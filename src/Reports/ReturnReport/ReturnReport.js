@@ -11,7 +11,7 @@ import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess } fro
 import DynamicColumnHook from "../../components/Common/TableCommonFunc";
 import { Return_Report_Action, Return_Report_Action_Success } from "../../store/Report/ReturnReportRedux/action";
 import { ExcelReportComponent } from "../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS";
-import CustomTable from "../../CustomTable2";
+import GlobalCustomTable from "../../GlobalCustomTable";
 import { changeCommonPartyDropDetailsAction } from "../../store/Utilites/PartyDrodown/action";
 import { allLabelWithBlank } from "../../components/Common/CommonErrorMsg/HarderCodeData";
 
@@ -263,7 +263,7 @@ const ReturnReport = (props) => {
                 </div>
 
                 <div className="mb-1">
-                    <CustomTable
+                    <GlobalCustomTable
                         keyField={"id"}
                         data={tableData}
                         columns={tableColumns}

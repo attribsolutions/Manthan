@@ -14,7 +14,7 @@ import PartyDropdownForReport from "../ReportComponent";
 import { Change_Button, Go_Button } from "../../components/Common/CommonButton";
 import { GetRoutesList, GetRoutesListSuccess } from "../../store/Administrator/RoutesRedux/actions";
 import { PartyOutstandingReport_GoButton_API, PartyOutstandingReport_GoButton_API_Success } from "../../store/Report/PartyOutstandingRedux/action";
-import CustomTable from "../../CustomTable2";
+import GlobalCustomTable from "../../GlobalCustomTable";
 import { alertMessages } from "../../components/Common/CommonErrorMsg/alertMsg";
 import { allLabelWithBlank } from "../../components/Common/CommonErrorMsg/HarderCodeData";
 
@@ -188,7 +188,7 @@ const PartyOutstandingReport = (props) => {
 				</div>
 
 				<div className="mb-1">
-					<CustomTable
+					<GlobalCustomTable
 						keyField={"id"}
 						data={goButtonData}
 						columns={tableColumns}
