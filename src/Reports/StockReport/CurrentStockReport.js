@@ -16,7 +16,7 @@ import {  mode, pageId } from "../../routes/index"
 import { stockReport_GoButton_API, stockReport_GoButton_API_Success } from "../../store/Report/StockReport/action";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
-import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
+import { globalTableSearchProps } from "../../components/Common/SearchBox/MySearch";
 import { ExcelReportComponent } from "../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS";
 import { alertMessages } from "../../components/Common/CommonErrorMsg/alertMsg";
 import { changeCommonPartyDropDetailsAction } from "../../store/Utilites/PartyDrodown/action";
@@ -693,7 +693,7 @@ const CurrentStockReport = (props) => {
 												}}
 												{...toolkitProps.baseProps}
 											/>
-											{mySearchProps(toolkitProps.searchProps)}
+											{globalTableSearchProps(toolkitProps.searchProps)}
 										</div>
 									</Col>
 								</Row>

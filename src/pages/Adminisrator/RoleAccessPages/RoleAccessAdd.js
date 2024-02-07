@@ -38,7 +38,7 @@ import { C_Select } from "../../../CustomValidateForm";
 import "./style.scss";
 
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
-import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
+import { globalTableSearchProps } from "../../../components/Common/SearchBox/MySearch";
 import BootstrapTable from "react-bootstrap-table-next";
 
 const RoleAccessAdd = () => {
@@ -602,7 +602,7 @@ const RoleAccTable = ({ data, columns }) => {
                                         noDataIndication={<div className="text-danger text-center ">Items Not available</div>}
                                         {...toolkitProps.baseProps}
                                     />
-                                    {mySearchProps(toolkitProps.searchProps,)}
+                                    {globalTableSearchProps(toolkitProps.searchProps,)}
                                 </div>
                             </Col>
                         </Row>

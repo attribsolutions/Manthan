@@ -34,7 +34,7 @@ import { decimalRegx, } from "../../../CustomValidateForm/RegexPattern";
 import { goButtonPartyItemAddPage, goButtonPartyItemAddPageSuccess } from "../../../store/Administrator/PartyItemsRedux/action";
 import { innerStockCaculation, returnQtyOnChange, return_discountCalculate_Func, stockQtyOnChange } from "./PurchaseReturnCalculation";
 import * as _cfunc from "../../../components/Common/CommonFunction";
-import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
+import { globalTableSearchProps } from "../../../components/Common/SearchBox/MySearch";
 import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import { Tbody, Thead } from "react-super-responsive-table";
@@ -1272,7 +1272,7 @@ const PurchaseReturn = (props) => {
                                                 />
                                             </div>
                                         </Col>
-                                        {mySearchProps(toolkitProps.searchProps,)}
+                                        {globalTableSearchProps(toolkitProps.searchProps,)}
                                     </Row>
 
                                 </React.Fragment>

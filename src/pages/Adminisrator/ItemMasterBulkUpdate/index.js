@@ -8,7 +8,7 @@ import { mode, pageId } from "../../../routes/index"
 import { MetaTags } from "react-meta-tags";
 import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess, get_Group_By_GroupType_ForDropDown, get_Group_By_GroupType_ForDropDown_Success, postSelect_Field_for_dropdown } from "../../../store/actions";
 import BootstrapTable from "react-bootstrap-table-next";
-import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
+import { globalTableSearchProps } from "../../../components/Common/SearchBox/MySearch";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import { C_Select } from "../../../CustomValidateForm";
 import { ItemWiseUpdateGoButton_Action, ItemWiseUpdateGoButton_Success, ItemWiseUpdate_Save_Action, ItemWiseUpdate_Save_Success } from "../../../store/Administrator/ItemWiseUpdateRedux/action";
@@ -451,7 +451,7 @@ const ItemMasterBulkUpdate = (props) => {
 
 
                                                 />
-                                                {mySearchProps(toolkitProps.searchProps)}
+                                                {globalTableSearchProps(toolkitProps.searchProps)}
                                             </div>
                                         </Col>
                                     </Row>

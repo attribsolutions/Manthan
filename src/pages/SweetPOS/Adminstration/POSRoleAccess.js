@@ -9,7 +9,7 @@ import { mode, pageId, } from "../../../routes/index"
 import { MetaTags } from "react-meta-tags";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
-import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
+import { globalTableSearchProps } from "../../../components/Common/SearchBox/MySearch";
 import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import DynamicColumnHook from "../../../components/Common/TableCommonFunc";
 import { Data } from './Data';
@@ -159,7 +159,7 @@ const POSRoleAccess = (props) => {
                                                 }}
                                                 {...toolkitProps.baseProps}
                                             />
-                                            {mySearchProps(toolkitProps.searchProps)}
+                                            {globalTableSearchProps(toolkitProps.searchProps)}
                                         </Col>
                                     </SimpleBar>
                                 </Row>

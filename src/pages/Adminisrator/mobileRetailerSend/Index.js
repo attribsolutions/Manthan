@@ -19,7 +19,7 @@ import * as url from "../../../routes/route_url";
 import * as mode from "../../../routes/PageMode"
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
-import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
+import { globalTableSearchProps } from "../../../components/Common/SearchBox/MySearch";
 import { selectAllCheck } from "../../../components/Common/TableCommonFunc";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { C_Select } from "../../../CustomValidateForm";
@@ -232,7 +232,7 @@ const Index = (props) => {
 											}}
 										/>
 
-										{mySearchProps(toolkitProps.searchProps)}
+										{globalTableSearchProps(toolkitProps.searchProps)}
 									</div>
 
 								</React.Fragment>

@@ -26,7 +26,7 @@ import { GetVenderSupplierCustomer, GetVenderSupplierCustomerSuccess, } from "..
 import "../../Sale/SalesReturn/salesReturn.scss";
 import { CInput, C_DatePicker, C_Select, decimalRegx } from "../../../CustomValidateForm/index";
 import * as _cfunc from "../../../components/Common/CommonFunction";
-import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
+import { globalTableSearchProps } from "../../../components/Common/SearchBox/MySearch";
 import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import { SaveButton } from "../../../components/Common/CommonButton";
@@ -624,7 +624,7 @@ const PurchaseReturnMode3 = (props) => {
                                                     />
                                                 </div>
                                             </Col>
-                                            {mySearchProps(toolkitProps.searchProps,)}
+                                            {globalTableSearchProps(toolkitProps.searchProps,)}
                                         </Row>
 
                                     </React.Fragment>

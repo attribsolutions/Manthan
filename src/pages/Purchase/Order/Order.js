@@ -17,7 +17,7 @@ import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { orderCalculateFunc } from "./OrderPageCalulation";
 import { SaveButton, Go_Button, Change_Button, GotoInvoiceBtn, PageLoadingSpinner, DashboardLoader, C_Button } from "../../../components/Common/CommonButton";
-import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
+import { globalTableSearchProps } from "../../../components/Common/SearchBox/MySearch";
 
 import OrderPageTermsTable from "./OrderPageTermsTable";
 import { initialFiledFunc } from "../../../components/Common/validationFunction";
@@ -1680,7 +1680,7 @@ const Order = (props) => {
                                         }}
                                         {...toolkitProps.baseProps}
                                     />
-                                    {mySearchProps(toolkitProps.searchProps)}
+                                    {globalTableSearchProps(toolkitProps.searchProps)}
 
 
                                 </React.Fragment>

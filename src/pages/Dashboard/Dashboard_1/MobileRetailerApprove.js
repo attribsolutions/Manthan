@@ -7,7 +7,7 @@ import { loginPartyID, loginSelectedPartyID } from "../../../components/Common/C
 import { PartyListforApproval_Action, PartyListforApproval_Success, editPartyID } from "../../../store/Administrator/PartyRedux/action";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
-import { mySearchProps } from '../../../components/Common/SearchBox/MySearch';
+import { globalTableSearchProps } from '../../../components/Common/SearchBox/MySearch';
 import { Button, Spinner } from "reactstrap";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import SimpleBar from "simplebar-react"
@@ -153,7 +153,7 @@ const MobileRetailerApprove = () => {
                             {...toolkitProps.baseProps}
 
                         />
-                        {mySearchProps(toolkitProps.searchProps)}
+                        {globalTableSearchProps(toolkitProps.searchProps)}
                         {/* </div> */}
                     </SimpleBar>
 

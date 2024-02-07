@@ -18,7 +18,7 @@ import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { CInput, C_Select, floatRegx } from "../../../CustomValidateForm/index";
 import { goButtonPartyItemAddPageSuccess, goButtonPartyItemAddPage } from "../../../store/Administrator/PartyItemsRedux/action";
 import * as _cfunc from "../../../components/Common/CommonFunction";
-import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
+import { globalTableSearchProps } from "../../../components/Common/SearchBox/MySearch";
 import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import { saveStockEntryAction, saveStockEntrySuccess } from "../../../store/Inventory/StockEntryRedux/action";
@@ -569,7 +569,7 @@ const StockAdjustment = (props) => {
                                                     }}
                                                     {...toolkitProps.baseProps}
                                                 />
-                                                {mySearchProps(toolkitProps.searchProps)}
+                                                {globalTableSearchProps(toolkitProps.searchProps)}
                                             </div>
                                         </Col>
                                     </Row>

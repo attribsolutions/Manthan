@@ -19,7 +19,7 @@ import { useState } from 'react';
 import { url } from '../../routes';
 import ToolkitProvider from 'react-bootstrap-table2-toolkit';
 import BootstrapTable from 'react-bootstrap-table-next';
-import { mySearchProps } from '../../components/Common/SearchBox/MySearch';
+import { globalTableSearchProps } from '../../components/Common/SearchBox/MySearch';
 import { C_Button } from '../../components/Common/CommonButton';
 import { C_Select } from '../../CustomValidateForm';
 import { getPartyTypelist } from '../../store/Administrator/PartyTypeRedux/action';
@@ -665,7 +665,7 @@ const ProductMarginReport = (props) => {
                                                 }}
                                                 {...toolkitProps.baseProps}
                                             />
-                                            {mySearchProps(toolkitProps.searchProps)}
+                                            {globalTableSearchProps(toolkitProps.searchProps)}
                                         </div>
                                     </Col>
                                 </Row>

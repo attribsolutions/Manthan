@@ -3,7 +3,7 @@ import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { date_ymd_func, loginPartyID } from '../../../components/Common/CommonFunction';
 import { useDispatch, useSelector } from 'react-redux';
-import { mySearchProps } from '../../../components/Common/SearchBox/MySearch';
+import { globalTableSearchProps } from '../../../components/Common/SearchBox/MySearch';
 import { salesReturnListAPI, salesReturnListAPISuccess } from '../../../store/Sales/SalesReturnRedux/action';
 import SimpleBar from "simplebar-react"
 
@@ -78,7 +78,7 @@ export default function SalesReturnListForDashboard() {
                             headerWrapperClasses={"thead-light"}
                             {...toolkitProps.baseProps}
                         />
-                        {mySearchProps(toolkitProps.searchProps)}
+                        {globalTableSearchProps(toolkitProps.searchProps)}
 
                     </SimpleBar >
 

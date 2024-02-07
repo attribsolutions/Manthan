@@ -31,7 +31,7 @@ import { mode, pageId, url } from "../../../routes";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { comAddPageFieldFunc, formValid, initialFiledFunc, onChangeDate, onChangeSelect, resetFunction } from "../../../components/Common/validationFunction";
 import { Go_Button, SaveButton } from "../../../components/Common/CommonButton";
-import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
+import { globalTableSearchProps } from "../../../components/Common/SearchBox/MySearch";
 import { deleteMRPMaster_Id, deleteMRPMaster_Id_Success, GoButtonForMRP_Master, GoButtonForMRP_MasterSuccess, saveMRPMaster, saveMRPMasterSuccess } from "../../../store/Administrator/MRPMasterRedux/action";
 import { mobileApp_ProductUpdate_Api } from "../../../helpers/backend_helper";
 import { showToastAlert } from "../../../helpers/axios_Config";
@@ -559,7 +559,7 @@ const MRPMaster = (props) => {
                                                                 noDataIndication={<div className="text-danger text-center ">Items Not available</div>}
                                                                 {...toolkitProps.baseProps}
                                                             />
-                                                            {mySearchProps(toolkitProps.searchProps)}
+                                                            {globalTableSearchProps(toolkitProps.searchProps)}
                                                         </div>
                                                     </Col>
                                                 </Row>

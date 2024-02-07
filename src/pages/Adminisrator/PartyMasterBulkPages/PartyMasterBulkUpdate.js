@@ -33,7 +33,7 @@ import BootstrapTable from "react-bootstrap-table-next";
 import * as pageId from "../../../routes//allPageID";
 import * as url from "../../../routes/route_url";
 import * as mode from "../../../routes/PageMode";
-import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
+import { globalTableSearchProps } from "../../../components/Common/SearchBox/MySearch";
 import React, { useEffect, useState } from "react";
 import { GetRoutesList, GetRoutesListSuccess } from "../../../store/Administrator/RoutesRedux/actions";
 import {
@@ -768,7 +768,7 @@ const PartyMasterBulkUpdate = (props) => {
                                                     {...paginationTableProps}
                                                 />
                                                 {/* {countlabelFunc(toolkitProps, paginationProps,)} */}
-                                                {mySearchProps(toolkitProps.searchProps)}
+                                                {globalTableSearchProps(toolkitProps.searchProps)}
                                             </div>
 
                                             <Row className="align-items-md-center mt-30">

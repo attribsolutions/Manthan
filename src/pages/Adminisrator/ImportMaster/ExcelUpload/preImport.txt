@@ -12,7 +12,7 @@ import {  commonPageField, commonPageFieldSuccess,  } from "../../../store/actio
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { countlabelFunc } from "../../../components/Common/CommonPurchaseList";
-import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
+import { globalTableSearchProps } from "../../../components/Common/SearchBox/MySearch";
 import * as pageId from "../../../routes/allPageID";
 import * as mode from "../../../routes/PageMode";
 import { Go_Button, SaveButton } from "../../../components/Common/CommonButton";
@@ -307,7 +307,7 @@ const ImportMaster = (props) => {
                                                             {...paginationTableProps}
                                                         />
                                                         {countlabelFunc(toolkitProps, paginationProps, dispatch, "MRP")}
-                                                        {mySearchProps(toolkitProps.searchProps)}
+                                                        {globalTableSearchProps(toolkitProps.searchProps)}
                                                     </div>
 
                                                     <Row className="align-items-md-center mt-30">
@@ -349,7 +349,7 @@ const ImportMaster = (props) => {
                                                                 noDataIndication={<div className="text-danger text-center ">Data Not available</div>}
                                                             />
                                                             {countlabelFunc(toolkitProps, paginationProps, dispatch, "WorkOrder")}
-                                                            {mySearchProps(toolkitProps.searchProps, pageField.id)}
+                                                            {globalTableSearchProps(toolkitProps.searchProps, pageField.id)}
                                                         </div>
                                                     </Col>
                                                 </Row>

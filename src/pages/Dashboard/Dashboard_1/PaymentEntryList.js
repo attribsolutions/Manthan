@@ -5,7 +5,7 @@ import { ReceiptListAPI, ReceiptListAPISuccess } from '../../../store/Accounting
 import { currentDate_ymd, loginPartyID } from '../../../components/Common/CommonFunction';
 import { useDispatch, useSelector } from 'react-redux';
 import * as url from "../../../routes/route_url";
-import { mySearchProps } from '../../../components/Common/SearchBox/MySearch';
+import { globalTableSearchProps } from '../../../components/Common/SearchBox/MySearch';
 import SimpleBar from "simplebar-react"
 
 import "./table1.scss";
@@ -92,7 +92,7 @@ export default function PaymentEntryList() {
 
                         />
 
-                        {mySearchProps(toolkitProps.searchProps)}
+                        {globalTableSearchProps(toolkitProps.searchProps)}
                         {/* </div> */}
                     </SimpleBar>
 
