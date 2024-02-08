@@ -26,9 +26,9 @@ const GRNList = () => {
         masterPath: '',
         makeBtnShow: false, makeBtnShow: '', makeBtnName: '', IBType: '', orderType: ''
     });
-    const [hederFilters, setHederFilters] = useState({ fromdate: currentDate_ymd, todate: currentDate_ymd, venderSelect: allLabelWithBlank })
-
-    const { fromdate, todate, venderSelect } = hederFilters;
+    const [hederFilters, setHederFilters] = useState({ fromdate: currentDate_ymd, todate: currentDate_ymd })
+    const [supplierSelect, setSupplierSelect] = useState(allLabelWithBlank);
+    const { fromdate, todate, } = hederFilters;
 
     const reducers = useSelector(
         (state) => ({
@@ -65,8 +65,6 @@ const GRNList = () => {
         updateSucc: _act.updateGRNIdSuccess,
         deleteSucc: _act.deleteGRNIdSuccess
     }
-
-
 
     useLayoutEffect(() => {
         let page_Id = '';
@@ -115,11 +113,7 @@ const GRNList = () => {
         value: i.id,
         label: i.Name,
     }));
-
-    venderOptions.unshift({
-        value: "",
-        label: " All"
-    });
+    venderOptions.unshift(allLabelWithBlank);
 
     const makeBtnFunc = (list = []) => {
 
@@ -139,7 +133,7 @@ const GRNList = () => {
             const filtersBody = JSON.stringify({
                 FromDate: fromdate,
                 ToDate: todate,
-                Supplier: venderSelect === "" ? '' : venderSelect.value,
+                Supplier: supplierSelect.value,
                 Party: loginSelectedPartyID(),
                 DashBoardMode: 0
 
@@ -161,9 +155,7 @@ const GRNList = () => {
     }
 
     function venderOnchange(e) {
-        let newObj = { ...hederFilters }
-        newObj.venderSelect = e
-        setHederFilters(newObj)
+        setSupplierSelect(e)
     }
 
     const HeaderContent = () => {
@@ -203,7 +195,7 @@ const GRNList = () => {
                                 style={{ width: "115px" }}>Supplier Name</Label>
                             <Col md="5">
                                 <Select
-                                    value={venderSelect}
+                                    value={supplierSelect}
                                     classNamePrefix="select2-Customer"
                                     options={venderOptions}
                                     onChange={venderOnchange}
@@ -217,7 +209,6 @@ const GRNList = () => {
 
                     <Col sm="1" className="mt-3 ">
                         <Go_Button
-                            // id={gobtnId}
                             loading={reducers.loading}
                             onClick={goButtonHandler}
                         />
@@ -229,15 +220,14 @@ const GRNList = () => {
     }
 
     const partySelectButtonHandler = () => {
-        goButtonHandler()
+        goButtonHandler();
+        setSupplierSelect(allLabelWithBlank);
         dispatch(_act.GetVenderSupplierCustomer({ PartyID: loginSelectedPartyID(), subPageMode, RouteID: "" }))
     }
 
     function partySelectOnChangeHandler() {
         dispatch(_act.getGRNListPageSuccess([]));
-        let newObj = { ...hederFilters }
-        newObj.venderSelect = {  }
-        setHederFilters(newObj)
+        setSupplierSelect(allLabelWithBlank);
     }
 
     return (
