@@ -82,7 +82,7 @@ const GlobalCustomTable = ({
         page: 1,
         paginationSize: 5,
         pageStartIndex: 1,
-        sizePerPage: paginationEnabled ? 25 : data.length,
+        sizePerPage: paginationEnabled ? 25 : filteredData.length+10,
         // hideSizePerPage: true,
         custom: true,
         totalSize: filteredData.length,

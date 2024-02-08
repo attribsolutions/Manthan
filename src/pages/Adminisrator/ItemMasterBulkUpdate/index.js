@@ -7,9 +7,6 @@ import * as _cfunc from "../../../components/Common/CommonFunction";
 import { mode, pageId } from "../../../routes/index"
 import { MetaTags } from "react-meta-tags";
 import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess, get_Group_By_GroupType_ForDropDown, get_Group_By_GroupType_ForDropDown_Success, postSelect_Field_for_dropdown } from "../../../store/actions";
-import BootstrapTable from "react-bootstrap-table-next";
-import { globalTableSearchProps } from "../../../components/Common/SearchBox/MySearch";
-import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import { C_Select } from "../../../CustomValidateForm";
 import { ItemWiseUpdateGoButton_Action, ItemWiseUpdateGoButton_Success, ItemWiseUpdate_Save_Action, ItemWiseUpdate_Save_Success } from "../../../store/Administrator/ItemWiseUpdateRedux/action";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
@@ -424,34 +421,21 @@ const ItemMasterBulkUpdate = (props) => {
                         </Row>
                     </div>
 
-                    <div className="mt-1">
-                        <ToolkitProvider
-                            keyField="id"
-                            data={goButtonData}
-                            columns={pagesListColumns}
-                            search
-                        >
-                            {(toolkitProps,) => (
-                                <React.Fragment>
-                                    <BootstrapTable
-                                        keyField="id"
-                                        classes={"custom-table"}
-                                        noDataIndication={
-                                            <div className="text-danger text-center ">
-                                                Record Not available
-                                            </div>
-                                        }
-                                        onDataSizeChange={({ dataSize }) => {
-                                            dispatch(BreadcrumbShowCountlabel(`Count:${dataSize}`));
-                                        }}
-                                        {...toolkitProps.baseProps}
-                                    />
-                                    {globalTableSearchProps(toolkitProps.searchProps)}
+                    <GlobalCustomTable
+                        keyField="id"
+                        data={goButtonData}
+                        columns={pagesListColumns}
+                        classes={"custom-table"}
+                        noDataIndication={
+                            <div className="text-danger text-center ">
+                                Record Not available
+                            </div>
+                        }
+                        onDataSizeChange={({ dataSize }) => {
+                            dispatch(BreadcrumbShowCountlabel(`Count:${dataSize}`));
+                        }}
+                    />
 
-                                </React.Fragment>
-                            )}
-                        </ToolkitProvider>
-                    </div>
 
                     {goButtonData.length > 0 &&
                         <SaveButtonDraggable>
