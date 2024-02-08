@@ -17,6 +17,7 @@ import { getPosRoleAccesslist, savePosRoleAccess, savePosRoleAccess_Success } fr
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 import { SaveButton } from "../../../components/Common/CommonButton";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
+import { get_POSRoleAccess_List_Api } from "../../../helpers/backend_helper";
 
 
 
@@ -30,6 +31,10 @@ const POSRoleAccess = (props) => {
     const [cellReferesh, setcellReferesh] = useState(false)
     const [userPageAccessState, setUserAccState] = useState('');
     const [pageMode, setPageMode] = useState(mode.defaultsave);
+
+    const [DataBase_Data, setDataBase_Data] = useState([]);
+
+
 
     const {
         userAccess,
@@ -75,14 +80,26 @@ const POSRoleAccess = (props) => {
             _cfunc.breadcrumbReturnFunc({ dispatch, userAcc });
         };
     }, [userAccess])
+    useEffect(async () => {
+        const response = await get_POSRoleAccess_List_Api()
+        response.Data.forEach(i => {
+            for (let key in i) {
+                if (i.hasOwnProperty(key) && i[key] === null) {
+                    i[key] = 0;
+                }
+            }
+        });
+        setDataBase_Data(response.Data)
+    }, [])
 
 
     useEffect(() => {
         if (postMsg.Status === true && postMsg.StatusCode === 200) {
+            dispatch(getPosRoleAccesslist())
             dispatch(savePosRoleAccess_Success({ Status: false }));
             customAlert({
-                Type: 3,
-                Message: JSON.stringify(postMsg.Message),
+                Type: 4,
+                Message: postMsg.Message,
             })
         }
     }, [postMsg]);
@@ -118,9 +135,7 @@ const POSRoleAccess = (props) => {
                                         name={`${row.DivName}`}
                                         defaultChecked={cell}
                                         onChange={(e) => {
-                                            debugger
                                             if (e.target.id === `checkbox_${row.id}_${key}`) {
-                                                debugger
                                                 setcellReferesh(i => !i)
                                                 row[i.dataField] = (e.target.checked === true ? e.target.checked = 1 : e.target.checked = 0)
                                             }
@@ -154,6 +169,7 @@ const POSRoleAccess = (props) => {
             });
 
             settableData({ data: tableList, tableColumns: columns })
+
             dispatch(BreadcrumbShowCountlabel(`Count:${Data.length}`));
         }
     }, [tableColumns.length > 1, tableList, cellReferesh])
@@ -161,52 +177,20 @@ const POSRoleAccess = (props) => {
 
 
     const saveHandler = () => {
-        const TableData = tableList.map(i => ({
-            Division: i.id,
-            IsAddNewItem: i.IsAddNewItem,
-            IsImportItems: i.IsImportItems,
-            IsImportGroups: i.IsImportGroups,
-            IsUpdateItem: i.IsUpdateItem,
-            IsCItemId: i.IsCItemId,
-            IsItemName: i.IsItemName,
-            IsSalesModify: i.IsSalesModify,
-            IsSalesDelete: i.IsSalesDelete,
-            IsUnitModify: i.IsUnitModify,
-            IsShowVoucherButton: i.IsShowVoucherButton,
-            IsGiveSweetPOSUpdate: i.IsGiveSweetPOSUpdate,
-            IsSweetPOSAutoUpdate: i.IsSweetPOSAutoUpdate,
-            IsSweetPOSServiceAutoUpdate: i.IsSweetPOSServiceAutoUpdate,
-            IsEayBillUploadExist: i.IsEayBillUploadExist,
-            CreatedBy: 4,
-            CreatedOn: "2024-02-05",
-            UpdatedBy: 3,
-            UpdatedOn: "2024-02-05",
+        const isChangeRow = [];
+        DataBase_Data.forEach((objA, index) => {
+            const objB = tableList[index];
+            const isChangeObject = _cfunc.compareObjects(objA, objB)
+            if (!isChangeObject) {
+                isChangeRow.push(objB);
+            }
+        })
+        const TableData = isChangeRow.map(i => ({
+            ...i,
+            CreatedBy: _cfunc.loginUserID(),
+            CreatedOn: _cfunc.date_dmy_func(),
+            UpdatedOn: _cfunc.date_dmy_func(),
         }));
-
-
-        // const TableData = tableList.map(i => ({
-
-        //     Division: i.id,
-        //     IsAddNewItem: 0,
-        //     IsImportItems: 0,
-        //     IsImportGroups: 0,
-        //     IsUpdateItem: 0,
-        //     IsCItemId: 0,
-        //     IsItemName: 0,
-        //     IsSalesModify: 0,
-        //     IsSalesDelete: 0,
-        //     IsUnitModify: 0,
-        //     IsShowVoucherButton: 0,
-        //     IsGiveSweetPOSUpdate: 1,
-        //     IsSweetPOSAutoUpdate: 1,
-        //     IsSweetPOSServiceAutoUpdate: 1,
-        //     IsEayBillUploadExist: 1,
-        //     CreatedBy: 4,
-        //     CreatedOn: "2024-02-05",
-        //     UpdatedBy: 3,
-        //     UpdatedOn: "2024-02-05"
-
-        // }));
 
         const jsonBody = JSON.stringify(TableData);
         dispatch(savePosRoleAccess({ jsonBody }));
