@@ -29,7 +29,7 @@ import { goButtonPartyItemAddPageSuccess, goButtonPartyItemAddPage } from "../..
 import { StockEntry_GO_button_api_For_Item } from "../../../helpers/backend_helper";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import "../../../pages/Sale/SalesReturn/salesReturn.scss";
-import { saveStockEntryAction, saveStockEntrySuccess } from "../../../store/Inventory/StockEntryRedux/action";
+import { GetStockCount, saveStockEntryAction, saveStockEntrySuccess } from "../../../store/Inventory/StockEntryRedux/action";
 import { globalTableSearchProps } from "../../../components/Common/SearchBox/MySearch";
 import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
@@ -70,12 +70,15 @@ const StockEntry = (props) => {
         pageField,
         userAccess,
         saveBtnloading,
-        partyItemListLoading
+        partyItemListLoading,
+        StockCount
     } = useSelector((state) => ({
         partyItemListLoading: state.PartyItemsReducer.partyItemListLoading,
         saveBtnloading: state.StockEntryReducer.saveBtnloading,
         postMsg: state.StockEntryReducer.postMsg,
         ItemList: state.PartyItemsReducer.partyItem,
+        StockCount: state.StockEntryReducer.StockCount,
+
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
     }));
@@ -146,9 +149,25 @@ const StockEntry = (props) => {
         }
     }, [postMsg]);
 
+    useEffect(() => {
+        const PartyID = _cfunc.loginPartyID()
+        const jsonBody = JSON.stringify({
+            "FromDate": currentDate_ymd,
+            "PartyID": PartyID
+        });
+
+        dispatch(GetStockCount({ jsonBody }))
+    }, [currentDate_ymd])
 
 
     function Date_Onchange(e, date) {
+        const PartyID = _cfunc.loginPartyID()
+        const jsonBody = JSON.stringify({
+            "FromDate": date,
+            "PartyID": PartyID
+        });
+
+        dispatch(GetStockCount({ jsonBody }))
         setState((i) => {
             const a = { ...i }
             a.values.Date = date;
@@ -522,13 +541,15 @@ const StockEntry = (props) => {
 
         } catch (e) { _cfunc.btnIsDissablefunc({ btnId, state: false }) }
     };
-
+    console.log(StockCount)
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
                 <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
                 <div className="page-content">
                     <form noValidate>
+                        {!StockCount && <div style={{ color: "red", fontSize: "18px" }} className="sliding-text " > {` Warning: Can not Save Stock Entry for  ${_cfunc.date_dmy_func(values.Date)}`}.  </div>}
+
                         <div className="px-3 c_card_filter header text-black mb-1" >
 
                             <Row>
@@ -591,6 +612,7 @@ const StockEntry = (props) => {
                                             {
                                                 < Button type="button" color="btn btn-outline-primary border-1 font-size-11 text-center"
                                                     onClick={(e,) => AddPartyHandler(e, "add")}
+                                                    disabled={!StockCount}
                                                 > Add</Button>
                                             }
 
@@ -601,7 +623,6 @@ const StockEntry = (props) => {
                             </Row>
                         </div>
                         {values.IsAllStockZero && <div style={{ color: "red", fontSize: "18px" }} className="sliding-text " >  Warning: If new stock is added then the previous whole item stock will become zero.  </div>}
-
                         <ToolkitProvider
                             keyField={"id"}
                             data={TableArr}

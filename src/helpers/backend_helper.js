@@ -649,6 +649,10 @@ export const Dashboard_Get_API = ({ loginPartyID }) => get(`${url.DASHBOARD}/${l
 export const StockEntry_GO_button_api_For_Item = (ItemId) => get(`${url.STOCK_ENTRY_GO_BUTTON}/${ItemId}`)//add button get api for item
 export const StockEntry_Post_API = ({ jsonBody }) => post(url.STOCK_ENTRY, jsonBody)//post api
 
+export const StockCount_Post_API = ({ jsonBody }) => post(url.STOCK_COUNT, jsonBody)//post api
+
+
+
 //Stock Report
 export const StockReport_GoBtn_API = (jsonBody) => post(url.STOCK_REPORT, jsonBody)//Go button api
 export const StockProcessing_API = ({ jsonBody }) => post(url.STOCK_PROCESSING, jsonBody)//Go button api
