@@ -46,6 +46,7 @@ import { globalTableSearchProps } from "../../../../components/Common/SearchBox/
 import BootstrapTable from "react-bootstrap-table-next";
 import { deltBtnCss, hideBtnCss } from "../../../../components/Common/ListActionsButtons";
 import { API_URL_LIVE } from "../../../../routes/route_url";
+import { alertMessages } from "../../../../components/Common/CommonErrorMsg/alertMsg";
 
 const ItemImageUpload = (props) => {
 
@@ -129,7 +130,7 @@ const ItemImageUpload = (props) => {
             if (UploadImage.Delete === true) {
                 customAlert({
                     Type: 1,
-                    Message: "Item Image Remove successfully",
+                    Message:alertMessages.imageUploadSuccessfully,
                 })
             } else {
                 ImageType.forEach(i => {
@@ -145,8 +146,6 @@ const ItemImageUpload = (props) => {
             const response = await GetItemImageUpload({ ItemId: values.ItemName.value })
             setImage(response.Data)
         }
-
-
     }, [UploadImage])
 
     useEffect(() => {
@@ -154,7 +153,6 @@ const ItemImageUpload = (props) => {
             setChangeButtonShow(true)
         }
     }, [values]);
-
 
     const ItemOnChange = () => {
 
@@ -184,7 +182,6 @@ const ItemImageUpload = (props) => {
         document.body.classList.add("no_padding")
     }
 
-
     useEffect(() => {
         if (pageField) {
             const fieldArr = pageField.PageFieldMaster
@@ -204,11 +201,6 @@ const ItemImageUpload = (props) => {
         }
     }, [values])
 
-
-
-
-
-
     const onchangeHandler = async ({ event, Type, TypeOf }) => {
 
         const obj = {
@@ -223,12 +215,10 @@ const ItemImageUpload = (props) => {
 
     const imageShowHandler = async ({ Type }) => { // image Show handler
 
-
-
         if ((values.ItemName === "") || (values.ItemName.value === 0)) {
             customAlert({
                 Type: 3,
-                Message: "Please Select Item",
+                Message:alertMessages.itemNameIsRequired,
             })
             return
         }
@@ -260,7 +250,7 @@ const ItemImageUpload = (props) => {
         if ((values.ItemName === "") || (values.ItemName.value === 0)) {
             customAlert({
                 Type: 3,
-                Message: "Please Select Item",
+                Message:alertMessages.itemNameIsRequired,
             })
             return
         }
@@ -268,7 +258,7 @@ const ItemImageUpload = (props) => {
         if ((Object.values(ImageToUpload).length === 0) && (Delete === undefined)) {
             customAlert({
                 Type: 3,
-                Message: "Please Select Image file",
+                Message: alertMessages.selectImageFile,
             })
             return
         }
