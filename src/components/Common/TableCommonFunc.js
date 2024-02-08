@@ -4,8 +4,9 @@ import { useState } from "react";
 import { useEffect } from "react";
 
 
-export const onSelectAll = ({ event, allarray, }) => {  // event only call After all selection 
+export const onSelectAll = ({ event, allarray, nonSelectable }) => {  // event only call After all selection 
   allarray.forEach((ele,) => {
+    ele.forceSelectDissabled = nonSelectable.includes(ele.id)
     ele.selectCheck = event
     ele["hasAllSelect"] = event
   })
@@ -31,7 +32,7 @@ export const selectAllCheck = ({
 
   mode: "checkbox",
   bgColor: bgColor,
-  onSelectAll: (event) => onSelectAll({ event: event, allarray: tableList }),
+  onSelectAll: (event) => onSelectAll({ event: event, allarray: tableList, nonSelectable }),
   onSelect: selectRow,
   selected: rowSelected,
   selectColumnPosition: position ? position : "right",
@@ -47,7 +48,6 @@ export const selectAllCheck = ({
         head.checked = true
       }
     }
-
     return <div className="">
       <Input type="checkbox" checked={head.checked} />
       <label style={{ paddingLeft: "7px" }}>{headLabel ? headLabel : "SelectAll"}</label>

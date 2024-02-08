@@ -140,6 +140,7 @@ const SalesReturnList = () => {
 
     useEffect(async () => {
         if ((sendToSSbtnTableData.Status === true) && (sendToSSbtnTableData.StatusCode === 200)) {
+
             const { Data = [] } = sendToSSbtnTableData;
             let grand_total = 0;
             const updatedTableDataPromises = Data.map((item, index) => {
@@ -488,7 +489,7 @@ const SalesReturnList = () => {
 
     const selectSaveBtnHandler = (row = []) => {
 
-        let ischeck = row.filter(i => (i.selectCheck))
+        let ischeck = row.filter(i => (i.selectCheck && !i.forceSelectDissabled))
         if (!ischeck.length > 0) {
             customAlert({
                 Type: 4,

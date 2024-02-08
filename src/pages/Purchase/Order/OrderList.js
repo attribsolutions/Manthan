@@ -621,7 +621,7 @@ const OrderList = () => {
     const OrderConfirm_Handler = (row = []) => {
 
 
-        let ischeck = row.filter(i => (i.selectCheck))
+        let ischeck = row.filter(i => (i.selectCheck && !i.forceSelectDissabled))
         if (!ischeck.length > 0) {
             customAlert({
                 Type: 4,
@@ -636,7 +636,7 @@ const OrderList = () => {
 
     const BulkInvoice_Handler = (allList = []) => {
 
-        let checkRows = allList.filter(i => (i.selectCheck))
+        let checkRows = allList.filter(i => (i.selectCheck && !i.forceSelectDissabled))
         if (!checkRows.length > 0) {
             customAlert({
                 Type: 4,

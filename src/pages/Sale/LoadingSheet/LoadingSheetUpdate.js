@@ -172,8 +172,7 @@ const LoadingSheetUpdate = (props) => {
     }
 
     function MakeReceiptForAll() {
-
-        const result = tableListData.filter(index => index.selectCheck === true).map(index => index.id);
+        const result = tableListData.filter(index => index.selectCheck && !index.forceSelectDissabled).map(index => index.id);
 
         const LoadingNumber = result.toString()
 

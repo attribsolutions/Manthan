@@ -346,6 +346,7 @@ const CommonPurchaseList = (props) => {
 
 
   function rowSelected() {
+
     return tableList.map((index) => { return (index.selectCheck) })
   }
 
@@ -358,6 +359,7 @@ const CommonPurchaseList = (props) => {
         .filter(row => (row.Status === "Send To Supplier") || (row.Status === "Open"))
         .map(row => row.id);
     } else {
+
       noSelectedIds = tableList
         .filter(row => row.forceSelectDissabled)
         .map(row => row.id);
