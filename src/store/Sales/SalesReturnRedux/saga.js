@@ -37,7 +37,8 @@ function* SalesReturn_List_GenFun({ filters }) {
             i["transactionDateLabel"] = listpageConcatDateAndTime(i.ReturnDate, i.CreatedOn);
             i["IsCreditNoteCreated"] = i.IsCreditNoteCreated === 1 ? true : false
             i["IsApproved"] = i.IsApproved === 1 ? true : false
-            i["forceDeleteHide"] = (i.Mode === 3) ? true : false
+            i["forceDeleteHide"] = ((i.Mode === 3) && (i.IsApproved)) ? true : false
+            debugger
             return i
         })
         yield put(action.salesReturnListAPISuccess(newList));
