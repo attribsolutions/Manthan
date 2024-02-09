@@ -655,7 +655,7 @@ const SalesReturn = (props) => {
                                 onClick={(event) => {
 
                                     if ((row.ImageURL === undefined)) {
-                                        customAlert({ Type: 3, Message: `${row.ItemName} Images not uploaded` });
+                                        customAlert({ Type: 3, Message: `${row.ItemName} ${alertMessages.imageNotUploaded}` });
                                         return setmodal_backdrop(false)
                                     } else if ((row.ImageURL) && (row.ImageURL.length > 0)) {
                                         imageShowHandler(row)
@@ -743,13 +743,13 @@ const SalesReturn = (props) => {
 
         const invalidMsg1 = []
         if ((values.ItemName === '') && (byType === 'ItemWise')) {
-            invalidMsg1.push(`Select Item Name`)
+            invalidMsg1.push(alertMessages.itemNameIsRequired)
         }
         if ((values.InvoiceNumber === '') && (values.Customer === '') && (byType === 'InvoiceWise')) {
             invalidMsg1.push(`Select ${fieldLabel.Customer}.`)
         }
         else if ((values.InvoiceNumber === '') && (byType === 'InvoiceWise')) {
-            invalidMsg1.push(`Select Invoice No.`)
+            invalidMsg1.push(alertMessages.selectInvoiceNo)
         }
 
         if (invalidMsg1.length > 0) {
@@ -883,7 +883,7 @@ const SalesReturn = (props) => {
         if (filterData.length === 0) {
             customAlert({
                 Type: 4,
-                Message: "Please Enter One Item Quantity",
+                Message: alertMessages.itemQtyIsRequired,
             });
             return;
         }

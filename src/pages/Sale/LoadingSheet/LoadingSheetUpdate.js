@@ -23,6 +23,7 @@ import { C_DatePicker } from "../../../CustomValidateForm";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { C_Button } from "../../../components/Common/CommonButton";
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
+import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 
 const LoadingSheetUpdate = (props) => {
 
@@ -187,7 +188,7 @@ const LoadingSheetUpdate = (props) => {
         if (LoadingNumber === "") {
             customAlert({
                 Type: 3,
-                Message: "Select At Least One Invoice",
+                Message:alertMessages.atLeastOneInvoiceRequired,
             })
         }
         else {

@@ -550,7 +550,7 @@ const InvoiceList = () => {
         if (!ischeck.length > 0) {
             customAlert({
                 Type: 4,
-                Message: "Please Select One Checkbox",
+                Message: alertMessages.selectOneCheckbox,
             });
             return
         }
