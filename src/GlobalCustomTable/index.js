@@ -77,27 +77,18 @@ const GlobalCustomTable = ({
             Showing {from} to {to} of {size} Results
         </span>
     );
-
+    const sizePerPage = (parseInt(paginationEnabled) > 0) ? paginationEnabled : 25
+    
     const options = {
         page: 1,
         paginationSize: 5,
         pageStartIndex: 1,
-        sizePerPage: paginationEnabled ? 25 : filteredData.length+10,
-        // hideSizePerPage: true,
+        sizePerPage: paginationEnabled ? sizePerPage : filteredData.length + 10,
         custom: true,
         totalSize: filteredData.length,
         hidePageListOnlyOnePage: true,
         paginationTotalRenderer: customTotal,
-        sizePerPageList: [{
-            text: '10', value: 10
-        }, {
-            text: '25', value: 25
-        },
-        {
-            text: '50', value: 50
-        }, {
-            text: 'All', value: filteredData.length
-        }]
+
     };
 
 

@@ -12,7 +12,6 @@ import { roleAceessActionError } from "../../store/actions";
 import { loginUserDetails } from "../Common/CommonFunction";
 import * as urlRel from "../../routes/urlRalations";
 import { useDispatch, useSelector } from "react-redux";
-import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import { afterloginOneTimeAPI } from "../Common/AfterLoginApiFunc";
 
 const SidebarContent = (props) => {
@@ -32,11 +31,6 @@ const SidebarContent = (props) => {
 
   useEffect(async () => {
     if (roleAccesssForSidbarError) {
-      // await customAlert({
-      //   Type: 2,
-      //   Message: `RoleAccess get Api Error `
-      // })
-
       dispatch(roleAceessActionError(false))
       history.push({ pathname: '/logout' })
     }
@@ -92,10 +86,7 @@ const SidebarContent = (props) => {
     return false;
   }, [RoleAccessUpdateData.length <= 0]);
 
-  // Use ComponentDidMount and ComponentDidUpdate method symultaniously
-
   useEffect(() => {
-    // const pathName = props.location.pathname;
     let pathName = props.location.pathname
     let userAcc = RoleAccessUpdateData.find((inx) => {
       const path = inx.ActualPagePath.toLowerCase()
@@ -110,7 +101,6 @@ const SidebarContent = (props) => {
       new MetisMenu("#side-menu");
       let matchingMenuItem = null;
       const ul = document.getElementById("side-menu");
-
       const items = ul.getElementsByTagName("a");
       for (let i = 0; i < items.length; ++i) {
         if (pathName === items[i].pathname) {
@@ -125,7 +115,6 @@ const SidebarContent = (props) => {
     initMenu();
   }, [activateParentDropdown, RoleAccessUpdateData.length <= 0]);
 
-
   useEffect(() => {
     ref.current.recalculate();
   });
@@ -139,21 +128,12 @@ const SidebarContent = (props) => {
     }
   }
 
-  // const productMarginReport_Link_Onclick = () => {
-
-  //   const userDetails = loginUserDetails()
-  //   dispatch(getExcel_Button_API(userDetails.IsSCMPartyType === null ? 0 : userDetails.IsSCMPartyType, userDetails.Party_id))
-  // }
-
   return (
     <React.Fragment>
-
       <SimpleBar style={{ maxHeight: "100%" }} ref={ref}>
         <div id="sidebar-menu">
           <ul className="metismenu list-unstyled " id="side-menu">
-
             {RoleAccessData.map((item) => {
-
               if (item.ModuleName === "Dashboard") {
                 let isdashboard = ''
                 if (item.ModuleData.length > 0) { isdashboard = item.ModuleData[0] }
@@ -166,7 +146,6 @@ const SidebarContent = (props) => {
                   </li >
                 )
               }
-
               else return (
                 <li >
                   <Link to="/#" className="has-arrow">
@@ -176,18 +155,6 @@ const SidebarContent = (props) => {
                   <ul className="sub-menu">
                     {item.ModuleData.map((index, j) => {
                       if (index.RoleAccess_IsShowOnMenu === true) {
-                        // if (index.ActualPagePath === "ProductMarginReport") {
-                        //   return (
-                        //     <li>
-
-                        //       <div
-                        //         title={`Download ${index.Name}`}
-                        //         onClick={productMarginReport_Link_Onclick}>
-                        //         {props.t(index.Name)}
-                        //       </div>
-                        //     </li>
-                        //   )
-                        // }
                         return (
                           <li>
                             <Link to={{ pathname: `/${index.ActualPagePath}` }}>

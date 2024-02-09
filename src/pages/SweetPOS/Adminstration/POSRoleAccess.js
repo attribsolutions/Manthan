@@ -190,6 +190,8 @@ const POSRoleAccess = (props) => {
             CreatedBy: _cfunc.loginUserID(),
             CreatedOn: _cfunc.date_dmy_func(),
             UpdatedOn: _cfunc.date_dmy_func(),
+            UpdatedBy: _cfunc.loginUserID(),
+
         }));
 
         const jsonBody = JSON.stringify(TableData);

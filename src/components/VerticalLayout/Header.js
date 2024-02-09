@@ -8,7 +8,6 @@ import ReactDrawer from 'react-drawer';
 import 'react-drawer/lib/react-drawer.css';
 
 //Import Icons
-import FeatherIcon from "feather-icons-react";
 
 // Import menuDropdown
 import NotificationDropdown from "../CommonForBoth/TopbarDropdown/NotificationDropdown"

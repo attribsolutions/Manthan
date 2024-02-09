@@ -77,7 +77,7 @@ export const listPageActionsButtonFunc = (props) => {
 
     const { listBtnLoading } = props.reducers;
 
-    const userCreated = loginUserID();
+    const loginUserid = loginUserID();
     const subPageMode = history.location.pathname;
 
     const makeButtonHandler = ({ rowData, btnId }) => {
@@ -161,17 +161,20 @@ export const listPageActionsButtonFunc = (props) => {
         }
 
         const isUploadAccess = loginSystemSetting().PurchaseReturnPrintUpload?.split(',').map(value => parseInt(value)).includes(rowData.PartyTypeID);
-
         const hasRole = (role) => userAccState[role];
 
+        const userCreatedRow = rowData.CreatedBy === loginUserid;
+        const isApproved = rowData.IsApproved;
+        const isCreditNoteCreated = rowData.IsCreditNoteCreated;
+
         const canEdit = hasRole("RoleAccess_IsEdit") && !forceEditHide;
-        const canEditSelf = hasRole("RoleAccess_IsEditSelf") && !canEdit && rowData.CreatedBy === userCreated && !forceEditHide;
+        const canEditSelf = hasRole("RoleAccess_IsEditSelf") && !canEdit && userCreatedRow && !forceEditHide;
         const canView = hasRole("RoleAccess_IsView") && !canEdit && !canEditSelf && !viewApprovalBtnFunc;
         const canApprovalView = hasRole("RoleAccess_IsView") && !canEdit && !canEditSelf && viewApprovalBtnFunc;
         const canPrint = hasRole("RoleAccess_IsPrint") && !downClaimBtnFunc;
         const canMultiInvoicePrint = hasRole("RoleAccess_IsMultipleInvoicePrint");
         const canDelete = hasRole("RoleAccess_IsDelete") && !forceDeleteHide;
-        const canDeleteSelf = hasRole("RoleAccess_IsDeleteSelf") && !canDelete && rowData.CreatedBy === userCreated && !forceDeleteHide;
+        const canDeleteSelf = hasRole("RoleAccess_IsDeleteSelf") && !canDelete && userCreatedRow && !forceDeleteHide;
         const canCopy = hasRole("RoleAccess_IsSave") && hasRole("RoleAccess_IsCopy");
         const canMakeBtn = pageMode === mode.modeSTPList && makeBtnShow && !forceMakeBtnHide;
         const canOrderApproval = oderAprovalBtnFunc && !forceHideOrderAprovalBtn;
@@ -181,25 +184,22 @@ export const listPageActionsButtonFunc = (props) => {
         const canMasterClaimPrint = hasRole("RoleAccess_IsPrint") && downClaimBtnFunc;
         const canSendToScm = isPartyTypeIDInSendToScm //  Currently Button  is remove From InVoice List of CX parties  further Development After Discussion  So condition is False
 
-        const canMakeCreditNoteBtn = (subPageMode === url.SALES_RETURN_LIST) && hasRole("RoleAccess_IsSave") && rowData.IsApproved && !rowData.IsCreditNoteCreated
+        const canMakeCreditNoteBtn = (subPageMode === url.SALES_RETURN_LIST) && hasRole("RoleAccess_IsSave") && isApproved && !isCreditNoteCreated
         const canUpdatebtn = otherBtn_1Func && hasRole("RoleAccess_IsSave")
 
         const canShowImages = downBtnFunc && (subPageMode === url.CLAIM_TRACKING_ENTRY_LIST)
-
 
         const canUpload = hasRole("RoleAccess_Upload") && upBtnFunc && isUploadAccess;
 
 
 
-
         const dummyDisable_OrderApproval = !canOrderApproval && oderAprovalBtnFunc;
         const dummyDisable_Edit = (userAccState.RoleAccess_IsEdit || userAccState.RoleAccess_IsEditSelf) && !canEdit && !canEditSelf && !canView && !viewApprovalBtnFunc;
-        const dummyDisable_Delete = (hasRole("RoleAccess_IsDelete") || hasRole("RoleAccess_IsDeleteSelf")) && !canDelete && !canDeleteSelf;
+        const dummyDisable_Delete = ((hasRole("RoleAccess_IsDelete") || hasRole("RoleAccess_IsDeleteSelf")) && !canDelete && !canDeleteSelf);
         const dummyDisable_MakeBtn = !canMakeBtn && makeBtnShow;
         const dummyDisable_SendToScm = !isPartyTypeIDInSendToScm && sendToScmBtnFunc;
 
-        const dummyDisable_CreditNoteBtn = (!rowData.IsApproved && (subPageMode === url.SALES_RETURN_LIST)) || (rowData.IsCreditNoteCreated && (subPageMode === url.SALES_RETURN_LIST))
-
+        const dummyDisable_CreditNoteBtn = (!isApproved && (subPageMode === url.SALES_RETURN_LIST)) || (isCreditNoteCreated && (subPageMode === url.SALES_RETURN_LIST))
 
         const dummyDisable_upload = hasRole("RoleAccess_Upload") && !isUploadAccess
 

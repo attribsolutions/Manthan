@@ -15,6 +15,7 @@ import { commonPartyDropdown_API, genaraMasterBy_Type_API, GenralMasterSubType, 
 import { BreadcrumbShowCountlabel } from '../../store/actions';
 import SimpleBar from "simplebar-react"
 import { allLabelWithBlank } from '../../components/Common/CommonErrorMsg/HarderCodeData';
+import GlobalCustomTable from '../../GlobalCustomTable';
 
 
 const TransactionLog = () => {
@@ -221,10 +222,6 @@ const TransactionLog = () => {
             CommonConsole('Error during copy:', error);
         }
     };
-
-
-
-
 
 
     const viewColumn = [
@@ -549,40 +546,22 @@ const TransactionLog = () => {
             {/* <PageLoadingSpinner isLoading={goBtnloading || !pageField} /> */}
             <div className="page-content">
                 <HeaderContent />
-                <ToolkitProvider
-                    keyField={"id"}
-                    // defaultSorted={defaultSorted}
+                <GlobalCustomTable
+                    keyField="id"
                     data={tableData}
                     columns={tableColumns}
-                    search
-                >
-                    {(toolkitProps,) => (
-                        <React.Fragment>
-                            <Row>
-                                <Col xl="12">
-                                    <div className="table-responsive table" style={{ minHeight: "45vh" }}>
-                                        <BootstrapTable
-                                            keyField={"id"}
-                                            id="table_Arrow"
-                                            classes={"table  table-bordered table-hover"}
-                                            noDataIndication={
-                                                <div className="text-danger text-center ">
-                                                    Record Not available
-                                                </div>
-                                            }
-                                            onDataSizeChange={({ dataSize }) => {
-                                                dispatch(BreadcrumbShowCountlabel(`Count : ${dataSize}`))
-                                            }}
-                                            {...toolkitProps.baseProps}
-                                        />
-                                        {globalTableSearchProps(toolkitProps.searchProps)}
-                                    </div>
-                                </Col>
-                            </Row>
+                    paginationEnabled={200}//show pagination 200 per page
+                    classes={"custom-table"}
+                    noDataIndication={
+                        <div className="text-danger text-center ">
+                            Record Not available
+                        </div>
+                    }
+                    onDataSizeChange={({ dataCount }) => {
+                        dispatch(BreadcrumbShowCountlabel(`Count:${dataCount}`));
+                    }}
+                />
 
-                        </React.Fragment>
-                    )}
-                </ToolkitProvider>
                 <Modal
                     isOpen={modal_view}
                     toggle={modalToggleFunc}
@@ -591,44 +570,22 @@ const TransactionLog = () => {
                 >
                     <CardBody className="c_card_body">
                         <h2 className="text-center">Transaction Log Details</h2>
-                        <ToolkitProvider
-                            keyField={"id"}
-                            // defaultSorted={defaultSorted}
+                        <GlobalCustomTable
+                            keyField="id"
                             data={UpdateJsonData}
                             columns={viewColumn}
-                            search
-                        >
-                            {(toolkitProps,) => (
-                                <React.Fragment>
-                                    <Row>
-                                        <Col xl="12">
-                                            {/* <div className="table-responsive table" style={{ minHeight: "45vh" }}> */}
-                                            <SimpleBar className="table-responsive ">
+                            paginationEnabled={200}//show pagination 200 per page
+                            classes={"custom-table"}
+                            noDataIndication={
+                                <div className="text-danger text-center ">
+                                    Record Not available
+                                </div>
+                            }
+                            onDataSizeChange={({ dataCount }) => {
 
-                                                <BootstrapTable
-                                                    keyField={"id"}
-                                                    id="table_Arrow"
-                                                    classes={"table  table-bordered table-hover"}
-                                                    noDataIndication={
-                                                        <div className="text-danger text-center ">
-                                                            Record Not available
-                                                        </div>
-                                                    }
-                                                    onDataSizeChange={({ dataSize }) => {
-                                                        dispatch(BreadcrumbShowCountlabel(`Count : ${dataSize}`))
-                                                    }}
-                                                    {...toolkitProps.baseProps}
-                                                />
-                                                {globalTableSearchProps(toolkitProps.searchProps)}
-                                            </SimpleBar>
-
-                                            {/* </div> */}
-                                        </Col>
-                                    </Row>
-
-                                </React.Fragment>
-                            )}
-                        </ToolkitProvider>
+                                dispatch(BreadcrumbShowCountlabel(`Count:${dataCount}`));
+                            }}
+                        />
 
                     </CardBody>
 
