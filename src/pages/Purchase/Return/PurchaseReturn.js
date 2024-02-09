@@ -738,7 +738,7 @@ const PurchaseReturn = (props) => {
                                 onClick={(event) => {
 
                                     if ((row.ImageURL === undefined)) {
-                                        customAlert({ Type: 3, Message: `${row.ItemName} Images not uploaded` });
+                                        customAlert({ Type: 3, Message: `${row.ItemName} ${alertMessages.imageNotUploaded}` });
                                         return setmodal_backdrop(false)
                                     } else if ((row.ImageURL) && (row.ImageURL.length > 0)) {
                                         imageShowHandler(row)

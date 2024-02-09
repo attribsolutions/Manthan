@@ -46,6 +46,7 @@ import RoutesMaster from "../../Adminisrator/RoutesPages/RoutesMaster";
 import VehicleMaster from "../../Adminisrator/VehiclePages/VehicleMaster";
 import DropdownMaster from "../../../components/Common/DropdownMaster";
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
+import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 
 const LoadingSheet = (props) => {
 
@@ -262,7 +263,7 @@ const LoadingSheet = (props) => {
             customAlert({
                 Type: 4,
                 Status: true,
-                Message: "RouteName Is Required",
+                Message:alertMessages.routeNameIsRequired,
             });
             return;
         }
@@ -301,7 +302,7 @@ const LoadingSheet = (props) => {
             customAlert({
                 Type: 4,
                 Status: true,
-                Message: "Atleast One Invoice Is Select...!",
+                Message: alertMessages.atLeastOneInvoiceRequired,
             });
             return;
         }
