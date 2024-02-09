@@ -38,6 +38,7 @@ import {
 } from "../../../../store/Administrator/ImportExcelPartyMapRedux/action";
 import * as _cfunc from "../../../../components/Common/CommonFunction";
 import SaveButtonDraggable from "../../../../components/Common/saveButtonDraggable";
+import { alertMessages } from "../../../../components/Common/CommonErrorMsg/alertMsg";
 
 const ImportExcelPartyMap = (props) => {
 
@@ -47,12 +48,7 @@ const ImportExcelPartyMap = (props) => {
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState('');
 
-
-    const fileds = {
-        Party: "",
-        MapType: "",
-    }
-
+    const fileds = { Party: "", MapType: "", }
     const [state, setState] = useState(initialFiledFunc(fileds))
     const [UpdateTableList, setUpdateTableList] = useState([])
 
@@ -84,20 +80,8 @@ const ImportExcelPartyMap = (props) => {
 
     useEffect(() => {
         if (commonPartyDropSelect.value > 0) {
-            const mapType = values.MapType.value;
-            if (mapType > 0) {
-                let partyId = commonPartyDropSelect.value;
-                if (mapType === 2) {
-
-                    const jsonBody = {
-                        ..._cfunc.loginJsonBody(),
-                        PartyID: partyId,
-                    };
-                    dispatch(goButtonPartyItemAddPage({ jsonBody }));
-                } else {
-                    dispatch(GoButton_ImportExcelPartyMap({ partyId, mapType }))
-                }
-
+            if (values.MapType.value > 0) {
+                goButtonActionCall();
             }
         } else {
             partyOnChangeHandler();
@@ -108,14 +92,12 @@ const ImportExcelPartyMap = (props) => {
         const page_Id = pageId.IMPORT_MASTER_MAP
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
-        // dispatch(getPartyListAPI());
+
         dispatch(GoButton_ImportExcelPartyMap_Success([]));
         return () => {
-            // dispatch(getPartyListAPISuccess([]))
             dispatch(GoButton_ImportExcelPartyMap_Success([]));
             dispatch(commonPageFieldSuccess(null));
         }
-
     }, []);
 
     const location = { ...history.location }
@@ -147,7 +129,6 @@ const ImportExcelPartyMap = (props) => {
         }
     }, [pageField])
 
-
     useEffect(() => {
 
         if (values.MapType.value === 2) {
@@ -164,12 +145,9 @@ const ImportExcelPartyMap = (props) => {
         }
     }, [goButtonArr, ItemList])
 
-
     useEffect(() => {
         dispatch(BreadcrumbShowCountlabel(`${"Count"} :${UpdateTableList.length}`))
     }, [UpdateTableList])
-
-
 
     useEffect(async () => {
 
@@ -209,7 +187,6 @@ const ImportExcelPartyMap = (props) => {
         label: "Unit",
     }]
 
-
     const pagesListColumns = [
         {
             text: `${values.MapType.label === undefined ? "Party" : values.MapType.label}`,
@@ -227,16 +204,13 @@ const ImportExcelPartyMap = (props) => {
             dataField: "CustomerAddress",
             sort: true,
             hidden: values.MapType.value !== 1
-
         },
         {
             text: "GSTIN No",
             dataField: "GSTIN",
             sort: true,
             hidden: values.MapType.value !== 1
-
         },
-
         {
             text: "Related Key Field",
             dataField: "mapValue",
@@ -258,28 +232,31 @@ const ImportExcelPartyMap = (props) => {
 
     async function goButtonHandler(event) {
 
-        // event.preventDefault();
-        const mapType = values.MapType.value;
-        if (mapType > 0) {
-            let partyId = commonPartyDropSelect.value;
-            if (mapType === 2) {
-
-                const jsonBody = {
-                    ..._cfunc.loginJsonBody(),
-                    PartyID: partyId,
-                };
-                dispatch(goButtonPartyItemAddPage({ jsonBody }));
-            } else {
-                dispatch(GoButton_ImportExcelPartyMap({ partyId, mapType }))
-            }
-
-        } else {
-            customAlert({
-                Type: 3,
-                Message: "Please select mapping type"
-            })
+        if (commonPartyDropSelect.value === 0) {
+            customAlert({ Type: 3, Message: alertMessages.commonPartySelectionIsRequired });
+            return;
+        }
+        else if (values.MapType === '') {
+            customAlert({ Type: 3, Message: alertMessages.selectMappingType })
+            return;
+        }
+        else {
+            goButtonActionCall();
         }
     };
+
+    function goButtonActionCall() {
+        const mapType = values.MapType?.value;
+        if (mapType === 2) {
+            const jsonBody = {
+                ..._cfunc.loginJsonBody(),
+                PartyID: commonPartyDropSelect.value,
+            };
+            dispatch(goButtonPartyItemAddPage({ jsonBody }));
+        } else {
+            dispatch(GoButton_ImportExcelPartyMap({ partyId: commonPartyDropSelect.value, mapType }))
+        }
+    }
 
     function partyOnChangeHandler(e) {
         dispatch(GoButton_ImportExcelPartyMap_Success([]));
@@ -342,7 +319,6 @@ const ImportExcelPartyMap = (props) => {
             });
             return
         }
-
         dispatch(save_ImportExcelPartyMap({ jsonBody: JSON.stringify(jsonArr), mapType, }));
 
     };
@@ -457,7 +433,6 @@ const ImportExcelPartyMap = (props) => {
                     </div>
                 </div>
 
-
                 {(UpdateTableList.length > 0) &&
                     <SaveButtonDraggable>
                         <SaveButton
@@ -468,8 +443,6 @@ const ImportExcelPartyMap = (props) => {
                         />
                     </SaveButtonDraggable>
                 }
-
-
             </React.Fragment>
         );
     }

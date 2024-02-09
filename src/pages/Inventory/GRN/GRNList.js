@@ -106,7 +106,6 @@ const GRNList = () => {
                 page_Mode: makeChallan.page_Mode,
             })
         }
-
     }, [makeChallan]);
 
     const venderOptions = customer.map((i) => ({

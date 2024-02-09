@@ -34,6 +34,7 @@ const doYouConfirmChoice = "Do you confirm your choice?"
 const mappingNotMatchError = "Mapping not match."
 const PricelistIsRequired = "Please Select PriceList"
 const paymentORcodeIsRequired = "Payment QR not uploaded"
+const selectMappingType = "Please select Mapping Type"
 
 // Mobile Retailer Send Save Button Error Message
 const atLeastOneRetailerIsRequired = "At least One Retailer is Selected"
@@ -57,6 +58,8 @@ const updateOneFieldIsRequired = "Update At least One Field"
 const subGroupNameIsRequired = 'SubGroup Name is Required'
 const GroupIDError = "Error for Group ID"
 const categoryAlreadyExists = "Category alredy Select"
+const imageUploadSuccessfully = "Item Image Remove successfully"
+const selectImageFile="Please Select Image file"
 
 // claim Tracking Entry 
 const CreditNote_Not_Upload = "Credit Note Not Uploaded"
@@ -112,7 +115,10 @@ export const alertMessages = {
     rateNotAvailable,
     multiple_MRP_notAllowed,
     customerIsRequired,
-    batchCode_notAvailable
+    batchCode_notAvailable,
+    selectMappingType,
+    imageUploadSuccessfully,
+    selectImageFile
 };
 
 
