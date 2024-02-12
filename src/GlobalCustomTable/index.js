@@ -134,7 +134,7 @@ const GlobalCustomTable = ({
                         <PaginationTotalStandalone
                             {...paginationProps}
                         />
-                        <div className=" pagination pagination-rounded justify-content-end  mb-3" style={{ marginTop: "-20px" }}>
+                        <div className=" pagination pagination-rounded justify-content-end  mb-3" style={{ marginTop: "-20px", marginBottom: "40px" }}>
                             <PaginationListStandalone
                                 {...paginationProps}
                             />
