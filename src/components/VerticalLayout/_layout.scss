@@ -97,3 +97,40 @@ padding-left: 5px;
 border-bottom: 1px solid $border-color;
 
 }
+
+
+
+#scroll-to-top-button {
+  position: fixed;
+  bottom: 10px;
+  right: 20px;
+  background-color: #ced4da;
+  color: #0d12e182;
+  padding: 10px; /* Increased padding for better touchability */
+  border-radius: 50%;
+  cursor: pointer;
+  height: 40px;
+  width: 40px;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999; /* Ensure it's above other elements */
+}
+
+#scroll-to-top-button.show {
+  opacity: 1;
+}
+
+#scroll-to-top-button:hover {
+  background-color: #0d12e1;
+  color: #ced4da;
+}
+
+
+/* Hover effect */
+#scroll-to-top-button:hover {
+  background-color: #0d12e196; /* Dark blue */
+  color: #ced4dac2; /* Light grey */
+}

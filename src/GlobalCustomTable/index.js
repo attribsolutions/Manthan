@@ -78,7 +78,7 @@ const GlobalCustomTable = ({
         </span>
     );
     const sizePerPage = (parseInt(paginationEnabled) > 0) ? paginationEnabled : 25
-    
+
     const options = {
         page: 1,
         paginationSize: 5,
@@ -134,7 +134,7 @@ const GlobalCustomTable = ({
                         <PaginationTotalStandalone
                             {...paginationProps}
                         />
-                        <div className=" pagination pagination-rounded justify-content-end  mb-3" style={{ marginTop: "-20px", marginBottom: "40px" }}>
+                        <div className=" pagination pagination-rounded justify-content-end" style={{ marginTop: "-20px", marginBottom: "40px" }}>
                             <PaginationListStandalone
                                 {...paginationProps}
                             />

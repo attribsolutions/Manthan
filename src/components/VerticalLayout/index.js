@@ -21,6 +21,8 @@ import './_layout.scss';
 import { useRef } from "react";
 import PageDetailsSection from "./breadcrumb/PageDetailsSection";
 
+
+
 const Layout = props => {
   const dispatch = useDispatch();
 
@@ -136,6 +138,15 @@ const Layout = props => {
     }
 
     previousScrollPos = currentScrollPos;
+
+    const scrollButton = document.getElementById('scroll-to-top-button');
+    // Add or remove the "show" class based on scroll position
+    if (currentScrollPos > 200) {
+      scrollButton.classList.add('show');
+    } else {
+      scrollButton.classList.remove('show');
+    }
+
   };
 
   const handleCloseDetaildDiv = useCallback(() => {
@@ -145,7 +156,10 @@ const Layout = props => {
     detailedDiv.style.display = 'none';
   }, []);
 
-
+  const scrollToTop = () => {
+    // Scroll the custom-page-wrapper element to the top
+    customPageWrapperRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   return (
     <div>
@@ -176,6 +190,9 @@ const Layout = props => {
             handleClose={handleCloseDetaildDiv} />
         </div>
 
+        <div id="scroll-to-top-button" onClick={scrollToTop}>
+        <i class="fa fa-arrow-up font-size-18" aria-hidden="true" ></i>
+        </div>
       </div>
 
     </div>
