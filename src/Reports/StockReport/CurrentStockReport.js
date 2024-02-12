@@ -113,7 +113,9 @@ const CurrentStockReport = (props) => {
 		dispatch(commonPageFieldSuccess(null));
 		dispatch(commonPageField(pageId.STOCK_REPORT));
 		dispatch(BreadcrumbShowCountlabel(`Count:${0}`));
-
+		if (_cfunc.CommonPartyDropValue().value > 0) {
+			setPartyDropdown(_cfunc.CommonPartyDropValue());
+		}
 		dispatch(changeCommonPartyDropDetailsAction({ isShow: false }))//change party drop-down show false
 		return () => {
 			dispatch(commonPageFieldSuccess(null));
