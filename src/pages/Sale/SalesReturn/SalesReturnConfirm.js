@@ -13,6 +13,7 @@ import { table_ArrowUseEffect } from "../../../components/Common/CommonUseEffect
 import { CInput, onlyNumberRegx } from "../../../CustomValidateForm";
 import { C_Button } from "../../../components/Common/CommonButton";
 import Slidewithcaption from "../../../components/Common/CommonImageComponent";
+import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 
 const ViewDetails_Modal = () => {
 
@@ -217,7 +218,7 @@ const ViewDetails_Modal = () => {
                             onClick={(event) => {
 
                                 if ((row.ReturnItemImages) && (row.ReturnItemImages.length === 0)) {
-                                    customAlert({ Type: 3, Message: ` Images not uploaded` });
+                                    customAlert({ Type: 3, Message: alertMessages.imageNotUploaded});
                                     return setmodal_backdrop(false)
                                 } else if ((row.ReturnItemImages) && (row.ReturnItemImages.length > 0)) {
                                     imageShowHandler(row)
@@ -246,7 +247,7 @@ const ViewDetails_Modal = () => {
                 const Comment = index.ApproveComment ? index.ApproveComment : null
 
                 if (index.ApprovedQuantity === "") {
-                    inValideUnits.push({ [`${index.ItemName}`]: `Please Enter Approve Quantity` })
+                    inValideUnits.push({ [`${index.ItemName}`]: alertMessages.approvedQtyIsRequired })
 
                 } else if (Number(approvedQty) >= 0) {
                     const ReturnItems = {

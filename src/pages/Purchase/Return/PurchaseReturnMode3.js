@@ -34,6 +34,7 @@ import { return_discountCalculate_Func } from "../../Sale/SalesReturn/SalesCalcu
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import Slidewithcaption from "../../../components/Common/CommonImageComponent";
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
+import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 
 
 const PurchaseReturnMode3 = (props) => {
@@ -366,7 +367,7 @@ const PurchaseReturnMode3 = (props) => {
                                 onClick={(event) => {
 
                                     if ((row.ReturnItemImages.length === 0)) {
-                                        customAlert({ Type: 3, Message: `${row.ItemName} Images not uploaded` });
+                                        customAlert({ Type: 3, Message: `${row.ItemName} ${alertMessages.imageNotUploaded}` });
                                         return setmodal_backdrop(false)
                                     } else if ((row.ReturnItemImages) && (row.ReturnItemImages.length > 0)) {
                                         imageShowHandler(row)

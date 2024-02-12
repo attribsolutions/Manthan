@@ -2,6 +2,9 @@
 // Common Error Messages
 const commonPartySelectionIsRequired = "Please Select Party"
 
+// Image Related Error Message 
+const imageNotUploaded = "Images not uploaded"
+
 const IsRequired = 'Is Required.'
 const changeCustomerName = "Are you sure you want to change the customer ?"
 
@@ -59,7 +62,7 @@ const subGroupNameIsRequired = 'SubGroup Name is Required'
 const GroupIDError = "Error for Group ID"
 const categoryAlreadyExists = "Category alredy Select"
 const imageUploadSuccessfully = "Item Image Remove successfully"
-const selectImageFile="Please Select Image file"
+const selectImageFile = "Please Select Image file"
 
 // claim Tracking Entry 
 const CreditNote_Not_Upload = "Credit Note Not Uploaded"
@@ -71,6 +74,11 @@ const customerIsRequired = "Customer is required."
 
 // Sales Return 
 const batchCode_notAvailable = "Item Name and batch code not available"
+const selectInvoiceNo = "Select Invoice No."
+const approvedQtyIsRequired = "Please Enter Approve Quantity"
+const imageRemoveSuccessfully = "Return Iamge Remove Successfully"
+const returnImageNotUploaded = "Return Image Not Uploaded"
+const selectOneCheckbox = "Please Select One Checkbox"
 
 export const alertMessages = {
     commonPartySelectionIsRequired,
@@ -118,7 +126,13 @@ export const alertMessages = {
     batchCode_notAvailable,
     selectMappingType,
     imageUploadSuccessfully,
-    selectImageFile
+    selectImageFile,
+    selectInvoiceNo,
+    imageNotUploaded,
+    approvedQtyIsRequired,
+    imageRemoveSuccessfully,
+    returnImageNotUploaded,
+    selectOneCheckbox
 };
 
 

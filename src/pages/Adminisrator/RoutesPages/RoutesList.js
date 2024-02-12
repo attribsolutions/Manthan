@@ -1,7 +1,7 @@
 import React, { useEffect, } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import RoutesMaster from "./RoutesMaster";
-import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
+import { BreadcrumbShowCountlabel, commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
 import {
@@ -63,6 +63,7 @@ const RoutesList = (props) => {
     const page_Id = pageId.ROUTES_LIST
     dispatch(commonPageFieldListSuccess(null))
     dispatch(commonPageFieldList(page_Id))
+    // dispatch(BreadcrumbShowCountlabel(`Count :${0}`))
     return () => {
       dispatch(GetRoutesListSuccess([]));
     }

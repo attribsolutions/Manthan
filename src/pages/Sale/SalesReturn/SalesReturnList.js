@@ -214,7 +214,7 @@ const SalesReturnList = () => {
             })
             customAlert({
                 Type: 1,
-                Message: "Return Iamge Remove Successfully",
+                Message: alertMessages.imageRemoveSuccessfully,
             })
 
         } else if ((UploadMsg.Status === true) && (UploadMsg.StatusCode === 200)) {
@@ -351,7 +351,7 @@ const SalesReturnList = () => {
 
         if (Image === null && isUploadAccess) {
             isMadalOpen = false
-            customAlert({ Type: 3, Message: "Return Image Not Uploaded" });
+            customAlert({ Type: 3, Message: alertMessages.returnImageNotUploaded });
             return;
         } else {
             isMadalOpen = true
@@ -493,7 +493,7 @@ const SalesReturnList = () => {
         if (!ischeck.length > 0) {
             customAlert({
                 Type: 4,
-                Message: "Please Select One Checkbox",
+                Message: alertMessages.selectOneCheckbox,
             });
             return
         }
