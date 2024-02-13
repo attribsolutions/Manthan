@@ -18,8 +18,7 @@ const HeaderTitleNewBtn = ({
     const userName = loginUserName();
 
     const [listPagePath, setListPagePath] = useState("");
-    const [relatedPageId, setRelatedPageId] = useState(0);
-    const [pageTypeSelect, setPageTypeSelect] = useState(null);
+
     const [menuOpen, setMenuOpen] = useState(false);
 
     const {
@@ -34,21 +33,6 @@ const HeaderTitleNewBtn = ({
         ...BreadcrumbReducer.breadcrumbDetail,
         editData: H_Pages.editData,
     }));
-
-    useEffect(() => {
-        if (userAcc) {
-            setListPagePath(userAcc.ActualPagePath)
-            if (pageTypeSelect === 'add') {
-                NavigateHandler(userAcc.RelatedPageID)
-            }
-            else if (pageTypeSelect === 'list') {
-                NavigateHandler(userAcc.id)
-            }
-            else {
-                setRelatedPageId(userAcc.id);
-            }
-        }
-    }, [userAcc, pageTypeSelect]);
 
     useEffect(() => {
 
@@ -70,79 +54,91 @@ const HeaderTitleNewBtn = ({
         })
     }
 
-    function NavigateHandler(id) {
-        debugger
-        if (userName === "Attrib") {
-            dispatch(edit_PageListID_Action({ editId: id, }))
+    function NavigateHandler(pageType) {
+
+        if (pageType === "add") {
+            dispatch(edit_PageListID_Action({ editId: userAcc?.RelatedPageID, }))
+            setListPagePath()
         }
+        else {
+            dispatch(edit_PageListID_Action({ editId: userAcc?.id, }))
+        }
+        setListPagePath(userAcc.ActualPagePath)
     }
 
-    const handleClose = (pageType) => {
-        setMenuOpen(false);
-        setPageTypeSelect(pageType);
-    };
+    const toggle_pagetype = () => {
+        if (userName === "Attrib") {
+            setMenuOpen(!menuOpen)
+        }
 
-    if (newBtnView) {
+    }
+
+    const PageHeadingNavigate = ({ pageHeading }) => {
+        const headerLabelStyles = userName === "Attrib" ? { cursor: 'pointer' } : {}
+        const headerLabelClass = userName === "Attrib" && "labelHover"
+
         return (
             <>
-                <div className="fade-menu-container">
-                    <button
-                        type="button"
-                        className="btn btn-success"
-                        data-mdb-toggle="tooltip"
-                        data-mdb-placement="top"
-                        title="Create New"
-                        onClick={NewButtonHandeller}
-                    >
-                        New
-                    </button>
+                <Dropdown
+                    isOpen={menuOpen}
+                    toggle={toggle_pagetype}
+                    className="d-inline-block"
+                >
+                    <DropdownToggle tag="label">
+                        <Label className={`pt-3 pl-1 font-size-18 ${headerLabelClass}`}
+                            style={{ ...headerLabelStyles, }}>{pageHeading}</Label>
+                    </DropdownToggle>
 
-                    <Dropdown
-                        isOpen={menuOpen}
-                        toggle={() => setMenuOpen(!menuOpen)}
-                        className="d-inline-block"
-                    >
-                        <DropdownToggle tag="label"                        >
-                            <Label className="pt-3 pl-1 font-size-18 ">{pageHeading}</Label>
-                        </DropdownToggle>
+                    <DropdownMenu>
+                        <DropdownItem onClick={() => NavigateHandler("add")}>
+                            <div className="text-left">
+                                <i className='bx bxs-add-to-queue align-middle me-1 text-primary' ></i>
+                                Add Page
+                            </div>
+                        </DropdownItem>
+                        <DropdownItem onClick={() => NavigateHandler("list")}>
+                            <div className="text-left">
+                                <i className='bx bx-list-ul align-middle me-1 text-primary'></i>
+                                List Page
+                            </div>
+                        </DropdownItem>
+                    </DropdownMenu>
 
-                        <DropdownMenu>
-                            <DropdownItem onClick={() => handleClose("add")}>
-                                <div className="text-left">
-                                    <i className='bx bxs-add-to-queue align-middle me-1 text-primary' ></i>
-                                    Add Page
-                                </div>
-                            </DropdownItem>
-                            <DropdownItem onClick={() => handleClose("list")}>
-                                <div className="text-left">
-                                    <i className='bx bx-list-ul align-middle me-1 text-primary'></i>
-                                    List Page
-                                </div>
-                            </DropdownItem>
-                        </DropdownMenu>
+                </Dropdown>
 
-                    </Dropdown>
-                </div>
-            </>
-        );
-    } else {
-        return (
-            <div onClick={() => { NavigateHandler(relatedPageId) }}>
-                <label className={userName === "Attrib" ? "font-size-18 col-ls-6 col-form-label labelHover" : "font-size-18 col-ls-6 col-form-label text-black"}
-                    style={{ marginLeft: "6px", cursor: userName === "Attrib" ? 'pointer' : 'default', }}>
-                    {pageHeading}
+            </>)
+    };
+
+    const RenderNewButtonView = () => newBtnView && (
+        <button
+            type="button"
+            className="btn btn-success"
+            data-mdb-toggle="tooltip"
+            data-mdb-placement="top"
+            title="Create New"
+            onClick={NewButtonHandeller}
+        >
+            New
+        </button>
+    );
+
+    return (
+        <div>
+            <RenderNewButtonView />
+            <PageHeadingNavigate pageHeading={pageHeading} />
+            {bredcrumbItemName.length > 0 && (
+                <label
+                    className="font-size-21 form-label text-nowrap bd-highlight text-primary"
+                    style={{ paddingLeft: "7px", color: "#5156be" }}
+                >
+                    &nbsp;/&nbsp;{bredcrumbItemName}
                 </label>
-                {bredcrumbItemName.length > 0 && (
-                    <label
-                        className="font-size-21 form-label text-nowrap bd-highlight text-primary"
-                        style={{ paddingLeft: "7px", color: "#5156be" }}
-                    >
-                        &nbsp;/&nbsp;{bredcrumbItemName}
-                    </label>
-                )}
-            </div>
-        );
-    }
+            )}
+        </div>
+    );
+
 };
 
 export default React.memo(HeaderTitleNewBtn);
+
+
