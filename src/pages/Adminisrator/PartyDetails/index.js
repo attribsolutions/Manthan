@@ -65,6 +65,7 @@ const PartyDetails = (props) => {
 
     const {
         goBtnList,
+        goBtnloadingRedux,
         saveBtnloading,
         postMsg,
         pageField,
@@ -74,6 +75,8 @@ const PartyDetails = (props) => {
         groupListLoading,
         userAccess } = useSelector((state) => ({
             goBtnList: state.PartyDetailsReducer.goBtnList,
+            goBtnloadingRedux: state.PartyDetailsReducer.loading,
+            
 
             clusterDropdown: state.ClusterReducer.ClusterListData,
 
@@ -134,8 +137,7 @@ const PartyDetails = (props) => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(savePartyDetails_Success({ Status: false }))
             goButtonHandler()
-            setTableData([]);
-            setGroupSelect(allLabelWithZero)
+            // setTableData([]);
             if (pageMode === "other") {
                 customAlert({
                     Type: 1,
@@ -627,7 +629,7 @@ const PartyDetails = (props) => {
     };
 
     const paginationOptions = {
-        sizePerPage: 6, // Number of rows per page
+        sizePerPage: 25, // Number of rows per page
         hideSizePerPage: true, // Hide the size per page dropdown
         hidePageListOnlyOnePage: true, // Hide the pagination list when there's only one page
     };
@@ -671,7 +673,7 @@ const PartyDetails = (props) => {
                             <Col sm="1" className="mt-3 mb-3">
                                 {tableData.length === 0 ?
                                     <Go_Button
-                                        loading={goBtnLoading}
+                                        loading={goBtnLoading||goBtnloadingRedux}
                                         onClick={goButtonHandler}
                                     />
                                     :
@@ -681,22 +683,20 @@ const PartyDetails = (props) => {
                         </div>
                     </div>
 
-                    <div className="" >
+                    <div className="mb-4" >
                         <ToolkitProvider
                             keyField="PartyID"
                             data={tableData}
                             columns={pagesListColumns}
+                            
                             search
                         >
                             {(toolkitProps) => (
                                 <React.Fragment>
-                                    <SimpleBar style={{ maxHeight: "70vh" }}  >
-                                        <div style={{ minHeight: "70vh" }} >
-
                                             <BootstrapTable
-
                                                 keyField="PartyID"
                                                 id="table_Arrow"
+                                                classes='custom-table'
                                                 noDataIndication={<div className="text-danger text-center">Party Not available</div>}
                                                 onDataSizeChange={({ dataSize }) => {
                                                     dispatch(BreadcrumbShowCountlabel(`Count : ${dataSize}`));
@@ -705,9 +705,6 @@ const PartyDetails = (props) => {
                                                 {...toolkitProps.baseProps}
                                             />
                                             {globalTableSearchProps(toolkitProps.searchProps)}
-                                        </div>
-                                    </SimpleBar >
-
                                 </React.Fragment>
                             )}
                         </ToolkitProvider>
@@ -733,30 +730,4 @@ const PartyDetails = (props) => {
     }
 };
 
-export default PartyDetails
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+export default PartyDetails;
