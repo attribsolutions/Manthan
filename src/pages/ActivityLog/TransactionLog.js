@@ -224,6 +224,10 @@ const TransactionLog = () => {
     };
 
 
+
+
+
+
     const viewColumn = [
         {
             text: "Keys",
@@ -558,9 +562,13 @@ const TransactionLog = () => {
                         </div>
                     }
                     onDataSizeChange={({ dataCount }) => {
+
                         dispatch(BreadcrumbShowCountlabel(`Count:${dataCount}`));
                     }}
                 />
+
+
+
 
                 <Modal
                     isOpen={modal_view}
@@ -570,22 +578,39 @@ const TransactionLog = () => {
                 >
                     <CardBody className="c_card_body">
                         <h2 className="text-center">Transaction Log Details</h2>
-                        <GlobalCustomTable
-                            keyField="id"
+                        <ToolkitProvider
+                            keyField={"id"}
                             data={UpdateJsonData}
                             columns={viewColumn}
-                            paginationEnabled={200}//show pagination 200 per page
-                            classes={"custom-table"}
-                            noDataIndication={
-                                <div className="text-danger text-center ">
-                                    Record Not available
-                                </div>
-                            }
-                            onDataSizeChange={({ dataCount }) => {
 
-                                dispatch(BreadcrumbShowCountlabel(`Count:${dataCount}`));
-                            }}
-                        />
+                        >
+                            {(toolkitProps,) => (
+                                <React.Fragment>
+                                    <Row>
+                                        <Col xl="12">
+                                            <SimpleBar className="table-responsive ">
+                                                <BootstrapTable
+                                                    keyField={"id"}
+                                                    id="table_Arrow"
+                                                    classes={"table  table-bordered table-hover"}
+                                                    noDataIndication={
+                                                        <div className="text-danger text-center ">
+                                                            Record Not available
+                                                        </div>
+                                                    }
+                                                    onDataSizeChange={({ dataSize }) => {
+                                                        dispatch(BreadcrumbShowCountlabel(`Count : ${dataSize}`))
+                                                    }}
+                                                    {...toolkitProps.baseProps}
+                                                />
+                                            </SimpleBar>
+
+                                        </Col>
+                                    </Row>
+
+                                </React.Fragment>
+                            )}
+                        </ToolkitProvider>
 
                     </CardBody>
 
