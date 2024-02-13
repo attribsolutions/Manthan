@@ -597,6 +597,7 @@ const DiscountMaster = (props) => {
                                             <C_DatePicker
                                                 options={{
                                                     altInput: true,
+                                                    minDate: "today",
                                                     altFormat: "d-m-Y",
                                                     dateFormat: "Y-m-d",
                                                 }}
@@ -616,6 +617,7 @@ const DiscountMaster = (props) => {
                                         <Col sm="7">
                                             <C_DatePicker
                                                 options={{
+                                                    minDate: "today",
                                                     altInput: true,
                                                     altFormat: "d-m-Y",
                                                     dateFormat: "Y-m-d",
