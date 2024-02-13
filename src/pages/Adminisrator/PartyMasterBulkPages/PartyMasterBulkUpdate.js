@@ -343,7 +343,7 @@ const PartyMasterBulkUpdate = (props) => {
 
     const pagesListColumns = [
         {
-            text: "PartyName",
+            text: "Party Name",
             dataField: "PartyName",
         },
         {
@@ -365,7 +365,7 @@ const PartyMasterBulkUpdate = (props) => {
 
     if (SelectFieldName.label === "FSSAINo") {
         let FSSAINo = {
-            text: "FSSAIExipry",
+            text: "FSSAI  Exipry",
             dataField: "FSSAIExipry",
         }
         pagesListColumns.push(FSSAINo)
@@ -380,7 +380,7 @@ const PartyMasterBulkUpdate = (props) => {
     }
 
     const Newvalue = {
-        text: `New${SelectFieldName.label === undefined ? "Value" : SelectFieldName.label}`,
+        text: `New${SelectFieldName.label === undefined ? " Value" : SelectFieldName.label}`,
         dataField: "Newvalue",
 
         formatter: (cellContent, row, key) => (
@@ -472,7 +472,7 @@ const PartyMasterBulkUpdate = (props) => {
 
     pagesListColumns.push(Newvalue)
     const dateColumn = {
-        text: " New FSSAIExipry",
+        text: " New FSSAI Exipry",
         dataField: "",
         formatter: (cellContent, row, key) => (
             <>

@@ -158,7 +158,7 @@ const RouteUpdate = (props) => {
             dataField: "SubPartyName",
         },
         {
-            text: "RouteName",
+            text: "Route Name",
             dataField: "Route Name",
             style: () => ({ width: "30%" }),
             formatExtraData: { forceRefresh },
