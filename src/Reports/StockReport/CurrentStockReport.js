@@ -20,6 +20,7 @@ import { globalTableSearchProps } from "../../components/Common/SearchBox/MySear
 import { ExcelReportComponent } from "../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS";
 import { alertMessages } from "../../components/Common/CommonErrorMsg/alertMsg";
 import { changeCommonPartyDropDetailsAction } from "../../store/Utilites/PartyDrodown/action";
+import GlobalCustomTable from "../../GlobalCustomTable";
 
 const CurrentStockReport = (props) => {
 
@@ -445,6 +446,7 @@ const CurrentStockReport = (props) => {
 				}
 
 				if (accumulator[key]) {
+
 					accumulator[key].SaleableStock += Number(SaleableStock);
 					accumulator[key].UnSaleableStock += Number(UnSaleableStock);
 					accumulator[key].TotalStockValue += Number(TotalStockValue);
@@ -454,10 +456,11 @@ const CurrentStockReport = (props) => {
 					accumulator[key].SaleableStockValue += Number(SaleableStockValue);
 					accumulator[key].TaxValue += Number(TaxValue);
 				} else {
+
 					accumulator[key] = {
 						ItemName,
 						MRP, PurchaseRate, SaleableStock: Number(SaleableStock),
-						UnSaleableStock: Number(UnSaleableStock), TotalStockValue: Number(TotalStockValue),
+						UnSaleableStock: Number(UnSaleableStock), TotalStockValue: TotalStockValue,
 						UnSaleableStockTaxValue: Number(UnSaleableStockTaxValue), UnSaleableStockValue: Number(UnSaleableStockValue),
 						SaleableStockTaxValue: Number(SaleableStockTaxValue), SaleableStockValue: Number(SaleableStockValue), TaxValue: Number(TaxValue), BatchCode,
 						DistributorCode, DistributorName, Item, GroupName, SubGroupName, GroupTypeName, BatchCode, Stockvaluewithtax, Unit
@@ -476,8 +479,20 @@ const CurrentStockReport = (props) => {
 				groupedArray = Object.values(groupedItems);
 			}
 
-			filterTableData = groupedArray;
+			groupedArray = groupedArray.map(i => {
+				return {
+					...i,
+					TotalStockValue: (Number(i.TotalStockValue).toFixed(2)),
+					UnSaleableStockValue: (Number(i.UnSaleableStockValue).toFixed(2)),
+					UnSaleableStockTaxValue: (Number(i.UnSaleableStockTaxValue).toFixed(2)),
+					TaxValue: (Number(i.TaxValue).toFixed(2)),
+					Stockvaluewithtax: (Number(i.Stockvaluewithtax).toFixed(2)),
+					SaleableStock: (Number(i.SaleableStock).toFixed(2)),
+					SaleableStockValue: (Number(i.SaleableStockValue).toFixed(2)),
+				}
+			});
 
+			filterTableData = groupedArray;
 		}
 
 		return { filterTableData };
@@ -491,219 +506,221 @@ const CurrentStockReport = (props) => {
 	return (
 		<React.Fragment>
 			<MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
-			<div className="page-content">
-				<div className="px-2 c_card_filter text-black mb-1" >
+			{/* <div className="page-content"> */}
+			<div className="px-2 c_card_filter text-black mb-1" >
 
-					<Row>
-						<Col className="col col-11  mt-1">
-							<Row className="mb-2 row ">
+				<Row>
+					<Col className="col col-11  mt-1">
+						<Row className="mb-2 row ">
+							<Col sm={3}>
+								<FormGroup className="mb-n2 row mt-1">
+
+									<Label className="col-sm-3 p-2">FromDate</Label>
+									<Col sm={6}>
+										<C_DatePicker
+											name='fromdate'
+											value={fromdate}
+											disabled={true}
+											onChange={fromdateOnchange}
+										/>
+									</Col>
+								</FormGroup>
+							</Col>
+
+							<Col sm={3} className="custom-to-date-col">
+								<FormGroup className="mb-n3 row mt-1">
+									<Label className="col-sm-4 p-2">ToDate</Label>
+									<Col>
+										<C_DatePicker
+											nane='todate'
+											value={todate}
+											disabled={true}
+											onChange={todateOnchange}
+										/>
+									</Col>
+								</FormGroup>
+							</Col>
+
+							<Col sm={3}>
+								<FormGroup className="mb-n3 row mt-1">
+
+									<Label className="col-sm-4 p-2">Unit</Label>
+									<Col>
+										<Select
+											name="Unit"
+											value={unitDropdown}
+											isSearchable={true}
+											className="react-dropdown"
+											classNamePrefix="dropdown"
+											styles={{
+												menu: provided => ({ ...provided, zIndex: 2 })
+											}}
+											options={BaseUnit_DropdownOptions}
+											onChange={(e) => {
+												setUnitDropdown(e);
+												setTableData([]);
+											}}
+										/>
+									</Col>
+								</FormGroup>
+							</Col>
+
+							{isSCMParty &&
 								<Col sm={3}>
-									<FormGroup className="mb-n2 row mt-1">
-
-										<Label className="col-sm-3 p-2">FromDate</Label>
-										<Col sm={6}>
-											<C_DatePicker
-												name='fromdate'
-												value={fromdate}
-												disabled={true}
-												onChange={fromdateOnchange}
-											/>
-										</Col>
-									</FormGroup>
-								</Col>
-
-								<Col sm={3} className="custom-to-date-col">
 									<FormGroup className="mb-n3 row mt-1">
-										<Label className="col-sm-4 p-2">ToDate</Label>
-										<Col>
-											<C_DatePicker
-												nane='todate'
-												value={todate}
-												disabled={true}
-												onChange={todateOnchange}
-											/>
-										</Col>
-									</FormGroup>
-								</Col>
-
-								<Col sm={3}>
-									<FormGroup className="mb-n3 row mt-1">
-
-										<Label className="col-sm-4 p-2">Unit</Label>
+										<Label className="col-sm-4 p-2">Party</Label>
 										<Col>
 											<Select
-												name="Unit"
-												value={unitDropdown}
+												name="Party"
+												value={partyDropdown}
 												isSearchable={true}
 												className="react-dropdown"
 												classNamePrefix="dropdown"
 												styles={{
 													menu: provided => ({ ...provided, zIndex: 2 })
 												}}
-												options={BaseUnit_DropdownOptions}
+												options={Party_Option}
 												onChange={(e) => {
-													setUnitDropdown(e);
+													setPartyDropdown(e);
 													setTableData([]);
 												}}
 											/>
 										</Col>
 									</FormGroup>
-								</Col>
+								</Col>}
+						</Row>
+					</Col>
 
-								{isSCMParty &&
-									<Col sm={3}>
-										<FormGroup className="mb-n3 row mt-1">
-											<Label className="col-sm-4 p-2">Party</Label>
-											<Col>
-												<Select
-													name="Party"
-													value={partyDropdown}
-													isSearchable={true}
-													className="react-dropdown"
-													classNamePrefix="dropdown"
-													styles={{
-														menu: provided => ({ ...provided, zIndex: 2 })
-													}}
-													options={Party_Option}
-													onChange={(e) => {
-														setPartyDropdown(e);
-														setTableData([]);
-													}}
-												/>
-											</Col>
-										</FormGroup>
-									</Col>}
-							</Row>
-						</Col>
+					<Col sm="1" className="mt-2 mb-1 ">
+						<C_Button
+							type="button"
+							spinnerColor="white"
+							loading={GoBtnLoading === "showOnTable"}
+							className="btn btn-success"
+							onClick={() => goButtonHandler("showOnTable")}
+						>
+							Show
+						</C_Button>
+					</Col>
+				</Row>
 
-						<Col sm="1" className="mt-2 mb-1 ">
-							<C_Button
-								type="button"
-								spinnerColor="white"
-								loading={GoBtnLoading === "showOnTable"}
-								className="btn btn-success"
-								onClick={() => goButtonHandler("showOnTable")}
-							>
-								Show
-							</C_Button>
-						</Col>
-					</Row>
+				<Row>
+					<Col className="col col-11  mt-1">
+						<Row className="mb-2 row ">
+							<Col sm={3}>
+								<FormGroup className="mb-n2 row mt-1">
 
-					<Row>
-						<Col className="col col-11  mt-1">
-							<Row className="mb-2 row ">
-								<Col sm={3}>
-									<FormGroup className="mb-n2 row mt-1">
+									<Label className="col-sm-3 p-2">Stock Type</Label>
+									<Col sm={6}>
+										<Select
+											name="stockType"
+											value={stockTypeSelect}
+											isSearchable={true}
+											className="react-dropdown"
+											classNamePrefix="dropdown"
+											styles={{
+												menu: provided => ({ ...provided, zIndex: 2 })
+											}}
+											options={StockTypeOptions}
+											onChange={(e) => {
+												StockTypeHandler(e)
 
-										<Label className="col-sm-3 p-2">Stock Type</Label>
-										<Col sm={6}>
-											<Select
-												name="stockType"
-												value={stockTypeSelect}
-												isSearchable={true}
-												className="react-dropdown"
-												classNamePrefix="dropdown"
-												styles={{
-													menu: provided => ({ ...provided, zIndex: 2 })
-												}}
-												options={StockTypeOptions}
+											}}
+										/>
+									</Col>
+								</FormGroup>
+							</Col>
+
+							<Col sm={2}>
+								<FormGroup className=" row mt-1 " >
+									<Label htmlFor="horizontal-firstname-input" className="col-sm-6 col-form-label" >MRP-Wise</Label>
+									<Col md={2} style={{ marginTop: '7px' }} >
+										<div className="form-check form-switch form-switch-md ">
+											<Input type="checkbox" className="form-check-input"
+												checked={mrpWise}
+												name="mrpWise"
 												onChange={(e) => {
-													StockTypeHandler(e)
-
+													setMrpWise(e.target.checked);
 												}}
 											/>
-										</Col>
-									</FormGroup>
-								</Col>
-
-								<Col sm={2}>
-									<FormGroup className=" row mt-1 " >
-										<Label htmlFor="horizontal-firstname-input" className="col-sm-6 col-form-label" >MRP-Wise</Label>
-										<Col md={2} style={{ marginTop: '7px' }} >
-											<div className="form-check form-switch form-switch-md ">
-												<Input type="checkbox" className="form-check-input"
-													checked={mrpWise}
-													name="mrpWise"
-													onChange={(e) => {
-														setMrpWise(e.target.checked);
-													}}
-												/>
-											</div>
-										</Col>
-									</FormGroup>
-								</Col>
-
-								<Col sm={1}></Col>
-								<Col sm={2}>
-									<FormGroup className=" row mt-1 " >
-										<Label htmlFor="horizontal-firstname-input" className="col-sm-6 col-form-label" >Batch-Wise</Label>
-										<Col md={2} style={{ marginTop: '7px' }} >
-											<div className="form-check form-switch form-switch-md ">
-												<Input type="checkbox" className="form-check-input"
-													checked={batchWise}
-													name="batchWise"
-													onChange={(e) => {
-														setBatchWise(e.target.checked);
-													}}
-												/>
-											</div>
-										</Col>
-									</FormGroup>
-								</Col>
-
-							</Row>
-						</Col>
-
-						<Col sm="1" className="mt-2 mb-1 ">
-							<C_Button
-								type="button"
-								spinnerColor="white"
-								loading={ExcelBtnLoading === "downloadExcel"}
-								className="btn btn-primary"
-								onClick={() => goButtonHandler("downloadExcel")}
-							>
-								Excel
-							</C_Button>
-						</Col>
-					</Row>
-				</div>
-
-				<div className="mt-1">
-					<ToolkitProvider
-						keyField="ID"
-						data={tableData}
-						columns={selectedColumns}
-						search
-					>
-						{(toolkitProps,) => (
-							<React.Fragment>
-								<Row>
-									<Col xl="12">
-										<div className="table-responsive table">
-											<BootstrapTable
-												keyField="ID"
-												classes={"table  table-bordered table-hover"}
-												noDataIndication={
-													<div className="text-danger text-center ">
-														Record Not available
-													</div>
-												}
-												onDataSizeChange={({ dataSize }) => {
-													dispatch(BreadcrumbShowCountlabel(`Count:${dataSize}`));
-												}}
-												{...toolkitProps.baseProps}
-											/>
-											{globalTableSearchProps(toolkitProps.searchProps)}
 										</div>
 									</Col>
-								</Row>
+								</FormGroup>
+							</Col>
 
-							</React.Fragment>
-						)}
-					</ToolkitProvider>
-				</div>
+							<Col sm={1}></Col>
+							<Col sm={2}>
+								<FormGroup className=" row mt-1 " >
+									<Label htmlFor="horizontal-firstname-input" className="col-sm-6 col-form-label" >Batch-Wise</Label>
+									<Col md={2} style={{ marginTop: '7px' }} >
+										<div className="form-check form-switch form-switch-md ">
+											<Input type="checkbox" className="form-check-input"
+												checked={batchWise}
+												name="batchWise"
+												onChange={(e) => {
+													setBatchWise(e.target.checked);
+												}}
+											/>
+										</div>
+									</Col>
+								</FormGroup>
+							</Col>
+
+						</Row>
+					</Col>
+
+					<Col sm="1" className="mt-2 mb-1 ">
+						<C_Button
+							type="button"
+							spinnerColor="white"
+							loading={ExcelBtnLoading === "downloadExcel"}
+							className="btn btn-primary"
+							onClick={() => goButtonHandler("downloadExcel")}
+						>
+							Excel
+						</C_Button>
+					</Col>
+				</Row>
+			</div>
+
+			<div className="mt-1">
+				<ToolkitProvider
+					keyField="ID"
+					data={tableData}
+					columns={selectedColumns}
+					search
+				>
+					{(toolkitProps,) => (
+						<React.Fragment>
+							<Row>
+								<Col xl="12">
+									<div className="table-responsive table">
+										<BootstrapTable
+											keyField="ID"
+											classes={"table  table-bordered table-hover"}
+											noDataIndication={
+												<div className="text-danger text-center ">
+													Record Not available
+												</div>
+											}
+											onDataSizeChange={({ dataSize }) => {
+												dispatch(BreadcrumbShowCountlabel(`Count:${dataSize}`));
+											}}
+											{...toolkitProps.baseProps}
+										/>
+										{globalTableSearchProps(toolkitProps.searchProps)}
+									</div>
+								</Col>
+							</Row>
+
+						</React.Fragment>
+					)}
+				</ToolkitProvider>
+
 
 			</div>
+
+			{/* </div> */}
 			<C_Report />
 		</React.Fragment >
 	)
