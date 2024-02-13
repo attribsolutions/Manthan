@@ -136,8 +136,8 @@ const PartyDetails = (props) => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(savePartyDetails_Success({ Status: false }))
-            goButtonHandler()
-            // setTableData([]);
+            // goButtonHandler()
+            setTableData([]);
             if (pageMode === "other") {
                 customAlert({
                     Type: 1,
