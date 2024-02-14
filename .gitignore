@@ -5,7 +5,7 @@
 /.pnp
 .pnp.js
 
-severPath
+severPath.js
 
 # testing
 /coverage
