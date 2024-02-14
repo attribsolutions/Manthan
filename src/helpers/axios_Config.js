@@ -8,7 +8,7 @@ import { loginPartyID, loginSystemSetting, loginUserID } from '../components/Com
 const API_URL = "http://192.168.1.114:8000";
 // const API_URL = "http://127.0.0.1:8000";
 
-
+//for testing commite chnage url
 const axiosApi = axios.create({ baseURL: API_URL });
 
 const requestUrls = {};
