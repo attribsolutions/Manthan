@@ -1,15 +1,12 @@
 import axios from 'axios';
 import axiosRetry from 'axios-retry';
 import { toast, Bounce } from 'react-toastify';
-import { loginPartyID, loginSystemSetting, loginUserID } from '../components/Common/CommonFunction';
+import { loginSystemSetting, loginUserID } from '../components/Common/CommonFunction';
+import SERVER_HOST_PATH from './severPath';
 
-// const API_URL = "http://cbmfooderp.com:8000";
 
-const API_URL = "http://192.168.1.114:8000";
-// const API_URL = "http://127.0.0.1:8000";
 
-//for testing commite chnage url
-const axiosApi = axios.create({ baseURL: API_URL });
+const axiosApi = axios.create({ baseURL: SERVER_HOST_PATH });
 
 const requestUrls = {};
 
