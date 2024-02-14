@@ -25,6 +25,10 @@ function* Get_Pos_RoleAccess_GenFun() {
       for (let key in i) {
         if (i.hasOwnProperty(key) && i[key] === null) {
           i[key] = 0;
+        } else if (i.hasOwnProperty(key) && i[key] === true) {
+          i[key] = 1;
+        } else if (i.hasOwnProperty(key) && i[key] === false) {
+          i[key] = 0;
         }
       }
     });

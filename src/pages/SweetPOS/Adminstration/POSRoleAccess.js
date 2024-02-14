@@ -86,6 +86,10 @@ const POSRoleAccess = (props) => {
             for (let key in i) {
                 if (i.hasOwnProperty(key) && i[key] === null) {
                     i[key] = 0;
+                } else if (i.hasOwnProperty(key) && i[key] === true) {
+                    i[key] = 1;
+                } else if (i.hasOwnProperty(key) && i[key] === false) {
+                    i[key] = 0;
                 }
             }
         });
@@ -185,14 +189,14 @@ const POSRoleAccess = (props) => {
                 isChangeRow.push(objB);
             }
         })
-        const TableData = isChangeRow.map(i => ({
-            ...i,
-            CreatedBy: _cfunc.loginUserID(),
-            CreatedOn: _cfunc.date_dmy_func(),
-            UpdatedOn: _cfunc.date_dmy_func(),
-            UpdatedBy: _cfunc.loginUserID(),
-
-        }));
+        const TableData = isChangeRow.map(i => {
+            const { Name, id, CreatedOn, UpdatedOn, ...rest } = i;
+            return {
+                ...rest,
+                CreatedBy: _cfunc.loginUserID(),
+                UpdatedBy: _cfunc.loginUserID(),
+            };
+        });
 
         const jsonBody = JSON.stringify(TableData);
         dispatch(savePosRoleAccess({ jsonBody }));
