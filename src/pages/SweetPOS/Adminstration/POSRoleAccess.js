@@ -12,7 +12,6 @@ import { globalTableSearchProps } from "../../../components/Common/SearchBox/MyS
 import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import DynamicColumnHook from "../../../components/Common/TableCommonFunc";
 import { Data } from './Data';
-import SimpleBar from "simplebar-react"
 import { getPosRoleAccesslist, savePosRoleAccess, savePosRoleAccess_Success } from "../../../store/SweetPOSStore/Administrator/POSRoleAccessRedux/action";
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 import { SaveButton } from "../../../components/Common/CommonButton";
@@ -195,7 +194,7 @@ const POSRoleAccess = (props) => {
                 ...rest,
                 CreatedBy: _cfunc.loginUserID(),
                 UpdatedBy: _cfunc.loginUserID(),
-                
+
             };
         });
 
