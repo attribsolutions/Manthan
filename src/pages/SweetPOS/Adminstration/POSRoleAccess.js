@@ -195,6 +195,7 @@ const POSRoleAccess = (props) => {
                 ...rest,
                 CreatedBy: _cfunc.loginUserID(),
                 UpdatedBy: _cfunc.loginUserID(),
+                
             };
         });
 
