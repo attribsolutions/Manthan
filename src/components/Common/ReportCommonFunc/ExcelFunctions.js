@@ -170,6 +170,7 @@ export function styleLastRow(worksheet) {
         });
     }
 }
+// =================================================================================================
 
 export function generateTableData({
     pageField,
@@ -178,7 +179,9 @@ export function generateTableData({
     extraColumn,
     numericHeaders,
     dateHeader,
-    listExcelDownload }) {
+    listExcelDownload
+}) {
+
     let columnsKey = [];
     let HeaderColumns = [];
     let dataRow = [];
@@ -226,14 +229,24 @@ export function generateTableData({
             }
         });
     }
-
-    dataRow = excelTableData.map(item =>
-        columnsKey.map(column => item[column] || "")
-    );
-
+    dataRow = excelTableData.map(item => {
+        return columnsKey.map(column => {
+            if (column in item) {
+                if (typeof item[column] === 'boolean') {
+                    return item[column]; // Return boolean value if it's boolean
+                } else {
+                    return item[column] || ""; // Return existing value if it exists, otherwise return ''
+                }
+            }
+            return "";
+        });
+    });
+  
     return { HeaderColumns, dataRow, controlTypeName, noDataForDownload: false };
 }
 
+
+// /==========================================================
 function findProperties(checkedValues, pageFieldMaster, propertyName) {
     const result = [];
     checkedValues.forEach((value) => {
