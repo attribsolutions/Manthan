@@ -1,1 +1,4 @@
+
+git update-index --skip-worktree axios_Config.js  
+
 git update-index --no-skip-worktree axios_Config.js
