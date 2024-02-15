@@ -199,7 +199,7 @@ const POSRoleAccess = (props) => {
                         dataField: i.dataField,
                         sort: true,
                         classes: "table-cursor-pointer",
-                        formatExtraData: { cellReferesh },
+                        // formatExtraData: { cellReferesh },
                         formatter: (cell, row, key) => {
 
                             return (
@@ -208,11 +208,11 @@ const POSRoleAccess = (props) => {
                                         placeholder="Enter License Date"
                                         value={cell}
                                         id={`checkbox_${row.id}_${key}`}
-                                        onChange={(e) => {
-                                            if (e.target.id === `checkbox_${row.id}_${key}`) {
-                                                setcellReferesh(i => !i)
-                                                row[i.dataField] = e.target.value
-                                            }
+                                        onChange={(e, date) => {
+
+
+                                            row[i.dataField] = date
+
                                         }}
                                     />
                                 </>
@@ -237,7 +237,7 @@ const POSRoleAccess = (props) => {
                                         defaultValue={cell}
                                         onChange={(e) => {
                                             if (e.target.id === `checkbox_${row.id}_${key}`) {
-                                                debugger
+
                                                 // setcellReferesh(i => !i)
                                                 row[i.dataField] = e.target.value
                                             }
