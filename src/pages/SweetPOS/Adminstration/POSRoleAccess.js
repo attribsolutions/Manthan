@@ -17,6 +17,8 @@ import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable"
 import { SaveButton } from "../../../components/Common/CommonButton";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { get_POSRoleAccess_List_Api } from "../../../helpers/backend_helper";
+import { event } from "jquery";
+import { C_DatePicker } from "../../../CustomValidateForm";
 
 
 
@@ -46,7 +48,6 @@ const POSRoleAccess = (props) => {
         pageField: state.CommonPageFieldReducer.pageField,
         saveBtnloading: state.PosRoleAccessReducer.saveBtnloading,
         postMsg: state.PosRoleAccessReducer.postMsg,
-
         tableList: state.PosRoleAccessReducer.PosRoleAccessListData
     })
     );
@@ -79,6 +80,7 @@ const POSRoleAccess = (props) => {
             _cfunc.breadcrumbReturnFunc({ dispatch, userAcc });
         };
     }, [userAccess])
+
     useEffect(async () => {
         const response = await get_POSRoleAccess_List_Api()
         response.Data.forEach(i => {
@@ -117,8 +119,17 @@ const POSRoleAccess = (props) => {
         if (tableColumns.length > 1) {
             let columns = []
             tableColumns.forEach(i => {
+
                 let column = {}
-                let Not_RoleAccessColumn = ["Name"];
+                let Not_RoleAccessColumn = ["Name", "TopRows", "Query", "TouchSaleHistoryRows", "LicenseValidTill"];
+                let RoleAccess_TextColumn = ["TopRows", "Query", "TouchSaleHistoryRows",];
+                let RoleAccess_DateColumn = ["LicenseValidTill"];
+
+                let isColumntext = RoleAccess_TextColumn.includes(i.dataField);
+                let isColumnDate = RoleAccess_DateColumn.includes(i.dataField);
+
+
+
                 let isColumn = Not_RoleAccessColumn.includes(i.dataField);
                 if (!isColumn) {
                     column = {
@@ -131,6 +142,7 @@ const POSRoleAccess = (props) => {
 
                             return (
                                 <>
+
                                     <Input
                                         id={`checkbox_${row.id}_${key}`}
                                         type="checkbox"
@@ -149,7 +161,70 @@ const POSRoleAccess = (props) => {
                             );
                         },
                     };
-                } else {
+                } else if (isColumntext) {
+                    column = {
+                        text: i.dataField,
+                        dataField: i.dataField,
+                        sort: true,
+                        classes: "table-cursor-pointer",
+                        style: {
+                            position: "sticky",
+                            left: 0,
+                            background: "white"
+                        },
+                        formatExtraData: { cellReferesh },
+                        formatter: (cell, row, key) => {
+
+                            return (
+                                <>
+                                    <textarea rows={3} value={cell}
+                                     id={`checkbox_${row.id}_${key}`}
+                                        onChange={(e) => {
+                                            debugger
+                                            if (e.target.id === `checkbox_${row.id}_${key}`) {
+
+                                                setcellReferesh(i => !i)
+                                                row[i.dataField] = e.target.value
+                                            }
+                                        }}
+                                        cols={40} />
+
+                                </>
+                            );
+                        },
+                    };
+
+                } else if (isColumnDate) {
+
+                    column = {
+                        text: i.dataField,
+                        dataField: i.dataField,
+                        sort: true,
+                        classes: "table-cursor-pointer",
+                        formatExtraData: { cellReferesh },
+                        formatter: (cell, row, key) => {
+
+                            return (
+                                <>
+                                    <C_DatePicker
+                                        placeholder="Enter License Date"
+                                        value={cell}
+                                        id={`checkbox_${row.id}_${key}`}
+                                        onChange={(e) => {
+                                            if (e.target.id === `checkbox_${row.id}_${key}`) {
+                                                setcellReferesh(i => !i)
+                                                row[i.dataField] = e.target.value
+                                            }
+                                        }}
+                                    />
+                                </>
+                            );
+                        },
+                    };
+
+                }
+
+                else {
                     column = {
                         text: i.dataField,
                         dataField: i.dataField,
@@ -197,9 +272,15 @@ const POSRoleAccess = (props) => {
 
             };
         });
-
-        const jsonBody = JSON.stringify(TableData);
-        dispatch(savePosRoleAccess({ jsonBody }));
+        if (TableData.length > 0) {
+            const jsonBody = JSON.stringify(TableData);
+            dispatch(savePosRoleAccess({ jsonBody }));
+        } else {
+            customAlert({
+                Type: 4,
+                Message: "Please update at least one field."
+            })
+        }
     }
 
 
@@ -217,7 +298,6 @@ const POSRoleAccess = (props) => {
                         {(toolkitProps,) => (
                             <React.Fragment>
                                 <Row>
-                                    {/* <SimpleBar className="" style={{ maxHeight: "81vh" }}> */}
                                     <Col xl="12">
                                         <BootstrapTable
                                             keyField="id"
@@ -234,7 +314,6 @@ const POSRoleAccess = (props) => {
                                         />
                                         {globalTableSearchProps(toolkitProps.searchProps)}
                                     </Col>
-                                    {/* </SimpleBar> */}
                                 </Row>
                             </React.Fragment>
                         )}

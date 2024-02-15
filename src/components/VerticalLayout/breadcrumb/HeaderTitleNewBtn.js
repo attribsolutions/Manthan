@@ -10,7 +10,8 @@ import { useState } from "react";
 import { Dropdown, DropdownItem, DropdownMenu, DropdownToggle, Label } from "reactstrap";
 
 const HeaderTitleNewBtn = ({
-    hederTextColor = "black"
+    hederTextColor = "black",
+    showBredcrumItemName = true
 }) => {
 
     const dispatch = useDispatch();
@@ -33,6 +34,7 @@ const HeaderTitleNewBtn = ({
         pageField
     } = useSelector(({ BreadcrumbReducer, H_Pages }) => ({
         ...BreadcrumbReducer.breadcrumbDetail,
+        bredcrumbItemName: BreadcrumbReducer.bredcrumbItemName,
         editData: H_Pages.editData,
     }));
 
@@ -129,7 +131,7 @@ const HeaderTitleNewBtn = ({
         else {
             return (
                 <>
-                    <Label className={`pt-3 pl-1 font-size-18 ${headerLabelClass}`}
+                    <Label className={`pt-2 pl-1 font-size-18 ${headerLabelClass}`}
                         onClick={() => NavigateHandler("list")}
                         style={{ ...headerLabelStyles, }}>{pageHeading}</Label>
                 </>
@@ -154,14 +156,11 @@ const HeaderTitleNewBtn = ({
         <div>
             <RenderNewButtonView />
             <PageHeadingNavigate pageHeading={pageHeading} />
-            {bredcrumbItemName.length > 0 && (
-                <label
-                    className="font-size-21 form-label text-nowrap bd-highlight text-primary"
-                    style={{ paddingLeft: "7px", color: "#5156be" }}
-                >
-                    &nbsp;/&nbsp;{bredcrumbItemName}
-                </label>
-            )}
+            {showBredcrumItemName && <label>
+                <div id='breadcrumb-item-name' className="text-primary">
+                    <span>{bredcrumbItemName}</span>
+                </div>
+            </label>}
         </div>
     );
 

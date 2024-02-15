@@ -21,7 +21,7 @@ const PageDetailsSection = ({ handleClose, ...props }) => {
                         <button className="close-white" onClick={handleClose}>
                         </button>
 
-                        <HeaderTitleNewBtn hederTextColor={"white"} />
+                        <HeaderTitleNewBtn hederTextColor={"white"} showBredcrumItemName={false} />
                         <CountLabelComp />
                     </div>
                 </div>

@@ -95,7 +95,15 @@ padding-bottom: 5px;
 padding-right: 5px;
 padding-left: 5px;
 border-bottom: 1px solid $border-color;
+}
 
+#breadcrumb-item-name {
+  background-color: #e7f3fe;
+  border-left: 3px solid #2196F3;
+  padding-left: 5px; 
+  padding-right: 5px; 
+  align-self: center;
+  margin-left: 10px;
 }
 
 
