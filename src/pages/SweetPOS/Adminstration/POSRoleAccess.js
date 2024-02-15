@@ -11,13 +11,11 @@ import BootstrapTable from "react-bootstrap-table-next";
 import { globalTableSearchProps } from "../../../components/Common/SearchBox/MySearch";
 import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import DynamicColumnHook from "../../../components/Common/TableCommonFunc";
-import { Data } from './Data';
 import { getPosRoleAccesslist, savePosRoleAccess, savePosRoleAccess_Success } from "../../../store/SweetPOSStore/Administrator/POSRoleAccessRedux/action";
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 import { SaveButton } from "../../../components/Common/CommonButton";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { get_POSRoleAccess_List_Api } from "../../../helpers/backend_helper";
-import { event } from "jquery";
 import { C_DatePicker } from "../../../CustomValidateForm";
 
 
@@ -194,10 +192,18 @@ const POSRoleAccess = (props) => {
                         sort: true,
                         classes: "table-cursor-pointer",
                         formatter: (cell, row, key) => {
+                            cell = (cell === 0 ? _cfunc.date_ymd_func() : cell)
+                            let options = {
+                                maxDate: "",
+                                altInput: true,
+                                altFormat: "d-m-Y",
+                                dateFormat: "Y-m-d",
+                            }
                             return (
                                 <>
                                     <C_DatePicker
                                         placeholder="Enter License Date"
+                                        options={options}
                                         value={cell}
                                         id={`checkbox_${row.id}_${key}`}
                                         onChange={(e, date) => {
@@ -264,11 +270,9 @@ const POSRoleAccess = (props) => {
 
             settableData({ data: tableList, tableColumns: columns })
 
-            dispatch(BreadcrumbShowCountlabel(`Count:${Data.length}`));
+            dispatch(BreadcrumbShowCountlabel(`Count:${tableList.length}`));
         }
     }, [tableColumns.length > 1, tableList, cellReferesh])
-
-
 
     const saveHandler = () => {
         const isChangeRow = [];
@@ -280,10 +284,12 @@ const POSRoleAccess = (props) => {
             }
         })
         const TableData = isChangeRow.map(i => {
+
             const { Name, id, CreatedOn, UpdatedOn, ...rest } = i;
             return {
                 ...rest,
                 DivName: Name,
+                LicenseValidTill: i.LicenseValidTill === 0 ? _cfunc.date_ymd_func() : i.LicenseValidTill,
                 CreatedBy: _cfunc.loginUserID(),
                 UpdatedBy: _cfunc.loginUserID(),
             };
@@ -298,7 +304,6 @@ const POSRoleAccess = (props) => {
             })
         }
     }
-
     return (
         <React.Fragment>
             <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
