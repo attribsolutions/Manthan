@@ -691,7 +691,7 @@ const PageMaster = (props) => {
                                   <Select
                                     value={module_DropdownSelect}
                                     options={Module_DropdownOption}
-                                    isDisabled={(actualPagePath) && true}
+                                    // isDisabled={(actualPagePath) && true}
                                     autoComplete="off"
                                     onChange={(e) => {
                                       Module_DropdownSelectHandller(e);
