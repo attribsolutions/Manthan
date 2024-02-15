@@ -103,7 +103,7 @@ const POSRoleAccess = (props) => {
             dispatch(getPosRoleAccesslist())
             dispatch(savePosRoleAccess_Success({ Status: false }));
             customAlert({
-                Type: 4,
+                Type: 1,
                 Message: postMsg.Message,
             })
         }
@@ -130,7 +130,6 @@ const POSRoleAccess = (props) => {
                 let isColumntext = RoleAccess_TextColumn.includes(i.dataField);
                 let isColumnDate = RoleAccess_DateColumn.includes(i.dataField);
 
-
                 let isColumn = Not_RoleAccessColumn.includes(i.dataField);
                 if (!isColumn) {
                     column = {
@@ -140,7 +139,6 @@ const POSRoleAccess = (props) => {
                         classes: "table-cursor-pointer",
                         formatExtraData: { cellReferesh },
                         formatter: (cell, row, key) => {
-
                             return (
                                 <>
                                     <Input
@@ -172,16 +170,14 @@ const POSRoleAccess = (props) => {
                             left: 0,
                             background: "white"
                         },
-                        // formatExtraData: { cellReferesh },
                         formatter: (cell, row, key) => {
-
                             return (
                                 <>
                                     <textarea rows={3} defaultValue={cell}
+                                        style={{ borderRadius: "5px" }}
                                         id={`checkbox_${row.id}_${key}`}
                                         onChange={(e) => {
                                             if (e.target.id === `checkbox_${row.id}_${key}`) {
-                                                // setcellReferesh(i => !i)
                                                 row[i.dataField] = e.target.value
                                             }
                                         }}
@@ -191,17 +187,13 @@ const POSRoleAccess = (props) => {
                             );
                         },
                     };
-
                 } else if (isColumnDate) {
-
                     column = {
                         text: i.dataField,
                         dataField: i.dataField,
                         sort: true,
                         classes: "table-cursor-pointer",
-                        // formatExtraData: { cellReferesh },
                         formatter: (cell, row, key) => {
-
                             return (
                                 <>
                                     <C_DatePicker
@@ -210,7 +202,6 @@ const POSRoleAccess = (props) => {
                                         id={`checkbox_${row.id}_${key}`}
                                         onChange={(e, date) => {
                                             row[i.dataField] = date
-
                                         }}
                                     />
                                 </>
@@ -224,24 +215,27 @@ const POSRoleAccess = (props) => {
                         dataField: i.dataField,
                         sort: true,
                         classes: "table-cursor-pointer",
-                        // formatExtraData: { cellReferesh },
                         formatter: (cell, row, key) => {
                             return (
                                 <>
                                     <Input
                                         id={`checkbox_${row.id}_${key}`}
+                                        style={{ width: "100px" }}
                                         type="text"
                                         name={`${row.Name}`}
                                         defaultValue={cell}
                                         onChange={(e) => {
                                             if (e.target.id === `checkbox_${row.id}_${key}`) {
-
-                                                // setcellReferesh(i => !i)
-                                                row[i.dataField] = e.target.value
+                                                let value = Number(e.target.value);
+                                                if (!isNaN(value)) {
+                                                    row[i.dataField] = e.target.value
+                                                } else {
+                                                    e.target.value = cell
+                                                }
                                             }
                                         }}
                                     >
-                                    </Input>
+                                    </Input >
                                 </>
                             );
                         },
@@ -292,7 +286,6 @@ const POSRoleAccess = (props) => {
                 DivName: Name,
                 CreatedBy: _cfunc.loginUserID(),
                 UpdatedBy: _cfunc.loginUserID(),
-
             };
         });
         if (TableData.length > 0) {
@@ -305,7 +298,6 @@ const POSRoleAccess = (props) => {
             })
         }
     }
-
 
     return (
         <React.Fragment>
