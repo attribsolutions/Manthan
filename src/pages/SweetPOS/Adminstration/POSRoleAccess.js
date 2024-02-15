@@ -192,10 +192,18 @@ const POSRoleAccess = (props) => {
                         sort: true,
                         classes: "table-cursor-pointer",
                         formatter: (cell, row, key) => {
+                            cell = (cell === 0 ? _cfunc.date_ymd_func() : cell)
+                            let options = {
+                                maxDate: "",
+                                altInput: true,
+                                altFormat: "d-m-Y",
+                                dateFormat: "Y-m-d",
+                            }
                             return (
                                 <>
                                     <C_DatePicker
                                         placeholder="Enter License Date"
+                                        options={options}
                                         value={cell}
                                         id={`checkbox_${row.id}_${key}`}
                                         onChange={(e, date) => {
@@ -276,10 +284,12 @@ const POSRoleAccess = (props) => {
             }
         })
         const TableData = isChangeRow.map(i => {
+
             const { Name, id, CreatedOn, UpdatedOn, ...rest } = i;
             return {
                 ...rest,
                 DivName: Name,
+                LicenseValidTill: i.LicenseValidTill === 0 ? _cfunc.date_ymd_func() : i.LicenseValidTill,
                 CreatedBy: _cfunc.loginUserID(),
                 UpdatedBy: _cfunc.loginUserID(),
             };
@@ -298,45 +308,45 @@ const POSRoleAccess = (props) => {
         <React.Fragment>
             <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
             <div className="page-content">
-            <div className="mt-1">
-                <ToolkitProvider
-                    keyField="id"
-                    data={tableData.data}
-                    columns={tableData.tableColumns}
-                    search
-                >
-                    {(toolkitProps,) => (
-                        <React.Fragment>
-                            <Row>
-                                <Col xl="12">
-                                    <BootstrapTable
-                                        keyField="id"
-                                        classes={"table  table-bordered table-hover"}
-                                        noDataIndication={
-                                            <div className="text-danger text-center ">
-                                                Record Not available
-                                            </div>
-                                        }
-                                        onDataSizeChange={({ dataSize }) => {
-                                            dispatch(BreadcrumbShowCountlabel(`Count:${dataSize}`));
-                                        }}
-                                        {...toolkitProps.baseProps}
-                                    />
-                                    {globalTableSearchProps(toolkitProps.searchProps)}
-                                </Col>
-                            </Row>
-                        </React.Fragment>
-                    )}
-                </ToolkitProvider>
-                <SaveButtonDraggable>
-                    <SaveButton
-                        loading={saveBtnloading}
-                        pageMode={pageMode}
-                        userAcc={userPageAccessState}
-                        module={"POS RoleAccess"} onClick={saveHandler}
-                    />
-                </SaveButtonDraggable>
-            </div>
+                <div className="mt-1">
+                    <ToolkitProvider
+                        keyField="id"
+                        data={tableData.data}
+                        columns={tableData.tableColumns}
+                        search
+                    >
+                        {(toolkitProps,) => (
+                            <React.Fragment>
+                                <Row>
+                                    <Col xl="12">
+                                        <BootstrapTable
+                                            keyField="id"
+                                            classes={"table  table-bordered table-hover"}
+                                            noDataIndication={
+                                                <div className="text-danger text-center ">
+                                                    Record Not available
+                                                </div>
+                                            }
+                                            onDataSizeChange={({ dataSize }) => {
+                                                dispatch(BreadcrumbShowCountlabel(`Count:${dataSize}`));
+                                            }}
+                                            {...toolkitProps.baseProps}
+                                        />
+                                        {globalTableSearchProps(toolkitProps.searchProps)}
+                                    </Col>
+                                </Row>
+                            </React.Fragment>
+                        )}
+                    </ToolkitProvider>
+                    <SaveButtonDraggable>
+                        <SaveButton
+                            loading={saveBtnloading}
+                            pageMode={pageMode}
+                            userAcc={userPageAccessState}
+                            module={"POS RoleAccess"} onClick={saveHandler}
+                        />
+                    </SaveButtonDraggable>
+                </div>
             </div>
         </React.Fragment >
     )
