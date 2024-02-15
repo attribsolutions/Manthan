@@ -172,16 +172,16 @@ const POSRoleAccess = (props) => {
                             left: 0,
                             background: "white"
                         },
-                        formatExtraData: { cellReferesh },
+                        // formatExtraData: { cellReferesh },
                         formatter: (cell, row, key) => {
 
                             return (
                                 <>
-                                    <textarea rows={3} value={cell}
+                                    <textarea rows={3} defaultValue={cell}
                                         id={`checkbox_${row.id}_${key}`}
                                         onChange={(e) => {
                                             if (e.target.id === `checkbox_${row.id}_${key}`) {
-                                                setcellReferesh(i => !i)
+                                                // setcellReferesh(i => !i)
                                                 row[i.dataField] = e.target.value
                                             }
                                         }}
@@ -209,8 +209,6 @@ const POSRoleAccess = (props) => {
                                         value={cell}
                                         id={`checkbox_${row.id}_${key}`}
                                         onChange={(e, date) => {
-
-
                                             row[i.dataField] = date
 
                                         }}
