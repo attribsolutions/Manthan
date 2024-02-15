@@ -314,11 +314,11 @@ const OrderSummary = (props) => {
         setGroupByDate(e.target.checked)
         setBtnMode(1)
     }
-    function groupBySupplierHamdler(e) {
+    function groupBySupplierHandler(e) {
         setGroupBySupplier(e.target.checked)
         setBtnMode(1)
     }
-    function groupByCustomerHamdler(e) {
+    function groupByCustomerHandler(e) {
         setGroupByCustomer(e.target.checked)
         setBtnMode(1)
     }
@@ -459,44 +459,39 @@ const OrderSummary = (props) => {
 
                 </div>
 
-                <Card className="mt-1">
-                    <CardBody className="c_card_body text-black">
-                        <Row>
-                            <Col sm={4} >
-                                <FormGroup className="row mt-n3 mb-n4">
-                                    <Label className="col-4 p-2" >By Date Group</Label>
-                                    <Col sm="4" style={{ marginTop: '9px', }}>
-                                        <Input type="checkbox"
-                                            checked={groupByDate}
-                                            onChange={groupByDateHandler} />
-                                    </Col>
-                                </FormGroup>
-                            </Col>
+                <Card className="mt-1 mb-1  c_card_body">
 
-                            <Col sm={4} >
-                                <FormGroup className="row mt-n3 mb-n4">
-                                    <Label className="col-4 p-2" >By Supplier Name</Label>
-                                    <Col sm="4" style={{ marginTop: '9px', }}>
-                                        <Input type="checkbox"
-                                            checked={groupBySupplier}
-                                            onChange={groupBySupplierHamdler}
-                                        />
-                                    </Col>
-                                </FormGroup>
-                            </Col>
-                            <Col sm={4} >
-                                <FormGroup className="row mt-n3 mb-n4">
-                                    <Label className="col-4 p-2" >By Customer Name</Label>
-                                    <Col sm="4" style={{ marginTop: '9px', }}>
-                                        <Input type="checkbox"
-                                            checked={groupByCustomer}
-                                            onChange={groupByCustomerHamdler}
-                                        />
-                                    </Col>
-                                </FormGroup>
-                            </Col>
-                        </Row>
-                    </CardBody>
+                    <div className="d-flex gap-5">
+                        <div className="d-flex gap-2  justify-content-center">
+                            <div>By Date Group</div>
+                            <Input
+                                type="checkbox"
+                                checked={groupByDate}
+                                onChange={groupByDateHandler}
+                            />
+                        </div>
+
+                        <div className="d-flex gap-2 justify-content-center">
+                            <div>By Supplier Name</div>
+                            <Input
+                                type="checkbox"
+                                checked={groupBySupplier}
+                                onChange={groupBySupplierHandler}
+                            />
+                        </div>
+
+                        <div className="d-flex gap-2 justify-content-center">
+                            <div>By Customer Name</div>
+                            <Input
+                                type="checkbox"
+                                checked={groupByCustomer}
+                                onChange={groupByCustomerHandler}
+                            />
+                        </div>
+                    </div>
+
+
+
                 </Card>
 
                 <div >
@@ -510,10 +505,10 @@ const OrderSummary = (props) => {
                             <React.Fragment>
                                 <Row>
                                     <Col xl="12">
-                                        <div className="table-responsive table">
+                                        <div>
                                             <BootstrapTable
                                                 keyField={"keyId"}
-                                                classes={"table  table-bordered table-hover"}
+                                                classes={"custom-table"}
                                                 noDataIndication={
                                                     <div className="text-danger text-center ">
                                                         Record Not available

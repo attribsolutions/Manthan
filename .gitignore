@@ -6,7 +6,7 @@
 .pnp.js
 
 _serverPath.js
-
+_serverPath
 # testing
 /coverage
 
