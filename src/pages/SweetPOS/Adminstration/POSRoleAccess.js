@@ -121,13 +121,14 @@ const POSRoleAccess = (props) => {
             tableColumns.forEach(i => {
 
                 let column = {}
-                let Not_RoleAccessColumn = ["Name", "TopRows", "Query", "TouchSaleHistoryRows", "LicenseValidTill"];
-                let RoleAccess_TextColumn = ["TopRows", "Query", "TouchSaleHistoryRows",];
+                let Not_RoleAccessColumn = ["Name", "TopRows", "Query", "TouchSaleHistoryRows", "LicenseValidTill", "DivisionID"];
+                let RoleAccess_TextColumn = ["Query"];
                 let RoleAccess_DateColumn = ["LicenseValidTill"];
+                let RoleAccess_InputColumn = ["TopRows", "TouchSaleHistoryRows", "DivisionID"];
 
+                let isColumnInput = RoleAccess_InputColumn.includes(i.dataField);
                 let isColumntext = RoleAccess_TextColumn.includes(i.dataField);
                 let isColumnDate = RoleAccess_DateColumn.includes(i.dataField);
-
 
 
                 let isColumn = Not_RoleAccessColumn.includes(i.dataField);
@@ -142,12 +143,11 @@ const POSRoleAccess = (props) => {
 
                             return (
                                 <>
-
                                     <Input
                                         id={`checkbox_${row.id}_${key}`}
                                         type="checkbox"
                                         className="p-1"
-                                        name={`${row.DivName}`}
+                                        name={`${row.Name}`}
                                         defaultChecked={cell}
                                         onChange={(e) => {
                                             if (e.target.id === `checkbox_${row.id}_${key}`) {
@@ -178,11 +178,9 @@ const POSRoleAccess = (props) => {
                             return (
                                 <>
                                     <textarea rows={3} value={cell}
-                                     id={`checkbox_${row.id}_${key}`}
+                                        id={`checkbox_${row.id}_${key}`}
                                         onChange={(e) => {
-                                            debugger
                                             if (e.target.id === `checkbox_${row.id}_${key}`) {
-
                                                 setcellReferesh(i => !i)
                                                 row[i.dataField] = e.target.value
                                             }
@@ -221,10 +219,36 @@ const POSRoleAccess = (props) => {
                             );
                         },
                     };
-
                 }
-
-                else {
+                else if (isColumnInput) {
+                    column = {
+                        text: i.dataField,
+                        dataField: i.dataField,
+                        sort: true,
+                        classes: "table-cursor-pointer",
+                        // formatExtraData: { cellReferesh },
+                        formatter: (cell, row, key) => {
+                            return (
+                                <>
+                                    <Input
+                                        id={`checkbox_${row.id}_${key}`}
+                                        type="text"
+                                        name={`${row.Name}`}
+                                        defaultValue={cell}
+                                        onChange={(e) => {
+                                            if (e.target.id === `checkbox_${row.id}_${key}`) {
+                                                debugger
+                                                // setcellReferesh(i => !i)
+                                                row[i.dataField] = e.target.value
+                                            }
+                                        }}
+                                    >
+                                    </Input>
+                                </>
+                            );
+                        },
+                    };
+                } else {
                     column = {
                         text: i.dataField,
                         dataField: i.dataField,
@@ -267,6 +291,7 @@ const POSRoleAccess = (props) => {
             const { Name, id, CreatedOn, UpdatedOn, ...rest } = i;
             return {
                 ...rest,
+                DivName: Name,
                 CreatedBy: _cfunc.loginUserID(),
                 UpdatedBy: _cfunc.loginUserID(),
 
