@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Col, Input, Row, } from "reactstrap";
+import { Button, Col, Input, Row, } from "reactstrap";
 import { useHistory } from "react-router-dom";
 
 import * as _cfunc from "../../../components/Common/CommonFunction";
@@ -79,6 +79,8 @@ const POSRoleAccess = (props) => {
         };
     }, [userAccess])
 
+    ///  use effect for compare actual save value to change value in ui change value are update in tablelist variable
+
     useEffect(async () => {
         const response = await get_POSRoleAccess_List_Api()
         response.Data.forEach(i => {
@@ -93,12 +95,13 @@ const POSRoleAccess = (props) => {
             }
         });
         setDataBase_Data(response.Data)
-    }, [])
-
-
-    useEffect(() => {
+        ////set Table Data here so that check actual save value to change value in tablelist variavle after save with out referesh
+        settableData((i) => {
+            const a = { ...i }
+            a.data = response.Data;
+            return a
+        })
         if (postMsg.Status === true && postMsg.StatusCode === 200) {
-            dispatch(getPosRoleAccesslist())
             dispatch(savePosRoleAccess_Success({ Status: false }));
             customAlert({
                 Type: 1,
@@ -127,8 +130,8 @@ const POSRoleAccess = (props) => {
                 let isColumnInput = RoleAccess_InputColumn.includes(i.dataField);
                 let isColumntext = RoleAccess_TextColumn.includes(i.dataField);
                 let isColumnDate = RoleAccess_DateColumn.includes(i.dataField);
-
                 let isColumn = Not_RoleAccessColumn.includes(i.dataField);
+
                 if (!isColumn) {
                     column = {
                         text: i.dataField,
@@ -142,6 +145,7 @@ const POSRoleAccess = (props) => {
                                     <Input
                                         id={`checkbox_${row.id}_${key}`}
                                         type="checkbox"
+                                        style={{ cursor: 'pointer' }}
                                         className="p-1"
                                         name={`${row.Name}`}
                                         defaultChecked={cell}
@@ -171,15 +175,21 @@ const POSRoleAccess = (props) => {
                         formatter: (cell, row, key) => {
                             return (
                                 <>
-                                    <textarea rows={3} defaultValue={cell}
-                                        style={{ borderRadius: "5px" }}
-                                        id={`checkbox_${row.id}_${key}`}
-                                        onChange={(e) => {
-                                            if (e.target.id === `checkbox_${row.id}_${key}`) {
-                                                row[i.dataField] = e.target.value
-                                            }
-                                        }}
-                                        cols={40} />
+                                    <div style={{ position: 'relative' }}>
+                                        <textarea
+                                            rows={3}
+                                            defaultValue={cell}
+                                            style={{ borderRadius: '5px', borderColor: '#ced4da', paddingRight: '30px' }}
+                                            id={`Text_${row.id}_${key}`}
+                                            onChange={(e) => {
+                                                if (e.target.id === `Text_${row.id}_${key}`) {
+                                                    row[i.dataField] = e.target.value
+                                                }
+                                            }}
+                                            cols={40}
+                                        />
+                                    </div>
+
 
                                 </>
                             );
@@ -205,8 +215,9 @@ const POSRoleAccess = (props) => {
                                         placeholder="Enter License Date"
                                         options={options}
                                         value={cell}
-                                        id={`checkbox_${row.id}_${key}`}
+                                        id={`Date_${row.id}_${key}`}
                                         onChange={(e, date) => {
+                                            debugger
                                             row[i.dataField] = date
                                         }}
                                     />
@@ -225,13 +236,13 @@ const POSRoleAccess = (props) => {
                             return (
                                 <>
                                     <Input
-                                        id={`checkbox_${row.id}_${key}`}
+                                        id={`Input_${row.id}_${key}`}
                                         style={{ width: "100px" }}
                                         type="text"
                                         name={`${row.Name}`}
                                         defaultValue={cell}
                                         onChange={(e) => {
-                                            if (e.target.id === `checkbox_${row.id}_${key}`) {
+                                            if (e.target.id === `Input_${row.id}_${key}`) {
                                                 let value = Number(e.target.value);
                                                 if (!isNaN(value)) {
                                                     row[i.dataField] = e.target.value
@@ -275,6 +286,7 @@ const POSRoleAccess = (props) => {
     }, [tableColumns.length > 1, tableList, cellReferesh])
 
     const saveHandler = () => {
+        ///only Save json row that are change in UI..../////
         const isChangeRow = [];
         DataBase_Data.forEach((objA, index) => {
             const objB = tableList[index];
@@ -284,7 +296,6 @@ const POSRoleAccess = (props) => {
             }
         })
         const TableData = isChangeRow.map(i => {
-
             const { Name, id, CreatedOn, UpdatedOn, ...rest } = i;
             return {
                 ...rest,
@@ -315,7 +326,7 @@ const POSRoleAccess = (props) => {
                         columns={tableData.tableColumns}
                         search
                     >
-                        {(toolkitProps,) => (
+                        {(toolkitProps) => (
                             <React.Fragment>
                                 <Row>
                                     <Col xl="12">
@@ -338,7 +349,8 @@ const POSRoleAccess = (props) => {
                             </React.Fragment>
                         )}
                     </ToolkitProvider>
-                    <SaveButtonDraggable>
+
+                    {tableData.data.length > 0 && <SaveButtonDraggable>
                         <SaveButton
                             loading={saveBtnloading}
                             pageMode={pageMode}
@@ -346,6 +358,8 @@ const POSRoleAccess = (props) => {
                             module={"POS RoleAccess"} onClick={saveHandler}
                         />
                     </SaveButtonDraggable>
+                    }
+
                 </div>
             </div>
         </React.Fragment >
