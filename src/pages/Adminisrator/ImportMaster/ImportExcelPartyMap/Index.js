@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import {
+    Button,
     Col,
     FormGroup,
     Input,
     Label,
+    Row,
 } from "reactstrap";
 import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
@@ -51,6 +53,10 @@ const ImportExcelPartyMap = (props) => {
     const fileds = { Party: "", MapType: "", }
     const [state, setState] = useState(initialFiledFunc(fileds))
     const [UpdateTableList, setUpdateTableList] = useState([])
+    const [isCopy, setisCopy] = useState(false)
+
+
+
 
 
     //Access redux store Data /  'save_ModuleSuccess' action data
@@ -141,16 +147,30 @@ const ImportExcelPartyMap = (props) => {
 
             setUpdateTableList(newItemList)
         } else {
-            setUpdateTableList(goButtonArr)
+
+            if (isCopy) {
+                const updatedGoButtonArr = goButtonArr.map(i => {
+                    if (i.mapValue === null) {
+                        return {
+                            ...i,
+                            mapValue: i.fieldName
+                        };
+                    }
+                    return i;
+                });
+                setUpdateTableList(updatedGoButtonArr);
+            } else {
+                setUpdateTableList(goButtonArr);
+            }
         }
-    }, [goButtonArr, ItemList])
+    }, [goButtonArr, isCopy, ItemList])
 
     useEffect(() => {
         dispatch(BreadcrumbShowCountlabel(`${"Count"} :${UpdateTableList.length}`))
     }, [UpdateTableList])
 
-    useEffect(async () => {
 
+    useEffect(async () => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(save_ImportExcelPartyMap_Sucess({ Status: false }))
             customAlert({
@@ -191,7 +211,34 @@ const ImportExcelPartyMap = (props) => {
         {
             text: `${values.MapType.label === undefined ? "Party" : values.MapType.label}`,
             dataField: "fieldName",
-            sort: true
+
+
+            headerFormatter: () => {
+                return (
+                    <Row>
+                        <Col sm={9}>
+                            <span
+                            > {values.MapType.label === undefined ? "Party" : values.MapType.label} </span>
+                        </Col>
+                        <Col>
+                            <div className="btn-group " role="group" aria-label="Basic checkbox toggle button group">
+                                <input
+                                    type="checkbox"
+                                    id={"btncheck"}
+                                    className="btn-check"
+                                    title="Copy"
+                                    onChange={(e) => {
+                                        setisCopy(e.target.checked)
+                                    }}
+                                />
+                                <label className="btn btn-outline-primary" title="Copy" htmlFor={"btncheck"}><span
+                                    className="bx bxs-copy font-size-9"
+                                ></span></label>
+                            </div>
+                        </Col>
+                    </Row>
+                );
+            }
         },
         {
             text: "Route",
@@ -214,8 +261,9 @@ const ImportExcelPartyMap = (props) => {
         {
             text: "Related Key Field",
             dataField: "mapValue",
-            formatter: (cellContent, row) => (
-                <>
+            formatter: (cellContent, row) => {
+
+                return <>
                     <div style={{ justifyContent: 'center' }} >
                         <Input
                             type="text"
@@ -226,7 +274,7 @@ const ImportExcelPartyMap = (props) => {
 
                     </div>
                 </>
-            ),
+            },
         },
     ];
 
