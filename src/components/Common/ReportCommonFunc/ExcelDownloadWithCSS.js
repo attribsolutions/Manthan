@@ -30,7 +30,7 @@ export function ExcelReportComponent({ pageField,
         // Add headers to the worksheet
         worksheet.addRow(HeaderColumns);
 
-        styleHeaderRow(worksheet, dataRow);  // Header Style
+        styleHeaderRow(worksheet);  // Header Style
 
         function formatCellByDataType(cell, controlType, value) {
             switch (controlType) {

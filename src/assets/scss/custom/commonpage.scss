@@ -148,7 +148,7 @@
 
 
 .c_card_body {
-  background-color: #7a51e324;
+  background-color: #7a51e311;
   border-radius: 5px;
   padding: 10px;
 }
@@ -162,8 +162,15 @@
 .c_card_filter {
   background-color: #c2c2dbf5 !important;
   border-radius: 5px;
-  margin-bottom: 4px;
-  // background-color: rgb(218, 218, 219) !important;
+  margin-bottom: 6px;
+  box-shadow: 2px 3px 3px 0px darkgray;
+}
+
+.c_card_filter-2 {
+  background-color: #8b7fa952;
+  border-radius: 5px;
+  padding: 10px;
+  box-shadow: 2px 3px 3px 0px darkgray;
 }
 
 

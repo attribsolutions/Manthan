@@ -1358,7 +1358,7 @@ const Order = (props) => {
                     <div className="page-content">
 
                         <div>
-                            <div className="px-2 c_card_filter header text-black" >{/* Order Date And Supplier Name,Go_Button*/}
+                            <div className="px-2 c_card_filter text-black" >{/* Order Date And Supplier Name,Go_Button*/}
 
                                 <div>
                                     <Row >
@@ -1558,9 +1558,11 @@ const Order = (props) => {
 
                             </div>
 
-                            <div className="px-2  mb-1 c_card_body text-black" >              {/*  Description and Delivery Date  field */}
 
-                                {subPageMode === url.ORDER_1 ? <div>                             {/*  Billing Address   and Shipping Address*/}
+
+                            {subPageMode === url.ORDER_1 &&
+                                <div className="px-2  mb-1 c_card_body text-black" >              {/*  Description and Delivery Date  field */}
+                                    {/*  Billing Address   and Shipping Address*/}
                                     <div className="row mt-2 ">
 
                                         <div className="col col-6">                             {/* Billing Address */}
@@ -1624,7 +1626,7 @@ const Order = (props) => {
                                     </div>
 
 
-                                    {(orderTypeSelect.label === 'Open PO') ?
+                                    {(orderTypeSelect.label === 'Open PO') &&
                                         <div className="row" >                                    {/*PO From Date */}
                                             <div className="col col-6" >
                                                 <FormGroup className=" row " >
@@ -1655,11 +1657,10 @@ const Order = (props) => {
                                                     </div>
                                                 </FormGroup>
                                             </div >
-                                        </div> : null}
+                                        </div>
+                                    }
                                 </div>
-                                    : null}
-
-                            </div>
+                            }
 
                         </div>
 

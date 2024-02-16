@@ -13,6 +13,7 @@ import { GST_R1_Report_API, GST_R1_Report_API_Success, GST_R3B_Report_API, GST_R
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import { alertMessages } from "../../components/Common/CommonErrorMsg/alertMsg";
 import { allLabelWithBlank } from "../../components/Common/CommonErrorMsg/HarderCodeData";
+import GST_ExcelDownloadFun from "./GST_ExcelDownloadFun";
 
 const GSTR1Report = (props) => {
     const dispatch = useDispatch();
@@ -78,26 +79,25 @@ const GSTR1Report = (props) => {
     }, [userAccess])
 
     useEffect(() => {
-        if ((GstR3BReportData.length !== 0)) {
+        if ((GstR3BReportData.StatusCode === 200 && GstR3BReportData.Status)) {
+            GST_ExcelDownloadFun({      // Download multi tab excel
+                excelTableData: GstR3BReportData.Data,
+                excelFileName: `GST-R3B Report (${values.FromDate}) To (${values.ToDate})`,
+            })
+            dispatch(GST_R3B_Report_API_Success({ Status: false }))
+        }
+    }, [GstR3BReportData]);
 
-            const blob = new Blob([GstR3BReportData], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-            const url = URL.createObjectURL(blob);
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = `GST_R3B_Report_From_(${values.FromDate})_To_(${values.ToDate}).xlsx`;
-            link.click();
-            dispatch(GST_R3B_Report_API_Success([]))
-        } else if ((GstR1ReportData.length !== 0)) {
-            const blob = new Blob([GstR1ReportData], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-            const url = URL.createObjectURL(blob);
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = `GST_R1_Report_From_(${values.FromDate})_To_(${values.ToDate}).xlsx`;
-            link.click();
-            dispatch(GST_R1_Report_API_Success([]))
+    useEffect(() => {
+        if ((GstR1ReportData.StatusCode === 200 && GstR1ReportData.Status)) {
+            GST_ExcelDownloadFun({      // Download multi tab excel
+                excelTableData: GstR1ReportData.Data,
+                excelFileName: `GST-R1 Report (${values.FromDate}) To (${values.ToDate})`,
+            })
+            dispatch(GST_R1_Report_API_Success({ Status: false }))
         }
 
-    }, [GstR3BReportData, GstR1ReportData])
+    }, [GstR1ReportData])
 
     useEffect(() => {
         return () => {
