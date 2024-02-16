@@ -371,7 +371,6 @@ const CurrentStockReport = (props) => {
 			value: "",
 			label: "All"
 		},
-
 		{
 			value: 0,
 			label: "Saleable Stock"
@@ -485,6 +484,7 @@ const CurrentStockReport = (props) => {
 					TotalStockValue: (Number(i.TotalStockValue).toFixed(2)),
 					UnSaleableStockValue: (Number(i.UnSaleableStockValue).toFixed(2)),
 					UnSaleableStockTaxValue: (Number(i.UnSaleableStockTaxValue).toFixed(2)),
+					SaleableStockTaxValue: (Number(i.SaleableStockTaxValue).toFixed(2)),
 					TaxValue: (Number(i.TaxValue).toFixed(2)),
 					Stockvaluewithtax: (Number(i.Stockvaluewithtax).toFixed(2)),
 					SaleableStock: (Number(i.SaleableStock).toFixed(2)),

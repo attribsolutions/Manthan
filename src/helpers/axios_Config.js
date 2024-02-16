@@ -2,7 +2,7 @@ import axios from 'axios';
 import axiosRetry from 'axios-retry';
 import { toast, Bounce } from 'react-toastify';
 import { loginSystemSetting, loginUserID } from '../components/Common/CommonFunction';
-import SERVER_HOST_PATH from './_serverPath';
+import SERVER_HOST_PATH from './_serverPath.js';
 
 
 

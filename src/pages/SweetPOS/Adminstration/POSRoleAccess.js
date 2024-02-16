@@ -11,13 +11,12 @@ import BootstrapTable from "react-bootstrap-table-next";
 import { globalTableSearchProps } from "../../../components/Common/SearchBox/MySearch";
 import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import DynamicColumnHook from "../../../components/Common/TableCommonFunc";
-import { Data } from './Data';
-import SimpleBar from "simplebar-react"
 import { getPosRoleAccesslist, savePosRoleAccess, savePosRoleAccess_Success } from "../../../store/SweetPOSStore/Administrator/POSRoleAccessRedux/action";
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 import { SaveButton } from "../../../components/Common/CommonButton";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { get_POSRoleAccess_List_Api } from "../../../helpers/backend_helper";
+import { C_DatePicker } from "../../../CustomValidateForm";
 
 
 
@@ -47,7 +46,6 @@ const POSRoleAccess = (props) => {
         pageField: state.CommonPageFieldReducer.pageField,
         saveBtnloading: state.PosRoleAccessReducer.saveBtnloading,
         postMsg: state.PosRoleAccessReducer.postMsg,
-
         tableList: state.PosRoleAccessReducer.PosRoleAccessListData
     })
     );
@@ -80,11 +78,16 @@ const POSRoleAccess = (props) => {
             _cfunc.breadcrumbReturnFunc({ dispatch, userAcc });
         };
     }, [userAccess])
+
     useEffect(async () => {
         const response = await get_POSRoleAccess_List_Api()
         response.Data.forEach(i => {
             for (let key in i) {
                 if (i.hasOwnProperty(key) && i[key] === null) {
+                    i[key] = 0;
+                } else if (i.hasOwnProperty(key) && i[key] === true) {
+                    i[key] = 1;
+                } else if (i.hasOwnProperty(key) && i[key] === false) {
                     i[key] = 0;
                 }
             }
@@ -98,7 +101,7 @@ const POSRoleAccess = (props) => {
             dispatch(getPosRoleAccesslist())
             dispatch(savePosRoleAccess_Success({ Status: false }));
             customAlert({
-                Type: 4,
+                Type: 1,
                 Message: postMsg.Message,
             })
         }
@@ -114,8 +117,17 @@ const POSRoleAccess = (props) => {
         if (tableColumns.length > 1) {
             let columns = []
             tableColumns.forEach(i => {
+
                 let column = {}
-                let Not_RoleAccessColumn = ["Name"];
+                let Not_RoleAccessColumn = ["Name", "TopRows", "Query", "TouchSaleHistoryRows", "LicenseValidTill", "DivisionID"];
+                let RoleAccess_TextColumn = ["Query"];
+                let RoleAccess_DateColumn = ["LicenseValidTill"];
+                let RoleAccess_InputColumn = ["TopRows", "TouchSaleHistoryRows", "DivisionID"];
+
+                let isColumnInput = RoleAccess_InputColumn.includes(i.dataField);
+                let isColumntext = RoleAccess_TextColumn.includes(i.dataField);
+                let isColumnDate = RoleAccess_DateColumn.includes(i.dataField);
+
                 let isColumn = Not_RoleAccessColumn.includes(i.dataField);
                 if (!isColumn) {
                     column = {
@@ -125,14 +137,13 @@ const POSRoleAccess = (props) => {
                         classes: "table-cursor-pointer",
                         formatExtraData: { cellReferesh },
                         formatter: (cell, row, key) => {
-
                             return (
                                 <>
                                     <Input
                                         id={`checkbox_${row.id}_${key}`}
                                         type="checkbox"
                                         className="p-1"
-                                        name={`${row.DivName}`}
+                                        name={`${row.Name}`}
                                         defaultChecked={cell}
                                         onChange={(e) => {
                                             if (e.target.id === `checkbox_${row.id}_${key}`) {
@@ -142,6 +153,95 @@ const POSRoleAccess = (props) => {
                                         }}
                                     >
                                     </Input>
+                                </>
+                            );
+                        },
+                    };
+                } else if (isColumntext) {
+                    column = {
+                        text: i.dataField,
+                        dataField: i.dataField,
+                        sort: true,
+                        classes: "table-cursor-pointer",
+                        style: {
+                            position: "sticky",
+                            left: 0,
+                            background: "white"
+                        },
+                        formatter: (cell, row, key) => {
+                            return (
+                                <>
+                                    <textarea rows={3} defaultValue={cell}
+                                        style={{ borderRadius: "5px" }}
+                                        id={`checkbox_${row.id}_${key}`}
+                                        onChange={(e) => {
+                                            if (e.target.id === `checkbox_${row.id}_${key}`) {
+                                                row[i.dataField] = e.target.value
+                                            }
+                                        }}
+                                        cols={40} />
+
+                                </>
+                            );
+                        },
+                    };
+                } else if (isColumnDate) {
+                    column = {
+                        text: i.dataField,
+                        dataField: i.dataField,
+                        sort: true,
+                        classes: "table-cursor-pointer",
+                        formatter: (cell, row, key) => {
+                            cell = (cell === 0 ? _cfunc.date_ymd_func() : cell)
+                            let options = {
+                                maxDate: "",
+                                altInput: true,
+                                altFormat: "d-m-Y",
+                                dateFormat: "Y-m-d",
+                            }
+                            return (
+                                <>
+                                    <C_DatePicker
+                                        placeholder="Enter License Date"
+                                        options={options}
+                                        value={cell}
+                                        id={`checkbox_${row.id}_${key}`}
+                                        onChange={(e, date) => {
+                                            row[i.dataField] = date
+                                        }}
+                                    />
+                                </>
+                            );
+                        },
+                    };
+                }
+                else if (isColumnInput) {
+                    column = {
+                        text: i.dataField,
+                        dataField: i.dataField,
+                        sort: true,
+                        classes: "table-cursor-pointer",
+                        formatter: (cell, row, key) => {
+                            return (
+                                <>
+                                    <Input
+                                        id={`checkbox_${row.id}_${key}`}
+                                        style={{ width: "100px" }}
+                                        type="text"
+                                        name={`${row.Name}`}
+                                        defaultValue={cell}
+                                        onChange={(e) => {
+                                            if (e.target.id === `checkbox_${row.id}_${key}`) {
+                                                let value = Number(e.target.value);
+                                                if (!isNaN(value)) {
+                                                    row[i.dataField] = e.target.value
+                                                } else {
+                                                    e.target.value = cell
+                                                }
+                                            }
+                                        }}
+                                    >
+                                    </Input >
                                 </>
                             );
                         },
@@ -170,11 +270,9 @@ const POSRoleAccess = (props) => {
 
             settableData({ data: tableList, tableColumns: columns })
 
-            dispatch(BreadcrumbShowCountlabel(`Count:${Data.length}`));
+            dispatch(BreadcrumbShowCountlabel(`Count:${tableList.length}`));
         }
     }, [tableColumns.length > 1, tableList, cellReferesh])
-
-
 
     const saveHandler = () => {
         const isChangeRow = [];
@@ -185,20 +283,27 @@ const POSRoleAccess = (props) => {
                 isChangeRow.push(objB);
             }
         })
-        const TableData = isChangeRow.map(i => ({
-            ...i,
-            CreatedBy: _cfunc.loginUserID(),
-            CreatedOn: _cfunc.date_dmy_func(),
-            UpdatedOn: _cfunc.date_dmy_func(),
-            UpdatedBy: _cfunc.loginUserID(),
+        const TableData = isChangeRow.map(i => {
 
-        }));
-
-        const jsonBody = JSON.stringify(TableData);
-        dispatch(savePosRoleAccess({ jsonBody }));
+            const { Name, id, CreatedOn, UpdatedOn, ...rest } = i;
+            return {
+                ...rest,
+                DivName: Name,
+                LicenseValidTill: i.LicenseValidTill === 0 ? _cfunc.date_ymd_func() : i.LicenseValidTill,
+                CreatedBy: _cfunc.loginUserID(),
+                UpdatedBy: _cfunc.loginUserID(),
+            };
+        });
+        if (TableData.length > 0) {
+            const jsonBody = JSON.stringify(TableData);
+            dispatch(savePosRoleAccess({ jsonBody }));
+        } else {
+            customAlert({
+                Type: 4,
+                Message: "Please update at least one field."
+            })
+        }
     }
-
-
     return (
         <React.Fragment>
             <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
@@ -213,7 +318,6 @@ const POSRoleAccess = (props) => {
                         {(toolkitProps,) => (
                             <React.Fragment>
                                 <Row>
-                                    {/* <SimpleBar className="" style={{ maxHeight: "81vh" }}> */}
                                     <Col xl="12">
                                         <BootstrapTable
                                             keyField="id"
@@ -230,7 +334,6 @@ const POSRoleAccess = (props) => {
                                         />
                                         {globalTableSearchProps(toolkitProps.searchProps)}
                                     </Col>
-                                    {/* </SimpleBar> */}
                                 </Row>
                             </React.Fragment>
                         )}
