@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
     Button,
-    Card,
-    CardBody,
     Col,
     FormGroup,
     Input,
@@ -10,7 +8,7 @@ import {
     Row
 } from 'reactstrap';
 import Select from "react-select";
-import {  getBaseUnit_ForDropDown, getItemList } from '../../../../../store/actions';
+import { getBaseUnit_ForDropDown, getItemList } from '../../../../../store/actions';
 import { useDispatch, useSelector } from 'react-redux';
 import BOMTable from './Table';
 import { customAlert } from '../../../../../CustomAlert/ConfirmDialog';
@@ -38,7 +36,7 @@ function ItemTab(props) {
     }));
 
     function ContentItem_Handler(e) {
-        
+
         setUnitSelect('')
         setContentItemSelect(e)
         let Item = Items.filter((index) => {
@@ -55,7 +53,7 @@ function ItemTab(props) {
     const Unit_Handler = (event) => {
         setUnitSelect(event);
     };
-    const addRowsHandler = (data) => {
+    const addRowsHandler = () => {
         const invalidMsg1 = []
 
         if ((contentItemSelect === "")) {
@@ -67,20 +65,19 @@ function ItemTab(props) {
         if ((unitSelect === "")) {
             invalidMsg1.push(`Unit Is Required`)
         };
-        
+
         if ((contentItemSelect === "")
             || (unitSelect === "")
             || (Quantity === "")
         ) {
+            customAlert({
+                Type: 4,
+                Status: true,
+                Message: JSON.stringify(invalidMsg1),
+                RedirectPath: false,
+                PermissionAction: false,
+            })
 
-                customAlert({
-                    Type: 4,
-                    Status: true,
-                    Message: JSON.stringify(invalidMsg1),
-                    RedirectPath: false,
-                    PermissionAction: false,
-                })
-            
             return;
         }
         const val = {
@@ -91,15 +88,12 @@ function ItemTab(props) {
             Quantity: Quantity,
         };
 
-
         const totalTableData = props.tableData.length;
         val.id = totalTableData + 1;
         const updatedTableData = [...props.tableData];
         updatedTableData.push(val);
         props.func(updatedTableData)
         clearState();
-
-
 
     }
     const clearState = () => {
@@ -109,7 +103,7 @@ function ItemTab(props) {
     };
 
     const handleChange = event => {
-        
+
         let val = event.target.value
         const result = /^-?([0-9]*\.?[0-9]+|[0-9]+\.?[0-9]*)$/.test(val);
         if (result) {
@@ -137,6 +131,9 @@ function ItemTab(props) {
                                     >Content Item</Label>
                                     <Col sm="7">
                                         <Select
+                                            styles={{
+                                                menu: provided => ({ ...provided, zIndex: 2 })
+                                            }}
                                             value={contentItemSelect}
                                             options={ItemDropdown_Options}
                                             onChange={ContentItem_Handler}
@@ -168,6 +165,9 @@ function ItemTab(props) {
                                     >Unit</Label>
                                     <Col sm="7">
                                         <Select
+                                            styles={{
+                                                menu: provided => ({ ...provided, zIndex: 2 })
+                                            }}
                                             value={unitSelect}
                                             options={ItemUnitOptions}
                                             onChange={Unit_Handler}

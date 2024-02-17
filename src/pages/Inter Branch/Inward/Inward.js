@@ -85,11 +85,11 @@ const Inward = (props) => {
     }, [postMsg])
 
 
-    function InwardDateOnchange(e, date) {
+    function InwardDateOnchange( date) {
         setInwardDate(date)
     };
 
-    const saveHandeller = (e, values) => {
+    const saveHandeller = () => {
 
         const arr = InvoiceItems.map(i => ({
             Item: i.Item,
@@ -132,7 +132,6 @@ const Inward = (props) => {
             }]
         });
 
-
         if (pageMode === mode.edit) {
         } else {
 
@@ -149,7 +148,6 @@ const Inward = (props) => {
             text: "Batch Code",
             dataField: "",
             formatter: (cellContent, user) => (
-
                 <>
                     <Table className="table table-bordered table-responsive mb-1">
                         <Thead>
@@ -160,7 +158,6 @@ const Inward = (props) => {
                         </Thead>
                         <Tbody>
                             {InvoiceItems.map((index) => {
-
                                 return (
                                     < tr >
                                         <td>
@@ -254,7 +251,6 @@ const Inward = (props) => {
                         </Col>
                     </div>
                 </div>
-
                 <div className="mt-1">
                     <PaginationProvider pagination={paginationFactory(pageOptions)}>
                         {({ paginationProps, paginationTableProps }) => (

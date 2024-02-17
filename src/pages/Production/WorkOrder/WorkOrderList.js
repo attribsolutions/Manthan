@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { BreadcrumbShowCountlabel, commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
+import { commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList"
 import { Button, Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
-import { date_ymd_func,  loginCompanyID, loginPartyID } from "../../../components/Common/CommonFunction";
+import { date_ymd_func, loginCompanyID, loginPartyID } from "../../../components/Common/CommonFunction";
 import {
     deleteWorkOrderId,
     deleteWorkOrderIdSuccess,
@@ -81,13 +81,13 @@ const WorkOrderList = () => {
         dispatch(getWorkOrderListPage(jsonBody));
     }
 
-    function fromdateOnchange(e, date) {
+    function fromdateOnchange( date) {
         let newObj = { ...hederFilters }
         newObj.fromdate = date
         setHederFilters(newObj)
     }
 
-    function todateOnchange(e, date) {
+    function todateOnchange( date) {
         let newObj = { ...hederFilters }
         newObj.todate = date
         setHederFilters(newObj)
@@ -116,7 +116,7 @@ const WorkOrderList = () => {
             <div className="page-content">
 
 
-                <div className="px-2   c_card_header text-black"  >
+                <div className="px-2   c_card_filter text-black"  >
                     <div className="row" >
                         <Col sm="5" >
                             <FormGroup className=" row mt-3 " >
