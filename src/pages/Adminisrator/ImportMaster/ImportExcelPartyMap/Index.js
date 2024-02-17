@@ -145,7 +145,20 @@ const ImportExcelPartyMap = (props) => {
                 "mapValue": i.MapItem,
             }))
 
-            setUpdateTableList(newItemList)
+            if (isCopy) {
+                const updatedGoButtonArr = newItemList.map(i => {
+                    if (i.mapValue === null) {
+                        return {
+                            ...i,
+                            mapValue: i.fieldName
+                        };
+                    }
+                    return i;
+                });
+                setUpdateTableList(updatedGoButtonArr);
+            } else {
+                setUpdateTableList(newItemList);
+            }
         } else {
 
             if (isCopy) {
@@ -220,7 +233,7 @@ const ImportExcelPartyMap = (props) => {
                             <span
                             > {values.MapType.label === undefined ? "Party" : values.MapType.label} </span>
                         </Col>
-                        <Col>
+                        {(UpdateTableList.length > 0) && <Col>
                             <div className="btn-group " role="group" aria-label="Basic checkbox toggle button group">
                                 <input
                                     type="checkbox"
@@ -235,7 +248,7 @@ const ImportExcelPartyMap = (props) => {
                                     className="bx bxs-copy font-size-9"
                                 ></span></label>
                             </div>
-                        </Col>
+                        </Col>}
                     </Row>
                 );
             }
