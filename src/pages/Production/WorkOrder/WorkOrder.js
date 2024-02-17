@@ -52,8 +52,7 @@ import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 
 const goBtnID1 = "workOrdergoBtnID1"
 const changeBtnID1 = "workOrderchangeBtnID1"
-const saveBtnID1 = "workOrdersaveBtnID1"
-const updateBtnID1 = "workOrderupdateBtnID1"
+
 
 const WorkOrder = (props) => {
 

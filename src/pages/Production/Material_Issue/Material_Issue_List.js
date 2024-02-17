@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { BreadcrumbShowCountlabel, commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
+import { commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList"
 import { Button, Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
-import { date_ymd_func} from "../../../components/Common/CommonFunction";
+import { date_ymd_func } from "../../../components/Common/CommonFunction";
 import MaterialIssueMaster from "./Material_IssueMaster";
 import {
     deleteMaterialIssueId,
@@ -37,7 +37,7 @@ const MaterialIssueList = () => {
         })
     );
 
-    const {  pageField, produtionMake } = reducers;
+    const { pageField, produtionMake } = reducers;
     const { fromdate, todate } = hederFilters;
 
     const hasPagePath = history.location.pathname;
@@ -52,7 +52,6 @@ const MaterialIssueList = () => {
         updateSucc: updateWorkOrderListSuccess,
         deleteSucc: deleteMaterialIssueIdSuccess,
     }
-
     // Featch Modules List data  First Rendering
     useEffect(() => {
         // setpageMode(page_mode)
@@ -74,7 +73,7 @@ const MaterialIssueList = () => {
     }, [produtionMake]);
 
     const makeBtnFunc = (list = {}) => {
-        
+
         const obj = { ...list[0], EstimatedQuantity: list[0].LotQuantity }
         history.push({
             pathname: url.PRODUCTION_MASTER,
@@ -91,13 +90,13 @@ const MaterialIssueList = () => {
         dispatch(getMaterialIssueListPage(jsonBody));
     };
 
-    function fromdateOnchange(e, date) {
+    function fromdateOnchange(date) {
         let newObj = { ...hederFilters }
         newObj.fromdate = date
         setHederFilters(newObj)
     }
 
-    function todateOnchange(e, date) {
+    function todateOnchange(date) {
         let newObj = { ...hederFilters }
         newObj.todate = date
         setHederFilters(newObj)
@@ -105,11 +104,8 @@ const MaterialIssueList = () => {
 
     return (
         <React.Fragment>
-          
-
             <div className="page-content">
-
-                <div className="px-2  c_card_header text-black" >
+                <div className="px-2   c_card_filter text-black" >
                     <div className=" row" >
                         <Col sm="5" >
                             <FormGroup className=" row mt-3 " >
@@ -137,7 +133,6 @@ const MaterialIssueList = () => {
                                 </Col>
                             </FormGroup>
                         </Col>
-
                         <Col sm="1" className="mx-4 ">
                             <Button type="button" color="btn btn-outline-success border-2 font-size-12 m-3  "
                                 onClick={() => goButtonHandler()}

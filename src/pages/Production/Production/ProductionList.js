@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { BreadcrumbShowCountlabel, commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
+import { commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList"
 import { Button, Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
@@ -13,7 +13,6 @@ import {
     delete_ProductionIdSuccess,
     edit_ProductionId,
     getProductionListPage,
-    Productionlistfilters
 } from "../../../store/Production/ProductionRedux/actions"
 import * as report from '../../../Reports/ReportIndex'
 import * as pageId from "../../../routes/allPageID"
@@ -152,7 +151,7 @@ const ProductionList = () => {
         <React.Fragment>
             <div className="page-content">
 
-                <div className="px-2  c_card_header"  >
+                <div className="px-2   c_card_filter text-black" >
                     <div className="row" >
                         <Col sm="5" >
                             <FormGroup className=" row mt-3 " >

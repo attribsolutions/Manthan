@@ -187,7 +187,7 @@ const BOMMaster = (props) => {
             dispatch(saveBOMMasterSuccess({ Status: false }))
             customAlert({
                 Type: 4,
-                 Message: JSON.stringify(postMsg.Message),
+                Message: JSON.stringify(postMsg.Message),
             })
         }
     }, [postMsg])
@@ -237,6 +237,7 @@ const BOMMaster = (props) => {
     }
 
     function Items_Dropdown_Handler(e) {
+        
         setItemTabDetails([])
         let Item = Items.filter((index) => {
             return index.id === e.value
@@ -343,6 +344,9 @@ const BOMMaster = (props) => {
                                                 isSearchable={true}
                                                 className="react-dropdown"
                                                 classNamePrefix="dropdown"
+                                                styles={{
+                                                    menu: provided => ({ ...provided, zIndex: 2 })
+                                                }}
                                                 options={ItemDropdown_Options}
                                                 onChange={(hasSelect, evn) => {
                                                     onChangeSelect({ hasSelect, evn, state, setState });
@@ -391,6 +395,9 @@ const BOMMaster = (props) => {
                                                 isSearchable={true}
                                                 className="react-dropdown"
                                                 classNamePrefix="dropdown"
+                                                styles={{
+                                                    menu: provided => ({ ...provided, zIndex: 2 })
+                                                }}
                                                 options={pageMode === mode.edit ? ItemUnitOnEditData : ItemUnitOptions}
                                                 onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
                                             />

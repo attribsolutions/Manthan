@@ -1,17 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
-    BreadcrumbShowCountlabel,
     commonPageFieldList,
     commonPageFieldListSuccess
 } from "../../../../store/actions";
 import CommonPurchaseList from "../../../../components/Common/CommonPurchaseList"
-import {  BIllOf_MATERIALS_LIST } from "../../../../routes/route_url";
+import { BIllOf_MATERIALS_LIST } from "../../../../routes/route_url";
 import { Button, Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
-import { useMemo } from "react";
 import {
-    
     deleteBOMId,
     deleteBOMIdSuccess,
     editBOMList,
@@ -32,7 +29,6 @@ const BOMList = () => {
     const history = useHistory();
     const currentDate_ymd = _cfunc.date_ymd_func();
 
-
     const hasPagePath = history.location.pathname
 
     const [pageMode, setpageMode] = useState(BIllOf_MATERIALS_LIST)
@@ -52,9 +48,8 @@ const BOMList = () => {
         })
     );
 
-    const { userAccess, pageField, tableList, bomlistFilters } = reducers;
-    // const { fromdate, todate } = bomlistFilters;
-    const { fromdate, todate, venderSelect } = hederFilters;
+    const { userAccess, pageField } = reducers;
+    const { fromdate, todate } = hederFilters;
 
 
     const action = {
@@ -77,7 +72,7 @@ const BOMList = () => {
 
     }, []);
 
- 
+
     useEffect(() => {
         const pageId = 70
         let userAcc = userAccess.find((inx) => {
@@ -93,18 +88,18 @@ const BOMList = () => {
             FromDate: fromdate,
             ToDate: todate,
             Company: _cfunc.loginCompanyID(),
-            Party:_cfunc.loginPartyID(),
+            Party: _cfunc.loginPartyID(),
         });
         dispatch(getBOMListPage(jsonBody));
     }
 
-    function fromdateOnchange(e, date) {
+    function fromdateOnchange(date) {
         let newObj = { ...hederFilters }
         newObj.fromdate = date
         setHederFilters(newObj)
     }
 
-    function todateOnchange(e, date) {
+    function todateOnchange( date) {
         let newObj = { ...hederFilters }
         newObj.todate = date
         setHederFilters(newObj)
@@ -112,8 +107,8 @@ const BOMList = () => {
     return (
         <React.Fragment>
             <div className="page-content">
-          
-                <div className="px-2   c_card_header text-black" >
+
+                <div className="px-2   c_card_filter text-black"  >
                     <div className="row">
                         <Col sm="5">
                             <FormGroup className=" row mt-3 " >
