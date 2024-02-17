@@ -34,7 +34,7 @@ const SaveButtonDraggable = ({ children }) => {
   }, []);
 
   return (
-    <div className="row save-Btn">
+    <div id='save-btn-container' className="row">
       <div id="draggable-section">
         <div>
           {children}

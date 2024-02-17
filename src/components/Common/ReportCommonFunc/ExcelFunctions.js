@@ -130,11 +130,16 @@ export function saveWorkbookAsExcel(workbook, excelFileName) {
         });
 }
 
-export function styleHeaderRow(worksheet) {
+export function styleHeaderRow(
+    worksheet,
+    bgColor = 'E4DFEC',//'cce6f6',
+    textColor = '000000',
+    height = 25
+) {
 
     const headerRow = worksheet.getRow(worksheet.lastRow.number);
 
-    headerRow.height = 25;
+    headerRow.height = height;
 
     headerRow.alignment = { vertical: 'middle', horizontal: 'left' };
 
@@ -142,9 +147,14 @@ export function styleHeaderRow(worksheet) {
         cell.fill = {
             type: 'pattern',
             pattern: 'solid',
-            fgColor: { argb: 'cce6f6' }
+            fgColor: { argb: bgColor }
         };
-        cell.font = { bold: true };
+        cell.font = {
+            color: {
+                argb: textColor,
+            },
+            bold: true
+        };
     });
 }
 
@@ -220,7 +230,7 @@ export function generateTableData({
         HeaderColumns = keys;
         columnsKey = keys;
         controlTypeName = HeaderColumns.map((header) => {
-            if (numericHeaders.includes(header)) {
+            if (numericHeaders?.includes(header)) {
                 return 'Number';
             } else if (header === dateHeader) {
                 return 'Date';
@@ -229,19 +239,16 @@ export function generateTableData({
             }
         });
     }
+    
     dataRow = excelTableData.map(item => {
         return columnsKey.map(column => {
             if (column in item) {
-                if (typeof item[column] === 'boolean') {
-                    return item[column]; // Return boolean value if it's boolean
-                } else {
-                    return item[column] || ""; // Return existing value if it exists, otherwise return ''
-                }
+                    return item[column] ; // Return existing value if it exists, otherwise return ''
             }
             return "";
         });
     });
-  
+    
     return { HeaderColumns, dataRow, controlTypeName, noDataForDownload: false };
 }
 

@@ -459,7 +459,7 @@ const OrderSummary = (props) => {
 
                 </div>
 
-                <Card className="mt-1 mb-1  c_card_body">
+                <Card className="mt-1 mb-1  c_card_filter-2 ">
 
                     <div className="d-flex gap-5">
                         <div className="d-flex gap-2  justify-content-center">

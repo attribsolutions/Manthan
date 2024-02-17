@@ -7,8 +7,8 @@ import {
 } from "./actionType";
 
 const INIT_STATE = {
-    GstR1ReportData: [],
-    GstR3BReportData: [],
+    GstR1ReportData:{ Status: false },
+    GstR3BReportData: { Status: false },
     GstR1BtnLoading: false,
     GstR3BBtnLoading: false,
 }
