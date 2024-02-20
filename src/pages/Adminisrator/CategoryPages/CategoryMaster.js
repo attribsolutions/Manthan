@@ -260,7 +260,7 @@ const CategoryMaster = (props) => {
             <React.Fragment>
                 <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
 
-                <div className="page-content" style={{ marginTop: IsEditMode_Css, height: "18cm" }}>
+                <div className="page-content" >
                     <Container fluid>
                         <Card className="text-black">
                             <CardHeader className="card-header   text-black c_card_header" >

@@ -225,7 +225,7 @@ const ManagementEmpParties = (props) => {
             <React.Fragment>
                 <PageLoadingSpinner isLoading={(!pageField)} />
                 <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
-                <div className="page-content" style={{ marginTop: IsEditMode_Css, marginBottom: "200px" }}>
+                <div className="page-content" >
                     <div className="px-2   c_card_header text-black mb-1" >
                         <div className="row">
                             <Col sm="5">
