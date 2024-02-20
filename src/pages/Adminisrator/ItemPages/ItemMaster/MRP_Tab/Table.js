@@ -24,7 +24,7 @@ function MRPTable(props) {
 
       const permission = await customAlert({
         Type: 7,
-        Message: alertMessages.deleteThis_MRP,
+        Message: `${alertMessages.deleteOrNot}MRP`
       })
       if (permission) {
         dispatch(deleteMRPMaster_Id(info.id))

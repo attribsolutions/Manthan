@@ -39,6 +39,7 @@ import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { getPartyTypelist } from "../../../store/Administrator/PartyTypeRedux/action";
 // import { PriceDrop } from "./PriceDrop";
 import * as mode from "../../../routes/PageMode"
+import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 
 const PriceMaster = (props) => {
 
@@ -230,7 +231,7 @@ const PriceMaster = (props) => {
         const btnId = "cc";
         const promise = await customAlert({
             Type: 7,
-            Message: `Are you sure you want to delete this Price : "${price.label}"`,
+            Message: `${alertMessages.deleteOrNot} Price : "${price.label}"`,
         })
         if (promise) {
             btnIsDissablefunc({ btnId, state: true })

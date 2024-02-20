@@ -106,7 +106,7 @@ export const listPageActionsButtonFunc = (props) => {
                 if (btnmode === mode.isdelete) {
                     let alertRepsponse = await customAlert({
                         Type: 8,
-                        Message: `Are you sure you want to delete this ${ButtonMsgLable} : "${rowData[deleteName]}"`,
+                        Message: `${alertMessages.deleteOrNot} ${ButtonMsgLable} : "${rowData[deleteName]}"`,
                     })
                     if (alertRepsponse) {
                         dispatch(dispatchAction({ ...config }));
