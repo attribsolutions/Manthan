@@ -73,6 +73,7 @@ const selectImageFile = "Please Select Image file"
 
 // claim Tracking Entry 
 const CreditNote_Not_Upload = "Credit Note Not Uploaded"
+const deleteClaim="Do you want To Delete Claim ?"
 
 // Invoice Master
 const rateNotAvailable = " Rate not available."
@@ -130,8 +131,55 @@ const atLeastOneRoleAddInTable="At Least One Role  Add in the Table"
 //GRN 
 const assignItem="Please Assign-Item."
 const hideInvoiceOrNot="Do you want To Hide Invoice ?"
+const unHideInvoiceOrNot="Do you want To Unhide Invoice ?"
+
+// Stock Entry
+const batchCodeAlreadyExist="This BatchCode Already Exist"
+const changeOneStockQty="Please Enter One Changed Stock Quantity"
+const selectItemName="Select Item Name"
+const stockIsZero="If new stock is added then the previous whole item stock will become zero."
+const unitIsRequired = 'Unit Is Required'
+const mrpIsRequired = 'MRP Is Required'
+const gstIsRequired = 'GST Is Required'
+const batchCodeIsRequired = 'BatchCode Is Required'
+
+//Inter Branch Module (BOM)
+const atLeastOneMaterialDataAddInTable="At Least One Matrial data Add in the table"
+const itemQtyIsReq='Item Quantity Is Required'
+const contentItemQtyIsReq='Content Item Is Required'
+
+// Order Error Message
+const select_PO_Type="Please Select PO Type"
+const itemRateIsRequired="This Item Rate Is Required..." 
+const enterOneTerms_and_Cond="Please Enter One Terms And Condition"
+const selectOneOrder="Please Select One Order"
+const selectSupplier="Please Select Supplier"
+
+//Report Error Message
+const selectUnit = "Please Select Unit"
+const recordNotAvailable = "Records Not available "
 
 export const alertMessages = {
+    recordNotAvailable,
+    selectUnit,
+    deleteClaim,
+    selectSupplier,
+    selectOneOrder,
+    unHideInvoiceOrNot,
+    itemRateIsRequired,
+    enterOneTerms_and_Cond,
+    select_PO_Type,
+    contentItemQtyIsReq,
+    itemQtyIsReq,
+    atLeastOneMaterialDataAddInTable,
+    batchCodeIsRequired,
+    gstIsRequired,
+    mrpIsRequired,
+    unitIsRequired,
+    stockIsZero,
+    selectItemName,
+    changeOneStockQty,
+    batchCodeAlreadyExist,
     hideInvoiceOrNot,
     assignItem,
     atLeastOneRoleAddInTable,

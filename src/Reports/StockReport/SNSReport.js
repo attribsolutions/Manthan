@@ -103,7 +103,7 @@ const SNSReport = (props) => {
             else if ((StockReport_1_Gobtb.Status === true) && (StockReport_1_Gobtb.StatusCode === 204)) {
                 customAlert({
                     Type: 3,
-                    Message: "Records Not available ",
+                    Message:alertMessages.recordNotAvailable,
                 })
                 dispatch(stockReport_1_GoButton_API_Success([]));
                 return
@@ -119,7 +119,7 @@ const SNSReport = (props) => {
                 if ((pdfdata.Status === true) && (pdfdata.StatusCode === 204)) {
                     customAlert({
                         Type: 3,
-                        Message: "Records Not available ",
+                        Message: alertMessages.recordNotAvailable,
                     })
                     return
                 }
@@ -179,7 +179,7 @@ const SNSReport = (props) => {
         if (unitDropdown === "") {
             customAlert({
                 Type: 4,
-                Message: "Please Select Unit"
+                Message: alertMessages.selectUnit
             })
             return
         }

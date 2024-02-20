@@ -150,7 +150,7 @@ const ItemRegisterReport = (props) => {
         if (values.Item === "") {
             customAlert({
                 Type: 3,
-                Message: "Please Select Item",
+                Message: alertMessages.itemNameIsRequired,
             })
             return
         } else {

@@ -505,7 +505,7 @@ const OrderList = () => {
 
         const isConfirmed = await customAlert({
             Type: 7,
-            Message: "Do you want To Unhide Invoice ?",
+            Message:alertMessages.unHideInvoiceOrNot,
         });
 
         if (isConfirmed) {
@@ -625,7 +625,7 @@ const OrderList = () => {
         if (!ischeck.length > 0) {
             customAlert({
                 Type: 4,
-                Message: "Please Select One Order",
+                Message: alertMessages.selectOneOrder,
             });
             return
         }
@@ -640,7 +640,7 @@ const OrderList = () => {
         if (!checkRows.length > 0) {
             customAlert({
                 Type: 4,
-                Message: "Please Select One Order",
+                Message:alertMessages.selectOneOrder,
             });
             return
         }

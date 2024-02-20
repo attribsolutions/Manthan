@@ -1043,13 +1043,13 @@ const Order = (props) => {
         let isfound = orderItemTable.find(i => i.value === itemSelect.value);
 
         if (!itemSelect) {
-            customAlert({ Type: 4, Message: `Select Item Name` })
+            customAlert({ Type: 4, Message: alertMessages.itemNameIsRequired })
         }
         else if (isfound === undefined) {
             setOrderItemTable([itemSelect].concat(orderItemTable))
         }
         else {
-            customAlert({ Type: 3, Message: "This Item Already Exist" })
+            customAlert({ Type: 3, Message: alertMessages.ItemNameAlreadyExists })
         }
         setItemSelect('')
     }
@@ -1116,7 +1116,7 @@ const Order = (props) => {
 
                 // Check for item quantity and rate validity
                 if ((item.Quantity > 0) && !(item.Rate > 0)) {
-                    validationMessages.push({ [item.ItemName]: "This Item Rate Is Required..." });
+                    validationMessages.push({ [item.ItemName]: alertMessages.itemRateIsRequired });
                 }
                 else if (pageMode === mode.edit) {
                     // Check if the item quantity or unit has changed in edit mode
@@ -1252,14 +1252,14 @@ const Order = (props) => {
             if (orderItems.length === 0) {
                 customAlert({
                     Type: 4,
-                    Message: "Please Select 1 Item Quantity",
+                    Message: alertMessages.itemQtyIsRequired,
                 });
                 return;
             }
             if (orderTypeSelect.length === 0) {
                 customAlert({
                     Type: 4,
-                    Message: "Please Select PO Type",
+                    Message: alertMessages.select_PO_Type,
                 });
                 return;
             }
@@ -1268,7 +1268,7 @@ const Order = (props) => {
             ) {
                 customAlert({
                     Type: 4,
-                    Message: "Please Enter One Terms And Condition",
+                    Message: alertMessages.enterOneTerms_and_Cond,
                 });
                 return;
             }

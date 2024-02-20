@@ -35,6 +35,7 @@ import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import { ItemAPIResponseFunc } from "./stockEntryFunctions";
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
+import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 
 const StockEntry = (props) => {
 
@@ -372,7 +373,7 @@ const StockEntry = (props) => {
         if (values.ItemName === '') {
             customAlert({
                 Type: 4,
-                Message: `Select Item Name`
+                Message:alertMessages.selectItemName
             });
             return;
         }
@@ -455,7 +456,7 @@ const StockEntry = (props) => {
         if (filterData.length === 0) {
             customAlert({
                 Type: 4,
-                Message: " Please Enter One Item Quantity"
+                Message: alertMessages.itemQtyIsRequired
             })
             return _cfunc.btnIsDissablefunc({ btnId, state: false })
         }
@@ -465,16 +466,16 @@ const StockEntry = (props) => {
         ReturnItems.forEach((i) => {
 
             if ((i.Unit === undefined) || (i.Unit === null)) {
-                invalidMsg1.push(`${i.ItemName} : Unit Is Required`)
+                invalidMsg1.push(`${i.ItemName} : ${alertMessages.unitIsRequired}`)
             }
             else if ((i.MRP === undefined) || (i.MRP === null)) {
-                invalidMsg1.push(`${i.ItemName} : MRP Is Required`)
+                invalidMsg1.push(`${i.ItemName} :${alertMessages.mrpIsRequired}`)
             }
             else if ((i.GST === undefined) || (i.GST === null)) {
-                invalidMsg1.push(`${i.ItemName} : GST Is Required`)
+                invalidMsg1.push(`${i.ItemName} : ${alertMessages.gstIsRequired}`)
             }
             else if ((i.BatchCode === "") || (i.BatchCode === undefined)) {
-                invalidMsg1.push(`${i.ItemName} : BatchCode Is Required`)
+                invalidMsg1.push(`${i.ItemName} : ${alertMessages.batchCodeIsRequired}`)
             };
         })
 
@@ -531,7 +532,7 @@ const StockEntry = (props) => {
                 if (values.IsAllStockZero) {
                     isConfirmed = await customAlert({
                         Type: 7,
-                        Message: "If new stock is added then the previous whole item stock will become zero.",
+                        Message: alertMessages.stockIsZero,
                     });
                 }
                 if ((isConfirmed) || (!values.IsAllStockZero)) {
