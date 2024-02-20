@@ -266,7 +266,7 @@ const PartyType = (props) => {
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
-                <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
+                <div className="page-content" >
                     <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
                     <Container fluid>
                         <Card className="text-black">

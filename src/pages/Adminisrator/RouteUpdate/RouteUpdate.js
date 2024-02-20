@@ -224,7 +224,7 @@ const RouteUpdate = (props) => {
             <React.Fragment>
                 <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
                 <PageLoadingSpinner isLoading={(loading || !pageField)} />
-                <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
+                <div className="page-content" >
 
                     <div style={{ minHeight: "45vh" }}>
                         <PaginationProvider pagination={paginationFactory(pageOptions)} >
