@@ -8,6 +8,7 @@ import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import './changeParty.scss'; // Add your styles here
 import { useRef } from "react";
 import { showToastAlert } from "../../../helpers/axios_Config";
+import { alertMessages } from "../../Common/CommonErrorMsg/alertMsg";
 
 const ChangeCommonParty = (props) => {
 
@@ -57,7 +58,7 @@ const ChangeCommonParty = (props) => {
     // Function to update the selected party
     const updateSelectedParty = () => {
         if (selectedParty.value === 0) {
-            customAlert({ Type: 3, Message: "Please Select Party" });
+            customAlert({ Type: 3, Message:alertMessages.selectPartyName });
             return;
         }
         setIsDrawerOpen(false);

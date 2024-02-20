@@ -4,6 +4,7 @@ import { Tbody, Thead } from 'react-super-responsive-table';
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteIdForMarginMaster, deleteIdForMarginMasterSuccess } from '../../../../../store/Administrator/MarginMasterRedux/action';
 import { customAlert } from '../../../../../CustomAlert/ConfirmDialog';
+import { alertMessages } from '../../../../../components/Common/CommonErrorMsg/alertMsg';
 
 function MarginTable(props) {
   const dispatch = useDispatch();
@@ -24,7 +25,7 @@ function MarginTable(props) {
     else {
       const permission = await customAlert({
         Type: 7,
-        Message: "Are you sure you want to delete this Margin",
+        Message:alertMessages.deleteThis_Margin
       })
       if (permission) {
         dispatch(deleteIdForMarginMaster(info.id))

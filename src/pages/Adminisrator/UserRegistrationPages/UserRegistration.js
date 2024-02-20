@@ -36,6 +36,7 @@ import { commonPageField, commonPageFieldSuccess } from "../../../store/actions"
 import AddMaster from "../EmployeePages/Drodown";
 import * as url from "../../../routes/route_url";
 import AddEmployee from "../EmployeePages/EmployeeMaster";
+import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 
 const AddUser = (props) => {
 
@@ -290,7 +291,7 @@ const AddUser = (props) => {
       if (userRoleArr.length <= 0) {
         customAlert({
           Type: 4,
-          Message: "At Least One Role  Add in the Table",
+          Message:alertMessages.atLeastOneRoleAddInTable,
         })
         return btnIsDissablefunc({ btnId: btnId, state: false })
       }

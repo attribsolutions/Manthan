@@ -26,6 +26,7 @@ import { pageFieldUseEffect, saveMsgUseEffect, table_ArrowUseEffect, userAccessU
 import { useLayoutEffect } from "react";
 import DatePicker from "react-flatpickr";
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
+import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 
 const GRNAdd3 = (props) => {
 
@@ -43,7 +44,6 @@ const GRNAdd3 = (props) => {
     const [invoiceNo, setInvoiceNo] = useState('');
     const [InvoiceID, setInvoiceID] = useState('');
     const [invoiceDate, setInvoiceDate] = useState('');
-
 
     const [editCreatedBy, seteditCreatedBy] = useState("");
     const [EditData, setEditData] = useState({});
@@ -141,7 +141,6 @@ const GRNAdd3 = (props) => {
     useEffect(() => {
 
         if (hideMsg.Status === true && hideMsg.StatusCode === 200) {
-            // setState(() => resetFunction(fileds, state)) // Clear form values 
             customAlert({
                 Type: 3,
                 Message: JSON.stringify(hideMsg.Message),
@@ -345,7 +344,7 @@ const GRNAdd3 = (props) => {
 
         const isConfirmed = await customAlert({
             Type: 7,
-            Message: "Do you want To Hide Invoice ?",
+            Message: alertMessages.hideInvoiceOrNot,
         });
 
         if (isConfirmed) {
@@ -367,10 +366,10 @@ const GRNAdd3 = (props) => {
                 let { UnitDetails, GSToption, MRPOps, GSTDropdown, MRPDetails, PartyItemAssign, ...item } = index;
 
                 if (!Number(item.Rate) > 0) {// rate validation check
-                    isvalidMsg.push({ [item.ItemName]: " Rate not available." })
+                    isvalidMsg.push({ [item.ItemName]: alertMessages.rateNotAvailable})
                 }
                 if (!PartyItemAssign) {// rate validation check
-                    isvalidMsg.push({ [item.ItemName]: "Please Assign-Item." })
+                    isvalidMsg.push({ [item.ItemName]: alertMessages.assignItem})
                 }
                 return {
                     ...item,
@@ -383,7 +382,7 @@ const GRNAdd3 = (props) => {
             })
 
             if (invoiceNo.length === 0) {
-                customAlert({ Type: 3, Message: "Please Enter Invoice Number" });
+                customAlert({ Type: 3, Message: alertMessages.invoiceNoIsRequired});
                 return
             }
             if (isvalidMsg.length > 0) {

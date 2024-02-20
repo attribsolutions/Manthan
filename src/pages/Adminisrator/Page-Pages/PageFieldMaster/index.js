@@ -14,7 +14,7 @@ import { Tbody, Thead } from "react-super-responsive-table";
 import { C_Select } from '../../../../CustomValidateForm';
 
 function PageFieldMasterTab(props) {
-    const dispatch = useDispatch();
+   
     const { pageFieldTabTable, setPageFieldTabTable } = props;
 
     const {
@@ -26,7 +26,6 @@ function PageFieldMasterTab(props) {
         fieldValidationLoading: state.H_Pages.fieldValidationDropDownLoading,
         fieldValidationsALLType: state.H_Pages.fieldValidationsALLType,
     }));
-
 
     const controlTypesOptions = ControlTypes.map((controlType) => ({
         value: controlType.id,
@@ -68,8 +67,6 @@ function PageFieldMasterTab(props) {
         setPageFieldTabTable(updatedTable);
     };
 
-
-
     function validtionOptionAssing(controlType) {
         let validationOptions = fieldValidationsALLType.find(item => item.type === controlType)?.data || []
         return validationOptions.map(item => ({ value: item.id, label: item.Name }));
@@ -100,8 +97,6 @@ function PageFieldMasterTab(props) {
             });
         });
     };
-
-
 
     return (
         <>
@@ -236,8 +231,6 @@ function PageFieldMasterTab(props) {
                                             <div><Label>&nbsp;&nbsp;Sort</Label></div>
 
                                         </div>
-
-
                                     </td>
 
                                     <td>
@@ -264,7 +257,6 @@ function PageFieldMasterTab(props) {
                                             </Input>
                                         </div>
                                     </td>
-
 
                                     <td>
                                         <div className='mb-1 d-flex'>

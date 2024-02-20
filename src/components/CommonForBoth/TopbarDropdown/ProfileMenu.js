@@ -23,6 +23,7 @@ import { ChangePassword, ChangePassword_Succes } from "../../../store/auth/chang
 import { customAlert } from "../../../CustomAlert/ConfirmDialog"
 import { passwordRgx } from "../../../CustomValidateForm/index";
 import { loginCompanyName, loginIsSCMCompany, loginUserDetails } from "../../Common/CommonFunction"
+import { alertMessages } from "../../Common/CommonErrorMsg/alertMsg"
 
 const ProfileMenu = props => {
 
@@ -147,14 +148,14 @@ const ProfileMenu = props => {
     if ((newPwd.length < 3) || (newPwd.length < 8)) {
       customAlert({
         Type: 3,
-        Message: "Set NewPassoword",
+        Message: alertMessages.setNewPassword,
       });
       return
     }
     else if (!passwordsMatch) {
       customAlert({
         Type: 3,
-        Message: "Confirm does not match to NewPassword ",
+        Message: alertMessages.newPasswordNotMatch,
       });
       return
     }
@@ -167,7 +168,7 @@ const ProfileMenu = props => {
 
     const isConfirmed = await customAlert({
       Type: 7,
-      Message: "Do you Want to Change Password ?",
+      Message: alertMessages.changePassword,
     });
 
     if (isConfirmed) {
@@ -175,24 +176,7 @@ const ProfileMenu = props => {
 
     };
   };
-  // const handleMouseEnter = () => {
-  //   
-  //   document.getElementById('user-detail-div').style.display = 'block';
-  // };
 
-  // const handleMouseLeave = () => {
-  //   document.getElementById('user-detail-div').style.display = 'none';
-  // };
-
-  const [isMouseOver, setIsMouseOver] = useState(false);
-
-  const handleMouseEnter = () => {
-    setIsMouseOver(true);
-  };
-
-  const handleMouseLeave = () => {
-    setIsMouseOver(false);
-  };
   let FooterDetails = loginUserDetails()
   let CompanyName = loginCompanyName()
   let IsSCMCompany = loginIsSCMCompany() === 1 ? "IsSCM" : "Non-SCM"
@@ -223,7 +207,6 @@ const ProfileMenu = props => {
               <FormGroup className="mb-2 col col-sm-9 ">
                 <Label htmlFor="validationCustom01"> Old Password </Label>
                 <Input
-                  // defaultValue={""}
                   type="password"
                   value={currentPwd}
                   autoComplete="off"
@@ -242,7 +225,6 @@ const ProfileMenu = props => {
                   placeholder="Enter New Password"
                   autoComplete='off'
                   className="form-control"
-                  // autoFocus={true}
                   onChange={newpwdOnchange}
                 />
                 {(newPwdError.length > 0) && (
@@ -257,7 +239,6 @@ const ProfileMenu = props => {
                   type="text"
                   placeholder="Enter Confirm Password"
                   autoComplete="off"
-                  // autoFocus={true}
                   onChange={e => {
                     confirmpwdOnchange(e);
                   }}
@@ -360,8 +341,6 @@ const ProfileMenu = props => {
               <i className="fas fa-lock" style={{ marginRight: "7px" }}></i>
               <span>{props.t("Change Password")}</span>
             </DropdownItem >
-
-
 
             <Link to="/logout" className="dropdown-item" >
               <i className="bx bx-power-off font-size-16 align-middle me-1 text-danger fw-bold" />

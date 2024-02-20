@@ -46,6 +46,7 @@ import AddMaster from "../EmployeePages/Drodown";
 import Modules from "../ModulesPages/Modules";
 import * as url from "../../../routes/route_url";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
+import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 
 const PageMaster = (props) => {
 
@@ -149,7 +150,7 @@ const PageMaster = (props) => {
 
   // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
   useEffect(() => {
-    
+
     if (((fieldValidationsALLType.length > 0) && (hasShowloction || hasShowModal))) {
 
       let hasEditVal = null
@@ -292,12 +293,11 @@ const PageMaster = (props) => {
       setrelatedPage_DropdownSelect("");
 
       if (pageMode === "true") {
-        dispatch(
           customAlert({
             Type: 1,
             Message: postMsg.Message,
           })
-        );
+        
       } else {
         let isPermission = await customAlert({
           Type: 1,
@@ -320,27 +320,27 @@ const PageMaster = (props) => {
   useEffect(() => {
     if ((modulePostAPIResponse.Status === true) && (modulePostAPIResponse.StatusCode === 200)) {
       dispatch(saveModuleMasterSuccess({ Status: false }))
-      dispatch(customAlert({
+      customAlert({
         Type: 1,
         Status: true,
         Message: modulePostAPIResponse.Message,
-      }))
+      })
       tog_center()
     } else if (modulePostAPIResponse.Status === true) {
       dispatch(saveModuleMasterSuccess({ Status: false }))
-      dispatch(customAlert({
+      customAlert({
         Type: 4,
         Status: true,
         Message: JSON.stringify(modulePostAPIResponse.Message),
         RedirectPath: false,
         AfterResponseAction: false
-      }));
+      })
     }
 
   }, [modulePostAPIResponse])
 
   useEffect(() => {
-    
+
     if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
       dispatch(update_PageListId_Success({ Status: false }));
       if (actualPagePath) {
@@ -455,28 +455,24 @@ const PageMaster = (props) => {
       Access.length === 0 &&
       (pageType_DropdownSelect.value === 2)
     ) {
-      dispatch(
         customAlert({
           Type: 4,
           Status: true,
-          Message: "At Least One PageAccess is Select",
+          Message: alertMessages.selectPageAcces,
           RedirectPath: false,
           PermissionAction: false,
         })
-      );
       return;
     }
 
     if ((pageType_DropdownSelect.value === 2) && (relatedPage_DropdownSelect === undefined)) {
-      dispatch(
-        customAlert({
-          Type: 4,
-          Status: true,
-          Message: "Please Select Related Page ID",
-          RedirectPath: false,
-          PermissionAction: false,
-        })
-      );
+      customAlert({
+        Type: 4,
+        Status: true,
+        Message: alertMessages.selectRelatedID,
+        RedirectPath: false,
+        PermissionAction: false,
+      })
       return;
     }
 
@@ -505,15 +501,13 @@ const PageMaster = (props) => {
 
     if ((pageType_DropdownSelect.value === 1) && (PageFieldMaster.length === 0)) {
       {
-        dispatch(
-          customAlert({
-            Type: 4,
-            Status: true,
-            Message: "PageFields is Required",
-            RedirectPath: false,
-            PermissionAction: false,
-          })
-        );
+        customAlert({
+          Type: 4,
+          Status: true,
+          Message: alertMessages.pageField_IsRequired,
+          RedirectPath: false,
+          PermissionAction: false,
+        })
         return;
       }
     }
@@ -522,12 +516,9 @@ const PageMaster = (props) => {
       dispatch(update_PageListId_Action({ jsonBody, updateId: EditData.id, btnId }));
 
     } else {
-
       dispatch(save_PageMaster_Action({ jsonBody, btnId }));
-
     }
   };
-
 
   // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
   var IsEditMode_Css = ''
@@ -568,7 +559,7 @@ const PageMaster = (props) => {
                           <span className="d-none d-sm-block">Page Master Details</span>
                         </NavLink>
                       </NavItem>
-                      {/* {!(pageType_DropdownSelect.value === 2) ? */}
+                     
                       <NavItem>
                         <NavLink
                           style={{ cursor: "pointer" }}
@@ -585,8 +576,6 @@ const PageMaster = (props) => {
                           <span className="d-none d-sm-block">Page Field</span>
                         </NavLink>
                       </NavItem>
-                      {/* : <></> */}
-                      {/* } */}
 
                     </Nav>
 
@@ -691,7 +680,6 @@ const PageMaster = (props) => {
                                   <Select
                                     value={module_DropdownSelect}
                                     options={Module_DropdownOption}
-                                    // isDisabled={(actualPagePath) && true}
                                     autoComplete="off"
                                     onChange={(e) => {
                                       Module_DropdownSelectHandller(e);
