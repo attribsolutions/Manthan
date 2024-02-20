@@ -57,7 +57,8 @@ function formatCellByDataType(cell, controlType, value) {
 
 
 // Component function for generating an Excel report with multiple tabs
-function GST_ExcelDownloadFun({ excelTableData, excelFileName }) {
+function GST_ExcelDownloadFun({ excelTableData, excelFileName, pageName }) {
+    
     const workbook = new ExcelJS.Workbook(); // Create a new Excel workbook
 
     // Iterate through each key-value pair in the excelTableData object
@@ -67,22 +68,27 @@ function GST_ExcelDownloadFun({ excelTableData, excelFileName }) {
         // Add title row for the worksheet
         addTitleRow(worksheet, key);
 
+        if (pageName === "GST-R1") {
+            // If there are elements in the first index
+            if (value.length > 0) {
+                
+                const firstIndex = value[0]; // Get the first index of the value array
+                const { HeaderColumns, dataRow, controlTypeName } = generateTableData({ excelTableData: [firstIndex] }); // Generate table data
 
-
-        // If there are elements in the first index
-        if (value.length > 0) {
-            const firstIndex = value[0]; // Get the first index of the value array
-            const { HeaderColumns, dataRow, controlTypeName } = generateTableData({ excelTableData: [firstIndex] }); // Generate table data
-
-            // Add rows and format cells based on the generated table data
-            addRowsAndFormatCells(worksheet, HeaderColumns, dataRow, controlTypeName);
-            worksheet.addRow([]); // Add empty row after title
+                // Add rows and format cells based on the generated table data
+                addRowsAndFormatCells(worksheet, HeaderColumns, dataRow, controlTypeName);
+                worksheet.addRow([]); // Add empty row after title
+            }
         }
+
         setColumnWidths(worksheet)
 
-        // If there are elements in the copied value array
-        if (value.length > 1) {
-            const valueCopy = value.slice(1); // Create a copy of the value array excluding the first index
+        if (value.length > 0) {
+            
+            let valueCopy = value
+            if (pageName === "GST-R1") {
+                valueCopy = value.slice(1); // Create a copy of the value array excluding the first index
+            }
 
             const { HeaderColumns, dataRow, controlTypeName } = generateTableData({ excelTableData: valueCopy }); // Generate table data for copied value array
 
@@ -92,12 +98,12 @@ function GST_ExcelDownloadFun({ excelTableData, excelFileName }) {
             freezeHeaderRow(worksheet);
             autoFitColumnWidths(worksheet, HeaderColumns, dataRow);
         }
+        
     }
 
     // Save the workbook as an Excel file
     saveWorkbookAsExcel(workbook, excelFileName);
 };
-
 
 
 export default GST_ExcelDownloadFun
