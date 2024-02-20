@@ -27,7 +27,6 @@ import { SaveButton } from "../../../components/Common/CommonButton";
 import {
     breadcrumbReturnFunc,
     loginCompanyID,
-    loginPartyID,
     loginUserID
 } from "../../../components/Common/CommonFunction";
 import Select from "react-select";

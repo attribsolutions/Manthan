@@ -16,7 +16,7 @@ import { LoadingSheet_GoBtn_API_Succcess, UpdateLoadingSheetSucccess } from "../
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { globalTableSearchProps } from "../../../components/Common/SearchBox/MySearch";
-import { GetOpeningBalance, ReceiptGoButtonMaster, ReceiptGoButtonMaster_Success } from "../../../store/Accounting/Receipt/action";
+import { ReceiptGoButtonMaster, ReceiptGoButtonMaster_Success } from "../../../store/Accounting/Receipt/action";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import DynamicColumnHook, { selectAllCheck } from "../../../components/Common/TableCommonFunc";
 import { C_DatePicker } from "../../../CustomValidateForm";
@@ -188,7 +188,7 @@ const LoadingSheetUpdate = (props) => {
         if (LoadingNumber === "") {
             customAlert({
                 Type: 3,
-                Message:alertMessages.atLeastOneInvoiceRequired,
+                Message: alertMessages.atLeastOneInvoiceRequired,
             })
         }
         else {

@@ -5,7 +5,6 @@ import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/
 import CommonListPage from "../../../components/Common/CommonMasterListPage";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
-import { MetaTags } from "react-meta-tags";
 import {
     deleteBankIDSuccess,
     delete_Bank_ID,

@@ -80,7 +80,7 @@ const BankMaster = (props) => {
 
     const values = { ...state.values }
     const { isError } = state;
-    const { fieldLabel } = state;
+
 
     const location = { ...history.location }
     const hasShowloction = location.hasOwnProperty(mode.editValue)//changes

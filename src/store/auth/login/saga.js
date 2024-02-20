@@ -9,9 +9,9 @@ import {
   ROLE_ACCESS_API_CALL
 } from "./actionTypes"
 import {
-  apiError, divisionDropdownSelectSuccess, getUserDetailsActionSuccess,
+  divisionDropdownSelectSuccess, getUserDetailsActionSuccess,
   loginError_Action,
-  loginSuccess,
+
   loginSuccessAction,
   postSuperAdminSuccess,
   RoleAccessUpdateSuccess,
@@ -57,7 +57,7 @@ function* afterLoginUserDetails_genFun({ id }) {
     } else {
       throw new Error('Exception message');
     }
-    
+
     yield put(getUserDetailsActionSuccess(response.Data))
     localStorage.setItem("UserName", (response.Data.UserName))
     localStorage.setItem("Company", response.Data.CompanyID)
@@ -99,7 +99,7 @@ function* RoleAccessGenratorFunction({ party, employee, company }) {
 
     const RoleResponse = yield call(RoleAccessApi_url, party, employee, company);
 
-    
+
 
     if (RoleResponse.Data.length > 0 && PageAccessApi.Data.length > 0) {
       let arrayMain = [];

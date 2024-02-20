@@ -7,12 +7,12 @@ import {
     CardBody,
     CardHeader,
     Col,
-    Container, Label, Row, Spinner,
+    Container, Label, Row,
 } from "reactstrap";
-import { breadcrumbReturnFunc, loginSelectedPartyID } from '../../../components/Common/CommonFunction';
+import { breadcrumbReturnFunc } from '../../../components/Common/CommonFunction';
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
-import { commonPageField, commonPageFieldSuccess, getGRNListPage, getGRNListPageSuccess, getOrderListPage, invoiceListGoBtnfilter, invoiceListGoBtnfilterSucccess } from '../../../store/actions';
+import { commonPageField, commonPageFieldSuccess, getGRNListPageSuccess, invoiceListGoBtnfilterSucccess } from '../../../store/actions';
 import * as mode from "../../../routes/PageMode"
 import { Get_Dashboard_Grn_Data, Get_Dashboard_Invoice_Data, Get_Dashboard_Order_Data, getDashbordDetails } from '../../../store/Dashboard/Dashboard_1_Redux/action';
 import PaymentEntryList from '../Dashboard_1/PaymentEntryList';
@@ -22,7 +22,6 @@ import MobileRetailerApprove from '../Dashboard_1/MobileRetailerApprove';
 
 import { DashboardLoader, PageLoadingSpinner } from '../../../components/Common/CommonButton';
 import LineBar from '../../../components/Common/DashboardChart/MixLineChart';
-import TransactionLog from './TransactionLog';
 
 const Dashboard_Admin = (props) => {
 

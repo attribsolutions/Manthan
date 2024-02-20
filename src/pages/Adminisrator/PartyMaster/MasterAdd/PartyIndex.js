@@ -28,13 +28,13 @@ import {
 	updatePartyIDSuccess
 } from "../../../../store/Administrator/PartyRedux/action"
 import { Breadcrumb_inputName, commonPageField, commonPageFieldSuccess } from "../../../../store/actions"
-import { btnIsDissablefunc, isEditMode_CssFun, loginCompanyID, loginPartyID, loginSelectedPartyID, loginUserAdminRole, loginUserID, metaTagLabel } from "../../../../components/Common/CommonFunction"
+import { btnIsDissablefunc, isEditMode_CssFun, loginCompanyID, loginPartyID, loginUserAdminRole, loginUserID, metaTagLabel } from "../../../../components/Common/CommonFunction"
 import * as url from "../../../../routes/route_url";
 import * as pageId from "../../../../routes/allPageID"
 import * as mode from "../../../../routes/PageMode"
 import { getPartyTypelist } from "../../../../store/Administrator/PartyTypeRedux/action";
 import { getcompanyList } from "../../../../store/Administrator/CompanyRedux/actions";
-import { C_Button, SaveButton } from "../../../../components/Common/CommonButton";
+import { SaveButton } from "../../../../components/Common/CommonButton";
 import { SSDD_List_under_Company } from "../../../../store/CommonAPI/SupplierRedux/actions";
 import AddressTabForm from "./AddressDetailsTab/index";
 import { customAlert } from "../../../../CustomAlert/ConfirmDialog";
@@ -138,7 +138,7 @@ const PartyMaster = (props) => {
 		if (!(subPageMode === url.RETAILER_MASTER)) {
 			dispatch(changeCommonPartyDropDetailsAction({ isShow: false }))//change party drop-down  hide
 		}
-		
+
 	}, [])
 
 	useEffect(() => {
@@ -153,9 +153,9 @@ const PartyMaster = (props) => {
 		}
 		return () => {
 			dispatch(priceListByPartyActionSuccess([]));//clear privious priceList
-			dispatch(changeCommonPartyDropDetailsAction({isShow: true, forceDisable: false }))//change party drop-down restore state
+			dispatch(changeCommonPartyDropDetailsAction({ isShow: true, forceDisable: false }))//change party drop-down restore state
 		}
-	
+
 	}, [])
 
 	useEffect(() => {
@@ -284,7 +284,7 @@ const PartyMaster = (props) => {
 						dispatch(changeCommonPartyDropDetailsAction({ forceDisable: true }))//change party drop-down disable when edit/view
 					}
 				}
-				
+
 			} catch (e) { }
 		}
 
@@ -545,7 +545,7 @@ const PartyMaster = (props) => {
 			<React.Fragment>
 				<MetaTags> {metaTagLabel(userPageAccessState)}</MetaTags>
 				<div className="page-content" style={{ marginTop: IsEditMode_Css }}>
-				
+
 					<Container fluid>
 						<Row>
 							<Col lg={12}>

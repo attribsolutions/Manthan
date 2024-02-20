@@ -35,7 +35,7 @@ import {
     CommonConsole,
     metaTagLabel
 } from "../../../../components/Common/CommonFunction";
-import { mode, url, pageId } from "../../../../routes/index";
+import { mode, pageId } from "../../../../routes/index";
 import { userAccessUseEffect } from "../../../../components/Common/CommonUseEffect";
 import { customAlert } from "../../../../CustomAlert/ConfirmDialog";
 import Slidewithcaption from "../../../../components/Common/CommonImageComponent";
@@ -72,14 +72,12 @@ const ItemImageUpload = (props) => {
 
 
 
-    
+
 
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
-        postMsg,
         pageField,
-        UploadImageLoading,
         ItemList,
         UploadImage,
         ImageType,
@@ -95,12 +93,9 @@ const ItemImageUpload = (props) => {
         }));
 
     const { values } = state
-    const { isError } = state;
-    const { fieldLabel } = state;
 
     const location = { ...history.location }
-    const hasShowloction = location.hasOwnProperty(mode.editValue)
-    const hasShowModal = props.hasOwnProperty(mode.editValue)
+
 
     useEffect(() => {
         const page_Id = pageId.GROUP
@@ -130,7 +125,7 @@ const ItemImageUpload = (props) => {
             if (UploadImage.Delete === true) {
                 customAlert({
                     Type: 1,
-                    Message:alertMessages.imageUploadSuccessfully,
+                    Message: alertMessages.imageUploadSuccessfully,
                 })
             } else {
                 ImageType.forEach(i => {
@@ -218,7 +213,7 @@ const ItemImageUpload = (props) => {
         if ((values.ItemName === "") || (values.ItemName.value === 0)) {
             customAlert({
                 Type: 3,
-                Message:alertMessages.itemNameIsRequired,
+                Message: alertMessages.itemNameIsRequired,
             })
             return
         }
@@ -228,8 +223,6 @@ const ItemImageUpload = (props) => {
         Object.values(Image).forEach((element) => {
             if (element.ImageType === Type) {
                 if (!(element.file instanceof File)) {
-                    
-
                     slides = [{
                         Image: `${API_URL_LIVE}${element.Item_pic}`
                     }];
@@ -250,7 +243,7 @@ const ItemImageUpload = (props) => {
         if ((values.ItemName === "") || (values.ItemName.value === 0)) {
             customAlert({
                 Type: 3,
-                Message:alertMessages.itemNameIsRequired,
+                Message: alertMessages.itemNameIsRequired,
             })
             return
         }
@@ -301,8 +294,6 @@ const ItemImageUpload = (props) => {
         {
             text: "Image Type",
             dataField: "Name",
-
-
         },
         {
             text: "Upload",
@@ -311,7 +302,7 @@ const ItemImageUpload = (props) => {
             style: {
                 width: "50%"
             },
-            formatter: (cell, row) => {
+            formatter: (row) => {
 
                 return (
                     <form id={`ResetForm${row.id}`}>
@@ -368,8 +359,6 @@ const ItemImageUpload = (props) => {
                             </Col>}
                         </Row>
                     </form>
-
-
                 );
             },
 
@@ -410,10 +399,6 @@ const ItemImageUpload = (props) => {
                             </div>
                             : null}
                     </>
-
-
-
-
                 );
             },
         },

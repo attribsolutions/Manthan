@@ -15,7 +15,7 @@ import { CInput, C_DatePicker, decimalRegx } from '../../../../../CustomValidate
 import { C_Button } from '../../../../../components/Common/CommonButton';
 import { date_ymd_func } from '../../../../../components/Common/CommonFunction';
 
-const AddressTabForm = forwardRef((props, ref) => {
+const AddressTabForm = forwardRef(( ref) => {
 
 	const fileds = {
 		PartyAddress: "",

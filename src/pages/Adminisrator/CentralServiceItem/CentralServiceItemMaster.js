@@ -34,18 +34,14 @@ import {
     onChangeText,
     resetFunction
 } from "../../../components/Common/validationFunction";
-import { getGroupTypeslist } from "../../../store/Administrator/GroupTypeRedux/action";
 import { SaveButton } from "../../../components/Common/CommonButton";
 import {
-    btnIsDissablefunc,
     CommonConsole,
     loginUserID,
     metaTagLabel
 } from "../../../components/Common/CommonFunction";
 import { mode, url, pageId } from "../../../routes/index";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
-import GroupTypeMaster from "../GroupTypePage/GroupTypeMaster";
-import AddMaster from "../EmployeePages/Drodown";
 import { saveMsgUseEffect, userAccessUseEffect } from "../../../components/Common/CommonUseEffect";
 import { editCentralServiceItemSuccess, saveCentralServiceItem, saveCentralServiceItem_Success, updateCentralServiceItemID, updateCentralServiceItemIDSuccess } from "../../../store/Administrator/CentralServiceItemRedux/action";
 
@@ -134,7 +130,7 @@ const CentralServiceItem = (props) => {
             }
 
             if (hasEditVal) {
-                
+
                 const { id, Name, GSTPercentage, HSNCode, Rate, isActive, Type, Unit, UnitName } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
