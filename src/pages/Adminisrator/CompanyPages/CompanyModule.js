@@ -253,14 +253,14 @@ const CompanyModule = (props) => {
     } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
   };
 
-  var IsEditMode_Css = ''
-  if ((modalCss) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
+  // var IsEditMode_Css = ''
+  // if ((modalCss) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
 
   if (!(userPageAccessState === '')) {
     return (
       <React.Fragment>
         <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
-        <div className={"page-content"} style={{ marginTop: IsEditMode_Css }} >
+        <div className={"page-content"} >
 
           <Container fluid>
             <Row>

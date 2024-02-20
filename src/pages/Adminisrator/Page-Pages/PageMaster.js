@@ -293,11 +293,11 @@ const PageMaster = (props) => {
       setrelatedPage_DropdownSelect("");
 
       if (pageMode === "true") {
-          customAlert({
-            Type: 1,
-            Message: postMsg.Message,
-          })
-        
+        customAlert({
+          Type: 1,
+          Message: postMsg.Message,
+        })
+
       } else {
         let isPermission = await customAlert({
           Type: 1,
@@ -455,13 +455,13 @@ const PageMaster = (props) => {
       Access.length === 0 &&
       (pageType_DropdownSelect.value === 2)
     ) {
-        customAlert({
-          Type: 4,
-          Status: true,
-          Message: alertMessages.selectPageAcces,
-          RedirectPath: false,
-          PermissionAction: false,
-        })
+      customAlert({
+        Type: 4,
+        Status: true,
+        Message: alertMessages.selectPageAcces,
+        RedirectPath: false,
+        PermissionAction: false,
+      })
       return;
     }
 
@@ -521,13 +521,13 @@ const PageMaster = (props) => {
   };
 
   // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
-  var IsEditMode_Css = ''
-  if ((modalCss) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
+  // var IsEditMode_Css = ''
+  // if ((modalCss) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
 
   if (!(userPageAccessState === '')) {
     return (
       <React.Fragment>
-        <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
+        <div className="page-content">
           <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
           <Container fluid>
             <AvForm
@@ -559,7 +559,7 @@ const PageMaster = (props) => {
                           <span className="d-none d-sm-block">Page Master Details</span>
                         </NavLink>
                       </NavItem>
-                     
+
                       <NavItem>
                         <NavLink
                           style={{ cursor: "pointer" }}
