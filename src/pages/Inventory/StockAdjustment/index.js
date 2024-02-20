@@ -26,6 +26,7 @@ import { AddItemInTableFunc, stockQtyUnit_SelectOnchange } from "./StockAdjust_F
 import "../../../pages/Sale/SalesReturn/salesReturn.scss";
 import Select, { components } from "react-select";
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
+import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 
 const StockAdjustment = (props) => {
 
@@ -199,7 +200,7 @@ const StockAdjustment = (props) => {
         let isfound = index1.StockDetails.find(i => i.id === index1.BatchCodeSelect?.id);
 
         if (!(isfound === undefined)) {
-            return customAlert({ Type: 3, Message: "This BatchCode Already Exist" })
+            return customAlert({ Type: 3, Message: alertMessages.batchCodeAlreadyExist})
         }
 
         const itemIndex = tableList.indexOf(index1);
@@ -475,7 +476,7 @@ const StockAdjustment = (props) => {
         if (flatStockTableArr.length === 0) {
             customAlert({
                 Type: 4,
-                Message: "Please Enter One Changed Stock Quantity"
+                Message: alertMessages.changeOneStockQty
             })
             return
         }

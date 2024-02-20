@@ -826,13 +826,13 @@ const PurchaseReturn = (props) => {
 
         const invalidMsg1 = []
         if ((values.ItemName === '') && (byType === 'ItemWise')) {
-            invalidMsg1.push(`Select Item Name`)
+            invalidMsg1.push(alertMessages.selectItemName)
         }
         if ((values.InvoiceNumber === '') && (values.Customer === '') && (byType === 'InvoiceWise')) {
             invalidMsg1.push(`Select ${fieldLabel.Customer}.`)
         }
         else if ((values.InvoiceNumber === '') && (byType === 'InvoiceWise')) {
-            invalidMsg1.push(`Select Invoice No.`)
+            invalidMsg1.push(alertMessages.selectInvoiceNo)
         }
 
         if (invalidMsg1.length > 0) {
@@ -974,7 +974,7 @@ const PurchaseReturn = (props) => {
             if (filterData.length === 0) {
                 customAlert({
                     Type: 4,
-                    Message: "Please Enter One Item Quantity",
+                    Message: alertMessages.itemQtyIsRequired,
                 });
                 return;
             }

@@ -124,7 +124,7 @@ const DamageStockReport = (props) => {
             if (unitDropdown === "") {
                 customAlert({
                     Type: 3,
-                    Message: "Please Select Unit"
+                    Message:alertMessages.selectUnit
                 })
                 setBtnMode(0)
                 return

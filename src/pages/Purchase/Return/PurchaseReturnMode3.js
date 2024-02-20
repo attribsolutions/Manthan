@@ -416,7 +416,7 @@ const PurchaseReturnMode3 = (props) => {
         if (values.Customer === "") {
             customAlert({
                 Type: 4,
-                Message: "Please Select Supplier",
+                Message: alertMessages.selectSupplier,
             });
             return;
         }

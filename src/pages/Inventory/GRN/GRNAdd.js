@@ -25,6 +25,7 @@ import { initialFiledFunc } from "../../../components/Common/validationFunction"
 import { useLayoutEffect } from "react";
 import { pageFieldUseEffect, saveMsgUseEffect, table_ArrowUseEffect, userAccessUseEffect } from "../../../components/Common/CommonUseEffect";
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
+import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 
 let initialTableData = []
 
@@ -608,7 +609,7 @@ const GRNAdd = (props) => {
 
                 customAlert({
                     Type: 3,
-                    Message: "Please Enter Invoice Number",
+                    Message: alertMessages.invoiceNoIsRequired,
                 })
                 return returnFunc()
             }
@@ -616,7 +617,7 @@ const GRNAdd = (props) => {
 
                 customAlert({
                     Type: 3,
-                    Message: "Please Enter One Item Quantity",
+                    Message: alertMessages.itemQtyIsRequired
                 })
                 return returnFunc()
             }
