@@ -111,7 +111,7 @@ const Order = (props) => {
     const [goBtnDissable, setGoBtnDissable] = useState(false)
 
     const [termsAndConTable, setTermsAndConTable] = useState([]);
-    const [orderTypeSelect, setorderTypeSelect] = useState('');
+    const [orderTypeSelect, setorderTypeSelect] = useState([]);
     const [isOpen_assignLink, setisOpen_assignLink] = useState(false)
     const [orderItemTable, setOrderItemTable] = useState([])
     const [findPartyItemAccess, setFindPartyItemAccess] = useState(false)
