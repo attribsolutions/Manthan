@@ -27,7 +27,7 @@ function GSTTable(props) {
 
       const permission = await customAlert({
         Type: 7,
-        Message: alertMessages.deleteThis_GST,
+        Message: `${alertMessages.deleteOrNot}GST`,
       })
       if (permission) {
         dispatch(deleteGSTId_ForMaster(info.id))

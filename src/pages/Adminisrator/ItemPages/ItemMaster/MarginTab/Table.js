@@ -25,7 +25,7 @@ function MarginTable(props) {
     else {
       const permission = await customAlert({
         Type: 7,
-        Message:alertMessages.deleteThis_Margin
+        Message:`${alertMessages.deleteOrNot}Margin`
       })
       if (permission) {
         dispatch(deleteIdForMarginMaster(info.id))

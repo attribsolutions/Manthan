@@ -15,6 +15,7 @@ import MRPMaster from "./MRPMaster";
 import { Listloader } from "../../../components/Common/CommonButton";
 import { mobileApp_ProductUpdate_Api } from "../../../helpers/backend_helper";
 import { showToastAlert } from "../../../helpers/axios_Config";
+import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 
 const MRPList = () => {
 
@@ -108,7 +109,7 @@ const MRPList = () => {
     if (rowData.CommonID) {
       const rep = await customAlert({
         Type: 8,
-        Message: `Are you sure you want to delete this ${"EffectiveDate"}: "${rowData.EffectiveDate}"`,
+        Message: `${alertMessages.deleteOrNot} ${"EffectiveDate"}: "${rowData.EffectiveDate}"`,
       })
       if (rep) {
         let config = { btnId, deleteId: rowData.CommonID }

@@ -14,6 +14,7 @@ import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import GSTMaster from "./GSTMaster";
 import { deleteGSTListId, deleteGSTListId_Success, getGSTList, goButtonForGST_Master_Success } from "../../../store/Administrator/GSTRedux/action";
 import { PageLoadingSpinner, Listloader } from "../../../components/Common/CommonButton";
+import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 
 const GSTList = () => {
 
@@ -109,7 +110,7 @@ const GSTList = () => {
     if (rowData.CommonID) {
       const rep = await customAlert({
         Type: 8,
-        Message: `Are you sure you want to delete this ${"EffectiveDate"}: "${rowData.EffectiveDate}"`,
+        Message: `${alertMessages.deleteOrNot} ${"EffectiveDate"}: "${rowData.EffectiveDate}"`,
       })
       if (rep) {
         _cfunc.btnIsDissablefunc({ btnId, state: true })
