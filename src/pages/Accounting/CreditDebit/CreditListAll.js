@@ -335,13 +335,13 @@ const CreditList = () => {
 
     const HeaderContent = () => {
         return (
-            <div className="px-2 c_card_filter text-black" >
+            <div className="px-2   c_card_filter text-black" >
                 <div className="row" >
-                    <Col sm={2} className="">
-                        <FormGroup className=" mb-2 row mt-3 " >
-                            <Label className="col-sm-4 p-2"
-                                style={{ width: "66px" }}>FromDate</Label>
-                            <Col sm={7}>
+                    <Col sm="3" className="">
+                        <FormGroup className="mb- row mt-3 " >
+                            <Label className="col-sm-5 p-2"
+                                style={{ width: "83px" }}>FromDate</Label>
+                            <Col sm="7">
                                 <C_DatePicker
                                     name='FromDate'
                                     value={values.FromDate}
@@ -350,12 +350,11 @@ const CreditList = () => {
                             </Col>
                         </FormGroup>
                     </Col>
-
-                    <Col sm={2} className="">
-                        <FormGroup className=" row mt-3 " >
-                            <Label className="col-sm-4 p-2"
-                                style={{ width: "60px" }}>ToDate</Label>
-                            <Col sm={7}>
+                    <Col sm="3" className="">
+                        <FormGroup className="mb- row mt-3 " >
+                            <Label className="col-sm-5 p-2"
+                                style={{ width: "65px" }}>ToDate</Label>
+                            <Col sm="7">
                                 <C_DatePicker
                                     name="ToDate"
                                     value={values.ToDate}
@@ -364,12 +363,11 @@ const CreditList = () => {
                             </Col>
                         </FormGroup>
                     </Col>
-
-                    <Col sm={3}>
-                        <FormGroup className=" row mt-3 " >
-                            <Label className="col-sm-2 p-2"
-                                style={{ width: "85px" }}>Customer</Label>
-                            <Col sm={7}>
+                    <Col sm="5">
+                        <FormGroup className="mb-2 row mt-3 " >
+                            <Label className="col-md-4 p-2"
+                                style={{ width: "115px" }}>Customer</Label>
+                            <Col sm="5">
                                 <Select
                                     name="Customer"
                                     classNamePrefix="select2-Customer"
@@ -383,27 +381,7 @@ const CreditList = () => {
                             </Col>
                         </FormGroup>
                     </Col >
-
-                    {/* <Col sm={3}>
-                    <FormGroup className=" row mt-3 " >
-                        <Label className="col-md-3 p-2"
-                            style={{ width: "90px" }}>NoteType</Label>
-                        <Col sm={8}>
-                            <Select
-                                name="Customer"
-                                classNamePrefix="select2-Customer"
-                                value={values.NoteType}
-                                options={NoteType}
-                                onChange={NoteTypeOnChange}
-                                styles={{
-                                    menu: provided => ({ ...provided, zIndex: 2 })
-                                }}
-                            />
-                        </Col>
-                    </FormGroup>
-                </Col > */}
-
-                    <Col sm={1} className="mt-3 " style={{ paddingLeft: "100px" }}>
+                    <Col sm="1" className="mt-3 ">
                         <Go_Button onClick={goButtonHandler} loading={GobuttonLoading} />
                     </Col>
                 </div>

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { BreadcrumbRadioButtonView, commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
 import * as pageId from "../../../routes/allPageID"
@@ -21,7 +21,7 @@ import { C_DatePicker, C_Select } from "../../../CustomValidateForm";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 
-const ClaimTrackingEntryList = (props) => {
+const ClaimTrackingEntryList = () => {
 
     const dispatch = useDispatch();
     const currentDate_ymd = date_ymd_func();
@@ -125,83 +125,83 @@ const ClaimTrackingEntryList = (props) => {
         dispatch(getClaimTrackingEntrySuccess([]));
     }
 
-    return (
 
+    const HeaderContent = () => {
+        return (
+            <div className="px-2   c_card_filter text-black" >
+                <div className="row" >
+                    <Col sm="3" className="">
+                        <FormGroup className="mb- row mt-3 " >
+                            <Label className="col-sm-5 p-2"
+                                style={{ width: "83px" }}>FromDate</Label>
+                            <Col sm="7">
+                                <C_DatePicker
+                                    name='FromDate'
+                                    value={fromDate}
+                                    onChange={fromdateOnchange}
+                                />
+                            </Col>
+                        </FormGroup>
+                    </Col>
+                    <Col sm="3" className="">
+                        <FormGroup className="mb- row mt-3 " >
+                            <Label className="col-sm-5 p-2"
+                                style={{ width: "65px" }}>ToDate</Label>
+                            <Col sm="7">
+                                <C_DatePicker
+                                    name="ToDate"
+                                    value={toDate}
+                                    onChange={todateOnchange}
+                                />
+                            </Col>
+                        </FormGroup>
+                    </Col>
+                    <Col sm="5">
+                        <FormGroup className="mb-2 row mt-3 " >
+                            <Label className="col-md-4 p-2"
+                                style={{ width: "115px" }}>Party</Label>
+                            <Col sm="5">
+                                <C_Select
+                                    name="PartyName"
+                                    value={partySelect}
+                                    isSearchable={true}
+                                    className="react-dropdown"
+                                    classNamePrefix="dropdown"
+                                    styles={{
+                                        menu: provided => ({ ...provided, zIndex: 2 })
+                                    }}
+                                    options={Party_Option}
+                                    onChange={(e) => {
+                                        setPartySelect(e);
+                                        dispatch(getClaimTrackingEntrySuccess([]));
+                                    }}
+                                />
+                            </Col>
+                        </FormGroup>
+                    </Col >
+                    <Col sm="1" className="mt-3 ">
+                        < Go_Button
+                            loading={goBtnLoading}
+                            onClick={(e) => goButtonHandler()}
+                        />
+                    </Col>
+                </div>
+            </div>
+        )
+    }
+
+
+    return (
         <React.Fragment>
             <PageLoadingSpinner isLoading={(reducers.goBtnLoading || !pageField)} />
             <div className="page-content">
-
-                <div className="px-3 c_card_filter header text-black mb-2" >
-
-                    <div className="row" >
-                        <Col sm={3} className="">
-                            <FormGroup className="mb- row mt-3 mb-2 " >
-                                <Label className="col-sm-4 p-2"
-                                    style={{ width: "83px" }}>FromDate</Label>
-                                <Col sm="6">
-                                    <C_DatePicker
-                                        name='FromDate'
-                                        value={fromDate}
-                                        onChange={fromdateOnchange}
-                                    />
-                                </Col>
-                            </FormGroup>
-                        </Col>
-                        <Col sm={3} className="">
-                            <FormGroup className="mb- row mt-3 mb-2" >
-                                <Label className="col-sm-4 p-2"
-                                    style={{ width: "65px" }}>ToDate</Label>
-                                <Col sm="6">
-                                    <C_DatePicker
-                                        name="ToDate"
-                                        value={toDate}
-                                        onChange={todateOnchange}
-                                    />
-                                </Col>
-                            </FormGroup>
-                        </Col>
-
-                        {isSCMParty &&
-                            <Col sm={3} className="">
-                                <FormGroup className="mb- row mt-3" >
-                                    <Label className="col-sm-4 p-2"
-                                        style={{ width: "65px", marginRight: "20px" }}>Party</Label>
-                                    <Col sm="8">
-                                        <C_Select
-                                            name="PartyName"
-                                            value={partySelect}
-                                            isSearchable={true}
-                                            className="react-dropdown"
-                                            classNamePrefix="dropdown"
-                                            styles={{
-                                                menu: provided => ({ ...provided, zIndex: 2 })
-                                            }}
-                                            options={Party_Option}
-                                            onChange={(e) => {
-                                                setPartySelect(e);
-                                                dispatch(getClaimTrackingEntrySuccess([]));
-                                            }}
-                                        />
-                                    </Col>
-                                </FormGroup>
-                            </Col>
-                        }
-
-                        <Col sm="1" className="mx-6 mt-3" >
-                            < Go_Button
-                                loading={goBtnLoading}
-                                onClick={(e) => goButtonHandler()}
-                            />
-                        </Col>
-                    </div>
-                </div>
-
                 {
                     (pageField) &&
                     <div className="mt-n1">
                         <CommonPurchaseList
                             action={action}
                             reducers={reducers}
+                            HeaderContent={HeaderContent}
                             downBtnFunc={downBtnFunc}
                             MasterModal={ClaimTrackingEntry}
                             masterPath={url.CLAIM_TRACKING_ENTRY}
