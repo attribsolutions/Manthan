@@ -117,6 +117,9 @@ const invalidEmail = 'InValid Email'
 const invalidPAN = 'InValid Pan No '
 const invalid_GSTIN_no = 'InValid GSTIN No'
 const invalid_Name = 'InValid Name'
+const fillAddressDetailsInTable ="Don't forget to fill in the address details in the table."
+const  defaultAddressIsSelected="Atleast One Default Address is Select "
+
 
 // Role Access
 const selectParty = "Select Party"
@@ -158,6 +161,8 @@ const selectUnit = "Please Select Unit"
 const recordNotAvailable = "Records Not available "
 
 export const alertMessages = {
+    defaultAddressIsSelected,
+    fillAddressDetailsInTable,
     deleteOrNot,
     recordNotAvailable,
     selectUnit,
