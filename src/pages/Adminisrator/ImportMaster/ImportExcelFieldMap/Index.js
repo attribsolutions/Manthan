@@ -12,14 +12,11 @@ import {
 } from "../../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { globalTableSearchProps } from "../../../../components/Common/SearchBox/MySearch";
 import * as pageId from "../../../../routes/allPageID";
 import * as mode from "../../../../routes/PageMode";
 import { PageLoadingSpinner, SaveButton } from "../../../../components/Common/CommonButton";
 import * as _cfunc from "../../../../components/Common/CommonFunction";
 import { comAddPageFieldFunc, initialFiledFunc, } from "../../../../components/Common/validationFunction";
-import ToolkitProvider from "react-bootstrap-table2-toolkit";
-import BootstrapTable from "react-bootstrap-table-next";
 import {
     GoButton_ImportFiledMap_Add,
     GoButton_ImportFiledMap_AddSuccess,
@@ -54,7 +51,6 @@ const ImportExcelFieldMap = (props) => {
         pageField,
         userAccess,
         goButtonItem,
-        goBtnLoading,
         partyDropDownLoading,
         saveBtnLoading,
         commonPartyDropSelect
@@ -126,7 +122,6 @@ const ImportExcelFieldMap = (props) => {
                 Type: 1,
                 Message: postMsg.Message,
             })
-
 
         }
         else if (postMsg.Status === true) {
@@ -315,3 +310,13 @@ const ImportExcelFieldMap = (props) => {
 };
 
 export default ImportExcelFieldMap
+
+
+
+
+
+
+
+
+
+

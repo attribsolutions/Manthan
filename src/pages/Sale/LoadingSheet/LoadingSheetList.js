@@ -1,7 +1,6 @@
 import React, { useEffect, useState, } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
-    BreadcrumbShowCountlabel,
     commonPageFieldList,
     commonPageFieldListSuccess
 } from "../../../store/actions";
@@ -30,7 +29,6 @@ const LoadingSheetList = () => {
     const history = useHistory();
     const dispatch = useDispatch();
     const currentDate_ymd = _cfunc.date_ymd_func()
-
     const [headerFilters, setHeaderFilters] = useState('');
     const [pageMode] = useState(mode.defaultList);
 
@@ -48,7 +46,6 @@ const LoadingSheetList = () => {
 
     const { fromdate = currentDate_ymd, todate = currentDate_ymd } = headerFilters;
     const { pageField, LoadingSheetUpdateList } = reducers;
-
     const { commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
 
     // Common Party Dropdown useEffect
@@ -72,7 +69,7 @@ const LoadingSheetList = () => {
     useEffect(() => {
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(pageId.LOADING_SHEET_LIST))
-        if (!( commonPartyDropSelect.value === 0)) {
+        if (!(commonPartyDropSelect.value === 0)) {
             goButtonHandler()
         }
         return () => {
@@ -90,14 +87,14 @@ const LoadingSheetList = () => {
 
     const goButtonHandler = () => {
         try {
-            if (( commonPartyDropSelect.value === 0)) {
+            if ((commonPartyDropSelect.value === 0)) {
                 customAlert({ Type: 3, Message: alertMessages.commonPartySelectionIsRequired });
                 return;
             };
             const jsonBody = JSON.stringify({
                 FromDate: fromdate,
                 ToDate: todate,
-                PartyID:  commonPartyDropSelect.value,
+                PartyID: commonPartyDropSelect.value,
             });
 
             dispatch(LoadingSheetListAction(jsonBody));

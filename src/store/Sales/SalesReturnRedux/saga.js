@@ -3,7 +3,6 @@ import * as  apiCall from "../../../helpers/backend_helper";
 import * as actionType from "./actionType";
 import * as action from "./action";
 import { amountCommaSeparateFunc, listpageConcatDateAndTime, date_dmy_func } from "../../../components/Common/CommonFunction";
-import { url } from "../../../routes";
 
 // Bank list Dropdown API
 function* Invoice_No_List_GenFunc({ jsonBody }) {
@@ -38,7 +37,7 @@ function* SalesReturn_List_GenFun({ filters }) {
             i["IsCreditNoteCreated"] = i.IsCreditNoteCreated === 1 ? true : false
             i["IsApproved"] = i.IsApproved === 1 ? true : false
             i["forceDeleteHide"] = ((i.Mode === 3) && (i.IsApproved)) ? true : false
-            debugger
+            
             return i
         })
         yield put(action.salesReturnListAPISuccess(newList));
@@ -80,7 +79,7 @@ function* Return_Approve_GenFunc({ config }) {
 function* addButton_saleReturn_GenFunc({ config }) {
 
     try {
-        const { jsonBody, InvoiceId, returnMode, subPageMode } = config;
+        const { jsonBody, InvoiceId, returnMode } = config;
         let response
         if (returnMode === 2) {//returnMode 1 = "itemWise"
             response = yield call(apiCall.SalesReturn_add_button_api_For_Item, jsonBody);

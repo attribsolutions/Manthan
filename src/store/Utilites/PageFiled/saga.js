@@ -6,7 +6,6 @@ import {
   commonPageFieldSuccess,
   commonPageFieldListSuccess
 } from "../../actions"
-import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 
 
 function* commonPageFiled_GenFunc({ pageId }) {

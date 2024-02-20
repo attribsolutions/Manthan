@@ -1,4 +1,4 @@
-import { CommonConsole, sap_date_dmy_func } from "../../../components/Common/CommonFunction";
+import { sap_date_dmy_func } from "../../../components/Common/CommonFunction";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { getOrderApprovalDetailActionSucc, GoButton_For_Order_AddSuccess, orderApprovalAction, orderApprovalActionSuccess } from "../../../store/actions";
 
@@ -47,13 +47,13 @@ export const orderApprovalFunc = ({ dispatch, approvalDetail }) => {
     }
 }
 
-export const orderApprovalMessage = async ({ dispatch, orderApprovalMsg, listPath, history,goButtonHandler }) => {
-   
+export const orderApprovalMessage = async ({ dispatch, orderApprovalMsg, listPath, history, goButtonHandler }) => {
+
     try {
- 
+
         if (orderApprovalMsg.Status === true && orderApprovalMsg.StatusCode === 200) {
             dispatch(orderApprovalActionSuccess({ Status: false }))
-  
+
             goButtonHandler("event",)
             dispatch(GoButton_For_Order_AddSuccess([]))
 

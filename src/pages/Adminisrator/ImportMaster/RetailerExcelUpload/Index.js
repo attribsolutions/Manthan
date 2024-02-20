@@ -30,8 +30,6 @@ import { priceListByPartyAction, priceListByPartyActionSuccess } from "../../../
 import { getPartyTypelist, getPartyTypelistSuccess } from "../../../../store/Administrator/PartyTypeRedux/action";
 import { retailer_FileDetails, retailer_SaveHandler } from "./AllHndlerFunc";
 import { C_Button, PageLoadingSpinner } from "../../../../components/Common/CommonButton";
-import { C_Select } from "../../../../CustomValidateForm";
-// import { getPartyListAPI } from "../../../../store/Administrator/PartyRedux/action";
 import { readExcelFile } from "../InvoiceExcelUpload/readFile";
 import { alertMessages } from "../../../../components/Common/CommonErrorMsg/alertMsg";
 

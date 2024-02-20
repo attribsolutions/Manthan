@@ -1,7 +1,7 @@
 import React, { useEffect, } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import RoutesMaster from "./RoutesMaster";
-import { BreadcrumbShowCountlabel, commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
+import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
 import {
@@ -19,7 +19,7 @@ import { PageLoadingSpinner } from "../../../components/Common/CommonButton";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 
-const RoutesList = (props) => {
+const RoutesList = () => {
 
   const dispatch = useDispatch();
 

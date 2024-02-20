@@ -4,14 +4,13 @@ import BootstrapTable from 'react-bootstrap-table-next';
 import ToolkitProvider from 'react-bootstrap-table2-toolkit';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { Button, Card, CardBody, Col, FormGroup, Label, Modal, Row, Spinner } from 'reactstrap';
+import { Button, CardBody, Col, FormGroup, Label, Modal, Row, Spinner } from 'reactstrap';
 import { Go_Button } from '../../components/Common/CommonButton';
 import { breadcrumbReturnFunc, CommonConsole, convertDateTime_ydm, getDateTime_dmy, loginCompanyID, loginEmployeeID } from '../../components/Common/CommonFunction';
-import { globalTableSearchProps } from '../../components/Common/SearchBox/MySearch';
 import { customAlert } from '../../CustomAlert/ConfirmDialog';
 import { C_Select, C_TimePicker } from '../../CustomValidateForm';
 import { showToastAlert } from '../../helpers/axios_Config';
-import { commonPartyDropdown_API, genaraMasterBy_Type_API, GenralMasterSubType, TransactionLog_Get_User_Api, TransactionLog_getjson_for_Transation_Id, TransactionLog_Go_Btn_Api, TransactionLog_transactionType_Api } from '../../helpers/backend_helper';
+import { commonPartyDropdown_API, GenralMasterSubType, TransactionLog_Get_User_Api, TransactionLog_getjson_for_Transation_Id, TransactionLog_Go_Btn_Api, TransactionLog_transactionType_Api } from '../../helpers/backend_helper';
 import { BreadcrumbShowCountlabel } from '../../store/actions';
 import SimpleBar from "simplebar-react"
 import { allLabelWithBlank } from '../../components/Common/CommonErrorMsg/HarderCodeData';

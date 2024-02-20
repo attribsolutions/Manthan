@@ -24,7 +24,6 @@ function pageFooter(doc, data) {
 }
 
 const CustomerWiseReturnReport = (data) => {
-
     var doc = new jsPDF('p', 'pt', 'a4');
     pageHeder(doc, data);
     reportBody(doc, data);

@@ -30,7 +30,7 @@ import {
     saveChallan_ChallanAdd
 } from "../../../store/Inventory/ChallanRedux/actions";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
-import { Amount, basicAmount, orderCalculateFunc, roundedGstAmount } from "../../Purchase/Order/OrderPageCalulation";
+import { orderCalculateFunc } from "../../Purchase/Order/OrderPageCalulation";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { C_DatePicker } from "../../../CustomValidateForm";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
