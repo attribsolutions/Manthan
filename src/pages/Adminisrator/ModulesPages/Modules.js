@@ -258,7 +258,7 @@ const Modules = (props) => {
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
-                <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
+                <div className="page-content" >
                     <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
                     <Container fluid >
 

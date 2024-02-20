@@ -524,7 +524,7 @@ const PartyItems = (props) => {
 		<>
 			<PageLoadingSpinner isLoading={(GoBtnlistloading || !pageField)} />
 			{userPageAccessState && (
-				<div className="page-content" style={{ marginTop: IsEditMode_Css }}>
+				<div className="page-content" >
 					<Container fluid>
 						<MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
 

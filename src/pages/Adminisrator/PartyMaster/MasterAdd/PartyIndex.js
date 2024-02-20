@@ -545,7 +545,7 @@ const PartyMaster = (props) => {
 		return (
 			<React.Fragment>
 				<MetaTags> {metaTagLabel(userPageAccessState)}</MetaTags>
-				<div className="page-content" style={{ marginTop: IsEditMode_Css }}>
+				<div className="page-content" >
 
 					<Container fluid>
 						<Row>
