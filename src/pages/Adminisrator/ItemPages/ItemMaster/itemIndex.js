@@ -62,6 +62,7 @@ import { showToastAlert } from "../../../../helpers/axios_Config";
 import { mobileApp_ProductAdd_Api, mobileApp_ProductUpdate_Api } from "../../../../helpers/backend_helper";
 import { getGroupTypeslist } from "../../../../store/Administrator/GroupTypeRedux/action";
 import { priceListByCompay_Action } from "../../../../store/Administrator/PriceList/action";
+import { alertMessages } from "../../../../components/Common/CommonErrorMsg/alertMsg";
 
 export const unitConversionInitial = {
     id: 1,
@@ -731,7 +732,7 @@ const ItemsMaster = (props) => {
                 if (GStDetailsMaster.length === 0) {
                     customAlert({
                         Type: 4,
-                        Message: "GST Details Required",
+                        Message: alertMessages.gstDetailsIsRequired,
                     })
                     return btnIsDissablefunc({ btnId, state: false });
                 }
@@ -739,7 +740,7 @@ const ItemsMaster = (props) => {
                 if (MRP_Tab_TableData.length === 0) {
                     customAlert({
                         Type: 4,
-                        Message: "MRP Details Required",
+                        Message: alertMessages.mrpDetailsIsRequired,
                     })
                     return btnIsDissablefunc({ btnId, state: false });
                 }

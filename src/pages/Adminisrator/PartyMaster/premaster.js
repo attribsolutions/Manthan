@@ -45,6 +45,7 @@ import { SaveButton } from "../../../components/Common/CommonButton";
 import { SSDD_List_under_Company } from "../../../store/CommonAPI/SupplierRedux/actions";
 import NewForm from "./NewForm";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
+import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 
 const PartyMaster = (props) => {
     const dispatch = useDispatch();
@@ -326,7 +327,7 @@ const PartyMaster = (props) => {
                 customAlert({
                     Type: 4,
                     Status: true,
-                    Message: "Address details is required",
+                    Message: alertMessages.addressIsRequired,
                     RedirectPath: false,
                     PermissionAction: false,
                 })
@@ -345,7 +346,7 @@ const PartyMaster = (props) => {
                 customAlert({
                     Type: 4,
                     Status: true,
-                    Message: "At least one Address Details IsDefault true",
+                    Message: alertMessages.addressDefaultTrueSelect,
                     RedirectPath: false,
                     PermissionAction: false,
                 })

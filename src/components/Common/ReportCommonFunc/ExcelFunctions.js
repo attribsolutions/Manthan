@@ -1,4 +1,5 @@
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
+import { alertMessages } from "../CommonErrorMsg/alertMsg";
 import { CommonConsole } from "../CommonFunction";
 
 function parseAndFormatDate(dateString) {
@@ -203,7 +204,7 @@ export function generateTableData({
         if (listPageColumns.length === 0) {
             customAlert({
                 Type: 4,
-                Message: "No fields selected for download"
+                Message: alertMessages.noFieldsSelectedForDownload
             })
             return { noDataForDownload: true };
         }
