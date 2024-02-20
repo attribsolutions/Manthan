@@ -52,6 +52,7 @@ import { Retailer_List, SSDD_List_under_Company, } from "../../../store/CommonAP
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { Tbody, Thead } from "react-super-responsive-table";
 import { globalTableSearchProps } from "../../../components/Common/SearchBox/MySearch";
+import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 
 const PartySubParty = (props) => {
 
@@ -311,7 +312,7 @@ const PartySubParty = (props) => {
         if (values.PartyName === '') {
             customAlert({
                 Type: 3,
-                Message: "Select Party",
+                Message: alertMessages.selectParty,
             })
         }
         else if ((values.Subparty === '')) {
@@ -334,7 +335,7 @@ const PartySubParty = (props) => {
         else {
             customAlert({
                 Type: 3,
-                Message: "Party Already Exist",
+                Message: alertMessages.partyAlreadyExist,
             })
         }
     }

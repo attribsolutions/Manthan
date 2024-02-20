@@ -5,8 +5,14 @@ const commonPartySelectionIsRequired = "Please Select Party"
 // Image Related Error Message 
 const imageNotUploaded = "Images not uploaded"
 
+// common functions alert Message
+const actionNotDefined = "Action Not defined"
+const noFieldsSelectedForDownload = "No fields selected for download"
+const selectPartyName = "Please Select Party"
+
 const IsRequired = 'Is Required.'
 const changeCustomerName = "Are you sure you want to change the customer ?"
+const deleteOrNot = "Are you sure you want to delete this "
 
 // Loading Sheet Master
 const routeNameIsRequired = "RouteName Is Required"
@@ -39,6 +45,8 @@ const PricelistIsRequired = "Please Select PriceList"
 const paymentORcodeIsRequired = "Payment QR not uploaded"
 const selectMappingType = "Please select Mapping Type"
 
+const selectValidExcelFile = "Please select a valid excel file."
+
 // Mobile Retailer Send Save Button Error Message
 const atLeastOneRetailerIsRequired = "At least One Retailer is Selected"
 
@@ -66,6 +74,7 @@ const selectImageFile = "Please Select Image file"
 
 // claim Tracking Entry 
 const CreditNote_Not_Upload = "Credit Note Not Uploaded"
+const deleteClaim = "Do you want To Delete Claim ?"
 
 // Invoice Master
 const rateNotAvailable = " Rate not available."
@@ -80,7 +89,114 @@ const imageRemoveSuccessfully = "Return Iamge Remove Successfully"
 const returnImageNotUploaded = "Return Image Not Uploaded"
 const selectOneCheckbox = "Please Select One Checkbox"
 
+// page Master Error Message 
+const selectPageAcces = "At Least One PageAccess is Select"
+const selectRelatedID = "Please Select Related Page ID"
+const pageField_IsRequired = "PageFields is Required"
+
+// Profile Menu
+const setNewPassword = "Set NewPassoword"
+const newPasswordNotMatch = "Confirm does not match to NewPassword "
+const changePassword = "Do you Want to Change Password ?"
+
+// Item Master 
+const gstDetailsIsRequired = "GST Details Required"
+const mrpDetailsIsRequired = "MRP Details Required"
+const groupType_IsRerquired = "Please Select GroupType value...!"
+const group_IsRerquired = "Please Select Group value...!"
+const enterValue = "Please Enter value"
+
+// Party Master 
+const addressDefaultTrueSelect = "At least one Address Details IsDefault true"
+const addressIsRequired = "Address details is required"
+const selectField = "Please select field"
+const updateAtLeastOneField = "Update At least One Field"
+const DistrictIsRequired = 'District Name is Required'
+const invalidMobile = 'InValid Mobile No'
+const invalidEmail = 'InValid Email'
+const invalidPAN = 'InValid Pan No '
+const invalid_GSTIN_no = 'InValid GSTIN No'
+const invalid_Name = 'InValid Name'
+const fillAddressDetailsInTable ="Don't forget to fill in the address details in the table."
+const  defaultAddressIsSelected="Atleast One Default Address is Select "
+
+
+// Role Access
+const selectParty = "Select Party"
+const partyAlreadyExist = "Party Already Exist"
+const pageAlreadyExist = "Party Already Exist"
+const selectPage = "Please Select Page"
+const selectRole = "Please Select Role"
+const atLeastOneRoleAddInTable = "At Least One Role  Add in the Table"
+
+//GRN 
+const assignItem = "Please Assign-Item."
+const hideInvoiceOrNot = "Do you want To Hide Invoice ?"
+const unHideInvoiceOrNot = "Do you want To Unhide Invoice ?"
+
+// Stock Entry
+const batchCodeAlreadyExist = "This BatchCode Already Exist"
+const changeOneStockQty = "Please Enter One Changed Stock Quantity"
+const selectItemName = "Select Item Name"
+const stockIsZero = "If new stock is added then the previous whole item stock will become zero."
+const unitIsRequired = 'Unit Is Required'
+const mrpIsRequired = 'MRP Is Required'
+const gstIsRequired = 'GST Is Required'
+const batchCodeIsRequired = 'BatchCode Is Required'
+
+//Inter Branch Module (BOM)
+const atLeastOneMaterialDataAddInTable = "At Least One Matrial data Add in the table"
+const itemQtyIsReq = 'Item Quantity Is Required'
+const contentItemQtyIsReq = 'Content Item Is Required'
+
+// Order Error Message
+const select_PO_Type = "Please Select PO Type"
+const itemRateIsRequired = "This Item Rate Is Required..."
+const enterOneTerms_and_Cond = "Please Enter One Terms And Condition"
+const selectOneOrder = "Please Select One Order"
+const selectSupplier = "Please Select Supplier"
+
+//Report Error Message
+const selectUnit = "Please Select Unit"
+const recordNotAvailable = "Records Not available "
+
 export const alertMessages = {
+    defaultAddressIsSelected,
+    fillAddressDetailsInTable,
+    deleteOrNot,
+    recordNotAvailable,
+    selectUnit,
+    deleteClaim,
+    selectSupplier,
+    selectOneOrder,
+    unHideInvoiceOrNot,
+    itemRateIsRequired,
+    enterOneTerms_and_Cond,
+    select_PO_Type,
+    contentItemQtyIsReq,
+    itemQtyIsReq,
+    atLeastOneMaterialDataAddInTable,
+    batchCodeIsRequired,
+    gstIsRequired,
+    mrpIsRequired,
+    unitIsRequired,
+    stockIsZero,
+    selectItemName,
+    changeOneStockQty,
+    batchCodeAlreadyExist,
+    hideInvoiceOrNot,
+    assignItem,
+    atLeastOneRoleAddInTable,
+    selectRole,
+    selectPage,
+    pageAlreadyExist,
+    partyAlreadyExist,
+    selectParty,
+    invalid_Name,
+    invalid_GSTIN_no,
+    invalidPAN,
+    invalidEmail,
+    invalidMobile,
     commonPartySelectionIsRequired,
     routeNameIsRequired,
     atLeastOneInvoiceRequired,
@@ -132,7 +248,27 @@ export const alertMessages = {
     approvedQtyIsRequired,
     imageRemoveSuccessfully,
     returnImageNotUploaded,
-    selectOneCheckbox
+    selectOneCheckbox,
+    selectPageAcces,
+    selectRelatedID,
+    pageField_IsRequired,
+    actionNotDefined,
+    noFieldsSelectedForDownload,
+    setNewPassword,
+    newPasswordNotMatch,
+    changePassword,
+    selectPartyName,
+    selectValidExcelFile,
+    gstDetailsIsRequired,
+    mrpDetailsIsRequired,
+    groupType_IsRerquired,
+    group_IsRerquired,
+    enterValue,
+    addressDefaultTrueSelect,
+    addressIsRequired,
+    selectField,
+    updateAtLeastOneField,
+    DistrictIsRequired
 };
 
 

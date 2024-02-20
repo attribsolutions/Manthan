@@ -47,6 +47,7 @@ import { mobileApp_RetailerUpdate_Api } from "../../../../helpers/backend_helper
 import { showToastAlert } from "../../../../helpers/axios_Config";
 import { mobileApp_Send_Retailer_Api } from "../../../../helpers/backend_helper"
 import { changeCommonPartyDropDetailsAction } from "../../../../store/Utilites/PartyDrodown/action";
+import { alertMessages } from "../../../../components/Common/CommonErrorMsg/alertMsg";
 
 function initialState(history) {
 
@@ -395,7 +396,7 @@ const PartyMaster = (props) => {
 		if ((values.PartyAddress.length > 0) && (isError.PartyAddress === "")) {
 			customAlert({
 				Type: 4,
-				Message: "Don't forget to fill in the address details in the table."
+				Message: alertMessages.fillAddressDetailsInTable
 			})
 			return;
 		}
@@ -409,7 +410,7 @@ const PartyMaster = (props) => {
 			setactiveTab1("2")
 			customAlert({
 				Type: 4,
-				Message: "Address details is required",
+				Message: alertMessages.addressIsRequired,
 			})
 			return;
 		};
@@ -428,7 +429,7 @@ const PartyMaster = (props) => {
 			setactiveTab1("2")
 			customAlert({
 				Type: 4,
-				Message: "Atleast One Default Address is Select ",
+				Message:alertMessages.defaultAddressIsSelected,
 			})
 			return;
 		};
@@ -478,7 +479,7 @@ const PartyMaster = (props) => {
 			if (((priceListSelect.label === "") || (priceListSelect.value === "")) && (subPageMode === url.RETAILER_MASTER)) {
 				customAlert({
 					Type: 4,
-					Message: "Please Select PriceList ",
+					Message: alertMessages.PricelistIsRequired,
 				})
 				return;
 			}

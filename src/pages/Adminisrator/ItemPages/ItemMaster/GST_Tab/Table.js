@@ -4,6 +4,7 @@ import { Tbody, Thead } from 'react-super-responsive-table';
 import { deleteGSTId_ForMaster, deleteGSTId_ForMaster_Success } from '../../../../../store/Administrator/GSTRedux/action';
 import { useDispatch, useSelector } from 'react-redux';
 import { customAlert } from '../../../../../CustomAlert/ConfirmDialog';
+import { alertMessages } from '../../../../../components/Common/CommonErrorMsg/alertMsg';
 
 function GSTTable(props) {
 
@@ -26,7 +27,7 @@ function GSTTable(props) {
 
       const permission = await customAlert({
         Type: 7,
-        Message: "Are you sure you want to delete this GST",
+        Message: `${alertMessages.deleteOrNot}GST`,
       })
       if (permission) {
         dispatch(deleteGSTId_ForMaster(info.id))

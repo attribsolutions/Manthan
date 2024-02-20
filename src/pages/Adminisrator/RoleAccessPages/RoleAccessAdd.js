@@ -40,6 +40,7 @@ import "./style.scss";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import { globalTableSearchProps } from "../../../components/Common/SearchBox/MySearch";
 import BootstrapTable from "react-bootstrap-table-next";
+import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 
 const RoleAccessAdd = () => {
 
@@ -255,7 +256,7 @@ const RoleAccessAdd = () => {
         else if (role === undefined) {
             customAlert({
                 Type: 4,
-                Message: "Please Select Role",
+                Message: alertMessages.selectRole,
             })
 
         }
@@ -291,13 +292,13 @@ const RoleAccessAdd = () => {
             else if (found) {
                 customAlert({
                     Type: 4,
-                    Message: "Page Alredy Exist",
+                    Message: alertMessages.pageAlreadyExist
                 })
             }
             else {
                 customAlert({
                     Type: 4,
-                    Message: "Please Select Page",
+                    Message: alertMessages.selectPage,
                 })
             }
         }

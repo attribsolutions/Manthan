@@ -13,6 +13,7 @@ import GSTTable from './Table';
 import { loginUserID, loginCompanyID } from '../../../../../components/Common/CommonFunction';
 import { customAlert } from '../../../../../CustomAlert/ConfirmDialog';
 import { C_DatePicker } from '../../../../../CustomValidateForm';
+import { alertMessages } from '../../../../../components/Common/CommonErrorMsg/alertMsg';
 
 function GSTTab(props) {
 
@@ -55,7 +56,7 @@ function GSTTab(props) {
 
         }
         else {
-            customAlert({ Type: 4, Message: "Please Enter value" })
+            customAlert({ Type: 4, Message: alertMessages.enterValue})
         }
     };
     const clearState = () => {

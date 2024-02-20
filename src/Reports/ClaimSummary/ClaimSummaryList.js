@@ -16,6 +16,7 @@ import ClaimSummaryMaster from "./ClaimSummaryMaster";
 import { initialFiledFunc } from "../../components/Common/validationFunction";
 import { ClaimSummary_API, MasterClaimSummary_API } from "../../helpers/backend_helper";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
+import { alertMessages } from "../../components/Common/CommonErrorMsg/alertMsg";
 
 const SelectedMonth = () => _cfunc.getPreviousMonthAndYear(new Date())
 const FirstAndLastDate = () => _cfunc.getFirstAndLastDateOfMonth(SelectedMonth());
@@ -141,7 +142,7 @@ const ClaimSummaryList = () => {
 
         const isConfirmed = await customAlert({
             Type: 7,
-            Message: "Do you want To Delete Claim ?",
+            Message:alertMessages.deleteClaim,
         });
 
         if (isConfirmed) {

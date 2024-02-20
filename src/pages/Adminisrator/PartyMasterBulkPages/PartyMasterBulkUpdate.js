@@ -259,7 +259,7 @@ const PartyMasterBulkUpdate = (props) => {
         else if (SelectFieldName.length === 0) {
             customAlert({
                 Type: 3,
-                Message: "Please select field",
+                Message: alertMessages.selectField,
             })
             return;
         }
@@ -574,7 +574,7 @@ const PartyMasterBulkUpdate = (props) => {
                 if (arr1.length <= 0) {
                     customAlert({
                         Type: 3,
-                        Message: "Update At least One Field",
+                        Message: alertMessages.updateAtLeastOneField,
                     })
                     btnIsDissablefunc({ btnId, state: false })
                 } else {
@@ -584,7 +584,7 @@ const PartyMasterBulkUpdate = (props) => {
 
                         if ((SelectFieldName.label === "State")) {
                             if (!(i.Value2)) {
-                                invalidMsg1.push({ [i.party]: 'District Name is Required' })
+                                invalidMsg1.push({ [i.party]: alertMessages.DistrictIsRequired })
                             }
                         };
 
@@ -592,7 +592,7 @@ const PartyMasterBulkUpdate = (props) => {
                             const regexExp1 = /^[6-9]\d{9}$/gi;
                             const IsMobile = regexExp1.test(i.Value1)
                             if (!IsMobile) {
-                                invalidMsg1.push({ [i.party]: 'InValid Mobile No' })
+                                invalidMsg1.push({ [i.party]: alertMessages.invalidMobile})
 
                             }
                         };
@@ -601,7 +601,7 @@ const PartyMasterBulkUpdate = (props) => {
                             const regexExp2 = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
                             const IsEmail = regexExp2.test(i.Value1)
                             if (!IsEmail) {
-                                invalidMsg1.push({ [i.party]: 'InValid Email' })
+                                invalidMsg1.push({ [i.party]: alertMessages.invalidEmail})
                             }
                         };
 
@@ -609,7 +609,7 @@ const PartyMasterBulkUpdate = (props) => {
                             const regexExp3 = /[A-Z]{5}[0-9]{4}[A-Z]{1}/
                             const IsPan = regexExp3.test(i.Value1)
                             if (!IsPan) {
-                                invalidMsg1.push({ [i.party]: 'InValid Pan No ' })
+                                invalidMsg1.push({ [i.party]: alertMessages.invalidPAN })
                             }
                         };
 
@@ -617,7 +617,7 @@ const PartyMasterBulkUpdate = (props) => {
                             const regexExp4 = /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/
                             const IsGSTIN = regexExp4.test(i.Value1)
                             if (!IsGSTIN) {
-                                invalidMsg1.push({ [i.party]: 'InValid GSTIN No' })
+                                invalidMsg1.push({ [i.party]: alertMessages.invalid_GSTIN_no })
                             }
                         };
 
@@ -625,7 +625,7 @@ const PartyMasterBulkUpdate = (props) => {
                             const regexExp5 = /^[A-Za-z]+$/
                             const IsName = regexExp5.test(i.Value1)
                             if (!IsName) {
-                                invalidMsg1.push({ [i.party]: 'InValid Name' })
+                                invalidMsg1.push({ [i.party]: alertMessages.invalid_Name })
                             }
                         };
 
@@ -647,15 +647,15 @@ const PartyMasterBulkUpdate = (props) => {
     };
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
-    var IsEditMode_Css = ''
-    if ((modalCss) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
+    // var IsEditMode_Css = ''
+    // if ((modalCss) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
 
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
                 <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
 
-                <div className="page-content" style={{ marginTop: IsEditMode_Css, }}>
+                <div className="page-content" >
                     <form noValidate>
 
                         <Card className="mb-1" style={{ marginBottom: "6px" }}>

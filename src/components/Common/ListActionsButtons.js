@@ -5,6 +5,7 @@ import { date_dmy_func, loginSystemSetting, loginUserDetails, loginUserID } from
 import '../../assets/searchBox/searchBox.scss'
 import { Cancel_Credit_Debit_EInvoiceAction, Cancel_EInvoiceAction, Cancel_EwayBillAction, Uploaded_Credit_Debit_EInvoiceAction, Uploaded_EInvoiceAction, Uploaded_EwayBillAction } from "../../store/actions";
 import { url } from "../../routes";
+import { alertMessages } from "./CommonErrorMsg/alertMsg";
 
 //******************** button class ******************************
 
@@ -105,7 +106,7 @@ export const listPageActionsButtonFunc = (props) => {
                 if (btnmode === mode.isdelete) {
                     let alertRepsponse = await customAlert({
                         Type: 8,
-                        Message: `Are you sure you want to delete this ${ButtonMsgLable} : "${rowData[deleteName]}"`,
+                        Message: `${alertMessages.deleteOrNot} ${ButtonMsgLable} : "${rowData[deleteName]}"`,
                     })
                     if (alertRepsponse) {
                         dispatch(dispatchAction({ ...config }));
@@ -117,13 +118,10 @@ export const listPageActionsButtonFunc = (props) => {
         } catch (error) {
             customAlert({
                 Type: 3,
-                Message: "Action Not defined",
+                Message: alertMessages.actionNotDefined,
             });
         }
     };
-
-
-
 
     const renderButtonWithSpinner = (btnmode, spinnerColor, iconClass) => {
         const style = (btnmode === mode.makeBtn) ? { marginLeft: "5px", marginRight: "6px" } : {};
@@ -202,12 +200,6 @@ export const listPageActionsButtonFunc = (props) => {
         const dummyDisable_CreditNoteBtn = (!isApproved && (subPageMode === url.SALES_RETURN_LIST)) || (isCreditNoteCreated && (subPageMode === url.SALES_RETURN_LIST))
 
         const dummyDisable_upload = hasRole("RoleAccess_Upload") && !isUploadAccess
-
-
-
-
-
-
 
 
         const renderButtonIfNeeded = ({ condition, btnmode, iconClass, actionFunc, dispatchAction, title, buttonClasss, isDummyBtn, }) => {
@@ -303,8 +295,6 @@ export const listPageActionsButtonFunc = (props) => {
                         buttonClasss: vieBtnCss,
                     })}
 
-
-
                     {renderButtonIfNeeded({
                         condition: canMakeBtn,
                         btnmode: mode.makeBtn,
@@ -325,8 +315,6 @@ export const listPageActionsButtonFunc = (props) => {
                         isDummyBtn: dummyDisable_CreditNoteBtn
 
                     })}
-
-
 
                     {renderButtonIfNeeded({
                         condition: canPrint,
@@ -386,7 +374,6 @@ export const listPageActionsButtonFunc = (props) => {
                         isDummyBtn: dummyDisable_SendToScm
                     })}
 
-
                     {renderButtonIfNeeded({   //Button Added for ClaimTraking list Show iamges
                         condition: canShowImages,
                         btnmode: mode.isShowImages,
@@ -396,7 +383,6 @@ export const listPageActionsButtonFunc = (props) => {
                         buttonClasss: printBtnCss,
                         // isDummyBtn: dummyDisable_SendToScm
                     })}
-
 
                     {renderButtonIfNeeded({
                         condition: canDelete,
@@ -569,8 +555,6 @@ export const E_WayBill_ActionsButtonFunc = ({ dispatch, reducers, e_WayBill_Acti
             const isCancelAccess = hasRole("RoleAccess_E-WayBillcancel");
             const isPrintAccess = hasRole("RoleAccess_E-WayBillPrint");
 
-
-
             const canUpload = ((rowData.InvoiceUploads.length === 0) || (rowData.InvoiceUploads[0]?.EwayBillNo === null));
             const canCancel = (!canUpload && (rowData.InvoiceUploads[0]?.EwayBillIsCancel === false));
             const canPrint = (!canUpload && (rowData.InvoiceUploads[0]?.EwayBillUrl !== null));
@@ -615,13 +599,6 @@ export const E_WayBill_ActionsButtonFunc = ({ dispatch, reducers, e_WayBill_Acti
         },
     };
 };
-
-
-
-
-
-
-
 
 
 

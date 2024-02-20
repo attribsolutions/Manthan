@@ -17,6 +17,7 @@ import { SaveButton } from "../../../components/Common/CommonButton";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { get_POSRoleAccess_List_Api } from "../../../helpers/backend_helper";
 import { C_DatePicker } from "../../../CustomValidateForm";
+import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 
 
 
@@ -311,7 +312,7 @@ const POSRoleAccess = (props) => {
         } else {
             customAlert({
                 Type: 4,
-                Message: "Please update at least one field."
+                Message: alertMessages.updateAtLeastOneField
             })
         }
     }

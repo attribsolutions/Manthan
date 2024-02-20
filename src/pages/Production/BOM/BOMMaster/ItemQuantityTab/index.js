@@ -12,6 +12,7 @@ import { getBaseUnit_ForDropDown, getItemList } from '../../../../../store/actio
 import { useDispatch, useSelector } from 'react-redux';
 import BOMTable from './Table';
 import { customAlert } from '../../../../../CustomAlert/ConfirmDialog';
+import { alertMessages } from '../../../../../components/Common/CommonErrorMsg/alertMsg';
 
 function ItemTab(props) {
 
@@ -57,13 +58,13 @@ function ItemTab(props) {
         const invalidMsg1 = []
 
         if ((contentItemSelect === "")) {
-            invalidMsg1.push(`Content Item Is Required`)
+            invalidMsg1.push(alertMessages.contentItemQtyIsReq)
         }
         if (Quantity === "") {
-            invalidMsg1.push(`Item Quantity Is Required`)
+            invalidMsg1.push(alertMessages.itemQtyIsReq)
         };
         if ((unitSelect === "")) {
-            invalidMsg1.push(`Unit Is Required`)
+            invalidMsg1.push(alertMessages.unitIsRequired)
         };
 
         if ((contentItemSelect === "")

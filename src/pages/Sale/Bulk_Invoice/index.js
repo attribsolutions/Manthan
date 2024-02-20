@@ -16,6 +16,7 @@ import { BulkInvoiceProvider } from "./dataProvider";
 import { useMemo } from "react";
 import { itemAmounWithGst, settingBaseRoundOffOrderAmountFunc } from "./util/calculationFunc";
 import { saveBulkInvoiceAction, saveBulkInvoiceActionSuccess } from "../../../store/Sales/bulkInvoice/action";
+import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 
 const Bulk_Invoice2 = (props) => {
 
@@ -221,7 +222,7 @@ const Bulk_Invoice2 = (props) => {
             if (!(bulkInvoiceJsonBody.length > 0)) {
                 customAlert({
                     Type: 4,
-                    Message: "Please Enter One Item Quantity",
+                    Message: alertMessages.itemQtyIsRequired,
                 })
                 return
             }

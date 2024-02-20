@@ -155,7 +155,7 @@ const UploadExcel = (props) => {
         if (files.length == 0) {
             customAlert({
                 Type: 3,
-                Message: "Please choose any file...",
+                Message: alertMessages.chooseAnyFile,
             })
             return;
         }
@@ -184,7 +184,7 @@ const UploadExcel = (props) => {
         } else {
             customAlert({
                 Type: 3,
-                Message: "Please select a valid excel file.",
+                Message:alertMessages.selectValidExcelFile,
             })
         }
     }

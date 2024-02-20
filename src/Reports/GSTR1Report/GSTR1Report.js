@@ -6,7 +6,7 @@ import { initialFiledFunc, } from "../../components/Common/validationFunction";
 import { C_Button } from "../../components/Common/CommonButton";
 import { C_DatePicker } from "../../CustomValidateForm";
 import * as _cfunc from "../../components/Common/CommonFunction";
-import { mode, } from "../../routes/index"
+import { mode, url, } from "../../routes/index"
 import { MetaTags } from "react-meta-tags";
 import C_Report from "../../components/Common/C_Report";
 import { GST_R1_Report_API, GST_R1_Report_API_Success, GST_R3B_Report_API, GST_R3B_Report_API_Success } from "../../store/Report/GSTR1ReportRedux/action";
@@ -83,6 +83,7 @@ const GSTR1Report = (props) => {
             GST_ExcelDownloadFun({      // Download multi tab excel
                 excelTableData: GstR3BReportData.Data,
                 excelFileName: `GST-R3B Report (${values.FromDate}) To (${values.ToDate})`,
+                pageName:"GST-R3B"
             })
             dispatch(GST_R3B_Report_API_Success({ Status: false }))
         }
@@ -93,6 +94,7 @@ const GSTR1Report = (props) => {
             GST_ExcelDownloadFun({      // Download multi tab excel
                 excelTableData: GstR1ReportData.Data,
                 excelFileName: `GST-R1 Report (${values.FromDate}) To (${values.ToDate})`,
+                pageName:"GST-R1"
             })
             dispatch(GST_R1_Report_API_Success({ Status: false }))
         }

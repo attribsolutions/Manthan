@@ -6,6 +6,7 @@ import MarginTable from './Table';
 import { loginUserID, loginCompanyID } from '../../../../../components/Common/CommonFunction';
 import { customAlert } from '../../../../../CustomAlert/ConfirmDialog';
 import { C_DatePicker, C_Select } from '../../../../../CustomValidateForm';
+import { alertMessages } from '../../../../../components/Common/CommonErrorMsg/alertMsg';
 
 function Margin_Tab(props) {
 
@@ -86,7 +87,7 @@ function Margin_Tab(props) {
             clearState();
 
         }
-        else { customAlert({ Type: 4, Message: "Please Enter value" }) }
+        else { customAlert({ Type: 4, Message: alertMessages.enterValue }) }
     };
 
     const clearState = () => {

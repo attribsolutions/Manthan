@@ -35,6 +35,7 @@ import * as mode from "../../../../routes/PageMode";
 import { C_DatePicker } from "../../../../CustomValidateForm";
 import * as _cfunc from "../../../../components/Common/CommonFunction";
 import { customAlert } from "../../../../CustomAlert/ConfirmDialog";
+import { alertMessages } from "../../../../components/Common/CommonErrorMsg/alertMsg";
 
 const BOMMaster = (props) => {
 
@@ -290,7 +291,7 @@ const BOMMaster = (props) => {
                     customAlert({
                         Type: 4,
                         Status: true,
-                        Message: "At Least One Matrial data Add in the table",
+                        Message: alertMessages.atLeastOneMaterialDataAddInTable,
                         RedirectPath: false,
                         PermissionAction: false,
                     })

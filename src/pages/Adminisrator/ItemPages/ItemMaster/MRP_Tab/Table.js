@@ -4,6 +4,7 @@ import { Tbody, Thead } from "react-super-responsive-table";
 import { deleteMRPMaster_Id, deleteMRPMaster_Id_Success } from "../../../../../store/Administrator/MRPMasterRedux/action";
 import { useDispatch, useSelector } from "react-redux";
 import { customAlert } from "../../../../../CustomAlert/ConfirmDialog";
+import { alertMessages } from "../../../../../components/Common/CommonErrorMsg/alertMsg";
 
 function MRPTable(props) {
   const dispatch = useDispatch();
@@ -23,7 +24,7 @@ function MRPTable(props) {
 
       const permission = await customAlert({
         Type: 7,
-        Message: 'Are you sure you want to delete this MRP',
+        Message: `${alertMessages.deleteOrNot}MRP`
       })
       if (permission) {
         dispatch(deleteMRPMaster_Id(info.id))
