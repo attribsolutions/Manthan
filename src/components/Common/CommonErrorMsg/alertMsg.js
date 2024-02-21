@@ -38,7 +38,7 @@ const receiptAmountGreaterThanZero = "The Receipt amount must be greater than ze
 // Import Excel Field Map , Party Map and Invoice Excel Upload pages Error Message
 const chooseAnyFile = "Please choose any file..."
 const waitForDownloadFieldDetails = "Please wait Downloading field Details."
-const unSupportedFileFormat = "Unsupported file format. Please select an Excel (XLSX) or CSV file."
+const unSupportedFileFormat = "Unsupported file format. Please select an Excel (XLSX)."
 const doYouConfirmChoice = "Do you confirm your choice?"
 const mappingNotMatchError = "Mapping not match."
 const PricelistIsRequired = "Please Select PriceList"
@@ -117,8 +117,8 @@ const invalidEmail = 'InValid Email'
 const invalidPAN = 'InValid Pan No '
 const invalid_GSTIN_no = 'InValid GSTIN No'
 const invalid_Name = 'InValid Name'
-const fillAddressDetailsInTable ="Don't forget to fill in the address details in the table."
-const  defaultAddressIsSelected="Atleast One Default Address is Select "
+const fillAddressDetailsInTable = "Don't forget to fill in the address details in the table."
+const defaultAddressIsSelected = "Atleast One Default Address is Select "
 
 
 // Role Access
