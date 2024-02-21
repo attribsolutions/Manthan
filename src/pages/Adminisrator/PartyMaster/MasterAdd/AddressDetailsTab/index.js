@@ -15,7 +15,7 @@ import { CInput, C_DatePicker, decimalRegx } from '../../../../../CustomValidate
 import { C_Button } from '../../../../../components/Common/CommonButton';
 import { date_ymd_func } from '../../../../../components/Common/CommonFunction';
 
-const AddressTabForm = forwardRef(( ref) => {
+const AddressTabForm = forwardRef((props, ref) => {
 
 	const fileds = {
 		PartyAddress: "",
@@ -150,7 +150,7 @@ const AddressTabForm = forwardRef(( ref) => {
 
 		setButtonShow(true);
 		setState((i) => {
-			
+
 			const a = { ...i }
 			a.values.PartyAddress = row.Address;
 			a.values.FSSAINo = row.FSSAINo;
