@@ -24,7 +24,7 @@ function* PartySetting_GenFunc(config) {
         for (const item of response.Data) {
 
             SystemSetting[item.SystemSetting.replace(/\s/g, '')] = item.Value
-            if (item.SystemSetting === "Payment QR Code image on Invoice") {
+            if (item.id === 3) {   /// 3 is setting id of Payment QR Code which will Not change
                 SystemSetting["Qr_Image"] = item.Image
             }
 
