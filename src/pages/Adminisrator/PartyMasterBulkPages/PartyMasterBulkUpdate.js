@@ -19,7 +19,7 @@ import {
     resetFunction
 } from "../../../components/Common/validationFunction";
 import Select from "react-select";
-import { Change_Button, Go_Button, SaveButton } from "../../../components/Common/CommonButton";
+import { Change_Button, Go_Button, PageLoadingSpinner, SaveButton } from "../../../components/Common/CommonButton";
 import {
     breadcrumbReturnFunc,
     btnIsDissablefunc,
@@ -68,7 +68,8 @@ const PartyMasterBulkUpdate = (props) => {
     const fileds = {
         id: "",
         Party: allLabelWithBlank,
-        Routes: allLabelWithBlank
+        Routes: allLabelWithBlank,
+        Type: ""
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
@@ -80,7 +81,8 @@ const PartyMasterBulkUpdate = (props) => {
     const hasShowModal = props.hasOwnProperty(mode.editValue)
 
     const values = { ...state.values }
-
+    const { fieldLabel } = state;
+    debugger
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
         postMsg,
@@ -384,7 +386,6 @@ const PartyMasterBulkUpdate = (props) => {
         dataField: "Newvalue",
 
         formatter: (cellContent, row, key) => (
-
             <>
                 {SelectFieldName.label === "State" ?
 
@@ -592,7 +593,7 @@ const PartyMasterBulkUpdate = (props) => {
                             const regexExp1 = /^[6-9]\d{9}$/gi;
                             const IsMobile = regexExp1.test(i.Value1)
                             if (!IsMobile) {
-                                invalidMsg1.push({ [i.party]: alertMessages.invalidMobile})
+                                invalidMsg1.push({ [i.party]: alertMessages.invalidMobile })
 
                             }
                         };
@@ -601,7 +602,7 @@ const PartyMasterBulkUpdate = (props) => {
                             const regexExp2 = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
                             const IsEmail = regexExp2.test(i.Value1)
                             if (!IsEmail) {
-                                invalidMsg1.push({ [i.party]: alertMessages.invalidEmail})
+                                invalidMsg1.push({ [i.party]: alertMessages.invalidEmail })
                             }
                         };
 
@@ -646,102 +647,96 @@ const PartyMasterBulkUpdate = (props) => {
         } catch (e) { }
     };
 
-    // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
-    // var IsEditMode_Css = ''
-    // if ((modalCss) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
-
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
+                <PageLoadingSpinner isLoading={(!pageField)} />
                 <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
-
                 <div className="page-content" >
                     <form noValidate>
+                        <div className="px-2   c_card_filter text-black" >
+                            <div className="row" >
+                                <Col sm="3" className="">
+                                    <FormGroup className="mb- row mt-3 " >
+                                        <Label className="col-sm-5 p-2"
+                                            style={{ width: "83px" }}>{fieldLabel.Type}</Label>
+                                        <Col sm="7">
+                                            <Select
+                                                name="SelectField"
+                                                value={SelectFieldName}
+                                                isSearchable={true}
+                                                className="react-dropdown"
+                                                classNamePrefix="dropdown"
+                                                isDisabled={Data.length > 0 && true}
+                                                styles={{
+                                                    menu: provided => ({ ...provided, zIndex: 2 })
+                                                }}
+                                                options={SelectFieldDropdown_options}
+                                                onChange={(event) => SelectFieldHandler(event)}
+                                            />
+                                        </Col>
+                                    </FormGroup>
+                                </Col>
+                                <Col sm="3" className="">
+                                    <FormGroup className="mb- row mt-3 " >
+                                        <Label className="col-sm-5 p-2"
+                                            style={{ width: "80px" }}>{fieldLabel.Routes}</Label>
+                                        <Col sm="7">
+                                            <Select
+                                                name="RoutesName"
+                                                value={values.Routes}
+                                                isSearchable={true}
+                                                className="react-dropdown"
+                                                isDisabled={Data.length > 0 && true}
+                                                styles={{
+                                                    menu: provided => ({ ...provided, zIndex: 2 })
+                                                }}
+                                                classNamePrefix="dropdown"
+                                                options={RouteName_Options}
+                                                onChange={RoutesNameOnchange}
 
-                        <Card className="mb-1" style={{ marginBottom: "6px" }}>
-                            <CardBody className="c_card_header text-black">
-                                <Row>
-                                    <Col sm={3} >
-                                        <FormGroup className=" row" >
-                                            <Label className="mt-1"
-                                                style={{ width: "95px" }}>SelectField </Label>
-                                            <div className="col col-7 sm-1">
-                                                <Select
-                                                    name="SelectField"
-                                                    value={SelectFieldName}
-                                                    isSearchable={true}
-                                                    className="react-dropdown"
-                                                    classNamePrefix="dropdown"
-                                                    isDisabled={Data.length > 0 && true}
-                                                    styles={{
-                                                        menu: provided => ({ ...provided, zIndex: 2 })
-                                                    }}
-                                                    options={SelectFieldDropdown_options}
-                                                    onChange={(event) => SelectFieldHandler(event)}
-                                                />
-                                            </div>
-                                        </FormGroup>
-                                    </Col>
-                                    <Col sm={3} >
-                                        <FormGroup className=" row ">
-                                            <Label className="mt-1"
-                                                style={{ width: "104px" }}>RoutesName </Label>
-                                            <div className="col col-7 sm-1">
-                                                <Select
-                                                    name="RoutesName"
-                                                    value={values.Routes}
-                                                    isSearchable={true}
-                                                    className="react-dropdown"
-                                                    isDisabled={Data.length > 0 && true}
-                                                    styles={{
-                                                        menu: provided => ({ ...provided, zIndex: 2 })
-                                                    }}
-                                                    classNamePrefix="dropdown"
-                                                    options={RouteName_Options}
-                                                    onChange={RoutesNameOnchange}
+                                            />
+                                        </Col>
+                                    </FormGroup>
+                                </Col>
+                                <Col sm="5">
+                                    <FormGroup className="mb-2 row mt-3 " >
+                                        <Label className="col-md-4 p-2"
+                                            style={{ width: "115px" }}>{fieldLabel.Party}</Label>
+                                        <Col sm="5">
+                                            <Select
+                                                name="PartyName"
+                                                value={values.Party}
+                                                isSearchable={true}
+                                                className="react-dropdown"
+                                                classNamePrefix="dropdown"
+                                                isDisabled={Data.length > 0 && true}
+                                                styles={{
+                                                    menu: provided => ({ ...provided, zIndex: 2 })
+                                                }}
+                                                options={PartyDropdown_Options}
+                                                onChange={partyOnchange}
 
-                                                />
-                                            </div>
-                                        </FormGroup>
-                                    </Col>
+                                            />
+                                        </Col>
+                                    </FormGroup>
+                                </Col >
+                                <Col sm="1" className="mt-3 ">
+                                    {!Data.length > 0 ?
+                                        <Go_Button onClick={(event) => { GoButton_Handler(event) }} loading={listBtnLoading} />
+                                        : <Change_Button
+                                            onClick={(e) => dispatch(GoButton_For_Party_Master_Bulk_Update_AddSuccess([]))}
+                                        />
+                                    }
+                                </Col>
+                            </div>
+                        </div>
 
-                                    <Col sm={4} >
-                                        <FormGroup className=" row " >
-                                            <Label htmlFor="validationCustom01" className="mt-1"
-                                                style={{ width: "100px" }}>PartyName </Label>
-                                            <div className="col col-7 sm-1">
-                                                <Select
-                                                    name="PartyName"
-                                                    value={values.Party}
-                                                    isSearchable={true}
-                                                    className="react-dropdown"
-                                                    classNamePrefix="dropdown"
-                                                    isDisabled={Data.length > 0 && true}
-                                                    styles={{
-                                                        menu: provided => ({ ...provided, zIndex: 2 })
-                                                    }}
-                                                    options={PartyDropdown_Options}
-                                                    onChange={partyOnchange}
 
-                                                />
-                                            </div>
-                                        </FormGroup>
-                                    </Col>
 
-                                    <Col sm={1}>
-                                        <div className="col col-1 px-5">
 
-                                            {!Data.length > 0 ?
-                                                <Go_Button onClick={(event) => { GoButton_Handler(event) }} loading={listBtnLoading} />
-                                                : <Change_Button
-                                                    onClick={(e) => dispatch(GoButton_For_Party_Master_Bulk_Update_AddSuccess([]))}
-                                                />
-                                            }
-                                        </div>
-                                    </Col>
-                                </Row>
-                            </CardBody>
-                        </Card>
+
+
                         <PaginationProvider
                             pagination={paginationFactory(pageOptions)}
                         >

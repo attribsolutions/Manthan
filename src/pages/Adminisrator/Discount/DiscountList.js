@@ -99,11 +99,11 @@ const DiscountList = () => {
     }
 
     return (
+
         <React.Fragment>
             <PageLoadingSpinner isLoading={(goBtnLoading || !pageField)} />
             <div className="page-content">
                 <div className="px-3 c_card_filter header text-black mb-1" >
-
                     <Row >
                         <Col sm="6" className="mt-1 mb-1">
                             <FormGroup className="row mt-2" >
