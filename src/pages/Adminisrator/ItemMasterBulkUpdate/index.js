@@ -431,8 +431,8 @@ const ItemMasterBulkUpdate = (props) => {
                                 Record Not available
                             </div>
                         }
-                        onDataSizeChange={({ dataSize }) => {
-                            dispatch(BreadcrumbShowCountlabel(`Count:${dataSize}`));
+                        onDataSizeChange={({ dataCount }) => {
+                            dispatch(BreadcrumbShowCountlabel(`Count:${dataCount}`));
                         }}
                     />
 

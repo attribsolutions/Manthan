@@ -13,7 +13,7 @@ import {
     saveBankMaster_Success,
     updateBankIDSuccess
 } from "../../../store/Accounting/BankRedux/action";
-import { Listloader } from "../../../components/Common/CommonButton";
+import { Listloader, PageLoadingSpinner } from "../../../components/Common/CommonButton";
 
 
 const BankList = () => {
@@ -50,25 +50,21 @@ const BankList = () => {
         dispatch(getBanklist());
     }, []);
 
-    const { pageField} = reducers;
+    const { pageField, loading } = reducers;
 
     return (
         <React.Fragment>
-            {
-                 reducers.loading ?
-                 <Listloader />
-                 :
-                (pageField) ?
-                    <CommonListPage
-                        action={action}
-                        reducers={reducers}
-                        MasterModal={BankMaster}
-                        masterPath={url.BANK}
-                        ButtonMsgLable={"Bank"}
-                        deleteName={"Name"}
-                    />
-                    : <><Listloader /></>
-            }
+            <PageLoadingSpinner isLoading={(loading || !pageField)} />
+            <CommonListPage
+                action={action}
+                reducers={reducers}
+                MasterModal={BankMaster}
+                masterPath={url.BANK}
+                ButtonMsgLable={"Bank"}
+                deleteName={"Name"}
+            />
+
+
         </React.Fragment>
     )
 }

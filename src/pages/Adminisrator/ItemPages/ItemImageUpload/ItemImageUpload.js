@@ -302,8 +302,7 @@ const ItemImageUpload = (props) => {
             style: {
                 width: "50%"
             },
-            formatter: (row) => {
-
+            formatter: (cell, row) => {
                 return (
                     <form id={`ResetForm${row.id}`}>
                         <Row >
