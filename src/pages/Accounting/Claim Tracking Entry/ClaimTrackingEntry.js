@@ -155,7 +155,7 @@ const ClaimTrackingEntry = (props) => {
     };
   }, []);
 
-  useEffect(() => {
+  useEffect(async () => {
     if ((hasShowloction || hasShowModal) && pageField) {
       let hasEditVal = null;
       if (hasShowloction) {
@@ -201,26 +201,6 @@ const ClaimTrackingEntry = (props) => {
         const { values, fieldLabel, hasValid, required, isError } = {
           ...state,
         };
-
-        // hasValid.Date.valid = true;
-        // hasValid.ClaimReceivedSource.valid = true;
-        // hasValid.ClaimAmount.valid = true;
-        // hasValid.Remark.valid = true;
-        // hasValid.CreditNoteNo.valid = true;
-        // hasValid.CreditNoteDate.valid = true;
-        // hasValid.CreditNoteAmount.valid = true;
-        // hasValid.ClaimSummaryDate.valid = true;
-        // hasValid.CreditNoteUpload.valid = true;
-        // hasValid.ClaimId.valid = true;
-        // hasValid.Type.valid = true;
-        // hasValid.ClaimTrade.valid = true;
-        // hasValid.TypeOfClaim.valid = true;
-        // hasValid.ClaimCheckBy.valid = true;
-        // hasValid.CreditNotestatus.valid = true;
-        // hasValid.PartyName.valid = true;
-        // hasValid.ClaimForTheMonth.valid = true;
-        // hasValid.ClaimText.valid = true;
-        // Set validation values to true
         for (const key in hasValid) {
           if (hasValid.hasOwnProperty(key)) {
             hasValid[key].valid = true;
@@ -236,10 +216,15 @@ const ClaimTrackingEntry = (props) => {
         values.CreditNoteDate = CreditNoteDate;
         values.CreditNoteAmount = CreditNoteAmount;
         values.ClaimSummaryDate = ClaimSummaryDate;
-        values.CreditNoteUpload = CreditNoteUpload;
+        // values.CreditNoteUpload = CreditNoteUpload;
         values.ClaimText = FullClaimNo;
 
 
+
+        const response = await fetch(CreditNoteUpload);
+        const data = await response.blob();
+        const file = new File([data], 'filename.PDF');
+        values.CreditNoteUpload = file
 
 
         values.ClaimId = {
@@ -344,6 +329,9 @@ const ClaimTrackingEntry = (props) => {
     setClaimTradefortrackingApi(resp1.StatusCode === 200 ? resp1.Data : []);
   }, []);
 
+
+
+
   const partyListOptions = partyList.map((i) => ({
     value: i.id,
     label: i.Name,
@@ -389,6 +377,8 @@ const ClaimTrackingEntry = (props) => {
       return a;
     });
   };
+
+
 
   const partyOnChange = (hasSelect, evn) => {
     onChangeSelect({ hasSelect, evn, state, setState });
@@ -472,9 +462,12 @@ const ClaimTrackingEntry = (props) => {
         formData.append('Party', values.PartyName.value);
         formData.append('FullClaimNo', values.ClaimText ? values.ClaimText : values.ClaimId.claimId);
         formData.append('PartyType', values.ClaimId.PartyTypeID === undefined ? "" : values.ClaimId.PartyTypeID);
-        if (values.File[0] === undefined) {
+        if (pageMode === mode.edit) {
+          formData.append(`CreditNoteUpload`, values.CreditNoteUpload);
         } else {
           formData.append(`CreditNoteUpload`, values.File[0]);
+
+
         }
 
         if (pageMode === mode.edit) {
@@ -1053,12 +1046,19 @@ const ClaimTrackingEntry = (props) => {
                             type="file"
                             className="form-control "
                             name="image"
-                            id="file"
+                            id="fileInput"
                             multiple
                             accept=".jpg, .jpeg, .png ,.pdf"
                             onChange={(event) => { onchangeHandler(event, "ImageUpload") }}
                           />
                         </div>
+                        {values.CreditNoteUpload !== null && pageMode === mode.edit && (
+                          <div>
+                            <p>Uploaded files:{values.CreditNoteUpload ? values.CreditNoteUpload.name : null}</p>
+                            <ul>
+                            </ul>
+                          </div>
+                        )}
                       </div>
 
                     </Col>

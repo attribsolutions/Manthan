@@ -46,6 +46,7 @@ const Header = props => {
 
   /*** Sidebar menu icon and default menu set */
   function tToggle() {
+    
     var body = document.body;
     setClick(!isClick);
     if (isClick === true) {
@@ -94,6 +95,7 @@ const Header = props => {
             <div>
               <button
                 onClick={() => {
+                  
                   tToggle()
                 }}
                 type="button" className="btn btn-sm  font-size-16 header-item" id="vertical-menu-btn">
