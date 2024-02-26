@@ -184,7 +184,7 @@ export function* watchChangeLayoutPosition() {
 }
 
 export function* watchChangeLeftSidebarType() {
-  yield takeLatest(CHANGE_SIDEBAR_TYPE, changeLeftSidebarType);
+  // yield takeLatest(CHANGE_SIDEBAR_TYPE, changeLeftSidebarType);
 }
 
 export function* watchChangeTopbarTheme() {
