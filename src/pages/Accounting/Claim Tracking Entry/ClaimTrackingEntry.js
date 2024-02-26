@@ -462,7 +462,8 @@ const ClaimTrackingEntry = (props) => {
         formData.append('Party', values.PartyName.value);
         formData.append('FullClaimNo', values.ClaimText ? values.ClaimText : values.ClaimId.claimId);
         formData.append('PartyType', values.ClaimId.PartyTypeID === undefined ? "" : values.ClaimId.PartyTypeID);
-        if (pageMode === mode.edit) {
+        debugger
+        if (pageMode === mode.edit && values.File[0] === undefined) {
           formData.append(`CreditNoteUpload`, values.CreditNoteUpload);
         } else {
           formData.append(`CreditNoteUpload`, values.File[0]);
