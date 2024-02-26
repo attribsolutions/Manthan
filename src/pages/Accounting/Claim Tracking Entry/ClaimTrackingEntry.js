@@ -196,6 +196,7 @@ const ClaimTrackingEntry = (props) => {
           Month,
           PartyTypeName,
           FullClaimNo,
+          FileName
         } = hasEditVal;
 
         const { values, fieldLabel, hasValid, required, isError } = {
@@ -219,11 +220,11 @@ const ClaimTrackingEntry = (props) => {
         // values.CreditNoteUpload = CreditNoteUpload;
         values.ClaimText = FullClaimNo;
 
-
-
+        const filename = FileName.split('/').pop();
+        console.log(filename);
         const response = await fetch(CreditNoteUpload);
         const data = await response.blob();
-        const file = new File([data], 'filename.PDF');
+        const file = new File([data], filename);
         values.CreditNoteUpload = file
 
 
