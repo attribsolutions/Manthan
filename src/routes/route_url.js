@@ -1,9 +1,9 @@
 
 
 
-// export const API_URL_LIVE = "http://cbmfooderp.com:8000"
+export const API_URL_LIVE = "http://cbmfooderp.com:8000"
 
-export const API_URL_LIVE = "http://192.168.1.114:8000"
+// export const API_URL_LIVE = "http://192.168.1.114:8000"
 
 
 
