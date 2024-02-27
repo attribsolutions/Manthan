@@ -7,12 +7,12 @@ import { date_dmy_func } from "../components/Common/CommonFunction";
 export const C_DatePicker = ({
     disabled,
     value,
-    // options = {
-    //     maxDate: "today",
-    //     altInput: true,
-    //     altFormat: "d-m-Y",
-    //     dateFormat: "Y-m-d",
-    // },
+    options = {
+        maxDate: "today",
+        altInput: true,
+        altFormat: "d-m-Y",
+        dateFormat: "Y-m-d",
+    },
     ...rest
 }) => {
     return (
