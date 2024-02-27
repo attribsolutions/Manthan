@@ -16,7 +16,7 @@ import {
   onChangeText,
   resetFunction,
 } from "../../../components/Common/validationFunction";
-import { SaveButton } from "../../../components/Common/CommonButton";
+import { PageLoadingSpinner, SaveButton } from "../../../components/Common/CommonButton";
 import { C_DatePicker, C_Select } from "../../../CustomValidateForm";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { url, mode, pageId } from "../../../routes/index";
@@ -56,6 +56,11 @@ const ClaimTrackingEntry = (props) => {
   const [claimTradefortrackingApi, setClaimTradefortrackingApi] = useState([]);
 
   const [UploadFile, setUploadFile] = useState([]);
+
+  const [CreditNoteUpload, setCreditNoteUpload] = useState({});
+
+
+
 
   const [yearAndMonth, setYearAndMonth] = useState(getCurrent_Month_And_Year);
 
@@ -149,13 +154,28 @@ const ClaimTrackingEntry = (props) => {
     dispatch(commonPageFieldSuccess(null));
     dispatch(commonPageField(page_Id));
     // dispatch(priceListByCompay_Action());
-
     return () => {
       dispatch(commonPageFieldSuccess(null));
     };
   }, []);
 
+
   useEffect(async () => {
+    const { file, filename } = CreditNoteUpload
+    const response = await fetch(file);
+    const data = await response.blob();
+    const fetchFile = new File([data], filename);
+
+    setState((i) => {
+      const a = { ...i }
+      a.values.CreditNoteUpload = fetchFile;
+      return a
+    })
+
+  }, [CreditNoteUpload])
+
+
+  useEffect(() => {
     if ((hasShowloction || hasShowModal) && pageField) {
       let hasEditVal = null;
       if (hasShowloction) {
@@ -217,16 +237,15 @@ const ClaimTrackingEntry = (props) => {
         values.CreditNoteDate = CreditNoteDate;
         values.CreditNoteAmount = CreditNoteAmount;
         values.ClaimSummaryDate = ClaimSummaryDate;
-        // values.CreditNoteUpload = CreditNoteUpload;
         values.ClaimText = FullClaimNo;
-
         const filename = FileName.split('/').pop();
-        console.log(filename);
-        const response = await fetch(CreditNoteUpload);
-        const data = await response.blob();
-        const file = new File([data], filename);
-        values.CreditNoteUpload = file
 
+        // const response = await fetch(CreditNoteUpload);
+        // const data = await response.blob();
+        // const file = new File([data], filename);
+        // values.CreditNoteUpload = file
+
+        setCreditNoteUpload({ file: CreditNoteUpload, filename: filename })
 
         values.ClaimId = {
           label: `${id} ${PartyName} /${PartyTypeName} (${ClaimAmount})`,
@@ -251,7 +270,7 @@ const ClaimTrackingEntry = (props) => {
         dispatch(editClaimTrackingEntryIDSuccess({ Status: false }));
       }
     }
-  }, [hasShowloction, hasShowModal, pageField]);
+  }, [pageField, hasShowloction, hasShowModal]);
 
   // Post UseEffect
   useEffect(async () => {
@@ -494,8 +513,9 @@ const ClaimTrackingEntry = (props) => {
   if (!(userPageAccessState === "")) {
     return (
       <React.Fragment>
+        <PageLoadingSpinner isLoading={(!pageField)} />
         <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
-        <div className="page-content" style={{ marginBottom: "5cm" }}>
+        <div className="page-content" >
 
           <Modal
             isOpen={modal_backdrop}

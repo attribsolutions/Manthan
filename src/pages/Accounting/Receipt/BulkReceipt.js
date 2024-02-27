@@ -234,7 +234,7 @@ const BulkRecipt = (props) => {
                                             <C_DatePicker
                                                 name='Date'
                                                 value={_cfunc.currentDate_ymd}
-                                            // disabled={true}
+                                                disabled={true}
                                             />
                                         </Col>
                                     </FormGroup>
