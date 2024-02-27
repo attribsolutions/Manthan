@@ -6,7 +6,7 @@ import {
     Label,
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
-import {  commonPageField, commonPageFieldSuccess } from "../../../store/actions";
+import { commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { SaveButton } from "../../../components/Common/CommonButton";
@@ -234,7 +234,7 @@ const BulkRecipt = (props) => {
                                             <C_DatePicker
                                                 name='Date'
                                                 value={_cfunc.currentDate_ymd}
-                                                disabled={true}
+                                            // disabled={true}
                                             />
                                         </Col>
                                     </FormGroup>
