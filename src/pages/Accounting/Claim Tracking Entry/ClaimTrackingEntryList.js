@@ -95,7 +95,7 @@ const ClaimTrackingEntryList = () => {
             }
         } else {
             const link = document.createElement('a');
-            link.href = `${url.API_URL_LIVE}/media/${config.rowData.CreditNoteUpload}`;
+            link.href = config.rowData.CreditNoteUpload;
             link.setAttribute('target', '_blank');
             link.setAttribute('rel', 'noopener noreferrer');
             document.body.appendChild(link);

@@ -68,7 +68,7 @@ const ImportExcelPartyMap = (props) => {
         partyDropDownLoading,
         ItemList,
     } = useSelector((state) => ({
-        saveBtnloading: state.GroupReducer.saveBtnloading,
+        saveBtnloading: state.ImportExcelPartyMap_Reducer.saveBtnLoading,
         listBtnLoading: (state.ImportExcelPartyMap_Reducer.listBtnLoading || state.PartyItemsReducer.partyItemListLoading),
         postMsg: state.ImportExcelPartyMap_Reducer.postMsg,
         userAccess: state.Login.RoleAccessUpdateData,
