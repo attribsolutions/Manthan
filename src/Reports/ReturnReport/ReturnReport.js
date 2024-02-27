@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Col, FormGroup, Label, Row } from "reactstrap";
+import { Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import { C_Button } from "../../components/Common/CommonButton";
 import { C_DatePicker, C_Select } from "../../CustomValidateForm";
@@ -256,7 +256,7 @@ const ReturnReport = (props) => {
                                 className="btn btn-primary"
                                 onClick={(e) => excel_And_GoBtnHandler(e, 2)}
                             >
-                                Excel 
+                                Excel
                             </C_Button>
                         </Col>
                     </div>
@@ -274,13 +274,7 @@ const ReturnReport = (props) => {
                             </div>
                         }
                         onDataSizeChange={({ dataCount, filteredData = [] }) => {
-                            let totalAmount = filteredData.reduce((total, item) => {
-                                return total + Number(item.recordsAmountTotal) || 0;
-
-                            }, 0);
-                            let commaSeparateAmount = _cfunc.amountCommaSeparateFunc(Number(totalAmount).toFixed(2));
-
-                            dispatch(BreadcrumbShowCountlabel(`Count:${dataCount} ₹ ${commaSeparateAmount}`));
+                            dispatch(BreadcrumbShowCountlabel(`Count:${dataCount} ₹ ${_cfunc.TotalAmount_Func(filteredData)}`));
                         }}
                     />
                 </div>
