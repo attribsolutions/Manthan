@@ -262,7 +262,7 @@ const LoadingSheet = (props) => {
             customAlert({
                 Type: 4,
                 Status: true,
-                Message:alertMessages.routeNameIsRequired,
+                Message: alertMessages.routeNameIsRequired,
             });
             return;
         }
@@ -397,12 +397,12 @@ const LoadingSheet = (props) => {
                                                 name='Date'
                                                 value={values.Date}
                                                 onChange={DateOnchange}
-                                                // options={{
-                                                //     maxDate: new Date(new Date().setMonth(new Date().getMonth() + 1)),
-                                                //     altInput: true,
-                                                //     altFormat: "d-m-Y",
-                                                //     dateFormat: "Y-m-d",
-                                                // }}
+                                                options={{
+                                                    maxDate: new Date(new Date().setMonth(new Date().getMonth() + 1)),
+                                                    altInput: true,
+                                                    altFormat: "d-m-Y",
+                                                    dateFormat: "Y-m-d",
+                                                }}
                                             />
                                         </Col>
 
