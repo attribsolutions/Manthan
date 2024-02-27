@@ -8,7 +8,7 @@ import GridExample from './Pivottable'
 import { useDispatch } from 'react-redux'
 import { BreadcrumbShowCountlabel } from '../../store/actions'
 import GlobalCustomTable from '../../GlobalCustomTable'
-import { amountCommaSeparateFunc } from '../../components/Common/CommonFunction'
+import { TotalAmount_Func } from '../../components/Common/CommonFunction'
 
 function ShowTable() {
 
@@ -43,15 +43,7 @@ function ShowTable() {
             //     dispatch(BreadcrumbShowCountlabel(`Count:${dataCount}`));
             // }}
             onDataSizeChange={({ dataCount, filteredData = [] }) => {
-                
-                let totalAmount = filteredData.reduce((total, item) => {
-                    return total + Number(item.Amount) || 0;
-
-                }, 0);
-                let commaSeparateAmount = amountCommaSeparateFunc(Number(totalAmount).toFixed(2));
-
-                dispatch(BreadcrumbShowCountlabel(`Count:${dataCount} ₹ ${commaSeparateAmount}`));
-
+                dispatch(BreadcrumbShowCountlabel(`Count:${dataCount} ₹ ${TotalAmount_Func(filteredData)}`));
             }
             }
             noDataIndication={<div className="text-danger text-center table-cursor-pointer"  >Data Not available</div>}

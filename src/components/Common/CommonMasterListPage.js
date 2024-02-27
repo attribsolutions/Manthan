@@ -87,6 +87,7 @@ const CommonListPage = (props) => {
       listObj = {}
     })
     dispatch(CommonBreadcrumbDetails({ downBtnData: downList, defaultDownBtnData: listObj2 }))
+    dispatch(BreadcrumbShowCountlabel(`Count:${tableList.length}`));
   }, [tableList])
 
 
@@ -213,7 +214,7 @@ const CommonListPage = (props) => {
           />
 
           <Modal isOpen={modal_edit} toggle={() => { tog_center() }} size="xl">
-              <MasterModal editValue={editData.Data} masterPath={masterPath} pageMode={editData.pageMode}  />
+            <MasterModal editValue={editData.Data} masterPath={masterPath} pageMode={editData.pageMode} />
           </Modal>
         </div>
 

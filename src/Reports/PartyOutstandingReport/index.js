@@ -199,13 +199,7 @@ const PartyOutstandingReport = (props) => {
 							</div>
 						}
 						onDataSizeChange={({ dataCount, filteredData = [] }) => {
-							let totalAmount = filteredData.reduce((total, item) => {
-								return total + Number(item.recordsAmountTotal) || 0;
-
-							}, 0);
-							let commaSeparateAmount = _cfunc.amountCommaSeparateFunc(Number(totalAmount).toFixed(2));
-
-							dispatch(BreadcrumbShowCountlabel(`Count:${dataCount} ₹ ${commaSeparateAmount}`));
+							dispatch(BreadcrumbShowCountlabel(`Count:${dataCount} ₹ ${_cfunc.TotalAmount_Func(filteredData)}`));
 						}}
 					/>
 				</div>

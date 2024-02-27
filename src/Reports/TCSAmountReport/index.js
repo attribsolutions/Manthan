@@ -1,22 +1,21 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Col, FormGroup, Label, Row, } from "reactstrap";
+import { Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import { initialFiledFunc } from "../../components/Common/validationFunction";
 import { C_Button } from "../../components/Common/CommonButton";
 import { C_DatePicker } from "../../CustomValidateForm";
 import * as _cfunc from "../../components/Common/CommonFunction";
-import { mode, url, pageId } from "../../routes/index"
+import { mode, pageId } from "../../routes/index"
 import { MetaTags } from "react-meta-tags";
-import ToolkitProvider from "react-bootstrap-table2-toolkit";
-import BootstrapTable from "react-bootstrap-table-next";
 import Select from "react-select";
-import { globalTableSearchProps } from "../../components/Common/SearchBox/MySearch";
 import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess } from "../../store/actions";
 import DynamicColumnHook from "../../components/Common/TableCommonFunc";
 import { TCS_Amount_Gobtn_Action, TCS_Amount_Gobtn_Success } from "../../store/Report/TCS_AmountRedux/action";
 import { ExcelReportComponent } from "../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS";
 import { allLabelWithBlank } from "../../components/Common/CommonErrorMsg/HarderCodeData";
+import ReportTableFunc from "../../components/Common/ReportTableFunc";
+import { ShowAndExcelBtn } from "../ReportComponent";
 
 const TCSAmountReport = (props) => {
 
@@ -50,7 +49,7 @@ const TCSAmountReport = (props) => {
     const { userAccess, tableData = [], GoBtnLoading, pageField, PartyList } = reducers;
 
     useEffect(() => {
-        
+
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(pageId.TCS_AMOUNT_REPORT));
         dispatch(BreadcrumbShowCountlabel(`Count:${0}`));
@@ -220,65 +219,24 @@ const TCSAmountReport = (props) => {
                             </Col>
                         }
 
-                        <Col sm={1} className="mt-3 ">
-                            <C_Button
-                                type="button"
-                                spinnerColor="white"
-                                loading={(GoBtnLoading && btnMode === "show") && true}
-                                className="btn btn-success   "
-                                onClick={() => goAndExcel_Btn_Handler("show")}
-                            >
-                                Show
-                            </C_Button>
-                        </Col>
-
-                        <Col sm={2} className="mt-3 ">
-                            <C_Button
-                                type="button"
-                                spinnerColor="white"
-                                loading={(GoBtnLoading && btnMode === "excel") && true}
-                                className="btn btn-primary   "
-                                onClick={() => goAndExcel_Btn_Handler("excel")}
-                            >
-                                Excel 
-                            </C_Button>
-                        </Col>
+                        <ShowAndExcelBtn  // Excel download and Show button function
+                            sm={1}
+                            margin={"mt-3"}
+                            showLoading={(GoBtnLoading && btnMode === "show") && true}
+                            excelLoading={(GoBtnLoading && btnMode === "excel") && true}
+                            showOnClick={(e) => goAndExcel_Btn_Handler("show")}
+                            excelOnClick={(e) => goAndExcel_Btn_Handler("excel")}
+                        />
                     </div>
                 </div>
 
                 <div className="mt-1">
-                    <ToolkitProvider
+                    <ReportTableFunc
                         keyField="InvoiceNumber"
-                        data={tableData}
+                        tableData={tableData}
                         columns={updatetableColumn}
-                        search
-                    >
-                        {(toolkitProps,) => (
-                            <React.Fragment>
-                                <Row>
-                                    <Col xl="12">
-                                        <div className="table-responsive table">
-                                            <BootstrapTable
-                                                keyField="InvoiceNumber"
-                                                classes={"table  table-bordered table-hover"}
-                                                noDataIndication={
-                                                    <div className="text-danger text-center ">
-                                                        Record Not available
-                                                    </div>
-                                                }
-                                                onDataSizeChange={({ dataSize }) => {
-                                                    dispatch(BreadcrumbShowCountlabel(`Count:${dataSize}`));
-                                                }}
-                                                {...toolkitProps.baseProps}
-                                            />
-                                            {globalTableSearchProps(toolkitProps.searchProps)}
-                                        </div>
-                                    </Col>
-                                </Row>
-
-                            </React.Fragment>
-                        )}
-                    </ToolkitProvider>
+                        totalAmountShow={true}
+                    />
                 </div>
 
             </div>
