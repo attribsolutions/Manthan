@@ -819,4 +819,11 @@ export const fetchFiles = async (linksArray) => {
 };
 
 
+export function TotalAmount_Func(tableList) {
+  let totalAmount = tableList.reduce((total, item) => {
+    return total + Number(item.recordsAmountTotal) || 0;
 
+  }, 0);
+  let commaSeparateAmount = amountCommaSeparateFunc(Number(totalAmount).toFixed(2));
+  return commaSeparateAmount
+}

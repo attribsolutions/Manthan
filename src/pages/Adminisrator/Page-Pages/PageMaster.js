@@ -426,7 +426,7 @@ const PageMaster = (props) => {
   }
 
   const SaveHandler = (event, values) => {
-
+    debugger
     event.preventDefault();
     const btnId = event.target.id;
 
@@ -832,7 +832,7 @@ const PageMaster = (props) => {
                                       <AvInput
                                         type="checkbox"
                                         className="form-check-input mt-4"
-                                        key={EditData.CountLabel}
+                                        // key={EditData.CountLabel}
                                         defaultChecked={EditData.CountLabel}
                                         name="CountLabel"
                                       />
@@ -863,7 +863,7 @@ const PageMaster = (props) => {
                                       <AvInput
                                         type="checkbox"
                                         className="form-check-input mt-4"
-                                        key={EditData.isActive}
+                                        // key={EditData.isActive}
                                         name="isActive"
                                         defaultChecked={true}
                                       />
@@ -893,7 +893,7 @@ const PageMaster = (props) => {
                                       <AvInput
                                         type="checkbox"
                                         className="form-check-input mt-4"
-                                        key={EditData.IsDivisionRequired}
+                                        // key={EditData.IsDivisionRequired}
                                         defaultChecked={EditData.IsDivisionRequired}
                                         name="IsDivisionRequired"
                                       />
@@ -923,7 +923,7 @@ const PageMaster = (props) => {
                                       >
                                         <AvInput
                                           type="checkbox"
-                                          key={EditData.IsEditPopuporComponent}
+                                          // key={EditData.IsEditPopuporComponent}
                                           className="form-check-input mt-4"
                                           defaultChecked={EditData.IsEditPopuporComponent}
                                           name="IsEditPopuporComponent"

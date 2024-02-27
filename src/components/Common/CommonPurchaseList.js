@@ -7,7 +7,7 @@ import {
   BreadcrumbShowCountlabel,
   CommonBreadcrumbDetails,
 } from "../../store/actions";
-import { amountCommaSeparateFunc, breadcrumbReturnFunc, metaTagLabel } from "./CommonFunction";
+import { TotalAmount_Func, breadcrumbReturnFunc, metaTagLabel } from "./CommonFunction";
 import C_Report from "./C_Report";
 import * as mode from "../../routes/PageMode";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
@@ -72,7 +72,7 @@ const CommonPurchaseList = (props) => {
 
   const { PageFieldMaster = [] } = { ...pageField };
 
-  useEffect(() => {
+  useEffect(async () => {
 
     const locationPath = history.location.pathname;
     let userAcc = userAccess.find((inx) => {
@@ -114,6 +114,14 @@ const CommonPurchaseList = (props) => {
         defaultDownBtnData: listObj2,
       })
     );
+
+    if (totalAmountShow === true && tableList.length > 0) {
+      dispatch(BreadcrumbShowCountlabel(`Count:${tableList.length} ₹ ${TotalAmount_Func(tableList)}`));
+    }
+    else {
+      dispatch(BreadcrumbShowCountlabel(`Count:${tableList.length}`));
+    }
+
   }, [tableList]);
 
   // This UseEffect => UpadateModal Success/Unsucces  Show and Hide Control Alert_modal
@@ -312,10 +320,6 @@ const CommonPurchaseList = (props) => {
   }
 
   const thirdLastColumn = () => {  // ======================== for List Page Action Button ================================
-
-
-
-
     const hasRole = (role) => userAccState[role];
 
     const isUploadAccess = hasRole("RoleAccess_E-InvoiceUpload");
@@ -325,13 +329,6 @@ const CommonPurchaseList = (props) => {
     if (isUploadAccess || isCancelAccess || isPrintAccess) {// INVOICE_LIST_1 E_Invoice buttons
       return E_Invoice_ActionsButtonFunc({ ...props, dispatch, userAccState, })
     }
-
-
-
-
-
-
-
   }
 
   const [tableColumns, defaultSorted] = DynamicColumnHook({
@@ -395,15 +392,8 @@ const CommonPurchaseList = (props) => {
                 defaultSorted={defaultSorted}
                 updatedRowBlinkId={updatedRowBlinkId}
                 onDataSizeChange={({ dataCount, filteredData = [] }) => {
-
                   if (totalAmountShow === true) {
-                    let totalAmount = filteredData.reduce((total, item) => {
-                      return total + Number(item.recordsAmountTotal) || 0;
-
-                    }, 0);
-                    let commaSeparateAmount = amountCommaSeparateFunc(Number(totalAmount).toFixed(2));
-
-                    dispatch(BreadcrumbShowCountlabel(`Count:${dataCount} ₹ ${commaSeparateAmount}`));
+                    dispatch(BreadcrumbShowCountlabel(`Count:${dataCount} ₹ ${TotalAmount_Func(filteredData)}`));
                   }
                   else {
                     dispatch(BreadcrumbShowCountlabel(`Count:${dataCount}`));
@@ -438,7 +428,6 @@ const CommonPurchaseList = (props) => {
               </div>
 
             </SaveButtonDraggable>
-
           }
 
           <Modal
