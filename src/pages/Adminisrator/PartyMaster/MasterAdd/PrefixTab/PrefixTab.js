@@ -39,9 +39,50 @@ const PrefixTab = forwardRef(({ subPageMode }, ref) => {
 
     const {
         pageField,
+        commonPartyDropSelect
     } = useSelector((state) => ({
-        pageField: state.CommonPageFieldReducer.pageField
+        pageField: state.CommonPageFieldReducer.pageField,
+        commonPartyDropSelect: state.CommonPartyDropdownReducer.commonPartyDropSelect
     }));
+
+
+
+    useEffect(() => {
+        if (commonPartyDropSelect.value <= 0) {
+            setState((i) => {
+                let a = { ...i }
+                a.values.OrderPrefix = 'PO'
+                a.values.InvoicePrefix = 'IN'
+                a.values.GRNPrefix = 'GRN'
+                a.values.ChallanPrefix = ''
+                a.values.ReceiptPrefix = 'RE'
+                a.values.WorkOrderPrefix = ''
+                a.values.MaterialIssuePrefix = ''
+                a.values.DemandPrefix = ''
+                a.values.IBChallanPrefix = ''
+                a.values.IBInwardPrefix = ''
+                a.values.PurchaseReturnprefix = 'PR'
+                a.values.CreditPrefix = 'CR'
+                a.values.DebitPrefix = 'DR'
+
+                a.hasValid.OrderPrefix.valid = true;
+                a.hasValid.InvoicePrefix.valid = true;
+                a.hasValid.GRNPrefix.valid = true;
+                a.hasValid.ChallanPrefix.valid = true;
+                a.hasValid.ReceiptPrefix.valid = true;
+                a.hasValid.WorkOrderPrefix.valid = true;
+                a.hasValid.MaterialIssuePrefix.valid = true;
+                a.hasValid.DemandPrefix.valid = true;
+                a.hasValid.IBChallanPrefix.valid = true;
+                a.hasValid.IBInwardPrefix.valid = true;
+                a.hasValid.PurchaseReturnprefix.valid = true;
+                a.hasValid.CreditPrefix.valid = true;
+                a.hasValid.DebitPrefix.valid = true;
+
+                return a
+            })
+        }
+    }, [commonPartyDropSelect]);
 
     useEffect(() => {
         if (pageField) {
