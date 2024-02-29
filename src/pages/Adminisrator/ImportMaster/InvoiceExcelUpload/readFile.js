@@ -50,7 +50,15 @@ export const readExcelFile = async ({ file, compareParameter, ItemList = [] }) =
 
 
       comparefilter.forEach((c1) => {
-
+        for (let key in r1) {
+          if (Object.prototype.hasOwnProperty.call(r1, key)) {
+            if (key.trim() !== key) {
+              r1[key.trim()] = r1[key];
+              delete r1[key];
+            }
+          }
+        }
+        debugger
         if (c1.ControlTypeName === "Date") {
           let date = null
           if (Number.isInteger(r1[c1.Value])) {

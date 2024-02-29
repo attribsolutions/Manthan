@@ -163,7 +163,13 @@ const ChangeCommonParty = (props) => {
                                 type="button"
 
                                 className={`${hideBtnCss} px-2`}
-                                onClick={() => { !(selectedParty.Latitude === null && selectedParty.Longitude == null) && window.open(`https://maps.google.com/?q=${selectedParty.Latitude},${selectedParty.Longitude}`, "_blank") }}
+                                onClick={() => {
+                                    if (selectedParty && selectedParty.Latitude !== undefined && selectedParty.Longitude !== undefined && selectedParty.Latitude !== null && selectedParty.Longitude !== null) {
+                                        window.open(`https://maps.google.com/?q=${selectedParty.Latitude},${selectedParty.Longitude}`, "_blank");
+                                    }
+
+
+                                }}
 
                             >
                                 <i className="bx bx-map-pin"></i>
