@@ -9,6 +9,8 @@ import Dashboard from "../pages/Dashboard/index";
 import Login from "../pages/Authentication/Login"
 import Logout from "../pages/Authentication/Logout"
 import ForgetPwd from "../pages/Authentication/ForgetPassword"
+import Error404 from "../pages/Utility/Error404";
+import Error500 from "../pages/Utility/Error500";
 
 //Import Administrator 
 import Modules from "../pages/Adminisrator/ModulesPages/Modules";
@@ -25,11 +27,9 @@ import AddEmployee from "../pages/Adminisrator/EmployeePages/EmployeeMaster";
 import Employee_List from "../pages/Adminisrator/EmployeePages/EmployeeList";
 import RoleMaster from "../pages/Adminisrator/RoleMasterPages/RoleMaster";
 import RoleList from "../pages/Adminisrator/RoleMasterPages/RoleList"
-import Error404 from "../pages/Utility/Error404";
-import Error500 from "../pages/Utility/Error500";
+
 import ItemsList from "../pages/Adminisrator/ItemPages/ItemList";
 import ItemsMaster from "../pages/Adminisrator/ItemPages/ItemMaster/itemIndex"
-
 import SearchBoxSecond from "../pages/Adminisrator/SearchBox/SearchBoxSecond";
 import SerachBox3 from "../pages/Adminisrator/SearchBox/SerachBox3";
 import PartyList from "../pages/Adminisrator/PartyMaster/PartyList";
@@ -221,7 +221,6 @@ import CurrentStockReport from "../Reports/StockReport/CurrentStockReport.js";
 const userRoutes = [
 	// *************************** DashBord *******************************//
 
-
 	{ path: path.DASHBORD_1, component: Dashboard_1, isPartyWisePage: true },
 	{ path: path.DASHBORD_2, component: Dashboard_Admin, isPartyWisePage: true },
 
@@ -371,7 +370,6 @@ const userRoutes = [
 	{ path: path.ITEM_IMAGE_UPLOAD, component: ItemImageUpload },//not party wise
 
 
-
 	//******************************* Inventory Module ************************************//
 	{ path: path.CHALLAN_LIST, component: ChallanList },
 	{ path: path.CHALLAN, component: Challan },
@@ -408,7 +406,6 @@ const userRoutes = [
 	{ path: path.PURCHASE_RETURN_MODE_3, component: PurchaseReturnMode3, isPartyWisePage: true },
 
 
-
 	//******************************* PRODUCTION Module ************************************//
 	{ path: path.BIllOf_MATERIALS, component: BOMMaster },
 	{ path: path.BIllOf_MATERIALS_LIST, component: BOMList },
@@ -427,7 +424,6 @@ const userRoutes = [
 	{ path: path.PRODUCTION_REISSUE, component: ProductionReIssueAdd },
 	{ path: path.PRODUCTION_REISSUE_LIST, component: ProductionReIssueList },
 	{ path: path.PRODUCTION_REISSUE_STP, component: ProductionList },
-
 
 
 	//******************************* Sale Module ************************************//
@@ -457,7 +453,6 @@ const userRoutes = [
 	{ path: path.IB_GRN_LIST, component: InvoiceList },
 	{ path: path.IB_INVOICE, component: Invoice },
 	{ path: path.IB_INVOICE_STP, component: OrderList },
-
 
 
 	//********************************Accounting ***********************************//
@@ -551,7 +546,6 @@ const userRoutes = [
 	{ path: path.CX_DD_DIFFERENCE_REPORT, component: CX_DD_DiffrenceReport },// use self party drop-down
 
 
-
 	//******************************* Sweet Pos ************************************//
 
 	{ path: path.POS_ROLE_ACCESS, component: POSRoleAccess },//not party wise
@@ -561,11 +555,6 @@ const userRoutes = [
 	{ path: path.SYSTEM_SETTING, component: SystemSetting },//not party wise
 
 	{ path: path.SYSTEM_SETTING_LIST, component: SystemSettingList },//not party wise
-
-
-
-
-
 
 
 	{ path: path.SEARCH_BOX2, component: SearchBoxSecond },
