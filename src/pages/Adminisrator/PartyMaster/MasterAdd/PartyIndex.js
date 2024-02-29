@@ -154,7 +154,7 @@ const PartyMaster = (props) => {
 			}))
 		}
 
-		if (commonPartyDropSelect.value <= 0) {
+		if (commonPartyDropSelect.value <= 0 && subPageMode === url.PARTY_SELF_EDIT) {
 			partySelectOnChangeHandler();
 		}
 
@@ -166,6 +166,7 @@ const PartyMaster = (props) => {
 	}, [commonPartyDropSelect.value])
 
 	function partySelectOnChangeHandler() {
+
 		addressTabRef.current = null;
 		baseTabRef.current = null;
 		prefixTabRef.current = null;
