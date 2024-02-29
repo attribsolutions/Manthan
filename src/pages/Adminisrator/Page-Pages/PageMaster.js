@@ -70,6 +70,10 @@ const PageMaster = (props) => {
   const [editCreatedBy, seteditCreatedBy] = useState("");
   const [moduleMaster_AddAccess, setModuleMaster_AddAccess] = useState(false)
 
+  const [showCountLabel, setShowCountLabel] = useState(false);
+  const [countLabel, setCountLabel] = useState("");
+  const [isEditPopuporComponent, setIsEditPopuporComponent] = useState(false);
+
   const [pageFieldTabTable, setPageFieldTabTable] = useState([{
     ControlID: '',
     FieldLabel: '',
@@ -148,7 +152,7 @@ const PageMaster = (props) => {
     dispatch(getFieldValidationsForALLType())
   }, [dispatch]);
 
-  // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
+  //Edit Data UseEffect.
   useEffect(() => {
 
     if (((fieldValidationsALLType.length > 0) && (hasShowloction || hasShowModal))) {
@@ -165,10 +169,13 @@ const PageMaster = (props) => {
       }
 
       if (hasEditVal) {
-
+        
         let pageType_ID = hasEditVal.PageType;
 
         setEditData(hasEditVal);
+        setShowCountLabel(hasEditVal?.CountLabel)
+        setCountLabel(hasEditVal?.ShowCountLabel)
+        setIsEditPopuporComponent(hasEditVal?.IsEditPopuporComponent)
 
         dispatch(Breadcrumb_inputName(hasEditVal.Name))
         setPageAccessData(hasEditVal.PagePageAccess);
@@ -426,7 +433,7 @@ const PageMaster = (props) => {
   }
 
   const SaveHandler = (event, values) => {
-    debugger
+
     event.preventDefault();
     const btnId = event.target.id;
 
@@ -475,7 +482,7 @@ const PageMaster = (props) => {
       })
       return;
     }
-
+    
     const jsonBody = JSON.stringify({
 
       Name: values.Name,
@@ -483,8 +490,8 @@ const PageMaster = (props) => {
       isActive: values.isActive,
       DisplayIndex: values.displayIndex,
       Icon: values.Icon,
-      CountLabel: values.CountLabel,
-      ShowCountLabel: values.ShowCountLabel,
+      CountLabel: showCountLabel,
+      ShowCountLabel: countLabel,
       ActualPagePath: values.pagePath,
       PageType: pageType_DropdownSelect.value,
       PageHeading: values.pageheading,
@@ -492,7 +499,7 @@ const PageMaster = (props) => {
       PageDescriptionDetails: values.pageheadingdescription,
       RelatedPageID: (pageType_DropdownSelect.value === 2) ? relatedPage_DropdownSelect.value : 0,
       IsDivisionRequired: values.IsDivisionRequired,
-      IsEditPopuporComponent: values.IsEditPopuporComponent,
+      IsEditPopuporComponent: isEditPopuporComponent,
       CreatedBy: loginUserID(),
       UpdatedBy: loginUserID(),
       PagePageAccess: Access,
@@ -519,10 +526,6 @@ const PageMaster = (props) => {
       dispatch(save_PageMaster_Action({ jsonBody, btnId }));
     }
   };
-
-  // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
-  // var IsEditMode_Css = ''
-  // if ((modalCss) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
 
   if (!(userPageAccessState === '')) {
     return (
@@ -806,11 +809,12 @@ const PageMaster = (props) => {
                                 <FormGroup className="mb-3">
                                   <Label >Count Label</Label>
                                   <AvField
-                                    name="ShowCountLabel"
-                                    value={EditData.ShowCountLabel}
+                                    name="countLabel"
+                                    value={countLabel}
                                     type="text"
                                     placeholder="Please Enter  Show Count Label"
                                     autoComplete="off"
+                                    onChange={(e) => { setCountLabel(e.target.value) }}
                                   />
                                 </FormGroup>
                               </Col>
@@ -831,10 +835,12 @@ const PageMaster = (props) => {
                                     >
                                       <AvInput
                                         type="checkbox"
+                                        name="showCountLabel"
                                         className="form-check-input mt-4"
                                         // key={EditData.CountLabel}
                                         defaultChecked={EditData.CountLabel}
-                                        name="CountLabel"
+                                        checked={showCountLabel}
+                                        onChange={(e) => { setShowCountLabel(e.target.checked) }}
                                       />
                                       <label
                                         className="form-check-label"
@@ -926,7 +932,9 @@ const PageMaster = (props) => {
                                           // key={EditData.IsEditPopuporComponent}
                                           className="form-check-input mt-4"
                                           defaultChecked={EditData.IsEditPopuporComponent}
+                                          checked={isEditPopuporComponent}
                                           name="IsEditPopuporComponent"
+                                          onChange={(e) => { setIsEditPopuporComponent(e.target.checked) }}
                                         />
                                         <label
                                           className="form-check-label"
