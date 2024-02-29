@@ -6,9 +6,8 @@ import { unitConversionInitial } from '../itemIndex';
 
 export default function UnitConverstion(props) {
 
-    const { pageMode, formValue, TableData = [], BaseUnit = [], } = props.state;
-
-    const { settable, setFormValue } = props
+    const { pageMode, formValue, TableData = [], BaseUnit = [] } = props.state;
+    const { settable, setFormValue } = props;
 
     const BaseUnit_DropdownOptions = BaseUnit.map((data) => ({
         value: data.id,
@@ -16,52 +15,55 @@ export default function UnitConverstion(props) {
     }));
 
     function baseunitOnchange(event) {
-
-        const val = { ...formValue }
-        const a1 = { ...unitConversionInitial, Unit: event, Conversion: 1, IsBase: true }
-        val["BaseUnit"] = event
-        setFormValue(val)
-        settable([a1])
+        const { BaseUnitName, ...restRequired } = formValue.required;
+        const updatedFormValue = {
+            ...formValue,
+            values: {
+                ...formValue.values,
+                BaseUnitName: event,
+            },
+            isError: {
+                ...formValue.isError,
+                BaseUnitName: "",
+            },
+            required: restRequired,
+        };
+        setFormValue(updatedFormValue);
+        settable([{ ...unitConversionInitial, Unit: event, Conversion: 1, IsBase: true }]);
     }
 
     function addRow_Handler(ID) {
-        let a1 = { ...unitConversionInitial, id: ID + 1 }
-        const newarr = [...TableData, a1]
-        
-        settable(newarr)
+        let newRow = { ...unitConversionInitial, id: ID + 1 };
+        settable((prevTableData) => [...prevTableData, newRow]);
     }
 
     function deleteRow_Handler(Id) {
-        const found = TableData.filter((i) => {
-            return !(i.id === Id)
-        })
-        
-        settable(found)
+        settable((prevTableData) => prevTableData.filter((row) => row.id !== Id));
     }
 
     function baseUnit2_onChange(event, type = '', Id) {
-        settable(e1 => {
-            const newarr = e1.map((index) => {
-
-                if (((type === 'POUnit') && !(index.id === Id))) {
-                    index.POUnit = false
-                };
-                if (((type === 'SOUnit') && !(index.id === Id))) {
-                    index.SOUnit = false
-                };
-                if (index.id === Id) { index[type] = event };
-                return index
+        settable((prevTableData) =>
+            prevTableData.map((row) => {
+                if (type === 'POUnit' && row.id !== Id) {
+                    row.POUnit = false;
+                }
+                if (type === 'SOUnit' && row.id !== Id) {
+                    row.SOUnit = false;
+                }
+                if (row.id === Id) {
+                    row[type] = event;
+                }
+                return row;
             })
-            return (newarr)
-        })
-    };
+        );
+    }
 
     //start  => BaseUnit DropDown select id(array value) ,Table BaseUnit dropdown option filter is notinclude BaseUnit DropDown select +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
     let BaseUnit_DropdownOptions2 = []
     BaseUnit.forEach(myFunction);
     function myFunction(item, index, arr) {
 
-        if (!(formValue.BaseUnit.label === item.Name)) {
+        if (!(formValue.values.BaseUnitName.label === item.Name)) {
             BaseUnit_DropdownOptions2[index] = {
                 value: item.id,
                 label: item.Name
@@ -107,7 +109,7 @@ export default function UnitConverstion(props) {
                                     >
                                     </Input>
                                 </Col>
-                                <Label className=" col-sm-4 col-form-label"> {formValue.BaseUnit.label}</Label>
+                                <Label className=" col-sm-4 col-form-label"> {formValue.values.BaseUnitName.label}</Label>
                             </Row>
                         </td>
 
@@ -198,7 +200,7 @@ export default function UnitConverstion(props) {
                             <Select
                                 id={`dropBaseUnit-0`}
                                 placeholder="Select..."
-                                value={formValue.BaseUnit}
+                                value={formValue.values.BaseUnitName}
                                 isDisabled={pageMode === "edit" ? true : false}
                                 options={BaseUnit_DropdownOptions}
                                 onChange={baseunitOnchange}
@@ -209,7 +211,7 @@ export default function UnitConverstion(props) {
                         </FormGroup>
                     </Row>
 
-                    {!(formValue.BaseUnit.value === 0)
+                    {!(formValue.values.BaseUnitName.value === 0)
                         ? <Row className="mt-3">
                             <Col md={8}>
                                 <Table className="table table-bordered  ">
