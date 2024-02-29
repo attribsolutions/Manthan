@@ -136,28 +136,45 @@ const PartyMaster = (props) => {
 		dispatch(getPartyTypelist());
 		dispatch(getcompanyList());
 		dispatch(SSDD_List_under_Company())
-		if (!(subPageMode === url.RETAILER_MASTER)) {
-			dispatch(changeCommonPartyDropDetailsAction({ isShow: false }))//change party drop-down  hide
+		if ((subPageMode === url.RETAILER_MASTER) || (subPageMode === url.PARTY_SELF_EDIT)) {
+			dispatch(changeCommonPartyDropDetailsAction({ isShow: true }))//change party drop-down  hide
 		}
 
 	}, [])
 
 	useEffect(() => {
-		if (subPageMode === url.PARTY_SELF_EDIT) {
+
+		if (subPageMode === url.PARTY_SELF_EDIT && commonPartyDropSelect.value > 0) {
 			dispatch(editPartyID({
-				editId: loginPartyID(),
+				editId: commonPartyDropSelect.value,
 				btnmode: 'edit',
 				subPageMode: 'PartySelfEdit',
-				btnId: `btn-edit-${loginPartyID()}`,
+				btnId: `btn-edit-${commonPartyDropSelect.value}`,
 
 			}))
 		}
+
+		if (commonPartyDropSelect.value <= 0) {
+			partySelectOnChangeHandler();
+		}
+
 		return () => {
 			dispatch(priceListByPartyActionSuccess([]));//clear privious priceList
 			dispatch(changeCommonPartyDropDetailsAction({ isShow: true, forceDisable: false }))//change party drop-down restore state
 		}
 
-	}, [])
+	}, [commonPartyDropSelect.value])
+
+	function partySelectOnChangeHandler() {
+		addressTabRef.current = null;
+		baseTabRef.current = null;
+		prefixTabRef.current = null;
+		dispatch(getDistrictOnStateSuccess([]))//clear district privious options
+		dispatch(getCityOnDistrictSuccess([]))//clear City privious options
+		dispatch(priceListByPartyActionSuccess([]));//clear privious priceList
+		dispatch(priceListByPartyActionSuccess([]));//clear privious priceList
+		dispatch(editPartyIDSuccess({ Status: false }));
+	}
 
 	useEffect(() => {
 
@@ -282,7 +299,7 @@ const PartyMaster = (props) => {
 						dispatch(getCityOnDistrict(hasEditVal.District.id))
 						dispatch(priceListByPartyAction(hasEditVal.PartyType.id,))
 						dispatch(editPartyIDSuccess({ Status: false }));
-						dispatch(changeCommonPartyDropDetailsAction({ forceDisable: true }))//change party drop-down disable when edit/view
+						// dispatch(changeCommonPartyDropDetailsAction({ forceDisable: true }))//change party drop-down disable when edit/view
 					}
 				}
 
@@ -429,7 +446,7 @@ const PartyMaster = (props) => {
 			setactiveTab1("2")
 			customAlert({
 				Type: 4,
-				Message:alertMessages.defaultAddressIsSelected,
+				Message: alertMessages.defaultAddressIsSelected,
 			})
 			return;
 		};
@@ -507,7 +524,6 @@ const PartyMaster = (props) => {
 				"IsApprovedParty": isMobileRetailer && false,
 				"PartySubParty": supplierArr,
 				"PartyAddress": addressTabDetail,
-
 				"PartyPrefix": [
 					{
 						"Orderprefix": prefixValue.OrderPrefix,
@@ -539,7 +555,6 @@ const PartyMaster = (props) => {
 		} catch (error) { btnIsDissablefunc({ btnId, state: false }) }
 	};
 
-	let IsEditMode_Css = isEditMode_CssFun();
 
 	if (!(userPageAccessState === '')) {
 		return (

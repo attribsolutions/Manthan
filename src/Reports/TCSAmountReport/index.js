@@ -232,7 +232,7 @@ const TCSAmountReport = (props) => {
 
                 <div className="mt-1">
                     <ReportTableFunc
-                        keyField="InvoiceNumber"
+                        keyField="_keyID"
                         tableData={tableData}
                         columns={updatetableColumn}
                         totalAmountShow={true}

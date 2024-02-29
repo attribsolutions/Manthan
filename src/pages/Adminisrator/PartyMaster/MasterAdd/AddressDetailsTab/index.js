@@ -51,9 +51,26 @@ const AddressTabForm = forwardRef((props, ref) => {
 
 	const {
 		pageField,
+		commonPartyDropSelect
 	} = useSelector((state) => ({
-		pageField: state.CommonPageFieldReducer.pageField
+		pageField: state.CommonPageFieldReducer.pageField,
+		commonPartyDropSelect: state.CommonPartyDropdownReducer.commonPartyDropSelect
 	}));
+
+
+
+
+
+
+	useEffect(() => {
+		if (commonPartyDropSelect.value <= 0) {
+			setAddressTable([])
+		}
+	}, [commonPartyDropSelect]);
+
+
+
+
 
 	useEffect(() => {
 		if (pageField) {

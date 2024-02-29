@@ -113,6 +113,7 @@ const ItemMasterBulkUpdate = (props) => {
 
     function SelectFieldHandler(event) {
         setSelectFieldName(event);
+        setGroupTypeSelect({ value: 1, label: "Primary" })
     }
 
     function tableSelectHandler(event, row) {
@@ -188,7 +189,7 @@ const ItemMasterBulkUpdate = (props) => {
     //  function to create the Newvalue column
     const createNewValueColumn = () => {
         return {
-            text: `New${SelectFieldName.label === undefined ? "Value" : SelectFieldName.label}`,
+            text: `New ${SelectFieldName.label === undefined ? "Value" : SelectFieldName.label}`,
             dataField: "Newvalue",
             formatExtraData: { forceRefresh },
             formatter: (cellContent, row, key) => {

@@ -311,8 +311,7 @@ const InvoiceExcelUpload = (props) => {
 
         if (extension === ".xlsx") {
             const readjson = await readExcelFile({ file: files[0], compareParameter, ItemList })
-
-
+            
             //////////////////////////////////////// Check  in valid format Value Or Not //////////////////////////////////////////////////////
 
             if (readjson.NotMapColumn.length > 0) {
@@ -587,7 +586,7 @@ const InvoiceExcelUpload = (props) => {
 
                     const calculate = InvoiceUploadCalculation({ Quantity: ele[parArr.Quantity], Rate: ele[parArr.Rate], GST: ele.GST, Discount: ele[parArr.Discount], DiscountType: ele[parArr.DiscountType] });
                     invoiceTotalAmount = invoiceTotalAmount + calculate.Amount;
-                    debugger
+
                     parentObj = {
                         "ImportFromExcel": 1,
                         "CustomerGSTTin": ele[parArr.CustomerGSTTin] ? ele[parArr.CustomerGSTTin] : '',
@@ -626,7 +625,7 @@ const InvoiceExcelUpload = (props) => {
                         "IGSTPercentage": ele[parArr.IGSTPercentage] ? ele[parArr.IGSTPercentage] : 0,
                         "Amount": ele[parArr.Amount] ? ele[parArr.Amount] : (calculate.Amount).toFixed(2),
                         "DiscountType": ele[parArr.DiscountType] ? ele[parArr.DiscountType] : 2,
-                        "Discount": ele[parArr.Discount] ? ele[parArr.Discount] : 0,
+                        "Discount": ele[parArr.Discount] ? ele[parArr.Discount]?.toFixed(2) : 0,
                         "DiscountAmount": ele[parArr.DiscountAmount] ? ele[parArr.DiscountAmount] : (calculate.DiscountAmount).toFixed(2),
 
                         "TaxType": "GST",

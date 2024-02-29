@@ -52,8 +52,13 @@ export const readExcelFile = async ({ file, compareParameter, ItemList = [] }) =
       comparefilter.forEach((c1) => {
 
         if (c1.ControlTypeName === "Date") {
-
-          const date = new Date(Math.round((r1[c1.Value] - 25569) * 86400 * 1000));
+          let date = null
+          if (Number.isInteger(r1[c1.Value])) {
+            date = new Date(Math.round((r1[c1.Value] - 25569) * 86400 * 1000));
+          } else {
+            const [day, month, year] = r1[c1.Value].split("-").map(Number);
+            date = new Date(year, month - 1, day);
+          }
           r1[c1.Value] = date_ymd_func(date)
         };
 
@@ -90,8 +95,9 @@ export const readExcelFile = async ({ file, compareParameter, ItemList = [] }) =
         }
         if (!c1.IsCompulsory && (r1[c1.Value] === '' || r1[c1.Value] === null || r1[c1.Value] === undefined)) {
         }
-        else if (!(regExp.test(r1[c1.Value]))) {
 
+        else if (!(regExp.test(r1[c1.Value]))) {
+          debugger
           if (!((Number.isInteger(r1[c1.Value]) || (isFloat(r1[c1.Value]))) && (r1[c1.Value] <= 0))) {
             invalidMsg.push(`${c1.Value} :${r1[c1.Value]} is invalid Format`)
           }

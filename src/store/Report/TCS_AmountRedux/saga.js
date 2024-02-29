@@ -16,8 +16,9 @@ function* TCSAmountReport_GenFunc({ config }) {
 			i.Total = amountCommaSeparateFunc(parseFloat(i.Total).toFixed(2)) //  GrandTotal show with commas
 			return i;
 		});
+		const data = yield response.Data.map((i, k) => ({ ...i, _keyID: k }))
+		yield put(TCS_Amount_Gobtn_Success(data));
 
-		yield put(TCS_Amount_Gobtn_Success(response.Data))
 	} catch (error) { yield put(TCS_Amount_ReportApiErrorAction()) }
 }
 
