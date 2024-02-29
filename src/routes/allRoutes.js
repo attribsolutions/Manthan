@@ -264,7 +264,7 @@ const userRoutes = [
 	{ path: path.NON_RETAILER_PARTY_lIST, component: PartyList, isPartyWisePage: true },
 	{ path: path.NON_RETAILER_PARTY, component: PartyMaster, isPartyWisePage: true },
 
-	{ path: path.PARTY_SELF_EDIT, component: PartyMaster },//not party wise
+	{ path: path.PARTY_SELF_EDIT, component: PartyMaster, isPartyWisePage: true },//not party wise
 
 	{ path: path.EMPLOYEETYPE, component: EmployeeTypesMaster },//not party wise
 	{ path: path.EMPLOYEETYPE_lIST, component: EmployeeTypeList },//not party wise

@@ -133,7 +133,7 @@ const ImportExcelPartyMap = (props) => {
     }, [pageField])
 
     useEffect(() => {
-
+        debugger
         if (values.MapType.value === 2) {
             const newItemList = ItemList.map(i => ({
                 "party": commonPartyDropSelect.value,
@@ -173,7 +173,23 @@ const ImportExcelPartyMap = (props) => {
                 setUpdateTableList(goButtonArr);
             }
         }
-    }, [goButtonArr, isCopy, ItemList])
+    }, [isCopy])
+
+    useEffect(() => {
+        if (values.MapType.value === 2) {
+            const newItemList = ItemList.map(i => ({
+                "party": commonPartyDropSelect.value,
+                "fieldName": i.ItemName,
+                "fieldId": i.Item,
+                "mapValue": i.MapItem,
+            }))
+            setUpdateTableList(newItemList);
+        } else {
+            setUpdateTableList(goButtonArr);
+        }
+
+    }, [goButtonArr, ItemList])
+
 
     useEffect(() => {
         dispatch(BreadcrumbShowCountlabel(`${"Count"} :${UpdateTableList.length}`))

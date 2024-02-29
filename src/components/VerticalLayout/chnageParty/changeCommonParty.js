@@ -9,6 +9,7 @@ import './changeParty.scss'; // Add your styles here
 import { useRef } from "react";
 import { showToastAlert } from "../../../helpers/axios_Config";
 import { alertMessages } from "../../Common/CommonErrorMsg/alertMsg";
+import { hideBtnCss } from "../../Common/ListActionsButtons";
 
 const ChangeCommonParty = (props) => {
 
@@ -58,7 +59,7 @@ const ChangeCommonParty = (props) => {
     // Function to update the selected party
     const updateSelectedParty = () => {
         if (selectedParty.value === 0) {
-            customAlert({ Type: 3, Message:alertMessages.selectPartyName });
+            customAlert({ Type: 3, Message: alertMessages.selectPartyName });
             return;
         }
         setIsDrawerOpen(false);
@@ -77,7 +78,12 @@ const ChangeCommonParty = (props) => {
     const PartyDropdownOptions = commonPartyDropdownOption.map(data => ({
         value: data.id,
         label: data.Name,
-        SAPPartyCode: data.SAPPartyCode
+        SAPPartyCode: data.SAPPartyCode,
+        Latitude: data.Latitude,
+        Longitude: data.Longitude,
+        MobileNo: data.MobileNo,
+        Address: data.Address
+
     })).filter(index => !isShowOnlySAPParty || index.SAPPartyCode !== null);
 
     // Function to toggle drawer
@@ -147,25 +153,43 @@ const ChangeCommonParty = (props) => {
                                 // isDisabled={changeButtonShow && !(selectedParty.value === 0)}
                                 onChange={(e) => setSelectedParty(e)}
                             />
+                            {commonPartyDropSelect.value > 0 && <div className="mt-2">
+                                <span style={{ display: 'block' }}><strong>Address: </strong>{selectedParty.Address}</span>
+                                <span style={{ display: 'block' }}> <strong>Contact: </strong> <a href={"tel:" + selectedParty.MobileNo}>{selectedParty.MobileNo}</a></span>
+                            </div>}
                         </div>
-                        <div className="modal-footer mt-2">
-
+                        <div className="modal-footer d-flex justify-content-between align-items-center">
                             <C_Button
                                 type="button"
-                                className="btn btn-primary border-1 font-size-12 text-center"
-                                onClick={updateSelectedParty}
+
+                                className={`${hideBtnCss} px-2`}
+                                onClick={() => { !(selectedParty.Latitude === null && selectedParty.Longitude == null) && window.open(`https://maps.google.com/?q=${selectedParty.Latitude},${selectedParty.Longitude}`, "_blank") }}
+
                             >
-                                Select
+                                <i className="bx bx-map-pin"></i>
                             </C_Button>
 
-                            <C_Button
-                                type="button"
-                                className="btn btn-danger border-1 font-size-12 text-center"
-                                onClick={handleClearBtn}
-                            >
-                                Clear
-                            </C_Button>
+                            <div className="">
+                                <C_Button
+                                    type="button"
+                                    style={{ margin: "3px" }}
+                                    className="btn btn-primary border-1 font-size-12 text-center ml-1"
+                                    onClick={updateSelectedParty}
+                                >
+                                    Select
+                                </C_Button>
+
+                                <C_Button
+                                    type="button"
+                                    className="btn btn-danger border-1 font-size-12 text-center ml-2"
+                                    onClick={handleClearBtn}
+                                >
+                                    Clear
+                                </C_Button>
+                            </div>
                         </div>
+
+
                     </div>
                 </div>
             )}
