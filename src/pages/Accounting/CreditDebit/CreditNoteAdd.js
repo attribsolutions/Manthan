@@ -198,7 +198,12 @@ const CreditNoteAdd = (props) => {
                     Message: postMsg.Message,
                 })
                 if (alertResponse) {
-                    history.push({ pathname: url.CREDIT_LIST })
+                    // history.push({ pathname: url.CREDIT_LIST })
+                    history.push({
+                        pathname: url.CREDIT_LIST,
+                        updatedRowBlinkId: postMsg.TransactionID
+                    });
+
                 }
             }
         }

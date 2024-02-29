@@ -2,10 +2,9 @@ import React, { useImperativeHandle, forwardRef, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Card, CardBody, Col, FormGroup, Input, Label, Row } from 'reactstrap'
 import { comAddPageFieldFunc, onChangeCheckbox, onChangeSelect, onChangeText } from '../../../../../components/Common/validationFunction'
-import { Breadcrumb_inputName, commonPageField, commonPageFieldSuccess, get_Category_By_CategoryType_ForDropDownAPI } from '../../../../../store/actions'
+import { Breadcrumb_inputName, get_Category_By_CategoryType_ForDropDownAPI } from '../../../../../store/actions'
 import Select from "react-select"
 import { unitConversionInitial } from '../../ItemMaster/itemIndex'
-import { pageId } from '../../../../../routes'
 
 const BasicInfoTabForm = forwardRef(({ state, setState, settable, pageField }, ref) => {
 
@@ -28,7 +27,6 @@ const BasicInfoTabForm = forwardRef(({ state, setState, settable, pageField }, r
         CategoryList,
         BrandName,
         ItemTagList,
-        // pageField
     } = useSelector((state) => ({
         BaseUnit: state.ItemMastersReducer.BaseUnit,
         CategoryTypeList: state.categoryTypeReducer.categoryTypeListData,
@@ -36,7 +34,6 @@ const BasicInfoTabForm = forwardRef(({ state, setState, settable, pageField }, r
         categotyDropDownLoading: state.ItemMastersReducer.categotyDropDownLoading,
         BrandName: state.GeneralReducer.GeneralMasterSubType,
         ItemTagList: state.ItemMastersReducer.ItemTagList,
-        // pageField: state.CommonPageFieldReducer.pageField,
     }));
 
     const { values } = state;
@@ -49,11 +46,6 @@ const BasicInfoTabForm = forwardRef(({ state, setState, settable, pageField }, r
             comAddPageFieldFunc({ state, setState, fieldArr })
         }
     }, [pageField])
-
-    // useEffect(() => {
-    //     dispatch(commonPageFieldSuccess(null));//clear privious PageField
-    //     dispatch(commonPageField(pageId.ITEM))
-    // }, []);
 
     const BaseUnit_DropdownOptions = BaseUnit.map((data) => ({
         value: data.id,
@@ -392,7 +384,6 @@ const BasicInfoTabForm = forwardRef(({ state, setState, settable, pageField }, r
                                     <span className="invalid-feedback">{isError.Sequence}</span>
                                 )}
                             </FormGroup>
-
                         </Row>
                     </Col>
 

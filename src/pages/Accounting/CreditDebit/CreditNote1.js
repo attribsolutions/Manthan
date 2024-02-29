@@ -239,7 +239,11 @@ const CreditNote_1 = (props) => {
                     Message: postMsg.Message,
                 })
                 if (alertResponse) {
-                    history.push({ pathname: listPath })
+                    // history.push({ pathname: listPath })
+                    history.push({
+                        pathname: listPath,
+                        updatedRowBlinkId: postMsg.TransactionID
+                    });
                 }
             }
         }
