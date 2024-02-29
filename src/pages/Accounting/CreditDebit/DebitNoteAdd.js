@@ -196,7 +196,8 @@ const Debit = (props) => {
                 if (promise) {
                     history.push({
                         pathname: listPath,
-                    })
+                        updatedRowBlinkId: postMsg.TransactionID
+                    });
                 }
             }
         }
