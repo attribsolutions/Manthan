@@ -45,8 +45,8 @@ import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import { globalTableSearchProps } from "../../../../components/Common/SearchBox/MySearch";
 import BootstrapTable from "react-bootstrap-table-next";
 import { deltBtnCss, hideBtnCss } from "../../../../components/Common/ListActionsButtons";
-import { API_URL_LIVE } from "../../../../routes/route_url";
 import { alertMessages } from "../../../../components/Common/CommonErrorMsg/alertMsg";
+import SERVER_HOST_PATH from "../../../../helpers/_serverPath";
 
 const ItemImageUpload = (props) => {
 
@@ -224,7 +224,7 @@ const ItemImageUpload = (props) => {
             if (element.ImageType === Type) {
                 if (!(element.file instanceof File)) {
                     slides = [{
-                        Image: `${API_URL_LIVE}${element.Item_pic}`
+                        Image: `${SERVER_HOST_PATH}${element.Item_pic}`
                     }];
                 }
 
@@ -281,7 +281,7 @@ const ItemImageUpload = (props) => {
 
         Object.values(Image).forEach((element) => {
             if (element.ImageType === Type && !(element.file instanceof File) && element.Item_pic !== null) {
-                imageUrl = `${API_URL_LIVE}${element.Item_pic}`;
+                imageUrl = `${SERVER_HOST_PATH}${element.Item_pic}`;
 
             }
         });

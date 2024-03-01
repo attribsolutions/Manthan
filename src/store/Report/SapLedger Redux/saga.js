@@ -5,7 +5,7 @@ import {
 } from "./action";
 import { Get_Product_Margin_Report, PartyLedger_API, } from "../../../helpers/backend_helper";
 import { PRODUCTMARGIN_GO_BTN_ACTION, GO_BUTTON_API_SAP_LEDGER, } from "./actionType";
-import { API_URL_LIVE } from "../../../routes/route_url";
+import SERVER_HOST_PATH from "../../../helpers/_serverPath";
 
 function* SapLedger_GoBtn_GenFuc({ filters }) {
 
@@ -83,7 +83,7 @@ function* ProductMarginGoBtn_GenFuc({ config }) {
 							let isImageColumn = imageColumns.includes(key);
 							if (isImageColumn) {
 
-								obj[key] = `${ele[key] === " " || ele[key] === "" ? "" : `${API_URL_LIVE}/media/${ele[key]}`}`;
+								obj[key] = `${ele[key] === " " || ele[key] === "" ? "" : `${SERVER_HOST_PATH}/media/${ele[key]}`}`;
 							} else {
 								obj[key] = ele[key];
 							}

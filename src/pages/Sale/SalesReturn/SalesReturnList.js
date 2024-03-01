@@ -23,8 +23,8 @@ import { ReturnPrint_API } from "../../../helpers/backend_helper";
 import { return_discountCalculate_Func } from "./SalesCalculation";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 import Slidewithcaption from "../../../components/Common/CommonImageComponent";
-import { API_URL_LIVE } from "../../../routes/route_url";
 import { allLabelWithBlank } from "../../../components/Common/CommonErrorMsg/HarderCodeData";
+import SERVER_HOST_PATH from "../../../helpers/_serverPath";
 
 const SalesReturnList = () => {
 
@@ -42,6 +42,9 @@ const SalesReturnList = () => {
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
+
+    const [FileLoading, setFileLoading] = useState(false)
+
 
     const [pageMode, setPageMode] = useState(mode.defaultList)
     const [subPageMode, setSubPageMode] = useState(history.location.pathname);
@@ -140,7 +143,7 @@ const SalesReturnList = () => {
 
     useEffect(async () => {
         if ((sendToSSbtnTableData.Status === true) && (sendToSSbtnTableData.StatusCode === 200)) {
-
+            setFileLoading(true)
             const { Data = [] } = sendToSSbtnTableData;
             let grand_total = 0;
             const updatedTableDataPromises = Data.map((item, index) => {
@@ -168,6 +171,7 @@ const SalesReturnList = () => {
                 updatedTableData: updatedTableData,
                 GrandTotal: grand_total
             })
+            setFileLoading(false)
         }
     }, [sendToSSbtnTableData])
 
@@ -536,7 +540,7 @@ const SalesReturnList = () => {
                             selectSaveBtnHandler: selectSaveBtnHandler,
                             selectSaveBtnLabel: "Send To Supplier",
                             selectHeaderLabel: "Select",
-                            selectSaveBtnLoading: sendToSSbtnLoading
+                            selectSaveBtnLoading: sendToSSbtnLoading || FileLoading
                         }}
 
                     />
@@ -555,7 +559,7 @@ const SalesReturnList = () => {
             >
                 <div>
                     {((values.UploadedFile !== null)) && <Slidewithcaption Images={[{
-                        Image: isFile(values.UploadedFile) ? URL.createObjectURL(values.UploadedFile) : `${API_URL_LIVE}${values.listData.rowData?.ASMApprovalImgUpload}`
+                        Image: isFile(values.UploadedFile) ? URL.createObjectURL(values.UploadedFile) : `${SERVER_HOST_PATH}${values.listData.rowData?.ASMApprovalImgUpload}`
 
                     }]} />}
                     {!isUploadAccess && !values.listData.rowData?.IsApproved ? <div className=" px-2 col-12" role="group">

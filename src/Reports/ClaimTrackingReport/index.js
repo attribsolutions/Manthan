@@ -14,7 +14,6 @@ import DynamicColumnHook from "../../components/Common/TableCommonFunc";
 import { getClaimTrackingEntrySuccess, getClaimTrackingEntrylist } from "../../store/Accounting/ClaimTrackingEntryRedux/action";
 import { C_DatePicker, C_Select } from "../../CustomValidateForm";
 import { ExcelReportComponent } from "../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS";
-import { API_URL_LIVE } from "../../routes/route_url";
 
 const ClaimTrackingReport = (props) => {
 
