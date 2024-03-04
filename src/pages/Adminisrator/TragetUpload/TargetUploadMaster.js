@@ -100,7 +100,6 @@ const TargetUpload = (props) => {
 
 
 
-
     useEffect(() => {
         /////////////////////////////////////////////////////////// check Ignore Negative Value in excel file /////////////////////////////////
         let updatereadJsonDetail = readJsonDetail
