@@ -390,8 +390,8 @@ export const ImportExcelType_API = () => get(url.IMPORT_EXCEL_TYPE)// update api
 //Target Upload API
 
 export const save_TargetUpload_API = ({ jsonBody }) => post(url.TARGET_UPLOAD, jsonBody)// post api
-
 export const Get_Target_Upload = () => get(url.GET_TARGET_UPLOAD)// update api
+export const Delete_Target_Upload = ({ jsonBody }) => delwithPostBody(url.DEL_TARGET_UPLOAD, jsonBody)//Bulk delete api
 
 
 
@@ -551,6 +551,7 @@ export const Update_Vehicle_Invoice_API = ({ Invoiceid, vehicleid }) => get(`${u
 export const Invoice_Send_To_Scm = ({ jsonBody }) => post(url.INVOICE_SEND_TO_SCM, jsonBody)// delete api
 
 export const Invoice_1_Bulk_Delete_API = ({ jsonBody }) => delwithPostBody(url.INVOICE_1_BULK_DELETE_API, jsonBody)//Bulk delete api
+
 
 //**************************** E-Invoice (upload ,cancel,print) ***************************************/
 
