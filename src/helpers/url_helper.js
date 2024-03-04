@@ -187,7 +187,7 @@ export const IMPORT_EXCEL_TYPE = '/ImportExcelTypesList'         //list
 
 export const TARGET_UPLOAD = '/TargetUploads'         //list
 export const GET_TARGET_UPLOAD = '/Gettargetupload'         //list
-export const DEL_TARGET_UPLOAD = '/Deletetargetupload'         //list
+export const DEL_TARGET_UPLOAD = '/DeleteTargetSheet'         //list
 
 
 
