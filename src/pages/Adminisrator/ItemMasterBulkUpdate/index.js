@@ -15,7 +15,7 @@ import {
     get_Group_By_GroupType_ForDropDown_Success,
     postSelect_Field_for_dropdown
 } from "../../../store/actions";
-import { CInput, C_Select, charRegx } from "../../../CustomValidateForm";
+import { CInput, C_Select, charRegx, decimalRegx } from "../../../CustomValidateForm";
 import {
     ItemWiseUpdateGoButton_Action,
     ItemWiseUpdateGoButton_Success,
@@ -104,7 +104,7 @@ const ItemMasterBulkUpdate = (props) => {
             SelectDropdown.forEach(item => {
                 if (["Group", "SAPUnit"].includes(item.Name)) {
                     item.DataType = "dropdown";
-                } else if (["BarCode", "Length", "Breadth", "ShelfLife", "SAPItemCode", "Sequence", "Height", "Grammage"].includes(item.Name)) {
+                } else if (["BarCode", "Length", "Breadth", "ShelfLife", "SAPItemCode", "Sequence", "Height",].includes(item.Name)) {
                     item.DataType = "number";
                 } else {
                     item.DataType = "string";
@@ -142,7 +142,7 @@ const ItemMasterBulkUpdate = (props) => {
                 if (matchingBaseUnit) {
                     return {
                         ...i,
-                        SAPUnitID: matchingBaseUnit.Name
+                        SAPUnit: matchingBaseUnit.Name
                     };
                 }
                 return i;
@@ -235,7 +235,7 @@ const ItemMasterBulkUpdate = (props) => {
         try {
             const response = await SubGroup_By_Group_DropDown_API(GroupID.value);
             if (response.StatusCode === 200) {
-                
+
                 row.Newvalue = GroupID.value
                 row.DropdownSetValue = GroupID
                 row.subGroupOptions = response.Data
@@ -303,7 +303,7 @@ const ItemMasterBulkUpdate = (props) => {
                                         <CInput
                                             id={key}
                                             type="text"
-                                            cpattern={charRegx}
+                                            cpattern={(SelectFieldName.DataType === "number") ? decimalRegx : charRegx}
                                             placeholder={`Enter New ${SelectFieldName.label}`}
                                             defaultValue={row.Newvalue}
                                             className="col col-sm "
