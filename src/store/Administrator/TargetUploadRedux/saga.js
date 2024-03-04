@@ -6,6 +6,7 @@ import {
   saveTargetUploadMaster_Success,
 } from "./action";
 import {
+  Delete_Target_Upload,
   Get_Target_Upload,
   del_Group_List_API,
   save_TargetUpload_API,
@@ -39,9 +40,11 @@ function* Get_TargetUpload_List_GenFunc() {                                   //
   } catch (error) { yield put(TargetUploadApiErrorAction()) }
 }
 
-function* Delete_TargetUpload_ID_GenFunc({ config }) {                    // delete API
+function* Delete_TargetUpload_ID_GenFunc({ config }) {               // delete API
+  const jsonBody = JSON.stringify({ "SheetNo": config.deleteId })
+  config["jsonBody"] = jsonBody
   try {
-    const response = yield call(del_Group_List_API, config);
+    const response = yield call(Delete_Target_Upload, config);
     yield put(deleteTargetUploadSuccess(response))
   } catch (error) { yield put(TargetUploadApiErrorAction()) }
 }
