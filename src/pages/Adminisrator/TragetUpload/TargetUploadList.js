@@ -46,7 +46,7 @@ const TargetUploadList = () => {
     }
 
     useEffect(() => {
-        const page_Id = pageId.GROUP_lIST
+        const page_Id = pageId.TARGET_UPLOAD_LIST
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
         // dispatch(getGroupList());

@@ -117,6 +117,10 @@ export const RETAILER_EXCEL_UPLOAD = 184
 export const IMPORT_FIELD_ADD = 188
 export const IMPORT_FIELD_ADD_LIST = 189
 
+
+export const TARGET_UPLOAD = 270
+export const TARGET_UPLOAD_LIST = 271
+
 export const IMPORT_EXCEL_PARTY_MAP = 194
 
 export const ROUTE_UPDATE = 159
