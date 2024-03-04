@@ -15,7 +15,7 @@ import { url, mode, pageId } from "../../../routes/index"
 import { order_Type } from "../../../components/Common/C-Varialbes";
 import { OrderPage_Edit_ForDownload_API } from "../../../helpers/backend_helper";
 import { comAddPageFieldFunc, initialFiledFunc } from "../../../components/Common/validationFunction";
-import { getOrderApprovalDetailAction, postOrderConfirms_API, postOrderConfirms_API_Success } from "../../../store/actions";
+import { getOrderApprovalDetailAction, orderApprovalAction, postOrderConfirms_API, postOrderConfirms_API_Success } from "../../../store/actions";
 import { orderApprovalFunc, orderApprovalMessage } from "./orderApproval";
 import { priceListByCompay_Action, priceListByCompay_ActionSuccess } from "../../../store/Administrator/PriceList/action";
 import OrderView from "./OrderView";
@@ -68,7 +68,7 @@ const OrderList = () => {
             pageField: state.CommonPageFieldReducer.pageFieldList,
 
             orderApprovalMsg: state.OrderReducer.orderApprovalMsg,
-            approvalDetail: state.OrderReducer.approvalDetail,
+            // approvalDetail: state.OrderReducer.approvalDetail,
 
             customerType: state.PriceListReducer.priceListByCompany,
             customerTypeDropLoading: state.PriceListReducer.listBtnLoading,
@@ -100,7 +100,7 @@ const OrderList = () => {
         supplier,
         makeIBInvoice,
         orderApprovalMsg,
-        approvalDetail,
+        // approvalDetail,
         customerType,
         orderConfirmMsg,
         gobutton_Add_invoice,
@@ -294,7 +294,7 @@ const OrderList = () => {
 
         }
     }, [ordersBulkInvoiceData]);
-
+//order confirm
     useEffect(() => {
 
         if (orderConfirmMsg.Status === true && orderConfirmMsg.StatusCode === 200) {
@@ -321,9 +321,9 @@ const OrderList = () => {
 
     }, [orderApprovalMsg]);
 
-    useEffect(() => {
-        orderApprovalFunc({ dispatch, approvalDetail })
-    }, [approvalDetail]);
+    // useEffect(() => {
+    //     orderApprovalFunc({ dispatch, approvalDetail })
+    // }, [approvalDetail]);
 
     useEffect(() => {
         if (unhideMsg.Status === true && unhideMsg.StatusCode === 200) {
@@ -390,7 +390,8 @@ const OrderList = () => {
         let config = {}
         config.btnId = btnId;
         config.orderId = editId;
-        dispatch(getOrderApprovalDetailAction(config))
+        // dispatch(getOrderApprovalDetailAction(config))
+        dispatch(orderApprovalAction({ jsonBody: JSON.stringify({ Order: editId }), btnId }))
     }
 
     const makeBtnFunc = (list = [], btnId) => {
@@ -505,7 +506,7 @@ const OrderList = () => {
 
         const isConfirmed = await customAlert({
             Type: 7,
-            Message:alertMessages.unHideInvoiceOrNot,
+            Message: alertMessages.unHideInvoiceOrNot,
         });
 
         if (isConfirmed) {
@@ -640,7 +641,7 @@ const OrderList = () => {
         if (!checkRows.length > 0) {
             customAlert({
                 Type: 4,
-                Message:alertMessages.selectOneOrder,
+                Message: alertMessages.selectOneOrder,
             });
             return
         }
