@@ -574,16 +574,27 @@ const SalesReturnList = () => {
                                     type="file"
                                     className="form-control mt-2"
                                     name="image"
-                                    id="file" f
-                                    accept=".jpg, .jpeg, .png ,.pdf"
+                                    id="file"
+                                    accept=".jpg, .jpeg, .png,"
                                     onChange={(event) => {
-                                        setState((i) => {
-                                            let a = { ...i }
-                                            a.values.UploadedFile = event.target.files[0]
-                                            a.hasValid.UploadedFile.valid = true;
-                                            return a
-                                        })
+                                        const selectedFile = event.target.files[0];
+                                        const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+                                        if (selectedFile) {
+                                            if (allowedTypes.includes(selectedFile.type)) {
+                                                setState((i) => {
+                                                    let a = { ...i }
+                                                    a.values.UploadedFile = selectedFile
+                                                    a.hasValid.UploadedFile.valid = true;
+                                                    return a
+                                                })
+                                            } else {
+                                                customAlert({
+                                                    Type: 4,
+                                                    Message: alertMessages.ImageIsRequired,
+                                                });
 
+                                            }
+                                        }
                                     }}
                                 />
                             </Col>

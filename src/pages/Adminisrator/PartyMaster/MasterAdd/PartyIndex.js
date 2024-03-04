@@ -315,12 +315,7 @@ const PartyMaster = (props) => {
 			dispatch(postPartyDataSuccess({ Status: false }));
 
 			//***************mobail app api*********************** */
-			if (subPageMode === url.RETAILER_MASTER) {
 
-				const jsonBody = JSON.stringify({ RetailerID: postMsg.TransactionID.toString() });
-				const mobilApiResp = await mobileApp_Send_Retailer_Api({ jsonBody });
-				if (mobilApiResp.Message.code === 200) { showToastAlert(mobilApiResp.Message.message, "success"); };
-			}
 			//************************************** */
 
 			if (pageMode === mode.dropdownAdd) {
@@ -339,6 +334,12 @@ const PartyMaster = (props) => {
 						pathname: listPath,
 					});
 				}
+			}
+
+			if (subPageMode === url.RETAILER_MASTER) {
+				const jsonBody = JSON.stringify({ RetailerID: postMsg.TransactionID.toString() });
+				const mobilApiResp = await mobileApp_Send_Retailer_Api({ jsonBody });
+				if (mobilApiResp.Message.code === 200) { showToastAlert(mobilApiResp.Message.message, "success"); };
 			}
 		}
 		else if ((postMsg.Status === true)) {

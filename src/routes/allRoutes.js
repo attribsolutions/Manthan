@@ -216,6 +216,8 @@ import SystemSetting from "../pages/Utility/SystemSetting/SystemSetting.js";
 import SystemSettingList from "../pages/Utility/SystemSetting/SystemSettingList.js";
 import SNSReport from "../Reports/StockReport/SNSReport.js";
 import CurrentStockReport from "../Reports/StockReport/CurrentStockReport.js";
+import TargetUpload from "../pages/Adminisrator/TragetUpload/TargetUploadMaster.js";
+import TargetUploadList from "../pages/Adminisrator/TragetUpload/TargetUploadList.js";
 
 
 const userRoutes = [
@@ -327,7 +329,13 @@ const userRoutes = [
 	{ path: path.CITY, component: CityMaster },//not party wise
 	{ path: path.CITY_LIST, component: CityList },//not party wise
 
+	{ path: path.TARGET_UPLOAD, component: TargetUpload },
+	{ path: path.TARGET_UPLOAD_LIST, component: TargetUploadList },
+
+
 	{ path: path.INVOICE_EXCEL_UPLOAD, component: InvoiceExcelUpload, isPartyWisePage: true },
+
+
 	{ path: path.RETAILER_EXCEL_UPLOAD, component: RetailerExcelUpload, isPartyWisePage: true },
 
 	{ path: path.IMPORT_EXCEL_FIELD_MAP, component: ImportExcelFieldMap, isPartyWisePage: true },

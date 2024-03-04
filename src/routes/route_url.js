@@ -113,6 +113,15 @@ export const CITY_LIST = "/CityList"
 
 export const IMPORT_EXCEL_FIELD_MAP = "/Import_ExcelFieldMap"
 
+
+
+export const TARGET_UPLOAD = "/Target_Upload"
+
+export const TARGET_UPLOAD_LIST = "/Target_Upload_List"
+
+
+
+
 export const INVOICE_EXCEL_UPLOAD = "/Invoice_Excel_Upload"
 export const RETAILER_EXCEL_UPLOAD = "/Retailer_Excel_Upload"
 

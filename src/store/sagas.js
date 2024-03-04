@@ -53,6 +53,9 @@ import ImportExcelPartyMap_Saga from "./Administrator/ImportExcelPartyMapRedux/s
 import CitySaga from "./Administrator/CityRedux/saga"
 import DiscountSaga from "./Administrator/DiscountRedux/saga"
 
+import TargetUploadSagaSaga from "./Administrator/TargetUploadRedux/saga"
+
+
 // *********************** Purchase ***********************
 import OrderPageSaga from "./Purchase/OrderPageRedux/saga"
 
@@ -223,6 +226,10 @@ export default function* rootSaga() {
 		fork(Cx_DD_DiffrenceReportSaga),
 		fork(SystemSettingSaga),
 		fork(PosRoleAccessSaga),
+		fork(TargetUploadSagaSaga),
+
+
+
 
 
 

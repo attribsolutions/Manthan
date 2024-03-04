@@ -386,6 +386,12 @@ export const ImportFieldAdd_Update_API = ({ jsonBody, updateId }) => put(`${url.
 
 export const ImportExcelType_API = () => get(url.IMPORT_EXCEL_TYPE)// update api
 
+
+//Target Upload API
+
+export const save_TargetUpload_API = ({ jsonBody }) => post(url.TARGET_UPLOAD, jsonBody)// post api
+
+
 // SubGroup API
 export const get_SubGroup_List_Api = () => get(url.SUBGROUP_API)// get api
 export const Post_SubGroupList_API = ({ jsonBody }) => post(url.SUBGROUP_API, jsonBody)// post api

@@ -264,6 +264,12 @@ export const System_Setting_List = url.SYSTEM_SETTING;
 
 
 
+export const Target_Upload = url.TARGET_UPLOAD_LIST;
+export const Target_Upload_List = url.TARGET_UPLOAD;
+
+
+
+
 //**************************** Reports ***********************************//
 
 export const OrderSummaryReport = url.ORDER_SUMMARY_REPORT;
