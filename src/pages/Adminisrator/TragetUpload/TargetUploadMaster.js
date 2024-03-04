@@ -110,8 +110,10 @@ const TargetUpload = (props) => {
         const extension = filename.substring(filename.lastIndexOf(".")).toLowerCase();
         if (extension === ".xlsx") {
             const readjson = await readExcelFile({ file: files[0] })
+
             //////////////////////////////////////// Check  Invoice  Item Contain Negative Value Or Not //////////////////////////////////////////////////////
-            const Negative_Value_Item_Array = readjson.filter(i => i.shouldRemove)
+            const Negative_Value_Item_Array = readjson.filter(i => i.RemoveField.length > 0)
+            debugger
             if (Negative_Value_Item_Array.length > 0) {
                 setNegativeFigureVerify({ Negative_Figure_Array: Negative_Value_Item_Array, Not_Verify_Negative_Figure: true })
             } else {
@@ -272,11 +274,22 @@ const TargetUpload = (props) => {
                                         {negativeFigureVerify.Not_Verify_Negative_Figure === false ? null : <div className="error-msg mt-0">
                                             <p>
                                                 <span style={{ fontWeight: "bold", fontSize: "14px" }} > Sheet Contains Negative Value:&nbsp;&nbsp;</span>
-                                                {negativeFigureVerify.Negative_Figure_Array?.map((i, index) => (
-                                                    <span key={index}>
-                                                        <span style={{ fontWeight: "bold" }}>{`${index + 1})`}</span>    {` ${i.Invoice_No}`}&nbsp;&nbsp;&nbsp;&nbsp;
-                                                    </span>
-                                                ))}
+                                            
+                                                <div style={{ whiteSpace: "nowrap" }}>
+                                                    {negativeFigureVerify.Negative_Figure_Array.map((item, index) => (
+                                                        item.RemoveField.map((field, fieldIndex) => (
+                                                            <div key={fieldIndex} style={{ display: "inline-block", marginRight: "10px" }}>
+                                                                <span style={{ fontWeight: "bold", display: "inline-block", marginRight: "5px" }}>{`${fieldIndex + 1})`}</span>
+                                                                {Object.keys(field).map((key) => (
+                                                                    <div key={key} style={{ display: "inline-block" }}>
+                                                                        <strong>{key}: </strong>
+                                                                        {field[key]}
+                                                                    </div>
+                                                                ))}
+                                                            </div>
+                                                        ))
+                                                    ))}
+                                                </div>
                                             </p>
                                         </div>}
                                     </details> : null}
