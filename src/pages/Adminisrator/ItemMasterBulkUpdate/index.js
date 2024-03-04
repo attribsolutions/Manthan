@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Col, FormGroup, Label, Row, } from "reactstrap";
 import { useHistory } from "react-router-dom";
@@ -45,6 +45,10 @@ const ItemMasterBulkUpdate = (props) => {
     const [tableData, setTableData] = useState([]);
     const [selectFieldNameDropOptions, setSelectFieldNameDropOptions] = useState([]);
 
+    const [fieldNameDropOptions, setFieldNameDropOptions] = useState([]);
+
+
+
     const { userAccess,
         SelectDropdown,
         goBtnLoading,
@@ -90,6 +94,15 @@ const ItemMasterBulkUpdate = (props) => {
         };
     }, [userAccess])
 
+    // Select Dropdown GeneralMasterSubType api call
+    useEffect(() => {
+        const jsonBody = JSON.stringify({
+            Company: _cfunc.loginCompanyID(),
+            TypeID: 102
+        });
+        dispatch(postSelect_Field_for_dropdown(jsonBody));
+    }, []);
+
     useEffect(() => {
         if (GroupList.length > 0 && SelectFieldName.label === "Group") {
             setSelectFieldNameDropOptions(createAndSortDropdownOptions(GroupList, 'id', 'Name'))
@@ -99,19 +112,29 @@ const ItemMasterBulkUpdate = (props) => {
         }
     }, [SelectFieldName, GroupList, BaseUnit])
 
+    const setFieldNameDropOptionsCallback = useCallback((options) => {
+        setFieldNameDropOptions(options);
+    }, [setFieldNameDropOptions]);
+
     useEffect(() => {
         if (SelectDropdown.length > 0) {
-            SelectDropdown.forEach(item => {
+            const updatedDropdown = SelectDropdown.map(item => {
                 if (["Group", "SAPUnit"].includes(item.Name)) {
-                    item.DataType = "dropdown";
-                } else if (["BarCode", "Length", "Breadth", "ShelfLife", "SAPItemCode", "Sequence", "Height",].includes(item.Name)) {
-                    item.DataType = "number";
+                    return { ...item, DataType: "dropdown" };
+                } else if (["BarCode", "Length", "Breadth", "ShelfLife", "SAPItemCode", "Sequence", "Height"].includes(item.Name)) {
+                    return { ...item, DataType: "number" };
                 } else {
-                    item.DataType = "string";
+                    return { ...item, DataType: "string" };
                 }
             });
+
+            setFieldNameDropOptionsCallback(updatedDropdown.map(data => ({
+                value: data.id,
+                label: data.Name,
+                DataType: data.DataType
+            })));
         }
-    }, [SelectDropdown]);
+    }, [SelectDropdown, setFieldNameDropOptionsCallback]);
 
     useEffect(() => {
         dispatch(commonPageFieldSuccess(null));
@@ -158,15 +181,6 @@ const ItemMasterBulkUpdate = (props) => {
             dispatch(getBaseUnit_ForDropDown());
         }
     }, [SelectFieldName])
-
-    // Select Dropdown GeneralMasterSubType api call
-    useEffect(() => {
-        const jsonBody = JSON.stringify({
-            Company: _cfunc.loginCompanyID(),
-            TypeID: 102
-        });
-        dispatch(postSelect_Field_for_dropdown(jsonBody));
-    }, []);
 
     //This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
@@ -264,11 +278,7 @@ const ItemMasterBulkUpdate = (props) => {
             .sort((a, b) => a.label.toLowerCase().localeCompare(b.label.toLowerCase()));
     };
 
-    const SelectDropdownOptions = SelectDropdown.map((data) => ({
-        value: data.id,
-        label: data.Name,
-        DataType: data.DataType
-    }));
+
 
     const GroupType_DropdownOptions = createAndSortDropdownOptions(GroupType, 'id', 'Name');
 
@@ -457,7 +467,7 @@ const ItemMasterBulkUpdate = (props) => {
                                             styles={{
                                                 menu: provided => ({ ...provided, zIndex: 2 })
                                             }}
-                                            options={SelectDropdownOptions}
+                                            options={fieldNameDropOptions}
                                             onChange={(event) => SelectFieldHandler(event)}
                                         />
                                     </Col>
