@@ -33,6 +33,8 @@ function* Get_TargetUpload_List_GenFunc() {                                   //
         id: SheetNo
       };
     });
+
+    debugger
     yield put(getTargetUploadListSuccess(NewResponse));
   } catch (error) { yield put(TargetUploadApiErrorAction()) }
 }

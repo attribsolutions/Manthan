@@ -6,16 +6,14 @@ import {
     commonPageFieldListSuccess,
 } from "../../../store/actions";
 import {
-    delete_GroupList_ID,
     editGroupID,
-    getGroupList,
     updateGroupIDSuccess
 } from "../../../store/Administrator/GroupRedux/action";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
 import { PageLoadingSpinner } from "../../../components/Common/CommonButton";
 import TargetUpload from "./TargetUploadMaster";
-import { deleteTargetUploadSuccess, getTargetUploadList, getTargetUploadListSuccess, saveTargetUploadMaster_Success } from "../../../store/Administrator/TargetUploadRedux/action";
+import { deleteTargetUploadSuccess, delete_TargetUpload_ID, getTargetUploadList, getTargetUploadListSuccess, saveTargetUploadMaster_Success } from "../../../store/Administrator/TargetUploadRedux/action";
 
 const TargetUploadList = () => {
 
@@ -24,20 +22,20 @@ const TargetUploadList = () => {
         (state) => ({
             listBtnLoading: state.GroupReducer.listBtnLoading,
             goBtnLoading: state.GroupReducer.goBtnLoading,
-            tableList: state.GroupReducer.groupList,
-            editData: state.GroupReducer.editData,
-            updateMsg: state.GroupReducer.updateMsg,
-            deleteMsg: state.GroupReducer.deleteMsg,
-            postMsg: state.GroupReducer.postMsg,
+            tableList: state.TargetUploadReducer.targetList,
+            editData: state.TargetUploadReducer.editData,
+            updateMsg: state.TargetUploadReducer.updateMsg,
+            deleteMsg: state.TargetUploadReducer.deleteMsg,
+            postMsg: state.TargetUploadReducer.postMsg,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList
         })
     );
 
     const action = {
-        getList: getGroupList,
+        getList: getTargetUploadList,
         editId: editGroupID,
-        deleteId: delete_GroupList_ID,
+        deleteId: delete_TargetUpload_ID,
         postSucc: saveTargetUploadMaster_Success,
         updateSucc: updateGroupIDSuccess,
         deleteSucc: deleteTargetUploadSuccess

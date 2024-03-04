@@ -11,7 +11,7 @@ import {
 
 const INIT_STATE = {
   postMsg: { Status: false },
-  groupList: [],
+  targetList: [],
   deleteMsg: { Status: false },
   editData: { Status: false },
   updateMsg: { Status: false },
@@ -47,7 +47,7 @@ const TargetUploadReducer = (state = INIT_STATE, action) => {
     case GET_TARGET_UPLOAD_LIST_SUCCESS:
       return {
         ...state,
-        groupList: action.payload,
+        targetList: action.payload,
         goBtnLoading: false,
       }
 
