@@ -6,18 +6,16 @@ import {
     commonPageFieldListSuccess,
 } from "../../../store/actions";
 import {
-    deleteGrouplistSuccess,
     delete_GroupList_ID,
     editGroupID,
     getGroupList,
-    getGroupListSuccess,
-    saveGroupMaster_Success,
     updateGroupIDSuccess
 } from "../../../store/Administrator/GroupRedux/action";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
 import { PageLoadingSpinner } from "../../../components/Common/CommonButton";
 import TargetUpload from "./TargetUploadMaster";
+import { deleteTargetUploadSuccess, getTargetUploadListSuccess, saveTargetUploadMaster_Success } from "../../../store/Administrator/TargetUploadRedux/action";
 
 const TargetUploadList = () => {
 
@@ -40,9 +38,9 @@ const TargetUploadList = () => {
         getList: getGroupList,
         editId: editGroupID,
         deleteId: delete_GroupList_ID,
-        postSucc: saveGroupMaster_Success,
+        postSucc: saveTargetUploadMaster_Success,
         updateSucc: updateGroupIDSuccess,
-        deleteSucc: deleteGrouplistSuccess
+        deleteSucc: deleteTargetUploadSuccess
     }
 
     useEffect(() => {
@@ -50,9 +48,8 @@ const TargetUploadList = () => {
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
         // dispatch(getGroupList());
-
         return () => {
-            dispatch(getGroupListSuccess([]));
+            dispatch(getTargetUploadListSuccess([]));
             dispatch(commonPageFieldListSuccess(null))
         }
     }, []);
@@ -71,7 +68,6 @@ const TargetUploadList = () => {
                     ButtonMsgLable={"Target Upload"}
                     deleteName={"Name"}
                 />
-
             }
         </React.Fragment>
     )

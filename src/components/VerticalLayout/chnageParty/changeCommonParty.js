@@ -10,6 +10,7 @@ import { useRef } from "react";
 import { showToastAlert } from "../../../helpers/axios_Config";
 import { alertMessages } from "../../Common/CommonErrorMsg/alertMsg";
 import { hideBtnCss } from "../../Common/ListActionsButtons";
+import { Col } from "reactstrap";
 
 const ChangeCommonParty = (props) => {
 
@@ -129,7 +130,7 @@ const ChangeCommonParty = (props) => {
             {isDrawerOpen && (
                 <div className="mini-drawer">
                     <div className="c_modal-content">
-                        <div className="modal-header c_card_filter text-black"                                >
+                        <div style={{ boxShadow: "none" }} className="modal-header c_card_filter text-black"                                >
                             <strong> Party selection </strong>
                             <button
                                 type="button"
@@ -159,21 +160,18 @@ const ChangeCommonParty = (props) => {
                             </div>}
                         </div>
                         <div className="modal-footer d-flex justify-content-between align-items-center">
-                            <C_Button
+                            {selectedParty.value > 0 ? <C_Button
                                 type="button"
-
                                 className={`${hideBtnCss} px-2`}
+                                title={"Party Location"}
                                 onClick={() => {
                                     if (selectedParty && selectedParty.Latitude !== undefined && selectedParty.Longitude !== undefined && selectedParty.Latitude !== null && selectedParty.Longitude !== null) {
                                         window.open(`https://maps.google.com/?q=${selectedParty.Latitude},${selectedParty.Longitude}`, "_blank");
                                     }
-
-
                                 }}
-
                             >
                                 <i className="bx bx-map-pin"></i>
-                            </C_Button>
+                            </C_Button> : <Col></Col>}
 
                             <div className="">
                                 <C_Button
@@ -194,6 +192,8 @@ const ChangeCommonParty = (props) => {
                                 </C_Button>
                             </div>
                         </div>
+
+
 
 
                     </div>
