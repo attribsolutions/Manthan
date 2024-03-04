@@ -58,7 +58,7 @@ export const readExcelFile = async ({ file, compareParameter, ItemList = [] }) =
             }
           }
         }
-        debugger
+        
         if (c1.ControlTypeName === "Date") {
           let date = null
           if (Number.isInteger(r1[c1.Value])) {
@@ -105,7 +105,7 @@ export const readExcelFile = async ({ file, compareParameter, ItemList = [] }) =
         }
 
         else if (!(regExp.test(r1[c1.Value]))) {
-          debugger
+          
           if (!((Number.isInteger(r1[c1.Value]) || (isFloat(r1[c1.Value]))) && (r1[c1.Value] <= 0))) {
             invalidMsg.push(`${c1.Value} :${r1[c1.Value]} is invalid Format`)
           }

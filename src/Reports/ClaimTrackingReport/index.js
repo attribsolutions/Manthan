@@ -90,7 +90,7 @@ const ClaimTrackingReport = (props) => {
             if (element.dataField === "CreditNoteUpload") {
 
                 let formatter = element.formatter = (cell, row) => {
-                    debugger
+                    
                     if (cell !== "") {
                         return <a href={cell} style={{ cursor: "pointer", }} target="_blank" rel="noopener noreferrer" > Download Credit Note </a>
 
@@ -105,7 +105,7 @@ const ClaimTrackingReport = (props) => {
     useEffect(() => {
         if (btnMode === "downloadExcel") {
             if (Data.length > 0) {
-                debugger
+                
                 ExcelReportComponent({      // Download CSV
                     pageField,
                     excelTableData: Data,

@@ -47,7 +47,7 @@ const CommonListPage = (props) => {
     getListbodyFunc = () => { },
     MasterModal,
     masterPath,
-    mobaileDeleteApiFinc
+    mobaileDeleteApiFinc,
   } = props;
 
   const { PageFieldMaster = [] } = { ...pageField };
@@ -63,7 +63,6 @@ const CommonListPage = (props) => {
       breadcrumbReturnFunc({ dispatch, userAcc, newBtnPath: masterPath, pageField: pageField });
     }
   }, [userAccess]);
-
 
   useEffect(() => {
 
@@ -87,9 +86,13 @@ const CommonListPage = (props) => {
       listObj = {}
     })
     dispatch(CommonBreadcrumbDetails({ downBtnData: downList, defaultDownBtnData: listObj2 }))
-    dispatch(BreadcrumbShowCountlabel(`Count:${tableList.length}`));
   }, [tableList])
 
+  useEffect(() => {
+    if ((tableList.length > 0) && (pageField?.CountLabel === true)) {
+      dispatch(BreadcrumbShowCountlabel(`Count:${tableList.length}`));
+    }
+  }, [tableList, pageField])
 
   useEffect(async () => {// This UseEffect => UpadateModal Success/Unsucces  Show and Hide Control Alert_modal
 
