@@ -82,7 +82,7 @@ const PartyMasterBulkUpdate = (props) => {
 
     const values = { ...state.values }
     const { fieldLabel } = state;
-    debugger
+    
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
         postMsg,

@@ -1,20 +1,37 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Col, FormGroup, Input, Label, Row, } from "reactstrap";
+import { Col, FormGroup, Label, Row, } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import { Change_Button, Go_Button, SaveButton, } from "../../../components/Common/CommonButton";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { mode, pageId } from "../../../routes/index"
 import { MetaTags } from "react-meta-tags";
-import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess, get_Group_By_GroupType_ForDropDown, get_Group_By_GroupType_ForDropDown_Success, postSelect_Field_for_dropdown } from "../../../store/actions";
-import { C_Select } from "../../../CustomValidateForm";
-import { ItemWiseUpdateGoButton_Action, ItemWiseUpdateGoButton_Success, ItemWiseUpdate_Save_Action, ItemWiseUpdate_Save_Success } from "../../../store/Administrator/ItemWiseUpdateRedux/action";
+import {
+    BreadcrumbShowCountlabel,
+    commonPageField,
+    commonPageFieldSuccess,
+    getBaseUnit_ForDropDown,
+    get_Group_By_GroupType_ForDropDown,
+    get_Group_By_GroupType_ForDropDown_Success,
+    postSelect_Field_for_dropdown
+} from "../../../store/actions";
+import { CInput, C_Select, charRegx } from "../../../CustomValidateForm";
+import {
+    ItemWiseUpdateGoButton_Action,
+    ItemWiseUpdateGoButton_Success,
+    ItemWiseUpdate_Save_Action,
+    ItemWiseUpdate_Save_Success
+} from "../../../store/Administrator/ItemWiseUpdateRedux/action";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
-import { getGroupTypeslist, getGroupTypeslistSuccess } from "../../../store/Administrator/GroupTypeRedux/action";
+import {
+    getGroupTypeslist,
+    getGroupTypeslistSuccess
+} from "../../../store/Administrator/GroupTypeRedux/action";
 import { SubGroup_By_Group_DropDown_API } from "../../../helpers/backend_helper";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 import GlobalCustomTable from "../../../GlobalCustomTable"
+
 const ItemMasterBulkUpdate = (props) => {
 
     const dispatch = useDispatch();
@@ -25,22 +42,33 @@ const ItemMasterBulkUpdate = (props) => {
     const [SelectFieldName, setSelectFieldName] = useState([]);
     const [groupTypeSelect, setGroupTypeSelect] = useState({ value: 1, label: "Primary" });
     const [forceRefresh, setForceRefresh] = useState(false);
+    const [tableData, setTableData] = useState([]);
+    const [selectFieldNameDropOptions, setSelectFieldNameDropOptions] = useState([]);
 
-    const reducers = useSelector(
-        (state) => ({
-            GroupType: state.GroupTypeReducer.GroupType,
-            GroupTypeLoading: state.GroupTypeReducer.goBtnLoading,
-            GroupList: state.ItemMastersReducer.GroupList,
-            SelectDropdown: state.PartyMasterBulkUpdateReducer.SelectField,
-            goBtnLoading: state.ItemWiseUpdateReducer.loading,
-            goButtonData: state.ItemWiseUpdateReducer.goButtonData,
-            postMsg: state.ItemWiseUpdateReducer.postMsg,
-            saveBtnloading: state.ItemWiseUpdateReducer.saveBtnloading,
-            userAccess: state.Login.RoleAccessUpdateData,
-            pageField: state.CommonPageFieldReducer.pageField
-        })
-    );
-    const { userAccess, SelectDropdown, goBtnLoading, goButtonData = [], postMsg, saveBtnloading, GroupType, GroupList, GroupTypeLoading } = reducers;
+    const { userAccess,
+        SelectDropdown,
+        goBtnLoading,
+        goButtonData = [],
+        postMsg,
+        saveBtnloading,
+        GroupType,
+        GroupList,
+        GroupTypeLoading,
+        BaseUnit } = useSelector(
+            (state) => ({
+                GroupType: state.GroupTypeReducer.GroupType,
+                GroupTypeLoading: state.GroupTypeReducer.goBtnLoading,
+                GroupList: state.ItemMastersReducer.GroupList,
+                SelectDropdown: state.PartyMasterBulkUpdateReducer.SelectField,
+                goBtnLoading: state.ItemWiseUpdateReducer.loading,
+                goButtonData: state.ItemWiseUpdateReducer.goButtonData,
+                postMsg: state.ItemWiseUpdateReducer.postMsg,
+                saveBtnloading: state.ItemWiseUpdateReducer.saveBtnloading,
+                userAccess: state.Login.RoleAccessUpdateData,
+                BaseUnit: state.ItemMastersReducer.BaseUnit,
+                pageField: state.CommonPageFieldReducer.pageField
+            })
+        );
 
     // Featch Modules List data  First Rendering
     const location = { ...history.location }
@@ -63,6 +91,29 @@ const ItemMasterBulkUpdate = (props) => {
     }, [userAccess])
 
     useEffect(() => {
+        if (GroupList.length > 0 && SelectFieldName.label === "Group") {
+            setSelectFieldNameDropOptions(createAndSortDropdownOptions(GroupList, 'id', 'Name'))
+        }
+        else if (BaseUnit.length > 0 && SelectFieldName.label === "SAPUnit") {
+            setSelectFieldNameDropOptions(createAndSortDropdownOptions(BaseUnit, 'id', 'Name'))
+        }
+    }, [SelectFieldName, GroupList, BaseUnit])
+
+    useEffect(() => {
+        if (SelectDropdown.length > 0) {
+            SelectDropdown.forEach(item => {
+                if (["Group", "SAPUnit"].includes(item.Name)) {
+                    item.DataType = "dropdown";
+                } else if (["BarCode", "Length", "Breadth", "ShelfLife", "SAPItemCode", "Sequence", "Height", "Grammage"].includes(item.Name)) {
+                    item.DataType = "number";
+                } else {
+                    item.DataType = "string";
+                }
+            });
+        }
+    }, [SelectDropdown]);
+
+    useEffect(() => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(pageId.ITEM_MASTER_BULK_UPDATE));
         dispatch(getGroupTypeslist());
@@ -78,6 +129,33 @@ const ItemMasterBulkUpdate = (props) => {
     useEffect(() => {
         if (SelectFieldName.label === "Group") {
             dispatch(get_Group_By_GroupType_ForDropDown(groupTypeSelect.value))
+        }
+    }, [SelectFieldName])
+
+    useEffect(() => {
+
+        if (goButtonData.length > 0 && SelectFieldName.label === "SAPUnit") {
+            const updatedGoButtonData = goButtonData.map((i) => {
+                const matchingBaseUnit = BaseUnit.find((index) => Number(i.SAPUnitID) === index.id);
+
+                // If a match is found, update i.SAPUnitID with index.Name
+                if (matchingBaseUnit) {
+                    return {
+                        ...i,
+                        SAPUnitID: matchingBaseUnit.Name
+                    };
+                }
+                return i;
+            });
+            setTableData(updatedGoButtonData);
+        } else {
+            setTableData(goButtonData);
+        }
+    }, [goButtonData, SelectFieldName])
+
+    useEffect(() => {
+        if (SelectFieldName.label === "SAPUnit") {
+            dispatch(getBaseUnit_ForDropDown());
         }
     }, [SelectFieldName])
 
@@ -104,6 +182,7 @@ const ItemMasterBulkUpdate = (props) => {
         else if (postMsg.Status === true) {
             dispatch(ItemWiseUpdate_Save_Success({ Status: false }));
             dispatch(ItemWiseUpdateGoButton_Success([]));
+            setTableData([])
             customAlert({
                 Type: 4,
                 Message: JSON.stringify(postMsg.Message),
@@ -116,10 +195,35 @@ const ItemMasterBulkUpdate = (props) => {
         setGroupTypeSelect({ value: 1, label: "Primary" })
     }
 
-    function tableSelectHandler(event, row) {
-        let input = event.target.value;
-        row.Newvalue = input
-    }
+    //  function to handle the goButtonHandler logic
+    const handleGoButton = () => {
+
+        if (SelectFieldName.length === 0) {
+            customAlert({
+                Type: 4,
+                Message: alertMessages.fieldSelectionIsRequired
+            });
+            return;
+        }
+
+        const jsonBody = JSON.stringify({
+            "Type": SelectFieldName.label === "SAPUnit" ? "SAPUnitID" : SelectFieldName.label,
+            "GroupType": groupTypeSelect.value
+        });
+
+        dispatch(ItemWiseUpdateGoButton_Action(jsonBody));
+    };
+
+    const AllDropdownHandler = (event, row) => {
+
+        if (SelectFieldName.label === "Group") {
+            GroupNameHandler(event, row)
+
+        } else if (SelectFieldName.label === "SAPUnit") {
+            row.Newvalue = event.value
+        }
+        return [];
+    };
 
     function GroupTypeHandler(event) {
         setGroupTypeSelect(event)
@@ -131,9 +235,9 @@ const ItemMasterBulkUpdate = (props) => {
         try {
             const response = await SubGroup_By_Group_DropDown_API(GroupID.value);
             if (response.StatusCode === 200) {
-
+                
                 row.Newvalue = GroupID.value
-                row.selectGroup = GroupID
+                row.DropdownSetValue = GroupID
                 row.subGroupOptions = response.Data
                     .map(item => ({ value: item.id, label: item.Name }))
                     .sort((a, b) => a.label.toLowerCase().localeCompare(b.label.toLowerCase()));
@@ -151,7 +255,7 @@ const ItemMasterBulkUpdate = (props) => {
     };
 
     function SubGroupType_Handler(event, row) {
-        row.NewSubGroup = event.value
+        row.NewValue_2 = event.value
     }
 
     const createAndSortDropdownOptions = (list, valueKey = 'id', labelKey = 'Name') => {
@@ -160,51 +264,34 @@ const ItemMasterBulkUpdate = (props) => {
             .sort((a, b) => a.label.toLowerCase().localeCompare(b.label.toLowerCase()));
     };
 
-    //  function to handle the goButtonHandler logic
-    const handleGoButton = () => {
-        if (SelectFieldName.length === 0) {
-            customAlert({
-                Type: 4,
-                Message: alertMessages.fieldSelectionIsRequired
-            });
-            return;
-        }
+    const SelectDropdownOptions = SelectDropdown.map((data) => ({
+        value: data.id,
+        label: data.Name,
+        DataType: data.DataType
+    }));
 
-        if (SelectFieldName.label === "Group" && groupTypeSelect.length === 0) {
-            customAlert({
-                Type: 4,
-                Message: alertMessages.groupTypeIsRequired
-            });
-            return;
-        }
-
-        const jsonBody = JSON.stringify({
-            "Type": SelectFieldName.label,
-            "GroupType": groupTypeSelect.value
-        });
-
-        dispatch(ItemWiseUpdateGoButton_Action(jsonBody));
-    };
+    const GroupType_DropdownOptions = createAndSortDropdownOptions(GroupType, 'id', 'Name');
 
     //  function to create the Newvalue column
     const createNewValueColumn = () => {
         return {
             text: `New ${SelectFieldName.label === undefined ? "Value" : SelectFieldName.label}`,
             dataField: "Newvalue",
-            formatExtraData: { forceRefresh },
-            formatter: (cellContent, row, key) => {
+            formatExtraData: { forceRefresh, dropdownOptions: selectFieldNameDropOptions, tableData: tableData },
+            formatter: (cellContent, row, key, { dropdownOptions, tableData }) => {
+
                 return (
                     <>
-                        {SelectFieldName.label === "Group" ?
+                        {SelectFieldName.DataType === "dropdown" ?
 
                             <div style={{ width: "180px" }}>
                                 <Col>
                                     <FormGroup>
                                         <C_Select
                                             key={row.Newvalue}
-                                            value={(row?.selectGroup === "") ? { value: "", label: "Select..." } : row.selectGroup}
-                                            options={Group_DropdownOptions}
-                                            onChange={(event) => GroupNameHandler(event, row, key)}
+                                            value={row.DropdownSetValue}
+                                            options={dropdownOptions}
+                                            onChange={(event) => AllDropdownHandler(event, row, tableData)}
                                         />
                                     </FormGroup>
                                 </Col>
@@ -213,13 +300,16 @@ const ItemMasterBulkUpdate = (props) => {
                             <div style={{ width: "180px" }}>
                                 <Col>
                                     <FormGroup>
-                                        <Input
+                                        <CInput
                                             id={key}
                                             type="text"
+                                            cpattern={charRegx}
                                             placeholder={`Enter New ${SelectFieldName.label}`}
                                             defaultValue={row.Newvalue}
                                             className="col col-sm "
-                                            onChange={(event) => tableSelectHandler(event, row)}
+                                            onChange={(event) => {
+                                                row.Newvalue = event.target.value
+                                            }}
                                         />
                                     </FormGroup>
                                 </Col>
@@ -255,10 +345,6 @@ const ItemMasterBulkUpdate = (props) => {
         };
     };
 
-    const SelectDropdownOptions = createAndSortDropdownOptions(SelectDropdown);
-    const GroupType_DropdownOptions = createAndSortDropdownOptions(GroupType, 'id', 'Name');
-    const Group_DropdownOptions = createAndSortDropdownOptions(GroupList, 'id', 'Name');
-
     const pagesListColumns = [
         {
             text: "Group",
@@ -271,6 +357,7 @@ const ItemMasterBulkUpdate = (props) => {
         {
             text: "Name",
             dataField: "ItemName",
+            sort: true
         },
         {
             text: SelectFieldName.label,
@@ -281,6 +368,7 @@ const ItemMasterBulkUpdate = (props) => {
     if (SelectFieldName.label === "Group") {
         pagesListColumns.pop();
     }
+
     pagesListColumns.push(createNewValueColumn());
 
     if (SelectFieldName.label === "Group") {
@@ -294,14 +382,14 @@ const ItemMasterBulkUpdate = (props) => {
         try {
             const updatedData = [];
 
-            goButtonData.forEach(i => {
+            tableData.forEach(i => {
 
                 if (i.Newvalue) {
                     const arr = {
                         ItemName: i.ItemName,
                         ItemID: i.id,
                         Value1: i.Newvalue,
-                        Value2: i.NewSubGroup
+                        Value2: i.NewValue_2
 
                     };
                     updatedData.push(arr);
@@ -335,7 +423,7 @@ const ItemMasterBulkUpdate = (props) => {
                 }
 
                 const responseData = {
-                    Type: SelectFieldName.label,
+                    Type: SelectFieldName.label === "SAPUnit" ? "SAPUnitID" : SelectFieldName.label,
                     UpdatedData: updatedData
                 };
 
@@ -403,7 +491,7 @@ const ItemMasterBulkUpdate = (props) => {
                             <Col sm="2">
                                 <FormGroup className=" row mt-2 " >
                                     <Col sm="1" className="mx-6">
-                                        {goButtonData.length === 0 ?
+                                        {tableData.length === 0 ?
                                             <Go_Button
                                                 onClick={handleGoButton}
                                                 loading={goBtnLoading}
@@ -411,6 +499,7 @@ const ItemMasterBulkUpdate = (props) => {
                                             :
                                             <Change_Button onClick={(e) => {
                                                 dispatch(ItemWiseUpdateGoButton_Success([]));
+                                                setTableData([]);
 
                                             }} />
                                         }
@@ -424,9 +513,15 @@ const ItemMasterBulkUpdate = (props) => {
 
                     <GlobalCustomTable
                         keyField="id"
-                        data={goButtonData}
+                        data={tableData}
                         columns={pagesListColumns}
                         classes={"custom-table"}
+                        defaultSorted={[
+                            {
+                                dataField: "ItemName",
+                                order: "asc",
+                            },
+                        ]}
                         noDataIndication={
                             <div className="text-danger text-center ">
                                 Record Not available
@@ -437,8 +532,7 @@ const ItemMasterBulkUpdate = (props) => {
                         }}
                     />
 
-
-                    {goButtonData.length > 0 &&
+                    {tableData.length > 0 &&
                         <SaveButtonDraggable>
                             <SaveButton pageMode={pageMode}
                                 loading={saveBtnloading}
@@ -449,7 +543,6 @@ const ItemMasterBulkUpdate = (props) => {
                         </SaveButtonDraggable>
                     }
                 </form>
-
             </div>
 
         </React.Fragment >

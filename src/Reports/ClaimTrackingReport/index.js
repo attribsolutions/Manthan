@@ -14,7 +14,6 @@ import DynamicColumnHook from "../../components/Common/TableCommonFunc";
 import { getClaimTrackingEntrySuccess, getClaimTrackingEntrylist } from "../../store/Accounting/ClaimTrackingEntryRedux/action";
 import { C_DatePicker, C_Select } from "../../CustomValidateForm";
 import { ExcelReportComponent } from "../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS";
-import { API_URL_LIVE } from "../../routes/route_url";
 
 const ClaimTrackingReport = (props) => {
 
@@ -91,7 +90,7 @@ const ClaimTrackingReport = (props) => {
             if (element.dataField === "CreditNoteUpload") {
 
                 let formatter = element.formatter = (cell, row) => {
-                    debugger
+                    
                     if (cell !== "") {
                         return <a href={cell} style={{ cursor: "pointer", }} target="_blank" rel="noopener noreferrer" > Download Credit Note </a>
 
@@ -106,7 +105,7 @@ const ClaimTrackingReport = (props) => {
     useEffect(() => {
         if (btnMode === "downloadExcel") {
             if (Data.length > 0) {
-                debugger
+                
                 ExcelReportComponent({      // Download CSV
                     pageField,
                     excelTableData: Data,

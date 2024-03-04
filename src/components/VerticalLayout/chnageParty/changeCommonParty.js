@@ -153,7 +153,7 @@ const ChangeCommonParty = (props) => {
                                 // isDisabled={changeButtonShow && !(selectedParty.value === 0)}
                                 onChange={(e) => setSelectedParty(e)}
                             />
-                            {commonPartyDropSelect.value > 0 && <div className="mt-2">
+                            {selectedParty.value > 0 && <div className="mt-2">
                                 <span style={{ display: 'block' }}><strong>Address: </strong>{selectedParty.Address}</span>
                                 <span style={{ display: 'block' }}> <strong>Contact: </strong> <a href={"tel:" + selectedParty.MobileNo}>{selectedParty.MobileNo}</a></span>
                             </div>}
@@ -163,7 +163,13 @@ const ChangeCommonParty = (props) => {
                                 type="button"
 
                                 className={`${hideBtnCss} px-2`}
-                                onClick={() => { !(selectedParty.Latitude === null && selectedParty.Longitude == null) && window.open(`https://maps.google.com/?q=${selectedParty.Latitude},${selectedParty.Longitude}`, "_blank") }}
+                                onClick={() => {
+                                    if (selectedParty && selectedParty.Latitude !== undefined && selectedParty.Longitude !== undefined && selectedParty.Latitude !== null && selectedParty.Longitude !== null) {
+                                        window.open(`https://maps.google.com/?q=${selectedParty.Latitude},${selectedParty.Longitude}`, "_blank");
+                                    }
+
+
+                                }}
 
                             >
                                 <i className="bx bx-map-pin"></i>

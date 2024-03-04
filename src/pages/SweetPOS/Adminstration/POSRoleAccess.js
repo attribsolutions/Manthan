@@ -218,7 +218,7 @@ const POSRoleAccess = (props) => {
                                         value={cell}
                                         id={`Date_${row.id}_${key}`}
                                         onChange={(e, date) => {
-                                            debugger
+                                            
                                             row[i.dataField] = date
                                         }}
                                     />

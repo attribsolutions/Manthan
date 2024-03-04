@@ -13,7 +13,7 @@ function* StockEntry_API_GenFunc({ config }) { // Save GRN  genrator function
 
 
 function* StockCount_API_GenFunc({ config }) { // Save GRN  genrator function
-    debugger
+    
     try {
         const response = yield call(apiCall.StockCount_Post_API, config);
 

@@ -4,7 +4,7 @@ import * as actionType from "./actionType";
 import * as action from "./action";
 import { url } from "../../../routes";
 import { date_dmy_func } from "../../../components/Common/CommonFunction";
-import { API_URL_LIVE } from "../../../routes/route_url";
+import SERVER_HOST_PATH from "../../../helpers/_serverPath";
 
 // List API
 function* Get_ClaimTrackingEntry_List_GenFunc({ config }) {     // getList API
@@ -16,7 +16,7 @@ function* Get_ClaimTrackingEntry_List_GenFunc({ config }) {     // getList API
 
         response.Data.map((i) => {
 
-            i.CreditNoteUpload = ((i.CreditNoteUpload !== "") || (i.CreditNoteUpload !== null)) ? `${API_URL_LIVE}/media/${i.CreditNoteUpload}` : null
+            i.CreditNoteUpload = ((i.CreditNoteUpload !== "") || (i.CreditNoteUpload !== null)) ? `${SERVER_HOST_PATH}/media/${i.CreditNoteUpload}` : null
             i.CreditNoteDate = date_dmy_func(i.CreditNoteDate);
             i.ClaimSummaryDate = date_dmy_func(i.ClaimSummaryDate);
             i.Date = date_dmy_func(i.Date);

@@ -3,7 +3,7 @@ import { Card, CardBody, CardHeader, Col, Container, FormGroup, Input, Label } f
 
 import { MetaTags } from "react-meta-tags";
 import { useDispatch, useSelector } from "react-redux";
-import { Breadcrumb_inputName, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
+import { BreadcrumbShowCountlabel, Breadcrumb_inputName, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import { goButtonPartyItemAddPageSuccess, goButtonPartyItemAddPage, savePartyItemsAction, savePartyItemsActionSuccess, editPartyItemIDSuccess, channalItemViewDetailAction } from "../../../store/Administrator/PartyItemsRedux/action";
 import { globalTableSearchProps } from "../../../components/Common/SearchBox/MySearch";
@@ -205,7 +205,7 @@ const PartyItems = (props) => {
 	}, [tableList]);
 
 	const filterdItemWise_tableData = useMemo(() => {
-		return groupWiseItemArray
+		const groupWiseItemNewArray = groupWiseItemArray
 			.map(({ items, ...rest }) => ({
 				...rest,
 				items: items.filter((item) => {
@@ -216,6 +216,13 @@ const PartyItems = (props) => {
 				}),
 			}))
 			.filter((row) => row.items.length > 0);
+
+		const numberOfGroups = groupWiseItemNewArray.length;
+
+		const numberOfItems = groupWiseItemNewArray.reduce((total, group) => total + group.items.length, 0);
+
+		dispatch(BreadcrumbShowCountlabel(`Groups:${numberOfGroups} Count:${numberOfItems}`));
+		return groupWiseItemNewArray
 	}, [searchQuery, groupWiseItemArray]);
 
 	const tableColumns = [
@@ -320,8 +327,6 @@ const PartyItems = (props) => {
 				..._cfunc.loginJsonBody(),
 				PartyID: commonPartyDropSelect.value,
 				PartyTypeID: channelTypeSelect.value
-
-
 			};
 			dispatch(goButtonPartyItemAddPage({ jsonBody, subPageMode }));
 		}

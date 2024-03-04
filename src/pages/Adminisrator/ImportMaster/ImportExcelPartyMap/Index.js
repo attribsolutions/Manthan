@@ -133,7 +133,7 @@ const ImportExcelPartyMap = (props) => {
     }, [pageField])
 
     useEffect(() => {
-        debugger
+        
         if (values.MapType.value === 2) {
             const newItemList = ItemList.map(i => ({
                 "party": commonPartyDropSelect.value,

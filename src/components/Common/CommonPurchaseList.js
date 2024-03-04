@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Input, Modal, Spinner } from "reactstrap";
+import { Button, Modal, Spinner } from "reactstrap";
 import { useDispatch } from "react-redux";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
@@ -17,9 +17,7 @@ import { url } from "../../routes";
 import { C_Button } from "./CommonButton";
 import GlobalCustomTable from "../../GlobalCustomTable";
 import ExtraTableWrapper from "../../GlobalCustomTable/TableWrapper";
-import { object } from "prop-types";
 import SaveButtonDraggable from "./saveButtonDraggable";
-
 
 export async function isAlertFunc(type, Msg) {
   await customAlert({
@@ -36,7 +34,7 @@ const CommonPurchaseList = (props) => {
 
   const [userAccState, setUserAccState] = useState("");
   const [modal_edit, setmodal_edit] = useState(false);
-  // const [tableList, settableList] = useState([]);
+
   const {
     editData = { Data: "" },
     updateMsg = { Status: false },
@@ -115,14 +113,20 @@ const CommonPurchaseList = (props) => {
       })
     );
 
-    if (totalAmountShow === true && tableList.length > 0) {
-      dispatch(BreadcrumbShowCountlabel(`Count:${tableList.length} ₹ ${TotalAmount_Func(tableList)}`));
-    }
-    else {
-      dispatch(BreadcrumbShowCountlabel(`Count:${tableList.length}`));
-    }
-
   }, [tableList]);
+
+  useEffect(() => {
+    
+    if ((tableList.length > 0) && (pageField?.CountLabel === true)) {
+      if (totalAmountShow === true) {
+        dispatch(BreadcrumbShowCountlabel(`Count:${tableList.length} ₹ ${TotalAmount_Func(tableList)}`));
+      }
+      else if (pageField?.CountLabel === true) {
+        dispatch(BreadcrumbShowCountlabel(`Count:${tableList.length}`));
+      }
+    }
+  }, [tableList, pageField])
+
 
   // This UseEffect => UpadateModal Success/Unsucces  Show and Hide Control Alert_modal
   useEffect(() => {

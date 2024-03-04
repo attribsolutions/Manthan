@@ -44,7 +44,7 @@ export const currentDate_dmy = date_dmy_func();
 
 export function isDissableForParticularDate(date, type) {
 
-  debugger
+  
   const currentDate = new Date();
   const currentDay = currentDate.getDate();
   const lastDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate();
@@ -487,7 +487,7 @@ export function hasDecimalCheckFunc(input) {
 }
 
 export const isButtonEnable = ({ ConditionDetails = {} }) => {   /////// button disable based on condiition ///////
-  debugger
+  
   let isEnable = false;
   let isEnablePriviousAlert = false;
   const CustomerPartyTypeID = loginUserDetails().PartyTypeID
