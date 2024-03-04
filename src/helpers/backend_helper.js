@@ -391,6 +391,11 @@ export const ImportExcelType_API = () => get(url.IMPORT_EXCEL_TYPE)// update api
 
 export const save_TargetUpload_API = ({ jsonBody }) => post(url.TARGET_UPLOAD, jsonBody)// post api
 
+export const Get_Target_Upload = () => get(url.GET_TARGET_UPLOAD)// update api
+
+
+
+
 
 // SubGroup API
 export const get_SubGroup_List_Api = () => get(url.SUBGROUP_API)// get api

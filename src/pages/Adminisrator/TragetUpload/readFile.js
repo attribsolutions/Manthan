@@ -19,7 +19,11 @@ export const readExcelFile = async ({ file }) => {
       }
     });
     jsonResult.forEach((i) => {
+      let RemoveField = []
       for (let key in i) {
+        if ((Number.isInteger(i[key])) && i[key] <= 0) {   //  - figure 
+          RemoveField.push({ [key]: i[key] })
+        }
         if (Object.prototype.hasOwnProperty.call(i, key)) {
           if (key.trim() !== key) {
             i[key.trim()] = i[key];
@@ -27,7 +31,10 @@ export const readExcelFile = async ({ file }) => {
           }
         }
       }
+      i["RemoveField"] = RemoveField
+
     })
+
     return jsonResult
   } catch (e) { }
 

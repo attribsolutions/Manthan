@@ -6,9 +6,8 @@ import {
   saveTargetUploadMaster_Success,
 } from "./action";
 import {
+  Get_Target_Upload,
   del_Group_List_API,
-  get_Group_List_Api,
-  save_Group_API,
   save_TargetUpload_API,
 } from "../../../helpers/backend_helper";
 import {
@@ -26,7 +25,7 @@ function* Save_Method_ForTargetUpload_GenFun({ config }) {              // Save 
 
 function* Get_TargetUpload_List_GenFunc() {                                   // getList API
   try {
-    const response = yield call(get_Group_List_Api);
+    const response = yield call(Get_Target_Upload);
     yield put(getTargetUploadListSuccess(response.Data));
   } catch (error) { yield put(TargetUploadApiErrorAction()) }
 }
