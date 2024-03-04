@@ -18,6 +18,7 @@ import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { Verifiy_Button } from "../../../components/Common/CommonButton";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 import { saveTargetUploadMaster, saveTargetUploadMaster_Success } from "../../../store/Administrator/TargetUploadRedux/action";
+import { url } from "../../../routes";
 
 const TargetUpload = (props) => {
 
@@ -81,6 +82,7 @@ const TargetUpload = (props) => {
             setisIgnoreNegativeValue(false)
             setNegativeFigureVerify({ Negative_Figure_Array: [], Not_Verify_Negative_Figure: undefined });
             document.getElementById("demo1").style.border = "";
+            history.push({ pathname: url.TARGET_UPLOAD_LIST })
         }
         else if (postMsg.Status === true) {
             setselectedFiles([]);
