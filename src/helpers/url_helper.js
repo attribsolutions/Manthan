@@ -183,6 +183,14 @@ export const IMPORT_FIELD_ADD_SAVE = '/ImportField'               //save
 export const IMPORT_FIELD_ADD_FILTER = '/ImportFieldList'         //list
 export const IMPORT_EXCEL_TYPE = '/ImportExcelTypesList'         //list
 
+
+
+export const TARGET_UPLOAD = '/TargetUploads'         //list
+
+
+
+
+
 //TermsAndCondtions API
 export const TERMSANDCONDITIONS_API = '/TermsAndCondtions'
 

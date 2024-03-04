@@ -169,7 +169,7 @@ const PageMaster = (props) => {
       }
 
       if (hasEditVal) {
-        
+
         let pageType_ID = hasEditVal.PageType;
 
         setEditData(hasEditVal);
@@ -482,7 +482,7 @@ const PageMaster = (props) => {
       })
       return;
     }
-    
+
     const jsonBody = JSON.stringify({
 
       Name: values.Name,
@@ -706,7 +706,7 @@ const PageMaster = (props) => {
                                   <Select
                                     value={pageType_DropdownSelect}
                                     options={PageType_DropdownOption}
-                                    isDisabled={(actualPagePath) && true}
+                                    // isDisabled={(actualPagePath) && true}
                                     autoComplete="off"
                                     onChange={(e) => {
                                       PageType_DropdownSelectHandller(e);

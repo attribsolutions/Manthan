@@ -125,6 +125,9 @@ import SystemSettingReducer from "./Utilites/SystemSettingRedux/reducer"
 
 import PosRoleAccessReducer from "./SweetPOSStore/Administrator/POSRoleAccessRedux/reducer"
 
+import TargetUploadReducer from "./Administrator/TargetUploadRedux/reducer"
+
+
 
 
 
@@ -229,6 +232,8 @@ const rootReducer = combineReducers({
 	TCSAmountReportReducer,
 	Cx_DD_Diffrence_Reducer,
 	SystemSettingReducer,
-	PosRoleAccessReducer
+	PosRoleAccessReducer,
+	TargetUploadReducer,
+
 })
 export default rootReducer

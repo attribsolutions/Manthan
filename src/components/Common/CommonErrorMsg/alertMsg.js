@@ -160,6 +160,8 @@ const selectSupplier = "Please Select Supplier"
 const selectUnit = "Please Select Unit"
 const recordNotAvailable = "Records Not available "
 
+const ImageIsRequired = 'Only JPG, JPEG, or PNG files are allowed.'
+
 export const alertMessages = {
     defaultAddressIsSelected,
     fillAddressDetailsInTable,
@@ -268,7 +270,8 @@ export const alertMessages = {
     addressIsRequired,
     selectField,
     updateAtLeastOneField,
-    DistrictIsRequired
+    DistrictIsRequired,
+    ImageIsRequired
 };
 
 
