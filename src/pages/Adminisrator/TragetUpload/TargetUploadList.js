@@ -15,7 +15,7 @@ import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
 import { PageLoadingSpinner } from "../../../components/Common/CommonButton";
 import TargetUpload from "./TargetUploadMaster";
-import { deleteTargetUploadSuccess, getTargetUploadListSuccess, saveTargetUploadMaster_Success } from "../../../store/Administrator/TargetUploadRedux/action";
+import { deleteTargetUploadSuccess, getTargetUploadList, getTargetUploadListSuccess, saveTargetUploadMaster_Success } from "../../../store/Administrator/TargetUploadRedux/action";
 
 const TargetUploadList = () => {
 
@@ -47,7 +47,7 @@ const TargetUploadList = () => {
         const page_Id = pageId.TARGET_UPLOAD_LIST
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
-        // dispatch(getGroupList());
+        dispatch(getTargetUploadList());
         return () => {
             dispatch(getTargetUploadListSuccess([]));
             dispatch(commonPageFieldListSuccess(null))
