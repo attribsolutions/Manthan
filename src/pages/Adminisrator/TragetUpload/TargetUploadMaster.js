@@ -24,11 +24,11 @@ const TargetUpload = (props) => {
     const dispatch = useDispatch();
     const history = useHistory()
 
-    const preDetails = { fileFiled: '', invoice: [], party: [], invoiceDate: [], amount: 0, invoiceNO: [], partyNO: [] };
 
     const [userPageAccessState, setUserAccState] = useState('');
     const [selectedFiles, setselectedFiles] = useState([]);
-    const [readJsonDetail, setReadJsonDetail] = useState(preDetails);
+    const [readJsonDetail, setReadJsonDetail] = useState([]);
+    const [updatereadJsonDetail, setUpdateReadJsonDetail] = useState([]);
     const [verifyLoading, setverifyLoading] = useState(false);
     const [isIgnoreNegativeValue, setisIgnoreNegativeValue] = useState(false);
     const [negativeFigureVerify, setNegativeFigureVerify] = useState({ Negative_Figure_Array: [], Not_Verify_Negative_Figure: undefined });
@@ -77,13 +77,15 @@ const TargetUpload = (props) => {
                 Message: postMsg.Message,
             });
             setselectedFiles([]);
-            setReadJsonDetail(preDetails);
+            setReadJsonDetail([]);
+            setisIgnoreNegativeValue(false)
             setNegativeFigureVerify({ Negative_Figure_Array: [], Not_Verify_Negative_Figure: undefined });
             document.getElementById("demo1").style.border = "";
         }
         else if (postMsg.Status === true) {
             setselectedFiles([]);
-            setReadJsonDetail(preDetails);
+            setReadJsonDetail([]);
+            setisIgnoreNegativeValue(false)
             setNegativeFigureVerify({ Negative_Figure_Array: [], Not_Verify_Negative_Figure: undefined })
             document.getElementById("demo1").style.border = "";
             dispatch(saveTargetUploadMaster_Success({ Status: false }))
@@ -93,6 +95,19 @@ const TargetUpload = (props) => {
             });
         };
     }, [postMsg])
+
+
+
+
+    useEffect(() => {
+        /////////////////////////////////////////////////////////// check Ignore Negative Value in excel file /////////////////////////////////
+        let updatereadJsonDetail = readJsonDetail
+        if (isIgnoreNegativeValue) {
+            updatereadJsonDetail = readJsonDetail.filter(i => !i.RemoveField.length > 0)
+        }
+        setUpdateReadJsonDetail(updatereadJsonDetail)
+
+    }, [isIgnoreNegativeValue, readJsonDetail])
 
 
     async function veifyExcelBtn_Handler() {
@@ -113,7 +128,7 @@ const TargetUpload = (props) => {
 
             //////////////////////////////////////// Check  Invoice  Item Contain Negative Value Or Not //////////////////////////////////////////////////////
             const Negative_Value_Item_Array = readjson.filter(i => i.RemoveField.length > 0)
-            debugger
+
             if (Negative_Value_Item_Array.length > 0) {
                 setNegativeFigureVerify({ Negative_Figure_Array: Negative_Value_Item_Array, Not_Verify_Negative_Figure: true })
             } else {
@@ -132,7 +147,7 @@ const TargetUpload = (props) => {
     ////////////////////////////////////////////////////  Verify condition Check If all condition fullfill then only file verified /////////////////////////////
 
     const isVerify = (
-        (negativeFigureVerify.Not_Verify_Negative_Figure === false)
+        ((isIgnoreNegativeValue) || (negativeFigureVerify.Not_Verify_Negative_Figure === false))
     );
 
     async function handleAcceptedFiles(files) {
@@ -148,7 +163,7 @@ const TargetUpload = (props) => {
 
         //////////////////////////////////////////////////////////// New File is Selected then privious verified details clear//////////////////////////////    
 
-        setReadJsonDetail(preDetails)
+        setReadJsonDetail([])
         setNegativeFigureVerify({ Negative_Figure_Array: [], Not_Verify_Negative_Figure: undefined })
         files.map(file =>
             Object.assign(file, {
@@ -171,7 +186,7 @@ const TargetUpload = (props) => {
 
     const uploadSaveHandler = () => {
         try {
-            const Data = readJsonDetail.map(i => {
+            const Data = updatereadJsonDetail.map(i => {
                 const { Month, Year, Party, Item, TargetQuantity } = i;
                 return {
                     Month: Month,
@@ -274,7 +289,7 @@ const TargetUpload = (props) => {
                                         {negativeFigureVerify.Not_Verify_Negative_Figure === false ? null : <div className="error-msg mt-0">
                                             <p>
                                                 <span style={{ fontWeight: "bold", fontSize: "14px" }} > Sheet Contains Negative Value:&nbsp;&nbsp;</span>
-                                            
+
                                                 <div style={{ whiteSpace: "nowrap" }}>
                                                     {negativeFigureVerify.Negative_Figure_Array.map((item, index) => (
                                                         item.RemoveField.map((field, fieldIndex) => (
