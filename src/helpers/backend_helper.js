@@ -392,7 +392,7 @@ export const ImportExcelType_API = () => get(url.IMPORT_EXCEL_TYPE)// update api
 export const save_TargetUpload_API = ({ jsonBody }) => post(url.TARGET_UPLOAD, jsonBody)// post api
 export const Get_Target_Upload = () => get(url.GET_TARGET_UPLOAD)// update api
 export const Delete_Target_Upload = ({ jsonBody }) => delwithPostBody(url.DEL_TARGET_UPLOAD, jsonBody)//Bulk delete api
-export const view_Target_List_Api = ({ editId }) => get(`${url.EDIT_TARGET_UPLOAD}/${editId}`)// edit api
+export const view_Target_List_Api = ({ SheetNo, PartyID }) => get(`${url.EDIT_TARGET_UPLOAD}/${SheetNo}/${PartyID}`)// edit api
 
 
 // SubGroup API
