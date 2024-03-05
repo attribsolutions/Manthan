@@ -41,11 +41,10 @@ const TargetUpload = (props) => {
     const {
         postMsg,
         userAccess,
-        saveBtnLoading,
+        saveBtnloading,
     } = useSelector((state) => ({
         postMsg: state.TargetUploadReducer.postMsg,
-        saveBtnLoading: state.ImportExcelPartyMap_Reducer.invoiceUploadSaveLoading,
-        PartyMapData: state.ImportExcelPartyMap_Reducer.addGoButton,
+        saveBtnloading: state.TargetUploadReducer.saveBtnloading,
         partyList: state.CommonPartyDropdownReducer.commonPartyDropdownOption,
         userAccess: state.Login.RoleAccessUpdateData,
 
@@ -120,7 +119,6 @@ const TargetUpload = (props) => {
             dispatch(editTargetUploadIDSuccess({ Status: false }))
         }
     }, [])
-
 
 
 
@@ -216,7 +214,7 @@ const TargetUpload = (props) => {
                     Year: Year,
                     Party: Party,
                     Item: Item,
-                    TargetQuantity: TargetQuantity,
+                    TargetQuantity: (Number(TargetQuantity)).toFixed(2),
                     CreatedOn: _cfunc.loginUserID(),
                     CreatedBy: _cfunc.loginUserID(),
                 };
@@ -392,10 +390,10 @@ const TargetUpload = (props) => {
                                 id='btn-uploadBtnFunc'
                                 spinnerColor={"white"}
                                 className="btn btn-success"
-                                loading={saveBtnLoading}
+                                loading={saveBtnloading}
                                 onClick={uploadSaveHandler}
+                                children={"Upload Files"}
                             >
-                                Upload Files
                             </Verifiy_Button>
                             :
                             <Verifiy_Button
@@ -405,8 +403,8 @@ const TargetUpload = (props) => {
                                 loading={verifyLoading}
                                 className="btn btn-primary"
                                 onClick={veifyExcelBtn_Handler}
+                                children={" Verify Files"}
                             >
-                                Verify Files
                             </Verifiy_Button>
                         }
                     </div>
