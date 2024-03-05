@@ -115,6 +115,7 @@ const TargetUpload = (props) => {
             }
             if (hasEditVal) {
                 setTableData(hasEditVal)
+                dispatch(BreadcrumbShowCountlabel(`Count:${hasEditVal.length}`));
             }
             dispatch(editTargetUploadIDSuccess({ Status: false }))
         }
