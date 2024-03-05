@@ -17,16 +17,19 @@ import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 
 import { Verifiy_Button } from "../../../components/Common/CommonButton";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
-import { saveTargetUploadMaster, saveTargetUploadMaster_Success } from "../../../store/Administrator/TargetUploadRedux/action";
+import { editTargetUploadIDSuccess, saveTargetUploadMaster, saveTargetUploadMaster_Success } from "../../../store/Administrator/TargetUploadRedux/action";
 import { url } from "../../../routes";
+import GlobalCustomTable from "../../../GlobalCustomTable";
+import { BreadcrumbShowCountlabel } from "../../../store/actions";
 
 const TargetUpload = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory()
 
-
+    const [tableData, setTableData] = useState([])
     const [userPageAccessState, setUserAccState] = useState('');
+    const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [selectedFiles, setselectedFiles] = useState([]);
     const [readJsonDetail, setReadJsonDetail] = useState([]);
     const [updatereadJsonDetail, setUpdateReadJsonDetail] = useState([]);
@@ -34,7 +37,7 @@ const TargetUpload = (props) => {
     const [isIgnoreNegativeValue, setisIgnoreNegativeValue] = useState(false);
     const [negativeFigureVerify, setNegativeFigureVerify] = useState({ Negative_Figure_Array: [], Not_Verify_Negative_Figure: undefined });
 
-
+    debugger
     const {
         postMsg,
         userAccess,
@@ -50,8 +53,9 @@ const TargetUpload = (props) => {
 
 
     // Common Party Dropdown useEffect
-    const location = { ...history.location };
-    const hasShowModal = props.hasOwnProperty(mode.editValue);
+    const location = { ...history.location }
+    const hasShowloction = location.hasOwnProperty(mode.editValue)
+    const hasShowModal = props.hasOwnProperty(mode.editValue)
 
     // userAccess useEffect
     useEffect(() => {
@@ -98,6 +102,25 @@ const TargetUpload = (props) => {
         };
     }, [postMsg])
 
+    useEffect(() => {
+        if ((hasShowloction || hasShowModal)) {
+            let hasEditVal = null
+            if (hasShowloction) {
+                setPageMode(location.pageMode)
+                hasEditVal = location.editValue
+            }
+            else if (hasShowModal) {
+                hasEditVal = props.editValue
+                setPageMode(props.pageMode)
+            }
+            if (hasEditVal) {
+                setTableData(hasEditVal)
+            }
+            dispatch(editTargetUploadIDSuccess({ Status: false }))
+        }
+    }, [])
+
+
 
 
     useEffect(() => {
@@ -107,9 +130,7 @@ const TargetUpload = (props) => {
             updatereadJsonDetail = readJsonDetail.filter(i => !i.RemoveField.length > 0)
         }
         setUpdateReadJsonDetail(updatereadJsonDetail)
-
     }, [isIgnoreNegativeValue, readJsonDetail])
-
 
     async function veifyExcelBtn_Handler() {
         setverifyLoading(true);
@@ -204,7 +225,57 @@ const TargetUpload = (props) => {
         } catch (e) { console.log(e) }
     };
 
-    if (!(userPageAccessState === '')) {
+
+
+    const tableColumns = [
+        {
+            text: "SheetNo",
+            dataField: "SheetNo",
+            align: 'right',
+            sort: true
+        }, {
+            text: "PartyID",
+            dataField: "PartyID",
+            align: 'right',
+            sort: true
+        }, {
+            text: "Party Name",
+            dataField: "PartyName",
+            sort: true
+        },
+        {
+            text: "Item ID",
+            dataField: "ItemID",
+            align: 'right',
+            sort: true
+        }, {
+            text: "Item Name",
+            dataField: "ItemName",
+            sort: true
+        },
+        {
+            text: "Month",
+            dataField: "Month",
+            align: 'right',
+            sort: true
+        },
+        {
+            text: "Year",
+            dataField: "Year",
+            align: 'right',
+            sort: true
+        },
+
+        {
+            text: "Target Quantity",
+            dataField: "TargetQuantity",
+            align: 'right',
+            sort: true
+        },
+
+    ]
+
+    if (!(pageMode === mode.view)) {
         return (
             <React.Fragment>
                 <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
@@ -344,7 +415,25 @@ const TargetUpload = (props) => {
     }
     else {
         return (
-            <React.Fragment></React.Fragment>
+            <React.Fragment>
+                <div className="page-content">
+                    <GlobalCustomTable
+                        keyField="id"
+                        data={tableData}
+                        columns={tableColumns}
+                        paginationEnabled={200}//show pagination 200 per page
+                        classes={"custom-table"}
+                        noDataIndication={
+                            <div className="text-danger text-center ">
+                                Record Not available
+                            </div>
+                        }
+                        onDataSizeChange={({ dataCount }) => {
+                            dispatch(BreadcrumbShowCountlabel(`Count:${dataCount}`));
+                        }}
+                    />
+                </div>
+            </React.Fragment>
         )
     }
 };
