@@ -63,7 +63,7 @@ const TargetUploadList = () => {
                     MasterModal={TargetUpload}
                     masterPath={url.TARGET_UPLOAD}
                     ButtonMsgLable={"Target Upload"}
-                    deleteName={"id"}
+                    deleteName={"SheetNo"}
                 />
             }
         </React.Fragment>
