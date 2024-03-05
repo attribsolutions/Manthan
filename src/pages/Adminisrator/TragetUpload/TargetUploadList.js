@@ -13,7 +13,7 @@ import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
 import { PageLoadingSpinner } from "../../../components/Common/CommonButton";
 import TargetUpload from "./TargetUploadMaster";
-import { deleteTargetUploadSuccess, delete_TargetUpload_ID, getTargetUploadList, getTargetUploadListSuccess, saveTargetUploadMaster_Success } from "../../../store/Administrator/TargetUploadRedux/action";
+import { deleteTargetUploadSuccess, delete_TargetUpload_ID, editTargetUploadID, getTargetUploadList, getTargetUploadListSuccess, saveTargetUploadMaster_Success } from "../../../store/Administrator/TargetUploadRedux/action";
 
 const TargetUploadList = () => {
 
@@ -34,7 +34,7 @@ const TargetUploadList = () => {
 
     const action = {
         getList: getTargetUploadList,
-        editId: editGroupID,
+        editId: editTargetUploadID,
         deleteId: delete_TargetUpload_ID,
         postSucc: saveTargetUploadMaster_Success,
         updateSucc: updateGroupIDSuccess,

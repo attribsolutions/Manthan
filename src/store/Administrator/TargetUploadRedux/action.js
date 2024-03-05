@@ -2,6 +2,8 @@ import {
 
   DELETE_TARGET_UPLOAD_LIST_ID,
   DELETE_TARGET_UPLOAD_LIST_ID_SUCCESS,
+  EDIT_TARGET_UPLOAD_ID,
+  EDIT_TARGET_UPLOAD_ID_SUCCESS,
   GET_TARGET_UPLOAD_LIST,
   GET_TARGET_UPLOAD_LIST_SUCCESS,
   SAVE_TARGET_UPLOAD_MASTER,
@@ -29,6 +31,16 @@ export const saveTargetUploadMaster_Success = (resp) => ({// Save  success
   payload: resp,
 });
 
+
+export const editTargetUploadID = (config = {}) => ({ // Edit Action 
+  type: EDIT_TARGET_UPLOAD_ID,
+  config,
+});
+
+export const editTargetUploadIDSuccess = (editData) => ({// Edit  Success
+  type: EDIT_TARGET_UPLOAD_ID_SUCCESS,
+  payload: editData,
+});
 
 export const delete_TargetUpload_ID = (config = {}) => ({// Delete  Action
   type: DELETE_TARGET_UPLOAD_LIST_ID,

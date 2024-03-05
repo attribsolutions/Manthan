@@ -1,6 +1,8 @@
 import {
   DELETE_TARGET_UPLOAD_LIST_ID,
   DELETE_TARGET_UPLOAD_LIST_ID_SUCCESS,
+  EDIT_TARGET_UPLOAD_ID,
+  EDIT_TARGET_UPLOAD_ID_SUCCESS,
   GET_TARGET_UPLOAD_LIST,
   GET_TARGET_UPLOAD_LIST_SUCCESS,
   SAVE_TARGET_UPLOAD_MASTER,
@@ -51,6 +53,18 @@ const TargetUploadReducer = (state = INIT_STATE, action) => {
         goBtnLoading: false,
       }
 
+    case EDIT_TARGET_UPLOAD_ID:
+      return {
+        ...state,
+        listBtnLoading: action.config.btnId,
+      };
+
+    case EDIT_TARGET_UPLOAD_ID_SUCCESS:
+      return {
+        ...state,
+        listBtnLoading: false,
+        editData: action.payload,
+      };
 
     //  del
     case DELETE_TARGET_UPLOAD_LIST_ID:
@@ -66,11 +80,6 @@ const TargetUploadReducer = (state = INIT_STATE, action) => {
         listBtnLoading: false,
         deleteMsg: action.payload,
       };
-
-
-  
-
-
 
     case TARGET_UPLOAD_API_ERROR_ACTION:
       return {
