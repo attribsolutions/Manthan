@@ -9,7 +9,6 @@ import {
 import {
   Delete_Target_Upload,
   Get_Target_Upload,
-  del_Group_List_API,
   save_TargetUpload_API,
   view_Target_List_Api,
 } from "../../../helpers/backend_helper";
@@ -27,25 +26,28 @@ function* Save_Method_ForTargetUpload_GenFun({ config }) {              // Save 
   } catch (error) { yield put(TargetUploadApiErrorAction()) }
 }
 
-function* Get_TargetUpload_List_GenFunc() {                                   // getList API
+function* Get_TargetUpload_List_GenFunc({ config }) {
+  debugger                            // getList API
   try {
-    const response = yield call(Get_Target_Upload);
+    const response = yield call(Get_Target_Upload, config);
+    let id = 1;
     const NewResponse = response.Data.map(i => {
-      const { SheetNo, ...rest } = i;
+      const { ...rest } = i;
       return {
         ...rest,
-        id: SheetNo
+        id: id++
       };
     });
-
-    debugger
     yield put(getTargetUploadListSuccess(NewResponse));
   } catch (error) { yield put(TargetUploadApiErrorAction()) }
 }
 
-function* Delete_TargetUpload_ID_GenFunc({ config }) {               // delete API
-  const jsonBody = JSON.stringify({ "SheetNo": config.deleteId })
-  config["jsonBody"] = jsonBody
+function* Delete_TargetUpload_ID_GenFunc({ config }) {
+  debugger
+  if (config.deleteId) {
+    config["jsonBody"] = JSON.stringify({ "Month": config.rowData.Month.toString(), "Party": config.rowData.PartyID.toString(), "Year": config.rowData.Year.toString() })
+  }
+
   try {
     const response = yield call(Delete_Target_Upload, config);
     yield put(deleteTargetUploadSuccess(response))
@@ -55,6 +57,8 @@ function* Delete_TargetUpload_ID_GenFunc({ config }) {               // delete A
 
 function* Edit_TargetUploadlist_ID_GenratorFunction({ config }) {          // edit API 
   const { btnmode } = config;
+  config["SheetNo"] = config.rowData.SheetNo
+  config["PartyID"] = config.rowData.PartyID
   try {
     const response = yield call(view_Target_List_Api, config);
     response.pageMode = btnmode;

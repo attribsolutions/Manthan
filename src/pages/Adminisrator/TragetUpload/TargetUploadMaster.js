@@ -37,11 +37,18 @@ const TargetUpload = (props) => {
     const [isIgnoreNegativeValue, setisIgnoreNegativeValue] = useState(false);
     const [negativeFigureVerify, setNegativeFigureVerify] = useState({ Negative_Figure_Array: [], Not_Verify_Negative_Figure: undefined });
 
-    debugger
+    const [sameMonthandYear, setsameMonthandYear] = useState(undefined);
+
+    const [partyExist, setPartyExist] = useState({ Not_Exist_Party_Array: [], PartyNotexist: undefined });
+
+
+
+
     const {
         postMsg,
         userAccess,
         saveBtnloading,
+        partyList
     } = useSelector((state) => ({
         postMsg: state.TargetUploadReducer.postMsg,
         saveBtnloading: state.TargetUploadReducer.saveBtnloading,
@@ -83,8 +90,10 @@ const TargetUpload = (props) => {
             setselectedFiles([]);
             setReadJsonDetail([]);
             setisIgnoreNegativeValue(false)
+            setsameMonthandYear(undefined)
             setNegativeFigureVerify({ Negative_Figure_Array: [], Not_Verify_Negative_Figure: undefined });
             document.getElementById("demo1").style.border = "";
+            setPartyExist({ Not_Exist_Party_Array: [], PartyNotexist: undefined });
             history.push({ pathname: url.TARGET_UPLOAD_LIST })
         }
         else if (postMsg.Status === true) {
@@ -92,6 +101,8 @@ const TargetUpload = (props) => {
             setReadJsonDetail([]);
             setisIgnoreNegativeValue(false)
             setNegativeFigureVerify({ Negative_Figure_Array: [], Not_Verify_Negative_Figure: undefined })
+            setPartyExist({ Not_Exist_Party_Array: [], PartyNotexist: undefined });
+            setsameMonthandYear(undefined)
             document.getElementById("demo1").style.border = "";
             dispatch(saveTargetUploadMaster_Success({ Status: false }))
             customAlert({
@@ -146,10 +157,31 @@ const TargetUpload = (props) => {
         const extension = filename.substring(filename.lastIndexOf(".")).toLowerCase();
         if (extension === ".xlsx") {
             const readjson = await readExcelFile({ file: files[0] })
-
+            let NotexistParty = []
             //////////////////////////////////////// Check  Invoice  Item Contain Negative Value Or Not //////////////////////////////////////////////////////
-            const Negative_Value_Item_Array = readjson.filter(i => i.RemoveField.length > 0)
 
+            readjson.map(item => {
+                const idExistAsParty = partyList.some(partyItem => partyItem.id === item.Party);
+                if (!idExistAsParty) {
+                    NotexistParty.push(item)
+                }
+            })
+            debugger
+            if (NotexistParty.length > 0) {
+                setPartyExist({ Not_Exist_Party_Array: NotexistParty, PartyNotexist: true })
+            } else {
+                setPartyExist({ Not_Exist_Party_Array: [], PartyNotexist: false })
+            }
+
+            const sameMonthAndYear = readjson.every(item => item.Month === readjson[0].Month && item.Year === readjson[0].Year);
+            debugger
+            if (sameMonthAndYear) {
+                setsameMonthandYear(true)
+            } else {
+                setsameMonthandYear(false)
+            }
+
+            const Negative_Value_Item_Array = readjson.filter(i => i.RemoveField.length > 0)
             if (Negative_Value_Item_Array.length > 0) {
                 setNegativeFigureVerify({ Negative_Figure_Array: Negative_Value_Item_Array, Not_Verify_Negative_Figure: true })
             } else {
@@ -169,6 +201,9 @@ const TargetUpload = (props) => {
 
     const isVerify = (
         ((isIgnoreNegativeValue) || (negativeFigureVerify.Not_Verify_Negative_Figure === false))
+        && (sameMonthandYear) && (partyExist.PartyNotexist === false)
+
+
     );
 
     async function handleAcceptedFiles(files) {
@@ -186,6 +221,8 @@ const TargetUpload = (props) => {
 
         setReadJsonDetail([])
         setNegativeFigureVerify({ Negative_Figure_Array: [], Not_Verify_Negative_Figure: undefined })
+        setPartyExist({ Not_Exist_Party_Array: [], PartyNotexist: undefined });
+        setsameMonthandYear(undefined)
         files.map(file =>
             Object.assign(file, {
                 preview: URL.createObjectURL(file),
@@ -203,7 +240,6 @@ const TargetUpload = (props) => {
         const i = Math.floor(Math.log(bytes) / Math.log(k))
         return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i]
     }
-
 
     const uploadSaveHandler = () => {
         try {
@@ -338,7 +374,6 @@ const TargetUpload = (props) => {
                                     </Card>
                                 )
                             })}
-
                             <div id="filedetail">
                                 {negativeFigureVerify.Not_Verify_Negative_Figure !== undefined ?
                                     <details>
@@ -379,6 +414,57 @@ const TargetUpload = (props) => {
                                             </p>
                                         </div>}
                                     </details> : null}
+                                {sameMonthandYear !== undefined ? <details>
+                                    <summary>&nbsp;&nbsp;&nbsp;&nbsp;Same Month and Year
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{sameMonthandYear === true ?
+                                            <i style={{ color: "green", }} className="mdi mdi-check-decagram  font-size-18  "></i> :
+                                            <i style={{ color: "tomato", }} className="mdi mdi-close-circle font-size-18  "></i>}</summary>
+                                    {sameMonthandYear === true ? null : <div className="error-msg">
+                                        <p>
+                                            <span style={{ fontWeight: "bold", fontSize: "15px" }} >Upload Data of Same Month and year</span>
+
+                                        </p>
+                                    </div>}
+                                </details> : null}
+
+
+
+
+
+                                {partyExist.PartyNotexist !== undefined ? <details>
+                                    <summary>&nbsp;&nbsp;&nbsp;&nbsp;Party ID
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{partyExist.PartyNotexist === false ?
+                                            <i style={{ color: "green", }} className="mdi mdi-check-decagram  font-size-18  "></i> :
+                                            <i style={{ color: "tomato", }} className="mdi mdi-close-circle font-size-18  "></i>}</summary>
+                                    {partyExist.PartyNotexist === false ? null : <div className="error-msg">
+                                        <p>
+                                            <span style={{ fontWeight: "bold", fontSize: "15px" }} >Party ID Not Exist</span>
+                                            <div style={{ whiteSpace: "nowrap" }}>
+                                                {partyExist.Not_Exist_Party_Array.map((i, index) => (
+                                                    <span key={index}>
+                                                        <span key={index}>
+                                                            <span style={{ fontWeight: "bold" }}>{`${index + 1})`}</span>    {` ${i.Party}`}&nbsp;&nbsp;&nbsp;&nbsp;
+                                                        </span>
+                                                    </span>
+                                                ))}
+                                            </div>
+                                        </p>
+                                    </div>}
+                                </details> : null}
+
+
+
+
+
+
+
+
+
+
+
+
                             </div>
                         </div>
                     </div>
