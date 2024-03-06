@@ -9,7 +9,6 @@ import {
 import {
   Delete_Target_Upload,
   Get_Target_Upload,
-  del_Group_List_API,
   save_TargetUpload_API,
   view_Target_List_Api,
 } from "../../../helpers/backend_helper";
@@ -27,9 +26,10 @@ function* Save_Method_ForTargetUpload_GenFun({ config }) {              // Save 
   } catch (error) { yield put(TargetUploadApiErrorAction()) }
 }
 
-function* Get_TargetUpload_List_GenFunc() {                                   // getList API
+function* Get_TargetUpload_List_GenFunc({ config }) {
+  debugger                            // getList API
   try {
-    const response = yield call(Get_Target_Upload);
+    const response = yield call(Get_Target_Upload, config);
     let id = 1;
     const NewResponse = response.Data.map(i => {
       const { ...rest } = i;
@@ -44,8 +44,10 @@ function* Get_TargetUpload_List_GenFunc() {                                   //
 
 function* Delete_TargetUpload_ID_GenFunc({ config }) {
   debugger
-  const jsonBody = JSON.stringify({ "SheetNo": config.rowData.SheetNo, "PartyID": config.rowData.PartyID })
-  config["jsonBody"] = jsonBody
+  if (config.deleteId) {
+    config["jsonBody"] = JSON.stringify({ "Month": config.rowData.Month.toString(), "Party": config.rowData.PartyID.toString(), "Year": config.rowData.Year.toString() })
+  }
+
   try {
     const response = yield call(Delete_Target_Upload, config);
     yield put(deleteTargetUploadSuccess(response))

@@ -12,8 +12,9 @@ import {
 } from "./actionType";
 
 
-export const getTargetUploadList = () => ({// get List Action
+export const getTargetUploadList = (config = {}) => ({// get List Action
   type: GET_TARGET_UPLOAD_LIST,
+  config
 });
 
 export const getTargetUploadListSuccess = (pages) => ({// get List success

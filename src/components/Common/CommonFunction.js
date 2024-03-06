@@ -44,7 +44,7 @@ export const currentDate_dmy = date_dmy_func();
 
 export function isDissableForParticularDate(date, type) {
 
-  
+
   const currentDate = new Date();
   const currentDay = currentDate.getDate();
   const lastDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate();
@@ -194,9 +194,10 @@ export const areAllDatesSame = (dates) => {
 };
 
 
-export const getPreviousMonthAndYear = (date) => {
+export const getPreviousMonthAndYear = ({ date, Privious }) => {
+  debugger
   const previousMonthDate = new Date(date);
-  previousMonthDate.setMonth(previousMonthDate.getMonth() - 1);
+  previousMonthDate.setMonth(previousMonthDate.getMonth() - Privious);
 
   const year = previousMonthDate.getFullYear();
   const month = (previousMonthDate.getMonth() + 1).toString().padStart(2, '0'); // Adding padding if needed
@@ -487,7 +488,7 @@ export function hasDecimalCheckFunc(input) {
 }
 
 export const isButtonEnable = ({ ConditionDetails = {} }) => {   /////// button disable based on condiition ///////
-  
+
   let isEnable = false;
   let isEnablePriviousAlert = false;
   const CustomerPartyTypeID = loginUserDetails().PartyTypeID

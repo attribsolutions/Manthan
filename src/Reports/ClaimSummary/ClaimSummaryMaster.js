@@ -20,7 +20,7 @@ import { globalTableSearchProps } from "../../components/Common/SearchBox/MySear
 const createClaimBtnCss = "badge badge-soft-success font-size-18 btn btn-success waves-effect waves-light w-xxs border border-light"
 const deltBtnCss = "badge badge-soft-danger font-size-18 btn btn-danger waves-effect waves-light w-xxs border border-light"
 
-const SelectedMonth = () => _cfunc.getPreviousMonthAndYear(new Date())
+const SelectedMonth = () => _cfunc.getPreviousMonthAndYear({ date: new Date(), Privious: 1 })
 const FirstAndLastDate = () => _cfunc.getFirstAndLastDateOfMonth(SelectedMonth());
 const fileds = () => ({
     FromDate: FirstAndLastDate().firstDate,
@@ -193,7 +193,7 @@ const ClaimSummaryMaster = (props) => {
     }
 
     const currentDate = new Date(); // Current date
-    const currentMonth = _cfunc.getPreviousMonthAndYear(currentDate);
+    const currentMonth = _cfunc.getPreviousMonthAndYear({ date: currentDate, Privious: 1 });
     const pagesListColumns = [
         {
             text: "Party",
