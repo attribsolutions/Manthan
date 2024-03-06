@@ -20,8 +20,7 @@ const TargetUploadList = () => {
     const dispatch = useDispatch();
     const reducers = useSelector(
         (state) => ({
-            listBtnLoading: state.GroupReducer.listBtnLoading,
-            goBtnLoading: state.GroupReducer.goBtnLoading,
+            listBtnLoading: state.TargetUploadReducer.listBtnLoading,
             tableList: state.TargetUploadReducer.targetList,
             editData: state.TargetUploadReducer.editData,
             updateMsg: state.TargetUploadReducer.updateMsg,

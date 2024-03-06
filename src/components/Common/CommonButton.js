@@ -311,7 +311,7 @@ export function Verifiy_Button({
         title={`Add Button Loading...`}
         {...rest}
       >
-        Verifying Details&nbsp;&nbsp;<Spinner style={{ height: "12px", width: "12px" }} color={spinnerColor} />
+        {children}&nbsp;&nbsp;<Spinner style={{ height: "12px", width: "12px" }} color={spinnerColor} />
       </button>
     );
   }
