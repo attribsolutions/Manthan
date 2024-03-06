@@ -9,7 +9,7 @@ import { C_DatePicker } from "../../CustomValidateForm";
 import * as _cfunc from "../../components/Common/CommonFunction";
 import { MetaTags } from "react-meta-tags";
 import Select from "react-select";
-import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess, getBaseUnit_ForDropDown, getBaseUnit_ForDropDownSuccess } from "../../store/actions";
+import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess, getBaseUnit_ForDropDown, getBaseUnit_ForDropDownSuccess, get_Group_By_GroupType_ForDropDown } from "../../store/actions";
 import C_Report from "../../components/Common/C_Report";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import { mode, pageId } from "../../routes/index"
@@ -20,7 +20,11 @@ import { globalTableSearchProps } from "../../components/Common/SearchBox/MySear
 import { ExcelReportComponent } from "../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS";
 import { alertMessages } from "../../components/Common/CommonErrorMsg/alertMsg";
 import { changeCommonPartyDropDetailsAction } from "../../store/Utilites/PartyDrodown/action";
-import GlobalCustomTable from "../../GlobalCustomTable";
+import { getClusterlist } from "../../store/Administrator/ClusterRedux/action";
+import { getClusterlistSuccess } from "../../store/Administrator/ClusterRedux/action";
+import { Get_Subcluster_On_cluster_API, SubGroup_By_Group_DropDown_API } from "../../helpers/backend_helper";
+import { allLabelWithBlank } from "../../components/Common/CommonErrorMsg/HarderCodeData";
+
 
 const CurrentStockReport = (props) => {
 
@@ -32,8 +36,16 @@ const CurrentStockReport = (props) => {
 	const [headerFilters, setHeaderFilters] = useState('');
 	const [userPageAccessState, setUserAccState] = useState('');
 
-	const [partyDropdown, setPartyDropdown] = useState({ value: "", label: 'All' });
+	const [partyDropdown, setPartyDropdown] = useState(allLabelWithBlank);
 	const [unitDropdown, setUnitDropdown] = useState({ value: 1, label: 'No' });
+
+	const [cluserSelect, setCluserSelect] = useState(allLabelWithBlank);
+	const [subCluserSelect, setSubCluserSelect] = useState(allLabelWithBlank);
+	const [subClusterOptions, setSubClusterOptions] = useState([]);
+
+	const [groupSelect, setGroupSelect] = useState(allLabelWithBlank);
+	const [subGroupSelect, setSubGroupSelect] = useState(allLabelWithBlank);
+	const [subGroupOptions, setSubGroupOptions] = useState([]);
 
 	const [originalTableData, setOriginalTableData] = useState([]);
 	const [stockTypeSelect, setStockTypeSelect] = useState({
@@ -73,19 +85,31 @@ const CurrentStockReport = (props) => {
 		},
 	]);
 
-	const reducers = useSelector(
+	const { userAccess,
+		BaseUnit,
+		SSDD_List,
+		pageField,
+		goButtonData = [],
+		GoBtnLoading,
+		ExcelBtnLoading,
+		clusterDropdown,
+		GroupDropdown
+	} = useSelector(
 		(state) => ({
 			goButtonData: state.StockReportReducer.StockReportGobtn,
 			BaseUnit: state.ItemMastersReducer.BaseUnit,
 			SSDD_List: state.CommonPartyDropdownReducer.commonPartyDropdownOption,
 			GoBtnLoading: state.StockReportReducer.GoBtnLoading,
 			ExcelBtnLoading: state.StockReportReducer.ExcelBtnLoading,
+
+			clusterDropdown: state.ClusterReducer.ClusterListData,
+			GroupDropdown: state.ItemMastersReducer.GroupList,
+
 			userAccess: state.Login.RoleAccessUpdateData,
 			pageField: state.CommonPageFieldReducer.pageField
 		})
 	);
 
-	const { userAccess, BaseUnit, SSDD_List, pageField, goButtonData = [], GoBtnLoading, ExcelBtnLoading } = reducers;
 	const { fromdate = currentDate_ymd, todate = currentDate_ymd } = headerFilters;
 
 	// Featch Modules List data First Rendering
@@ -109,7 +133,17 @@ const CurrentStockReport = (props) => {
 	}, [userAccess])
 
 	useEffect(() => {
+		if (subClusterOptions.length > 0) {
+			subClusterOptions.unshift(allLabelWithBlank)
+		}
+		if (subGroupOptions.length > 0) {
+			subGroupOptions.unshift(allLabelWithBlank)
+		}
+	}, [subClusterOptions, subGroupOptions])
 
+	useEffect(() => {
+		dispatch(getClusterlist());
+		dispatch(get_Group_By_GroupType_ForDropDown(1));
 		dispatch(getBaseUnit_ForDropDown());
 		dispatch(commonPageFieldSuccess(null));
 		dispatch(commonPageField(pageId.STOCK_REPORT));
@@ -123,6 +157,7 @@ const CurrentStockReport = (props) => {
 			dispatch(stockReport_GoButton_API_Success([]));
 			dispatch(getBaseUnit_ForDropDownSuccess([]));
 			dispatch(changeCommonPartyDropDetailsAction({ isShow: true }))//change party drop-down restore show state
+			dispatch(getClusterlistSuccess([]));
 		}
 	}, [])
 
@@ -130,7 +165,7 @@ const CurrentStockReport = (props) => {
 		{
 			text: 'DistributorCode',
 			dataField: 'DistributorCode',
-			showing: partyDropdown.value === "",
+			showing: ((partyDropdown.value === "") && (stockTypeSelect.value === '')),
 			groupBy: false,
 			align: 'right',
 			sequence: 5,
@@ -139,9 +174,25 @@ const CurrentStockReport = (props) => {
 		{
 			text: 'DistributorName',
 			dataField: 'DistributorName',
-			showing: partyDropdown.value === "",
+			showing: ((partyDropdown.value === "") && (stockTypeSelect.value === '')),
 			groupBy: false,
 			sequence: 5,
+			controlTypeName: "Text"
+		},
+		{
+			text: 'Cluster',
+			dataField: 'Cluster',
+			showing: ((partyDropdown.value === "") && (stockTypeSelect.value === '')),
+			groupBy: false,
+			sequence: 6,
+			controlTypeName: "Text"
+		},
+		{
+			text: 'SubCluster',
+			dataField: 'SubCluster',
+			showing: ((partyDropdown.value === "") && (stockTypeSelect.value === '')),
+			groupBy: false,
+			sequence: 6,
 			controlTypeName: "Text"
 		},
 
@@ -361,10 +412,20 @@ const CurrentStockReport = (props) => {
 		value: i.id,
 		label: i.Name
 	}));
-	Party_Option.unshift({
-		value: "",
-		label: "All"
-	})
+	Party_Option.unshift(allLabelWithBlank)
+
+	const Cluster_Options = clusterDropdown.map((Data) => ({
+		value: Data.id,
+		label: Data.Name
+	}));
+	Cluster_Options.unshift(allLabelWithBlank)
+
+	const Group_Options = GroupDropdown.map((Data) => ({
+		value: Data.id,
+		label: Data.Name
+	}));
+	Group_Options.unshift(allLabelWithBlank)
+
 
 	const StockTypeOptions = [
 		{
@@ -392,6 +453,10 @@ const CurrentStockReport = (props) => {
 				"FromDate": fromdate,
 				"ToDate": todate,
 				"Unit": unitDropdown.value,
+				"Cluster": cluserSelect.value,
+				"SubCluster": subCluserSelect.value,
+				"Group": groupSelect.value,
+				"SubGroup": subGroupSelect.value,
 				"PartyID": (partyDropdown.value === "" && !(isSCMParty)) ? _cfunc.loginPartyID() : partyDropdown.value,
 				"IsDamagePieces": stockTypeSelect.value,
 				"Employee": !isSCMParty ? 0 : _cfunc.loginEmployeeID(),
@@ -429,7 +494,7 @@ const CurrentStockReport = (props) => {
 					TotalStockValue, UnSaleableStockTaxValue,
 					UnSaleableStockValue, SaleableStockTaxValue,
 					SaleableStockValue, MRP, BatchCode, Item, ItemName,
-					PurchaseRate, DistributorCode, DistributorName, GroupName,
+					PurchaseRate, DistributorCode, DistributorName, Cluster, SubCluster, GroupName,
 					SubGroupName, GroupTypeName, Stockvaluewithtax, Unit, TaxValue } = currentItem;
 
 				let key = "";
@@ -462,7 +527,7 @@ const CurrentStockReport = (props) => {
 						UnSaleableStock: Number(UnSaleableStock), TotalStockValue: TotalStockValue,
 						UnSaleableStockTaxValue: Number(UnSaleableStockTaxValue), UnSaleableStockValue: Number(UnSaleableStockValue),
 						SaleableStockTaxValue: Number(SaleableStockTaxValue), SaleableStockValue: Number(SaleableStockValue), TaxValue: Number(TaxValue), BatchCode,
-						DistributorCode, DistributorName, Item, GroupName, SubGroupName, GroupTypeName, BatchCode, Stockvaluewithtax, Unit
+						DistributorCode, DistributorName, Item, GroupName, SubGroupName, GroupTypeName, BatchCode, Stockvaluewithtax, Unit, SubCluster, Cluster
 					};
 				}
 				return accumulator;
@@ -501,6 +566,49 @@ const CurrentStockReport = (props) => {
 	function StockTypeHandler(e) {
 		setStockTypeSelect(e);
 		setTableData([]);
+	}
+
+	async function ClusterOnchangeHandler(e) {
+
+		setSubCluserSelect(allLabelWithBlank);
+		setSubClusterOptions([]);
+		setCluserSelect(e);
+		setTableData([]);
+
+		if (!(e.value === "")) {
+			const response = await Get_Subcluster_On_cluster_API(e.value);
+			if (response.StatusCode === 200) {
+
+				setSubClusterOptions(response.Data.map(index => ({ value: index.id, label: index.Name })))
+			}
+			else {
+				customAlert({
+					Type: 3,
+					Message: `Error for Subcluster ${e.label}:`,
+				});
+			}
+		}
+	}
+
+	async function GroupOnchangeHandler(e) {
+		setSubGroupSelect(allLabelWithBlank);
+		setSubGroupOptions([]);
+		setGroupSelect(e);
+		setTableData([]);
+
+		if (!(e.value === "")) {
+			const response = await SubGroup_By_Group_DropDown_API(e.value);
+			if (response.StatusCode === 200) {
+
+				setSubGroupOptions(response.Data.map(index => ({ value: index.id, label: index.Name })))
+			}
+			else {
+				customAlert({
+					Type: 3,
+					Message: `Error for SubGroup ${e.label}:`,
+				});
+			}
+		}
 	}
 
 	return (
@@ -610,6 +718,116 @@ const CurrentStockReport = (props) => {
 							<Col sm={3}>
 								<FormGroup className="mb-n2 row mt-1">
 
+									<Label className="col-sm-3 p-2">Cluster</Label>
+									<Col sm={6}>
+										<Select
+											name="cluster"
+											value={cluserSelect}
+											isSearchable={true}
+											className="react-dropdown"
+											classNamePrefix="dropdown"
+											styles={{
+												menu: provided => ({ ...provided, zIndex: 2 })
+											}}
+											options={Cluster_Options}
+											onChange={(e) => { ClusterOnchangeHandler(e) }}
+										/>
+									</Col>
+								</FormGroup>
+							</Col>
+
+							<Col sm={3} className="custom-to-date-col">
+								<FormGroup className="mb-n3 row mt-1">
+									<Label className="col-sm-4 p-2">Sub-Cluster</Label>
+									<Col>
+										<Select
+											name="subCluser"
+											value={subCluserSelect}
+											isSearchable={true}
+											className="react-dropdown"
+											classNamePrefix="dropdown"
+											styles={{
+												menu: provided => ({ ...provided, zIndex: 2 })
+											}}
+											options={subClusterOptions}
+											onChange={(e) => {
+												setSubCluserSelect(e);
+												setTableData([]);
+											}}
+										/>
+									</Col>
+								</FormGroup>
+							</Col>
+
+							<Col sm={3}>
+								<FormGroup className="mb-n3 row mt-1">
+
+									<Label className="col-sm-4 p-2">Group</Label>
+									<Col>
+										<Select
+											name="group"
+											value={groupSelect}
+											isSearchable={true}
+											className="react-dropdown"
+											classNamePrefix="dropdown"
+											styles={{
+												menu: provided => ({ ...provided, zIndex: 2 })
+											}}
+											options={Group_Options}
+											// onChange={(e) => {
+											// 	setGroupSelect(e);
+											// 	setTableData([]);
+											// }}
+											onChange={(e) => { GroupOnchangeHandler(e) }}
+										/>
+									</Col>
+								</FormGroup>
+							</Col>
+
+							<Col sm={3}>
+								<FormGroup className="mb-n3 row mt-1">
+									<Label className="col-sm-4 p-2">Sub-Group</Label>
+									<Col>
+										<Select
+											name="subGroup"
+											value={subGroupSelect}
+											isSearchable={true}
+											className="react-dropdown"
+											classNamePrefix="dropdown"
+											styles={{
+												menu: provided => ({ ...provided, zIndex: 2 })
+											}}
+											options={subGroupOptions}
+											onChange={(e) => {
+												setSubGroupSelect(e);
+												setTableData([]);
+											}}
+										/>
+									</Col>
+								</FormGroup>
+							</Col>
+						</Row>
+					</Col>
+
+					<Col sm="1" className="mt-2 mb-1 ">
+						<C_Button
+							type="button"
+							spinnerColor="white"
+							loading={ExcelBtnLoading === "downloadExcel"}
+							className="btn btn-primary"
+							onClick={() => goButtonHandler("downloadExcel")}
+						>
+							Excel
+						</C_Button>
+					</Col>
+				</Row>
+
+				<Row>
+					<Col className="col col-11  mt-1">
+						<Row className="mb-2 row ">
+							<Col sm={3}>
+								<FormGroup className="mb-n2 row mt-1">
+
 									<Label className="col-sm-3 p-2">Stock Type</Label>
 									<Col sm={6}>
 										<Select
@@ -669,17 +887,7 @@ const CurrentStockReport = (props) => {
 						</Row>
 					</Col>
 
-					<Col sm="1" className="mt-2 mb-1 ">
-						<C_Button
-							type="button"
-							spinnerColor="white"
-							loading={ExcelBtnLoading === "downloadExcel"}
-							className="btn btn-primary"
-							onClick={() => goButtonHandler("downloadExcel")}
-						>
-							Excel
-						</C_Button>
-					</Col>
+
 				</Row>
 			</div>
 

@@ -110,13 +110,17 @@ const CommonPurchaseList = (props) => {
       CommonBreadcrumbDetails({
         downBtnData: downList,
         defaultDownBtnData: listObj2,
+        CountLabel: pageField?.CountLabel,
+        pageHeading: pageField?.PageHeading,
+        newBtnView: userAccState?.RoleAccess_IsSave,
+        excelBtnView:userAccState?.RoleAccess_Exceldownload,
       })
     );
 
-  }, [tableList]);
+  }, [tableList, pageField, userAccState]);
 
   useEffect(() => {
-    
+
     if ((tableList.length > 0) && (pageField?.CountLabel === true)) {
       if (totalAmountShow === true) {
         dispatch(BreadcrumbShowCountlabel(`Count:${tableList.length} ₹ ${TotalAmount_Func(tableList)}`));

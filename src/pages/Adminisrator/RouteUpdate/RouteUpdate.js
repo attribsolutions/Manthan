@@ -7,7 +7,7 @@ import {
 import { MetaTags } from "react-meta-tags";
 import { commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
-import { BreadcrumbShowCountlabel, Breadcrumb_inputName } from "../../../store/Utilites/Breadcrumb/actions";
+import { BreadcrumbShowCountlabel } from "../../../store/Utilites/Breadcrumb/actions";
 import { useDispatch, useSelector } from "react-redux";
 import {
     comAddPageFieldFunc,
@@ -25,8 +25,9 @@ import { Post_RouteUpdate, Post_RouteUpdateSuccess, RouteUpdateListAPI, RouteUpd
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { C_Select } from "../../../CustomValidateForm";
-import { GetRoutesList } from "../../../store/Administrator/RoutesRedux/actions";
+import { GetRoutesList, GetRoutesListSuccess } from "../../../store/Administrator/RoutesRedux/actions";
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
+import { loginSelectedPartyID } from "../../../components/Common/CommonFunction";
 
 const RouteUpdate = (props) => {
 
@@ -62,18 +63,9 @@ const RouteUpdate = (props) => {
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageField
         }));
-    const { Data = [] } = RouteUpdateList
+    const { commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
 
-    useEffect(() => {
-        const page_Id = pageId.ROUTE_UPDATE
-        dispatch(commonPageFieldSuccess(null));
-        dispatch(commonPageField(page_Id))
-        dispatch(GetRoutesList())
-        dispatch(RouteUpdateListAPI())
-        return () => {
-            dispatch(RouteUpdateListSuccess([]))
-        }
-    }, []);
+    const { Data = [] } = RouteUpdateList
 
     const location = { ...history.location }
     const hasShowModal = props.hasOwnProperty(mode.editValue)
@@ -96,6 +88,32 @@ const RouteUpdate = (props) => {
             breadcrumbReturnFunc({ dispatch, userAcc });
         };
     }, [userAccess])
+
+    useEffect(() => {
+        const page_Id = pageId.ROUTE_UPDATE
+        dispatch(commonPageFieldSuccess(null));
+        dispatch(commonPageField(page_Id))
+        dispatch(GetRoutesList())
+        if (commonPartyDropSelect.value > 0) {
+            dispatch(RouteUpdateListAPI({ ..._cfunc.loginJsonBody(), "PartyID": commonPartyDropSelect.value }))
+            dispatch(GetRoutesList({ ..._cfunc.loginJsonBody(), "PartyID": commonPartyDropSelect.value }));
+        }
+        return () => {
+            dispatch(RouteUpdateListSuccess([]));
+            dispatch(GetRoutesListSuccess([]));
+        }
+    }, []);
+
+    // Common Party select Dropdown useEffect
+    useEffect(() => {
+        if (commonPartyDropSelect.value > 0) {
+            dispatch(GetRoutesList({ ..._cfunc.loginJsonBody(), "PartyID": commonPartyDropSelect.value }));
+            dispatch(RouteUpdateListAPI({ ..._cfunc.loginJsonBody(), "PartyID": commonPartyDropSelect.value }))
+        } else {
+            dispatch(RouteUpdateListSuccess([]));
+            dispatch(GetRoutesListSuccess([]));
+        }
+    }, [commonPartyDropSelect]);
 
     //This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
@@ -271,7 +289,7 @@ const RouteUpdate = (props) => {
                     </div>
 
                     {Data.length > 0 &&
-                       <SaveButtonDraggable>
+                        <SaveButtonDraggable>
                             <SaveButton pageMode={pageMode}
                                 loading={saveBtnloading}
                                 onClick={SaveHandler}

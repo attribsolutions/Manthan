@@ -85,10 +85,18 @@ const CommonListPage = (props) => {
       defaultDownList2.push(listObj2)
       listObj = {}
     })
-    dispatch(CommonBreadcrumbDetails({ downBtnData: downList, defaultDownBtnData: listObj2 }))
-  }, [tableList])
+    dispatch(CommonBreadcrumbDetails({
+      downBtnData: downList,
+      defaultDownBtnData: listObj2,
+      CountLabel: pageField?.CountLabel,
+      pageHeading: pageField?.PageHeading,
+      newBtnView: userAccState?.RoleAccess_IsSave,
+      excelBtnView: userAccState?.RoleAccess_Exceldownload,
+    }))
+  }, [tableList, pageField, userAccState])
 
   useEffect(() => {
+
     if ((tableList.length > 0) && (pageField?.CountLabel === true)) {
       dispatch(BreadcrumbShowCountlabel(`Count:${tableList.length}`));
     }
@@ -112,7 +120,6 @@ const CommonListPage = (props) => {
       })
     }
   }, [updateMsg]);
-
 
   useEffect(async () => {
     if (deleteMsg.Status === true && deleteMsg.StatusCode === 200) {
@@ -138,7 +145,6 @@ const CommonListPage = (props) => {
     }
   }, [deleteMsg]);
 
-
   useEffect(async () => {
 
     if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
@@ -159,7 +165,6 @@ const CommonListPage = (props) => {
       })
     }
   }, [postMsg])
-
 
   useEffect(() => {// Edit Modal Show When Edit Data is true
     if (editData.Status === true) {
@@ -182,7 +187,6 @@ const CommonListPage = (props) => {
     }
     setmodal_edit(false)
   }
-
 
   const lastColumn = () => {
     return listPageActionsButtonFunc({

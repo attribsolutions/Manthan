@@ -5,11 +5,10 @@ import { Post_RouteUpdateSuccess, RouteUpdateApiErrorAction, RouteUpdateListSucc
 import { POST_ROUTE_UPDATE, ROUTE_UPDATE_LIST } from "./actionType";
 
 //Routes List Api Using Post Method
-function* RouteUpdate_List_GenratorFunction() {
-
-    const filters = JSON.stringify(loginJsonBody()); // Only PartyID is Required
+function* RouteUpdate_List_GenratorFunction({ jsonBody }) {
+    const filters = jsonBody ? jsonBody : JSON.stringify(loginJsonBody()); // Only PartyID is Required
     try {
-        
+
         const response = yield call(Route_Update_List_API, filters);
         yield put(RouteUpdateListSuccess(response));
     } catch (error) { yield put(RouteUpdateApiErrorAction()) }

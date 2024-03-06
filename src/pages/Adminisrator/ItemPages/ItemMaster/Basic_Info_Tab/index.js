@@ -1,4 +1,4 @@
-import React, { useImperativeHandle, forwardRef, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Card, CardBody, Col, FormGroup, Input, Label, Row } from 'reactstrap'
 import { comAddPageFieldFunc, onChangeCheckbox, onChangeSelect, onChangeText } from '../../../../../components/Common/validationFunction'
@@ -6,20 +6,11 @@ import { Breadcrumb_inputName, get_Category_By_CategoryType_ForDropDownAPI } fro
 import Select from "react-select"
 import { unitConversionInitial } from '../../ItemMaster/itemIndex'
 
-const BasicInfoTabForm = forwardRef(({ state, setState, settable, pageField }, ref) => {
+const BasicInfoTabForm = ({ state, setState, settable, pageField }) => {
 
     const dispatch = useDispatch();
 
     const [searchResults, setSearchResults] = React.useState([]);
-
-    useImperativeHandle(ref, () => ({
-        setCurrentState(arr) {
-            setState(arr)
-        },
-        getCurrentState: () => {
-            return state
-        },
-    }));
 
     const {
         BaseUnit,
@@ -336,9 +327,9 @@ const BasicInfoTabForm = forwardRef(({ state, setState, settable, pageField }, r
                                         onChangeSelect({ hasSelect, evn, state, setState })
                                     }}
                                 />
-                                {/* {isError.BrandName.length > 0 && (
+                                {isError.BrandName.length > 0 && (
                                     <span className="text-danger f-8"><small>{isError.BrandName}</small></span>
-                                )} */}
+                                )}
                             </FormGroup>
                         </Row>
                     </Col>
@@ -437,7 +428,7 @@ const BasicInfoTabForm = forwardRef(({ state, setState, settable, pageField }, r
         </div >
     )
     return FirstTab
-})
+}
 
 export default BasicInfoTabForm
 

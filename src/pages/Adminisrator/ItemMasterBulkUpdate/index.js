@@ -112,10 +112,6 @@ const ItemMasterBulkUpdate = (props) => {
         }
     }, [SelectFieldName, GroupList, BaseUnit])
 
-    const setFieldNameDropOptionsCallback = useCallback((options) => {
-        setFieldNameDropOptions(options);
-    }, [setFieldNameDropOptions]);
-
     useEffect(() => {
         if (SelectDropdown.length > 0) {
             const updatedDropdown = SelectDropdown.map(item => {
@@ -128,13 +124,13 @@ const ItemMasterBulkUpdate = (props) => {
                 }
             });
 
-            setFieldNameDropOptionsCallback(updatedDropdown.map(data => ({
+            setFieldNameDropOptions(updatedDropdown.map(data => ({
                 value: data.id,
                 label: data.Name,
                 DataType: data.DataType
             })));
         }
-    }, [SelectDropdown, setFieldNameDropOptionsCallback]);
+    }, [SelectDropdown]);
 
     useEffect(() => {
         dispatch(commonPageFieldSuccess(null));
