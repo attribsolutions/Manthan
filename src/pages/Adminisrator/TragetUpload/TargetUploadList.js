@@ -100,7 +100,7 @@ const TargetUploadList = () => {
         let MonthString = ischeck.map(obj => obj.Month).join(',')
         let YearString = ischeck.map(obj => obj.Year).join(',')
         let PartyIDString = ischeck.map(obj => obj.PartyID).join(',')
-        let jsonBody = JSON.stringify({ Month: MonthString, Year: YearString, PartyID: PartyIDString })
+        let jsonBody = JSON.stringify({ Month: MonthString, Year: YearString, Party: PartyIDString })
         dispatch(delete_TargetUpload_ID({ jsonBody }))
     }
 

@@ -453,18 +453,6 @@ const TargetUpload = (props) => {
                                         </p>
                                     </div>}
                                 </details> : null}
-
-
-
-
-
-
-
-
-
-
-
-
                             </div>
                         </div>
                     </div>
