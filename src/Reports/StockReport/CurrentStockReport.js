@@ -165,7 +165,7 @@ const CurrentStockReport = (props) => {
 		{
 			text: 'DistributorCode',
 			dataField: 'DistributorCode',
-			showing: partyDropdown.value === "",
+			showing: ((partyDropdown.value === "") && (stockTypeSelect.value === '')),
 			groupBy: false,
 			align: 'right',
 			sequence: 5,
@@ -174,9 +174,25 @@ const CurrentStockReport = (props) => {
 		{
 			text: 'DistributorName',
 			dataField: 'DistributorName',
-			showing: partyDropdown.value === "",
+			showing: ((partyDropdown.value === "") && (stockTypeSelect.value === '')),
 			groupBy: false,
 			sequence: 5,
+			controlTypeName: "Text"
+		},
+		{
+			text: 'Cluster',
+			dataField: 'Cluster',
+			showing: ((partyDropdown.value === "") && (stockTypeSelect.value === '')),
+			groupBy: false,
+			sequence: 6,
+			controlTypeName: "Text"
+		},
+		{
+			text: 'SubCluster',
+			dataField: 'SubCluster',
+			showing: ((partyDropdown.value === "") && (stockTypeSelect.value === '')),
+			groupBy: false,
+			sequence: 6,
 			controlTypeName: "Text"
 		},
 
@@ -426,7 +442,7 @@ const CurrentStockReport = (props) => {
 		}]
 
 	function goButtonHandler(goBtnMode) {
-		debugger
+
 		try {
 			if ((isSCMParty) && (partyDropdown === "")) {
 				customAlert({ Type: 3, Message: alertMessages.commonPartySelectionIsRequired });
@@ -478,7 +494,7 @@ const CurrentStockReport = (props) => {
 					TotalStockValue, UnSaleableStockTaxValue,
 					UnSaleableStockValue, SaleableStockTaxValue,
 					SaleableStockValue, MRP, BatchCode, Item, ItemName,
-					PurchaseRate, DistributorCode, DistributorName, GroupName,
+					PurchaseRate, DistributorCode, DistributorName, Cluster, SubCluster, GroupName,
 					SubGroupName, GroupTypeName, Stockvaluewithtax, Unit, TaxValue } = currentItem;
 
 				let key = "";
@@ -511,7 +527,7 @@ const CurrentStockReport = (props) => {
 						UnSaleableStock: Number(UnSaleableStock), TotalStockValue: TotalStockValue,
 						UnSaleableStockTaxValue: Number(UnSaleableStockTaxValue), UnSaleableStockValue: Number(UnSaleableStockValue),
 						SaleableStockTaxValue: Number(SaleableStockTaxValue), SaleableStockValue: Number(SaleableStockValue), TaxValue: Number(TaxValue), BatchCode,
-						DistributorCode, DistributorName, Item, GroupName, SubGroupName, GroupTypeName, BatchCode, Stockvaluewithtax, Unit
+						DistributorCode, DistributorName, Item, GroupName, SubGroupName, GroupTypeName, BatchCode, Stockvaluewithtax, Unit, SubCluster, Cluster
 					};
 				}
 				return accumulator;
@@ -558,7 +574,7 @@ const CurrentStockReport = (props) => {
 		setSubClusterOptions([]);
 		setCluserSelect(e);
 		setTableData([]);
-		
+
 		if (!(e.value === "")) {
 			const response = await Get_Subcluster_On_cluster_API(e.value);
 			if (response.StatusCode === 200) {
