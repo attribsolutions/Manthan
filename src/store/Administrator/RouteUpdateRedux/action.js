@@ -7,9 +7,9 @@ import {
 } from "./actionType";
 
 // RouteUpdateList API Using Post Method
-export const RouteUpdateListAPI = (config = {}) => ({
+export const RouteUpdateListAPI = (jsonBody) => ({
     type: ROUTE_UPDATE_LIST,
-    config,
+    jsonBody,
 });
 
 export const RouteUpdateListSuccess = (resp) => ({

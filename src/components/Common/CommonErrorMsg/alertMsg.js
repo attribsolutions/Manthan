@@ -103,8 +103,9 @@ const changePassword = "Do you Want to Change Password ?"
 const gstDetailsIsRequired = "GST Details Required"
 const mrpDetailsIsRequired = "MRP Details Required"
 const groupType_IsRerquired = "Please Select GroupType value...!"
-const group_IsRerquired = "Please Select Group value...!"
-const enterValue = "Please Enter value"
+const group_IsRerquired = "Please select group value...!"
+const enterValue = "Please enter value"
+const No_Kg_IsRerquired = "No. and Kg unit conversions are compulsory"
 
 // Party Master 
 const addressDefaultTrueSelect = "At least one Address Details IsDefault true"
@@ -119,7 +120,6 @@ const invalid_GSTIN_no = 'InValid GSTIN No'
 const invalid_Name = 'InValid Name'
 const fillAddressDetailsInTable = "Don't forget to fill in the address details in the table."
 const defaultAddressIsSelected = "Atleast One Default Address is Select "
-
 
 // Role Access
 const selectParty = "Select Party"
@@ -271,7 +271,8 @@ export const alertMessages = {
     selectField,
     updateAtLeastOneField,
     DistrictIsRequired,
-    ImageIsRequired
+    ImageIsRequired,
+    No_Kg_IsRerquired
 };
 
 

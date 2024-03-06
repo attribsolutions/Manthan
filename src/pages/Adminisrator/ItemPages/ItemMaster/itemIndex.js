@@ -89,7 +89,6 @@ export const unitConversionInitial = {
 const ItemsMaster = (props) => {
 
     const dispatch = useDispatch();
-    const baseTabRef = useRef(null);
 
     const history = useHistory()
     const [EditData, setEditData] = useState({});
@@ -117,7 +116,6 @@ const ItemsMaster = (props) => {
         Length: '',
         StoringCondition: '',
     });
-
     const [editItemShelfLife, setEditItemShelfLife] = useState('');
 
     const fileds = {
@@ -236,12 +234,14 @@ const ItemsMaster = (props) => {
                     label: index.PartyName
                 }))
 
-                const editCategoryType = {
-                    value: hasEditVal.ItemCategoryDetails[0].CategoryType,
-                    label: hasEditVal.ItemCategoryDetails[0].CategoryTypeName
-                }
+                const editCategoryType = hasEditVal.ItemCategoryDetails.length > 0 ? {
+                    value: hasEditVal.ItemCategoryDetails[0]?.CategoryType,
+                    label: hasEditVal.ItemCategoryDetails[0]?.CategoryTypeName
+                } : []
 
-                dispatch(get_Category_By_CategoryType_ForDropDownAPI(editCategoryType.value));
+                if (hasEditVal.ItemCategoryDetails.length > 0) {
+                    dispatch(get_Category_By_CategoryType_ForDropDownAPI(editCategoryType.value));
+                }
 
                 const editCategory = hasEditVal.ItemCategoryDetails.map(index => ({
                     value: index.Category,
@@ -335,79 +335,88 @@ const ItemsMaster = (props) => {
 
     }, [hasShowloction, hasShowModal, pageField])
 
-    useEffect(async () => {
+    useEffect(() => {
+        const fetchData = async () => {
+            if (postMsg.Status === true && postMsg.StatusCode === 200) {
+                try {
+                    dispatch(SaveItemMasterActionSuccess({ Status: false }));
 
-        if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-            dispatch(SaveItemMasterActionSuccess({ Status: false }))
+                    // ***************mobail app api*********************** 
+                    const mobilApiResp = await mobileApp_ProductAdd_Api(postMsg.TransactionID);
 
-            //***************mobail app api*********************** */
-            const mobilApiResp = await mobileApp_ProductAdd_Api(postMsg.TransactionID)
-            if (mobilApiResp.StatusCode === 200) {
-                showToastAlert(mobilApiResp.Message)
-            }
-            else {
-                setMobileApiLoading(false)
-            }
-            //************************************** */
+                    if (mobilApiResp.StatusCode === 200) {
+                        showToastAlert(mobilApiResp.Message);
+                    } else {
+                        setMobileApiLoading(false);
+                    }
 
-            if (pageMode === mode.dropdownAdd) {
-                customAlert({
-                    Type: 1,
-                    Message: postMsg.Message,
-                })
-            }
-            else {
-                const promise = await customAlert({
-                    Type: 1,
-                    Message: postMsg.Message,
-                })
-                if (promise) {
-                    history.push({
-                        pathname: url.ITEM_lIST,
-                    })
+                } catch (error) {
+                    console.error("An error occurred while fetching mobileApiResp:", error);
                 }
+                // ************************************** 
+                if (pageMode === mode.dropdownAdd) {
+                    customAlert({
+                        Type: 1,
+                        Message: postMsg.Message,
+                    });
+                } else {
+                    const promise = await customAlert({
+                        Type: 1,
+                        Message: postMsg.Message,
+                    });
+
+                    if (promise) {
+                        history.push({
+                            pathname: url.ITEM_lIST,
+                        });
+                    }
+                }
+            } else if (postMsg.Status === true) {
+                dispatch(SaveItemMasterActionSuccess({ Status: false }));
+                customAlert({
+                    Type: 4,
+                    Message: JSON.stringify(postMsg.Message),
+                });
             }
-        }
-        else if (postMsg.Status === true) {
-            dispatch(SaveItemMasterActionSuccess({ Status: false }))
-            customAlert({
-                Type: 4,
-                Message: JSON.stringify(postMsg.Message),
-            })
-        }
-    }, [postMsg])
+        };
+        fetchData();
+    }, [postMsg]);
 
-    useEffect(async () => {
+    useEffect(() => {
+        const fetchData = async () => {
+            if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
+                try {
+                    setMobileApiLoading(true);
 
-        if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
-            setMobileApiLoading(true)
+                    const jsonBody = JSON.stringify({
+                        products: (updateMsg.TransactionID).toString()
+                    });
 
-            //***************mobail app api*********************** */
-            const jsonBody = JSON.stringify({
-                products: (updateMsg.TransactionID).toString()
-            })
+                    const mobilApiResp = await mobileApp_ProductUpdate_Api({ jsonBody });
 
-            const mobilApiResp = await mobileApp_ProductUpdate_Api({ jsonBody });
-            if (mobilApiResp.StatusCode === 200) {
-                showToastAlert(mobilApiResp.Message);
-                setMobileApiLoading(false)
+                    if (mobilApiResp.StatusCode === 200) {
+                        showToastAlert(mobilApiResp.Message);
+                        setMobileApiLoading(false);
+                    } else {
+                        setMobileApiLoading(false);
+                    }
+
+                } catch (error) {
+                    console.error("An error occurred while fetching mobileApiResp:", error);
+                    setMobileApiLoading(false);
+                }
+                history.push({
+                    pathname: url.ITEM_lIST,
+                });
+            } else if (updateMsg.Status === true && !modalCss) {
+                dispatch(updateItemMasterActionSuccess({ Status: false }));
+                customAlert({
+                    Type: 3,
+                    Message: JSON.stringify(updateMsg.Message),
+                });
             }
-            else {
-                setMobileApiLoading(false)
-            }
-            //************************************** */
-
-            history.push({
-                pathname: url.ITEM_lIST,
-            });
-
-        } else if (updateMsg.Status === true && !modalCss) {
-            dispatch(updateItemMasterActionSuccess({ Status: false }));
-            customAlert({
-                Type: 3,
-                Message: JSON.stringify(updateMsg.Message),
-            })
-        }
+        };
+        fetchData();
     }, [updateMsg, modalCss]);
 
     const toggle1 = tab => {
@@ -458,6 +467,18 @@ const ItemsMaster = (props) => {
                     customAlert({
                         Type: 4,
                         Message: alertMessages.mrpDetailsIsRequired,
+                    })
+                    return btnIsDissablefunc({ btnId, state: false });
+                }
+
+                // **********  Unit Conversions Tab 'No', 'Kg' both compulsory *********************** //
+
+                const hasNo_Or_Kg = ['No', 'Kg'].every(label => baseUnitTableData.some(item => item.Unit.label === label))
+
+                if (!(hasNo_Or_Kg)) {
+                    customAlert({
+                        Type: 4,
+                        Message: alertMessages.No_Kg_IsRerquired,
                     })
                     return btnIsDissablefunc({ btnId, state: false });
                 }
@@ -762,7 +783,6 @@ const ItemsMaster = (props) => {
                                                 <TabPane tabId="1">{/* ++++ TabPane tabId="1" ++++++ */}
                                                     {(pageField) &&
                                                         <BasicInfoTabForm
-                                                            ref={baseTabRef}
                                                             state={state}
                                                             setState={setState}
                                                             settable={setBaseUnitTableData}

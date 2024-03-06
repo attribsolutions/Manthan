@@ -321,7 +321,7 @@ const userRoutes = [
 
 	{ path: path.ROUTES, component: RoutesMaster, isPartyWisePage: true },
 	{ path: path.ROUTES_LIST, component: RoutesList, isPartyWisePage: true },
-	{ path: path.ROUTE_UPDATE, component: RouteUpdate },//not party wise
+	{ path: path.ROUTE_UPDATE, component: RouteUpdate, isPartyWisePage: true },
 
 	{ path: path.SALESMAN, component: SalesManMaster, isPartyWisePage: true },
 	{ path: path.SALESMAN_LIST, component: SalesManList, isPartyWisePage: true },
