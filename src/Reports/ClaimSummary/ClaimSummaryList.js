@@ -18,7 +18,7 @@ import { ClaimSummary_API, MasterClaimSummary_API } from "../../helpers/backend_
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import { alertMessages } from "../../components/Common/CommonErrorMsg/alertMsg";
 
-const SelectedMonth = () => _cfunc.getPreviousMonthAndYear(new Date())
+const SelectedMonth = () => _cfunc.getPreviousMonthAndYear({ date: new Date(), Privious: 1 })
 const FirstAndLastDate = () => _cfunc.getFirstAndLastDateOfMonth(SelectedMonth());
 const fileds = () => ({
     FromDate: FirstAndLastDate().firstDate,
@@ -35,7 +35,7 @@ const ClaimSummaryList = () => {
     const [pageMode] = useState(mode.defaultList);
 
     const currentDate = new Date(); // Current date
-    const currentMonth = _cfunc.getPreviousMonthAndYear(currentDate);
+    const currentMonth = _cfunc.getPreviousMonthAndYear({ date: currentDate, Privious: 1 });
 
     const reducers = useSelector(
         (state) => ({
@@ -142,7 +142,7 @@ const ClaimSummaryList = () => {
 
         const isConfirmed = await customAlert({
             Type: 7,
-            Message:alertMessages.deleteClaim,
+            Message: alertMessages.deleteClaim,
         });
 
         if (isConfirmed) {

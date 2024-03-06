@@ -37,7 +37,10 @@ const TargetUpload = (props) => {
     const [isIgnoreNegativeValue, setisIgnoreNegativeValue] = useState(false);
     const [negativeFigureVerify, setNegativeFigureVerify] = useState({ Negative_Figure_Array: [], Not_Verify_Negative_Figure: undefined });
 
-    debugger
+    const [sameMonthandYear, setsameMonthandYear] = useState(undefined);
+
+
+
     const {
         postMsg,
         userAccess,
@@ -148,8 +151,19 @@ const TargetUpload = (props) => {
             const readjson = await readExcelFile({ file: files[0] })
 
             //////////////////////////////////////// Check  Invoice  Item Contain Negative Value Or Not //////////////////////////////////////////////////////
-            const Negative_Value_Item_Array = readjson.filter(i => i.RemoveField.length > 0)
 
+
+            const sameMonthAndYear = readjson.every(item => item.Month === readjson[0].Month && item.Year === readjson[0].Year);
+
+
+            if (sameMonthAndYear) {
+                debugger
+                setsameMonthandYear(true)
+            } else {
+                setsameMonthandYear(false)
+            }
+
+            const Negative_Value_Item_Array = readjson.filter(i => i.RemoveField.length > 0)
             if (Negative_Value_Item_Array.length > 0) {
                 setNegativeFigureVerify({ Negative_Figure_Array: Negative_Value_Item_Array, Not_Verify_Negative_Figure: true })
             } else {
@@ -338,7 +352,6 @@ const TargetUpload = (props) => {
                                     </Card>
                                 )
                             })}
-
                             <div id="filedetail">
                                 {negativeFigureVerify.Not_Verify_Negative_Figure !== undefined ?
                                     <details>
@@ -379,6 +392,19 @@ const TargetUpload = (props) => {
                                             </p>
                                         </div>}
                                     </details> : null}
+                                {sameMonthandYear !== undefined ? <details>
+                                    <summary>&nbsp;&nbsp;&nbsp;&nbsp;Same Month and Year 
+                                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{sameMonthandYear === true ?
+                                            <i style={{ color: "green", }} className="mdi mdi-check-decagram  font-size-18  "></i> :
+                                            <i style={{ color: "tomato", }} className="mdi mdi-close-circle font-size-18  "></i>}</summary>
+                                    {sameMonthandYear === true ? null : <div className="error-msg">
+                                        <p>
+                                            <span style={{ fontWeight: "bold", fontSize: "15px" }} >Upload Data of Same Month and year</span>
+
+                                        </p>
+                                    </div>}
+                                </details> : null}
                             </div>
                         </div>
                     </div>
