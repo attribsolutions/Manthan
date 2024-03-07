@@ -71,6 +71,7 @@ const TargetUploadList = () => {
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
         dispatch(getTargetUploadList());
+        goButtonHandler()
         return () => {
             dispatch(getTargetUploadListSuccess([]));
             dispatch(commonPageFieldListSuccess(null))

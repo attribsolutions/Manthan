@@ -23,6 +23,7 @@ import { C_Button } from '../../components/Common/CommonButton';
 import { ExcelReportComponent } from '../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS';
 import { changeCommonPartyDropDetailsAction } from '../../store/Utilites/PartyDrodown/action';
 import DynamicColumnHook from '../../components/Common/TableCommonFunc';
+import SimpleBar from "simplebar-react";
 
 function initialState(history) {
 
@@ -37,7 +38,7 @@ function initialState(history) {
     return { page_Id, buttonLable }
 };
 
-const ManPowerReport = (props) => { 
+const ManPowerReport = (props) => {
 
     const history = useHistory()
     const dispatch = useDispatch();
@@ -140,7 +141,7 @@ const ManPowerReport = (props) => {
                             </C_Button>
 
                         </Col>
-                        
+
                         <Col lg={2} className=" mt-n2 mb-n2 ">
                             {(downloadManPower) && btnMode === "Excel" ?
                                 <Button type="button"
@@ -153,7 +154,7 @@ const ManPowerReport = (props) => {
                                 <Button type="button"
                                     color='btn btn-primary'
                                     id="excelbtn-id"
-                                    onClick={() => GobtnExcelhandler("Excel")}> Excel 
+                                    onClick={() => GobtnExcelhandler("Excel")}> Excel
                                 </Button>
                             }
                         </Col>
@@ -171,7 +172,7 @@ const ManPowerReport = (props) => {
                             <React.Fragment>
                                 <Row>
                                     <Col xl="12">
-                                        <div >
+                                        <div className="table-responsive table" style={{maxHeight:"77vh"}}> 
                                             <BootstrapTable
                                                 keyField="PartyID"
                                                 classes={"custom-table"}
@@ -185,6 +186,7 @@ const ManPowerReport = (props) => {
                                                 }}
                                                 {...toolkitProps.baseProps}
                                             />
+
                                             {globalTableSearchProps(toolkitProps.searchProps)}
                                         </div>
                                     </Col>
