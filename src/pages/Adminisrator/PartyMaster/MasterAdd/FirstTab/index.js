@@ -110,58 +110,55 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
 
     // Common Party Dropdown useEffect
     useEffect(() => {
+        debugger
         if (commonPartyDropSelect.value <= 0) {
-            setState((i) => {
-                let a = { ...i }
-                a.values.Name = ''
-                a.values.MobileNo = ''
-                a.values.PartyType = ''
-                a.values.SAPPartyCode = ''
-                a.values.Supplier = []
-                a.values.PAN = ''
-                a.values.Email = ''
-                a.values.AlternateContactNo = ''
-                a.values.State = ''
-                a.values.District = ''
-                a.values.GSTIN = ''
-                a.values.CityName = ''
-                a.values.Route = ''
-                a.values.Distance = ''
-                a.values.isActive = true
-                a.values.Latitude = ''
-                a.values.Longitude = ''
-
-                a.hasValid.Name.valid = true;
-                a.hasValid.MobileNo.valid = true;
-                a.hasValid.PartyType.valid = true;
-                a.hasValid.SAPPartyCode.valid = true;
-                a.hasValid.Supplier.valid = true;
-                a.hasValid.PAN.valid = true;
-                a.hasValid.Email.valid = true;
-                a.hasValid.AlternateContactNo.valid = true;
-                a.hasValid.State.valid = true;
-                a.hasValid.District.valid = true;
-                a.hasValid.GSTIN.valid = true;
-                a.hasValid.CityName.valid = true;
-                a.hasValid.Distance.valid = true;
-                a.hasValid.Latitude.valid = true;
-                a.hasValid.Longitude.valid = true;
-
-                return a
-            })
             setPriceListSelect({ value: '' })
             dispatch(Breadcrumb_inputName(""))
         }
 
+
+        setState((i) => {
+            let a = { ...i }
+            a.values.Name = ''
+            a.values.MobileNo = ''
+            a.values.PartyType = ''
+            a.values.SAPPartyCode = ''
+            a.values.Supplier = []
+            a.values.PAN = ''
+            a.values.Email = ''
+            a.values.AlternateContactNo = ''
+            a.values.State = ''
+            a.values.District = ''
+            a.values.GSTIN = ''
+            a.values.CityName = ''
+            a.values.Route = ''
+            a.values.Distance = ''
+            a.values.isActive = true
+            a.values.Latitude = ''
+            a.values.Longitude = ''
+
+            a.hasValid.Name.valid = true;
+            a.hasValid.MobileNo.valid = true;
+            a.hasValid.PartyType.valid = true;
+            a.hasValid.SAPPartyCode.valid = true;
+            a.hasValid.Supplier.valid = true;
+            a.hasValid.PAN.valid = true;
+            a.hasValid.Email.valid = true;
+            a.hasValid.AlternateContactNo.valid = true;
+            a.hasValid.State.valid = true;
+            a.hasValid.District.valid = true;
+            a.hasValid.GSTIN.valid = true;
+            a.hasValid.CityName.valid = true;
+            a.hasValid.Distance.valid = true;
+            a.hasValid.Latitude.valid = true;
+            a.hasValid.Longitude.valid = true;
+
+            return a
+        })
+
         if (commonPartyDropSelect.value > 0) {
             dispatch(GetRoutesList({ ...loginJsonBody(), "PartyID": commonPartyDropSelect.value }))
         }
-        setState((i) => {
-            let a = { ...i }
-            a.values.Route = ''
-            a.hasValid.Route.valid = true;
-            return a
-        })
         return () => {
             dispatch(GetRoutesListSuccess([]));
         }
