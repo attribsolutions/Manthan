@@ -132,6 +132,25 @@ const ViewDetails_Modal = () => {
             )
         },
         {
+            text: "Approved Quantity",
+            align: "right",
+            dataField: "ApprovedQuantity",
+            formatter: (value, row, k) => (
+                <>
+                    <div>{`${Number(row.ApprovedQuantity).toFixed(0)}`}</div>
+                </>
+            )
+        }, {
+            text: "ApprovedBy Company",
+            dataField: "ApprovedByCompany",
+            align: "right",
+            formatter: (value, row, k) => (
+                <>
+                    <div>{`${Number(row.ApprovedByCompany).toFixed(0)}`}</div>
+                </>
+            )
+        },
+        {
             text: "Basic Rate",
             dataField: "Rate",
         },
@@ -218,7 +237,7 @@ const ViewDetails_Modal = () => {
                             onClick={(event) => {
 
                                 if ((row.ReturnItemImages) && (row.ReturnItemImages.length === 0)) {
-                                    customAlert({ Type: 3, Message: alertMessages.imageNotUploaded});
+                                    customAlert({ Type: 3, Message: alertMessages.imageNotUploaded });
                                     return setmodal_backdrop(false)
                                 } else if ((row.ReturnItemImages) && (row.ReturnItemImages.length > 0)) {
                                     imageShowHandler(row)
@@ -406,7 +425,6 @@ const ViewDetails_Modal = () => {
                                             </button>}
                                     </div>
                                 </FormGroup >}
-
                         </div>
                     </div>
                 </CardBody>
