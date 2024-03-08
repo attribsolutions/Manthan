@@ -52,6 +52,7 @@ function logRequestAndResponse(config, response) {
     }
 }
 
+
 axiosApi.interceptors.request.use(
     (config) => {
         const token = localStorage.getItem('token');
