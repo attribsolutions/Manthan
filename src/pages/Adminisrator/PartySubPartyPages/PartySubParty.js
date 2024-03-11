@@ -389,14 +389,14 @@ const PartySubParty = (props) => {
     async function mobileRetailerApiCall(partySaveArray) {
         debugger
         const subPartyIds = partySaveArray.reduce((acc, item) => {
-            if (!acc.includes(item.SubParty) && item.isNewAdded) {
+            if (!acc.includes(item.SubParty) ) {
                 acc.push(item.SubParty);
             }
             return acc;
         }, []).join(',');
         debugger
         // Create the desired object
-        const jsonBody = JSON.stringify({ "RetailerID": subPartyIds, "DistributorID": partySaveArray[0].PartyID });
+        const jsonBody = JSON.stringify({ "RetailerID": subPartyIds, });
 
         try {
             const mobilApiResp = await mobileApp_RetailerUpdate_Api({ jsonBody });

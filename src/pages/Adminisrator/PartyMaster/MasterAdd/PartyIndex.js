@@ -337,7 +337,7 @@ const PartyMaster = (props) => {
 			}
 
 			if (subPageMode === url.RETAILER_MASTER) {
-				const jsonBody = JSON.stringify({ RetailerID: postMsg.TransactionID.toString(), DistributorID: commonPartyDropSelect.value });
+				const jsonBody = JSON.stringify({ RetailerID: postMsg.TransactionID.toString(),});
 				const mobilApiResp = await mobileApp_Send_Retailer_Api({ jsonBody });
 				if (mobilApiResp.Message.code === 200) { showToastAlert(mobilApiResp.Message.message, "success"); };
 			}
@@ -368,7 +368,7 @@ const PartyMaster = (props) => {
 				if (subPageMode === url.RETAILER_MASTER && !(isMobileRetailer)) {
 					const jsonBody = JSON.stringify({
 						RetailerID: (updateMsg.TransactionID).toString(),
-						DistributorID: commonPartyDropSelect.value
+					
 					})
 					const mobilApiResp = await mobileApp_RetailerUpdate_Api({ jsonBody });
 					if (mobilApiResp.StatusCode === 200) { showToastAlert(mobilApiResp.Message, 'success'); };

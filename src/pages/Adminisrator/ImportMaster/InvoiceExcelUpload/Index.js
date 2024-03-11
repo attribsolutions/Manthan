@@ -313,7 +313,6 @@ const InvoiceExcelUpload = (props) => {
             const readjson = await readExcelFile({ file: files[0], compareParameter, ItemList })
             
             //////////////////////////////////////// Check  in valid format Value Or Not //////////////////////////////////////////////////////
-
             if (readjson.NotMapColumn.length > 0) {
                 setColunmMap({ Not_Map_Column_Array: readjson.NotMapColumn, Not_Map_Columnt: true });
                 setverifyLoading(false);
@@ -321,8 +320,6 @@ const InvoiceExcelUpload = (props) => {
             } else {
                 setColunmMap({ Not_Map_Column_Array: [], Not_Map_Columnt: false })
             }
-
-
 
             //////////////////////////////////////// Check  in valid format Value Or Not //////////////////////////////////////////////////////
 
@@ -332,20 +329,14 @@ const InvoiceExcelUpload = (props) => {
                 setInvalidFormat({ Invalid_Format_Array: [], Not_Verify_Invalid_Format: false })
             }
 
-
             //////////////////////////////////////// Check  Invoice  Item Contain Negative Value Or Not //////////////////////////////////////////////////////
-
             const Negative_Value_Item_Array = readjson.filter(i => i.shouldRemove)
-
-
-
 
             if (Negative_Value_Item_Array.length > 0) {
                 setNegativeFigureVerify({ Negative_Figure_Array: Negative_Value_Item_Array, Not_Verify_Negative_Figure: true })
             } else {
                 setNegativeFigureVerify({ Negative_Figure_Array: [], Not_Verify_Negative_Figure: false })
             }
-
             //////////////////////////////////////check Invoice Item Mapping Code exist in system or not ///////////////////////////////////////
 
             const mapItemValues = ItemList.map(obj => obj.MapItem);
@@ -355,20 +346,13 @@ const InvoiceExcelUpload = (props) => {
                 return !mapItemValues.includes(itemCodeAsString);
             });
 
-
             if (Wrong_Item_Code_Array.length > 0) {
-
                 try {
-
                     const MapItemList = ItemList.filter(obj => obj.MapItem !== null && obj.MapItem !== "");
-
                     MapItemList.forEach(function (i) {
-
                         let Item_Code = i.MapItem;
                         let GST = i.GST;
-
                         let Matching_ItemCode_Objects = readjson.filter(inx => {
-
                             return (inx.Item_Code).toString().trim() === (Item_Code).toString().trim();
                         });
 
@@ -405,8 +389,6 @@ const InvoiceExcelUpload = (props) => {
                         if (Matching_ItemCode_Objects) {
                             Matching_ItemCode_Objects.GST = GST;
                         }
-
-
                     });
                     setItemVerify({ Wrong_Item_Code_Array: [], Not_Verify_Item: false })
                 } catch (error) {
@@ -441,8 +423,6 @@ const InvoiceExcelUpload = (props) => {
                 const unitMap = isdetails.unitCode;
                 const arrayOfUnitMapStrings = unitMap.map(String);
                 const mapUnitValues = unitMapData.map(obj => obj.MapUnit);
-
-
 
                 const Wrong_Unit_Code_Array = arrayOfUnitMapStrings.filter(value => {
                     const unitCodeAsString = value.toString().trim();
