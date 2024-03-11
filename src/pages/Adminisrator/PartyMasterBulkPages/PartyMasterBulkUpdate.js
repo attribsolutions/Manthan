@@ -82,7 +82,7 @@ const PartyMasterBulkUpdate = (props) => {
 
     const values = { ...state.values }
     const { fieldLabel } = state;
-    
+
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
         postMsg,
@@ -176,11 +176,13 @@ const PartyMasterBulkUpdate = (props) => {
             setState(() => resetFunction(fileds, state))// Clear form values 
             setSelectFieldName([]);
             //***************mobail app api*********************** */
+            debugger
             let arrayOfRetailerID = SelectedParty.map(function (i) {
                 return i.SubPartyID;
             });
             const jsonBody = JSON.stringify({
-                RetailerID: arrayOfRetailerID.join(', ')
+                RetailerID: arrayOfRetailerID.join(', '),
+                DistributorID: commonPartyDropSelect.value
             })
             const mobilApiResp = await mobileApp_RetailerUpdate_Api({ jsonBody })
             if (mobilApiResp.StatusCode === 200) { showToastAlert(mobilApiResp.Message) }

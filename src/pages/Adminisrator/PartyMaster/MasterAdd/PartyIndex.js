@@ -367,7 +367,8 @@ const PartyMaster = (props) => {
 				//***************mobail app api*********************** */
 				if (subPageMode === url.RETAILER_MASTER && !(isMobileRetailer)) {
 					const jsonBody = JSON.stringify({
-						RetailerID: (updateMsg.TransactionID).toString()
+						RetailerID: (updateMsg.TransactionID).toString(),
+						DistributorID: commonPartyDropSelect.value
 					})
 					const mobilApiResp = await mobileApp_RetailerUpdate_Api({ jsonBody });
 					if (mobilApiResp.StatusCode === 200) { showToastAlert(mobilApiResp.Message, 'success'); };

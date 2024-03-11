@@ -52,7 +52,7 @@ import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { Tbody, Thead } from "react-super-responsive-table";
 import { globalTableSearchProps } from "../../../components/Common/SearchBox/MySearch";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
-import { mobileApp_Send_Retailer_Api } from "../../../helpers/backend_helper";
+import { mobileApp_RetailerUpdate_Api, mobileApp_Send_Retailer_Api } from "../../../helpers/backend_helper";
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 
 const PartySubParty = (props) => {
@@ -320,6 +320,7 @@ const PartySubParty = (props) => {
             })
         }
         else if (find === undefined) {
+            values.Subparty["isNewAdded"] = true
             setPartyTableArr([...partyTableArr, values.Subparty]);
 
             setState((i) => {
@@ -386,19 +387,19 @@ const PartySubParty = (props) => {
     }, [filterdItemWise_tableData])
 
     async function mobileRetailerApiCall(partySaveArray) {
-
+        debugger
         const subPartyIds = partySaveArray.reduce((acc, item) => {
-            if (!acc.includes(item.SubParty)) {
+            if (!acc.includes(item.SubParty) && item.isNewAdded) {
                 acc.push(item.SubParty);
             }
             return acc;
         }, []).join(',');
-
+        debugger
         // Create the desired object
-        const jsonBody = JSON.stringify({ "RetailerID": subPartyIds });
+        const jsonBody = JSON.stringify({ "RetailerID": subPartyIds, "DistributorID": partySaveArray[0].PartyID });
 
         try {
-            const mobilApiResp = await mobileApp_Send_Retailer_Api({ jsonBody });
+            const mobilApiResp = await mobileApp_RetailerUpdate_Api({ jsonBody });
 
             if (mobilApiResp.StatusCode === 200) {
                 customAlert({ Type: 1, Status: true, Message: mobilApiResp.Message });
@@ -423,12 +424,14 @@ const PartySubParty = (props) => {
                         Party: values.PartyName.value,
                         SubParty: i.value,
                         PartyID: values.PartyName.value,
+                        isNewAdded: i.isNewAdded ? true : false
 
                     }
                     const isvendor = {
                         Party: i.value,
                         SubParty: values.PartyName.value,
                         PartyID: values.PartyName.value,
+
                     }
 
                     const ramain = {
@@ -450,6 +453,7 @@ const PartySubParty = (props) => {
 
                 // ************* mobile Retailer Send API Call when IsRetailerTransfer flag true ************//
                 if (values.IsRetailerTransfer) {
+
                     mobileRetailerApiCall(arr)
                 }
 
