@@ -182,7 +182,7 @@ const PartyMasterBulkUpdate = (props) => {
             });
             const jsonBody = JSON.stringify({
                 RetailerID: arrayOfRetailerID.join(', '),
-                // DistributorID: commonPartyDropSelect.value
+                DistributorID: commonPartyDropSelect.value
             })
             const mobilApiResp = await mobileApp_RetailerUpdate_Api({ jsonBody })
             if (mobilApiResp.StatusCode === 200) { showToastAlert(mobilApiResp.Message) }

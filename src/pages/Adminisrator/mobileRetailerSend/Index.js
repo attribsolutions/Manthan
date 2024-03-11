@@ -123,7 +123,8 @@ const Index = (props) => {
 		}
 
 		const RetailerJson = {
-			RetailerID: CheckArray.map(index => index.id).join(',')
+			RetailerID: CheckArray.map(index => index.id).join(','),
+			DistributorID: partyName.value
 		};
 
 		const jsonBody = JSON.stringify(RetailerJson);

@@ -52,8 +52,9 @@ import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { Tbody, Thead } from "react-super-responsive-table";
 import { globalTableSearchProps } from "../../../components/Common/SearchBox/MySearch";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
-import { mobileApp_RetailerUpdate_Api, mobileApp_Send_Retailer_Api } from "../../../helpers/backend_helper";
+import { mobileApp_RetailerUpdate_Api } from "../../../helpers/backend_helper";
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
+import { allLabelWithBlank } from "../../../components/Common/CommonErrorMsg/HarderCodeData";
 
 const PartySubParty = (props) => {
 
@@ -247,6 +248,8 @@ const PartySubParty = (props) => {
         Route: null
     }));
 
+    // RetailerDropdown_Options.unshift(allLabelWithBlank)
+
     function handllerParty(e) {
         dispatch(getPartySubParty_For_party_dropdown(e.value));
         setState((i) => {
@@ -301,10 +304,17 @@ const PartySubParty = (props) => {
 
     // Role Table Validation
     function AddPartyHandler() {
-
+        // let AllRetailerArray = []
         const find = partyTableArr.find((element) => {
             return element.value === values.Subparty.value
         });
+
+        // if (values.Subparty.value === "") {
+        //     AllRetailerArray = RetailerDropdown_Options.filter(element => {
+        //         return (element.value !== "") && (!partyTableArr.some(item => item.value === element.value));
+        //     });
+
+        // }
 
         if (values.PartyName === '') {
             customAlert({
@@ -322,7 +332,6 @@ const PartySubParty = (props) => {
         else if (find === undefined) {
             values.Subparty["isNewAdded"] = true
             setPartyTableArr([...partyTableArr, values.Subparty]);
-
             setState((i) => {
                 const a = { ...i }
                 a.values.Subparty = '';
@@ -387,16 +396,17 @@ const PartySubParty = (props) => {
     }, [filterdItemWise_tableData])
 
     async function mobileRetailerApiCall(partySaveArray) {
-        debugger
+
         const subPartyIds = partySaveArray.reduce((acc, item) => {
-            if (!acc.includes(item.SubParty) ) {
+            debugger
+            if (!acc.includes(item.SubParty) && item.isNewAdded) {
                 acc.push(item.SubParty);
             }
             return acc;
         }, []).join(',');
-        debugger
+
         // Create the desired object
-        const jsonBody = JSON.stringify({ "RetailerID": subPartyIds, });
+        const jsonBody = JSON.stringify({ "RetailerID": subPartyIds, "DistributorID": partySaveArray[0].PartyID });
 
         try {
             const mobilApiResp = await mobileApp_RetailerUpdate_Api({ jsonBody });
@@ -450,7 +460,7 @@ const PartySubParty = (props) => {
                 })
 
                 const jsonBody = JSON.stringify(arr);
-
+                debugger
                 // ************* mobile Retailer Send API Call when IsRetailerTransfer flag true ************//
                 if (values.IsRetailerTransfer) {
 
@@ -461,13 +471,11 @@ const PartySubParty = (props) => {
                     dispatch(updatePartySubParty({ jsonBody, updateId: values.id, btnId }));
                 }
                 else {
-
                     dispatch(savePartySubParty({ jsonBody, btnId }));
                 }
             }
         } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
     };
-
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
