@@ -248,7 +248,7 @@ const PartySubParty = (props) => {
         Route: null
     }));
 
-    // RetailerDropdown_Options.unshift(allLabelWithBlank)
+    RetailerDropdown_Options.unshift(allLabelWithBlank)
 
     function handllerParty(e) {
         dispatch(getPartySubParty_For_party_dropdown(e.value));
@@ -304,17 +304,17 @@ const PartySubParty = (props) => {
 
     // Role Table Validation
     function AddPartyHandler() {
-        // let AllRetailerArray = []
+        let AllRetailerArray = []
         const find = partyTableArr.find((element) => {
             return element.value === values.Subparty.value
         });
 
-        // if (values.Subparty.value === "") {
-        //     AllRetailerArray = RetailerDropdown_Options.filter(element => {
-        //         return (element.value !== "") && (!partyTableArr.some(item => item.value === element.value));
-        //     });
-
-        // }
+        if (values.Subparty.value === "") {
+            AllRetailerArray = RetailerDropdown_Options.filter(element => {
+                element["isNewAdded"] = true
+                return (element.value !== "") && (!partyTableArr.some(item => item.value === element.value));
+            });
+        }
 
         if (values.PartyName === '') {
             customAlert({
@@ -331,7 +331,18 @@ const PartySubParty = (props) => {
         }
         else if (find === undefined) {
             values.Subparty["isNewAdded"] = true
-            setPartyTableArr([...partyTableArr, values.Subparty]);
+            if (values.Subparty.value === "") {
+                if (AllRetailerArray.length <= 0) {
+                    return customAlert({
+                        Type: 3,
+                        Message: alertMessages.partyAlreadyExist,
+                    })
+                }
+                setPartyTableArr([...partyTableArr, ...AllRetailerArray]);
+            } else {
+                setPartyTableArr([...partyTableArr, values.Subparty]);
+            }
+
             setState((i) => {
                 const a = { ...i }
                 a.values.Subparty = '';
@@ -398,25 +409,27 @@ const PartySubParty = (props) => {
     async function mobileRetailerApiCall(partySaveArray) {
 
         const subPartyIds = partySaveArray.reduce((acc, item) => {
-            debugger
+
             if (!acc.includes(item.SubParty) && item.isNewAdded) {
                 acc.push(item.SubParty);
             }
             return acc;
         }, []).join(',');
-
+        debugger
         // Create the desired object
         const jsonBody = JSON.stringify({ "RetailerID": subPartyIds, "DistributorID": partySaveArray[0].PartyID });
 
         try {
-            const mobilApiResp = await mobileApp_RetailerUpdate_Api({ jsonBody });
+            if (subPartyIds !== "") {
+                mobileApp_RetailerUpdate_Api({ jsonBody });
+            }
 
-            if (mobilApiResp.StatusCode === 200) {
-                customAlert({ Type: 1, Status: true, Message: mobilApiResp.Message });
-            }
-            else {
-                customAlert({ Type: 4, Status: true, Message: mobilApiResp.Message });
-            }
+            // if (mobilApiResp.StatusCode === 200) {
+            //     customAlert({ Type: 1, Status: true, Message: mobilApiResp.Message });
+            // }
+            // else {
+            //     customAlert({ Type: 4, Status: true, Message: mobilApiResp.Message });
+            // }
         } catch (e) { }
     };
 
@@ -458,9 +471,9 @@ const PartySubParty = (props) => {
                         return { ...normal, ...ramain }
                     }
                 })
-
-                const jsonBody = JSON.stringify(arr);
                 debugger
+                const jsonBody = JSON.stringify(arr);
+
                 // ************* mobile Retailer Send API Call when IsRetailerTransfer flag true ************//
                 if (values.IsRetailerTransfer) {
 
