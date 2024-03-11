@@ -133,7 +133,7 @@ const TargetUploadList = () => {
 
     }
     const partyOnchange = (e) => {
-        debugger
+        
         setPartyDropdown(e)
     }
 

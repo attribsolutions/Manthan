@@ -176,7 +176,7 @@ const PartyMasterBulkUpdate = (props) => {
             setState(() => resetFunction(fileds, state))// Clear form values 
             setSelectFieldName([]);
             //***************mobail app api*********************** */
-            debugger
+            
             let arrayOfRetailerID = SelectedParty.map(function (i) {
                 return i.SubPartyID;
             });

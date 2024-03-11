@@ -110,7 +110,7 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
 
     // Common Party Dropdown useEffect
     useEffect(() => {
-        debugger
+        
         if (commonPartyDropSelect.value <= 0) {
             setPriceListSelect({ value: '' })
             dispatch(Breadcrumb_inputName(""))

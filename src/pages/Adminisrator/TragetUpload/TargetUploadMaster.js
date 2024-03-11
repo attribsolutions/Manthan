@@ -166,7 +166,7 @@ const TargetUpload = (props) => {
                     NotexistParty.push(item)
                 }
             })
-            debugger
+            
             if (NotexistParty.length > 0) {
                 setPartyExist({ Not_Exist_Party_Array: NotexistParty, PartyNotexist: true })
             } else {
@@ -174,7 +174,7 @@ const TargetUpload = (props) => {
             }
 
             const sameMonthAndYear = readjson.every(item => item.Month === readjson[0].Month && item.Year === readjson[0].Year);
-            debugger
+            
             if (sameMonthAndYear) {
                 setsameMonthandYear(true)
             } else {

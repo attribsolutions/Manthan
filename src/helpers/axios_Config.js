@@ -11,6 +11,7 @@ const axiosApi = axios.create({ baseURL: SERVER_HOST_PATH });
 const requestUrls = {};
 
 function logRequestAndResponse(config, response) {
+    
     const userId = String(loginUserID());
     const isUsershowConsole = loginSystemSetting()?.isConsoleShow?.split(',')?.includes(userId) || false;
     if (!isUsershowConsole) {
@@ -76,14 +77,15 @@ axiosApi.interceptors.request.use(
 );
 
 axiosApi.interceptors.response.use(
+
     (response) => {
         // Log response using utility function
         logRequestAndResponse(null, response);
-
+        debugger
         return response;
     },
     (error) => {
-
+        debugger
         if (!error.response) {
             // Log network error using utility function
             const networkErrorResponse = {

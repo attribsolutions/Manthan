@@ -27,7 +27,7 @@ function* Save_Method_ForTargetUpload_GenFun({ config }) {              // Save 
 }
 
 function* Get_TargetUpload_List_GenFunc({ config }) {
-  debugger                            // getList API
+                              // getList API
   try {
     const response = yield call(Get_Target_Upload, config);
     let id = 1;
@@ -43,7 +43,7 @@ function* Get_TargetUpload_List_GenFunc({ config }) {
 }
 
 function* Delete_TargetUpload_ID_GenFunc({ config }) {
-  debugger
+  
   if (config.deleteId) {
     config["jsonBody"] = JSON.stringify({ "Month": config.rowData.Month.toString(), "Party": config.rowData.PartyID.toString(), "Year": config.rowData.Year.toString() })
   }

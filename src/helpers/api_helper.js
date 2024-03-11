@@ -28,6 +28,7 @@ export function post(url, body) {
 }
 
 export function put(url, body) {
+  
   return axiosApi
     .put(url, body, {
       headers: {
@@ -36,6 +37,7 @@ export function put(url, body) {
       },
     })
     .then((response) => {
+
       return response.data;
     })
 

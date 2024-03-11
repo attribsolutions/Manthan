@@ -415,13 +415,13 @@ const PartySubParty = (props) => {
             }
             return acc;
         }, []).join(',');
-        debugger
+
         // Create the desired object
         const jsonBody = JSON.stringify({ "RetailerID": subPartyIds, "DistributorID": partySaveArray[0].PartyID });
 
         try {
             if (subPartyIds !== "") {
-                mobileApp_RetailerUpdate_Api({ jsonBody });
+                await mobileApp_RetailerUpdate_Api({ jsonBody });
             }
 
             // if (mobilApiResp.StatusCode === 200) {
@@ -471,7 +471,7 @@ const PartySubParty = (props) => {
                         return { ...normal, ...ramain }
                     }
                 })
-                debugger
+
                 const jsonBody = JSON.stringify(arr);
 
                 // ************* mobile Retailer Send API Call when IsRetailerTransfer flag true ************//

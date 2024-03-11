@@ -195,7 +195,7 @@ export const areAllDatesSame = (dates) => {
 
 
 export const getPreviousMonthAndYear = ({ date, Privious }) => {
-  debugger
+  
   const previousMonthDate = new Date(date);
   previousMonthDate.setMonth(previousMonthDate.getMonth() - Privious);
 
