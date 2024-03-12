@@ -55,6 +55,7 @@ import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMs
 import { mobileApp_RetailerUpdate_Api } from "../../../helpers/backend_helper";
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 import { allLabelWithBlank } from "../../../components/Common/CommonErrorMsg/HarderCodeData";
+import { showToastAlert } from "../../../helpers/axios_Config";
 
 const PartySubParty = (props) => {
 
@@ -79,6 +80,11 @@ const PartySubParty = (props) => {
     const [editCreatedBy, seteditCreatedBy] = useState("");
     const [searchQuery, setSearchQuery] = useState("");
     const [TableRow, setTableRow] = useState([]);
+
+    const [Array, setArray] = useState([]);
+
+
+
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const { postMsg,
@@ -185,6 +191,10 @@ const PartySubParty = (props) => {
                     Status: true,
                     Message: postMsg.Message,
                 })
+                if (values.IsRetailerTransfer) {
+                    mobileRetailerApiCall(Array)
+                }
+
                 if (isPermission) {
                     history.push({ pathname: url.PARTY_SUB_PARTY_lIST })
                 }
@@ -409,7 +419,6 @@ const PartySubParty = (props) => {
     async function mobileRetailerApiCall(partySaveArray) {
 
         const subPartyIds = partySaveArray.reduce((acc, item) => {
-
             if (!acc.includes(item.SubParty) && item.isNewAdded) {
                 acc.push(item.SubParty);
             }
@@ -421,26 +430,25 @@ const PartySubParty = (props) => {
 
         try {
             if (subPartyIds !== "") {
-                await mobileApp_RetailerUpdate_Api({ jsonBody });
+                const mobilApiResp = await mobileApp_RetailerUpdate_Api({ jsonBody });
+                if (mobilApiResp.StatusCode === 200) {
+                    showToastAlert(mobilApiResp.Message);
+                }
+                else {
+                    showToastAlert(mobilApiResp.Message);
+                }
             }
-
-            // if (mobilApiResp.StatusCode === 200) {
-            //     customAlert({ Type: 1, Status: true, Message: mobilApiResp.Message });
-            // }
-            // else {
-            //     customAlert({ Type: 4, Status: true, Message: mobilApiResp.Message });
-            // }
         } catch (e) { }
     };
 
-    const SaveHandler = async (event) => {
+    const SaveHandler = async (vent) => {
 
-        event.preventDefault();
-        const btnId = event.target.id;
+        // event.preventDefault();
+        // const btnId = event.target.id;
 
         try {
             if (formValid(state, setState)) {
-                btnIsDissablefunc({ btnId, state: true })
+                btnIsDissablefunc({ state: true })
                 const arr = partyTableArr.map(i => {
 
                     const normal = {
@@ -475,19 +483,16 @@ const PartySubParty = (props) => {
                 const jsonBody = JSON.stringify(arr);
 
                 // ************* mobile Retailer Send API Call when IsRetailerTransfer flag true ************//
-                if (values.IsRetailerTransfer) {
-
-                    mobileRetailerApiCall(arr)
-                }
 
                 if (pageMode === mode.edit) {
-                    dispatch(updatePartySubParty({ jsonBody, updateId: values.id, btnId }));
+                    dispatch(updatePartySubParty({ jsonBody, updateId: values.id, }));
                 }
                 else {
-                    dispatch(savePartySubParty({ jsonBody, btnId }));
+                    dispatch(savePartySubParty({ jsonBody, }));
                 }
+                setArray(arr)
             }
-        } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
+        } catch (e) { btnIsDissablefunc({ state: false }) }
     };
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
