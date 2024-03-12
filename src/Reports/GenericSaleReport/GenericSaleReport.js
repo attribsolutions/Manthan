@@ -267,8 +267,6 @@ const GenericSaleReport = (props) => {
                     </div>
                 </div>
 
-
-
                 <div className="mt-1">
                     <ToolkitProvider
                         keyField="id"
