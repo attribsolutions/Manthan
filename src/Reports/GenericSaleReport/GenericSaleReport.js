@@ -14,6 +14,9 @@ import { ExcelReportComponent } from "../../components/Common/ReportCommonFunc/E
 import GlobalCustomTable from "../../GlobalCustomTable";
 import { changeCommonPartyDropDetailsAction } from "../../store/Utilites/PartyDrodown/action";
 import { allLabelWithBlank } from "../../components/Common/CommonErrorMsg/HarderCodeData";
+import ToolkitProvider from "react-bootstrap-table2-toolkit";
+import BootstrapTable from "react-bootstrap-table-next";
+import { globalTableSearchProps } from "../../components/Common/SearchBox/MySearch";
 
 const GenericSaleReport = (props) => {
 
@@ -258,27 +261,46 @@ const GenericSaleReport = (props) => {
                                 className="btn btn-primary"
                                 onClick={(e) => excel_And_GoBtnHandler(e, 2)}
                             >
-                                Excel 
+                                Excel
                             </C_Button>
                         </Col>
                     </div>
                 </div>
 
-                <div className="mb-1">
-                    <GlobalCustomTable
-                        keyField={"id"}
+                <div className="mt-1">
+                    <ToolkitProvider
+                        keyField="id"
                         data={tableData}
                         columns={tableColumns}
-                        id="table_Arrow"
-                        noDataIndication={
-                            <div className="text-danger text-center ">
-                                Items Not available
-                            </div>
-                        }
-                        onDataSizeChange={({ dataCount, filteredData = [] }) => {
-                            dispatch(BreadcrumbShowCountlabel(`Count:${dataCount} ₹ ${_cfunc.TotalAmount_Func(filteredData)}`));
-                        }}
-                    />
+                        search
+                    >
+                        {(toolkitProps,) => (
+                            <React.Fragment>
+                                <Row>
+                                    <Col xl="12">
+                                        <div className="table-responsive table" style={{ maxHeight: "77vh" }}>
+                                            <BootstrapTable
+                                                keyField="PartyID"
+                                                classes={"custom-table"}
+                                                noDataIndication={
+                                                    <div className="text-danger text-center ">
+                                                        Record Not available
+                                                    </div>
+                                                }
+                                                onDataSizeChange={({ dataSize }) => {
+                                                    dispatch(BreadcrumbShowCountlabel(`Count:${dataSize}`));
+                                                }}
+                                                {...toolkitProps.baseProps}
+                                            />
+
+                                            {globalTableSearchProps(toolkitProps.searchProps)}
+                                        </div>
+                                    </Col>
+                                </Row>
+
+                            </React.Fragment>
+                        )}
+                    </ToolkitProvider>
                 </div>
             </div>
 

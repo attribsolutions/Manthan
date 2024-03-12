@@ -31,6 +31,7 @@ import { SubGroup_By_Group_DropDown_API } from "../../../helpers/backend_helper"
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 import GlobalCustomTable from "../../../GlobalCustomTable"
+// import { sideBarPageFiltersInfoAction } from "../../../store/Utilites/PartyDrodown/action";
 
 const ItemMasterBulkUpdate = (props) => {
 
@@ -46,8 +47,6 @@ const ItemMasterBulkUpdate = (props) => {
     const [selectFieldNameDropOptions, setSelectFieldNameDropOptions] = useState([]);
 
     const [fieldNameDropOptions, setFieldNameDropOptions] = useState([]);
-
-
 
     const { userAccess,
         SelectDropdown,
@@ -93,6 +92,15 @@ const ItemMasterBulkUpdate = (props) => {
             _cfunc.breadcrumbReturnFunc({ dispatch, userAcc });
         };
     }, [userAccess])
+
+    // // sideBar Page Filters Information
+    // useEffect(() => {
+
+    //     dispatch(sideBarPageFiltersInfoAction([
+    //         { label: "Select Field", content: SelectFieldName.label, },
+    //     ]));
+
+    // }, [SelectFieldName]);
 
     // Select Dropdown GeneralMasterSubType api call
     useEffect(() => {
@@ -274,8 +282,6 @@ const ItemMasterBulkUpdate = (props) => {
             .sort((a, b) => a.label.toLowerCase().localeCompare(b.label.toLowerCase()));
     };
 
-
-
     const GroupType_DropdownOptions = createAndSortDropdownOptions(GroupType, 'id', 'Name');
 
     //  function to create the Newvalue column
@@ -395,8 +401,9 @@ const ItemMasterBulkUpdate = (props) => {
                         ItemName: i.ItemName,
                         ItemID: i.id,
                         Value1: i.Newvalue,
-                        Value2: i.NewValue_2
-
+                        Value2: i.NewValue_2,
+                        GroupTypeID: groupTypeSelect.value,
+                        CreatedBy: _cfunc.loginUserID()
                     };
                     updatedData.push(arr);
                 }
@@ -451,7 +458,7 @@ const ItemMasterBulkUpdate = (props) => {
                             <Col sm="5">
                                 <FormGroup className="row mt-2" >
                                     <Label className="col-sm-1 p-2"
-                                        style={{ width: "115px", marginRight: "0.4cm" }}>SelectField </Label>
+                                        style={{ width: "115px", marginRight: "0.4cm" }}>Select Field </Label>
                                     <Col sm="7">
                                         <C_Select
                                             name="SelectField"
