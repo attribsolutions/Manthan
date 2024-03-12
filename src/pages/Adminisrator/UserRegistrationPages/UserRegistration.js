@@ -101,7 +101,7 @@ const AddUser = (props) => {
   const values = { ...state.values }
   const { isError } = state;
   const { fieldLabel } = state;
-
+  debugger
   const location = { ...history.location }
   const hasShowloction = location.hasOwnProperty(mode.editValue)
   const hasShowModal = props.hasOwnProperty(mode.editValue)
@@ -258,7 +258,9 @@ const AddUser = (props) => {
 
   const EmployeeOptions = employeelistForDropdown.map((Data) => ({
     value: Data.id,
-    label: Data.Name
+    label: Data.Name,
+    EmployeeEmail: Data.EmployeeEmail,
+    EmployeeMobile: Data.EmployeeMobile
   }));
 
   const RolesValues = Roles.map((Data) => ({
@@ -506,6 +508,8 @@ const AddUser = (props) => {
                                     <div className="form-check form-switch form-switch-md ml-4 " dir="ltr">
                                       <Input type="checkbox" className="form-check-input"
                                         checked={values.isLoginUsingMobile}
+                                        disabled={values.EmployeeName.EmployeeMobile === "" ? true : false}
+
                                         name="isLoginUsingMobile"
                                         onChange={(event) => {
                                           setState((i) => {
@@ -527,6 +531,7 @@ const AddUser = (props) => {
                                         checked={values.isActive}
                                         defaultChecked={true}
                                         name="isActive"
+
                                         onChange={(event) => {
                                           setState((i) => {
                                             const a = { ...i }
@@ -550,6 +555,7 @@ const AddUser = (props) => {
                                     <div className="form-check form-switch form-switch-md" dir="ltr">
                                       <Input type="checkbox" className="form-check-input"
                                         checked={values.isLoginUsingEmail}
+                                        disabled={values.EmployeeName.EmployeeEmail === "" ? true : false}
                                         name="isLoginUsingEmail"
                                         onChange={(event) => {
                                           setState((i) => {
