@@ -61,10 +61,7 @@ const ForgetPasswordPage = props => {
     if (sendPasswordMsg_reducx) {
       setSendPasswordMsg(sendPasswordMsg_reducx)
       setSendPasswordError(null)
-
-
       dispatch(changePasswordForForgetPasswordSuccess(null))
-      // dispatch(changePasswordForForgetPasswordError(null))
 
     }
     if (sendPasswordError_reducx) {
@@ -83,7 +80,6 @@ const ForgetPasswordPage = props => {
       setSendOtpMegError(null)
       setSetpawShowUI(true)
       dispatch(userForgetPassword_sendOTP_Success(null))
-
     }
     if (sendOtpMegError_reducx) {
       setSendOtpMegError(sendOtpMegError_reducx)
@@ -110,12 +106,6 @@ const ForgetPasswordPage = props => {
     dispatch(userForgetPassword_sendOTP(jsonBody))
   }
 
-
-
-
-
-
-
   function handleValidSubmit1(event, values) {
 
     event.preventDefault();
@@ -123,12 +113,10 @@ const ForgetPasswordPage = props => {
     var pawdcn = values.passwordcon
 
     if (!(paswd === pawdcn)) {
-      // setPaswErr("form-control is-invalid mb-2")
       setPaswErr(true)
       return
     }
     else {
-      // setPaswErr("form-control is-valid mb-2")
       setPaswErr(false)
 
       var jsonBody = JSON.stringify({
@@ -145,7 +133,6 @@ const ForgetPasswordPage = props => {
   const handlePasswordChange = (e) => {
     setPassword(e.target.value);
     setConfirmPassword(''); // Clear Confirm Password field
-    // setPasswordMatched(true); // Reset to true when Password changes
   };
 
   const handleConfirmPasswordChange = (e) => {
@@ -154,8 +141,13 @@ const ForgetPasswordPage = props => {
   };
 
   function handleKeyDown(event) {
+    // Check if the pressed key is a space
     if (event.key === " ") {
-      event.preventDefault();
+      // Check if the input contains only spaces
+      if (event.target.value.trim() === "") {
+        // Prevent default behavior (typing space)
+        event.preventDefault();
+      }
     }
   }
 
@@ -210,8 +202,6 @@ const ForgetPasswordPage = props => {
                                   name="LoginName"
                                   onKeyDown={handleKeyDown}
                                   className="form-control mb-2"
-                                  // dissabled={true}
-                                  // autoComplete="new-email"
                                   placeholder="LoginName"
                                   type="text"
                                   autoComplete="off"
@@ -223,7 +213,6 @@ const ForgetPasswordPage = props => {
                                   name="OTP"
                                   onKeyDown={handleKeyDown}
                                   className="form-control mb-2"
-                                  // dissabled={true}
                                   placeholder="Enter OTP"
                                   type="text"
                                   required
@@ -305,8 +294,6 @@ const ForgetPasswordPage = props => {
                           <div className="mt-5 text-center">
                             <p className="text-muted mb-0">Remember It ?&nbsp;
                               <Link to="/Login" className="text-primary fw-semibold">Login</Link>
-                              {/* <a href="/login"
-                          className="text-primary fw-semibold"> Sign In </a> */}
                             </p>
                           </div>
                         </div>

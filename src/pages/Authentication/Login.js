@@ -144,10 +144,16 @@ const Login = props => {
     setShowPassword(!showPassword);
   };
   function handleKeyDown(event) {
+    // Check if the pressed key is a space
     if (event.key === " ") {
-      event.preventDefault();
+      // Check if the input contains only spaces
+      if (event.target.value.trim() === "") {
+        // Prevent default behavior (typing space)
+        event.preventDefault();
+      }
     }
   }
+
 
   return (
     <React.Fragment>
