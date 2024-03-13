@@ -13,7 +13,7 @@ const RetailerApprovalList = () => {
     const dispatch = useDispatch();
     const history = useHistory();
 
-    const [pageMode] = useState(mode.modeSTPsave);
+    const [pageMode] = useState(mode.modeSTPList);
 
     const reducers = useSelector(
         (state) => ({
