@@ -38,15 +38,13 @@ const Header = props => {
   const [position, setPosition] = useState();
   const [open, setOpen] = useState(false);
 
-
-
   const onDrawerClose = () => {
     setOpen(false);
   }
 
   /*** Sidebar menu icon and default menu set */
   function tToggle() {
-    
+
     var body = document.body;
     setClick(!isClick);
     if (isClick === true) {
@@ -74,14 +72,14 @@ const Header = props => {
         <div className="navbar-header">
           <div className="d-flex">
             <div className="navbar-brand-box" >
-              <Link to="/dashboard" className="logo logo-dark">
+              <div style={{ cursor: "context-menu" }} className="logo logo-dark">
                 <span className="logo-sm" >
                   <img src={logoSvg} alt="" height="35" />
                 </span>
                 <span className="logo-lg">
                   <img src={logoSvg} alt="" height="45" /> <span className="logo-txt" style={{ color: 'white' }}>FoodERP 2.0</span>
                 </span>
-              </Link>
+              </div>
 
               <Link to="/dashboard" className="logo logo-light">
                 <span className="logo-sm" >
@@ -95,7 +93,7 @@ const Header = props => {
             <div>
               <button
                 onClick={() => {
-                  
+
                   tToggle()
                 }}
                 type="button" className="btn btn-sm  font-size-16 header-item" id="vertical-menu-btn">

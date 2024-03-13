@@ -145,14 +145,14 @@ const Login = props => {
                 <div className="w-100">
                   <div className="d-flex flex-column h-100">
                     <div className="mb-4 md-5 text-center">
-                      <Link to="/dashboard" className="d-block auth-logo">
+                      <div style={{ cursor: "context-menu" }} className="logo logo-dark">
                         <span className="logo-txt">FoodERP 2.0</span>
-                      </Link>
+                      </div>
                       <img src={logo} alt="" height="90" />
 
                     </div>
                     <div className="auth-content my-auto">
-                      <div className="text-center">
+                      <div style={{ cursor: "context-menu" }} className="text-center">
                         <h5 className="mb-0">Welcome !</h5>
                         <p className="text-muted mt-2">Sign in to Continue FoodERP 2.0</p>
                       </div>
@@ -232,7 +232,7 @@ const Login = props => {
                       </form>
                     </div>
                     <div className="mt-4 mt-md-5 text-center">
-                      <p className="mb-0">© {new Date().getFullYear()}.Developed by Attrib Solution</p>
+                      <p style={{ cursor: "context-menu" }} className="mb-0">© {new Date().getFullYear()}.Developed by Attrib Solution</p>
                     </div>
                   </div>
                 </div>

@@ -11,7 +11,6 @@ import { GoButton_For_GenericSale_Action, GoButton_For_GenericSale_Success } fro
 import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess } from "../../store/actions";
 import DynamicColumnHook from "../../components/Common/TableCommonFunc";
 import { ExcelReportComponent } from "../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS";
-import GlobalCustomTable from "../../GlobalCustomTable";
 import { changeCommonPartyDropDetailsAction } from "../../store/Utilites/PartyDrodown/action";
 import { allLabelWithBlank } from "../../components/Common/CommonErrorMsg/HarderCodeData";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
@@ -142,7 +141,6 @@ const GenericSaleReport = (props) => {
         else {
             isDistributorDropdown = distributorDropdown.filter(i => !(i.value === '')).map(obj => obj.value).join(',');
         }
-
         const jsonBody = JSON.stringify({
             "FromDate": fromdate,
             "ToDate": todate,
