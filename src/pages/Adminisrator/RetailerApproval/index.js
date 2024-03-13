@@ -5,12 +5,11 @@ import * as pageId from "../../../routes/allPageID"
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList";
 import { PageLoadingSpinner } from "../../../components/Common/CommonButton";
 import { mode } from "../../../routes";
-import { loginPartyID } from "../../../components/Common/CommonFunction";
 import { PartyListforApproval_Action, PartyListforApproval_Success, GetPartyListforApprovalID_Action, GetPartyListforApprovalID_Success } from "../../../store/Administrator/PartyRedux/action";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 
 const RetailerApprovalList = () => {
-
+    
     const dispatch = useDispatch();
 
     const [pageMode] = useState(mode.modeSTPsave);
@@ -23,10 +22,11 @@ const RetailerApprovalList = () => {
             RetailerApprovalID: state.PartyMasterReducer.PartyListForApproval_ID,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList,
+            commonPartyDropSelect: state.CommonPartyDropdownReducer.commonPartyDropSelect
         })
     );
 
-    const { pageField, goBtnLoading, RetailerApprovalID } = reducers;
+    const { pageField, goBtnLoading, RetailerApprovalID, commonPartyDropSelect } = reducers;
 
     const action = {}
 
@@ -35,11 +35,20 @@ const RetailerApprovalList = () => {
         const page_Id = pageId.RETAILER_APPROVAL
         dispatch(commonPageFieldListSuccess(null));
         dispatch(commonPageFieldList(page_Id));
-        goButtonHandler();
         return () => {
             dispatch(PartyListforApproval_Success([]));
         }
     }, []);
+
+    // Common Party Dropdown useEffect
+    useEffect(() => {
+        if (commonPartyDropSelect.value > 0) {
+            goButtonHandler();
+        }
+        return () => {
+            dispatch(PartyListforApproval_Success([]));
+        }
+    }, [commonPartyDropSelect]);
 
     useEffect(() => {
 
@@ -60,12 +69,11 @@ const RetailerApprovalList = () => {
     const goButtonHandler = () => {
         try {
             const jsonBody = JSON.stringify({
-                PartyID: loginPartyID(),
+                PartyID: commonPartyDropSelect.value,
             });
-
             dispatch(PartyListforApproval_Action(jsonBody));
         } catch (error) { }
-        return
+
     };
 
     const makeBtnFunc = (list = [], btnId) => {
@@ -80,7 +88,6 @@ const RetailerApprovalList = () => {
         <React.Fragment>
             <PageLoadingSpinner isLoading={(goBtnLoading || !pageField)} />
             <div className="page-content">
-
                 {
                     (pageField) &&
                     <div className="mt-n1">
@@ -94,7 +101,6 @@ const RetailerApprovalList = () => {
                             makeBtnFunc={makeBtnFunc}
                         />
                     </div>
-
                 }
             </div>
 

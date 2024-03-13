@@ -41,9 +41,6 @@ const TargetUpload = (props) => {
 
     const [partyExist, setPartyExist] = useState({ Not_Exist_Party_Array: [], PartyNotexist: undefined });
 
-
-
-
     const {
         postMsg,
         userAccess,
@@ -56,7 +53,6 @@ const TargetUpload = (props) => {
         userAccess: state.Login.RoleAccessUpdateData,
 
     }));
-
 
     // Common Party Dropdown useEffect
     const location = { ...history.location }
@@ -78,7 +74,6 @@ const TargetUpload = (props) => {
             _cfunc.breadcrumbReturnFunc({ dispatch, userAcc });
         };
     }, [userAccess])
-
 
     useEffect(async () => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
@@ -131,10 +126,8 @@ const TargetUpload = (props) => {
         }
     }, [])
 
-
-
     useEffect(() => {
-        /////////////////////////////////////////////////////////// check Ignore Negative Value in excel file /////////////////////////////////
+        // check Ignore Negative Value in excel file 
         let updatereadJsonDetail = readJsonDetail
         if (isIgnoreNegativeValue) {
             updatereadJsonDetail = readJsonDetail.filter(i => !i.RemoveField.length > 0)
@@ -158,7 +151,7 @@ const TargetUpload = (props) => {
         if (extension === ".xlsx") {
             const readjson = await readExcelFile({ file: files[0] })
             let NotexistParty = []
-            //////////////////////////////////////// Check  Invoice  Item Contain Negative Value Or Not //////////////////////////////////////////////////////
+            // Check  Invoice  Item Contain Negative Value Or Not 
 
             readjson.map(item => {
                 const idExistAsParty = partyList.some(partyItem => partyItem.id === item.Party);
@@ -166,7 +159,7 @@ const TargetUpload = (props) => {
                     NotexistParty.push(item)
                 }
             })
-            
+
             if (NotexistParty.length > 0) {
                 setPartyExist({ Not_Exist_Party_Array: NotexistParty, PartyNotexist: true })
             } else {
@@ -174,7 +167,7 @@ const TargetUpload = (props) => {
             }
 
             const sameMonthAndYear = readjson.every(item => item.Month === readjson[0].Month && item.Year === readjson[0].Year);
-            
+
             if (sameMonthAndYear) {
                 setsameMonthandYear(true)
             } else {
@@ -197,13 +190,10 @@ const TargetUpload = (props) => {
         setverifyLoading(false)
     }
 
-    ////////////////////////////////////////////////////  Verify condition Check If all condition fullfill then only file verified /////////////////////////////
-
+    // Verify condition Check If all condition fullfill then only file verified 
     const isVerify = (
         ((isIgnoreNegativeValue) || (negativeFigureVerify.Not_Verify_Negative_Figure === false))
         && (sameMonthandYear) && (partyExist.PartyNotexist === false)
-
-
     );
 
     async function handleAcceptedFiles(files) {
@@ -217,7 +207,7 @@ const TargetUpload = (props) => {
             }
         };
 
-        //////////////////////////////////////////////////////////// New File is Selected then privious verified details clear//////////////////////////////    
+        // New File is Selected then privious verified details clear   
 
         setReadJsonDetail([])
         setNegativeFigureVerify({ Negative_Figure_Array: [], Not_Verify_Negative_Figure: undefined })
@@ -259,8 +249,6 @@ const TargetUpload = (props) => {
             dispatch(saveTargetUploadMaster({ jsonBody }));
         } catch (e) { console.log(e) }
     };
-
-
 
     const tableColumns = [
         {

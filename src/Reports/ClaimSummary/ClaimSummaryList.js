@@ -17,6 +17,7 @@ import { initialFiledFunc } from "../../components/Common/validationFunction";
 import { ClaimSummary_API, MasterClaimSummary_API } from "../../helpers/backend_helper";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import { alertMessages } from "../../components/Common/CommonErrorMsg/alertMsg";
+import { sideBarPageFiltersInfoAction } from "../../store/Utilites/PartyDrodown/action";
 
 const SelectedMonth = () => _cfunc.getPreviousMonthAndYear({ date: new Date(), Privious: 1 })
 const FirstAndLastDate = () => _cfunc.getFirstAndLastDateOfMonth(SelectedMonth());
@@ -50,17 +51,10 @@ const ClaimSummaryList = () => {
         })
     );
 
-    const { pageField, pdfdata, deleteMsg } = reducers;
-    const values = { ...state.values }
     const { commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
 
-    // Common Party select Dropdown useEffect
-    useEffect(() => {
-        if (commonPartyDropSelect.value === 0) {
-            dispatch(claimList_API_Success([]));
-        }
-    }, [commonPartyDropSelect]);
-
+    const { pageField, pdfdata, deleteMsg } = reducers;
+    const values = { ...state.values }
 
     const action = {
         getList: claimList_API,
@@ -72,14 +66,28 @@ const ClaimSummaryList = () => {
     useEffect(() => {
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(pageId.CLAIM_SUMMARY_lIST))
-
-        if (!(commonPartyDropSelect.value === 0)) {
-            MonthAndYearOnchange(values.SelectedMonth, "InitialDate")
-        }
         return () => {
             dispatch(claimList_API_Success([]));
         }
     }, []);
+
+    // Common Party select Dropdown useEffect
+    useEffect(() => {
+        if (commonPartyDropSelect.value > 0) {
+            MonthAndYearOnchange(values.SelectedMonth, "InitialDate")
+        }
+        else {
+            dispatch(claimList_API_Success([]));
+        }
+    }, [commonPartyDropSelect]);
+
+    // sideBar Page Filters Information
+    useEffect(() => {
+        const { monthName, year } = _cfunc.SelectedMonthAndYearName(values.SelectedMonth);
+        dispatch(sideBarPageFiltersInfoAction([
+            { label: "Month", content: `${monthName} ${year}` },
+        ]));
+    }, [values.SelectedMonth]);
 
     useEffect(() => {
         if ((pdfdata.Status === true) && (pdfdata.StatusCode === 204)) {

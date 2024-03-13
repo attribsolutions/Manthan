@@ -13,6 +13,8 @@ import { C_DatePicker } from "../../../CustomValidateForm";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 import { allLabelWithBlank } from "../../../components/Common/CommonErrorMsg/HarderCodeData";
+import * as _cfunc from "../../../components/Common/CommonFunction";
+import { sideBarPageFiltersInfoAction } from "../../../store/Utilites/PartyDrodown/action";
 
 const GRNList = () => {
 
@@ -57,6 +59,17 @@ const GRNList = () => {
             partySelectOnChangeHandler();
         }
     }, [commonPartyDropSelect]);
+
+    // sideBar Page Filters Information
+    useEffect(() => {
+
+        dispatch(sideBarPageFiltersInfoAction([
+            { label: "From Date", content: _cfunc.date_dmy_func(fromdate), },
+            { label: "To Date", content: _cfunc.date_dmy_func(todate), },
+            { label: "Supplier Name", content: supplierSelect.label, }
+        ]));
+
+    }, [supplierSelect, fromdate, todate]);
 
     const action = {
         editId: _act.editGRNAction,

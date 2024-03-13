@@ -245,7 +245,7 @@ const Dashboard_Admin = (props) => {
             setGrnMonthCount({ monthCounts, containsNonZeroNumber })
         }
     }, [GrnData])
-   
+
     function paymentEntry_onClick() {
         history.push(url.PAYMENT_ENTRY_LIST)
     }
@@ -257,7 +257,7 @@ const Dashboard_Admin = (props) => {
     function salesReturn_onClick() {
         history.push(url.SALES_RETURN_LIST)
     }
-    
+
     const RedirectHandler = (Type) => {
         if (Type === 1) {
             history.push(url.ORDER_LIST_4)
@@ -273,8 +273,8 @@ const Dashboard_Admin = (props) => {
         }
     }
 
-    function mobileOrder_OnClick() {
-        history.push(url.APP_ORDER_LIST)
+    function mobileRetailerAprproveLinkHandler() {
+        history.push(url.RETAILER_APPROVAL)
     }
 
     return (
@@ -535,7 +535,7 @@ const Dashboard_Admin = (props) => {
                                         <CardHeader style={{ backgroundColor: "whitesmoke" }}
                                             className="card-header align-items-center d-flex text-center">
                                             <Label className="card-title mb-0 flex-grow-4 text-primary text-bold mb-n2 text-decoration-underline"
-                                                onClick={mobileOrder_OnClick}
+                                                onClick={mobileRetailerAprproveLinkHandler}
                                                 disabled={SalesReturnListloading}
                                                 style={{ cursor: "pointer" }}
                                             >

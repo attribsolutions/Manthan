@@ -1,9 +1,58 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import ChangeCommonParty from '../chnageParty/changeCommonParty';
 import CountLabelComp from './CountLabelComp';
 import HeaderTitleNewBtn from './HeaderTitleNewBtn';
+import { useDispatch, useSelector } from 'react-redux';
+import { sideBarPageFiltersInfoSuccess } from '../../../store/Utilites/PartyDrodown/action';
 
 const PageDetailsSection = ({ handleClose, ...props }) => {
+    const dispatch = useDispatch();
+    const sideBarPageFilters = useSelector(({ CommonPartyDropdownReducer }) => CommonPartyDropdownReducer.sideBarPageFilters);
+
+    const defaultLabelStyle = "#fff";
+    const defaultContentStyle = "#ffc735";
+
+    useEffect(() => {
+        dispatch(sideBarPageFiltersInfoSuccess([]));
+    }, [])
+
+    const StyledSpan = ({ items }) => {
+
+        return (
+            <>
+                {/* <label style={{ color: "#20e696" }}>Filter Details</label> */}
+                {items.map(({ label, content, labelStyle, contentStyle }, index) => (
+                    <div
+                        key={index}
+                    // style={{
+                    //     border: "1px solid #ccc",
+                    //     padding: "5px",
+                    //     marginBottom: "7px",
+                    //     borderRadius: "3px"
+                    // }}
+                    >
+                        <span
+                            style={{
+                                color: labelStyle ? labelStyle : defaultLabelStyle,
+                                marginLeft: "5px"
+                            }}
+                        >
+                            {label} :
+                        </span>{" "}
+                        <span
+                            style={{
+                                color: contentStyle ? contentStyle : defaultContentStyle,
+                                marginLeft: "5px"
+                            }}
+                        >
+                            {content}
+                        </span>
+                    </div>
+                ))}
+            </>
+        );
+    };
+
     return (
         <div className="vertical-menu" >
             <ChangeCommonParty {...props} />
@@ -23,6 +72,27 @@ const PageDetailsSection = ({ handleClose, ...props }) => {
 
                         <HeaderTitleNewBtn hederTextColor={"white"} showBredcrumItemName={false} />
                         <CountLabelComp />
+                        {sideBarPageFilters.length > 0 &&
+                            <div className='mt-2'
+                                style={{
+                                    border: "1px solid #ccc",
+                                    padding: "5px",
+                                    marginBottom: "7px",
+                                    borderRadius: "3px"
+                                }}
+                            >
+                                <StyledSpan
+                                    items={Object.entries(sideBarPageFilters).map(([key, value]) => ({
+                                        label: value.label,
+                                        content: value.content,
+                                        labelStyle: value.labelStyle,
+                                        contentStyle: value.contentStyle
+                                    }))}
+                                />
+
+                            </div>}
+
+
                     </div>
                 </div>
             </div>
@@ -32,37 +102,3 @@ const PageDetailsSection = ({ handleClose, ...props }) => {
 
 export default PageDetailsSection;
 
-
-//   {/* <div style={{ marginBottom: "15px", marginTop: "15px" }}>
-//                     <h5 style={{ color: "#f4f4f4eb" }}>Summary</h5>
-//                     <ul style={{ listStyle: "none", padding: 0 }}>
-//                         <li>
-//                             Total Transactions: <strong>256</strong>
-//                         </li>
-//                         <li>
-//                             Customers: <strong>120</strong>
-//                         </li>
-//                         <li>
-//                             Date Range: <strong>January 1, 2022 - January 31, 2022</strong>
-//                         </li>
-//                     </ul>
-//                 </div>
-
-//                 <div style={{ marginBottom: "15px" }}>
-//                     <h5 style={{ color: "#f4f4f4eb" }}>Customer Details</h5>
-//                     <ul style={{ listStyle: "none", padding: 0 }}>
-//                         <li>
-//                             Customer Name: <strong>John Doe</strong>
-//                         </li>
-//                         <li>
-//                             Email: <strong>john.doe@example.com</strong>
-//                         </li>
-//                         <li>
-//                             Account Type: <strong>Premium</strong>
-//                         </li>
-//                     </ul>
-//                 </div>
-
-//                 <div style={{ marginBottom: "15px" }}>
-//                     <h5 style={{ color: "#f4f4f4eb" }}>Transaction History</h5>
-//                 </div> */}

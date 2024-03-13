@@ -29,6 +29,7 @@ import { url, mode, pageId } from "../../../routes/index"
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 import { allLabelWithBlank } from "../../../components/Common/CommonErrorMsg/HarderCodeData";
+import { sideBarPageFiltersInfoAction } from "../../../store/Utilites/PartyDrodown/action";
 
 
 const PaymentEntryList = () => {
@@ -87,6 +88,16 @@ const PaymentEntryList = () => {
         }
     }, [commonPartyDropSelect]);
 
+    // sideBar Page Filters Information
+    useEffect(() => {
+
+        dispatch(sideBarPageFiltersInfoAction([
+            { label: "From Date", content: _cfunc.date_dmy_func(values.FromDate), },
+            { label: "To Date", content: _cfunc.date_dmy_func(values.ToDate), },
+            { label: "Customer", content: values.Customer.label, }
+        ]));
+
+    }, [state]);
 
     useEffect(() => {
         return () => {

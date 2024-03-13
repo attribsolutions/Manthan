@@ -12,8 +12,6 @@ import { listPageActionsButtonFunc } from "./ListActionsButtons";
 import DynamicColumnHook from "./TableCommonFunc";
 import GlobalCustomTable from "../../GlobalCustomTable";
 
-
-
 const CommonListPage = (props) => {
 
   const dispatch = useDispatch();

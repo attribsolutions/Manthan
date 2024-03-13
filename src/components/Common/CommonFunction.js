@@ -195,7 +195,7 @@ export const areAllDatesSame = (dates) => {
 
 
 export const getPreviousMonthAndYear = ({ date, Privious }) => {
-  
+
   const previousMonthDate = new Date(date);
   previousMonthDate.setMonth(previousMonthDate.getMonth() - Privious);
 
@@ -828,3 +828,11 @@ export function TotalAmount_Func(tableList) {
   let commaSeparateAmount = amountCommaSeparateFunc(Number(totalAmount).toFixed(2));
   return commaSeparateAmount
 }
+
+// month and year name return 
+export function SelectedMonthAndYearName(selectedMonth) {
+
+  const [year, month] = selectedMonth.split('-');
+  const monthName = new Date(`${year}-${month}-01`).toLocaleString('default', { month: 'long' });
+  return { monthName, year };
+};
