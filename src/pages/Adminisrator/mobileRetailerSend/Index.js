@@ -26,6 +26,7 @@ import { C_Select } from "../../../CustomValidateForm";
 import { mobileApp_Send_Retailer_Api } from "../../../helpers/backend_helper"
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
+import { sideBarPageFiltersInfoAction } from "../../../store/Utilites/PartyDrodown/action";
 
 const Index = (props) => {
 
@@ -80,6 +81,15 @@ const Index = (props) => {
 			dispatch(GetVenderSupplierCustomerSuccess([]));
 		}
 	}, [])
+
+	// sideBar Page Filters Information
+	useEffect(() => {
+
+		dispatch(sideBarPageFiltersInfoAction([
+			{ label: "Party", content: partyName.label, },
+		]));
+
+	}, [partyName]);
 
 	const location = { ...history.location }
 	const hasShowloction = location.hasOwnProperty(mode.editValue)

@@ -24,6 +24,7 @@ import { url, mode, pageId } from "../../../routes/index"
 import { Go_Button, PageLoadingSpinner } from "../../../components/Common/CommonButton";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
+import { sideBarPageFiltersInfoAction } from "../../../store/Utilites/PartyDrodown/action";
 
 const LoadingSheetList = () => {
     const history = useHistory();
@@ -64,6 +65,16 @@ const LoadingSheetList = () => {
         deleteId: DeleteLoadingSheet,
         deleteSucc: DeleteLoadingSheetSucccess
     }
+
+    // sideBar Page Filters Information
+    useEffect(() => {
+
+        dispatch(sideBarPageFiltersInfoAction([
+            { label: "From Date", content: _cfunc.date_dmy_func(fromdate), },
+            { label: "To Date", content: _cfunc.date_dmy_func(todate), },
+        ]));
+
+    }, [headerFilters]);
 
     // Featch Modules List data  First Rendering
     useEffect(() => {

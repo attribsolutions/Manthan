@@ -20,6 +20,8 @@ import { CommonConsole, date_ymd_func, loginEmployeeID, loginIsSCMParty, loginPa
 import { C_DatePicker, C_Select } from "../../../CustomValidateForm";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
+import { sideBarPageFiltersInfoAction } from "../../../store/Utilites/PartyDrodown/action";
+import * as _cfunc from "../../../components/Common/CommonFunction"
 
 const ClaimTrackingEntryList = () => {
 
@@ -70,6 +72,17 @@ const ClaimTrackingEntryList = () => {
             dispatch(commonPageFieldListSuccess(null))
         }
     }, []);
+
+    // sideBar Page Filters Information
+    useEffect(() => {
+
+        dispatch(sideBarPageFiltersInfoAction([
+            { label: "From Date", content: _cfunc.date_dmy_func(fromDate), },
+            { label: "To Date", content: _cfunc.date_dmy_func(toDate), },
+            { label: "Party", content: partySelect.label, }
+        ]));
+
+    }, [partySelect, fromDate, toDate]);
 
     function goButtonHandler(e) {
 
@@ -124,7 +137,6 @@ const ClaimTrackingEntryList = () => {
         setToDate(date);
         dispatch(getClaimTrackingEntrySuccess([]));
     }
-
 
     const HeaderContent = () => {
         return (

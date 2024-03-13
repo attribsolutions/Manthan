@@ -30,7 +30,8 @@ import { C_DatePicker, C_Select } from "../../../CustomValidateForm";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 import { allLabelWithBlank } from "../../../components/Common/CommonErrorMsg/HarderCodeData";
-
+import { sideBarPageFiltersInfoAction } from "../../../store/Utilites/PartyDrodown/action";
+import * as _cfunc from "../../../components/Common/CommonFunction";
 
 const ReceiptList = () => {
 
@@ -84,6 +85,17 @@ const ReceiptList = () => {
             dispatch(commonPageFieldListSuccess(null))
         }
     }, []);
+
+    // sideBar Page Filters Information
+    useEffect(() => {
+
+        dispatch(sideBarPageFiltersInfoAction([
+            { label: "From Date", content: _cfunc.date_dmy_func(values.FromDate), },
+            { label: "To Date", content: _cfunc.date_dmy_func(values.ToDate), },
+            { label: "Customer", content: values.Customer.label, }
+        ]));
+
+    }, [state]);
 
     // Common Party Dropdown useEffect
     useEffect(() => {

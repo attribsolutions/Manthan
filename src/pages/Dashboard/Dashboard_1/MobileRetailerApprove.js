@@ -1,9 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
-import * as pageId from "../../../routes/allPageID"
 import { mode, url } from "../../../routes";
-import { loginPartyID, loginSelectedPartyID } from "../../../components/Common/CommonFunction";
 import { PartyListforApproval_Action, PartyListforApproval_Success, editPartyID } from "../../../store/Administrator/PartyRedux/action";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
@@ -11,7 +8,6 @@ import { globalTableSearchProps } from '../../../components/Common/SearchBox/MyS
 import { Button, Spinner } from "reactstrap";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import SimpleBar from "simplebar-react"
-
 
 const MobileRetailerApprove = () => {
 
@@ -35,9 +31,7 @@ const MobileRetailerApprove = () => {
 
     //  This UseEffect => Featch Modules List data  First Rendering
     useEffect(() => {
-        const page_Id = pageId.RETAILER_APPROVAL
-        dispatch(commonPageFieldListSuccess(null));
-        dispatch(commonPageFieldList(page_Id));
+
         if (commonPartyDropSelect.value > 0) {
             goButtonHandler();
         }
@@ -61,12 +55,10 @@ const MobileRetailerApprove = () => {
     const goButtonHandler = () => {
         try {
             const jsonBody = JSON.stringify({
-                PartyID: loginSelectedPartyID()
+                PartyID: commonPartyDropSelect.value
             });
-
             dispatch(PartyListforApproval_Action(jsonBody));
         } catch (error) { }
-        return
     };
 
     const makeBtnFunc = (list = {}) => {
@@ -81,14 +73,9 @@ const MobileRetailerApprove = () => {
             text: "Name",
             dataField: "Name",
         },
-        // {
-        //     text: "GSTIN",
-        //     dataField: "GSTIN",
-        // },
         {
             text: "PAN",
             dataField: "PAN",
-
         },
         {
             text: "Email",
@@ -98,7 +85,6 @@ const MobileRetailerApprove = () => {
             text: "MobileNo",
             dataField: "MobileNo",
         },
-
         {
             text: "Action",
             dataField: "",
@@ -130,6 +116,7 @@ const MobileRetailerApprove = () => {
             }
         },
     ];
+
     return (
         <ToolkitProvider
             keyField="id"
@@ -139,9 +126,7 @@ const MobileRetailerApprove = () => {
         >
             {toolkitProps => (
                 <React.Fragment>
-                    {/* <div className="table-container"> */}
                     <SimpleBar className="" style={{ maxHeight: "352px" }}>
-
                         <BootstrapTable
                             keyField={"Invoice"}
                             bordered={true}
@@ -154,10 +139,7 @@ const MobileRetailerApprove = () => {
 
                         />
                         {globalTableSearchProps(toolkitProps.searchProps)}
-                        {/* </div> */}
                     </SimpleBar>
-
-
                 </React.Fragment>
             )}
         </ToolkitProvider>

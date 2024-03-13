@@ -31,7 +31,7 @@ import { SubGroup_By_Group_DropDown_API } from "../../../helpers/backend_helper"
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 import GlobalCustomTable from "../../../GlobalCustomTable"
-// import { sideBarPageFiltersInfoAction } from "../../../store/Utilites/PartyDrodown/action";
+import { sideBarPageFiltersInfoAction } from "../../../store/Utilites/PartyDrodown/action";
 
 const ItemMasterBulkUpdate = (props) => {
 
@@ -93,14 +93,14 @@ const ItemMasterBulkUpdate = (props) => {
         };
     }, [userAccess])
 
-    // // sideBar Page Filters Information
-    // useEffect(() => {
+    // sideBar Page Filters Information
+    useEffect(() => {
 
-    //     dispatch(sideBarPageFiltersInfoAction([
-    //         { label: "Select Field", content: SelectFieldName.label, },
-    //     ]));
+        dispatch(sideBarPageFiltersInfoAction([
+            { label: "Select Field", content: SelectFieldName.label, },
+        ]));
 
-    // }, [SelectFieldName]);
+    }, [SelectFieldName]);
 
     // Select Dropdown GeneralMasterSubType api call
     useEffect(() => {

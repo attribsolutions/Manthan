@@ -1,4 +1,4 @@
-import { GET_COMMON_PARTY_DROPDWON_OPTION_ACTION, GET_COMMON_PARTY_DROPDWON_OPTION_ACTION_SUCCESS, COMMON_PARTY_DROP_SELECT_ACTION, CHANGE_COMMON_PARTY_DROPDWON_DETAILS_ACTION } from "./actionType"
+import { GET_COMMON_PARTY_DROPDWON_OPTION_ACTION, GET_COMMON_PARTY_DROPDWON_OPTION_ACTION_SUCCESS, COMMON_PARTY_DROP_SELECT_ACTION, CHANGE_COMMON_PARTY_DROPDWON_DETAILS_ACTION, SIDE_BAR_PAGE_FILTERS_INFO_ACTION, SIDE_BAR_PAGE_FILTERS_INFO_ACTION_SUCCESS } from "./actionType"
 
 const INIT_STATE = {
     commonPartyDropdownOption: [],
@@ -6,8 +6,8 @@ const INIT_STATE = {
     commonPartyDropSelect: { value: 0, label: "select...", SAPPartyCode: "" },
     forceDisable: false,
     isShow: true,
-    isShowOnlySAPParty: false
-
+    isShowOnlySAPParty: false,
+    sideBarPageFilters: []
 }
 
 const CommonPartyDropdownReducer = (state = INIT_STATE, action) => {
@@ -40,6 +40,19 @@ const CommonPartyDropdownReducer = (state = INIT_STATE, action) => {
                 commonPartyDropSelect: action.payload,
             }
 
+        case SIDE_BAR_PAGE_FILTERS_INFO_ACTION:
+
+            return {
+                ...state,
+                sideBarPageFilters: action.payload,
+            }
+
+        case SIDE_BAR_PAGE_FILTERS_INFO_ACTION_SUCCESS:
+
+            return {
+                ...state,
+                sideBarPageFilters: action.payload,
+            }
         default:
             return state
     }

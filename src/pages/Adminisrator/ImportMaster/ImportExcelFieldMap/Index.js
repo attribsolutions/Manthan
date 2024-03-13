@@ -26,6 +26,7 @@ import {
 import { customAlert } from "../../../../CustomAlert/ConfirmDialog";
 import SaveButtonDraggable from "../../../../components/Common/saveButtonDraggable";
 import GlobalCustomTable from "../../../../GlobalCustomTable";
+import { sideBarPageFiltersInfoAction } from "../../../../store/Utilites/PartyDrodown/action";
 
 const ImportExcelFieldMap = (props) => {
 
@@ -69,12 +70,19 @@ const ImportExcelFieldMap = (props) => {
         commonPartyDropSelect: state.CommonPartyDropdownReducer.commonPartyDropSelect
 
     }));
+
     useEffect(() => {
         const page_Id = pageId.IMPORT_EXCEL_FIELD_MAP
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
-
     }, []);
+
+    useEffect(() => {
+
+        if (goButtonItem.length > 0) {
+            dispatch(BreadcrumbShowCountlabel(`Count:${goButtonItem.length}`));
+        }
+    }, [goButtonItem]);
 
     useEffect(() => {
         dispatch(GoButton_ImportFiledMap_AddSuccess([]));
@@ -89,7 +97,6 @@ const ImportExcelFieldMap = (props) => {
 
     const location = { ...history.location }
     const hasShowModal = props.hasOwnProperty(mode.editValue)
-
 
     // userAccess useEffect
     useEffect(() => {
@@ -133,8 +140,6 @@ const ImportExcelFieldMap = (props) => {
         }
     }, [postMsg])
 
-
-
     useEffect(() => {
 
         goButtonItem.sort((a, b) => {
@@ -148,13 +153,11 @@ const ImportExcelFieldMap = (props) => {
             }
         });
 
-
         setSortTable(goButtonItem)
         dispatch(BreadcrumbShowCountlabel(`${"Count"} :${goButtonItem.length}`))
     }, [goButtonItem])
 
     useEffect(() => _cfunc.tableInputArrowUpDounFunc("#table_Arrow"), [goButtonItem]);
-
 
     const pagesListColumns = [
         {
@@ -233,7 +236,6 @@ const ImportExcelFieldMap = (props) => {
         dispatch(GoButton_ImportFiledMap_Add({ jsonBody }))
     };
 
-
     function SaveHandler(event) {
         event.preventDefault();
 
@@ -273,6 +275,7 @@ const ImportExcelFieldMap = (props) => {
                 <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
                 <PageLoadingSpinner isLoading={((partyDropDownLoading) || !pageField)} />
                 <div className="page-content">
+
                     <GlobalCustomTable
                         keyField="id"
                         data={SortTable}
@@ -281,8 +284,9 @@ const ImportExcelFieldMap = (props) => {
                         id="table_Arrow"
                         noDataIndication={<div className="text-danger text-center ">Items Not available</div>}
                         classes={"custom-table"}
-                        onDataSizeChange={({ dataSize }) => {
-                            dispatch(BreadcrumbShowCountlabel(`Count:${dataSize}`));
+                        onDataSizeChange={({ dataCount, filteredData = [] }) => {
+                            debugger
+                            dispatch(BreadcrumbShowCountlabel(`Count:${dataCount}`));
                         }}
                     />
                 </div>

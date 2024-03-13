@@ -356,7 +356,7 @@ const userRoutes = [
 	{ path: path.DISCOUNT_MASTER, component: DiscountMaster, isPartyWisePage: true },
 	{ path: path.DISCOUNT_LIST, component: DiscountList, isPartyWisePage: true },
 
-	{ path: path.RETAILER_APPROVAL, component: RetailerApprovalList },
+	{ path: path.RETAILER_APPROVAL, component: RetailerApprovalList, isPartyWisePage: true },
 
 	{ path: path.MOBILE_RETAILER_SEND, component: MobailRetailersSend },// use self party drop-down
 

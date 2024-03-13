@@ -23,6 +23,7 @@ import OrderView_Modal from "./OrderView";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 import { getOrdersMakeInvoiceDataAction, getOrdersMakeInvoiceDataActionSuccess } from "../../../store/Sales/bulkInvoice/action";
 import { allLabelWithBlank } from "../../../components/Common/CommonErrorMsg/HarderCodeData";
+import { sideBarPageFiltersInfoAction } from "../../../store/Utilites/PartyDrodown/action";
 
 const OrderList = () => {
 
@@ -125,16 +126,41 @@ const OrderList = () => {
         deleteSucc: _act.deleteOrderIdSuccess,
     }
 
-
-    // Common Party select Dropdown useEffect
+    // Common Party Dropdown useEffect
     useEffect(() => {
+
         if (commonPartyDropSelect.value > 0) {
-            partySelectButtonHandler();
+            goButtonHandler()
+            dispatch(_act.GetVenderSupplierCustomer({ subPageMode, PartyID: commonPartyDropSelect.value }));
+
         } else {
-            partySelectOnChangeHandler();
+            dispatch(_act.getOrderListPageSuccess([]));
+            dispatch(_act.GetVenderSupplierCustomerSuccess([]));
+            setState((i) => {
+                let a = { ...i }
+                a.values.CustomerType = [allLabelWithBlank]
+                a.values.Supplier = allLabelWithBlank
+                a.hasValid.CustomerType.valid = true;
+                a.hasValid.Supplier.valid = true;
+                return a
+            })
         }
+
     }, [commonPartyDropSelect]);
 
+    // sideBar Page Filters Information
+    useEffect(() => {
+        const filtersArray = [
+            { label: fieldLabel.FromDate, content: _cfunc.date_dmy_func(values.FromDate) },
+            { label: fieldLabel.ToDate, content: _cfunc.date_dmy_func(values.ToDate) },
+            ...(orderList4_or_app_orderList
+                ? [{ label: fieldLabel.CustomerType, content: values.CustomerType.map(obj => obj.label).join(',') }]
+                : []),
+            { label: fieldLabel.Supplier, content: values.Supplier.label }
+        ];
+
+        dispatch(sideBarPageFiltersInfoAction(filtersArray));
+    }, [pageField, state, orderList4_or_app_orderList]);
 
     // Featch Modules List data  First Rendering
     useEffect(() => {
@@ -232,8 +258,6 @@ const OrderList = () => {
         }
     }, []);
 
-
-
     // check bulk-invoice access useEffect
     useEffect(() => {//only of app order list then check bulk-invoice Access
         if (subPageMode === url.APP_ORDER_LIST) {
@@ -294,7 +318,8 @@ const OrderList = () => {
 
         }
     }, [ordersBulkInvoiceData]);
-//order confirm
+
+    //order confirm
     useEffect(() => {
 
         if (orderConfirmMsg.Status === true && orderConfirmMsg.StatusCode === 200) {
@@ -342,32 +367,6 @@ const OrderList = () => {
         }
 
     }, [unhideMsg]);
-
-
-    // Common Party Dropdown useEffect
-    useEffect(() => {
-
-        if (commonPartyDropSelect.value > 0) {
-            goButtonHandler()
-            dispatch(_act.GetVenderSupplierCustomer({ subPageMode, PartyID: commonPartyDropSelect.value }));
-
-        } else {
-            dispatch(_act.getOrderListPageSuccess([]));
-            dispatch(_act.GetVenderSupplierCustomerSuccess([]));
-            setState((i) => {
-                let a = { ...i }
-                a.values.CustomerType = [allLabelWithBlank]
-                a.values.Supplier = allLabelWithBlank
-                a.hasValid.CustomerType.valid = true;
-                a.hasValid.Supplier.valid = true;
-                return a
-            })
-        }
-
-    }, [commonPartyDropSelect]);
-
-
-
 
     const supplierOptions = supplier.map((i) => ({
         value: i.id,
