@@ -113,7 +113,7 @@ const CommonPurchaseList = (props) => {
         CountLabel: pageField?.CountLabel,
         pageHeading: pageField?.PageHeading,
         newBtnView: userAccState?.RoleAccess_IsSave,
-        excelBtnView:userAccState?.RoleAccess_Exceldownload,
+        excelBtnView: userAccState?.RoleAccess_Exceldownload,
       })
     );
 
@@ -121,7 +121,7 @@ const CommonPurchaseList = (props) => {
 
   useEffect(() => {
 
-    if ((tableList.length > 0) && (pageField?.CountLabel === true)) {
+    if ((pageField?.CountLabel === true)) {
       if (totalAmountShow === true) {
         dispatch(BreadcrumbShowCountlabel(`Count:${tableList.length} ₹ ${TotalAmount_Func(tableList)}`));
       }

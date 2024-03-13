@@ -55,6 +55,7 @@ import { showToastAlert } from "../../../helpers/axios_Config";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 import { allLabelWithBlank } from "../../../components/Common/CommonErrorMsg/HarderCodeData";
+import { sideBarPageFiltersInfoAction } from "../../../store/Utilites/PartyDrodown/action";
 
 const PartyMasterBulkUpdate = (props) => {
 
@@ -75,7 +76,7 @@ const PartyMasterBulkUpdate = (props) => {
     const [state, setState] = useState(() => initialFiledFunc(fileds))
     const [forceRefresh, setForceRefresh] = useState(false);
     const [SelectedParty, SetSelectedParty] = useState([])
-    const [SelectFieldName, setSelectFieldName] = useState([]);
+    const [SelectFieldName, setSelectFieldName] = useState('');
 
     const location = { ...history.location }
     const hasShowModal = props.hasOwnProperty(mode.editValue)
@@ -121,6 +122,17 @@ const PartyMasterBulkUpdate = (props) => {
             partySelectOnChangeHandler();
         }
     }, [commonPartyDropSelect]);
+
+    // sideBar Page Filters Information
+    useEffect(() => {
+
+        dispatch(sideBarPageFiltersInfoAction([
+            { label: fieldLabel.Type, content: SelectFieldName.label, },
+            { label: fieldLabel.Party, content: values.Party.label, },
+            { label: fieldLabel.Routes, content: values.Routes.label, },
+        ]));
+
+    }, [state, pageField, SelectFieldName]);
 
     useEffect(() => {
         dispatch(GoButton_For_Party_Master_Bulk_Update_AddSuccess([]))
@@ -176,7 +188,7 @@ const PartyMasterBulkUpdate = (props) => {
             setState(() => resetFunction(fileds, state))// Clear form values 
             setSelectFieldName([]);
             //***************mobail app api*********************** */
-            
+
             let arrayOfRetailerID = SelectedParty.map(function (i) {
                 return i.SubPartyID;
             });
@@ -260,7 +272,7 @@ const PartyMasterBulkUpdate = (props) => {
             return;
         }
 
-        else if (SelectFieldName.length === 0) {
+        else if (SelectFieldName.length === '') {
             customAlert({
                 Type: 3,
                 Message: alertMessages.selectField,
@@ -272,7 +284,7 @@ const PartyMasterBulkUpdate = (props) => {
 
             PartyID: commonPartyDropSelect.value,
             Route: values.Routes.value === "" ? 0 : values.Routes.value,
-            Type: SelectFieldName.length === 0 ? 0 : SelectFieldName.label,
+            Type: SelectFieldName.length === '' ? 0 : SelectFieldName.label,
             FilterPartyID: values.Party.value === "" ? 0 : values.Party.value
 
         });
@@ -733,11 +745,6 @@ const PartyMasterBulkUpdate = (props) => {
                                 </Col>
                             </div>
                         </div>
-
-
-
-
-
 
                         <PaginationProvider
                             pagination={paginationFactory(pageOptions)}

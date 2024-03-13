@@ -25,6 +25,7 @@ import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMs
 import Slidewithcaption from "../../../components/Common/CommonImageComponent";
 import { allLabelWithBlank } from "../../../components/Common/CommonErrorMsg/HarderCodeData";
 import SERVER_HOST_PATH from "../../../helpers/_serverPath";
+import { sideBarPageFiltersInfoAction } from "../../../store/Utilites/PartyDrodown/action";
 
 const SalesReturnList = () => {
 
@@ -95,6 +96,17 @@ const SalesReturnList = () => {
             partySelectOnChangeHandler();
         }
     }, [commonPartyDropSelect]);
+
+    // sideBar Page Filters Information
+    useEffect(() => {
+
+        dispatch(sideBarPageFiltersInfoAction([
+            { label: "From Date", content: _cfunc.date_dmy_func(values.FromDate), },
+            { label: "To Date", content: _cfunc.date_dmy_func(values.ToDate), },
+            { label: customerdropdownLabel, content: values.Customer.label, }
+        ]));
+
+    }, [state]);
 
     // userAccess useEffect
     useEffect(() => {
@@ -204,7 +216,6 @@ const SalesReturnList = () => {
             dispatch(confirm_SalesReturn_Id_Succcess({ Status: false }))
         }
     }, [reducers.viewData_redux.pageMode])
-
 
     useEffect(() => {
 

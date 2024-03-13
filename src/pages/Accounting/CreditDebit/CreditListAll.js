@@ -32,6 +32,7 @@ import * as _cfunc from "../../../components/Common/CommonFunction"
 import { C_DatePicker } from "../../../CustomValidateForm";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { allLabelWithBlank } from "../../../components/Common/CommonErrorMsg/HarderCodeData";
+import { sideBarPageFiltersInfoAction } from "../../../store/Utilites/PartyDrodown/action";
 
 const CreditList = () => {
 
@@ -56,7 +57,6 @@ const CreditList = () => {
         masterPath: '',
         buttonMsgLable: '',
         page_Id: '',
-
     });
 
     const reducers = useSelector(
@@ -148,6 +148,16 @@ const CreditList = () => {
         dispatch(CredietDebitType(jsonBody));
     }, []);
 
+    // sideBar Page Filters Information
+    useEffect(() => {
+
+        dispatch(sideBarPageFiltersInfoAction([
+            { label: "From Date", content: _cfunc.date_dmy_func(values.FromDate), },
+            { label: "To Date", content: _cfunc.date_dmy_func(values.ToDate), },
+            { label: "Customer", content: values.Customer.label, }
+        ]));
+
+    }, [state]);
 
     // Common Party Dropdown useEffect
     useEffect(() => {
@@ -157,7 +167,6 @@ const CreditList = () => {
         } else {
             partySelectOnChangeHandler()
         }
-
     }, [commonPartyDropSelect]);
 
     // Retailer DropDown List Type 1 for credit list drop down
@@ -170,8 +179,6 @@ const CreditList = () => {
         dispatch(Retailer_List(jsonBody));
     }, []);
 
-
-
     useEffect(() => {
         const jsonBody = JSON.stringify({
             Type: 4,
@@ -180,7 +187,6 @@ const CreditList = () => {
         });
         dispatch(Retailer_List(jsonBody));
     }, []);
-
 
     useEffect(() => {
         if ((CreditDebitType.length > 0) && !(commonPartyDropSelect.value === 0)) {
@@ -228,7 +234,6 @@ const CreditList = () => {
             return
         }
     }, [Cancel_Credit_Debit_EInvoice]);
-
 
     const customerOptions = RetailerList.map((index) => ({
         value: index.id,
@@ -330,8 +335,6 @@ const CreditList = () => {
             return a
         })
     }
-
-
 
     const HeaderContent = () => {
         return (

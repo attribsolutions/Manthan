@@ -4,14 +4,14 @@ import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/
 import * as pageId from "../../../routes/allPageID"
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList";
 import { PageLoadingSpinner } from "../../../components/Common/CommonButton";
-import { mode } from "../../../routes";
-import { loginPartyID } from "../../../components/Common/CommonFunction";
-import { PartyListforApproval_Action, PartyListforApproval_Success, GetPartyListforApprovalID_Action, GetPartyListforApprovalID_Success } from "../../../store/Administrator/PartyRedux/action";
-import { customAlert } from "../../../CustomAlert/ConfirmDialog";
+import { mode, url } from "../../../routes";
+import { PartyListforApproval_Action, PartyListforApproval_Success, editPartyID } from "../../../store/Administrator/PartyRedux/action";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 const RetailerApprovalList = () => {
 
     const dispatch = useDispatch();
+    const history = useHistory();
 
     const [pageMode] = useState(mode.modeSTPsave);
 
@@ -20,13 +20,15 @@ const RetailerApprovalList = () => {
             goBtnLoading: state.PartyMasterReducer.goBtnLoading,
             listBtnLoading: state.PartyMasterReducer.listBtnLoading,
             tableList: state.PartyMasterReducer.PartyListForApproval,
+            editData: state.PartyMasterReducer.editData,
             RetailerApprovalID: state.PartyMasterReducer.PartyListForApproval_ID,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList,
+            commonPartyDropSelect: state.CommonPartyDropdownReducer.commonPartyDropSelect
         })
     );
 
-    const { pageField, goBtnLoading, RetailerApprovalID } = reducers;
+    const { pageField, goBtnLoading, commonPartyDropSelect, editData } = reducers;
 
     const action = {}
 
@@ -35,44 +37,47 @@ const RetailerApprovalList = () => {
         const page_Id = pageId.RETAILER_APPROVAL
         dispatch(commonPageFieldListSuccess(null));
         dispatch(commonPageFieldList(page_Id));
-        goButtonHandler();
         return () => {
             dispatch(PartyListforApproval_Success([]));
         }
     }, []);
 
+    // Common Party Dropdown useEffect
     useEffect(() => {
-
-        if ((RetailerApprovalID.Status === true) && (RetailerApprovalID.StatusCode === 200)) {
-            dispatch(GetPartyListforApprovalID_Success({ Status: false }))
-            customAlert({ Type: 1, Message: RetailerApprovalID.Message });
+        if (commonPartyDropSelect.value > 0) {
             goButtonHandler();
         }
-        else if ((RetailerApprovalID.Status === true)) {
-            dispatch(GetPartyListforApprovalID_Success({ Status: false }))
-            customAlert({
-                Type: 4,
-                Message: JSON.stringify(RetailerApprovalID.Message),
+        return () => {
+            dispatch(PartyListforApproval_Success([]));
+        }
+    }, [commonPartyDropSelect]);
+
+    useEffect(() => {
+
+        if (editData.Status === true && editData.StatusCode === 200) {
+            history.push({
+                pathname: url.RETAILER_MASTER,
+                pageMode: mode.edit,
+                editValue: editData.Data,
+                IsMobileRetailer: true
             })
         }
-    }, [RetailerApprovalID])
+    }, [editData])
 
     const goButtonHandler = () => {
         try {
             const jsonBody = JSON.stringify({
-                PartyID: loginPartyID(),
+                PartyID: commonPartyDropSelect.value,
             });
-
             dispatch(PartyListforApproval_Action(jsonBody));
         } catch (error) { }
-        return
+
     };
 
     const makeBtnFunc = (list = [], btnId) => {
-
         var { id } = list[0]
         try {
-            dispatch(GetPartyListforApprovalID_Action({ btnId: btnId, transactionId: id }))
+            dispatch(editPartyID({ btnId: `btn-edit-${id}`, btnmode: mode.edit, editId: id }))
         } catch (e) { }
     }
 
@@ -80,7 +85,6 @@ const RetailerApprovalList = () => {
         <React.Fragment>
             <PageLoadingSpinner isLoading={(goBtnLoading || !pageField)} />
             <div className="page-content">
-
                 {
                     (pageField) &&
                     <div className="mt-n1">
@@ -94,7 +98,6 @@ const RetailerApprovalList = () => {
                             makeBtnFunc={makeBtnFunc}
                         />
                     </div>
-
                 }
             </div>
 

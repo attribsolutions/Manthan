@@ -42,6 +42,8 @@ import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { getVehicleList } from "../../../store/Administrator/VehicleRedux/action";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 import { allLabelWithBlank } from "../../../components/Common/CommonErrorMsg/HarderCodeData";
+import { sideBarPageFiltersInfoAction, sideBarPageFiltersInfoSuccess } from "../../../store/Utilites/PartyDrodown/action";
+import { date_dmy_func } from "../../../components/Common/CommonFunction";
 
 const InvoiceList = () => {
 
@@ -85,7 +87,6 @@ const InvoiceList = () => {
         })
     );
 
-
     const {
         pageField,
         supplier,
@@ -124,6 +125,16 @@ const InvoiceList = () => {
         }
     }, [commonPartyDropSelect]);
 
+    // sideBar Page Filters Information
+    useEffect(() => {
+
+        dispatch(sideBarPageFiltersInfoAction([
+            { label: "From Date", content: date_dmy_func(fromdate), },
+            { label: "To Date", content: date_dmy_func(todate), },
+            { label: "Customer", content: supplierSelect.label, }
+        ]));
+
+    }, [hederFilters]);
 
     // Featch Modules List data  First Rendering
     useEffect(() => {
@@ -162,7 +173,6 @@ const InvoiceList = () => {
         setPageMode(page_Mode)
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
-        // dispatch(BreadcrumbShowCountlabel(`${"Count"} :0`))
         dispatch(GetVenderSupplierCustomer({ subPageMode, PartyID: commonPartyDropSelect.value }))
 
         setmodal(false);
@@ -381,8 +391,6 @@ const InvoiceList = () => {
         setHederFilters(newObj);
     }
 
-
-
     const partySelectButtonHandler = (e) => {
         goButtonHandler()
         dispatch(GetVenderSupplierCustomer({ subPageMode, PartyID: commonPartyDropSelect.value }));
@@ -558,11 +566,12 @@ const InvoiceList = () => {
         let jsonBody = JSON.stringify({ Invoice_ID: idString })
         dispatch(InvoiceBulkDelete_IDs_Action({ jsonBody }))
     }
+
     return (
         <React.Fragment>
             <PageLoadingSpinner isLoading={reducers.listBtnLoading || !pageField || supplierDropLoading} />
             <div className="page-content">
-              
+
                 {
                     (pageField) ?
                         <CommonPurchaseList

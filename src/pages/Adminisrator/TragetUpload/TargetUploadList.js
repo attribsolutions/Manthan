@@ -1,14 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import CommonListPage from "../../../components/Common/CommonMasterListPage";
 import {
     commonPageFieldList,
     commonPageFieldListSuccess,
 } from "../../../store/actions";
-import {
-    editGroupID,
-    updateGroupIDSuccess
-} from "../../../store/Administrator/GroupRedux/action";
+import { updateGroupIDSuccess } from "../../../store/Administrator/GroupRedux/action";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
 import { Go_Button, PageLoadingSpinner } from "../../../components/Common/CommonButton";
@@ -19,16 +15,12 @@ import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { Col, FormGroup, Input, Label, Row } from "reactstrap";
-import { getPreviousMonthAndYear } from "../../../components/Common/CommonFunction";
-import { initialFiledFunc } from "../../../components/Common/validationFunction";
+import { SelectedMonthAndYearName, getPreviousMonthAndYear } from "../../../components/Common/CommonFunction";
 import Select from "react-select";
 import { allLabelWithBlank } from "../../../components/Common/CommonErrorMsg/HarderCodeData";
+import { sideBarPageFiltersInfoAction } from "../../../store/Utilites/PartyDrodown/action";
 
 const SelectedMonth = () => getPreviousMonthAndYear({ date: new Date(), Privious: 0 })
-const fileds = () => ({
-    PartyName: "",
-    SelectedMonth: SelectedMonth(),
-})
 
 const TargetUploadList = () => {
 
@@ -36,8 +28,8 @@ const TargetUploadList = () => {
     const history = useHistory();
 
     const [subPageMode] = useState(history.location.pathname);
-    const [state, setState] = useState(() => initialFiledFunc(fileds()))
-    const [PartyDropdown, setPartyDropdown] = useState(allLabelWithBlank);
+    const [monthSelection, setMonthSelection] = useState(SelectedMonth())
+    const [partySelect, setPartySelect] = useState(allLabelWithBlank);
 
     const reducers = useSelector(
         (state) => ({
@@ -52,10 +44,7 @@ const TargetUploadList = () => {
             pageField: state.CommonPageFieldReducer.pageFieldList
         })
     );
-
-    const values = { ...state.values }
-
-    const { Parties } = reducers
+    const { pageField, goBtnLoading, Parties } = reducers
 
     const action = {
         getList: getTargetUploadList,
@@ -67,9 +56,8 @@ const TargetUploadList = () => {
     }
 
     useEffect(() => {
-        const page_Id = pageId.TARGET_UPLOAD_LIST
         dispatch(commonPageFieldListSuccess(null))
-        dispatch(commonPageFieldList(page_Id))
+        dispatch(commonPageFieldList(pageId.TARGET_UPLOAD_LIST))
         dispatch(getTargetUploadList());
         goButtonHandler()
         return () => {
@@ -78,8 +66,21 @@ const TargetUploadList = () => {
         }
     }, []);
 
+    // sideBar Page Filters Information
+    useEffect(() => {
+        const { monthName, year } = SelectedMonthAndYearName(monthSelection);
+        dispatch(sideBarPageFiltersInfoAction([
+            { label: "Month", content: `${monthName} ${year}` },
+            { label: "Party", content: partySelect.label }
+        ]));
 
+    }, [monthSelection, partySelect]);
 
+    const Party_Option = Parties.map(i => ({
+        value: i.id,
+        label: i.Name
+    }));
+    Party_Option.unshift(allLabelWithBlank)
 
     const selectDeleteBtnHandler = (row = []) => {
         let isAllcheck = row.filter(i => (i.hasAllSelect))
@@ -105,50 +106,23 @@ const TargetUploadList = () => {
         dispatch(delete_TargetUpload_ID({ jsonBody }))
     }
 
-
     function goButtonHandler() {
         try {
-            const date = values.SelectedMonth
+            const date = monthSelection
             const [year, month] = date.split('-');
             const jsonBody = {
                 Month: parseInt(month),
                 Year: parseInt(year),
-                Party: PartyDropdown.value,
+                Party: partySelect.value,
             }
             dispatch(getTargetUploadList({ jsonBody }))
-
         }
         catch (error) { console.log(error) }
-        return
     };
 
-    function MonthAndYearOnchange(e,) {
-        const selectedMonth = e.target.value
-        setState((i) => {
-            const a = { ...i }
-            a.values.SelectedMonth = selectedMonth;
-            a.hasValid.SelectedMonth.valid = true
-            return a
-        })
-
-    }
-    const partyOnchange = (e) => {
-        
-        setPartyDropdown(e)
-    }
-
-    const Party_Option = Parties.map(i => ({
-        value: i.id,
-        label: i.Name
-    }));
-    Party_Option.unshift(allLabelWithBlank)
-
-
-    const { pageField, goBtnLoading } = reducers
     return (
         <React.Fragment>
             <PageLoadingSpinner isLoading={(goBtnLoading || !pageField)} />
-
 
             <div className="px-3 c_card_filter header text-black mb-1" >
                 <Row >
@@ -159,10 +133,9 @@ const TargetUploadList = () => {
                             <Col sm="7">
                                 <Input className="form-control"
                                     type="month"
-                                    defaultValue={values.SelectedMonth}
+                                    defaultValue={monthSelection}
                                     id="example-month-input"
-                                    onChange={MonthAndYearOnchange}
-
+                                    onChange={(e) => setMonthSelection(e.target.value)}
                                 />
                             </Col>
                         </FormGroup>
@@ -175,13 +148,13 @@ const TargetUploadList = () => {
                             <Col sm="7">
                                 <Select
                                     name="Party"
-                                    value={PartyDropdown}
+                                    value={partySelect}
                                     isSearchable={true}
                                     styles={{
                                         menu: provided => ({ ...provided, zIndex: 2 })
                                     }}
                                     options={Party_Option}
-                                    onChange={(e) => { partyOnchange(e) }}
+                                    onChange={(e) => { setPartySelect(e) }}
                                 />
                             </Col>
                             <Col md={1}></Col>

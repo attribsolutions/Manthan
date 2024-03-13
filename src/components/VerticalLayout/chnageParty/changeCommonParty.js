@@ -150,8 +150,9 @@ const ChangeCommonParty = (props) => {
                                 isLoading={partyDropdownLoading}
                                 className="react-dropdown"
                                 classNamePrefix="dropdown"
+
                                 options={PartyDropdownOptions}
-                                // isDisabled={changeButtonShow && !(selectedParty.value === 0)}
+                                isDisabled={(commonPartyDropSelect.value > 0)}
                                 onChange={(e) => setSelectedParty(e)}
                             />
                             {selectedParty.value > 0 && <div className="mt-2">
@@ -174,30 +175,40 @@ const ChangeCommonParty = (props) => {
                             </C_Button> : <Col></Col>}
 
                             <div className="">
-                                <C_Button
-                                    type="button"
-                                    style={{ margin: "3px" }}
-                                    className="btn btn-primary border-1 font-size-12 text-center ml-1"
-                                    onClick={updateSelectedParty}
-                                >
-                                    Select
-                                </C_Button>
+                                {
+                                    !(commonPartyDropSelect.value > 0) ?
+                                        <C_Button
+                                            type="button"
+                                            style={{ margin: "3px" }}
+                                            className="btn btn-primary border-1 font-size-12 text-center ml-1"
+                                            onClick={updateSelectedParty}
+                                        >
+                                            Select
+                                        </C_Button>
+                                        :
+                                        <C_Button
+                                            type="button"
+                                            style={{ margin: "3px" }}
+                                            className="btn btn-success border-1 font-size-12 text-center ml-1"
+                                            onClick={handleClearBtn}
+                                        >
+                                            Change
+                                        </C_Button>
+                                }
 
-                                <C_Button
+                                {/* <C_Button
                                     type="button"
+                                    forceDisabled={!(commonPartyDropSelect.value > 0)}
                                     className="btn btn-danger border-1 font-size-12 text-center ml-2"
                                     onClick={handleClearBtn}
                                 >
-                                    Clear
-                                </C_Button>
+                                    Change
+                                </C_Button> */}
                             </div>
                         </div>
 
-
-
-
                     </div>
-                </div>
+                </div> 
             )}
         </div>
     );

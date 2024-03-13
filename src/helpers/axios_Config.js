@@ -81,11 +81,9 @@ axiosApi.interceptors.response.use(
     (response) => {
         // Log response using utility function
         logRequestAndResponse(null, response);
-        debugger
         return response;
     },
     (error) => {
-        debugger
         if (!error.response) {
             // Log network error using utility function
             const networkErrorResponse = {

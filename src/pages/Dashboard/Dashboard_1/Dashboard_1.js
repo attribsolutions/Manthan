@@ -7,7 +7,7 @@ import {
     CardBody,
     CardHeader,
     Col,
-    Container, Label, Row, Spinner,
+    Container, Label, Row, 
 } from "reactstrap";
 import { breadcrumbReturnFunc, loginSelectedPartyID } from '../../../components/Common/CommonFunction';
 import * as url from "../../../routes/route_url";
@@ -100,10 +100,9 @@ const Dashboard_1 = (props) => {
         history.push(url.SALES_RETURN_LIST)
     }
 
-    function mobileOrder_OnClick() {
-        history.push(url.APP_ORDER_LIST)
+    function mobileRetailerAprproveLinkHandler() {
+        history.push(url.RETAILER_APPROVAL)
     }
-
 
     const RedirectHandler = (Type) => {
         if (Type === 1) {
@@ -117,7 +116,6 @@ const Dashboard_1 = (props) => {
         } else {
             history.push(url.GRN_LIST_3)
         }
-
     }
 
     return (
@@ -171,7 +169,9 @@ const Dashboard_1 = (props) => {
                                 <CardBody>
                                     <Row className="align-items-center">
                                         <Col >
-                                            <span style={{ cursor: "pointer", fontWeight: "bold" }} onClick={() => RedirectHandler(2)} className="text-primary mb-3 lh-1 d-block text-decoration-underline">Total Invoices</span>
+                                            <span style={{ cursor: "pointer", fontWeight: "bold" }}
+                                                onClick={() => RedirectHandler(2)}
+                                                className="text-primary mb-3 lh-1 d-block text-decoration-underline">Total Invoices</span>
                                             <h4 className="mb-3">
                                                 <span className="counter-value">
                                                     {InvoiceCount}
@@ -188,7 +188,9 @@ const Dashboard_1 = (props) => {
                                 <CardBody>
                                     <Row className="align-items-center">
                                         <Col>
-                                            <span style={{ cursor: "pointer", fontWeight: "bold" }} onClick={() => RedirectHandler(3)} className="text-primary text-bold mb-3 lh-1 d-block text-decoration-underline">Total GRNs</span>
+                                            <span style={{ cursor: "pointer", fontWeight: "bold" }}
+                                                onClick={() => RedirectHandler(3)}
+                                                className="text-primary text-bold mb-3 lh-1 d-block text-decoration-underline">Total GRNs</span>
                                             <h4 className="mb-3">
                                                 <span className="counter-value">
                                                     {GRNsCount}
@@ -271,10 +273,9 @@ const Dashboard_1 = (props) => {
                                     <CardHeader style={{ backgroundColor: "whitesmoke" }}
                                         className="card-header align-items-center d-flex text-center">
                                         <Label className="card-title mb-0 flex-grow-4 text-primary text-bold mb-n2 text-decoration-underline"
-                                            onClick={mobileOrder_OnClick}
+                                            onClick={mobileRetailerAprproveLinkHandler}
                                             disabled={SalesReturnListloading}
                                             style={{ cursor: "pointer" }}
-
                                         >
                                             Mobile Retailer Approve</Label>
                                         {(SalesReturnListloading) &&
