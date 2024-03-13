@@ -119,6 +119,15 @@ const Login = props => {
   }
 
   const SaveHandler = async (event) => {
+    if (currentUserName === "") {
+      dispatch(loginError_Action("Invalid UserName"))
+      return
+    }
+
+    if (Password === "") {
+      dispatch(loginError_Action("Incorrect Password"))
+      return
+    }
 
     event.preventDefault();
     const values = {
@@ -131,6 +140,11 @@ const Login = props => {
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
   };
+  function handleKeyDown(event) {
+    if (event.key === " ") {
+      event.preventDefault();
+    }
+  }
 
   return (
     <React.Fragment>
@@ -176,6 +190,7 @@ const Login = props => {
                               value={currentUserName}
                               autoComplete="off"
                               autoFocus={false}
+                              onKeyDown={handleKeyDown}
                               required
                               onChange={currentUserOnchange}
                               placeholder="Enter User Name"
@@ -199,6 +214,7 @@ const Login = props => {
                                 onChange={PasswordOnchange}
                                 type={showPassword ? 'text' : 'password'}
                                 className="form-control"
+                                onKeyDown={handleKeyDown}
                                 required
                                 placeholder="Enter Password"
                               />
