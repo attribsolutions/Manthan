@@ -119,11 +119,14 @@ const Login = props => {
   }
 
   const SaveHandler = async (event) => {
+    if (currentUserName === "" && Password === "") {
+      dispatch(loginError_Action("Invalid UserName and Password"))
+      return
+    }
     if (currentUserName === "") {
       dispatch(loginError_Action("Invalid UserName"))
       return
     }
-
     if (Password === "") {
       dispatch(loginError_Action("Incorrect Password"))
       return
