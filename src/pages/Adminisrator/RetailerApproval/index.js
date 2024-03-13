@@ -4,13 +4,14 @@ import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/
 import * as pageId from "../../../routes/allPageID"
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList";
 import { PageLoadingSpinner } from "../../../components/Common/CommonButton";
-import { mode } from "../../../routes";
-import { PartyListforApproval_Action, PartyListforApproval_Success, GetPartyListforApprovalID_Action, GetPartyListforApprovalID_Success } from "../../../store/Administrator/PartyRedux/action";
-import { customAlert } from "../../../CustomAlert/ConfirmDialog";
+import { mode, url } from "../../../routes";
+import { PartyListforApproval_Action, PartyListforApproval_Success, editPartyID } from "../../../store/Administrator/PartyRedux/action";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 const RetailerApprovalList = () => {
-    
+
     const dispatch = useDispatch();
+    const history = useHistory();
 
     const [pageMode] = useState(mode.modeSTPsave);
 
@@ -19,6 +20,7 @@ const RetailerApprovalList = () => {
             goBtnLoading: state.PartyMasterReducer.goBtnLoading,
             listBtnLoading: state.PartyMasterReducer.listBtnLoading,
             tableList: state.PartyMasterReducer.PartyListForApproval,
+            editData: state.PartyMasterReducer.editData,
             RetailerApprovalID: state.PartyMasterReducer.PartyListForApproval_ID,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList,
@@ -26,7 +28,7 @@ const RetailerApprovalList = () => {
         })
     );
 
-    const { pageField, goBtnLoading, RetailerApprovalID, commonPartyDropSelect } = reducers;
+    const { pageField, goBtnLoading, commonPartyDropSelect, editData } = reducers;
 
     const action = {}
 
@@ -52,19 +54,15 @@ const RetailerApprovalList = () => {
 
     useEffect(() => {
 
-        if ((RetailerApprovalID.Status === true) && (RetailerApprovalID.StatusCode === 200)) {
-            dispatch(GetPartyListforApprovalID_Success({ Status: false }))
-            customAlert({ Type: 1, Message: RetailerApprovalID.Message });
-            goButtonHandler();
-        }
-        else if ((RetailerApprovalID.Status === true)) {
-            dispatch(GetPartyListforApprovalID_Success({ Status: false }))
-            customAlert({
-                Type: 4,
-                Message: JSON.stringify(RetailerApprovalID.Message),
+        if (editData.Status === true && editData.StatusCode === 200) {
+            history.push({
+                pathname: url.RETAILER_MASTER,
+                pageMode: mode.edit,
+                editValue: editData.Data,
+                IsMobileRetailer: true
             })
         }
-    }, [RetailerApprovalID])
+    }, [editData])
 
     const goButtonHandler = () => {
         try {
@@ -77,10 +75,9 @@ const RetailerApprovalList = () => {
     };
 
     const makeBtnFunc = (list = [], btnId) => {
-
         var { id } = list[0]
         try {
-            dispatch(GetPartyListforApprovalID_Action({ btnId: btnId, transactionId: id }))
+            dispatch(editPartyID({ btnId: `btn-edit-${id}`, btnmode: mode.edit, editId: id }))
         } catch (e) { }
     }
 
