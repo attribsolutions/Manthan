@@ -7,7 +7,7 @@ import {
     CardBody,
     CardHeader,
     Col,
-    Container, Label, Row, Spinner,
+    Container, Label, Row, 
 } from "reactstrap";
 import { breadcrumbReturnFunc, loginSelectedPartyID } from '../../../components/Common/CommonFunction';
 import * as url from "../../../routes/route_url";
@@ -116,7 +116,6 @@ const Dashboard_1 = (props) => {
         } else {
             history.push(url.GRN_LIST_3)
         }
-
     }
 
     return (
