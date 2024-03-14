@@ -136,7 +136,7 @@ const ImportExcelPartyMap = (props) => {
 
 
     useEffect(() => {
-        debugger
+
         if (pageField === null) { }; // Return early if pageField is null
 
         let downList = [];
@@ -159,21 +159,21 @@ const ImportExcelPartyMap = (props) => {
                     listObj[index2.ControlID] = index1[index2.ControlID]
                 }
             })
+            debugger
             downList.push(listObj)
             defaultDownList2.push(listObj2)
             listObj = {}
         })
 
-
-
         if (values.MapType.value === 1) {
             const keysToChange = ["mapValue"];
 
             for (let i = 0; i < downList.length; i++) {
+
                 for (let j = 0; j < keysToChange.length; j++) {
                     if (downList[i].hasOwnProperty(keysToChange[j])) {
                         downList[i]["Related Key Field"] = downList[i]["mapValue"]
-                        delete downList[i]["mapValue"];
+                        // delete downList[i]["mapValue"];
                     }
                 }
             }
@@ -187,6 +187,7 @@ const ImportExcelPartyMap = (props) => {
                 }
             }
         }
+
 
         dispatch(CommonBreadcrumbDetails({
             downBtnData: downList,

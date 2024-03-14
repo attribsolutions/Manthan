@@ -151,7 +151,7 @@ const Dashboard_1 = (props) => {
                                 <CardBody>
                                     <Row className="align-items-center">
                                         <Col >
-                                            <span style={{ cursor: "pointer", fontWeight: "bold" }} onClick={() => RedirectHandler(3)} className="text-primary mb-3 lh-1  d-block text-decoration-underline "> MobileApp Order</span>
+                                            <span style={{ cursor: "pointer", fontWeight: "bold" }} onClick={() => RedirectHandler(3)} className="text-primary mb-3 lh-1  d-block text-decoration-underline "> MobileApp Orders</span>
                                             <h4 className="mb-3">
                                                 <span className="counter-value">
                                                     {MobileAppOrderCount}
