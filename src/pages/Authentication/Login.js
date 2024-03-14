@@ -19,6 +19,7 @@ import CarouselPage from "./CarouselPage"
 import { useLayoutEffect } from "react"
 import { afterloginOneTimeAPI } from "../../components/Common/AfterLoginApiFunc"
 import { useSession } from "../../routes/middleware/SessionContext"
+import { event } from "jquery"
 
 const Login = props => {
 
@@ -143,7 +144,7 @@ const Login = props => {
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
   };
-  function handleKeyDown(event) {
+  function handleKeyDown({ event, Type }) {
     // Check if the pressed key is a space
     if (event.key === " ") {
       // Check if the input contains only spaces
@@ -153,7 +154,6 @@ const Login = props => {
       }
     }
   }
-
 
   return (
     <React.Fragment>
@@ -199,7 +199,7 @@ const Login = props => {
                               value={currentUserName}
                               autoComplete="off"
                               autoFocus={false}
-                              onKeyDown={handleKeyDown}
+                              onKeyDown={(event) => { handleKeyDown({ event: event, Type: "UserName" }) }}
                               required
                               onChange={currentUserOnchange}
                               placeholder="Enter User Name"
@@ -223,7 +223,7 @@ const Login = props => {
                                 onChange={PasswordOnchange}
                                 type={showPassword ? 'text' : 'password'}
                                 className="form-control"
-                                onKeyDown={handleKeyDown}
+                                onKeyDown={(event) => { handleKeyDown({ event: event, Type: "Password" }) }}
                                 required
                                 placeholder="Enter Password"
                               />

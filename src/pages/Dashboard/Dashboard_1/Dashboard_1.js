@@ -189,8 +189,8 @@ const Dashboard_1 = (props) => {
                                     <Row className="align-items-center">
                                         <Col>
                                             <span style={{ cursor: "pointer", fontWeight: "bold" }}
-                                                onClick={() => RedirectHandler(3)}
-                                                className="text-primary text-bold mb-3 lh-1 d-block text-decoration-underline">Total GRNs</span>
+                                                onClick={() => RedirectHandler()}
+                                                className="text-primary text-bold mb-3 lh-1 d-block text-decoration-underline">Total GRN's</span>
                                             <h4 className="mb-3">
                                                 <span className="counter-value">
                                                     {GRNsCount}
@@ -214,7 +214,7 @@ const Dashboard_1 = (props) => {
                                         disabled={PaymentEntryListloading}
                                         style={{ cursor: "pointer" }}
                                     >
-                                        Todays Payment Entry</Label>&nbsp;&nbsp;&nbsp;
+                                        Today's Payment Entry</Label>&nbsp;&nbsp;&nbsp;
                                     {(PaymentEntryListloading) &&
                                         <DashboardLoader />
                                     }
