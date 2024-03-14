@@ -8,7 +8,7 @@ import {
 } from "reactstrap";
 import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
-import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess, goButtonPartyItemAddPage, goButtonPartyItemAddPageSuccess, } from "../../../../store/actions";
+import { BreadcrumbShowCountlabel, CommonBreadcrumbDetails, commonPageField, commonPageFieldSuccess, goButtonPartyItemAddPage, goButtonPartyItemAddPageSuccess, } from "../../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { globalTableSearchProps } from "../../../../components/Common/SearchBox/MySearch";
@@ -111,6 +111,7 @@ const ImportExcelPartyMap = (props) => {
     const { fieldLabel } = state;
     // userAccess useEffect
     useEffect(() => {
+
         let userAcc = null;
         let locationPath = location.pathname;
         if (hasShowModal) {
@@ -121,9 +122,9 @@ const ImportExcelPartyMap = (props) => {
         })
         if (userAcc) {
             setUserAccState(userAcc)
-            breadcrumbReturnFunc({ dispatch, userAcc });
+            breadcrumbReturnFunc({ dispatch, userAcc, pageField: pageField });
         };
-    }, [userAccess])
+    }, [userAccess, pageField])
 
     useEffect(() => {
         if (pageField) {
@@ -132,8 +133,75 @@ const ImportExcelPartyMap = (props) => {
         }
     }, [pageField])
 
+
+
     useEffect(() => {
-        
+        debugger
+        if (pageField === null) { }; // Return early if pageField is null
+
+        let downList = [];
+        let defaultDownList2 = [];
+        let listObj = {};
+        let listObj2 = {};
+
+        UpdateTableList.forEach((index1) => {
+
+            pageField?.PageFieldMaster?.forEach((index2) => {
+                if (index2.ControlID === "fieldName" && values.MapType.value === 2) {
+                    index2.FieldLabel = "Item"
+                } else if (index2.ControlID === "fieldName" && values.MapType.value === 1) {
+                    index2.FieldLabel = "Party Name"
+                } else if (index2.ControlID === "fieldName" && values.MapType.value === 3) {
+                    index2.FieldLabel = "Unit"
+                }
+                if (index2.ShowInDownload) {
+                    listObj2[index2.ControlID] = index2.ShownloadDefaultSelect
+                    listObj[index2.ControlID] = index1[index2.ControlID]
+                }
+            })
+            downList.push(listObj)
+            defaultDownList2.push(listObj2)
+            listObj = {}
+        })
+
+
+
+        if (values.MapType.value === 1) {
+            const keysToChange = ["mapValue"];
+
+            for (let i = 0; i < downList.length; i++) {
+                for (let j = 0; j < keysToChange.length; j++) {
+                    if (downList[i].hasOwnProperty(keysToChange[j])) {
+                        downList[i]["Related Key Field"] = downList[i]["mapValue"]
+                        delete downList[i]["mapValue"];
+                    }
+                }
+            }
+        } else if (values.MapType.value === 2 || values.MapType.value === 3) {
+            const keysToRemove = ["GSTIN", "RouteName", "id"];
+            for (let i = 0; i < downList.length; i++) {
+                for (let j = 0; j < keysToRemove.length; j++) {
+                    if (downList[i].hasOwnProperty(keysToRemove[j])) {
+                        delete downList[i][keysToRemove[j]];
+                    }
+                }
+            }
+        }
+
+        dispatch(CommonBreadcrumbDetails({
+            downBtnData: downList,
+            defaultDownBtnData: listObj2,
+            CountLabel: pageField?.CountLabel,
+            pageHeading: pageField?.PageHeading,
+            newBtnView: userPageAccessState?.RoleAccess_IsSave,
+            excelBtnView: userPageAccessState?.RoleAccess_Exceldownload,
+        }))
+
+    }, [UpdateTableList, pageField, userPageAccessState])
+
+
+    useEffect(() => {
+
         if (values.MapType.value === 2) {
             const newItemList = ItemList.map(i => ({
                 "party": commonPartyDropSelect.value,

@@ -419,7 +419,7 @@ export function breadcrumbReturnFunc({ dispatch, userAcc, newBtnPath = "", force
   const isnewBtnView = userAcc.PageType === 2 && userAcc.RoleAccess_IsSave;
   const isCountLabel = userAcc.CountLabel;
   const isexcelBtnView =
-    userAcc.PageType === 2 && userAcc.RoleAccess_Exceldownload;
+    (userAcc.PageType === 2 || userAcc.PageType === 3) && userAcc.RoleAccess_Exceldownload;
   dispatch(
     CommonBreadcrumbDetails({
       newBtnPath: newBtnPath,

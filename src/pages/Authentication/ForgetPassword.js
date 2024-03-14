@@ -141,6 +141,7 @@ const ForgetPasswordPage = props => {
   };
 
   function handleKeyDown(event) {
+    
     // Check if the pressed key is a space
     if (event.key === " ") {
       // Check if the input contains only spaces
@@ -259,7 +260,7 @@ const ForgetPasswordPage = props => {
 
 
                               <div className="mb-3 mt-4">
-                                <button className="btn btn-primary w-100 waves-effect waves-light" type="submit">change Password</button>
+                                <button className="btn btn-primary w-100 waves-effect waves-light" type="submit">Change Password</button>
                               </div>
                             </AvForm>
                             :
