@@ -309,7 +309,7 @@ const Dashboard_Admin = (props) => {
 
                                                     </Col>
                                                     <Col className='mt-1' sm={3}>
-                                                        <span style={{ cursor: "pointer" }} onClick={() => RedirectHandler(1)} >Todays Orders</span>
+                                                        <span style={{ cursor: "pointer" }} onClick={() => RedirectHandler(1)} >Today's Orders</span>
 
                                                     </Col>
                                                     <Col sm={2} className='mt-1'>
@@ -353,7 +353,7 @@ const Dashboard_Admin = (props) => {
 
                                                 </Col>
                                                 <Col className='mt-1' sm={4}>
-                                                    <span style={{ cursor: "pointer" }} onClick={() => RedirectHandler(3)} className="">Todays App Orders</span>
+                                                    <span style={{ cursor: "pointer" }} onClick={() => RedirectHandler(3)} className="">Today's App Orders</span>
 
 
                                                 </Col>
@@ -400,7 +400,7 @@ const Dashboard_Admin = (props) => {
 
                                                     </Col>
                                                     <Col className='mt-1' sm={3}>
-                                                        <span style={{ cursor: "pointer" }} onClick={() => RedirectHandler(2)} >Todays Invoice</span>
+                                                        <span style={{ cursor: "pointer" }} onClick={() => RedirectHandler(2)} >Today's Invoice</span>
 
                                                     </Col>
                                                     <Col sm={2} className='mt-1'>
@@ -432,7 +432,7 @@ const Dashboard_Admin = (props) => {
                                             <Card className="card-h-100">
                                                 <Row>
                                                     <Col className='mt-1' sm={3}>
-                                                        <span style={{ cursor: "pointer" }} onClick={() => RedirectHandler(3)}> Annual GRNs</span>
+                                                        <span style={{ cursor: "pointer" }} onClick={() => RedirectHandler()}> Annual GRN's</span>
 
 
                                                     </Col>
@@ -443,20 +443,15 @@ const Dashboard_Admin = (props) => {
                                                                 : 0
                                                             }
                                                         </span>
-
                                                     </Col>
                                                     <Col className='mt-1' sm={3}>
-                                                        <span style={{ cursor: "pointer" }} onClick={() => RedirectHandler(3)} className="">Todays GRNs</span>
-
-
+                                                        <span style={{ cursor: "pointer" }} onClick={() => RedirectHandler()} className="">Today's GRN's</span>
                                                     </Col>
                                                     <Col sm={2} className='mt-1'>
                                                         <span style={{ fontSize: "15px" }}> {GRNsCount}</span>
                                                     </Col>
-
                                                 </Row>
                                             </Card>
-
                                         </Row>}
                                     <div id="mix-line-bar" className="e-chart">
                                         {ChartOpen && (GrnMonthCount.containsNonZeroNumber) &&
@@ -482,7 +477,7 @@ const Dashboard_Admin = (props) => {
                                         disabled={PaymentEntryListloading}
                                         style={{ cursor: "pointer" }}
                                     >
-                                        Todays Payment Entry</Label>&nbsp;&nbsp;&nbsp;
+                                        Today's Payment Entry</Label>&nbsp;&nbsp;&nbsp;
                                     {(PaymentEntryListloading) &&
                                         <DashboardLoader />
                                     }
