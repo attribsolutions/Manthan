@@ -60,7 +60,7 @@ const PartyDropdownForReport = (props) => {
                 <Col sm={3}>
                     <FormGroup className=" row mt-3 " >
                         <Label className="col-md-3 p-2 "
-                            style={{ width: "90px" }}>Party</Label>
+                            style={{ width: "65px" }}>Party</Label>
                         <Col sm={7}>
                             <C_Select
                                 value={partyValue}

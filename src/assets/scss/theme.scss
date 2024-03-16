@@ -211,7 +211,11 @@ textarea:focus {
   backdrop-filter: blur(2px);
 }
 
-
+.mr {
+  height: fit-content;
+  margin-bottom: 12px !important;
+  margin-top: 11px !important
+}
 
 .transparent1 {
   background-color: rgba(92, 91, 91, 0.3);

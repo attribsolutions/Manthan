@@ -170,14 +170,17 @@ const GRNList = () => {
         setSupplierSelect(e)
     }
 
+
+
+
     const HeaderContent = () => {
-        return <div className="px-2  c_card_filter text-black " >
-            <div className="row">
-                <div className=" row">
+        return (
+            <div className="px-2   c_card_filter text-black" >
+                <div className="row" >
                     <Col sm="3" className="">
                         <FormGroup className="mb- row mt-3 " >
                             <Label className="col-sm-5 p-2"
-                                style={{ width: "83px" }}>From Date</Label>
+                                style={{ width: "83px" }}>FromDate</Label>
                             <Col sm="7">
                                 <C_DatePicker
                                     name='fromdate'
@@ -187,10 +190,11 @@ const GRNList = () => {
                             </Col>
                         </FormGroup>
                     </Col>
+
                     <Col sm="3" className="">
                         <FormGroup className="mb- row mt-3 " >
                             <Label className="col-sm-5 p-2"
-                                style={{ width: "65px" }}>To Date</Label>
+                                style={{ width: "65px" }}>ToDate</Label>
                             <Col sm="7">
                                 <C_DatePicker
                                     nane='todate'
@@ -204,8 +208,9 @@ const GRNList = () => {
                     <Col sm="5">
                         <FormGroup className="mb-2 row mt-3 " >
                             <Label className="col-md-4 p-2"
+
                                 style={{ width: "115px" }}>Supplier Name</Label>
-                            <Col md="5">
+                            <Col sm="5">
                                 <Select
                                     value={supplierSelect}
                                     classNamePrefix="select2-Customer"
@@ -226,10 +231,13 @@ const GRNList = () => {
                         />
                     </Col>
                 </div>
-
-            </div>
-        </div>
+            </div >
+        )
     }
+
+
+
+
 
     const partySelectButtonHandler = () => {
         goButtonHandler();
