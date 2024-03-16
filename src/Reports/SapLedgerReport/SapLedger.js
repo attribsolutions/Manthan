@@ -233,78 +233,14 @@ const SapLedger = (props) => {
         return (
             <React.Fragment>
                 <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
-
                 <div className="page-content" >
-
-                    {/* <div className="px-2  c_card_filter text-black " >
-                        <div className="row">
-                            <div className=" row">
-                                <Col sm="4" className="">
-                                    <FormGroup className="mb- row mt-2 " >
-                                        <Label className="col-sm-5 p-2"
-                                            style={{ width: "83px" }}>From Date</Label>
-                                        <Col sm="7">
-                                            <C_DatePicker
-                                                name='fromdate'
-                                                value={fromdate}
-                                                onChange={fromdateOnchange}
-                                            />
-                                        </Col>
-                                    </FormGroup>
-                                </Col>
-                                <Col sm="4" className="">
-                                    <FormGroup className="mb- row mt-2 " >
-                                        <Label className="col-sm-5 p-2"
-                                            style={{ width: "65px" }}>To Date</Label>
-                                        <Col sm="7">
-                                            <C_DatePicker
-                                                nane='todate'
-                                                value={todate}
-                                                onChange={todateOnchange}
-                                            />
-                                        </Col>
-                                    </FormGroup>
-                                </Col>
-
-                                <Col sm={1} className="mt-2" >
-                                    <C_Button
-                                        type="button"
-                                        spinnerColor="white"
-                                        loading={(btnMode === "showTable" && goBtnLoading) && true}
-                                        className="btn btn-success"
-                                        onClick={(e) => goButtonHandler("showTable")}
-                                    >
-                                        Show
-                                    </C_Button>
-
-                                </Col>
-
-                                <Col sm={2} className="mt-2">
-                                    <C_Button
-                                        type="button"
-                                        spinnerColor="white"
-                                        loading={(btnMode === "excel" && goBtnLoading) && true}
-                                        className="btn btn-primary"
-                                        onClick={(e) => goButtonHandler("excel")}
-                                    >
-                                        Excel
-                                    </C_Button>
-                                </Col>
-                            </div>
-
-                        </div>
-                    </div> */}
-
-
-
-
                     <div className="px-2   c_card_filter text-black " >
                         <Row>
                             <Col sm={3} className="">
                                 <FormGroup className=" row mt-2  " >
                                     <Label className="col-sm-4 p-2"
                                         style={{ width: "83px" }}>FromDate</Label>
-                                    <Col sm="6">
+                                    <Col sm="7">
                                         <C_DatePicker
                                             name='fromdate'
                                             value={fromdate}
@@ -318,7 +254,7 @@ const SapLedger = (props) => {
                                 <FormGroup className=" row mt-2 " >
                                     <Label className="col-sm-4 p-2"
                                         style={{ width: "65px" }}>ToDate</Label>
-                                    <Col sm="6">
+                                    <Col sm="7">
                                         <C_DatePicker
                                             nane='todate'
                                             value={todate}
