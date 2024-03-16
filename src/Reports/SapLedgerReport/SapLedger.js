@@ -236,7 +236,7 @@ const SapLedger = (props) => {
 
                 <div className="page-content" >
 
-                    <div className="px-2  c_card_filter text-black " >
+                    {/* <div className="px-2  c_card_filter text-black " >
                         <div className="row">
                             <div className=" row">
                                 <Col sm="4" className="">
@@ -293,7 +293,68 @@ const SapLedger = (props) => {
                             </div>
 
                         </div>
+                    </div> */}
+
+
+
+
+                    <div className="px-2   c_card_filter text-black " >
+                        <Row>
+                            <Col sm={3} className="">
+                                <FormGroup className=" row mt-2  " >
+                                    <Label className="col-sm-4 p-2"
+                                        style={{ width: "83px" }}>FromDate</Label>
+                                    <Col sm="6">
+                                        <C_DatePicker
+                                            name='fromdate'
+                                            value={fromdate}
+                                            onChange={fromdateOnchange}
+                                        />
+                                    </Col>
+                                </FormGroup>
+                            </Col>
+
+                            <Col sm={3} className="">
+                                <FormGroup className=" row mt-2 " >
+                                    <Label className="col-sm-4 p-2"
+                                        style={{ width: "65px" }}>ToDate</Label>
+                                    <Col sm="6">
+                                        <C_DatePicker
+                                            nane='todate'
+                                            value={todate}
+                                            onChange={todateOnchange}
+                                        />
+                                    </Col>
+                                </FormGroup>
+                            </Col>
+
+
+                            <Col sm={6} className=" d-flex justify-content-end" >
+                                <C_Button
+                                    type="button"
+                                    spinnerColor="white"
+                                    loading={(btnMode === "showTable" && goBtnLoading) && true}
+                                    className="btn btn-success m-3 mr"
+                                    onClick={(e) => goButtonHandler("showTable")}
+                                >
+                                    Show
+                                </C_Button>
+
+                                <C_Button
+                                    type="button"
+                                    spinnerColor="white"
+                                    loading={(btnMode === "excel" && goBtnLoading) && true}
+                                    className="btn btn-primary m-3 mr"
+                                    onClick={(e) => goButtonHandler("excel")}
+                                >
+                                    Excel
+                                </C_Button>
+                            </Col>
+                        </Row>
                     </div>
+
+
+
 
                     <ToolkitProvider
                         keyField="id"

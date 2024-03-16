@@ -128,14 +128,13 @@ const RetailerDataReport = (props) => {
     <React.Fragment>
       <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
       <div className="page-content">
-        <div className="px-2   c_card_filter text-black">
-          <div className="row">
-            <Col sm={4}>
-              <FormGroup className="mb- row mt-3 mb-2">
-                <Label className="col-sm-4 p-2" style={{ width: "65px" }}>
-                  Party
-                </Label>
-                <Col sm="8">
+        <div className="px-2   c_card_filter text-black " >
+          <Row>
+            <Col sm={5} className="">
+              <FormGroup className=" row mt-2  " >
+                <Label className="col-sm-4 p-2"
+                  style={{ width: "83px" }}>Party</Label>
+                <Col sm="6">
                   <C_Select
                     name="party"
                     value={partydropdown}
@@ -155,20 +154,18 @@ const RetailerDataReport = (props) => {
               </FormGroup>
             </Col>
 
-            <Col sm={1} className="mt-3">
+            <Col sm={7} className=" d-flex justify-content-end" >
               <C_Button
                 type="button"
                 spinnerColor="white"
                 loading={listBtnLoading && btnMode === "Show"}
-                className="btn btn-success"
+                className="btn btn-success m-3 mr"
                 onClick={() => excelhandler("Show")}
               >
                 Show
               </C_Button>
-            </Col>
-            <Col lg={2} className=" mt-3 ">
               {listBtnLoading && btnMode === "Excel" ? (
-                <Button type="button" color="btn btn-primary" id="excelbtn-id">
+                <Button type="button" className="btn btn-primary m-3 mr" color="btn btn-primary" id="excelbtn-id">
                   {" "}
                   Downloading.. &nbsp;
                   <Spinner
@@ -181,13 +178,14 @@ const RetailerDataReport = (props) => {
                   type="button"
                   color="btn btn-primary"
                   id="excelbtn-id"
+                  className="btn btn-primary m-3 mr"
                   onClick={() => excelhandler("Excel")}
                 >
                   Excel
                 </Button>
               )}
             </Col>
-          </div>
+          </Row>
         </div>
 
         <div className="mt-1">
@@ -201,7 +199,7 @@ const RetailerDataReport = (props) => {
               <React.Fragment>
                 <Row>
                   <Col xl="12">
-                    <div className="table-responsive table">
+                    <div className="table-responsive table" style={{ minHeight: "75vh" }}>
                       <BootstrapTable
                         keyField="PartyID"
                         classes={"table  table-bordered table-hover"}

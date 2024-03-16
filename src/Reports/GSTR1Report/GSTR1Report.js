@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Col, FormGroup, Label } from "reactstrap";
+import { Col, FormGroup, Label, Row } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import { initialFiledFunc, } from "../../components/Common/validationFunction";
 import { C_Button } from "../../components/Common/CommonButton";
@@ -83,7 +83,7 @@ const GSTR1Report = (props) => {
             GST_ExcelDownloadFun({      // Download multi tab excel
                 excelTableData: GstR3BReportData.Data,
                 excelFileName: `GST-R3B Report (${values.FromDate}) To (${values.ToDate})`,
-                pageName:"GST-R3B"
+                pageName: "GST-R3B"
             })
             dispatch(GST_R3B_Report_API_Success({ Status: false }))
         }
@@ -94,7 +94,7 @@ const GSTR1Report = (props) => {
             GST_ExcelDownloadFun({      // Download multi tab excel
                 excelTableData: GstR1ReportData.Data,
                 excelFileName: `GST-R1 Report (${values.FromDate}) To (${values.ToDate})`,
-                pageName:"GST-R1"
+                pageName: "GST-R1"
             })
             dispatch(GST_R1_Report_API_Success({ Status: false }))
         }
@@ -156,11 +156,10 @@ const GSTR1Report = (props) => {
         <React.Fragment>
             <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
             <div className="page-content">
-
-                <div className="px-2   c_card_filter text-black" >
-                    <div className="row" >
+                <div className="px-2   c_card_filter text-black " >
+                    <Row>
                         <Col sm={3} className="">
-                            <FormGroup className="mb- row mt-3 mb-2 " >
+                            <FormGroup className=" row mt-2  " >
                                 <Label className="col-sm-4 p-2"
                                     style={{ width: "83px" }}>FromDate</Label>
                                 <Col sm="6">
@@ -174,7 +173,7 @@ const GSTR1Report = (props) => {
                         </Col>
 
                         <Col sm={3} className="">
-                            <FormGroup className="mb- row mt-3 mb-2" >
+                            <FormGroup className=" row mt-2 " >
                                 <Label className="col-sm-4 p-2"
                                     style={{ width: "65px" }}>ToDate</Label>
                                 <Col sm="6">
@@ -186,33 +185,33 @@ const GSTR1Report = (props) => {
                                 </Col>
                             </FormGroup>
                         </Col>
-                        <Col sm={2} className="mt-3" >
+
+
+                        <Col sm={6} className=" d-flex justify-content-end" >
                             <C_Button
                                 type="button"
-                                style={{ width: "90px" }}
+                                // style={{ width: "90px" }}
                                 spinnerColor="white"
                                 loading={GstR1BtnLoading}
-                                className="btn btn-primary"
+                                className="btn btn-primary m-3 mr "
                                 onClick={() => goButtonHandler("GSTR1")}
                             >
                                 GST R1
                             </C_Button>
-                        </Col>
-
-                        <Col sm={2} className="mt-3" >
                             <C_Button
                                 type="button"
-                                style={{ width: "90px" }}
+                                // style={{ width: "90px" }}
                                 spinnerColor="white"
                                 loading={GstR3BBtnLoading}
-                                className="btn btn-primary"
+                                className="btn btn-primary m-3 mr "
                                 onClick={() => goButtonHandler("GSTR3B")}
                             >
                                 GST R3B
                             </C_Button>
                         </Col>
-                    </div>
+                    </Row>
                 </div>
+
             </div>
             <C_Report />
         </React.Fragment >

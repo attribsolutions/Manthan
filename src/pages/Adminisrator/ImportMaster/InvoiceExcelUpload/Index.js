@@ -311,7 +311,7 @@ const InvoiceExcelUpload = (props) => {
 
         if (extension === ".xlsx") {
             const readjson = await readExcelFile({ file: files[0], compareParameter, ItemList })
-            
+
             //////////////////////////////////////// Check  in valid format Value Or Not //////////////////////////////////////////////////////
             if (readjson.NotMapColumn.length > 0) {
                 setColunmMap({ Not_Map_Column_Array: readjson.NotMapColumn, Not_Map_Columnt: true });
@@ -484,7 +484,8 @@ const InvoiceExcelUpload = (props) => {
         ((isIgnoreNegativeValue) || (negativeFigureVerify.Not_Verify_Negative_Figure === false))
         &&
         (invoiceWithsameDateVerify.Not_Verify_Same_Date === false) &&
-        (unitVerify.Not_Verify_Unit === false) && (colunmMap.Not_Map_Columnt === false)
+        (unitVerify.Not_Verify_Unit === false) && (colunmMap.Not_Map_Columnt === false) &&
+        (updatereadJsonDetail.invoice.size !== 0)
     );
 
 
@@ -618,9 +619,11 @@ const InvoiceExcelUpload = (props) => {
 
                 outerArr.push({ ...parentObj, InvoiceItems: invoiceItems })
             });
-
             const jsonBody = JSON.stringify({ "BulkData": outerArr })
+
             dispatch(InvoiceExcelUpload_save_action({ jsonBody, btnId }));
+
+
 
         } catch (e) { _cfunc.btnIsDissablefunc({ btnId, state: false }) }
     };
@@ -731,7 +734,16 @@ const InvoiceExcelUpload = (props) => {
                                 {preViewDivShow ? <Card >
 
                                     <details>
-                                        <summary>&nbsp; &nbsp;  No. of Invoice: {updatereadJsonDetail.invoice.size}</summary>
+                                        <summary>&nbsp; &nbsp;  No. of Invoice: {updatereadJsonDetail.invoice.size}
+
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{(updatereadJsonDetail.invoice.size === 0) ?
+                                                <i style={{ color: "tomato", }} className="mdi mdi-close-circle font-size-18  "></i> :
+                                                <i style={{ color: "green", }} className="mdi mdi-check-decagram  font-size-18  "></i>}
+
+
+                                        </summary>
                                         <div className="error-msg">
                                             <p>
                                                 {updatereadJsonDetail.invoiceNO.map(i => (<Label>{i} ,&#160;</Label>))}

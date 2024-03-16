@@ -189,7 +189,7 @@ const CX_DD_DiffrenceReport = (props) => {
             <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
             <div className="page-content">
 
-                <div className="px-2   c_card_filter text-black" >
+                {/* <div className="px-2   c_card_filter text-black" >
                     <div className="row" >
                         <Col sm={3} className="">
                             <FormGroup className="mb- row mt-3 mb-2 " >
@@ -266,7 +266,88 @@ const CX_DD_DiffrenceReport = (props) => {
                             </C_Button>
                         </Col>
                     </div>
+                </div> */}
+
+
+
+
+                <div className="px-2   c_card_filter text-black " >
+                    <Row>
+                        <Col sm={3} className="">
+                            <FormGroup className=" row mt-2  " >
+                                <Label className="col-sm-4 p-2"
+                                    style={{ width: "83px" }}>FromDate</Label>
+                                <Col sm="6">
+                                    <C_DatePicker
+                                        name='FromDate'
+                                        value={values.FromDate}
+                                        onChange={fromdateOnchange}
+                                    />
+                                </Col>
+                            </FormGroup>
+                        </Col>
+
+                        <Col sm={3} className="">
+                            <FormGroup className=" row mt-2 " >
+                                <Label className="col-sm-4 p-2"
+                                    style={{ width: "65px" }}>ToDate</Label>
+                                <Col sm="6">
+                                    <C_DatePicker
+                                        name="ToDate"
+                                        value={values.ToDate}
+                                        onChange={todateOnchange}
+                                    />
+                                </Col>
+                            </FormGroup>
+                        </Col>
+
+                        {isSCMParty &&
+                            <Col sm={4} className="">
+                                <FormGroup className=" row mt-2" >
+                                    <Label className="col-sm-4 p-2"
+                                        style={{ width: "65px", marginRight: "20px" }}>Party</Label>
+                                    <Col sm="8">
+                                        <C_Select
+                                            name="Party"
+                                            value={PartyDropdown}
+                                            isSearchable={true}
+                                            isLoading={partyDropdownLoading}
+                                            className="react-dropdown"
+                                            classNamePrefix="dropdown"
+                                            styles={{
+                                                menu: provided => ({ ...provided, zIndex: 2 })
+                                            }}
+                                            options={partyDropdownOptions}
+                                            onChange={(e) => { partyOnchange(e) }}
+                                        />
+                                    </Col>
+                                </FormGroup>
+                            </Col>
+                        }
+                        <Col sm={isSCMParty ? 2 : 6} className=" d-flex justify-content-end" >
+                            <C_Button
+                                type="button"
+                                spinnerColor="white"
+                                loading={(GoBtnLoading && btnMode === "show") && true}
+                                className="btn btn-success m-3 mr"
+                                onClick={() => goAndExcel_Btn_Handler("show")}
+                            >
+                                Show
+                            </C_Button>
+                            <C_Button
+                                type="button"
+                                spinnerColor="white"
+                                loading={(GoBtnLoading && btnMode === "excel") && true}
+                                className="btn btn-primary m-3 mr"
+                                onClick={() => goAndExcel_Btn_Handler("excel")}
+                            >
+                                Excel
+                            </C_Button>
+                        </Col>
+                    </Row>
                 </div>
+
+
 
                 <div className="mt-1">
                     <ToolkitProvider

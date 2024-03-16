@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Col, FormGroup, Label } from "reactstrap";
+import { Col, FormGroup, Label, Row } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import { initialFiledFunc, } from "../../components/Common/validationFunction";
 import { C_Button } from "../../components/Common/CommonButton";
@@ -445,7 +445,7 @@ const PartyLedger = () => {
         <React.Fragment>
             <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
             <div className="page-content">
-                <div className="px-2   c_card_filter text-black" >
+                {/* <div className="px-2   c_card_filter text-black" >
                     <div className="row" >
                         <Col sm={3} className="">
                             <FormGroup className="mb- row mt-3 mb-2 " >
@@ -546,7 +546,119 @@ const PartyLedger = () => {
                                 Print</C_Button>
                         </Col>
                     </div>
+                </div> */}
+
+
+
+                <div className="px-2   c_card_filter text-black " >
+                    <Row>
+                        <Col sm={3} className="">
+                            <FormGroup className=" row mt-2  " >
+                                <Label className="col-sm-4 p-2"
+                                    style={{ width: "83px" }}>FromDate</Label>
+                                <Col sm="6">
+                                    <C_DatePicker
+                                        name='FromDate'
+                                        value={values.FromDate}
+                                        onChange={fromdateOnchange}
+                                    />
+                                </Col>
+                            </FormGroup>
+                        </Col>
+
+                        <Col sm={3} className="">
+                            <FormGroup className=" row mt-2 " >
+                                <Label className="col-sm-4 p-2"
+                                    style={{ width: "65px" }}>ToDate</Label>
+                                <Col sm="6">
+                                    <C_DatePicker
+                                        name="ToDate"
+                                        value={values.ToDate}
+                                        onChange={todateOnchange}
+                                    />
+                                </Col>
+                            </FormGroup>
+                        </Col>
+
+                        {subPageMode === url.PARTY_LEDGER ? (
+                            <Col sm={4} className="">
+                                <FormGroup className=" row mt-2" >
+                                    <Label className="col-sm-4 p-2"
+                                        style={{ width: "65px", marginRight: "20px" }}>Customer</Label>
+                                    <Col sm="8">
+                                        <C_Select
+                                            name="Customer"
+                                            value={values.Customer}
+                                            isSearchable={true}
+                                            isLoading={customerDropdownLoading}
+                                            className="react-dropdown"
+                                            classNamePrefix="dropdown"
+                                            styles={{
+                                                menu: provided => ({ ...provided, zIndex: 2 })
+                                            }}
+                                            options={customerDropdownOptions}
+                                            onChange={customerOnChangehandler}
+
+                                        />
+                                    </Col>
+                                </FormGroup>
+                            </Col>
+                        ) : (
+
+                            <Col sm={4} className="">
+                                <FormGroup className=" row mt-2" >
+                                    <Label className="col-sm-4 p-2"
+                                        style={{ width: "65px", marginRight: "20px" }}>Party</Label>
+                                    <Col sm="8">
+                                        <C_Select
+                                            name="Party"
+                                            value={values.Party}
+                                            isSearchable={true}
+                                            isLoading={partyDropdownLoading}
+                                            className="react-dropdown"
+                                            classNamePrefix="dropdown"
+                                            styles={{
+                                                menu: provided => ({ ...provided, zIndex: 2 })
+                                            }}
+                                            options={partyDropdounOptions}
+                                            onChange={partyOnChangehandler}
+
+                                        />
+                                    </Col>
+                                </FormGroup>
+                            </Col>
+
+
+                        )}
+                        <Col sm={2} className=" d-flex justify-content-end" >
+                            <C_Button
+                                type="button"
+                                spinnerColor="white"
+                                loading={btnMode}
+                                className="btn btn-success m-3 mr"
+                                onClick={(e) => { goButtonHandler(e, "excel") }}
+                            >
+                                Excel
+                            </C_Button>
+                            <C_Button
+                                type="button"
+                                spinnerColor="primary"
+                                loading={goBtnLoading}
+                                className="btn btn-outline-primary border-1 font-size-12 text-center m-3 mr"
+                                onClick={(e) => { goButtonHandler(e, "print") }}
+                            >
+                                Print</C_Button>
+                        </Col>
+                    </Row>
                 </div>
+
+
+
+
+
+
+
+
             </div>
             <C_Report />
         </React.Fragment >

@@ -1,3 +1,4 @@
+
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
@@ -651,18 +652,16 @@ const OrderList = () => {
         dispatch(getOrdersMakeInvoiceDataAction({ jsonBody }))
     }
 
+
     const HeaderContent = () => {
         return (
             <div className="px-2   c_card_filter text-black" >
                 <div className="row" >
-
-                    <Col lg={(orderList4_or_app_orderList) ? 0 : 3} >
+                    <Col lg={(orderList4_or_app_orderList) ? 2 : 3} className="">
                         <FormGroup className="mb- row mt-3 " >
                             <Label className="col-sm-5 p-2"
-                                style={{ width: "65px" }}>
-                                {!(fieldLabel.FromDate === '') ? fieldLabel.FromDate : "From Date"}
-                            </Label>
-                            <Col sm="8">
+                                style={{ width: "83px" }}>  {!(fieldLabel.FromDate === '') ? fieldLabel.FromDate : "From Date"}</Label>
+                            <Col sm="7">
                                 <C_DatePicker
                                     options={{
                                         altInput: true,
@@ -677,13 +676,11 @@ const OrderList = () => {
                         </FormGroup>
                     </Col>
 
-                    <Col lg={(orderList4_or_app_orderList) ? 0 : 3} >
+                    <Col lg={(orderList4_or_app_orderList) ? 2 : 3} className="">
                         <FormGroup className="mb- row mt-3 " >
                             <Label className="col-sm-5 p-2"
-                                style={{ width: "65px" }}>
-                                {!(fieldLabel.ToDate === '') ? fieldLabel.ToDate : "To Date"}
-                            </Label>
-                            <Col sm="8">
+                                style={{ width: "65px" }}>  {!(fieldLabel.ToDate === '') ? fieldLabel.ToDate : "To Date"}</Label>
+                            <Col sm="7">
                                 <C_DatePicker
                                     options={{
                                         altInput: true,
@@ -698,7 +695,8 @@ const OrderList = () => {
                         </FormGroup>
                     </Col>
 
-                    {(orderList4_or_app_orderList) ?
+
+                    {(orderList4_or_app_orderList) &&
                         <Col lg={3}>
                             <FormGroup className="mb-1 row mt-3 " >
                                 <Label className="col-sm p-2"
@@ -720,18 +718,14 @@ const OrderList = () => {
                                     />
                                 </Col>
                             </FormGroup>
-                        </Col >
-                        :
-                        <Col sm='1' />
-                    }
+                        </Col >}
 
-                    <Col lg={3}>
-                        <FormGroup className="mb-1 row mt-3 " >
+                    <Col lg={(orderList4_or_app_orderList) ? 4 : 5}>
+                        <FormGroup className="mb-2 row mt-3 " >
                             <Label className="col-md-4 p-2"
-                                style={{ width: "90px" }}>
-                                {(!(fieldLabel.Supplier === '')) ? fieldLabel.Supplier : (orderList4_or_app_orderList ? "Customer" : "Supplier")}
-                            </Label>
-                            <Col sm="7">
+
+                                style={{ width: "115px" }}>{(!(fieldLabel.Supplier === '')) ? fieldLabel.Supplier : (orderList4_or_app_orderList ? "Customer" : "Supplier")}</Label>
+                            <Col sm="5">
                                 <C_Select
                                     name="Supplier"
                                     classNamePrefix="select2-Customer"
@@ -747,14 +741,43 @@ const OrderList = () => {
                         </FormGroup>
                     </Col >
 
-                    {/* <Col sm="1" /> */}
-                    <Col sm="1" className="mt-3 mb-2 ">
+                    <Col sm="1" className="mt-3 ">
                         <Go_Button loading={reducers.goBtnloading} id={gobtnId} onClick={goButtonHandler} />
                     </Col>
                 </div>
-            </div>
+            </div >
         )
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     function partySelectButtonHandler() {
         goButtonHandler()

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Col, FormGroup, Label } from "reactstrap";
+import { Col, FormGroup, Label, Row } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import { initialFiledFunc } from "../../components/Common/validationFunction";
 import { C_Button } from "../../components/Common/CommonButton";
@@ -167,10 +167,11 @@ const TCSAmountReport = (props) => {
             <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
             <div className="page-content">
 
-                <div className="px-2   c_card_filter text-black" >
-                    <div className="row" >
+
+                <div className="px-2   c_card_filter text-black " >
+                    <Row>
                         <Col sm={3} className="">
-                            <FormGroup className="mb- row mt-3 mb-2 " >
+                            <FormGroup className=" row mt-2  " >
                                 <Label className="col-sm-4 p-2"
                                     style={{ width: "83px" }}>FromDate</Label>
                                 <Col sm="6">
@@ -182,8 +183,9 @@ const TCSAmountReport = (props) => {
                                 </Col>
                             </FormGroup>
                         </Col>
+
                         <Col sm={3} className="">
-                            <FormGroup className="mb- row mt-3 mb-2" >
+                            <FormGroup className=" row mt-2 " >
                                 <Label className="col-sm-4 p-2"
                                     style={{ width: "65px" }}>ToDate</Label>
                                 <Col sm="6">
@@ -197,8 +199,8 @@ const TCSAmountReport = (props) => {
                         </Col>
 
                         {isSCMParty &&
-                            <Col sm={3} className="">
-                                <FormGroup className="mb- row mt-3" >
+                            <Col sm={4} className="">
+                                <FormGroup className=" row mt-2" >
                                     <Label className="col-sm-4 p-2"
                                         style={{ width: "65px", marginRight: "20px" }}>Party</Label>
                                     <Col sm="8">
@@ -218,17 +220,30 @@ const TCSAmountReport = (props) => {
                                 </FormGroup>
                             </Col>
                         }
-
-                        <ShowAndExcelBtn  // Excel download and Show button function
-                            sm={1}
-                            margin={"mt-3"}
-                            showLoading={(GoBtnLoading && btnMode === "show") && true}
-                            excelLoading={(GoBtnLoading && btnMode === "excel") && true}
-                            showOnClick={(e) => goAndExcel_Btn_Handler("show")}
-                            excelOnClick={(e) => goAndExcel_Btn_Handler("excel")}
-                        />
-                    </div>
+                        <Col sm={isSCMParty ? 2 : 6} className=" d-flex justify-content-end" >
+                            <C_Button
+                                type="button"
+                                spinnerColor="white"
+                                loading={(GoBtnLoading && btnMode === "show") && true}
+                                className="btn btn-success m-3 mr"
+                                onClick={() => goAndExcel_Btn_Handler("show")}
+                            >
+                                Show
+                            </C_Button>
+                            <C_Button
+                                type="button"
+                                spinnerColor="white"
+                                loading={(GoBtnLoading && btnMode === "excel") && true}
+                                className="btn btn-primary m-3 mr "
+                                onClick={() => goAndExcel_Btn_Handler("excel")}
+                            >
+                                Excel
+                            </C_Button>
+                        </Col>
+                    </Row>
                 </div>
+
+
 
                 <div className="mt-1">
                     <ReportTableFunc

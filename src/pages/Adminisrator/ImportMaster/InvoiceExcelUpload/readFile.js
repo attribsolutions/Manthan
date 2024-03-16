@@ -6,6 +6,8 @@ const XLSX = require('xlsx');
 
 
 export const readExcelFile = async ({ file, compareParameter, ItemList = [] }) => {
+
+
   function isFloat(num) {
     return num % 1 !== 0;
   }
@@ -58,7 +60,7 @@ export const readExcelFile = async ({ file, compareParameter, ItemList = [] }) =
             }
           }
         }
-        
+
         if (c1.ControlTypeName === "Date") {
           let date = null
           if (Number.isInteger(r1[c1.Value])) {
@@ -95,8 +97,10 @@ export const readExcelFile = async ({ file, compareParameter, ItemList = [] }) =
             shouldRemove = false;
           }
         }
+
         if (c1.IsCompulsory && r1[c1.Value] === undefined) {
           const errorMessage = `${c1.Value} : Column Required`;
+          debugger
           if (!NotMapColumn.includes(errorMessage)) {
             NotMapColumn.push(errorMessage);
           }
@@ -105,7 +109,7 @@ export const readExcelFile = async ({ file, compareParameter, ItemList = [] }) =
         }
 
         else if (!(regExp.test(r1[c1.Value]))) {
-          
+
           if (!((Number.isInteger(r1[c1.Value]) || (isFloat(r1[c1.Value]))) && (r1[c1.Value] <= 0))) {
             invalidMsg.push(`${c1.Value} :${r1[c1.Value]} is invalid Format`)
           }

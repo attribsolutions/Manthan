@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Col, FormGroup, Label } from "reactstrap";
+import { Col, FormGroup, Label, Row } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import { C_Button } from "../../components/Common/CommonButton";
 import { C_DatePicker, C_Select } from "../../CustomValidateForm";
@@ -14,6 +14,9 @@ import { ExcelReportComponent } from "../../components/Common/ReportCommonFunc/E
 import GlobalCustomTable from "../../GlobalCustomTable";
 import { changeCommonPartyDropDetailsAction } from "../../store/Utilites/PartyDrodown/action";
 import { allLabelWithBlank } from "../../components/Common/CommonErrorMsg/HarderCodeData";
+import ToolkitProvider from "react-bootstrap-table2-toolkit";
+import BootstrapTable from "react-bootstrap-table-next";
+import { globalTableSearchProps } from "../../components/Common/SearchBox/MySearch";
 
 const ReturnReport = (props) => {
 
@@ -177,13 +180,11 @@ const ReturnReport = (props) => {
     return (
         <React.Fragment>
             <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
-
             <div className="page-content">
-
-                <div className="px-2   c_card_filter text-black mb-1" >
-                    <div className="row" >
+                <div className="px-2   c_card_filter text-black " >
+                    <Row>
                         <Col sm={3} className="">
-                            <FormGroup className="mb- row mt-3 mb-2 " >
+                            <FormGroup className=" row mt-2  " >
                                 <Label className="col-sm-4 p-2"
                                     style={{ width: "83px" }}>FromDate</Label>
                                 <Col sm="6">
@@ -197,7 +198,7 @@ const ReturnReport = (props) => {
                         </Col>
 
                         <Col sm={3} className="">
-                            <FormGroup className="mb- row mt-3 mb-2" >
+                            <FormGroup className=" row mt-2 " >
                                 <Label className="col-sm-4 p-2"
                                     style={{ width: "65px" }}>ToDate</Label>
                                 <Col sm="6">
@@ -211,8 +212,8 @@ const ReturnReport = (props) => {
                         </Col>
 
                         {isSCMParty &&
-                            <Col sm={3} className="">
-                                <FormGroup className="mb- row mt-3" >
+                            <Col sm={4} className="">
+                                <FormGroup className=" row mt-2" >
                                     <Label className="col-sm-4 p-2"
                                         style={{ width: "65px", marginRight: "20px" }}>Party</Label>
                                     <Col sm="8">
@@ -234,34 +235,28 @@ const ReturnReport = (props) => {
                                 </FormGroup>
                             </Col>
                         }
-
-                        <Col sm={1} className="mt-3" >
+                        <Col sm={isSCMParty ? 2 : 6} className=" d-flex justify-content-end" >
                             <C_Button
                                 type="button"
                                 spinnerColor="white"
                                 loading={btnMode === 1 && true}
-                                className="btn btn-success"
+                                className="btn btn-success m-3 mr"
                                 onClick={(e) => excel_And_GoBtnHandler(e, 1)}
                             >
                                 Show
                             </C_Button>
-
-                        </Col>
-
-                        <Col sm={2} className="mt-3 ">
                             <C_Button
                                 type="button"
                                 spinnerColor="white"
                                 loading={btnMode === 2 && true}
-                                className="btn btn-primary"
+                                className="btn btn-primary m-3 mr "
                                 onClick={(e) => excel_And_GoBtnHandler(e, 2)}
                             >
                                 Excel
                             </C_Button>
                         </Col>
-                    </div>
+                    </Row>
                 </div>
-
                 <div className="mb-1">
                     <GlobalCustomTable
                         keyField={"id"}
@@ -278,6 +273,7 @@ const ReturnReport = (props) => {
                         }}
                     />
                 </div>
+
 
             </div>
 

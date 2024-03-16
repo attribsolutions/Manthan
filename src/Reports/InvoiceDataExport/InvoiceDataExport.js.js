@@ -201,10 +201,10 @@ const InvoiceDataExport = (props) => {
         <React.Fragment>
             <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
             <div className="page-content">
-                <div className="px-2   c_card_filter text-black" >
-                    <div className="row" >
+                <div className="px-2   c_card_filter text-black " >
+                    <Row>
                         <Col sm={3} className="">
-                            <FormGroup className="mb- row mt-3 mb-2 " >
+                            <FormGroup className=" row mt-2  " >
                                 <Label className="col-sm-4 p-2"
                                     style={{ width: "83px" }}>FromDate</Label>
                                 <Col sm="6">
@@ -216,8 +216,9 @@ const InvoiceDataExport = (props) => {
                                 </Col>
                             </FormGroup>
                         </Col>
+
                         <Col sm={3} className="">
-                            <FormGroup className="mb- row mt-3 mb-2" >
+                            <FormGroup className=" row mt-2 " >
                                 <Label className="col-sm-4 p-2"
                                     style={{ width: "65px" }}>ToDate</Label>
                                 <Col sm="6">
@@ -231,8 +232,8 @@ const InvoiceDataExport = (props) => {
                         </Col>
 
                         {isSCMParty &&
-                            <Col sm={3} className="">
-                                <FormGroup className="mb- row mt-3" >
+                            <Col sm={4} className="">
+                                <FormGroup className=" row mt-2" >
                                     <Label className="col-sm-4 p-2"
                                         style={{ width: "65px", marginRight: "20px" }}>Party</Label>
                                     <Col sm="8">
@@ -252,34 +253,50 @@ const InvoiceDataExport = (props) => {
                                 </FormGroup>
                             </Col>
                         }
-                        <Col sm={1} className="mt-3 ">
+                        <Col sm={isSCMParty ? 2 : 6} className=" d-flex justify-content-end" >
                             <C_Button
                                 type="button"
                                 spinnerColor="white"
                                 loading={GoBtnLoading === "showOnTable"}
-                                className="btn btn-success"
+                                className="btn btn-success m-3 mr"
                                 onClick={() => goButtonHandler("showOnTable")}
                             >
                                 Show
                             </C_Button>
-
-                        </Col>
-
-                        <Col sm={2} className="mt-3 ">
                             <C_Button
                                 type="button"
                                 spinnerColor="white"
                                 loading={ExcelBtnLoading === "downloadExcel"}
-                                className="btn btn-primary"
+                                className="btn btn-primary m-3 mr"
                                 onClick={() => goButtonHandler("downloadExcel")}
                             >
-                                Excel 
+                                Excel
                             </C_Button>
                         </Col>
-
-
-                    </div>
+                    </Row>
                 </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
                 <div className="mt-1">
                     <ToolkitProvider

@@ -129,14 +129,13 @@ const PartyOutstandingReport = (props) => {
 			<MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
 			<div className="page-content">
 
-				<div className="px-2 c_card_filter text-black mb-1">
-					<div className="row">
-						<Col sm={(isSCMParty) ? 4 : 3} className="">
-							<FormGroup className="mb-2 row mt-3">
-								<Label className="col-sm-4 p-2" style={{ width: "66px" }}>
-									Date
-								</Label>
-								<Col sm={7}>
+				<div className="px-2   c_card_filter text-black" >
+					<div className="row" >
+						<Col sm="3" className="">
+							<FormGroup className="mb- row mt-3 " >
+								<Label className="col-sm-5 p-2"
+									style={{ width: "83px" }}>FromDate</Label>
+								<Col sm="7">
 									<C_DatePicker
 										name='date'
 										value={date}
@@ -150,12 +149,13 @@ const PartyOutstandingReport = (props) => {
 							partyValue={partyDropdown}
 							setPartyValue={partyOnChangeHandler}
 						/>
-						<Col sm={(isSCMParty) ? 4 : 3}>
-							<FormGroup className="row mt-3">
-								<Label className="col-sm-2 p-2" style={{ width: "85px" }}>
-									Route
-								</Label>
-								<Col sm={7}>
+
+
+						<Col sm="5">
+							<FormGroup className="mb-2 row mt-3 " >
+								<Label className="col-md-4 p-2"
+									style={{ width: "115px" }}>Route</Label>
+								<Col sm="5">
 									<C_Select
 										name="Route"
 										value={routeDropdown}
@@ -175,17 +175,17 @@ const PartyOutstandingReport = (props) => {
 									/>
 								</Col>
 							</FormGroup>
-						</Col>
-						<Col sm="1" className="mt-3 mb-3">
+						</Col >
+
+						<Col sm="1" className="mt-3 ">
 							{
 								goButtonData.length === 0 ?
 									<Go_Button onClick={goButtonHandler} loading={listBtnLoading} />
 									: <Change_Button onClick={() => dispatch(PartyOutstandingReport_GoButton_API_Success([]))} />
 							}
 						</Col>
-
 					</div>
-				</div>
+				</div >
 
 				<div className="mb-1">
 					<GlobalCustomTable
