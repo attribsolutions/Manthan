@@ -103,13 +103,13 @@ const SNSReport = (props) => {
             else if ((StockReport_1_Gobtb.Status === true) && (StockReport_1_Gobtb.StatusCode === 204)) {
                 customAlert({
                     Type: 3,
-                    Message:alertMessages.recordNotAvailable,
+                    Message: alertMessages.recordNotAvailable,
                 })
                 dispatch(stockReport_1_GoButton_API_Success([]));
                 return
             }
         }
-        catch (e) {  }
+        catch (e) { }
 
     }, [StockReport_1_Gobtb]);
 
@@ -126,7 +126,7 @@ const SNSReport = (props) => {
             }
             dispatch(stockReport_1_GoButton_API_Success([]));
         }
-        catch (e) {  }
+        catch (e) { }
 
     }, [pdfdata]);
 
@@ -215,157 +215,117 @@ const SNSReport = (props) => {
         setHeaderFilters(newObj)
     }
 
-    const FromDateColumn = (
-        <FormGroup className=" mb-2 row mt-3 " >
-            <Label className="col-sm-4 p-2"
-                style={{ width: "66px" }}>FromDate</Label>
-            <Col sm={7}>
-                <C_DatePicker
-                    name='fromdate'
-                    value={fromdate}
-                    onChange={fromdateOnchange}
-                />
-            </Col>
-        </FormGroup>
-    );
-
-    const ToDateColumn = (
-        <FormGroup className=" row mt-3 " >
-            <Label className="col-sm-4 p-2"
-                style={{ width: "60px" }}>ToDate</Label>
-            <Col sm={7}>
-                <C_DatePicker
-                    nane='todate'
-                    value={todate}
-                    onChange={todateOnchange}
-                />
-            </Col>
-        </FormGroup>
-    );
-
-    const UnitColumn = (
-        <FormGroup className=" row" >
-            <Label className="col-sm-2 p-2"
-                style={{ width: "60px" }}>Unit</Label>
-            <Col sm={7}>
-                <C_Select
-                    name="Unit"
-                    value={unitDropdown}
-                    isSearchable={true}
-                    className="react-dropdown"
-                    classNamePrefix="dropdown"
-                    styles={{
-                        menu: provided => ({ ...provided, zIndex: 2 })
-                    }}
-                    options={BaseUnit_DropdownOptions}
-                    onChange={(e) => { setUnitDropdown(e) }}
-                />
-            </Col>
-        </FormGroup>
-    );
-
-    const PartyColumn = (
-        <FormGroup className=" row" >
-            <Label className="col-sm-2 p-2"
-                style={{ width: "60px" }}>Party</Label>
-            <Col sm={7}>
-                <C_Select
-                    name="Party"
-                    value={PartyDropdown}
-                    isSearchable={true}
-                    className="react-dropdown"
-                    classNamePrefix="dropdown"
-                    styles={{
-                        menu: provided => ({ ...provided, zIndex: 2 })
-                    }}
-                    options={Party_Option}
-                    onChange={(e) => { setPartyDropdown(e) }}
-                />
-            </Col>
-        </FormGroup>
-    );
-
-    const StockProcessColumn = (
-        <C_Button
-            type="button"
-            spinnerColor="white"
-            loading={reducers.stockProcessingLoading}
-            className="btn btn-outline-info border-1 font-size-10 text-center"
-            onClick={() => StockProccessHandler()}
-        >
-            Stock Process
-        </C_Button>
-    );
-
-    const PrintBtnColumn = (
-        <C_Button
-            type="button"
-            spinnerColor="white"
-            className="btn btn-success"
-            loading={goBtnLoading}
-            onClick={(e) => excel_And_GoBtnHandler(e, "print")}
-        >
-            Print
-        </C_Button>
-    );
-
-    const ExcelBtnColumn = (
-        <C_Button
-            type="button"
-            spinnerColor="white"
-            loading={excelLoading}
-            className="btn btn-primary"
-            onClick={(e) => excel_And_GoBtnHandler(e, "excel")}
-        >
-            Excel 
-        </C_Button>
-    );
-
     return (
         <React.Fragment>
             <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
             <div className="page-content">
-                <div className="px-2 c_card_filter text-black" >
+                <div className="px-2   c_card_filter text-black " >
+                    <Row>
+                        <Col sm={isSCMParty ? 2 : 3} className="">
+                            <FormGroup className=" row mt-2  " >
+                                <Label className="col-sm-4 p-2"
+                                    style={{ width: "83px" }}>FromDate</Label>
+                                <Col sm="7">
+                                    <C_DatePicker
+                                        name='fromdate'
+                                        value={fromdate}
+                                        onChange={fromdateOnchange}
+                                    />
+                                </Col>
+                            </FormGroup>
+                        </Col>
 
-                    {isSCMParty ? (
-                        <>
-                            <div className="row" >
-                                <Col sm={4}>{FromDateColumn} </Col>
+                        <Col sm={isSCMParty ? 2 : 3} className="">
+                            <FormGroup className=" row mt-2 " >
+                                <Label className="col-sm-4 p-2"
+                                    style={{ width: "65px" }}>ToDate</Label>
+                                <Col sm="7">
+                                    <C_DatePicker
+                                        nane='todate'
+                                        value={todate}
+                                        onChange={todateOnchange}
+                                    />
+                                </Col>
+                            </FormGroup>
+                        </Col>
 
-                                <Col sm={4}>{ToDateColumn} </Col>
 
-                                <Col sm={1} className="mt-3 ml-5 px-2 p-1"> {StockProcessColumn} </Col>
-                            </div>
+                        <Col sm={isSCMParty ? 2 : 3} className="">
+                            <FormGroup className=" row mt-2" >
+                                <Label className="col-sm-4 p-2"
+                                    style={{ width: "65px" }}>Unit</Label>
+                                <Col sm="8">
+                                    <C_Select
+                                        name="Unit"
+                                        value={unitDropdown}
+                                        isSearchable={true}
+                                        className="react-dropdown"
+                                        classNamePrefix="dropdown"
+                                        styles={{
+                                            menu: provided => ({ ...provided, zIndex: 2 })
+                                        }}
+                                        options={BaseUnit_DropdownOptions}
+                                        onChange={(e) => { setUnitDropdown(e) }}
+                                    />
+                                </Col>
+                            </FormGroup>
+                        </Col>
 
-                            <div className="row mb-1">
-                                <Col sm={4}>{UnitColumn} </Col>
+                        {isSCMParty && <Col sm={3} >
+                            <FormGroup className=" row mt-2" >
+                                <Label className="col-sm-4 p-2"
+                                    style={{ width: "65px", }}>Party</Label>
+                                <Col sm="7">
+                                    <C_Select
+                                        name="Party"
+                                        value={PartyDropdown}
+                                        isSearchable={true}
+                                        className="react-dropdown"
+                                        classNamePrefix="dropdown"
+                                        styles={{
+                                            menu: provided => ({ ...provided, zIndex: 2 })
+                                        }}
+                                        options={Party_Option}
+                                        onChange={(e) => { setPartyDropdown(e) }}
+                                    />
+                                </Col>
+                            </FormGroup>
+                        </Col>
+                        }
+                        <Col sm={isSCMParty ? 3 : 3} className=" d-flex justify-content-end" >
+                            <C_Button
+                                type="button"
+                                spinnerColor="white"
 
-                                <Col sm={4}> {PartyColumn}</Col>
-
-                                <Col sm={1}>{PrintBtnColumn}</Col>
-
-                                <Col sm={2}> {ExcelBtnColumn} </Col>
-                            </div>
-                        </>
-
-                    ) : (
-                        <div className="row">
-                            <Col sm={2}>{FromDateColumn}</Col>
-
-                            <Col sm={2}> {ToDateColumn} </Col>
-
-                            <Col sm={3} className="mt-3"> {UnitColumn}  </Col >
-
-                            <Col sm={1} className="mt-3 ml-5 px-2 p-1"> {StockProcessColumn}</Col>
-
-                            <Col sm={1} className="mt-3" >  {PrintBtnColumn}  </Col>
-
-                            <Col sm={2} className="mt-3 "> {ExcelBtnColumn}  </Col>
-
-                        </div>
-                    )}
-
+                                loading={reducers.stockProcessingLoading}
+                                className="btn btn-outline-info border-1 font-size-10 text-center m-3  "
+                                onClick={() => StockProccessHandler()}
+                            >
+                                Stock Process
+                            </C_Button>
+                            <C_Button
+                                type="button"
+                                spinnerColor="white"
+                                className="btn btn-success m-3 mr"
+                                loading={goBtnLoading}
+                                onClick={(e) => excel_And_GoBtnHandler(e, "print")}
+                            >
+                                Print
+                            </C_Button>
+                            <C_Button
+                                type="button"
+                                spinnerColor="white"
+                                loading={excelLoading}
+                                className="btn btn-primary m-3 mr"
+                                onClick={(e) => excel_And_GoBtnHandler(e, "excel")}
+                            >
+                                Excel
+                            </C_Button>
+                        </Col>
+                    </Row>
                 </div>
+
+
 
             </div>
             <C_Report />
