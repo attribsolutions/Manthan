@@ -204,12 +204,12 @@ const PurchaseGSTReport = (props) => {
         <React.Fragment>
             <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
             <div className="page-content">
-                <div className="px-2   c_card_filter text-black" >
-                    <div className="row" >
-                        <Col sm={2} className="">
-                            <FormGroup className="mb- row mt-3 mb-2 " >
+                <div className="px-2   c_card_filter text-black " >
+                    <Row>
+                        <Col sm={3} className="">
+                            <FormGroup className=" row mt-2  " >
                                 <Label className="col-sm-4 p-2"
-                                    style={{ width: "78px" }}>FromDate</Label>
+                                    style={{ width: "83px" }}>FromDate</Label>
                                 <Col sm="7">
                                     <C_DatePicker
                                         name='FromDate'
@@ -220,8 +220,8 @@ const PurchaseGSTReport = (props) => {
                             </FormGroup>
                         </Col>
 
-                        <Col sm={2} className="">
-                            <FormGroup className="mb- row mt-3 mb-2" >
+                        <Col sm={3} className="">
+                            <FormGroup className=" row mt-2 " >
                                 <Label className="col-sm-4 p-2"
                                     style={{ width: "65px" }}>ToDate</Label>
                                 <Col sm="7">
@@ -234,24 +234,11 @@ const PurchaseGSTReport = (props) => {
                             </FormGroup>
                         </Col>
 
-                        <Col sm={2} >
-                            <FormGroup className="mb- row mt-3 mb-2">
-                                <Label style={{ width: "110px" }} className="col-4 p-2" >GST Rate Wise</Label>
-                                <Col sm="2" className=" mt-2 ">
-                                    <Input type="checkbox"
-                                        className="p-2"
-                                        checked={GSTRateWise}
-                                        onChange={(e) => { setGSTRateWise(e.target.checked) }}
-                                    />
-                                </Col>
-                            </FormGroup>
-                        </Col>
-
                         {isSCMParty &&
                             <Col sm={3} className="">
-                                <FormGroup className="mb- row mt-3" >
+                                <FormGroup className=" row mt-2" >
                                     <Label className="col-sm-4 p-2"
-                                        style={{ width: "50px", marginRight: "20px" }}>Party</Label>
+                                        style={{ width: "65px", marginRight: "20px" }}>Party</Label>
                                     <Col sm="8">
                                         <Select
                                             name="Party"
@@ -270,34 +257,43 @@ const PurchaseGSTReport = (props) => {
                             </Col>
                         }
 
-                        <Col sm={1} className="mt-3 ">
+                        <Col sm={2} >
+                            <FormGroup className="mb- row mt-2 mb-2">
+                                <Label style={{ width: "110px" }} className="col-4 p-2" >GST Rate Wise</Label>
+                                <Col sm="2" className=" mt-1 ">
+                                    <Input type="checkbox"
+                                        className="p-2"
+                                        checked={GSTRateWise}
+                                        onChange={(e) => { setGSTRateWise(e.target.checked) }}
+                                    />
+                                </Col>
+                            </FormGroup>
+                        </Col>
 
+
+
+                        <Col sm={isSCMParty ? 1 : 4} className=" d-flex justify-content-end" >
                             <C_Button
                                 type="button"
                                 spinnerColor="white"
-                                loading={(GoBtnLoading && btnMode === "showOnTable")}
-                                className="btn btn-success   "
-                                onClick={(e) => excel_And_GoBtnHandler(e, "showOnTable")}
+                                loading={btnMode === 1 && true}
+                                className="btn btn-success m-3 mr"
+                                onClick={(e) => excel_And_GoBtnHandler(e, 1)}
                             >
                                 Show
                             </C_Button>
-
-                        </Col>
-                        <Col sm={2} className="mt-3 ">
                             <C_Button
                                 type="button"
                                 spinnerColor="white"
-                                loading={(ExcelBtnLoading && btnMode === "excel")}
-                                className="btn btn-primary  "
-                                onClick={(e) => excel_And_GoBtnHandler(e, "excel")}
+                                loading={btnMode === 2 && true}
+                                className="btn btn-primary m-3 mr "
+                                onClick={(e) => excel_And_GoBtnHandler(e, 2)}
                             >
-                                Excel 
+                                Excel
                             </C_Button>
                         </Col>
-
-                    </div>
+                    </Row>
                 </div>
-
                 <ToolkitProvider
                     keyField={"id"}
                     data={GSTRateWise ? PurchaseGSTRateWiseDetails : PurchaseGSTDetails}

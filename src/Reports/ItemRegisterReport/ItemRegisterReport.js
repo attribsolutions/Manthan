@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Col, FormGroup, Label } from "reactstrap";
+import { Col, FormGroup, Label, Row } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import { initialFiledFunc, } from "../../components/Common/validationFunction";
 import { C_Button } from "../../components/Common/CommonButton";
@@ -109,7 +109,7 @@ const ItemRegisterReport = (props) => {
             value: data.id,
             label: data.Name
         }));
-        
+
     const onselecthandel = (e) => {
         setState((i) => {
             const a = { ...i }
@@ -196,7 +196,7 @@ const ItemRegisterReport = (props) => {
         <React.Fragment>
             <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
             <div className="page-content">
-                <div className="px-2   c_card_filter text-black" >
+                {/* <div className="px-2   c_card_filter text-black" >
                     <div className="row" >
                         <Col lg={0} className="">
                             <FormGroup className="mb- row mt-3 mb-2 " >
@@ -282,7 +282,100 @@ const ItemRegisterReport = (props) => {
                                 Print</C_Button>
                         </Col>
                     </div>
+                </div> */}
+
+
+                <div className="px-2   c_card_filter text-black " >
+                    <Row>
+                        <Col sm={3} className="">
+                            <FormGroup className=" row mt-2  " >
+                                <Label className="col-sm-4 p-2"
+                                    style={{ width: "83px" }}>FromDate</Label>
+                                <Col sm="7">
+                                    <C_DatePicker
+                                        name='FromDate'
+                                        value={values.FromDate}
+                                        onChange={fromdateOnchange}
+                                    />
+                                </Col>
+                            </FormGroup>
+                        </Col>
+
+                        <Col sm={3} className="">
+                            <FormGroup className=" row mt-2 " >
+                                <Label className="col-sm-4 p-2"
+                                    style={{ width: "65px" }}>ToDate</Label>
+                                <Col sm="7">
+                                    <C_DatePicker
+                                        name="ToDate"
+                                        value={values.ToDate}
+                                        onChange={todateOnchange}
+                                    />
+                                </Col>
+                            </FormGroup>
+                        </Col>
+
+
+                        <Col sm={3} className="">
+                            <FormGroup className=" row mt-2" >
+                                <Label className="col-sm-4 p-2"
+                                    style={{ width: "65px", marginRight: "20px" }}>Item</Label>
+                                <Col sm="8">
+                                    <C_Select
+                                        name="Item"
+                                        value={values.Item}
+                                        isSearchable={true}
+                                        isLoading={CustomerLoading}
+                                        className="react-dropdown"
+                                        classNamePrefix="dropdown"
+                                        styles={{
+                                            menu: provided => ({ ...provided, zIndex: 2 })
+                                        }}
+                                        options={ItemOptions}
+                                        onChange={(e) => { onselecthandel(e) }}
+
+                                    />
+                                </Col>
+                            </FormGroup>
+                        </Col>
+
+
+                        <Col sm={2} >
+                            <FormGroup className=" row mt-2" >
+                                <Label className="col-sm-4 p-2"
+                                    style={{ width: "65px", marginRight: "20px" }}>Unit</Label>
+                                <Col sm="7">
+                                    <C_Select
+                                        name="Unit"
+                                        value={values.Unit}
+                                        isSearchable={true}
+                                        isLoading={CustomerLoading}
+                                        className="react-dropdown"
+                                        classNamePrefix="dropdown"
+                                        styles={{
+                                            menu: provided => ({ ...provided, zIndex: 2 })
+                                        }}
+                                        options={BaseUnit_DropdownOptions}
+                                        onChange={(e) => { onUnitselecthandel(e) }}
+                                    />
+                                </Col>
+                            </FormGroup>
+                        </Col>
+
+
+
+                        <Col sm={1} className=" d-flex justify-content-end" >
+                            <C_Button
+                                type="button"
+                                className="btn btn-outline-primary border-1 font-size-12 text-center m-3 mr"
+                                onClick={goButtonHandler}
+                                loading={reducers.goBtnLoading} >
+                                Print</C_Button>
+                        </Col>
+                    </Row>
                 </div>
+
+
             </div>
             <C_Report />
         </React.Fragment >
