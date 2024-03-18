@@ -144,59 +144,59 @@ const LoadingSheetList = () => {
     return (
         <React.Fragment>
             <PageLoadingSpinner isLoading={reducers.loading || !pageField} />
-
             <div className="page-content">
+                <div className="px-2   c_card_filter text-black" >
+                    <div className="row" >
+                        <Col sm={3} className="">
+                            <FormGroup className="mb- row mt-3 mb-1 " >
+                                <Label className="col-sm-5 p-2"
+                                    style={{ width: "83px" }}>FromDate</Label>
+                                <Col sm="7">
+                                    <C_DatePicker
+                                        options={{
+                                            maxDate: new Date(new Date().setMonth(new Date().getMonth() + 1)),
+                                            altInput: true,
+                                            altFormat: "d-m-Y",
+                                            dateFormat: "Y-m-d",
+                                        }}
+                                        name='fromdate'
+                                        value={fromdate}
+                                        onChange={fromdateOnchange}
+                                    />
+                                </Col>
+                            </FormGroup>
+                        </Col>
 
-                <div className="px-2  c_card_filter text-black " >
-                    <div className="row">
-                        <div className=" row mt-2 mb-1">
-                            <Col sm="5" className="">
-                                <FormGroup className=" row" >
-                                    <Label className="col-sm-5 p-2"
-                                        style={{ width: "83px" }}>From Date</Label>
-                                    <Col sm="7">
-                                        <C_DatePicker
-                                            options={{
-                                                maxDate: new Date(new Date().setMonth(new Date().getMonth() + 1)),
-                                                altInput: true,
-                                                altFormat: "d-m-Y",
-                                                dateFormat: "Y-m-d",
-                                            }}
-                                            name='fromdate'
-                                            value={fromdate}
-                                            onChange={fromdateOnchange}
-                                        />
-                                    </Col>
-                                </FormGroup>
-                            </Col>
-                            <Col sm="6" className="">
-                                <FormGroup className="row" >
-                                    <Label className="col-sm-5 p-2"
-                                        style={{ width: "65px" }}>To Date</Label>
-                                    <Col sm="7">
-                                        <C_DatePicker
-                                            options={{
-                                                maxDate: new Date(new Date().setMonth(new Date().getMonth() + 1)),
-                                                altInput: true,
-                                                altFormat: "d-m-Y",
-                                                dateFormat: "Y-m-d",
-                                            }}
-                                            nane='todate'
-                                            value={todate}
-                                            onChange={todateOnchange}
-                                        />
-                                    </Col>
-                                </FormGroup>
-                            </Col>
-                            <Col sm="1" className="">
-                                <Go_Button loading={reducers.loading}
-                                    id={'LoadingSheet'}
-                                    onClick={goButtonHandler} />
-                            </Col>
-                        </div>
+                        <Col sm={3} className="">
+                            <FormGroup className="mb- row mt-3 mb-1  " >
+                                <Label className="col-sm-7 p-2"
+                                    style={{ width: "65px" }}>ToDate</Label>
+                                <Col sm="7" >
+                                    <C_DatePicker
+                                        options={{
+                                            maxDate: new Date(new Date().setMonth(new Date().getMonth() + 1)),
+                                            altInput: true,
+                                            altFormat: "d-m-Y",
+                                            dateFormat: "Y-m-d",
+                                        }}
+                                        nane='todate'
+                                        value={todate}
+                                        onChange={todateOnchange}
+                                    />
+                                </Col>
+                            </FormGroup>
+                        </Col>
 
+                        <Col sm={5} className="">
+                        </Col>
+                        <Col sm={1} className="mt-3 mb-1  ">
+                            <Go_Button loading={reducers.loading}
+                                id={'LoadingSheet'}
+                                onClick={goButtonHandler} />
+                        </Col>
                     </div>
-                </div>
+                </div >
+
                 {
                     (pageField) ?
                         <CommonPurchaseList

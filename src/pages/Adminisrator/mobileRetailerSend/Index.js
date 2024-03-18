@@ -171,13 +171,14 @@ const Index = (props) => {
 				<MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
 
 				<div className="page-content" style={{ marginTop: IsEditMode_Css, marginBottom: "200px" }}>
-					<div className="px-2   c_card_header text-black mb-1" >
-						<div className="row">
-							<Col sm="5">
-								<FormGroup className=" row mt-2  mb-1" >
+
+					<div className="px-2   c_card_filter text-black" >
+						<div className="row" >
+							<Col sm={3} className="">
+								<FormGroup className="mb- row mt-3 mb-1 " >
 									<Label className="col-sm-5 p-2"
-										style={{ width: "83px" }}>Party </Label>
-									<Col sm="6">
+										style={{ width: "83px" }}>FromDate</Label>
+									<Col sm="7">
 										<C_Select
 											name="Party"
 											value={partyName}
@@ -199,7 +200,12 @@ const Index = (props) => {
 								</FormGroup>
 							</Col>
 
-							<Col sm="1" className="mt-2">
+
+
+							<Col sm={8} className="">
+
+							</Col>
+							<Col sm={1} className="mt-3 mb-1  ">
 								{RetailerList.length === 0 ?
 									<Go_Button
 										loading={goBtnLoading}
@@ -209,9 +215,11 @@ const Index = (props) => {
 								}
 
 							</Col>
-
 						</div>
-					</div>
+					</div >
+
+
+
 
 					<form noValidate>
 						<ToolkitProvider

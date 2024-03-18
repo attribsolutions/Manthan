@@ -451,14 +451,12 @@ const ItemMasterBulkUpdate = (props) => {
             <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
             <div className="page-content">
                 <form noValidate>
-
-                    <div className="px-3 c_card_filter header text-black mb-1" >
-
-                        <Row>
-                            <Col sm="5">
-                                <FormGroup className="row mt-2" >
-                                    <Label className="col-sm-1 p-2"
-                                        style={{ width: "115px", marginRight: "0.4cm" }}>Select Field </Label>
+                    <div className="px-2   c_card_filter text-black" >
+                        <div className="row" >
+                            <Col sm={3} className="">
+                                <FormGroup className="mb- row mt-3 mb-1 " >
+                                    <Label className="col-sm-5 p-2"
+                                        style={{ width: "83px" }}>FromDate</Label>
                                     <Col sm="7">
                                         <C_Select
                                             name="SelectField"
@@ -475,54 +473,50 @@ const ItemMasterBulkUpdate = (props) => {
                                         />
                                     </Col>
                                 </FormGroup>
-                            </Col >
+                            </Col>
 
-                            {SelectFieldName.label === "Group" &&
-                                <Col sm="5">
-                                    <FormGroup className="row mt-2" >
-                                        <Label className="col-sm-1 p-2"
-                                            style={{ width: "115px", marginRight: "0.4cm" }}>GroupType </Label>
-                                        <Col sm="7">
-                                            <C_Select
-                                                name="groupType"
-                                                value={groupTypeSelect}
-                                                isSearchable={true}
-                                                isDisabled={goButtonData.length > 0 && true}
-                                                isLoading={GroupTypeLoading}
-                                                className="react-dropdown"
-                                                classNamePrefix="dropdown"
-                                                styles={{
-                                                    menu: provided => ({ ...provided, zIndex: 2 })
-                                                }}
-                                                options={GroupType_DropdownOptions}
-                                                onChange={(event) => GroupTypeHandler(event)}
-                                            />
-                                        </Col>
-                                    </FormGroup>
-                                </Col >}
-
-                            <Col sm="2">
-                                <FormGroup className=" row mt-2 " >
-                                    <Col sm="1" className="mx-6">
-                                        {tableData.length === 0 ?
-                                            <Go_Button
-                                                onClick={handleGoButton}
-                                                loading={goBtnLoading}
-                                            />
-                                            :
-                                            <Change_Button onClick={(e) => {
-                                                dispatch(ItemWiseUpdateGoButton_Success([]));
-                                                setTableData([]);
-
-                                            }} />
-                                        }
-
+                            {SelectFieldName.label === "Group" && <Col sm={3} className="">
+                                <FormGroup className="mb- row mt-3 mb-1  " >
+                                    <Label className="col-sm-7 p-2"
+                                        style={{ width: "65px" }}>ToDate</Label>
+                                    <Col sm="7" >
+                                        <C_Select
+                                            name="groupType"
+                                            value={groupTypeSelect}
+                                            isSearchable={true}
+                                            isDisabled={goButtonData.length > 0 && true}
+                                            isLoading={GroupTypeLoading}
+                                            className="react-dropdown"
+                                            classNamePrefix="dropdown"
+                                            styles={{
+                                                menu: provided => ({ ...provided, zIndex: 2 })
+                                            }}
+                                            options={GroupType_DropdownOptions}
+                                            onChange={(event) => GroupTypeHandler(event)}
+                                        />
                                     </Col>
                                 </FormGroup>
-                            </Col >
+                            </Col>}
 
-                        </Row>
-                    </div>
+                            <Col sm={SelectFieldName.label === "Group" ? 5 : 8} className="">
+
+                            </Col>
+                            <Col sm={1} className="mt-3 mb-1  ">
+                                {tableData.length === 0 ?
+                                    <Go_Button
+                                        onClick={handleGoButton}
+                                        loading={goBtnLoading}
+                                    />
+                                    :
+                                    <Change_Button onClick={(e) => {
+                                        dispatch(ItemWiseUpdateGoButton_Success([]));
+                                        setTableData([]);
+
+                                    }} />
+                                }
+                            </Col>
+                        </div>
+                    </div >
 
                     <GlobalCustomTable
                         keyField="id"

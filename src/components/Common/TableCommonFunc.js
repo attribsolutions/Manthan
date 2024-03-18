@@ -49,8 +49,9 @@ export const selectAllCheck = ({
       }
     }
     return <div className="">
-      <Input type="checkbox" checked={head.checked} />
-      <label style={{ paddingLeft: "7px" }}>{headLabel ? headLabel : "SelectAll"}</label>
+      <Input type="checkbox" checked={head.checked} /> 
+      {/*  marginBottom: 0  added because in common  them css margin have change affected here so to fix extra margin */}
+      <label style={{ paddingLeft: "7px", marginBottom: 0 }}>{headLabel ? headLabel : "SelectAll"}</label>  
     </div>
   },
   selectionRenderer: ({ mode, checked, ...rest }) => {

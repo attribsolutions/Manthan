@@ -373,7 +373,7 @@ const StockEntry = (props) => {
         if (values.ItemName === '') {
             customAlert({
                 Type: 4,
-                Message:alertMessages.selectItemName
+                Message: alertMessages.selectItemName
             });
             return;
         }
@@ -550,7 +550,7 @@ const StockEntry = (props) => {
                 <div className="page-content">
                     <form noValidate>
                         {!StockCount && <div style={{ color: "red", fontSize: "18px" }} className="sliding-text " > {` Warning: Can not Save Stock Entry for  ${_cfunc.date_dmy_func(values.Date)}`}.  </div>}
-
+                        {/* 
                         <div className="px-3 c_card_filter header text-black mb-1" >
 
                             <Row>
@@ -622,7 +622,81 @@ const StockEntry = (props) => {
                                 </Col >
 
                             </Row>
-                        </div>
+                        </div> */}
+
+
+
+                        <div className="px-2   c_card_filter text-black" >
+                            <div className="row" >
+                                <Col sm={4} className="">
+                                    <FormGroup className="mb- row mt-3 mb-1 " >
+                                        <Label className="col-sm-5 p-2"
+                                            style={{ width: "83px" }}>{fieldLabel.Date}</Label>
+                                        <Col sm="7">
+                                            <C_DatePicker
+                                                name='Date'
+                                                value={values.Date}
+                                                onChange={Date_Onchange}
+                                            />
+                                        </Col>
+                                    </FormGroup>
+                                </Col>
+                                <Col sm={4} className="">
+                                    <FormGroup className="mb- row mt-3 mb-1 " >
+                                        <Label className="col-sm-5 p-2"
+                                            style={{ width: "115px" }}>{fieldLabel.ItemName}</Label>
+                                        <Col sm="7">
+                                            <C_Select
+                                                id="ItemName "
+                                                name="ItemName"
+                                                value={values.ItemName}
+                                                isSearchable={true}
+                                                isLoading={partyItemListLoading}
+                                                className="react-dropdown"
+                                                classNamePrefix="dropdown"
+                                                styles={{
+                                                    menu: provided => ({ ...provided, zIndex: 2 })
+                                                }}
+                                                options={ItemList_Options}
+                                                onChange={(hasSelect, evn) => {
+                                                    onChangeSelect({ hasSelect, evn, state, setState, })
+                                                }}
+                                            />
+                                        </Col>
+                                    </FormGroup>
+
+                                </Col>
+
+                                <Col sm={3} className="">
+                                    <FormGroup className="mb- row mt-3 mb-1 " >
+                                        <Label className="col-sm-5 p-2"
+                                            style={{ width: "115px" }}>{fieldLabel.IsAllStockZero} </Label>
+                                        <Col sm={7} style={{ marginTop: '5px' }} >
+                                            <div className="form-check form-switch form-switch-md mb-3">
+                                                <Input type="checkbox" className="form-check-input"
+                                                    checked={values.IsAllStockZero}
+                                                    name="IsAllStockZero"
+                                                    onChange={isAllStockZero_Onchange}
+
+                                                />
+                                            </div>
+                                        </Col>
+                                    </FormGroup>
+                                </Col>
+                                <Col sm={1} className="mt-3" >
+                                    {
+                                        < Button type="button" color="btn btn-outline-primary border-1 font-size-11 text-center mt-1"
+                                            onClick={(e,) => AddPartyHandler(e, "add")}
+                                            disabled={!StockCount}
+                                        > Add</Button>
+                                    }
+
+
+                                </Col>
+                            </div>
+                        </div >
+
+
                         {values.IsAllStockZero && <div style={{ color: "red", fontSize: "18px" }} className="sliding-text " >  Warning: If new stock is added then the previous whole item stock will become zero.  </div>}
                         <ToolkitProvider
                             keyField={"id"}

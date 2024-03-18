@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 let input = '';
 let priviousSerach = []
@@ -13,6 +13,7 @@ export const globalTableSearchProps = (props, pageID) => {
 
 
 export const defaultSearch = (defaultid,) => {
+
     let retn = { defaultSearch: '' }
 
     let found = priviousSerach.find((i, k) => {
@@ -20,6 +21,7 @@ export const defaultSearch = (defaultid,) => {
     });
 
     if (found) {
+        debugger
         document.getElementById("myInput").value = found.text
         retn = { defaultSearch: found.text }
     }
@@ -27,12 +29,15 @@ export const defaultSearch = (defaultid,) => {
     return retn
 }
 
+
 export const MySearch = () => {//compont start
+    const [search, setSearch] = useState("");
 
     function handleClick(e) {
 
-        var len = e.target.value
-        input = e.target.value
+        var len = (e.target.value).trimStart()
+        input = (e.target.value).trimStart()
+        setSearch(input)
         if (!(len[0] === "/")) {
             tableProps.onSearch(len);
 
@@ -55,12 +60,14 @@ export const MySearch = () => {//compont start
                 placeholder="Search..."
                 type="text"
                 onChange={handleClick}
+                value={search}
                 name="myCountry"
                 autoComplete="off"
                 autoFocus={true}
             />
             <button className="btn btn-primary"
-                type="butten">
+                style={{ cursor: "context-menu" }}
+                type="button">
                 <i className="bx bx-search-alt align-middle" />
             </button>
 
