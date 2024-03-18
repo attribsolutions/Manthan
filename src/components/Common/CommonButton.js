@@ -91,7 +91,7 @@ export function Go_Button(props) {
     <button
       id={id}
       type={type}
-      className="btn btn-success"
+      className="btn btn-success "
       data-mdb-toggle="tooltip"
       data-mdb-placement="top"
       title={`Go Button Loging...`}
@@ -104,7 +104,8 @@ export function Go_Button(props) {
     <button
       id={id}
       type="button"
-      className="btn btn-success"
+      className="btn btn-success "
+      style={{ marginTop: "3px" }}
       data-mdb-toggle="tooltip"
       data-mdb-placement="top"
       title="Go get details"

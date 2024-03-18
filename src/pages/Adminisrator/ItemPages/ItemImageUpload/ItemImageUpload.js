@@ -425,97 +425,95 @@ const ItemImageUpload = (props) => {
                     >
                         {(imageTable.length > 0) && <Slidewithcaption Images={imageTable} />}
                     </Modal>
-                    <Container fluid>
-                        <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
 
-                        <Card className="text-black">
+                    <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
+                    <div className="px-2   c_card_filter text-black" >
+                        <div className="row" >
+                            <Col sm={3} className="">
+                                <FormGroup className="mb- row mt-3 mb-1 " >
+                                    <Label className="col-sm-5 p-2"
+                                        style={{ width: "83px" }}>Item</Label>
+                                    <Col sm="7">
+                                        <Select
+                                            name="ItemName"
+                                            value={values.ItemName}
+                                            isSearchable={true}
+                                            styles={{ menu: (provided) => ({ ...provided, zIndex: 2 }) }}
 
-
-                            <div className=" c_card_header text-black mb-1">
-                                <div className="row ">
-                                    <Col sm="5">
-                                        <FormGroup className="row">
-                                            <Label className="  col-sm-5 m-3" style={{ width: "60px" }}>
-                                                Item
-                                            </Label>
-                                            <Col sm="6">
-                                                <Select
-                                                    name="ItemName"
-                                                    value={values.ItemName}
-                                                    isSearchable={true}
-                                                    styles={{ menu: (provided) => ({ ...provided, zIndex: 2 }) }}
-
-                                                    className="react-dropdown mt-2"
-                                                    classNamePrefix="dropdown"
-                                                    isDisabled={(changeButtonShow && !(values.ItemName.value === 0))}
-                                                    options={Items}
-                                                    onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
-                                                />
-                                            </Col>
-                                        </FormGroup>
+                                            className="react-dropdown "
+                                            classNamePrefix="dropdown"
+                                            isDisabled={(changeButtonShow && !(values.ItemName.value === 0))}
+                                            options={Items}
+                                            onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
+                                        />
                                     </Col>
+                                </FormGroup>
+                            </Col>
 
-                                    <Col sm="1" className="">
-                                        {(!(changeButtonShow)) ?
-                                            <C_Button
-                                                type="button"
-                                                className="btn btn-outline-primary border-1 font-size-12 text-center mt-2"
-                                            // onClick={updateSelectedParty}
-                                            >
-                                                Select
-                                            </C_Button>
-                                            :
-                                            <C_Button
-                                                type="button"
-                                                spinnerColor={"info"}
-                                                className="btn btn-outline-info border-1 font-size-12 mt-2  "
-                                                onClick={ItemOnChange}
-                                            >Change</C_Button>
 
-                                        }
+
+                            <Col sm={8} className="">
+
+                            </Col>
+                            <Col sm={1} className="mt-3 mb-1  ">
+                                {(!(changeButtonShow)) ?
+                                    <C_Button
+                                        type="button"
+                                        className="btn btn-outline-primary border-1 font-size-12 text-center mt-1"
+                                    // onClick={updateSelectedParty}
+                                    >
+                                        Select
+                                    </C_Button>
+                                    :
+                                    <C_Button
+                                        type="button"
+                                        spinnerColor={"info"}
+                                        className="btn btn-outline-info border-1 font-size-12 mt-1 "
+                                        onClick={ItemOnChange}
+                                    >Change</C_Button>
+
+                                }
+
+                            </Col>
+                        </div>
+                    </div >
+
+
+
+
+
+                    <ToolkitProvider
+                        keyField="id"
+                        data={ImageType}
+                        columns={pagesListColumns}
+                        search
+                    >
+                        {toolkitProps => (
+                            <React.Fragment>
+                                <Row>
+                                    <Col xl="12">
+                                        <div className="table-responsive table" style={{ minHeight: "60vh" }}>
+                                            <BootstrapTable
+                                                keyField={"id"}
+                                                bordered={true}
+                                                striped={false}
+                                                noDataIndication={<div className="text-danger text-center ">Record Not available</div>}
+                                                classes={"table align-middle table-nowrap table-hover"}
+                                                headerWrapperClasses={"thead-light"}
+
+                                                {...toolkitProps.baseProps}
+
+                                            />
+                                        </div>
                                     </Col>
+                                    {globalTableSearchProps(toolkitProps.searchProps)}
 
-                                </div>
-                            </div>
+                                </Row>
 
+                            </React.Fragment>
+                        )}
+                    </ToolkitProvider>
 
-
-
-
-
-                            <ToolkitProvider
-                                keyField="id"
-                                data={ImageType}
-                                columns={pagesListColumns}
-                                search
-                            >
-                                {toolkitProps => (
-                                    <React.Fragment>
-                                        <Row>
-                                            <Col xl="12">
-                                                <div className="table-responsive table" style={{ minHeight: "60vh" }}>
-                                                    <BootstrapTable
-                                                        keyField={"id"}
-                                                        bordered={true}
-                                                        striped={false}
-                                                        noDataIndication={<div className="text-danger text-center ">Record Not available</div>}
-                                                        classes={"table align-middle table-nowrap table-hover"}
-                                                        headerWrapperClasses={"thead-light"}
-
-                                                        {...toolkitProps.baseProps}
-
-                                                    />
-                                                </div>
-                                            </Col>
-                                            {globalTableSearchProps(toolkitProps.searchProps)}
-
-                                        </Row>
-
-                                    </React.Fragment>
-                                )}
-                            </ToolkitProvider>
-                        </Card>
-                    </Container>
                 </div>
             </React.Fragment >
         );

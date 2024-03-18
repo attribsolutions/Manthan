@@ -226,26 +226,26 @@ const LoadingSheetUpdate = (props) => {
             <React.Fragment>
                 <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
 
-                <div className="page-content" style={{ marginBottom: "5cm" }}>
+                <div className="page-content" >
                     <form noValidate>
-                        <div className="px-2 c_card_filter header text-black mb-2" >
 
-                            <div className=" row ">
-                                <Col sm="6">
-                                    <FormGroup className=" row mt-2" >
-                                        <Label className="col-sm-1 p-2"
+                        <div className="px-2   c_card_filter text-black" >
+                            <div className="row" >
+                                <Col sm={3} className="">
+                                    <FormGroup className="mb- row mt-3 mb-1 " >
+                                        <Label className="col-sm-5 p-2"
                                             style={{ width: "115px" }}>Loading NO :</Label>
                                         <Col sm="7">
                                             <Label className=" mt-2">{partyDetails.LoadingSheetNo}</Label>
                                         </Col>
                                     </FormGroup>
-                                </Col >
+                                </Col>
 
-                                <Col sm="6">
-                                    <FormGroup className=" row mt-2" >
-                                        <Label className="col-sm-1 p-2"
-                                            style={{ width: "115px", marginRight: "0.4cm" }}>Loading Date </Label>
-                                        <Col sm="7">
+                                <Col sm={3} className="">
+                                    <FormGroup className="mb- row mt-3 mb-1  " >
+                                        <Label className="col-sm-7 p-2"
+                                            style={{ width: "65px" }}>ToDate</Label>
+                                        <Col sm="7" >
                                             <C_DatePicker
                                                 name='Date'
                                                 value={loadingDate}
@@ -253,9 +253,10 @@ const LoadingSheetUpdate = (props) => {
                                             />
                                         </Col>
                                     </FormGroup>
-                                </Col >
+                                </Col>
+
                             </div>
-                        </div>
+                        </div >
 
                         <div className="mt-n1">
                             <ToolkitProvider

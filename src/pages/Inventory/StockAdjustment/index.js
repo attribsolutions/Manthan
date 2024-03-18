@@ -200,7 +200,7 @@ const StockAdjustment = (props) => {
         let isfound = index1.StockDetails.find(i => i.id === index1.BatchCodeSelect?.id);
 
         if (!(isfound === undefined)) {
-            return customAlert({ Type: 3, Message: alertMessages.batchCodeAlreadyExist})
+            return customAlert({ Type: 3, Message: alertMessages.batchCodeAlreadyExist })
         }
 
         const itemIndex = tableList.indexOf(index1);
@@ -503,13 +503,13 @@ const StockAdjustment = (props) => {
                 <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
                 <div className="page-content">
                     <form noValidate>
-                        <div className="px-3 c_card_filter header text-black mb-1" >
 
-                            <Row>
-                                <Col sm="6">
-                                    <FormGroup className="row mt-2" >
-                                        <Label className="col-sm-1 p-2"
-                                            style={{ width: "115px", marginRight: "0.4cm" }}>ItemName </Label>
+                        <div className="px-2   c_card_filter text-black" >
+                            <div className="row" >
+                                <Col sm={4} className="">
+                                    <FormGroup className="mb- row mt-3 mb-1 " >
+                                        <Label className="col-sm-5 p-2"
+                                            style={{ width: "83px" }}>ItemName</Label>
                                         <Col sm="7">
                                             <C_Select
                                                 id="ItemName "
@@ -527,23 +527,20 @@ const StockAdjustment = (props) => {
                                             />
                                         </Col>
                                     </FormGroup>
-                                </Col >
+                                </Col>
+                                <Col sm={7} className="">
+                                </Col>
+                                <Col sm={1} className="mt-3" style={{}}>
+                                    {
+                                        < Button type="button" color="btn btn-outline-primary border-1 font-size-11 text-center mt-1"
+                                            onClick={(e,) => ItemAddButtonHandler(e)}
+                                        > Add</Button>
+                                    }
 
-                                <Col sm="6">
-                                    <FormGroup className=" row mt-2 " >
-                                        <Col sm="1" className="mx-6 mt-1">
-                                            {
-                                                < Button type="button" color="btn btn-outline-primary border-1 font-size-11 text-center"
-                                                    onClick={(e,) => ItemAddButtonHandler(e)}
-                                                > Add</Button>
-                                            }
+                                </Col>
+                            </div>
+                        </div >
 
-                                        </Col>
-                                    </FormGroup>
-                                </Col >
-
-                            </Row>
-                        </div>
 
                         <ToolkitProvider
                             keyField={"id"}
