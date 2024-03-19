@@ -63,18 +63,9 @@ class Slidewithcaption extends Component {
         const { activeIndex } = this.state
 
         const slides = this.items.map((item, key) => {
-            
+
             return (
-                // <CarouselItem
-                //     onExiting={this.onExiting}
-                //     onExited={this.onExited}
-                //     key={key}
-                // >
-                //     <img
-                //         src={item}
-                //         className="k img-fluid"
-                //     />
-                // </CarouselItem>
+          
 
                 <CarouselItem
                     onExiting={this.onExiting}
@@ -85,21 +76,14 @@ class Slidewithcaption extends Component {
                         src={item.Image} // Replace with the actual image source
                         className="k img-fluid"
                         style={{ width: "600px", height: "600px" }}
-                        // Set the dimensions
+          
                         alt="Image Description" // Add a meaningful alt attribute for accessibility
                     />
                 </CarouselItem>
-
-
-
-
-
             )
         })
-
         return (
             <React.Fragment>
-
                 <Carousel
                     activeIndex={activeIndex}
                     next={this.next}

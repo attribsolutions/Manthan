@@ -6,18 +6,21 @@ import { useHistory } from "react-router-dom";
 import {
   BreadcrumbShowCountlabel,
   CommonBreadcrumbDetails,
+  getpdfReportdata,
 } from "../../store/actions";
 import { TotalAmount_Func, breadcrumbReturnFunc, metaTagLabel } from "./CommonFunction";
 import C_Report from "./C_Report";
 import * as mode from "../../routes/PageMode";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
-import { E_Invoice_ActionsButtonFunc, E_WayBill_ActionsButtonFunc, hideBtnCss, listPageActionsButtonFunc, makeBtnCss } from "./ListActionsButtons";
+import { E_Invoice_ActionsButtonFunc, E_WayBill_ActionsButtonFunc, hideBtnCss, listPageActionsButtonFunc, makeBtnCss, printBtnCss } from "./ListActionsButtons";
 import DynamicColumnHook, { selectAllCheck } from "./TableCommonFunc";
 import { url } from "../../routes";
 import { C_Button } from "./CommonButton";
 import GlobalCustomTable from "../../GlobalCustomTable";
 import ExtraTableWrapper from "../../GlobalCustomTable/TableWrapper";
 import SaveButtonDraggable from "./saveButtonDraggable";
+import * as report from '../../Reports/ReportIndex'
+import { Invoice_Singel_Get_for_Report_Api } from "../../helpers/backend_helper";
 
 export async function isAlertFunc(type, Msg) {
   await customAlert({
@@ -217,6 +220,14 @@ const CommonPurchaseList = (props) => {
     hideBtnFunc(arr);
   }
 
+  function printBtnHandler(rowData, btnId) {
+    let config = {}
+    config["btnId"] = btnId
+    config["editId"] = rowData.id
+    config["ReportType"] = report.invoice;
+    dispatch(getpdfReportdata(Invoice_Singel_Get_for_Report_Api, config))
+  }
+
 
 
   function tog_center() {
@@ -253,17 +264,37 @@ const CommonPurchaseList = (props) => {
                     className={hideBtnCss}
                     data-mdb-toggle="tooltip"
                     data-mdb-placement="top"
-                    disabled={listBtnLoading}
                     title={"UnHide"}
                     onClick={() => {
-                      hideBtnHandler(rowData);
+                      !listBtnLoading && hideBtnHandler(rowData);
                     }}
                   >
                     {(listBtnLoading === `btn-makeBtn-${rowData.id}`) ?
                       <Spinner style={{ height: "16px", width: "16px" }} color="white" />
                       : <span
-                        style={{ marginLeft: "4px", marginRight: "4px" }}
-                        className=" fas fa-eye"
+
+                        className=" fas fa-eye font-size-16"
+                      ></span>
+                    }
+                  </Button>
+
+
+                  < Button
+                    type="button"
+                    id={`btn-print-${rowData.id}`}
+                    className={printBtnCss}
+                    style={{ marginLeft: "9px" }}
+                    title="Print GRN"
+                    onClick={() => {
+                      const btnId = `btn-print-${rowData.id}`
+                      !listBtnLoading && printBtnHandler(rowData, btnId)
+                    }}
+                  >
+                    {(listBtnLoading === `btn-print-${rowData.id}`) ?
+                      <Spinner style={{ height: "16px", width: "16px" }} color="white" />
+                      : <span
+
+                        className="bx bx-printer font-size-16"
                       ></span>
                     }
                   </Button>
@@ -278,17 +309,35 @@ const CommonPurchaseList = (props) => {
                   className={makeBtnCss}
                   data-mdb-toggle="tooltip"
                   data-mdb-placement="top"
-                  disabled={listBtnLoading}
                   title={makeBtnName}
                   onClick={() => {
-                    makeBtnHandler(rowData);
+                    !listBtnLoading && makeBtnHandler(rowData);
                   }}
                 >
                   {(listBtnLoading === `btn-makeBtn-${rowData.id}`) ?
                     <Spinner style={{ height: "16px", width: "16px" }} color="white" />
                     : <span
-                      style={{ marginLeft: "6px", marginRight: "6px" }}
-                      className=" fas fa-file-invoice"
+
+                      className=" fas fa-file-invoice font-size-16"
+                    ></span>
+                  }
+                </Button>
+                < Button
+                  type="button"
+                  id={`btn-print-${rowData.id}`}
+                  className={printBtnCss}
+                  style={{ marginLeft: "9px" }}
+                  title="Print GRN"
+                  onClick={() => {
+                    const btnId = `btn-print-${rowData.id}`
+                    !listBtnLoading && printBtnHandler(rowData, btnId)
+                  }}
+                >
+                  {(listBtnLoading === `btn-print-${rowData.id}`) ?
+                    <Spinner style={{ height: "16px", width: "16px" }} color="white" />
+                    : <span
+
+                      className="bx bx-printer font-size-16"
                     ></span>
                   }
                 </Button>
@@ -349,16 +398,12 @@ const CommonPurchaseList = (props) => {
     userAccState: userAccState
   })
 
-
   function rowSelected() {
-
     return tableList.map((index) => { return (index.selectCheck) })
   }
 
   const nonSelectedRow = () => {
-
     var noSelectedIds = [];
-
     if (masterPath === url.SALES_RETURN) {
       noSelectedIds = tableList
         .filter(row => (row.Status === "Send To Supplier") || (row.Status === "Open"))

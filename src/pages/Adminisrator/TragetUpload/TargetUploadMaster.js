@@ -36,6 +36,7 @@ const TargetUpload = (props) => {
     const [verifyLoading, setverifyLoading] = useState(false);
     const [isIgnoreNegativeValue, setisIgnoreNegativeValue] = useState(false);
     const [negativeFigureVerify, setNegativeFigureVerify] = useState({ Negative_Figure_Array: [], Not_Verify_Negative_Figure: undefined });
+    const [invalidFormat, setInvalidFormat] = useState({ Invalid_Format_Array: [], Not_Verify_Invalid_Format: undefined });
 
     const [sameMonthandYear, setsameMonthandYear] = useState(undefined);
 
@@ -89,6 +90,7 @@ const TargetUpload = (props) => {
             setNegativeFigureVerify({ Negative_Figure_Array: [], Not_Verify_Negative_Figure: undefined });
             document.getElementById("demo1").style.border = "";
             setPartyExist({ Not_Exist_Party_Array: [], PartyNotexist: undefined });
+            setInvalidFormat({ Invalid_Format_Array: [], Not_Verify_Invalid_Format: undefined });
             history.push({ pathname: url.TARGET_UPLOAD_LIST })
         }
         else if (postMsg.Status === true) {
@@ -99,6 +101,7 @@ const TargetUpload = (props) => {
             setPartyExist({ Not_Exist_Party_Array: [], PartyNotexist: undefined });
             setsameMonthandYear(undefined)
             document.getElementById("demo1").style.border = "";
+            setInvalidFormat({ Invalid_Format_Array: [], Not_Verify_Invalid_Format: undefined });
             dispatch(saveTargetUploadMaster_Success({ Status: false }))
             customAlert({
                 Type: 4,
@@ -150,6 +153,12 @@ const TargetUpload = (props) => {
         const extension = filename.substring(filename.lastIndexOf(".")).toLowerCase();
         if (extension === ".xlsx") {
             const readjson = await readExcelFile({ file: files[0] })
+
+            if (readjson.length <= 0) {
+                setInvalidFormat({ Invalid_Format_Array: ["The Excel content should not be blank"], Not_Verify_Invalid_Format: true })
+                setverifyLoading(false)
+                return
+            }
             let NotexistParty = []
             // Check  Invoice  Item Contain Negative Value Or Not 
 
@@ -211,6 +220,7 @@ const TargetUpload = (props) => {
 
         setReadJsonDetail([])
         setNegativeFigureVerify({ Negative_Figure_Array: [], Not_Verify_Negative_Figure: undefined })
+        setInvalidFormat({ Invalid_Format_Array: [], Not_Verify_Invalid_Format: undefined });
         setPartyExist({ Not_Exist_Party_Array: [], PartyNotexist: undefined });
         setsameMonthandYear(undefined)
         files.map(file =>
@@ -249,6 +259,19 @@ const TargetUpload = (props) => {
             dispatch(saveTargetUploadMaster({ jsonBody }));
         } catch (e) { console.log(e) }
     };
+
+
+
+    const removeFile = () => {
+        setselectedFiles([]);
+        setReadJsonDetail([]);
+        setisIgnoreNegativeValue(false)
+        setsameMonthandYear(undefined)
+        setNegativeFigureVerify({ Negative_Figure_Array: [], Not_Verify_Negative_Figure: undefined });
+        setInvalidFormat({ Invalid_Format_Array: [], Not_Verify_Invalid_Format: undefined });
+        document.getElementById("demo1").style.border = "";
+        setPartyExist({ Not_Exist_Party_Array: [], PartyNotexist: undefined });
+    }
 
     const tableColumns = [
         {
@@ -311,23 +334,31 @@ const TargetUpload = (props) => {
                                 document.getElementById("demo1").style.border = "4px dotted green";
                                 handleAcceptedFiles(acceptedFiles)
                             }}
+                            multiple={false}
                         >
                             {({ getRootProps, getInputProps }) => (
-                                <div id='demo1' className="dropzone">
-                                    <div
-                                        className="dz-message needsclick mt-2"
-                                        {...getRootProps()}
-                                    >
+                                <div id='demo1' className="d-flex dropzone justify-content-between">
+                                    <div className="dz-message needsclick mt-2" {...getRootProps()}>
                                         <input {...getInputProps()} />
                                         <div className="mb-3">
                                             <i className="display-4 text-muted bx bxs-cloud-upload" />
                                         </div>
                                         <h4>Drop files here or click to upload.</h4>
                                     </div>
+                                    <div>
+                                        <button
+                                            name="Cancel"
+                                            style={{ borderRadius: "10px", border: "none", backgroundColor: "white" }}
+                                            onClick={removeFile}
+                                            type="button"
+                                            className={`px-2`}
+                                        >
+                                            <i className="mdi mdi-close" style={{ fontSize: "25px" }}></i>
+                                        </button>
+                                    </div>
                                 </div>
                             )}
                         </Dropzone>
-
                         <div className="dropzone-previews mt-3" id="file-previews">
                             {selectedFiles.map((f, i) => {
                                 return (
@@ -363,6 +394,27 @@ const TargetUpload = (props) => {
                                 )
                             })}
                             <div id="filedetail">
+                                {invalidFormat.Not_Verify_Invalid_Format !== undefined ? <details>
+                                    <summary>&nbsp; &nbsp; Invalid Format&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{invalidFormat.Not_Verify_Invalid_Format === true ?
+                                            <i style={{ color: "tomato", }} className="mdi mdi-close-circle font-size-18  "></i> :
+                                            <i style={{ color: "green", }} className="mdi mdi-check-decagram  font-size-18  "></i>}</summary>
+                                    {invalidFormat.Not_Verify_Invalid_Format === false ? null : <div className="error-msg">
+                                        <p>
+                                            <span style={{ fontWeight: "bold", fontSize: "15px" }} >Invalid Format:&nbsp;&nbsp;</span>
+                                            {invalidFormat.Invalid_Format_Array.map((i, index) => (
+                                                <span key={index}>
+                                                    <span key={index}>
+                                                        <span style={{ fontWeight: "bold" }}>{`${index + 1})`}</span> {`${i}`}&nbsp;&nbsp;&nbsp;&nbsp;
+                                                    </span>
+                                                </span>
+                                            ))}
+                                        </p>
+                                    </div>}
+                                </details> : null}
+
+
                                 {negativeFigureVerify.Not_Verify_Negative_Figure !== undefined ?
                                     <details>
                                         {negativeFigureVerify.Not_Verify_Negative_Figure === false ? null : <Row className="mt-2 error-msg" style={{ margin: "unset", backgroundColor: "#c1cfed" }}>
