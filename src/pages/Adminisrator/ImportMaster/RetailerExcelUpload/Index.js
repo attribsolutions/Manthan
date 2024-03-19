@@ -339,6 +339,16 @@ const RetailerExcelUpload = (props) => {
     }
 
 
+    const removeFile = () => {
+        setRetailerId('')
+        setselectedFiles([])
+        setPreUploadjson([])
+        setPreViewDivShow(false)
+        SetPartySelect('')
+        document.getElementById("demo1").style.border = "";
+    }
+
+
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
@@ -346,79 +356,61 @@ const RetailerExcelUpload = (props) => {
                 <PageLoadingSpinner isLoading={(!pageField)} />
                 <form noValidate>
                     <div className="page-content">
-
-                        {/* // userAdminRole ?  */}
-                        {/* 
-                        {(!(compareParameter.length > 0)) ?
-                            <div className="row ">
-                                <div className="d-flex justify-content-start p-2 ">
-                                    <div>Please wait Downloading field Details.</div>
-                                    <div >
-                                        <div className="dot-pulse">
-                                            <div className="bounce1"></div>
-                                            <div className="bounce2"></div>
-                                            <div className="bounce3"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            : */}
-
                         <div >
-                            <div className="px-2 c_card_header text-black" >
-                                <div className="   c_card_filter text-black" style={{ paddingBottom: "5px", paddingTop: "7px" }} >
+                            <div className="px-2  mb-1 c_card_filter text-black" >
+                                <div className="row" >
 
-                                    <row className='mb-2'>
-                                        < Col md={6}>
-                                            <FormGroup className=" row px-1">
-                                                <Label className="col col-sm-1  mt-2" style={{ width: "83px" }}>PriceList </Label>
-                                                <Col md={5}>
-                                                    <Input
-                                                        value={priceListSelect.label}
-                                                        disabled={partyDropDownLoading}
-                                                        autoComplete={"off"}
-                                                        placeholder="Select..."
-                                                        onClick={priceListOnClick}
-                                                    />
-                                                    <PriceDropOptions
-                                                        data={priceListByPartyType}
-                                                        priceList={priceListSelect}
-                                                        setPriceSelect={setPriceListSelect} />
-                                                </Col>
-                                            </FormGroup>
-                                        </Col>
-                                    </row>
+                                    <Col sm={4} >
+                                        <FormGroup className="mb- row mt-3 mb-2" >
+                                            <Label className="col-sm-4 p-2"
+                                                style={{ width: "65px" }}>PriceList</Label>
+                                            <Col sm="8">
+                                                <Input
+                                                    value={priceListSelect.label}
+                                                    disabled={partyDropDownLoading}
+                                                    autoComplete={"off"}
+                                                    placeholder="Select..."
+                                                    onClick={priceListOnClick}
+                                                />
+                                                <PriceDropOptions
+                                                    data={priceListByPartyType}
+                                                    priceList={priceListSelect}
+                                                    setPriceSelect={setPriceListSelect} />
+                                            </Col>
+                                        </FormGroup>
+                                    </Col>
                                 </div>
                             </div>
-                            <h4 className="pt-4 pb-4 text-primary" >{"Upload Your Excel."}</h4>
+
                         </div>
-
-
-
-
-
-
-
                         <div className="mb-3 mt-3">
-
-
+                            <h4 className="pt-4 pb-4 text-primary" >{"Upload Your Excel."}</h4>
                             <Dropzone
                                 onDrop={acceptedFiles => {
                                     document.getElementById("demo1").style.border = "4px dotted green";
                                     handleAcceptedFiles(acceptedFiles)
                                 }}
+                                multiple={false}
                             >
                                 {({ getRootProps, getInputProps }) => (
-                                    <div id='demo1' className="dropzone">
-                                        <div
-                                            className="dz-message needsclick mt-2"
-                                            {...getRootProps()}
-                                        >
+                                    <div id='demo1' className="d-flex dropzone justify-content-between">
+                                        <div className="dz-message needsclick mt-2" {...getRootProps()}>
                                             <input {...getInputProps()} />
                                             <div className="mb-3">
                                                 <i className="display-4 text-muted bx bxs-cloud-upload" />
                                             </div>
                                             <h4>Drop files here or click to upload.</h4>
+                                        </div>
+                                        <div>
+                                            <button
+                                                name="Cancel"
+                                                style={{ borderRadius: "10px", border: "none", backgroundColor: "white" }}
+                                                onClick={removeFile}
+                                                type="button"
+                                                className={` px-2`}
+                                            >
+                                                <i className="mdi mdi-close" style={{ fontSize: "25px" }}></i>
+                                            </button>
                                         </div>
                                     </div>
                                 )}
