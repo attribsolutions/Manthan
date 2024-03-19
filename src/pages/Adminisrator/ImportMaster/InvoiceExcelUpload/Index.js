@@ -31,6 +31,7 @@ import './scss.scss'
 import { PageLoadingSpinner, Verifiy_Button } from "../../../../components/Common/CommonButton";
 import { ImportMaster_Map_Unit_GoButton_API } from "../../../../helpers/backend_helper";
 import { alertMessages } from "../../../../components/Common/CommonErrorMsg/alertMsg";
+import { hideBtnCss } from "../../../../components/Common/ListActionsButtons";
 
 const InvoiceExcelUpload = (props) => {
 
@@ -311,7 +312,11 @@ const InvoiceExcelUpload = (props) => {
 
         if (extension === ".xlsx") {
             const readjson = await readExcelFile({ file: files[0], compareParameter, ItemList })
-
+            if (readjson.length <= 0) {
+                setInvalidFormat({ Invalid_Format_Array: ["The Excel content should not be blank"], Not_Verify_Invalid_Format: true })
+                setverifyLoading(false)
+                return
+            }
             //////////////////////////////////////// Check  in valid format Value Or Not //////////////////////////////////////////////////////
             if (readjson.NotMapColumn.length > 0) {
                 setColunmMap({ Not_Map_Column_Array: readjson.NotMapColumn, Not_Map_Columnt: true });
@@ -628,7 +633,21 @@ const InvoiceExcelUpload = (props) => {
         } catch (e) { _cfunc.btnIsDissablefunc({ btnId, state: false }) }
     };
 
+    const removeFile = () => {
+        setselectedFiles([]);
+        setPreViewDivShow(false);
+        setReadJsonDetail(preDetails);
+        setUnitVerify({ Wrong_Unit_Code_Array: [], Not_Verify_Unit: undefined })
+        setPartyVerify({ Wrong_Party_Code_Array: [], Not_Verify_Party: undefined })
+        setItemVerify({ Wrong_Item_Code_Array: [], Not_Verify_Item: undefined })
+        setNegativeFigureVerify({ Negative_Figure_Array: [], Not_Verify_Negative_Figure: undefined })
+        setNonCBMItemVerify({ Non_CBM_Item_Array: [], Not_Verify_Non_CBM_Item: undefined })
+        setInvoiceWithsameDateVerify({ Invoice_Date: [], Not_Verify_Same_Date: undefined, isFutureDate: false })
+        setInvalidFormat({ Invalid_Format_Array: [], Not_Verify_Invalid_Format: undefined });
+        setColunmMap({ Not_Map_Column_Array: [], Not_Map_Columnt: undefined })
 
+        document.getElementById("demo1").style.border = "";
+    }
 
     if (!(userPageAccessState === '')) {
         return (
@@ -637,7 +656,7 @@ const InvoiceExcelUpload = (props) => {
                 <PageLoadingSpinner isLoading={((partyDropDownLoading) || compareParamLoading)} />
 
                 <div className="page-content">
-                    <div className="px-2 c_card_header text-black mt-2" >
+                    <div className="px-2   c_card_filter text-black" >
                         {(compareParamLoading) ?
                             <div className="row ">
                                 <div className="d-flex justify-content-start p-2 ">
@@ -653,12 +672,12 @@ const InvoiceExcelUpload = (props) => {
                             </div>
                             :
                             compareParameter.length > 0 ? < Row >
-                                <Col sm={10}>
+                                <Col sm={10} className=" mt-4 m-lg-auto">
                                     <h4 className="pt-4 pb-4 text-primary" >{"Upload Your Excel."}</h4>
                                 </Col>
-                                <Col sm={2} className="mt-4">
-                                    <span className="mt-2 text-primary"
-                                        style={{ cursor: "pointer" }}
+                                <Col sm={2} className="mt-4 m-lg-auto" >
+                                    <span className="mt-3 text-primary"
+                                        style={{ cursor: "pointer", fontWeight: "bold" }}
                                         onClick={() => downloadDummyFormatHandler(compareParameter)}
                                     >
                                         Download Format
@@ -667,7 +686,6 @@ const InvoiceExcelUpload = (props) => {
 
                             </Row> : null
                         }
-
                     </div>
 
                     <div className="mb-3 mt-3">
@@ -676,18 +694,28 @@ const InvoiceExcelUpload = (props) => {
                                 document.getElementById("demo1").style.border = "4px dotted green";
                                 handleAcceptedFiles(acceptedFiles)
                             }}
+                            multiple={false}
                         >
                             {({ getRootProps, getInputProps }) => (
-                                <div id='demo1' className="dropzone">
-                                    <div
-                                        className="dz-message needsclick mt-2"
-                                        {...getRootProps()}
-                                    >
+
+                                <div id='demo1' className="d-flex dropzone justify-content-between">
+                                    <div className="dz-message needsclick mt-2" {...getRootProps()}>
                                         <input {...getInputProps()} />
                                         <div className="mb-3">
                                             <i className="display-4 text-muted bx bxs-cloud-upload" />
                                         </div>
                                         <h4>Drop files here or click to upload.</h4>
+                                    </div>
+                                    <div>
+                                        <button
+                                            name="Cancel"
+                                            style={{ borderRadius: "10px", border: "none", backgroundColor: "white" }}
+                                            onClick={removeFile}
+                                            type="button"
+                                            className={` px-2`}
+                                        >
+                                            <i className="mdi mdi-close" style={{ fontSize: "25px" }}></i>
+                                        </button>
                                     </div>
                                 </div>
                             )}
@@ -785,8 +813,6 @@ const InvoiceExcelUpload = (props) => {
                                     </div>}
                                 </details> : null}
 
-
-
                                 {invalidFormat.Not_Verify_Invalid_Format !== undefined ? <details>
                                     <summary>&nbsp; &nbsp; Invalid Format&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -806,9 +832,6 @@ const InvoiceExcelUpload = (props) => {
                                         </p>
                                     </div>}
                                 </details> : null}
-
-
-
                                 {partyVerify.Not_Verify_Party !== undefined ? <details>
                                     {partyVerify.Not_Verify_Party === false ? null : <Row className="mt-2 error-msg" style={{ margin: "unset", backgroundColor: "#c1cfed" }}>
                                         <Col sm={3} style={{ fontWeight: "bold", fontSize: "15px", paddingLeft: "unset" }} className="col-xl-auto">Ignore this Party </Col>

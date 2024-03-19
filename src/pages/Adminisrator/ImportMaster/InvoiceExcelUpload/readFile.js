@@ -33,7 +33,7 @@ export const readExcelFile = async ({ file, compareParameter, ItemList = [] }) =
       }
 
     });
-
+    
 
     let invalidMsg = []
     let NotMapColumn = []

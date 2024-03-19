@@ -289,7 +289,6 @@ const ItemImageUpload = (props) => {
         return imageUrl; // Return the found image URL (or an empty string if not found)
     };
 
-
     const pagesListColumns = [
         {
             text: "Image Type",

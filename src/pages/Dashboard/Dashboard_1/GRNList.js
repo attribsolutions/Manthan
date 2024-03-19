@@ -11,6 +11,11 @@ import { Button, Spinner } from 'reactstrap';
 import { makeGRN_Mode_1Action } from '../../../store/Inventory/GRNRedux/actions';
 import { mode, url } from "../../../routes/index";
 import SimpleBar from "simplebar-react"
+import { printBtnCss } from '../../../components/Common/ListActionsButtons';
+import * as report from '../../../Reports/ReportIndex'
+import { Invoice_Singel_Get_for_Report_Api } from '../../../helpers/backend_helper';
+import { getpdfReportdata } from '../../../store/actions';
+import C_Report from '../../../components/Common/C_Report';
 
 
 
@@ -26,7 +31,7 @@ export default function InvoiceForGRN() {
     const { tableList, GRNitem, listBtnLoading, commonPartyDropSelect, userAccess } = useSelector((state) => ({
         tableList: state.OrderReducer.orderList,
         GRNitem: state.GRNReducer.GRNitem,
-        listBtnLoading: state.GRNReducer.listBtnLoading,
+        listBtnLoading: state.GRNReducer.listBtnLoading || state.PdfReportReducers.ReportBtnLoading,
         userAccess: state.Login.RoleAccessUpdateData,
         commonPartyDropSelect: state.CommonPartyDropdownReducer.commonPartyDropSelect
     }));
@@ -119,6 +124,15 @@ export default function InvoiceForGRN() {
         }
     }
 
+    function printBtnHandler(rowData, btnId) {
+        debugger
+        let config = {}
+        config["btnId"] = btnId
+        config["editId"] = rowData.id
+        config["ReportType"] = report.invoice;
+        dispatch(getpdfReportdata(Invoice_Singel_Get_for_Report_Api, config))
+    }
+
     const pagesListColumns = [
         {
             text: "InvoiceDate",
@@ -151,17 +165,36 @@ export default function InvoiceForGRN() {
                         id={`btn-makeBtn-${rowData.id}`}
                         className="badge badge-soft-info font-size-12 btn btn-info waves-effect waves-light w-xxs border border-light "
                         title="Make GRN"
-                        disabled={listBtnLoading}
                         onClick={() => {
+
                             const btnId = `btn-makeBtn-${rowData.id}`
-                            makeBtnHandler(rowData, btnId)
+                            !listBtnLoading && makeBtnHandler(rowData, btnId)
                         }}
                     >
                         {(listBtnLoading === `btn-makeBtn-${rowData.id}`) ?
                             <Spinner style={{ height: "16px", width: "16px" }} color="white" />
                             : <span
-                                style={{ marginLeft: "6px", marginRight: "6px" }}
-                                className=" fas fa-file-invoice"
+                                className=" fas fa-file-invoice font-size-17"
+                            ></span>
+                        }
+                    </Button>
+
+                    < Button
+                        type="button"
+                        id={`btn-print-${rowData.id}`}
+                        className={printBtnCss}
+                        style={{ marginLeft: "9px" }}
+                        title="Print GRN"
+                        onClick={() => {
+                            const btnId = `btn-print-${rowData.id}`
+                            !listBtnLoading && printBtnHandler(rowData, btnId)
+                        }}
+                    >
+                        {(listBtnLoading === `btn-print-${rowData.id}`) ?
+                            <Spinner style={{ height: "16px", width: "16px" }} color="white" />
+                            : <span
+
+                                className="bx bx-printer font-size-16"
                             ></span>
                         }
                     </Button>
@@ -196,9 +229,10 @@ export default function InvoiceForGRN() {
                         {globalTableSearchProps(toolkitProps.searchProps)}
                         {/* </div> */}
                     </SimpleBar >
-
+                    <C_Report />
                 </React.Fragment>
             )}
+
         </ToolkitProvider>
     )
 }
