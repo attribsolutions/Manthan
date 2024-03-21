@@ -480,7 +480,7 @@ const HeaderSection = (props) => {
       <MetaTags>{_cfunc.metaTagLabel(states.userPageAccessState)}</MetaTags>
 
       <div>
-        <div className="item-Sale-card_1 px-2 text-black mt-n1 ">
+        <div className="item-Sale-card_1 px-2 text-black mt-n1 px-2  mb-1 c_card_filter text-black ">
           <Row>
             <Col className="col col-11  mt-1">
               <Row className="mb-2 row ">
@@ -610,7 +610,7 @@ const HeaderSection = (props) => {
           </Row>
         </div>
         {!states.pivotMode && (
-          <div className="item-Sale-card_3 px-2 text-black mt-1 mb-1">
+          <div className="item-Sale-card_3 px-2 text-black mt-1 mb-1" >
             <Row className="mb-1 ">
               <Col className="col col-11">
                 <Row className="mt-1 ">
