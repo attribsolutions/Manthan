@@ -257,7 +257,7 @@ const ReturnReport = (props) => {
                         </Col>
                     </Row>
                 </div>
-                <div className="mb-1">
+                <div className="mb-1 table-responsive table">
                     <GlobalCustomTable
                         keyField={"id"}
                         data={tableData}

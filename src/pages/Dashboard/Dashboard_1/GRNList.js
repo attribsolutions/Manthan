@@ -184,7 +184,7 @@ export default function InvoiceForGRN() {
                         id={`btn-print-${rowData.id}`}
                         className={printBtnCss}
                         style={{ marginLeft: "9px" }}
-                        title="Print GRN"
+                        title="Print Invoice"
                         onClick={() => {
                             const btnId = `btn-print-${rowData.id}`
                             !listBtnLoading && printBtnHandler(rowData, btnId)
