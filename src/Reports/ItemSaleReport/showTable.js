@@ -43,7 +43,15 @@ function ShowTable() {
             //     dispatch(BreadcrumbShowCountlabel(`Count:${dataCount}`));
             // }}
             onDataSizeChange={({ dataCount, filteredData = [] }) => {
-                dispatch(BreadcrumbShowCountlabel(`Count:${dataCount} ₹ ${TotalAmount_Func(filteredData)}`));
+                const newfilteredData = filteredData.map(i => {
+                    const { ...rest } = i;
+                    return {
+                        ...rest,
+                        recordsAmountTotal: i.Amount, // Breadcrumb Count total
+                    };
+                });
+                debugger
+                dispatch(BreadcrumbShowCountlabel(`Count:${dataCount} ₹ ${TotalAmount_Func(newfilteredData)}`));
             }
             }
             noDataIndication={<div className="text-danger text-center table-cursor-pointer"  >Data Not available</div>}

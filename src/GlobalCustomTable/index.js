@@ -95,13 +95,13 @@ const GlobalCustomTable = ({
     const sortCaretFunction = {
         sortCaret: (order, column) => {
             if (!order) {
-                return null;
+                return <i className="fas fa-sort-up pl-1 font-size-12" style={{ color: "#e9e9ef" }}></i>;
             } else if (order === 'asc') {
                 return <i className="fas fa-sort-up pl-1 font-size-12"></i>;
             } else if (order === 'desc') {
                 return <i className="fas fa-sort-down pl-1 font-size-12"></i>;
             }
-            return null;
+            return <i className="fas fa-sort-up pl-1 font-size-12" style={{ color: "#e9e9ef" }}></i >;
         }
     };
 
@@ -134,11 +134,11 @@ const GlobalCustomTable = ({
                         <PaginationTotalStandalone
                             {...paginationProps}
                         />
-                        <div className=" pagination pagination-rounded justify-content-end" style={{ marginTop: "-20px", marginBottom: "40px" }}>
+                        {paginationEnabled && <div className=" pagination pagination-rounded justify-content-end" style={{ marginTop: "-20px", marginBottom: "40px" }}>
                             <PaginationListStandalone
                                 {...paginationProps}
                             />
-                        </div>
+                        </div>}
 
                     </div>
                 )

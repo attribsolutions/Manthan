@@ -251,30 +251,24 @@ const BulkRecipt = (props) => {
                             </div>
                         </div>
 
-
                         <ToolkitProvider
-
                             keyField="id"
                             data={Data}
                             columns={pagesListColumns}
-
                             search
                         >
                             {toolkitProps => (
                                 <React.Fragment>
-                                    <div className="table">
+                                    <div className="">
                                         <BootstrapTable
                                             keyField={"id"}
                                             bordered={true}
                                             striped={false}
                                             noDataIndication={<div className="text-danger text-center ">Record Not available</div>}
-                                            classes={"table align-middle table-nowrap table-hover"}
+                                            classes={"table table-bordered table align-middle table-nowrap table-hover"}
                                             headerWrapperClasses={"thead-light"}
-
                                             {...toolkitProps.baseProps}
-
                                         />
-
                                         {globalTableSearchProps(toolkitProps.searchProps)}
                                     </div>
 

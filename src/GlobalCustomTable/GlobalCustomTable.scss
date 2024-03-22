@@ -53,7 +53,11 @@
 
 
 
-
+ .react-bootstrap-table th {
+    white-space: nowrap; /* Prevent text from wrapping */
+    overflow: hidden; /* Hide overflow text */
+    text-overflow: ellipsis; /* Display ellipsis (...) for overflow text */
+  }
 
 
 
