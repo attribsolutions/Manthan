@@ -3,7 +3,9 @@ import React, { useEffect, useState } from "react";
 import {
     Card,
     Col,
+    FormGroup,
     Input,
+    Label,
     Row,
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
@@ -20,7 +22,8 @@ import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMs
 import { editTargetUploadIDSuccess, saveTargetUploadMaster, saveTargetUploadMaster_Success } from "../../../store/Administrator/TargetUploadRedux/action";
 import { url } from "../../../routes";
 import GlobalCustomTable from "../../../GlobalCustomTable";
-import { BreadcrumbShowCountlabel } from "../../../store/actions";
+import { BreadcrumbShowCountlabel, getBaseUnit_ForDropDown } from "../../../store/actions";
+import Select from 'react-select'
 
 const TargetUpload = (props) => {
 
@@ -39,6 +42,8 @@ const TargetUpload = (props) => {
     const [invalidFormat, setInvalidFormat] = useState({ Invalid_Format_Array: [], Not_Verify_Invalid_Format: undefined });
 
     const [sameMonthandYear, setsameMonthandYear] = useState(undefined);
+    const [Unit, setUnit] = useState("")
+
 
     const [partyExist, setPartyExist] = useState({ Not_Exist_Party_Array: [], PartyNotexist: undefined });
 
@@ -46,8 +51,10 @@ const TargetUpload = (props) => {
         postMsg,
         userAccess,
         saveBtnloading,
-        partyList
+        partyList,
+        BaseUnit
     } = useSelector((state) => ({
+        BaseUnit: state.ItemMastersReducer.BaseUnit,
         postMsg: state.TargetUploadReducer.postMsg,
         saveBtnloading: state.TargetUploadReducer.saveBtnloading,
         partyList: state.CommonPartyDropdownReducer.commonPartyDropdownOption,
@@ -75,6 +82,11 @@ const TargetUpload = (props) => {
             _cfunc.breadcrumbReturnFunc({ dispatch, userAcc });
         };
     }, [userAccess])
+
+    useEffect(() => {
+        dispatch(getBaseUnit_ForDropDown());
+    }, [])
+
 
     useEffect(async () => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
@@ -242,22 +254,31 @@ const TargetUpload = (props) => {
     }
 
     const uploadSaveHandler = () => {
-        try {
-            const Data = updatereadJsonDetail.map(i => {
-                const { Month, Year, Party, Item, TargetQuantity } = i;
-                return {
-                    Month: Month,
-                    Year: Year,
-                    Party: Party,
-                    Item: Item,
-                    TargetQuantity: (Number(TargetQuantity)).toFixed(2),
-                    CreatedOn: _cfunc.loginUserID(),
-                    CreatedBy: _cfunc.loginUserID(),
-                };
+        if (Unit === "") {
+            customAlert({
+                Type: 4,
+                Message: "Please Select Unit",
             });
-            const jsonBody = JSON.stringify(Data)
-            dispatch(saveTargetUploadMaster({ jsonBody }));
-        } catch (e) { console.log(e) }
+        } else {
+            try {
+                const Data = updatereadJsonDetail.map(i => {
+                    const { Month, Year, Party, Item, TargetQuantity } = i;
+                    return {
+                        UnitId: Unit.value,
+                        Month: Month,
+                        Year: Year,
+                        Party: Party,
+                        Item: Item,
+                        TargetQuantity: (Number(TargetQuantity)).toFixed(2),
+                        CreatedOn: _cfunc.loginUserID(),
+                        CreatedBy: _cfunc.loginUserID(),
+                    };
+                });
+                const jsonBody = JSON.stringify(Data)
+                dispatch(saveTargetUploadMaster({ jsonBody }));
+            } catch (e) { console.log(e) }
+        }
+
     };
 
 
@@ -320,13 +341,37 @@ const TargetUpload = (props) => {
         },
 
     ]
+    const BaseUnit_DropdownOptions = BaseUnit.map((data) => ({
+        value: data.id,
+        label: data.Name
+    }));
 
     if (!(pageMode === mode.view)) {
         return (
             <React.Fragment>
                 <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
                 <div className="page-content">
-                    <div className="px-2 c_card_header text-black mt-2" >
+                    <div className="px-2  mb-1 c_card_filter text-black" >
+                        <div className="row" >
+                            <Col sm={4} >
+                                <FormGroup className="mb- row mt-3 mb-2" >
+                                    <Label className="col-sm-4 p-2"
+                                        style={{ width: "65px" }}>Unit</Label>
+                                    <Col sm="8">
+                                        <Select
+                                            id={`dropBaseUnit-0`}
+                                            placeholder="Select..."
+                                            value={Unit}
+                                            options={BaseUnit_DropdownOptions}
+                                            onChange={(e) => { setUnit(e) }}
+                                            styles={{
+                                                menu: provided => ({ ...provided, zIndex: 2 })
+                                            }}
+                                        />
+                                    </Col>
+                                </FormGroup>
+                            </Col>
+                        </div>
                     </div>
                     <div className="mb-3 mt-3">
                         <Dropzone
