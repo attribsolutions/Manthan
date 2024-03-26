@@ -211,7 +211,7 @@ const Inward = (props) => {
                         <Col sm="4" className="">
                             <FormGroup className=" row mt-3 " >
                                 <Label className="col-sm-5 p-2"
-                                    style={{ width: "83px" }}>From Date</Label>
+                                    style={{ width: "83px" }}>FromDate</Label>
                                 <Col sm="7">
                                     <C_DatePicker
                                         style={{ userselect: "all" }}

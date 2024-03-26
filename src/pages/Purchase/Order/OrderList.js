@@ -660,7 +660,7 @@ const OrderList = () => {
                     <Col lg={(orderList4_or_app_orderList) ? 2 : 3} className="">
                         <FormGroup className="mb- row mt-3 " >
                             <Label className="col-sm-5 p-2"
-                                style={{ width: "83px" }}>  {!(fieldLabel.FromDate === '') ? fieldLabel.FromDate : "From Date"}</Label>
+                                style={{ width: "83px" }}>  {!(fieldLabel.FromDate === '') ? fieldLabel.FromDate : "FromDate"}</Label>
                             <Col sm="7">
                                 <C_DatePicker
                                     options={{
@@ -679,7 +679,7 @@ const OrderList = () => {
                     <Col lg={(orderList4_or_app_orderList) ? 2 : 3} className="">
                         <FormGroup className="mb- row mt-3 " >
                             <Label className="col-sm-5 p-2"
-                                style={{ width: "65px" }}>  {!(fieldLabel.ToDate === '') ? fieldLabel.ToDate : "To Date"}</Label>
+                                style={{ width: "65px" }}>  {!(fieldLabel.ToDate === '') ? fieldLabel.ToDate : "ToDate"}</Label>
                             <Col sm="7">
                                 <C_DatePicker
                                     options={{

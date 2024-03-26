@@ -129,8 +129,8 @@ const InvoiceList = () => {
     useEffect(() => {
 
         dispatch(sideBarPageFiltersInfoAction([
-            { label: "From Date", content: date_dmy_func(fromdate), },
-            { label: "To Date", content: date_dmy_func(todate), },
+            { label: "FromDate", content: date_dmy_func(fromdate), },
+            { label: "ToDate", content: date_dmy_func(todate), },
             { label: "Customer", content: supplierSelect.label, }
         ]));
 
@@ -439,7 +439,7 @@ const InvoiceList = () => {
                     <Col sm="3" className="">
                         <FormGroup className="mb- row mt-3 " >
                             <Label className="col-sm-5 p-2"
-                                style={{ width: "83px" }}>From Date</Label>
+                                style={{ width: "83px" }}>FromDate</Label>
                             <Col sm="7">
                                 <C_DatePicker
                                     options={{
@@ -458,7 +458,7 @@ const InvoiceList = () => {
                     <Col sm="3" className="">
                         <FormGroup className="mb- row mt-3 " >
                             <Label className="col-sm-5 p-2"
-                                style={{ width: "65px" }}>To Date</Label>
+                                style={{ width: "65px" }}>ToDate</Label>
                             <Col sm="7">
                                 <C_DatePicker
                                     options={{
