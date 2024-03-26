@@ -382,13 +382,13 @@ const TransactionLog = () => {
                         <FormGroup>
                             <div className="d-flex align-items-center">
                                 <Label className="col-sm-5 p-2" htmlFor="fromdate">
-                                    From Date
+                                    FromDate
                                 </Label>
                                 <Col sm="7">
                                     <C_TimePicker
                                         id="fromdate"
                                         value={formDateSelect}
-                                        placeholder="Select From Date"
+                                        placeholder="Select FromDate"
                                         name="fromdate"
                                         data-enable-time
                                         data-enable-seconds
@@ -411,13 +411,13 @@ const TransactionLog = () => {
                         <FormGroup >
                             <div className="d-flex align-items-center">
                                 <Label className="col-sm-5 p-2" htmlFor="todate">
-                                    To Date
+                                    ToDate
                                 </Label>
                                 <Col sm="7">
                                     <C_TimePicker
                                         id="todate"
                                         name="todate"
-                                        placeholder="Select To Date"
+                                        placeholder="Select ToDate"
                                         value={toDateSelect}
                                         data-enable-time
                                         data-enable-seconds
@@ -489,7 +489,7 @@ const TransactionLog = () => {
                         <FormGroup >
                             <div className="d-flex align-items-center">
                                 <Label className="col-sm-5 p-2" htmlFor="userName">
-                                    User Name
+                                    Employee Name
                                 </Label>
                                 <Col sm="7">
                                     <C_Select

@@ -113,7 +113,7 @@ const BOMList = () => {
                         <Col sm="5">
                             <FormGroup className=" row mt-3 " >
                                 <Label className="col-sm-5 p-2"
-                                    style={{ width: "83px" }}>From Date</Label>
+                                    style={{ width: "83px" }}>FromDate</Label>
                                 <Col sm="6">
                                     <C_DatePicker
                                         name='fromdate'
@@ -127,7 +127,7 @@ const BOMList = () => {
                         <Col sm="5" className="">
                             <FormGroup className="mb- row mt-3 " >
                                 <Label className="col-sm-5 p-2"
-                                    style={{ width: "65px", marginRight: "0.4cm" }}>To Date</Label>
+                                    style={{ width: "65px", marginRight: "0.4cm" }}>ToDate</Label>
                                 <Col sm="6 ">
                                     <C_DatePicker
                                         name="todate"
