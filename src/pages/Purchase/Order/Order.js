@@ -1604,7 +1604,7 @@ const Order = (props) => {
                                         </div >
                                     </div>
 
-                                    <div className="row" >                                        {/**PO Type  (PO From Date and PO To Date)*/}
+                                    <div className="row" >                                        {/**PO Type  (PO FromDate and PO ToDate)*/}
                                         <div className="col col-6" >                              {/**PO Type */}
                                             <FormGroup className=" row  " >
                                                 <Label className=" p-2"
@@ -1627,11 +1627,11 @@ const Order = (props) => {
 
 
                                     {(orderTypeSelect.label === 'Open PO') &&
-                                        <div className="row" >                                    {/*PO From Date */}
+                                        <div className="row" >                                    {/*PO FromDate */}
                                             <div className="col col-6" >
                                                 <FormGroup className=" row " >
                                                     <Label className=" p-2"
-                                                        style={{ width: "115px" }}>PO From Date</Label>
+                                                        style={{ width: "115px" }}>PO FromDate</Label>
                                                     <div className="col col-6 ">
                                                         <C_DatePicker
                                                             id="pofromdate"
@@ -1643,10 +1643,10 @@ const Order = (props) => {
                                                 </FormGroup>
                                             </div >
 
-                                            <div className="col col-6" >                        {/*PO To Date */}
+                                            <div className="col col-6" >                        {/*PO ToDate */}
                                                 <FormGroup className=" row  " >
                                                     <Label className=" p-2"
-                                                        style={{ width: "130px" }}>PO To Date</Label>
+                                                        style={{ width: "130px" }}>PO ToDate</Label>
                                                     <div className="col col-6 ">
                                                         <C_DatePicker
                                                             id="potodate"

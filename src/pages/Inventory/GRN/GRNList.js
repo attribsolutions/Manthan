@@ -64,8 +64,8 @@ const GRNList = () => {
     useEffect(() => {
 
         dispatch(sideBarPageFiltersInfoAction([
-            { label: "From Date", content: _cfunc.date_dmy_func(fromdate), },
-            { label: "To Date", content: _cfunc.date_dmy_func(todate), },
+            { label: "FromDate", content: _cfunc.date_dmy_func(fromdate), },
+            { label: "ToDate", content: _cfunc.date_dmy_func(todate), },
             { label: "Supplier Name", content: supplierSelect.label, }
         ]));
 

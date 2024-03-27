@@ -136,7 +136,7 @@ const PartyLedger = () => {
         const worksheet = ''
         const dataRows = [
             ["Form Date", jsonData[0].FormDate],
-            ["To Date", jsonData[0].ToDate],
+            ["ToDate", jsonData[0].ToDate],
 
             ["Distributor Name", jsonData[0].Distributor, '', "Customer Name", jsonData[0].CustomerName],
             ["Distributor GSTIN", jsonData[0].DistributorGSTIN, '', "Customer GSTIN", jsonData[0].CustomerGSTIN],
@@ -231,7 +231,7 @@ const PartyLedger = () => {
         }
 
         const dataRows = [
-            [`Form Date : ${jsonData[0].FormDate}`, `To Date : ${jsonData[0].ToDate}`],
+            [`Form Date : ${jsonData[0].FormDate}`, `ToDate : ${jsonData[0].ToDate}`],
 
             [`Distributor Name : ${jsonData[0].Distributor}`, `Customer Name : ${jsonData[0].CustomerName}`],
             [`Distributor GSTIN : ${jsonData[0].DistributorGSTIN}`, `Customer GSTIN : ${jsonData[0].CustomerGSTIN}`],
