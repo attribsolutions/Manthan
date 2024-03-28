@@ -218,7 +218,7 @@ import SNSReport from "../Reports/StockReport/SNSReport.js";
 import CurrentStockReport from "../Reports/StockReport/CurrentStockReport.js";
 import TargetUpload from "../pages/Adminisrator/TragetUpload/TargetUploadMaster.js";
 import TargetUploadList from "../pages/Adminisrator/TragetUpload/TargetUploadList.js";
-
+import TargetVSAchievement from "../Reports/TargetVSAchievement";
 
 const userRoutes = [
 	// *************************** DashBord *******************************//
@@ -332,6 +332,7 @@ const userRoutes = [
 	{ path: path.TARGET_UPLOAD, component: TargetUpload },
 	{ path: path.TARGET_UPLOAD_LIST, component: TargetUploadList },
 
+	// { path: path.CREDIT_NOTE_UPLOAD, component: InvoiceExcelUpload, isPartyWisePage: true },
 
 	{ path: path.INVOICE_EXCEL_UPLOAD, component: InvoiceExcelUpload, isPartyWisePage: true },
 
@@ -553,6 +554,7 @@ const userRoutes = [
 
 	{ path: path.CX_DD_DIFFERENCE_REPORT, component: CX_DD_DiffrenceReport },// use self party drop-down
 
+	{ path: path.TARGET_VS_ACHIEVEMENT, component: TargetVSAchievement, isPartyWisePage: true },
 
 	//******************************* Sweet Pos ************************************//
 

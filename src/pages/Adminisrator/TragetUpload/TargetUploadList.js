@@ -17,7 +17,7 @@ import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { Col, FormGroup, Input, Label, Row } from "reactstrap";
 import { SelectedMonthAndYearName, getPreviousMonthAndYear } from "../../../components/Common/CommonFunction";
 import Select from "react-select";
-import { allLabelWithBlank } from "../../../components/Common/CommonErrorMsg/HarderCodeData";
+import {  allLabelWithZero } from "../../../components/Common/CommonErrorMsg/HarderCodeData";
 import { sideBarPageFiltersInfoAction } from "../../../store/Utilites/PartyDrodown/action";
 
 const SelectedMonth = () => getPreviousMonthAndYear({ date: new Date(), Privious: 0 })
@@ -29,7 +29,7 @@ const TargetUploadList = () => {
 
     const [subPageMode] = useState(history.location.pathname);
     const [monthSelection, setMonthSelection] = useState(SelectedMonth())
-    const [partySelect, setPartySelect] = useState(allLabelWithBlank);
+    const [partySelect, setPartySelect] = useState(allLabelWithZero);
 
     const reducers = useSelector(
         (state) => ({
@@ -80,7 +80,7 @@ const TargetUploadList = () => {
         value: i.id,
         label: i.Name
     }));
-    Party_Option.unshift(allLabelWithBlank)
+    Party_Option.unshift(allLabelWithZero)
 
     const selectDeleteBtnHandler = (row = []) => {
         let isAllcheck = row.filter(i => (i.hasAllSelect))

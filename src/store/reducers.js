@@ -126,11 +126,7 @@ import SystemSettingReducer from "./Utilites/SystemSettingRedux/reducer"
 import PosRoleAccessReducer from "./SweetPOSStore/Administrator/POSRoleAccessRedux/reducer"
 
 import TargetUploadReducer from "./Administrator/TargetUploadRedux/reducer"
-
-
-
-
-
+import TargetVsAchievementReducer from "./Report/TargetVSAchievementRedux/reducer"
 
 
 const rootReducer = combineReducers({
@@ -234,6 +230,6 @@ const rootReducer = combineReducers({
 	SystemSettingReducer,
 	PosRoleAccessReducer,
 	TargetUploadReducer,
-
+	TargetVsAchievementReducer,
 })
 export default rootReducer
