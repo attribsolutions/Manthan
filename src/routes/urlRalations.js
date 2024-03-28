@@ -268,7 +268,7 @@ export const Target_Upload = url.TARGET_UPLOAD_LIST;
 export const Target_Upload_List = url.TARGET_UPLOAD;
 
 
-
+export const CreditNoteUpload = url.CREDIT_NOTE_UPLOAD
 
 //**************************** Reports ***********************************//
 
@@ -314,4 +314,4 @@ export const CX_DD_Difference = url.CX_DD_DIFFERENCE_REPORT
 
 export const Sales_Order_List_2 = url.APP_ORDER_LIST
 
-
+export const TargetVSAchievement =url.TARGET_VS_ACHIEVEMENT

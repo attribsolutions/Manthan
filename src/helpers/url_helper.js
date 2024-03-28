@@ -352,8 +352,6 @@ export const UPDATE_VEHICLE_INVOICE = '/UpdateVehicleInvoice' // Uploaded_E-wayB
 export const INVOICE_SEND_TO_SCM = '/InvoicetoSCM' // Uploaded_E-wayBill
 export const INVOICE_1_BULK_DELETE_API = '/InvoiceBulkDelete'// invoice_1 Bulk Delete Api
 
-
-
 //BulkInvoices
 export const BULK_INVOICES = '/BulkInvoices'// invoice_1 addpage GoButton Api 
 export const IMPORT_BULK_RETAIER = '/ImportRetailerBulkdata'// invoice_1 addpage GoButton Api 
@@ -395,10 +393,6 @@ export const RETURN_ITEM_APPROVE_AIP = '/ReturnItemApprove'
 
 export const RETURN_UPLOAD = '/ReturnImageUpdate'
 
-
-
-
-
 export const ADD_BUTTON_API_FOR_ITEM_CREDIT_NOTE_1 = '/CentralServiceItem' // privious Api  =>'/ReturnItemAdd'
 
 // Credit and Debit API
@@ -425,13 +419,6 @@ export const CLAIM_LIST = '/Claimlist'
 export const ITEM_REGISTER = '/MaterialRegister'
 
 
-
-
-
-
-
-
-
 // Stock Report
 export const STOCK_REPORT = '/PartyLiveStock'
 export const STOCK_PROCESSING = '/StockProcessing'
@@ -453,9 +440,6 @@ export const STOCK_ENTRY = '/PartyStockEntry'
 
 export const STOCK_COUNT = '/GetStockCountForParty'
 
-
-
-
 export const STOCK_ENTRY_GO_BUTTON = "/ReturnItemAdd"
 
 export const INVOICE_DATA_EXPORT = "/InvoiceDataExport"
@@ -472,7 +456,6 @@ export const ITEM_SALE_REPORT_GO_BUTTON = '/ItemSaleReport'
 export const SUPPLIER_API = '/ItemSaleSupplier'
 export const ITEM_LIST_API = '/ItemSaleItemList'
 
-
 //Deleted Invoice Data Export Report 
 export const DELETE_INVOICE_DATA_EXPORT = "/DeletedInvoiceData"
 
@@ -486,7 +469,6 @@ export const TRANSACTION_LOG_All_USER = "/GetEmployeeFromUser"
 export const TRANSACTION_LOG_GO_BTN = "/TransactionDetails"
 export const TRANSACTION_JSON = "/TransactionJson"
 
-
 // Claim Tracking Entry
 
 export const CLAIM_LIST_FOR_TRACKING = "/ClaimListfortracking"
@@ -498,7 +480,6 @@ export const CREDIT_DEBIT_DATA_EXPORT = "/CreditDebitDataExport"
 
 //ReceiptDataExport
 export const RECEIPT_DEBIT_DATA_EXPORT = "/ReceiptDataExport"
-
 
 ////mobail Api
 
@@ -527,7 +508,6 @@ export const CENTRAL_SERVICE_ITEM = '/CentralItemService'
 export const SERVICE_ITEM_ASSIGN_SAVE = '/CentralServiceItemAssign';
 export const SERVICE_ITEM_ASSIGN_GO_BUTTON = '/CentralServiceItemAssignFilter';
 
-
 // Party Details
 export const GET_PARTY_DETAILS_LIST = '/GetPartydetails'
 export const POST_PARTY_DETAILS = '/PartyDetails'
@@ -543,21 +523,15 @@ export const TCS_AMOUNT_REPORT_GO_BUTTON_API = '/TCSAmountReport'
 export const CX_DD_DIFFRENCE_REPORT = '/CxDDDiffReport'
 export const CX_DD_DIFFRENCE_PARTY_API = '/CxDDDiffParty'
 
-
 export const SYSTEM_SETTING_API = '/SettingsDataSave'
-
 
 export const SYSTEM_SETTING = '/SystemSettings'
 
-
-
-
 //Sweet POS Role Access 
-
-
-
 export const SWEET_POS_API = '/SweetPOS/SPOSroleaccess'
 
+// TargetVSAchievement 
+export const TARGET_VS_ACHIEVEMENT_API = '/TargetVSAchievement'
 
 
 

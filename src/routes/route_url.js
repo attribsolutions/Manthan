@@ -161,6 +161,8 @@ export const ITEM_MASTER_BULK_UPDATE = "/ItemMasterBulkUpdate"
 
 export const ITEM_IMAGE_UPLOAD = "/ItemImageUpload"
 
+export const CREDIT_NOTE_UPLOAD = "/CreditNoteUpload"
+
 //******************************* Purchase Module ************************************//
 export const ORDER_1 = "/Order_1"
 export const ORDER_LIST_1 = "/OrderList_1"
@@ -348,6 +350,7 @@ export const SYSTEM_SETTING = "/System_Setting"
 
 export const SYSTEM_SETTING_LIST = "/System_Setting_List"
 
+export const TARGET_VS_ACHIEVEMENT = "/TargetVSAchievement"
 
 
 

@@ -784,17 +784,13 @@ export const del_SystemSetting_List_API = ({ deleteId }) => del(`${url.SYSTEM_SE
 export const edit_SystemSetting_List_Api = ({ editId }) => get(`${url.SYSTEM_SETTING}/${editId}`)// edit api
 export const update_SystemSetting_List_Api = ({ jsonBody, updateId }) => put(`${url.SYSTEM_SETTING}/${updateId}`, jsonBody)// update api
 
-
-
-
 //Sweet POS Role Access
-
 
 export const get_POSRoleAccess_List_Api = () => get(url.SWEET_POS_API) // get api
 export const Post_POSRoleAccess_API = ({ jsonBody }) => post(url.SWEET_POS_API, jsonBody)// post api
 
-
-
+// TargetVSAchievement 
+export const Target_Vs_Achievement_Gobtn_API = ({ jsonBody }) => post(url.TARGET_VS_ACHIEVEMENT_API, jsonBody)// post api
 
 
 export {
