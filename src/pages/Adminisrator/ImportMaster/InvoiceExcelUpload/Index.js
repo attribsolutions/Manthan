@@ -839,6 +839,7 @@ const InvoiceExcelUpload = (props) => {
                                             <div className="form-check form-switch form-switch-md " style={{ marginTop: "-3px" }}>
                                                 <Input type="checkbox" className="form-check-input"
                                                     name="itemVerify"
+                                                    disabled={!((itemVerify.Not_Verify_Item === true) && (!isIgnoreItem))}
                                                     onChange={(e) => { setisIgnoreParty(e.target.checked) }}
 
                                                 />
