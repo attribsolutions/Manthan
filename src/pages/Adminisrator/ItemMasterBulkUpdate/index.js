@@ -456,7 +456,7 @@ const ItemMasterBulkUpdate = (props) => {
                             <Col sm={3} className="">
                                 <FormGroup className="mb- row mt-3 mb-1 " >
                                     <Label className="col-sm-5 p-2"
-                                        style={{ width: "83px" }}>FromDate</Label>
+                                        style={{ width: "83px" }}>Select Field</Label>
                                     <Col sm="7">
                                         <C_Select
                                             name="SelectField"
@@ -478,7 +478,7 @@ const ItemMasterBulkUpdate = (props) => {
                             {SelectFieldName.label === "Group" && <Col sm={3} className="">
                                 <FormGroup className="mb- row mt-3 mb-1  " >
                                     <Label className="col-sm-7 p-2"
-                                        style={{ width: "65px" }}>ToDate</Label>
+                                        style={{ width: "65px" }}>Group Type</Label>
                                     <Col sm="7" >
                                         <C_Select
                                             name="groupType"

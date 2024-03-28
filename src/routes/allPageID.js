@@ -121,6 +121,8 @@ export const IMPORT_FIELD_ADD_LIST = 189
 export const TARGET_UPLOAD = 270
 export const TARGET_UPLOAD_LIST = 271
 
+export const CREDIT_NOTE_UPLOAD = 272
+
 export const IMPORT_EXCEL_PARTY_MAP = 194
 
 export const ROUTE_UPDATE = 159
@@ -297,8 +299,7 @@ export const RETURN_REPORT = 223
 
 export const PURCHASE_GST_REPORT = 219
 
-export const
-    INVOICE_DATA_EXPORT = 218
+export const INVOICE_DATA_EXPORT = 218
 
 export const PURCHASE_DATA_EXPORT = 234
 
@@ -338,6 +339,6 @@ export const SYSTEM_SETTING = 268
 
 export const SYSTEM_SETTING_LIST = 269
 
-
+export const TARGET_VS_ACHIEVEMENT = 273
 
 
