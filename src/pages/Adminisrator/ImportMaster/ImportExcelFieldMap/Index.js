@@ -243,7 +243,7 @@ const ImportExcelFieldMap = (props) => {
         const invalid = []
         goButtonItem.forEach(i => {
             if ((((i.Value === '') || (i.Value === null)) && (i.IsCompulsory === true))) {
-                invalid.push({ [i.FieldName]: "this filed Requird." })
+                invalid.push({ [i.FieldName]: "this field Requird." })
             }
             if ((!(i.Value === '') && !(i.Value === null))) {
                 const obj = {

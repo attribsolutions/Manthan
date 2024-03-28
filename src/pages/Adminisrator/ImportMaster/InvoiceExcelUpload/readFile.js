@@ -40,7 +40,7 @@ export const readExcelFile = async ({ file, compareParameter, ItemList = [] }) =
 
     const comparefilter = compareParameter.filter(f => (f.Value !== null))
     if (comparefilter.length === 0) {
-      invalidMsg.push(`Import filed Not Map`)
+      invalidMsg.push(`Import field Not Map`)
     }
 
 
