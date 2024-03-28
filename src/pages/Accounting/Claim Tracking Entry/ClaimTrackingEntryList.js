@@ -77,8 +77,8 @@ const ClaimTrackingEntryList = () => {
     useEffect(() => {
 
         dispatch(sideBarPageFiltersInfoAction([
-            { label: "From Date", content: _cfunc.date_dmy_func(fromDate), },
-            { label: "To Date", content: _cfunc.date_dmy_func(toDate), },
+            { label: "FromDate", content: _cfunc.date_dmy_func(fromDate), },
+            { label: "ToDate", content: _cfunc.date_dmy_func(toDate), },
             { label: "Party", content: partySelect.label, }
         ]));
 

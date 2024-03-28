@@ -146,7 +146,7 @@ const ChallanList = () => {
                             <Col sm="3" className="">
                                 <FormGroup className="mb- row mt-3 " >
                                     <Label className="col-sm-5 p-2"
-                                        style={{ width: "83px" }}>From Date</Label>
+                                        style={{ width: "83px" }}>FromDate</Label>
                                     <Col sm="7">
                                         <C_DatePicker
                                             name='fromdate'
@@ -159,7 +159,7 @@ const ChallanList = () => {
                             <Col sm="3" className="">
                                 <FormGroup className="mb- row mt-3 " >
                                     <Label className="col-sm-5 p-2"
-                                        style={{ width: "65px" }}>To Date</Label>
+                                        style={{ width: "65px" }}>ToDate</Label>
                                     <Col sm="7">
                                         <C_DatePicker
                                             nane='todate'

@@ -59,9 +59,6 @@ const ClaimTrackingEntry = (props) => {
 
   const [CreditNoteUpload, setCreditNoteUpload] = useState({});
 
-
-
-
   const [yearAndMonth, setYearAndMonth] = useState(getCurrent_Month_And_Year);
 
   const fileds = {
@@ -69,10 +66,10 @@ const ClaimTrackingEntry = (props) => {
     ClaimId: "",
     ClaimText: "",
     PartyName: "",
-    Type: "",
+    TypeName: "",
     ClaimReceivedSource: "",
     ClaimTrade: "",
-    TypeOfClaim: "",
+    TypeOfClaimName: "",
     ClaimForTheMonth: "",
     ClaimAmount: "",
     Remark: "",
@@ -251,9 +248,9 @@ const ClaimTrackingEntry = (props) => {
           label: `${id} ${PartyName} /${PartyTypeName} (${ClaimAmount})`,
           value: Claim,
         };
-        values.Type = { label: TypeName, value: Type };
+        values.TypeName = { label: TypeName, value: Type };
         values.ClaimTrade = { label: ClaimTradeName, value: ClaimTrade };
-        values.TypeOfClaim =
+        values.TypeOfClaimName =
           TypeOfClaimName === null
             ? { label: "Select...", value: 0 }
             : { label: TypeOfClaimName, value: TypeOfClaim };
@@ -337,7 +334,7 @@ const ClaimTrackingEntry = (props) => {
 
   useEffect(async () => {
     fetchDataAndSetDropdown(76, setTypeOption); // set Type dropdown
-    fetchDataAndSetDropdown(78, setTypeOfClaimOption); // set TypeOfClaim dropdown
+    fetchDataAndSetDropdown(78, setTypeOfClaimOption); // set TypeOfClaimName dropdown
     fetchDataAndSetDropdown(79, setClaimCheckByOption); // set ClaimCheckBy dropdown
     fetchDataAndSetDropdown(82, setCreditNoteStatusOption); // set CreditNoteStatus dropdown
     dispatch(getcompanyList());
@@ -420,13 +417,13 @@ const ClaimTrackingEntry = (props) => {
       const a = { ...i };
       a.values.ClaimAmount = hasSelect.ClaimAmount;
       a.values.PartyName = hasSelect.Party;
-      a.values.Type = { value: 77, label: 'Return Claim' };
+      a.values.TypeName = { value: 77, label: 'Return Claim' };
 
-      a.isError.Type = "";
+      a.isError.TypeName = "";
       a.isError.PartyName = "";
       a.isError.ClaimAmount = "";
 
-      a.hasValid.Type.valid = true;
+      a.hasValid.TypeName.valid = true;
       a.hasValid.PartyName.valid = true;
       a.hasValid.ClaimAmount.valid = true;
 
@@ -467,9 +464,9 @@ const ClaimTrackingEntry = (props) => {
         formData.append('Month', yearAndMonth.Month);
         formData.append('Year', yearAndMonth.Year);
         formData.append('ClaimReceivedSource', values.ClaimReceivedSource);
-        formData.append('Type', values.Type.value);
+        formData.append('Type', values.TypeName.value);
         formData.append('ClaimTrade', values.ClaimTrade.value);
-        formData.append('TypeOfClaim', (values.TypeOfClaim === "" || values.TypeOfClaim === 0) ? 0 : values.TypeOfClaim.value);
+        formData.append('TypeOfClaim', (values.TypeOfClaimName === "" || values.TypeOfClaimName === 0) ? 0 : values.TypeOfClaimName.value);
         formData.append('ClaimAmount', values.ClaimAmount);
         formData.append('Remark', values.Remark);
         formData.append('ClaimCheckBy', values.ClaimCheckBy.value);
@@ -712,12 +709,12 @@ const ClaimTrackingEntry = (props) => {
                       className="col-sm-1 p-2"
                       style={{ width: "115px", marginRight: "0.4cm" }}
                     >
-                      {fieldLabel.Type}{" "}
+                      {fieldLabel.TypeName}{" "}
                     </Label>
                     <Col sm="7">
                       <Select
-                        name="Type"
-                        value={values.Type}
+                        name="TypeName"
+                        value={values.TypeName}
                         isSearchable={true}
                         className="react-dropdown"
                         classNamePrefix="dropdown"
@@ -729,9 +726,9 @@ const ClaimTrackingEntry = (props) => {
                           onChangeSelect({ hasSelect, evn, state, setState });
                         }}
                       />
-                      {isError.Type.length > 0 && (
+                      {isError.TypeName.length > 0 && (
                         <span className="text-danger f-8">
-                          <small>{isError.Type}</small>
+                          <small>{isError.TypeName}</small>
                         </span>
                       )}
                     </Col>
@@ -776,12 +773,12 @@ const ClaimTrackingEntry = (props) => {
                       className="col-sm-1 p-2"
                       style={{ width: "115px", marginRight: "0.4cm" }}
                     >
-                      {fieldLabel.TypeOfClaim}{" "}
+                      {fieldLabel.TypeOfClaimName}{" "}
                     </Label>
                     <Col sm="7">
                       <Select
-                        name="TypeOfClaim"
-                        value={values.TypeOfClaim}
+                        name="TypeOfClaimName"
+                        value={values.TypeOfClaimName}
                         isSearchable={true}
                         className="react-dropdown"
                         classNamePrefix="dropdown"
@@ -793,9 +790,9 @@ const ClaimTrackingEntry = (props) => {
                           onChangeSelect({ hasSelect, evn, state, setState });
                         }}
                       />
-                      {isError.TypeOfClaim.length > 0 && (
+                      {isError.TypeOfClaimName.length > 0 && (
                         <span className="text-danger f-8">
-                          <small>{isError.TypeOfClaim}</small>
+                          <small>{isError.TypeOfClaimName}</small>
                         </span>
                       )}
                     </Col>

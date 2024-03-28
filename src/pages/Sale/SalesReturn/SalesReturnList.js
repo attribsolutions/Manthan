@@ -101,8 +101,8 @@ const SalesReturnList = () => {
     useEffect(() => {
 
         dispatch(sideBarPageFiltersInfoAction([
-            { label: "From Date", content: _cfunc.date_dmy_func(values.FromDate), },
-            { label: "To Date", content: _cfunc.date_dmy_func(values.ToDate), },
+            { label: "FromDate", content: _cfunc.date_dmy_func(values.FromDate), },
+            { label: "ToDate", content: _cfunc.date_dmy_func(values.ToDate), },
             { label: customerdropdownLabel, content: values.Customer.label, }
         ]));
 
