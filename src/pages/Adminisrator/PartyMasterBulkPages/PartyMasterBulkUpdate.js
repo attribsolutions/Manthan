@@ -1,15 +1,12 @@
 import {
-    Card,
-    CardBody,
     Col,
-    Container,
     FormGroup,
     Input,
     Label,
     Row
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
-import { BreadcrumbShowCountlabel, Breadcrumb_inputName, commonPageFieldSuccess } from "../../../store/actions";
+import { BreadcrumbShowCountlabel, commonPageFieldSuccess } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { commonPageField } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
@@ -62,7 +59,6 @@ const PartyMasterBulkUpdate = (props) => {
     const dispatch = useDispatch();
     const history = useHistory();
 
-    const [modalCss] = useState(false);
     const [pageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserPageAccessState] = useState('');
 
@@ -77,6 +73,7 @@ const PartyMasterBulkUpdate = (props) => {
     const [forceRefresh, setForceRefresh] = useState(false);
     const [SelectedParty, SetSelectedParty] = useState([])
     const [SelectFieldName, setSelectFieldName] = useState('');
+    const [mobileApiLoading, setMobileApiLoading] = useState(false);
 
     const location = { ...history.location }
     const hasShowModal = props.hasOwnProperty(mode.editValue)
@@ -110,7 +107,6 @@ const PartyMasterBulkUpdate = (props) => {
         SelectField: state.PartyMasterBulkUpdateReducer.SelectField,
         PartyName: state.PartyMasterBulkUpdateReducer.PartyName,
     }));
-
 
     const { commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
 
@@ -187,18 +183,33 @@ const PartyMasterBulkUpdate = (props) => {
             dispatch(GoButton_For_Party_Master_Bulk_Update_AddSuccess([]));
             setState(() => resetFunction(fileds, state))// Clear form values 
             setSelectFieldName([]);
-            //***************mobail app api*********************** */
 
-            let arrayOfRetailerID = SelectedParty.map(function (i) {
-                return i.SubPartyID;
-            });
-            const jsonBody = JSON.stringify({
-                RetailerID: arrayOfRetailerID.join(', '),
-                DistributorID: commonPartyDropSelect.value
-            })
-            const mobilApiResp = await mobileApp_RetailerUpdate_Api({ jsonBody })
-            if (mobilApiResp.StatusCode === 200) { showToastAlert(mobilApiResp.Message) }
-            //************************************** */
+            //***************mobail app api*********************** */
+            try {
+                setMobileApiLoading(true);
+                let arrayOfRetailerID = SelectedParty.map(function (i) {
+                    return i.SubPartyID;
+                });
+                const jsonBody = JSON.stringify({
+                    RetailerID: arrayOfRetailerID.join(', '),
+                    DistributorID: commonPartyDropSelect.value
+                })
+                const mobilApiResp = await mobileApp_RetailerUpdate_Api({ jsonBody })
+
+                if (mobilApiResp.StatusCode === 200) {
+                    showToastAlert(mobilApiResp.Message);
+                    setMobileApiLoading(false);
+                } else {
+                    setMobileApiLoading(false);
+                }
+
+            } catch (error) {
+                console.log("An error occurred while fetching mobileApiResp:", error);
+            }
+
+            finally {
+                setMobileApiLoading(false);
+            }
 
             if (pageMode === mode.dropdownAdd) {
                 customAlert({
@@ -357,6 +368,11 @@ const PartyMasterBulkUpdate = (props) => {
         row.NewFSSAIExipry = Date
     }
 
+    function OpeningBalanceDateOnchange(event, row) {
+        const Date = date_ymd_func(event[0])
+        row.Date = Date
+    }
+
     const pagesListColumns = [
         {
             text: "Party Name",
@@ -366,7 +382,6 @@ const PartyMasterBulkUpdate = (props) => {
             text: SelectFieldName.label,
             dataField: SelectFieldName.label,
         },
-
     ];
 
     PartyDropdown_Options.unshift({
@@ -512,11 +527,45 @@ const PartyMasterBulkUpdate = (props) => {
             </>
         ),
     }
+
+    const OpeningBalanceDatePicker = {
+        text: "Opening Balance Date",
+        dataField: "",
+        formatter: (cellContent, row,) => {
+
+            return (
+                <>
+                    <div style={{ width: "180px" }} >
+                        <Col sm={12}>
+                            <FormGroup sm={6}>
+                                <C_DatePicker
+                                    options={{
+                                        altInput: true,
+                                        altFormat: "d-m-Y",
+                                        dateFormat: "Y-m-d",
+                                    }}
+                                    key={row.id}
+                                    value={row.Date}
+                                    onChange={(event) => OpeningBalanceDateOnchange(event, row)}
+                                />
+                            </FormGroup>
+                        </Col>
+                    </div>
+
+                </>
+            )
+        }
+    }
+
     if (SelectFieldName.label === "FSSAINo") {
         pagesListColumns.push(dateColumn)
     }
     if (SelectFieldName.label === "State") {
         pagesListColumns.push(DistrictColumn)
+    }
+
+    if (SelectFieldName.label === "OpeningBalance") {
+        pagesListColumns.push(OpeningBalanceDatePicker)
     }
 
     const pageOptions = {
@@ -564,9 +613,9 @@ const PartyMasterBulkUpdate = (props) => {
                         SubPartyID: i.SubPartyID,
                         Value1: i.Newvalue,
                         Value2: i.NewFSSAIExipry || i.NewDistrict,
+                        Date: i.Date,
                         party: i.PartyName
                     }
-
                     arr1.push(arr)
                 }
             })
@@ -578,7 +627,6 @@ const PartyMasterBulkUpdate = (props) => {
                 CreatedBy: _cfunc.loginUserID(),
                 UpdatedBy: _cfunc.loginUserID(),
                 UpdateData: arr1
-
             });
 
             if (pageMode === mode.edit) {
@@ -636,14 +684,12 @@ const PartyMasterBulkUpdate = (props) => {
                             }
                         };
 
-                        if ((SelectFieldName.label === "Name")) {
-                            const regexExp5 = /^[A-Za-z]+$/
-                            const IsName = regexExp5.test(i.Value1)
-                            if (!IsName) {
-                                invalidMsg1.push({ [i.party]: alertMessages.invalid_Name })
+                        if ((SelectFieldName.label === "OpeningBalance")) {
+
+                            if ((i.Date === undefined || i.Date === "") && !(i.Value1 === "")) {
+                                invalidMsg1.push({ [i.party]: alertMessages.OpeningBalanceDateRequired })
                             }
                         };
-
                     })
 
                     if (invalidMsg1.length > 0) {
@@ -653,7 +699,6 @@ const PartyMasterBulkUpdate = (props) => {
                         })
                         return;
                     }
-
                     dispatch(postParty_Master_Bulk_Update({ jsonBody, btnId }));
                 }
 
@@ -793,7 +838,7 @@ const PartyMasterBulkUpdate = (props) => {
                         {Data.length > 0 &&
                             <SaveButtonDraggable>
                                 <SaveButton pageMode={pageMode}
-                                    loading={saveBtnloading}
+                                    loading={saveBtnloading || mobileApiLoading}
                                     onClick={SaveHandler}
                                     userAcc={userPageAccessState}
                                     module={"PartyMasterBulkUpdate"}
@@ -812,7 +857,6 @@ const PartyMasterBulkUpdate = (props) => {
         )
     }
 };
-
 
 export default PartyMasterBulkUpdate
 
