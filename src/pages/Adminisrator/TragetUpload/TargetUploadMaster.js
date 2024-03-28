@@ -264,7 +264,7 @@ const TargetUpload = (props) => {
                 const Data = updatereadJsonDetail.map(i => {
                     const { Month, Year, Party, Item, TargetQuantity } = i;
                     return {
-                        UnitId: Unit.value,
+                        Unit: Unit.value,
                         Month: Month,
                         Year: Year,
                         Party: Party,
