@@ -118,6 +118,7 @@ const invalidEmail = 'InValid Email'
 const invalidPAN = 'InValid Pan No '
 const invalid_GSTIN_no = 'InValid GSTIN No'
 const invalid_Name = 'InValid Name'
+const OpeningBalanceDateRequired = 'OpeningBalance Date is Required'
 const fillAddressDetailsInTable = "Don't forget to fill in the address details in the table."
 const defaultAddressIsSelected = "Atleast One Default Address is Select "
 
@@ -195,6 +196,7 @@ export const alertMessages = {
     partyAlreadyExist,
     selectParty,
     invalid_Name,
+    OpeningBalanceDateRequired,
     invalid_GSTIN_no,
     invalidPAN,
     invalidEmail,
