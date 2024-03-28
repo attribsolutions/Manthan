@@ -311,7 +311,7 @@ const InvoiceExcelUpload = (props) => {
 
         if (extension === ".xlsx") {
             const readjson = await readExcelFile({ file: files[0], compareParameter, ItemList })
-            
+
             if (readjson?.length <= 0 || readjson === undefined) {
                 setInvalidFormat({ Invalid_Format_Array: ["The Excel content should not be blank"], Not_Verify_Invalid_Format: true })
                 setverifyLoading(false)
@@ -657,7 +657,7 @@ const InvoiceExcelUpload = (props) => {
                         {(compareParamLoading) ?
                             <div className="row ">
                                 <div className="d-flex justify-content-start p-2 ">
-                                    <div>Please wait Downloading field Details. other wise check filed mapping </div>
+                                    <div>Please wait Downloading field Details. other wise check field mapping </div>
                                     <div >
                                         <div className="dot-pulse">
                                             <div className="bounce1"></div>
@@ -836,7 +836,6 @@ const InvoiceExcelUpload = (props) => {
                                             <div className="form-check form-switch form-switch-md " style={{ marginTop: "-3px" }}>
                                                 <Input type="checkbox" className="form-check-input"
                                                     name="itemVerify"
-                                                    disabled={!((itemVerify.Not_Verify_Item === true) && (!isIgnoreItem))}
                                                     onChange={(e) => { setisIgnoreParty(e.target.checked) }}
 
                                                 />

@@ -270,7 +270,6 @@ const TargetUpload = (props) => {
                         Party: Party,
                         Item: Item,
                         TargetQuantity: (Number(TargetQuantity)).toFixed(2),
-                        CreatedOn: _cfunc.loginUserID(),
                         CreatedBy: _cfunc.loginUserID(),
                     };
                 });
