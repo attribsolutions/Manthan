@@ -112,7 +112,6 @@ const InvoiceExcelUpload = (props) => {
             }
         }
 
-
         return () => {
             dispatch(GoButton_ImportFiledMap_AddSuccess([]));
             dispatch(getPartyListAPISuccess([]));
@@ -312,7 +311,8 @@ const InvoiceExcelUpload = (props) => {
 
         if (extension === ".xlsx") {
             const readjson = await readExcelFile({ file: files[0], compareParameter, ItemList })
-            if (readjson.length <= 0) {
+            
+            if (readjson?.length <= 0 || readjson === undefined) {
                 setInvalidFormat({ Invalid_Format_Array: ["The Excel content should not be blank"], Not_Verify_Invalid_Format: true })
                 setverifyLoading(false)
                 return
@@ -443,14 +443,12 @@ const InvoiceExcelUpload = (props) => {
                 }
 
                 ///////////////////////////////////////////////// Verifiy All Party Mapping  Done or Not ///////////////////////////////////////////////////////////////////////
-
                 const PartyMap = isdetails.partyNO;
 
                 ///////////////////////////////////////////////// Verifiy  Party Mapping code ///////////////////////////////////////////////////////////////////////
 
                 const arrayOfPartyMapStrings = PartyMap.map(String);
                 const mapCustomerValues = PartyMapData.map(obj => obj.MapCustomer);
-
 
                 const Wrong_Party_Code_Array = arrayOfPartyMapStrings.filter(value => {
                     const partyCodeAsString = value.toString().trim();
@@ -587,7 +585,6 @@ const InvoiceExcelUpload = (props) => {
                         UpdatedBy: _cfunc.loginUserID(),
                         "InvoiceDate": ele[parArr.InvoiceDate] ? ele[parArr.InvoiceDate] : '',
                     }
-
 
                     invoiceItems.push({
                         "Item": ele[parArr.Item] ? ele[parArr.Item].toString().trim() : '',
