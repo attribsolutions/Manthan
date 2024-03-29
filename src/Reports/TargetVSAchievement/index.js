@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Col, FormGroup, Input, Label, Row } from "reactstrap";
 import { useHistory } from "react-router-dom";
-import { Change_Button, Go_Button } from "../../components/Common/CommonButton";
+import { C_Button } from "../../components/Common/CommonButton";
 import * as _cfunc from "../../components/Common/CommonFunction";
 import { mode, pageId } from "../../routes/index";
 import { MetaTags } from "react-meta-tags";
@@ -23,9 +23,8 @@ import {
     Target_VS_Achievement_Go_Button_API,
     Target_VS_Achievement_Go_Button_API_Success
 } from "../../store/Report/TargetVSAchievementRedux/action";
-import { alertMessages } from "../../components/Common/CommonErrorMsg/alertMsg";
-import { customAlert } from "../../CustomAlert/ConfirmDialog";
-import ReportTableFunc from "../TCSAmountReport/tableShowCommonFunc";
+import { ExcelReportComponent } from "../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS";
+import GlobalCustomTable from "../../GlobalCustomTable";
 
 const TargetVSAchievement = (props) => {
 
@@ -35,6 +34,7 @@ const TargetVSAchievement = (props) => {
     const [userPageAccessState, setUserAccState] = useState("");
 
     const [yearAndMonth, setYearAndMonth] = useState(getCurrent_Month_And_Year);
+    const [btnMode, setBtnMode] = useState("");
 
     const {
         userAccess,
@@ -103,8 +103,22 @@ const TargetVSAchievement = (props) => {
         setYearAndMonth(selectdMonth);
     }
 
-    function goButtonHandler(e) {
+    useEffect(() => {
 
+        if (btnMode === "excel") {
+            if (tableData.length > 0) {
+                ExcelReportComponent({   // Download CSV
+                    pageField,
+                    excelTableData: tableData,
+                    excelFileName: "Target Vs Achievement Report",
+                })
+                dispatch(Target_VS_Achievement_Go_Button_API_Success([]));
+            }
+        }
+    }, [tableData]);
+
+    function goButtonHandler(btnMode) {
+        setBtnMode(btnMode)
         const jsonBody = JSON.stringify({
             "Month": yearAndMonth.Month,
             "Year": yearAndMonth.Year,
@@ -115,9 +129,13 @@ const TargetVSAchievement = (props) => {
     };
 
     const pageOptions = {
+        page: 1,
+        paginationSize: 5,
+        pageStartIndex: 1,
         sizePerPage: 10,
-        totalSize: tableData.length,
         custom: true,
+        totalSize: tableData.length,
+        hidePageListOnlyOnePage: true,
     };
 
     return (
@@ -144,73 +162,96 @@ const TargetVSAchievement = (props) => {
                             </FormGroup>
                         </Col>
 
-                        <Col sm={8} className="">
+                        <Col sm={9} className=" d-flex justify-content-end" >
+                            <C_Button
+                                type="button"
+                                spinnerColor="white"
+                                loading={(goBtnLoading && btnMode === "show") && true}
+                                className="btn btn-success m-3 mr"
+                                onClick={() => goButtonHandler("show")}
+                            >
+                                Show
+                            </C_Button>
+                            <C_Button
+                                type="button"
+                                spinnerColor="white"
+                                loading={(goBtnLoading && btnMode === "excel") && true}
+                                className="btn btn-primary m-3 mr "
+                                onClick={() => goButtonHandler("excel")}
+                            >
+                                Excel
+                            </C_Button>
+                        </Col>
 
-                        </Col>
-                        <Col sm={1} className="mt-3 mb-1  ">
-                            {tableData.length === 0 ?
-                                <Go_Button
-                                    onClick={goButtonHandler}
-                                    loading={goBtnLoading}
-                                />
-                                :
-                                <Change_Button onClick={(e) => {
-                                    dispatch(Target_VS_Achievement_Go_Button_API_Success([]));
-                                }} />
-                            }
-                        </Col>
                     </div>
                 </div>
 
                 <div className="mt-1">
-                    <PaginationProvider
+
+                    {/* <PaginationProvider
                         pagination={paginationFactory(pageOptions)}
                     >
-                        {({ paginationProps, paginationTableProps }) => (
-                            <ToolkitProvider
-                                keyField="id"
-                                data={tableData}
-                                columns={tableColumns}
-                                search
-                            >
-                                {(toolkitProps) => (
-                                    <React.Fragment>
-                                        <Row>
-                                            <Col xl="12">
-                                                <div className="table-responsive table" style={{ minHeight: "75vh" }}>
-                                                    <BootstrapTable
-                                                        keyField="PartyID"
-                                                        classes={"table  table-bordered table-hover"}
-                                                        noDataIndication={
-                                                            <div className="text-danger text-center ">
-                                                                Record Not available
-                                                            </div>
-                                                        }
-                                                        onDataSizeChange={({ dataSize }) => {
-                                                            dispatch(
-                                                                BreadcrumbShowCountlabel(`Count:${dataSize}`)
-                                                            );
-                                                        }}
-                                                        {...toolkitProps.baseProps}
-                                                        {...paginationTableProps}
-                                                    />
-                                                    {globalTableSearchProps(toolkitProps.searchProps)}
-                                                </div>
-                                                <Row className="align-items-md-center mt-30">
+                        {({ paginationProps, paginationTableProps }) => ( */}
+                    <ToolkitProvider
+                        keyField="id"
+                        data={tableData}
+                        columns={tableColumns}
+                        search
+                    >
+                        {(toolkitProps) => (
+                            <React.Fragment>
+                                <Row>
+                                    <Col xl="12">
+                                        <div className="table-responsive table" style={{ minHeight: "75vh" }}>
+                                            <BootstrapTable
+                                                keyField="id"
+                                                classes={"table  table-bordered table-hover"}
+                                                noDataIndication={
+                                                    <div className="text-danger text-center ">
+                                                        Record Not available
+                                                    </div>
+                                                }
+                                                onDataSizeChange={({ dataSize }) => {
+                                                    dispatch(BreadcrumbShowCountlabel(`Count:${dataSize}`));
+                                                }}
+                                                {...toolkitProps.baseProps}
+                                            // {...paginationTableProps}
+                                            />
+                                            {globalTableSearchProps(toolkitProps.searchProps)}
+                                        </div>
+                                        {/* <Row className="align-items-md-center mt-30">
                                                     <Col className="pagination pagination-rounded justify-content-end mb-2">
                                                         <PaginationListStandalone
                                                             {...paginationProps}
                                                         />
                                                     </Col>
-                                                </Row>
-                                            </Col>
-                                        </Row>
-                                    </React.Fragment>
-                                )}
-                            </ToolkitProvider>
-                        )
+                                                </Row> */}
+                                    </Col>
+                                </Row>
+                            </React.Fragment>
+                        )}
+                    </ToolkitProvider>
+                    {/* )
                         }
-                    </PaginationProvider>
+                    </PaginationProvider> */}
+
+                    {/* <GlobalCustomTable
+                        keyField="id"
+                        data={tableData}
+                        columns={tableColumns}
+                        // paginationEnabled={10}//show pagination 200 per page
+                        classes={"custom-table"}
+                        noDataIndication={
+                            <div className="text-danger text-center ">
+                                Record Not available
+                            </div>
+                        }
+                        onDataSizeChange={({ dataCount }) => {
+
+                            dispatch(BreadcrumbShowCountlabel(`Count:${dataCount}`));
+                        }}
+                    /> */}
+
 
                 </div>
             </div>
