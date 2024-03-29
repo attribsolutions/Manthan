@@ -46,7 +46,7 @@ const Header = props => {
     setOpen(false);
   }
   const IsNotificationShow = loginSystemSetting().IsNotificationShow
-  debugger
+
 
   function tog_backdrop() {
     setmodal_backdrop(!modal_backdrop)
@@ -104,7 +104,7 @@ const Header = props => {
                 <h5>All FoodERP users,</h5>
                 Following are the changes in FoodERP in view of commencement of new financial year (2024-25) on 1st April 2024.<br /><br />
                 1 - On 31st March 2024 after completion of all work or if updating stock on 1st April 2024 select date 31st March 2024 to update closing stock. (Billing will not be possible on 1st April 2024 without stock update)<br /><br />
-                2 - After the stock update dated 31st March 2024 no old transactions can be changed.<br /><br />
+                2 - After the stock update dated 31st March 2024  old transactions cannot be changed.<br /><br />
                 3 - All transaction document numbers will start from 001. (Eg Bill Number, Credit Note Number…. )<br /><br />
               </p>
             </div>
@@ -150,11 +150,9 @@ const Header = props => {
 
           </div>
 
-          <div style={{ color: "red", fontWeight: "bold", cursor: "pointer" }} >
-
-            <h3 onClick={() => { setmodal_backdrop(true) }} class="text-red blink-soft">Important Notice! Click here</h3>
-
-          </div>
+          {IsNotificationShow !== "null" ? <div style={{ fontWeight: "bold", cursor: "pointer" }} >
+            <h3 style={{ color: "red" }} onClick={() => { setmodal_backdrop(true) }} class="text-red blink-soft">Important Notification! Click here</h3>
+          </div> : null}
 
 
           <div className="d-flex">
