@@ -104,14 +104,11 @@ const TargetVSAchievement = (props) => {
     }
 
     function goButtonHandler(e) {
-        if (commonPartyDropSelect.value === 0) {
-            customAlert({ Type: 3, Message: alertMessages.commonPartySelectionIsRequired });
-            return;
-        };
+
         const jsonBody = JSON.stringify({
             "Month": yearAndMonth.Month,
             "Year": yearAndMonth.Year,
-            "Party": commonPartyDropSelect.value,
+            "Party": (commonPartyDropSelect.value === 0) ? 0 : commonPartyDropSelect.value,
             "Employee": !(isSCMParty) ? 0 : _cfunc.loginEmployeeID(),
         })
         dispatch(Target_VS_Achievement_Go_Button_API(jsonBody));
