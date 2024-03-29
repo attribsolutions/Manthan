@@ -347,16 +347,31 @@
 
 
 
-.slide-message {
-  white-space: nowrap; /* Ensures the message doesn't break to a new line */
-  animation: slideAnimation 22s linear infinite;
+
+
+
+
+.container {
+  width: 75%;
+  margin: 0 auto;
+  font-family: sans-serif;
 }
 
-@keyframes slideAnimation {
-  0%, 50% {
-    transform: translateX(-40%); /* Start from fully off-screen left */
-  }
-  50% {
-    transform: translateX(40%); /* Slide off-screen right */
+
+.text-red {
+  color: red;
+}
+
+.blink-hard {
+  animation: blinker 1.5s step-end infinite;
+}
+
+.blink-soft {
+  animation: blinker 1.0s linear infinite;
+}
+
+@keyframes blinker {
+  60% {
+    opacity: 0;
   }
 }
