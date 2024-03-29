@@ -30,6 +30,7 @@ import {
 } from "../../store/actions"
 import { MainSearchBox, } from '../Common/SearchBox/index';
 import { MySearch } from '../Common/SearchBox/MySearch';
+import { loginSystemSetting } from '../Common/CommonFunction';
 
 const Header = props => {
   const { onChangeLayoutMode } = props;
@@ -41,7 +42,8 @@ const Header = props => {
   const onDrawerClose = () => {
     setOpen(false);
   }
-
+  const IsNotificationShow = loginSystemSetting().IsNotificationShow
+  debugger
   /*** Sidebar menu icon and default menu set */
   function tToggle() {
 
@@ -70,6 +72,7 @@ const Header = props => {
     <React.Fragment>
       <header id="page-topbar">
         <div className="navbar-header">
+
           <div className="d-flex">
             <div className="navbar-brand-box" >
               <div style={{ cursor: "context-menu" }} className="logo logo-dark">
@@ -102,35 +105,14 @@ const Header = props => {
             </div>
             <MainSearchBox />
 
-
           </div>
-
-
-          <div className="d-flex">
-            <div className="dropdown d-inline-block d-lg-none ms-2">
-              {/* <button type="button" className="btn header-item" id="page-header-search-dropdown"
-                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <FeatherIcon
-                  icon="search"
-                  className="icon-lg"
-                />
-              </button> */}
-              <div className="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0"
-                aria-labelledby="page-header-search-dropdown">
-
-                <form className="p-3">
-                  <div className="form-group m-0">
-                    <div className="input-group">
-                      <input type="text" className="form-control" placeholder="Search ..." aria-label="Search Result" />
-
-                      <button className="btn btn-primary" type="submit"><i className="mdi mdi-magnify"></i></button>
-                    </div>
-                  </div>
-                </form>
-              </div>
+          {IsNotificationShow !== "null" ? <div className="d-flex">
+            <div className="slide-message" style={{ color: "red", fontSize: "20px", fontWeight: "bold" }}>
+              {IsNotificationShow}
             </div>
+          </div> : null}
 
-          </div>
+
           <div className="d-flex">
             <div className="dropdown d-inline-block d-lg-none ms-2">
               <button

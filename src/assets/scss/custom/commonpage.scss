@@ -343,3 +343,20 @@
   color: $primary;
   text-decoration: underline;
 }
+
+
+
+
+.slide-message {
+  white-space: nowrap; /* Ensures the message doesn't break to a new line */
+  animation: slideAnimation 22s linear infinite;
+}
+
+@keyframes slideAnimation {
+  0%, 50% {
+    transform: translateX(-40%); /* Start from fully off-screen left */
+  }
+  50% {
+    transform: translateX(40%); /* Slide off-screen right */
+  }
+}

@@ -13,6 +13,7 @@ import {
 } from "../../store/actions";
 import BootstrapTable from "react-bootstrap-table-next";
 import { globalTableSearchProps } from "../../components/Common/SearchBox/MySearch";
+import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import DynamicColumnHook from "../../components/Common/TableCommonFunc";
 import {
@@ -24,11 +25,13 @@ import {
 } from "../../store/Report/TargetVSAchievementRedux/action";
 import { alertMessages } from "../../components/Common/CommonErrorMsg/alertMsg";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
+import ReportTableFunc from "../TCSAmountReport/tableShowCommonFunc";
 
 const TargetVSAchievement = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory();
+    const isSCMParty = _cfunc.loginIsSCMParty();
     const [userPageAccessState, setUserAccState] = useState("");
 
     const [yearAndMonth, setYearAndMonth] = useState(getCurrent_Month_And_Year);
@@ -101,16 +104,20 @@ const TargetVSAchievement = (props) => {
     }
 
     function goButtonHandler(e) {
-        if (commonPartyDropSelect.value === 0) {
-            customAlert({ Type: 3, Message: alertMessages.commonPartySelectionIsRequired });
-            return;
-        };
+
         const jsonBody = JSON.stringify({
             "Month": yearAndMonth.Month,
             "Year": yearAndMonth.Year,
-            "Party": commonPartyDropSelect.value
+            "Party": (commonPartyDropSelect.value === 0) ? 0 : commonPartyDropSelect.value,
+            "Employee": !(isSCMParty) ? 0 : _cfunc.loginEmployeeID(),
         })
         dispatch(Target_VS_Achievement_Go_Button_API(jsonBody));
+    };
+
+    const pageOptions = {
+        sizePerPage: 10,
+        totalSize: tableData.length,
+        custom: true,
     };
 
     return (
@@ -156,39 +163,55 @@ const TargetVSAchievement = (props) => {
                 </div>
 
                 <div className="mt-1">
-                    <ToolkitProvider
-                        keyField="id"
-                        data={tableData}
-                        columns={tableColumns}
-                        search
+                    <PaginationProvider
+                        pagination={paginationFactory(pageOptions)}
                     >
-                        {(toolkitProps) => (
-                            <React.Fragment>
-                                <Row>
-                                    <Col xl="12">
-                                        <div className="table-responsive table" style={{ minHeight: "75vh" }}>
-                                            <BootstrapTable
-                                                keyField="PartyID"
-                                                classes={"table  table-bordered table-hover"}
-                                                noDataIndication={
-                                                    <div className="text-danger text-center ">
-                                                        Record Not available
-                                                    </div>
-                                                }
-                                                onDataSizeChange={({ dataSize }) => {
-                                                    dispatch(
-                                                        BreadcrumbShowCountlabel(`Count:${dataSize}`)
-                                                    );
-                                                }}
-                                                {...toolkitProps.baseProps}
-                                            />
-                                            {globalTableSearchProps(toolkitProps.searchProps)}
-                                        </div>
-                                    </Col>
-                                </Row>
-                            </React.Fragment>
-                        )}
-                    </ToolkitProvider>
+                        {({ paginationProps, paginationTableProps }) => (
+                            <ToolkitProvider
+                                keyField="id"
+                                data={tableData}
+                                columns={tableColumns}
+                                search
+                            >
+                                {(toolkitProps) => (
+                                    <React.Fragment>
+                                        <Row>
+                                            <Col xl="12">
+                                                <div className="table-responsive table" style={{ minHeight: "75vh" }}>
+                                                    <BootstrapTable
+                                                        keyField="PartyID"
+                                                        classes={"table  table-bordered table-hover"}
+                                                        noDataIndication={
+                                                            <div className="text-danger text-center ">
+                                                                Record Not available
+                                                            </div>
+                                                        }
+                                                        onDataSizeChange={({ dataSize }) => {
+                                                            dispatch(
+                                                                BreadcrumbShowCountlabel(`Count:${dataSize}`)
+                                                            );
+                                                        }}
+                                                        {...toolkitProps.baseProps}
+                                                        {...paginationTableProps}
+                                                    />
+                                                    {globalTableSearchProps(toolkitProps.searchProps)}
+                                                </div>
+                                                <Row className="align-items-md-center mt-30">
+                                                    <Col className="pagination pagination-rounded justify-content-end mb-2">
+                                                        <PaginationListStandalone
+                                                            {...paginationProps}
+                                                        />
+                                                    </Col>
+                                                </Row>
+                                            </Col>
+                                        </Row>
+                                    </React.Fragment>
+                                )}
+                            </ToolkitProvider>
+                        )
+                        }
+                    </PaginationProvider>
+
                 </div>
             </div>
         </React.Fragment>
