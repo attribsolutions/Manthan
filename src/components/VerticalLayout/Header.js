@@ -31,6 +31,7 @@ import {
 import { MainSearchBox, } from '../Common/SearchBox/index';
 import { MySearch } from '../Common/SearchBox/MySearch';
 import { loginSystemSetting } from '../Common/CommonFunction';
+import { Modal } from 'reactstrap';
 
 const Header = props => {
   const { onChangeLayoutMode } = props;
@@ -38,12 +39,22 @@ const Header = props => {
   const [isClick, setClick] = useState(true);
   const [position, setPosition] = useState();
   const [open, setOpen] = useState(false);
+  const [modal_backdrop, setmodal_backdrop] = useState(false);   // Image Model open Or not
+
 
   const onDrawerClose = () => {
     setOpen(false);
   }
   const IsNotificationShow = loginSystemSetting().IsNotificationShow
   debugger
+
+  function tog_backdrop() {
+    setmodal_backdrop(!modal_backdrop)
+    removeBodyCss()
+  }
+  function removeBodyCss() {
+    document.body.classList.add("no_padding")
+  }
   /*** Sidebar menu icon and default menu set */
   function tToggle() {
 
@@ -68,9 +79,41 @@ const Header = props => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+
+
+
   return (
     <React.Fragment>
       <header id="page-topbar">
+        <Modal
+          isOpen={modal_backdrop}
+          toggle={() => {
+            tog_backdrop()
+          }}
+          style={{ width: "800px", height: "800px", borderRadius: "50%" }}
+          className="modal-dialog-centered"
+        >
+          <div className="modal-content">
+            <div className="modal-body">
+              <p style={{ fontSize: "15px", color: "black" }}>
+                <h5> सर्व FoodERP वापरकर्ते,</h5>
+                दिनांक १ एप्रिल २०२४ रोजी नवीन आर्थिक वर्ष (२०२४-२५) सुरु होईल त्या दृष्टीने FoodERP मध्ये होणारे बदल खालील प्रमाणे.<br /><br />
+                १ - दिनांक ३१ मार्च २०२४ रोजी सर्व काम संपल्यावर किंवा १ एप्रिल २०२४ रोजी स्टॉक अपडेट करणार असल्यास ३१ मार्च २०२४ ची तारीख सिलेक्ट करून क्लोजिंग स्टॉक अपडेट करायचा आहे. (स्टॉक अपडेट केल्याशिवाय १ एप्रिल २०२४ रोजी बिलिंग करता येणार नाही)<br /><br />
+                २ - दिनांक ३१ मार्च २०२४ चा स्टॉक अपडेट केल्यानंतर जुने कुठलेही ट्रान्झॅक्शन बदलता येणार नाहीत.<br /><br />
+                ३ - सर्व ट्रान्झॅक्शन डॉक्युमेंट नंबर ००१ पासून सुरु होतील. (उदा. बिल नंबर, क्रेडिट नोट नंबर…. )<br /><br />
+                <h5>All FoodERP users,</h5>
+                Following are the changes in FoodERP in view of commencement of new financial year (2024-25) on 1st April 2024.<br /><br />
+                1 - On 31st March 2024 after completion of all work or if updating stock on 1st April 2024 select date 31st March 2024 to update closing stock. (Billing will not be possible on 1st April 2024 without stock update)<br /><br />
+                2 - After the stock update dated 31st March 2024 no old transactions can be changed.<br /><br />
+                3 - All transaction document numbers will start from 001. (Eg Bill Number, Credit Note Number…. )<br /><br />
+              </p>
+            </div>
+
+          </div>
+        </Modal>
+
+
+
         <div className="navbar-header">
 
           <div className="d-flex">
@@ -106,11 +149,12 @@ const Header = props => {
             <MainSearchBox />
 
           </div>
-          {IsNotificationShow !== "null" ? <div className="d-flex">
-            <div className="slide-message" style={{ color: "red", fontSize: "20px", fontWeight: "bold" }}>
-              {IsNotificationShow}
-            </div>
-          </div> : null}
+
+          <div style={{ color: "red", fontWeight: "bold", cursor: "pointer" }} >
+
+            <h3 onClick={() => { setmodal_backdrop(true) }} class="text-red blink-soft">Important Notice! Click here</h3>
+
+          </div>
 
 
           <div className="d-flex">
@@ -144,6 +188,8 @@ const Header = props => {
             <ProfileMenu />
 
           </div>
+
+
         </div>
       </header>
       <ReactDrawer
