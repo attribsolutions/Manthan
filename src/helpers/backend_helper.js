@@ -661,6 +661,12 @@ export const StockEntry_Post_API = ({ jsonBody }) => post(url.STOCK_ENTRY, jsonB
 
 export const StockCount_Post_API = ({ jsonBody }) => post(url.STOCK_COUNT, jsonBody)//post api
 
+export const CheckStockEntryForFirstTransaction = ({ jsonBody }) => post(url.STOCK_ENTERY_FOR_FIRST_YEAR_TRANSACTION, jsonBody)//post api
+export const CheckStockEntryforBackDatedTransaction = ({ jsonBody }) => post(url.STOCK_ENTERY_FOR_BACKDATED_TRANSACTION, jsonBody)//post api
+
+
+
+
 
 
 //Stock Report

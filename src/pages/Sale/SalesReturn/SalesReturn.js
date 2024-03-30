@@ -47,6 +47,7 @@ import Slidewithcaption from "../../../components/Common/CommonImageComponent";
 import { deltBtnCss } from "../../../components/Common/ListActionsButtons";
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
+import { CheckStockEntryforBackDatedTransaction, CheckStockEntryforBackDatedTransactionSuccess } from "../../../store/Inventory/StockEntryRedux/action";
 
 const SalesReturn = (props) => {
 
@@ -97,8 +98,10 @@ const SalesReturn = (props) => {
         addBtnLoading,
         invoiceNoDropDownLoading,
         retailerDropLoading,
-        commonPartyDropSelect
+        commonPartyDropSelect,
+        StockEnteryForBackdated
     } = useSelector((state) => ({
+        StockEnteryForBackdated: state.StockEntryReducer.StockEnteryForBackdated,
         addButtonData: state.SalesReturnReducer.addButtonData,
         postMsg: state.SalesReturnReducer.postMsg,
         RetailerList: state.CommonAPI_Reducer.RetailerList,
@@ -192,6 +195,31 @@ const SalesReturn = (props) => {
         });
         dispatch(postSelect_Field_for_dropdown(jsonBody));
     }, []);
+
+
+
+
+    useEffect(() => {
+        const jsonBody = JSON.stringify({
+            "TransactionDate": values.ReturnDate,
+            "PartyID": commonPartyDropSelect.value
+        });
+        if (commonPartyDropSelect.value > 0) {
+            dispatch(CheckStockEntryforBackDatedTransaction({ jsonBody }))
+        }
+    }, [values.ReturnDate])
+
+    useEffect(() => {
+        if (StockEnteryForBackdated.Status === false && StockEnteryForBackdated.StatusCode === 400) {
+            dispatch(CheckStockEntryforBackDatedTransactionSuccess({ status: false }))
+            customAlert({
+                Type: 3,
+                Message: JSON.stringify(StockEnteryForBackdated.Message),
+            })
+        }
+    }, [StockEnteryForBackdated])
+
+
 
     useEffect(() => {
         if (pageField) {
@@ -988,11 +1016,9 @@ const SalesReturn = (props) => {
 
                         style={{ width: "800px", height: "800px", borderRadius: "50%" }}
                         className="modal-dialog-centered "
-
                     >
                         {(imageTable.length > 0) && <Slidewithcaption Images={imageTable} />}
                     </Modal>
-
                     <form noValidate>
                         <div className="px-2 c_card_filter header text-black mb-1" >
                             <Row>
@@ -1143,55 +1169,6 @@ const SalesReturn = (props) => {
                                     </FormGroup>
                                 </Col >
 
-                                {/* <Col sm="6">
-                                    <FormGroup className=" row mt-1 " >
-                                        <Label className="col-sm-1 p-2"
-                                            style={{ width: "115px", marginRight: "0.4cm" }}>  {fieldLabel.InvoiceNumber}</Label>
-                                        <Col sm="7">
-                                            <C_Select
-                                                id="InvoiceNumber "
-                                                name="InvoiceNumber"
-                                                value={values.InvoiceNumber}
-                                                //(returnMode === 2) ItemWise
-                                                isDisabled={((returnMode === 2) || invoiceNoDropDownLoading || (TableArr.length > 0)) ? true : false}
-                                                isSearchable={true}
-                                                isLoading={invoiceNoDropDownLoading}
-                                                styles={{
-                                                    menu: provided => ({ ...provided, zIndex: 2 })
-                                                }}
-                                                options={InvoiceNo_Options}
-                                                onChange={(hasSelect, evn) => {
-                                                    onChangeSelect({ hasSelect, evn, state, setState, })
-                                                    setReturnMode(1)
-                                                }}
-                                            />
-
-                                        </Col>
-                                        <Col sm="1" className="mx-6 mt-1 ">
-                                            {((TableArr.length > 0) || (!(values.ItemName === ""))) ?
-                                                <Change_Button onClick={(e) => {
-                                                    setTableArr([])
-                                                    setState((i) => {
-                                                        let a = { ...i }
-                                                        a.values.ItemName = ""
-                                                        a.values.InvoiceNumber = ""
-                                                        return a
-                                                    })
-                                                }} />
-                                                :
-                                                (!(returnMode === 2)) &&//(returnMode === 2) ItemWise
-                                                <C_Button
-                                                    type="button"
-                                                    loading={addBtnLoading}
-                                                    className="btn btn-outline-primary border-1 font-size-12 text-center"
-                                                    onClick={() => AddPartyHandler("InvoiceWise")}>
-                                                    Select
-                                                </C_Button>
-
-                                            }
-                                        </Col>
-                                    </FormGroup>
-                                </Col > */}
 
                             </Row>
                         </div>
@@ -1238,7 +1215,7 @@ const SalesReturn = (props) => {
                             <SaveButtonDraggable>
                                 <SaveButton
                                     pageMode={pageMode}
-                                    forceDisabled={addBtnLoading}
+                                    forceDisabled={addBtnLoading || !StockEnteryForBackdated.Transaction}
                                     loading={saveBtnloading}
                                     onClick={SaveHandler}
                                     userAcc={userPageAccessState}

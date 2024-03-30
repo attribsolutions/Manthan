@@ -27,6 +27,8 @@ import { useLayoutEffect } from "react";
 import DatePicker from "react-flatpickr";
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
+import { CheckStockEntryforBackDatedTransaction, CheckStockEntryforBackDatedTransactionSuccess } from "../../../store/Inventory/StockEntryRedux/action";
+
 
 const GRNAdd3 = (props) => {
 
@@ -61,8 +63,11 @@ const GRNAdd3 = (props) => {
         pageField,
         saveBtnloading,
         genralMaster_type69,
-        hideMsg
+        hideMsg,
+        StockEnteryForBackdated,
+        commonPartyDropSelect
     } = useSelector((state) => ({
+        StockEnteryForBackdated: state.StockEntryReducer.StockEnteryForBackdated,
         saveBtnloading: state.GRNReducer.saveBtnloading,
         items: state.GRNReducer.GRNitem,
         hideMsg: state.GRNReducer.hideMsg,
@@ -71,6 +76,7 @@ const GRNAdd3 = (props) => {
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
         genralMaster_type69: state.PartyMasterBulkUpdateReducer.SelectField,
+        commonPartyDropSelect: state.CommonPartyDropdownReducer.commonPartyDropSelect
     }));
 
     const values = { ...state.values }
@@ -136,6 +142,32 @@ const GRNAdd3 = (props) => {
         }
 
     }, [items])
+
+
+
+    useEffect(() => {
+        if (StockEnteryForBackdated.Status === false && StockEnteryForBackdated.StatusCode === 400) {
+            dispatch(CheckStockEntryforBackDatedTransactionSuccess({ status: false }))
+            customAlert({
+                Type: 3,
+                Message: JSON.stringify(StockEnteryForBackdated.Message),
+            })
+        }
+    }, [StockEnteryForBackdated])
+
+
+
+
+    useEffect(() => {
+        const jsonBody = JSON.stringify({
+            "TransactionDate": grnDate,
+            "PartyID": commonPartyDropSelect.value
+        });
+
+        if (commonPartyDropSelect.value > 0) {
+            dispatch(CheckStockEntryforBackDatedTransaction({ jsonBody }))
+        }
+    }, [values.GRNDate, grnDate])
 
 
     useEffect(() => {
@@ -366,10 +398,10 @@ const GRNAdd3 = (props) => {
                 let { UnitDetails, GSToption, MRPOps, GSTDropdown, MRPDetails, PartyItemAssign, ...item } = index;
 
                 if (!Number(item.Rate) > 0) {// rate validation check
-                    isvalidMsg.push({ [item.ItemName]: alertMessages.rateNotAvailable})
+                    isvalidMsg.push({ [item.ItemName]: alertMessages.rateNotAvailable })
                 }
                 if (!PartyItemAssign) {// rate validation check
-                    isvalidMsg.push({ [item.ItemName]: alertMessages.assignItem})
+                    isvalidMsg.push({ [item.ItemName]: alertMessages.assignItem })
                 }
                 return {
                     ...item,
@@ -382,7 +414,7 @@ const GRNAdd3 = (props) => {
             })
 
             if (invoiceNo.length === 0) {
-                customAlert({ Type: 3, Message: alertMessages.invoiceNoIsRequired});
+                customAlert({ Type: 3, Message: alertMessages.invoiceNoIsRequired });
                 return
             }
             if (isvalidMsg.length > 0) {
@@ -430,7 +462,12 @@ const GRNAdd3 = (props) => {
                                             name="GRNDate"
                                             value={values.GRNDate}
                                             disabled={(pageMode === mode.view) ? true : false}
-                                            onChange={(e, date) => { setgrnDate(date) }}
+                                            onChange={(e, date) => {
+
+                                                setgrnDate(date)
+
+
+                                            }}
                                         />
                                     </Col>
                                 </FormGroup>
@@ -560,6 +597,7 @@ const GRNAdd3 = (props) => {
 
                         <SaveButtonDraggable>
                             <SaveButton pageMode={pageMode}
+                                forceDisabled={!StockEnteryForBackdated.Transaction}
                                 loading={saveBtnloading}
                                 editCreatedBy={editCreatedBy}
                                 userAcc={userPageAccessState}

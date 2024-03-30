@@ -42,6 +42,7 @@ import Slidewithcaption from "../../../components/Common/CommonImageComponent";
 import { deltBtnCss } from "../../../components/Common/ListActionsButtons";
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
+import { CheckStockEntryforBackDatedTransaction, CheckStockEntryforBackDatedTransactionSuccess } from "../../../store/Inventory/StockEntryRedux/action";
 
 const PurchaseReturn = (props) => {
 
@@ -105,8 +106,10 @@ const PurchaseReturn = (props) => {
         saveBtnloading,
         addBtnLoading,
         invoiceNoDropDownLoading,
-        commonPartyDropSelect
+        commonPartyDropSelect,
+        StockEnteryForBackdated
     } = useSelector((state) => ({
+        StockEnteryForBackdated: state.StockEntryReducer.StockEnteryForBackdated,
         addButtonData: state.SalesReturnReducer.addButtonData,
         postMsg: state.SalesReturnReducer.postMsg,
         supplierDrodownLoading: state.CommonAPI_Reducer.vendorSupplierCustomerLoading,
@@ -159,6 +162,32 @@ const PurchaseReturn = (props) => {
             setReturnMode(0)
         }
     }, [TableArr]);
+
+    useEffect(() => {
+
+        const jsonBody = JSON.stringify({
+            "TransactionDate": values.ReturnDate,
+            "PartyID": commonPartyDropSelect.value
+        });
+
+        if (commonPartyDropSelect.value > 0) {
+            dispatch(CheckStockEntryforBackDatedTransaction({ jsonBody }))
+        }
+
+    }, [values.ReturnDate])
+
+    useEffect(() => {
+
+        if (StockEnteryForBackdated.Status === false && StockEnteryForBackdated.StatusCode === 400) {
+            dispatch(CheckStockEntryforBackDatedTransactionSuccess({ status: false }))
+            customAlert({
+                Type: 3,
+                Message: JSON.stringify(StockEnteryForBackdated.Message),
+            })
+        }
+    }, [StockEnteryForBackdated])
+
+
 
     const location = { ...history.location }
     const hasShowModal = props.hasOwnProperty(mode.editValue)
@@ -1285,7 +1314,7 @@ const PurchaseReturn = (props) => {
                         <SaveButtonDraggable>
                             <SaveButton
                                 pageMode={pageMode}
-                                forceDisabled={addBtnLoading || !ButtonCondition.isEnable}
+                                forceDisabled={addBtnLoading || !ButtonCondition.isEnable || !StockEnteryForBackdated.Transaction}
                                 loading={saveBtnloading}
 
                                 onClick={SaveHandler}
