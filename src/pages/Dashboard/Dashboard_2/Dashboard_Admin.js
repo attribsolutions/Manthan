@@ -32,15 +32,16 @@ const Dashboard_Admin = (props) => {
     const [OrderMonthCount, setOrderMonthCount] = useState({});
     const [MobileOrderMonthCount, setMobileOrderMonthCount] = useState({});
 
-
-
-
     const [InvoiceMonthCount, setInvoiceMonthCount] = useState({});
     const [GrnMonthCount, setGrnMonthCount] = useState({});
 
     const [ChartOpen, setChartOpen] = useState(false);
     const [OrderChartOpen, setOrderChartOpen] = useState(false);
 
+    const [salesOrderListAccess, setSalesOrderListAccess] = useState(false);
+    const [appOrderListAccess, setAppOrderListAccess] = useState(false);
+    const [invoiceListAccess, setInvoiceListAccess] = useState(false);
+    const [grnListAccess, setGrnListAccess] = useState(false);
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
@@ -96,6 +97,20 @@ const Dashboard_Admin = (props) => {
             setUserAccState(userAcc)
             breadcrumbReturnFunc({ dispatch, userAcc });
         };
+        userAccess.forEach((index) => {
+            if (index.id === pageId.ORDER_LIST_4) {
+                return setSalesOrderListAccess(true)
+            }
+            if (index.id === pageId.APP_ORDER_LIST) {
+                return setAppOrderListAccess(true)
+            }
+            if (index.id === pageId.INVOICE_LIST_1) {
+                return setInvoiceListAccess(true)
+            }
+            if (index.id === pageId.GRN_LIST_3) {
+                return setGrnListAccess(true)
+            }
+        });
     }, [userAccess])
 
     useEffect(() => {
@@ -259,16 +274,17 @@ const Dashboard_Admin = (props) => {
     }
 
     const RedirectHandler = (Type) => {
-        if (Type === 1) {
+
+        if (Type === 1 && salesOrderListAccess) {
             history.push(url.ORDER_LIST_4)
 
-        } else if (Type === 2) {
+        } else if (Type === 2 && invoiceListAccess) {
             history.push(url.INVOICE_LIST_1)
         }
-        else if (Type === 3) {
+        else if (Type === 3 && appOrderListAccess) {
             history.push(url.APP_ORDER_LIST)
         }
-        else {
+        else if (Type === 4 && appOrderListAccess) {
             history.push(url.GRN_LIST_3)
         }
     }
@@ -432,7 +448,7 @@ const Dashboard_Admin = (props) => {
                                             <Card className="card-h-100">
                                                 <Row>
                                                     <Col className='mt-1' sm={3}>
-                                                        <span style={{ cursor: "pointer" }} onClick={() => RedirectHandler()}> Annual GRN's</span>
+                                                        <span style={{ cursor: "pointer" }} onClick={() => RedirectHandler(4)}> Annual GRN's</span>
 
 
                                                     </Col>
@@ -445,7 +461,7 @@ const Dashboard_Admin = (props) => {
                                                         </span>
                                                     </Col>
                                                     <Col className='mt-1' sm={3}>
-                                                        <span style={{ cursor: "pointer" }} onClick={() => RedirectHandler()} className="">Today's GRN's</span>
+                                                        <span style={{ cursor: "pointer" }} onClick={() => RedirectHandler(4)} className="">Today's GRN's</span>
                                                     </Col>
                                                     <Col sm={2} className='mt-1'>
                                                         <span style={{ fontSize: "15px" }}> {GRNsCount}</span>
