@@ -861,7 +861,7 @@ const Invoice = (props) => {
                                                 name="InvoiceDate"
                                                 value={values.InvoiceDate}
                                                 id="myInput11"
-                                                disabled={(orderItemDetails.length > 0 || pageMode === "edit" || StockEnteryForBackdated) ? true : false}
+                                                disabled={(orderItemDetails.length > 0 || pageMode === "edit") ? true : false}
                                                 onChange={InvoiceDateOnchange}
                                             />
                                             {isError.InvoiceDate.length > 0 && (
