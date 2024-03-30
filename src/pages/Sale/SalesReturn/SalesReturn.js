@@ -201,6 +201,7 @@ const SalesReturn = (props) => {
 
 
     useEffect(() => {
+        debugger
         const jsonBody = JSON.stringify({
             "FromDate": values.ReturnDate,
             "PartyID": commonPartyDropSelect.value
@@ -208,7 +209,7 @@ const SalesReturn = (props) => {
         if (commonPartyDropSelect.value > 0) {
             dispatch(CheckStockEntryForFirstTransaction({ jsonBody }))
         }
-    }, [values.ReturnDate])
+    }, [values.ReturnDate, commonPartyDropSelect.value])
 
     useEffect(() => {
         if (StockEnteryForFirstYear.Status === false && StockEnteryForFirstYear.StatusCode === 400) {

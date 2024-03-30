@@ -656,7 +656,7 @@ const Invoice = (props) => {
         if (commonPartyDropSelect.value > 0) {
             dispatch(CheckStockEntryForFirstTransaction({ jsonBody }))
         }
-    }, [values.InvoiceDate])
+    }, [values.InvoiceDate, commonPartyDropSelect.value])
 
 
 

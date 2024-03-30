@@ -175,7 +175,7 @@ const PurchaseReturn = (props) => {
             dispatch(CheckStockEntryForFirstTransactionSuccess({ jsonBody }))
         }
 
-    }, [values.ReturnDate])
+    }, [values.ReturnDate, commonPartyDropSelect.value])
 
     useEffect(() => {
 
