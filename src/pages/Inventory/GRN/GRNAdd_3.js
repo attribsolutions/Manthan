@@ -167,7 +167,7 @@ const GRNAdd3 = (props) => {
         if (commonPartyDropSelect.value > 0) {
             dispatch(CheckStockEntryForFirstTransaction({ jsonBody }))
         }
-    }, [values.GRNDate, grnDate])
+    }, [values.GRNDate, grnDate, commonPartyDropSelect.value])
 
 
     useEffect(() => {

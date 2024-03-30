@@ -211,7 +211,7 @@ const PurchaseReturnMode3 = (props) => {
         if (commonPartyDropSelect.value > 0) {
             dispatch(CheckStockEntryForFirstTransaction({ jsonBody }))
         }
-    }, [values.ReturnDate])
+    }, [values.ReturnDate, commonPartyDropSelect.value])
 
 
     useEffect(() => {
