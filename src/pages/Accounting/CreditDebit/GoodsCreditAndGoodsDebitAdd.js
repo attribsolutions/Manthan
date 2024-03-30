@@ -141,7 +141,13 @@ const GoodsCreditNote = (props) => {
     // Common Party Dropdown useEffect
     useEffect(() => {
         if (commonPartyDropSelect.value > 0) {
-            partySelectButtonHandler();
+            dispatch(goButtonPartyItemAddPage({ jsonBody: { ..._cfunc.loginJsonBody(), "PartyID": loginSelectedPartyID() } }));
+            const jsonBody = JSON.stringify({
+                Type: 4,
+                PartyID: commonPartyDropSelect.value,
+                CompanyID: _cfunc.loginCompanyID(),
+            });
+            dispatch(Retailer_List(jsonBody));
         } else {
             partySelectOnChangeHandler();
         };
@@ -151,16 +157,6 @@ const GoodsCreditNote = (props) => {
         dispatch(InvoiceNumberSuccess([]));
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_id));
-
-        if (!(commonPartyDropSelect.value === 0)) {
-            dispatch(goButtonPartyItemAddPage({ jsonBody: { ..._cfunc.loginJsonBody(), "PartyID": loginSelectedPartyID() } }));
-            const jsonBody = JSON.stringify({
-                Type: 4,
-                PartyID: commonPartyDropSelect.value,
-                CompanyID: _cfunc.loginCompanyID(),
-            });
-            dispatch(Retailer_List(jsonBody));
-        }
         dispatch(BreadcrumbShowCountlabel(`${"Count"} :${0} ₹ :${0}`));
 
         return () => {
@@ -168,8 +164,6 @@ const GoodsCreditNote = (props) => {
             dispatch(goButtonPartyItemAddPageSuccess([]));
         };
     }, []);
-
-
 
     useEffect(() => {// userAccess useEffect
         let userAcc = null;
@@ -719,16 +713,6 @@ const GoodsCreditNote = (props) => {
             setTableArr([])
         }
     }
-
-    function partySelectButtonHandler() {
-        const jsonBody = JSON.stringify({
-            Type: 4,
-            PartyID: commonPartyDropSelect.value,
-            CompanyID: _cfunc.loginCompanyID(),
-        });
-        dispatch(Retailer_List(jsonBody));
-        dispatch(goButtonPartyItemAddPage({ jsonBody: { ..._cfunc.loginJsonBody(), "PartyID": loginSelectedPartyID() } }));
-    };
 
     function partySelectOnChangeHandler() {
         dispatch(Retailer_List_Success([]));

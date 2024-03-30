@@ -108,7 +108,12 @@ const Debit = (props) => {
     // Common Party Dropdown useEffect
     useEffect(() => {
         if (commonPartyDropSelect.value > 0) {
-            partySelectButtonHandler();
+            const jsonBody = JSON.stringify({
+                Type: 4,
+                PartyID: commonPartyDropSelect.value,
+                CompanyID: _cfunc.loginCompanyID()
+            });
+            dispatch(Retailer_List(jsonBody));
         } else {
             partySelectOnChangeHandler();
         };
@@ -121,7 +126,6 @@ const Debit = (props) => {
             dispatch(commonPageFieldSuccess(null));
         }
     }, []);
-
 
     // userAccess useEffect
     useEffect(() => {
@@ -219,15 +223,6 @@ const Debit = (props) => {
 
     useEffect(() => {
         const jsonBody = JSON.stringify({
-            Type: 4,
-            PartyID: commonPartyDropSelect.value,
-            CompanyID: _cfunc.loginCompanyID()
-        });
-        dispatch(Retailer_List(jsonBody));
-    }, []);
-
-    useEffect(() => {
-        const jsonBody = JSON.stringify({
             Company: _cfunc.loginCompanyID(),
             TypeID: 7
         });
@@ -301,15 +296,6 @@ const Debit = (props) => {
         })
         onChangeSelect({ hasSelect, evn, state, setState, })
     }
-
-    function partySelectButtonHandler() {
-        const jsonBody = JSON.stringify({
-            Type: 4,
-            PartyID: commonPartyDropSelect.value,
-            CompanyID: _cfunc.loginCompanyID()
-        });
-        dispatch(Retailer_List(jsonBody));
-    };
 
     function partySelectOnChangeHandler() {
         dispatch(Retailer_List_Success([]));

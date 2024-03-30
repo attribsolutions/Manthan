@@ -162,31 +162,17 @@ const CreditList = () => {
     // Common Party Dropdown useEffect
     useEffect(() => {
         if (commonPartyDropSelect.value > 0) {
-            partySelectButtonHandler()
+            const jsonBody = JSON.stringify({ //Retailer DropDown List Type 4 for credit list drop down
+                Type: 4,
+                PartyID: commonPartyDropSelect.value,
+                CompanyID: _cfunc.loginCompanyID()
+            });
+            dispatch(Retailer_List(jsonBody));
 
         } else {
             partySelectOnChangeHandler()
         }
     }, [commonPartyDropSelect]);
-
-    // Retailer DropDown List Type 1 for credit list drop down
-    useEffect(() => {
-        const jsonBody = JSON.stringify({
-            Type: 1,
-            PartyID: commonPartyDropSelect.value,
-            CompanyID: _cfunc.loginCompanyID()
-        });
-        dispatch(Retailer_List(jsonBody));
-    }, []);
-
-    useEffect(() => {
-        const jsonBody = JSON.stringify({
-            Type: 4,
-            PartyID: commonPartyDropSelect.value,
-            CompanyID: _cfunc.loginCompanyID()
-        });
-        dispatch(Retailer_List(jsonBody));
-    }, []);
 
     useEffect(() => {
         if ((CreditDebitType.length > 0) && !(commonPartyDropSelect.value === 0)) {
@@ -244,15 +230,6 @@ const CreditList = () => {
         value: "",
         label: " All"
     });
-
-    function partySelectButtonHandler() {
-        const jsonBody = JSON.stringify({
-            Type: 4,
-            PartyID: commonPartyDropSelect.value,
-            CompanyID: _cfunc.loginCompanyID()
-        });
-        dispatch(Retailer_List(jsonBody));
-    }
 
     function partySelectOnChangeHandler() {
 
