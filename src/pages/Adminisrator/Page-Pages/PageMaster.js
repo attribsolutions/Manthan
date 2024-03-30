@@ -70,6 +70,7 @@ const PageMaster = (props) => {
   const [editCreatedBy, seteditCreatedBy] = useState("");
   const [moduleMaster_AddAccess, setModuleMaster_AddAccess] = useState(false)
 
+  const [isActiveCheckbox, setIsActiveCheckbox] = useState(true);
   const [showCountLabel, setShowCountLabel] = useState(false);
   const [countLabel, setCountLabel] = useState("");
   const [isEditPopuporComponent, setIsEditPopuporComponent] = useState(false);
@@ -173,6 +174,7 @@ const PageMaster = (props) => {
         let pageType_ID = hasEditVal.PageType;
 
         setEditData(hasEditVal);
+        setIsActiveCheckbox(hasEditVal?.isActive)
         setShowCountLabel(hasEditVal?.CountLabel)
         setCountLabel(hasEditVal?.ShowCountLabel)
         setIsEditPopuporComponent(hasEditVal?.IsEditPopuporComponent)
@@ -487,7 +489,7 @@ const PageMaster = (props) => {
 
       Name: values.Name,
       Module: module_DropdownSelect.value,
-      isActive: values.isActive,
+      isActive: isActiveCheckbox,
       DisplayIndex: values.displayIndex,
       Icon: values.Icon,
       CountLabel: showCountLabel,
@@ -869,9 +871,10 @@ const PageMaster = (props) => {
                                       <AvInput
                                         type="checkbox"
                                         className="form-check-input mt-4"
-                                        // key={EditData.isActive}
                                         name="isActive"
-                                        defaultChecked={true}
+                                        // defaultChecked={EditData.isActive}
+                                        defaultChecked={isActiveCheckbox}
+                                        onChange={(e) => { setIsActiveCheckbox(e.target.checked) }}
                                       />
                                       <label
                                         className="form-check-label"
@@ -899,7 +902,6 @@ const PageMaster = (props) => {
                                       <AvInput
                                         type="checkbox"
                                         className="form-check-input mt-4"
-                                        // key={EditData.IsDivisionRequired}
                                         defaultChecked={EditData.IsDivisionRequired}
                                         name="IsDivisionRequired"
                                       />
@@ -929,7 +931,6 @@ const PageMaster = (props) => {
                                       >
                                         <AvInput
                                           type="checkbox"
-                                          // key={EditData.IsEditPopuporComponent}
                                           className="form-check-input mt-4"
                                           defaultChecked={EditData.IsEditPopuporComponent}
                                           checked={isEditPopuporComponent}
