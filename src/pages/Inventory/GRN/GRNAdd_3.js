@@ -27,7 +27,7 @@ import { useLayoutEffect } from "react";
 import DatePicker from "react-flatpickr";
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
-import { CheckStockEntryForFirstTransaction, CheckStockEntryForFirstTransactionSuccess, CheckStockEntryforBackDatedTransaction, CheckStockEntryforBackDatedTransactionSuccess } from "../../../store/Inventory/StockEntryRedux/action";
+import { CheckStockEntryForFirstTransaction, CheckStockEntryForFirstTransactionSuccess } from "../../../store/Inventory/StockEntryRedux/action";
 
 
 const GRNAdd3 = (props) => {
