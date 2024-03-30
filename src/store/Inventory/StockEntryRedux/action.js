@@ -1,4 +1,8 @@
 import {
+    CHECK_STOCK_ENTERY_FOR_BACKDATED_TRANSACTION,
+    CHECK_STOCK_ENTERY_FOR_BACKDATED_TRANSACTION_SUCCESS,
+    CHECK_STOCK_ENTERY_FOR_FIRST_TRANSACTION,
+    CHECK_STOCK_ENTERY_FOR_FIRST_TRANSACTION_SUCCESS,
     GET_STOCK_COUNT_ACTION,
     GET_STOCK_COUNT_ACTION_SUCCESS,
     SAVE_STOCK_ENTRY_ACTION,
@@ -27,9 +31,31 @@ export const GetStockCountSuccess = (resp) => ({
 });
 
 
+export const CheckStockEntryForFirstTransaction = (config = {}) => ({
+    type: CHECK_STOCK_ENTERY_FOR_FIRST_TRANSACTION,
+    config,
+});
+export const CheckStockEntryForFirstTransactionSuccess = (resp) => ({
+    type: CHECK_STOCK_ENTERY_FOR_FIRST_TRANSACTION_SUCCESS,
+    payload: resp
+});
+
+export const CheckStockEntryforBackDatedTransaction = (config = {}) => ({
+    type: CHECK_STOCK_ENTERY_FOR_BACKDATED_TRANSACTION,
+    config,
+});
+export const CheckStockEntryforBackDatedTransactionSuccess = (resp) => ({
+    type: CHECK_STOCK_ENTERY_FOR_BACKDATED_TRANSACTION_SUCCESS,
+    payload: resp
+});
+
+
+
+
 export const StockEntryApiErrorAction = () => ({
     type: STOCK_ENTRY_API_ERROR_ACTION,
 })
+
 
 
 

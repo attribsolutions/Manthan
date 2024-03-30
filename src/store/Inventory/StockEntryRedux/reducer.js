@@ -1,4 +1,8 @@
 import {
+    CHECK_STOCK_ENTERY_FOR_BACKDATED_TRANSACTION,
+    CHECK_STOCK_ENTERY_FOR_BACKDATED_TRANSACTION_SUCCESS,
+    CHECK_STOCK_ENTERY_FOR_FIRST_TRANSACTION,
+    CHECK_STOCK_ENTERY_FOR_FIRST_TRANSACTION_SUCCESS,
     GET_STOCK_COUNT_ACTION,
     GET_STOCK_COUNT_ACTION_SUCCESS,
     SAVE_STOCK_ENTRY_ACTION,
@@ -10,7 +14,9 @@ const INIT_STATE = {
     postMsg: { Status: false },
     loading: false,
     saveBtnloading: false,
-    StockCount: {}
+    StockCount: {},
+    StockEnteryForFirstYear: { status: false },
+    StockEnteryForBackdated: { status: false }
 
 }
 
@@ -43,6 +49,26 @@ const StockEntryReducer = (state = INIT_STATE, action) => {
                 StockCountloading: false
             }
 
+        case CHECK_STOCK_ENTERY_FOR_FIRST_TRANSACTION:
+            return {
+                ...state,
+            }
+        case CHECK_STOCK_ENTERY_FOR_FIRST_TRANSACTION_SUCCESS:
+            return {
+                ...state,
+                StockEnteryForFirstYear: action.payload,
+            }
+
+        case CHECK_STOCK_ENTERY_FOR_BACKDATED_TRANSACTION:
+            return {
+                ...state,
+            }
+        case CHECK_STOCK_ENTERY_FOR_BACKDATED_TRANSACTION_SUCCESS:
+            return {
+                ...state,
+                StockEnteryForBackdated: action.payload,
+
+            }
         case STOCK_ENTRY_API_ERROR_ACTION:
             return {
                 ...state,

@@ -58,6 +58,7 @@ import GlobalCustomTable from "../../../GlobalCustomTable";
 import { changeCommonPartyDropDetailsAction } from "../../../store/Utilites/PartyDrodown/action";
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
+import { CheckStockEntryforBackDatedTransaction, CheckStockEntryforBackDatedTransactionSuccess } from "../../../store/Inventory/StockEntryRedux/action";
 
 const Invoice = (props) => {
 
@@ -105,7 +106,8 @@ const Invoice = (props) => {
         editData,
         saveBtnloading,
         saveAndPdfBtnLoading,
-        commonPartyDropSelect
+        commonPartyDropSelect,
+        StockEnteryForBackdated
     } = useSelector((state) => ({
         postMsg: state.InvoiceReducer.postMsg,
         editData: state.InvoiceReducer.editData,
@@ -119,7 +121,8 @@ const Invoice = (props) => {
         makeIBInvoice: state.InvoiceReducer.makeIBInvoice,
         saveBtnloading: state.InvoiceReducer.saveBtnloading,
         saveAndPdfBtnLoading: state.InvoiceReducer.saveAndPdfBtnLoading,
-        commonPartyDropSelect: state.CommonPartyDropdownReducer.commonPartyDropSelect
+        commonPartyDropSelect: state.CommonPartyDropdownReducer.commonPartyDropSelect,
+        StockEnteryForBackdated: state.StockEntryReducer.StockEnteryForBackdated,
     }));
 
     const location = { ...history.location }
@@ -645,9 +648,35 @@ const Invoice = (props) => {
         dispatch(BreadcrumbShowCountlabel(`Count:${dataCount} ₹ ${commaSeparateAmount}`))
 
     }
+    useEffect(() => {
+        const jsonBody = JSON.stringify({
+            "TransactionDate": values.InvoiceDate,
+            "PartyID": commonPartyDropSelect.value
+        });
+        if (commonPartyDropSelect.value > 0) {
+            dispatch(CheckStockEntryforBackDatedTransaction({ jsonBody }))
+        }
+    }, [values.InvoiceDate])
+
+
+
+    useEffect(() => {
+        if (StockEnteryForBackdated.Status === false && StockEnteryForBackdated.StatusCode === 400) {
+            dispatch(CheckStockEntryforBackDatedTransactionSuccess({ status: false }))
+            customAlert({
+                Type: 3,
+                Message: JSON.stringify(StockEnteryForBackdated.Message),
+            })
+        }
+    }, [StockEnteryForBackdated])
+
+
+
+
 
     function InvoiceDateOnchange(y, v, e) {
         dispatch(GoButtonForinvoiceAddSuccess([]))
+
         onChangeDate({ e, v, state, setState })
     };
 
@@ -832,7 +861,7 @@ const Invoice = (props) => {
                                                 name="InvoiceDate"
                                                 value={values.InvoiceDate}
                                                 id="myInput11"
-                                                disabled={(orderItemDetails.length > 0 || pageMode === "edit") ? true : false}
+                                                disabled={(orderItemDetails.length > 0 || pageMode === "edit" || StockEnteryForBackdated) ? true : false}
                                                 onChange={InvoiceDateOnchange}
                                             />
                                             {isError.InvoiceDate.length > 0 && (
@@ -917,7 +946,7 @@ const Invoice = (props) => {
                                     pageMode={pageMode}
                                     userAcc={userPageAccessState}
                                     onClick={SaveHandler}
-                                    forceDisabled={saveAndPdfBtnLoading}
+                                    forceDisabled={saveAndPdfBtnLoading || !StockEnteryForBackdated}
                                 />
                                 {(pageMode === mode.defaultsave) &&
                                     <SaveAndDownloadPDF
@@ -926,7 +955,7 @@ const Invoice = (props) => {
                                         id={saveBtnid}
                                         userAcc={userPageAccessState}
                                         onClick={SaveHandler}
-                                        forceDisabled={saveBtnloading}
+                                        forceDisabled={(saveBtnloading) || !(StockEnteryForBackdated.Transaction)}
                                     />
                                 }
                             </SaveButtonDraggable>

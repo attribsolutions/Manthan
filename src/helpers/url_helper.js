@@ -440,6 +440,13 @@ export const STOCK_ENTRY = '/PartyStockEntry'
 
 export const STOCK_COUNT = '/GetStockCountForParty'
 
+export const STOCK_ENTERY_FOR_FIRST_YEAR_TRANSACTION = '/CheckStockEntryForFYFirstTransaction'
+export const STOCK_ENTERY_FOR_BACKDATED_TRANSACTION = '/CheckStockEntryDateAndNotAllowedBackdatedTransaction'
+
+
+
+
+
 export const STOCK_ENTRY_GO_BUTTON = "/ReturnItemAdd"
 
 export const INVOICE_DATA_EXPORT = "/InvoiceDataExport"

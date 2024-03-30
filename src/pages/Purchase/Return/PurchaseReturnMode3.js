@@ -35,6 +35,7 @@ import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import Slidewithcaption from "../../../components/Common/CommonImageComponent";
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
+import { CheckStockEntryforBackDatedTransaction, CheckStockEntryforBackDatedTransactionSuccess } from "../../../store/Inventory/StockEntryRedux/action";
 
 
 const PurchaseReturnMode3 = (props) => {
@@ -70,8 +71,10 @@ const PurchaseReturnMode3 = (props) => {
         supplier,
         pageField,
         userAccess,
-        commonPartyDropSelect
+        commonPartyDropSelect,
+        StockEnteryForBackdated
     } = useSelector((state) => ({
+        StockEnteryForBackdated: state.StockEntryReducer.StockEnteryForBackdated,
         saveBtnloading: state.SalesReturnReducer.saveBtnloading,
         sendToSSbtnTableData: state.SalesReturnReducer.sendToSSbtnTableData,
         supplier: state.CommonAPI_Reducer.vendorSupplierCustomer,
@@ -195,7 +198,33 @@ const PurchaseReturnMode3 = (props) => {
         document.body.classList.add("no_padding")
     }
 
+    useEffect(() => {
 
+    }, [])
+
+
+    useEffect(() => {
+        const jsonBody = JSON.stringify({
+            "TransactionDate": values.ReturnDate,
+            "PartyID": commonPartyDropSelect.value
+        });
+        if (commonPartyDropSelect.value > 0) {
+            dispatch(CheckStockEntryforBackDatedTransaction({ jsonBody }))
+        }
+    }, [values.ReturnDate])
+
+
+    useEffect(() => {
+
+        if (StockEnteryForBackdated.Status === false && StockEnteryForBackdated.StatusCode === 400) {
+            dispatch(CheckStockEntryforBackDatedTransactionSuccess({ status: false }))
+
+            customAlert({
+                Type: 3,
+                Message: JSON.stringify(StockEnteryForBackdated.Message),
+            })
+        }
+    }, [StockEnteryForBackdated])
 
 
 
@@ -642,7 +671,7 @@ const PurchaseReturnMode3 = (props) => {
                                 pageMode={mode.modeSTPsave}
                                 loading={saveBtnloading}
                                 onClick={SaveHandler}
-                                forceDisabled={!ButtonCondition.isEnable}
+                                forceDisabled={(!ButtonCondition.isEnable) || (!StockEnteryForBackdated.Transaction)}
                                 userAcc={userPageAccessState}
                                 module={"SalesReturn"}
                             />
