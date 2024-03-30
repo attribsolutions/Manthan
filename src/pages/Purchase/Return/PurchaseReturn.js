@@ -166,7 +166,7 @@ const PurchaseReturn = (props) => {
     useEffect(() => {
 
         const jsonBody = JSON.stringify({
-            "TransactionDate": values.ReturnDate,
+            "FromDate": values.ReturnDate,
             "PartyID": commonPartyDropSelect.value
         });
 
