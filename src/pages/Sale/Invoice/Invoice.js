@@ -650,7 +650,7 @@ const Invoice = (props) => {
     }
     useEffect(() => {
         const jsonBody = JSON.stringify({
-            "TransactionDate": values.InvoiceDate,
+            "FromDate": values.InvoiceDate,
             "PartyID": commonPartyDropSelect.value
         });
         if (commonPartyDropSelect.value > 0) {

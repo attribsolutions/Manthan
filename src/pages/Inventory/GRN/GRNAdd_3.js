@@ -160,7 +160,7 @@ const GRNAdd3 = (props) => {
 
     useEffect(() => {
         const jsonBody = JSON.stringify({
-            "TransactionDate": grnDate,
+            "FromDate": grnDate,
             "PartyID": commonPartyDropSelect.value
         });
 
