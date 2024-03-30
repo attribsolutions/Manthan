@@ -215,7 +215,7 @@ const PurchaseReturnMode3 = (props) => {
 
 
     useEffect(() => {
-        if (StockEnteryForFirstYear.Status === false && StockEnteryForFirstYear.StatusCode === 400) {
+        if (StockEnteryForFirstYear.Status === true && StockEnteryForFirstYear.StatusCode === 400) {
             dispatch(CheckStockEntryForFirstTransactionSuccess({ status: false }))
             customAlert({
                 Type: 3,
