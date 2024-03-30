@@ -27,7 +27,7 @@ import { useLayoutEffect } from "react";
 import DatePicker from "react-flatpickr";
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
-import { CheckStockEntryforBackDatedTransaction, CheckStockEntryforBackDatedTransactionSuccess } from "../../../store/Inventory/StockEntryRedux/action";
+import { CheckStockEntryForFirstTransaction, CheckStockEntryForFirstTransactionSuccess, CheckStockEntryforBackDatedTransaction, CheckStockEntryforBackDatedTransactionSuccess } from "../../../store/Inventory/StockEntryRedux/action";
 
 
 const GRNAdd3 = (props) => {
@@ -64,10 +64,10 @@ const GRNAdd3 = (props) => {
         saveBtnloading,
         genralMaster_type69,
         hideMsg,
-        StockEnteryForBackdated,
+        StockEnteryForFirstYear,
         commonPartyDropSelect
     } = useSelector((state) => ({
-        StockEnteryForBackdated: state.StockEntryReducer.StockEnteryForBackdated,
+        StockEnteryForFirstYear: state.StockEntryReducer.StockEnteryForFirstYear,
         saveBtnloading: state.GRNReducer.saveBtnloading,
         items: state.GRNReducer.GRNitem,
         hideMsg: state.GRNReducer.hideMsg,
@@ -146,14 +146,14 @@ const GRNAdd3 = (props) => {
 
 
     useEffect(() => {
-        if (StockEnteryForBackdated.Status === false && StockEnteryForBackdated.StatusCode === 400) {
-            dispatch(CheckStockEntryforBackDatedTransactionSuccess({ status: false }))
+        if (StockEnteryForFirstYear.Status === false && StockEnteryForFirstYear.StatusCode === 400) {
+            dispatch(CheckStockEntryForFirstTransactionSuccess({ status: false }))
             customAlert({
                 Type: 3,
-                Message: JSON.stringify(StockEnteryForBackdated.Message),
+                Message: JSON.stringify(StockEnteryForFirstYear.Message),
             })
         }
-    }, [StockEnteryForBackdated])
+    }, [StockEnteryForFirstYear])
 
 
 
@@ -165,7 +165,7 @@ const GRNAdd3 = (props) => {
         });
 
         if (commonPartyDropSelect.value > 0) {
-            dispatch(CheckStockEntryforBackDatedTransaction({ jsonBody }))
+            dispatch(CheckStockEntryForFirstTransaction({ jsonBody }))
         }
     }, [values.GRNDate, grnDate])
 
@@ -386,11 +386,8 @@ const GRNAdd3 = (props) => {
     }
 
     const saveHandeller = (event) => {
-
         event.preventDefault();
-
         const btnId = event.target.id
-
         try {
             const isvalidMsg = [];
 
@@ -587,7 +584,6 @@ const GRNAdd3 = (props) => {
                                         </div>
                                     </Col>
                                 </Row>
-
                             </React.Fragment>
                         )}
                     </ToolkitProvider>
@@ -597,17 +593,13 @@ const GRNAdd3 = (props) => {
 
                         <SaveButtonDraggable>
                             <SaveButton pageMode={pageMode}
-                                forceDisabled={!StockEnteryForBackdated.Transaction}
+                                forceDisabled={!StockEnteryForFirstYear.Data}
                                 loading={saveBtnloading}
                                 editCreatedBy={editCreatedBy}
                                 userAcc={userPageAccessState}
                                 module={"GRN"} onClick={saveHandeller}
                             />
                         </SaveButtonDraggable>
-
-
-
-
                     }
                 </div >
 
