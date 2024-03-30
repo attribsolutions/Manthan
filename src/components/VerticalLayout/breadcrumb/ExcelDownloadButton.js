@@ -5,17 +5,22 @@ import { Modal, Button, Input, Label, Card, CardBody } from "reactstrap";
 import { AvForm } from "availity-reactstrap-validation";
 import { ExcelReportComponent } from "../../Common/ReportCommonFunc/ExcelDownloadWithCSS";
 import { useSelector } from "react-redux";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
+import { alertMessages } from "../../Common/CommonErrorMsg/alertMsg";
 
 const ExcelDownloadButton = ({ }) => {
   const [modal_scroll, setmodal_scroll] = useState(false);
   const [downListKey, setDownListKey] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
 
+  const [alertMessageShow, setAlertMessageShow] = useState(false);
+
   const {
     pageHeading = '',
     excelBtnView,
     downBtnData,
-    pageField
+    pageField,
+    defaultDownBtnData
   } = useSelector(({ BreadcrumbReducer }) => ({ ...BreadcrumbReducer.breadcrumbDetail }))
 
   useEffect(() => {
@@ -23,11 +28,11 @@ const ExcelDownloadButton = ({ }) => {
   }, [downBtnData]);
 
   const initializeDownListKey = () => {
+
     if (downBtnData.length > 0) {
-      const defaultDownBtnArray = downBtnData[0]
-        ? Object.keys(downBtnData[0]).map((key) => ({ [key]: true }))
-        : [];
+      let defaultDownBtnArray = Object.keys(defaultDownBtnData).map(key => ({ [key]: defaultDownBtnData[key] }));
       setDownListKey(defaultDownBtnArray);
+    
       const allValuesTrue = defaultDownBtnArray.every(
         (item) => Object.values(item)[0] === true
       );
@@ -36,6 +41,7 @@ const ExcelDownloadButton = ({ }) => {
   };
 
   const handleCheckboxChange = (index) => {
+    setAlertMessageShow(false)
     setDownListKey((prevListKey) => {
       const updatedList = [...prevListKey];
       const key = Object.keys(updatedList[index])[0];
@@ -46,8 +52,8 @@ const ExcelDownloadButton = ({ }) => {
   };
 
   const handleSelectAllChange = (e) => {
+    setAlertMessageShow(false)
     setSelectAll((prevSelectAll) => !prevSelectAll);
-
     setDownListKey((prevListKey) => {
       const updatedList = prevListKey.map((item) => ({
         [Object.keys(item)[0]]: e.target.checked,
@@ -118,12 +124,18 @@ const ExcelDownloadButton = ({ }) => {
   });
 
   const DownloadInExcelButtonHanler = (event, values) => {
+
     let tableData = [];
     let object1 = {};
 
     const filteredValues = downListKey
       .filter((obj) => obj[Object.keys(obj)[0]])
       .map((obj) => Object.keys(obj)[0]);
+
+    if (filteredValues.length === 0) {
+      setAlertMessageShow(true)
+      return
+    }
 
     downBtnData.forEach((index1) => {
       filteredValues.forEach((index2) => {
@@ -179,6 +191,12 @@ const ExcelDownloadButton = ({ }) => {
             </button>
           </div>
           <div className="modal-body">
+            {alertMessageShow && (
+              <div className="alert alert-danger" role="alert">
+                Please select at least one checkbox before downloading.
+              </div>
+            )}
+
             <AvForm
               onValidSubmit={(event, values) => {
                 DownloadInExcelButtonHanler(event, values);
@@ -186,19 +204,19 @@ const ExcelDownloadButton = ({ }) => {
             >
               <ExcelCheckBox />
 
-                <div className="modal-footer">
-                 
-                  <button type="submit" className="btn btn-primary">
-                    Download in Excel
-                  </button>
-                  <button
-                    type="button"
-                    className="btn btn-danger"
-                    onClick={() => setmodal_scroll(false)}
-                  >
-                    Cancel
-                  </button>
-                </div>
+              <div className="modal-footer">
+
+                <button type="submit" className="btn btn-primary">
+                  Download in Excel
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-danger"
+                  onClick={() => setmodal_scroll(false)}
+                >
+                  Cancel
+                </button>
+              </div>
             </AvForm>
           </div>
         </div>

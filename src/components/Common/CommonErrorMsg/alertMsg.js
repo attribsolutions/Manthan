@@ -1,6 +1,7 @@
 
 // Common Error Messages
 const commonPartySelectionIsRequired = "Please Select Party"
+const atLeastOneCheckboxCheck="Please select at least one checkbox before downloading."
 
 // Image Related Error Message 
 const imageNotUploaded = "Images not uploaded"
@@ -274,7 +275,8 @@ export const alertMessages = {
     updateAtLeastOneField,
     DistrictIsRequired,
     ImageIsRequired,
-    No_Kg_IsRerquired
+    No_Kg_IsRerquired,
+    atLeastOneCheckboxCheck
 };
 
 
