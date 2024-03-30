@@ -106,7 +106,6 @@ const PurchaseReturn = (props) => {
         addButtonData,
         saveBtnloading,
         addBtnLoading,
-        invoiceNoDropDownLoading,
         commonPartyDropSelect,
         StockEnteryForFirstYear
     } = useSelector((state) => ({
@@ -164,29 +163,6 @@ const PurchaseReturn = (props) => {
         }
     }, [TableArr]);
 
-    useEffect(() => {
-
-        const jsonBody = JSON.stringify({
-            "FromDate": values.ReturnDate,
-            "PartyID": commonPartyDropSelect.value
-        });
-
-        if (commonPartyDropSelect.value > 0) {
-            dispatch(CheckStockEntryForFirstTransactionSuccess({ jsonBody }))
-        }
-
-    }, [values.ReturnDate, commonPartyDropSelect.value])
-
-    useEffect(() => {
-
-        if (StockEnteryForFirstYear.Status === false && StockEnteryForFirstYear.StatusCode === 400) {
-            dispatch(CheckStockEntryForFirstTransaction({ status: false }))
-            customAlert({
-                Type: 3,
-                Message: JSON.stringify(StockEnteryForFirstYear.Message),
-            })
-        }
-    }, [StockEnteryForFirstYear])
 
 
 
@@ -264,6 +240,32 @@ const PurchaseReturn = (props) => {
             })
         }
     }, [postMsg])
+
+
+    useEffect(() => {
+
+        const jsonBody = JSON.stringify({
+            "FromDate": values.ReturnDate,
+            "PartyID": commonPartyDropSelect.value
+        });
+
+        if (commonPartyDropSelect.value > 0) {
+            dispatch(CheckStockEntryForFirstTransaction({ jsonBody }))
+        }
+
+    }, [values.ReturnDate, commonPartyDropSelect])
+
+    useEffect(() => {
+
+        if (StockEnteryForFirstYear.Status === false && StockEnteryForFirstYear.StatusCode === 400) {
+            dispatch(CheckStockEntryForFirstTransactionSuccess({ status: false }))
+            customAlert({
+                Type: 3,
+                Message: JSON.stringify(StockEnteryForFirstYear.Message),
+            })
+        }
+    }, [StockEnteryForFirstYear])
+
 
     useEffect(() => {
 
