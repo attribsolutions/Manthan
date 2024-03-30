@@ -47,7 +47,8 @@ import Slidewithcaption from "../../../components/Common/CommonImageComponent";
 import { deltBtnCss } from "../../../components/Common/ListActionsButtons";
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
-import { CheckStockEntryforBackDatedTransaction, CheckStockEntryforBackDatedTransactionSuccess } from "../../../store/Inventory/StockEntryRedux/action";
+import { CheckStockEntryForFirstTransactionSuccess, CheckStockEntryforBackDatedTransaction, CheckStockEntryforBackDatedTransactionSuccess } from "../../../store/Inventory/StockEntryRedux/action";
+import { CheckStockEntryForFirstTransaction } from "../../../helpers/backend_helper";
 
 const SalesReturn = (props) => {
 
@@ -99,9 +100,9 @@ const SalesReturn = (props) => {
         invoiceNoDropDownLoading,
         retailerDropLoading,
         commonPartyDropSelect,
-        StockEnteryForBackdated
+        StockEnteryForFirstYear
     } = useSelector((state) => ({
-        StockEnteryForBackdated: state.StockEntryReducer.StockEnteryForBackdated,
+        StockEnteryForFirstYear: state.StockEntryReducer.StockEnteryForFirstYear,
         addButtonData: state.SalesReturnReducer.addButtonData,
         postMsg: state.SalesReturnReducer.postMsg,
         RetailerList: state.CommonAPI_Reducer.RetailerList,
@@ -205,19 +206,19 @@ const SalesReturn = (props) => {
             "PartyID": commonPartyDropSelect.value
         });
         if (commonPartyDropSelect.value > 0) {
-            dispatch(CheckStockEntryforBackDatedTransaction({ jsonBody }))
+            dispatch(CheckStockEntryForFirstTransaction({ jsonBody }))
         }
     }, [values.ReturnDate])
 
     useEffect(() => {
-        if (StockEnteryForBackdated.Status === false && StockEnteryForBackdated.StatusCode === 400) {
-            dispatch(CheckStockEntryforBackDatedTransactionSuccess({ status: false }))
+        if (StockEnteryForFirstYear.Status === false && StockEnteryForFirstYear.StatusCode === 400) {
+            dispatch(CheckStockEntryForFirstTransactionSuccess({ status: false }))
             customAlert({
                 Type: 3,
-                Message: JSON.stringify(StockEnteryForBackdated.Message),
+                Message: JSON.stringify(StockEnteryForFirstYear.Message),
             })
         }
-    }, [StockEnteryForBackdated])
+    }, [StockEnteryForFirstYear])
 
 
 
@@ -1215,7 +1216,7 @@ const SalesReturn = (props) => {
                             <SaveButtonDraggable>
                                 <SaveButton
                                     pageMode={pageMode}
-                                    forceDisabled={addBtnLoading || !StockEnteryForBackdated.Transaction}
+                                    forceDisabled={addBtnLoading || !StockEnteryForFirstYear.Data}
                                     loading={saveBtnloading}
                                     onClick={SaveHandler}
                                     userAcc={userPageAccessState}

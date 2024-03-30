@@ -52,13 +52,13 @@ import "./invoice.scss"
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { CInput, C_DatePicker, decimalRegx } from "../../../CustomValidateForm";
 import { getVehicleList, getVehicleListSuccess } from "../../../store/Administrator/VehicleRedux/action";
-import { Invoice_Singel_Get_for_Report_Api } from "../../../helpers/backend_helper";
+import { CheckStockEntryForFirstTransaction, Invoice_Singel_Get_for_Report_Api } from "../../../helpers/backend_helper";
 import * as report from '../../../Reports/ReportIndex'
 import GlobalCustomTable from "../../../GlobalCustomTable";
 import { changeCommonPartyDropDetailsAction } from "../../../store/Utilites/PartyDrodown/action";
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
-import { CheckStockEntryforBackDatedTransaction, CheckStockEntryforBackDatedTransactionSuccess } from "../../../store/Inventory/StockEntryRedux/action";
+import { CheckStockEntryForFirstTransactionSuccess, CheckStockEntryforBackDatedTransaction, CheckStockEntryforBackDatedTransactionSuccess } from "../../../store/Inventory/StockEntryRedux/action";
 
 const Invoice = (props) => {
 
@@ -107,7 +107,7 @@ const Invoice = (props) => {
         saveBtnloading,
         saveAndPdfBtnLoading,
         commonPartyDropSelect,
-        StockEnteryForBackdated
+        StockEnteryForFirstYear
     } = useSelector((state) => ({
         postMsg: state.InvoiceReducer.postMsg,
         editData: state.InvoiceReducer.editData,
@@ -122,7 +122,7 @@ const Invoice = (props) => {
         saveBtnloading: state.InvoiceReducer.saveBtnloading,
         saveAndPdfBtnLoading: state.InvoiceReducer.saveAndPdfBtnLoading,
         commonPartyDropSelect: state.CommonPartyDropdownReducer.commonPartyDropSelect,
-        StockEnteryForBackdated: state.StockEntryReducer.StockEnteryForBackdated,
+        StockEnteryForFirstYear: state.StockEntryReducer.StockEnteryForFirstYear,
     }));
 
     const location = { ...history.location }
@@ -654,21 +654,21 @@ const Invoice = (props) => {
             "PartyID": commonPartyDropSelect.value
         });
         if (commonPartyDropSelect.value > 0) {
-            dispatch(CheckStockEntryforBackDatedTransaction({ jsonBody }))
+            dispatch(CheckStockEntryForFirstTransaction({ jsonBody }))
         }
     }, [values.InvoiceDate])
 
 
 
     useEffect(() => {
-        if (StockEnteryForBackdated.Status === false && StockEnteryForBackdated.StatusCode === 400) {
-            dispatch(CheckStockEntryforBackDatedTransactionSuccess({ status: false }))
+        if (StockEnteryForFirstYear.Status === false && StockEnteryForFirstYear.StatusCode === 400) {
+            dispatch(CheckStockEntryForFirstTransactionSuccess({ status: false }))
             customAlert({
                 Type: 3,
-                Message: JSON.stringify(StockEnteryForBackdated.Message),
+                Message: JSON.stringify(StockEnteryForFirstYear.Message),
             })
         }
-    }, [StockEnteryForBackdated])
+    }, [StockEnteryForFirstYear])
 
 
 
@@ -946,7 +946,7 @@ const Invoice = (props) => {
                                     pageMode={pageMode}
                                     userAcc={userPageAccessState}
                                     onClick={SaveHandler}
-                                    forceDisabled={saveAndPdfBtnLoading || !StockEnteryForBackdated}
+                                    forceDisabled={saveAndPdfBtnLoading || !StockEnteryForFirstYear.Data}
                                 />
                                 {(pageMode === mode.defaultsave) &&
                                     <SaveAndDownloadPDF
@@ -955,7 +955,7 @@ const Invoice = (props) => {
                                         id={saveBtnid}
                                         userAcc={userPageAccessState}
                                         onClick={SaveHandler}
-                                        forceDisabled={(saveBtnloading) || !(StockEnteryForBackdated.Transaction)}
+                                        forceDisabled={(saveBtnloading) || !(StockEnteryForFirstYear.Data)}
                                     />
                                 }
                             </SaveButtonDraggable>
