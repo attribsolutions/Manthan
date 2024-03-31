@@ -104,7 +104,12 @@ const CreditNoteAdd = (props) => {
     // Common Party Dropdown useEffect
     useEffect(() => {
         if (commonPartyDropSelect.value > 0) {
-            partySelectButtonHandler();
+            const jsonBody = JSON.stringify({
+                Type: 4,
+                PartyID: commonPartyDropSelect.value,
+                CompanyID: loginCompanyID()
+            });
+            dispatch(Retailer_List(jsonBody));
         } else {
             partySelectOnChangeHandler();
         };
@@ -114,10 +119,13 @@ const CreditNoteAdd = (props) => {
     useEffect(() => {
         const page_Id = pageId.CREDIT_NOTE//changes
         dispatch(commonPageFieldSuccess(null));
-        dispatch(commonPageField(page_Id))
-        dispatch(ReceiptGoButtonMaster_Success([]))
-        dispatch(Invoice_Return_ID_Success([]))
-        dispatch(InvoiceNumberSuccess([]))
+        dispatch(commonPageField(page_Id));
+        
+        return()=>{
+            dispatch(ReceiptGoButtonMaster_Success([]))
+            dispatch(Invoice_Return_ID_Success([]))
+            dispatch(InvoiceNumberSuccess([]))
+        }
     }, []);
 
     // userAccess useEffect
@@ -223,16 +231,6 @@ const CreditNoteAdd = (props) => {
         }
     }, [pageField]);
 
-    // Retailer DropDown List Type 1 for credit list drop down
-    useEffect(() => {
-        const jsonBody = JSON.stringify({
-            Type: 1,
-            PartyID: commonPartyDropSelect.value,
-            CompanyID: loginCompanyID()
-        });
-        dispatch(Retailer_List(jsonBody));
-    }, []);
-
     // Note Reason Type id 6 Required
     useEffect(() => {
         const jsonBody = JSON.stringify({
@@ -310,15 +308,6 @@ const CreditNoteAdd = (props) => {
         });
 
         dispatch(InvoiceNumber(jsonBody1));
-    };
-
-    function partySelectButtonHandler() {
-        const jsonBody = JSON.stringify({
-            Type: 1,
-            PartyID: commonPartyDropSelect.value,
-            CompanyID: loginCompanyID()
-        });
-        dispatch(Retailer_List(jsonBody));
     };
 
     function partySelectOnChangeHandler() {

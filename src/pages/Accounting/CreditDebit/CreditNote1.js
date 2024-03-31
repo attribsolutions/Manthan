@@ -141,8 +141,15 @@ const CreditNote_1 = (props) => {
     const { commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
 
     useEffect(() => { // Common Party Dropdown useEffect
-        if (commonPartyDropSelect.value > 0) {
-            partySelectButtonHandler()
+        if ((commonPartyDropSelect.value > 0)) {
+            dispatch(goButton_ServiceItemAssign({ jsonBody: { CompanyID: 1, "PartyID": commonPartyDropSelect.value } }));
+            dispatch(goButtonPartyItemAddPage({ jsonBody: { ..._cfunc.loginJsonBody(), "PartyID": commonPartyDropSelect.value } }));
+            const jsonBody = JSON.stringify({
+                Type: 4,
+                PartyID: commonPartyDropSelect.value,
+                CompanyID: _cfunc.loginCompanyID(),
+            });
+            dispatch(Retailer_List(jsonBody));
         } else {
             partySelectOnChangeHandler()
         };
@@ -152,27 +159,13 @@ const CreditNote_1 = (props) => {
         dispatch(InvoiceNumberSuccess([]));
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_id));
-
-        if (!(commonPartyDropSelect.value === 0)) {
-            dispatch(goButton_ServiceItemAssign({ jsonBody: { CompanyID: 1, "PartyID": commonPartyDropSelect.value } }));
-            dispatch(goButtonPartyItemAddPage({ jsonBody: { ..._cfunc.loginJsonBody(), "PartyID": commonPartyDropSelect.value } }));
-            const jsonBody = JSON.stringify({
-                Type: 4,
-                PartyID: commonPartyDropSelect.value,
-                CompanyID: _cfunc.loginCompanyID(),
-            });
-            dispatch(Retailer_List(jsonBody));
-        }
         dispatch(BreadcrumbShowCountlabel(`${"Count"} :${0} ₹ :${0}`));
-
         return () => {
             dispatch(Retailer_List_Success([]));
             dispatch(goButtonPartyItemAddPageSuccess([]));
             dispatch(goButton_ServiceItemAssign_Success([]));
         };
     }, []);
-
-
 
     useEffect(() => {// userAccess useEffect
         let userAcc = null;
@@ -659,12 +652,6 @@ const CreditNote_1 = (props) => {
     }
 
     function partySelectButtonHandler() {
-        const jsonBody = JSON.stringify({
-            Type: 4,
-            PartyID: commonPartyDropSelect.value,
-            CompanyID: _cfunc.loginCompanyID(),
-        });
-        dispatch(Retailer_List(jsonBody));
         dispatch(goButton_ServiceItemAssign({ jsonBody: { CompanyID: 1, "PartyID": commonPartyDropSelect.value } }));
         dispatch(goButtonPartyItemAddPage({ jsonBody: { ..._cfunc.loginJsonBody(), "PartyID": commonPartyDropSelect.value } }));
     }
