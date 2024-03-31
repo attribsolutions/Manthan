@@ -197,7 +197,14 @@ const PurchaseReturn = (props) => {
             TypeID: 8
         });
         dispatch(postSelect_Field_for_dropdown(jsonBody));
+
+        return () => {
+            dispatch(CheckStockEntryForFirstTransactionSuccess({ status: false }))
+        }
+
     }, []);
+
+
 
     useEffect(() => {
         if (pageField) {
@@ -267,17 +274,6 @@ const PurchaseReturn = (props) => {
 
 
     }, [values.ReturnDate, commonPartyDropSelect])
-
-    useEffect(() => {
-
-        if (StockEnteryForFirstYear.Status === true && StockEnteryForFirstYear.StatusCode === 400) {
-            dispatch(CheckStockEntryForFirstTransactionSuccess({ status: false }))
-            customAlert({
-                Type: 3,
-                Message: JSON.stringify(StockEnteryForFirstYear.Message),
-            })
-        }
-    }, [StockEnteryForFirstYear])
 
 
     useEffect(() => {
@@ -896,7 +892,15 @@ const PurchaseReturn = (props) => {
 
         const InvoiceId = values.InvoiceNumber ? values.InvoiceNumber.value : ''
         const nrwReturnMode = (byType === 'ItemWise') ? 2 : 1 //(returnMode === 2) ItemWise
-        dispatch(SalesReturnAddBtn_Action({ jsonBody, InvoiceId, returnMode: nrwReturnMode }))
+
+        if (StockEnteryForFirstYear.Status === true && StockEnteryForFirstYear.StatusCode === 400) {
+            customAlert({
+                Type: 3,
+                Message: JSON.stringify(StockEnteryForFirstYear.Message),
+            })
+        } else {
+            dispatch(SalesReturnAddBtn_Action({ jsonBody, InvoiceId, returnMode: nrwReturnMode }))
+        }
         setReturnMode(nrwReturnMode)
     }
 
