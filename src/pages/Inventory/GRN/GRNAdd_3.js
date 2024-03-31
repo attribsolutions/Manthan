@@ -27,7 +27,8 @@ import { useLayoutEffect } from "react";
 import DatePicker from "react-flatpickr";
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
-import { CheckStockEntryForFirstTransaction, CheckStockEntryForFirstTransactionSuccess } from "../../../store/Inventory/StockEntryRedux/action";
+import { CheckStockEntryForFirstTransaction, CheckStockEntryForFirstTransactionSuccess, CheckStockEntryforBackDatedTransaction, CheckStockEntryforBackDatedTransactionSuccess } from "../../../store/Inventory/StockEntryRedux/action";
+
 
 
 const GRNAdd3 = (props) => {
@@ -65,9 +66,11 @@ const GRNAdd3 = (props) => {
         genralMaster_type69,
         hideMsg,
         StockEnteryForFirstYear,
+        StockEnteryForBackdated,
         commonPartyDropSelect
     } = useSelector((state) => ({
         StockEnteryForFirstYear: state.StockEntryReducer.StockEnteryForFirstYear,
+        StockEnteryForBackdated: state.StockEntryReducer.StockEnteryForBackdated,
         saveBtnloading: state.GRNReducer.saveBtnloading,
         items: state.GRNReducer.GRNitem,
         hideMsg: state.GRNReducer.hideMsg,
@@ -137,7 +140,6 @@ const GRNAdd3 = (props) => {
             setopenPOdata(grnDetails.GRNReferences)
 
             dispatch(makeGRN_Mode_1ActionSuccess({ Status: false }))
-
             dispatch(BreadcrumbShowCountlabel(`${"GRN Amount"} :${grnDetails.OrderAmount}`))
         }
 
@@ -157,21 +159,26 @@ const GRNAdd3 = (props) => {
 
 
 
-
     useEffect(() => {
         const jsonBody = JSON.stringify({
             "FromDate": grnDate,
-            "PartyID": commonPartyDropSelect.value
+            "PartyID": commonPartyDropSelect.value,
         });
 
+
+        const jsonBodyForBackdatedTransaction = JSON.stringify({
+            "TransactionDate": grnDate,
+            "PartyID": commonPartyDropSelect.value,
+
+        });
         if (commonPartyDropSelect.value > 0) {
             dispatch(CheckStockEntryForFirstTransaction({ jsonBody }))
+            dispatch(CheckStockEntryforBackDatedTransaction({ jsonBody: jsonBodyForBackdatedTransaction }))
         }
+
     }, [values.GRNDate, grnDate, commonPartyDropSelect.value])
 
-
     useEffect(() => {
-
         if (hideMsg.Status === true && hideMsg.StatusCode === 200) {
             customAlert({
                 Type: 3,
@@ -385,6 +392,7 @@ const GRNAdd3 = (props) => {
 
     }
 
+
     const saveHandeller = (event) => {
         event.preventDefault();
         const btnId = event.target.id
@@ -435,7 +443,12 @@ const GRNAdd3 = (props) => {
             if (pageMode === mode.edit) {
 
             } else {
-                dispatch(saveGRNAction({ jsonBody, btnId }))
+                if (StockEnteryForBackdated.Status === true && StockEnteryForBackdated.StatusCode === 400) {
+                    dispatch(CheckStockEntryforBackDatedTransactionSuccess({ status: false }))
+                    customAlert({ Type: 3, Message: StockEnteryForBackdated.Message });
+                } else {
+                    dispatch(saveGRNAction({ jsonBody, btnId }))
+                }
             }
         } catch (error) { _cfunc.CommonConsole(error) }
     }

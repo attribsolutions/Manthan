@@ -3,6 +3,7 @@ import * as  apiCall from "../../../helpers/backend_helper";
 import * as actionType from "./actionType";
 import * as action from "./action";
 import { amountCommaSeparateFunc, listpageConcatDateAndTime, date_dmy_func } from "../../../components/Common/CommonFunction";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 
 // Bank list Dropdown API
 function* Invoice_No_List_GenFunc({ jsonBody }) {
@@ -37,7 +38,7 @@ function* SalesReturn_List_GenFun({ filters }) {
             i["IsCreditNoteCreated"] = i.IsCreditNoteCreated === 1 ? true : false
             i["IsApproved"] = i.IsApproved === 1 ? true : false
             i["forceDeleteHide"] = ((i.Mode === 3) && (i.IsApproved)) ? true : false
-            
+
             return i
         })
         yield put(action.salesReturnListAPISuccess(newList));
@@ -46,8 +47,20 @@ function* SalesReturn_List_GenFun({ filters }) {
 
 // delete API
 function* delete_SalesReturn_ID_GenFunc({ config }) {
-
+    debugger
     try {
+        const SelectedPartyID = JSON.parse(localStorage.getItem("selectedParty")).value
+        const jsonBodyForBackdatedTransaction = JSON.stringify({
+            "TransactionDate": config.rowData.ReturnDate,
+            "PartyID": SelectedPartyID,
+        });
+        const BackDateresponse = yield apiCall.CheckStockEntryforBackDatedTransaction({ jsonBody: jsonBodyForBackdatedTransaction })
+        if (BackDateresponse.Status === true && BackDateresponse.StatusCode === 400) {
+            customAlert({ Type: 3, Message: BackDateresponse.Message });
+            yield put(action.SalesReturnApiErrorAction())
+            return
+        }
+
         const response = yield call(apiCall.SalesReturn_Delete_API, config);
         yield put(action.delete_SalesReturn_Id_Succcess(response))
     } catch (error) { yield put(action.SalesReturnApiErrorAction()) }

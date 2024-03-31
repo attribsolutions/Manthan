@@ -58,7 +58,7 @@ import GlobalCustomTable from "../../../GlobalCustomTable";
 import { changeCommonPartyDropDetailsAction } from "../../../store/Utilites/PartyDrodown/action";
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
-import { CheckStockEntryForFirstTransaction, CheckStockEntryForFirstTransactionSuccess } from "../../../store/Inventory/StockEntryRedux/action";
+import { CheckStockEntryForFirstTransaction, CheckStockEntryForFirstTransactionSuccess, CheckStockEntryforBackDatedTransaction, CheckStockEntryforBackDatedTransactionSuccess } from "../../../store/Inventory/StockEntryRedux/action";
 
 const Invoice = (props) => {
 
@@ -107,7 +107,8 @@ const Invoice = (props) => {
         saveBtnloading,
         saveAndPdfBtnLoading,
         commonPartyDropSelect,
-        StockEnteryForFirstYear
+        StockEnteryForFirstYear,
+        StockEnteryForBackdated
     } = useSelector((state) => ({
         postMsg: state.InvoiceReducer.postMsg,
         editData: state.InvoiceReducer.editData,
@@ -123,6 +124,8 @@ const Invoice = (props) => {
         saveAndPdfBtnLoading: state.InvoiceReducer.saveAndPdfBtnLoading,
         commonPartyDropSelect: state.CommonPartyDropdownReducer.commonPartyDropSelect,
         StockEnteryForFirstYear: state.StockEntryReducer.StockEnteryForFirstYear,
+        StockEnteryForBackdated: state.StockEntryReducer.StockEnteryForBackdated,
+
     }));
 
     const location = { ...history.location }
@@ -653,8 +656,17 @@ const Invoice = (props) => {
             "FromDate": values.InvoiceDate,
             "PartyID": commonPartyDropSelect.value
         });
+
+        const jsonBodyForBackdatedTransaction = JSON.stringify({
+            "TransactionDate": values.InvoiceDate,
+            "PartyID": commonPartyDropSelect.value,
+            
+        });
+
         if (commonPartyDropSelect.value > 0) {
             dispatch(CheckStockEntryForFirstTransaction({ jsonBody }))
+            dispatch(CheckStockEntryforBackDatedTransaction({ jsonBody: jsonBodyForBackdatedTransaction }))
+
         }
     }, [values.InvoiceDate, commonPartyDropSelect.value])
 
@@ -836,7 +848,12 @@ const Invoice = (props) => {
                 dispatch(updateInvoiceAction(config));
             }
             else {
-                dispatch(invoiceSaveAction({ subPageMode, jsonBody, btnId, saveAndDownloadPdfMode }));
+                if (StockEnteryForBackdated.Status === true && StockEnteryForBackdated.StatusCode === 400) {
+                    dispatch(CheckStockEntryforBackDatedTransactionSuccess({ status: false }))
+                    customAlert({ Type: 3, Message: StockEnteryForBackdated.Message });
+                } else {
+                    dispatch(invoiceSaveAction({ subPageMode, jsonBody, btnId, saveAndDownloadPdfMode }));
+                }
             }
 
         } catch (e) { _cfunc.CommonConsole("invoice save Handler", e) }

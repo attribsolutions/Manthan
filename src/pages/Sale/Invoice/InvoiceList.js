@@ -14,7 +14,7 @@ import * as report from '../../../Reports/ReportIndex'
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
-import { Invoice_Singel_Get_for_Report_Api } from "../../../helpers/backend_helper";
+import { CheckStockEntryforBackDatedTransaction, Invoice_Singel_Get_for_Report_Api } from "../../../helpers/backend_helper";
 import { getpdfReportdata } from "../../../store/Utilites/PdfReport/actions";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import {
@@ -42,8 +42,9 @@ import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { getVehicleList } from "../../../store/Administrator/VehicleRedux/action";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 import { allLabelWithBlank } from "../../../components/Common/CommonErrorMsg/HarderCodeData";
-import { sideBarPageFiltersInfoAction, sideBarPageFiltersInfoSuccess } from "../../../store/Utilites/PartyDrodown/action";
+import { sideBarPageFiltersInfoAction } from "../../../store/Utilites/PartyDrodown/action";
 import { date_dmy_func } from "../../../components/Common/CommonFunction";
+import { CheckStockEntryforBackDatedTransactionSuccess } from "../../../store/Inventory/StockEntryRedux/action";
 
 const InvoiceList = () => {
 
@@ -59,6 +60,8 @@ const InvoiceList = () => {
     const [modal, setmodal] = useState(false);
     const [vehicleErrorMsg, setvehicleErrorMsg] = useState(false);
     const [InvoiceID, setInvoiceID] = useState("");
+
+
 
     const reducers = useSelector(
         (state) => ({
@@ -100,6 +103,7 @@ const InvoiceList = () => {
         sendToScmMsg,
         invoiceBulkDelete,
         invoiceBulkDeleteLoading,
+
 
     } = reducers;
 
@@ -346,7 +350,6 @@ const InvoiceList = () => {
     }));
 
     function downBtnFunc(config) {
-
         config["ReportType"] = report.invoice;
         dispatch(getpdfReportdata(Invoice_Singel_Get_for_Report_Api, config))
     }
@@ -525,10 +528,22 @@ const InvoiceList = () => {
         }
     };
 
-    function editBodyfunc(config) {
-
+    async function editBodyfunc(config) {
+        debugger
         const { rowData } = config;
+        const jsonBodyForBackdatedTransaction = JSON.stringify({
+            "TransactionDate": rowData.InvoiceDate,
+            "PartyID": commonPartyDropSelect.value,
+        });
 
+        if (commonPartyDropSelect.value > 0) {
+            const response = await CheckStockEntryforBackDatedTransaction({ jsonBody: jsonBodyForBackdatedTransaction })
+            if (response.Status === true && response.StatusCode === 400) {
+                dispatch(CheckStockEntryforBackDatedTransactionSuccess({ status: false }))
+                customAlert({ Type: 3, Message: response.Message });
+                return
+            }
+        }
         const customer = {
             value: rowData.CustomerID,
             label: rowData.Customer,
@@ -536,12 +551,15 @@ const InvoiceList = () => {
             IsTCSParty: rowData.IsTCSParty,
             ISCustomerPAN: rowData.CustomerPAN
         }
+
         dispatch(editInvoiceAction({
             ...config,
             customer,
             subPageMode: url.INVOICE_1,
             path: url.INVOICE_1,
         }));
+
+
 
     }
 

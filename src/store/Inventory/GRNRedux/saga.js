@@ -10,6 +10,7 @@ import {
   updateGRNIdSuccess,
 } from "./actions";
 import {
+  CheckStockEntryforBackDatedTransaction,
   GRN_delete_API,
   GRN_Edit_API,
   GRN_get_API, GRN_Make_API, GRN_Post_API,
@@ -27,6 +28,7 @@ import {
 } from "./actionType";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { url } from "../../../routes";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 
 function* saveGRNGenFunc({ config }) {            // Save GRN  genrator function
   try {
@@ -38,6 +40,17 @@ function* saveGRNGenFunc({ config }) {            // Save GRN  genrator function
 
 function* DeleteGRNGenFunc({ config }) {            // Delete GRN  genrator function
   try {
+    const SelectedPartyID = JSON.parse(localStorage.getItem("selectedParty")).value
+    const jsonBodyForBackdatedTransaction = JSON.stringify({
+      "TransactionDate": config.rowData.GRNDate,
+      "PartyID": SelectedPartyID,
+    });
+    const BackDateresponse = yield CheckStockEntryforBackDatedTransaction({ jsonBody: jsonBodyForBackdatedTransaction })
+    if (BackDateresponse.Status === true && BackDateresponse.StatusCode === 400) {
+      customAlert({ Type: 3, Message: BackDateresponse.Message });
+      yield put(GrnApiErrorAction())
+      return
+    }
     const response = yield call(GRN_delete_API, config);
     yield put(deleteGRNIdSuccess(response));
   } catch (error) { yield put(GrnApiErrorAction()) }
