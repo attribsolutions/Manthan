@@ -32,6 +32,7 @@ import { MainSearchBox, } from '../Common/SearchBox/index';
 import { MySearch } from '../Common/SearchBox/MySearch';
 import { loginSystemSetting } from '../Common/CommonFunction';
 import { Modal } from 'reactstrap';
+import { Notification_Log } from '../../helpers/backend_helper';
 
 const Header = props => {
   const { onChangeLayoutMode } = props;
@@ -80,7 +81,20 @@ const Header = props => {
   }, []);
 
 
+  const handleClick = async () => {
+    const SelectedPartyID = JSON.parse(localStorage.getItem("selectedParty")).value
+    const jsonBody =
+    {
+      "PartyID": SelectedPartyID,
+      "TransactionID": 0,
+      "FromDate": "",
+      "ToDate": "",
+      "CustomerID": 0
 
+    }
+    setmodal_backdrop(true);
+    await Notification_Log({ jsonBody });
+  };
 
   return (
     <React.Fragment>
@@ -151,7 +165,7 @@ const Header = props => {
           </div>
 
           {IsNotificationShow !== "null" ? <div style={{ fontWeight: "bold", cursor: "pointer" }} >
-            <h3 style={{ color: "red" }} onClick={() => { setmodal_backdrop(true) }} class="text-red blink-soft">Important Notification! Click here</h3>
+            <h3 style={{ color: "red" }} onClick={handleClick} class="text-red blink-soft">Important Notification! Click here</h3>
           </div> : null}
 
 

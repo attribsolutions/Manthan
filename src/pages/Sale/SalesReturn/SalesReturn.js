@@ -1140,7 +1140,7 @@ const SalesReturn = (props) => {
                                             <Input
                                                 name="BatchCode"
                                                 value={values.BatchCode}
-                                                placeholder="Enter BatchCode"
+                                                placeholder="Enter Batch Code"
                                                 type='text'
                                                 autoComplete='off'
                                                 onChange={(event) => {
