@@ -26,6 +26,7 @@ import {
   Invoice_1_Edit_API,
   Invoice_1_Update_API,
   Invoice_1_Bulk_Delete_API,
+  CheckStockEntryforBackDatedTransaction,
 } from "../../../helpers/backend_helper";
 import {
   deleteInvoiceIdSuccess,
@@ -63,6 +64,7 @@ import {
 import *as url from "../../../routes/route_url"
 import { invoice_discountCalculate_Func } from "../../../pages/Sale/Invoice/invoiceCaculations";
 import { orderApprovalActionSuccess } from "../../actions";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 
 //post api for Invoice Master
 function* save_Invoice_Genfun({ config }) {
@@ -195,11 +197,21 @@ function* DeleteInvoiceGenFunc({ config }) {
     let response;
 
     if (subPageMode === url.INVOICE_LIST_1) {
+      const SelectedPartyID = JSON.parse(localStorage.getItem("selectedParty")).value
+      const jsonBodyForBackdatedTransaction = JSON.stringify({
+        "TransactionDate": config.rowData.InvoiceDate,
+        "PartyID": SelectedPartyID,
+      });
+      const BackDateresponse = yield CheckStockEntryforBackDatedTransaction({ jsonBody: jsonBodyForBackdatedTransaction })
+      if (BackDateresponse.Status === true && BackDateresponse.StatusCode === 400) {
+        customAlert({ Type: 3, Message: BackDateresponse.Message });
+        yield put(InvoiceApiErrorAction())
+        return
+      }
       response = yield call(Invoice_1_Delete_API, config)
     } else if (subPageMode === url.IB_INVOICE_LIST) {
       response = yield call(IB_Invoice_Delete_API, config)
     }
-
     yield put(deleteInvoiceIdSuccess(response));
   } catch (error) {
     yield put(InvoiceApiErrorAction())

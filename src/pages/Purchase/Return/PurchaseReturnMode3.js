@@ -35,7 +35,7 @@ import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import Slidewithcaption from "../../../components/Common/CommonImageComponent";
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
-import { CheckStockEntryForFirstTransaction, CheckStockEntryForFirstTransactionSuccess } from "../../../store/Inventory/StockEntryRedux/action";
+import { CheckStockEntryForFirstTransaction, CheckStockEntryForFirstTransactionSuccess, CheckStockEntryforBackDatedTransaction, CheckStockEntryforBackDatedTransactionSuccess } from "../../../store/Inventory/StockEntryRedux/action";
 
 
 const PurchaseReturnMode3 = (props) => {
@@ -72,9 +72,11 @@ const PurchaseReturnMode3 = (props) => {
         pageField,
         userAccess,
         commonPartyDropSelect,
-        StockEnteryForFirstYear
+        StockEnteryForFirstYear,
+        StockEnteryForBackdated
     } = useSelector((state) => ({
         StockEnteryForFirstYear: state.StockEntryReducer.StockEnteryForFirstYear,
+        StockEnteryForBackdated: state.StockEntryReducer.StockEnteryForBackdated,
         saveBtnloading: state.SalesReturnReducer.saveBtnloading,
         sendToSSbtnTableData: state.SalesReturnReducer.sendToSSbtnTableData,
         supplier: state.CommonAPI_Reducer.vendorSupplierCustomer,
@@ -208,8 +210,14 @@ const PurchaseReturnMode3 = (props) => {
             "FromDate": values.ReturnDate,
             "PartyID": commonPartyDropSelect.value
         });
+
+        const jsonBodyForBackdatedTransaction = JSON.stringify({
+            "TransactionDate": values.ReturnDate,
+            "PartyID": commonPartyDropSelect.value,
+        });
         if (commonPartyDropSelect.value > 0) {
             dispatch(CheckStockEntryForFirstTransaction({ jsonBody }))
+            dispatch(CheckStockEntryforBackDatedTransaction({ jsonBody: jsonBodyForBackdatedTransaction }))
         }
     }, [values.ReturnDate, commonPartyDropSelect.value])
 
@@ -522,7 +530,13 @@ const PurchaseReturnMode3 = (props) => {
             formData.append('PurchaseReturnReferences', JSON.stringify(PurchaseReturnReferences)); // Convert to JSON string
             formData.append('ReturnItems', JSON.stringify(ReturnItems)); // Convert to JSON strin
 
-            dispatch(saveSalesReturnMaster({ formData, btnId }));
+
+            if (StockEnteryForBackdated.Status === true && StockEnteryForBackdated.StatusCode === 400) {
+                dispatch(CheckStockEntryforBackDatedTransactionSuccess({ status: false }))
+                customAlert({ Type: 3, Message: StockEnteryForBackdated.Message });
+            } else {
+                dispatch(saveSalesReturnMaster({ formData, btnId }));
+            }
 
         } catch (e) { _cfunc.CommonConsole(e) }
     };

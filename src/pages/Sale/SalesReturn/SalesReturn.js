@@ -47,7 +47,7 @@ import Slidewithcaption from "../../../components/Common/CommonImageComponent";
 import { deltBtnCss } from "../../../components/Common/ListActionsButtons";
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
-import { CheckStockEntryForFirstTransaction, CheckStockEntryForFirstTransactionSuccess } from "../../../store/Inventory/StockEntryRedux/action";
+import { CheckStockEntryForFirstTransaction, CheckStockEntryForFirstTransactionSuccess, CheckStockEntryforBackDatedTransaction, CheckStockEntryforBackDatedTransactionSuccess } from "../../../store/Inventory/StockEntryRedux/action";
 
 
 const SalesReturn = (props) => {
@@ -100,9 +100,11 @@ const SalesReturn = (props) => {
         invoiceNoDropDownLoading,
         retailerDropLoading,
         commonPartyDropSelect,
-        StockEnteryForFirstYear
+        StockEnteryForFirstYear,
+        StockEnteryForBackdated
     } = useSelector((state) => ({
         StockEnteryForFirstYear: state.StockEntryReducer.StockEnteryForFirstYear,
+        StockEnteryForBackdated: state.StockEntryReducer.StockEnteryForBackdated,
         addButtonData: state.SalesReturnReducer.addButtonData,
         postMsg: state.SalesReturnReducer.postMsg,
         RetailerList: state.CommonAPI_Reducer.RetailerList,
@@ -206,9 +208,16 @@ const SalesReturn = (props) => {
             "FromDate": values.ReturnDate,
             "PartyID": commonPartyDropSelect.value
         });
+
+        const jsonBodyForBackdatedTransaction = JSON.stringify({
+            "TransactionDate": values.ReturnDate,
+            "PartyID": commonPartyDropSelect.value,
+        });
         if (commonPartyDropSelect.value > 0) {
             dispatch(CheckStockEntryForFirstTransaction({ jsonBody }))
+            dispatch(CheckStockEntryforBackDatedTransaction({ jsonBody: jsonBodyForBackdatedTransaction }))
         }
+
     }, [values.ReturnDate, commonPartyDropSelect.value])
 
     useEffect(() => {
@@ -414,7 +423,6 @@ const SalesReturn = (props) => {
                     <div className="parent" >
                         <div className="child" style={{ minWidth: "100px" }}>
                             <CInput
-
                                 defaultValue={row.Quantity}
                                 autoComplete="off"
                                 type="text"
@@ -990,7 +998,13 @@ const SalesReturn = (props) => {
             formData.append('PurchaseReturnReferences', JSON.stringify([])); // Convert to JSON string
             formData.append('ReturnItems', JSON.stringify(ReturnItems)); // Convert to JSON string
 
-            dispatch(saveSalesReturnMaster({ formData, btnId })); // Send FormData as the payload
+            if (StockEnteryForBackdated.Status === true && StockEnteryForBackdated.StatusCode === 400) {
+                dispatch(CheckStockEntryforBackDatedTransactionSuccess({ status: false }))
+                customAlert({ Type: 3, Message: StockEnteryForBackdated.Message });
+            } else {
+                dispatch(saveSalesReturnMaster({ formData, btnId })); // Send FormData as the payload
+            }
+
         } catch (e) {
             _cfunc.CommonConsole(e);
         }
