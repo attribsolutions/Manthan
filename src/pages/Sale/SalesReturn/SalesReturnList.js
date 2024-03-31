@@ -578,7 +578,6 @@ const SalesReturnList = () => {
                             <Col sm={2}>
                                 <Label className=" mt-2 p-2"
                                     style={{ width: "60px" }}>Upload</Label>
-
                             </Col>
                             <Col sm={5}>
                                 <Input

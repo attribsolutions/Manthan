@@ -998,12 +998,7 @@ const SalesReturn = (props) => {
             formData.append('PurchaseReturnReferences', JSON.stringify([])); // Convert to JSON string
             formData.append('ReturnItems', JSON.stringify(ReturnItems)); // Convert to JSON string
 
-            if (StockEnteryForBackdated.Status === true && StockEnteryForBackdated.StatusCode === 400) {
-                dispatch(CheckStockEntryforBackDatedTransactionSuccess({ status: false }))
-                customAlert({ Type: 3, Message: StockEnteryForBackdated.Message });
-            } else {
-                dispatch(saveSalesReturnMaster({ formData, btnId })); // Send FormData as the payload
-            }
+            dispatch(saveSalesReturnMaster({ formData, btnId })); // Send FormData as the payload
 
         } catch (e) {
             _cfunc.CommonConsole(e);
