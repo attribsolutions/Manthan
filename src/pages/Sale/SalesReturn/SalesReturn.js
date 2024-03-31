@@ -126,6 +126,8 @@ const SalesReturn = (props) => {
         dispatch(BreadcrumbShowCountlabel(`${"Total Amount"} :${0}`))
         return () => {
             dispatch(Retailer_List_Success([]));
+            dispatch(CheckStockEntryForFirstTransactionSuccess({ status: false }))
+
         }
     }, []);
 
@@ -219,16 +221,6 @@ const SalesReturn = (props) => {
         }
 
     }, [values.ReturnDate, commonPartyDropSelect.value])
-
-    useEffect(() => {
-        if (StockEnteryForFirstYear.Status === true && StockEnteryForFirstYear.StatusCode === 400) {
-            dispatch(CheckStockEntryForFirstTransactionSuccess({ status: false }))
-            customAlert({
-                Type: 3,
-                Message: JSON.stringify(StockEnteryForFirstYear.Message),
-            })
-        }
-    }, [StockEnteryForFirstYear])
 
 
 
@@ -806,7 +798,15 @@ const SalesReturn = (props) => {
 
         const InvoiceId = values.InvoiceNumber ? values.InvoiceNumber.value : ''
         const nrwReturnMode = (byType === 'ItemWise') ? 2 : 1 //(returnMode === 2) ItemWise
-        dispatch(SalesReturnAddBtn_Action({ jsonBody, InvoiceId, returnMode: nrwReturnMode }))
+
+        if (StockEnteryForFirstYear.Status === true && StockEnteryForFirstYear.StatusCode === 400) {
+            customAlert({
+                Type: 3,
+                Message: JSON.stringify(StockEnteryForFirstYear.Message),
+            })
+        } else {
+            dispatch(SalesReturnAddBtn_Action({ jsonBody, InvoiceId, returnMode: nrwReturnMode }))
+        }
         setReturnMode(nrwReturnMode)
     }
 

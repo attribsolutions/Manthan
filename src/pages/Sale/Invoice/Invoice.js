@@ -519,7 +519,10 @@ const Invoice = (props) => {
                                         defaultValue={discountTypeAll}
                                         classNamePrefix="select2-selection"
                                         options={discountDropOption}
-                                        style={{ textAlign: "right" }}
+                                        // style={{ textAlign: "right",zIndex: 2 }}
+                                        styles={{
+                                            menu: provided => ({ ...provided, zIndex: 55 })
+                                        }}
                                         onChange={(e) => {
                                             setChangeAllDiscount(true);
                                             setDiscountTypeAll(e);
@@ -660,7 +663,7 @@ const Invoice = (props) => {
         const jsonBodyForBackdatedTransaction = JSON.stringify({
             "TransactionDate": values.InvoiceDate,
             "PartyID": commonPartyDropSelect.value,
-            
+
         });
 
         if (commonPartyDropSelect.value > 0) {
