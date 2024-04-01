@@ -47,7 +47,7 @@ const StockEntry = (props) => {
     const [userPageAccessState, setUserAccState] = useState('');
 
     const fileds = {
-        Date: currentDate_ymd,
+        Date: "2024-03-31",
         ItemName: "",
         IsAllStockZero: false
     }
@@ -558,7 +558,7 @@ const StockEntry = (props) => {
                                 <Col sm={4} className="">
                                     <FormGroup className="mb- row mt-3 mb-1 " >
                                         <Label className="col-sm-5 p-2"
-                                            style={{ width: "83px" }}>{fieldLabel.Date}</Label>
+                                            style={{ width: "150px" }}>{fieldLabel.Date}</Label>
                                         <Col sm="7">
                                             <C_DatePicker
                                                 name='Date'
