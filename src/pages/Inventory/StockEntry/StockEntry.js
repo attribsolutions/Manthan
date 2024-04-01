@@ -631,11 +631,11 @@ const StockEntry = (props) => {
                                 <Col sm={4} className="">
                                     <FormGroup className="mb- row mt-3 mb-1 " >
                                         <Label className="col-sm-5 p-2"
-                                            style={{ width: "83px" }}>{fieldLabel.Date}</Label>
+                                            style={{ width: "150px" }}>{fieldLabel.Date}</Label>
                                         <Col sm="7">
                                             <C_DatePicker
                                                 name='Date'
-                                                value={values.Date}
+                                                value={"2024-03-31"}
                                                 onChange={Date_Onchange}
                                             />
                                         </Col>
@@ -674,7 +674,8 @@ const StockEntry = (props) => {
                                         <Col sm={7} style={{ marginTop: '5px' }} >
                                             <div className="form-check form-switch form-switch-md mb-3">
                                                 <Input type="checkbox" className="form-check-input"
-                                                    checked={values.IsAllStockZero}
+                                                    // checked={values.IsAllStockZero}
+                                                    checked={true}
                                                     name="IsAllStockZero"
                                                     onChange={isAllStockZero_Onchange}
 

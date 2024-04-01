@@ -14,6 +14,8 @@ import { CInput, onlyNumberRegx } from "../../../CustomValidateForm";
 import { C_Button } from "../../../components/Common/CommonButton";
 import Slidewithcaption from "../../../components/Common/CommonImageComponent";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
+import { CheckStockEntryForFirstTransaction, CheckStockEntryforBackDatedTransaction } from "../../../helpers/backend_helper";
+
 
 const ViewDetails_Modal = () => {
 
@@ -33,15 +35,55 @@ const ViewDetails_Modal = () => {
         saveBtnloading: state.SalesReturnReducer.saveBtnloading // modify Redux State
     }))
 
-    useEffect(() => {
+    useEffect(async () => {
 
         try {
             if ((viewData_redux.Status === true)) {
                 if (viewData_redux.Data.length > 0) {
+                    const SelectedPartyID = JSON.parse(localStorage.getItem("selectedParty")).value
                     setTableArray(viewData_redux.Data[0])// modify Custom Table Data
-                    setModal_view(true);
-                }
+                    const allowedRoles = ReturnFinalApprovalRole.split(",").map(role => parseInt(role.trim()));
 
+
+                    const jsonBody = JSON.stringify({
+                        "FromDate": viewData_redux.Data[0].ReturnDate,
+                        "PartyID": SelectedPartyID
+                    });
+
+                    const jsonBodyForBackdatedTransaction = JSON.stringify({
+                        "TransactionDate": viewData_redux.Data[0].ReturnDate,
+                        "PartyID": SelectedPartyID,
+                    });
+                    if (SelectedPartyID > 0) {
+                        if (allowedRoles.includes(loginRoleID())) {
+                            setModal_view(true);
+                            return
+                        }
+                        if ((viewData_redux.Data[0].viewMode === url.PURCHASE_RETURN_LIST)) {
+                            setModal_view(true);
+                            return
+                        }
+                        const StockEnteryForTransaction = await (CheckStockEntryForFirstTransaction({ jsonBody }))
+                        const BackDateresponse = await (CheckStockEntryforBackDatedTransaction({ jsonBody: jsonBodyForBackdatedTransaction }))
+
+
+                        if (StockEnteryForTransaction.Status === true && StockEnteryForTransaction.StatusCode === 400) {
+                            customAlert({
+                                Type: 3,
+                                Message: JSON.stringify(StockEnteryForTransaction.Message),
+                            })
+                            return
+                        } else if (BackDateresponse.Status === true && BackDateresponse.StatusCode === 400) {
+                            customAlert({
+                                Type: 3,
+                                Message: JSON.stringify(BackDateresponse.Message),
+                            })
+                            return
+                        } else {
+                            setModal_view(true);
+                        }
+                    }
+                }
             }
         } catch (error) { CommonConsole(error) }
     }, [viewData_redux]);
