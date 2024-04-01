@@ -624,7 +624,7 @@ const StockEntry = (props) => {
                         </div >
 
 
-                        {true && <div style={{ color: "red", fontSize: "18px" }} className="sliding-text " >  Warning: If new stock is added then the previous whole item stock will become zero.  </div>}
+                        {values.IsAllStockZero  && <div style={{ color: "red", fontSize: "18px" }} className="sliding-text " >  Warning: If new stock is added then the previous whole item stock will become zero.  </div>}
                         <ToolkitProvider
                             keyField={"id"}
                             data={TableArr}
