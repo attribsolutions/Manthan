@@ -49,7 +49,7 @@ const StockEntry = (props) => {
     const fileds = {
         Date: "2024-03-31",
         ItemName: "",
-        IsAllStockZero: false
+        IsAllStockZero: true
     }
 
     const [state, setState] = useState(initialFiledFunc(fileds))
@@ -601,8 +601,7 @@ const StockEntry = (props) => {
                                         <Col sm={7} style={{ marginTop: '5px' }} >
                                             <div className="form-check form-switch form-switch-md mb-3">
                                                 <Input type="checkbox" className="form-check-input"
-                                                    // checked={values.IsAllStockZero}
-                                                    checked={true}
+                                                    checked={values.IsAllStockZero}
                                                     name="IsAllStockZero"
                                                     onChange={isAllStockZero_Onchange}
 
