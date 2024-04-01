@@ -17,7 +17,7 @@ import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMs
 import { CheckStockEntryForFirstTransaction, CheckStockEntryforBackDatedTransaction } from "../../../helpers/backend_helper";
 
 
-const ViewDetails_Modal = () => {
+const ViewDetails_Modal = (Props) => {
 
     const dispatch = useDispatch();
     const { ReturnFinalApprovalRole = '' } = loginSystemSetting()
@@ -29,6 +29,9 @@ const ViewDetails_Modal = () => {
 
 
 
+
+
+
     const { viewData_redux = [], ApprovrMsg, saveBtnloading } = useSelector((state) => ({
         viewData_redux: state.SalesReturnReducer.confirmBtnData, // modify Redux State
         ApprovrMsg: state.SalesReturnReducer.ApprovrMsg,// modify Redux State
@@ -36,8 +39,8 @@ const ViewDetails_Modal = () => {
     }))
 
     useEffect(async () => {
-
         try {
+
             if ((viewData_redux.Status === true)) {
                 if (viewData_redux.Data.length > 0) {
                     const SelectedPartyID = JSON.parse(localStorage.getItem("selectedParty")).value
@@ -56,16 +59,19 @@ const ViewDetails_Modal = () => {
                     });
                     if (SelectedPartyID > 0) {
                         if (allowedRoles.includes(loginRoleID())) {
-                            setModal_view(true);
-                            return
+                            return setModal_view(true);
                         }
                         if ((viewData_redux.Data[0].viewMode === url.PURCHASE_RETURN_LIST)) {
-                            setModal_view(true);
-                            return
-                        }
-                        const StockEnteryForTransaction = await (CheckStockEntryForFirstTransaction({ jsonBody }))
-                        const BackDateresponse = await (CheckStockEntryforBackDatedTransaction({ jsonBody: jsonBodyForBackdatedTransaction }))
+                            return setModal_view(true);
 
+                        }
+                        let StockEnteryForTransaction = { Status: false, StatusCode: 200 }
+                        let BackDateresponse = { Status: false, StatusCode: 200 }
+
+                        if (Props.subPageMode !== url.PURCHASE_RETURN_LIST) {
+                            StockEnteryForTransaction = await (CheckStockEntryForFirstTransaction({ jsonBody }))
+                            BackDateresponse = await (CheckStockEntryforBackDatedTransaction({ jsonBody: jsonBodyForBackdatedTransaction }))
+                        }
 
                         if (StockEnteryForTransaction.Status === true && StockEnteryForTransaction.StatusCode === 400) {
                             customAlert({
@@ -79,14 +85,18 @@ const ViewDetails_Modal = () => {
                                 Message: JSON.stringify(BackDateresponse.Message),
                             })
                             return
-                        } else {
-                            setModal_view(true);
                         }
+
                     }
                 }
             }
         } catch (error) { CommonConsole(error) }
+
+
     }, [viewData_redux]);
+
+
+
 
     useEffect(() => {
 
@@ -145,8 +155,6 @@ const ViewDetails_Modal = () => {
                     <div >{`${(row.ItemName)}`}</div>
                 </>
             )
-
-
         },
 
         {

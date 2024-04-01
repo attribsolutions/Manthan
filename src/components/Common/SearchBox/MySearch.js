@@ -61,7 +61,6 @@ export const MySearch = () => {//compont start
                 type="text"
                 onChange={handleClick}
                 value={search}
-                name="myCountry"
                 autoComplete="off"
                 autoFocus={true}
             />

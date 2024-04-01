@@ -5,7 +5,8 @@ import {
     Label,
     Input,
     Row,
-    Button
+    Button,
+    Spinner
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
 import { BreadcrumbShowCountlabel, commonPageFieldSuccess } from "../../../store/actions";
@@ -20,7 +21,7 @@ import {
 
 } from "../../../components/Common/validationFunction";
 import Select from "react-select";
-import { SaveButton } from "../../../components/Common/CommonButton";
+import { DashboardLoader, Loader, SaveButton } from "../../../components/Common/CommonButton";
 import { url, mode, pageId } from "../../../routes/index"
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { CInput, C_DatePicker, C_Select } from "../../../CustomValidateForm/index";
@@ -49,7 +50,7 @@ const StockEntry = (props) => {
     const fileds = {
         Date: "2024-03-31",
         ItemName: "",
-        IsAllStockZero: false
+        IsAllStockZero: true
     }
 
     const [state, setState] = useState(initialFiledFunc(fileds))
@@ -57,6 +58,8 @@ const StockEntry = (props) => {
 
     const [itemAPIData, setItemAPIData] = useState([]);
     const [itemAPIDataLoading, setItemAPIDataLoading] = useState(false);
+
+    const [AddLoading, setAddLoading] = useState(false);
 
     const location = { ...history.location }
     const hasShowModal = props.hasOwnProperty(mode.editValue)
@@ -370,19 +373,18 @@ const StockEntry = (props) => {
     }
 
     async function AddPartyHandler() {
+        setAddLoading(true)
         if (values.ItemName === '') {
             customAlert({
                 Type: 4,
                 Message: alertMessages.selectItemName
             });
+            setAddLoading(false)
             return;
         }
-
         try {
             const apiResponse = await StockEntry_GO_button_api_For_Item(values.ItemName.value);
-
             const updatedTableData = await ItemAPIResponseFunc(apiResponse, [...TableArr]);
-
             setState((prevState) => {
                 const newState = { ...prevState };
                 newState.values.ItemName = "";
@@ -392,8 +394,9 @@ const StockEntry = (props) => {
 
             setTableArr(updatedTableData);
             dispatch(BreadcrumbShowCountlabel(`Count:${updatedTableData.length}`));
-
+            setAddLoading(false)
         } catch (error) {
+            setAddLoading(false)
             _cfunc.CommonConsole('Error in AddPartyHandler:', error);
         }
     }
@@ -495,7 +498,6 @@ const StockEntry = (props) => {
 
             // Find items that are present in ItemListOptionsItems but not in filterDataItems
             const ItemIDs = ItemListOptionsItems.filter(item => !filterDataItems.includes(item));
-
             try {
                 const results = await Promise.all(ItemIDs.map(ItemID => ItemAPICall(ItemID)));
                 updatedTableData = [...itemAPIData, ...results];
@@ -542,7 +544,7 @@ const StockEntry = (props) => {
 
         } catch (e) { _cfunc.btnIsDissablefunc({ btnId, state: false }) }
     };
-    console.log(StockCount)
+
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
@@ -550,8 +552,6 @@ const StockEntry = (props) => {
                 <div className="page-content">
                     <form noValidate>
                         {!StockCount && <div style={{ color: "red", fontSize: "18px" }} className="sliding-text " > {` Warning: Can not Save Stock Entry for  ${_cfunc.date_dmy_func(values.Date)}`}.  </div>}
-
-
 
                         <div className="px-2   c_card_filter text-black" >
                             <div className="row" >
@@ -601,8 +601,7 @@ const StockEntry = (props) => {
                                         <Col sm={7} style={{ marginTop: '5px' }} >
                                             <div className="form-check form-switch form-switch-md mb-3">
                                                 <Input type="checkbox" className="form-check-input"
-                                                    // checked={values.IsAllStockZero}
-                                                    checked={true}
+                                                    checked={values.IsAllStockZero}
                                                     name="IsAllStockZero"
                                                     onChange={isAllStockZero_Onchange}
 
@@ -612,8 +611,10 @@ const StockEntry = (props) => {
                                     </FormGroup>
                                 </Col>
                                 <Col sm={1} className="mt-3" >
-                                    {
-                                        < Button type="button" color="btn btn-outline-primary border-1 font-size-11 text-center mt-1"
+                                    {AddLoading
+                                        ? < Button type="button" color="btn btn-outline-primary border-1 font-size-11 text-center mt-1"
+                                        ><Spinner className="mt-1" style={{ width: "15px", height: "15px" }} /></Button> :
+                                        < Button type="button" color="btn btn-outline-primary border-1 font-size-11 text-center mt-1  p-2"
                                             onClick={(e,) => AddPartyHandler(e, "add")}
                                             disabled={!StockCount}
                                         > Add</Button>
@@ -625,7 +626,7 @@ const StockEntry = (props) => {
                         </div >
 
 
-                        {true && <div style={{ color: "red", fontSize: "18px" }} className="sliding-text " >  Warning: If new stock is added then the previous whole item stock will become zero.  </div>}
+                        {values.IsAllStockZero && <div style={{ color: "red", fontSize: "18px" }} className="sliding-text " >  Warning: If new stock is added then the previous whole item stock will become zero.  </div>}
                         <ToolkitProvider
                             keyField={"id"}
                             data={TableArr}
