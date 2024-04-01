@@ -541,6 +541,15 @@ export const SWEET_POS_API = '/SweetPOS/SPOSroleaccess'
 export const TARGET_VS_ACHIEVEMENT_API = '/TargetVSAchievement'
 
 
+//Log Api
+
+export const NOTIFICATION_LOG = '/LogTransaction'
+
+
+
+
+
+
 
 
 

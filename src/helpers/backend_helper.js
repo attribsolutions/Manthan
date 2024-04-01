@@ -799,6 +799,11 @@ export const Post_POSRoleAccess_API = ({ jsonBody }) => post(url.SWEET_POS_API, 
 export const Target_Vs_Achievement_Gobtn_API = ({ jsonBody }) => post(url.TARGET_VS_ACHIEVEMENT_API, jsonBody)// post api
 
 
+
+//Log Api
+
+export const Notification_Log = ({ jsonBody }) => post(url.NOTIFICATION_LOG, jsonBody)// post api
+
 export {
 	getLoggedInUser,
 	isUserAuthenticated,
