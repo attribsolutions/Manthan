@@ -258,8 +258,6 @@ const PurchaseReturn = (props) => {
             "PartyID": commonPartyDropSelect.value
         });
 
-
-
         const jsonBodyForBackdatedTransaction = JSON.stringify({
             "TransactionDate": values.ReturnDate,
             "PartyID": commonPartyDropSelect.value,
@@ -270,8 +268,6 @@ const PurchaseReturn = (props) => {
             dispatch(CheckStockEntryForFirstTransaction({ jsonBody }))
             dispatch(CheckStockEntryforBackDatedTransaction({ jsonBody: jsonBodyForBackdatedTransaction }))
         }
-
-
 
     }, [values.ReturnDate, commonPartyDropSelect])
 
@@ -1112,15 +1108,7 @@ const PurchaseReturn = (props) => {
             formData.append('ReturnItems', JSON.stringify(processedItems)); // Convert to JSON string
             formData.append('PurchaseReturnReferences', JSON.stringify([])); // Convert to JSON string
 
-            if (StockEnteryForBackdated.Status === true && StockEnteryForBackdated.StatusCode === 400) {
-                dispatch(CheckStockEntryforBackDatedTransactionSuccess({ status: false }))
-                customAlert({ Type: 3, Message: StockEnteryForBackdated.Message });
-            } else {
-                dispatch(saveSalesReturnMaster({ formData }));
-            }
-
-
-
+            dispatch(saveSalesReturnMaster({ formData }));
 
         } catch (e) { _cfunc.CommonConsole(e) }
     };

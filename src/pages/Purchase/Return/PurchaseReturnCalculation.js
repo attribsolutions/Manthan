@@ -1,3 +1,4 @@
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { amountCommaSeparateFunc, CommonConsole, compareGSTINState } from "../../../components/Common/CommonFunction";
 
 
@@ -64,7 +65,7 @@ export const return_discountCalculate_Func = (row, index1, IsComparGstIn) => {
 // ************************************************************************
 
 export function stockDistributeFunc(index1, _key) {
-    
+
     let totalAmount = 0
     let orderqty = Number(index1.Quantity);
     let _ItemTotalStock = 0
@@ -121,7 +122,7 @@ export function stockDistributeFunc(index1, _key) {
 // ************************************************************************
 
 export function returnQtyOnChange(event, index, _key) {
-
+    debugger
     let input = Number(event.target.value)
     let ItemTotalStock = Number(index.ItemTotalStock)
     let result = /^\d*(\.\d{0,3})?$/.test(input);
