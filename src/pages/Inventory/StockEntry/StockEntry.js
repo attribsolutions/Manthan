@@ -550,79 +550,6 @@ const StockEntry = (props) => {
                 <div className="page-content">
                     <form noValidate>
                         {!StockCount && <div style={{ color: "red", fontSize: "18px" }} className="sliding-text " > {` Warning: Can not Save Stock Entry for  ${_cfunc.date_dmy_func(values.Date)}`}.  </div>}
-                        {/* 
-                        <div className="px-3 c_card_filter header text-black mb-1" >
-
-                            <Row>
-                                <Col sm="3">
-                                    <FormGroup className="row mt-2" >
-                                        <Label className="col-sm-1 p-2"
-                                            style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.Date}  </Label>
-                                        <Col sm="7">
-                                            <C_DatePicker
-                                                name='Date'
-                                                value={values.Date}
-                                                onChange={Date_Onchange}
-                                            />
-                                        </Col>
-                                    </FormGroup>
-                                </Col >
-
-                                <Col sm="3">
-                                    <FormGroup className="row mt-2" >
-                                        <Label className="col-sm-1 p-2"
-                                            style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.IsAllStockZero}  </Label>
-
-                                        <Col sm={7} style={{ marginTop: '5px' }} >
-                                            <div className="form-check form-switch form-switch-md mb-3">
-                                                <Input type="checkbox" className="form-check-input"
-                                                    checked={values.IsAllStockZero}
-                                                    name="IsAllStockZero"
-                                                    onChange={isAllStockZero_Onchange}
-
-                                                />
-                                            </div>
-                                        </Col>
-
-                                    </FormGroup>
-                                </Col >
-                                <Col sm="6">
-                                    <FormGroup className=" row mt-2 " >
-                                        <Label className="col-sm-1 p-2"
-                                            style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.ItemName} </Label>
-                                        <Col sm="7">
-                                            <C_Select
-                                                id="ItemName "
-                                                name="ItemName"
-                                                value={values.ItemName}
-                                                isSearchable={true}
-                                                isLoading={partyItemListLoading}
-                                                className="react-dropdown"
-                                                classNamePrefix="dropdown"
-                                                styles={{
-                                                    menu: provided => ({ ...provided, zIndex: 2 })
-                                                }}
-                                                options={ItemList_Options}
-                                                onChange={(hasSelect, evn) => {
-                                                    onChangeSelect({ hasSelect, evn, state, setState, })
-                                                }}
-                                            />
-                                        </Col>
-
-                                        <Col sm="1" className="mx-6 mt-1">
-                                            {
-                                                < Button type="button" color="btn btn-outline-primary border-1 font-size-11 text-center"
-                                                    onClick={(e,) => AddPartyHandler(e, "add")}
-                                                    disabled={!StockCount}
-                                                > Add</Button>
-                                            }
-
-                                        </Col>
-                                    </FormGroup>
-                                </Col >
-
-                            </Row>
-                        </div> */}
 
 
 
@@ -631,11 +558,11 @@ const StockEntry = (props) => {
                                 <Col sm={4} className="">
                                     <FormGroup className="mb- row mt-3 mb-1 " >
                                         <Label className="col-sm-5 p-2"
-                                            style={{ width: "150px" }}>{fieldLabel.Date}</Label>
+                                            style={{ width: "83px" }}>{fieldLabel.Date}</Label>
                                         <Col sm="7">
                                             <C_DatePicker
                                                 name='Date'
-                                                value={"2024-03-31"}
+                                                value={values.Date}
                                                 onChange={Date_Onchange}
                                             />
                                         </Col>
@@ -740,6 +667,7 @@ const StockEntry = (props) => {
                             <SaveButtonDraggable>
                                 <SaveButton pageMode={pageMode}
                                     loading={saveBtnloading || itemAPIDataLoading}
+                                    forceDisabled={!StockCount}
                                     onClick={SaveHandler}
                                     userAcc={userPageAccessState}
                                 />
