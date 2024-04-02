@@ -43,8 +43,7 @@ export const reportHeder1 = (doc, data) => {
     doc.line(30, 789, 30, 16);//vertical left 1
 
     doc.line(570, 789, 570, 16);//vertical left 2
-    doc.line(408, 160, 408, 16);//vertical right 1
-    doc.line(220, 160, 220, 63);//vertical right 2
+
 
     //Header Table Style 
     var BilledByStyle = {
@@ -221,6 +220,14 @@ export const reportHeder1 = (doc, data) => {
                 doc.setFont(undefined, 'bold')
                 doc.text('FSSAI No: ', x, y)
             };
+            if (rowIdx === 4 && colIdx === 0) {
+
+                let x = data1.cursor.x + 2
+                let y = data1.cursor.y + 9
+                doc.setFontSize(8)
+                doc.setFont(undefined, 'bold')
+                doc.text('Description: ', x, y)
+            };
 
 
         },
@@ -275,7 +282,11 @@ export const reportHeder1 = (doc, data) => {
 
     doc.autoTable(table.DetailsOfTransport, table.DetailsOfTransportRow(data), DetailsOfTransportStyle);
     priLength()
+
+    doc.line(408, initial_y, 408, 16);//vertical right 1
+    doc.line(220, initial_y, 220, 63);//vertical right 2
 }
+
 
 
 export const reportHeder2 = (doc, data) => {
@@ -314,7 +325,6 @@ export const reportHeder3 = (doc, data) => {
 export const reportFooter = (doc, data) => {
     var options1 = {
         didParseCell: (data1) => {
-
             if (data1.row.cells[0].raw === "Terms And Condition") {
                 data1.row.cells[0].styles.fontSize = 10
                 data1.row.cells[0].styles.fontStyle = "bold"
@@ -322,7 +332,7 @@ export const reportFooter = (doc, data) => {
 
         },
         margin: {
-            top: 45, left: 35, right: 35, bottom: 10
+            top: 45, left: 30, right: 30, bottom: 10
         },
         showHead: 'always',
         theme: 'plain',

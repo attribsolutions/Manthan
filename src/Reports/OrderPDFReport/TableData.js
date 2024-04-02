@@ -242,6 +242,8 @@ export const DetailsOfTransportRow = (data) => {
         [`                   ${data.CustomerName}`],
         [`                 ${data.BillingAddress}`],
         [`                   ${data.ShippingFssai}`],
+        [`                      ${data.Description}`],
+
 
     ]
 
