@@ -158,8 +158,10 @@ const ChangeCommonParty = (props) => {
                                 onChange={(e) => setSelectedParty(e)}
                             />
                             {selectedParty.value > 0 && <div className="mt-2">
-                                <span style={{ display: 'block' }}> <strong>Party Type: </strong> {selectedParty.PartyType}</span>
-                                <span style={{ display: 'block' }}><strong>Address: </strong>{selectedParty.Address}</span>
+                                <span className="mb-1" style={{ display: 'block' }}> <strong>Party Type: </strong> {selectedParty.PartyType}</span>
+
+                                <span className="mb-1"style={{ display: 'block' }}><strong>Address: </strong>{selectedParty.Address}</span>
+
                                 <span style={{ display: 'block' }}> <strong>Contact: </strong> <a href={"tel:" + selectedParty.MobileNo}>{selectedParty.MobileNo}</a></span>
 
                             </div>}
