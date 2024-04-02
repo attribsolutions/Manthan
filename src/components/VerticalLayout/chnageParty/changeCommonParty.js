@@ -34,6 +34,7 @@ const ChangeCommonParty = (props) => {
     // useEffect to update selected party when commonPartyDropSelect changes
     useEffect(() => {
         if (commonPartyDropSelect.value > 0) {
+            debugger
             setSelectedParty(commonPartyDropSelect);
         }
     }, [commonPartyDropSelect]);
@@ -83,7 +84,8 @@ const ChangeCommonParty = (props) => {
         Latitude: data.Latitude,
         Longitude: data.Longitude,
         MobileNo: data.MobileNo,
-        Address: data.Address
+        Address: data.Address,
+        PartyType: data.PartyType
 
     })).filter(index => !isShowOnlySAPParty || index.SAPPartyCode !== null);
 
@@ -157,7 +159,9 @@ const ChangeCommonParty = (props) => {
                             />
                             {selectedParty.value > 0 && <div className="mt-2">
                                 <span style={{ display: 'block' }}><strong>Address: </strong>{selectedParty.Address}</span>
+                                <span style={{ display: 'block' }}> <strong>Party Type: </strong> {selectedParty.PartyType}</span>
                                 <span style={{ display: 'block' }}> <strong>Contact: </strong> <a href={"tel:" + selectedParty.MobileNo}>{selectedParty.MobileNo}</a></span>
+
                             </div>}
                         </div>
                         <div className="modal-footer d-flex justify-content-between align-items-center">
@@ -208,7 +212,7 @@ const ChangeCommonParty = (props) => {
                         </div>
 
                     </div>
-                </div> 
+                </div>
             )}
         </div>
     );

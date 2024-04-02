@@ -405,7 +405,7 @@ export const reportHeder3 = (doc, data) => {
 
 
 export const reportFooter = (doc, data) => {
-    
+
     if (data.Period.PaymentQr === null) {
         doc.addImage("", 'JPEG', 335, 303, 105, 96);
     } else {
@@ -662,11 +662,7 @@ export const tableBody = (doc, data) => {
             if (data1.row.cells[1].raw === "HSN Item Name") {
                 let TotalBox = 0;
 
-                // data.InvoiceItems.forEach((element, key) => {
-                //     if (element.PrimaryUnitName === "Box") {
-                //         TotalBox = Number(TotalBox) + Number(element.Quantity)
-                //     }
-                // })
+
                 if (TotalBox === 0) {
                     data1.row.cells[1].text[0] = ` HSN Item Name (${data.TotalItemlength})`
                 } else {
@@ -685,7 +681,7 @@ export const tableBody = (doc, data) => {
             const rowIdx = data1.row.index;
             const colIdx = data1.column.index;
             if (rowIdx === 0 && colIdx === 8) {
-                if (data1.row.cells[8].raw === "          CGST           %        Amount") {
+                if (data1.row.cells[8].raw === "          CGST           %            Amount") {
 
                     const cellWidth = data1.cell.width;
                     const cellHeight = data1.cell.height;
@@ -703,7 +699,7 @@ export const tableBody = (doc, data) => {
                 }
             }
             if (rowIdx === 0 && colIdx === 10) {
-                if (data1.row.cells[10].raw === "          SGST           %        Amount") {
+                if (data1.row.cells[10].raw === "          SGST           %             Amount") {
 
                     const cellWidth = data1.cell.width;
                     const cellHeight = data1.cell.height;
@@ -816,9 +812,10 @@ export const tableBody = (doc, data) => {
 
 
 
-    if ((data.NoteType === "Goods CreditNote") || (data.NoteType === "CreditNote")) {
+    if ((data.NoteType === "Goods CreditNote")) {
 
-        doc.autoTable(table.columnsWithCGST_SGST, table.RowsWithCGST_SGST(data), options,);
+        doc.autoTable(table.columnsWithCGST_SGST, table.RowsWithCGST_SGST(data), options);
+
     } else {
         return null
     }

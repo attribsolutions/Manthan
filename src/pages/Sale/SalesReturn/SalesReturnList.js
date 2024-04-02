@@ -382,7 +382,6 @@ const SalesReturnList = () => {
 
             a.hasValid.listData.valid = true
             a.hasValid.UploadModalOpen.valid = true
-
             return a
         })
     }
@@ -400,8 +399,6 @@ const SalesReturnList = () => {
             formData.append(`ASMApprovalImgUpload`, "");
             dispatch(Upload_Return({ formData, updateId, Type }))
         }
-
-
     }
 
     function tog_backdrop() {
@@ -557,7 +554,7 @@ const SalesReturnList = () => {
                     />
                 }
             </div >
-            <SalesReturnView_Modal />
+            <SalesReturnView_Modal subPageMode={subPageMode} />
 
             {/* image  show and upload modal  */}
             <Modal
