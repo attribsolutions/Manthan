@@ -17,7 +17,6 @@ import * as mode from "../../../../routes/PageMode";
 import { Change_Button, Go_Button, PageLoadingSpinner, SaveButton } from "../../../../components/Common/CommonButton";
 import {
     breadcrumbReturnFunc,
-    loginIsSCMCompany,
     loginUserID,
     metaTagLabel
 } from "../../../../components/Common/CommonFunction";
@@ -44,7 +43,7 @@ const ImportExcelPartyMap = (props) => {
     const dispatch = useDispatch();
     const history = useHistory()
 
-    const [pageMode, setPageMode] = useState(mode.defaultsave);
+    const [pageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState('');
 
     const fileds = { Party: "", MapType: "", }
@@ -52,20 +51,14 @@ const ImportExcelPartyMap = (props) => {
     const [UpdateTableList, setUpdateTableList] = useState([])
     const [isCopy, setisCopy] = useState(false)
 
-
-
-
-
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
         postMsg,
         pageField,
         userAccess,
         goButtonArr,
-        partyList,
         listBtnLoading,
         saveBtnloading,
-        partyDropDownLoading,
         ItemList,
     } = useSelector((state) => ({
         saveBtnloading: state.ImportExcelPartyMap_Reducer.saveBtnLoading,
@@ -75,10 +68,9 @@ const ImportExcelPartyMap = (props) => {
 
         pageField: state.CommonPageFieldReducer.pageField,
         goButtonArr: state.ImportExcelPartyMap_Reducer.addGoButton,
-        partyList: state.PartyMasterReducer.partyList,
         ItemList: state.PartyItemsReducer.partyItem,
-        partyDropDownLoading: state.PartyMasterReducer.goBtnLoading,
     }));
+
     const { commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
 
     useEffect(() => {
@@ -109,6 +101,7 @@ const ImportExcelPartyMap = (props) => {
     const values = { ...state.values }
     const { isError } = state;
     const { fieldLabel } = state;
+
     // userAccess useEffect
     useEffect(() => {
 
@@ -132,8 +125,6 @@ const ImportExcelPartyMap = (props) => {
             comAddPageFieldFunc({ state, setState, fieldArr })
         }
     }, [pageField])
-
-
 
     useEffect(() => {
 
@@ -159,7 +150,6 @@ const ImportExcelPartyMap = (props) => {
                     listObj[index2.ControlID] = index1[index2.ControlID]
                 }
             })
-            debugger
             downList.push(listObj)
             defaultDownList2.push(listObj2)
             listObj = {}
@@ -173,7 +163,6 @@ const ImportExcelPartyMap = (props) => {
                 for (let j = 0; j < keysToChange.length; j++) {
                     if (downList[i].hasOwnProperty(keysToChange[j])) {
                         downList[i]["Related Key Field"] = downList[i]["mapValue"]
-                        // delete downList[i]["mapValue"];
                     }
                 }
             }
@@ -188,7 +177,6 @@ const ImportExcelPartyMap = (props) => {
             }
         }
 
-
         dispatch(CommonBreadcrumbDetails({
             downBtnData: downList,
             defaultDownBtnData: listObj2,
@@ -199,7 +187,6 @@ const ImportExcelPartyMap = (props) => {
         }))
 
     }, [UpdateTableList, pageField, userPageAccessState])
-
 
     useEffect(() => {
 
@@ -259,11 +246,9 @@ const ImportExcelPartyMap = (props) => {
 
     }, [goButtonArr, ItemList])
 
-
     useEffect(() => {
         dispatch(BreadcrumbShowCountlabel(`${"Count"} :${UpdateTableList.length}`))
     }, [UpdateTableList])
-
 
     useEffect(async () => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
@@ -284,11 +269,6 @@ const ImportExcelPartyMap = (props) => {
 
     useEffect(() => _cfunc.tableInputArrowUpDounFunc("#table_Arrow"), [UpdateTableList]);
 
-    const partyDropdown_Options = partyList.map((index) => ({
-        value: index.id,
-        label: index.Name,
-    }));
-
     const mapTypeDropdown_Options = [{  // this map type also check in invoice excel upload   for mapping validation!!s
         value: 1,
         label: "Party",
@@ -306,7 +286,6 @@ const ImportExcelPartyMap = (props) => {
         {
             text: `${values.MapType.label === undefined ? "Party" : values.MapType.label}`,
             dataField: "fieldName",
-
 
             headerFormatter: () => {
                 return (
@@ -445,7 +424,6 @@ const ImportExcelPartyMap = (props) => {
                     jsonArr.push({ ...defaultBody, Unit: i.fieldId, MapUnit: mapValue })
                 }
             }
-
         });
 
         mapValueToFieldIds.forEach((fieldIds, mapValue) => {// Find fieldIds with duplicate mapValues
@@ -463,46 +441,19 @@ const ImportExcelPartyMap = (props) => {
             return
         }
         dispatch(save_ImportExcelPartyMap({ jsonBody: JSON.stringify(jsonArr), mapType, }));
-
     };
-
 
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
                 <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
-                <PageLoadingSpinner isLoading={((partyDropDownLoading && !(loginIsSCMCompany() === 1)) || !pageField)} />
+                <PageLoadingSpinner isLoading={!(pageField)} />
 
                 <div className="page-content">
 
                     <div className="px-2 c_card_filter text-black" >
                         <form onSubmit={(event) => goButtonHandler(event)} noValidate>
                             <div className="row">
-                                <Col sm="5" style={{ display: (loginIsSCMCompany() === 1) ? "none" : "block" }}>
-                                    <FormGroup className="mb-2 row mt-3 " >
-                                        <Label className=" p-2"
-                                            style={{ maxWidth: "115px" }}>{fieldLabel.Party}</Label>
-                                        <Col style={{ maxWidth: "300px" }} >
-                                            <Select
-                                                name="Party"
-                                                value={values.Party}
-                                                isSearchable={true}
-                                                isDisabled={!(UpdateTableList.length === 0) && true}
-                                                className="react-dropdown"
-                                                classNamePrefix="dropdown"
-                                                styles={{
-                                                    menu: provided => ({ ...provided, zIndex: 2 })
-                                                }}
-                                                options={partyDropdown_Options}
-                                                onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
-                                            />
-                                            {isError.Party.length > 0 && (
-                                                <span className="text-danger f-8"><small>{isError.Party}</small></span>
-                                            )}
-
-                                        </Col>
-                                    </FormGroup>
-                                </Col >
                                 <Col sm="5">
                                     <FormGroup className="mb-2 row mt-3 " >
                                         <Label className=" p-2"
@@ -515,7 +466,7 @@ const ImportExcelPartyMap = (props) => {
                                                 styles={{
                                                     menu: provided => ({ ...provided, zIndex: 2 })
                                                 }}
-                                                isDisabled={(!(UpdateTableList.length === 0) || (partyDropDownLoading && !(loginIsSCMCompany() === 1)))}
+                                                isDisabled={(!(UpdateTableList.length === 0))}
                                                 className="react-dropdown"
                                                 classNamePrefix="dropdown"
                                                 options={mapTypeDropdown_Options}
@@ -531,7 +482,6 @@ const ImportExcelPartyMap = (props) => {
                                 <Col sm="2" className="mt-3 ">
                                     {(UpdateTableList.length === 0) ?
                                         <Go_Button
-                                            forceDisabled={(partyDropDownLoading && !(loginIsSCMCompany() === 1))}
                                             onClick={goButtonHandler} loading={listBtnLoading} />
                                         :
                                         <Change_Button onClick={partyOnChangeHandler} />
