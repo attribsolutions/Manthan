@@ -322,7 +322,7 @@ const Order = (props) => {
                 setOrderItemTable(orderItems)
                 setTermsAndConTable(termsAndCondition)
 
-                const commaSeparateAmount = _cfunc.amountCommaSeparateFunc(Number(hasEditVal.OrderAmount));
+                const commaSeparateAmount = _cfunc.amountCommaSeparateFunc(Number(hasEditVal.OrderAmount).toFixed(2));
                 dispatch(_act.BreadcrumbShowCountlabel(`Count:${orderItems.length} ₹ ${commaSeparateAmount}`))
                 seteditCreatedBy(hasEditVal.CreatedBy)
             }
@@ -1032,7 +1032,7 @@ const Order = (props) => {
         row["Amount"] = calculate.roundedTotalAmount
         const sumOfAmount = tableList.reduce((accumulator, currentObject) => accumulator + (Number(currentObject["Amount"]) || 0), 0);
 
-        const commaSeparateAmount = _cfunc.amountCommaSeparateFunc(sumOfAmount)
+        const commaSeparateAmount = _cfunc.amountCommaSeparateFunc(sumOfAmount.toFixed(2))
         dispatch(_act.BreadcrumbShowCountlabel(`Count:${tableList.length} ₹ ${commaSeparateAmount}`))
     };
 
@@ -1473,7 +1473,8 @@ const Order = (props) => {
                                                                 setSelecedItemWiseOrder(true)
                                                                 setOrderItemTable([])
                                                                 setItemSelect(allLabelWithBlank)
-                                                                dispatch(_act.GoButton_For_Order_AddSuccess([]))
+                                                                dispatch(_act.GoButton_For_Order_AddSuccess([]));
+                                                                dispatch(_act.BreadcrumbShowCountlabel(initial_BredcrumbMsg))
                                                             }}
                                                         />
                                                     : null
