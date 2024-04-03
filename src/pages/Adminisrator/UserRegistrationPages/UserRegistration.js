@@ -335,7 +335,7 @@ const AddUser = (props) => {
     if (!(employePartyWiseRoleState.length === 0)) {
       if ((employePartyWiseRoleState[0].Party > 0)) {
         return (
-          <div className="col col-6" style={{ marginTop: '28px' }}>
+          <div className="col col-12" style={{ marginTop: '28px' }}>
             <table className="table table-bordered ">
               <Thead >
                 <tr>

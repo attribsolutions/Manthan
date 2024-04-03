@@ -1165,7 +1165,7 @@ const SalesReturn = (props) => {
                                 <Col sm="6">
                                     <FormGroup className=" row mt-1 " >
                                         <Label className="col-sm-1 p-2"
-                                            style={{ width: "115px", marginRight: "0.4cm" }}>IsSaleableStock</Label>
+                                            style={{ width: "115px", marginRight: "0.4cm" }}>Is Saleable Stock</Label>
                                         <Col sm="7">
                                             <Input
                                                 style={{ marginRight: "0.4cm", marginTop: "10px", width: "15px", height: "15px" }}

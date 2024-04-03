@@ -4,8 +4,6 @@ import {
     FormGroup,
     Input,
     Label,
-    Row,
-    Table
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
 import { BreadcrumbShowCountlabel, commonPageFieldSuccess, getpdfReportdata } from "../../../store/actions";
@@ -14,21 +12,16 @@ import { commonPageField } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import {
     comAddPageFieldFunc,
-    formValid,
     initialFiledFunc,
     onChangeDate,
     onChangeSelect,
 } from "../../../components/Common/validationFunction";
 import Select from "react-select";
-import { GotoInvoiceBtn, SaveAndDownloadPDF, SaveButton } from "../../../components/Common/CommonButton";
-import {
-    updateBOMListSuccess
-} from "../../../store/Production/BOMRedux/action";
+import { SaveAndDownloadPDF, SaveButton } from "../../../components/Common/CommonButton";
 import * as mode from "../../../routes/PageMode";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url"
 import {
-    GoButtonForinvoiceAdd,
     GoButtonForinvoiceAddSuccess,
     Uploaded_EInvoiceAction,
     invoiceSaveAction,
@@ -68,7 +61,6 @@ const Invoice = (props) => {
     const subPageMode = history.location.pathname
     const systemSetting = _cfunc.loginSystemSetting();
 
-    const goBtnId = `ADDGoBtn${subPageMode}`
     const saveBtnid = `saveBtn${subPageMode}`
 
     const fileds = {
@@ -154,6 +146,16 @@ const Invoice = (props) => {
             dispatch(GetVenderSupplierCustomerSuccess([]));
             dispatch(getVehicleListSuccess([]));
             dispatch(changeCommonPartyDropDetailsAction({ forceDisable: false }))//change party drop-down restore state
+            dispatch(invoiceSaveActionSuccess({ Status: false })); // Reset the status to false
+            setOrderItemDetails([]);
+            setState((i) => {
+                const obj = { ...i }
+                obj.values.Customer = "";
+                obj.values.VehicleNo = "";
+                obj.hasValid.Customer.valid = true;
+                obj.hasValid.VehicleNo.valid = true;
+                return obj
+            })
         }
     }, [commonPartyDropSelect]);
 
