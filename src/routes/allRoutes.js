@@ -219,7 +219,7 @@ import CurrentStockReport from "../Reports/StockReport/CurrentStockReport.js";
 import TargetUpload from "../pages/Adminisrator/TragetUpload/TargetUploadMaster.js";
 import TargetUploadList from "../pages/Adminisrator/TragetUpload/TargetUploadList.js";
 import TargetVSAchievement from "../Reports/TargetVSAchievement";
-import CreditNoteExcelUpload from "../pages/Adminisrator/ImportMaster/CreditNoteExcelUpload";
+// import CreditNoteExcelUpload from "../pages/Adminisrator/ImportMaster/CreditNoteExcelUpload";
 
 const userRoutes = [
 	// *************************** DashBord *******************************//
@@ -344,7 +344,7 @@ const userRoutes = [
 	{ path: path.IMPORT_CREDIT_NOTE_EXCEL_FIELD_MAP, component: ImportExcelFieldMap, isPartyWisePage: true },
 
 	{ path: path.IMPORT_FIELD_ADD, component: ImportFieldAdd, isPartyWisePage: true },
-	
+
 	{ path: path.IMPORT_FIELD_ADD_LIST, component: ImportFieldAddList, isPartyWisePage: true },
 
 	{ path: path.IMPORT_EXCEL_PARTY_MAP, component: ImportExcelPartyMap, isPartyWisePage: true },
