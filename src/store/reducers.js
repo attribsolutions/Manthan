@@ -61,6 +61,7 @@ import ImportExcelPartyMap_Reducer from "./Administrator/ImportExcelPartyMapRedu
 import CityReducer from "./Administrator/CityRedux/reducer"
 import PartySettingReducer from "./Administrator/PartySetting/reducer"
 import DiscountReducer from "./Administrator/DiscountRedux/reducer"
+import PartyEmployeeDetailsReducer from "./Administrator/PartyEmployeeDetailsRedux/reducer"
 
 // *********************** Purchase ***********************
 import OrderReducer from "./Purchase/OrderPageRedux/reducer"
@@ -231,5 +232,6 @@ const rootReducer = combineReducers({
 	PosRoleAccessReducer,
 	TargetUploadReducer,
 	TargetVsAchievementReducer,
+	PartyEmployeeDetailsReducer
 })
 export default rootReducer

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { C_Button } from "../../Common/CommonButton";
 import { C_Select } from "../../../CustomValidateForm";
-import { loginUserAdminRole } from "../../Common/CommonFunction";
+import { loginEmployeeID, loginUserAdminRole } from "../../Common/CommonFunction";
 import { commonPartyDropSelectAction } from "../../../store/Utilites/PartyDrodown/action";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import './changeParty.scss'; // Add your styles here
@@ -10,16 +10,21 @@ import { useRef } from "react";
 import { showToastAlert } from "../../../helpers/axios_Config";
 import { alertMessages } from "../../Common/CommonErrorMsg/alertMsg";
 import { hideBtnCss } from "../../Common/ListActionsButtons";
-import { Col } from "reactstrap";
+import { Col, Spinner } from "reactstrap";
+import { url } from "../../../routes";
+import { useHistory } from 'react-router-dom';
+import { getPartyEmployeeDetails } from "../../../store/Administrator/PartyEmployeeDetailsRedux/action";
 
 const ChangeCommonParty = (props) => {
 
     const dispatch = useDispatch();
     const componentRef = useRef(null);
+    const history = useHistory()
 
     // Local state
     const [selectedParty, setSelectedParty] = useState({ value: 0, label: "select party...", SAPPartyCode: "" });
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     // Selectors from Redux store
     const {
@@ -30,6 +35,12 @@ const ChangeCommonParty = (props) => {
         isShow,
         isShowOnlySAPParty
     } = useSelector((state) => state.CommonPartyDropdownReducer);
+
+
+    const { loading } = useSelector((state) => ({
+        loading: state.PartyEmployeeDetailsReducer.loading,
+    }));
+
 
     // useEffect to update selected party when commonPartyDropSelect changes
     useEffect(() => {
@@ -110,10 +121,20 @@ const ChangeCommonParty = (props) => {
         return partylable.charAt(0).toUpperCase() + partylable.slice(1).toLowerCase();
     }
 
-    // Check user role, if not admin return null
+    const handleClick = () => {
+        setIsLoading(true);
+        dispatch(getPartyEmployeeDetails({ EmployeeId: loginEmployeeID() }))
+        setTimeout(() => {
+            history.push(url.PARTY_EMPLOYEE_DETAILS);
+            setIsLoading(false);
+        }, 1000);
+    };
+
     if (!loginUserAdminRole()) {
         return null;
     };
+
+
 
     const partylabelStyle = !props.isPartyWisePage || !isShow || forceDisable ? { color: "gray" } : {};
 
@@ -134,6 +155,7 @@ const ChangeCommonParty = (props) => {
                     <div className="c_modal-content">
                         <div style={{ boxShadow: "none" }} className="modal-header c_card_filter text-black"                                >
                             <strong> Party selection </strong>
+
                             <button
                                 type="button"
                                 onClick={() => setIsDrawerOpen(false)}
@@ -160,15 +182,28 @@ const ChangeCommonParty = (props) => {
                             {selectedParty.value > 0 && <div className="mt-2">
                                 <span className="mb-1" style={{ display: 'block' }}> <strong>Party Type: </strong> {selectedParty.PartyType}</span>
 
-                                <span className="mb-1"style={{ display: 'block' }}><strong>Address: </strong>{selectedParty.Address}</span>
+                                <span className="mb-1" style={{ display: 'block' }}><strong>Address: </strong>{selectedParty.Address}</span>
 
                                 <span style={{ display: 'block' }}> <strong>Contact: </strong> <a href={"tel:" + selectedParty.MobileNo}>{selectedParty.MobileNo}</a></span>
 
                             </div>}
                         </div>
                         <div className="modal-footer d-flex justify-content-between align-items-center">
+
+
+                            <C_Button
+                                type="button"
+
+                                className={`${"badge badge-soft-info font-size-12 btn btn-info waves-effect waves-light w-xxs border border-light"} px-2`}
+                                title={"All Party Details"}
+                                onClick={handleClick}
+                            >
+                                {isLoading || loading ? <Spinner style={{ width: "15px", height: "15px" }} /> : <i className="fas fa-users"></i>}
+                            </C_Button>
+
                             {selectedParty.value > 0 ? <C_Button
                                 type="button"
+                                style={{ marginRight: "156px" }}
                                 className={`${hideBtnCss} px-2`}
                                 title={"Party Location"}
                                 onClick={() => {
@@ -179,6 +214,9 @@ const ChangeCommonParty = (props) => {
                             >
                                 <i className="bx bx-map-pin"></i>
                             </C_Button> : <Col></Col>}
+
+
+
 
                             <div className="">
                                 {
@@ -202,14 +240,10 @@ const ChangeCommonParty = (props) => {
                                         </C_Button>
                                 }
 
-                                {/* <C_Button
-                                    type="button"
-                                    forceDisabled={!(commonPartyDropSelect.value > 0)}
-                                    className="btn btn-danger border-1 font-size-12 text-center ml-2"
-                                    onClick={handleClearBtn}
-                                >
-                                    Change
-                                </C_Button> */}
+
+
+
+
                             </div>
                         </div>
 
