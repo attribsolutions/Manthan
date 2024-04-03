@@ -113,7 +113,7 @@ export const CITY_LIST = "/CityList"
 
 export const IMPORT_EXCEL_FIELD_MAP = "/Import_ExcelFieldMap"
 
-
+export const IMPORT_CREDIT_NOTE_EXCEL_FIELD_MAP = "/Credit_Note_Excel_Field_Map"
 
 export const TARGET_UPLOAD = "/Target_Upload"
 
