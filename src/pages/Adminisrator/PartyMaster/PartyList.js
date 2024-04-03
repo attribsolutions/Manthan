@@ -18,10 +18,8 @@ import { useHistory } from 'react-router-dom';
 import { PageLoadingSpinner } from '../../../components/Common/CommonButton';
 import CommonPurchaseList from '../../../components/Common/CommonPurchaseList';
 import * as _cfunc from "../../../components/Common/CommonFunction";
-import { customAlert } from '../../../CustomAlert/ConfirmDialog';
 import { mobileApp_RetailerDelete_Api } from '../../../helpers/backend_helper';
 import { showToastAlert } from '../../../helpers/axios_Config';
-import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 import { changeCommonPartyDropDetailsAction } from '../../../store/Utilites/PartyDrodown/action';
 
 const PartyList = () => {
@@ -63,16 +61,11 @@ const PartyList = () => {
     }
     // Common Party Dropdown useEffect
     useEffect(() => {
-
-        if ((commonPartyDropSelect.value > 0 && (subPageMode === url.RETAILER_LIST || subPageMode === url.NON_RETAILER_PARTY_lIST))) {
+        if (subPageMode === url.PARTY_lIST) {
             goButtonHandler()
         }
-        else if (subPageMode === url.PARTY_lIST) {
-            dispatch(getPartyListAPI({
-                ..._cfunc.loginJsonBody(),
-                PartyID: _cfunc.loginPartyID(),
-                IsRetailer: 0
-            }));
+        else if ((commonPartyDropSelect.value > 0 && (subPageMode === url.RETAILER_LIST || subPageMode === url.NON_RETAILER_PARTY_lIST))) {
+            goButtonHandler()
         }
         return () => {
             dispatch(updatePartyIDSuccess([])); //for clear privious order list 
@@ -107,21 +100,14 @@ const PartyList = () => {
         setPageMode(page_Mode)
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
-        if (subPageMode === url.PARTY_lIST) {
-            dispatch(changeCommonPartyDropDetailsAction({ isShow: false }))//change party drop-down  hide
-        }
     }, []);
 
     function goButtonHandler() {
 
         try {
-            if ((commonPartyDropSelect.value === 0)) {
-                customAlert({ Type: 3, Message: alertMessages.commonPartySelectionIsRequired });
-                return;
-            };
             const jsonBody = {
                 ..._cfunc.loginJsonBody(),
-                PartyID: _cfunc.loginSelectedPartyID(),
+                PartyID: _cfunc.loginSelectedPartyID() === 0 ? _cfunc.loginPartyID() : _cfunc.loginSelectedPartyID(),
                 IsRetailer: subPageMode === url.RETAILER_LIST ? 1 : 0
             }
             dispatch(getPartyListAPI(jsonBody));
