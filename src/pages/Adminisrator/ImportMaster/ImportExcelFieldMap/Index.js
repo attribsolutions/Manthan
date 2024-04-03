@@ -26,7 +26,7 @@ import {
 import { customAlert } from "../../../../CustomAlert/ConfirmDialog";
 import SaveButtonDraggable from "../../../../components/Common/saveButtonDraggable";
 import GlobalCustomTable from "../../../../GlobalCustomTable";
-import { sideBarPageFiltersInfoAction } from "../../../../store/Utilites/PartyDrodown/action";
+import { url } from "../../../../routes";
 
 const ImportExcelFieldMap = (props) => {
 
@@ -36,6 +36,7 @@ const ImportExcelFieldMap = (props) => {
     const [pageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState('');
     const [SortTable, setSortTable] = useState([])
+    const [subPageMode] = useState(history.location.pathname);
 
     const fileds = {
         id: "",
@@ -72,7 +73,13 @@ const ImportExcelFieldMap = (props) => {
     }));
 
     useEffect(() => {
-        const page_Id = pageId.IMPORT_EXCEL_FIELD_MAP
+        let page_Id
+        if (subPageMode === url.IMPORT_EXCEL_FIELD_MAP) {
+            page_Id = pageId.IMPORT_EXCEL_FIELD_MAP
+        }
+        else {
+            page_Id = pageId.IMPORT_CREDIT_NOTE_EXCEL_FIELD_MAP
+        }
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
     }, []);
@@ -231,7 +238,7 @@ const ImportExcelFieldMap = (props) => {
         const jsonBody = JSON.stringify({
             PartyID: _cfunc.loginSelectedPartyID(),
             CompanyID: _cfunc.loginCompanyID(),
-            IsFieldType: 1// type 1 is all Invoices fields
+            IsFieldType: subPageMode === url.IMPORT_EXCEL_FIELD_MAP ? 1 : 3// type 1 is all Invoices fields and 3 for Credit Note Fields
         })
         dispatch(GoButton_ImportFiledMap_Add({ jsonBody }))
     };
