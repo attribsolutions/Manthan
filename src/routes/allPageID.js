@@ -109,6 +109,8 @@ export const SALESMAN_LIST = 152
 
 export const IMPORT_EXCEL_FIELD_MAP = 157
 
+export const IMPORT_CREDIT_NOTE_EXCEL_FIELD_MAP = 274
+
 export const IMPORT_MASTER_MAP = 194
 
 export const INVOICE_EXCEL_UPLOAD = 184
@@ -226,8 +228,8 @@ export const IB_INVOICE_LIST = 131
 export const IB_GRN_LIST = 146
 export const IB_INVOICE_STP = 132
 
-export const CHALLAN = 139
-export const CHALLAN_LIST = 138
+export const CHALLAN = 130
+export const CHALLAN_LIST = 131
 // export const IB_INVOICE_STP = 132
 
 //******************************* Sales ************************************//

@@ -219,6 +219,7 @@ import CurrentStockReport from "../Reports/StockReport/CurrentStockReport.js";
 import TargetUpload from "../pages/Adminisrator/TragetUpload/TargetUploadMaster.js";
 import TargetUploadList from "../pages/Adminisrator/TragetUpload/TargetUploadList.js";
 import TargetVSAchievement from "../Reports/TargetVSAchievement";
+import CreditNoteExcelUpload from "../pages/Adminisrator/ImportMaster/CreditNoteExcelUpload";
 
 const userRoutes = [
 	// *************************** DashBord *******************************//
@@ -257,8 +258,8 @@ const userRoutes = [
 	{ path: path.ITEM, component: ItemsMaster },//not party wise
 	{ path: path.ITEM_lIST, component: ItemsList },//not party wise
 
-	{ path: path.PARTY_lIST, component: PartyList },//not party wise
-	{ path: path.PARTY, component: PartyMaster },//not party wise
+	{ path: path.PARTY_lIST, component: PartyList, isPartyWisePage: true },//not party wise
+	{ path: path.PARTY, component: PartyMaster, isPartyWisePage: true },//not party wise
 
 	{ path: path.RETAILER_LIST, component: PartyList, isPartyWisePage: true },
 	{ path: path.RETAILER_MASTER, component: PartyMaster, isPartyWisePage: true },
@@ -332,7 +333,7 @@ const userRoutes = [
 	{ path: path.TARGET_UPLOAD, component: TargetUpload },
 	{ path: path.TARGET_UPLOAD_LIST, component: TargetUploadList },
 
-	// { path: path.CREDIT_NOTE_UPLOAD, component: InvoiceExcelUpload, isPartyWisePage: true },
+	// { path: path.CREDIT_NOTE_UPLOAD, component: CreditNoteExcelUpload, isPartyWisePage: true },
 
 	{ path: path.INVOICE_EXCEL_UPLOAD, component: InvoiceExcelUpload, isPartyWisePage: true },
 
@@ -340,7 +341,10 @@ const userRoutes = [
 	{ path: path.RETAILER_EXCEL_UPLOAD, component: RetailerExcelUpload, isPartyWisePage: true },
 
 	{ path: path.IMPORT_EXCEL_FIELD_MAP, component: ImportExcelFieldMap, isPartyWisePage: true },
+	{ path: path.IMPORT_CREDIT_NOTE_EXCEL_FIELD_MAP, component: ImportExcelFieldMap, isPartyWisePage: true },
+
 	{ path: path.IMPORT_FIELD_ADD, component: ImportFieldAdd, isPartyWisePage: true },
+	
 	{ path: path.IMPORT_FIELD_ADD_LIST, component: ImportFieldAddList, isPartyWisePage: true },
 
 	{ path: path.IMPORT_EXCEL_PARTY_MAP, component: ImportExcelPartyMap, isPartyWisePage: true },
@@ -536,7 +540,7 @@ const userRoutes = [
 
 	{ path: path.ITEM_SALE_REPORT, component: ItemSaleReport, isPartyWisePage: true },
 
-	{ path: path.ITEM_REGISTER_REPORT, component: ItemRegisterReport },// use self party drop-down
+	{ path: path.ITEM_REGISTER_REPORT, component: ItemRegisterReport, isPartyWisePage: true },// use self party drop-down
 
 	{ path: path.CREDIT_DATA_EXPORT, component: CreditDebitDataExport },// use self party drop-down
 
