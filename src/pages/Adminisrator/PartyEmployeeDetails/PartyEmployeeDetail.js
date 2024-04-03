@@ -66,54 +66,14 @@ const PartyEmployeeDetails = (props) => {
     const hasShowModal = props.hasOwnProperty(mode.editValue)
 
 
-    const debounceHandleSearch = _debounce((val) => {
-        setSearchText(val);
-    }, 300);
-
-
-    const sortCaretFunction = {
-        sortCaret: (order, column) => {
-            if (!order) {
-                return <i className="fas fa-sort-up pl-1 font-size-12" style={{ color: "#e9e9ef" }}></i>;
-            } else if (order === 'asc') {
-                return <i className="fas fa-sort-up pl-1 font-size-12"></i>;
-            } else if (order === 'desc') {
-                return <i className="fas fa-sort-down pl-1 font-size-12"></i>;
-            }
-            return <i className="fas fa-sort-up pl-1 font-size-12" style={{ color: "#e9e9ef" }}></i >;
-        }
-    };
-
-    const filteredData = useMemo(() => {
-        return PartyEmployeeDetails?.filter((row) =>
-            Object.values(row).some(value =>
-                value !== null && value.toString().toLowerCase().includes(searchText.toLowerCase())
-            )
-        );
-
-    }, [PartyEmployeeDetails, searchText]);
-
-    console.log("data", filteredData)
-
-    useEffect(() => {
-        globalTableSearchProps({ onSearch: debounceHandleSearch });
-    }, []); // Ensure that globalTableSearchProps is called after mounting
 
 
     useEffect(() => {
-
         const page_Id = pageId.PARTY_EMPLOYEE_DETAILS
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
         dispatch(getPartyEmployeeDetails({ EmployeeId: loginEmployeeID() }))
-
-        return () => {
-            dispatch(getPartyEmployeeDetails_API_Success())
-        }
-
-
     }, []);
-
 
 
 
@@ -329,15 +289,49 @@ const PartyEmployeeDetails = (props) => {
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
 
+
+
+
+
+    const debounceHandleSearch = _debounce((val) => {
+        setSearchText(val);
+    }, 300);
+
+
+    const sortCaretFunction = {
+        sortCaret: (order, column) => {
+            if (!order) {
+                return <i className="fas fa-sort-up pl-1 font-size-12" style={{ color: "#e9e9ef" }}></i>;
+            } else if (order === 'asc') {
+                return <i className="fas fa-sort-up pl-1 font-size-12"></i>;
+            } else if (order === 'desc') {
+                return <i className="fas fa-sort-down pl-1 font-size-12"></i>;
+            }
+            return <i className="fas fa-sort-up pl-1 font-size-12" style={{ color: "#e9e9ef" }}></i >;
+        }
+    };
+
+    const filteredData = useMemo(() => {
+        return PartyEmployeeDetails?.filter((row) =>
+            Object.values(row).some(value =>
+                value !== null && value.toString().toLowerCase().includes(searchText.toLowerCase())
+            )
+        );
+
+    }, [PartyEmployeeDetails, searchText]);
     const options = {
         page: 1,
         paginationSize: 5,
         pageStartIndex: 1,
         custom: true,
-        sizePerPage: filteredData.length,
-        totalSize: filteredData.length,
+        sizePerPage: filteredData?.length,
+        totalSize: filteredData?.length,
         hidePageListOnlyOnePage: true,
     };
+
+    useEffect(() => {
+        globalTableSearchProps({ onSearch: debounceHandleSearch });
+    }, []); // Ensure that globalTableSearchProps is called after mounting
 
 
 
