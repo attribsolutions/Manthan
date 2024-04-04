@@ -376,6 +376,7 @@ export const ImportMaster_Map_Unit_GoButton_API = ({ partyId }) => get(`${url.IM
 export const ImportMaster_Map_Unit_Save_API = ({ jsonBody }) => post(url.IMPORT_MASTER_MAP_UNIT, jsonBody)// post api
 
 export const ExcelUpload_Invoice_Save_API = ({ jsonBody }) => post(url.BULK_INVOICES, jsonBody)// post api
+export const CreditNote_ExcelUpload_Save_API = ({ jsonBody }) => post(url.BULK_CREDIT_NOTE_UPLOAD, jsonBody)// post api
 export const ExcelUpload_Retailer_Save_API = ({ jsonBody }) => post(url.IMPORT_BULK_RETAIER, jsonBody)// post api
 
 export const ImportFieldAdd_Save_API = ({ jsonBody }) => post(url.IMPORT_FIELD_ADD_SAVE, jsonBody)// post api
@@ -630,6 +631,7 @@ export const Upload_Return_Api = ({ formData, updateId }) => putForFormData(`${u
 export const Go_Button_Credit_Debit_Post_API = (jsonBody) => post(url.CREDIT_DEBIT_FILTER, jsonBody)// postapi
 export const Credit_Debit_Save_API = ({ jsonBody }) => post(url.CREDIT_DEBIT, jsonBody)//post api
 export const del_Credit_List_API = ({ deleteId }) => del(`${url.CREDIT_DEBIT}/${deleteId}`)// delete api
+export const BulkCreditNote_delete_API = ({jsonBody}) => delwithPostBody(url.BULK_CREDIT_NOTE_DELETE, jsonBody)
 export const Edit_Credit_List_API = ({ editId }) => get(`${url.CREDIT_DEBIT}/${editId}`)// Edit api
 export const InvoiceReturn_API = (id) => get(`${url.INVOICE_RETURN}/${id}`)// Invoice Return api
 export const Receipt_Number_API = (jsonBody) => post(url.RECEIPT_NUMBER_LIST, jsonBody)// postapi

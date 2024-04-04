@@ -354,6 +354,7 @@ export const INVOICE_1_BULK_DELETE_API = '/InvoiceBulkDelete'// invoice_1 Bulk D
 
 //BulkInvoices
 export const BULK_INVOICES = '/BulkInvoices'// invoice_1 addpage GoButton Api 
+export const BULK_CREDIT_NOTE_UPLOAD = '/BulkCreditNote'// invoice_1 addpage GoButton Api 
 export const IMPORT_BULK_RETAIER = '/ImportRetailerBulkdata'// invoice_1 addpage GoButton Api 
 
 //   IB_INVOICE==Inter Branch Invoice
@@ -402,6 +403,7 @@ export const INVOICE_RETURN = '/InvoiceReturnCRDR'
 export const RECEIPT_NUMBER_LIST = '/ReceiptNoList'
 export const UPLOADED_CREDIT_DEBIT_E_INVOICE = '/Uploaded_CreditDebitNotes_EInvoice'
 export const CANCEL_CREDIT_DEBIT_E_INVOICE = '/Cancel_CreditDebitNotes_EInvoice'
+export const BULK_CREDIT_NOTE_DELETE = '/BulkCreditNoteDelete'
 
 export const PARTY_LEDGER_API = '/SAPLedger'
 export const PRODUCT_MARGIN_REPORT_API = '/ProductMarginReport'
