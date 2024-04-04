@@ -26,7 +26,8 @@ import {
     GetCreditListSuccess,
     Uploaded_Credit_Debit_EInvoiceSuccess,
     Cancel_Credit_Debit_EInvoiceSuccess,
-    bulk_CreditNote_delete_ID
+    bulk_CreditNote_delete_ID,
+    bulk_CreditNote_delete_ID_Success
 } from "../../../store/Accounting/CreditRedux/action";
 import { Retailer_List, Retailer_List_Success, getSupplierSuccess } from "../../../store/CommonAPI/SupplierRedux/actions";
 import * as _cfunc from "../../../components/Common/CommonFunction"
@@ -91,6 +92,7 @@ const CreditList = () => {
         Uploaded_Credit_Debit_EInvoice,
         GobuttonLoading,
         BulkCreditNotedeleteMsg } = reducers;
+
     const values = { ...state.values }
 
     const action = {
@@ -236,7 +238,7 @@ const CreditList = () => {
     useEffect(async () => {   // Bulk Credit Note Delete useEffect 
 
         if (BulkCreditNotedeleteMsg.Status === true && BulkCreditNotedeleteMsg.StatusCode === 200) {
-            dispatch(Cancel_Credit_Debit_EInvoiceSuccess({ Status: false }))
+            dispatch(bulk_CreditNote_delete_ID_Success({ Status: false }))
             goButtonHandler("event")
             customAlert({
                 Type: 1,
@@ -246,7 +248,7 @@ const CreditList = () => {
         }
 
         else if (BulkCreditNotedeleteMsg.Status === true) {
-            dispatch(Cancel_Credit_Debit_EInvoiceSuccess({ Status: false }))
+            dispatch(bulk_CreditNote_delete_ID_Success({ Status: false }))
             customAlert({
                 Type: 3,
                 Message: JSON.stringify(BulkCreditNotedeleteMsg.Message),
@@ -348,7 +350,7 @@ const CreditList = () => {
     }
 
     const selectSaveBtnHandler = (row = []) => {
-        
+
         let ischeck = row.filter(i => (i.selectCheck && !i.forceSelectDissabled))
         if (!ischeck.length > 0) {
             customAlert({
@@ -452,7 +454,7 @@ const CreditList = () => {
                                 selectSaveBtnHandler: selectSaveBtnHandler,
                                 selectSaveBtnLabel: "Delete",
                                 selectHeaderLabel: "Select",
-                                selectSaveBtnLoading: false
+                                selectSaveBtnLoading: listBtnLoading
                             }}
 
                         />

@@ -234,6 +234,7 @@ export const FilterNoOfInvoice = (map, conditionFn, isIgnoreNegativeValue = fals
 };
 
 export const InvoiceUploadCalculation = ({ Quantity, Rate, GST, DiscountType, Discount }) => {
+    
     Discount = Discount ? Discount : 0;
     const GSTPersentage = GST;
     const BasicAmount = Quantity * Rate;
@@ -252,5 +253,6 @@ export const InvoiceUploadCalculation = ({ Quantity, Rate, GST, DiscountType, Di
         CGSTAmount: CGST_Amount,
         Amount: Amount,
         DiscountAmount: DiscountAmount,
+        Discount: Discount
     }
 }
