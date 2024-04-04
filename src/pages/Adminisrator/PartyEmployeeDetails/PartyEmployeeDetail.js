@@ -316,6 +316,10 @@ const PartyEmployeeDetails = (props) => {
     }, [PartyEmployeeDetails, searchText]);
 
 
+    useEffect(() => {
+        dispatch(BreadcrumbShowCountlabel(`Count:${filteredData?.length}`));
+    }, [])
+
 
 
     const options = {

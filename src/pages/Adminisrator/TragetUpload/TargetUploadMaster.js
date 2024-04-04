@@ -42,7 +42,7 @@ const TargetUpload = (props) => {
     const [invalidFormat, setInvalidFormat] = useState({ Invalid_Format_Array: [], Not_Verify_Invalid_Format: undefined });
 
     const [sameMonthandYear, setsameMonthandYear] = useState(undefined);
-    const [Unit, setUnit] = useState("")
+    const [Unit, setUnit] = useState({ label: "No", value: 1 })
 
 
     const [partyExist, setPartyExist] = useState({ Not_Exist_Party_Array: [], PartyNotexist: undefined });
@@ -229,7 +229,7 @@ const TargetUpload = (props) => {
         };
 
         // New File is Selected then privious verified details clear   
-
+        setisIgnoreNegativeValue(false)
         setReadJsonDetail([])
         setNegativeFigureVerify({ Negative_Figure_Array: [], Not_Verify_Negative_Figure: undefined })
         setInvalidFormat({ Invalid_Format_Array: [], Not_Verify_Invalid_Format: undefined });
@@ -361,6 +361,7 @@ const TargetUpload = (props) => {
                                             id={`dropBaseUnit-0`}
                                             placeholder="Select..."
                                             value={Unit}
+                                            isDisabled={true}
                                             options={BaseUnit_DropdownOptions}
                                             onChange={(e) => { setUnit(e) }}
                                             styles={{
