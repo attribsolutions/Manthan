@@ -8,6 +8,7 @@ import {
   RetailerExcelUploadApiErrorAction
 } from "./action";
 import {
+  CreditNote_ExcelUpload_Save_API,
   ExcelUpload_Invoice_Save_API,
   ExcelUpload_Retailer_Save_API,
   ImportMaster_Map_Customer_GoButton_API,
@@ -24,6 +25,7 @@ import {
   RETAILER_EXCEL_UPLOAD_SAVE,
 } from "./actionType";
 import { CommonConsole } from "../../../components/Common/CommonFunction";
+import { url } from "../../../routes";
 
 
 function* GoButtonExcel_ImportMaster_GenFun({ config }) {              // Go buuton add Page API
@@ -90,7 +92,13 @@ function* Save_Method_ForExcel_ImportMaster_GenFun({ config }) {  // Save API
 function* InvoiceExcelUpload_save_GenFun({ config }) {  // Save API
 
   try {
-    const response = yield call(ExcelUpload_Invoice_Save_API, config);
+    let response
+    if (config.subPageMode === url.CREDIT_NOTE_UPLOAD) {
+      response = yield call(CreditNote_ExcelUpload_Save_API, config);
+    }
+    else {
+      response = yield call(ExcelUpload_Invoice_Save_API, config);
+    }
     yield put(InvoiceExcelUpload_save_Success(response));
 
   } catch (error) { yield put(RetailerExcelUploadApiErrorAction()) }

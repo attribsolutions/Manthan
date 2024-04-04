@@ -25,7 +25,8 @@ import {
     delete_CreditList_ID,
     GetCreditListSuccess,
     Uploaded_Credit_Debit_EInvoiceSuccess,
-    Cancel_Credit_Debit_EInvoiceSuccess
+    Cancel_Credit_Debit_EInvoiceSuccess,
+    bulk_CreditNote_delete_ID
 } from "../../../store/Accounting/CreditRedux/action";
 import { Retailer_List, Retailer_List_Success, getSupplierSuccess } from "../../../store/CommonAPI/SupplierRedux/actions";
 import * as _cfunc from "../../../components/Common/CommonFunction"
@@ -33,6 +34,7 @@ import { C_DatePicker } from "../../../CustomValidateForm";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { allLabelWithBlank } from "../../../components/Common/CommonErrorMsg/HarderCodeData";
 import { sideBarPageFiltersInfoAction } from "../../../store/Utilites/PartyDrodown/action";
+import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 
 const CreditList = () => {
 
@@ -72,13 +74,23 @@ const CreditList = () => {
             RetailerList: state.CommonAPI_Reducer.RetailerList,
             CreditDebitType: state.CredietDebitReducer.CreditDebitType,
             editData: state.CredietDebitReducer.editData,
+
+            BulkCreditNotedeleteMsg: state.CredietDebitReducer.BulkCreditNotedeleteMsg,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList
         })
     );
 
     const { commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
-    const { pageField, RetailerList, CreditDebitType, listBtnLoading, Cancel_Credit_Debit_EInvoice, Uploaded_Credit_Debit_EInvoice, GobuttonLoading } = reducers;
+
+    const { pageField,
+        RetailerList,
+        CreditDebitType,
+        listBtnLoading,
+        Cancel_Credit_Debit_EInvoice,
+        Uploaded_Credit_Debit_EInvoice,
+        GobuttonLoading,
+        BulkCreditNotedeleteMsg } = reducers;
     const values = { ...state.values }
 
     const action = {
@@ -221,6 +233,28 @@ const CreditList = () => {
         }
     }, [Cancel_Credit_Debit_EInvoice]);
 
+    useEffect(async () => {   // Bulk Credit Note Delete useEffect 
+
+        if (BulkCreditNotedeleteMsg.Status === true && BulkCreditNotedeleteMsg.StatusCode === 200) {
+            dispatch(Cancel_Credit_Debit_EInvoiceSuccess({ Status: false }))
+            goButtonHandler("event")
+            customAlert({
+                Type: 1,
+                Message: BulkCreditNotedeleteMsg.Message,
+            })
+            return
+        }
+
+        else if (BulkCreditNotedeleteMsg.Status === true) {
+            dispatch(Cancel_Credit_Debit_EInvoiceSuccess({ Status: false }))
+            customAlert({
+                Type: 3,
+                Message: JSON.stringify(BulkCreditNotedeleteMsg.Message),
+            })
+            return
+        }
+    }, [BulkCreditNotedeleteMsg]);
+
     const customerOptions = RetailerList.map((index) => ({
         value: index.id,
         label: index.Name,
@@ -313,6 +347,21 @@ const CreditList = () => {
         })
     }
 
+    const selectSaveBtnHandler = (row = []) => {
+        
+        let ischeck = row.filter(i => (i.selectCheck && !i.forceSelectDissabled))
+        if (!ischeck.length > 0) {
+            customAlert({
+                Type: 4,
+                Message: alertMessages.selectOneCheckbox,
+            });
+            return
+        }
+        let idString = ischeck.map(obj => obj.id).join(',')
+        let jsonBody = JSON.stringify({ CreditNote_ID: idString })
+        dispatch(bulk_CreditNote_delete_ID({ jsonBody, btnId: row.btnId }))
+    }
+
     const HeaderContent = () => {
         return (
             <div className="px-2   c_card_filter text-black" >
@@ -397,6 +446,14 @@ const CreditList = () => {
                             deleteName={"FullNoteNumber"}
 
                             totalAmountShow={true}
+
+                            selectCheckParams={{
+                                isShow: ((subPageMode === url.GOODS_CREDIT_LIST)),
+                                selectSaveBtnHandler: selectSaveBtnHandler,
+                                selectSaveBtnLabel: "Delete",
+                                selectHeaderLabel: "Select",
+                                selectSaveBtnLoading: false
+                            }}
 
                         />
                         : null
