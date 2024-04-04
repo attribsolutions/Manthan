@@ -53,6 +53,10 @@ function* Get_Credit_List_GenFunc(data) {               // getList API
     const response = yield call(Go_Button_Credit_Debit_Post_API, data.data);
     const newList = yield response.Data.map((i) => {
 
+      if (!(i.ImportFromExcel)) {
+        i.forceSelectDissabled = true;//select row check box dessible 
+      }
+
       i["recordsAmountTotal"] = i.GrandTotal;  // Breadcrumb Count total
       i["InvoiceUploads"] = i.CRDRNoteUploads  // Added this blank Array to Show e Invoive Array   Further devlopment Remain 
       i["PageMode"] = "CreditDebitList"  //Mode Added  for e invoice  column condition check in list Action button in einvoice
@@ -75,7 +79,7 @@ function* Delete_Credit_ID_GenFunc({ config }) {         // delete API
 }
 
 function* BulkCreditNote_Delete_ID_GenFunc({ config }) {         // delete API
-  
+
   try {
     const response = yield call(BulkCreditNote_delete_API, config);
     yield put(bulk_CreditNote_delete_ID_Success(response))

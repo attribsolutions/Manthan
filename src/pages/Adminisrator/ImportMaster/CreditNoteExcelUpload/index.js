@@ -316,7 +316,7 @@ const CreditNoteExcelUpload = (props) => {
     }, [readJsonDetail, isIgnoreParty]);
 
     useEffect(() => {
-        debugger
+        
         const mapItemValues = ItemList.map(obj => obj.MapItem);
         const conditionFunction = (item) => {
             const itemCodeAsString = item.Item_Code.toString().trim();
@@ -640,7 +640,7 @@ const CreditNoteExcelUpload = (props) => {
                 let invoiceTotalAmount = 0
 
                 inv.forEach(async (ele) => {
-
+                    
                     const calculate = InvoiceUploadCalculation({
                         Quantity: ele[parArr.Quantity],
                         Rate: ele[parArr.Rate],
@@ -670,7 +670,7 @@ const CreditNoteExcelUpload = (props) => {
                         "CreatedBy": _cfunc.loginUserID(),
                         "UpdatedBy": _cfunc.loginUserID(),
                     }
-
+                    
                     CRDRNoteItems.push({
                         "Item": ele.Item_ID ? ele.Item_ID : '',
                         "ServiceItem": null,
