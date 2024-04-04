@@ -191,19 +191,11 @@ const ChangeCommonParty = (props) => {
                         <div className="modal-footer d-flex justify-content-between align-items-center">
 
 
-                            <C_Button
-                                type="button"
 
-                                className={`${"badge badge-soft-info font-size-12 btn btn-info waves-effect waves-light w-xxs border border-light"} px-2`}
-                                title={"All Party Details"}
-                                onClick={handleClick}
-                            >
-                                {isLoading || loading ? <Spinner style={{ width: "15px", height: "15px" }} /> : <i className="fas fa-users"></i>}
-                            </C_Button>
 
                             {selectedParty.value > 0 ? <C_Button
                                 type="button"
-                                style={{ marginRight: "156px" }}
+
                                 className={`${hideBtnCss} px-2`}
                                 title={"Party Location"}
                                 onClick={() => {
@@ -213,10 +205,16 @@ const ChangeCommonParty = (props) => {
                                 }}
                             >
                                 <i className="bx bx-map-pin"></i>
-                            </C_Button> : <Col></Col>}
-
-
-
+                            </C_Button> : null}
+                            <C_Button
+                                type="button"
+                                style={{ marginRight: "156px" }}
+                                className={`${"badge badge-soft-info font-size-12 btn btn-info waves-effect waves-light w-xxs border border-light"} px-2`}
+                                title={"All Party Details"}
+                                onClick={handleClick}
+                            >
+                                {isLoading || loading ? <Spinner style={{ width: "15px", height: "15px" }} /> : <i className="fas fa-users"></i>}
+                            </C_Button>
 
                             <div className="">
                                 {

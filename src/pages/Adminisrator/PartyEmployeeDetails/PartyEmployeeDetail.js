@@ -159,7 +159,9 @@ const PartyEmployeeDetails = (props) => {
                             <span style={{ fontWeight: "bold" }}>Aadhar No:</span> {index.AadharNo}
                         </div>
                         <div style={{ width: "auto", whiteSpace: "nowrap" }}>
-                            <span style={{ fontWeight: "bold" }}>Status:</span> {index.Status === "Active" ? <span style={{ color: "green", fontWeight: "bold" }}>Active</span> : <span style={{ color: "red", fontWeight: "bold" }}> Deactive</span>}
+                            <span style={{ fontWeight: "bold" }}>Status:</span> {index.Status === "Active" ?
+                                <span style={{ color: "green", fontWeight: "bold" }}>{index.Status}</span> :
+                                <span style={{ color: "red", fontWeight: "bold" }}> {index.Status}</span>}
                         </div>
 
 
@@ -214,10 +216,9 @@ const PartyEmployeeDetails = (props) => {
             text: "Employee Details",
             dataField: "EmpType",
             formatter: (cellContent, index) => {
-
                 return (
                     <>
-                        <div style={{ width: "auto", whiteSpace: "nowrap" }}>
+                        <div style={{ width: "auto", whiteSpace: "nowrap" }} >
                             <span style={{ fontWeight: "bold" }}>Full Name:</span> {index.EmpName}
                         </div>
                         <div style={{ width: "auto", whiteSpace: "nowrap" }}>
@@ -231,17 +232,14 @@ const PartyEmployeeDetails = (props) => {
                         <div style={{ width: "auto", whiteSpace: "nowrap" }}>
                             <span style={{ fontWeight: "bold" }}>DOB:</span> {index.DOB}
                         </div>
-
                         <div style={{ width: "auto", whiteSpace: "nowrap" }}>
                             <span style={{ fontWeight: "bold" }}>PAN:</span> {index.EmpPAN}
                         </div>
-
-
-
-
                     </>
                 );
             }
+
+
 
         },
         {
@@ -290,9 +288,6 @@ const PartyEmployeeDetails = (props) => {
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
 
 
-
-
-
     const debounceHandleSearch = _debounce((val) => {
         setSearchText(val);
     }, 300);
@@ -319,6 +314,14 @@ const PartyEmployeeDetails = (props) => {
         );
 
     }, [PartyEmployeeDetails, searchText]);
+
+
+    useEffect(() => {
+        dispatch(BreadcrumbShowCountlabel(`Count:${filteredData?.length}`));
+    }, [])
+
+
+
     const options = {
         page: 1,
         paginationSize: 5,
@@ -343,7 +346,6 @@ const PartyEmployeeDetails = (props) => {
             <div className="page-content" >
                 <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
 
-
                 <PaginationProvider
                     data={filteredData}
                     columns={pagesListColumns}
@@ -362,6 +364,7 @@ const PartyEmployeeDetails = (props) => {
                                     keyField={"id"}
                                     classes='custom-table '
                                     sort={sortCaretFunction} // Include the sortCaret function
+                                    noDataIndication={<div className="text-danger text-center ">No Records Found</div>}
                                     onDataSizeChange={({ dataSize }) => {
                                         dispatch(BreadcrumbShowCountlabel(`Count:${dataSize}`));
                                     }}
@@ -371,8 +374,6 @@ const PartyEmployeeDetails = (props) => {
                                 <PaginationTotalStandalone
                                     {...paginationProps}
                                 />
-
-
                             </div>
                         )
                     }

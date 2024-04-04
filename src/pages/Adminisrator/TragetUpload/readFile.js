@@ -22,9 +22,8 @@ export const readExcelFile = async ({ file }) => {
 
       let RemoveField = []
       for (let key in i) {
-        if ((Number.isInteger(i[key])) && i[key] <= 0) {   //  - figure 
-          
-          if ((key !== "TargetQuantity")) {
+        if ((Number(i[key]) || Number(i[key]) === 0) && Number(i[key]) <= 0) {
+          if ((key === "TargetQuantity")) {
             RemoveField.push({ [key]: i[key] })
           }
         }
