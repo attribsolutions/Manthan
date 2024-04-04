@@ -175,12 +175,13 @@ const LoadingSheetList = () => {
                                     <C_DatePicker
                                         options={{
                                             maxDate: new Date(new Date().setMonth(new Date().getMonth() + 1)),
+                                            minDate: (_cfunc.disablePriviousTodate({ fromDate: fromdate })),
                                             altInput: true,
                                             altFormat: "d-m-Y",
                                             dateFormat: "Y-m-d",
                                         }}
                                         nane='todate'
-                                        value={todate}
+                                        value={_cfunc.ToDate({ FromDate: fromdate, Todate: todate })}
                                         onChange={todateOnchange}
                                     />
                                 </Col>

@@ -159,7 +159,6 @@ const OrderList = () => {
                 : []),
             { label: fieldLabel.Supplier, content: values.Supplier.label }
         ];
-
         dispatch(sideBarPageFiltersInfoAction(filtersArray));
     }, [pageField, state, orderList4_or_app_orderList]);
 
@@ -683,12 +682,13 @@ const OrderList = () => {
                             <Col sm="7">
                                 <C_DatePicker
                                     options={{
+                                        minDate: (_cfunc.disablePriviousTodate({ fromDate: values.FromDate })),
                                         altInput: true,
                                         altFormat: "d-m-Y",
                                         dateFormat: "Y-m-d",
                                     }}
                                     name="ToDate"
-                                    value={values.ToDate}
+                                    value={_cfunc.ToDate({ FromDate: values.FromDate, Todate: values.ToDate })}
                                     onChange={todateOnchange}
                                 />
                             </Col>

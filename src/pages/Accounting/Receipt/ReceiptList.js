@@ -245,8 +245,16 @@ const ReceiptList = () => {
                                 style={{ width: "65px" }}>ToDate</Label>
                             <Col sm="7">
                                 <C_DatePicker
+
+                                    options={{
+                                        minDate: (_cfunc.disablePriviousTodate({ fromDate: values.FromDate })),
+                                        maxDate: "today",
+                                        altInput: true,
+                                        altFormat: "d-m-Y",
+                                        dateFormat: "Y-m-d",
+                                    }}
+                                    value={_cfunc.ToDate({ FromDate: values.FromDate, Todate: values.ToDate })}
                                     name="ToDate"
-                                    value={values.ToDate}
                                     onChange={todateOnchange}
                                 />
                             </Col>

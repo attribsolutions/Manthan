@@ -136,6 +136,9 @@ const PartyEmployeeDetails = (props) => {
                             <span style={{ fontWeight: "bold" }}>Party Type:</span> {index.PartyType}
                         </div>
                         <div style={{ width: "auto", whiteSpace: "nowrap" }}>
+                            <span style={{ fontWeight: "bold" }}>Party Id:</span> {index.PartyID}
+                        </div>
+                        <div style={{ width: "auto", whiteSpace: "nowrap" }}>
                             <span style={{ fontWeight: "bold" }}>Sap Code:</span> {index.SAPPartyCode}
                         </div>
                         <div style={{ width: "auto", whiteSpace: "nowrap" }}>
@@ -163,7 +166,6 @@ const PartyEmployeeDetails = (props) => {
                                 <span style={{ color: "green", fontWeight: "bold" }}>{index.Status}</span> :
                                 <span style={{ color: "red", fontWeight: "bold" }}> {index.Status}</span>}
                         </div>
-
 
                     </>
                 );
@@ -285,8 +287,8 @@ const PartyEmployeeDetails = (props) => {
 
     ];
 
-    // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
 
+    // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
 
     const debounceHandleSearch = _debounce((val) => {
         setSearchText(val);
@@ -337,8 +339,6 @@ const PartyEmployeeDetails = (props) => {
     }, []); // Ensure that globalTableSearchProps is called after mounting
 
 
-
-
     if ((modalCss) || (pageMode === mode.dropdownAdd));
 
     return (
@@ -378,16 +378,6 @@ const PartyEmployeeDetails = (props) => {
                         )
                     }
                 </PaginationProvider>
-
-
-
-
-
-
-
-
-
-
             </div>
         </React.Fragment >
     );

@@ -17,7 +17,7 @@ import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { Col, FormGroup, Input, Label, Row } from "reactstrap";
 import { SelectedMonthAndYearName, getPreviousMonthAndYear } from "../../../components/Common/CommonFunction";
 import Select from "react-select";
-import {  allLabelWithZero } from "../../../components/Common/CommonErrorMsg/HarderCodeData";
+import { allLabelWithZero } from "../../../components/Common/CommonErrorMsg/HarderCodeData";
 import { sideBarPageFiltersInfoAction } from "../../../store/Utilites/PartyDrodown/action";
 
 const SelectedMonth = () => getPreviousMonthAndYear({ date: new Date(), Privious: 0 })
@@ -82,7 +82,7 @@ const TargetUploadList = () => {
     }));
     Party_Option.unshift(allLabelWithZero)
 
-    const selectDeleteBtnHandler = (row = []) => {
+    const selectDeleteBtnHandler = async (row = []) => {
         let isAllcheck = row.filter(i => (i.hasAllSelect))
         let isRowcheck = row.filter(i => (i.selectCheck))
         let ischeck = [];
@@ -103,7 +103,14 @@ const TargetUploadList = () => {
         let YearString = ischeck.map(obj => obj.Year).join(',')
         let PartyIDString = ischeck.map(obj => obj.PartyID).join(',')
         let jsonBody = JSON.stringify({ Month: MonthString, Year: YearString, Party: PartyIDString })
-        dispatch(delete_TargetUpload_ID({ jsonBody }))
+        const isConfirmed = await customAlert({
+            Type: 7,
+            Message: "Are you sure you want to delete this Target Upload",
+        });
+
+        if (isConfirmed) {
+            dispatch(delete_TargetUpload_ID({ jsonBody }))
+        }
     }
 
     function goButtonHandler() {
