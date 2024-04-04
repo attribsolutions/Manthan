@@ -528,7 +528,8 @@ export const disablePriviousTodate = ({ fromDate }) => {
 
 
 export const ToDate = ({ FromDate, Todate }) => {
-  const date = isFutureDate(date_dmy_func(FromDate)) && !isFutureDate(date_dmy_func(ToDate)) ? FromDate : Todate
+  const date = isFutureDate(date_dmy_func(FromDate)) && !isFutureDate(date_dmy_func(Todate)) ? FromDate : Todate
+  debugger
   return date
 }
 
