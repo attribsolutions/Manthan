@@ -121,6 +121,10 @@ export const TARGET_UPLOAD_LIST = "/Target_Upload_List"
 
 
 
+export const PARTY_EMPLOYEE_DETAILS = "/PartyEmployeeDetails"
+
+
+
 
 export const INVOICE_EXCEL_UPLOAD = "/Invoice_Excel_Upload"
 export const RETAILER_EXCEL_UPLOAD = "/Retailer_Excel_Upload"

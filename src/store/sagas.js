@@ -55,6 +55,7 @@ import DiscountSaga from "./Administrator/DiscountRedux/saga"
 
 import TargetUploadSagaSaga from "./Administrator/TargetUploadRedux/saga"
 
+import PartyEmployeeDetailsSaga from "./Administrator/PartyEmployeeDetailsRedux/saga"
 
 // *********************** Purchase ***********************
 import OrderPageSaga from "./Purchase/OrderPageRedux/saga"
@@ -225,6 +226,10 @@ export default function* rootSaga() {
 		fork(PosRoleAccessSaga),
 		fork(TargetUploadSagaSaga),
 		fork(TargetVsAchievementSaga),
+		fork(PartyEmployeeDetailsSaga),
+
+
+		
 
 	])
 }

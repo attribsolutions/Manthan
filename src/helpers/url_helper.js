@@ -534,6 +534,8 @@ export const SYSTEM_SETTING_API = '/SettingsDataSave'
 
 export const SYSTEM_SETTING = '/SystemSettings'
 
+export const GET_PARTY_EMPLOYEE_DETAILS = '/PartiesEmpAllDetails'
+
 //Sweet POS Role Access 
 export const SWEET_POS_API = '/SweetPOS/SPOSroleaccess'
 

@@ -219,6 +219,7 @@ import CurrentStockReport from "../Reports/StockReport/CurrentStockReport.js";
 import TargetUpload from "../pages/Adminisrator/TragetUpload/TargetUploadMaster.js";
 import TargetUploadList from "../pages/Adminisrator/TragetUpload/TargetUploadList.js";
 import TargetVSAchievement from "../Reports/TargetVSAchievement";
+import PartyEmployeeDetails from "../pages/Adminisrator/PartyEmployeeDetails/PartyEmployeeDetail.js";
 // import CreditNoteExcelUpload from "../pages/Adminisrator/ImportMaster/CreditNoteExcelUpload";
 
 const userRoutes = [
@@ -381,6 +382,8 @@ const userRoutes = [
 	{ path: path.ITEM_MASTER_BULK_UPDATE, component: ItemMasterBulkUpdate },//not party wise
 
 	{ path: path.ITEM_IMAGE_UPLOAD, component: ItemImageUpload },//not party wise
+
+	{ path: path.PARTY_EMPLOYEE_DETAILS, component: PartyEmployeeDetails, isPartyWisePage: true },
 
 
 	//******************************* Inventory Module ************************************//
