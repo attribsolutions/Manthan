@@ -15,7 +15,7 @@ const ConfirmDialog = () => {
     const buttonRef = useRef(null);
 
     useEffect(() => {
-        
+
         if (buttonRef.current) {
             buttonRef.current.focus();
         }
@@ -257,10 +257,10 @@ const AlertPermission1 = ({ btnRef }) => {
                         <MessageFun msg={Message} />
 
                         <div className="d-flex flex-wrap gap-2 " style={{ float: "right" }}><button type="button"
-                            className="btn btn-danger " onClick={innerOk}>Yes</button>
+                            className="btn btn-success " onClick={innerOk}>Yes</button>
                             <button type="button"
                                 ref={btnRef}
-                                className="btn btn-success w-xm waves-effect waves-light"
+                                className="btn btn-danger w-xm waves-effect waves-light"
                                 onClick={outerNo}>No</button></div>
                     </div>
                 </div>
@@ -356,10 +356,10 @@ const AlertPermission3 = ({ btnRef }) => {
                         </p></div>
                         <div className="d-flex flex-wrap gap-2 " style={{ float: "right" }}>
                             <button type="button"
-                                className="btn btn-danger " onClick={innerYes}>Yes</button>
+                                className="btn btn-success " onClick={innerYes}>Yes</button>
                             <button type="button"
                                 ref={btnRef}
-                                className="btn btn-success w-xm waves-effect waves-light" onClick={outerNo}>No</button>
+                                className="btn btn-danger w-xm waves-effect waves-light" onClick={outerNo}>No</button>
                         </div>
                     </div>
 
@@ -403,10 +403,10 @@ const AlertPermission4 = ({ btnRef }) => {
                         <MessageFun msg={Message} />
 
                         <div className="d-flex flex-wrap gap-2 " style={{ float: "right" }}><button type="button"
-                            className="btn btn-danger " onClick={innerYes}>Yes</button>
+                            className="btn btn-success " onClick={innerYes}>Yes</button>
                             <button type="button"
                                 ref={btnRef}
-                                className="btn btn-success w-xm waves-effect waves-light" onClick={outerNo}>No</button></div>
+                                className="btn btn-danger w-xm waves-effect waves-light" onClick={outerNo}>No</button></div>
                     </div>
                 </div>
             </div >
