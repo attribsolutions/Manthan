@@ -28,7 +28,7 @@ export function post(url, body) {
 }
 
 export function put(url, body) {
-  
+
   return axiosApi
     .put(url, body, {
       headers: {
@@ -106,6 +106,7 @@ export function postMethodExcel(url, body) {
 
 
 export function delwithPostBody(url, body) {
+  debugger
   return axiosApi
     .delete(url, {
       headers: {

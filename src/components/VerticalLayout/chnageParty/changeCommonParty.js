@@ -45,7 +45,7 @@ const ChangeCommonParty = (props) => {
     // useEffect to update selected party when commonPartyDropSelect changes
     useEffect(() => {
         if (commonPartyDropSelect.value > 0) {
-            debugger
+            
             setSelectedParty(commonPartyDropSelect);
         }
     }, [commonPartyDropSelect]);

@@ -220,7 +220,7 @@ import TargetUpload from "../pages/Adminisrator/TragetUpload/TargetUploadMaster.
 import TargetUploadList from "../pages/Adminisrator/TragetUpload/TargetUploadList.js";
 import TargetVSAchievement from "../Reports/TargetVSAchievement";
 import PartyEmployeeDetails from "../pages/Adminisrator/PartyEmployeeDetails/PartyEmployeeDetail.js";
-// import CreditNoteExcelUpload from "../pages/Adminisrator/ImportMaster/CreditNoteExcelUpload";
+import CreditNoteExcelUpload from "../pages/Adminisrator/ImportMaster/CreditNoteExcelUpload";
 
 const userRoutes = [
 	// *************************** DashBord *******************************//
@@ -334,7 +334,7 @@ const userRoutes = [
 	{ path: path.TARGET_UPLOAD, component: TargetUpload },
 	{ path: path.TARGET_UPLOAD_LIST, component: TargetUploadList },
 
-	// { path: path.CREDIT_NOTE_UPLOAD, component: CreditNoteExcelUpload, isPartyWisePage: true },
+	{ path: path.CREDIT_NOTE_UPLOAD, component: CreditNoteExcelUpload, isPartyWisePage: true },
 
 	{ path: path.INVOICE_EXCEL_UPLOAD, component: InvoiceExcelUpload, isPartyWisePage: true },
 

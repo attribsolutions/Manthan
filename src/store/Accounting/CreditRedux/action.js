@@ -1,4 +1,6 @@
 import {
+  BULK_CREDITNOTE_DELETE_ID,
+  BULK_CREDITNOTE_DELETE_ID_SUCCESS,
   CANCLE_CREDIT_DEBIT_E_INVOICE_ACTION,
   CANCLE_CREDIT_DEBIT_E_INVOICE_ACTION_SUCCESS,
   CREDITDEBIT_TYPE,
@@ -78,6 +80,17 @@ export const delete_CreditList_ID = (config = {}) => ({// Delete  Action
 
 export const deleteCreditlistSuccess = (resp) => ({// Delete Success
   type: DELETE_CREDIT_LIST_ID_SUCCESS,
+  payload: resp
+});
+
+
+export const bulk_CreditNote_delete_ID = (config = {}) => ({//  Bulk Credit Note Delete  Action
+  type: BULK_CREDITNOTE_DELETE_ID,
+  config,
+});
+
+export const bulk_CreditNote_delete_ID_Success = (resp) => ({//  Bulk Credit Note Delete Success
+  type: BULK_CREDITNOTE_DELETE_ID_SUCCESS,
   payload: resp
 });
 
