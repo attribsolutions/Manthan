@@ -663,7 +663,6 @@ const OrderList = () => {
                             <Col sm="7">
                                 <C_DatePicker
                                     options={{
-
                                         altInput: true,
                                         altFormat: "d-m-Y",
                                         dateFormat: "Y-m-d",

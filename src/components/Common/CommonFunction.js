@@ -152,49 +152,6 @@ export const getCurrentMonthAndYear = () => {
 }
 
 
-
-
-// export const areAllDatesSame = (dates) => {
-//   if (!Array.isArray(dates) || dates.length === 0) {
-//     return null; // Return null for empty arrays or non-array inputs
-//   }
-
-//   const uniqueDates = Array.from(new Set(dates)); // Get unique dates in the array
-
-//   return {
-//     allSame: uniqueDates.length === 1,
-//     dates: uniqueDates,
-//   };
-// };
-
-export const isFutureDate = (date) => {
-  debugger
-  const currentDate = new Date(); // Get the current date
-
-  const [day, month, year] = date.split('-').map(Number);
-  // JavaScript months are 0-indexed, so subtract 1 from the month
-  const inputDate = new Date(year, month - 1, day);
-
-  return inputDate > currentDate; // Return true if the input date is in the future
-};
-
-export const areAllDatesSame = (dates) => {
-  if (!Array.isArray(dates) || dates.length === 0) {
-    return null; // Return null for empty arrays or non-array inputs
-  }
-
-  const uniqueDates = Array.from(new Set(dates)); // Get unique dates in the array
-  const futureDates = uniqueDates.filter(date => isFutureDate(date));
-
-  return {
-    allSame: uniqueDates.length === 1,
-    dates: uniqueDates,
-    futureDate: futureDates.length > 0 ? true : false, // Check if the first unique date is a future date
-    futureDates: futureDates, // Array of future dates
-  };
-};
-
-
 export const getPreviousMonthAndYear = ({ date, Privious }) => {
 
   const previousMonthDate = new Date(date);
@@ -521,6 +478,44 @@ export const DateFormat = (day) => {
 
 
 
+export const isFutureDate = (date) => {
+
+  const currentDate = new Date(); // Get the current date
+  const [day, month, year] = date.split('-').map(Number);
+  // JavaScript months are 0-indexed, so subtract 1 from the month
+  const inputDate = new Date(year, month - 1, day);
+  return inputDate > currentDate; // Return true if the input date is in the future
+};
+
+export const isToDateisgreterThanFormDate = ({ FromDate, ToDate }) => {
+  const [ToDateday, ToDatemonth, ToDateyear] = ToDate.split('-').map(Number);
+  const toDate = new Date(ToDateday, ToDatemonth - 1, ToDateyear);
+
+  const [FromDateday, FromDatemonth, FromDateyear] = FromDate.split('-').map(Number);
+  const fromDate = new Date(FromDateday, FromDatemonth - 1, FromDateyear);
+
+  return toDate > fromDate; // Return true if the input date is in the future
+};
+
+
+
+export const areAllDatesSame = (dates) => {
+  if (!Array.isArray(dates) || dates.length === 0) {
+    return null; // Return null for empty arrays or non-array inputs
+  }
+
+  const uniqueDates = Array.from(new Set(dates)); // Get unique dates in the array
+  const futureDates = uniqueDates.filter(date => isFutureDate(date));
+
+  return {
+    allSame: uniqueDates.length === 1,
+    dates: uniqueDates,
+    futureDate: futureDates.length > 0 ? true : false, // Check if the first unique date is a future date
+    futureDates: futureDates, // Array of future dates
+  };
+};
+
+
 export const disablePriviousTodate = ({ fromDate }) => {
   const [year, month, day] = fromDate?.split("-").map(Number);
   return new Date(year, month - 1, day)
@@ -528,7 +523,13 @@ export const disablePriviousTodate = ({ fromDate }) => {
 
 
 export const ToDate = ({ FromDate, Todate }) => {
-  const date = isFutureDate(date_dmy_func(FromDate)) && !isFutureDate(date_dmy_func(Todate)) ? FromDate : Todate
+
+  const istoDateisgreterThanFormDate = isToDateisgreterThanFormDate({ FromDate: FromDate, ToDate: Todate })
+  const isfutureDate = isFutureDate(date_dmy_func(FromDate))
+  const todateisNotFuture = !isFutureDate(date_dmy_func(Todate))
+
+
+  const date = (isfutureDate && todateisNotFuture) || !(istoDateisgreterThanFormDate) ? FromDate : Todate
   debugger
   return date
 }
@@ -842,9 +843,9 @@ export const fetchFiles = async (linksArray) => {
 };
 
 export function TotalAmount_Func(tableList) {
-  debugger
+
   let totalAmount = tableList.reduce((total, item) => {
-    debugger
+
     return total + Number(item.recordsAmountTotal) || 0;
 
   }, 0);
