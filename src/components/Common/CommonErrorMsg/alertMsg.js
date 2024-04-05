@@ -37,7 +37,7 @@ const paymentAmountGreaterThanZero = "The payment amount must be greater than ze
 const receiptAmountGreaterThanZero = "The Receipt amount must be greater than zero."
 
 // Import Excel Field Map , Party Map and Invoice Excel Upload pages Error Message
-const chooseAnyFile = "Please choose any file..."
+const chooseAnyFile = "Please choose xlsx file..."
 const waitForDownloadFieldDetails = "Please wait Downloading field Details."
 const unSupportedFileFormat = "Unsupported file format. Please select an Excel (XLSX)."
 const doYouConfirmChoice = "Do you confirm your choice?"
