@@ -168,6 +168,7 @@ export const getCurrentMonthAndYear = () => {
 // };
 
 export const isFutureDate = (date) => {
+  debugger
   const currentDate = new Date(); // Get the current date
 
   const [day, month, year] = date.split('-').map(Number);
@@ -517,6 +518,26 @@ export const DateFormat = (day) => {
 }
 
 
+
+
+
+export const disablePriviousTodate = ({ fromDate }) => {
+  const [year, month, day] = fromDate?.split("-").map(Number);
+  return new Date(year, month - 1, day)
+}
+
+
+export const ToDate = ({ FromDate, Todate }) => {
+  const date = isFutureDate(date_dmy_func(FromDate)) && !isFutureDate(date_dmy_func(ToDate)) ? FromDate : Todate
+  return date
+}
+
+
+
+
+
+
+
 export function btnIsDissablefunc({ btnId, state = false }) {// +++++++++++ Button Dissable and Sppiner Function +++++++++++++++++++++++++++++++
 
   // if (btnId) {
@@ -819,9 +840,10 @@ export const fetchFiles = async (linksArray) => {
   }
 };
 
-
 export function TotalAmount_Func(tableList) {
+  debugger
   let totalAmount = tableList.reduce((total, item) => {
+    debugger
     return total + Number(item.recordsAmountTotal) || 0;
 
   }, 0);
