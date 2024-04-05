@@ -99,6 +99,7 @@ const TargetVSAchievement = (props) => {
     const [tableColumns] = DynamicColumnHook({ pageField });
 
     async function MonthAndYearOnchange(e) {
+        dispatch(Target_VS_Achievement_Go_Button_API_Success([]));
         const selectdMonth = getCurrent_Month_And_Year(e.target.value);
         setYearAndMonth(selectdMonth);
     }
@@ -155,7 +156,6 @@ const TargetVSAchievement = (props) => {
                                         type="month"
                                         value={`${yearAndMonth.Year}-${yearAndMonth.Month}`}
                                         onChange={(e) => MonthAndYearOnchange(e)}
-                                        disabled={(tableData.length > 0) && true}
                                     // max={maxMonthCurrent}
                                     />
                                 </Col>
@@ -187,11 +187,6 @@ const TargetVSAchievement = (props) => {
                 </div>
 
                 <div className="mt-1">
-
-                    {/* <PaginationProvider
-                        pagination={paginationFactory(pageOptions)}
-                    >
-                        {({ paginationProps, paginationTableProps }) => ( */}
                     <ToolkitProvider
                         keyField="id"
                         data={tableData}
@@ -215,43 +210,16 @@ const TargetVSAchievement = (props) => {
                                                     dispatch(BreadcrumbShowCountlabel(`Count:${dataSize}`));
                                                 }}
                                                 {...toolkitProps.baseProps}
-                                            // {...paginationTableProps}
+
                                             />
                                             {globalTableSearchProps(toolkitProps.searchProps)}
                                         </div>
-                                        {/* <Row className="align-items-md-center mt-30">
-                                                    <Col className="pagination pagination-rounded justify-content-end mb-2">
-                                                        <PaginationListStandalone
-                                                            {...paginationProps}
-                                                        />
-                                                    </Col>
-                                                </Row> */}
+
                                     </Col>
                                 </Row>
                             </React.Fragment>
                         )}
                     </ToolkitProvider>
-                    {/* )
-                        }
-                    </PaginationProvider> */}
-
-                    {/* <GlobalCustomTable
-                        keyField="id"
-                        data={tableData}
-                        columns={tableColumns}
-                        // paginationEnabled={10}//show pagination 200 per page
-                        classes={"custom-table"}
-                        noDataIndication={
-                            <div className="text-danger text-center ">
-                                Record Not available
-                            </div>
-                        }
-                        onDataSizeChange={({ dataCount }) => {
-
-                            dispatch(BreadcrumbShowCountlabel(`Count:${dataCount}`));
-                        }}
-                    /> */}
-
 
                 </div>
             </div>

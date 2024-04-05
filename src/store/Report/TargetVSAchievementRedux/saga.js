@@ -10,10 +10,10 @@ function* Target_VS_Achievement_GenFun(jsonBody) {
         const response = yield call(Target_Vs_Achievement_Gobtn_API, jsonBody);
         const newList = yield response.Data.map((i, k) => {
             i.id = k + 1
-            i.TargetQuantity = amountCommaSeparateFunc(parseFloat(i.TargetQuantity).toFixed(3))
-            i.TargetAmount = amountCommaSeparateFunc(parseFloat(i.TargetAmount).toFixed(2))
-            i.Quantity = amountCommaSeparateFunc(parseFloat(i.Quantity).toFixed(3))
-            i.Amount = amountCommaSeparateFunc(parseFloat(i.Amount).toFixed(2))
+            i.TargetQuantityInKG = amountCommaSeparateFunc(parseFloat(i.TargetQuantityInKG).toFixed(3))
+            i.TargetAmountWithGST = amountCommaSeparateFunc(parseFloat(i.TargetAmountWithGST).toFixed(2))
+            i.AchQuantityInKG = amountCommaSeparateFunc(parseFloat(i.AchQuantityInKG).toFixed(3))
+            i.AchAmountWithGST = amountCommaSeparateFunc(parseFloat(i.AchAmountWithGST).toFixed(2))
 
             return i
         })
