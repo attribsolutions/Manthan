@@ -27,6 +27,7 @@ const GlobalCustomTable = ({
 }) => {
     const updatedRowBlinkIds_string = updatedRowBlinkId?.toString() || '';
     const [searchText, setSearchText] = useState(defaultSearchText || '');
+    const [currentPage, setCurrentPage] = useState(1); // Initialize currentPage state
 
 
     const debounceHandleSearch = _debounce((val) => {
@@ -65,11 +66,21 @@ const GlobalCustomTable = ({
     }, [data, searchText, columns]);
 
 
-    const debounceIsDataChangeFunc = _debounce(() => {
+    // const debounceIsDataChangeFunc = _debounce(() => {
+    //     if (onDataSizeChange) {
+    //         onDataSizeChange({ dataCount: filteredData.length, filteredData: filteredData });
+    //     }
+    // }, 300);
+
+    /// this function due to pagination page reditect to page one
+    const handleDataChange = (sizePerPage, page) => {
+        setCurrentPage(page); // Update currentPage when data changes
         if (onDataSizeChange) {
             onDataSizeChange({ dataCount: filteredData.length, filteredData: filteredData });
         }
-    }, 300);
+    };
+
+
 
 
     const customTotal = (from, to, size) => (
@@ -80,7 +91,7 @@ const GlobalCustomTable = ({
     const sizePerPage = (parseInt(paginationEnabled) > 0) ? paginationEnabled : 25
 
     const options = {
-        page: 1,
+        page: currentPage,
         paginationSize: 5,
         pageStartIndex: 1,
         sizePerPage: paginationEnabled ? sizePerPage : filteredData.length + 10,
@@ -126,7 +137,7 @@ const GlobalCustomTable = ({
                             classes='custom-table '
                             rowClasses={rowClasses}
                             sort={sortCaretFunction} // Include the sortCaret function
-                            onDataSizeChange={debounceIsDataChangeFunc}
+                            onDataSizeChange={handleDataChange}
                             {...rest}
                             {...paginationTableProps}
                             bootstrap4
