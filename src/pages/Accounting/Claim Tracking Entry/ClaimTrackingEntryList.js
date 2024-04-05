@@ -161,8 +161,15 @@ const ClaimTrackingEntryList = () => {
                                 style={{ width: "65px" }}>ToDate</Label>
                             <Col sm="7">
                                 <C_DatePicker
+                                    options={{
+                                        minDate: (_cfunc.disablePriviousTodate({ fromDate: fromDate })),
+                                        maxDate: "today",
+                                        altInput: true,
+                                        altFormat: "d-m-Y",
+                                        dateFormat: "Y-m-d",
+                                    }}
+                                    value={_cfunc.ToDate({ FromDate: fromDate, Todate: toDate })}
                                     name="ToDate"
-                                    value={toDate}
                                     onChange={todateOnchange}
                                 />
                             </Col>

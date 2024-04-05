@@ -197,8 +197,15 @@ const GRNList = () => {
                                 style={{ width: "65px" }}>ToDate</Label>
                             <Col sm="7">
                                 <C_DatePicker
+                                    options={{
+                                        minDate: (_cfunc.disablePriviousTodate({ fromDate: fromdate })),
+                                        maxDate: "today",
+                                        altInput: true,
+                                        altFormat: "d-m-Y",
+                                        dateFormat: "Y-m-d",
+                                    }}
+                                    value={_cfunc.ToDate({ FromDate: fromdate, Todate: todate })}
                                     nane='todate'
-                                    value={todate}
                                     onChange={todateOnchange}
                                 />
                             </Col>

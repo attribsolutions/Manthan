@@ -527,12 +527,11 @@ export const ToDate = ({ FromDate, Todate }) => {
   const istoDateisgreterThanFormDate = isToDateisgreterThanFormDate({ FromDate: FromDate, ToDate: Todate })
   const isfutureDate = isFutureDate(date_dmy_func(FromDate))
   const todateisNotFuture = !isFutureDate(date_dmy_func(Todate))
-
-
   const date = (isfutureDate && todateisNotFuture) || !(istoDateisgreterThanFormDate) ? FromDate : Todate
-  debugger
+
   return date
 }
+
 
 
 

@@ -465,12 +465,13 @@ const InvoiceList = () => {
                             <Col sm="7">
                                 <C_DatePicker
                                     options={{
+                                        minDate: (_cfunc.disablePriviousTodate({ fromDate: fromdate })),
                                         altInput: true,
                                         altFormat: "d-m-Y",
                                         dateFormat: "Y-m-d",
                                     }}
                                     name="todate"
-                                    value={todate}
+                                    value={_cfunc.ToDate({ FromDate: fromdate, Todate: todate })}
                                     onChange={todateOnchange}
                                 />
                             </Col>
