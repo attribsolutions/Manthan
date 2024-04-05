@@ -261,7 +261,7 @@ const CreditNoteAdd = (props) => {
 
     const InvoiceNo_Options = InvoiceNo.map((index) => ({
         value: index.Invoice,
-        label: index.FullInvoiceNumber,
+        label: `${index.FullInvoiceNumber}-(${_cfunc.date_dmy_func(index.InvoiceDate)})`,
     }));
 
     const creditNoteTypeId = CreditDebitType.find((index) => {
