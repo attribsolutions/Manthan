@@ -31,6 +31,7 @@ const GlobalCustomTable = ({
 
 
     const debounceHandleSearch = _debounce((val) => {
+        setCurrentPage(1); // Update currentPage when data changes
         setSearchText(val);
     }, 300);
 
@@ -40,6 +41,7 @@ const GlobalCustomTable = ({
 
 
     const rowClasses = (row) => {
+
         let cs = '';
         if (row.IsRecordDeleted) {
             cs += '_deleted-Row ';
@@ -72,7 +74,7 @@ const GlobalCustomTable = ({
     //     }
     // }, 300);
 
-    /// this function due to pagination page reditect to page one
+
     const handleDataChange = (sizePerPage, page) => {
         setCurrentPage(page); // Update currentPage when data changes
         if (onDataSizeChange) {
@@ -91,6 +93,7 @@ const GlobalCustomTable = ({
     const sizePerPage = (parseInt(paginationEnabled) > 0) ? paginationEnabled : 25
 
     const options = {
+
         page: currentPage,
         paginationSize: 5,
         pageStartIndex: 1,
@@ -146,6 +149,7 @@ const GlobalCustomTable = ({
                             {...paginationProps}
                         />
                         {paginationEnabled && <div className=" pagination pagination-rounded justify-content-end" style={{ marginTop: "-20px", marginBottom: "40px" }}>
+
                             <PaginationListStandalone
                                 {...paginationProps}
                             />
