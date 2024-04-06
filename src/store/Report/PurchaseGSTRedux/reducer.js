@@ -2,8 +2,8 @@ import { POST_PURCHASE_GST_REPORT_API, POST_PURCHASE_GST_REPORT_API_SUCCESS, POS
 
 const INIT_STATE = {
     PurchaseGSTGobtn: [],
-    GoBtnLoading: false,
-    ExcelBtnLoading: false
+    Loading: false,
+
 }
 
 const PurchaseGSTReportReducer = (state = INIT_STATE, action) => {
@@ -13,8 +13,8 @@ const PurchaseGSTReportReducer = (state = INIT_STATE, action) => {
         case POST_PURCHASE_GST_REPORT_API:
             return {
                 ...state,
-                GoBtnLoading: true,
-                ExcelBtnLoading: true,
+                Loading: true,
+
 
             }
 
@@ -22,15 +22,15 @@ const PurchaseGSTReportReducer = (state = INIT_STATE, action) => {
             return {
                 ...state,
                 PurchaseGSTGobtn: action.payload,
-                GoBtnLoading: false,
-                ExcelBtnLoading: false
+                Loading: false,
+
 
             }
         case POST_PURCHASE_GST_REPORT_API_ERROR_ACTION:
             return {
                 ...state,
-                GoBtnLoading: false,
-                ExcelBtnLoading: false
+                Loading: false,
+
             };
         default:
             return state
