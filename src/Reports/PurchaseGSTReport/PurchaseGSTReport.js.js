@@ -43,15 +43,14 @@ const PurchaseGSTReport = (props) => {
     const reducers = useSelector(
         (state) => ({
             tableData: state.PurchaseGSTReportReducer.PurchaseGSTGobtn,
-            ExcelBtnLoading: state.PurchaseGSTReportReducer.ExcelBtnLoading,
-            GoBtnLoading: state.PurchaseGSTReportReducer.GoBtnLoading,
+            Loading: state.PurchaseGSTReportReducer.Loading,
             Distributor: state.CommonPartyDropdownReducer.commonPartyDropdownOption,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageField
         })
     );
 
-    const { userAccess, tableData, ExcelBtnLoading, GoBtnLoading, Distributor, pageField } = reducers;
+    const { userAccess, tableData, Loading, Distributor, pageField } = reducers;
     const { PurchaseGSTDetails = [], PurchaseGSTRateWiseDetails = [] } = tableData;
 
     const values = { ...state.values }
@@ -134,7 +133,7 @@ const PurchaseGSTReport = (props) => {
     }
 
     useEffect(() => {
-        if (btnMode === "excel") {
+        if (btnMode === 2) {
 
             if ((PurchaseGSTRateWiseDetails.length > 0) || (PurchaseGSTDetails.length > 0)) {
                 const removeIdField = (arr) => {
@@ -276,7 +275,7 @@ const PurchaseGSTReport = (props) => {
                             <C_Button
                                 type="button"
                                 spinnerColor="white"
-                                loading={btnMode === 1 && true}
+                                loading={btnMode === 1 && Loading}
                                 className="btn btn-success m-3 mr"
                                 onClick={(e) => excel_And_GoBtnHandler(e, 1)}
                             >
@@ -285,7 +284,7 @@ const PurchaseGSTReport = (props) => {
                             <C_Button
                                 type="button"
                                 spinnerColor="white"
-                                loading={btnMode === 2 && true}
+                                loading={btnMode === 2 && Loading}
                                 className="btn btn-primary m-3 mr "
                                 onClick={(e) => excel_And_GoBtnHandler(e, 2)}
                             >
