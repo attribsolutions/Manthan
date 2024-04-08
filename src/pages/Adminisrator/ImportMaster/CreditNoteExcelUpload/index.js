@@ -316,7 +316,7 @@ const CreditNoteExcelUpload = (props) => {
     }, [readJsonDetail, isIgnoreParty]);
 
     useEffect(() => {
-        
+
         const mapItemValues = ItemList.map(obj => obj.MapItem);
         const conditionFunction = (item) => {
             const itemCodeAsString = item.Item_Code.toString().trim();
@@ -342,6 +342,15 @@ const CreditNoteExcelUpload = (props) => {
 
         setverifyLoading(true);
 
+        if (commonPartyDropSelect.value === 0) {
+            customAlert({
+                Type: 3,
+                Message: alertMessages.commonPartySelectionIsRequired,
+            })
+            setverifyLoading(false)
+            return
+        }
+        
         if (compareParameter.length === 0) {
             customAlert({
                 Type: 3,
@@ -640,7 +649,7 @@ const CreditNoteExcelUpload = (props) => {
                 let invoiceTotalAmount = 0
 
                 inv.forEach(async (ele) => {
-                    
+
                     const calculate = InvoiceUploadCalculation({
                         Quantity: ele[parArr.Quantity],
                         Rate: ele[parArr.Rate],
@@ -670,7 +679,7 @@ const CreditNoteExcelUpload = (props) => {
                         "CreatedBy": _cfunc.loginUserID(),
                         "UpdatedBy": _cfunc.loginUserID(),
                     }
-                    
+
                     CRDRNoteItems.push({
                         "Item": ele.Item_ID ? ele.Item_ID : '',
                         "ServiceItem": null,
