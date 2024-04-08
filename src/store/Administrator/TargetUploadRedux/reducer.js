@@ -77,8 +77,8 @@ const TargetUploadReducer = (state = INIT_STATE, action) => {
     case DELETE_TARGET_UPLOAD_LIST_ID_SUCCESS:
       return {
         ...state,
-        listBtnLoading: false,
         deleteMsg: action.payload,
+        listBtnLoading: false,
       };
 
     case TARGET_UPLOAD_API_ERROR_ACTION:
