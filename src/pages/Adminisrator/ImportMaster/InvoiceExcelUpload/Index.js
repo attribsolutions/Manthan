@@ -272,13 +272,13 @@ const InvoiceExcelUpload = (props) => {
         dispatch(GoButton_ImportFiledMap_Add({ jsonBody }))
     };
 
-
     async function veifyExcelBtn_Handler() {
+        debugger
         setverifyLoading(true);
         if (commonPartyDropSelect.value === 0) {
-            customAlert({
+            await customAlert({
                 Type: 3,
-                Message: alertMessages.requiredPartySelection,
+                Message: alertMessages.selectPartyName,
             })
             setverifyLoading(false)
             return
