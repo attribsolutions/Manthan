@@ -85,8 +85,9 @@ const ViewDetails_Modal = (Props) => {
                                 Message: JSON.stringify(BackDateresponse.Message),
                             })
                             return
+                        } else if (Props.subPageMode !== url.PURCHASE_RETURN_LIST) {
+                            return setModal_view(true);
                         }
-
                     }
                 }
             }
