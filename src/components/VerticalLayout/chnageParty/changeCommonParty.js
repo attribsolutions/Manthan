@@ -45,7 +45,7 @@ const ChangeCommonParty = (props) => {
     // useEffect to update selected party when commonPartyDropSelect changes
     useEffect(() => {
         if (commonPartyDropSelect.value > 0) {
-            
+
             setSelectedParty(commonPartyDropSelect);
         }
     }, [commonPartyDropSelect]);
@@ -210,7 +210,7 @@ const ChangeCommonParty = (props) => {
                                 type="button"
                                 style={{ marginRight: "156px" }}
                                 className={`${"badge badge-soft-info font-size-12 btn btn-info waves-effect waves-light w-xxs border border-light"} px-2`}
-                                title={"All Party Details"}
+                                title={"Party Employee Details"}
                                 onClick={handleClick}
                             >
                                 {isLoading || loading ? <Spinner style={{ width: "15px", height: "15px" }} /> : <i className="fas fa-users"></i>}

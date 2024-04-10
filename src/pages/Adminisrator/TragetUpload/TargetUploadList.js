@@ -34,6 +34,7 @@ const TargetUploadList = () => {
     const reducers = useSelector(
         (state) => ({
             listBtnLoading: state.TargetUploadReducer.listBtnLoading,
+            goBtnLoading: state.TargetUploadReducer.goBtnLoading,
             tableList: state.TargetUploadReducer.targetList,
             editData: state.TargetUploadReducer.editData,
             updateMsg: state.TargetUploadReducer.updateMsg,
@@ -83,6 +84,7 @@ const TargetUploadList = () => {
     Party_Option.unshift(allLabelWithZero)
 
     const selectDeleteBtnHandler = async (row = []) => {
+        debugger
         let isAllcheck = row.filter(i => (i.hasAllSelect))
         let isRowcheck = row.filter(i => (i.selectCheck))
         let ischeck = [];
@@ -190,7 +192,7 @@ const TargetUploadList = () => {
                         selectSaveBtnLabel: "Delete",
                         selectHeaderLabel: "Select",
                         selectSaveBtnLoading: reducers.listBtnLoading,
-                        pageloading: reducers.listBtnLoading     ////   non selectable  till page loading
+                        pageloading: reducers.listBtnLoading || reducers.goBtnLoading    ////   non selectable  till page loading
                     }}
 
                     ButtonMsgLable={"Target Upload"}
