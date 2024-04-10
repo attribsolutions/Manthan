@@ -29,6 +29,7 @@ import paginationFactory, { PaginationProvider, PaginationTotalStandalone } from
 import BootstrapTable from "react-bootstrap-table-next";
 import { globalTableSearchProps } from "../../../components/Common/SearchBox/MySearch";
 import _debounce from 'lodash/debounce';
+import escapeRegExp from 'lodash/escapeRegExp';
 
 
 
@@ -120,7 +121,10 @@ const PartyEmployeeDetails = (props) => {
         if (!searchValue || searchValue.trim() === '') {
             return strText;
         }
-        const regex = new RegExp(searchValue.trim(), 'gi');
+
+        const escapedSearchValue = escapeRegExp(searchValue.trim());
+        const regex = new RegExp(escapedSearchValue, 'gi');
+
         return strText.replace(regex, match => `<span style="background-color: Yellow">${match}</span>`);
 
     };
