@@ -113,6 +113,18 @@ const PartyEmployeeDetails = (props) => {
 
 
 
+
+    const highlightSearchValue = (text, searchValue) => {
+        let strText = text === null ? "" : text.toString()
+        debugger
+        if (!searchValue || searchValue.trim() === '') {
+            return strText;
+        }
+        const regex = new RegExp(searchValue.trim(), 'gi');
+        return strText.replace(regex, match => `<span style="background-color: Yellow">${match}</span>`);
+
+    };
+
     const pagesListColumns = [
         {
             text: "Sr No",
@@ -122,49 +134,54 @@ const PartyEmployeeDetails = (props) => {
         {
             text: "Party Details",
             dataField: "PartyName",
-            formatter: (cellContent, index) => {
+            sort: true,
+            formatExtraData: { searchText },
+            formatter: (cellContent, index, rowIndex, { searchText }) => {
                 return (
                     <>
                         <div style={{ width: "auto", whiteSpace: "nowrap" }}>
-                            <span style={{ fontWeight: "bold" }}>Full Name:</span> {index.PartyName}
+
+                            <span style={{ fontWeight: "bold" }}>Full Name:</span>    <span dangerouslySetInnerHTML={{ __html: highlightSearchValue(index.PartyName, searchText) }} />
                         </div>
 
                         <div style={{ width: "auto", whiteSpace: "nowrap" }}>
-                            <span style={{ fontWeight: "bold" }}>Login Name:</span> {index.LoginName}
+                            <span style={{ fontWeight: "bold" }}>Login Name:</span>  <span dangerouslySetInnerHTML={{ __html: highlightSearchValue(index.LoginName, searchText) }} />
                         </div>
                         <div style={{ width: "auto", whiteSpace: "nowrap" }}>
-                            <span style={{ fontWeight: "bold" }}>Party Type:</span> {index.PartyType}
+                            <span style={{ fontWeight: "bold" }}>Party Type:</span>  <span dangerouslySetInnerHTML={{ __html: highlightSearchValue(index.PartyType, searchText) }} />
                         </div>
                         <div style={{ width: "auto", whiteSpace: "nowrap" }}>
-                            <span style={{ fontWeight: "bold" }}>Party Id:</span> {index.PartyID}
+                            <span style={{ fontWeight: "bold" }}>Party Id:</span>  <span dangerouslySetInnerHTML={{ __html: highlightSearchValue(index.PartyID, searchText) }} />
                         </div>
                         <div style={{ width: "auto", whiteSpace: "nowrap" }}>
-                            <span style={{ fontWeight: "bold" }}>Sap Code:</span> {index.SAPPartyCode}
+                            <span style={{ fontWeight: "bold" }}>Sap Code:</span>  <span dangerouslySetInnerHTML={{ __html: highlightSearchValue(index.SAPPartyCode, searchText) }} />
                         </div>
                         <div style={{ width: "auto", whiteSpace: "nowrap" }}>
-                            <span style={{ fontWeight: "bold" }}>Party Email:</span> {index.PartyEmail}
+                            <span style={{ fontWeight: "bold" }}>Party Email:</span>  <span dangerouslySetInnerHTML={{ __html: highlightSearchValue(index.PartyEmail, searchText) }} />
 
                         </div> <div style={{ width: "auto", whiteSpace: "nowrap" }}>
-                            <span style={{ fontWeight: "bold" }}>Mobile No:</span> {index.MobileNo}
+                            <span style={{ fontWeight: "bold" }}>Mobile No:</span>  <span dangerouslySetInnerHTML={{ __html: highlightSearchValue(index.MobileNo, searchText) }} />
                         </div>
                         <div style={{ width: "auto", whiteSpace: "nowrap" }}>
-                            <span style={{ fontWeight: "bold" }}>Alternate Contact No:</span> {index.AlternateContactNo}
+                            <span style={{ fontWeight: "bold" }}>Alternate Contact No:</span>  <span dangerouslySetInnerHTML={{ __html: highlightSearchValue(index.AlternateContactNo, searchText) }} />
                         </div>
                         <div style={{ width: "auto", whiteSpace: "nowrap" }}>
-                            <span style={{ fontWeight: "bold" }}>DOB:</span> {index.DOB}
-                        </div>
-
-                        <div style={{ width: "auto", whiteSpace: "nowrap" }}>
-                            <span style={{ fontWeight: "bold" }}>PAN:</span> {index.PartyPAN}
+                            <span style={{ fontWeight: "bold" }}>DOB:</span> <span dangerouslySetInnerHTML={{ __html: highlightSearchValue(index.DOB, searchText) }} />
                         </div>
 
                         <div style={{ width: "auto", whiteSpace: "nowrap" }}>
-                            <span style={{ fontWeight: "bold" }}>Aadhar No:</span> {index.AadharNo}
+                            <span style={{ fontWeight: "bold" }}>PAN:</span>  <span dangerouslySetInnerHTML={{ __html: highlightSearchValue(index.PartyPAN, searchText) }} />
+                        </div>
+
+                        <div style={{ width: "auto", whiteSpace: "nowrap" }}>
+                            <span style={{ fontWeight: "bold" }}>Aadhar No:</span> <span dangerouslySetInnerHTML={{ __html: highlightSearchValue(index.AadharNo, searchText) }} />
                         </div>
                         <div style={{ width: "auto", whiteSpace: "nowrap" }}>
                             <span style={{ fontWeight: "bold" }}>Status:</span> {index.Status === "Active" ?
-                                <span style={{ color: "green", fontWeight: "bold" }}>{index.Status}</span> :
-                                <span style={{ color: "red", fontWeight: "bold" }}> {index.Status}</span>}
+                                <span style={{ color: "green", fontWeight: "bold" }} dangerouslySetInnerHTML={{ __html: highlightSearchValue(index.Status, searchText) }} />
+                                :
+                                <span style={{ color: "red", fontWeight: "bold" }} dangerouslySetInnerHTML={{ __html: highlightSearchValue(index.Status, searchText) }} />}
+
                         </div>
 
                     </>
@@ -174,23 +191,24 @@ const PartyEmployeeDetails = (props) => {
         {
             text: "Party Address Details",
             dataField: "PartyAddress",
-            formatter: (cellContent, index) => {
+            formatExtraData: { searchText },
+            formatter: (cellContent, index, rowIndex, { searchText }) => {
                 return (
                     <>
                         <div style={{ width: "auto" }}>
-                            <span style={{ fontWeight: "bold" }}>Address:</span> {index.PartyAddress}
+                            <span style={{ fontWeight: "bold" }}>Address:</span>   <span dangerouslySetInnerHTML={{ __html: highlightSearchValue(index.PartyAddress, searchText) }} />
                         </div>
                         <div style={{ width: "auto", whiteSpace: "nowrap" }}>
-                            <span style={{ fontWeight: "bold" }}>State:</span> {index.PartyState}
+                            <span style={{ fontWeight: "bold" }}>State:</span> <span dangerouslySetInnerHTML={{ __html: highlightSearchValue(index.PartyState, searchText) }} />
                         </div> <div style={{ width: "auto", whiteSpace: "nowrap" }}>
-                            <span style={{ fontWeight: "bold" }}>District:</span> {index.PartyDistrict}
+                            <span style={{ fontWeight: "bold" }}>District:</span> <span dangerouslySetInnerHTML={{ __html: highlightSearchValue(index.PartyDistrict, searchText) }} />
                         </div>
                         <div style={{ width: "auto", whiteSpace: "nowrap" }}>
-                            <span style={{ fontWeight: "bold" }}>City:</span> {index.PartyCity}
+                            <span style={{ fontWeight: "bold" }}>City:</span> <span dangerouslySetInnerHTML={{ __html: highlightSearchValue(index.PartyCity, searchText) }} />
                         </div>
 
                         <div style={{ width: "auto", whiteSpace: "nowrap" }}>
-                            <span style={{ fontWeight: "bold" }}>Pin Code:</span> {index.PartyPIN}
+                            <span style={{ fontWeight: "bold" }}>Pin Code:</span> <span dangerouslySetInnerHTML={{ __html: highlightSearchValue(index.PartyPIN, searchText) }} />
                         </div>
 
                         <div style={{ width: "auto", whiteSpace: "nowrap" }}>
@@ -217,25 +235,26 @@ const PartyEmployeeDetails = (props) => {
         {
             text: "Employee Details",
             dataField: "EmpType",
-            formatter: (cellContent, index) => {
+            formatExtraData: { searchText },
+            formatter: (cellContent, index, rowIndex, { searchText }) => {
                 return (
                     <>
                         <div style={{ width: "auto", whiteSpace: "nowrap" }} >
-                            <span style={{ fontWeight: "bold" }}>Full Name:</span> {index.EmpName}
+                            <span style={{ fontWeight: "bold" }}>Full Name:</span> <span dangerouslySetInnerHTML={{ __html: highlightSearchValue(index.EmpName, searchText) }} />
                         </div>
                         <div style={{ width: "auto", whiteSpace: "nowrap" }}>
-                            <span style={{ fontWeight: "bold" }}>Employee Type:</span> {index.EmpType}
+                            <span style={{ fontWeight: "bold" }}>Employee Type:</span>  <span dangerouslySetInnerHTML={{ __html: highlightSearchValue(index.EmpType, searchText) }} />
                         </div>
                         <div style={{ width: "auto", whiteSpace: "nowrap" }}>
-                            <span style={{ fontWeight: "bold" }}>Email:</span> {index.EmpEmail}
+                            <span style={{ fontWeight: "bold" }}>Email:</span> <span dangerouslySetInnerHTML={{ __html: highlightSearchValue(index.EmpEmail, searchText) }} />
                         </div> <div style={{ width: "auto", whiteSpace: "nowrap" }}>
-                            <span style={{ fontWeight: "bold" }}>Mobile:</span> {index.EmpMobile}
+                            <span style={{ fontWeight: "bold" }}>Mobile:</span>  <span dangerouslySetInnerHTML={{ __html: highlightSearchValue(index.EmpMobile, searchText) }} />
                         </div>
                         <div style={{ width: "auto", whiteSpace: "nowrap" }}>
-                            <span style={{ fontWeight: "bold" }}>DOB:</span> {index.DOB}
+                            <span style={{ fontWeight: "bold" }}>DOB:</span>  <span dangerouslySetInnerHTML={{ __html: highlightSearchValue(index.DOB, searchText) }} />
                         </div>
                         <div style={{ width: "auto", whiteSpace: "nowrap" }}>
-                            <span style={{ fontWeight: "bold" }}>PAN:</span> {index.EmpPAN}
+                            <span style={{ fontWeight: "bold" }}>PAN:</span>  <span dangerouslySetInnerHTML={{ __html: highlightSearchValue(index.EmpPAN, searchText) }} />
                         </div>
                     </>
                 );
@@ -247,20 +266,21 @@ const PartyEmployeeDetails = (props) => {
         {
             text: "Employee Address Details",
             dataField: "EmpAddress",
-            formatter: (cellContent, index) => {
+            formatExtraData: { searchText },
+            formatter: (cellContent, index, rowIndex, { searchText }) => {
                 return (
                     <>
 
                         <div style={{ width: "auto" }}>
-                            <span style={{ fontWeight: "bold" }}>Address:</span> {index.EmpAddress}
+                            <span style={{ fontWeight: "bold" }}>Address:</span>  <span dangerouslySetInnerHTML={{ __html: highlightSearchValue(index.EmpAddress, searchText) }} />
                         </div>
                         <div style={{ width: "auto", whiteSpace: "nowrap" }}>
-                            <span style={{ fontWeight: "bold" }}>State:</span> {index.EmpState}
+                            <span style={{ fontWeight: "bold" }}>State:</span>  <span dangerouslySetInnerHTML={{ __html: highlightSearchValue(index.EmpState, searchText) }} />
                         </div> <div style={{ width: "auto", whiteSpace: "nowrap" }}>
-                            <span style={{ fontWeight: "bold" }}>District:</span> {index.EmpDistrict}
+                            <span style={{ fontWeight: "bold" }}>District:</span>  <span dangerouslySetInnerHTML={{ __html: highlightSearchValue(index.EmpDistrict, searchText) }} />
                         </div>
                         <div style={{ width: "auto", whiteSpace: "nowrap" }}>
-                            <span style={{ fontWeight: "bold" }}>Pin Code:</span> {index.EmpPIN}
+                            <span style={{ fontWeight: "bold" }}>Pin Code:</span> <span dangerouslySetInnerHTML={{ __html: highlightSearchValue(index.EmpPIN, searchText) }} />
                         </div>
                     </>
                 );
@@ -271,13 +291,14 @@ const PartyEmployeeDetails = (props) => {
         {
             text: "FSSAI Details",
             dataField: "FSSAIExpiry",
-            formatter: (cellContent, index) => {
+            formatExtraData: { searchText },
+            formatter: (cellContent, index, rowIndex, { searchText }) => {
                 return (
                     <>
                         <div style={{ width: "auto", whiteSpace: "nowrap" }}>
-                            <span style={{ fontWeight: "bold" }}>FSSAI No:</span> {index.FSSAINo}
+                            <span style={{ fontWeight: "bold" }}>FSSAI No:</span> <span dangerouslySetInnerHTML={{ __html: highlightSearchValue(index.FSSAINo, searchText) }} />
                         </div><div style={{ width: "auto", whiteSpace: "nowrap" }}>
-                            <span style={{ fontWeight: "bold" }}>FSSAI Expiry:</span> {index.FSSAIExpiry}
+                            <span style={{ fontWeight: "bold" }}>FSSAI Expiry:</span> <span dangerouslySetInnerHTML={{ __html: highlightSearchValue(index.FSSAIExpiry, searchText) }} />
                         </div>
 
                     </>
@@ -308,14 +329,31 @@ const PartyEmployeeDetails = (props) => {
         }
     };
 
+    // const filteredData = useMemo(() => {
+    //     return PartyEmployeeDetails?.filter((row) =>
+    //         Object.values(row).some(value =>
+    //             value !== null && value.toString().toLowerCase().includes(searchText.toLowerCase())
+    //         )
+    //     );
+
+    // }, [PartyEmployeeDetails, searchText]);
+
+
     const filteredData = useMemo(() => {
+        if (!searchText) {
+            return PartyEmployeeDetails;
+        }
+
         return PartyEmployeeDetails?.filter((row) =>
-            Object.values(row).some(value =>
-                value !== null && value.toString().toLowerCase().includes(searchText.toLowerCase())
+            Object.entries(row).some(([key, value]) =>
+                key !== 'Latitude' && key !== 'Longitude' &&  // Exclude Latitude field
+                value !== null &&
+                value.toString().toLowerCase().includes(searchText.toLowerCase())
             )
         );
-
     }, [PartyEmployeeDetails, searchText]);
+
+
 
 
     useEffect(() => {
