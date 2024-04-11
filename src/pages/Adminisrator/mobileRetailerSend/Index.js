@@ -92,7 +92,6 @@ const Index = (props) => {
 	}, [partyName]);
 
 	const location = { ...history.location }
-	const hasShowloction = location.hasOwnProperty(mode.editValue)
 	const hasShowModal = props.hasOwnProperty(mode.editValue)
 
 	const partyListOptions = partyList.map((index) => ({
@@ -177,7 +176,7 @@ const Index = (props) => {
 							<Col sm={3} className="">
 								<FormGroup className="mb- row mt-3 mb-1 " >
 									<Label className="col-sm-5 p-2"
-										style={{ width: "83px" }}>FromDate</Label>
+										style={{ width: "83px" }}>Party</Label>
 									<Col sm="7">
 										<C_Select
 											name="Party"
@@ -200,8 +199,6 @@ const Index = (props) => {
 								</FormGroup>
 							</Col>
 
-
-
 							<Col sm={8} className="">
 
 							</Col>
@@ -217,9 +214,6 @@ const Index = (props) => {
 							</Col>
 						</div>
 					</div >
-
-
-
 
 					<form noValidate>
 						<ToolkitProvider
