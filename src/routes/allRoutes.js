@@ -211,7 +211,7 @@ import ManPowerReport from "../Reports/ManPowerReport";
 import TCSAmountReport from "../Reports/TCSAmountReport";
 import CX_DD_DiffrenceReport from "../Reports/CX_DD_DiffrenceReport";
 import Bulk_Invoice from "../pages/Sale/Bulk_Invoice/index";
-import POSRoleAccess from "../pages/SweetPOS/Adminstration/POSRoleAccess.js";
+import POSRoleAccess from "../pages/SweetPOS/Adminstration/RoleAccess/POSRoleAccess.js";
 import SystemSetting from "../pages/Utility/SystemSetting/SystemSetting.js";
 import SystemSettingList from "../pages/Utility/SystemSetting/SystemSettingList.js";
 import SNSReport from "../Reports/StockReport/SNSReport.js";
