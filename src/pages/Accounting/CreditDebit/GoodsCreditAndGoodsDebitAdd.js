@@ -157,7 +157,7 @@ const GoodsCreditNote = (props) => {
         dispatch(InvoiceNumberSuccess([]));
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_id));
-        dispatch(BreadcrumbShowCountlabel(`${"Count"} :${0} ₹ :${0}`));
+        dispatch(BreadcrumbShowCountlabel(`${"Count"} :${0} ₹ ${0}`));
 
         return () => {
             dispatch(Retailer_List_Success([]));
@@ -351,7 +351,7 @@ const GoodsCreditNote = (props) => {
                 });
 
                 let sumOfGrandTotal = updateItemArr.reduce((accumulator, currentObject) => accumulator + Number(currentObject["roundedTotalAmount"]) || 0, 0);
-                let count_label = `${"Count"} :${updateItemArr.length} ₹ :${Number(sumOfGrandTotal).toLocaleString()}`
+                let count_label = `${"Count"} :${updateItemArr.length} ₹ ${Number(sumOfGrandTotal).toLocaleString()}`
                 dispatch(BreadcrumbShowCountlabel(count_label));
                 updateItemArr.sort((a, b) => b.id - a.id);
                 setTableArr(updateItemArr);
@@ -618,7 +618,7 @@ const GoodsCreditNote = (props) => {
     const deleteButtonAction = (row, TablelistArray = []) => {
         const newArr = TablelistArray.filter((index) => !(index.id === row.id))
         let sumOfGrandTotal = newArr.reduce((accumulator, currentObject) => accumulator + Number(currentObject["roundedTotalAmount"]) || 0, 0);
-        let count_label = `${"Count"} :${newArr.length} ₹ :${Number(sumOfGrandTotal).toLocaleString()}`
+        let count_label = `${"Count"} :${newArr.length} ₹ ${Number(sumOfGrandTotal).toLocaleString()}`
         dispatch(BreadcrumbShowCountlabel(count_label));
         setTableArr(newArr)
     }
