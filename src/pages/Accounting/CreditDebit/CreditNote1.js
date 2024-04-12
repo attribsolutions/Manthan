@@ -159,7 +159,8 @@ const CreditNote_1 = (props) => {
         dispatch(InvoiceNumberSuccess([]));
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_id));
-        dispatch(BreadcrumbShowCountlabel(`${"Count"} :${0} ₹ :${0}`));
+        dispatch(BreadcrumbShowCountlabel(`${"Count"} :${0} ₹ ${0}`));
+
         return () => {
             dispatch(Retailer_List_Success([]));
             dispatch(goButtonPartyItemAddPageSuccess([]));
@@ -294,7 +295,7 @@ const CreditNote_1 = (props) => {
                 });
 
                 let sumOfGrandTotal = updateItemArr.reduce((accumulator, currentObject) => accumulator + Number(currentObject["roundedTotalAmount"]) || 0, 0);
-                let count_label = `${"Count"} :${updateItemArr.length} ₹ :${Number(sumOfGrandTotal).toLocaleString()}`
+                let count_label = `${"Count"} :${updateItemArr.length} ₹ ${Number(sumOfGrandTotal).toLocaleString()}`
                 dispatch(BreadcrumbShowCountlabel(count_label));
                 updateItemArr.sort((a, b) => b.id - a.id);
                 setTableArr(updateItemArr);
@@ -390,7 +391,7 @@ const CreditNote_1 = (props) => {
                     <Select
                         id={`GST${key}`}
                         name="GST"
-                        defaultValue={(row.GST === "") ? "" : { value: row.GST, label: row.GSTPercentage }}
+                        defaultValue={(row.GSTPercentage === "") ? "" : { value: row.GST, label: row.GSTPercentage }}
                         isSearchable={true}
                         className="react-dropdown"
                         classNamePrefix="dropdown"
@@ -539,20 +540,20 @@ const CreditNote_1 = (props) => {
     }
 
     const totalAmountCalcuationFunc = (row, TablelistArray = []) => {
+
         const caculate = return_discountCalculate_Func(row)
         row.roundedTotalAmount = caculate.roundedTotalAmount;
-
         let sumOfGrandTotal = TablelistArray.reduce((accumulator, currentObject) => accumulator + Number(currentObject["roundedTotalAmount"]) || 0, 0);
         let dataCount = TablelistArray.length;
         let commaSeparateAmount = _cfunc.amountCommaSeparateFunc(Number(sumOfGrandTotal).toFixed(2));
-        dispatch(BreadcrumbShowCountlabel(`Count:${dataCount} ₹ :${commaSeparateAmount}`));
+        dispatch(BreadcrumbShowCountlabel(`Count:${dataCount} ₹ ${commaSeparateAmount}`));
     }
 
     const deleteButtonAction = (row, TablelistArray = []) => {
         const newArr = TablelistArray.filter((index) => !(index.id === row.id))
         let sumOfGrandTotal = newArr.reduce((accumulator, currentObject) => accumulator + Number(currentObject["roundedTotalAmount"]) || 0, 0);
-        let count_label = `${"Count"} :${newArr.length} ₹ :${Number(sumOfGrandTotal).toLocaleString()}`
-        dispatch(BreadcrumbShowCountlabel(count_label));
+        let commaSeparateAmount = _cfunc.amountCommaSeparateFunc(Number(sumOfGrandTotal).toFixed(2));
+        dispatch(BreadcrumbShowCountlabel(`Count:${newArr.length} ₹ ${commaSeparateAmount}`));
         setTableArr(newArr)
     }
 
@@ -651,11 +652,6 @@ const CreditNote_1 = (props) => {
         }
     }
 
-    function partySelectButtonHandler() {
-        dispatch(goButton_ServiceItemAssign({ jsonBody: { CompanyID: 1, "PartyID": commonPartyDropSelect.value } }));
-        dispatch(goButtonPartyItemAddPage({ jsonBody: { ..._cfunc.loginJsonBody(), "PartyID": commonPartyDropSelect.value } }));
-    }
-
     function partySelectOnChangeHandler() {
         dispatch(Retailer_List_Success([]));
         dispatch(InvoiceNumberSuccess([]));
@@ -685,10 +681,10 @@ const CreditNote_1 = (props) => {
                 if (i.Quantity > 0) {
                     let msgString = ' Please Select';
 
-                    if (i.GST === '') { msgString = msgString + ', ' + "GST" };
+                    if (i.GST === '' && typeSelect.value === 1) { msgString = msgString + ', ' + "GST" };
                     if (!(Number(i.Rate) > 0)) { msgString = msgString + ', ' + "Rate" };
 
-                    if (((i.GST === '') || !(Number(i.Rate) > 0))) {
+                    if (((i.GST === '' && typeSelect.value === 1) || !(Number(i.Rate) > 0))) {
                         invalidMessages.push({ [i.ItemName]: msgString });
                     }
                     return true
@@ -729,11 +725,11 @@ const CreditNote_1 = (props) => {
                     "MRPValue": i.MRPValue,
                     "Rate": i.Rate,
                     "GST": i.GST,
+                    "GSTPercentage": calculate.GST_Percentage,
                     "ItemComment": i.ItemComment,
                     "CGST": Number(calculate.CGST_Amount).toFixed(2),
                     "SGST": Number(calculate.SGST_Amount).toFixed(2),
                     "IGST": Number(calculate.IGST_Amount).toFixed(2),
-                    "GSTPercentage": calculate.GST_Percentage,
                     "CGSTPercentage": calculate.CGST_Percentage,
                     "SGSTPercentage": calculate.SGST_Percentage,
                     "IGSTPercentage": calculate.IGST_Percentage,
@@ -960,9 +956,16 @@ const CreditNote_1 = (props) => {
                                                             </div>
                                                         }
                                                         {...toolkitProps.baseProps}
-                                                        onDataSizeChange={(e) => {
-                                                            _cfunc.tableInputArrowUpDounFunc("#table_Arrow")
-                                                        }}
+                                                    // onDataSizeChange={(e) => {
+                                                    //     _cfunc.tableInputArrowUpDounFunc("#table_Arrow")
+                                                    // }}
+                                                    // onDataSizeChange={({ dataCount, filteredData = [] }) => {
+                                                    //     _cfunc.tableInputArrowUpDounFunc("#table_Arrow")
+
+                                                    //     dispatch(BreadcrumbShowCountlabel(`Count:${dataCount} ₹ ${_cfunc.TotalAmount_Func(filteredData)}`));
+
+
+                                                    // }}
                                                     />
                                                 </div>
                                             </Col>
