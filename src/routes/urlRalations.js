@@ -314,7 +314,17 @@ export const CX_DD_Difference = url.CX_DD_DIFFERENCE_REPORT
 
 export const Sales_Order_List_2 = url.APP_ORDER_LIST
 
-export const TargetVSAchievement =url.TARGET_VS_ACHIEVEMENT
+export const TargetVSAchievement = url.TARGET_VS_ACHIEVEMENT
 
-export const Credit_Note_Excel_Field_Map =url.IMPORT_CREDIT_NOTE_EXCEL_FIELD_MAP
+export const Credit_Note_Excel_Field_Map = url.IMPORT_CREDIT_NOTE_EXCEL_FIELD_MAP
 
+
+
+
+
+//**************************** POS ***********************************//
+
+
+
+export const POS_User = url.POS_USER_lIST;
+export const POS_User_List = url.POS_USER;
