@@ -119,6 +119,9 @@ import SystemSettingSaga from "./Utilites/SystemSettingRedux/saga"
 import PosRoleAccessSaga from "./SweetPOSStore/Administrator/POSRoleAccessRedux/saga"
 import TargetVsAchievementSaga from "./Report/TargetVSAchievementRedux/saga"
 
+import POSUserRegistrationSaga from "./SweetPOSStore/Administrator/UserMasterRedux/saga"
+
+
 export default function* rootSaga() {
 	yield all([
 		fork(AccountSaga),
@@ -227,6 +230,10 @@ export default function* rootSaga() {
 		fork(TargetUploadSagaSaga),
 		fork(TargetVsAchievementSaga),
 		fork(PartyEmployeeDetailsSaga),
+		fork(POSUserRegistrationSaga),
+
+
+		
 
 
 		

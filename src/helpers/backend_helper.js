@@ -797,6 +797,22 @@ export const update_SystemSetting_List_Api = ({ jsonBody, updateId }) => put(`${
 export const get_POSRoleAccess_List_Api = () => get(url.SWEET_POS_API) // get api
 export const Post_POSRoleAccess_API = ({ jsonBody }) => post(url.SWEET_POS_API, jsonBody)// post api
 
+
+
+
+
+///POS USER REGESTRATION
+export const POS_USER_Master_Get_API = () => get(url.POS_USER_REGESTRATION)//get api
+export const POS_USER_Master_Post_API = ({ jsonBody }) => post(url.POS_USER_REGESTRATION, jsonBody)// post api
+export const POS_USER_Master_Delete_API = ({ deleteId }) => del(`${url.POS_USER_REGESTRATION}/${deleteId}`)// delete api
+export const POS_USER_Master_Edit_API = ({ editId }) => get(`${url.POS_USER_REGESTRATION}/${editId}`)// edit api
+export const POS_USER_Master_Update_API = ({ jsonBody, updateId }) => put(`${url.POS_USER_REGESTRATION}/${updateId}`, jsonBody)// update api
+export const POS_USER_Get_Roles = () => get(`${url.POS_USER_RLOE}`)// edit api
+
+
+
+
+
 // TargetVSAchievement 
 export const Target_Vs_Achievement_Gobtn_API = ({ jsonBody }) => post(url.TARGET_VS_ACHIEVEMENT_API, jsonBody)// post api
 
