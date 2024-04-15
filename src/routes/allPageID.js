@@ -6,6 +6,10 @@ export const DASHBORD_1 = 171
 export const SEARCH_BOX2 = "/SearchBoxSecond"
 export const SEARCH_BOX3 = "/SerachBox3"
 
+// *************************** POS Administration *******************************//
+export const POS_USER = 281
+export const POS_USER_lIST = 282
+
 // *************************** Administration *******************************//
 
 export const MODULE = 5

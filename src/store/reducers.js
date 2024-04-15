@@ -130,6 +130,10 @@ import TargetUploadReducer from "./Administrator/TargetUploadRedux/reducer"
 import TargetVsAchievementReducer from "./Report/TargetVSAchievementRedux/reducer"
 
 
+import POS_User_Registration_Reducer from "./SweetPOSStore/Administrator/UserMasterRedux/reducer"
+
+
+
 const rootReducer = combineReducers({
 	Layout,
 	Login,
@@ -232,6 +236,7 @@ const rootReducer = combineReducers({
 	PosRoleAccessReducer,
 	TargetUploadReducer,
 	TargetVsAchievementReducer,
-	PartyEmployeeDetailsReducer
+	PartyEmployeeDetailsReducer,
+	POS_User_Registration_Reducer
 })
 export default rootReducer

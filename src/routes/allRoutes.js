@@ -211,7 +211,7 @@ import ManPowerReport from "../Reports/ManPowerReport";
 import TCSAmountReport from "../Reports/TCSAmountReport";
 import CX_DD_DiffrenceReport from "../Reports/CX_DD_DiffrenceReport";
 import Bulk_Invoice from "../pages/Sale/Bulk_Invoice/index";
-import POSRoleAccess from "../pages/SweetPOS/Adminstration/POSRoleAccess.js";
+import POSRoleAccess from "../pages/SweetPOS/Adminstration/RoleAccess/POSRoleAccess.js";
 import SystemSetting from "../pages/Utility/SystemSetting/SystemSetting.js";
 import SystemSettingList from "../pages/Utility/SystemSetting/SystemSettingList.js";
 import SNSReport from "../Reports/StockReport/SNSReport.js";
@@ -221,6 +221,8 @@ import TargetUploadList from "../pages/Adminisrator/TragetUpload/TargetUploadLis
 import TargetVSAchievement from "../Reports/TargetVSAchievement";
 import PartyEmployeeDetails from "../pages/Adminisrator/PartyEmployeeDetails/PartyEmployeeDetail.js";
 import CreditNoteExcelUpload from "../pages/Adminisrator/ImportMaster/CreditNoteExcelUpload";
+import POSUSER from "../pages/SweetPOS/Adminstration/UserMaster/POSUserMaster.js";
+import POSUserList from "../pages/SweetPOS/Adminstration/UserMaster/POSUserList.js";
 
 const userRoutes = [
 	// *************************** DashBord *******************************//
@@ -566,6 +568,11 @@ const userRoutes = [
 	//******************************* Sweet Pos ************************************//
 
 	{ path: path.POS_ROLE_ACCESS, component: POSRoleAccess },//not party wise
+
+	//******************************* Sweet Pos USER REGESTRATION ************************************//
+
+	{ path: path.POS_USER, component: POSUSER },//not party wise
+	{ path: path.POS_USER_lIST, component: POSUserList },//not party wise
 
 	// ************************************ Utility **************************************//
 

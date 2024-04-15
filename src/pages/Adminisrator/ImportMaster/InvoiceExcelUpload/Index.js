@@ -273,7 +273,7 @@ const InvoiceExcelUpload = (props) => {
     };
 
     async function veifyExcelBtn_Handler() {
-        debugger
+        
         setverifyLoading(true);
         if (commonPartyDropSelect.value === 0) {
             await customAlert({

@@ -363,4 +363,12 @@ export const TARGET_VS_ACHIEVEMENT = "/TargetVSAchievement"
 
 export const POS_ROLE_ACCESS = "/POS_RoleAccess"
 
+export const POS_USER = "/POS_User"
+
+export const POS_USER_lIST = "/POS_User_List"
+
+
+
+
+
 
