@@ -385,7 +385,7 @@ const POSUSER = (props) => {
 
 
                               </Col>
-                              <Col className="mt-1" >
+                              <Col className="mt-2" >
                                 <button
                                   className="btn btn-outline-primary mt-4"
                                   style={{ borderColor: "#d4d4d4" }}
