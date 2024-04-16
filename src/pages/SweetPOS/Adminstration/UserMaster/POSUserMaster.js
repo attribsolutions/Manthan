@@ -28,7 +28,7 @@ import { POSuserEditActionSuccess, POSuserUpdateAction, getPOSRole, savePOSUserM
 import { passwordRgx } from "../../../../CustomValidateForm";
 
 const POSUSER = (props) => {
-  
+
   // const formRef = useRef(null);
   const dispatch = useDispatch();
   const history = useHistory()
@@ -87,7 +87,7 @@ const POSUSER = (props) => {
   const values = { ...state.values }
   const { isError } = state;
   const { fieldLabel } = state;
-  
+
   const location = { ...history.location }
   const hasShowloction = location.hasOwnProperty(mode.editValue)
   const hasShowModal = props.hasOwnProperty(mode.editValue)
@@ -225,7 +225,7 @@ const POSUSER = (props) => {
   }, [postMsg.Status])
 
   console.log(POSRole)
-  
+
   const RolesValues = POSRole.map((Data) => ({
     value: Data.id,
     label: Data.Name
@@ -348,7 +348,9 @@ const POSUSER = (props) => {
                                   type="text"
                                   placeholder="Please Enter Login Name"
                                   value={values.LoginName}
-                                  autoComplete='off'
+                                  autoComplete='new-password'
+
+                                
                                   onChange={(event) => {
                                     onChangeText({ event, state, setState });
                                     dispatch(Breadcrumb_inputName(event.target.value))
@@ -369,9 +371,9 @@ const POSUSER = (props) => {
                                   <Label htmlFor="validationCustom01">Password</Label>
                                   <Input
                                     value={values.Password}
-                                    type={!showPassword ? 'text' : 'password'}
+                                    type={showPassword ? 'text' : 'password'}
                                     placeholder="Enter New Password"
-
+                                    autoComplete='new-password'
                                     className="form-control"
                                     onChange={newpwdOnchange}
                                   />
@@ -417,8 +419,9 @@ const POSUSER = (props) => {
                                   <Label htmlFor="validationCustom01">Confirm Password</Label>
                                   <Input
                                     value={confirmPwd}
-                                    type={!showPassword ? 'text' : 'password'}
+                                    type={showPassword ? 'text' : 'password'}
                                     placeholder="Enter Confirm Password"
+
 
                                     onChange={e => {
                                       confirmpwdOnchange(e);
