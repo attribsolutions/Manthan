@@ -38,7 +38,7 @@ const POSUSER = (props) => {
     Name: "",
     LoginName: '',
     Password: '',
-    POSRoles: '',
+    RoleName: '',
     IsActive: true,
   }
 
@@ -259,7 +259,7 @@ const POSUSER = (props) => {
         DivisionID: 1,
         LoginName: values.LoginName,
         Password: values.Password,
-        RoleID: values.POSRoles.value,
+        RoleID: values.RoleName.value,
         IsActive: values.IsActive,
         CreatedBy: loginUserID(),
         UpdatedBy: loginUserID(),
@@ -335,21 +335,21 @@ const POSUSER = (props) => {
                             <Row>
 
                               <FormGroup className="mb-2 col col-sm-4 ">
-                                <Label htmlFor="validationCustom01"> {fieldLabel.POSRoles} </Label>
+                                <Label htmlFor="validationCustom01"> {fieldLabel.RoleName} </Label>
                                 <Col sm={12}>
                                   <Select
                                     id="POSRoles"
                                     name="POSRoles"
                                     isDisabled={pageMode === mode.edit ? true : false}
-                                    value={values.POSRoles}
+                                    value={values.RoleName}
                                     options={RolesValues}
                                     autoFocus={true}
                                     onChange={(hasSelect, evn) => {
                                       onChangeSelect({ hasSelect, evn, state, setState, })
                                     }}
                                   />
-                                  {isError.POSRoles.length > 0 && (
-                                    <span className="invalid-feedback">{isError.POSRoles}</span>
+                                  {isError.RoleName.length > 0 && (
+                                    <span className="invalid-feedback">{isError.RoleName}</span>
                                   )}
                                 </Col>
                               </FormGroup>
