@@ -12,14 +12,11 @@ import {
   Input
 } from "reactstrap";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  getEmployeeForUseRegistration,
-}
-  from "../../../../store/Administrator/UserRegistrationRedux/actions";
+
 import { Breadcrumb_inputName } from "../../../../store/Utilites/Breadcrumb/actions";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
-import { breadcrumbReturnFunc, btnIsDissablefunc, loginCompanyID, loginUserID, metaTagLabel } from "../../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, loginCompanyID, loginUserID, metaTagLabel } from "../../../../components/Common/CommonFunction";
 import * as mode from "../../../../routes/PageMode"
 import * as pageId from "../../../../routes/allPageID"
 import { SaveButton } from "../../../../components/Common/CommonButton";
@@ -27,8 +24,7 @@ import { customAlert } from "../../../../CustomAlert/ConfirmDialog";
 import { comAddPageFieldFunc, initialFiledFunc, onChangeSelect, onChangeText } from "../../../../components/Common/validationFunction";
 import { commonPageField, commonPageFieldSuccess } from "../../../../store/actions";
 import * as url from "../../../../routes/route_url";
-import { alertMessages } from "../../../../components/Common/CommonErrorMsg/alertMsg";
-import { POSuserEditActionSuccess, POSuserUpdateAction, savePOSUserMasterAction, savePOSUserMasterActionSuccess } from "../../../../store/SweetPOSStore/Administrator/UserMasterRedux/actions";
+import { POSuserEditActionSuccess, POSuserUpdateAction, getPOSRole, savePOSUserMasterAction, savePOSUserMasterActionSuccess } from "../../../../store/SweetPOSStore/Administrator/UserMasterRedux/actions";
 import { passwordRgx } from "../../../../CustomValidateForm";
 
 const POSUSER = (props) => {
@@ -91,7 +87,7 @@ const POSUSER = (props) => {
   } = useSelector((state) => ({
     saveBtnloading: state.POS_User_Registration_Reducer.saveBtnloading,
     postMsg: state.POS_User_Registration_Reducer.postMsg,
-    POSRole: state.POS_User_Registration_Reducer.userPartiesForUserMaster,
+    POSRole: state.POS_User_Registration_Reducer.POSRole,
     userAccess: state.Login.RoleAccessUpdateData,
     pageField: state.CommonPageFieldReducer.pageField
   }));
@@ -99,7 +95,7 @@ const POSUSER = (props) => {
   const values = { ...state.values }
   const { isError } = state;
   const { fieldLabel } = state;
-
+  debugger
   const location = { ...history.location }
   const hasShowloction = location.hasOwnProperty(mode.editValue)
   const hasShowModal = props.hasOwnProperty(mode.editValue)
@@ -108,7 +104,7 @@ const POSUSER = (props) => {
 
     dispatch(commonPageFieldSuccess(null));
     dispatch(commonPageField(pageId.POS_USER))
-
+    dispatch(getPOSRole())
   }, []);
 
   const toggleShowPassword = () => {
@@ -184,7 +180,7 @@ const POSUSER = (props) => {
       }
 
       if (hasEditVal) {
-        debugger
+
         const { id, LoginName, Password, IsActive, DivisionID, CreatedBy } = hasEditVal
         const { values, hasValid, } = { ...state }
 
@@ -245,26 +241,25 @@ const POSUSER = (props) => {
     }
   }, [postMsg.Status])
 
-
-
-
-
+  console.log(POSRole)
+  debugger
+  const RolesValues = POSRole.map((Data) => ({
+    value: Data.id,
+    label: Data.Name
+  }));
 
   const saveHandler = (event) => {
-    debugger
     event.preventDefault();
     if (!passwordsMatch && !pageMode === mode.edit) {
       return
     }
-
     try {
-
       const jsonBody = JSON.stringify({
         CompanyID: loginCompanyID(),
         DivisionID: 1,
         LoginName: values.LoginName,
         Password: values.Password,
-        RoleID: 2,
+        RoleID: values.POSRoles.value,
         IsActive: values.IsActive,
         CreatedBy: loginUserID(),
         UpdatedBy: loginUserID(),
@@ -347,7 +342,7 @@ const POSUSER = (props) => {
                                     name="POSRoles"
                                     isDisabled={pageMode === mode.edit ? true : false}
                                     value={values.POSRoles}
-                                    // options={EmployeeOptions}
+                                    options={RolesValues}
                                     autoFocus={true}
                                     onChange={(hasSelect, evn) => {
                                       onChangeSelect({ hasSelect, evn, state, setState, })
