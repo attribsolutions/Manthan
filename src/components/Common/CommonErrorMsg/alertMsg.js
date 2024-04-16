@@ -126,7 +126,7 @@ const defaultAddressIsSelected = "Atleast One Default Address is Select "
 // Role Access
 const selectParty = "Select Party"
 const partyAlreadyExist = "Party Already Exist"
-const pageAlreadyExist = "Party Already Exist"
+const pageAlreadyExist = "Page Already Exist"
 const selectPage = "Please Select Page"
 const selectRole = "Please Select Role"
 const atLeastOneRoleAddInTable = "At Least One Role  Add in the Table"

@@ -89,14 +89,14 @@ export const readExcelFile = async ({ file, compareParameter, ItemList = [] }) =
         };
         const regExp = RegExp(c1.RegularExpression);
 
-        // if ((Number.isInteger(r1[c1.Value]) || (isFloat(r1[c1.Value]))) && r1[c1.Value] <= 0) {   //  - figure only checking value  that are map in our system 
+        if ((Number.isInteger(r1[c1.Value]) || (isFloat(r1[c1.Value]))) && r1[c1.Value] <= 0) {   //  - figure only checking value  that are map in our system 
 
-        //   if (c1.IsCompulsory && c1.FieldName !== "Discount") {
-        //     shouldRemove = true;
-        //   } else {
-        //     shouldRemove = false;
-        //   }
-        // }
+          if (c1.IsCompulsory && c1.FieldName !== "Discount") {
+            shouldRemove = true;
+          } else {
+            shouldRemove = false;
+          }
+        }
 
         if (c1.IsCompulsory && r1[c1.Value] === undefined) {
           const errorMessage = `${c1.Value} : Column Required`;
