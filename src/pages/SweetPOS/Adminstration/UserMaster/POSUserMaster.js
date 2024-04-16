@@ -21,7 +21,7 @@ import * as mode from "../../../../routes/PageMode"
 import * as pageId from "../../../../routes/allPageID"
 import { SaveButton } from "../../../../components/Common/CommonButton";
 import { customAlert } from "../../../../CustomAlert/ConfirmDialog";
-import { comAddPageFieldFunc, initialFiledFunc, onChangeSelect, onChangeText } from "../../../../components/Common/validationFunction";
+import { comAddPageFieldFunc, formValid, initialFiledFunc, onChangeSelect, onChangeText } from "../../../../components/Common/validationFunction";
 import { commonPageField, commonPageFieldSuccess } from "../../../../store/actions";
 import * as url from "../../../../routes/route_url";
 import { POSuserEditActionSuccess, POSuserUpdateAction, getPOSRole, savePOSUserMasterAction, savePOSUserMasterActionSuccess } from "../../../../store/SweetPOSStore/Administrator/UserMasterRedux/actions";
@@ -65,7 +65,7 @@ const POSUSER = (props) => {
   const [confirmPwd, setConfirmPwd] = useState("");
   const [passwordsMatch, setPasswordsMatch] = useState(false);
 
-  const [newPwdError, setNewPwdError] = useState("");
+  const [newPwdError, setNewPwdError] = useState({ PasswordLevel: "", Color: "" });
 
 
 
@@ -85,6 +85,7 @@ const POSUSER = (props) => {
   }));
 
   const values = { ...state.values }
+  debugger
   const { isError } = state;
   const { fieldLabel } = state;
 
@@ -169,7 +170,10 @@ const POSUSER = (props) => {
         values.IsActive = IsActive
         values.DivisionID = DivisionID;
 
-        hasValid.RoleName.valid = RoleName;
+        values.RoleName = {
+          value: id,
+          label: RoleName
+        };
 
 
         hasValid.id.valid = true;
@@ -236,45 +240,46 @@ const POSUSER = (props) => {
     if (!passwordsMatch && !pageMode === mode.edit) {
       return
     }
+
     try {
-      const jsonBody = JSON.stringify({
-        CompanyID: loginCompanyID(),
-        DivisionID: 1,
-        LoginName: values.LoginName,
-        Password: values.Password,
-        RoleID: values.RoleName.value,
-        IsActive: values.IsActive,
-        CreatedBy: loginUserID(),
-        UpdatedBy: loginUserID(),
+      if (formValid(state, setState) && newPwdError.PasswordLevel !== "Weak password") {
+        const jsonBody = JSON.stringify({
+          CompanyID: loginCompanyID(),
+          DivisionID: 1,
+          LoginName: values.LoginName,
+          Password: values.Password,
+          RoleID: values.RoleName.value,
+          IsActive: values.IsActive,
+          CreatedBy: loginUserID(),
+          UpdatedBy: loginUserID(),
 
-      })
+        })
 
-      if (pageMode === mode.edit) {
-        dispatch(POSuserUpdateAction({ jsonBody, updateId: values.id, }));
-      }
-      else {
-        dispatch(savePOSUserMasterAction({ jsonBody }));
+        if (pageMode === mode.edit) {
+          dispatch(POSuserUpdateAction({ jsonBody, updateId: values.id, }));
+        }
+        else {
+          dispatch(savePOSUserMasterAction({ jsonBody }));
+        }
       }
     } catch (error) { console.log(error) }
   }
 
   const newpwdOnchange = (e) => {
 
+
     let val = e.target.value
-    const result = passwordRgx.test(val);
-    if (!result) {
-      setNewPwdError("Invalid password format.")
-    }
-    else {
-      setNewPwdError("")
 
-    }
+    const strongRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    const mediumRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/;
 
-    setState((i) => {
-      const a = { ...i }
-      a.values.Password = e.target.value
-      return a
-    })
+    if (strongRegex.test(val) && val !== "") {
+      setNewPwdError({ PasswordLevel: "Strong password", Color: "green" });
+    } else if (mediumRegex.test(val) && val !== "") {
+      setNewPwdError({ PasswordLevel: "Medium password", Color: "orange" });
+    } else if (val !== "") {
+      setNewPwdError({ PasswordLevel: "Weak password", Color: "tomato" });
+    }
 
     setConfirmPwd('');
     setPasswordsMatch(false);
@@ -323,16 +328,14 @@ const POSUSER = (props) => {
                                   <Select
                                     id="RoleName"
                                     name="RoleName"
-                                    isDisabled={pageMode === mode.edit ? true : false}
                                     value={values.RoleName}
                                     options={RolesValues}
                                     onChange={(hasSelect, evn) => {
-                                      debugger
                                       onChangeSelect({ hasSelect, evn, state, setState, })
                                     }}
                                   />
                                   {isError.RoleName.length > 0 && (
-                                    <span className="invalid-feedback">{isError.RoleName}</span>
+                                    <span className="text-danger font-size-17"><small>{isError.RoleName}</small></span>
                                   )}
                                 </Col>
                               </FormGroup>
@@ -350,14 +353,15 @@ const POSUSER = (props) => {
                                   value={values.LoginName}
                                   autoComplete='new-password'
 
-                                
+
                                   onChange={(event) => {
+
                                     onChangeText({ event, state, setState });
                                     dispatch(Breadcrumb_inputName(event.target.value))
                                   }}
                                 />
                                 {isError.LoginName.length > 0 && (
-                                  <span className="text-danger f-8"><small>{isError.LoginName}</small></span>
+                                  <span className="text-danger font-size-17"><small>{isError.LoginName}</small></span>
                                 )}
                               </FormGroup>
                             </Row>
@@ -366,23 +370,29 @@ const POSUSER = (props) => {
 
                             <Row>
                               <Col className="col col-xxl-4"   >
-
                                 <FormGroup className="mb-2 col  " >
-                                  <Label htmlFor="validationCustom01">Password</Label>
+                                  <Label htmlFor="validationCustom01">{fieldLabel.Password}</Label>
                                   <Input
+                                    name="Password"
+                                    id="txtName"
                                     value={values.Password}
                                     type={showPassword ? 'text' : 'password'}
                                     placeholder="Enter New Password"
                                     autoComplete='new-password'
                                     className="form-control"
-                                    onChange={newpwdOnchange}
+                                    onChange={(event) => {
+                                      onChangeText({ event, state, setState });
+                                      newpwdOnchange(event)
+                                    }}
+
                                   />
-                                  {(newPwdError.length > 0) && (
-                                    <span className="text-danger font-size-12">{newPwdError}</span>
+                                  {(values.Password !== "") && (
+                                    <span className=" font-size-12" style={{ color: newPwdError.Color }}>{newPwdError.PasswordLevel}</span>
                                   )}
-
+                                  {isError.Password.length > 0 && (
+                                    <span className="text-danger font-size-17"><small>{isError.Password}</small></span>
+                                  )}
                                 </FormGroup>
-
 
                               </Col>
                               <Col className="mt-2" >
@@ -402,7 +412,7 @@ const POSUSER = (props) => {
                               </div>
                                 <div className="col-7  font-size-14">
                                   <span>
-                                    must be 8-16 char and include at least one A-Z letter,
+                                    Must be 8-16 char and include at least one A-Z letter,
                                     one a-z letter, one 0-9, and one special character (@$!%*?&).
                                   </span>
                                 </div>  </Col>
