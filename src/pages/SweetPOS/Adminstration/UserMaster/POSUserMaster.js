@@ -28,7 +28,7 @@ import { POSuserEditActionSuccess, POSuserUpdateAction, getPOSRole, savePOSUserM
 import { passwordRgx } from "../../../../CustomValidateForm";
 
 const POSUSER = (props) => {
-  debugger
+  
   // const formRef = useRef(null);
   const dispatch = useDispatch();
   const history = useHistory()
@@ -43,7 +43,7 @@ const POSUSER = (props) => {
   }
 
   const [state, setState] = useState(() => initialFiledFunc(fileds))
-  const [employeeMaster_AddAccess, setEmployeeMaster_AddAccess] = useState(false)
+
 
   //SetState  Edit data Geting From Modules List component
   const [modalCss, setModalCss] = useState(false);
@@ -54,29 +54,21 @@ const POSUSER = (props) => {
 
   // M_Roles DropDown
 
-  const [password, setPassword] = useState('');
-  const [cPassword, setCPassword] = useState('');
-  const [showErrorMessage, setShowErrorMessage] = useState(false);
-  const [cPasswordClass, setCPasswordClass] = useState('form-control');
+
   const [isCPassword, setisCPassword] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
 
 
 
-  const [currentPwd, setCurrentPwd] = useState("");
-  const [newPwd, setNewPwd] = useState("");
+
   const [confirmPwd, setConfirmPwd] = useState("");
   const [passwordsMatch, setPasswordsMatch] = useState(false);
 
   const [newPwdError, setNewPwdError] = useState("");
 
 
-  const handleCPassword = (event) => {
-    onChangeText({ event, state, setState });
-    setCPassword(event.target.value);
-    setisCPassword(true);
-  }
+
 
   const {
     postMsg,
@@ -95,7 +87,7 @@ const POSUSER = (props) => {
   const values = { ...state.values }
   const { isError } = state;
   const { fieldLabel } = state;
-  debugger
+  
   const location = { ...history.location }
   const hasShowloction = location.hasOwnProperty(mode.editValue)
   const hasShowModal = props.hasOwnProperty(mode.editValue)
@@ -111,17 +103,7 @@ const POSUSER = (props) => {
     setShowPassword(!showPassword);
   };
 
-  useEffect(() => {
-    if (isCPassword) {
-      if (password === cPassword) {
-        setShowErrorMessage(false);
-        setCPasswordClass('form-control is-valid')
-      } else {
-        setShowErrorMessage(true)
-        setCPasswordClass('form-control is-invalid')
-      }
-    }
-  }, [cPassword])
+
 
   // userAccess useEffect
 
@@ -140,9 +122,6 @@ const POSUSER = (props) => {
     };
 
     userAcc = userAccess.find((index) => {
-      if (index.id === pageId.EMPLOYEE) {
-        setEmployeeMaster_AddAccess(true)
-      }
       return (`/${index.ActualPagePath}` === locationPath)
     })
 
@@ -181,7 +160,7 @@ const POSUSER = (props) => {
 
       if (hasEditVal) {
 
-        const { id, LoginName, Password, IsActive, DivisionID, CreatedBy } = hasEditVal
+        const { id, LoginName, Password, IsActive, DivisionID, CreatedBy, RoleName } = hasEditVal
         const { values, hasValid, } = { ...state }
 
         values.id = id;
@@ -190,10 +169,14 @@ const POSUSER = (props) => {
         values.IsActive = IsActive
         values.DivisionID = DivisionID;
 
+        hasValid.RoleName.valid = RoleName;
+
 
         hasValid.id.valid = true;
         hasValid.LoginName.valid = true;
         hasValid.Password.valid = true;
+        hasValid.RoleName.valid = true;
+
         hasValid.IsActive.valid = true;
 
         dispatch(Breadcrumb_inputName(LoginName))
@@ -242,7 +225,7 @@ const POSUSER = (props) => {
   }, [postMsg.Status])
 
   console.log(POSRole)
-  debugger
+  
   const RolesValues = POSRole.map((Data) => ({
     value: Data.id,
     label: Data.Name
@@ -338,13 +321,13 @@ const POSUSER = (props) => {
                                 <Label htmlFor="validationCustom01"> {fieldLabel.RoleName} </Label>
                                 <Col sm={12}>
                                   <Select
-                                    id="POSRoles"
-                                    name="POSRoles"
+                                    id="RoleName"
+                                    name="RoleName"
                                     isDisabled={pageMode === mode.edit ? true : false}
                                     value={values.RoleName}
                                     options={RolesValues}
-                                    autoFocus={true}
                                     onChange={(hasSelect, evn) => {
+                                      debugger
                                       onChangeSelect({ hasSelect, evn, state, setState, })
                                     }}
                                   />
