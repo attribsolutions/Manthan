@@ -85,7 +85,7 @@ export const ITEM_IMAGE_UPLOAD = "/ImageUploads"
 //POS User Regestration
 
 export const POS_USER_REGESTRATION = "/SweetPOS/SPOSUsers"
-export const POS_USER_RLOE = "/SweetPOS/SPOSRoles"
+export const POS_USER_RLOE = "/SweetPOS/sposroleslist"
 
 
 

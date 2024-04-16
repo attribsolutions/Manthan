@@ -811,11 +811,8 @@ export const POS_USER_Get_Roles = () => get(`${url.POS_USER_RLOE}`)// edit api
 
 
 
-
-
 // TargetVSAchievement 
 export const Target_Vs_Achievement_Gobtn_API = ({ jsonBody }) => post(url.TARGET_VS_ACHIEVEMENT_API, jsonBody)// post api
-
 
 export const PartyEmployeeDetails = ({ EmployeeId }) => get(`${url.GET_PARTY_EMPLOYEE_DETAILS}/${EmployeeId}`)// edit api
 

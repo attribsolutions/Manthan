@@ -1,19 +1,19 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import AddUser from "./POSUserMaster";
 
 import CommonListPage from "../../../../components/Common/CommonMasterListPage";
-import { commonPageFieldList, commonPageFieldListSuccess, } from "../../../../store/actions";
+import { commonPageFieldList, } from "../../../../store/actions";
 import { POS_USER } from "../../../../routes/route_url";
 
 import * as pageId from "../../../../routes/allPageID"
-import {  PageLoadingSpinner } from "../../../../components/Common/CommonButton";
+import { PageLoadingSpinner } from "../../../../components/Common/CommonButton";
 import { POSuserDeleteAction, POSuserDeleteActionSuccess, POSuserEditAction, POSuserUpdateActionSuccess, getPOSUserList, savePOSUserMasterAction } from "../../../../store/SweetPOSStore/Administrator/UserMasterRedux/actions";
 import POSUSER from "./POSUserMaster";
 
 const POSUserList = () => {
     const dispatch = useDispatch();
     const reducers = useSelector(
+
         (state) => ({
             listBtnLoading: state.POS_User_Registration_Reducer.listBtnLoading,
             loading: state.POS_User_Registration_Reducer.loading,
@@ -38,17 +38,16 @@ const POSUserList = () => {
 
     //  This UseEffect => Featch Modules List data  First Rendering
     useEffect(() => {
-        dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(pageId.POS_USER_lIST))
         dispatch(getPOSUserList());
     }, []);
 
 
     const { pageField, userAccess = [] } = reducers
-
+    
     return (
         <React.Fragment>
-            <PageLoadingSpinner isLoading={(reducers.loading || !pageField)} />
+            <PageLoadingSpinner isLoading={(!pageField)} />
             {
                 (pageField) &&
                 <CommonListPage
