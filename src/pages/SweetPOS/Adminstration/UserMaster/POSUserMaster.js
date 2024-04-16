@@ -85,7 +85,7 @@ const POSUSER = (props) => {
   }));
 
   const values = { ...state.values }
-  debugger
+
   const { isError } = state;
   const { fieldLabel } = state;
 
@@ -160,8 +160,8 @@ const POSUSER = (props) => {
       }
 
       if (hasEditVal) {
-
-        const { id, LoginName, Password, IsActive, DivisionID, CreatedBy, RoleName } = hasEditVal
+        debugger
+        const { id, LoginName, Password, IsActive, DivisionID, CreatedBy, RoleName,RoleID } = hasEditVal
         const { values, hasValid, } = { ...state }
 
         values.id = id;
@@ -171,7 +171,7 @@ const POSUSER = (props) => {
         values.DivisionID = DivisionID;
 
         values.RoleName = {
-          value: id,
+          value: RoleID,
           label: RoleName
         };
 
@@ -339,9 +339,7 @@ const POSUSER = (props) => {
                                   )}
                                 </Col>
                               </FormGroup>
-
                             </Row>
-
                             <Row>
                               <FormGroup className="mb-2 col col-sm-4 ">
                                 <Label htmlFor="validationCustom01">{fieldLabel.LoginName}</Label>
@@ -353,9 +351,7 @@ const POSUSER = (props) => {
                                   value={values.LoginName}
                                   autoComplete='new-password'
 
-
                                   onChange={(event) => {
-
                                     onChangeText({ event, state, setState });
                                     dispatch(Breadcrumb_inputName(event.target.value))
                                   }}
