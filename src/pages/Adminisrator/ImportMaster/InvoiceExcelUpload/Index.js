@@ -908,7 +908,7 @@ const InvoiceExcelUpload = (props) => {
                                     </div>}
                                 </details> : null}
 
-                                {negativeFigureVerify.Not_Verify_Negative_Figure !== undefined ?
+                                {/* {negativeFigureVerify.Not_Verify_Negative_Figure !== undefined ?
 
                                     <details>
                                         {negativeFigureVerify.Not_Verify_Negative_Figure === false ? null : <Row className="mt-2 error-msg" style={{ margin: "unset", backgroundColor: "#c1cfed" }}>
@@ -937,7 +937,7 @@ const InvoiceExcelUpload = (props) => {
                                                 ))}
                                             </p>
                                         </div>}
-                                    </details> : null}
+                                    </details> : null} */}
 
                                 {nonCBMItemVerify.Not_Verify_Non_CBM_Item !== undefined ? <details>
                                     <summary>&nbsp; &nbsp;Non CBM Item  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;

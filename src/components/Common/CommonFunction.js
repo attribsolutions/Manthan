@@ -296,15 +296,21 @@ export const CommonPartyDropValue = () => {//+++++++++++++++++++++ Session commo
   return '';
 };
 
+
+
+
 export const loginEmployeeID = () => {//+++++++++++++++++++++ Session loginPartyID Id+++++++++++++++++++++++++++++++
 
   try {
-    return loginUserDetails().Employee_id;
+    const employeeId = parseInt(loginUserDetails().Employee_id);
+    return employeeId
   } catch (e) {
     alert("Common login EmployeeID Func  Error");
   }
   return 0;
 };
+
+
 
 export const loginIsSCMCompany = () => { //+++++++++++++++++++++ Session loginPartyID Id+++++++++++++++++++++++++++++++
   try {
