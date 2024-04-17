@@ -645,7 +645,7 @@ export const tableBody = (doc, data) => {
             const rowIdx = data1.row.index;
             const colIdx = data1.column.index;
             if (rowIdx === 0 && colIdx === 8) {
-                if (data1.row.cells[8].raw === "          CGST           %            Amount") {
+                if (data1.row.cells[8].raw === "          CGST           %        Amount") {
 
                     const cellWidth = data1.cell.width;
                     const cellHeight = data1.cell.height;
@@ -663,7 +663,7 @@ export const tableBody = (doc, data) => {
                 }
             }
             if (rowIdx === 0 && colIdx === 10) {
-                if (data1.row.cells[10].raw === "          SGST           %             Amount") {
+                if (data1.row.cells[10].raw === "          SGST           %        Amount") {
 
                     const cellWidth = data1.cell.width;
                     const cellHeight = data1.cell.height;
