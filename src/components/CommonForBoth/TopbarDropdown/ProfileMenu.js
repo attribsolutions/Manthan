@@ -327,13 +327,13 @@ const ProfileMenu = props => {
             </DropdownItem>
             <DropdownItem divider />
 
-            {/* {localStorage.getItem("isMultipleDivision") && //If division  then only
+            {localStorage.getItem("isMultipleDivision") && //If division  then only
               <DropdownItem>
                 <span onClick={onChangeDivisionHandler} className="dropdown-item">
                   <i className="bx bx-user font-size-16 align-middle me-1  text-primary" />
                   <span>{props.t("Change Division")}</span>
                 </span>
-              </DropdownItem>} */}
+              </DropdownItem>}
 
             <DropdownItem style={{ cursor: "pointer" }} onClick={() => {
               tog_backdrop()
