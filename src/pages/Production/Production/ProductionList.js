@@ -4,7 +4,7 @@ import { commonPageFieldList, commonPageFieldListSuccess, } from "../../../store
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList"
 import { Button, Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
-import { date_ymd_func, loginPartyID } from "../../../components/Common/CommonFunction";
+import { ToDate, date_ymd_func, disablePriviousTodate, loginPartyID } from "../../../components/Common/CommonFunction";
 import {
     updateWorkOrderListSuccess
 } from "../../../store/Production/WorkOrder/action";
@@ -160,18 +160,27 @@ const ProductionList = () => {
                                 <Col sm="6">
                                     <C_DatePicker
                                         name='fromdate'
+                                        value={fromdate}
                                         onChange={fromdateOnchange}
                                     />
                                 </Col>
                             </FormGroup>
                         </Col>
+
                         <Col sm="5">
                             <FormGroup className=" mb-1 row mt-3 " >
                                 <Label className="col-sm-1 p-2"
                                     style={{ width: "65px", marginRight: "0.4cm" }}>ToDate</Label>
                                 <Col sm="6 ">
                                     <C_DatePicker
+                                        options={{
+                                            minDate: (disablePriviousTodate({ fromDate: fromdate })),
+                                            altInput: true,
+                                            altFormat: "d-m-Y",
+                                            dateFormat: "Y-m-d",
+                                        }}
                                         name="todate"
+                                        value={ToDate({ FromDate: fromdate, Todate: todate })}
                                         onChange={todateOnchange}
                                     />
                                 </Col>

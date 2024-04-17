@@ -169,6 +169,10 @@ export const ITEM_MASTER_BULK_UPDATE = 261
 
 export const PARTY_EMPLOYEE_DETAILS = 275
 
+export const RATE_MASTER = 277
+export const RATE_LIST = 278
+
+
 //******************************* Purchase Module ************************************//
 export const ORDER_1 = 53
 export const ORDER_LIST_1 = 54

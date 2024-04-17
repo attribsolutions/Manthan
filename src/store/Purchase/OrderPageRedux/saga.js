@@ -50,9 +50,13 @@ function* goButtonGenFunc({ config }) {                      // GO-Botton order 
     const { subPageMode, } = config
     let response;
     if ((subPageMode === url.ORDER_1) || (subPageMode === url.ORDER_2) || (subPageMode === url.ORDER_4)) {
+
       response = yield call(OrderPage_GoButton_API, config); // GO-Botton Purchase Order 1 && 2 Add Page API
       yield response.Data.OrderItems.forEach((ele, k) => {
         ele["id"] = k + 1
+        if (subPageMode === url.ORDER_1) {
+          ele.Rate = Number(ele.VRate)
+        }
       });
       const termArr = []
       var term = response.Data.TermsAndConditions
@@ -69,6 +73,7 @@ function* goButtonGenFunc({ config }) {                      // GO-Botton order 
     else if (subPageMode === url.IB_ORDER) {
       response = yield call(IBOrderPage_GoButton_API, config); // GO-Botton IB-invoice Add Page API
     }
+
     yield put(GoButton_For_Order_AddSuccess(response.Data));
   } catch (error) {
     yield put(orderApiErrorAction())
@@ -172,12 +177,17 @@ function* orderList_GoBtn_GenFunc({ config }) {
       i.forceHideOrderAprovalBtn = true;
 
       if (i.Inward > 0) {
+
         i.Inward = "Close"
         i.Status = "Close"
         i.forceEditHide = true
+
       } else {
         i.Status = "Open";
         i.Inward = "Open";
+        if (subPageMode === url.GRN_STP_1) {
+          i.forceMakeBtnHide = false
+        }
       }
 
       //+++++++++++++++++++++++++  Status colonm show Status    ++++++++++++++++++++++++++++++++++++++

@@ -558,6 +558,11 @@ export const TARGET_VS_ACHIEVEMENT_API = '/TargetVSAchievement'
 
 export const NOTIFICATION_LOG = '/LogTransaction'
 
+// Rate Master API
+export const GO_BUTTON_POST_API_FOR_RATE_MASTER = '/GetRate' // for go button
+export const DELETE_API_FOR_RATE_MASTER_PAGE = '/DeleteRate' // for delete 
+export const RATES = '/Rates' // for Save button
+export const DELETE_API_FOR_RATE_LIST_PAGE = '/DeleteRateOnList' // for List Page
 
 
 

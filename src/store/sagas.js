@@ -115,10 +115,9 @@ import ItemWiseUpdateSaga from "./Administrator/ItemWiseUpdateRedux/saga"
 import TCSAmountReportSaga from "./Report/TCS_AmountRedux/saga"
 import Cx_DD_DiffrenceReportSaga from "./Report/CX_DD_Diffrence_Report/saga"
 import SystemSettingSaga from "./Utilites/SystemSettingRedux/saga"
-
 import PosRoleAccessSaga from "./SweetPOSStore/Administrator/POSRoleAccessRedux/saga"
 import TargetVsAchievementSaga from "./Report/TargetVSAchievementRedux/saga"
-
+import RateMasterSaga from "./Administrator/RateMasterRedux/saga"
 import POSUserRegistrationSaga from "./SweetPOSStore/Administrator/UserMasterRedux/saga"
 
 
@@ -231,12 +230,7 @@ export default function* rootSaga() {
 		fork(TargetVsAchievementSaga),
 		fork(PartyEmployeeDetailsSaga),
 		fork(POSUserRegistrationSaga),
-
-
-		
-
-
-		
+		fork(RateMasterSaga)
 
 	])
 }

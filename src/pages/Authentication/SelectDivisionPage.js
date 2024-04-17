@@ -55,6 +55,9 @@ const SelectDivisionPage = () => {
         history.push("/Dashboard")
       }
     }
+    else {
+      localStorage.setItem("isMultipleDivision", false)
+    }
   }, [userAccess])
 
   const divisionDropdown_DropdownOption = divisionDropdown_redux.map((d, key) => ({

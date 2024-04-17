@@ -121,18 +121,12 @@ import PartyDetailsReducer from "./Administrator/PartyDetailsRedux/reducer"
 import ItemWiseUpdateReducer from "./Administrator/ItemWiseUpdateRedux/reducer"
 import TCSAmountReportReducer from "./Report/TCS_AmountRedux/reducer"
 import Cx_DD_Diffrence_Reducer from "./Report/CX_DD_Diffrence_Report/reducer"
-
 import SystemSettingReducer from "./Utilites/SystemSettingRedux/reducer"
-
 import PosRoleAccessReducer from "./SweetPOSStore/Administrator/POSRoleAccessRedux/reducer"
-
 import TargetUploadReducer from "./Administrator/TargetUploadRedux/reducer"
 import TargetVsAchievementReducer from "./Report/TargetVSAchievementRedux/reducer"
-
-
+import RateMasterReducer from "./Administrator/RateMasterRedux/reducer"
 import POS_User_Registration_Reducer from "./SweetPOSStore/Administrator/UserMasterRedux/reducer"
-
-
 
 const rootReducer = combineReducers({
 	Layout,
@@ -237,6 +231,8 @@ const rootReducer = combineReducers({
 	TargetUploadReducer,
 	TargetVsAchievementReducer,
 	PartyEmployeeDetailsReducer,
-	POS_User_Registration_Reducer
+	POS_User_Registration_Reducer,
+	RateMasterReducer
+
 })
 export default rootReducer

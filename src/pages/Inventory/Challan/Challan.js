@@ -565,6 +565,9 @@ const Challan = (props) => {
                                                     classNamePrefix="dropdown"
                                                     options={venderOptions}
                                                     onChange={partyOnChange}
+                                                    styles={{
+                                                        menu: provided => ({ ...provided, zIndex: 2 })
+                                                    }}
                                                 />
                                                 {isError.Party.length > 0 && (
                                                     <span className="text-danger f-8"><small>{isError.Party}</small></span>
@@ -585,6 +588,9 @@ const Challan = (props) => {
                                                     classNamePrefix="dropdown"
                                                     options={ItemsOption}
                                                     onChange={itemOnChange}
+                                                    styles={{
+                                                        menu: provided => ({ ...provided, zIndex: 2 })
+                                                    }}
 
                                                 />
                                                 {isError.Item.length > 0 && (

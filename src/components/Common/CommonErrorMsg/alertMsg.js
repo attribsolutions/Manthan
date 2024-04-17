@@ -1,7 +1,7 @@
 
 // Common Error Messages
 const commonPartySelectionIsRequired = "Please Select Party"
-const atLeastOneCheckboxCheck="Please select at least one checkbox before downloading."
+const atLeastOneCheckboxCheck = "Please select at least one checkbox before downloading."
 
 // Image Related Error Message 
 const imageNotUploaded = "Images not uploaded"
@@ -54,12 +54,13 @@ const atLeastOneRetailerIsRequired = "At least One Retailer is Selected"
 // Management Parties (Party Assign) Save Button Error Message
 const atLeastOnePartySelectionRequired = "At least One Party is Selected"
 
-// MRP , GST and Margin Page Error Messages
+// MRP , Rate,GST and Margin Page Error Messages
 const deleteThisItem = "Are you sure you want to delete this Item"
 const effectiveDateIsRequired = "Please select EffectiveDate"
 const MRPIsRequired = "Please Enter MRP"
 const marginISRequired = "Please Enter Margin"
 const enterGSTPercentage_HSNCodeIsRequired = "Please Enter One GSTPercentage & HSNCode"
+const RateIsRequired = "Please Enter Rate"
 
 //Item Master Bulk Update 
 const fieldSelectionIsRequired = "Field selection is Required."
@@ -276,7 +277,8 @@ export const alertMessages = {
     DistrictIsRequired,
     ImageIsRequired,
     No_Kg_IsRerquired,
-    atLeastOneCheckboxCheck
+    atLeastOneCheckboxCheck,
+    RateIsRequired
 };
 
 

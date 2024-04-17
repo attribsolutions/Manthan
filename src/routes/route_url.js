@@ -119,12 +119,7 @@ export const TARGET_UPLOAD = "/Target_Upload"
 
 export const TARGET_UPLOAD_LIST = "/Target_Upload_List"
 
-
-
 export const PARTY_EMPLOYEE_DETAILS = "/PartyEmployeeDetails"
-
-
-
 
 export const INVOICE_EXCEL_UPLOAD = "/Invoice_Excel_Upload"
 export const RETAILER_EXCEL_UPLOAD = "/Retailer_Excel_Upload"
@@ -166,6 +161,10 @@ export const ITEM_MASTER_BULK_UPDATE = "/ItemMasterBulkUpdate"
 export const ITEM_IMAGE_UPLOAD = "/ItemImageUpload"
 
 export const CREDIT_NOTE_UPLOAD = "/CreditNoteUpload"
+
+export const RATE_MASTER = "/Rate_Master"
+export const RATE_LIST = "/Rate_List"
+
 
 //******************************* Purchase Module ************************************//
 export const ORDER_1 = "/Order_1"

@@ -283,10 +283,12 @@ const OrderList = () => {
     }, [pageField])
 
     useEffect(() => {
+
         if (GRNitem.Status === true && GRNitem.StatusCode === 200) {
+            debugger
             history.push({
                 pathname: GRNitem.path,
-                page_Mode: GRNitem.page_Mode,
+                page_Mode: GRNitem.pageMode,
             })
         }
     }, [GRNitem])
@@ -747,54 +749,6 @@ const OrderList = () => {
                 </div>
             </div >
         )
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    function partySelectButtonHandler() {
-        goButtonHandler()
-        dispatch(_act.GetVenderSupplierCustomer({ subPageMode, PartyID: _cfunc.loginSelectedPartyID() }));
-    }
-
-    function partySelectOnChangeHandler() {
-        dispatch(_act.getOrderListPageSuccess([]));
-        dispatch(_act.GetVenderSupplierCustomerSuccess([]));
-        setState((i) => {
-            let a = { ...i }
-            a.values.CustomerType = [allLabelWithBlank]
-            a.values.Supplier = allLabelWithBlank
-            a.hasValid.CustomerType.valid = true;
-            a.hasValid.Supplier.valid = true;
-            return a
-        })
     }
 
     return (

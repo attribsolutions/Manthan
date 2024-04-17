@@ -100,35 +100,43 @@ function* makeGRN_Mode1_GenFunc({ config }) {
   // Make_GRN Items  genrator function
 
   const { pageMode = '', path = '', grnRef = [], challanNo = '', InvoiceDate } = config
+
   try {
     const response = yield call(GRN_Make_API, config);
 
-
     response.Data.OrderItem.forEach(index => {
+      
+      index["GSToption"] = index.GSTDropdown?.map(i => ({ value: i.GST, label: i.GSTPercentage, }));
+      index["MRPOps"] = index.MRPDetails?.map(i => ({ label: i.MRPValue, value: i.MRP }));
 
-      index["GSToption"] = index.GSTDropdown.map(i => ({ value: i.GST, label: i.GSTPercentage, }));
-      index["MRPOps"] = index.MRPDetails.map(i => ({ label: i.MRPValue, value: i.MRP }));
-      const deFaultValue = index["MRPOps"].reduce((maxObj, obj) => {
-        return obj.value > maxObj.value ? obj : maxObj;
-      }, { value: -Infinity });
+      let deFaultValue = { value: 0 }; // Default value for case when MRPOps is undefined
+      if (index["MRPOps"]) {
+        deFaultValue = index["MRPOps"].reduce((maxObj, obj) => {
+          return obj.value > maxObj.value ? obj : maxObj;
+        }, { value: -Infinity });
+      }
+      // const deFaultValue = index["MRPOps"].reduce((maxObj, obj) => {
+      //   return obj.value > maxObj.value ? obj : maxObj;
+      // }, { value: -Infinity });
 
-      index["MRPValue"] = deFaultValue?.label;
-      index["MRP"] = deFaultValue?.value;
+      index["MRPValue"] = (deFaultValue?.value === 0) ? index.MRPValue : deFaultValue?.label;
+      index["MRP"] = (deFaultValue?.value === 0) ? index.MRP : deFaultValue?.value;
+      index["vendorOrderRate"] = index.Rate;
 
       if (index.GST === null) {
-        const deFaultValue = index.GSTDropdown.filter(i => i.GSTPercentage === index.GSTPercentage);
+        const deFaultValue = index.GSTDropdown?.filter(i => i.GSTPercentage === index.GSTPercentage);
         index["GSTPercentage"] = deFaultValue[0]?.GSTPercentage
         index["GST"] = deFaultValue[0]?.GST;
 
       } else {
-        const deFaultValue = index.GSTDropdown.filter(i => i.GST === index.GST);
-        index["GSTPercentage"] = deFaultValue[0]?.GSTPercentage;
-        index["GST"] = deFaultValue[0]?.GST;
+        const deFaultValue = index.GSTDropdown?.filter(i => i.GST === index.GST);
+        index["GSTPercentage"] = (deFaultValue === undefined) ? "" : deFaultValue[0]?.GSTPercentage;
+        index["GST"] = (deFaultValue === undefined) ? "" : deFaultValue[0]?.GST;
       }
 
     })
 
-    response.Data.OrderItem.sort(function (a, b) {
+    response.Data.OrderItem?.sort(function (a, b) {
       if (a.Item > b.Item) { return 1; }
       else if (a.Item < b.Item) { return -1; }
       return 0;
