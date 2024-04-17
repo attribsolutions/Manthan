@@ -219,7 +219,8 @@ const RateMaster = (props) => {
         }
         else {
             const jsonBody = JSON.stringify({
-                EffectiveDate: values.EffectiveDate
+                "EffectiveDate": values.EffectiveDate,
+                "CompanyID": loginCompanyID()
             });
 
             dispatch(goButtonForRate_Master({ jsonBody }));
