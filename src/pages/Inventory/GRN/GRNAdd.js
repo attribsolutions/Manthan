@@ -78,7 +78,8 @@ const GRNAdd = (props) => {
         dispatch(_act.commonPageFieldSuccess(null));
         dispatch(_act.commonPageField(pageId.GRN_ADD_1));
         const jsonBody = JSON.stringify({
-            EffectiveDate: currentDate_ymd
+            "EffectiveDate": currentDate_ymd,
+            "CompanyID": _cfunc.loginCompanyID()
         });
 
         dispatch(goButtonForRate_Master({ jsonBody }));
@@ -333,16 +334,16 @@ const GRNAdd = (props) => {
                             autoComplete="off"
                             key={row.id}
                             disabled={true}
-                            // disabled={pageMode === mode.view ? true : false}
-                            // onChange={(e) => {
-                            //     const val = e.target.value
-                            //     let isnum = /^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)?([eE][+-]?[0-9]+)?$/.test(val);
-                            //     if ((isnum) || (val === '')) {
-                            //         row.MRPValue = val;
-                            //     } else {
-                            //         document.getElementById(`MRP${row.id}`).value = row.Quantity
-                            //     }
-                            // }}
+                        // disabled={pageMode === mode.view ? true : false}
+                        // onChange={(e) => {
+                        //     const val = e.target.value
+                        //     let isnum = /^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)?([eE][+-]?[0-9]+)?$/.test(val);
+                        //     if ((isnum) || (val === '')) {
+                        //         row.MRPValue = val;
+                        //     } else {
+                        //         document.getElementById(`MRP${row.id}`).value = row.Quantity
+                        //     }
+                        // }}
                         />
                     </span>
                 )
