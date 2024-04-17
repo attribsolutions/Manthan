@@ -64,11 +64,10 @@ const CreditNote_1 = (props) => {
     const currentDate_ymd = _cfunc.date_ymd_func();
     const systemSetting = _cfunc.loginSystemSetting();
 
-    const [pageMode, setPageMode] = useState(mode.defaultsave);
+    const [pageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState('');
     const [page_id] = useState(() => initialState(history).page_Id)
     const [listPath] = useState(() => initialState(history).listPath)
-    const [subPageMode] = useState(history.location.pathname)
 
     const fileds = {
         CRDRNoteDate: currentDate_ymd,
@@ -356,7 +355,7 @@ const CreditNote_1 = (props) => {
             formatter: (cell, row, key, { TableArr }) => {
                 return (
                     <div className="parent" >
-                        <div className="child" style={{ minWidth: "100px" }}>
+                        <div className="child" style={{ minWidth: "200px" }}>
                             <CInput
 
                                 defaultValue={row.Quantity}
@@ -956,16 +955,9 @@ const CreditNote_1 = (props) => {
                                                             </div>
                                                         }
                                                         {...toolkitProps.baseProps}
-                                                    // onDataSizeChange={(e) => {
-                                                    //     _cfunc.tableInputArrowUpDounFunc("#table_Arrow")
-                                                    // }}
-                                                    // onDataSizeChange={({ dataCount, filteredData = [] }) => {
-                                                    //     _cfunc.tableInputArrowUpDounFunc("#table_Arrow")
-
-                                                    //     dispatch(BreadcrumbShowCountlabel(`Count:${dataCount} ₹ ${_cfunc.TotalAmount_Func(filteredData)}`));
-
-
-                                                    // }}
+                                                        onDataSizeChange={(e) => {
+                                                            _cfunc.tableInputArrowUpDounFunc("#table_Arrow")
+                                                        }}
                                                     />
                                                 </div>
                                             </Col>

@@ -50,6 +50,7 @@ function* Get_Party_GenFun({ jsonBody }) {   // Only CompanyID is Required
   try {
 
     const response = yield call(Party_Master_Get_API, JSON.stringify(JsonBody));
+    
     function address(arr) {
       let result = ''
       const ind = arr.PartyAddress.find((index) => {
@@ -59,14 +60,16 @@ function* Get_Party_GenFun({ jsonBody }) {   // Only CompanyID is Required
       return result
     }
     const newArray = response.Data.map((index) => {
+      
       index["State"] = index.State.Name;
       index["District"] = index.District.Name;
       index['Company'] = index.Company.Name;
       index['PartyType'] = index.PartyType.Name;
+      index['PartyTypeID'] = index.PartyType.id;
       const routes = index.MCSubParty.map(item => item.Route?.Name).filter(name => name !== null);
       index['Route'] = routes.join(', ')
       // index['Route'] = index.MCSubParty[0]?.Route?.Name||"";
-      
+
       if (!index.PriceList) { index.PriceList = '' }
       else { index["PriceList"] = index.PriceList.Name; }
       index["PartyAddress"] = address(index);

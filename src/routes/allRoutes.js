@@ -223,6 +223,8 @@ import PartyEmployeeDetails from "../pages/Adminisrator/PartyEmployeeDetails/Par
 import CreditNoteExcelUpload from "../pages/Adminisrator/ImportMaster/CreditNoteExcelUpload";
 import POSUSER from "../pages/SweetPOS/Adminstration/UserMaster/POSUserMaster.js";
 import POSUserList from "../pages/SweetPOS/Adminstration/UserMaster/POSUserList.js";
+import RateMaster from "../pages/Adminisrator/RateMaster/RateMaster";
+import RateList from "../pages/Adminisrator/RateMaster/RateList";
 
 const userRoutes = [
 	// *************************** DashBord *******************************//
@@ -301,6 +303,9 @@ const userRoutes = [
 
 	{ path: path.MRP, component: MRPMaster },//not party wise
 	{ path: path.MRP_lIST, component: MRPList },//not party wise
+
+	{ path: path.RATE_MASTER, component: RateMaster },//not party wise
+	{ path: path.RATE_LIST, component: RateList },//not party wise
 
 	{ path: path.MARGIN, component: MarginMaster },//not party wise
 	{ path: path.MARGIN_lIST, component: MarginList },//not party wise

@@ -68,7 +68,7 @@ export default function OrderPageTermsTable(props,) {
 
 
     return (
-        <div style={{ minHeight: "400px", marginTop: "-20px" }}>
+        <div style={{ minHeight: "400px", marginTop: "-10px" }}>
             <div className="row mx-1 " style={{
                 borderStyle: "solid",
                 borderColor: "Gray",

@@ -188,6 +188,34 @@ const AddEmployee = (props) => {
     });
   }, [userAccess])
 
+  useEffect(() => {
+    
+    if ((values.EmployeeTypeName.IsSalesTeamMember === true && partyList.length > 0)) {
+
+      const Party_DropdownOptions = partyList
+        .filter(index => index.PartyType === "Company Division")
+        .map(index => ({ value: index.id, label: index.Name }));
+
+      setState((i) => {
+        const a = { ...i }
+        a.values.EmployeeParties = Party_DropdownOptions
+        a.hasValid.EmployeeParties.valid = false
+
+        return a
+      })
+    }
+    else {
+      setState((i) => {
+        const a = { ...i }
+        a.values.EmployeeParties = []
+        a.hasValid.EmployeeParties.valid = false
+
+        return a
+      })
+    }
+
+  }, [partyList, employeeType, values.EmployeeTypeName]);
+
   // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
   useEffect(() => {
 
@@ -320,7 +348,8 @@ const AddEmployee = (props) => {
   const EmployeeType_DropdownOptions = employeeType.map((data) => ({
     value: data.id,
     label: data.Name,
-    IsPartyConnection: data.IsPartyConnection
+    IsPartyConnection: data.IsPartyConnection,
+    IsSalesTeamMember: data.IsSalesTeamMember
   }));
 
   const State_DropdownOptions = State.map((data) => ({
@@ -709,6 +738,7 @@ const AddEmployee = (props) => {
                               value={values.EmployeeParties}
                               isMulti={true}
                               isLoading={partyDropdownLoading}
+                              isDisabled={(values.EmployeeTypeName.IsSalesTeamMember)}
                               className="react-dropdown"
                               options={Party_DropdownOptions}
                               onChange={(hasSelect, evn) => {
