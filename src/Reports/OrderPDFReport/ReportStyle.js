@@ -415,7 +415,7 @@ export const tableBody = (doc, data) => {
             const rowIdx = data1.row.index;
             const colIdx = data1.column.index;
             if (rowIdx === 0 && colIdx === 7) {
-                if (data1.row.cells[7].raw === "       CGST        %        Amount") {
+                if (data1.row.cells[7].raw === "       CGST           %        Amount") {
 
                     const cellWidth = data1.cell.width;
                     const cellHeight = data1.cell.height;
@@ -428,12 +428,12 @@ export const tableBody = (doc, data) => {
                     const startY1vertical = data1.cell.y + 9;
                     const endYvertical = startY + cellHeight;
 
-                    doc.line(startXVertical - 4, startY1vertical + 2, startXVertical - 4, endYvertical + 2);  // Draw a vertical line
+                    doc.line(startXVertical - 8, startY1vertical + 2, startXVertical - 8, endYvertical + 2);  // Draw a vertical line
                     doc.line(startX, startY, endX, endY);
                 }
             }
             if (rowIdx === 0 && colIdx === 9) {
-                if (data1.row.cells[9].raw === "       SGST        %        Amount") {
+                if (data1.row.cells[9].raw === "       SGST           %        Amount") {
 
                     const cellWidth = data1.cell.width;
                     const cellHeight = data1.cell.height;
@@ -446,7 +446,7 @@ export const tableBody = (doc, data) => {
                     const startY1vertical = data1.cell.y + 9;
                     const endYvertical = startY + cellHeight;
 
-                    doc.line(startXVertical - 4, startY1vertical + 2, startXVertical - 4, endYvertical + 2); // Draw a vertical line
+                    doc.line(startXVertical - 8, startY1vertical + 2, startXVertical - 8, endYvertical + 2); // Draw a vertical line
                     doc.line(startX, startY, endX, endY);
                 }
             }
@@ -478,7 +478,7 @@ export const tableBody = (doc, data) => {
         columnStyles: {
             0: {
                 valign: "top",
-                columnWidth: 125,
+                columnWidth: 120,
             },
             1: {
                 columnWidth: 45,
@@ -486,25 +486,24 @@ export const tableBody = (doc, data) => {
 
             },
             2: {
-                columnWidth: 36,
+                columnWidth: 33,
                 halign: 'right',
-
             },
 
             3: {
-                columnWidth: 40,
+                columnWidth: 37,
                 halign: 'right',
             },
             4: {
-                columnWidth: 44,
+                columnWidth: 37,
                 halign: 'right',
             },
             5: {
-                columnWidth: 43,
+                columnWidth: 38,
                 halign: 'right',
             },
             6: {
-                columnWidth: 43,
+                columnWidth: 49,
                 halign: 'right',
             },
             7: {
@@ -512,7 +511,7 @@ export const tableBody = (doc, data) => {
                 halign: 'right',
             },
             8: {
-                columnWidth: 34,
+                columnWidth: 40,
                 halign: 'right',
             },
             9: {
@@ -521,12 +520,12 @@ export const tableBody = (doc, data) => {
                 halign: 'right',
             },
             10: {
-                columnWidth: 34,
+                columnWidth: 40,
                 fontStyle: 'bold',
                 halign: 'right',
             },
             11: {
-                columnWidth: 46,
+                columnWidth: 51,
                 fontStyle: 'bold',
                 halign: 'right',
             },
