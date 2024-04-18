@@ -48,6 +48,7 @@ import { showToastAlert } from "../../../../helpers/axios_Config";
 import { mobileApp_Send_Retailer_Api } from "../../../../helpers/backend_helper"
 import { changeCommonPartyDropDetailsAction } from "../../../../store/Utilites/PartyDrodown/action";
 import { alertMessages } from "../../../../components/Common/CommonErrorMsg/alertMsg";
+import { getClusterlist } from "../../../../store/Administrator/ClusterRedux/action";
 
 function initialState(history) {
 
@@ -134,6 +135,7 @@ const PartyMaster = (props) => {
 		dispatch(commonPageField(page_id))
 		dispatch(getState());
 		dispatch(getPartyTypelist());
+		dispatch(getClusterlist());
 		dispatch(getcompanyList());
 		dispatch(SSDD_List_under_Company())
 		if ((subPageMode === url.RETAILER_MASTER) || (subPageMode === url.PARTY_SELF_EDIT)) {
@@ -521,6 +523,8 @@ const PartyMaster = (props) => {
 				"Taluka": 0,
 				"Latitude": baseValue.Latitude,
 				"Longitude": baseValue.Longitude,
+				"Cluster":baseValue.Cluster.value,
+				"SubCluster":baseValue.SubCluster.value,
 				"GSTIN": baseValue.GSTIN,
 				"isActive": baseValue.isActive,
 				"CreatedBy": loginUserID(),

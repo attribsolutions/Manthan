@@ -16,6 +16,7 @@ import { getCityOnDistrict, getCityOnDistrictSuccess } from '../../../../../stor
 import CityMaster from '../../../CityPages/CityMaster'
 import { C_Select } from '../../../../../CustomValidateForm'
 import { GetRoutesList, GetRoutesListSuccess } from '../../../../../store/Administrator/RoutesRedux/actions'
+import { Get_Subcluster_On_cluster_API } from '../../../../../helpers/backend_helper'
 
 const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
 
@@ -38,8 +39,9 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
         Distance: "",
         isActive: true,
         Latitude: "",
-        Longitude: ""
-
+        Longitude: "",
+        Cluster: "",
+        SubCluster: ""
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
@@ -47,6 +49,21 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
     const [priceListSelect, setPriceListSelect] = useState({ value: '' });
     const [partyType_AddMasterAccess, setPartyType_AddMasterAccess] = useState(false)
     const [city_AddMasterAccess, setCity_AddMasterAccess] = useState(false)
+
+
+
+    const [SubClusterOptions, setSubClusterOptions] = useState({});
+
+
+
+
+
+
+
+
+
+
+
 
     const { values } = state;
     const { isError } = state;
@@ -79,8 +96,10 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
         userAccess,
         districtDropDownLoading,
         cityDropDownLoading,
+        clusterDropdown,
         commonPartyDropSelect
     } = useSelector((state) => ({
+        clusterDropdown: state.ClusterReducer.ClusterListData,
         stateRedux: state.EmployeesReducer.State,
         DistrictOnState: state.PartyMasterReducer.DistrictOnState,
         CityOnDistrict: state.EmployeesReducer.City,
@@ -110,7 +129,7 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
 
     // Common Party Dropdown useEffect
     useEffect(() => {
-        
+
         if (commonPartyDropSelect.value <= 0) {
             setPriceListSelect({ value: '' })
             dispatch(Breadcrumb_inputName(""))
@@ -246,6 +265,23 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
         label: index.Name,
         IsActive: index.IsActive
     }));
+    
+    const Cluster_Options = clusterDropdown.map((Data) => ({
+        value: Data.id,
+        label: Data.Name
+    }));
+
+
+
+
+    const getSubCluster = async ({ Select }) => {
+        const response = await Get_Subcluster_On_cluster_API(Select.value);
+        
+        if (response.StatusCode === 200) {
+            setSubClusterOptions(response.Data.map(index => ({ value: index.id, label: index.Name })))
+        }
+    }
+
 
     const RouteName_Options = RoutesListOptions.filter((index) => {
         return index.IsActive === true
@@ -272,7 +308,6 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
             return a
         })
     }
-
 
     function District_Dropdown_Handler(e) {
         dispatch(getCityOnDistrict(e.value))
@@ -441,7 +476,6 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
                                     </FormGroup>
                                 </Col>
                             }
-
                         </Row>
                     </CardBody>
                 </Card>
@@ -764,6 +798,91 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
                                     </Row>
                                 </FormGroup>
                             </Col>
+
+
+
+
+                            <Col md="3">
+                                <FormGroup className="mb-3">
+                                    <Label htmlFor="validationCustom01">{fieldLabel.Cluster} </Label>
+                                    <C_Select
+                                        name="Cluster"
+                                        id="Cluster"
+                                        value={values.Cluster}
+                                        isDisabled={(subPageMode === url.PARTY_SELF_EDIT) && true}
+                                        isSearchable={true}
+                                        classNamePrefix="dropdown"
+                                        isLoading={cityDropDownLoading}
+                                        options={Cluster_Options}
+                                        onChange={(hasSelect, evn) => {
+                                            onChangeSelect({ hasSelect, evn, state, setState, })
+                                            getSubCluster({ Select: hasSelect })
+                                        }}
+                                    />
+                                    {isError.Cluster.length > 0 && (
+                                        <span className="text-danger f-8"><small>{isError.Cluster}</small></span>
+                                    )}
+                                </FormGroup>
+                            </Col>
+
+
+                            <Col md="1"> </Col>
+
+                            <Col md="3">
+                                <FormGroup className="mb-3">
+                                    <Label htmlFor="validationCustom01">{fieldLabel.SubCluster} </Label>
+                                    <C_Select
+                                        name="SubCluster"
+                                        id="SubCluster"
+                                        value={values.SubCluster}
+                                        isDisabled={(subPageMode === url.PARTY_SELF_EDIT) && true}
+                                        isSearchable={true}
+                                        classNamePrefix="dropdown"
+                                        // isLoading={cityDropDownLoading}
+                                        options={SubClusterOptions
+
+
+
+
+                                        }
+                                        onChange={(hasSelect, evn) => {
+                                            onChangeSelect({ hasSelect, evn, state, setState, })
+                                        }}
+                                    />
+                                    {isError.SubCluster.length > 0 && (
+                                        <span className="text-danger f-8"><small>{isError.SubCluster}</small></span>
+                                    )}
+                                </FormGroup>
+                            </Col>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                         </Row>
                     </CardBody>
                 </Card>

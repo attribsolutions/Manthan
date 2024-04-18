@@ -356,7 +356,7 @@ export const reportHeder1 = (doc, data) => {
     priLength()
 
 
-    doc.line(570, data.isQR ? initial_y : 144, 30, data.isQR ? initial_y : 144);// full horizontal bill by bill to below line 
+    doc.line(570, data.isQR ? initial_y : 61, 30, data.isQR ? initial_y : 61);// full horizontal bill by bill to below line 
 
     doc.line(408, data.isQR ? initial_y : 144, 408, 16);//vertical line header section billby 
     doc.line(220, data.isQR ? initial_y : 144, 220, data.isQR ? 103 : 46);//vertical  line header section billto
