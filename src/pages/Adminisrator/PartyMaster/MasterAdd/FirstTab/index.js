@@ -801,7 +801,7 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
 
 
 
-
+{subPageMode !== url.RETAILER_MASTER &&
                             <Col md="3">
                                 <FormGroup className="mb-3">
                                     <Label htmlFor="validationCustom01">{fieldLabel.Cluster} </Label>
@@ -823,12 +823,14 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
                                         <span className="text-danger f-8"><small>{isError.Cluster}</small></span>
                                     )}
                                 </FormGroup>
-                            </Col>
+                            </Col>}
 
 
                             <Col md="1"> </Col>
 
-                            <Col md="3">
+                            {
+                                subPageMode !== url.RETAILER_MASTER &&
+                                <Col md="3">
                                 <FormGroup className="mb-3">
                                     <Label htmlFor="validationCustom01">{fieldLabel.SubCluster} </Label>
                                     <C_Select
@@ -854,7 +856,7 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
                                     )}
                                 </FormGroup>
                             </Col>
-
+}
 
 
 
