@@ -464,7 +464,7 @@ export const DetailsOfTransportRow = (data) => {
         NoteType = "Goods Credit Note"
     }
 
-    if (data.CRDRNoteUploads.length>0) {
+    if (data.CRDRNoteUploads.length > 0) {
         IRN_No = (data.CRDRNoteUploads[0].Irn === null ? "" : data.CRDRNoteUploads[0].Irn)
         ACK_No = (data.CRDRNoteUploads[0].AckNo === null ? "" : data.CRDRNoteUploads[0].AckNo)
 
@@ -482,6 +482,7 @@ export const DetailsOfTransportRow = (data) => {
         [`                        ${date_dmy_func(InvoiceDate)}`],
         [`                      ${FullInvoiceNumber}`],
         [`                    ${data.Narration === null ? "" : data.Narration}`],
+        NoteType === "CreditNote" && [`                         ${data.NoteReason === null ? "" : data.NoteReason}`],
         [`                ${IRN_No}`],
         [`                ${ACK_No}`],
 

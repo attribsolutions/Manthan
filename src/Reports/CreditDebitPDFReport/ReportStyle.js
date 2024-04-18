@@ -58,14 +58,13 @@ export const pageHeder = (doc, data) => {
     doc.line(570, data.isQR ? 103 : 45, 30, data.isQR ? 103 : 45)  //horizontal line 1 billby upper for repeat header
     doc.line(408, data.isQR ? initial_y : 45, 408, 16);//vertical line header section billby 
 
-   
+
     doc.setFontSize(8)
     doc.text('Original For Buyer', 33, 28,)
 
 }
 
 export const reportHeder1 = (doc, data) => {
-
 
     let Y1 = 0
     if (data.isQR) {
@@ -251,6 +250,7 @@ export const reportHeder1 = (doc, data) => {
         startY: data.isQR ? 120 : 60
 
     };
+    const CreditNoteType = (data.NoteType === "CreditNote")
     var DetailsOfTransportStyle = {
         didDrawCell: (data1) => {
             const rowIdx = data1.row.index;
@@ -271,7 +271,6 @@ export const reportHeder1 = (doc, data) => {
                 doc.text('Invoice Date: ', x, y)
             };
             if (rowIdx === 2 && colIdx === 0) {
-
                 let x = data1.cursor.x + 2
                 let y = data1.cursor.y + 8
                 doc.setFontSize(8)
@@ -286,10 +285,17 @@ export const reportHeder1 = (doc, data) => {
                 doc.setFontSize(8)
                 doc.setFont(undefined, 'bold')
                 doc.text('Narration: ', x, y)
-
-
             };
-            if (rowIdx === 4 && colIdx === 0) {
+
+            if (rowIdx === 4 && colIdx === 0 && CreditNoteType) {
+                let x = data1.cursor.x + 2
+                let y = data1.cursor.y + 8
+                doc.setFontSize(8)
+                doc.setFont(undefined, 'bold')
+                doc.text('Note Reason: ', x, y)
+            };
+
+            if (CreditNoteType ? rowIdx === 5 : rowIdx === 4 && colIdx === 0) {
 
                 let x = data1.cursor.x + 2
                 let y = data1.cursor.y + 8
@@ -297,7 +303,7 @@ export const reportHeder1 = (doc, data) => {
                 doc.setFont(undefined, 'bold')
                 doc.text('IRN No: ', x, y)
             };
-            if (rowIdx === 5 && colIdx === 0) {
+            if (CreditNoteType ? rowIdx === 6 : rowIdx === 5 && colIdx === 0) {
 
                 let x = data1.cursor.x + 2
                 let y = data1.cursor.y + 8
@@ -353,13 +359,18 @@ export const reportHeder1 = (doc, data) => {
     priLength()
 
     doc.autoTable(table.DetailsOfTransport, table.DetailsOfTransportRow(data), DetailsOfTransportStyle);
+    
     priLength()
 
 
     doc.line(570, data.isQR ? initial_y : 61, 30, data.isQR ? initial_y : 61);// full horizontal bill by bill to below line 
 
-    doc.line(408, data.isQR ? initial_y : 144, 408, 16);//vertical line header section billby 
-    doc.line(220, data.isQR ? initial_y : 144, 220, data.isQR ? 103 : 46);//vertical  line header section billto
+    doc.line(408, initial_y , 408, 16);//vertical line header section billby 
+    doc.line(220, initial_y , 220, data.isQR ? 103 : 46);//vertical  line header section billto
+
+
+    doc.line(570, initial_y, 30, initial_y);// full horizontal bill by bill to below line 
+    debugger
 
 }
 
