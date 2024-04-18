@@ -265,7 +265,7 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
         label: index.Name,
         IsActive: index.IsActive
     }));
-    
+
     const Cluster_Options = clusterDropdown.map((Data) => ({
         value: Data.id,
         label: Data.Name
@@ -276,7 +276,7 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
 
     const getSubCluster = async ({ Select }) => {
         const response = await Get_Subcluster_On_cluster_API(Select.value);
-        
+
         if (response.StatusCode === 200) {
             setSubClusterOptions(response.Data.map(index => ({ value: index.id, label: index.Name })))
         }
@@ -801,29 +801,28 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
 
 
 
-{subPageMode !== url.RETAILER_MASTER &&
-                            <Col md="3">
-                                <FormGroup className="mb-3">
-                                    <Label htmlFor="validationCustom01">{fieldLabel.Cluster} </Label>
-                                    <C_Select
-                                        name="Cluster"
-                                        id="Cluster"
-                                        value={values.Cluster}
-                                        isDisabled={(subPageMode === url.PARTY_SELF_EDIT) && true}
-                                        isSearchable={true}
-                                        classNamePrefix="dropdown"
-                                        isLoading={cityDropDownLoading}
-                                        options={Cluster_Options}
-                                        onChange={(hasSelect, evn) => {
-                                            onChangeSelect({ hasSelect, evn, state, setState, })
-                                            getSubCluster({ Select: hasSelect })
-                                        }}
-                                    />
-                                    {isError.Cluster.length > 0 && (
-                                        <span className="text-danger f-8"><small>{isError.Cluster}</small></span>
-                                    )}
-                                </FormGroup>
-                            </Col>}
+                            {subPageMode !== url.RETAILER_MASTER &&
+                                <Col md="3">
+                                    <FormGroup className="mb-3">
+                                        <Label htmlFor="validationCustom01">{fieldLabel.Cluster} </Label>
+                                        <C_Select
+                                            name="Cluster"
+                                            id="Cluster"
+                                            value={values.Cluster}
+                                            isDisabled={values.PartyType.value === 11}
+                                            isSearchable={true}
+                                            classNamePrefix="dropdown"
+                                            options={Cluster_Options}
+                                            onChange={(hasSelect, evn) => {
+                                                onChangeSelect({ hasSelect, evn, state, setState, })
+                                                getSubCluster({ Select: hasSelect })
+                                            }}
+                                        />
+                                        {isError.Cluster.length > 0 && (
+                                            <span className="text-danger f-8"><small>{isError.Cluster}</small></span>
+                                        )}
+                                    </FormGroup>
+                                </Col>}
 
 
                             <Col md="1"> </Col>
@@ -831,32 +830,31 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
                             {
                                 subPageMode !== url.RETAILER_MASTER &&
                                 <Col md="3">
-                                <FormGroup className="mb-3">
-                                    <Label htmlFor="validationCustom01">{fieldLabel.SubCluster} </Label>
-                                    <C_Select
-                                        name="SubCluster"
-                                        id="SubCluster"
-                                        value={values.SubCluster}
-                                        isDisabled={(subPageMode === url.PARTY_SELF_EDIT) && true}
-                                        isSearchable={true}
-                                        classNamePrefix="dropdown"
-                                        // isLoading={cityDropDownLoading}
-                                        options={SubClusterOptions
+                                    <FormGroup className="mb-3">
+                                        <Label htmlFor="validationCustom01">{fieldLabel.SubCluster} </Label>
+                                        <C_Select
+                                            name="SubCluster"
+                                            id="SubCluster"
+                                            value={values.SubCluster}
+                                            isDisabled={values.PartyType.value === 11}
+                                            isSearchable={true}
+                                            classNamePrefix="dropdown"
+                                            options={SubClusterOptions
 
 
 
 
-                                        }
-                                        onChange={(hasSelect, evn) => {
-                                            onChangeSelect({ hasSelect, evn, state, setState, })
-                                        }}
-                                    />
-                                    {isError.SubCluster.length > 0 && (
-                                        <span className="text-danger f-8"><small>{isError.SubCluster}</small></span>
-                                    )}
-                                </FormGroup>
-                            </Col>
-}
+                                            }
+                                            onChange={(hasSelect, evn) => {
+                                                onChangeSelect({ hasSelect, evn, state, setState, })
+                                            }}
+                                        />
+                                        {isError.SubCluster.length > 0 && (
+                                            <span className="text-danger f-8"><small>{isError.SubCluster}</small></span>
+                                        )}
+                                    </FormGroup>
+                                </Col>
+                            }
 
 
 
