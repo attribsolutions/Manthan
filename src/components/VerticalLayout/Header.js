@@ -47,7 +47,7 @@ const Header = props => {
     setOpen(false);
   }
   const IsNotificationShow = loginSystemSetting().IsNotificationShow
-
+  debugger
 
   function tog_backdrop() {
     setmodal_backdrop(!modal_backdrop)
@@ -163,8 +163,13 @@ const Header = props => {
             <MainSearchBox />
 
           </div>
-
+          {/* 
           {IsNotificationShow !== "null" ? <div style={{ fontWeight: "bold", cursor: "pointer" }} >
+            <h3 style={{ color: "red" }} onClick={handleClick} class="text-red blink-soft">Important Notification! Click here</h3>
+          </div> : null} */}
+
+
+          {IsNotificationShow === "true" ? <div style={{ fontWeight: "bold", cursor: "pointer" }} >
             <h3 style={{ color: "red" }} onClick={handleClick} class="text-red blink-soft">Important Notification! Click here</h3>
           </div> : null}
 
