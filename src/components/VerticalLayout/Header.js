@@ -47,7 +47,7 @@ const Header = props => {
     setOpen(false);
   }
   const IsNotificationShow = loginSystemSetting().IsNotificationShow
-  debugger
+  
 
   function tog_backdrop() {
     setmodal_backdrop(!modal_backdrop)

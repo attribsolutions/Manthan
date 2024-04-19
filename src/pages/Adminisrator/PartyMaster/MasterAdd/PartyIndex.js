@@ -245,6 +245,17 @@ const PartyMaster = (props) => {
 								label: hasEditVal.District.Name,
 								value: hasEditVal.District.id,
 							},
+
+							Cluster: {
+								label: hasEditVal.Cluster ? hasEditVal.Cluster.Name : "Select...",
+								value: hasEditVal.Cluster ? hasEditVal.Cluster.id : "",
+							},
+
+							SubCluster: {
+								label: hasEditVal.SubCluster ? hasEditVal.SubCluster.Name : "Select...",
+								value: hasEditVal.SubCluster ? hasEditVal.SubCluster.id : "",
+							},
+
 							CityName: {
 								label: hasEditVal.City === null ? "Select..." : hasEditVal.City.Name,
 								value: hasEditVal.City === null ? "" : hasEditVal.City.id,
@@ -523,8 +534,8 @@ const PartyMaster = (props) => {
 				"Taluka": 0,
 				"Latitude": baseValue.Latitude,
 				"Longitude": baseValue.Longitude,
-				"Cluster":baseValue.Cluster.value,
-				"SubCluster":baseValue.SubCluster.value,
+				"Cluster": baseValue.Cluster.value,
+				"SubCluster": baseValue.SubCluster.value,
 				"GSTIN": baseValue.GSTIN,
 				"isActive": baseValue.isActive,
 				"CreatedBy": loginUserID(),
