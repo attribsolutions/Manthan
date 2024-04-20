@@ -50,7 +50,7 @@ function ShowTable() {
                         recordsAmountTotal: i.Amount, // Breadcrumb Count total
                     };
                 });
-                debugger
+                
                 dispatch(BreadcrumbShowCountlabel(`Count:${dataCount} ₹ ${TotalAmount_Func(newfilteredData)}`));
             }
             }

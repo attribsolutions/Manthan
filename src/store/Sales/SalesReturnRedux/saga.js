@@ -47,7 +47,7 @@ function* SalesReturn_List_GenFun({ filters }) {
 
 // delete API
 function* delete_SalesReturn_ID_GenFunc({ config }) {
-    debugger
+    
     try {
         const SelectedPartyID = JSON.parse(localStorage.getItem("selectedParty")).value
         const jsonBodyForBackdatedTransaction = JSON.stringify({

@@ -1708,7 +1708,11 @@ const Order = (props) => {
                             )}
                         </ToolkitProvider>
 
-                        <OrderPageTermsTable tableList={termsAndConTable} setfunc={setTermsAndConTable} privious={editVal.TermsAndConditions} tableData={orderItemTable} />
+                        <OrderPageTermsTable
+                            tableList={termsAndConTable}
+                            setfunc={setTermsAndConTable}
+                            privious={editVal.TermsAndConditions}
+                            tableData={orderItemTable} />
 
                         {
                             ((orderItemTable.length > 0) && (!isOpen_assignLink)) &&

@@ -44,6 +44,11 @@ const StockEntry = (props) => {
     const history = useHistory()
     const currentDate_ymd = _cfunc.date_ymd_func();
 
+    const systemsetting = _cfunc.loginSystemSetting().MRP_Rate;
+    const settingsArray = systemsetting.split(',');
+    const searchString = _cfunc.loginCompanyID() + "-2";
+    const isVisibleRateDrop = settingsArray.includes(searchString);
+
     const [pageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState('');
 
@@ -163,7 +168,6 @@ const StockEntry = (props) => {
         dispatch(GetStockCount({ jsonBody }))
     }, [currentDate_ymd])
 
-
     function Date_Onchange(e, date) {
         const PartyID = _cfunc.loginPartyID()
         const jsonBody = JSON.stringify({
@@ -260,6 +264,7 @@ const StockEntry = (props) => {
             dataField: "",
             style: { minWidth: "10vw" },
             classes: () => "",
+            hidden: (isVisibleRateDrop),
             formatter: (cellContent, row, key) => {
 
                 return (
@@ -274,6 +279,31 @@ const StockEntry = (props) => {
                                 classNamePrefix="dropdown"
                                 options={row.MRP_DropdownOptions}
                                 onChange={(event) => { row.defaultMRP = event }}
+                            />
+                        </span></>)
+            }
+        },
+
+        {
+            text: "Rate",
+            dataField: "",
+            style: { minWidth: "10vw" },
+            classes: () => "",
+            hidden: !(isVisibleRateDrop),
+            formatter: (cellContent, row, key) => {
+
+                return (
+                    <>
+                        <span >
+                            <Select
+                                id={`Rate${key}`}
+                                name="Rate"
+                                defaultValue={row.defaultRate.value === null ? [] : row.defaultRate}
+                                isSearchable={true}
+                                className="react-dropdown "
+                                classNamePrefix="dropdown"
+                                options={row.Rate_DropdownOptions}
+                                onChange={(event) => { row.defaultRate = event }}
                             />
                         </span></>)
             }
@@ -426,7 +456,6 @@ const StockEntry = (props) => {
         })
     }
 
-
     const SaveHandler = async (event) => {
 
         event.preventDefault();
@@ -439,12 +468,15 @@ const StockEntry = (props) => {
 
         const mapItemArray = (index) => ({
             "Item": index.ItemId,
+            "ItemName": index.ItemName,
             "Quantity": index.Qty === undefined ? 0 : index.Qty,
             "MRP": index.defaultMRP.value,
             "Unit": index.defaultUnit.value,
             "GST": index.defaultGST.value,
             "MRPValue": index.defaultMRP.label,
             "GSTPercentage": index.defaultGST.label,
+            "Rate": index.defaultRate.value,
+            "RateValue": index.defaultRate.label,
             "BatchDate": index.BatchDate,
             "BatchCode": index.BatchCode,
             "BatchCodeID": 0
@@ -452,7 +484,7 @@ const StockEntry = (props) => {
 
         const ReturnItems = TableArr.map(mapItemArray);
 
-        const filterData = ReturnItems.map(({ ItemName, ...rest }) => rest).filter((i) => {
+        const filterData = ReturnItems.filter((i) => {
             return i.Quantity > 0;
         });
 
@@ -471,8 +503,11 @@ const StockEntry = (props) => {
             if ((i.Unit === undefined) || (i.Unit === null)) {
                 invalidMsg1.push(`${i.ItemName} : ${alertMessages.unitIsRequired}`)
             }
-            else if ((i.MRP === undefined) || (i.MRP === null)) {
+            else if ((i.MRP === undefined) || (i.MRP === null) && !(isVisibleRateDrop)) {
                 invalidMsg1.push(`${i.ItemName} :${alertMessages.mrpIsRequired}`)
+            }
+            else if ((i.Rate === undefined) || (i.Rate === null) && (isVisibleRateDrop)) {
+                invalidMsg1.push(`${i.ItemName} :${alertMessages.rateIsRequired}`)
             }
             else if ((i.GST === undefined) || (i.GST === null)) {
                 invalidMsg1.push(`${i.ItemName} : ${alertMessages.gstIsRequired}`)

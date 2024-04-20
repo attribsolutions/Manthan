@@ -292,7 +292,7 @@ const ImportExcelFieldMap = (props) => {
                         noDataIndication={<div className="text-danger text-center ">Items Not available</div>}
                         classes={"custom-table"}
                         onDataSizeChange={({ dataCount, filteredData = [] }) => {
-                            debugger
+                            
                             dispatch(BreadcrumbShowCountlabel(`Count:${dataCount}`));
                         }}
                     />

@@ -188,33 +188,33 @@ const AddEmployee = (props) => {
     });
   }, [userAccess])
 
-  useEffect(() => {
-    
-    if ((values.EmployeeTypeName.IsSalesTeamMember === true && partyList.length > 0)) {
+  // useEffect(() => {
 
-      const Party_DropdownOptions = partyList
-        .filter(index => index.PartyType === "Company Division")
-        .map(index => ({ value: index.id, label: index.Name }));
+  //   if ((values.EmployeeTypeName.IsSalesTeamMember === true && partyList.length > 0) && pageMode === mode.defaultsave) {
 
-      setState((i) => {
-        const a = { ...i }
-        a.values.EmployeeParties = Party_DropdownOptions
-        a.hasValid.EmployeeParties.valid = false
+  //     const Party_DropdownOptions = partyList
+  //       .filter(index => index.PartyType === "Company Division")
+  //       .map(index => ({ value: index.id, label: index.Name }));
 
-        return a
-      })
-    }
-    else {
-      setState((i) => {
-        const a = { ...i }
-        a.values.EmployeeParties = []
-        a.hasValid.EmployeeParties.valid = false
+  //     setState((i) => {
+  //       const a = { ...i }
+  //       a.values.EmployeeParties = Party_DropdownOptions
+  //       a.hasValid.EmployeeParties.valid = false
 
-        return a
-      })
-    }
+  //       return a
+  //     })
+  //   }
+  //   else {
+  //     setState((i) => {
+  //       const a = { ...i }
+  //       a.values.EmployeeParties = []
+  //       a.hasValid.EmployeeParties.valid = false
 
-  }, [partyList, employeeType, values.EmployeeTypeName]);
+  //       return a
+  //     })
+  //   }
+
+  // }, [partyList, employeeType, values.EmployeeTypeName]);
 
   // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
   useEffect(() => {
@@ -738,7 +738,7 @@ const AddEmployee = (props) => {
                               value={values.EmployeeParties}
                               isMulti={true}
                               isLoading={partyDropdownLoading}
-                              isDisabled={(values.EmployeeTypeName.IsSalesTeamMember)}
+                              // isDisabled={(values.EmployeeTypeName.IsSalesTeamMember)}
                               className="react-dropdown"
                               options={Party_DropdownOptions}
                               onChange={(hasSelect, evn) => {

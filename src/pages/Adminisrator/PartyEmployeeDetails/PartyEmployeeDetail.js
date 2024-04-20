@@ -117,7 +117,7 @@ const PartyEmployeeDetails = (props) => {
 
     const highlightSearchValue = (text, searchValue) => {
         let strText = text === null ? "" : text.toString()
-        debugger
+        
         if (!searchValue || searchValue.trim() === '') {
             return strText;
         }
