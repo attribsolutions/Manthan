@@ -22,7 +22,7 @@ const SNSReport = (props) => {
     const dispatch = useDispatch();
     const history = useHistory();
     const currentDate_ymd = _cfunc.date_ymd_func();
-    const isSCMParty = _cfunc.loginIsSCMParty();
+    const isSCMParty = _cfunc.loginUserAdminRole();
 
     const [headerFilters, setHeaderFilters] = useState('');
     const [userPageAccessState, setUserAccState] = useState('');

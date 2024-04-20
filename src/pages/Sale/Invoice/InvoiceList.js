@@ -530,7 +530,7 @@ const InvoiceList = () => {
     };
 
     async function editBodyfunc(config) {
-        debugger
+        
         const { rowData } = config;
         const jsonBodyForBackdatedTransaction = JSON.stringify({
             "TransactionDate": rowData.InvoiceDate,

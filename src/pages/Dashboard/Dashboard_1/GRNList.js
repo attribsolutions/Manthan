@@ -125,7 +125,7 @@ export default function InvoiceForGRN() {
     }
 
     function printBtnHandler(rowData, btnId) {
-        debugger
+        
         let config = {}
         config["btnId"] = btnId
         config["editId"] = rowData.id

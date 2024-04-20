@@ -160,7 +160,7 @@ const POSUSER = (props) => {
       }
 
       if (hasEditVal) {
-        debugger
+        
         const { id, LoginName, Password, IsActive, DivisionID, CreatedBy, RoleName,RoleID } = hasEditVal
         const { values, hasValid, } = { ...state }
 

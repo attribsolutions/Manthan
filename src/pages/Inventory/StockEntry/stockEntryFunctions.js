@@ -3,7 +3,7 @@ import * as _cfunc from "../../../components/Common/CommonFunction";
 export async function ItemAPIResponseFunc(apiResponse, tableData) {
 
     const currentDate_ymd = _cfunc.date_ymd_func();
-    
+
     try {
         // Convert API response to desired format
         const convert_ApiResponse = apiResponse.Data.InvoiceItems.map((i) => {
@@ -34,13 +34,24 @@ export async function ItemAPIResponseFunc(apiResponse, tableData) {
                 return prev.value > current.value ? prev : current;
             });
 
+            const Rate_DropdownOptions = i.ItemRateDetails.map((mrp) => ({
+                label: mrp.RateValue,
+                value: mrp.Rate,
+            }));
+
+            const Highest_Rate = Rate_DropdownOptions.reduce((prev, current) => {
+                return prev.value > current.value ? prev : current;
+            });
+
             return {
                 UnitDroupDownOptions,
                 MRP_DropdownOptions,
                 GST_DropdownOptions,
+                Rate_DropdownOptions,
                 Default_Unit,
                 Highest_MRP,
                 Highest_GST,
+                Highest_Rate,
                 ItemName: i.ItemName,
                 ItemId: i.Item,
                 Quantity: i.Quantity,
@@ -76,6 +87,7 @@ export async function ItemAPIResponseFunc(apiResponse, tableData) {
                 Unit_DropdownOptions: index.UnitDroupDownOptions,
                 MRP_DropdownOptions: index.MRP_DropdownOptions,
                 ItemGSTHSNDetails: index.GST_DropdownOptions,
+                Rate_DropdownOptions: index.Rate_DropdownOptions,
                 ItemName: index.ItemName,
                 ItemId: itemId,
                 Quantity: index.Quantity,
@@ -84,6 +96,7 @@ export async function ItemAPIResponseFunc(apiResponse, tableData) {
                 defaultUnit: index.Default_Unit,
                 defaultMRP: index.Highest_MRP,
                 defaultGST: index.Highest_GST,
+                defaultRate: index.Highest_Rate,
             });
         });
 

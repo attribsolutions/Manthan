@@ -21,7 +21,7 @@ export const defaultSearch = (defaultid,) => {
     });
 
     if (found) {
-        debugger
+        
         document.getElementById("myInput").value = found.text
         retn = { defaultSearch: found.text }
     }

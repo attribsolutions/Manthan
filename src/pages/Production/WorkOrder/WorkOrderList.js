@@ -83,14 +83,14 @@ const WorkOrderList = () => {
     }
 
     function fromdateOnchange(e, date) {
-        debugger
+        
         let newObj = { ...hederFilters }
         newObj.fromdate = date
         setHederFilters(newObj)
     }
 
     function todateOnchange(e, date) {
-        debugger
+        
         let newObj = { ...hederFilters }
         newObj.todate = date
         setHederFilters(newObj)

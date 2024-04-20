@@ -122,7 +122,7 @@ export function stockDistributeFunc(index1, _key) {
 // ************************************************************************
 
 export function returnQtyOnChange(event, index, _key) {
-    debugger
+    
     let input = Number(event.target.value)
     let ItemTotalStock = Number(index.ItemTotalStock)
     let result = /^\d*(\.\d{0,3})?$/.test(input);

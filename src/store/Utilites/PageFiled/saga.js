@@ -22,7 +22,7 @@ function* commonPageFiled_GenFunc({ pageId }) {
   } catch (error) { }
 }
 function* commonPageFiledList_GenFunc({ pageId }) {
-  debugger
+  
   try {
 
     const response = yield call(commonPageFiled_API, pageId);

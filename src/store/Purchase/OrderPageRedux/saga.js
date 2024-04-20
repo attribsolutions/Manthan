@@ -139,7 +139,7 @@ function* UpdateOrder_ID_GenFunc({ config }) {         // Update Order by subPag
 }
 
 function* orderList_GoBtn_GenFunc({ config }) {
-
+  
   //  Order List Filter by subPageMode
   try {
     const { subPageMode } = config
@@ -155,7 +155,6 @@ function* orderList_GoBtn_GenFunc({ config }) {
     else if ((subPageMode === url.IB_ORDER_PO_LIST) || (subPageMode === url.IB_ORDER_SO_LIST) || (subPageMode === url.IB_INVOICE_STP)) {
       response = yield call(IBOrderList_get_Filter_API, config); // GO-Botton IB-invoice Add Page API
     }
-
 
     newList = yield response.Data.map((i) => {
 
@@ -185,7 +184,7 @@ function* orderList_GoBtn_GenFunc({ config }) {
       } else {
         i.Status = "Open";
         i.Inward = "Open";
-        if (subPageMode === url.GRN_STP_1) {
+        if (subPageMode === url.GRN_STP_1 || (subPageMode === url.ORDER_LIST_1)) {
           i.forceMakeBtnHide = false
         }
       }
