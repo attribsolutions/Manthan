@@ -66,9 +66,10 @@ function* Get_Party_GenFun({ jsonBody }) {   // Only CompanyID is Required
       index['Company'] = index.Company.Name;
       index['PartyType'] = index.PartyType.Name;
       index['PartyTypeID'] = index.PartyType.id;
-      // const routes = index.MCSubParty.map(item => item.Route?.Name).filter(name => name !== null);
-      // index['Route'] = routes.join(', ')
-      index['Route'] = index.MCSubParty[0].Route === null ? null : index.MCSubParty[0].Route.Name;
+      const filterArry = index.MCSubParty
+        .filter(i => i.Route !== null)
+        .map(i => i.Route.Name);
+      index['Route'] = filterArry.length > 0 ? filterArry.join(', ') : '';
 
       if (!index.PriceList) { index.PriceList = '' }
       else { index["PriceList"] = index.PriceList.Name; }
@@ -76,6 +77,7 @@ function* Get_Party_GenFun({ jsonBody }) {   // Only CompanyID is Required
       index["Check"] = false
       return index;
     });
+
     yield put(getPartyListAPISuccess(newArray))
   } catch (error) {
     CommonConsole(error);
