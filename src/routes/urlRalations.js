@@ -146,6 +146,10 @@ export const Party_Details = url.PARTY_DETAILS
 
 export const ItemMasterBulkUpdate = url.ITEM_MASTER_BULK_UPDATE
 
+export const Rate_Master = url.RATE_LIST
+export const Rate_List = url.RATE_MASTER
+
+
 //******************************* Purchase Module ************************************//
 
 export const OrderList_1 = url.ORDER_1;

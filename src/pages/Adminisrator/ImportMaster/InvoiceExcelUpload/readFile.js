@@ -100,7 +100,7 @@ export const readExcelFile = async ({ file, compareParameter, ItemList = [] }) =
 
         if (c1.IsCompulsory && r1[c1.Value] === undefined) {
           const errorMessage = `${c1.Value} : Column Required`;
-          debugger
+          
           if (!NotMapColumn.includes(errorMessage)) {
             NotMapColumn.push(errorMessage);
           }

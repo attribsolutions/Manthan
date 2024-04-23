@@ -205,7 +205,7 @@ const SalesReturn = (props) => {
 
 
     useEffect(() => {
-        debugger
+        
         const jsonBody = JSON.stringify({
             "FromDate": values.ReturnDate,
             "PartyID": commonPartyDropSelect.value

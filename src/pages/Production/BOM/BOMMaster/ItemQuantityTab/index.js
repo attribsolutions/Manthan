@@ -8,7 +8,7 @@ import {
     Row
 } from 'reactstrap';
 import Select from "react-select";
-import { getBaseUnit_ForDropDown, getItemList } from '../../../../../store/actions';
+import { getItemList } from '../../../../../store/actions';
 import { useDispatch, useSelector } from 'react-redux';
 import BOMTable from './Table';
 import { customAlert } from '../../../../../CustomAlert/ConfirmDialog';
@@ -28,7 +28,6 @@ function ItemTab(props) {
 
     useEffect(() => {
         dispatch(getItemList())
-        dispatch(getBaseUnit_ForDropDown());
     }, [dispatch]);
 
     const ItemDropdown_Options = Items.map((index) => ({
@@ -43,8 +42,8 @@ function ItemTab(props) {
         let Item = Items.filter((index) => {
             return index.id === e.value
         })
-        let ItemUnits = Item[0].UnitDetails.map((data) => ({
-            value: data.id,
+        let ItemUnits = Item[0]?.UnitDetails.map((data) => ({
+            value: data.UnitID,
             label: data.UnitName
         }))
         setItemUnitOptions(ItemUnits)

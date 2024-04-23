@@ -180,6 +180,9 @@ const ChallanList = () => {
                                             classNamePrefix="select2-Customer"
                                             options={venderOptions}
                                             onChange={venderOnchange}
+                                            styles={{
+                                                menu: provided => ({ ...provided, zIndex: 2 })
+                                            }}
                                         />
                                     </Col>
                                 </FormGroup>

@@ -301,6 +301,7 @@ const Order = (props) => {
                 }))
 
                 const orderItems = hasEditVal.OrderItems.map((ele, k) => {
+
                     ele["id"] = k + 1
                     return ele
                 });
@@ -428,6 +429,7 @@ const Order = (props) => {
     useEffect(() => {
         if (goBtnOrderdata) {
             let { OrderItems = [], TermsAndConditions = [] } = goBtnOrderdata
+
             if (!selecedItemWiseOrder) { setOrderItemTable(OrderItems) }
             setitemSelectOptions(OrderItems.map(i => ({ ...i, value: i.Item_id, label: i.ItemName })))
 
@@ -652,7 +654,9 @@ const Order = (props) => {
                         row["po_Unit_id"] = i.UnitID;
                         row["UnitName"] = i.UnitName;
                         row["BaseUnitQuantity"] = i.BaseUnitQuantity;
-                        row["Rate"] = ((i.BaseUnitQuantity / i.BaseUnitQuantityNoUnit) * i.Rate).toFixed(2);
+                        if (!(subPageMode === url.ORDER_1)) {
+                            row["Rate"] = ((i.BaseUnitQuantity / i.BaseUnitQuantityNoUnit) * i.Rate).toFixed(2);
+                        }
                     }
 
                 } else {
@@ -715,6 +719,9 @@ const Order = (props) => {
 
                                 document.getElementById(`Rate-${key}`).innerText = _cfunc.amountCommaSeparateFunc(Number(row.Rate).toFixed(2))
                             }}
+                            styles={{
+                                menu: provided => ({ ...provided, zIndex: 2 })
+                            }}
                         >
                         </Select >
                     </div>
@@ -733,6 +740,7 @@ const Order = (props) => {
             },
             formatExtraData: { tableList: orderItemTable },
             formatter: (value, row, k, { tableList }) => {
+
                 if (subPageMode === url.ORDER_1) {
                     return (
                         <div key={row.id} className="text-end">
@@ -1700,7 +1708,11 @@ const Order = (props) => {
                             )}
                         </ToolkitProvider>
 
-                        <OrderPageTermsTable tableList={termsAndConTable} setfunc={setTermsAndConTable} privious={editVal.TermsAndConditions} tableData={orderItemTable} />
+                        <OrderPageTermsTable
+                            tableList={termsAndConTable}
+                            setfunc={setTermsAndConTable}
+                            privious={editVal.TermsAndConditions}
+                            tableData={orderItemTable} />
 
                         {
                             ((orderItemTable.length > 0) && (!isOpen_assignLink)) &&

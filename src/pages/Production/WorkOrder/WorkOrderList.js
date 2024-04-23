@@ -27,6 +27,7 @@ const WorkOrderList = () => {
 
     const [pageMode, setpageMode] = useState(mode.defaultList)
     const [hederFilters, setHederFilters] = useState({ fromdate: currentDate_ymd, todate: currentDate_ymd, })
+    
     const reducers = useSelector(
         (state) => ({
             tableList: state.WorkOrderReducer.WorkOrderList,
@@ -81,13 +82,15 @@ const WorkOrderList = () => {
         dispatch(getWorkOrderListPage(jsonBody));
     }
 
-    function fromdateOnchange( date) {
+    function fromdateOnchange(e, date) {
+        
         let newObj = { ...hederFilters }
         newObj.fromdate = date
         setHederFilters(newObj)
     }
 
-    function todateOnchange( date) {
+    function todateOnchange(e, date) {
+        
         let newObj = { ...hederFilters }
         newObj.todate = date
         setHederFilters(newObj)

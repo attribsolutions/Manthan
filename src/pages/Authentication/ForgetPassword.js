@@ -92,7 +92,7 @@ const ForgetPasswordPage = props => {
   function handleValidSubmit(event, values) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const isEmail = !values.email.match(emailRegex)
-    debugger
+    
     if (values.email === "" || isEmail) {
       dispatch(userForgetPassword_sendOTP_Error("Invalid Email"));
       return

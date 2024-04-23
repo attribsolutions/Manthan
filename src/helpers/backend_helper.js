@@ -631,7 +631,7 @@ export const Upload_Return_Api = ({ formData, updateId }) => putForFormData(`${u
 export const Go_Button_Credit_Debit_Post_API = (jsonBody) => post(url.CREDIT_DEBIT_FILTER, jsonBody)// postapi
 export const Credit_Debit_Save_API = ({ jsonBody }) => post(url.CREDIT_DEBIT, jsonBody)//post api
 export const del_Credit_List_API = ({ deleteId }) => del(`${url.CREDIT_DEBIT}/${deleteId}`)// delete api
-export const BulkCreditNote_delete_API = ({jsonBody}) => delwithPostBody(url.BULK_CREDIT_NOTE_DELETE, jsonBody)
+export const BulkCreditNote_delete_API = ({ jsonBody }) => delwithPostBody(url.BULK_CREDIT_NOTE_DELETE, jsonBody)
 export const Edit_Credit_List_API = ({ editId }) => get(`${url.CREDIT_DEBIT}/${editId}`)// Edit api
 export const InvoiceReturn_API = (id) => get(`${url.INVOICE_RETURN}/${id}`)// Invoice Return api
 export const Receipt_Number_API = (jsonBody) => post(url.RECEIPT_NUMBER_LIST, jsonBody)// postapi
@@ -819,6 +819,15 @@ export const PartyEmployeeDetails = ({ EmployeeId }) => get(`${url.GET_PARTY_EMP
 //Log Api
 
 export const Notification_Log = ({ jsonBody }) => post(url.NOTIFICATION_LOG, jsonBody)// post api
+
+
+// Rate Master API
+export const GoButton_Post_API_For_RateMaster = (data) => post(url.GO_BUTTON_POST_API_FOR_RATE_MASTER, data)// go button postapi
+export const Rate_MasterPage_delete_API = (id) => del(`${url.DELETE_API_FOR_RATE_MASTER_PAGE}/${id}`)// delete api
+export const RateMaster_Post_API = (data) => post(url.RATES, data)// post api
+export const GetRateList_For_Listpage = () => get(url.RATES)// get List
+export const delete_RateList_API = ({ deleteId }) => del(`${url.DELETE_API_FOR_RATE_LIST_PAGE}/${deleteId}`)// Delete api
+
 
 export {
 	getLoggedInUser,

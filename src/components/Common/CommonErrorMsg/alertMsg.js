@@ -1,7 +1,7 @@
 
 // Common Error Messages
 const commonPartySelectionIsRequired = "Please Select Party"
-const atLeastOneCheckboxCheck="Please select at least one checkbox before downloading."
+const atLeastOneCheckboxCheck = "Please select at least one checkbox before downloading."
 
 // Image Related Error Message 
 const imageNotUploaded = "Images not uploaded"
@@ -54,12 +54,13 @@ const atLeastOneRetailerIsRequired = "At least One Retailer is Selected"
 // Management Parties (Party Assign) Save Button Error Message
 const atLeastOnePartySelectionRequired = "At least One Party is Selected"
 
-// MRP , GST and Margin Page Error Messages
+// MRP , Rate,GST and Margin Page Error Messages
 const deleteThisItem = "Are you sure you want to delete this Item"
 const effectiveDateIsRequired = "Please select EffectiveDate"
 const MRPIsRequired = "Please Enter MRP"
 const marginISRequired = "Please Enter Margin"
 const enterGSTPercentage_HSNCodeIsRequired = "Please Enter One GSTPercentage & HSNCode"
+const RateIsRequired = "Please Enter Rate"
 
 //Item Master Bulk Update 
 const fieldSelectionIsRequired = "Field selection is Required."
@@ -145,6 +146,7 @@ const unitIsRequired = 'Unit Is Required'
 const mrpIsRequired = 'MRP Is Required'
 const gstIsRequired = 'GST Is Required'
 const batchCodeIsRequired = 'BatchCode Is Required'
+const rateIsRequired = "Rate Is Required."
 
 //Inter Branch Module (BOM)
 const atLeastOneMaterialDataAddInTable = "At Least One Matrial data Add in the table"
@@ -153,7 +155,7 @@ const contentItemQtyIsReq = 'Content Item Is Required'
 
 // Order Error Message
 const select_PO_Type = "Please Select PO Type"
-const itemRateIsRequired = "This Item Rate Is Required..."
+const itemRateIsRequired = "This Item Rate Is Required."
 const enterOneTerms_and_Cond = "Please Enter One Terms And Condition"
 const selectOneOrder = "Please Select One Order"
 const selectSupplier = "Please Select Supplier"
@@ -183,6 +185,7 @@ export const alertMessages = {
     batchCodeIsRequired,
     gstIsRequired,
     mrpIsRequired,
+    rateIsRequired,
     unitIsRequired,
     stockIsZero,
     selectItemName,
@@ -276,7 +279,8 @@ export const alertMessages = {
     DistrictIsRequired,
     ImageIsRequired,
     No_Kg_IsRerquired,
-    atLeastOneCheckboxCheck
+    atLeastOneCheckboxCheck,
+    RateIsRequired
 };
 
 

@@ -20,12 +20,13 @@ import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import * as _act from "../../../store/actions";
 
-import { C_DatePicker } from "../../../CustomValidateForm";
+import { CInput, C_DatePicker, decimalRegx } from "../../../CustomValidateForm";
 import { initialFiledFunc } from "../../../components/Common/validationFunction";
 import { useLayoutEffect } from "react";
 import { pageFieldUseEffect, saveMsgUseEffect, table_ArrowUseEffect, userAccessUseEffect } from "../../../components/Common/CommonUseEffect";
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
+import { goButtonForRate_Master, saveRateMaster } from "../../../store/Administrator/RateMasterRedux/action";
 
 let initialTableData = []
 
@@ -53,6 +54,7 @@ const GRNAdd = (props) => {
     const [invoiceNo, setInvoiceNo] = useState('');
     const [editCreatedBy, seteditCreatedBy] = useState("");
     const [EditData, setEditData] = useState({});
+    const [ratePostJsonBody, setRatePostJsonBody] = useState([]);
 
     const {
         items,
@@ -60,18 +62,27 @@ const GRNAdd = (props) => {
         userAccess,
         pageField,
         saveBtnloading,
+        RateMasterGoButton
     } = useSelector((state) => ({
         saveBtnloading: state.GRNReducer.saveBtnloading,
         items: state.GRNReducer.GRNitem,
         postMsg: state.GRNReducer.postMsg,
         updateMsg: state.GRNReducer.updateMsg,
+
+        RateMasterGoButton: state.RateMasterReducer.RateMasterGoButton,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField
     }));
 
     useLayoutEffect(() => {
         dispatch(_act.commonPageFieldSuccess(null));
-        dispatch(_act.commonPageField(pageId.GRN_ADD_1))
+        dispatch(_act.commonPageField(pageId.GRN_ADD_1));
+        const jsonBody = JSON.stringify({
+            "EffectiveDate": currentDate_ymd,
+            "CompanyID": _cfunc.loginCompanyID()
+        });
+
+        dispatch(goButtonForRate_Master({ jsonBody }));
     }, [])
 
     const values = { ...state.values }
@@ -92,6 +103,14 @@ const GRNAdd = (props) => {
         postSuccss: _act.saveGRNSuccess,
         listPath: url.GRN_LIST_1
     }), [postMsg]);
+
+    useEffect(() => {
+        if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
+            if (ratePostJsonBody.length > 0) {
+                dispatch(saveRateMaster(JSON.stringify(ratePostJsonBody)));
+            }
+        }
+    }, [postMsg])
 
     useEffect(() => pageFieldUseEffect({// useEffect common pagefield for master
         state,
@@ -170,7 +189,6 @@ const GRNAdd = (props) => {
             }
         }
     }, [])
-
 
     function val_onChange(val, row, type) {
 
@@ -306,26 +324,26 @@ const GRNAdd = (props) => {
             formatter: (value, row, k) => {
                 return (
                     <span className="text-right" >
-                        <Input
+                        <CInput
 
                             type="text"
                             className=" text-end"
-                            defaultValue={row.MRP}
-
+                            defaultValue={row.MRPValue}
+                            cpattern={decimalRegx}
                             id={`MRP${row.id}`}
                             autoComplete="off"
                             key={row.id}
                             disabled={true}
-                            // disabled={pageMode === mode.view ? true : false}
-                            onChange={(e) => {
-                                const val = e.target.value
-                                let isnum = /^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)?([eE][+-]?[0-9]+)?$/.test(val);
-                                if ((isnum) || (val === '')) {
-                                    row.MRP = val;
-                                } else {
-                                    document.getElementById(`MRP${row.id}`).value = row.Quantity
-                                }
-                            }}
+                        // disabled={pageMode === mode.view ? true : false}
+                        // onChange={(e) => {
+                        //     const val = e.target.value
+                        //     let isnum = /^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)?([eE][+-]?[0-9]+)?$/.test(val);
+                        //     if ((isnum) || (val === '')) {
+                        //         row.MRPValue = val;
+                        //     } else {
+                        //         document.getElementById(`MRP${row.id}`).value = row.Quantity
+                        //     }
+                        // }}
                         />
                     </span>
                 )
@@ -344,14 +362,15 @@ const GRNAdd = (props) => {
                 if (row.Amount === undefined) { row["Amount"] = 0 }
                 return (
                     <span className="text-right" >
-                        <Input
+                        <CInput
                             key={row.id}
                             type="text"
                             id={`Ratey${k}`}
                             className=" text-end"
                             defaultValue={row.Rate}
+                            cpattern={decimalRegx}
                             autoComplete="off"
-                            disabled={(row.GST === '') || (pageMode === mode.view) ? true : false}
+                            // disabled={((row.GST === '') || (pageMode === mode.view)) ? true : false}
                             onChange={e => {
                                 row["Rate"] = e.target.value;
                                 const qty = document.getElementById(`Quantity${row.id}`)
@@ -544,7 +563,7 @@ const GRNAdd = (props) => {
             _cfunc.btnIsDissablefunc({ btnId, state: false })
         }
         try {
-            const itemArr = []
+            const GRNItemArray = []
             const isvalidMsg = [];
 
             grnItemList.forEach(i => {
@@ -555,8 +574,10 @@ const GRNAdd = (props) => {
                     Item: i.Item,
                     Quantity: i.Quantity,
                     MRP: i.MRP,
+                    MRPValue: i.MRPValue,
                     ReferenceRate: i.Rate,
                     Rate: i.Rate,
+                    vendorOrderRate: i.vendorOrderRate,
                     Unit: i.Unit,
                     BaseUnitQuantity: i.BaseUnitQuantity,
                     BatchDate: i.BatchDate,
@@ -580,8 +601,7 @@ const GRNAdd = (props) => {
 
                 }
 
-
-                let isfound = itemArr.filter(ind => {
+                let isfound = GRNItemArray.filter(ind => {
                     return ind.Item === i.Item
                 })
 
@@ -594,18 +614,18 @@ const GRNAdd = (props) => {
                     if ((i.Quantity > 0)) {
 
                         if (dubli.length === 0) {
-                            itemArr.push(arr)
+                            GRNItemArray.push(arr)
                         } else {
                             isvalidMsg.push(`${i.ItemName}:  This Item  Is Dublicate...`)
                         }
                     }
                 } else if ((i.Quantity > 0)) {
-                    itemArr.push(arr)
+                    GRNItemArray.push(arr)
                 }
 
             })
 
-            if (invoiceNo.length === 0) {
+            if (invoiceNo === '') {
 
                 customAlert({
                     Type: 3,
@@ -613,7 +633,7 @@ const GRNAdd = (props) => {
                 })
                 return returnFunc()
             }
-            if (itemArr.length === 0) {
+            if (GRNItemArray.length === 0) {
 
                 customAlert({
                     Type: 3,
@@ -621,6 +641,7 @@ const GRNAdd = (props) => {
                 })
                 return returnFunc()
             }
+
             if (isvalidMsg.length > 0) {
 
                 customAlert({
@@ -629,6 +650,34 @@ const GRNAdd = (props) => {
                 })
                 return returnFunc()
             }
+
+            const differentRates = [];
+
+            GRNItemArray.forEach(grnItem => {
+                const correspondingButton = RateMasterGoButton.Data.find(buttonItem => buttonItem.Item === grnItem.Item);
+                if (correspondingButton) {
+                    const rateToCompare = correspondingButton.CurrentRate !== "" ? parseFloat(correspondingButton.CurrentRate) : parseFloat(correspondingButton.vendorOrderRate);
+                    const grnRate = parseFloat(grnItem.Rate);
+                    const vendorRate = parseFloat(grnItem.vendorOrderRate);
+                    if (grnRate !== rateToCompare || vendorRate !== rateToCompare) {
+                        differentRates.push({ Item: grnItem.Item, Rate: grnItem.Rate });
+                    }
+                }
+            });
+
+            const RateJsonBody = differentRates.map((index) => ({
+                "id": index.Item,
+                "Rate": index.Rate,
+                "CommonID": 0,
+                "EffectiveDate": currentDate_ymd,
+                "Company": _cfunc.loginCompanyID(),
+                "CreatedBy": _cfunc.loginUserID(),
+                "UpdatedBy": _cfunc.loginUserID(),
+                "IsDeleted": 0,
+                "Item": index.Item,
+            }))
+
+            setRatePostJsonBody(RateJsonBody);
 
             const jsonBody = JSON.stringify({
                 GRNDate: grnDate,
@@ -639,15 +688,13 @@ const GRNAdd = (props) => {
                 InvoiceNumber: invoiceNo,
                 CreatedBy: _cfunc.loginUserID(),
                 UpdatedBy: 1,
-                GRNItems: itemArr,
+                GRNItems: GRNItemArray,
                 GRNReferences: openPOdata,
             });
 
             if (pageMode === mode.edit) {
-
                 returnFunc()
             } else {
-
                 dispatch(_act.saveGRNAction({ jsonBody, btnId }))
             }
 

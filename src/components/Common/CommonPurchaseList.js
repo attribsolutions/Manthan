@@ -254,7 +254,7 @@ const CommonPurchaseList = (props) => {
         sort: true,
         attrs: (cell, row, rowIndex, colIndex) => ({ 'data-label': 'Action', "sticky-col": (colIndex === 0) ? "true" : "false" }),
         formatter: (cellContent, rowData) => {
-
+          
           if (rowData.IsRecordDeleted === true) {   ///hide button in GRN list 3 STP page last action column for Make Button
             return (
               <div>
@@ -265,6 +265,7 @@ const CommonPurchaseList = (props) => {
                     data-mdb-toggle="tooltip"
                     data-mdb-placement="top"
                     title={"UnHide"}
+                   
                     onClick={() => {
                       !listBtnLoading && hideBtnHandler(rowData);
                     }}
@@ -285,6 +286,7 @@ const CommonPurchaseList = (props) => {
                     className={printBtnCss}
                     style={{ marginLeft: "9px" }}
                     title="Print Invoice"
+
                     onClick={() => {
                       const btnId = `btn-print-${rowData.id}`
                       !listBtnLoading && printBtnHandler(rowData, btnId)
@@ -310,6 +312,7 @@ const CommonPurchaseList = (props) => {
                   data-mdb-toggle="tooltip"
                   data-mdb-placement="top"
                   title={makeBtnName}
+                  disabled={rowData.forceMakeBtnHide}
                   onClick={() => {
                     !listBtnLoading && makeBtnHandler(rowData);
                   }}

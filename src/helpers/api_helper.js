@@ -106,7 +106,7 @@ export function postMethodExcel(url, body) {
 
 
 export function delwithPostBody(url, body) {
-  debugger
+  
   return axiosApi
     .delete(url, {
       headers: {

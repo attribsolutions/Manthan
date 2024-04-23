@@ -27,7 +27,7 @@ const CountLabelComp = () => {
 
     const CountLabel = useSelector(({ BreadcrumbReducer }) => BreadcrumbReducer.breadcrumbDetail?.CountLabel);
     const showCountlabel = useSelector(({ BreadcrumbReducer }) => BreadcrumbReducer.showCountlabel);
-
+    
     if (!(CountLabel && showCountlabel.length > 0)) {
         return null;
     }
@@ -47,7 +47,7 @@ const CountLabelComp = () => {
                 <span style={{ color: amountColor, marginRight: "5px" }}>{countPart}</span>
                 {amountPart && (
                     <>
-                        <span style={{ color: countAndRupeeColor, marginRight: "5px" }}>₹</span>
+                        <span style={{ color: countAndRupeeColor, marginRight: "5px" }}>₹:</span>
                         <span style={{ color: amountColor }}>{amountPart}</span>
                     </>
                 )}

@@ -9,7 +9,7 @@ import {
 import { MetaTags } from "react-meta-tags";
 import { Breadcrumb_inputName, commonPageFieldSuccess } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
-import {  commonPageField } from "../../../store/actions";
+import { commonPageField } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import {
     comAddPageFieldFunc,
@@ -57,7 +57,8 @@ const changeBtnID1 = "workOrderchangeBtnID1"
 const WorkOrder = (props) => {
 
     const dispatch = useDispatch();
-    const history = useHistory()
+    const history = useHistory();
+    const currentDate_ymd = _cfunc.date_ymd_func();
 
     const [EditData, setEditData] = useState({});
     const [modalCss, setModalCss] = useState(false);
@@ -67,7 +68,7 @@ const WorkOrder = (props) => {
 
     const fileds = {
         id: "",
-        WorkOrderDate: '',
+        WorkOrderDate: currentDate_ymd,
         ItemName: [],
         NumberOfLot: "",
         Quantity: "",
@@ -206,7 +207,7 @@ const WorkOrder = (props) => {
             dispatch(SaveWorkOrderMasterSuccess({ Status: false }))
             dispatch(customAlert({
                 Type: 4,
-                 Message: JSON.stringify(postMsg.Message),
+                Message: JSON.stringify(postMsg.Message),
             })
             )
         }
@@ -222,7 +223,7 @@ const WorkOrder = (props) => {
                 pathname: url.WORK_ORDER_LIST,
             })
         } else if (updateMsg.Status === true && !modalCss) {
-             customAlert({
+            customAlert({
                 Type: 3,
                 Message: JSON.stringify(updateMsg.Message),
             })
@@ -395,11 +396,11 @@ const WorkOrder = (props) => {
     }
 
     const SaveHandler = async (event) => {
-        
+
         event.preventDefault();
         const btnId = event.target.id
         try {
-             {
+            {
                 btnIsDissablefunc({ btnId, state: true })
                 const WorkOrderItems = BOMItems.map((index) => ({
                     Item: index.Item,
@@ -424,20 +425,20 @@ const WorkOrder = (props) => {
                     dispatch(updateWorkOrderList({ jsonBody, updateId: values.id, btnId }));
                 }
                 else {
-                    
+
                     dispatch(SaveWorkOrderMaster({ jsonBody, btnId }));
                 }
             }
         } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
     };
 
-    
+
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
                 <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
                 <div className="page-content" style={{ marginBottom: "200px" }}>
-                    <form  noValidate>
+                    <form noValidate>
                         <div className="px-2 mb-1 c_card_filter text-black" >
                             <Row>
                                 <Col sm={11}>
@@ -452,8 +453,11 @@ const WorkOrder = (props) => {
                                                         name="WorkOrderDate"
                                                         value={values.WorkOrderDate}
                                                         disabled={(BOMItems.length > 0) || (pageMode === mode.edit) ? true : false}
-                                                        onChange={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
-                                                        onReady={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
+                                                        onChange={(y, v, e) => {
+                                                            onChangeDate({ e, v, state, setState })
+                                                        }}
+                                                    // onChange={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
+                                                    // onReady={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
                                                     />
                                                     {isError.WorkOrderDate.length > 0 && (
                                                         <span className="invalid-feedback">{isError.WorkOrderDate}</span>

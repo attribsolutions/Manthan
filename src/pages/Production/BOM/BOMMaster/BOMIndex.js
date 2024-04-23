@@ -41,6 +41,7 @@ const BOMMaster = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory()
+    const currentDate_ymd = _cfunc.date_ymd_func();
 
     const [EditData, setEditData] = useState({});
     const [modalCss, setModalCss] = useState(false);
@@ -53,7 +54,7 @@ const BOMMaster = (props) => {
 
     const fileds = {
         id: "",
-        BomDate: "",
+        BomDate: currentDate_ymd,
         ItemName: "",
         EstimatedOutputQty: "",
         UnitName: "",
@@ -238,13 +239,13 @@ const BOMMaster = (props) => {
     }
 
     function Items_Dropdown_Handler(e) {
-        
+
         setItemTabDetails([])
         let Item = Items.filter((index) => {
             return index.id === e.value
         })
-        let ItemUnits = Item[0].UnitDetails.map((data) => ({
-            value: data.id,
+        let ItemUnits = Item[0]?.UnitDetails.map((data) => ({
+            value: data.UnitID,
             label: data.UnitName
         }))
 
@@ -322,11 +323,16 @@ const BOMMaster = (props) => {
                                         <Label className="mt-2" style={{ width: "115px" }}>{fieldLabel.BomDate} </Label>
                                         <Col sm="7">
                                             <C_DatePicker
+                                                options={{
+                                                    altInput: true,
+                                                    altFormat: "d-m-Y",
+                                                    dateFormat: "Y-m-d",
+                                                }}
                                                 name="BomDate"
                                                 value={values.BomDate}
                                                 disabled={pageMode === mode.edit ? true : false}
                                                 onChange={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
-                                                onReady={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
+                                            // onReady={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
                                             />
                                             {isError.BomDate.length > 0 && (
                                                 <span className="invalid-feedback">{isError.BomDate}</span>

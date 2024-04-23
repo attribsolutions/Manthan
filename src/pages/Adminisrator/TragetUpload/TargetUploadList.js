@@ -84,7 +84,7 @@ const TargetUploadList = () => {
     Party_Option.unshift(allLabelWithZero)
 
     const selectDeleteBtnHandler = async (row = []) => {
-        debugger
+        
         let isAllcheck = row.filter(i => (i.hasAllSelect))
         let isRowcheck = row.filter(i => (i.selectCheck))
         let ischeck = [];
