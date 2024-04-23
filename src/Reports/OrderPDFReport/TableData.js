@@ -10,9 +10,9 @@ export const columns = [
     "Discount",
     "Discount Amount",
     "Basic   Amount ",
-    "       CGST        %        Amount",
+    "       CGST           %        Amount",
     "CGST   Amount ",
-    "       SGST        %        Amount",
+    "       SGST           %        Amount",
     "SGST   Amount",
     "Total Amount"];
 
@@ -71,7 +71,7 @@ export const Rows = (data) => {
 
                 const tableitemRow = [
                     `(${element.HSNCode}) ${element.ItemName}\n${element.Comment === null ? "" : element.Comment}`,
-                    `${Number(element.Quantity).toFixed(2)} ${element.PrimaryUnitName}  ${element.UnitName}`,
+                    `${Number(element.Quantity).toFixed(2)}\n${element.PrimaryUnitName}${element.UnitName}`,
                     `${(numberWithCommas(Number(element.MRPValue).toFixed(2)))}`,
                     `${(numberWithCommas(Number(element.Rate).toFixed(2)))}`,
                     `${element.Discount} ${element.DiscountType === "1" ? "Rs" : "%"}`,

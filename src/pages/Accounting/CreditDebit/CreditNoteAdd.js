@@ -45,6 +45,8 @@ import * as _cfunc from "../../../components/Common/CommonFunction";
 import { C_DatePicker, C_Select } from "../../../CustomValidateForm";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 
+import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
+
 const CreditNoteAdd = (props) => {
     const history = useHistory();
     const dispatch = useDispatch();
@@ -528,7 +530,7 @@ const CreditNoteAdd = (props) => {
 
 
                     <FormGroup>
-                        <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
+                    <SaveButtonDraggable>
                             <SaveButton pageMode={pageMode}
                                 loading={saveBtnloading}
                                 onClick={saveHandeller}
@@ -537,7 +539,7 @@ const CreditNoteAdd = (props) => {
                                 module={"Receipts"}
 
                             />
-                        </Col>
+                      </SaveButtonDraggable>
                     </FormGroup >
 
 

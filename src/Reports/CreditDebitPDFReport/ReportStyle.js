@@ -56,7 +56,7 @@ export const pageHeder = (doc, data) => {
     doc.setDrawColor(0, 0, 0);
 
     doc.line(570, data.isQR ? 103 : 45, 30, data.isQR ? 103 : 45)  //horizontal line 1 billby upper for repeat header
-    doc.line(570, data.isQR ? 118 : 60, 30, data.isQR ? 118 : 60);// full horizontal bill by bill to below line 
+    doc.line(408, data.isQR ? initial_y : 45, 408, 16);//vertical line header section billby 
 
 
     doc.setFontSize(8)
@@ -65,7 +65,6 @@ export const pageHeder = (doc, data) => {
 }
 
 export const reportHeder1 = (doc, data) => {
-
 
     let Y1 = 0
     if (data.isQR) {
@@ -80,22 +79,6 @@ export const reportHeder1 = (doc, data) => {
     doc.text("Billed by", 80, Y1)  //bill by 
     doc.text('Billed to', 280, Y1) //billed to
     doc.text('Details of Note', 440, Y1)
-
-    // doc.setDrawColor(0, 0, 0);
-    // doc.line(570, data.isQR ? 103 : 63, 30, data.isQR ? 103 : 63) //horizontal line 1 billby upper
-    // doc.line(570, 16, 30, 16);//horizontal line 2
-    // doc.line(570, data.isQR ? 120 : 80, 30, data.isQR ? 120 : 80);//horizontal line 3
-
-    // doc.setFontSize(10)
-    // doc.setFont(undefined, 'bold')
-    // doc.text("Billed by", 80, 55)    //bill by 
-    // doc.text('Billed to', 280, 55)   //billed to
-    // doc.text('Details of Note', 440, 55) //Details of Transport
-    // doc.line(570, 45, 30, 45);//horizontal line  when header on next page bottom line
-    // doc.line(30, 350, 30, 16);//vertical left 1
-    // doc.line(570, 350, 570, 16);//vertical left 2
-
-
 
     var BilledByStyle = {
 
@@ -267,6 +250,7 @@ export const reportHeder1 = (doc, data) => {
         startY: data.isQR ? 120 : 60
 
     };
+    const CreditNoteType = (data.NoteType === "CreditNote")
     var DetailsOfTransportStyle = {
         didDrawCell: (data1) => {
             const rowIdx = data1.row.index;
@@ -287,7 +271,6 @@ export const reportHeder1 = (doc, data) => {
                 doc.text('Invoice Date: ', x, y)
             };
             if (rowIdx === 2 && colIdx === 0) {
-
                 let x = data1.cursor.x + 2
                 let y = data1.cursor.y + 8
                 doc.setFontSize(8)
@@ -302,10 +285,17 @@ export const reportHeder1 = (doc, data) => {
                 doc.setFontSize(8)
                 doc.setFont(undefined, 'bold')
                 doc.text('Narration: ', x, y)
-
-
             };
-            if (rowIdx === 4 && colIdx === 0) {
+
+            if (rowIdx === 4 && colIdx === 0 && CreditNoteType) {
+                let x = data1.cursor.x + 2
+                let y = data1.cursor.y + 8
+                doc.setFontSize(8)
+                doc.setFont(undefined, 'bold')
+                doc.text('Note Reason: ', x, y)
+            };
+
+            if (CreditNoteType ? rowIdx === 5 : rowIdx === 4 && colIdx === 0) {
 
                 let x = data1.cursor.x + 2
                 let y = data1.cursor.y + 8
@@ -313,7 +303,7 @@ export const reportHeder1 = (doc, data) => {
                 doc.setFont(undefined, 'bold')
                 doc.text('IRN No: ', x, y)
             };
-            if (rowIdx === 5 && colIdx === 0) {
+            if (CreditNoteType ? rowIdx === 6 : rowIdx === 5 && colIdx === 0) {
 
                 let x = data1.cursor.x + 2
                 let y = data1.cursor.y + 8
@@ -369,13 +359,18 @@ export const reportHeder1 = (doc, data) => {
     priLength()
 
     doc.autoTable(table.DetailsOfTransport, table.DetailsOfTransportRow(data), DetailsOfTransportStyle);
+    
     priLength()
 
 
-    doc.line(570, data.isQR ? initial_y : 144, 30, data.isQR ? initial_y : 144);// full horizontal bill by bill to below line 
+    doc.line(570, data.isQR ? initial_y : 61, 30, data.isQR ? initial_y : 61);// full horizontal bill by bill to below line 
 
-    doc.line(408, data.isQR ? initial_y : 144, 408, 16);//vertical line header section billby 
-    doc.line(220, data.isQR ? initial_y : 144, 220, data.isQR ? 103 : 46);//vertical  line header section billto
+    doc.line(408, initial_y , 408, 16);//vertical line header section billby 
+    doc.line(220, initial_y , 220, data.isQR ? 103 : 46);//vertical  line header section billto
+
+
+    doc.line(570, initial_y, 30, initial_y);// full horizontal bill by bill to below line 
+    debugger
 
 }
 
@@ -393,12 +388,12 @@ export const reportHeder3 = (doc, data) => {
         doc.text(`Debit Note No:   ${data.FullNoteNumber}`, 410, 25)
         var date = date_dmy_func(data.CRDRNoteDate)
         var time = convertOnlyTimefunc(data.CreatedOn)
-        doc.text(`Debit Note Date: ${date}  ${time}`, 410, 40)
+        doc.text(`Debit Note Date: ${date} ${time}`, 410, 40)
     } else if ((data.NoteType === "CreditNote") || (data.NoteType === "Goods CreditNote")) {
         doc.text(`Credit Note No:   ${data.FullNoteNumber}`, 410, 25)
         var date = date_dmy_func(data.CRDRNoteDate)
         var time = convertOnlyTimefunc(data.CreatedOn)
-        doc.text(`Credit Note Date: ${date}  ${time}`, 410, 40)
+        doc.text(`Credit Note Date: ${date} ${time}`, 410, 40)
     }
 
 }
@@ -614,26 +609,6 @@ export const reportFooterForPlainCredit_DebitA4 = (doc, data) => {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 export const tableBody = (doc, data) => {
 
     var options = {
@@ -681,7 +656,7 @@ export const tableBody = (doc, data) => {
             const rowIdx = data1.row.index;
             const colIdx = data1.column.index;
             if (rowIdx === 0 && colIdx === 8) {
-                if (data1.row.cells[8].raw === "          CGST           %            Amount") {
+                if (data1.row.cells[8].raw === "          CGST           %        Amount") {
 
                     const cellWidth = data1.cell.width;
                     const cellHeight = data1.cell.height;
@@ -699,7 +674,7 @@ export const tableBody = (doc, data) => {
                 }
             }
             if (rowIdx === 0 && colIdx === 10) {
-                if (data1.row.cells[10].raw === "          SGST           %             Amount") {
+                if (data1.row.cells[10].raw === "          SGST           %        Amount") {
 
                     const cellWidth = data1.cell.width;
                     const cellHeight = data1.cell.height;
@@ -721,7 +696,7 @@ export const tableBody = (doc, data) => {
 
         },
         margin: {
-            left: 30, right: 25, top: 56
+            left: 30, right: 25, top: 45
         },
         theme: 'grid',
         headerStyles: {
