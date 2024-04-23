@@ -20,11 +20,12 @@ import {
     getCurrent_Month_And_Year,
 } from "../../pages/Accounting/Claim Tracking Entry/ClaimRelatedFunc";
 import {
+    Target_VS_AchievementGroupWise_Go_Button_API,
+    Target_VS_AchievementGroupWise_Go_Button_API_Success,
     Target_VS_Achievement_Go_Button_API,
     Target_VS_Achievement_Go_Button_API_Success
 } from "../../store/Report/TargetVSAchievementRedux/action";
 import { ExcelReportComponent } from "../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS";
-import GlobalCustomTable from "../../GlobalCustomTable";
 
 const TargetVSAchievement = (props) => {
 
@@ -36,15 +37,33 @@ const TargetVSAchievement = (props) => {
     const [yearAndMonth, setYearAndMonth] = useState(getCurrent_Month_And_Year);
     const [btnMode, setBtnMode] = useState("");
 
+    const [isGropuWise, setisGropuWise] = useState(false);
+    const [Tabledata, setTabledata] = useState([]);
+
+
+    const [tablecolumn, settablecolumn] = useState([{}]);
+
+
+
+
+
+
+
+
+
+
+
+
     const {
         userAccess,
         pageField,
         goBtnLoading,
-        tableData
+        tableData,
+        tableDataGroupWise
     } = useSelector((state) => ({
         goBtnLoading: state.TargetVsAchievementReducer.listBtnLoading,
         tableData: state.TargetVsAchievementReducer.TargetVsAchievementGobtn,
-
+        tableDataGroupWise: state.TargetVsAchievementReducer.TargetVsAchievementGropuWiseGobtn,
         pageField: state.CommonPageFieldReducer.pageField,
         userAccess: state.Login.RoleAccessUpdateData,
     }));
@@ -74,7 +93,7 @@ const TargetVSAchievement = (props) => {
     useEffect(() => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(pageId.TARGET_VS_ACHIEVEMENT));
-        dispatch(BreadcrumbShowCountlabel(`Count:${tableData.length}`));
+        dispatch(BreadcrumbShowCountlabel(`Count:${Tabledata.length + 1}`));
         return () => {
             dispatch(commonPageFieldSuccess(null));
             dispatch(Target_VS_Achievement_Go_Button_API_Success([]));
@@ -96,7 +115,37 @@ const TargetVSAchievement = (props) => {
         return `${current.Year}-${current.Month}`;
     }, []);
 
+
     const [tableColumns] = DynamicColumnHook({ pageField });
+    const TargetVSAchievementGroupwise = ["AchAmount%", "ContriAmount%", "ContriQty%", "GTAchAmountWithGST", "GTAchQuantityInKG","AchQty%"]
+    const TargetVSAchievement = ["Cluster", "Fy", "ItemName", "ItemSubGroup", "PartyID", "PartyName", "SAPPartyCode", "SubCluster", "Year"]
+
+
+
+    useEffect(() => {
+
+        const newColumns = tableColumns?.map(obj => {
+            obj.showing = true
+            if (TargetVSAchievement.includes(obj.dataField) && isGropuWise) {
+                return null;
+            }
+            if (TargetVSAchievementGroupwise.includes(obj.dataField) && !isGropuWise) {
+                return null;
+            }
+            return obj;
+        }).filter(obj => obj !== null);
+
+        if (newColumns?.length > 0) {
+            settablecolumn(newColumns)
+        }
+
+        if (isGropuWise) {
+            setTabledata(tableDataGroupWise)
+        } else {
+            setTabledata(tableData)
+        }
+
+    }, [isGropuWise, tableData, tableDataGroupWise, tableColumns])
 
     async function MonthAndYearOnchange(e) {
         dispatch(Target_VS_Achievement_Go_Button_API_Success([]));
@@ -107,16 +156,16 @@ const TargetVSAchievement = (props) => {
     useEffect(() => {
 
         if (btnMode === "excel") {
-            if (tableData.length > 0) {
+            if (Tabledata.length > 0) {
                 ExcelReportComponent({   // Download CSV
-                    pageField,
-                    excelTableData: tableData,
+                    customKeyColumns: { tableData: tablecolumn, isButton: true },
+                    excelTableData: Tabledata,
                     excelFileName: "Target Vs Achievement Report",
                 })
                 dispatch(Target_VS_Achievement_Go_Button_API_Success([]));
             }
         }
-    }, [tableData]);
+    }, [Tabledata]);
 
     function goButtonHandler(btnMode) {
         setBtnMode(btnMode)
@@ -126,7 +175,11 @@ const TargetVSAchievement = (props) => {
             "Party": (commonPartyDropSelect.value === 0) ? 0 : commonPartyDropSelect.value,
             "Employee": !(isSCMParty) ? 0 : _cfunc.loginEmployeeID(),
         })
-        dispatch(Target_VS_Achievement_Go_Button_API(jsonBody));
+        if (isGropuWise) {
+            dispatch(Target_VS_AchievementGroupWise_Go_Button_API(jsonBody));
+        } else {
+            dispatch(Target_VS_Achievement_Go_Button_API(jsonBody));
+        }
     };
 
     const pageOptions = {
@@ -135,7 +188,7 @@ const TargetVSAchievement = (props) => {
         pageStartIndex: 1,
         sizePerPage: 10,
         custom: true,
-        totalSize: tableData.length,
+        totalSize: Tabledata.length,
         hidePageListOnlyOnePage: true,
     };
 
@@ -149,7 +202,7 @@ const TargetVSAchievement = (props) => {
                         <Col sm={3} className="">
                             <FormGroup className="mb- row mt-3 mb-1 " >
                                 <Label className="col-sm-5 p-2"
-                                    style={{ width: "83px" }}>Select Month</Label>
+                                    style={{ width: "120px" }}>Select Month</Label>
                                 <Col sm="7">
                                     <Input
                                         className="form-control"
@@ -162,7 +215,61 @@ const TargetVSAchievement = (props) => {
                             </FormGroup>
                         </Col>
 
-                        <Col sm={9} className=" d-flex justify-content-end" >
+
+
+
+                        <Col sm={3} className="">
+                            <FormGroup className="mb- row mt-3 mb-1 " >
+                                <Label className="col-sm-5 p-2"
+                                    style={{ width: "120px" }}>Group wise</Label>
+                                <Col sm="7">
+                                    <div className="form-check form-switch form-switch-md " dir="ltr">
+                                        <Input type="checkbox" className="form-check-input mt-2"
+                                            checked={isGropuWise}
+                                            name="toggle"
+                                            onChange={(event) => {
+                                                setisGropuWise(event.target.checked)
+                                                dispatch(Target_VS_Achievement_Go_Button_API_Success([]));
+                                                dispatch(Target_VS_AchievementGroupWise_Go_Button_API_Success([]));
+                                            }}
+                                        />
+                                        <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
+                                    </div>
+                                </Col>
+                            </FormGroup>
+                        </Col>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                        <Col sm={6} className=" d-flex justify-content-end" >
                             <C_Button
                                 type="button"
                                 spinnerColor="white"
@@ -189,8 +296,8 @@ const TargetVSAchievement = (props) => {
                 <div className="mt-1">
                     <ToolkitProvider
                         keyField="id"
-                        data={tableData}
-                        columns={tableColumns}
+                        data={Tabledata}
+                        columns={tablecolumn}
                         search
                     >
                         {(toolkitProps) => (
