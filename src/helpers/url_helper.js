@@ -553,6 +553,8 @@ export const SWEET_POS_API = '/SweetPOS/SPOSroleaccess'
 // TargetVSAchievement 
 export const TARGET_VS_ACHIEVEMENT_API = '/TargetVSAchievement'
 
+export const TARGET_VS_ACHIEVEMENT_GROUP_API = '/TargetVSAchievementGroupwise'
+
 
 //Log Api
 

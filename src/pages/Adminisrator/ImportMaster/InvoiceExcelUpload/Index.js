@@ -273,7 +273,7 @@ const InvoiceExcelUpload = (props) => {
     };
 
     async function veifyExcelBtn_Handler() {
-        
+
         setverifyLoading(true);
         if (commonPartyDropSelect.value === 0) {
             await customAlert({
@@ -355,18 +355,25 @@ const InvoiceExcelUpload = (props) => {
                 try {
                     const MapItemList = ItemList.filter(obj => obj.MapItem !== null && obj.MapItem !== "");
                     MapItemList.forEach(function (i) {
+                        debugger
                         let Item_Code = i.MapItem;
                         let GST = i.GST;
+                        let GSTID = i.GSTID
+
                         let Matching_ItemCode_Objects = readjson.filter(inx => {
                             return (inx.Item_Code).toString().trim() === (Item_Code).toString().trim();
                         });
 
                         Matching_ItemCode_Objects.forEach(matchingObject => {
                             matchingObject.GST = GST;
+                            matchingObject.GSTID = GSTID;
+
                         });
 
                         if (Matching_ItemCode_Objects) {
                             Matching_ItemCode_Objects.GST = GST;
+                            Matching_ItemCode_Objects.GSTID = GSTID;
+
                         }
                     });
                     setItemVerify({ Wrong_Item_Code_Array: Wrong_Item_Code_Array, Not_Verify_Item: true });
@@ -379,8 +386,10 @@ const InvoiceExcelUpload = (props) => {
                 try {
                     const MapItemList = ItemList.filter(obj => obj.MapItem !== null && obj.MapItem !== "");
                     MapItemList.forEach(function (i) {
+                        debugger
                         let Item_Code = i.MapItem;
                         let GST = i.GST;
+                        let GSTID = i.GSTID
 
                         let Matching_ItemCode_Objects = readjson.filter(inx => {
 
@@ -389,10 +398,14 @@ const InvoiceExcelUpload = (props) => {
 
                         Matching_ItemCode_Objects.forEach(matchingObject => {
                             matchingObject.GST = GST;
+                            matchingObject.GSTID = GSTID;
+
                         });
 
                         if (Matching_ItemCode_Objects) {
                             Matching_ItemCode_Objects.GST = GST;
+                            Matching_ItemCode_Objects.GSTID = GSTID;
+
                         }
                     });
                     setItemVerify({ Wrong_Item_Code_Array: [], Not_Verify_Item: false })
@@ -567,7 +580,7 @@ const InvoiceExcelUpload = (props) => {
                 let invoiceTotalAmount = 0
 
                 inv.forEach(async (ele) => {
-
+                    debugger
                     const calculate = InvoiceUploadCalculation({ Quantity: ele[parArr.Quantity], Rate: ele[parArr.Rate], GST: ele.GST, Discount: ele[parArr.Discount], DiscountType: ele[parArr.DiscountType] });
                     invoiceTotalAmount = invoiceTotalAmount + calculate.Amount;
 
@@ -598,7 +611,7 @@ const InvoiceExcelUpload = (props) => {
                         "Rate": ele[parArr.Rate] ? ele[parArr.Rate]?.toFixed(2) : '',
                         "BasicAmount": ele[parArr.BasicAmount] ? ele[parArr.BasicAmount] : (calculate.BasicAmount).toFixed(2),
                         "GSTAmount": ele[parArr.GSTAmount] ? ele[parArr.GSTAmount] : (calculate.GSTAmount).toFixed(2),
-                        "GST": '',
+                        "GST": ele?.GSTID,
                         "CGST": ele[parArr.CGST] ? ele[parArr.CGST] : (calculate.GSTAmount / 2).toFixed(2),
                         "SGST": ele[parArr.SGST] ? ele[parArr.SGST] : (calculate.GSTAmount / 2).toFixed(2),
                         "IGST": ele[parArr.IGST] ? ele[parArr.IGST] : 0,
