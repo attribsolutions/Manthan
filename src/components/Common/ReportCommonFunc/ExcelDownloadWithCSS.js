@@ -9,7 +9,9 @@ export function ExcelReportComponent({ pageField,
     dateHeader,
     lastRowStyle = false,
     customKeyColumns,
-    listExcelDownload
+    listExcelDownload,
+    ExtraHeader = false,
+    style = { ySplit: 1 }
 }) {
 
     const workbook = new ExcelJS.Workbook();
@@ -22,12 +24,17 @@ export function ExcelReportComponent({ pageField,
         extraColumn,
         numericHeaders,
         dateHeader,
-        listExcelDownload
+        listExcelDownload,
+
     });
 
     if (!(noDataForDownload)) {
 
-        // Add headers to the worksheet
+        if (ExtraHeader) {
+            worksheet.addRow(ExtraHeader)
+            styleHeaderRow(worksheet);  // Header Style
+
+        }
         worksheet.addRow(HeaderColumns);
 
         styleHeaderRow(worksheet);  // Header Style
@@ -50,7 +57,6 @@ export function ExcelReportComponent({ pageField,
 
         dataRow.forEach((item) => {
             const row = worksheet.addRow(item);
-
             row.eachCell((cell, colNumber) => {
                 const controlType = controlTypeName[colNumber - 1];
                 formatCellByDataType(cell, controlType, item[colNumber - 1]);
@@ -61,7 +67,7 @@ export function ExcelReportComponent({ pageField,
             styleLastRow(worksheet, dataRow);
         }
 
-        freezeHeaderRow(worksheet);  // freeze Header Row
+        freezeHeaderRow(worksheet, style.ySplit);  // freeze Header Row
         autoFitColumnWidths(worksheet, HeaderColumns, dataRow); // Auto Fit Columns
         saveWorkbookAsExcel(workbook, excelFileName);  // Save Work Book
     }
