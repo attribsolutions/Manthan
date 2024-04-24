@@ -37,7 +37,7 @@ const TargetVSAchievement = (props) => {
     const [yearAndMonth, setYearAndMonth] = useState(getCurrent_Month_And_Year);
     const [btnMode, setBtnMode] = useState("");
 
-    const [isGropuWise, setisGropuWise] = useState(true);
+    const [isGropuWise, setisGropuWise] = useState(false);
     const [Tabledata, setTabledata] = useState([]);
 
 
@@ -93,10 +93,12 @@ const TargetVSAchievement = (props) => {
     useEffect(() => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(pageId.TARGET_VS_ACHIEVEMENT));
-        dispatch(BreadcrumbShowCountlabel(`Count:${Tabledata.length + 1}`));
+
         return () => {
             dispatch(commonPageFieldSuccess(null));
             dispatch(Target_VS_Achievement_Go_Button_API_Success([]));
+            dispatch(Target_VS_AchievementGroupWise_Go_Button_API_Success([]));
+
         };
     }, []);
 
@@ -106,6 +108,8 @@ const TargetVSAchievement = (props) => {
             // goButtonHandler();
         } else {
             dispatch(Target_VS_Achievement_Go_Button_API_Success([]));
+            dispatch(Target_VS_AchievementGroupWise_Go_Button_API_Success([]));
+
         }
     }, [commonPartyDropSelect]);
 
@@ -117,23 +121,24 @@ const TargetVSAchievement = (props) => {
 
 
     const [tableColumns] = DynamicColumnHook({ pageField });
-    const TargetVSAchievementGroupwise = ["AchAmount%", "ContriAmount%", "ContriQty%", "GTAchAmountWithGST", "GTAchQuantityInKG", "AchQty%"]
-    const TargetVSAchievement = ["Cluster", "Fy", "ItemName", "ItemSubGroup", "PartyID", "PartyName", "SAPPartyCode", "SubCluster", "Year"]
 
 
 
     useEffect(() => {
-
+        debugger
         if (isGropuWise) {
             setTabledata(tableDataGroupWise)
+            dispatch(BreadcrumbShowCountlabel(`Count:${tableDataGroupWise.length}`));
         } else {
             setTabledata(tableData)
-        }
+            dispatch(BreadcrumbShowCountlabel(`Count:${tableData.length}`));
 
+        }
     }, [isGropuWise, tableData, tableDataGroupWise,])
 
     async function MonthAndYearOnchange(e) {
         dispatch(Target_VS_Achievement_Go_Button_API_Success([]));
+        dispatch(Target_VS_AchievementGroupWise_Go_Button_API_Success([]));
         const selectdMonth = getCurrent_Month_And_Year(e.target.value);
         setYearAndMonth(selectdMonth);
     }
@@ -255,7 +260,7 @@ const TargetVSAchievement = (props) => {
                     customKeyColumns: { tableData: Columns, isButton: true },
                     ExtraHeader: ExtraHeader,
                     lastRowStyle: true,
-                    style : { ySplit: 2 }
+                    style: { ySplit: 2 }
 
                 })
                 dispatch(Target_VS_AchievementGroupWise_Go_Button_API_Success([]));
@@ -325,12 +330,13 @@ const TargetVSAchievement = (props) => {
                                     <div className="form-check form-switch form-switch-md " dir="ltr">
                                         <Input type="checkbox" className="form-check-input mt-2"
                                             checked={isGropuWise}
-                                            defaultChecked={true}
                                             name="toggle"
                                             onChange={(event) => {
                                                 setisGropuWise(event.target.checked)
                                                 dispatch(Target_VS_Achievement_Go_Button_API_Success([]));
                                                 dispatch(Target_VS_AchievementGroupWise_Go_Button_API_Success([]));
+                                                setTabledata([])
+
                                             }}
                                         />
                                         <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
