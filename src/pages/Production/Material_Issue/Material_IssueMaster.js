@@ -174,7 +174,7 @@ const MaterialIssueMaster = (props) => {
                 // ++++++++++++++++++++++++++**Dynamic go Button API Call method+++++++++++++++++
 
 
-                if (insidePageMode === mode.view) {
+                if (!insidePageMode === mode.view) {
                     dispatch(goButtonForMaterialIssue_Master_ActionSuccess(MaterialIssueItems))
                     setGoButtonList(MaterialIssueItems)
                 }
