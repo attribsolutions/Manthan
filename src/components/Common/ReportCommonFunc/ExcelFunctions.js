@@ -77,12 +77,12 @@ export function setNumberValue(cell, value) {
     }
 }
 
-export function freezeHeaderRow(worksheet,) {
+export function freezeHeaderRow(worksheet, ySplit) {
     worksheet.views = [
         {
             state: 'frozen',
             xSplit: 0,
-            ySplit: 1,
+            ySplit: ySplit,
             showGridLines: true,
         }
     ];
@@ -240,16 +240,14 @@ export function generateTableData({
             }
         });
     }
-    
     dataRow = excelTableData.map(item => {
         return columnsKey.map(column => {
             if (column in item) {
-                    return item[column] ; // Return existing value if it exists, otherwise return ''
+                return item[column]; // Return existing value if it exists, otherwise return ''
             }
             return "";
         });
     });
-    
     return { HeaderColumns, dataRow, controlTypeName, noDataForDownload: false };
 }
 

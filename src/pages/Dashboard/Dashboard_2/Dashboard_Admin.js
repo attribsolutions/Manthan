@@ -9,7 +9,7 @@ import {
     Col,
     Container, Label, Row,
 } from "reactstrap";
-import { breadcrumbReturnFunc } from '../../../components/Common/CommonFunction';
+import { breadcrumbReturnFunc, loginSystemSetting } from '../../../components/Common/CommonFunction';
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import { commonPageField, commonPageFieldSuccess, getGRNListPageSuccess, invoiceListGoBtnfilterSucccess } from '../../../store/actions';
@@ -22,6 +22,9 @@ import MobileRetailerApprove from '../Dashboard_1/MobileRetailerApprove';
 
 import { DashboardLoader, PageLoadingSpinner } from '../../../components/Common/CommonButton';
 import LineBar from '../../../components/Common/DashboardChart/MixLineChart';
+import TransactionLog from './TransactionLog';
+import { TransactionLog_Get_OnDashBoard_Api } from '../../../helpers/backend_helper';
+
 
 const Dashboard_Admin = (props) => {
 
@@ -42,12 +45,16 @@ const Dashboard_Admin = (props) => {
     const [appOrderListAccess, setAppOrderListAccess] = useState(false);
     const [invoiceListAccess, setInvoiceListAccess] = useState(false);
     const [grnListAccess, setGrnListAccess] = useState(false);
+    const [logLoading, setlogLoading] = useState(false);
+    const [logtableData, setlogTableData] = useState([]);
+
+
+    const IsTransactionLogShow = loginSystemSetting().IsTransactionLogShow
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
         getDashboard,
         userAccess,
-        orderApprovalMsg,
         GRNListLoading,
         pageField,
         SalesReturnListloading,
@@ -62,7 +69,6 @@ const Dashboard_Admin = (props) => {
             getDashboard: state.DashboardReducer.getDashboard,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageField,
-            orderApprovalMsg: state.OrderReducer.orderApprovalMsg,
             GRNListLoading: state.OrderReducer.goBtnLoading,
             SalesReturnListloading: state.SalesReturnReducer.loading,
             PaymentEntryListloading: state.ReceiptReducer.loading,
@@ -170,7 +176,18 @@ const Dashboard_Admin = (props) => {
             dispatch(getGRNListPageSuccess([]));
             dispatch(invoiceListGoBtnfilterSucccess([]));
         }
-    }, [commonPartyDropSelect])
+    }, [commonPartyDropSelect]);
+
+
+    useEffect(async () => {
+        setlogLoading(true)
+        const resp3 = await TransactionLog_Get_OnDashBoard_Api();
+        if (resp3.StatusCode === 200) {
+            setlogTableData(resp3.Data);
+            setlogLoading(false)
+        }
+
+    }, [])
 
     function getFirstAndLastDateOfYear(year) {
         // Create a date object for January 1st of the given year
@@ -272,6 +289,14 @@ const Dashboard_Admin = (props) => {
     function salesReturn_onClick() {
         history.push(url.SALES_RETURN_LIST)
     }
+
+
+    function Transactionlog() {
+        history.push(url.TRANSACTION_LOG)
+    }
+
+
+
 
     const RedirectHandler = (Type) => {
 
@@ -560,7 +585,40 @@ const Dashboard_Admin = (props) => {
 
                                 </Card>
                             </Col>
-                        </Col>
+                        </Col> 
+                        {IsTransactionLogShow === "true" && <Col xl={6}>
+                            <Card >
+                                <div className='mb-n6'>
+                                    <CardHeader style={{ backgroundColor: "whitesmoke" }}
+                                        className="card-header align-items-center d-flex text-center">
+                                        <Label className="card-title mb-0 flex-grow-4 text-primary text-bold mb-n2 text-decoration-underline"
+                                            style={{ cursor: "pointer" }}
+                                            onClick={Transactionlog}
+                                        >
+                                            TransactionLog</Label>
+                                        {
+                                            (logLoading) &&
+                                            <DashboardLoader />}
+                                    </CardHeader>
+                                </div>
+                                <TransactionLog logData={logtableData} />
+                            </Card>
+                        </Col>}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
                     </Row>
 

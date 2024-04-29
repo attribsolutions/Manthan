@@ -41,7 +41,7 @@ const TargetVSAchievement = (props) => {
     const [Tabledata, setTabledata] = useState([]);
 
 
-    const [tablecolumn, settablecolumn] = useState([{}]);
+
 
 
 
@@ -93,10 +93,12 @@ const TargetVSAchievement = (props) => {
     useEffect(() => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(pageId.TARGET_VS_ACHIEVEMENT));
-        dispatch(BreadcrumbShowCountlabel(`Count:${Tabledata.length + 1}`));
+
         return () => {
             dispatch(commonPageFieldSuccess(null));
             dispatch(Target_VS_Achievement_Go_Button_API_Success([]));
+            dispatch(Target_VS_AchievementGroupWise_Go_Button_API_Success([]));
+
         };
     }, []);
 
@@ -106,6 +108,8 @@ const TargetVSAchievement = (props) => {
             // goButtonHandler();
         } else {
             dispatch(Target_VS_Achievement_Go_Button_API_Success([]));
+            dispatch(Target_VS_AchievementGroupWise_Go_Button_API_Success([]));
+
         }
     }, [commonPartyDropSelect]);
 
@@ -117,53 +121,152 @@ const TargetVSAchievement = (props) => {
 
 
     const [tableColumns] = DynamicColumnHook({ pageField });
-    const TargetVSAchievementGroupwise = ["AchAmount%", "ContriAmount%", "ContriQty%", "GTAchAmountWithGST", "GTAchQuantityInKG","AchQty%"]
-    const TargetVSAchievement = ["Cluster", "Fy", "ItemName", "ItemSubGroup", "PartyID", "PartyName", "SAPPartyCode", "SubCluster", "Year"]
 
 
 
     useEffect(() => {
-
-        const newColumns = tableColumns?.map(obj => {
-            obj.showing = true
-            if (TargetVSAchievement.includes(obj.dataField) && isGropuWise) {
-                return null;
-            }
-            if (TargetVSAchievementGroupwise.includes(obj.dataField) && !isGropuWise) {
-                return null;
-            }
-            return obj;
-        }).filter(obj => obj !== null);
-
-        if (newColumns?.length > 0) {
-            settablecolumn(newColumns)
-        }
-
+        debugger
         if (isGropuWise) {
             setTabledata(tableDataGroupWise)
+            dispatch(BreadcrumbShowCountlabel(`Count:${tableDataGroupWise.length}`));
         } else {
             setTabledata(tableData)
-        }
+            dispatch(BreadcrumbShowCountlabel(`Count:${tableData.length}`));
 
-    }, [isGropuWise, tableData, tableDataGroupWise, tableColumns])
+        }
+    }, [isGropuWise, tableData, tableDataGroupWise,])
 
     async function MonthAndYearOnchange(e) {
         dispatch(Target_VS_Achievement_Go_Button_API_Success([]));
+        dispatch(Target_VS_AchievementGroupWise_Go_Button_API_Success([]));
         const selectdMonth = getCurrent_Month_And_Year(e.target.value);
         setYearAndMonth(selectdMonth);
     }
 
+
+
+    const Columns = [
+        {
+            text: "Product Name",
+            dataField: "ItemGroup",
+            showing: true,
+        },
+        {
+            text: "Qty in kg",
+            dataField: "AchQuantityInKG",
+            showing: true,
+            align: "right",
+
+        },
+        {
+            text: "Ach in value",
+            dataField: "AchAmountWithGST",
+            showing: true,
+            align: "right",
+
+        },
+        {
+            text: "Qty in kg",
+            dataField: "CXQuantityInKG",
+            showing: true,
+            align: "right",
+
+        },
+        {
+            text: "Ach in value",
+            dataField: "CXAmountWithGST",
+            showing: true,
+            align: "right",
+
+        },
+        {
+            text: "Target in KG",
+            dataField: "TargetQuantityInKG",
+            showing: true,
+            align: "right",
+
+        },
+        {
+            text: "Ach in KG",
+            dataField: "GTAchQuantityInKG",
+            align: "right",
+            showing: true,
+        },
+        {
+            text: "Ach %",
+            dataField: "AchQty%",
+            align: "right",
+            showing: true,
+        },
+        {
+            text: "Contri",
+            dataField: "ContriQty%",
+            showing: true,
+            align: "right",
+
+        },
+        {
+            text: "Target in Value",
+            dataField: "TargetAmountWithGST",
+            showing: true,
+            align: "right",
+
+        }, {
+            text: "Ach in Value",
+            dataField: "GTAchAmountWithGST",
+            showing: true,
+            align: "right",
+
+        }, {
+            text: "Ach %",
+            dataField: "AchAmount%",
+            showing: true,
+            align: "right",
+
+        },
+        {
+            text: "Contri",
+            dataField: "ContriAmount%",
+            showing: true,
+            align: "right",
+
+        },
+        {
+            text: "SR in Value",
+            dataField: "CreditNoteAmountWithGST",
+            showing: true,
+            align: "right",
+        },
+
+    ];
+
+    const ExtraHeader = ["", "", "Primary", "", "CX Ach", "", "", "", "GT Achivement", "", "", "", "Sales Return", ""]
+
+
     useEffect(() => {
 
         if (btnMode === "excel") {
-            if (Tabledata.length > 0) {
+            if (Tabledata.length > 0 && !isGropuWise) {
                 ExcelReportComponent({   // Download CSV
-                    customKeyColumns: { tableData: tablecolumn, isButton: true },
+                    pageField,
                     excelTableData: Tabledata,
                     excelFileName: "Target Vs Achievement Report",
                 })
                 dispatch(Target_VS_Achievement_Go_Button_API_Success([]));
+            } else if (Tabledata.length > 0 && isGropuWise) {
+                ExcelReportComponent({   // Download CSV
+                    excelTableData: Tabledata,
+                    excelFileName: 'Target Vs Achievement Report Group Wise',
+                    customKeyColumns: { tableData: Columns, isButton: true },
+                    ExtraHeader: ExtraHeader,
+                    lastRowStyle: true,
+                    style: { ySplit: 2 }
+
+                })
+                dispatch(Target_VS_AchievementGroupWise_Go_Button_API_Success([]));
             }
+
+
         }
     }, [Tabledata]);
 
@@ -182,15 +285,19 @@ const TargetVSAchievement = (props) => {
         }
     };
 
-    const pageOptions = {
-        page: 1,
-        paginationSize: 5,
-        pageStartIndex: 1,
-        sizePerPage: 10,
-        custom: true,
-        totalSize: Tabledata.length,
-        hidePageListOnlyOnePage: true,
+
+
+    const rowStyle = (row, rowIndex) => {
+        const style = {};
+        if ((row.key) === (Tabledata.length)) {
+            debugger
+            style.backgroundColor = 'rgb(239, 239, 239)';
+            style.fontWeight = 'bold';
+            style.fontSize = '4';
+        }
+        return style;
     };
+
 
     return (
         <React.Fragment>
@@ -215,9 +322,6 @@ const TargetVSAchievement = (props) => {
                             </FormGroup>
                         </Col>
 
-
-
-
                         <Col sm={3} className="">
                             <FormGroup className="mb- row mt-3 mb-1 " >
                                 <Label className="col-sm-5 p-2"
@@ -231,6 +335,8 @@ const TargetVSAchievement = (props) => {
                                                 setisGropuWise(event.target.checked)
                                                 dispatch(Target_VS_Achievement_Go_Button_API_Success([]));
                                                 dispatch(Target_VS_AchievementGroupWise_Go_Button_API_Success([]));
+                                                setTabledata([])
+
                                             }}
                                         />
                                         <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
@@ -238,36 +344,6 @@ const TargetVSAchievement = (props) => {
                                 </Col>
                             </FormGroup>
                         </Col>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
                         <Col sm={6} className=" d-flex justify-content-end" >
                             <C_Button
@@ -293,11 +369,11 @@ const TargetVSAchievement = (props) => {
                     </div>
                 </div>
 
-                <div className="mt-1">
+                {!isGropuWise && <div className="mt-1">
                     <ToolkitProvider
-                        keyField="id"
+                        keyField="key"
                         data={Tabledata}
-                        columns={tablecolumn}
+                        columns={tableColumns}
                         search
                     >
                         {(toolkitProps) => (
@@ -306,7 +382,8 @@ const TargetVSAchievement = (props) => {
                                     <Col xl="12">
                                         <div className="table-responsive table" style={{ minHeight: "75vh" }}>
                                             <BootstrapTable
-                                                keyField="id"
+                                                keyField="key"
+                                                rowStyle={rowStyle}
                                                 classes={"table  table-bordered table-hover"}
                                                 noDataIndication={
                                                     <div className="text-danger text-center ">
@@ -329,6 +406,56 @@ const TargetVSAchievement = (props) => {
                     </ToolkitProvider>
 
                 </div>
+                }
+
+                {isGropuWise && <div className="mt-1">
+
+
+                    <ToolkitProvider
+                        keyField="key"
+                        data={tableDataGroupWise}
+                        columns={Columns}
+                        search
+                    >
+                        {(toolkitProps) => (
+                            <React.Fragment>
+                                <Row>
+                                    <Col xl="12">
+                                        <div className="table-responsive table" style={{ minHeight: "75vh" }}>
+                                            <BootstrapTable
+                                                keyField="key"
+                                                rowStyle={rowStyle}
+                                                classes={"table  table-bordered table-hover"}
+                                                noDataIndication={
+                                                    <div className="text-danger text-center ">
+                                                        Record Not available
+                                                    </div>
+                                                }
+                                                onDataSizeChange={({ dataSize }) => {
+                                                    dispatch(BreadcrumbShowCountlabel(`Count:${dataSize}`));
+                                                }}
+                                                {...toolkitProps.baseProps}
+
+                                            />
+                                            {globalTableSearchProps(toolkitProps.searchProps)}
+                                        </div>
+
+                                    </Col>
+                                </Row>
+                            </React.Fragment>
+                        )}
+                    </ToolkitProvider>
+
+                </div>}
+
+
+
+
+
+
+
+
+
             </div>
         </React.Fragment>
     );

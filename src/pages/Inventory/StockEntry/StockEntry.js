@@ -53,9 +53,9 @@ const StockEntry = (props) => {
     const [userPageAccessState, setUserAccState] = useState('');
 
     const fileds = {
-        Date: "2024-03-31",
+        Date: currentDate_ymd,
         ItemName: "",
-        IsAllStockZero: true
+        IsAllStockZero: false
     }
 
     const [state, setState] = useState(initialFiledFunc(fileds))
