@@ -11,7 +11,6 @@ export default function TransactionLog(props) {
         {
             text: "Transaction Date",
             dataField: "TransactionDate",
-            // sort: true,
         },
         {
             text: "Employee Name (User Name)",
