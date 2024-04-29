@@ -487,6 +487,12 @@ export const TRANSACTION_LOG_All_USER = "/GetEmployeeFromUser"
 export const TRANSACTION_LOG_GO_BTN = "/TransactionDetails"
 export const TRANSACTION_JSON = "/TransactionJson"
 
+export const TRANSACTION_ON_DASHBOARD = "/LogsOnDashboard"
+
+
+
+
+
 // Claim Tracking Entry
 
 export const CLAIM_LIST_FOR_TRACKING = "/ClaimListfortracking"

@@ -708,6 +708,13 @@ export const TransactionLog_Get_User_Api = () => get(url.TRANSACTION_LOG_All_USE
 export const TransactionLog_Go_Btn_Api = ({ jsonBody }) => post(url.TRANSACTION_LOG_GO_BTN, jsonBody);
 export const TransactionLog_getjson_for_Transation_Id = ({ TransctionID }) => get(`${url.TRANSACTION_JSON}/${TransctionID}`) // edit api
 
+export const TransactionLog_Get_OnDashBoard_Api = () => get(url.TRANSACTION_ON_DASHBOARD);
+
+
+
+
+
+
 // Claim Tracking Entry
 export const ClaimListfortracking = (jsonBody) => post(url.CLAIM_LIST_FOR_TRACKING, jsonBody)// post api
 export const ClaimList_Post_API = ({ formData }) => postForFormData(url.CLAIM_TRACKING, formData)// post api

@@ -5,7 +5,7 @@ import ToolkitProvider from 'react-bootstrap-table2-toolkit';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { Button, CardBody, Col, FormGroup, Label, Modal, Row, Spinner } from 'reactstrap';
-import { Go_Button } from '../../components/Common/CommonButton';
+import { C_Button, Go_Button } from '../../components/Common/CommonButton';
 import { breadcrumbReturnFunc, CommonConsole, convertDateTime_ydm, getDateTime_dmy, loginCompanyID, loginEmployeeID } from '../../components/Common/CommonFunction';
 import { customAlert } from '../../CustomAlert/ConfirmDialog';
 import { C_Select, C_TimePicker } from '../../CustomValidateForm';
@@ -15,6 +15,7 @@ import { BreadcrumbShowCountlabel } from '../../store/actions';
 import SimpleBar from "simplebar-react"
 import { allLabelWithBlank } from '../../components/Common/CommonErrorMsg/HarderCodeData';
 import GlobalCustomTable from '../../GlobalCustomTable';
+import { ExcelReportComponent } from '../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS';
 
 
 const TransactionLog = () => {
@@ -42,6 +43,11 @@ const TransactionLog = () => {
     const [JsonData, setJsonData] = useState('');
     const [UpdateJsonData, setUpdateJsonData] = useState('');
     const [isCopy, setisCopy] = useState({});
+
+    const [btnMode, setbtnMode] = useState(0);
+
+
+
 
 
 
@@ -196,7 +202,17 @@ const TransactionLog = () => {
 
     }, [JsonData])
 
+    useEffect(() => {
+        debugger
+        if ((btnMode === 2) && (tableData.length > 0)) {
+            ExcelReportComponent({
+                excelTableData: tableData,
+                excelFileName: 'Transaction Log',
+                customKeyColumns: { tableData: tableColumns, isButton: true },
+            });
 
+        }
+    }, [tableData])
 
 
     const copyToClipboard = (CopyValue, btnId) => {
@@ -274,35 +290,42 @@ const TransactionLog = () => {
         {
             text: "Transaction Date",
             dataField: "TransactionDate",
-            sort: true
+            sort: true,
+            showing: true,
         }, {
             text: "Employee Name (User Name)",
             dataField: "UserName",
+            showing: true,
             sort: true
         }, {
             text: "IP Address",
             dataField: "IPaddress",
+            showing: true,
             sort: true
         },
         {
             text: "Transaction Type",
             dataField: "TransactionType",
+            showing: true,
             sort: true
         },
         {
             text: "Transaction Detail",
             dataField: "TransactionDetails",
+            showing: true,
             sort: true
 
         },
         {
             text: "Party Name",
             dataField: "PartyName",
+            showing: true,
             sort: true
         },
         {
             text: "Customer/Supplier Name",
             dataField: "CustomerName",
+            showing: true,
             sort: true
         },
         {
@@ -343,8 +366,8 @@ const TransactionLog = () => {
 
     ]
 
-    const goButtonHandler = async () => {
-
+    const goButtonHandler = async (btnMode) => {
+        setbtnMode(btnMode)
         try {
             if (!categoryTypeSelect.length > 0) {
                 showToastAlert("Please Select Category Type", 'error');
@@ -372,7 +395,6 @@ const TransactionLog = () => {
         } catch (w) { setGoBtnloading(false); }
 
     }
-
 
     const HeaderContent = () => {
         return (
@@ -440,8 +462,6 @@ const TransactionLog = () => {
                                 <Label className="col-sm-5 p-2" >
                                     Category Type
                                 </Label>
-
-
                                 <Col sm="7">
                                     <C_Select
                                         id="CategoryTypee"
@@ -459,7 +479,25 @@ const TransactionLog = () => {
                             </div>
                         </FormGroup>
                     </Col>
-
+                    <Col sm="3" >
+                        <Row> <Col sm="2" >
+                            <Go_Button
+                                loading={btnMode === 1 && goBtnloading}
+                                onClick={() => goButtonHandler(1)} />
+                        </Col>
+                            <Col sm="4" className='mt-n2' >
+                                <C_Button
+                                    type="button"
+                                    spinnerColor="white"
+                                    loading={btnMode === 2 && goBtnloading}
+                                    className="btn btn-primary mt-1 mr"
+                                    onClick={() => goButtonHandler(2)}
+                                >
+                                    Excel
+                                </C_Button>
+                            </Col>
+                        </Row>
+                    </Col>
                 </div>
                 <div className="row">
                     <Col sm="3" >
@@ -532,12 +570,6 @@ const TransactionLog = () => {
                             </div>
                         </FormGroup>
                     </Col>
-
-                    <Col sm="1" >
-                        <Go_Button
-                            loading={goBtnloading}
-                            onClick={goButtonHandler} />
-                    </Col>
                 </div>
             </div>
         );
@@ -566,9 +598,6 @@ const TransactionLog = () => {
                     }}
                 />
 
-
-
-
                 <Modal
                     isOpen={modal_view}
                     toggle={modalToggleFunc}
@@ -581,7 +610,6 @@ const TransactionLog = () => {
                             keyField={"id"}
                             data={UpdateJsonData}
                             columns={viewColumn}
-
                         >
                             {(toolkitProps,) => (
                                 <React.Fragment>
@@ -619,5 +647,4 @@ const TransactionLog = () => {
         </React.Fragment>
     )
 }
-
 export default TransactionLog
