@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/static/css/main.818fe99f.chunk.css",
-    "main.js": "/static/js/main.19de4dc5.chunk.js",
-    "main.js.map": "/static/js/main.19de4dc5.chunk.js.map",
+    "main.js": "/static/js/main.4c8f3cb9.chunk.js",
+    "main.js.map": "/static/js/main.4c8f3cb9.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.739a3fb7.js",
     "runtime-main.js.map": "/static/js/runtime-main.739a3fb7.js.map",
     "static/css/2.4e63362a.chunk.css": "/static/css/2.4e63362a.chunk.css",
@@ -24,7 +24,7 @@
     "static/media/Enterpass.2732ee11.png": "/static/media/Enterpass.2732ee11.png",
     "static/media/theme.scss": "/static/media/materialdesignicons-webfont.e9db4005.woff2",
     "static/media/avatar-3.bd68c38c.jpg": "/static/media/avatar-3.bd68c38c.jpg",
-    "static/media/cbm_logo.abef454e.png": "/static/media/cbm_logo.abef454e.png",
+    "static/media/cbm_logo.c5134d88.png": "/static/media/cbm_logo.c5134d88.png",
     "static/media/error-img.5206e328.png": "/static/media/error-img.5206e328.png",
     "static/media/foodERP_logo.af2ace89.png": "/static/media/foodERP_logo.af2ace89.png",
     "static/media/otp.a294b038.jfif": "/static/media/otp.a294b038.jfif",
@@ -36,6 +36,6 @@
     "static/css/2.4e63362a.chunk.css",
     "static/js/2.4832fd9a.chunk.js",
     "static/css/main.818fe99f.chunk.css",
-    "static/js/main.19de4dc5.chunk.js"
+    "static/js/main.4c8f3cb9.chunk.js"
   ]
 }
