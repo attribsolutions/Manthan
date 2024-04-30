@@ -93,7 +93,7 @@ const SelectDivisionPage = () => {
                       <Link to="/dashboard" className="d-block auth-logo">
                         <span className="logo-txt">FoodERP 2.0</span>
                       </Link>
-                      <img src={logo} alt="" height="150" />
+                      <img src={logo} alt="" height="150" style={{height:"175px"}} />
                     </div>
 
                     <div className="auth-content my-auto">
