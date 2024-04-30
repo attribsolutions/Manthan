@@ -89,6 +89,7 @@ function* GoButton_MaterialIssue_listpage_GenFunc({ filters }) {                
     const newList = yield response.Data.map((i) => {
       var date = date_dmy_func(i.MaterialIssueDate)
       var time = convertTimefunc(i.CreatedOn)
+      i.ProductionDate = i.MaterialIssueDate
       i.MaterialIssueDate = (`${date} ${time}`)
       return i
     })

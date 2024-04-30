@@ -865,3 +865,11 @@ export function SelectedMonthAndYearName(selectedMonth) {
   const monthName = new Date(`${year}-${month}-01`).toLocaleString('default', { month: 'long' });
   return { monthName, year };
 };
+
+
+export function checkRateDropVisibility() {  
+
+  const settingsArray = loginSystemSetting().MRP_Rate.split(',');
+  const searchString = loginCompanyID() + "-2";
+  return settingsArray.includes(searchString);
+}

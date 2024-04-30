@@ -259,6 +259,7 @@ const BOMMaster = (props) => {
     }
 
     const SaveHandler = async (event) => {
+
         event.preventDefault();
         const btnId = event.target.id
         const BOMItems = ItemTabDetails.map((index) => ({
@@ -269,6 +270,7 @@ const BOMMaster = (props) => {
 
         try {
             if (formValid(state, setState)) {
+
                 _cfunc.btnIsDissablefunc({ btnId, state: true })
                 let BOMrefID = 0
                 if ((pageMode === mode.edit)) {
@@ -332,7 +334,6 @@ const BOMMaster = (props) => {
                                                 value={values.BomDate}
                                                 disabled={pageMode === mode.edit ? true : false}
                                                 onChange={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
-                                            // onReady={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
                                             />
                                             {isError.BomDate.length > 0 && (
                                                 <span className="invalid-feedback">{isError.BomDate}</span>

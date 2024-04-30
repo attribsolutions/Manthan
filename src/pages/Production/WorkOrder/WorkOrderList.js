@@ -16,6 +16,7 @@ import WorkOrder from "./WorkOrder";
 import { mode, url, pageId } from "../../../routes/index"
 import { goButtonForMaterialIssue_Master_Action } from "../../../store/Production/Matrial_Issue/action";
 import { C_DatePicker } from "../../../CustomValidateForm";
+import * as _cfunc from "../../../components/Common/CommonFunction";
 
 const WorkOrderList = () => {
 
@@ -27,7 +28,7 @@ const WorkOrderList = () => {
 
     const [pageMode, setpageMode] = useState(mode.defaultList)
     const [hederFilters, setHederFilters] = useState({ fromdate: currentDate_ymd, todate: currentDate_ymd, })
-    
+
     const reducers = useSelector(
         (state) => ({
             tableList: state.WorkOrderReducer.WorkOrderList,
@@ -44,7 +45,7 @@ const WorkOrderList = () => {
     const { pageField, makeProductionReIssue } = reducers;
     const { fromdate, todate } = hederFilters
     const page_Id = (hasPagePath === url.MATERIAL_ISSUE_STP) ? pageId.MATERIAL_ISSUE_STP : pageId.WORK_ORDER_LIST;
-    const page_mode = (hasPagePath === url.MATERIAL_ISSUE_STP) ? mode.modeSTPsave : mode.defaultList;
+    const page_mode = (hasPagePath === url.MATERIAL_ISSUE_STP) ? mode.modeSTPList : mode.defaultList;
 
     const action = {
         getList: getWorkOrderListPage,
@@ -83,14 +84,14 @@ const WorkOrderList = () => {
     }
 
     function fromdateOnchange(e, date) {
-        
+
         let newObj = { ...hederFilters }
         newObj.fromdate = date
         setHederFilters(newObj)
     }
 
     function todateOnchange(e, date) {
-        
+
         let newObj = { ...hederFilters }
         newObj.todate = date
         setHederFilters(newObj)
@@ -98,7 +99,7 @@ const WorkOrderList = () => {
 
 
     const makeBtnFunc = (list = []) => {
-
+        
         var jsonData = list[0]
         try {
             const jsonBody = JSON.stringify({
@@ -140,8 +141,15 @@ const WorkOrderList = () => {
                                     style={{ width: "65px", marginRight: "0.4cm" }}>ToDate</Label>
                                 <Col sm="6 ">
                                     <C_DatePicker
-                                        name="todate"
-                                        value={todate}
+                                        options={{
+                                            minDate: (_cfunc.disablePriviousTodate({ fromDate: fromdate })),
+                                            maxDate: "today",
+                                            altInput: true,
+                                            altFormat: "d-m-Y",
+                                            dateFormat: "Y-m-d",
+                                        }}
+                                        value={_cfunc.ToDate({ FromDate: fromdate, Todate: todate })}
+                                        nane='todate'
                                         onChange={todateOnchange}
                                     />
                                 </Col>

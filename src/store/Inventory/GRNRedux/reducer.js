@@ -122,9 +122,6 @@ const GRNReducer = (state = INIT_STATE, action) => {
       }
 
 
-
-
-
     case DELETE_GRN_FOR_GRN_PAGE_SUCCESS:
       return {
         ...state,

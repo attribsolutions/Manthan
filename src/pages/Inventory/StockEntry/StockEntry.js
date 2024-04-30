@@ -44,10 +44,7 @@ const StockEntry = (props) => {
     const history = useHistory()
     const currentDate_ymd = _cfunc.date_ymd_func();
 
-    const systemsetting = _cfunc.loginSystemSetting().MRP_Rate;
-    const settingsArray = systemsetting.split(',');
-    const searchString = _cfunc.loginCompanyID() + "-2";
-    const isVisibleRateDrop = settingsArray.includes(searchString);
+    const isVisibleRateDrop = _cfunc.checkRateDropVisibility()
 
     const [pageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState('');

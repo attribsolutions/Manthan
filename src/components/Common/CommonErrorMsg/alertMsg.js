@@ -55,7 +55,7 @@ const atLeastOneRetailerIsRequired = "At least One Retailer is Selected"
 const atLeastOnePartySelectionRequired = "At least One Party is Selected"
 
 // MRP , Rate,GST and Margin Page Error Messages
-const deleteThisItem = "Are you sure you want to delete this Item"
+const deleteThisItem = "Are you sure you want to delete this Item Rate?"
 const effectiveDateIsRequired = "Please select EffectiveDate"
 const MRPIsRequired = "Please Enter MRP"
 const marginISRequired = "Please Enter Margin"

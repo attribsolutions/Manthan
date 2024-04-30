@@ -295,7 +295,8 @@ const GRNAdd = (props) => {
                         classNamePrefix="select2-selection"
                         id={"ddlUnit"}
                         key={row.id}
-                        isDisabled={pageMode === mode.view ? true : false}
+                        isDisabled={true}
+                        // isDisabled={pageMode === mode.view ? true : false}
                         defaultValue={{ value: row.Unit, label: row.UnitName }}
                         options={
                             row.UnitDetails.map(i => ({
@@ -616,7 +617,7 @@ const GRNAdd = (props) => {
                         if (dubli.length === 0) {
                             GRNItemArray.push(arr)
                         } else {
-                            isvalidMsg.push(`${i.ItemName}:  This Item  Is Dublicate...`)
+                            isvalidMsg.push(`${i.ItemName}:  This Item Is Dublicate...`)
                         }
                     }
                 } else if ((i.Quantity > 0)) {
@@ -654,12 +655,12 @@ const GRNAdd = (props) => {
             const differentRates = [];
 
             GRNItemArray.forEach(grnItem => {
-                const correspondingButton = RateMasterGoButton.Data.find(buttonItem => buttonItem.Item === grnItem.Item);
-                if (correspondingButton) {
-                    const rateToCompare = correspondingButton.CurrentRate !== "" ? parseFloat(correspondingButton.CurrentRate) : parseFloat(correspondingButton.vendorOrderRate);
+                const matchItemIdReturn = RateMasterGoButton.find(buttonItem => buttonItem.ItemID === grnItem.Item);
+                if (matchItemIdReturn) {
+                    const rateToCompare = parseFloat(matchItemIdReturn.CurrentRate);
                     const grnRate = parseFloat(grnItem.Rate);
                     const vendorRate = parseFloat(grnItem.vendorOrderRate);
-                    if (grnRate !== rateToCompare || vendorRate !== rateToCompare) {
+                    if (grnRate !== vendorRate || grnRate !== rateToCompare) {
                         differentRates.push({ Item: grnItem.Item, Rate: grnItem.Rate });
                     }
                 }
