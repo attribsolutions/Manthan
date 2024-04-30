@@ -15,6 +15,7 @@ import {
 import { mode, url, pageId } from "../../../routes/index";
 import { updateWorkOrderListSuccess } from "../../../store/Production/WorkOrder/action";
 import { C_DatePicker } from "../../../CustomValidateForm";
+import * as _cfunc from "../../../components/Common/CommonFunction";
 
 const MaterialIssueList = () => {
 
@@ -41,7 +42,7 @@ const MaterialIssueList = () => {
     const { fromdate, todate } = hederFilters;
 
     const hasPagePath = history.location.pathname;
-    const pageMode = (hasPagePath === url.PRODUCTION_STP) ? mode.modeSTPsave : mode.defaultList;
+    const pageMode = (hasPagePath === url.PRODUCTION_STP) ? mode.modeSTPList : mode.defaultList;
     const page_Id = (hasPagePath === url.PRODUCTION_STP) ? pageId.PRODUCTION_STP : pageId.MATERIAL_ISSUE_LIST;
 
     const action = {
@@ -90,13 +91,13 @@ const MaterialIssueList = () => {
         dispatch(getMaterialIssueListPage(jsonBody));
     };
 
-    function fromdateOnchange(date) {
+    function fromdateOnchange(e, date) {
         let newObj = { ...hederFilters }
         newObj.fromdate = date
         setHederFilters(newObj)
     }
 
-    function todateOnchange(date) {
+    function todateOnchange(e, date) {
         let newObj = { ...hederFilters }
         newObj.todate = date
         setHederFilters(newObj)
@@ -126,8 +127,15 @@ const MaterialIssueList = () => {
                                     style={{ width: "65px", marginRight: "0.4cm" }}>ToDate</Label>
                                 <Col sm="6 ">
                                     <C_DatePicker
-                                        name="todate"
-                                        value={todate}
+                                        options={{
+                                            minDate: (_cfunc.disablePriviousTodate({ fromDate: fromdate })),
+                                            maxDate: "today",
+                                            altInput: true,
+                                            altFormat: "d-m-Y",
+                                            dateFormat: "Y-m-d",
+                                        }}
+                                        value={_cfunc.ToDate({ FromDate: fromdate, Todate: todate })}
+                                        nane='todate'
                                         onChange={todateOnchange}
                                     />
                                 </Col>

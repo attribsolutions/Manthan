@@ -38,7 +38,11 @@ function* Get_BOMList_GenratorFunction({ filters }) {      // get Item dropdown 
 
 function* GoButton_WorkOrder_post_genfun({ jsonbody, btnId }) {     // GO Botton Post API
   try {
+
     const response = yield call(WorkOrder_GoButton_Post_API, jsonbody);
+    response.Data.BOMItems.forEach(item => {
+      item.StockQuantity = item.StockQuantity.toFixed(2);
+    });
     yield put(postGoButtonForWorkOrder_MasterSuccess(response.Data));
   } catch (error) { CommonConsole(error) }
 }

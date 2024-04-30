@@ -65,22 +65,22 @@ const Inward = (props) => {
     useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(postInwardSuccess({ Status: false }))
-            dispatch(customAlert({
+            customAlert({
                 Type: 1,
                 Status: true,
                 Message: postMsg.Message,
                 RedirectPath: url.INWARD_LIST,
-            }))
+            })
 
         } else if (postMsg.Status === true) {
             dispatch(postInwardSuccess({ Status: false }))
-            dispatch(customAlert({
+           customAlert({
                 Type: 4,
                 Status: true,
                 Message: JSON.stringify(postMsg.Message),
                 RedirectPath: false,
                 AfterResponseAction: false
-            }));
+            })
         }
     }, [postMsg])
 

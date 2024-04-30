@@ -17,6 +17,8 @@ import { useHistory } from "react-router-dom";
 import {
     commonPageField,
     commonPageFieldSuccess,
+    getBaseUnit_ForDropDown,
+    getBaseUnit_ForDropDownSuccess,
 } from "../../../store/actions";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
@@ -27,7 +29,7 @@ import {
     metaTagLabel
 } from "../../../components/Common/CommonFunction";
 import * as _cfunc from "../../../components/Common/CommonFunction";
-import { CInput, C_DatePicker, decimalRegx } from "../../../CustomValidateForm";
+import { CInput, C_DatePicker, C_Select, decimalRegx } from "../../../CustomValidateForm";
 import { mode, pageId, url } from "../../../routes";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { comAddPageFieldFunc, initialFiledFunc, onChangeDate, resetFunction } from "../../../components/Common/validationFunction";
@@ -52,7 +54,7 @@ const RateMaster = (props) => {
     const [userPageAccessState, setUserAccState] = useState("");
     const [editCreatedBy, seteditCreatedBy] = useState("");
 
-    //Access redux store Data /  'save_ModuleSuccess' action data
+    //Access redux store tableData /  'save_ModuleSuccess' action data
     const { postMsg,
         tableData,
         deleteMessage,
@@ -60,22 +62,27 @@ const RateMaster = (props) => {
         pageField,
         saveBtnloading,
         listBtnLoading,
+        BaseUnit
     } = useSelector((state) => ({
         listBtnLoading: state.RateMasterReducer.listBtnLoading,
         saveBtnloading: state.RateMasterReducer.saveBtnloading,
         tableData: state.RateMasterReducer.RateMasterGoButton,
         deleteMessage: state.RateMasterReducer.deleteMsgForMaster,
         postMsg: state.RateMasterReducer.postMsg,
+        BaseUnit: state.ItemMastersReducer.BaseUnit,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField
     }));
 
-    const { Data = [] } = tableData
-
     useEffect(() => {
         const page_Id = pageId.GST
         dispatch(commonPageFieldSuccess(null));
-        dispatch(commonPageField(page_Id))
+        dispatch(commonPageField(page_Id));
+        dispatch(getBaseUnit_ForDropDown());
+        return () => {
+            dispatch(commonPageFieldSuccess(null));
+            dispatch(getBaseUnit_ForDropDownSuccess([]));
+        }
     }, []);
 
     const values = { ...state.values }
@@ -206,7 +213,12 @@ const RateMaster = (props) => {
         }
     }, [deleteMessage]);
 
-    useEffect(() => _cfunc.tableInputArrowUpDounFunc("#table_Arrow"), [Data]);
+    useEffect(() => _cfunc.tableInputArrowUpDounFunc("#table_Arrow"), [tableData]);
+
+    const BaseUnit_DropdownOptions = BaseUnit.map((data) => ({
+        value: data.id,
+        label: data.Name
+    }));
 
     const GoButton_Handler = (event) => {
 
@@ -241,17 +253,17 @@ const RateMaster = (props) => {
 
     };
 
-    const pageOptions = {
-        sizePerPage: 10,
-        totalSize: Data.length,
-        custom: true,
-    };
+    const defaultSorted = [
+        {
+            dataField: "ItemName", // if dataField is not match to any column you defined, it will be ignored.
+            order: "asc", // desc or asc
+        },
+    ];
 
     const pagesListColumns = [
         {
             text: "Item Name",
-            dataField: "Name",
-            sort: true,
+            dataField: "ItemName",
             headerStyle: () => { return { width: '300px' } },
         },
         {
@@ -259,17 +271,15 @@ const RateMaster = (props) => {
             dataField: "CurrentDate",
             sort: true,
             headerStyle: () => { return { width: '200px' } },
-            formatter: (cellContent, row) => {
+            formatter: (cellContent, row, key) => {
+                if (!row.EffectiveDate) {
+                    return null
+                }
                 return (<span style={{ justifyContent: 'center' }}>
-                    < Input
-                        key={`CurrentDate${row.Item}`}
-                        id=""
-                        type="text"
-                        disabled={true}
-                        defaultValue={_cfunc.date_dmy_func(cellContent)}
-                        className="col col-sm text-end"
-                        onChange={(e) => { row["CurrentDate"] = e.target.value }}
-                    />
+                    <Label
+                        style={{ color: "black", textAlign: "center", display: "block", }}
+                        key={`CurrentDate${row.ItemID}`}
+                    >{_cfunc.date_dmy_func(row.EffectiveDate)}</Label>
                 </span>)
             },
         },
@@ -277,13 +287,12 @@ const RateMaster = (props) => {
         {
             text: "CurrentRate",
             dataField: "CurrentRate",
-            sort: true,
             headerStyle: () => { return { width: '200px' } },
             formatter: (cellContent, row, key) => {
                 return (
                     <span style={{ justifyContent: 'center' }}>
                         <CInput
-                            key={`CurrentRate${row.Item}`}
+                            key={`CurrentRate${row.ItemID}`}
                             id=""
                             cpattern={decimalRegx}
                             type="text"
@@ -298,24 +307,43 @@ const RateMaster = (props) => {
         },
 
         {
-
             text: "Rate ",
             dataField: "Rate",
-            sort: true,
             headerStyle: () => { return { width: '200px' } },
             formatter: (cellContent, row, key) => {
                 return (
                     <span style={{ justifyContent: 'center' }}>
                         <CInput
-                            key={`Rate${row.Item}`}
+                            key={`Rate${row.ItemID}`}
                             type="text"
                             cpattern={decimalRegx}
                             className="col col-sm "
                             onChange={(e) => { row["Rate"] = e.target.value }}
                         />
-
                     </span>
+                )
+            },
+        },
 
+        {
+
+            text: "Unit ",
+            dataField: "Unit",
+            headerStyle: () => { return { width: '200px' } },
+            formatter: (cellContent, row, key) => {
+                return (
+                    <span style={{ justifyContent: 'center' }}>
+                        <C_Select
+                            key={`unit${row.ItemID}`}
+                            defaultValue={row.defaultUnit.value === null ? [] : row.defaultUnit}
+                            isDisabled={true}
+                            options={BaseUnit_DropdownOptions}
+                            onChange={(e) => { row["defaultUnit"] = e }}
+                            styles={{
+                                menu: provided => ({ ...provided, zIndex: 2 })
+                            }}
+                        />
+                    </span>
                 )
             },
         },
@@ -327,7 +355,6 @@ const RateMaster = (props) => {
                 return { width: '100px' };
             },
             formatter: (cellContent, user) => {
-
                 return (
                     <span className="d-flex justify-content-center align-items-center">
                         {!(user.CurrentRate === null) &&
@@ -335,8 +362,8 @@ const RateMaster = (props) => {
                                 id={"deleteid"}
                                 type="button"
                                 className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
-                                data-mdb-toggle="tooltip" data-mdb-placement="top" title='Delete MRP'
-                                onClick={() => { deleteHandeler(user.id, user.Name); }}
+                                data-mdb-toggle="tooltip" data-mdb-placement="top" title='Delete Rate'
+                                onClick={() => { deleteHandeler(user.id, user.ItemName); }}
                             >
                                 <i className="mdi mdi-delete font-size-18"></i>
                             </Button>}
@@ -348,30 +375,28 @@ const RateMaster = (props) => {
 
     const SaveHandler = async (event) => {
         event.preventDefault();
-        const btnId = event.target.id
+        const invalidMessages = [];
         try {
 
-            _cfunc.btnIsDissablefunc({ btnId, state: true })
-
-            var ItemData = Data.map((index) => ({
+            var ItemData = tableData.map((index) => ({
                 "id": index.id,
-                "Rate": index.Rate,
+                "Rate": Number(index.Rate),
+                "BaseUnitID": index.defaultUnit.value,
                 "CommonID": 0,
                 "EffectiveDate": values.EffectiveDate,
                 "Company": loginCompanyID(),
                 "CreatedBy": loginUserID(),
                 "UpdatedBy": loginUserID(),
                 "IsDeleted": 0,
-                "Item": index.Item,
+                "Item": index.ItemID,
+                "ItemName": index.ItemName,
             }))
 
-            const filterData = ItemData.filter((index) => {
-                return (!(index.Rate === ''))
+            const filteredData = ItemData.filter((index) => {
+                return index.Rate > 0
             })
 
-            const jsonBody = JSON.stringify(filterData)
-
-            if (!(filterData.length > 0)) {
+            if (!(filteredData.length > 0)) {
                 dispatch(
                     customAlert({
                         Type: 4,
@@ -379,13 +404,28 @@ const RateMaster = (props) => {
                         Message: alertMessages.RateIsRequired
                     })
                 );
-                return _cfunc.btnIsDissablefunc({ btnId, state: false })
-            }
-            else {
-                dispatch(saveRateMaster(jsonBody));
+                return
             }
 
-        } catch (e) { _cfunc.btnIsDissablefunc({ btnId, state: false }) }
+            // const filteredDataWithUnit = filteredData.filter(({ UnitID, ItemName }) => {
+            //     if (UnitID === null) {
+            //         invalidMessages.push({ [ItemName]: alertMessages.unitIsRequired });
+            //         return false;
+            //     }
+            //     return true;
+            // });
+
+            // if (invalidMessages.length > 0) {
+            //     customAlert({
+            //         Type: 4,
+            //         Message: invalidMessages,
+            //     });
+            //     return;
+            // }
+            const jsonBody = JSON.stringify(filteredData.map(({ ItemName, ...rest }) => rest));
+            dispatch(saveRateMaster(jsonBody));
+
+        } catch (e) { }
     };
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
@@ -424,6 +464,7 @@ const RateMaster = (props) => {
                                                                 onChangeDate({ e, v, state, setState })
                                                             }}
                                                             options={{
+                                                                minDate: "today",
                                                                 altInput: true,
                                                                 altFormat: "d-m-Y",
                                                                 dateFormat: "Y-m-d",
@@ -442,41 +483,41 @@ const RateMaster = (props) => {
                                     </CardHeader>
                                 </Card>
 
-                                {Data.length > 0 ?
+                                {tableData.length > 0 ?
 
                                     <ToolkitProvider
-                                        keyField="Item"
-                                        data={Data}
+                                        keyField={"ItemID"}
+                                        data={tableData}
                                         columns={pagesListColumns}
                                         search
                                     >
-                                        {(toolkitProps) => (
+                                        {(toolkitProps,) => (
                                             <React.Fragment>
-                                                <Row>
-                                                    <Col xl="12">
-                                                        <div className="table-responsive">
-                                                            <BootstrapTable
-                                                                keyField={"Item"}
-                                                                id="table_Arrow"
-                                                                responsive
-                                                                bordered={false}
-                                                                striped={false}
-                                                                classes={"table  table-bordered"}
-                                                                noDataIndication={<div className="text-danger text-center ">Items Not available</div>}
-                                                                {...toolkitProps.baseProps}
-                                                            />
-                                                            {globalTableSearchProps(toolkitProps.searchProps)}
 
+                                                <BootstrapTable
+                                                    keyField={"ItemID"}
+                                                    id="table_Arrow"
+                                                    defaultSorted={defaultSorted}
+                                                    classes='custom-table'
+                                                    noDataIndication={
+                                                        <div className="text-danger text-center table-cursor-pointer">
+                                                            Items Not available
                                                         </div>
-                                                    </Col>
-                                                </Row>
+                                                    }
+                                                    onDataSizeChange={(e) => {
+                                                        _cfunc.tableInputArrowUpDounFunc("#table_Arrow")
+                                                    }}
+                                                    {...toolkitProps.baseProps}
+                                                />
+                                                {globalTableSearchProps(toolkitProps.searchProps)}
+
 
                                             </React.Fragment>
                                         )}
                                     </ToolkitProvider>
                                     : null}
 
-                                {Data.length > 0 &&
+                                {tableData.length > 0 &&
                                     <SaveButtonDraggable>
                                         <SaveButton pageMode={pageMode}
                                             loading={saveBtnloading}

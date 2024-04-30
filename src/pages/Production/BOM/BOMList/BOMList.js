@@ -93,13 +93,13 @@ const BOMList = () => {
         dispatch(getBOMListPage(jsonBody));
     }
 
-    function fromdateOnchange(date) {
+    function fromdateOnchange(e, date) {
         let newObj = { ...hederFilters }
         newObj.fromdate = date
         setHederFilters(newObj)
     }
 
-    function todateOnchange( date) {
+    function todateOnchange(e, date) {
         let newObj = { ...hederFilters }
         newObj.todate = date
         setHederFilters(newObj)
@@ -129,9 +129,17 @@ const BOMList = () => {
                                 <Label className="col-sm-5 p-2"
                                     style={{ width: "65px", marginRight: "0.4cm" }}>ToDate</Label>
                                 <Col sm="6 ">
+
                                     <C_DatePicker
-                                        name="todate"
-                                        value={todate}
+                                        options={{
+                                            minDate: (_cfunc.disablePriviousTodate({ fromDate: fromdate })),
+                                            maxDate: "today",
+                                            altInput: true,
+                                            altFormat: "d-m-Y",
+                                            dateFormat: "Y-m-d",
+                                        }}
+                                        value={_cfunc.ToDate({ FromDate: fromdate, Todate: todate })}
+                                        nane='todate'
                                         onChange={todateOnchange}
                                     />
                                 </Col>
