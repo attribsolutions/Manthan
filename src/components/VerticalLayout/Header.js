@@ -134,10 +134,10 @@ const Header = props => {
             <div className="navbar-brand-box" >
               <div style={{ cursor: "context-menu" }} className="logo logo-dark">
                 <span className="logo-sm" >
-                  <img src={logoSvg} alt="" height="35" />
+                  <img src={logoSvg} alt="" height="40" />
                 </span>
                 <span className="logo-lg">
-                  <img src={logoSvg} alt="" height="45" /> <span className="logo-txt" style={{ color: 'white' }}>FoodERP 2.0</span>
+                  <img src={logoSvg} alt="" height="40" /> <span className="logo-txt" style={{ color: 'white' }}>FoodERP 2.0</span>
                 </span>
               </div>
 
