@@ -1258,9 +1258,10 @@ const Order = (props) => {
                 return;
             }
 
-            const allQuantitiesGreaterThanZero = array => array.every(item => parseInt(item.Quantity, 10) > 0);
+            const allQuantitiesGreaterThanZero = array => array.every(item => parseInt(item.Quantity) === 0);
             const Result = allQuantitiesGreaterThanZero(orderItems);
-            if (orderItems.length === 0 || !Result) {
+            
+            if (orderItems.length === 0 || Result) {
                 customAlert({
                     Type: 4,
                     Message: alertMessages.itemQtyIsRequired,

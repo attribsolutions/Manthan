@@ -170,7 +170,7 @@ const ForgetPasswordPage = props => {
                       <div style={{ cursor: "context-menu" }} className="logo logo-dark">
                         <span className="logo-txt">FoodERP 2.0</span>
                       </div>
-                      <img src={logo} alt="" height="90" />
+                      <img src={logo} alt="" height="150" />
 
                     </div>
                     {
