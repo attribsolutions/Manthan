@@ -180,9 +180,9 @@ export const ProductionReIssue = url.PRODUCTION_REISSUE_LIST;
 export const ProductionReIssueList = url.PRODUCTION_REISSUE;
 export const ProductionReIssue_STP = url.PRODUCTION_REISSUE_STP;
 
-export const ProductionMaster = url.PRODUCTION_LIST;
 export const ProductionList = url.PRODUCTION_STP;
-export const Production_Add_Mode = url.PRODUCTION_LIST;
+export const ProductionMaster = url.PRODUCTION_LIST;
+export const Production_STP = url.PRODUCTION_LIST;
 
 //******************************* Inventory ************************************//
 
@@ -260,13 +260,8 @@ export const Credit_Note_List_1 = url.CREDIT_NOTE_1
 export const ClaimTrackingEntry = url.CLAIM_TRACKING_ENTRY_LIST
 export const ClaimTrackingEntryList = url.CLAIM_TRACKING_ENTRY
 
-
-
 export const System_Setting = url.SYSTEM_SETTING_LIST;
 export const System_Setting_List = url.SYSTEM_SETTING;
-
-
-
 
 export const Target_Upload = url.TARGET_UPLOAD_LIST;
 export const Target_Upload_List = url.TARGET_UPLOAD;
@@ -323,12 +318,7 @@ export const TargetVSAchievement = url.TARGET_VS_ACHIEVEMENT
 export const Credit_Note_Excel_Field_Map = url.IMPORT_CREDIT_NOTE_EXCEL_FIELD_MAP
 
 
-
-
-
 //**************************** POS ***********************************//
-
-
 
 export const POS_User = url.POS_USER_lIST;
 export const POS_User_List = url.POS_USER;

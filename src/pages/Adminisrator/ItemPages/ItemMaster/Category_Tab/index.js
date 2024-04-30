@@ -56,11 +56,11 @@ function CategoryTab(props) {
         });
 
         if (!(find === undefined)) {
-            dispatch(customAlert({
+            customAlert({
                 Type: 4,
                 Status: true,
                 Message: alertMessages.categoryAlreadyExists,
-            }))
+            })
             return
         }
         const val = {

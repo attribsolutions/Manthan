@@ -16,6 +16,7 @@ export function SaveButton(props) {
   else if ((userAcc.RoleAccess_IsSave) && (pageMode === mode.defaultsave
     || pageMode === mode.copy
     || pageMode === mode.modeSTPsave
+    || pageMode === mode.modeSTPList
     || pageMode === mode.dropdownAdd
     || pageMode === mode.assingLink)) {
     return <SaveBtn  {...props} />

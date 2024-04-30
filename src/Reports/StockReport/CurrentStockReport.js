@@ -25,13 +25,14 @@ import { getClusterlistSuccess } from "../../store/Administrator/ClusterRedux/ac
 import { Get_Subcluster_On_cluster_API, SubGroup_By_Group_DropDown_API } from "../../helpers/backend_helper";
 import { allLabelWithBlank } from "../../components/Common/CommonErrorMsg/HarderCodeData";
 
-
 const CurrentStockReport = (props) => {
 
 	const dispatch = useDispatch();
 	const history = useHistory();
 	const currentDate_ymd = _cfunc.date_ymd_func();
-	const isSCMParty = _cfunc.loginIsSCMParty();
+	const isSCMParty = _cfunc.loginUserAdminRole();
+	const isSCMCompany = _cfunc.loginIsSCMParty();
+	const isVisibleRateDrop = _cfunc.checkRateDropVisibility()
 
 	const [headerFilters, setHeaderFilters] = useState('');
 	const [userPageAccessState, setUserAccState] = useState('');
@@ -243,7 +244,7 @@ const CurrentStockReport = (props) => {
 			controlTypeName: "Text"
 		},
 		{
-			text: 'MRP',
+			text: !isVisibleRateDrop ? "MRP" : 'Rate',
 			dataField: 'MRP',
 			align: "right",
 			showing: mrpWise,
@@ -365,7 +366,11 @@ const CurrentStockReport = (props) => {
 			if (goButtonData.Status === true && goButtonData.StatusCode === 200) {
 				const { goBtnMode } = goButtonData;
 				updatedReduxData = goButtonData.Data.map((obj) => {
-					return { ...obj, ID: nextId++ };
+					return {
+						...obj,
+						ID: nextId++,
+						MRP: isVisibleRateDrop ? obj.Rate : obj.MRP
+					};
 				});
 
 				if (goBtnMode === "downloadExcel") {
@@ -393,7 +398,6 @@ const CurrentStockReport = (props) => {
 
 		} catch (e) { }
 	}, [goButtonData]);
-
 
 	useEffect(() => {
 
@@ -460,6 +464,7 @@ const CurrentStockReport = (props) => {
 				"PartyID": (partyDropdown.value === "" && !(isSCMParty)) ? _cfunc.loginPartyID() : partyDropdown.value,
 				"IsDamagePieces": stockTypeSelect.value,
 				"Employee": !isSCMParty ? 0 : _cfunc.loginEmployeeID(),
+				"IsRateWise": isVisibleRateDrop ? 2 : 1
 			});
 			const config = { jsonBody, btnId: goBtnMode, };
 			dispatch(stockReport_GoButton_API(config))
@@ -715,49 +720,80 @@ const CurrentStockReport = (props) => {
 				<Row>
 					<Col className="col col-11  mt-1">
 						<Row className="mb-2 row ">
-							<Col sm={3}>
-								<FormGroup className="mb-n2 row mt-1">
+							{
+								isSCMCompany &&
+								<Col sm={3}>
+									<FormGroup className="mb-n2 row mt-1">
 
-									<Label className="col-sm-3 p-2">Cluster</Label>
-									<Col sm={6}>
-										<Select
-											name="cluster"
-											value={cluserSelect}
-											isSearchable={true}
-											className="react-dropdown"
-											classNamePrefix="dropdown"
-											styles={{
-												menu: provided => ({ ...provided, zIndex: 2 })
-											}}
-											options={Cluster_Options}
-											onChange={(e) => { ClusterOnchangeHandler(e) }}
-										/>
-									</Col>
-								</FormGroup>
-							</Col>
+										<Label className="col-sm-3 p-2">Stock Type</Label>
+										<Col sm={6}>
+											<Select
+												name="stockType"
+												value={stockTypeSelect}
+												isSearchable={true}
+												className="react-dropdown"
+												classNamePrefix="dropdown"
+												styles={{
+													menu: provided => ({ ...provided, zIndex: 2 })
+												}}
+												options={StockTypeOptions}
+												onChange={(e) => {
+													StockTypeHandler(e)
 
-							<Col sm={3} className="custom-to-date-col">
-								<FormGroup className="mb-n3 row mt-1">
-									<Label className="col-sm-4 p-2">Sub-Cluster</Label>
-									<Col>
-										<Select
-											name="subCluser"
-											value={subCluserSelect}
-											isSearchable={true}
-											className="react-dropdown"
-											classNamePrefix="dropdown"
-											styles={{
-												menu: provided => ({ ...provided, zIndex: 2 })
-											}}
-											options={subClusterOptions}
-											onChange={(e) => {
-												setSubCluserSelect(e);
-												setTableData([]);
-											}}
-										/>
-									</Col>
-								</FormGroup>
-							</Col>
+												}}
+											/>
+										</Col>
+									</FormGroup>
+								</Col>
+							}
+
+							{
+								!isSCMCompany &&
+								<Col sm={3}>
+									<FormGroup className="mb-n2 row mt-1">
+
+										<Label className="col-sm-3 p-2">Cluster</Label>
+										<Col sm={6}>
+											<Select
+												name="cluster"
+												value={cluserSelect}
+												isSearchable={true}
+												className="react-dropdown"
+												classNamePrefix="dropdown"
+												styles={{
+													menu: provided => ({ ...provided, zIndex: 2 })
+												}}
+												options={Cluster_Options}
+												onChange={(e) => { ClusterOnchangeHandler(e) }}
+											/>
+										</Col>
+									</FormGroup>
+								</Col>
+							}
+
+							{!isSCMCompany &&
+								<Col sm={3} className="custom-to-date-col">
+									<FormGroup className="mb-n3 row mt-1">
+										<Label className="col-sm-4 p-2">Sub-Cluster</Label>
+										<Col>
+											<Select
+												name="subCluser"
+												value={subCluserSelect}
+												isSearchable={true}
+												className="react-dropdown"
+												classNamePrefix="dropdown"
+												styles={{
+													menu: provided => ({ ...provided, zIndex: 2 })
+												}}
+												options={subClusterOptions}
+												onChange={(e) => {
+													setSubCluserSelect(e);
+													setTableData([]);
+												}}
+											/>
+										</Col>
+									</FormGroup>
+								</Col>}
 
 							<Col sm={3}>
 								<FormGroup className="mb-n3 row mt-1">
@@ -774,10 +810,6 @@ const CurrentStockReport = (props) => {
 												menu: provided => ({ ...provided, zIndex: 2 })
 											}}
 											options={Group_Options}
-											// onChange={(e) => {
-											// 	setGroupSelect(e);
-											// 	setTableData([]);
-											// }}
 											onChange={(e) => { GroupOnchangeHandler(e) }}
 										/>
 									</Col>
@@ -825,33 +857,36 @@ const CurrentStockReport = (props) => {
 				<Row>
 					<Col className="col col-11  mt-1">
 						<Row className="mb-2 row ">
-							<Col sm={3}>
-								<FormGroup className="mb-n2 row mt-1">
+							{!isSCMCompany &&
+								<Col sm={3}>
+									<FormGroup className="mb-n2 row mt-1">
 
-									<Label className="col-sm-3 p-2">Stock Type</Label>
-									<Col sm={6}>
-										<Select
-											name="stockType"
-											value={stockTypeSelect}
-											isSearchable={true}
-											className="react-dropdown"
-											classNamePrefix="dropdown"
-											styles={{
-												menu: provided => ({ ...provided, zIndex: 2 })
-											}}
-											options={StockTypeOptions}
-											onChange={(e) => {
-												StockTypeHandler(e)
+										<Label className="col-sm-3 p-2">Stock Type</Label>
+										<Col sm={6}>
+											<Select
+												name="stockType"
+												value={stockTypeSelect}
+												isSearchable={true}
+												className="react-dropdown"
+												classNamePrefix="dropdown"
+												styles={{
+													menu: provided => ({ ...provided, zIndex: 2 })
+												}}
+												options={StockTypeOptions}
+												onChange={(e) => {
+													StockTypeHandler(e)
 
-											}}
-										/>
-									</Col>
-								</FormGroup>
-							</Col>
+												}}
+											/>
+										</Col>
+									</FormGroup>
+								</Col>}
+
 
 							<Col sm={2}>
 								<FormGroup className=" row mt-1 " >
-									<Label htmlFor="horizontal-firstname-input" className="col-sm-6 col-form-label" >MRP-Wise</Label>
+									<Label htmlFor="horizontal-firstname-input"
+										className="col-sm-6 col-form-label" >{!isVisibleRateDrop ? "MRP - Wise" : 'Rate-Wise'}</Label>
 									<Col md={2} style={{ marginTop: '7px' }} >
 										<div className="form-check form-switch form-switch-md ">
 											<Input type="checkbox" className="form-check-input"

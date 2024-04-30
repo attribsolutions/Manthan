@@ -19,7 +19,11 @@ function* goButton_Rate_GenFunc({ data }) {
     response.pageMode = btnmode
     response.pathname = pathname
     response.rowData = rowData
-    yield put(action.goButtonForRate_Master_Success(response));
+    const newList = response.Data.map((i) => ({
+      ...i,
+      ['defaultUnit']: { value: i.BaseUnitID, label: i.UnitName }
+    }));
+    yield put(action.goButtonForRate_Master_Success(newList));
   } catch (error) { yield put(action.RateApiErrorAction()) }
 }
 

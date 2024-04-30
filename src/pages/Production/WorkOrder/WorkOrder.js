@@ -49,6 +49,7 @@ import { globalTableSearchProps } from "../../../components/Common/SearchBox/MyS
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { C_DatePicker } from "../../../CustomValidateForm";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
+import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 
 const goBtnID1 = "workOrdergoBtnID1"
 const changeBtnID1 = "workOrderchangeBtnID1"
@@ -73,7 +74,9 @@ const WorkOrder = (props) => {
         NumberOfLot: "",
         Quantity: "",
         StockQuantity: "0",
-        EstimatedOutputQty: ""
+        EstimatedOutputQty: "",
+        FullWorkOrderNumber: "",
+        WorkOrderNumber: ""
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
@@ -150,9 +153,10 @@ const WorkOrder = (props) => {
 
             if (hasEditVal) {
                 setEditData(hasEditVal);
+                debugger
                 const { id, WorkOrderDate, Item, ItemName, NumberOfLot, Stock
                     , Quantity, EstimatedOutputQty, Bom, Party } = hasEditVal
-                const { values, fieldLabel, hasValid, required, isError } = { ...state }
+                const { values, fieldLabel, hasValid, required, isError, FullWorkOrderNumber, WorkOrderNumber } = { ...state }
                 hasValid.id.valid = true;
                 hasValid.WorkOrderDate.valid = true;
                 hasValid.EstimatedOutputQty.valid = true;
@@ -166,6 +170,9 @@ const WorkOrder = (props) => {
                 values.Quantity = Quantity;
                 values.NumberOfLot = NumberOfLot;
                 values.StockQuantity = Stock;
+                values.ItemName = { label: ItemName, value: Item };
+                values.FullWorkOrderNumber = FullWorkOrderNumber;
+                values.WorkOrderNumber = WorkOrderNumber
                 values.ItemName = { label: ItemName, value: Item };
 
                 const jsonBody = JSON.stringify({
@@ -205,18 +212,17 @@ const WorkOrder = (props) => {
         }
         else if (postMsg.Status === true) {
             dispatch(SaveWorkOrderMasterSuccess({ Status: false }))
-            dispatch(customAlert({
+            customAlert({
                 Type: 4,
                 Message: JSON.stringify(postMsg.Message),
             })
-            )
+            
         }
     }, [postMsg])
 
     useEffect(() => _cfunc.tableInputArrowUpDounFunc("#table_Arrow"), [BOMItems]);
 
     useEffect(() => {
-
         if ((updateMsg.Status === true) && (updateMsg.StatusCode === 200) && !(modalCss)) {
             // setState(() => resetFunction(fileds, state))// Clear form values  
             history.push({
@@ -258,7 +264,7 @@ const WorkOrder = (props) => {
         Unit: index.Unit,
         UnitName: index.UnitName,
         EstimatedOutputQty: index.EstimatedOutputQty,
-        StockQty: index.StockQty
+        StockQty: (index.StockQty).toFixed(2)
     }));
 
     const pagesListColumns = [
@@ -314,7 +320,6 @@ const WorkOrder = (props) => {
 
     const QuantityHandler = (event, user) => {
 
-        // user["Quantity"] = event.target.value
         let val = event.target.value;
         const result = /^-?([0-9]*\.?[0-9]+|[0-9]+\.?[0-9]*)$/.test(val);
         if ((result) && (parseFloat(event.target.value).toFixed(3))) {
@@ -385,7 +390,13 @@ const WorkOrder = (props) => {
     }
 
     const goButtonHandler = (event) => {
-
+        if (values.ItemName.length === 0) {
+            customAlert({
+                Type: 4,
+                Message: alertMessages.itemNameIsRequired
+            })
+            return
+        }
         const jsonBody = JSON.stringify({
             Item: (pageMode === mode.edit ? EditData.Item : values.ItemName.ItemID),
             Bom: (pageMode === mode.edit ? EditData.Bom : values.ItemName.value),
@@ -396,7 +407,7 @@ const WorkOrder = (props) => {
     }
 
     const SaveHandler = async (event) => {
-
+        debugger
         event.preventDefault();
         const btnId = event.target.id
         try {
@@ -408,6 +419,7 @@ const WorkOrder = (props) => {
                     BomQuantity: index.BomQuantity,
                     Quantity: index.Quantity,
                 }))
+                debugger
                 const jsonBody = JSON.stringify({
                     WorkOrderDate: values.WorkOrderDate,
                     Item: (pageMode === mode.edit ? Item : values.ItemName.ItemID),
@@ -419,6 +431,8 @@ const WorkOrder = (props) => {
                     Party: loginPartyID(),
                     CreatedBy: loginUserID(),
                     UpdatedBy: loginUserID(),
+                    FullWorkOrderNumber: EditData.FullWorkOrderNumber,
+                    WorkOrderNumber: EditData.WorkOrderNumber,
                     WorkOrderItems: WorkOrderItems
                 });
                 if (pageMode === mode.edit) {
@@ -538,8 +552,6 @@ const WorkOrder = (props) => {
                                                         {pageMode === mode.edit ? EditData.UnitName : itemselect.UnitName}</Label>
                                                 </div>
                                             </FormGroup>
-
-
                                         </div >
 
                                     </div>
@@ -598,12 +610,6 @@ const WorkOrder = (props) => {
                                                     <Label style={{ marginTop: '7px', width: "72px", marginLeft: '-23px' }}>
                                                         {pageMode === mode.edit ? EditData.UnitName : itemselect.UnitName}</Label>
                                                 </div>
-                                                {/* <div className="col col-1">
-                                            <Button
-                                                color="btn btn-outline-success border-2 font-size-12 " style={{ marginTop: '3px' }}
-                                                onClick={(e) => goButtonHandler(e)}
-                                            >Go</Button>
-                                        </div> */}
 
                                             </FormGroup>
                                         </div >
@@ -622,7 +628,6 @@ const WorkOrder = (props) => {
                                         }
                                     </div>
                                 </Col>
-
                             </Row>
                         </div>
 

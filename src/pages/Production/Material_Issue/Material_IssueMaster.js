@@ -38,7 +38,7 @@ import { Tbody, Thead } from "react-super-responsive-table";
 import { mode, pageId, url } from "../../../routes/index";
 import { countlabelFunc } from "../../../components/Common/CommonPurchaseList";
 import * as _cfunc from "../../../components/Common/CommonFunction";
-import { C_DatePicker } from "../../../CustomValidateForm";
+import { CInput, C_DatePicker, decimalRegx } from "../../../CustomValidateForm";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 
@@ -59,6 +59,7 @@ const MaterialIssueMaster = (props) => {
 
     const [modalCss, setModalCss] = useState(false);
     const [pageMode, setPageMode] = useState(mode.defaultsave);
+
     const [userPageAccessState, setUserAccState] = useState('');
     const [Itemselect, setItemselect] = useState([])
     const [Itemselectonchange, setItemselectonchange] = useState("");
@@ -119,7 +120,7 @@ const MaterialIssueMaster = (props) => {
     useEffect(() => {
 
         if ((GoButton.Status === true) && (GoButton.StatusCode === 200)) {
-
+            setPageMode(GoButton.pageMode)
             const { ListData, Data } = GoButton
             const { id, Item, ItemName, Unit, Quantity, NumberOfLot, Bom, } = ListData
             setState((i) => {
@@ -173,7 +174,6 @@ const MaterialIssueMaster = (props) => {
                 })
                 // ++++++++++++++++++++++++++**Dynamic go Button API Call method+++++++++++++++++
 
-
                 if (insidePageMode === mode.view) {
                     dispatch(goButtonForMaterialIssue_Master_ActionSuccess(MaterialIssueItems))
                     setGoButtonList(MaterialIssueItems)
@@ -217,23 +217,6 @@ const MaterialIssueMaster = (props) => {
     }, [postMsg])
 
     useEffect(() => {
-
-        if ((updateMsg.Status === true) && (updateMsg.StatusCode === 200) && !(modalCss)) {
-            // setState(() => resetFunction(fileds, state))// Clear form values 
-            history.push({
-                pathname: url.MATERIAL_ISSUE_LIST,
-            })
-        } else if (updateMsg.Status === true && !modalCss) {
-            dispatch(updateBOMListSuccess({ Status: false }));
-            customAlert({
-                Type: 3,
-                Message: JSON.stringify(updateMsg.Message),
-            })
-
-        }
-    }, [updateMsg, modalCss]);
-
-    useEffect(() => {
         if (pageField) {
             const fieldArr = pageField.PageFieldMaster
             comAddPageFieldFunc({ state, setState, fieldArr })
@@ -268,7 +251,7 @@ const MaterialIssueMaster = (props) => {
             style: (cellContent, user,) => {
 
                 let Stock = user.BatchesData.map((index) => {
-                    return index.BaseUnitQuantity
+                    return index.ObatchwiseQuantity
                 })
                 var TotalStock = 0;
                 Stock.forEach(x => {
@@ -338,22 +321,23 @@ const MaterialIssueMaster = (props) => {
                                             <div style={{ width: "120px", textAlign: "right" }}>
                                                 <Label
                                                 >
-                                                    {index.BaseUnitQuantity}
+                                                    {index.ObatchwiseQuantity}
                                                 </Label>
                                             </div>
                                         </td>
                                         <td>
                                             <div style={{ width: "150px" }}>
-                                                <Input
+                                                <CInput
                                                     type="text"
                                                     key={`stock${user.id}-${index.id}`}
                                                     disabled={pageMode === mode.view ? true : false}
                                                     id={`stock${user.id}-${index.id}`}
                                                     style={{ textAlign: "right" }}
+                                                    cpattern={decimalRegx}
                                                     defaultValue={index.Qty}
                                                     autoComplete='off'
                                                     onChange={(event) => handleChange(event, user, index)}
-                                                ></Input>
+                                                />
                                             </div>
                                         </td>
                                     </tr>
@@ -389,6 +373,7 @@ const MaterialIssueMaster = (props) => {
     }
 
     function goButtonHandler(event) {
+
         event.preventDefault();
         if (state.values.LotQuantity === "0") {
             alert("Quantity Can Not be 0")
@@ -436,7 +421,6 @@ const MaterialIssueMaster = (props) => {
         if (event.target.value === "NaN") {
             value1 = 0
         }
-        // onChangeText({ event, state, setState });
         setState((i) => {
             i.values.LotQuantity = value1
             // i.hasValid.NumberOfLot.valid = true;
@@ -462,12 +446,12 @@ const MaterialIssueMaster = (props) => {
     }
 
     const handleChange = (event, index1, index2) => {
-
-        let input = event.target.value
-        let result = /^\d*(\.\d{0,3})?$/.test(input);
+        debugger
+        let input = Number(event.target.value)
+        let result = /^\d*(\.\d{0,2})?$/.test(input);
         let val1 = 0;
         if (result) {
-            let v1 = Number(index2.BaseUnitQuantity);
+            let v1 = Number(index1.Quantity);
             let v2 = Number(input)
             if (v1 >= v2) { val1 = input }
             else { val1 = v1 };
@@ -478,7 +462,7 @@ const MaterialIssueMaster = (props) => {
             val1 = 0
         }
 
-        event.target.value = val1;
+        event.target.value = Number(val1);
 
         let Qtysum = 0
         index1.BatchesData.forEach((i) => {
@@ -488,38 +472,40 @@ const MaterialIssueMaster = (props) => {
         });
 
         Qtysum = Number(Qtysum) + Number(val1);
-        index2.Qty = val1;
-        let diffrence = Math.abs(index1.Quantity - Qtysum);
+        index2.Qty = Number(val1);
+        // let diffrence = Math.abs(index1.Quantity - Qtysum);
 
-        if ((Qtysum === index1.Quantity)) {
-            try {
-                document.getElementById(`ItemName${index1.id}`).style.color = ""
-                document.getElementById(`ItemNameMsg${index1.id}`).innerText = ''
-                index1["invalid"] = false
-                index1["invalidMsg"] = ''
+        // if ((Qtysum === index1.Quantity)) {
+        //     try {
+        //         document.getElementById(`ItemName${index1.id}`).style.color = ""
+        //         document.getElementById(`ItemNameMsg${index1.id}`).innerText = ''
+        //         index1["invalid"] = false
+        //         index1["invalidMsg"] = ''
 
-            } catch (e) { }
-        } else {
-            try {
-                const msg = (Qtysum > index1.Quantity) ? (`Excess Quantity ${diffrence} ${index1.UnitName}`)
-                    : (`Short Quantity ${diffrence} ${index1.UnitName}`)
-                index1["invalid"] = true;
-                index1["invalidMsg"] = msg;
+        //     } catch (e) { }
+        // } else {
+        //     try {
+        //         const msg = (Qtysum > index1.Quantity) ? (`Excess Quantity ${diffrence} ${index1.UnitName}`)
+        //             : (`Short Quantity ${diffrence} ${index1.UnitName}`)
+        //         index1["invalid"] = true;
+        //         index1["invalidMsg"] = msg;
 
-                document.getElementById(`ItemNameMsg${index1.id}`).innerText = msg;
-            } catch (e) { }
-        }
+        //         document.getElementById(`ItemNameMsg${index1.id}`).innerText = msg;
+        //     } catch (e) { }
+        // }
     };
 
     const SaveHandler = async (event) => {
+
         event.preventDefault();
         const btnId = event.target.id
         const validMsg = []
         const materialIssueItems = []
         let ox = await goButtonList.map((index) => {
+
             var TotalStock = 0;
             index.BatchesData.map(i => {
-                TotalStock += Number(i.BaseUnitQuantity);
+                TotalStock += Number(i.ObatchwiseQuantity);
             });
 
             var OrderQty = Number(index.Quantity)
@@ -542,13 +528,13 @@ const MaterialIssueMaster = (props) => {
                     BatchDate: ele.BatchDate,
                     SystemBatchDate: ele.SystemBatchDate,
                     SystemBatchCode: ele.SystemBatchCode,
-                    IssueQuantity: parseInt(ele.Qty),
+                    IssueQuantity: ele.Qty,
                     BatchID: ele.id,
                     LiveBatchID: ele.LiveBatchID
                 })
             }
             index.BatchesData.map((ele) => {
-                // 
+
                 if (Number(ele.Qty) > 0) {
                     batch(ele)
                 }
@@ -556,14 +542,15 @@ const MaterialIssueMaster = (props) => {
         })
         try {
             if (formValid(state, setState)) {
+
                 if (validMsg.length > 0) {
-                    dispatch(customAlert({
+                    customAlert({
                         Type: 4,
                         Status: true,
                         Message: JSON.stringify(validMsg),
                         RedirectPath: false,
                         AfterResponseAction: false
-                    }));
+                    })
                     return
                 }
                 _cfunc.btnIsDissablefunc({ btnId, state: true })
@@ -587,11 +574,9 @@ const MaterialIssueMaster = (props) => {
                     ]
                 }
                 );
-                if (pageMode === mode.edit) {
-                }
-                else {
-                    dispatch(saveMaterialIssue(jsonBody));
-                }
+
+                dispatch(saveMaterialIssue({ jsonBody }));
+
             }
         } catch (e) { _cfunc.btnIsDissablefunc({ btnId, state: false }) }
     };
@@ -636,6 +621,9 @@ const MaterialIssueMaster = (props) => {
                                                     classNamePrefix="dropdown"
                                                     options={ItemDropdown_Options}
                                                     onChange={ItemOnchange}
+                                                    styles={{
+                                                        menu: provided => ({ ...provided, zIndex: 2 })
+                                                    }}
                                                 />
                                                 {isError.ItemName.length > 0 && (
                                                     <span className="text-danger f-8"><small>{isError.ItemName}</small></span>
@@ -692,7 +680,7 @@ const MaterialIssueMaster = (props) => {
                                 <Col sm={1} className="mt-2">
                                     {pageMode === mode.defaultsave ?
                                         (Data.length === 0) ?
-                                            < Go_Button onClick={(e) => goButtonHandler()} />
+                                            < Go_Button onClick={(e) => goButtonHandler(e)} />
                                             :
                                             <Change_Button onClick={(e) => dispatch(goButtonForMaterialIssue_Master_ActionSuccess([]))} />
                                         : null
@@ -743,13 +731,13 @@ const MaterialIssueMaster = (props) => {
 
                         </PaginationProvider>
                         {goButtonList.length > 0 &&
-                         <SaveButtonDraggable>
-                            <SaveButton pageMode={pageMode}
-                                onClick={SaveHandler}
-                                userAcc={userPageAccessState}
-                                module={"Material Issue"}
-                            />
-                        </SaveButtonDraggable>}
+                            <SaveButtonDraggable>
+                                <SaveButton pageMode={pageMode}
+                                    onClick={SaveHandler}
+                                    userAcc={userPageAccessState}
+                                    module={"Material Issue"}
+                                />
+                            </SaveButtonDraggable>}
 
                     </form>
                 </div>
