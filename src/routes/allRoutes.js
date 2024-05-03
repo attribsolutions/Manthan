@@ -550,7 +550,7 @@ const userRoutes = [
 
 	{ path: path.ITEM_SALE_REPORT, component: ItemSaleReport, isPartyWisePage: true },
 
-	{ path: path.ITEM_REGISTER_REPORT, component: ItemRegisterReport, isPartyWisePage: true },// use self party drop-down
+	{ path: path.MATERIAL_REGISTER_REPORT, component: ItemRegisterReport, isPartyWisePage: true },// use self party drop-down
 
 	{ path: path.CREDIT_DATA_EXPORT, component: CreditDebitDataExport },// use self party drop-down
 

@@ -850,7 +850,7 @@ const HeaderSection = (props) => {
                           states.setItemNameCheckbox(e.target.checked);
                         }}
                       />
-                      <Label className="col-sm-4 p-2">Items</Label>
+                      <Label className="col-sm-4 p-2">SKU Name</Label>
                       <Col>
                         <C_Select
                           value={states.itemNameSelect}

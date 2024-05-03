@@ -327,7 +327,7 @@ export const RETURN_REPORT = "/ReturnReport"
 
 export const ITEM_SALE_REPORT = "/Item_Sale_Report"
 
-export const ITEM_REGISTER_REPORT = "/ItemRegister"
+export const MATERIAL_REGISTER_REPORT = "/MaterialRegister"
 
 export const DEBIT_DATA_EXPORT = "/DebitDataExport"
 
