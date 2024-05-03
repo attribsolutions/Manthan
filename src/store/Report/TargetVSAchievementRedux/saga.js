@@ -109,7 +109,7 @@ function* Target_VS_AchievementGroupWise_GenFun(jsonBody) {
 
 
         debugger
-        const AchQty_Percentage = (TotalAchQuantityInKG / TotalTargetQuantityInKG) * 100
+        const AchQty_Percentage = (TotalGTAchQuantityInKG / TotalTargetQuantityInKG) * 100
         const ContriQty_Percentage = (TotalGTAchQuantityInKG / TotalGTAchQuantityInKG) * 100
         const AchAmount_Percentage = (TotalGTAchAmountWithGST / TotalTargetAmountWithGST) * 100
         const ContriAmount_Percentage = (TotalGTAchAmountWithGST / TotalGTAchAmountWithGST) * 100
