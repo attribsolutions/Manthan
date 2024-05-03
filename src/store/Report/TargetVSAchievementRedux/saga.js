@@ -11,13 +11,17 @@ function* Target_VS_Achievement_GenFun(jsonBody) {
 
         const response = yield call(Target_Vs_Achievement_Gobtn_API, jsonBody);
         const newList = yield response.Data.map((i, key) => {
-
+        
             i.key = key + 1
-            i.TargetQuantityInKG = amountCommaSeparateFunc(parseFloat(i.TargetQuantityInKG).toFixed(3))
-            i.TargetAmountWithGST = amountCommaSeparateFunc(parseFloat(i.TargetAmountWithGST).toFixed(2))
-            i.AchQuantityInKG = amountCommaSeparateFunc(parseFloat(i.AchQuantityInKG).toFixed(3))
-            i.AchAmountWithGST = amountCommaSeparateFunc(parseFloat(i.AchAmountWithGST).toFixed(2))
-
+            i.TargetQuantityInKG = parseInt(i.TargetQuantityInKG)
+            i.TargetAmountWithGST = parseInt(i.TargetAmountWithGST)
+            i.AchQuantityInKG = parseInt(i.AchQuantityInKG)
+            i.AchAmountWithGST = parseInt(i.AchAmountWithGST)
+            i.AchAmountWithGST = parseInt(i.AchAmountWithGST)
+            i.AchAmountWithGST = parseInt(i.AchAmountWithGST)
+            i.SAPItemCode =parseInt(i.SAPItemCode)
+            i.SAPPartyCode =parseInt(i.SAPPartyCode)
+debugger
             return i
         })
 
@@ -98,17 +102,9 @@ function* Target_VS_AchievementGroupWise_GenFun(jsonBody) {
             TotalCreditNoteQuantityInKG = Number(TotalCreditNoteQuantityInKG) + Number(i.CreditNoteQuantityInKG)
 
 
-
-            i["AchQty%"] = `${(i["AchQty%"])}%`
-            i["ContriQty%"] = `${(i["ContriQty%"])}%`
-            i["AchAmount%"] = `${(i["AchAmount%"])}%`
-            i["ContriAmount%"] = `${(i["ContriAmount%"])}%`
-
             return i
         })
 
-
-        debugger
         const AchQty_Percentage = (TotalGTAchQuantityInKG / TotalTargetQuantityInKG) * 100
         const ContriQty_Percentage = (TotalGTAchQuantityInKG / TotalGTAchQuantityInKG) * 100
         const AchAmount_Percentage = (TotalGTAchAmountWithGST / TotalTargetAmountWithGST) * 100
@@ -126,10 +122,10 @@ function* Target_VS_AchievementGroupWise_GenFun(jsonBody) {
             CXQuantityInKG: parseInt(TotalCXQuantityInKG),
             TargetQuantityInKG: parseInt(TotalTargetQuantityInKG),
             GTAchQuantityInKG: parseInt(TotalGTAchQuantityInKG),
-            "AchQty%": `${(AchQty_Percentage.toFixed(2))}%`,
-            "ContriQty%": `${(ContriQty_Percentage.toFixed(2))}%`,
-            "AchAmount%": `${(AchAmount_Percentage.toFixed(2))}%`,
-            "ContriAmount%": `${(ContriAmount_Percentage.toFixed(2))}%`,
+            "AchQty%": (AchQty_Percentage.toFixed(2)),
+            "ContriQty%": (ContriQty_Percentage.toFixed(2)),
+            "AchAmount%": (AchAmount_Percentage.toFixed(2)),
+            "ContriAmount%": (ContriAmount_Percentage.toFixed(2)),
             CreditNoteQuantityInKG: parseInt(TotalCreditNoteQuantityInKG),
 
 
