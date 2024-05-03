@@ -125,7 +125,7 @@ const TargetVSAchievement = (props) => {
 
 
     useEffect(() => {
-        debugger
+        
         if (isGropuWise) {
             setTabledata(tableDataGroupWise)
             dispatch(BreadcrumbShowCountlabel(`Count:${tableDataGroupWise.length}`));
@@ -152,28 +152,28 @@ const TargetVSAchievement = (props) => {
             showing: true,
         },
         {
-            text: "Qty in kg",
+            text: "Primary Qty in kg",
             dataField: "AchQuantityInKG",
             showing: true,
             align: "right",
 
         },
         {
-            text: "Ach in value",
+            text: "Primary value",
             dataField: "AchAmountWithGST",
             showing: true,
             align: "right",
 
         },
         {
-            text: "Qty in kg",
+            text: "Cx Sale Qty in kg",
             dataField: "CXQuantityInKG",
             showing: true,
             align: "right",
 
         },
         {
-            text: "Ach in value",
+            text: "Cx Sale in value",
             dataField: "CXAmountWithGST",
             showing: true,
             align: "right",
@@ -232,6 +232,13 @@ const TargetVSAchievement = (props) => {
 
         },
         {
+            text: "SR Qty in kg ",
+            dataField: "CreditNoteQuantityInKG",
+            showing: true,
+            align: "right",
+        },
+
+        {
             text: "SR in Value",
             dataField: "CreditNoteAmountWithGST",
             showing: true,
@@ -254,6 +261,7 @@ const TargetVSAchievement = (props) => {
                 })
                 dispatch(Target_VS_Achievement_Go_Button_API_Success([]));
             } else if (Tabledata.length > 0 && isGropuWise) {
+                
                 ExcelReportComponent({   // Download CSV
                     excelTableData: Tabledata,
                     excelFileName: 'Target Vs Achievement Report Group Wise',
@@ -290,7 +298,7 @@ const TargetVSAchievement = (props) => {
     const rowStyle = (row, rowIndex) => {
         const style = {};
         if ((row.key) === (Tabledata.length)) {
-            debugger
+            
             style.backgroundColor = 'rgb(239, 239, 239)';
             style.fontWeight = 'bold';
             style.fontSize = '4';
@@ -383,7 +391,7 @@ const TargetVSAchievement = (props) => {
                                         <div className="table-responsive table" style={{ minHeight: "75vh" }}>
                                             <BootstrapTable
                                                 keyField="key"
-                                                rowStyle={rowStyle}
+
                                                 classes={"table  table-bordered table-hover"}
                                                 noDataIndication={
                                                     <div className="text-danger text-center ">

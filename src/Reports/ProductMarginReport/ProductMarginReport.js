@@ -556,7 +556,7 @@ const ProductMarginReport = (props) => {
                             <FormGroup>
                                 <div className="d-flex align-items-center">
                                     <Label className="col-sm-5 p-2">
-                                        Group
+                                        Product
                                     </Label>
                                     <Col sm="8">
                                         <C_Select
@@ -581,7 +581,7 @@ const ProductMarginReport = (props) => {
                             <FormGroup >
                                 <div className="d-flex align-items-center">
                                     <Label className="col-sm-5 p-2" >
-                                        Sub Group
+                                        Sub Product
                                     </Label>
                                     <Col sm="8">
                                         <C_Select
@@ -606,7 +606,7 @@ const ProductMarginReport = (props) => {
                             <FormGroup >
                                 <div className="d-flex align-items-center">
                                     <Label className="col-sm-5 p-2" >
-                                        ItemName
+                                        SKU Name
                                     </Label>
                                     <Col sm="7">
                                         <C_Select

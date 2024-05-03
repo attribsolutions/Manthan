@@ -7,24 +7,10 @@ import { amountCommaSeparateFunc } from "../../../components/Common/CommonFuncti
 function* Target_VS_Achievement_GenFun(jsonBody) {
 
     try {
-        let TotalAchAmountWithGST = 0
-        let TotalCXAmountWithGST = 0
-        let TotalCreditNoteAmountWithGST = 0
-        let TotalTargetAmountWithGST = 0
-        let TotalAchQuantityInKG = 0
-        let TotalTargetQuantityInKGT = 0
-
 
 
         const response = yield call(Target_Vs_Achievement_Gobtn_API, jsonBody);
         const newList = yield response.Data.map((i, key) => {
-            debugger
-            TotalAchAmountWithGST = Number(TotalAchAmountWithGST) + Number(i.AchAmountWithGST)
-            TotalCreditNoteAmountWithGST = Number(TotalCreditNoteAmountWithGST) + Number(i.CreditNoteAmountWithGST)
-            TotalTargetAmountWithGST = Number(TotalTargetAmountWithGST) + Number(i.TargetAmountWithGST)
-            TotalCXAmountWithGST = Number(TotalCXAmountWithGST) + Number(i.CXAmountWithGST)
-            TotalAchQuantityInKG = Number(TotalAchQuantityInKG) + Number(i.AchQuantityInKG)
-            TotalTargetQuantityInKGT = Number(TotalTargetQuantityInKGT) + Number(i.TargetQuantityInKG)
 
             i.key = key + 1
             i.TargetQuantityInKG = amountCommaSeparateFunc(parseFloat(i.TargetQuantityInKG).toFixed(3))
@@ -34,20 +20,6 @@ function* Target_VS_Achievement_GenFun(jsonBody) {
 
             return i
         })
-
-        newList.push({
-            key: newList.length + 1,
-            Year: "Total",
-            AchAmountWithGST: amountCommaSeparateFunc(parseFloat(TotalAchAmountWithGST.toFixed(2))),
-            CreditNoteAmountWithGST: amountCommaSeparateFunc(parseFloat(TotalCreditNoteAmountWithGST.toFixed(2))),
-            TargetAmountWithGST: amountCommaSeparateFunc(parseFloat(TotalTargetAmountWithGST.toFixed(2))),
-            CXAmountWithGST: amountCommaSeparateFunc(parseFloat(TotalCXAmountWithGST.toFixed(2))),
-            TargetQuantityInKG: amountCommaSeparateFunc(parseFloat(TotalTargetQuantityInKGT.toFixed(2))),
-            AchQuantityInKG: amountCommaSeparateFunc(parseFloat(TotalAchQuantityInKG.toFixed(2))),
-        })
-
-
-
 
         yield put(Target_VS_Achievement_Go_Button_API_Success(newList))
     } catch (error) { yield put(Target_VS_Achievement_Api_ErrorAction()) }
@@ -80,6 +52,21 @@ function* Target_VS_AchievementGroupWise_GenFun(jsonBody) {
         const response = yield call(Target_Vs_AchievementGroupWise_Gobtn_API, jsonBody);
 
         const newList = yield response.Data.map((i, key) => {
+            
+            i.AchAmountWithGST = parseInt(Number(i.AchAmountWithGST))
+            i.CreditNoteAmountWithGST = parseInt(Number(i.CreditNoteAmountWithGST))
+            i.GTAchAmountWithGST = parseInt(Number(i.GTAchAmountWithGST))
+            i.TargetAmountWithGST = parseInt(Number(i.TargetAmountWithGST))
+            i.CXAmountWithGST = parseInt(Number(i.CXAmountWithGST))
+            i.CXQuantityInKG = parseInt(Number(i.CXQuantityInKG))
+            i.TargetQuantityInKG = parseInt(Number(i.TargetQuantityInKG))
+            i.GTAchQuantityInKG = parseInt(Number(i.GTAchQuantityInKG))
+            i.CreditNoteQuantityInKG = parseInt(Number(i.CreditNoteQuantityInKG))
+            i.AchQuantityInKG = parseInt(Number(i.AchQuantityInKG))
+
+
+
+
             i.key = key + 1
             TotalAchAmountWithGST = Number(TotalAchAmountWithGST) + Number(i.AchAmountWithGST)
             TotalCreditNoteAmountWithGST = Number(TotalCreditNoteAmountWithGST) + Number(i.CreditNoteAmountWithGST)
@@ -102,37 +89,37 @@ function* Target_VS_AchievementGroupWise_GenFun(jsonBody) {
 
             TotalContriAmount = Number(TotalContriAmount) + Number(i["ContriAmount%"])
             TotalCreditNoteQuantityInKG = Number(TotalCreditNoteQuantityInKG) + Number(i.CreditNoteQuantityInKG)
-
-
-
             return i
         })
 
 
+
+        const AchQty_Percentage = (TotalAchQuantityInKG / TotalTargetQuantityInKG) * 100
+        const ContriQty_Percentage = (TotalGTAchQuantityInKG / TotalGTAchQuantityInKG) * 100
+        const AchAmount_Percentage = (TotalGTAchAmountWithGST / TotalTargetAmountWithGST) * 100
+        const ContriAmount_Percentage = (TotalGTAchAmountWithGST / TotalGTAchAmountWithGST) * 100
+        
         newList.push({
             key: newList.length + 1,
             ItemGroup: "Total",
-            AchAmountWithGST: TotalAchAmountWithGST.toFixed(2),
-            CreditNoteAmountWithGST: TotalCreditNoteAmountWithGST.toFixed(2),
-            GTAchAmountWithGST: TotalGTAchAmountWithGST.toFixed(2),
-            TargetAmountWithGST: TotalTargetAmountWithGST.toFixed(2),
-            CXAmountWithGST: TotalCXAmountWithGST.toFixed(2),
-            AchQuantityInKG: TotalAchQuantityInKG.toFixed(2),
-            CXQuantityInKG: TotalCXQuantityInKG.toFixed(2),
-            TargetQuantityInKG: TotalTargetQuantityInKG.toFixed(2),
-            GTAchQuantityInKG: TotalGTAchQuantityInKG.toFixed(2),
-            "AchQty%": `${TotalAchQty.toFixed(2)}%`,
-            "ContriQty%": `${TotalContriQty.toFixed(2)}%`,
-            "AchAmount%": `${TotalAchAmount.toFixed(2)}%`,
-            "ContriAmount%": `${TotalContriAmount.toFixed(2)}%`,
-            CreditNoteQuantityInKG: TotalCreditNoteQuantityInKG.toFixed(2),
+            AchAmountWithGST: parseInt(TotalAchAmountWithGST),
+            CreditNoteAmountWithGST: parseInt(TotalCreditNoteAmountWithGST),
+            GTAchAmountWithGST: parseInt(TotalGTAchAmountWithGST),
+            TargetAmountWithGST: parseInt(TotalTargetAmountWithGST),
+            CXAmountWithGST: parseInt(TotalCXAmountWithGST),
+            AchQuantityInKG: parseInt(TotalAchQuantityInKG),
+            CXQuantityInKG: parseInt(TotalCXQuantityInKG),
+            TargetQuantityInKG: parseInt(TotalTargetQuantityInKG),
+            GTAchQuantityInKG: parseInt(TotalGTAchQuantityInKG),
+            "AchQty%": (AchQty_Percentage.toFixed(2)),
+            "ContriQty%": (ContriQty_Percentage.toFixed(2)),
+            "AchAmount%": (AchAmount_Percentage.toFixed(2)),
+            "ContriAmount%": (ContriAmount_Percentage.toFixed(2)),
+            CreditNoteQuantityInKG: parseInt(TotalCreditNoteQuantityInKG),
 
 
 
         })
-
-
-
 
 
 
