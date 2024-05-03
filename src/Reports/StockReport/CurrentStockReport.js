@@ -798,7 +798,7 @@ const CurrentStockReport = (props) => {
 							<Col sm={3}>
 								<FormGroup className="mb-n3 row mt-1">
 
-									<Label className="col-sm-4 p-2">Group</Label>
+									<Label className="col-sm-4 p-2">Product</Label>
 									<Col>
 										<Select
 											name="group"
@@ -818,7 +818,7 @@ const CurrentStockReport = (props) => {
 
 							<Col sm={3}>
 								<FormGroup className="mb-n3 row mt-1">
-									<Label className="col-sm-4 p-2">Sub-Group</Label>
+									<Label className="col-sm-4 p-2">Sub-Product</Label>
 									<Col>
 										<Select
 											name="subGroup"

@@ -52,7 +52,7 @@ function* Target_VS_AchievementGroupWise_GenFun(jsonBody) {
         const response = yield call(Target_Vs_AchievementGroupWise_Gobtn_API, jsonBody);
 
         const newList = yield response.Data.map((i, key) => {
-            
+
             i.AchAmountWithGST = parseInt(Number(i.AchAmountWithGST))
             i.CreditNoteAmountWithGST = parseInt(Number(i.CreditNoteAmountWithGST))
             i.GTAchAmountWithGST = parseInt(Number(i.GTAchAmountWithGST))
@@ -63,6 +63,13 @@ function* Target_VS_AchievementGroupWise_GenFun(jsonBody) {
             i.GTAchQuantityInKG = parseInt(Number(i.GTAchQuantityInKG))
             i.CreditNoteQuantityInKG = parseInt(Number(i.CreditNoteQuantityInKG))
             i.AchQuantityInKG = parseInt(Number(i.AchQuantityInKG))
+
+
+
+
+
+
+
 
 
 
@@ -89,16 +96,24 @@ function* Target_VS_AchievementGroupWise_GenFun(jsonBody) {
 
             TotalContriAmount = Number(TotalContriAmount) + Number(i["ContriAmount%"])
             TotalCreditNoteQuantityInKG = Number(TotalCreditNoteQuantityInKG) + Number(i.CreditNoteQuantityInKG)
+
+
+
+            i["AchQty%"] = `${(i["AchQty%"])}%`
+            i["ContriQty%"] = `${(i["ContriQty%"])}%`
+            i["AchAmount%"] = `${(i["AchAmount%"])}%`
+            i["ContriAmount%"] = `${(i["ContriAmount%"])}%`
+
             return i
         })
 
 
-
+        debugger
         const AchQty_Percentage = (TotalAchQuantityInKG / TotalTargetQuantityInKG) * 100
         const ContriQty_Percentage = (TotalGTAchQuantityInKG / TotalGTAchQuantityInKG) * 100
         const AchAmount_Percentage = (TotalGTAchAmountWithGST / TotalTargetAmountWithGST) * 100
         const ContriAmount_Percentage = (TotalGTAchAmountWithGST / TotalGTAchAmountWithGST) * 100
-        
+
         newList.push({
             key: newList.length + 1,
             ItemGroup: "Total",
@@ -111,10 +126,10 @@ function* Target_VS_AchievementGroupWise_GenFun(jsonBody) {
             CXQuantityInKG: parseInt(TotalCXQuantityInKG),
             TargetQuantityInKG: parseInt(TotalTargetQuantityInKG),
             GTAchQuantityInKG: parseInt(TotalGTAchQuantityInKG),
-            "AchQty%": (AchQty_Percentage.toFixed(2)),
-            "ContriQty%": (ContriQty_Percentage.toFixed(2)),
-            "AchAmount%": (AchAmount_Percentage.toFixed(2)),
-            "ContriAmount%": (ContriAmount_Percentage.toFixed(2)),
+            "AchQty%": `${(AchQty_Percentage.toFixed(2))}%`,
+            "ContriQty%": `${(ContriQty_Percentage.toFixed(2))}%`,
+            "AchAmount%": `${(AchAmount_Percentage.toFixed(2))}%`,
+            "ContriAmount%": `${(ContriAmount_Percentage.toFixed(2))}%`,
             CreditNoteQuantityInKG: parseInt(TotalCreditNoteQuantityInKG),
 
 

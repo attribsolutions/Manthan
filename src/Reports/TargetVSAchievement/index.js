@@ -166,14 +166,14 @@ const TargetVSAchievement = (props) => {
 
         },
         {
-            text: "Cx Sale Qty in kg",
+            text: "CX Sale Qty in kg",
             dataField: "CXQuantityInKG",
             showing: true,
             align: "right",
 
         },
         {
-            text: "Cx Sale in value",
+            text: "CX Sale in value",
             dataField: "CXAmountWithGST",
             showing: true,
             align: "right",
@@ -247,7 +247,7 @@ const TargetVSAchievement = (props) => {
 
     ];
 
-    const ExtraHeader = ["", "", "Primary", "", "CX Ach", "", "", "", "GT Achivement", "", "", "", "Sales Return", ""]
+    const ExtraHeader = ["", "", "Primary", "", "CX Ach", "", "", "", "GT Achivement", "", "", "", "Sales Return", "",""]
 
 
     useEffect(() => {
