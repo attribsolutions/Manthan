@@ -122,10 +122,10 @@ function* Target_VS_AchievementGroupWise_GenFun(jsonBody) {
             CXQuantityInKG: parseInt(TotalCXQuantityInKG),
             TargetQuantityInKG: parseInt(TotalTargetQuantityInKG),
             GTAchQuantityInKG: parseInt(TotalGTAchQuantityInKG),
-            "AchQty%": (AchQty_Percentage.toFixed(2)),
-            "ContriQty%": (ContriQty_Percentage.toFixed(2)),
-            "AchAmount%": (AchAmount_Percentage.toFixed(2)),
-            "ContriAmount%": (ContriAmount_Percentage.toFixed(2)),
+            "AchQty%": parseFloat(AchQty_Percentage.toFixed(2)),
+            "ContriQty%": parseFloat(ContriQty_Percentage.toFixed(2)),
+            "AchAmount%": parseFloat(AchAmount_Percentage.toFixed(2)),
+            "ContriAmount%": parseFloat(ContriAmount_Percentage.toFixed(2)),
             CreditNoteQuantityInKG: parseInt(TotalCreditNoteQuantityInKG),
 
 
