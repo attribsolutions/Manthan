@@ -3,6 +3,7 @@ import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { Col, Row } from 'reactstrap';
 import SimpleBar from "simplebar-react"
+import { DateTime} from '../../../components/Common/CommonFunction';
 
 
 
@@ -11,6 +12,13 @@ export default function TransactionLog(props) {
         {
             text: "Transaction Date",
             dataField: "TransactionDate",
+            formatter: (value, row, k) => {
+                
+                return <>
+                    <div>{DateTime(row.Transactiontime)}</div></>
+            }
+
+
         },
         {
             text: "Employee Name (User Name)",
