@@ -13,12 +13,9 @@ export default function TransactionLog(props) {
             text: "Transaction Date",
             dataField: "TransactionDate",
             formatter: (value, row, k) => {
-                
                 return <>
                     <div>{DateTime(row.Transactiontime)}</div></>
             }
-
-
         },
         {
             text: "Employee Name (User Name)",
@@ -55,7 +52,6 @@ export default function TransactionLog(props) {
         dataField: 'TransactionDate',
         order: 'asc'
     }];
-
 
     return (
         <ToolkitProvider keyField={"id"} data={props.logData} columns={tableColumns} search>
