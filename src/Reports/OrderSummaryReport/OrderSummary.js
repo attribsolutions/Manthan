@@ -187,7 +187,7 @@ const OrderSummary = (props) => {
             dynamicColumn.push('CustomerName')
         }
 
-        let currentColumnName = [...dynamicColumn, ...['OrderNo', 'GroupName', 'SubGroup', 'MaterialName']]
+        let currentColumnName = [...dynamicColumn, ...['OrderNo', 'Product', 'SubProduct', 'SKUName']]
         const columnSumsByGroup = jsonData.reduce((result, item) => {
             const groupKey = currentColumnName.map(columnName => item[columnName]).join('|');
 
