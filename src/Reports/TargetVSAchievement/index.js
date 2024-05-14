@@ -106,7 +106,7 @@ const TargetVSAchievement = (props) => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(pageId.TARGET_VS_ACHIEVEMENT));
         dispatch(SSDD_List_under_Company());
-        dispatch(EmployeeSubEmployee_List(_cfunc.loginEmployeeID()));
+        // dispatch(EmployeeSubEmployee_List(_cfunc.loginEmployeeID()));
         dispatch(getClusterlist());
         return () => {
             dispatch(commonPageFieldSuccess(null));
@@ -168,8 +168,8 @@ const TargetVSAchievement = (props) => {
     }));
 
     const Party_Option = PartyOnClusterSubClusterList.map((i) => ({
-        value: i.id,
-        label: i.Name,
+        value: i.PartyID,
+        label: i.PartyName,
     }));
 
 
@@ -180,10 +180,9 @@ const TargetVSAchievement = (props) => {
 
     Party_Option.unshift(allLabelWithZero);
     const clusterOnchange = async (e) => {
-        debugger
         const response = await Get_Subcluster_On_cluster_API(e.value);
         if (response.StatusCode === 200) {
-            setSubClusterOptions(response.Data.map(index => ({ value: e.value, label: e.label })))
+            setSubClusterOptions(response.Data.map(index => ({ value: index.id, label: index.Name })))
         }
         setCluster({
             value: e.value,
@@ -366,9 +365,6 @@ const TargetVSAchievement = (props) => {
     };
 
 
-
-
-
     return (
         <React.Fragment>
             <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
@@ -391,8 +387,84 @@ const TargetVSAchievement = (props) => {
                                 </Col>
                             </FormGroup>
                         </Col>
+                        <Col sm={3} className="">
+                            <FormGroup className=" row mt-1" >
+                                <Label className="col-sm-4 p-2"
+                                    style={{ width: "120px" }}>Cluster</Label>
+                                <Col sm="8">
+                                    <Select
+                                        name="Cluster"
+                                        id="Cluster"
+                                        value={cluster}
+                                        isSearchable={true}
+                                        classNamePrefix="dropdown"
+                                        styles={{
+                                            menu: provided => ({ ...provided, zIndex: 2 })
+                                        }}
+                                        options={Cluster_Options}
+                                        onChange={clusterOnchange}
+                                    />
+                                </Col>
+                            </FormGroup>
+                        </Col>
 
                         <Col sm={3} className="">
+                            <FormGroup className=" row mt-1" >
+                                <Label className="col-sm-4 p-2"
+                                    style={{ width: "120px" }}>Sub Cluster</Label>
+                                <Col sm="8">
+                                    <Select
+                                        name="SubCluster"
+                                        id="SubCluster"
+                                        value={subCluster}
+                                        isSearchable={true}
+                                        classNamePrefix="dropdown"
+                                        options={SubClusterOptions}
+                                        styles={{
+                                            menu: provided => ({ ...provided, zIndex: 2 })
+                                        }}
+                                        onChange={(e) => {
+                                            setSubCluster({
+                                                value: e.value,
+                                                label: e.label
+                                            })
+                                        }}
+                                    />
+                                </Col>
+                            </FormGroup>
+                        </Col>
+
+                        <Col sm={3} className=" d-flex justify-content-end" >
+                            <C_Button
+                                type="button"
+                                spinnerColor="white"
+                                loading={(goBtnLoading && btnMode === "show") && true}
+                                className="btn btn-success m-3 mr"
+                                onClick={() => goButtonHandler("show")}
+                            >
+                                Show
+                            </C_Button>
+                            <C_Button
+                                type="button"
+                                spinnerColor="white"
+                                loading={(goBtnLoading && btnMode === "excel") && true}
+                                className="btn btn-primary m-3 mr "
+                                onClick={() => goButtonHandler("excel")}
+                            >
+                                Excel
+                            </C_Button>
+                        </Col>
+
+                    </Row>
+                    <Row>
+
+
+
+
+
+
+
+                    <Col sm={3} className="">
                             <FormGroup className=" row mt-2" >
                                 <Label className="col-sm-4 p-2"
                                     style={{ width: "120px" }}>Sub Employee</Label>
@@ -444,75 +516,7 @@ const TargetVSAchievement = (props) => {
                             </FormGroup>
                         </Col>
 
-                        <Col sm={3} className=" d-flex justify-content-end" >
-                            <C_Button
-                                type="button"
-                                spinnerColor="white"
-                                loading={(goBtnLoading && btnMode === "show") && true}
-                                className="btn btn-success m-3 mr"
-                                onClick={() => goButtonHandler("show")}
-                            >
-                                Show
-                            </C_Button>
-                            <C_Button
-                                type="button"
-                                spinnerColor="white"
-                                loading={(goBtnLoading && btnMode === "excel") && true}
-                                className="btn btn-primary m-3 mr "
-                                onClick={() => goButtonHandler("excel")}
-                            >
-                                Excel
-                            </C_Button>
-                        </Col>
 
-                    </Row>
-                    <Row>
-                        <Col sm={3} className="">
-                            <FormGroup className=" row mt-1" >
-                                <Label className="col-sm-4 p-2"
-                                    style={{ width: "120px" }}>Cluster</Label>
-                                <Col sm="8">
-                                    <Select
-                                        name="Cluster"
-                                        id="Cluster"
-                                        value={cluster}
-                                        isSearchable={true}
-                                        classNamePrefix="dropdown"
-                                        styles={{
-                                            menu: provided => ({ ...provided, zIndex: 2 })
-                                        }}
-                                        options={Cluster_Options}
-                                        onChange={clusterOnchange}
-                                    />
-                                </Col>
-                            </FormGroup>
-                        </Col>
-
-                        <Col sm={3} className="">
-                            <FormGroup className=" row mt-" >
-                                <Label className="col-sm-4 p-2"
-                                    style={{ width: "120px" }}>Sub Cluster</Label>
-                                <Col sm="8">
-                                    <Select
-                                        name="SubCluster"
-                                        id="SubCluster"
-                                        value={subCluster}
-                                        isSearchable={true}
-                                        classNamePrefix="dropdown"
-                                        options={SubClusterOptions}
-                                        styles={{
-                                            menu: provided => ({ ...provided, zIndex: 2 })
-                                        }}
-                                        onChange={(e) => {
-                                            setSubCluster({
-                                                value: e.value,
-                                                label: e.label
-                                            })
-                                        }}
-                                    />
-                                </Col>
-                            </FormGroup>
-                        </Col>
                         <Col sm={3} className="">
                             <FormGroup className="mb- row mt- mb-1 " >
                                 <Label className="col-sm-5 p-2"
