@@ -18,6 +18,10 @@ import {
   RETAILER_LIST,
   PARTY_DROPDOWN_LIST,
   SSDD_LIST_UNDER_COMPANY,
+  SUB_EMPLOYEE_LIST,
+  SUB_EMPLOYEE_LIST_SUCCESS,
+  PARTY_ON_CLUSTER_SUBCLUSTER_LIST_SUCCESS,
+  PARTY_ON_CLUSTER_SUBCLUSTER_LIST,
 } from "./actionType"
 
 const INIT_STATE = {
@@ -30,12 +34,17 @@ const INIT_STATE = {
   SSDD_List: [],
   RetailerList: [],
   partyList: [],
+  SubEmployeeList:[],
   vendorSupplierCustomerLoading: false,
   retailerDropLoading: false,
   partyDropLoading: false,
   SSDD_ListLoading: false,
   supilerADDLoading: false,
-  orderTypeLoading: false
+  orderTypeLoading: false,
+  SubEmployeeLoading: false,
+  PartyOnClusterSubClusterLoading: false,
+  PartyOnClusterSubClusterList:[]
+  
 }
 
 const CommonAPI_Reducer = (state = INIT_STATE, action) => {
@@ -153,12 +162,45 @@ const CommonAPI_Reducer = (state = INIT_STATE, action) => {
 
     //******************************** */
 
+
+    case SUB_EMPLOYEE_LIST:
+      return {
+        ...state,
+        SubEmployeeLoading: true,
+      }
+    case SUB_EMPLOYEE_LIST_SUCCESS:
+      return {
+        ...state,
+        SubEmployeeLoading: false,
+        SubEmployeeList: action.payload,
+      }
+
+    //******************************** */
+
+    case PARTY_ON_CLUSTER_SUBCLUSTER_LIST:
+      return {
+        ...state,
+        PartyOnClusterSubClusterLoading: true,
+      }
+    case PARTY_ON_CLUSTER_SUBCLUSTER_LIST_SUCCESS:
+      return {
+        ...state,
+        PartyOnClusterSubClusterLoading: false,
+        PartyOnClusterSubClusterList: action.payload,
+      }
+
+    //******************************** */
+
+
+
     case COMMON_API_REDUCER_ERROR_ACTION:
       return {
         ...state,
         vendorSupplierCustomerLoading: false,
+        PartyOnClusterSubClusterLoading: false,
         retailerDropLoading: false,
         pattyDropLoading: false,
+        SubEmployeeLoading: false,
         SSDD_ListLoading: false,
         supilerADDLoading: false
       }

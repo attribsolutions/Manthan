@@ -61,21 +61,12 @@ function* Target_VS_AchievementGroupWise_GenFun(jsonBody) {
             i.CreditNoteAmountWithGST = parseInt(Number(i.CreditNoteAmountWithGST))
             i.GTAchAmountWithGST = parseInt(Number(i.GTAchAmountWithGST))
             i.TargetAmountWithGST = parseInt(Number(i.TargetAmountWithGST))
-            i.CXAmountWithGST = parseInt(Number(i.CXAmountWithGST))
-            i.CXQuantityInKG = parseInt(Number(i.CXQuantityInKG))
-            i.TargetQuantityInKG = parseInt(Number(i.TargetQuantityInKG))
-            i.GTAchQuantityInKG = parseInt(Number(i.GTAchQuantityInKG))
-            i.CreditNoteQuantityInKG = parseInt(Number(i.CreditNoteQuantityInKG))
-            i.AchQuantityInKG = parseInt(Number(i.AchQuantityInKG))
-
-
-
-
-
-
-
-
-
+            i.CXAmountWithGST = (Number(i.CXAmountWithGST))
+            i.CXQuantityInKG = (Number(i.CXQuantityInKG).toFixed(2))
+            i.TargetQuantityInKG = (Number(i.TargetQuantityInKG).toFixed(2))
+            i.GTAchQuantityInKG = (Number(i.GTAchQuantityInKG).toFixed(2))
+            i.CreditNoteQuantityInKG = (Number(i.CreditNoteQuantityInKG).toFixed(2))
+            i.AchQuantityInKG = (Number(i.AchQuantityInKG).toFixed(2))
 
 
             i.key = key + 1
