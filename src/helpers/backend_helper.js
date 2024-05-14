@@ -348,6 +348,12 @@ export const VendorSupplierCustomer = (jsonBody) => post(url.GET_SUPPLIER_VENDOR
 export const SSDD_List_under_Company_API = (jsonBody) => post(url.RETAILER_SSDD_LIST, jsonBody)//Post api
 export const Retailer_List_under_Company_PartyAPI = (jsonBody) => post(url.RETAILER_SSDD_LIST, jsonBody)//Post api
 export const Party_Dropdown_Get_API = (id) => get(`${url.MANAGEMENT_PARTIES}/${id}`)// Party dropdown Api
+export const SubEmployee_Dropdown_Get_API = (id) => get(`${url.SUBEMPLOYEE}/${id}`)// Party dropdown Api
+export const PartyOnClusterSbcluster_Dropdown_Get_API = ({cluster_ID,SubCluster_ID}) => get(`${url.PARTY_ON_CLUSTER_SUBCLUSTER}/${cluster_ID}/${SubCluster_ID}`)// Party dropdown Api
+
+
+
+
 
 // ImportField_Add
 export const ImportField_Add_GoButton_API = ({ jsonBody }) => post(url.IMPORT_FIELD_MAP_FILTER, jsonBody)//get api

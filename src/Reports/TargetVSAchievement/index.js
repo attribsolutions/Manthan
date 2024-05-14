@@ -6,8 +6,12 @@ import { C_Button } from "../../components/Common/CommonButton";
 import * as _cfunc from "../../components/Common/CommonFunction";
 import { mode, pageId } from "../../routes/index";
 import { MetaTags } from "react-meta-tags";
+import Select from "react-select";
 import {
     BreadcrumbShowCountlabel,
+    EmployeeSubEmployee_List,
+    Partyonclustersubcluster_List,
+    SSDD_List_under_Company,
     commonPageField,
     commonPageFieldSuccess,
 } from "../../store/actions";
@@ -26,6 +30,9 @@ import {
     Target_VS_Achievement_Go_Button_API_Success
 } from "../../store/Report/TargetVSAchievementRedux/action";
 import { ExcelReportComponent } from "../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS";
+import { getClusterlist } from "../../store/Administrator/ClusterRedux/action";
+import { Get_Subcluster_On_cluster_API } from "../../helpers/backend_helper";
+import { allLabelWithZero } from "../../components/Common/CommonErrorMsg/HarderCodeData";
 
 const TargetVSAchievement = (props) => {
 
@@ -41,30 +48,35 @@ const TargetVSAchievement = (props) => {
     const [Tabledata, setTabledata] = useState([]);
 
 
+    const [cluster, setCluster] = useState({ value: 0, label: "Select..." });
+    const [subCluster, setSubCluster] = useState({ value: 0, label: "Select..." });
+    const [SubEmployee, setSubEmployee] = useState({ value: 0, label: "Select..." });
 
 
-
-
-
-
-
-
-
-
-
-
-
+    const [SubClusterOptions, setSubClusterOptions] = useState([]);
+    const [partydropdown, setPartydropdown] = useState(allLabelWithZero);
     const {
         userAccess,
         pageField,
         goBtnLoading,
         tableData,
-        tableDataGroupWise
+        tableDataGroupWise,
+        clusterDropdown,
+        partyList,
+        partyLoading,
+        SubEmployeeList,
+        PartyOnClusterSubClusterList
     } = useSelector((state) => ({
         goBtnLoading: state.TargetVsAchievementReducer.listBtnLoading,
+        SubEmployeeList: state.TargetVsAchievementReducer.SubEmployeeList,
         tableData: state.TargetVsAchievementReducer.TargetVsAchievementGobtn,
+        clusterDropdown: state.ClusterReducer.ClusterListData,
+        SubEmployeeList: state.CommonAPI_Reducer.SubEmployeeList,
+        partyList: state.CommonAPI_Reducer.SSDD_List,
+        PartyOnClusterSubClusterList: state.CommonAPI_Reducer.PartyOnClusterSubClusterList,
         tableDataGroupWise: state.TargetVsAchievementReducer.TargetVsAchievementGropuWiseGobtn,
         pageField: state.CommonPageFieldReducer.pageField,
+        partyLoading: state.CommonAPI_Reducer.SSDD_ListLoading,
         userAccess: state.Login.RoleAccessUpdateData,
     }));
 
@@ -93,7 +105,9 @@ const TargetVSAchievement = (props) => {
     useEffect(() => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(pageId.TARGET_VS_ACHIEVEMENT));
-
+        dispatch(SSDD_List_under_Company());
+        dispatch(EmployeeSubEmployee_List(_cfunc.loginEmployeeID()));
+        dispatch(getClusterlist());
         return () => {
             dispatch(commonPageFieldSuccess(null));
             dispatch(Target_VS_Achievement_Go_Button_API_Success([]));
@@ -123,9 +137,8 @@ const TargetVSAchievement = (props) => {
     const [tableColumns] = DynamicColumnHook({ pageField });
 
 
-
     useEffect(() => {
-        
+
         if (isGropuWise) {
             setTabledata(tableDataGroupWise)
             dispatch(BreadcrumbShowCountlabel(`Count:${tableDataGroupWise.length}`));
@@ -136,12 +149,54 @@ const TargetVSAchievement = (props) => {
         }
     }, [isGropuWise, tableData, tableDataGroupWise,])
 
+    useEffect(() => {
+        dispatch(Partyonclustersubcluster_List({ cluster_ID: cluster.value, SubCluster_ID: subCluster.value }));
+    }, [cluster, subCluster])
+
+
     async function MonthAndYearOnchange(e) {
         dispatch(Target_VS_Achievement_Go_Button_API_Success([]));
         dispatch(Target_VS_AchievementGroupWise_Go_Button_API_Success([]));
         const selectdMonth = getCurrent_Month_And_Year(e.target.value);
         setYearAndMonth(selectdMonth);
     }
+
+
+    const Cluster_Options = clusterDropdown.map((Data) => ({
+        value: Data.id,
+        label: Data.Name
+    }));
+
+    const Party_Option = PartyOnClusterSubClusterList.map((i) => ({
+        value: i.id,
+        label: i.Name,
+    }));
+
+
+    const SubEmployee_Option = SubEmployeeList.map((i) => ({
+        value: i.id,
+        label: i.Name,
+    }));
+
+    Party_Option.unshift(allLabelWithZero);
+    const clusterOnchange = async (e) => {
+        debugger
+        const response = await Get_Subcluster_On_cluster_API(e.value);
+        if (response.StatusCode === 200) {
+            setSubClusterOptions(response.Data.map(index => ({ value: e.value, label: e.label })))
+        }
+        setCluster({
+            value: e.value,
+            label: e.label
+        })
+    }
+
+
+    function PartyDropdown_OnChange_Handler(e) {
+        setPartydropdown(e);
+        setTabledata([]);
+    }
+
 
 
 
@@ -247,7 +302,7 @@ const TargetVSAchievement = (props) => {
 
     ];
 
-    const ExtraHeader = ["", "", "Primary", "", "CX Ach", "", "", "", "GT Achivement", "", "", "", "Sales Return", "",""]
+    const ExtraHeader = ["", "", "Primary", "", "CX Ach", "", "", "", "GT Achivement", "", "", "", "Sales Return", "", ""]
 
 
     useEffect(() => {
@@ -261,7 +316,7 @@ const TargetVSAchievement = (props) => {
                 })
                 dispatch(Target_VS_Achievement_Go_Button_API_Success([]));
             } else if (Tabledata.length > 0 && isGropuWise) {
-                
+
                 ExcelReportComponent({   // Download CSV
                     excelTableData: Tabledata,
                     excelFileName: 'Target Vs Achievement Report Group Wise',
@@ -285,6 +340,9 @@ const TargetVSAchievement = (props) => {
             "Year": yearAndMonth.Year,
             "Party": (commonPartyDropSelect.value === 0) ? 0 : commonPartyDropSelect.value,
             "Employee": !(isSCMParty) ? 0 : _cfunc.loginEmployeeID(),
+            "SubEmployee": SubEmployee.value,
+            "Cluster": cluster.value,
+            "SubCluster": subCluster.value
         })
         if (isGropuWise) {
             dispatch(Target_VS_AchievementGroupWise_Go_Button_API(jsonBody));
@@ -298,7 +356,7 @@ const TargetVSAchievement = (props) => {
     const rowStyle = (row, rowIndex) => {
         const style = {};
         if ((row.key) === (Tabledata.length)) {
-            
+
             style.backgroundColor = 'rgb(239, 239, 239)';
             style.fontWeight = 'bold';
             style.fontSize = '4';
@@ -307,18 +365,21 @@ const TargetVSAchievement = (props) => {
     };
 
 
+
+
+
     return (
         <React.Fragment>
             <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
             <div className="page-content">
                 <div className="px-2   c_card_filter text-black " >
 
-                    <div className="row" >
+                    <Row>
                         <Col sm={3} className="">
-                            <FormGroup className="mb- row mt-3 mb-1 " >
+                            <FormGroup className="mb- row mt-2 mb-1 " >
                                 <Label className="col-sm-5 p-2"
                                     style={{ width: "120px" }}>Select Month</Label>
-                                <Col sm="7">
+                                <Col sm="8">
                                     <Input
                                         className="form-control"
                                         type="month"
@@ -331,7 +392,128 @@ const TargetVSAchievement = (props) => {
                         </Col>
 
                         <Col sm={3} className="">
-                            <FormGroup className="mb- row mt-3 mb-1 " >
+                            <FormGroup className=" row mt-2" >
+                                <Label className="col-sm-4 p-2"
+                                    style={{ width: "120px" }}>Sub Employee</Label>
+                                <Col sm="8">
+                                    <Select
+                                        name="SubEmployee"
+                                        value={SubEmployee}
+                                        isSearchable={true}
+                                        className="react-dropdown"
+                                        classNamePrefix="dropdown"
+                                        styles={{
+                                            menu: provided => ({ ...provided, zIndex: 2 })
+                                        }}
+                                        options={SubEmployee_Option}
+                                        onChange={(e) => {
+                                            setSubEmployee({
+                                                value: e.value,
+                                                label: e.label
+                                            })
+                                        }}
+                                    />
+                                </Col>
+                            </FormGroup>
+                        </Col>
+
+
+
+                        <Col sm={3} className="">
+                            <FormGroup className=" row mt-2" >
+                                <Label className="col-sm-4 p-2"
+                                    style={{ width: "120px" }}>Party</Label>
+                                <Col sm="8">
+                                    <Select
+                                        name="party"
+                                        value={partydropdown}
+                                        isSearchable={true}
+                                        isLoading={partyLoading}
+                                        className="react-dropdown"
+                                        classNamePrefix="dropdown"
+                                        styles={{
+                                            menu: (provided) => ({ ...provided, zIndex: 2 }),
+                                        }}
+                                        options={Party_Option}
+                                        onChange={(e) => {
+                                            PartyDropdown_OnChange_Handler(e);
+                                        }}
+                                    />
+                                </Col>
+                            </FormGroup>
+                        </Col>
+
+                        <Col sm={3} className=" d-flex justify-content-end" >
+                            <C_Button
+                                type="button"
+                                spinnerColor="white"
+                                loading={(goBtnLoading && btnMode === "show") && true}
+                                className="btn btn-success m-3 mr"
+                                onClick={() => goButtonHandler("show")}
+                            >
+                                Show
+                            </C_Button>
+                            <C_Button
+                                type="button"
+                                spinnerColor="white"
+                                loading={(goBtnLoading && btnMode === "excel") && true}
+                                className="btn btn-primary m-3 mr "
+                                onClick={() => goButtonHandler("excel")}
+                            >
+                                Excel
+                            </C_Button>
+                        </Col>
+
+                    </Row>
+                    <Row>
+                        <Col sm={3} className="">
+                            <FormGroup className=" row mt-1" >
+                                <Label className="col-sm-4 p-2"
+                                    style={{ width: "120px" }}>Cluster</Label>
+                                <Col sm="8">
+                                    <Select
+                                        name="Cluster"
+                                        id="Cluster"
+                                        value={cluster}
+                                        isSearchable={true}
+                                        classNamePrefix="dropdown"
+                                        styles={{
+                                            menu: provided => ({ ...provided, zIndex: 2 })
+                                        }}
+                                        options={Cluster_Options}
+                                        onChange={clusterOnchange}
+                                    />
+                                </Col>
+                            </FormGroup>
+                        </Col>
+
+                        <Col sm={3} className="">
+                            <FormGroup className=" row mt-" >
+                                <Label className="col-sm-4 p-2"
+                                    style={{ width: "120px" }}>Sub Cluster</Label>
+                                <Col sm="8">
+                                    <Select
+                                        name="SubCluster"
+                                        id="SubCluster"
+                                        value={subCluster}
+                                        isSearchable={true}
+                                        classNamePrefix="dropdown"
+                                        options={SubClusterOptions}
+                                        styles={{
+                                            menu: provided => ({ ...provided, zIndex: 2 })
+                                        }}
+                                        onChange={(e) => {
+                                            setSubCluster({
+                                                value: e.value,
+                                                label: e.label
+                                            })
+                                        }}
+                                    />
+                                </Col>
+                            </FormGroup>
+                        </Col>
+                        <Col sm={3} className="">
+                            <FormGroup className="mb- row mt- mb-1 " >
                                 <Label className="col-sm-5 p-2"
                                     style={{ width: "120px" }}>Group wise</Label>
                                 <Col sm="7">
@@ -353,28 +535,8 @@ const TargetVSAchievement = (props) => {
                             </FormGroup>
                         </Col>
 
-                        <Col sm={6} className=" d-flex justify-content-end" >
-                            <C_Button
-                                type="button"
-                                spinnerColor="white"
-                                loading={(goBtnLoading && btnMode === "show") && true}
-                                className="btn btn-success m-3 mr"
-                                onClick={() => goButtonHandler("show")}
-                            >
-                                Show
-                            </C_Button>
-                            <C_Button
-                                type="button"
-                                spinnerColor="white"
-                                loading={(goBtnLoading && btnMode === "excel") && true}
-                                className="btn btn-primary m-3 mr "
-                                onClick={() => goButtonHandler("excel")}
-                            >
-                                Excel
-                            </C_Button>
-                        </Col>
 
-                    </div>
+                    </Row>
                 </div>
 
                 {!isGropuWise && <div className="mt-1">
@@ -453,17 +615,7 @@ const TargetVSAchievement = (props) => {
                             </React.Fragment>
                         )}
                     </ToolkitProvider>
-
                 </div>}
-
-
-
-
-
-
-
-
-
             </div>
         </React.Fragment>
     );

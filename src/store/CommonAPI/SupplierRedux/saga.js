@@ -1,5 +1,6 @@
 import { call, put, takeLatest } from "redux-saga/effects";
 import {
+  EmployeeSubEmployee_List_Success,
   GetCustomerSuccess,
   getOrderTypeSuccess,
   getSupplierAddressSuccess,
@@ -7,6 +8,7 @@ import {
   GetVenderSuccess,
   GetVenderSupplierCustomerSuccess,
   Party_Dropdown_List_Success,
+  Partyonclustersubcluste_List_Success,
   Retailer_List_Success,
   SSDD_List_under_Company_Success,
 } from "./actions";
@@ -14,8 +16,10 @@ import {
   get_OrderType_Api,
   Party_Dropdown_Get_API,
   Party_Master_Edit_API,
+  PartyOnClusterSbcluster_Dropdown_Get_API,
   Retailer_List_under_Company_PartyAPI,
   SSDD_List_under_Company_API,
+  SubEmployee_Dropdown_Get_API,
   VendorSupplierCustomer,
 } from "../../../helpers/backend_helper";
 
@@ -27,8 +31,10 @@ import {
   GET_VENDER,
   GET_VENDER_SUPPLIER_CUSTOMER,
   PARTY_DROPDOWN_LIST,
+  PARTY_ON_CLUSTER_SUBCLUSTER_LIST,
   RETAILER_LIST,
   SSDD_LIST_UNDER_COMPANY,
+  SUB_EMPLOYEE_LIST,
 } from "./actionType";
 
 import { CommonConsole, loginCompanyID, loginPartyID } from "../../../components/Common/CommonFunction";
@@ -221,6 +227,31 @@ function* Party_Dropdown_List_GenFunc({ loginEmployeeID }) {
   }
 }
 
+function* SubEmployee_Dropdown_List_GenFunc({ loginEmployeeID }) {
+
+  try {
+    const response = yield call(SubEmployee_Dropdown_Get_API, loginEmployeeID);
+    yield put(EmployeeSubEmployee_List_Success(response.Data));
+  } catch (error) {
+    CommonConsole(error);
+    yield put(orderApiErrorAction());
+  }
+}
+
+
+
+function* PartyonClusterSubcluster_Dropdown_List_GenFunc({config}) {
+  try {
+    const response = yield call(PartyOnClusterSbcluster_Dropdown_Get_API, config);
+    yield put(Partyonclustersubcluste_List_Success(response.Data));
+  } catch (error) {
+    CommonConsole(error);
+    yield put(orderApiErrorAction());
+  }
+}
+
+
+
 function* SupplierSaga() {
   yield takeLatest(GET_SUPPLIER, getSupplierGenFunc);
   yield takeLatest(GET_SUPPLIER_ADDRESS, supplierAddressGenFunc);
@@ -231,6 +262,11 @@ function* SupplierSaga() {
   yield takeLatest(SSDD_LIST_UNDER_COMPANY, SSDD_List_under_Company_GenFunc);
   yield takeLatest(RETAILER_LIST, Retailer_List_GenFunc);
   yield takeLatest(PARTY_DROPDOWN_LIST, Party_Dropdown_List_GenFunc);
+  yield takeLatest(SUB_EMPLOYEE_LIST, SubEmployee_Dropdown_List_GenFunc);
+  yield takeLatest(PARTY_ON_CLUSTER_SUBCLUSTER_LIST, PartyonClusterSubcluster_Dropdown_List_GenFunc);
+
+
+
 
 
 }

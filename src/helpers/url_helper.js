@@ -380,6 +380,15 @@ export const PURCHASE_RETURN_PRINT = '/PurchaseReturnPrint'// Loading sheet Prin
 export const MANAGEMENT_PARTIES = '/ManagementEmpParties'
 export const GO_BUTTON_API_MANAGEMENT_PARTIES = '/ManagementEmpPartiesFilter'
 export const EMPLOYEE_DROPDOWN_API = '/ManagementEmployeeList'
+export const SUBEMPLOYEE = '/EmployeeSubEmployee'
+
+export const PARTY_ON_CLUSTER_SUBCLUSTER = '/GetPartyOnSubclusterandcluster'
+
+
+
+
+
+
 
 // Receipt
 export const RECEIPT_GO_BUTTON_API = '/ReceiptInvoices'
