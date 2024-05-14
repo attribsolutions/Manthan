@@ -338,11 +338,12 @@ const TargetVSAchievement = (props) => {
         const jsonBody = JSON.stringify({
             "Month": yearAndMonth.Month,
             "Year": yearAndMonth.Year,
-            "Party": (commonPartyDropSelect.value === 0) ? 0 : commonPartyDropSelect.value,
+            "Party": partydropdown.value,
             "Employee": !(isSCMParty) ? 0 : _cfunc.loginEmployeeID(),
             "SubEmployee": SubEmployee.value,
             "Cluster": cluster.value,
             "SubCluster": subCluster.value
+
         })
         if (isGropuWise) {
             dispatch(Target_VS_AchievementGroupWise_Go_Button_API(jsonBody));
