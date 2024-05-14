@@ -221,7 +221,7 @@ const PartyItems = (props) => {
 
 		const numberOfItems = groupWiseItemNewArray.reduce((total, group) => total + group.items.length, 0);
 
-		dispatch(BreadcrumbShowCountlabel(`Groups:${numberOfGroups} Count:${numberOfItems}`));
+		dispatch(BreadcrumbShowCountlabel(`Groups:${numberOfGroups}`));
 		return groupWiseItemNewArray
 	}, [searchQuery, groupWiseItemArray]);
 
