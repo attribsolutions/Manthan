@@ -354,6 +354,7 @@ const TargetVSAchievement = (props) => {
 
 
     const rowStyle = (row, rowIndex) => {
+        
         const style = {};
         if ((row.key) === (Tabledata.length)) {
 
@@ -458,12 +459,7 @@ const TargetVSAchievement = (props) => {
                     </Row>
                     <Row>
 
-
-
-
-
-
-
+{/* 
                     <Col sm={3} className="">
                             <FormGroup className=" row mt-2" >
                                 <Label className="col-sm-4 p-2"
@@ -488,12 +484,12 @@ const TargetVSAchievement = (props) => {
                                     />
                                 </Col>
                             </FormGroup>
-                        </Col>
+                        </Col> */}
 
 
 
                         <Col sm={3} className="">
-                            <FormGroup className=" row mt-2" >
+                            <FormGroup className=" row mt-1" >
                                 <Label className="col-sm-4 p-2"
                                     style={{ width: "120px" }}>Party</Label>
                                 <Col sm="8">
@@ -518,7 +514,7 @@ const TargetVSAchievement = (props) => {
 
 
                         <Col sm={3} className="">
-                            <FormGroup className="mb- row mt- mb-1 " >
+                            <FormGroup className="mb- row mt-1 mb-1 " >
                                 <Label className="col-sm-5 p-2"
                                     style={{ width: "120px" }}>Group wise</Label>
                                 <Col sm="7">

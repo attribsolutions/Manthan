@@ -21,7 +21,7 @@ function* Target_VS_Achievement_GenFun(jsonBody) {
             i.AchAmountWithGST = parseInt(i.AchAmountWithGST)
             i.SAPItemCode =parseInt(i.SAPItemCode)
             i.SAPPartyCode =parseInt(i.SAPPartyCode)
-debugger
+
             return i
         })
 
