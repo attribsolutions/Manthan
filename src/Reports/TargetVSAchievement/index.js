@@ -339,7 +339,7 @@ const TargetVSAchievement = (props) => {
         const jsonBody = JSON.stringify({
             "Month": yearAndMonth.Month,
             "Year": yearAndMonth.Year,
-            "Party": partydropdown.value,
+            "Party": !(isSCMParty) ? _cfunc.loginPartyID() : partydropdown.value,
             "Employee": !(isSCMParty) ? 0 : _cfunc.loginEmployeeID(),
             "SubEmployee": SubEmployee.value,
             "Cluster": cluster.value,
@@ -490,7 +490,7 @@ const TargetVSAchievement = (props) => {
 
 
 
-                        <Col sm={3} className="">
+                       {isSCMParty && <Col sm={3} className="">
                             <FormGroup className=" row mt-1" >
                                 <Label className="col-sm-4 p-2"
                                     style={{ width: "120px" }}>Party</Label>
@@ -513,7 +513,7 @@ const TargetVSAchievement = (props) => {
                                 </Col>
                             </FormGroup>
                         </Col>
-
+}
 
                         <Col sm={3} className="">
                             <FormGroup className="mb- row mt-1 mb-1 " >
