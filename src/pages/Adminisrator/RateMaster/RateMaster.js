@@ -15,10 +15,14 @@ import { MetaTags } from "react-meta-tags";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import {
+    Breadcrumb_inputName,
     commonPageField,
     commonPageFieldSuccess,
     getBaseUnit_ForDropDown,
     getBaseUnit_ForDropDownSuccess,
+    get_Party_ForDropDown,
+    get_Party_ForDropDown_Success,
+    goButtonForMarginSuccess,
 } from "../../../store/actions";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
@@ -32,12 +36,13 @@ import * as _cfunc from "../../../components/Common/CommonFunction";
 import { CInput, C_DatePicker, C_Select, decimalRegx } from "../../../CustomValidateForm";
 import { mode, pageId, url } from "../../../routes";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
-import { comAddPageFieldFunc, initialFiledFunc, onChangeDate, resetFunction } from "../../../components/Common/validationFunction";
-import { Go_Button, SaveButton } from "../../../components/Common/CommonButton";
+import { comAddPageFieldFunc, initialFiledFunc, onChangeDate, onChangeSelect, resetFunction } from "../../../components/Common/validationFunction";
+import { Change_Button, Go_Button, SaveButton } from "../../../components/Common/CommonButton";
 import { globalTableSearchProps } from "../../../components/Common/SearchBox/MySearch";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 import { deleteRateId_ForMaster, deleteRateId_ForMaster_Success, goButtonForRate_Master, goButtonForRate_Master_Success, saveRateMaster, saveRateMasterSuccess } from "../../../store/Administrator/RateMasterRedux/action";
+import { priceListByCompay_Action, priceListByCompay_ActionSuccess } from "../../../store/Administrator/PriceList/action";
 
 const RateMaster = (props) => {
     const dispatch = useDispatch();
@@ -45,6 +50,8 @@ const RateMaster = (props) => {
 
     const fileds = {
         EffectiveDate: "",
+        PartyName: "",
+        PriceListName: "",
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
@@ -62,7 +69,10 @@ const RateMaster = (props) => {
         pageField,
         saveBtnloading,
         listBtnLoading,
-        BaseUnit
+        BaseUnit,
+        PriceList,
+        partyDropLoading,
+        Party
     } = useSelector((state) => ({
         listBtnLoading: state.RateMasterReducer.listBtnLoading,
         saveBtnloading: state.RateMasterReducer.saveBtnloading,
@@ -70,19 +80,28 @@ const RateMaster = (props) => {
         deleteMessage: state.RateMasterReducer.deleteMsgForMaster,
         postMsg: state.RateMasterReducer.postMsg,
         BaseUnit: state.ItemMastersReducer.BaseUnit,
+        Party: state.ItemMastersReducer.Party,
+        partyDropLoading: state.ItemMastersReducer.partyApiLoading,
+
+        PriceList: state.PriceListReducer.priceListByCompany,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField
     }));
 
     useEffect(() => {
-        const page_Id = pageId.GST
+        const page_Id = pageId.RATE_MASTER
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id));
         dispatch(getBaseUnit_ForDropDown());
+        dispatch(priceListByCompay_Action());
+        dispatch(get_Party_ForDropDown());
         return () => {
             dispatch(commonPageFieldSuccess(null));
             dispatch(getBaseUnit_ForDropDownSuccess([]));
+            dispatch(get_Party_ForDropDown_Success([]));
+            dispatch(priceListByCompay_ActionSuccess([]));
         }
+
     }, []);
 
     const values = { ...state.values }
@@ -220,9 +239,23 @@ const RateMaster = (props) => {
         label: data.Name
     }));
 
+    const PartyTypeDropdown_Options = Party.map((tableData) => ({
+        value: tableData.id,
+        label: tableData.Name
+    }));
+    PartyTypeDropdown_Options.unshift({
+        value: 0,
+        label: "select"
+    });
+
+    const PriceList_DropdownOptions = PriceList.map((data) => ({
+        value: data.id,
+        label: data.Name
+    }));
+
     const GoButton_Handler = (event) => {
 
-        if (values.EffectiveDate === '') {
+        if ((values.EffectiveDate === '') || (values.PriceListName === '')) {
             customAlert({
                 Type: 4,
                 Message: alertMessages.effectiveDateIsRequired,
@@ -231,6 +264,8 @@ const RateMaster = (props) => {
         }
         else {
             const jsonBody = JSON.stringify({
+                "PriceList": values.PriceListName.value,
+                "Party": values.PartyName.value ? values.PartyName.value : 0,
                 "EffectiveDate": values.EffectiveDate,
                 "CompanyID": loginCompanyID()
             });
@@ -375,13 +410,15 @@ const RateMaster = (props) => {
 
     const SaveHandler = async (event) => {
         event.preventDefault();
-        const invalidMessages = [];
+
         try {
 
             var ItemData = tableData.map((index) => ({
                 "id": index.id,
+                "PriceList": values.PriceListName.value,
+                "Party": values.PartyName.value ? values.PartyName.value : null,
                 "Rate": Number(index.Rate),
-                "BaseUnitID": index.defaultUnit.value,
+                "UnitID": index.defaultUnit.value,
                 "CommonID": 0,
                 "EffectiveDate": values.EffectiveDate,
                 "Company": loginCompanyID(),
@@ -446,7 +483,7 @@ const RateMaster = (props) => {
                             </CardHeader>
                             <CardBody className=" vh-10 0 text-black" style={{ marginBottom: "4cm" }}>
 
-                                <Card style={{ backgroundColor: "whitesmoke" }} className=" mb-1">
+                                {/* <Card style={{ backgroundColor: "whitesmoke" }} className=" mb-1">
                                     <CardHeader className="c_card_body"  >
                                         <Row className="mt-3">
 
@@ -478,6 +515,97 @@ const RateMaster = (props) => {
                                             </Col>
                                             <Col sm={1}>
                                                 <Go_Button onClick={(event) => { GoButton_Handler(event) }} loading={listBtnLoading} />
+                                            </Col>
+                                        </Row>
+                                    </CardHeader>
+                                </Card> */}
+
+                                <Card style={{ backgroundColor: "whitesmoke" }} className=" mb-1">
+                                    <CardHeader className="c_card_body"  >
+                                        <Row className="mt-3">
+                                            <Col sm={3}>
+                                                <FormGroup className="mb-3 row">
+                                                    <Label htmlFor="validationCustom01" className="col-sm-4 p-1 ml-n1 ">{fieldLabel.PriceListName}</Label>
+                                                    <Col sm={8}>
+                                                        <C_Select
+                                                            name="PriceListName"
+                                                            value={values.PriceListName}
+                                                            options={PriceList_DropdownOptions}
+                                                            isDisabled={pageMode === mode.edit ? true : false}
+                                                            isSearchable={true}
+                                                            autoFocus={true}
+                                                            styles={{
+                                                                menu: provided => ({ ...provided, zIndex: 2 })
+                                                            }}
+                                                            placeholder="select"
+                                                            onChange={(hasSelect, evn) => {
+                                                                onChangeSelect({ hasSelect, evn, state, setState, })
+                                                                dispatch(Breadcrumb_inputName(hasSelect.label))
+                                                            }}
+                                                            classNamePrefix="dropdown"
+                                                        />
+                                                        {isError.PriceListName.length > 0 && (
+                                                            <span className="text-danger f-8"><small>{isError.PriceListName}</small></span>
+                                                        )}
+
+                                                    </Col>
+                                                </FormGroup>
+                                            </Col>
+                                            <Col sm={3}>
+                                                <FormGroup className="mb-3 row ">
+                                                    <Label htmlFor="validationCustom01" className="col-sm-3 p-2" style={{ width: "2.5cm" }}>{fieldLabel.PartyName}</Label>
+                                                    <Col sm={8} >
+                                                        <C_Select
+                                                            name="PartyName"
+                                                            value={values.PartyName}
+                                                            id={"PartyName"}
+                                                            options={PartyTypeDropdown_Options}
+                                                            isDisabled={pageMode === mode.edit ? true : false}
+                                                            isSearchable={true}
+                                                            isLoading={partyDropLoading}
+                                                            styles={{
+                                                                menu: provided => ({ ...provided, zIndex: 2 })
+                                                            }}
+                                                            placeholder="select"
+                                                            onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
+                                                            classNamePrefix="dropdown"
+                                                        />
+                                                        {isError.PartyName.length > 0 && (
+                                                            <span className="text-danger f-8"><small>{isError.PartyName}</small></span>
+                                                        )}
+                                                    </Col>
+                                                </FormGroup>
+                                            </Col>
+                                            <Col sm={4}>
+                                                <FormGroup className="mb-3 row ">
+                                                    <Label className="col-md-6 p-2" style={{ width: "2.9cm" }}>{fieldLabel.EffectiveDate}</Label>
+                                                    <Col sm={6}>
+                                                        <C_DatePicker
+                                                            id="EffectiveDate"
+                                                            name="EffectiveDate"
+                                                            placeholder={"DD/MM/YYYY"}
+                                                            value={values.EffectiveDate}
+                                                            isDisabled={pageMode === mode.edit ? true : false}
+                                                            onChange={(y, v, e) => {
+                                                                onChangeDate({ e, v, state, setState })
+                                                            }}
+                                                            options={{
+                                                                altInput: true,
+                                                                altFormat: "d-m-Y",
+                                                                dateFormat: "Y-m-d",
+                                                            }}
+                                                        />
+                                                        {isError.EffectiveDate.length > 0 && (
+                                                            <span className="invalid-feedback">{isError.EffectiveDate}</span>
+                                                        )}
+                                                    </Col>
+                                                </FormGroup>
+                                            </Col>
+                                            <Col sm={1}>
+                                                {
+                                                    !(tableData.length > 0) ?
+                                                        <Go_Button onClick={(event) => { GoButton_Handler(event) }} loading={listBtnLoading} />
+                                                        : <Change_Button onClick={() => { dispatch(goButtonForMarginSuccess([])) }} />}
                                             </Col>
                                         </Row>
                                     </CardHeader>

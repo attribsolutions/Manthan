@@ -69,8 +69,7 @@ const Challan = (props) => {
         challanitems: state.ChallanReducer.challanitems,
         GoButton: state.ChallanReducer.GoButton,
         vender: state.CommonAPI_Reducer.vender,
-        postMsg: state.InvoiceReducer.postMsg,
-        updateMsg: state.BOMReducer.updateMsg,
+        postMsg: state.ChallanReducer.postMsg,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
     }));
@@ -82,6 +81,15 @@ const Challan = (props) => {
     const values = { ...state.values }
     const { isError } = state;
     const { fieldLabel } = state;
+
+    useEffect(() => {
+        const jsonBody = JSON.stringify({
+            Company: _cfunc.loginCompanyID()
+        });
+        dispatch(challanItemForDropdown(jsonBody))
+        dispatch(GetVender())
+        dispatch(GoButtonForChallanAddSuccess([]))
+    }, [])
 
     // userAccess useEffect
     useEffect(() => {
@@ -102,6 +110,13 @@ const Challan = (props) => {
 
         };
     }, [userAccess])
+
+    useEffect(() => {
+        if (pageField) {
+            const fieldArr = pageField.PageFieldMaster
+            comAddPageFieldFunc({ state, setState, fieldArr })
+        }
+    }, [pageField])
 
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
@@ -146,7 +161,7 @@ const Challan = (props) => {
                     Message: postMsg.Message,
                 })
                 if (isPermission) {
-                    history.push({ pathname: url.IN })
+                    history.push({ pathname: url.CHALLAN_LIST })
                 }
             }
         }
@@ -157,43 +172,6 @@ const Challan = (props) => {
             })
         }
     }, [postMsg])
-
-    useEffect(() => {
-
-        if ((updateMsg.Status === true) && (updateMsg.StatusCode === 200) && !(modalCss)) {
-            history.push({
-                pathname: url.MATERIAL_ISSUE_LIST,
-            })
-        } else if (updateMsg.Status === true && !modalCss) {
-            customAlert({
-                Type: 3,
-                Message: JSON.stringify(updateMsg.Message),
-            })
-        }
-    }, [updateMsg, modalCss]);
-
-    useEffect(() => {
-        const jsonBody = JSON.stringify({
-            Company: _cfunc.loginCompanyID()
-        });
-        dispatch(challanItemForDropdown(jsonBody))
-        dispatch(GetVender())
-        dispatch(GoButtonForChallanAddSuccess([]))
-    }, [])
-
-    useEffect(() => {
-        if (pageField) {
-            const fieldArr = pageField.PageFieldMaster
-            comAddPageFieldFunc({ state, setState, fieldArr })
-        }
-    }, [pageField])
-
-    useEffect(() => {
-        if (pageField) {
-            const fieldArr = pageField.PageFieldMaster
-            comAddPageFieldFunc({ state, setState, fieldArr })
-        }
-    }, [pageField]);
 
     useEffect(() => _cfunc.tableInputArrowUpDounFunc("#table_Arrow"), [GoButton]);
 
@@ -344,7 +322,6 @@ const Challan = (props) => {
         custom: true,
     };
 
-
     function ChallanDateOnchange(y, v, e) {
         onChangeDate({ e, v, state, setState })
     };
@@ -358,6 +335,7 @@ const Challan = (props) => {
         })
         dispatch(GoButtonForChallanAddSuccess([]))
     };
+    
     function itemOnChange(hasSelect, evn) {
 
         setState((i) => {

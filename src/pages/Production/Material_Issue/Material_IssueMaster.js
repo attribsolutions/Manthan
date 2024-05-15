@@ -19,12 +19,8 @@ import {
     onChangeDate,
     onChangeSelect,
 } from "../../../components/Common/validationFunction";
-import Select from "react-select";
 import { Change_Button, Go_Button, SaveButton } from "../../../components/Common/CommonButton";
-import {
-    saveBOMMasterSuccess,
-    updateBOMListSuccess
-} from "../../../store/Production/BOMRedux/action";
+import { saveBOMMasterSuccess } from "../../../store/Production/BOMRedux/action";
 import {
     editMaterialIssueIdSuccess,
     goButtonForMaterialIssue_Master_Action,
@@ -38,9 +34,11 @@ import { Tbody, Thead } from "react-super-responsive-table";
 import { mode, pageId, url } from "../../../routes/index";
 import { countlabelFunc } from "../../../components/Common/CommonPurchaseList";
 import * as _cfunc from "../../../components/Common/CommonFunction";
-import { CInput, C_DatePicker, decimalRegx } from "../../../CustomValidateForm";
+import { CInput, C_DatePicker, decimalRegx, onlyNumberRegx } from "../../../CustomValidateForm";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
+import { Qty_Distribution_Func, updateWorkOrderQuantity_By_Lot } from "./DistributionFunc";
+import Select, { components } from "react-select";
 
 const MaterialIssueMaster = (props) => {
 
@@ -51,30 +49,30 @@ const MaterialIssueMaster = (props) => {
     const fileds = {
         MaterialIssueDate: currentDate_ymd,
         ItemName: "",
-        NumberOfLot: "",
-        LotQuantity: "",
+        NumberOfLot: 0,
+        LotQuantity: 0,
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
 
-    const [modalCss, setModalCss] = useState(false);
     const [pageMode, setPageMode] = useState(mode.defaultsave);
-
     const [userPageAccessState, setUserAccState] = useState('');
     const [Itemselect, setItemselect] = useState([])
     const [Itemselectonchange, setItemselectonchange] = useState("");
     const [goButtonList, setGoButtonList] = useState([]);
+    const [editCreatedBy, seteditCreatedBy] = useState("");
+    const [noOfLotForDistribution, setNoOfLotForDistribution] = useState(0);
+
+    const [changeButtonEnable, setChangeButtonEnable] = useState(false);
 
     const {
         postMsg,
-        updateMsg,
         pageField,
         userAccess,
         Items,
         GoButton = []
     } = useSelector((state) => ({
         postMsg: state.MaterialIssueReducer.postMsg,
-        updateMsg: state.BOMReducer.updateMsg,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
         Items: state.WorkOrderReducer.WorkOrderList,
@@ -82,6 +80,7 @@ const MaterialIssueMaster = (props) => {
     }));
 
     const { Data = [] } = GoButton
+
     useEffect(() => {
         const page_Id = pageId.MATERIAL_ISSUE
         dispatch(goButtonForMaterialIssue_Master_ActionSuccess([]))
@@ -120,22 +119,36 @@ const MaterialIssueMaster = (props) => {
     useEffect(() => {
 
         if ((GoButton.Status === true) && (GoButton.StatusCode === 200)) {
+
             setPageMode(GoButton.pageMode)
             const { ListData, Data } = GoButton
-            const { id, Item, ItemName, Unit, Quantity, NumberOfLot, Bom, } = ListData
-            setState((i) => {
-                i.values.MaterialIssueDate = currentDate_ymd
-                i.values.ItemName = { value: id, label: ItemName, Item: Item, NoLot: NumberOfLot, lotQty: Quantity };
-                i.values.NumberOfLot = NumberOfLot;
-                i.values.LotQuantity = Quantity;
-                i.hasValid.ItemName.valid = true;
-                i.hasValid.MaterialIssueDate.valid = true;
-                i.hasValid.NumberOfLot.valid = true;
-                i.hasValid.LotQuantity.valid = true;
-                return i
-            })
-            setItemselect({ Item: Item, Unit: Unit, id: id, Bom: Bom })
-            setGoButtonList(Data)
+
+            if (GoButton.goButtonCallByMode) {
+                const { id, Item, ItemName, Unit, Quantity, NumberOfLot, Bom } = ListData;
+
+                setState((i) => {
+                    i.values.MaterialIssueDate = currentDate_ymd
+                    i.values.ItemName = { value: id, label: ItemName, Item: Item, NoLot: NumberOfLot, lotQty: Quantity };
+                    i.values.NumberOfLot = NumberOfLot;
+                    i.values.LotQuantity = Quantity;
+                    i.hasValid.ItemName.valid = true;
+                    i.hasValid.MaterialIssueDate.valid = true;
+                    i.hasValid.NumberOfLot.valid = true;
+                    i.hasValid.LotQuantity.valid = true;
+                    return i
+                })
+                setItemselect({ Item: Item, Unit: Unit, id: id, Bom: Bom, Quantity: Quantity })
+                setNoOfLotForDistribution(NumberOfLot)
+                const Qty_Distribution_data = Qty_Distribution_Func(Data);
+
+                setGoButtonList(Qty_Distribution_data)
+            }
+            else {
+                if (changeButtonEnable) {
+                    const updatedWorkOrderData = updateWorkOrderQuantity_By_Lot(Data, values.NumberOfLot, noOfLotForDistribution);
+                    setGoButtonList(updatedWorkOrderData)
+                }
+            }
         }
     }, [GoButton])
 
@@ -154,7 +167,6 @@ const MaterialIssueMaster = (props) => {
                 hasEditVal = props[mode.editValue]
                 insidePageMode = props.pageMode;
                 setPageMode(props.pageMode)
-                setModalCss(true)
             }
 
             if (hasEditVal) {
@@ -178,6 +190,7 @@ const MaterialIssueMaster = (props) => {
                     dispatch(goButtonForMaterialIssue_Master_ActionSuccess(MaterialIssueItems))
                     setGoButtonList(MaterialIssueItems)
                 }
+                seteditCreatedBy(hasEditVal.CreatedBy)
                 dispatch(editMaterialIssueIdSuccess({ Status: false }))
             }
         }
@@ -228,11 +241,13 @@ const MaterialIssueMaster = (props) => {
     const ItemDropdown_Options = Items.map((index) => ({
         value: index.id,
         label: index.ItemName,
-        Quantity: index.Quantity,
+        ItemName: index.ItemName,
+        Quantity: index.RemaningQty,
         Item: index.Item,
         BomID: index.Bom,
         Unit: index.Unit,
-        NumberOfLot: index.NumberOfLot
+        NumberOfLot: index.RemainingLot,
+        WorkDate: index.WorkDate
     }));
 
     const pagesListColumns = [
@@ -266,7 +281,10 @@ const MaterialIssueMaster = (props) => {
                 }
             },
         },
-
+        {
+            text: "Original  Work Order Qty",
+            dataField: "OriginalWorkOrderQty",
+        },
         {
             text: "Work Order Qty",
             dataField: "Quantity",
@@ -279,74 +297,76 @@ const MaterialIssueMaster = (props) => {
             text: "Batch Code",
             dataField: "BatchesData",
 
-            formatter: (cellContent, user) => (
-                <>
-                    <Table className="table table-bordered table-responsive mb-1">
-                        <Thead>
-                            <tr>
-                                <th>Batch Code </th>
-                                <th>Supplier BatchCode</th>
-                                <th>Batch Date</th>
-                                <th>Stock Quantity</th>
-                                <th>Quantity</th>
-                            </tr>
-                        </Thead>
-                        <Tbody>
-                            {cellContent.map((index) => {
+            formatter: (cellContent, user) => {
+                return (
+                    <>
+                        <Table className="table table-bordered table-responsive mb-1">
+                            <Thead>
+                                <tr>
+                                    <th>Batch Code </th>
+                                    <th>Supplier BatchCode</th>
+                                    <th>Batch Date</th>
+                                    <th>Stock Quantity</th>
+                                    <th>Quantity</th>
+                                </tr>
+                            </Thead>
+                            <Tbody>
+                                {cellContent.map((index) => {
 
-                                return (
-                                    < tr >
-                                        <td>
-                                            <div style={{ width: "150px" }}>
-                                                <Label>
-                                                    {index.SystemBatchCode}
-                                                </Label>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div style={{ width: "150px" }}>
-                                                <Label>
-                                                    {index.BatchCode}
-                                                </Label>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div style={{ width: "100px" }}>
-                                                <Label>
-                                                    {_cfunc.date_dmy_func(index.BatchDate)}
-                                                </Label>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div style={{ width: "120px", textAlign: "right" }}>
-                                                <Label
-                                                >
-                                                    {index.ObatchwiseQuantity}
-                                                </Label>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div style={{ width: "150px" }}>
-                                                <CInput
-                                                    type="text"
-                                                    key={`stock${user.id}-${index.id}`}
-                                                    disabled={pageMode === mode.view ? true : false}
-                                                    id={`stock${user.id}-${index.id}`}
-                                                    style={{ textAlign: "right" }}
-                                                    cpattern={decimalRegx}
-                                                    defaultValue={index.Qty}
-                                                    autoComplete='off'
-                                                    onChange={(event) => handleChange(event, user, index)}
-                                                />
-                                            </div>
-                                        </td>
-                                    </tr>
-                                )
-                            })}
-                        </Tbody>
-                    </Table>
-                </>
-            ),
+                                    return (
+                                        < tr >
+                                            <td>
+                                                <div style={{ width: "170px" }}>
+                                                    <Label>
+                                                        {index.SystemBatchCode}
+                                                    </Label>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div style={{ width: "150px" }}>
+                                                    <Label>
+                                                        {index.BatchCode}
+                                                    </Label>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div style={{ width: "100px" }}>
+                                                    <Label>
+                                                        {_cfunc.date_dmy_func(index.BatchDate)}
+                                                    </Label>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div style={{ width: "120px", textAlign: "right" }}>
+                                                    <Label
+                                                    >
+                                                        {index.ObatchwiseQuantity}
+                                                    </Label>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div style={{ width: "150px" }}>
+                                                    <CInput
+                                                        type="text"
+                                                        key={`stock${user.id}-${index.id}`}
+                                                        disabled={pageMode === mode.view ? true : false}
+                                                        id={`stock${user.id}-${index.id}`}
+                                                        style={{ textAlign: "right" }}
+                                                        cpattern={decimalRegx}
+                                                        defaultValue={index.Qty}
+                                                        autoComplete='off'
+                                                        onChange={(event) => tableQuantityOnchangeHandler(event, user, index)}
+                                                    />
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    )
+                                })}
+                            </Tbody>
+                        </Table>
+                    </>
+                )
+            }
         },
 
     ]
@@ -384,7 +404,9 @@ const MaterialIssueMaster = (props) => {
                     Item: values.ItemName.Item,
                     Company: _cfunc.loginCompanyID(),
                     Party: _cfunc.loginPartyID(),
-                    Quantity: parseInt(values.LotQuantity)
+                    Quantity: parseInt(values.LotQuantity),
+                    NoOfLots: Number(values.NumberOfLot),
+
                 });
                 const body = { jsonBody, pageMode }
                 dispatch(goButtonForMaterialIssue_Master_Action(body));
@@ -430,69 +452,39 @@ const MaterialIssueMaster = (props) => {
     }
 
     function NumberOfLotchange(event) {
-        dispatch(goButtonForMaterialIssue_Master_ActionSuccess([]))
-        let value1 = Math.max('', Math.min(Itemselect.NumberOfLot, Number(event.target.value)));
-        event.target.value = value1
-        if ((event.target.value === "NaN")) {
-            value1 = 0
+
+        let input = event.trim(); // Remove leading and trailing whitespace
+        let defaultNoOfLot = parseFloat(noOfLotForDistribution);
+
+        if (input === "" || isNaN(input)) {
+            input = 0;
         }
-        // onChangeText({ event, state, setState });
+
+        if (parseFloat(input) > defaultNoOfLot) {
+            input = defaultNoOfLot;
+        }
+
         setState((i) => {
-            i.values.NumberOfLot = value1
-            i.hasValid.NumberOfLot.valid = true;
-            // i.hasValid.LotQuantity.valid = true;
-            return i
-        })
+            let a = { ...i };
+            a.values.NumberOfLot = input;
+            a.hasValid.NumberOfLot.valid = true;
+            return a;
+        });
     }
 
-    const handleChange = (event, index1, index2) => {
-        debugger
-        let input = Number(event.target.value)
-        let result = /^\d*(\.\d{0,2})?$/.test(input);
-        let val1 = 0;
-        if (result) {
-            let v1 = Number(index1.Quantity);
-            let v2 = Number(input)
-            if (v1 >= v2) { val1 = input }
-            else { val1 = v1 };
+    const tableQuantityOnchangeHandler = (event, index1, index2) => {
 
-        } else if (((index2.Qty >= 0) && (!(input === '')))) {
-            val1 = index2.Qty
+        let input = event.target.value.trim(); // Remove leading and trailing whitespace
+        let ObatchwiseQuantity = parseFloat(index2.ObatchwiseQuantity);
+
+        if (input === "" || isNaN(input)) {
+            index2.Qty = 0;
         } else {
-            val1 = 0
-        }
-
-        event.target.value = Number(val1);
-
-        let Qtysum = 0
-        index1.BatchesData.forEach((i) => {
-            if (!(i.id === index2.id)) {
-                Qtysum = Number(Qtysum) + Number(i.Qty)
+            if (parseFloat(input) > ObatchwiseQuantity) {
+                event.target.value = ObatchwiseQuantity;
             }
-        });
-
-        Qtysum = Number(Qtysum) + Number(val1);
-        index2.Qty = Number(val1);
-        // let diffrence = Math.abs(index1.Quantity - Qtysum);
-
-        // if ((Qtysum === index1.Quantity)) {
-        //     try {
-        //         document.getElementById(`ItemName${index1.id}`).style.color = ""
-        //         document.getElementById(`ItemNameMsg${index1.id}`).innerText = ''
-        //         index1["invalid"] = false
-        //         index1["invalidMsg"] = ''
-
-        //     } catch (e) { }
-        // } else {
-        //     try {
-        //         const msg = (Qtysum > index1.Quantity) ? (`Excess Quantity ${diffrence} ${index1.UnitName}`)
-        //             : (`Short Quantity ${diffrence} ${index1.UnitName}`)
-        //         index1["invalid"] = true;
-        //         index1["invalidMsg"] = msg;
-
-        //         document.getElementById(`ItemNameMsg${index1.id}`).innerText = msg;
-        //     } catch (e) { }
-        // }
+            index2.Qty = input; // Assign the input value directly to Qty
+        }
     };
 
     const SaveHandler = async (event) => {
@@ -557,7 +549,7 @@ const MaterialIssueMaster = (props) => {
 
                 const jsonBody = JSON.stringify({
                     MaterialIssueDate: values.MaterialIssueDate,
-                    NumberOfLot: values.NumberOfLot,
+                    NumberOfLot: Number(values.NumberOfLot),
                     LotQuantity: values.LotQuantity,
                     CreatedBy: _cfunc.loginUserID(),
                     UpdatedBy: _cfunc.loginUserID(),
@@ -566,6 +558,7 @@ const MaterialIssueMaster = (props) => {
                     Item: Itemselect.Item,
                     Unit: Itemselect.Unit,
                     MaterialIssueItems: materialIssueItems,
+                    // Status: 1,
                     MaterialIssueWorkOrder: [
                         {
                             WorkOrder: Itemselect.id,
@@ -574,13 +567,26 @@ const MaterialIssueMaster = (props) => {
                     ]
                 }
                 );
-
                 dispatch(saveMaterialIssue({ jsonBody }));
 
             }
         } catch (e) { _cfunc.btnIsDissablefunc({ btnId, state: false }) }
     };
 
+    const customOption = (props) => {
+
+        const { innerProps, label, data } = props;
+        
+        return (
+            <components.Option {...props}>
+                <div {...innerProps}>
+                    <div >Name:{data.ItemName}</div>
+                    <div>Quantity:{data.Quantity}</div>
+                    <div>WorkDate:{_cfunc.date_dmy_func(data.WorkDate)}</div>
+                </div>
+            </components.Option>
+        );
+    };
 
     if (!(userPageAccessState === '')) {
         return (
@@ -615,11 +621,13 @@ const MaterialIssueMaster = (props) => {
                                                 <Select
                                                     name="ItemName"
                                                     value={values.ItemName}
-                                                    isDisabled={Data.length > 0 ? true : false}
+                                                    // isDisabled={Data.length > 0 ? true : false}
                                                     isSearchable={true}
                                                     className="react-dropdown"
                                                     classNamePrefix="dropdown"
                                                     options={ItemDropdown_Options}
+                                                    components={{ Option: customOption }}
+                                                    isDisabled={(goButtonList.length > 0) ? true : false}
                                                     onChange={ItemOnchange}
                                                     styles={{
                                                         menu: provided => ({ ...provided, zIndex: 2 })
@@ -635,16 +643,17 @@ const MaterialIssueMaster = (props) => {
                                         <FormGroup className="mb-2 mt-2 row  " style={{ marginTop: "" }}>
                                             <Label className="mt-1" style={{ width: "150px" }}> {fieldLabel.NumberOfLot} </Label>
                                             <Col sm={7}>
-                                                <Input
+                                                <CInput
                                                     style={{ textAlign: "right" }}
                                                     name="NumberOfLot"
+                                                    cpattern={onlyNumberRegx}
                                                     value={values.NumberOfLot}
-                                                    disabled={(Data.length > 0) ? true : false}
+                                                    disabled={(goButtonList.length > 0) ? true : false}
                                                     type="text"
                                                     className={isError.NumberOfLot.length > 0 ? "is-invalid form-control" : "form-control"}
                                                     placeholder="Please Enter Number Of Lots"
                                                     autoComplete='off'
-                                                    onChange={NumberOfLotchange}
+                                                    onChange={(e) => NumberOfLotchange(e.target.value)}
                                                 />
 
                                             </Col>
@@ -655,12 +664,13 @@ const MaterialIssueMaster = (props) => {
                                         <FormGroup className="mb-1 mt-2  row" >
                                             <Label className="mt-2" style={{ width: "100px" }}> {fieldLabel.LotQuantity} </Label>
                                             <Col sm={7}>
-                                                <Input
+                                                <CInput
                                                     style={{ textAlign: "right" }}
                                                     name="LotQuantity"
                                                     value={values.LotQuantity}
-                                                    disabled={(Data.length > 0) ? true : false}
+                                                    disabled={(goButtonList.length > 0) ? true : false}
                                                     type="text"
+                                                    cpattern={decimalRegx}
                                                     className={isError.LotQuantity.length > 0 ? "is-invalid form-control" : "form-control"}
                                                     placeholder="Please Enter LotQuantity"
                                                     autoComplete='off'
@@ -678,12 +688,14 @@ const MaterialIssueMaster = (props) => {
 
                                 </Col>
                                 <Col sm={1} className="mt-2">
-                                    {pageMode === mode.defaultsave ?
-                                        (Data.length === 0) ?
-                                            < Go_Button onClick={(e) => goButtonHandler(e)} />
-                                            :
-                                            <Change_Button onClick={(e) => dispatch(goButtonForMaterialIssue_Master_ActionSuccess([]))} />
-                                        : null
+                                    {!(goButtonList.length > 0) ?
+                                        < Go_Button onClick={(e) => goButtonHandler(e)} />
+                                        :
+                                        <Change_Button onClick={(e) => {
+                                            setChangeButtonEnable(true)
+                                            dispatch(goButtonForMaterialIssue_Master_ActionSuccess([]));
+                                            setGoButtonList([])
+                                        }} />
                                     }
                                 </Col>
 
@@ -730,14 +742,17 @@ const MaterialIssueMaster = (props) => {
                             )}
 
                         </PaginationProvider>
+
                         {goButtonList.length > 0 &&
-                            <SaveButtonDraggable>
+                            <SaveButtonDraggable >
                                 <SaveButton pageMode={pageMode}
                                     onClick={SaveHandler}
                                     userAcc={userPageAccessState}
                                     module={"Material Issue"}
+                                    editCreatedBy={editCreatedBy}
                                 />
-                            </SaveButtonDraggable>}
+                            </SaveButtonDraggable>
+                        }
 
                     </form>
                 </div>

@@ -355,7 +355,7 @@ const InvoiceExcelUpload = (props) => {
                 try {
                     const MapItemList = ItemList.filter(obj => obj.MapItem !== null && obj.MapItem !== "");
                     MapItemList.forEach(function (i) {
-                        debugger
+                        
                         let Item_Code = i.MapItem;
                         let GST = i.GST;
                         let GSTID = i.GSTID
@@ -386,7 +386,7 @@ const InvoiceExcelUpload = (props) => {
                 try {
                     const MapItemList = ItemList.filter(obj => obj.MapItem !== null && obj.MapItem !== "");
                     MapItemList.forEach(function (i) {
-                        debugger
+                        
                         let Item_Code = i.MapItem;
                         let GST = i.GST;
                         let GSTID = i.GSTID
@@ -580,7 +580,7 @@ const InvoiceExcelUpload = (props) => {
                 let invoiceTotalAmount = 0
 
                 inv.forEach(async (ele) => {
-                    debugger
+                    
                     const calculate = InvoiceUploadCalculation({ Quantity: ele[parArr.Quantity], Rate: ele[parArr.Rate], GST: ele.GST, Discount: ele[parArr.Discount], DiscountType: ele[parArr.DiscountType] });
                     invoiceTotalAmount = invoiceTotalAmount + calculate.Amount;
 

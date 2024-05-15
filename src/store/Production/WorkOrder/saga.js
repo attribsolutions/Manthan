@@ -1,5 +1,5 @@
 import { call, put, takeLatest } from "redux-saga/effects";
-import { CommonConsole, date_dmy_func, convertTimefunc } from "../../../components/Common/CommonFunction";
+import { date_dmy_func, convertTimefunc } from "../../../components/Common/CommonFunction";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import {
   BOMList_Get_API,
@@ -17,7 +17,8 @@ import {
   getWorkOrderListPageSuccess,
   postGoButtonForWorkOrder_MasterSuccess,
   SaveWorkOrderMasterSuccess,
-  updateWorkOrderListSuccess
+  updateWorkOrderListSuccess,
+  WorkOrderApiErrorAction
 } from "./action";
 import {
   DELETE_WORK_ORDER_LIST_PAGE,
@@ -33,7 +34,7 @@ function* Get_BOMList_GenratorFunction({ filters }) {      // get Item dropdown 
   try {
     const response = yield call(BOMList_Get_API, filters);
     yield put(getBOMListSuccess(response.Data));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(WorkOrderApiErrorAction()) }
 }
 
 function* GoButton_WorkOrder_post_genfun({ jsonbody, btnId }) {     // GO Botton Post API
@@ -44,14 +45,14 @@ function* GoButton_WorkOrder_post_genfun({ jsonbody, btnId }) {     // GO Botton
       item.StockQuantity = item.StockQuantity.toFixed(2);
     });
     yield put(postGoButtonForWorkOrder_MasterSuccess(response.Data));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(WorkOrderApiErrorAction()) }
 }
 
 function* Post_WorkOrder_GenratorFunction({ config }) {     // WOrk Order Post API
   try {
     const response = yield call(Post_WorkOrder_Master_API, config);
     yield put(SaveWorkOrderMasterSuccess(response));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(WorkOrderApiErrorAction()) }
 }
 
 function* GetWorkOrderGenFunc({ filters }) {       // get Work Order List API Using post method
@@ -62,10 +63,22 @@ function* GetWorkOrderGenFunc({ filters }) {       // get Work Order List API Us
       var date = date_dmy_func(i.WorkOrderDate)
       var time = convertTimefunc(i.CreatedOn)
       i.WorkOrderDate = (`${date} ${time}`)
+      if (i.Status === 0) {
+        i.Status = "Open";
+      }
+      else if (i.Status === 1) {
+        i.Status = "Partially Completed";
+      }
+      else if (i.Status === 2) {
+        i.Status = "Completed";
+      }
+      else if (i.Status === 3) {
+        i.Status = "Close";
+      }
       return i
     })
     yield put(getWorkOrderListPageSuccess(newList));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(WorkOrderApiErrorAction()) }
 }
 
 function* editWorkOrderGenFunc({ config }) {     // Work Order edit List page
@@ -77,27 +90,29 @@ function* editWorkOrderGenFunc({ config }) {     // Work Order edit List page
     if (response.StatusCode === 226) {
       customAlert({
         Type: 3,
-        Status: true, Message: response.Message,
+        Status: true,
+        Message: response.Message,
       })
+      return
     }
     else {
       yield put(editWorkOrderListSuccess(response));
     }
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(WorkOrderApiErrorAction()) }
 }
 
 function* UpdateWorkOrderGenFunc({ config }) {     // Work Order update List page
   try {
     const response = yield call(WorkOrder_Update_Api, config);
     yield put(updateWorkOrderListSuccess(response))
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(WorkOrderApiErrorAction()) }
 }
 
 function* DeleteWorkOrderGenFunc({ config }) {       // Work Order delete List page
   try {
     const response = yield call(WorkOrder_Delete_Api, config);
     yield put(deleteWorkOrderIdSuccess(response));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(WorkOrderApiErrorAction()) }
 }
 
 function* WorkOrderSaga() {

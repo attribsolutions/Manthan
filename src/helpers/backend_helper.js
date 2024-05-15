@@ -578,8 +578,8 @@ export const IB_Invoice_Edit_API_Singel_Get = ({ editId }) => get(`${url.IB_INVO
 //************************************Inter Branch ************************************/
 
 // IBOrder
-export const IBOrderPage_GoButton_API = (jsonBody) => post(url.GO_BUTTON_POST_API_FOR_IBORDER, jsonBody)//go button api
-export const IBOrderPage_Save_API = (data) => post(url.SAVE_API_FOR_IBORDER, data)//post api
+export const IBOrderPage_GoButton_API = ({jsonBody}) => post(url.GO_BUTTON_POST_API_FOR_IBORDER, jsonBody)//go button api
+export const IBOrderPage_Save_API = ({ jsonBody }) => post(url.SAVE_API_FOR_IBORDER, jsonBody)//post api
 export const IBOrderList_get_Filter_API = ({ filtersBody }) => post(url.IBORDER_LiST_BY_FILTERS, filtersBody)//list page
 
 export const IB_Division_DROP_API = (data) => post(url.IB_DIVISION_DROPDOWN, data)//dropdown api

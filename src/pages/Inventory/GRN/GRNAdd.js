@@ -78,6 +78,8 @@ const GRNAdd = (props) => {
         dispatch(_act.commonPageFieldSuccess(null));
         dispatch(_act.commonPageField(pageId.GRN_ADD_1));
         const jsonBody = JSON.stringify({
+            "PriceList": 0,
+            "Party": _cfunc.loginSelectedPartyID(),
             "EffectiveDate": currentDate_ymd,
             "CompanyID": _cfunc.loginCompanyID()
         });
@@ -122,6 +124,7 @@ const GRNAdd = (props) => {
 
     useEffect(() => {
         if ((items.Status === true) && (items.StatusCode === 200)) {
+            
             const grnItems = items.Data
 
             grnItems.OrderItem.forEach((ele, k) => {
@@ -149,8 +152,8 @@ const GRNAdd = (props) => {
             setopenPOdata(grnDetails.GRNReferences)
             items.Status = false
             dispatch(_act.makeGRN_Mode_1ActionSuccess(items))
-
-            dispatch(_act.BreadcrumbShowCountlabel(`${"GRN Amount"} :${grnItems.OrderAmount}`))
+            dispatch(_act.BreadcrumbShowCountlabel(`Count:${grnItems.OrderItem.length} ₹ ${0}`));
+            // dispatch(_act.BreadcrumbShowCountlabel(`${"GRN Amount"} :${grnItemList.length} ${"GRN Amount"} :${grnItems.OrderAmount}`))
         }
 
     }, [items])
@@ -211,7 +214,8 @@ const GRNAdd = (props) => {
             sum = sum + parseFloat(ind.Amount)
         });
         setOrderAmount(sum.toFixed(2))
-        dispatch(_act.BreadcrumbShowCountlabel(`${"GRN Amount"} :${sum.toFixed(2)}`))
+        dispatch(_act.BreadcrumbShowCountlabel(`Count:${grnItemList.length} ₹ ${sum.toFixed(2)}`));
+      
     }
 
     const tableColumnsMode_1 = [
@@ -322,6 +326,7 @@ const GRNAdd = (props) => {
         {  //-------------MRP column ----------------------------------
             text: "MRP",
             dataField: "",
+            hidden: true,
             formatter: (value, row, k) => {
                 return (
                     <span className="text-right" >
@@ -518,6 +523,7 @@ const GRNAdd = (props) => {
 
     const copybtnOnclick = (r) => {
         const id = r.id
+        
         const newArr = []
         let list = [...initialTableData];
 
@@ -543,7 +549,11 @@ const GRNAdd = (props) => {
 
         initialTableData = newArr
         setgrnItemList(newArr)
-
+        let sum = 0
+        newArr.forEach(ind => {
+            sum = sum + parseFloat(ind.Amount)
+        });
+        dispatch(_act.BreadcrumbShowCountlabel(`Count:${newArr.length} ₹ ${sum.toFixed(2)}`));
     }
 
     const deletebtnOnclick = (r) => {
@@ -551,10 +561,15 @@ const GRNAdd = (props) => {
         const newArr = list.filter(i => { return (!(i.id === r.id)) })
         initialTableData = newArr
         setgrnItemList(newArr)
+        let sum = 0
+        newArr.forEach(ind => {
+            sum = sum + parseFloat(ind.Amount)
+        });
+        dispatch(_act.BreadcrumbShowCountlabel(`Count:${newArr.length} ₹ ${sum.toFixed(2)}`));
     }
 
     const saveHandeller = (event) => {
-
+        
         event.preventDefault();
 
         const btnId = event.target.id
@@ -568,7 +583,7 @@ const GRNAdd = (props) => {
             const isvalidMsg = [];
 
             grnItemList.forEach(i => {
-
+                
                 const calculated = orderCalculateFunc(i)// amount calculation function 
 
                 const arr = {
@@ -692,7 +707,7 @@ const GRNAdd = (props) => {
                 GRNItems: GRNItemArray,
                 GRNReferences: openPOdata,
             });
-
+            
             if (pageMode === mode.edit) {
                 returnFunc()
             } else {
