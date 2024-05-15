@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
     Button,
     Col,
@@ -8,27 +8,23 @@ import {
     Row
 } from 'reactstrap';
 import Select from "react-select";
-import { getItemList } from '../../../../../store/actions';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import BOMTable from './Table';
 import { customAlert } from '../../../../../CustomAlert/ConfirmDialog';
 import { alertMessages } from '../../../../../components/Common/CommonErrorMsg/alertMsg';
+import { C_Select } from '../../../../../CustomValidateForm';
 
 function ItemTab(props) {
 
-    const dispatch = useDispatch();
     const [contentItemSelect, setContentItemSelect] = useState('');
     const [Quantity, setQuantity] = useState('');
     const [unitSelect, setUnitSelect] = useState('');
     const [ItemUnitOptions, setItemUnitOptions] = useState([]);
 
-    const { Items } = useSelector((state) => ({
+    const { Items, ItemListloading } = useSelector((state) => ({
         Items: state.ItemMastersReducer.ItemList,
+        ItemListloading: state.ItemMastersReducer.loading,
     }));
-
-    useEffect(() => {
-        dispatch(getItemList())
-    }, [dispatch]);
 
     const ItemDropdown_Options = Items.map((index) => ({
         value: index.id,
@@ -47,7 +43,6 @@ function ItemTab(props) {
             label: data.UnitName
         }))
         setItemUnitOptions(ItemUnits)
-
     }
 
     const Unit_Handler = (event) => {
@@ -103,7 +98,7 @@ function ItemTab(props) {
     };
 
     const handleChange = event => {
-
+        
         let val = event.target.value
         const result = /^-?([0-9]*\.?[0-9]+|[0-9]+\.?[0-9]*)$/.test(val);
         if (result) {
@@ -130,13 +125,14 @@ function ItemTab(props) {
                                     <Label className="col-sm-4 p-2"
                                     >Content Item</Label>
                                     <Col sm="7">
-                                        <Select
+                                        <C_Select
                                             styles={{
                                                 menu: provided => ({ ...provided, zIndex: 2 })
                                             }}
                                             value={contentItemSelect}
                                             options={ItemDropdown_Options}
                                             onChange={ContentItem_Handler}
+                                            isLoading={ItemListloading}
                                         />
                                     </Col>
                                 </FormGroup>

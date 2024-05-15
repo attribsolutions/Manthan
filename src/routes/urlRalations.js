@@ -205,8 +205,8 @@ export const STOCK_ADJUSTMENT_MODE = url.STOCK_ADJUSTMENT_MODE_2
 
 //******************************* Inter Branch ************************************//
 
-export const OrderList_3 = url.IB_ORDER;
-export const Order_3 = url.IB_ORDER_PO_LIST;
+export const IB_ORDER_PO_LIST = url.IB_ORDER;
+export const IB_Order = url.IB_ORDER_PO_LIST;
 
 export const InwardList = url.IB_INWARD_STP;
 export const Inward = url.INWARD_LIST;

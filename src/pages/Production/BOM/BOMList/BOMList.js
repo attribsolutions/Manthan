@@ -21,6 +21,7 @@ import * as url from "../../../../routes/route_url";
 import { C_DatePicker } from "../../../../CustomValidateForm";
 import * as _cfunc from "../../../../components/Common/CommonFunction";
 import { allLabelWithBlank } from "../../../../components/Common/CommonErrorMsg/HarderCodeData";
+import { Go_Button } from "../../../../components/Common/CommonButton";
 
 
 const BOMList = () => {
@@ -37,6 +38,8 @@ const BOMList = () => {
 
     const reducers = useSelector(
         (state) => ({
+            goBtnLoading: state.BOMReducer.loading,
+            listBtnLoading: state.BOMReducer.listBtnLoading,
             tableList: state.BOMReducer.BOMList,
             deleteMsg: state.BOMReducer.deleteMsg,
             updateMsg: state.BOMReducer.updateMsg,
@@ -47,8 +50,8 @@ const BOMList = () => {
             pageField: state.CommonPageFieldReducer.pageFieldList
         })
     );
-
-    const { userAccess, pageField } = reducers;
+    
+    const { userAccess, pageField, goBtnLoading,listBtnLoading } = reducers;
     const { fromdate, todate } = hederFilters;
 
 
@@ -111,7 +114,7 @@ const BOMList = () => {
                 <div className="px-2   c_card_filter text-black"  >
                     <div className="row">
                         <Col sm="5">
-                            <FormGroup className=" row mt-3 " >
+                            <FormGroup className=" row mt-2 " >
                                 <Label className="col-sm-5 p-2"
                                     style={{ width: "83px" }}>FromDate</Label>
                                 <Col sm="6">
@@ -125,7 +128,7 @@ const BOMList = () => {
                         </Col>
 
                         <Col sm="5" className="">
-                            <FormGroup className="mb- row mt-3 " >
+                            <FormGroup className="mb- row mt-2 " >
                                 <Label className="col-sm-5 p-2"
                                     style={{ width: "65px", marginRight: "0.4cm" }}>ToDate</Label>
                                 <Col sm="6 ">
@@ -146,10 +149,9 @@ const BOMList = () => {
                             </FormGroup>
                         </Col>
 
-                        <Col sm="1" className="mx-4 ">
-                            <Button type="button" color="btn btn-outline-success border-2 font-size-12 m-3  "
-                                onClick={() => goButtonHandler()}
-                            >Go</Button>
+                        <Col sm="1" ></Col>
+                        <Col sm="1" className="mt-2 ">
+                            <Go_Button loading={goBtnLoading} onClick={goButtonHandler} />
                         </Col>
                     </div>
                 </div>

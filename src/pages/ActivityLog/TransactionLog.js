@@ -203,7 +203,7 @@ const TransactionLog = () => {
     }, [JsonData])
 
     useEffect(() => {
-        debugger
+        
         if ((btnMode === 2) && (tableData.length > 0)) {
             ExcelReportComponent({
                 excelTableData: tableData,

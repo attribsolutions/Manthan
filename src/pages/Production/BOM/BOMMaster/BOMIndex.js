@@ -18,6 +18,7 @@ import {
     onChangeDate,
     onChangeSelect,
     onChangeText,
+    resetFunction,
 } from "../../../../components/Common/validationFunction";
 import Select from "react-select";
 import { SaveButton } from "../../../../components/Common/CommonButton";
@@ -32,10 +33,11 @@ import {
 import * as pageId from "../../../../routes//allPageID";
 import * as url from "../../../../routes/route_url";
 import * as mode from "../../../../routes/PageMode";
-import { C_DatePicker } from "../../../../CustomValidateForm";
+import { C_DatePicker, C_Select } from "../../../../CustomValidateForm";
 import * as _cfunc from "../../../../components/Common/CommonFunction";
 import { customAlert } from "../../../../CustomAlert/ConfirmDialog";
 import { alertMessages } from "../../../../components/Common/CommonErrorMsg/alertMsg";
+import SaveButtonDraggable from "../../../../components/Common/saveButtonDraggable";
 
 const BOMMaster = (props) => {
 
@@ -72,12 +74,16 @@ const BOMMaster = (props) => {
         pageField,
         userAccess,
         Items,
+        ItemListloading,
+        saveBtnloading
     } = useSelector((state) => ({
+        saveBtnloading: state.BOMReducer.saveBtnloading,
         postMsg: state.BOMReducer.PostData,
         updateMsg: state.BOMReducer.updateMsg,
-        userAccess: state.Login.RoleAccessUpdateData,
-        pageField: state.CommonPageFieldReducer.pageField,
         Items: state.ItemMastersReducer.ItemList,
+        ItemListloading: state.ItemMastersReducer.loading,
+        pageField: state.CommonPageFieldReducer.pageField,
+        userAccess: state.Login.RoleAccessUpdateData,
     }));
 
     useEffect(() => {
@@ -165,7 +171,8 @@ const BOMMaster = (props) => {
     useEffect(async () => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(saveBOMMasterSuccess({ Status: false }))
-            // setState(() => resetFunction(fileds, state))// Clear form values  
+            setState(() => resetFunction(fileds, state))// Clear form values  
+            setItemTabDetails([]);
             dispatch(Breadcrumb_inputName(''))
 
             if (pageMode === mode.dropdownAdd) {
@@ -202,13 +209,18 @@ const BOMMaster = (props) => {
                 pathname: url.BIllOf_MATERIALS_LIST,
             })
         } else if ((updateMsg.Status === true) && (updateMsg.StatusCode === 100) && !(modalCss)) {
+            
             dispatch(updateBOMListSuccess({ Status: false }));
             customAlert({
-                Type: 6, Status: true,
+                Type: 5,
+                Status: true,
                 Message: JSON.stringify(updateMsg.Message),
-                PermissionFunction: PermissionFunction,
-
+                // PermissionAction: SaveHandler(),
             })
+
+            // if (altertResponse===true) {
+            //     SaveHandler()
+            // }
         }
         else if (updateMsg.Status === true && !modalCss) {
             dispatch(updateBOMListSuccess({ Status: false }));
@@ -233,10 +245,11 @@ const BOMMaster = (props) => {
         label: index.Name,
     }));
 
-    function PermissionFunction() {
-        let event = { preventDefault: () => { } }
-        SaveHandler({ event, mode: true })
-    }
+    // function PermissionFunction() {
+    //     
+    //     let event = { preventDefault: (e) => {  } }
+    //     SaveHandler(event)
+    // }
 
     function Items_Dropdown_Handler(e) {
 
@@ -259,7 +272,7 @@ const BOMMaster = (props) => {
     }
 
     const SaveHandler = async (event) => {
-
+        
         event.preventDefault();
         const btnId = event.target.id
         const BOMItems = ItemTabDetails.map((index) => ({
@@ -346,7 +359,7 @@ const BOMMaster = (props) => {
                                     <FormGroup className="mb-2 row mt-2 ">
                                         <Label className="mt-2" style={{ width: "115px" }}> {fieldLabel.ItemName} </Label>
                                         <Col sm={7}>
-                                            <Select
+                                            <C_Select
                                                 name="ItemName"
                                                 value={values.ItemName}
                                                 isSearchable={true}
@@ -356,6 +369,7 @@ const BOMMaster = (props) => {
                                                     menu: provided => ({ ...provided, zIndex: 2 })
                                                 }}
                                                 options={ItemDropdown_Options}
+                                                isLoading={ItemListloading}
                                                 onChange={(hasSelect, evn) => {
                                                     onChangeSelect({ hasSelect, evn, state, setState });
                                                     Items_Dropdown_Handler(hasSelect);
@@ -495,20 +509,16 @@ const BOMMaster = (props) => {
                                         <ItemTab tableData={ItemTabDetails} func={setItemTabDetails} />
                                     </Col>
                                 </Row>
-
-                                <FormGroup>
-                                    <Col sm={2} style={{ marginLeft: "9px" }}>
-                                        <SaveButton
-                                            pageMode={pageMode}
-                                            onClick={SaveHandler}
-                                            userAcc={userPageAccessState}
-                                            editCreatedBy={editCreatedBy}
-                                            module={"BOMMaster"}
-                                        />
-                                    </Col>
-                                </FormGroup >
                             </Row>
                         </div>
+                        <SaveButtonDraggable>
+                            <SaveButton pageMode={pageMode}
+                                loading={saveBtnloading}
+                                onClick={(event) => SaveHandler(event)}
+                                userAcc={userPageAccessState}
+                                editCreatedBy={editCreatedBy}
+                            />
+                        </SaveButtonDraggable>
                     </form>
                 </div>
             </React.Fragment>

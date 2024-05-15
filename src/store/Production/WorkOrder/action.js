@@ -13,6 +13,7 @@ import {
   POST_WORK_ORDER_MASTER_SUCCESS,
   UPDATE_WORK_ORDER_LIST,
   UPDATE_WORK_ORDER_LIST_SUCCESS,
+  WORK_ORDER_API_ERROR_ACTION,
 } from "./actionTypes";
 
 
@@ -39,7 +40,7 @@ export const postGoButtonForWorkOrder_MasterSuccess = (data) => ({             /
 });
 
 // Go Button Post API
-export const SaveWorkOrderMaster = (config={}) => ({                     //Post Action For work Order
+export const SaveWorkOrderMaster = (config = {}) => ({                     //Post Action For work Order
   type: POST_WORK_ORDER_MASTER,
   config,
 });
@@ -78,7 +79,7 @@ export const updateWorkOrderListSuccess = (resp) => ({                          
   payload: resp,
 });
 
-export const deleteWorkOrderId = (config={}) => ({                                   //Delete Action 
+export const deleteWorkOrderId = (config = {}) => ({                                   //Delete Action 
   type: DELETE_WORK_ORDER_LIST_PAGE,
   config,
 });
@@ -86,3 +87,7 @@ export const deleteWorkOrderIdSuccess = (resp) => ({                            
   type: DELETE_WORK_ORDER_LIST_PAGE_SUCCESS,
   payload: resp,
 });
+
+export const WorkOrderApiErrorAction = () => ({
+  type: WORK_ORDER_API_ERROR_ACTION,
+})

@@ -39,7 +39,7 @@ import {
 
 import { CommonConsole, loginCompanyID, loginPartyID } from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url";
-import { orderApiErrorAction } from "../../actions";
+import { commonApiReducer_ErrorAction } from "../../actions";
 
 function* supplierAddressGenFunc({ editId }) {
   const config = { editId: editId }
@@ -66,7 +66,7 @@ function* supplierAddressGenFunc({ editId }) {
     yield put(getSupplierAddressSuccess(newArr));
   } catch (error) {
     CommonConsole(error);
-    yield put(orderApiErrorAction());
+    yield put(commonApiReducer_ErrorAction());
   }
 }
 
@@ -77,7 +77,7 @@ function* OrderType_GenFunc() {
     yield put(getOrderTypeSuccess(response.Data));
   } catch (error) {
     CommonConsole(error);
-    yield put(orderApiErrorAction());
+    yield put(commonApiReducer_ErrorAction());
   }
 }
 
@@ -88,7 +88,7 @@ function* getVendorGenFunc() {
     yield put(GetVenderSuccess(response.Data));
   } catch (error) {
     CommonConsole(error);
-    yield put(orderApiErrorAction());
+    yield put(commonApiReducer_ErrorAction());
   }
 }
 
@@ -100,7 +100,7 @@ function* getSupplierGenFunc({ jsonBody = '' }) {
     yield put(getSupplierSuccess(response.Data));
   } catch (error) {
     CommonConsole(error);
-    yield put(orderApiErrorAction());
+    yield put(commonApiReducer_ErrorAction());
   }
 }
 
@@ -110,7 +110,7 @@ function* getCustomerGenFunc() {
     yield put(GetCustomerSuccess(response.Data));
   } catch (error) {
     CommonConsole(error);
-    yield put(orderApiErrorAction());
+    yield put(commonApiReducer_ErrorAction());
   }
 }
 
@@ -191,7 +191,7 @@ function* vendorSupplierCustomer_genFunc({ data }) {
   }
   catch (error) {
     CommonConsole(error);
-    yield put(orderApiErrorAction());
+    yield put(commonApiReducer_ErrorAction());
   }
 }
 
@@ -201,7 +201,7 @@ function* SSDD_List_under_Company_GenFunc() {
     yield put(SSDD_List_under_Company_Success(response.Data));
   } catch (error) {
     CommonConsole(error);
-    yield put(orderApiErrorAction());
+    yield put(commonApiReducer_ErrorAction());
   }
 }
 
@@ -212,7 +212,7 @@ function* Retailer_List_GenFunc({ data }) {
     yield put(Retailer_List_Success(response.Data));
   } catch (error) {
     CommonConsole(error);
-    yield put(orderApiErrorAction());
+    yield put(commonApiReducer_ErrorAction());
   }
 }
 
@@ -223,7 +223,7 @@ function* Party_Dropdown_List_GenFunc({ loginEmployeeID }) {
     yield put(Party_Dropdown_List_Success(response.Data));
   } catch (error) {
     CommonConsole(error);
-    yield put(orderApiErrorAction());
+    yield put(commonApiReducer_ErrorAction());
   }
 }
 
@@ -234,7 +234,7 @@ function* SubEmployee_Dropdown_List_GenFunc({ loginEmployeeID }) {
     yield put(EmployeeSubEmployee_List_Success(response.Data));
   } catch (error) {
     CommonConsole(error);
-    yield put(orderApiErrorAction());
+    yield put(commonApiReducer_ErrorAction());
   }
 }
 
@@ -246,7 +246,7 @@ function* PartyonClusterSubcluster_Dropdown_List_GenFunc({config}) {
     yield put(Partyonclustersubcluste_List_Success(response.Data));
   } catch (error) {
     CommonConsole(error);
-    yield put(orderApiErrorAction());
+    yield put(commonApiReducer_ErrorAction());
   }
 }
 

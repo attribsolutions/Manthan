@@ -370,7 +370,7 @@ export const reportHeder1 = (doc, data) => {
 
 
     doc.line(570, initial_y, 30, initial_y);// full horizontal bill by bill to below line 
-    debugger
+    
 
 }
 

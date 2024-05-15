@@ -149,7 +149,7 @@ const BasicInfoTabForm = ({ state, setState, settable, pageField }) => {
                     <Col md={12} >
                         <Row className="mt-1 ">
                             <FormGroup className="mb-3 col col-sm-4 " >
-                                <Label >{fieldLabel.Name} </Label>
+                                <Label >{fieldLabel.Name ? fieldLabel.Name : "Name"} </Label>
                                 <Input
                                     name="Name"
                                     id="txtName"
@@ -175,7 +175,7 @@ const BasicInfoTabForm = ({ state, setState, settable, pageField }) => {
                             </FormGroup>
 
                             <FormGroup className="mb-3 col col-sm-4 " >
-                                <Label >{fieldLabel.ShortName} </Label>
+                                <Label >{fieldLabel.ShortName ? fieldLabel.ShortName : "Short Name"} </Label>
                                 <Input
                                     name="ShortName"
                                     id="txtName"
@@ -195,7 +195,7 @@ const BasicInfoTabForm = ({ state, setState, settable, pageField }) => {
                             </FormGroup>
 
                             <FormGroup className="mb-3 col col-sm-4 " >
-                                <Label >{fieldLabel.ShelfLife}<samp className="text-secondary">/Day</samp> </Label>
+                                <Label >{fieldLabel.ShelfLife ? fieldLabel.ShelfLife : "Shelf Life"}<samp className="text-secondary">/Day</samp> </Label>
                                 <Input
                                     name="ShelfLife"
                                     id="txtName"
@@ -219,7 +219,7 @@ const BasicInfoTabForm = ({ state, setState, settable, pageField }) => {
                     <Col md={12} >
                         <Row className="mt-1 ">
                             <FormGroup className="mb-3 col col-sm-4 " >
-                                <Label >{fieldLabel.BaseUnitName} </Label>
+                                <Label >{fieldLabel.BaseUnitName ? fieldLabel.BaseUnitName : "Base Unit"} </Label>
                                 <Select
                                     name="BaseUnitName"
                                     value={values.BaseUnitName}
@@ -235,7 +235,7 @@ const BasicInfoTabForm = ({ state, setState, settable, pageField }) => {
                             </FormGroup>
 
                             <FormGroup className="mb-3 col col-sm-4 " >
-                                <Label >{fieldLabel.BarCode} </Label>
+                                <Label >{fieldLabel.BarCode ? fieldLabel.BarCode : "BarCode"} </Label>
                                 <Input
                                     name="BarCode"
                                     id="txtName"
@@ -255,7 +255,7 @@ const BasicInfoTabForm = ({ state, setState, settable, pageField }) => {
                             </FormGroup>
 
                             <FormGroup className="mb-3 col col-sm-4 " >
-                                <Label >{fieldLabel.SAPItemCode} </Label>
+                                <Label >{fieldLabel.SAPItemCode ? fieldLabel.SAPItemCode : "SAP Code"} </Label>
                                 <Input
                                     name="SAPItemCode"
                                     id="txtName"
@@ -279,7 +279,7 @@ const BasicInfoTabForm = ({ state, setState, settable, pageField }) => {
                     <Col md={12} >
                         <Row className="mt-1 ">
                             <FormGroup className="mb-3 col col-sm-4 " >
-                                <Label >{fieldLabel.CategoryType} </Label>
+                                <Label >{fieldLabel.CategoryType ? fieldLabel.CategoryType : "Category Type"} </Label>
                                 <Select
                                     name="CategoryType"
                                     value={values.CategoryType}
@@ -295,7 +295,7 @@ const BasicInfoTabForm = ({ state, setState, settable, pageField }) => {
                             </FormGroup>
 
                             <FormGroup className="mb-3 col col-sm-4 " >
-                                <Label >{fieldLabel.Category} </Label>
+                                <Label >{fieldLabel.Category ? fieldLabel.Category : "Category"} </Label>
                                 <Select
                                     name="Category"
                                     value={values.Category}
@@ -314,7 +314,7 @@ const BasicInfoTabForm = ({ state, setState, settable, pageField }) => {
                             </FormGroup>
 
                             <FormGroup className="mb-3 col col-sm-4 " >
-                                <Label >{fieldLabel.BrandName}</Label>
+                                <Label >{fieldLabel.BrandName ? fieldLabel.BrandName : "Brand Name"}</Label>
                                 <Select
                                     name="BrandName"
                                     value={values.BrandName}
@@ -337,7 +337,7 @@ const BasicInfoTabForm = ({ state, setState, settable, pageField }) => {
                     <Col md={12} >
                         <Row className="mt-1 ">
                             <FormGroup className="mb-3 col col-sm-4 " >
-                                <Label >{fieldLabel.Tag} </Label>
+                                <Label >{fieldLabel.Tag ? fieldLabel.Tag : "Tag"} </Label>
                                 <Input
                                     name="Tag"
                                     id="txtName"
@@ -357,7 +357,7 @@ const BasicInfoTabForm = ({ state, setState, settable, pageField }) => {
                             </FormGroup>
 
                             <FormGroup className="mb-3 col col-sm-4 " >
-                                <Label >{fieldLabel.Sequence} </Label>
+                                <Label >{fieldLabel.Sequence ? fieldLabel.Sequence : "Sequence"} </Label>
                                 <Input
                                     name="Sequence"
                                     id="txtName"
@@ -384,7 +384,7 @@ const BasicInfoTabForm = ({ state, setState, settable, pageField }) => {
                                 <Row style={{ marginTop: '25px' }}>
                                     <Label
                                         className="col-sm-4 col-form-label">
-                                        {fieldLabel.isActive}
+                                        {fieldLabel.isActive ? fieldLabel.isActive : "isActive"}
                                     </Label>
                                     <Col md={4} style={{ marginTop: '7px' }} className=" form-check form-switch form-switch-sm ">
                                         <div className="form-check form-switch form-switch-md mb-3">
@@ -404,7 +404,7 @@ const BasicInfoTabForm = ({ state, setState, settable, pageField }) => {
                                 <Row style={{ marginTop: '25px' }}>
                                     <Label
                                         className="col-sm-4 col-form-label">
-                                        {fieldLabel.IsSCM}
+                                        {fieldLabel.IsSCM ? fieldLabel.IsSCM : "IsSCM"}
                                     </Label>
                                     <Col md={4} style={{ marginTop: '7px' }} className=" form-check form-switch form-switch-sm ">
                                         <div className="form-check form-switch form-switch-md mb-3">

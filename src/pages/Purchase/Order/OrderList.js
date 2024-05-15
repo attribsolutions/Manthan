@@ -25,6 +25,7 @@ import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMs
 import { getOrdersMakeInvoiceDataAction, getOrdersMakeInvoiceDataActionSuccess } from "../../../store/Sales/bulkInvoice/action";
 import { allLabelWithBlank } from "../../../components/Common/CommonErrorMsg/HarderCodeData";
 import { sideBarPageFiltersInfoAction } from "../../../store/Utilites/PartyDrodown/action";
+import { debounce } from "redux-saga/effects";
 
 const OrderList = () => {
 
@@ -38,7 +39,6 @@ const OrderList = () => {
         Supplier: allLabelWithBlank,
         CustomerType: [allLabelWithBlank]
     }
-
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
     const [subPageMode] = useState(history.location.pathname);
@@ -90,8 +90,6 @@ const OrderList = () => {
                 || state.InvoiceReducer.listBtnLoading
                 || state.GRNReducer.listBtnLoading
                 || state.PdfReportReducers.ReportBtnLoading),
-
-
         })
     );
 
@@ -198,7 +196,8 @@ const OrderList = () => {
             page_Id = pageId.IB_ORDER_SO_LIST
             masterPath = url.IB_ORDER;
             makeBtnShow = true;
-            makeBtnName = "Make IBInvoice"
+            page_Mode = mode.modeSTPList
+            makeBtnName = "Make IBChallan"
             IBType = "IBSO"
         }
         else if (subPageMode === url.ORDER_LIST_4) {
@@ -208,7 +207,7 @@ const OrderList = () => {
             newBtnPath = url.ORDER_4;
             makeBtnShow = true;
             makeBtnName = "Make Invoice"
-            showAprovalBtn = true                      //Showing  AprovalBtn  in sales order list
+            showAprovalBtn = true    //Showing  AprovalBtn  in sales order list
         }
 
         else if (subPageMode === url.APP_ORDER_LIST) {
@@ -287,7 +286,7 @@ const OrderList = () => {
     useEffect(() => {
 
         if (GRNitem.Status === true && GRNitem.StatusCode === 200) {
-            
+
             history.push({
                 pathname: GRNitem.path,
                 page_Mode: GRNitem.pageMode,

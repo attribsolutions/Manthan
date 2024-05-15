@@ -17,8 +17,9 @@ import {
     onChangeDate,
     onChangeSelect,
     onChangeText,
+    resetFunction,
 } from "../../../components/Common/validationFunction";
-import Select from "react-select";
+// import Select from "react-select";
 import { Change_Button, Go_Button, SaveButton } from "../../../components/Common/CommonButton";
 import {
     breadcrumbReturnFunc,
@@ -32,6 +33,7 @@ import {
 import {
     editWorkOrderListSuccess,
     getBOMList,
+    getBOMListSuccess,
     postGoButtonForWorkOrder_Master,
     postGoButtonForWorkOrder_MasterSuccess,
     SaveWorkOrderMaster,
@@ -50,10 +52,11 @@ import * as _cfunc from "../../../components/Common/CommonFunction";
 import { C_DatePicker } from "../../../CustomValidateForm";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
+import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
+import Select, { components } from "react-select";
 
 const goBtnID1 = "workOrdergoBtnID1"
 const changeBtnID1 = "workOrderchangeBtnID1"
-
 
 const WorkOrder = (props) => {
 
@@ -66,6 +69,7 @@ const WorkOrder = (props) => {
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState('');
     const [itemselect, setItemselect] = useState("")
+    const [editCreatedBy, seteditCreatedBy] = useState("");
 
     const fileds = {
         id: "",
@@ -88,8 +92,12 @@ const WorkOrder = (props) => {
         pageField,
         userAccess,
         Items,
-        GoButton
+        GoButton,
+        goBtnLoading,
+        saveBtnloading
     } = useSelector((state) => ({
+        saveBtnloading: state.WorkOrderReducer.saveBtnloading,
+        goBtnLoading: state.WorkOrderReducer.loading,
         postMsg: state.WorkOrderReducer.postMsg,
         updateMsg: state.WorkOrderReducer.updateMsg,
         userAccess: state.Login.RoleAccessUpdateData,
@@ -113,7 +121,11 @@ const WorkOrder = (props) => {
         const page_Id = pageId.WORK_ORDER
         dispatch(postGoButtonForWorkOrder_MasterSuccess([]))
         dispatch(commonPageFieldSuccess(null));
-        dispatch(commonPageField(page_Id))
+        dispatch(commonPageField(page_Id));
+        return () => {
+            dispatch(getBOMListSuccess([]));
+            dispatch(postGoButtonForWorkOrder_MasterSuccess([]));
+        }
 
     }, []);
 
@@ -153,7 +165,7 @@ const WorkOrder = (props) => {
 
             if (hasEditVal) {
                 setEditData(hasEditVal);
-                debugger
+                
                 const { id, WorkOrderDate, Item, ItemName, NumberOfLot, Stock
                     , Quantity, EstimatedOutputQty, Bom, Party } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError, FullWorkOrderNumber, WorkOrderNumber } = { ...state }
@@ -186,13 +198,16 @@ const WorkOrder = (props) => {
                 setState({ values, fieldLabel, hasValid, required, isError })
                 dispatch(editWorkOrderListSuccess({ Status: false }))
                 dispatch(Breadcrumb_inputName(hasEditVal.ItemName))
+                seteditCreatedBy(hasEditVal.CreatedBy)
             }
         }
     }, [])
 
     useEffect(async () => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-            dispatch(SaveWorkOrderMasterSuccess({ Status: false }))
+            dispatch(SaveWorkOrderMasterSuccess({ Status: false }));
+            dispatch(postGoButtonForWorkOrder_MasterSuccess([]));
+            setState(() => resetFunction(fileds, state))// Clear form values  
             if (pageMode === mode.dropdownAdd) {
                 customAlert({
                     Type: 1,
@@ -216,7 +231,7 @@ const WorkOrder = (props) => {
                 Type: 4,
                 Message: JSON.stringify(postMsg.Message),
             })
-            
+
         }
     }, [postMsg])
 
@@ -224,7 +239,8 @@ const WorkOrder = (props) => {
 
     useEffect(() => {
         if ((updateMsg.Status === true) && (updateMsg.StatusCode === 200) && !(modalCss)) {
-            // setState(() => resetFunction(fileds, state))// Clear form values  
+            setState(() => resetFunction(fileds, state))// Clear form values  
+            dispatch(postGoButtonForWorkOrder_MasterSuccess([]));
             history.push({
                 pathname: url.WORK_ORDER_LIST,
             })
@@ -259,7 +275,8 @@ const WorkOrder = (props) => {
 
     const ItemDropdown_Options = filterItems.map((index) => ({
         value: index.id,
-        label: index.ItemName,
+        label: `${index.ItemName} (BOMDate-${_cfunc.date_dmy_func(index.BomDate)})`,
+        ItemName: index.ItemName,
         ItemID: index.Item,
         Unit: index.Unit,
         UnitName: index.UnitName,
@@ -347,7 +364,7 @@ const WorkOrder = (props) => {
     }
 
     function NumberOfLotchange(e) {
-
+        
         dispatch(postGoButtonForWorkOrder_MasterSuccess([]))
         let qty = ''
         if (pageMode === mode.edit) {
@@ -407,7 +424,7 @@ const WorkOrder = (props) => {
     }
 
     const SaveHandler = async (event) => {
-        debugger
+        
         event.preventDefault();
         const btnId = event.target.id
         try {
@@ -419,7 +436,7 @@ const WorkOrder = (props) => {
                     BomQuantity: index.BomQuantity,
                     Quantity: index.Quantity,
                 }))
-                debugger
+
                 const jsonBody = JSON.stringify({
                     WorkOrderDate: values.WorkOrderDate,
                     Item: (pageMode === mode.edit ? Item : values.ItemName.ItemID),
@@ -433,7 +450,8 @@ const WorkOrder = (props) => {
                     UpdatedBy: loginUserID(),
                     FullWorkOrderNumber: EditData.FullWorkOrderNumber,
                     WorkOrderNumber: EditData.WorkOrderNumber,
-                    WorkOrderItems: WorkOrderItems
+                    WorkOrderItems: WorkOrderItems,
+                    // Status:1
                 });
                 if (pageMode === mode.edit) {
                     dispatch(updateWorkOrderList({ jsonBody, updateId: values.id, btnId }));
@@ -444,6 +462,20 @@ const WorkOrder = (props) => {
                 }
             }
         } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
+    };
+
+    const customOption = (props) => {
+
+        const { innerProps, label, data } = props;
+        return (
+            <components.Option {...props}>
+                <div {...innerProps}>
+                    <div >Name:{data.ItemName}</div>
+                    <div>Qty:{data.StockQty}</div>
+                    <div>BOMDate:{_cfunc.date_dmy_func(data.BomDate)}</div>
+                </div>
+            </components.Option>
+        );
     };
 
 
@@ -470,8 +502,6 @@ const WorkOrder = (props) => {
                                                         onChange={(y, v, e) => {
                                                             onChangeDate({ e, v, state, setState })
                                                         }}
-                                                    // onChange={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
-                                                    // onReady={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
                                                     />
                                                     {isError.WorkOrderDate.length > 0 && (
                                                         <span className="invalid-feedback">{isError.WorkOrderDate}</span>
@@ -492,6 +522,7 @@ const WorkOrder = (props) => {
                                                         className="react-dropdown"
                                                         classNamePrefix="dropdown"
                                                         options={ItemDropdown_Options}
+                                                        components={{ Option: customOption }}
                                                         onChange={(hasSelect, evn) => {
                                                             onChangeSelect({ hasSelect, evn, state, setState });
                                                             ItemOnchange(hasSelect)
@@ -520,7 +551,6 @@ const WorkOrder = (props) => {
                                                         }
                                                         disabled={true}
                                                         className="text-end"
-                                                    // placeholder="Please Enter Stock Quantity"
                                                     />
                                                 </div>
                                                 <div className="col col-2">
@@ -543,7 +573,6 @@ const WorkOrder = (props) => {
                                                                 itemselect.EstimatedOutputQty : ""}
                                                         disabled={true}
                                                         className="text-end"
-                                                        // placeholder="Please Enter Estimated Output Qty"
                                                         autoComplete='off'
                                                     />
                                                 </div>
@@ -620,7 +649,9 @@ const WorkOrder = (props) => {
                                     <div className="col col-1 mt-2">
                                         {pageMode === mode.defaultsave ?
                                             (BOMItems.length === 0) ?
-                                                < Go_Button id={goBtnID1} onClick={(e) => goButtonHandler()} />
+                                                < Go_Button
+                                                    loading={goBtnLoading}
+                                                    onClick={(e) => goButtonHandler()} />
                                                 :
                                                 <Change_Button id={changeBtnID1}
                                                     onClick={(e) => dispatch(postGoButtonForWorkOrder_MasterSuccess([]))} />
@@ -680,23 +711,21 @@ const WorkOrder = (props) => {
                             </PaginationProvider>
                             : <></>}
 
-                        {BOMItems.length > 0 ? <FormGroup style={{ marginTop: "-25px" }}>
-                            <Row >
-                                <Col sm={2} className="mt-n4">
-                                    <SaveButton pageMode={pageMode}
-                                        onClick={SaveHandler}
-                                        userAcc={userPageAccessState}
-                                        module={"WorkOrder"}
-                                    />
-                                </Col>
-                            </Row>
-                        </FormGroup >
+                        {BOMItems.length > 0 ?
+                            < SaveButtonDraggable >
+                                <SaveButton pageMode={pageMode}
+                                    loading={saveBtnloading}
+                                    onClick={SaveHandler}
+                                    userAcc={userPageAccessState}
+                                    editCreatedBy={editCreatedBy}
+                                />
+                            </SaveButtonDraggable>
                             : null
                         }
 
                     </form>
                 </div>
-            </React.Fragment>
+            </React.Fragment >
         );
     }
     else {

@@ -56,6 +56,7 @@ function* goButtonGenFunc({ config }) {                      // GO-Botton order 
         ele["id"] = k + 1
         if (subPageMode === url.ORDER_1) {
           ele.Rate = Number(ele.VRate)
+          ele.UnitDetails = ele.UnitDetails.map(unit => ({ ...unit, Rate: Number(ele.VRate) }))
         }
       });
       const termArr = []
@@ -72,6 +73,12 @@ function* goButtonGenFunc({ config }) {                      // GO-Botton order 
     }
     else if (subPageMode === url.IB_ORDER) {
       response = yield call(IBOrderPage_GoButton_API, config); // GO-Botton IB-invoice Add Page API
+
+      yield response.Data.OrderItems.forEach((ele, k) => {
+        ele["id"] = k + 1;
+        ele.Rate = Number(ele.Rate);
+        ele.UnitDetails = ele.UnitDetails.map(unit => ({ ...unit, Rate: Number(ele.Rate) }));
+      });
     }
 
     yield put(GoButton_For_Order_AddSuccess(response.Data));
@@ -139,7 +146,7 @@ function* UpdateOrder_ID_GenFunc({ config }) {         // Update Order by subPag
 }
 
 function* orderList_GoBtn_GenFunc({ config }) {
-  
+
   //  Order List Filter by subPageMode
   try {
     const { subPageMode } = config
@@ -155,15 +162,15 @@ function* orderList_GoBtn_GenFunc({ config }) {
     else if ((subPageMode === url.IB_ORDER_PO_LIST) || (subPageMode === url.IB_ORDER_SO_LIST) || (subPageMode === url.IB_INVOICE_STP)) {
       response = yield call(IBOrderList_get_Filter_API, config); // GO-Botton IB-invoice Add Page API
     }
-
+    
     newList = yield response.Data.map((i) => {
-
+      
       i["recordsAmountTotal"] = i.OrderAmount;  // Breadcrumb Count total
       i.OrderAmount = amountCommaSeparateFunc(i.OrderAmount) //  GrandTotal show with commas
       var DeliveryDate = date_dmy_func(i.DeliveryDate);
 
       i.dashboardOrderDate = date_dmy_func(i.OrderDate); // Only for Dashoard 
-      //tranzaction date is only for fiterand page field but UI show transactionDateLabel
+      // //tranzaction date is only for fiterand page field but UI show transactionDateLabel
       i["transactionDate"] = i.CreatedOn;
       i["transactionDateLabel"] = listpageConcatDateAndTime(i.OrderDate, i.CreatedOn);
 
@@ -184,7 +191,7 @@ function* orderList_GoBtn_GenFunc({ config }) {
       } else {
         i.Status = "Open";
         i.Inward = "Open";
-        if (subPageMode === url.GRN_STP_1 || (subPageMode === url.ORDER_LIST_1)) {
+        if (subPageMode === url.GRN_STP_1 || (subPageMode === url.ORDER_LIST_1) || (subPageMode === url.IB_ORDER_SO_LIST)) {
           i.forceMakeBtnHide = false
         }
       }
@@ -243,7 +250,7 @@ function* orderList_GoBtn_GenFunc({ config }) {
       newList = newList.filter(i => i.MobileAppOrderFlag !== null);
     }
     yield put(getOrderListPageSuccess(newList))
-
+ 
   } catch (error) {
     yield put(orderApiErrorAction())
   }
