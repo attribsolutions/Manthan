@@ -9,32 +9,8 @@ function* GoButton_MaterialIssue_masterPage_genfun({ data }) {                  
   try {
     const { jsonBody } = data;
     const response = yield call(Material_Issue_GoButton_Post_API, jsonBody);
-    response.Data.forEach(i1 => {
-      i1.BatchesData.forEach(i2 => {
-        i2.Qty = '';
-      });
-    });
-    let convResp = []
-    const resp1 = { ...response, ...convResp, ...data }
-    yield convResp = response.Data.map(i1 => {
-      let count = Number(i1.Quantity)
-      i1.BatchesData = i1.BatchesData.map(i2 => {
-        let qty = Number(i2.BaseUnitQuantity)
-        if ((count > qty) && !(count === 0)) {
-          count = count - qty
-          i2.Qty = qty.toFixed(3)
-        } else if ((count <= qty) && (count > 0)) {
-          i2.Qty = count.toFixed(3)
-          count = 0
-        }
-        else {
-          i2.Qty = 0;
-        }
-        return i2
-      });
-      count = 0
-      return i1
-    })
+    const resp1 = { ...response, ...data }
+    
     yield put(goButtonForMaterialIssue_Master_ActionSuccess(resp1));
   } catch (error) { CommonConsole(error) }
 }
@@ -91,6 +67,16 @@ function* GoButton_MaterialIssue_listpage_GenFunc({ filters }) {                
       var time = convertTimefunc(i.CreatedOn)
       i.ProductionDate = i.MaterialIssueDate
       i.MaterialIssueDate = (`${date} ${time}`)
+
+      if (i.Status === 1) {
+        i.Status = "Open";
+      }
+      else if (i.Status === 2) {
+        i.Status = "Partially Completed";
+      }
+      else if (i.Status === 3) {
+        i.Status = "Completed";
+      }
       return i
     })
     yield put(getMaterialIssueListPageSuccess(newList));

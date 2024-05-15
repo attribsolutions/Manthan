@@ -90,6 +90,7 @@ const Order = (props) => {
     const [page_id] = useState(() => initialState(history).page_Id)
     const [listPath] = useState(() => initialState(history).listPath)
     const [subPageMode] = useState(history.location.pathname)
+
     const [modalCss, setModalCss] = useState(false);
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState('');
@@ -654,7 +655,8 @@ const Order = (props) => {
                         row["po_Unit_id"] = i.UnitID;
                         row["UnitName"] = i.UnitName;
                         row["BaseUnitQuantity"] = i.BaseUnitQuantity;
-                        if (!(subPageMode === url.ORDER_1)) {
+                        if (!(subPageMode === url.ORDER_1 || subPageMode === url.IB_ORDER)) {
+
                             row["Rate"] = ((i.BaseUnitQuantity / i.BaseUnitQuantityNoUnit) * i.Rate).toFixed(2);
                         }
                     }
@@ -781,6 +783,7 @@ const Order = (props) => {
             headerStyle: () => {
                 return { width: '8%', textAlign: 'center' };
             },
+            hidden: (subPageMode === url.ORDER_1 || subPageMode === url.IB_ORDER) && true,
             formatter: (value, row, k) => {
 
                 return (
@@ -801,6 +804,7 @@ const Order = (props) => {
             headerStyle: () => {
                 return { width: '11%', textAlign: 'center' };
             },
+            hidden: (subPageMode === url.ORDER_1 || subPageMode === url.IB_ORDER) && true,
             headerFormatter: () => {
                 return (
                     <div className="" >
@@ -943,6 +947,7 @@ const Order = (props) => {
             text: "Comment",
             classes: 'table-cursor-pointer',
             dataField: "",
+            hidden: (subPageMode === url.ORDER_1 || subPageMode === url.IB_ORDER) && true,
             attrs: (cell, row, rowIndex, colIndex) => ({ 'data-label': "Comment" }),
             formatter: (value, row, k) => {
                 return (
@@ -1260,7 +1265,7 @@ const Order = (props) => {
 
             const allQuantitiesGreaterThanZero = array => array.every(item => parseInt(item.Quantity) === 0);
             const Result = allQuantitiesGreaterThanZero(orderItems);
-            
+
             if (orderItems.length === 0 || Result) {
                 customAlert({
                     Type: 4,

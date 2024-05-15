@@ -235,7 +235,6 @@ const GSTMaster = (props) => {
 
     //select id for delete row
     const deleteHandeler = (id, name) => {
-        dispatch(
             customAlert({
                 Type: 5,
                 Status: true,
@@ -244,7 +243,6 @@ const GSTMaster = (props) => {
                 PermissionAction: deleteGSTId_ForMaster,
                 ID: id,
             })
-        )
     };
 
     const pageOptions = {

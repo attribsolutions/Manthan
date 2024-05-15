@@ -122,7 +122,7 @@ const ItemsMaster = (props) => {
         Name: "",
         ShortName: "",
         ShelfLife: "",
-        BaseUnitName: "",
+        BaseUnitName:"",
         SAPItemCode: "",
         BarCode: '',
         Category: [],
@@ -339,6 +339,7 @@ const ItemsMaster = (props) => {
         const fetchData = async () => {
             if (postMsg.Status === true && postMsg.StatusCode === 200) {
                 try {
+                    setMobileApiLoading(true);
                     dispatch(SaveItemMasterActionSuccess({ Status: false }));
 
                     // ***************mobail app api*********************** 
@@ -346,12 +347,14 @@ const ItemsMaster = (props) => {
 
                     if (mobilApiResp.StatusCode === 200) {
                         showToastAlert(mobilApiResp.Message);
+                        setMobileApiLoading(false);
                     } else {
                         setMobileApiLoading(false);
                     }
 
                 } catch (error) {
                     console.error("An error occurred while fetching mobileApiResp:", error);
+                    setMobileApiLoading(false);
                 }
                 // ************************************** 
                 if (pageMode === mode.dropdownAdd) {

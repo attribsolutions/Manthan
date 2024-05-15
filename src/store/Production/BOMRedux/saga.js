@@ -2,7 +2,7 @@ import { call, put, takeLatest } from "redux-saga/effects";
 import { CommonConsole, date_dmy_func, convertTimefunc } from "../../../components/Common/CommonFunction";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { BOM_Delete_API, BOM_ListPage_API, BOM_Post_API, BOM_Update_API, GetItemUnits_For_Dropdown, BOM_Edit_API } from "../../../helpers/backend_helper";
-import { deleteBOMIdSuccess, editBOMListSuccess, getBOMListPageSuccess, GetItemUnitsDrodownAPISuccess, saveBOMMasterSuccess, updateBOMListSuccess } from "./action";
+import { BOMApiErrorAction, deleteBOMIdSuccess, editBOMListSuccess, getBOMListPageSuccess, GetItemUnitsDrodownAPISuccess, saveBOMMasterSuccess, updateBOMListSuccess } from "./action";
 import { DELETE_BOM_LIST_PAGE, EDIT_BOM_LIST_ID, GET_BOM_LIST_PAGE, GET_ITEM_UNITS_DROPDOWN_API, SAVE_BOM_MASTER, UPDATE_BOM_LIST } from "./actionTypes";
 
 //post api
@@ -10,7 +10,8 @@ function* Post_BOM_GenratorFunction({ config }) {
   try {
     const response = yield call(BOM_Post_API, config);
     yield put(saveBOMMasterSuccess(response));
-  } catch (error) { CommonConsole(error) }
+  }
+  catch (error) { yield put(BOMApiErrorAction()) }
 }
 
 function* get_BOMList_GenFunc({ filters }) {
@@ -24,10 +25,11 @@ function* get_BOMList_GenFunc({ filters }) {
       return i
     })
     yield put(getBOMListPageSuccess(data))
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(BOMApiErrorAction()) }
 }
 
 function* editBOMListGenFunc({ config }) {
+  
   const { btnmode } = config;
   try {
     let response = yield call(BOM_Edit_API, config);
@@ -40,14 +42,14 @@ function* editBOMListGenFunc({ config }) {
         Status: true, Message: JSON.stringify(response.Message),
       })
     }
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(BOMApiErrorAction()) }
 }
 
 function* UpdateBOM_ID_GenFunc({ config }) {
   try {
     const response = yield call(BOM_Update_API, config);
     yield put(updateBOMListSuccess(response))
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(BOMApiErrorAction()) }
 }
 
 function* DeleteBOM_GenFunc({ config }) {
@@ -60,8 +62,8 @@ function* DeleteBOM_GenFunc({ config }) {
         Message: JSON.stringify(response.Message),
       })
     }
-   
-  } catch (error) { CommonConsole(error) }
+
+  } catch (error) { yield put(BOMApiErrorAction()) }
 }
 
 // GetItemUnits API
@@ -74,7 +76,7 @@ function* GetItemUnits_saga({ data }) {
       UnitID: data.UnitID,
     }))
     yield put(GetItemUnitsDrodownAPISuccess(UnitDataConvert));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(BOMApiErrorAction()) }
 }
 
 function* BOMSaga() {

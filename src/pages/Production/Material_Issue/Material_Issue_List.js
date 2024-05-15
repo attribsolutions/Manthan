@@ -16,6 +16,7 @@ import { mode, url, pageId } from "../../../routes/index";
 import { updateWorkOrderListSuccess } from "../../../store/Production/WorkOrder/action";
 import { C_DatePicker } from "../../../CustomValidateForm";
 import * as _cfunc from "../../../components/Common/CommonFunction";
+import { Go_Button } from "../../../components/Common/CommonButton";
 
 const MaterialIssueList = () => {
 
@@ -141,10 +142,10 @@ const MaterialIssueList = () => {
                                 </Col>
                             </FormGroup>
                         </Col>
-                        <Col sm="1" className="mx-4 ">
-                            <Button type="button" color="btn btn-outline-success border-2 font-size-12 m-3  "
-                                onClick={() => goButtonHandler()}
-                            >Go</Button>
+                       
+                        <Col sm="1" ></Col>
+                        <Col sm="1" className="mt-3 ">
+                            <Go_Button  onClick={goButtonHandler} />
                         </Col>
                     </div>
                 </div>

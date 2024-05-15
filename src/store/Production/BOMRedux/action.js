@@ -10,7 +10,8 @@ import {
   SAVE_BOM_MASTER, SAVE_BOM_MASTER_SUCCESS,
   UPDATE_BOM_LIST,
   UPDATE_BOM_LIST_SUCCESS,
-  BOM_LIST_FILTERS
+  BOM_LIST_FILTERS,
+  BOM_API_ERROR_ACTION
 } from "./actionTypes";
 
 export const BOMlistfilters = filter => ({
@@ -80,3 +81,7 @@ export const GetItemUnitsDrodownAPISuccess = (data) => ({
   type: GET_ITEM_UNITS_DROPDOWN_API_SUCCESS,
   payload: data,
 });
+
+export const BOMApiErrorAction = () => ({
+  type: BOM_API_ERROR_ACTION,
+})

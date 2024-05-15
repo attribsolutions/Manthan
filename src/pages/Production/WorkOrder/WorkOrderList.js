@@ -17,6 +17,7 @@ import { mode, url, pageId } from "../../../routes/index"
 import { goButtonForMaterialIssue_Master_Action } from "../../../store/Production/Matrial_Issue/action";
 import { C_DatePicker } from "../../../CustomValidateForm";
 import * as _cfunc from "../../../components/Common/CommonFunction";
+import { Go_Button } from "../../../components/Common/CommonButton";
 
 const WorkOrderList = () => {
 
@@ -31,6 +32,8 @@ const WorkOrderList = () => {
 
     const reducers = useSelector(
         (state) => ({
+            goBtnLoading: state.WorkOrderReducer.loading,
+            listBtnLoading: state.WorkOrderReducer.listBtnLoading,
             tableList: state.WorkOrderReducer.WorkOrderList,
             deleteMsg: state.WorkOrderReducer.deleteMsg,
             updateMsg: state.WorkOrderReducer.updateMsg,
@@ -42,7 +45,7 @@ const WorkOrderList = () => {
         })
     );
 
-    const { pageField, makeProductionReIssue } = reducers;
+    const { pageField, makeProductionReIssue, goBtnLoading } = reducers;
     const { fromdate, todate } = hederFilters
     const page_Id = (hasPagePath === url.MATERIAL_ISSUE_STP) ? pageId.MATERIAL_ISSUE_STP : pageId.WORK_ORDER_LIST;
     const page_mode = (hasPagePath === url.MATERIAL_ISSUE_STP) ? mode.modeSTPList : mode.defaultList;
@@ -58,7 +61,6 @@ const WorkOrderList = () => {
 
     useEffect(() => {
         setpageMode(page_mode)
-        // dispatch(BreadcrumbShowCountlabel(`${"Work Order Count"} :0`))
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
         goButtonHandler(true)
@@ -66,7 +68,6 @@ const WorkOrderList = () => {
     }, []);
 
     useEffect(() => {
-
         if (makeProductionReIssue.Status === true && makeProductionReIssue.StatusCode === 200) {
             history.push({
                 pathname: makeProductionReIssue.path,
@@ -98,27 +99,59 @@ const WorkOrderList = () => {
     }
 
 
-    const makeBtnFunc = (list = []) => {
-        
-        var jsonData = list[0]
-        try {
-            const jsonBody = JSON.stringify({
-                WorkOrder: jsonData.id,
-                Item: jsonData.Item,
-                Company: loginCompanyID(),
-                Party: loginPartyID(),
-                Quantity: parseInt(jsonData.Quantity)
-            })
-            const body = { jsonBody, pageMode, path: url.MATERIAL_ISSUE, ListData: list[0] }
-            dispatch(goButtonForMaterialIssue_Master_Action(body))
+    // const makeBtnFunc = (list = []) => {
 
-        } catch (e) { }
-    }
+    //     var jsonData = list[0]
+    //     try {
+    //         const jsonBody = JSON.stringify({
+    //             WorkOrder: jsonData.id,
+    //             Item: jsonData.Item,
+    //             Company: loginCompanyID(),
+    //             Party: loginPartyID(),
+    //             Quantity: parseInt(jsonData.Quantity),
+    //             NoOfLots: jsonData.NumberOfLot
+    //         })
+    //         const body = { jsonBody, pageMode, path: url.MATERIAL_ISSUE, ListData: list[0], goButtonCallByMode: true }
+    //         dispatch(goButtonForMaterialIssue_Master_Action(body))
+
+    //     } catch (e) { }
+    // }
+
+    const makeBtnFunc = (list = []) => {
+        try {
+            if (list.length > 0) {
+                const jsonData = list[0];
+                                
+                jsonData.NumberOfLot = jsonData.RemainingLot;  // Update NumberOfLot field to RemainingLot 
+                jsonData.Quantity = jsonData.RemaningQty;  // Update Quantity field to RemaningQty 
+
+                const jsonBody = JSON.stringify({
+                    WorkOrder: jsonData.id,
+                    Item: jsonData.Item,
+                    Company: loginCompanyID(),
+                    Party: loginPartyID(),
+                    Quantity: parseInt(jsonData.Quantity),
+                    NoOfLots: jsonData.NumberOfLot
+                });
+
+                const body = {
+                    jsonBody,
+                    pageMode,
+                    path: url.MATERIAL_ISSUE,
+                    ListData: list[0],
+                    goButtonCallByMode: true
+                };
+
+                dispatch(goButtonForMaterialIssue_Master_Action(body));
+            }
+        } catch (e) {
+            console.error("Error:", e);
+        }
+    };
 
     return (
         <React.Fragment>
             <div className="page-content">
-
 
                 <div className="px-2   c_card_filter text-black"  >
                     <div className="row" >
@@ -156,10 +189,9 @@ const WorkOrderList = () => {
                             </FormGroup>
                         </Col>
 
-                        <Col sm="1" className="mx-4 ">
-                            <Button type="button" color="btn btn-outline-success border-2 font-size-12 m-3  "
-                                onClick={() => goButtonHandler()}
-                            >Go</Button>
+                        <Col sm="1" ></Col>
+                        <Col sm="1" className="mt-3 ">
+                            <Go_Button loading={goBtnLoading} onClick={goButtonHandler} />
                         </Col>
                     </div>
                 </div>
