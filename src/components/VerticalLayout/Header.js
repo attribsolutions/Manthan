@@ -47,7 +47,7 @@ const Header = props => {
     setOpen(false);
   }
   const IsNotificationShow = loginSystemSetting().IsNotificationShow
-  
+
 
   function tog_backdrop() {
     setmodal_backdrop(!modal_backdrop)
@@ -110,16 +110,24 @@ const Header = props => {
           <div className="modal-content">
             <div className="modal-body">
               <p style={{ fontSize: "15px", color: "black" }}>
-                <h5> सर्व FoodERP वापरकर्ते,</h5>
-                दिनांक १ एप्रिल २०२४ रोजी नवीन आर्थिक वर्ष (२०२४-२५) सुरु होईल त्या दृष्टीने FoodERP मध्ये होणारे बदल खालील प्रमाणे.<br /><br />
-                १ - दिनांक ३१ मार्च २०२४ रोजी सर्व काम संपल्यावर किंवा १ एप्रिल २०२४ रोजी स्टॉक अपडेट करणार असल्यास ३१ मार्च २०२४ ची तारीख सिलेक्ट करून क्लोजिंग स्टॉक अपडेट करायचा आहे. (स्टॉक अपडेट केल्याशिवाय १ एप्रिल २०२४ रोजी बिलिंग करता येणार नाही)<br /><br />
-                २ - दिनांक ३१ मार्च २०२४ चा स्टॉक अपडेट केल्यानंतर जुने कुठलेही ट्रान्झॅक्शन बदलता येणार नाहीत.<br /><br />
-                ३ - सर्व ट्रान्झॅक्शन डॉक्युमेंट नंबर ००१ पासून सुरु होतील. (उदा. बिल नंबर, क्रेडिट नोट नंबर…. )<br /><br />
-                <h5>All FoodERP users,</h5>
-                Following are the changes in FoodERP in view of commencement of new financial year (2024-25) on 1st April 2024.<br /><br />
-                1 - On 31st March 2024 after completion of all work or if updating stock on 1st April 2024 select date 31st March 2024 to update closing stock. (Billing will not be possible on 1st April 2024 without stock update)<br /><br />
-                2 - After the stock update dated 31st March 2024  old transactions cannot be changed.<br /><br />
-                3 - All transaction document numbers will start from 001. (Eg Bill Number, Credit Note Number…. )<br /><br />
+
+
+
+
+
+
+
+                <h5> FoodERP 2.0 सिस्टम वापरकर्त्यांसाठी सूचना :</h5>
+              
+                FoodERP 2.0 प्रणाली गुरुवार, 16 मे 2024 रोजी दुपारी 1:00 ते 2:00 PM (IST) या वेळेत अनुपलब्ध असेल. यावेळी, सिस्टमची कार्यक्षमता सुनिश्चित करण्यासाठी आवश्यक देखभाल केली जाईल. यामुळे होणाऱ्या कोणत्याही गैरसोयीबद्दल आम्ही दिलगीर आहोत.
+                आपल्या सहकार्यासाठी धन्यवाद.<br />
+                टीम चितळे बंधू<br /><br />
+
+                <h5> Attention FoodERP 2.0 System Users </h5>
+                The FoodERP System will be temporarily unavailable on Thursday, 16th May 2024, from 1:00 PM to 2:00 PM (IST).<br /><br />
+                During this time, essential maintenance will be carried out to ensure performance of the system. We apologise for any inconvenience this may cause and appreciate your understanding as we work to improve our services.
+                Thank you for your cooperation.<br />
+                Team Chitale Bandhu
               </p>
             </div>
 
@@ -134,19 +142,19 @@ const Header = props => {
             <div className="navbar-brand-box" >
               <div style={{ cursor: "context-menu" }} className="logo logo-dark">
                 <span className="logo-sm" >
-                  <img src={logoSvg} alt="" height="40"  style={{height:"56px"}}/>
+                  <img src={logoSvg} alt="" height="40" style={{ height: "56px" }} />
                 </span>
                 <span className="logo-lg">
-                  <img src={logoSvg} alt="" height="40" style={{height:"56px"}} /> <span className="logo-txt" style={{ color: 'white' }}>FoodERP 2.0</span>
+                  <img src={logoSvg} alt="" height="40" style={{ height: "56px" }} /> <span className="logo-txt" style={{ color: 'white' }}>FoodERP 2.0</span>
                 </span>
               </div>
 
               <Link to="/dashboard" className="logo logo-light">
                 <span className="logo-sm" >
-                  <img src={logoSvg} alt="" height="35" style={{height:"56px"}} />
+                  <img src={logoSvg} alt="" height="35" style={{ height: "56px" }} />
                 </span>
                 <span className="logo-lg">
-                  <img src={logoSvg} alt="" height="35" style={{height:"56px"}}/> <span className="logo-txt">FoodERP 2.0</span>
+                  <img src={logoSvg} alt="" height="35" style={{ height: "56px" }} /> <span className="logo-txt">FoodERP 2.0</span>
                 </span>
               </Link>
             </div>
