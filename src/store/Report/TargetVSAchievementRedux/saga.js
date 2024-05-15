@@ -13,9 +13,9 @@ function* Target_VS_Achievement_GenFun(jsonBody) {
         const newList = yield response.Data.map((i, key) => {
         
             i.key = key + 1
-            i.TargetQuantityInKG = parseInt(i.TargetQuantityInKG)
+            i.TargetQuantityInKG = (i.TargetQuantityInKG)
             i.TargetAmountWithGST = parseInt(i.TargetAmountWithGST)
-            i.AchQuantityInKG = parseInt(i.AchQuantityInKG)
+            i.AchQuantityInKG = Number(i.AchQuantityInKG).toFixed(2)
             i.AchAmountWithGST = parseInt(i.AchAmountWithGST)
             i.AchAmountWithGST = parseInt(i.AchAmountWithGST)
             i.AchAmountWithGST = parseInt(i.AchAmountWithGST)
@@ -109,15 +109,15 @@ function* Target_VS_AchievementGroupWise_GenFun(jsonBody) {
             GTAchAmountWithGST: parseInt(TotalGTAchAmountWithGST),
             TargetAmountWithGST: parseInt(TotalTargetAmountWithGST),
             CXAmountWithGST: parseInt(TotalCXAmountWithGST),
-            AchQuantityInKG: parseInt(TotalAchQuantityInKG),
-            CXQuantityInKG: parseInt(TotalCXQuantityInKG),
-            TargetQuantityInKG: parseInt(TotalTargetQuantityInKG),
-            GTAchQuantityInKG: parseInt(TotalGTAchQuantityInKG),
+            AchQuantityInKG: parseFloat(TotalAchQuantityInKG.toFixed(2)),
+            CXQuantityInKG: parseFloat(TotalCXQuantityInKG.toFixed(2)),
+            TargetQuantityInKG: parseFloat(TotalTargetQuantityInKG.toFixed(2)),
+            GTAchQuantityInKG: parseFloat(TotalGTAchQuantityInKG.toFixed(2)),
             "AchQty%": parseFloat(AchQty_Percentage.toFixed(2)),
             "ContriQty%": parseFloat(ContriQty_Percentage.toFixed(2)),
             "AchAmount%": parseFloat(AchAmount_Percentage.toFixed(2)),
             "ContriAmount%": parseFloat(ContriAmount_Percentage.toFixed(2)),
-            CreditNoteQuantityInKG: parseInt(TotalCreditNoteQuantityInKG),
+            CreditNoteQuantityInKG: parseFloat(TotalCreditNoteQuantityInKG.toFixed(2)),
 
 
 
