@@ -163,14 +163,15 @@ const TargetVSAchievement = (props) => {
     }, [cluster, subCluster])
 
     useEffect(async () => {
-        for (const item of cluster) {
-
-            const response = await Get_Subcluster_On_cluster_API(item.value);
-            if (response.StatusCode === 200) {
-                setSubClusterOptions(prevOptions => [
-                    ...prevOptions,
-                    response.Data.map(index => ({ value: index.id, label: index.Name }))
-                ]);
+        if (cluster[0].value !== "") {
+            for (const item of cluster) {
+                const response = await Get_Subcluster_On_cluster_API(item.value);
+                if (response.StatusCode === 200) {
+                    setSubClusterOptions(prevOptions => [
+                        ...prevOptions,
+                        response.Data.map(index => ({ value: index.id, label: index.Name }))
+                    ]);
+                }
             }
         }
         console.log(SubClusterOptions)
