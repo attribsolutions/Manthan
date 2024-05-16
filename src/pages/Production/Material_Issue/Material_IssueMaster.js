@@ -452,9 +452,10 @@ const MaterialIssueMaster = (props) => {
     }
 
     function NumberOfLotchange(event) {
-
+        debugger
         let input = event.trim(); // Remove leading and trailing whitespace
         let defaultNoOfLot = parseFloat(noOfLotForDistribution);
+        let remainingQuantity = 0
 
         if (input === "" || isNaN(input)) {
             input = 0;
@@ -463,11 +464,17 @@ const MaterialIssueMaster = (props) => {
         if (parseFloat(input) > defaultNoOfLot) {
             input = defaultNoOfLot;
         }
+        remainingQuantity = ((parseFloat(values.ItemName.lotQty) / defaultNoOfLot) * parseFloat(input)).toFixed(2)
 
+        if (remainingQuantity === "" || isNaN(remainingQuantity)) {
+            remainingQuantity = 0;
+        }
         setState((i) => {
             let a = { ...i };
             a.values.NumberOfLot = input;
             a.hasValid.NumberOfLot.valid = true;
+            a.values.LotQuantity = remainingQuantity;
+            a.hasValid.LotQuantity.valid = true;
             return a;
         });
     }
@@ -558,7 +565,6 @@ const MaterialIssueMaster = (props) => {
                     Item: Itemselect.Item,
                     Unit: Itemselect.Unit,
                     MaterialIssueItems: materialIssueItems,
-                    // Status: 1,
                     MaterialIssueWorkOrder: [
                         {
                             WorkOrder: Itemselect.id,
@@ -576,7 +582,7 @@ const MaterialIssueMaster = (props) => {
     const customOption = (props) => {
 
         const { innerProps, label, data } = props;
-        
+
         return (
             <components.Option {...props}>
                 <div {...innerProps}>
@@ -668,9 +674,10 @@ const MaterialIssueMaster = (props) => {
                                                     style={{ textAlign: "right" }}
                                                     name="LotQuantity"
                                                     value={values.LotQuantity}
-                                                    disabled={(goButtonList.length > 0) ? true : false}
+                                                    // disabled={(goButtonList.length > 0) ? true : false}
                                                     type="text"
                                                     cpattern={decimalRegx}
+                                                    disabled={true}
                                                     className={isError.LotQuantity.length > 0 ? "is-invalid form-control" : "form-control"}
                                                     placeholder="Please Enter LotQuantity"
                                                     autoComplete='off'

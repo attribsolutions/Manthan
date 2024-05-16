@@ -86,6 +86,7 @@ function* editWorkOrderGenFunc({ config }) {     // Work Order edit List page
   try {
     let response = yield call(WorkOrder_edit_Api, config);
     response.pageMode = btnmode;
+
     response.Data = response.Data[0];
     if (response.StatusCode === 226) {
       customAlert({
@@ -93,7 +94,9 @@ function* editWorkOrderGenFunc({ config }) {     // Work Order edit List page
         Status: true,
         Message: response.Message,
       })
+      yield put(editWorkOrderListSuccess({ Status: false }))
       return
+
     }
     else {
       yield put(editWorkOrderListSuccess(response));

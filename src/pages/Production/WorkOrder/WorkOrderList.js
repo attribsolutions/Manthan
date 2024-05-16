@@ -98,30 +98,11 @@ const WorkOrderList = () => {
         setHederFilters(newObj)
     }
 
-
-    // const makeBtnFunc = (list = []) => {
-
-    //     var jsonData = list[0]
-    //     try {
-    //         const jsonBody = JSON.stringify({
-    //             WorkOrder: jsonData.id,
-    //             Item: jsonData.Item,
-    //             Company: loginCompanyID(),
-    //             Party: loginPartyID(),
-    //             Quantity: parseInt(jsonData.Quantity),
-    //             NoOfLots: jsonData.NumberOfLot
-    //         })
-    //         const body = { jsonBody, pageMode, path: url.MATERIAL_ISSUE, ListData: list[0], goButtonCallByMode: true }
-    //         dispatch(goButtonForMaterialIssue_Master_Action(body))
-
-    //     } catch (e) { }
-    // }
-
     const makeBtnFunc = (list = []) => {
         try {
             if (list.length > 0) {
                 const jsonData = list[0];
-                                
+
                 jsonData.NumberOfLot = jsonData.RemainingLot;  // Update NumberOfLot field to RemainingLot 
                 jsonData.Quantity = jsonData.RemaningQty;  // Update Quantity field to RemaningQty 
 
