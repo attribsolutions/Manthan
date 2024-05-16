@@ -345,15 +345,17 @@ const TargetVSAchievement = (props) => {
     }, [Tabledata]);
 
     function goButtonHandler(btnMode) {
+        debugger
         setBtnMode(btnMode)
+        const Cluster = cluster.filter(i => !(i.value === '')).map(obj => obj.value).join(',');
+        const SubCluster = subCluster.filter(i => !(i.value === '')).map(obj => obj.value).join(',');
         const jsonBody = JSON.stringify({
             "Month": yearAndMonth.Month,
             "Year": yearAndMonth.Year,
             "Party": !(isSCMParty) ? _cfunc.loginPartyID() : partydropdown.value,
-            "Employee": !(isSCMParty) ? 0 : _cfunc.loginEmployeeID(),
-            "SubEmployee": SubEmployee.value,
-            "Cluster": cluster.value,
-            "SubCluster": subCluster.value
+            "Employee":_cfunc.loginEmployeeID(),
+            "Cluster":Cluster,
+            "SubCluster":SubCluster
 
         })
         if (isGropuWise) {
