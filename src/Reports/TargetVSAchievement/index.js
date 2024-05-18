@@ -32,7 +32,7 @@ import {
 import { ExcelReportComponent } from "../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS";
 import { getClusterlist } from "../../store/Administrator/ClusterRedux/action";
 import { Get_Subcluster_On_cluster_API } from "../../helpers/backend_helper";
-import { allLabelWithZero } from "../../components/Common/CommonErrorMsg/HarderCodeData";
+import { allLabelWithBlank, allLabelWithZero } from "../../components/Common/CommonErrorMsg/HarderCodeData";
 
 const TargetVSAchievement = (props) => {
 
@@ -48,11 +48,11 @@ const TargetVSAchievement = (props) => {
     const [Tabledata, setTabledata] = useState([]);
 
 
-    const [cluster, setCluster] = useState({ value: 0, label: "Select..." });
-    const [subCluster, setSubCluster] = useState({ value: 0, label: "Select..." });
+    const [cluster, setCluster] = useState([allLabelWithBlank]);
+    const [subCluster, setSubCluster] = useState([allLabelWithBlank]);
     const [SubEmployee, setSubEmployee] = useState({ value: 0, label: "Select..." });
 
-   
+
     const [SubClusterOptions, setSubClusterOptions] = useState([]);
     const [partydropdown, setPartydropdown] = useState(allLabelWithZero);
     const {
@@ -150,8 +150,33 @@ const TargetVSAchievement = (props) => {
     }, [isGropuWise, tableData, tableDataGroupWise,])
 
     useEffect(() => {
-        dispatch(Partyonclustersubcluster_List({ cluster_ID: cluster.value, SubCluster_ID: subCluster.value }));
+
+        const Cluster = cluster.filter(i => !(i.value === '')).map(obj => obj.value).join(',');
+        const SubCluster = subCluster.filter(i => !(i.value === '')).map(obj => obj.value).join(',');
+        const jsonBody = JSON.stringify({
+            "ClusterID": Cluster,
+            "SubClusterID": SubCluster,
+            "EmployeeID": !(isSCMParty) ? 0 : _cfunc.loginEmployeeID(),
+        });
+        let config = { jsonBody }
+        dispatch(Partyonclustersubcluster_List(config));
     }, [cluster, subCluster])
+
+    useEffect(async () => {
+        if (cluster[0].value !== "") {
+            for (const item of cluster) {
+                const response = await Get_Subcluster_On_cluster_API(item.value);
+                if (response.StatusCode === 200) {
+                    setSubClusterOptions(prevOptions => [
+                        ...prevOptions,
+                        response.Data.map(index => ({ value: index.id, label: index.Name }))
+                    ]);
+                }
+            }
+        }
+        console.log(SubClusterOptions)
+
+    }, [cluster])
 
 
     async function MonthAndYearOnchange(e) {
@@ -179,26 +204,11 @@ const TargetVSAchievement = (props) => {
     }));
 
     Party_Option.unshift(allLabelWithZero);
-    const clusterOnchange = async (e) => {
-        const response = await Get_Subcluster_On_cluster_API(e.value);
-        if (response.StatusCode === 200) {
-            setSubClusterOptions(response.Data.map(index => ({ value: index.id, label: index.Name })))
-        }
-        setCluster({
-            value: e.value,
-            label: e.label
-        })
-        setSubCluster({ value: 0, label: "Select..." })
-        setPartydropdown(allLabelWithZero)
-    }
-
 
     function PartyDropdown_OnChange_Handler(e) {
         setPartydropdown(e);
         setTabledata([]);
     }
-
-
 
 
     const Columns = [
@@ -335,15 +345,17 @@ const TargetVSAchievement = (props) => {
     }, [Tabledata]);
 
     function goButtonHandler(btnMode) {
+        debugger
         setBtnMode(btnMode)
+        const Cluster = cluster.filter(i => !(i.value === '')).map(obj => obj.value).join(',');
+        const SubCluster = subCluster.filter(i => !(i.value === '')).map(obj => obj.value).join(',');
         const jsonBody = JSON.stringify({
             "Month": yearAndMonth.Month,
             "Year": yearAndMonth.Year,
             "Party": !(isSCMParty) ? _cfunc.loginPartyID() : partydropdown.value,
-            "Employee": !(isSCMParty) ? 0 : _cfunc.loginEmployeeID(),
-            "SubEmployee": SubEmployee.value,
-            "Cluster": cluster.value,
-            "SubCluster": subCluster.value
+            "Employee":_cfunc.loginEmployeeID(),
+            "Cluster":Cluster,
+            "SubCluster":SubCluster
 
         })
         if (isGropuWise) {
@@ -354,9 +366,40 @@ const TargetVSAchievement = (props) => {
     };
 
 
+    function ClusterOnChange(e = []) {
+        debugger
+        if (e.length === 0) {
+            e = [allLabelWithBlank]
+            setSubCluster(e)
+        } else {
+            e = e.filter(i => !(i.value === ''))
+            setSubCluster([])
+        }
+        setCluster(e);
+        setTabledata([]);
+        setSubClusterOptions([])
+    }
+
+
+    function SubClusterOnChange(e = []) {
+        if (e.length === 0) {
+            e = [allLabelWithBlank]
+        } else {
+            e = e.filter(i => !(i.value === ''))
+        }
+        setSubCluster(e);
+        setTabledata([]);
+    }
+
+
+
+
+
+
+
 
     const rowStyle = (row, rowIndex) => {
-        
+
         const style = {};
         if ((row.key) === (Tabledata.length)) {
 
@@ -365,6 +408,17 @@ const TargetVSAchievement = (props) => {
             style.fontSize = '4';
         }
         return style;
+    };
+
+    const removeDuplicates = (array) => {
+        const idSet = new Set();
+        return array.filter(item => {
+            if (!idSet.has(item.value)) {
+                idSet.add(item.value);
+                return true;
+            }
+            return false;
+        });
     };
 
 
@@ -390,7 +444,7 @@ const TargetVSAchievement = (props) => {
                                 </Col>
                             </FormGroup>
                         </Col>
-                        <Col sm={3} className="">
+                        {isSCMParty && <Col sm={3} className="">
                             <FormGroup className=" row mt-1" >
                                 <Label className="col-sm-4 p-2"
                                     style={{ width: "120px" }}>Cluster</Label>
@@ -398,6 +452,7 @@ const TargetVSAchievement = (props) => {
                                     <Select
                                         name="Cluster"
                                         id="Cluster"
+                                        isMulti={true}
                                         value={cluster}
                                         isSearchable={true}
                                         classNamePrefix="dropdown"
@@ -405,13 +460,13 @@ const TargetVSAchievement = (props) => {
                                             menu: provided => ({ ...provided, zIndex: 2 })
                                         }}
                                         options={Cluster_Options}
-                                        onChange={clusterOnchange}
+                                        onChange={ClusterOnChange}
                                     />
                                 </Col>
                             </FormGroup>
-                        </Col>
+                        </Col>}
 
-                        <Col sm={3} className="">
+                        {isSCMParty && <Col sm={3} className="">
                             <FormGroup className=" row mt-1" >
                                 <Label className="col-sm-4 p-2"
                                     style={{ width: "120px" }}>Sub Cluster</Label>
@@ -419,24 +474,21 @@ const TargetVSAchievement = (props) => {
                                     <Select
                                         name="SubCluster"
                                         id="SubCluster"
+                                        isMulti={true}
                                         value={subCluster}
                                         isSearchable={true}
                                         classNamePrefix="dropdown"
-                                        options={SubClusterOptions}
+                                        options={removeDuplicates(SubClusterOptions.flat())}
                                         styles={{
                                             menu: provided => ({ ...provided, zIndex: 2 })
                                         }}
-                                        onChange={(e) => {
-                                            setSubCluster({
-                                                value: e.value,
-                                                label: e.label
-                                            })
-                                        }}
+                                        onChange={SubClusterOnChange}
                                     />
                                 </Col>
                             </FormGroup>
                         </Col>
-
+                        }
+                        {!isSCMParty && <Col sm={6}></Col>}
                         <Col sm={3} className=" d-flex justify-content-end" >
                             <C_Button
                                 type="button"
@@ -461,7 +513,7 @@ const TargetVSAchievement = (props) => {
                     </Row>
                     <Row>
 
-{/* 
+                        {/* 
                     <Col sm={3} className="">
                             <FormGroup className=" row mt-2" >
                                 <Label className="col-sm-4 p-2"
@@ -490,7 +542,7 @@ const TargetVSAchievement = (props) => {
 
 
 
-                       {isSCMParty && <Col sm={3} className="">
+                        {isSCMParty && <Col sm={3} className="">
                             <FormGroup className=" row mt-1" >
                                 <Label className="col-sm-4 p-2"
                                     style={{ width: "120px" }}>Party</Label>
@@ -513,7 +565,7 @@ const TargetVSAchievement = (props) => {
                                 </Col>
                             </FormGroup>
                         </Col>
-}
+                        }
 
                         <Col sm={3} className="">
                             <FormGroup className="mb- row mt-1 mb-1 " >
