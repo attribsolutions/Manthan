@@ -19,12 +19,10 @@ import {
     onChangeText,
     resetFunction,
 } from "../../../components/Common/validationFunction";
-// import Select from "react-select";
 import { Change_Button, Go_Button, SaveButton } from "../../../components/Common/CommonButton";
 import {
     breadcrumbReturnFunc,
     loginUserID,
-    currentDate_ymd,
     loginCompanyID,
     loginPartyID,
     btnIsDissablefunc,
@@ -32,15 +30,12 @@ import {
 } from "../../../components/Common/CommonFunction";
 import {
     editWorkOrderListSuccess,
-    getBOMList,
-    getBOMListSuccess,
     postGoButtonForWorkOrder_Master,
     postGoButtonForWorkOrder_MasterSuccess,
     SaveWorkOrderMaster,
     SaveWorkOrderMasterSuccess,
     updateWorkOrderList,
 } from "../../../store/Production/WorkOrder/action";
-import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import * as pageId from "../../../routes//allPageID";
@@ -54,6 +49,7 @@ import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 import Select, { components } from "react-select";
+import { getBOMListPage, getBOMListPageSuccess } from "../../../store/Production/BOMRedux/action";
 
 const goBtnID1 = "workOrdergoBtnID1"
 const changeBtnID1 = "workOrderchangeBtnID1"
@@ -84,6 +80,7 @@ const WorkOrder = (props) => {
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
+    const [tableData, setTableData] = useState([]);
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
@@ -94,17 +91,22 @@ const WorkOrder = (props) => {
         Items,
         GoButton,
         goBtnLoading,
-        saveBtnloading
+        saveBtnloading,
+        ItemsLoading,
+        editData
     } = useSelector((state) => ({
         saveBtnloading: state.WorkOrderReducer.saveBtnloading,
         goBtnLoading: state.WorkOrderReducer.loading,
         postMsg: state.WorkOrderReducer.postMsg,
         updateMsg: state.WorkOrderReducer.updateMsg,
-        userAccess: state.Login.RoleAccessUpdateData,
-        pageField: state.CommonPageFieldReducer.pageField,
         GetItemUnits: state.BOMReducer.GetItemUnits,
-        Items: state.WorkOrderReducer.BOMList,
-        GoButton: state.WorkOrderReducer.GoButton
+        Items: state.BOMReducer.BOMList,
+        GoButton: state.WorkOrderReducer.GoButton,
+        editData: state.WorkOrderReducer.editData,
+        ItemsLoading: state.BOMReducer.loading,
+
+        pageField: state.CommonPageFieldReducer.pageField,
+        userAccess: state.Login.RoleAccessUpdateData,
     }));
 
     const { BOMItems = [], EstimatedOutputQty = '', id = '', Item = '', Unit = '' } = GoButton
@@ -123,11 +125,20 @@ const WorkOrder = (props) => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id));
         return () => {
-            dispatch(getBOMListSuccess([]));
+            dispatch(getBOMListPageSuccess([]));
             dispatch(postGoButtonForWorkOrder_MasterSuccess([]));
         }
-
     }, []);
+
+    useEffect(() => {
+
+        if (GoButton?.BOMItems?.length > 0) {
+            setTableData(GoButton?.BOMItems)
+        }
+        else if ((editData.Status === true) && (editData.StatusCode === 200)) {
+            setTableData(editData.Data?.WorkOrderItems)
+        }
+    }, [GoButton, editData]);
 
     // userAccess useEffect
     useEffect(() => {
@@ -165,10 +176,10 @@ const WorkOrder = (props) => {
 
             if (hasEditVal) {
                 setEditData(hasEditVal);
-                
+
                 const { id, WorkOrderDate, Item, ItemName, NumberOfLot, Stock
-                    , Quantity, EstimatedOutputQty, Bom, Party } = hasEditVal
-                const { values, fieldLabel, hasValid, required, isError, FullWorkOrderNumber, WorkOrderNumber } = { ...state }
+                    , Quantity, EstimatedOutputQty, Bom, Party, WorkOrderItems, Unit } = hasEditVal
+                const { values, fieldLabel, hasValid, required, isError, FullWorkOrderNumber, WorkOrderNumber, } = { ...state }
                 hasValid.id.valid = true;
                 hasValid.WorkOrderDate.valid = true;
                 hasValid.EstimatedOutputQty.valid = true;
@@ -182,19 +193,18 @@ const WorkOrder = (props) => {
                 values.Quantity = Quantity;
                 values.NumberOfLot = NumberOfLot;
                 values.StockQuantity = Stock;
-                values.ItemName = { label: ItemName, value: Item };
+                values.ItemName = { label: ItemName, value: Item, ItemID: Item, Unit: Unit, Bom: Bom };
                 values.FullWorkOrderNumber = FullWorkOrderNumber;
                 values.WorkOrderNumber = WorkOrderNumber
-                values.ItemName = { label: ItemName, value: Item };
 
-                const jsonBody = JSON.stringify({
-                    Item: Item,
-                    Bom: Bom,
-                    Quantity: parseFloat(Quantity),
-                    Party: Party
-                });
-                dispatch(postGoButtonForWorkOrder_Master(jsonBody));
-
+                // const jsonBody = JSON.stringify({
+                //     Item: Item,
+                //     Bom: Bom,
+                //     Quantity: parseFloat(Quantity),
+                //     Party: Party
+                // });
+                // dispatch(postGoButtonForWorkOrder_Master(jsonBody));
+                // setWorkOrderItemsDetails(WorkOrderItems)
                 setState({ values, fieldLabel, hasValid, required, isError })
                 dispatch(editWorkOrderListSuccess({ Status: false }))
                 dispatch(Breadcrumb_inputName(hasEditVal.ItemName))
@@ -235,7 +245,7 @@ const WorkOrder = (props) => {
         }
     }, [postMsg])
 
-    useEffect(() => _cfunc.tableInputArrowUpDounFunc("#table_Arrow"), [BOMItems]);
+    useEffect(() => _cfunc.tableInputArrowUpDounFunc("#table_Arrow"), [tableData]);
 
     useEffect(() => {
         if ((updateMsg.Status === true) && (updateMsg.StatusCode === 200) && !(modalCss)) {
@@ -259,10 +269,6 @@ const WorkOrder = (props) => {
         }
     }, [pageField])
 
-    let filterItems = Items.filter((index) => {
-        return index.IsActive === true
-    })
-
     useEffect(() => {
         const jsonBody = JSON.stringify({
             FromDate: "2022-12-01",
@@ -270,19 +276,22 @@ const WorkOrder = (props) => {
             Company: loginCompanyID(),
             Party: loginPartyID()
         });
-        dispatch(getBOMList(jsonBody));
+        dispatch(getBOMListPage(jsonBody));
     }, [])
 
-    const ItemDropdown_Options = filterItems.map((index) => ({
-        value: index.id,
-        label: `${index.ItemName} (BOMDate-${_cfunc.date_dmy_func(index.BomDate)})`,
-        ItemName: index.ItemName,
-        ItemID: index.Item,
-        Unit: index.Unit,
-        UnitName: index.UnitName,
-        EstimatedOutputQty: index.EstimatedOutputQty,
-        StockQty: (index.StockQty).toFixed(2)
-    }));
+    const ItemDropdown_Options = Items
+        .filter(index => index.IsActive)
+        .map(index => ({
+            value: index.ID,
+            label: `${index.ItemName} (BOMDate-${_cfunc.date_dmy_func(index.BomDate)})`,
+            ItemName: index.ItemName,
+            ItemID: index.Item,
+            Unit: index.Unit,
+            UnitName: index.UnitName,
+            EstimatedOutputQty: index.EstimatedOutputQty,
+            StockQty: index.StockQty.toFixed(2),
+            BOMDate: _cfunc.date_dmy_func(index.BomDate),
+        }));
 
     const pagesListColumns = [
         {
@@ -329,12 +338,6 @@ const WorkOrder = (props) => {
         },
     ];
 
-    const pageOptions = {
-        sizePerPage: 10,
-        totalSize: GoButton.length,
-        custom: true,
-    };
-
     const QuantityHandler = (event, user) => {
 
         let val = event.target.value;
@@ -364,7 +367,7 @@ const WorkOrder = (props) => {
     }
 
     function NumberOfLotchange(e) {
-        
+
         dispatch(postGoButtonForWorkOrder_MasterSuccess([]))
         let qty = ''
         if (pageMode === mode.edit) {
@@ -424,13 +427,13 @@ const WorkOrder = (props) => {
     }
 
     const SaveHandler = async (event) => {
-        
+
         event.preventDefault();
         const btnId = event.target.id
         try {
             {
                 btnIsDissablefunc({ btnId, state: true })
-                const WorkOrderItems = BOMItems.map((index) => ({
+                const WorkOrderItems = tableData.map((index) => ({
                     Item: index.Item,
                     Unit: index.Unit,
                     BomQuantity: index.BomQuantity,
@@ -439,9 +442,12 @@ const WorkOrder = (props) => {
 
                 const jsonBody = JSON.stringify({
                     WorkOrderDate: values.WorkOrderDate,
-                    Item: (pageMode === mode.edit ? Item : values.ItemName.ItemID),
-                    Bom: (pageMode === mode.edit ? id : values.ItemName.value),
-                    Unit: (pageMode === mode.edit ? Unit : values.ItemName.Unit),
+                    // Item: (pageMode === mode.edit ? Item : values.ItemName.ItemID),
+                    // Unit: (pageMode === mode.edit ? Unit : values.ItemName.Unit),
+                    // Bom: values.ItemName.value,
+                    Bom: (pageMode === mode.edit ? values.ItemName.Bom : values.ItemName.value),
+                    Item: values.ItemName.ItemID,
+                    Unit: values.ItemName.Unit,
                     NumberOfLot: values.NumberOfLot,
                     Quantity: parseFloat(values.Quantity).toFixed(3),
                     Company: loginCompanyID(),
@@ -451,7 +457,6 @@ const WorkOrder = (props) => {
                     FullWorkOrderNumber: EditData.FullWorkOrderNumber,
                     WorkOrderNumber: EditData.WorkOrderNumber,
                     WorkOrderItems: WorkOrderItems,
-                    // Status:1
                 });
                 if (pageMode === mode.edit) {
                     dispatch(updateWorkOrderList({ jsonBody, updateId: values.id, btnId }));
@@ -471,13 +476,12 @@ const WorkOrder = (props) => {
             <components.Option {...props}>
                 <div {...innerProps}>
                     <div >Name:{data.ItemName}</div>
-                    <div>Qty:{data.StockQty}</div>
-                    <div>BOMDate:{_cfunc.date_dmy_func(data.BomDate)}</div>
+                    <div>Estimated Qty:{data.EstimatedOutputQty}</div>
+                    <div>BOMDate:{data.BOMDate}</div>
                 </div>
             </components.Option>
         );
     };
-
 
     if (!(userPageAccessState === '')) {
         return (
@@ -498,7 +502,7 @@ const WorkOrder = (props) => {
                                                         style={{ userselect: "all" }}
                                                         name="WorkOrderDate"
                                                         value={values.WorkOrderDate}
-                                                        disabled={(BOMItems.length > 0) || (pageMode === mode.edit) ? true : false}
+                                                        disabled={(tableData.length > 0) || (pageMode === mode.edit) ? true : false}
                                                         onChange={(y, v, e) => {
                                                             onChangeDate({ e, v, state, setState })
                                                         }}
@@ -518,11 +522,15 @@ const WorkOrder = (props) => {
                                                         name="ItemName"
                                                         value={values.ItemName}
                                                         isSearchable={true}
-                                                        isDisabled={(BOMItems.length > 0) ? true : false}
+                                                        isDisabled={(tableData.length > 0) ? true : false}
                                                         className="react-dropdown"
                                                         classNamePrefix="dropdown"
                                                         options={ItemDropdown_Options}
+                                                        isLoading={ItemsLoading}
                                                         components={{ Option: customOption }}
+                                                        styles={{
+                                                            menu: provided => ({ ...provided, zIndex: 2 })
+                                                        }}
                                                         onChange={(hasSelect, evn) => {
                                                             onChangeSelect({ hasSelect, evn, state, setState });
                                                             ItemOnchange(hasSelect)
@@ -595,7 +603,7 @@ const WorkOrder = (props) => {
                                                         name="NumberOfLot"
                                                         value={values.NumberOfLot}
                                                         type="text"
-                                                        disabled={(BOMItems.length > 0) ? true : false}
+                                                        disabled={(tableData.length > 0) ? true : false}
                                                         className={isError.NumberOfLot.length > 0 ? "is-invalid form-control text-end" : "form-control text-end"}
                                                         placeholder="Please Enter Number Of Lot"
                                                         autoComplete='off'
@@ -620,7 +628,7 @@ const WorkOrder = (props) => {
                                                         style={{ textAlign: "right" }}
                                                         name="Quantity"
                                                         value={`${values.Quantity}`}
-                                                        disabled={(BOMItems.length > 0) ? true : false}
+                                                        disabled={(tableData.length > 0) ? true : false}
                                                         type="text"
                                                         className={isError.Quantity.length > 0 ? "is-invalid form-control text-end" : "form-control text-end"}
                                                         placeholder="Please Enter Quantity"
@@ -648,13 +656,16 @@ const WorkOrder = (props) => {
                                 <Col sm={1}>
                                     <div className="col col-1 mt-2">
                                         {pageMode === mode.defaultsave ?
-                                            (BOMItems.length === 0) ?
+                                            (tableData.length === 0) ?
                                                 < Go_Button
                                                     loading={goBtnLoading}
                                                     onClick={(e) => goButtonHandler()} />
                                                 :
                                                 <Change_Button id={changeBtnID1}
-                                                    onClick={(e) => dispatch(postGoButtonForWorkOrder_MasterSuccess([]))} />
+                                                    onClick={(e) => {
+                                                        dispatch(postGoButtonForWorkOrder_MasterSuccess([]))
+                                                        setTableData([])
+                                                    }} />
                                             : null
                                         }
                                     </div>
@@ -662,66 +673,53 @@ const WorkOrder = (props) => {
                             </Row>
                         </div>
 
-                        {BOMItems.length > 0 ?
-                            <PaginationProvider pagination={paginationFactory(pageOptions)}>
-                                {({ paginationProps, paginationTableProps }) => (
-                                    <ToolkitProvider
-                                        keyField={"id"}
-                                        data={BOMItems}
-                                        columns={pagesListColumns}
-                                        search
-                                    >
-                                        {(toolkitProps) => (
-                                            <React.Fragment>
-                                                <Row>
-                                                    <Col xl="12">
-                                                        <div className="table-responsive">
-                                                            <BootstrapTable
-                                                                keyField={"id"}
-                                                                id="table_Arrow"
-                                                                responsive
-                                                                bordered={false}
-                                                                striped={false}
-                                                                classes={"table  table-bordered"}
-                                                                {...toolkitProps.baseProps}
-                                                                {...paginationTableProps}
-                                                            />
-                                                            {countlabelFunc(toolkitProps, paginationProps, dispatch, "WorkOrder")}
-                                                            {globalTableSearchProps(toolkitProps.searchProps, pageField.id)}
-                                                            <div>
-                                                                <label >EstimatedOutputQty :&nbsp;&nbsp;
-                                                                    <span style={{ color: "#000000" }}>
-                                                                        {`${EstimatedOutputQty} ${pageMode === mode.edit ? EditData.UnitName : itemselect.UnitName}`}
-                                                                    </span>
-                                                                </label>
-                                                            </div>
-                                                        </div>
-                                                    </Col>
-                                                </Row>
-                                                <Row className="align-items-md-center mt-30">
-                                                    <Col className="pagination pagination-rounded justify-content-end mb-2">
-                                                        <PaginationListStandalone {...paginationProps} />
-                                                    </Col>
-                                                </Row>
-                                            </React.Fragment>
-                                        )}
-                                    </ToolkitProvider>
+                        {tableData.length > 0 ?
+                            <ToolkitProvider
+                                keyField={"id"}
+                                data={tableData}
+                                columns={pagesListColumns}
+                                search
+                            >
+                                {(toolkitProps) => (
+                                    <React.Fragment>
+                                        <Row>
+                                            <Col xl="12">
+                                                <div className="table-responsive">
+                                                    <BootstrapTable
+                                                        keyField={"id"}
+                                                        id="table_Arrow"
+                                                        responsive
+                                                        bordered={false}
+                                                        striped={false}
+                                                        classes={"table  table-bordered"}
+                                                        {...toolkitProps.baseProps}
+                                                    />
+                                                    {countlabelFunc(toolkitProps, dispatch, "WorkOrder")}
+                                                    {globalTableSearchProps(toolkitProps.searchProps)}
+                                                    {/* {globalTableSearchProps(toolkitProps.searchProps, pageField.id)} */}
+                                                    <div>
+                                                        <label >EstimatedOutputQty :&nbsp;&nbsp;
+                                                            <span style={{ color: "#000000" }}>
+                                                                {`${EstimatedOutputQty} ${pageMode === mode.edit ? EditData.UnitName : itemselect.UnitName}`}
+                                                            </span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </Col>
+                                        </Row>
+
+                                    </React.Fragment>
                                 )}
+                            </ToolkitProvider> : null}
 
-                            </PaginationProvider>
-                            : <></>}
-
-                        {BOMItems.length > 0 ?
-                            < SaveButtonDraggable >
-                                <SaveButton pageMode={pageMode}
-                                    loading={saveBtnloading}
-                                    onClick={SaveHandler}
-                                    userAcc={userPageAccessState}
-                                    editCreatedBy={editCreatedBy}
-                                />
-                            </SaveButtonDraggable>
-                            : null
-                        }
+                        < SaveButtonDraggable >
+                            <SaveButton pageMode={pageMode}
+                                loading={saveBtnloading}
+                                onClick={SaveHandler}
+                                userAcc={userPageAccessState}
+                                editCreatedBy={editCreatedBy}
+                            />
+                        </SaveButtonDraggable>
 
                     </form>
                 </div>

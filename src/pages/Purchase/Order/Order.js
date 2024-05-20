@@ -247,7 +247,6 @@ const Order = (props) => {
             dispatch(_act.GoButton_For_Order_AddSuccess([]))
         }
 
-
     }, [commonPartyDropSelect]);
 
     useEffect(() => { // hasEditVal useEffect
@@ -318,8 +317,6 @@ const Order = (props) => {
                         return a.Quantity - b.Quantity;
                     }
                 });
-
-
 
                 setOrderItemTable(orderItems)
                 setTermsAndConTable(termsAndCondition)
@@ -743,7 +740,7 @@ const Order = (props) => {
             formatExtraData: { tableList: orderItemTable },
             formatter: (value, row, k, { tableList }) => {
 
-                if (subPageMode === url.ORDER_1) {
+                if (subPageMode === url.ORDER_1 || subPageMode === url.IB_ORDER) {
                     return (
                         <div key={row.id} className="text-end">
                             <CInput
@@ -1040,7 +1037,7 @@ const Order = (props) => {
     };
 
     function itemWise_CalculationFunc(row, IsComparGstIn, tableList = []) {
-
+        
         const calculate = orderCalculateFunc(row) //order calculation function 
         row["Amount"] = calculate.roundedTotalAmount
         const sumOfAmount = tableList.reduce((accumulator, currentObject) => accumulator + (Number(currentObject["Amount"]) || 0), 0);

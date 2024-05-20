@@ -18,6 +18,7 @@ import {
     initialFiledFunc,
     onChangeDate,
     onChangeSelect,
+    resetFunction,
 } from "../../../components/Common/validationFunction";
 import { Change_Button, Go_Button, SaveButton } from "../../../components/Common/CommonButton";
 import { saveBOMMasterSuccess } from "../../../store/Production/BOMRedux/action";
@@ -200,7 +201,9 @@ const MaterialIssueMaster = (props) => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(SaveMaterialIssueSuccess({ Status: false }))
             dispatch(goButtonForMaterialIssue_Master_ActionSuccess([]))
-            dispatch(saveBOMMasterSuccess({ Status: false }))
+            dispatch(saveBOMMasterSuccess({ Status: false }));
+            setState(() => resetFunction(fileds, state))// Clear form values  
+            setGoButtonList([])
             if (pageMode === mode.dropdownAdd) {
                 customAlert({
                     Type: 1,
@@ -393,10 +396,13 @@ const MaterialIssueMaster = (props) => {
     }
 
     function goButtonHandler(event) {
-
+        
         event.preventDefault();
-        if (state.values.LotQuantity === "0") {
-            alert("Quantity Can Not be 0")
+        if (parseFloat(state.values.LotQuantity) === 0) {
+            customAlert({
+                Type:3,
+                Message:"Quantity Can Not be 0"
+            })
         } else
             if (formValid(state, setState)) {
                 const jsonBody = JSON.stringify({
@@ -452,7 +458,7 @@ const MaterialIssueMaster = (props) => {
     }
 
     function NumberOfLotchange(event) {
-        debugger
+        
         let input = event.trim(); // Remove leading and trailing whitespace
         let defaultNoOfLot = parseFloat(noOfLotForDistribution);
         let remainingQuantity = 0

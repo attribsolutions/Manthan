@@ -72,6 +72,7 @@ function* goButtonGenFunc({ config }) {                      // GO-Botton order 
       yield response.Data.TermsAndConditions = termArr;
     }
     else if (subPageMode === url.IB_ORDER) {
+      
       response = yield call(IBOrderPage_GoButton_API, config); // GO-Botton IB-invoice Add Page API
 
       yield response.Data.OrderItems.forEach((ele, k) => {
@@ -162,9 +163,9 @@ function* orderList_GoBtn_GenFunc({ config }) {
     else if ((subPageMode === url.IB_ORDER_PO_LIST) || (subPageMode === url.IB_ORDER_SO_LIST) || (subPageMode === url.IB_INVOICE_STP)) {
       response = yield call(IBOrderList_get_Filter_API, config); // GO-Botton IB-invoice Add Page API
     }
-    
+
     newList = yield response.Data.map((i) => {
-      
+
       i["recordsAmountTotal"] = i.OrderAmount;  // Breadcrumb Count total
       i.OrderAmount = amountCommaSeparateFunc(i.OrderAmount) //  GrandTotal show with commas
       var DeliveryDate = date_dmy_func(i.DeliveryDate);
@@ -250,7 +251,7 @@ function* orderList_GoBtn_GenFunc({ config }) {
       newList = newList.filter(i => i.MobileAppOrderFlag !== null);
     }
     yield put(getOrderListPageSuccess(newList))
- 
+
   } catch (error) {
     yield put(orderApiErrorAction())
   }

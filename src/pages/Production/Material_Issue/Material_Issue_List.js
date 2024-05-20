@@ -11,6 +11,7 @@ import {
     deleteMaterialIssueIdSuccess,
     editMaterialIssueId,
     getMaterialIssueListPage,
+    getMaterialIssueListPageSuccess,
 } from "../../../store/Production/Matrial_Issue/action";
 import { mode, url, pageId } from "../../../routes/index";
 import { updateWorkOrderListSuccess } from "../../../store/Production/WorkOrder/action";
@@ -56,12 +57,12 @@ const MaterialIssueList = () => {
     }
     // Featch Modules List data  First Rendering
     useEffect(() => {
-        // setpageMode(page_mode)
-        // dispatch(BreadcrumbShowCountlabel(`${"Material Issue Count"} :0`))
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
         goButtonHandler(true)
-
+        return () => {
+            dispatch(getMaterialIssueListPageSuccess([]));
+        }
     }, []);
 
 
@@ -142,10 +143,10 @@ const MaterialIssueList = () => {
                                 </Col>
                             </FormGroup>
                         </Col>
-                       
+
                         <Col sm="1" ></Col>
                         <Col sm="1" className="mt-3 ">
-                            <Go_Button  onClick={goButtonHandler} />
+                            <Go_Button onClick={goButtonHandler} />
                         </Col>
                     </div>
                 </div>
