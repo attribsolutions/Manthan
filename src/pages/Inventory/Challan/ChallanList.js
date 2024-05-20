@@ -107,7 +107,7 @@ const ChallanList = () => {
             jsonBody,
             pageMode: mode.modeSTPsave,
             grnRef,
-            // path: url.GRN_ADD_1,
+            path: url.GRN_ADD_1,
             challanNo
         }))
     };
@@ -219,6 +219,7 @@ const ChallanList = () => {
                             makeBtnName={"Make GRN"}
                             deleteName={"FullChallanNumber"}
                             MasterModal={Challan}
+                            forceNewBtnView={true}
                         />
                         : null
                 }

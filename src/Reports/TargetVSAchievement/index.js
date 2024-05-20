@@ -345,7 +345,7 @@ const TargetVSAchievement = (props) => {
     }, [Tabledata]);
 
     function goButtonHandler(btnMode) {
-        debugger
+        
         setBtnMode(btnMode)
         const Cluster = cluster.filter(i => !(i.value === '')).map(obj => obj.value).join(',');
         const SubCluster = subCluster.filter(i => !(i.value === '')).map(obj => obj.value).join(',');
@@ -367,7 +367,7 @@ const TargetVSAchievement = (props) => {
 
 
     function ClusterOnChange(e = []) {
-        debugger
+        
         if (e.length === 0) {
             e = [allLabelWithBlank]
             setSubCluster(e)

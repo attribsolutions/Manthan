@@ -88,7 +88,7 @@ const CommonListPage = (props) => {
       defaultDownBtnData: listObj2,
       CountLabel: pageField?.CountLabel,
       pageHeading: pageField?.PageHeading,
-      newBtnView: userAccState?.RoleAccess_IsSave,
+      // newBtnView: userAccState?.RoleAccess_IsSave,
       excelBtnView: userAccState?.RoleAccess_Exceldownload,
     }))
   }, [tableList, pageField, userAccState])
