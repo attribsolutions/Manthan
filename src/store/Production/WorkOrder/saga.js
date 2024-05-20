@@ -2,7 +2,6 @@ import { call, put, takeLatest } from "redux-saga/effects";
 import { date_dmy_func, convertTimefunc } from "../../../components/Common/CommonFunction";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import {
-  BOMList_Get_API,
   Post_WorkOrder_Master_API,
   WorkOrder_Delete_Api,
   WorkOrder_edit_Api,
@@ -13,7 +12,6 @@ import {
 import {
   deleteWorkOrderIdSuccess,
   editWorkOrderListSuccess,
-  getBOMListSuccess,
   getWorkOrderListPageSuccess,
   postGoButtonForWorkOrder_MasterSuccess,
   SaveWorkOrderMasterSuccess,
@@ -23,21 +21,14 @@ import {
 import {
   DELETE_WORK_ORDER_LIST_PAGE,
   EDIT_WORK_ORDER_LIST_ID,
-  GET_BOM_LIST,
   GET_WORK_ORDER_LIST_PAGE,
   POST_GO_BUTTON_FOR_WORK_ORDER_MASTER,
   POST_WORK_ORDER_MASTER,
   UPDATE_WORK_ORDER_LIST
 } from "./actionTypes";
+import { url } from "../../../routes";
 
-function* Get_BOMList_GenratorFunction({ filters }) {      // get Item dropdown API using post method
-  try {
-    const response = yield call(BOMList_Get_API, filters);
-    yield put(getBOMListSuccess(response.Data));
-  } catch (error) { yield put(WorkOrderApiErrorAction()) }
-}
-
-function* GoButton_WorkOrder_post_genfun({ jsonbody, btnId }) {     // GO Botton Post API
+function* GoButton_WorkOrder_post_genfun({ jsonbody }) {     // GO Botton Post API
   try {
 
     const response = yield call(WorkOrder_GoButton_Post_API, jsonbody);
@@ -55,10 +46,14 @@ function* Post_WorkOrder_GenratorFunction({ config }) {     // WOrk Order Post A
   } catch (error) { yield put(WorkOrderApiErrorAction()) }
 }
 
-function* GetWorkOrderGenFunc({ filters }) {       // get Work Order List API Using post method
+function* GetWorkOrderGenFunc({ filters }) {
+  const { subPageMode, jsonBody } = filters
+  let newList
+  // get Work Order List API Using post method
   try {
-    const response = yield call(WorkOrder_Get_API, filters);
-    const newList = yield response.Data.map((i) => {
+    const response = yield call(WorkOrder_Get_API, jsonBody);
+
+    newList = yield response.Data.map((i) => {
       i.WorkDate = i.WorkOrderDate;
       var date = date_dmy_func(i.WorkOrderDate)
       var time = convertTimefunc(i.CreatedOn)
@@ -77,6 +72,13 @@ function* GetWorkOrderGenFunc({ filters }) {       // get Work Order List API Us
       }
       return i
     })
+    if (subPageMode === url.MATERIAL_ISSUE_STP) {
+
+      newList = response.Data.filter((i) => {
+        return !(i.Status === "Completed")
+      })
+    }
+
     yield put(getWorkOrderListPageSuccess(newList));
   } catch (error) { yield put(WorkOrderApiErrorAction()) }
 }
@@ -119,7 +121,6 @@ function* DeleteWorkOrderGenFunc({ config }) {       // Work Order delete List p
 }
 
 function* WorkOrderSaga() {
-  yield takeLatest(GET_BOM_LIST, Get_BOMList_GenratorFunction)
   yield takeLatest(POST_GO_BUTTON_FOR_WORK_ORDER_MASTER, GoButton_WorkOrder_post_genfun)
   yield takeLatest(POST_WORK_ORDER_MASTER, Post_WorkOrder_GenratorFunction)
   yield takeLatest(GET_WORK_ORDER_LIST_PAGE, GetWorkOrderGenFunc)

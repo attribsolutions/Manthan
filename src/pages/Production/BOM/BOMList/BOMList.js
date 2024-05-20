@@ -13,7 +13,8 @@ import {
     deleteBOMIdSuccess,
     editBOMList,
     getBOMListPage,
-    updateBOMListSuccess
+    updateBOMListSuccess,
+    getBOMListPageSuccess
 } from "../../../../store/Production/BOMRedux/action";
 import BOMMaster from "../BOMMaster/BOMIndex";
 import * as pageId from "../../../../routes//allPageID";
@@ -50,8 +51,8 @@ const BOMList = () => {
             pageField: state.CommonPageFieldReducer.pageFieldList
         })
     );
-    
-    const { userAccess, pageField, goBtnLoading,listBtnLoading } = reducers;
+
+    const { userAccess, pageField, goBtnLoading, listBtnLoading } = reducers;
     const { fromdate, todate } = hederFilters;
 
 
@@ -70,9 +71,10 @@ const BOMList = () => {
         setpageMode(hasPagePath)
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
-        // dispatch(BreadcrumbShowCountlabel(`${"BOM Count"} :0`))
         goButtonHandler(true)
-
+        return () => {
+            dispatch(getBOMListPageSuccess([]))
+        }
     }, []);
 
 

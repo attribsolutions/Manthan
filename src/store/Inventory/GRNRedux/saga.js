@@ -11,6 +11,7 @@ import {
 } from "./actions";
 import {
   CheckStockEntryforBackDatedTransaction,
+  get_Demand_Details_Post_API,
   GRN_delete_API,
   GRN_Edit_API,
   GRN_get_API, GRN_Make_API, GRN_Post_API,
@@ -98,57 +99,66 @@ function* HideInvoiceForGRNGenFunc({ config }) {             // Upadte GRN  genr
 
 function* makeGRN_Mode1_GenFunc({ config }) {
   // Make_GRN Items  genrator function
-
-  const { pageMode = '', path = '', grnRef = [], challanNo = '', InvoiceDate } = config
+  
+  const { pageMode = '', path = '', grnRef = [], challanNo = '', InvoiceDate, subPageMode } = config
 
   try {
-    const response = yield call(GRN_Make_API, config);
+    if (subPageMode === url.IB_ORDER_SO_LIST) {
+      const response = yield call(get_Demand_Details_Post_API, config);
+      response["pageMode"] = pageMode;
+      response["path"] = path; //Pagepath
+      yield put(makeGRN_Mode_1ActionSuccess(response))
+    }
+    else {
+      const response = yield call(GRN_Make_API, config);
 
-    response.Data.OrderItem.forEach(index => {
-      
-      index["GSToption"] = index.GSTDropdown?.map(i => ({ value: i.GST, label: i.GSTPercentage, }));
-      index["MRPOps"] = index.MRPDetails?.map(i => ({ label: i.MRPValue, value: i.MRP }));
+      response.Data.OrderItem.forEach(index => {
 
-      let deFaultValue = { value: 0 }; // Default value for case when MRPOps is undefined
-      if (index["MRPOps"]) {
-        deFaultValue = index["MRPOps"].reduce((maxObj, obj) => {
-          return obj.value > maxObj.value ? obj : maxObj;
-        }, { value: -Infinity });
-      }
-      // const deFaultValue = index["MRPOps"].reduce((maxObj, obj) => {
-      //   return obj.value > maxObj.value ? obj : maxObj;
-      // }, { value: -Infinity });
+        index["GSToption"] = index.GSTDropdown?.map(i => ({ value: i.GST, label: i.GSTPercentage, }));
+        index["MRPOps"] = index.MRPDetails?.map(i => ({ label: i.MRPValue, value: i.MRP }));
 
-      index["MRPValue"] = (deFaultValue?.value === 0) ? index.MRPValue : deFaultValue?.label;
-      index["MRP"] = (deFaultValue?.value === 0) ? index.MRP : deFaultValue?.value;
-      index["vendorOrderRate"] = index.Rate;
+        let deFaultValue = { value: 0 }; // Default value for case when MRPOps is undefined
+        if (index["MRPOps"]) {
+          deFaultValue = index["MRPOps"].reduce((maxObj, obj) => {
+            return obj.value > maxObj.value ? obj : maxObj;
+          }, { value: -Infinity });
+        }
+        // const deFaultValue = index["MRPOps"].reduce((maxObj, obj) => {
+        //   return obj.value > maxObj.value ? obj : maxObj;
+        // }, { value: -Infinity });
 
-      if (index.GST === null) {
-        const deFaultValue = index.GSTDropdown?.filter(i => i.GSTPercentage === index.GSTPercentage);
-        index["GSTPercentage"] = deFaultValue[0]?.GSTPercentage
-        index["GST"] = deFaultValue[0]?.GST;
+        index["MRPValue"] = (deFaultValue?.value === 0) ? index.MRPValue : deFaultValue?.label;
+        index["MRP"] = (deFaultValue?.value === 0) ? index.MRP : deFaultValue?.value;
+        index["vendorOrderRate"] = index.Rate;
 
-      } else {
-        const deFaultValue = index.GSTDropdown?.filter(i => i.GST === index.GST);
-        index["GSTPercentage"] = (deFaultValue === undefined) ? "" : deFaultValue[0]?.GSTPercentage;
-        index["GST"] = (deFaultValue === undefined) ? "" : deFaultValue[0]?.GST;
-      }
+        if (index.GST === null) {
+          const deFaultValue = index.GSTDropdown?.filter(i => i.GSTPercentage === index.GSTPercentage);
+          index["GSTPercentage"] = deFaultValue[0]?.GSTPercentage
+          index["GST"] = deFaultValue[0]?.GST;
 
-    })
+        } else {
+          const deFaultValue = index.GSTDropdown?.filter(i => i.GST === index.GST);
+          index["GSTPercentage"] = (deFaultValue === undefined) ? "" : deFaultValue[0]?.GSTPercentage;
+          index["GST"] = (deFaultValue === undefined) ? "" : deFaultValue[0]?.GST;
+        }
 
-    response.Data.OrderItem?.sort(function (a, b) {
-      if (a.Item > b.Item) { return 1; }
-      else if (a.Item < b.Item) { return -1; }
-      return 0;
-    });
+      })
+
+      response.Data.OrderItem?.sort(function (a, b) {
+        if (a.Item > b.Item) { return 1; }
+        else if (a.Item < b.Item) { return -1; }
+        return 0;
+      });
 
 
-    response["pageMode"] = pageMode;
-    response["path"] = path; //Pagepath
-    response.Data["GRNReferences"] = grnRef;
-    response.Data["challanNo"] = challanNo;
-    response.Data["InvoiceDate"] = InvoiceDate
-    yield put(makeGRN_Mode_1ActionSuccess(response))
+      response["pageMode"] = pageMode;
+      response["path"] = path; //Pagepath
+      response.Data["GRNReferences"] = grnRef;
+      response.Data["challanNo"] = challanNo;
+      response.Data["InvoiceDate"] = InvoiceDate
+      yield put(makeGRN_Mode_1ActionSuccess(response))
+    }
+
 
   } catch (error) { yield put(GrnApiErrorAction()) }
 }

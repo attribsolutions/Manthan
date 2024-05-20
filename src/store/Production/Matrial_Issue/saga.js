@@ -68,13 +68,13 @@ function* GoButton_MaterialIssue_listpage_GenFunc({ filters }) {                
       i.ProductionDate = i.MaterialIssueDate
       i.MaterialIssueDate = (`${date} ${time}`)
 
-      if (i.Status === 1) {
+      if (i.Status === 0) {
         i.Status = "Open";
       }
-      else if (i.Status === 2) {
+      else if (i.Status === 1) {
         i.Status = "Partially Completed";
       }
-      else if (i.Status === 3) {
+      else if (i.Status === 2) {
         i.Status = "Completed";
       }
       return i

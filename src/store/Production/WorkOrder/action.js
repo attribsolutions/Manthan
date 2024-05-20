@@ -16,19 +16,6 @@ import {
   WORK_ORDER_API_ERROR_ACTION,
 } from "./actionTypes";
 
-
-
-// get BOMList 
-export const getBOMList = (filters) => ({                                          //Get BOM List filter Api
-  type: GET_BOM_LIST,
-  filters
-});
-
-export const getBOMListSuccess = (data) => ({                                     //Get BOM List filterSuccess Action
-  type: GET_BOM_LIST_SUCCESS,
-  payload: data,
-});
-
 export const postGoButtonForWorkOrder_Master = (jsonbody, btnId) => ({             //post Action For go button
   type: POST_GO_BUTTON_FOR_WORK_ORDER_MASTER,
   jsonbody, btnId
