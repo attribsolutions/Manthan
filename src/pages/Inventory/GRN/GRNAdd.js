@@ -31,7 +31,7 @@ import { goButtonForRate_Master, saveRateMaster } from "../../../store/Administr
 let initialTableData = []
 
 const GRNAdd = (props) => {
-
+  debugger  
     const dispatch = useDispatch();
     const history = useHistory();
     const currentDate_ymd = _cfunc.date_ymd_func();
@@ -124,7 +124,7 @@ const GRNAdd = (props) => {
 
     useEffect(() => {
         if ((items.Status === true) && (items.StatusCode === 200)) {
-            
+
             const grnItems = items.Data
 
             grnItems.OrderItem.forEach((ele, k) => {
@@ -215,7 +215,7 @@ const GRNAdd = (props) => {
         });
         setOrderAmount(sum.toFixed(2))
         dispatch(_act.BreadcrumbShowCountlabel(`Count:${grnItemList.length} ₹ ${sum.toFixed(2)}`));
-      
+
     }
 
     const tableColumnsMode_1 = [
@@ -523,7 +523,7 @@ const GRNAdd = (props) => {
 
     const copybtnOnclick = (r) => {
         const id = r.id
-        
+
         const newArr = []
         let list = [...initialTableData];
 
@@ -569,7 +569,7 @@ const GRNAdd = (props) => {
     }
 
     const saveHandeller = (event) => {
-        
+
         event.preventDefault();
 
         const btnId = event.target.id
@@ -583,7 +583,7 @@ const GRNAdd = (props) => {
             const isvalidMsg = [];
 
             grnItemList.forEach(i => {
-                
+
                 const calculated = orderCalculateFunc(i)// amount calculation function 
 
                 const arr = {
@@ -707,7 +707,7 @@ const GRNAdd = (props) => {
                 GRNItems: GRNItemArray,
                 GRNReferences: openPOdata,
             });
-            
+
             if (pageMode === mode.edit) {
                 returnFunc()
             } else {

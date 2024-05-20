@@ -493,11 +493,12 @@ export const Hide_Invoice_For_GRN_API = ({ InvoiceId, IsHide }) => del(`${url.HI
 
 //Challan API
 export const Challan_get_API = (filter) => post(url.CHALLAN_LIST_BY_FILTERS, filter)
-export const Challan_delete_API = (id) => del(`${url.CHALLAN_SAVE_GRN_LIST}/${id}`)//Delete challan
+export const Challan_delete_API = ({deleteId}) => del(`${url.CHALLAN_SAVE_GRN_LIST}/${deleteId}`)//Delete challan
 export const Challan_Save_API = (data) => post(url.CHALLAN_SAVE_GRN_LIST, data)//Make challan
 export const Challan_Make_API = ({ makeBody }) => post(url.CHALLAN_SAVE_GRN_LIST, makeBody)//Make challan
 export const Challan_items_API = (data) => post(url.CHALLAN_ITEMS, data)//Make challan
 export const Challan_items_Stock_API = (data) => post(url.CHALLAN_ITEMS_STOCK, data)//Make challan
+export const get_Demand_Details_Post_API = ({ jsonBody }) => post(url.GET_DEMAND_DETAILS, jsonBody)
 
 // BOM API
 export const BOM_ListPage_API = (filters) => post(url.BOM_LiST, filters)// get list api
@@ -508,7 +509,6 @@ export const BOM_Delete_API = ({ deleteId }) => del(`${url.BOM}/${deleteId}`)// 
 export const GetItemUnits_For_Dropdown = (data) => post(url.GET_ITEM_UNITS, data)// post api
 
 // Work Order API
-export const BOMList_Get_API = (filters) => post(url.BOM_LiST, filters)// get Items dropdown api
 export const WorkOrder_GoButton_Post_API = (data) => post(url.GO_BUTTON_POST_API_FOR_WORKORDER, data)// go button postapi
 export const Post_WorkOrder_Master_API = ({ jsonBody }) => post(url.POST_WORK_ORDER_API, jsonBody)// post api
 export const WorkOrder_Get_API = (filters) => post(url.WORK_ORDER_LIST, filters)// get list api

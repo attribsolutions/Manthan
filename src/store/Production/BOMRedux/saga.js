@@ -18,7 +18,8 @@ function* get_BOMList_GenFunc({ filters }) {
   try {
     const response = yield call(BOM_ListPage_API, filters);
     let data = response.Data.map((i) => {
-      i.id = `${i.id}/${i.Company}`;
+      i["ID"] = i.id  // use For Dropdown 
+      i.id = `${i.id}/${i.Company}`;  // use For List Page
       var date = date_dmy_func(i.BomDate)
       var time = convertTimefunc(i.CreatedOn)
       i.BomDate = (`${date} ${time}`)
@@ -29,7 +30,7 @@ function* get_BOMList_GenFunc({ filters }) {
 }
 
 function* editBOMListGenFunc({ config }) {
-  
+
   const { btnmode } = config;
   try {
     let response = yield call(BOM_Edit_API, config);

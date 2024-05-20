@@ -3,8 +3,6 @@ import {
   DELETE_WORK_ORDER_LIST_PAGE_SUCCESS,
   EDIT_WORK_ORDER_LIST_ID,
   EDIT_WORK_ORDER_LIST_ID_SUCCESS,
-  GET_BOM_LIST,
-  GET_BOM_LIST_SUCCESS,
   GET_WORK_ORDER_LIST_PAGE,
   GET_WORK_ORDER_LIST_PAGE_SUCCESS,
   POST_GO_BUTTON_FOR_WORK_ORDER_MASTER,
@@ -31,20 +29,6 @@ const INIT_STATE = {
 
 const WorkOrderReducer = (state = INIT_STATE, action) => {
   switch (action.type) {
-
-    // get api
-    case GET_BOM_LIST:
-      return {
-        ...state,
-        loading: true,
-        BOMList: []
-      }
-    case GET_BOM_LIST_SUCCESS:
-      return {
-        ...state,
-        BOMList: action.payload,
-        loading: false,
-      }
 
     // GO Button 
 

@@ -7,7 +7,6 @@ import {
     Col,
     Container,
     FormGroup,
-    Input,
     Label,
     Row,
 } from "reactstrap";
@@ -22,7 +21,6 @@ import {
     getBaseUnit_ForDropDownSuccess,
     get_Party_ForDropDown,
     get_Party_ForDropDown_Success,
-    goButtonForMarginSuccess,
 } from "../../../store/actions";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
@@ -100,6 +98,7 @@ const RateMaster = (props) => {
             dispatch(getBaseUnit_ForDropDownSuccess([]));
             dispatch(get_Party_ForDropDown_Success([]));
             dispatch(priceListByCompay_ActionSuccess([]));
+            dispatch(goButtonForRate_Master_Success([]));
         }
 
     }, []);
@@ -162,15 +161,13 @@ const RateMaster = (props) => {
 
                 values.EffectiveDate = EffectiveDate
                 values.id = id
-
                 hasValid.EffectiveDate.valid = true;
-
                 setState({ values, fieldLabel, hasValid, required, isError })
                 seteditCreatedBy(hasEditVal.CreatedBy)
             }
         }
         else {
-            dispatch(goButtonForRate_Master_Success({ Status: false }))
+            dispatch(goButtonForRate_Master_Success([]))
         }
     }, [])
 
@@ -217,7 +214,6 @@ const RateMaster = (props) => {
                 Type: 1,
                 Status: true,
                 Message: deleteMessage.Message,
-                // AfterResponseAction: getGSTList,
             })
 
         } else if (deleteMessage.Status === true) {
@@ -253,7 +249,7 @@ const RateMaster = (props) => {
         label: data.Name
     }));
 
-    const GoButton_Handler = (event) => {
+    const GoButton_Handler = () => {
 
         if ((values.EffectiveDate === '') || (values.PriceListName === '')) {
             customAlert({
@@ -361,7 +357,6 @@ const RateMaster = (props) => {
         },
 
         {
-
             text: "Unit ",
             dataField: "Unit",
             headerStyle: () => { return { width: '200px' } },
@@ -444,21 +439,6 @@ const RateMaster = (props) => {
                 return
             }
 
-            // const filteredDataWithUnit = filteredData.filter(({ UnitID, ItemName }) => {
-            //     if (UnitID === null) {
-            //         invalidMessages.push({ [ItemName]: alertMessages.unitIsRequired });
-            //         return false;
-            //     }
-            //     return true;
-            // });
-
-            // if (invalidMessages.length > 0) {
-            //     customAlert({
-            //         Type: 4,
-            //         Message: invalidMessages,
-            //     });
-            //     return;
-            // }
             const jsonBody = JSON.stringify(filteredData.map(({ ItemName, ...rest }) => rest));
             dispatch(saveRateMaster(jsonBody));
 
@@ -483,43 +463,6 @@ const RateMaster = (props) => {
                             </CardHeader>
                             <CardBody className=" vh-10 0 text-black" style={{ marginBottom: "4cm" }}>
 
-                                {/* <Card style={{ backgroundColor: "whitesmoke" }} className=" mb-1">
-                                    <CardHeader className="c_card_body"  >
-                                        <Row className="mt-3">
-
-                                            <Col sm={4}>
-                                                <FormGroup className="mb-3 row ">
-                                                    <Label className="col-md-6 p-2" style={{ width: "2.9cm" }}>{fieldLabel.EffectiveDate}</Label>
-                                                    <Col sm={8}>
-                                                        <C_DatePicker
-                                                            id="EffectiveDate"
-                                                            name="EffectiveDate"
-                                                            placeholder={"DD/MM/YYYY"}
-                                                            value={values.EffectiveDate}
-                                                            isDisabled={pageMode === mode.edit ? true : false}
-                                                            onChange={(y, v, e) => {
-                                                                onChangeDate({ e, v, state, setState })
-                                                            }}
-                                                            options={{
-                                                                minDate: "today",
-                                                                altInput: true,
-                                                                altFormat: "d-m-Y",
-                                                                dateFormat: "Y-m-d",
-                                                            }}
-                                                        />
-                                                        {isError.EffectiveDate.length > 0 && (
-                                                            <span className="invalid-feedback">{isError.EffectiveDate}</span>
-                                                        )}
-                                                    </Col>
-                                                </FormGroup>
-                                            </Col>
-                                            <Col sm={1}>
-                                                <Go_Button onClick={(event) => { GoButton_Handler(event) }} loading={listBtnLoading} />
-                                            </Col>
-                                        </Row>
-                                    </CardHeader>
-                                </Card> */}
-
                                 <Card style={{ backgroundColor: "whitesmoke" }} className=" mb-1">
                                     <CardHeader className="c_card_body"  >
                                         <Row className="mt-3">
@@ -531,7 +474,7 @@ const RateMaster = (props) => {
                                                             name="PriceListName"
                                                             value={values.PriceListName}
                                                             options={PriceList_DropdownOptions}
-                                                            isDisabled={pageMode === mode.edit ? true : false}
+                                                            isDisabled={(tableData.length > 0)}
                                                             isSearchable={true}
                                                             autoFocus={true}
                                                             styles={{
@@ -540,7 +483,7 @@ const RateMaster = (props) => {
                                                             placeholder="select"
                                                             onChange={(hasSelect, evn) => {
                                                                 onChangeSelect({ hasSelect, evn, state, setState, })
-                                                                dispatch(Breadcrumb_inputName(hasSelect.label))
+                                                                // dispatch(Breadcrumb_inputName(hasSelect.label))
                                                             }}
                                                             classNamePrefix="dropdown"
                                                         />
@@ -560,7 +503,7 @@ const RateMaster = (props) => {
                                                             value={values.PartyName}
                                                             id={"PartyName"}
                                                             options={PartyTypeDropdown_Options}
-                                                            isDisabled={pageMode === mode.edit ? true : false}
+                                                            isDisabled={(tableData.length > 0)}
                                                             isSearchable={true}
                                                             isLoading={partyDropLoading}
                                                             styles={{
@@ -585,7 +528,7 @@ const RateMaster = (props) => {
                                                             name="EffectiveDate"
                                                             placeholder={"DD/MM/YYYY"}
                                                             value={values.EffectiveDate}
-                                                            isDisabled={pageMode === mode.edit ? true : false}
+                                                            isDisabled={(tableData.length > 0)}
                                                             onChange={(y, v, e) => {
                                                                 onChangeDate({ e, v, state, setState })
                                                             }}
@@ -604,8 +547,13 @@ const RateMaster = (props) => {
                                             <Col sm={1}>
                                                 {
                                                     !(tableData.length > 0) ?
-                                                        <Go_Button onClick={(event) => { GoButton_Handler(event) }} loading={listBtnLoading} />
-                                                        : <Change_Button onClick={() => { dispatch(goButtonForMarginSuccess([])) }} />}
+                                                        <Go_Button
+                                                            loading={listBtnLoading}
+                                                            onClick={(event) => { GoButton_Handler(event) }}
+                                                        />
+                                                        : <Change_Button onClick={() => {
+                                                            dispatch(goButtonForRate_Master_Success([]))
+                                                        }} />}
                                             </Col>
                                         </Row>
                                     </CardHeader>

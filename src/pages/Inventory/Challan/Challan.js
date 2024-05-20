@@ -27,14 +27,16 @@ import {
     challanItemForDropdown,
     GoButtonForChallanAdd,
     GoButtonForChallanAddSuccess,
-    saveChallan_ChallanAdd
+    saveChallan_ChallanAdd,
+    saveChallan_ChallanAddSuccess
 } from "../../../store/Inventory/ChallanRedux/actions";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { orderCalculateFunc } from "../../Purchase/Order/OrderPageCalulation";
 import * as _cfunc from "../../../components/Common/CommonFunction";
-import { C_DatePicker } from "../../../CustomValidateForm";
+import { CInput, C_DatePicker, decimalRegx } from "../../../CustomValidateForm";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
+import { makeGRN_Mode_1ActionSuccess } from "../../../store/actions";
 
 const Challan = (props) => {
 
@@ -55,6 +57,9 @@ const Challan = (props) => {
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState('');
     const [showAllStockState, setShowAllStockState] = useState(true);
+    const [tableData, setTableData] = useState([]);
+    const [customerID, setCustomerID] = useState("");
+
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
@@ -64,7 +69,8 @@ const Challan = (props) => {
         userAccess,
         GoButton = [],
         vender,
-        challanitems
+        challanitems,
+        GRNitem
     } = useSelector((state) => ({
         challanitems: state.ChallanReducer.challanitems,
         GoButton: state.ChallanReducer.GoButton,
@@ -72,6 +78,7 @@ const Challan = (props) => {
         postMsg: state.ChallanReducer.postMsg,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
+        GRNitem: state.GRNReducer.GRNitem,
     }));
 
     const location = { ...history.location }
@@ -83,12 +90,14 @@ const Challan = (props) => {
     const { fieldLabel } = state;
 
     useEffect(() => {
-        const jsonBody = JSON.stringify({
-            Company: _cfunc.loginCompanyID()
-        });
-        dispatch(challanItemForDropdown(jsonBody))
-        dispatch(GetVender())
-        dispatch(GoButtonForChallanAddSuccess([]))
+        // const jsonBody = JSON.stringify({
+        //     Company: _cfunc.loginCompanyID()
+        // });
+        // dispatch(challanItemForDropdown(jsonBody))
+        // dispatch(GetVender())
+        // dispatch(GoButtonForChallanAddSuccess([]))
+        dispatch(makeGRN_Mode_1ActionSuccess({ Status: false }))
+        dispatch(saveChallan_ChallanAddSuccess({ Status: false }))
     }, [])
 
     // userAccess useEffect
@@ -120,6 +129,7 @@ const Challan = (props) => {
 
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
+
         if ((hasShowloction || hasShowModal)) {
 
             let hasEditVal = null
@@ -148,6 +158,8 @@ const Challan = (props) => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
 
+            dispatch(saveChallan_ChallanAddSuccess({ Status: false }))
+            setTableData([]);
             if (pageMode === mode.dropdownAdd) {
                 customAlert({
                     Type: 1,
@@ -173,16 +185,17 @@ const Challan = (props) => {
         }
     }, [postMsg])
 
-    useEffect(() => _cfunc.tableInputArrowUpDounFunc("#table_Arrow"), [GoButton]);
+    useEffect(() => {
 
-    const venderOptions = vender.map((i) => ({
-        value: i.id,
-        label: i.Name,
-    }));
-    const ItemsOption = challanitems.map((i) => ({
-        value: i.id,
-        label: i.Name,
-    }));
+        if (GRNitem.Status === true && GRNitem.StatusCode === 200) {
+
+            const { DemandItemDetails, CustomerID } = GRNitem.Data
+            setCustomerID(CustomerID)
+            setTableData(DemandItemDetails)
+        }
+    }, [GRNitem])
+
+    useEffect(() => _cfunc.tableInputArrowUpDounFunc("#table_Arrow"), [tableData]);
 
     const pagesListColumns = [
 
@@ -197,9 +210,9 @@ const Challan = (props) => {
 
                 return (
                     <>
-                        <div><samp id={`ItemName${index1.id}`}>{values.Item.label}</samp></div>
-                        {(index1.StockInValid) ? <div><samp id={`StockInvalidMsg${index1.id}`} style={{ color: "red" }}> {index1.StockInvalidMsg}</samp></div>
-                            : <></>}
+                        <div><samp id={`ItemName${index1.id}`}>{index1.ItemName}</samp></div>
+                        {/* {(index1.StockInValid) ? <div><samp id={`StockInvalidMsg${index1.id}`} style={{ color: "red" }}> {index1.StockInvalidMsg}</samp></div>
+                            : <></>} */}
                     </>
                 )
             },
@@ -212,16 +225,26 @@ const Challan = (props) => {
                 return (
                     <div className="width-60">Quantity</div>)
             },
-            formatter: (cellContent, user) => (
-                <div >
-                    <Input type="text"
-                        style={{ textAlign: "right" }}
-                        placeholder="Enter Quantity"
-                        onChange={(event) => orderQtyOnChange(event, user)}
-                    ></Input>
-                </div>
+            formatter: (cellContent, user) => {
+                
+                return (<>
+                    <div >
+                        <CInput
+                            type="text"
+                            cpattern={decimalRegx}
+                            style={{ textAlign: "right" }}
+                            placeholder="Enter Quantity"
+                            defaultValue={user.Quantity}
+                            // onChange={(event) => orderQtyOnChange(event, user)}
+                            onChange={(event) => {
+                                
+                                user.Quantity = event.target.value
+                            }}
+                        />
+                    </div></>)
+            }
 
-            )
+
         },
 
         {//***************StockDetails********************************************************************* */
@@ -317,187 +340,139 @@ const Challan = (props) => {
         },
     ];
 
-    const pageOptions = {
-        sizePerPage: 10,
-        custom: true,
-    };
-
     function ChallanDateOnchange(y, v, e) {
         onChangeDate({ e, v, state, setState })
     };
 
-    function partyOnChange(hasSelect, evn) {
-        setState((i) => {
-            const v1 = { ...i }
-            v1.values.Party = hasSelect
-            v1.hasValid.Party.valid = true
-            return v1
-        })
-        dispatch(GoButtonForChallanAddSuccess([]))
-    };
-    
-    function itemOnChange(hasSelect, evn) {
+    // function stockDistributeFunc(index) {
 
-        setState((i) => {
-            const v1 = { ...i }
-            v1.values.Item = hasSelect
-            v1.hasValid.Item.valid = true
-            return v1
-        })
-        dispatch(GoButtonForChallanAddSuccess([]))
-    };
+    //     const v1 = index.Quantity;
+    //     let orderqty = Number(v1) * Number(index.ConversionUnit);
 
-    function stockDistributeFunc(index) {
+    //     index.StockDetails = index.StockDetails.map(i2 => {
 
-        const v1 = index.Quantity;
-        let orderqty = Number(v1) * Number(index.ConversionUnit);
+    //         let stockqty = Number(i2.BaseUnitQuantity);
 
-        index.StockDetails = index.StockDetails.map(i2 => {
+    //         if ((orderqty > stockqty) && !(orderqty === 0)) {
+    //             orderqty = orderqty - stockqty
+    //             i2.Qty = stockqty.toFixed(3)
+    //         } else if ((orderqty <= stockqty) && (orderqty > 0)) {
+    //             i2.Qty = orderqty.toFixed(3)
+    //             orderqty = 0
+    //         }
+    //         else {
+    //             i2.Qty = 0;
+    //         }
+    //         try {
+    //             document.getElementById(`batchQty${index.id}-${i2.id}`).value = i2.Qty
+    //         } catch (e) { }
+    //         return i2
+    //     });
 
-            let stockqty = Number(i2.BaseUnitQuantity);
+    //     const t1 = (v1 * index.ConversionUnit);
+    //     const t2 = index.StockUnit;
+    //     const t3 = index.StockTotal;
 
-            if ((orderqty > stockqty) && !(orderqty === 0)) {
-                orderqty = orderqty - stockqty
-                i2.Qty = stockqty.toFixed(3)
-            } else if ((orderqty <= stockqty) && (orderqty > 0)) {
-                i2.Qty = orderqty.toFixed(3)
-                orderqty = 0
-            }
-            else {
-                i2.Qty = 0;
-            }
-            try {
-                document.getElementById(`batchQty${index.id}-${i2.id}`).value = i2.Qty
-            } catch (e) { }
-            return i2
-        });
+    //     if (t1 > t3) {
+    //         try {
+    //             document.getElementById(`OrderQty${index.id}`).value = t3.toFixed(3)
+    //         } catch (e) { }
+    //     };
+    //     try {
+    //         index.StockInValid = false
+    //         index.StockInvalidMsg = null
+    //         document.getElementById(`StockInvalidMsg${index.id}`).style.display = "none";
+    //     } catch (e) { };
+    //     try {
+    //         document.getElementById(`stocktotal${index.id}`).innerText = `Total:${t1} ${t2}`
+    //     } catch (e) { };
 
-        const t1 = (v1 * index.ConversionUnit);
-        const t2 = index.StockUnit;
-        const t3 = index.StockTotal;
+    // };
 
-        if (t1 > t3) {
-            try {
-                document.getElementById(`OrderQty${index.id}`).value = t3.toFixed(3)
-            } catch (e) { }
-        };
-        try {
-            index.StockInValid = false
-            index.StockInvalidMsg = null
-            document.getElementById(`StockInvalidMsg${index.id}`).style.display = "none";
-        } catch (e) { };
-        try {
-            document.getElementById(`stocktotal${index.id}`).innerText = `Total:${t1} ${t2}`
-        } catch (e) { };
+    // function orderQtyOnChange(event, index) {
 
-    };
+    //     let input = event.target.value
+    //     let result = /^\d*(\.\d{0,3})?$/.test(input);
 
-    function orderQtyOnChange(event, index) {
-
-        let input = event.target.value
-        let result = /^\d*(\.\d{0,3})?$/.test(input);
-
-        setState((i) => {
-            const v1 = { ...i }
-            v1.values.Quantity = input
-            return v1
-        })
-        stockDistributeFunc(index)
-    };
-
-    function goButtonHandler(event) {
-
-        const validMsg = []
-        if (!(values.Item.value)) {
-            validMsg.push({ Item: "Please Select Item" })
-        };
-        if (!(values.Party.value)) {
-            validMsg.push({ Party: alertMessages.commonPartySelectionIsRequired })
-        };
-        if (validMsg.length > 0) {
-            customAlert({
-                Type: 3,
-                Message: validMsg
-            })
-            return
-        } else {
-            const jsonBody = JSON.stringify({
-                Party: _cfunc.loginPartyID(),
-                Item: values.Item.value
-            });
-            dispatch(GoButtonForChallanAdd(jsonBody));
-        }
-    };
+    //     setState((i) => {
+    //         const v1 = { ...i }
+    //         v1.values.Quantity = input
+    //         return v1
+    //     })
+    //     stockDistributeFunc(index)
+    // };
 
     const saveHandeller = (e,) => {
         const itemArr = []
         let grand_total = 0;
 
-        const isvalidMsg = [];
+        tableData.forEach(tableIndex => {
+            
+            tableIndex.StockDetails.forEach(stockIndex => {
+                
+                stockIndex["Quantity"] = parseFloat(values.Quantity);
 
-        GoButton[0].StockDetails.forEach(i => {
-            i["Quantity"] = values.Quantity
-
-            const calculate = orderCalculateFunc(i)// amount calculation function 
-
-            grand_total = grand_total + Number(calculate.roundedTotalAmount)
-            const arr = {
-                Item: values.Item.value,
-                Quantity: values.Quantity,
-                Unit: i.UnitName.id,
-                BaseUnitQuantity: i.BaseUnitQuantity,
-                MRP: i.MRP,
-                ReferenceRate: "100.00",
-                Rate: i.Rate,
-                BasicAmount: calculate.basicAmount,
-                TaxType: "GST",
-                GST: i.GST,
-                GSTPercentage: i.GSTPercentage,
-                HSNCode: i.HSNCode,
-                GSTAmount: calculate.roundedGstAmount,
-                Amount: calculate.roundedTotalAmount,
-                DiscountType: "0",
-                Discount: "0.00",
-                DiscountAmount: "0.00",
-                CGST: calculate.CGST_Amount,
-                SGST: calculate.SGST_Amount,
-                IGST: 0,
-                CGSTPercentage: (i.GSTPercentage / 2),
-                SGSTPercentage: (i.GSTPercentage / 2),
-                IGSTPercentage: 0,
-                BatchDate: i.BatchDate,
-                BatchCode: i.BatchCode,
-                SystemBatchDate: i.SystemBatchDate,
-                SystemBatchCode: i.SystemBatchCode,
-                BatchID: i.id,
-            }
-            if ((i.GSTPercentage > 0)) {
-                itemArr.push(arr)
-            }
-
-        })
-
-        if (isvalidMsg.length > 0) {
-            customAlert({
-                Type: 3,
-                Message: isvalidMsg,
-            })
-            return
-        }
-        const jsonBody = JSON.stringify({
-            GRN: "",
-            ChallanDate: values.ChallanDate,
-            Party: _cfunc.loginPartyID(),
-            GrandTotal: grand_total,
-            Customer: values.Party.value,
-            CreatedBy: _cfunc.loginUserID(),
-            UpdatedBy: _cfunc.loginUserID(),
-            RoundOffAmount: Math.round(grand_total),
-            ChallanItems: itemArr,
-
+                const calculate = orderCalculateFunc(stockIndex); // amount calculation function
+                
+                grand_total += Number(calculate.roundedTotalAmount);
+                const arr = {
+                    Item: tableIndex.Item,
+                    Quantity: tableIndex.Quantity,
+                    Unit: tableIndex.Unit, // Updated to correctly access unit
+                    BaseUnitQuantity: stockIndex.BaseUnitQuantity,
+                    ReferenceRate: "100.00",
+                    Rate: stockIndex.Rate,
+                    BasicAmount: calculate.basicAmount,
+                    TaxType: "GST",
+                    GST: tableIndex.GST,
+                    GSTPercentage: stockIndex.GSTPercentage,
+                    HSNCode: stockIndex.HSNCode,
+                    GSTAmount: calculate.roundedGstAmount,
+                    Amount: calculate.roundedTotalAmount,
+                    DiscountType: "0",
+                    Discount: "0.00",
+                    DiscountAmount: "0.00",
+                    CGST: calculate.CGST_Amount,
+                    SGST: calculate.SGST_Amount,
+                    IGST: "0.00",
+                    CGSTPercentage: (tableIndex.CGSTPercentage / 2).toFixed(2),
+                    SGSTPercentage: (tableIndex.SGSTPercentage / 2).toFixed(2),
+                    IGSTPercentage: "0.00",
+                    BatchDate: stockIndex.BatchDate,
+                    BatchCode: stockIndex.BatchCode,
+                    SystemBatchDate: stockIndex.SystemBatchDate,
+                    SystemBatchCode: stockIndex.SystemBatchCode,
+                    BatchID: stockIndex.LiveBatche_id
+                };
+                if (parseFloat(tableIndex.Quantity) > 0) {
+                    itemArr.push(arr);
+                }
+            });
         });
 
-        dispatch(saveChallan_ChallanAdd(jsonBody))
+        if (itemArr.length === 0) {
+            customAlert({
+                Type: 3,
+                Message: alertMessages.itemQtyIsRequired
+            })
+            return;
+        }
+        else {
+            const jsonBody = JSON.stringify({
+                GRN: "",
+                ChallanDate: values.ChallanDate,
+                Party: _cfunc.loginSelectedPartyID(),
+                GrandTotal: grand_total,
+                Customer: customerID,
+                CreatedBy: _cfunc.loginUserID(),
+                UpdatedBy: _cfunc.loginUserID(),
+                RoundOffAmount: Math.round(grand_total),
+                ChallanItems: itemArr,
+
+            });
+
+            dispatch(saveChallan_ChallanAdd(jsonBody))
+        }
     }
 
     if (!(userPageAccessState === '')) {
@@ -519,127 +494,58 @@ const Challan = (props) => {
                                                     name="ChallanDate"
                                                     value={values.ChallanDate}
                                                     id="myInput11"
-                                                    disabled={(GoButton.length > 0 || pageMode === "edit") ? true : false}
+                                                    disabled={true}
                                                     onChange={ChallanDateOnchange}
                                                 />
-                                                {isError.ChallanDate.length > 0 && (
-                                                    <span className="invalid-feedback">{isError.ChallanDate}</span>
-                                                )}
                                             </Col>
                                         </FormGroup>
                                     </Col>
 
-                                    <Col sm={3}>
-                                        <FormGroup className="row mt-2 mb-3 ">
-                                            <Label className="mt-2" style={{ width: "80px" }}> Party </Label>
-                                            <Col sm={8}>
-                                                <Select
-                                                    name="Customer"
-                                                    value={values.Party}
-                                                    isSearchable={true}
-                                                    isDisabled={GoButton.length > 0 ? true : false}
-                                                    id={'customerselect'}
-                                                    className="react-dropdown"
-                                                    classNamePrefix="dropdown"
-                                                    options={venderOptions}
-                                                    onChange={partyOnChange}
-                                                    styles={{
-                                                        menu: provided => ({ ...provided, zIndex: 2 })
-                                                    }}
-                                                />
-                                                {isError.Party.length > 0 && (
-                                                    <span className="text-danger f-8"><small>{isError.Party}</small></span>
-                                                )}
-                                            </Col>
-                                        </FormGroup>
-                                    </Col >
-                                    <Col sm={3}>
-                                        <FormGroup className="row mt-2 mb-3 ">
-                                            <Label className="mt-2" style={{ width: "80px" }}> Item </Label>
-                                            <Col sm={8} >
-                                                <Select
-                                                    name="Item"
-                                                    value={values.Item}
-                                                    isSearchable={true}
-                                                    id={'customerselect'}
-                                                    className="react-dropdown"
-                                                    classNamePrefix="dropdown"
-                                                    options={ItemsOption}
-                                                    onChange={itemOnChange}
-                                                    styles={{
-                                                        menu: provided => ({ ...provided, zIndex: 2 })
-                                                    }}
-
-                                                />
-                                                {isError.Item.length > 0 && (
-                                                    <span className="text-danger f-8"><small>{isError.Item}</small></span>
-                                                )}
-                                            </Col>
-                                        </FormGroup>
-                                    </Col >
-                                    <Col sm={2} className="mt-2">
-                                        {pageMode === mode.defaultsave ?
-                                            (GoButton.length === 0) ?
-                                                < Go_Button onClick={(e) => goButtonHandler()} />
-                                                :
-                                                <Change_Button onClick={(e) => dispatch(GoButtonForChallanAddSuccess([]))} />
-                                            : null
-                                        }
-                                    </Col>
                                 </Col>
                             </Row>
                         </Col>
-                        <PaginationProvider pagination={paginationFactory(pageOptions)}>
-                            {({ paginationProps, paginationTableProps }) => (
-                                <ToolkitProvider
-                                    keyField={"id"}
-                                    data={GoButton}
-                                    columns={pagesListColumns}
-                                    search
-                                >
-                                    {(toolkitProps) => (
-                                        <React.Fragment>
-                                            <Row>
-                                                <Col xl="12">
-                                                    <div className="table-responsive">
-                                                        <BootstrapTable
-                                                            keyField={"id"}
-                                                            id="table_Arrow"
-                                                            responsive
-                                                            bordered={false}
-                                                            striped={false}
-                                                            classes={"table  table-bordered"}
-                                                            noDataIndication={
-                                                                <div className="text-danger text-center ">
-                                                                    Items Not available
-                                                                </div>
-                                                            }
-                                                            {...toolkitProps.baseProps}
-                                                            {...paginationTableProps}
-                                                        />
-                                                    </div>
-                                                </Col>
-                                            </Row>
-                                            <Row className="align-items-md-center mt-30">
-                                                <Col className="pagination pagination-rounded justify-content-end mb-2">
-                                                    <PaginationListStandalone {...paginationProps} />
-                                                </Col>
-                                            </Row>
-                                        </React.Fragment>
-                                    )}
-                                </ToolkitProvider>
+
+                        <ToolkitProvider
+                            keyField={"id"}
+                            data={tableData}
+                            columns={pagesListColumns}
+                            search
+                        >
+                            {(toolkitProps) => (
+                                <React.Fragment>
+                                    <Row>
+                                        <Col xl="12">
+                                            <div className="table-responsive">
+                                                <BootstrapTable
+                                                    keyField={"id"}
+                                                    id="table_Arrow"
+                                                    responsive
+                                                    bordered={false}
+                                                    striped={false}
+                                                    classes={"table  table-bordered"}
+                                                    noDataIndication={
+                                                        <div className="text-danger text-center ">
+                                                            Items Not available
+                                                        </div>
+                                                    }
+                                                    {...toolkitProps.baseProps}
+
+                                                />
+                                            </div>
+                                        </Col>
+                                    </Row>
+
+                                </React.Fragment>
                             )}
+                        </ToolkitProvider>
 
-                        </PaginationProvider>
-
-                        {GoButton.length > 0 &&
-                            <SaveButtonDraggable>
-                                <SaveButton pageMode={pageMode}
-                                    onClick={saveHandeller}
-                                    id={saveBtnid}
-                                    userAcc={userPageAccessState}
-                                />
-                            </SaveButtonDraggable>}
+                        <SaveButtonDraggable>
+                            <SaveButton pageMode={pageMode}
+                                onClick={saveHandeller}
+                                id={saveBtnid}
+                                userAcc={userPageAccessState}
+                            />
+                        </SaveButtonDraggable>
                     </form>
                 </div>
             </React.Fragment>

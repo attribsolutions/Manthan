@@ -103,7 +103,13 @@ const ChallanList = () => {
             OrderIDs: list[0].id.toString(),
             Mode: 2 // mode when challan to make GRN
         })
-        dispatch(makeGRN_Mode_1Action({ jsonBody, pageMode: mode.modeSTPsave, grnRef, path: url.GRN_ADD_1, challanNo }))
+        dispatch(makeGRN_Mode_1Action({
+            jsonBody,
+            pageMode: mode.modeSTPsave,
+            grnRef,
+            // path: url.GRN_ADD_1,
+            challanNo
+        }))
     };
 
     function goButtonHandler() {
@@ -211,7 +217,7 @@ const ChallanList = () => {
                             makeBtnFunc={makeBtnFunc}
                             ButtonMsgLable={"challan"}
                             makeBtnName={"Make GRN"}
-                            deleteName={"FullGRNNumber"}
+                            deleteName={"FullChallanNumber"}
                             MasterModal={Challan}
                         />
                         : null

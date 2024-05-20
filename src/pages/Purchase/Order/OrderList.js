@@ -422,6 +422,17 @@ const OrderList = () => {
                 btnId
             }));
         }
+        else if (subPageMode === url.IB_ORDER_SO_LIST) {
+            dispatch(_act.makeGRN_Mode_1Action({
+                jsonBody: { "DemandDate": obj.OrderDate, "Party": obj.CustomerID, "DemandID": (obj.id).toString() },
+                path: url.CHALLAN,
+                pageMode: mode.defaultsave,
+                customer,
+                btnId,
+                subPageMode: subPageMode
+
+            }));
+        }
         else if (orderList4_or_app_orderList) {
             dispatch(_act.GoButtonForinvoiceAdd({
                 jsonBody,

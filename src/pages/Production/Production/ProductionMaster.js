@@ -26,13 +26,12 @@ import {
     getUnitIDForProdunctionSuccess,
     Save_Production,
     Save_ProductionSuccess,
-    update_ProductionIdSuccess
 } from "../../../store/Production/ProductionRedux/actions";
-import { getMaterialIssueListPage } from "../../../store/Production/Matrial_Issue/action";
+import { getMaterialIssueListPage, getMaterialIssueListPageSuccess } from "../../../store/Production/Matrial_Issue/action";
 import * as pageId from "../../../routes/allPageID";
 import * as url from "../../../routes/route_url";
 import * as mode from "../../../routes/PageMode";
-import { C_DatePicker } from "../../../CustomValidateForm";
+import { CInput, C_DatePicker, decimalRegx, onlyNumberRegx } from "../../../CustomValidateForm";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
@@ -63,8 +62,8 @@ const ProductionMaster = (props) => {
     const [state, setState] = useState(initialFiledFunc(fileds))
     const [batchDate, setBatchDate] = useState("")
 
-    const [itemDropDisabled, setItemDropDisabled] = useState(false)
-
+    const [originalValues, setOriginalValues] = useState({ orignalNumberOfLot: 0, orignalEstimatedQty: 0 });
+    const [allFieldsEnabled, setAllFieldsEnabled] = useState(false);
 
     const {
         postMsg,
@@ -86,7 +85,15 @@ const ProductionMaster = (props) => {
     useEffect(() => {
         dispatch(getUnitIDForProdunctionSuccess([]))
         dispatch(commonPageFieldSuccess(null));
-        dispatch(commonPageField(pageId.PRODUCTION_LIST))
+        dispatch(commonPageField(pageId.PRODUCTION_LIST));
+        const jsonBody = JSON.stringify({
+            FromDate: "2022-11-01", //fromdate hard code value is compulsory
+            ToDate: currentDate_ymd,
+        });
+        dispatch(getMaterialIssueListPage(jsonBody));
+        return () => {
+            dispatch(getMaterialIssueListPageSuccess([]))
+        }
     }, []);
 
     const location = { ...history.location }
@@ -99,7 +106,7 @@ const ProductionMaster = (props) => {
 
     useEffect(() => {
         if ((hasShowloction || hasShowModal)) {
-
+            setAllFieldsEnabled(true)
             let hasEditVal = null
             let insidePageMode = null;
             if (hasShowloction) {
@@ -122,14 +129,17 @@ const ProductionMaster = (props) => {
                     NumberOfLot = 0, ActualQuantity = '',
                     ProductionDate = currentDate_ymd } = hasEditVal;
 
-                setUnitNamefromPageMod_2(UnitName)
-                setBatchDate(ProductionDate)
+                setUnitNamefromPageMod_2(UnitName);
+                setBatchDate(ProductionDate);
+                setOriginalValues({ orignalNumberOfLot: NumberOfLot, orignalEstimatedQty: EstimatedQuantity })
+
                 setState(ele => {
                     const i = { ...ele };
 
                     i.values.ItemName = {
                         label: ItemName,
-                        value: Item
+                        value: Item,
+                        ItemID: Item
                     }
                     i.values.UnitName = {
                         label: UnitName,
@@ -146,7 +156,6 @@ const ProductionMaster = (props) => {
                     i.values.Remark = Remark;
 
                     i.hasValid.id.valid = true
-                    // i.hasValid.ActualQuantity.valid = true
                     i.hasValid.ProductionDate.valid = true
                     i.hasValid.ItemName.valid = true
                     i.hasValid.EstimatedQuantity.valid = true
@@ -164,13 +173,6 @@ const ProductionMaster = (props) => {
                     dispatch(edit_ProductionIdSuccess({ Status: false }))
                 }
             }
-
-        } else {
-            const jsonBody = JSON.stringify({
-                FromDate: "2022-11-01", //from datehardrd code value is compulsory
-                ToDate: currentDate_ymd,
-            });
-            dispatch(getMaterialIssueListPage(jsonBody));
         }
     }, []);
 
@@ -231,90 +233,41 @@ const ProductionMaster = (props) => {
 
     const ItemDropdown_Options = itemsDrop.map((index) => ({
         id: index.id,
-        value: index.Item,
+        value: index.id,
         label: index.ItemName,
+        ItemID: index.Item,
         EstimatedQuantity: index.LotQuantity,
         NumberOfLot: index.NumberOfLot,
         Unit: { value: index.Unit, label: index.UnitName },
         ProductionDate: index.ProductionDate
     }));
 
-    const SaveHandler = async (event) => {
-
-        event.preventDefault();
-        const btnId = event.target.id;
-        const dateString = currentDate_ymd.replace(/-/g, ""); // Convert date To DateString 
-        let newBatchCode = `${dateString}_${values.ItemName.value}_${_cfunc.loginSelectedPartyID()}_`;
-        try {
-            if (formValid(state, setState)) {
-
-                btnIsDissablefunc({ btnId, state: true })
-                const jsonBody = JSON.stringify({
-                    ProductionMaterialIssue: [
-                        {
-                            MaterialIssue: values.id
-                        }
-                    ],
-                    ProductionDate: currentDate_ymd,
-                    EstimatedQuantity: values.EstimatedQuantity,
-                    NumberOfLot: values.NumberOfLot,
-                    ActualQuantity: parseFloat(values.ActualQuantity).toFixed(3),
-                    BatchDate: batchDate,
-                    StoreLocation: "21313",
-                    PrintedBatchCode: values.PrintedBatchCode,
-                    BestBefore: values.BestBefore,
-                    Remark: values.Remark,
-                    CreatedBy: loginUserID(),
-                    UpdatedBy: loginUserID(),
-                    Company: loginCompanyID(),
-                    Division: _cfunc.loginSelectedPartyID(),
-                    Unit: values.UnitName.value,
-                    Item: values.ItemName.value,
-                });
-
-                dispatch(Save_Production({ jsonBody, btnId }));
-            }
-        } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
-    };
-
     function changeButtonHandler() {
-        dispatch(getUnitIDForProdunctionSuccess([]));
-        setItemDropDisabled(false);
-
-        setState((i) => {
-            let a = { ...i };
-            a.values.id = ""
-            a.values.ItemName = "";
-            a.values.UnitName = "";
-            a.values.NumberOfLot = "";
-            a.values.EstimatedQuantity = "";
-            a.hasValid.NumberOfLot.valid = true;
-            a.hasValid.ItemName.valid = false;
-            a.hasValid.EstimatedQuantity.valid = true;
-            a.hasValid.UnitName.valid = true;
-            return a;
-        });
+        setAllFieldsEnabled(false)
     }
 
     function ItemNameOnChangeHandler(hasSelect, evn) {
+        
+        setAllFieldsEnabled(true)
+        setOriginalValues({ orignalNumberOfLot: hasSelect.NumberOfLot, orignalEstimatedQty: hasSelect.EstimatedQuantity })
 
-        setItemDropDisabled(true);
         const jsonBody = JSON.stringify({
             Item: hasSelect.value
         });
         dispatch(getUnitIDForProdunction(jsonBody));
-        setBatchDate(hasSelect.ProductionDate)
+        setBatchDate(hasSelect.ProductionDate);
+
         setState((i) => {
             let a = { ...i };
             a.values.id = hasSelect.id
-            a.values.ItemName = { label: hasSelect.label, value: hasSelect.value };
+            a.values.ItemName = { label: hasSelect.label, value: hasSelect.value, ItemID: hasSelect.ItemID };
             a.values.UnitName = hasSelect.Unit;
             a.values.NumberOfLot = hasSelect.NumberOfLot;
             a.values.EstimatedQuantity = hasSelect.EstimatedQuantity;
             a.hasValid.NumberOfLot.valid = true;
             a.hasValid.ItemName.valid = true;
             a.hasValid.EstimatedQuantity.valid = true;
-            a.hasValid.UnitName.valid = true;
+            a.hasValid.UnitName.valid = false;
             return a;
         });
     }
@@ -334,6 +287,101 @@ const ProductionMaster = (props) => {
             </components.Option>
         );
     };
+
+    function NumberOfLotOnChange(event) {
+
+        let input = event.trim(); // Remove leading and trailing whitespace
+        let remainingQuantity = 0
+        if (input === "" || isNaN(input)) {
+            input = 0;
+        }
+
+        if (parseFloat(input) > originalValues.orignalNumberOfLot) {
+            input = originalValues.orignalNumberOfLot;
+        }
+        remainingQuantity = ((parseFloat(originalValues.orignalEstimatedQty) / originalValues.orignalNumberOfLot) * parseFloat(input)).toFixed(2)
+
+        if (remainingQuantity === "" || isNaN(remainingQuantity)) {
+            remainingQuantity = 0;
+        }
+        setState((i) => {
+            let a = { ...i };
+            a.values.NumberOfLot = input;
+            a.hasValid.NumberOfLot.valid = true;
+            a.values.EstimatedQuantity = remainingQuantity;
+            a.hasValid.EstimatedQuantity.valid = true;
+            return a;
+        });
+    }
+
+    let isActionPermitted = false; // Flag variable to track permission
+
+    const SaveHandler = async (event) => {
+
+        event.preventDefault();
+        const btnId = event.target.id;
+        let jsonBody
+        try {
+            
+            if (!isActionPermitted && formValid(state, setState)) { // Check if action is not already permitted
+                btnIsDissablefunc({ btnId, state: true });
+                jsonBody = JSON.stringify({
+                    ProductionMaterialIssue: [
+                        {
+                            MaterialIssue: values.id
+                        }
+                    ],
+                    ProductionDate: currentDate_ymd,
+                    EstimatedQuantity: values.EstimatedQuantity,
+                    NumberOfLot: values.NumberOfLot,
+                    ActualQuantity: parseFloat(values.ActualQuantity).toFixed(3),
+                    BatchDate: batchDate,
+                    StoreLocation: "21313",
+                    PrintedBatchCode: values.PrintedBatchCode,
+                    BestBefore: values.BestBefore,
+                    Remark: values.Remark,
+                    CreatedBy: loginUserID(),
+                    UpdatedBy: loginUserID(),
+                    Company: loginCompanyID(),
+                    Division: _cfunc.loginSelectedPartyID(),
+                    Unit: values.UnitName.value,
+                    Item: values.ItemName.ItemID,
+                });
+
+                const originalEstimatedQty = parseFloat(values.EstimatedQuantity);
+                const actualQuantity = parseFloat(values.ActualQuantity);
+                
+                const percentageDecrease = parseFloat((1 - actualQuantity / originalEstimatedQty) * 100).toFixed(2);
+                let message;
+                let isPermission
+                if (parseFloat(percentageDecrease) > 50) {
+                    message = `Actual Quantity is 50% Lower than Estimated Quantity.`;
+                    isPermission = await customAlert({
+                        Type: 8,
+                        Message: message,
+                    });
+                } else if (parseFloat(percentageDecrease) < -50) {
+                    message = `Actual Quantity Exceeds Estimated Quantity by 50%`;
+                    isPermission = await customAlert({
+                        Type: 8,
+                        Message: message,
+                    });
+                }
+
+                if (isPermission) {
+                    isActionPermitted = true;
+                    dispatch(Save_Production({ jsonBody, btnId }));
+                }
+                else if (message === undefined) {
+                    dispatch(Save_Production({ jsonBody, btnId }));
+                }
+            }
+
+        } catch (e) {
+            btnIsDissablefunc({ btnId, state: false });
+        }
+    };
+
 
     if (!(userPageAccessState === "")) {
         return (
@@ -364,7 +412,7 @@ const ProductionMaster = (props) => {
                                             style={{ width: "170px" }}>{fieldLabel.ItemName}</Label>
                                         <Col md="7">
                                             <Select
-                                                isDisabled={!(values.ItemName === "")}
+                                                isDisabled={(allFieldsEnabled)}
                                                 name="Name"
                                                 value={values.ItemName}
                                                 options={ItemDropdown_Options}
@@ -378,14 +426,11 @@ const ProductionMaster = (props) => {
                                             )}
                                         </Col>
                                         <Col sm="1" className="mx-6 mt-1">
-                                            {(!(values.ItemName === "" || pageMode === mode.view)) &&
+                                            {((allFieldsEnabled)) &&
                                                 <Change_Button
                                                     type="button"
-                                                    // forceDisabled={true}
                                                     onClick={changeButtonHandler}
                                                 />}
-
-
                                         </Col>
                                     </FormGroup>
                                 </Col>
@@ -397,18 +442,20 @@ const ProductionMaster = (props) => {
                                         <Label className="col-sm-4 p-2"
                                             style={{ width: "170px" }}>{fieldLabel.NumberOfLot} </Label>
                                         <Col md="7">
-                                            < Input
-                                                disabled
+                                            < CInput
                                                 name="NumberOfLot"
                                                 type="text"
                                                 className="text-end"
+                                                disabled={allFieldsEnabled}
+                                                cpattern={onlyNumberRegx}
                                                 placeholder="Enter Estimated Quantity"
                                                 value={values.NumberOfLot}
                                                 autoComplete="off"
                                                 style={{ backgroundColor: "white" }}
-                                                onChange={(event) => {
-                                                    onChangeText({ event, state, setState })
-                                                }}
+                                                // onChange={(event) => {
+                                                //     onChangeText({ event, state, setState })
+                                                // }}
+                                                onChange={(e) => { NumberOfLotOnChange(e.target.value) }}
                                             />
                                         </Col>
                                     </FormGroup>
@@ -419,8 +466,8 @@ const ProductionMaster = (props) => {
                                         <Label className="col-sm-4 p-2"
                                             style={{ width: "170px" }}>{fieldLabel.EstimatedQuantity} </Label>
                                         <Col md="7">
-                                            < Input
-                                                disabled
+                                            < CInput
+                                                disabled={true}
                                                 name="EstimatedQuantity"
                                                 type="text"
                                                 className="text-end"
@@ -452,8 +499,6 @@ const ProductionMaster = (props) => {
                                                 type="text"
                                                 name="ActualQuantity"
                                                 value={values.ActualQuantity}
-                                                disabled={pageMode === mode.view ? true : false}
-
                                                 className="text-end"
                                                 placeholder="Enter Actual Quantity"
                                                 autoComplete="off"
@@ -474,7 +519,6 @@ const ProductionMaster = (props) => {
                                             style={{ width: "170px" }}>{fieldLabel.UnitName}</Label>
                                         <Col md="7">
                                             <Select
-                                                isDisabled={pageMode === mode.view ? true : false}
                                                 name="UnitName"
                                                 value={values.UnitName}
                                                 options={UnitDropdown}
@@ -483,8 +527,8 @@ const ProductionMaster = (props) => {
                                                 }
                                                 }
                                             />
-                                            {isError.id.length > 0 && (
-                                                <span className="text-danger f-8"><small>{isError.id}</small></span>
+                                            {isError.UnitName.length > 0 && (
+                                                <span className="text-danger f-8"><small>{isError.UnitName}</small></span>
                                             )}
                                         </Col>
                                     </FormGroup>

@@ -10,6 +10,7 @@ import {
     deleteWorkOrderIdSuccess,
     editWorkOrderList,
     getWorkOrderListPage,
+    getWorkOrderListPageSuccess,
     updateWorkOrderListSuccess,
 } from "../../../store/Production/WorkOrder/action";
 import WorkOrder from "./WorkOrder";
@@ -25,7 +26,7 @@ const WorkOrderList = () => {
     const history = useHistory();
     const currentDate_ymd = date_ymd_func();
 
-    const hasPagePath = history.location.pathname
+    const subPageMode = history.location.pathname
 
     const [pageMode, setpageMode] = useState(mode.defaultList)
     const [hederFilters, setHederFilters] = useState({ fromdate: currentDate_ymd, todate: currentDate_ymd, })
@@ -47,8 +48,8 @@ const WorkOrderList = () => {
 
     const { pageField, makeProductionReIssue, goBtnLoading } = reducers;
     const { fromdate, todate } = hederFilters
-    const page_Id = (hasPagePath === url.MATERIAL_ISSUE_STP) ? pageId.MATERIAL_ISSUE_STP : pageId.WORK_ORDER_LIST;
-    const page_mode = (hasPagePath === url.MATERIAL_ISSUE_STP) ? mode.modeSTPList : mode.defaultList;
+    const page_Id = (subPageMode === url.MATERIAL_ISSUE_STP) ? pageId.MATERIAL_ISSUE_STP : pageId.WORK_ORDER_LIST;
+    const page_mode = (subPageMode === url.MATERIAL_ISSUE_STP) ? mode.modeSTPList : mode.defaultList;
 
     const action = {
         getList: getWorkOrderListPage,
@@ -64,7 +65,9 @@ const WorkOrderList = () => {
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
         goButtonHandler(true)
-
+        return () => {
+            dispatch(getWorkOrderListPageSuccess([]));
+        }
     }, []);
 
     useEffect(() => {
@@ -81,7 +84,7 @@ const WorkOrderList = () => {
             FromDate: fromdate,
             ToDate: todate,
         });
-        dispatch(getWorkOrderListPage(jsonBody));
+        dispatch(getWorkOrderListPage({ jsonBody, subPageMode }));
     }
 
     function fromdateOnchange(e, date) {
@@ -98,30 +101,11 @@ const WorkOrderList = () => {
         setHederFilters(newObj)
     }
 
-
-    // const makeBtnFunc = (list = []) => {
-
-    //     var jsonData = list[0]
-    //     try {
-    //         const jsonBody = JSON.stringify({
-    //             WorkOrder: jsonData.id,
-    //             Item: jsonData.Item,
-    //             Company: loginCompanyID(),
-    //             Party: loginPartyID(),
-    //             Quantity: parseInt(jsonData.Quantity),
-    //             NoOfLots: jsonData.NumberOfLot
-    //         })
-    //         const body = { jsonBody, pageMode, path: url.MATERIAL_ISSUE, ListData: list[0], goButtonCallByMode: true }
-    //         dispatch(goButtonForMaterialIssue_Master_Action(body))
-
-    //     } catch (e) { }
-    // }
-
     const makeBtnFunc = (list = []) => {
         try {
             if (list.length > 0) {
                 const jsonData = list[0];
-                                
+
                 jsonData.NumberOfLot = jsonData.RemainingLot;  // Update NumberOfLot field to RemainingLot 
                 jsonData.Quantity = jsonData.RemaningQty;  // Update Quantity field to RemaningQty 
 
