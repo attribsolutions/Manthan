@@ -10,7 +10,7 @@ import {
     Modal,
     Row,
 } from "reactstrap";
-import { CurrentURl, breadcrumbReturnFunc, loginIsSCMParty, loginPartyID, loginUserDetails, metaTagLabel } from '../../components/Common/CommonFunction';
+import { CurrentURl, breadcrumbReturnFunc, loginCompanyID, loginIsSCMParty, loginPartyID, loginUserDetails, metaTagLabel } from '../../components/Common/CommonFunction';
 import * as pageId from "../../routes/allPageID"
 import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess, getGroupList, getGroupListSuccess, getSubGroupList, getSubGroupListSuccess, get_Sub_Group_By_Group_ForDropDown, get_Sub_Group_By_Group_ForDropDown_Success } from '../../store/actions';
 import * as mode from "../../routes/PageMode"
@@ -318,7 +318,8 @@ const ProductMarginReport = (props) => {
             "PriceList": priceListSelect.value,
             "Group": groupSelect[0].value === 0 ? "" : groupSelect.map(i => i.value).join(','),
             "SubGroup": subGroupSelect[0].value === 0 ? "" : subGroupSelect.map(i => i.value).join(','),
-            "Item": itemNameSelect[0].value === 0 ? "" : itemNameSelect.map(i => i.value).join(',')
+            "Item": itemNameSelect[0].value === 0 ? "" : itemNameSelect.map(i => i.value).join(','),
+            "Company":loginCompanyID()
         });
         dispatch(ProductMargin_Go_Btn_Action({ jsonBody }))
     }
