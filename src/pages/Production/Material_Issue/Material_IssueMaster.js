@@ -120,13 +120,13 @@ const MaterialIssueMaster = (props) => {
     useEffect(() => {
 
         if ((GoButton.Status === true) && (GoButton.StatusCode === 200)) {
-
+            debugger
             setPageMode(GoButton.pageMode)
             const { ListData, Data } = GoButton
 
             if (GoButton.goButtonCallByMode) {
                 const { id, Item, ItemName, Unit, Quantity, NumberOfLot, Bom } = ListData;
-
+                debugger
                 setState((i) => {
                     i.values.MaterialIssueDate = currentDate_ymd
                     i.values.ItemName = { value: id, label: ItemName, Item: Item, NoLot: NumberOfLot, lotQty: Quantity };
@@ -146,6 +146,7 @@ const MaterialIssueMaster = (props) => {
             }
             else {
                 if (changeButtonEnable) {
+                    debugger
                     const updatedWorkOrderData = updateWorkOrderQuantity_By_Lot(Data, values.NumberOfLot, noOfLotForDistribution);
                     setGoButtonList(updatedWorkOrderData)
                 }
@@ -156,7 +157,7 @@ const MaterialIssueMaster = (props) => {
     useEffect(() => {
 
         if ((hasShowloction || hasShowModal)) {
-
+            debugger
             let hasEditVal = null
             let insidePageMode = null
             if (hasShowloction) {
@@ -188,8 +189,14 @@ const MaterialIssueMaster = (props) => {
                 // ++++++++++++++++++++++++++**Dynamic go Button API Call method+++++++++++++++++
 
                 if (insidePageMode === mode.view) {
+
                     dispatch(goButtonForMaterialIssue_Master_ActionSuccess(MaterialIssueItems))
-                    setGoButtonList(MaterialIssueItems)
+                    const newArray = MaterialIssueItems.map((i) => ({
+                        ...i,
+                        Quantity: i.WorkOrderQuantity,
+                        OriginalWorkOrderQty: i.WorkOrderQuantity
+                    }))
+                    setGoButtonList(newArray)
                 }
                 seteditCreatedBy(hasEditVal.CreatedBy)
                 dispatch(editMaterialIssueIdSuccess({ Status: false }))
@@ -396,12 +403,12 @@ const MaterialIssueMaster = (props) => {
     }
 
     function goButtonHandler(event) {
-        
+
         event.preventDefault();
         if (parseFloat(state.values.LotQuantity) === 0) {
             customAlert({
-                Type:3,
-                Message:"Quantity Can Not be 0"
+                Type: 3,
+                Message: "Quantity Can Not be 0"
             })
         } else
             if (formValid(state, setState)) {
@@ -458,7 +465,7 @@ const MaterialIssueMaster = (props) => {
     }
 
     function NumberOfLotchange(event) {
-        
+
         let input = event.trim(); // Remove leading and trailing whitespace
         let defaultNoOfLot = parseFloat(noOfLotForDistribution);
         let remainingQuantity = 0

@@ -217,6 +217,7 @@ const WorkOrder = (props) => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(SaveWorkOrderMasterSuccess({ Status: false }));
             dispatch(postGoButtonForWorkOrder_MasterSuccess([]));
+            setTableData([]);
             setState(() => resetFunction(fileds, state))// Clear form values  
             if (pageMode === mode.dropdownAdd) {
                 customAlert({
@@ -251,6 +252,7 @@ const WorkOrder = (props) => {
         if ((updateMsg.Status === true) && (updateMsg.StatusCode === 200) && !(modalCss)) {
             setState(() => resetFunction(fileds, state))// Clear form values  
             dispatch(postGoButtonForWorkOrder_MasterSuccess([]));
+            setTableData([]);
             history.push({
                 pathname: url.WORK_ORDER_LIST,
             })
