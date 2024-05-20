@@ -124,7 +124,7 @@ const GRNAdd = (props) => {
 
     useEffect(() => {
         if ((items.Status === true) && (items.StatusCode === 200)) {
-            debugger
+            
             const grnItems = items.Data
 
             grnItems.OrderItem.forEach((ele, k) => {
@@ -585,7 +585,7 @@ const GRNAdd = (props) => {
             grnItemList.forEach(i => {
 
                 const calculated = orderCalculateFunc(i)// amount calculation function 
-                debugger
+                
                 const arr = {
                     Item: i.Item,
                     Quantity: i.Quantity,
