@@ -120,13 +120,13 @@ const MaterialIssueMaster = (props) => {
     useEffect(() => {
 
         if ((GoButton.Status === true) && (GoButton.StatusCode === 200)) {
-            debugger
+            
             setPageMode(GoButton.pageMode)
             const { ListData, Data } = GoButton
 
             if (GoButton.goButtonCallByMode) {
                 const { id, Item, ItemName, Unit, Quantity, NumberOfLot, Bom } = ListData;
-                debugger
+                
                 setState((i) => {
                     i.values.MaterialIssueDate = currentDate_ymd
                     i.values.ItemName = { value: id, label: ItemName, Item: Item, NoLot: NumberOfLot, lotQty: Quantity };
@@ -146,7 +146,7 @@ const MaterialIssueMaster = (props) => {
             }
             else {
                 if (changeButtonEnable) {
-                    debugger
+                    
                     const updatedWorkOrderData = updateWorkOrderQuantity_By_Lot(Data, values.NumberOfLot, noOfLotForDistribution);
                     setGoButtonList(updatedWorkOrderData)
                 }
@@ -157,7 +157,7 @@ const MaterialIssueMaster = (props) => {
     useEffect(() => {
 
         if ((hasShowloction || hasShowModal)) {
-            debugger
+            
             let hasEditVal = null
             let insidePageMode = null
             if (hasShowloction) {
