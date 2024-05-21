@@ -50,7 +50,7 @@ const TargetVSAchievement = (props) => {
 
     const [cluster, setCluster] = useState([allLabelWithBlank]);
     const [subCluster, setSubCluster] = useState([allLabelWithBlank]);
-    const [SubEmployee, setSubEmployee] = useState({ value: 0, label: "Select..." });
+    const [SubEmployee, setSubEmployee] = useState(allLabelWithZero);
 
 
     const [SubClusterOptions, setSubClusterOptions] = useState([]);
@@ -202,6 +202,8 @@ const TargetVSAchievement = (props) => {
         value: i.id,
         label: i.ItemGroup,
     }));
+
+    SubEmployee_Option.unshift(allLabelWithZero);
 
     Party_Option.unshift(allLabelWithZero);
 

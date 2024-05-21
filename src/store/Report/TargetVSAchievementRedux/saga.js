@@ -15,9 +15,7 @@ function* Target_VS_Achievement_GenFun(jsonBody) {
             i.key = key + 1
             i.TargetQuantityInKG = (i.TargetQuantityInKG)
             i.TargetAmountWithGST = parseInt(i.TargetAmountWithGST)
-            i.AchQuantityInKG = Number(i.AchQuantityInKG).toFixed(2)
-            i.AchAmountWithGST = parseInt(i.AchAmountWithGST)
-            i.AchAmountWithGST = parseInt(i.AchAmountWithGST)
+            i.AchQuantityInKG = parseFloat(i.AchQuantityInKG)
             i.AchAmountWithGST = parseInt(i.AchAmountWithGST)
             i.SAPItemCode =parseInt(i.SAPItemCode)
             i.SAPPartyCode =parseInt(i.SAPPartyCode)
@@ -54,7 +52,6 @@ function* Target_VS_AchievementGroupWise_GenFun(jsonBody) {
 
 
         const response = yield call(Target_Vs_AchievementGroupWise_Gobtn_API, jsonBody);
-
         const newList = yield response.Data.map((i, key) => {
 
             i.AchAmountWithGST = parseInt(Number(i.AchAmountWithGST))
@@ -62,11 +59,11 @@ function* Target_VS_AchievementGroupWise_GenFun(jsonBody) {
             i.GTAchAmountWithGST = parseInt(Number(i.GTAchAmountWithGST))
             i.TargetAmountWithGST = parseInt(Number(i.TargetAmountWithGST))
             i.CXAmountWithGST = (Number(i.CXAmountWithGST))
-            i.CXQuantityInKG = (Number(i.CXQuantityInKG).toFixed(2))
-            i.TargetQuantityInKG = (Number(i.TargetQuantityInKG).toFixed(2))
-            i.GTAchQuantityInKG = (Number(i.GTAchQuantityInKG).toFixed(2))
-            i.CreditNoteQuantityInKG = (Number(i.CreditNoteQuantityInKG).toFixed(2))
-            i.AchQuantityInKG = (Number(i.AchQuantityInKG).toFixed(2))
+            i.CXQuantityInKG = parseFloat(i.CXQuantityInKG)
+            i.TargetQuantityInKG = parseFloat(i.TargetQuantityInKG)
+            i.GTAchQuantityInKG = parseFloat(i.GTAchQuantityInKG)
+            i.CreditNoteQuantityInKG = parseFloat(i.CreditNoteQuantityInKG)
+            i.AchQuantityInKG = parseFloat(i.AchQuantityInKG)
 
 
             i.key = key + 1
@@ -124,7 +121,7 @@ function* Target_VS_AchievementGroupWise_GenFun(jsonBody) {
         })
 
 
-
+debugger
         yield put(Target_VS_AchievementGroupWise_Go_Button_API_Success(newList))
     } catch (error) { yield put(Target_VS_Achievement_Api_ErrorAction()) }
 }
