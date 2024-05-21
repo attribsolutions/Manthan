@@ -1,7 +1,7 @@
 import { compareGSTINState } from "../../../components/Common/CommonFunction";
 
 export const orderCalculateFunc = (row, IsComparGstIn) => {
-
+  debugger
   // Retrieve values from input object
   const rate = Number(row.Rate) || 0;
   const quantity = Number(row.Quantity) || 0;
@@ -47,7 +47,7 @@ export const orderCalculateFunc = (row, IsComparGstIn) => {
   // Return the calculated values as an object
   return {
     basicAmount: basicAmount.toFixed(2),
-
+    DiscountType: discountType,
     discountBaseAmt: Number(discountBaseAmt.toFixed(2)),
     disCountAmt: Number(disCountAmt.toFixed(2)),
 

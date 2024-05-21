@@ -33,7 +33,7 @@ import {
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { orderCalculateFunc } from "../../Purchase/Order/OrderPageCalulation";
 import * as _cfunc from "../../../components/Common/CommonFunction";
-import { CInput, C_DatePicker, decimalRegx } from "../../../CustomValidateForm";
+import { CInput, C_DatePicker, C_Select, decimalRegx } from "../../../CustomValidateForm";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 import { makeGRN_Mode_1ActionSuccess } from "../../../store/actions";
@@ -58,8 +58,7 @@ const Challan = (props) => {
     const [userPageAccessState, setUserAccState] = useState('');
     const [showAllStockState, setShowAllStockState] = useState(true);
     const [tableData, setTableData] = useState([]);
-    const [customerID, setCustomerID] = useState("");
-
+    const [customerID, setCustomerID] = useState([]);
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
@@ -86,8 +85,6 @@ const Challan = (props) => {
     const hasShowModal = props.hasOwnProperty(mode.editValue)
 
     const values = { ...state.values }
-    const { isError } = state;
-    const { fieldLabel } = state;
 
     useEffect(() => {
         // const jsonBody = JSON.stringify({
@@ -188,9 +185,9 @@ const Challan = (props) => {
     useEffect(() => {
 
         if (GRNitem.Status === true && GRNitem.StatusCode === 200) {
-
-            const { DemandItemDetails, CustomerID } = GRNitem.Data
-            setCustomerID(CustomerID)
+            
+            const { DemandItemDetails, CustomerID, CustomerName } = GRNitem.Data
+            setCustomerID({ value: CustomerID, label: CustomerName })
             setTableData(DemandItemDetails)
         }
     }, [GRNitem])
@@ -226,7 +223,7 @@ const Challan = (props) => {
                     <div className="width-60">Quantity</div>)
             },
             formatter: (cellContent, user) => {
-                
+
                 return (<>
                     <div >
                         <CInput
@@ -237,7 +234,7 @@ const Challan = (props) => {
                             defaultValue={user.Quantity}
                             // onChange={(event) => orderQtyOnChange(event, user)}
                             onChange={(event) => {
-                                
+
                                 user.Quantity = event.target.value
                             }}
                         />
@@ -405,9 +402,9 @@ const Challan = (props) => {
     const saveHandeller = (e,) => {
         const itemArr = []
         let grand_total = 0;
-
+        
         tableData.forEach(tableIndex => {
-            
+
             tableIndex.StockDetails.forEach(stockIndex => {
                 
                 stockIndex["Quantity"] = parseFloat(values.Quantity);
@@ -463,7 +460,7 @@ const Challan = (props) => {
                 ChallanDate: values.ChallanDate,
                 Party: _cfunc.loginSelectedPartyID(),
                 GrandTotal: grand_total,
-                Customer: customerID,
+                Customer: customerID.value,
                 CreatedBy: _cfunc.loginUserID(),
                 UpdatedBy: _cfunc.loginUserID(),
                 RoundOffAmount: Math.round(grand_total),
@@ -501,6 +498,19 @@ const Challan = (props) => {
                                         </FormGroup>
                                     </Col>
 
+                                    <Col sm={3}>
+                                        <FormGroup className="row mt-2 mb-3  ">
+                                            <Label className="mt-1" style={{ width: "110px" }}>Division </Label>
+                                            <Col sm={7}>
+                                                <C_Select
+                                                    value={customerID}
+                                                    isDisabled={true}
+                                                    options={[]}
+                                                // classNamePrefix="select2-Customer"
+                                                />
+                                            </Col>
+                                        </FormGroup>
+                                    </Col>
                                 </Col>
                             </Row>
                         </Col>
