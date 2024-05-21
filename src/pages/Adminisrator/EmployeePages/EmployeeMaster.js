@@ -60,6 +60,7 @@ import { C_DatePicker, C_Select } from "../../../CustomValidateForm";
 import CityMaster from "../CityPages/CityMaster";
 import { getStateESuccess } from "../../../store/Administrator/EmployeeRedux/action";
 import { getEmployeeTypelistSuccess } from "../../../store/Administrator/EmployeeTypeRedux/action";
+import { GenralMasterSubType } from "../../../helpers/backend_helper";
 
 const AddEmployee = (props) => {
 
@@ -80,7 +81,8 @@ const AddEmployee = (props) => {
     DistrictName: "",
     PIN: "",
     CityName: "",
-    EmployeeParties: []
+    EmployeeParties: [],
+    Designation: ""
   }
 
   const [state, setState] = useState(() => initialFiledFunc(fileds))
@@ -92,6 +94,10 @@ const AddEmployee = (props) => {
   const [employeeType_AddAccess, setEmployeeType_AddAccess] = useState(false)
   const [partyMaster_AddAccess, setPartyMaster_AddAccess] = useState(false)
   const [cityMaster_AddAccess, setCityMaster_AddAccess] = useState(false)
+
+  const [Designation, setDesignation] = useState([])
+
+
 
   //Access redux store Data /  'save_ModuleSuccess' action data
   const {
@@ -241,9 +247,8 @@ const AddEmployee = (props) => {
 
         // if ((hasEditVal.EmployeeParties).length > 0) { setPartyDropDownShow_UI(true) };
 
-        const { id, Name, Address, Mobile, email, DOB, PAN, AadharNo, CompanyName, EmployeeTypeName, StateName, DistrictName, EmployeeParties, PIN, City, CityName,
-          State_id, District_id, Company_id, City_id, EmployeeType_id, } = hasEditVal
-
+        const { id, Name, Address, Mobile, email, DOB, PAN, AadharNo, CompanyName, EmployeeTypeName, StateName, DistrictName, EmployeeParties, PIN, City, CityName, Designation, DesignationID,
+        State_id, District_id, Company_id, City_id, EmployeeType_id, } = hasEditVal
         const { values, fieldLabel, hasValid, required, isError } = { ...state }
         hasValid.id.valid = id
         hasValid.Name.valid = true;
@@ -270,6 +275,7 @@ const AddEmployee = (props) => {
         values.AadharNo = AadharNo
         values.Name = Name;
         values.PIN = PIN;
+        values.Designation = { label: Designation, value: DesignationID };
         values.CityName = { label: CityName, value: City_id };
         values.EmployeeTypeName = { label: EmployeeTypeName, value: EmployeeType_id };
         values.StateName = { label: StateName, value: State_id };
@@ -340,7 +346,24 @@ const AddEmployee = (props) => {
     }
   }, [pageField])
 
+  useEffect(async () => {
+    const jsonBody = {
+      Company: loginCompanyID(),
+      TypeID: 161
+    };
+    const resp3 = await GenralMasterSubType(jsonBody)
+    setDesignation(resp3.Data)
+
+  }, [])
+
+
   const Party_DropdownOptions = partyList.map((data) => ({
+    value: data.id,
+    label: data.Name
+  }));
+
+
+  const EmployeeDesignation = Designation.map((data) => ({
     value: data.id,
     label: data.Name
   }));
@@ -363,7 +386,6 @@ const AddEmployee = (props) => {
   }));
 
   const City_DropdownOptions = City.map((data) => ({
-
     value: data.id,
     label: data.Name
   }));
@@ -388,7 +410,6 @@ const AddEmployee = (props) => {
       const a = { ...i }
       a.values.CityName = "";
       a.hasValid.CityName.valid = false
-
       return a
     })
   }
@@ -429,6 +450,7 @@ const AddEmployee = (props) => {
           District: values.DistrictName.value,
           City: values.CityName.value,
           EmployeeParties: emplPartie,
+          Designation: values.Designation.value,
           PIN: values.PIN,
           Company: loginCompanyID(),
           CreatedBy: loginUserID(),
@@ -693,6 +715,39 @@ const AddEmployee = (props) => {
                             <span className="invalid-feedback">{isError.PIN}</span>
                           )}
                         </FormGroup>
+
+                        <Col md="1"></Col>
+
+                        <FormGroup className="mb-2 col col-sm-3 ">
+                          <Label htmlFor="validationCustom01"> {fieldLabel.Designation} </Label>
+                          <Col sm={12}>
+                            <C_Select
+                              name="Designation"
+                              value={values.Designation}
+                              isSearchable={true}
+                              className="react-dropdown"
+                              classNamePrefix="dropdown"
+                              options={EmployeeDesignation}
+                              onChange={(hasSelect, evn) => {
+                                onChangeSelect({ hasSelect, evn, state, setState })
+                              }}
+                            />
+                            {isError.Designation.length > 0 && (
+                              <span className="text-danger f-8"><small>{isError.Designation}</small></span>
+                            )}
+                          </Col>
+                        </FormGroup>
+
+
+
+
+
+
+
+
+
+
+
                       </Row>
                     </CardBody>
                   </Card>
