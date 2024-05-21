@@ -106,7 +106,7 @@ const TargetVSAchievement = (props) => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(pageId.TARGET_VS_ACHIEVEMENT));
         dispatch(SSDD_List_under_Company());
-        // dispatch(EmployeeSubEmployee_List(_cfunc.loginEmployeeID()));
+        dispatch(EmployeeSubEmployee_List(_cfunc.loginEmployeeID()));
         dispatch(getClusterlist());
         return () => {
             dispatch(commonPageFieldSuccess(null));
@@ -156,11 +156,11 @@ const TargetVSAchievement = (props) => {
         const jsonBody = JSON.stringify({
             "ClusterID": Cluster,
             "SubClusterID": SubCluster,
-            "EmployeeID": !(isSCMParty) ? 0 : _cfunc.loginEmployeeID(),
+            "EmployeeID": !(isSCMParty) ? 0 : SubEmployee.value === 0 ? _cfunc.loginEmployeeID() : SubEmployee.value,
         });
         let config = { jsonBody }
         dispatch(Partyonclustersubcluster_List(config));
-    }, [cluster, subCluster])
+    }, [cluster, subCluster,SubEmployee])
 
     useEffect(async () => {
         if (cluster[0].value !== "") {
@@ -200,7 +200,7 @@ const TargetVSAchievement = (props) => {
 
     const SubEmployee_Option = SubEmployeeList.map((i) => ({
         value: i.id,
-        label: i.Name,
+        label: i.ItemGroup,
     }));
 
     Party_Option.unshift(allLabelWithZero);
@@ -345,7 +345,7 @@ const TargetVSAchievement = (props) => {
     }, [Tabledata]);
 
     function goButtonHandler(btnMode) {
-        
+
         setBtnMode(btnMode)
         const Cluster = cluster.filter(i => !(i.value === '')).map(obj => obj.value).join(',');
         const SubCluster = subCluster.filter(i => !(i.value === '')).map(obj => obj.value).join(',');
@@ -353,9 +353,9 @@ const TargetVSAchievement = (props) => {
             "Month": yearAndMonth.Month,
             "Year": yearAndMonth.Year,
             "Party": !(isSCMParty) ? _cfunc.loginPartyID() : partydropdown.value,
-            "Employee":_cfunc.loginEmployeeID(),
-            "Cluster":Cluster,
-            "SubCluster":SubCluster
+            "Employee": !(isSCMParty) ? 0 : SubEmployee.value === 0 ? _cfunc.loginEmployeeID() : SubEmployee.value,
+            "Cluster": Cluster,
+            "SubCluster": SubCluster
 
         })
         if (isGropuWise) {
@@ -367,7 +367,7 @@ const TargetVSAchievement = (props) => {
 
 
     function ClusterOnChange(e = []) {
-        
+
         if (e.length === 0) {
             e = [allLabelWithBlank]
             setSubCluster(e)
@@ -512,9 +512,7 @@ const TargetVSAchievement = (props) => {
 
                     </Row>
                     <Row>
-
-                        {/* 
-                    <Col sm={3} className="">
+                       {isSCMParty && <Col sm={3} className="">
                             <FormGroup className=" row mt-2" >
                                 <Label className="col-sm-4 p-2"
                                     style={{ width: "120px" }}>Sub Employee</Label>
@@ -538,10 +536,7 @@ const TargetVSAchievement = (props) => {
                                     />
                                 </Col>
                             </FormGroup>
-                        </Col> */}
-
-
-
+                        </Col>}
                         {isSCMParty && <Col sm={3} className="">
                             <FormGroup className=" row mt-1" >
                                 <Label className="col-sm-4 p-2"
