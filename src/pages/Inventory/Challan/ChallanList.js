@@ -12,7 +12,7 @@ import { makeGRN_Mode_1Action } from "../../../store/Inventory/GRNRedux/actions"
 import Challan from "./Challan";
 import { C_DatePicker } from "../../../CustomValidateForm";
 import { url, mode, pageId } from "../../../routes/index"
-import { PageLoadingSpinner } from "../../../components/Common/CommonButton";
+import { Go_Button, PageLoadingSpinner } from "../../../components/Common/CommonButton";
 import { allLabelWithBlank } from "../../../components/Common/CommonErrorMsg/HarderCodeData";
 
 const ChallanList = () => {
@@ -195,9 +195,9 @@ const ChallanList = () => {
                             </Col >
 
                             <Col sm="1" className="mt-3 ">
-                                <Button type="button" color="btn btn-outline-success border-2 font-size-12 "
-                                    onClick={() => goButtonHandler()}
-                                >Go</Button>
+                                <Go_Button
+                                    onClick={goButtonHandler}
+                                />
                             </Col>
                         </div>
 
@@ -219,7 +219,7 @@ const ChallanList = () => {
                             makeBtnName={"Make GRN"}
                             deleteName={"FullChallanNumber"}
                             MasterModal={Challan}
-                            forceNewBtnView={true}
+                            forceNewBtnView={false}
                         />
                         : null
                 }

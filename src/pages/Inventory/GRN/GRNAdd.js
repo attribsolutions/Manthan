@@ -108,6 +108,11 @@ const GRNAdd = (props) => {
 
     useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
+            setgrnItemList([]);
+            setGrnDetail({});
+            setInvoiceNo([]);
+            setopenPOdata([]);
+            
             if (ratePostJsonBody.length > 0) {
                 dispatch(saveRateMaster(JSON.stringify(ratePostJsonBody)));
             }
@@ -124,7 +129,7 @@ const GRNAdd = (props) => {
 
     useEffect(() => {
         if ((items.Status === true) && (items.StatusCode === 200)) {
-            
+
             const grnItems = items.Data
 
             grnItems.OrderItem.forEach((ele, k) => {
@@ -136,6 +141,7 @@ const GRNAdd = (props) => {
                 ele["BatchDate"] = currentDate_ymd
                 ele["BatchCode"] = '0'
                 ele["delbtn"] = false
+                ele["Invoice"] = null
 
             });
             initialTableData = []
@@ -150,10 +156,10 @@ const GRNAdd = (props) => {
             const myArr = grnDetails.challanNo.split(",");
             myArr.map(i => ({ Name: i, hascheck: false }))
             setopenPOdata(grnDetails.GRNReferences)
+
             items.Status = false
             dispatch(_act.makeGRN_Mode_1ActionSuccess(items))
             dispatch(_act.BreadcrumbShowCountlabel(`Count:${grnItems.OrderItem.length} ₹ ${0}`));
-            // dispatch(_act.BreadcrumbShowCountlabel(`${"GRN Amount"} :${grnItemList.length} ${"GRN Amount"} :${grnItems.OrderAmount}`))
         }
 
     }, [items])
@@ -515,12 +521,6 @@ const GRNAdd = (props) => {
         },
     ];
 
-    const pageOptions = {
-        sizePerPage: (grnItemList.length + 2),
-        totalSize: 0,
-        custom: true,
-    };
-
     const copybtnOnclick = (r) => {
         const id = r.id
 
@@ -585,7 +585,7 @@ const GRNAdd = (props) => {
             grnItemList.forEach(i => {
 
                 const calculated = orderCalculateFunc(i)// amount calculation function 
-                
+
                 const arr = {
                     Item: i.Item,
                     Quantity: i.Quantity,
@@ -611,7 +611,7 @@ const GRNAdd = (props) => {
                     GSTAmount: calculated.roundedGstAmount,
                     Amount: calculated.roundedTotalAmount,
                     TaxType: 'GST',
-                    DiscountType: i.DiscountType,
+                    DiscountType: 1,
                     Discount: Number(i.Discount) || 0,
                     DiscountAmount: Number(calculated.disCountAmt).toFixed(2),
 
@@ -695,6 +695,12 @@ const GRNAdd = (props) => {
 
             setRatePostJsonBody(RateJsonBody);
 
+            let GRNReferencesUpdate = openPOdata.map(item => ({
+                ...item,
+                Invoice: null
+            }));
+
+
             const jsonBody = JSON.stringify({
                 GRNDate: grnDate,
                 Customer: grnDetail.Customer,
@@ -705,7 +711,7 @@ const GRNAdd = (props) => {
                 CreatedBy: _cfunc.loginUserID(),
                 UpdatedBy: 1,
                 GRNItems: GRNItemArray,
-                GRNReferences: openPOdata,
+                GRNReferences: GRNReferencesUpdate,
             });
 
             if (pageMode === mode.edit) {
