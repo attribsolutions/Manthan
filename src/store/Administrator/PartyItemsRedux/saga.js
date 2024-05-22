@@ -26,7 +26,6 @@ function* save_PartyItems_GenFunc({ config }) {
 }
 
 function* goButton_partyItem_Add_GenFunc({ config }) {
-
   const { jsonBody, subPageMode } = config;
   try {
     let response = null
@@ -35,7 +34,9 @@ function* goButton_partyItem_Add_GenFunc({ config }) {
     } else {
       response = yield call(PartyItemGoBtnAdd_API, jsonBody);
     }
+    
     response.Data.map((item) => {
+      
       item["selectCheck"] = false;
       item["GST"] = Number(item.GST)
 

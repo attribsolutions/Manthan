@@ -3,6 +3,8 @@ import {
     CHECK_STOCK_ENTERY_FOR_BACKDATED_TRANSACTION_SUCCESS,
     CHECK_STOCK_ENTERY_FOR_FIRST_TRANSACTION,
     CHECK_STOCK_ENTERY_FOR_FIRST_TRANSACTION_SUCCESS,
+    GET_ITEM_DROPDOWM_ACTION,
+    GET_ITEM_DROPDOWM_ACTION_SUCCESS,
     GET_STOCK_COUNT_ACTION,
     GET_STOCK_COUNT_ACTION_SUCCESS,
     SAVE_STOCK_ENTRY_ACTION,
@@ -16,7 +18,10 @@ const INIT_STATE = {
     saveBtnloading: false,
     StockCount: {},
     StockEnteryForFirstYear: { status: false },
-    StockEnteryForBackdated: { status: false }
+    StockEnteryForBackdated: { status: false },
+    ItemDropDown:[],
+    ItemDropDownloading:false
+
 
 }
 
@@ -47,6 +52,21 @@ const StockEntryReducer = (state = INIT_STATE, action) => {
                 ...state,
                 StockCount: action.payload,
                 StockCountloading: false
+            }
+
+
+
+
+        case GET_ITEM_DROPDOWM_ACTION:
+            return {
+                ...state,
+                ItemDropDownloading: true
+            }
+        case GET_ITEM_DROPDOWM_ACTION_SUCCESS:
+            return {
+                ...state,
+                ItemDropDown: action.payload,
+                ItemDropDownloading: false
             }
 
         case CHECK_STOCK_ENTERY_FOR_FIRST_TRANSACTION:
