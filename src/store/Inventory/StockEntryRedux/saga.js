@@ -24,6 +24,22 @@ function* StockCount_API_GenFunc({ config }) { // Save GRN  genrator function
 }
 
 
+
+
+
+
+function* ItemDropDown_API_GenFunc({ config }) { // Save GRN  genrator function
+    try {
+        
+        const response = yield call(apiCall.Item_DropDown_Api, config);
+
+        yield put(action.Get_Items_Drop_Down_Success(response.Data));
+    } catch (error) { yield put(action.StockEntryApiErrorAction()) }
+}
+
+
+
+
 function* StockEnteryForFirstTransaction_API_GenFunc({ config }) { // Save GRN  genrator function
 
     try {
@@ -42,6 +58,7 @@ function* StockenteryForBackDatedTransaction_API_GenFunc({ config }) { // Save G
 
 function* StockEntrySaga() {
 
+    yield takeLatest(actionType.GET_ITEM_DROPDOWM_ACTION, ItemDropDown_API_GenFunc)
     yield takeLatest(actionType.SAVE_STOCK_ENTRY_ACTION, StockEntry_API_GenFunc)
     yield takeLatest(actionType.GET_STOCK_COUNT_ACTION, StockCount_API_GenFunc)
 

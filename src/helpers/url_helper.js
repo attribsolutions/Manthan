@@ -457,12 +457,17 @@ export const RETAILER_DATA_REPORT = '/RetailerDataReport'
 export const PARTY_SETTING = '/PartySettings'
 
 // StockEntry
-export const STOCK_ENTRY = '/PartyStockEntry'
+export const STOCK_ENTRY = '/SweetPOS/StockEntry'
 
 export const STOCK_COUNT = '/GetStockCountForParty'
 
 export const STOCK_ENTERY_FOR_FIRST_YEAR_TRANSACTION = '/CheckStockEntryForFYFirstTransaction'
 export const STOCK_ENTERY_FOR_BACKDATED_TRANSACTION = '/CheckStockEntryDateAndNotAllowedBackdatedTransaction'
+
+
+
+export const ITEM_DROPDOWN_API = '/ItemsForFranchise'
+
 
 
 
