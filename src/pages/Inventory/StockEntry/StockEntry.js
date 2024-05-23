@@ -865,12 +865,15 @@ const StockEntry = (props) => {
         //         PartyID: commonPartyDropSelect.value
         //     })
         // }));
-        debugger
-        dispatch(Get_Items_Drop_Down({
 
+        dispatch(Get_Items_Drop_Down({
             jsonBody: JSON.stringify({
-                ..._cfunc.loginJsonBody(),
-                PartyID: commonPartyDropSelect.value === 0 ? _cfunc.loginPartyID() : commonPartyDropSelect.value
+                UserID: _cfunc.loginUserID(),
+                RoleID: _cfunc.loginRoleID(),
+                CompanyID: _cfunc.loginCompanyID(),
+                IsSCMCompany: _cfunc.loginIsSCMCompany(),
+                CompanyGroup: _cfunc.loginCompanyGroup(),
+                PartyID: _cfunc.loginSelectedPartyID(),
             })
         }));
 
@@ -1062,7 +1065,6 @@ const StockEntry = (props) => {
             classes: () => "",
             hidden: !(isVisibleRateDrop),
             formatter: (cellContent, row, key) => {
-
                 return (
                     <>
                         <span >
@@ -1165,6 +1167,7 @@ const StockEntry = (props) => {
     };
 
     async function ItemAPICall(itemIDs, Items) {
+        
         // Find itemsObject that are present in ItemListOptionsItems but not in filterDataItems
         const filteredItems = filterItemsById(Items, itemIDs);
         const initialTableData = await ItemAPIResponseFunc(filteredItems, [...itemAPIData]);
@@ -1184,7 +1187,6 @@ const StockEntry = (props) => {
         }
         try {
             // const apiResponse = await StockEntry_GO_button_api_For_Item(values.ItemName.value);
-
             const selectedItem = ItemDropDown.filter((index, key) => (values.ItemName.value === index.Item))
             const updatedTableData = await ItemAPIResponseFunc(selectedItem, [...TableArr]);
 
@@ -1299,7 +1301,7 @@ const StockEntry = (props) => {
         }
 
         if (values.IsAllStockZero) {
-
+            debugger
             setItemAPIDataLoading(true)
             const filterDataItems = filterData.map(item => item.Item);
             const ItemListOptionsItems = ItemList_Options.map(item => item.value);
@@ -1308,7 +1310,7 @@ const StockEntry = (props) => {
             const ItemIDs = ItemListOptionsItems.filter(item => !filterDataItems.includes(item));
 
             try {
-                const results = await Promise.all(ItemAPICall(ItemIDs, ItemDropDown));
+                const results = await ItemAPICall(ItemIDs, ItemDropDown);
                 updatedTableData = [...itemAPIData, ...results];
                 updatedTableData.sort((a, b) => b.id - a.id);
                 setItemAPIData(updatedTableData);
