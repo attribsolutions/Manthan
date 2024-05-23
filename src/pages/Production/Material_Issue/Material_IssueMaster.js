@@ -61,6 +61,8 @@ const MaterialIssueMaster = (props) => {
     const [Itemselect, setItemselect] = useState([])
     const [Itemselectonchange, setItemselectonchange] = useState("");
     const [goButtonList, setGoButtonList] = useState([]);
+    const [originalQty, setOriginalQty] = useState([]);
+
     const [editCreatedBy, seteditCreatedBy] = useState("");
     const [noOfLotForDistribution, setNoOfLotForDistribution] = useState(0);
 
@@ -71,8 +73,10 @@ const MaterialIssueMaster = (props) => {
         pageField,
         userAccess,
         Items,
-        GoButton = []
+        GoButton = [],
+        saveBtnloading
     } = useSelector((state) => ({
+        saveBtnloading: state.MaterialIssueReducer.saveBtnloading,
         postMsg: state.MaterialIssueReducer.postMsg,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
@@ -120,13 +124,13 @@ const MaterialIssueMaster = (props) => {
     useEffect(() => {
 
         if ((GoButton.Status === true) && (GoButton.StatusCode === 200)) {
-            
+
             setPageMode(GoButton.pageMode)
             const { ListData, Data } = GoButton
 
             if (GoButton.goButtonCallByMode) {
-                const { id, Item, ItemName, Unit, Quantity, NumberOfLot, Bom } = ListData;
-                
+                const { id, Item, ItemName, Unit, Quantity, NumberOfLot, Bom, RemaningQty } = ListData;
+
                 setState((i) => {
                     i.values.MaterialIssueDate = currentDate_ymd
                     i.values.ItemName = { value: id, label: ItemName, Item: Item, NoLot: NumberOfLot, lotQty: Quantity };
@@ -141,13 +145,14 @@ const MaterialIssueMaster = (props) => {
                 setItemselect({ Item: Item, Unit: Unit, id: id, Bom: Bom, Quantity: Quantity })
                 setNoOfLotForDistribution(NumberOfLot)
                 const Qty_Distribution_data = Qty_Distribution_Func(Data);
+                setOriginalQty(RemaningQty)
 
                 setGoButtonList(Qty_Distribution_data)
             }
             else {
                 if (changeButtonEnable) {
-                    
-                    const updatedWorkOrderData = updateWorkOrderQuantity_By_Lot(Data, values.NumberOfLot, noOfLotForDistribution);
+
+                    const updatedWorkOrderData = updateWorkOrderQuantity_By_Lot(Data, values.NumberOfLot, noOfLotForDistribution, originalQty);
                     setGoButtonList(updatedWorkOrderData)
                 }
             }
@@ -157,7 +162,7 @@ const MaterialIssueMaster = (props) => {
     useEffect(() => {
 
         if ((hasShowloction || hasShowModal)) {
-            
+
             let hasEditVal = null
             let insidePageMode = null
             if (hasShowloction) {
@@ -292,7 +297,7 @@ const MaterialIssueMaster = (props) => {
             },
         },
         {
-            text: "Original  Work Order Qty",
+            text: "Original Work Order Qty",
             dataField: "OriginalWorkOrderQty",
         },
         {
@@ -600,6 +605,7 @@ const MaterialIssueMaster = (props) => {
             <components.Option {...props}>
                 <div {...innerProps}>
                     <div >Name:{data.ItemName}</div>
+                    <div>No Of Lot:{data.NumberOfLot}</div>
                     <div>Quantity:{data.Quantity}</div>
                     <div>WorkDate:{_cfunc.date_dmy_func(data.WorkDate)}</div>
                 </div>
@@ -708,71 +714,63 @@ const MaterialIssueMaster = (props) => {
 
                                 </Col>
                                 <Col sm={1} className="mt-2">
-                                    {!(goButtonList.length > 0) ?
-                                        < Go_Button onClick={(e) => goButtonHandler(e)} />
-                                        :
+                                    {!(pageMode === "view") && (goButtonList.length > 0) ? (
                                         <Change_Button onClick={(e) => {
-                                            setChangeButtonEnable(true)
+                                            setChangeButtonEnable(true);
                                             dispatch(goButtonForMaterialIssue_Master_ActionSuccess([]));
-                                            setGoButtonList([])
+                                            setGoButtonList([]);
                                         }} />
-                                    }
+                                    ) : (
+                                        (!(goButtonList.length > 0)) ? (
+                                            <Go_Button onClick={(e) => goButtonHandler(e)} />
+                                        ) : null
+                                    )}
                                 </Col>
+
 
                                 <Col>
                                 </Col>
                             </Row>
                         </Col>
 
-                        <PaginationProvider pagination={paginationFactory(pageOptions)}>
-                            {({ paginationProps, paginationTableProps }) => (
-                                <ToolkitProvider
-                                    keyField={"id"}
-                                    data={goButtonList}
-                                    columns={pagesListColumns}
-                                    search
-                                >
-                                    {(toolkitProps) => (
-                                        <React.Fragment>
-                                            <Row>
-                                                <Col xl="12">
-                                                    <div className="table-responsive">
-                                                        <BootstrapTable
-                                                            keyField={"id"}
-                                                            id="table_Arrow"
-                                                            responsive
-                                                            bordered={false}
-                                                            striped={false}
-                                                            classes={"table  table-bordered"}
-                                                            {...toolkitProps.baseProps}
-                                                            {...paginationTableProps}
-                                                        />
-                                                        {countlabelFunc(toolkitProps, paginationProps, dispatch, "Material Issue")}
-                                                    </div>
-                                                </Col>
-                                            </Row>
-                                            <Row className="align-items-md-center mt-30">
-                                                <Col className="pagination pagination-rounded justify-content-end mb-2">
-                                                    <PaginationListStandalone {...paginationProps} />
-                                                </Col>
-                                            </Row>
-                                        </React.Fragment>
-                                    )}
-                                </ToolkitProvider>
+                        <ToolkitProvider
+                            keyField={"id"}
+                            data={goButtonList}
+                            columns={pagesListColumns}
+                            search
+                        >
+                            {(toolkitProps) => (
+                                <React.Fragment>
+                                    <Row>
+                                        <Col xl="12">
+                                            <div className="table-responsive">
+                                                <BootstrapTable
+                                                    keyField={"id"}
+                                                    id="table_Arrow"
+                                                    responsive
+                                                    bordered={false}
+                                                    striped={false}
+                                                    classes={"table  table-bordered"}
+                                                    {...toolkitProps.baseProps}
+                                                // {...paginationTableProps}
+                                                />
+                                                {countlabelFunc(toolkitProps, dispatch, "Material Issue")}
+                                            </div>
+                                        </Col>
+                                    </Row>
+                                </React.Fragment>
                             )}
+                        </ToolkitProvider>
 
-                        </PaginationProvider>
-
-                        {goButtonList.length > 0 &&
-                            <SaveButtonDraggable >
-                                <SaveButton pageMode={pageMode}
-                                    onClick={SaveHandler}
-                                    userAcc={userPageAccessState}
-                                    module={"Material Issue"}
-                                    editCreatedBy={editCreatedBy}
-                                />
-                            </SaveButtonDraggable>
-                        }
+                        <SaveButtonDraggable >
+                            <SaveButton pageMode={pageMode}
+                                loading={saveBtnloading}
+                                onClick={SaveHandler}
+                                userAcc={userPageAccessState}
+                                module={"Material Issue"}
+                                editCreatedBy={editCreatedBy}
+                            />
+                        </SaveButtonDraggable>
 
                     </form>
                 </div>

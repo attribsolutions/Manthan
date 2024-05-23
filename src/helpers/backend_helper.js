@@ -517,7 +517,7 @@ export const WorkOrder_Update_Api = ({ jsonBody, updateId }) => put(`${url.WORK_
 export const WorkOrder_Delete_Api = ({ deleteId }) => del(`${url.WORK_ORDER_LIST_API}/${deleteId}`)// delete api
 
 // Material Issue
-export const Material_Issue_GoButton_Post_API = (data) => post(url.GO_BUTTON_POST_API_FOR_MATERIAL_ISSUE, data)// go button postapi
+export const Material_Issue_GoButton_Post_API = ({ jsonBody }) => post(url.GO_BUTTON_POST_API_FOR_MATERIAL_ISSUE, jsonBody)// go button postapi
 export const Material_Issue_Post_API = ({ jsonBody }) => post(url.POST_API_FOR_MATERIAL_ISSUE, jsonBody)// postapi
 export const Material_Issue_Get_API = (filters) => post(url.POST_API_FOR_MATERIAL_ISSUE_LIST, filters)// get list api
 export const Material_Issue_Edit_API = ({ editId }) => get(`${url.POST_API_FOR_MATERIAL_ISSUE}/${editId}`)// delete api

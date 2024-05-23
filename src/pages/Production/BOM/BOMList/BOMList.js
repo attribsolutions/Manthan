@@ -22,7 +22,7 @@ import * as url from "../../../../routes/route_url";
 import { C_DatePicker } from "../../../../CustomValidateForm";
 import * as _cfunc from "../../../../components/Common/CommonFunction";
 import { allLabelWithBlank } from "../../../../components/Common/CommonErrorMsg/HarderCodeData";
-import { Go_Button } from "../../../../components/Common/CommonButton";
+import { Go_Button, PageLoadingSpinner } from "../../../../components/Common/CommonButton";
 
 
 const BOMList = () => {
@@ -111,8 +111,8 @@ const BOMList = () => {
     }
     return (
         <React.Fragment>
+            <PageLoadingSpinner isLoading={goBtnLoading || !pageField} />
             <div className="page-content">
-
                 <div className="px-2   c_card_filter text-black"  >
                     <div className="row">
                         <Col sm="5">

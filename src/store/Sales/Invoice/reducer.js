@@ -152,13 +152,13 @@ const InvoiceReducer = (state = INIT_STATE, action) => {
         case MAKE_IB_INVOICE_ACTION:
             return {
                 ...state,
-                listBtnLoading: action.config.btnId,
+                listBtnLoading:true,
             }
         case MAKE_IB_INVOICE_ACTION_SUCCESS:
             return {
                 ...state,
-                listBtnLoading: false,
                 makeIBInvoice: action.payload,
+                listBtnLoading: false,
             }
         /**************************************** */
 

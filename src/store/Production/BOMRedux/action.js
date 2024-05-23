@@ -10,14 +10,8 @@ import {
   SAVE_BOM_MASTER, SAVE_BOM_MASTER_SUCCESS,
   UPDATE_BOM_LIST,
   UPDATE_BOM_LIST_SUCCESS,
-  BOM_LIST_FILTERS,
   BOM_API_ERROR_ACTION
 } from "./actionTypes";
-
-// export const BOMlistfilters = filter => ({
-//   type:BOM_LIST_FILTERS,
-//   payload: filter,
-// })
 
 export const saveBOMMaster = (config={}) => ({ // Post action
   type: SAVE_BOM_MASTER,

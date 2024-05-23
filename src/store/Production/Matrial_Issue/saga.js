@@ -1,22 +1,18 @@
 import { call, put, takeLatest } from "redux-saga/effects";
-import { CommonConsole, date_dmy_func, convertTimefunc } from "../../../components/Common/CommonFunction";
+import { date_dmy_func, convertTimefunc } from "../../../components/Common/CommonFunction";
 import { Material_Issue_Delete_API, Material_Issue_Edit_API, Material_Issue_Get_API, Material_Issue_GoButton_Post_API, Material_Issue_Post_API } from "../../../helpers/backend_helper";
-import { deleteMaterialIssueIdSuccess, editMaterialIssueIdSuccess, getMaterialIssueListPageSuccess, goButtonForMaterialIssue_Master_ActionSuccess, SaveMaterialIssueSuccess } from "./action";
+import { deleteMaterialIssueIdSuccess, editMaterialIssueIdSuccess, getMaterialIssueListPageSuccess, goButtonForMaterialIssue_Master_ActionSuccess, MaterialIssueApiErrorAction, SaveMaterialIssueSuccess } from "./action";
 import { DELETE_MATERIAL_ISSUE_LIST_PAGE, EDIT_MATERIAL_ISSUE_LIST_PAGE, GET_MATERIAL_ISSUE_LIST_PAGE, POST_GO_BUTTON_FOR_MATERIAL_ISSUE_MASTER, POST_MATERIAL_ISSUE } from "./actionType";
 
-
-function* GoButton_MaterialIssue_masterPage_genfun({ data }) {                      // GO Botton Post API
+function* GoButton_MaterialIssue_masterPage_genfun({ config }) {  // GO Botton Post API
   try {
-    const { jsonBody } = data;
-    const response = yield call(Material_Issue_GoButton_Post_API, jsonBody);
-    const resp1 = { ...response, ...data }
-    
+    const response = yield call(Material_Issue_GoButton_Post_API, config);
+    const resp1 = { ...response, ...config }
     yield put(goButtonForMaterialIssue_Master_ActionSuccess(resp1));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(MaterialIssueApiErrorAction()) }
 }
 
-
-function* edit_Metrialissue_listpage_GenFunc({ config }) {                              //Edit Material Issue API
+function* edit_Metrialissue_listpage_GenFunc({ config }) {       //Edit Material Issue API
   const { btnmode } = config;
   try {
     const response = yield call(Material_Issue_Edit_API, config);
@@ -48,14 +44,14 @@ function* edit_Metrialissue_listpage_GenFunc({ config }) {                      
     yield obj.MaterialIssueItems = newArr
     yield response.Data = obj;
     yield put(editMaterialIssueIdSuccess(response));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(MaterialIssueApiErrorAction()) }
 }
 
 function* save_Material_Issue_Genfun({ config }) {                                            //Save Button API
   try {
     const response = yield call(Material_Issue_Post_API, config);
     yield put(SaveMaterialIssueSuccess(response));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(MaterialIssueApiErrorAction()) }
 }
 
 
@@ -67,6 +63,7 @@ function* GoButton_MaterialIssue_listpage_GenFunc({ filters }) {                
       var time = convertTimefunc(i.CreatedOn)
       i.ProductionDate = i.MaterialIssueDate
       i.MaterialIssueDate = (`${date} ${time}`)
+      i.NumberOfLotWithPercentage = (`${i.NumberOfLot} (${i.Percentage}%)`)
 
       if (i.Status === 0) {
         i.Status = "Open";
@@ -80,14 +77,14 @@ function* GoButton_MaterialIssue_listpage_GenFunc({ filters }) {                
       return i
     })
     yield put(getMaterialIssueListPageSuccess(newList));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(MaterialIssueApiErrorAction()) }
 }
 
 function* Delete_Metrialissue_listpage_GenFunc({ config }) {                                   //Delete Material issue 
   try {
     const response = yield call(Material_Issue_Delete_API, config);
     yield put(deleteMaterialIssueIdSuccess(response));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(MaterialIssueApiErrorAction()) }
 }
 
 function* MaterialIssueSaga() {

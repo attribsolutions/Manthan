@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList"
-import { Button, Col, FormGroup, Label } from "reactstrap";
+import { Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import { date_ymd_func } from "../../../components/Common/CommonFunction";
 import MaterialIssueMaster from "./Material_IssueMaster";
@@ -17,7 +17,7 @@ import { mode, url, pageId } from "../../../routes/index";
 import { updateWorkOrderListSuccess } from "../../../store/Production/WorkOrder/action";
 import { C_DatePicker } from "../../../CustomValidateForm";
 import * as _cfunc from "../../../components/Common/CommonFunction";
-import { Go_Button } from "../../../components/Common/CommonButton";
+import { Go_Button, PageLoadingSpinner } from "../../../components/Common/CommonButton";
 
 const MaterialIssueList = () => {
 
@@ -29,6 +29,8 @@ const MaterialIssueList = () => {
 
     const reducers = useSelector(
         (state) => ({
+            goBtnLoading: state.MaterialIssueReducer.listGoBtnloading,
+            listBtnLoading: state.MaterialIssueReducer.listBtnLoading,
             tableList: state.MaterialIssueReducer.materialIssueList,
             deleteMsg: state.MaterialIssueReducer.deleteMsg,
             updateMsg: state.WorkOrderReducer.updateMsg,
@@ -40,7 +42,7 @@ const MaterialIssueList = () => {
         })
     );
 
-    const { pageField, produtionMake } = reducers;
+    const { pageField, produtionMake, goBtnLoading } = reducers;
     const { fromdate, todate } = hederFilters;
 
     const hasPagePath = history.location.pathname;
@@ -65,7 +67,6 @@ const MaterialIssueList = () => {
         }
     }, []);
 
-
     useEffect(() => {
         if (produtionMake.Status === true && produtionMake.StatusCode === 406) {
             history.push({
@@ -85,10 +86,11 @@ const MaterialIssueList = () => {
         })
     };
 
-    const goButtonHandler = () => {
+    const goButtonHandler = (onload) => {
+
         const jsonBody = JSON.stringify({
-            FromDate: fromdate,
-            ToDate: todate,
+            FromDate: onload ? "" : fromdate,
+            ToDate: onload ? "" : todate,
         });
         dispatch(getMaterialIssueListPage(jsonBody));
     };
@@ -107,6 +109,7 @@ const MaterialIssueList = () => {
 
     return (
         <React.Fragment>
+            <PageLoadingSpinner isLoading={goBtnLoading || !pageField} />
             <div className="page-content">
                 <div className="px-2   c_card_filter text-black" >
                     <div className=" row" >
@@ -146,7 +149,9 @@ const MaterialIssueList = () => {
 
                         <Col sm="1" ></Col>
                         <Col sm="1" className="mt-3 ">
-                            <Go_Button onClick={goButtonHandler} />
+                            <Go_Button
+                                loading={goBtnLoading}
+                                onClick={goButtonHandler} />
                         </Col>
                     </div>
                 </div>

@@ -1,8 +1,10 @@
 export function Qty_Distribution_Func(Data) {
+    
     return Data.map(item => {
         let remainingQuantity = item.Quantity;
 
         const updatedBatchesData = item.BatchesData.map(batch => {
+            
             const quantity = parseFloat(batch.ObatchwiseQuantity);
             const distributedQuantity = Math.min(remainingQuantity, quantity);
             remainingQuantity -= distributedQuantity;
@@ -14,19 +16,19 @@ export function Qty_Distribution_Func(Data) {
 
         return {
             ...item,
-            "OriginalWorkOrderQty": item.Quantity,
+            // "OriginalWorkOrderQty": item.Quantity,
             BatchesData: updatedBatchesData
         };
     });
 }
 
-export function updateWorkOrderQuantity_By_Lot(Data, NumberOfLot, noOfLotForDistribution) {
+export function updateWorkOrderQuantity_By_Lot(Data, NumberOfLot, noOfLotForDistribution, originalQty) {
 
     return Data.map(item => {
-        let remainingQuantity = ((parseFloat(item.Quantity) / noOfLotForDistribution) * parseFloat(NumberOfLot)).toFixed(2)
-
+        let remainingQuantity = ((parseFloat(item.OriginalWorkOrderQty) / noOfLotForDistribution) * parseFloat(NumberOfLot)).toFixed(2)
+        
         const updatedBatchesData = item.BatchesData.map(batch => {
-
+            
             const quantity = parseFloat(batch.ObatchwiseQuantity);
             const distributedQuantity = Math.min(remainingQuantity, quantity);
             remainingQuantity -= distributedQuantity;
@@ -35,11 +37,11 @@ export function updateWorkOrderQuantity_By_Lot(Data, NumberOfLot, noOfLotForDist
                 Qty: distributedQuantity.toString()
             };
         });
-
+        
         return {
             ...item,
-            Quantity: ((parseFloat(item.Quantity) / noOfLotForDistribution) * parseFloat(NumberOfLot)).toFixed(2),
-            "OriginalWorkOrderQty": item.Quantity,
+            Quantity: ((parseFloat(item.OriginalWorkOrderQty) / noOfLotForDistribution) * parseFloat(NumberOfLot)).toFixed(2),
+            // "OriginalWorkOrderQty": ((parseFloat(originalQty) / noOfLotForDistribution) * parseFloat(NumberOfLot)).toFixed(2),
             BatchesData: updatedBatchesData
         };
     });

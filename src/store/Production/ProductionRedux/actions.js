@@ -12,6 +12,7 @@ import {
   GET_UNIT_ID_FOR_PRODUNCTION_SUCCESS,
   POST_PRODUCTION_FROM_PRODUCTION_PAGE,
   POST_PRODUCTION_FROM_PRODUCTION_PAGE_SUCCESS,
+  PRODUNCTION_API_ERROR_ACTION,
   UPDATE_PRODUCTION_ID_FROM_PRODUCTION_PAGE,
   UPDATE_PRODUCTION_ID_FROM_PRODUCTION_PAGE_SUCCESS
 } from './actionType'
@@ -87,4 +88,7 @@ export const getUnitIDForProdunctionSuccess = (unitID) => ({               //Get
   payload: unitID,
 });
 
+export const ProductionApiErrorAction = () => ({
+  type: PRODUNCTION_API_ERROR_ACTION,
+})
 
