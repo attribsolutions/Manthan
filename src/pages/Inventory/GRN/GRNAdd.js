@@ -112,7 +112,7 @@ const GRNAdd = (props) => {
             setGrnDetail({});
             setInvoiceNo([]);
             setopenPOdata([]);
-            
+
             if (ratePostJsonBody.length > 0) {
                 dispatch(saveRateMaster(JSON.stringify(ratePostJsonBody)));
             }
@@ -151,7 +151,7 @@ const GRNAdd = (props) => {
             setgrnItemList(initialTableData)
             grnDetails.OrderItem = []
 
-            setInvoiceNo(grnItems.InvoiceNumber)
+            // setInvoiceNo(grnItems.InvoiceNumber)
             setGrnDetail(grnDetails)
             const myArr = grnDetails.challanNo.split(",");
             myArr.map(i => ({ Name: i, hascheck: false }))
@@ -686,6 +686,7 @@ const GRNAdd = (props) => {
                 "Rate": index.Rate,
                 "CommonID": 0,
                 "EffectiveDate": currentDate_ymd,
+                "Party": _cfunc.loginPartyID(),
                 "Company": _cfunc.loginCompanyID(),
                 "CreatedBy": _cfunc.loginUserID(),
                 "UpdatedBy": _cfunc.loginUserID(),
@@ -801,13 +802,13 @@ const GRNAdd = (props) => {
                                         style={{ width: "130px" }}>Close PO</Label>
                                     <Col md="7" style={{ marginLeft: "-14px" }}>
                                         {
-                                            openPOdata.length === 1 ?
+                                            openPOdata.length === 0 ?
                                                 <Input
                                                     type="checkbox"
                                                     style={{ paddingTop: "7px" }}
                                                     placeholder="Enter Invoice No"
-                                                    disabled={pageMode === mode.view ? true : false}
-                                                    onChange={(e) => openPOdata[0].Inward = e.target.checked}
+                                                    // disabled={pageMode === mode.view ? true : false}
+                                                    onChange={(e) => setopenPOdrp(true)}
                                                 />
                                                 :
                                                 <Dropdown

@@ -23,7 +23,7 @@ import { production_Edit_API } from "../../../helpers/backend_helper";
 import ProductionMaster from "./ProductionMaster";
 import { makeBtnProduction_ReIssue_STP_action } from "../../../store/Production/ProductionReissueRedux/actions";
 import { C_DatePicker } from "../../../CustomValidateForm";
-import { Go_Button } from "../../../components/Common/CommonButton";
+import { Go_Button, PageLoadingSpinner } from "../../../components/Common/CommonButton";
 
 const ProductionList = () => {
 
@@ -37,6 +37,8 @@ const ProductionList = () => {
     const [hederFilters, setHederFilters] = useState({ fromdate: currentDate_ymd, todate: currentDate_ymd })
     const reducers = useSelector(
         (state) => ({
+            goBtnLoading: state.ProductionReducer.loading,
+            listBtnLoading: state.ProductionReducer.listBtnLoading,
             tableList: state.ProductionReducer.ProductionList,
             deleteMsg: state.ProductionReducer.deleteMsg,
             updateMsg: state.WorkOrderReducer.updateMsg,
@@ -139,6 +141,7 @@ const ProductionList = () => {
 
     return (
         <React.Fragment>
+            <PageLoadingSpinner isLoading={reducers.goBtnLoading || !pageField} />
             <div className="page-content">
 
                 <div className="px-2   c_card_filter text-black" >
@@ -179,7 +182,7 @@ const ProductionList = () => {
 
                         <Col sm="1" ></Col>
                         <Col sm="1" className="mt-3 ">
-                            <Go_Button onClick={goButtonHandler} />
+                            <Go_Button loading={reducers.goBtnLoading} onClick={goButtonHandler} />
                         </Col>
                     </div>
                 </div>

@@ -38,7 +38,7 @@ const CurrentStockReport = (props) => {
 	const [userPageAccessState, setUserAccState] = useState('');
 
 	const [partyDropdown, setPartyDropdown] = useState(allLabelWithBlank);
-	const [unitDropdown, setUnitDropdown] = useState({ value: 1, label: 'No' });
+	const [unitDropdown, setUnitDropdown] = useState({ value: 0, label: "BaseUnit" });
 
 	const [cluserSelect, setCluserSelect] = useState(allLabelWithBlank);
 	const [subCluserSelect, setSubCluserSelect] = useState(allLabelWithBlank);
@@ -411,6 +411,7 @@ const CurrentStockReport = (props) => {
 			value: data.id,
 			label: data.Name
 		}));
+	BaseUnit_DropdownOptions.unshift({ value: 0, label: "BaseUnit" })
 
 	const Party_Option = SSDD_List.map(i => ({
 		value: i.id,

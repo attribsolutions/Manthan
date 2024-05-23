@@ -1,5 +1,5 @@
 import { call, put, takeLatest } from "redux-saga/effects";
-import { CommonConsole, date_dmy_func, convertTimefunc } from "../../../components/Common/CommonFunction";
+import { date_dmy_func, convertTimefunc } from "../../../components/Common/CommonFunction";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { BOM_Delete_API, BOM_ListPage_API, BOM_Post_API, BOM_Update_API, GetItemUnits_For_Dropdown, BOM_Edit_API } from "../../../helpers/backend_helper";
 import { BOMApiErrorAction, deleteBOMIdSuccess, editBOMListSuccess, getBOMListPageSuccess, GetItemUnitsDrodownAPISuccess, saveBOMMasterSuccess, updateBOMListSuccess } from "./action";
@@ -22,7 +22,7 @@ function* get_BOMList_GenFunc({ filters }) {
       i.id = `${i.id}/${i.Company}`;  // use For List Page
       var date = date_dmy_func(i.BomDate)
       var time = convertTimefunc(i.CreatedOn)
-      i.BomDate = (`${date} ${time}`)
+      i.transactionDateLabel = (`${date} ${time}`)
       return i
     })
     yield put(getBOMListPageSuccess(data))

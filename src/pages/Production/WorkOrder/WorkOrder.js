@@ -285,14 +285,14 @@ const WorkOrder = (props) => {
         .filter(index => index.IsActive)
         .map(index => ({
             value: index.ID,
-            label: `${index.ItemName} (BOMDate-${_cfunc.date_dmy_func(index.BomDate)})`,
+            label: `${index.ItemName} (BOMDate-${(_cfunc.date_dmy_func(index.BomDate))})`,
             ItemName: index.ItemName,
             ItemID: index.Item,
             Unit: index.Unit,
             UnitName: index.UnitName,
             EstimatedOutputQty: index.EstimatedOutputQty,
             StockQty: index.StockQty.toFixed(2),
-            BOMDate: _cfunc.date_dmy_func(index.BomDate),
+            BOMDate: (_cfunc.date_dmy_func(index.BomDate)),
         }));
 
     const pagesListColumns = [
@@ -458,6 +458,8 @@ const WorkOrder = (props) => {
                     UpdatedBy: loginUserID(),
                     FullWorkOrderNumber: EditData.FullWorkOrderNumber,
                     WorkOrderNumber: EditData.WorkOrderNumber,
+                    RemainNumberOfLot: EditData.RemainNumberOfLot,
+                    RemaninQuantity: EditData.RemaninQuantity,
                     WorkOrderItems: WorkOrderItems,
                 });
                 if (pageMode === mode.edit) {
@@ -474,6 +476,7 @@ const WorkOrder = (props) => {
     const customOption = (props) => {
 
         const { innerProps, label, data } = props;
+        
         return (
             <components.Option {...props}>
                 <div {...innerProps}>

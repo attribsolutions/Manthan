@@ -5,17 +5,16 @@ import {
   EDIT_MATERIAL_ISSUE_LIST_PAGE_SUCCESS,
   GET_MATERIAL_ISSUE_LIST_PAGE,
   GET_MATERIAL_ISSUE_LIST_PAGE_SUCCESS,
+  MATERIAL_ISSUE_API_ERROR_ACTION,
   POST_GO_BUTTON_FOR_MATERIAL_ISSUE_MASTER,
   POST_GO_BUTTON_FOR_MATERIAL_ISSUE_MASTER_SUCCESS,
   POST_MATERIAL_ISSUE,
   POST_MATERIAL_ISSUE_SUCCESS
 } from "./actionType";
 
-
-
-export const goButtonForMaterialIssue_Master_Action = (data) => ({               //GO Button Action
+export const goButtonForMaterialIssue_Master_Action = (config = {}) => ({               //GO Button Action
   type: POST_GO_BUTTON_FOR_MATERIAL_ISSUE_MASTER,
-  data,
+  config,
 });
 
 export const goButtonForMaterialIssue_Master_ActionSuccess = (data) => ({       //GO Button Action Success
@@ -23,7 +22,7 @@ export const goButtonForMaterialIssue_Master_ActionSuccess = (data) => ({       
   payload: data,
 });
 
-export const saveMaterialIssue = (config={}) => ({                                   //Save Action
+export const saveMaterialIssue = (config = {}) => ({                                   //Save Action
   type: POST_MATERIAL_ISSUE,
   config,
 });
@@ -57,7 +56,12 @@ export const deleteMaterialIssueId = (config = {}) => ({                        
   type: DELETE_MATERIAL_ISSUE_LIST_PAGE,
   config,
 });
+
 export const deleteMaterialIssueIdSuccess = (data) => ({                        //Delete Material issue Action Success
   type: DELETE_MATERIAL_ISSUE_PAGE_SUCCESS,
   payload: data,
 });
+
+export const MaterialIssueApiErrorAction = () => ({
+  type: MATERIAL_ISSUE_API_ERROR_ACTION,
+})
