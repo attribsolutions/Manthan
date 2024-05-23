@@ -103,7 +103,7 @@ const WorkOrderReducer = (state = INIT_STATE, action) => {
     case DELETE_WORK_ORDER_LIST_PAGE:
       return {
         ...state,
-        listBtnLoading: action.config.btnId,
+        listBtnLoading: true,
       }
     case DELETE_WORK_ORDER_LIST_PAGE_SUCCESS:
       return {

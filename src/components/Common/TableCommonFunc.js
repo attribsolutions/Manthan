@@ -92,7 +92,9 @@ const LABEL_COLORS = {
   "Send To Supplier": "indigo_label",
   "Approved": "green_label",
   "Order send To SAP": "indigo_label",
-  "Reject": "red_label"
+  "Reject": "red_label",
+  "Partially Completed": "yellow_label",
+  "Completed": "green_label",
 };
 
 
