@@ -664,7 +664,9 @@ export const Dashboard_Get_API = ({ loginPartyID }) => get(`${url.DASHBOARD}/${l
 
 //StockEntry
 export const StockEntry_GO_button_api_For_Item = (ItemId) => get(`${url.STOCK_ENTRY_GO_BUTTON}/${ItemId}`)//add button get api for item
-export const StockEntry_Post_API = ({ jsonBody }) => post(url.STOCK_ENTRY, jsonBody)//post api
+export const StockEntry_Post_API = ({ jsonBody }) => post(url.PARTY_STOCK_ENTRY, jsonBody)//post api
+export const Franchise_StockEntry_Post_API = ({ jsonBody }) => post(url.FRANCHISE_STOCK_ENTRY, jsonBody)//post api
+
 
 export const StockCount_Post_API = ({ jsonBody }) => post(url.STOCK_COUNT, jsonBody)//post api
 

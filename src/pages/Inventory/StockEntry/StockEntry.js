@@ -1167,7 +1167,7 @@ const StockEntry = (props) => {
     };
 
     async function ItemAPICall(itemIDs, Items) {
-        
+
         // Find itemsObject that are present in ItemListOptionsItems but not in filterDataItems
         const filteredItems = filterItemsById(Items, itemIDs);
         const initialTableData = await ItemAPIResponseFunc(filteredItems, [...itemAPIData]);
@@ -1348,7 +1348,8 @@ const StockEntry = (props) => {
                     });
                 }
                 if ((isConfirmed) || (!values.IsAllStockZero)) {
-                    dispatch(saveStockEntryAction({ jsonBody, btnId }));
+                    const IsFranchise = _cfunc.loginUserDetails().IsFranchises === 0 ? false : true
+                    dispatch(saveStockEntryAction({ jsonBody, btnId, IsFranchise }));
                 };
             }
         } catch (e) { _cfunc.btnIsDissablefunc({ btnId, state: false }) }
