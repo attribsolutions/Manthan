@@ -466,7 +466,7 @@ export const STOCK_ENTERY_FOR_BACKDATED_TRANSACTION = '/CheckStockEntryDateAndNo
 
 
 
-export const ITEM_DROPDOWN_API = '/ItemsForFranchise'
+export const ITEM_DROPDOWN_API = '/PartyItemsStock_Entry'
 
 
 
