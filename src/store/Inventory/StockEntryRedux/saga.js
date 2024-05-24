@@ -6,7 +6,12 @@ import * as action from "./action";
 function* StockEntry_API_GenFunc({ config }) { // Save GRN  genrator function
 
     try {
-        const response = yield call(apiCall.StockEntry_Post_API, config);
+        let response = "";
+        if (config.IsFranchise) {
+            response = yield call(apiCall.Franchise_StockEntry_Post_API, config);
+        } else {
+            response = yield call(apiCall.StockEntry_Post_API, config);
+        }
         yield put(action.saveStockEntrySuccess(response));
     } catch (error) { yield put(action.StockEntryApiErrorAction()) }
 }
@@ -30,7 +35,7 @@ function* StockCount_API_GenFunc({ config }) { // Save GRN  genrator function
 
 function* ItemDropDown_API_GenFunc({ config }) { // Save GRN  genrator function
     try {
-        
+
         const response = yield call(apiCall.Item_DropDown_Api, config);
 
         yield put(action.Get_Items_Drop_Down_Success(response.Data));

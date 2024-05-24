@@ -457,7 +457,12 @@ export const RETAILER_DATA_REPORT = '/RetailerDataReport'
 export const PARTY_SETTING = '/PartySettings'
 
 // StockEntry
-export const STOCK_ENTRY = '/SweetPOS/StockEntry'
+export const FRANCHISE_STOCK_ENTRY = '/SweetPOS/StockEntry'
+
+export const PARTY_STOCK_ENTRY = '/PartyStockEntry'
+
+
+
 
 export const STOCK_COUNT = '/GetStockCountForParty'
 
