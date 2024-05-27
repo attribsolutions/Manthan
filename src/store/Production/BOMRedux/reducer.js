@@ -1,7 +1,5 @@
-import { currentDate_ymd } from "../../../components/Common/CommonFunction"
 import {
     BOM_API_ERROR_ACTION,
-    BOM_LIST_FILTERS,
     DELETE_BOM_LIST_PAGE,
     DELETE_BOM_LIST_PAGE_SUCCESS,
     EDIT_BOM_LIST_ID,
@@ -21,7 +19,6 @@ const INIT_STATE = {
     editData: { Status: false, },
     updateMsg: { Status: false },
     deleteMsg: { Status: false },
-    bomlistFilters: { fromdate: currentDate_ymd, todate: currentDate_ymd, },
     listBtnLoading: false,
     loading: false,
     saveBtnloading: false,
@@ -29,12 +26,6 @@ const INIT_STATE = {
 
 const BOMReducer = (state = INIT_STATE, action) => {
     switch (action.type) {
-
-        case BOM_LIST_FILTERS:
-            return {
-                ...state,
-                bomlistFilters: action.payload,
-            }
 
         case SAVE_BOM_MASTER:
             return {
@@ -86,7 +77,7 @@ const BOMReducer = (state = INIT_STATE, action) => {
         case DELETE_BOM_LIST_PAGE:
             return {
                 ...state,
-                // listBtnLoading: true,
+                listBtnLoading: true,
             }
         case DELETE_BOM_LIST_PAGE_SUCCESS:
             return {

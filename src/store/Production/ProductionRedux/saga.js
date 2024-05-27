@@ -8,6 +8,7 @@ import {
   getUnitIDForProdunctionSuccess,
   Save_ProductionSuccess,
   update_ProductionIdSuccess,
+  ProductionApiErrorAction,
 } from "./actions";
 import {
   Production_Delete_API,
@@ -28,37 +29,37 @@ import {
   EDIT_PRODUCTION_FOR_PRODUCTION_PAGE,
 } from "./actionType";
 
-import { CommonConsole, date_dmy_func, convertTimefunc } from "../../../components/Common/CommonFunction";
+import { date_dmy_func, convertTimefunc } from "../../../components/Common/CommonFunction";
 
 function* SaveProductionGenFunc({ config }) {
   try {
     const response = yield call(Production_Post_API, config);
     yield put(Save_ProductionSuccess(response));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(ProductionApiErrorAction()) }
 }
 
 function* DeleteProductionGenFunc({ config }) {
   try {
     const response = yield call(Production_Delete_API, config);
     yield put(delete_ProductionIdSuccess(response));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(ProductionApiErrorAction()) }
 }
 
-function* UpdateProductionGenFunc({ config}) {
+function* UpdateProductionGenFunc({ config }) {
   try {
     const response = yield call(config);
     yield put(update_ProductionIdSuccess(response));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(ProductionApiErrorAction()) }
 }
 
 // List Page API
 function* get_PRODUCTION_GerFunc({ filters }) {
-  
+
   try {
     const response = yield call(production_get_API, filters);
     const newList = response.Data.map((index) => {
       // index.Item = index.Item;
-      
+
       var date = date_dmy_func(index.ProductionDate)
       var batchdate = date_dmy_func(index.BatchDate)
       var time = convertTimefunc(index.CreatedOn)
@@ -68,7 +69,7 @@ function* get_PRODUCTION_GerFunc({ filters }) {
       return index;
     });
     yield put(getProductionistPageSuccess(newList));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(ProductionApiErrorAction()) }
 }
 
 // List Page API
@@ -80,7 +81,7 @@ function* getProduction_Mode2_GenFunc({ data }) {
     response["pageMode"] = pageMode;
     response["path"] = path; //Pagepath
     yield put(getProduction_Mode2_Success(response));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(ProductionApiErrorAction()) }
 }
 
 // Edit Production  Page API
@@ -90,7 +91,7 @@ function* editProduction_GenFunc({ config }) {
     const response = yield call(production_Edit_API, config);
     response.pageMode = btnmode;
     yield put(edit_ProductionIdSuccess(response));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(ProductionApiErrorAction()) }
 };
 
 //  DesignationID dropdown list
@@ -102,7 +103,7 @@ function* UnitIDForProduction_saga({ data }) {
       label: index.UnitName,
     }));
     yield put(getUnitIDForProdunctionSuccess(UnitDropdown));
-  } catch (error) { CommonConsole(error) }
+  } catch (error) { yield put(ProductionApiErrorAction()) }
 }
 
 function* ProductionSaga() {

@@ -18,7 +18,7 @@ import { mode, url, pageId } from "../../../routes/index"
 import { goButtonForMaterialIssue_Master_Action } from "../../../store/Production/Matrial_Issue/action";
 import { C_DatePicker } from "../../../CustomValidateForm";
 import * as _cfunc from "../../../components/Common/CommonFunction";
-import { Go_Button } from "../../../components/Common/CommonButton";
+import { Go_Button, PageLoadingSpinner } from "../../../components/Common/CommonButton";
 
 const WorkOrderList = () => {
 
@@ -34,7 +34,7 @@ const WorkOrderList = () => {
     const reducers = useSelector(
         (state) => ({
             goBtnLoading: state.WorkOrderReducer.loading,
-            listBtnLoading: state.WorkOrderReducer.listBtnLoading,
+            listBtnLoading: (state.MaterialIssueReducer.listBtnLoading || state.WorkOrderReducer.listBtnLoading),
             tableList: state.WorkOrderReducer.WorkOrderList,
             deleteMsg: state.WorkOrderReducer.deleteMsg,
             updateMsg: state.WorkOrderReducer.updateMsg,
@@ -46,7 +46,7 @@ const WorkOrderList = () => {
         })
     );
 
-    const { pageField, makeProductionReIssue, goBtnLoading } = reducers;
+    const { pageField, makeProductionReIssue, goBtnLoading, listBtnLoading } = reducers;
     const { fromdate, todate } = hederFilters
     const page_Id = (subPageMode === url.MATERIAL_ISSUE_STP) ? pageId.MATERIAL_ISSUE_STP : pageId.WORK_ORDER_LIST;
     const page_mode = (subPageMode === url.MATERIAL_ISSUE_STP) ? mode.modeSTPList : mode.defaultList;
@@ -66,7 +66,9 @@ const WorkOrderList = () => {
         dispatch(commonPageFieldList(page_Id))
         goButtonHandler(true)
         return () => {
-            dispatch(getWorkOrderListPageSuccess([]));
+            if (subPageMode === url.WORK_ORDER_LIST) {
+                dispatch(getWorkOrderListPageSuccess([]));
+            }
         }
     }, []);
 
@@ -79,10 +81,11 @@ const WorkOrderList = () => {
         }
     }, [makeProductionReIssue])
 
-    const goButtonHandler = () => {
+    const goButtonHandler = (onload) => {
+        debugger
         const jsonBody = JSON.stringify({
-            FromDate: fromdate,
-            ToDate: todate,
+            FromDate: onload ? "" : fromdate,
+            ToDate: onload ? "" : todate,
         });
         dispatch(getWorkOrderListPage({ jsonBody, subPageMode }));
     }
@@ -101,7 +104,8 @@ const WorkOrderList = () => {
         setHederFilters(newObj)
     }
 
-    const makeBtnFunc = (list = []) => {
+    const makeBtnFunc = (list = [], btnId) => {
+
         try {
             if (list.length > 0) {
                 const jsonData = list[0];
@@ -118,15 +122,14 @@ const WorkOrderList = () => {
                     NoOfLots: jsonData.NumberOfLot
                 });
 
-                const body = {
+                dispatch(goButtonForMaterialIssue_Master_Action({
                     jsonBody,
                     pageMode,
                     path: url.MATERIAL_ISSUE,
                     ListData: list[0],
-                    goButtonCallByMode: true
-                };
-
-                dispatch(goButtonForMaterialIssue_Master_Action(body));
+                    goButtonCallByMode: true,
+                    btnId
+                }));
             }
         } catch (e) {
             console.error("Error:", e);
@@ -135,6 +138,7 @@ const WorkOrderList = () => {
 
     return (
         <React.Fragment>
+            <PageLoadingSpinner isLoading={goBtnLoading || pageField} />
             <div className="page-content">
 
                 <div className="px-2   c_card_filter text-black"  >
