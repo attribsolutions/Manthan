@@ -20,7 +20,7 @@ const routeNameIsRequired = "RouteName Is Required"
 
 //Item Dropdown Add button Error Message
 const itemNameIsRequired = "Please Select ItemName"
-const ItemNameAlreadyExists = "This ItemName Already Exists"
+const ItemNameAlreadyExists = "This Item Name Already Exists"
 const itemQtyIsRequired = "Please Enter One Item Quantity"
 
 //Payment and Receipt Pages Error Message
@@ -165,6 +165,8 @@ const selectUnit = "Please Select Unit"
 const recordNotAvailable = "Records Not available "
 
 const ImageIsRequired = 'Only JPG, JPEG, or PNG files are allowed.'
+const AllItemExist = 'All Item Exist'
+
 
 export const alertMessages = {
     defaultAddressIsSelected,
@@ -280,7 +282,8 @@ export const alertMessages = {
     ImageIsRequired,
     No_Kg_IsRerquired,
     atLeastOneCheckboxCheck,
-    RateIsRequired
+    RateIsRequired,
+    AllItemExist
 };
 
 

@@ -787,6 +787,7 @@ import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import { ItemAPIResponseFunc } from "./stockEntryFunctions";
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
+import paginationFactory from "react-bootstrap-table2-paginator";
 
 
 
@@ -814,6 +815,8 @@ const StockEntry = (props) => {
     const [itemAPIDataLoading, setItemAPIDataLoading] = useState(false);
 
     const [AddLoading, setAddLoading] = useState(false);
+    const [Add_AllLoading, setAdd_AllLoading] = useState(false);
+
 
     const location = { ...history.location }
     const hasShowModal = props.hasOwnProperty(mode.editValue)
@@ -830,11 +833,14 @@ const StockEntry = (props) => {
         saveBtnloading,
         partyItemListLoading,
         StockCount,
-        ItemDropDown
+        ItemDropDown,
+        ItemDropDownloading
     } = useSelector((state) => ({
         partyItemListLoading: state.PartyItemsReducer.partyItemListLoading,
         saveBtnloading: state.StockEntryReducer.saveBtnloading,
         ItemDropDown: state.StockEntryReducer.ItemDropDown,
+        ItemDropDownloading: state.StockEntryReducer.ItemDropDownloading,
+
 
         postMsg: state.StockEntryReducer.postMsg,
         ItemList: state.PartyItemsReducer.partyItem,
@@ -847,24 +853,12 @@ const StockEntry = (props) => {
     const { commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
 
     // Common Party select Dropdown useEffect
-    useEffect(() => {
-        if (commonPartyDropSelect.value > 0) {
-            partySelectButtonHandler();
-        } else {
-            partySelectOnChangeHandler();
-        }
-    }, [commonPartyDropSelect]);
+
 
     useEffect(() => {
         const page_Id = pageId.STOCK_ENTRY
         dispatch(commonPageFieldSuccess(null));
-        dispatch(commonPageField(page_Id))
-        // dispatch(goButtonPartyItemAddPage({
-        //     jsonBody: JSON.stringify({
-        //         ..._cfunc.loginJsonBody(),
-        //         PartyID: commonPartyDropSelect.value
-        //     })
-        // }));
+        dispatch(commonPageField(page_Id));
 
         dispatch(Get_Items_Drop_Down({
             jsonBody: JSON.stringify({
@@ -980,7 +974,7 @@ const StockEntry = (props) => {
     const pagesListColumns = [
         {
             text: "Item Name",
-            dataField: "id",
+            dataField: "ItemName",
             classes: () => "",
             formatter: (cellContent, row, key) => {
                 return (
@@ -993,16 +987,19 @@ const StockEntry = (props) => {
             dataField: "",
             classes: () => "",
             formatter: (cellContent, row, key) => {
-
+                debugger
                 return (<span style={{ justifyContent: 'center' }}>
                     <CInput
                         id={`Qty${key}`}
                         key={`Qty${row.id}`}
+                        value={row.Qty}
                         autoComplete="off"
                         type="text"
                         cpattern={decimalRegx}
                         className="text-end"
-                        onChange={(e) => { row.Qty = e.target.value }}
+                        onChange={(e) => {
+                            row.Qty = e.target.value
+                        }}
                     />
                 </span>)
             }
@@ -1175,20 +1172,56 @@ const StockEntry = (props) => {
         return initialTableData;
     }
 
-    async function AddPartyHandler() {
+    async function AddPartyHandler(e, Type) {
         setAddLoading(true)
+
+        let selectedItem = []
         if (values.ItemName === '') {
-            customAlert({
-                Type: 4,
-                Message: alertMessages.selectItemName
-            });
-            setAddLoading(false)
-            return;
+            if (Type === "add_All" && TableArr.length !== ItemDropDown.length) {
+                setAddLoading(false)
+                setAdd_AllLoading(true)
+                selectedItem = ItemDropDown
+            } else {
+                if (TableArr.length === ItemDropDown.length) {
+                    setAddLoading(false)
+                    setAdd_AllLoading(false)
+                    customAlert({
+                        Type: 4,
+                        Message: alertMessages.AllItemExist
+                    });
+                } else if (values.ItemName === '' && Type !== "add_All") {
+                    setAddLoading(false)
+                    setAdd_AllLoading(false)
+                    customAlert({
+                        Type: 4,
+                        Message: alertMessages.selectItemName
+                    });
+                }
+
+                return;
+
+            }
         }
+
+
         try {
             // const apiResponse = await StockEntry_GO_button_api_For_Item(values.ItemName.value);
-            const selectedItem = ItemDropDown.filter((index, key) => (values.ItemName.value === index.Item))
-            const updatedTableData = await ItemAPIResponseFunc(selectedItem, [...TableArr]);
+            if (values.ItemName !== '' && Type !== "add_All") {
+                selectedItem = ItemDropDown.filter((index, key) => (values.ItemName.value === index.Item))
+                const ExistInTable = TableArr.filter((index, key) => (values.ItemName.value === index.ItemId))
+
+                if (ExistInTable.length > 0) {
+                    setAddLoading(false)
+                    setAdd_AllLoading(false)
+                    customAlert({
+                        Type: 4,
+                        Message: alertMessages.ItemNameAlreadyExists
+                    });
+                    return
+                }
+
+            }
+            const updatedTableData = await ItemAPIResponseFunc(selectedItem, Type !== "add_All" ? [...TableArr] : []);
 
             setState((prevState) => {
                 const newState = { ...prevState };
@@ -1196,12 +1229,13 @@ const StockEntry = (props) => {
                 newState.hasValid.ItemName.valid = true;
                 return newState;
             });
-
             setTableArr(updatedTableData);
             dispatch(BreadcrumbShowCountlabel(`Count:${updatedTableData.length}`));
             setAddLoading(false)
+            setAdd_AllLoading(false)
         } catch (error) {
             setAddLoading(false)
+            setAdd_AllLoading(false)
             _cfunc.CommonConsole('Error in AddPartyHandler:', error);
         }
     }
@@ -1214,11 +1248,7 @@ const StockEntry = (props) => {
 
     }
 
-    function partySelectButtonHandler() {
-        dispatch(goButtonPartyItemAddPage({
-            jsonBody: JSON.stringify({ ..._cfunc.loginJsonBody(), PartyID: commonPartyDropSelect.value })
-        }))
-    }
+
 
     function partySelectOnChangeHandler() {
         dispatch(goButtonPartyItemAddPageSuccess([]))
@@ -1301,7 +1331,7 @@ const StockEntry = (props) => {
         }
 
         if (values.IsAllStockZero) {
-            debugger
+
             setItemAPIDataLoading(true)
             const filterDataItems = filterData.map(item => item.Item);
             const ItemListOptionsItems = ItemList_Options.map(item => item.value);
@@ -1355,6 +1385,12 @@ const StockEntry = (props) => {
         } catch (e) { _cfunc.btnIsDissablefunc({ btnId, state: false }) }
     };
 
+    const paginationOptions = {
+        sizePerPage: 25, // Number of rows per page
+        hideSizePerPage: true, // Hide the size per page dropdown
+        hidePageListOnlyOnePage: true, // Hide the pagination list when there's only one page
+    };
+
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
@@ -1388,7 +1424,7 @@ const StockEntry = (props) => {
                                                 name="ItemName"
                                                 value={values.ItemName}
                                                 isSearchable={true}
-                                                isLoading={partyItemListLoading}
+                                                isLoading={ItemDropDownloading}
                                                 className="react-dropdown"
                                                 classNamePrefix="dropdown"
                                                 styles={{
@@ -1404,9 +1440,9 @@ const StockEntry = (props) => {
 
                                 </Col>
 
-                                <Col sm={3} className="">
+                                <Col sm={2} className="">
                                     <FormGroup className="mb- row mt-3 mb-1 " >
-                                        <Label className="col-sm-5 p-2"
+                                        <Label className="col p-2"
                                             style={{ width: "115px" }}>{fieldLabel.IsAllStockZero} </Label>
                                         <Col sm={7} style={{ marginTop: '5px' }} >
                                             <div className="form-check form-switch form-switch-md mb-3">
@@ -1426,51 +1462,58 @@ const StockEntry = (props) => {
                                         ><Spinner className="mt-1" style={{ width: "15px", height: "15px" }} /></Button> :
                                         < Button type="button" color="btn btn-outline-primary border-1 font-size-11 text-center mt-1  p-2"
                                             onClick={(e,) => AddPartyHandler(e, "add")}
-                                            disabled={!StockCount}
-                                        > Add</Button>
+                                            disabled={!StockCount || ItemDropDownloading}
+                                        > Add </Button>
                                     }
 
+
+                                </Col>
+
+                                <Col sm={1} className="mt-3" >
+                                    {Add_AllLoading
+                                        ? < Button type="button" color="btn btn-outline-primary border-1 font-size-11 text-center mt-1"
+                                        ><Spinner className="mt-1" style={{ width: "15px", height: "15px" }} /></Button> :
+                                        < Button type="button" color="btn btn-outline-primary border-1 font-size-11 text-center mt-1  p-2"
+                                            style={{ cursor: "pointer" }}
+                                            onClick={(e,) => AddPartyHandler(e, "add_All")}
+                                            disabled={!StockCount || ItemDropDownloading || (TableArr.length === ItemDropDown.length)}
+                                        > Add All</Button>
+                                    }
 
                                 </Col>
                             </div>
                         </div >
 
-
                         {values.IsAllStockZero && <div style={{ color: "red", fontSize: "18px" }} className="sliding-text " >  Warning: If new stock is added then the previous whole item stock will become zero.  </div>}
+
+
+
+
                         <ToolkitProvider
-                            keyField={"id"}
+                            keyField="id"
                             data={TableArr}
                             columns={pagesListColumns}
+
                             search
                         >
-                            {(toolkitProps,) => (
+                            {(toolkitProps) => (
                                 <React.Fragment>
-                                    <Row>
-                                        <Col xl="12">
-                                            <div className="table-responsive table" style={{ minHeight: "45vh" }}>
-                                                <BootstrapTable
-                                                    keyField={"id"}
-                                                    id="table_Arrow"
-                                                    classes={"table  table-bordered table-hover "}
-                                                    noDataIndication={
-                                                        <div className="text-danger text-center ">
-                                                            Items Not available
-                                                        </div>
-                                                    }
-                                                    onDataSizeChange={(e) => {
-                                                        _cfunc.tableInputArrowUpDounFunc("#table_Arrow")
-                                                    }}
-
-                                                    {...toolkitProps.baseProps}
-                                                />
-                                                {globalTableSearchProps(toolkitProps.searchProps)}
-                                            </div>
-                                        </Col>
-                                    </Row>
-
+                                    <BootstrapTable
+                                        keyField="id"
+                                        id="table_Arrow"
+                                        classes='custom-table'
+                                        noDataIndication={<div className="text-danger text-center">Item Not available</div>}
+                                        onDataSizeChange={({ dataSize }) => {
+                                            dispatch(BreadcrumbShowCountlabel(`Count : ${dataSize}`));
+                                        }}
+                                        pagination={paginationFactory(paginationOptions)} // Add pagination options
+                                        {...toolkitProps.baseProps}
+                                    />
+                                    {globalTableSearchProps(toolkitProps.searchProps)}
                                 </React.Fragment>
                             )}
                         </ToolkitProvider>
+
 
 
                         {
