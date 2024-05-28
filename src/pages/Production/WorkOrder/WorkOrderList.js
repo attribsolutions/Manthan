@@ -82,10 +82,10 @@ const WorkOrderList = () => {
     }, [makeProductionReIssue])
 
     const goButtonHandler = (onload) => {
-        debugger
+        
         const jsonBody = JSON.stringify({
-            FromDate: onload ? "" : fromdate,
-            ToDate: onload ? "" : todate,
+            FromDate: onload===true ? "" : fromdate,
+            ToDate:  onload===true  ? "" : todate,
         });
         dispatch(getWorkOrderListPage({ jsonBody, subPageMode }));
     }

@@ -274,7 +274,7 @@ const CommonPurchaseList = (props) => {
                       <Spinner style={{ height: "16px", width: "16px" }} color="white" />
                       : <span
 
-                        className=" fas fa-eye font-size-16"
+                        className="fas fa-file-invoice font-size-16"
                       ></span>
                     }
                   </Button>

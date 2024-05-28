@@ -313,8 +313,6 @@ export const CommonPartyDropValue = () => {//+++++++++++++++++++++ Session commo
 };
 
 
-
-
 export const loginEmployeeID = () => {//+++++++++++++++++++++ Session loginPartyID Id+++++++++++++++++++++++++++++++
 
   try {
@@ -322,6 +320,17 @@ export const loginEmployeeID = () => {//+++++++++++++++++++++ Session loginParty
     return employeeId
   } catch (e) {
     alert("Common login EmployeeID Func  Error");
+  }
+  return 0;
+};
+
+export const loginPriceListID = () => {//+++++++++++++++++++++ Session loginPartyID Id+++++++++++++++++++++++++++++++
+  
+  try {
+    const PriceList_id = parseInt(loginUserDetails().PriceList_id);
+    return PriceList_id
+  } catch (e) {
+    alert("Common login PriceList_id Func  Error");
   }
   return 0;
 };

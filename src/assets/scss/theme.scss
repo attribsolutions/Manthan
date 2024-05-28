@@ -324,7 +324,7 @@ textarea:focus {
 $opacity: 0.16;
 
 
-$c_red: RED;
+$c_red: rgba(243, 69, 30, 0.906);
 
 .green_label {
   @extend %common-list-label;
@@ -336,6 +336,12 @@ $c_red: RED;
   @extend %common-list-label;
   background-color: rgba($yellow, $opacity); // Use your main color
   color: $yellow;
+}
+
+.darkOrange_label {
+  @extend %common-list-label;
+  background-color: rgba($darkOrange, $opacity); // Use your main color
+  color: $darkOrange;
 }
 
 .purple_label {
