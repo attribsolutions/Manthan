@@ -788,6 +788,7 @@ import { ItemAPIResponseFunc } from "./stockEntryFunctions";
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 import paginationFactory from "react-bootstrap-table2-paginator";
+import { table_ArrowUseEffect } from "../../../components/Common/CommonUseEffect";
 
 
 
@@ -927,6 +928,8 @@ const StockEntry = (props) => {
 
         dispatch(GetStockCount({ jsonBody }))
     }, [currentDate_ymd])
+
+    useEffect(() => table_ArrowUseEffect("#table_Arrow"), [TableArr]);
 
     function Date_Onchange(e, date) {
         const PartyID = _cfunc.loginPartyID()
@@ -1505,7 +1508,9 @@ const StockEntry = (props) => {
                                         noDataIndication={<div className="text-danger text-center">Item Not available</div>}
                                         onDataSizeChange={({ dataSize }) => {
                                             dispatch(BreadcrumbShowCountlabel(`Count : ${dataSize}`));
+                                            _cfunc.tableInputArrowUpDounFunc("#table_Arrow")
                                         }}
+
                                         pagination={paginationFactory(paginationOptions)} // Add pagination options
                                         {...toolkitProps.baseProps}
                                     />
