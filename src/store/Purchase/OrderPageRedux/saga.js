@@ -72,7 +72,7 @@ function* goButtonGenFunc({ config }) {                      // GO-Botton order 
       yield response.Data.TermsAndConditions = termArr;
     }
     else if (subPageMode === url.IB_ORDER) {
-      
+
       response = yield call(IBOrderPage_GoButton_API, config); // GO-Botton IB-invoice Add Page API
 
       yield response.Data.OrderItems.forEach((ele, k) => {
@@ -159,6 +159,7 @@ function* orderList_GoBtn_GenFunc({ config }) {
     else if ((subPageMode === url.GRN_STP_1) || subPageMode === url.GRN_STP_3) {
 
       response = yield call(GRN_STP_for_orderList_goBtn, config); // GO-Botton IB-invoice Add Page API
+
     }
     else if ((subPageMode === url.IB_ORDER_PO_LIST) || (subPageMode === url.IB_ORDER_SO_LIST) || (subPageMode === url.IB_INVOICE_STP)) {
       response = yield call(IBOrderList_get_Filter_API, config); // GO-Botton IB-invoice Add Page API
@@ -250,6 +251,10 @@ function* orderList_GoBtn_GenFunc({ config }) {
     } else if (subPageMode === url.APP_ORDER_LIST) {
       newList = newList.filter(i => i.MobileAppOrderFlag !== null);
     }
+    else if (subPageMode === url.GRN_STP_1) {
+      newList = newList.filter(i => i.Status === "Open");
+    }
+    
     yield put(getOrderListPageSuccess(newList))
 
   } catch (error) {

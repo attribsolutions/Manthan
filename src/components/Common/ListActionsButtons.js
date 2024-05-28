@@ -20,6 +20,7 @@ export const printBtnCss = "badge badge-soft-primary font-size-12 btn c_btn-prim
 const printInvoiceBtnCss = "badge badge-soft-info font-size-12 btn btn-info waves-effect waves-light w-xxs border border-light"
 export const hideBtnCss = "badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light "
 
+const forceFullyCompletedBtnCss = "badge badge-soft-primary font-size-12 btn c_btn-primary waves-effect waves-light w-xxs border border-light"
 
 //******************** icon class ******************************
 const editIconClass = "mdi mdi-pencil font-size-16";
@@ -41,12 +42,7 @@ const claimMasterPrintIconClass = "far fa-file-alt font-size-14";  //Icon Added 
 const makeCreditNoteIconClass = "mdi mdi-file-move font-size-16";
 const ShowImageIconClass = "mdi mdi-image font-size-16";
 
-
-
-
-// const makeCreditNoteIconClass = "far fa-file-alt font-size-14";  //Icon Added For Claim Print on Claim list
-
-
+const forceFullyCompletedIconClass="fas fa-check font-size-14"
 
 
 
@@ -422,6 +418,14 @@ export const listPageActionsButtonFunc = (props) => {
                         isDummyBtn: dummyDisable_OrderApproval
                     })}
 
+                    {renderButtonIfNeeded({  // Button For Material Issue List Mode 2
+                        condition: subPageMode===url.MATERIAL_ISSUE_STP,
+                        btnmode: mode.copy,
+                        iconClass: forceFullyCompletedIconClass,
+                        actionFunc: copyBodyfunc,
+                        title: "ForceFullyCompleted",
+                        buttonClasss: forceFullyCompletedBtnCss,
+                    })}
 
                 </div>
             </span>

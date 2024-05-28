@@ -281,6 +281,20 @@ const WorkOrder = (props) => {
         dispatch(getBOMListPage(jsonBody));
     }, [])
 
+    // const ItemDropdown_Options = Items
+    //     .filter(index => index.IsActive)
+    //     .map(index => ({
+    //         value: index.ID,
+    //         label: `${index.ItemName} (BOMDate-${(_cfunc.date_dmy_func(index.BomDate))})`,
+    //         ItemName: index.ItemName,
+    //         ItemID: index.Item,
+    //         Unit: index.Unit,
+    //         UnitName: index.UnitName,
+    //         EstimatedOutputQty: index.EstimatedOutputQty,
+    //         StockQty: index.StockQty.toFixed(2),
+    //         BOMDate: (_cfunc.date_dmy_func(index.BomDate)),
+    //     }));
+
     const ItemDropdown_Options = Items
         .filter(index => index.IsActive)
         .map(index => ({
@@ -292,8 +306,14 @@ const WorkOrder = (props) => {
             UnitName: index.UnitName,
             EstimatedOutputQty: index.EstimatedOutputQty,
             StockQty: index.StockQty.toFixed(2),
-            BOMDate: (_cfunc.date_dmy_func(index.BomDate)),
-        }));
+            BOMDate: _cfunc.date_dmy_func(index.BomDate), // Assuming this returns a string
+        }))
+        .sort((a, b) => {
+            // Convert BOMDate to a Date object for comparison
+            const dateA = new Date(a.BOMDate.split('-').reverse().join('-'));
+            const dateB = new Date(b.BOMDate.split('-').reverse().join('-'));
+            return dateB - dateA; // Descending order
+        });
 
     const pagesListColumns = [
         {
@@ -476,7 +496,7 @@ const WorkOrder = (props) => {
     const customOption = (props) => {
 
         const { innerProps, label, data } = props;
-        
+
         return (
             <components.Option {...props}>
                 <div {...innerProps}>

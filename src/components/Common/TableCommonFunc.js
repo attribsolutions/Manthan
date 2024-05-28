@@ -49,9 +49,9 @@ export const selectAllCheck = ({
       }
     }
     return <div className="">
-      <Input type="checkbox" checked={head.checked} /> 
+      <Input type="checkbox" checked={head.checked} />
       {/*  marginBottom: 0  added because in common  them css margin have change affected here so to fix extra margin */}
-      <label style={{ paddingLeft: "7px", marginBottom: 0 }}>{headLabel ? headLabel : "SelectAll"}</label>  
+      <label style={{ paddingLeft: "7px", marginBottom: 0 }}>{headLabel ? headLabel : "SelectAll"}</label>
     </div>
   },
   selectionRenderer: ({ mode, checked, ...rest }) => {
@@ -93,8 +93,9 @@ const LABEL_COLORS = {
   "Approved": "green_label",
   "Order send To SAP": "indigo_label",
   "Reject": "red_label",
-  "Partially Completed": "yellow_label",
+  "Partially Completed": "darkOrange_label",
   "Completed": "green_label",
+  "Close": "red_label",
 };
 
 

@@ -49,8 +49,8 @@ const GRNAdd = (props) => {
     const [orderAmount, setOrderAmount] = useState(0);
     const [grnDetail, setGrnDetail] = useState({});
     const [grnItemList, setgrnItemList] = useState([]);
-    const [openPOdrp, setopenPOdrp] = useState(false);
-    const [openPOdata, setopenPOdata] = useState([]);
+    const [openPOdrp, setOpenPOdrp] = useState(false);
+    const [openPOdata, setOpenPOdata] = useState([]);
     const [invoiceNo, setInvoiceNo] = useState('');
     const [editCreatedBy, seteditCreatedBy] = useState("");
     const [EditData, setEditData] = useState({});
@@ -111,7 +111,7 @@ const GRNAdd = (props) => {
             setgrnItemList([]);
             setGrnDetail({});
             setInvoiceNo([]);
-            setopenPOdata([]);
+            setOpenPOdata([]);
 
             if (ratePostJsonBody.length > 0) {
                 dispatch(saveRateMaster(JSON.stringify(ratePostJsonBody)));
@@ -155,7 +155,7 @@ const GRNAdd = (props) => {
             setGrnDetail(grnDetails)
             const myArr = grnDetails.challanNo.split(",");
             myArr.map(i => ({ Name: i, hascheck: false }))
-            setopenPOdata(grnDetails.GRNReferences)
+            setOpenPOdata(grnDetails.GRNReferences)
 
             items.Status = false
             dispatch(_act.makeGRN_Mode_1ActionSuccess(items))
@@ -568,6 +568,17 @@ const GRNAdd = (props) => {
         dispatch(_act.BreadcrumbShowCountlabel(`Count:${newArr.length} ₹ ${sum.toFixed(2)}`));
     }
 
+    const handleCheckboxChange = (e) => {
+        // Ensure openPOdata is not undefined and has at least one element
+        if (openPOdata && openPOdata.length > 0) {
+            openPOdata[0].Inward = e.target.checked;
+            setOpenPOdata([...openPOdata]); // Update the state with the new value
+            setOpenPOdrp(true);
+        } else {
+            console.error('openPOdata is undefined or empty');
+        }
+    };
+
     const saveHandeller = (event) => {
 
         event.preventDefault();
@@ -686,6 +697,7 @@ const GRNAdd = (props) => {
                 "Rate": index.Rate,
                 "CommonID": 0,
                 "EffectiveDate": currentDate_ymd,
+                "PriceList": _cfunc.loginPriceListID(),
                 "Party": _cfunc.loginPartyID(),
                 "Company": _cfunc.loginCompanyID(),
                 "CreatedBy": _cfunc.loginUserID(),
@@ -802,21 +814,13 @@ const GRNAdd = (props) => {
                                         style={{ width: "130px" }}>Close PO</Label>
                                     <Col md="7" style={{ marginLeft: "-14px" }}>
                                         {
-                                            openPOdata.length === 0 ?
-                                                <Input
-                                                    type="checkbox"
-                                                    style={{ paddingTop: "7px" }}
-                                                    placeholder="Enter Invoice No"
-                                                    // disabled={pageMode === mode.view ? true : false}
-                                                    onChange={(e) => setopenPOdrp(true)}
-                                                />
-                                                :
+                                            openPOdata.length > 1 ?
                                                 <Dropdown
                                                     className="d-none d-lg-inline-block ms-1"
 
                                                     isOpen={openPOdrp}
                                                     toggle={() => {
-                                                        setopenPOdrp(!openPOdrp)
+                                                        setOpenPOdrp(!openPOdrp)
                                                     }}
                                                 >
                                                     <DropdownToggle
@@ -862,6 +866,15 @@ const GRNAdd = (props) => {
 
                                                     </DropdownMenu>
                                                 </Dropdown>
+
+                                                :
+                                                <Input
+                                                    type="checkbox"
+                                                    style={{ paddingTop: "7px", marginLeft: "20px", marginTop: "10px" }}
+                                                    placeholder="Enter Invoice No"
+                                                    defaultChecked={true}
+                                                    onChange={handleCheckboxChange}
+                                                />
                                         }
                                     </Col>
                                 </FormGroup>

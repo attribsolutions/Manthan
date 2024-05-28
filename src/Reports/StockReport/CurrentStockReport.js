@@ -24,6 +24,7 @@ import { getClusterlist } from "../../store/Administrator/ClusterRedux/action";
 import { getClusterlistSuccess } from "../../store/Administrator/ClusterRedux/action";
 import { Get_Subcluster_On_cluster_API, SubGroup_By_Group_DropDown_API } from "../../helpers/backend_helper";
 import { allLabelWithBlank } from "../../components/Common/CommonErrorMsg/HarderCodeData";
+import { cleanData } from "jquery";
 
 const CurrentStockReport = (props) => {
 
@@ -207,25 +208,26 @@ const CurrentStockReport = (props) => {
 			controlTypeName: "Number"
 		},
 		{
+			text: 'Group',
+			dataField: 'GroupName',
+			showing: true,
+			groupBy: true,
+			sequence: 5,
+			controlTypeName: "Text"
+		}, {
+			text: 'SubGroup',
+			dataField: 'SubGroupName',
+			showing: true,
+			groupBy: true,
+			sequence: 5,
+			controlTypeName: "Text"
+		},
+		{
 			text: 'Item',
 			dataField: 'ItemName',
 			showing: ['', 0, 1].includes(stockTypeSelect.value),
 			groupBy: true,
 			sequence: 1,
-			controlTypeName: "Text"
-		}, {
-			text: 'Product',
-			dataField: 'GroupName',
-			showing: stockTypeSelect.value === "",
-			groupBy: false,
-			sequence: 5,
-			controlTypeName: "Text"
-		}, {
-			text: 'SubProduct',
-			dataField: 'SubGroupName',
-			showing: stockTypeSelect.value === "",
-			groupBy: false,
-			sequence: 5,
 			controlTypeName: "Text"
 		}, {
 			text: 'ProductType',
@@ -617,6 +619,13 @@ const CurrentStockReport = (props) => {
 		}
 	}
 
+	const defaultSorted = [
+		{
+			dataField: "ItemName", // if dataField is not match to any column you defined, it will be ignored.
+			order: "asc", // desc or asc
+		},
+	];
+
 	return (
 		<React.Fragment>
 			<MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
@@ -930,6 +939,7 @@ const CurrentStockReport = (props) => {
 			<div className="mt-1">
 				<ToolkitProvider
 					keyField="ID"
+					defaultSorted={defaultSorted}
 					data={tableData}
 					columns={selectedColumns}
 					search
