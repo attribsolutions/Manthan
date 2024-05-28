@@ -247,7 +247,7 @@ const ProductionMaster = (props) => {
     }
 
     function ItemNameOnChangeHandler(hasSelect, evn) {
-        
+
         setAllFieldsEnabled(true)
         setOriginalValues({ orignalNumberOfLot: hasSelect.NumberOfLot, orignalEstimatedQty: hasSelect.EstimatedQuantity })
 
@@ -322,7 +322,7 @@ const ProductionMaster = (props) => {
         const btnId = event.target.id;
         let jsonBody
         try {
-            
+
             if (!isActionPermitted && formValid(state, setState)) { // Check if action is not already permitted
                 btnIsDissablefunc({ btnId, state: true });
                 jsonBody = JSON.stringify({
@@ -350,7 +350,7 @@ const ProductionMaster = (props) => {
 
                 const originalEstimatedQty = parseFloat(values.EstimatedQuantity);
                 const actualQuantity = parseFloat(values.ActualQuantity);
-                
+
                 const percentageDecrease = parseFloat((1 - actualQuantity / originalEstimatedQty) * 100).toFixed(2);
                 let message;
                 let isPermission
@@ -451,10 +451,6 @@ const ProductionMaster = (props) => {
                                                 placeholder="Enter Estimated Quantity"
                                                 value={values.NumberOfLot}
                                                 autoComplete="off"
-                                                style={{ backgroundColor: "white" }}
-                                                // onChange={(event) => {
-                                                //     onChangeText({ event, state, setState })
-                                                // }}
                                                 onChange={(e) => { NumberOfLotOnChange(e.target.value) }}
                                             />
                                         </Col>
@@ -474,7 +470,6 @@ const ProductionMaster = (props) => {
                                                 placeholder="Enter Estimated Quantity"
                                                 value={values.EstimatedQuantity}
                                                 autoComplete="off"
-                                                style={{ backgroundColor: "white" }}
                                                 onChange={(event) => {
                                                     onChangeText({ event, state, setState })
                                                 }}

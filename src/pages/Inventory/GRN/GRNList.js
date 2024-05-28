@@ -171,8 +171,6 @@ const GRNList = () => {
     }
 
 
-
-
     const HeaderContent = () => {
         return (
             <div className="px-2   c_card_filter text-black" >
@@ -241,9 +239,6 @@ const GRNList = () => {
             </div >
         )
     }
-
-
-
 
 
     const partySelectButtonHandler = () => {

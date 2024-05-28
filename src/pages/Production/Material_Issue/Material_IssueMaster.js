@@ -28,7 +28,7 @@ import {
     goButtonForMaterialIssue_Master_ActionSuccess,
     saveMaterialIssue, SaveMaterialIssueSuccess
 } from "../../../store/Production/Matrial_Issue/action";
-import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
+
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { Tbody, Thead } from "react-super-responsive-table";
@@ -40,6 +40,7 @@ import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 import { Qty_Distribution_Func, updateWorkOrderQuantity_By_Lot } from "./DistributionFunc";
 import Select, { components } from "react-select";
+import { getWorkOrderListPage } from "../../../store/Production/WorkOrder/action";
 
 const MaterialIssueMaster = (props) => {
 
@@ -52,6 +53,8 @@ const MaterialIssueMaster = (props) => {
         ItemName: "",
         NumberOfLot: 0,
         LotQuantity: 0,
+        TotalQty: 0,
+        TotalNumberOfLot: 0
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
@@ -74,23 +77,32 @@ const MaterialIssueMaster = (props) => {
         userAccess,
         Items,
         GoButton = [],
-        saveBtnloading
+        saveBtnloading,
+        goBtnloading
     } = useSelector((state) => ({
         saveBtnloading: state.MaterialIssueReducer.saveBtnloading,
         postMsg: state.MaterialIssueReducer.postMsg,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
         Items: state.WorkOrderReducer.WorkOrderList,
-        GoButton: state.MaterialIssueReducer.GoButton
+        GoButton: state.MaterialIssueReducer.GoButton,
+        goBtnloading: state.MaterialIssueReducer.goBtnloading
     }));
-
-    const { Data = [] } = GoButton
 
     useEffect(() => {
         const page_Id = pageId.MATERIAL_ISSUE
-        dispatch(goButtonForMaterialIssue_Master_ActionSuccess([]))
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
+        const jsonBody = JSON.stringify({
+            FromDate: "",
+            ToDate: "",
+        });
+        dispatch(getWorkOrderListPage({ jsonBody }));
+
+        return () => {
+            dispatch(goButtonForMaterialIssue_Master_ActionSuccess([]))
+
+        }
     }, []);
 
     const location = { ...history.location }
@@ -122,31 +134,32 @@ const MaterialIssueMaster = (props) => {
     }, [userAccess])
 
     useEffect(() => {
-
         if ((GoButton.Status === true) && (GoButton.StatusCode === 200)) {
 
             setPageMode(GoButton.pageMode)
             const { ListData, Data } = GoButton
 
             if (GoButton.goButtonCallByMode) {
-                const { id, Item, ItemName, Unit, Quantity, NumberOfLot, Bom, RemaningQty } = ListData;
+                if (ListData) {
+                    const { id, Item, ItemName, Unit, Quantity, NumberOfLot, Bom, RemaningQty } = ListData;
+                    
+                    setState((i) => {
+                        i.values.MaterialIssueDate = currentDate_ymd
+                        i.values.ItemName = { value: id, label: ItemName, Item: Item, NoLot: NumberOfLot, lotQty: Quantity };
+                        i.values.NumberOfLot = NumberOfLot;
+                        i.values.LotQuantity = Quantity;
+                        i.hasValid.ItemName.valid = true;
+                        i.hasValid.MaterialIssueDate.valid = true;
+                        i.hasValid.NumberOfLot.valid = true;
+                        i.hasValid.LotQuantity.valid = true;
+                        return i
+                    })
+                    setItemselect({ Item: Item, Unit: Unit, id: id, Bom: Bom, Quantity: Quantity })
+                    setNoOfLotForDistribution(NumberOfLot)
+                    setOriginalQty(RemaningQty)
+                }
 
-                setState((i) => {
-                    i.values.MaterialIssueDate = currentDate_ymd
-                    i.values.ItemName = { value: id, label: ItemName, Item: Item, NoLot: NumberOfLot, lotQty: Quantity };
-                    i.values.NumberOfLot = NumberOfLot;
-                    i.values.LotQuantity = Quantity;
-                    i.hasValid.ItemName.valid = true;
-                    i.hasValid.MaterialIssueDate.valid = true;
-                    i.hasValid.NumberOfLot.valid = true;
-                    i.hasValid.LotQuantity.valid = true;
-                    return i
-                })
-                setItemselect({ Item: Item, Unit: Unit, id: id, Bom: Bom, Quantity: Quantity })
-                setNoOfLotForDistribution(NumberOfLot)
                 const Qty_Distribution_data = Qty_Distribution_Func(Data);
-                setOriginalQty(RemaningQty)
-
                 setGoButtonList(Qty_Distribution_data)
             }
             else {
@@ -254,17 +267,21 @@ const MaterialIssueMaster = (props) => {
     useEffect(() => _cfunc.tableInputArrowUpDounFunc("#table_Arrow"), [goButtonList]);
 
     const ItemDropdown_Options = Items.map((index) => ({
+        id: index.id,
         value: index.id,
         label: index.ItemName,
         ItemName: index.ItemName,
         Quantity: index.RemaningQty,
         Item: index.Item,
-        BomID: index.Bom,
+        Bom: index.Bom,
         Unit: index.Unit,
         NumberOfLot: index.RemainingLot,
-        WorkDate: index.WorkDate
-    }));
+        WorkDate: index.WorkDate,
+        TotalNumberOfLot: index.NumberOfLot,
+        TotalQty: index.Quantity,
 
+    }));
+    console.log(Items)
     const pagesListColumns = [
         {
             text: "Item Name",
@@ -383,14 +400,7 @@ const MaterialIssueMaster = (props) => {
                 )
             }
         },
-
     ]
-
-    const pageOptions = {
-        sizePerPage: 10,
-        totalSize: Data.length,
-        custom: true,
-    };
 
     function ItemOnchange(hasSelect, evn) {
         onChangeSelect({ hasSelect, evn, state, setState });
@@ -426,14 +436,17 @@ const MaterialIssueMaster = (props) => {
                     NoOfLots: Number(values.NumberOfLot),
 
                 });
-                const body = { jsonBody, pageMode }
+                const body = { jsonBody, pageMode, goButtonCallByMode: true, }
                 dispatch(goButtonForMaterialIssue_Master_Action(body));
             }
     }
 
     function ItemOnchange(e) {
+        
         dispatch(goButtonForMaterialIssue_Master_ActionSuccess([]))
         setItemselectonchange(e)
+        setItemselect({ Item: e.Item, Unit: e.Unit, id: e.id, Bom: e.Bom, Quantity: e.Quantity })
+        setNoOfLotForDistribution(e.NumberOfLot)
         setState((i) => {
             i.values.ItemName = {
                 value: e.value,
@@ -444,8 +457,12 @@ const MaterialIssueMaster = (props) => {
             };
             i.values.NumberOfLot = e.NumberOfLot;
             i.values.LotQuantity = e.Quantity;
+            i.values.TotalNumberOfLot = e.TotalNumberOfLot;
+            i.values.TotalQty = e.TotalQty;
             i.hasValid.NumberOfLot.valid = true;
             i.hasValid.LotQuantity.valid = true;
+            i.hasValid.TotalNumberOfLot.valid = true;
+            i.hasValid.TotalQty.valid = true;
             i.hasValid.ItemName.valid = true;
             return i
         })
@@ -470,7 +487,7 @@ const MaterialIssueMaster = (props) => {
     }
 
     function NumberOfLotchange(event) {
-
+        
         let input = event.trim(); // Remove leading and trailing whitespace
         let defaultNoOfLot = parseFloat(noOfLotForDistribution);
         let remainingQuantity = 0
@@ -600,12 +617,14 @@ const MaterialIssueMaster = (props) => {
     const customOption = (props) => {
 
         const { innerProps, label, data } = props;
-
+        
         return (
             <components.Option {...props}>
                 <div {...innerProps}>
                     <div >Name:{data.ItemName}</div>
-                    <div>No Of Lot:{data.NumberOfLot}</div>
+                    <div>Total Number Of Lot:{data.TotalNumberOfLot}</div>
+                    <div>Number Of Lot:{data.NumberOfLot}</div>
+                    <div>Total Qty:{data.TotalQty}</div>
                     <div>Quantity:{data.Quantity}</div>
                     <div>WorkDate:{_cfunc.date_dmy_func(data.WorkDate)}</div>
                 </div>
@@ -664,8 +683,35 @@ const MaterialIssueMaster = (props) => {
                                             </Col>
                                         </FormGroup>
                                     </Col >
+
                                     <Col sm="6">
-                                        <FormGroup className="mb-2 mt-2 row  " style={{ marginTop: "" }}>
+                                        <FormGroup className="mt-2 row" >
+                                            <Label className="mt-1" style={{ width: "150px" }}>
+                                                {fieldLabel.TotalNumberOfLot}
+                                            </Label>
+                                            <Col sm={7}>
+                                                <Label className="mt-1" style={{ width: "150px", marginRight: "20px" }}>
+                                                    {values.TotalNumberOfLot}
+                                                </Label>
+                                            </Col>
+                                        </FormGroup>
+                                    </Col>
+
+                                    <Col sm="6">
+                                        <FormGroup className=" mt-2  row" >
+                                            <Label className="mt-2" style={{ width: "100px" }}> {fieldLabel.TotalQty} </Label>
+                                            <Col sm={7}>
+                                                <Label className="mt-2" style={{ width: "100px" }}>
+                                                    {values.TotalQty}
+                                                </Label>
+                                            </Col>
+                                        </FormGroup>
+                                    </Col>
+
+
+
+                                    <Col sm="6">
+                                        <FormGroup className="mb-2 mt-1 row  " style={{ marginTop: "" }}>
                                             <Label className="mt-1" style={{ width: "150px" }}> {fieldLabel.NumberOfLot} </Label>
                                             <Col sm={7}>
                                                 <CInput
@@ -686,7 +732,7 @@ const MaterialIssueMaster = (props) => {
                                     </Col>
 
                                     <Col sm="6">
-                                        <FormGroup className="mb-1 mt-2  row" >
+                                        <FormGroup className="mb-1 mt-1  row" >
                                             <Label className="mt-2" style={{ width: "100px" }}> {fieldLabel.LotQuantity} </Label>
                                             <Col sm={7}>
                                                 <CInput
@@ -711,8 +757,9 @@ const MaterialIssueMaster = (props) => {
                                             </div>
                                         </FormGroup>
                                     </Col>
-
                                 </Col>
+
+
                                 <Col sm={1} className="mt-2">
                                     {!(pageMode === "view") && (goButtonList.length > 0) ? (
                                         <Change_Button onClick={(e) => {
@@ -722,7 +769,9 @@ const MaterialIssueMaster = (props) => {
                                         }} />
                                     ) : (
                                         (!(goButtonList.length > 0)) ? (
-                                            <Go_Button onClick={(e) => goButtonHandler(e)} />
+                                            <Go_Button
+                                                loading={goBtnloading}
+                                                onClick={(e) => goButtonHandler(e)} />
                                         ) : null
                                     )}
                                 </Col>
