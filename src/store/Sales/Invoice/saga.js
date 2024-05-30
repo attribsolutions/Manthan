@@ -149,6 +149,13 @@ function* InvoiceListGenFunc({ config }) {
       if (!(i.ImportFromExcel)) {
         i.forceSelectDissabled = true;
       }
+      debugger
+      if (i.DataRecovery) {
+        i.forceEditHide = true
+        i.forceDeleteHide = true;
+      }
+
+
       return i
     })
     yield put(invoiceListGoBtnfilterSucccess(newList));
