@@ -697,13 +697,13 @@ const GRNAdd = (props) => {
                 "Rate": index.Rate,
                 "CommonID": 0,
                 "EffectiveDate": currentDate_ymd,
-                "PriceList": _cfunc.loginPriceListID(),
                 "Party": _cfunc.loginPartyID(),
                 "Company": _cfunc.loginCompanyID(),
                 "CreatedBy": _cfunc.loginUserID(),
                 "UpdatedBy": _cfunc.loginUserID(),
                 "IsDeleted": 0,
                 "Item": index.Item,
+                "PriceList":39
             }))
 
             setRatePostJsonBody(RateJsonBody);

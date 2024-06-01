@@ -141,17 +141,22 @@ const MaterialIssueMaster = (props) => {
 
             if (GoButton.goButtonCallByMode) {
                 if (ListData) {
-                    const { id, Item, ItemName, Unit, Quantity, NumberOfLot, Bom, RemaningQty } = ListData;
+                    const { id, Item, ItemName, Unit, Quantity, NumberOfLot, Bom, RemaningQty, RemainingLot, TotalQty, TotalNumberOfLot } = ListData;
                     
                     setState((i) => {
                         i.values.MaterialIssueDate = currentDate_ymd
                         i.values.ItemName = { value: id, label: ItemName, Item: Item, NoLot: NumberOfLot, lotQty: Quantity };
-                        i.values.NumberOfLot = NumberOfLot;
-                        i.values.LotQuantity = Quantity;
+                        i.values.NumberOfLot = RemainingLot;
+                        i.values.LotQuantity = RemaningQty;
+                        i.values.TotalNumberOfLot = TotalNumberOfLot;
+                        i.values.TotalQty = TotalQty;
+
                         i.hasValid.ItemName.valid = true;
                         i.hasValid.MaterialIssueDate.valid = true;
                         i.hasValid.NumberOfLot.valid = true;
                         i.hasValid.LotQuantity.valid = true;
+                        i.hasValid.TotalNumberOfLot.valid = true;
+                        i.hasValid.TotalQty.valid = true;
                         return i
                     })
                     setItemselect({ Item: Item, Unit: Unit, id: id, Bom: Bom, Quantity: Quantity })
@@ -281,7 +286,7 @@ const MaterialIssueMaster = (props) => {
         TotalQty: index.Quantity,
 
     }));
-    console.log(Items)
+
     const pagesListColumns = [
         {
             text: "Item Name",
@@ -442,7 +447,7 @@ const MaterialIssueMaster = (props) => {
     }
 
     function ItemOnchange(e) {
-        
+
         dispatch(goButtonForMaterialIssue_Master_ActionSuccess([]))
         setItemselectonchange(e)
         setItemselect({ Item: e.Item, Unit: e.Unit, id: e.id, Bom: e.Bom, Quantity: e.Quantity })
@@ -487,7 +492,7 @@ const MaterialIssueMaster = (props) => {
     }
 
     function NumberOfLotchange(event) {
-        
+
         let input = event.trim(); // Remove leading and trailing whitespace
         let defaultNoOfLot = parseFloat(noOfLotForDistribution);
         let remainingQuantity = 0
@@ -617,7 +622,7 @@ const MaterialIssueMaster = (props) => {
     const customOption = (props) => {
 
         const { innerProps, label, data } = props;
-        
+
         return (
             <components.Option {...props}>
                 <div {...innerProps}>
