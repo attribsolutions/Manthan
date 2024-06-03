@@ -524,6 +524,15 @@ const Order = (props) => {
         label: "All"
     });
 
+    function debounce(func, wait) {
+        let timeout;
+        return function (...args) {
+            const context = this;
+            clearTimeout(timeout);
+            timeout = setTimeout(() => func.apply(context, args), wait);
+        };
+    }
+
     const pagesListColumns = [
         { //---------------"GroupName"------------
             dataField: "GroupName",
@@ -609,7 +618,8 @@ const Order = (props) => {
                             className=" text-end"
                             onChange={(e) => {
                                 row["Quantity"] = e.target.value
-                                itemWise_CalculationFunc(row, undefined, tableList)
+                                // itemWise_CalculationFunc(row, undefined, tableList)
+                                debounce(() => itemWise_CalculationFunc(row, undefined, tableList), 100)(); // 300ms debounce
                             }}
                         />
                     </>
@@ -1037,7 +1047,7 @@ const Order = (props) => {
     };
 
     function itemWise_CalculationFunc(row, IsComparGstIn, tableList = []) {
-        
+
         const calculate = orderCalculateFunc(row) //order calculation function 
         row["Amount"] = calculate.roundedTotalAmount
         const sumOfAmount = tableList.reduce((accumulator, currentObject) => accumulator + (Number(currentObject["Amount"]) || 0), 0);
@@ -1649,6 +1659,12 @@ const Order = (props) => {
                                                         style={{ width: "115px" }}>PO FromDate</Label>
                                                     <div className="col col-6 ">
                                                         <C_DatePicker
+                                                            options={{
+                                                                altInput: true,
+                                                                altFormat: "d-m-Y",
+                                                                dateFormat: "Y-m-d",
+                                                                minDate: "today",
+                                                            }}
                                                             id="pofromdate"
                                                             name="pofromdate"
                                                             value={poFromDate}
@@ -1664,6 +1680,12 @@ const Order = (props) => {
                                                         style={{ width: "130px" }}>PO ToDate</Label>
                                                     <div className="col col-6 ">
                                                         <C_DatePicker
+                                                            options={{
+                                                                altInput: true,
+                                                                altFormat: "d-m-Y",
+                                                                dateFormat: "Y-m-d",
+                                                                minDate: "today",
+                                                            }}
                                                             id="potodate"
                                                             name="potodate"
                                                             value={poToDate}

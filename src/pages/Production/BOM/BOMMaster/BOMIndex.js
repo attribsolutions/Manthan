@@ -209,7 +209,7 @@ const BOMMaster = (props) => {
                 pathname: url.BIllOf_MATERIALS_LIST,
             })
         } else if ((updateMsg.Status === true) && (updateMsg.StatusCode === 100) && !(modalCss)) {
-            
+
             dispatch(updateBOMListSuccess({ Status: false }));
             customAlert({
                 Type: 5,
@@ -272,7 +272,7 @@ const BOMMaster = (props) => {
     }
 
     const SaveHandler = async (event) => {
-        
+
         event.preventDefault();
         const btnId = event.target.id
         const BOMItems = ItemTabDetails.map((index) => ({
@@ -315,7 +315,13 @@ const BOMMaster = (props) => {
                     return;
                 }
                 if (pageMode === mode.edit) {
-                    dispatch(updateBOMList({ jsonBody, updateId: `${EditData.id}/${EditData.Company}`, btnId }));
+                    const isConfirmed = await customAlert({
+                        Type: 7,
+                        Message: "Do you want To Update Bill of Material",
+                    });
+                    if (isConfirmed) {
+                        dispatch(updateBOMList({ jsonBody, updateId: `${EditData.id}/${EditData.Company}`, btnId }));
+                    }
                 }
                 else {
                     dispatch(saveBOMMaster({ jsonBody, btnId }));

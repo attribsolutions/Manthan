@@ -128,10 +128,10 @@ const GRNAdd = (props) => {
     useEffect(() => table_ArrowUseEffect("#table_Arrow"), [grnItemList]);
 
     useEffect(() => {
+
         if ((items.Status === true) && (items.StatusCode === 200)) {
 
             const grnItems = items.Data
-
             grnItems.OrderItem.forEach((ele, k) => {
                 ele.id = k + 1;
                 ele["poQuantity"] = ele.Quantity
@@ -569,6 +569,19 @@ const GRNAdd = (props) => {
     }
 
     const handleCheckboxChange = (e) => {
+        if (openPOdata[0]?.POType === "Open PO" && e.target.checked) {
+            const isfuturedate = _cfunc.isFutureDate(_cfunc.date_dmy_func(openPOdata[0]?.OrderDate))
+            if (isfuturedate) {
+                customAlert({
+                    Type: 3,
+                    Message: `PO Date ${_cfunc.date_dmy_func(openPOdata[0]?.OrderDate)}`,
+                })
+                e.target.checked = false
+                return
+            }
+
+        }
+
         // Ensure openPOdata is not undefined and has at least one element
         if (openPOdata && openPOdata.length > 0) {
             openPOdata[0].Inward = e.target.checked;
@@ -703,7 +716,7 @@ const GRNAdd = (props) => {
                 "UpdatedBy": _cfunc.loginUserID(),
                 "IsDeleted": 0,
                 "Item": index.Item,
-                "PriceList":39
+                "PriceList": 39
             }))
 
             setRatePostJsonBody(RateJsonBody);
@@ -872,7 +885,8 @@ const GRNAdd = (props) => {
                                                     type="checkbox"
                                                     style={{ paddingTop: "7px", marginLeft: "20px", marginTop: "10px" }}
                                                     placeholder="Enter Invoice No"
-                                                    defaultChecked={true}
+
+                                                    defaultChecked={openPOdata[0]?.POType === "Open PO" ? false : true}
                                                     onChange={handleCheckboxChange}
                                                 />
                                         }
