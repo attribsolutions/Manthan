@@ -142,7 +142,7 @@ const MaterialIssueMaster = (props) => {
             if (GoButton.goButtonCallByMode) {
                 if (ListData) {
                     const { id, Item, ItemName, Unit, Quantity, NumberOfLot, Bom, RemaningQty, RemainingLot, TotalQty, TotalNumberOfLot } = ListData;
-                    
+
                     setState((i) => {
                         i.values.MaterialIssueDate = currentDate_ymd
                         i.values.ItemName = { value: id, label: ItemName, Item: Item, NoLot: NumberOfLot, lotQty: Quantity };
@@ -816,7 +816,7 @@ const MaterialIssueMaster = (props) => {
                             )}
                         </ToolkitProvider>
 
-                        <SaveButtonDraggable >
+                        {goButtonList.length > 0 && <SaveButtonDraggable >
                             <SaveButton pageMode={pageMode}
                                 loading={saveBtnloading}
                                 onClick={SaveHandler}
@@ -824,7 +824,7 @@ const MaterialIssueMaster = (props) => {
                                 module={"Material Issue"}
                                 editCreatedBy={editCreatedBy}
                             />
-                        </SaveButtonDraggable>
+                        </SaveButtonDraggable>}
 
                     </form>
                 </div>

@@ -321,6 +321,16 @@ const OrderList = () => {
 
         }
     }, [ordersBulkInvoiceData]);
+    useEffect(() => {
+        const Todate = _cfunc.ToDate({ FromDate: values.FromDate, Todate: values.ToDate })
+        setState((i) => {
+            const a = { ...i }
+            a.values.ToDate = Todate;
+            a.hasValid.ToDate.valid = true
+            return a
+        })
+
+    }, [values.FromDate]);
 
     //order confirm
     useEffect(() => {
@@ -434,6 +444,7 @@ const OrderList = () => {
             }));
         }
         else {
+            debugger
             var isGRNSelect = ''
             var challanNo = ''
             const grnRef = []
@@ -445,7 +456,10 @@ const OrderList = () => {
                             Order: !(subPageMode === url.GRN_STP_3) ? ele.POType === "Challan" ? '' : ele.id : null,
                             ChallanNo: ele.FullOrderNumber,
                             Inward: url.GRN_STP_3 ? true : false,
-                            Challan: ele.POType === "Challan" ? ele.id : ''
+                            Challan: ele.POType === "Challan" ? ele.id : '',
+                            POType: ele.POType,
+                            OrderDate: ele.OrderDate,
+
                         });
                         isGRNSelect = isGRNSelect.concat(`${ele.id},`)
                         challanNo = challanNo.concat(`${ele.FullOrderNumber},`)

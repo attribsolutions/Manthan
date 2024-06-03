@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
+    BreadcrumbRadioButtonView,
     commonPageFieldList,
     commonPageFieldListSuccess
 } from "../../../../store/actions";
@@ -70,6 +71,7 @@ const BOMList = () => {
         const page_Id = pageId.BIllOf_MATERIALS_LIST
         setpageMode(hasPagePath)
         dispatch(commonPageFieldListSuccess(null))
+        dispatch(BreadcrumbRadioButtonView(true));
         dispatch(commonPageFieldList(page_Id))
         goButtonHandler(true)
         return () => {
