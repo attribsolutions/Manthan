@@ -27,6 +27,7 @@ import {
   OrderPage_Edit_Post_API,
   OrderConfirm_post_API,
   OrderPage_Edit_ForDownload_API,
+  InterBranch_Order_Delete_API,
 } from "../../../helpers/backend_helper";
 import {
   UPDATE_ORDER_ID_FROM_ORDER_PAGE,
@@ -127,10 +128,17 @@ function* editOrderGenFunc({ config }) {     //  Edit Order by subPageMode
   }
 }
 
-function* DeleteOrder_GenFunc({ config }) {                  // Delete Order by subPageMode
+function* DeleteOrder_GenFunc({ config }) {
+  debugger               // Delete Order by subPageMode
   try {
+    let response = ""
+    if (config.subPageMode === url.IB_ORDER_PO_LIST || config.subPageMode === url.IB_ORDER_SO_LIST) {
+      response = yield call(InterBranch_Order_Delete_API, config);
+    } else {
+      response = yield call(OrderPage_Delete_API, config);
+    }
 
-    const response = yield call(OrderPage_Delete_API, config);
+
     yield put(deleteOrderIdSuccess(response));
   } catch (error) {
     yield put(orderApiErrorAction())
@@ -254,7 +262,7 @@ function* orderList_GoBtn_GenFunc({ config }) {
     else if (subPageMode === url.GRN_STP_1) {
       newList = newList.filter(i => i.Status === "Open");
     }
-    
+
     yield put(getOrderListPageSuccess(newList))
 
   } catch (error) {
