@@ -42,7 +42,7 @@ const claimMasterPrintIconClass = "far fa-file-alt font-size-14";  //Icon Added 
 const makeCreditNoteIconClass = "mdi mdi-file-move font-size-16";
 const ShowImageIconClass = "mdi mdi-image font-size-16";
 
-const forceFullyCompletedIconClass="fas fa-check font-size-14"
+const forceFullyCompletedIconClass = "fas fa-check font-size-14"
 
 
 
@@ -419,7 +419,7 @@ export const listPageActionsButtonFunc = (props) => {
                     })}
 
                     {renderButtonIfNeeded({  // Button For Material Issue List Mode 2
-                        condition: subPageMode===url.MATERIAL_ISSUE_STP,
+                        condition: subPageMode === url.MATERIAL_ISSUE_STP,
                         btnmode: mode.copy,
                         iconClass: forceFullyCompletedIconClass,
                         actionFunc: copyBodyfunc,

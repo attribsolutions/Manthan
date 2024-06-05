@@ -99,14 +99,16 @@ function* HideInvoiceForGRNGenFunc({ config }) {             // Upadte GRN  genr
 
 function* makeGRN_Mode1_GenFunc({ config }) {
   // Make_GRN Items  genrator function
-  
+
   const { pageMode = '', path = '', grnRef = [], challanNo = '', InvoiceDate, subPageMode } = config
 
   try {
     if (subPageMode === url.IB_ORDER_SO_LIST) {
       const response = yield call(get_Demand_Details_Post_API, config);
       response["pageMode"] = pageMode;
-      response["path"] = path; //Pagepath
+      response["path"] = path;
+      response["Demand_Reference"] = grnRef;
+
       yield put(makeGRN_Mode_1ActionSuccess(response))
     }
     else {

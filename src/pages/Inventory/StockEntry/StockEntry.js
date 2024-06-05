@@ -920,7 +920,7 @@ const StockEntry = (props) => {
     }, [postMsg]);
 
     useEffect(() => {
-        const PartyID = _cfunc.loginPartyID()
+        const PartyID = _cfunc.loginSelectedPartyID()
         const jsonBody = JSON.stringify({
             "FromDate": currentDate_ymd,
             "PartyID": PartyID
@@ -1213,15 +1213,6 @@ const StockEntry = (props) => {
                 selectedItem = ItemDropDown.filter((index, key) => (values.ItemName.value === index.Item))
                 const ExistInTable = TableArr.filter((index, key) => (values.ItemName.value === index.ItemId))
 
-                if (ExistInTable.length > 0) {
-                    setAddLoading(false)
-                    setAdd_AllLoading(false)
-                    customAlert({
-                        Type: 4,
-                        Message: alertMessages.ItemNameAlreadyExists
-                    });
-                    return
-                }
 
             }
             const updatedTableData = await ItemAPIResponseFunc(selectedItem, Type !== "add_All" ? [...TableArr] : []);

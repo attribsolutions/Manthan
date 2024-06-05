@@ -7,9 +7,9 @@ import {
     CardBody,
     CardHeader,
     Col,
-    Container, Label, Row, 
+    Container, Label, Row,
 } from "reactstrap";
-import { breadcrumbReturnFunc, loginSelectedPartyID } from '../../../components/Common/CommonFunction';
+import { IsSweetAndSnacksCompany, breadcrumbReturnFunc, loginSelectedPartyID } from '../../../components/Common/CommonFunction';
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import { commonPageField, commonPageFieldSuccess } from '../../../store/actions';
@@ -20,11 +20,14 @@ import InvoiceForGRN from './GRNList';
 import SalesReturnListForDashboard from './SalesReturnListForDashboard';
 import { DashboardLoader, PageLoadingSpinner } from '../../../components/Common/CommonButton';
 import MobileRetailerApprove from './MobileRetailerApprove';
+import DemandListForDashboard from './demand';
+import ChallanListForDashboard from './challan';
 
 const Dashboard_1 = (props) => {
 
     const history = useHistory()
     const dispatch = useDispatch();
+    const IsCompanySweetAndSnacks = IsSweetAndSnacksCompany()
     const [userPageAccessState, setUserAccState] = useState('');
 
     //Access redux store Data /  'save_ModuleSuccess' action data
@@ -93,7 +96,11 @@ const Dashboard_1 = (props) => {
     }
 
     function InvoiceFoRGRN_onClick() {
-        history.push(url.GRN_STP_3)
+        if (IsCompanySweetAndSnacks) {
+            history.push(url.GRN_STP_1)
+        } else {
+            history.push(url.GRN_STP_3)
+        }
     }
 
     function salesReturn_onClick() {
@@ -104,6 +111,13 @@ const Dashboard_1 = (props) => {
         history.push(url.RETAILER_APPROVAL)
     }
 
+    function demandListLinkHandler() {
+        history.push(url.IB_ORDER_PO_LIST)
+    }
+
+    function ChallanlistLinkHandler() {
+        history.push(url.CHALLAN_LIST)
+    }
     const RedirectHandler = (Type) => {
         if (Type === 1) {
             history.push(url.ORDER_LIST_4)
@@ -146,7 +160,7 @@ const Dashboard_1 = (props) => {
                             </Card>
                         </Col>
 
-                        <Col xl={3} md={3} >
+                        {!IsCompanySweetAndSnacks && <Col xl={3} md={3} >
                             <Card className="card-h-100">
                                 <CardBody>
                                     <Row className="align-items-center">
@@ -162,9 +176,9 @@ const Dashboard_1 = (props) => {
 
                                 </CardBody>
                             </Card>
-                        </Col>
+                        </Col>}
 
-                        <Col xl={3} md={3} >
+                        {!IsCompanySweetAndSnacks && <Col xl={3} md={3} >
                             <Card className="card-h-100">
                                 <CardBody>
                                     <Row className="align-items-center">
@@ -181,9 +195,9 @@ const Dashboard_1 = (props) => {
                                     </Row>
                                 </CardBody>
                             </Card>
-                        </Col>
+                        </Col>}
 
-                        <Col xl={3} md={3} >
+                        {<Col xl={3} md={3} >
                             <Card className="card-h-100">
                                 <CardBody>
                                     <Row className="align-items-center">
@@ -200,11 +214,11 @@ const Dashboard_1 = (props) => {
                                     </Row>
                                 </CardBody>
                             </Card>
-                        </Col>
+                        </Col>}
                     </Row>
 
                     <Row>
-                        <Col lg={6}>
+                        {!IsCompanySweetAndSnacks && <Col lg={6}>
                             <Card className=''>
                                 <CardHeader style={{ backgroundColor: "whitesmoke" }}
                                     className="card-header align-items-center d-flex text-center">
@@ -221,9 +235,9 @@ const Dashboard_1 = (props) => {
                                 </CardHeader>
                                 <PaymentEntryList />
                             </Card>
-                        </Col>
+                        </Col>}
 
-                        <Col lg={6}>
+                        {IsCompanySweetAndSnacks && <Col lg={6}>
                             <Card >
                                 <CardHeader style={{ backgroundColor: "whitesmoke" }}
 
@@ -244,10 +258,62 @@ const Dashboard_1 = (props) => {
                                 <InvoiceForGRN />
 
                             </Card>
-                        </Col>
+                        </Col>}
+
+
+
+
+
+                        {IsCompanySweetAndSnacks &&
+                            <Col lg={6}>
+                                <Card >
+                                    <CardHeader style={{ backgroundColor: "whitesmoke" }}
+                                        className="card-header align-items-center d-flex text-center">
+                                        <Label className="card-title mb-0 flex-grow-4 text-primary text-bold mb-n2 text-decoration-underline"
+                                            onClick={demandListLinkHandler}
+                                            disabled={false}
+                                            style={{ cursor: "pointer" }}
+
+                                        >
+                                            Demand List</Label>
+                                        {(SalesReturnListloading) &&
+                                            <DashboardLoader />
+                                        }
+                                    </CardHeader>
+                                    <DemandListForDashboard />
+                                </Card>
+                            </Col>
+                        }
+
+
+
+
                     </Row>
 
                     <Row>
+
+                        {IsCompanySweetAndSnacks && <Col lg={6}>
+                            <Card >
+                                <CardHeader style={{ backgroundColor: "whitesmoke" }}
+
+                                    className="card-header align-items-center d-flex">
+
+                                    <Label
+                                        className="card-title mb-0 flex-grow-4 text-primary text-bold mb-n2 text-decoration-underline"
+                                        disabled={false}
+                                        onClick={ChallanlistLinkHandler}
+                                        style={{ cursor: "pointer" }}
+
+                                    >
+                                        Challan List</Label>
+                                    {(GRNListLoading) &&
+                                        <DashboardLoader />
+                                    }
+                                </CardHeader>
+                                <ChallanListForDashboard />
+                            </Card>
+                        </Col>}
+
                         <Col lg={6}>
                             <Card >
                                 <CardHeader style={{ backgroundColor: "whitesmoke" }}
@@ -267,7 +333,7 @@ const Dashboard_1 = (props) => {
                             </Card>
                         </Col>
 
-                        <Col lg={6}>
+                        {!IsCompanySweetAndSnacks && <Col lg={6}>
                             <Card >
                                 <div className='mb-n6'>
                                     <CardHeader style={{ backgroundColor: "whitesmoke" }}
@@ -285,7 +351,7 @@ const Dashboard_1 = (props) => {
                                 </div>
                                 <MobileRetailerApprove />
                             </Card>
-                        </Col>
+                        </Col>}
                     </Row>
 
                 </Container>

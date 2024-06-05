@@ -1314,7 +1314,7 @@ const Order = (props) => {
                 DemandAmount: sumOfOrderAmount,
                 DemandItem: orderItems,
                 Customer: division,
-                Supplier: supplier,
+                Supplier: supplier,  
                 OrderType: order_Type.PurchaseOrder,
             }
             const comm_jsonBody = {
@@ -1380,10 +1380,8 @@ const Order = (props) => {
                     </div>}
 
                     <div className="page-content">
-
                         <div>
-                            <div className="px-2 c_card_filter text-black" >{/* Order Date And Supplier Name,Go_Button*/}
-
+                            <div className="px-2 c_card_filter text-black" >
                                 <div>
                                     <Row >
                                         <Col sm="4" >
@@ -1436,7 +1434,7 @@ const Order = (props) => {
                                         <Col sm="4" className="">
                                             <FormGroup className="row mt-2" >
                                                 <Label className="col-sm-5 p-2"
-                                                    style={{ width: "115px" }}>{fieldLabel.Supplier}</Label>
+                                                    style={{ width: "129px" }}>{fieldLabel.Supplier}</Label>
                                                 <Col sm="7">
                                                     <C_Select
                                                         value={supplierSelect}
@@ -1527,7 +1525,7 @@ const Order = (props) => {
                                         <Col sm="4">
                                             <FormGroup className="row mt-1" >
                                                 <Label className="col-sm-5 p-2"
-                                                    style={{ width: "115px" }}>{fieldLabel.Item}</Label>
+                                                    style={{ width: "129px" }}>{fieldLabel.Item}</Label>
 
                                                 <Col sm="7">
                                                     <C_Select
@@ -1582,82 +1580,81 @@ const Order = (props) => {
                                 </div>
 
                             </div>
-
-
-
                             {subPageMode === url.ORDER_1 &&
-                                <div className="px-2  mb-1 c_card_body text-black" >              {/*  Description and Delivery Date  field */}
-                                    {/*  Billing Address   and Shipping Address*/}
-                                    <div className="row mt-2 ">
 
-                                        <div className="col col-6">                             {/* Billing Address */}
-                                            <FormGroup className="row  " >
-                                                <Label className=" p-2"
-                                                    style={{ width: "115px" }}>Billing Address</Label>
-                                                <div className="col col-6">
-                                                    <C_Select
-                                                        value={billAddr}
-                                                        classNamePrefix="select2-Customer"
-                                                        options={supplierAddress}
-                                                        onChange={(e) => { setbillAddr(e) }}
-                                                        isLoading={supplierADDdropLoading}
-                                                        styles={{
-                                                            menu: provided => ({ ...provided, zIndex: 2 })
-                                                        }}
-                                                    />
-                                                </div>
-                                            </FormGroup>
-                                        </div >
+                                <div className="px-2 c_card_filter text-black" >
+                                    <div>
+                                        <Row >
+                                            <Col sm="4" >
+                                                <FormGroup className=" row mt-2" >
+                                                    <Label className="col-sm-5 p-2"
+                                                        style={{ width: "115px" }}>Billing Address</Label>
+                                                    <Col sm="7">
+                                                        <C_Select
+                                                            value={billAddr}
+                                                            classNamePrefix="select2-Customer"
+                                                            options={supplierAddress}
+                                                            onChange={(e) => { setbillAddr(e) }}
+                                                            isLoading={supplierADDdropLoading}
+                                                            styles={{
+                                                                menu: provided => ({ ...provided, zIndex: 2 })
+                                                            }}
+                                                        />
+                                                    </Col>
+                                                </FormGroup>
+                                            </Col>
 
-                                        <div className="col col-6">                               {/*  Billing Shipping Address */}
-                                            <FormGroup className=" row " >
-                                                <Label className=" p-2"
-                                                    style={{ width: "130px" }}>Shipping Address</Label>
-                                                <div className="col col-6">
-                                                    <Select
-                                                        value={shippAddr}
-                                                        classNamePrefix="select2-Customer"
-                                                        styles={{
-                                                            menu: provided => ({ ...provided, zIndex: 2 })
-                                                        }}
-                                                        isLoading={supplierADDdropLoading}
-                                                        options={supplierAddress}
-                                                        onChange={(e) => { setshippAddr(e) }}
-                                                    />
-                                                </div>
-                                            </FormGroup>
-                                        </div >
-                                    </div>
+                                            <Col sm='3' />
 
-                                    <div className="row" >                                        {/**PO Type  (PO FromDate and PO ToDate)*/}
-                                        <div className="col col-6" >                              {/**PO Type */}
-                                            <FormGroup className=" row  " >
-                                                <Label className=" p-2"
-                                                    style={{ width: "115px" }}>PO Type</Label>
-                                                <div className="col col-6 ">
-                                                    <Select
-                                                        value={orderTypeSelect}
-                                                        classNamePrefix="select2-Customer"
-                                                        options={orderTypeOptions}
-                                                        onChange={(e) => { setorderTypeSelect(e) }}
-                                                        isLoading={orderTypeDropLoading}
-                                                        styles={{
-                                                            menu: provided => ({ ...provided, zIndex: 2 })
-                                                        }}
-                                                    />
-                                                </div>
-                                            </FormGroup>
-                                        </div >
-                                    </div>
+                                            <Col sm="4" className="">
+                                                <FormGroup className="row mt-2" >
+                                                    <Label className="col-form-label-sm p-2"
+                                                        style={{ width: "129px", fontSize: "14px" }}>Shipping Address</Label>
+                                                    <Col sm="7">
+                                                        <Select
+                                                            value={shippAddr}
+                                                            classNamePrefix="select2-Customer"
+                                                            styles={{
+                                                                menu: provided => ({ ...provided, zIndex: 2 })
+                                                            }}
+                                                            isLoading={supplierADDdropLoading}
+                                                            options={supplierAddress}
+                                                            onChange={(e) => { setshippAddr(e) }}
+                                                        />
+                                                    </Col>
 
+                                                </FormGroup>
+                                            </Col>
+                                        </Row>
+                                        <Row>
+                                            <Col sm="4">                               {/*  Description field */}
+                                                <FormGroup className="row mt-1" >
+                                                    <Label className="col-sm-5 p-2"
+                                                        style={{ width: "115px" }}>PO Type</Label>
+                                                    <div className="col-7">
+                                                        <Select
+                                                            value={orderTypeSelect}
+                                                            classNamePrefix="select2-Customer"
+                                                            options={orderTypeOptions}
+                                                            onChange={(e) => { setorderTypeSelect(e) }}
+                                                            isLoading={orderTypeDropLoading}
+                                                            styles={{
+                                                                menu: provided => ({ ...provided, zIndex: 2 })
+                                                            }}
+                                                        />
+                                                    </div>
+                                                </FormGroup>
+                                            </Col >
+                                            <Col sm="3" />
 
-                                    {(orderTypeSelect.label === 'Open PO') &&
-                                        <div className="row" >                                    {/*PO FromDate */}
-                                            <div className="col col-6" >
-                                                <FormGroup className=" row " >
-                                                    <Label className=" p-2"
-                                                        style={{ width: "115px" }}>PO FromDate</Label>
-                                                    <div className="col col-6 ">
+                                        </Row>
+
+                                        {(orderTypeSelect.label === 'Open PO') && <Row >
+                                            <Col sm="4" >
+                                                <FormGroup className=" row mt-2" >
+                                                    <Label className="col-sm-5 p-2"
+                                                        style={{ width: "115px" }}>PO From Date</Label>
+                                                    <Col sm="7">
                                                         <C_DatePicker
                                                             options={{
                                                                 altInput: true,
@@ -1670,15 +1667,16 @@ const Order = (props) => {
                                                             value={poFromDate}
                                                             onChange={(e, date) => { setpoFromDate(date) }}
                                                         />
-                                                    </div>
+                                                    </Col>
                                                 </FormGroup>
-                                            </div >
+                                            </Col>
 
-                                            <div className="col col-6" >                        {/*PO ToDate */}
-                                                <FormGroup className=" row  " >
-                                                    <Label className=" p-2"
-                                                        style={{ width: "130px" }}>PO ToDate</Label>
-                                                    <div className="col col-6 ">
+                                            <Col sm='3' />
+                                            <Col sm="4" className="">
+                                                <FormGroup className="row mt-2" >
+                                                    <Label className="col-form-label-sm p-2"
+                                                        style={{ width: "130px", fontSize: "14px" }}>PO To Date</Label>
+                                                    <Col sm="7">
                                                         <C_DatePicker
                                                             options={{
                                                                 altInput: true,
@@ -1691,12 +1689,16 @@ const Order = (props) => {
                                                             value={poToDate}
                                                             onChange={(e, date) => { setpoToDate(date) }}
                                                         />
-                                                    </div>
+                                                    </Col>
+
                                                 </FormGroup>
-                                            </div >
-                                        </div>
-                                    }
+                                            </Col>
+
+                                        </Row>}
+                                    </div>
+
                                 </div>
+
                             }
 
                         </div>

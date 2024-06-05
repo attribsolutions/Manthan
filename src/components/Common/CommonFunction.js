@@ -265,6 +265,21 @@ export const loginCompanyID = () => { //+++++++++++++++++++++ Session Company Id
   return 0;
 };
 
+
+
+export const IsSweetAndSnacksCompany = () => { //+++++++++++++++++++++ Company condition Company Id+++++++++++++++++++++++++++++
+  try {
+    const loginCompanyId = loginCompanyID();
+    return (loginCompanyId === 4);  // Company Id 4 For (Chitale Sweet and Snacks )
+  } catch (e) {
+    CommonConsole("Common Login company Error");
+  }
+  return false;
+};
+
+
+
+
 export const loginCompanyName = () => { //+++++++++++++++++++++ Session Company Id+++++++++++++++++++++++++++++
   try {
     return localStorage.getItem("CompanyName");
@@ -325,7 +340,7 @@ export const loginEmployeeID = () => {//+++++++++++++++++++++ Session loginParty
 };
 
 export const loginPriceListID = () => {//+++++++++++++++++++++ Session loginPartyID Id+++++++++++++++++++++++++++++++
-  
+
   try {
     const PriceList_id = parseInt(loginUserDetails().PriceList_id);
     return PriceList_id
