@@ -317,7 +317,7 @@ const userRoutes = [
 	{ path: path.GROUP, component: GroupMaster },//not party wise
 	{ path: path.GROUP_lIST, component: GroupList },//not party wise
 
-	{ path: path.GROUP_SUBGROUP, component: GroupSubGroup },//not party wise
+	// { path: path.GROUP_SUBGROUP, component: GroupSubGroup },//not party wise
 
 
 
