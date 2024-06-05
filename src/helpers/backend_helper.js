@@ -408,6 +408,21 @@ export const del_SubGroup_List_API = ({ deleteId }) => del(`${url.SUBGROUP_API}/
 export const edit_SubGroup_List_Api = ({ editId }) => get(`${url.SUBGROUP_API}/${editId}`)// edit api
 export const update_SubGroup_List_Api = ({ jsonBody, updateId }) => put(`${url.SUBGROUP_API}/${updateId}`, jsonBody)// update api
 
+// export const get_SubGroup_Group = () => get(url.GROUP_SUBGROUP_API)// get api
+export const get_SubGroup_Group = ({ GroupType_ID }) => get(`${url.GROUP_SUBGROUP_API}/${GroupType_ID}`)// edit api
+
+
+
+export const Udate_Group_Subgroup = ({ jsonBody }) => post(url.UPDATE_GROUP_SUBGROUP_API, jsonBody)// post api
+
+
+
+
+
+
+
+
+
 // General API
 export const Post_General_List_Api = (data) => post(url.GENERAL_MASTER_LIST, data)// get api
 export const Post_General_API = ({ jsonBody }) => post(url.GENERAL_MASTER_API, jsonBody)// post api
@@ -477,6 +492,9 @@ export const OrderPage_Update_API = ({ jsonBody, updateId }) => put(`${url.ORDER
 export const getOrderList_For_Listpage = () => get(url.ORDER_PAGE_API)// Get subModule For H_pages
 export const orderApproval_Save_API = ({ jsonBody }) => post(url.ORDER_APPROVAL_API, jsonBody)// Order approval
 
+export const InterBranch_Order_Delete_API = ({ deleteId }) => del(`${url.INTERBRANCH_ORDER_PAGE_API}/${deleteId}`)//Delete Order
+
+
 // OrderType Dropdown API
 export const get_OrderType_Api = () => get(url.ORDER_TYPE_API) // get api
 export const OrderConfirm_post_API = ({ jsonBody }) => post(url.ORDER_CONFIRM_API, jsonBody)// update api
@@ -493,7 +511,7 @@ export const Hide_Invoice_For_GRN_API = ({ InvoiceId, IsHide }) => del(`${url.HI
 
 //Challan API
 export const Challan_get_API = (filter) => post(url.CHALLAN_LIST_BY_FILTERS, filter)
-export const Challan_delete_API = ({deleteId}) => del(`${url.CHALLAN_SAVE_GRN_LIST}/${deleteId}`)//Delete challan
+export const Challan_delete_API = ({ deleteId }) => del(`${url.CHALLAN_SAVE_GRN_LIST}/${deleteId}`)//Delete challan
 export const Challan_Save_API = (data) => post(url.CHALLAN_SAVE_GRN_LIST, data)//Make challan
 export const Challan_Make_API = ({ makeBody }) => post(url.CHALLAN_SAVE_GRN_LIST, makeBody)//Make challan
 export const Challan_items_API = (data) => post(url.CHALLAN_ITEMS, data)//Make challan
@@ -577,7 +595,7 @@ export const IB_Invoice_Edit_API_Singel_Get = ({ editId }) => get(`${url.IB_INVO
 //************************************Inter Branch ************************************/
 
 // IBOrder
-export const IBOrderPage_GoButton_API = ({jsonBody}) => post(url.GO_BUTTON_POST_API_FOR_IBORDER, jsonBody)//go button api
+export const IBOrderPage_GoButton_API = ({ jsonBody }) => post(url.GO_BUTTON_POST_API_FOR_IBORDER, jsonBody)//go button api
 export const IBOrderPage_Save_API = ({ jsonBody }) => post(url.SAVE_API_FOR_IBORDER, jsonBody)//post api
 export const IBOrderList_get_Filter_API = ({ filtersBody }) => post(url.IBORDER_LiST_BY_FILTERS, filtersBody)//list page
 
