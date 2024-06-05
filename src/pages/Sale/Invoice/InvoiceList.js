@@ -530,7 +530,7 @@ const InvoiceList = () => {
     };
 
     async function editBodyfunc(config) {
-        
+
         const { rowData } = config;
         const jsonBodyForBackdatedTransaction = JSON.stringify({
             "TransactionDate": rowData.InvoiceDate,
@@ -585,7 +585,7 @@ const InvoiceList = () => {
         let jsonBody = JSON.stringify({ Invoice_ID: idString })
         dispatch(InvoiceBulkDelete_IDs_Action({ jsonBody }))
     }
-
+    
     return (
         <React.Fragment>
             <PageLoadingSpinner isLoading={reducers.listBtnLoading || !pageField || supplierDropLoading} />

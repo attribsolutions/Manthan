@@ -407,7 +407,7 @@ const OrderList = () => {
     }
 
     const makeBtnFunc = (list = [], btnId) => {
-
+        
         const obj = list[0]
 
         const customer = {
@@ -444,7 +444,7 @@ const OrderList = () => {
             }));
         }
         else {
-            debugger
+
             var isGRNSelect = ''
             var challanNo = ''
             const grnRef = []
@@ -459,6 +459,8 @@ const OrderList = () => {
                             Challan: ele.POType === "Challan" ? ele.id : '',
                             POType: ele.POType,
                             OrderDate: ele.OrderDate,
+                            CustomerID: ele.CustomerID,
+                            CustomerName: ele.Customer,
 
                         });
                         isGRNSelect = isGRNSelect.concat(`${ele.id},`)
@@ -476,12 +478,18 @@ const OrderList = () => {
                     if (list[0].POType === "Challan") {
                         isMode = 2
                     }
-                    else if (subPageMode === url.GRN_STP_3) {
+                    if (subPageMode === url.GRN_STP_3) {
                         isMode = 3
+                    } else if (subPageMode === url.IB_ORDER_SO_LIST) {
+                        path = url.CHALLAN
                     }
+
                     const jsonBody = JSON.stringify({
                         OrderIDs: isGRNSelect,
-                        Mode: isMode
+                        Mode: isMode,
+                        DemandDate: subPageMode === url.IB_ORDER_SO_LIST ? list[0].OrderDate : undefined,
+                        Party: subPageMode === url.IB_ORDER_SO_LIST ? _cfunc.loginPartyID() : undefined
+
                     })
 
                     dispatch(_act.makeGRN_Mode_1Action({ jsonBody, subPageMode, pageMode, path: path, grnRef, challanNo, InvoiceDate: obj.dashboardOrderDate, btnId: `btn-makeBtn-${obj.id}` }))

@@ -286,7 +286,7 @@ export const RowsWithIGST = (data) => {
         const tableitemRow = [
             SrNO++,
             `${HSNcodes} ${element.ItemName}`,
-            `${Number(element.Quantity).toFixed(2)} ${element.PrimaryUnitName}   ${element.UnitName}`,
+            element.UnitName === "" ? `${parseFloat(element.Quantity)} ${element.PrimaryUnitName}   ${element.UnitName}` : `${parseFloat(element.Quantity)} ${element.PrimaryUnitName}(${element.PcsinNumber} ${element.PcsinNumberUnit})`,
             `${numberWithCommas(Number(element.MRPValue).toFixed(2))}`,
             `${numberWithCommas(Number(element.Rate).toFixed(2))}`,
             `${element.Discount} ${element.DiscountType === "1" ? "Rs" : "%"}`,

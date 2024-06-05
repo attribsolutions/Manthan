@@ -81,6 +81,9 @@ export const SALESMAN_LIST = "/SalesManList"
 export const GROUP = "/GroupMaster"
 export const GROUP_lIST = "/GroupList"
 
+export const GROUP_SUBGROUP = "/Group_SubGroup"
+
+
 export const PRICE = "/PriceMaster"
 export const PRICE_lIST = "/PriceList"
 

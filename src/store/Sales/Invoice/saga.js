@@ -96,7 +96,7 @@ function* Invoice_Send_To_Scm_GenFun({ config }) {         // Save API
 
 // Invoice List
 function* InvoiceListGenFunc({ config }) {
-
+  
   const isSendToScm = loginSystemSetting().InvoiceSendToSCMButton
   const PartyTypeID = loginUserDetails().PartyTypeID
   try {
@@ -108,7 +108,7 @@ function* InvoiceListGenFunc({ config }) {
     } else if (subPageMode === url.IB_INVOICE_LIST || subPageMode === url.IB_GRN_LIST || subPageMode === url.IB_INWARD_STP) {
       response = yield call(IB_Invoice_Get_Filter_API, config);
     }
-
+    
     const newList = yield response.Data.map((i) => {
       i["selectCheck"] = false;
       i.forceDeleteHide = false;
@@ -131,7 +131,7 @@ function* InvoiceListGenFunc({ config }) {
       i["transactionDateLabel"] = listpageConcatDateAndTime(i.InvoiceDate, i.CreatedOn);
 
       // if InvoiceUploads array length is greater than 0 then delete button disabled
-      if (i.InvoiceUploads.length > 0) {
+      if (i.InvoiceUploads?.length > 0) {
 
         i.forceEditHide = true;// if InvoiceUploads array length then then edif not allowed
 
@@ -149,7 +149,7 @@ function* InvoiceListGenFunc({ config }) {
       if (!(i.ImportFromExcel)) {
         i.forceSelectDissabled = true;
       }
-      debugger
+
       if (i.DataRecovery) {
         i.forceEditHide = true
         i.forceDeleteHide = true;
@@ -230,6 +230,7 @@ function invoice_GoButton_dataConversion_Func(response, customer = '') {
 
   // Iterate over OrderItemDetails array and perform data conversion
   response.Data.OrderItemDetails = response.Data.OrderItemDetails.map(index1 => {
+
     const isUnitIDPresent = index1.UnitDetails.find(findEle => findEle.UnitID === index1.Unit);
     const isMCunitID = index1.UnitDetails.find(findEle => findEle.DeletedMCUnitsUnitID === index1.DeletedMCUnitsUnitID);
     const defaultunit = isUnitIDPresent !== undefined ? isUnitIDPresent : isMCunitID;

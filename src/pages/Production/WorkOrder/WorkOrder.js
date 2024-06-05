@@ -296,7 +296,7 @@ const WorkOrder = (props) => {
     //     }));
 
     const ItemDropdown_Options = Items
-        .filter(index => index.IsActive)
+        .filter(index => index.IsActive && !index.IsRecordDeleted)
         .map(index => ({
             value: index.ID,
             label: `${index.ItemName} (BOMDate-${(_cfunc.date_dmy_func(index.BomDate))})`,
