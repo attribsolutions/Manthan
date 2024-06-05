@@ -215,6 +215,17 @@ export const GROUP_API = '/Group'
 // SubGroup API
 export const SUBGROUP_API = '/SubGroups'
 
+export const UPDATE_GROUP_SUBGROUP_API = '/UpdateGroupSubGroupSequence'
+
+
+
+
+
+export const GROUP_SUBGROUP_API = '/DetailsOfsubgroups_groups'
+
+
+
+
 //General API
 export const GENERAL_MASTER_API = '/GeneralMaster'
 export const GENERAL_MASTER_TYPE_API = '/GeneralMasterType'
@@ -291,6 +302,12 @@ export const ORDER_TYPE_API = '/POType'
 export const ORDER_APPROVAL_API = '/SAPOrder'
 export const ORDER_CONFIRM_API = '/OrderConfirms'
 
+export const INTERBRANCH_ORDER_PAGE_API = '/InterBranchesOrder'
+
+
+
+
+
 // GRN
 
 export const GRN_STP_FOR_ORDER_lIST_goBtn = "/OrdersFilterSecond"
@@ -306,7 +323,7 @@ export const CHALLAN_LIST_BY_FILTERS = "/ChallanFilter"
 export const CHALLAN_SAVE_GRN_LIST = "/Challan"
 export const CHALLAN_ITEMS = "/ChallanItems"
 export const CHALLAN_ITEMS_STOCK = "/ChallanItemStock"
-export const GET_DEMAND_DETAILS="/GetDemandDetails"
+export const GET_DEMAND_DETAILS = "/GetDemandDetails"
 
 //Bill Of Master
 export const BOM = '/Billofmaterial'
@@ -403,7 +420,7 @@ export const MAKE_RECEIPT_TO_PAYMENT = '/MakeReceiptofPayment'
 // Sales Return
 
 export const INVOICE_NUMBER_LIST = '/InvoiceNoList'
-export const ADD_BUTTON_API_FOR_ITEM = '/ReturnItemBatchcode' 
+export const ADD_BUTTON_API_FOR_ITEM = '/ReturnItemBatchcode'
 export const ADD_BUTTON_API_FOR_INVOICE = '/InvoiceReturnCRDR'
 export const SALES_RETURN = '/PurchaseReturn'
 export const SALES_RETURN_LIST_API = '/PurchaseReturnFilter'
@@ -413,7 +430,7 @@ export const RETURN_ITEM_APPROVE_AIP = '/ReturnItemApprove'
 
 export const RETURN_UPLOAD = '/ReturnImageUpdate'
 
-export const ADD_BUTTON_API_FOR_ITEM_CREDIT_NOTE_1 = '/CentralServiceItem' 
+export const ADD_BUTTON_API_FOR_ITEM_CREDIT_NOTE_1 = '/CentralServiceItem'
 
 // Credit and Debit API
 export const CREDIT_DEBIT = '/CreditDebitNote'
