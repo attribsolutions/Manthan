@@ -4,6 +4,7 @@ import {
     BreadcrumbShowCountlabel,
     commonPageFieldList,
     commonPageFieldListSuccess,
+    makeGRN_Mode_1Action,
 } from "../../../store/actions";
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList"
 import { Col, FormGroup, Label, Modal, Row } from "reactstrap";
@@ -82,6 +83,7 @@ const InvoiceList = () => {
             Cancel_EwayBill: state.InvoiceReducer.Cancel_EwayBill,
             VehicleNumber: state.VehicleReducer.VehicleList,
             Update_Vehicle_Invoice: state.InvoiceReducer.Update_Vehicle_Invoice,
+            makeGRN: state.GRNReducer.GRNitem,
 
             sendToScmMsg: state.InvoiceReducer.sendToScmMsg,
             invoiceBulkDeleteLoading: state.InvoiceReducer.invoiceBulkDeleteLoading,
@@ -103,7 +105,7 @@ const InvoiceList = () => {
         sendToScmMsg,
         invoiceBulkDelete,
         invoiceBulkDeleteLoading,
-
+        makeGRN,
 
     } = reducers;
 
@@ -164,6 +166,8 @@ const InvoiceList = () => {
         else if (subPageMode === url.IB_GRN_LIST) {
             page_Id = pageId.IB_GRN_LIST;
             masterPath = url.IB_INVOICE
+            page_Mode = mode.modeSTPList;
+            makeBtnShow = true
             IBType = "IBGRN"
         }
         else if (subPageMode === url.IB_INWARD_STP) {
@@ -334,6 +338,16 @@ const InvoiceList = () => {
         }
     }, [invoiceBulkDelete]);
 
+
+    useEffect(() => {
+        if (makeGRN.Status === true && makeGRN.StatusCode === 200) {
+            history.push({
+                pathname: makeGRN.path,
+                page_Mode: makeGRN.page_Mode,
+            })
+        }
+    }, [makeGRN])
+
     const supplierOptions = supplier.map((i) => ({
         value: i.id,
         label: i.Name,
@@ -419,11 +433,29 @@ const InvoiceList = () => {
     };
 
     const makeBtnFunc = (list = {}, btnId) => {
-        const config = { makeInwardId: list[0].id, btnId }
-        dispatch(makeInward(config))
-        history.push({
-            pathname: url.INWARD,
+        const challanNo = list[0].FullChallanNumber
+        const grnRef = [{
+            Challan: list[0].id,
+            Inward: false
+        }];
+
+        const jsonBody = JSON.stringify({
+            OrderIDs: list[0].id.toString(),
+            Mode: 2 // mode when challan to make GRN
         })
+        dispatch(makeGRN_Mode_1Action({
+            jsonBody,
+            pageMode: mode.modeSTPsave,
+            grnRef,
+            path: url.GRN_ADD_1,
+            challanNo
+        }))
+
+        // const config = { makeInwardId: list[0].id, btnId }
+        // dispatch(makeInward(config))
+        // history.push({
+        //     pathname: url.GRN_ADD_1,
+        // })
     };
     //Added For send To Scm Button 
     function sendToScmBtnFunc(config) {
@@ -585,7 +617,7 @@ const InvoiceList = () => {
         let jsonBody = JSON.stringify({ Invoice_ID: idString })
         dispatch(InvoiceBulkDelete_IDs_Action({ jsonBody }))
     }
-    
+
     return (
         <React.Fragment>
             <PageLoadingSpinner isLoading={reducers.listBtnLoading || !pageField || supplierDropLoading} />
