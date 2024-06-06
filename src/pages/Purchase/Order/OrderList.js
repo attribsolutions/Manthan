@@ -407,7 +407,7 @@ const OrderList = () => {
     }
 
     const makeBtnFunc = (list = [], btnId) => {
-        
+
         const obj = list[0]
 
         const customer = {
@@ -796,7 +796,7 @@ const OrderList = () => {
                             editBodyfunc={editBodyfunc}
                             makeBtnFunc={makeBtnFunc}
                             hideBtnFunc={hideBtnFunc}
-                            ButtonMsgLable={"Order"}
+                            ButtonMsgLable={subPageMode === url.IB_ORDER_PO_LIST ? "Demand" : "Order"}
                             deleteName={"FullOrderNumber"}
                             makeBtnName={otherState.makeBtnName}
                             MasterModal={Order}

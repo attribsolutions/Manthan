@@ -493,6 +493,13 @@ const Order = (props) => {
         }
     }, [changeAllDiscount, discountValueAll, discountTypeAll.value]);
 
+
+    useEffect(() => {
+        const commaSeparateAmount = _cfunc.amountCommaSeparateFunc(Number(0).toFixed(2));
+        dispatch(_act.BreadcrumbShowCountlabel(`Count:${orderItemTable.length} ₹ ${commaSeparateAmount}`))
+    }, [orderItemTable])
+
+
     const supplierOptions = vendorSupplierCustomer.map((i) => ({
         value: i.id,
         label: i.Name,
@@ -719,6 +726,7 @@ const Order = (props) => {
                                 }))
                             }
                             onChange={e => {
+                                debugger
                                 row["Unit_id"] = e.value;
                                 row["UnitName"] = e.label
                                 row["BaseUnitQuantity"] = e.BaseUnitQuantity;
@@ -757,7 +765,7 @@ const Order = (props) => {
                                 type="text"
                                 id={`Rate-${k}`}
                                 cpattern={decimalRegx}
-                                defaultValue={row.Rate}
+                                value={row.Rate}
                                 className="text-end"
                                 onChange={(event) => {
                                     row.Rate = event.target.value;
@@ -1314,7 +1322,7 @@ const Order = (props) => {
                 DemandAmount: sumOfOrderAmount,
                 DemandItem: orderItems,
                 Customer: division,
-                Supplier: supplier,  
+                Supplier: supplier,
                 OrderType: order_Type.PurchaseOrder,
             }
             const comm_jsonBody = {
