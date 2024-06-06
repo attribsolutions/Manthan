@@ -130,7 +130,7 @@ const GRNAdd = (props) => {
     useEffect(() => {
 
         if ((items.Status === true) && (items.StatusCode === 200)) {
-
+            debugger
             const grnItems = items.Data
             grnItems.OrderItem.forEach((ele, k) => {
                 ele.id = k + 1;
@@ -155,16 +155,18 @@ const GRNAdd = (props) => {
             setGrnDetail(grnDetails)
             const myArr = grnDetails.challanNo.split(",");
             myArr.map(i => ({ Name: i, hascheck: false }))
+            debugger
             setOpenPOdata(grnDetails.GRNReferences)
 
             items.Status = false
-            dispatch(_act.makeGRN_Mode_1ActionSuccess(items))
+            dispatch(_act.makeGRN_Mode_1ActionSuccess({ Status: false, Data: [], }))
             dispatch(_act.BreadcrumbShowCountlabel(`Count:${grnItems.OrderItem.length} ₹ ${0}`));
         }
 
     }, [items])
 
     useEffect(() => {
+        debugger
         if ((hasShowloction || hasShowModal)) {
             let hasEditVal = null
             if (hasShowloction) {
@@ -177,9 +179,7 @@ const GRNAdd = (props) => {
             }
 
             if (hasEditVal) {
-
                 setEditData(hasEditVal);
-
                 const { GRNItems = [], GRNReferences = [], InvoiceNumber } = hasEditVal;
 
                 let ChallanNo1 = ''
