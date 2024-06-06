@@ -57,7 +57,11 @@ function* goButtonGenFunc({ config }) {                      // GO-Botton order 
         ele["id"] = k + 1
         if (subPageMode === url.ORDER_1) {
           ele.Rate = Number(ele.VRate)
-          ele.UnitDetails = ele.UnitDetails.map(unit => ({ ...unit, Rate: Number(ele.VRate) }))
+          debugger
+          ele.UnitDetails = ele.UnitDetails.map(unit => ({
+            ...unit, Rate: Number(ele.VRate),
+            _BaseUnitRate: (unit.Rate * unit.BaseUnitQuantity)  /// this field add only for testing purpose ///checking  not use any where in code only for observation
+          }))
         }
       });
       const termArr = []
