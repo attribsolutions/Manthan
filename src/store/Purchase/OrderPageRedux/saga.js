@@ -55,12 +55,14 @@ function* goButtonGenFunc({ config }) {                      // GO-Botton order 
       response = yield call(OrderPage_GoButton_API, config); // GO-Botton Purchase Order 1 && 2 Add Page API
       yield response.Data.OrderItems.forEach((ele, k) => {
         ele["id"] = k + 1
+        ele.UnitDetails = ele.UnitDetails.map(unit => ({
+          ...unit,
+          _BaseUnitRate: (unit.Rate * unit.BaseUnitQuantity)  /// this field add only for testing purpose ///checking  not use any where in code only for observation
+        }))
         if (subPageMode === url.ORDER_1) {
           ele.Rate = Number(ele.VRate)
-          debugger
           ele.UnitDetails = ele.UnitDetails.map(unit => ({
             ...unit, Rate: Number(ele.VRate),
-            _BaseUnitRate: (unit.Rate * unit.BaseUnitQuantity)  /// this field add only for testing purpose ///checking  not use any where in code only for observation
           }))
         }
       });
