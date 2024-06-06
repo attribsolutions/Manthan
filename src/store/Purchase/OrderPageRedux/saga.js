@@ -50,7 +50,7 @@ function* goButtonGenFunc({ config }) {                      // GO-Botton order 
 
     const { subPageMode, } = config
     let response;
-    if ((subPageMode === url.ORDER_1) || (subPageMode === url.ORDER_2) || (subPageMode === url.ORDER_4)) {
+    if ((subPageMode === url.ORDER_1) || (subPageMode === url.ORDER_2) || (subPageMode === url.ORDER_4) || (subPageMode === url.IB_ORDER)) {
 
       response = yield call(OrderPage_GoButton_API, config); // GO-Botton Purchase Order 1 && 2 Add Page API
       yield response.Data.OrderItems.forEach((ele, k) => {
@@ -72,16 +72,16 @@ function* goButtonGenFunc({ config }) {                      // GO-Botton order 
 
       yield response.Data.TermsAndConditions = termArr;
     }
-    else if (subPageMode === url.IB_ORDER) {
+    // else if (subPageMode === url.IB_ORDER) {
 
-      response = yield call(IBOrderPage_GoButton_API, config); // GO-Botton IB-invoice Add Page API
+    //   response = yield call(IBOrderPage_GoButton_API, config); // GO-Botton IB-invoice Add Page API
 
-      yield response.Data.OrderItems.forEach((ele, k) => {
-        ele["id"] = k + 1;
-        ele.Rate = Number(ele.Rate);
-        ele.UnitDetails = ele.UnitDetails.map(unit => ({ ...unit, Rate: Number(ele.Rate) }));
-      });
-    }
+    //   yield response.Data.OrderItems.forEach((ele, k) => {
+    //     ele["id"] = k + 1;
+    //     ele.Rate = Number(ele.Rate);
+    //     ele.UnitDetails = ele.UnitDetails.map(unit => ({ ...unit, Rate: Number(ele.Rate) }));
+    //   });
+    // }
 
     yield put(GoButton_For_Order_AddSuccess(response.Data));
   } catch (error) {
