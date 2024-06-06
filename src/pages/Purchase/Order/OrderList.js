@@ -197,7 +197,7 @@ const OrderList = () => {
             masterPath = url.IB_ORDER;
             makeBtnShow = true;
             page_Mode = mode.modeSTPList
-            makeBtnName = "Make IBChallan"
+            makeBtnName = "Make Challan"
             IBType = "IBSO"
         }
         else if (subPageMode === url.ORDER_LIST_4) {
@@ -796,7 +796,7 @@ const OrderList = () => {
                             editBodyfunc={editBodyfunc}
                             makeBtnFunc={makeBtnFunc}
                             hideBtnFunc={hideBtnFunc}
-                            ButtonMsgLable={subPageMode === url.IB_ORDER_PO_LIST ? "Demand" : "Order"}
+                            ButtonMsgLable={subPageMode === url.IB_ORDER_PO_LIST ? "Demand" : subPageMode === url.IB_ORDER_SO_LIST ? "" : "Order"}
                             deleteName={"FullOrderNumber"}
                             makeBtnName={otherState.makeBtnName}
                             MasterModal={Order}
