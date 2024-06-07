@@ -1095,16 +1095,15 @@ const Challan = (props) => {
             tableIndex.StockDetails.forEach(stockIndex => {
                 if ((Number(stockIndex.Qty) > 0)) {
 
-
+                    debugger
                     const calculate = ChallanCalculateFunc(stockIndex); // amount calculation function
 
                     grand_total += Number(calculate.roundedTotalAmount);
                     const arr = {
                         Item: tableIndex.Item,
-                        Quantity: tableIndex.Quantity,
-                        Unit: tableIndex.Unit, // Updated to correctly access unit
+                        Quantity: stockIndex.Qty,
+                        Unit: tableIndex.default_UnitDropvalue.value, // Updated to correctly access unit
                         BaseUnitQuantity: stockIndex.BaseUnitQuantity,
-                        ReferenceRate: "100.00",
                         Rate: stockIndex.Rate,
                         BasicAmount: calculate.basicAmount,
                         TaxType: "GST",
