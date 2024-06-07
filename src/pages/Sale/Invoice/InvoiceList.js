@@ -448,7 +448,7 @@ const InvoiceList = () => {
             jsonBody,
             pageMode: mode.modeSTPsave,
             grnRef,
-            path: url.GRN_ADD_3,
+            path: url.GRN_ADD_1,
             challanNo
         }))
 
