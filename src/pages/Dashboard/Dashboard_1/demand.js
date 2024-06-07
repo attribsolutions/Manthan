@@ -1,11 +1,13 @@
 import React, { useEffect } from 'react'
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
-import { date_ymd_func } from '../../../components/Common/CommonFunction';
+import { date_ymd_func, loginSelectedPartyID } from '../../../components/Common/CommonFunction';
 import { useDispatch, useSelector } from 'react-redux';
 import { globalTableSearchProps } from '../../../components/Common/SearchBox/MySearch';
 import { salesReturnListAPI, salesReturnListAPISuccess } from '../../../store/Sales/SalesReturnRedux/action';
 import SimpleBar from "simplebar-react"
+import { getOrderListPage, getOrderListPageSuccess } from '../../../store/actions';
+import { url } from '../../../routes';
 
 
 export default function DemandListForDashboard() {
@@ -14,7 +16,7 @@ export default function DemandListForDashboard() {
     const currentDate_ymd = date_ymd_func();
 
     const { tableList, commonPartyDropSelect } = useSelector((state) => ({
-        tableList: state.SalesReturnReducer.salesReturnList,
+        tableList: state.OrderReducer.orderList,
         commonPartyDropSelect: state.CommonPartyDropdownReducer.commonPartyDropSelect
     }));
 
@@ -22,16 +24,22 @@ export default function DemandListForDashboard() {
     useEffect(() => {
 
         if (commonPartyDropSelect.value > 0) {
-            const jsonBody = JSON.stringify({
-                FromDate: currentDate_ymd,
-                ToDate: currentDate_ymd,
-                CustomerID: "",
-                PartyID: commonPartyDropSelect.value,
+            let subPageMode = url.IB_ORDER_SO_LIST
+            const filtersBody = JSON.stringify({
+                "FromDate": currentDate_ymd,
+                "ToDate": currentDate_ymd,
+                "Supplier": "",//Suppiler swipe
+                "Customer": loginSelectedPartyID(),//customer swipe
+                "OrderType": 1,
+                "CustomerType": "",
+                "IBType": "IBSO",
+                "DashBoardMode": 0
+
             });
-            dispatch(salesReturnListAPI(jsonBody));
+            dispatch(getOrderListPage({ subPageMode, filtersBody }));
         }
         return () => {
-            dispatch(salesReturnListAPISuccess([]))
+            dispatch(getOrderListPageSuccess([]))
         }
 
     }, [commonPartyDropSelect]);
@@ -43,15 +51,19 @@ export default function DemandListForDashboard() {
         },
         {
             text: "Demand Date",
-            dataField: "dashboardReturnDate",
+            dataField: "transactionDateLabel",
         },
         {
             text: "Full Demand Number",
-            dataField: "FullReturnNumber",
+            dataField: "FullOrderNumber",
         },
         {
             text: "Division",
             dataField: "Customer",
+        },
+        {
+            text: "Grand Total",
+            dataField: "OrderAmount",
         },
 
     ];

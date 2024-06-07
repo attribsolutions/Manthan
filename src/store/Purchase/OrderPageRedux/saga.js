@@ -59,7 +59,7 @@ function* goButtonGenFunc({ config }) {                      // GO-Botton order 
           ...unit,
           _BaseUnitRate: (unit.Rate * unit.BaseUnitQuantity)  /// this field add only for testing purpose ///checking  not use any where in code only for observation
         }))
-        if (subPageMode === url.ORDER_1) {
+        if ((subPageMode === url.ORDER_1) || (subPageMode === url.IB_ORDER)) {
           ele.Rate = Number(ele.VRate)
           ele.UnitDetails = ele.UnitDetails.map(unit => ({
             ...unit, Rate: Number(ele.VRate),

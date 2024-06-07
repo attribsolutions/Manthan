@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { globalTableSearchProps } from '../../../components/Common/SearchBox/MySearch';
-import { date_ymd_func, loginPartyID } from '../../../components/Common/CommonFunction';
+import { IsSweetAndSnacksCompany, date_ymd_func, loginPartyID } from '../../../components/Common/CommonFunction';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { order_Type } from '../../../components/Common/C-Varialbes';
@@ -14,7 +14,7 @@ import SimpleBar from "simplebar-react"
 import { printBtnCss } from '../../../components/Common/ListActionsButtons';
 import * as report from '../../../Reports/ReportIndex'
 import { Invoice_Singel_Get_for_Report_Api } from '../../../helpers/backend_helper';
-import { getpdfReportdata } from '../../../store/actions';
+import { getpdfReportdata, invoiceListGoBtnfilter } from '../../../store/actions';
 import C_Report from '../../../components/Common/C_Report';
 
 
@@ -25,23 +25,29 @@ export default function InvoiceForGRN() {
     const history = useHistory();
     const currentDate_ymd = date_ymd_func();
 
+    const IsCompanySweetAndSnacks = IsSweetAndSnacksCompany()
+
     const [userAccState, setUserAccState] = useState('');
 
 
     const { tableList, GRNitem, listBtnLoading, commonPartyDropSelect, userAccess } = useSelector((state) => ({
-        tableList: state.OrderReducer.orderList,
+        tableList: IsCompanySweetAndSnacks ? state.InvoiceReducer.Invoicelist : state.OrderReducer.orderList,
         GRNitem: state.GRNReducer.GRNitem,
         listBtnLoading: state.GRNReducer.listBtnLoading || state.PdfReportReducers.ReportBtnLoading,
         userAccess: state.Login.RoleAccessUpdateData,
         commonPartyDropSelect: state.CommonPartyDropdownReducer.commonPartyDropSelect
     }));
 
-
-    const TableListWithNonDeleteRecord = tableList.filter(i => i.IsRecordDeleted === false);
+    let TableListWithNonDeleteRecord = []
+    if (IsCompanySweetAndSnacks) {
+        TableListWithNonDeleteRecord = tableList
+    } else {
+        TableListWithNonDeleteRecord = tableList.filter(i => i.IsRecordDeleted === false);
+    }
 
     // Common Party Dropdown useEffect
 
-
+    debugger
     useEffect(() => {
 
         const locationPath = history.location.pathname
@@ -60,17 +66,31 @@ export default function InvoiceForGRN() {
 
         if (commonPartyDropSelect.value > 0) {
 
-            let subPageMode = url.GRN_STP_3
-            const gobtnId = `gobtn-${subPageMode}`
-            const filtersBody = JSON.stringify({
-                FromDate: "",
-                ToDate: "",
-                Supplier: "",
-                Customer: commonPartyDropSelect.value,
-                OrderType: order_Type.InvoiceToGRN,
-                IBType: ""
-            });
-            dispatch(getOrderListPage({ subPageMode, filtersBody, btnId: gobtnId }));
+            if (IsCompanySweetAndSnacks) {
+                let subPageMode = url.IB_GRN_LIST
+                const filtersBody = JSON.stringify({
+                    FromDate: currentDate_ymd,
+                    ToDate: currentDate_ymd,
+                    Customer: "",
+                    Party: commonPartyDropSelect.value,
+                    IBType: "IBGRN",
+                    DashBoardMode: 0
+
+                });
+                dispatch(invoiceListGoBtnfilter({ subPageMode, filtersBody }));
+            } else {
+                let subPageMode = url.GRN_STP_3
+                const gobtnId = `gobtn-${subPageMode}`
+                const filtersBody = JSON.stringify({
+                    FromDate: "",
+                    ToDate: "",
+                    Supplier: "",
+                    Customer: commonPartyDropSelect.value,
+                    OrderType: order_Type.InvoiceToGRN,
+                    IBType: ""
+                });
+                dispatch(getOrderListPage({ subPageMode, filtersBody, btnId: gobtnId }));
+            }
         }
         return () => {
             dispatch(getOrderListPageSuccess([]))
@@ -113,7 +133,7 @@ export default function InvoiceForGRN() {
 
                 const jsonBody = JSON.stringify({
                     OrderIDs: isGRNSelect,
-                    Mode: 3
+                    Mode: IsCompanySweetAndSnacks ? 2 : 3
                 })
 
                 dispatch(makeGRN_Mode_1Action({ jsonBody, pageMode: mode.modeSTPsave, path: path, grnRef, challanNo, btnId, InvoiceDate: rowData.dashboardOrderDate }))
@@ -125,7 +145,7 @@ export default function InvoiceForGRN() {
     }
 
     function printBtnHandler(rowData, btnId) {
-        
+
         let config = {}
         config["btnId"] = btnId
         config["editId"] = rowData.id
@@ -136,19 +156,19 @@ export default function InvoiceForGRN() {
     const pagesListColumns = [
         {
             text: "InvoiceDate",
-            dataField: "dashboardOrderDate",
+            dataField: IsCompanySweetAndSnacks ? "transactionDateLabel" : "dashboardOrderDate",
         },
         {
             text: "InvoiceNo",
-            dataField: "FullOrderNumber",
+            dataField: IsCompanySweetAndSnacks ? "FullInvoiceNumber" : "FullOrderNumber",
         },
         {
             text: "Supplier",
-            dataField: "Supplier",
+            dataField: IsCompanySweetAndSnacks ? "Party" : "Supplier",
         },
         {
             text: "InvoiceAmount",
-            dataField: "OrderAmount",
+            dataField: IsCompanySweetAndSnacks ? "GrandTotal" : "OrderAmount",
             align: "right"
         },
         {
@@ -166,7 +186,6 @@ export default function InvoiceForGRN() {
                         className="badge badge-soft-info font-size-12 btn btn-info waves-effect waves-light w-xxs border border-light "
                         title="Make GRN"
                         onClick={() => {
-
                             const btnId = `btn-makeBtn-${rowData.id}`
                             !listBtnLoading && makeBtnHandler(rowData, btnId)
                         }}
