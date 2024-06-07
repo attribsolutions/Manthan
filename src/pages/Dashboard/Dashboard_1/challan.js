@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react'
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
-import { date_ymd_func } from '../../../components/Common/CommonFunction';
+import { date_ymd_func, loginSelectedPartyID } from '../../../components/Common/CommonFunction';
 import { useDispatch, useSelector } from 'react-redux';
 import { globalTableSearchProps } from '../../../components/Common/SearchBox/MySearch';
 import { salesReturnListAPI, salesReturnListAPISuccess } from '../../../store/Sales/SalesReturnRedux/action';
 import SimpleBar from "simplebar-react"
+import { challanList_ForListPage, challanList_ForListPageSuccess } from '../../../store/actions';
 
 
 export default function ChallanListForDashboard() {
@@ -14,7 +15,7 @@ export default function ChallanListForDashboard() {
     const currentDate_ymd = date_ymd_func();
 
     const { tableList, commonPartyDropSelect } = useSelector((state) => ({
-        tableList: state.SalesReturnReducer.salesReturnList,
+        tableList: state.ChallanReducer.ChallanList,
         commonPartyDropSelect: state.CommonPartyDropdownReducer.commonPartyDropSelect
     }));
 
@@ -25,16 +26,22 @@ export default function ChallanListForDashboard() {
             const jsonBody = JSON.stringify({
                 FromDate: currentDate_ymd,
                 ToDate: currentDate_ymd,
-                CustomerID: "",
-                PartyID: commonPartyDropSelect.value,
+                Party: loginSelectedPartyID(),
+                Customer: "",
             });
-            dispatch(salesReturnListAPI(jsonBody));
+            dispatch(challanList_ForListPage(jsonBody));
         }
         return () => {
-            dispatch(salesReturnListAPISuccess([]))
+            dispatch(challanList_ForListPageSuccess([]))
         }
 
     }, [commonPartyDropSelect]);
+
+
+
+
+
+
 
     const pagesListColumns = [
         {

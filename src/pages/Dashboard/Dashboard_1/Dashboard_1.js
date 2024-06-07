@@ -237,7 +237,7 @@ const Dashboard_1 = (props) => {
                             </Card>
                         </Col>}
 
-                        {IsCompanySweetAndSnacks && <Col lg={6}>
+                        {<Col lg={6}>
                             <Card >
                                 <CardHeader style={{ backgroundColor: "whitesmoke" }}
 

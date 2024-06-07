@@ -433,6 +433,7 @@ const InvoiceList = () => {
     };
 
     const makeBtnFunc = (list = {}, btnId) => {
+
         const challanNo = list[0].FullChallanNumber
         const grnRef = [{
             Challan: list[0].id,
@@ -447,7 +448,7 @@ const InvoiceList = () => {
             jsonBody,
             pageMode: mode.modeSTPsave,
             grnRef,
-            path: url.GRN_ADD_1,
+            path: url.GRN_ADD_3,
             challanNo
         }))
 
@@ -459,7 +460,6 @@ const InvoiceList = () => {
     };
     //Added For send To Scm Button 
     function sendToScmBtnFunc(config) {
-
         const InvoiceID = config.rowData.id
         const jsonBody = JSON.stringify({ Invoice: InvoiceID })
         const btnId = config.btnId
@@ -639,9 +639,9 @@ const InvoiceList = () => {
                             HeaderContent={HeaderContent}
                             makeBtnFunc={makeBtnFunc}
                             sendToScmBtnFunc={sendToScmBtnFunc}
-                            ButtonMsgLable={"Invoice"}
+                            ButtonMsgLable={subPageMode === url.IB_GRN_LIST ? "GRN" : "Invoice"}
                             deleteName={"FullInvoiceNumber"}
-                            makeBtnName={"Make GRN"}
+                            makeBtnName={"Make"}
                             filters={hederFilters}
                             forceNewBtnView={false}
                             e_WayBill_ActionsBtnFunc={e_WayBill_ActionsBtnFunc}
