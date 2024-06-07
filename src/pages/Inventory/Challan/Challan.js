@@ -774,20 +774,48 @@ const Challan = (props) => {
 
             const { DemandItemDetails } = GRNitem.Data
             setCustomerID({ value: GRNitem.Demand_Reference[0].CustomerID, label: GRNitem.Demand_Reference[0].CustomerName })
-
+            debugger
             const Updated_DemandDetails = DemandItemDetails.map((inx_1, key_1) => {
+
+                const isUnitIDPresent = inx_1.UnitDetails.find(findEle => findEle.UnitID === inx_1.Unit);
+                const isMCunitID = inx_1.UnitDetails.find(findEle => findEle.DeletedMCUnitsUnitID === inx_1.DeletedMCUnitsUnitID);
+                const defaultunit = isUnitIDPresent !== undefined ? isUnitIDPresent : isMCunitID;
 
                 let totalStockQty = 0;
                 let remainingOrderQty = parseFloat(inx_1.Quantity); // Convert to a number
                 let totalAmount = 0;
                 inx_1.StockInValid = false;
                 inx_1.StockInvalidMsg = '';
+
+
+                inx_1.default_UnitDropvalue = {//initialize
+                    value: inx_1.Unit,
+                    label: inx_1.UnitName,
+                    ConversionUnit: '1',
+                    Unitlabel: inx_1.UnitName,
+                    BaseUnitQuantity: defaultunit.BaseUnitQuantity,
+                    BaseUnitQuantityNoUnit: defaultunit.BaseUnitQuantityNoUnit,
+                };
+
+                inx_1.InpStockQtyTotal = `${Number(inx_1.Quantity) * Number(inx_1.ConversionUnit)}`;
+
                 inx_1.StockDetails = inx_1.StockDetails.map((inx_2, key_2) => {
-                    const stockQty = parseFloat(inx_2.BaseUnitQuantity); // Convert to a number
+                    inx_2.initialRate = inx_2.Rate;
+
+                    const _hasRate = ((defaultunit.BaseUnitQuantity / defaultunit.BaseUnitQuantityNoUnit) * inx_2.initialRate);
+                    const _hasActualQuantity = (inx_2.BaseUnitQuantity / defaultunit.BaseUnitQuantity);
+
+
+                    inx_2.Rate = _cfunc.roundToDecimalPlaces(_hasRate, 2);//max 2 decimal  //initialize
+                    inx_2.ActualQuantity = _cfunc.roundToDecimalPlaces(_hasActualQuantity, 3);//max 3 decimal  //initialize
+
+                    const stockQty = parseFloat(inx_2.ActualQuantity); // Convert to a number
                     totalStockQty += stockQty
                     const qtyToDeduct = Math.min(remainingOrderQty, stockQty);
                     inx_2.Qty = _cfunc.roundToDecimalPlaces(qtyToDeduct, 3); // Round to three decimal places
                     remainingOrderQty = _cfunc.roundToDecimalPlaces(remainingOrderQty - qtyToDeduct, 3); // Round the remaining order quantity
+
+
 
                     if (qtyToDeduct > 0) {// Calculate total amount if quantity is greater than 0
                         const calculatedItem = invoice_discountCalculate_Func(inx_2, inx_1);
