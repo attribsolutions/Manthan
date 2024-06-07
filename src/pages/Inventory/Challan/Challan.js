@@ -896,7 +896,7 @@ const Challan = (props) => {
             formatExtraData: { tableList: tableData },
             attrs: () => ({ 'data-label': "Quantity/Unit" }),
             formatter: (cellContent, index1, keys_, { tableList = [] }) => {
-
+                debugger
                 return (<>
                     <div>
                         <Input
@@ -920,22 +920,22 @@ const Challan = (props) => {
                     <div>
                         <div id="select">
                             <Select
-                            // classNamePrefix="select2-selection"
-                            // id={"ddlUnit"}
-                            // isDisabled={pageMode === mode.edit && true}
-                            // defaultValue={index1.default_UnitDropvalue}
-                            // options={index1.UnitDetails.map(i => ({
-                            //     "label": i.UnitName,
-                            //     "value": i.UnitID,
-                            //     "ConversionUnit": i.ConversionUnit,
-                            //     "Unitlabel": i.UnitName,
-                            //     "BaseUnitQuantity": i.BaseUnitQuantity,
-                            //     "BaseUnitQuantityNoUnit": i.BaseUnitQuantityNoUnit,
-                            // }))}
-                            // onChange={(event) => {
-                            //     orderQtyUnit_SelectOnchange(event, index1);
-                            //     totalAmountCalcuationFunc(tableList);
-                            // }}
+                                classNamePrefix="select2-selection"
+                                id={"ddlUnit"}
+                                isDisabled={pageMode === mode.edit && true}
+                                defaultValue={index1.default_UnitDropvalue}
+                                options={index1.UnitDetails.map(i => ({
+                                    "label": i.UnitName,
+                                    "value": i.UnitID,
+                                    "ConversionUnit": i.ConversionUnit,
+                                    "Unitlabel": i.UnitName,
+                                    "BaseUnitQuantity": i.BaseUnitQuantity,
+                                    "BaseUnitQuantityNoUnit": i.BaseUnitQuantityNoUnit,
+                                }))}
+                                onChange={(event) => {
+                                    orderQtyUnit_SelectOnchange(event, index1);
+                                    totalAmountCalcuationFunc(tableList);
+                                }}
                             ></Select>
                         </div>
                     </div>
