@@ -482,13 +482,11 @@ const OrderList = () => {
                         isMode = 3
                     } else if (subPageMode === url.IB_ORDER_SO_LIST) {
                         path = url.CHALLAN
-                    } else if (subPageMode === url.ORDER_LIST_1) {
-                        path = url.GRN_ADD_3
-                    }
-
+                    } 
+                    
                     const jsonBody = JSON.stringify({
                         OrderIDs: isGRNSelect,
-                        Mode: isMode,
+                        Mode: subPageMode === url.IB_ORDER_SO_LIST ? undefined : isMode,
                         DemandDate: subPageMode === url.IB_ORDER_SO_LIST ? list[0].OrderDate : undefined,
                         Party: subPageMode === url.IB_ORDER_SO_LIST ? _cfunc.loginPartyID() : undefined
 
