@@ -108,12 +108,12 @@ export default function InvoiceForGRN() {
     }, [GRNitem])
 
     function makeBtnHandler(rowData, btnId) {
-
+        debugger
         const list = [rowData]
         var isGRNSelect = ''
-        var challanNo = ''
         const grnRef = []
         if (list.length > 0) {
+            let challanNo = list[0].FullInvoiceNumber
             list.forEach(ele => {
                 grnRef.push({
                     Invoice: ele.id,
@@ -123,13 +123,16 @@ export default function InvoiceForGRN() {
                     Challan: ''
                 });
                 isGRNSelect = isGRNSelect.concat(`${ele.id},`)
-                challanNo = challanNo.concat(`${ele.FullOrderNumber},`)
             });
 
             if (isGRNSelect) {
                 let path = url.GRN_ADD_3
+                if (IsCompanySweetAndSnacks) {
+                    path = url.GRN_ADD_1
+                } else {
+                    path = url.GRN_ADD_3
+                }
                 isGRNSelect = isGRNSelect.replace(/,*$/, '');//****** withoutLastComma  function */
-                challanNo = challanNo.replace(/,*$/, '');           //****** withoutLastComma  function */
 
                 const jsonBody = JSON.stringify({
                     OrderIDs: isGRNSelect,
@@ -153,13 +156,16 @@ export default function InvoiceForGRN() {
         dispatch(getpdfReportdata(Invoice_Singel_Get_for_Report_Api, config))
     }
 
+
+
     const pagesListColumns = [
         {
-            text: "InvoiceDate",
+            text: "Invoice Date",
             dataField: IsCompanySweetAndSnacks ? "transactionDateLabel" : "dashboardOrderDate",
+            sort: true
         },
         {
-            text: "InvoiceNo",
+            text: "Invoice No",
             dataField: IsCompanySweetAndSnacks ? "FullInvoiceNumber" : "FullOrderNumber",
         },
         {
@@ -167,7 +173,7 @@ export default function InvoiceForGRN() {
             dataField: IsCompanySweetAndSnacks ? "Party" : "Supplier",
         },
         {
-            text: "InvoiceAmount",
+            text: "Invoice Amount",
             dataField: IsCompanySweetAndSnacks ? "GrandTotal" : "OrderAmount",
             align: "right"
         },
@@ -221,6 +227,10 @@ export default function InvoiceForGRN() {
             }
         },
     ];
+    const defaultSorted = [{
+        dataField: IsCompanySweetAndSnacks ? "transactionDateLabel" : "dashboardOrderDate",
+        order: 'desc'
+    }];
 
     return (
         <ToolkitProvider
@@ -238,6 +248,7 @@ export default function InvoiceForGRN() {
                             keyField={"Invoice"}
                             bordered={true}
                             striped={false}
+                            defaultSorted={defaultSorted}
                             noDataIndication={<div className="text-danger text-center ">Record Not available</div>}
                             classes={"table align-middle table-nowrap table-hover"}
                             headerWrapperClasses={"thead-light"}

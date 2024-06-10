@@ -211,9 +211,9 @@ const ChallanList = () => {
                             showBreadcrumb={false}
                             masterPath={otherState.masterPath}
                             newBtnPath={otherState.newBtnPath}
-                            makeBtnShow={otherState.makeBtnShow}
+                            // makeBtnShow={otherState.makeBtnShow}
                             pageMode={pageMode}
-                            goButnFunc={goButtonHandler}
+                            // goButnFunc={goButtonHandler}
                             makeBtnFunc={makeBtnFunc}
                             ButtonMsgLable={"challan"}
                             makeBtnName={"Make GRN"}

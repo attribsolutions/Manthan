@@ -433,8 +433,8 @@ const InvoiceList = () => {
     };
 
     const makeBtnFunc = (list = {}, btnId) => {
-
-        const challanNo = list[0].FullChallanNumber
+        
+        const challanNo = list[0].FullInvoiceNumber
         const grnRef = [{
             Challan: list[0].id,
             Inward: false

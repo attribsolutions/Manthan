@@ -46,12 +46,9 @@ export default function DemandListForDashboard() {
 
     const pagesListColumns = [
         {
-            text: "ID",
-            dataField: "id",
-        },
-        {
             text: "Demand Date",
             dataField: "transactionDateLabel",
+            sort: true
         },
         {
             text: "Full Demand Number",
@@ -68,6 +65,12 @@ export default function DemandListForDashboard() {
 
     ];
 
+    const defaultSorted = [{
+        dataField: 'transactionDateLabel',
+        order: 'desc'
+    }];
+
+
     return (
         <ToolkitProvider
             keyField="id"
@@ -82,6 +85,7 @@ export default function DemandListForDashboard() {
                             keyField={"id"}
                             bordered={true}
                             striped={false}
+                            defaultSorted={defaultSorted}
                             noDataIndication={<div className="text-danger text-center ">Record Not available</div>}
                             classes={"table align-middle table-nowrap table-hover"}
                             headerWrapperClasses={"thead-light"}
