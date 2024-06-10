@@ -217,11 +217,11 @@ const PartyItems = (props) => {
 			}))
 			.filter((row) => row.items.length > 0);
 
-		const numberOfGroups = groupWiseItemNewArray.length;
+	
 
 		const numberOfItems = groupWiseItemNewArray.reduce((total, group) => total + group.items.length, 0);
 
-		dispatch(BreadcrumbShowCountlabel(`Groups:${numberOfGroups}`));
+		dispatch(BreadcrumbShowCountlabel(`Groups:${numberOfItems}`));
 		return groupWiseItemNewArray
 	}, [searchQuery, groupWiseItemArray]);
 

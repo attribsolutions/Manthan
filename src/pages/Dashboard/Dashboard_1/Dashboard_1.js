@@ -97,7 +97,7 @@ const Dashboard_1 = (props) => {
 
     function InvoiceFoRGRN_onClick() {
         if (IsCompanySweetAndSnacks) {
-            history.push(url.GRN_STP_1)
+            history.push(url.IB_GRN_LIST)
         } else {
             history.push(url.GRN_STP_3)
         }
@@ -112,7 +112,7 @@ const Dashboard_1 = (props) => {
     }
 
     function demandListLinkHandler() {
-        history.push(url.IB_ORDER_PO_LIST)
+        history.push(url.IB_ORDER_SO_LIST)
     }
 
     function ChallanlistLinkHandler() {
