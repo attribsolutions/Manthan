@@ -162,7 +162,7 @@ export default function InvoiceForGRN() {
         {
             text: "Invoice Date",
             dataField: IsCompanySweetAndSnacks ? "transactionDateLabel" : "dashboardOrderDate",
-            sort: true
+            sort: IsCompanySweetAndSnacks ? true : false
         },
         {
             text: "Invoice No",
