@@ -161,15 +161,15 @@ export const listPageActionsButtonFunc = (props) => {
         const isApproved = rowData.IsApproved;
         const isCreditNoteCreated = rowData.IsCreditNoteCreated;
 
-        const canEdit = hasRole("RoleAccess_IsEdit") && !forceEditHide;
+        const canEdit = hasRole("RoleAccess_IsEdit") && !forceEditHide && !IsRecordDeleted;
         const canEditSelf = hasRole("RoleAccess_IsEditSelf") && !canEdit && userCreatedRow && !forceEditHide;
         const canView = hasRole("RoleAccess_IsView") && !canEdit && !canEditSelf && !viewApprovalBtnFunc;
         const canApprovalView = hasRole("RoleAccess_IsView") && !canEdit && !canEditSelf && viewApprovalBtnFunc;
         const canPrint = hasRole("RoleAccess_IsPrint") && !downClaimBtnFunc;
         const canMultiInvoicePrint = hasRole("RoleAccess_IsMultipleInvoicePrint");
-        const canDelete = hasRole("RoleAccess_IsDelete") && !forceDeleteHide;
+        const canDelete = hasRole("RoleAccess_IsDelete") && !forceDeleteHide && !IsRecordDeleted;
         const canDeleteSelf = hasRole("RoleAccess_IsDeleteSelf") && !canDelete && userCreatedRow && !forceDeleteHide;
-        const canCopy = hasRole("RoleAccess_IsSave") && hasRole("RoleAccess_IsCopy");
+        const canCopy = hasRole("RoleAccess_IsSave") && hasRole("RoleAccess_IsCopy") && IsRecordDeleted;
         const canMakeBtn = pageMode === mode.modeSTPList && makeBtnShow && !forceMakeBtnHide;
         const canOrderApproval = oderAprovalBtnFunc && !forceHideOrderAprovalBtn;
 
@@ -186,10 +186,9 @@ export const listPageActionsButtonFunc = (props) => {
         const canUpload = hasRole("RoleAccess_Upload") && upBtnFunc && isUploadAccess;
 
 
-
         const dummyDisable_OrderApproval = !canOrderApproval && oderAprovalBtnFunc;
-        const dummyDisable_Edit = (userAccState.RoleAccess_IsEdit || userAccState.RoleAccess_IsEditSelf) && !canEdit && !canEditSelf && !canView && !viewApprovalBtnFunc;
-        const dummyDisable_Delete = ((hasRole("RoleAccess_IsDelete") || hasRole("RoleAccess_IsDeleteSelf")) && !canDelete && !canDeleteSelf);
+        const dummyDisable_Edit = (userAccState.RoleAccess_IsEdit || userAccState.RoleAccess_IsEditSelf) && !canEdit && !canEditSelf && !canView && !viewApprovalBtnFunc && IsRecordDeleted;
+        const dummyDisable_Delete = ((hasRole("RoleAccess_IsDelete") || hasRole("RoleAccess_IsDeleteSelf")) && !canDelete && !canDeleteSelf && !IsRecordDeleted);
         const dummyDisable_MakeBtn = !canMakeBtn && makeBtnShow;
         const dummyDisable_SendToScm = !isPartyTypeIDInSendToScm && sendToScmBtnFunc && !(subPageMode === url.IB_GRN_LIST);
 
@@ -197,10 +196,10 @@ export const listPageActionsButtonFunc = (props) => {
 
         const dummyDisable_upload = hasRole("RoleAccess_Upload") && !isUploadAccess
 
+    
 
         const renderButtonIfNeeded = ({ condition, btnmode, iconClass, actionFunc, dispatchAction, title, buttonClasss, isDummyBtn, }) => {
-
-            if ((!condition && !isDummyBtn) || IsRecordDeleted) return null;
+            if (((!condition && !isDummyBtn))) return null;
             if (!isDummyBtn) {
 
                 return (
@@ -380,17 +379,7 @@ export const listPageActionsButtonFunc = (props) => {
                         // isDummyBtn: dummyDisable_SendToScm
                     })}
 
-                    {renderButtonIfNeeded({
-                        condition: canDelete,
-                        btnmode: mode.isdelete,
-                        iconClass: deleteIconClass,
-                        actionFunc: deleteBodyfunc,
-                        dispatchAction: deleteActionFun,
-                        title: "Delete",
-                        buttonClasss: deltBtnCss,
-                        isDummyBtn: dummyDisable_Delete
 
-                    })}
                     {renderButtonIfNeeded({
                         condition: canDeleteSelf,
                         btnmode: mode.isdelete,
@@ -407,6 +396,19 @@ export const listPageActionsButtonFunc = (props) => {
                         actionFunc: copyBodyfunc,
                         title: "Copy",
                         buttonClasss: copyBtnCss,
+                     
+
+                    })}
+                    {renderButtonIfNeeded({
+                        condition: canDelete,
+                        btnmode: mode.isdelete,
+                        iconClass: deleteIconClass,
+                        actionFunc: deleteBodyfunc,
+                        dispatchAction: deleteActionFun,
+                        title: "Delete",
+                        buttonClasss: deltBtnCss,
+                        isDummyBtn: dummyDisable_Delete
+
                     })}
                     {renderButtonIfNeeded({
                         condition: canOrderApproval,
@@ -420,7 +422,7 @@ export const listPageActionsButtonFunc = (props) => {
 
                     {renderButtonIfNeeded({  // Button For Material Issue List Mode 2
                         condition: subPageMode === url.MATERIAL_ISSUE_STP,
-                        btnmode: mode.copy,
+                        btnmode: mode.completed,
                         iconClass: forceFullyCompletedIconClass,
                         actionFunc: copyBodyfunc,
                         title: "ForceFullyCompleted",

@@ -4,6 +4,10 @@ export const edit = "edit";
 export const view = "view";
 export const copy = "copy";
 export const isdelete = "isdelete";
+export const completed = "completed";
+
+
+
 export const viewApproval = "viewApproval";
 export const isSendToScm = "isSendToScm";
 export const makeGoodsCreditNote = "makeGoodsCreditNote";

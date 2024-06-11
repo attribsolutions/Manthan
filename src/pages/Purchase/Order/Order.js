@@ -150,7 +150,8 @@ const Order = (props) => {
         orderTypeDropLoading,
         routesDropLoading,
         commonPartyDropSelect,
-        partyItemListLoading
+        partyItemListLoading,
+        PartyItemPostMsg
     } = useSelector((state) => ({
         goBtnOrderdata: state.OrderReducer.goBtnOrderAdd,
 
@@ -185,7 +186,7 @@ const Order = (props) => {
         gotoInvoiceBtnLoading: state.OrderReducer.gotoInvoiceBtnLoading,
 
         partyItemListLoading: state.PartyItemsReducer.partyItemListLoading,
-
+        PartyItemPostMsg: state.PartyItemsReducer.postMsg,
         commonPartyDropSelect: state.CommonPartyDropdownReducer.commonPartyDropSelect
     }));;
 
@@ -334,6 +335,14 @@ const Order = (props) => {
             dispatch(changeCommonPartyDropDetailsAction({ forceDisable: false }))//change party drop-down restore state
         }
     }, []);
+
+
+    useEffect(() => {
+        if ((PartyItemPostMsg.Status === true) && (PartyItemPostMsg.StatusCode === 200)) {
+            dispatch(_act.GoButton_For_Order_AddSuccess([]))
+        }
+    }, [PartyItemPostMsg])
+
 
     useEffect(async () => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
@@ -726,7 +735,7 @@ const Order = (props) => {
                                 }))
                             }
                             onChange={e => {
-                                debugger
+                                
                                 row["Unit_id"] = e.value;
                                 row["UnitName"] = e.label
                                 row["BaseUnitQuantity"] = e.BaseUnitQuantity;
@@ -1050,7 +1059,7 @@ const Order = (props) => {
             const jsonBody = JSON.stringify({ ..._cfunc.loginJsonBody(), ...{ PartyID: isParty } });
 
             dispatch(editPartyItemID({ jsonBody, config }))
-            dispatch(_act.GoButton_For_Order_AddSuccess([]))
+            // dispatch(_act.GoButton_For_Order_AddSuccess([]))
         };
     };
 
