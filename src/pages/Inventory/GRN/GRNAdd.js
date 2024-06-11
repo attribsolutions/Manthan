@@ -130,20 +130,43 @@ const GRNAdd = (props) => {
     useEffect(() => {
 
         if ((items.Status === true) && (items.StatusCode === 200)) {
-            debugger
+            
             const grnItems = items.Data
-            grnItems.OrderItem.forEach((ele, k) => {
-                ele.id = k + 1;
-                ele["poQuantity"] = ele.Quantity
-                ele["Quantity"] = ''
-                ele["poAmount"] = ele.Amount
-                ele["Amount"] = 0
-                ele["BatchDate"] = currentDate_ymd
-                ele["BatchCode"] = '0'
-                ele["delbtn"] = false
-                ele["Invoice"] = null
 
-            });
+            if ((grnItems.GRNReferences[0]?.GRN_From === url.IB_GRN_LIST)) { /// If GRN from IB GRN List then this 
+                
+                let sum = 0
+
+                grnItems.OrderItem.forEach((ele, k) => {
+                    const calculate = orderCalculateFunc(ele)
+                    sum = sum + parseFloat(calculate.roundedTotalAmount)
+                    ele.id = k + 1;
+                    ele["poQuantity"] = ele.Quantity
+                    ele["Quantity"] = ele.Quantity
+                    ele["poAmount"] = ele.Amount
+                    ele["Amount"] = calculate.roundedTotalAmount
+                    ele["BatchDate"] = currentDate_ymd
+                    ele["BatchCode"] = ''
+                    ele["delbtn"] = false
+                    ele["Invoice"] = null
+                });
+                dispatch(_act.BreadcrumbShowCountlabel(`Count:${grnItems.OrderItem.length} ₹ ${sum.toFixed(2)}`));
+            } else {                                                       // IF GRN From Vendor Order list 
+                grnItems.OrderItem.forEach((ele, k) => {
+                    ele.id = k + 1;
+                    ele["poQuantity"] = ele.Quantity
+                    ele["Quantity"] = ""
+                    ele["poAmount"] = ele.Amount
+                    ele["Amount"] = 0
+                    ele["BatchDate"] = currentDate_ymd
+                    ele["BatchCode"] = ''
+                    ele["delbtn"] = false
+                    ele["Invoice"] = null
+                });
+                dispatch(_act.BreadcrumbShowCountlabel(`Count:${grnItems.OrderItem.length} ₹ ${0}`));
+            }
+
+
             initialTableData = []
             const grnDetails = { ...grnItems }
 
@@ -160,7 +183,7 @@ const GRNAdd = (props) => {
 
             items.Status = false
             dispatch(_act.makeGRN_Mode_1ActionSuccess({ Status: false }))
-            dispatch(_act.BreadcrumbShowCountlabel(`Count:${grnItems.OrderItem.length} ₹ ${0}`));
+
 
         }
 
@@ -258,6 +281,7 @@ const GRNAdd = (props) => {
             dataField: "",
 
             formatter: (value, row, k) => {
+
                 try {
                     document.getElementById(`Quantity${k}`).value = row.Quantity
                 } catch (e) { }
@@ -269,7 +293,7 @@ const GRNAdd = (props) => {
                             className="text-end"
                             autoComplete="off"
                             key={row.id}
-                            disabled={pageMode === mode.view ? true : false}
+                            disabled={((pageMode === mode.view) || openPOdata[0]?.GRN_From === url.IB_GRN_LIST) ? true : false}
                             onChange={(e) => {
                                 const val = e.target.value
                                 let isnum = /^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)?([eE][+-]?[0-9]+)?$/.test(val);
@@ -380,6 +404,7 @@ const GRNAdd = (props) => {
                             type="text"
                             id={`Ratey${k}`}
                             className=" text-end"
+                            disabled={openPOdata[0]?.GRN_From === url.IB_GRN_LIST}
                             defaultValue={row.Rate}
                             cpattern={decimalRegx}
                             autoComplete="off"
@@ -437,7 +462,7 @@ const GRNAdd = (props) => {
                         id={`Batch${row.id}`}
                         placeholder="Batch Code..."
                         className="text-end "
-                        disabled={(pageMode === mode.view) ? true : false}
+                        disabled={((pageMode === mode.view) || openPOdata[0]?.GRN_From === url.IB_GRN_LIST) ? true : false}
                         defaultValue={row.BatchCode}
                         onChange={e => { row["BatchCode"] = e.target.value }}
                         autoComplete="off"
@@ -462,8 +487,9 @@ const GRNAdd = (props) => {
                         id={`BatchDate${k}`}
                         key={row.id}
                         value={row.BatchDate}
+
                         data-enable-time
-                        disabled={(pageMode === mode.view) ? true : false}
+                        disabled={((pageMode === mode.view) || (openPOdata[0]?.GRN_From === url.IB_GRN_LIST)) ? true : false}
                         onChange={(e, date) => { row.BatchDate = date }}
                     />
                 )
@@ -781,7 +807,8 @@ const GRNAdd = (props) => {
                                             style={{ backgroundColor: "white" }}
                                             type="text"
                                             value={pageMode === mode.view ? EditData.CustomerName : grnDetail.SupplierName}
-                                            disabled={pageMode === mode.view ? true : false} />
+                                            disabled={((pageMode === mode.view) || (openPOdata[0]?.GRN_From === url.IB_GRN_LIST)) ? true : false}
+                                        />
                                     </Col>
                                 </FormGroup>
 
@@ -791,7 +818,8 @@ const GRNAdd = (props) => {
                                     <Col sm="7">
                                         <Input type="text"
                                             style={{ backgroundColor: "white" }}
-                                            disabled={pageMode === mode.view ? true : false}
+                                            disabled={((pageMode === mode.view) || (openPOdata[0]?.GRN_From === url.IB_GRN_LIST)) ? true : false}
+
                                             value={pageMode === mode.view ? grnDetail : grnDetail.challanNo}
                                             placeholder="Enter Challan No" />
                                     </Col>
@@ -800,22 +828,23 @@ const GRNAdd = (props) => {
                             <Col sm={5}>
                                 <FormGroup className=" row mt-2" >
                                     <Label className="col-md-4 p-2"
-                                        style={{ width: "130px" }}>Invoice Date</Label>
+                                        style={{ width: "130px" }}>{(openPOdata[0]?.GRN_From === url.IB_GRN_LIST) ? "Challan Date" : "Invoice Date"}</Label>
                                     <Col md="7">
                                         <C_DatePicker
+                                            value={openPOdata[0]?.OrderDate}
                                             disabled={true}
                                         />
                                     </Col>
                                 </FormGroup>
                                 <FormGroup className="mb-2 row  " >
                                     <Label className="col-md-4 p-2"
-                                        style={{ width: "130px" }}>Invoice No</Label>
+                                        style={{ width: "130px" }}>{(openPOdata[0]?.GRN_From === url.IB_GRN_LIST) ? "Challan No" : "Invoice No"}</Label>
                                     <Col md="7">
                                         <Input
                                             type="text"
                                             style={{ backgroundColor: "white" }}
                                             value={invoiceNo}
-                                            placeholder="Enter Invoice No"
+                                            placeholder={(openPOdata[0]?.GRN_From === url.IB_GRN_LIST) ? ` Enter Challan No` : `Enter Invoice No `}
                                             disabled={pageMode === mode.view ? true : false}
                                             onChange={(e) => setInvoiceNo(e.target.value)}
                                         />
@@ -886,7 +915,7 @@ const GRNAdd = (props) => {
                                                     type="checkbox"
                                                     style={{ paddingTop: "7px", marginLeft: "20px", marginTop: "10px" }}
                                                     placeholder="Enter Invoice No"
-
+                                                    disabled={openPOdata[0]?.GRN_From === url.IB_GRN_LIST}   // Make Default Disabled true from IB GRN list TO GRN
                                                     defaultChecked={openPOdata[0]?.POType === "Open PO" ? false : true}
                                                     onChange={handleCheckboxChange}
                                                 />

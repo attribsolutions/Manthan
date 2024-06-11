@@ -53,7 +53,7 @@ export default function ChallanListForDashboard() {
             dataField: "ChallanDate",
         },
         {
-            text: "Full Challan Number",
+            text: "Challan Number",
             dataField: "FullChallanNumber",
         },
         {

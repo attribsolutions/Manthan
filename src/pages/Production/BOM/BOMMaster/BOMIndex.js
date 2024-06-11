@@ -693,7 +693,7 @@ const BOMMaster = (props) => {
                 setPageMode(props.pageMode)
                 setModalCss(true)
             }
-
+            
             if (hasEditVal) {
                 let ItemUnits = hasEditVal.ParentUnitDetails.map((data) => ({
                     value: data.Unit,
@@ -913,7 +913,7 @@ const BOMMaster = (props) => {
                                                 }}
                                                 name="BomDate"
                                                 value={values.BomDate}
-                                                disabled={pageMode === mode.edit ? true : false}
+                                                disabled={pageMode === mode.copy || pageMode === mode.view || pageMode === mode.edit }
                                                 onChange={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
                                             />
                                             {isError.BomDate.length > 0 && (
@@ -933,6 +933,7 @@ const BOMMaster = (props) => {
                                                 isSearchable={true}
                                                 className="react-dropdown"
                                                 classNamePrefix="dropdown"
+                                                isDisabled={pageMode === mode.copy || pageMode === mode.view}
                                                 styles={{
                                                     menu: provided => ({ ...provided, zIndex: 2 })
                                                 }}
@@ -960,6 +961,7 @@ const BOMMaster = (props) => {
                                                 style={{ textAlign: "right" }}
                                                 name="EstimatedOutputQty"
                                                 value={values.EstimatedOutputQty}
+                                                disabled={pageMode === mode.copy || pageMode === mode.view}
                                                 type="text"
                                                 className={isError.EstimatedOutputQty.length > 0 ? "is-invalid form-control" : "form-control"}
                                                 placeholder="Please Enter EstimatedOutputQty"
@@ -982,6 +984,7 @@ const BOMMaster = (props) => {
                                             <Select
                                                 name="UnitName"
                                                 value={values.UnitName}
+                                                isDisabled={pageMode === mode.copy || pageMode === mode.view}
                                                 isSearchable={true}
                                                 className="react-dropdown"
                                                 classNamePrefix="dropdown"
@@ -1006,6 +1009,7 @@ const BOMMaster = (props) => {
                                                 name="Comment"
                                                 value={values.Comment}
                                                 type="text"
+                                                disabled={pageMode === mode.copy || pageMode === mode.view}
                                                 className={isError.Comment.length > 0 ? "is-invalid form-control" : "form-control"}
                                                 placeholder="Please Enter Comment"
                                                 autoComplete='off'
@@ -1030,6 +1034,7 @@ const BOMMaster = (props) => {
                                                         <div className="form-check form-switch form-switch-md mb-3">
                                                             <Input type="checkbox" className="form-check-input"
                                                                 checked={values.IsActive}
+                                                                disabled={pageMode === mode.copy || pageMode === mode.view}
                                                                 name="IsActive"
                                                                 onChange={(e) => {
                                                                     setState((i) => {
@@ -1054,6 +1059,7 @@ const BOMMaster = (props) => {
                                                         <div className="form-check form-switch form-switch-md mb-3">
                                                             <Input type="checkbox" className="form-check-input"
                                                                 checked={values.IsVDCItem}
+                                                                disabled={pageMode === mode.copy || pageMode === mode.view}
                                                                 name="IsVDCItem"
                                                                 onChange={(e) => {
                                                                     setState((i) => {
@@ -1077,7 +1083,7 @@ const BOMMaster = (props) => {
                             <Row>
                                 <Row className="mt-3">
                                     <Col className=" col col-12">
-                                        <ItemTab tableData={ItemTabDetails} func={setItemTabDetails} />
+                                        <ItemTab tableData={ItemTabDetails} func={setItemTabDetails} pageMode={pageMode} />
                                     </Col>
                                 </Row>
                             </Row>

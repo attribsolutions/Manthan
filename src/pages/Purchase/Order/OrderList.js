@@ -461,6 +461,7 @@ const OrderList = () => {
                             OrderDate: ele.OrderDate,
                             CustomerID: ele.CustomerID,
                             CustomerName: ele.Customer,
+                            GRN_From: subPageMode
 
                         });
                         isGRNSelect = isGRNSelect.concat(`${ele.id},`)
@@ -482,8 +483,8 @@ const OrderList = () => {
                         isMode = 3
                     } else if (subPageMode === url.IB_ORDER_SO_LIST) {
                         path = url.CHALLAN
-                    } 
-                    
+                    }
+
                     const jsonBody = JSON.stringify({
                         OrderIDs: isGRNSelect,
                         Mode: subPageMode === url.IB_ORDER_SO_LIST ? undefined : isMode,
