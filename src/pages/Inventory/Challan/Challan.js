@@ -682,6 +682,11 @@ const Challan = (props) => {
     const [editInvoiceData, setEditInvoiceData] = useState('')
     const [customerID, setCustomerID] = useState([]);
 
+    const [DemandNo, setDemandNo] = useState({ Demand_NO: "" });
+
+
+
+
     const [tableData, setTableData] = useState([]);
 
     // for invoice page heder discount functionality useSate ************************************
@@ -771,10 +776,10 @@ const Challan = (props) => {
 
     useEffect(() => {
         if (GRNitem.Status === true && GRNitem.StatusCode === 200) {
-
             const { DemandItemDetails } = GRNitem.Data
             setCustomerID({ value: GRNitem.Demand_Reference[0].CustomerID, label: GRNitem.Demand_Reference[0].CustomerName })
-            debugger
+            setDemandNo({ Demand_NO: GRNitem.Data.DemandNumber })
+
             const Updated_DemandDetails = DemandItemDetails.map((inx_1, key_1) => {
 
                 const isUnitIDPresent = inx_1.UnitDetails.find(findEle => findEle.UnitID === inx_1.Unit);
@@ -1144,6 +1149,7 @@ const Challan = (props) => {
         }
         else {
             const jsonBody = JSON.stringify({
+                DemandNO: DemandNo.Demand_NO,
                 GRN: "",
                 ChallanDate: values.ChallanDate,
                 Party: _cfunc.loginSelectedPartyID(),
