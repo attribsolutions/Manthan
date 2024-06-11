@@ -201,11 +201,11 @@ export const ReportFotterColumns2 = [
 export const ReportRows = (data, doc) => {
 
     const terms = data.OrderTermsAndCondition
-    const slicedArray = terms.slice(0, 2);
+    const slicedArray = terms?.slice(0, 2);
     var TableArray = [["Terms And Condition"],
-    [`${slicedArray[0] === undefined ? "" : slicedArray[0].TermsAndCondition}`,
+    [`${slicedArray?.[0] === undefined ? "" : slicedArray[0]?.TermsAndCondition}`,
     ],
-    [`${slicedArray[1] === undefined ? "" : slicedArray[1].TermsAndCondition}`,
+    [`${slicedArray?.[1] === undefined ? "" : slicedArray[1]?.TermsAndCondition}`,
     ],
     ]
     return TableArray

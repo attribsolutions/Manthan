@@ -14,7 +14,7 @@ import { Go_Button, PageLoadingSpinner } from "../../../components/Common/Common
 import * as report from '../../../Reports/ReportIndex'
 import { url, mode, pageId } from "../../../routes/index"
 import { order_Type } from "../../../components/Common/C-Varialbes";
-import { OrderPage_Edit_ForDownload_API } from "../../../helpers/backend_helper";
+import { IB_Order_Get_Api, OrderPage_Edit_ForDownload_API } from "../../../helpers/backend_helper";
 import { comAddPageFieldFunc, initialFiledFunc } from "../../../components/Common/validationFunction";
 import { getOrderApprovalDetailAction, orderApprovalAction, postOrderConfirms_API, postOrderConfirms_API_Success } from "../../../store/actions";
 import { orderApprovalFunc, orderApprovalMessage } from "./orderApproval";
@@ -520,7 +520,12 @@ const OrderList = () => {
 
     function downBtnFunc(config) {
         config["ReportType"] = report.order1;
-        dispatch(_act.getpdfReportdata(OrderPage_Edit_ForDownload_API, config))
+        if (subPageMode === url.IB_ORDER_PO_LIST) {
+            dispatch(_act.getpdfReportdata(IB_Order_Get_Api, config))
+        } else {
+            dispatch(_act.getpdfReportdata(OrderPage_Edit_ForDownload_API, config))
+        }
+
     }
 
     async function hideBtnFunc(rowdata) {

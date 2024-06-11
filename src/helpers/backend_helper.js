@@ -494,6 +494,12 @@ export const orderApproval_Save_API = ({ jsonBody }) => post(url.ORDER_APPROVAL_
 
 export const InterBranch_Order_Delete_API = ({ deleteId }) => del(`${url.INTERBRANCH_ORDER_PAGE_API}/${deleteId}`)//Delete Order
 
+export const IB_Order_Get_Api = ({ editId }) => get(`${url.IB_ORDER_GET_API}/${editId}`)//Delete Order
+
+
+
+
+
 
 // OrderType Dropdown API
 export const get_OrderType_Api = () => get(url.ORDER_TYPE_API) // get api
