@@ -682,7 +682,7 @@ const Challan = (props) => {
     const [editInvoiceData, setEditInvoiceData] = useState('')
     const [customerID, setCustomerID] = useState([]);
 
-    const [DemandNo, setDemandNo] = useState({ Demand_NO: "" });
+    const [Demand_ID, setDemandID] = useState({ Demand_ID: "" });
 
 
 
@@ -776,9 +776,10 @@ const Challan = (props) => {
 
     useEffect(() => {
         if (GRNitem.Status === true && GRNitem.StatusCode === 200) {
+            debugger
             const { DemandItemDetails } = GRNitem.Data
             setCustomerID({ value: GRNitem.Demand_Reference[0].CustomerID, label: GRNitem.Demand_Reference[0].CustomerName })
-            setDemandNo({ Demand_NO: GRNitem.Data.DemandNumber })
+            setDemandID({ Demand_ID: Number(GRNitem.Data.DemandIDs) })
 
             const Updated_DemandDetails = DemandItemDetails.map((inx_1, key_1) => {
 
@@ -929,7 +930,7 @@ const Challan = (props) => {
             formatExtraData: { tableList: tableData },
             attrs: () => ({ 'data-label': "Quantity/Unit" }),
             formatter: (cellContent, index1, keys_, { tableList = [] }) => {
-                debugger
+
                 return (<>
                     <div>
                         <Input
@@ -1100,7 +1101,7 @@ const Challan = (props) => {
             tableIndex.StockDetails.forEach(stockIndex => {
                 if ((Number(stockIndex.Qty) > 0)) {
 
-                    debugger
+
                     const calculate = ChallanCalculateFunc(stockIndex); // amount calculation function
 
                     grand_total += Number(calculate.roundedTotalAmount);
@@ -1149,7 +1150,7 @@ const Challan = (props) => {
         }
         else {
             const jsonBody = JSON.stringify({
-                DemandNO: DemandNo.Demand_NO,
+                Demand_ID: Demand_ID.Demand_ID,
                 GRN: "",
                 ChallanDate: values.ChallanDate,
                 Party: _cfunc.loginSelectedPartyID(),
