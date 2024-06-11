@@ -682,6 +682,11 @@ const Challan = (props) => {
     const [editInvoiceData, setEditInvoiceData] = useState('')
     const [customerID, setCustomerID] = useState([]);
 
+    const [Demand_ID, setDemandID] = useState({ Demand_ID: "" });
+
+
+
+
     const [tableData, setTableData] = useState([]);
 
     // for invoice page heder discount functionality useSate ************************************
@@ -771,10 +776,11 @@ const Challan = (props) => {
 
     useEffect(() => {
         if (GRNitem.Status === true && GRNitem.StatusCode === 200) {
-
+            debugger
             const { DemandItemDetails } = GRNitem.Data
             setCustomerID({ value: GRNitem.Demand_Reference[0].CustomerID, label: GRNitem.Demand_Reference[0].CustomerName })
-            debugger
+            setDemandID({ Demand_ID: Number(GRNitem.Data.DemandIDs) })
+
             const Updated_DemandDetails = DemandItemDetails.map((inx_1, key_1) => {
 
                 const isUnitIDPresent = inx_1.UnitDetails.find(findEle => findEle.UnitID === inx_1.Unit);
@@ -924,7 +930,7 @@ const Challan = (props) => {
             formatExtraData: { tableList: tableData },
             attrs: () => ({ 'data-label': "Quantity/Unit" }),
             formatter: (cellContent, index1, keys_, { tableList = [] }) => {
-                debugger
+
                 return (<>
                     <div>
                         <Input
@@ -1095,7 +1101,7 @@ const Challan = (props) => {
             tableIndex.StockDetails.forEach(stockIndex => {
                 if ((Number(stockIndex.Qty) > 0)) {
 
-                    debugger
+
                     const calculate = ChallanCalculateFunc(stockIndex); // amount calculation function
 
                     grand_total += Number(calculate.roundedTotalAmount);
@@ -1144,6 +1150,7 @@ const Challan = (props) => {
         }
         else {
             const jsonBody = JSON.stringify({
+                Demand_ID: Demand_ID.Demand_ID,
                 GRN: "",
                 ChallanDate: values.ChallanDate,
                 Party: _cfunc.loginSelectedPartyID(),

@@ -437,7 +437,9 @@ const InvoiceList = () => {
         const challanNo = list[0].FullInvoiceNumber
         const grnRef = [{
             Challan: list[0].id,
-            Inward: false
+            Inward: false,
+            GRN_From: subPageMode,
+            OrderDate: list[0]?.InvoiceDate
         }];
 
         const jsonBody = JSON.stringify({
@@ -452,11 +454,6 @@ const InvoiceList = () => {
             challanNo
         }))
 
-        // const config = { makeInwardId: list[0].id, btnId }
-        // dispatch(makeInward(config))
-        // history.push({
-        //     pathname: url.GRN_ADD_1,
-        // })
     };
     //Added For send To Scm Button 
     function sendToScmBtnFunc(config) {

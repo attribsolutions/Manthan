@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Col, Input, Table, } from 'reactstrap';
 import { Tbody, Thead } from 'react-super-responsive-table';
+import * as mode from "../../../../../routes/PageMode";
 
 function BOMTable(props) {
 
@@ -15,7 +16,7 @@ function BOMTable(props) {
   };
 
   const handleChange = (event, info) => {
- 
+
     // let val = event.target.value
     // const result = /^-?([0-9]*\.?[0-9]+|[0-9]+\.?[0-9]*)$/.test(val);
     // if (result) {
@@ -50,6 +51,7 @@ function BOMTable(props) {
             <Input type="text"
               key={info.id}
               style={{ width: '140px', textAlign: 'center' }}
+              disabled={props.pageMode === mode.copy || props.pageMode === mode.view}
               className="text-end"
               defaultValue={info.Quantity}
               onChange={(event) => handleChange(event, info)}
@@ -62,6 +64,7 @@ function BOMTable(props) {
           <Button
             className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
             data-mdb-toggle="tooltip" data-mdb-placement="top" title="Delete Party Type"
+            disabled={props.pageMode === mode.copy || props.pageMode === mode.view}
             onClick={(e) => {
               onDeleteHandeler(info);
             }}

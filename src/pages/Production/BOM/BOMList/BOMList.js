@@ -111,6 +111,16 @@ const BOMList = () => {
         newObj.todate = date
         setHederFilters(newObj)
     }
+
+
+
+    function copyBodyfunc(config) {
+        try {
+            dispatch(editBOMList(config));
+
+        } catch (error) { }
+    }
+
     return (
         <React.Fragment>
             <PageLoadingSpinner isLoading={goBtnLoading || !pageField} />
@@ -165,6 +175,7 @@ const BOMList = () => {
                             action={action}
                             reducers={reducers}
                             showBreadcrumb={false}
+                            copyBodyfunc={copyBodyfunc}
                             MasterModal={BOMMaster}
                             masterPath={url.BIllOf_MATERIALS}
                             newBtnPath={url.BIllOf_MATERIALS}

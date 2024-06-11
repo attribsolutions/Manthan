@@ -146,7 +146,7 @@ export default function DemandListForDashboard() {
             sort: true
         },
         {
-            text: "Full Demand Number",
+            text: "Demand Number",
             dataField: "FullOrderNumber",
         },
         {
