@@ -305,6 +305,11 @@ export const ORDER_CONFIRM_API = '/OrderConfirms'
 export const INTERBRANCH_ORDER_PAGE_API = '/InterBranchesOrder'
 
 
+export const IB_ORDER_GET_API = '/IBPOList'
+
+
+
+
 
 
 
