@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { BreadcrumbReset, commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
+import { BreadcrumbReset, commonPageFieldList, commonPageFieldListSuccess, getpdfReportdata, } from "../../../store/actions";
 import { Button, Col, FormGroup, Label } from "reactstrap";
 import Select from "react-select";
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList";
@@ -14,6 +14,8 @@ import { C_DatePicker } from "../../../CustomValidateForm";
 import { url, mode, pageId } from "../../../routes/index"
 import { Go_Button, PageLoadingSpinner } from "../../../components/Common/CommonButton";
 import { allLabelWithBlank } from "../../../components/Common/CommonErrorMsg/HarderCodeData";
+import * as report from '../../../Reports/ReportIndex'
+import { IB_Invoice_Singel_Get_for_Report_Api } from "../../../helpers/backend_helper";
 
 const ChallanList = () => {
 
@@ -122,6 +124,11 @@ const ChallanList = () => {
         dispatch(challanList_ForListPage(jsonBody));
     }
 
+    function downBtnFunc(config) {
+        config["ReportType"] = report.invoice;
+        dispatch(getpdfReportdata(IB_Invoice_Singel_Get_for_Report_Api, config))
+    }
+
     function fromdateOnchange(e, date) {
         let newObj = { ...hederFilters }
         newObj.fromdate = date
@@ -213,6 +220,7 @@ const ChallanList = () => {
                             newBtnPath={otherState.newBtnPath}
                             // makeBtnShow={otherState.makeBtnShow}
                             pageMode={pageMode}
+                            downBtnFunc={downBtnFunc}
                             // goButnFunc={goButtonHandler}
                             makeBtnFunc={makeBtnFunc}
                             ButtonMsgLable={"challan"}

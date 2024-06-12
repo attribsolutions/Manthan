@@ -417,7 +417,7 @@ export const BilledToRow = (data) => {
 export const DetailsOfTransportRow = (data) => {
 
     let OrderNumber = " "
-    if (data.InvoicesReferences.length > 0) {
+    if (data.InvoicesReferences?.length > 0) {
 
         const PoNumber = data.InvoicesReferences.map(index => ({
             SystemGenerate: index.FullOrderNumber,
@@ -431,7 +431,7 @@ export const DetailsOfTransportRow = (data) => {
     }
 
     let EwayData = ""
-    if (data.InvoiceUploads.length > 0) {
+    if (data.InvoiceUploads?.length > 0) {
         EwayData = data.InvoiceUploads[0]
     }
 
@@ -449,7 +449,7 @@ export const DetailsOfTransportRow = (data) => {
 
 export const BankRow = (data) => {
 
-    if (data.BankData.length > 0) {
+    if (data.BankData?.length > 0) {
         let BankData = data.BankData[0]
         var reportArray = [
             [`A/C No: ${BankData.AccountNo}`, `IFSC Code: ${BankData.IFSC}`, `Branch: ${BankData.BranchName}`],

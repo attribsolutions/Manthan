@@ -528,7 +528,7 @@ export const reportFooter = (doc, data) => {
 
     var DetailsOfBankStyle = {
         didParseCell: (data1) => {
-            if (data.BankData.length > 0) {
+            if (data.BankData?.length > 0) {
                 let BankData = data.BankData[0]
                 if (data1.row.cells[0].raw === `Bank Name :${BankData.BankName}`) {
                     data1.row.cells[0].colSpan = 3
@@ -558,12 +558,12 @@ export const reportFooter = (doc, data) => {
         columnStyles: {
             0: {
                 valign: "top",
-                columnWidth: (data.BankData.length > 0) ? 90 : 30,
+                columnWidth: (data.BankData?.length > 0) ? 90 : 30,
                 halign: 'lfet',
             },
             1: {
                 valign: "top",
-                columnWidth: (data.BankData.length > 0) ? 90 : 300,
+                columnWidth: (data.BankData?.length > 0) ? 90 : 300,
                 halign: 'lfet',
             },
             2: {

@@ -45,7 +45,7 @@ import { amountCommaSeparateFunc, listpageConcatDateAndTime, date_dmy_func, } fr
 import *as url from "../../../routes/route_url"
 
 function* goButtonGenFunc({ config }) {                      // GO-Botton order Add Page by subPageMode  
-
+  
   try {
 
     const { subPageMode, } = config
@@ -135,7 +135,7 @@ function* editOrderGenFunc({ config }) {     //  Edit Order by subPageMode
 }
 
 function* DeleteOrder_GenFunc({ config }) {
-  debugger               // Delete Order by subPageMode
+  // Delete Order by subPageMode
   try {
     let response = ""
     if (config.subPageMode === url.IB_ORDER_PO_LIST || config.subPageMode === url.IB_ORDER_SO_LIST) {

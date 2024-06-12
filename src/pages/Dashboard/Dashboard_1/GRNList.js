@@ -120,7 +120,8 @@ export default function InvoiceForGRN() {
                     Order: null,
                     ChallanNo: ele.FullOrderNumber,
                     Inward: true,
-                    Challan: ''
+                    Challan: '',
+                    GRN_From: IsCompanySweetAndSnacks ? url.IB_GRN_LIST : ""
                 });
                 isGRNSelect = isGRNSelect.concat(`${ele.id},`)
             });

@@ -434,6 +434,7 @@ const Order = (props) => {
     }, [assingItemData]);
 
     useEffect(() => {
+        
         if (goBtnOrderdata) {
             let { OrderItems = [], TermsAndConditions = [] } = goBtnOrderdata
 
@@ -503,10 +504,7 @@ const Order = (props) => {
     }, [changeAllDiscount, discountValueAll, discountTypeAll.value]);
 
 
-    useEffect(() => {
-        const commaSeparateAmount = _cfunc.amountCommaSeparateFunc(Number(0).toFixed(2));
-        dispatch(_act.BreadcrumbShowCountlabel(`Count:${orderItemTable.length} ₹ ${commaSeparateAmount}`))
-    }, [orderItemTable])
+
 
 
     const supplierOptions = vendorSupplierCustomer.map((i) => ({
@@ -654,7 +652,7 @@ const Order = (props) => {
             },
             formatExtraData: { tableList: orderItemTable },
             formatter: (value, row, key, { tableList }) => {
-
+                
                 if (!row.UnitName) {
                     row["Unit_id"] = 0;
                     row["UnitName"] = 'null';
@@ -678,10 +676,9 @@ const Order = (props) => {
                         row["po_Unit_id"] = i.UnitID;
                         row["UnitName"] = i.UnitName;
                         row["BaseUnitQuantity"] = i.BaseUnitQuantity;
-                        if (!(subPageMode === url.ORDER_1 || subPageMode === url.IB_ORDER)) {
-
-                            row["Rate"] = ((i.BaseUnitQuantity / i.BaseUnitQuantityNoUnit) * i.Rate).toFixed(2);
-                        }
+                        // if (!(subPageMode === url.ORDER_1 || subPageMode === url.IB_ORDER)) {
+                        row["Rate"] = ((i.BaseUnitQuantity / i.BaseUnitQuantityNoUnit) * i.Rate).toFixed(2);
+                        // }
                     }
 
                 } else {
@@ -1104,7 +1101,7 @@ const Order = (props) => {
         _cfunc.btnIsDissablefunc({ btnId, state: true })
 
         dispatch(_act.BreadcrumbShowCountlabel(initial_BredcrumbMsg))
-        debugger
+
 
         let PO_Body = {
             Party: selectSupplier ? selectSupplier : supplierSelect.value,
