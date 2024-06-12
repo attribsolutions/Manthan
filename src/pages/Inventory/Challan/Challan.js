@@ -930,7 +930,7 @@ const Challan = (props) => {
             formatExtraData: { tableList: tableData },
             attrs: () => ({ 'data-label': "Quantity/Unit" }),
             formatter: (cellContent, index1, keys_, { tableList = [] }) => {
-
+                debugger
                 return (<>
                     <div>
                         <Input
@@ -975,7 +975,7 @@ const Challan = (props) => {
                     </div>
                     <div className="theme-font">
                         <span className="text-muted">Demand-Qty :</span>
-                        <samp>{index1.Quantity}</samp>&nbsp;&nbsp;
+                        <samp>{index1.BaseUnitQuantity}</samp>&nbsp;&nbsp;
                         <samp>{index1.UnitName}</samp>
                     </div>
                     <div>
@@ -1150,6 +1150,7 @@ const Challan = (props) => {
         }
         else {
             const jsonBody = JSON.stringify({
+                ChallansReferences: [{ Demand_ID: Demand_ID.Demand_ID }],
                 Demand_ID: Demand_ID.Demand_ID,
                 GRN: "",
                 ChallanDate: values.ChallanDate,
