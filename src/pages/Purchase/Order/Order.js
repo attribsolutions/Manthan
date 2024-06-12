@@ -735,7 +735,7 @@ const Order = (props) => {
                                 }))
                             }
                             onChange={e => {
-                                
+
                                 row["Unit_id"] = e.value;
                                 row["UnitName"] = e.label
                                 row["BaseUnitQuantity"] = e.BaseUnitQuantity;
@@ -1104,7 +1104,7 @@ const Order = (props) => {
         _cfunc.btnIsDissablefunc({ btnId, state: true })
 
         dispatch(_act.BreadcrumbShowCountlabel(initial_BredcrumbMsg))
-
+        debugger
 
         let PO_Body = {
             Party: selectSupplier ? selectSupplier : supplierSelect.value,
@@ -1112,6 +1112,7 @@ const Order = (props) => {
             RateParty: commonPartyDropSelect.value,
             EffectiveDate: orderdate,
             OrderID: (pageMode === mode.defaultsave) ? 0 : editVal.id,
+            Demand: ((subPageMode === url.ORDER_1) && (pageMode === mode.defaultsave)) ? 0 : editVal.id,  //IB Purachase Order  
             OrderType: order_Type.PurchaseOrder,
         }
         let SO_body = {
@@ -1120,6 +1121,7 @@ const Order = (props) => {
             RateParty: selectSupplier ? selectSupplier : supplierSelect.value,
             EffectiveDate: orderdate,
             OrderID: (pageMode === mode.defaultsave) ? 0 : editVal.id,
+            Demand: ((subPageMode === url.ORDER_1) && (pageMode === mode.defaultsave)) ? 0 : editVal.id,  //IB Purachase Order   
             OrderType: order_Type.SaleOrder,
         }
 
