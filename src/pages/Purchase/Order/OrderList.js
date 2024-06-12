@@ -503,15 +503,15 @@ const OrderList = () => {
     }
 
     function editBodyfunc(config) {
-
+        debugger
         const { rowData } = config;
         try {
             const jsonBody = JSON.stringify({
                 Party: rowData.SupplierID,
                 Customer: rowData.CustomerID,
                 EffectiveDate: rowData.OrderDate,
-                OrderID: rowData.id,
-                Demand: (subPageMode === url.ORDER_LIST_1) ? rowData.id : 0,
+                OrderID: (subPageMode === url.IB_ORDER_PO_LIST) ? 0 : rowData.id,
+                Demand: (subPageMode === url.IB_ORDER_PO_LIST) ? rowData.id : 0,
                 RateParty: rowData.CustomerID,
                 OrderType: ((subPageMode === url.ORDER_4) || (subPageMode === url.APP_ORDER_LIST)) ? order_Type.SaleOrder : order_Type.PurchaseOrder
             })
