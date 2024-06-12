@@ -384,6 +384,8 @@ export const UPDATE_VEHICLE_INVOICE = '/UpdateVehicleInvoice' // Uploaded_E-wayB
 export const INVOICE_SEND_TO_SCM = '/InvoicetoSCM' // Uploaded_E-wayBill
 export const INVOICE_1_BULK_DELETE_API = '/InvoiceBulkDelete'// invoice_1 Bulk Delete Api
 
+
+
 //BulkInvoices
 export const BULK_INVOICES = '/BulkInvoices'// invoice_1 addpage GoButton Api 
 export const BULK_CREDIT_NOTE_UPLOAD = '/BulkCreditNote'// invoice_1 addpage GoButton Api 
@@ -393,6 +395,9 @@ export const IMPORT_BULK_RETAIER = '/ImportRetailerBulkdata'// invoice_1 addpage
 export const IB_INVOICE_lIST_FILTER = '/BranchInvoiceFilter'//ib_INVOICE_List filter Api
 export const IB_INVOICE_SAVE = '/BranchInvoice'// ib_INVOICE  addpage save Api
 export const IB_INVOICE_ADD_PAGE_GO_BTN = '/InterBrancheOrderDetails'// ib_INVOICE addpage GoButton Api 
+
+export const IB_INVOICE_SINGEL_GET = '/Challan'// invoice_1  addpage save Api
+
 
 //  Report Api
 export const MULTIPLEINVOICE_API = '/MultipleInvoices'//ib_INVOICE_List filter Api

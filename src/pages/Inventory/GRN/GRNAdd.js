@@ -820,7 +820,7 @@ const GRNAdd = (props) => {
                                             style={{ backgroundColor: "white" }}
                                             disabled={((pageMode === mode.view) || (openPOdata[0]?.GRN_From === url.IB_GRN_LIST)) ? true : false}
 
-                                            value={pageMode === mode.view ? grnDetail : grnDetail.challanNo}
+                                            value={grnDetail.FullDemandNumber}
                                             placeholder="Enter Challan No" />
                                     </Col>
                                 </FormGroup>
@@ -831,7 +831,7 @@ const GRNAdd = (props) => {
                                         style={{ width: "130px" }}>{(openPOdata[0]?.GRN_From === url.IB_GRN_LIST) ? "Challan Date" : "Invoice Date"}</Label>
                                     <Col md="7">
                                         <C_DatePicker
-                                            value={openPOdata[0]?.OrderDate}
+                                            value={_cfunc.date_dmy_func(grnDetail.DemandDate)}
                                             disabled={true}
                                         />
                                     </Col>

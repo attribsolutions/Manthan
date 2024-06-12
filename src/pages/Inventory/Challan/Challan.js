@@ -1152,7 +1152,6 @@ const Challan = (props) => {
             const jsonBody = JSON.stringify({
                 ChallansReferences: [{ Demands: Demand_ID.Demand_ID }],
                 Demand_ID: Demand_ID.Demand_ID,
-                GRN: "",
                 ChallanDate: values.ChallanDate,
                 Party: _cfunc.loginSelectedPartyID(),
                 GrandTotal: grand_total,

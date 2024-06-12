@@ -581,6 +581,12 @@ export const Invoice_Send_To_Scm = ({ jsonBody }) => post(url.INVOICE_SEND_TO_SC
 export const Invoice_1_Bulk_Delete_API = ({ jsonBody }) => delwithPostBody(url.INVOICE_1_BULK_DELETE_API, jsonBody)//Bulk delete api
 
 
+export const IB_Invoice_Singel_Get_for_Report_Api = ({ editId }) => get(`${url.IB_INVOICE_SINGEL_GET}/${editId}`)// delete api
+
+
+
+
+
 //**************************** E-Invoice (upload ,cancel,print) ***************************************/
 
 export const EInvoice_Uploade_Get_API = ({ RowId, UserID }) => get(`${url.UPLOADED_E_INVOICE}/${RowId}/${UserID}`)// Uploade_EInvoice
