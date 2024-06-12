@@ -492,7 +492,7 @@ export const OrderPage_Update_API = ({ jsonBody, updateId }) => put(`${url.ORDER
 export const getOrderList_For_Listpage = () => get(url.ORDER_PAGE_API)// Get subModule For H_pages
 export const orderApproval_Save_API = ({ jsonBody }) => post(url.ORDER_APPROVAL_API, jsonBody)// Order approval
 
-export const InterBranch_Order_Delete_API = ({ deleteId }) => del(`${url.INTERBRANCH_ORDER_PAGE_API}/${deleteId}`)//Delete Order
+export const InterBranch_Order_Delete_API = ({ deleteId }) => del(`${url.IB_ORDER_GET_API}/${deleteId}`)//Delete Order
 
 export const IB_Order_Get_Api = ({ editId }) => get(`${url.IB_ORDER_GET_API}/${editId}`)//Delete Order
 

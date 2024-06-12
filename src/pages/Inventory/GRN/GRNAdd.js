@@ -132,9 +132,9 @@ const GRNAdd = (props) => {
         if ((items.Status === true) && (items.StatusCode === 200)) {
 
             const grnItems = items.Data
-
+            debugger
             if ((grnItems.GRNReferences[0]?.GRN_From === url.IB_GRN_LIST)) { /// If GRN from IB GRN List then this 
-                debugger
+
                 let sum = 0
 
                 grnItems.OrderItem.forEach((ele, k) => {
@@ -820,7 +820,7 @@ const GRNAdd = (props) => {
                                             style={{ backgroundColor: "white" }}
                                             disabled={((pageMode === mode.view) || (openPOdata[0]?.GRN_From === url.IB_GRN_LIST)) ? true : false}
 
-                                            value={grnDetail.FullDemandNumber}
+                                            value={(openPOdata[0]?.GRN_From === url.IB_GRN_LIST) ? grnDetail.FullDemandNumber : grnDetail.challanNo}
                                             placeholder="Enter Challan No" />
                                     </Col>
                                 </FormGroup>
@@ -831,7 +831,7 @@ const GRNAdd = (props) => {
                                         style={{ width: "130px" }}>{(openPOdata[0]?.GRN_From === url.IB_GRN_LIST) ? "Challan Date" : "Invoice Date"}</Label>
                                     <Col md="7">
                                         <C_DatePicker
-                                            value={_cfunc.date_dmy_func(grnDetail.DemandDate)}
+                                            value={openPOdata[0]?.GRN_From === url.IB_GRN_LIST ? _cfunc.date_dmy_func(grnDetail.DemandDate) : _cfunc.date_dmy_func(grnDetail.InvoiceDate)}
                                             disabled={true}
                                         />
                                     </Col>
