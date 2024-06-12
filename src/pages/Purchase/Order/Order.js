@@ -1112,7 +1112,7 @@ const Order = (props) => {
             RateParty: commonPartyDropSelect.value,
             EffectiveDate: orderdate,
             OrderID: (pageMode === mode.defaultsave) ? 0 : editVal.id,
-            Demand: ((subPageMode === url.ORDER_1) && (pageMode === mode.defaultsave)) ? 0 : editVal.id,  //IB Purachase Order  
+            Demand: ((subPageMode === url.ORDER_1) || (pageMode === mode.defaultsave)) ? 0 : editVal.id,  //IB Purachase Order  
             OrderType: order_Type.PurchaseOrder,
         }
         let SO_body = {
@@ -1121,7 +1121,7 @@ const Order = (props) => {
             RateParty: selectSupplier ? selectSupplier : supplierSelect.value,
             EffectiveDate: orderdate,
             OrderID: (pageMode === mode.defaultsave) ? 0 : editVal.id,
-            Demand: ((subPageMode === url.ORDER_1) && (pageMode === mode.defaultsave)) ? 0 : editVal.id,  //IB Purachase Order   
+            Demand: ((subPageMode === url.ORDER_1) || (pageMode === mode.defaultsave)) ? 0 : editVal.id,  //IB Purachase Order   
             OrderType: order_Type.SaleOrder,
         }
 
