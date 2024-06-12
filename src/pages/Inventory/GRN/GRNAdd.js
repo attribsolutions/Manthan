@@ -130,11 +130,11 @@ const GRNAdd = (props) => {
     useEffect(() => {
 
         if ((items.Status === true) && (items.StatusCode === 200)) {
-            
+
             const grnItems = items.Data
 
             if ((grnItems.GRNReferences[0]?.GRN_From === url.IB_GRN_LIST)) { /// If GRN from IB GRN List then this 
-                
+                debugger
                 let sum = 0
 
                 grnItems.OrderItem.forEach((ele, k) => {
@@ -146,7 +146,7 @@ const GRNAdd = (props) => {
                     ele["poAmount"] = ele.Amount
                     ele["Amount"] = calculate.roundedTotalAmount
                     ele["BatchDate"] = currentDate_ymd
-                    ele["BatchCode"] = ''
+                    ele["BatchCode"] = ele.BatchCode
                     ele["delbtn"] = false
                     ele["Invoice"] = null
                 });
