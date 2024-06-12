@@ -28,6 +28,7 @@ import {
   OrderConfirm_post_API,
   OrderPage_Edit_ForDownload_API,
   InterBranch_Order_Delete_API,
+  IB_Order_Update_API,
 } from "../../../helpers/backend_helper";
 import {
   UPDATE_ORDER_ID_FROM_ORDER_PAGE,
@@ -45,7 +46,7 @@ import { amountCommaSeparateFunc, listpageConcatDateAndTime, date_dmy_func, } fr
 import *as url from "../../../routes/route_url"
 
 function* goButtonGenFunc({ config }) {                      // GO-Botton order Add Page by subPageMode  
-  
+
   try {
 
     const { subPageMode, } = config
@@ -126,6 +127,7 @@ function* editOrderGenFunc({ config }) {     //  Edit Order by subPageMode
   const { btnmode, btnId } = config;
   try {
     let response = yield call(OrderPage_Edit_Post_API, config);
+
     response.pageMode = btnmode
     response.btnId = btnId
     yield put(editOrderIdSuccess(response));
@@ -152,8 +154,15 @@ function* DeleteOrder_GenFunc({ config }) {
 }
 
 function* UpdateOrder_ID_GenFunc({ config }) {         // Update Order by subPageMode
+  debugger
   try {
-    const response = yield call(OrderPage_Update_API, config);
+    let response = ""
+    if (config.subPageMode === url.IB_ORDER) {
+      response = yield call(IB_Order_Update_API, config);
+    } else {
+      response = yield call(OrderPage_Update_API, config);
+    }
+
     yield put(updateOrderIdSuccess(response))
   } catch (error) {
     yield put(orderApiErrorAction())

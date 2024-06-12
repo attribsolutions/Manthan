@@ -139,6 +139,7 @@ const GRNAdd = (props) => {
 
                 grnItems.OrderItem.forEach((ele, k) => {
                     const calculate = orderCalculateFunc(ele)
+
                     sum = sum + parseFloat(calculate.roundedTotalAmount)
                     ele.id = k + 1;
                     ele["poQuantity"] = ele.Quantity
@@ -632,10 +633,10 @@ const GRNAdd = (props) => {
         try {
             const GRNItemArray = []
             const isvalidMsg = [];
-
+            let calculated = {}
             grnItemList.forEach(i => {
 
-                const calculated = orderCalculateFunc(i)// amount calculation function 
+                calculated = orderCalculateFunc(i)// amount calculation function 
 
                 const arr = {
                     Item: i.Item,
@@ -758,7 +759,7 @@ const GRNAdd = (props) => {
                 GRNDate: grnDate,
                 Customer: grnDetail.Customer,
                 GRNNumber: 1,
-                GrandTotal: Number(orderAmount).toFixed(2),
+                GrandTotal: Number(calculated.roundedTotalAmount).toFixed(2),
                 Party: grnDetail.Supplier,
                 InvoiceNumber: invoiceNo,
                 CreatedBy: _cfunc.loginUserID(),
