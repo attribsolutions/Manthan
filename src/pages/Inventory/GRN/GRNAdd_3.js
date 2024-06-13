@@ -126,7 +126,7 @@ const GRNAdd3 = (props) => {
     useEffect(() => {
 
         if ((items.Status === true)) {
-
+            debugger
             const grnDetails = { ...items.Data }
             const InvoiceID = grnDetails.GRNReferences[0].Invoice
             setInvoiceID(InvoiceID)
@@ -220,7 +220,7 @@ const GRNAdd3 = (props) => {
                     ChallanNo1 = ChallanNo1.concat(`${ele.ChallanNo},`)
                 });
                 ChallanNo1 = ChallanNo1.replace(/,*$/, '');
-
+                debugger
                 setInvoiceNo(InvoiceNumber)
                 setGrnDetail(ChallanNo1);
                 setGrnItemTableList(GRNItems)
@@ -501,7 +501,7 @@ const GRNAdd3 = (props) => {
                                         <Input type="text"
                                             disabled={true}
                                             value={pageMode === mode.view ? grnDetail : grnDetail.challanNo}
-                                            placeholder="Enter Challan No" />
+                                            placeholder="Enter PO No" />
                                     </Col>
                                 </FormGroup>
                             </Col>
