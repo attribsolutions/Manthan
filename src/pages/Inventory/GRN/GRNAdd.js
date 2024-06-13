@@ -73,7 +73,7 @@ const GRNAdd = (props) => {
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField
     }));
-
+    debugger
     useLayoutEffect(() => {
         dispatch(_act.commonPageFieldSuccess(null));
         dispatch(_act.commonPageField(pageId.GRN_ADD_1));
@@ -100,6 +100,7 @@ const GRNAdd = (props) => {
     }), [userAccess]);
 
     useEffect(() => saveMsgUseEffect({// saveMsgUseEffect common useEffect 
+
         postMsg, pageMode,
         history, dispatch,
         postSuccss: _act.saveGRNSuccess,
@@ -132,7 +133,7 @@ const GRNAdd = (props) => {
         if ((items.Status === true) && (items.StatusCode === 200)) {
 
             const grnItems = items.Data
-            debugger
+
             if ((grnItems.GRNReferences[0]?.GRN_From === url.IB_GRN_LIST)) { /// If GRN from IB GRN List then this 
 
                 let sum = 0
@@ -175,8 +176,11 @@ const GRNAdd = (props) => {
             setgrnItemList(initialTableData)
             grnDetails.OrderItem = []
 
-            // setInvoiceNo(grnItems.InvoiceNumber)
+            grnDetails["InvoiceDate"] = _cfunc.date_ymd_func(grnDetails.InvoiceDate)
+            grnDetails["DemandDate"] = _cfunc.date_ymd_func(grnDetails.DemandDate)
+
             setGrnDetail(grnDetails)
+
             const myArr = grnDetails.challanNo.split(",");
             myArr.map(i => ({ Name: i, hascheck: false }))
 
@@ -633,11 +637,11 @@ const GRNAdd = (props) => {
         try {
             const GRNItemArray = []
             const isvalidMsg = [];
-            let calculated = {}
+            let sum_roundedTotalAmount = 0
             grnItemList.forEach(i => {
 
-                calculated = orderCalculateFunc(i)// amount calculation function 
-
+                const calculated = orderCalculateFunc(i)// amount calculation function 
+                sum_roundedTotalAmount = sum_roundedTotalAmount + parseFloat(calculated.roundedTotalAmount)
                 const arr = {
                     Item: i.Item,
                     Quantity: i.Quantity,
@@ -672,7 +676,7 @@ const GRNAdd = (props) => {
                 let isfound = GRNItemArray.filter(ind => {
                     return ind.Item === i.Item
                 })
-
+                
                 if (isfound.length > 0) {
                     let dubli = isfound.filter(ele => {
                         let condition = ((i.Rate === ele.Rate) && (i.BatchDate === ele.BatchDate) && (i.BatchCode === ele.BatchCode) && (i.Unit === ele.Unit))
@@ -759,7 +763,7 @@ const GRNAdd = (props) => {
                 GRNDate: grnDate,
                 Customer: grnDetail.Customer,
                 GRNNumber: 1,
-                GrandTotal: Number(calculated.roundedTotalAmount).toFixed(2),
+                GrandTotal: Number(sum_roundedTotalAmount).toFixed(2),
                 Party: grnDetail.Supplier,
                 InvoiceNumber: invoiceNo,
                 CreatedBy: _cfunc.loginUserID(),
@@ -832,7 +836,7 @@ const GRNAdd = (props) => {
                                         style={{ width: "130px" }}>{(openPOdata[0]?.GRN_From === url.IB_GRN_LIST) ? "Challan Date" : "Invoice Date"}</Label>
                                     <Col md="7">
                                         <C_DatePicker
-                                            value={openPOdata[0]?.GRN_From === url.IB_GRN_LIST ? _cfunc.date_dmy_func(grnDetail.DemandDate) : _cfunc.date_dmy_func(grnDetail.InvoiceDate)}
+                                            value={openPOdata[0]?.GRN_From === url.IB_GRN_LIST ? (grnDetail.InvoiceDate) : (grnDetail.DemandDate)}
                                             disabled={true}
                                         />
                                     </Col>
