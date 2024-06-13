@@ -498,6 +498,12 @@ export const IB_Order_Get_Api = ({ editId }) => get(`${url.IB_ORDER_GET_API}/${e
 
 
 
+export const IB_Order_Update_API = ({ jsonBody, updateId }) => put(`${url.IB_ORDER_GET_API}/${updateId}`, jsonBody)// update api
+
+
+
+
+
 
 
 

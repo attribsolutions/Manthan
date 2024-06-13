@@ -113,7 +113,7 @@ function* makeGRN_Mode1_GenFunc({ config }) {
     }
     else {
       const response = yield call(GRN_Make_API, config);
-
+      debugger
       response.Data.OrderItem.forEach(index => {
 
         index["GSToption"] = index.GSTDropdown?.map(i => ({ value: i.GST, label: i.GSTPercentage, }));
@@ -139,9 +139,16 @@ function* makeGRN_Mode1_GenFunc({ config }) {
           index["GST"] = deFaultValue[0]?.GST;
 
         } else {
-          const deFaultValue = index.GSTDropdown?.filter(i => i.GST === index.GST);
-          index["GSTPercentage"] = (deFaultValue === undefined) ? "" : deFaultValue[0]?.GSTPercentage;
-          index["GST"] = (deFaultValue === undefined) ? "" : deFaultValue[0]?.GST;
+          if (index.GSTDropdown) {
+            const deFaultValue = index.GSTDropdown?.filter(i => i.GST === index.GST);
+            index["GSTPercentage"] = (deFaultValue === undefined) ? "" : deFaultValue[0]?.GSTPercentage;
+            index["GST"] = (deFaultValue === undefined) ? "" : deFaultValue[0]?.GST;
+          } else {
+            index["GSTPercentage"] = index.GSTPercentage
+          }
+
+
+
         }
 
       })

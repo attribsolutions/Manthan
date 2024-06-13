@@ -253,7 +253,7 @@ const Order = (props) => {
     useEffect(() => { // hasEditVal useEffect
 
         if ((hasShowloction || hasShowModal)) {
-
+            debugger
             let hasEditVal = null
             if (hasShowloction) {
                 setPageMode(location.pageMode)
@@ -434,7 +434,7 @@ const Order = (props) => {
     }, [assingItemData]);
 
     useEffect(() => {
-        
+
         if (goBtnOrderdata) {
             let { OrderItems = [], TermsAndConditions = [] } = goBtnOrderdata
 
@@ -652,7 +652,7 @@ const Order = (props) => {
             },
             formatExtraData: { tableList: orderItemTable },
             formatter: (value, row, key, { tableList }) => {
-                
+
                 if (!row.UnitName) {
                     row["Unit_id"] = 0;
                     row["UnitName"] = 'null';
@@ -1312,7 +1312,7 @@ const Order = (props) => {
                 });
                 return;
             }
-
+            debugger
             const po_JsonBody = {
                 Customer: division,
                 Supplier: supplier,
@@ -1344,6 +1344,8 @@ const Order = (props) => {
                 ShippingAddress: shippAddr.value,
                 OrderNo: 1,
                 FullOrderNumber: "PO0001",
+                DemandNo: 1,
+                FullDemandNumber: "PO0001",
                 Division: division,
                 POType: orderTypeSelect.value,
                 POFromDate: orderTypeSelect.value === 1 ? currentDate_ymd : poFromDate,
@@ -1367,7 +1369,7 @@ const Order = (props) => {
             // +*********************************
 
             if (pageMode === mode.edit) {
-                dispatch(_act.updateOrderIdAction({ jsonBody, updateId: editVal.id, gotoInvoiceMode }))
+                dispatch(_act.updateOrderIdAction({ jsonBody, updateId: editVal.id, gotoInvoiceMode, subPageMode }))
 
             } else {
 

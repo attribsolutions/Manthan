@@ -13,7 +13,7 @@ import { mode, url } from "../../../routes/index";
 import SimpleBar from "simplebar-react"
 import { printBtnCss } from '../../../components/Common/ListActionsButtons';
 import * as report from '../../../Reports/ReportIndex'
-import { Invoice_Singel_Get_for_Report_Api } from '../../../helpers/backend_helper';
+import { IB_Invoice_Singel_Get_for_Report_Api, Invoice_Singel_Get_for_Report_Api } from '../../../helpers/backend_helper';
 import { getpdfReportdata, invoiceListGoBtnfilter } from '../../../store/actions';
 import C_Report from '../../../components/Common/C_Report';
 
@@ -149,12 +149,16 @@ export default function InvoiceForGRN() {
     }
 
     function printBtnHandler(rowData, btnId) {
-
         let config = {}
         config["btnId"] = btnId
         config["editId"] = rowData.id
         config["ReportType"] = report.invoice;
-        dispatch(getpdfReportdata(Invoice_Singel_Get_for_Report_Api, config))
+
+        if (IsCompanySweetAndSnacks) {
+            dispatch(getpdfReportdata(IB_Invoice_Singel_Get_for_Report_Api, config))
+        } else {
+            dispatch(getpdfReportdata(Invoice_Singel_Get_for_Report_Api, config))
+        }
     }
 
 

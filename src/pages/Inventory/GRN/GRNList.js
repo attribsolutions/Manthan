@@ -88,7 +88,7 @@ const GRNList = () => {
         if (subPageMode === url.GRN_LIST_1) {
             page_Id = pageId.GRN_LIST_1;
             masterPath = url.GRN_ADD_1;
-            newBtnPath = url.GRN_STP_1;
+            newBtnPath = url.IB_GRN_LIST;
             page_Mode = mode.modeSTPList
             makeBtnShow = false;
         }
