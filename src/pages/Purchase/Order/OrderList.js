@@ -237,6 +237,7 @@ const OrderList = () => {
             page_Mode = mode.modeSTPsave
             makeBtnShow = true;
             makeBtnName = "Make GRN"
+
         }
 
         setOtherState({ masterPath, makeBtnShow, newBtnPath, makeBtnName, IBType, showAprovalBtn })
@@ -479,8 +480,10 @@ const OrderList = () => {
                     if (list[0].POType === "Challan") {
                         isMode = 2
                     }
+                    debugger
                     if (subPageMode === url.GRN_STP_3) {
-                        isMode = 3
+                        isMode = _cfunc.IsSweetAndSnacksCompany() ? 1 : 3
+                        path = _cfunc.IsSweetAndSnacksCompany() ? url.GRN_ADD_1 : url.GRN_ADD_3
                     } else if (subPageMode === url.IB_ORDER_SO_LIST) {
                         path = url.CHALLAN
                     }
@@ -587,12 +590,13 @@ const OrderList = () => {
                 "ToDate": values.ToDate,
                 "Supplier": values.Supplier.value,
                 "Customer": _cfunc.loginSelectedPartyID(),
-                "OrderType": order_Type.InvoiceToGRN,
+                "OrderType": _cfunc.IsSweetAndSnacksCompany() ? order_Type.PurchaseOrder : order_Type.InvoiceToGRN,
                 "CustomerType": '',
                 "IBType": IBType ? IBType : otherState.IBType,
                 "DashBoardMode": 0
 
             }
+            debugger
             if (orderList4_or_app_orderList) {
                 filtersBody = JSON.stringify(SO_filters);
             }

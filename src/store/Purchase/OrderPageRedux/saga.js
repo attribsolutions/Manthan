@@ -216,7 +216,7 @@ function* orderList_GoBtn_GenFunc({ config }) {
       } else {
         i.Status = "Open";
         i.Inward = "Open";
-        if (subPageMode === url.GRN_STP_1 || (subPageMode === url.ORDER_LIST_1) || (subPageMode === url.IB_ORDER_SO_LIST)) {
+        if (subPageMode === url.GRN_STP_1 || (subPageMode === url.ORDER_LIST_1) || (subPageMode === url.IB_ORDER_SO_LIST) || (subPageMode === url.GRN_STP_3)) {
           i.forceMakeBtnHide = false
         }
       }

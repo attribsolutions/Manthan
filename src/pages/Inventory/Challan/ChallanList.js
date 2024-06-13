@@ -41,7 +41,7 @@ const ChallanList = () => {
             pageField: state.CommonPageFieldReducer.pageFieldList,
         })
     );
-    const { pageField, vender, makeGRN } = reducers;
+    const { pageField, vender, makeGRN, deleteMsg } = reducers;
     const { fromdate, todate, venderSelect } = hederFilters;
 
     const action = {
@@ -82,6 +82,15 @@ const ChallanList = () => {
             })
         }
     }, [makeGRN])
+
+
+
+    useEffect(() => {
+        if (deleteMsg.Status === true && deleteMsg.StatusCode === 200) {
+            goButtonHandler()
+        }
+
+    }, [deleteMsg])
 
     const venderOptions = vender.map((i) => ({
         value: i.id,
