@@ -108,7 +108,7 @@ export default function InvoiceForGRN() {
     }, [GRNitem])
 
     function makeBtnHandler(rowData, btnId) {
-        
+        debugger
         const list = [rowData]
         var isGRNSelect = ''
         const grnRef = []
@@ -120,7 +120,7 @@ export default function InvoiceForGRN() {
                     Order: null,
                     ChallanNo: ele.FullInvoiceNumber,
                     Inward: true,
-                    Challan: ele.id,
+                    Challan: ele.POType === "Challan" ? ele.id : '',
                     GRN_From: IsCompanySweetAndSnacks ? url.IB_GRN_LIST : ""
                 });
                 isGRNSelect = isGRNSelect.concat(`${ele.id},`)
