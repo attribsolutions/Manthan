@@ -186,13 +186,23 @@ export const Production_STP = url.PRODUCTION_LIST;
 
 //******************************* Inventory ************************************//
 
-export const GRN_LIST_1 = url.GRN_STP_1;
+
 export const GRN_ADD_1 = url.GRN_LIST_1;
 export const GRN_STP_1 = url.GRN_LIST_1;
+
+
+
 
 export const GRNList_3 = url.GRN_STP_3;
 export const GRN_ADD_3 = url.GRN_LIST_3;
 export const GRN_STP_3 = url.GRN_LIST_3;
+
+
+export const GRN_LIST_1 = url.IB_GRN_LIST;
+export const IB_GRN_List = url.GRN_LIST_1;
+
+
+
 
 export const StockEntry = url.STOCK_ENTRY;
 

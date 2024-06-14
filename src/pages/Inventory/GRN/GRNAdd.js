@@ -28,8 +28,8 @@ import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable"
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 import { goButtonForRate_Master, saveRateMaster } from "../../../store/Administrator/RateMasterRedux/action";
 
+//// This GRN  Add Page is Use For  Sweets and Snacks GRN  Add page Use for 2 MODE From vendor Order to GRN & Inter Branch GRN
 let initialTableData = []
-
 const GRNAdd = (props) => {
 
     const dispatch = useDispatch();
@@ -73,7 +73,7 @@ const GRNAdd = (props) => {
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField
     }));
-    debugger
+
     useLayoutEffect(() => {
         dispatch(_act.commonPageFieldSuccess(null));
         dispatch(_act.commonPageField(pageId.GRN_ADD_1));
@@ -98,13 +98,13 @@ const GRNAdd = (props) => {
         dispatch,
         setUserAccState,
     }), [userAccess]);
-
+    debugger
     useEffect(() => saveMsgUseEffect({// saveMsgUseEffect common useEffect 
 
         postMsg, pageMode,
         history, dispatch,
         postSuccss: _act.saveGRNSuccess,
-        listPath: url.GRN_LIST_1
+        listPath: ((postMsg.GRN_Reference === url.GRN_STP_3) || (postMsg.GRN_Reference === url.ORDER_LIST_1)) ? url.GRN_LIST_3 : url.GRN_LIST_1
     }), [postMsg]);
 
     useEffect(() => {
@@ -676,7 +676,7 @@ const GRNAdd = (props) => {
                 let isfound = GRNItemArray.filter(ind => {
                     return ind.Item === i.Item
                 })
-                
+
                 if (isfound.length > 0) {
                     let dubli = isfound.filter(ele => {
                         let condition = ((i.Rate === ele.Rate) && (i.BatchDate === ele.BatchDate) && (i.BatchCode === ele.BatchCode) && (i.Unit === ele.Unit))
@@ -775,7 +775,7 @@ const GRNAdd = (props) => {
             if (pageMode === mode.edit) {
                 returnFunc()
             } else {
-                dispatch(_act.saveGRNAction({ jsonBody, btnId }))
+                dispatch(_act.saveGRNAction({ jsonBody, btnId, GRNReferencesUpdate }))
             }
 
         } catch (error) { returnFunc() }
