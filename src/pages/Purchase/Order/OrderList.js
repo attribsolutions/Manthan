@@ -408,7 +408,7 @@ const OrderList = () => {
     }
 
     const makeBtnFunc = (list = [], btnId) => {
-
+        debugger
         const obj = list[0]
 
         const customer = {
@@ -480,7 +480,7 @@ const OrderList = () => {
                     if (list[0].POType === "Challan") {
                         isMode = 2
                     }
-                    debugger
+                    
                     if (subPageMode === url.GRN_STP_3) {
                         isMode = _cfunc.IsSweetAndSnacksCompany() ? 1 : 3
                         path = _cfunc.IsSweetAndSnacksCompany() ? url.GRN_ADD_1 : url.GRN_ADD_3
@@ -506,7 +506,7 @@ const OrderList = () => {
     }
 
     function editBodyfunc(config) {
-        debugger
+        
         const { rowData } = config;
         try {
             const jsonBody = JSON.stringify({
@@ -524,7 +524,7 @@ const OrderList = () => {
 
     function downBtnFunc(config) {
         config["ReportType"] = report.order1;
-        if (subPageMode === url.IB_ORDER_PO_LIST) {
+        if (subPageMode === url.IB_ORDER_PO_LIST || subPageMode === url.IB_ORDER_SO_LIST) {
             dispatch(_act.getpdfReportdata(IB_Order_Get_Api, config))
         } else {
             dispatch(_act.getpdfReportdata(OrderPage_Edit_ForDownload_API, config))
@@ -596,7 +596,7 @@ const OrderList = () => {
                 "DashBoardMode": 0
 
             }
-            debugger
+
             if (orderList4_or_app_orderList) {
                 filtersBody = JSON.stringify(SO_filters);
             }

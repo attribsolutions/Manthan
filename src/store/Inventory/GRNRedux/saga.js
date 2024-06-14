@@ -34,6 +34,7 @@ import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 function* saveGRNGenFunc({ config }) {            // Save GRN  genrator function
   try {
     const response = yield call(GRN_Post_API, config);
+    response["GRN_Reference"] = config.GRNReferencesUpdate[0]?.GRN_From
     yield put(saveGRNSuccess(response));
   } catch (error) { yield put(GrnApiErrorAction()) }
 }

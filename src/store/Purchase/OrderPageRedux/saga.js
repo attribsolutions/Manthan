@@ -29,6 +29,7 @@ import {
   OrderPage_Edit_ForDownload_API,
   InterBranch_Order_Delete_API,
   IB_Order_Update_API,
+  IB_Order_Get_Api,
 } from "../../../helpers/backend_helper";
 import {
   UPDATE_ORDER_ID_FROM_ORDER_PAGE,
@@ -170,7 +171,7 @@ function* UpdateOrder_ID_GenFunc({ config }) {         // Update Order by subPag
 }
 
 function* orderList_GoBtn_GenFunc({ config }) {
-
+  debugger
   //  Order List Filter by subPageMode
   try {
     const { subPageMode } = config
@@ -216,12 +217,18 @@ function* orderList_GoBtn_GenFunc({ config }) {
       } else {
         i.Status = "Open";
         i.Inward = "Open";
-        if (subPageMode === url.GRN_STP_1 || (subPageMode === url.ORDER_LIST_1) || (subPageMode === url.IB_ORDER_SO_LIST) || (subPageMode === url.GRN_STP_3)) {
-          i.forceMakeBtnHide = false
+        if (subPageMode === url.GRN_STP_1 || (subPageMode === url.ORDER_LIST_1) || (subPageMode === url.IB_ORDER_SO_LIST) || (subPageMode === url.GRN_STP_3) || (subPageMode === url.IB_ORDER_PO_LIST)) {
+          if ((subPageMode === url.IB_ORDER_SO_LIST || subPageMode === url.IB_ORDER_PO_LIST) && i.InvoiceCreated) {
+            i.forceEditHide = true;
+            i.forceMakeBtnHide = true
+            i.forceDeleteHide = true;
+          } else {
+            i.forceMakeBtnHide = false
+          }
         }
       }
 
-      //+++++++++++++++++++++++++  Status colonm show Status    ++++++++++++++++++++++++++++++++++++++
+      //+++++++++++++++++++++++++  Status colonm show Status   ++++++++++++++++++++++++++++++++++++++
       if (i.SAPResponse) {
         i.Status = "Order send To SAP"
       }
@@ -324,9 +331,15 @@ function* OrderConfirm_GenFunc({ config }) {         // Update Order by subPageM
 
 function* OrderSingleGet_GenFunc({ config }) {
 
-
   try {
-    const response = yield call(OrderPage_Edit_ForDownload_API, config);
+    let response = ""
+    if (config.subPageMode === url.IB_ORDER_SO_LIST || config.subPageMode === url.IB_ORDER_PO_LIST) {
+      response = yield call(IB_Order_Get_Api, config);
+    } else {
+      response = yield call(OrderPage_Edit_ForDownload_API, config);
+
+    }
+
     yield put(orderSinglegetSuccess(response))
 
   } catch (error) {
