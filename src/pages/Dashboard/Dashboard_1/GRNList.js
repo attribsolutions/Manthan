@@ -113,12 +113,11 @@ export default function InvoiceForGRN() {
         var isGRNSelect = ''
         const grnRef = []
         if (list.length > 0) {
-            let challanNo = list[0].FullInvoiceNumber
             list.forEach(ele => {
                 grnRef.push({
                     Invoice: ele.id,
                     Order: null,
-                    ChallanNo: ele.FullInvoiceNumber,
+                    Invoice_NO: ele.FullInvoiceNumber,
                     Inward: true,
                     Challan: ele.POType === "Challan" ? ele.id : '',
                     GRN_From: IsCompanySweetAndSnacks ? url.IB_GRN_LIST : ""
@@ -140,7 +139,7 @@ export default function InvoiceForGRN() {
                     Mode: IsCompanySweetAndSnacks ? 2 : 3
                 })
 
-                dispatch(makeGRN_Mode_1Action({ jsonBody, pageMode: mode.modeSTPsave, path: path, grnRef, challanNo, btnId, InvoiceDate: rowData.dashboardOrderDate }))
+                dispatch(makeGRN_Mode_1Action({ jsonBody, pageMode: mode.modeSTPsave, path: path, grnRef, btnId, InvoiceDate: rowData.dashboardOrderDate }))
 
             } else {
                 alert("Please Select Order1")
