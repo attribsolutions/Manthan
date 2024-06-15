@@ -15,7 +15,7 @@ import * as report from '../../../Reports/ReportIndex'
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
-import { CheckStockEntryforBackDatedTransaction, Invoice_Singel_Get_for_Report_Api } from "../../../helpers/backend_helper";
+import { CheckStockEntryforBackDatedTransaction, Invoice_Singel_Get_for_Report_Api, OrderPage_Edit_ForDownload_API } from "../../../helpers/backend_helper";
 import { getpdfReportdata } from "../../../store/Utilites/PdfReport/actions";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import {
@@ -364,6 +364,7 @@ const InvoiceList = () => {
     }));
 
     function downBtnFunc(config) {
+        debugger
         config["ReportType"] = report.invoice;
         dispatch(getpdfReportdata(Invoice_Singel_Get_for_Report_Api, config))
     }
@@ -433,25 +434,25 @@ const InvoiceList = () => {
     };
 
     const makeBtnFunc = (list = {}, btnId) => {
-        
-        const challanNo = list[0].FullInvoiceNumber
+
+
         const grnRef = [{
             Challan: list[0].id,
             Inward: false,
             GRN_From: subPageMode,
-            OrderDate: list[0]?.InvoiceDate
+            OrderDate: list[0]?.InvoiceDate,
+            Invoice_NO: list[0].FullInvoiceNumber
         }];
 
         const jsonBody = JSON.stringify({
             OrderIDs: list[0].id.toString(),
-            Mode: 2 // mode when challan to make GRN
+            Mode: 2
         })
         dispatch(makeGRN_Mode_1Action({
             jsonBody,
             pageMode: mode.modeSTPsave,
             grnRef,
             path: url.GRN_ADD_1,
-            challanNo
         }))
 
     };

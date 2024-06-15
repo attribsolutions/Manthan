@@ -455,7 +455,7 @@ const OrderList = () => {
                         grnRef.push({
                             Invoice: (subPageMode === url.GRN_STP_3) ? ele.id : null,
                             Order: !(subPageMode === url.GRN_STP_3) ? ele.POType === "Challan" ? '' : ele.id : null,
-                            ChallanNo: ele.FullOrderNumber,
+                            Full_OrderNumber: ele.FullOrderNumber,
                             Inward: url.GRN_STP_3 ? true : false,
                             Challan: ele.POType === "Challan" ? ele.id : '',
                             POType: ele.POType,
@@ -466,21 +466,18 @@ const OrderList = () => {
 
                         });
                         isGRNSelect = isGRNSelect.concat(`${ele.id},`)
-                        challanNo = challanNo.concat(`${ele.FullOrderNumber},`)
+
                     }
                 });
 
                 if (isGRNSelect) {
                     let path = (subPageMode === url.GRN_STP_3 ? url.GRN_ADD_3 : url.GRN_ADD_1)
                     isGRNSelect = isGRNSelect.replace(/,*$/, '');//****** withoutLastComma  function */
-                    challanNo = challanNo.replace(/,*$/, '');           //****** withoutLastComma  function */
-
                     let isMode = 1                               // define isMode for MakeBtn API
-
                     if (list[0].POType === "Challan") {
                         isMode = 2
                     }
-                    
+
                     if (subPageMode === url.GRN_STP_3) {
                         isMode = _cfunc.IsSweetAndSnacksCompany() ? 1 : 3
                         path = _cfunc.IsSweetAndSnacksCompany() ? url.GRN_ADD_1 : url.GRN_ADD_3
@@ -496,7 +493,7 @@ const OrderList = () => {
 
                     })
 
-                    dispatch(_act.makeGRN_Mode_1Action({ jsonBody, subPageMode, pageMode, path: path, grnRef, challanNo, InvoiceDate: obj.dashboardOrderDate, btnId: `btn-makeBtn-${obj.id}` }))
+                    dispatch(_act.makeGRN_Mode_1Action({ jsonBody, subPageMode, pageMode, path: path, grnRef, InvoiceDate: obj.dashboardOrderDate, btnId: `btn-makeBtn-${obj.id}` }))
 
                 } else {
                     alert("Please Select Order1")
@@ -506,7 +503,7 @@ const OrderList = () => {
     }
 
     function editBodyfunc(config) {
-        
+
         const { rowData } = config;
         try {
             const jsonBody = JSON.stringify({
@@ -523,6 +520,7 @@ const OrderList = () => {
     }
 
     function downBtnFunc(config) {
+
         config["ReportType"] = report.order1;
         if (subPageMode === url.IB_ORDER_PO_LIST || subPageMode === url.IB_ORDER_SO_LIST) {
             dispatch(_act.getpdfReportdata(IB_Order_Get_Api, config))

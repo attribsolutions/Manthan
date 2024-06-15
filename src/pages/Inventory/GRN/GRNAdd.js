@@ -131,7 +131,7 @@ const GRNAdd = (props) => {
     useEffect(() => {
 
         if ((items.Status === true) && (items.StatusCode === 200)) {
-
+            debugger
             const grnItems = items.Data
 
             if ((grnItems.GRNReferences[0]?.GRN_From === url.IB_GRN_LIST)) { /// If GRN from IB GRN List then this 
@@ -171,7 +171,7 @@ const GRNAdd = (props) => {
 
             initialTableData = []
             const grnDetails = { ...grnItems }
-
+            debugger
             initialTableData = grnDetails.OrderItem;
             setgrnItemList(initialTableData)
             grnDetails.OrderItem = []
@@ -180,9 +180,7 @@ const GRNAdd = (props) => {
             grnDetails["DemandDate"] = _cfunc.date_ymd_func(grnDetails.DemandDate)
 
             setGrnDetail(grnDetails)
-
-            const myArr = grnDetails.challanNo.split(",");
-            myArr.map(i => ({ Name: i, hascheck: false }))
+            setInvoiceNo(grnDetails.GRNReferences[0]?.Invoice_NO)
 
             setOpenPOdata(grnDetails.GRNReferences)
 
@@ -825,15 +823,15 @@ const GRNAdd = (props) => {
                                             style={{ backgroundColor: "white" }}
                                             disabled={((pageMode === mode.view) || (openPOdata[0]?.GRN_From === url.IB_GRN_LIST)) ? true : false}
 
-                                            value={(openPOdata[0]?.GRN_From === url.IB_GRN_LIST) ? grnDetail.FullDemandNumber : grnDetail.challanNo}
-                                            placeholder="Enter Challan No" />
+                                            value={grnDetail.Full_OrderNumber === undefined ? grnDetail.FullDemandNumber : grnDetail.Full_OrderNumber}
+                                            placeholder="Enter PO Number" />
                                     </Col>
                                 </FormGroup>
                             </Col>
                             <Col sm={5}>
                                 <FormGroup className=" row mt-2" >
                                     <Label className="col-md-4 p-2"
-                                        style={{ width: "130px" }}>{(openPOdata[0]?.GRN_From === url.IB_GRN_LIST) ? "Challan Date" : "Invoice Date"}</Label>
+                                        style={{ width: "130px" }}>{"Invoice Date"}</Label>
                                     <Col md="7">
                                         <C_DatePicker
                                             value={openPOdata[0]?.GRN_From === url.IB_GRN_LIST ? (grnDetail.InvoiceDate) : (grnDetail.DemandDate)}
@@ -843,13 +841,13 @@ const GRNAdd = (props) => {
                                 </FormGroup>
                                 <FormGroup className="mb-2 row  " >
                                     <Label className="col-md-4 p-2"
-                                        style={{ width: "130px" }}>{(openPOdata[0]?.GRN_From === url.IB_GRN_LIST) ? "Challan No" : "Invoice No"}</Label>
+                                        style={{ width: "130px" }}>{"Invoice No"}</Label>
                                     <Col md="7">
                                         <Input
                                             type="text"
                                             style={{ backgroundColor: "white" }}
                                             value={invoiceNo}
-                                            placeholder={(openPOdata[0]?.GRN_From === url.IB_GRN_LIST) ? ` Enter Challan No` : `Enter Invoice No `}
+                                            placeholder={`Enter Invoice No `}
                                             disabled={pageMode === mode.view ? true : false}
                                             onChange={(e) => setInvoiceNo(e.target.value)}
                                         />
