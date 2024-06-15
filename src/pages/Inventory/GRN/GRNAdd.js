@@ -823,7 +823,7 @@ const GRNAdd = (props) => {
                                             style={{ backgroundColor: "white" }}
                                             disabled={((pageMode === mode.view) || (openPOdata[0]?.GRN_From === url.IB_GRN_LIST)) ? true : false}
 
-                                            value={grnDetail.Full_OrderNumber === undefined ? grnDetail.FullDemandNumber : grnDetail.Full_OrderNumber}
+                                            value={openPOdata[0]?.Full_OrderNumber === undefined ? grnDetail.FullDemandNumber : openPOdata[0]?.Full_OrderNumber}
                                             placeholder="Enter PO Number" />
                                     </Col>
                                 </FormGroup>
