@@ -135,8 +135,7 @@ const GRNAdd3 = (props) => {
 
             setInvoiceNo(grnDetails.InvoiceNumber)
             setGrnDetail(grnDetails)
-            const myArr = grnDetails.challanNo.split(",");
-            myArr.map(i => ({ Name: i, hascheck: false }))
+
             setopenPOdata(grnDetails.GRNReferences)
 
             dispatch(makeGRN_Mode_1ActionSuccess({ Status: false }))
