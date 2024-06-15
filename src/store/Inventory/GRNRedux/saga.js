@@ -101,7 +101,7 @@ function* HideInvoiceForGRNGenFunc({ config }) {             // Upadte GRN  genr
 function* makeGRN_Mode1_GenFunc({ config }) {
   // Make_GRN Items  genrator function
 
-  const { pageMode = '', path = '', grnRef = [], challanNo = '', InvoiceDate, subPageMode } = config
+  const { pageMode = '', path = '', grnRef = [], InvoiceDate, subPageMode } = config
 
   try {
     if (subPageMode === url.IB_ORDER_SO_LIST) {
@@ -164,7 +164,6 @@ function* makeGRN_Mode1_GenFunc({ config }) {
       response["pageMode"] = pageMode;
       response["path"] = path; //Pagepath
       response.Data["GRNReferences"] = grnRef;
-      response.Data["challanNo"] = challanNo;
       response.Data["InvoiceDate"] = InvoiceDate
       yield put(makeGRN_Mode_1ActionSuccess(response))
     }

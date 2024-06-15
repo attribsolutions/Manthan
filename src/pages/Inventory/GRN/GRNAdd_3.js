@@ -500,7 +500,7 @@ const GRNAdd3 = (props) => {
                                     <Col sm="7">
                                         <Input type="text"
                                             disabled={true}
-                                            value={pageMode === mode.view ? grnDetail : grnDetail.challanNo}
+                                            value={grnDetail.FullOrderNumber}
                                             placeholder="Enter PO No" />
                                     </Col>
                                 </FormGroup>

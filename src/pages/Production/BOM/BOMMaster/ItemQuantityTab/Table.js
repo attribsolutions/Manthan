@@ -51,7 +51,7 @@ function BOMTable(props) {
             <Input type="text"
               key={info.id}
               style={{ width: '140px', textAlign: 'center' }}
-              disabled={props.pageMode === mode.copy || props.pageMode === mode.view}
+              disabled={ props.pageMode === mode.view}
               className="text-end"
               defaultValue={info.Quantity}
               onChange={(event) => handleChange(event, info)}
@@ -64,7 +64,7 @@ function BOMTable(props) {
           <Button
             className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
             data-mdb-toggle="tooltip" data-mdb-placement="top" title="Delete Party Type"
-            disabled={props.pageMode === mode.copy || props.pageMode === mode.view}
+            disabled={ props.pageMode === mode.view}
             onClick={(e) => {
               onDeleteHandeler(info);
             }}
