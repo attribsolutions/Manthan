@@ -126,7 +126,7 @@ const GRNAdd3 = (props) => {
     useEffect(() => {
 
         if ((items.Status === true)) {
-            debugger
+
             const grnDetails = { ...items.Data }
             const InvoiceID = grnDetails.GRNReferences[0].Invoice
             setInvoiceID(InvoiceID)
@@ -219,7 +219,7 @@ const GRNAdd3 = (props) => {
                     ChallanNo1 = ChallanNo1.concat(`${ele.ChallanNo},`)
                 });
                 ChallanNo1 = ChallanNo1.replace(/,*$/, '');
-                debugger
+
                 setInvoiceNo(InvoiceNumber)
                 setGrnDetail(ChallanNo1);
                 setGrnItemTableList(GRNItems)
@@ -425,6 +425,7 @@ const GRNAdd3 = (props) => {
                 customAlert({ Type: 3, Message: isvalidMsg });
                 return
             }
+            let GRNReferencesUpdate = openPOdata  /// GRNReferencesUpdate this Key Word Use For GRN Ref From Use Inter Branch
 
             const jsonBody = JSON.stringify({
                 GRNDate: grnDate,
@@ -436,7 +437,7 @@ const GRNAdd3 = (props) => {
                 CreatedBy: _cfunc.loginUserID(),
                 UpdatedBy: 1,
                 GRNItems: itemArray,
-                GRNReferences: openPOdata,
+                GRNReferences: GRNReferencesUpdate,
             });
 
             if (pageMode === mode.edit) {
@@ -446,7 +447,7 @@ const GRNAdd3 = (props) => {
                     dispatch(CheckStockEntryforBackDatedTransactionSuccess({ status: false }))
                     customAlert({ Type: 3, Message: StockEnteryForBackdated.Message });
                 } else {
-                    dispatch(saveGRNAction({ jsonBody, btnId }))
+                    dispatch(saveGRNAction({ jsonBody, btnId, GRNReferencesUpdate }))
                 }
             }
         } catch (error) { _cfunc.CommonConsole(error) }
