@@ -28,6 +28,7 @@ import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable"
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 import { goButtonForRate_Master, saveRateMaster } from "../../../store/Administrator/RateMasterRedux/action";
 
+
 //// This GRN  Add Page is Use For  Sweets and Snacks GRN  Add page Use for 2 MODE From vendor Order to GRN & Inter Branch GRN
 let initialTableData = []
 const GRNAdd = (props) => {
@@ -98,7 +99,7 @@ const GRNAdd = (props) => {
         dispatch,
         setUserAccState,
     }), [userAccess]);
-    debugger
+    
     useEffect(() => saveMsgUseEffect({// saveMsgUseEffect common useEffect 
 
         postMsg, pageMode,
@@ -131,7 +132,7 @@ const GRNAdd = (props) => {
     useEffect(() => {
 
         if ((items.Status === true) && (items.StatusCode === 200)) {
-            debugger
+            
             const grnItems = items.Data
 
             if ((grnItems.GRNReferences[0]?.GRN_From === url.IB_GRN_LIST)) { /// If GRN from IB GRN List then this 
@@ -171,7 +172,7 @@ const GRNAdd = (props) => {
 
             initialTableData = []
             const grnDetails = { ...grnItems }
-            debugger
+            
             initialTableData = grnDetails.OrderItem;
             setgrnItemList(initialTableData)
             grnDetails.OrderItem = []
@@ -453,7 +454,9 @@ const GRNAdd = (props) => {
         {//------------- Batch Code column ----------------------------------
             text: "BatchCode",
             dataField: "",
-            // sort: true,
+            style: {
+                width: "250px"
+            },
             formatter: (value, row, k) => {
 
                 try {
@@ -505,7 +508,7 @@ const GRNAdd = (props) => {
         {//------------- Action column ----------------------------------
             text: "Action",
             dataField: "",
-            hidden: (pageMode === mode.view) ? true : false,
+            hidden: (pageMode === mode.view || openPOdata[0]?.GRN_From === url.IB_GRN_LIST) ? true : false,
             formatter: (value, row, k, a, v) => (
                 <div className="d-flex justify-Content-center mt-2" >
                     <div> <Button
