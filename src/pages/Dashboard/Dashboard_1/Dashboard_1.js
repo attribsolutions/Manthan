@@ -115,9 +115,7 @@ const Dashboard_1 = (props) => {
         history.push(url.IB_ORDER_SO_LIST)
     }
 
-    function ChallanlistLinkHandler() {
-        history.push(url.CHALLAN_LIST)
-    }
+  
     const RedirectHandler = (Type) => {
         if (Type === 1) {
             history.push(url.ORDER_LIST_4)
@@ -178,7 +176,7 @@ const Dashboard_1 = (props) => {
                             </Card>
                         </Col>}
 
-                        {!IsCompanySweetAndSnacks && <Col xl={3} md={3} >
+                        { <Col xl={3} md={3} >
                             <Card className="card-h-100">
                                 <CardBody>
                                     <Row className="align-items-center">
@@ -237,6 +235,32 @@ const Dashboard_1 = (props) => {
                             </Card>
                         </Col>}
 
+
+
+
+
+
+                        {IsCompanySweetAndSnacks &&
+                            <Col lg={6}>
+                                <Card >
+                                    <CardHeader style={{ backgroundColor: "whitesmoke" }}
+                                        className="card-header align-items-center d-flex text-center">
+                                        <Label className="card-title mb-0 flex-grow-4 text-primary text-bold mb-n2 text-decoration-underline"
+                                            onClick={demandListLinkHandler}
+                                            disabled={false}
+                                            style={{ cursor: "pointer" }}
+
+                                        >
+                                            IB Sales Order List</Label>
+                                        {(SalesReturnListloading) &&
+                                            <DashboardLoader />
+                                        }
+                                    </CardHeader>
+                                    <DemandListForDashboard />
+                                </Card>
+                            </Col>
+                        }
+
                         {<Col lg={6}>
                             <Card >
                                 <CardHeader style={{ backgroundColor: "whitesmoke" }}
@@ -262,57 +286,11 @@ const Dashboard_1 = (props) => {
 
 
 
-
-
-                        {IsCompanySweetAndSnacks &&
-                            <Col lg={6}>
-                                <Card >
-                                    <CardHeader style={{ backgroundColor: "whitesmoke" }}
-                                        className="card-header align-items-center d-flex text-center">
-                                        <Label className="card-title mb-0 flex-grow-4 text-primary text-bold mb-n2 text-decoration-underline"
-                                            onClick={demandListLinkHandler}
-                                            disabled={false}
-                                            style={{ cursor: "pointer" }}
-
-                                        >
-                                            Demand List</Label>
-                                        {(SalesReturnListloading) &&
-                                            <DashboardLoader />
-                                        }
-                                    </CardHeader>
-                                    <DemandListForDashboard />
-                                </Card>
-                            </Col>
-                        }
-
-
-
-
                     </Row>
 
                     <Row>
 
-                        {IsCompanySweetAndSnacks && <Col lg={6}>
-                            <Card >
-                                <CardHeader style={{ backgroundColor: "whitesmoke" }}
 
-                                    className="card-header align-items-center d-flex">
-
-                                    <Label
-                                        className="card-title mb-0 flex-grow-4 text-primary text-bold mb-n2 text-decoration-underline"
-                                        disabled={false}
-                                        onClick={ChallanlistLinkHandler}
-                                        style={{ cursor: "pointer" }}
-
-                                    >
-                                        Challan List</Label>
-                                    {(GRNListLoading) &&
-                                        <DashboardLoader />
-                                    }
-                                </CardHeader>
-                                <ChallanListForDashboard />
-                            </Card>
-                        </Col>}
 
                         <Col lg={6}>
                             <Card >

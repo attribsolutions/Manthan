@@ -337,6 +337,9 @@ const Order = (props) => {
     }, []);
 
 
+
+
+
     useEffect(() => {
         if ((PartyItemPostMsg.Status === true) && (PartyItemPostMsg.StatusCode === 200)) {
             dispatch(_act.GoButton_For_Order_AddSuccess([]))
@@ -620,20 +623,20 @@ const Order = (props) => {
             },
             formatExtraData: { tableList: orderItemTable },
             formatter: (value, row, k, { tableList }) => {
-
+                debugger
                 return (
                     <>
                         <CInput
                             key={`Quantity-${k}`}
                             id={`Quantity-${k}`}
                             cpattern={onlyNumberRegx}
-                            defaultValue={row.Quantity}
-                            autoComplete="off"
+                            defaultValue={(row.Quantity)}
                             className=" text-end"
                             onChange={(e) => {
+                                
                                 row["Quantity"] = e.target.value
-                                // itemWise_CalculationFunc(row, undefined, tableList)
-                                debounce(() => itemWise_CalculationFunc(row, undefined, tableList), 100)(); // 300ms debounce
+                                itemWise_CalculationFunc(row, undefined, tableList)
+
                             }}
                         />
                     </>
@@ -1067,6 +1070,7 @@ const Order = (props) => {
         const sumOfAmount = tableList.reduce((accumulator, currentObject) => accumulator + (Number(currentObject["Amount"]) || 0), 0);
 
         const commaSeparateAmount = _cfunc.amountCommaSeparateFunc(sumOfAmount.toFixed(2))
+        debugger
         dispatch(_act.BreadcrumbShowCountlabel(`Count:${tableList.length} ₹ ${commaSeparateAmount}`))
     };
 
@@ -1099,8 +1103,10 @@ const Order = (props) => {
         }
         let btnId = `go-btn${subPageMode}`
         _cfunc.btnIsDissablefunc({ btnId, state: true })
-
+        debugger
+        console.log(itemSelectDropOptions)
         dispatch(_act.BreadcrumbShowCountlabel(initial_BredcrumbMsg))
+
 
 
         let PO_Body = {
@@ -1499,6 +1505,7 @@ const Order = (props) => {
                                                                     })
                                                                     return;
                                                                 }
+                                                                dispatch(_act.BreadcrumbShowCountlabel(`Count:${itemSelectDropOptions.length} ₹ ${(0)}`))
                                                                 setSelecedItemWiseOrder(false)
                                                                 setOrderItemTable(itemSelectDropOptions)
                                                                 setItemSelect(allLabelWithBlank)

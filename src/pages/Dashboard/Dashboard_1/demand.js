@@ -6,11 +6,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { globalTableSearchProps } from '../../../components/Common/SearchBox/MySearch';
 import { salesReturnListAPI, salesReturnListAPISuccess } from '../../../store/Sales/SalesReturnRedux/action';
 import SimpleBar from "simplebar-react"
-import { getOrderListPage, getOrderListPageSuccess, makeGRN_Mode_1Action } from '../../../store/actions';
+import { getOrderListPage, getOrderListPageSuccess, getpdfReportdata, makeGRN_Mode_1Action } from '../../../store/actions';
 import { mode, url } from '../../../routes';
 import { printBtnCss } from '../../../components/Common/ListActionsButtons';
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 import { Button, Spinner } from 'reactstrap';
+import * as report from '../../../Reports/ReportIndex'
+import { IB_Order_Get_Api } from '../../../helpers/backend_helper';
 
 
 export default function DemandListForDashboard() {
@@ -76,11 +78,11 @@ export default function DemandListForDashboard() {
 
     function printBtnHandler(rowData, btnId) {
 
-        // let config = {}
-        // config["btnId"] = btnId
-        // config["editId"] = rowData.id
-        // config["ReportType"] = report.invoice;
-        // dispatch(getpdfReportdata(Invoice_Singel_Get_for_Report_Api, config))
+        let config = {}
+        config["btnId"] = btnId
+        config["editId"] = rowData.id
+        config["ReportType"] = report.order1;;
+        dispatch(getpdfReportdata(IB_Order_Get_Api, config))
     }
 
 
@@ -141,12 +143,12 @@ export default function DemandListForDashboard() {
     const hasRole = (role) => userAccState[role];
     const pagesListColumns = [
         {
-            text: "Demand Date",
+            text: "IB Order Date",
             dataField: "transactionDateLabel",
             sort: true
         },
         {
-            text: "Demand Number",
+            text: "IB Order Number",
             dataField: "FullOrderNumber",
         },
         {
@@ -170,7 +172,7 @@ export default function DemandListForDashboard() {
                         type="button"
                         id={`btn-makeBtn-${rowData.id}`}
                         className="badge badge-soft-info font-size-12 btn btn-info waves-effect waves-light w-xxs border border-light "
-                        title="Make Challan"
+                        title="Make Invoice"
                         onClick={() => {
                             const btnId = `btn-makeBtn-${rowData.id}`
                             !listBtnLoading && makeBtnFunc(rowData, btnId)
@@ -189,7 +191,7 @@ export default function DemandListForDashboard() {
                         id={`btn-print-${rowData.id}`}
                         className={printBtnCss}
                         style={{ marginLeft: "9px" }}
-                        title="Print Challan"
+                        title="Print Invoice"
                         onClick={() => {
                             const btnId = `btn-print-${rowData.id}`
                             !listBtnLoading && printBtnHandler(rowData, btnId)
