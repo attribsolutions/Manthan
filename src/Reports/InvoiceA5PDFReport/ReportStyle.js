@@ -340,7 +340,7 @@ export const reportFooter = (doc, data) => {
     if (data.SettingData.Qr_Image === null) {
         doc.addImage("", 'JPEG', 335, 303, 105, 96);
     } else {
-        doc.addImage(data.SettingData.Qr_Image, 'JPEG', 335, 303, 105, 96);
+        doc.addImage(data.SettingData.Qr_Image, 'JPEG', 335, 303, 105, 96, null, 'FAST');
     }
 
 
