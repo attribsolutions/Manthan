@@ -110,7 +110,10 @@ const BOMList = () => {
         label: index.Name,
     }));
 
-
+    ItemDropdown_Options.unshift({
+        value: "",
+        label: " All"
+    });
 
     function copyBodyfunc(config) {
         try {
@@ -134,7 +137,7 @@ const BOMList = () => {
                                         value={Item}
                                         isSearchable={true}
                                         className="react-dropdown"
-                                        classNamePrefix="dropdown" 
+                                        classNamePrefix="dropdown"
                                         styles={{
                                             menu: provided => ({ ...provided, zIndex: 2 })
                                         }}
