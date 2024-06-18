@@ -194,12 +194,14 @@ const OrderList = () => {
         }
         else if (subPageMode === url.IB_ORDER_SO_LIST) {
             page_Id = pageId.IB_ORDER_SO_LIST
-            masterPath = url.IB_ORDER;
-            makeBtnShow = true;
+            masterPath = url.IB_SALES_ORDER;
             page_Mode = mode.modeSTPList
-            makeBtnName = "Make Challan"
+            newBtnPath = url.IB_SALES_ORDER;
+            makeBtnShow = true;
+            makeBtnName = "Make IB Invoice"
             IBType = "IBSO"
         }
+
         else if (subPageMode === url.ORDER_LIST_4) {
             page_Id = pageId.ORDER_LIST_4
             masterPath = url.ORDER_4;
@@ -408,7 +410,7 @@ const OrderList = () => {
     }
 
     const makeBtnFunc = (list = [], btnId) => {
-        debugger
+
         const obj = list[0]
 
         const customer = {
