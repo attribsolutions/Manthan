@@ -3,7 +3,8 @@ import { useSelector, useDispatch } from "react-redux";
 import {
     BreadcrumbRadioButtonView,
     commonPageFieldList,
-    commonPageFieldListSuccess
+    commonPageFieldListSuccess,
+    getItemList
 } from "../../../../store/actions";
 import CommonPurchaseList from "../../../../components/Common/CommonPurchaseList"
 import { BIllOf_MATERIALS_LIST } from "../../../../routes/route_url";
@@ -20,7 +21,7 @@ import {
 import BOMMaster from "../BOMMaster/BOMIndex";
 import * as pageId from "../../../../routes//allPageID";
 import * as url from "../../../../routes/route_url";
-import { C_DatePicker } from "../../../../CustomValidateForm";
+import { C_DatePicker, C_Select } from "../../../../CustomValidateForm";
 import * as _cfunc from "../../../../components/Common/CommonFunction";
 import { allLabelWithBlank } from "../../../../components/Common/CommonErrorMsg/HarderCodeData";
 import { Go_Button, PageLoadingSpinner } from "../../../../components/Common/CommonButton";
@@ -37,7 +38,9 @@ const BOMList = () => {
     const [pageMode, setpageMode] = useState(BIllOf_MATERIALS_LIST)
     const [userAccState, setUserAccState] = useState('');
     const [hederFilters, setHederFilters] = useState({ fromdate: currentDate_ymd, todate: currentDate_ymd, venderSelect: allLabelWithBlank })
+    const [Item, setItem] = useState(allLabelWithBlank);
 
+    debugger
     const reducers = useSelector(
         (state) => ({
             goBtnLoading: state.BOMReducer.loading,
@@ -48,12 +51,13 @@ const BOMList = () => {
             postMsg: state.OrderReducer.postMsg,
             editData: state.BOMReducer.editData,
             bomlistFilters: state.BOMReducer.bomlistFilters,
+            Items: state.ItemMastersReducer.ItemList,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList
         })
     );
 
-    const { userAccess, pageField, goBtnLoading, listBtnLoading } = reducers;
+    const { userAccess, pageField, goBtnLoading, listBtnLoading, Items } = reducers;
     const { fromdate, todate } = hederFilters;
 
 
@@ -74,6 +78,7 @@ const BOMList = () => {
         dispatch(BreadcrumbRadioButtonView(true));
         dispatch(commonPageFieldList(page_Id))
         goButtonHandler(true)
+        dispatch(getItemList())
         return () => {
             dispatch(getBOMListPageSuccess([]))
         }
@@ -91,26 +96,19 @@ const BOMList = () => {
     }, [userAccess])
 
     const goButtonHandler = () => {
+
         const jsonBody = JSON.stringify({
-            FromDate: fromdate,
-            ToDate: todate,
             Company: _cfunc.loginCompanyID(),
             Party: _cfunc.loginPartyID(),
+            ItemID: Item.value
         });
         dispatch(getBOMListPage(jsonBody));
     }
 
-    function fromdateOnchange(e, date) {
-        let newObj = { ...hederFilters }
-        newObj.fromdate = date
-        setHederFilters(newObj)
-    }
-
-    function todateOnchange(e, date) {
-        let newObj = { ...hederFilters }
-        newObj.todate = date
-        setHederFilters(newObj)
-    }
+    const ItemDropdown_Options = Items.map((index) => ({
+        value: index.id,
+        label: index.Name,
+    }));
 
 
 
@@ -127,44 +125,32 @@ const BOMList = () => {
             <div className="page-content">
                 <div className="px-2   c_card_filter text-black"  >
                     <div className="row">
-                        <Col sm="5">
-                            <FormGroup className=" row mt-2 " >
-                                <Label className="col-sm-5 p-2"
-                                    style={{ width: "83px" }}>FromDate</Label>
-                                <Col sm="6">
-                                    <C_DatePicker
-                                        name='fromdate'
-                                        value={fromdate}
-                                        onChange={fromdateOnchange}
-                                    />
-                                </Col>
-                            </FormGroup>
-                        </Col>
-
-                        <Col sm="5" className="">
-                            <FormGroup className="mb- row mt-2 " >
-                                <Label className="col-sm-5 p-2"
-                                    style={{ width: "65px", marginRight: "0.4cm" }}>ToDate</Label>
-                                <Col sm="6 ">
-
-                                    <C_DatePicker
-                                        options={{
-                                            minDate: (_cfunc.disablePriviousTodate({ fromDate: fromdate })),
-                                            maxDate: "today",
-                                            altInput: true,
-                                            altFormat: "d-m-Y",
-                                            dateFormat: "Y-m-d",
+                        <Col sm="4">
+                            <FormGroup className="mb-3 row mt-3 ">
+                                <Label className="mt-2" style={{ width: "115px" }}> Item Name </Label>
+                                <Col sm={7}>
+                                    <C_Select
+                                        name="ItemName"
+                                        value={Item}
+                                        isSearchable={true}
+                                        className="react-dropdown"
+                                        classNamePrefix="dropdown" 
+                                        styles={{
+                                            menu: provided => ({ ...provided, zIndex: 2 })
                                         }}
-                                        value={_cfunc.ToDate({ FromDate: fromdate, Todate: todate })}
-                                        nane='todate'
-                                        onChange={todateOnchange}
+                                        options={ItemDropdown_Options}
+                                        onChange={(e) => { setItem(e) }
+                                        }
                                     />
+
                                 </Col>
                             </FormGroup>
                         </Col>
 
-                        <Col sm="1" ></Col>
-                        <Col sm="1" className="mt-2 ">
+
+
+                        <Col sm="7" ></Col>
+                        <Col sm="1" className="mt-3 ">
                             <Go_Button loading={goBtnLoading} onClick={goButtonHandler} />
                         </Col>
                     </div>

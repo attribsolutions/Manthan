@@ -122,7 +122,7 @@ const ItemsMaster = (props) => {
         Name: "",
         ShortName: "",
         ShelfLife: "",
-        BaseUnitName:"",
+        BaseUnitName: "",
         SAPItemCode: "",
         BarCode: '',
         Category: [],
@@ -305,6 +305,7 @@ const ItemsMaster = (props) => {
                         IsBase: index.IsBase,
                         POUnit: index.PODefaultUnit,
                         SOUnit: index.SODefaultUnit,
+                        IsShowUnit: index.IsShowUnit,
                     })
                 })
 
@@ -526,6 +527,7 @@ const ItemsMaster = (props) => {
                 }
 
                 let itemUnitDetails = baseUnitTableData.reduce((result, index, key) => {
+                    debugger
                     const val1 = index.Conversion !== '' ? parseFloat(index.Conversion).toFixed(3) : '';
                     const unit1 = index.Unit.value;
 
@@ -548,7 +550,8 @@ const ItemsMaster = (props) => {
                             UnitID: unit1,
                             IsBase: index.IsBase,
                             SODefaultUnit: index.SOUnit,
-                            PODefaultUnit: index.POUnit
+                            PODefaultUnit: index.POUnit,
+                            IsShowUnit: index.IsShowUnit
                         });
                     }
                     return result;

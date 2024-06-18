@@ -48,7 +48,7 @@ import { allLabelWithBlank } from "../../../components/Common/CommonErrorMsg/Har
 let editVal = {}
 let initial_BredcrumbMsg = `Count:0 ₹ 0.00`
 function initialState(history) {
-
+    debugger
     let page_Id = '';
     let listPath = ''
     let sub_Mode = history.location.pathname;
@@ -68,6 +68,9 @@ function initialState(history) {
     else if (sub_Mode === url.ORDER_4) {
         page_Id = pageId.ORDER_4;
         listPath = url.ORDER_LIST_4
+    } else if (sub_Mode === url.IB_SALES_ORDER) {
+        page_Id = pageId.IB_SALES_ORDER;
+        listPath = url.IB_ORDER_SO_LIST
     }
     return { page_Id, listPath }
 };
@@ -633,7 +636,7 @@ const Order = (props) => {
                             defaultValue={(row.Quantity)}
                             className=" text-end"
                             onChange={(e) => {
-                                
+
                                 row["Quantity"] = e.target.value
                                 itemWise_CalculationFunc(row, undefined, tableList)
 

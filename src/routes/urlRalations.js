@@ -218,6 +218,12 @@ export const STOCK_ADJUSTMENT_MODE = url.STOCK_ADJUSTMENT_MODE_2
 export const IB_ORDER_PO_LIST = url.IB_ORDER;
 export const IB_Order = url.IB_ORDER_PO_LIST;
 
+
+export const IB_Order_SO_List = url.IB_SALES_ORDER;
+export const IB_Sales_Order = url.IB_ORDER_SO_LIST;
+
+
+
 export const InwardList = url.IB_INWARD_STP;
 export const Inward = url.INWARD_LIST;
 export const IB_INWARD_STP = url.IB_INVOICE_LIST;

@@ -244,6 +244,9 @@ export const BULK_INVOICE = "/Bulk_Invoice"
 //******************************* InterBranch Module ************************************//
 
 export const IB_ORDER = "/IB_Order" // IB Order
+
+export const IB_SALES_ORDER = "/IB_Sales_Order" // IB Order
+
 export const IB_ORDER_PO_LIST = "/IB_Order_PO_List" //IB Order List
 export const IB_ORDER_SO_LIST = "/IB_Order_SO_List" //IB Order List
 
