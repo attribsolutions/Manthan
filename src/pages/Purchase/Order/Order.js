@@ -26,7 +26,7 @@ import PartyItems from "../../Adminisrator/PartyItemPage/PartyItems";
 
 import { customAlert } from "../../../CustomAlert/ConfirmDialog"
 import { order_Type } from "../../../components/Common/C-Varialbes";
-import { CInput, C_DatePicker, C_Select, decimalRegx, onlyNumberRegx } from "../../../CustomValidateForm/index";
+import { CInput, C_DatePicker, C_Select, decimalRegx, onlyNumberRegx,decimalRegx_3dit } from "../../../CustomValidateForm/index";
 
 import * as _act from "../../../store/actions";
 import * as _cfunc from "../../../components/Common/CommonFunction";
@@ -256,7 +256,7 @@ const Order = (props) => {
     useEffect(() => { // hasEditVal useEffect
 
         if ((hasShowloction || hasShowModal)) {
-            debugger
+            
             let hasEditVal = null
             if (hasShowloction) {
                 setPageMode(location.pageMode)
@@ -305,7 +305,6 @@ const Order = (props) => {
                 }))
 
                 const orderItems = hasEditVal.OrderItems.map((ele, k) => {
-
                     ele["id"] = k + 1
                     return ele
                 });
@@ -632,7 +631,7 @@ const Order = (props) => {
                         <CInput
                             key={`Quantity-${k}`}
                             id={`Quantity-${k}`}
-                            cpattern={onlyNumberRegx}
+                            cpattern={subPageMode === url.ORDER_1?decimalRegx_3dit:onlyNumberRegx}
                             defaultValue={(row.Quantity)}
                             className=" text-end"
                             onChange={(e) => {

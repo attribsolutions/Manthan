@@ -743,7 +743,7 @@ const GRNAdd = (props) => {
                 "Rate": index.Rate,
                 "CommonID": 0,
                 "EffectiveDate": currentDate_ymd,
-                "Party": _cfunc.loginPartyID(),
+                "Party": null,
                 "Company": _cfunc.loginCompanyID(),
                 "CreatedBy": _cfunc.loginUserID(),
                 "UpdatedBy": _cfunc.loginUserID(),
