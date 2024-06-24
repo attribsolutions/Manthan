@@ -47,6 +47,11 @@ function* get_RateList_GenFunc() {
       //tranzaction date is only for fiterand page field but UI show transactionDateLabel
       i["transactionDate"] = i.CreatedOn;
       i["transactionDateLabel"] = listpageConcatDateAndTime(i.EffectiveDate, i.CreatedOn);
+
+      if (!i.PartyName){
+        i.PartyName="All"
+      }
+
     })
     yield put(action.getRateListSuccess(response.Data));
   } catch (error) { yield put(action.RateApiErrorAction()) }
