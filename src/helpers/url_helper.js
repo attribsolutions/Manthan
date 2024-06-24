@@ -371,7 +371,8 @@ export const POST_API_FOR_INWARD = '/InterBranchInward'// Inward  addpage save A
 export const INWARD_LIST_API = '/InterBranchInwardFilter'//InwardList filter Api
 export const MAKE_INWARD_BUTTON_API = '/BranchInvoiceDetails'//Inward  addpage GoButton Api 
 
-export const INVOICE_1_lIST_FILTER = '/InvoicesFilter'//invoice_1_List filter Api
+// export const INVOICE_1_lIST_FILTER = '/InvoicesFilter'//invoice_1_List filter Api
+export const INVOICE_1_lIST_FILTER = '/InvoicesFilterSecond'//invoice_1_List filter Api
 export const INVOICE_1_SAVE = '/Invoice'// invoice_1  addpage save Api
 export const INVOICE_1_Edit = '/Invoicegetandupdate'// invoice_1  edit Api
 export const INVOICE_1_ADD_PAGE_GO_BTN = '/GetOrderDetails'// invoice_1 addpage GoButton Api 

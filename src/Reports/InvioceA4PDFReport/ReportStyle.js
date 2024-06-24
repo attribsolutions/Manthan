@@ -395,7 +395,7 @@ export const reportFooter = (doc, data) => {
     if (data.SettingData.Qr_Image === null) {
         doc.addImage("", 'JPEG', 337, 728, 100, 86);
     } else {
-        doc.addImage(data.SettingData.Qr_Image, 'JPEG', 337, 728, 100, 86);
+        doc.addImage(data.SettingData.Qr_Image, 'JPEG', 337, 728, 100, 86, null, 'FAST');
     }
     doc.setDrawColor(0, 0, 0);
     doc.line(570, 730, 30, 730);//horizontal line Footer 1
