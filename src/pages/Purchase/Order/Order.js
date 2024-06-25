@@ -26,7 +26,7 @@ import PartyItems from "../../Adminisrator/PartyItemPage/PartyItems";
 
 import { customAlert } from "../../../CustomAlert/ConfirmDialog"
 import { order_Type } from "../../../components/Common/C-Varialbes";
-import { CInput, C_DatePicker, C_Select, decimalRegx, onlyNumberRegx,decimalRegx_3dit } from "../../../CustomValidateForm/index";
+import { CInput, C_DatePicker, C_Select, decimalRegx, onlyNumberRegx, decimalRegx_3dit } from "../../../CustomValidateForm/index";
 
 import * as _act from "../../../store/actions";
 import * as _cfunc from "../../../components/Common/CommonFunction";
@@ -256,7 +256,7 @@ const Order = (props) => {
     useEffect(() => { // hasEditVal useEffect
 
         if ((hasShowloction || hasShowModal)) {
-            
+
             let hasEditVal = null
             if (hasShowloction) {
                 setPageMode(location.pageMode)
@@ -631,7 +631,7 @@ const Order = (props) => {
                         <CInput
                             key={`Quantity-${k}`}
                             id={`Quantity-${k}`}
-                            cpattern={subPageMode === url.ORDER_1?decimalRegx_3dit:onlyNumberRegx}
+                            cpattern={subPageMode === url.ORDER_1 ? decimalRegx_3dit : onlyNumberRegx}
                             defaultValue={(row.Quantity)}
                             className=" text-end"
                             onChange={(e) => {
@@ -1189,7 +1189,7 @@ const Order = (props) => {
             function processOrderItem({ item, isEdit }) {
 
                 // Handle quantity for null or undefined values
-                item.Quantity = !Number(item.Quantity) ? 0 : item.Quantity;
+                item.Quantity = isNaN(parseFloat(item.Quantity)) ? 0 : parseFloat(item.Quantity);
 
                 // Check various conditions for item processing
                 if ((item.Quantity > 0) && (item.Rate > 0) && !(orderTypeSelect.value === 3)) {
@@ -1294,16 +1294,17 @@ const Order = (props) => {
                 return;
             }
 
-            const allQuantitiesGreaterThanZero = array => array.every(item => parseInt(item.Quantity) === 0);
-            const Result = allQuantitiesGreaterThanZero(orderItems);
-
-            if (orderItems.length === 0 || Result) {
+            const hasNonPositiveQuantity = array => array.every(item => item.Quantity <= 0);
+            const result = hasNonPositiveQuantity(orderItems);
+            
+            if (orderItems.length === 0 || result) {
                 customAlert({
                     Type: 4,
                     Message: alertMessages.itemQtyIsRequired,
                 });
                 return;
             }
+            
             if (orderTypeSelect.length === 0) {
                 customAlert({
                     Type: 4,
