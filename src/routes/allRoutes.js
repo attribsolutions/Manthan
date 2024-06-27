@@ -119,8 +119,8 @@ import InvoiceList from "../pages/Sale/Invoice/InvoiceList";
 
 import Inward from "../pages/Inter Branch/Inward/Inward";
 import InwardList from "../pages/Inter Branch/Inward/InwardList";
-import ChallanList from "../pages/Inventory/Challan/ChallanList";
-import Challan from "../pages/Inventory/Challan/Challan";
+import ChallanList from "../pages/Inter Branch/IBInvoice/IBInvoiceList.js";
+import Challan from "../pages/Inter Branch/IBInvoice/IBInvoice.js"
 
 import RoutesMaster from "../pages/Adminisrator/RoutesPages/RoutesMaster";
 import RoutesList from "../pages/Adminisrator/RoutesPages/RoutesList";
