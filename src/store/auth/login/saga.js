@@ -81,7 +81,7 @@ function* afterLoginUserDetails_genFun({ id }) {
     }
 
   } catch (error) {
-    yield put(loginError_Action('Login Erorr...'))
+    yield put(loginError_Action('Login Error...'))
   }
 }
 

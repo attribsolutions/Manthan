@@ -9,7 +9,7 @@ import { date_ymd_func, loginPartyID } from "../../../components/Common/CommonFu
 import { useHistory } from "react-router-dom";
 import { deleteChallanId, deleteChallanIdSuccess, challanList_ForListPage, } from "../../../store/Inventory/ChallanRedux/actions";
 import { makeGRN_Mode_1Action } from "../../../store/Inventory/GRNRedux/actions";
-import Challan from "./Challan";
+import Challan from "./IBInvoice";
 import { C_DatePicker } from "../../../CustomValidateForm";
 import { url, mode, pageId } from "../../../routes/index"
 import { Go_Button, PageLoadingSpinner } from "../../../components/Common/CommonButton";
