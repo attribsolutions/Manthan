@@ -80,7 +80,7 @@ const GRNAdd = (props) => {
         dispatch(_act.commonPageField(pageId.GRN_ADD_1));
         const jsonBody = JSON.stringify({
             "PriceList": 0,
-            "Party": _cfunc.loginSelectedPartyID(),
+            "Party": "", //Party Id Blank save from GRN  Vendor Order To GRN
             "EffectiveDate": currentDate_ymd,
             "CompanyID": _cfunc.loginCompanyID()
         });
@@ -99,7 +99,7 @@ const GRNAdd = (props) => {
         dispatch,
         setUserAccState,
     }), [userAccess]);
-    
+
     useEffect(() => saveMsgUseEffect({// saveMsgUseEffect common useEffect 
 
         postMsg, pageMode,
@@ -132,7 +132,7 @@ const GRNAdd = (props) => {
     useEffect(() => {
 
         if ((items.Status === true) && (items.StatusCode === 200)) {
-            
+
             const grnItems = items.Data
 
             if ((grnItems.GRNReferences[0]?.GRN_From === url.IB_GRN_LIST)) { /// If GRN from IB GRN List then this 
@@ -172,7 +172,7 @@ const GRNAdd = (props) => {
 
             initialTableData = []
             const grnDetails = { ...grnItems }
-            
+
             initialTableData = grnDetails.OrderItem;
             setgrnItemList(initialTableData)
             grnDetails.OrderItem = []
@@ -851,7 +851,7 @@ const GRNAdd = (props) => {
                                             style={{ backgroundColor: "white" }}
                                             value={invoiceNo}
                                             placeholder={`Enter Invoice No `}
-                                            disabled={pageMode === mode.view ? true : false}
+                                            disabled={((pageMode === mode.view) || (openPOdata[0]?.GRN_From === url.IB_GRN_LIST)) ? true : false}
                                             onChange={(e) => setInvoiceNo(e.target.value)}
                                         />
                                     </Col>
