@@ -132,13 +132,13 @@ const WorkOrder = (props) => {
 
     useEffect(() => {
 
-        if (GoButton?.BOMItems?.length > 0) {
-            setTableData(GoButton?.BOMItems)
+        if (GoButton.Data?.BOMItems?.length > 0) {
+            setTableData(GoButton.Data?.BOMItems)
         }
         else if ((editData.Status === true) && (editData.StatusCode === 200)) {
             setTableData(editData.Data?.WorkOrderItems)
         }
-    }, [GoButton, editData]);
+    }, [GoButton.Data, editData]);
 
     // userAccess useEffect
     useEffect(() => {
@@ -176,9 +176,9 @@ const WorkOrder = (props) => {
 
             if (hasEditVal) {
                 setEditData(hasEditVal);
-
+                debugger
                 const { id, WorkOrderDate, Item, ItemName, NumberOfLot, Stock
-                    , Quantity, EstimatedOutputQty, Bom, Party, WorkOrderItems, Unit } = hasEditVal
+                    , Quantity, EstimatedOutputQty, Bom, Party, WorkOrderItems, Unit, UnitName } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError, FullWorkOrderNumber, WorkOrderNumber, } = { ...state }
                 hasValid.id.valid = true;
                 hasValid.WorkOrderDate.valid = true;
@@ -205,6 +205,20 @@ const WorkOrder = (props) => {
                 // });
                 // dispatch(postGoButtonForWorkOrder_Master(jsonBody));
                 // setWorkOrderItemsDetails(WorkOrderItems)
+
+                setItemselect({
+                    value: Item,
+                    label: `${ItemName} (BOMDate-${WorkOrderDate})`,
+                    ItemName: ItemName,
+                    ItemID: Item,
+                    Unit: Unit,
+                    UnitName: UnitName,
+                    EstimatedOutputQty: EstimatedOutputQty,
+                    StockQty: Stock.toFixed(2),
+                    BOMDate: WorkOrderDate,
+                })
+
+
                 setState({ values, fieldLabel, hasValid, required, isError })
                 dispatch(editWorkOrderListSuccess({ Status: false }))
                 dispatch(Breadcrumb_inputName(hasEditVal.ItemName))
@@ -273,10 +287,11 @@ const WorkOrder = (props) => {
 
     useEffect(() => {
         const jsonBody = JSON.stringify({
-            FromDate: "2022-12-01",
-            ToDate: currentDate_ymd,
+            // FromDate: "2022-12-01",
+            // ToDate: currentDate_ymd,
             Company: loginCompanyID(),
-            Party: loginPartyID()
+            Party: loginPartyID(),
+            ItemID: ""
         });
         dispatch(getBOMListPage(jsonBody));
     }, [])
@@ -299,14 +314,14 @@ const WorkOrder = (props) => {
         .filter(index => index.IsActive && !index.IsRecordDeleted)
         .map(index => ({
             value: index.ID,
-            label: `${index.ItemName} (BOMDate-${(_cfunc.date_dmy_func(index.BomDate))})`,
+            label: `${index.ItemName} (BOMDate-${index.BomDate})`,
             ItemName: index.ItemName,
             ItemID: index.Item,
             Unit: index.Unit,
             UnitName: index.UnitName,
             EstimatedOutputQty: index.EstimatedOutputQty,
             StockQty: index.StockQty.toFixed(2),
-            BOMDate: _cfunc.date_dmy_func(index.BomDate), // Assuming this returns a string
+            BOMDate: index.BomDate, // Assuming this returns a string
         }))
         .sort((a, b) => {
             // Convert BOMDate to a Date object for comparison
@@ -557,6 +572,7 @@ const WorkOrder = (props) => {
                                                             menu: provided => ({ ...provided, zIndex: 2 })
                                                         }}
                                                         onChange={(hasSelect, evn) => {
+                                                            debugger
                                                             onChangeSelect({ hasSelect, evn, state, setState });
                                                             ItemOnchange(hasSelect)
                                                             dispatch(Breadcrumb_inputName(hasSelect.label))
