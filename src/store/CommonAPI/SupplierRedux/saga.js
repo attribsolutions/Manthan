@@ -157,6 +157,7 @@ function* vendorSupplierCustomer_genFunc({ data }) {
     || subPageMode === url.IB_INVOICE
     || subPageMode === url.IB_INVOICE_LIST
     || subPageMode === url.INWARD_LIST
+    || subPageMode === url.IB_SALES_ORDER
   );
 
 
@@ -240,7 +241,7 @@ function* SubEmployee_Dropdown_List_GenFunc({ loginEmployeeID }) {
 
 
 
-function* PartyonClusterSubcluster_Dropdown_List_GenFunc({config}) {
+function* PartyonClusterSubcluster_Dropdown_List_GenFunc({ config }) {
   try {
     const response = yield call(PartyOnClusterSbcluster_Dropdown_Get_API, config);
     yield put(Partyonclustersubcluste_List_Success(response.Data));
