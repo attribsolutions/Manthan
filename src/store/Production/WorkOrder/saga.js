@@ -35,7 +35,7 @@ function* GoButton_WorkOrder_post_genfun({ jsonbody }) {     // GO Botton Post A
     response.Data.BOMItems.forEach(item => {
       item.StockQuantity = item.StockQuantity.toFixed(2);
     });
-    yield put(postGoButtonForWorkOrder_MasterSuccess(response.Data));
+    yield put(postGoButtonForWorkOrder_MasterSuccess(response));
   } catch (error) { yield put(WorkOrderApiErrorAction()) }
 }
 

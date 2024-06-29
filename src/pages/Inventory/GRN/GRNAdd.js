@@ -673,7 +673,7 @@ const GRNAdd = (props) => {
                     DiscountAmount: Number(calculated.disCountAmt).toFixed(2),
 
                 }
-
+                debugger
                 let isfound = GRNItemArray.filter(ind => {
                     return ind.Item === i.Item
                 })
@@ -719,7 +719,7 @@ const GRNAdd = (props) => {
 
                 customAlert({
                     Type: 3,
-                    Message: isvalidMsg,
+                    Message: JSON.stringify(isvalidMsg),
                 })
                 return returnFunc()
             }

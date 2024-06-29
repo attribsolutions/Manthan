@@ -173,6 +173,7 @@ export default function DemandListForDashboard() {
                         id={`btn-makeBtn-${rowData.id}`}
                         className="badge badge-soft-info font-size-12 btn btn-info waves-effect waves-light w-xxs border border-light "
                         title="Make Invoice"
+                        disabled={rowData.InvoiceCreated}
                         onClick={() => {
                             const btnId = `btn-makeBtn-${rowData.id}`
                             !listBtnLoading && makeBtnFunc(rowData, btnId)

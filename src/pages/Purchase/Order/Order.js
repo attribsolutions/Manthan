@@ -769,7 +769,7 @@ const Order = (props) => {
             formatExtraData: { tableList: orderItemTable },
             formatter: (value, row, k, { tableList }) => {
 
-                if (subPageMode === url.ORDER_1 || subPageMode === url.IB_ORDER) {
+                if (subPageMode === url.ORDER_1 || subPageMode === url.IB_ORDER || subPageMode === url.IB_SALES_ORDER) {
                     return (
                         <div key={row.id} className="text-end">
                             <CInput
@@ -809,7 +809,7 @@ const Order = (props) => {
             headerStyle: () => {
                 return { width: '8%', textAlign: 'center' };
             },
-            hidden: (subPageMode === url.ORDER_1 || subPageMode === url.IB_ORDER) && true,
+            hidden: (subPageMode === url.ORDER_1 || subPageMode === url.IB_ORDER || subPageMode === url.IB_SALES_ORDER) && true,
             formatter: (value, row, k) => {
 
                 return (
@@ -830,7 +830,7 @@ const Order = (props) => {
             headerStyle: () => {
                 return { width: '11%', textAlign: 'center' };
             },
-            hidden: (subPageMode === url.ORDER_1 || subPageMode === url.IB_ORDER) && true,
+            hidden: (subPageMode === url.ORDER_1 || subPageMode === url.IB_ORDER || subPageMode === url.IB_SALES_ORDER) && true,
             headerFormatter: () => {
                 return (
                     <div className="" >
@@ -1132,7 +1132,7 @@ const Order = (props) => {
 
 
         let jsonBody;   //json body decleration 
-        if (subPageMode === url.ORDER_4) {
+        if (subPageMode === url.ORDER_4 || subPageMode === url.IB_SALES_ORDER) {
             jsonBody = JSON.stringify({ ...SO_body, });
         }
         else {
@@ -1296,7 +1296,7 @@ const Order = (props) => {
 
             const hasNonPositiveQuantity = array => array.every(item => item.Quantity <= 0);
             const result = hasNonPositiveQuantity(orderItems);
-            
+
             if (orderItems.length === 0 || result) {
                 customAlert({
                     Type: 4,
@@ -1304,7 +1304,7 @@ const Order = (props) => {
                 });
                 return;
             }
-            
+
             if (orderTypeSelect.length === 0) {
                 customAlert({
                     Type: 4,

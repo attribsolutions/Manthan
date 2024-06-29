@@ -197,6 +197,10 @@ export const BIllOf_MATERIALS_LIST = 70
 export const WORK_ORDER = 72
 export const WORK_ORDER_LIST = 73
 
+export const BULK_WORK_ORDER = 285
+
+
+
 export const MATERIAL_ISSUE = 75
 export const MATERIAL_ISSUE_LIST = 76
 export const MATERIAL_ISSUE_STP = 125

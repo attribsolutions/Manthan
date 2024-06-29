@@ -214,6 +214,11 @@ export const BIllOf_MATERIALS_LIST = "/BOMList"
 export const WORK_ORDER = "/WorkOrder"
 export const WORK_ORDER_LIST = "/WorkOrderList"
 
+export const BULK_WORK_ORDER = "/Bulk_Work_Order"
+
+
+
+
 export const MATERIAL_ISSUE = "/MaterialIssue"
 export const MATERIAL_ISSUE_LIST = "/MaterialIssueList"
 export const MATERIAL_ISSUE_STP = "/MaterialIssue_STP"

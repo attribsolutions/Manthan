@@ -23,6 +23,8 @@ function* get_BOMList_GenFunc({ filters }) {
       var date = date_dmy_func(i.BomDate)
       var time = convertTimefunc(i.CreatedOn)
       i.transactionDateLabel = (`${date} ${time}`)
+      i.BomDate = date
+
       return i
     })
     yield put(getBOMListPageSuccess(data))
