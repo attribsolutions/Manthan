@@ -1,5 +1,5 @@
 
-import React, { useEffect, useLayoutEffect, useState, } from "react";
+import React, { useEffect, useState, } from "react";
 import {
     Col,
     FormGroup,
@@ -15,28 +15,16 @@ import {
     comAddPageFieldFunc,
     initialFiledFunc,
     onChangeDate,
-    onChangeSelect,
 } from "../../../components/Common/validationFunction";
 import Select from "react-select";
-import { SaveAndDownloadPDF, SaveButton } from "../../../components/Common/CommonButton";
+import { SaveButton } from "../../../components/Common/CommonButton";
 import * as mode from "../../../routes/PageMode";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url"
-import {
-    GoButtonForinvoiceAddSuccess,
-    Uploaded_EInvoiceAction,
-    invoiceSaveAction,
-    invoiceSaveActionSuccess,
-    makeIB_InvoiceActionSuccess,
-    editInvoiceActionSuccess,
-    updateInvoiceAction,
-    updateInvoiceActionSuccess
-} from "../../../store/Sales/Invoice/action";
-import { GetVenderSupplierCustomer, GetVenderSupplierCustomerSuccess } from "../../../store/CommonAPI/SupplierRedux/actions";
+
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import {
     invoice_discountCalculate_Func,
-    innerStockCaculation,
     orderQtyOnChange,
     orderQtyUnit_SelectOnchange,
     stockQtyOnChange,
@@ -44,24 +32,19 @@ import {
     ChallanCalculateFunc
 } from "./IBInvoiceCalculation";
 import * as _cfunc from "../../../components/Common/CommonFunction";
-import { CInput, C_DatePicker, decimalRegx } from "../../../CustomValidateForm";
-import { getVehicleList, getVehicleListSuccess } from "../../../store/Administrator/VehicleRedux/action";
-import { Invoice_Singel_Get_for_Report_Api } from "../../../helpers/backend_helper";
-import * as report from '../../../Reports/ReportIndex'
+import { C_DatePicker } from "../../../CustomValidateForm";
+
 import GlobalCustomTable from "../../../GlobalCustomTable";
-import { changeCommonPartyDropDetailsAction } from "../../../store/Utilites/PartyDrodown/action";
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 import { CheckStockEntryForFirstTransaction, CheckStockEntryForFirstTransactionSuccess, CheckStockEntryforBackDatedTransaction, CheckStockEntryforBackDatedTransactionSuccess } from "../../../store/Inventory/StockEntryRedux/action";
-import { orderCalculateFunc } from "../../Purchase/Order/OrderPageCalulation";
 
-const Challan = (props) => {
+const IBInvoice = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory();
     const currentDate_ymd = _cfunc.date_ymd_func();
     const subPageMode = history.location.pathname
-    const systemSetting = _cfunc.loginSystemSetting();
 
     const saveBtnid = `saveBtn${subPageMode}`
 
@@ -73,22 +56,14 @@ const Challan = (props) => {
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
     const [orderItemDetails, setOrderItemDetails] = useState([])
-    const [orderIDs, setOrderIDs] = useState('')
-    const [editInvoiceData, setEditInvoiceData] = useState('')
     const [customerID, setCustomerID] = useState([]);
 
     const [Demand_ID, setDemandID] = useState({ Demand_ID: "" });
 
-
-
-
     const [tableData, setTableData] = useState([]);
 
     // for invoice page heder discount functionality useSate ************************************
-    const [discountValueAll, setDiscountValueAll] = useState("");
-    const [discountTypeAll, setDiscountTypeAll] = useState({ value: 2, label: " % " });
-    const [discountDropOption] = useState([{ value: 1, label: "Rs" }, { value: 2, label: "%" }])
-    const [changeAllDiscount, setChangeAllDiscount] = useState(false)
+
 
     // ****************************************************************************
 
@@ -98,19 +73,12 @@ const Challan = (props) => {
 
     const {
         postMsg,
-
         pageField,
         userAccess,
-
-        vendorSupplierCustomer,
-        makeIBInvoice,
-        VehicleNumber,
-
         saveBtnloading,
         saveAndPdfBtnLoading,
         commonPartyDropSelect,
         StockEnteryForFirstYear,
-        StockEnteryForBackdated,
         GRNitem,
     } = useSelector((state) => ({
         postMsg: state.ChallanReducer.postMsg,
@@ -120,14 +88,10 @@ const Challan = (props) => {
         pageField: state.CommonPageFieldReducer.pageField,
         customer: state.CommonAPI_Reducer.customer,
 
-        vendorSupplierCustomer: state.CommonAPI_Reducer.vendorSupplierCustomer,
-        VehicleNumber: state.VehicleReducer.VehicleList,
-        makeIBInvoice: state.InvoiceReducer.makeIBInvoice,
         saveBtnloading: state.InvoiceReducer.saveBtnloading,
         saveAndPdfBtnLoading: state.InvoiceReducer.saveAndPdfBtnLoading,
         commonPartyDropSelect: state.CommonPartyDropdownReducer.commonPartyDropSelect,
         StockEnteryForFirstYear: state.StockEntryReducer.StockEnteryForFirstYear,
-        StockEnteryForBackdated: state.StockEntryReducer.StockEnteryForBackdated,
         GRNitem: state.GRNReducer.GRNitem,
     }));
 
@@ -638,7 +602,7 @@ const Challan = (props) => {
     }
 };
 
-export default Challan
+export default IBInvoice
 
 
 

@@ -113,8 +113,7 @@ export function stockDistributeFunc(index1) {
         return index2;
     });
 
-    debugger
-
+    
     index1.ItemTotalStock = parseFloat(totalStockQty.toFixed(3)); // Convert to a number with three decimal places
     index1.ItemTotalAmount = parseFloat(totalAmount.toFixed(2)); // Convert to a number with two decimal places
 

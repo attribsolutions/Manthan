@@ -29,9 +29,9 @@ import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMs
 import { goButtonForRate_Master, saveRateMaster } from "../../../store/Administrator/RateMasterRedux/action";
 
 
-//// This GRN  Add Page is Use For  Sweets and Snacks GRN  Add page Use for 2 MODE From vendor Order to GRN & Inter Branch GRN
+//// This GRN_ADD_1 Page is Use For  Sweets and Snacks GRN  Add page Use for 2 MODE From vendor Order to GRN & Inter Branch GRN
 let initialTableData = []
-const GRNAdd = (props) => {
+const GRN_ADD_1 = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory();
@@ -987,5 +987,5 @@ const GRNAdd = (props) => {
     }
 
 }
-export default GRNAdd
+export default GRN_ADD_1
 
