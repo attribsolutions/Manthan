@@ -8,13 +8,13 @@ import { mode, url, pageId } from "../../../routes/index"
 import * as _act from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import { Go_Button, PageLoadingSpinner } from "../../../components/Common/CommonButton";
-import GRNAdd from "./GRNAdd";
 import { C_DatePicker } from "../../../CustomValidateForm";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 import { allLabelWithBlank } from "../../../components/Common/CommonErrorMsg/HarderCodeData";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { sideBarPageFiltersInfoAction } from "../../../store/Utilites/PartyDrodown/action";
+import GRN_ADD_1 from "./GRN_ADD_1";
 
 const GRNList = () => {
 
@@ -272,7 +272,7 @@ const GRNList = () => {
                             ButtonMsgLable={"GRN"}
                             deleteName={"FullGRNNumber"}
                             makeBtnName={otherState.makeBtnName}
-                            MasterModal={GRNAdd}
+                            MasterModal={GRN_ADD_1}
                             totalAmountShow={true}
                         />
                         : null

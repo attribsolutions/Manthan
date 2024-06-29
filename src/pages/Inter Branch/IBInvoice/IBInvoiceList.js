@@ -17,7 +17,7 @@ import { allLabelWithBlank } from "../../../components/Common/CommonErrorMsg/Har
 import * as report from '../../../Reports/ReportIndex'
 import { IB_Invoice_Singel_Get_for_Report_Api } from "../../../helpers/backend_helper";
 
-const ChallanList = () => {
+const IBInvoiceList = () => {
 
     const history = useHistory();
     const dispatch = useDispatch();
@@ -246,4 +246,4 @@ const ChallanList = () => {
     )
 }
 
-export default ChallanList;
+export default IBInvoiceList;

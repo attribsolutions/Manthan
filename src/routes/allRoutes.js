@@ -93,8 +93,7 @@ import GeneralMaster from "../pages/Adminisrator/GeneralPage/GeneralMaster";
 import GeneralList from "../pages/Adminisrator/GeneralPage/GeneralList";
 
 import GRNList from "../pages/Inventory/GRN/GRNList";
-import GRNAdd from "../pages/Inventory/GRN/GRNAdd";
-import GRNAdd3 from "../pages/Inventory/GRN/GRNAdd_3";
+import GRNAdd3 from "../pages/Inventory/GRN/GRN_ADD_3.js";
 
 import SubGroupMaster from "../pages/Adminisrator/SubGroupPages/SubGroupMaster";
 import SubGroupList from "../pages/Adminisrator/SubGroupPages/SubGroupList";
@@ -119,8 +118,6 @@ import InvoiceList from "../pages/Sale/Invoice/InvoiceList";
 
 import Inward from "../pages/Inter Branch/Inward/Inward";
 import InwardList from "../pages/Inter Branch/Inward/InwardList";
-import ChallanList from "../pages/Inter Branch/IBInvoice/IBInvoiceList.js";
-import Challan from "../pages/Inter Branch/IBInvoice/IBInvoice.js"
 
 import RoutesMaster from "../pages/Adminisrator/RoutesPages/RoutesMaster";
 import RoutesList from "../pages/Adminisrator/RoutesPages/RoutesList";
@@ -230,6 +227,9 @@ import POSUserList from "../pages/SweetPOS/Adminstration/UserMaster/POSUserList.
 import RateMaster from "../pages/Adminisrator/RateMaster/RateMaster";
 import RateList from "../pages/Adminisrator/RateMaster/RateList";
 import BulkWorkOrder from "../pages/Production/WorkOrder/BulkWorkOrder.js";
+import IBInvoice from "../pages/Inter Branch/IBInvoice/IBInvoice.js";
+import IBInvoiceList from "../pages/Inter Branch/IBInvoice/IBInvoiceList.js";
+import GRN_ADD_1 from "../pages/Inventory/GRN/GRN_ADD_1.js";
 
 const userRoutes = [
 	// *************************** DashBord *******************************//
@@ -404,11 +404,11 @@ const userRoutes = [
 
 
 	//******************************* Inventory Module ************************************//
-	{ path: path.CHALLAN_LIST, component: ChallanList },
-	{ path: path.CHALLAN, component: Challan },
+	{ path: path.CHALLAN_LIST, component: IBInvoiceList },
+	{ path: path.CHALLAN, component: IBInvoice },
 
 	{ path: path.GRN_LIST_1, component: GRNList, isPartyWisePage: true },
-	{ path: path.GRN_ADD_1, component: GRNAdd, isPartyWisePage: true },
+	{ path: path.GRN_ADD_1, component: GRN_ADD_1, isPartyWisePage: true },
 	{ path: path.GRN_STP_1, component: OrderList, isPartyWisePage: true },
 
 	{ path: path.GRN_LIST_3, component: GRNList, isPartyWisePage: true },
