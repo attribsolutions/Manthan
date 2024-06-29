@@ -1,0 +1,98 @@
+[
+    {
+        "id": 31,
+        "IsActive": true,
+        "Item": 1104,
+        "ItemName": "Kandi Pedha",
+        "Stock": 0,
+        "EstimatedOutputQty": 58,
+        "TotalQuantity": 0,
+        "WorkQuantity": 0,
+        "Unit": 2803,
+        "UnitName": "Kg",
+        "BOMItems": [
+            {
+                "id": 9,
+                "Item": 883,
+                "ItemName": "Khawa",
+                "Unit": 2582,
+                "UnitName": "Kg",
+                "StockQuantity": 132,
+                "BomQuantity": "50.000",
+                "Quantity": 50
+            },
+            {
+                "id": 10,
+                "Item": 878,
+                "ItemName": "Sugar",
+                "Unit": 2577,
+                "UnitName": "Kg",
+                "StockQuantity": 96.999,
+                "BomQuantity": "10.000",
+                "Quantity": 10
+            },
+            {
+                "id": 11,
+                "Item": 879,
+                "ItemName": "Velchi Powder",
+                "Unit": 2578,
+                "UnitName": "Kg",
+                "StockQuantity": 0,
+                "BomQuantity": "0.100",
+                "Quantity": 0.1
+            },
+            {
+                "id": 12,
+                "Item": 908,
+                "ItemName": "Pedha Mix",
+                "Unit": 2607,
+                "UnitName": "Kg",
+                "StockQuantity": 69,
+                "BomQuantity": "7.000",
+                "Quantity": 7
+            }
+        ]
+    },
+    {
+        "id": 32,
+        "IsActive": true,
+        "Item": 1105,
+        "ItemName": "Mango Lassi",
+        "Stock": 10,
+        "EstimatedOutputQty": 120,
+        "Unit": 2804,
+        "UnitName": "Liters",
+        "BOMItems": [
+            {
+                "id": 13,
+                "Item": 890,
+                "ItemName": "Mango Pulp",
+                "Unit": 2583,
+                "UnitName": "Kg",
+                "StockQuantity": 50,
+                "BomQuantity": "30.000",
+                "Quantity": 30
+            },
+            {
+                "id": 14,
+                "Item": 891,
+                "ItemName": "Yogurt",
+                "Unit": 2584,
+                "UnitName": "Kg",
+                "StockQuantity": 100,
+                "BomQuantity": "80.000",
+                "Quantity": 80
+            },
+            {
+                "id": 15,
+                "Item": 892,
+                "ItemName": "Sugar",
+                "Unit": 2577,
+                "UnitName": "Kg",
+                "StockQuantity": 40,
+                "BomQuantity": "10.000",
+                "Quantity": 10
+            }
+        ]
+    }
+]

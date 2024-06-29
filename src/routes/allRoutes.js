@@ -229,6 +229,7 @@ import POSUSER from "../pages/SweetPOS/Adminstration/UserMaster/POSUserMaster.js
 import POSUserList from "../pages/SweetPOS/Adminstration/UserMaster/POSUserList.js";
 import RateMaster from "../pages/Adminisrator/RateMaster/RateMaster";
 import RateList from "../pages/Adminisrator/RateMaster/RateList";
+import BulkWorkOrder from "../pages/Production/WorkOrder/BulkWorkOrder.js";
 
 const userRoutes = [
 	// *************************** DashBord *******************************//
@@ -444,6 +445,12 @@ const userRoutes = [
 
 	{ path: path.WORK_ORDER, component: WorkOrder },
 	{ path: path.WORK_ORDER_LIST, component: WorkOrderList },
+
+	{ path: path.BULK_WORK_ORDER, component: BulkWorkOrder },
+
+
+
+
 
 	{ path: path.MATERIAL_ISSUE, component: MaterialIssueMaster },
 	{ path: path.MATERIAL_ISSUE_LIST, component: MaterialIssueList },

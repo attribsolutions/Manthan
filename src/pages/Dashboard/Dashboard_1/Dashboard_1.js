@@ -21,7 +21,7 @@ import SalesReturnListForDashboard from './SalesReturnListForDashboard';
 import { DashboardLoader, PageLoadingSpinner } from '../../../components/Common/CommonButton';
 import MobileRetailerApprove from './MobileRetailerApprove';
 import DemandListForDashboard from './demand';
-import ChallanListForDashboard from './challan';
+import WorkOrderForDashboard from './WorkOrder';
 
 const Dashboard_1 = (props) => {
 
@@ -115,7 +115,7 @@ const Dashboard_1 = (props) => {
         history.push(url.IB_ORDER_SO_LIST)
     }
 
-  
+
     const RedirectHandler = (Type) => {
         if (Type === 1) {
             history.push(url.ORDER_LIST_4)
@@ -176,7 +176,7 @@ const Dashboard_1 = (props) => {
                             </Card>
                         </Col>}
 
-                        { <Col xl={3} md={3} >
+                        {<Col xl={3} md={3} >
                             <Card className="card-h-100">
                                 <CardBody>
                                     <Row className="align-items-center">
@@ -330,6 +330,32 @@ const Dashboard_1 = (props) => {
                                 <MobileRetailerApprove />
                             </Card>
                         </Col>}
+
+
+
+                        {false && <Col lg={6}>
+                            <Card >
+                                <div className='mb-n6'>
+                                    <CardHeader style={{ backgroundColor: "whitesmoke" }}
+                                        className="card-header align-items-center d-flex text-center">
+                                        <Label className="card-title mb-0 flex-grow-4 text-primary text-bold mb-n2 text-decoration-underline"
+                                            onClick={mobileRetailerAprproveLinkHandler}
+                                            disabled={SalesReturnListloading}
+                                            style={{ cursor: "pointer" }}
+                                        >
+                                            Item Wise Work Order</Label>
+                                        {(SalesReturnListloading) &&
+                                            <DashboardLoader />
+                                        }
+                                    </CardHeader>
+                                </div>
+                                <WorkOrderForDashboard />
+                            </Card>
+                        </Col>}
+
+
+
+
                     </Row>
 
                 </Container>
