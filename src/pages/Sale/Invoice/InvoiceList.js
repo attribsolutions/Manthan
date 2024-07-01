@@ -15,7 +15,7 @@ import * as report from '../../../Reports/ReportIndex'
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
-import { CheckStockEntryforBackDatedTransaction, Invoice_Singel_Get_for_Report_Api, OrderPage_Edit_ForDownload_API } from "../../../helpers/backend_helper";
+import { CheckStockEntryforBackDatedTransaction, Invoice_Singel_Get_for_Report_Api, OrderPage_Edit_ForDownload_API, Pos_Invoice_Singel_Get_for_Report_Api } from "../../../helpers/backend_helper";
 import { getpdfReportdata } from "../../../store/Utilites/PdfReport/actions";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import {
@@ -366,7 +366,13 @@ const InvoiceList = () => {
     function downBtnFunc(config) {
         debugger
         config["ReportType"] = report.invoice;
-        dispatch(getpdfReportdata(Invoice_Singel_Get_for_Report_Api, config))
+        config["Invoice_Identifier_ID"] = config.rowData.Identify_id
+        if (config.rowData.Identify_id === 1) {
+            dispatch(getpdfReportdata(Invoice_Singel_Get_for_Report_Api, config))
+        } else {
+            dispatch(getpdfReportdata(Pos_Invoice_Singel_Get_for_Report_Api, config))
+        }
+
     }
 
     function goButtonHandler(event, IBType) {

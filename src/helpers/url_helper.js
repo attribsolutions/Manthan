@@ -386,6 +386,11 @@ export const INVOICE_SEND_TO_SCM = '/InvoicetoSCM' // Uploaded_E-wayBill
 export const INVOICE_1_BULK_DELETE_API = '/InvoiceBulkDelete'// invoice_1 Bulk Delete Api
 
 
+export const POS_INVOICE_PRINT = '/SweetPOS/Invoice' // Uploaded_E-wayBill
+
+
+
+
 
 //BulkInvoices
 export const BULK_INVOICES = '/BulkInvoices'// invoice_1 addpage GoButton Api 
