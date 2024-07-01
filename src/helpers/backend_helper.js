@@ -849,7 +849,7 @@ export const update_SystemSetting_List_Api = ({ jsonBody, updateId }) => put(`${
 export const get_POSRoleAccess_List_Api = () => get(url.SWEET_POS_API) // get api
 export const Post_POSRoleAccess_API = ({ jsonBody }) => post(url.SWEET_POS_API, jsonBody)// post api
 
-
+export const Pos_Invoice_Singel_Get_for_Report_Api = ({ editId }) => get(`${url.POS_INVOICE_PRINT}/${editId}/P`)// delete api
 
 
 
