@@ -196,7 +196,7 @@ export const listPageActionsButtonFunc = (props) => {
 
         const dummyDisable_upload = hasRole("RoleAccess_Upload") && !isUploadAccess
 
-    
+
 
         const renderButtonIfNeeded = ({ condition, btnmode, iconClass, actionFunc, dispatchAction, title, buttonClasss, isDummyBtn, }) => {
             if (((!condition && !isDummyBtn))) return null;
@@ -396,7 +396,7 @@ export const listPageActionsButtonFunc = (props) => {
                         actionFunc: copyBodyfunc,
                         title: "Copy",
                         buttonClasss: copyBtnCss,
-                     
+
 
                     })}
                     {renderButtonIfNeeded({
@@ -479,7 +479,7 @@ export const E_WayBill_ActionsButtonFunc = ({ dispatch, reducers, e_WayBill_Acti
                 Message: `Are you sure you want to Cancel EwayBill : "${rowData[deleteName]}"`,
             })
             if (alertRepsponse) {
-                dispatch(Cancel_EwayBillAction({ btnId, RowId: rowData.id, UserID: loginUserID() }));
+                dispatch(Cancel_EwayBillAction({ btnId, RowId: rowData.id, UserID: loginUserID(), Invoice_Identifier_ID: rowData.Identify_id }));
             }
 
         } catch (error) { }
@@ -620,7 +620,7 @@ export const E_Invoice_ActionsButtonFunc = ({ dispatch, reducers, deleteName, us
             if (rowData.PageMode === "CreditDebitList") {
                 dispatch(Uploaded_Credit_Debit_EInvoiceAction({ btnId, RowId: rowData.id, UserID: loginUserID() }));
             } else {
-                dispatch(Uploaded_EInvoiceAction({ btnId, RowId: rowData.id, UserID: loginUserID() }));
+                dispatch(Uploaded_EInvoiceAction({ btnId, RowId: rowData.id, UserID: loginUserID(), Invoice_Identifier_ID: rowData.Identify_id }));
             }
         } catch (error) { }
     }
