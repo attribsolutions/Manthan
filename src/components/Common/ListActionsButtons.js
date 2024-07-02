@@ -636,7 +636,7 @@ export const E_Invoice_ActionsButtonFunc = ({ dispatch, reducers, deleteName, us
                 if (rowData.PageMode === "CreditDebitList") {
                     dispatch(Cancel_Credit_Debit_EInvoiceAction({ btnId, RowId: rowData.id, UserID: loginUserID() }));
                 } else {
-                    dispatch(Cancel_EInvoiceAction({ btnId, RowId: rowData.id, UserID: loginUserID() }));
+                    dispatch(Cancel_EInvoiceAction({ btnId, RowId: rowData.id, UserID: loginUserID(), Invoice_Identifier_ID: rowData.Identify_id }));
 
                 }
             }
