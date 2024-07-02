@@ -596,11 +596,11 @@ export const IB_Invoice_Singel_Get_for_Report_Api = ({ editId }) => get(`${url.I
 //**************************** E-Invoice (upload ,cancel,print) ***************************************/
 
 export const EInvoice_Uploade_Get_API = ({ RowId, UserID, Invoice_Identifier_ID }) => get(`${url.UPLOADED_E_INVOICE}/${RowId}/${UserID}/${Invoice_Identifier_ID}`)// Uploade_EInvoice
-export const EInvoice_Cancel_Get_API = ({ RowId, UserID }) => get(`${url.CANCEL_E_INVOICE}/${RowId}/${UserID}`)// Cancel_EInvoice
+export const EInvoice_Cancel_Get_API = ({ RowId, UserID ,Invoice_Identifier_ID}) => get(`${url.CANCEL_E_INVOICE}/${RowId}/${UserID}/${Invoice_Identifier_ID}`)// Cancel_EInvoice
 
 //**************************** E-WayBill (upload ,cancel,print) actions ***************************************/
 
-export const EwayBill_Uploade_Get_API = ({ RowId, UserID, Invoice_Identifier_ID }) => get(`${url.UPLOADED_E_WAY_BILL}/${RowId}/${UserID}/${Invoice_Identifier_ID}`)// Uploade_EwayBill
+export const EwayBill_Uploade_Get_API = ({ RowId, UserID }) => get(`${url.UPLOADED_E_WAY_BILL}/${RowId}/${UserID}`)// Uploade_EwayBill
 export const EwayBill_Cancel_Get_API = ({ RowId, UserID }) => get(`${url.CANCEL_E_WAY_BILL}/${RowId}/${UserID}`)// Cancel_EwayBill
 
 //IB Invoice 2 
