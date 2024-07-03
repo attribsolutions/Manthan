@@ -36,6 +36,7 @@ import { getGroupTypeslist } from "../../../store/Administrator/GroupTypeRedux/a
 import { SaveButton } from "../../../components/Common/CommonButton";
 import {
     btnIsDissablefunc,
+    loginCompanyID,
     loginUserID,
     metaTagLabel
 } from "../../../components/Common/CommonFunction";
@@ -202,6 +203,7 @@ const GroupMaster = (props) => {
                     Sequence: values.Sequence,
                     CreatedBy: loginUserID(),
                     UpdatedBy: loginUserID(),
+                    Company:loginCompanyID()
                 });
 
                 if (pageMode === mode.edit) {

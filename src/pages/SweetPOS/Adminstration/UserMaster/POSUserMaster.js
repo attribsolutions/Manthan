@@ -16,7 +16,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Breadcrumb_inputName } from "../../../../store/Utilites/Breadcrumb/actions";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
-import { breadcrumbReturnFunc, loginCompanyID, loginUserID, metaTagLabel } from "../../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, loginCompanyID, loginSelectedPartyID, loginUserID, metaTagLabel } from "../../../../components/Common/CommonFunction";
 import * as mode from "../../../../routes/PageMode"
 import * as pageId from "../../../../routes/allPageID"
 import { SaveButton } from "../../../../components/Common/CommonButton";
@@ -160,8 +160,8 @@ const POSUSER = (props) => {
       }
 
       if (hasEditVal) {
-        
-        const { id, LoginName, Password, IsActive, DivisionID, CreatedBy, RoleName,RoleID } = hasEditVal
+
+        const { id, LoginName, Password, IsActive, DivisionID, CreatedBy, RoleName, RoleID } = hasEditVal
         const { values, hasValid, } = { ...state }
 
         values.id = id;
@@ -206,16 +206,14 @@ const POSUSER = (props) => {
           Type: 1,
           Message: postMsg.Message,
         })
+        history.push({ pathname: url.POS_USER_lIST })
       }
       else {
-        let isPermission = await customAlert({
+        customAlert({
           Type: 1,
-          Status: true,
           Message: postMsg.Message,
         })
-        if (isPermission) {
-          history.push({ pathname: url.POS_USER_lIST })
-        }
+        history.push({ pathname: url.POS_USER_lIST })
       }
     }
 
@@ -228,7 +226,7 @@ const POSUSER = (props) => {
     }
   }, [postMsg.Status])
 
-  console.log(POSRole)
+ 
 
   const RolesValues = POSRole.map((Data) => ({
     value: Data.id,
@@ -242,10 +240,11 @@ const POSUSER = (props) => {
     }
 
     try {
+
       if (formValid(state, setState) && newPwdError.PasswordLevel !== "Weak password") {
         const jsonBody = JSON.stringify({
           CompanyID: loginCompanyID(),
-          DivisionID: 1,
+          DivisionID: loginSelectedPartyID(),
           LoginName: values.LoginName,
           Password: values.Password,
           RoleID: values.RoleName.value,
@@ -273,14 +272,17 @@ const POSUSER = (props) => {
     const strongRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     const mediumRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/;
 
-    if (strongRegex.test(val) && val !== "") {
-      setNewPwdError({ PasswordLevel: "Strong password", Color: "green" });
-    } else if (mediumRegex.test(val) && val !== "") {
-      setNewPwdError({ PasswordLevel: "Medium password", Color: "orange" });
-    } else if (val !== "") {
-      setNewPwdError({ PasswordLevel: "Weak password", Color: "tomato" });
+    if (state.required.Password) {
+      if (strongRegex.test(val) && val !== "") {
+        setNewPwdError({ PasswordLevel: "Strong password", Color: "green" });
+      } else if (mediumRegex.test(val) && val !== "") {
+        setNewPwdError({ PasswordLevel: "Medium password", Color: "orange" });
+      } else if (val !== "") {
+        setNewPwdError({ PasswordLevel: "Weak password", Color: "tomato" });
+      }
+    } else {
+      setNewPwdError({ PasswordLevel: "", Color: "" });
     }
-
     setConfirmPwd('');
     setPasswordsMatch(false);
   }
@@ -401,7 +403,7 @@ const POSUSER = (props) => {
                                   {showPassword ? <i className="mdi mdi-eye-off"></i> : <i className="mdi mdi-eye"></i>}
                                 </button>
                               </Col>
-                              <Col sm={4}>   <div className="col truioyh ">
+                              {state.required.Password ? <Col sm={4}>   <div className="col truioyh ">
                                 <span className="text-danger">
                                   *Note
                                 </span>
@@ -411,7 +413,7 @@ const POSUSER = (props) => {
                                     Must be 8-16 char and include at least one A-Z letter,
                                     one a-z letter, one 0-9, and one special character (@$!%*?&).
                                   </span>
-                                </div>  </Col>
+                                </div>  </Col> : null}
 
                             </Row>
 
