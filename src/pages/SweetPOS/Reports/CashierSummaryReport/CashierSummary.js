@@ -38,10 +38,8 @@ const CashierSummary = (props) => {
         GoBtnLoading,
         pageField
     } = useSelector((state) => ({
-        tableData: state.ClaimTrackingEntry_Reducer.claimTrackingEntryList,
-        GoBtnLoading: state.ClaimTrackingEntry_Reducer.GoBtnLoading,
-        ExcelBtnLoading: state.ClaimTrackingEntry_Reducer.ExcelBtnLoading,
-        partyList: state.CommonPartyDropdownReducer.commonPartyDropdownOption,
+        tableData: state.CashierSummaryReportReducer.CashierSummary,
+        GoBtnLoading: state.CashierSummaryReportReducer.listBtnLoading,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField
     }));
@@ -51,7 +49,7 @@ const CashierSummary = (props) => {
     useEffect(() => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(pageId.CASHIER_SUMMARY_REPORT));
-      
+
         return () => {
             dispatch(commonPageFieldSuccess(null));
             dispatch(CashierSummaryReport_GoButton_API_Success([]));
@@ -98,13 +96,13 @@ const CashierSummary = (props) => {
                 "ToDate": toDate,
                 "Party": _cfunc.loginPartyID(),
             })
-            const config = { jsonBody};
+            const config = { jsonBody };
             dispatch(CashierSummaryReport_GoButton_API(config))
 
         } catch (error) { _cfunc.CommonConsole(error) }
     }
 
-    
+
 
     function fromdateOnchange(e, date) {
         setFromDate(date)
@@ -152,7 +150,7 @@ const CashierSummary = (props) => {
                         </Col>
 
 
-                        <Col sm={ 6} className=" d-flex justify-content-end" >
+                        <Col sm={6} className=" d-flex justify-content-end" >
                             <C_Button
                                 type="button"
                                 spinnerColor="white"
