@@ -88,6 +88,10 @@ export const POS_USER_REGESTRATION = "/SweetPOS/SPOSUsers"
 export const POS_USER_RLOE = "/SweetPOS/sposroleslist"
 
 
+export const CASHIER_SUMMARY_REPORT = "SweetPOS/CashierSummary"
+
+
+
 
 
 

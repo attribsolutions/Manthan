@@ -359,4 +359,7 @@ export const SYSTEM_SETTING_LIST = 269
 
 export const TARGET_VS_ACHIEVEMENT = 273
 
+export const  CASHIER_SUMMARY_REPORT = 287
+
+
 

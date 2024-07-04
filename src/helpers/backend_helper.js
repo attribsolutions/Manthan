@@ -862,6 +862,10 @@ export const POS_USER_Master_Update_API = ({ jsonBody, updateId }) => put(`${url
 export const POS_USER_Get_Roles = () => get(`${url.POS_USER_RLOE}`)// edit api
 
 
+export const CashierSummary_API = ({ jsonBody }) => post(url.CASHIER_SUMMARY_REPORT, jsonBody)// post api
+
+
+
 
 // TargetVSAchievement 
 export const Target_Vs_Achievement_Gobtn_API = ({ jsonBody }) => post(url.TARGET_VS_ACHIEVEMENT_API, jsonBody)// post api

@@ -230,6 +230,7 @@ import BulkWorkOrder from "../pages/Production/WorkOrder/BulkWorkOrder.js";
 import IBInvoice from "../pages/Inter Branch/IBInvoice/IBInvoice.js";
 import IBInvoiceList from "../pages/Inter Branch/IBInvoice/IBInvoiceList.js";
 import GRN_ADD_1 from "../pages/Inventory/GRN/GRN_ADD_1.js";
+import CashierSummary from "../pages/SweetPOS/Reports/CashierSummaryReport/CashierSummary.js";
 
 const userRoutes = [
 	// *************************** DashBord *******************************//
@@ -591,6 +592,9 @@ const userRoutes = [
 	//******************************* Sweet Pos ************************************//
 
 	{ path: path.POS_ROLE_ACCESS, component: POSRoleAccess },//not party wise
+
+	{ path: path.CASHIER_SUMMARY_REPORT, component: CashierSummary },//not party wise
+
 
 	//******************************* Sweet Pos USER REGESTRATION ************************************//
 
