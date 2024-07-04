@@ -184,7 +184,7 @@ const DroppableContainer = ({ items, groupName, moveItem, moveItemWithinGroup, a
             {items.map((item, index) => (
                 <DraggableItem key={item.value} item={item} index={index} groupName={groupName} moveItemWithinGroup={moveItemWithinGroup} />
             ))}
-            <Add_SubGroup addItem={addItem} groupName={groupName} items={items} />
+            {/* <Add_SubGroup addItem={addItem} groupName={groupName} items={items} /> */}
         </div>
     );
 };

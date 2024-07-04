@@ -119,6 +119,7 @@ import PosRoleAccessSaga from "./SweetPOSStore/Administrator/POSRoleAccessRedux/
 import TargetVsAchievementSaga from "./Report/TargetVSAchievementRedux/saga"
 import RateMasterSaga from "./Administrator/RateMasterRedux/saga"
 import POSUserRegistrationSaga from "./SweetPOSStore/Administrator/UserMasterRedux/saga"
+import CashierSummaryReportSaga from "./SweetPOSStore/Report/CashierSummaryRedux/saga"
 
 
 export default function* rootSaga() {
@@ -230,7 +231,11 @@ export default function* rootSaga() {
 		fork(TargetVsAchievementSaga),
 		fork(PartyEmployeeDetailsSaga),
 		fork(POSUserRegistrationSaga),
-		fork(RateMasterSaga)
+		fork(RateMasterSaga),
+		fork(CashierSummaryReportSaga)
+
+
+		
 
 	])
 }
