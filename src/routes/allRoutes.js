@@ -71,7 +71,7 @@ import GroupList from "../pages/Adminisrator/GroupPage/GroupList";
 import GroupTypeList from "../pages/Adminisrator/GroupTypePage/GroupTypeList";
 
 
-// import GroupSubGroup from "../pages/Adminisrator/GroupSubGroup/GroupSubGroup";
+import GroupSubGroup from "../pages/Adminisrator/GroupSubGroup/GroupSubGroup";
 
 
 import GroupTypeMaster from "../pages/Adminisrator/GroupTypePage/GroupTypeMaster";
@@ -318,7 +318,7 @@ const userRoutes = [
 	{ path: path.GROUP, component: GroupMaster },//not party wise
 	{ path: path.GROUP_lIST, component: GroupList },//not party wise
 
-	// { path: path.GROUP_SUBGROUP, component: GroupSubGroup },//not party wise
+	{ path: path.GROUP_SUBGROUP, component: GroupSubGroup },//not party wise
 
 
 
