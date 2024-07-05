@@ -990,7 +990,7 @@ const StockEntry = (props) => {
             dataField: "",
             classes: () => "",
             formatter: (cellContent, row, key) => {
-                debugger
+
                 return (<span style={{ justifyContent: 'center' }}>
                     <CInput
                         id={`Qty${key}`}
@@ -1176,6 +1176,7 @@ const StockEntry = (props) => {
     }
 
     async function AddPartyHandler(e, Type) {
+        debugger
         setAddLoading(true)
 
         let selectedItem = []
@@ -1217,6 +1218,8 @@ const StockEntry = (props) => {
             }
             const updatedTableData = await ItemAPIResponseFunc(selectedItem, Type !== "add_All" ? [...TableArr] : []);
 
+            updatedTableData.reverse();
+
             setState((prevState) => {
                 const newState = { ...prevState };
                 newState.values.ItemName = "";
@@ -1224,6 +1227,7 @@ const StockEntry = (props) => {
                 return newState;
             });
             setTableArr(updatedTableData);
+
             dispatch(BreadcrumbShowCountlabel(`Count:${updatedTableData.length}`));
             setAddLoading(false)
             setAdd_AllLoading(false)
