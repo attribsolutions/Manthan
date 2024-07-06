@@ -11,7 +11,7 @@ import C_Report from "../../components/Common/C_Report";
 import { StockProcessing_API_Success, StockProcessing_Action, stockReport_1_GoButton_API, stockReport_1_GoButton_API_Success } from "../../store/Report/StockReport/action";
 import { commonPageField, commonPageFieldSuccess, getBaseUnit_ForDropDown, getBaseUnit_ForDropDownSuccess, getpdfReportdata } from "../../store/actions";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
-import { StockReport_1_GoBtn_API } from "../../helpers/backend_helper";
+import { Pos_StockReport_GoBtn_API, StockReport_1_GoBtn_API } from "../../helpers/backend_helper";
 import * as report from '../ReportIndex'
 import { ExcelReportComponent } from "../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS";
 import { alertMessages } from "../../components/Common/CommonErrorMsg/alertMsg";
@@ -23,6 +23,10 @@ const SNSReport = (props) => {
     const history = useHistory();
     const currentDate_ymd = _cfunc.date_ymd_func();
     const isSCMParty = _cfunc.loginUserAdminRole();
+    const isFranchises = _cfunc.loginUserIsFranchisesRole();
+
+
+
 
     const [headerFilters, setHeaderFilters] = useState('');
     const [userPageAccessState, setUserAccState] = useState('');
@@ -171,7 +175,7 @@ const SNSReport = (props) => {
             "ToDate": todate,
             "Party": isSCMParty ? PartyDropdown.value : _cfunc.loginPartyID()
         });
-        dispatch(StockProcessing_Action({ jsonBody, btnId }))
+        dispatch(StockProcessing_Action({ jsonBody, btnId, isFranchises }))
     }
 
     function excel_And_GoBtnHandler(e, btnMode) {
@@ -187,6 +191,7 @@ const SNSReport = (props) => {
             customAlert({ Type: 4, Message: alertMessages.commonPartySelectionIsRequired });
             return;
         }
+
         const jsonBody = JSON.stringify({
             "FromDate": fromdate,
             "ToDate": todate,
@@ -194,13 +199,19 @@ const SNSReport = (props) => {
             "Party": isSCMParty ? PartyDropdown.value : _cfunc.loginPartyID()
         });
 
-        let config = { ReportType: report.Stock, jsonBody }
+        let config = { ReportType: report.Stock, jsonBody, isFranchises }
+
         if (btnMode === "excel") {
             dispatch(stockReport_1_GoButton_API(config))
         }
         else {
-            dispatch(getpdfReportdata(StockReport_1_GoBtn_API, config))
+            if (isFranchises) {
+                dispatch(getpdfReportdata(Pos_StockReport_GoBtn_API, config))
+            } else {
+                dispatch(getpdfReportdata(StockReport_1_GoBtn_API, config))
+            }
         }
+
     }
 
     function fromdateOnchange(e, date) {

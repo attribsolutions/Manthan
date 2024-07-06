@@ -587,6 +587,10 @@ export const Invoice_Send_To_Scm = ({ jsonBody }) => post(url.INVOICE_SEND_TO_SC
 export const Invoice_1_Bulk_Delete_API = ({ jsonBody }) => delwithPostBody(url.INVOICE_1_BULK_DELETE_API, jsonBody)//Bulk delete api
 
 
+export const Update_Vehicle_Customer_Invoice_API = ({ jsonBody }) => post(url.UPDATE_VEHICLE_CUSTOMER_INVOICE, jsonBody)// Cancel_EwayBill
+
+
+
 export const IB_Invoice_Singel_Get_for_Report_Api = ({ editId }) => get(`${url.IB_INVOICE_SINGEL_GET}/${editId}`)// delete api
 
 
@@ -718,7 +722,18 @@ export const Item_DropDown_Api = ({ jsonBody }) => post(url.ITEM_DROPDOWN_API, j
 
 //Stock Report
 export const StockReport_GoBtn_API = (jsonBody) => post(url.STOCK_REPORT, jsonBody)//Go button api
+
+export const Pos_StockReport_GoBtn_API = ({jsonBody}) => post(url.POS_STOCK_REPORT, jsonBody)//Go button api
+
+
+
 export const StockProcessing_API = ({ jsonBody }) => post(url.STOCK_PROCESSING, jsonBody)//Go button api
+
+export const Pos_StockProcessing_API = ({ jsonBody }) => post(url.POS_STOCK_PROCESSING, jsonBody)//Go button api
+
+
+
+
 export const StockReport_1_GoBtn_API = ({ jsonBody }) => post(url.STOCK_REPORT_1, jsonBody)//Go button api
 // Damage Stock Report 
 export const DamageStockReport_GoBtn_API = ({ jsonBody, btnId }) => post(url.DAMAGE_STOCK_REPORT_GO_BUTTON, jsonBody)//Go button api
@@ -734,6 +749,8 @@ export const PurchaseGSTReportSaga_GoBtn_API = ({ jsonBody }) => post(url.PURCHA
 
 export const Gst_R1_Report_API = ({ jsonBody }) => post(url.GST_R1_REPORT, jsonBody)//Go button api
 export const Gst_R3B_Report_API = ({ jsonBody }) => post(url.GST_R3B_REPORT, jsonBody)//Go button api
+
+
 
 export const DeleteInvoiceDataExport_GoBtn_API = ({ jsonBody }) => post(url.DELETE_INVOICE_DATA_EXPORT, jsonBody)//Go button api
 export const ReturnReport_API = ({ jsonBody }) => post(url.RETURN_REPORT, jsonBody)//Go button api
@@ -754,7 +771,6 @@ export const TransactionLog_Go_Btn_Api = ({ jsonBody }) => post(url.TRANSACTION_
 export const TransactionLog_getjson_for_Transation_Id = ({ TransctionID }) => get(`${url.TRANSACTION_JSON}/${TransctionID}`) // edit api
 
 export const TransactionLog_Get_OnDashBoard_Api = () => get(url.TRANSACTION_ON_DASHBOARD);
-
 
 
 

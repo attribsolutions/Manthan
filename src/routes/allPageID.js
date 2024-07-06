@@ -216,6 +216,11 @@ export const PRODUCTION_REISSUE_STP = 142
 export const INVOICE_1 = 121
 export const INVOICE_LIST_1 = 122
 
+export const POS_INVOICE_LIST = 288
+
+
+
+
 export const BULK_INVOICE = 265
 //******************************* Inventory Module ************************************//
 

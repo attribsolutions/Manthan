@@ -27,6 +27,7 @@ import {
   Invoice_1_Update_API,
   Invoice_1_Bulk_Delete_API,
   CheckStockEntryforBackDatedTransaction,
+  Update_Vehicle_Customer_Invoice_API,
 } from "../../../helpers/backend_helper";
 import {
   deleteInvoiceIdSuccess,
@@ -44,6 +45,7 @@ import {
   InvoiceSendToScmSuccess,
   updateInvoiceActionSuccess,
   InvoiceBulkDelete_IDs_Succcess,
+  Pos_UpdateVehicleCustomerInvoice_Action_Success,
 } from "./action";
 import {
   DELETE_INVOICE_LIST_PAGE,
@@ -59,6 +61,7 @@ import {
   INVOICE_SEND_TO_SCM_ACTION,
   UPDATE_INVOICE_ACTION,
   INVOICE_BULK_DELETE_IDS_ACTION,
+  UPDATE_VEHICLE_CUSTOMER_INVOICE_ACTION,
 
 } from "./actionType";
 import *as url from "../../../routes/route_url"
@@ -103,7 +106,7 @@ function* InvoiceListGenFunc({ config }) {
     const { subPageMode } = config
     let response;
 
-    if ((subPageMode === url.INVOICE_LIST_1) || (subPageMode === url.LOADING_SHEET)) {
+    if ((subPageMode === url.INVOICE_LIST_1) || (subPageMode === url.LOADING_SHEET) ||( subPageMode === url.POS_INVOICE_LIST)) {
       response = yield call(Invoice_1_Get_Filter_API, config);
     } else if (subPageMode === url.IB_INVOICE_LIST || subPageMode === url.IB_GRN_LIST || subPageMode === url.IB_INWARD_STP) {
       response = yield call(IB_Invoice_Get_Filter_API, config);
@@ -419,6 +422,25 @@ function* UpdateVehicleInvoice_GenFunc({ config }) {
   }
 }
 
+
+function* UpdateVehicleCustomerInvoice_GenFunc({ config }) {
+
+  try {
+    const response = yield call(Update_Vehicle_Customer_Invoice_API, config)
+    yield put(Pos_UpdateVehicleCustomerInvoice_Action_Success(response));
+  } catch (error) {
+    yield put(InvoiceApiErrorAction())
+  }
+}
+
+
+
+
+
+
+
+
+
 function* InvoiceBulkDelete_GenFunc({ config }) { // Update Order by subPageMode
 
   try {
@@ -442,6 +464,9 @@ function* InvoiceSaga() {
   yield takeLatest(CANCLE_E_WAY_BILL_ACTION, Cancle_EwayBillGenFunc);
   yield takeLatest(CANCLE_E_INVOICE_ACTION, Cancle_EInvoiceGenFunc);
   yield takeLatest(UPDATE_VEHICLE_INVOICE_ACTION, UpdateVehicleInvoice_GenFunc);
+
+  yield takeLatest(UPDATE_VEHICLE_CUSTOMER_INVOICE_ACTION, UpdateVehicleCustomerInvoice_GenFunc);
+
   yield takeLatest(INVOICE_BULK_DELETE_IDS_ACTION, InvoiceBulkDelete_GenFunc);
 
 }

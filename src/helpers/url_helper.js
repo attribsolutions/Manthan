@@ -390,6 +390,12 @@ export const INVOICE_SEND_TO_SCM = '/InvoicetoSCM' // Uploaded_E-wayBill
 export const INVOICE_1_BULK_DELETE_API = '/InvoiceBulkDelete'// invoice_1 Bulk Delete Api
 
 
+export const UPDATE_VEHICLE_CUSTOMER_INVOICE = '/SweetPOS/UpdateCustomerVehiclePOSinvoice' // Uploaded_E-wayBill
+
+
+
+
+
 export const POS_INVOICE_PRINT = '/SweetPOS/Invoice' // Uploaded_E-wayBill
 
 
@@ -480,7 +486,19 @@ export const ITEM_REGISTER = '/MaterialRegister'
 // Stock Report
 export const STOCK_REPORT = '/PartyLiveStock'
 export const STOCK_PROCESSING = '/StockProcessing'
+
+export const POS_STOCK_PROCESSING = '/StockProcesSPOS'
+
+
+
+
+
 export const STOCK_REPORT_1 = '/StockReport'
+
+export const POS_STOCK_REPORT = '/SPOSStockReport'
+
+
+
 
 export const DAMAGE_STOCK_REPORT_GO_BUTTON = '/DamageStock'
 
