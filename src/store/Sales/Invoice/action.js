@@ -28,6 +28,8 @@ import {
     UPDATE_INVOICE_ACTION_SUCCESS,
     INVOICE_BULK_DELETE_IDS_ACTION,
     INVOICE_BULK_DELETE_IDS_SUCCESS,
+    UPDATE_VEHICLE_CUSTOMER_INVOICE_ACTION,
+    UPDATE_VEHICLE_CUSTOMER_INVOICE_ACTION_SUCCESS,
 
 } from "./actionType";
 
@@ -53,7 +55,7 @@ export const editInvoiceActionSuccess = (editData) => ({
     payload: editData,
 })
 // edit api
-export const updateInvoiceAction = (config ) => ({
+export const updateInvoiceAction = (config) => ({
     type: UPDATE_INVOICE_ACTION,
     config,
 })
@@ -175,18 +177,33 @@ export const UpdateVehicleInvoice_Success = (data) => ({
     payload: data,
 });
 
+
+
+export const Pos_UpdateVehicleCustomerInvoice_Action = (config) => ({
+    type: UPDATE_VEHICLE_CUSTOMER_INVOICE_ACTION,
+    config
+});
+
+export const Pos_UpdateVehicleCustomerInvoice_Action_Success = (data) => ({
+    type: UPDATE_VEHICLE_CUSTOMER_INVOICE_ACTION_SUCCESS,
+    payload: data,
+});
+
+
+
+
 // Invoice Bulk Delete
 export const InvoiceBulkDelete_IDs_Action = (config = {}) => ({
     type: INVOICE_BULK_DELETE_IDS_ACTION,
     config,
-  });
-  
-  export const InvoiceBulkDelete_IDs_Succcess = (resp) => ({
+});
+
+export const InvoiceBulkDelete_IDs_Succcess = (resp) => ({
     type: INVOICE_BULK_DELETE_IDS_SUCCESS,
     payload: resp,
-  });
+});
 
-  // Invoice Error Action
-  export const InvoiceApiErrorAction = () => ({
+// Invoice Error Action
+export const InvoiceApiErrorAction = () => ({
     type: INVOICE_API_ERROR_ACTION,
 })

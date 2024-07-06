@@ -231,6 +231,7 @@ import IBInvoice from "../pages/Inter Branch/IBInvoice/IBInvoice.js";
 import IBInvoiceList from "../pages/Inter Branch/IBInvoice/IBInvoiceList.js";
 import GRN_ADD_1 from "../pages/Inventory/GRN/GRN_ADD_1.js";
 import CashierSummary from "../pages/SweetPOS/Reports/CashierSummaryReport/CashierSummary.js";
+import Pos_InvoiceList from "../pages/SweetPOS/Sales/Invoice/InvoiceList.js";
 
 const userRoutes = [
 	// *************************** DashBord *******************************//
@@ -601,7 +602,25 @@ const userRoutes = [
 	{ path: path.POS_USER, component: POSUSER },//not party wise
 	{ path: path.POS_USER_lIST, component: POSUserList },//not party wise
 
+
+	// ************************************ Pos_Invoice **************************************//
+
+
+	{ path: path.POS_INVOICE_LIST, component: Pos_InvoiceList },//not party wise
+
+
+
+
+
+
+
+
 	// ************************************ Utility **************************************//
+
+
+
+
+
 
 	{ path: path.SYSTEM_SETTING, component: SystemSetting },//not party wise
 

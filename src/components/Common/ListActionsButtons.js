@@ -462,7 +462,7 @@ export const E_WayBill_ActionsButtonFunc = ({ dispatch, reducers, e_WayBill_Acti
     function Uploaded_EwayBillHandler(btnId, rowData) {
         try {
 
-            let config = { btnId, RowId: rowData.id, UserID: loginUserID() };
+            let config = { btnId, RowId: rowData.id, UserID: loginUserID() ,Invoice_Identifier_ID: rowData.Identify_id };
             if ((rowData.VehicleNo === null) && !(rowData.VehicleNo === "") && (e_WayBill_ActionsBtnFunc)) {
                 e_WayBill_ActionsBtnFunc(rowData)
             }

@@ -23,7 +23,8 @@ import {
     UPDATE_INVOICE_ACTION,
     UPDATE_INVOICE_ACTION_SUCCESS,
     INVOICE_BULK_DELETE_IDS_ACTION,
-    INVOICE_BULK_DELETE_IDS_SUCCESS
+    INVOICE_BULK_DELETE_IDS_SUCCESS,
+    UPDATE_VEHICLE_CUSTOMER_INVOICE_ACTION_SUCCESS
 } from "./actionType"
 
 const INIT_STATE = {
@@ -39,6 +40,7 @@ const INIT_STATE = {
     Cancel_EInvoice: { Status: false },
     Cancel_EwayBill: { Status: false },
     Update_Vehicle_Invoice: [],
+    Update_Vehicle_Customer_Invoice:[],
     invoiceBulkDelete: { Status: false },
 
     listBtnLoading: false,
@@ -152,7 +154,7 @@ const InvoiceReducer = (state = INIT_STATE, action) => {
         case MAKE_IB_INVOICE_ACTION:
             return {
                 ...state,
-                listBtnLoading:true,
+                listBtnLoading: true,
             }
         case MAKE_IB_INVOICE_ACTION_SUCCESS:
             return {
@@ -215,6 +217,14 @@ const InvoiceReducer = (state = INIT_STATE, action) => {
             return {
                 ...state,
                 Update_Vehicle_Invoice: action.payload,
+            }
+
+        /**************************************** */
+
+        case UPDATE_VEHICLE_CUSTOMER_INVOICE_ACTION_SUCCESS:
+            return {
+                ...state,
+                Update_Vehicle_Customer_Invoice: action.payload,
             }
         /**************************************** */
 
