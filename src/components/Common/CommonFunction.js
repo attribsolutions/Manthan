@@ -22,7 +22,7 @@ function isDateInitial(isdate) {
 }
 
 export const date_ymd_func = (isdate) => { //+++++++++++++++ Current Date by format (yyyy-dd-mm) ++++++++++++++++++++++++++++++++++++
-  
+
   let date = isDateInitial(isdate);
   return (`${date.yy}-${date.mm}-${date.dd}`)
 };
@@ -217,6 +217,19 @@ export const loginUserAdminRole = () => { //+++++++++++++++++++++ Session Compan
     return (detail.PartyType === "Company Division");
   } catch (e) {
     CommonConsole("Common loginUserAdminRole  Error");
+  }
+  return false;
+};
+
+
+
+export const loginUserIsFranchisesRole = () => { //+++++++++++++++++++++ IsFranchises Company Id+++++++++++++++++++++++++++++
+
+  try {
+    const detail = loginUserDetails();
+    return (detail.IsFranchises === 1);
+  } catch (e) {
+    CommonConsole("Common loginUserIsFranchisesRole  Error");
   }
   return false;
 };

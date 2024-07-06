@@ -377,6 +377,12 @@ export const POS_USER = "/POS_User"
 
 export const POS_USER_lIST = "/POS_User_List"
 
+export const POS_INVOICE_LIST = "/Pos_InvoiceList"
+
+
+
+
+
 export const CASHIER_SUMMARY_REPORT = "/Cashier_Summary_Report"
 
 
