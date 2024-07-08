@@ -23,7 +23,6 @@ import {
     Cancel_EwayBillSuccess,
     InvoiceSendToScm,
     InvoiceSendToScmSuccess,
-    UpdateVehicleInvoice_Action,
     UpdateVehicleInvoice_Success,
     Uploaded_EInvoiceSuccess,
     Uploaded_EwayBillSuccess,
@@ -161,31 +160,12 @@ const InvoiceList = () => {
             masterPath = url.INVOICE_1
             newBtnPath = url.INVOICE_1
         }
-        else if (subPageMode === url.IB_INVOICE_LIST) {
-            page_Id = pageId.IB_INVOICE_LIST;
-            masterPath = url.IB_INVOICE
-            newBtnPath = url.IB_INVOICE_STP
-            IBType = "IBInvoice"
-        }
-        else if (subPageMode === url.IB_GRN_LIST) {
-            page_Id = pageId.IB_GRN_LIST;
-            masterPath = url.IB_INVOICE
-            page_Mode = mode.modeSTPList;
-            makeBtnShow = true
-            IBType = "IBGRN"
-        }
-        else if (subPageMode === url.IB_INWARD_STP) {
-            page_Id = pageId.IB_INWARD_STP
-            page_Mode = mode.modeSTPsave
-            makeBtnShow = true;
-            IBType = "IBGRN"
-        }
+
         setSubPageMode(subPageMode)
         setOtherState({ masterPath, makeBtnShow, newBtnPath, IBType })
         setPageMode(page_Mode)
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
-        // dispatch(GetVenderSupplierCustomer({ subPageMode, PartyID: commonPartyDropSelect.value }))
 
         setmodal(false);
         if (!(commonPartyDropSelect.value === 0)) {
@@ -369,7 +349,7 @@ const InvoiceList = () => {
     }));
 
     function downBtnFunc(config) {
-        
+
         config["ReportType"] = report.invoice;
         config["Invoice_Identifier_ID"] = config.rowData.Identify_id
         if (config.rowData.Identify_id === 1) {
@@ -445,8 +425,6 @@ const InvoiceList = () => {
     }
 
 
-
-
     function toggleModal() {
         setmodal(!modal);
         setVehicle_No('')
@@ -454,7 +432,7 @@ const InvoiceList = () => {
         setvehicleErrorMsg(false);
     };
 
-    const makeBtnFunc = (list = {}, btnId) => {
+    const makeBtnFunc = (list = {}) => {
 
 
         const grnRef = [{
@@ -558,17 +536,17 @@ const InvoiceList = () => {
     }
 
     function e_WayBill_ActionsBtnFunc(rowData) {
-
-        const { VehicleNo = '', id, Identify_id } = rowData
+        debugger
+        const { VehicleNo = '', id ,CustomerID,Customer } = rowData
         if (VehicleNo === null) {
-        setmodal(true);
-        dispatch(getVehicleList())
-        setInvoiceID(id)
+            setmodal(true);
+            dispatch(getVehicleList())
+            setInvoiceID(id)
+            setCustomer({ value: CustomerID, label: Customer })
         }
     }
 
     const updateVehicleInvoice = () => {
-
         if (Vehicle_No === "") {
             setvehicleErrorMsg(true);
         } else {
@@ -722,9 +700,6 @@ const InvoiceList = () => {
                                                 }),
                                             }}
                                         />
-                                        {(vehicleErrorMsg) && (
-                                            <span className="text-danger f-8"><small>Please Select Customer Number</small></span>
-                                        )}
 
                                     </Col>
                                 </FormGroup>
@@ -752,6 +727,9 @@ const InvoiceList = () => {
                                                 }),
                                             }}
                                         />
+                                        {(vehicleErrorMsg) && (
+                                            <span className="text-danger f-8"><small>Please Select Vehicle No </small></span>
+                                        )}
                                     </Col>
                                 </FormGroup>
                             </Col>
