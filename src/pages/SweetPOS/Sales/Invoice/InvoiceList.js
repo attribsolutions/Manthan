@@ -23,7 +23,6 @@ import {
     Cancel_EwayBillSuccess,
     InvoiceSendToScm,
     InvoiceSendToScmSuccess,
-    UpdateVehicleInvoice_Action,
     UpdateVehicleInvoice_Success,
     Uploaded_EInvoiceSuccess,
     Uploaded_EwayBillSuccess,
@@ -36,7 +35,9 @@ import {
     updateInvoiceActionSuccess,
     InvoiceBulkDelete_IDs_Action,
     InvoiceBulkDelete_IDs_Succcess,
-    Pos_UpdateVehicleCustomerInvoice_Action
+    Pos_UpdateVehicleCustomerInvoice_Action,
+    Pos_UpdateVehicleCustomerInvoice_Action_Success,
+    Uploaded_EInvoiceAction
 } from "../../../../store/Sales/Invoice/action";
 import { C_DatePicker, C_Select } from "../../../../CustomValidateForm";
 import { customAlert } from "../../../../CustomAlert/ConfirmDialog";
@@ -59,6 +60,11 @@ const InvoiceList = () => {
     const [otherState, setOtherState] = useState({ masterPath: '', makeBtnShow: false, newBtnPath: '', IBType: '' });
     const [Vehicle_No, setVehicle_No] = useState('')
     const [Customer, setCustomer] = useState('')
+
+    const [InvoiceRowData, setInvoiceRowData] = useState('')
+
+
+
 
 
 
@@ -161,31 +167,12 @@ const InvoiceList = () => {
             masterPath = url.INVOICE_1
             newBtnPath = url.INVOICE_1
         }
-        else if (subPageMode === url.IB_INVOICE_LIST) {
-            page_Id = pageId.IB_INVOICE_LIST;
-            masterPath = url.IB_INVOICE
-            newBtnPath = url.IB_INVOICE_STP
-            IBType = "IBInvoice"
-        }
-        else if (subPageMode === url.IB_GRN_LIST) {
-            page_Id = pageId.IB_GRN_LIST;
-            masterPath = url.IB_INVOICE
-            page_Mode = mode.modeSTPList;
-            makeBtnShow = true
-            IBType = "IBGRN"
-        }
-        else if (subPageMode === url.IB_INWARD_STP) {
-            page_Id = pageId.IB_INWARD_STP
-            page_Mode = mode.modeSTPsave
-            makeBtnShow = true;
-            IBType = "IBGRN"
-        }
+
         setSubPageMode(subPageMode)
         setOtherState({ masterPath, makeBtnShow, newBtnPath, IBType })
         setPageMode(page_Mode)
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
-        // dispatch(GetVenderSupplierCustomer({ subPageMode, PartyID: commonPartyDropSelect.value }))
 
         setmodal(false);
         if (!(commonPartyDropSelect.value === 0)) {
@@ -194,6 +181,8 @@ const InvoiceList = () => {
         return () => {
             dispatch(UpdateVehicleInvoice_Success([]));
             dispatch(invoiceListGoBtnfilterSucccess([]));
+            dispatch(Pos_UpdateVehicleCustomerInvoice_Action_Success([]));
+
         }
 
     }, [dispatch]);
@@ -211,6 +200,12 @@ const InvoiceList = () => {
                 Type: 1,
                 Message: JSON.stringify(Update_Vehicle_Customer_Invoice.Message),
             })
+
+            if (InvoiceRowData.btnId) {
+                dispatch(Uploaded_EInvoiceAction({ btnId: InvoiceRowData.btnId, RowId: InvoiceRowData.RowData.id, UserID: _cfunc.loginUserID(), Invoice_Identifier_ID: InvoiceRowData.RowData.Identify_id }));
+            }
+
+
         }
 
         else if (Update_Vehicle_Customer_Invoice.Status === true) {
@@ -369,7 +364,7 @@ const InvoiceList = () => {
     }));
 
     function downBtnFunc(config) {
-        
+
         config["ReportType"] = report.invoice;
         config["Invoice_Identifier_ID"] = config.rowData.Identify_id
         if (config.rowData.Identify_id === 1) {
@@ -445,16 +440,15 @@ const InvoiceList = () => {
     }
 
 
-
-
     function toggleModal() {
         setmodal(!modal);
         setVehicle_No('')
         setCustomer("")
+        setInvoiceRowData("")
         setvehicleErrorMsg(false);
     };
 
-    const makeBtnFunc = (list = {}, btnId) => {
+    const makeBtnFunc = (list = {}) => {
 
 
         const grnRef = [{
@@ -559,27 +553,53 @@ const InvoiceList = () => {
 
     function e_WayBill_ActionsBtnFunc(rowData) {
 
-        const { VehicleNo = '', id, Identify_id } = rowData
+        const { VehicleNo = '', id, CustomerID, Customer } = rowData
         if (VehicleNo === null) {
-        setmodal(true);
-        dispatch(getVehicleList())
-        setInvoiceID(id)
+            setmodal(true);
+            dispatch(getVehicleList())
+            setInvoiceID(id)
+            setCustomer({ value: CustomerID, label: Customer })
         }
+    }
+
+
+
+
+
+    function e_Invoice_ActionsBtnFunc(config) {
+
+        const { id, CustomerID, Customer } = config.RowData
+        setmodal(true);
+        setInvoiceID(id)
+        setCustomer({ value: CustomerID, label: Customer })
+        setInvoiceRowData(config)
+
+
     }
 
     const updateVehicleInvoice = () => {
 
-        if (Vehicle_No === "") {
-            setvehicleErrorMsg(true);
-        } else {
-            const jsonBody = JSON.stringify({
+        let jsonBody = ""
+        if (InvoiceRowData.btnId) {   /// if invoice customer update from  e-invoice button 
+            jsonBody = JSON.stringify({
                 InvoiceID: InvoiceID,
-                vehicle: Vehicle_No.value,
+                vehicle: null,
                 Customer: Customer.value
             });
-
             dispatch(Pos_UpdateVehicleCustomerInvoice_Action({ jsonBody }));
+        } else {
+            if (Vehicle_No === "") {
+                setvehicleErrorMsg(true);
+            } else {
+                jsonBody = JSON.stringify({
+                    InvoiceID: InvoiceID,
+                    vehicle: Vehicle_No.value,
+                    Customer: Customer.value
+                });
+                dispatch(Pos_UpdateVehicleCustomerInvoice_Action({ jsonBody }));
+            }
         }
+
     };
 
     async function editBodyfunc(config) {
@@ -665,6 +685,7 @@ const InvoiceList = () => {
                             makeBtnName={"Make"}
                             filters={hederFilters}
                             forceNewBtnView={false}
+                            e_Invoice_ActionsBtnFunc={e_Invoice_ActionsBtnFunc}
                             e_WayBill_ActionsBtnFunc={e_WayBill_ActionsBtnFunc}
                             totalAmountShow={true}
                             selectCheckParams={{
@@ -722,14 +743,11 @@ const InvoiceList = () => {
                                                 }),
                                             }}
                                         />
-                                        {(vehicleErrorMsg) && (
-                                            <span className="text-danger f-8"><small>Please Select Customer Number</small></span>
-                                        )}
 
                                     </Col>
                                 </FormGroup>
                             </Col>
-                            <Col sm="8" className="">
+                            {!InvoiceRowData.btnId && <Col sm="8" className="">
                                 <FormGroup className="mb- row mt-1 " >
                                     <Label className="col-sm-6 p-2 text-black"
                                         style={{ width: "90px" }}>Vehicle No</Label>
@@ -752,9 +770,12 @@ const InvoiceList = () => {
                                                 }),
                                             }}
                                         />
+                                        {(vehicleErrorMsg) && (
+                                            <span className="text-danger f-8"><small>Please Select Vehicle No </small></span>
+                                        )}
                                     </Col>
                                 </FormGroup>
-                            </Col>
+                            </Col>}
                         </Row>
                         <div className="modal-footer">
                             <button
@@ -768,7 +789,7 @@ const InvoiceList = () => {
                                 type="submit"
                                 className="btn btn-primary"
                                 onClick={updateVehicleInvoice}>
-                                Update
+                                {InvoiceRowData.btnId ? "Upload" : "Update"}
                             </button>
                         </div>
                     </div>

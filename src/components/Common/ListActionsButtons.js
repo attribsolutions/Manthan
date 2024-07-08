@@ -7,6 +7,7 @@ import { Cancel_Credit_Debit_EInvoiceAction, Cancel_EInvoiceAction, Cancel_EwayB
 import { url } from "../../routes";
 import { alertMessages } from "./CommonErrorMsg/alertMsg";
 
+
 //******************** button class ******************************
 
 export const editBtnCss = "badge badge-soft-success font-size-12 btn btn-success waves-effect waves-light w-xxs border border-light"
@@ -462,7 +463,7 @@ export const E_WayBill_ActionsButtonFunc = ({ dispatch, reducers, e_WayBill_Acti
     function Uploaded_EwayBillHandler(btnId, rowData) {
         try {
 
-            let config = { btnId, RowId: rowData.id, UserID: loginUserID() ,Invoice_Identifier_ID: rowData.Identify_id };
+            let config = { btnId, RowId: rowData.id, UserID: loginUserID(), Invoice_Identifier_ID: rowData.Identify_id };
             if ((rowData.VehicleNo === null) && !(rowData.VehicleNo === "") && (e_WayBill_ActionsBtnFunc)) {
                 e_WayBill_ActionsBtnFunc(rowData)
             }
@@ -611,7 +612,7 @@ export const E_WayBill_ActionsButtonFunc = ({ dispatch, reducers, e_WayBill_Acti
 
 // ************************* E-Invoice Button *****************************************************
 
-export const E_Invoice_ActionsButtonFunc = ({ dispatch, reducers, deleteName, userAccState }) => {
+export const E_Invoice_ActionsButtonFunc = ({ dispatch, reducers, deleteName, userAccState, e_Invoice_ActionsBtnFunc }) => {
     const { listBtnLoading } = reducers;
 
     function Uploaded_EInvoiceHandler(btnId, rowData) {
@@ -620,7 +621,13 @@ export const E_Invoice_ActionsButtonFunc = ({ dispatch, reducers, deleteName, us
             if (rowData.PageMode === "CreditDebitList") {
                 dispatch(Uploaded_Credit_Debit_EInvoiceAction({ btnId, RowId: rowData.id, UserID: loginUserID() }));
             } else {
-                dispatch(Uploaded_EInvoiceAction({ btnId, RowId: rowData.id, UserID: loginUserID(), Invoice_Identifier_ID: rowData.Identify_id }));
+                if ((e_Invoice_ActionsBtnFunc)) {
+                    let config = { btnId, RowData: rowData }
+                    e_Invoice_ActionsBtnFunc(config)
+                }
+                else {
+                    dispatch(Uploaded_EInvoiceAction({ btnId, RowId: rowData.id, UserID: loginUserID(), Invoice_Identifier_ID: rowData.Identify_id }));
+                }
             }
         } catch (error) { }
     }
