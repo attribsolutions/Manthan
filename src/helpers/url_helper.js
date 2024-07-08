@@ -487,7 +487,7 @@ export const ITEM_REGISTER = '/MaterialRegister'
 export const STOCK_REPORT = '/PartyLiveStock'
 export const STOCK_PROCESSING = '/StockProcessing'
 
-export const POS_STOCK_PROCESSING = '/StockProcesSPOS'
+export const POS_STOCK_PROCESSING = 'SweetPOS/StockProcesSPOS'
 
 
 
@@ -495,7 +495,7 @@ export const POS_STOCK_PROCESSING = '/StockProcesSPOS'
 
 export const STOCK_REPORT_1 = '/StockReport'
 
-export const POS_STOCK_REPORT = '/SPOSStockReport'
+export const POS_STOCK_REPORT = 'SweetPOS/SPOSStockReport'
 
 
 
