@@ -58,7 +58,7 @@ const InvoiceList = () => {
     const [subPageMode, setSubPageMode] = useState(history.location.pathname);
     const [hederFilters, setHederFilters] = useState({ todate: currentDate_ymd, fromdate: currentDate_ymd, supplierSelect: allLabelWithBlank });
     const [otherState, setOtherState] = useState({ masterPath: '', makeBtnShow: false, newBtnPath: '', IBType: '' });
-    const [Vehicle_No, setVehicle_No] = useState('')
+    const [Vehicle_No, setVehicle_No] = useState({ value: "", label: "Select..." })
     const [Customer, setCustomer] = useState('')
 
     const [InvoiceRowData, setInvoiceRowData] = useState('')
@@ -191,7 +191,7 @@ const InvoiceList = () => {
         if (Update_Vehicle_Customer_Invoice.Status === true && Update_Vehicle_Customer_Invoice.StatusCode === 200) {
             dispatch(UpdateVehicleInvoice_Success([]));
             setInvoiceID('');
-            setVehicle_No('');
+            setVehicle_No({ value: "", label: "Select..." });
             setCustomer("")
             setvehicleErrorMsg(false);
             goButtonHandler("event");
@@ -436,7 +436,7 @@ const InvoiceList = () => {
 
     function toggleModal() {
         setmodal(!modal);
-        setVehicle_No('')
+        setVehicle_No({ value: "", label: "Select..." })
         setCustomer("")
         setInvoiceRowData("")
         setvehicleErrorMsg(false);
@@ -465,7 +465,7 @@ const InvoiceList = () => {
         }))
 
     };
-    
+
 
     const HeaderContent = () => {
         return (
@@ -541,19 +541,24 @@ const InvoiceList = () => {
 
 
     function UpdateDetailsBtnFunc(config) {
-        
+
         const { id, CustomerID, Customer, VehicleNo, VehicleID } = config.rowData
         setmodal(true);
         dispatch(getVehicleList())
         setInvoiceID(id)
         setCustomer({ value: CustomerID, label: Customer })
-        setVehicle_No({ value: VehicleID, label: VehicleNo })
+
+        if ((VehicleID === null) || VehicleNo === null) {
+            setVehicle_No({ value: "", label: "Select..." });
+        } else {
+            setVehicle_No({ value: VehicleID, label: VehicleNo })
+        }
         setInvoiceRowData(config)
     }
 
     const updateVehicleInvoice = () => {
 
-        if (Vehicle_No === "") {
+        if (Vehicle_No.value === "") {
             setvehicleErrorMsg(true);
         } else {
             const jsonBody = JSON.stringify({

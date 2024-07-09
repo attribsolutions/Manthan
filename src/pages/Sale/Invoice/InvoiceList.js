@@ -57,7 +57,7 @@ const InvoiceList = () => {
     const [subPageMode, setSubPageMode] = useState(history.location.pathname);
     const [hederFilters, setHederFilters] = useState({ todate: currentDate_ymd, fromdate: currentDate_ymd, supplierSelect: allLabelWithBlank });
     const [otherState, setOtherState] = useState({ masterPath: '', makeBtnShow: false, newBtnPath: '', IBType: '' });
-    const [VehicleNoDropdown, setVehicleNoDropdown] = useState('')
+    const [VehicleNoDropdown, setVehicleNoDropdown] = useState({ value: "", label: "Select..." })
     const [modal, setmodal] = useState(false);
     const [vehicleErrorMsg, setvehicleErrorMsg] = useState(false);
     const [InvoiceID, setInvoiceID] = useState("");
@@ -198,7 +198,7 @@ const InvoiceList = () => {
         if (Update_Vehicle_Invoice.Status === true && Update_Vehicle_Invoice.StatusCode === 200) {
             dispatch(UpdateVehicleInvoice_Success([]));
             setInvoiceID('');
-            setVehicleNoDropdown('');
+            setVehicleNoDropdown({ value: "", label: "Select..." });
             setvehicleErrorMsg(false);
             goButtonHandler("event");
             setmodal(false);
@@ -364,7 +364,7 @@ const InvoiceList = () => {
     }));
 
     function downBtnFunc(config) {
-        
+
         config["ReportType"] = report.invoice;
         config["Invoice_Identifier_ID"] = config.rowData.Identify_id
         if (config.rowData.Identify_id === 1) {
@@ -435,7 +435,7 @@ const InvoiceList = () => {
 
     function toggleModal() {
         setmodal(!modal);
-        setVehicleNoDropdown('')
+        setVehicleNoDropdown({ value: "", label: "Select..." })
         setvehicleErrorMsg(false);
     };
 
@@ -558,12 +558,16 @@ const InvoiceList = () => {
         setmodal(true);
         dispatch(getVehicleList())
         setInvoiceID(id)
-        setVehicleNoDropdown({ value: VehicleID, label: VehicleNo })
+        if ((VehicleID === null) || VehicleNo === null) {
+            setVehicleNoDropdown({ value: "", label: "Select..." });
+        } else {
+            setVehicleNoDropdown({ value: VehicleID, label: VehicleNo })
+        }
     }
 
     const updateVehicleInvoice = () => {
 
-        if (VehicleNoDropdown === "") {
+        if (VehicleNoDropdown.value === "") {
             setvehicleErrorMsg(true);
         } else {
             const invoiceAndVehicleID = {
@@ -694,11 +698,12 @@ const InvoiceList = () => {
                             <Col sm="8" className="">
                                 <FormGroup className="mb- row mt-1 " >
                                     <Label className="col-sm-6 p-2 text-black"
-                                        style={{ width: "65px" }}>VehicleNo</Label>
+                                        style={{ width: "90px" }}>Vehicle No</Label>
                                     <Col sm="8">
                                         <C_Select
                                             name="VehicleNo"
                                             value={VehicleNoDropdown}
+
                                             isSearchable={true}
                                             id={'VehicleNoselect'}
                                             className="card-header align-items-center d-flex"
