@@ -200,12 +200,6 @@ const InvoiceList = () => {
                 Type: 1,
                 Message: JSON.stringify(Update_Vehicle_Customer_Invoice.Message),
             })
-
-            if (InvoiceRowData.btnId) {
-                dispatch(Uploaded_EInvoiceAction({ btnId: InvoiceRowData.btnId, RowId: InvoiceRowData.RowData.id, UserID: _cfunc.loginUserID(), Invoice_Identifier_ID: InvoiceRowData.RowData.Identify_id }));
-            }
-
-
         }
 
         else if (Update_Vehicle_Customer_Invoice.Status === true) {
@@ -471,13 +465,7 @@ const InvoiceList = () => {
         }))
 
     };
-    //Added For send To Scm Button 
-    function sendToScmBtnFunc(config) {
-        const InvoiceID = config.rowData.id
-        const jsonBody = JSON.stringify({ Invoice: InvoiceID })
-        const btnId = config.btnId
-        dispatch(InvoiceSendToScm({ jsonBody, btnId }))
-    }
+    
 
     const HeaderContent = () => {
         return (
@@ -551,54 +539,31 @@ const InvoiceList = () => {
         )
     }
 
-    function e_WayBill_ActionsBtnFunc(rowData) {
 
-        const { VehicleNo = '', id, CustomerID, Customer } = rowData
-        if (VehicleNo === null) {
-            setmodal(true);
-            dispatch(getVehicleList())
-            setInvoiceID(id)
-            setCustomer({ value: CustomerID, label: Customer })
-        }
-    }
-
-
-
-
-
-    function e_Invoice_ActionsBtnFunc(config) {
-
-        const { id, CustomerID, Customer } = config.RowData
+    function UpdateDetailsBtnFunc(config) {
+        
+        const { id, CustomerID, Customer, VehicleNo, VehicleID } = config.rowData
         setmodal(true);
+        dispatch(getVehicleList())
         setInvoiceID(id)
         setCustomer({ value: CustomerID, label: Customer })
+        setVehicle_No({ value: VehicleID, label: VehicleNo })
         setInvoiceRowData(config)
-
-
     }
 
     const updateVehicleInvoice = () => {
 
-        let jsonBody = ""
-        if (InvoiceRowData.btnId) {   /// if invoice customer update from  e-invoice button 
-            jsonBody = JSON.stringify({
+        if (Vehicle_No === "") {
+            setvehicleErrorMsg(true);
+        } else {
+            const jsonBody = JSON.stringify({
                 InvoiceID: InvoiceID,
-                vehicle: null,
+                vehicle: Vehicle_No.value,
                 Customer: Customer.value
             });
             dispatch(Pos_UpdateVehicleCustomerInvoice_Action({ jsonBody }));
-        } else {
-            if (Vehicle_No === "") {
-                setvehicleErrorMsg(true);
-            } else {
-                jsonBody = JSON.stringify({
-                    InvoiceID: InvoiceID,
-                    vehicle: Vehicle_No.value,
-                    Customer: Customer.value
-                });
-                dispatch(Pos_UpdateVehicleCustomerInvoice_Action({ jsonBody }));
-            }
         }
+
 
     };
 
@@ -674,19 +639,19 @@ const InvoiceList = () => {
                             newBtnPath={otherState.newBtnPath}
                             makeBtnShow={otherState.makeBtnShow}
                             pageMode={pageMode}
+                            UpdateDetailsBtnFunc={UpdateDetailsBtnFunc}
                             goButnFunc={goButtonHandler}
                             downBtnFunc={downBtnFunc}
                             editBodyfunc={editBodyfunc}
                             HeaderContent={HeaderContent}
                             makeBtnFunc={makeBtnFunc}
-                            sendToScmBtnFunc={sendToScmBtnFunc}
                             ButtonMsgLable={subPageMode === url.IB_GRN_LIST ? "GRN" : "Invoice"}
                             deleteName={"FullInvoiceNumber"}
                             makeBtnName={"Make"}
                             filters={hederFilters}
                             forceNewBtnView={false}
-                            e_Invoice_ActionsBtnFunc={e_Invoice_ActionsBtnFunc}
-                            e_WayBill_ActionsBtnFunc={e_WayBill_ActionsBtnFunc}
+                            // e_Invoice_ActionsBtnFunc={e_Invoice_ActionsBtnFunc}
+                            // e_WayBill_ActionsBtnFunc={e_WayBill_ActionsBtnFunc}
                             totalAmountShow={true}
                             selectCheckParams={{
                                 isShow: (subPageMode === url.INVOICE_LIST_1),
@@ -707,7 +672,7 @@ const InvoiceList = () => {
                     centered={true}
                 >
                     <div className="modal-header" style={{ position: "relative" }}>
-                        <h5 className="modal-title mt-0 align-middle">Update vehicle No and Customer</h5>
+                        <h5 className="modal-title mt-0 align-middle">Update Details</h5>
                         <button
                             type="button"
                             onClick={toggleModal}
@@ -720,7 +685,7 @@ const InvoiceList = () => {
                     </div>
                     <div className="modal-body">
                         <Row >
-                            <Col sm="8" className="">
+                            {_cfunc.loginUserIsFranchisesRole() && <Col sm="8" className="">
                                 <FormGroup className="mb- row mt-1 " >
                                     <Label className="col-sm-6 p-2 text-black"
                                         style={{ width: "90px" }}>Customer</Label>
@@ -746,8 +711,8 @@ const InvoiceList = () => {
 
                                     </Col>
                                 </FormGroup>
-                            </Col>
-                            {!InvoiceRowData.btnId && <Col sm="8" className="">
+                            </Col>}
+                            <Col sm="8" className="">
                                 <FormGroup className="mb- row mt-1 " >
                                     <Label className="col-sm-6 p-2 text-black"
                                         style={{ width: "90px" }}>Vehicle No</Label>
@@ -775,7 +740,7 @@ const InvoiceList = () => {
                                         )}
                                     </Col>
                                 </FormGroup>
-                            </Col>}
+                            </Col>
                         </Row>
                         <div className="modal-footer">
                             <button
@@ -789,7 +754,7 @@ const InvoiceList = () => {
                                 type="submit"
                                 className="btn btn-primary"
                                 onClick={updateVehicleInvoice}>
-                                {InvoiceRowData.btnId ? "Upload" : "Update"}
+                                {"Update"}
                             </button>
                         </div>
                     </div>

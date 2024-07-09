@@ -30,6 +30,9 @@ export const upload = "upload";
 export const otherBtn_1 = "otherBtn_1";
 export const MultiInvoice = "MultiInvoice";
 
+export const updateDetails = "updateDetails";
+
+
 export const CustomerWiseSummary = "CustomerWiseSummary";
 export const ItemWiseSummary = "ItemWiseSummary";
 export const MastarClaimSummary = "MastarClaimSummary";

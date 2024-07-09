@@ -364,7 +364,7 @@ const InvoiceList = () => {
     }));
 
     function downBtnFunc(config) {
-        debugger
+        
         config["ReportType"] = report.invoice;
         config["Invoice_Identifier_ID"] = config.rowData.Identify_id
         if (config.rowData.Identify_id === 1) {
@@ -542,14 +542,23 @@ const InvoiceList = () => {
         )
     }
 
-    function e_WayBill_ActionsBtnFunc(rowData) {
+    // function e_WayBill_ActionsBtnFunc(rowData) {
 
-        const { VehicleNo = '', id } = rowData
-        if (VehicleNo === null) {
-            setmodal(true);
-            dispatch(getVehicleList())
-            setInvoiceID(id)
-        }
+    //     const { VehicleNo = '', id } = rowData
+    //     if (VehicleNo === null) {
+    //         setmodal(true);
+    //         dispatch(getVehicleList())
+    //         setInvoiceID(id)
+    //     }
+    // }
+
+
+    function UpdateDetailsBtnFunc(config) {
+        const { id, VehicleNo, VehicleID } = config.rowData
+        setmodal(true);
+        dispatch(getVehicleList())
+        setInvoiceID(id)
+        setVehicleNoDropdown({ value: VehicleID, label: VehicleNo })
     }
 
     const updateVehicleInvoice = () => {
@@ -648,7 +657,7 @@ const InvoiceList = () => {
                             makeBtnName={"Make"}
                             filters={hederFilters}
                             forceNewBtnView={false}
-                            e_WayBill_ActionsBtnFunc={e_WayBill_ActionsBtnFunc}
+                            UpdateDetailsBtnFunc={UpdateDetailsBtnFunc}
                             totalAmountShow={true}
                             selectCheckParams={{
                                 isShow: (subPageMode === url.INVOICE_LIST_1),
