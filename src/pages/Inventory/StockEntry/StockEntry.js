@@ -22,7 +22,7 @@ import {
 
 } from "../../../components/Common/validationFunction";
 import Select from "react-select";
-import { DashboardLoader, Loader, SaveButton } from "../../../components/Common/CommonButton";
+import { C_Button, DashboardLoader, Loader, SaveButton } from "../../../components/Common/CommonButton";
 import { url, mode, pageId } from "../../../routes/index"
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { CInput, C_DatePicker, C_Select } from "../../../CustomValidateForm/index";
@@ -40,6 +40,7 @@ import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable"
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 import paginationFactory from "react-bootstrap-table2-paginator";
 import { table_ArrowUseEffect } from "../../../components/Common/CommonUseEffect";
+import { ExcelReportComponent } from "../../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS";
 
 
 
@@ -427,7 +428,7 @@ const StockEntry = (props) => {
     }
 
     async function AddPartyHandler(e, Type) {
-        debugger
+
         setAddLoading(true)
 
         let selectedItem = []
@@ -642,6 +643,30 @@ const StockEntry = (props) => {
             _cfunc.tableInputArrowUpDounFunc("#table_Arrow")
         }
     };
+    const ExcelDownloadhandler = () => {
+        debugger
+        const StockItem_Array = TableArr.map(item => {
+            return {
+                ItemName: item.ItemName,
+                Quantity: item.Qty ? parseFloat(item.Qty) : item.Quantity,
+                Unit: item.defaultUnit.label,
+                MRP: item.defaultMRP.label,
+                GST: item.defaultGST.label,
+                BatchCode: item.BatchCode,
+                BatchDate: item.BatchDate,
+            };
+        });
+
+
+
+        ExcelReportComponent({
+            extraColumn: pagesListColumns,
+            excelTableData: StockItem_Array,
+            excelFileName: "Stock Entry Report"
+        })
+    }
+
+
 
     if (!(userPageAccessState === '')) {
         return (
@@ -708,7 +733,8 @@ const StockEntry = (props) => {
                                         </Col>
                                     </FormGroup>
                                 </Col>
-                                <Col sm={1} className="mt-3" >
+
+                                <Col className="mt-3 col-auto" >
                                     {AddLoading
                                         ? < Button type="button" color="btn btn-outline-primary border-1 font-size-11 text-center mt-1"
                                         ><Spinner className="mt-1" style={{ width: "15px", height: "15px" }} /></Button> :
@@ -721,7 +747,7 @@ const StockEntry = (props) => {
 
                                 </Col>
 
-                                <Col sm={1} className="mt-3" >
+                                <Col className="mt-3 col-auto" >
                                     {Add_AllLoading
                                         ? < Button type="button" color="btn btn-outline-primary border-1 font-size-11 text-center mt-1"
                                         ><Spinner className="mt-1" style={{ width: "15px", height: "15px" }} /></Button> :
@@ -733,13 +759,23 @@ const StockEntry = (props) => {
                                     }
 
                                 </Col>
+                                {TableArr.length > 0 && <Col className="mt-2 col-auto" >
+                                    <C_Button
+                                        type="button"
+                                        spinnerColor="white"
+                                        // loading={excelLoading}
+                                        className="btn btn-primary m-3 mr"
+                                        onClick={ExcelDownloadhandler}
+                                    >
+                                        Excel
+                                    </C_Button>
+                                </Col>}
+
+
                             </div>
                         </div >
 
                         {values.IsAllStockZero && <div style={{ color: "red", fontSize: "18px" }} className="sliding-text " >  Warning: If new stock is added then the previous whole item stock will become zero.  </div>}
-
-
-
 
                         <ToolkitProvider
                             keyField="id"
