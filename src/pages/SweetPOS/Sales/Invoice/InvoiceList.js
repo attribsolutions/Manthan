@@ -465,13 +465,7 @@ const InvoiceList = () => {
         }))
 
     };
-    //Added For send To Scm Button 
-    function sendToScmBtnFunc(config) {
-        const InvoiceID = config.rowData.id
-        const jsonBody = JSON.stringify({ Invoice: InvoiceID })
-        const btnId = config.btnId
-        dispatch(InvoiceSendToScm({ jsonBody, btnId }))
-    }
+    
 
     const HeaderContent = () => {
         return (
@@ -651,7 +645,6 @@ const InvoiceList = () => {
                             editBodyfunc={editBodyfunc}
                             HeaderContent={HeaderContent}
                             makeBtnFunc={makeBtnFunc}
-                            sendToScmBtnFunc={sendToScmBtnFunc}
                             ButtonMsgLable={subPageMode === url.IB_GRN_LIST ? "GRN" : "Invoice"}
                             deleteName={"FullInvoiceNumber"}
                             makeBtnName={"Make"}
