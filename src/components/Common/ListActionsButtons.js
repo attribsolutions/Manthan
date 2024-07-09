@@ -31,6 +31,11 @@ const makeBtnIconClass = "fas fa-file-invoice font-size-16";
 const printIconClass = "bx bx-printer font-size-16";
 const multiInvoiceIconClass = "fas fa-file-download";
 const updateIconClass = "mdi mdi-file-table-box-multiple font-size-16";
+
+const updateDetailsIconClass = "bx bx-detail font-size-16";
+
+
+
 const deleteIconClass = "mdi mdi-delete font-size-16";
 const sendToScmIconClass = "fas fa-share font-size-16";  //Icon Added For Invoice send to SCM Button In Invoice Listf
 const copyIconClass = "bx bxs-copy font-size-16";
@@ -65,6 +70,7 @@ export const listPageActionsButtonFunc = (props) => {
         downClaimBtnFunc,
         viewApprovalBtnFunc,
         otherBtn_1Func,
+        UpdateDetailsBtnFunc,
         makeBtnFunc = () => { },
         pageMode,
         makeBtnName,
@@ -182,6 +188,9 @@ export const listPageActionsButtonFunc = (props) => {
         const canMakeCreditNoteBtn = (subPageMode === url.SALES_RETURN_LIST) && hasRole("RoleAccess_IsSave") && isApproved && !isCreditNoteCreated
         const canUpdatebtn = otherBtn_1Func && hasRole("RoleAccess_IsSave")
 
+
+        const canUpdateDetails = hasRole("RoleAccess_UpdateDetails")
+
         const canShowImages = downBtnFunc && (subPageMode === url.CLAIM_TRACKING_ENTRY_LIST)
 
         const canUpload = hasRole("RoleAccess_Upload") && upBtnFunc && isUploadAccess;
@@ -200,6 +209,8 @@ export const listPageActionsButtonFunc = (props) => {
 
 
         const renderButtonIfNeeded = ({ condition, btnmode, iconClass, actionFunc, dispatchAction, title, buttonClasss, isDummyBtn, }) => {
+
+
             if (((!condition && !isDummyBtn))) return null;
             if (!isDummyBtn) {
 
@@ -312,6 +323,15 @@ export const listPageActionsButtonFunc = (props) => {
 
                     })}
 
+                    {renderButtonIfNeeded({ // Button added For Detail update in Row 
+                        condition: canUpdateDetails,
+                        btnmode: mode.updateDetails,
+                        iconClass: updateDetailsIconClass,
+                        actionFunc: UpdateDetailsBtnFunc,
+                        title: "Update Details",
+                        buttonClasss: updateBtnCss,
+                    })}
+
                     {renderButtonIfNeeded({
                         condition: canPrint,
                         btnmode: mode.download,
@@ -336,6 +356,7 @@ export const listPageActionsButtonFunc = (props) => {
                         title: "Update",
                         buttonClasss: updateBtnCss,
                     })}
+
                     {renderButtonIfNeeded({   // Button Added For Customer Wise Claim Summary Print on Claim List page
                         condition: canCustomerWisePrint,
                         btnmode: mode.CustomerWiseSummary,
@@ -462,14 +483,8 @@ export const E_WayBill_ActionsButtonFunc = ({ dispatch, reducers, e_WayBill_Acti
 
     function Uploaded_EwayBillHandler(btnId, rowData) {
         try {
-
             let config = { btnId, RowId: rowData.id, UserID: loginUserID(), Invoice_Identifier_ID: rowData.Identify_id };
-            if ((rowData.VehicleNo === null) && !(rowData.VehicleNo === "") && (e_WayBill_ActionsBtnFunc)) {
-                e_WayBill_ActionsBtnFunc(rowData)
-            }
-            else {
-                dispatch(Uploaded_EwayBillAction(config));
-            }
+            dispatch(Uploaded_EwayBillAction(config));
         } catch (error) { }
     }
 
@@ -621,13 +636,13 @@ export const E_Invoice_ActionsButtonFunc = ({ dispatch, reducers, deleteName, us
             if (rowData.PageMode === "CreditDebitList") {
                 dispatch(Uploaded_Credit_Debit_EInvoiceAction({ btnId, RowId: rowData.id, UserID: loginUserID() }));
             } else {
-                if ((e_Invoice_ActionsBtnFunc)) {
-                    let config = { btnId, RowData: rowData }
-                    e_Invoice_ActionsBtnFunc(config)
-                }
-                else {
-                    dispatch(Uploaded_EInvoiceAction({ btnId, RowId: rowData.id, UserID: loginUserID(), Invoice_Identifier_ID: rowData.Identify_id }));
-                }
+                // if ((e_Invoice_ActionsBtnFunc)) {
+                //     let config = { btnId, RowData: rowData }
+                //     e_Invoice_ActionsBtnFunc(config)
+                // }
+                // else {
+                dispatch(Uploaded_EInvoiceAction({ btnId, RowId: rowData.id, UserID: loginUserID(), Invoice_Identifier_ID: rowData.Identify_id }));
+                // }
             }
         } catch (error) { }
     }
