@@ -80,7 +80,7 @@ const GRN_ADD_1 = (props) => {
         dispatch(_act.commonPageField(pageId.GRN_ADD_1));
         const jsonBody = JSON.stringify({
             "PriceList": 0,
-            "Party": "", //Party Id Blank save from GRN  Vendor Order To GRN
+            "Party": _cfunc.loginPartyID(), // send login Party Priviovsly null Party ID
             "EffectiveDate": currentDate_ymd,
             "CompanyID": _cfunc.loginCompanyID()
         });
