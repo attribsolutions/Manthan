@@ -204,9 +204,11 @@ export const listPageActionsButtonFunc = (props) => {
 
         const dummyDisable_CreditNoteBtn = (!isApproved && (subPageMode === url.SALES_RETURN_LIST)) || (isCreditNoteCreated && (subPageMode === url.SALES_RETURN_LIST))
 
+
         const dummyDisable_upload = hasRole("RoleAccess_Upload") && !isUploadAccess
 
-
+        const dummyDisable_UpdateDetails = hasRole("RoleAccess_UpdateDetails") && (!((rowData.InvoiceUploads.length === 0) || (rowData.InvoiceUploads[0]?.Irn === null))) && (!((rowData.InvoiceUploads.length === 0) || (rowData.InvoiceUploads[0]?.EwayBillNo === null)));
+        debugger
 
         const renderButtonIfNeeded = ({ condition, btnmode, iconClass, actionFunc, dispatchAction, title, buttonClasss, isDummyBtn, }) => {
 
@@ -330,6 +332,8 @@ export const listPageActionsButtonFunc = (props) => {
                         actionFunc: UpdateDetailsBtnFunc,
                         title: "Update Details",
                         buttonClasss: updateBtnCss,
+                        isDummyBtn: dummyDisable_UpdateDetails
+
                     })}
 
                     {renderButtonIfNeeded({
