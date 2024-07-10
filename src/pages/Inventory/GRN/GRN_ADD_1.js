@@ -132,7 +132,7 @@ const GRN_ADD_1 = (props) => {
     useEffect(() => {
 
         if ((items.Status === true) && (items.StatusCode === 200)) {
-
+            debugger
             const grnItems = items.Data
 
             if ((grnItems.GRNReferences[0]?.GRN_From === url.IB_GRN_LIST)) { /// If GRN from IB GRN List then this 
@@ -737,7 +737,7 @@ const GRN_ADD_1 = (props) => {
                     }
                 }
             });
-            debugger
+
             const RateJsonBody = differentRates.map((index) => ({
                 "id": index.Item,
                 "Rate": index.Rate,
@@ -750,7 +750,7 @@ const GRN_ADD_1 = (props) => {
                 "UnitID": index.UnitID,
                 "IsDeleted": 0,
                 "Item": index.Item,
-                "PriceList": 0   // Price list ID 0 Hard code    
+                "PriceList": grnDetail.PriceListId  // Price list ID 0 Hard code    
             }))
 
             setRatePostJsonBody(RateJsonBody);
