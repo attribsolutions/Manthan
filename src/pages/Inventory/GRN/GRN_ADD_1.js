@@ -79,8 +79,8 @@ const GRN_ADD_1 = (props) => {
         dispatch(_act.commonPageFieldSuccess(null));
         dispatch(_act.commonPageField(pageId.GRN_ADD_1));
         const jsonBody = JSON.stringify({
-            "PriceList": 0,
-            "Party": _cfunc.loginPartyID(), // send login Party Priviovsly null Party ID
+            "PriceList": 0, // hard code 0 PriceList find On backend side based on loginPartyID
+            "Party": _cfunc.loginPartyID(),
             "EffectiveDate": currentDate_ymd,
             "CompanyID": _cfunc.loginCompanyID()
         });
@@ -733,11 +733,11 @@ const GRN_ADD_1 = (props) => {
                     const grnRate = parseFloat(grnItem.Rate);
                     const vendorRate = parseFloat(grnItem.vendorOrderRate);
                     if (grnRate !== vendorRate || grnRate !== rateToCompare) {
-                        differentRates.push({ Item: grnItem.Item, Rate: grnItem.Rate });
+                        differentRates.push({ Item: grnItem.Item, Rate: grnItem.Rate, UnitID: grnItem.Unit });
                     }
                 }
             });
-
+            debugger
             const RateJsonBody = differentRates.map((index) => ({
                 "id": index.Item,
                 "Rate": index.Rate,
@@ -747,9 +747,10 @@ const GRN_ADD_1 = (props) => {
                 "Company": _cfunc.loginCompanyID(),
                 "CreatedBy": _cfunc.loginUserID(),
                 "UpdatedBy": _cfunc.loginUserID(),
+                "UnitID": index.UnitID,
                 "IsDeleted": 0,
                 "Item": index.Item,
-                "PriceList": 39
+                "PriceList": 0   // Price list ID 0 Hard code    
             }))
 
             setRatePostJsonBody(RateJsonBody);
