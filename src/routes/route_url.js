@@ -216,6 +216,9 @@ export const WORK_ORDER_LIST = "/WorkOrderList"
 
 export const BULK_WORK_ORDER = "/Bulk_Work_Order"
 
+export const BULK_WORK_ORDER_LIST = "/Bulk_Work_Order_List"
+
+
 
 
 

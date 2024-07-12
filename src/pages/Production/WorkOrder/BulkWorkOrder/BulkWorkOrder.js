@@ -3,21 +3,21 @@ import {
     Input,
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
-import { BreadcrumbShowCountlabel, commonPageFieldSuccess } from "../../../store/actions";
+import { BreadcrumbShowCountlabel, commonPageFieldSuccess } from "../../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
-import { commonPageField } from "../../../store/actions";
+import { commonPageField } from "../../../../store/actions";
 import { useHistory } from "react-router-dom";
-import { SaveButton } from "../../../components/Common/CommonButton";
-import { url, mode, pageId } from "../../../routes/index"
-import { customAlert } from "../../../CustomAlert/ConfirmDialog";
-import { goButtonPartyItemAddPageSuccess, goButtonPartyItemAddPage } from "../../../store/Administrator/PartyItemsRedux/action";
-import * as _cfunc from "../../../components/Common/CommonFunction";
-import { saveStockEntryAction, saveStockEntrySuccess } from "../../../store/Inventory/StockEntryRedux/action";
-import "../../../pages/Sale/SalesReturn/salesReturn.scss";
-import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
-import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
-import data from './data.json';
-import GlobalCustomTable from "../../../GlobalCustomTable";
+import { SaveButton } from "../../../../components/Common/CommonButton";
+import { url, mode, pageId } from "../../../../routes/index"
+import { customAlert } from "../../../../CustomAlert/ConfirmDialog";
+import { goButtonPartyItemAddPageSuccess, goButtonPartyItemAddPage } from "../../../../store/Administrator/PartyItemsRedux/action";
+import * as _cfunc from "../../../../components/Common/CommonFunction";
+import { saveStockEntryAction, saveStockEntrySuccess } from "../../../../store/Inventory/StockEntryRedux/action";
+import "../../../../pages/Sale/SalesReturn/salesReturn.scss";
+import SaveButtonDraggable from "../../../../components/Common/saveButtonDraggable";
+import { alertMessages } from "../../../../components/Common/CommonErrorMsg/alertMsg";
+import data from '../data.json';
+import GlobalCustomTable from "../../../../GlobalCustomTable";
 
 const BulkWorkOrder = (props) => {
 
@@ -30,7 +30,7 @@ const BulkWorkOrder = (props) => {
     const [userPageAccessState, setUserAccState] = useState('');
 
     const [TableArr, setTableArr] = useState([]);
-    const [checked, setchecked] = useState({ Value: false, btn_Id: "" });
+    const [checked, setchecked] = useState(false);
 
 
     const location = { ...history.location }
@@ -118,7 +118,6 @@ const BulkWorkOrder = (props) => {
     }, [postMsg])
 
 
-
     function partySelectButtonHandler() {
         dispatch(goButtonPartyItemAddPage({
             jsonBody: JSON.stringify({
@@ -132,7 +131,6 @@ const BulkWorkOrder = (props) => {
         setTableArr([]);
         dispatch(goButtonPartyItemAddPageSuccess([]))
     }
-
 
 
     function QuantityOnchange(event, index1, index2) {
@@ -168,23 +166,17 @@ const BulkWorkOrder = (props) => {
             text: "Change Quantity",
             dataField: "BOMItems",
             headerStyle: { zIndex: "2", width: "40% " },
-            formatExtraData: { tableList: TableArr, checked: checked },
-            formatter: (cellContent, inx_1, keys_, { tableList = [], checked = { Value: false, btn_Id: "" } }) => {
-
-
-                const handleCheckboxChange = ({ e, ID }) => {
-                    setchecked({ Value: e.target.checked, btn_Id: ID })
-                    let element = document.getElementById(`Body-${ID}`);
-                    if (e.target.checked) {
-                        element.classList.add('hidden-row');
-                    } else {
-                        element.classList.remove('hidden-row');
-                    }
-                };
+            formatExtraData: { tableList: TableArr, checked },
+            formatter: (cellContent, inx_1, keys_, { tableList = [] }) => {
                 debugger
+                const handleCheckboxChange = ({ e, ID }) => {
+                    setchecked(i => !i)
+                    inx_1.IsTableOpen = e.target.checked
+                    // setchecked({ Value: e.target.checked, btn_Id: ID })
+                };
+
                 return <>
                     <div className="table-responsive">
-
                         <table className="custom-table ">
                             <thead >
                                 <tr>
@@ -199,22 +191,22 @@ const BulkWorkOrder = (props) => {
                                                 <input
                                                     type="checkbox"
                                                     id={`btn-${inx_1.id}`}
-                                                    checked={checked.Value}
+                                                    defaultChecked={inx_1.IsTableOpen}
                                                     onChange={(e) => { handleCheckboxChange({ e: e, ID: inx_1.id }) }}
                                                     style={{ display: "none" }}
                                                 />
-                                                {((checked.Value) && (`btn-${checked.btn_Id}` === `btn-${inx_1.id}`)) ? <span id={`Icon-${inx_1.id}`} className="mdi mdi-arrow-expand-down font-size-10"></span> : <span id={`Icon-${inx_1.id}`} className="mdi mdi-arrow-collapse-up font-size-10"></span>}
+                                                {inx_1.IsTableOpen ? <span id={`Icon-${inx_1.id}`} className="mdi mdi-arrow-collapse-up font-size-10"></span> : <span id={`Icon-${inx_1.id}`} className="mdi mdi-arrow-expand-down font-size-10"></span>}
                                             </label>
                                             Item Name
                                         </span>
                                     </th>
                                     <th>Stock Quantity  </th>
                                     <th>BOM Quantity</th>
-                                    <th>Quantity</th>
+                                    <th style={{ width: "150px" }}>Quantity</th>
                                     <th>Unit</th>
                                 </tr>
                             </thead>
-                            <tbody id={`Body-${inx_1.id}`}  >
+                            <tbody id={`Body-${inx_1.id}`} className={inx_1.IsTableOpen ? '' : 'hidden-row'}  >
                                 {cellContent.map((inx_2) => (
                                     <tr key={inx_1.id}>
                                         <td data-label="Item Name">{inx_2.ItemName}</td>
@@ -261,7 +253,6 @@ const BulkWorkOrder = (props) => {
             formatter: (cellContent, row) => {
                 return <> <span></span></>
             }
-
 
         },
 
@@ -381,39 +372,6 @@ const BulkWorkOrder = (props) => {
                         }}
                     />
 
-                    {/* <ToolkitProvider
-                            keyField={"id"}
-                            data={data}
-                            columns={pagesListColumns}
-                            search
-                        >
-                            {(toolkitProps,) => (
-                                <React.Fragment>
-                                    <Row>
-                                        <Col xl="12">
-                                            <div className="table-responsive table" style={{ minHeight: "65vh" }}>
-                                                <BootstrapTable
-                                                    keyField={"id"}
-                                                    id="table_Arrow"
-                                                    classes={"table  table-bordered table-hover "}
-                                                    noDataIndication={
-                                                        <div className="text-danger text-center ">
-                                                            Items Not available
-                                                        </div>
-                                                    }
-                                                    onDataSizeChange={(e) => {
-                                                        _cfunc.tableInputArrowUpDounFunc("#table_Arrow")
-                                                    }}
-                                                    {...toolkitProps.baseProps}
-                                                />
-                                                {globalTableSearchProps(toolkitProps.searchProps)}
-                                            </div>
-                                        </Col>
-                                    </Row>
-
-                                </React.Fragment>
-                            )}
-                        </ToolkitProvider> */}
 
                     {
                         TableArr.length > 0 &&

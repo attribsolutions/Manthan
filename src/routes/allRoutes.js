@@ -226,12 +226,13 @@ import POSUSER from "../pages/SweetPOS/Adminstration/UserMaster/POSUserMaster.js
 import POSUserList from "../pages/SweetPOS/Adminstration/UserMaster/POSUserList.js";
 import RateMaster from "../pages/Adminisrator/RateMaster/RateMaster";
 import RateList from "../pages/Adminisrator/RateMaster/RateList";
-import BulkWorkOrder from "../pages/Production/WorkOrder/BulkWorkOrder.js";
+import BulkWorkOrder from "../pages/Production/WorkOrder/BulkWorkOrder/BulkWorkOrder.js";
 import IBInvoice from "../pages/Inter Branch/IBInvoice/IBInvoice.js";
 import IBInvoiceList from "../pages/Inter Branch/IBInvoice/IBInvoiceList.js";
 import GRN_ADD_1 from "../pages/Inventory/GRN/GRN_ADD_1.js";
 import CashierSummary from "../pages/SweetPOS/Reports/CashierSummaryReport/CashierSummary.js";
 import Pos_InvoiceList from "../pages/SweetPOS/Sales/Invoice/InvoiceList.js";
+import BulkWorkOrderList from "../pages/Production/WorkOrder/BulkWorkOrder/BulkWorkOrderList.js";
 
 const userRoutes = [
 	// *************************** DashBord *******************************//
@@ -449,6 +450,11 @@ const userRoutes = [
 	{ path: path.WORK_ORDER_LIST, component: WorkOrderList },
 
 	{ path: path.BULK_WORK_ORDER, component: BulkWorkOrder },
+
+	{ path: path.BULK_WORK_ORDER_LIST, component: BulkWorkOrderList },
+
+
+	
 
 
 

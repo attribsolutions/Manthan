@@ -218,6 +218,9 @@ export const INVOICE_LIST_1 = 122
 
 export const POS_INVOICE_LIST = 288
 
+export const BULK_WORK_ORDER_LIST = 289
+
+
 
 
 
