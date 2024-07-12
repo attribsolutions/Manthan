@@ -172,6 +172,10 @@ export const BOM = url.BIllOf_MATERIALS_LIST;
 export const WorkOrderList = url.WORK_ORDER;
 export const WorkOrder = url.WORK_ORDER_LIST;
 
+
+export const Bulk_Work_Order_List = url.BULK_WORK_ORDER;
+export const Bulk_Work_Order = url.BULK_WORK_ORDER_LIST;
+
 export const MaterialIssueList = url.MATERIAL_ISSUE_STP;
 export const MaterialIssue = url.MATERIAL_ISSUE_LIST;
 export const MaterialIssue_STP = url.MATERIAL_ISSUE_LIST;
