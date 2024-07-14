@@ -539,12 +539,19 @@ export const BOM_Delete_API = ({ deleteId }) => del(`${url.BOM}/${deleteId}`)// 
 export const GetItemUnits_For_Dropdown = (data) => post(url.GET_ITEM_UNITS, data)// post api
 
 // Work Order API
+
+
 export const WorkOrder_GoButton_Post_API = (data) => post(url.GO_BUTTON_POST_API_FOR_WORKORDER, data)// go button postapi
 export const Post_WorkOrder_Master_API = ({ jsonBody }) => post(url.POST_WORK_ORDER_API, jsonBody)// post api
 export const WorkOrder_Get_API = (filters) => post(url.WORK_ORDER_LIST, filters)// get list api
 export const WorkOrder_edit_Api = ({ editId }) => get(`${url.WORK_ORDER_LIST_API}/${editId}`) //Single get api BOMList 
 export const WorkOrder_Update_Api = ({ jsonBody, updateId }) => put(`${url.WORK_ORDER_LIST_API}/${updateId}`, jsonBody)// update api
 export const WorkOrder_Delete_Api = ({ deleteId }) => del(`${url.WORK_ORDER_LIST_API}/${deleteId}`)// delete api
+
+export const Post_Bulk_BOM_For_WorkOrder_API = ({ jsonBody }) => post(url.BULK_BOM_FOR_WORKORDER, jsonBody)// post api
+
+
+
 
 // Material Issue
 export const Material_Issue_GoButton_Post_API = ({ jsonBody }) => post(url.GO_BUTTON_POST_API_FOR_MATERIAL_ISSUE, jsonBody)// go button postapi
@@ -580,7 +587,7 @@ export const Invoice_1_Delete_API = ({ deleteId }) => del(`${url.INVOICE_1_SAVE}
 export const Invoice_1_Edit_API = ({ editId }) => get(`${url.INVOICE_1_Edit}/${editId}`)// delete api
 export const Invoice_1_Update_API = ({ updateId, jsonBody }) => put(`${url.INVOICE_1_Edit}/${updateId}`, jsonBody)// delete api
 
-export const Invoice_Singel_Get_for_Report_Api = ({ editId }) => get(`${url.INVOICE_1_SAVE}/${editId}/P`)// delete api
+export const Invoice_Singel_Get_for_Report_Api = ({ editId }) => get(`${url.INVOICE_1_SAVE}/${editId}/P/`)// delete api
 export const Update_Vehicle_Invoice_API = ({ Invoiceid, vehicleid }) => get(`${url.UPDATE_VEHICLE_INVOICE}/${Invoiceid}/${vehicleid}`)// Cancel_EwayBill
 export const Invoice_Send_To_Scm = ({ jsonBody }) => post(url.INVOICE_SEND_TO_SCM, jsonBody)// delete api
 
