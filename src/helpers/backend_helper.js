@@ -548,7 +548,7 @@ export const WorkOrder_edit_Api = ({ editId }) => get(`${url.WORK_ORDER_LIST_API
 export const WorkOrder_Update_Api = ({ jsonBody, updateId }) => put(`${url.WORK_ORDER_LIST_API}/${updateId}`, jsonBody)// update api
 export const WorkOrder_Delete_Api = ({ deleteId }) => del(`${url.WORK_ORDER_LIST_API}/${deleteId}`)// delete api
 
-export const Post_Bulk_BOM_For_WorkOrder_API = ({ jsonBody }) => post(url.BULK_BOM_FOR_WORKORDER, jsonBody)// post api
+// export const Post_Bulk_BOM_For_WorkOrder_API = ({ jsonBody }) => post(url.BULK_BOM_FOR_WORKORDER, jsonBody)// post api
 
 
 
