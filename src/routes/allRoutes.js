@@ -233,6 +233,7 @@ import GRN_ADD_1 from "../pages/Inventory/GRN/GRN_ADD_1.js";
 import CashierSummary from "../pages/SweetPOS/Reports/CashierSummaryReport/CashierSummary.js";
 import Pos_InvoiceList from "../pages/SweetPOS/Sales/Invoice/InvoiceList.js";
 import BulkWorkOrderList from "../pages/Production/WorkOrder/BulkWorkOrder/BulkWorkOrderList.js";
+import FrenchiesSaleReport from "../pages/SweetPOS/Reports/FrenchiesSaleReport/FrenchiesSaleReport.js";
 
 const userRoutes = [
 	// *************************** DashBord *******************************//
@@ -454,7 +455,7 @@ const userRoutes = [
 	{ path: path.BULK_WORK_ORDER_LIST, component: BulkWorkOrderList },
 
 
-	
+
 
 
 
@@ -613,6 +614,18 @@ const userRoutes = [
 
 
 	{ path: path.POS_INVOICE_LIST, component: Pos_InvoiceList },//not party wise
+
+
+
+
+	// ************************************ Frenchies  **************************************//
+
+
+	{ path: path.FRENCHIESE_SALE_REPORT, component: FrenchiesSaleReport },//not party wise
+
+
+
+
 
 
 

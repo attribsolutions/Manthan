@@ -615,6 +615,9 @@ export const SERVICE_ITEM_ASSIGN_GO_BUTTON = '/CentralServiceItemAssignFilter';
 export const GET_PARTY_DETAILS_LIST = '/GetPartydetails'
 export const POST_PARTY_DETAILS = '/PartyDetails'
 
+export const FRENCHIESE_ITEM_SALE_REPORT = '/FranchiseSaleReport'
+
+
 //ItemWiseUpdate
 export const ITEM_WISE_UPDATE_API = '/ItemWiseUpdate'
 export const ITEM_WISE_UPDATE_POST_API = '/ItemWiseSave'

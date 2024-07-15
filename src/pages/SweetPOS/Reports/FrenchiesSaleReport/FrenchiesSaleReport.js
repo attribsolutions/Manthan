@@ -2,20 +2,25 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Col, FormGroup, Label, Row } from "reactstrap";
 import { useHistory } from "react-router-dom";
-import { C_Button } from "../../components/Common/CommonButton";
-import { C_DatePicker, C_Select } from "../../CustomValidateForm";
-import * as _cfunc from "../../components/Common/CommonFunction";
-import { mode, pageId } from "../../routes/index"
+import { C_Button } from "../../../../components/Common/CommonButton";
+import { C_DatePicker, C_Select } from "../../../../CustomValidateForm";
+import * as _cfunc from "../../../../components/Common/CommonFunction";
+import { mode, pageId } from "../../../../routes/index"
 import { MetaTags } from "react-meta-tags";
-import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess } from "../../store/actions";
-import DynamicColumnHook from "../../components/Common/TableCommonFunc";
-import { Return_Report_Action, Return_Report_Action_Success } from "../../store/Report/ReturnReportRedux/action";
-import { ExcelReportComponent } from "../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS";
-import GlobalCustomTable from "../../GlobalCustomTable";
-import { changeCommonPartyDropDetailsAction } from "../../store/Utilites/PartyDrodown/action";
-import { allLabelWithBlank } from "../../components/Common/CommonErrorMsg/HarderCodeData";
+import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess } from "../../../../store/actions";
+import DynamicColumnHook from "../../../../components/Common/TableCommonFunc";
+import { Return_Report_Action, Return_Report_Action_Success } from "../../../../store/Report/ReturnReportRedux/action";
+import { ExcelReportComponent } from "../../../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS";
+import GlobalCustomTable from "../../../../GlobalCustomTable";
+import { changeCommonPartyDropDetailsAction } from "../../../../store/Utilites/PartyDrodown/action";
+import { allLabelWithBlank } from "../../../../components/Common/CommonErrorMsg/HarderCodeData";
+import ToolkitProvider from "react-bootstrap-table2-toolkit";
+import BootstrapTable from "react-bootstrap-table-next";
+import { globalTableSearchProps } from "../../../../components/Common/SearchBox/MySearch";
+import { Get_Items_Drop_Down } from "../../../../store/Inventory/StockEntryRedux/action";
+import { Frenchies_Item_sale_Report_Action, Frenchies_Item_sale_Report_Action_Success } from "../../../../store/SweetPOSStore/Report/FrenchiesSaleRedux/action";
 
-const ReturnReport = (props) => {
+const FrenchiesSaleReport = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory();
@@ -24,22 +29,31 @@ const ReturnReport = (props) => {
 
     const [headerFilters, setHeaderFilters] = useState('');
     const [userPageAccessState, setUserAccState] = useState('');
-    const [distributorDropdown, setDistributorDropdown] = useState([allLabelWithBlank]);
+    const [PartyDropdown, setPartyDropdown] = useState([allLabelWithBlank]);
     const [tableData, setTableData] = useState([]);
     const [btnMode, setBtnMode] = useState(0);
+
+    const [Item, setItem] = useState(allLabelWithBlank);
+
 
     const {
         goButtonData,
         pageField,
         userAccess,
-        Distributor,
-        partyDropdownLoading
+        Party,
+        ItemDropDown,
+        partyDropdownLoading,
+        ItemDropDownloading,
+        listBtnLoading
     } = useSelector((state) => ({
-        goButtonData: state.ReturnReportReducer.returnReportData,
+        goButtonData: state.FrenchiesItemSaleReportReducer.FrenchiesesItemSaleData,
+        listBtnLoading: state.FrenchiesItemSaleReportReducer.listBtnLoading,
         partyDropdownLoading: state.CommonPartyDropdownReducer.partyDropdownLoading,
-        Distributor: state.CommonPartyDropdownReducer.commonPartyDropdownOption,
+        ItemDropDown: state.StockEntryReducer.ItemDropDown,
+        Party: state.CommonPartyDropdownReducer.commonPartyDropdownOption,
         userAccess: state.Login.RoleAccessUpdateData,
-        pageField: state.CommonPageFieldReducer.pageField
+        pageField: state.CommonPageFieldReducer.pageField,
+        ItemDropDownloading: state.StockEntryReducer.ItemDropDownloading,
     })
     );
 
@@ -50,14 +64,24 @@ const ReturnReport = (props) => {
 
     useEffect(() => {
         dispatch(commonPageFieldSuccess(null));
-        dispatch(commonPageField(pageId.RETURN_REPORT))
+        dispatch(commonPageField(pageId.FRENCHIESE_SALE_REPORT))
         dispatch(BreadcrumbShowCountlabel(`Count:${0} ₹ ${0.00}`));
         dispatch(changeCommonPartyDropDetailsAction({ isShow: false }))//change party drop-down show false
+        dispatch(Get_Items_Drop_Down({
+            jsonBody: JSON.stringify({
+                UserID: _cfunc.loginUserID(),
+                RoleID: _cfunc.loginRoleID(),
+                CompanyID: _cfunc.loginCompanyID(),
+                IsSCMCompany: _cfunc.loginIsSCMCompany(),
+                CompanyGroup: _cfunc.loginCompanyGroup(),
+                PartyID: _cfunc.loginSelectedPartyID(),
+            })
+        }));
         if (_cfunc.CommonPartyDropValue().value > 0) {
-            setDistributorDropdown([_cfunc.CommonPartyDropValue()]);
+            setPartyDropdown([_cfunc.CommonPartyDropValue()]);
         }
         return () => {
-            dispatch(Return_Report_Action_Success([]));
+            dispatch(Frenchies_Item_sale_Report_Action_Success([]));
             setTableData([]);
             dispatch(changeCommonPartyDropDetailsAction({ isShow: true }))//change party drop-down restore show state
         }
@@ -85,9 +109,14 @@ const ReturnReport = (props) => {
         }
     }, [tableData]);
 
-    const Party_Option = Distributor.map(i => ({
+    const Party_Option = Party.map(i => ({
         value: i.id,
         label: i.Name
+    }));
+
+    const ItemList_Options = ItemDropDown.map((index) => ({
+        value: index.Item,
+        label: index.ItemName,
     }));
 
     const [tableColumns] = DynamicColumnHook({ pageField, })
@@ -97,15 +126,14 @@ const ReturnReport = (props) => {
         try {
             if ((goButtonData.Status === true) && (goButtonData.StatusCode === 200)) {
                 setBtnMode(0);
-
                 if (btnMode === 2) {
                     ExcelReportComponent({      // Download CSV
                         pageField,
                         excelTableData: goButtonData.Data,
-                        excelFileName: "ReturnReport"
+                        excelFileName: "Frenchies Item Sale Report"
                     })
-                    dispatch(Return_Report_Action_Success([]));
-                    setDistributorDropdown([allLabelWithBlank])
+                    dispatch(Frenchies_Item_sale_Report_Action_Success([]));
+                    setPartyDropdown([allLabelWithBlank])
                 }
                 else {
                     const UpdatedTableData = goButtonData.Data.map((item, index) => {
@@ -114,7 +142,7 @@ const ReturnReport = (props) => {
                         };
                     });
                     setTableData(UpdatedTableData);
-                    dispatch(Return_Report_Action_Success([]));
+                    dispatch(Frenchies_Item_sale_Report_Action_Success([]));
                 }
             }
             else if ((goButtonData.Status === true)) {
@@ -127,24 +155,15 @@ const ReturnReport = (props) => {
     }, [goButtonData]);
 
     function excel_And_GoBtnHandler(e, Btnmode) {
-
         setBtnMode(Btnmode);
-
-        var isDistributorDropdown = ''
-        if (distributorDropdown[0].value === "") {
-            isDistributorDropdown = Party_Option.filter(i => !(i.value === '')).map(obj => obj.value).join(',');
-        }
-        else {
-            isDistributorDropdown = distributorDropdown.filter(i => !(i.value === '')).map(obj => obj.value).join(',');
-        }
-
         const jsonBody = JSON.stringify({
             "FromDate": fromdate,
             "ToDate": todate,
-            "Party": !(isSCMParty) ? _cfunc.loginPartyID().toString() : isDistributorDropdown,
+            "Item": Item.value,
+            "Party": _cfunc.loginSelectedPartyID(),
         });
-        let config = { jsonBody }
-        dispatch(Return_Report_Action(config));
+
+        dispatch(Frenchies_Item_sale_Report_Action({ jsonBody }));
     }
 
     function fromdateOnchange(e, date) {
@@ -170,7 +189,7 @@ const ReturnReport = (props) => {
         } else {
             e = e.filter(i => !(i.value === ''))
         }
-        setDistributorDropdown(e);
+        setPartyDropdown(e);
         setTableData([]);
     }
 
@@ -180,7 +199,7 @@ const ReturnReport = (props) => {
             <div className="page-content">
                 <div className="px-2   c_card_filter text-black " >
                     <Row>
-                        <Col sm={3} className="">
+                        <Col sm={2} className="">
                             <FormGroup className=" row mt-2  " >
                                 <Label className="col-sm-4 p-2"
                                     style={{ width: "83px" }}>FromDate</Label>
@@ -194,7 +213,7 @@ const ReturnReport = (props) => {
                             </FormGroup>
                         </Col>
 
-                        <Col sm={3} className="">
+                        <Col sm={2} className="">
                             <FormGroup className=" row mt-2 " >
                                 <Label className="col-sm-4 p-2"
                                     style={{ width: "65px" }}>ToDate</Label>
@@ -208,35 +227,59 @@ const ReturnReport = (props) => {
                             </FormGroup>
                         </Col>
 
-                        {isSCMParty &&
-                            <Col sm={4} className="">
-                                <FormGroup className=" row mt-2" >
-                                    <Label className="col-sm-4 p-2"
-                                        style={{ width: "65px", marginRight: "20px" }}>Party</Label>
-                                    <Col sm="8">
-                                        <C_Select
-                                            name="Distributor"
-                                            value={distributorDropdown}
-                                            isSearchable={true}
-                                            isMulti={true}
-                                            isLoading={partyDropdownLoading}
-                                            className="react-dropdown"
-                                            classNamePrefix="dropdown"
-                                            styles={{
-                                                menu: provided => ({ ...provided, zIndex: 2 })
-                                            }}
-                                            options={Party_Option}
-                                            onChange={PartyDrodownOnChange}
-                                        />
-                                    </Col>
-                                </FormGroup>
-                            </Col>
-                        }
+
+                        <Col sm={3} className="">
+                            <FormGroup className=" row mt-2" >
+                                <Label className="col-sm-4 p-2"
+                                    style={{ width: "65px", marginRight: "20px" }}>Item</Label>
+                                <Col sm="8">
+                                    <C_Select
+                                        id="ItemName "
+                                        name="ItemName"
+                                        value={Item}
+                                        isSearchable={true}
+                                        isLoading={ItemDropDownloading}
+                                        className="react-dropdown"
+                                        classNamePrefix="dropdown"
+                                        styles={{
+                                            menu: provided => ({ ...provided, zIndex: 2 })
+                                        }}
+                                        options={ItemList_Options}
+                                        onChange={(e) => { setItem(e) }}
+                                    />
+                                </Col>
+                            </FormGroup>
+                        </Col>
+
+
+
+                        <Col sm={3} className="">
+                            <FormGroup className=" row mt-2" >
+                                <Label className="col-sm-4 p-2"
+                                    style={{ width: "65px", marginRight: "20px" }}>Party</Label>
+                                <Col sm="8">
+                                    <C_Select
+                                        name="Party"
+                                        value={PartyDropdown}
+                                        isSearchable={true}
+                                        isLoading={partyDropdownLoading}
+                                        className="react-dropdown"
+                                        classNamePrefix="dropdown"
+                                        styles={{
+                                            menu: provided => ({ ...provided, zIndex: 2 })
+                                        }}
+                                        options={Party_Option}
+                                        onChange={PartyDrodownOnChange}
+                                    />
+                                </Col>
+                            </FormGroup>
+                        </Col>
+
                         <Col sm={isSCMParty ? 2 : 6} className=" d-flex justify-content-end" >
                             <C_Button
                                 type="button"
                                 spinnerColor="white"
-                                loading={btnMode === 1 && true}
+                                loading={btnMode === 1 && listBtnLoading}
                                 className="btn btn-success m-3 mr"
                                 onClick={(e) => excel_And_GoBtnHandler(e, 1)}
                             >
@@ -245,7 +288,7 @@ const ReturnReport = (props) => {
                             <C_Button
                                 type="button"
                                 spinnerColor="white"
-                                loading={btnMode === 2 && true}
+                                loading={btnMode === 2 && listBtnLoading}
                                 className="btn btn-primary m-3 mr "
                                 onClick={(e) => excel_And_GoBtnHandler(e, 2)}
                             >
@@ -262,7 +305,7 @@ const ReturnReport = (props) => {
                         id="table_Arrow"
                         noDataIndication={
                             <div className="text-danger text-center ">
-                                Items Not available
+                                Record's Not available
                             </div>
                         }
                         onDataSizeChange={({ dataCount, filteredData = [] }) => {
@@ -278,4 +321,4 @@ const ReturnReport = (props) => {
     )
 }
 
-export default ReturnReport;
+export default FrenchiesSaleReport;
