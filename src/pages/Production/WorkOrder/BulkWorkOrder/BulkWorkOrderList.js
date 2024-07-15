@@ -22,7 +22,7 @@ import { getOrdersMakeInvoiceDataAction, getOrdersMakeInvoiceDataActionSuccess }
 import { allLabelWithBlank } from "../../../../components/Common/CommonErrorMsg/HarderCodeData";
 import { sideBarPageFiltersInfoAction } from "../../../../store/Utilites/PartyDrodown/action";
 import { getBOMListPage } from "../../../../store/Production/BOMRedux/action";
-import { Bulk_BOM_for_WorkOrder } from "../../../../store/Production/WorkOrder/action";
+import { Bulk_BOM_for_WorkOrder, Bulk_BOM_for_WorkOrderSuccess } from "../../../../store/Production/WorkOrder/action";
 
 const BulkWorkOrderList = () => {
 
@@ -175,6 +175,10 @@ const BulkWorkOrderList = () => {
             dispatch(_act.orderSinglegetSuccess({ Status: false }));
             dispatch(_act.GetVenderSupplierCustomerSuccess([]));
             dispatch(priceListByCompay_ActionSuccess([]));
+            dispatch(Bulk_BOM_for_WorkOrderSuccess({ Status: false }));
+
+
+
         }
     }, []);
 
@@ -190,6 +194,7 @@ const BulkWorkOrderList = () => {
 
 
     useEffect(() => {
+        debugger
         if (Bulk_Data.Status === true && Bulk_Data.StatusCode === 200) {
             history.push({
                 pathname: url.BULK_WORK_ORDER,
@@ -214,7 +219,7 @@ const BulkWorkOrderList = () => {
     }
 
     const BulkInvoice_Handler = (allList = []) => {
-
+        debugger
         let checkRows = allList.filter(i => (i.selectCheck && !i.forceSelectDissabled))
         if (!checkRows.length > 0) {
             customAlert({
@@ -223,12 +228,19 @@ const BulkWorkOrderList = () => {
             });
             return
         }
-        let idString = checkRows.map(row => row.ID).join(',')
+        let ID_String = checkRows.map(row => row.ID).join(',')
+        let Quantity_String = checkRows.map(row => row.EstimatedOutputQty).join(',')
+        let Item_String = checkRows.map(row => row.Item).join(',')
+
+
+
 
 
         const jsonBody = JSON.stringify({
             Company: _cfunc.loginCompanyID(),
-            BOM_ID: idString,
+            BOM_ID: ID_String,
+            Quantity: Quantity_String,
+            Item: Item_String,
             Party: _cfunc.loginPartyID(),
         });
 
