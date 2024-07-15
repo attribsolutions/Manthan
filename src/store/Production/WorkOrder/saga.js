@@ -2,6 +2,7 @@ import { call, put, takeLatest } from "redux-saga/effects";
 import { date_dmy_func, convertTimefunc } from "../../../components/Common/CommonFunction";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import {
+  Post_Bulk_BOM_For_WorkOrder_API,
   Post_WorkOrder_Master_API,
   WorkOrder_Delete_Api,
   WorkOrder_edit_Api,
@@ -10,20 +11,24 @@ import {
   WorkOrder_Update_Api
 } from "../../../helpers/backend_helper";
 import {
+  Bulk_BOM_for_WorkOrderSuccess,
   deleteWorkOrderIdSuccess,
   editWorkOrderListSuccess,
   getWorkOrderListPageSuccess,
   postGoButtonForWorkOrder_MasterSuccess,
+  Save_Bulk_BOM_for_WorkOrderSuccess,
   SaveWorkOrderMasterSuccess,
   updateWorkOrderListSuccess,
   WorkOrderApiErrorAction
 } from "./action";
 import {
+  BULK_BOM_FOR_WORKORDER,
   DELETE_WORK_ORDER_LIST_PAGE,
   EDIT_WORK_ORDER_LIST_ID,
   GET_WORK_ORDER_LIST_PAGE,
   POST_GO_BUTTON_FOR_WORK_ORDER_MASTER,
   POST_WORK_ORDER_MASTER,
+  SAVE_BULK_BOM_FOR_WORKORDER,
   UPDATE_WORK_ORDER_LIST
 } from "./actionTypes";
 import { url } from "../../../routes";
@@ -45,6 +50,26 @@ function* Post_WorkOrder_GenratorFunction({ config }) {     // WOrk Order Post A
     yield put(SaveWorkOrderMasterSuccess(response));
   } catch (error) { yield put(WorkOrderApiErrorAction()) }
 }
+
+
+
+function* Save_Bulk_BOM_For_WorkOrder_GenratorFunction({ config }) {     // WOrk Order Post API
+  try {
+    const response = yield call(Post_WorkOrder_Master_API, config);
+    yield put(Save_Bulk_BOM_for_WorkOrderSuccess(response));
+  } catch (error) { yield put(WorkOrderApiErrorAction()) }
+}
+
+
+
+
+function* Bulk_BOM_For_WorkOrder_GenratorFunction({ config }) {     // WOrk Order Post API
+  try {
+    const response = yield call(Post_Bulk_BOM_For_WorkOrder_API, config);
+    yield put(Bulk_BOM_for_WorkOrderSuccess(response));
+  } catch (error) { yield put(WorkOrderApiErrorAction()) }
+}
+
 
 function* GetWorkOrderGenFunc({ filters }) {
   const { subPageMode, jsonBody } = filters
@@ -123,10 +148,14 @@ function* DeleteWorkOrderGenFunc({ config }) {       // Work Order delete List p
 function* WorkOrderSaga() {
   yield takeLatest(POST_GO_BUTTON_FOR_WORK_ORDER_MASTER, GoButton_WorkOrder_post_genfun)
   yield takeLatest(POST_WORK_ORDER_MASTER, Post_WorkOrder_GenratorFunction)
+  yield takeLatest(SAVE_BULK_BOM_FOR_WORKORDER, Save_Bulk_BOM_For_WorkOrder_GenratorFunction)
   yield takeLatest(GET_WORK_ORDER_LIST_PAGE, GetWorkOrderGenFunc)
   yield takeLatest(EDIT_WORK_ORDER_LIST_ID, editWorkOrderGenFunc)
   yield takeLatest(UPDATE_WORK_ORDER_LIST, UpdateWorkOrderGenFunc)
   yield takeLatest(DELETE_WORK_ORDER_LIST_PAGE, DeleteWorkOrderGenFunc)
+
+  yield takeLatest(BULK_BOM_FOR_WORKORDER, Bulk_BOM_For_WorkOrder_GenratorFunction)
+
 }
 
 export default WorkOrderSaga;

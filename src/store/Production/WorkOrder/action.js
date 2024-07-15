@@ -1,4 +1,6 @@
 import {
+  BULK_BOM_FOR_WORKORDER,
+  BULK_BOM_FOR_WORKORDER_SUCCESS,
   DELETE_WORK_ORDER_LIST_PAGE,
   DELETE_WORK_ORDER_LIST_PAGE_SUCCESS,
   EDIT_WORK_ORDER_LIST_ID,
@@ -11,6 +13,8 @@ import {
   POST_GO_BUTTON_FOR_WORK_ORDER_MASTER_SUCCESS,
   POST_WORK_ORDER_MASTER,
   POST_WORK_ORDER_MASTER_SUCCESS,
+  SAVE_BULK_BOM_FOR_WORKORDER,
+  SAVE_BULK_BOM_FOR_WORKORDER_SUCCESS,
   UPDATE_WORK_ORDER_LIST,
   UPDATE_WORK_ORDER_LIST_SUCCESS,
   WORK_ORDER_API_ERROR_ACTION,
@@ -41,6 +45,29 @@ export const getWorkOrderListPage = (filters) => ({                           //
   type: GET_WORK_ORDER_LIST_PAGE,
   filters,
 });
+
+export const Bulk_BOM_for_WorkOrderSuccess = (data) => ({                         //Post Action For work Order Success
+  type: BULK_BOM_FOR_WORKORDER_SUCCESS,
+  payload: data,
+});
+
+export const Bulk_BOM_for_WorkOrder = (config = {}) => ({                           //GEt action for work orde list page
+  type: BULK_BOM_FOR_WORKORDER,
+  config,
+});
+
+
+export const Save_Bulk_BOM_for_WorkOrderSuccess = (data) => ({                         //Post Action For work Order Success
+  type: SAVE_BULK_BOM_FOR_WORKORDER_SUCCESS,
+  payload: data,
+});
+
+export const Save_Bulk_BOM_for_WorkOrder = (config = {}) => ({                           //GEt action for work orde list page
+  type: SAVE_BULK_BOM_FOR_WORKORDER,
+  config,
+});
+
+
 
 export const getWorkOrderListPageSuccess = (data) => ({                      //GEt action for work orde list page Success
   type: GET_WORK_ORDER_LIST_PAGE_SUCCESS,

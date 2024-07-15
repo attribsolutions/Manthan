@@ -345,6 +345,10 @@ export const POST_WORK_ORDER_API = '/WorkOrder'
 export const WORK_ORDER_LIST = '/WorkOrderFilter'// ALL GET
 export const WORK_ORDER_LIST_API = '/WorkOrder' //Single gate and delete
 
+
+export const BULK_BOM_FOR_WORKORDER = '/BulkBom'
+
+
 // Material Issue
 export const GO_BUTTON_POST_API_FOR_MATERIAL_ISSUE = '/WorkOrderDetails'
 export const POST_API_FOR_MATERIAL_ISSUE = '/MaterialIssue'

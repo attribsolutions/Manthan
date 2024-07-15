@@ -22,6 +22,7 @@ import { getOrdersMakeInvoiceDataAction, getOrdersMakeInvoiceDataActionSuccess }
 import { allLabelWithBlank } from "../../../../components/Common/CommonErrorMsg/HarderCodeData";
 import { sideBarPageFiltersInfoAction } from "../../../../store/Utilites/PartyDrodown/action";
 import { getBOMListPage } from "../../../../store/Production/BOMRedux/action";
+import { Bulk_BOM_for_WorkOrder } from "../../../../store/Production/WorkOrder/action";
 
 const BulkWorkOrderList = () => {
 
@@ -70,7 +71,10 @@ const BulkWorkOrderList = () => {
             pageField: state.CommonPageFieldReducer.pageFieldList,
             supplier: state.CommonAPI_Reducer.vendorSupplierCustomer,
             supplierDropLoading: state.CommonAPI_Reducer.vendorSupplierCustomerLoading,
+            Bulk_Data: state.WorkOrderReducer.Bulk_Bom_for_WorkOrder,
             tableList: state.BOMReducer.BOMList,
+            BulkBtnloading: state.WorkOrderReducer.BulkBtnloading,
+
 
 
         })
@@ -78,6 +82,8 @@ const BulkWorkOrderList = () => {
 
     const {
         pageField,
+        Bulk_Data,
+        BulkBtnloading
     } = reducers;
 
     const ordersBulkInvoiceData = useSelector(state => state.BulkInvoiceReducer.ordersBulkInvoiceData);
@@ -184,17 +190,18 @@ const BulkWorkOrderList = () => {
 
 
     useEffect(() => {
-        if (ordersBulkInvoiceData.Status === true && ordersBulkInvoiceData.StatusCode === 200) {
+        if (Bulk_Data.Status === true && Bulk_Data.StatusCode === 200) {
             history.push({
                 pathname: url.BULK_WORK_ORDER,
+                state: Bulk_Data.Data
             })
 
         }
-    }, [ordersBulkInvoiceData]);
+    }, [Bulk_Data]);
 
 
 
-    function goButtonHandler(event, IBType) {
+    function goButtonHandler() {
         try {
             const jsonBody = JSON.stringify({
                 Company: _cfunc.loginCompanyID(),
@@ -217,20 +224,16 @@ const BulkWorkOrderList = () => {
             return
         }
         let idString = checkRows.map(row => row.ID).join(',')
-        let jsonBody = {
+
+
+        const jsonBody = JSON.stringify({
             Company: _cfunc.loginCompanyID(),
-            BomIDs: idString,
+            BOM_ID: idString,
             Party: _cfunc.loginPartyID(),
+        });
 
-        }
-        console.log(jsonBody)
-        history.push({
-            pathname: url.BULK_WORK_ORDER,
-        })
-        // dispatch(getOrdersMakeInvoiceDataAction({ jsonBody }))
+        dispatch(Bulk_BOM_for_WorkOrder({ jsonBody }))
     }
-
-
 
 
     return (
@@ -249,15 +252,13 @@ const BulkWorkOrderList = () => {
                             makeBtnShow={otherState.makeBtnShow}
                             pageMode={pageMode}
                             goButnFunc={goButtonHandler}
-                            ButtonMsgLable={subPageMode === url.IB_ORDER_PO_LIST ? "Demand" : subPageMode === url.IB_ORDER_SO_LIST ? "" : "Order"}
-                            deleteName={"FullOrderNumber"}
                             makeBtnName={otherState.makeBtnName}
                             selectCheckParams={{
                                 isShow: (subPageMode === url.BULK_WORK_ORDER_LIST),
                                 selectSaveBtnHandler: BulkInvoice_Handler,
                                 selectSaveBtnLabel: "Bulk Work Order",
                                 selectHeaderLabel: "Select",
-                                selectSaveBtnLoading: subPageMode === url.APP_ORDER_LIST && makeBulkInvoiceLoading,
+                                selectSaveBtnLoading: BulkBtnloading,
                             }}
                             totalAmountShow={true}
                         />
