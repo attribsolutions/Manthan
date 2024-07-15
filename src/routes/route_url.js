@@ -218,6 +218,12 @@ export const BULK_WORK_ORDER = "/Bulk_Work_Order"
 
 export const BULK_WORK_ORDER_LIST = "/Bulk_Work_Order_List"
 
+export const FRENCHIESE_SALE_REPORT = "/Frenchies_Item_sale_Report"
+
+
+
+
+
 
 
 
