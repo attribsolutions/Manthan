@@ -548,7 +548,7 @@ export const WorkOrder_edit_Api = ({ editId }) => get(`${url.WORK_ORDER_LIST_API
 export const WorkOrder_Update_Api = ({ jsonBody, updateId }) => put(`${url.WORK_ORDER_LIST_API}/${updateId}`, jsonBody)// update api
 export const WorkOrder_Delete_Api = ({ deleteId }) => del(`${url.WORK_ORDER_LIST_API}/${deleteId}`)// delete api
 
-// export const Post_Bulk_BOM_For_WorkOrder_API = ({ jsonBody }) => post(url.BULK_BOM_FOR_WORKORDER, jsonBody)// post api
+export const Post_Bulk_BOM_For_WorkOrder_API = ({ jsonBody }) => post(url.BULK_BOM_FOR_WORKORDER, jsonBody)// post api
 
 
 
@@ -587,7 +587,7 @@ export const Invoice_1_Delete_API = ({ deleteId }) => del(`${url.INVOICE_1_SAVE}
 export const Invoice_1_Edit_API = ({ editId }) => get(`${url.INVOICE_1_Edit}/${editId}`)// delete api
 export const Invoice_1_Update_API = ({ updateId, jsonBody }) => put(`${url.INVOICE_1_Edit}/${updateId}`, jsonBody)// delete api
 
-export const Invoice_Singel_Get_for_Report_Api = ({ editId }) => get(`${url.INVOICE_1_SAVE}/${editId}/P/`)// delete api
+export const Invoice_Singel_Get_for_Report_Api = ({ editId }) => get(`${url.INVOICE_1_SAVE}/${editId}/P`)// delete api
 export const Update_Vehicle_Invoice_API = ({ Invoiceid, vehicleid }) => get(`${url.UPDATE_VEHICLE_INVOICE}/${Invoiceid}/${vehicleid}`)// Cancel_EwayBill
 export const Invoice_Send_To_Scm = ({ jsonBody }) => post(url.INVOICE_SEND_TO_SCM, jsonBody)// delete api
 
