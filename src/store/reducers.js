@@ -128,6 +128,7 @@ import TargetVsAchievementReducer from "./Report/TargetVSAchievementRedux/reduce
 import RateMasterReducer from "./Administrator/RateMasterRedux/reducer"
 import POS_User_Registration_Reducer from "./SweetPOSStore/Administrator/UserMasterRedux/reducer"
 import CashierSummaryReportReducer from "./SweetPOSStore/Report/CashierSummaryRedux/reducer"
+import FrenchiesItemSaleReportReducer from "./SweetPOSStore/Report/FrenchiesSaleRedux/reducer"
 
 const rootReducer = combineReducers({
 	Layout,
@@ -234,7 +235,8 @@ const rootReducer = combineReducers({
 	PartyEmployeeDetailsReducer,
 	POS_User_Registration_Reducer,
 	RateMasterReducer,
-	CashierSummaryReportReducer
+	CashierSummaryReportReducer,
+	FrenchiesItemSaleReportReducer
 
 })
 export default rootReducer

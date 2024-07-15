@@ -221,6 +221,10 @@ export const POS_INVOICE_LIST = 288
 export const BULK_WORK_ORDER_LIST = 289
 
 
+export const FRENCHIESE_SALE_REPORT = 290
+
+
+
 
 
 
