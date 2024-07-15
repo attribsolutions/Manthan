@@ -18,22 +18,28 @@ import SaveButtonDraggable from "../../../../components/Common/saveButtonDraggab
 import { alertMessages } from "../../../../components/Common/CommonErrorMsg/alertMsg";
 import data from '../data.json';
 import GlobalCustomTable from "../../../../GlobalCustomTable";
+import { Save_Bulk_BOM_for_WorkOrder } from "../../../../store/Production/WorkOrder/action";
 
 const BulkWorkOrder = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory()
-    const currentDate_ymd = _cfunc.date_ymd_func();
-
+    const location = { ...history.location }
     const [pageMode] = useState(mode.defaultsave);
     const [subPageMode] = useState(history.location.pathname)
     const [userPageAccessState, setUserAccState] = useState('');
-
-    const [TableArr, setTableArr] = useState([]);
+    const [BulkData, setBulkData] = useState(location.state);
     const [checked, setchecked] = useState(false);
 
+    const [allChecked, setAllChecked] = useState(false);
 
-    const location = { ...history.location }
+
+
+
+
+
+
+
     const hasShowModal = props.hasOwnProperty(mode.editValue);
 
     //Access redux store Data /  'save_ModuleSuccess' action data
@@ -101,7 +107,7 @@ const BulkWorkOrder = (props) => {
     useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(saveStockEntrySuccess({ Status: false }))
-            setTableArr([])
+            setBulkData([])
             customAlert({
                 Type: 1,
                 Message: postMsg.Message,
@@ -128,7 +134,7 @@ const BulkWorkOrder = (props) => {
     }
 
     function partySelectOnChangeHandler() {
-        setTableArr([]);
+        setBulkData([]);
         dispatch(goButtonPartyItemAddPageSuccess([]))
     }
 
@@ -149,6 +155,79 @@ const BulkWorkOrder = (props) => {
 
     }
 
+
+    const SaveHandler = async (event) => {
+        event.preventDefault();
+        try {
+            {
+                const WorkOrderItems = location.state.map((inx_1) => ({
+                    id: 31,
+                    IsActive: true,
+                    Item: inx_1.Item,
+                    ItemName: inx_1.ItemName,
+                    Stock: 0,
+                    EstimatedOutputQty: inx_1.EstimatedOutputQty,
+                    TotalQuantity: 0,
+                    WorkQuantity: 0,
+                    Unit: inx_1.Unit,
+                    UnitName: inx_1.UnitName,
+                    WorkOrderItems: inx_1.BOMItems.map((inx_2) => ({
+                        id: 9,
+                        Item: inx_2.Item,
+                        ItemName: inx_2.ItemName,
+                        Unit: inx_2.Unit,
+                        UnitName: inx_2.UnitName,
+                        StockQuantity: inx_2.Quantity,
+                        BomQuantity: "50.000",
+                        Quantity: 50
+                    })),
+                }))
+                const jsonBody = JSON.stringify(WorkOrderItems);
+                dispatch(Save_Bulk_BOM_for_WorkOrder({ jsonBody }));
+            }
+        } catch (e) { console.log(e) }
+    };
+
+
+    function Header(column, colIndex, { sortElement, filterElement }) {
+
+        const handleAllCheckboxChange = ({ e, Data }) => {
+            setAllChecked(e.target.checked)
+            let BulkData = []
+            if (e.target.checked) {
+                BulkData = Data.map(item => {
+                    return { ...item, IsTableOpen: e.target.checked };
+                });
+            } else {
+                BulkData = Data.map(item => {
+                    return { ...item, IsTableOpen: e.target.checked };
+                });
+            }
+            setBulkData(BulkData)
+        };
+        return (
+            <span>
+                <label
+                    htmlFor={`btn-Header`}
+                    className=" badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light ml-2 mb-n1"
+                    title="Expand Table"
+                    style={{ borderRadius: "50%", marginRight: "5px", cursor: "pointer", marginLeft: "10px" }}
+                >
+                    <input
+                        type="checkbox"
+                        id={`btn-Header`}
+                        checked={allChecked}
+                        onChange={(e) => { handleAllCheckboxChange({ e: e, Data: BulkData }) }}
+                        style={{ display: "none" }}
+                    />
+                    {allChecked ? <span id={`Icon-Header`} className="mdi mdi-arrow-collapse-up font-size-10"></span> : <span id={`Icon-Header`} className="mdi mdi-arrow-expand-down font-size-10"></span>}
+                </label>
+                Item Name
+            </span>
+        );
+    }
+
+
     const pagesListColumns = [
         //*************** ItemName ********************************* */
         {
@@ -166,15 +245,14 @@ const BulkWorkOrder = (props) => {
             text: "Change Quantity",
             dataField: "BOMItems",
             headerStyle: { zIndex: "2", width: "40% " },
-            formatExtraData: { tableList: TableArr, checked },
-            formatter: (cellContent, inx_1, keys_, { tableList = [] }) => {
-                debugger
+            formatExtraData: { checked, BulkData },
+            headerFormatter: Header,
+            formatter: (cellContent, inx_1, keys_, { Data }) => {
+
                 const handleCheckboxChange = ({ e, ID }) => {
                     setchecked(i => !i)
                     inx_1.IsTableOpen = e.target.checked
-                    // setchecked({ Value: e.target.checked, btn_Id: ID })
                 };
-
                 return <>
                     <div className="table-responsive">
                         <table className="custom-table ">
@@ -183,19 +261,19 @@ const BulkWorkOrder = (props) => {
                                     <th>
                                         <span>
                                             <label
-                                                htmlFor={`btn-${inx_1.id}`}
+                                                htmlFor={`btn-${inx_1.Item}`}
                                                 className=" badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light ml-2 mb-n1"
                                                 title="Expand Table"
                                                 style={{ borderRadius: "50%", marginRight: "5px", cursor: "pointer" }}
                                             >
                                                 <input
                                                     type="checkbox"
-                                                    id={`btn-${inx_1.id}`}
-                                                    defaultChecked={inx_1.IsTableOpen}
-                                                    onChange={(e) => { handleCheckboxChange({ e: e, ID: inx_1.id }) }}
+                                                    id={`btn-${inx_1.Item}`}
+                                                    checked={inx_1.IsTableOpen}
+                                                    onChange={(e) => { handleCheckboxChange({ e: e, ID: inx_1.Item }) }}
                                                     style={{ display: "none" }}
                                                 />
-                                                {inx_1.IsTableOpen ? <span id={`Icon-${inx_1.id}`} className="mdi mdi-arrow-collapse-up font-size-10"></span> : <span id={`Icon-${inx_1.id}`} className="mdi mdi-arrow-expand-down font-size-10"></span>}
+                                                {inx_1.IsTableOpen ? <span id={`Icon-${inx_1.Item}`} className="mdi mdi-arrow-collapse-up font-size-10"></span> : <span id={`Icon-${inx_1.Item}`} className="mdi mdi-arrow-expand-down font-size-10"></span>}
                                             </label>
                                             Item Name
                                         </span>
@@ -206,12 +284,12 @@ const BulkWorkOrder = (props) => {
                                     <th>Unit</th>
                                 </tr>
                             </thead>
-                            <tbody id={`Body-${inx_1.id}`} className={inx_1.IsTableOpen ? '' : 'hidden-row'}  >
+                            <tbody id={`Body-${inx_1.Item}`} className={inx_1.IsTableOpen ? '' : 'hidden-row'}  >
                                 {cellContent.map((inx_2) => (
-                                    <tr key={inx_1.id}>
+                                    <tr key={inx_1.Item}>
                                         <td data-label="Item Name">{inx_2.ItemName}</td>
                                         <td data-label="Stock Quantity" style={{ textAlign: "right" }} >
-                                            <samp id={`ActualQuantity-${inx_1.id}-${inx_2.id}`}>{inx_2.StockQuantity}</samp>
+                                            <samp id={`ActualQuantity-${inx_1.Item}-${inx_2.id}`}>{inx_2.StockQuantity}</samp>
                                         </td>
                                         <td data-label="BOM Quantity">{inx_2.BomQuantity}</td>
                                         <td data-label='Quantity'>
@@ -220,12 +298,12 @@ const BulkWorkOrder = (props) => {
                                                 disabled={pageMode === 'edit' ? true : false}
                                                 placeholder="Manually enter quantity"
                                                 className="right-aligned-placeholder"
-                                                key={`batchQty${inx_1.id}-${inx_2.id}`}
-                                                id={`batchQty${inx_1.id}-${inx_2.id}`}
+                                                key={`batchQty${inx_1.Item}-${inx_2.id}`}
+                                                id={`batchQty${inx_1.Item}-${inx_2.id}`}
                                                 autoComplete="off"
                                                 defaultValue={inx_2.Quantity}
                                                 onChange={(event) => {
-                                                    QuantityOnchange(event, inx_1, inx_2, tableList);
+                                                    QuantityOnchange(event, inx_1, inx_2,);
                                                 }}
                                             />
                                         </td>
@@ -279,76 +357,6 @@ const BulkWorkOrder = (props) => {
 
     ];
 
-    const SaveHandler = async (event) => {
-
-        event.preventDefault();
-
-        const flatStockTableArr = TableArr.reduce((accumulator, index1) => {
-
-            index1.StockDetails.forEach((index2) => {
-
-                index2.Qty = Number(_cfunc.roundToDecimalPlaces(index2.Qty, 3));
-                index2.ActualQuantity = Number(_cfunc.roundToDecimalPlaces(index2.ActualQuantity, 3));
-
-                const hasChange = index2.Qty !== index2.ActualQuantity;
-
-                function changebodyFunc() {
-                    accumulator.push({
-                        "Item": index2.Item,
-                        "Quantity": index2.Qty,
-                        "MRP": index2.MRPID,
-                        "Unit": index1.UnitID,
-                        "GST": index2.GSTID,
-                        "MRPValue": index2.MRP,
-                        "GSTPercentage": index2.GSTPercentage,
-                        "BatchDate": index2.BatchDate,
-                        "BatchCode": index2.BatchCode,
-                        "BatchCodeID": index2.id
-                    })
-                };
-
-                if (hasChange) {
-                    if (index2.Qty > 0) {
-                        changebodyFunc()
-                    }
-                    else if (((index2.ActualQuantity > 0) && (index2.Qty === 0))) {
-                        changebodyFunc()
-                    } else if (((index2.ActualQuantity === 0) && (index2.Qty > 0))) {
-                        changebodyFunc()
-                    };
-                };
-
-
-            });
-
-            return accumulator
-
-        }, [])
-
-
-        if (flatStockTableArr.length === 0) {
-            customAlert({
-                Type: 4,
-                Message: alertMessages.changeOneStockQty
-            })
-            return
-        }
-
-        try {
-            const jsonBody = JSON.stringify({
-                "PartyID": commonPartyDropSelect.value,
-                "CreatedBy": _cfunc.loginUserID(),
-                "Date": currentDate_ymd,
-                "Mode": subPageMode === url.STOCK_ADJUSTMENT ? 2 : 3,
-                "StockItems": flatStockTableArr,
-                "IsStockAdjustment": true,//if stock  
-                "IsAllStockZero": false
-            })
-
-            dispatch(saveStockEntryAction({ jsonBody }));
-        }
-        catch (w) { }
-    };
 
     if (!(userPageAccessState === '')) {
         return (
@@ -356,8 +364,8 @@ const BulkWorkOrder = (props) => {
                 <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
                 <div className="page-content">
                     <GlobalCustomTable
-                        keyField="id"
-                        data={data}
+                        keyField="Item"
+                        data={BulkData}
                         columns={pagesListColumns}
                         paginationEnabled={200}//show pagination 200 per page
                         classes={"custom-table"}
@@ -367,14 +375,13 @@ const BulkWorkOrder = (props) => {
                             </div>
                         }
                         onDataSizeChange={({ dataCount }) => {
-
                             dispatch(BreadcrumbShowCountlabel(`Count:${dataCount}`));
                         }}
                     />
 
 
                     {
-                        TableArr.length > 0 &&
+                        BulkData.length > 0 &&
                         <SaveButtonDraggable>
                             <SaveButton
                                 pageMode={pageMode}

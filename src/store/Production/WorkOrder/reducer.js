@@ -1,4 +1,6 @@
 import {
+  BULK_BOM_FOR_WORKORDER,
+  BULK_BOM_FOR_WORKORDER_SUCCESS,
   DELETE_WORK_ORDER_LIST_PAGE,
   DELETE_WORK_ORDER_LIST_PAGE_SUCCESS,
   EDIT_WORK_ORDER_LIST_ID,
@@ -9,6 +11,8 @@ import {
   POST_GO_BUTTON_FOR_WORK_ORDER_MASTER_SUCCESS,
   POST_WORK_ORDER_MASTER,
   POST_WORK_ORDER_MASTER_SUCCESS,
+  SAVE_BULK_BOM_FOR_WORKORDER,
+  SAVE_BULK_BOM_FOR_WORKORDER_SUCCESS,
   UPDATE_WORK_ORDER_LIST,
   UPDATE_WORK_ORDER_LIST_SUCCESS,
   WORK_ORDER_API_ERROR_ACTION,
@@ -18,12 +22,15 @@ const INIT_STATE = {
   BOMList: [],
   GoButton: [],
   postMsg: { Status: false },
+  Bulk_Bom_for_WorkOrder: { Status: false },
+  Save_Bulk_Bom_for_WorkOrder: { Status: false },
   WorkOrderList: [],
   editData: { Status: false, },
   updateMsg: { Status: false },
   deleteMsg: { Status: false },
   listBtnLoading: false,
   loading: false,
+  BulkBtnloading: false,
   saveBtnloading: false,
 }
 
@@ -58,6 +65,35 @@ const WorkOrderReducer = (state = INIT_STATE, action) => {
         postMsg: action.payload,
         saveBtnloading: false,
       }
+
+
+
+    case BULK_BOM_FOR_WORKORDER:
+      return {
+        ...state,
+        BulkBtnloading: true,
+      }
+
+    case BULK_BOM_FOR_WORKORDER_SUCCESS:
+      return {
+        ...state,
+        Bulk_Bom_for_WorkOrder: action.payload,
+        BulkBtnloading: false,
+      }
+
+    case SAVE_BULK_BOM_FOR_WORKORDER:
+      return {
+        ...state,
+        saveBtnloading: true,
+      }
+
+    case SAVE_BULK_BOM_FOR_WORKORDER_SUCCESS:
+      return {
+        ...state,
+        Save_Bulk_Bom_for_WorkOrder: action.payload,
+        saveBtnloading: false,
+      }
+
 
     // Work Order List Page 
     case GET_WORK_ORDER_LIST_PAGE:
