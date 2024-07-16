@@ -13,7 +13,7 @@ import { Return_Report_Action, Return_Report_Action_Success } from "../../../../
 import { ExcelReportComponent } from "../../../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS";
 import GlobalCustomTable from "../../../../GlobalCustomTable";
 import { changeCommonPartyDropDetailsAction } from "../../../../store/Utilites/PartyDrodown/action";
-import { allLabelWithBlank } from "../../../../components/Common/CommonErrorMsg/HarderCodeData";
+import { allLabelWithBlank, allLabelWithZero } from "../../../../components/Common/CommonErrorMsg/HarderCodeData";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { globalTableSearchProps } from "../../../../components/Common/SearchBox/MySearch";
@@ -29,11 +29,11 @@ const FrenchiesSaleReport = (props) => {
 
     const [headerFilters, setHeaderFilters] = useState('');
     const [userPageAccessState, setUserAccState] = useState('');
-    const [PartyDropdown, setPartyDropdown] = useState([allLabelWithBlank]);
+    const [PartyDropdown, setPartyDropdown] = useState([allLabelWithZero]);
     const [tableData, setTableData] = useState([]);
     const [btnMode, setBtnMode] = useState(0);
 
-    const [Item, setItem] = useState(allLabelWithBlank);
+    const [Item, setItem] = useState(allLabelWithZero);
 
 
     const {
@@ -114,11 +114,13 @@ const FrenchiesSaleReport = (props) => {
         label: i.Name
     }));
 
+    Party_Option.unshift(allLabelWithZero);
+
     const ItemList_Options = ItemDropDown.map((index) => ({
         value: index.Item,
         label: index.ItemName,
     }));
-
+    ItemList_Options.unshift(allLabelWithZero);
     const [tableColumns] = DynamicColumnHook({ pageField, })
 
     useEffect(() => {
