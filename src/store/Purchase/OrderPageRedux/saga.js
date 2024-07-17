@@ -43,17 +43,32 @@ import {
   POST_ORDER_CONFIRM_API,
   ORDER_SINGLE_GET_API
 } from "./actionType";
-import { amountCommaSeparateFunc, listpageConcatDateAndTime, date_dmy_func, } from "../../../components/Common/CommonFunction";
+import { amountCommaSeparateFunc, listpageConcatDateAndTime, date_dmy_func, loginSystemSetting, IsSweetAndSnacksCompany, loginCompanyID } from "../../../components/Common/CommonFunction";
 import *as url from "../../../routes/route_url"
 
-function* goButtonGenFunc({ config }) {                      // GO-Botton order Add Page by subPageMode  
+
+
+const CheckRateFromCompany = () => {
+  const checkRateFromCompany = loginSystemSetting().MRP_Rate
+  const loginCompanyId = IsSweetAndSnacksCompany() ? loginCompanyID() : "";
+  const result = checkRateFromCompany
+    .split(',')
+    .map((part) => part.split('-')[0])
+    .join(',');
+  const isRateForSweetAndSnacksCompany = result.split(',').includes(loginCompanyId.toString());
+  return { result, isRateForSweetAndSnacksCompany };
+};
+
+
+
+
+function* goButtonGenFunc({ config }) {                     // GO-Botton order Add Page by subPageMode  
 
   try {
 
     const { subPageMode, } = config
     let response;
     if ((subPageMode === url.ORDER_1) || (subPageMode === url.ORDER_2) || (subPageMode === url.ORDER_4) || (subPageMode === url.IB_ORDER) || (subPageMode === url.IB_SALES_ORDER)) {
-
       response = yield call(OrderPage_GoButton_API, config); // GO-Botton Purchase Order 1 && 2 Add Page API
       yield response.Data.OrderItems.forEach((ele, k) => {
         ele["id"] = k + 1
@@ -61,7 +76,8 @@ function* goButtonGenFunc({ config }) {                      // GO-Botton order 
           ...unit,
           _BaseUnitRate: (unit.Rate * unit.BaseUnitQuantity)  /// this field add only for testing purpose ///checking  not use any where in code only for observation
         }))
-        if ((subPageMode === url.ORDER_1) || (subPageMode === url.IB_ORDER)) {
+        const isRateForSweetAndSnacksCompany = CheckRateFromCompany().isRateForSweetAndSnacksCompany;
+        if ((subPageMode === url.ORDER_1) || (subPageMode === url.IB_ORDER) || isRateForSweetAndSnacksCompany) {
           ele.Rate = Number(ele.VRate)
           ele.UnitDetails = ele.UnitDetails.map(unit => ({
             ...unit, Rate: Number(ele.VRate),

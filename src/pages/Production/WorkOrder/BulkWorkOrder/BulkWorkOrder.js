@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import {
+    Col,
     Input,
+    Row,
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
 import { BreadcrumbShowCountlabel, commonPageFieldSuccess } from "../../../../store/actions";
@@ -29,7 +31,16 @@ const BulkWorkOrder = (props) => {
     const [subPageMode] = useState(history.location.pathname)
     const [userPageAccessState, setUserAccState] = useState('');
     const [BulkData, setBulkData] = useState(location.state);
+
     const [checked, setchecked] = useState(false);
+    const [LotChange, setLotChange] = useState(false);
+
+    const [QuantityChange, setQuantityChange] = useState(false);
+
+
+
+
+
 
     const [allChecked, setAllChecked] = useState(false);
 
@@ -123,7 +134,6 @@ const BulkWorkOrder = (props) => {
         }
     }, [postMsg])
 
-
     function partySelectButtonHandler() {
         dispatch(goButtonPartyItemAddPage({
             jsonBody: JSON.stringify({
@@ -139,51 +149,55 @@ const BulkWorkOrder = (props) => {
     }
 
 
-    function QuantityOnchange(event, index1, index2) {
+    const QuantityCalculationFunc = ({ inx_1, Input_Qty }) => {
 
-        const InputQty = event.target.value;
-        index2.Qty = InputQty
-
-        const totalOriginalBaseUnitQuantity = index1.StockDetails.reduce(
-            (total, stockDetail) =>
-                total + Number(stockDetail.Qty) || 0,
-            0
-        );
-        try {
-            document.getElementById(`OrderQty-${index1.id}`).value = totalOriginalBaseUnitQuantity
-        } catch (e) { _cfunc.CommonConsole('inner-Stock-Caculation', e) };
-
+        inx_1.BOMItems = inx_1.BOMItems.map(inx_2 => {
+            try {
+                const Qty = parseFloat(inx_2.BomQuantity) / parseFloat(inx_1.EstimatedOutputQty)
+                const ActualQuantity = parseFloat(Number(Input_Qty) * Qty)
+                document.getElementById(`Quantity${inx_1.Item}-${inx_2.id}`).value = ActualQuantity
+            } catch (error) {
+                _cfunc.CommonConsole('QuantityCalculationFunc', error);
+            }
+            return inx_2;
+        });
     }
 
-
     const SaveHandler = async (event) => {
+
         event.preventDefault();
         try {
             {
                 const WorkOrderItems = location.state.map((inx_1) => ({
-                    id: 31,
-                    IsActive: true,
+                    Bom: inx_1.id,
+                    WorkOrderDate: _cfunc.currentDate_ymd,
+                    IsActive: inx_1.IsActive,
                     Item: inx_1.Item,
                     ItemName: inx_1.ItemName,
-                    Stock: 0,
+                    Stock: inx_1.Stock,
+                    NumberOfLot: inx_1.Number_Lots,
                     EstimatedOutputQty: inx_1.EstimatedOutputQty,
-                    TotalQuantity: 0,
-                    WorkQuantity: 0,
+                    Company: _cfunc.loginCompanyID(),
+                    Party: _cfunc.loginSelectedPartyID(),
+                    CreatedBy: _cfunc.loginUserID(),
+                    UpdatedBy: _cfunc.loginUserID(),
+                    Quantity: inx_1.Qty,
                     Unit: inx_1.Unit,
                     UnitName: inx_1.UnitName,
                     WorkOrderItems: inx_1.BOMItems.map((inx_2) => ({
-                        id: 9,
+                        id: inx_2.id,
                         Item: inx_2.Item,
                         ItemName: inx_2.ItemName,
                         Unit: inx_2.Unit,
                         UnitName: inx_2.UnitName,
                         StockQuantity: inx_2.Quantity,
-                        BomQuantity: "50.000",
-                        Quantity: 50
+                        BomQuantity: inx_2.BomQuantity,
+                        Quantity: inx_2.Quantity
                     })),
                 }))
                 const jsonBody = JSON.stringify(WorkOrderItems);
                 dispatch(Save_Bulk_BOM_for_WorkOrder({ jsonBody }));
+
             }
         } catch (e) { console.log(e) }
     };
@@ -227,7 +241,6 @@ const BulkWorkOrder = (props) => {
         );
     }
 
-
     const pagesListColumns = [
         //*************** ItemName ********************************* */
         {
@@ -239,6 +252,11 @@ const BulkWorkOrder = (props) => {
         {
             text: "Stock Quantity",
             dataField: "Stock",
+            align: 'Right',
+            formatter: (cellContent, inx_1, key) => {
+                return <> <span id={`Stock-${key}`}>{cellContent} {inx_1.UnitName}</span></>
+            }
+
         },
 
         {//*************** StockDetails ********************************** */
@@ -247,8 +265,7 @@ const BulkWorkOrder = (props) => {
             headerStyle: { zIndex: "2", width: "40% " },
             formatExtraData: { checked, BulkData },
             headerFormatter: Header,
-            formatter: (cellContent, inx_1, keys_, { Data }) => {
-
+            formatter: (cellContent, inx_1, key) => {
                 const handleCheckboxChange = ({ e, ID }) => {
                     setchecked(i => !i)
                     inx_1.IsTableOpen = e.target.checked
@@ -285,36 +302,37 @@ const BulkWorkOrder = (props) => {
                                 </tr>
                             </thead>
                             <tbody id={`Body-${inx_1.Item}`} className={inx_1.IsTableOpen ? '' : 'hidden-row'}  >
-                                {cellContent.map((inx_2) => (
-                                    <tr key={inx_1.Item}>
-                                        <td data-label="Item Name">{inx_2.ItemName}</td>
-                                        <td data-label="Stock Quantity" style={{ textAlign: "right" }} >
-                                            <samp id={`ActualQuantity-${inx_1.Item}-${inx_2.id}`}>{inx_2.StockQuantity}</samp>
-                                        </td>
-                                        <td data-label="BOM Quantity">{inx_2.BomQuantity}</td>
-                                        <td data-label='Quantity'>
-                                            <Input
-                                                type="text"
-                                                disabled={pageMode === 'edit' ? true : false}
-                                                placeholder="Manually enter quantity"
-                                                className="right-aligned-placeholder"
-                                                key={`batchQty${inx_1.Item}-${inx_2.id}`}
-                                                id={`batchQty${inx_1.Item}-${inx_2.id}`}
-                                                autoComplete="off"
-                                                defaultValue={inx_2.Quantity}
-                                                onChange={(event) => {
-                                                    QuantityOnchange(event, inx_1, inx_2,);
-                                                }}
-                                            />
-                                        </td>
-
-                                        < td >
-                                            <span className="d-flex justify-content-center align-items-center">
-                                                {inx_2.UnitName}
-                                            </span>
-                                        </td>
-                                    </tr>
-                                ))}
+                                {cellContent.map((inx_2) => {
+                                    return (
+                                        <tr key={inx_1.Item}>
+                                            <td data-label="Item Name">{inx_2.ItemName}</td>
+                                            <td data-label="Stock Quantity" style={{ textAlign: "right" }} >
+                                                <samp id={`ActualQuantity-${inx_1.Item}-${inx_2.id}`}>{inx_2.StockQuantity}</samp>
+                                            </td>
+                                            <td data-label="BOM Quantity">{inx_2.BomQuantity}</td>
+                                            <td data-label='Quantity'>
+                                                <Input
+                                                    type="text"
+                                                    disabled={pageMode === 'edit' ? true : false}
+                                                    placeholder="Manually enter quantity"
+                                                    className="right-aligned-placeholder"
+                                                    key={`Quantity${inx_1.Item}-${inx_2.id}`}
+                                                    id={`Quantity${inx_1.Item}-${inx_2.id}`}
+                                                    autoComplete="off"
+                                                    defaultValue={inx_2.Quantity}
+                                                    onChange={(event) => {
+                                                        // QuantityOnchange(event, inx_1, inx_2,);
+                                                    }}
+                                                />
+                                            </td>
+                                            < td >
+                                                <span className="d-flex justify-content-center align-items-center">
+                                                    {inx_2.UnitName}
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    )
+                                })}
                             </tbody>
                         </table>
                     </div ></>
@@ -326,33 +344,88 @@ const BulkWorkOrder = (props) => {
 
         {
 
-            text: "Total Quantity",
-            dataField: "TotalQuantity",
-            formatter: (cellContent, row) => {
-                return <> <span></span></>
+            text: "Estimated Quantity",
+            dataField: "EstimatedOutputQty",
+            align: 'Right',
+            formatter: (cellContent, inx_1, key) => {
+                return <> <span id={`Qty-${key}`}>{inx_1.EstimatedOutputQty} {inx_1.UnitName}</span></>
             }
 
         },
 
         {
-
-            text: "Work Quantity",
-            dataField: "WorkQuantity",
-
-        },
-
-        {
             text: "Number of Lots",
-            dataField: "",
+            dataField: "Number_Lots",
 
+            formatter: (cellContent, inx_1, key,) => {
+                const LotsOnchange = (event, inx_1, key) => {
+                    let inputQty = event.target.value;
+                    if (!isNaN(Number(inputQty))) {
+                        const quantity = Number(inputQty) * Number(inx_1.EstimatedOutputQty);
+                        QuantityCalculationFunc({ inx_1: inx_1, Input_Qty: quantity })
+                        document.getElementById(`Quantity${inx_1.Item}`).value = quantity;
+                    } else {
+                        event.target.value = "";
+                    }
+                };
+                return <>
+                    <Input
+                        type="text"
+                        placeholder="Manually enter Lot"
+                        className="right-aligned-placeholder"
+                        key={`Number_Lots${inx_1.Item}`}
+                        id={`Number_Lots${inx_1.Item}`}
+                        autoComplete="off"
+                        defaultValue={inx_1.Number_Lots}
+                        onChange={(event) => {
+                            LotsOnchange(event, inx_1, key);
+                        }}
+                    />
+                </>
+            }
         },
+
         {
 
-            text: "Estimated Quantity",
-            dataField: "EstimatedOutputQty",
+            text: "Quantity",
+            dataField: "Qty",
+            align: 'Right',
+            formatter: (cellContent, inx_1, key) => {
+                const QuantityOnchange = (event, inx_1, key,) => {
+                    let inputQty = event.target.value;
+                    if (!isNaN(Number(inputQty))) {
+                        QuantityCalculationFunc({ inx_1: inx_1, Input_Qty: inputQty })
+                        let NumberLot = Number(inputQty) / Number(inx_1.EstimatedOutputQty)
+                        inx_1.Number_Lots = NumberLot;
+                        inx_1.Qty = inputQty;
+                        document.getElementById(`Number_Lots${inx_1.Item}`).value = NumberLot
+                    } else {
+                        event.target.value = "";
+                    }
+                };
+                return <>
+                    <Row>
+                        <Col sm={10}>
+                            <Input
+                                type="text"
+                                placeholder="Manually enter Lot"
+                                className="right-aligned-placeholder"
+                                key={`Quantity${inx_1.Item}`}
+                                id={`Quantity${inx_1.Item}`}
+                                defaultValue={`${inx_1.Qty}`}
+                                onChange={(event) => {
+                                    QuantityOnchange(event, inx_1, key,);
+                                }}
+                            />
+                        </Col>
+                        <Col sm={2}>
+                            <span >{inx_1.UnitName}</span>
+                        </Col>
+                    </Row>
+                </>
+            }
 
         },
-
 
 
     ];

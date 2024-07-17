@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { C_Button } from "../../Common/CommonButton";
 import { C_Select } from "../../../CustomValidateForm";
-import { loginEmployeeID, loginUserAdminRole } from "../../Common/CommonFunction";
+import { loginCompanyID, loginEmployeeID, loginUserAdminRole } from "../../Common/CommonFunction";
 import { commonPartyDropSelectAction } from "../../../store/Utilites/PartyDrodown/action";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import './changeParty.scss'; // Add your styles here
@@ -14,6 +14,7 @@ import { Col, Spinner } from "reactstrap";
 import { url } from "../../../routes";
 import { useHistory } from 'react-router-dom';
 import { getPartyEmployeeDetails } from "../../../store/Administrator/PartyEmployeeDetailsRedux/action";
+import { getpartysetting_API, getpartysetting_API_Success } from "../../../store/Administrator/PartySetting/action";
 
 const ChangeCommonParty = (props) => {
 
@@ -77,6 +78,7 @@ const ChangeCommonParty = (props) => {
         }
         setIsDrawerOpen(false);
         dispatch(commonPartyDropSelectAction(selectedParty));
+        dispatch(getpartysetting_API(selectedParty.value, loginCompanyID()))
         localStorage.setItem("selectedParty", JSON.stringify(selectedParty));
     };
 
@@ -85,6 +87,7 @@ const ChangeCommonParty = (props) => {
     const handleClearBtn = () => {
         setSelectedParty({ value: 0, label: "select party...", SAPPartyCode: "" });
         dispatch(commonPartyDropSelectAction({ value: 0, label: "select party...", SAPPartyCode: "" }));
+        dispatch(getpartysetting_API_Success([]));
         localStorage.setItem("selectedParty", JSON.stringify({ value: 0, label: "select...", SAPPartyCode: "" }));
     };
 
@@ -124,6 +127,10 @@ const ChangeCommonParty = (props) => {
     const handleClick = () => {
         setIsLoading(true);
         dispatch(getPartyEmployeeDetails({ EmployeeId: loginEmployeeID() }))
+
+
+
+
         setTimeout(() => {
             history.push(url.PARTY_EMPLOYEE_DETAILS);
             setIsLoading(false);
@@ -133,8 +140,6 @@ const ChangeCommonParty = (props) => {
     if (!loginUserAdminRole()) {
         return null;
     };
-
-
 
     const partylabelStyle = !props.isPartyWisePage || !isShow || forceDisable ? { color: "gray" } : {};
 
