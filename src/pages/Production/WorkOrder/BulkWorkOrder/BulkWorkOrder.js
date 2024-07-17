@@ -20,7 +20,7 @@ import SaveButtonDraggable from "../../../../components/Common/saveButtonDraggab
 import { alertMessages } from "../../../../components/Common/CommonErrorMsg/alertMsg";
 import data from '../data.json';
 import GlobalCustomTable from "../../../../GlobalCustomTable";
-import { Save_Bulk_BOM_for_WorkOrder } from "../../../../store/Production/WorkOrder/action";
+import { Save_Bulk_BOM_for_WorkOrder, Save_Bulk_BOM_for_WorkOrderSuccess } from "../../../../store/Production/WorkOrder/action";
 
 const BulkWorkOrder = (props) => {
 
@@ -60,8 +60,8 @@ const BulkWorkOrder = (props) => {
         saveBtnloading,
         userAccess,
     } = useSelector((state) => ({
-        saveBtnloading: state.StockEntryReducer.saveBtnloading,
-        postMsg: state.StockEntryReducer.postMsg,
+        saveBtnloading: state.WorkOrderReducer.saveBtnloading,
+        postMsg: state.WorkOrderReducer.Save_Bulk_Bom_for_WorkOrder,
         userAccess: state.Login.RoleAccessUpdateData,
     }));
 
@@ -117,16 +117,16 @@ const BulkWorkOrder = (props) => {
 
     useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-            dispatch(saveStockEntrySuccess({ Status: false }))
+            dispatch(Save_Bulk_BOM_for_WorkOrderSuccess({ Status: false }))
             setBulkData([])
             customAlert({
                 Type: 1,
                 Message: postMsg.Message,
-                // RedirectPath: url.STOCK_ENTRY,
+                RedirectPath: url.WORK_ORDER_LIST,
             })
         }
         else if (postMsg.Status === true) {
-            dispatch(saveStockEntrySuccess({ Status: false }))
+            dispatch(Save_Bulk_BOM_for_WorkOrderSuccess({ Status: false }))
             customAlert({
                 Type: 4,
                 Message: JSON.stringify(postMsg.Message),
@@ -303,6 +303,7 @@ const BulkWorkOrder = (props) => {
                             </thead>
                             <tbody id={`Body-${inx_1.Item}`} className={inx_1.IsTableOpen ? '' : 'hidden-row'}  >
                                 {cellContent.map((inx_2) => {
+                                    debugger
                                     return (
                                         <tr key={inx_1.Item}>
                                             <td data-label="Item Name">{inx_2.ItemName}</td>
