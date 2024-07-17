@@ -64,8 +64,17 @@ function* Save_Bulk_BOM_For_WorkOrder_GenratorFunction({ config }) {     // WOrk
 
 
 function* Bulk_BOM_For_WorkOrder_GenratorFunction({ config }) {     // WOrk Order Post API
+  
   try {
-    const response = yield call(Post_Bulk_BOM_For_WorkOrder_API, config);
+    let response = yield call(Post_Bulk_BOM_For_WorkOrder_API, config);
+
+
+    let NewResponse = yield response.Data.map((inx_1) => {
+      inx_1.Number_Lots = 1 /// Initilal   Number_Lots  will be 1 
+      inx_1.Qty = inx_1.Number_Lots * Number(inx_1.EstimatedOutputQty)
+      return inx_1;
+    })
+    response.Data = NewResponse
     yield put(Bulk_BOM_for_WorkOrderSuccess(response));
   } catch (error) { yield put(WorkOrderApiErrorAction()) }
 }

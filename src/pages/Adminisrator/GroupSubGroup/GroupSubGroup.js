@@ -189,7 +189,39 @@ const DroppableContainer = ({ items, groupName, moveItem, moveItemWithinGroup, a
     );
 };
 
-const DraggableGroup = ({ groupName, items, index, moveGroup, moveItem, moveItemWithinGroup, addItem }) => {
+
+const UnAsginItemDroppableContainer = ({ items, groupName, moveItem, moveItemWithinGroup, addItem }) => {
+    debugger
+    const UnAsginItemItems = Object.keys(items).reduce((acc, key) => {
+        const nullValuesInGroup = items[key].filter(item => item.value === null);
+        return [...acc, ...nullValuesInGroup];
+    }, []);
+
+    const [, ref] = useDrop({
+        accept: ItemType.ITEM,
+        drop: (draggedItem) => {
+            if (draggedItem.groupName !== groupName) {
+                moveItem(draggedItem.item, draggedItem.groupName, groupName);
+            }
+        },
+    });
+
+    return (
+        <div ref={ref} style={{ minHeight: '10px', padding: '8px', display: 'flex', flexWrap: 'wrap', borderRadius: '12px', background: '#e5e7ed', boxShadow: '0px 1px 5px 1px grey' }}>
+            {UnAsginItemItems?.map((item, index) => (
+                <DraggableItem key={item.value} item={item} index={index} groupName={groupName} moveItemWithinGroup={moveItemWithinGroup} />
+            ))}
+            {/* <Add_SubGroup addItem={addItem} groupName={groupName} items={items} /> */}
+        </div>
+    );
+};
+
+
+
+
+
+const DraggableGroup = ({ groupName, items, index, moveGroup, moveItem, moveItemWithinGroup, addItem, Type }) => {
+
 
     const [{ isDragging }, ref, preview] = useDrag({
         type: ItemType.GROUP,
