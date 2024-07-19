@@ -58,7 +58,7 @@ const InvoiceList = () => {
     const [subPageMode, setSubPageMode] = useState(history.location.pathname);
     const [hederFilters, setHederFilters] = useState({ todate: currentDate_ymd, fromdate: currentDate_ymd, supplierSelect: allLabelWithBlank });
     const [otherState, setOtherState] = useState({ masterPath: '', makeBtnShow: false, newBtnPath: '', IBType: '' });
-    const [Vehicle_No, setVehicle_No] = useState({ value: "", label: "Select..." })
+    const [Vehicle_No, setVehicle_No] = useState({ value: null, label: "Select..." })
     const [Customer, setCustomer] = useState('')
 
     const [InvoiceRowData, setInvoiceRowData] = useState('')
@@ -549,7 +549,7 @@ const InvoiceList = () => {
         setCustomer({ value: CustomerID, label: Customer })
 
         if ((VehicleID === null) || VehicleNo === null) {
-            setVehicle_No({ value: "", label: "Select..." });
+            setVehicle_No({ value: null, label: "Select..." });
         } else {
             setVehicle_No({ value: VehicleID, label: VehicleNo })
         }
@@ -558,16 +558,13 @@ const InvoiceList = () => {
 
     const updateVehicleInvoice = () => {
 
-        if (Vehicle_No.value === "") {
-            setvehicleErrorMsg(true);
-        } else {
-            const jsonBody = JSON.stringify({
-                InvoiceID: InvoiceID,
-                vehicle: Vehicle_No.value,
-                Customer: Customer.value
-            });
-            dispatch(Pos_UpdateVehicleCustomerInvoice_Action({ jsonBody }));
-        }
+        const jsonBody = JSON.stringify({
+            InvoiceID: InvoiceID,
+            vehicle: Vehicle_No.value,
+            Customer: Customer.value
+        });
+        dispatch(Pos_UpdateVehicleCustomerInvoice_Action({ jsonBody }));
+
 
 
     };
