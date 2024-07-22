@@ -477,7 +477,7 @@ const WorkOrder = (props) => {
                     Quantity: index.Quantity,
                 }))
 
-                const jsonBody = JSON.stringify({
+                const jsonBody = JSON.stringify([{
                     WorkOrderDate: values.WorkOrderDate,
                     // Item: (pageMode === mode.edit ? Item : values.ItemName.ItemID),
                     // Unit: (pageMode === mode.edit ? Unit : values.ItemName.Unit),
@@ -496,7 +496,7 @@ const WorkOrder = (props) => {
                     RemainNumberOfLot: EditData.RemainNumberOfLot,
                     RemaninQuantity: EditData.RemaninQuantity,
                     WorkOrderItems: WorkOrderItems,
-                });
+                }]);
                 if (pageMode === mode.edit) {
                     dispatch(updateWorkOrderList({ jsonBody, updateId: values.id, btnId }));
                 }
