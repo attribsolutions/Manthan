@@ -114,6 +114,10 @@ const Order = (props) => {
     const [selecedItemWiseOrder, setSelecedItemWiseOrder] = useState(true)
     const [goBtnDissable, setGoBtnDissable] = useState(false)
 
+
+
+
+
     const [termsAndConTable, setTermsAndConTable] = useState([]);
     const [orderTypeSelect, setorderTypeSelect] = useState([]);
     const [isOpen_assignLink, setisOpen_assignLink] = useState(false)
@@ -252,6 +256,8 @@ const Order = (props) => {
         }
 
     }, [commonPartyDropSelect]);
+
+
 
     useEffect(() => { // hasEditVal useEffect
 
@@ -625,7 +631,7 @@ const Order = (props) => {
             },
             formatExtraData: { tableList: orderItemTable },
             formatter: (value, row, k, { tableList }) => {
-                debugger
+
                 return (
                     <>
                         <CInput
@@ -635,7 +641,6 @@ const Order = (props) => {
                             defaultValue={(row.Quantity)}
                             className=" text-end"
                             onChange={(e) => {
-
                                 row["Quantity"] = e.target.value
                                 itemWise_CalculationFunc(row, undefined, tableList)
 
@@ -1072,8 +1077,13 @@ const Order = (props) => {
         const sumOfAmount = tableList.reduce((accumulator, currentObject) => accumulator + (Number(currentObject["Amount"]) || 0), 0);
 
         const commaSeparateAmount = _cfunc.amountCommaSeparateFunc(sumOfAmount.toFixed(2))
-        debugger
-        dispatch(_act.BreadcrumbShowCountlabel(`Count:${tableList.length} ₹ ${commaSeparateAmount}`))
+
+
+        const elements = document.querySelectorAll('.amount-countable-Calulation');
+        elements.forEach(element => {
+            element.innerText = commaSeparateAmount;
+        });
+
     };
 
     const item_AddButtonHandler = () => {
