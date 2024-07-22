@@ -441,7 +441,7 @@ const InvoiceList = () => {
 
     const makeBtnFunc = (list = {}, btnId) => {
 
-
+        debugger
         const grnRef = [{
             Challan: list[0].id,
             Inward: false,
@@ -452,7 +452,7 @@ const InvoiceList = () => {
 
         const jsonBody = JSON.stringify({
             OrderIDs: list[0].id.toString(),
-            Mode: 2
+            Mode: 4
         })
         dispatch(makeGRN_Mode_1Action({
             jsonBody,

@@ -136,7 +136,7 @@ export default function InvoiceForGRN() {
 
                 const jsonBody = JSON.stringify({
                     OrderIDs: isGRNSelect,
-                    Mode: IsCompanySweetAndSnacks ? 2 : 3
+                    Mode: IsCompanySweetAndSnacks ? 4 : 3
                 })
 
                 dispatch(makeGRN_Mode_1Action({ jsonBody, pageMode: mode.modeSTPsave, path: path, grnRef, btnId, InvoiceDate: rowData.dashboardOrderDate }))
