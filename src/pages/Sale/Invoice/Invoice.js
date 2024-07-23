@@ -145,6 +145,7 @@ const Invoice = (props) => {
         return () => {
             dispatch(GetVenderSupplierCustomerSuccess([]));
             dispatch(getVehicleListSuccess([]));
+            dispatch(CheckStockEntryForFirstTransactionSuccess({ status: false }))
             dispatch(changeCommonPartyDropDetailsAction({ forceDisable: false }))//change party drop-down restore state
             dispatch(invoiceSaveActionSuccess({ Status: false })); // Reset the status to false
             setOrderItemDetails([]);
@@ -679,16 +680,12 @@ const Invoice = (props) => {
 
     useEffect(() => {
         if (StockEnteryForFirstYear.Status === true && StockEnteryForFirstYear.StatusCode === 400) {
-            dispatch(CheckStockEntryForFirstTransactionSuccess({ status: false }))
             customAlert({
                 Type: 3,
                 Message: JSON.stringify(StockEnteryForFirstYear.Message),
             })
         }
     }, [StockEnteryForFirstYear])
-
-
-
 
 
     function InvoiceDateOnchange(y, v, e) {
@@ -709,7 +706,7 @@ const Invoice = (props) => {
 
 
     const SaveHandler = async (event) => {
-
+        debugger
         event.preventDefault();
         const btnId = event.target.id
         const saveAndDownloadPdfMode = btnId.substring(0, 21) === "SaveAndDownloadPdfBtn";
@@ -854,7 +851,6 @@ const Invoice = (props) => {
             }
             else {
                 if (StockEnteryForBackdated.Status === true && StockEnteryForBackdated.StatusCode === 400) {
-                    dispatch(CheckStockEntryforBackDatedTransactionSuccess({ status: false }))
                     customAlert({ Type: 3, Message: StockEnteryForBackdated.Message });
                 } else {
                     dispatch(invoiceSaveAction({ subPageMode, jsonBody, btnId, saveAndDownloadPdfMode }));
@@ -968,7 +964,7 @@ const Invoice = (props) => {
                                     pageMode={pageMode}
                                     userAcc={userPageAccessState}
                                     onClick={SaveHandler}
-                                    forceDisabled={saveAndPdfBtnLoading || !StockEnteryForFirstYear.Data}
+                                    forceDisabled={saveBtnloading || !StockEnteryForFirstYear.Data}
                                 />
                                 {(pageMode === mode.defaultsave) &&
                                     <SaveAndDownloadPDF
@@ -977,7 +973,7 @@ const Invoice = (props) => {
                                         id={saveBtnid}
                                         userAcc={userPageAccessState}
                                         onClick={SaveHandler}
-                                        forceDisabled={(saveBtnloading) || !(StockEnteryForFirstYear.Data)}
+                                        forceDisabled={(saveAndPdfBtnLoading) || !(StockEnteryForFirstYear.Data)}
                                     />
                                 }
                             </SaveButtonDraggable>

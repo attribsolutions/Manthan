@@ -522,7 +522,6 @@ const OrderList = () => {
     }
 
     function downBtnFunc(config) {
-
         config["ReportType"] = report.order1;
         if (subPageMode === url.IB_ORDER_PO_LIST || subPageMode === url.IB_ORDER_SO_LIST) {
             dispatch(_act.getpdfReportdata(IB_Order_Get_Api, config))
@@ -531,6 +530,14 @@ const OrderList = () => {
         }
 
     }
+
+
+    function minPrintBtn_Func(config) {
+        config["ReportType"] = report.FrenchiesesOrder;
+        dispatch(_act.getpdfReportdata(OrderPage_Edit_ForDownload_API, config))
+    }
+
+
 
     async function hideBtnFunc(rowdata) {
         const isHideValue = rowdata[0].isHideValue
@@ -800,6 +807,7 @@ const OrderList = () => {
                             newBtnPath={otherState.newBtnPath}
                             makeBtnShow={otherState.makeBtnShow}
                             pageMode={pageMode}
+                            minPrintBtn_Func={minPrintBtn_Func}
                             HeaderContent={HeaderContent}
                             viewApprovalBtnFunc={viewApprovalBtnFunc}
                             goButnFunc={goButtonHandler}
