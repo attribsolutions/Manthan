@@ -329,7 +329,7 @@ export const tableBody_1 = (doc, data) => {
         },
    
         margin: {
-            left: 30, right: 25, top: 134
+            left: 30, right: 25, top: 67
         },
         theme: 'grid',
         headerStyles: {
@@ -347,7 +347,7 @@ export const tableBody_1 = (doc, data) => {
         bodyStyles: {
             columnWidth: 'wrap',
             textColor: [30, 30, 30],
-            cellPadding: 5,
+            cellPadding: 3,
             fontSize: 7,
             lineColor: [6, 3, 1]
         },
@@ -444,7 +444,7 @@ export const tableBody_1 = (doc, data) => {
         if (i !== 1) {
             pageHeder(doc)
             reportHeder3(doc, data)
-            reportHeder1(doc, data)
+            // reportHeder1(doc, data)
         }
         doc.setFont('helvetica', 'Normal')
         doc.setFontSize(11)
