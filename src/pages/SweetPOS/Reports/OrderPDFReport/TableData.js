@@ -6,7 +6,7 @@ export const columns_1 = [
     "Item Name",
     "Unit",
     "Comments",
-   
+
 ];
 
 
@@ -67,9 +67,9 @@ export const Rows_1 = (data) => {
 
         i.forEach((element, inx_2) => {
             const tableitemRow = [
-                `${element.ItemName}${element.Comment === null ? "" : element.Comment}`,
+                `${element.ItemName}`,
                 `${Number(element.Quantity).toFixed(2)}${element.PrimaryUnitName}${element.UnitName}`,
-                `${(numberWithCommas(Number(element.Comment).toFixed(2)))}`,
+                `${element.Comment === null ? "" : element.Comment}`,
 
             ];
             hasHedRow.push(tableitemRow);
