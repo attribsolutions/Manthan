@@ -10,8 +10,9 @@ import ReturnReport from "./ReturnReport/PDFReport/Page";
 import MasterClaimReport from "./ClaimSummary/PDFReport/MasterClaimReport/Page";
 import ItemWiseClaimReport from "./ClaimSummary/PDFReport/ItemWiseClaimReport/Page";
 import CustomerWiseClaimReport from "./ClaimSummary/PDFReport/CustomerWiseClaimReport/Page";
+import FrenchiesesOrderReport from "../pages/SweetPOS/Reports/OrderPDFReport/Page";
 
-
+export const FrenchiesesOrder = "FrenchiesesOrder"
 export const order1 = "order1"
 export const invoice = "invoice"
 export const Stock = "Stock"
@@ -70,6 +71,9 @@ const generateReport = (resp) => {
             break;
         case CustomerWiseClaim:
             CustomerWiseClaimReport(resp.Data)
+            break;
+        case FrenchiesesOrder:
+            FrenchiesesOrderReport(resp.Data)
             break;
 
 
