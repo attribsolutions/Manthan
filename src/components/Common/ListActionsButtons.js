@@ -70,6 +70,7 @@ export const listPageActionsButtonFunc = (props) => {
         downClaimBtnFunc,
         viewApprovalBtnFunc,
         otherBtn_1Func,
+        minPrintBtn_Func,
         UpdateDetailsBtnFunc,
         makeBtnFunc = () => { },
         pageMode,
@@ -188,6 +189,10 @@ export const listPageActionsButtonFunc = (props) => {
         const canMakeCreditNoteBtn = (subPageMode === url.SALES_RETURN_LIST) && hasRole("RoleAccess_IsSave") && isApproved && !isCreditNoteCreated
         const canUpdatebtn = otherBtn_1Func && hasRole("RoleAccess_IsSave")
 
+        const canMinPrint = minPrintBtn_Func && hasRole("RoleAccess_FranchisesOrderPrint")
+
+
+
 
         const canUpdateDetails = hasRole("RoleAccess_UpdateDetails")
 
@@ -208,7 +213,7 @@ export const listPageActionsButtonFunc = (props) => {
         const dummyDisable_upload = hasRole("RoleAccess_Upload") && !isUploadAccess
 
         const dummyDisable_UpdateDetails = hasRole("RoleAccess_UpdateDetails") && (!((rowData.InvoiceUploads.length === 0) || (rowData.InvoiceUploads[0]?.Irn === null))) && (!((rowData.InvoiceUploads.length === 0) || (rowData.InvoiceUploads[0]?.EwayBillNo === null)));
-        debugger
+
 
         const renderButtonIfNeeded = ({ condition, btnmode, iconClass, actionFunc, dispatchAction, title, buttonClasss, isDummyBtn, }) => {
 
@@ -344,6 +349,15 @@ export const listPageActionsButtonFunc = (props) => {
                         title: "Print",
                         buttonClasss: printBtnCss,
                     })}
+                    {renderButtonIfNeeded({
+                        condition: canMinPrint,
+                        btnmode: mode.MinPrint,
+                        iconClass: printIconClass,
+                        actionFunc: minPrintBtn_Func,
+                        title: "Print",
+                        buttonClasss: updateBtnCss,
+                    })}
+
                     {renderButtonIfNeeded({
                         condition: canMultiInvoicePrint,
                         btnmode: mode.MultiInvoice,
