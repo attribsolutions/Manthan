@@ -12,7 +12,7 @@ import DynamicColumnHook from "../../../../components/Common/TableCommonFunc";
 import { Return_Report_Action, Return_Report_Action_Success } from "../../../../store/Report/ReturnReportRedux/action";
 import { ExcelReportComponent } from "../../../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS";
 import GlobalCustomTable from "../../../../GlobalCustomTable";
-import { changeCommonPartyDropDetailsAction } from "../../../../store/Utilites/PartyDrodown/action";
+import { changeCommonPartyDropDetailsAction, getCommonPartyDrodownOptionAction } from "../../../../store/Utilites/PartyDrodown/action";
 import { allLabelWithBlank, allLabelWithZero } from "../../../../components/Common/CommonErrorMsg/HarderCodeData";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
@@ -44,7 +44,7 @@ const FrenchiesSaleReport = (props) => {
         ItemDropDown,
         partyDropdownLoading,
         ItemDropDownloading,
-        listBtnLoading
+        listBtnLoading,
     } = useSelector((state) => ({
         goButtonData: state.FrenchiesItemSaleReportReducer.FrenchiesesItemSaleData,
         listBtnLoading: state.FrenchiesItemSaleReportReducer.listBtnLoading,
@@ -54,6 +54,7 @@ const FrenchiesSaleReport = (props) => {
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
         ItemDropDownloading: state.StockEntryReducer.ItemDropDownloading,
+        commonPartyDropdownOption: state.CommonPartyDropdownReducer,
     })
     );
 
@@ -67,6 +68,7 @@ const FrenchiesSaleReport = (props) => {
         dispatch(commonPageField(pageId.FRENCHIESE_SALE_REPORT))
         dispatch(BreadcrumbShowCountlabel(`Count:${0} ₹ ${0.00}`));
         dispatch(changeCommonPartyDropDetailsAction({ isShow: false }))//change party drop-down show false
+        dispatch(getCommonPartyDrodownOptionAction())
         dispatch(Get_Items_Drop_Down({
             jsonBody: JSON.stringify({
                 UserID: _cfunc.loginUserID(),
@@ -78,7 +80,7 @@ const FrenchiesSaleReport = (props) => {
             })
         }));
         if (_cfunc.CommonPartyDropValue().value > 0) {
-            setPartyDropdown([_cfunc.CommonPartyDropValue()]);
+            setPartyDropdown(_cfunc.CommonPartyDropValue());
         }
         return () => {
             dispatch(Frenchies_Item_sale_Report_Action_Success([]));
@@ -111,8 +113,9 @@ const FrenchiesSaleReport = (props) => {
 
     const Party_Option = Party.map(i => ({
         value: i.id,
-        label: i.Name
-    }));
+        label: i.Name,
+        PartyType: i.PartyType
+    })).filter(index => index.PartyType === "Franchises");;
 
     Party_Option.unshift(allLabelWithZero);
 
@@ -158,11 +161,12 @@ const FrenchiesSaleReport = (props) => {
 
     function excel_And_GoBtnHandler(e, Btnmode) {
         setBtnMode(Btnmode);
+        debugger
         const jsonBody = JSON.stringify({
             "FromDate": fromdate,
             "ToDate": todate,
             "Item": Item.value,
-            "Party": _cfunc.loginSelectedPartyID(),
+            "Party": PartyDropdown.value
         });
 
         dispatch(Frenchies_Item_sale_Report_Action({ jsonBody }));
@@ -184,13 +188,7 @@ const FrenchiesSaleReport = (props) => {
         setTableData([]);
     }
 
-    function PartyDrodownOnChange(e = []) {
-
-        if (e.length === 0) {
-            e = [allLabelWithBlank]
-        } else {
-            e = e.filter(i => !(i.value === ''))
-        }
+    function PartyDrodownOnChange(e) {
         setPartyDropdown(e);
         setTableData([]);
     }
