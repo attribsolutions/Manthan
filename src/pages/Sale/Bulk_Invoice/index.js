@@ -100,135 +100,135 @@ const Bulk_Invoice2 = (props) => {
         }
     }, [postMsg]);
 
-    const saveHandleCallBack = useCallback(
-        (bulkData) => {
-            const newBulkData = JSON.parse(JSON.stringify(bulkData));
-            const loginPartyGstIn = _cfunc.loginUserGSTIN();
-            const bulkInvoiceJsonBody = [];
-            const validMsg = [];
+    const saveHandleCallBack = useCallback((bulkData) => {
+        
+        const newBulkData = JSON.parse(JSON.stringify(bulkData));
+        const loginPartyGstIn = _cfunc.loginUserGSTIN();
+        const bulkInvoiceJsonBody = [];
+        const validMsg = [];
 
-            for (const orderInfo of newBulkData) {
+        for (const orderInfo of newBulkData) {
 
-                const orderId = orderInfo.OrderIDs;
-                const orderNumber = orderInfo.OrderNumber;
-                const customerId = orderInfo.CustomerID;
-                const IsTCSParty = orderInfo.IsTCSParty;
-                const IsCustomerPAN = orderInfo.IsTCSParty;
-                const IsComparGstIn = { GSTIn_1: orderInfo.CustomerGSTIN, GSTIn_2: loginPartyGstIn };
-                const orderIncoiceItems = [];
-                let sumOfItemAmount = 0;
+            const orderId = orderInfo.OrderIDs;
+            const orderNumber = orderInfo.OrderNumber;
+            const customerId = orderInfo.CustomerID;
+            const IsTCSParty = orderInfo.IsTCSParty;
+            const IsCustomerPAN = orderInfo.IsTCSParty;
+            const IsComparGstIn = { GSTIn_1: orderInfo.CustomerGSTIN, GSTIn_2: loginPartyGstIn };
+            const orderIncoiceItems = [];
+            let sumOfItemAmount = 0;
 
-                for (const itemInfo of orderInfo.OrderItemDetails) {
+            for (const itemInfo of orderInfo.OrderItemDetails) {
 
-                    let isSameMRPinStock = '';
+                let isSameMRPinStock = '';
 
-                    if (itemInfo.lessStock) {//** */ if Short Short validation check  */
-                        validMsg.push({ [itemInfo.ItemName]: `Short Short Quantity ${itemInfo.lessStock} ${itemInfo.UnitName?.split(" ")[0]}` })
-                    };
-
-                    for (const stockInfo of itemInfo.StockDetails) {
-
-                        if (isSameMRPinStock === "" || isSameMRPinStock === parseFloat(stockInfo.MRP)) {
-                            isSameMRPinStock = parseFloat(stockInfo.MRP);
-                        } else {
-                            validMsg.push({ [`Order Number ${orderNumber}  (${itemInfo.ItemName})`]: "Multiple MRP’S Invoice not allowed." });
-                        }
-                        if (!Number(stockInfo.Rate) > 0) {//** */ rate validation check  */
-                            validMsg.push({ [itemInfo.ItemName]: " Rate not available." })
-                        };
-
-                        if (stockInfo.distribute > 0) {
-
-                            const calculate = itemAmounWithGst({
-                                Rate: stockInfo.Rate,
-                                modifiedQuantity: stockInfo.distribute,
-                                GSTPercentage: stockInfo.GST,
-                                Discount: itemInfo.Discount,
-                                DiscountType: itemInfo.DiscountType,
-                                IsComparGstIn: IsComparGstIn
-                            });
-
-                            const orderInvoiceItems = {
-                                "Item": itemInfo.Item,
-                                "Unit": itemInfo.Unit,
-                                "BatchCode": stockInfo.BatchCode,
-                                "Quantity": Number(stockInfo.distribute.toFixed(3)),
-                                "BatchDate": stockInfo.BatchDate,
-                                "BatchID": stockInfo.id,
-                                "BaseUnitQuantity": Number(stockInfo.BaseUnitQuantity).toFixed(3),
-                                "PreviousInvoiceBaseUnitQuantity": Number(stockInfo.BaseUnitQuantity).toFixed(3),
-
-                                "LiveBatch": stockInfo.LiveBatche,
-                                "MRP": stockInfo.LiveBatcheMRPID,
-                                "MRPValue": stockInfo.MRP,//changes
-                                "Rate": Number(stockInfo.Rate).toFixed(2),
-
-                                "GST": stockInfo.LiveBatcheGSTID,
-                                "CGST": Number(calculate.CGST_Amount).toFixed(2),
-                                "SGST": Number(calculate.SGST_Amount).toFixed(2),
-                                "IGST": Number(calculate.IGST_Amount).toFixed(2),
-
-                                "GSTPercentage": calculate.GST_Percentage,
-                                "CGSTPercentage": calculate.CGST_Percentage,
-                                "SGSTPercentage": calculate.SGST_Percentage,
-                                "IGSTPercentage": calculate.IGST_Percentage,
-
-                                "BasicAmount": Number(calculate.discountBaseAmt).toFixed(2),
-                                "GSTAmount": Number(calculate.roundedGstAmount).toFixed(2),
-                                "Amount": Number(calculate.roundedTotalAmount).toFixed(2),
-
-                                "TaxType": 'GST',
-                                "DiscountType": itemInfo.DiscountType.value,
-                                "Discount": Number(itemInfo.Discount) || 0,
-                                "DiscountAmount": Number(calculate.disCountAmt).toFixed(2),
-                            };
-
-                            sumOfItemAmount += calculate.roundedTotalAmount;
-                            orderIncoiceItems.push(orderInvoiceItems)
-                        }
-                    }
-                }
-
-                const orderCalculate = settingBaseRoundOffOrderAmountFunc({ IsTCSParty, IsCustomerPAN, sumOfItemAmount, })
-
-                const orderInvoiceJsonBody = {
-                    InvoiceDate: _cfunc.date_ymd_func(),
-                    InvoicesReferences: [{ Order: orderId }],
-                    CustomerGSTTin: IsComparGstIn.GSTIn_2,
-                    GrandTotal: orderCalculate.sumOfItemAmount,
-                    RoundOffAmount: orderCalculate.RoundOffAmount,
-                    TCSAmount: orderCalculate.TCS_Amount,
-                    Customer: customerId,
-                    Vehicle: '',
-                    Party: commonPartyDropSelect.value,
-                    CreatedBy: _cfunc.loginUserID(),
-                    UpdatedBy: _cfunc.loginUserID(),
-                    InvoiceItems: orderIncoiceItems//order items stock wise enterys
+                if (itemInfo.lessStock) {//** */ if Short Short validation check  */
+                    validMsg.push({ [itemInfo.ItemName]: `Short Short Quantity ${itemInfo.lessStock} ${itemInfo.UnitName?.split(" ")[0]}` })
                 };
 
-                orderIncoiceItems.length > 0 && bulkInvoiceJsonBody.push(orderInvoiceJsonBody)
+                for (const stockInfo of itemInfo.StockDetails) {
+
+                    if (((isSameMRPinStock === "") || (isSameMRPinStock === parseFloat(stockInfo.MRP))) || (stockInfo.distribute === 0)) {
+                        isSameMRPinStock = parseFloat(stockInfo.MRP);
+                    } else {
+                        validMsg.push({ [`Order Number ${orderNumber}  (${itemInfo.ItemName})`]: "Multiple MRP’S Invoice not allowed." });
+                    }
+                    if (!Number(stockInfo.Rate) > 0) {//** */ rate validation check  */
+                        validMsg.push({ [itemInfo.ItemName]: " Rate not available." })
+                    };
+
+                    if (stockInfo.distribute > 0) {
+
+                        const calculate = itemAmounWithGst({
+                            Rate: stockInfo.Rate,
+                            modifiedQuantity: stockInfo.distribute,
+                            GSTPercentage: stockInfo.GST,
+                            Discount: itemInfo.Discount,
+                            DiscountType: itemInfo.DiscountType,
+                            IsComparGstIn: IsComparGstIn
+                        });
+
+                        const orderInvoiceItems = {
+                            "Item": itemInfo.Item,
+                            "Unit": itemInfo.Unit,
+                            "BatchCode": stockInfo.BatchCode,
+                            "Quantity": Number(stockInfo.distribute.toFixed(3)),
+                            "BatchDate": stockInfo.BatchDate,
+                            "BatchID": stockInfo.id,
+                            "BaseUnitQuantity": Number(stockInfo.BaseUnitQuantity).toFixed(3),
+                            "PreviousInvoiceBaseUnitQuantity": Number(stockInfo.BaseUnitQuantity).toFixed(3),
+
+                            "LiveBatch": stockInfo.LiveBatche,
+                            "MRP": stockInfo.LiveBatcheMRPID,
+                            "MRPValue": stockInfo.MRP,//changes
+                            "Rate": Number(stockInfo.Rate).toFixed(2),
+
+                            "GST": stockInfo.LiveBatcheGSTID,
+                            "CGST": Number(calculate.CGST_Amount).toFixed(2),
+                            "SGST": Number(calculate.SGST_Amount).toFixed(2),
+                            "IGST": Number(calculate.IGST_Amount).toFixed(2),
+
+                            "GSTPercentage": calculate.GST_Percentage,
+                            "CGSTPercentage": calculate.CGST_Percentage,
+                            "SGSTPercentage": calculate.SGST_Percentage,
+                            "IGSTPercentage": calculate.IGST_Percentage,
+
+                            "BasicAmount": Number(calculate.discountBaseAmt).toFixed(2),
+                            "GSTAmount": Number(calculate.roundedGstAmount).toFixed(2),
+                            "Amount": Number(calculate.roundedTotalAmount).toFixed(2),
+
+                            "TaxType": 'GST',
+                            "DiscountType": itemInfo.DiscountType.value,
+                            "Discount": Number(itemInfo.Discount) || 0,
+                            "DiscountAmount": Number(calculate.disCountAmt).toFixed(2),
+                        };
+
+                        sumOfItemAmount += calculate.roundedTotalAmount;
+                        orderIncoiceItems.push(orderInvoiceItems)
+                    }
+                }
             }
-            const jsonBody = JSON.stringify({ InvoiceData: bulkInvoiceJsonBody })
 
-            if (validMsg.length > 0) {
-                customAlert({
-                    Type: 4,
-                    Message: validMsg,
-                })
-                return
-            }
+            const orderCalculate = settingBaseRoundOffOrderAmountFunc({ IsTCSParty, IsCustomerPAN, sumOfItemAmount, })
+
+            const orderInvoiceJsonBody = {
+                InvoiceDate: _cfunc.date_ymd_func(),
+                InvoicesReferences: [{ Order: orderId }],
+                CustomerGSTTin: IsComparGstIn.GSTIn_2,
+                GrandTotal: orderCalculate.sumOfItemAmount,
+                RoundOffAmount: orderCalculate.RoundOffAmount,
+                TCSAmount: orderCalculate.TCS_Amount,
+                Customer: customerId,
+                Vehicle: '',
+                Party: commonPartyDropSelect.value,
+                CreatedBy: _cfunc.loginUserID(),
+                UpdatedBy: _cfunc.loginUserID(),
+                InvoiceItems: orderIncoiceItems//order items stock wise enterys
+            };
+
+            orderIncoiceItems.length > 0 && bulkInvoiceJsonBody.push(orderInvoiceJsonBody)
+        }
+        const jsonBody = JSON.stringify({ InvoiceData: bulkInvoiceJsonBody })
+
+        if (validMsg.length > 0) {
+            customAlert({
+                Type: 4,
+                Message: validMsg,
+            })
+            return
+        }
 
 
-            if (!(bulkInvoiceJsonBody.length > 0)) {
-                customAlert({
-                    Type: 4,
-                    Message: alertMessages.itemQtyIsRequired,
-                })
-                return
-            }
-            dispatch(saveBulkInvoiceAction({ jsonBody: jsonBody }))
+        if (!(bulkInvoiceJsonBody.length > 0)) {
+            customAlert({
+                Type: 4,
+                Message: alertMessages.itemQtyIsRequired,
+            })
+            return
+        }
+        dispatch(saveBulkInvoiceAction({ jsonBody: jsonBody }))
 
-        }, [])
+    }, [])
 
     if (userPageAccessState === '') {
         return null //if roll access absent for this page then  not vissile 
