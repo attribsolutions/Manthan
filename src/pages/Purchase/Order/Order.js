@@ -658,7 +658,7 @@ const Order = (props) => {
             dataField: "",
             attrs: (cell, row, rowIndex, colIndex) => ({ 'data-label': "Unit" }),
             headerStyle: () => {
-                return { width: '9%', textAlign: 'center' };
+                return { width: '10%', textAlign: 'center' };
             },
             formatExtraData: { tableList: orderItemTable },
             formatter: (value, row, key, { tableList }) => {
@@ -726,7 +726,7 @@ const Order = (props) => {
                 }
 
                 return (
-                    <div >
+                    <div style={{ width: "130px" }}>
                         <Select
                             id={"ddlUnit"}
                             key={`ddlUnit${row.id}`}
