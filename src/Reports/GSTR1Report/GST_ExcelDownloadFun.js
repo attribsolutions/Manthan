@@ -1,3 +1,5 @@
+
+
 import * as ExcelJS from 'exceljs';
 import { autoFitColumnWidths, freezeHeaderRow, generateTableData, saveWorkbookAsExcel, setDateValue, setNumberValue, setTextValue, styleHeaderRow } from "../../components/Common/ReportCommonFunc/ExcelFunctions";
 
@@ -13,15 +15,155 @@ function addTitleRow(worksheet, title) {
 
 // Function to add merged title row to the worksheet
 function addMergedTitleRow(worksheet, HeaderColumns) {
+
     const endColumn = HeaderColumns.length + 1;
     worksheet.mergeCells(1, 1, 1, endColumn); // Merge cells for title
     worksheet.getCell(1, endColumn).alignment = { horizontal: 'center' }; // Align title horizontally to center
+
 }
 
+
 // Function to add rows and format cells based on table data
-function addRowsAndFormatCells(worksheet, HeaderColumns, dataRow, controlTypeName) {
-    worksheet.addRow(HeaderColumns); // Add header row
+function addRowsAndFormatCells(worksheet, HeaderColumns, dataRow, controlTypeName, key) {
+    const headerRow = worksheet.addRow(HeaderColumns);
+    // Merge cells in the header row with the cells in the merge row
+    debugger
+    if ((key === "B2B") || (key === "B2CL") || (key === "CDNR")) {
+        const mergeRow = worksheet.addRow([])
+        const Avoide_Merging_Column = ["C", "D", "E", "F", "K", "L", "M", "N"];
+        HeaderColumns.forEach((header, index) => {
+            const colLetter = String.fromCharCode(65 + index); // Convert column index to letter (A, B, C, etc.)
+            if (!(Avoide_Merging_Column.includes(colLetter))) {
+                worksheet.mergeCells(`${colLetter}${headerRow.number}:${colLetter}${mergeRow.number}`);
+
+            }
+        });
+
+        // Set values for the second row in specific columns
+        HeaderColumns.forEach((header, index) => {
+            const colLetter = String.fromCharCode(65 + index);
+            if (Avoide_Merging_Column.includes(colLetter)) {
+                const cell_1 = worksheet.getCell(`${colLetter}${mergeRow.number}`);
+                cell_1.value = header; // Set the value for specific columns in the second row
+            }
+        });
+        worksheet.mergeCells('C6:F6');
+        worksheet.mergeCells('K6:N6');
+
+        const mergedCell_1 = worksheet.getCell('C6');
+        const mergedCell_2 = worksheet.getCell('K6');
+
+        mergedCell_1.alignment = { vertical: 'middle', horizontal: 'center' };
+        mergedCell_1.value = (key === "CDNR") ? "Credit note/Debit note details" : "Invoice Details";
+        mergedCell_1.fill = {
+            type: 'pattern',
+            pattern: 'solid',
+            fgColor: { argb: 'E4DFEC' }
+        };
+        mergedCell_1.font = {
+            color: {
+                argb: '000000',
+            },
+            bold: true
+        };
+        mergedCell_1.border = {
+            top: { style: 'thin' },
+            left: { style: 'thin' },
+            bottom: { style: 'thin' },
+            right: { style: 'thin' }
+        };
+
+        mergedCell_2.alignment = { vertical: 'middle', horizontal: 'center' };
+        mergedCell_2.value = "Tax Amount";
+        mergedCell_2.fill = {
+            type: 'pattern',
+            pattern: 'solid',
+            fgColor: { argb: 'E4DFEC' }
+        };
+        mergedCell_2.font = {
+            color: {
+                argb: '000000',
+            },
+            bold: true
+        };
+        mergedCell_2.border = {
+            top: { style: 'thin' },
+            left: { style: 'thin' },
+            bottom: { style: 'thin' },
+            right: { style: 'thin' }
+        };
+    };
+
+    if ((key === "B2CS")) {
+        const mergeRow = worksheet.addRow([])
+        const Avoide_Merging_Column = ["C", "D", "G", "H", "I", "J"];
+        HeaderColumns.forEach((header, index) => {
+            const colLetter = String.fromCharCode(65 + index); // Convert column index to letter (A, B, C, etc.)
+            if (!(Avoide_Merging_Column.includes(colLetter))) {
+                worksheet.mergeCells(`${colLetter}${headerRow.number}:${colLetter}${mergeRow.number}`);
+
+            }
+        });
+
+        // Set values for the second row in specific columns
+        HeaderColumns.forEach((header, index) => {
+            const colLetter = String.fromCharCode(65 + index);
+            if (Avoide_Merging_Column.includes(colLetter)) {
+                const cell_1 = worksheet.getCell(`${colLetter}${mergeRow.number}`);
+                cell_1.value = header; // Set the value for specific columns in the second row
+            }
+        });
+        worksheet.mergeCells('C6:D6');
+        worksheet.mergeCells('G6:J6');
+
+        const mergedCell_1 = worksheet.getCell('C6');
+        const mergedCell_2 = worksheet.getCell('G6');
+
+        mergedCell_1.alignment = { vertical: 'middle', horizontal: 'center' };
+        mergedCell_1.value = (key === "CDNR") ? "Credit note/Debit note details" : "Invoice Details";
+        mergedCell_1.fill = {
+            type: 'pattern',
+            pattern: 'solid',
+            fgColor: { argb: 'E4DFEC' }
+        };
+        mergedCell_1.font = {
+            color: {
+                argb: '000000',
+            },
+            bold: true
+        };
+        mergedCell_1.border = {
+            top: { style: 'thin' },
+            left: { style: 'thin' },
+            bottom: { style: 'thin' },
+            right: { style: 'thin' }
+        };
+
+        mergedCell_2.alignment = { vertical: 'middle', horizontal: 'center' };
+        mergedCell_2.value = "Tax Amount";
+        mergedCell_2.fill = {
+            type: 'pattern',
+            pattern: 'solid',
+            fgColor: { argb: 'E4DFEC' }
+        };
+        mergedCell_2.font = {
+            color: {
+                argb: '000000',
+            },
+            bold: true
+        };
+        mergedCell_2.border = {
+            top: { style: 'thin' },
+            left: { style: 'thin' },
+            bottom: { style: 'thin' },
+            right: { style: 'thin' }
+        };
+    }
+
+
+
     styleHeaderRow(worksheet); // Apply style to header row
+
     // Iterate through each data row, add rows and format cells accordingly
     dataRow.forEach((item) => {
         const row = worksheet.addRow(item);
@@ -31,7 +173,6 @@ function addRowsAndFormatCells(worksheet, HeaderColumns, dataRow, controlTypeNam
         });
     });
 }
-
 function setColumnWidths(worksheet) {
     worksheet.columns.forEach((column) => {
         column.width = Math.max(20, column.width);
@@ -55,10 +196,9 @@ function formatCellByDataType(cell, controlType, value) {
     }
 }
 
-
 // Component function for generating an Excel report with multiple tabs
 function GST_ExcelDownloadFun({ excelTableData, excelFileName, pageName }) {
-    
+
     const workbook = new ExcelJS.Workbook(); // Create a new Excel workbook
 
     // Iterate through each key-value pair in the excelTableData object
@@ -71,7 +211,7 @@ function GST_ExcelDownloadFun({ excelTableData, excelFileName, pageName }) {
         if (pageName === "GST-R1") {
             // If there are elements in the first index
             if (value.length > 0) {
-                
+
                 const firstIndex = value[0]; // Get the first index of the value array
                 const { HeaderColumns, dataRow, controlTypeName } = generateTableData({ excelTableData: [firstIndex] }); // Generate table data
 
@@ -84,7 +224,7 @@ function GST_ExcelDownloadFun({ excelTableData, excelFileName, pageName }) {
         setColumnWidths(worksheet)
 
         if (value.length > 0) {
-            
+
             let valueCopy = value
             if (pageName === "GST-R1") {
                 valueCopy = value.slice(1); // Create a copy of the value array excluding the first index
@@ -94,11 +234,11 @@ function GST_ExcelDownloadFun({ excelTableData, excelFileName, pageName }) {
 
             // Add merged title row, rows, format cells, freeze header row, and auto fit column widths
             addMergedTitleRow(worksheet, HeaderColumns);
-            addRowsAndFormatCells(worksheet, HeaderColumns, dataRow, controlTypeName);
+            addRowsAndFormatCells(worksheet, HeaderColumns, dataRow, controlTypeName, key);
             freezeHeaderRow(worksheet);
             autoFitColumnWidths(worksheet, HeaderColumns, dataRow);
         }
-        
+
     }
 
     // Save the workbook as an Excel file
