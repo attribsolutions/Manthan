@@ -814,7 +814,7 @@ const Order = (props) => {
             headerStyle: () => {
                 return { width: '8%', textAlign: 'center' };
             },
-            hidden: (subPageMode === url.ORDER_1 || subPageMode === url.IB_ORDER || subPageMode === url.IB_SALES_ORDER) && true,
+            hidden: (subPageMode === url.ORDER_1 || subPageMode === url.IB_ORDER || subPageMode === url.IB_SALES_ORDER || _cfunc.loginUserIsFranchisesRole()) && true,
             formatter: (value, row, k) => {
 
                 return (
@@ -835,7 +835,7 @@ const Order = (props) => {
             headerStyle: () => {
                 return { width: '11%', textAlign: 'center' };
             },
-            hidden: (subPageMode === url.ORDER_1 || subPageMode === url.IB_ORDER || subPageMode === url.IB_SALES_ORDER) && true,
+            hidden: (subPageMode === url.ORDER_1 || subPageMode === url.IB_ORDER || subPageMode === url.IB_SALES_ORDER || _cfunc.loginUserIsFranchisesRole()) && true,
             headerFormatter: () => {
                 return (
                     <div className="" >
