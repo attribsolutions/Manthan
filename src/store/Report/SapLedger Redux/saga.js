@@ -79,7 +79,7 @@ function* ProductMarginGoBtn_GenFuc({ config }) {
 						const keys = Object.keys(ele);
 						keys.forEach(key => {
 
-							let imageColumns = ["Side2View", "TopView", "Side1View", "BackView", "BarCode", "Poster", "FrontView", "Nutrition"];
+							let imageColumns = ["SideView(L)", "TopView", "SideView(R)", "BackView", "BarCode", "Poster", "FrontView", "Nutrition"];
 							let isImageColumn = imageColumns.includes(key);
 							if (isImageColumn) {
 

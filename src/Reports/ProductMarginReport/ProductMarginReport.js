@@ -209,8 +209,9 @@ const ProductMarginReport = (props) => {
             let columns = []
             const objectAtIndex0 = ((ProductMargin[0]));
             for (const key in objectAtIndex0) {
+                debugger
                 let column = {}
-                let imageColumns = ["Side2View", "TopView", "Side1View", "BackView", "BarCode", "Poster", "FrontView", "Nutrition"];
+                let imageColumns = ["SideView(L)", "TopView", "SideView(R)", "BackView", "BarCode", "Poster", "FrontView", "Nutrition"];
                 let isImageColumn = imageColumns.includes(key);
                 if (isImageColumn) {
 
@@ -220,7 +221,7 @@ const ProductMarginReport = (props) => {
                         sort: true,
                         classes: "table-cursor-pointer",
                         formatter: (cell, row, key) => {
-
+                            debugger
                             const imageShowHandler = async ({ ImageUrl, }) => { // image Show handler                               
                                 let slides = []
                                 if (ImageUrl !== "") {
@@ -241,6 +242,7 @@ const ProductMarginReport = (props) => {
                                                     backgroundSize: 'cover'
                                                 }}
                                                 onClick={() => {
+                                                    debugger
                                                     imageShowHandler({ ImageUrl: cell })
                                                 }}
                                                 id={`ImageID_${key}`}
@@ -319,7 +321,7 @@ const ProductMarginReport = (props) => {
             "Group": groupSelect[0].value === 0 ? "" : groupSelect.map(i => i.value).join(','),
             "SubGroup": subGroupSelect[0].value === 0 ? "" : subGroupSelect.map(i => i.value).join(','),
             "Item": itemNameSelect[0].value === 0 ? "" : itemNameSelect.map(i => i.value).join(','),
-            "Company":loginCompanyID()
+            "Company": loginCompanyID()
         });
         dispatch(ProductMargin_Go_Btn_Action({ jsonBody }))
     }
@@ -380,7 +382,7 @@ const ProductMarginReport = (props) => {
         dispatch(priceListByPartyAction(e.value))
     }
 
-       function GroupOnchange(e = []) {
+    function GroupOnchange(e = []) {
         dispatch(ProductMargin_Go_Btn_Success([]));
         setTableData([]);
         setcolumn([{}]);
@@ -416,7 +418,7 @@ const ProductMarginReport = (props) => {
         dispatch(ProductMargin_Go_Btn_Success([]));
         setTableData([]);
         setcolumn([{}]);
-       
+
         dispatch(Items_On_Group_And_Subgroup_API_Success([]));
         setItemNameSelect([allLabelWithZero]);
 
@@ -451,7 +453,7 @@ const ProductMarginReport = (props) => {
     }
 
     const priceListOnClick = function () {
-     
+
         const hasNone = document.getElementById("price-drop").style;
 
         if ((priceListByPartyType_WithAll.length > 0)) {

@@ -15,6 +15,11 @@ import { alertMessages } from "../../components/Common/CommonErrorMsg/alertMsg";
 import { allLabelWithBlank } from "../../components/Common/CommonErrorMsg/HarderCodeData";
 import GST_ExcelDownloadFun from "./GST_ExcelDownloadFun";
 
+
+
+
+
+
 const GSTR1Report = (props) => {
     const dispatch = useDispatch();
     const history = useHistory();
@@ -91,11 +96,13 @@ const GSTR1Report = (props) => {
 
     useEffect(() => {
         if ((GstR1ReportData.StatusCode === 200 && GstR1ReportData.Status)) {
+            
             GST_ExcelDownloadFun({      // Download multi tab excel
                 excelTableData: GstR1ReportData.Data,
                 excelFileName: `GST-R1 Report (${values.FromDate}) To (${values.ToDate})`,
                 pageName: "GST-R1"
             })
+
             dispatch(GST_R1_Report_API_Success({ Status: false }))
         }
 
