@@ -607,12 +607,12 @@ export const IB_Invoice_Singel_Get_for_Report_Api = ({ editId }) => get(`${url.I
 //**************************** E-Invoice (upload ,cancel,print) ***************************************/
 
 export const EInvoice_Uploade_Get_API = ({ RowId, UserID, Invoice_Identifier_ID }) => get(`${url.UPLOADED_E_INVOICE}/${RowId}/${UserID}/${Invoice_Identifier_ID}`)// Uploade_EInvoice
-export const EInvoice_Cancel_Get_API = ({ RowId, UserID ,Invoice_Identifier_ID}) => get(`${url.CANCEL_E_INVOICE}/${RowId}/${UserID}/${Invoice_Identifier_ID}`)// Cancel_EInvoice
+export const EInvoice_Cancel_Get_API = ({ RowId, UserID, Invoice_Identifier_ID }) => get(`${url.CANCEL_E_INVOICE}/${RowId}/${UserID}/${Invoice_Identifier_ID}`)// Cancel_EInvoice
 
 //**************************** E-WayBill (upload ,cancel,print) actions ***************************************/
 
-export const EwayBill_Uploade_Get_API = ({ RowId, UserID ,Invoice_Identifier_ID}) => get(`${url.UPLOADED_E_WAY_BILL}/${RowId}/${UserID}/${Invoice_Identifier_ID}`)// Uploade_EwayBill
-export const EwayBill_Cancel_Get_API = ({ RowId, UserID,Invoice_Identifier_ID }) => get(`${url.CANCEL_E_WAY_BILL}/${RowId}/${UserID}/${Invoice_Identifier_ID}`)// Cancel_EwayBill
+export const EwayBill_Uploade_Get_API = ({ RowId, UserID, Invoice_Identifier_ID }) => get(`${url.UPLOADED_E_WAY_BILL}/${RowId}/${UserID}/${Invoice_Identifier_ID}`)// Uploade_EwayBill
+export const EwayBill_Cancel_Get_API = ({ RowId, UserID, Invoice_Identifier_ID }) => get(`${url.CANCEL_E_WAY_BILL}/${RowId}/${UserID}/${Invoice_Identifier_ID}`)// Cancel_EwayBill
 
 //IB Invoice 2 
 export const IB_Invoice_GoButton_API = ({ jsonBody }) => post(url.IB_INVOICE_ADD_PAGE_GO_BTN, jsonBody)// go button postapi
@@ -730,7 +730,7 @@ export const Item_DropDown_Api = ({ jsonBody }) => post(url.ITEM_DROPDOWN_API, j
 //Stock Report
 export const StockReport_GoBtn_API = (jsonBody) => post(url.STOCK_REPORT, jsonBody)//Go button api
 
-export const Pos_StockReport_GoBtn_API = ({jsonBody}) => post(url.POS_STOCK_REPORT, jsonBody)//Go button api
+export const Pos_StockReport_GoBtn_API = ({ jsonBody }) => post(url.POS_STOCK_REPORT, jsonBody)//Go button api
 
 
 
@@ -882,17 +882,17 @@ export const Pos_Invoice_Singel_Get_for_Report_Api = ({ editId }) => get(`${url.
 
 
 ///POS USER REGESTRATION
-export const POS_USER_Master_Get_API = () => get(url.POS_USER_REGESTRATION)//get api
+// export const POS_USER_Master_Get_API = () => get(url.POS_USER_REGESTRATION)//get api
+export const POS_USER_Master_Get_API = ({ division_Id }) => get(`${url.GET_POS_USER_REGESTRATION}/${division_Id}`)// edit api
+
 export const POS_USER_Master_Post_API = ({ jsonBody }) => post(url.POS_USER_REGESTRATION, jsonBody)// post api
-export const POS_USER_Master_Delete_API = ({ deleteId }) => del(`${url.POS_USER_REGESTRATION}/${deleteId}`)// delete api
-export const POS_USER_Master_Edit_API = ({ editId }) => get(`${url.POS_USER_REGESTRATION}/${editId}`)// edit api
+export const POS_USER_Master_Delete_API = ({ deleteId }) => del(`${url.GET_POS_USER_REGESTRATION}/${deleteId}`)// delete api
+export const POS_USER_Master_Edit_API = ({ editId }) => get(`${url.GET_POS_USER_REGESTRATION}/${editId}`)// edit api
 export const POS_USER_Master_Update_API = ({ jsonBody, updateId }) => put(`${url.POS_USER_REGESTRATION}/${updateId}`, jsonBody)// update api
 export const POS_USER_Get_Roles = () => get(`${url.POS_USER_RLOE}`)// edit api
 
 
 export const CashierSummary_API = ({ jsonBody }) => post(url.CASHIER_SUMMARY_REPORT, jsonBody)// post api
-
-
 
 
 // TargetVSAchievement 
