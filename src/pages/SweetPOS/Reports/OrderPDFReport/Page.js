@@ -33,7 +33,7 @@ const FrenchiesesOrderReport = (data) => {
         const doc = new jsPDF('p', 'pt', 'a4');
 
         const { OrderItem } = data
- 
+
         const margin = {
             left: 30,
             right: 26,
@@ -168,6 +168,11 @@ const FrenchiesesOrderReport = (data) => {
         // Delete unused empty page
         doc.deletePage(1);
 
+        doc.setProperties({
+
+            title: `POReport/${data.OrderDate}-${data.CustomerName}`
+        });
+
         return doc;
     }
 
@@ -175,11 +180,10 @@ const FrenchiesesOrderReport = (data) => {
     // generatePDF().save('multi-section table.pdf');
 
     // Set properties for the document
-    generatePDF().setProperties({
-        title: `POReport/${data.OrderDate}-${data.CustomerName}`
-    });
+    // generatePDF().setProperties({
 
-
+    //     title: `POReport/${data.OrderDate}-${data.CustomerName}`
+    // });
 
 
 
