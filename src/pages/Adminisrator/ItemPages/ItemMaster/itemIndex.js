@@ -396,14 +396,14 @@ const ItemsMaster = (props) => {
                         products: (updateMsg.TransactionID).toString()
                     });
 
-                    const mobilApiResp = await mobileApp_ProductUpdate_Api({ jsonBody });
+                    // const mobilApiResp = await mobileApp_ProductUpdate_Api({ jsonBody });
 
-                    if (mobilApiResp.StatusCode === 200) {
-                        showToastAlert(mobilApiResp.Message);
-                        setMobileApiLoading(false);
-                    } else {
-                        setMobileApiLoading(false);
-                    }
+                    // if (mobilApiResp.StatusCode === 200) {
+                    //     showToastAlert(mobilApiResp.Message);
+                    //     setMobileApiLoading(false);
+                    // } else {
+                    //     setMobileApiLoading(false);
+                    // }
 
                 } catch (error) {
                     console.error("An error occurred while fetching mobileApiResp:", error);
