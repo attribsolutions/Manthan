@@ -221,7 +221,8 @@ const MRPMaster = (props) => {
                 const jsonBody = JSON.stringify({
                     Division: values.DivisionName.value ? values.DivisionName.value : 0,
                     Party: values.PartyName.value ? values.PartyName.value : 0,
-                    EffectiveDate: values.EffectiveDate
+                    EffectiveDate: values.EffectiveDate,
+                    CompanyID: _cfunc.loginCompanyID()
                 });
                 dispatch(GoButtonForMRP_Master({ jsonBody }));
             }

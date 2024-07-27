@@ -56,7 +56,7 @@ const MRPList = () => {
   }, []);
 
   const mobaileDeleteApiFinc = async (deleteMsg) => {
-    
+
     //***************mobail app api*********************** */
     const jsonBody = JSON.stringify({
       products: deleteMsg.DeleteID
@@ -96,7 +96,8 @@ const MRPList = () => {
       const jsonBody = JSON.stringify({
         Division: Division_id === null ? 0 : Division_id,
         Party: Party_id === null ? 0 : Party_id,
-        EffectiveDate: EffectiveDate
+        EffectiveDate: EffectiveDate,
+        CompanyID: _cfunc.loginCompanyID()
       })
       let config = { jsonBody, pathname: url.MRP, btnmode: mode.edit, rowData: rowData }
       dispatch(_act.GoButtonForMRP_Master(config));
