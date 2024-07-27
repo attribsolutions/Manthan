@@ -1,6 +1,6 @@
 import { call, put, takeLatest } from "redux-saga/effects";
 import {
- 
+
   GET_POS_ROLE,
   ADD_POS_USER,
   UPDATE_POS_USER_ACTION,
@@ -17,7 +17,7 @@ import {
   POSuserUpdateActionSuccess,
   getPOSRoleSuccess
 } from "./actions";
-import {  loginJsonBody } from "../../../../components/Common/CommonFunction";
+import { loginJsonBody, loginSelectedPartyID } from "../../../../components/Common/CommonFunction";
 import { POS_USER_Get_Roles, POS_USER_Master_Delete_API, POS_USER_Master_Edit_API, POS_USER_Master_Get_API, POS_USER_Master_Post_API, POS_USER_Master_Update_API } from "../../../../helpers/backend_helper";
 
 // employee dropdown list
@@ -37,9 +37,10 @@ function* POS_user_save_GenFunc({ config }) {
 }
 
 function* POS_userList_GenFunc() { //  Get  Users list  for List page  POST_api
-  const filters = JSON.stringify(loginJsonBody())
+  let config = {}
+  config.division_Id = loginSelectedPartyID()
   try {
-    const response = yield call(POS_USER_Master_Get_API, filters);
+    const response = yield call(POS_USER_Master_Get_API, config);
     yield put(getPOSUserListSuccess(response.Data));
   } catch (error) { yield put(POSUserApiErrorAction()) }
 }
@@ -78,7 +79,7 @@ function* POSUserRegistrationSaga() {
   yield takeLatest(GET_POS_USER_LIST, POS_userList_GenFunc)
   yield takeLatest(DELETE_POS_USER_ACTION, Delete_POS_UserList_GenFunc)
   yield takeLatest(EDIT_POS_USER_ACTION, Edit_POS_UserList_GenFunc)
- 
+
 
 }
 export default POSUserRegistrationSaga;

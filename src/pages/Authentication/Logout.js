@@ -17,6 +17,7 @@ const Logout = props => {
       session: false,
     })
     localStorage.clear()
+    sessionStorage.clear()
     dispatch(logoutUser(props.history))
     dispatch(logoutReset())
   }, [dispatch, props.history])
