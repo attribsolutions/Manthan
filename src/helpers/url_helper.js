@@ -87,6 +87,11 @@ export const ITEM_IMAGE_UPLOAD = "/ImageUploads"
 export const POS_USER_REGESTRATION = "/SweetPOS/SPOSUsers"
 export const POS_USER_RLOE = "/SweetPOS/sposroleslist"
 
+export const GET_POS_USER_REGESTRATION = "SweetPOS/SPOSUsersOfDivision"
+
+
+
+
 
 export const CASHIER_SUMMARY_REPORT = "SweetPOS/CashierSummary"
 
