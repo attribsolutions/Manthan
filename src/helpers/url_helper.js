@@ -89,6 +89,7 @@ export const POS_USER_RLOE = "/SweetPOS/sposroleslist"
 
 export const GET_POS_USER_REGESTRATION = "SweetPOS/SPOSUsersOfDivision"
 
+export const SINGLE_GET_POS_USER_REGESTRATION = "SweetPOS/SweetPOSSingleUser"
 
 
 
@@ -621,6 +622,9 @@ export const GET_PARTY_DETAILS_LIST = '/GetPartydetails'
 export const POST_PARTY_DETAILS = '/PartyDetails'
 
 export const FRENCHIESE_ITEM_SALE_REPORT = '/FranchiseSaleReport'
+
+export const FRENCHIESE_DAILY_SALE_REPORT = '/SweetPOS/TopSaleItemsOfFranchise'
+
 
 
 //ItemWiseUpdate

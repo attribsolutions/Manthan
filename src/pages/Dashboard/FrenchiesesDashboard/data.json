@@ -1,0 +1,45 @@
+{
+    "StatusCode": 200,
+    "Status": true,
+    "Message": "",
+    "Data": [
+        {
+            "PartyId": 19803,
+            "PartyName": "ATHARV ENTERPRISES HADAPS",
+            "PartyAddress": "4/5-1892, Jalna Road, MIDC Industrial Area, Midc Area, Aurangabad, Maharashtra 431005, India",
+            "TotalAmount": "257528.56",
+            "TopSaleItems": [
+                {
+                    "Item": 214,
+                    "ItemName": "Bakarwadi Loose",
+                    "TotalAmount": "64065.00",
+                    "TotalQuantity": "159.675"
+                },
+                {
+                    "Item": 288,
+                    "ItemName": "Kaju Katli",
+                    "TotalAmount": "18858.75",
+                    "TotalQuantity": "18.780"
+                },
+                {
+                    "Item": 328,
+                    "ItemName": "Shahi Motichur Ladoo",
+                    "TotalAmount": "7712.60",
+                    "TotalQuantity": "14.755"
+                },
+                {
+                    "Item": 348,
+                    "ItemName": "Kandi Pedha",
+                    "TotalAmount": "6207.85",
+                    "TotalQuantity": "9.690"
+                },
+                {
+                    "Item": 302,
+                    "ItemName": "Spl. Dink Ladoo",
+                    "TotalAmount": "6137.00",
+                    "TotalQuantity": "10.220"
+                }
+            ]
+        }
+    ]
+}
