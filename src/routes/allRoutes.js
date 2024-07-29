@@ -1,6 +1,7 @@
 import React from "react"
 import * as path from "./route_url";
-import { Redirect } from "react-router-dom"
+import { Redirect, useParams } from "react-router-dom"
+
 
 //Dashboard
 import Dashboard from "../pages/Dashboard/index";
@@ -234,6 +235,10 @@ import CashierSummary from "../pages/SweetPOS/Reports/CashierSummaryReport/Cashi
 import Pos_InvoiceList from "../pages/SweetPOS/Sales/Invoice/InvoiceList.js";
 import BulkWorkOrderList from "../pages/Production/WorkOrder/BulkWorkOrder/BulkWorkOrderList.js";
 import FrenchiesSaleReport from "../pages/SweetPOS/Reports/FrenchiesSaleReport/FrenchiesSaleReport.js";
+import DailyItemSaleView from "../pages/Dashboard/FrenchiesesDashboard/DailyItemSaleView.js";
+
+
+
 
 const userRoutes = [
 	// *************************** DashBord *******************************//
@@ -634,6 +639,11 @@ const userRoutes = [
 
 
 
+
+
+
+
+
 	// ************************************ Utility **************************************//
 
 
@@ -661,6 +671,7 @@ const userRoutes = [
 
 const authRoutes = [
 	//authencation page
+
 	{ path: "/division", component: SelectDivisionPage },
 	{ path: "/logout", component: Logout },
 	{ path: "/login", component: Login },
@@ -669,6 +680,8 @@ const authRoutes = [
 	{ path: "/SendOTP", component: SendOTP },
 	{ path: "/EnterOTP", component: EnterOTP },
 	{ path: "/pages-404", component: Error404 },
+
+	{ path: '/Daily_Sale_Report/:Party_Id', component: DailyItemSaleView },
 	// { component:() => <Redirect to="/login" /> },
 	{ path: "/pages-500", component: Error500 },
 ]

@@ -9,7 +9,7 @@ import {
     Col,
     Container, Label, Row,
 } from "reactstrap";
-import { IsSweetAndSnacksCompany, breadcrumbReturnFunc, loginSelectedPartyID } from '../../../components/Common/CommonFunction';
+import { IsSweetAndSnacksCompany, breadcrumbReturnFunc, currentDate_dmy, loginPartyID, loginSelectedPartyID, loginUserIsFranchisesRole } from '../../../components/Common/CommonFunction';
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import { commonPageField, commonPageFieldSuccess } from '../../../store/actions';
@@ -22,6 +22,11 @@ import { DashboardLoader, PageLoadingSpinner } from '../../../components/Common/
 import MobileRetailerApprove from './MobileRetailerApprove';
 import DemandListForDashboard from './demand';
 import WorkOrderForDashboard from './WorkOrder';
+import DailyItemSaleView from '../FrenchiesesDashboard/DailyItemSaleView';
+import Pie from '../FrenchiesesDashboard/pie';
+import Data from './../FrenchiesesDashboard/data.json'
+import SERVER_HOST_PATH, { ERP_LINK } from '../../../helpers/_serverPath';
+import { formatDate, GetDailySaleData } from '../FrenchiesesDashboard/Function';
 
 const Dashboard_1 = (props) => {
 
@@ -29,6 +34,13 @@ const Dashboard_1 = (props) => {
     const dispatch = useDispatch();
     const IsCompanySweetAndSnacks = IsSweetAndSnacksCompany()
     const [userPageAccessState, setUserAccState] = useState('');
+    const [selectedOption, setSelectedOption] = useState('TODAYS');
+    const [data, setData] = useState({});
+
+    const [dateRange, setDateRange] = useState({
+        fromDate: currentDate_dmy,
+        toDate: currentDate_dmy,
+    });
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
@@ -115,6 +127,35 @@ const Dashboard_1 = (props) => {
         history.push(url.IB_ORDER_SO_LIST)
     }
 
+    const handleChange = (event) => {
+        const value = event.target.value;
+        setSelectedOption(value);
+
+        const today = new Date();
+        let fromDate;
+        let toDate;
+
+        if (value === 'TODAYS') {
+            fromDate = toDate = formatDate(today);
+        } else if (value === 'YESTERDAY') {
+            const yesterday = new Date(today);
+            yesterday.setDate(today.getDate() - 1);
+            fromDate = toDate = formatDate(yesterday);
+        } else if (value === 'MONTH') {
+            const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+            fromDate = formatDate(firstDayOfMonth);
+            toDate = formatDate(today);
+        } else if (value === 'SIX_MONTH') {
+            const sixMonthsAgo = new Date(today);
+            sixMonthsAgo.setMonth(today.getMonth() - 6);
+            fromDate = formatDate(sixMonthsAgo);
+            toDate = formatDate(today);
+        }
+
+        setDateRange({ fromDate, toDate });
+    };
+
+
 
     const RedirectHandler = (Type) => {
         if (Type === 1) {
@@ -129,6 +170,12 @@ const Dashboard_1 = (props) => {
             history.push(url.GRN_LIST_3)
         }
     }
+
+    useEffect(async () => {
+        const jsonData = await GetDailySaleData({ fromDate: dateRange.fromDate, toDate: dateRange.toDate, Party_Id: loginPartyID(), })
+        setData(jsonData.Data)
+    }, [])
+
 
     return (
         <React.Fragment>
@@ -216,7 +263,7 @@ const Dashboard_1 = (props) => {
                     </Row>
 
                     <Row>
-                        {!IsCompanySweetAndSnacks && <Col lg={6}>
+                        {(!IsCompanySweetAndSnacks) && (!loginUserIsFranchisesRole()) && <Col lg={6}>
                             <Card className=''>
                                 <CardHeader style={{ backgroundColor: "whitesmoke" }}
                                     className="card-header align-items-center d-flex text-center">
@@ -236,8 +283,44 @@ const Dashboard_1 = (props) => {
                         </Col>}
 
 
+                        {loginUserIsFranchisesRole() && (
+                            <Col lg={6}>
+                                <Card>
+                                    <CardHeader style={{ backgroundColor: "whitesmoke" }} className="card-header align-items-center d-flex justify-content-between">
+                                        <Label
+                                            className="card-title mb-0 flex-grow-4 text-primary text-bold mb-n2 text-decoration-underline"
 
+                                            style={{ cursor: "pointer" }}
+                                        >
+                                            Daily Top 5 Selling Items
+                                        </Label>
 
+                                        <Label
+                                            className="card-title mb-0 flex-grow-4 text-primary text-bold mb-n2 text-decoration-underline ml-auto"
+                                            style={{ cursor: "pointer" }}
+                                        >
+                                            {`${ERP_LINK}${url.DAILY_SALE_REPORT}/${loginPartyID()}`}
+
+                                        </Label>
+                                    </CardHeader>
+                                    {data[0]?.TopSaleItems.length === 0 ? null : <div className="d-flex flex-wrap align-items-center mb-n2 mt-1 ">
+                                        <div style={{ marginLeft: "5px" }}>
+                                            <select className="form-select form-select-sm"
+                                                value={selectedOption}
+                                                onChange={handleChange}
+                                            >
+                                                <option value="TODAYS">Today's</option>
+                                                <option value="YESTERDAY">Yesterday</option>
+                                                <option value="MONTH">Month</option>
+                                                <option value="SIX_MONTH">Six Month</option>
+
+                                            </select>
+                                        </div>
+                                    </div>}
+                                    {data[0]?.TopSaleItems.length === 0 ? null : <Pie Item={data[0]?.TopSaleItems ? data[0]?.TopSaleItems : []} />}
+                                </Card>
+                            </Col>
+                        )}
 
 
                         {IsCompanySweetAndSnacks &&

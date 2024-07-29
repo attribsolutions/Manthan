@@ -887,7 +887,7 @@ export const POS_USER_Master_Get_API = ({ division_Id }) => get(`${url.GET_POS_U
 
 export const POS_USER_Master_Post_API = ({ jsonBody }) => post(url.POS_USER_REGESTRATION, jsonBody)// post api
 export const POS_USER_Master_Delete_API = ({ deleteId }) => del(`${url.GET_POS_USER_REGESTRATION}/${deleteId}`)// delete api
-export const POS_USER_Master_Edit_API = ({ editId }) => get(`${url.GET_POS_USER_REGESTRATION}/${editId}`)// edit api
+export const POS_USER_Master_Edit_API = ({ editId }) => get(`${url.SINGLE_GET_POS_USER_REGESTRATION}/${editId}`)// edit api
 export const POS_USER_Master_Update_API = ({ jsonBody, updateId }) => put(`${url.POS_USER_REGESTRATION}/${updateId}`, jsonBody)// update api
 export const POS_USER_Get_Roles = () => get(`${url.POS_USER_RLOE}`)// edit api
 
