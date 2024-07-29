@@ -5,7 +5,7 @@ import { Card, CardBody, Col, Row } from 'reactstrap'
 import Pie from './pie'
 
 import data_1 from './data.json'
-import { amountCommaSeparateFunc, currentDate_dmy } from '../../../components/Common/CommonFunction'
+import { amountCommaSeparateFunc, currentDate_dmy, currentDate_ymd } from '../../../components/Common/CommonFunction'
 import { Frenchies_Daily_sale_Report_API } from '../../../helpers/backend_helper'
 
 import { useParams } from 'react-router-dom';
@@ -23,13 +23,11 @@ const DailyItemSaleView = () => {
 
 
     const [dateRange, setDateRange] = useState({
-        fromDate: currentDate_dmy,
-        toDate: currentDate_dmy,
+        fromDate: currentDate_ymd,
+        toDate: currentDate_ymd,
     });
 
     const Data = data[0];
-
-    debugger
 
     const handleChange = (event) => {
         const value = event.target.value;

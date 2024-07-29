@@ -9,7 +9,7 @@ import {
     Col,
     Container, Label, Row,
 } from "reactstrap";
-import { IsSweetAndSnacksCompany, breadcrumbReturnFunc, currentDate_dmy, loginPartyID, loginSelectedPartyID, loginUserIsFranchisesRole } from '../../../components/Common/CommonFunction';
+import { IsSweetAndSnacksCompany, breadcrumbReturnFunc, currentDate_dmy, currentDate_ymd, loginPartyID, loginSelectedPartyID, loginUserIsFranchisesRole } from '../../../components/Common/CommonFunction';
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import { commonPageField, commonPageFieldSuccess } from '../../../store/actions';
@@ -38,8 +38,8 @@ const Dashboard_1 = (props) => {
     const [data, setData] = useState({});
 
     const [dateRange, setDateRange] = useState({
-        fromDate: currentDate_dmy,
-        toDate: currentDate_dmy,
+        fromDate: currentDate_ymd,
+        toDate: currentDate_ymd,
     });
 
     //Access redux store Data /  'save_ModuleSuccess' action data
@@ -299,7 +299,13 @@ const Dashboard_1 = (props) => {
                                             className="card-title mb-0 flex-grow-4 text-primary text-bold mb-n2 text-decoration-underline ml-auto"
                                             style={{ cursor: "pointer" }}
                                         >
-                                            {`${ERP_LINK}${url.DAILY_SALE_REPORT}/${loginPartyID()}`}
+                                            <a
+                                                href={`${ERP_LINK}${url.DAILY_SALE_REPORT}/${loginPartyID()}`}
+                                                target="_blank"  // Optional: to open the link in a new tab
+                                                style={{ color: "inherit", textDecoration: "inherit" }}  // Optional: to inherit the styles from the Label component
+                                            >
+                                                {`${ERP_LINK}${url.DAILY_SALE_REPORT}/${loginPartyID()}`}
+                                            </a>
 
                                         </Label>
                                     </CardHeader>
