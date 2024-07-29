@@ -35,8 +35,8 @@ const Dashboard_1 = (props) => {
     const IsCompanySweetAndSnacks = IsSweetAndSnacksCompany()
     const [userPageAccessState, setUserAccState] = useState('');
     const [selectedOption, setSelectedOption] = useState('TODAYS');
-    const [data, setData] = useState({});
-
+    const [data, setData] = useState([]);
+    debugger
     const [dateRange, setDateRange] = useState({
         fromDate: currentDate_ymd,
         toDate: currentDate_ymd,
@@ -323,7 +323,7 @@ const Dashboard_1 = (props) => {
                                             </select>
                                         </div>
                                     </div>}
-                                    {data[0]?.TopSaleItems.length === 0 ? null : <Pie Item={data[0]?.TopSaleItems ? data[0]?.TopSaleItems : []} />}
+                                    {(data.length === 0) ? null : <Pie Item={data[0]?.TopSaleItems} />}
                                 </Card>
                             </Col>
                         )}

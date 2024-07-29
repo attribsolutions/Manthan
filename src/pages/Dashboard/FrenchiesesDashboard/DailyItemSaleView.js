@@ -18,7 +18,7 @@ const DailyItemSaleView = () => {
     const [selectedOption, setSelectedOption] = useState('TODAYS');
     const { Party_Id } = useParams();
 
-    const [data, setData] = useState({});
+    const [data, setData] = useState([]);
 
 
 
@@ -68,7 +68,7 @@ const DailyItemSaleView = () => {
     }, [Party_Id, dateRange])
 
 
-  
+
 
     return (
         <Card style={{ background: 'whitesmoke', margin: "10px", boxShadow: '0px 1px 5px 1px grey', }}>
@@ -177,7 +177,7 @@ const DailyItemSaleView = () => {
 
             {/* <CardBody> */}
             <div id="pie-chart" className="e-chart">
-                {Data?.TopSaleItems.length === 0 ?
+                {data.length === 0 ?
 
                     <CardBody style={{
                         margin: "5px",
