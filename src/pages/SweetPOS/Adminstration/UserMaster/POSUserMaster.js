@@ -26,6 +26,7 @@ import { commonPageField, commonPageFieldSuccess } from "../../../../store/actio
 import * as url from "../../../../routes/route_url";
 import { POSuserEditActionSuccess, POSuserUpdateAction, getPOSRole, savePOSUserMasterAction, savePOSUserMasterActionSuccess } from "../../../../store/SweetPOSStore/Administrator/UserMasterRedux/actions";
 import { passwordRgx } from "../../../../CustomValidateForm";
+import { GenralMasterSubType } from "../../../../helpers/backend_helper";
 
 const POSUSER = (props) => {
 
@@ -39,6 +40,7 @@ const POSUSER = (props) => {
     LoginName: '',
     Password: '',
     RoleName: '',
+    POSRateType: '',
     IsActive: true,
   }
 
@@ -60,6 +62,7 @@ const POSUSER = (props) => {
 
 
 
+  const [RateType, setRateType] = useState([]);
 
 
   const [confirmPwd, setConfirmPwd] = useState("");
@@ -141,6 +144,17 @@ const POSUSER = (props) => {
       comAddPageFieldFunc({ state, setState, fieldArr })
     }
   }, [pageField])
+
+
+  useEffect(async () => {
+    const jsonBody = {
+      Company: loginCompanyID(),
+      TypeID: 173
+    };
+    const resp3 = await GenralMasterSubType(jsonBody)
+    setRateType(resp3.Data)
+
+  }, [])
 
   // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
   useEffect(() => {
@@ -226,12 +240,23 @@ const POSUSER = (props) => {
     }
   }, [postMsg.Status])
 
- 
+
 
   const RolesValues = POSRole.map((Data) => ({
     value: Data.id,
     label: Data.Name
   }));
+
+
+  const RateTypeValue = RateType.map((Data) => ({
+    value: Data.id,
+    label: Data.Name
+  }));
+
+
+
+
+
 
   const saveHandler = (event) => {
     event.preventDefault();
@@ -251,6 +276,7 @@ const POSUSER = (props) => {
           IsActive: values.IsActive,
           CreatedBy: loginUserID(),
           UpdatedBy: loginUserID(),
+          POSRateType: values.POSRateType.value
 
         })
 
@@ -338,6 +364,27 @@ const POSUSER = (props) => {
                                   />
                                   {isError.RoleName.length > 0 && (
                                     <span className="text-danger font-size-17"><small>{isError.RoleName}</small></span>
+                                  )}
+                                </Col>
+                              </FormGroup>
+                            </Row>
+
+                            <Row>
+
+                              <FormGroup className="mb-2 col col-sm-4 ">
+                                <Label htmlFor="validationCustom01"> {fieldLabel.POSRateType} </Label>
+                                <Col sm={12}>
+                                  <Select
+                                    id="POSRateType"
+                                    name="POSRateType"
+                                    value={values.POSRateType}
+                                    options={RateTypeValue}
+                                    onChange={(hasSelect, evn) => {
+                                      onChangeSelect({ hasSelect, evn, state, setState, })
+                                    }}
+                                  />
+                                  {isError.POSRateType.length > 0 && (
+                                    <span className="text-danger font-size-17"><small>{isError.POSRateType}</small></span>
                                   )}
                                 </Col>
                               </FormGroup>
