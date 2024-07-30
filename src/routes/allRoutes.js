@@ -681,7 +681,7 @@ const authRoutes = [
 	{ path: "/EnterOTP", component: EnterOTP },
 	{ path: "/pages-404", component: Error404 },
 
-	{ path: '/Daily_Sale_Report/:Party_Id', component: DailyItemSaleView },
+	{ path: '/Daily_Sale_Report/:Party_Id', exact: '/Daily_Sale_Report', component: DailyItemSaleView },
 	// { component:() => <Redirect to="/login" /> },
 	{ path: "/pages-500", component: Error500 },
 ]
