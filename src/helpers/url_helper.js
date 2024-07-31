@@ -538,9 +538,9 @@ export const STOCK_ENTERY_FOR_BACKDATED_TRANSACTION = '/CheckStockEntryDateAndNo
 
 export const ITEM_DROPDOWN_API = '/PartyItemsStock_Entry'
 
+export const STOCK_ENTRY_LIST_API = '/GetStockEntryList'
 
-
-
+export const STOCK_ENTRY_ITEM_LIST_API = '/GetStockEntryItemList'
 
 
 export const STOCK_ENTRY_GO_BUTTON = "/ReturnItemAdd"

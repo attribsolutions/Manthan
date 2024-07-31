@@ -723,8 +723,9 @@ export const CheckStockEntryforBackDatedTransaction = ({ jsonBody }) => post(url
 
 export const Item_DropDown_Api = ({ jsonBody }) => post(url.ITEM_DROPDOWN_API, jsonBody)//post api
 
+export const StockEntryList_API = ({ jsonBody }) => post(url.STOCK_ENTRY_LIST_API, jsonBody)//post api
 
-
+export const StockEntryItemList_API = ({jsonBody}) => post(url.STOCK_ENTRY_ITEM_LIST_API, jsonBody)//post api
 
 
 //Stock Report
