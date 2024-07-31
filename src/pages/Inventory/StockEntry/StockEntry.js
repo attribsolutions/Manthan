@@ -644,7 +644,7 @@ const StockEntry = (props) => {
         }
     };
     const ExcelDownloadhandler = () => {
-        debugger
+        
         const StockItem_Array = TableArr.map(item => {
             return {
                 ItemName: item.ItemName,

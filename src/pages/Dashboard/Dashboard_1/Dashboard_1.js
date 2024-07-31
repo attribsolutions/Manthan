@@ -173,7 +173,7 @@ const Dashboard_1 = (props) => {
     }
 
     useEffect(async () => {
-        debugger
+        
         const jsonData = await GetDailySaleData({ fromDate: dateRange.fromDate, toDate: dateRange.toDate, Party_Id: loginPartyID(), })
         setData(jsonData.Data)
     }, [dateRange])

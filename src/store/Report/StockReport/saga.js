@@ -19,7 +19,7 @@ function* StockReport_GenFunc({ config }) {
 function* StockProccessing_GenFunc({ config }) {
 	try {
 		let response = ""
-		debugger
+		
 		if (config.isFranchises) {
 			response = yield call(Pos_StockProcessing_API, config);
 		} else {

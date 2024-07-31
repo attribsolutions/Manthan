@@ -40,7 +40,7 @@ const BOMList = () => {
     const [hederFilters, setHederFilters] = useState({ fromdate: currentDate_ymd, todate: currentDate_ymd, venderSelect: allLabelWithBlank })
     const [Item, setItem] = useState(allLabelWithBlank);
 
-    debugger
+    
     const reducers = useSelector(
         (state) => ({
             goBtnLoading: state.BOMReducer.loading,

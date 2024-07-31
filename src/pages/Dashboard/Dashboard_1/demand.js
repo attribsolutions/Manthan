@@ -87,7 +87,7 @@ export default function DemandListForDashboard() {
 
 
     const makeBtnFunc = (list = [], btnId) => {
-        debugger
+        
         let subPageMode = url.IB_ORDER_SO_LIST
         const obj = list[0]
 

@@ -59,7 +59,7 @@ export default function WorkOrderForDashboard() {
     useEffect(() => {
 
         if (GoButton.StatusCode === 200 && GoButton.Status === true) {
-            debugger
+            
             const Bomdate = date_ymd_func(bomData.BomDate)
             history.push({
                 pathname: url.WORK_ORDER,

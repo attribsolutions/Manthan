@@ -63,7 +63,7 @@ const FrenchiesesOrderReport = (data) => {
             const lasttable = doc.lastAutoTable.finalY
             let startY = lasttable;
 
-            debugger
+            
             doc.autoTable({
                 theme: 'grid',
                 head: [table.columns_1],

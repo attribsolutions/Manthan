@@ -527,7 +527,7 @@ const ItemsMaster = (props) => {
                 }
 
                 let itemUnitDetails = baseUnitTableData.reduce((result, index, key) => {
-                    debugger
+                    
                     const val1 = index.Conversion !== '' ? parseFloat(index.Conversion).toFixed(3) : '';
                     const unit1 = index.Unit.value;
 

@@ -132,7 +132,7 @@ const GRN_ADD_1 = (props) => {
     useEffect(() => {
 
         if ((items.Status === true) && (items.StatusCode === 200)) {
-            debugger
+            
             const grnItems = items.Data
 
             if ((grnItems.GRNReferences[0]?.GRN_From === url.IB_GRN_LIST)) { /// If GRN from IB GRN List then this 
@@ -673,7 +673,7 @@ const GRN_ADD_1 = (props) => {
                     DiscountAmount: Number(calculated.disCountAmt).toFixed(2),
 
                 }
-                debugger
+                
                 let isfound = GRNItemArray.filter(ind => {
                     return ind.Item === i.Item
                 })

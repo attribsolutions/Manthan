@@ -191,7 +191,7 @@ const DroppableContainer = ({ items, groupName, moveItem, moveItemWithinGroup, a
 
 
 const UnAsginItemDroppableContainer = ({ items, groupName, moveItem, moveItemWithinGroup, addItem }) => {
-    debugger
+    
     const UnAsginItemItems = Object.keys(items).reduce((acc, key) => {
         const nullValuesInGroup = items[key].filter(item => item.value === null);
         return [...acc, ...nullValuesInGroup];
@@ -396,7 +396,7 @@ const GroupSubGroup = (props) => {
 
         let response = []
         if ((Group.value !== "")) {
-            debugger
+            
             if (GroupType.value !== "") {
                 response = await fetchData()
             }

@@ -121,7 +121,7 @@ function* Target_VS_AchievementGroupWise_GenFun(jsonBody) {
         })
 
 
-debugger
+
         yield put(Target_VS_AchievementGroupWise_Go_Button_API_Success(newList))
     } catch (error) { yield put(Target_VS_Achievement_Api_ErrorAction()) }
 }

@@ -194,7 +194,7 @@ const BulkWorkOrderList = () => {
 
 
     useEffect(() => {
-        debugger
+        
         if (Bulk_Data.Status === true && Bulk_Data.StatusCode === 200) {
             history.push({
                 pathname: url.BULK_WORK_ORDER,
@@ -219,7 +219,7 @@ const BulkWorkOrderList = () => {
     }
 
     const BulkInvoice_Handler = (allList = []) => {
-        debugger
+        
         let checkRows = allList.filter(i => (i.selectCheck && !i.forceSelectDissabled))
         if (!checkRows.length > 0) {
             customAlert({

@@ -44,7 +44,7 @@ const replaceValues = (target, source) => {
 };
 
 export const Rows_1 = ({ OrderItem = [] }) => {
-    debugger
+    
     const grouped = groupBy(OrderItem, ele => ele.SubGroup);
 
     let hasHedRow = []

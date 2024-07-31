@@ -48,7 +48,7 @@ import { allLabelWithBlank } from "../../../components/Common/CommonErrorMsg/Har
 let editVal = {}
 let initial_BredcrumbMsg = `Count:0 ₹ 0.00`
 function initialState(history) {
-    debugger
+    
     let page_Id = '';
     let listPath = ''
     let sub_Mode = history.location.pathname;
@@ -784,7 +784,7 @@ const Order = (props) => {
                                 defaultValue={row.Rate}
                                 className="text-end"
                                 onChange={(event) => {
-                                    debugger
+                                    
                                     row.Rate = event.target.value;
                                     itemWise_CalculationFunc(row, undefined, tableList)
 
@@ -1116,7 +1116,7 @@ const Order = (props) => {
         }
         let btnId = `go-btn${subPageMode}`
         _cfunc.btnIsDissablefunc({ btnId, state: true })
-        debugger
+        
         console.log(itemSelectDropOptions)
         dispatch(_act.BreadcrumbShowCountlabel(initial_BredcrumbMsg))
 
@@ -1332,7 +1332,7 @@ const Order = (props) => {
                 });
                 return;
             }
-            debugger
+            
             const po_JsonBody = {
                 Customer: division,
                 Supplier: supplier,

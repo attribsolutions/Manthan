@@ -15,6 +15,7 @@ import { getClaimTrackingEntrySuccess } from "../../../../store/Accounting/Claim
 import { C_DatePicker, C_Select } from "../../../../CustomValidateForm";
 import { ExcelReportComponent } from "../../../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS";
 import { CashierSummaryReport_GoButton_API, CashierSummaryReport_GoButton_API_Success } from "../../../../store/SweetPOSStore/Report/CashierSummaryRedux/action";
+import GlobalCustomTable from "../../../../GlobalCustomTable";
 
 const CashierSummary = (props) => {
 
@@ -43,8 +44,6 @@ const CashierSummary = (props) => {
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField
     }));
-
-    const { Data = [] } = tableData;
 
     useEffect(() => {
         dispatch(commonPageFieldSuccess(null));
@@ -77,16 +76,16 @@ const CashierSummary = (props) => {
 
     useEffect(() => {
         if (btnMode === "downloadExcel") {
-            if (Data.length > 0) {
+            if (tableData.length > 0) {
                 ExcelReportComponent({      // Download CSV
                     pageField,
-                    excelTableData: Data,
+                    excelTableData: tableData,
                     excelFileName: "Cashier Summary Report"
                 })
-                dispatch(CashierSummaryReport_GoButton_API_Success([]));   // Reset Excel Data
+                dispatch(CashierSummaryReport_GoButton_API_Success([]));   // Reset Excel tableData
             }
         }
-    }, [Data, pageField]);
+    }, [tableData, pageField]);
 
     function goButtonHandler(goBtnMode) {
         setBtnMode(goBtnMode)
@@ -101,8 +100,6 @@ const CashierSummary = (props) => {
 
         } catch (error) { _cfunc.CommonConsole(error) }
     }
-
-
 
     function fromdateOnchange(e, date) {
         setFromDate(date)
@@ -174,46 +171,22 @@ const CashierSummary = (props) => {
                     </Row>
                 </div>
 
-
-
-
-
-
-                <div className="mt-1">
-                    <ToolkitProvider
-                        keyField="id"
-                        data={Data}
+                <div className="mb-1 table-responsive table">
+                    <GlobalCustomTable
+                        keyField={"id"}
+                        data={tableData}
                         columns={tableColumns}
-                        search
-                    >
-                        {(toolkitProps,) => (
-                            <React.Fragment>
-                                <Row>
-                                    <Col xl="12">
-                                        <div className="table-responsive table">
-                                            <BootstrapTable
-                                                keyField="id"
-                                                classes={"table  table-bordered table-hover"}
-                                                noDataIndication={
-                                                    <div className="text-danger text-center ">
-                                                        Record Not available
-                                                    </div>
-                                                }
-                                                onDataSizeChange={({ dataSize }) => {
-                                                    dispatch(BreadcrumbShowCountlabel(`Count:${dataSize}`));
-                                                }}
-                                                {...toolkitProps.baseProps}
-                                            />
-                                            {globalTableSearchProps(toolkitProps.searchProps)}
-                                        </div>
-                                    </Col>
-                                </Row>
-
-                            </React.Fragment>
-                        )}
-                    </ToolkitProvider>
+                        id="table_Arrow"
+                        noDataIndication={
+                            <div className="text-danger text-center ">
+                                Record Not available
+                            </div>
+                        }
+                        onDataSizeChange={({ dataCount, filteredData = [] }) => {
+                            dispatch(BreadcrumbShowCountlabel(`Count:${dataCount} ₹ ${_cfunc.TotalAmount_Func(filteredData)}`));
+                        }}
+                    />
                 </div>
-
             </div>
         </React.Fragment >
     )
