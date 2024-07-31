@@ -12,6 +12,8 @@ import StockEntry from "./StockEntry";
 import { GetStockEntryList_Action, GetStockEntryView_Action } from "../../../store/Inventory/StockEntryRedux/action";
 import StockEntryView from "./StockEntryView";
 import * as _act from "../../../store/Inventory/StockEntryRedux/action";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
+import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 
 const StockEntryList = () => {
 
@@ -28,6 +30,7 @@ const StockEntryList = () => {
             pageField: state.CommonPageFieldReducer.pageFieldList,
         })
     );
+    const { commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
     const { pageField, goBtnLoading } = reducers
     const { fromdate = currentDate_ymd, todate = currentDate_ymd } = headerFilters;
 
@@ -36,20 +39,34 @@ const StockEntryList = () => {
     useEffect(() => {
         const page_Id = pageId.STOCK_ENTRY_LIST;
         dispatch(commonPageFieldList(page_Id));
-        goButtonHandler();
+        if (!(_cfunc.loginSelectedPartyID() === 0)) {
+            goButtonHandler()
+        }
         return () => {
             dispatch(commonPageFieldListSuccess(null));
         }
     }, []);
 
-    const goButtonHandler = () => {
-        try {
+    useEffect(() => {
+        if (commonPartyDropSelect.value > 0) {
+            goButtonHandler();
 
+        } else {
+            dispatch(_act.GetStockEntryList_Success([]));
+        }
+    }, [commonPartyDropSelect]);
+
+    const goButtonHandler = () => {
+        if (_cfunc.loginSelectedPartyID() === 0) {
+            customAlert({ Type: 3, Message: alertMessages.commonPartySelectionIsRequired });
+            return;
+        };
+        try {
             const jsonBody = JSON.stringify({
                 "FromDate": fromdate,
                 "ToDate": todate,
+                "PartyID": _cfunc.loginSelectedPartyID()
             });
-
             dispatch(GetStockEntryList_Action({ jsonBody }));
         } catch (error) { }
         return
