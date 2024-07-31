@@ -303,7 +303,7 @@ const BulkWorkOrder = (props) => {
                             </thead>
                             <tbody id={`Body-${inx_1.Item}`} className={inx_1.IsTableOpen ? '' : 'hidden-row'}  >
                                 {cellContent.map((inx_2) => {
-                                    debugger
+                                    
                                     return (
                                         <tr key={inx_1.Item}>
                                             <td data-label="Item Name">{inx_2.ItemName}</td>

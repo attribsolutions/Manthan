@@ -135,7 +135,7 @@ const IBInvoice = (props) => {
 
     useEffect(() => {
         if (GRNitem.Status === true && GRNitem.StatusCode === 200) {
-            debugger
+            
             const { DemandItemDetails } = GRNitem.Data
             setCustomerID({ value: GRNitem.Demand_Reference[0].CustomerID, label: GRNitem.Demand_Reference[0].CustomerName })
             setDemandID({ Demand_ID: Number(GRNitem.Data.DemandIDs) })
@@ -289,7 +289,7 @@ const IBInvoice = (props) => {
             formatExtraData: { tableList: tableData },
             attrs: () => ({ 'data-label': "Quantity/Unit" }),
             formatter: (cellContent, index1, keys_, { tableList = [] }) => {
-                debugger
+                
                 return (<>
                     <div>
                         <Input

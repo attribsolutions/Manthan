@@ -441,7 +441,7 @@ const InvoiceList = () => {
 
     const makeBtnFunc = (list = {}, btnId) => {
 
-        debugger
+        
         const grnRef = [{
             Challan: list[0].id,
             Inward: false,

@@ -22,7 +22,7 @@ class Pie extends Component {
             name: Data.ItemName
         }));
 
-        debugger
+        
         return {
             toolbox: {
                 show: true,

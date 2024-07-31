@@ -27,7 +27,7 @@ function addMergedTitleRow(worksheet, HeaderColumns) {
 function addRowsAndFormatCells(worksheet, HeaderColumns, dataRow, controlTypeName, key) {
     const headerRow = worksheet.addRow(HeaderColumns);
     // Merge cells in the header row with the cells in the merge row
-    debugger
+    
     if ((key === "B2B") || (key === "B2CL") || (key === "CDNR")) {
         const mergeRow = worksheet.addRow([])
         const Avoide_Merging_Column = ["C", "D", "E", "F", "K", "L", "M", "N"];

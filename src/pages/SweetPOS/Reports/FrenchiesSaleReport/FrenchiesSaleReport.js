@@ -161,7 +161,7 @@ const FrenchiesSaleReport = (props) => {
 
     function excel_And_GoBtnHandler(e, Btnmode) {
         setBtnMode(Btnmode);
-        debugger
+        
         const jsonBody = JSON.stringify({
             "FromDate": fromdate,
             "ToDate": todate,

@@ -98,7 +98,7 @@ export default function UnitConverstion(props) {
 
 
     function ShowUnit_onChange(event, type = '', Id) {
-        debugger
+        
         settable((prevTableData) =>
             prevTableData.map((row) => {
                 if ((!row.IsShowUnit) && (pageMode !== mode.edit)) {
@@ -125,7 +125,7 @@ export default function UnitConverstion(props) {
     // Generate table body rows
     const tbodyfunction = () => {
         return TableData.map((index, key) => {
-            debugger
+            
             if (formValue.values.BaseUnitName.value === index.Unit.value) {
                 index.IsShowUnit = true
             }

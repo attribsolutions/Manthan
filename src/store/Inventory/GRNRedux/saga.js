@@ -114,7 +114,7 @@ function* makeGRN_Mode1_GenFunc({ config }) {
     }
     else {
       const response = yield call(GRN_Make_API, config);
-      debugger
+      
       response.Data.OrderItem.forEach(index => {
 
         index["GSToption"] = index.GSTDropdown?.map(i => ({ value: i.GST, label: i.GSTPercentage, }));

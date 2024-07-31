@@ -176,7 +176,7 @@ const WorkOrder = (props) => {
 
             if (hasEditVal) {
                 setEditData(hasEditVal);
-                debugger
+                
                 const { id, WorkOrderDate, Item, ItemName, NumberOfLot, Stock
                     , Quantity, EstimatedOutputQty, Bom, Party, WorkOrderItems, Unit, UnitName } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError, FullWorkOrderNumber, WorkOrderNumber, } = { ...state }
@@ -572,7 +572,7 @@ const WorkOrder = (props) => {
                                                             menu: provided => ({ ...provided, zIndex: 2 })
                                                         }}
                                                         onChange={(hasSelect, evn) => {
-                                                            debugger
+                                                            
                                                             onChangeSelect({ hasSelect, evn, state, setState });
                                                             ItemOnchange(hasSelect)
                                                             dispatch(Breadcrumb_inputName(hasSelect.label))

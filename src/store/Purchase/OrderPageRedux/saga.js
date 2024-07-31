@@ -171,7 +171,7 @@ function* DeleteOrder_GenFunc({ config }) {
 }
 
 function* UpdateOrder_ID_GenFunc({ config }) {         // Update Order by subPageMode
-  debugger
+  
   try {
     let response = ""
     if (config.subPageMode === url.IB_ORDER) {
@@ -187,7 +187,7 @@ function* UpdateOrder_ID_GenFunc({ config }) {         // Update Order by subPag
 }
 
 function* orderList_GoBtn_GenFunc({ config }) {
-  debugger
+  
   //  Order List Filter by subPageMode
   try {
     const { subPageMode } = config

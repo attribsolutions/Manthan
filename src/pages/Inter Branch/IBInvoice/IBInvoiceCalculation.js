@@ -3,7 +3,7 @@ import { decimalRegx_3dit, onlyNumberRegx } from "../../../CustomValidateForm";
 
 
 export const invoice_discountCalculate_Func = (row, index1, IsComparGstIn) => {
-    debugger
+    
     // Extract values from the input parameters
     const rate = Number(row.Rate) || 0;
     const quantity = Number(row.Qty) || 0;
@@ -236,7 +236,7 @@ export function stockQtyOnChange(event, index1, index2) {
 // ************************************************************************
 
 export const innerStockCaculation = (index1) => {
-    debugger
+    
     let QuantityTatal = 0
     let totalAmount = 0;
 
@@ -304,7 +304,7 @@ function stockValidation_DOM_MsgShowFunc(index1) {
 
 
 export const ChallanCalculateFunc = (row, IsComparGstIn) => {
-    debugger
+    
     // Retrieve values from input object
     const rate = Number(row.Rate) || 0;
     const quantity = Number(row.Qty) || 0;

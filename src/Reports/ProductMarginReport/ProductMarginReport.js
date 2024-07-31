@@ -209,7 +209,7 @@ const ProductMarginReport = (props) => {
             let columns = []
             const objectAtIndex0 = ((ProductMargin[0]));
             for (const key in objectAtIndex0) {
-                debugger
+                
                 let column = {}
                 let imageColumns = ["SideView(L)", "TopView", "SideView(R)", "BackView", "BarCode", "Poster", "FrontView", "Nutrition"];
                 let isImageColumn = imageColumns.includes(key);
@@ -221,7 +221,7 @@ const ProductMarginReport = (props) => {
                         sort: true,
                         classes: "table-cursor-pointer",
                         formatter: (cell, row, key) => {
-                            debugger
+                            
                             const imageShowHandler = async ({ ImageUrl, }) => { // image Show handler                               
                                 let slides = []
                                 if (ImageUrl !== "") {
@@ -242,7 +242,7 @@ const ProductMarginReport = (props) => {
                                                     backgroundSize: 'cover'
                                                 }}
                                                 onClick={() => {
-                                                    debugger
+                                                    
                                                     imageShowHandler({ ImageUrl: cell })
                                                 }}
                                                 id={`ImageID_${key}`}
