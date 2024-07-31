@@ -161,7 +161,7 @@ const ItemsMaster = (props) => {
         dispatch(getCategoryTypelist());//Category tab
         dispatch(getGroupTypeslist());//group Tab
         dispatch(get_ImageType_ForDropDown());
-        dispatch(get_Party_ForDropDown());//margin tab
+        // dispatch(get_Party_ForDropDown());//margin tab
         dispatch(priceListByCompay_Action());
         dispatch(getcompanyList());
         dispatch(getBaseUnit_ForDropDown());
