@@ -81,7 +81,7 @@ function* GRNListfilterGerFunc({ config }) {          // Grn_List filter  genrat
     const newList = yield response.Data.map((i) => {
       i["recordsAmountTotal"] = i.GrandTotal;  // Breadcrumb Count total
       i.GrandTotal = _cfunc.amountCommaSeparateFunc(i.GrandTotal) //  GrandTotal show with commas
-
+      i.InvoiceDate = _cfunc.date_dmy_func(i.InvoiceDate);
       //tranzaction date is only for fiterand page field but UI show transactionDateLabel
       i["transactionDate"] = i.CreatedOn;
       i["transactionDateLabel"] = _cfunc.listpageConcatDateAndTime(i.GRNDate, i.CreatedOn);
