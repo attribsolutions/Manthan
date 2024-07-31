@@ -238,7 +238,7 @@ import FrenchiesSaleReport from "../pages/SweetPOS/Reports/FrenchiesSaleReport/F
 
 import DailyItemSaleView from "../pages/Dashboard/FrenchiesesDashboard/DailyItemSaleView.js";
 
-import ItemSupplierAssign from "../pages/Adminisrator/ItemMasterBulkUpdate/ItemSupplierAssign.js";
+// import ItemSupplierAssign from "../pages/Adminisrator/ItemMasterBulkUpdate/ItemSupplierAssign.js";
 import StockEntryList from "../pages/Inventory/StockEntry/StockEntryList.js";
 
 const userRoutes = [
