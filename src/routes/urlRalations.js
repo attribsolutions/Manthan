@@ -146,6 +146,8 @@ export const Party_Details = url.PARTY_DETAILS
 
 export const ItemMasterBulkUpdate = url.ITEM_MASTER_BULK_UPDATE
 
+export const Item_Supplier_Assign = url.ITEM_SUPPLIER_ASSIGN
+
 export const Rate_Master = url.RATE_LIST
 export const Rate_List = url.RATE_MASTER
 
@@ -201,14 +203,11 @@ export const GRNList_3 = url.GRN_STP_3;
 export const GRN_ADD_3 = url.GRN_LIST_3;
 export const GRN_STP_3 = url.GRN_LIST_3;
 
-
 export const GRN_LIST_1 = url.IB_GRN_LIST;
 export const IB_GRN_List = url.GRN_LIST_1;
 
-
-
-
 export const StockEntry = url.STOCK_ENTRY;
+export const Stock_Entry_List =  url.STOCK_ENTRY_LIST;
 
 export const ChallanList = url.CHALLAN;
 export const Challan = url.CHALLAN_LIST;

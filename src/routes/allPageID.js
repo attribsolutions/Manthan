@@ -167,6 +167,8 @@ export const PARTY_DETAILS = 260
 
 export const ITEM_MASTER_BULK_UPDATE = 261
 
+export const ITEM_SUPPLIER_ASSIGN = 292
+
 export const PARTY_EMPLOYEE_DETAILS = 275
 
 export const RATE_MASTER = 277
@@ -199,8 +201,6 @@ export const WORK_ORDER_LIST = 73
 
 export const BULK_WORK_ORDER = 285
 
-
-
 export const MATERIAL_ISSUE = 75
 export const MATERIAL_ISSUE_LIST = 76
 export const MATERIAL_ISSUE_STP = 125
@@ -220,15 +220,10 @@ export const POS_INVOICE_LIST = 288
 
 export const BULK_WORK_ORDER_LIST = 289
 
-
 export const FRENCHIESE_SALE_REPORT = 290
 
-
-
-
-
-
 export const BULK_INVOICE = 265
+
 //******************************* Inventory Module ************************************//
 
 export const GRN_ADD_1 = 55
@@ -240,6 +235,7 @@ export const GRN_LIST_3 = 166
 export const GRN_STP_3 = 164
 
 export const STOCK_ENTRY = 205
+export const STOCK_ENTRY_LIST = 293
 
 export const STOCK_ADJUSTMENT = 236
 

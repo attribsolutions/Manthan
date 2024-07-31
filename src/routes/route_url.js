@@ -161,6 +161,8 @@ export const PARTY_DETAILS = "/Party_Details"
 
 export const ITEM_MASTER_BULK_UPDATE = "/ItemMasterBulkUpdate"
 
+export const ITEM_SUPPLIER_ASSIGN = "/Item_Supplier_Assign"
+
 export const ITEM_IMAGE_UPLOAD = "/ItemImageUpload"
 
 export const CREDIT_NOTE_UPLOAD = "/CreditNoteUpload"
@@ -198,6 +200,8 @@ export const CHALLAN_LIST = "/ChallanList"
 export const CHALLAN = "/Challan"
 
 export const STOCK_ENTRY = "/Stock_Entry"
+
+export const STOCK_ENTRY_LIST = "/Stock_Entry_List"
 
 export const STOCK_ADJUSTMENT = "/StockAdjustment"
 

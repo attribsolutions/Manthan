@@ -235,10 +235,11 @@ import CashierSummary from "../pages/SweetPOS/Reports/CashierSummaryReport/Cashi
 import Pos_InvoiceList from "../pages/SweetPOS/Sales/Invoice/InvoiceList.js";
 import BulkWorkOrderList from "../pages/Production/WorkOrder/BulkWorkOrder/BulkWorkOrderList.js";
 import FrenchiesSaleReport from "../pages/SweetPOS/Reports/FrenchiesSaleReport/FrenchiesSaleReport.js";
+
 import DailyItemSaleView from "../pages/Dashboard/FrenchiesesDashboard/DailyItemSaleView.js";
 
-
-
+import ItemSupplierAssign from "../pages/Adminisrator/ItemMasterBulkUpdate/ItemSupplierAssign.js";
+import StockEntryList from "../pages/Inventory/StockEntry/StockEntryList.js";
 
 const userRoutes = [
 	// *************************** DashBord *******************************//
@@ -407,6 +408,8 @@ const userRoutes = [
 
 	{ path: path.ITEM_MASTER_BULK_UPDATE, component: ItemMasterBulkUpdate },//not party wise
 
+	// { path: path.ITEM_SUPPLIER_ASSIGN, component:ItemSupplierAssign  },//not party wise
+
 	{ path: path.ITEM_IMAGE_UPLOAD, component: ItemImageUpload },//not party wise
 
 	{ path: path.PARTY_EMPLOYEE_DETAILS, component: PartyEmployeeDetails, isPartyWisePage: true },
@@ -425,6 +428,8 @@ const userRoutes = [
 	{ path: path.GRN_STP_3, component: OrderList, isPartyWisePage: true },
 
 	{ path: path.STOCK_ENTRY, component: StockEntry, isPartyWisePage: true },
+
+	{ path: path.STOCK_ENTRY_LIST, component: StockEntryList},
 
 	{ path: path.STOCK_ADJUSTMENT, component: StockAdjustment, isPartyWisePage: true },
 

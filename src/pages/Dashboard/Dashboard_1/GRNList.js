@@ -47,7 +47,7 @@ export default function InvoiceForGRN() {
 
     // Common Party Dropdown useEffect
 
-    debugger
+    
     useEffect(() => {
 
         const locationPath = history.location.pathname
@@ -108,7 +108,7 @@ export default function InvoiceForGRN() {
     }, [GRNitem])
 
     function makeBtnHandler(rowData, btnId) {
-        debugger
+        
         const list = [rowData]
         var isGRNSelect = ''
         const grnRef = []
