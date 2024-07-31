@@ -781,9 +781,10 @@ const Order = (props) => {
                                 type="text"
                                 id={`Rate-${k}`}
                                 cpattern={decimalRegx}
-                                value={row.Rate}
+                                defaultValue={row.Rate}
                                 className="text-end"
                                 onChange={(event) => {
+                                    debugger
                                     row.Rate = event.target.value;
                                     itemWise_CalculationFunc(row, undefined, tableList)
 
