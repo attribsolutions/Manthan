@@ -31,7 +31,7 @@ import { goButtonPartyItemAddPageSuccess, goButtonPartyItemAddPage } from "../..
 import { StockEntry_GO_button_api_For_Item } from "../../../helpers/backend_helper";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import "../../../pages/Sale/SalesReturn/salesReturn.scss";
-import { GetStockCount, Get_Items_Drop_Down, saveStockEntryAction, saveStockEntrySuccess } from "../../../store/Inventory/StockEntryRedux/action";
+import { GetStockCount, Get_Items_Drop_Down, Get_Items_Drop_Down_Success, saveStockEntryAction, saveStockEntrySuccess } from "../../../store/Inventory/StockEntryRedux/action";
 import { globalTableSearchProps } from "../../../components/Common/SearchBox/MySearch";
 import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
@@ -41,8 +41,6 @@ import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMs
 import paginationFactory from "react-bootstrap-table2-paginator";
 import { table_ArrowUseEffect } from "../../../components/Common/CommonUseEffect";
 import { ExcelReportComponent } from "../../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS";
-
-
 
 const StockEntry = (props) => {
 
@@ -94,7 +92,6 @@ const StockEntry = (props) => {
         ItemDropDown: state.StockEntryReducer.ItemDropDown,
         ItemDropDownloading: state.StockEntryReducer.ItemDropDownloading,
 
-
         postMsg: state.StockEntryReducer.postMsg,
         ItemList: state.PartyItemsReducer.partyItem,
         StockCount: state.StockEntryReducer.StockCount,
@@ -106,7 +103,6 @@ const StockEntry = (props) => {
     const { commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
 
     // Common Party select Dropdown useEffect
-
 
     useEffect(() => {
         const page_Id = pageId.STOCK_ENTRY
@@ -124,10 +120,26 @@ const StockEntry = (props) => {
             })
         }));
 
-
-
         dispatch(BreadcrumbShowCountlabel(`Count:${0}`));
     }, []);
+
+    useEffect(() => {
+        if (commonPartyDropSelect.value > 0) {
+            dispatch(Get_Items_Drop_Down({
+                jsonBody: JSON.stringify({
+                    UserID: _cfunc.loginUserID(),
+                    RoleID: _cfunc.loginRoleID(),
+                    CompanyID: _cfunc.loginCompanyID(),
+                    IsSCMCompany: _cfunc.loginIsSCMCompany(),
+                    CompanyGroup: _cfunc.loginCompanyGroup(),
+                    PartyID: _cfunc.loginSelectedPartyID(),
+                })
+            }));
+        } else {
+            dispatch(Get_Items_Drop_Down_Success([]));
+            setTableArr([]);
+        }
+    }, [commonPartyDropSelect]);
 
     // userAccess useEffect
     useEffect(() => {
@@ -159,7 +171,7 @@ const StockEntry = (props) => {
             customAlert({
                 Type: 1,
                 Message: postMsg.Message,
-                RedirectPath: url.STOCK_ENTRY,
+                RedirectPath: url.STOCK_ENTRY_LIST,
             })
         }
         else if (postMsg.Status === true) {
@@ -207,18 +219,6 @@ const StockEntry = (props) => {
             return a
         })
     }
-
-    // const itemList = ItemList.map((index) => ({
-    //     value: index.Item,
-    //     label: index.ItemName,
-    //     itemCheck: index.selectCheck
-    // }));
-
-    // const ItemList_Options = itemList.filter((index) => {
-    //     return index.itemCheck === true
-    // });
-
-
 
     const ItemList_Options = ItemDropDown.map((index) => ({
         value: index.Item,
@@ -430,8 +430,14 @@ const StockEntry = (props) => {
     async function AddPartyHandler(e, Type) {
 
         setAddLoading(true)
-
+        
         let selectedItem = []
+        if (_cfunc.loginSelectedPartyID() === 0 && values.ItemName === '') {
+            customAlert({ Type: 3, Message: alertMessages.commonPartySelectionIsRequired });
+            setAddLoading(false)
+            return;
+        }
+       
         if (values.ItemName === '') {
             if (Type === "add_All" && TableArr.length !== ItemDropDown.length) {
                 setAddLoading(false)
@@ -458,7 +464,6 @@ const StockEntry = (props) => {
 
             }
         }
-
 
         try {
             // const apiResponse = await StockEntry_GO_button_api_For_Item(values.ItemName.value);
@@ -496,19 +501,6 @@ const StockEntry = (props) => {
         setTableArr(newArr)
         dispatch(BreadcrumbShowCountlabel(`Count:${newArr.length}`));
 
-    }
-
-
-
-    function partySelectOnChangeHandler() {
-        dispatch(goButtonPartyItemAddPageSuccess([]))
-        setTableArr([])
-        setState((i) => {
-            const a = { ...i }
-            a.values.ItemName = '';
-            a.hasValid.ItemName.valid = true
-            return a
-        })
     }
 
     const SaveHandler = async (event) => {
@@ -644,7 +636,7 @@ const StockEntry = (props) => {
         }
     };
     const ExcelDownloadhandler = () => {
-        
+
         const StockItem_Array = TableArr.map(item => {
             return {
                 ItemName: item.ItemName,

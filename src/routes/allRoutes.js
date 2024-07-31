@@ -429,7 +429,7 @@ const userRoutes = [
 
 	{ path: path.STOCK_ENTRY, component: StockEntry, isPartyWisePage: true },
 
-	{ path: path.STOCK_ENTRY_LIST, component: StockEntryList},
+	{ path: path.STOCK_ENTRY_LIST, component: StockEntryList, isPartyWisePage: true },
 
 	{ path: path.STOCK_ADJUSTMENT, component: StockAdjustment, isPartyWisePage: true },
 
