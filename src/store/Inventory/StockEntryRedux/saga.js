@@ -56,8 +56,8 @@ function* StockEntryList_API_GenFunc({ config }) { // Save GRN  genrator functio
         const response = yield call(apiCall.StockEntryList_API, config);
         const newList = yield response.Data.map((i, key) => {
             i.id = key + 1
-            i.PriviousStockDate = i.StockDate; // Only for Dashoard 
-            i.StockDate = date_dmy_func(i.StockDate); // Only for Dashoard 
+            i.PriviousStockDate = i.StockDate; 
+            i.StockDate = date_dmy_func(i.StockDate);
             return i
         })
         yield put(action.GetStockEntryList_Success(newList));
