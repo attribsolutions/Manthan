@@ -261,9 +261,9 @@ const ItemsMaster = (props) => {
                 setEditItemShelfLife(ItemShelfLife[0])
 
                 const { id, Name, SAPItemCode, ShortName, BarCode, Sequence, CompanyName, Company,
-                    BaseUnitName, BaseUnitID, isActive, IsSCM } = hasEditVal
+                    BaseUnitName, BaseUnitID, isActive, IsSCM, IsCBMItem } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
-
+                debugger
                 hasValid.Name.valid = true;
                 hasValid.SAPItemCode.valid = true;
                 hasValid.ShortName.valid = true;
@@ -276,11 +276,18 @@ const ItemsMaster = (props) => {
                 hasValid.Category.valid = true;
                 hasValid.ShelfLife.valid = true;
 
+                hasValid.IsCBMItem.valid = true;
+
+
+
+
+
                 values.id = id
                 values.Name = Name;
                 values.SAPItemCode = SAPItemCode;
                 values.ShortName = ShortName;
                 values.BarCode = BarCode;
+                values.IsCBMItem = IsCBMItem;
                 values.Sequence = Sequence;
                 values.Company = { label: CompanyName, value: Company }
                 values.BaseUnitName = { label: BaseUnitName, value: BaseUnitID }
@@ -600,9 +607,10 @@ const ItemsMaster = (props) => {
                         IsAdd: true
                     });
                 }
-                debugger
+
                 const jsonBody = JSON.stringify({
                     Name: values.Name,
+                    IsCBMItem: values.IsCBMItem,
                     ShortName: values.ShortName,
                     SAPItemCode: values.SAPItemCode,
                     BarCode: values.BarCode,
