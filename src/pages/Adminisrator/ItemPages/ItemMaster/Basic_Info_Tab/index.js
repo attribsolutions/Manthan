@@ -375,6 +375,31 @@ const BasicInfoTabForm = ({ state, setState, settable, pageField }) => {
                                     <span className="invalid-feedback">{isError.Sequence}</span>
                                 )}
                             </FormGroup>
+
+
+                            <FormGroup className="mb-1 col col-sm-4 " >
+                                <Row style={{ marginTop: '25px' }}>
+                                    <Label
+                                        className="col-sm-4 col-form-label">
+                                        {fieldLabel.IsCBMItem ? fieldLabel.IsCBMItem : "IsCBMItem"}
+                                    </Label>
+                                    <Col md={4} style={{ marginTop: '7px' }} className=" form-check form-switch form-switch-sm ">
+                                        <div className="form-check form-switch form-switch-md mb-3">
+                                            <Input
+                                                name="IsCBMItem"
+                                                type="checkbox"
+                                                className="form-check-input"
+                                                checked={values.IsCBMItem}
+                                                onChange={(event) => onChangeCheckbox({ event, state, setState })}
+                                            />
+                                        </div>
+                                    </Col>
+                                </Row>
+                            </FormGroup>
+
+
+
+
                         </Row>
                     </Col>
 
