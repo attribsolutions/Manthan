@@ -12,6 +12,7 @@ import { customAlert } from '../../../CustomAlert/ConfirmDialog';
 import Select from "react-select";
 import { getGroupTypeslist } from '../../../store/Administrator/GroupTypeRedux/action';
 import { getGroupList } from '../../../store/actions';
+import SimpleBar from "simplebar-react"
 
 const ItemType = {
     ITEM: 'item',
@@ -182,6 +183,7 @@ const DroppableContainer = ({ items, groupName, moveItem, moveItemWithinGroup, a
     return (
         <div ref={ref} style={{ minHeight: '10px', padding: '8px', display: 'flex', flexWrap: 'wrap', borderRadius: '12px', background: '#e5e7ed', boxShadow: '0px 1px 5px 1px grey' }}>
             {items.map((item, index) => (
+
                 <DraggableItem key={item.value} item={item} index={index} groupName={groupName} moveItemWithinGroup={moveItemWithinGroup} />
             ))}
             {/* <Add_SubGroup addItem={addItem} groupName={groupName} items={items} /> */}
@@ -191,11 +193,7 @@ const DroppableContainer = ({ items, groupName, moveItem, moveItemWithinGroup, a
 
 
 const UnAsginItemDroppableContainer = ({ items, groupName, moveItem, moveItemWithinGroup, addItem }) => {
-    
-    const UnAsginItemItems = Object.keys(items).reduce((acc, key) => {
-        const nullValuesInGroup = items[key].filter(item => item.value === null);
-        return [...acc, ...nullValuesInGroup];
-    }, []);
+    const UnAsginItemItems = (items["UnAssign"] === undefined) ? [] : items["UnAssign"];
 
     const [, ref] = useDrop({
         accept: ItemType.ITEM,
@@ -205,7 +203,7 @@ const UnAsginItemDroppableContainer = ({ items, groupName, moveItem, moveItemWit
             }
         },
     });
-
+    debugger
     return (
         <div ref={ref} style={{ minHeight: '10px', padding: '8px', display: 'flex', flexWrap: 'wrap', borderRadius: '12px', background: '#e5e7ed', boxShadow: '0px 1px 5px 1px grey' }}>
             {UnAsginItemItems?.map((item, index) => (
@@ -243,7 +241,7 @@ const DraggableGroup = ({ groupName, items, index, moveGroup, moveItem, moveItem
 
     return (
         <>
-            <div ref={(node) => ref(drop(node))} style={{ opacity: isDragging ? 0 : 1 }}>
+            <div ref={(node) => Type === "Group" && ref(drop(node))} style={{ opacity: isDragging ? 0 : 1 }}>
                 <Card style={{ background: '#d2d6f7', paddingBottom: '15px', paddingLeft: '13px', paddingRight: '13px', borderRadius: '13px', boxShadow: '0px 1px 5px 1px grey' }}>
                     <FormGroup>
                         <Label style={{ marginTop: '10px', marginLeft: '10px' }}>{groupName.charAt(0).toUpperCase() + groupName.slice(1)} </Label>
@@ -260,6 +258,11 @@ const GroupSubGroup = (props) => {
     const [groups, setGroups] = useState({});
 
     const [SubGroups, setSubGroups] = useState({});
+
+
+    const [UnAssign, setUnAssign] = useState([]);
+
+
     const [orderedSubGroups, setOrderedSubGroups] = useState([]);
 
     const [SequenceSubGroupItem, setSequenceSubGroupItem] = useState({});
@@ -273,8 +276,6 @@ const GroupSubGroup = (props) => {
     const [userPageAccessState, setUserAccState] = useState('');
     const [GroupType, setGroupType] = useState({ label: "Select...", value: "" });
     const [Group, setGroup] = useState({ label: "Select...", value: "" });
-
-
 
 
 
@@ -396,16 +397,12 @@ const GroupSubGroup = (props) => {
 
         let response = []
         if ((Group.value !== "")) {
-            
+            setUnAssign(SubGroups["UnAssign"])
+
             if (GroupType.value !== "") {
                 response = await fetchData()
             }
             const groupedData = response.reduce((acc, item, index) => {
-
-
-
-
-
                 let group = {}
                 if ((item.GroupID === Group.value)) {
                     group = {
@@ -440,27 +437,24 @@ const GroupSubGroup = (props) => {
                 group.SubgroupDetails.sort((a, b) => a.SubGroupSequence - b.SubGroupSequence);
             });
 
-            const transformedData = transformData(groupedData);
-            // setGroups
-
+            let transformedData = transformData(groupedData);
+            if (SubGroups["UnAssign"] !== undefined) {
+                transformedData["UnAssign"] = SubGroups["UnAssign"];
+            }
 
             setSubGroups(transformedData);
-
-
-
             setOrderedSubGroups(Object.keys(transformedData));
         }
     }, [Group])
 
-
-
     useEffect(() => {
+
         setSequenceSubGroupItem((prevSubGroups) => ({
             ...prevSubGroups,
             ...SubGroups
         }));
-    }, [SubGroups])
 
+    }, [SubGroups])
 
 
 
@@ -472,16 +466,13 @@ const GroupSubGroup = (props) => {
     };
 
     const moveItem = (item, sourceGroupName, targetGroupName) => {
-
         if (sourceGroupName === targetGroupName) return;
-
         setGroups((prevGroups) => {
             const sourceGroup = prevGroups[sourceGroupName].filter((i) => i.value !== item.value);
             const targetGroupdata = [...prevGroups[targetGroupName]];
 
             item = { GroupID: targetGroupdata[0]?.GroupID, GroupName: targetGroupdata[0]?.GroupName, GroupSequence: 2, SubGroupSequence: item.GroupSequence, label: item.label, value: item.GroupSequence }
             const targetGroup = [...prevGroups[targetGroupName], item];
-
 
             return {
                 ...prevGroups,
@@ -496,9 +487,17 @@ const GroupSubGroup = (props) => {
     const moveSubGroupItem = (item, sourceGroupName, targetGroupName) => {
 
         if (sourceGroupName === targetGroupName) return;
-
         setSubGroups((prevGroups) => {
-            const sourceGroup = prevGroups[sourceGroupName].filter((i) => i.value !== item.value);
+            prevGroups["UnAssign"] ? prevGroups["UnAssign"] = prevGroups["UnAssign"] : prevGroups["UnAssign"] = []
+
+            let sourceGroup = []
+            if (sourceGroupName === "UnAssign") {
+
+                sourceGroup = prevGroups[sourceGroupName].filter((i) => i.label !== item.label);
+            } else {
+                sourceGroup = prevGroups[sourceGroupName].filter((i) => i.value !== item.value);
+            }
+
             const targetGroupdata = [...prevGroups[targetGroupName]];
 
             item = { GroupID: targetGroupdata[0]?.GroupID, GroupName: targetGroupdata[0]?.GroupName, GroupSequence: 2, SubGroupSequence: item.GroupSequence, label: item.label, value: item.GroupSequence }
@@ -511,12 +510,6 @@ const GroupSubGroup = (props) => {
             };
         });
     };
-
-
-
-
-
-
 
 
     const moveItemWithinGroup = (sourceIndex, targetIndex, groupName) => {
@@ -539,19 +532,12 @@ const GroupSubGroup = (props) => {
             const updatedGroup = Array.from(prevGroups[groupName]);
             const [movedItem] = updatedGroup.splice(sourceIndex, 1);
             updatedGroup.splice(targetIndex, 0, movedItem);
-
             return {
                 ...prevGroups,
                 [groupName]: updatedGroup,
             };
         });
     };
-
-
-
-
-
-
 
 
 
@@ -564,7 +550,6 @@ const GroupSubGroup = (props) => {
         });
     };
 
-
     const moveSubGroup = (sourceIndex, targetIndex) => {
         setOrderedSubGroups((prevOrderedGroups) => {
             const updatedOrderedGroups = Array.from(prevOrderedGroups);
@@ -576,13 +561,9 @@ const GroupSubGroup = (props) => {
 
 
 
-
     const addItem = ({ New_subGroup, groupName, GroupID }) => {
-
         const newItem = { value: "", label: `${New_subGroup}`, GroupID: GroupID, GroupName: groupName, };
-
         setGroups((prevGroups) => ({
-
             ...prevGroups,
             [groupName]: [...prevGroups[groupName], newItem],
         }));
@@ -598,8 +579,6 @@ const GroupSubGroup = (props) => {
             [groupName]: [...prevGroups[groupName], newItem],
         }));
     };
-
-
 
 
 
@@ -643,16 +622,13 @@ const GroupSubGroup = (props) => {
             };
         });
 
+
         console.log("groups", groups)
         console.log("orderedGroups", orderedGroups)
         console.log("Subgroups", SubGroups)
         console.log("orderedSubGroups", orderedSubGroups)
         console.log("SequenceSubGroupItem", SequenceSubGroupItem)
         console.log("transformedData", transformedSubgroups);
-
-
-
-
 
 
         const jsonBody = JSON.stringify(transformedSubgroups)
@@ -678,13 +654,11 @@ const GroupSubGroup = (props) => {
         label: Data.Name
     }));
 
-
     let GroupValues = groupList.filter(item => GroupType.value === item.GroupType)
         .map(item => ({
             value: item.id,
             label: item.Name
         }));
-
 
     return (
         <div className="page-content" >
@@ -731,8 +705,7 @@ const GroupSubGroup = (props) => {
                                                 onChange={(e) => {
                                                     setGroup(e)
                                                     setOrderedSubGroups([])
-
-                                                    setSubGroups({})
+                                                    // setSubGroups({})
 
                                                 }}
                                                 classNamePrefix="dropdown"
@@ -744,35 +717,71 @@ const GroupSubGroup = (props) => {
                         </Card>
                     </Col>
 
+
                     {((orderedGroups.length > 0) && Group.value === "") ? orderedGroups.map((groupName, index) => (
                         <Col key={groupName} xs={Group.value === "" ? 12 : 12}  >
                             <DraggableGroup
                                 groupName={groupName}
                                 items={groups[groupName]}
                                 index={index}
+                                Type={"Group"}
                                 moveGroup={moveGroup}
                                 moveItem={moveItem}
                                 moveItemWithinGroup={moveItemWithinGroup}
                                 addItem={addItem}
                             />
                         </Col>
-
                     )) :
+                        <>
+                            <Row>
+                                {orderedSubGroups.length > 0 ? (
+                                    <Col xs={9} st >
+                                        <SimpleBar className="" style={{ maxHeight: "70vh", padding: "3px" }}>
+                                            {orderedSubGroups.map((groupName, index) => (
+                                                (groupName !== "UnAssign") && <DraggableGroup
+                                                    key={groupName}
+                                                    groupName={groupName}
+                                                    items={SubGroups[groupName]}
+                                                    index={index}
+                                                    Type={"SubGroup"}
+                                                    moveGroup={moveSubGroup}
+                                                    moveItem={moveSubGroupItem}
+                                                    moveItemWithinGroup={moveItemWithinSubGroup}
+                                                    addItem={addSubGroupItem}
+                                                />
+                                            ))}
+                                        </SimpleBar>
+                                    </Col>
+                                ) : <Col xs={9}></Col>}
 
-                        orderedSubGroups.length > 0 ? orderedSubGroups.map((groupName, index) => (
-                            <Col key={groupName} xs={Group.value === "" ? 12 : 12}  >
-                                <DraggableGroup
-                                    groupName={groupName}
-                                    items={SubGroups[groupName]}
-                                    index={index}
-                                    moveGroup={moveSubGroup}
-                                    moveItem={moveSubGroupItem}
-                                    moveItemWithinGroup={moveItemWithinSubGroup}
-                                    addItem={addSubGroupItem}
-                                />
-                            </Col>))
-                            :
-                            null}
+                                {Group.value !== "" && <Col sm={3} style={{ position: 'sticky', top: '100px', zIndex: '2' }}>
+                                    <Card
+                                        style={{
+                                            background: '#d2d6f7',
+                                            paddingBottom: '15px',
+                                            paddingLeft: '13px',
+                                            paddingRight: '13px',
+                                            borderRadius: '13px',
+                                            boxShadow: '0px 1px 5px 1px grey'
+                                        }}
+                                    >
+                                        <FormGroup>
+                                            <Label style={{ marginTop: '10px', marginLeft: '10px' }}> </Label>
+                                            <UnAsginItemDroppableContainer
+                                                items={SubGroups}
+                                                groupName={"UnAssign"}
+                                                moveItem={moveSubGroupItem}
+                                                moveItemWithinGroup={moveItemWithinSubGroup}
+                                                addItem={addItem}
+
+                                            />
+                                        </FormGroup>
+                                    </Card>
+                                </Col>}
+                            </Row>
+                        </>
+
+                    }
 
                 </Row>
                 {((orderedSubGroups.length > 0) || (orderedGroups.length > 0)) ? <SaveButtonDraggable>
