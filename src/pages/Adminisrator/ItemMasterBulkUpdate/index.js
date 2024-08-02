@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Col, FormGroup, Label, Row, } from "reactstrap";
+import { Col, FormGroup, Input, Label, Row, } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import { Change_Button, Go_Button, SaveButton, } from "../../../components/Common/CommonButton";
 import * as _cfunc from "../../../components/Common/CommonFunction";
@@ -295,7 +295,6 @@ const ItemMasterBulkUpdate = (props) => {
                 return (
                     <>
                         {SelectFieldName.DataType === "dropdown" ?
-
                             <div style={{ width: "180px" }}>
                                 <Col>
                                     <FormGroup>
@@ -309,23 +308,44 @@ const ItemMasterBulkUpdate = (props) => {
                                 </Col>
                             </div>
                             :
-                            <div style={{ width: "180px" }}>
-                                <Col>
-                                    <FormGroup>
-                                        <CInput
-                                            id={key}
-                                            type="text"
-                                            cpattern={(SelectFieldName.DataType === "number") ? decimalRegx : charRegx}
-                                            placeholder={`Enter New ${SelectFieldName.label}`}
-                                            defaultValue={row.Newvalue}
-                                            className="col col-sm "
-                                            onChange={(event) => {
-                                                row.Newvalue = event.target.value
-                                            }}
-                                        />
-                                    </FormGroup>
-                                </Col>
-                            </div>
+                            SelectFieldName.label === "IsCBMItem" ?
+                                <FormGroup className="mb-1 col col-sm-4 " >
+                                    <Row style={{ marginTop: '25px' }}>
+                                        <Col md={4} style={{ marginTop: '7px' }} className=" form-check form-switch form-switch-sm ">
+                                            <div className="form-check form-switch form-switch-md mb-3">
+                                                <Input
+                                                    name="IsCBMItem"
+                                                    type="checkbox"
+                                                    className="form-check-input"
+                                                    checked={row.IsCBMItem}
+                                                    onChange={(event) => {
+                                                        row.Newvalue = event.target.checked
+                                                    }}
+                                                />
+                                            </div>
+                                        </Col>
+                                    </Row>
+                                </FormGroup>
+                                :
+
+
+                                <div style={{ width: "180px" }}>
+                                    <Col>
+                                        <FormGroup>
+                                            <CInput
+                                                id={key}
+                                                type="text"
+                                                cpattern={(SelectFieldName.DataType === "number") ? decimalRegx : charRegx}
+                                                placeholder={`Enter New ${SelectFieldName.label}`}
+                                                defaultValue={row.Newvalue}
+                                                className="col col-sm "
+                                                onChange={(event) => {
+                                                    row.Newvalue = event.target.value
+                                                }}
+                                            />
+                                        </FormGroup>
+                                    </Col>
+                                </div>
                         }
                     </>
                 );
