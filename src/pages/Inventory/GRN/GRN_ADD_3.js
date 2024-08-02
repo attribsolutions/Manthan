@@ -395,6 +395,7 @@ const GRNAdd3 = (props) => {
     const saveHandeller = (event) => {
         event.preventDefault();
         const btnId = event.target.id
+        
         try {
             const isvalidMsg = [];
 
@@ -434,6 +435,7 @@ const GRNAdd3 = (props) => {
                 GrandTotal: grnDetail.OrderAmount,
                 Party: grnDetail.Supplier,
                 InvoiceNumber: invoiceNo,
+                InvoiceDate: _cfunc.date_ymd_func(invoiceDate),
                 CreatedBy: _cfunc.loginUserID(),
                 UpdatedBy: 1,
                 GRNItems: itemArray,
