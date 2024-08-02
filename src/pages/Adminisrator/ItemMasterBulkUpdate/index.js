@@ -317,7 +317,7 @@ const ItemMasterBulkUpdate = (props) => {
                                                     name="IsCBMItem"
                                                     type="checkbox"
                                                     className="form-check-input"
-                                                    checked={row.IsCBMItem}
+                                                    defaultChecked={row.IsCBMItem}
                                                     onChange={(event) => {
                                                         row.Newvalue = event.target.checked
                                                     }}
