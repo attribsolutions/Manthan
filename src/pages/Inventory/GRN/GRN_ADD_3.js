@@ -395,7 +395,7 @@ const GRNAdd3 = (props) => {
     const saveHandeller = (event) => {
         event.preventDefault();
         const btnId = event.target.id
-        
+
         try {
             const isvalidMsg = [];
 
@@ -428,6 +428,8 @@ const GRNAdd3 = (props) => {
             }
             let GRNReferencesUpdate = openPOdata  /// GRNReferencesUpdate this Key Word Use For GRN Ref From Use Inter Branch
 
+            const Invoicedate = _cfunc.convertDateFormat(invoiceDate)
+            debugger
             const jsonBody = JSON.stringify({
                 GRNDate: grnDate,
                 Customer: grnDetail.Customer,
@@ -435,7 +437,7 @@ const GRNAdd3 = (props) => {
                 GrandTotal: grnDetail.OrderAmount,
                 Party: grnDetail.Supplier,
                 InvoiceNumber: invoiceNo,
-                InvoiceDate: _cfunc.date_ymd_func(invoiceDate),
+                InvoiceDate: Invoicedate,
                 CreatedBy: _cfunc.loginUserID(),
                 UpdatedBy: 1,
                 GRNItems: itemArray,

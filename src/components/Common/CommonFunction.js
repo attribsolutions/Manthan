@@ -22,7 +22,7 @@ function isDateInitial(isdate) {
 }
 
 export const date_ymd_func = (isdate) => { //+++++++++++++++ Current Date by format (yyyy-dd-mm) ++++++++++++++++++++++++++++++++++++
-
+  debugger
   let date = isDateInitial(isdate);
   return (`${date.yy}-${date.mm}-${date.dd}`)
 };
@@ -92,6 +92,11 @@ export function listpageConcatDateAndTime(date, time) {//+++++++++++time and dat
   const t = convertTimefunc(time);
   return `${d} ${t}`;
 }
+
+export const convertDateFormat = (dateString) => {
+  const [day, month, year] = dateString.split('-');
+  return `${year}-${month}-${day}`;
+};
 
 
 export function getDateTime_dmy(hourOffset = 0) {
