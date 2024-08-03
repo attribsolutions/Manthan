@@ -203,7 +203,7 @@ const UnAsginItemDroppableContainer = ({ items, groupName, moveItem, moveItemWit
             }
         },
     });
-    debugger
+
     return (
         <div ref={ref} style={{ minHeight: '10px', padding: '8px', display: 'flex', flexWrap: 'wrap', borderRadius: '12px', background: '#e5e7ed', boxShadow: '0px 1px 5px 1px grey' }}>
             {UnAsginItemItems?.map((item, index) => (
@@ -485,7 +485,7 @@ const GroupSubGroup = (props) => {
 
 
     const moveSubGroupItem = (item, sourceGroupName, targetGroupName) => {
-
+        debugger
         if (sourceGroupName === targetGroupName) return;
         setSubGroups((prevGroups) => {
             prevGroups["UnAssign"] ? prevGroups["UnAssign"] = prevGroups["UnAssign"] : prevGroups["UnAssign"] = []
@@ -500,7 +500,7 @@ const GroupSubGroup = (props) => {
 
             const targetGroupdata = [...prevGroups[targetGroupName]];
 
-            item = { GroupID: targetGroupdata[0]?.GroupID, GroupName: targetGroupdata[0]?.GroupName, GroupSequence: 2, SubGroupSequence: item.GroupSequence, label: item.label, value: item.GroupSequence }
+            item = { GroupID: targetGroupdata[0]?.GroupID, GroupName: targetGroupdata[0]?.GroupName, SubGroupSequence: item.SubGroupSequence, label: item.label, value: item.value }
             const targetGroup = [...prevGroups[targetGroupName], item];
 
             return {
@@ -528,6 +528,7 @@ const GroupSubGroup = (props) => {
 
 
     const moveItemWithinSubGroup = (sourceIndex, targetIndex, groupName) => {
+
         setSubGroups((prevGroups) => {
             const updatedGroup = Array.from(prevGroups[groupName]);
             const [movedItem] = updatedGroup.splice(sourceIndex, 1);
@@ -585,6 +586,7 @@ const GroupSubGroup = (props) => {
 
     const SaveHandler = async () => {
         setSaveLoading(true)
+        debugger
         let combinedArray = [];
         orderedGroups.forEach(groupName => {
             combinedArray = combinedArray.concat(groups[groupName]);
