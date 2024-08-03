@@ -87,8 +87,8 @@ const StockEntryList = () => {
     function viewApprovalBtnFunc(config) {
 
         const jsonBody = JSON.stringify({
-            Party: config.rowData.Party_id,
-            StockDate: config.rowData.PriviousStockDate,
+            "PartyID": config.rowData.Party_id,
+            "StockDate": config.rowData.PriviousStockDate,
         })
 
         dispatch(GetStockEntryView_Action({ jsonBody, btnId: `btn-viewApproval-${config.rowData.id}` }))
