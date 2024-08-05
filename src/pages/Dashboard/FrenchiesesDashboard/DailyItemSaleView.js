@@ -11,7 +11,7 @@ import { Frenchies_Daily_sale_Report_API } from '../../../helpers/backend_helper
 import { useParams } from 'react-router-dom';
 import { FRENCHIESE_DAILY_SALE_REPORT } from '../../../helpers/url_helper'
 import SERVER_HOST_PATH from '../../../helpers/_serverPath'
-import { formatDate, GetDailySaleData } from './Function'
+import { convertTo12Hour, formatDate, GetDailySaleData } from './Function'
 
 const DailyItemSaleView = () => {
 
@@ -92,9 +92,10 @@ const DailyItemSaleView = () => {
                     justifyContent: 'center',
                     textAlign: 'center'
                 }}>
+
                     <h2 style={{ color: '#5156be' }}>{data?.PartyName}</h2>
                     <h5 style={{ color: '#5156be' }}>{data?.PartyAddress}</h5>
-                    <h6 style={{ color: '#5156be' }}>(Bill Count:{data?.BillCount})</h6>
+                    <h6 style={{ color: '#5156be', fontSize: "20px" }}>    <span style={{ fontSize: "20px" }} className="badge rounded-pill badge-soft-primary font-size-19 fw-medium"> Bill Count:{data?.BillCount} </span> </h6>
 
                 </CardBody>
 
@@ -117,6 +118,7 @@ const DailyItemSaleView = () => {
                 }}>
                     <Row>
                         {!loading ? <div className="flex-shrink-0">
+
                             <span className="badge rounded-pill badge-soft-primary fw-large" style={{ fontSize: "35px" }}> ₹ {data?.TotalAmount ? amountCommaSeparateFunc(data.TotalAmount) : 0}</span>
                         </div>
                             :
@@ -148,6 +150,7 @@ const DailyItemSaleView = () => {
 
                             </select>
                         </div>
+
                     </div>
                     <Col xl={4}>
 
@@ -162,11 +165,11 @@ const DailyItemSaleView = () => {
                                             </div>
 
                                             <div className="flex-shrink-0" style={{ marginRight: "10px" }}>
-                                                <span style={{ width: "80px" }} className="badge rounded-pill badge-soft-success font-size-12 fw-medium">{element.TotalQuantity}</span>
+                                                <span style={{ width: "90px" }} className="badge rounded-pill badge-soft-success font-size-12 fw-medium">{element.TotalQuantity} {element.UnitName}</span>
                                             </div>
 
                                             <div className="flex-shrink-0">
-                                                <span className="badge rounded-pill badge-soft-primary font-size-12 fw-medium"> ₹{amountCommaSeparateFunc(element.TotalAmount)}</span>
+                                                <span style={{ width: "90px" }} className="badge rounded-pill badge-soft-primary font-size-12 fw-medium"> ₹&nbsp;{amountCommaSeparateFunc(element.TotalAmount)}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -182,6 +185,8 @@ const DailyItemSaleView = () => {
                 </Row>
 
                 {/* <CardBody> */}
+                <span className="badge rounded-pill badge-soft-primary font-size-18 fw-medium"> First Bill :{data?.FirstBillTime ? convertTo12Hour(data?.FirstBillTime) : ""} </span>
+
                 <div id="pie-chart" className="e-chart">
                     {(data?.TopSaleItems?.length === undefined) || (data?.TopSaleItems?.length === 0) ?
 
@@ -205,11 +210,10 @@ const DailyItemSaleView = () => {
                             <h1 style={{ color: 'red' }}>Record's Not Available</h1>
 
                         </CardBody>
-
                         : <Pie Item={data.TopSaleItems} />}
 
-
                 </div>
+                <span className="badge rounded-pill badge-soft-primary font-size-18 fw-medium"> Last Bill :{convertTo12Hour(data?.LastBillTime)} </span>
                 {/* </CardBody> */}
             </Card>
     )

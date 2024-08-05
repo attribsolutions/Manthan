@@ -37,6 +37,24 @@ export const formatDate = (date) => {
 
 
 
+export function convertTo12Hour(time) {
+    let [hours, minutes, seconds] = time.split(':').map(Number);
+    let period = 'AM';
+
+    if (hours >= 12) {
+        period = 'PM';
+        if (hours > 12) {
+            hours -= 12;
+        }
+    } else if (hours === 0) {
+        hours = 12;
+    }
+
+    return `${hours}:${minutes} ${period}`;
+}
+
+
+
 
 
 
