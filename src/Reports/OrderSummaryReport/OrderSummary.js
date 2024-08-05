@@ -36,6 +36,7 @@ const OrderSummary = (props) => {
     const [groupByDate, setGroupByDate] = useState(false);
     const [groupBySupplier, setGroupBySupplier] = useState(false);
     const [groupByCustomer, setGroupByCustomer] = useState(false);
+    const [groupByItemSupplier, setGroupByItemSupplier] = useState(false);
     const [showTableData, setShowTableData] = useState([]);
     const [orderSummaryApiData, setOrderSummaryApiData] = useState([]);
     const [btnMode, setBtnMode] = useState(0);
@@ -186,6 +187,9 @@ const OrderSummary = (props) => {
         if (groupByCustomer) {
             dynamicColumn.push('CustomerName')
         }
+        if (groupByItemSupplier) {
+            dynamicColumn.push('ItemSupplier')
+        }
 
         let currentColumnName = [...dynamicColumn, ...['OrderNo', 'Product', 'SubProduct', 'SKUName']]
         const columnSumsByGroup = jsonData.reduce((result, item) => {
@@ -322,6 +326,11 @@ const OrderSummary = (props) => {
         setGroupByCustomer(e.target.checked)
         setBtnMode(1)
     }
+    function groupByItemSupplierHandler(e) {
+        setGroupByItemSupplier(e.target.checked)
+        setBtnMode(1)
+    }
+
     const pagesListColumns = useMemo(() => {
         let internalColumn = [{}];
         if (showTableData.length > 0) {
@@ -453,10 +462,7 @@ const OrderSummary = (props) => {
                                 Excel
                             </C_Button>
                         </Col>
-
-
                     </div>
-
                 </div>
 
                 <Card className="mt-1 mb-1  c_card_filter-2 ">
@@ -488,9 +494,16 @@ const OrderSummary = (props) => {
                                 onChange={groupByCustomerHandler}
                             />
                         </div>
+
+                        <div className="d-flex gap-2 justify-content-center">
+                            <div>By Item Supplier</div>
+                            <Input
+                                type="checkbox"
+                                checked={groupByItemSupplier}
+                                onChange={groupByItemSupplierHandler}
+                            />
+                        </div>
                     </div>
-
-
 
                 </Card>
 
