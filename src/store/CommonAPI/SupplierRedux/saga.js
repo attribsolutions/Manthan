@@ -81,10 +81,10 @@ function* OrderType_GenFunc() {
   }
 }
 
-function* getVendorGenFunc() {
-
+function* getVendorGenFunc({ jsonBody = '' }) {
+  const { PartyID = loginPartyID() } = jsonBody
   try {
-    const response = yield call(VendorSupplierCustomer, { "Type": 1, "PartyID": loginPartyID(), "Company": loginCompanyID(), Route: "" });
+    const response = yield call(VendorSupplierCustomer, { "Type": 1, "PartyID": PartyID, "Company": loginCompanyID(), Route: "" });
     yield put(GetVenderSuccess(response.Data));
   } catch (error) {
     CommonConsole(error);
@@ -115,7 +115,7 @@ function* getCustomerGenFunc() {
 }
 
 function* vendorSupplierCustomer_genFunc({ data }) {
-
+  
   const {
     subPageMode,
     RouteID = "",

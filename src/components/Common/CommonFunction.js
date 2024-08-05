@@ -22,7 +22,7 @@ function isDateInitial(isdate) {
 }
 
 export const date_ymd_func = (isdate) => { //+++++++++++++++ Current Date by format (yyyy-dd-mm) ++++++++++++++++++++++++++++++++++++
-  debugger
+  
   let date = isDateInitial(isdate);
   return (`${date.yy}-${date.mm}-${date.dd}`)
 };

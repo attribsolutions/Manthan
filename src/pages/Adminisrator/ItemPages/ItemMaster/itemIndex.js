@@ -263,7 +263,7 @@ const ItemsMaster = (props) => {
                 const { id, Name, SAPItemCode, ShortName, BarCode, Sequence, CompanyName, Company,
                     BaseUnitName, BaseUnitID, isActive, IsSCM, IsCBMItem } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
-                debugger
+                
                 hasValid.Name.valid = true;
                 hasValid.SAPItemCode.valid = true;
                 hasValid.ShortName.valid = true;
