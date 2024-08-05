@@ -485,7 +485,7 @@ const GroupSubGroup = (props) => {
 
 
     const moveSubGroupItem = (item, sourceGroupName, targetGroupName) => {
-        debugger
+        
         if (sourceGroupName === targetGroupName) return;
         setSubGroups((prevGroups) => {
             prevGroups["UnAssign"] ? prevGroups["UnAssign"] = prevGroups["UnAssign"] : prevGroups["UnAssign"] = []
@@ -586,7 +586,7 @@ const GroupSubGroup = (props) => {
 
     const SaveHandler = async () => {
         setSaveLoading(true)
-        debugger
+        
         let combinedArray = [];
         orderedGroups.forEach(groupName => {
             combinedArray = combinedArray.concat(groups[groupName]);

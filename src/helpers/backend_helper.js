@@ -850,7 +850,9 @@ export const post_PartyDetails = ({ jsonBody }) => post(url.POST_PARTY_DETAILS, 
 
 //ItemWiseUpdate
 export const ItemWiseUpdate_GoButton_API = (jsonBody) => post(url.ITEM_WISE_UPDATE_API, jsonBody)// GO BUTTON API
-export const ItemWiseUpdate_Post_API = (jsonBody) => post(url.ITEM_WISE_UPDATE_POST_API, jsonBody)// POST API
+export const ItemWiseUpdate_Post_API = ({jsonBody}) => post(url.ITEM_WISE_UPDATE_POST_API, jsonBody)// POST API
+export const ItemSupplier_Post_API = ({jsonBody}) => post(url.ITEM_SUPPLIER_LIST_GET_API, jsonBody)// POST API
+export const ItemSupplierList_Get_API = () => get(url.ITEM_SUPPLIER_LIST_GET_API)
 
 // TCS Amount Report
 export const TCS_Amount_Report_GoButton_API = (jsonBody) => post(url.TCS_AMOUNT_REPORT_GO_BUTTON_API, jsonBody)
