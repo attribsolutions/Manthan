@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from 'react'
 
-import { Link } from 'react-router-dom/cjs/react-router-dom.min'
+
 import { Card, CardBody, Col, Row } from 'reactstrap'
 import Pie from './pie'
 
-import data_1 from './data.json'
+
 import { amountCommaSeparateFunc, currentDate_dmy, currentDate_ymd } from '../../../components/Common/CommonFunction'
-import { Frenchies_Daily_sale_Report_API } from '../../../helpers/backend_helper'
+
 
 import { useParams } from 'react-router-dom';
-import { FRENCHIESE_DAILY_SALE_REPORT } from '../../../helpers/url_helper'
-import SERVER_HOST_PATH from '../../../helpers/_serverPath'
+
 import { convertTo12Hour, formatDate, GetDailySaleData } from './Function'
 
 const DailyItemSaleView = () => {
@@ -213,7 +212,7 @@ const DailyItemSaleView = () => {
                         : <Pie Item={data.TopSaleItems} />}
 
                 </div>
-                <span className="badge rounded-pill badge-soft-primary font-size-18 fw-medium"> Last Bill :{convertTo12Hour(data?.LastBillTime)} </span>
+                <span className="badge rounded-pill badge-soft-primary font-size-18 fw-medium"> Last Bill :{data?.LastBillTime ? convertTo12Hour(data?.LastBillTime) : ""} </span>
                 {/* </CardBody> */}
             </Card>
     )
