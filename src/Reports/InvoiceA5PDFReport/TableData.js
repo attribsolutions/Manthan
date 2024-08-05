@@ -67,7 +67,7 @@ export const RowsWithCGST_SGST = (data) => {
     let GSTPercentage = 0
 
     const groupedItems = InvoiceItems.reduce((accumulator, currentItem) => {
-        
+
         const { HSNCode,
             ItemName, MRP, Rate,
             Discount, CGST, SGST,
@@ -76,7 +76,7 @@ export const RowsWithCGST_SGST = (data) => {
             UnitName, MRPValue, CGSTPercentage,
             SGSTPercentage, GSTPercentage,
             BatchCode, BatchDate, DiscountType,
-            PrimaryUnitName, ItemExpiryDate } = currentItem;
+            PrimaryUnitName } = currentItem;
         let PcsinNumber = ""
         let PcsinNumberUnit = ""
         const pattern = /\((.*?)\)/;
@@ -89,7 +89,7 @@ export const RowsWithCGST_SGST = (data) => {
             PcsinNumberUnit = match[1];
 
         }
-        
+
         const key = ItemName + '_' + MRPValue;
         if (accumulator[key]) {
 
@@ -103,8 +103,7 @@ export const RowsWithCGST_SGST = (data) => {
             accumulator[key].Amount += Number(Amount);
             accumulator[key].BatchCode += BatchCode;
             accumulator[key].BatchDate += BatchDate;
-            accumulator[key].ItemExpiryDate += ItemExpiryDate;
-            accumulator[key].quantityString += ` ,  ${BatchDate} ${BatchCode} ${ItemExpiryDate} ${Quantity} `;
+            accumulator[key].quantityString += ` ,  ${BatchCode} ${BatchDate} `;
 
         } else {
             accumulator[key] = {
@@ -117,7 +116,7 @@ export const RowsWithCGST_SGST = (data) => {
                 BasicAmount: Number(BasicAmount), Quantity: Number(Quantity),
                 UnitName, CGSTPercentage, SGSTPercentage, GSTPercentage,
                 BatchDate, BatchCode: BatchCode, BatchDate: BatchDate,
-                quantityString: `  ${BatchDate} ${BatchCode} ${ItemExpiryDate} ${Quantity}`, PrimaryUnitName
+                quantityString: `  ${BatchCode}  ${BatchDate}`, PrimaryUnitName
             };
         }
         return accumulator;
@@ -126,7 +125,7 @@ export const RowsWithCGST_SGST = (data) => {
     const TotalItemlength = Object.values(groupedItems).length;
     data["TotalItemlength"] = TotalItemlength;
     Object.values(groupedItems).forEach((element, key) => {
-        
+
         let HSNcodes = ""
         if (element.HSNCode) {
             if (data.SettingData.HSNCodeDigit === "1") {
@@ -252,13 +251,12 @@ export const RowsWithIGST = (data) => {
     let GSTPercentage = 0
 
     const groupedItems = InvoiceItems.reduce((accumulator, currentItem) => {
-        
         const { HSNCode, ItemName, IGSTPercentage,
             MRP, Rate, Discount, CGST, SGST,
             Amount, DiscountAmount, BasicAmount,
             Quantity, UnitName, MRPValue, CGSTPercentage,
             SGSTPercentage, GSTPercentage, BatchCode,
-            BatchDate, DiscountType, PrimaryUnitName, IGST, ItemExpiryDate } = currentItem;
+            BatchDate, DiscountType, PrimaryUnitName, IGST } = currentItem;
 
         let PcsinNumber = ""
         let PcsinNumberUnit = ""
@@ -285,8 +283,7 @@ export const RowsWithIGST = (data) => {
             accumulator[key].Amount += Number(Amount);
             accumulator[key].BatchCode += BatchCode;
             accumulator[key].BatchDate += BatchDate;
-            accumulator[key].ItemExpiryDate += ItemExpiryDate;
-            accumulator[key].quantityString += ` ,  ${BatchDate} ${BatchCode} ${ItemExpiryDate} ${Quantity} `;
+            accumulator[key].quantityString += ` ,  ${BatchCode} ${BatchDate} `;
 
         } else {
             accumulator[key] = {
@@ -298,7 +295,7 @@ export const RowsWithIGST = (data) => {
                 BasicAmount: Number(BasicAmount), Quantity: Number(Quantity),
                 UnitName, CGSTPercentage, SGSTPercentage, GSTPercentage,
                 BatchDate, BatchCode: BatchCode, BatchDate: BatchDate,
-                quantityString: `   ${BatchDate} ${BatchCode} ${ItemExpiryDate} ${Quantity}`, PrimaryUnitName, IGST
+                quantityString: `  ${BatchCode}  ${BatchDate}`, PrimaryUnitName, IGST
             };
         }
         return accumulator;
