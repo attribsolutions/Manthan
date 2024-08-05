@@ -630,6 +630,8 @@ export const FRENCHIESE_DAILY_SALE_REPORT = '/SweetPOS/TopSaleItemsOfFranchise'
 //ItemWiseUpdate
 export const ITEM_WISE_UPDATE_API = '/ItemWiseUpdate'
 export const ITEM_WISE_UPDATE_POST_API = '/ItemWiseSave'
+export const ITEM_SUPPLIER_LIST_GET_API = '/ItemSupplier'
+
 
 // TCS Amount Report
 export const TCS_AMOUNT_REPORT_GO_BUTTON_API = '/TCSAmountReport'

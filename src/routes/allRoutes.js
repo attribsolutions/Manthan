@@ -235,10 +235,8 @@ import CashierSummary from "../pages/SweetPOS/Reports/CashierSummaryReport/Cashi
 import Pos_InvoiceList from "../pages/SweetPOS/Sales/Invoice/InvoiceList.js";
 import BulkWorkOrderList from "../pages/Production/WorkOrder/BulkWorkOrder/BulkWorkOrderList.js";
 import FrenchiesSaleReport from "../pages/SweetPOS/Reports/FrenchiesSaleReport/FrenchiesSaleReport.js";
-
 import DailyItemSaleView from "../pages/Dashboard/FrenchiesesDashboard/DailyItemSaleView.js";
-
-// import ItemSupplierAssign from "../pages/Adminisrator/ItemMasterBulkUpdate/ItemSupplierAssign.js";
+import ItemSupplierAssign from "../pages/Adminisrator/ItemMasterBulkUpdate/ItemSupplierAssign.js";
 import StockEntryList from "../pages/Inventory/StockEntry/StockEntryList.js";
 
 const userRoutes = [
@@ -408,7 +406,7 @@ const userRoutes = [
 
 	{ path: path.ITEM_MASTER_BULK_UPDATE, component: ItemMasterBulkUpdate },//not party wise
 
-	// { path: path.ITEM_SUPPLIER_ASSIGN, component:ItemSupplierAssign  },//not party wise
+	{ path: path.ITEM_SUPPLIER_ASSIGN, component:ItemSupplierAssign  },//not party wise
 
 	{ path: path.ITEM_IMAGE_UPLOAD, component: ItemImageUpload },//not party wise
 

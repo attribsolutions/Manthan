@@ -59,6 +59,7 @@ export const Bankcolumn = [
 ]
 
 export const Rows = (data) => {
+    
     const { InvoiceItems = [] } = data
     InvoiceItems.sort((firstItem, secondItem) => firstItem.GSTPercentage - secondItem.GSTPercentage);
     const returnArr = [];
@@ -74,8 +75,8 @@ export const Rows = (data) => {
 
     const groupedItems = InvoiceItems.reduce((accumulator, currentItem) => {
 
-
-        const { HSNCode, ItemName, MRP, Rate, Discount, CGST, SGST, Amount, DiscountAmount, BasicAmount, Quantity, UnitName, MRPValue, CGSTPercentage, SGSTPercentage, GSTPercentage, BatchCode, BatchDate, DiscountType, PrimaryUnitName } = currentItem;
+        
+        const { HSNCode, ItemName, MRP, Rate, Discount, CGST, SGST, Amount, DiscountAmount, BasicAmount, Quantity, UnitName, MRPValue, CGSTPercentage, SGSTPercentage, GSTPercentage, BatchCode, BatchDate, DiscountType, PrimaryUnitName, ItemExpiryDate } = currentItem;
         let PcsinNumber = ""
         let PcsinNumberUnit = ""
         const pattern = /\((.*?)\)/;
@@ -97,13 +98,20 @@ export const Rows = (data) => {
             accumulator[key].CGST += Number(CGST);
             accumulator[key].SGST += Number(SGST);
             accumulator[key].Amount += Number(Amount);
-            accumulator[key].BatchCode += BatchCode;
             accumulator[key].BatchDate += BatchDate;
-            accumulator[key].quantityString += ` ,  ${BatchCode} ${BatchDate} `;
+            accumulator[key].BatchCode += BatchCode;
+            accumulator[key].ItemExpiryDate += ItemExpiryDate;
+            accumulator[key].Quantity += Quantity;
+            accumulator[key].quantityString += ` ,  ${BatchDate} ${BatchCode} ${ItemExpiryDate} ${Quantity} `;
         } else {
             accumulator[key] = {
                 ItemName, HSNCode,
-                MRPValue, DiscountType, Rate, Discount, PcsinNumberUnit: PcsinNumberUnit, PcsinNumber: Number(PcsinNumber), CGST: Number(CGST), SGST: Number(SGST), Amount: Number(Amount), DiscountAmount: Number(DiscountAmount), BasicAmount: Number(BasicAmount), Quantity: Number(Quantity), UnitName, CGSTPercentage, SGSTPercentage, GSTPercentage, BatchDate, BatchCode: BatchCode, BatchDate: BatchDate, quantityString: `  ${BatchCode}  ${BatchDate}`, PrimaryUnitName
+                MRPValue, DiscountType, Rate, Discount, 
+                PcsinNumberUnit: PcsinNumberUnit, PcsinNumber: Number(PcsinNumber), 
+                CGST: Number(CGST), SGST: Number(SGST), Amount: Number(Amount), 
+                DiscountAmount: Number(DiscountAmount), BasicAmount: Number(BasicAmount),
+                 Quantity: Number(Quantity), UnitName, CGSTPercentage, SGSTPercentage, GSTPercentage, BatchDate, BatchCode: BatchCode, BatchDate: BatchDate,
+                  quantityString: `  ${BatchDate} ${BatchCode} ${ItemExpiryDate} ${Quantity}`, PrimaryUnitName
             };
         }
         return accumulator;
@@ -243,7 +251,7 @@ export const RowsWithIGST = (data) => {
 
     const groupedItems = InvoiceItems.reduce((accumulator, currentItem) => {
 
-        const { HSNCode, ItemName, IGSTPercentage, MRP, Rate, Discount, CGST, SGST, Amount, DiscountAmount, BasicAmount, Quantity, UnitName, MRPValue, CGSTPercentage, SGSTPercentage, GSTPercentage, BatchCode, BatchDate, DiscountType, PrimaryUnitName, IGST } = currentItem;
+        const { HSNCode, ItemName, IGSTPercentage, MRP, Rate, Discount, CGST, SGST, Amount, DiscountAmount, BasicAmount, Quantity, UnitName, MRPValue, CGSTPercentage, SGSTPercentage, GSTPercentage, BatchCode, BatchDate, DiscountType, PrimaryUnitName, IGST,ItemExpiryDate } = currentItem;
         const key = ItemName + '_' + MRPValue;
         if (accumulator[key]) {
             accumulator[key].DiscountAmount += Number(DiscountAmount);
@@ -255,12 +263,15 @@ export const RowsWithIGST = (data) => {
             accumulator[key].Amount += Number(Amount);
             accumulator[key].BatchCode += BatchCode;
             accumulator[key].BatchDate += BatchDate;
-            accumulator[key].quantityString += ` ,  ${BatchCode} ${BatchDate} `;
+            accumulator[key].ItemExpiryDate += ItemExpiryDate;
+            accumulator[key].Quantity += Quantity;
+            accumulator[key].quantityString += ` ,  ${BatchDate} ${BatchCode} ${ItemExpiryDate} ${Quantity} `;
 
         } else {
             accumulator[key] = {
                 ItemName, HSNCode,
-                MRPValue, IGSTPercentage, DiscountType, Rate, Discount, CGST: Number(CGST), SGST: Number(SGST), Amount: Number(Amount), DiscountAmount: Number(DiscountAmount), BasicAmount: Number(BasicAmount), Quantity: Number(Quantity), UnitName, CGSTPercentage, SGSTPercentage, GSTPercentage, BatchDate, BatchCode: BatchCode, BatchDate: BatchDate, quantityString: `  ${BatchCode}  ${BatchDate}`, PrimaryUnitName, IGST
+                MRPValue, IGSTPercentage, DiscountType, Rate, Discount, CGST: Number(CGST), SGST: Number(SGST), Amount: Number(Amount), DiscountAmount: Number(DiscountAmount), BasicAmount: Number(BasicAmount), Quantity: Number(Quantity), UnitName, CGSTPercentage, SGSTPercentage, GSTPercentage, BatchDate, BatchCode: BatchCode, BatchDate: BatchDate,
+                 quantityString: `  ${BatchDate} ${BatchCode} ${ItemExpiryDate} ${Quantity}`, PrimaryUnitName, IGST
             };
         }
         return accumulator;

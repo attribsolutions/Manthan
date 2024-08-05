@@ -429,7 +429,7 @@ const GRNAdd3 = (props) => {
             let GRNReferencesUpdate = openPOdata  /// GRNReferencesUpdate this Key Word Use For GRN Ref From Use Inter Branch
 
             const Invoicedate = _cfunc.convertDateFormat(invoiceDate)
-            debugger
+            
             const jsonBody = JSON.stringify({
                 GRNDate: grnDate,
                 Customer: grnDetail.Customer,
