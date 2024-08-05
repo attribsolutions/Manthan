@@ -29,10 +29,10 @@ const FrenchiesSaleReport = (props) => {
 
     const [headerFilters, setHeaderFilters] = useState('');
     const [userPageAccessState, setUserAccState] = useState('');
-    const [PartyDropdown, setPartyDropdown] = useState([allLabelWithZero]);
+    const [PartyDropdown, setPartyDropdown] = useState(allLabelWithZero);
     const [tableData, setTableData] = useState([]);
     const [btnMode, setBtnMode] = useState(0);
-
+    debugger
     const [Item, setItem] = useState(allLabelWithZero);
 
 
@@ -161,7 +161,6 @@ const FrenchiesSaleReport = (props) => {
 
     function excel_And_GoBtnHandler(e, Btnmode) {
         setBtnMode(Btnmode);
-        
         const jsonBody = JSON.stringify({
             "FromDate": fromdate,
             "ToDate": todate,
