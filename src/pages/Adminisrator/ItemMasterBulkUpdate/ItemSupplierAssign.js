@@ -60,7 +60,7 @@ const ItemSupplierAssign = (props) => {
             pageField: state.CommonPageFieldReducer.pageField
         })
     );
-  
+
     // Featch Modules List data  First Rendering
     const location = { ...history.location }
     const hasShowModal = props.hasOwnProperty(mode.editValue)
@@ -154,7 +154,6 @@ const ItemSupplierAssign = (props) => {
     };
 
     const SupplierHandler = async (supplierID, row) => {
-        debugger
         row.Newvalue = supplierID
         row.DropdownSetValue = supplierID
         setForceRefresh(i => !i)
@@ -230,13 +229,36 @@ const ItemSupplierAssign = (props) => {
             let updatedData = [];
 
             tableData.forEach(item => {
-                if (item?.DropdownSetValue && item?.DropdownSetValue.length > 0) {
+                const hasDropdownSetValue = item?.DropdownSetValue && item.DropdownSetValue.length > 0;
+                const hasSupplierDetails = item?.SupplierDetails && item.SupplierDetails.length > 0;
+
+                // Case 1: Only DropdownSetValue is populated
+                if (hasDropdownSetValue && !hasSupplierDetails) {
                     item.DropdownSetValue.forEach(supplier => {
-                        const arr = {
+                        updatedData.push({
                             Item: item.ItemID,
                             Supplier: supplier.value
-                        };
-                        updatedData.push(arr);
+                        });
+                    });
+                }
+
+                // Case 2: Only SupplierDetails is populated
+                if (hasSupplierDetails && !hasDropdownSetValue) {
+                    item.SupplierDetails.forEach(supplier => {
+                        updatedData.push({
+                            Item: item.ItemID,
+                            Supplier: supplier.SupplierId
+                        });
+                    });
+                }
+
+                // Case 3: Both DropdownSetValue and SupplierDetails are populated
+                if (hasDropdownSetValue && hasSupplierDetails) {
+                    item.DropdownSetValue.forEach(supplier => {
+                        updatedData.push({
+                            Item: item.ItemID,
+                            Supplier: supplier.value
+                        });
                     });
                 }
             });
@@ -249,7 +271,6 @@ const ItemSupplierAssign = (props) => {
                 return;
             }
             else {
-
                 const jsonBody = JSON.stringify(updatedData);
                 dispatch(ItemWiseUpdate_Save_Action({ jsonBody, subPageMode: url.ITEM_SUPPLIER_ASSIGN }));
             }
