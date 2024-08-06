@@ -13,7 +13,7 @@ import {
     commonPageField,
     commonPageFieldSuccess,
 } from "../../../store/actions";
-import { CInput, C_Select, charRegx, decimalRegx } from "../../../CustomValidateForm";
+import { C_Select } from "../../../CustomValidateForm";
 import {
     ItemSupplierList_Action,
     ItemSupplierList_Success,
@@ -25,6 +25,7 @@ import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMs
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 import GlobalCustomTable from "../../../GlobalCustomTable"
 import { sideBarPageFiltersInfoAction } from "../../../store/Utilites/PartyDrodown/action";
+import Select from "react-select"
 
 const ItemSupplierAssign = (props) => {
 
@@ -44,9 +45,12 @@ const ItemSupplierAssign = (props) => {
         postMsg,
         saveBtnloading,
         SupplierList,
+        SupplierDroploading,
+        pageField
     } = useSelector(
         (state) => ({
             SupplierList: state.CommonAPI_Reducer.vender,
+            SupplierDroploading: state.CommonAPI_Reducer.vendorSupplierCustomerLoading,
             goBtnLoading: state.ItemWiseUpdateReducer.loading,
             goButtonData: state.ItemWiseUpdateReducer.itemSupplierList,
 
@@ -56,7 +60,7 @@ const ItemSupplierAssign = (props) => {
             pageField: state.CommonPageFieldReducer.pageField
         })
     );
-
+  
     // Featch Modules List data  First Rendering
     const location = { ...history.location }
     const hasShowModal = props.hasOwnProperty(mode.editValue)
@@ -150,7 +154,7 @@ const ItemSupplierAssign = (props) => {
     };
 
     const SupplierHandler = async (supplierID, row) => {
-        
+        debugger
         row.Newvalue = supplierID
         row.DropdownSetValue = supplierID
         setForceRefresh(i => !i)
@@ -170,42 +174,29 @@ const ItemSupplierAssign = (props) => {
             formatExtraData: { forceRefresh, dropdownOptions: selectFieldNameDropOptions, tableData: tableData },
             formatter: (cellContent, row, key, { dropdownOptions, tableData }) => {
 
+                const defaultSelected = row.SupplierDetails
+                    .filter(data => data.SupplierId !== null)
+                    .map(data => ({
+                        value: data.SupplierId,
+                        label: data.SupplierName
+                    }));
+
                 return (
                     <>
-                        {SelectFieldName.DataType === "dropdown" ?
-
-                            <div style={{ width: "180px" }}>
-                                <Col>
-                                    <FormGroup>
-                                        <C_Select
-                                            key={row.Newvalue}
-                                            value={row.DropdownSetValue}
-                                            isMulti={true}
-                                            options={dropdownOptions}
-                                            onChange={(event) => AllDropdownHandler(event, row, tableData)}
-                                        />
-                                    </FormGroup>
-                                </Col>
-                            </div>
-                            :
-                            <div style={{ width: "180px" }}>
-                                <Col>
-                                    <FormGroup>
-                                        <CInput
-                                            id={key}
-                                            type="text"
-                                            cpattern={(SelectFieldName.DataType === "number") ? decimalRegx : charRegx}
-                                            placeholder={`Enter New ${SelectFieldName.label}`}
-                                            defaultValue={row.Newvalue}
-                                            className="col col-sm "
-                                            onChange={(event) => {
-                                                row.Newvalue = event.target.value
-                                            }}
-                                        />
-                                    </FormGroup>
-                                </Col>
-                            </div>
-                        }
+                        <div style={{ width: "180px" }}>
+                            <Col>
+                                <FormGroup>
+                                    <Select
+                                        key={row.Newvalue}
+                                        defaultValue={defaultSelected}
+                                        value={row.DropdownSetValue}
+                                        isMulti={true}
+                                        options={dropdownOptions}
+                                        onChange={(event) => AllDropdownHandler(event, row, tableData)}
+                                    />
+                                </FormGroup>
+                            </Col>
+                        </div>
                     </>
                 );
             }
@@ -226,22 +217,18 @@ const ItemSupplierAssign = (props) => {
             dataField: "ItemName",
             sort: true
         },
-        {
-            text: "SupplierName",
-            dataField: "SupplierName",
-        },
     ];
 
     pagesListColumns.push(createNewValueColumn());
 
     const SaveHandler = (event) => {
-        
+
         event.preventDefault();
 
         try {
-           
+
             let updatedData = [];
-            
+
             tableData.forEach(item => {
                 if (item?.DropdownSetValue && item?.DropdownSetValue.length > 0) {
                     item.DropdownSetValue.forEach(supplier => {
@@ -271,7 +258,7 @@ const ItemSupplierAssign = (props) => {
 
     return (
         <React.Fragment>
-            <PageLoadingSpinner isLoading={(goButtonData.length > 0 && false)} />
+            <PageLoadingSpinner isLoading={(goBtnLoading || SupplierDroploading)} />
             <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
             <div className="page-content">
                 <form noValidate>

@@ -11,9 +11,9 @@ function* ItemWiseUpdateGoButton_GenFunc({ jsonBody }) {
     } catch (error) { yield put(action.ItemWiseUpdateApiErrorAction()) }
 }
 
-function* ItemWiseUpdate_Save_GenFunc({config}) {
+function* ItemWiseUpdate_Save_GenFunc({ config }) {
     const { subPageMode } = config
-    
+
     try {
         let response
         if (subPageMode === url.ITEM_SUPPLIER_ASSIGN) {
@@ -28,7 +28,11 @@ function* ItemWiseUpdate_Save_GenFunc({config}) {
 function* ItemsSupplierList_GenFunc() {
     try {
         const response = yield call(apiCall.ItemSupplierList_Get_API);
-        yield put(action.ItemSupplierList_Success(response.Data));
+        const newList = response.Data.map((i, index) => {
+            i.id = index + 1
+            return i
+        })
+        yield put(action.ItemSupplierList_Success(newList));
     } catch (error) { yield put(action.ItemWiseUpdateApiErrorAction()) }
 }
 
