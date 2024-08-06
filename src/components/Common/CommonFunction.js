@@ -22,7 +22,7 @@ function isDateInitial(isdate) {
 }
 
 export const date_ymd_func = (isdate) => { //+++++++++++++++ Current Date by format (yyyy-dd-mm) ++++++++++++++++++++++++++++++++++++
-  
+
   let date = isDateInitial(isdate);
   return (`${date.yy}-${date.mm}-${date.dd}`)
 };
@@ -431,12 +431,21 @@ export const loginJsonBody = () => ({ //+++++++++++++++++++++ loginJsonBody for 
 });
 
 export const compareGSTINState = (gstin1 = '', gstin2 = '') => {
+
   gstin1 = String(gstin1) || ""
   gstin2 = String(gstin2) || ""
   let stateCode1 = gstin1.substring(0, 2);
   let stateCode2 = gstin2.substring(0, 2);
-
-  return (!(stateCode1 === stateCode2) && !(gstin1 === "") && !(gstin2 === ""));
+  
+  if ((stateCode1 === stateCode2) || (gstin1 === "") || (gstin2 === "")) {
+    return false;
+  } else if (!(stateCode1 === stateCode2)) {
+    return true;
+  }
+  else {
+    return false;
+  }
+  // return (!(stateCode1 === stateCode2) && !(gstin1 === "") && !(gstin2 === ""));
 }
 
 export function breadcrumbReturnFunc({ dispatch, userAcc, newBtnPath = "", forceNewBtnView = true, pageField }) {
