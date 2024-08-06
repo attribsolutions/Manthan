@@ -226,6 +226,16 @@ export const loginUserAdminRole = () => { //+++++++++++++++++++++ Session Compan
   return false;
 };
 
+export const loginPartyTypeName = () => { //+++++++++++++++++++++ Session Company Id+++++++++++++++++++++++++++++
+  
+  try {
+    const detail = loginUserDetails();
+    return ((detail.PartyType === "Division") || (detail.PartyType === "Franchises"));
+  } catch (e) {
+    CommonConsole("Common loginPartyTypeName Error");
+  }
+  return false;
+};
 
 
 export const loginUserIsFranchisesRole = () => { //+++++++++++++++++++++ IsFranchises Company Id+++++++++++++++++++++++++++++
