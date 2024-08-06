@@ -801,6 +801,9 @@ const AddEmployee = (props) => {
                               }}
                               classNamePrefix="dropdown"
                             />
+                            {isError.EmployeeParties.length > 0 && (
+                              <span className="text-danger f-8"><small>{isError.EmployeeParties}</small></span>
+                            )}
                           </FormGroup>
                         </Col>
 

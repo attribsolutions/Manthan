@@ -24,6 +24,7 @@ const OrderSummary = (props) => {
     const history = useHistory();
     const currentDate_ymd = _cfunc.date_ymd_func();
     const isSCMParty = _cfunc.loginIsSCMParty();
+    const loginPartyType = _cfunc.loginPartyTypeName()
 
     const fileds = {
         FromDate: currentDate_ymd,
@@ -494,15 +495,16 @@ const OrderSummary = (props) => {
                                 onChange={groupByCustomerHandler}
                             />
                         </div>
-
-                        <div className="d-flex gap-2 justify-content-center">
+                        
+                        {loginPartyType && <div className="d-flex gap-2 justify-content-center">
                             <div>By Item Supplier</div>
                             <Input
                                 type="checkbox"
                                 checked={groupByItemSupplier}
                                 onChange={groupByItemSupplierHandler}
                             />
-                        </div>
+                        </div>}
+
                     </div>
 
                 </Card>
