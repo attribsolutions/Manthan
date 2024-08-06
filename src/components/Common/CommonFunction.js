@@ -432,11 +432,11 @@ export const loginJsonBody = () => ({ //+++++++++++++++++++++ loginJsonBody for 
 
 export const compareGSTINState = (gstin1 = '', gstin2 = '') => {
 
-  gstin1 = String(gstin1) || ""
-  gstin2 = String(gstin2) || ""
+  gstin1 = gstin1 === null ? "" : String(gstin1);
+  gstin2 = gstin2 === null ? "" : String(gstin2);
   let stateCode1 = gstin1.substring(0, 2);
   let stateCode2 = gstin2.substring(0, 2);
-  
+
   if ((stateCode1 === stateCode2) || (gstin1 === "") || (gstin2 === "")) {
     return false;
   } else if (!(stateCode1 === stateCode2)) {
