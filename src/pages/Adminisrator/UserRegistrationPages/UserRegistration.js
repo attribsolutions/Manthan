@@ -101,7 +101,7 @@ const AddUser = (props) => {
   const values = { ...state.values }
   const { isError } = state;
   const { fieldLabel } = state;
-  
+
   const location = { ...history.location }
   const hasShowloction = location.hasOwnProperty(mode.editValue)
   const hasShowModal = props.hasOwnProperty(mode.editValue)
@@ -236,14 +236,14 @@ const AddUser = (props) => {
         })
       }
       else {
-        let isPermission = await customAlert({
+        customAlert({
           Type: 1,
           Status: true,
           Message: postMsg.Message,
         })
-        if (isPermission) {
-          history.push({ pathname: url.USER_lIST })
-        }
+        history.push({
+          pathname: url.USER_lIST,
+        })
       }
     }
 
