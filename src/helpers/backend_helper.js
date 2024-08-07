@@ -882,7 +882,9 @@ export const Post_POSRoleAccess_API = ({ jsonBody }) => post(url.SWEET_POS_API, 
 
 export const Pos_Invoice_Singel_Get_for_Report_Api = ({ editId }) => get(`${url.POS_INVOICE_PRINT}/${editId}/P`)// delete api
 
-
+//Sweet POS Rate master
+export const POS_RateList_Get_Api = () => get(url.SWEET_POS_RATE_LIST_API) // get api
+export const POS_RateMaster_Post_Api = ({ jsonBody }) => post(url.SWEET_POS_RATE_SAVE_API, jsonBody)// post api
 
 ///POS USER REGESTRATION
 // export const POS_USER_Master_Get_API = () => get(url.POS_USER_REGESTRATION)//get api

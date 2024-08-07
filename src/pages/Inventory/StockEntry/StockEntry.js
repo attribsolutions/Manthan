@@ -164,15 +164,27 @@ const StockEntry = (props) => {
         }
     }, [pageField])
 
-    useEffect(() => {
+    useEffect(async() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(saveStockEntrySuccess({ Status: false }))
             setTableArr([])
-            customAlert({
-                Type: 1,
-                Message: postMsg.Message,
-                RedirectPath: url.STOCK_ENTRY_LIST,
-            })
+            
+            if (pageMode === "other") {
+                customAlert({
+                    Type: 1,
+                    Message: postMsg.Message,
+                })
+            }
+            else {
+                let isPermission = await customAlert({
+                    Type: 1,
+                    Status: true,
+                    Message: postMsg.Message,
+                })
+                if (isPermission) {
+                    history.push({ pathname: url.STOCK_ENTRY_LIST })
+                }
+            }
         }
         else if (postMsg.Status === true) {
             dispatch(saveStockEntrySuccess({ Status: false }))
@@ -189,7 +201,6 @@ const StockEntry = (props) => {
             "FromDate": currentDate_ymd,
             "PartyID": PartyID
         });
-
         dispatch(GetStockCount({ jsonBody }))
     }, [currentDate_ymd])
 
@@ -430,14 +441,14 @@ const StockEntry = (props) => {
     async function AddPartyHandler(e, Type) {
 
         setAddLoading(true)
-        
+
         let selectedItem = []
         if (_cfunc.loginSelectedPartyID() === 0 && values.ItemName === '') {
             customAlert({ Type: 3, Message: alertMessages.commonPartySelectionIsRequired });
             setAddLoading(false)
             return;
         }
-       
+
         if (values.ItemName === '') {
             if (Type === "add_All" && TableArr.length !== ItemDropDown.length) {
                 setAddLoading(false)

@@ -238,6 +238,7 @@ import FrenchiesSaleReport from "../pages/SweetPOS/Reports/FrenchiesSaleReport/F
 import DailyItemSaleView from "../pages/Dashboard/FrenchiesesDashboard/DailyItemSaleView.js";
 import ItemSupplierAssign from "../pages/Adminisrator/ItemMasterBulkUpdate/ItemSupplierAssign.js";
 import StockEntryList from "../pages/Inventory/StockEntry/StockEntryList.js";
+import SweetPOSRateMaster from "../pages/SweetPOS/Adminstration/RateMaster/SweetPOSRateMaster.js";
 
 const userRoutes = [
 	// *************************** DashBord *******************************//
@@ -611,6 +612,8 @@ const userRoutes = [
 
 	{ path: path.CASHIER_SUMMARY_REPORT, component: CashierSummary },//not party wise
 
+	{ path: path.SWEET_POS_RATE_MASTER, component: SweetPOSRateMaster },//not party wise
+
 
 	//******************************* Sweet Pos USER REGESTRATION ************************************//
 
@@ -622,8 +625,6 @@ const userRoutes = [
 
 
 	{ path: path.POS_INVOICE_LIST, component: Pos_InvoiceList },//not party wise
-
-
 
 
 	// ************************************ Frenchies  **************************************//

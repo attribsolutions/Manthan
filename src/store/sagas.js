@@ -121,6 +121,7 @@ import RateMasterSaga from "./Administrator/RateMasterRedux/saga"
 import POSUserRegistrationSaga from "./SweetPOSStore/Administrator/UserMasterRedux/saga"
 import CashierSummaryReportSaga from "./SweetPOSStore/Report/CashierSummaryRedux/saga"
 import FrenchiesItemSaleReportSaga from "./SweetPOSStore/Report/FrenchiesSaleRedux/saga"
+import Pos_RateMaster_Saga from "./SweetPOSStore/Administrator/SweetPOSRateMasterRedux/saga"
 
 
 export default function* rootSaga() {
@@ -234,13 +235,8 @@ export default function* rootSaga() {
 		fork(POSUserRegistrationSaga),
 		fork(RateMasterSaga),
 		fork(CashierSummaryReportSaga),
-		fork(FrenchiesItemSaleReportSaga)
-
-
-		
-
-
-		
+		fork(FrenchiesItemSaleReportSaga),
+		fork(Pos_RateMaster_Saga)
 
 	])
 }
