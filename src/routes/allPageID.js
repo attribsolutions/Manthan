@@ -369,5 +369,5 @@ export const TARGET_VS_ACHIEVEMENT = 273
 
 export const  CASHIER_SUMMARY_REPORT = 287
 
-
+export const  SWEET_POS_RATE_MASTER = 295
 

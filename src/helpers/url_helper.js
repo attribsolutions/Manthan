@@ -649,6 +649,10 @@ export const GET_PARTY_EMPLOYEE_DETAILS = '/PartiesEmpAllDetails'
 //Sweet POS Role Access 
 export const SWEET_POS_API = '/SweetPOS/SPOSroleaccess'
 
+//Sweet POS Rate master
+export const SWEET_POS_RATE_LIST_API = '/SweetPOS/SPOSRateList'
+export const SWEET_POS_RATE_SAVE_API = '/SweetPOS/SPOSRateSave'
+
 // TargetVSAchievement 
 export const TARGET_VS_ACHIEVEMENT_API = '/TargetVSAchievement'
 

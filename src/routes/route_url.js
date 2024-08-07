@@ -400,12 +400,9 @@ export const POS_USER_lIST = "/POS_User_List"
 
 export const POS_INVOICE_LIST = "/Pos_InvoiceList"
 
-
-
-
-
 export const CASHIER_SUMMARY_REPORT = "/Cashier_Summary_Report"
 
+export const  SWEET_POS_RATE_MASTER = "/SweetPOS_Rate_Master"
 
 
 
