@@ -106,6 +106,7 @@ const SweetPOSRateMaster = (props) => {
     useEffect(async () => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(PosRateSave_Success({ Status: false }));
+            dispatch(getPosRateListSuccess([]));
             dispatch(getPosRateList_Action());
             setRateTypeSelect([])
             if (pageMode === "other") {
@@ -126,6 +127,7 @@ const SweetPOSRateMaster = (props) => {
         }
         else if (postMsg.Status === true) {
             dispatch(PosRateSave_Success({ Status: false }))
+            dispatch(getPosRateListSuccess([]));
             customAlert({
                 Type: 4,
                 Message: JSON.stringify(postMsg.Message),
@@ -181,14 +183,12 @@ const SweetPOSRateMaster = (props) => {
     const SaveHandler = async (event) => {
 
         event.preventDefault();
-
         try {
-            debugger
+
             if (rateTypeSelect.length === 0) {
                 customAlert({ Type: 3, Message: "Rate Type is required" });
                 return;
             }
-
             let filteredData = PosRateMasterListData.filter(item => item.Rate !== null);
 
             const jsonBody = JSON.stringify(filteredData.map((i) => ({
@@ -198,7 +198,7 @@ const SweetPOSRateMaster = (props) => {
                 "Rate": i.Rate,
                 "ItemID": i.ItemID,
             })))
-            // console.log(jsonBody)
+
             dispatch(PosRateSave_Action({ jsonBody }));
 
         } catch (e) { }
