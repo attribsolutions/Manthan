@@ -10,10 +10,10 @@ function* Save_Pos_RateMaster_GenFun({ config }) {
     } catch (error) { yield put(PosRateApiErrorAction()) }
 }
 
-function* Get_Pos_RateList_GenFun() {
+function* Get_Pos_RateList_GenFun({ config }) {
 
     try {
-        const response = yield call(POS_RateList_Get_Api);
+        const response = yield call(POS_RateList_Get_Api, config);
         let newData = response.Data.map((i) => {
             i.IsChangeRateToDefault = i.IsChangeRateToDefault === true ? true : false
             return i

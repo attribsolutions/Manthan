@@ -461,7 +461,7 @@ const ItemMasterBulkUpdate = (props) => {
                 };
 
                 const jsonBody = JSON.stringify(responseData);
-                dispatch(ItemWiseUpdate_Save_Action(jsonBody));
+                dispatch(ItemWiseUpdate_Save_Action({jsonBody}));
             }
         } catch (e) { }
     };
