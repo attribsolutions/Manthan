@@ -6,8 +6,9 @@ import {
     POS_RATE_SAVE_SUCCESS
 } from "./actionType";
 
-export const getPosRateList_Action = () => ({
+export const getPosRateList_Action = (config = {}) => ({
     type: GET_POS_RATE_LIST_ACTION,
+    config
 });
 
 export const getPosRateListSuccess = (pages) => ({

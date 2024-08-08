@@ -167,8 +167,11 @@ const recordNotAvailable = "Records Not available "
 const ImageIsRequired = 'Only JPG, JPEG, or PNG files are allowed.'
 const AllItemExist = 'All Item Exist'
 
+// SweetPOS Rate Master
+const rateTypeIsRequired = "Rate Type is required"
 
 export const alertMessages = {
+    rateTypeIsRequired,
     defaultAddressIsSelected,
     fillAddressDetailsInTable,
     deleteOrNot,

@@ -725,7 +725,7 @@ export const Item_DropDown_Api = ({ jsonBody }) => post(url.ITEM_DROPDOWN_API, j
 
 export const StockEntryList_API = ({ jsonBody }) => post(url.STOCK_ENTRY_LIST_API, jsonBody)//post api
 
-export const StockEntryItemList_API = ({jsonBody}) => post(url.STOCK_ENTRY_ITEM_LIST_API, jsonBody)//post api
+export const StockEntryItemList_API = ({ jsonBody }) => post(url.STOCK_ENTRY_ITEM_LIST_API, jsonBody)//post api
 
 
 //Stock Report
@@ -850,8 +850,8 @@ export const post_PartyDetails = ({ jsonBody }) => post(url.POST_PARTY_DETAILS, 
 
 //ItemWiseUpdate
 export const ItemWiseUpdate_GoButton_API = (jsonBody) => post(url.ITEM_WISE_UPDATE_API, jsonBody)// GO BUTTON API
-export const ItemWiseUpdate_Post_API = ({jsonBody}) => post(url.ITEM_WISE_UPDATE_POST_API, jsonBody)// POST API
-export const ItemSupplier_Post_API = ({jsonBody}) => post(url.ITEM_SUPPLIER_LIST_GET_API, jsonBody)// POST API
+export const ItemWiseUpdate_Post_API = ({ jsonBody }) => post(url.ITEM_WISE_UPDATE_POST_API, jsonBody)// POST API
+export const ItemSupplier_Post_API = ({ jsonBody }) => post(url.ITEM_SUPPLIER_LIST_GET_API, jsonBody)// POST API
 export const ItemSupplierList_Get_API = () => get(url.ITEM_SUPPLIER_LIST_GET_API)
 
 // TCS Amount Report
@@ -883,7 +883,7 @@ export const Post_POSRoleAccess_API = ({ jsonBody }) => post(url.SWEET_POS_API, 
 export const Pos_Invoice_Singel_Get_for_Report_Api = ({ editId }) => get(`${url.POS_INVOICE_PRINT}/${editId}/P`)// delete api
 
 //Sweet POS Rate master
-export const POS_RateList_Get_Api = () => get(url.SWEET_POS_RATE_LIST_API) // get api
+export const POS_RateList_Get_Api = ({ jsonBody }) => post(url.SWEET_POS_RATE_LIST_API,jsonBody) // get api
 export const POS_RateMaster_Post_Api = ({ jsonBody }) => post(url.SWEET_POS_RATE_SAVE_API, jsonBody)// post api
 
 ///POS USER REGESTRATION
@@ -919,6 +919,8 @@ export const RateMaster_Post_API = (data) => post(url.RATES, data)// post api
 export const GetRateList_For_Listpage = () => get(url.RATES)// get List
 export const delete_RateList_API = ({ deleteId }) => del(`${url.DELETE_API_FOR_RATE_LIST_PAGE}/${deleteId}`)// Delete api
 
+// Order Item Supplier Report
+export const OrderItemSupplier_GoButton_API = ({ jsonBody }) => post(url.ORDER_ITEM_SUPPLIER_REPORT, jsonBody)// post api
 
 export {
 	getLoggedInUser,

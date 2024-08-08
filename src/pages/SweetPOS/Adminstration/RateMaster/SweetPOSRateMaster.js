@@ -1,11 +1,10 @@
 import React, { useEffect, useState, } from "react";
-
 import { MetaTags } from "react-meta-tags";
 import { commonPageField, commonPageFieldSuccess, postSelect_Field_for_dropdown, postSelect_Field_for_dropdown_Success } from "../../../../store/actions";
 import { useHistory } from "react-router-dom";
 import { BreadcrumbShowCountlabel } from "../../../../store/Utilites/Breadcrumb/actions";
 import { useDispatch, useSelector } from "react-redux";
-import { PageLoadingSpinner, SaveButton } from "../../../../components/Common/CommonButton";
+import { Go_Button, PageLoadingSpinner, SaveButton } from "../../../../components/Common/CommonButton";
 import {
     breadcrumbReturnFunc,
     date_ymd_func,
@@ -23,7 +22,7 @@ import { customAlert } from "../../../../CustomAlert/ConfirmDialog";
 import { url } from "../../../../routes";
 import { Col, FormGroup, Input, Label } from "reactstrap";
 import { C_DatePicker, C_Select, CInput, decimalRegx } from "../../../../CustomValidateForm";
-import { selectAllCheck } from "../../../../components/Common/TableCommonFunc";
+import { alertMessages } from "../../../../components/Common/CommonErrorMsg/alertMsg";
 
 const SweetPOSRateMaster = (props) => {
 
@@ -31,7 +30,6 @@ const SweetPOSRateMaster = (props) => {
     const dispatch = useDispatch();
     const currentDate_ymd = date_ymd_func();
 
-    const [modalCss] = useState(false);
     const [pageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState(123);
     const [effectiveFrom, setEffectiveFrom] = useState(currentDate_ymd);
@@ -44,7 +42,6 @@ const SweetPOSRateMaster = (props) => {
         listBtnLoading,
         PosRateMasterListData,
         RateTypeList,
-        pageField,
         userAccess } = useSelector((state) => ({
             saveBtnloading: state.PosRateMasterReducer.saveBtnloading,
             postMsg: state.PosRateMasterReducer.postMsg,
@@ -52,15 +49,17 @@ const SweetPOSRateMaster = (props) => {
             PosRateMasterListData: state.PosRateMasterReducer.PosRateMasterListData,
             RateTypeList: state.PartyMasterBulkUpdateReducer.SelectField,
             userAccess: state.Login.RoleAccessUpdateData,
-            pageField: state.CommonPageFieldReducer.pageField
         }));
+
+    const location = { ...history.location }
+    const hasShowloction = location.hasOwnProperty(mode.editValue)
+    const hasShowModal = props.hasOwnProperty(mode.editValue)
 
     useEffect(() => {
         const page_Id = pageId.SWEET_POS_RATE_MASTER
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
         dispatch(BreadcrumbShowCountlabel(`Count:${0}`));
-        dispatch(getPosRateList_Action());
         return () => {
             dispatch(getPosRateListSuccess([]));
             dispatch(postSelect_Field_for_dropdown_Success([]));
@@ -79,9 +78,6 @@ const SweetPOSRateMaster = (props) => {
         value: index.id,
         label: index.Name,
     }));
-    const location = { ...history.location }
-    const hasShowloction = location.hasOwnProperty(mode.editValue)
-    const hasShowModal = props.hasOwnProperty(mode.editValue)
 
     // userAccess useEffect
     useEffect(() => {
@@ -107,8 +103,8 @@ const SweetPOSRateMaster = (props) => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(PosRateSave_Success({ Status: false }));
             dispatch(getPosRateListSuccess([]));
-            dispatch(getPosRateList_Action());
-            setRateTypeSelect([])
+            // goButtonHandler();
+
             if (pageMode === "other") {
                 customAlert({
                     Type: 1,
@@ -135,6 +131,21 @@ const SweetPOSRateMaster = (props) => {
         }
     }, [postMsg])
 
+    const goButtonHandler = () => {
+        try {
+            if ((rateTypeSelect.length === 0)) {
+                customAlert({ Type: 3, Message: alertMessages.rateTypeIsRequired });
+                return;
+            };
+            const jsonBody = JSON.stringify({
+                "EffectiveFrom": effectiveFrom,
+                "POSRateType": rateTypeSelect.value,
+            });
+
+            dispatch(getPosRateList_Action({ jsonBody }));
+        } catch (error) { }
+    };
+
     const pagesListColumns = [
         {
             text: "ItemName",
@@ -144,7 +155,7 @@ const SweetPOSRateMaster = (props) => {
         {
             text: "Rate",
             dataField: "Rate",
-            headerStyle: () => { return { width: '120px' } },
+            headerStyle: () => { return { width: '150px' } },
             formatter: (cellContent, row) => {
 
                 return (<span style={{ justifyContent: 'center' }}>
@@ -156,6 +167,27 @@ const SweetPOSRateMaster = (props) => {
                         cpattern={decimalRegx}
                         className="col col-sm text-end"
                         onChange={(e) => { row["Rate"] = e.target.value }}
+                    />
+                </span>)
+            },
+        },
+
+        {
+            text: "Primary Rate (MRP)",
+            dataField: "PrimaryRate",
+            headerStyle: () => { return { width: '100px' } },
+            formatter: (cellContent, row) => {
+
+                return (<span style={{ justifyContent: 'center' }}>
+                    < CInput
+                        key={`posRate${row.ItemID}`}
+                        id=""
+                        type="text"
+                        disabled={true}
+                        defaultValue={row.PrimaryRate}
+                        cpattern={decimalRegx}
+                        className="col col-sm text-end"
+                        onChange={(e) => { row["PrimaryRate"] = e.target.value }}
                     />
                 </span>)
             },
@@ -186,16 +218,16 @@ const SweetPOSRateMaster = (props) => {
         try {
 
             if (rateTypeSelect.length === 0) {
-                customAlert({ Type: 3, Message: "Rate Type is required" });
+                customAlert({ Type: 3, Message: alertMessages.rateTypeIsRequired });
                 return;
             }
-            let filteredData = PosRateMasterListData.filter(item => item.Rate !== null);
+            let filteredData = PosRateMasterListData.filter(item => ((item.PrimaryRate !== null) && (item.PrimaryRate !== null)));
 
             const jsonBody = JSON.stringify(filteredData.map((i) => ({
                 "POSRateType": rateTypeSelect.value,
                 "IsChangeRateToDefault": i.IsChangeRateToDefault,
                 "EffectiveFrom": effectiveFrom,
-                "Rate": i.Rate,
+                "Rate": i.Rate === null ? i.PrimaryRate : i.Rate,
                 "ItemID": i.ItemID,
             })))
 
@@ -210,11 +242,11 @@ const SweetPOSRateMaster = (props) => {
                 <PageLoadingSpinner isLoading={(listBtnLoading)} />
                 <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
                 <div className="page-content" >
-                    <div className="px-2   c_card_header text-black mb-1" >
+                    <div className="px-2   c_card_header text-black " >
                         <div className="row">
 
-                            <Col sm="4">
-                                <FormGroup className=" row mt-2  mb-1" >
+                            <Col sm="5">
+                                <FormGroup className=" row mt-2  " >
                                     <Label className="col-sm-3 p-2"
                                         style={{ width: "83px" }}> Effective From</Label>
                                     <Col sm="6">
@@ -223,7 +255,10 @@ const SweetPOSRateMaster = (props) => {
                                             name="EffectiveDate"
                                             placeholder={"DD/MM/YYYY"}
                                             value={effectiveFrom}
-                                            onChange={(e, date) => { setEffectiveFrom(date) }}
+                                            onChange={(e, date) => {
+                                                setEffectiveFrom(date);
+                                                dispatch(getPosRateListSuccess([]));
+                                            }}
                                             options={{
                                                 altInput: true,
                                                 altFormat: "d-m-Y",
@@ -233,21 +268,23 @@ const SweetPOSRateMaster = (props) => {
                                     </Col>
                                 </FormGroup>
                             </Col>
-                            <Col sm="4">
-                                <FormGroup className=" row mt-2  mb-1" >
+                            <Col sm="5">
+                                <FormGroup className=" row mt-2  " >
                                     <Label className="col-sm-5 p-2"
                                         style={{ width: "83px" }}> Rate Type</Label>
                                     <Col sm="6">
                                         <C_Select
-                                            name="Employee"
+                                            name="rateType"
                                             value={rateTypeSelect}
                                             isSearchable={true}
                                             className="react-dropdown"
                                             classNamePrefix="dropdown"
                                             autoFocus={true}
                                             options={RateTypeListOptions}
-                                            // isLoading={employeeDropdownLoading}
-                                            onChange={(e) => { setRateTypeSelect(e) }}
+                                            onChange={(e) => {
+                                                setRateTypeSelect(e);
+                                                dispatch(getPosRateListSuccess([]));
+                                            }}
                                             styles={{
                                                 menu: provided => ({ ...provided, zIndex: 2 })
                                             }}
@@ -255,10 +292,14 @@ const SweetPOSRateMaster = (props) => {
                                     </Col>
                                 </FormGroup>
                             </Col>
-
-
+                            <Col sm={1} className="mt-2">
+                                <Go_Button
+                                    loading={listBtnLoading}
+                                    onClick={goButtonHandler} />
+                            </Col>
                         </div>
                     </div>
+
                     <form noValidate>
                         <ToolkitProvider
                             keyField="ItemID"
@@ -273,12 +314,6 @@ const SweetPOSRateMaster = (props) => {
                                             keyField={"ItemID"}
                                             bordered={true}
                                             striped={true}
-                                            // selectRow={selectAllCheck({
-                                            //     rowSelected: rowSelected(),
-                                            //     bgColor: '',
-                                            //     tableList: PosRateMasterListData
-                                            // })}
-
                                             noDataIndication={<div className="text-danger text-center ">Record Not available</div>}
                                             classes={"table align-middle table-nowrap table-hover"}
                                             headerWrapperClasses={"thead-light"}
@@ -287,7 +322,6 @@ const SweetPOSRateMaster = (props) => {
                                                 dispatch(BreadcrumbShowCountlabel(`Count:${dataSize}`));
                                             }}
                                         />
-
                                         {globalTableSearchProps(toolkitProps.searchProps)}
                                     </div>
 
@@ -319,4 +353,3 @@ const SweetPOSRateMaster = (props) => {
 };
 
 export default SweetPOSRateMaster
-
