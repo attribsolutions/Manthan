@@ -221,13 +221,13 @@ const SweetPOSRateMaster = (props) => {
                 customAlert({ Type: 3, Message: alertMessages.rateTypeIsRequired });
                 return;
             }
-            let filteredData = PosRateMasterListData.filter(item => ((item.PrimaryRate !== null) && (item.PrimaryRate !== null)));
-
+            let filteredData = PosRateMasterListData.filter(item => ((item.PrimaryRate !== null)));
+            debugger
             const jsonBody = JSON.stringify(filteredData.map((i) => ({
                 "POSRateType": rateTypeSelect.value,
                 "IsChangeRateToDefault": i.IsChangeRateToDefault,
                 "EffectiveFrom": effectiveFrom,
-                "Rate": i.Rate === null ? i.PrimaryRate : i.Rate,
+                "Rate": (i.Rate === null || i.Rate === "") ? i.PrimaryRate : i.Rate,
                 "ItemID": i.ItemID,
             })))
 
