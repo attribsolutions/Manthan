@@ -16,6 +16,8 @@ function* Get_Pos_RateList_GenFun({ config }) {
         const response = yield call(POS_RateList_Get_Api, config);
         let newData = response.Data.map((i) => {
             i.IsChangeRateToDefault = i.IsChangeRateToDefault === true ? true : false
+            i.Rate = i.Rate === null ? i.PrimaryRate : i.Rate
+            // i.newRate = ""
             return i
         })
         yield put(getPosRateListSuccess(newData));
