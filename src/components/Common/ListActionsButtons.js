@@ -164,7 +164,7 @@ export const listPageActionsButtonFunc = (props) => {
 
         const isUploadAccess = loginSystemSetting().PurchaseReturnPrintUpload?.split(',').map(value => parseInt(value)).includes(rowData.PartyTypeID);
         const hasRole = (role) => userAccState[role];
-       
+
         const userCreatedRow = rowData.CreatedBy === loginUserid;
         const isApproved = rowData.IsApproved;
         const isCreditNoteCreated = rowData.IsCreditNoteCreated;
@@ -179,8 +179,8 @@ export const listPageActionsButtonFunc = (props) => {
         const canDeleteSelf = hasRole("RoleAccess_IsDeleteSelf") && !canDelete && userCreatedRow && !forceDeleteHide;
         const canCopy = hasRole("RoleAccess_IsSave") && hasRole("RoleAccess_IsCopy") && IsRecordDeleted;
         const canMakeBtn = pageMode === mode.modeSTPList && makeBtnShow && !forceMakeBtnHide;
-        const canOrderApproval = hasRole("RoleAccess_SendToSAP") && oderAprovalBtnFunc && !forceHideOrderAprovalBtn;
-      
+        const canOrderApproval = oderAprovalBtnFunc && !forceHideOrderAprovalBtn;
+
         const canCustomerWisePrint = hasRole("RoleAccess_IsPrint") && downClaimBtnFunc;
         const canItemWisePrint = hasRole("RoleAccess_IsPrint") && downClaimBtnFunc;
         const canMasterClaimPrint = hasRole("RoleAccess_IsPrint") && downClaimBtnFunc;
@@ -201,7 +201,7 @@ export const listPageActionsButtonFunc = (props) => {
         const canUpload = hasRole("RoleAccess_Upload") && upBtnFunc && isUploadAccess;
 
 
-        const dummyDisable_OrderApproval = hasRole("RoleAccess_SendToSAP") && !canOrderApproval && oderAprovalBtnFunc;
+        const dummyDisable_OrderApproval = !canOrderApproval && oderAprovalBtnFunc;
         const dummyDisable_Edit = (userAccState.RoleAccess_IsEdit || userAccState.RoleAccess_IsEditSelf) && !canEdit && !canEditSelf && !canView && !viewApprovalBtnFunc && IsRecordDeleted;
         const dummyDisable_Delete = ((hasRole("RoleAccess_IsDelete") || hasRole("RoleAccess_IsDeleteSelf")) && !canDelete && !canDeleteSelf && !IsRecordDeleted);
         const dummyDisable_MakeBtn = !canMakeBtn && makeBtnShow;
