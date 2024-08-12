@@ -820,7 +820,7 @@ const OrderList = () => {
                             makeBtnName={otherState.makeBtnName}
                             MasterModal={Order}
                             ViewModal={OrderView}
-                            oderAprovalBtnFunc={oderAprovalBtnFunc}
+                            oderAprovalBtnFunc={otherState.showAprovalBtn && oderAprovalBtnFunc}
                             selectCheckParams={{
                                 isShow: (subPageMode === url.ORDER_LIST_4 || (hasBulkinvoiceSaveAccess && subPageMode === url.APP_ORDER_LIST)),
                                 selectSaveBtnHandler: (subPageMode === url.ORDER_LIST_4) ? OrderConfirm_Handler : BulkInvoice_Handler,
