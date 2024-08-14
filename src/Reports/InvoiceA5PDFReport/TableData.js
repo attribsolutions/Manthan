@@ -1,4 +1,5 @@
 
+import { date_dmy_func } from "../../components/Common/CommonFunction";
 import { numberWithCommas, toWords } from "../Report_common_function";
 
 export const columnsWithCGST_SGST = [
@@ -103,7 +104,7 @@ export const RowsWithCGST_SGST = (data) => {
             accumulator[key].Amount += Number(Amount);
             accumulator[key].BatchCode += BatchCode;
             accumulator[key].BatchDate += BatchDate;
-            accumulator[key].quantityString += ` ,  (${BatchDate} - ${BatchCode} - ${ItemExpiryDate} - ${Quantity}) `;
+            accumulator[key].quantityString += ` ,  ${BatchCode} - M(${date_dmy_func(BatchDate)}) - E(${date_dmy_func(ItemExpiryDate)}) - ${Quantity} `;
 
         } else {
             accumulator[key] = {
@@ -116,7 +117,7 @@ export const RowsWithCGST_SGST = (data) => {
                 BasicAmount: Number(BasicAmount), Quantity: Number(Quantity),
                 UnitName, CGSTPercentage, SGSTPercentage, GSTPercentage,
                 BatchDate, BatchCode: BatchCode, BatchDate: BatchDate,
-                quantityString: `  (${BatchDate} - ${BatchCode} - ${ItemExpiryDate} - ${Quantity})`, PrimaryUnitName
+                quantityString: `  ${BatchCode} - M(${date_dmy_func(BatchDate)}) - E(${date_dmy_func(ItemExpiryDate)}) - ${Quantity}`, PrimaryUnitName
             };
         }
         return accumulator;
@@ -283,7 +284,7 @@ export const RowsWithIGST = (data) => {
             accumulator[key].Amount += Number(Amount);
             accumulator[key].BatchCode += BatchCode;
             accumulator[key].BatchDate += BatchDate;
-            accumulator[key].quantityString += ` ,  (${BatchDate} - ${BatchCode} - ${ItemExpiryDate} - ${Quantity}) `;
+            accumulator[key].quantityString += ` ,  ${BatchCode} - M(${date_dmy_func(BatchDate)}) - E(${date_dmy_func(ItemExpiryDate)}) - ${Quantity} `;
 
         } else {
             accumulator[key] = {
@@ -295,7 +296,7 @@ export const RowsWithIGST = (data) => {
                 BasicAmount: Number(BasicAmount), Quantity: Number(Quantity),
                 UnitName, CGSTPercentage, SGSTPercentage, GSTPercentage,
                 BatchDate, BatchCode: BatchCode, BatchDate: BatchDate,
-                quantityString: `  (${BatchDate} - ${BatchCode} - ${ItemExpiryDate} - ${Quantity})`, PrimaryUnitName, IGST
+                quantityString: `  ${BatchCode} - M(${date_dmy_func(BatchDate)}) - E(${date_dmy_func(ItemExpiryDate)}) - ${Quantity}`, PrimaryUnitName, IGST
             };
         }
         return accumulator;
