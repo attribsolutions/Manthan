@@ -359,6 +359,10 @@ export const TCS_AMOUNT_REPORT = 263
 
 export const CX_DD_DIFFERENCE_REPORT = 264
 
+export const ORDER_ITEM_SUPPLIER_REPORT = 301
+
+// ***************** Sweet POS *******************
+
 export const POS_ROLE_ACCESS = 266
 
 export const SYSTEM_SETTING = 268
@@ -370,4 +374,5 @@ export const TARGET_VS_ACHIEVEMENT = 273
 export const  CASHIER_SUMMARY_REPORT = 287
 
 export const  SWEET_POS_RATE_MASTER = 295
+
 

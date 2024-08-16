@@ -32,7 +32,7 @@ const FrenchiesSaleReport = (props) => {
     const [PartyDropdown, setPartyDropdown] = useState(allLabelWithZero);
     const [tableData, setTableData] = useState([]);
     const [btnMode, setBtnMode] = useState(0);
-    debugger
+    
     const [Item, setItem] = useState(allLabelWithZero);
 
 

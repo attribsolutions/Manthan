@@ -387,7 +387,7 @@ export const SYSTEM_SETTING_LIST = "/System_Setting_List"
 
 export const TARGET_VS_ACHIEVEMENT = "/TargetVSAchievement"
 
-
+export const ORDER_ITEM_SUPPLIER_REPORT ="/Order_Item_Supplier_Report"
 
 
 //**************************** Sweet Pos ***********************************//

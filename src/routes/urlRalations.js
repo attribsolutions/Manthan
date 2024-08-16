@@ -336,6 +336,7 @@ export const TargetVSAchievement = url.TARGET_VS_ACHIEVEMENT
 
 export const Credit_Note_Excel_Field_Map = url.IMPORT_CREDIT_NOTE_EXCEL_FIELD_MAP
 
+export const Order_Item_Supplier_Report =url.ORDER_ITEM_SUPPLIER_REPORT
 
 //**************************** POS ***********************************//
 

@@ -148,9 +148,20 @@ const SweetPOSRateMaster = (props) => {
 
     const pagesListColumns = [
         {
+            text: "Group",
+            dataField: "GroupName",
+            headerStyle: () => { return { width: '300px' } },
+        },
+        {
+            text: "SubGroup",
+            dataField: "SubGroupName",
+            headerStyle: () => { return { width: '300px' } },
+        },
+        {
             text: "ItemName",
             dataField: "ItemName",
             headerStyle: () => { return { width: '300px' } },
+            // sort: true
         },
         {
             text: "Rate",
@@ -222,7 +233,7 @@ const SweetPOSRateMaster = (props) => {
                 return;
             }
             let filteredData = PosRateMasterListData.filter(item => ((item.PrimaryRate !== null)));
-            debugger
+            
             const jsonBody = JSON.stringify(filteredData.map((i) => ({
                 "POSRateType": rateTypeSelect.value,
                 "IsChangeRateToDefault": i.IsChangeRateToDefault,
@@ -314,6 +325,10 @@ const SweetPOSRateMaster = (props) => {
                                             keyField={"ItemID"}
                                             bordered={true}
                                             striped={true}
+                                            // defaultSorted={[{
+                                            //     dataField: 'ItemName',
+                                            //     order: 'asc'
+                                            // }]}
                                             noDataIndication={<div className="text-danger text-center ">Record Not available</div>}
                                             classes={"table align-middle table-nowrap table-hover"}
                                             headerWrapperClasses={"thead-light"}
