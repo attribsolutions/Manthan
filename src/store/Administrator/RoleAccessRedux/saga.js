@@ -61,8 +61,9 @@ function* GoButtonHandlerForRoleAccessList_GenFunc({ id1, id2, id3 }) {
   try {
 
     const response = yield call(RoleAccessAdd_GO_Button_Api, id1, id2, id3);
-
+    
     const newArray = response.Data.map((i, k) => {
+      
       const { defaultSelectedValues, dynamicOptions } = defaultSelectOption(i);
       i["defaultSelectedValues"] = defaultSelectedValues;
       i["dynamicOptions"] = dynamicOptions;
@@ -76,11 +77,11 @@ function* GoButtonHandlerForRoleAccessList_GenFunc({ id1, id2, id3 }) {
 }
 
 function* AddPageHandlerForRoleAccessList_GenFunc({ id }) {
-
   try {
     const response = yield call(RoleAccessAdd_AddPage_Button_Api, id);
     const getState = (state) => state.RoleAccessReducer.AddPageTableDataRedux;
     const tableList = yield select(getState);
+
 
     response.Data.forEach(i => {
       const { defaultSelectedValues, dynamicOptions } = defaultSelectOption(i);
@@ -89,7 +90,7 @@ function* AddPageHandlerForRoleAccessList_GenFunc({ id }) {
     });
 
     let preArray = [...response.Data, ...tableList]
-    
+
     yield put(setTableData_roleAccss_AddPageSuccess(preArray));
   } catch (error) {
 
@@ -109,7 +110,7 @@ function* getList_RoleAccessList_GenFunc() { // get api
   try {
     const response = yield call(RoleAccessAdd_List_Api, JsonBody);
     const newResp = response.Data.map((i, k) => {
-      i.id = k+1;
+      i.id = k + 1;
       return i
     })
     yield put(getRoleAccessListPageSuccess(newResp));
@@ -164,7 +165,7 @@ export default function* RoleAccessSaga() {
 
 
 const defaultSelectOption = (item) => {
-
+  
   const dynamicOptions = [];
   const defaultSelectedValues = []
 

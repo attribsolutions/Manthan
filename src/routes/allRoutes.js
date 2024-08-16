@@ -239,6 +239,7 @@ import DailyItemSaleView from "../pages/Dashboard/FrenchiesesDashboard/DailyItem
 import ItemSupplierAssign from "../pages/Adminisrator/ItemMasterBulkUpdate/ItemSupplierAssign.js";
 import StockEntryList from "../pages/Inventory/StockEntry/StockEntryList.js";
 import SweetPOSRateMaster from "../pages/SweetPOS/Adminstration/RateMaster/SweetPOSRateMaster.js";
+import OrderItemSupplierReport from "../Reports/OrderItemSupplier/index.js";
 
 const userRoutes = [
 	// *************************** DashBord *******************************//
@@ -407,7 +408,7 @@ const userRoutes = [
 
 	{ path: path.ITEM_MASTER_BULK_UPDATE, component: ItemMasterBulkUpdate },//not party wise
 
-	{ path: path.ITEM_SUPPLIER_ASSIGN, component:ItemSupplierAssign  },//not party wise
+	{ path: path.ITEM_SUPPLIER_ASSIGN, component: ItemSupplierAssign },//not party wise
 
 	{ path: path.ITEM_IMAGE_UPLOAD, component: ItemImageUpload },//not party wise
 
@@ -605,6 +606,8 @@ const userRoutes = [
 	{ path: path.CX_DD_DIFFERENCE_REPORT, component: CX_DD_DiffrenceReport },// use self party drop-down
 
 	{ path: path.TARGET_VS_ACHIEVEMENT, component: TargetVSAchievement, isPartyWisePage: false },
+
+	{ path: path.ORDER_ITEM_SUPPLIER_REPORT, component: OrderItemSupplierReport },
 
 	//******************************* Sweet Pos ************************************//
 

@@ -15,7 +15,7 @@ const ReportTableFunc = ({ keyField, tableData, columns, totalAmountShow }) => {
             id="table_Arrow"
             noDataIndication={
                 <div className="text-danger text-center ">
-                    Items Not available
+                    Data Not available
                 </div>
             }
             onDataSizeChange={({ dataCount, filteredData = [] }) => {
