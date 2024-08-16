@@ -316,14 +316,23 @@ const OrderList = () => {
     }, [gobutton_Add_invoice]);
 
     useEffect(() => {
+        
         if (ordersBulkInvoiceData.Status === true && ordersBulkInvoiceData.StatusCode === 200) {
             dispatch(getOrdersMakeInvoiceDataActionSuccess({ ...ordersBulkInvoiceData, Status: false }));
             history.push({
                 pathname: url.BULK_INVOICE,
             })
-
+        }
+        else if (ordersBulkInvoiceData.Status === true && ordersBulkInvoiceData.StatusCode === 204) {
+            customAlert({
+                Type: 3,
+                Message: ordersBulkInvoiceData.Message,
+            })
+            dispatch(getOrdersMakeInvoiceDataActionSuccess({ Status: false }));
+            return
         }
     }, [ordersBulkInvoiceData]);
+
     useEffect(() => {
         const Todate = _cfunc.ToDate({ FromDate: values.FromDate, Todate: values.ToDate })
         setState((i) => {
@@ -678,7 +687,7 @@ const OrderList = () => {
     }
 
     const BulkInvoice_Handler = (allList = []) => {
-
+        
         let checkRows = allList.filter(i => (i.selectCheck && !i.forceSelectDissabled))
         if (!checkRows.length > 0) {
             customAlert({
@@ -820,7 +829,7 @@ const OrderList = () => {
                             makeBtnName={otherState.makeBtnName}
                             MasterModal={Order}
                             ViewModal={OrderView}
-                            oderAprovalBtnFunc={otherState.showAprovalBtn && oderAprovalBtnFunc}
+                            oderAprovalBtnFunc={oderAprovalBtnFunc}
                             selectCheckParams={{
                                 isShow: (subPageMode === url.ORDER_LIST_4 || (hasBulkinvoiceSaveAccess && subPageMode === url.APP_ORDER_LIST)),
                                 selectSaveBtnHandler: (subPageMode === url.ORDER_LIST_4) ? OrderConfirm_Handler : BulkInvoice_Handler,
