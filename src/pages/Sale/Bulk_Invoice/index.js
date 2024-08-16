@@ -101,7 +101,7 @@ const Bulk_Invoice2 = (props) => {
     }, [postMsg]);
 
     const saveHandleCallBack = useCallback((bulkData) => {
-        
+
         const newBulkData = JSON.parse(JSON.stringify(bulkData));
         const loginPartyGstIn = _cfunc.loginUserGSTIN();
         const bulkInvoiceJsonBody = [];
@@ -121,18 +121,20 @@ const Bulk_Invoice2 = (props) => {
             for (const itemInfo of orderInfo.OrderItemDetails) {
 
                 let isSameMRPinStock = '';
-
+                
                 if (itemInfo.lessStock) {//** */ if Short Short validation check  */
                     validMsg.push({ [itemInfo.ItemName]: `Short Short Quantity ${itemInfo.lessStock} ${itemInfo.UnitName?.split(" ")[0]}` })
                 };
 
                 for (const stockInfo of itemInfo.StockDetails) {
+                    if (isSameMRPinStock === parseFloat(stockInfo.MRP) && (stockInfo.distribute !== 0)) {
+                        validMsg.push({ [`Order Number ${orderNumber}  (${itemInfo.ItemName})`]: "Multiple MRP’S Invoice not allowed." });
+                    }
 
                     if (((isSameMRPinStock === "") || (isSameMRPinStock === parseFloat(stockInfo.MRP))) || (stockInfo.distribute === 0)) {
                         isSameMRPinStock = parseFloat(stockInfo.MRP);
-                    } else {
-                        validMsg.push({ [`Order Number ${orderNumber}  (${itemInfo.ItemName})`]: "Multiple MRP’S Invoice not allowed." });
                     }
+                    
                     if (!Number(stockInfo.Rate) > 0) {//** */ rate validation check  */
                         validMsg.push({ [itemInfo.ItemName]: " Rate not available." })
                     };
