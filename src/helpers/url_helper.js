@@ -492,7 +492,7 @@ export const MASTER_CLAIM_CREATE = '/MasterClaimCreate'
 export const CLAIM_LIST = '/Claimlist'
 export const ITEM_REGISTER = '/MaterialRegister'
 
-export const ORDER_ITEM_SUPPLIER_REPORT = '/MaterialRegister'
+export const ORDER_ITEM_SUPPLIER_REPORT = '/OrderItemSupplierMaster'
 
 // Stock Report
 export const STOCK_REPORT = '/PartyLiveStock'
