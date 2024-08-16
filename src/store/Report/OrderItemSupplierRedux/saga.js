@@ -10,34 +10,13 @@ function* OrderItemSupplier_GenFunc({ config }) {
         const response = yield call(OrderItemSupplier_GoButton_API, config);
 
         const flattenedData = response.Data.flatMap(item => {
-            return item.ItemDetails.flatMap((i, index) => {
-                if (index === 0 && !item.SupplierName) {
-                    return [
-                        {
-                            SKUName: "",
-                            QtyInNo: "",
-                            QtyInKg: "",
-                            QtyInBox: "",
-                            SupplierName: ""
-                        },
-                        {
-                            SKUName: i.SKUName,
-                            QtyInNo: amountCommaSeparateFunc(parseFloat(i.QtyInNo).toFixed(2)),
-                            QtyInKg: amountCommaSeparateFunc(parseFloat(i.QtyInKg).toFixed(2)),
-                            QtyInBox: amountCommaSeparateFunc(parseFloat(i.QtyInBox).toFixed(2)),
-                            SupplierName: "Supplier Not Assigned"
-                        }
-                    ];
-                } else {
-                    return {
-                        SKUName: i.SKUName,
-                        QtyInNo: amountCommaSeparateFunc(parseFloat(i.QtyInNo).toFixed(2)),
-                        QtyInKg: amountCommaSeparateFunc(parseFloat(i.QtyInKg).toFixed(2)),
-                        QtyInBox: amountCommaSeparateFunc(parseFloat(i.QtyInBox).toFixed(2)),
-                        SupplierName: index === 0 ? item.SupplierName : ""
-                    };
-                }
-            });
+            return item.ItemDetails.map((i, index) => ({
+                SKUName: i.SKUName,
+                QtyInNo: amountCommaSeparateFunc(parseFloat(i.QtyInNo).toFixed(2)),
+                QtyInKg: amountCommaSeparateFunc(parseFloat(i.QtyInKg).toFixed(2)),
+                QtyInBox: amountCommaSeparateFunc(parseFloat(i.QtyInBox).toFixed(2)),
+               SupplierName: index === 0 ? (item.SupplierName || "Supplier Not Assigned") : ""
+            }));
         });
 
         const dataWithId = flattenedData.map((element, key) => {
