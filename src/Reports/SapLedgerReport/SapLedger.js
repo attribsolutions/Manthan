@@ -24,8 +24,7 @@ import { ExcelReportComponent } from "../../components/Common/ReportCommonFunc/E
 import { alertMessages } from "../../components/Common/CommonErrorMsg/alertMsg";
 import { changeCommonPartyDropDetailsAction } from "../../store/Utilites/PartyDrodown/action";
 
-const partdata = localStorage.getItem("roleId")
-const partyDivisiondata = JSON.parse(partdata);
+
 
 const SelectedPartyDropdown = () => {//+++++++++++++++++++++ Session common party dropdown id +++++++++++++++++++++++++++++++
     try {
@@ -88,7 +87,8 @@ const SapLedger = (props) => {
     const [userPageAccessState, setUserAccState] = useState('');
     const [headerFilters, setHeaderFilters] = useState('');
     const [btnMode, setBtnMode] = useState(0);
-
+    const partdata = localStorage.getItem("roleId")
+    const partyDivisiondata = JSON.parse(partdata);
     const {
         goBtnLoading,
         userAccess,
