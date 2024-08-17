@@ -80,7 +80,8 @@ const Authmiddleware = ({
   }, [loginSuccess])
 
   useEffect(() => {
-    if ((IsLoginFromOutsideLink) && Credentials !== "") {
+    if ((IsLoginFromOutsideLink) && Credentials !== "" && url.includes("AuthLink")) {
+      
       if (divisionDropdown_redux.length > 0) {
         let user = divisionDropdown_redux[0];
         if (user.Party_id === null) {
