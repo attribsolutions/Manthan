@@ -133,7 +133,8 @@ const ItemsMaster = (props) => {
         Sequence: '',
         IsCBMItem: false,
         isActive: true,
-        IsSCM: false
+        IsSCM: false,
+        IsMixItem: false
     }
     const [state, setState] = useState(() => initialFiledFunc(fileds))
     const [mobileApiLoading, setMobileApiLoading] = useState(false);
@@ -261,9 +262,9 @@ const ItemsMaster = (props) => {
                 setEditItemShelfLife(ItemShelfLife[0])
 
                 const { id, Name, SAPItemCode, ShortName, BarCode, Sequence, CompanyName, Company,
-                    BaseUnitName, BaseUnitID, isActive, IsSCM, IsCBMItem } = hasEditVal
+                    BaseUnitName, BaseUnitID, isActive, IsSCM, IsCBMItem,IsMixItem } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
-                
+
                 hasValid.Name.valid = true;
                 hasValid.SAPItemCode.valid = true;
                 hasValid.ShortName.valid = true;
@@ -277,7 +278,7 @@ const ItemsMaster = (props) => {
                 hasValid.ShelfLife.valid = true;
 
                 hasValid.IsCBMItem.valid = true;
-
+                hasValid.IsMixItem.valid = true;
 
 
 
@@ -293,6 +294,8 @@ const ItemsMaster = (props) => {
                 values.BaseUnitName = { label: BaseUnitName, value: BaseUnitID }
                 values.isActive = isActive;
                 values.IsSCM = IsSCM;
+                values.IsMixItem = IsMixItem;
+                
                 values.CategoryType = editCategoryType;
                 values.Category = editCategory;
                 values.Division = editDivision;
@@ -616,6 +619,7 @@ const ItemsMaster = (props) => {
                     BarCode: values.BarCode,
                     isActive: values.isActive,
                     IsSCM: values.IsSCM,
+                    IsMixItem: values.IsMixItem,
                     Company: loginCompanyID(),
                     BaseUnitID: values.BaseUnitName.value,
                     BrandName: ItemBrandName.toString(),
