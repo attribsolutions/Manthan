@@ -24,8 +24,8 @@ import { ExcelReportComponent } from "../../components/Common/ReportCommonFunc/E
 import { alertMessages } from "../../components/Common/CommonErrorMsg/alertMsg";
 import { changeCommonPartyDropDetailsAction } from "../../store/Utilites/PartyDrodown/action";
 
-let partdata = localStorage.getItem("roleId")
-var partyDivisiondata = JSON.parse(partdata);
+const partdata = localStorage.getItem("roleId")
+const partyDivisiondata = JSON.parse(partdata);
 
 const SelectedPartyDropdown = () => {//+++++++++++++++++++++ Session common party dropdown id +++++++++++++++++++++++++++++++
     try {
