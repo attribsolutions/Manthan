@@ -1,9 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
     BreadcrumbShowCountlabel,
     commonPageFieldList,
     commonPageFieldListSuccess,
+    getUserDetailsAction,
+    loginSuccessAction,
+    loginUser,
     makeGRN_Mode_1Action,
 } from "../../../../store/actions";
 import CommonPurchaseList from "../../../../components/Common/CommonPurchaseList"
@@ -37,7 +40,7 @@ import {
     InvoiceBulkDelete_IDs_Succcess,
     Pos_UpdateVehicleCustomerInvoice_Action,
     Pos_UpdateVehicleCustomerInvoice_Action_Success,
-    Uploaded_EInvoiceAction
+
 } from "../../../../store/Sales/Invoice/action";
 import { C_DatePicker, C_Select } from "../../../../CustomValidateForm";
 import { customAlert } from "../../../../CustomAlert/ConfirmDialog";
@@ -47,11 +50,16 @@ import { allLabelWithBlank } from "../../../../components/Common/CommonErrorMsg/
 import { sideBarPageFiltersInfoAction } from "../../../../store/Utilites/PartyDrodown/action";
 import { date_dmy_func } from "../../../../components/Common/CommonFunction";
 import { CheckStockEntryforBackDatedTransactionSuccess } from "../../../../store/Inventory/StockEntryRedux/action";
+import { useParams } from 'react-router-dom';
+import { afterloginOneTimeAPI, loginFromOutSideLink_Func } from "../../../../components/Common/AfterLoginApiFunc";
+import { useSession } from "../../../../routes/middleware/SessionContext";
 
 const InvoiceList = () => {
 
     const dispatch = useDispatch();
     const history = useHistory();
+    const { Credentials } = useParams();
+
     const currentDate_ymd = _cfunc.date_ymd_func();
 
     const [pageMode, setPageMode] = useState(url.ORDER_LIST_1)
@@ -61,11 +69,7 @@ const InvoiceList = () => {
     const [Vehicle_No, setVehicle_No] = useState({ value: null, label: "Select..." })
     const [Customer, setCustomer] = useState('')
 
-    const [InvoiceRowData, setInvoiceRowData] = useState('')
-
-
-
-
+    const { session, updateSessionActivity } = useSession();
 
 
     const [modal, setmodal] = useState(false);
@@ -74,8 +78,10 @@ const InvoiceList = () => {
 
 
 
+
     const reducers = useSelector(
         (state) => ({
+
             tableList: state.InvoiceReducer.Invoicelist,
             postMsg: state.OrderReducer.postMsg,
             editData: state.InvoiceReducer.editData,
@@ -116,7 +122,6 @@ const InvoiceList = () => {
         invoiceBulkDelete,
         invoiceBulkDeleteLoading,
         makeGRN,
-
     } = reducers;
 
     const {
@@ -162,7 +167,7 @@ const InvoiceList = () => {
         let newBtnPath = false;
         let makeBtnShow = false;
 
-        if (subPageMode === url.POS_INVOICE_LIST) {
+        if ((subPageMode === url.POS_INVOICE_LIST) || (subPageMode === `${url.POS_INVOICE_LIST}/AuthLink/${Credentials}`)) {
             page_Id = pageId.POS_INVOICE_LIST
             masterPath = url.INVOICE_1
             newBtnPath = url.INVOICE_1
@@ -172,12 +177,16 @@ const InvoiceList = () => {
         setOtherState({ masterPath, makeBtnShow, newBtnPath, IBType })
         setPageMode(page_Mode)
         dispatch(commonPageFieldListSuccess(null))
-        dispatch(commonPageFieldList(page_Id))
-
         setmodal(false);
-        if (!(commonPartyDropSelect.value === 0)) {
-            goButtonHandler("event", IBType)
+
+
+        if ((localStorage.getItem("token"))) {
+            dispatch(commonPageFieldList(page_Id))
+            if (!(commonPartyDropSelect.value === 0)) {
+                goButtonHandler("event", IBType)
+            }
         }
+
         return () => {
             dispatch(UpdateVehicleInvoice_Success([]));
             dispatch(invoiceListGoBtnfilterSucccess([]));
@@ -438,7 +447,7 @@ const InvoiceList = () => {
         setmodal(!modal);
         setVehicle_No({ value: "", label: "Select..." })
         setCustomer("")
-        setInvoiceRowData("")
+
         setvehicleErrorMsg(false);
     };
 
@@ -468,6 +477,7 @@ const InvoiceList = () => {
 
 
     const HeaderContent = () => {
+
         return (
             <div className="px-2   c_card_filter text-black" >
                 <div className="row" >
@@ -553,7 +563,7 @@ const InvoiceList = () => {
         } else {
             setVehicle_No({ value: VehicleID, label: VehicleNo })
         }
-        setInvoiceRowData(config)
+
     }
 
     const updateVehicleInvoice = () => {
@@ -630,7 +640,6 @@ const InvoiceList = () => {
         <React.Fragment>
             <PageLoadingSpinner isLoading={reducers.listBtnLoading || !pageField || supplierDropLoading} />
             <div className="page-content">
-
                 {
                     (pageField) ?
                         <CommonPurchaseList
@@ -767,3 +776,10 @@ const InvoiceList = () => {
 }
 
 export default InvoiceList;
+
+
+
+
+
+
+

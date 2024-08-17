@@ -630,7 +630,6 @@ export const tableBody = (doc, data) => {
 
 
             if (data1.row.cells[1].raw === "HSN Item Name") {
-
                 let TotalBox = 0;
                 data.InvoiceItems.forEach((element, key) => {
                     if (element.PrimaryUnitName === "Box") {
@@ -948,7 +947,6 @@ export const tableBodyWithIGST = (doc, data) => {
 
 
 export const pageFooter = (doc, data) => {
-
 
     const pageCount = doc.internal.getNumberOfPages()
     doc.setFont('helvetica', 'Normal')

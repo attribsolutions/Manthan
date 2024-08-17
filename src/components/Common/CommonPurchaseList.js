@@ -74,10 +74,15 @@ const CommonPurchaseList = (props) => {
   const { PageFieldMaster = [] } = { ...pageField };
 
   useEffect(async () => {
-
+    debugger
     const locationPath = history.location.pathname;
     let userAcc = userAccess.find((inx) => {
-      return `/${inx.ActualPagePath}` === locationPath;
+      const AuthenticatedLinkPath = (locationPath.startsWith(`/${inx.ActualPagePath}`)) && locationPath.includes("AuthLink")
+      if (AuthenticatedLinkPath) {
+        return true
+      } else {
+        return `/${inx.ActualPagePath}` === locationPath;
+      }
     });
     if (!(userAcc === undefined)) {
       setUserAccState(userAcc);
@@ -254,7 +259,7 @@ const CommonPurchaseList = (props) => {
         sort: true,
         attrs: (cell, row, rowIndex, colIndex) => ({ 'data-label': 'Action', "sticky-col": (colIndex === 0) ? "true" : "false" }),
         formatter: (cellContent, rowData) => {
-          
+
           if (rowData.IsRecordDeleted === true) {   ///hide button in GRN list 3 STP page last action column for Make Button
             return (
               <div>
@@ -265,7 +270,7 @@ const CommonPurchaseList = (props) => {
                     data-mdb-toggle="tooltip"
                     data-mdb-placement="top"
                     title={"UnHide"}
-                   
+
                     onClick={() => {
                       !listBtnLoading && hideBtnHandler(rowData);
                     }}

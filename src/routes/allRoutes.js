@@ -241,7 +241,12 @@ import StockEntryList from "../pages/Inventory/StockEntry/StockEntryList.js";
 import SweetPOSRateMaster from "../pages/SweetPOS/Adminstration/RateMaster/SweetPOSRateMaster.js";
 import OrderItemSupplierReport from "../Reports/OrderItemSupplier/index.js";
 
+
+
+
 const userRoutes = [
+
+	{ path: path.POS_INVOICE_LIST_IN_POS, component: Pos_InvoiceList },
 	// *************************** DashBord *******************************//
 
 	{ path: path.DASHBORD_1, component: Dashboard_1, isPartyWisePage: true },
@@ -674,6 +679,8 @@ const userRoutes = [
 	{ path: "/auth-404", component: Error404 },
 	{ path: "/auth-500", component: Error500 },
 
+
+
 ]
 
 const authRoutes = [
@@ -687,6 +694,7 @@ const authRoutes = [
 	{ path: "/SendOTP", component: SendOTP },
 	{ path: "/EnterOTP", component: EnterOTP },
 	{ path: "/pages-404", component: Error404 },
+
 
 	{ path: '/Daily_Sale_Report/:Party_Id', exact: '/Daily_Sale_Report', component: DailyItemSaleView },
 	// { component:() => <Redirect to="/login" /> },
