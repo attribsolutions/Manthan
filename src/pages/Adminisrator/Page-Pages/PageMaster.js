@@ -72,6 +72,7 @@ const PageMaster = (props) => {
 
   const [isActiveCheckbox, setIsActiveCheckbox] = useState(true);
   const [showCountLabel, setShowCountLabel] = useState(false);
+  const [isSweetPOSPage, setIsSweetPOSPage] = useState(false);
   const [countLabel, setCountLabel] = useState("");
   const [isEditPopuporComponent, setIsEditPopuporComponent] = useState(false);
 
@@ -176,6 +177,7 @@ const PageMaster = (props) => {
         setEditData(hasEditVal);
         setIsActiveCheckbox(hasEditVal?.isActive)
         setShowCountLabel(hasEditVal?.CountLabel)
+        setIsSweetPOSPage(hasEditVal?.IsSweetPOSPage)
         setCountLabel(hasEditVal?.ShowCountLabel)
         setIsEditPopuporComponent(hasEditVal?.IsEditPopuporComponent)
 
@@ -494,6 +496,7 @@ const PageMaster = (props) => {
       Icon: values.Icon,
       CountLabel: showCountLabel,
       ShowCountLabel: countLabel,
+      IsSweetPOSPage:isSweetPOSPage,
       ActualPagePath: values.pagePath,
       PageType: pageType_DropdownSelect.value,
       PageHeading: values.pageheading,
@@ -843,6 +846,41 @@ const PageMaster = (props) => {
                                         defaultChecked={EditData.CountLabel}
                                         checked={showCountLabel}
                                         onChange={(e) => { setShowCountLabel(e.target.checked) }}
+                                      />
+                                      <label
+                                        className="form-check-label"
+                                      ></label>
+                                    </div>
+                                  </Col>
+                                </Row>
+                              </FormGroup>
+
+
+
+
+
+                              <FormGroup className="mb-1 col col-sm-4">
+                                <Row className="justify-content-md-left">
+                                  <Col md="3"> </Col>
+                                  <Label
+                                    htmlFor="horizontal-firstname-input"
+                                    className="col-sm-4 col-form-label mt-4"
+                                  >
+                                   Is SweetPOS Page
+                                  </Label>
+                                  <Col md={5} style={{ marginTop: "15px" }}>
+                                    <div
+                                      className="form-check form-switch form-switch-md mb-1"
+                                      dir="ltr"
+                                    >
+                                      <AvInput
+                                        type="checkbox"
+                                        name="IsSweetPOSPage"
+                                        className="form-check-input mt-4"
+                                        // key={EditData.CountLabel}
+                                        defaultChecked={EditData.IsSweetPOSPage}
+                                        checked={isSweetPOSPage}
+                                        onChange={(e) => { setIsSweetPOSPage(e.target.checked) }}
                                       />
                                       <label
                                         className="form-check-label"
