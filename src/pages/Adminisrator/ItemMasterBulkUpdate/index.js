@@ -127,6 +127,9 @@ const ItemMasterBulkUpdate = (props) => {
                     return { ...item, DataType: "dropdown" };
                 } else if (["BarCode", "Length", "Breadth", "ShelfLife", "SAPItemCode", "Sequence", "Height"].includes(item.Name)) {
                     return { ...item, DataType: "number" };
+                }
+                else if (["IsCBMItem", "IsMixItem"].includes(item.Name)) {
+                    return { ...item, DataType: "boolean" };
                 } else {
                     return { ...item, DataType: "string" };
                 }
@@ -169,14 +172,23 @@ const ItemMasterBulkUpdate = (props) => {
                 if (matchingBaseUnit) {
                     return {
                         ...i,
-                        SAPUnit: matchingBaseUnit.Name
+                        SAPUnit: matchingBaseUnit.Name,
+                        booleanValue: i.IsMixItem ? i.IsMixItem : i.IsCBMItem
                     };
                 }
                 return i;
             });
             setTableData(updatedGoButtonData);
         } else {
-            setTableData(goButtonData);
+            const updatedGoButtonData = goButtonData.map((i) => {
+
+                return {
+                    ...i,
+                    booleanValue: i.IsMixItem ? i.IsMixItem : i.IsCBMItem
+                };
+
+            });
+            setTableData(updatedGoButtonData);
         }
     }, [goButtonData, SelectFieldName])
 
@@ -308,18 +320,17 @@ const ItemMasterBulkUpdate = (props) => {
                                 </Col>
                             </div>
                             :
-                            SelectFieldName.label === "IsCBMItem" ?
+                            SelectFieldName.DataType === "boolean" ?
                                 <FormGroup className="mb-1 col col-sm-4 " >
                                     <Row style={{ marginTop: '25px' }}>
                                         <Col md={4} style={{ marginTop: '7px' }} className=" form-check form-switch form-switch-sm ">
                                             <div className="form-check form-switch form-switch-md mb-3">
                                                 <Input
-                                                    name="IsCBMItem"
                                                     type="checkbox"
                                                     className="form-check-input"
-                                                    defaultChecked={row.IsCBMItem}
+                                                    defaultChecked={row.booleanValue}
                                                     onChange={(event) => {
-                                                        row.Newvalue = event.target.checked
+                                                        row["updatedBooleanValue"] = event.target.checked
                                                     }}
                                                 />
                                             </div>
@@ -327,7 +338,6 @@ const ItemMasterBulkUpdate = (props) => {
                                     </Row>
                                 </FormGroup>
                                 :
-
 
                                 <div style={{ width: "180px" }}>
                                     <Col>
@@ -416,11 +426,11 @@ const ItemMasterBulkUpdate = (props) => {
 
             tableData.forEach(i => {
 
-                if (i.Newvalue) {
+                if (i.Newvalue || i.updatedBooleanValue === true || i.updatedBooleanValue === false) {
                     const arr = {
                         ItemName: i.ItemName,
                         ItemID: i.id,
-                        Value1: i.Newvalue,
+                        Value1: i.Newvalue ? i.Newvalue : i.updatedBooleanValue,
                         Value2: i.NewValue_2,
                         GroupTypeID: groupTypeSelect.value,
                         CreatedBy: _cfunc.loginUserID()
@@ -461,7 +471,7 @@ const ItemMasterBulkUpdate = (props) => {
                 };
 
                 const jsonBody = JSON.stringify(responseData);
-                dispatch(ItemWiseUpdate_Save_Action({jsonBody}));
+                dispatch(ItemWiseUpdate_Save_Action({ jsonBody }));
             }
         } catch (e) { }
     };
