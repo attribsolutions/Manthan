@@ -284,10 +284,10 @@ const MarginMaster = (props) => {
 
     const GoButton_Handler = () => {
 
-        if (values.EffectiveDate === '') {
+        if (values.EffectiveDate === ''|| values.PriceListName==='') {
             customAlert({
                 Type: 4,
-                Message: alertMessages.effectiveDateIsRequired,
+                Message: alertMessages.effectiveDateAndPriceListIsRequired,
             })
             return
         }

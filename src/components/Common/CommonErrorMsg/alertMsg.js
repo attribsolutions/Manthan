@@ -56,7 +56,9 @@ const atLeastOnePartySelectionRequired = "At least One Party is Selected"
 
 // MRP , Rate,GST and Margin Page Error Messages
 const deleteThisItem = "Are you sure you want to delete this Item Rate?"
-const effectiveDateIsRequired = "Please select EffectiveDate and PriceListName"
+const effectiveDateIsRequired = "Please select EffectiveDate"
+const effectiveDateAndPriceListIsRequired = "Please select EffectiveDate and PriceListName"
+const effectiveDateAndDivisionIsRequired = "Please select EffectiveDate and Division."
 const MRPIsRequired = "Please Enter MRP"
 const marginISRequired = "Please Enter Margin"
 const enterGSTPercentage_HSNCodeIsRequired = "Please Enter One GSTPercentage & HSNCode"
@@ -236,6 +238,8 @@ export const alertMessages = {
     PricelistIsRequired,
     atLeastOneRetailerIsRequired,
     effectiveDateIsRequired,
+    effectiveDateAndDivisionIsRequired,
+    effectiveDateAndPriceListIsRequired,
     deleteThisItem,
     MRPIsRequired,
     atLeastOnePartySelectionRequired,

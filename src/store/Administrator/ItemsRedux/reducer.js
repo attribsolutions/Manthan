@@ -8,6 +8,7 @@ import {
     GET_CATEGORYTYPE_FOR_DROPDOWN_SUCCESS,
     GET_CATEGORY_BY_CATEGORYTYPE_FOR_DROPDOWN_API,
     GET_CATEGORY_BY_CATEGORYTYPE_FOR_DROPDOWN_API_SUCCESS,
+    GET_DIVISION_FOR_DROPDOWN,
     GET_DIVISION_FOR_DROPDOWN_SUCCESS,
     GET_GROUP_BY_GROUPTYPE_FOR_DROPDOWN,
     GET_GROUP_BY_GROUPTYPE_FOR_DROPDOWN_SUCCESS,
@@ -192,11 +193,19 @@ const ItemMastersReducer = (state = INIT_STATE, action) => {
                 ...state,
                 MRPType: action.payload,
             }
+            
+        case GET_DIVISION_FOR_DROPDOWN:
+            return {
+                ...state,
+                divisionApiLoading: true,
+            }
         case GET_DIVISION_FOR_DROPDOWN_SUCCESS:
             return {
                 ...state,
                 Division: action.payload,
+                divisionApiLoading: false,
             }
+
         case GET_PARTY_FOR_DROPDOWN:
             return {
                 ...state,
