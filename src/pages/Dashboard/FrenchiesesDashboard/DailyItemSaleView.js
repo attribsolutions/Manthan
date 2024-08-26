@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from 'react'
 
 
-import { Card, CardBody, Col, Row } from 'reactstrap'
+import { Card, CardBody, Col, Label, Row } from 'reactstrap'
 import Pie from './pie'
 
 
-import { amountCommaSeparateFunc, currentDate_dmy, currentDate_ymd } from '../../../components/Common/CommonFunction'
+import { amountCommaSeparateFunc, currentDate_dmy, currentDate_ymd, isFutureDate } from '../../../components/Common/CommonFunction'
 
 
 import { useParams } from 'react-router-dom';
 
 import { convertTo12Hour, formatDate, GetDailySaleData } from './Function'
+import { C_DatePicker } from '../../../CustomValidateForm';
+import { Go_Button } from '../../../components/Common/CommonButton';
 
 const DailyItemSaleView = () => {
 
@@ -24,6 +26,13 @@ const DailyItemSaleView = () => {
         fromDate: currentDate_ymd,
         toDate: currentDate_ymd,
     });
+
+    const [CoustomDate, setCoustomDate] = useState({
+        fromDate: currentDate_ymd,
+        toDate: currentDate_ymd,
+    });
+
+
 
     const decodeId = (encodedId) => {
         return atob(encodedId); // Converts Base64 encoded string back to ID
@@ -52,6 +61,8 @@ const DailyItemSaleView = () => {
             sixMonthsAgo.setMonth(today.getMonth() - 6);
             fromDate = formatDate(sixMonthsAgo);
             toDate = formatDate(today);
+        } else if (value === 'CUSTOM') {
+            return
         }
 
         setDateRange({ fromDate, toDate });
@@ -64,6 +75,14 @@ const DailyItemSaleView = () => {
         setloading(false)
         setData(jsonData.Data[0])
     }, [Party_Id, dateRange])
+
+    const goButtonHandler = async () => {
+        setloading(true)
+        const decodeId_PartyID = decodeId(Party_Id)
+        const jsonData = await GetDailySaleData({ fromDate: CoustomDate.fromDate, toDate: CoustomDate.toDate, Party_Id: Number(decodeId_PartyID), })
+        setloading(false)
+        setData(jsonData.Data[0])
+    }
 
     return (
         Object.keys(data).length === 0 ?
@@ -136,9 +155,9 @@ const DailyItemSaleView = () => {
                 </CardBody>
 
                 <Row className="align-items-center">
-                    <div className="d-flex flex-wrap align-items-center mb-n2 mt-1 ">
-                        <div style={{ marginLeft: "5px" }}>
-                            <select className="form-select form-select-lg"
+                    <div className="d-flex flex-wrap align-items-center mb-n2 mt-1 w-100">
+                        <div style={{ marginLeft: "5px", marginRight: "5px" }} className="w-100">
+                            <select className="form-select form-select-lg w-100"
                                 value={selectedOption}
                                 onChange={handleChange}
                             >
@@ -146,8 +165,61 @@ const DailyItemSaleView = () => {
                                 <option value="YESTERDAY">Yesterday</option>
                                 <option value="MONTH">Month</option>
                                 <option value="SIX_MONTH">Six Month</option>
+                                <option value="CUSTOM">Custom Date</option>
+
 
                             </select>
+                            {selectedOption === "CUSTOM" && (
+                                <div style={{ marginTop: "10px", backgroundColor: "#whitesmoke" }}>
+                                    <CardBody className="c_card_body">
+                                        <Label className="col-sm-5 "
+                                            style={{ width: "115px" }}>From Date</Label>
+                                        <C_DatePicker
+                                            options={{
+                                                altInput: true,
+                                                altFormat: "d-m-Y",
+                                                dateFormat: "Y-m-d",
+                                                maxDate: "today",
+                                            }}
+                                            name="FromDate"
+                                            value={CoustomDate.fromDate}
+                                            onChange={(e, date) => {
+                                                setCoustomDate((i) => {
+                                                    const a = { ...i }
+                                                    a.fromDate = date;
+                                                    return a
+                                                })
+                                            }}
+                                        />
+                                        <Label className="col-sm-5 mt-1"
+                                            style={{ width: "115px" }}>To Date</Label>
+                                        <C_DatePicker
+                                            options={{
+                                                altInput: true,
+                                                altFormat: "d-m-Y",
+                                                dateFormat: "Y-m-d",
+                                                maxDate: "today",
+                                            }}
+                                            name="ToDate"
+                                            value={CoustomDate.toDate}
+                                            onChange={(e, date) => {
+                                                setCoustomDate((i) => {
+                                                    const a = { ...i }
+                                                    a.toDate = date;
+                                                    return a
+                                                })
+                                            }}
+                                        />
+
+                                        <Col sm="1" className="mt-3 ">
+                                            <Go_Button
+                                                onClick={goButtonHandler}
+                                                loading={loading}
+                                            />
+                                        </Col>
+                                    </CardBody>
+                                </div>
+                            )}
                         </div>
 
                     </div>

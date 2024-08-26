@@ -27,6 +27,8 @@ import Pie from '../FrenchiesesDashboard/pie';
 import Data from './../FrenchiesesDashboard/data.json'
 import SERVER_HOST_PATH, { ERP_LINK } from '../../../helpers/_serverPath';
 import { encodeToHash, formatDate, GetDailySaleData } from '../FrenchiesesDashboard/Function';
+import DatePicker from 'react-flatpickr';
+import { C_DatePicker } from '../../../CustomValidateForm';
 
 const Dashboard_1 = (props) => {
 
@@ -129,6 +131,7 @@ const Dashboard_1 = (props) => {
     }
 
     const handleChange = (event) => {
+        debugger
         const value = event.target.value;
         setSelectedOption(value);
 
@@ -151,6 +154,9 @@ const Dashboard_1 = (props) => {
             sixMonthsAgo.setMonth(today.getMonth() - 6);
             fromDate = formatDate(sixMonthsAgo);
             toDate = formatDate(today);
+        } else if (value === 'CUSTOM') {
+            fromDate = dateRange.fromDate;
+            toDate = dateRange.toDate;
         }
 
         setDateRange({ fromDate, toDate });
@@ -173,7 +179,7 @@ const Dashboard_1 = (props) => {
     }
 
     useEffect(async () => {
-        
+
         const jsonData = await GetDailySaleData({ fromDate: dateRange.fromDate, toDate: dateRange.toDate, Party_Id: loginPartyID(), })
         setData(jsonData.Data)
     }, [dateRange])
@@ -189,7 +195,6 @@ const Dashboard_1 = (props) => {
         <React.Fragment>
             <PageLoadingSpinner isLoading={GRNListLoading || PaymentEntryListloading || SalesReturnListloading || !pageField} />
             <div className="page-content">
-
                 <MetaTags>
                     <title>Dashboard | FoodERP 2.0 - React Admin & Dashboard Template</title>
                 </MetaTags>
@@ -325,8 +330,55 @@ const Dashboard_1 = (props) => {
                                                 <option value="YESTERDAY">Yesterday</option>
                                                 <option value="MONTH">Month</option>
                                                 <option value="SIX_MONTH">Six Month</option>
+                                               
                                             </select>
+
+                                            {selectedOption === "CUSTOM" && (
+                                                <div style={{ marginTop: "10px", backgroundColor: "#whitesmoke" }}>
+                                                    <CardBody className="c_card_body">
+
+                                                        <C_DatePicker
+                                                            options={{
+                                                                altInput: true,
+                                                                altFormat: "d-m-Y",
+                                                                dateFormat: "Y-m-d",
+                                                                minDate: "today",
+                                                            }}
+                                                            name="FromDate"
+                                                            value={dateRange.fromDate}
+                                                            onChange={(e, date) => {
+                                                                setDateRange((i) => {
+                                                                    const a = { ...i }
+                                                                    a.fromDate = date;
+                                                                    return a
+                                                                })
+                                                            }}
+                                                        />
+
+                                                        <C_DatePicker
+                                                            options={{
+                                                                altInput: true,
+                                                                altFormat: "d-m-Y",
+                                                                dateFormat: "Y-m-d",
+                                                                minDate: "today",
+                                                            }}
+                                                            name="ToDate"
+                                                            value={dateRange.toDate}
+                                                            onChange={(e, date) => {
+                                                                setDateRange((i) => {
+                                                                    const a = { ...i }
+                                                                    a.toDate = date;
+                                                                    return a
+                                                                })
+                                                            }}
+                                                        />
+                                                    </CardBody>
+                                                </div>
+                                            )}
                                         </div>
+
+
+
                                         <div className="ml-auto" style={{ marginLeft: "5px" }}>
                                             <span className="badge rounded-pill badge-soft-primary fw-large" style={{ fontSize: "20px" }}>
                                                 ₹ {data[0]?.TotalAmount ? amountCommaSeparateFunc(data[0].TotalAmount) : 0}
