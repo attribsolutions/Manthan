@@ -24,25 +24,27 @@ import {
 import { Tbody, Thead } from "react-super-responsive-table";
 import { Breadcrumb_inputName } from "../../../store/Utilites/Breadcrumb/actions";
 import { MetaTags } from "react-meta-tags";
-import { useHistory } from "react-router-dom";
-import { breadcrumbReturnFunc, btnIsDissablefunc, loginUserID, metaTagLabel } from "../../../components/Common/CommonFunction";
+import reactRouterDom, { useHistory } from "react-router-dom";
+import { breadcrumbReturnFunc, btnIsDissablefunc, loginCompanyID, loginUserDetails, loginUserID, metaTagLabel } from "../../../components/Common/CommonFunction";
 import * as mode from "../../../routes/PageMode"
 import * as pageId from "../../../routes/allPageID"
 import { SaveButton } from "../../../components/Common/CommonButton";
 import { getRole } from "../../../store/Administrator/RoleMasterRedux/action";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { comAddPageFieldFunc, initialFiledFunc, onChangeSelect, onChangeText } from "../../../components/Common/validationFunction";
-import { commonPageField, commonPageFieldSuccess } from "../../../store/actions";
+import { commonPageField, commonPageFieldSuccess, postSelect_Field_for_dropdown } from "../../../store/actions";
 import AddMaster from "../EmployeePages/Drodown";
 import * as url from "../../../routes/route_url";
 import AddEmployee from "../EmployeePages/EmployeeMaster";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
+import { GenralMasterSubType } from "../../../helpers/backend_helper";
 
 const AddUser = (props) => {
 
   // const formRef = useRef(null);
   const dispatch = useDispatch();
   const history = useHistory()
+  const loginPartyTypeName = loginUserDetails().PartyType;
 
   const fileds = {
     id: "",
@@ -50,6 +52,7 @@ const AddUser = (props) => {
     LoginName: '',
     Password: '',
     EmployeeName: '',
+    POSRateType: '',
     isActive: true,
     isLoginUsingEmail: false,
     isLoginUsingMobile: false,
@@ -88,11 +91,13 @@ const AddUser = (props) => {
     userAccess,
     pageField,
     saveBtnloading,
+    RateTypeList
   } = useSelector((state) => ({
     saveBtnloading: state.User_Registration_Reducer.saveBtnloading,
     postMsg: state.User_Registration_Reducer.postMsg,
     employePartyWiseRoleState: state.User_Registration_Reducer.userPartiesForUserMaster,
     employeelistForDropdown: state.User_Registration_Reducer.employeelistForDropdown,
+    RateTypeList: state.PartyMasterBulkUpdateReducer.SelectField,
     Roles: state.RoleMaster_Reducer.roleList,
     userAccess: state.Login.RoleAccessUpdateData,
     pageField: state.CommonPageFieldReducer.pageField
@@ -112,6 +117,14 @@ const AddUser = (props) => {
     dispatch(commonPageField(pageId.USER))
     dispatch(getEmployeeForUseRegistration());
     dispatch(getRole());
+  }, []);
+
+  useEffect(() => { // Rate Type Dropdown useEffect
+    const jsonBody = JSON.stringify({
+      Company: loginCompanyID(),
+      TypeID: 173
+    });
+    dispatch(postSelect_Field_for_dropdown(jsonBody));
   }, []);
 
   useEffect(() => {
@@ -167,7 +180,7 @@ const AddUser = (props) => {
   }, [pageField])
 
   // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
-  useEffect(() => {
+  useEffect(async () => {
 
     if ((hasShowloction || hasShowModal)) {
 
@@ -185,9 +198,19 @@ const AddUser = (props) => {
 
       if (hasEditVal) {
         const { id, LoginName, AdminPassword, CreatedBy, EmployeeName, Employee, UserRole,
-          isLoginUsingMobile, isActive, isSendOTP, isLoginUsingEmail
+          isLoginUsingMobile, isActive, isSendOTP, isLoginUsingEmail, POSRateType
         } = hasEditVal
         const { values, hasValid, } = { ...state }
+
+        const jsonBody = {
+          Company: loginCompanyID(),
+          TypeID: 173
+        };
+        const rateTypeApiResp = await GenralMasterSubType(jsonBody)
+
+        const defaultSaveValue = rateTypeApiResp.Data
+          .filter(i => i.id === POSRateType)
+          .map(i => ({ label: i.Name, value: i.id }))[0] || null;
 
         values.id = id;
         values.LoginName = LoginName;
@@ -197,6 +220,7 @@ const AddUser = (props) => {
         values.isLoginUsingEmail = isLoginUsingEmail;
         values.isLoginUsingMobile = isLoginUsingMobile;
         values.isSendOTP = isSendOTP;
+        values.POSRateType = defaultSaveValue;
 
         hasValid.id.valid = true;
         hasValid.LoginName.valid = true;
@@ -206,6 +230,7 @@ const AddUser = (props) => {
         hasValid.isLoginUsingEmail.valid = true;
         hasValid.isLoginUsingMobile.valid = true;
         hasValid.isSendOTP.valid = true;
+        hasValid.POSRateType.valid = true;
 
         dispatch(Breadcrumb_inputName(LoginName))
         dispatch(GetUserPartiesForUserMastePage({ id: Employee, editRole: UserRole }))
@@ -220,8 +245,6 @@ const AddUser = (props) => {
       dispatch(Breadcrumb_inputName(""))
     }
   }, [])
-
-
 
 
   useEffect(async () => {
@@ -264,6 +287,11 @@ const AddUser = (props) => {
   }));
 
   const RolesValues = Roles.map((Data) => ({
+    value: Data.id,
+    label: Data.Name
+  }));
+
+  const RateTypeValue = RateTypeList.map((Data) => ({
     value: Data.id,
     label: Data.Name
   }));
@@ -311,6 +339,7 @@ const AddUser = (props) => {
         Employee: values.EmployeeName.value,
         isActive: values.isActive,
         isSendOTP: values.isSendOTP,
+        POSRateType: values.POSRateType === "" ? 0 : values.POSRateType.value,
         isLoginUsingMobile: values.isLoginUsingMobile,
         isLoginUsingEmail: values.isLoginUsingEmail,
         CreatedBy: loginUserID(),
@@ -444,6 +473,27 @@ const AddUser = (props) => {
                               }
 
                             </Row>
+                            {loginPartyTypeName === "Franchises" &&
+                              <Row>
+                                <FormGroup className="mb-2 col col-sm-4 ">
+                                  <Label htmlFor="validationCustom01"> {fieldLabel.POSRateType} </Label>
+                                  <Col sm={12}>
+                                    <Select
+                                      id="POSRateType"
+                                      name="POSRateType"
+                                      value={values.POSRateType}
+                                      options={RateTypeValue}
+                                      onChange={(hasSelect, evn) => {
+                                        onChangeSelect({ hasSelect, evn, state, setState, })
+                                      }}
+                                    />
+                                    {isError.POSRateType.length > 0 && (
+                                      <span className="text-danger font-size-17"><small>{isError.POSRateType}</small></span>
+                                    )}
+                                  </Col>
+                                </FormGroup>
+                              </Row>
+                            }
 
                             <Row>
                               <FormGroup className="mb-2 col col-sm-4 ">
