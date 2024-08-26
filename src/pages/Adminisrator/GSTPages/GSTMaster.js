@@ -235,14 +235,14 @@ const GSTMaster = (props) => {
 
     //select id for delete row
     const deleteHandeler = (id, name) => {
-            customAlert({
-                Type: 5,
-                Status: true,
-                Message: `${alertMessages.deleteThisItem} : "${name}"`,
-                RedirectPath: false,
-                PermissionAction: deleteGSTId_ForMaster,
-                ID: id,
-            })
+        customAlert({
+            Type: 5,
+            Status: true,
+            Message: `${alertMessages.deleteThisItem} : "${name}"`,
+            RedirectPath: false,
+            PermissionAction: deleteGSTId_ForMaster,
+            ID: id,
+        })
     };
 
     const pageOptions = {

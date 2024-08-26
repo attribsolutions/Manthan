@@ -17,7 +17,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { Breadcrumb_inputName, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
-import { get_Division_ForDropDown, get_Party_ForDropDown } from "../../../store/Administrator/ItemsRedux/action";
+import { get_Division_ForDropDown, get_Division_ForDropDown_Success, get_Party_ForDropDown, get_Party_ForDropDown_Success } from "../../../store/Administrator/ItemsRedux/action";
 import BootstrapTable from "react-bootstrap-table-next";
 import {
     breadcrumbReturnFunc,
@@ -26,7 +26,7 @@ import {
     metaTagLabel
 } from "../../../components/Common/CommonFunction";
 import * as _cfunc from "../../../components/Common/CommonFunction";
-import { CInput, C_DatePicker, decimalRegx } from "../../../CustomValidateForm";
+import { CInput, C_DatePicker, C_Select, decimalRegx } from "../../../CustomValidateForm";
 import { mode, pageId, url } from "../../../routes";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { comAddPageFieldFunc, formValid, initialFiledFunc, onChangeDate, onChangeSelect, resetFunction } from "../../../components/Common/validationFunction";
@@ -67,6 +67,8 @@ const MRPMaster = (props) => {
         pageField,
         saveBtnloading,
         listBtnLoading,
+        partyApiLoading,
+        divisionApiLoading
     } = useSelector((state) => ({
         listBtnLoading: state.MRPMasterReducer.listBtnLoading,
         saveBtnloading: state.MRPMasterReducer.saveBtnloading,
@@ -74,7 +76,9 @@ const MRPMaster = (props) => {
         deleteMessage: state.MRPMasterReducer.deleteIdForMRPMaster,
         postMsg: state.MRPMasterReducer.postMsg,
         Party: state.ItemMastersReducer.Party,
+        partyApiLoading: state.ItemMastersReducer.partyApiLoading,
         Division: state.ItemMastersReducer.Division,
+        divisionApiLoading: state.ItemMastersReducer.divisionApiLoading,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField
 
@@ -99,7 +103,11 @@ const MRPMaster = (props) => {
     useEffect(() => {
         dispatch(get_Party_ForDropDown());
         dispatch(get_Division_ForDropDown());
-    }, [dispatch]);
+        return () => {
+            dispatch(get_Party_ForDropDown_Success([]))
+            dispatch(get_Division_ForDropDown_Success([]))
+        }
+    }, []);
 
     // userAccess useEffect
     useEffect(() => {
@@ -160,9 +168,7 @@ const MRPMaster = (props) => {
                 seteditCreatedBy(hasEditVal.CreatedBy)
             }
         }
-        else {
-            dispatch(GoButtonForMRP_MasterSuccess({ Status: false }))
-        }
+
     }, [])
 
     useEffect(async () => {
@@ -197,10 +203,10 @@ const MRPMaster = (props) => {
         value: Data.id,
         label: Data.Name
     }));
-    PartyTypeDropdown_Options.unshift({
-        value: "",
-        label: "select"
-    });
+    // PartyTypeDropdown_Options.unshift({
+    //     value: "",
+    //     label: "select"
+    // });
 
     const Division_DropdownOptions = Division.map((data) => ({
         value: data.id,
@@ -209,10 +215,10 @@ const MRPMaster = (props) => {
 
     const GoButton_Handler = (event) => {
 
-        if (values.EffectiveDate === '') {
+        if (values.EffectiveDate === '' || values.DivisionName === '') {
             customAlert({
                 Type: 4,
-                Message: alertMessages.effectiveDateIsRequired,
+                Message: alertMessages.effectiveDateAndDivisionIsRequired,
             })
             return
         }
@@ -450,30 +456,24 @@ const MRPMaster = (props) => {
                                             {(IsSCM === 0) &&
                                                 <Col sm={3}>
                                                     <FormGroup className="mb-3 row">
-                                                        <Label htmlFor="validationCustom01" className="col-sm-4 p-2 ml-n2 ">{fieldLabel.DivisionName}</Label>
+                                                        <Label className="col-sm-4 p-2 ml-n2 ">{fieldLabel.DivisionName}</Label>
                                                         <Col sm={8}>
-                                                            <Select
+                                                            <C_Select
                                                                 name="DivisionName"
                                                                 value={values.DivisionName}
-                                                                id={"DivisionName"}
                                                                 options={Division_DropdownOptions}
                                                                 isDisabled={pageMode === mode.edit ? true : false}
                                                                 isSearchable={true}
+                                                                classNamePrefix="dropdown"
+                                                                isLoading={divisionApiLoading}
                                                                 styles={{
                                                                     menu: provided => ({ ...provided, zIndex: 2 })
                                                                 }}
-                                                                autoFocus={true}
-                                                                placeholder="select"
                                                                 onChange={(hasSelect, evn) => {
                                                                     onChangeSelect({ hasSelect, evn, state, setState, })
-                                                                    dispatch(Breadcrumb_inputName(hasSelect.label))
+                                                                    // dispatch(Breadcrumb_inputName(hasSelect.label))
                                                                 }}
-                                                                classNamePrefix="dropdown"
                                                             />
-                                                            {isError.DivisionName.length > 0 && (
-                                                                <span className="text-danger f-8"><small>{isError.DivisionName}</small></span>
-                                                            )}
-
                                                         </Col>
                                                     </FormGroup>
                                                 </Col>}
@@ -481,25 +481,21 @@ const MRPMaster = (props) => {
                                             {(IsSCM === 0) &&
                                                 <Col sm={3}>
                                                     <FormGroup className="mb-3 row ">
-                                                        <Label htmlFor="validationCustom01" className="col-sm-3 p-2" style={{ width: "2.5cm" }}>{fieldLabel.PartyName}</Label>
+                                                        <Label className="col-sm-3 p-2" style={{ width: "2.5cm" }}>{fieldLabel.PartyName}</Label>
                                                         <Col sm={8} >
-                                                            <Select
+                                                            <C_Select
                                                                 name="PartyName"
                                                                 value={values.PartyName}
-                                                                id={"PartyName"}
                                                                 options={PartyTypeDropdown_Options}
+                                                                isLoading={partyApiLoading}
                                                                 isDisabled={pageMode === mode.edit ? true : false}
                                                                 isSearchable={true}
+                                                                classNamePrefix="dropdown"
                                                                 styles={{
                                                                     menu: provided => ({ ...provided, zIndex: 2 })
                                                                 }}
-                                                                placeholder="select"
                                                                 onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
-                                                                classNamePrefix="dropdown"
                                                             />
-                                                            {isError.PartyName.length > 0 && (
-                                                                <span className="text-danger f-8"><small>{isError.PartyName}</small></span>
-                                                            )}
                                                         </Col>
                                                     </FormGroup>
                                                 </Col>
@@ -524,9 +520,6 @@ const MRPMaster = (props) => {
                                                                 dateFormat: "Y-m-d",
                                                             }}
                                                         />
-                                                        {isError.EffectiveDate.length > 0 && (
-                                                            <span className="invalid-feedback">{isError.EffectiveDate}</span>
-                                                        )}
                                                     </Col>
                                                 </FormGroup>
                                             </Col>

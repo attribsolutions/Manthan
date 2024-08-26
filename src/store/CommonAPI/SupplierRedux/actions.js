@@ -48,8 +48,9 @@ export const getSupplierSuccess = orders => ({
 })
 
 // ************************************************************
-export const GetVender = () => ({
+export const GetVender = (jsonBody) => ({
   type: GET_VENDER,
+  jsonBody
 });
 
 export const GetVenderSuccess = orders => ({
