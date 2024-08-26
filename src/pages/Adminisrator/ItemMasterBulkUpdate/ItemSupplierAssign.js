@@ -93,7 +93,7 @@ const ItemSupplierAssign = (props) => {
     // Select Dropdown GeneralMasterSubType api call
     useEffect(() => {
 
-        dispatch(GetVender({ PartyID: _cfunc.loginSelectedPartyID() }));
+        dispatch(GetVender({ "PartyID": _cfunc.loginSelectedPartyID(), "Type": 6 }));
         dispatch(ItemSupplierList_Action())
         return () => {
             dispatch(GetVenderSuccess([]));
