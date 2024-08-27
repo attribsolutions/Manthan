@@ -156,21 +156,21 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
             a.values.Latitude = ''
             a.values.Longitude = ''
 
-            a.hasValid.Name.valid = true;
-            a.hasValid.MobileNo.valid = true;
-            a.hasValid.PartyType.valid = true;
-            a.hasValid.SAPPartyCode.valid = true;
-            a.hasValid.Supplier.valid = true;
-            a.hasValid.PAN.valid = true;
-            a.hasValid.Email.valid = true;
-            a.hasValid.AlternateContactNo.valid = true;
-            a.hasValid.State.valid = true;
-            a.hasValid.District.valid = true;
-            a.hasValid.GSTIN.valid = true;
-            a.hasValid.CityName.valid = true;
-            a.hasValid.Distance.valid = true;
-            a.hasValid.Latitude.valid = true;
-            a.hasValid.Longitude.valid = true;
+            a.hasValid.Name.valid = false;
+            a.hasValid.MobileNo.valid = false;
+            a.hasValid.PartyType.valid = false;
+            a.hasValid.SAPPartyCode.valid = false;
+            a.hasValid.Supplier.valid = false;
+            a.hasValid.PAN.valid = false;
+            a.hasValid.Email.valid = false;
+            a.hasValid.AlternateContactNo.valid = false;
+            a.hasValid.State.valid = false;
+            a.hasValid.District.valid = false;
+            a.hasValid.GSTIN.valid = false;
+            a.hasValid.CityName.valid = false;
+            a.hasValid.Distance.valid = false;
+            a.hasValid.Latitude.valid = false;
+            a.hasValid.Longitude.valid = false;
 
             return a
         })
