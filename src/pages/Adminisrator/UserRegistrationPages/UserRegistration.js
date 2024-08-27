@@ -310,11 +310,12 @@ const AddUser = (props) => {
   };
 
   const saveHandler = (event) => {
+    debugger
     event.preventDefault();
     const btnId = event.target.id;
     btnIsDissablefunc({ btnId: btnId, state: true })
     try {
-
+      debugger
       const userRoleArr = []
       employePartyWiseRoleState.map(i1 => {
 
@@ -339,7 +340,7 @@ const AddUser = (props) => {
         Employee: values.EmployeeName.value,
         isActive: values.isActive,
         isSendOTP: values.isSendOTP,
-        POSRateType: values.POSRateType === "" ? 0 : values.POSRateType.value,
+        POSRateType: values.POSRateType > 0 ? values.POSRateType.value : 0,
         isLoginUsingMobile: values.isLoginUsingMobile,
         isLoginUsingEmail: values.isLoginUsingEmail,
         CreatedBy: loginUserID(),
