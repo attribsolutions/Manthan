@@ -340,7 +340,7 @@ const AddUser = (props) => {
         Employee: values.EmployeeName.value,
         isActive: values.isActive,
         isSendOTP: values.isSendOTP,
-        POSRateType: values.POSRateType > 0 ? values.POSRateType.value : 0,
+        POSRateType: (values.POSRateType === "" || values.POSRateType === null) ? 0 : values.POSRateType.value,
         isLoginUsingMobile: values.isLoginUsingMobile,
         isLoginUsingEmail: values.isLoginUsingEmail,
         CreatedBy: loginUserID(),
