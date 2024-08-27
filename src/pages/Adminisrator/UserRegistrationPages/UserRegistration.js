@@ -310,12 +310,12 @@ const AddUser = (props) => {
   };
 
   const saveHandler = (event) => {
-    debugger
+    
     event.preventDefault();
     const btnId = event.target.id;
     btnIsDissablefunc({ btnId: btnId, state: true })
     try {
-      debugger
+      
       const userRoleArr = []
       employePartyWiseRoleState.map(i1 => {
 
