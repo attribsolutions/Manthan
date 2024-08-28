@@ -117,6 +117,18 @@ export const SHOW_ALSO_OPTIONS = [{
     value: 8,
     label: "MRP",
 },
+{
+    value: 9,
+    label: "MobileNo",
+},
+{
+    value: 10,
+    label: "Cashier",
+},
+{
+    value: 11,
+    label: "GST",
+},
 
 ]
 

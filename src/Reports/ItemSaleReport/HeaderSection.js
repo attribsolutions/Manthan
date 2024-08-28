@@ -408,7 +408,7 @@ const HeaderSection = (props) => {
   function showAlsoOnChange(event) {
     let isLastInvoice =
       event.length > 0
-        ? [1, 5, 6, 7].includes(event[event.length - 1].value)
+        ? [1, 5, 6, 7, 9, 10, 11].includes(event[event.length - 1].value)
         : false;
 
     if (isLastInvoice) {
