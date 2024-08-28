@@ -339,6 +339,10 @@ const PosInvoiceReport = (data) => {
     doc.line(10, Discription_Table_Y + 5, 10 + lineWidth, Discription_Table_Y + 5); // Draw line
     doc.text(`Cashier: ${data.CashierName}`, 10, Discription_Table_Y + 20,)
     doc.text(`Thank You...!`, 113, Discription_Table_Y + 35, "center")
+    
+    doc.setProperties({
+        title: `InvoiceReport/${data.InvoiceDate}-${data.CustomerName} `
+    });
 
     // Save and open the PDF
     function generateSaveAndOpenPDFReport() {
