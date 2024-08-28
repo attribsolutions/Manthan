@@ -1,4 +1,4 @@
-import React, { memo, useEffect } from "react"
+import React, { memo, useEffect, useLayoutEffect } from "react"
 import PropTypes from "prop-types"
 import { Route, Redirect } from "react-router-dom"
 
@@ -20,14 +20,14 @@ const Authmiddleware = ({
 }) => {
   const { session, updateSessionActivity } = useSession();
   const dispatch = useDispatch()
-  const history = useHistory()
-
-
+ 
 
   const url = rest.history.location.pathname;
   const ActualPath = rest.path;
   const Credentials = url.split("/").pop();
-  const IsLoginFromOutsideLink = ActualPath.split(':')[1] === "Credentials" ? true : false;
+  // const IsLoginFromOutsideLink = ActualPath.split(':')[1] === "Credentials" ? true : false;
+
+  const IsLoginFromOutsideLink = ActualPath.split(':')[1] === "Credentials" && rest.history.location.pathname.includes('-');
 
 
 
@@ -35,22 +35,26 @@ const Authmiddleware = ({
     loginSuccess,
     divisionDropdown_redux = [],
     loading,
-    loginError
+    loginError,
+    userAccess
   } = useSelector((state) => ({
     loginError: state.Login.loginError,
     divisionDropdown_redux: state.Login.divisionDropdown,
     loginSuccess: state.Login.loginSuccess,
     afterLoginUserDetails: state.Login.afterLoginUserDetails,
     loading: state.Login.loading,
+    userAccess: state.Login.RoleAccessUpdateData,
+
 
   })
   );
 
 
-
   useEffect(() => {
     if ((IsLoginFromOutsideLink) && Credentials !== "") {
-      if (session.active === false && !(localStorage.getItem("token"))) {
+      localStorage.clear();
+      sessionStorage.clear()
+      if (session.active === false || !(localStorage.getItem("token"))) {
         const [User, password] = Credentials?.split('-') || [];
         const values = {
           UserName: User,
@@ -81,7 +85,7 @@ const Authmiddleware = ({
 
   useEffect(() => {
     if ((IsLoginFromOutsideLink) && Credentials !== "" && url.includes("AuthLink")) {
-      
+
       if (divisionDropdown_redux.length > 0) {
         let user = divisionDropdown_redux[0];
         if (user.Party_id === null) {
@@ -107,9 +111,9 @@ const Authmiddleware = ({
             )
           }
           return (
-            !loading && <Layout isPartyWisePage={isPartyWisePage}>
-              <Component {...props} />
-            </Layout>
+            !loading && userAccess.length > 0 &&
+            <Component {...props} />
+
           )
         }}
       />
@@ -167,21 +171,6 @@ export default memo(Authmiddleware);
 
 
 
-const updateTokan = (dispatch) => {
-  let istoken = localStorage.getItem("refreshToken")
-  if (istoken) {
-    //console.log(" keepSessionAlive  api call", new Date()) //##########################
 
-    let jsonBody = { "refresh": `${istoken}` }
-    dispatch(sessionAliveNewToken(jsonBody))
-  }
-}
-
-const keepSessionAlive = (dispatch) => {
-  //console.log(" keepSessionAlive", new Date()) //##########################
-
-  sessionStorage.setItem('keepSessionAlive', new Date())
-  intervalId = setInterval(() => { updateTokan(dispatch) }, 28 * 60 * 1000)
-};
 
 

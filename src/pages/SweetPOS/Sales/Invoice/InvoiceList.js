@@ -51,8 +51,8 @@ import { sideBarPageFiltersInfoAction } from "../../../../store/Utilites/PartyDr
 import { date_dmy_func } from "../../../../components/Common/CommonFunction";
 import { CheckStockEntryforBackDatedTransactionSuccess } from "../../../../store/Inventory/StockEntryRedux/action";
 import { useParams } from 'react-router-dom';
-import { afterloginOneTimeAPI, loginFromOutSideLink_Func } from "../../../../components/Common/AfterLoginApiFunc";
-import { useSession } from "../../../../routes/middleware/SessionContext";
+
+
 
 const InvoiceList = () => {
 
@@ -69,7 +69,7 @@ const InvoiceList = () => {
     const [Vehicle_No, setVehicle_No] = useState({ value: null, label: "Select..." })
     const [Customer, setCustomer] = useState('')
 
-    const { session, updateSessionActivity } = useSession();
+
 
 
     const [modal, setmodal] = useState(false);
@@ -378,6 +378,11 @@ const InvoiceList = () => {
 
     }
 
+    function minPrintBtn_Func(config) {
+        config["ReportType"] = report.PosInvoice;
+        dispatch(getpdfReportdata(Pos_Invoice_Singel_Get_for_Report_Api, config))
+    }
+
     function goButtonHandler(event, IBType) {
 
         try {
@@ -651,6 +656,7 @@ const InvoiceList = () => {
                             makeBtnShow={otherState.makeBtnShow}
                             pageMode={pageMode}
                             UpdateDetailsBtnFunc={UpdateDetailsBtnFunc}
+                            minPrintBtn_Func={minPrintBtn_Func}
                             goButnFunc={goButtonHandler}
                             downBtnFunc={downBtnFunc}
                             editBodyfunc={editBodyfunc}
@@ -741,7 +747,7 @@ const InvoiceList = () => {
                                                 menu: (provided) => ({
                                                     ...provided,
                                                     zIndex: 5,
-                                                    maxHeight: "80px",
+                                                    maxHeight: "300px",
                                                     overflowY: "auto",
                                                 }),
                                             }}
