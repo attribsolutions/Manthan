@@ -66,8 +66,13 @@ const PosInvoiceReport = (data) => {
             data1.table.body[4].cells[0].styles.fontSize = 9
 
             data1.table.body[5].cells[0].styles.fontStyle = "bold"
+            data1.table.body[5].cells[0].styles.fontSize = 9
 
+            data1.table.body[5].cells[0].styles.halign = "center"
             data1.table.body[6].cells[0].styles.fontStyle = "bold"
+
+            data1.table.body[7].cells[0].styles.fontStyle = "bold"
+
 
 
 
@@ -259,16 +264,26 @@ const PosInvoiceReport = (data) => {
 
     });
 
-    const Total_Payable = Number(totalAmount) - Number(totalDiscount)
+
     doc.setFontSize(9)
 
     doc.text(`Total Amount:`, 10, GST_Table_Y + 18,)
     doc.text(`Discount Amount:`, 10, GST_Table_Y + 30,)
     doc.text(`${Number(totalDiscount).toFixed(2)}`, 215, GST_Table_Y + 30, "right")
-    doc.text(`${Number(totalAmount).toFixed(2)}`, 215, GST_Table_Y + 18, "right")
+    const totalAmountNum = Number(totalAmount);
+    const totalDiscountNum = Number(totalDiscount);
+
+    const totalSum = totalAmountNum + totalDiscountNum;
+
+    // Convert the sum to a string with two decimal places
+    const formattedSum = totalSum.toFixed(2);
+
+    // Add the text to the PDF, aligned to the right
+    doc.text(`${formattedSum}`, 215, GST_Table_Y + 18, { align: "right" });
+
     doc.setFontSize(12)
     doc.text(`Total Payable:`, 10, GST_Table_Y + 42,)
-    doc.text(`${Number(Total_Payable).toFixed(2)}`, 215, GST_Table_Y + 42, "right")
+    doc.text(`${Number(data.GrandTotal).toFixed(2)}`, 215, GST_Table_Y + 42, "right")
 
     doc.setLineDash([]); // Dash pattern: 3 points dash, 3 points gap
     doc.line(10, GST_Table_Y + 50, 10 + lineWidth, GST_Table_Y + 50); // Draw line
@@ -322,8 +337,12 @@ const PosInvoiceReport = (data) => {
     doc.setLineDash([1, 1]); // Dash pattern: 3 points dash, 3 points gap
     const Discription_Table_Y = doc.previousAutoTable.finalY
     doc.line(10, Discription_Table_Y + 5, 10 + lineWidth, Discription_Table_Y + 5); // Draw line
-    doc.text(`Cashier: ${data.CustomerName}`, 10, Discription_Table_Y + 20,)
+    doc.text(`Cashier: ${data.CashierName}`, 10, Discription_Table_Y + 20,)
     doc.text(`Thank You...!`, 113, Discription_Table_Y + 35, "center")
+    
+    doc.setProperties({
+        title: `InvoiceReport/${data.InvoiceDate}-${data.CustomerName} `
+    });
 
     // Save and open the PDF
     function generateSaveAndOpenPDFReport() {

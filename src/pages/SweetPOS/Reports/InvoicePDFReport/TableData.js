@@ -5,7 +5,7 @@ import { convertTo12Hour } from "../../../Dashboard/FrenchiesesDashboard/Functio
 // original
 export const Item = [
     "HSN\nRate",
-    "Item\nGST%/Dist.Amt/Dist.",
+    "Item\nGST%/Dist./Dist.Amt",
     "Qty\nAmount",
 ];
 
@@ -33,7 +33,7 @@ export const ItemRow = (data) => {
     let hasHedRow = []
     InvoiceItems.forEach(element => {
         const tableitemRow = [
-            `${element.HSNCode}\n${element.Rate}`,
+            `${element.HSNCode}\n${element.MRPValue}`,
             `${element.ItemName}\n${element.GSTPercentage}/${element.Discount}/${element.DiscountAmount}`,
             `${element.Quantity}\n${element.Amount}`,
 
@@ -75,6 +75,7 @@ export const DetailsRow = (data) => {
         [`------------Tax Invoice---------`],
         [`${data.PartyAddress}`],
         [`GSTIN:${data.PartyGSTIN}`],
+        [`Customer:${data.CustomerName}`],
         [`Contact:${data.PartyMobileNo}`],
         [`Date:${data.InvoiceDate}   ${data?.CreatedOn?.slice(11)}                   Bill No:${data.FullInvoiceNumber}`],
     ]
