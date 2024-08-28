@@ -74,10 +74,12 @@ const SweetPOSRateMaster = (props) => {
         dispatch(postSelect_Field_for_dropdown(jsonBody));
     }, []);
 
-    const RateTypeListOptions = RateTypeList.map((index) => ({
-        value: index.id,
-        label: index.Name,
-    }));
+    const RateTypeListOptions = RateTypeList
+        .filter((item) => item.Name !== "Regular")
+        .map((item) => ({
+            value: item.id,
+            label: item.Name,
+        }));
 
     // userAccess useEffect
     useEffect(() => {
@@ -233,7 +235,7 @@ const SweetPOSRateMaster = (props) => {
                 return;
             }
             let filteredData = PosRateMasterListData.filter(item => ((item.PrimaryRate !== null)));
-            
+
             const jsonBody = JSON.stringify(filteredData.map((i) => ({
                 "POSRateType": rateTypeSelect.value,
                 "IsChangeRateToDefault": i.IsChangeRateToDefault,
