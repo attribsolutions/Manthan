@@ -171,6 +171,9 @@ const ItemSupplierAssign = (props) => {
             text: `New ${SelectFieldName.label === undefined ? "Value" : SelectFieldName.label}`,
             dataField: "Newvalue",
             formatExtraData: { forceRefresh, dropdownOptions: selectFieldNameDropOptions, tableData: tableData },
+            headerStyle: () => {
+                return { width: '40%', textAlign: 'center' };
+            },
             formatter: (cellContent, row, key, { dropdownOptions, tableData }) => {
 
                 const defaultSelected = row.SupplierDetails
@@ -182,7 +185,7 @@ const ItemSupplierAssign = (props) => {
 
                 return (
                     <>
-                        <div style={{ width: "180px" }}>
+                        <div >
                             <Col>
                                 <FormGroup>
                                     <Select

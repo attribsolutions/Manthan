@@ -33,6 +33,7 @@ const CurrentStockReport = (props) => {
 	const currentDate_ymd = _cfunc.date_ymd_func();
 	const isSCMParty = _cfunc.loginUserAdminRole();
 	const isSCMCompany = _cfunc.loginIsSCMParty();
+
 	const isVisibleRateDrop = _cfunc.checkRateDropVisibility()
 
 	const [headerFilters, setHeaderFilters] = useState('');
