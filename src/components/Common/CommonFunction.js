@@ -227,7 +227,7 @@ export const loginUserAdminRole = () => { //+++++++++++++++++++++ Session Compan
 };
 
 export const loginPartyTypeName = () => { //+++++++++++++++++++++ Session Company Id+++++++++++++++++++++++++++++
-  
+
   try {
     const detail = loginUserDetails();
     return ((detail.PartyType === "Division") || (detail.PartyType === "Franchises"));
@@ -381,7 +381,10 @@ export const loginPriceListID = () => {//+++++++++++++++++++++ Session loginPart
   return 0;
 };
 
+export const IsAuthorisedURL = ({ subPageMode, URL }) => {
+  return ((subPageMode.includes('AuthLink') && subPageMode.includes(URL)))
 
+}
 
 export const loginIsSCMCompany = () => { //+++++++++++++++++++++ Session loginPartyID Id+++++++++++++++++++++++++++++++
   try {

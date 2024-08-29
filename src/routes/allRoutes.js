@@ -246,7 +246,13 @@ import OrderItemSupplierReport from "../Reports/OrderItemSupplier/index.js";
 
 const userRoutes = [
 
+	{ path: path.POS_ORDER_IN_POS, component: Order },
 	{ path: path.POS_INVOICE_LIST_IN_POS, component: Pos_InvoiceList },
+
+	{ path: path.POS_ORDER_LIST_IN_POS, component: OrderList },
+
+
+
 	// *************************** DashBord *******************************//
 
 	{ path: path.DASHBORD_1, component: Dashboard_1, isPartyWisePage: true },

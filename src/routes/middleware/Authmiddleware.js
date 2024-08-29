@@ -7,7 +7,10 @@ import { useSession } from "./SessionContext"
 import { getUserDetailsAction, loginSuccessAction, loginUser, logoutReset, logoutUserSuccess } from "../../store/actions"
 import { afterloginOneTimeAPI } from "../../components/Common/AfterLoginApiFunc"
 import { useDispatch, useSelector } from "react-redux"
-import { useHistory } from "react-router-dom/cjs/react-router-dom.min"
+
+import BreadcrumbVertical from "../../components/VerticalLayout/breadcrumb/index"
+
+
 
 let intervalId
 
@@ -20,7 +23,7 @@ const Authmiddleware = ({
 }) => {
   const { session, updateSessionActivity } = useSession();
   const dispatch = useDispatch()
- 
+
 
   const url = rest.history.location.pathname;
   const ActualPath = rest.path;
@@ -28,7 +31,6 @@ const Authmiddleware = ({
   // const IsLoginFromOutsideLink = ActualPath.split(':')[1] === "Credentials" ? true : false;
 
   const IsLoginFromOutsideLink = ActualPath.split(':')[1] === "Credentials" && rest.history.location.pathname.includes('-');
-
 
 
   const {
@@ -112,8 +114,9 @@ const Authmiddleware = ({
           }
           return (
             !loading && userAccess.length > 0 &&
-            <Component {...props} />
-
+            // <BreadcrumbVertical >
+              <Component {...props} />
+            // </BreadcrumbVertical>
           )
         }}
       />

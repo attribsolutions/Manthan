@@ -13,16 +13,18 @@ export const userAccessUseEffect = ({ props,
     let hasShowModal = props.hasOwnProperty(mode.editValue)
 
     let locationPath;
-    
+
     if ((props.pageMode === mode.dropdownAdd) || hasShowModal) {
         locationPath = props.masterPath;
     } else {
         locationPath = props.location.pathname;
     }
-
+    
     userAccess.forEach((inx) => {
-        if ((`/${inx.ActualPagePath}` === locationPath) && setUserAccState) {
-            
+
+        const AuthenticatedLinkPath = (locationPath.startsWith(`/${inx.ActualPagePath}`)) && locationPath.includes("AuthLink")
+
+        if (((`/${inx.ActualPagePath}` === locationPath) && setUserAccState) || AuthenticatedLinkPath) {
             setUserAccState(inx);
             if (!props.isdropdown) {
                 breadcrumbReturnFunc({ dispatch, userAcc: inx });

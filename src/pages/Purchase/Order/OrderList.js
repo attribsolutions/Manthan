@@ -1,5 +1,5 @@
 
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { Col, FormGroup, Label } from "reactstrap";
@@ -16,8 +16,8 @@ import { url, mode, pageId } from "../../../routes/index"
 import { order_Type } from "../../../components/Common/C-Varialbes";
 import { IB_Order_Get_Api, OrderPage_Edit_ForDownload_API } from "../../../helpers/backend_helper";
 import { comAddPageFieldFunc, initialFiledFunc } from "../../../components/Common/validationFunction";
-import { getOrderApprovalDetailAction, orderApprovalAction, postOrderConfirms_API, postOrderConfirms_API_Success } from "../../../store/actions";
-import { orderApprovalFunc, orderApprovalMessage } from "./orderApproval";
+import { orderApprovalAction, postOrderConfirms_API, postOrderConfirms_API_Success } from "../../../store/actions";
+import { orderApprovalMessage } from "./orderApproval";
 import { priceListByCompay_Action, priceListByCompay_ActionSuccess } from "../../../store/Administrator/PriceList/action";
 import OrderView from "./OrderView";
 import OrderView_Modal from "./OrderView";
@@ -25,7 +25,7 @@ import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMs
 import { getOrdersMakeInvoiceDataAction, getOrdersMakeInvoiceDataActionSuccess } from "../../../store/Sales/bulkInvoice/action";
 import { allLabelWithBlank } from "../../../components/Common/CommonErrorMsg/HarderCodeData";
 import { sideBarPageFiltersInfoAction } from "../../../store/Utilites/PartyDrodown/action";
-import { debounce } from "redux-saga/effects";
+
 
 const OrderList = () => {
 
@@ -40,8 +40,15 @@ const OrderList = () => {
         CustomerType: [allLabelWithBlank]
     }
 
+    const initialSubPageMode = useMemo(() => {
+        if (_cfunc.IsAuthorisedURL({ subPageMode: history.location.pathname, URL: url.ORDER_LIST_2 })) {
+            return url.ORDER_LIST_2;
+        }
+        return history.location.pathname;
+    }, []);
+
     const [state, setState] = useState(() => initialFiledFunc(fileds))
-    const [subPageMode] = useState(history.location.pathname);
+    const [subPageMode] = useState(initialSubPageMode);
     const [pageMode, setPageMode] = useState(mode.defaultList);
     const [hasBulkinvoiceSaveAccess, setHasBulkinvoiceSaveAccess] = useState(false);
 
@@ -124,6 +131,7 @@ const OrderList = () => {
         updateSucc: _act.updateOrderIdSuccess,
         deleteSucc: _act.deleteOrderIdSuccess,
     }
+
 
     // Common Party Dropdown useEffect
     useEffect(() => {
@@ -316,7 +324,7 @@ const OrderList = () => {
     }, [gobutton_Add_invoice]);
 
     useEffect(() => {
-        
+
         if (ordersBulkInvoiceData.Status === true && ordersBulkInvoiceData.StatusCode === 200) {
             dispatch(getOrdersMakeInvoiceDataActionSuccess({ ...ordersBulkInvoiceData, Status: false }));
             history.push({
@@ -687,7 +695,7 @@ const OrderList = () => {
     }
 
     const BulkInvoice_Handler = (allList = []) => {
-        
+
         let checkRows = allList.filter(i => (i.selectCheck && !i.forceSelectDissabled))
         if (!checkRows.length > 0) {
             customAlert({
