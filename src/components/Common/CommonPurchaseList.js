@@ -74,7 +74,7 @@ const CommonPurchaseList = (props) => {
   const { PageFieldMaster = [] } = { ...pageField };
 
   useEffect(async () => {
-    debugger
+    
     const locationPath = history.location.pathname;
     let userAcc = userAccess.find((inx) => {
       const AuthenticatedLinkPath = (locationPath.startsWith(`/${inx.ActualPagePath}`)) && locationPath.includes("AuthLink")

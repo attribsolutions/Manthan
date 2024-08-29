@@ -131,7 +131,7 @@ const Dashboard_1 = (props) => {
     }
 
     const handleChange = (event) => {
-        debugger
+        
         const value = event.target.value;
         setSelectedOption(value);
 

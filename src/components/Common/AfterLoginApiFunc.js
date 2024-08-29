@@ -61,7 +61,7 @@ export const loginFromOutSideLink_Func = async ({ Credentials, subPageMode, disp
 
     const [User, password] = Credentials?.split('-') || [];
     const token = localStorage.getItem("token")
-    debugger
+    
     if ((LoginDetails?.Status === false && Credentials) || !token || !LoginDetails.UserID) {
         const values = {
             UserName: User,
