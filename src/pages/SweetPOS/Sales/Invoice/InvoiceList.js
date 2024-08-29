@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useMemo, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
     BreadcrumbShowCountlabel,
@@ -58,12 +58,20 @@ const InvoiceList = () => {
 
     const dispatch = useDispatch();
     const history = useHistory();
-    const { Credentials } = useParams();
+  
 
     const currentDate_ymd = _cfunc.date_ymd_func();
 
+
+    const initialSubPageMode = useMemo(() => {
+        if (_cfunc.IsAuthorisedURL({ subPageMode: history.location.pathname, URL: url.POS_INVOICE_LIST })) {
+            return url.POS_INVOICE_LIST;
+        }
+        return history.location.pathname;
+    }, []);
+
     const [pageMode, setPageMode] = useState(url.ORDER_LIST_1)
-    const [subPageMode, setSubPageMode] = useState(history.location.pathname);
+    const [subPageMode, setSubPageMode] = useState(initialSubPageMode);
     const [hederFilters, setHederFilters] = useState({ todate: currentDate_ymd, fromdate: currentDate_ymd, supplierSelect: allLabelWithBlank });
     const [otherState, setOtherState] = useState({ masterPath: '', makeBtnShow: false, newBtnPath: '', IBType: '' });
     const [Vehicle_No, setVehicle_No] = useState({ value: null, label: "Select..." })
@@ -148,6 +156,9 @@ const InvoiceList = () => {
 
     // sideBar Page Filters Information 
 
+
+
+
     useEffect(() => {
         dispatch(sideBarPageFiltersInfoAction([
             { label: "FromDate", content: date_dmy_func(fromdate), },
@@ -167,7 +178,7 @@ const InvoiceList = () => {
         let newBtnPath = false;
         let makeBtnShow = false;
 
-        if ((subPageMode === url.POS_INVOICE_LIST) || (subPageMode === `${url.POS_INVOICE_LIST}/AuthLink/${Credentials}`)) {
+        if ((subPageMode === url.POS_INVOICE_LIST)) {
             page_Id = pageId.POS_INVOICE_LIST
             masterPath = url.INVOICE_1
             newBtnPath = url.INVOICE_1
@@ -384,7 +395,7 @@ const InvoiceList = () => {
     }
 
     function goButtonHandler(event, IBType) {
-
+        debugger
         try {
             if (commonPartyDropSelect.value === 0) {
                 customAlert({ Type: 3, Message: alertMessages.commonPartySelectionIsRequired });

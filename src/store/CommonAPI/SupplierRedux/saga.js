@@ -37,7 +37,7 @@ import {
   SUB_EMPLOYEE_LIST,
 } from "./actionType";
 
-import { CommonConsole, loginCompanyID, loginPartyID } from "../../../components/Common/CommonFunction";
+import { CommonConsole, IsAuthorisedURL, loginCompanyID, loginPartyID } from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url";
 import { commonApiReducer_ErrorAction } from "../../actions";
 
@@ -137,7 +137,9 @@ function* vendorSupplierCustomer_genFunc({ data }) {
     || subPageMode === url.PURCHASE_RETURN
     || subPageMode === url.PURCHASE_RETURN_MODE_3
     || subPageMode === url.SELF_LEDGER
-    || subPageMode === url.PARTY_DETAILS);
+    || subPageMode === url.PARTY_DETAILS)
+  
+    ;
 
   const isCustomer = (subPageMode === url.ORDER_4  //Customer mode 3
     || subPageMode === url.ORDER_LIST_4
@@ -149,7 +151,7 @@ function* vendorSupplierCustomer_genFunc({ data }) {
     || subPageMode === url.GST_R1_REPORT
     || subPageMode === url.MOBILE_RETAILER_SEND
     || subPageMode === url.POS_INVOICE_LIST
-
+   
   );
 
 
