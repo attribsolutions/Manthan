@@ -387,7 +387,7 @@ export const SYSTEM_SETTING_LIST = "/System_Setting_List"
 
 export const TARGET_VS_ACHIEVEMENT = "/TargetVSAchievement"
 
-export const ORDER_ITEM_SUPPLIER_REPORT ="/Order_Item_Supplier_Report"
+export const ORDER_ITEM_SUPPLIER_REPORT = "/Order_Item_Supplier_Report"
 
 
 //**************************** Sweet Pos ***********************************//
@@ -403,13 +403,19 @@ export const POS_INVOICE_LIST = "/Pos_InvoiceList"
 
 export const POS_INVOICE_LIST_IN_POS = "/Pos_InvoiceList/AuthLink/:Credentials"
 
+export const POS_ORDER_IN_POS = "/Order_2/AuthLink/:Credentials"
+
+export const POS_ORDER_LIST_IN_POS = "/OrderList_2/AuthLink/:Credentials"
+
+
+
 
 
 
 
 export const CASHIER_SUMMARY_REPORT = "/Cashier_Summary_Report"
 
-export const  SWEET_POS_RATE_MASTER = "/SweetPOS_Rate_Master"
+export const SWEET_POS_RATE_MASTER = "/SweetPOS_Rate_Master"
 
 
 

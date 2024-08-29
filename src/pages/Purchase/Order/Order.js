@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useMemo, useState } from "react";
 import { MetaTags } from "react-meta-tags"
 import { useHistory } from "react-router-dom";
 import {
@@ -43,12 +43,14 @@ import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMs
 import { changeCommonPartyDropDetailsAction } from "../../../store/Utilites/PartyDrodown/action";
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 import { allLabelWithBlank } from "../../../components/Common/CommonErrorMsg/HarderCodeData";
+import { useParams } from 'react-router-dom';
+
 
 
 let editVal = {}
 let initial_BredcrumbMsg = `Count:0 ₹ 0.00`
 function initialState(history) {
-    
+
     let page_Id = '';
     let listPath = ''
     let sub_Mode = history.location.pathname;
@@ -57,7 +59,7 @@ function initialState(history) {
         page_Id = pageId.ORDER_1;
         listPath = url.ORDER_LIST_1
     }
-    else if (sub_Mode === url.ORDER_2) {
+    else if ((sub_Mode === url.ORDER_2) || _cfunc.IsAuthorisedURL({ subPageMode: sub_Mode, URL: url.ORDER_2 })) {
         page_Id = pageId.ORDER_2;
         listPath = url.ORDER_LIST_2
     }
@@ -65,7 +67,7 @@ function initialState(history) {
         page_Id = pageId.IB_ORDER;
         listPath = url.IB_ORDER_PO_LIST;
     }
-    else if (sub_Mode === url.ORDER_4) {
+    else if ((sub_Mode === url.ORDER_4)) {
         page_Id = pageId.ORDER_4;
         listPath = url.ORDER_LIST_4
     } else if (sub_Mode === url.IB_SALES_ORDER) {
@@ -81,6 +83,13 @@ const Order = (props) => {
     const history = useHistory();
     const currentDate_ymd = _cfunc.date_ymd_func();
 
+    const initialSubPageMode = useMemo(() => {
+        if (_cfunc.IsAuthorisedURL({ subPageMode: history.location.pathname, URL: url.ORDER_2 })) {
+            return url.ORDER_2;
+        }
+        return history.location.pathname;
+    }, []);
+
     const fileds = {
         id: "",
         Supplier: "",
@@ -92,7 +101,7 @@ const Order = (props) => {
     const [editCreatedBy, seteditCreatedBy] = useState("");
     const [page_id] = useState(() => initialState(history).page_Id)
     const [listPath] = useState(() => initialState(history).listPath)
-    const [subPageMode] = useState(history.location.pathname)
+    const [subPageMode] = useState(initialSubPageMode)
 
     const [modalCss, setModalCss] = useState(false);
     const [pageMode, setPageMode] = useState(mode.defaultsave);
@@ -204,6 +213,7 @@ const Order = (props) => {
     const hasShowModal = props.hasOwnProperty(mode.editValue)
 
     useLayoutEffect(() => {
+    
         dispatch(_act.commonPageFieldSuccess(null));
         dispatch(_act.GoButton_For_Order_AddSuccess(null));
         dispatch(_act.commonPageField(page_id));
@@ -218,6 +228,7 @@ const Order = (props) => {
     }, []);
 
     useEffect(() => userAccessUseEffect({ // userAccess useEffect 
+
         props,
         userAccess,
         dispatch,
@@ -784,7 +795,7 @@ const Order = (props) => {
                                 defaultValue={row.Rate}
                                 className="text-end"
                                 onChange={(event) => {
-                                    
+
                                     row.Rate = event.target.value;
                                     itemWise_CalculationFunc(row, undefined, tableList)
 
@@ -1116,7 +1127,7 @@ const Order = (props) => {
         }
         let btnId = `go-btn${subPageMode}`
         _cfunc.btnIsDissablefunc({ btnId, state: true })
-        
+
         console.log(itemSelectDropOptions)
         dispatch(_act.BreadcrumbShowCountlabel(initial_BredcrumbMsg))
 
@@ -1332,7 +1343,7 @@ const Order = (props) => {
                 });
                 return;
             }
-            
+
             const po_JsonBody = {
                 Customer: division,
                 Supplier: supplier,
