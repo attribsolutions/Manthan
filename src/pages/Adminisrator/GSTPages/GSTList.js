@@ -15,6 +15,7 @@ import GSTMaster from "./GSTMaster";
 import { deleteGSTListId, deleteGSTListId_Success, getGSTList, goButtonForGST_Master_Success } from "../../../store/Administrator/GSTRedux/action";
 import { PageLoadingSpinner, Listloader } from "../../../components/Common/CommonButton";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
+import GSTView from "./GSTView";
 
 const GSTList = () => {
 
@@ -88,6 +89,17 @@ const GSTList = () => {
     }
   }, [GSTGoButton]);
 
+  function viewApprovalBtnFunc(config) {
+    debugger
+    const jsonBody = JSON.stringify({
+      "EffectiveDate": config.rowData.EffectiveDate,
+      "CommonID": config.rowData.CommonID,
+
+    })
+    dispatch(_act.postViewGst({ jsonBody, btnId: `btn-viewApproval-${config.rowData.id}` }));
+
+  }
+
   function editBodyfunc(index) {
 
     const { rowData, btnId } = index
@@ -141,11 +153,14 @@ const GSTList = () => {
             deleteName={"EffectiveDate"}
             pageMode={pageMode}
             editBodyfunc={editBodyfunc}
+            viewApprovalBtnFunc={viewApprovalBtnFunc}
             deleteBodyfunc={deleteBodyfunc}
           />
 
         }
       </div>
+      <GSTView />
+
     </React.Fragment>
   )
 }

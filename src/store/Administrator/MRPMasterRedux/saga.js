@@ -44,6 +44,19 @@ function* goButton_MRPMaster_GenFunc({ data }) {
   } catch (error) { yield put(action.MRPApiErrorAction()) }
 }
 
+
+function* viewMRP_GenFunc({ config }) {
+  try {
+    const response = yield call(apiCall.View_MRP_Details_API, config);
+
+    yield put(action.postViewMrpSuccess(response));
+  } catch (error) { yield put(action.MRPApiErrorAction()) }
+}
+
+
+
+
+
 // delete api MRP Master PageL
 function* delete_MRPMaster_Id_GenFunc({ id }) {
   try {
@@ -55,6 +68,8 @@ function* delete_MRPMaster_Id_GenFunc({ id }) {
 
 function* MRPMasterSaga() {
   yield takeLatest(actionType.SAVE_MRP_MASTER, save_MRPMaster_GenFunc);
+  yield takeLatest(actionType.POST_VIEW_MRP, viewMRP_GenFunc);
+
   yield takeLatest(actionType.GO_BUTTON_FOR_MRP_MASTER, goButton_MRPMaster_GenFunc);
   yield takeLatest(actionType.GET_MRP_LIST, get_MRPMaster_GenFunc);
   yield takeLatest(actionType.DELETE_MRP_LIST, delete_MRPList_Id_GenFunc);

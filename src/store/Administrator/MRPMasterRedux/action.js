@@ -10,10 +10,12 @@ import {
     DELETE_MRP_MASTER_ID,
     DELETE_MRP_MASTER_ID_SUCCESS,
     MRP_API_ERROR_ACTION,
+    POST_VIEW_MRP,
+    POST_VIEW_MRP_SUCCESS,
 } from "./actionTypes";
 
 // MRP Post API
-export const saveMRPMaster = (config={}) => ({
+export const saveMRPMaster = (config = {}) => ({
     type: SAVE_MRP_MASTER,
     config,
 });
@@ -34,6 +36,18 @@ export const GoButtonForMRP_MasterSuccess = (resp) => ({
     payload: resp,
 });
 
+
+
+export const postViewMrp = (config = {}) => ({
+    type: POST_VIEW_MRP,
+    config,
+});
+
+export const postViewMrpSuccess = (resp) => ({
+    type: POST_VIEW_MRP_SUCCESS,
+    payload: resp,
+});
+
 //get listpage api
 export const getMRPList = () => ({
     type: GET_MRP_LIST,
@@ -45,7 +59,7 @@ export const getMRPList_Success = (resp) => ({
 });
 
 //delete action for MRP List Page
-export const deleteMRPList_Id = (config={}) => ({
+export const deleteMRPList_Id = (config = {}) => ({
     type: DELETE_MRP_LIST,
     config,
 });

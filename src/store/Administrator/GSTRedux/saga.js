@@ -35,6 +35,15 @@ function* delete_GSTList_ID_GenFunc({ config }) {
 
 }
 
+function* viewGST_GenFunc({ config }) {
+  try {
+    const response = yield call(apiCall.View_GST_Details_API, config);
+
+    yield put(action.postViewGst_Success(response));
+  } catch (error) { yield put(action.GSTApiErrorAction()) }
+}
+
+
 function* goButton_GST_GenFunc({ data }) {
   const { jsonBody, pathname, btnmode, rowData } = data
   try {
@@ -58,6 +67,7 @@ function* delete_GSTMaster_ID_GenFunc({ id }) {
 
 function* GSTSaga() {
   yield takeLatest(actionType.SAVE_GST_MASTER, save_GSTMaster_GenFunc);
+  yield takeLatest(actionType.POST_VIEW_GST, viewGST_GenFunc);
   yield takeLatest(actionType.GET_GST_LIST, get_GSTList_GenFunc);
   yield takeLatest(actionType.DELETE_GST_LIST_ID, delete_GSTList_ID_GenFunc);
   yield takeLatest(actionType.GO_BUTTON_FOR_GST_MASTER, goButton_GST_GenFunc);

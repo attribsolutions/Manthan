@@ -6,6 +6,8 @@ import {
   GO_BUTTON_FOR_GST_MASTER,
   GO_BUTTON_FOR_GST_MASTER_SUCCESS,
   GST_API_ERROR_ACTION,
+  POST_VIEW_GST,
+  POST_VIEW_GST_SUCCESS,
   SAVE_GST_MASTER,
   SAVE_GST_MASTER_SUCCESS
 } from "./actionType"
@@ -18,7 +20,8 @@ const INIT_STATE = {
   deleteMsgForMaster: { Status: false },
   saveBtnloading: false,
   listBtnLoading: false,
-  GoBtnlistloading: false
+  GoBtnlistloading: false,
+  GSTView: []
 
 }
 
@@ -85,6 +88,20 @@ const GSTReducer = (state = INIT_STATE, action) => {
       return {
         ...state,
         deleteMsgForMaster: action.payload,
+      }
+
+    case POST_VIEW_GST:
+      return {
+        ...state,
+        listBtnLoading: action.config.btnId,
+
+      };
+
+    case POST_VIEW_GST_SUCCESS:
+      return {
+        ...state,
+        GSTView: action.payload,
+        listBtnLoading: false,
       }
 
     case GST_API_ERROR_ACTION:

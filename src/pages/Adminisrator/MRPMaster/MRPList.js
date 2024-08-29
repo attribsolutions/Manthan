@@ -12,10 +12,10 @@ import * as _act from "../../../store/actions";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { deleteMRPList_Id, deleteMRPList_Id_Success, getMRPList, GoButtonForMRP_MasterSuccess } from "../../../store/Administrator/MRPMasterRedux/action";
 import MRPMaster from "./MRPMaster";
-import { Listloader } from "../../../components/Common/CommonButton";
 import { mobileApp_ProductUpdate_Api } from "../../../helpers/backend_helper";
 import { showToastAlert } from "../../../helpers/axios_Config";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
+import MRPView from "./MRPview";
 
 const MRPList = () => {
 
@@ -122,34 +122,43 @@ const MRPList = () => {
     }
   }
 
+  function viewApprovalBtnFunc(config) {
+    debugger
+    const jsonBody = JSON.stringify({
+      "EffectiveDate": config.rowData.EffectiveDate,
+      "CommonID": config.rowData.CommonID,
+
+    })
+    dispatch(_act.postViewMrp({ jsonBody, btnId: `btn-viewApproval-${config.rowData.id}` }));
+
+  }
+
   return (
     <React.Fragment>
       <div className="page-content">
 
         <div className="mt-n1">
           {
-            reducers.listBtnLoading ?
-              <Listloader />
-              :
-              (pageField) ?
-                <CommonPurchaseList
-                  action={action}
-                  reducers={reducers}
-                  showBreadcrumb={false}
-                  MasterModal={MRPMaster}
-                  masterPath={url.MRP}
-                  newBtnPath={url.MRP}
-                  mobaileDeleteApiFinc={mobaileDeleteApiFinc}
-                  ButtonMsgLable={"MRP"}
-                  deleteName={"EffectiveDate"}
-                  pageMode={pageMode}
-                  editBodyfunc={editBodyfunc}
-                  deleteBodyfunc={deleteBodyfunc}
-                />
-                : <Listloader />
+            (pageField) ?
+              <CommonPurchaseList
+                action={action}
+                reducers={reducers}
+                showBreadcrumb={false}
+                MasterModal={MRPMaster}
+                masterPath={url.MRP}
+                newBtnPath={url.MRP}
+                mobaileDeleteApiFinc={mobaileDeleteApiFinc}
+                ButtonMsgLable={"MRP"}
+                deleteName={"EffectiveDate"}
+                pageMode={pageMode}
+                viewApprovalBtnFunc={viewApprovalBtnFunc}
+                editBodyfunc={editBodyfunc}
+                deleteBodyfunc={deleteBodyfunc}
+              />
+              : null
           }
         </div>
-
+        <MRPView />
       </div>
     </React.Fragment>
   )
