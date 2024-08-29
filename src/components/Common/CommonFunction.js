@@ -960,10 +960,17 @@ export function SelectedMonthAndYearName(selectedMonth) {
 };
 
 
+// export function checkRateDropVisibility() {
+//   const partyTypeID =loginPartyTypeID();
+
+//   const settingsArray = loginSystemSetting().MRP_Rate.split(',');
+//   const searchString = loginCompanyID() + "-2" + `-${partyTypeID}`;
+//   return settingsArray.includes(searchString);
+// }
+
 export function checkRateDropVisibility() {
-  const partyTypeID =loginPartyTypeID();
 
   const settingsArray = loginSystemSetting().MRP_Rate.split(',');
-  const searchString = loginCompanyID() + "-2" + `-${partyTypeID}`;
+  const searchString = loginCompanyID() + "-2";
   return settingsArray.includes(searchString);
 }
