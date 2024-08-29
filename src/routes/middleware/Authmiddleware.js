@@ -55,7 +55,7 @@ const Authmiddleware = ({
   useEffect(() => {
     if ((IsLoginFromOutsideLink) && Credentials !== "") {
       localStorage.clear();
-      sessionStorage.clear()
+      sessionStorage.clear();
       if (session.active === false || !(localStorage.getItem("token"))) {
         const [User, password] = Credentials?.split('-') || [];
         const values = {
@@ -115,7 +115,7 @@ const Authmiddleware = ({
           return (
             !loading && userAccess.length > 0 &&
             // <BreadcrumbVertical >
-              <Component {...props} />
+            <Component {...props} />
             // </BreadcrumbVertical>
           )
         }}
