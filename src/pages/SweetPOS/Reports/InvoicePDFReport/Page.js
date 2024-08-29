@@ -43,6 +43,7 @@ const PosInvoiceReport = (data) => {
     doc.line(10, dottedLineY, 10 + lineWidth, dottedLineY); // Draw line
     doc.setLineDash([]); // Empty array for a solid line
     doc.setFont('Cambria', 'normal');
+    let isCoustomeGSTIN = !(data.CustomerGSTIN === "")
     var DetailsStyle = {
         didParseCell: (data1) => {
 
@@ -68,10 +69,12 @@ const PosInvoiceReport = (data) => {
             data1.table.body[5].cells[0].styles.fontStyle = "bold"
             data1.table.body[5].cells[0].styles.fontSize = 9
 
-            data1.table.body[5].cells[0].styles.halign = "center"
+            // data1.table.body[5].cells[0].styles.halign = "center"
             data1.table.body[6].cells[0].styles.fontStyle = "bold"
 
-            data1.table.body[7].cells[0].styles.fontStyle = "bold"
+            if (isCoustomeGSTIN) {
+                data1.table.body[7].cells[0].styles.fontStyle = "bold"
+            }
 
 
 
@@ -250,7 +253,7 @@ const PosInvoiceReport = (data) => {
     };
     doc.autoTable(table.GSTDetails, table.GSTDetailsRow(data, doc), GSTDetailsStyle);
 
-    const GST_Table_Y = doc.previousAutoTable.finalY
+    let GST_Table_Y = doc.previousAutoTable.finalY
 
     doc.setLineDash([]); // Dash pattern: 3 points dash, 3 points gap
     doc.line(10, GST_Table_Y + 6, 10 + lineWidth, GST_Table_Y + 6); // Draw line
@@ -266,20 +269,23 @@ const PosInvoiceReport = (data) => {
 
 
     doc.setFontSize(9)
+    let isDiscount = (totalDiscount !== 0)
 
-    doc.text(`Total Amount:`, 10, GST_Table_Y + 18,)
-    doc.text(`Discount Amount:`, 10, GST_Table_Y + 30,)
-    doc.text(`${Number(totalDiscount).toFixed(2)}`, 215, GST_Table_Y + 30, "right")
-    const totalAmountNum = Number(totalAmount);
-    const totalDiscountNum = Number(totalDiscount);
+    if (totalDiscount !== 0) {
+        doc.text(`Total Amount:`, 10, GST_Table_Y + 18,)
+        doc.text(`Discount Amount:`, 10, GST_Table_Y + 30,)
+        doc.text(`${Number(totalDiscount).toFixed(2)}`, 215, GST_Table_Y + 30, "right")
+        const totalAmountNum = Number(totalAmount);
+        const totalDiscountNum = Number(totalDiscount);
+        const totalSum = totalAmountNum + totalDiscountNum;
+        // Convert the sum to a string with two decimal places
+        const formattedSum = totalSum.toFixed(2);
+        // Add the text to the PDF, aligned to the right
+        doc.text(`${formattedSum}`, 215, GST_Table_Y + 18, { align: "right" });
 
-    const totalSum = totalAmountNum + totalDiscountNum;
-
-    // Convert the sum to a string with two decimal places
-    const formattedSum = totalSum.toFixed(2);
-
-    // Add the text to the PDF, aligned to the right
-    doc.text(`${formattedSum}`, 215, GST_Table_Y + 18, { align: "right" });
+    } else if (totalDiscount === 0) {
+        GST_Table_Y = GST_Table_Y - 24
+    }
 
     doc.setFontSize(12)
     doc.text(`Total Payable:`, 10, GST_Table_Y + 42,)
@@ -339,7 +345,7 @@ const PosInvoiceReport = (data) => {
     doc.line(10, Discription_Table_Y + 5, 10 + lineWidth, Discription_Table_Y + 5); // Draw line
     doc.text(`Cashier: ${data.CashierName}`, 10, Discription_Table_Y + 20,)
     doc.text(`Thank You...!`, 113, Discription_Table_Y + 35, "center")
-    
+
     doc.setProperties({
         title: `InvoiceReport/${data.InvoiceDate}-${data.CustomerName} `
     });

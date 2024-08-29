@@ -28,7 +28,7 @@ export const Discription = [
 
 
 export const ItemRow = (data) => {
-    debugger
+    
     const { InvoiceItems = [] } = data
     let hasHedRow = []
     InvoiceItems.forEach(element => {
@@ -46,7 +46,7 @@ export const ItemRow = (data) => {
 
 
 export const GSTDetailsRow = (data, doc) => {
-    debugger
+    
     const { InvoiceItems = [] } = data
 
     let totalCGST = 0
@@ -75,13 +75,15 @@ export const DetailsRow = (data) => {
         [`------------Tax Invoice---------`],
         [`${data.PartyAddress}`],
         [`GSTIN:${data.PartyGSTIN}`],
-        [`Customer:${data.CustomerName}`],
-        [`Contact:${data.PartyMobileNo}`],
+        [`Customer:${data.CustomerName}   GSTIN:${data.CustomerGSTIN}`],
+        [`Contact:${data.AlternateContactNo}`],
         [`Date:${data.InvoiceDate}   ${data?.CreatedOn?.slice(11)}                   Bill No:${data.FullInvoiceNumber}`],
     ]
+    if (data.CustomerGSTIN === "") {
+        DetailsArray.splice(5, 1);
+    }
     return DetailsArray;
 }
-
 
 
 export const DiscriptionRow = (data) => {
