@@ -164,11 +164,11 @@ const StockEntry = (props) => {
         }
     }, [pageField])
 
-    useEffect(async() => {
+    useEffect(async () => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(saveStockEntrySuccess({ Status: false }))
             setTableArr([])
-            
+
             if (pageMode === "other") {
                 customAlert({
                     Type: 1,

@@ -237,6 +237,16 @@ export const loginPartyTypeName = () => { //+++++++++++++++++++++ Session Compan
   return false;
 };
 
+export const loginPartyTypeID = () => {//+++++++++++++++++++++ Session loginPartyID Id+++++++++++++++++++++++++++++++
+
+  try {
+    return loginUserDetails().PartyTypeID;
+  } catch (e) {
+    CommonConsole("Common login PartyTypeID Func  Error");
+  }
+  return 0;
+};
+
 
 export const loginUserIsFranchisesRole = () => { //+++++++++++++++++++++ IsFranchises Company Id+++++++++++++++++++++++++++++
 
@@ -951,8 +961,9 @@ export function SelectedMonthAndYearName(selectedMonth) {
 
 
 export function checkRateDropVisibility() {
+  const partyTypeID =loginPartyTypeID();
 
   const settingsArray = loginSystemSetting().MRP_Rate.split(',');
-  const searchString = loginCompanyID() + "-2";
+  const searchString = loginCompanyID() + "-2" + `-${partyTypeID}`;
   return settingsArray.includes(searchString);
 }

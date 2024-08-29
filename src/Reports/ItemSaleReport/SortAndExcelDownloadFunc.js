@@ -247,6 +247,36 @@ export const SortButtonFunc = (props) => {
             sequence: 20,
             controlTypeName: "Number",
         },
+        {
+            text: 'MobileNo',
+            dataField: 'MobileNo',
+            selectValue: [allLabelWithBlank],
+            checkboxState: showAlsoSelect.some(item => item.value === 9),
+            sort: true,
+            // toFixed: 2,
+            sequence: 21,
+            controlTypeName: "Number",
+        },
+        {
+            text: 'Cashier',
+            dataField: 'CashierName',
+            selectValue: [allLabelWithBlank],
+            checkboxState: showAlsoSelect.some(item => item.value === 10),
+            sort: true,
+            toFixed: 2,
+            sequence: 22,
+            controlTypeName: "Text",
+        },
+        {
+            text: 'GST',
+            dataField: 'GSTAmount',
+            selectValue: [allLabelWithBlank],
+            checkboxState: showAlsoSelect.some(item => item.value === 11),
+            sort: true,
+            toFixed: 2,
+            sequence: 23,
+            controlTypeName: "Number",
+        },
 
     ];
 
