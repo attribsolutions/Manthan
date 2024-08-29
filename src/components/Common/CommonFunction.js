@@ -249,7 +249,7 @@ export const loginPartyTypeID = () => {//+++++++++++++++++++++ Session loginPart
 
 
 export const loginUserIsFranchisesRole = () => { //+++++++++++++++++++++ IsFranchises Company Id+++++++++++++++++++++++++++++
-debugger
+
   try {
     const detail = loginUserDetails();
     return (detail.IsFranchises === 1);
