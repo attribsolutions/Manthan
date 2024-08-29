@@ -118,7 +118,7 @@ const Header = props => {
 
 
                 <h5> FoodERP 2.0 सिस्टम वापरकर्त्यांसाठी सूचना :</h5>
-              
+
                 FoodERP 2.0 प्रणाली गुरुवार, 16 मे 2024 रोजी दुपारी 1:00 ते 2:00 PM (IST) या वेळेत अनुपलब्ध असेल. यावेळी, सिस्टमची कार्यक्षमता सुनिश्चित करण्यासाठी आवश्यक देखभाल केली जाईल. यामुळे होणाऱ्या कोणत्याही गैरसोयीबद्दल आम्ही दिलगीर आहोत.
                 आपल्या सहकार्यासाठी धन्यवाद.<br />
                 टीम चितळे बंधू<br /><br />
@@ -203,7 +203,7 @@ const Header = props => {
                 aria-labelledby="page-header-search-dropdown"
               >
                 <div className=" d-flex position-relative">
-                  <MySearch />
+                  <MySearch isButton={true} />
                 </div>
 
               </div>

@@ -50,7 +50,7 @@ export const MainSearchBox = () => {
               itemDiv.innerHTML += `<input type='hidden' id='${index}' value='${item.Name}'>`;
 
               itemDiv.addEventListener('click', function (e) {
-                
+
                 inp.value = this.getElementsByTagName('input')[0].value;
                 const inputId = this.getElementsByTagName('input')[0].id;
                 const actualPagePath = filteredItems[inputId].ActualPagePath;
@@ -125,7 +125,7 @@ export const MainSearchBox = () => {
     <React.Fragment>
       <div className="app-search d-none d-lg-block " style={{ marginTop: "-3px" }} autocomplete="off">
         <div className="position-relative">
-          <MySearch />
+          <MySearch isButton={true} />
         </div>
       </div>
 

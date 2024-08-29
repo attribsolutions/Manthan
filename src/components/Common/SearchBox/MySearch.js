@@ -21,7 +21,7 @@ export const defaultSearch = (defaultid,) => {
     });
 
     if (found) {
-        
+
         document.getElementById("myInput").value = found.text
         retn = { defaultSearch: found.text }
     }
@@ -30,7 +30,7 @@ export const defaultSearch = (defaultid,) => {
 }
 
 
-export const MySearch = () => {//compont start
+export const MySearch = (props) => {//compont start
     const [search, setSearch] = useState("");
 
     function handleClick(e) {
@@ -64,11 +64,11 @@ export const MySearch = () => {//compont start
                 autoComplete="off"
                 autoFocus={true}
             />
-            <button className="btn btn-primary"
+            {props.isButton && <button className="btn btn-primary"
                 style={{ cursor: "context-menu" }}
                 type="button">
                 <i className="bx bx-search-alt align-middle" />
-            </button>
+            </button>}
 
         </React.Fragment>
     );

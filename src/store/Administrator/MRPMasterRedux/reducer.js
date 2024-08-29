@@ -9,6 +9,8 @@ import {
     SAVE_MRP_MASTER,
     GET_MRP_LIST,
     MRP_API_ERROR_ACTION,
+    POST_VIEW_MRP,
+    POST_VIEW_MRP_SUCCESS,
 } from "./actionTypes";
 
 const INIT_STATE = {
@@ -19,6 +21,7 @@ const INIT_STATE = {
     deleteIdForMRPMaster: { Status: false },
     saveBtnloading: false,
     listBtnLoading: false,
+    MRPView: []
 };
 
 const MRPMasterReducer = (state = INIT_STATE, action) => {
@@ -53,6 +56,25 @@ const MRPMasterReducer = (state = INIT_STATE, action) => {
                 listBtnLoading: false,
             };
 
+
+
+        case POST_VIEW_MRP:
+            return {
+                ...state,
+                MRPView: [],
+                listBtnLoading: action.config.btnId,
+            };
+
+        // Go Button post api
+        case POST_VIEW_MRP_SUCCESS:
+            return {
+                ...state,
+                MRPView: action.payload,
+                listBtnLoading: false,
+            };
+
+
+
         // GET api
 
         case GET_MRP_LIST:
@@ -83,7 +105,7 @@ const MRPMasterReducer = (state = INIT_STATE, action) => {
                 deleteIdForMRPMaster: action.payload,
             };
 
-            case MRP_API_ERROR_ACTION:
+        case MRP_API_ERROR_ACTION:
             return {
                 ...state,
                 saveBtnloading: false,

@@ -290,6 +290,12 @@ export const MRPMaster_Delete_API_For_List = ({ deleteId }) => del(`${url.DELETE
 export const MRPMaster_goButton_API = (data) => post(url.GO_BUTTON_POST_API_FOR_MRP_MASTER, data)// go button postapi
 export const MRPMaster_Delete_API_For_Master = (id) => del(`${url.MRP_MASTER_LIST}/${id}`)// delete api MRP Master Page
 
+export const View_MRP_Details_API = ({ jsonBody }) => post(url.VIEW_MRP_DETAILS_API, jsonBody)// go button postapi
+
+
+
+
+
 // Margin Master
 export const GetMarginList_For_Listpage = () => get(url.MARGIN_MASTER_LIST)// get List
 export const Post_MarginMaster_API = ({ jsonBody }) => post(url.MARGIN_MASTER_LIST, jsonBody)// post api
@@ -325,6 +331,10 @@ export const GetGSTList_For_Listpage = () => get(url.GST_LIST_API)// get List
 export const delete_GSTList_API = ({ deleteId }) => del(`${url.DELETE_API_FOR_LIST_GST_PAGE}/${deleteId}`)// Delete api
 export const GoButton_Post_API_For_GSTMaster = (data) => post(url.GO_BUTTON_POST_API_FOR_GST_MASTER, data)// go button postapi
 export const GST_MasterPage_delete_API = (id) => del(`${url.GST_LIST_API}/${id}`)// delete api
+
+export const View_GST_Details_API = ({ jsonBody }) => post(url.VIEW_GST_DETAILS_API, jsonBody)// go button postapi
+
+
 
 // PartySubParty API
 export const PartySubParty_Get_API = () => get(`${url.PARTY_SUB_PARTY_LIST}`)// get list api
@@ -883,7 +893,7 @@ export const Post_POSRoleAccess_API = ({ jsonBody }) => post(url.SWEET_POS_API, 
 export const Pos_Invoice_Singel_Get_for_Report_Api = ({ editId }) => get(`${url.POS_INVOICE_PRINT}/${editId}/P`)// delete api
 
 //Sweet POS Rate master
-export const POS_RateList_Get_Api = ({ jsonBody }) => post(url.SWEET_POS_RATE_LIST_API,jsonBody) // get api
+export const POS_RateList_Get_Api = ({ jsonBody }) => post(url.SWEET_POS_RATE_LIST_API, jsonBody) // get api
 export const POS_RateMaster_Post_Api = ({ jsonBody }) => post(url.SWEET_POS_RATE_SAVE_API, jsonBody)// post api
 
 ///POS USER REGESTRATION
