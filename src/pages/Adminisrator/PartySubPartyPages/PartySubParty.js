@@ -245,14 +245,16 @@ const PartySubParty = (props) => {
         }
 
     }, [PartySubParty]);
-
+    debugger
     const PartyDropdown_Options = SSDD_List.map(i => ({
         value: i.id,
-        label: i.Name
+        label: i.Name,
+        IsVendor: i.PartyType.IsVendor
     }));
 
     const RetailerDropdown_Options = RetailerList.map(i => ({
         value: i.id,
+        IsVendor: i.PartyType.IsVendor,
         label: i.Name,
         Creditlimit: null,
         Route: null
@@ -261,6 +263,7 @@ const PartySubParty = (props) => {
     RetailerDropdown_Options.unshift(allLabelWithBlank)
 
     function handllerParty(e) {
+
         dispatch(getPartySubParty_For_party_dropdown(e.value));
         setState((i) => {
             const a = { ...i }
@@ -295,6 +298,7 @@ const PartySubParty = (props) => {
     }
 
     function handllerSub_Party(e) {
+
         setState((i) => {
             const a = { ...i }
             a.values.Subparty = e;
@@ -314,6 +318,7 @@ const PartySubParty = (props) => {
 
     // Role Table Validation
     function AddPartyHandler() {
+
         let AllRetailerArray = []
         const find = partyTableArr.find((element) => {
             return element.value === values.Subparty.value
