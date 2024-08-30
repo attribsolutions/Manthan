@@ -189,10 +189,18 @@ const OrderList = () => {
             makeBtnName = "Make GRN"
         }
         else if (subPageMode === url.ORDER_LIST_2) {
-            page_Id = pageId.ORDER_LIST_2
-            masterPath = url.ORDER_2;
-            newBtnPath = url.ORDER_2;
-            showAprovalBtn = true
+            const IsAuthorisedURL = _cfunc.IsAuthorisedURL({ subPageMode: history.location.pathname, URL: url.ORDER_LIST_2 })
+            if (IsAuthorisedURL) {
+                page_Id = pageId.ORDER_LIST_2
+                masterPath = url.POS_ORDER_IN_POS;
+                newBtnPath = url.POS_ORDER_IN_POS;
+                showAprovalBtn = true
+            } else {
+                page_Id = pageId.ORDER_LIST_2
+                masterPath = url.ORDER_2;
+                newBtnPath = url.ORDER_2;
+                showAprovalBtn = true
+            }
         }
         else if (subPageMode === url.IB_ORDER_PO_LIST) {
             page_Id = pageId.IB_ORDER_PO_LIST

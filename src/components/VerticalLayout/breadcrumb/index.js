@@ -6,6 +6,9 @@ import ExcelDownloadButton from "./ExcelDownloadButton";
 import DeletedOrNonDeletedButton from "./DeletedOrNonDeletedButton";
 import HeaderTitleNewBtn from "./HeaderTitleNewBtn";
 import CountLabelComp from "./CountLabelComp";
+import { MySearch } from "../../Common/SearchBox/MySearch";
+import { Col, Row } from "reactstrap";
+import { IsLoginFromOutsideLink } from "../../Common/CommonFunction";
 
 const BreadcrumbVertical = () => {
 
@@ -24,6 +27,22 @@ const BreadcrumbVertical = () => {
         </div>
 
         <div className=" d-flex gap-2 justify-content-end  align-items-center"  >
+          {IsLoginFromOutsideLink(history.location.pathname) && <Col sm={6}>
+            <Row>
+              <Col sm={12}>
+                <div className="input-group">
+                  <MySearch className="form-control" isButton={false} />
+                  <button
+                    className="btn btn-primary"
+                    type="button"
+                    style={{ borderRadius: "4px", cursor: "default" }}
+                  >
+                    <i className="bx bx-search-alt align-middle" />
+                  </button>
+                </div>
+              </Col>
+            </Row>
+          </Col>}
           <ExcelDownloadButton />
           <DeletedOrNonDeletedButton />
           <div className="align-items-center">

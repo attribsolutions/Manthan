@@ -32,7 +32,6 @@ const Authmiddleware = ({
 
   const IsLoginFromOutsideLink = ActualPath.split(':')[1] === "Credentials" && rest.history.location.pathname.includes('-');
 
-
   const {
     loginSuccess,
     divisionDropdown_redux = [],
@@ -47,7 +46,6 @@ const Authmiddleware = ({
     loading: state.Login.loading,
     userAccess: state.Login.RoleAccessUpdateData,
 
-
   })
   );
 
@@ -55,7 +53,7 @@ const Authmiddleware = ({
   useEffect(() => {
     if ((IsLoginFromOutsideLink) && Credentials !== "") {
       localStorage.clear();
-      sessionStorage.clear()
+      sessionStorage.clear();
       if (session.active === false || !(localStorage.getItem("token"))) {
         const [User, password] = Credentials?.split('-') || [];
         const values = {
@@ -114,9 +112,14 @@ const Authmiddleware = ({
           }
           return (
             !loading && userAccess.length > 0 &&
-            // <BreadcrumbVertical >
-              <Component {...props} />
-            // </BreadcrumbVertical>
+            (
+              <div>
+                <BreadcrumbVertical />
+                <Component {...props} />
+              </div>
+            )
+
+
           )
         }}
       />
