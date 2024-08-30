@@ -318,6 +318,9 @@ export const IsSweetAndSnacksCompany = () => { //+++++++++++++++++++++ Company c
   return false;
 };
 
+export const IsLoginFromOutsideLink = (Path) => {
+  return Path.includes('-') && Path.includes('AuthLink')
+}
 
 
 
