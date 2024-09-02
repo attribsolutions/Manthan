@@ -213,7 +213,7 @@ const Order = (props) => {
     const hasShowModal = props.hasOwnProperty(mode.editValue)
 
     useLayoutEffect(() => {
-    
+
         dispatch(_act.commonPageFieldSuccess(null));
         dispatch(_act.GoButton_For_Order_AddSuccess(null));
         dispatch(_act.commonPageField(page_id));
@@ -326,18 +326,19 @@ const Order = (props) => {
                     return ele
                 });
 
-                orderItems.sort((a, b) => {
-                    if (a.Quantity === null && b.Quantity !== null) {
-                        return 1;
-                    } else if (a.Quantity !== null && b.Quantity === null) {
-                        return -1;
-                    } else if (a.Quantity === null && b.Quantity === null) {
-                        return 0;
-                    } else {
-                        return a.Quantity - b.Quantity;
-                    }
-                });
-
+                if (!_cfunc.loginUserIsFranchisesRole()) {
+                    orderItems.sort((a, b) => {
+                        if (a.Quantity === null && b.Quantity !== null) {
+                            return 1;
+                        } else if (a.Quantity !== null && b.Quantity === null) {
+                            return -1;
+                        } else if (a.Quantity === null && b.Quantity === null) {
+                            return 0;
+                        } else {
+                            return a.Quantity - b.Quantity;
+                        }
+                    });
+                }
                 setOrderItemTable(orderItems)
                 setTermsAndConTable(termsAndCondition)
 
@@ -574,7 +575,7 @@ const Order = (props) => {
             dataField: "GroupName",
             text: "Group",
             classes: 'table-cursor-pointer',
-            sort: true,
+            // sort: true,
             attrs: (cell, row, rowIndex, colIndex) => ({ 'data-label': "GroupName" }),
             headerStyle: () => {
                 return { minWidth: '100px', textAlign: 'center' };
@@ -584,7 +585,7 @@ const Order = (props) => {
             dataField: "SubGroupName",
             text: "SubGroup",
             classes: 'table-cursor-pointer',
-            sort: true,
+            // sort: true,
             attrs: (cell, row, rowIndex, colIndex) => ({ 'data-label': "SubGroupName" }),
             headerStyle: () => {
                 return { minWidth: '100px', textAlign: 'center' };
@@ -596,7 +597,7 @@ const Order = (props) => {
             text: "Item Name",
             classes: 'table-cursor-pointer',
             attrs: (cell, row, rowIndex, colIndex) => ({ 'data-label': "ItemName", "sticky-col": "true" }),
-            sort: true,
+            // sort: true,
             headerStyle: () => {
                 return { minWidth: '200px', textAlign: 'center' };
             },
@@ -627,7 +628,7 @@ const Order = (props) => {
             classes: 'table-cursor-pointer',
             align: () => "right",
             attrs: (cell, row, rowIndex, colIndex) => ({ 'data-label': "StockQuantity" }),
-            sort: true,
+            // sort: true,
             headerStyle: () => {
                 return { minWidth: '100px', textAlign: 'center' };
             },
