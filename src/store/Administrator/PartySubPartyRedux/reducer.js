@@ -1,4 +1,4 @@
-import { UPDATE_PARTY_SUB_PARTY } from "./actionType";
+import { GET_PARTY_SUB_PARTY_FOR_PARTY_DROPDOWN, PARTY_SUB_PARTY_API_ERROR_ACTION, UPDATE_PARTY_SUB_PARTY } from "./actionType";
 import { SAVE_PARTY_SUB_PARTY } from "./actionType";
 import {
   DELETE_ID_FOR_MASTER_PAGE_SUCCESS,
@@ -20,6 +20,7 @@ const INIT_STATE = {
   PartySubParty: [],
   deleteState: [],
   saveBtnloading: false,
+  PartySubPartyListLoading:false,
 }
 
 const PartySubPartyReducer = (state = INIT_STATE, action) => {
@@ -69,16 +70,29 @@ const PartySubPartyReducer = (state = INIT_STATE, action) => {
         ...state,
         deleteMsg: action.payload,
       }
+    case GET_PARTY_SUB_PARTY_FOR_PARTY_DROPDOWN:
+      return {
+        ...state,
+        PartySubPartyListLoading:true,
+      }
     case GET_PARTY_SUB_PARTY_FOR_PARTY_DROPDOWN_SUCCESS:
       return {
         ...state,
         PartySubParty: action.payload,
+        PartySubPartyListLoading:false,
       }
     case DELETE_ID_FOR_MASTER_PAGE_SUCCESS:
       return {
         ...state,
         deleteState: action.payload,
       }
+
+      case PARTY_SUB_PARTY_API_ERROR_ACTION:
+        return {
+            ...state,
+            saveBtnloading: false,
+            PartySubPartyListLoading: false
+        };
     default:
       return state
   }

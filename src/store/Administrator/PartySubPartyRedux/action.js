@@ -12,7 +12,8 @@ import {
   UPDATE_PARTY_SUB_PARTY,
   UPDATE_PARTY_SUB_PARTY_SUCCESS,
   DELETE_ID_FOR_MASTER_PAGE,
-  DELETE_ID_FOR_MASTER_PAGE_SUCCESS
+  DELETE_ID_FOR_MASTER_PAGE_SUCCESS,
+  PARTY_SUB_PARTY_API_ERROR_ACTION
 } from "./actionType";
 
 
@@ -85,3 +86,7 @@ export const deleteIDForMasterPageSuccess = (resp) => ({                       /
   type: DELETE_ID_FOR_MASTER_PAGE_SUCCESS,
   payload: resp
 });
+
+export const PartySubPartyErrorAction = () => ({
+  type: PARTY_SUB_PARTY_API_ERROR_ACTION,
+})

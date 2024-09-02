@@ -22,6 +22,7 @@ import {
     updatePartySubParty,
     updatePartySubPartySuccess,
     getPartySubParty_For_party_dropdown,
+    getPartySubParty_For_party_dropdownSuccess,
 } from "../../../store/Administrator/PartySubPartyRedux/action";
 import {
     BreadcrumbShowCountlabel,
@@ -30,7 +31,7 @@ import {
     commonPageFieldSuccess
 } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
-import { SaveButton } from "../../../components/Common/CommonButton";
+import { PageLoadingSpinner, SaveButton } from "../../../components/Common/CommonButton";
 import {
     comAddPageFieldFunc,
     formValid,
@@ -47,7 +48,7 @@ import {
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
-import { Retailer_List, SSDD_List_under_Company, } from "../../../store/CommonAPI/SupplierRedux/actions";
+import { Retailer_List, Retailer_List_Success, SSDD_List_under_Company, } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { Tbody, Thead } from "react-super-responsive-table";
 import { globalTableSearchProps } from "../../../components/Common/SearchBox/MySearch";
@@ -56,6 +57,7 @@ import { mobileApp_RetailerUpdate_Api } from "../../../helpers/backend_helper";
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 import { allLabelWithBlank } from "../../../components/Common/CommonErrorMsg/HarderCodeData";
 import { showToastAlert } from "../../../helpers/axios_Config";
+import { C_Select } from "../../../CustomValidateForm";
 
 const PartySubParty = (props) => {
 
@@ -68,7 +70,8 @@ const PartySubParty = (props) => {
         Subparty: "",
         IsRetailerTransfer: false,
         SSDD: "",
-        Retailer: ""
+        Retailer: "",
+        ShowVendor: false
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
@@ -83,8 +86,7 @@ const PartySubParty = (props) => {
 
     const [Array, setArray] = useState([]);
 
-
-
+    const [allrecords, setAllRecords] = useState([]);
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const { postMsg,
@@ -92,17 +94,21 @@ const PartySubParty = (props) => {
         RetailerList,
         updateMsg,
         pageField,
-        PartySubParty,
+        PartySubPartyApiData,
         saveBtnloading,
+        SSDD_ListLoading,
+        PartySubPartyListLoading,
         userAccess } = useSelector((state) => ({
             saveBtnloading: state.PartySubPartyReducer.saveBtnloading,
             postMsg: state.PartySubPartyReducer.postMsg,
             SSDD_List: state.CommonAPI_Reducer.SSDD_List,
+            SSDD_ListLoading: state.CommonAPI_Reducer.SSDD_ListLoading,
             RetailerList: state.CommonAPI_Reducer.RetailerList,
             updateMsg: state.PartySubPartyReducer.updateMsg,
             pageField: state.CommonPageFieldReducer.pageField,
             userAccess: state.Login.RoleAccessUpdateData,
-            PartySubParty: state.PartySubPartyReducer.PartySubParty,
+            PartySubPartyApiData: state.PartySubPartyReducer.PartySubParty,
+            PartySubPartyListLoading: state.PartySubPartyReducer.PartySubPartyListLoading,
         }));
 
     useEffect(() => {
@@ -110,7 +116,10 @@ const PartySubParty = (props) => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
         dispatch(SSDD_List_under_Company());
-
+        return () => {
+            dispatch(getPartySubParty_For_party_dropdownSuccess([]));
+            dispatch(Retailer_List_Success([]))
+        }
     }, []);
 
     const values = { ...state.values }
@@ -231,39 +240,71 @@ const PartySubParty = (props) => {
         }
     }, [pageField])
 
+
     useEffect(() => {
-
         if (values.PartyName.value > 0) {
-            const newArr = (PartySubParty.map(i => ({
-                value: i.SubParty,
-                label: i.SubPartyName,
-                IsVendor: i.IsVendor,
-                Creditlimit: i.Creditlimit,
-                Route: i.Route
-            })))
-            setPartyTableArr(newArr)
-        }
+            let newArr = [];
 
-    }, [PartySubParty]);
-    debugger
+            if (PartySubPartyApiData.length > 0) {
+                newArr = PartySubPartyApiData.map(i => ({
+                    value: i.SubParty,
+                    label: i.SubPartyName,
+                    IsVendor: i.IsVendor,
+                    Creditlimit: i.Creditlimit,
+                    Route: i.Route,
+                    PartyTypeName: i.PartyTypeName
+                }));
+
+
+                // Use a functional update to ensure correct state update
+                setAllRecords(prevRecords => {
+                    const updatedRecords = [...newArr, ...prevRecords];
+                    // Filter based on ShowVendor
+                    const filteredArr = values.ShowVendor ? updatedRecords : updatedRecords.filter(i => !i.IsVendor);
+                    setPartyTableArr(filteredArr);
+                    return updatedRecords;
+                });
+            } else {
+                const filteredArr = values.ShowVendor ? allrecords : partyTableArr.filter(i => !i.IsVendor);
+                setPartyTableArr(filteredArr);
+            }
+        }
+    }, [PartySubPartyApiData, values.PartyName.value, values.ShowVendor]);
+
     const PartyDropdown_Options = SSDD_List.map(i => ({
         value: i.id,
         label: i.Name,
-        IsVendor: i.PartyType.IsVendor
+        IsVendor: i.PartyType.IsVendor,
+        PartyTypeName: i.PartyType.Name
     }));
+
+    const nonVendorParty_Options = SSDD_List
+        .filter(i => !(i.PartyType.IsVendor)) // Filter out parties where IsVendor is false
+        .map(i => ({
+            value: i.id,
+            label: i.Name,
+            IsVendor: i.PartyType.IsVendor,
+            PartyTypeName: i.PartyType.Name
+        }));
+
 
     const RetailerDropdown_Options = RetailerList.map(i => ({
         value: i.id,
-        IsVendor: i.PartyType.IsVendor,
         label: i.Name,
         Creditlimit: null,
-        Route: null
+        Route: null,
+        IsVendor: i.PartyType.IsVendor,
+        PartyTypeName: i.PartyType.Name
     }));
 
     RetailerDropdown_Options.unshift(allLabelWithBlank)
 
     function handllerParty(e) {
-
+        dispatch(getPartySubParty_For_party_dropdownSuccess([]));
+        dispatch(Retailer_List_Success([]))
+        setAllRecords([])
+        setPartyTableArr([])
+        setTableRow([])
         dispatch(getPartySubParty_For_party_dropdown(e.value));
         setState((i) => {
             const a = { ...i }
@@ -277,6 +318,8 @@ const PartySubParty = (props) => {
     }
 
     function IsRetailerTransfer(e) {
+        dispatch(getPartySubParty_For_party_dropdownSuccess([]));
+
         setState((i) => {
             const a = { ...i }
             a.values.IsRetailerTransfer = e.target.checked;
@@ -298,6 +341,7 @@ const PartySubParty = (props) => {
     }
 
     function handllerSub_Party(e) {
+        dispatch(getPartySubParty_For_party_dropdownSuccess([]));
 
         setState((i) => {
             const a = { ...i }
@@ -308,6 +352,8 @@ const PartySubParty = (props) => {
     }
 
     function handller_SSDD(e) {
+        dispatch(getPartySubParty_For_party_dropdownSuccess([]));
+        dispatch(Retailer_List_Success([]))
         const jsonBody = JSON.stringify({
             Type: 1,
             PartyID: e.value,
@@ -319,12 +365,22 @@ const PartySubParty = (props) => {
     // Role Table Validation
     function AddPartyHandler() {
 
+        dispatch(getPartySubParty_For_party_dropdownSuccess([]));
         let AllRetailerArray = []
+        if (values.Subparty && values.Subparty.IsVendor) {
+            setState((i) => {
+                const a = { ...i };
+                a.values.ShowVendor = true;
+                return a;
+            });
+        }
+
         const find = partyTableArr.find((element) => {
             return element.value === values.Subparty.value
         });
 
         if (values.Subparty.value === "") {
+
             AllRetailerArray = RetailerDropdown_Options.filter(element => {
                 element["isNewAdded"] = true
                 return (element.value !== "") && (!partyTableArr.some(item => item.value === element.value));
@@ -347,15 +403,20 @@ const PartySubParty = (props) => {
         else if (find === undefined) {
             values.Subparty["isNewAdded"] = true
             if (values.Subparty.value === "") {
+
                 if (AllRetailerArray.length <= 0) {
                     return customAlert({
                         Type: 3,
                         Message: alertMessages.partyAlreadyExist,
                     })
                 }
-                setPartyTableArr([...partyTableArr, ...AllRetailerArray]);
+
+                setPartyTableArr([...AllRetailerArray, ...partyTableArr]);
+                setAllRecords(prevState => [...AllRetailerArray, ...prevState])
             } else {
-                setPartyTableArr([...partyTableArr, values.Subparty]);
+
+                setPartyTableArr([values.Subparty, ...partyTableArr])
+                setAllRecords(prevState => [values.Subparty, ...prevState])
             }
 
             setState((i) => {
@@ -370,14 +431,20 @@ const PartySubParty = (props) => {
                 Type: 3,
                 Message: alertMessages.partyAlreadyExist,
             })
+            return
         }
     }
 
     const onDeleteHandeler = (id) => {
-        var filerData = partyTableArr.filter((index) => {
+
+        var filerPartyTableArr = partyTableArr.filter((index) => {
             return !(index.value === id);
         });
-        setPartyTableArr(filerData)
+        var filerAllRecords = allrecords.filter((index) => {
+            return !(index.value === id);
+        });
+        setAllRecords(filerAllRecords)
+        setPartyTableArr(filerPartyTableArr)
     };
 
     globalTableSearchProps({
@@ -387,13 +454,13 @@ const PartySubParty = (props) => {
     });
 
     const filterdItemWise_tableData = useMemo(() => {
-
         return partyTableArr.filter((item) => {
             return (
                 item.label.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                String(item.value).toLowerCase().includes(searchQuery.toLowerCase())
+                String(item.value).toLowerCase().includes(searchQuery.toLowerCase()) ||
+                (item.PartyTypeName && item.PartyTypeName.toLowerCase().includes(searchQuery.toLowerCase()))
             );
-        })
+        });
     }, [searchQuery, partyTableArr]);
 
     useEffect(() => {
@@ -402,6 +469,7 @@ const PartySubParty = (props) => {
             return (
                 <tr>
                     <td>{info.label}</td>
+                    <td>{info.PartyTypeName}</td>
                     <td>
                         <Button
                             className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
@@ -448,13 +516,10 @@ const PartySubParty = (props) => {
 
     const SaveHandler = async (vent) => {
 
-        // event.preventDefault();
-        // const btnId = event.target.id;
-
         try {
             if (formValid(state, setState)) {
                 btnIsDissablefunc({ state: true })
-                const arr = partyTableArr.map(i => {
+                const arr = allrecords.map(i => {
 
                     const normal = {
                         Party: values.PartyName.value,
@@ -508,6 +573,7 @@ const PartySubParty = (props) => {
         return (
             <React.Fragment>
                 <div className="page-content" >
+                    {PartySubPartyListLoading && <PageLoadingSpinner isLoading={PartySubPartyListLoading} />}
                     <Container fluid>
                         <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
 
@@ -519,153 +585,178 @@ const PartySubParty = (props) => {
 
                             <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
                                 <form onSubmit={SaveHandler} noValidate>
-                                    <Row className="">
-                                        <Col md={12}>
-                                            <Card>
-                                                <CardBody className="c_card_body">
-                                                    <Row className="mb-3">
-                                                        <Col sm="4">
-                                                            <FormGroup className="mb-1">
-                                                                <Label htmlFor="validationCustom01">{fieldLabel.PartyName} </Label>
-                                                                <Col sm={12}>
-                                                                    <Select
-                                                                        name="PartyName"
-                                                                        value={values.PartyName}
-                                                                        isSearchable={true}
-                                                                        autoFocus={true}
-                                                                        className="react-dropdown"
-                                                                        classNamePrefix="dropdown"
-                                                                        options={PartyDropdown_Options}
-                                                                        onChange={(hasSelect, evn) => {
-                                                                            onChangeSelect({ hasSelect, evn, state, setState, })
-                                                                            handllerParty(hasSelect)
-                                                                        }}
-                                                                        styles={{
-                                                                            menu: provided => ({ ...provided, zIndex: 2 })
-                                                                        }}
-                                                                    />
-                                                                    {isError.PartyName.length > 0 && (
-                                                                        <span className="text-danger f-8"><small>{isError.PartyName}</small></span>
-                                                                    )}
-                                                                </Col>
-                                                            </FormGroup>
+                                    <Card>
+                                        <CardBody className="c_card_body">
+                                            <Row className="mb-3">
+                                                <Col sm="4">
+                                                    <FormGroup className="mb-1">
+                                                        <Label htmlFor="validationCustom01">{fieldLabel.PartyName} </Label>
+                                                        <Col sm={12}>
+                                                            <C_Select
+                                                                name="PartyName"
+                                                                value={values.PartyName}
+                                                                isSearchable={true}
+                                                                autoFocus={true}
+                                                                isLoading={SSDD_ListLoading}
+                                                                className="react-dropdown"
+                                                                classNamePrefix="dropdown"
+                                                                options={nonVendorParty_Options}
+                                                                onChange={(hasSelect, evn) => {
+                                                                    onChangeSelect({ hasSelect, evn, state, setState, })
+                                                                    handllerParty(hasSelect)
+                                                                }}
+                                                                styles={{
+                                                                    menu: provided => ({ ...provided, zIndex: 2 })
+                                                                }}
+                                                            />
+                                                            {isError.PartyName.length > 0 && (
+                                                                <span className="text-danger f-8"><small>{isError.PartyName}</small></span>
+                                                            )}
                                                         </Col>
+                                                    </FormGroup>
+                                                </Col>
 
-                                                        <Col md={1}></Col>
-                                                        <FormGroup className="mt-4 col col-sm-5">
-                                                            <Row className="justify-content-md-left">
-                                                                <Label htmlFor="horizontal-firstname-input"
-                                                                    className="col-sm-5 col-form-label">{fieldLabel.IsRetailerTransfer}</Label>
-                                                                <Col md={2} style={{ marginTop: '9px' }} >
-                                                                    <div className="form-check form-switch form-switch-md ">
-                                                                        <Input type="checkbox" className="form-check-input"
-                                                                            checked={values.IsRetailerTransfer}
-                                                                            name="IsRetailerTransfer"
-                                                                            onChange={(e) => {
-                                                                                IsRetailerTransfer(e)
-                                                                            }}
-                                                                        />
-                                                                    </div>
-                                                                </Col>
-                                                            </Row>
-                                                        </FormGroup>
-                                                    </Row>
+                                                <Col md={1}></Col>
+                                                <FormGroup className="mt-4 col col-sm-5">
+                                                    <Row className="justify-content-md-left">
+                                                        <Label htmlFor="horizontal-firstname-input"
+                                                            className="col-sm-5 col-form-label">{fieldLabel.IsRetailerTransfer}</Label>
+                                                        <Col md={2} style={{ marginTop: '9px' }} >
+                                                            <div className="form-check form-switch form-switch-md ">
+                                                                <Input type="checkbox" className="form-check-input"
+                                                                    checked={values.IsRetailerTransfer}
+                                                                    name="IsRetailerTransfer"
+                                                                    onChange={(e) => {
+                                                                        IsRetailerTransfer(e);
 
-                                                    {(values.IsRetailerTransfer) ?
-                                                        <Row className="mb-3">
-                                                            <Col sm="4" >
-                                                                <FormGroup>
-                                                                    <Label htmlFor="validationCustom01"> {fieldLabel.SSDD}</Label>
-                                                                    <Select
-                                                                        name="SSDD"
-                                                                        value={values.SSDD}
-                                                                        isSearchable={true}
-                                                                        className="react-dropdown"
-                                                                        classNamePrefix="dropdown"
-                                                                        options={PartyDropdown_Options}
-                                                                        onChange={(hasSelect, evn) => {
-                                                                            onChangeSelect({ hasSelect, evn, state, setState, })
-                                                                            handller_SSDD(hasSelect)
-                                                                        }}
-                                                                        styles={{
-                                                                            menu: provided => ({ ...provided, zIndex: 2 })
-                                                                        }}
-                                                                    />
-
-                                                                </FormGroup>
-                                                            </Col>
-                                                        </Row>
-                                                        : null}
-
-                                                    <Row className="">
-                                                        <Col sm="4">
-                                                            <FormGroup>
-                                                                <Label >{(values.IsRetailerTransfer) ? fieldLabel.Retailer : fieldLabel.Subparty}</Label>
-                                                                <Select
-                                                                    name="Subparty"
-                                                                    value={values.Subparty}
-                                                                    isSearchable={true}
-                                                                    className="react-dropdown"
-                                                                    classNamePrefix="dropdown"
-                                                                    options={(values.IsRetailerTransfer) ? RetailerDropdown_Options : PartyDropdown_Options}
-                                                                    onChange={(hasSelect, evn) => {
-                                                                        onChangeSelect({ hasSelect, evn, state, setState, })
-                                                                        handllerSub_Party(hasSelect)
-                                                                    }}
-                                                                    styles={{
-                                                                        menu: provided => ({ ...provided, zIndex: 2 })
                                                                     }}
                                                                 />
-                                                            </FormGroup>
-                                                        </Col>
-
-                                                        <Col sm={2} style={{ marginTop: '16px' }} >
-                                                            <Button
-                                                                type="button"
-                                                                className=" button_add"
-                                                                color="btn btn-outline-primary border-2 font-size-12"
-                                                                onClick={() =>
-                                                                    AddPartyHandler()
-                                                                }
-                                                            >
-                                                                <i className="dripicons-plus"></i>
-                                                            </Button>
+                                                            </div>
                                                         </Col>
                                                     </Row>
+                                                </FormGroup>
 
-                                                </CardBody>
-                                            </Card>
+                                            </Row>
 
-                                            <Table className="table table-bordered table-hover">
-                                                <Thead>
-                                                    <tr>
-                                                        <th className="col col-sm-3">SubPartyName</th>
-                                                        <th className="col col-sm-3">{"Action"}</th>
-                                                    </tr>
-                                                </Thead>
-                                                <Tbody>{TableRow}</Tbody>
-                                            </Table>
+                                            {(values.IsRetailerTransfer) ?
+                                                <Row className="mb-3">
+                                                    <Col sm="4" >
+                                                        <FormGroup>
+                                                            <Label htmlFor="validationCustom01"> {fieldLabel.SSDD}</Label>
+                                                            <Select
+                                                                name="SSDD"
+                                                                value={values.SSDD}
+                                                                isSearchable={true}
+                                                                className="react-dropdown"
+                                                                classNamePrefix="dropdown"
+                                                                options={PartyDropdown_Options}
+                                                                onChange={(hasSelect, evn) => {
+                                                                    onChangeSelect({ hasSelect, evn, state, setState, })
+                                                                    handller_SSDD(hasSelect)
+                                                                }}
+                                                                styles={{
+                                                                    menu: provided => ({ ...provided, zIndex: 2 })
+                                                                }}
+                                                            />
+                                                        </FormGroup>
+                                                    </Col>
+                                                </Row>
+                                                : null}
 
-                                            {TableRow.length > 0 &&
-                                                < SaveButtonDraggable >
-                                                    <SaveButton pageMode={pageMode}
-                                                        loading={saveBtnloading}
-                                                        onClick={SaveHandler}
-                                                        userAcc={userPageAccessState}
-                                                        editCreatedBy={editCreatedBy}
-                                                        module={"PartySubParty"}
-                                                    />
-                                                </SaveButtonDraggable>
-                                            }
-                                        </Col>
-                                    </Row>
+
+                                            <Row className="">
+                                                <Col sm="4">
+                                                    <FormGroup>
+                                                        <Label >{(values.IsRetailerTransfer) ? fieldLabel.Retailer : fieldLabel.Subparty}</Label>
+                                                        <Select
+                                                            name="Subparty"
+                                                            value={values.Subparty}
+                                                            isSearchable={true}
+                                                            className="react-dropdown"
+                                                            classNamePrefix="dropdown"
+                                                            options={(values.IsRetailerTransfer) ? RetailerDropdown_Options : PartyDropdown_Options}
+                                                            onChange={(hasSelect, evn) => {
+                                                                onChangeSelect({ hasSelect, evn, state, setState, })
+                                                                handllerSub_Party(hasSelect)
+                                                            }}
+                                                            styles={{
+                                                                menu: provided => ({ ...provided, zIndex: 2 })
+                                                            }}
+                                                        />
+                                                    </FormGroup>
+                                                </Col>
+
+                                                <Col sm={1} style={{ marginTop: '16px' }} >
+                                                    <Button
+                                                        type="button"
+                                                        className=" button_add"
+                                                        color="btn btn-outline-primary border-2 font-size-12"
+                                                        onClick={() =>
+                                                            AddPartyHandler()
+                                                        }
+                                                    >
+                                                        <i className="dripicons-plus"></i>
+                                                    </Button>
+
+                                                </Col>
+                                                {/* <Col md={1}></Col> */}
+                                                <FormGroup className="mt-4 col col-sm-5">
+                                                    <Row className="justify-content-md-left">
+                                                        <Label htmlFor="horizontal-firstname-input"
+                                                            className="col-sm-5 col-form-label">{fieldLabel.ShowVendor}</Label>
+                                                        <Col md={2} style={{ marginTop: '9px' }} >
+                                                            <div className="form-check form-switch form-switch-md ">
+                                                                <Input type="checkbox" className="form-check-input"
+                                                                    checked={values.ShowVendor}
+                                                                    name="ShowVendor"
+                                                                    onChange={(e) => {
+                                                                        setState((i) => {
+                                                                            const a = { ...i }
+                                                                            a.values.ShowVendor = e.target.checked;
+                                                                            return a
+                                                                        })
+                                                                        dispatch(getPartySubParty_For_party_dropdownSuccess([]));
+                                                                    }}
+                                                                />
+                                                            </div>
+                                                        </Col>
+                                                    </Row>
+                                                </FormGroup>
+                                            </Row>
+
+                                        </CardBody>
+                                    </Card>
+
+                                    <Table className="table table-bordered table-hover">
+                                        <Thead>
+                                            <tr>
+                                                <th className="col col-sm-3">SubPartyName</th>
+                                                <th className="col col-sm-3">Party Type</th>
+                                                <th className="col col-sm-3">{"Action"}</th>
+                                            </tr>
+                                        </Thead>
+                                        <Tbody>{TableRow}</Tbody>
+                                    </Table>
+
+                                    {TableRow.length > 0 &&
+                                        < SaveButtonDraggable >
+                                            <SaveButton pageMode={pageMode}
+                                                loading={saveBtnloading}
+                                                onClick={SaveHandler}
+                                                userAcc={userPageAccessState}
+                                                editCreatedBy={editCreatedBy}
+                                                module={"PartySubParty"}
+                                            />
+                                        </SaveButtonDraggable>
+                                    }
+
                                 </form>
                             </CardBody>
 
                         </Card>
 
                     </Container>
-                </div>
+                </div >
             </React.Fragment >
         );
     }
