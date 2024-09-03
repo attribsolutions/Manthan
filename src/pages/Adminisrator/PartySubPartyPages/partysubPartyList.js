@@ -10,7 +10,7 @@ import {
   savePartySubPartySuccess,
   updatePartySubPartySuccess
 } from "../../../store/Administrator/PartySubPartyRedux/action";
-import PartySubParty from "./PartySubParty";
+import PartySubParty from "./index";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
 

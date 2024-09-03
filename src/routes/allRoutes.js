@@ -76,7 +76,7 @@ import GroupSubGroup from "../pages/Adminisrator/GroupSubGroup/GroupSubGroup";
 
 
 import GroupTypeMaster from "../pages/Adminisrator/GroupTypePage/GroupTypeMaster";
-import PartySubParty from "../pages/Adminisrator/PartySubPartyPages/PartySubParty";
+import PartySubParty from "../pages/Adminisrator/PartySubPartyPages/index.js";
 import PartySubPartyList from "../pages/Adminisrator/PartySubPartyPages/partysubPartyList";
 
 import GSTMaster from "../pages/Adminisrator/GSTPages/GSTMaster";
