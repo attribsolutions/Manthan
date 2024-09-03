@@ -343,3 +343,5 @@ export const Order_Item_Supplier_Report =url.ORDER_ITEM_SUPPLIER_REPORT
 export const POS_User = url.POS_USER_lIST;
 export const POS_User_List = url.POS_USER;
 export const  SweetPOS_Rate_Master = url.SWEET_POS_RATE_MASTER
+
+export const  SweetPOS_Machine_Master = url.SWEET_POS_MACHINE_MASTER

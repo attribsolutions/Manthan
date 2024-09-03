@@ -682,7 +682,9 @@ export const DELETE_API_FOR_RATE_MASTER_PAGE = '/DeleteRate' // for delete
 export const RATES = '/Rates' // for Save button
 export const DELETE_API_FOR_RATE_LIST_PAGE = '/DeleteRateOnList' // for List Page
 
-
+// SweetPos Machine Type API
+export const S_POS_MACHINE_TYPE_SAVE_API = '/SweetPOS/SPOSMachineTypeSave' // for Save button
+export const S_POS_MACHINE_TYPE_LIST_API = '/SweetPOS/SPOSMachineTypeList' // for List Page
 
 
 

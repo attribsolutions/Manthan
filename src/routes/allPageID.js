@@ -375,4 +375,8 @@ export const  CASHIER_SUMMARY_REPORT = 287
 
 export const  SWEET_POS_RATE_MASTER = 295
 
+export const  SWEET_POS_MACHINE_MASTER = 304
+
+
+
 
