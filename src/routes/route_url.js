@@ -408,17 +408,11 @@ export const POS_ORDER_IN_POS = "/Order_2/AuthLink/:Credentials"
 export const POS_ORDER_LIST_IN_POS = "/OrderList_2/AuthLink/:Credentials"
 
 
-
-
-
-
-
 export const CASHIER_SUMMARY_REPORT = "/Cashier_Summary_Report"
 
 export const SWEET_POS_RATE_MASTER = "/SweetPOS_Rate_Master"
 
-
-
+export const  SWEET_POS_MACHINE_MASTER = "/SweetPOS_Machine_Master"
 
 
 
