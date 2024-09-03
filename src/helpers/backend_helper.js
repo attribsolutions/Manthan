@@ -932,6 +932,10 @@ export const delete_RateList_API = ({ deleteId }) => del(`${url.DELETE_API_FOR_R
 // Order Item Supplier Report
 export const OrderItemSupplier_GoButton_API = ({ jsonBody }) => post(url.ORDER_ITEM_SUPPLIER_REPORT, jsonBody)// post api
 
+// SweetPos Machine Type
+export const S_Pos_MachineType_List_Api = (jsonBody) => post(url.S_POS_MACHINE_TYPE_LIST_API, jsonBody) // get api
+export const S_Pos_MachineType_Save_API = ({ jsonBody }) => post(url.S_POS_MACHINE_TYPE_SAVE_API, jsonBody)// post api
+
 export {
 	getLoggedInUser,
 	isUserAuthenticated,

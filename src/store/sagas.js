@@ -123,6 +123,7 @@ import CashierSummaryReportSaga from "./SweetPOSStore/Report/CashierSummaryRedux
 import FrenchiesItemSaleReportSaga from "./SweetPOSStore/Report/FrenchiesSaleRedux/saga"
 import Pos_RateMaster_Saga from "./SweetPOSStore/Administrator/SweetPOSRateMasterRedux/saga"
 import OrderItemSupplier_Saga from "./Report/OrderItemSupplierRedux/saga"
+import S_Pos_MachineType_Saga from "./SweetPOSStore/Administrator/MachineTypeMasterRedux/saga"
 
 
 export default function* rootSaga() {
@@ -238,6 +239,7 @@ export default function* rootSaga() {
 		fork(CashierSummaryReportSaga),
 		fork(FrenchiesItemSaleReportSaga),
 		fork(Pos_RateMaster_Saga),
-		fork(OrderItemSupplier_Saga)
+		fork(OrderItemSupplier_Saga),
+		fork(S_Pos_MachineType_Saga),
 	])
 }

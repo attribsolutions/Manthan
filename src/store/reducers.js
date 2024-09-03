@@ -131,6 +131,7 @@ import CashierSummaryReportReducer from "./SweetPOSStore/Report/CashierSummaryRe
 import FrenchiesItemSaleReportReducer from "./SweetPOSStore/Report/FrenchiesSaleRedux/reducer"
 import PosRateMasterReducer from "./SweetPOSStore/Administrator/SweetPOSRateMasterRedux/reducer"
 import OrderItemSupplier_Reducer from "./Report/OrderItemSupplierRedux/reducer"
+import SPos_MachineType_Reducer from "./SweetPOSStore/Administrator/MachineTypeMasterRedux/reducer"
 
 const rootReducer = combineReducers({
 	Layout,
@@ -240,7 +241,8 @@ const rootReducer = combineReducers({
 	CashierSummaryReportReducer,
 	FrenchiesItemSaleReportReducer,
 	PosRateMasterReducer,
-	OrderItemSupplier_Reducer
+	OrderItemSupplier_Reducer,
+	SPos_MachineType_Reducer
 
 })
 export default rootReducer
