@@ -354,7 +354,7 @@ export const listPageActionsButtonFunc = (props) => {
                         btnmode: mode.MinPrint,
                         iconClass: printIconClass,
                         actionFunc: minPrintBtn_Func,
-                        title: "Print",
+                        title: "view",
                         buttonClasss: updateBtnCss,
                     })}
 
