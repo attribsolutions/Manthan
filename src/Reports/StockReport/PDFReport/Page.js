@@ -29,7 +29,7 @@ const StockReport = (stockdata) => {
     reportBody(doc, data);
     pageFooter(doc, data);
     doc.setProperties({
-        title: `Stock_Report From  ${date_dmy_func(data.FromDate)} To ${date_dmy_func(data.ToDate)} Praty (${data.PartyName})`
+        title: `Stock_Report From  ${date_dmy_func(data.FromDate)} To ${date_dmy_func(data.ToDate)} Party (${data.PartyName})`
     });
     function generateSaveAndOpenPDFReport() {
         const pdfUrl = URL.createObjectURL(doc.output('blob'));
