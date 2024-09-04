@@ -1,6 +1,6 @@
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
-import { CommonConsole, loginSelectedPartyID, roundToDecimalPlaces } from "../../../components/Common/CommonFunction";
-import { getBatchCode_By_ItemID_api } from "../../../helpers/backend_helper";
+import { CommonConsole, loginSelectedPartyID, loginUserDetails, loginUserIsFranchisesRole, roundToDecimalPlaces } from "../../../components/Common/CommonFunction";
+import { getBatchCode_By_ItemID_api, getBatchCode_By_ItemID_SweetPOSapi } from "../../../helpers/backend_helper";
 
 export function stockQtyUnit_SelectOnchange(event, index1) {
 
@@ -62,10 +62,18 @@ export const AddItemInTableFunc = async ({ itemNameSelect, TableArr }) => {
     const data = [...TableArr];
 
     // click on Item Add button then API call
-    const resp = await getBatchCode_By_ItemID_api({
-        itemId: itemNameSelect.value,
-        partyId: loginSelectedPartyID(),
-    });
+    let resp
+    if (loginUserIsFranchisesRole()) {
+        resp = await getBatchCode_By_ItemID_SweetPOSapi({
+            itemId: itemNameSelect.value,
+            partyId: loginSelectedPartyID(),
+        });
+    } else {
+        resp = await getBatchCode_By_ItemID_api({
+            itemId: itemNameSelect.value,
+            partyId: loginSelectedPartyID(),
+        });
+    }
 
     if (resp.Data.length === 0) {
         return {
@@ -108,7 +116,7 @@ export const AddItemInTableFunc = async ({ itemNameSelect, TableArr }) => {
         .filter((item) => parseFloat(item.BaseUnitQuantity) === 0)
         .map(createBatchCodeDetail);
 
-
+    
     data.push({
         id: zeroIndexObject.id,
         Item: zeroIndexObject.Item,

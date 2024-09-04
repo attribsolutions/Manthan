@@ -781,6 +781,8 @@ export const ItemsList_On_Group_And_Subgroup_API = (jsonBody) => post(url.ITEM_L
 
 //StockAdjustment
 export const getBatchCode_By_ItemID_api = ({ itemId, partyId }) => get(`${url.GET_BATCH_CODE_BY_ITEM_ID}/${itemId}/${partyId}`)//add button get api for item
+export const getBatchCode_By_ItemID_SweetPOSapi = ({ itemId, partyId }) => get(`${url.GET_BATCH_CODE_BY_ITEM_ID_SWEET_POS}/${itemId}/${partyId}`)//add button get api for item
+
 
 //TransactionLog
 export const TransactionLog_transactionType_Api = () => get(url.TRANSACTION_LOG_TRANCTION_TYPE);

@@ -578,6 +578,7 @@ export const DELETE_INVOICE_DATA_EXPORT = "/DeletedInvoiceData"
 
 //StockAdjustment
 export const GET_BATCH_CODE_BY_ITEM_ID = "/ShowBatchesForItem"
+export const GET_BATCH_CODE_BY_ITEM_ID_SWEET_POS = "/SweetPOS/SPOSStockAdjustment"
 
 // transaction log
 export const TRANSACTION_LOG_TRANCTION_TYPE = "/GetTransactionType"

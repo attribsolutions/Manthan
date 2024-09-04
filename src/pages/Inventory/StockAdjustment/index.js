@@ -300,8 +300,7 @@ const StockAdjustment = (props) => {
                             />
                         </div>
                     </div>
-
-                    <div className="mt-2" >
+                    {!(_cfunc.loginUserIsFranchisesRole()) && <div className="mt-2" >
                         <Select
                             id={`BatchCode-${index1.id}`}
                             key={`BatchCode-${index1.id}`}
@@ -320,14 +319,17 @@ const StockAdjustment = (props) => {
                                 }),
                             }}
                         />
-                    </div>
-                    <div className="mt-1">
-                        <Label className="text-black pt-2" style={{ float: "left" }}>Add New Batch</Label>
-                        < Button type="button" style={{ float: "right" }} color="btn btn-btn-sm btn-outline-primary border-2 font-size-12 text-center"
-                            onClick={(event) => BatchCode_Add_Handler(event, index1, tableList, setTableList)}
-                        > <i className="dripicons-plus align-center " style={{ flot: "center" }}></i></Button>
+                    </div>}
 
-                    </div>
+                    {!(_cfunc.loginUserIsFranchisesRole()) &&
+                        <div className="mt-1">
+                            <Label className="text-black pt-2" style={{ float: "left" }}>Add New Batch</Label>
+                            < Button type="button" style={{ float: "right" }} color="btn btn-btn-sm btn-outline-primary border-2 font-size-12 text-center"
+                                onClick={(event) => BatchCode_Add_Handler(event, index1, tableList, setTableList)}
+                            > <i className="dripicons-plus align-center " style={{ flot: "center" }}></i></Button>
+
+                        </div>}
+
                 </>)
             }
         },
@@ -443,10 +445,10 @@ const StockAdjustment = (props) => {
                     accumulator.push({
                         "Item": index2.Item,
                         "Quantity": index2.Qty,
-                        "MRP": index2.MRPID,
+                        "MRP": _cfunc.loginUserIsFranchisesRole() ? index2.MRP : index2.MRPID,
                         "Unit": index1.UnitID,
                         "GST": index2.GSTID,
-                        "MRPValue": index2.MRP,
+                        "MRPValue": _cfunc.loginUserIsFranchisesRole() ? "1" : index2.MRP,
                         "GSTPercentage": index2.GSTPercentage,
                         "BatchDate": index2.BatchDate,
                         "BatchCode": index2.BatchCode,
@@ -491,7 +493,6 @@ const StockAdjustment = (props) => {
                 "IsStockAdjustment": true,//if stock  
                 "IsAllStockZero": false
             })
-
             dispatch(saveStockEntryAction({ jsonBody }));
         }
         catch (w) { }
