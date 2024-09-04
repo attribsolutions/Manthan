@@ -2,13 +2,13 @@ import { call, put, takeLatest } from "redux-saga/effects";
 import * as  apiCall from "../../../helpers/backend_helper";
 import * as actionType from "./actionType";
 import * as action from "./action";
-import { date_dmy_func } from "../../../components/Common/CommonFunction";
+import { date_dmy_func, loginUserIsFranchisesRole } from "../../../components/Common/CommonFunction";
 
 function* StockEntry_API_GenFunc({ config }) { // Save GRN  genrator function
-
+    debugger
     try {
         let response = "";
-        if (config.IsFranchise) {
+        if (loginUserIsFranchisesRole()) {
             response = yield call(apiCall.Franchise_StockEntry_Post_API, config);
         } else {
             response = yield call(apiCall.StockEntry_Post_API, config);
@@ -56,7 +56,7 @@ function* StockEntryList_API_GenFunc({ config }) { // Save GRN  genrator functio
         const response = yield call(apiCall.StockEntryList_API, config);
         const newList = yield response.Data.map((i, key) => {
             i.id = key + 1
-            i.PriviousStockDate = i.StockDate; 
+            i.PriviousStockDate = i.StockDate;
             i.StockDate = date_dmy_func(i.StockDate);
             return i
         })
