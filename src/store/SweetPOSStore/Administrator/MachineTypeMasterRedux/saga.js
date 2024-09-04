@@ -16,7 +16,7 @@ function* S_Pos_MachineType_List_GenFun({ config }) {
 }
 
 function* S_Pos_MachineType_Save_GenFun({ config }) {
-    debugger
+    
     try {
         const response = yield call(S_Pos_MachineType_Save_API, config);
         yield put(SPos_MachineTypeSave_Success(response));

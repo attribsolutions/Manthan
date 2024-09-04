@@ -631,8 +631,8 @@ const StockEntry = (props) => {
                     });
                 }
                 if ((isConfirmed) || (!values.IsAllStockZero)) {
-                    const IsFranchise = _cfunc.loginUserDetails().IsFranchises === 0 ? false : true
-                    dispatch(saveStockEntryAction({ jsonBody, btnId, IsFranchise }));
+                  
+                    dispatch(saveStockEntryAction({ jsonBody, btnId }));
                 };
             }
         } catch (e) { _cfunc.btnIsDissablefunc({ btnId, state: false }) }
