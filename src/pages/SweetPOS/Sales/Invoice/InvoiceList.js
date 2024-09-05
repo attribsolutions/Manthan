@@ -58,7 +58,7 @@ const InvoiceList = () => {
 
     const dispatch = useDispatch();
     const history = useHistory();
-  
+
 
     const currentDate_ymd = _cfunc.date_ymd_func();
 
@@ -697,6 +697,7 @@ const InvoiceList = () => {
                 <Modal
                     isOpen={modal}
                     toggle={toggleModal}
+
                     centered={true}
                 >
                     <div className="modal-header" style={{ position: "relative" }}>
@@ -711,7 +712,7 @@ const InvoiceList = () => {
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <div className="modal-body">
+                    <div className="modal-body" style={{ height: "250px", width: "500px" }}>
                         <Row >
                             {_cfunc.loginUserIsFranchisesRole() && <Col sm="8" className="">
                                 <FormGroup className="mb- row mt-1 " >
@@ -731,7 +732,7 @@ const InvoiceList = () => {
                                                 menu: (provided) => ({
                                                     ...provided,
                                                     zIndex: 5,
-                                                    maxHeight: "80px",
+                                                    maxHeight: "300px",
                                                     overflowY: "auto",
                                                 }),
                                             }}
