@@ -107,16 +107,22 @@ export const AddItemInTableFunc = async ({ itemNameSelect, TableArr }) => {
         (total, item) => total + parseFloat(item.BaseUnitQuantity),
         0
     );
-
-    const stockDetails = respData
-        .filter((item) => parseFloat(item.BaseUnitQuantity) > 0)
-        .map(createStockDetail);
+    let stockDetails
+    if (loginUserIsFranchisesRole()) {
+        stockDetails = respData
+            .filter((item) => parseFloat(item.BaseUnitQuantity))
+            .map(createStockDetail);
+    } else {
+        stockDetails = respData
+            .filter((item) => parseFloat(item.BaseUnitQuantity) > 0)
+            .map(createStockDetail);
+    }
 
     const batchCodeDetails = respData
         .filter((item) => parseFloat(item.BaseUnitQuantity) === 0)
         .map(createBatchCodeDetail);
 
-    
+
     data.push({
         id: zeroIndexObject.id,
         Item: zeroIndexObject.Item,
