@@ -241,6 +241,7 @@ import StockEntryList from "../pages/Inventory/StockEntry/StockEntryList.js";
 import SweetPOSRateMaster from "../pages/SweetPOS/Adminstration/RateMaster/SweetPOSRateMaster.js";
 import OrderItemSupplierReport from "../Reports/OrderItemSupplier/index.js";
 import MachineTypeMaster from "../pages/SweetPOS/Adminstration/MachineType/MachineTypeMaster.js";
+import StockOutReport from "../pages/SweetPOS/Reports/StockOutReport/index.js";
 
 
 
@@ -636,6 +637,8 @@ const userRoutes = [
 	{ path: path.POS_USER_lIST, component: POSUserList },//not party wise
 
 	{ path: path.SWEET_POS_MACHINE_MASTER, component: MachineTypeMaster },//not party wise
+
+	{ path: path.STOCK_OUT_REPORT, component: StockOutReport },//not party wise
 	// ************************************ Pos_Invoice **************************************//
 
 

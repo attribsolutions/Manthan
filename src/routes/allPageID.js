@@ -377,6 +377,6 @@ export const  SWEET_POS_RATE_MASTER = 295
 
 export const  SWEET_POS_MACHINE_MASTER = 304
 
-
+export const  STOCK_OUT_REPORT = 306
 
 

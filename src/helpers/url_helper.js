@@ -688,7 +688,7 @@ export const S_POS_MACHINE_TYPE_SAVE_API = '/SweetPOS/SPOSMachineTypeSave' // fo
 export const S_POS_MACHINE_TYPE_LIST_API = '/SweetPOS/SPOSMachineTypeList' // for List Page
 
 
-
+export const SWEET_POS_STOCK_OUT_REPORT = "/SweetPOS/SPOSStockOutReport"
 
 
 
