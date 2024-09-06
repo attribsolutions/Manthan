@@ -414,6 +414,7 @@ export const SWEET_POS_RATE_MASTER = "/SweetPOS_Rate_Master"
 
 export const  SWEET_POS_MACHINE_MASTER = "/SweetPOS_Machine_Master"
 
+export const  STOCK_OUT_REPORT = "/Stock_Out_Report"
 
 
 

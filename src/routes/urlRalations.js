@@ -345,3 +345,6 @@ export const POS_User_List = url.POS_USER;
 export const  SweetPOS_Rate_Master = url.SWEET_POS_RATE_MASTER
 
 export const  SweetPOS_Machine_Master = url.SWEET_POS_MACHINE_MASTER
+
+export const  Stock_Out_Report = url.STOCK_OUT_REPORT
+

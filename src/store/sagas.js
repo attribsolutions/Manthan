@@ -124,6 +124,7 @@ import FrenchiesItemSaleReportSaga from "./SweetPOSStore/Report/FrenchiesSaleRed
 import Pos_RateMaster_Saga from "./SweetPOSStore/Administrator/SweetPOSRateMasterRedux/saga"
 import OrderItemSupplier_Saga from "./Report/OrderItemSupplierRedux/saga"
 import S_Pos_MachineType_Saga from "./SweetPOSStore/Administrator/MachineTypeMasterRedux/saga"
+import StockOutReportSaga from "./SweetPOSStore/Report/StockOutReportRedux/saga"
 
 
 export default function* rootSaga() {
@@ -241,5 +242,6 @@ export default function* rootSaga() {
 		fork(Pos_RateMaster_Saga),
 		fork(OrderItemSupplier_Saga),
 		fork(S_Pos_MachineType_Saga),
+		fork(StockOutReportSaga)
 	])
 }
