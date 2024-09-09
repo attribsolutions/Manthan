@@ -5,7 +5,7 @@ import { globalTableSearchProps, MySearch } from "../../../components/Common/Sea
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { CommonConsole } from "../../../components/Common/CommonFunction";
-import { postViewMrpSuccess } from "../../../store/actions";
+import { postViewGst_Success, postViewMrpSuccess } from "../../../store/actions";
 import { useState } from "react";
 
 const GSTView = () => {
@@ -17,24 +17,22 @@ const GSTView = () => {
         viewData_redux: state.GSTReducer.GSTView // modify Redux State
     }))
 
+    const { ItemCount, GSTHSNList = [] } = viewData_redux
+
     useEffect(() => {
         try {
-
-            if ((viewData_redux.Status === true)) {
-                setTableArray(viewData_redux.Data)// modify Custom Table Data
+            if ((GSTHSNList.length > 0)) {
+                
+                setTableArray(GSTHSNList)// modify Custom Table Data
                 setModal_view(true);
             }
         } catch (error) { CommonConsole(error) }
-    }, [viewData_redux]);
+    }, [GSTHSNList]);
 
     function modalToggleFunc() {
         setModal_view(false);
-        dispatch(postViewMrpSuccess({ Status: false }))// modify Custom Api Action call
-
+        dispatch(postViewGst_Success({ Status: false }))// modify Custom Api Action call
     }
-
-
-
 
     const pagesListColumns = [
         {
@@ -63,14 +61,13 @@ const GSTView = () => {
             size="xl"
         >
             <Card>
-
-
-
                 <CardBody className="c_card_body">
-
                     <div className="modal-body">
 
                         <h2 className="text-center">GST Details</h2>
+                        <div className="d-flex justify-content-between align-items-end">
+                            <span className="fw-bold ms-auto">Count :{ItemCount}</span>
+                        </div>
                         <div className="mt-n1">
                             <ToolkitProvider
                                 keyField="id"

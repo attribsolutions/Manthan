@@ -12,9 +12,10 @@ function* save_MRPMaster_GenFunc({ config }) {
 }
 
 // List Page API
-function* get_MRPMaster_GenFunc() {
+function* get_MRPMaster_GenFunc({ config }) {
+  
   try {
-    const response = yield call(apiCall.MRPMaster_Get_API);
+    const response = yield call(apiCall.MRPMaster_Get_API, config);
     response.Data.map(i => {
 
       //tranzaction date is only for fiterand page field but UI show transactionDateLabel
@@ -49,12 +50,9 @@ function* viewMRP_GenFunc({ config }) {
   try {
     const response = yield call(apiCall.View_MRP_Details_API, config);
 
-    yield put(action.postViewMrpSuccess(response));
+    yield put(action.postViewMrpSuccess(response.Data));
   } catch (error) { yield put(action.MRPApiErrorAction()) }
 }
-
-
-
 
 
 // delete api MRP Master PageL

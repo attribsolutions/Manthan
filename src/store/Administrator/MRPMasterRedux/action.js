@@ -49,8 +49,9 @@ export const postViewMrpSuccess = (resp) => ({
 });
 
 //get listpage api
-export const getMRPList = () => ({
+export const getMRPList = (config = {}) => ({
     type: GET_MRP_LIST,
+    config
 });
 
 export const getMRPList_Success = (resp) => ({

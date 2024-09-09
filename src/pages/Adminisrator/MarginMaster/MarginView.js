@@ -1,38 +1,36 @@
 import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
-import { Card, CardBody, Modal, } from "reactstrap";
-import { globalTableSearchProps } from "../../../components/Common/SearchBox/MySearch";
+import { Card, CardBody, Col, Modal, Row, } from "reactstrap";
+import { globalTableSearchProps, MySearch } from "../../../components/Common/SearchBox/MySearch";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { CommonConsole } from "../../../components/Common/CommonFunction";
-import { postViewMrpSuccess } from "../../../store/actions";
+import { postViewGst_Success, postViewMrpSuccess } from "../../../store/actions";
 import { useState } from "react";
 
-const MRPView = () => {
+const MarginView = () => {
     const dispatch = useDispatch()
     const [modal_view, setModal_view] = useState(false);
     const [tableArray, setTableArray] = useState([]);
 
     const { viewData_redux } = useSelector((state) => ({
-        viewData_redux: state.MRPMasterReducer.MRPView // modify Redux State
+        viewData_redux: state.GSTReducer.GSTView // modify Redux State
     }))
 
-    const { ItemCount, MRPList = [] } = viewData_redux
+    const { ItemCount, MarginList = [] } = viewData_redux
 
     useEffect(() => {
         try {
-            if ((MRPList.length > 0)) {
-                debugger
-                setTableArray(MRPList)// modify Custom Table Data
+            if ((MarginList.length > 0)) {
+                setTableArray(MarginList)// modify Custom Table Data
                 setModal_view(true);
             }
         } catch (error) { CommonConsole(error) }
-    }, [MRPList]);
+    }, [MarginList]);
 
     function modalToggleFunc() {
         setModal_view(false);
-        dispatch(postViewMrpSuccess({ Status: false }))// modify Custom Api Action call
-
+        dispatch(postViewGst_Success({ Status: false }))// modify Custom Api Action call
     }
 
     const pagesListColumns = [
@@ -45,8 +43,8 @@ const MRPView = () => {
             dataField: "EffectiveDate",
         },
         {
-            text: "MRP",
-            dataField: "MRP",
+            text: "Margin",
+            dataField: "Margin",
         },
 
     ];
@@ -60,11 +58,11 @@ const MRPView = () => {
             <Card>
                 <CardBody className="c_card_body">
                     <div className="modal-body">
-                        <h2 className="text-center">MRP Details</h2>
-                        <div className="d-flex justify-content-between align-items-end">
-                            <span className="fw-bold ms-auto">Count : {ItemCount}</span>
-                        </div>
 
+                        <h2 className="text-center">Margin Details</h2>
+                        <div className="d-flex justify-content-between align-items-end">
+                            <span className="fw-bold ms-auto">Count :{ItemCount}</span>
+                        </div>
                         <div className="mt-n1">
                             <ToolkitProvider
                                 keyField="id"
@@ -97,10 +95,11 @@ const MRPView = () => {
 
                     </div>
 
+
                 </CardBody>
             </Card>
         </Modal>
     )
 
 }
-export default MRPView;
+export default MarginView;

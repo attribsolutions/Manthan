@@ -26,8 +26,9 @@ export const saveGSTMasterSuccess = (resp) => ({
 });
 
 //get listpage api
-export const getGSTList = () => ({
+export const getGSTList = (config = {}) => ({
     type: GET_GST_LIST,
+    config
 });
 
 export const getGSTListSuccess = (resp) => ({
