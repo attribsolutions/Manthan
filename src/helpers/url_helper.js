@@ -171,6 +171,7 @@ export const PRICE_LIST_BY_COMPANY = '/CompanywisePriceLists'
 
 // MRP Master Api
 export const MRP_MASTER_LIST = '/Mrps'
+export const MRP_MASTER_LIST_FILTER ="/MrpsListFilter"
 export const GO_BUTTON_POST_API_FOR_MRP_MASTER = '/GetMRP'
 export const DELETE_API_FOR_MRP_LIST_PAGE = '/DeleteMrpOnList'
 
@@ -182,8 +183,10 @@ export const VIEW_MRP_DETAILS_API = '/MrpsListDetails'
 
 // Margin Master
 export const MARGIN_MASTER_LIST = '/Margins'
+export const MARGIN_MASTER_LIST_FILTER = '/MarginsListFilter'
 export const GO_BUTTON_POST_API_FOR_MARGIN_MASTER = '/GetMargin'
 export const DELETE_API_FOR_LIST_MARGIN_PAGE = '/DeleteMarginOnList'
+export const VIEW_MARGIN_DETAILS_API = '/MarginListDetails' // for delete 
 
 //Import Field Add 
 export const IMPORT_FIELD_MAP_FILTER = '/PartyImportFieldFilter'    //gobutton
@@ -248,7 +251,8 @@ export const GENERAL_MASTER_TYPE_API = '/GeneralMasterType'
 export const GENERAL_MASTER_LIST = '/GeneralMasterList'
 
 // GST API
-export const GST_LIST_API = '/GstHsnCode' // for list page
+export const GST_LIST_API = '/GstHsnCode' 
+export const GST_LIST_FILTER_API = '/GstHsnListFilter' // for list page
 export const GO_BUTTON_POST_API_FOR_GST_MASTER = '/GetGstHsncode' // for go button
 export const DELETE_API_FOR_LIST_GST_PAGE = '/DeleteGstHsnCodeOnList' // for delete 
 

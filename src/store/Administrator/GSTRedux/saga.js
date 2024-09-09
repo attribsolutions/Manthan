@@ -3,6 +3,7 @@ import * as  apiCall from "../../../helpers/backend_helper";
 import * as actionType from "./actionType";
 import * as action from "./action";
 import { listpageConcatDateAndTime } from "../../../components/Common/CommonFunction";
+import { url } from "../../../routes";
 
 function* save_GSTMaster_GenFunc({ config }) {
   try {
@@ -12,10 +13,10 @@ function* save_GSTMaster_GenFunc({ config }) {
 }
 
 //listpage
-function* get_GSTList_GenFunc() {
+function* get_GSTList_GenFunc({ config }) {
 
   try {
-    const response = yield call(apiCall.GetGSTList_For_Listpage);
+    const response = yield call(apiCall.GetGSTList_For_Listpage, config);
     response.Data.map(i => {
 
       //tranzaction date is only for fiterand page field but UI show transactionDateLabel
@@ -36,10 +37,16 @@ function* delete_GSTList_ID_GenFunc({ config }) {
 }
 
 function* viewGST_GenFunc({ config }) {
+  const { subPageMode } = config
   try {
-    const response = yield call(apiCall.View_GST_Details_API, config);
+    let response
+    if (subPageMode === url.MARGIN_lIST) {
+      response = yield call(apiCall.View_Margin_Details_API, config);
+    } else {
+      response = yield call(apiCall.View_GST_Details_API, config);
+    }
 
-    yield put(action.postViewGst_Success(response));
+    yield put(action.postViewGst_Success(response.Data));
   } catch (error) { yield put(action.GSTApiErrorAction()) }
 }
 

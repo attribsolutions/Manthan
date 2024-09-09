@@ -24,8 +24,9 @@ export const saveMarginMasterSuccess = (resp) => ({
 });
 
 //get listpage api
-export const getMarginList = () => ({
+export const getMarginList = (config = {}) => ({
     type: GET_MARGIN_LIST,
+    config
 });
 
 export const getMarginListSuccess = (resp) => ({

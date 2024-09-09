@@ -32,9 +32,9 @@ function* post_Margin_GenFunc({ config }) {
 }
 
 //listpage
-function* get_Margin_GenFunc() {
+function* get_Margin_GenFunc({ config }) {
   try {
-    const response = yield call(GetMarginList_For_Listpage);
+    const response = yield call(GetMarginList_For_Listpage,config);
     response.Data.map(i => {
 
       //tranzaction date is only for fiterand page field but UI show transactionDateLabel
