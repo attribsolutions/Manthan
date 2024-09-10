@@ -151,6 +151,10 @@ export const Item_Supplier_Assign = url.ITEM_SUPPLIER_ASSIGN
 export const Rate_Master = url.RATE_LIST
 export const Rate_List = url.RATE_MASTER
 
+export const Franchise_Customer_Master = url.FRANCHISE_CUSTOMER_LIST
+
+export const Franchise_Customer_List = url.FRANCHISE_CUSTOMER_MASTER
+
 
 //******************************* Purchase Module ************************************//
 

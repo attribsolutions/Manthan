@@ -170,6 +170,9 @@ export const CREDIT_NOTE_UPLOAD = "/CreditNoteUpload"
 export const RATE_MASTER = "/Rate_Master"
 export const RATE_LIST = "/Rate_List"
 
+export const FRANCHISE_CUSTOMER_MASTER = "/Franchise_Customer_Master"
+
+export const FRANCHISE_CUSTOMER_LIST = "/Franchise_Customer_List"
 
 //******************************* Purchase Module ************************************//
 export const ORDER_1 = "/Order_1"

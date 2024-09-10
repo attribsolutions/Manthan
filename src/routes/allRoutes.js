@@ -297,6 +297,9 @@ const userRoutes = [
 	{ path: path.RETAILER_LIST, component: PartyList, isPartyWisePage: true },
 	{ path: path.RETAILER_MASTER, component: PartyMaster, isPartyWisePage: true },
 
+	{ path: path.FRANCHISE_CUSTOMER_LIST, component: PartyList, isPartyWisePage: true },
+	{ path: path.FRANCHISE_CUSTOMER_MASTER, component: PartyMaster, isPartyWisePage: true },
+
 	{ path: path.NON_RETAILER_PARTY_lIST, component: PartyList, isPartyWisePage: true },
 	{ path: path.NON_RETAILER_PARTY, component: PartyMaster, isPartyWisePage: true },
 
@@ -476,12 +479,6 @@ const userRoutes = [
 	{ path: path.BULK_WORK_ORDER, component: BulkWorkOrder },
 
 	{ path: path.BULK_WORK_ORDER_LIST, component: BulkWorkOrderList },
-
-
-
-
-
-
 
 
 	{ path: path.MATERIAL_ISSUE, component: MaterialIssueMaster },
