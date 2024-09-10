@@ -64,7 +64,11 @@ const PartyList = () => {
         if (subPageMode === url.PARTY_lIST) {
             goButtonHandler()
         }
-        else if ((commonPartyDropSelect.value > 0 && (subPageMode === url.RETAILER_LIST || subPageMode === url.NON_RETAILER_PARTY_lIST))) {
+        else if ((commonPartyDropSelect.value > 0 &&
+            (subPageMode === url.RETAILER_LIST ||
+                subPageMode === url.NON_RETAILER_PARTY_lIST ||
+                subPageMode === url.FRANCHISE_CUSTOMER_LIST)
+        )) {
             goButtonHandler()
         }
         return () => {
@@ -90,6 +94,11 @@ const PartyList = () => {
             page_Id = pageId.RETAILER_LIST
             masterPath = url.RETAILER_MASTER;
             newBtnPath = url.RETAILER_MASTER;
+        }
+        else if (subPageMode === url.FRANCHISE_CUSTOMER_LIST) {
+            page_Id = pageId.FRANCHISE_CUSTOMER_LIST
+            masterPath = url.FRANCHISE_CUSTOMER_MASTER;
+            newBtnPath = url.FRANCHISE_CUSTOMER_MASTER;
         }
         else if (subPageMode === url.NON_RETAILER_PARTY_lIST) {
             page_Id = pageId.NON_RETAILER_PARTY_lIST
