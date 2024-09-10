@@ -47,6 +47,7 @@ import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMs
 import { priceListByCompay_ActionSuccess } from "../../../store/Administrator/PriceList/action";
 import { DISCOUNT_API_ERROR_ACTION } from "../../../store/Administrator/DiscountRedux/actionType";
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
+import GlobalCustomTable from "../../../GlobalCustomTable";
 
 
 const MarginMaster = (props) => {
@@ -101,18 +102,13 @@ const MarginMaster = (props) => {
         dispatch(commonPageField(pageId.MARGIN));
         dispatch(priceListByCompay_Action());
         dispatch(get_Party_ForDropDown());
+        dispatch(BreadcrumbShowCountlabel(`Count:${0}`));
         return () => {
             dispatch(get_Party_ForDropDown_Success([]));
             dispatch(priceListByCompay_ActionSuccess([]));
             dispatch(goButtonForMarginSuccess([]));
         }
     }, []);
-
-    useEffect(() => {
-        if (tableData.length > 0) {
-            dispatch(BreadcrumbShowCountlabel(`Count:${tableData.length}`));
-        }
-    }, [tableData]);
 
     const values = { ...state.values }
     const { isError } = state;
@@ -284,7 +280,7 @@ const MarginMaster = (props) => {
 
     const GoButton_Handler = () => {
 
-        if (values.EffectiveDate === ''|| values.PriceListName==='') {
+        if (values.EffectiveDate === '' || values.PriceListName === '') {
             customAlert({
                 Type: 4,
                 Message: alertMessages.effectiveDateAndPriceListIsRequired,
@@ -570,7 +566,7 @@ const MarginMaster = (props) => {
                                 </CardHeader>
                             </Card>
 
-                            {tableData.length > 0 ?
+                            {/* {tableData.length > 0 ?
                                 <ToolkitProvider
                                     keyField="Item"
                                     data={tableData}
@@ -605,7 +601,21 @@ const MarginMaster = (props) => {
                                     )}
                                 </ToolkitProvider>
                                 : null
-                            }
+                            } */}
+                            <GlobalCustomTable
+                                keyField={"Item"}
+                                data={tableData}
+                                columns={pagesListColumns}
+                                id="table_Arrow"
+                                noDataIndication={
+                                    <div className="text-danger text-center ">
+                                        Items Not available
+                                    </div>
+                                }
+                                onDataSizeChange={({ dataCount, filteredData = [] }) => {
+                                    dispatch(BreadcrumbShowCountlabel(`Count:${dataCount}`));
+                                }}
+                            />
 
                             {tableData.length > 0 &&
                                 <SaveButtonDraggable>

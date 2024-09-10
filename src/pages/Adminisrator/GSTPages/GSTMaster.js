@@ -16,6 +16,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import {
     Breadcrumb_inputName,
+    BreadcrumbShowCountlabel,
     commonPageField,
     commonPageFieldSuccess,
     deleteGSTId_ForMaster,
@@ -43,6 +44,7 @@ import { Go_Button, SaveButton } from "../../../components/Common/CommonButton";
 import { globalTableSearchProps } from "../../../components/Common/SearchBox/MySearch";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
+import GlobalCustomTable from "../../../GlobalCustomTable";
 
 const GSTMaster = (props) => {
     const dispatch = useDispatch();
@@ -83,7 +85,9 @@ const GSTMaster = (props) => {
         const page_Id = pageId.GST
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
+        dispatch(BreadcrumbShowCountlabel(`Count:${0}`));
     }, []);
+
 
     const values = { ...state.values }
     const { isError } = state;
@@ -477,7 +481,7 @@ const GSTMaster = (props) => {
                                     </CardHeader>
                                 </Card>
 
-                                {Data.length > 0 ?
+                                {/* {Data.length > 0 ?
 
                                     <ToolkitProvider
                                         keyField="Item"
@@ -509,8 +513,22 @@ const GSTMaster = (props) => {
                                             </React.Fragment>
                                         )}
                                     </ToolkitProvider>
-                                    : null}
+                                    : null} */}
 
+                                <GlobalCustomTable
+                                    keyField={"Item"}
+                                    data={Data}
+                                    columns={pagesListColumns}
+                                    id="table_Arrow"
+                                    noDataIndication={
+                                        <div className="text-danger text-center ">
+                                            Items Not available
+                                        </div>
+                                    }
+                                    onDataSizeChange={({ dataCount, filteredData = [] }) => {
+                                        dispatch(BreadcrumbShowCountlabel(`Count:${dataCount}`));
+                                    }}
+                                />
                                 {Data.length > 0 &&
                                     <SaveButtonDraggable>
                                         <SaveButton pageMode={pageMode}
