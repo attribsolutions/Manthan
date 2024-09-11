@@ -27,8 +27,6 @@ import {
     saveGSTMaster,
     saveGSTMasterSuccess,
 } from "../../../store/actions";
-import ToolkitProvider from "react-bootstrap-table2-toolkit";
-import BootstrapTable from "react-bootstrap-table-next";
 import {
     breadcrumbReturnFunc,
     loginUserID,
@@ -41,7 +39,6 @@ import { mode, pageId, url } from "../../../routes";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { comAddPageFieldFunc, initialFiledFunc, onChangeDate, resetFunction } from "../../../components/Common/validationFunction";
 import { Go_Button, SaveButton } from "../../../components/Common/CommonButton";
-import { globalTableSearchProps } from "../../../components/Common/SearchBox/MySearch";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 import GlobalCustomTable from "../../../GlobalCustomTable";
@@ -247,12 +244,6 @@ const GSTMaster = (props) => {
             PermissionAction: deleteGSTId_ForMaster,
             ID: id,
         })
-    };
-
-    const pageOptions = {
-        sizePerPage: 10,
-        totalSize: Data.length,
-        custom: true,
     };
 
     const pagesListColumns = [
@@ -481,40 +472,6 @@ const GSTMaster = (props) => {
                                     </CardHeader>
                                 </Card>
 
-                                {/* {Data.length > 0 ?
-
-                                    <ToolkitProvider
-                                        keyField="Item"
-                                        data={Data}
-                                        columns={pagesListColumns}
-                                        search
-                                    >
-                                        {(toolkitProps) => (
-                                            <React.Fragment>
-                                                <Row>
-                                                    <Col xl="12">
-                                                        <div className="table-responsive">
-                                                            <BootstrapTable
-                                                                keyField={"Item"}
-                                                                id="table_Arrow"
-                                                                responsive
-                                                                bordered={false}
-                                                                striped={false}
-                                                                classes={"table  table-bordered"}
-                                                                noDataIndication={<div className="text-danger text-center ">Items Not available</div>}
-                                                                {...toolkitProps.baseProps}
-                                                            />
-                                                            {globalTableSearchProps(toolkitProps.searchProps)}
-
-                                                        </div>
-                                                    </Col>
-                                                </Row>
-
-                                            </React.Fragment>
-                                        )}
-                                    </ToolkitProvider>
-                                    : null} */}
-
                                 <GlobalCustomTable
                                     keyField={"Item"}
                                     data={Data}
@@ -525,7 +482,7 @@ const GSTMaster = (props) => {
                                             Items Not available
                                         </div>
                                     }
-                                    onDataSizeChange={({ dataCount, filteredData = [] }) => {
+                                    onDataSizeChange={({ dataCount }) => {
                                         dispatch(BreadcrumbShowCountlabel(`Count:${dataCount}`));
                                     }}
                                 />

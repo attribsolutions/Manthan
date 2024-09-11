@@ -226,6 +226,9 @@ const GRNAdd3 = (props) => {
                 dispatch(editGRNIdSuccess({ Status: false }))
                 dispatch(Breadcrumb_inputName(hasEditVal.ItemName))
                 seteditCreatedBy(hasEditVal.CreatedBy)
+                let sumOfGrandTotal = GRNItems.reduce((accumulator, currentObject) => accumulator + Number(currentObject["roundedTotalAmount"]) || 0, 0);
+                let count_label = `${"Count"}:${GRNItems.length} ₹ ${Number(sumOfGrandTotal).toLocaleString()}`
+                dispatch(BreadcrumbShowCountlabel(count_label));
             }
         }
     }, []);
@@ -429,7 +432,7 @@ const GRNAdd3 = (props) => {
             let GRNReferencesUpdate = openPOdata  /// GRNReferencesUpdate this Key Word Use For GRN Ref From Use Inter Branch
 
             const Invoicedate = _cfunc.convertDateFormat(invoiceDate)
-            
+
             const jsonBody = JSON.stringify({
                 GRNDate: grnDate,
                 Customer: grnDetail.Customer,

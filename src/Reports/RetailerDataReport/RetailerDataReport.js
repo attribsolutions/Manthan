@@ -69,7 +69,6 @@ const RetailerDataReport = (props) => {
     dispatch(commonPageFieldSuccess(null));
     dispatch(commonPageField(pageId.RETAILER_DATA_REPORT));
     dispatch(SSDD_List_under_Company());
-    dispatch(BreadcrumbShowCountlabel(`Count:${tableData.length}`));
     return () => {
       dispatch(commonPageFieldSuccess(null));
       dispatch(postRetailerData_API_Success([]));
