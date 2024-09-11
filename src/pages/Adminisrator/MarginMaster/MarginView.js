@@ -1,12 +1,13 @@
 import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
-import { Card, CardBody, Col, Modal, Row, } from "reactstrap";
-import { globalTableSearchProps, MySearch } from "../../../components/Common/SearchBox/MySearch";
+import { Card, CardBody, Modal } from "reactstrap";
+import { globalTableSearchProps } from "../../../components/Common/SearchBox/MySearch";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { CommonConsole } from "../../../components/Common/CommonFunction";
-import { postViewGst_Success, postViewMrpSuccess } from "../../../store/actions";
+import { postViewGst_Success } from "../../../store/actions";
 import { useState } from "react";
+import { ModalCount } from "../../../components/Common/ModalCount";
 
 const MarginView = () => {
     const dispatch = useDispatch()
@@ -60,9 +61,8 @@ const MarginView = () => {
                     <div className="modal-body">
 
                         <h2 className="text-center">Margin Details</h2>
-                        <div className="d-flex justify-content-between align-items-end">
-                            <span className="fw-bold ms-auto">Count :{ItemCount}</span>
-                        </div>
+                        <ModalCount Count={ItemCount} />
+
                         <div className="mt-n1">
                             <ToolkitProvider
                                 keyField="id"

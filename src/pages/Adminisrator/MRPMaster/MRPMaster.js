@@ -11,14 +11,11 @@ import {
     Label,
     Row,
 } from "reactstrap";
-import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { Breadcrumb_inputName, BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
-import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
+import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import { get_Division_ForDropDown, get_Division_ForDropDown_Success, get_Party_ForDropDown, get_Party_ForDropDown_Success } from "../../../store/Administrator/ItemsRedux/action";
-import BootstrapTable from "react-bootstrap-table-next";
 import {
     breadcrumbReturnFunc,
     loginUserID,
@@ -31,7 +28,6 @@ import { mode, pageId, url } from "../../../routes";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { comAddPageFieldFunc, formValid, initialFiledFunc, onChangeDate, onChangeSelect, resetFunction } from "../../../components/Common/validationFunction";
 import { Go_Button, SaveButton } from "../../../components/Common/CommonButton";
-import { globalTableSearchProps } from "../../../components/Common/SearchBox/MySearch";
 import { deleteMRPMaster_Id, deleteMRPMaster_Id_Success, GoButtonForMRP_Master, GoButtonForMRP_MasterSuccess, saveMRPMaster, saveMRPMasterSuccess } from "../../../store/Administrator/MRPMasterRedux/action";
 import { mobileApp_ProductUpdate_Api } from "../../../helpers/backend_helper";
 import { showToastAlert } from "../../../helpers/axios_Config";
@@ -403,7 +399,7 @@ const MRPMaster = (props) => {
             _cfunc.btnIsDissablefunc({ btnId, state: true })
 
             var ItemData = Data.map((index) => ({
-                DivisionName: values.DivisionName.value,
+                Division: values.DivisionName.value,
                 Party: values.PartyName.value,
                 EffectiveDate: values.EffectiveDate,
                 Company: loginCompanyID(),
@@ -531,23 +527,20 @@ const MRPMaster = (props) => {
                                     </CardHeader>
                                 </Card>
 
-                                {/* {Data.length > 0 ? */}
-                                    <GlobalCustomTable
-                                        keyField={"Item"}
-                                        data={Data}
-                                        columns={pagesListColumns}
-                                        id="table_Arrow"
-                                        noDataIndication={
-                                            <div className="text-danger text-center ">
-                                                Items Not available
-                                            </div>
-                                        }
-                                        onDataSizeChange={({ dataCount, filteredData = [] }) => {
-                                            dispatch(BreadcrumbShowCountlabel(`Count:${dataCount}`));
-                                        }}
-                                    />
-
-                                    {/* : null} */}
+                                <GlobalCustomTable
+                                    keyField={"Item"}
+                                    data={Data}
+                                    columns={pagesListColumns}
+                                    id="table_Arrow"
+                                    noDataIndication={
+                                        <div className="text-danger text-center ">
+                                            Items Not available
+                                        </div>
+                                    }
+                                    onDataSizeChange={({ dataCount, filteredData = [] }) => {
+                                        dispatch(BreadcrumbShowCountlabel(`Count:${dataCount}`));
+                                    }}
+                                />
 
                                 {Data.length > 0 &&
                                     <SaveButtonDraggable>

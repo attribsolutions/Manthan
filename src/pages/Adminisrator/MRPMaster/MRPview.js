@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { CommonConsole } from "../../../components/Common/CommonFunction";
 import { postViewMrpSuccess } from "../../../store/actions";
 import { useState } from "react";
+import { ModalCount } from "../../../components/Common/ModalCount";
 
 const MRPView = () => {
     const dispatch = useDispatch()
@@ -61,9 +62,7 @@ const MRPView = () => {
                 <CardBody className="c_card_body">
                     <div className="modal-body">
                         <h2 className="text-center">MRP Details</h2>
-                        <div className="d-flex justify-content-between align-items-end">
-                            <span className="fw-bold ms-auto">Count : {ItemCount}</span>
-                        </div>
+                        <ModalCount Count={ItemCount} />
 
                         <div className="mt-n1">
                             <ToolkitProvider
