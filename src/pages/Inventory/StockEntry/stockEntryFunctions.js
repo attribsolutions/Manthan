@@ -120,7 +120,7 @@
 import * as _cfunc from "../../../components/Common/CommonFunction";
 
 export async function ItemAPIResponseFunc(selectedItem, tableData) {
-    
+    debugger
     const currentDate_ymd = _cfunc.date_ymd_func();
 
     try {
@@ -172,6 +172,8 @@ export async function ItemAPIResponseFunc(selectedItem, tableData) {
                 Highest_MRP,
                 Highest_GST,
                 Highest_Rate,
+                GroupName: i.GroupName,
+                SubGroupName: i.SubGroupName,
                 ItemName: i.ItemName,
                 ItemId: i.Item,
                 Quantity: i.Quantity,
@@ -208,6 +210,8 @@ export async function ItemAPIResponseFunc(selectedItem, tableData) {
                 MRP_DropdownOptions: index.MRP_DropdownOptions,
                 ItemGSTHSNDetails: index.GST_DropdownOptions,
                 Rate_DropdownOptions: index.Rate_DropdownOptions,
+                GroupName: index.GroupName,
+                SubGroupName: index.SubGroupName,
                 ItemName: index.ItemName,
                 ItemId: itemId,
                 Quantity: index.Quantity,
