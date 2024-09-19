@@ -283,19 +283,19 @@ const PartyMasterBulkUpdate = (props) => {
             return;
         }
 
-        else if (SelectFieldName.length === '') {
+        else if (SelectFieldName === '') {
             customAlert({
                 Type: 3,
                 Message: alertMessages.selectField,
             })
             return;
         }
-
+        
         const jsonBody = JSON.stringify({
 
             PartyID: commonPartyDropSelect.value,
             Route: values.Routes.value === "" ? 0 : values.Routes.value,
-            Type: SelectFieldName.length === '' ? 0 : SelectFieldName.label,
+            Type: SelectFieldName === '' ? 0 : SelectFieldName.label,
             FilterPartyID: values.Party.value === "" ? 0 : values.Party.value
 
         });
