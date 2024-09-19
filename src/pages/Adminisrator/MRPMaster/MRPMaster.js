@@ -53,6 +53,7 @@ const MRPMaster = (props) => {
     const [editCreatedBy, seteditCreatedBy] = useState("");
     const [selectedMrp, setSelectedMrp] = useState([]);
     const [MRPDeleteId, setMRPDeleteId] = useState("");
+    const [mobileApiLoading, setMobileApiLoading] = useState(false);
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const { postMsg,
@@ -213,7 +214,7 @@ const MRPMaster = (props) => {
 
     const GoButton_Handler = (event) => {
 
-        if (values.EffectiveDate === '' || values.DivisionName === '') {
+        if (values.EffectiveDate === '') {
             customAlert({
                 Type: 4,
                 Message: alertMessages.effectiveDateAndDivisionIsRequired,
@@ -250,7 +251,7 @@ const MRPMaster = (props) => {
     useEffect(async () => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-
+            setMobileApiLoading(true)
             dispatch(saveMRPMasterSuccess({ Status: false }))
             //***************mobail app api*********************** */
             let arrayOfMrpID = selectedMrp.map(function (i) {
@@ -288,6 +289,8 @@ const MRPMaster = (props) => {
                 Message: JSON.stringify(postMsg.Message),
             })
         }
+        setMobileApiLoading(false);
+        dispatch(GoButtonForMRP_MasterSuccess([]));
     }, [postMsg])
 
 
@@ -545,8 +548,9 @@ const MRPMaster = (props) => {
                                 {Data.length > 0 &&
                                     <SaveButtonDraggable>
                                         <SaveButton pageMode={pageMode}
-                                            loading={saveBtnloading}
                                             onClick={SaveHandler}
+                                            loading={(saveBtnloading) || (mobileApiLoading)}
+                                            forceDisabled={mobileApiLoading}
                                             userAcc={userPageAccessState}
                                             editCreatedBy={editCreatedBy}
                                         />

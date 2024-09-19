@@ -7,9 +7,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { CommonConsole } from "../../../components/Common/CommonFunction";
 import { postViewGst_Success } from "../../../store/actions";
 import { useState } from "react";
-import { ModalCount } from "../../../components/Common/ModalCount";
+import { DetailsSection } from "../../../components/Common/ModalCount";
 
-const MarginView = () => {
+const MarginView = (Props) => {
+
+    const { tableRowData = {} } = Props
+    const { PriceListName = '', PartyName = '' } = tableRowData
+    
     const dispatch = useDispatch()
     const [modal_view, setModal_view] = useState(false);
     const [tableArray, setTableArray] = useState([]);
@@ -60,8 +64,15 @@ const MarginView = () => {
                 <CardBody className="c_card_body">
                     <div className="modal-body">
 
-                        <h2 className="text-center">Margin Details</h2>
-                        <ModalCount Count={ItemCount} />
+                        <DetailsSection
+                            title="Margin Details"
+                            firstLabel="PriceList"
+                            firstValue={PriceListName}
+                            secondLabel="Party"
+                            secondValue={PartyName}
+                            thirdLabel="Count"
+                            thirdValue={ItemCount}
+                        />
 
                         <div className="mt-n1">
                             <ToolkitProvider

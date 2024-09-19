@@ -32,6 +32,7 @@ const MarginList = () => {
   const [userAccState, setUserAccState] = useState('');
   const [hederFilters, setHederFilters] = useState({ fromdate: _cfunc.currentDate_ymd, todate: _cfunc.currentDate_ymd })
   const { fromdate, todate, } = hederFilters;
+  const [rowData, setRowData] = useState({})
 
   const reducers = useSelector(
     (state) => ({
@@ -150,7 +151,7 @@ const MarginList = () => {
 
     })
     dispatch(_act.postViewGst({ jsonBody, btnId: `btn-viewApproval-${config.rowData.id}`, subPageMode: url.MARGIN_lIST }));
-
+    setRowData(config.rowData)
   }
   function fromdateOnchange(e, date) {
     let newObj = { ...hederFilters }
@@ -252,7 +253,7 @@ const MarginList = () => {
 
         }
       </div>
-      <MarginView />
+      <MarginView tableRowData={rowData}  />
     </React.Fragment>
   )
 }

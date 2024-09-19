@@ -37,22 +37,22 @@ const GSTView = () => {
 
     const pagesListColumns = [
         {
-            text: "Item Name",
-            dataField: "ItemName",
-        },
-        {
-            text: "HSN Code",
-            dataField: "HSNCode",
-        },
-        {
             text: "Effective Date",
             dataField: "EffectiveDate",
+        },
+        {
+            text: "Item Name",
+            dataField: "ItemName",
         },
         {
             text: "GST Percentage",
             dataField: "GSTPercentage",
         },
-
+        {
+            text: "HSN Code",
+            dataField: "HSNCode",
+        },
+      
     ];
 
     return (

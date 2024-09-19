@@ -7,9 +7,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { CommonConsole } from "../../../components/Common/CommonFunction";
 import { postViewMrpSuccess } from "../../../store/actions";
 import { useState } from "react";
-import { ModalCount } from "../../../components/Common/ModalCount";
+import { DetailsSection } from "../../../components/Common/ModalCount";
 
-const MRPView = () => {
+const MRPView = (Props) => {
+    const { tableRowData = {} } = Props
+    const { DivisionName = '', PartyName = '' } = tableRowData
+
     const dispatch = useDispatch()
     const [modal_view, setModal_view] = useState(false);
     const [tableArray, setTableArray] = useState([]);
@@ -23,7 +26,6 @@ const MRPView = () => {
     useEffect(() => {
         try {
             if ((MRPList.length > 0)) {
-                debugger
                 setTableArray(MRPList)// modify Custom Table Data
                 setModal_view(true);
             }
@@ -33,17 +35,17 @@ const MRPView = () => {
     function modalToggleFunc() {
         setModal_view(false);
         dispatch(postViewMrpSuccess({ Status: false }))// modify Custom Api Action call
-
     }
 
     const pagesListColumns = [
-        {
-            text: "Item Name",
-            dataField: "ItemName",
-        },
+
         {
             text: "Effective Date",
             dataField: "EffectiveDate",
+        },
+        {
+            text: "Item Name",
+            dataField: "ItemName",
         },
         {
             text: "MRP",
@@ -61,9 +63,15 @@ const MRPView = () => {
             <Card>
                 <CardBody className="c_card_body">
                     <div className="modal-body">
-                        <h2 className="text-center">MRP Details</h2>
-                        <ModalCount Count={ItemCount} />
-
+                        <DetailsSection
+                            title="MRP Details"
+                            firstLabel="Division"
+                            firstValue={DivisionName}
+                            secondLabel="Party"
+                            secondValue={PartyName}
+                            thirdLabel="Count"
+                            thirdValue={ItemCount}
+                        />
                         <div className="mt-n1">
                             <ToolkitProvider
                                 keyField="id"
