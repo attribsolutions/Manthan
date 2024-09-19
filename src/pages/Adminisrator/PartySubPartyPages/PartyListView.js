@@ -5,53 +5,44 @@ import { globalTableSearchProps } from "../../../components/Common/SearchBox/MyS
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { CommonConsole } from "../../../components/Common/CommonFunction";
-import { postViewMrpSuccess } from "../../../store/actions";
 import { useState } from "react";
-import { DetailsSection } from "../../../components/Common/ModalCount";
+import { ModalCount } from "../../../components/Common/ModalCount";
+import { getPartySubParty_For_party_dropdownSuccess } from "../../../store/Administrator/PartySubPartyRedux/action";
 
-const MRPView = (Props) => {
-    const { tableRowData = {} } = Props
-    const { DivisionName = '', PartyName = '' } = tableRowData
-
+const PartySubPartyListView = () => {
     const dispatch = useDispatch()
     const [modal_view, setModal_view] = useState(false);
     const [tableArray, setTableArray] = useState([]);
 
     const { viewData_redux } = useSelector((state) => ({
-        viewData_redux: state.MRPMasterReducer.MRPView // modify Redux State
+        viewData_redux: state.PartySubPartyReducer.PartySubParty,
     }))
-
-    const { ItemCount, MRPList = [] } = viewData_redux
-
+  
     useEffect(() => {
         try {
-            if ((MRPList.length > 0)) {
-                setTableArray(MRPList)// modify Custom Table Data
+            if ((viewData_redux.length > 0)) {
+                
+                setTableArray(viewData_redux)// modify Custom Table Data
                 setModal_view(true);
             }
         } catch (error) { CommonConsole(error) }
-    }, [MRPList]);
+    }, [viewData_redux]);
 
     function modalToggleFunc() {
         setModal_view(false);
-        dispatch(postViewMrpSuccess({ Status: false }))// modify Custom Api Action call
+        dispatch(getPartySubParty_For_party_dropdownSuccess([]));
+
     }
 
     const pagesListColumns = [
-
         {
-            text: "Effective Date",
-            dataField: "EffectiveDate",
+            text: "Sub Party",
+            dataField: "SubPartyName",
         },
         {
-            text: "Item Name",
-            dataField: "ItemName",
+            text: "Party Type",
+            dataField: "PartyTypeName",
         },
-        {
-            text: "MRP",
-            dataField: "MRP",
-        },
-
     ];
 
     return (
@@ -63,15 +54,9 @@ const MRPView = (Props) => {
             <Card>
                 <CardBody className="c_card_body">
                     <div className="modal-body">
-                        <DetailsSection
-                            title="MRP Details"
-                            firstLabel="Division"
-                            firstValue={DivisionName}
-                            secondLabel="Party"
-                            secondValue={PartyName}
-                            thirdLabel="Count"
-                            thirdValue={ItemCount}
-                        />
+                        <h2 className="text-center">{viewData_redux[0]?.PartyName}</h2>
+                        <ModalCount Count={viewData_redux.length} />
+
                         <div className="mt-n1">
                             <ToolkitProvider
                                 keyField="id"
@@ -110,4 +95,4 @@ const MRPView = (Props) => {
     )
 
 }
-export default MRPView;
+export default PartySubPartyListView;

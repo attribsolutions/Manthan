@@ -29,6 +29,7 @@ const MRPList = () => {
   const [pageMode, setpageMode] = useState(mode.defaultsave)
   const [hederFilters, setHederFilters] = useState({ fromdate: _cfunc.currentDate_ymd, todate: _cfunc.currentDate_ymd })
   const { fromdate, todate, } = hederFilters;
+  const [rowData, setRowData] = useState({})
 
   const reducers = useSelector(
     (state) => ({
@@ -126,14 +127,13 @@ const MRPList = () => {
   }
 
   function viewApprovalBtnFunc(config) {
-    
+
     const jsonBody = JSON.stringify({
       "EffectiveDate": config.rowData.EffectiveDate,
       "CommonID": config.rowData.CommonID,
-
     })
     dispatch(_act.postViewMrp({ jsonBody, btnId: `btn-viewApproval-${config.rowData.id}` }));
-
+    setRowData(config.rowData)
   }
 
   function fromdateOnchange(e, date) {
@@ -237,7 +237,8 @@ const MRPList = () => {
               : null
           }
         </div>
-        <MRPView />
+
+        <MRPView tableRowData={rowData} />
       </div>
     </React.Fragment>
   )
