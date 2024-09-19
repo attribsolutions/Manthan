@@ -1,12 +1,13 @@
 import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
-import { Card, CardBody, Col, Modal, Row, } from "reactstrap";
-import { globalTableSearchProps, MySearch } from "../../../components/Common/SearchBox/MySearch";
+import { Card, CardBody, Modal, } from "reactstrap";
+import { globalTableSearchProps, } from "../../../components/Common/SearchBox/MySearch";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { CommonConsole } from "../../../components/Common/CommonFunction";
-import { postViewMrpSuccess } from "../../../store/actions";
+import { postViewGst_Success } from "../../../store/actions";
 import { useState } from "react";
+import { ModalCount } from "../../../components/Common/ModalCount";
 
 const GSTView = () => {
     const dispatch = useDispatch()
@@ -17,43 +18,41 @@ const GSTView = () => {
         viewData_redux: state.GSTReducer.GSTView // modify Redux State
     }))
 
+    const { ItemCount, GSTHSNList = [] } = viewData_redux
+
     useEffect(() => {
         try {
+            if ((GSTHSNList.length > 0)) {
 
-            if ((viewData_redux.Status === true)) {
-                setTableArray(viewData_redux.Data)// modify Custom Table Data
+                setTableArray(GSTHSNList)// modify Custom Table Data
                 setModal_view(true);
             }
         } catch (error) { CommonConsole(error) }
-    }, [viewData_redux]);
+    }, [GSTHSNList]);
 
     function modalToggleFunc() {
         setModal_view(false);
-        dispatch(postViewMrpSuccess({ Status: false }))// modify Custom Api Action call
-
+        dispatch(postViewGst_Success({ Status: false }))// modify Custom Api Action call
     }
 
-
-
-
     const pagesListColumns = [
-        {
-            text: "Item Name",
-            dataField: "ItemName",
-        },
-        {
-            text: "HSN Code",
-            dataField: "HSNCode",
-        },
         {
             text: "Effective Date",
             dataField: "EffectiveDate",
         },
         {
+            text: "Item Name",
+            dataField: "ItemName",
+        },
+        {
             text: "GST Percentage",
             dataField: "GSTPercentage",
         },
-
+        {
+            text: "HSN Code",
+            dataField: "HSNCode",
+        },
+      
     ];
 
     return (
@@ -63,14 +62,12 @@ const GSTView = () => {
             size="xl"
         >
             <Card>
-
-
-
                 <CardBody className="c_card_body">
-
                     <div className="modal-body">
 
                         <h2 className="text-center">GST Details</h2>
+                        <ModalCount Count={ItemCount} />
+
                         <div className="mt-n1">
                             <ToolkitProvider
                                 keyField="id"

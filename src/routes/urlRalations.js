@@ -151,6 +151,10 @@ export const Item_Supplier_Assign = url.ITEM_SUPPLIER_ASSIGN
 export const Rate_Master = url.RATE_LIST
 export const Rate_List = url.RATE_MASTER
 
+export const Franchise_Customer_Master = url.FRANCHISE_CUSTOMER_LIST
+
+export const Franchise_Customer_List = url.FRANCHISE_CUSTOMER_MASTER
+
 
 //******************************* Purchase Module ************************************//
 
@@ -345,3 +349,6 @@ export const POS_User_List = url.POS_USER;
 export const  SweetPOS_Rate_Master = url.SWEET_POS_RATE_MASTER
 
 export const  SweetPOS_Machine_Master = url.SWEET_POS_MACHINE_MASTER
+
+export const  Stock_Out_Report = url.STOCK_OUT_REPORT
+

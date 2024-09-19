@@ -241,6 +241,7 @@ import StockEntryList from "../pages/Inventory/StockEntry/StockEntryList.js";
 import SweetPOSRateMaster from "../pages/SweetPOS/Adminstration/RateMaster/SweetPOSRateMaster.js";
 import OrderItemSupplierReport from "../Reports/OrderItemSupplier/index.js";
 import MachineTypeMaster from "../pages/SweetPOS/Adminstration/MachineType/MachineTypeMaster.js";
+import StockOutReport from "../pages/SweetPOS/Reports/StockOutReport/index.js";
 
 
 
@@ -295,6 +296,9 @@ const userRoutes = [
 
 	{ path: path.RETAILER_LIST, component: PartyList, isPartyWisePage: true },
 	{ path: path.RETAILER_MASTER, component: PartyMaster, isPartyWisePage: true },
+
+	{ path: path.FRANCHISE_CUSTOMER_LIST, component: PartyList, isPartyWisePage: true },
+	{ path: path.FRANCHISE_CUSTOMER_MASTER, component: PartyMaster, isPartyWisePage: true },
 
 	{ path: path.NON_RETAILER_PARTY_lIST, component: PartyList, isPartyWisePage: true },
 	{ path: path.NON_RETAILER_PARTY, component: PartyMaster, isPartyWisePage: true },
@@ -477,12 +481,6 @@ const userRoutes = [
 	{ path: path.BULK_WORK_ORDER_LIST, component: BulkWorkOrderList },
 
 
-
-
-
-
-
-
 	{ path: path.MATERIAL_ISSUE, component: MaterialIssueMaster },
 	{ path: path.MATERIAL_ISSUE_LIST, component: MaterialIssueList },
 	{ path: path.MATERIAL_ISSUE_STP, component: WorkOrderList },
@@ -636,6 +634,8 @@ const userRoutes = [
 	{ path: path.POS_USER_lIST, component: POSUserList },//not party wise
 
 	{ path: path.SWEET_POS_MACHINE_MASTER, component: MachineTypeMaster },//not party wise
+
+	{ path: path.STOCK_OUT_REPORT, component: StockOutReport },//not party wise
 	// ************************************ Pos_Invoice **************************************//
 
 

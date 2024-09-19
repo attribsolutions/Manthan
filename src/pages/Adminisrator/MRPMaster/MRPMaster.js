@@ -11,14 +11,11 @@ import {
     Label,
     Row,
 } from "reactstrap";
-import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { Breadcrumb_inputName, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
-import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
+import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import { get_Division_ForDropDown, get_Division_ForDropDown_Success, get_Party_ForDropDown, get_Party_ForDropDown_Success } from "../../../store/Administrator/ItemsRedux/action";
-import BootstrapTable from "react-bootstrap-table-next";
 import {
     breadcrumbReturnFunc,
     loginUserID,
@@ -31,12 +28,12 @@ import { mode, pageId, url } from "../../../routes";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { comAddPageFieldFunc, formValid, initialFiledFunc, onChangeDate, onChangeSelect, resetFunction } from "../../../components/Common/validationFunction";
 import { Go_Button, SaveButton } from "../../../components/Common/CommonButton";
-import { globalTableSearchProps } from "../../../components/Common/SearchBox/MySearch";
 import { deleteMRPMaster_Id, deleteMRPMaster_Id_Success, GoButtonForMRP_Master, GoButtonForMRP_MasterSuccess, saveMRPMaster, saveMRPMasterSuccess } from "../../../store/Administrator/MRPMasterRedux/action";
 import { mobileApp_ProductUpdate_Api } from "../../../helpers/backend_helper";
 import { showToastAlert } from "../../../helpers/axios_Config";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
+import GlobalCustomTable from "../../../GlobalCustomTable";
 
 const MRPMaster = (props) => {
     const dispatch = useDispatch();
@@ -56,6 +53,7 @@ const MRPMaster = (props) => {
     const [editCreatedBy, seteditCreatedBy] = useState("");
     const [selectedMrp, setSelectedMrp] = useState([]);
     const [MRPDeleteId, setMRPDeleteId] = useState("");
+    const [mobileApiLoading, setMobileApiLoading] = useState(false);
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const { postMsg,
@@ -103,6 +101,7 @@ const MRPMaster = (props) => {
     useEffect(() => {
         dispatch(get_Party_ForDropDown());
         dispatch(get_Division_ForDropDown());
+        dispatch(BreadcrumbShowCountlabel(`Count:${0}`));
         return () => {
             dispatch(get_Party_ForDropDown_Success([]))
             dispatch(get_Division_ForDropDown_Success([]))
@@ -215,7 +214,7 @@ const MRPMaster = (props) => {
 
     const GoButton_Handler = (event) => {
 
-        if (values.EffectiveDate === '' || values.DivisionName === '') {
+        if (values.EffectiveDate === '') {
             customAlert({
                 Type: 4,
                 Message: alertMessages.effectiveDateAndDivisionIsRequired,
@@ -252,7 +251,7 @@ const MRPMaster = (props) => {
     useEffect(async () => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-
+            setMobileApiLoading(true)
             dispatch(saveMRPMasterSuccess({ Status: false }))
             //***************mobail app api*********************** */
             let arrayOfMrpID = selectedMrp.map(function (i) {
@@ -290,6 +289,8 @@ const MRPMaster = (props) => {
                 Message: JSON.stringify(postMsg.Message),
             })
         }
+        setMobileApiLoading(false);
+        dispatch(GoButtonForMRP_MasterSuccess([]));
     }, [postMsg])
 
 
@@ -401,7 +402,7 @@ const MRPMaster = (props) => {
             _cfunc.btnIsDissablefunc({ btnId, state: true })
 
             var ItemData = Data.map((index) => ({
-                DivisionName: values.DivisionName.value,
+                Division: values.DivisionName.value,
                 Party: values.PartyName.value,
                 EffectiveDate: values.EffectiveDate,
                 Company: loginCompanyID(),
@@ -471,7 +472,6 @@ const MRPMaster = (props) => {
                                                                 }}
                                                                 onChange={(hasSelect, evn) => {
                                                                     onChangeSelect({ hasSelect, evn, state, setState, })
-                                                                    // dispatch(Breadcrumb_inputName(hasSelect.label))
                                                                 }}
                                                             />
                                                         </Col>
@@ -530,46 +530,27 @@ const MRPMaster = (props) => {
                                     </CardHeader>
                                 </Card>
 
-                                {Data.length > 0 ?
-
-                                    <ToolkitProvider
-                                        keyField="Item"
-                                        data={Data}
-                                        columns={pagesListColumns}
-                                        search
-                                    >
-                                        {(toolkitProps) => (
-                                            <React.Fragment>
-                                                <Row>
-                                                    <Col xl="12">
-                                                        <div className="table-responsive">
-                                                            <BootstrapTable
-                                                                keyField={"Item"}
-                                                                id="table_Arrow"
-                                                                responsive
-                                                                bordered={false}
-                                                                striped={false}
-                                                                classes={"table  table-bordered"}
-                                                                noDataIndication={<div className="text-danger text-center ">Items Not available</div>}
-                                                                {...toolkitProps.baseProps}
-                                                            />
-                                                            {globalTableSearchProps(toolkitProps.searchProps)}
-                                                        </div>
-                                                    </Col>
-                                                </Row>
-
-                                            </React.Fragment>
-                                        )}
-                                    </ToolkitProvider>
-
-
-                                    : null}
+                                <GlobalCustomTable
+                                    keyField={"Item"}
+                                    data={Data}
+                                    columns={pagesListColumns}
+                                    id="table_Arrow"
+                                    noDataIndication={
+                                        <div className="text-danger text-center ">
+                                            Items Not available
+                                        </div>
+                                    }
+                                    onDataSizeChange={({ dataCount, filteredData = [] }) => {
+                                        dispatch(BreadcrumbShowCountlabel(`Count:${dataCount}`));
+                                    }}
+                                />
 
                                 {Data.length > 0 &&
                                     <SaveButtonDraggable>
                                         <SaveButton pageMode={pageMode}
-                                            loading={saveBtnloading}
                                             onClick={SaveHandler}
+                                            loading={(saveBtnloading) || (mobileApiLoading)}
+                                            forceDisabled={mobileApiLoading}
                                             userAcc={userPageAccessState}
                                             editCreatedBy={editCreatedBy}
                                         />

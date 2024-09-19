@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import CommonListPage from "../../../components/Common/CommonMasterListPage";
 import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
 import {
   deletePartySubParty,
   deletePartySubPartySuccess,
   editPartySubParty,
+  getPartySubParty_For_party_dropdown,
   getPartySubPartylist,
   savePartySubPartySuccess,
   updatePartySubPartySuccess
@@ -13,6 +13,8 @@ import {
 import PartySubParty from "./index";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
+import CommonPurchaseList from "../../../components/Common/CommonPurchaseList";
+import PartySubPartyListView from "./PartyListView";
 
 const PartySubPartyList = () => {
   const dispatch = useDispatch();
@@ -47,19 +49,28 @@ const PartySubPartyList = () => {
 
   const { pageField } = reducers
 
+  function viewApprovalBtnFunc(config) {
+    const PartyID = config.rowData.Party_id
+    dispatch(getPartySubParty_For_party_dropdown(PartyID));
+  }
+
   return (
     <React.Fragment>
       {
         (pageField) &&
-        <CommonListPage
+
+        <CommonPurchaseList
           action={action}
           reducers={reducers}
           MasterModal={PartySubParty}
           masterPath={url.PARTY_SUB_PARTY}
+          newBtnPath={url.PARTY_SUB_PARTY}
           ButtonMsgLable={"PartySubParty"}
           deleteName={"PartySubParty"}
+          viewApprovalBtnFunc={viewApprovalBtnFunc}
         />
       }
+      <PartySubPartyListView />
     </React.Fragment>
   )
 }

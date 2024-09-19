@@ -16,6 +16,9 @@ import { mobileApp_ProductUpdate_Api } from "../../../helpers/backend_helper";
 import { showToastAlert } from "../../../helpers/axios_Config";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 import MRPView from "./MRPview";
+import { Col, FormGroup, Label } from "reactstrap";
+import { C_DatePicker } from "../../../CustomValidateForm";
+import { Go_Button } from "../../../components/Common/CommonButton";
 
 const MRPList = () => {
 
@@ -24,6 +27,9 @@ const MRPList = () => {
   const hasPagePath = history.location.pathname
 
   const [pageMode, setpageMode] = useState(mode.defaultsave)
+  const [hederFilters, setHederFilters] = useState({ fromdate: _cfunc.currentDate_ymd, todate: _cfunc.currentDate_ymd })
+  const { fromdate, todate, } = hederFilters;
+  const [rowData, setRowData] = useState({})
 
   const reducers = useSelector(
     (state) => ({
@@ -36,7 +42,7 @@ const MRPList = () => {
     })
   );
 
-  const { pageField, MRPGoButton, deleteMsg } = reducers;
+  const { pageField, MRPGoButton, deleteMsg, listBtnLoading } = reducers;
 
   const action = {
     getList: getMRPList,
@@ -50,8 +56,7 @@ const MRPList = () => {
     setpageMode(hasPagePath)
     dispatch(commonPageFieldListSuccess(null))
     dispatch(commonPageFieldList(page_Id))
-    // dispatch(BreadcrumbShowCountlabel(`${"MRP Count"} :0`))
-    dispatch(getMRPList())
+    goButtonHandler()
 
   }, []);
 
@@ -64,7 +69,6 @@ const MRPList = () => {
     const mobilApiResp = await mobileApp_ProductUpdate_Api({ jsonBody })
     if (mobilApiResp.StatusCode === 200) { showToastAlert(mobilApiResp.Message, "success") }
     //************************************** */
-
     return // *note  return required 
   }
 
@@ -72,7 +76,7 @@ const MRPList = () => {
 
     if (deleteMsg.Status === true && deleteMsg.StatusCode === 200) {
       dispatch(deleteMRPList_Id_Success([]))
-      dispatch(getMRPList())
+      goButtonHandler()
     }
   }, [deleteMsg]);
 
@@ -123,14 +127,88 @@ const MRPList = () => {
   }
 
   function viewApprovalBtnFunc(config) {
-    debugger
+
     const jsonBody = JSON.stringify({
       "EffectiveDate": config.rowData.EffectiveDate,
       "CommonID": config.rowData.CommonID,
-
     })
     dispatch(_act.postViewMrp({ jsonBody, btnId: `btn-viewApproval-${config.rowData.id}` }));
+    setRowData(config.rowData)
+  }
 
+  function fromdateOnchange(e, date) {
+    let newObj = { ...hederFilters }
+    newObj.fromdate = date
+    setHederFilters(newObj)
+  }
+
+  function todateOnchange(e, date) {
+    let newObj = { ...hederFilters }
+    newObj.todate = date
+    setHederFilters(newObj)
+  }
+
+  const goButtonHandler = () => {
+    const jsonBody = JSON.stringify({
+      FromDate: fromdate,
+      ToDate: todate,
+    });
+
+    dispatch(getMRPList({ jsonBody }));
+  };
+
+  const HeaderContent = () => {
+
+    return (
+      <div className="px-2   c_card_filter text-black" >
+        <div className="row" >
+          <Col sm="3" className="">
+            <FormGroup className="mb-2 row mt-3 " >
+              <Label className="col-sm-5 p-2"
+                style={{ width: "83px" }}>FromDate</Label>
+              <Col sm="7">
+                <C_DatePicker
+                  name='FromDate'
+                  value={fromdate}
+                  onChange={fromdateOnchange}
+                />
+              </Col>
+            </FormGroup>
+          </Col>
+
+          <Col sm="3" className="">
+            <FormGroup className="mb-2 row mt-3 " >
+              <Label className="col-sm-5 p-2"
+                style={{ width: "65px" }}>ToDate</Label>
+              <Col sm="7">
+                <C_DatePicker
+
+                  options={{
+                    minDate: (_cfunc.disablePriviousTodate({ fromDate: fromdate })),
+                    maxDate: "today",
+                    altInput: true,
+                    altFormat: "d-m-Y",
+                    dateFormat: "Y-m-d",
+                  }}
+                  value={_cfunc.ToDate({ FromDate: fromdate, Todate: todate })}
+                  name="ToDate"
+                  onChange={todateOnchange}
+                />
+              </Col>
+            </FormGroup>
+          </Col>
+
+          <Col sm="5" ></Col>
+
+          <Col sm="1" className="mt-3 mb-2 ">
+            <Go_Button
+              loading={listBtnLoading}
+              onClick={goButtonHandler}
+            />
+          </Col>
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -151,6 +229,7 @@ const MRPList = () => {
                 ButtonMsgLable={"MRP"}
                 deleteName={"EffectiveDate"}
                 pageMode={pageMode}
+                HeaderContent={HeaderContent}
                 viewApprovalBtnFunc={viewApprovalBtnFunc}
                 editBodyfunc={editBodyfunc}
                 deleteBodyfunc={deleteBodyfunc}
@@ -158,7 +237,8 @@ const MRPList = () => {
               : null
           }
         </div>
-        <MRPView />
+
+        <MRPView tableRowData={rowData} />
       </div>
     </React.Fragment>
   )

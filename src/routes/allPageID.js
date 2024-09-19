@@ -174,6 +174,9 @@ export const PARTY_EMPLOYEE_DETAILS = 275
 export const RATE_MASTER = 277
 export const RATE_LIST = 278
 
+export const FRANCHISE_CUSTOMER_MASTER = 307
+
+export const FRANCHISE_CUSTOMER_LIST = 308
 
 //******************************* Purchase Module ************************************//
 export const ORDER_1 = 53
@@ -371,12 +374,12 @@ export const SYSTEM_SETTING_LIST = 269
 
 export const TARGET_VS_ACHIEVEMENT = 273
 
-export const  CASHIER_SUMMARY_REPORT = 287
+export const CASHIER_SUMMARY_REPORT = 287
 
-export const  SWEET_POS_RATE_MASTER = 295
+export const SWEET_POS_RATE_MASTER = 295
 
-export const  SWEET_POS_MACHINE_MASTER = 304
+export const SWEET_POS_MACHINE_MASTER = 304
 
-
+export const STOCK_OUT_REPORT = 306
 
 

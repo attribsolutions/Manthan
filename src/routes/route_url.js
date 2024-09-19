@@ -170,6 +170,9 @@ export const CREDIT_NOTE_UPLOAD = "/CreditNoteUpload"
 export const RATE_MASTER = "/Rate_Master"
 export const RATE_LIST = "/Rate_List"
 
+export const FRANCHISE_CUSTOMER_MASTER = "/Franchise_Customer_Master"
+
+export const FRANCHISE_CUSTOMER_LIST = "/Franchise_Customer_List"
 
 //******************************* Purchase Module ************************************//
 export const ORDER_1 = "/Order_1"
@@ -414,6 +417,7 @@ export const SWEET_POS_RATE_MASTER = "/SweetPOS_Rate_Master"
 
 export const  SWEET_POS_MACHINE_MASTER = "/SweetPOS_Machine_Master"
 
+export const  STOCK_OUT_REPORT = "/Stock_Out_Report"
 
 
 

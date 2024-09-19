@@ -15,6 +15,7 @@ import { C_Button } from "../../../components/Common/CommonButton";
 import Slidewithcaption from "../../../components/Common/CommonImageComponent";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 import { CheckStockEntryForFirstTransaction, CheckStockEntryforBackDatedTransaction } from "../../../helpers/backend_helper";
+import { ModalCount } from "../../../components/Common/ModalCount";
 
 
 const ViewDetails_Modal = (Props) => {
@@ -28,7 +29,7 @@ const ViewDetails_Modal = (Props) => {
     const [modal_backdrop, setmodal_backdrop] = useState(false);   // Image Model open Or not
 
 
-
+    console.log(tableArray)
 
 
 
@@ -405,6 +406,8 @@ const ViewDetails_Modal = (Props) => {
                         {tableArray.viewMode === url.PURCHASE_RETURN_LIST ?
                             <h2 className="text-center">Purchase Return Items</h2> :
                             <h2 className="text-center">Sales Return Items</h2>}
+                        <ModalCount Count={tableArray.ReturnItems?.length} />
+
                         <div className="mt-n1">
                             <ToolkitProvider
                                 keyField="id"

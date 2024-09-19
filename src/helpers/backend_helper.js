@@ -284,7 +284,7 @@ export const edit_PriceList = ({ editId }) => get(`${url.PRICE_LIST}/${editId}`)
 export const update_PriceList = ({ updateId, jsonBody }) => put(`${url.PRICE_LIST}/${updateId}`, jsonBody)// update
 
 // MRP Master 
-export const MRPMaster_Get_API = () => get(url.MRP_MASTER_LIST)// getapi
+export const MRPMaster_Get_API = ({ jsonBody }) => post(url.MRP_MASTER_LIST_FILTER,jsonBody)// getapi
 export const MRPMaster_Post_API = ({ jsonBody }) => post(url.MRP_MASTER_LIST, jsonBody)// post api
 export const MRPMaster_Delete_API_For_List = ({ deleteId }) => del(`${url.DELETE_API_FOR_MRP_LIST_PAGE}/${deleteId}`)// delete api
 export const MRPMaster_goButton_API = (data) => post(url.GO_BUTTON_POST_API_FOR_MRP_MASTER, data)// go button postapi
@@ -297,11 +297,12 @@ export const View_MRP_Details_API = ({ jsonBody }) => post(url.VIEW_MRP_DETAILS_
 
 
 // Margin Master
-export const GetMarginList_For_Listpage = () => get(url.MARGIN_MASTER_LIST)// get List
+export const GetMarginList_For_Listpage = ({ jsonBody }) => post(url.MARGIN_MASTER_LIST_FILTER,jsonBody)// get List
 export const Post_MarginMaster_API = ({ jsonBody }) => post(url.MARGIN_MASTER_LIST, jsonBody)// post api
 export const delete_MarginList_API = ({ deleteId }) => del(`${url.DELETE_API_FOR_LIST_MARGIN_PAGE}/${deleteId}`)// post api
 export const GoButton_Post_API_For_MarginMaster = (data) => post(url.GO_BUTTON_POST_API_FOR_MARGIN_MASTER, data)// go button postapi
 export const Margin_MasterPage_delete_API = (id) => del(`${url.MARGIN_MASTER_LIST}/${id}`)// delete api Margin Master Page
+export const View_Margin_Details_API = ({ jsonBody }) => post(url.VIEW_MARGIN_DETAILS_API, jsonBody)// go button postapi
 
 // GroupTypes API
 export const GroupTypes_API = () => get(url.GROUP_TYPE_API)
@@ -327,7 +328,7 @@ export const update_TermsAndCondtions_Master_API = ({ jsonBody, updateId }) => p
 
 // GST API
 export const Post_GSTMaster_API = (data) => post(url.GST_LIST_API, data)// post api
-export const GetGSTList_For_Listpage = () => get(url.GST_LIST_API)// get List
+export const GetGSTList_For_Listpage = ({ jsonBody }) => post(url.GST_LIST_FILTER_API,jsonBody)// get List
 export const delete_GSTList_API = ({ deleteId }) => del(`${url.DELETE_API_FOR_LIST_GST_PAGE}/${deleteId}`)// Delete api
 export const GoButton_Post_API_For_GSTMaster = (data) => post(url.GO_BUTTON_POST_API_FOR_GST_MASTER, data)// go button postapi
 export const GST_MasterPage_delete_API = (id) => del(`${url.GST_LIST_API}/${id}`)// delete api
@@ -937,6 +938,8 @@ export const OrderItemSupplier_GoButton_API = ({ jsonBody }) => post(url.ORDER_I
 // SweetPos Machine Type
 export const S_Pos_MachineType_List_Api = (jsonBody) => post(url.S_POS_MACHINE_TYPE_LIST_API, jsonBody) // get api
 export const S_Pos_MachineType_Save_API = ({ jsonBody }) => post(url.S_POS_MACHINE_TYPE_SAVE_API, jsonBody)// post api
+
+export const StockOutReport_API = ({ jsonBody }) => post(url.SWEET_POS_STOCK_OUT_REPORT, jsonBody)//Go button api
 
 export {
 	getLoggedInUser,

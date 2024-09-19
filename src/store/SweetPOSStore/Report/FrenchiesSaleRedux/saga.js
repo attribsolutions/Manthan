@@ -7,6 +7,10 @@ function* FrenchiesItemSaleReport_GenFunc({ config }) {
 
 	try {
 		const response = yield call(Frenchies_Item_sale_Report_API, config);
+		response.Data.forEach(i => {
+			i.recordsAmountTotal = i.Amount
+			return i
+		});
 		yield put(Frenchies_Item_sale_Report_Action_Success(response))
 	} catch (error) { yield put(Frenchies_Item_sale_Report_ErrorAction()) }
 }

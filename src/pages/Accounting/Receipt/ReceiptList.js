@@ -221,7 +221,8 @@ const ReceiptList = () => {
         })
     }
 
-    const HeaderContent = () => {
+    const HeaderContent = (props) => {
+        debugger
         return (
             <div className="px-2   c_card_filter text-black" >
                 <div className="row" >

@@ -67,6 +67,10 @@ function initialState(history) {
 	else if (sub_Mode === url.PARTY_SELF_EDIT) {
 		page_Id = pageId.PARTY_SELF_EDIT;
 	}
+	else if (sub_Mode === url.FRANCHISE_CUSTOMER_MASTER) {
+		page_Id = pageId.FRANCHISE_CUSTOMER_MASTER;
+		listPath = url.FRANCHISE_CUSTOMER_LIST
+	}
 	else {
 		page_Id = pageId.RETAILER_MASTER;
 		listPath = url.RETAILER_LIST

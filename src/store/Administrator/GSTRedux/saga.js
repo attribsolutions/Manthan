@@ -2,7 +2,8 @@ import { call, put, takeLatest } from "redux-saga/effects";
 import * as  apiCall from "../../../helpers/backend_helper";
 import * as actionType from "./actionType";
 import * as action from "./action";
-import { listpageConcatDateAndTime } from "../../../components/Common/CommonFunction";
+import { date_dmy_func, listpageConcatDateAndTime } from "../../../components/Common/CommonFunction";
+import { url } from "../../../routes";
 
 function* save_GSTMaster_GenFunc({ config }) {
   try {
@@ -12,15 +13,15 @@ function* save_GSTMaster_GenFunc({ config }) {
 }
 
 //listpage
-function* get_GSTList_GenFunc() {
+function* get_GSTList_GenFunc({ config }) {
 
   try {
-    const response = yield call(apiCall.GetGSTList_For_Listpage);
+    const response = yield call(apiCall.GetGSTList_For_Listpage, config);
     response.Data.map(i => {
 
       //tranzaction date is only for fiterand page field but UI show transactionDateLabel
-      i["transactionDate"] = i.CreatedOn;
-      i["transactionDateLabel"] = listpageConcatDateAndTime(i.EffectiveDate, i.CreatedOn);
+      i["transactionDateLabel"] = date_dmy_func(i.EffectiveDate);
+      // i["transactionDateLabel"] = listpageConcatDateAndTime(i.EffectiveDate, i.CreatedOn);
     })
     yield put(action.getGSTListSuccess(response.Data));
   } catch (error) { yield put(action.GSTApiErrorAction()) }
@@ -36,10 +37,24 @@ function* delete_GSTList_ID_GenFunc({ config }) {
 }
 
 function* viewGST_GenFunc({ config }) {
+  const { subPageMode } = config
   try {
-    const response = yield call(apiCall.View_GST_Details_API, config);
+    let response
+    if (subPageMode === url.MARGIN_lIST) {
+      response = yield call(apiCall.View_Margin_Details_API, config);
+      response.Data?.MarginList.forEach(i => {
+        i.EffectiveDate = date_dmy_func(i.EffectiveDate)
+        return i
+      });
+    } else {
+      response = yield call(apiCall.View_GST_Details_API, config);
+      response.Data?.GSTHSNList.forEach(i => {
+        i.EffectiveDate = date_dmy_func(i.EffectiveDate)
+        return i
+      });
+    }
 
-    yield put(action.postViewGst_Success(response));
+    yield put(action.postViewGst_Success(response.Data));
   } catch (error) { yield put(action.GSTApiErrorAction()) }
 }
 
