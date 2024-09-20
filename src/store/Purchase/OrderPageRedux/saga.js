@@ -272,6 +272,7 @@ function* orderList_GoBtn_GenFunc({ config }) {
       if (i.IsConfirm === true) {// is confirm is true the show force delete and edit true "PO" ans "SO" mode 
         i.forceEditHide = true;
         i.forceDeleteHide = true;
+        i.forceSelectDissabled = true;
         if (subPageMode === url.APP_ORDER_LIST) {
 
           if (!(i.SubPartyFlag) || (i.InvoiceCreated)) {

@@ -3,14 +3,13 @@ import { useSelector, useDispatch } from "react-redux";
 import { Col, FormGroup, Label, Row } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import { C_Button } from "../../../../components/Common/CommonButton";
-import { C_DatePicker, C_Select } from "../../../../CustomValidateForm";
+import { C_DatePicker } from "../../../../CustomValidateForm";
 import * as _cfunc from "../../../../components/Common/CommonFunction";
 import { mode, pageId } from "../../../../routes/index"
 import { MetaTags } from "react-meta-tags";
 import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess } from "../../../../store/actions";
 import DynamicColumnHook from "../../../../components/Common/TableCommonFunc";
 import { ExcelReportComponent } from "../../../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS";
-import { allLabelWithBlank } from "../../../../components/Common/CommonErrorMsg/HarderCodeData";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { globalTableSearchProps } from "../../../../components/Common/SearchBox/MySearch";
@@ -24,7 +23,6 @@ const StockOutReport = (props) => {
 
     const [headerFilters, setHeaderFilters] = useState('');
     const [userPageAccessState, setUserAccState] = useState('');
-    const [distributorDropdown, setDistributorDropdown] = useState([]);
     const [tableData, setTableData] = useState([]);
     const [btnMode, setBtnMode] = useState(0);
 
@@ -32,13 +30,8 @@ const StockOutReport = (props) => {
         goButtonData,
         pageField,
         userAccess,
-        Distributor,
-        partyDropdownLoading,
-      
     } = useSelector((state) => ({
         goButtonData: state.StockOutReportReducer.stockOutListData,
-        partyDropdownLoading: state.CommonPartyDropdownReducer.partyDropdownLoading,
-        Distributor: state.CommonPartyDropdownReducer.commonPartyDropdownOption,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField
     })
@@ -69,8 +62,6 @@ const StockOutReport = (props) => {
     useEffect(() => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(pageId.STOCK_OUT_REPORT))
-
-        dispatch(BreadcrumbShowCountlabel(`Count:${0}`));
         return () => {
             setTableData([]);
             dispatch(GoButton_For_StockOut_Success([]));
@@ -83,18 +74,13 @@ const StockOutReport = (props) => {
         }
     }, [tableData]);
 
-    const Party_Option = Distributor.map(i => ({
-        value: i.id,
-        label: i.Name
-    }));
-
     const [tableColumns] = DynamicColumnHook({ pageField, })
 
     useEffect(() => {
 
         try {
             if ((goButtonData.Status === true) && (goButtonData.StatusCode === 200)) {
-                
+
                 setBtnMode(0);
                 const { Data } = goButtonData
                 setTableData(Data);
@@ -105,14 +91,13 @@ const StockOutReport = (props) => {
                         excelFileName: "Stock Out Report"
                     })
                     dispatch(GoButton_For_StockOut_Success([]));
-                    setDistributorDropdown([allLabelWithBlank])
                 }
             }
             else if ((goButtonData.Status === true)) {
                 setTableData([]);
             }
             setBtnMode(0);
-            
+
         }
         catch (e) { }
 
@@ -125,7 +110,7 @@ const StockOutReport = (props) => {
         const jsonBody = JSON.stringify({
             "FromDate": fromdate,
             "ToDate": todate,
-            "Party": distributorDropdown.value,
+            "Party": _cfunc.loginPartyID(),
         });
 
         let config = { jsonBody }
@@ -148,12 +133,6 @@ const StockOutReport = (props) => {
         setHeaderFilters(newObj);
         setTableData([]);
         dispatch(GoButton_For_StockOut_Success([]));
-    }
-
-    function PartyDrodownOnChange(e) {
-        setDistributorDropdown(e);
-        dispatch(GoButton_For_StockOut_Success([]));
-        setTableData([]);
     }
 
     return (
@@ -191,28 +170,7 @@ const StockOutReport = (props) => {
                             </FormGroup>
                         </Col>
 
-                        <Col sm={4} className="">
-                            <FormGroup className=" row mt-2" >
-                                <Label className="col-sm-4 p-2"
-                                    style={{ width: "65px", marginRight: "20px" }}>Party</Label>
-                                <Col sm="8">
-                                    <C_Select
-                                        name="Distributor"
-                                        value={distributorDropdown}
-                                        isSearchable={true}
-                                        isLoading={partyDropdownLoading}
-                                        className="react-dropdown"
-                                        classNamePrefix="dropdown"
-                                        styles={{
-                                            menu: provided => ({ ...provided, zIndex: 2 })
-                                        }}
-                                        options={Party_Option}
-                                        onChange={PartyDrodownOnChange}
-                                    />
-                                </Col>
-                            </FormGroup>
-                        </Col>
-
+                        <Col sm={4}></Col>
                         <Col sm={2} className=" d-flex justify-content-end" >
                             <C_Button
                                 type="button"
