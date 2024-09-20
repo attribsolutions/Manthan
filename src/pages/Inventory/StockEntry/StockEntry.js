@@ -49,7 +49,7 @@ const StockEntry = (props) => {
     const currentDate_ymd = _cfunc.date_ymd_func();
 
     const isVisibleRateDrop = _cfunc.checkRateDropVisibility()
-
+    const IsFranchise = _cfunc.loginUserIsFranchisesRole()
     const [pageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState('');
 
@@ -239,6 +239,27 @@ const StockEntry = (props) => {
 
     const pagesListColumns = [
         {
+            text: "Group",
+            dataField: "GroupName",
+            classes: () => "",
+            formatter: (cellContent, row, key) => {
+                
+                return (
+                    <Label>{row.GroupName}</Label>
+                )
+            }
+        },
+        {
+            text: "Sub-Group",
+            dataField: "SubGroupName",
+            classes: () => "",
+            formatter: (cellContent, row, key) => {
+                return (
+                    <Label>{row.SubGroupName}</Label>
+                )
+            }
+        },
+        {
             text: "Item Name",
             dataField: "ItemName",
             classes: () => "",
@@ -301,7 +322,7 @@ const StockEntry = (props) => {
             dataField: "",
             style: { minWidth: "10vw" },
             classes: () => "",
-            hidden: (isVisibleRateDrop),
+            hidden: (isVisibleRateDrop ||IsFranchise),
             formatter: (cellContent, row, key) => {
 
                 return (
@@ -349,6 +370,7 @@ const StockEntry = (props) => {
             dataField: "",
             style: { minWidth: "10vw" },
             classes: () => "",
+            hidden:IsFranchise,
             formatter: (cellContent, row, key) => {
                 return (<span >
                     <Select
@@ -368,6 +390,7 @@ const StockEntry = (props) => {
             text: "BatchCode",
             dataField: "",
             classes: () => "",
+            hidden:IsFranchise,
             formatter: (cellContent, row, key) => {
 
                 return (<span >
@@ -386,6 +409,7 @@ const StockEntry = (props) => {
             text: "BatchDate",
             dataField: "",
             classes: () => "",
+            hidden:IsFranchise,
             formatter: (cellContent, row, key) => {
 
                 return (<span style={{ justifyContent: 'center' }}>
@@ -631,7 +655,7 @@ const StockEntry = (props) => {
                     });
                 }
                 if ((isConfirmed) || (!values.IsAllStockZero)) {
-                  
+
                     dispatch(saveStockEntryAction({ jsonBody, btnId }));
                 };
             }

@@ -445,10 +445,10 @@ const StockAdjustment = (props) => {
                     accumulator.push({
                         "Item": index2.Item,
                         "Quantity": index2.Qty,
-                        "MRP": _cfunc.loginUserIsFranchisesRole() ? index2.MRP : index2.MRPID,
+                        "MRP": index2.MRPID,
                         "Unit": index1.UnitID,
                         "GST": index2.GSTID,
-                        "MRPValue": _cfunc.loginUserIsFranchisesRole() ? "1" : index2.MRP,
+                        "MRPValue": index2.MRPValue,
                         "GSTPercentage": index2.GSTPercentage,
                         "BatchDate": index2.BatchDate,
                         "BatchCode": index2.BatchCode,
