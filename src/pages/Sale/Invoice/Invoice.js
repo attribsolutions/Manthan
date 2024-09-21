@@ -180,6 +180,7 @@ const Invoice = (props) => {
 
     useEffect(async () => {
         if (postMsg.Status === true && postMsg.StatusCode === 200) {
+            
             dispatch(invoiceSaveActionSuccess({ Status: false })); // Reset the status to false
             const config = {
                 editId: postMsg.TransactionID.join(', '),////for saveAndDownloadPdfMode
@@ -708,8 +709,13 @@ const Invoice = (props) => {
     const SaveHandler = async (event) => {
         
         event.preventDefault();
-        const btnId = event.target.id
-        const saveAndDownloadPdfMode = btnId.substring(0, 21) === "SaveAndDownloadPdfBtn";
+        const btnId = event.target.id;
+
+        let saveAndDownloadPdfMode = false;
+
+        if (btnId === "") {
+            saveAndDownloadPdfMode = true
+        }
 
         const validMsg = []
         const invoiceItems = []
@@ -850,6 +856,7 @@ const Invoice = (props) => {
                 dispatch(updateInvoiceAction(config));
             }
             else {
+
                 if (StockEnteryForBackdated.Status === true && StockEnteryForBackdated.StatusCode === 400) {
                     customAlert({ Type: 3, Message: StockEnteryForBackdated.Message });
                 } else {
@@ -960,20 +967,20 @@ const Invoice = (props) => {
                             <SaveButtonDraggable>
                                 <SaveButton
                                     loading={saveBtnloading}
-                                    id={saveBtnid}
                                     pageMode={pageMode}
                                     userAcc={userPageAccessState}
                                     onClick={SaveHandler}
                                     forceDisabled={saveBtnloading || !StockEnteryForFirstYear.Data}
+                                    module={"Invoice"}
                                 />
                                 {(pageMode === mode.defaultsave) &&
                                     <SaveAndDownloadPDF
                                         loading={saveAndPdfBtnLoading}
                                         pageMode={pageMode}
-                                        id={saveBtnid}
                                         userAcc={userPageAccessState}
                                         onClick={SaveHandler}
                                         forceDisabled={(saveAndPdfBtnLoading) || !(StockEnteryForFirstYear.Data)}
+                                        module={"Invoice"}
                                     />
                                 }
                             </SaveButtonDraggable>
