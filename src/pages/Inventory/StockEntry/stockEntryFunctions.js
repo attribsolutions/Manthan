@@ -120,13 +120,13 @@
 import * as _cfunc from "../../../components/Common/CommonFunction";
 
 export async function ItemAPIResponseFunc(selectedItem, tableData) {
-    debugger
+
     const currentDate_ymd = _cfunc.date_ymd_func();
 
     try {
         // Convert API response to desired format
         const convert_ApiResponse = selectedItem.map((i) => {
-    
+
             const UnitDroupDownOptions = i.ItemUnitDetails.map((unit) => ({
                 label: unit.UnitName,
                 value: unit.Unit,
@@ -177,6 +177,7 @@ export async function ItemAPIResponseFunc(selectedItem, tableData) {
                 ItemName: i.ItemName,
                 ItemId: i.Item,
                 Quantity: i.Quantity,
+                CurrentStock: i.CurrentStock
             };
         });
 
@@ -215,6 +216,7 @@ export async function ItemAPIResponseFunc(selectedItem, tableData) {
                 ItemName: index.ItemName,
                 ItemId: itemId,
                 Quantity: index.Quantity,
+                CurrentStock: _cfunc.roundToDecimalPlaces(index.CurrentStock, 3, true),
                 BatchDate: currentDate_ymd,
                 BatchCode: newBatchCode,
                 defaultUnit: index.Default_Unit,

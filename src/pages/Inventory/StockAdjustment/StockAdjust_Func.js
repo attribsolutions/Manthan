@@ -35,8 +35,8 @@ export const getItemDefaultUnitOption = (unitOptions) => {
 
 const createStockDetail = (item) => ({
     id: item.id,
-    ActualQuantity: roundToDecimalPlaces(item.BaseUnitQuantity, 3),
-    Qty: roundToDecimalPlaces(item.BaseUnitQuantity, 3),
+    ActualQuantity: roundToDecimalPlaces(item.BaseUnitQuantity, 3, true),
+    Qty: roundToDecimalPlaces(item.BaseUnitQuantity, 3, true),
     ...item, // Spread the rest of the properties
 });
 
@@ -108,10 +108,9 @@ export const AddItemInTableFunc = async ({ itemNameSelect, TableArr }) => {
         0
     );
     let stockDetails
+    
     if (loginUserIsFranchisesRole()) {
-        stockDetails = respData
-            .filter((item) => parseFloat(item.BaseUnitQuantity))
-            .map(createStockDetail);
+        stockDetails = respData.map(createStockDetail);
     } else {
         stockDetails = respData
             .filter((item) => parseFloat(item.BaseUnitQuantity) > 0)
