@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-
+import { debounce } from 'lodash';
 let input = '';
 let priviousSerach = []
 let pageid = ''
@@ -8,7 +8,13 @@ let tableProps = { onSearch: () => { } }
 
 export const globalTableSearchProps = (props, pageID) => {
     tableProps = props;
-    pageid = pageID
+    pageid = pageID;
+
+    // Debounce the search function
+    const debouncedOnSearch = debounce(props.onSearch, 200); // 300ms delay
+
+    // Replace the original onSearch with the debounced version
+    tableProps.onSearch = debouncedOnSearch;
 };
 
 
@@ -40,7 +46,6 @@ export const MySearch = (props) => {//compont start
         setSearch(input)
         if (!(len[0] === "/")) {
             tableProps.onSearch(len);
-
             const found = priviousSerach.find((i, k) => {
                 if ((i.id === pageid)) {
                     priviousSerach[k] = { id: i.id, text: len }

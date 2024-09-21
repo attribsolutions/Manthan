@@ -43,7 +43,7 @@ import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMs
 import { changeCommonPartyDropDetailsAction } from "../../../store/Utilites/PartyDrodown/action";
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 import { allLabelWithBlank } from "../../../components/Common/CommonErrorMsg/HarderCodeData";
-import { useParams } from 'react-router-dom';
+
 
 
 
@@ -244,7 +244,6 @@ const Order = (props) => {
 
     // Common Party Dropdown useEffect
     useEffect(() => {
-
         if (commonPartyDropSelect.value > 0) {
             dispatch(GetRoutesList({ ..._cfunc.loginJsonBody(), "PartyID": commonPartyDropSelect.value }));
             dispatch(getPartyListAPI({ ..._cfunc.loginJsonBody(), "PartyID": commonPartyDropSelect.value, IsRetailer: 0 }));
@@ -355,8 +354,6 @@ const Order = (props) => {
             dispatch(changeCommonPartyDropDetailsAction({ forceDisable: false }))//change party drop-down restore state
         }
     }, []);
-
-
 
 
 
@@ -529,7 +526,6 @@ const Order = (props) => {
 
 
 
-
     const supplierOptions = vendorSupplierCustomer.map((i) => ({
         value: i.id,
         label: i.Name,
@@ -561,45 +557,34 @@ const Order = (props) => {
         label: "All"
     });
 
-    function debounce(func, wait) {
-        let timeout;
-        return function (...args) {
-            const context = this;
-            clearTimeout(timeout);
-            timeout = setTimeout(() => func.apply(context, args), wait);
-        };
-    }
+
+
+    const rowStyle = (row, rowIndex) => {
+        if (row.GroupRow) {
+            return { backgroundColor: 'white', fontWeight: 'bold', fontSize: '18px' };
+        } else if (row.SubGroupRow) {
+            return { backgroundColor: '#f2f2f2', fontWeight: 'bold', fontSize: '15px' };
+        }
+        return {};
+    };
+
+    const rowClasses = (row) => {
+        if (row.GroupRow || row.SubGroupRow) {
+            return 'group-row hide-border';
+        }
+        return '';
+    };
 
     const pagesListColumns = [
-        { //---------------"GroupName"------------
-            dataField: "GroupName",
-            text: "Group",
-            classes: 'table-cursor-pointer',
-            // sort: true,
-            attrs: (cell, row, rowIndex, colIndex) => ({ 'data-label': "GroupName" }),
-            headerStyle: () => {
-                return { minWidth: '100px', textAlign: 'center' };
-            },
-        },
-        {//-----------------"SubGroupName"------------------
-            dataField: "SubGroupName",
-            text: "SubGroup",
-            classes: 'table-cursor-pointer',
-            // sort: true,
-            attrs: (cell, row, rowIndex, colIndex) => ({ 'data-label': "SubGroupName" }),
-            headerStyle: () => {
-                return { minWidth: '100px', textAlign: 'center' };
-            },
-        },
 
         {//------------- ItemName column ----------------------------------
             dataField: "ItemName",
             text: "Item Name",
             classes: 'table-cursor-pointer',
-            attrs: (cell, row, rowIndex, colIndex) => ({ 'data-label': "ItemName", "sticky-col": "true" }),
-            // sort: true,
+            attrs: (cell, row, rowIndex, colIndex) => ({ 'data-label': "ItemName", "sticky-col": "true", }),
+            sort: true,
             headerStyle: () => {
-                return { minWidth: '200px', textAlign: 'center' };
+                return { minWidth: '100px', textAlign: 'center' };
             },
             sortValue: (cell, row) => row["ItemName"],
             headerFormatter: (value, row, k, f) => {
@@ -621,6 +606,83 @@ const Order = (props) => {
                     </div>
                 )
             },
+
+            formatter: (value, row, k) => {
+                if (row.SubGroupRow) {
+                    const [Group, SubGroup] = row.Group_Subgroup.split('-');
+                    return (
+                        <>
+                            <Row>
+                                <Col sm={12}>
+                                    <span id="group-span" style={{
+                                        background: "#cacaebf5",
+                                        padding: "6px 10px",
+                                        borderRadius: "13px",
+                                        boxShadow: "rgba(0, 0, 0, 0.2) 0px 1px 6px",
+                                        position: "relative",
+                                        display: "inline-block",
+
+                                        marginRight: "30px"
+
+                                    }}>
+                                        <span style={{ color: "black" }}> Group </span>({Group})
+                                        <span style={{
+                                            content: "''",
+                                            position: "absolute",
+                                            right: "-12px", // Position the arrow outside the right side
+                                            top: "50%",
+                                            transform: "translateY(-50%)",
+                                            width: "0",
+                                            height: "0",
+                                            borderTop: "10px solid transparent",
+                                            borderBottom: "10px solid transparent",
+                                            borderLeft: "15px solid #cacaebf5",
+                                        }}></span>
+                                    </span>
+
+                                    <span id="subgroup-span" style={{
+                                        background: "#cacaebf5",
+                                        padding: "4px 10px",
+                                        borderRadius: "13px",
+                                        boxShadow: "rgba(0, 0, 0, 0.2) 0px 1px 6px",
+                                        position: "relative",
+                                        display: "inline-block",
+                                        fontSize: "13px",
+                                        marginTop: "5px"
+
+                                    }}>
+                                        <span style={{ color: "black" }}>Sub Group </span> ({SubGroup})
+                                        <span style={{
+                                            content: "''",
+                                            position: "absolute",
+                                            right: "-12px", // Position the arrow outside the right side
+                                            top: "50%",
+                                            transform: "translateY(-50%)",
+                                            width: "0",
+                                            height: "0",
+                                            borderTop: "10px solid transparent",
+                                            borderBottom: "10px solid transparent",
+                                            borderLeft: "15px solid #cacaebf5",
+                                        }}></span>
+                                    </span>
+
+                                </Col>
+                            </Row>
+                        </>
+                    )
+                } else {
+                    const [itemName] = row.ItemName.split('-');
+                    return (
+                        <>
+                            <div>
+                                {itemName}
+                            </div>
+                        </>
+                    )
+                }
+
+
+            },
         },
         {
             dataField: "StockQuantity",
@@ -628,7 +690,7 @@ const Order = (props) => {
             classes: 'table-cursor-pointer',
             align: () => "right",
             attrs: (cell, row, rowIndex, colIndex) => ({ 'data-label': "StockQuantity" }),
-            // sort: true,
+            sort: true,
             headerStyle: () => {
                 return { minWidth: '100px', textAlign: 'center' };
             },
@@ -643,7 +705,22 @@ const Order = (props) => {
             },
             formatExtraData: { tableList: orderItemTable },
             formatter: (value, row, k, { tableList }) => {
+                if (row.SubGroupRow) {
+                    return (
+                        <CInput
+                            key={`Quantity-${k}`}
+                            id={`Quantity-${k}`}
+                            cpattern={subPageMode === url.ORDER_1 ? decimalRegx_3dit : onlyNumberRegx}
+                            defaultValue={(row.Quantity)}
+                            className=" text-end"
+                            style={{ display: 'none' }}
+                            onChange={(e) => {
+                                row["Quantity"] = e.target.value
+                                itemWise_CalculationFunc(row, undefined, tableList)
+                            }}
+                        />)
 
+                }
                 return (
                     <>
                         <CInput
@@ -655,11 +732,11 @@ const Order = (props) => {
                             onChange={(e) => {
                                 row["Quantity"] = e.target.value
                                 itemWise_CalculationFunc(row, undefined, tableList)
-
                             }}
                         />
                     </>
                 )
+
             },
 
         },
@@ -674,7 +751,7 @@ const Order = (props) => {
             },
             formatExtraData: { tableList: orderItemTable },
             formatter: (value, row, key, { tableList }) => {
-
+                if (row.GroupRow || row.SubGroupRow) { return }
                 if (!row.UnitName) {
                     row["Unit_id"] = 0;
                     row["UnitName"] = 'null';
@@ -771,6 +848,7 @@ const Order = (props) => {
                         </Select >
                     </div>
                 )
+
             },
 
         },
@@ -785,6 +863,7 @@ const Order = (props) => {
             },
             formatExtraData: { tableList: orderItemTable },
             formatter: (value, row, k, { tableList }) => {
+                if (row.GroupRow || row.SubGroupRow) { return }
 
                 if (subPageMode === url.ORDER_1 || subPageMode === url.IB_ORDER || subPageMode === url.IB_SALES_ORDER) {
                     return (
@@ -815,6 +894,7 @@ const Order = (props) => {
                     )
                 }
 
+
             },
 
         },
@@ -829,12 +909,13 @@ const Order = (props) => {
             },
             hidden: (subPageMode === url.ORDER_1 || subPageMode === url.IB_ORDER || subPageMode === url.IB_SALES_ORDER || _cfunc.loginUserIsFranchisesRole()) && true,
             formatter: (value, row, k) => {
-
+                if (row.GroupRow || row.SubGroupRow) { return }
                 return (
                     <div key={row.id} className="text-end">
                         <span>{row.MRPValue}</span>
                     </div>
                 )
+
             },
 
         },
@@ -909,14 +990,15 @@ const Order = (props) => {
             },
 
             classes: () => "order-discount-row",
-            formatter: (cellContent, index1, key, formatExtraData) => {
+            formatter: (cellContent, row, key, formatExtraData) => {
+                if (row.GroupRow || row.SubGroupRow) { return }
 
                 let { tableList } = formatExtraData;
 
-                if (!index1.DiscountType) { index1.DiscountType = discountTypeAll.value }
+                if (!row.DiscountType) { row.DiscountType = discountTypeAll.value }
 
                 const defaultDiscountTypelabel =
-                    index1.DiscountType === 1 ? discountDropOption[0] : discountDropOption[1];
+                    row.DiscountType === 1 ? discountDropOption[0] : discountDropOption[1];
                 return (
                     <>
                         <div className="mb-2">
@@ -928,15 +1010,15 @@ const Order = (props) => {
                                     <Select
                                         id={`DicountType_${key}`}
                                         classNamePrefix="select2-selection"
-                                        key={`DicountType_${key}-${index1.id}`}
+                                        key={`DicountType_${key}-${row.id}`}
                                         value={defaultDiscountTypelabel}
                                         isDisabled={(subPageMode === url.ORDER_2)}
                                         options={discountDropOption}
                                         onChange={(e) => {
                                             setChangeAllDiscount(false);
-                                            index1.DiscountType = e.value;
-                                            index1.Discount = '';
-                                            itemWise_CalculationFunc(index1, undefined, tableList)
+                                            row.DiscountType = e.value;
+                                            row.Discount = '';
+                                            itemWise_CalculationFunc(row, undefined, tableList)
                                         }}
                                     />
                                 </div>
@@ -950,10 +1032,10 @@ const Order = (props) => {
                                 <div className="child">
                                     <CInput
                                         className="input"
-                                        id={`Dicount_${key}-${index1.id}`}
+                                        id={`Dicount_${key}-${row.id}`}
                                         style={{ textAlign: "right" }}
                                         type="text"
-                                        value={index1.Discount}
+                                        value={row.Discount}
                                         disabled={(subPageMode === url.ORDER_2)}
                                         cpattern={decimalRegx}
                                         onChange={(e) => {
@@ -963,7 +1045,7 @@ const Order = (props) => {
                                             let e_val = Number(e.target.value);
 
 
-                                            if (index1.DiscountType === 2) {// Discount type 2 represents "percentage"
+                                            if (row.DiscountType === 2) {// Discount type 2 represents "percentage"
                                                 if (e_val > 100) { // Limit the input to the range of 0 to 100
                                                     e.target.value = 100; // Set the input value to 100 if it exceeds 100
                                                 } else if (!(e_val >= 0 && e_val < 100)) {
@@ -972,9 +1054,9 @@ const Order = (props) => {
                                             }
 
 
-                                            index1.Discount = e.target.value;
+                                            row.Discount = e.target.value;
                                             setChangeAllDiscount(false);
-                                            itemWise_CalculationFunc(index1, undefined, tableList)
+                                            itemWise_CalculationFunc(row, undefined, tableList)
                                         }}
 
                                     />
@@ -984,6 +1066,7 @@ const Order = (props) => {
 
                     </>
                 );
+
             },
         },
 
@@ -994,6 +1077,8 @@ const Order = (props) => {
             hidden: (subPageMode === url.ORDER_1 || subPageMode === url.IB_ORDER) && true,
             attrs: (cell, row, rowIndex, colIndex) => ({ 'data-label': "Comment" }),
             formatter: (value, row, k) => {
+                if (row.GroupRow || row.SubGroupRow) { return }
+
                 return (
                     <span >
                         <Input type="text"
@@ -1006,6 +1091,7 @@ const Order = (props) => {
                         />
                     </span>
                 )
+
             },
 
             headerStyle: () => {
@@ -1100,9 +1186,7 @@ const Order = (props) => {
     };
 
     const item_AddButtonHandler = () => {
-
         setGoBtnDissable(true)
-
         let isfound = orderItemTable.find(i => i.value === itemSelect.value);
 
         if (!itemSelect) {
@@ -1179,8 +1263,8 @@ const Order = (props) => {
             let sumOfOrderAmount = 0;//total grand total amount
 
             // Loop through the order items
-            await orderItemTable.forEach(item => {
-
+            orderItemTable.forEach(item => {
+                debugger
                 // Check for item quantity and rate validity
                 if ((item.Quantity > 0) && !(item.Rate > 0)) {
                     validationMessages.push({ [item.ItemName]: alertMessages.itemRateIsRequired });
@@ -1411,6 +1495,55 @@ const Order = (props) => {
             _cfunc.CommonConsole("order_save_", error);
         }
     };
+
+
+    function processData(data) {
+        const result = [];
+        const subGroups = {}; // Store a concatenated string of ItemNames for each subgroup
+        let previousSubGroup = null;
+
+        data.forEach(item => {
+            // Check if the current item's subgroup is different from the previous one
+            if (item.SubGroupName !== previousSubGroup) {
+                // Initialize the concatenated string for the subgroup
+                if (!subGroups[item.SubGroupName]) {
+                    subGroups[item.SubGroupName] = "";
+                }
+                // Push a subgroup row into the result array
+                result.push({
+                    id: item.id,
+                    SubGroupRow: true,
+                    SubGroupName: item.SubGroupName,
+                    Group_Subgroup: `${item.GroupName}-${item.SubGroupName}`,
+                });
+                previousSubGroup = item.SubGroupName;
+            }
+
+            // Modify the ItemName to include subgroup and group names
+            item.ItemName = `${item.ItemName}-${item.SubGroupName} ${item.GroupName}`;
+            result.push(item);
+
+            // Concatenate the ItemName to the appropriate subgroup string
+            subGroups[item.SubGroupName] += `${item.ItemName}, `;
+        });
+
+        // Update the result array where SubGroupRow is true with the concatenated ItemNames
+        result.forEach(row => {
+            if (row.SubGroupRow) {
+                row.ItemName = subGroups[row.SubGroupName].slice(0, -2); // Remove the trailing ", "
+            }
+        });
+        console.log(result)
+        return result;
+    }
+
+
+    // Example usage 
+    const processedData = processData(orderItemTable);
+
+
+
+
 
 
     if (!(userPageAccessState === "")) {
@@ -1757,18 +1890,19 @@ const Order = (props) => {
 
                         <ToolkitProvider
                             keyField={"Item_id"}
-                            data={orderItemTable}
+                            data={processedData}
                             columns={pagesListColumns}
                             search
                         >
                             {(toolkitProps,) => (
                                 <React.Fragment>
-
                                     <BootstrapTable
                                         keyField={"Item_id"}
                                         id="table_Arrow"
                                         defaultSorted={!selecedItemWiseOrder ? defaultSorted : ''}
                                         classes='custom-table'
+                                        rowStyle={rowStyle}
+                                        rowClasses={rowClasses}
                                         noDataIndication={
                                             <div className="text-danger text-center table-cursor-pointer">
                                                 Items Not available
@@ -1832,7 +1966,6 @@ const Order = (props) => {
                     }}
                     size="xl"
                 >
-
                     <PartyItems
                         editValue={assingItemData.Data}
                         isAssing={true}
