@@ -213,7 +213,8 @@ const MachineTypeMaster = (props) => {
                 "MacID": i.MacID,
                 "MachineRole": i.MachineType,
                 "IsServer": i.IsServer,
-                "Party": loginPartyID()
+                "Party": loginPartyID(),
+                "ClientID": i.ClientID
             })))
             dispatch(SPos_MachineTypeSave_Action({ jsonBody }));
 
