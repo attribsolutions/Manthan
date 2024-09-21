@@ -714,7 +714,7 @@ const InvoiceList = () => {
                     </div>
                     <div className="modal-body" style={{ height: "250px", width: "500px" }}>
                         <Row >
-                            {_cfunc.loginUserIsFranchisesRole() && <Col sm="8" className="">
+                            {_cfunc.loginUserIsFranchisesRole() && <Col sm="12" className="">
                                 <FormGroup className="mb- row mt-1 " >
                                     <Label className="col-sm-6 p-2 text-black"
                                         style={{ width: "90px" }}>Customer</Label>
@@ -741,7 +741,7 @@ const InvoiceList = () => {
                                     </Col>
                                 </FormGroup>
                             </Col>}
-                            <Col sm="8" className="">
+                            <Col sm="12" className="">
                                 <FormGroup className="mb- row mt-1 " >
                                     <Label className="col-sm-6 p-2 text-black"
                                         style={{ width: "90px" }}>Vehicle No</Label>
