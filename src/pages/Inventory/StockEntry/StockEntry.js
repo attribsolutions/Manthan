@@ -270,6 +270,17 @@ const StockEntry = (props) => {
             }
         },
         {
+            text: "Current Stock",
+            dataField: "CurrentStock",
+            classes: () => "",
+            hidden:!(IsFranchise),
+            formatter: (cellContent, row, key) => {
+                return (
+                    <Label>{row.CurrentStock}</Label>
+                )
+            }
+        },
+        {
             text: "Quantity",
             dataField: "",
             classes: () => "",
