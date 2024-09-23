@@ -44,6 +44,7 @@ import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { globalTableSearchProps } from "../../../../components/Common/SearchBox/MySearch";
 import SaveButtonDraggable from "../../../../components/Common/saveButtonDraggable";
+import GlobalCustomTable from "../../../../GlobalCustomTable";
 
 const MachineTypeMaster = (props) => {
 
@@ -112,6 +113,7 @@ const MachineTypeMaster = (props) => {
     }, [userAccess])
 
     useEffect(async () => {
+        debugger
         const jsonBody = {
             Company: loginCompanyID(),
             TypeID: 179
@@ -169,7 +171,8 @@ const MachineTypeMaster = (props) => {
             text: "Machine Type",
             dataField: "",
             style: () => ({ width: "30%" }),
-            formatter: (value, row, key,) => {
+            formatExtraData: { machineTypeOptions: machineTypeOptions },
+            formatter: (value, row, key, { machineTypeOptions }) => {
 
                 return (
                     <C_Select
@@ -213,7 +216,8 @@ const MachineTypeMaster = (props) => {
                 "MacID": i.MacID,
                 "MachineRole": i.MachineType,
                 "IsServer": i.IsServer,
-                "Party": loginPartyID()
+                "Party": loginPartyID(),
+                "ClientID": i.ClientID,
             })))
             dispatch(SPos_MachineTypeSave_Action({ jsonBody }));
 
@@ -228,7 +232,25 @@ const MachineTypeMaster = (props) => {
                     <Container fluid>
                         <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
 
-                        <div className="mb-4">
+
+                        <GlobalCustomTable
+                            keyField="id"
+                            data={tableListData}
+                            columns={pagesListColumns}
+                            paginationEnabled={200}//show pagination 200 per page
+                            classes={"custom-table"}
+                            noDataIndication={
+                                <div className="text-danger text-center ">
+                                    Record Not available
+                                </div>
+                            }
+                            onDataSizeChange={({ dataCount }) => {
+
+                                dispatch(BreadcrumbShowCountlabel(`Count:${dataCount}`));
+                            }}
+                        />
+
+                        {/* <div className="mb-4">
                             <ToolkitProvider
                                 keyField="id"
                                 data={tableListData}
@@ -238,7 +260,7 @@ const MachineTypeMaster = (props) => {
                                 {toolkitProps => (
                                     <React.Fragment>
                                         <div className="table-responsive table mb-6">
-                                            <BootstrapTable
+                                            <GlobalCustomTable
                                                 keyField="id"
                                                 id="table_Arrow"
                                                 classes={"table  table-bordered table-hover"}
@@ -258,7 +280,7 @@ const MachineTypeMaster = (props) => {
                                     </React.Fragment>
                                 )}
                             </ToolkitProvider>
-                        </div>
+                        </div> */}
 
                         {tableListData.length > 0 &&
                             <SaveButtonDraggable>
