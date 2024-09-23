@@ -30,7 +30,7 @@ const SNSReport = (props) => {
 
     const [headerFilters, setHeaderFilters] = useState('');
     const [userPageAccessState, setUserAccState] = useState('');
-    const [unitDropdown, setUnitDropdown] = useState({ value: 1, label: 'No' });
+    const [unitDropdown, setUnitDropdown] = useState({ value: 0, label: "BaseUnit" });
     const [PartyDropdown, setPartyDropdown] = useState("");
     const [btnMode, setBtnMode] = useState("");
 
@@ -162,6 +162,8 @@ const SNSReport = (props) => {
             value: data.id,
             label: data.Name
         }));
+    BaseUnit_DropdownOptions.unshift({ value: 0, label: "BaseUnit" })
+
 
     function StockProccessHandler() {
 
