@@ -31,6 +31,7 @@ import PriceDropOptions from '../../pages/Adminisrator/PartyMaster/MasterAdd/Fir
 import Slidewithcaption from '../../components/Common/CommonImageComponent';
 import { ExcelReportComponent } from '../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS';
 import { allLabelWithZero } from '../../components/Common/CommonErrorMsg/HarderCodeData';
+import { get_PriceListByPartyType_API } from '../../helpers/backend_helper';
 
 function initialState(history) {
 
@@ -69,6 +70,11 @@ const ProductMarginReport = (props) => {
     const [btnMode, setBtnMode] = useState("");
     const [columns, setcolumn] = useState([{}]);
     const [columnsCreated, setColumnsCreated] = useState(false)
+
+
+
+    const [PartyTypePriceList, setPartyTypePriceList] = useState([]);
+
 
     const [partyTypeSelect, setPartyTypeSelect] = useState(allLabelWithZero);
     const [priceListSelect, setPriceListSelect] = useState(allLabelWithZero);
@@ -147,6 +153,25 @@ const ProductMarginReport = (props) => {
         }
     }, []);
 
+
+    useEffect(async () => {
+
+        let results = [];
+        if (partyTypeSelect.length > 0) {
+            for (const PartyType of partyTypeSelect) {
+                try {
+                    const response = await get_PriceListByPartyType_API(PartyType.value);
+                    results.push(response.Data);
+                } catch (error) {
+                    console.error(`Error fetching price list for ${PartyType.value}:`, error);
+                }
+            }
+        }
+        setPartyTypePriceList(results.flat())
+    }, [partyTypeSelect])
+
+
+
     const partyTypeDropdownOptions = useMemo(() => {
         const getOptions = (partyTypes) => [
             { value: 0, label: " All" },
@@ -160,11 +185,11 @@ const ProductMarginReport = (props) => {
     }, [DiscountPartyTypeLoading, DiscountPartyType, PartyType, PartyTypeLoading]);
 
     const priceListByPartyType_WithAll = useMemo(() => {
-        if (priceListByPartyType.length > 0) {
-            return [priceListAllObject, ...priceListByPartyType,];
+        if (PartyTypePriceList.length > 0) {
+            return [priceListAllObject, ...PartyTypePriceList,];
         }
-        return priceListByPartyType;
-    }, [priceListByPartyType]);
+        return PartyTypePriceList;
+    }, [PartyTypePriceList]);
 
     const location = { ...history.location }
     const hasShowloction = location.hasOwnProperty(mode.editValue)//changes
@@ -209,7 +234,7 @@ const ProductMarginReport = (props) => {
             let columns = []
             const objectAtIndex0 = ((ProductMargin[0]));
             for (const key in objectAtIndex0) {
-                
+
                 let column = {}
                 let imageColumns = ["SideView(L)", "TopView", "SideView(R)", "BackView", "BarCode", "Poster", "FrontView", "Nutrition"];
                 let isImageColumn = imageColumns.includes(key);
@@ -221,7 +246,7 @@ const ProductMarginReport = (props) => {
                         sort: true,
                         classes: "table-cursor-pointer",
                         formatter: (cell, row, key) => {
-                            
+
                             const imageShowHandler = async ({ ImageUrl, }) => { // image Show handler                               
                                 let slides = []
                                 if (ImageUrl !== "") {
@@ -242,7 +267,7 @@ const ProductMarginReport = (props) => {
                                                     backgroundSize: 'cover'
                                                 }}
                                                 onClick={() => {
-                                                    
+
                                                     imageShowHandler({ ImageUrl: cell })
                                                 }}
                                                 id={`ImageID_${key}`}
@@ -312,11 +337,11 @@ const ProductMarginReport = (props) => {
 
         setBtnMode(Type)
         const userDetails = loginUserDetails();
-
+        debugger
         const jsonBody = JSON.stringify({
             "IsSCM": (userDetails.IsSCMPartyType).toString(),
             "Party": loginPartyID(),// if IsSCM 0 then Party ID ignore.
-            "PartyType": partyTypeSelect.value,
+            "PartyType": partyTypeSelect.map(i => i.value).join(','),
             "PriceList": priceListSelect.value,
             "Group": groupSelect[0].value === 0 ? "" : groupSelect.map(i => i.value).join(','),
             "SubGroup": subGroupSelect[0].value === 0 ? "" : subGroupSelect.map(i => i.value).join(','),
@@ -374,12 +399,18 @@ const ProductMarginReport = (props) => {
     );
 
     function PartyTypeOnchange(e) {
+
+        if (e.length > 0 && e[0].value === 0) {
+            e.shift()
+        } else if (e.some(obj => obj.value === 0)) {
+            e = [allLabelWithZero]
+        }
         setPartyTypeSelect(e);
         setPriceListSelect(allLabelWithZero);
         dispatch(ProductMargin_Go_Btn_Success([]));
         setTableData([]);
         setcolumn([{}]);
-        dispatch(priceListByPartyAction(e.value))
+        // dispatch(priceListByPartyAction(e.value))
     }
 
     function GroupOnchange(e = []) {
@@ -500,6 +531,7 @@ const ProductMarginReport = (props) => {
                                         <C_Select
                                             classNamePrefix="select2-Customer"
                                             value={partyTypeSelect}
+                                            isMulti={true}
                                             isLoading={DiscountPartyTypeLoading}
                                             onChange={(e) => { PartyTypeOnchange(e) }}
                                             options={partyTypeDropdownOptions}
