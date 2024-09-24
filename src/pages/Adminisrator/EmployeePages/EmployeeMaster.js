@@ -798,7 +798,7 @@ const AddEmployee = (props) => {
                               className="react-dropdown"
                               options={Party_DropdownOptions}
                               onChange={(hasSelect, evn) => {
-                                debugger
+                                
                                 if (evn.removedValue.RoleName !== null && evn.removedValue) {
                                   customAlert({
                                     Type: 3,
