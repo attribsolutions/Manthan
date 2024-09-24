@@ -395,7 +395,7 @@ const InvoiceList = () => {
     }
 
     function goButtonHandler(event, IBType) {
-        debugger
+        
         try {
             if (commonPartyDropSelect.value === 0) {
                 customAlert({ Type: 3, Message: alertMessages.commonPartySelectionIsRequired });

@@ -403,10 +403,10 @@ const AlertPermission4 = ({ btnRef }) => {
                         <MessageFun msg={Message} />
 
                         <div className="d-flex flex-wrap gap-2 " style={{ float: "right" }}><button type="button"
-                            className="btn btn-success " onClick={innerYes}>Yes</button>
+                            className="btn btn-danger " onClick={innerYes}>Yes</button>
                             <button type="button"
                                 ref={btnRef}
-                                className="btn btn-danger w-xm waves-effect waves-light" onClick={outerNo}>No</button></div>
+                                className="btn btn-success w-xm waves-effect waves-light" onClick={outerNo}>No</button></div>
                     </div>
                 </div>
             </div >

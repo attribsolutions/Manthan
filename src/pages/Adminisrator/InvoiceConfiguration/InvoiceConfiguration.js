@@ -335,7 +335,7 @@ const InvoiceConfiguration = (props) => {
 
 
     useEffect(async () => {
-
+        
         if (Object.keys(SystemSetting).length !== 0) {
 
             const file = await convertImageToFile(SystemSetting.Qr_Image)
