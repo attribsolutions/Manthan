@@ -798,11 +798,12 @@ const AddEmployee = (props) => {
                               className="react-dropdown"
                               options={Party_DropdownOptions}
                               onChange={(hasSelect, evn) => {
-                                if (evn.removedValue.RoleName === null) {
-                                    customAlert({
-                                      Type: 1,
-                                      Message: "Role use in onother table",
-                                    })
+                                debugger
+                                if (evn.removedValue.RoleName !== null && evn.removedValue) {
+                                  customAlert({
+                                    Type: 3,
+                                    Message: "Role use in UserMaster",
+                                  })
                                   return
                                 } else {
                                   onChangeSelect({ hasSelect, evn, state, setState });
