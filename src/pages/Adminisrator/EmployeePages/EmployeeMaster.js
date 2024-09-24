@@ -799,7 +799,7 @@ const AddEmployee = (props) => {
                               options={Party_DropdownOptions}
                               onChange={(hasSelect, evn) => {
                                 debugger
-                                if (evn.removedValue.RoleName !== null && evn.removedValue) {
+                                if (evn?.removedValue?.RoleName !== null && evn?.removedValue) {
                                   customAlert({
                                     Type: 3,
                                     Message: "Role use in UserMaster",
