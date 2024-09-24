@@ -50,7 +50,7 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
     const [priceListSelect, setPriceListSelect] = useState({ value: '' });
     const [partyType_AddMasterAccess, setPartyType_AddMasterAccess] = useState(false)
     const [city_AddMasterAccess, setCity_AddMasterAccess] = useState(false)
-    console.log(priceListSelect)
+    
     const [SubClusterOptions, setSubClusterOptions] = useState({});
 
     const { values } = state;

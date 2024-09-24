@@ -5,7 +5,7 @@ import * as action from "./action";
 import { date_dmy_func, loginUserIsFranchisesRole } from "../../../components/Common/CommonFunction";
 
 function* StockEntry_API_GenFunc({ config }) { // Save GRN  genrator function
-    debugger
+    
     try {
         let response = "";
         if (loginUserIsFranchisesRole()) {
