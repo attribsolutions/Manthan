@@ -113,7 +113,7 @@ const MachineTypeMaster = (props) => {
     }, [userAccess])
 
     useEffect(async () => {
-        debugger
+        
         const jsonBody = {
             Company: loginCompanyID(),
             TypeID: 179
@@ -214,7 +214,7 @@ const MachineTypeMaster = (props) => {
         try {
             const jsonBody = JSON.stringify(tableListData.map((i) => ({
                 "MacID": i.MacID,
-                "MachineRole": i.MachineType,
+                "MachineType": i.MachineType,
                 "IsServer": i.IsServer,
                 "Party": loginPartyID(),
                 "ClientID": i.ClientID,

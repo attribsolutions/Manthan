@@ -14,8 +14,28 @@ export const MainSearchBox = () => {
   }));
 
   useEffect(() => {
+    
     const flattenModuleData = RoleAccessData.flatMap((i) => i.ModuleData);
     setSearchRoleData(flattenModuleData);
+  }, [RoleAccessData]);
+
+  useEffect(() => {
+    if (RoleAccessData) {
+
+      const flattenModuleData = RoleAccessData.flatMap(i => i.ModuleData);
+
+      const newFilteredData = flattenModuleData.filter(i => {
+        if ((i.PageType === 1) && i.RoleAccess_IsSave === true) {
+          return true;
+        }
+        else if ((i.PageType === 2 || i.PageType === 3) && i.RoleAccess_IsShowOnMenu === true) {
+          return true;
+        }
+        return false;
+      });
+
+      setSearchRoleData(newFilteredData);
+    }
   }, [RoleAccessData]);
 
   useEffect(() => {

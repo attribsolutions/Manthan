@@ -337,7 +337,7 @@ const ProductMarginReport = (props) => {
 
         setBtnMode(Type)
         const userDetails = loginUserDetails();
-        debugger
+        
         const jsonBody = JSON.stringify({
             "IsSCM": (userDetails.IsSCMPartyType).toString(),
             "Party": loginPartyID(),// if IsSCM 0 then Party ID ignore.

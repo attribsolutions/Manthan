@@ -41,7 +41,8 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
         Latitude: "",
         Longitude: "",
         Cluster: "",
-        SubCluster: ""
+        SubCluster: "",
+        PriceList: ""
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
@@ -49,21 +50,8 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
     const [priceListSelect, setPriceListSelect] = useState({ value: '' });
     const [partyType_AddMasterAccess, setPartyType_AddMasterAccess] = useState(false)
     const [city_AddMasterAccess, setCity_AddMasterAccess] = useState(false)
-
-
-
+    
     const [SubClusterOptions, setSubClusterOptions] = useState({});
-
-
-
-
-
-
-
-
-
-
-
 
     const { values } = state;
     const { isError } = state;
@@ -430,7 +418,7 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
                             </Col>
 
                             <Col md="1"></Col>
-                            {!(subPageMode === url.RETAILER_MASTER) && // SAPPartyCode   show only (Party Master) mode
+                            {(!(subPageMode === url.RETAILER_MASTER || subPageMode === url.FRANCHISE_CUSTOMER_MASTER)) && // SAPPartyCode   show only (Party Master) mode
                                 <Col md="3">
                                     <FormGroup className="mb-3">
                                         <Label htmlFor="validationCustom01">{fieldLabel.SAPPartyCode} </Label>
@@ -454,7 +442,7 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
                             }
 
                             <Col md="1"></Col>
-                            {!(subPageMode === url.RETAILER_MASTER) &&  // Distance   show only (Party Master) mode
+                            {(!(subPageMode === url.RETAILER_MASTER || subPageMode === url.FRANCHISE_CUSTOMER_MASTER)) &&  // Distance   show only (Party Master) mode
                                 <Col md="3">
                                     <FormGroup className="mb-3">
                                         <Label htmlFor="validationCustom01">{fieldLabel.Distance} </Label>
@@ -509,7 +497,7 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
                                 </Col>
                                 : null
                             }
-                            {/* <Col md="1"> </Col> */}
+                           
                             {
                                 !(subPageMode === url.RETAILER_MASTER) ?
                                     (partyType_AddMasterAccess) ?
@@ -522,10 +510,9 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
                                     : null
                             }
 
-
                             <Col md="3" className="mb-3">
                                 <FormGroup>
-                                    <Label>Price List </Label>
+                                    <Label>{fieldLabel.PriceList} </Label>
                                     <Input
                                         value={priceListSelect.label}
                                         autoComplete={"off"}
@@ -539,6 +526,9 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
                                         data={priceListByPartyType}
                                         priceList={priceListSelect}
                                         setPriceSelect={setPriceListSelect} />
+                                    {/* {(isError.PriceList.length > 0 && (priceListSelect.value === "" || priceListSelect.label === "")) && (
+                                        <span className="text-danger f-8"><small>{isError.PriceList}</small></span>
+                                    )} */}
                                 </FormGroup>
 
                             </Col>
@@ -799,9 +789,7 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
                                 </FormGroup>
                             </Col>
 
-
-
-                            {subPageMode !== url.RETAILER_MASTER &&
+                            {(!(subPageMode === url.RETAILER_MASTER || subPageMode === url.FRANCHISE_CUSTOMER_MASTER)) &&
                                 <Col md="3">
                                     <FormGroup className="mb-3">
                                         <Label htmlFor="validationCustom01">{fieldLabel.Cluster} </Label>
@@ -828,7 +816,7 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
                             <Col md="1"> </Col>
 
                             {
-                                subPageMode !== url.RETAILER_MASTER &&
+                                (!(subPageMode === url.RETAILER_MASTER || subPageMode === url.FRANCHISE_CUSTOMER_MASTER)) &&
                                 <Col md="3">
                                     <FormGroup className="mb-3">
                                         <Label htmlFor="validationCustom01">{fieldLabel.SubCluster} </Label>
@@ -840,10 +828,6 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
                                             isSearchable={true}
                                             classNamePrefix="dropdown"
                                             options={SubClusterOptions
-
-
-
-
                                             }
                                             onChange={(hasSelect, evn) => {
                                                 onChangeSelect({ hasSelect, evn, state, setState, })
@@ -855,34 +839,6 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
                                     </FormGroup>
                                 </Col>
                             }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                         </Row>
                     </CardBody>
                 </Card>
