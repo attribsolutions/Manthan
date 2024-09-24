@@ -116,7 +116,7 @@ const AddEmployee = (props) => {
     districtDropDownLoading,
     cityDropDownLoading,
     updateMsg } = useSelector((state) => ({
-      saveBtnloading: state.EmployeeTypeReducer.saveBtnloading,
+      saveBtnloading: state.EmployeesReducer.saveBtnloading,
       employeeType: state.EmployeeTypeReducer.EmployeeTypeList,
       State: state.EmployeesReducer.State,
       City: state.EmployeesReducer.City,
@@ -195,7 +195,6 @@ const AddEmployee = (props) => {
   }, [userAccess])
 
   // useEffect(() => {
-
   //   if ((values.EmployeeTypeName.IsSalesTeamMember === true && partyList.length > 0) && pageMode === mode.defaultsave) {
 
   //     const Party_DropdownOptions = partyList
@@ -223,6 +222,7 @@ const AddEmployee = (props) => {
   // }, [partyList, employeeType, values.EmployeeTypeName]);
 
   // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
+
   useEffect(() => {
 
     if ((hasShowloction || hasShowModal)) {
@@ -241,6 +241,7 @@ const AddEmployee = (props) => {
       if (hasEditVal) {
 
         const listItems = hasEditVal.EmployeeParties.map((data) => ({
+          ...data,
           value: data.id,
           label: data.Name
         }))
@@ -248,7 +249,7 @@ const AddEmployee = (props) => {
         // if ((hasEditVal.EmployeeParties).length > 0) { setPartyDropDownShow_UI(true) };
 
         const { id, Name, Address, Mobile, email, DOB, PAN, AadharNo, CompanyName, EmployeeTypeName, StateName, DistrictName, EmployeeParties, PIN, City, CityName, Designation, DesignationID,
-        State_id, District_id, Company_id, City_id, EmployeeType_id, } = hasEditVal
+          State_id, District_id, Company_id, City_id, EmployeeType_id, } = hasEditVal
         const { values, fieldLabel, hasValid, required, isError } = { ...state }
         hasValid.id.valid = id
         hasValid.Name.valid = true;
@@ -797,7 +798,16 @@ const AddEmployee = (props) => {
                               className="react-dropdown"
                               options={Party_DropdownOptions}
                               onChange={(hasSelect, evn) => {
-                                onChangeSelect({ hasSelect, evn, state, setState });
+                                debugger
+                                if (evn.removedValue.RoleName !== null && evn.removedValue) {
+                                  customAlert({
+                                    Type: 3,
+                                    Message: "Role use in UserMaster",
+                                  })
+                                  return
+                                } else {
+                                  onChangeSelect({ hasSelect, evn, state, setState });
+                                }
                               }}
                               classNamePrefix="dropdown"
                             />

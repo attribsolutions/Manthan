@@ -701,7 +701,7 @@ const InvoiceList = () => {
                     centered={true}
                 >
                     <div className="modal-header" style={{ position: "relative" }}>
-                        <h5 className="modal-title mt-0 align-middle">Update Details</h5>
+                        <h4 className="modal-title mt-0 align-middle">Update Details</h4>
                         <button
                             type="button"
                             onClick={toggleModal}
@@ -716,8 +716,8 @@ const InvoiceList = () => {
                         <Row >
                             {_cfunc.loginUserIsFranchisesRole() && <Col sm="12" className="">
                                 <FormGroup className="mb- row mt-1 " >
-                                    <Label className="col-sm-6 p-2 text-black"
-                                        style={{ width: "90px" }}>Customer</Label>
+                                    <Label className="col-sm-6 p-2 text-black font-size-18"
+                                        style={{ width: "105px" }}>Customer</Label>
                                     <Col sm="8">
                                         <C_Select
                                             name="Customer"
@@ -742,9 +742,9 @@ const InvoiceList = () => {
                                 </FormGroup>
                             </Col>}
                             <Col sm="12" className="">
-                                <FormGroup className="mb- row mt-1 " >
-                                    <Label className="col-sm-6 p-2 text-black"
-                                        style={{ width: "90px" }}>Vehicle No</Label>
+                                <FormGroup className="mb- row mt-1  mb-4" >
+                                    <Label className="col-sm-6 p-2 text-black font-size-18"
+                                        style={{ width: "105px" }}>Vehicle No</Label>
                                     <Col sm="8">
                                         <C_Select
                                             name="Customer"
@@ -771,17 +771,17 @@ const InvoiceList = () => {
                                 </FormGroup>
                             </Col>
                         </Row>
-                        <div className="modal-footer">
+                        <div className="justify-content-start modal-footer p-4">
                             <button
                                 type="button"
-                                className="btn btn-secondary"
+                                className="btn btn-secondary pr-3 pl-3"
                                 onClick={toggleModal}
                             >
                                 Cancel
                             </button>
                             <button
                                 type="submit"
-                                className="btn btn-primary"
+                                className="btn btn-primary pr-3 pl-3"
                                 onClick={updateVehicleInvoice}>
                                 {"Update"}
                             </button>
