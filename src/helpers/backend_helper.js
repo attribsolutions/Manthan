@@ -937,7 +937,7 @@ export const OrderItemSupplier_GoButton_API = ({ jsonBody }) => post(url.ORDER_I
 
 // SweetPos Machine Type
 export const S_Pos_MachineType_List_Api = (jsonBody) => post(url.S_POS_MACHINE_TYPE_LIST_API, jsonBody) // get api
-export const S_Pos_MachineType_Save_API = ({ jsonBody }) => post(url.S_POS_MACHINE_TYPE_SAVE_API, jsonBody)// post api
+export const S_Pos_MachineType_Save_API = ({ jsonBody }) => put(url.S_POS_MACHINE_TYPE_SAVE_API, jsonBody)// post api
 
 export const StockOutReport_API = ({ jsonBody }) => post(url.SWEET_POS_STOCK_OUT_REPORT, jsonBody)//Go button api
 
