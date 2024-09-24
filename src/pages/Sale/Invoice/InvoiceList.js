@@ -441,7 +441,7 @@ const InvoiceList = () => {
 
     const makeBtnFunc = (list = {}, btnId) => {
 
-        
+
         const grnRef = [{
             Challan: list[0].id,
             Inward: false,
@@ -682,7 +682,7 @@ const InvoiceList = () => {
                     centered={true}
                 >
                     <div className="modal-header" style={{ position: "relative" }}>
-                        <h5 className="modal-title mt-0 align-middle">Please Select Vehicle Number</h5>
+                        <h4 className="modal-title mt-0 align-middle">Please Select Vehicle Number</h4>
                         <button
                             type="button"
                             onClick={toggleModal}
@@ -695,10 +695,10 @@ const InvoiceList = () => {
                     </div>
                     <div className="modal-body">
                         <Row >
-                            <Col sm="8" className="">
+                            <Col sm="12" className="">
                                 <FormGroup className="mb- row mt-1 " >
-                                    <Label className="col-sm-6 p-2 text-black"
-                                        style={{ width: "90px" }}>Vehicle No</Label>
+                                    <Label className="col-sm-6 p-2 text-black font-size-18"
+                                        style={{ width: "105px" }}>Vehicle No</Label>
                                     <Col sm="8">
                                         <C_Select
                                             name="VehicleNo"
@@ -714,7 +714,7 @@ const InvoiceList = () => {
                                                 menu: (provided) => ({
                                                     ...provided,
                                                     zIndex: 5,
-                                                    maxHeight: "80px", // Set a fixed height for the dropdown
+                                                    maxHeight: "300px", // Set a fixed height for the dropdown
                                                     overflowY: "auto", // Add a scrollbar if the content exceeds the height
                                                 }),
                                             }}
@@ -727,21 +727,24 @@ const InvoiceList = () => {
                                 </FormGroup>
                             </Col>
                         </Row>
-                        <div className="modal-footer">
+
+                        <div className="modal-footer justify-content-start modal-footer p-4">
                             <button
                                 type="button"
-                                className="btn btn-secondary"
+                                className="btn btn-secondary pr-3 pl-3"
                                 onClick={toggleModal}
                             >
                                 Cancel
                             </button>
                             <button
                                 type="submit"
-                                className="btn btn-primary"
+                                className="btn btn-primary pr-3 pl-3"
                                 onClick={updateVehicleInvoice}>
                                 Update
                             </button>
                         </div>
+
+
                     </div>
                 </Modal>
             </div>
