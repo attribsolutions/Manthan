@@ -355,7 +355,7 @@ const InvoiceExcelUpload = (props) => {
                 try {
                     const MapItemList = ItemList.filter(obj => obj.MapItem !== null && obj.MapItem !== "");
                     MapItemList.forEach(function (i) {
-                        
+
                         let Item_Code = i.MapItem;
                         let GST = i.GST;
                         let GSTID = i.GSTID
@@ -386,7 +386,7 @@ const InvoiceExcelUpload = (props) => {
                 try {
                     const MapItemList = ItemList.filter(obj => obj.MapItem !== null && obj.MapItem !== "");
                     MapItemList.forEach(function (i) {
-                        
+
                         let Item_Code = i.MapItem;
                         let GST = i.GST;
                         let GSTID = i.GSTID
@@ -574,13 +574,13 @@ const InvoiceExcelUpload = (props) => {
             })
 
             updatereadJsonDetail.invoice.forEach(async (inv) => {
-
+                debugger
                 let parentObj;
                 let invoiceItems = []
                 let invoiceTotalAmount = 0
 
                 inv.forEach(async (ele) => {
-                    
+
                     const calculate = InvoiceUploadCalculation({ Quantity: ele[parArr.Quantity], Rate: ele[parArr.Rate], GST: ele.GST, Discount: ele[parArr.Discount], DiscountType: ele[parArr.DiscountType] });
                     invoiceTotalAmount = invoiceTotalAmount + calculate.Amount;
 
@@ -608,7 +608,7 @@ const InvoiceExcelUpload = (props) => {
                         "BaseUnitQuantity": ele[parArr.BaseUnitQuantity] ? ele[parArr.BaseUnitQuantity] : '',
                         "LiveBatch": ele[parArr.LiveBatch] ? ele[parArr.LiveBatch] : '',
                         "MRPValue": ele[parArr.MRP] ? ele[parArr.MRP] : '', //Actul MRP That Map in System
-                        "Rate": ele[parArr.Rate] ? ele[parArr.Rate]?.toFixed(2) : '',
+                        "Rate": ele[parArr.Rate] ? ele[parArr.Rate] : '',
                         "BasicAmount": ele[parArr.BasicAmount] ? ele[parArr.BasicAmount] : (calculate.BasicAmount).toFixed(2),
                         "GSTAmount": ele[parArr.GSTAmount] ? ele[parArr.GSTAmount] : (calculate.GSTAmount).toFixed(2),
                         "GST": ele?.GSTID,
@@ -631,8 +631,8 @@ const InvoiceExcelUpload = (props) => {
                     })
 
                 })
-
                 outerArr.push({ ...parentObj, InvoiceItems: invoiceItems })
+
             });
             const jsonBody = JSON.stringify({ "BulkData": outerArr })
 
