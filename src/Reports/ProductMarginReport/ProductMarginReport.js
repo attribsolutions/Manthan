@@ -76,7 +76,7 @@ const ProductMarginReport = (props) => {
     const [PartyTypePriceList, setPartyTypePriceList] = useState([]);
 
 
-    const [partyTypeSelect, setPartyTypeSelect] = useState(allLabelWithZero);
+    const [partyTypeSelect, setPartyTypeSelect] = useState([allLabelWithZero]);
     const [priceListSelect, setPriceListSelect] = useState(allLabelWithZero);
     const [itemNameSelect, setItemNameSelect] = useState([allLabelWithZero]);
     const [groupSelect, setGroupSelect] = useState([allLabelWithZero]);
@@ -155,7 +155,7 @@ const ProductMarginReport = (props) => {
 
 
     useEffect(async () => {
-
+        debugger
         let results = [];
         if (partyTypeSelect.length > 0) {
             for (const PartyType of partyTypeSelect) {
@@ -334,10 +334,10 @@ const ProductMarginReport = (props) => {
     }, [ProductMargin, pageField]);
 
     function GobtnExcelhandler(Type) {
-
+        debugger
         setBtnMode(Type)
         const userDetails = loginUserDetails();
-        
+
         const jsonBody = JSON.stringify({
             "IsSCM": (userDetails.IsSCMPartyType).toString(),
             "Party": loginPartyID(),// if IsSCM 0 then Party ID ignore.
