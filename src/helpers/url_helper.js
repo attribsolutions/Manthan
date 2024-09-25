@@ -234,13 +234,13 @@ export const GROUP_API = '/Group'
 // SubGroup API
 export const SUBGROUP_API = '/SubGroups'
 
-export const UPDATE_GROUP_SUBGROUP_API = '/UpdateGroupSubGroupSequence'
+export const UPDATE_GROUP_SUBGROUP_API = '/UpdateGroupSubGroupSequenceNew'
 
 
 
 
 
-export const GROUP_SUBGROUP_API = '/DetailsOfsubgroups_groups'
+export const GROUP_SUBGROUP_API = '/DetailsOfsubgroups_groupsNEW'
 
 
 
@@ -642,6 +642,10 @@ export const POST_PARTY_DETAILS = '/PartyDetails'
 export const FRENCHIESE_ITEM_SALE_REPORT = '/FranchiseSaleReport'
 
 export const FRENCHIESE_DAILY_SALE_REPORT = '/SweetPOS/TopSaleItemsOfFranchise'
+
+
+export const FRENCHIESE_MOBILE_CUSTOMER = '/SweetPOS/SPOSMobileLinkToBill'
+
 
 
 
