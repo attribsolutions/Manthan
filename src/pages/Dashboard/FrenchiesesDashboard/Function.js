@@ -1,5 +1,5 @@
 import SERVER_HOST_PATH from "../../../helpers/_serverPath";
-import { FRENCHIESE_DAILY_SALE_REPORT } from "../../../helpers/url_helper";
+import { FRENCHIESE_DAILY_SALE_REPORT, FRENCHIESE_MOBILE_CUSTOMER } from "../../../helpers/url_helper";
 
 export const GetDailySaleData = async ({ fromDate, toDate, Party_Id }) => { //+++++++++++++++++++++ Session Company Id+++++++++++++++++++++++++++++
     const myHeaders = new Headers();
@@ -20,6 +20,31 @@ export const GetDailySaleData = async ({ fromDate, toDate, Party_Id }) => { //++
     };
 
     const Response = await fetch(`${SERVER_HOST_PATH}${FRENCHIESE_DAILY_SALE_REPORT}`, requestOptions)
+    const jsonData = await Response.json();
+
+    return jsonData
+
+};
+
+export const CustomerMobileView = async ({ Mobile, IsLinkToBill, MacID }) => { //+++++++++++++++++++++ Session Company Id+++++++++++++++++++++++++++++
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Authorization", "Basic U3dlZXRQT1NVc2VyOjEyMzQ=");
+
+    const jsonBody = JSON.stringify({
+        "Mobile": Mobile,
+        "IsLinkToBill": IsLinkToBill,
+        "MacID": MacID,
+    });
+
+    const requestOptions = {
+        method: "POST",
+        headers: myHeaders,
+        body: jsonBody,
+        redirect: "follow"
+    };
+
+    const Response = await fetch(`${SERVER_HOST_PATH}${FRENCHIESE_MOBILE_CUSTOMER}`, requestOptions)
     const jsonData = await Response.json();
 
     return jsonData

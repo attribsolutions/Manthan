@@ -242,6 +242,7 @@ import SweetPOSRateMaster from "../pages/SweetPOS/Adminstration/RateMaster/Sweet
 import OrderItemSupplierReport from "../Reports/OrderItemSupplier/index.js";
 import MachineTypeMaster from "../pages/SweetPOS/Adminstration/MachineType/MachineTypeMaster.js";
 import StockOutReport from "../pages/SweetPOS/Reports/StockOutReport/index.js";
+import CustomerMobileView from "../pages/Dashboard/FrenchiesesDashboard/CustomerMobileView/CustomerMobileView.js";
 
 
 
@@ -704,6 +705,8 @@ const authRoutes = [
 
 
 	{ path: '/Daily_Sale_Report/:Party_Id', exact: '/Daily_Sale_Report', component: DailyItemSaleView },
+	{ path: '/Customer_Mobile_View/:Mac_ID', exact: '/Customer_Mobile_View/:Mac_ID', component: CustomerMobileView },
+
 	// { component:() => <Redirect to="/login" /> },
 	{ path: "/pages-500", component: Error500 },
 ]
