@@ -25,11 +25,13 @@ const MRPList = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const hasPagePath = history.location.pathname
+  const IsSCMCompany = _cfunc.loginIsSCMCompany()
 
   const [pageMode, setpageMode] = useState(mode.defaultsave)
   const [hederFilters, setHederFilters] = useState({ fromdate: _cfunc.currentDate_ymd, todate: _cfunc.currentDate_ymd })
   const { fromdate, todate, } = hederFilters;
   const [rowData, setRowData] = useState({})
+  const [updatedPageFieldMaster, setUpdatedPageFieldMaster] = useState(false);
 
   const reducers = useSelector(
     (state) => ({
@@ -43,6 +45,7 @@ const MRPList = () => {
   );
 
   const { pageField, MRPGoButton, deleteMsg, listBtnLoading } = reducers;
+
 
   const action = {
     getList: getMRPList,
@@ -59,6 +62,28 @@ const MRPList = () => {
     goButtonHandler()
 
   }, []);
+
+
+  useEffect(() => {
+    if (pageField && pageField.PageFieldMaster && IsSCMCompany === 1) {
+
+      // Directly modify pageField.PageFieldMaster in place
+      pageField.PageFieldMaster.forEach(field => {
+        if (field.ControlID === "DivisionName") {
+          field.ShowInListPage = false; // Directly mutate the field
+        }
+        if (field.ControlID === "PartyName") {
+          field.ShowInListPage = false; // Directly mutate the field
+        }
+      });
+      // After modification, trigger any necessary re-render or side-effect
+      setUpdatedPageFieldMaster(true); // This will re-render your component (optional)
+    }
+    else if (pageField && pageField.PageFieldMaster && IsSCMCompany !== 1) {
+      setUpdatedPageFieldMaster(true);
+    }
+  }, [pageField]);
+
 
   const mobaileDeleteApiFinc = async (deleteMsg) => {
 
@@ -217,7 +242,8 @@ const MRPList = () => {
 
         <div className="mt-n1">
           {
-            (pageField) ?
+
+            updatedPageFieldMaster && (
               <CommonPurchaseList
                 action={action}
                 reducers={reducers}
@@ -233,8 +259,8 @@ const MRPList = () => {
                 viewApprovalBtnFunc={viewApprovalBtnFunc}
                 editBodyfunc={editBodyfunc}
                 deleteBodyfunc={deleteBodyfunc}
-              />
-              : null
+              />)
+
           }
         </div>
 
