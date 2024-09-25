@@ -38,8 +38,9 @@ const CustomermobileViewBackground = (props) => {
 
 
     const SaveHandler = async () => {
+        debugger
         setResponse("")
-        if (CustomerMobileNumber === "" && !validateMobileNumber(CustomerMobileNumber)) {
+        if (!validateMobileNumber(CustomerMobileNumber)) {
             setError('Please enter a valid 10-digit mobile number.');
         } else {
             const jsonData = await CustomerMobileView({ Mobile: CustomerMobileNumber, IsLinkToBill: 0, MacID: props.Mac_ID, })
@@ -68,14 +69,13 @@ const CustomermobileViewBackground = (props) => {
     };
 
     console.log("response", (Response.Status === true && Response.StatusCode === 200))
-    console.log(" validation", (validateMobileNumber(CustomerMobileNumber)))
+    console.log(" validation", !(validateMobileNumber(CustomerMobileNumber)))
     let IsShowSent = false
     if (Response.Status === true && Response.StatusCode === 200) {
         IsShowSent = true
     } else if (validateMobileNumber(CustomerMobileNumber)) {
         IsShowSent = true
     }
-
 
     return (
         <React.Fragment>
