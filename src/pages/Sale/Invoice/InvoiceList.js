@@ -317,6 +317,16 @@ const InvoiceList = () => {
         }
     }, [Cancel_EwayBill]);
 
+    useEffect(() => {
+        const Todate = _cfunc.ToDate({ FromDate: hederFilters.fromdate, Todate: hederFilters.todate })
+        setHederFilters((i) => {
+            const a = { ...i }
+            a.todate = Todate;
+            return a
+        })
+
+    }, [hederFilters.fromdate]);
+
     useEffect(async () => {    // Invoice bulk delete useEffect 
 
         if (invoiceBulkDelete.Status === true && invoiceBulkDelete.StatusCode === 200) {

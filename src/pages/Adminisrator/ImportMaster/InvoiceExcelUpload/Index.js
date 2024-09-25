@@ -579,8 +579,8 @@ const InvoiceExcelUpload = (props) => {
                 let invoiceItems = []
                 let invoiceTotalAmount = 0
 
-                inv.forEach(async (ele) => {
 
+                inv.forEach(async (ele) => {
                     const calculate = InvoiceUploadCalculation({ Quantity: ele[parArr.Quantity], Rate: ele[parArr.Rate], GST: ele.GST, Discount: ele[parArr.Discount], DiscountType: ele[parArr.DiscountType] });
                     invoiceTotalAmount = invoiceTotalAmount + calculate.Amount;
 
@@ -608,7 +608,7 @@ const InvoiceExcelUpload = (props) => {
                         "BaseUnitQuantity": ele[parArr.BaseUnitQuantity] ? ele[parArr.BaseUnitQuantity] : '',
                         "LiveBatch": ele[parArr.LiveBatch] ? ele[parArr.LiveBatch] : '',
                         "MRPValue": ele[parArr.MRP] ? ele[parArr.MRP] : '', //Actul MRP That Map in System
-                        "Rate": ele[parArr.Rate] ? ele[parArr.Rate] : '',
+                        "Rate": ele[parArr.Rate] ? Number(ele[parArr.Rate]).toFixed(2) : '',
                         "BasicAmount": ele[parArr.BasicAmount] ? ele[parArr.BasicAmount] : (calculate.BasicAmount).toFixed(2),
                         "GSTAmount": ele[parArr.GSTAmount] ? ele[parArr.GSTAmount] : (calculate.GSTAmount).toFixed(2),
                         "GST": ele?.GSTID,
@@ -629,6 +629,7 @@ const InvoiceExcelUpload = (props) => {
                         "QtyInKg": ele[parArr.QtyInKg] ? ele[parArr.QtyInKg] : 0,
                         "QtyInNo": ele[parArr.QtyInNo] ? ele[parArr.QtyInNo] : 0,
                     })
+
 
                 })
                 outerArr.push({ ...parentObj, InvoiceItems: invoiceItems })
