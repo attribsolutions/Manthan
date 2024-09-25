@@ -27,7 +27,7 @@ import {
 	updatePartyID,
 	updatePartyIDSuccess
 } from "../../../../store/Administrator/PartyRedux/action"
-import { Breadcrumb_inputName, commonPageField, commonPageFieldSuccess } from "../../../../store/actions"
+import { Breadcrumb_inputName, commonPageField, commonPageFieldListSuccess, commonPageFieldSuccess } from "../../../../store/actions"
 import { btnIsDissablefunc, isEditMode_CssFun, loginCompanyID, loginPartyID, loginUserAdminRole, loginUserID, metaTagLabel } from "../../../../components/Common/CommonFunction"
 import * as url from "../../../../routes/route_url";
 import * as pageId from "../../../../routes/allPageID"
@@ -130,8 +130,7 @@ const PartyMaster = (props) => {
 		setUserAccState
 	}), [userAccess]);
 
-	useLayoutEffect(() => {
-
+	useEffect(() => {
 		dispatch(getDistrictOnStateSuccess([]))//clear district privious options
 		dispatch(getCityOnDistrictSuccess([]))//clear City privious options
 		dispatch(commonPageFieldSuccess(null));//clear privious PageField
@@ -145,7 +144,9 @@ const PartyMaster = (props) => {
 		if ((subPageMode === url.RETAILER_MASTER) || (subPageMode === url.PARTY_SELF_EDIT)) {
 			dispatch(changeCommonPartyDropDetailsAction({ isShow: true }))//change party drop-down  hide
 		}
-
+		return () => {
+			dispatch(commonPageFieldListSuccess(null))
+		}
 	}, [])
 
 	useEffect(() => {
@@ -431,7 +432,7 @@ const PartyMaster = (props) => {
 		let isError = addressTabIsAddressEnter.isError
 		let values = addressTabIsAddressEnter.values
 
-		if ((values.PartyAddress.length > 0) && (isError.PartyAddress === "")) {
+		if ((values.PartyAddress.length > 0) && (isError.PartyAddress === "") && !(url.FRANCHISE_CUSTOMER_MASTER)) {
 			customAlert({
 				Type: 4,
 				Message: alertMessages.fillAddressDetailsInTable
@@ -444,7 +445,7 @@ const PartyMaster = (props) => {
 			return
 		};
 
-		if (addressTabDetail.length === 0) {
+		if (addressTabDetail.length === 0 && !(url.FRANCHISE_CUSTOMER_MASTER)) {
 			setactiveTab1("2")
 			customAlert({
 				Type: 4,
@@ -463,7 +464,7 @@ const PartyMaster = (props) => {
 			return count
 		}, 0)
 
-		if (totalIsDefault === 0) {
+		if (totalIsDefault === 0 && !(url.FRANCHISE_CUSTOMER_MASTER)) {
 			setactiveTab1("2")
 			customAlert({
 				Type: 4,
@@ -514,7 +515,7 @@ const PartyMaster = (props) => {
 				}
 			})
 
-			if (((priceListSelect.label === "") || (priceListSelect.value === "")) && (subPageMode === url.RETAILER_MASTER)) {
+			if (((priceListSelect.label === "") || (priceListSelect.value === "")) && (subPageMode === url.RETAILER_MASTER || url.FRANCHISE_CUSTOMER_MASTER)) {
 				customAlert({
 					Type: 4,
 					Message: alertMessages.PricelistIsRequired,
@@ -566,7 +567,7 @@ const PartyMaster = (props) => {
 				],
 
 			});
-
+			
 			if (pageMode === mode.edit) {
 
 				dispatch(updatePartyID({ jsonBody, updateId: EditData.id, btnId }));
@@ -631,7 +632,8 @@ const PartyMaster = (props) => {
 
 												</NavLink>
 											</NavItem>
-											{!(subPageMode === url.RETAILER_MASTER) &&// only view when party master Mode
+
+											{(!(subPageMode === url.RETAILER_MASTER || subPageMode === url.FRANCHISE_CUSTOMER_MASTER)) &&// only view when party master Mode
 												<NavItem>
 													<NavLink
 														id="nave-link-3"
@@ -649,7 +651,6 @@ const PartyMaster = (props) => {
 														<span className="d-none d-sm-block">Transaction Prefix</span>
 													</NavLink>
 												</NavItem>}
-
 
 											<NavItem>
 												<NavLink
