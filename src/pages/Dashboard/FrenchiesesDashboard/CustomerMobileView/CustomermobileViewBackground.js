@@ -1,36 +1,15 @@
 import React, { useEffect, useState, } from "react";
-import { Carousel, CarouselItem, CarouselIndicators, Card, Input, Button } from "reactstrap";
+import { Card, Input } from "reactstrap";
 import cbm_logo from "../../../../assets/images/cbm_logo.png"
-import { Go_Button } from "../../../../components/Common/CommonButton";
+
 import "./button.css"
 import { CustomerMobileView } from "../Function";
-import { showToastAlert } from "../../../../helpers/axios_Config";
 
 
 
-const items = [
-    {
-        id: 1,
-        // img: img1,
-        // name: "Richard Drews",
-        // designation: "Web Designer",
-        description:
-            "Established in 1950 is one of the leading manufacturers of Indian Sweets, Snacks and Savouries and Ready to Eat Products with presence in Retail, General Trade, Modern Trade and Export Markets"
-    },
-    {
-        id: 2,
-        // img: img2,
-        // name: "Rosanna French",
-        // designation: "Web Developer",
-        description:
-            "To become leaders in the Indian Dairy Industry, while retaining our Indian traditions and family values"
-    },
-
-];
 
 const CustomermobileViewBackground = (props) => {
-    const [activeIndex, setActiveIndex] = useState(0);
-    const [animating, setAnimating] = useState(false);
+  
     const [CustomerMobileNumber, setCustomerMobileNumber] = useState("");
     const [error, setError] = useState('');
     const [Response, setResponse] = useState("");
@@ -38,7 +17,7 @@ const CustomermobileViewBackground = (props) => {
 
 
     const SaveHandler = async () => {
-        debugger
+
         setResponse("")
         if (!validateMobileNumber(CustomerMobileNumber)) {
             setError('Please enter a valid 10-digit mobile number.');
@@ -46,8 +25,13 @@ const CustomermobileViewBackground = (props) => {
             const jsonData = await CustomerMobileView({ Mobile: CustomerMobileNumber, IsLinkToBill: 0, MacID: props.Mac_ID, })
             setResponse(jsonData)
         }
-
     }
+    useEffect(() => {
+        if (Response.Status === true && Response.StatusCode === 200) {
+            setCustomerMobileNumber("");
+        }
+    }, [Response.Status, Response.StatusCode])
+
 
 
     const validateMobileNumber = (number) => {
@@ -58,18 +42,26 @@ const CustomermobileViewBackground = (props) => {
     };
 
     const handleChange = (event) => {
+        debugger
         const value = event.target.value;
-        setCustomerMobileNumber(value);
-        // Validate the mobile number
-        if (value && !validateMobileNumber(value)) {
-            setError('Please enter a valid 10-digit mobile number.');
-        } else {
-            setError('');
+        const isNumber = /^\d{0,10}$/.test(value)
+
+        if (isNumber) {
+            setCustomerMobileNumber(value);
+            // Validate the mobile number
+            if (value && !validateMobileNumber(value)) {
+                setError('Please enter a valid 10-digit mobile number.');
+            } else {
+
+                setError('');
+            }
         }
     };
 
-    console.log("response", (Response.Status === true && Response.StatusCode === 200))
-    console.log(" validation", !(validateMobileNumber(CustomerMobileNumber)))
+
+
+    // console.log("response", (Response.Status === true && Response.StatusCode === 200))
+    // console.log(" validation", !(validateMobileNumber(CustomerMobileNumber)))
     let IsShowSent = false
     if (Response.Status === true && Response.StatusCode === 200) {
         IsShowSent = true
@@ -158,23 +150,26 @@ const CustomermobileViewBackground = (props) => {
                             margin: '10px auto',
                             boxShadow: '0px 1px 5px 1px grey',
                             padding: '30px',
-                            width: '400px',
+                            width: '370px',
                             zIndex: 2, // Keep card on top of the background
                         }}
                     >
                         <h4>Customer Mobile</h4>
+
                         <Input
                             type="tel"
-                            className="input"
+                            id="Numiric_ID"
+                            className="input font-size-24"
                             autoComplete="off"
                             placeholder="Enter Mobile Number"
+                            value={CustomerMobileNumber}
                             onChange={handleChange}
                         />
                         {error && <div style={{ color: "red" }} className="error-message">{error}</div>}
                     </Card>
 
 
-                    <button className="button" onClick={SaveHandler} style={{ marginLeft: "100px", marginTop: "30px" }}>
+                    <button className="button" onClick={SaveHandler} style={{ marginLeft: "90px", marginTop: "30px" }}>
                         <div className="outline"></div>
                         <div className="state state--default" style={{ top: "10px" }} >
                             <div style={{ top: "-12px" }} className="icon">
@@ -276,6 +271,9 @@ const CustomermobileViewBackground = (props) => {
 
 
                 </div>
+
+
+
 
 
 

@@ -352,6 +352,15 @@ const InvoiceList = () => {
         }
     }, [invoiceBulkDelete]);
 
+    useEffect(() => {
+        const Todate = _cfunc.ToDate({ FromDate: hederFilters.fromdate, Todate: hederFilters.todate })
+        setHederFilters((i) => {
+            const a = { ...i }
+            a.todate = Todate;
+            return a
+        })
+
+    }, [hederFilters.fromdate]);
 
     useEffect(() => {
         if (makeGRN.Status === true && makeGRN.StatusCode === 200) {
@@ -395,7 +404,7 @@ const InvoiceList = () => {
     }
 
     function goButtonHandler(event, IBType) {
-        
+
         try {
             if (commonPartyDropSelect.value === 0) {
                 customAlert({ Type: 3, Message: alertMessages.commonPartySelectionIsRequired });
