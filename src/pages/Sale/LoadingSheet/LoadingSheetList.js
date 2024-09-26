@@ -30,7 +30,7 @@ const LoadingSheetList = () => {
     const history = useHistory();
     const dispatch = useDispatch();
     const currentDate_ymd = _cfunc.date_ymd_func()
-    const [headerFilters, setHeaderFilters] = useState('');
+    const [headerFilters, setHeaderFilters] = useState({ todate: currentDate_ymd, fromdate: currentDate_ymd, });
     const [pageMode] = useState(mode.defaultList);
 
     const reducers = useSelector(
@@ -87,6 +87,16 @@ const LoadingSheetList = () => {
             dispatch(LoadingSheetListActionSuccess([]))
         }
     }, []);
+
+    useEffect(() => {
+        const Todate = _cfunc.ToDate({ FromDate: headerFilters.fromdate, Todate: headerFilters.todate })
+        setHeaderFilters((i) => {
+            const a = { ...i }
+            a.todate = Todate;
+            return a
+        })
+
+    }, [headerFilters.fromdate]);
 
     useEffect(() => {
         if ((LoadingSheetUpdateList.Status === true) && (LoadingSheetUpdateList.StatusCode === 200)) {
