@@ -420,7 +420,7 @@ export const edit_SubGroup_List_Api = ({ editId }) => get(`${url.SUBGROUP_API}/$
 export const update_SubGroup_List_Api = ({ jsonBody, updateId }) => put(`${url.SUBGROUP_API}/${updateId}`, jsonBody)// update api
 
 // export const get_SubGroup_Group = () => get(url.GROUP_SUBGROUP_API)// get api
-export const get_SubGroup_Group = ({ GroupType_ID }) => get(`${url.GROUP_SUBGROUP_API}/${GroupType_ID}`)// edit api
+export const get_SubGroup_Group = ({ GroupType_id }) => post(`${url.GROUP_SUBGROUP_API}`, GroupType_id)// edit api
 
 
 
