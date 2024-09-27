@@ -13,6 +13,7 @@ import Select from "react-select";
 import { getGroupTypeslist } from '../../../store/Administrator/GroupTypeRedux/action';
 import { getGroupList } from '../../../store/actions';
 import SimpleBar from "simplebar-react"
+import { C_Button } from '../../../components/Common/CommonButton';
 
 const ItemType = {
     ITEM: 'item',
@@ -313,7 +314,9 @@ const GroupSubGroup = (props) => {
 
 
     const fetchData = async () => {
-        const response = await get_SubGroup_Group({ GroupType_ID: GroupType.value })
+        debugger
+        const GroupType_id = JSON.stringify({ GroupType_id: GroupType.value })
+        const response = await get_SubGroup_Group({ GroupType_id })
         return response.Data
     }
 
@@ -354,7 +357,11 @@ const GroupSubGroup = (props) => {
                 GroupID: item.GroupID,
                 GroupName: item.GroupName,
                 GroupSequence: item.GroupSequence,
-                Items: item.Items
+                Items: item.Items.map(obj => ({
+                    ...obj,
+                    PriviousGroup_ID: null,
+                    PriviousSubGroup_ID: null,  // initiall  set null 
+                }))
             });
             return acc;
         }, []);
@@ -398,12 +405,14 @@ const GroupSubGroup = (props) => {
         let response = []
         if ((Group.value !== "")) {
             setUnAssign(SubGroups["UnAssign"])
-
             if (GroupType.value !== "") {
                 response = await fetchData()
             }
+            let nullGroupItems = [];
             const groupedData = response.reduce((acc, item, index) => {
                 let group = {}
+                debugger
+
                 if ((item.GroupID === Group.value)) {
                     group = {
                         GroupID: item.SubGroupID,
@@ -415,19 +424,14 @@ const GroupSubGroup = (props) => {
                             SubGroupSequence: i + 1,    // set item Sequence based on  Index  From backend order by sequence so index will match the Sequence
                             GroupID: item.SubGroupID,
                             GroupName: item.SubGroupName,
-
+                            GroupSub_ID: item.GroupID
                         }))
                     };
                     acc.push(group);
+                }
 
-                    // group.SubgroupDetails.push({
-                    //     value: item.SubGroupID,
-                    //     label: item.SubGroupName,
-                    //     SubGroupSequence: item.SubGroupSequence,
-                    //     GroupID: item.GroupID,
-                    //     GroupName: item.GroupName,
-                    //     GroupSequence: item.GroupSequence
-                    // });
+                if (item.GroupID === null && item.SubGroupID === null) {
+                    nullGroupItems = nullGroupItems.concat(item.Items.map(inx => inx));
                 }
                 return acc;
             }, []);
@@ -438,10 +442,10 @@ const GroupSubGroup = (props) => {
             });
 
             let transformedData = transformData(groupedData);
+            debugger
             if (SubGroups["UnAssign"] !== undefined) {
-                transformedData["UnAssign"] = SubGroups["UnAssign"];
+                transformedData["UnAssign"] = nullGroupItems.concat(SubGroups["UnAssign"]);
             }
-
             setSubGroups(transformedData);
             setOrderedSubGroups(Object.keys(transformedData));
         }
@@ -466,6 +470,7 @@ const GroupSubGroup = (props) => {
     };
 
     const moveItem = (item, sourceGroupName, targetGroupName) => {
+
         if (sourceGroupName === targetGroupName) return;
         setGroups((prevGroups) => {
             const sourceGroup = prevGroups[sourceGroupName].filter((i) => i.value !== item.value);
@@ -497,10 +502,20 @@ const GroupSubGroup = (props) => {
             } else {
                 sourceGroup = prevGroups[sourceGroupName].filter((i) => i.value !== item.value);
             }
+            let PriviousGroup_ID = null
+            let PriviousSubGroup_ID = null
+
+            if (item.hasOwnProperty('PriviousGroup_ID') || item.hasOwnProperty('PriviousSubGroup_ID')) {
+                PriviousGroup_ID = item.PriviousGroup_ID
+                PriviousSubGroup_ID = item.PriviousSubGroup_ID
+            } else {
+                PriviousGroup_ID = sourceGroup[0]?.GroupID
+                PriviousSubGroup_ID = sourceGroup[0]?.GroupSub_ID
+            }
 
             const targetGroupdata = [...prevGroups[targetGroupName]];
-
-            item = { GroupID: targetGroupdata[0]?.GroupID, GroupName: targetGroupdata[0]?.GroupName, SubGroupSequence: item.SubGroupSequence, label: item.label, value: item.value }
+            // here Group ID is SUB Group ID AND Sub Group ID IS GRoup ID Swap only key field  not value
+            item = { GroupID: targetGroupdata[0]?.GroupID, GroupName: targetGroupdata[0]?.GroupName, SubGroupSequence: item.SubGroupSequence, label: item.label, value: item.value, PriviousGroup_ID: PriviousGroup_ID, PriviousSubGroup_ID: PriviousSubGroup_ID }
             const targetGroup = [...prevGroups[targetGroupName], item];
 
             return {
@@ -513,6 +528,7 @@ const GroupSubGroup = (props) => {
 
 
     const moveItemWithinGroup = (sourceIndex, targetIndex, groupName) => {
+
         setGroups((prevGroups) => {
             const updatedGroup = Array.from(prevGroups[groupName]);
             const [movedItem] = updatedGroup.splice(sourceIndex, 1);
@@ -563,6 +579,7 @@ const GroupSubGroup = (props) => {
 
 
     const addItem = ({ New_subGroup, groupName, GroupID }) => {
+
         const newItem = { value: "", label: `${New_subGroup}`, GroupID: GroupID, GroupName: groupName, };
         setGroups((prevGroups) => ({
             ...prevGroups,
@@ -586,7 +603,7 @@ const GroupSubGroup = (props) => {
 
     const SaveHandler = async () => {
         setSaveLoading(true)
-
+        debugger
         let combinedArray = [];
         orderedGroups.forEach(groupName => {
             combinedArray = combinedArray.concat(groups[groupName]);
@@ -604,27 +621,38 @@ const GroupSubGroup = (props) => {
             subGroupCounter++
             currentGroupID = subgroup.GroupID;
             const matchedKey = Object.keys(SequenceSubGroupItem).find(key => subgroup.label === key);
+            if (matchedKey) {
+
+            }
+
             const items = matchedKey
                 ? SequenceSubGroupItem[matchedKey].map((item, index) => ({
                     ItemID: item.value,
                     ItemName: item.label,
                     ItemSequence: index + 1,
-
+                    PriviousSubGroup_ID: item.PriviousGroup_ID ? item.PriviousGroup_ID : null,
+                    PriviousGroup_ID: item.PriviousSubGroup_ID ? item.PriviousSubGroup_ID : null  // ID is is swap for coad reduction   
                 }))
                 : [];
-
-            return {
+            const Obj = {
                 GroupID: subgroup.GroupID,
                 GroupName: subgroup.GroupName,
                 GroupSequence: orderedGroups.indexOf(subgroup.GroupName) + 1,
                 SubGroupSequence: subGroupCounter,
                 SubGroup: subgroup.label,
                 SubGroupID: subgroup.value,
-                Items: (items.length === 0) ? subgroup.Items : items
+                Items: (items.length === 0 && (matchedKey === undefined)) ? subgroup.Items : items,
+                GroupTypeID: GroupType.value
             };
+
+
+
+            return Obj
         });
 
 
+
+        debugger
         console.log("groups", groups)
         console.log("orderedGroups", orderedGroups)
         console.log("Subgroups", SubGroups)
@@ -669,11 +697,12 @@ const GroupSubGroup = (props) => {
                 <Row >
                     <Col sm={12} style={{ position: "sticky", top: "3px", zIndex: '2' }} >
                         <Card style={{ background: '#c2c2dbf5', paddingBottom: '4px', paddingLeft: '13px', paddingRight: '13px', borderRadius: '13px', boxShadow: '0px 1px 5px 1px grey', }}>
-                            <Row >
+
+                            <Row>
                                 <Col sm={3} className="">
                                     <FormGroup className=" row mt-2  " >
                                         <Label className="col-sm-4 p-2"
-                                            style={{ width: "120px" }}>Group Type</Label>
+                                            style={{ width: "90px" }}>Group Type</Label>
                                         <Col sm="7">
                                             <Select
                                                 name="GroupTypeName"
@@ -683,10 +712,9 @@ const GroupSubGroup = (props) => {
                                                 classNamePrefix="dropdown"
                                                 options={GroupTypesValues}
                                                 onChange={(e) => {
-                                                    setGroupType(e)
-                                                    setOrderedGroups([])
-                                                    setOrderedSubGroups([])
-
+                                                    setGroupType(e);
+                                                    setOrderedGroups([]);
+                                                    setOrderedSubGroups([]);
                                                 }}
                                             />
                                         </Col>
@@ -694,28 +722,42 @@ const GroupSubGroup = (props) => {
                                 </Col>
 
                                 <Col sm={3} className="">
-                                    <FormGroup className=" row mt-2  " >
+                                    <FormGroup className=" row mt-2 " >
                                         <Label className="col-sm-4 p-2"
-                                            style={{ width: "120px" }}>Group</Label>
+                                            style={{ width: "65px" }}>Group</Label>
                                         <Col sm="7">
                                             <Select
                                                 name="GroupName"
                                                 value={Group}
                                                 isSearchable={true}
                                                 className="react-dropdown"
+                                                classNamePrefix="dropdown"
                                                 options={GroupValues}
                                                 onChange={(e) => {
-                                                    setGroup(e)
-                                                    setOrderedSubGroups([])
-                                                    // setSubGroups({})
-
+                                                    setGroup(e);
+                                                    setOrderedSubGroups([]);
                                                 }}
-                                                classNamePrefix="dropdown"
                                             />
                                         </Col>
                                     </FormGroup>
                                 </Col>
+
+
+                                {((orderedSubGroups.length > 0) || (orderedGroups.length > 0)) && <Col sm={6} className=" d-flex justify-content-end" >
+                                    <C_Button
+                                        type="button"
+                                        spinnerColor="white"
+                                        className="btn btn-outline-primary border-1 font-size-14 text-center m-2"
+                                        onClick={() => {
+                                            setOrderedSubGroups([])
+                                            setOrderedGroups([])
+                                        }}
+                                    >
+                                        Reset Sequence
+                                    </C_Button>
+                                </Col>}
                             </Row>
+
                         </Card>
                     </Col>
 
