@@ -2,8 +2,9 @@
 import * as actionType from "./actionType";
 
 // get api
-export const getItemList = () => ({
+export const getItemList = (jsonBody) => ({
   type: actionType.GET_ITEM_LIST_API,
+  jsonBody,
 });
 
 
