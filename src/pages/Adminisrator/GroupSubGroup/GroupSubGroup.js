@@ -208,6 +208,7 @@ const UnAsginItemDroppableContainer = ({ items, groupName, moveItem, moveItemWit
     return (
         <div ref={ref} style={{ minHeight: '10px', padding: '8px', display: 'flex', flexWrap: 'wrap', borderRadius: '12px', background: '#e5e7ed', boxShadow: '0px 1px 5px 1px grey' }}>
             {UnAsginItemItems?.map((item, index) => (
+                //   {  console.log(item.value)}
                 <DraggableItem key={item.value} item={item} index={index} groupName={groupName} moveItemWithinGroup={moveItemWithinGroup} />
             ))}
             {/* <Add_SubGroup addItem={addItem} groupName={groupName} items={items} /> */}
@@ -220,7 +221,6 @@ const UnAsginItemDroppableContainer = ({ items, groupName, moveItem, moveItemWit
 
 
 const DraggableGroup = ({ groupName, items, index, moveGroup, moveItem, moveItemWithinGroup, addItem, Type }) => {
-
 
     const [{ isDragging }, ref, preview] = useDrag({
         type: ItemType.GROUP,
@@ -258,7 +258,7 @@ const DraggableGroup = ({ groupName, items, index, moveGroup, moveItem, moveItem
 const GroupSubGroup = (props) => {
     const [groups, setGroups] = useState({});
 
-    const [SubGroups, setSubGroups] = useState({});
+    const [SubGroups, setSubGroups] = useState({ UnAssign: [] });
 
 
     const [UnAssign, setUnAssign] = useState([]);
@@ -314,7 +314,7 @@ const GroupSubGroup = (props) => {
 
 
     const fetchData = async () => {
-        debugger
+
         const GroupType_id = JSON.stringify({ GroupType_id: GroupType.value })
         const response = await get_SubGroup_Group({ GroupType_id })
         return response.Data
@@ -404,6 +404,7 @@ const GroupSubGroup = (props) => {
 
         let response = []
         if ((Group.value !== "")) {
+
             setUnAssign(SubGroups["UnAssign"])
             if (GroupType.value !== "") {
                 response = await fetchData()
@@ -411,7 +412,7 @@ const GroupSubGroup = (props) => {
             let nullGroupItems = [];
             const groupedData = response.reduce((acc, item, index) => {
                 let group = {}
-                debugger
+
 
                 if ((item.GroupID === Group.value)) {
                     group = {
@@ -442,10 +443,26 @@ const GroupSubGroup = (props) => {
             });
 
             let transformedData = transformData(groupedData);
-            debugger
+            const updatedNullItems = nullGroupItems.map((item, index) => {
+
+                return {
+                    ...item,
+                    value: item.ItemID,
+                    label: item.ItemName,
+                    GroupID: null,
+                    GroupName: null,
+                    SubGroup: null,
+                    SubGroupID: null,
+                };
+            });
             if (SubGroups["UnAssign"] !== undefined) {
-                transformedData["UnAssign"] = nullGroupItems.concat(SubGroups["UnAssign"]);
+                transformedData["UnAssign"] = updatedNullItems?.concat(SubGroups["UnAssign"]);
             }
+            debugger
+            transformedData["UnAssign"] = transformedData["UnAssign"].filter((item, index, self) =>
+                index === self.findIndex((i) => i.ItemID === item.ItemID)
+            );
+
             setSubGroups(transformedData);
             setOrderedSubGroups(Object.keys(transformedData));
         }
@@ -588,9 +605,7 @@ const GroupSubGroup = (props) => {
     };
 
     const addSubGroupItem = ({ New_subGroup, groupName, GroupID }) => {
-
         const newItem = { value: "", label: `${New_subGroup}`, GroupID: GroupID, GroupName: groupName, };
-
         setSubGroups((prevGroups) => ({
 
             ...prevGroups,
@@ -603,7 +618,7 @@ const GroupSubGroup = (props) => {
 
     const SaveHandler = async () => {
         setSaveLoading(true)
-        debugger
+
         let combinedArray = [];
         orderedGroups.forEach(groupName => {
             combinedArray = combinedArray.concat(groups[groupName]);
@@ -612,6 +627,8 @@ const GroupSubGroup = (props) => {
         // const GroupSequence = orderedGroups.indexOf(group) + 1
         let currentGroupID = null;
         let subGroupCounter = 0;
+
+
 
         const transformedSubgroups = combinedArray.map((subgroup, index) => {
             if (subgroup.GroupID !== currentGroupID) {
@@ -652,7 +669,7 @@ const GroupSubGroup = (props) => {
 
 
 
-        debugger
+
         console.log("groups", groups)
         console.log("orderedGroups", orderedGroups)
         console.log("Subgroups", SubGroups)
@@ -660,8 +677,9 @@ const GroupSubGroup = (props) => {
         console.log("SequenceSubGroupItem", SequenceSubGroupItem)
         console.log("transformedData", transformedSubgroups);
 
+        const filteredArray = transformedSubgroups.filter(item => (item.GroupID !== null) && (item.SubGroupID !== null));
 
-        const jsonBody = JSON.stringify(transformedSubgroups)
+        const jsonBody = JSON.stringify(filteredArray)
         const response = await Udate_Group_Subgroup({ jsonBody })
         if (response.StatusCode === 200 && response.Status === true) {
             fetchGroups();
@@ -780,7 +798,7 @@ const GroupSubGroup = (props) => {
                             <Row>
                                 {orderedSubGroups.length > 0 ? (
                                     <Col xs={9} st >
-                                        <SimpleBar className="" style={{ maxHeight: "70vh", padding: "3px" }}>
+                                        <SimpleBar className="" style={{ maxHeight: "75vh", padding: "3px" }}>
                                             {orderedSubGroups.map((groupName, index) => (
                                                 (groupName !== "UnAssign") && <DraggableGroup
                                                     key={groupName}
@@ -799,28 +817,32 @@ const GroupSubGroup = (props) => {
                                 ) : <Col xs={9}></Col>}
 
                                 {Group.value !== "" && <Col sm={3} style={{ position: 'sticky', top: '100px', zIndex: '2' }}>
-                                    <Card
-                                        style={{
-                                            background: '#d2d6f7',
-                                            paddingBottom: '15px',
-                                            paddingLeft: '13px',
-                                            paddingRight: '13px',
-                                            borderRadius: '13px',
-                                            boxShadow: '0px 1px 5px 1px grey'
-                                        }}
-                                    >
-                                        <FormGroup>
-                                            <Label style={{ marginTop: '10px', marginLeft: '10px' }}> </Label>
-                                            <UnAsginItemDroppableContainer
-                                                items={SubGroups}
-                                                groupName={"UnAssign"}
-                                                moveItem={moveSubGroupItem}
-                                                moveItemWithinGroup={moveItemWithinSubGroup}
-                                                addItem={addItem}
+                                    <SimpleBar className="" style={{ maxHeight: "75vh", padding: "3px" }}>
 
-                                            />
-                                        </FormGroup>
-                                    </Card>
+                                        <Card
+                                            style={{
+                                                background: '#d2d6f7',
+                                                paddingBottom: '15px',
+                                                paddingLeft: '13px',
+                                                paddingRight: '13px',
+                                                borderRadius: '13px',
+                                                boxShadow: '0px 1px 5px 1px grey'
+                                            }}
+                                        >
+                                            <FormGroup>
+                                                <Label style={{ marginTop: '10px', marginLeft: '10px' }}> </Label>
+                                                <UnAsginItemDroppableContainer
+                                                    items={SubGroups}
+                                                    groupName={"UnAssign"}
+                                                    moveItem={moveSubGroupItem}
+                                                    moveItemWithinGroup={moveItemWithinSubGroup}
+                                                    addItem={addItem}
+
+                                                />
+                                            </FormGroup>
+                                        </Card>
+                                    </SimpleBar>
+
                                 </Col>}
                             </Row>
                         </>
