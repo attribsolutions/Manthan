@@ -4,9 +4,9 @@ import * as  apiCall from "../../../helpers/backend_helper";
 import * as actionType from "./actionType";
 import * as action from "./action";
 
-function* Get_Items_GenFunc() {
-
-  const filters = JSON.stringify(loginJsonBody());
+function* Get_Items_GenFunc({ jsonBody }) {
+  debugger
+  const filters = JSON.stringify(jsonBody ? jsonBody : { ...loginJsonBody(), IsBOM: 0 });
   try {
 
     const response = yield call(apiCall.Items_Filter_API, filters);
