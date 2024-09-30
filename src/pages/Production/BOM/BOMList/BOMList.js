@@ -40,7 +40,7 @@ const BOMList = () => {
     const [hederFilters, setHederFilters] = useState({ fromdate: currentDate_ymd, todate: currentDate_ymd, venderSelect: allLabelWithBlank })
     const [Item, setItem] = useState(allLabelWithBlank);
 
-    
+
     const reducers = useSelector(
         (state) => ({
             goBtnLoading: state.BOMReducer.loading,
@@ -78,7 +78,11 @@ const BOMList = () => {
         dispatch(BreadcrumbRadioButtonView(true));
         dispatch(commonPageFieldList(page_Id))
         goButtonHandler(true)
-        dispatch(getItemList())
+        const jsonBody = {
+            ..._cfunc.loginJsonBody(),
+            IsBOM: 1
+        }
+        dispatch(getItemList(jsonBody));
         return () => {
             dispatch(getBOMListPageSuccess([]))
         }
