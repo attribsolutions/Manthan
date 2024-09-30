@@ -1,5 +1,5 @@
 
-import { Input } from "reactstrap"
+import { Col, Input, Row } from "reactstrap"
 import { useState } from "react";
 import { useEffect } from "react";
 
@@ -228,4 +228,69 @@ const DynamicColumnHook = ({
 };
 
 export default DynamicColumnHook
+
+
+
+
+
+export const GroupSubgroupDisplay = ({ group, subgroup }) => {
+  return (
+    <Row>
+      <Col sm={12} className="mt-n2 mb-n1">
+        {/* Group Span */}
+        <span className="group-span">
+          <span className="group-text">Group</span> ({group})
+          <span className="group-arrow"></span>
+        </span>
+
+        {/* SubGroup Span */}
+        <span className="subgroup-span">
+          <span className="subgroup-text">Sub Group</span> ({subgroup})
+          <span className="subgroup-arrow"></span>
+        </span>
+      </Col>
+    </Row>
+  );
+};
+
+
+
+export const ModifyTableData_func = (data) => {
+  const result = [];
+  const subGroups = {}; // Store a concatenated string of ItemNames for each subgroup
+  let previousSubGroup = undefined;
+
+  data.forEach(item => {
+    // Check if the current item's subgroup is different from the previous one
+    if (item.SubGroupName !== previousSubGroup) {
+      // Initialize the concatenated string for the subgroup
+      if (!subGroups[item.SubGroupName]) {
+        subGroups[item.SubGroupName] = "";
+      }
+      // Push a subgroup row into the result array
+      result.push({
+        id: `${item.id}-${item.SubGroupName}`,
+        SubGroupRow: true,
+        SubGroupName: item.SubGroupName,
+        Group_Subgroup: `${item.GroupName}-${item.SubGroupName}`,
+      });
+      previousSubGroup = item.SubGroupName;
+    }
+
+    // Modify the ItemName to include subgroup and group names
+    item.ItemName = `${item.ItemName}-${item.SubGroupName} ${item.GroupName}`;
+    result.push(item);
+
+    // Concatenate the ItemName to the appropriate subgroup string
+    subGroups[item.SubGroupName] += `${item.ItemName}, `;
+  });
+
+  // Update the result array where SubGroupRow is true with the concatenated ItemNames
+  result.forEach(row => {
+    if (row.SubGroupRow) {
+      row.ItemName = subGroups[row.SubGroupName].slice(0, -2); // Remove the trailing ", "
+    }
+  });
+  return result;
+}
 

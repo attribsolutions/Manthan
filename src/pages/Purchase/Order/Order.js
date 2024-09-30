@@ -26,7 +26,7 @@ import PartyItems from "../../Adminisrator/PartyItemPage/PartyItems";
 
 import { customAlert } from "../../../CustomAlert/ConfirmDialog"
 import { order_Type } from "../../../components/Common/C-Varialbes";
-import { CInput, C_DatePicker, C_Select, decimalRegx, onlyNumberRegx, decimalRegx_3dit } from "../../../CustomValidateForm/index";
+import { CInput, C_DatePicker, C_Select, decimalRegx, onlyNumberRegx, decimalRegx_3dit, C_ItemSelect } from "../../../CustomValidateForm/index";
 
 import * as _act from "../../../store/actions";
 import * as _cfunc from "../../../components/Common/CommonFunction";
@@ -43,6 +43,7 @@ import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMs
 import { changeCommonPartyDropDetailsAction } from "../../../store/Utilites/PartyDrodown/action";
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 import { allLabelWithBlank } from "../../../components/Common/CommonErrorMsg/HarderCodeData";
+import { Group_Subgroup_func, GroupSubgroupDisplay, ModifyTableData_func } from "../../../components/Common/TableCommonFunc";
 
 
 
@@ -611,65 +612,8 @@ const Order = (props) => {
                 if (row.SubGroupRow) {
                     const [Group, SubGroup] = row.Group_Subgroup.split('-');
                     return (
-                        <>
-                            <Row>
-                                <Col sm={12}>
-                                    <span id="group-span" style={{
-                                        background: "#cacaebf5",
-                                        padding: "6px 10px",
-                                        borderRadius: "13px",
-                                        boxShadow: "rgba(0, 0, 0, 0.2) 0px 1px 6px",
-                                        position: "relative",
-                                        display: "inline-block",
-
-                                        marginRight: "30px"
-
-                                    }}>
-                                        <span style={{ color: "black" }}> Group </span>({Group})
-                                        <span style={{
-                                            content: "''",
-                                            position: "absolute",
-                                            right: "-12px", // Position the arrow outside the right side
-                                            top: "50%",
-                                            transform: "translateY(-50%)",
-                                            width: "0",
-                                            height: "0",
-                                            borderTop: "10px solid transparent",
-                                            borderBottom: "10px solid transparent",
-                                            borderLeft: "15px solid #cacaebf5",
-                                        }}></span>
-                                    </span>
-
-                                    <span id="subgroup-span" style={{
-                                        background: "#cacaebf5",
-                                        padding: "4px 10px",
-                                        borderRadius: "13px",
-                                        boxShadow: "rgba(0, 0, 0, 0.2) 0px 1px 6px",
-                                        position: "relative",
-                                        display: "inline-block",
-                                        fontSize: "13px",
-                                        marginTop: "5px"
-
-                                    }}>
-                                        <span style={{ color: "black" }}>Sub Group </span> ({SubGroup})
-                                        <span style={{
-                                            content: "''",
-                                            position: "absolute",
-                                            right: "-12px", // Position the arrow outside the right side
-                                            top: "50%",
-                                            transform: "translateY(-50%)",
-                                            width: "0",
-                                            height: "0",
-                                            borderTop: "10px solid transparent",
-                                            borderBottom: "10px solid transparent",
-                                            borderLeft: "15px solid #cacaebf5",
-                                        }}></span>
-                                    </span>
-
-                                </Col>
-                            </Row>
-                        </>
-                    )
+                        <GroupSubgroupDisplay group={Group} subgroup={SubGroup} />
+                    );
                 } else {
                     const [itemName] = row.ItemName.split('-');
                     return (
@@ -752,6 +696,7 @@ const Order = (props) => {
             formatExtraData: { tableList: orderItemTable },
             formatter: (value, row, key, { tableList }) => {
                 if (row.GroupRow || row.SubGroupRow) { return }
+
                 if (!row.UnitName) {
                     row["Unit_id"] = 0;
                     row["UnitName"] = 'null';
@@ -1496,55 +1441,7 @@ const Order = (props) => {
         }
     };
 
-
-    function processData(data) {
-        const result = [];
-        const subGroups = {}; // Store a concatenated string of ItemNames for each subgroup
-        let previousSubGroup = null;
-
-        data.forEach(item => {
-            // Check if the current item's subgroup is different from the previous one
-            if (item.SubGroupName !== previousSubGroup) {
-                // Initialize the concatenated string for the subgroup
-                if (!subGroups[item.SubGroupName]) {
-                    subGroups[item.SubGroupName] = "";
-                }
-                // Push a subgroup row into the result array
-                result.push({
-                    id: item.id,
-                    SubGroupRow: true,
-                    SubGroupName: item.SubGroupName,
-                    Group_Subgroup: `${item.GroupName}-${item.SubGroupName}`,
-                });
-                previousSubGroup = item.SubGroupName;
-            }
-
-            // Modify the ItemName to include subgroup and group names
-            item.ItemName = `${item.ItemName}-${item.SubGroupName} ${item.GroupName}`;
-            result.push(item);
-
-            // Concatenate the ItemName to the appropriate subgroup string
-            subGroups[item.SubGroupName] += `${item.ItemName}, `;
-        });
-
-        // Update the result array where SubGroupRow is true with the concatenated ItemNames
-        result.forEach(row => {
-            if (row.SubGroupRow) {
-                row.ItemName = subGroups[row.SubGroupName].slice(0, -2); // Remove the trailing ", "
-            }
-        });
-        console.log(result)
-        return result;
-    }
-
-
-    // Example usage 
-    const processedData = processData(orderItemTable);
-
-
-
-
-
+    const processedData = ModifyTableData_func(orderItemTable);
 
     if (!(userPageAccessState === "")) {
         return (
@@ -1712,7 +1609,7 @@ const Order = (props) => {
                                                     style={{ width: "129px" }}>{fieldLabel.Item}</Label>
 
                                                 <Col sm="7">
-                                                    <C_Select
+                                                    <C_ItemSelect
                                                         value={itemSelect}
                                                         isDisabled={(pageMode === "edit" || goBtnloading) ? true : false}
                                                         options={itemSelectDropOptions}

@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
     Col,
     FormGroup,
@@ -25,7 +25,7 @@ import Select from "react-select";
 import { C_Button, DashboardLoader, Loader, SaveButton } from "../../../components/Common/CommonButton";
 import { url, mode, pageId } from "../../../routes/index"
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
-import { CInput, C_DatePicker, C_Select } from "../../../CustomValidateForm/index";
+import { CInput, C_DatePicker, C_ItemSelect, C_Select } from "../../../CustomValidateForm/index";
 import { decimalRegx, } from "../../../CustomValidateForm/RegexPattern";
 import { goButtonPartyItemAddPageSuccess, goButtonPartyItemAddPage } from "../../../store/Administrator/PartyItemsRedux/action";
 import { StockEntry_GO_button_api_For_Item } from "../../../helpers/backend_helper";
@@ -41,6 +41,7 @@ import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMs
 import paginationFactory from "react-bootstrap-table2-paginator";
 import { table_ArrowUseEffect } from "../../../components/Common/CommonUseEffect";
 import { ExcelReportComponent } from "../../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS";
+import { GroupSubgroupDisplay, ModifyTableData_func } from "../../../components/Common/TableCommonFunc";
 
 const StockEntry = (props) => {
 
@@ -232,49 +233,83 @@ const StockEntry = (props) => {
     }
 
     const ItemList_Options = ItemDropDown.map((index) => ({
+        ...index,
         value: index.Item,
         label: index.ItemName,
     }));
 
 
+    const rowStyle = (row, rowIndex) => {
+        if (row.GroupRow) {
+            return { backgroundColor: 'white', fontWeight: 'bold', fontSize: '18px' };
+        } else if (row.SubGroupRow) {
+            return { backgroundColor: '#f2f2f2', fontWeight: 'bold', fontSize: '15px' };
+        }
+        return {};
+    };
+
+    const rowClasses = (row) => {
+        if (row.GroupRow || row.SubGroupRow) {
+            return 'group-row hide-border';
+        }
+        return '';
+    };
+
+
     const pagesListColumns = [
-        {
-            text: "Group",
-            dataField: "GroupName",
-            classes: () => "",
-            formatter: (cellContent, row, key) => {
-                
-                return (
-                    <Label>{row.GroupName}</Label>
-                )
-            }
-        },
-        {
-            text: "Sub-Group",
-            dataField: "SubGroupName",
-            classes: () => "",
-            formatter: (cellContent, row, key) => {
-                return (
-                    <Label>{row.SubGroupName}</Label>
-                )
-            }
-        },
+        // {
+        //     text: "Group",
+        //     dataField: "GroupName",
+        //     classes: () => "",
+        //     formatter: (cellContent, row, key) => {
+
+        //         return (
+        //             <Label>{row.GroupName}</Label>
+        //         )
+        //     }
+        // },
+        // {
+        //     text: "Sub-Group",
+        //     dataField: "SubGroupName",
+        //     classes: () => "",
+        //     formatter: (cellContent, row, key) => {
+        //         return (
+        //             <Label>{row.SubGroupName}</Label>
+        //         )
+        //     }
+        // },
         {
             text: "Item Name",
             dataField: "ItemName",
             classes: () => "",
-            formatter: (cellContent, row, key) => {
-                return (
-                    <Label>{row.ItemName}</Label>
-                )
-            }
+            formatter: (value, row, k) => {
+                if (row.SubGroupRow) {
+                    const [Group, SubGroup] = row.Group_Subgroup.split('-');
+                    return (
+                        <GroupSubgroupDisplay group={Group} subgroup={SubGroup} />
+                    );
+                } else {
+                    const [itemName] = row.ItemName.split('-');
+                    return (
+                        <>
+                            <div>
+                                {itemName}
+                            </div>
+                        </>
+                    )
+                }
+
+
+            },
         },
         {
             text: "Current Stock",
             dataField: "CurrentStock",
             classes: () => "",
-            hidden:!(IsFranchise),
+            hidden: !(IsFranchise),
             formatter: (cellContent, row, key) => {
+                if (row.GroupRow || row.SubGroupRow) { return }
+
                 return (
                     <Label>{row.CurrentStock}</Label>
                 )
@@ -285,6 +320,7 @@ const StockEntry = (props) => {
             dataField: "",
             classes: () => "",
             formatter: (cellContent, row, key) => {
+                if (row.GroupRow || row.SubGroupRow) { return }
 
                 return (<span style={{ justifyContent: 'center' }}>
                     <CInput
@@ -308,6 +344,7 @@ const StockEntry = (props) => {
             classes: () => "",
             style: { minWidth: "10vw" },
             formatter: (cellContent, row, key,) => {
+                if (row.GroupRow || row.SubGroupRow) { return }
 
                 return (<span style={{ justifyContent: 'center' }}>
                     <Select
@@ -333,8 +370,9 @@ const StockEntry = (props) => {
             dataField: "",
             style: { minWidth: "10vw" },
             classes: () => "",
-            hidden: (isVisibleRateDrop ||IsFranchise),
+            hidden: (isVisibleRateDrop || IsFranchise),
             formatter: (cellContent, row, key) => {
+                if (row.GroupRow || row.SubGroupRow) { return }
 
                 return (
                     <>
@@ -360,6 +398,8 @@ const StockEntry = (props) => {
             classes: () => "",
             hidden: !(isVisibleRateDrop),
             formatter: (cellContent, row, key) => {
+                if (row.GroupRow || row.SubGroupRow) { return }
+
                 return (
                     <>
                         <span >
@@ -381,8 +421,10 @@ const StockEntry = (props) => {
             dataField: "",
             style: { minWidth: "10vw" },
             classes: () => "",
-            hidden:IsFranchise,
+            hidden: IsFranchise,
             formatter: (cellContent, row, key) => {
+                if (row.GroupRow || row.SubGroupRow) { return }
+
                 return (<span >
                     <Select
                         id={`GST${key}`}
@@ -401,8 +443,9 @@ const StockEntry = (props) => {
             text: "BatchCode",
             dataField: "",
             classes: () => "",
-            hidden:IsFranchise,
+            hidden: IsFranchise,
             formatter: (cellContent, row, key) => {
+                if (row.GroupRow || row.SubGroupRow) { return }
 
                 return (<span >
                     <Input
@@ -420,8 +463,9 @@ const StockEntry = (props) => {
             text: "BatchDate",
             dataField: "",
             classes: () => "",
-            hidden:IsFranchise,
+            hidden: IsFranchise,
             formatter: (cellContent, row, key) => {
+                if (row.GroupRow || row.SubGroupRow) { return }
 
                 return (<span style={{ justifyContent: 'center' }}>
                     <C_DatePicker
@@ -438,25 +482,37 @@ const StockEntry = (props) => {
             text: "Action ",
             dataField: "",
             formatExtraData: { TableArr: TableArr, setTableArr: setTableArr },
-            formatter: (cellContent, row, _key, formatExtraData) => (
-                <>
-                    <div style={{ justifyContent: 'center' }} >
-                        <Col>
-                            <FormGroup className=" col col-sm-4 ">
-                                <Button
-                                    id={"deleteid"}
-                                    type="button"
-                                    className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
-                                    data-mdb-toggle="tooltip" data-mdb-placement="top" title='Delete MRP'
-                                    onClick={(e) => { deleteButtonAction(row, _key, formatExtraData) }}
-                                >
-                                    <i className="mdi mdi-delete font-size-18"></i>
-                                </Button>
-                            </FormGroup>
-                        </Col>
-                    </div>
-                </>
-            ),
+
+            formatter: (cellContent, row, _key, formatExtraData) => {
+                if (row.GroupRow || row.SubGroupRow) { return }
+                return (<div style={{ justifyContent: 'center' }} >
+                    <Col>
+                        <FormGroup className=" col col-sm-4 ">
+                            <Button
+                                id={"deleteid"}
+                                type="button"
+                                className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
+                                data-mdb-toggle="tooltip" data-mdb-placement="top" title='Delete MRP'
+                                onClick={(e) => { deleteButtonAction(row, _key, formatExtraData) }}
+                            >
+                                <i className="mdi mdi-delete font-size-18"></i>
+                            </Button>
+                        </FormGroup>
+                    </Col>
+                </div>)
+            }
+
+
+
+
+
+
+
+
+
+
+
+
         },
     ];
 
@@ -505,9 +561,7 @@ const StockEntry = (props) => {
                         Message: alertMessages.selectItemName
                     });
                 }
-
                 return;
-
             }
         }
 
@@ -542,8 +596,8 @@ const StockEntry = (props) => {
     }
 
     function deleteButtonAction(row, key, { TableArr = [], setTableArr }) {
-
-        const newArr = TableArr.filter((index, key1) => !(key === key1))
+        debugger
+        const newArr = TableArr.filter((index, key1) => !(row.ItemId === index.ItemId))
         setTableArr(newArr)
         dispatch(BreadcrumbShowCountlabel(`Count:${newArr.length}`));
 
@@ -674,7 +728,7 @@ const StockEntry = (props) => {
     };
 
     const paginationOptions = {
-        sizePerPage: 25, // Number of rows per page
+        sizePerPage: 300, // Number of rows per page
         hideSizePerPage: true, // Hide the size per page dropdown
         hidePageListOnlyOnePage: true, // Hide the pagination list when there's only one page
         onPageChange: (page, sizePerPage) => {
@@ -684,8 +738,9 @@ const StockEntry = (props) => {
     const ExcelDownloadhandler = () => {
 
         const StockItem_Array = TableArr.map(item => {
+            const [ItemName] = item.ItemName.split('-');
             return {
-                ItemName: item.ItemName,
+                ItemName: ItemName,
                 Quantity: item.Qty ? parseFloat(item.Qty) : item.Quantity,
                 Unit: item.defaultUnit.label,
                 MRP: item.defaultMRP.label,
@@ -704,8 +759,13 @@ const StockEntry = (props) => {
         })
     }
 
+    // const processedData = ModifyTableData_func(TableArr);
+
+    const processedData = useMemo(() => ModifyTableData_func(TableArr), [TableArr]);
 
 
+
+    console.log(processedData)
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
@@ -734,7 +794,7 @@ const StockEntry = (props) => {
                                         <Label className="col-sm-5 p-2"
                                             style={{ width: "115px" }}>{fieldLabel.ItemName}</Label>
                                         <Col sm="7">
-                                            <C_Select
+                                            <C_ItemSelect
                                                 id="ItemName "
                                                 name="ItemName"
                                                 value={values.ItemName}
@@ -817,7 +877,7 @@ const StockEntry = (props) => {
 
                         <ToolkitProvider
                             keyField="id"
-                            data={TableArr}
+                            data={processedData}
                             columns={pagesListColumns}
 
                             search
@@ -828,6 +888,8 @@ const StockEntry = (props) => {
                                         keyField="id"
                                         id="table_Arrow"
                                         classes='custom-table'
+                                        rowStyle={rowStyle}
+                                        rowClasses={rowClasses}
                                         noDataIndication={<div className="text-danger text-center">Item Not available</div>}
                                         onDataSizeChange={({ dataSize }) => {
                                             dispatch(BreadcrumbShowCountlabel(`Count : ${dataSize}`));
