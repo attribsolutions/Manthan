@@ -113,7 +113,7 @@ const MachineTypeMaster = (props) => {
     }, [userAccess])
 
     useEffect(async () => {
-        
+
         const jsonBody = {
             Company: loginCompanyID(),
             TypeID: 179
@@ -176,13 +176,19 @@ const MachineTypeMaster = (props) => {
 
                 return (
                     <C_Select
-                        defaultValue={!(row.MachineType > 0) ? "" : {
-                            value: row.MachineType, label: row.MachineTypeName
-                        }}
+                        defaultValue={!(row.MachineTypeDetails.length > 0) ? "" :
+                            row?.MachineTypeDetails?.map((index) => ({
+                                value: index.id,
+                                label: index.MachineTypeName,
+                            }))}
+                        // {
+                        //     value: row.MachineType, label: row.MachineTypeName
+                        // }}
                         options={machineTypeOptions}
+                        isMulti={true}
                         onChange={e => {
-                            row["MachineType"] = e.value;
-                            row["MachineTypeName"] = e.label
+                            row["MachineTypeDetails"] = e;
+
                         }}
                     >
                     </C_Select >
@@ -210,15 +216,16 @@ const MachineTypeMaster = (props) => {
 
     const SaveHandler = async (event) => {
         event.preventDefault();
-
+        debugger
         try {
             const jsonBody = JSON.stringify(tableListData.map((i) => ({
                 "MacID": i.MacID,
-                "MachineType": i.MachineType,
+                "MachineType": i.MachineTypeDetails.map(i => i.value).join(','),
                 "IsServer": i.IsServer,
                 "Party": loginPartyID(),
                 "ClientID": i.ClientID,
             })))
+            console.log(jsonBody)
             dispatch(SPos_MachineTypeSave_Action({ jsonBody }));
 
         } catch (e) { }
