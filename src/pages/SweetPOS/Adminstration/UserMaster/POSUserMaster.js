@@ -265,7 +265,7 @@ const POSUSER = (props) => {
     }
 
     try {
-
+      debugger
       if (formValid(state, setState) && newPwdError.PasswordLevel !== "Weak password") {
         const jsonBody = JSON.stringify({
           CompanyID: loginCompanyID(),
@@ -276,7 +276,7 @@ const POSUSER = (props) => {
           IsActive: values.IsActive,
           CreatedBy: loginUserID(),
           UpdatedBy: loginUserID(),
-          POSRateType: values.POSRateType.value
+          POSRateType: values.POSRateType === "" ? "" : values.POSRateType.value
 
         })
 
