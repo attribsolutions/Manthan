@@ -435,7 +435,7 @@ const PartyMaster = (props) => {
 		if (
 			(values.PartyAddress.length > 0) &&
 			(isError.PartyAddress === "") &&
-			!(url.FRANCHISE_CUSTOMER_MASTER)
+			!(subPageMode===url.FRANCHISE_CUSTOMER_MASTER)
 		) {
 			customAlert({
 				Type: 4,
@@ -450,7 +450,8 @@ const PartyMaster = (props) => {
 			return
 		};
 
-		if (addressTabDetail.length === 0 && !(url.FRANCHISE_CUSTOMER_MASTER)) {
+		if (addressTabDetail.length === 0 && !(subPageMode===url.FRANCHISE_CUSTOMER_MASTER)) {
+			debugger
 			setactiveTab1("2")
 			customAlert({
 				Type: 4,
@@ -470,7 +471,7 @@ const PartyMaster = (props) => {
 			return count
 		}, 0)
 
-		if (totalIsDefault === 0 && !(url.FRANCHISE_CUSTOMER_MASTER)) {
+		if (totalIsDefault === 0 && !(subPageMode===url.FRANCHISE_CUSTOMER_MASTER)) {
 			setactiveTab1("2")
 			customAlert({
 				Type: 4,
