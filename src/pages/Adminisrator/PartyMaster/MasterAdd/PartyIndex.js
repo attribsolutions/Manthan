@@ -432,13 +432,18 @@ const PartyMaster = (props) => {
 		let isError = addressTabIsAddressEnter.isError
 		let values = addressTabIsAddressEnter.values
 
-		if ((values.PartyAddress.length > 0) && (isError.PartyAddress === "") && !(url.FRANCHISE_CUSTOMER_MASTER)) {
+		if (
+			(values.PartyAddress.length > 0) &&
+			(isError.PartyAddress === "") &&
+			!(url.FRANCHISE_CUSTOMER_MASTER)
+		) {
 			customAlert({
 				Type: 4,
-				Message: alertMessages.fillAddressDetailsInTable
-			})
+				Message: alertMessages.fillAddressDetailsInTable,
+			});
 			return;
 		}
+
 
 		if (!validBasetab) {
 			setactiveTab1("1")
@@ -453,6 +458,7 @@ const PartyMaster = (props) => {
 			})
 			return;
 		};
+
 		const trueValues = addressTabDetail.map((index) => {
 			return (index.IsDefault === true)
 		})
@@ -515,11 +521,15 @@ const PartyMaster = (props) => {
 				}
 			})
 
-			if (((priceListSelect.label === "") || (priceListSelect.value === "")) && (subPageMode === url.RETAILER_MASTER || url.FRANCHISE_CUSTOMER_MASTER)) {
+			if (
+				(priceListSelect.label === "" || priceListSelect.value === "") &&
+				(subPageMode === url.RETAILER_MASTER || subPageMode === url.FRANCHISE_CUSTOMER_MASTER)
+			) {
+				debugger;
 				customAlert({
 					Type: 4,
 					Message: alertMessages.PricelistIsRequired,
-				})
+				});
 				return;
 			}
 
@@ -567,7 +577,7 @@ const PartyMaster = (props) => {
 				],
 
 			});
-			
+
 			if (pageMode === mode.edit) {
 
 				dispatch(updatePartyID({ jsonBody, updateId: EditData.id, btnId }));
