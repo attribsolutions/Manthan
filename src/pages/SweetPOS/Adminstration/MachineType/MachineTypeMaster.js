@@ -173,7 +173,6 @@ const MachineTypeMaster = (props) => {
             style: () => ({ width: "30%" }),
             formatExtraData: { machineTypeOptions: machineTypeOptions },
             formatter: (value, row, key, { machineTypeOptions }) => {
-
                 return (
                     <C_Select
                         defaultValue={!(row.MachineTypeDetails.length > 0) ? "" :
@@ -181,13 +180,14 @@ const MachineTypeMaster = (props) => {
                                 value: index.id,
                                 label: index.MachineTypeName,
                             }))}
-                        // {
-                        //     value: row.MachineType, label: row.MachineTypeName
-                        // }}
+
                         options={machineTypeOptions}
                         isMulti={true}
                         onChange={e => {
-                            row["MachineTypeDetails"] = e;
+                            row["MachineTypeDetails"] = e.map((index) => ({
+                                id: index.value,
+                                MachineTypeName: index.label,
+                            }));
 
                         }}
                     >
@@ -220,7 +220,7 @@ const MachineTypeMaster = (props) => {
         try {
             const jsonBody = JSON.stringify(tableListData.map((i) => ({
                 "MacID": i.MacID,
-                "MachineType": i.MachineTypeDetails.map(i => i.value).join(','),
+                "MachineType": i.MachineTypeDetails.map(i => i.id).join(','),
                 "IsServer": i.IsServer,
                 "Party": loginPartyID(),
                 "ClientID": i.ClientID,
