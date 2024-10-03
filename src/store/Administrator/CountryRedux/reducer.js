@@ -19,7 +19,7 @@ const INIT_STATE = {
     postMsg: { Status: false },
     editData: { Status: false },
     updateMessage: { Status: false },
-    deleteMessage: { Status: false },
+    deleteMsg: { Status: false },
     saveBtnloading: false,
     listBtnLoading: false,
 }
@@ -57,7 +57,6 @@ const CountryReducer = (state = INIT_STATE, action) => {
             return {
                 ...state,
                 listBtnLoading: action.config.btnId,
-                deleteMsg: action.payload,
             }
 
         case DELETE_COUNTRY_ID_SUCCESS:
