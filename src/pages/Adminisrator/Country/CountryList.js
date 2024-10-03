@@ -10,6 +10,7 @@ import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 import CountryMaster from "./CountryMaster";
 import { deleteCountry_ID_Action, deleteCountry_ID_Success, editCountry_ID_Action, getCountryList_Action, getCountryList_Success, saveCountryMaster_Success, updateCountry_ID_Success } from "../../../store/Administrator/CountryRedux/action";
+import CommonListPage from "../../../components/Common/CommonMasterListPage";
 
 const CountryList = () => {
 
@@ -59,13 +60,11 @@ const CountryList = () => {
         {
           (pageField) &&
           <div className="mt-n1">
-            <CommonPurchaseList
+            <CommonListPage
               action={action}
               reducers={reducers}
-              showBreadcrumb={false}
               MasterModal={CountryMaster}
               masterPath={url.COUNTRY_MASTER}
-              newBtnPath={url.COUNTRY_MASTER}
               ButtonMsgLable={"Country"}
               deleteName={"Country"}
             />
