@@ -941,6 +941,14 @@ export const S_Pos_MachineType_Save_API = ({ jsonBody }) => put(url.S_POS_MACHIN
 
 export const StockOutReport_API = ({ jsonBody }) => post(url.SWEET_POS_STOCK_OUT_REPORT, jsonBody)//Go button api
 
+//Country api
+
+export const Country_Post_API = ({ jsonBody }) => post(url.COUNTRY_SAVE_API, jsonBody)// post api
+export const Country_get_API = () => get(url.COUNTRY_GET_API) // get api
+export const Country_delete_API = ({ deleteId }) => del(`${url.COUNTRY_UPDATE_DELETE_API}/${deleteId}`) // delete api
+export const Country_edit_API = ({ editId }) => get(`${url.COUNTRY_UPDATE_DELETE_API}/${editId}`) // edit api
+export const Country_update_API = ({ jsonBody, updateId }) => put(`${url.COUNTRY_UPDATE_DELETE_API}/${updateId}`, jsonBody)// update
+
 export {
 	getLoggedInUser,
 	isUserAuthenticated,

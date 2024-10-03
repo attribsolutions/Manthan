@@ -155,6 +155,9 @@ export const Franchise_Customer_Master = url.FRANCHISE_CUSTOMER_LIST
 
 export const Franchise_Customer_List = url.FRANCHISE_CUSTOMER_MASTER
 
+export const Country_Master = url.COUNTRY_LIST
+export const Country_List =  url.COUNTRY_MASTER
+
 
 //******************************* Purchase Module ************************************//
 
