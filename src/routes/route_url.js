@@ -6,6 +6,7 @@ export const DASHBORD_2 = "/Dashboard_2"
 export const SEARCH_BOX2 = "/SearchBoxSecond"
 export const SEARCH_BOX3 = "/SerachBox3"
 export const TRANSACTION_LOG = "/TransactionLog"
+export const POS_LOG = "/POS_Log"
 
 // *************************** Administration *******************************//
 
@@ -173,6 +174,9 @@ export const RATE_LIST = "/Rate_List"
 export const FRANCHISE_CUSTOMER_MASTER = "/Franchise_Customer_Master"
 
 export const FRANCHISE_CUSTOMER_LIST = "/Franchise_Customer_List"
+
+export const COUNTRY_MASTER = "/Country_Master"
+export const COUNTRY_LIST = "/Country_List"
 
 //******************************* Purchase Module ************************************//
 export const ORDER_1 = "/Order_1"

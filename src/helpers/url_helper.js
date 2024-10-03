@@ -171,7 +171,7 @@ export const PRICE_LIST_BY_COMPANY = '/CompanywisePriceLists'
 
 // MRP Master Api
 export const MRP_MASTER_LIST = '/Mrps'
-export const MRP_MASTER_LIST_FILTER ="/MrpsListFilter"
+export const MRP_MASTER_LIST_FILTER = "/MrpsListFilter"
 export const GO_BUTTON_POST_API_FOR_MRP_MASTER = '/GetMRP'
 export const DELETE_API_FOR_MRP_LIST_PAGE = '/DeleteMrpOnList'
 
@@ -251,7 +251,7 @@ export const GENERAL_MASTER_TYPE_API = '/GeneralMasterType'
 export const GENERAL_MASTER_LIST = '/GeneralMasterList'
 
 // GST API
-export const GST_LIST_API = '/GstHsnCode' 
+export const GST_LIST_API = '/GstHsnCode'
 export const GST_LIST_FILTER_API = '/GstHsnListFilter' // for list page
 export const GO_BUTTON_POST_API_FOR_GST_MASTER = '/GetGstHsncode' // for go button
 export const DELETE_API_FOR_LIST_GST_PAGE = '/DeleteGstHsnCodeOnList' // for delete 
@@ -697,6 +697,11 @@ export const S_POS_MACHINE_TYPE_LIST_API = '/SweetPOS/SPOSMachineTypeList' // fo
 
 
 export const SWEET_POS_STOCK_OUT_REPORT = "/SweetPOS/SPOSStockOutReport"
+
+//Country API
+export const COUNTRY_SAVE_API = '/CountrySave'
+export const COUNTRY_GET_API = '/GETCountry'
+export const COUNTRY_UPDATE_DELETE_API = '/Country'
 
 
 

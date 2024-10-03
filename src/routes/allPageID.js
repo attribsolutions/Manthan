@@ -178,6 +178,9 @@ export const FRANCHISE_CUSTOMER_MASTER = 307
 
 export const FRANCHISE_CUSTOMER_LIST = 308
 
+export const COUNTRY_MASTER = 310
+export const COUNTRY_LIST = 311
+
 //******************************* Purchase Module ************************************//
 export const ORDER_1 = 53
 export const ORDER_LIST_1 = 54
