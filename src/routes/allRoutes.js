@@ -242,9 +242,12 @@ import SweetPOSRateMaster from "../pages/SweetPOS/Adminstration/RateMaster/Sweet
 import OrderItemSupplierReport from "../Reports/OrderItemSupplier/index.js";
 import MachineTypeMaster from "../pages/SweetPOS/Adminstration/MachineType/MachineTypeMaster.js";
 import StockOutReport from "../pages/SweetPOS/Reports/StockOutReport/index.js";
+
 import CustomerMobileView from "../pages/Dashboard/FrenchiesesDashboard/CustomerMobileView/CustomerMobileView.js";
 
-
+// import POS_Log from "../pages/ActivityLog/POSLog.js";
+import CountryMaster from "../pages/Adminisrator/Country/CountryMaster.js";
+import CountryList from "../pages/Adminisrator/Country/CountryList.js";
 
 
 const userRoutes = [
@@ -431,6 +434,8 @@ const userRoutes = [
 
 	{ path: path.PARTY_EMPLOYEE_DETAILS, component: PartyEmployeeDetails, isPartyWisePage: true },
 
+	{ path: path.COUNTRY_MASTER, component: CountryMaster },//not party wise
+	{ path: path.COUNTRY_LIST, component: CountryList },//not party wise
 
 	//******************************* Inventory Module ************************************//
 	{ path: path.CHALLAN_LIST, component: IBInvoiceList },
@@ -679,6 +684,7 @@ const userRoutes = [
 	{ path: path.SEARCH_BOX2, component: SearchBoxSecond },
 	{ path: path.SEARCH_BOX3, component: SerachBox3 },
 	{ path: path.TRANSACTION_LOG, component: TransactionLog },
+	// { path: path.POS_LOG, component: POS_Log },
 
 	{ path: "/dashboard", component: Dashboard, isPartyWisePage: true },
 
