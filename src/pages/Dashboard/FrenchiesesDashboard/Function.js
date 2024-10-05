@@ -26,7 +26,7 @@ export const GetDailySaleData = async ({ fromDate, toDate, Party_Id }) => { //++
 
 };
 
-export const CustomerMobileView = async ({ Mobile, IsLinkToBill, MacID }) => { //+++++++++++++++++++++ Session Company Id+++++++++++++++++++++++++++++
+export const CustomerMobileView = async ({ Mobile, IsLinkToBill, MacID, Party, CreatedOn }) => { //+++++++++++++++++++++ Session Company Id+++++++++++++++++++++++++++++
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
     myHeaders.append("Authorization", "Basic U3dlZXRQT1NVc2VyOjEyMzQ=");
@@ -35,6 +35,9 @@ export const CustomerMobileView = async ({ Mobile, IsLinkToBill, MacID }) => { /
         "Mobile": Mobile,
         "IsLinkToBill": IsLinkToBill,
         "MacID": MacID,
+        "Party": Party,
+        "CreatedOn": CreatedOn
+
     });
 
     const requestOptions = {
