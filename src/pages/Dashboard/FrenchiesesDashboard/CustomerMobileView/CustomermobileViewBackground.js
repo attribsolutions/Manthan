@@ -1,4 +1,4 @@
-import React, { useEffect, useState, } from "react";
+import React, { useEffect, useRef, useState, } from "react";
 import { Card, Input } from "reactstrap";
 import cbm_logo from "../../../../assets/images/cbm_logo.png"
 
@@ -8,21 +8,27 @@ import { CustomerMobileView } from "../Function";
 
 
 
-const CustomermobileViewBackground = (props) => {
-  
+export const CustomermobileViewBackground = (props) => {
+
     const [CustomerMobileNumber, setCustomerMobileNumber] = useState("");
     const [error, setError] = useState('');
     const [Response, setResponse] = useState("");
     const [showContent, setShowContent] = useState(false);
+    const [display, setDisplay] = useState('');
+    const buttonRef = useRef(null); // Reference to the Send button
 
 
     const SaveHandler = async () => {
+        const [Mac_ID, Party] = props.Details.split("&");
+        console.log(Mac_ID); // "64:51:06:3F:5F:D2"
+        console.log(Party); // "60722
 
         setResponse("")
         if (!validateMobileNumber(CustomerMobileNumber)) {
             setError('Please enter a valid 10-digit mobile number.');
+
         } else {
-            const jsonData = await CustomerMobileView({ Mobile: CustomerMobileNumber, IsLinkToBill: 0, MacID: props.Mac_ID, })
+            const jsonData = await CustomerMobileView({ Mobile: CustomerMobileNumber, IsLinkToBill: 0, MacID: Mac_ID, Party: Party, CreatedOn: new Date().toISOString() })
             setResponse(jsonData)
         }
     }
@@ -32,7 +38,19 @@ const CustomermobileViewBackground = (props) => {
         }
     }, [Response.Status, Response.StatusCode])
 
+    const scrollToElement = (id_1, id_2) => {
+        const element_1 = document.getElementById(id_1); // Find the element
+        const element_2 = document.getElementById(id_2); // Find the element
 
+
+        if (element_1) {
+            element_1.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        if (element_2) {
+            element_2.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    };
 
     const validateMobileNumber = (number) => {
         // Example regex for mobile number validation (10 digits)
@@ -41,8 +59,11 @@ const CustomermobileViewBackground = (props) => {
         return mobileRegex.test(number);
     };
 
+
+
+
     const handleChange = (event) => {
-        debugger
+
         const value = event.target.value;
         const isNumber = /^\d{0,10}$/.test(value)
 
@@ -52,12 +73,21 @@ const CustomermobileViewBackground = (props) => {
             if (value && !validateMobileNumber(value)) {
                 setError('Please enter a valid 10-digit mobile number.');
             } else {
+                // event.target.blur();
+                scrollToElement("BTN_ID", "CARD_ID")
 
                 setError('');
             }
         }
     };
 
+    const handleClick = (num) => {
+        setDisplay(display + num); // Append clicked number to the existing display
+    };
+
+    const handleBackspace = () => {
+        setDisplay(display.slice(0, -1)); // Remove the last character
+    };
 
 
     // console.log("response", (Response.Status === true && Response.StatusCode === 200))
@@ -139,18 +169,19 @@ const CustomermobileViewBackground = (props) => {
                         style={{
                             width: '250px',
                             height: '250px',
-                            marginBottom: '20px',
+                            marginBottom: '-45px',
                         }}
                     />
 
                     {/* Card with Input below the image */}
-                    <Card
+                    <Card id="CARD_ID"
                         style={{
                             background: 'whitesmoke',
                             margin: '10px auto',
                             boxShadow: '0px 1px 5px 1px grey',
                             padding: '30px',
                             width: '370px',
+                            height: "170px",
                             zIndex: 2, // Keep card on top of the background
                         }}
                     >
@@ -159,7 +190,7 @@ const CustomermobileViewBackground = (props) => {
                         <Input
                             type="tel"
                             id="Numiric_ID"
-                            className="input font-size-24"
+                            className="input font-size-22"
                             autoComplete="off"
                             placeholder="Enter Mobile Number"
                             value={CustomerMobileNumber}
@@ -169,7 +200,7 @@ const CustomermobileViewBackground = (props) => {
                     </Card>
 
 
-                    <button className="button" onClick={SaveHandler} style={{ marginLeft: "90px", marginTop: "30px" }}>
+                    <button id="BTN_ID" ref={buttonRef} className="button" onClick={SaveHandler} style={{ marginLeft: "90px", marginTop: "30px" }}>
                         <div className="outline"></div>
                         <div className="state state--default" style={{ top: "10px" }} >
                             <div style={{ top: "-12px" }} className="icon">
@@ -268,8 +299,10 @@ const CustomermobileViewBackground = (props) => {
 
                         }
                     </button>
-
-
+                    {/* <NumberPad
+                        handleBackspace={handleBackspace}
+                        handleClick={handleClick}
+                    /> */}
                 </div>
 
 
@@ -280,33 +313,38 @@ const CustomermobileViewBackground = (props) => {
             </div>
         </React.Fragment >
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     );
 };
 
-export default CustomermobileViewBackground;
 
 
+
+
+
+
+
+export const NumberPad = ({ handleClick, handleBackspace }) => {
+    const disableContextMenu = (e) => {
+        e.preventDefault(); // Prevents default context menu from showing
+    };
+
+    return (
+        <div className="mt-5 ml-5">
+            <ul id="keyboard" onContextMenu={disableContextMenu}>
+                <li className="letter" onClick={() => handleClick('1')}>1</li>
+                <li className="letter" onClick={() => handleClick('2')}>2</li>
+                <li className="letter" onClick={() => handleClick('3')}>3</li>
+                <li className="letter clearl" onClick={() => handleClick('4')}>4</li>
+                <li className="letter" onClick={() => handleClick('5')}>5</li>
+                <li className="letter" onClick={() => handleClick('6')}>6</li>
+                <li className="letter clearl" onClick={() => handleClick('7')}>7</li>
+                <li className="letter" onClick={() => handleClick('8')}>8</li>
+                <li className="letter" onClick={() => handleClick('9')}>9</li>
+                <li className="letter" onClick={() => handleClick('0')}>0</li>
+                <li className="letter clearl" onClick={handleBackspace}>Back</li> {/* Back button */}
+            </ul>
+        </div>
+    );
+};
 
 
