@@ -40,7 +40,7 @@ const OrderItemSupplierReport = (props) => {
             pageField: state.CommonPageFieldReducer.pageField
         })
     );
-
+    debugger
     const { userAccess, ItemSupplierReduxData = [], goBtnLoading, pageField } = reducers;
     const { tableData = [], ItemCount = {} } = ItemSupplierReduxData
 
@@ -82,10 +82,10 @@ const OrderItemSupplierReport = (props) => {
     useEffect(() => {
 
         if (btnMode === "excel") {
-            if (tableData.length > 0) {
+            if (ItemSupplierReduxData.length > 0) {
                 ExcelReportComponent({                // Download CSV
                     pageField,
-                    excelTableData: tableData,
+                    excelTableData: ItemSupplierReduxData,
                     excelFileName: "Order Item Supplier Report",
                 })
                 dispatch(order_Item_Supplier_goBtn_Success([]));
@@ -96,7 +96,7 @@ const OrderItemSupplierReport = (props) => {
                 pdfDownloadHandler(tableData)
             }
         }
-    }, [tableData]);
+    }, [ItemSupplierReduxData]);
 
     function goAndExcel_Btn_Handler(btnId) {
         setBtnMode(btnId)
@@ -324,7 +324,7 @@ const OrderItemSupplierReport = (props) => {
                 <div className="mt-1">
                     <ReportTableFunc
                         keyField="id"
-                        tableData={tableData}
+                        tableData={ItemSupplierReduxData}
                         columns={tableColumns}
                     // totalAmountShow={true}
                     />
