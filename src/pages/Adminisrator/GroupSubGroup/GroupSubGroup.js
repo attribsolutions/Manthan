@@ -184,8 +184,7 @@ const DroppableContainer = ({ items, groupName, moveItem, moveItemWithinGroup, a
     return (
         <div ref={ref} style={{ minHeight: '10px', padding: '8px', display: 'flex', flexWrap: 'wrap', borderRadius: '12px', background: '#e5e7ed', boxShadow: '0px 1px 5px 1px grey' }}>
             {items.map((item, index) => (
-
-                <DraggableItem key={item.value} item={item} index={index} groupName={groupName} moveItemWithinGroup={moveItemWithinGroup} />
+                item?.value !== null && <DraggableItem key={item.value} item={item} index={index} groupName={groupName} moveItemWithinGroup={moveItemWithinGroup} />
             ))}
             {/* <Add_SubGroup addItem={addItem} groupName={groupName} items={items} /> */}
         </div>
@@ -221,7 +220,7 @@ const UnAsginItemDroppableContainer = ({ items, groupName, moveItem, moveItemWit
 
 
 const UnAsginSubGroupDroppableContainer = ({ items, groupName, moveItem, moveItemWithinGroup, addItem }) => {
-    debugger
+
     const UnAsginSubGroupItem = items["null"];
 
     const [, ref] = useDrop({
@@ -394,8 +393,6 @@ const GroupSubGroup = (props) => {
             return acc;
         }, []);
 
-
-
         // Sort SubgroupDetails based on SubGroupSequence within each group 
         groupedData.forEach(group => {
             group.SubgroupDetails.sort((a, b) => a.SubGroupSequence - b.SubGroupSequence);
@@ -541,8 +538,6 @@ const GroupSubGroup = (props) => {
         setSubGroups((prevGroups) => {
             prevGroups["UnAssign"] ? prevGroups["UnAssign"] = prevGroups["UnAssign"] : prevGroups["UnAssign"] = []
 
-
-            debugger
             let sourceGroup = []
             if (sourceGroupName === "null") {
                 sourceGroup = prevGroups["null"].filter((i) => i.label !== item.label);
@@ -673,6 +668,9 @@ const GroupSubGroup = (props) => {
 
 
         const transformedSubgroups = combinedArray.map((subgroup, index) => {
+            if (subgroup.label === null) {
+                subgroup.label = "null"
+            }
             if (subgroup.GroupID !== currentGroupID) {
                 currentGroupID = subgroup.GroupID;
                 subGroupCounter = 0; // Reset counter when GroupID changes
@@ -680,9 +678,9 @@ const GroupSubGroup = (props) => {
             subGroupCounter++
             currentGroupID = subgroup.GroupID;
             const matchedKey = Object.keys(SequenceSubGroupItem).find(key => subgroup.label === key);
-            if (matchedKey) {
+            // if (matchedKey) {
 
-            }
+            // }
 
             const items = matchedKey
                 ? SequenceSubGroupItem[matchedKey].map((item, index) => ({
@@ -731,11 +729,11 @@ const GroupSubGroup = (props) => {
             })
             setSaveLoading(false)
         } else {
+            setSaveLoading(false)
             customAlert({
                 Type: 4,
                 Message: JSON.stringify(response.Message),
             })
-            setSaveLoading(false)
         }
 
     }
