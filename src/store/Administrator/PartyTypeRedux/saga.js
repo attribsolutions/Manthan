@@ -27,7 +27,11 @@ function* Get_PartyType_List_GneFunc() { // get api
 
     const jsonBody = JSON.stringify({ ...loginJsonBody(), "id": 0 });
     const response = yield call(get_PartyType_List_Api, jsonBody);
-    yield put(action.getPartyTypelistSuccess(response.Data));
+    const newData = response.Data.map((i) => {
+      i["CountryName"] = i.Country.Country;
+      return i
+    })
+    yield put(action.getPartyTypelistSuccess(newData));
   } catch (error) { yield put(action.PartyTypeApiErrorAction()) }
 }
 
