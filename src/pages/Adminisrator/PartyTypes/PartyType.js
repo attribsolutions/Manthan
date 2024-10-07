@@ -155,7 +155,7 @@ const PartyType = (props) => {
                     values.IsRetailer = IsRetailer
                     values.IsVendor = IsVendor
                     values.IsAdminDivision = IsAdminDivision
-                    values.CountryName = { label: Country?.Country, value: Country?.id }
+                    values.CountryName = Country !== null && { label: Country.Country, value: Country.id }
 
 
                     values.id = id
