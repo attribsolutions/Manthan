@@ -245,7 +245,7 @@ import StockOutReport from "../pages/SweetPOS/Reports/StockOutReport/index.js";
 
 import CustomerMobileView from "../pages/Dashboard/FrenchiesesDashboard/CustomerMobileView/CustomerMobileView.js";
 
-// import POS_Log from "../pages/ActivityLog/POSLog.js";
+import POS_Log from "../pages/ActivityLog/POSLog.js";
 import CountryMaster from "../pages/Adminisrator/Country/CountryMaster.js";
 import CountryList from "../pages/Adminisrator/Country/CountryList.js";
 
@@ -684,7 +684,7 @@ const userRoutes = [
 	{ path: path.SEARCH_BOX2, component: SearchBoxSecond },
 	{ path: path.SEARCH_BOX3, component: SerachBox3 },
 	{ path: path.TRANSACTION_LOG, component: TransactionLog },
-	// { path: path.POS_LOG, component: POS_Log },
+	{ path: path.POS_LOG, component: POS_Log },
 
 	{ path: "/dashboard", component: Dashboard, isPartyWisePage: true },
 
