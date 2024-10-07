@@ -260,7 +260,7 @@ const PartyType = (props) => {
                     IsRetailer: values.IsRetailer,
                     IsVendor: values.IsVendor,
                     IsAdminDivision: values.IsAdminDivision,
-                    CountryID: values.CountryName.value,
+                    Country: values.CountryName.value,
                     Company: _cfunc.loginCompanyID(),
                     CreatedBy: _cfunc.loginUserID(),
                     UpdatedBy: _cfunc.loginUserID(),
