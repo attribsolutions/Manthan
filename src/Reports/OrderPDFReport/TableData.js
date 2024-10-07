@@ -1,5 +1,5 @@
 import { groupBy } from "../../components/Common/CommonFunction";
-import { numberWithCommas } from "../Report_common_function";
+import { convertAmericanDollars, numberWithCommas, toWords } from "../Report_common_function";
 
 // original
 export const columns = [
@@ -29,6 +29,20 @@ export const columnsWithIGST = [
     "Total Amount",
 ];
 
+
+export const columnsForAmerica = [
+    "HSN Item Name",
+    "Quantity",
+    "Rate",
+    "Discount",
+    "Discount Amount",
+    "Basic   Amount ",
+    "        IGST        %       Amount",
+    "IGST   Amount ",
+    "Total Amount",
+];
+
+
 export const PageHedercolumns = [
     "Billed by",
     "Billed to",
@@ -46,6 +60,10 @@ export const BilledTo = [
 ]
 export const DetailsOfTransport = [
     "Billed by",
+]
+
+export const Currencycolumn = [
+    "",
 ]
 
 export const Rows = (data) => {
@@ -187,6 +205,74 @@ export const RowsWithIGST = (data) => {
     return hasHedRow
 }
 
+
+
+export const RowsForAmericanOrder = (data) => {
+
+    const { OrderItem = [] } = data
+    let hasHedRow = []
+    const grouped = groupBy(OrderItem, ele => ele.GSTPercentage);
+    grouped.forEach(i => {
+
+        if (i.length > 0) {
+
+            let totalBasicAmount = 0
+            let totalIGst = 0
+            let totalAmount = 0
+            let totalQuantity = 0
+            let GSTPercentage = 0
+            let totalDiscountAmount = 0
+
+            i.forEach(element => {
+
+                const tableitemRow = [
+                    `(${element.HSNCode}) ${element.ItemName}\n${element.Comment === null ? "" : element.Comment}`,
+                    `${Number(element.Quantity).toFixed(2)} ${element.PrimaryUnitName}                  ${element.UnitName}`,
+                    `${numberWithCommas(Number(element.Rate).toFixed(2))}`,
+                    `${element.Discount} ${element.DiscountType === "1" ? "Rs" : "%"}`,
+                    `${numberWithCommas(Number(element.DiscountAmount).toFixed(2))}`,
+                    `${numberWithCommas(Number(element.BasicAmount).toFixed(2))}`,
+                    `${Number(element.IGSTPercentage)}%`,
+                    `${numberWithCommas(Number(element.IGST).toFixed(2))}`,
+                    `${numberWithCommas(Number(element.Amount).toFixed(2))}`,
+                    "row"
+                ];
+
+                totalQuantity = Number(totalQuantity) + Number(element.Quantity)
+                totalIGst = Number(totalIGst) + Number(element.IGST)
+                totalAmount = Number(totalAmount) + Number(element.Amount)
+                totalBasicAmount = Number(totalBasicAmount) + Number(element.BasicAmount)
+                GSTPercentage = Number(element.IGSTPercentage)
+                totalDiscountAmount = Number(totalDiscountAmount) + Number(element.DiscountAmount)
+
+                hasHedRow.push(tableitemRow);
+            })
+
+            function totalrow() {
+                return [
+                    `GST ${(Number(GSTPercentage))}%  Total:${(numberWithCommas(Number(totalIGst).toFixed(2)))} `,
+                    "",
+                    "",
+                    `${numberWithCommas(Number(totalDiscountAmount).toFixed(2))}`,
+                    "",
+                    `${numberWithCommas(Number(totalBasicAmount).toFixed(2))}`,
+                    `${numberWithCommas(Number(totalIGst).toFixed(2))}`,
+                    "isaddition",
+                    `${numberWithCommas(Number(totalAmount).toFixed(2))}`,
+
+                ];
+            };
+            hasHedRow.push(totalrow());
+        }
+    })
+    return hasHedRow
+}
+
+
+
+
+
+
 export const ReportFotterColumns = [
     "SGST",
     "CGST", "Quantity",
@@ -248,6 +334,23 @@ export const DetailsOfTransportRow = (data) => {
     ]
 
     return DetailsOfTransportArray;
+}
+
+
+
+export const CurrencyRow = (data) => {
+    let stringNumber
+    if (data.isAmerica) {
+        stringNumber = convertAmericanDollars(Number(data.OrderAmount))
+    } else {
+        stringNumber = toWords(Number(data.OrderAmount))
+    }
+
+    var RupeesArray = [
+        [`                  ${stringNumber}`],
+
+    ]
+    return RupeesArray;
 }
 
 

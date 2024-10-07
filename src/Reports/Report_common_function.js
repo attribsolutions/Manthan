@@ -26,7 +26,7 @@ export function numberWithCommas(x) {
 
 
 export function toWords(number) {
-  
+
   // Define word mappings
   const units = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine'];
   const tens = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
@@ -176,3 +176,70 @@ export function toWordswithoutRS(number) {
   rupeesWords += ' Only';
   return rupeesWords;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+export function convertAmericanDollars(num) {
+  const belowTwenty = [
+    '', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten',
+    'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'
+  ];
+  const tens = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
+  const thousands = ['', 'Thousand', 'Million', 'Billion'];
+
+  function helper(n) {
+    if (n === 0) return '';
+    if (n < 20) return belowTwenty[n] + ' ';
+    if (n < 100) return tens[Math.floor(n / 10)] + ' ' + helper(n % 10);
+    return belowTwenty[Math.floor(n / 100)] + ' Hundred ' + helper(n % 100);
+  }
+
+  function convertDollars(n) {
+    if (n === 0) return 'Zero Dollars';
+    let i = 0, words = '';
+    while (n > 0) {
+      if (n % 1000 !== 0) {
+        words = helper(n % 1000) + thousands[i] + ' ' + words;
+      }
+      n = Math.floor(n / 1000);
+      i++;
+    }
+    return words.trim() + ' Dollars';
+  }
+
+  function convertCents(n) {
+    if (n === 0) return 'Zero Cents';
+    return helper(Math.floor(n)) + ' Cents';
+  }
+
+  const dollars = Math.floor(num);
+  const cents = Math.round((num - dollars) * 100);
+
+  let result = convertDollars(dollars);
+  if (cents > 0) {
+    result += ' and ' + convertCents(cents);
+  }
+
+  return result;
+}
+

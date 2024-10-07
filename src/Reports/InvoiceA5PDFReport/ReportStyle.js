@@ -377,7 +377,7 @@ export const reportFooter = (doc, data) => {
 
 
     const isIGST = compareGSTINState(data.CustomerGSTIN, data.PartyGSTIN)
-    if (isIGST) {
+    if (isIGST || data.isAmerica) {
 
         doc.text(`Total Basic:`, 440, 327,)
         doc.text(`${TotalBasicAmount.toFixed(2)}`, 567, 327, 'right')
@@ -410,12 +410,18 @@ export const reportFooter = (doc, data) => {
 
     }
 
+    if (!data.isAmerica) {
+        doc.text(`Round Off:`, 440, 367,)
+        doc.text(` ${Number(data.RoundOffAmount).toFixed(2)}`, 567, 367, 'right')
 
-    doc.text(`Round Off:`, 440, 367,)
-    doc.text(` ${Number(data.RoundOffAmount).toFixed(2)}`, 567, 367, 'right')
+        doc.text(`TCS Amount:`, 440, 377,)
+        doc.text(` ${numberWithCommas(Number(data.TCSAmount).toFixed(2))}`, 567, 377, 'right')
 
-    doc.text(`TCS Amount:`, 440, 377,)
-    doc.text(` ${numberWithCommas(Number(data.TCSAmount).toFixed(2))}`, 567, 377, 'right')
+    }
+
+
+
+
 
     doc.setFont(undefined, 'Normal')
     doc.setFontSize(10)
@@ -426,7 +432,7 @@ export const reportFooter = (doc, data) => {
 
     doc.setFont(undefined, 'bold')
 
-    let DetailsOfRupeesStyle = {
+    let DetailsOfCurrencyStyle = {
 
         didDrawCell: (data1) => {
             const rowIdx = data1.row.index;
@@ -470,7 +476,7 @@ export const reportFooter = (doc, data) => {
 
     };
 
-    doc.autoTable(table.Ruppescolumn, table.RupeesRow(data), DetailsOfRupeesStyle,);
+    doc.autoTable(table.Currencycolumn, table.CurrencyRow(data), DetailsOfCurrencyStyle,);
 
 
     let DetailsOfBankStyle = {
@@ -733,7 +739,7 @@ export const tableBody = (doc, data) => {
 
     doc.autoTable(Buttom_Hidden_Table_To_Avoid_FooterOverlap);
 }
-////  lines when report  header line when table cordinates
+
 
 export const tableBodyWithIGST = (doc, data) => {
     var options = {
@@ -891,6 +897,170 @@ export const tableBodyWithIGST = (doc, data) => {
     doc.line(220, initial_y, 220, 45);//vertical line between billby billto
     doc.line(570, initial_y, 30, initial_y) //horizontal line 1 billby upper
     doc.autoTable(table.columnsWithIGST, table.RowsWithIGST(data), options,);
+    const Buttom_Hidden_Table_To_Avoid_FooterOverlap = {
+        margin: {
+            left: 30, right: 30, bottom: 110
+        },
+    };
+
+    doc.autoTable(Buttom_Hidden_Table_To_Avoid_FooterOverlap);
+}
+
+
+export const tableBodyForAmericanInvoice = (doc, data) => {
+    debugger
+    var options = {
+
+        didParseCell: (data1) => {
+
+            if (data1.row.cells[8].raw === "isaddition") {
+                data1.row.cells[1].colSpan = 5
+                // data1.row.cells[3].colSpan = 5
+                data1.row.cells[7].colSpan = 2
+                // data1.row.cells[10].colSpan = 2
+
+                data1.row.cells[1].styles.fontSize = 7
+                data1.row.cells[1].styles.halign = "right"    // Alignment for  cgst and Total in spanrow
+
+                data1.row.cells[7].styles.fontSize = 7
+                data1.row.cells[6].styles.fontSize = 7
+                data1.row.cells[9].styles.fontSize = 7
+                // data1.row.cells[12].styles.fontSize = 7
+                data1.row.cells[1].styles.fontStyle = "bold"
+                data1.row.cells[7].styles.fontStyle = "bold"
+                data1.row.cells[6].styles.fontStyle = "bold"
+                data1.row.cells[9].styles.fontStyle = "bold"
+                // data1.row.cells[12].styles.fontStyle = "bold"
+            }
+
+            if (data1.row.cells[1].raw === "HSN Item Name") {
+
+                let TotalBox = 0;
+                data.InvoiceItems.forEach((element, key) => {
+                    if (element.PrimaryUnitName === "Box") {
+                        TotalBox = Number(TotalBox) + Number(element.Quantity)
+                    }
+                })
+                if (TotalBox === 0) {
+                    data1.row.cells[1].text[0] = ` HSN Item Name (${data.TotalItemlength})`
+                } else {
+                    data1.row.cells[1].text[0] = ` HSN Item Name (${data.TotalItemlength})  (${TotalBox} Box)`
+                }
+
+
+                data1.row.cells[7].colSpan = 2
+
+            }
+
+            if (data1.row.cells[1].raw === "Batch") {
+                data1.row.cells[0].colSpan = 12
+
+            }
+        },
+
+        didDrawCell: (data1) => {
+
+            const rowIdx = data1.row.index;
+            const colIdx = data1.column.index;
+            if (rowIdx === 0 && colIdx === 7) {
+                if (data1.row.cells[7].raw === "          IGST           %         Amount") {
+
+                    const cellWidth = data1.cell.width;
+                    const cellHeight = data1.cell.height;
+                    const startX = data1.cell.x;
+                    const startY = data1.cell.y + cellHeight / 2;
+                    const endX = startX + cellWidth;
+                    const endY = startY;
+
+                    const startXVertical = data1.cell.x + cellWidth / 2; // X-coordinate at the middle of the cell
+                    const startY1vertical = data1.cell.y + 9;
+                    const endYvertical = startY + cellHeight;
+
+                    doc.line(startXVertical - 4, startY1vertical, startXVertical - 4, endYvertical); // Draw a vertical line
+                    doc.line(startX, startY, endX, endY);
+                }
+            }
+
+        },
+
+        margin: {
+            left: 30, right: 25, top: 55
+        },
+        theme: 'grid',
+        headerStyles: {
+            cellPadding: 1,
+            lineWidth: 0.3,
+            valign: 'top',
+            fontStyle: 'bold',
+            halign: 'center',    //'center' or 'right'
+            fillColor: "white",
+            textColor: [0, 0, 0], //Black     
+            fontSize: 7,
+            rowHeight: 10,
+            lineColor: [0, 0, 0]
+        },
+        bodyStyles: {
+            textColor: [30, 30, 30],
+            cellPadding: 3,
+            fontSize: 7,
+            columnWidth: 'wrap',
+            lineColor: [0, 0, 0],
+        },
+        columnStyles: {
+            0: {
+                valign: "top",
+                fontSize: 6,
+                columnWidth: 15,
+            },
+            1: {
+                valign: "top",
+                columnWidth: 175,
+            },
+            2: {
+                columnWidth: 50,
+                halign: 'right',
+            },
+
+            3: {
+                columnWidth: 33,
+                halign: 'right',
+            },
+            4: {
+                columnWidth: 35,
+                halign: 'right',
+            },
+            5: {
+                columnWidth: 42,
+                halign: 'right',
+            },
+
+            6: {
+                columnWidth: 50,
+                halign: 'right',
+            },
+            7: {
+                columnWidth: 26,
+                halign: 'right',
+            },
+            8: {
+                columnWidth: 34,
+                halign: 'right',
+
+            },
+            9: {
+                columnWidth: 80,
+                halign: 'right',
+            },
+
+        },
+        tableLineColor: "black",
+        startY: initial_y,
+    };
+    doc.setLineWidth(0.5)
+    doc.line(408, initial_y, 408, 16);//vertical right 1
+    doc.line(220, initial_y, 220, 45);//vertical line between billby billto
+    doc.line(570, initial_y, 30, initial_y) //horizontal line 1 billby upper
+    doc.autoTable(table.columnsForAmerica, table.RowsForAmericaInvoice(data), options,);
     const Buttom_Hidden_Table_To_Avoid_FooterOverlap = {
         margin: {
             left: 30, right: 30, bottom: 110

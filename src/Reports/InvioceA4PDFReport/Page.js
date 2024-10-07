@@ -5,6 +5,7 @@ import { compareGSTINState, loginSystemSetting } from "../../components/Common/C
 import InvioceReporta5 from "../InvoiceA5PDFReport/Page";
 
 
+
 const pageHeder = (doc, data) => {
     style.pageBorder(doc, data);
     style.pageHeder(doc, data);     //Title
@@ -15,9 +16,13 @@ const pageHeder = (doc, data) => {
 };
 
 const reportBody = (doc, data) => {
+
     const isIGST = compareGSTINState(data.CustomerGSTIN, data.PartyGSTIN);
+
     if (isIGST) {
         style.tableBodyWithIGST(doc, data); //table Body
+    } else if (data.isAmerica) {
+        style.tableBodyForAmericanInvoice(doc, data)
     } else {
         style.tableBody(doc, data);
     }
@@ -31,6 +36,7 @@ function pageFooter(doc, data) {
 const invioceReport_A4 = async (data) => {
 
 
+    data["isAmerica"] = (data.CustomerGSTIN === "" && data.PartyGSTIN === "")
 
 
     if (data.InvoiceUploads?.length > 0) {
