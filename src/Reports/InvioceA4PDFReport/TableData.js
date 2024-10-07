@@ -1,5 +1,5 @@
 import { date_dmy_func } from "../../components/Common/CommonFunction";
-import { numberWithCommas, toWords } from "../Report_common_function";
+import { convertAmericanDollars, numberWithCommas, toWords } from "../Report_common_function";
 
 
 export const columns = [
@@ -32,6 +32,20 @@ export const columnsWithIGST = [
 ];
 
 
+export const columnsForAmerica = [
+    "SN",
+    "HSN Item Name",
+    "Quantity (UOM)",
+    "Rate",
+    "Discount",
+    "Discount Amount ",
+    "Taxable Amount",
+    "          IGST           %        Amount",
+    "IGST Amount",
+    "Amount",
+];
+
+
 
 export const Footercolumn = [
     "",
@@ -49,7 +63,7 @@ export const DetailsOfTransport = [
     "Billed by",
 ]
 
-export const Ruppescolumn = [
+export const Currencycolumn = [
     "",
 ]
 
@@ -389,6 +403,154 @@ export const RowsWithIGST = (data) => {
 }
 
 
+export const RowsForAmericaInvoice = (data) => {
+
+    const { InvoiceItems = [] } = data
+    InvoiceItems.sort((firstItem, secondItem) => firstItem.GSTPercentage - secondItem.GSTPercentage);
+    const returnArr = [];
+    let Gst = 0
+    let totalBasicAmount = 0
+    let totalIGst = 0
+    let totalAmount = 0
+    let totalQuantity = 0
+    let SrNO = 1
+    let GSTPercentage = 0
+
+    const groupedItems = InvoiceItems.reduce((accumulator, currentItem) => {
+
+        const { HSNCode, ItemName, IGSTPercentage, MRP, Rate, Discount, CGST, SGST, Amount, DiscountAmount,
+            BasicAmount, Quantity, UnitName, MRPValue, CGSTPercentage, SGSTPercentage, GSTPercentage, BatchCode,
+            BatchDate, DiscountType, PrimaryUnitName, IGST, ItemExpiryDate } = currentItem;
+        const key = ItemName + '_' + MRPValue;
+        if (accumulator[key]) {
+            accumulator[key].DiscountAmount += Number(DiscountAmount);
+            accumulator[key].Quantity += Number(Quantity);
+            accumulator[key].BasicAmount += Number(BasicAmount);
+            accumulator[key].CGST += Number(CGST);
+            accumulator[key].IGST += Number(IGST);
+            accumulator[key].SGST += Number(SGST);
+            accumulator[key].Amount += Number(Amount);
+            accumulator[key].BatchCode += BatchCode;
+            accumulator[key].BatchDate += BatchDate;
+            accumulator[key].quantityString += ` ,  ${BatchCode} - M(${date_dmy_func(BatchDate)}) - E(${date_dmy_func(ItemExpiryDate)}) - ${Quantity}`;
+
+        } else {
+            accumulator[key] = {
+                ItemName, HSNCode,
+                MRPValue, IGSTPercentage, DiscountType, Rate, Discount, CGST: Number(CGST), SGST: Number(SGST),
+                Amount: Number(Amount), DiscountAmount: Number(DiscountAmount), BasicAmount: Number(BasicAmount),
+                Quantity: Number(Quantity), UnitName, CGSTPercentage, SGSTPercentage, GSTPercentage,
+                BatchDate, BatchCode: BatchCode, BatchDate: BatchDate,
+                quantityString: ` ${BatchCode} - M(${date_dmy_func(BatchDate)}) - E(${date_dmy_func(ItemExpiryDate)}) - ${Quantity}`, PrimaryUnitName, IGST
+            };
+        }
+        return accumulator;
+    }, {});
+    const TotalItemlength = Object.values(groupedItems).length;
+    data["TotalItemlength"] = TotalItemlength;
+    Object.values(groupedItems).forEach((element, key) => {
+
+        let HSNcodes = ""
+        if (element.HSNCode) {
+            if (data.SettingData.HSNCodeDigit === "1") {
+                HSNcodes = element.HSNCode.slice(0, 4);
+            }
+            if (data.SettingData.HSNCodeDigit === "2") {
+                HSNcodes = element.HSNCode.slice(0, 6);
+            }
+            if (data.SettingData.HSNCodeDigit === "3") {
+                HSNcodes = element.HSNCode.slice(0, 8);
+            } else {
+                HSNcodes = element.HSNCode.slice(0, 8);
+            }
+        }
+        const tableitemRow = [
+            SrNO++,
+            `${HSNcodes} ${element.ItemName}`,
+            element.UnitName === "" ? `${parseFloat(element.Quantity)} ${element.PrimaryUnitName}   ${element.UnitName}` : `${parseFloat(element.Quantity)} ${element.PrimaryUnitName}(${element.PcsinNumber} ${element.PcsinNumberUnit})`,
+            `${numberWithCommas(Number(element.Rate).toFixed(2))}`,
+            `${element.Discount} ${element.DiscountType === "1" ? "Rs" : "%"}`,
+            `${numberWithCommas(Number(element.DiscountAmount).toFixed(2))}`,
+            `${numberWithCommas(Number(element.BasicAmount).toFixed(2))}`,
+            `${Number(element.IGSTPercentage).toFixed(1)}%`,
+            `${numberWithCommas(Number(element.IGST).toFixed(2))}`,
+            `${numberWithCommas(Number(element.Amount).toFixed(2))}`,
+        ];
+
+        function totalLots() {
+            totalQuantity = Number(totalQuantity) + Number(element.Quantity)
+            totalIGst = Number(totalIGst) + Number(element.IGST)
+            totalAmount = Number(totalAmount) + Number(element.Amount)
+            totalBasicAmount = Number(totalBasicAmount) + Number(element.BasicAmount)
+            GSTPercentage = Number(element.IGSTPercentage)
+
+
+        };
+
+
+        function totalrow() {
+
+            return [
+                "",
+                ` GST ${(parseFloat(GSTPercentage))}%  Total:${numberWithCommas(Number(totalIGst).toFixed(2))} `,
+                " ",
+                "",
+                "",
+                ``,
+                `${numberWithCommas(Number(totalBasicAmount).toFixed(2))}`,
+                `${numberWithCommas(Number(totalIGst).toFixed(2))}`,
+                "isaddition",
+                `${numberWithCommas(Number(totalAmount).toFixed(2))}`,
+
+            ];
+        };
+        const BatchRow = [
+            `Batch:  ${element.quantityString} `,
+            `Batch`,
+            " ",
+            "",
+            "",
+            "",
+            "",
+            ``,
+            "",
+            ``,
+        ]
+
+        if (Gst === 0) { Gst = element.GSTPercentage };
+        let aa = { TotalCGst: 0, totalSGst: 0 }
+        if (data["tableTot"] === undefined) { data["tableTot"] = aa }
+
+        if ((Gst === element.GSTPercentage)) {
+            data["tableTot"] = totalLots()
+            returnArr.push(tableitemRow)
+
+        }
+
+
+        else {
+            returnArr.push(totalrow());
+            returnArr.push(tableitemRow);
+            totalBasicAmount = 0
+            totalAmount = 0
+            totalQuantity = 0
+
+            data["tableTot"] = totalLots()
+            Gst = element.GSTPercentage;
+        }
+        if (data.SettingData.ShowBatchNoOnInvoicePrint === "1") {
+            returnArr.push((BatchRow))
+        }
+
+        if (key === Object.keys(groupedItems).length - 1) {
+
+            returnArr.push(totalrow());
+        }
+    })
+    return returnArr;
+}
+
+
 export const BilledByRow = (data) => {
 
     let PartyAddress = ""
@@ -494,8 +656,13 @@ export const IRNNumberRow = (data) => {
 }
 
 
-export const RupeesRow = (data) => {
-    let stringNumber = toWords(Number(data.GrandTotal))
+export const CurrencyRow = (data) => {
+    let stringNumber
+    if (data.isAmerica) {
+        stringNumber = convertAmericanDollars(Number(data.GrandTotal))
+    } else {
+        stringNumber = toWords(Number(data.GrandTotal))
+    }
 
     var RupeesArray = [
         [`                  ${stringNumber}`],

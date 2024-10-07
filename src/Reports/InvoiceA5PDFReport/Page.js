@@ -21,12 +21,16 @@ var pageHeder = function (doc, data) {
 };
 
 function reportBody(doc, data) {
+    debugger
     const isIGST = compareGSTINState(data.CustomerGSTIN, data.PartyGSTIN)
     if (isIGST) {
         style.tableBodyWithIGST(doc, data);                 //table Body
+    } else if (data.isAmerica) {
+        style.tableBodyForAmericanInvoice(doc, data);
     } else {
         style.tableBody(doc, data);
     }
+
 }
 
 function pageFooter(doc, data, islast, array) {
@@ -41,7 +45,7 @@ const generateReportPage = (doc, data) => {
 }
 
 const InvioceReporta5 = async (data) => {
-    
+    data["isAmerica"] = (data.CustomerGSTIN === "" && data.PartyGSTIN === "")
     var doc = new jsPDF('l', 'pt', 'a5');
 
     const BATCH_SIZE = 40; // You can adjust the batch size according to your needs

@@ -615,6 +615,31 @@ export const tableBodyWithIGST = (doc, data) => {
 
 
         },
+
+        didDrawCell: (data1) => {
+
+            const rowIdx = data1.row.index;
+            const colIdx = data1.column.index;
+            if (rowIdx === 0 && colIdx === 7) {
+                if (data1.row.cells[7].raw === "        IGST        %       Amount") {
+
+                    const cellWidth = data1.cell.width;
+                    const cellHeight = data1.cell.height;
+                    const startX = data1.cell.x;
+                    const startY = data1.cell.y + cellHeight / 2;
+                    const endX = startX + cellWidth;
+                    const endY = startY;
+
+                    const startXVertical = data1.cell.x + cellWidth / 2; // X-coordinate at the middle of the cell
+                    const startY1vertical = data1.cell.y + 13;
+                    const endYvertical = startY + cellHeight;
+
+                    doc.line(startXVertical - 7, startY1vertical, startXVertical - 7, endYvertical); // Draw a vertical line
+                    doc.line(startX, startY, endX, endY);
+                }
+            }
+
+        },
         margin: {
             left: 30, right: 25, top: 65
         },
@@ -713,6 +738,180 @@ export const tableBodyWithIGST = (doc, data) => {
     })
 }
 
+export const tableBodyForAmericanOrder = (doc, data) => {
+
+    const { OrderItem = [] } = data
+    //Body table  Css
+    var options = {
+        didParseCell: (data1) => {
+            if (data1.row.cells[7].raw === "isaddition") {
+                data1.row.cells[0].colSpan = 2
+                data1.row.cells[2].colSpan = 2
+                data1.row.cells[3].colSpan = 2
+                data1.row.cells[6].colSpan = 2
+
+
+                data1.row.cells[0].styles.halign = "right"
+                data1.row.cells[1].styles.halign = "right"
+                data1.row.cells[1].styles.fontStyle = "bold"
+
+
+                data1.row.cells[0].styles.fontSize = 8
+                data1.row.cells[2].styles.fontSize = 8
+                data1.row.cells[3].styles.fontSize = 8
+                data1.row.cells[5].styles.fontSize = 8
+                data1.row.cells[6].styles.fontSize = 8
+                data1.row.cells[8].styles.fontSize = 8
+
+
+
+
+                data1.row.cells[0].styles.fontStyle = "bold"
+                data1.row.cells[2].styles.fontStyle = "bold"
+                data1.row.cells[3].styles.fontStyle = "bold"
+                data1.row.cells[5].styles.fontStyle = "bold"
+                data1.row.cells[6].styles.fontStyle = "bold"
+                data1.row.cells[8].styles.fontStyle = "bold"
+
+
+
+
+
+            }
+
+            if (data1.row.cells[0].raw === "HSN Item Name") {
+
+                let TotalBox = 0;
+                OrderItem.forEach((element, key) => {
+                    if (element.PrimaryUnitName === "Box") {
+                        TotalBox = Number(TotalBox) + Number(element.Quantity)
+                    }
+                })
+
+                data1.row.cells[0].text[0] = ` HSN Item Name (${OrderItem.length})  (${TotalBox} Box)`
+                data1.row.cells[6].colSpan = 2
+            }
+
+
+
+        },
+
+        didDrawCell: (data1) => {
+
+            const rowIdx = data1.row.index;
+            const colIdx = data1.column.index;
+            if (rowIdx === 0 && colIdx === 6) {
+                if (data1.row.cells[6].raw === "        IGST        %       Amount") {
+
+                    const cellWidth = data1.cell.width;
+                    const cellHeight = data1.cell.height;
+                    const startX = data1.cell.x;
+                    const startY = data1.cell.y + cellHeight / 2;
+                    const endX = startX + cellWidth;
+                    const endY = startY;
+
+                    const startXVertical = data1.cell.x + cellWidth / 2; // X-coordinate at the middle of the cell
+                    const startY1vertical = data1.cell.y + 13;
+                    const endYvertical = startY + cellHeight;
+
+                    doc.line(startXVertical - 7, startY1vertical, startXVertical - 7, endYvertical); // Draw a vertical line
+                    doc.line(startX, startY, endX, endY);
+                }
+            }
+
+        },
+        margin: {
+            left: 30, right: 25, top: 65
+        },
+        theme: 'grid',
+        headerStyles: {
+            cellPadding: 4,
+            lineWidth: 1,
+            valign: 'top',
+            fontStyle: 'bold',
+            halign: 'center',
+            fillColor: "white",
+            textColor: [0, 0, 0],
+            fontSize: 8,
+            rowHeight: 10,
+            lineColor: [0, 0, 0]
+        },
+        bodyStyles: {
+            columnWidth: 'wrap',
+            textColor: [30, 30, 30],
+            cellPadding: 2,
+            fontSize: 7,
+            // fontStyle: 'bold',
+            lineColor: [6, 3, 1]
+        },
+        columnStyles: {
+            0: {
+                valign: "top",
+                columnWidth: 180,
+            },
+            1: {
+                columnWidth: 55,
+                halign: 'left',
+
+            },
+            2: {
+                columnWidth: 40,
+                halign: 'right',
+            },
+            3: {
+                columnWidth: 50,
+                halign: 'right',
+            },
+            4: {
+                columnWidth: 43,
+                halign: 'right',
+            },
+            5: {
+                columnWidth: 45,
+                halign: 'right',
+            },
+            6: {
+                columnWidth: 26,
+                halign: 'right',
+            },
+            7: {
+                columnWidth: 40,
+                halign: 'right',
+            },
+            8: {
+                columnWidth: 61,
+                halign: 'right',
+            },
+
+
+        },
+
+        tableLineColor: "black",
+        startY: initial_y,// 45,
+
+    };
+
+    doc.autoTable(table.columnsForAmerica, table.RowsForAmericanOrder(data), options);
+
+    const optionsTable4 = {
+        margin: {
+            left: 30, right: 30, bottom: 50
+        },
+    };
+
+    doc.autoTable(optionsTable4);
+
+    doc.autoTable({
+        html: '#table',
+        didParseCell(data) {
+            if (data.cell.row.index === 0) {
+                data.cell.styles.textColor = [255, 255, 255];
+                data.cell.styles.fillColor = '#FF5783';
+            }
+        }
+    })
+}
+
 export const pageFooter = (doc, data) => {
 
     const GrandTotal = Number(data.OrderAmount)
@@ -720,13 +919,13 @@ export const pageFooter = (doc, data) => {
     let stringNumber = toWords(Number(GrandTotal))
     // doc.addImage(upi_qr_code, 'PNG', 470, 750, 80, 60)
     doc.setDrawColor(0, 0, 0);
+
     doc.line(570, 735, 30, 735);//horizontal line Footer 2
-    // doc.line(570, 680, 30, 680);//horizontal line Footer 3
-    // doc.line(430, 700, 30, 700);//horizontal line Footer 3 Ruppe section
-    // doc.line(460, 745, 460, 815);//vertical right1 Qr Left 1
+
+
     doc.line(430, 735, 430, 815);//vertical right1 Sub Total
     doc.setFont('Tahoma')
-    doc.line(430, 750, 30, 750);//horizontal line (Bottom)
+    // doc.line(430, 750, 30, 750);//horizontal line (Bottom)
 
     const a = data.OrderItem.map((data) => ({
         CGST: Number(data.CGST),
@@ -753,7 +952,7 @@ export const pageFooter = (doc, data) => {
     const TotalGST = totalCGST + totalSGST;
 
     const isIGST = compareGSTINState(data.CustomerGSTIN, data.SupplierGSTIN)
-    if (isIGST) {
+    if (isIGST || data.isAmerica) {
         doc.setFontSize(8)
         doc.text(`Total Basic:`, 434, 752,)
         doc.text(`${numberWithCommas(Number(TotalBasicAmount).toFixed(2))}`, 568, 752, 'right')
@@ -811,16 +1010,6 @@ export const pageFooter = (doc, data) => {
 
 
 
-    // doc.autoTable(terms);
-    // const slicedArray = terms.slice(0, 3);
-    // // doc.text(`${slicedArray[0]}`, 35, 793, "justify")
-    // doc.text(`${slicedArray[0] === undefined ? "" : slicedArray[0].TermsAndCondition}`, 33, 783, "justify")
-    // doc.text(`${slicedArray[1] === undefined ? "" : slicedArray[1].TermsAndCondition}`, 33, 793, "justify")
-    // doc.text(`${slicedArray[2] === undefined ? "" : slicedArray[2].TermsAndCondition}`, 33, 803, "justify")
-    // doc.text(`${slicedArray[3] === undefined ? "" : slicedArray[3].TermsAndCondition}`, 33, 813, "justify")
-
-    // doc.text(`${slicedArray[2]}`, 35, 813, "justify")
-    // doc.text(`Received By `, 180, 785,"justify")
     doc.setFontSize(10)
     // doc.text(`${data.SupplierName} `, 390, 785, "justify")
     doc.setFontSize(10)
@@ -828,15 +1017,61 @@ export const pageFooter = (doc, data) => {
     doc.setFontSize(9)
     // doc.text(`Signature `, 400, 811, "justify")
     doc.setFont("Arimo");
-    // doc.text(`I/we hearby certify that food/foods mentioned in this invoice is/are warranted to be of the nature and
-    // quantity whitch it/these purports to be `, 34, 760,)
-    // doc.text(`A/C No: 2715500356 IFSC Code:BKID00015422 `, 34, 710,)
-    // doc.text('Bank details ·sdSVvDsdgbvzdfbBzdf', 34, 725,)
-    // doc.text(`INR NO : 12547yfewyrt5675w6wer78sdf687s6d7f8676yse87fugh43 `, 34, 740)
-    doc.setFont(undefined, 'bold')
-    doc.text(`Rupees:`, 33, 747,)
-    doc.setFont(undefined, 'Normal')
-    doc.text(`${stringNumber}`, 65, 747,)
+
+
+
+    let DetailsOfCurrencyStyle = {
+
+        didDrawCell: (data1) => {
+            const rowIdx = data1.row.index;
+            const colIdx = data1.column.index;
+            if (rowIdx === 0 && colIdx === 0) {
+                let x = data1.cursor.x + 2
+                let y = data1.cursor.y + 8
+                doc.setFontSize(9)
+                doc.setFont(undefined, 'bold')
+                if (data.isAmerica) {
+                    doc.text('Dollars: ', x, y)
+                } else {
+                    doc.text('Rupees: ', x, y)
+                }
+            }
+        },
+
+        margin: {
+            top: 0, left: 30,
+        },
+        showHead: 'always',
+        theme: 'grid',
+        styles: {
+            overflow: 'linebreak',
+            fontSize: 8,
+            height: 0,
+        },
+        bodyStyles: {
+            columnWidth: 'wrap',
+            textColor: "black",
+            cellPadding: 1,
+            fontSize: 9,
+            lineColor: "black"
+        },
+        columnStyles: {
+            0: {
+                valign: "top",
+                columnWidth: 400,
+                halign: 'lfet',
+            }
+
+        },
+        tableLineColor: "black",
+        startY: 735,
+
+    };
+
+    doc.autoTable(table.Currencycolumn, table.CurrencyRow(data), DetailsOfCurrencyStyle,);
+
+
+
 
     const pageCount = doc.internal.getNumberOfPages()
     doc.setFont('helvetica', 'Normal')

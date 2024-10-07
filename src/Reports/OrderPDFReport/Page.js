@@ -17,9 +17,13 @@ function reportBody(doc, data) {
     const isIGST = compareGSTINState(data.CustomerGSTIN, data.SupplierGSTIN)
     if (isIGST) {
         style.tableBodyWithIGST(doc, data);
+    } else if (data.isAmerica) {
+        style.tableBodyForAmericanOrder(doc, data)
     } else {
+
         style.tableBody(doc, data);
     }
+
 }
 
 function pageFooter(doc, data) {
@@ -28,6 +32,8 @@ function pageFooter(doc, data) {
 }
 
 const ordeRreport = (data) => {
+    data["isAmerica"] = (data.CustomerGSTIN === "" && data.SupplierGSTIN === "")
+
     var doc = new jsPDF('p', 'pt', 'a4');
     pageHeder(doc, data);
     reportBody(doc, data);
