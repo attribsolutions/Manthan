@@ -36,7 +36,7 @@ function pageFooter(doc, data) {
 const invioceReport_A4 = async (data) => {
 
 
-    data["isAmerica"] = (data.CustomerGSTIN === "" && data.PartyGSTIN === "")
+    data["isAmerica"] = ((data.CustomerGSTIN === "" && data.PartyGSTIN === "") || (data.CustomerGSTIN === null && data.PartyGSTIN === null))
 
 
     if (data.InvoiceUploads?.length > 0) {

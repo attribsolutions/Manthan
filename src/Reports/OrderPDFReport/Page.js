@@ -32,7 +32,7 @@ function pageFooter(doc, data) {
 }
 
 const ordeRreport = (data) => {
-    data["isAmerica"] = (data.CustomerGSTIN === "" && data.SupplierGSTIN === "")
+    data["isAmerica"] = ((data.CustomerGSTIN === "" && data.SupplierGSTIN === "") || (data.CustomerGSTIN === null && data.SupplierGSTIN === null))
 
     var doc = new jsPDF('p', 'pt', 'a4');
     pageHeder(doc, data);
