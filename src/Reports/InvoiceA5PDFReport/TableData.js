@@ -142,13 +142,13 @@ export const RowsWithCGST_SGST = (data) => {
 
         let HSNcodes = ""
         if (element.HSNCode) {
-            if (data.SettingData.HSNCodeDigit === "1") {
+            if (data.SettingData.HSNCodeDigit === "0") {
+                HSNcodes = element.HSNCode.slice(0, 0);
+            } else if (data.SettingData.HSNCodeDigit === "1") {
                 HSNcodes = element.HSNCode.slice(0, 4);
-            }
-            if (data.SettingData.HSNCodeDigit === "2") {
+            } else if (data.SettingData.HSNCodeDigit === "2") {
                 HSNcodes = element.HSNCode.slice(0, 6);
-            }
-            if (data.SettingData.HSNCodeDigit === "3") {
+            } else if (data.SettingData.HSNCodeDigit === "3") {
                 HSNcodes = element.HSNCode.slice(0, 8);
             } else {
                 HSNcodes = element.HSNCode.slice(0, 8);
@@ -320,19 +320,17 @@ export const RowsWithIGST = (data) => {
 
         let HSNcodes = ""
         if (element.HSNCode) {
-
-            if (data.SettingData.HSNCodeDigit === "1") {
+            if (data.SettingData.HSNCodeDigit === "0") {
+                HSNcodes = element.HSNCode.slice(0, 0);
+            } else if (data.SettingData.HSNCodeDigit === "1") {
                 HSNcodes = element.HSNCode.slice(0, 4);
-            }
-            if (data.SettingData.HSNCodeDigit === "2") {
+            } else if (data.SettingData.HSNCodeDigit === "2") {
                 HSNcodes = element.HSNCode.slice(0, 6);
-            }
-            if (data.SettingData.HSNCodeDigit === "3") {
+            } else if (data.SettingData.HSNCodeDigit === "3") {
                 HSNcodes = element.HSNCode.slice(0, 8);
             } else {
                 HSNcodes = element.HSNCode.slice(0, 8);
             }
-
         }
         const tableitemRow = [
             SrNO++,
@@ -491,19 +489,17 @@ export const RowsForAmericaInvoice = (data) => {
 
         let HSNcodes = ""
         if (element.HSNCode) {
-
-            if (data.SettingData.HSNCodeDigit === "1") {
+            if (data.SettingData.HSNCodeDigit === "0") {
+                HSNcodes = element.HSNCode.slice(0, 0);
+            } else if (data.SettingData.HSNCodeDigit === "1") {
                 HSNcodes = element.HSNCode.slice(0, 4);
-            }
-            if (data.SettingData.HSNCodeDigit === "2") {
+            } else if (data.SettingData.HSNCodeDigit === "2") {
                 HSNcodes = element.HSNCode.slice(0, 6);
-            }
-            if (data.SettingData.HSNCodeDigit === "3") {
+            } else if (data.SettingData.HSNCodeDigit === "3") {
                 HSNcodes = element.HSNCode.slice(0, 8);
             } else {
                 HSNcodes = element.HSNCode.slice(0, 8);
             }
-
         }
         const tableitemRow = [
             SrNO++,
