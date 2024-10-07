@@ -153,7 +153,7 @@ const GRN_ADD_1 = (props) => {
                     ele["delbtn"] = false
                     ele["Invoice"] = null
                 });
-                dispatch(_act.BreadcrumbShowCountlabel(`Count:${grnItems.OrderItem.length} ₹ ${sum.toFixed(2)}`));
+                dispatch(_act.BreadcrumbShowCountlabel(`Count:${grnItems.OrderItem.length} currency_symbol ${sum.toFixed(2)}`));
             } else {                                                       // IF GRN From Vendor Order list 
                 grnItems.OrderItem.forEach((ele, k) => {
                     ele.id = k + 1;
@@ -166,7 +166,7 @@ const GRN_ADD_1 = (props) => {
                     ele["delbtn"] = false
                     ele["Invoice"] = null
                 });
-                dispatch(_act.BreadcrumbShowCountlabel(`Count:${grnItems.OrderItem.length} ₹ ${0}`));
+                dispatch(_act.BreadcrumbShowCountlabel(`Count:${grnItems.OrderItem.length} currency_symbol ${0}`));
             }
 
 
@@ -248,7 +248,7 @@ const GRN_ADD_1 = (props) => {
             sum = sum + parseFloat(ind.Amount)
         });
         setOrderAmount(sum.toFixed(2))
-        dispatch(_act.BreadcrumbShowCountlabel(`Count:${grnItemList.length} ₹ ${sum.toFixed(2)}`));
+        dispatch(_act.BreadcrumbShowCountlabel(`Count:${grnItemList.length} currency_symbol ${sum.toFixed(2)}`));
 
     }
 
@@ -586,7 +586,7 @@ const GRN_ADD_1 = (props) => {
         newArr.forEach(ind => {
             sum = sum + parseFloat(ind.Amount)
         });
-        dispatch(_act.BreadcrumbShowCountlabel(`Count:${newArr.length} ₹ ${sum.toFixed(2)}`));
+        dispatch(_act.BreadcrumbShowCountlabel(`Count:${newArr.length} currency_symbol ${sum.toFixed(2)}`));
     }
 
     const deletebtnOnclick = (r) => {
@@ -598,7 +598,7 @@ const GRN_ADD_1 = (props) => {
         newArr.forEach(ind => {
             sum = sum + parseFloat(ind.Amount)
         });
-        dispatch(_act.BreadcrumbShowCountlabel(`Count:${newArr.length} ₹ ${sum.toFixed(2)}`));
+        dispatch(_act.BreadcrumbShowCountlabel(`Count:${newArr.length} currency_symbol ${sum.toFixed(2)}`));
     }
 
     const handleCheckboxChange = (e) => {

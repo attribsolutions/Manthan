@@ -46,10 +46,8 @@ import { allLabelWithBlank } from "../../../components/Common/CommonErrorMsg/Har
 import { Group_Subgroup_func, GroupSubgroupDisplay, ModifyTableData_func } from "../../../components/Common/TableCommonFunc";
 
 
-
-
 let editVal = {}
-let initial_BredcrumbMsg = `Count:0 ₹ 0.00`
+let initial_BredcrumbMsg = `Count:0 currency_symbol 0.00 weightage 0.00 kg`
 function initialState(history) {
 
     let page_Id = '';
@@ -343,7 +341,8 @@ const Order = (props) => {
                 setTermsAndConTable(termsAndCondition)
 
                 const commaSeparateAmount = _cfunc.amountCommaSeparateFunc(Number(hasEditVal.OrderAmount).toFixed(2));
-                dispatch(_act.BreadcrumbShowCountlabel(`Count:${orderItems.length} ₹ ${commaSeparateAmount}`))
+                dispatch(_act.BreadcrumbShowCountlabel(`Count:${orderItems.length} currency_symbol ${commaSeparateAmount} weightage ${hasEditVal?.weightage} kg`))
+
                 seteditCreatedBy(hasEditVal.CreatedBy)
             }
             dispatch(_act.editOrderIdSuccess({ Status: false }))
@@ -1115,18 +1114,43 @@ const Order = (props) => {
     };
 
     function itemWise_CalculationFunc(row, IsComparGstIn, tableList = []) {
-
+        debugger
         const calculate = orderCalculateFunc(row) //order calculation function 
         row["Amount"] = calculate.roundedTotalAmount
-        const sumOfAmount = tableList.reduce((accumulator, currentObject) => accumulator + (Number(currentObject["Amount"]) || 0), 0);
 
-        const commaSeparateAmount = _cfunc.amountCommaSeparateFunc(sumOfAmount.toFixed(2))
+
+        const totals = tableList.reduce(
+            (accumulator, currentObject) => {
+
+                const amount = Number(currentObject["Amount"]) || 0.00;
+                const weightage = Number(currentObject["Weightage"]) || 0.00;
+                const row_weightage = Number(currentObject.Quantity) / Number(weightage)
+                if (Number(currentObject["Amount"]) > 0) {
+                    return {
+                        amountSum: accumulator.amountSum + amount,
+                        weightageSum: accumulator.weightageSum + row_weightage,
+                    };
+                }
+                return {
+                    ...accumulator,
+                    amountSum: accumulator.amountSum + amount,
+                };
+            },
+            { amountSum: 0.00, weightageSum: 0.00 }
+        );
+
+
+        const commaSeparateAmount = _cfunc.amountCommaSeparateFunc(totals.amountSum.toFixed(2))
 
 
         const elements = document.querySelectorAll('.amount-countable-Calulation');
-        elements.forEach(element => {
-            element.innerText = commaSeparateAmount;
-        });
+
+
+        const weightage_lable = document.querySelectorAll('.weightage-lable');
+        const weightage_value = document.querySelectorAll('.weightage-value');
+        weightage_lable.forEach(element => { element.innerText = "weightage:"; });
+        weightage_value.forEach(element => { element.innerText = `${totals.weightageSum} kg`; });
+        elements.forEach(element => { element.innerText = commaSeparateAmount; });
 
     };
 
@@ -1561,7 +1585,7 @@ const Order = (props) => {
                                                                     })
                                                                     return;
                                                                 }
-                                                                dispatch(_act.BreadcrumbShowCountlabel(`Count:${itemSelectDropOptions.length} ₹ ${(0)}`))
+                                                                dispatch(_act.BreadcrumbShowCountlabel(`Count:${itemSelectDropOptions.length} currency_symbol 0.00 weightage 0.00 kg`))
                                                                 setSelecedItemWiseOrder(false)
                                                                 setOrderItemTable(itemSelectDropOptions)
                                                                 setItemSelect(allLabelWithBlank)

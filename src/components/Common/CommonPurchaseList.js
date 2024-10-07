@@ -131,7 +131,7 @@ const CommonPurchaseList = (props) => {
 
     if ((pageField?.CountLabel === true)) {
       if (totalAmountShow === true) {
-        dispatch(BreadcrumbShowCountlabel(`Count:${tableList.length} ₹ ${TotalAmount_Func(tableList)}`));
+        dispatch(BreadcrumbShowCountlabel(`Count:${tableList.length} currency_symbol ${TotalAmount_Func(tableList)}`));
       }
       else if (pageField?.CountLabel === true) {
         dispatch(BreadcrumbShowCountlabel(`Count:${tableList.length}`));
@@ -454,7 +454,7 @@ const CommonPurchaseList = (props) => {
                 updatedRowBlinkId={updatedRowBlinkId}
                 onDataSizeChange={({ dataCount, filteredData = [] }) => {
                   if (totalAmountShow === true) {
-                    dispatch(BreadcrumbShowCountlabel(`Count:${dataCount} ₹ ${TotalAmount_Func(filteredData)}`));
+                    dispatch(BreadcrumbShowCountlabel(`Count:${dataCount} currency_symbol ${TotalAmount_Func(filteredData)}`));
                   }
                   else {
                     dispatch(BreadcrumbShowCountlabel(`Count:${dataCount}`));
