@@ -158,7 +158,7 @@ const CreditNote_1 = (props) => {
         dispatch(InvoiceNumberSuccess([]));
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_id));
-        dispatch(BreadcrumbShowCountlabel(`${"Count"} :${0} ₹ ${0}`));
+        dispatch(BreadcrumbShowCountlabel(`${"Count"} :${0} currency_symbol ${0}`));
 
         return () => {
             dispatch(Retailer_List_Success([]));
@@ -294,7 +294,7 @@ const CreditNote_1 = (props) => {
                 });
 
                 let sumOfGrandTotal = updateItemArr.reduce((accumulator, currentObject) => accumulator + Number(currentObject["roundedTotalAmount"]) || 0, 0);
-                let count_label = `${"Count"} :${updateItemArr.length} ₹ ${Number(sumOfGrandTotal).toLocaleString()}`
+                let count_label = `${"Count"} :${updateItemArr.length} currency_symbol ${Number(sumOfGrandTotal).toLocaleString()}`
                 dispatch(BreadcrumbShowCountlabel(count_label));
                 updateItemArr.sort((a, b) => b.id - a.id);
                 setTableArr(updateItemArr);
@@ -545,14 +545,14 @@ const CreditNote_1 = (props) => {
         let sumOfGrandTotal = TablelistArray.reduce((accumulator, currentObject) => accumulator + Number(currentObject["roundedTotalAmount"]) || 0, 0);
         let dataCount = TablelistArray.length;
         let commaSeparateAmount = _cfunc.amountCommaSeparateFunc(Number(sumOfGrandTotal).toFixed(2));
-        dispatch(BreadcrumbShowCountlabel(`Count:${dataCount} ₹ ${commaSeparateAmount}`));
+        dispatch(BreadcrumbShowCountlabel(`Count:${dataCount} currency_symbol ${commaSeparateAmount}`));
     }
 
     const deleteButtonAction = (row, TablelistArray = []) => {
         const newArr = TablelistArray.filter((index) => !(index.id === row.id))
         let sumOfGrandTotal = newArr.reduce((accumulator, currentObject) => accumulator + Number(currentObject["roundedTotalAmount"]) || 0, 0);
         let commaSeparateAmount = _cfunc.amountCommaSeparateFunc(Number(sumOfGrandTotal).toFixed(2));
-        dispatch(BreadcrumbShowCountlabel(`Count:${newArr.length} ₹ ${commaSeparateAmount}`));
+        dispatch(BreadcrumbShowCountlabel(`Count:${newArr.length} currency_symbol ${commaSeparateAmount}`));
         setTableArr(newArr)
     }
 

@@ -51,7 +51,7 @@ function ShowTable() {
                     };
                 });
                 
-                dispatch(BreadcrumbShowCountlabel(`Count:${dataCount} ₹ ${TotalAmount_Func(newfilteredData)}`));
+                dispatch(BreadcrumbShowCountlabel(`Count:${dataCount} currency_symbol ${TotalAmount_Func(newfilteredData)}`));
             }
             }
             noDataIndication={<div className="text-danger text-center table-cursor-pointer"  >Data Not available</div>}
@@ -78,7 +78,7 @@ function ShowTable() {
         //                             }
         //                             onDataSizeChange={({ dataSize, d }) => {
         //                                 
-        //                                 // dispatch(BreadcrumbShowCountlabel(`Count:${dataSize} ₹ 0`))
+        //                                 // dispatch(BreadcrumbShowCountlabel(`Count:${dataSize} currency_symbol 0`))
         //                                 dispatch(BreadcrumbShowCountlabel(`Count:${dataSize}`));
         //                             }}
         //                             {...toolkitProps.baseProps}

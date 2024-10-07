@@ -19,7 +19,7 @@ const ReportTableFunc = ({ keyField, tableData, columns }) => {
                 </div>
             }
             onDataSizeChange={({ dataCount, filteredData = [] }) => {
-                dispatch(BreadcrumbShowCountlabel(`Count:${dataCount} ₹ ${TotalAmount_Func(filteredData)}`));
+                dispatch(BreadcrumbShowCountlabel(`Count:${dataCount} currency_symbol ${TotalAmount_Func(filteredData)}`));
             }}
         />
     );

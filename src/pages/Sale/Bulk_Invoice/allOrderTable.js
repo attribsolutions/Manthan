@@ -27,7 +27,7 @@ const Invoice = ({
       sumofOrdersAmount += orderInfo.orderAmountWithGst || 0
       ordersCount++
     }
-    dispatch(BreadcrumbShowCountlabel(`Count:${ordersCount} ₹ ${roundToDecimalPlaces(sumofOrdersAmount, 2, true)}`))
+    dispatch(BreadcrumbShowCountlabel(`Count:${ordersCount} currency_symbol ${roundToDecimalPlaces(sumofOrdersAmount, 2, true)}`))
 
   }, [, bulkData]);
 
