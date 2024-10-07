@@ -592,7 +592,8 @@ export const TRANSACTION_JSON = "/TransactionJson"
 
 export const TRANSACTION_ON_DASHBOARD = "/LogsOnDashboard"
 
-
+//POS log
+export const POS_LOG_GO_BTN = "/SweetPOS/SpoS_login_Detail"
 
 
 

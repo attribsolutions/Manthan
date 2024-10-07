@@ -793,7 +793,8 @@ export const TransactionLog_getjson_for_Transation_Id = ({ TransctionID }) => ge
 
 export const TransactionLog_Get_OnDashBoard_Api = () => get(url.TRANSACTION_ON_DASHBOARD);
 
-
+// POS Log
+export const POSLog_Go_Btn_Api = ({ jsonBody }) => post(url.POS_LOG_GO_BTN, jsonBody);
 
 
 
