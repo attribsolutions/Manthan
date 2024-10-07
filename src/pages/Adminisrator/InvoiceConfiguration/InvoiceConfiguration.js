@@ -81,7 +81,7 @@ const InvoiceConfiguration = (props) => {
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [modalCss, setModalCss] = useState(false);
     const [userPageAccessState, setUserAccState] = useState('');
-    const [hsnDropOption] = useState([{ value: "1", label: "4 Digits" }, { value: "2", label: "6 Digits" }, { value: "3", label: "8 Digits" }])
+    const [hsnDropOption] = useState([{ value: "0", label: "0 Digits" }, { value: "1", label: "4 Digits" }, { value: "2", label: "6 Digits" }, { value: "3", label: "8 Digits" }])
     const [editCreatedBy, seteditCreatedBy] = useState("");
     const [imageTable, setImageTable] = useState([]);  // Selected Image Array
     const [modal_backdrop, setmodal_backdrop] = useState(false);   // Image Model open Or not
@@ -227,13 +227,13 @@ const InvoiceConfiguration = (props) => {
 
         if (Object.keys(Data).length > 1) {
 
-            if (Data.HSNCodeDigit.Value === "1") {
+            if (Data.HSNCodeDigit.Value === "0") {
+                Data.HSNCodeDigit.Value = { value: "0", label: "0 Digits" }
+            } else if (Data.HSNCodeDigit.Value === "1") {
                 Data.HSNCodeDigit.Value = { value: "1", label: "4 Digits" }
-            }
-            if (Data.HSNCodeDigit.Value === "2") {
+            } else if (Data.HSNCodeDigit.Value === "2") {
                 Data.HSNCodeDigit.Value = { value: "2", label: "6 Digits" }
-            }
-            if (Data.HSNCodeDigit.Value === "3") {
+            } else if (Data.HSNCodeDigit.Value === "3") {
                 Data.HSNCodeDigit.Value = { value: "3", label: "8 Digits" }
             } else {
                 Data.HSNCodeDigit.Value = { value: "3", label: "8 Digits" }
@@ -335,7 +335,7 @@ const InvoiceConfiguration = (props) => {
 
 
     useEffect(async () => {
-        
+
         if (Object.keys(SystemSetting).length !== 0) {
 
             const file = await convertImageToFile(SystemSetting.Qr_Image)
