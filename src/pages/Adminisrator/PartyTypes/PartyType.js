@@ -147,7 +147,7 @@ const PartyType = (props) => {
                 }
 
                 if (hasEditVal) {
-                    const { id, Name, IsSCM, IsDivision, IsRetailer, IsVendor, IsAdminDivision, CountryID, CountryName } = hasEditVal
+                    const { id, Name, IsSCM, IsDivision, IsRetailer, IsVendor, IsAdminDivision, Country } = hasEditVal
                     const { values, fieldLabel, hasValid, required, isError } = { ...state }
                     values.Name = Name;
                     values.IsSCM = IsSCM;
@@ -155,7 +155,7 @@ const PartyType = (props) => {
                     values.IsRetailer = IsRetailer
                     values.IsVendor = IsVendor
                     values.IsAdminDivision = IsAdminDivision
-                    values.CountryName = { label: CountryName, value: CountryID }
+                    values.CountryName = { label: Country?.Country, value: Country?.id }
 
 
                     values.id = id
