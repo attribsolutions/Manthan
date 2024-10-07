@@ -49,6 +49,7 @@ import { mobileApp_Send_Retailer_Api } from "../../../../helpers/backend_helper"
 import { changeCommonPartyDropDetailsAction } from "../../../../store/Utilites/PartyDrodown/action";
 import { alertMessages } from "../../../../components/Common/CommonErrorMsg/alertMsg";
 import { getClusterlist } from "../../../../store/Administrator/ClusterRedux/action";
+import { getCountryList_Action, getCountryList_Success } from "../../../../store/Administrator/CountryRedux/action";
 
 function initialState(history) {
 
@@ -106,7 +107,9 @@ const PartyMaster = (props) => {
 		editData,
 		updateMsg,
 		saveBtnloading,
+
 	} = useSelector((state) => ({
+
 		saveBtnloading: state.PartyMasterReducer.saveBtnloading,
 		postMsg: state.PartyMasterReducer.postMsg,
 		editData: state.PartyMasterReducer.editData,
@@ -144,8 +147,11 @@ const PartyMaster = (props) => {
 		if ((subPageMode === url.RETAILER_MASTER) || (subPageMode === url.PARTY_SELF_EDIT)) {
 			dispatch(changeCommonPartyDropDetailsAction({ isShow: true }))//change party drop-down  hide
 		}
+		dispatch(getCountryList_Action());
+
 		return () => {
 			dispatch(commonPageFieldListSuccess(null))
+			dispatch(getCountryList_Success());
 		}
 	}, [])
 
@@ -242,6 +248,10 @@ const PartyMaster = (props) => {
 							PAN: hasEditVal.PAN,
 							Email: hasEditVal.Email,
 							AlternateContactNo: hasEditVal.AlternateContactNo,
+							CountryName: {
+								label: hasEditVal.Country.Country,
+								value: hasEditVal.Country.id,
+							},
 							State: {
 								label: hasEditVal.State.Name,
 								value: hasEditVal.State.id,
@@ -435,7 +445,7 @@ const PartyMaster = (props) => {
 		if (
 			(values.PartyAddress.length > 0) &&
 			(isError.PartyAddress === "") &&
-			!(subPageMode===url.FRANCHISE_CUSTOMER_MASTER)
+			!(subPageMode === url.FRANCHISE_CUSTOMER_MASTER)
 		) {
 			customAlert({
 				Type: 4,
@@ -450,8 +460,8 @@ const PartyMaster = (props) => {
 			return
 		};
 
-		if (addressTabDetail.length === 0 && !(subPageMode===url.FRANCHISE_CUSTOMER_MASTER)) {
-			debugger
+		if (addressTabDetail.length === 0 && !(subPageMode === url.FRANCHISE_CUSTOMER_MASTER)) {
+			
 			setactiveTab1("2")
 			customAlert({
 				Type: 4,
@@ -471,7 +481,7 @@ const PartyMaster = (props) => {
 			return count
 		}, 0)
 
-		if (totalIsDefault === 0 && !(subPageMode===url.FRANCHISE_CUSTOMER_MASTER)) {
+		if (totalIsDefault === 0 && !(subPageMode === url.FRANCHISE_CUSTOMER_MASTER)) {
 			setactiveTab1("2")
 			customAlert({
 				Type: 4,
@@ -526,7 +536,7 @@ const PartyMaster = (props) => {
 				(priceListSelect.label === "" || priceListSelect.value === "") &&
 				(subPageMode === url.RETAILER_MASTER || subPageMode === url.FRANCHISE_CUSTOMER_MASTER)
 			) {
-				debugger;
+				
 				customAlert({
 					Type: 4,
 					Message: alertMessages.PricelistIsRequired,
@@ -543,6 +553,7 @@ const PartyMaster = (props) => {
 				"Email": baseValue.Email,
 				"MobileNo": baseValue.MobileNo,
 				"AlternateContactNo": baseValue.AlternateContactNo,
+				"Country": baseValue.CountryName === "" ? null : baseValue.CountryName.value,
 				"State": baseValue.State.value,
 				"District": baseValue.District.value,
 				"City": (baseValue.CityName === "") ? "" : baseValue.CityName.value,
