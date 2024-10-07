@@ -85,11 +85,9 @@ const PartyType = (props) => {
         const page_Id = pageId.PARTYTYPE
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
-        // dispatch(getPartyTypelist());
         dispatch(getCountryList_Action());
         return () => {
             dispatch(getCountryList_Success());
-            // dispatch(getPartyTypelistSuccess());
         }
     }, []);
 
@@ -147,7 +145,7 @@ const PartyType = (props) => {
                 }
 
                 if (hasEditVal) {
-                    const { id, Name, IsSCM, IsDivision, IsRetailer, IsVendor, IsAdminDivision, Country } = hasEditVal
+                    const { id, Name, IsSCM, IsDivision, IsRetailer, IsVendor, IsAdminDivision, CountryID, CountryName } = hasEditVal
                     const { values, fieldLabel, hasValid, required, isError } = { ...state }
                     values.Name = Name;
                     values.IsSCM = IsSCM;
@@ -155,7 +153,7 @@ const PartyType = (props) => {
                     values.IsRetailer = IsRetailer
                     values.IsVendor = IsVendor
                     values.IsAdminDivision = IsAdminDivision
-                    values.CountryName = Country !== null && { label: Country.Country, value: Country.id }
+                    values.CountryName = CountryID !== null && { label: CountryName, value: CountryID }
 
 
                     values.id = id

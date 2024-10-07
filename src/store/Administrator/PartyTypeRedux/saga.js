@@ -24,14 +24,10 @@ function* save_Party_Type_GneFunc({ config }) {// post api
 
 function* Get_PartyType_List_GneFunc() { // get api
   try {
-    debugger
+    
     const jsonBody = JSON.stringify({ ...loginJsonBody(), "id": 0 });
     const response = yield call(get_PartyType_List_Api, jsonBody);
-    const newData = response.Data.map((i) => ({
-      ...i,  // spread the original object properties
-      CountryName: i.Country?.Country // add or overwrite the CountryName field
-    }));
-    yield put(action.getPartyTypelistSuccess(newData));
+    yield put(action.getPartyTypelistSuccess(response.Data));
   } catch (error) { yield put(action.PartyTypeApiErrorAction()) }
 }
 
