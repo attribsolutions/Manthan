@@ -5,7 +5,7 @@ import { Button, Card, CardBody, Col, FormGroup, Input, Label, Row } from 'react
 import { comAddPageFieldFunc, initialFiledFunc, onChangeCheckbox, onChangeSelect, onChangeText } from '../../../../../components/Common/validationFunction'
 import { Breadcrumb_inputName } from '../../../../../store/actions'
 import { getDistrictOnState } from '../../../../../store/Administrator/PartyRedux/action'
-import { priceListByPartyAction } from '../../../../../store/Administrator/PriceList/action'
+import { priceListByPartyAction, priceListByPartyActionSuccess } from '../../../../../store/Administrator/PriceList/action'
 import PriceDropOptions from './PriceDropOptions'
 import PartyType from '../../../PartyTypes/PartyType'
 import * as url from "../../../../../routes/route_url";
@@ -43,7 +43,7 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
         Cluster: "",
         SubCluster: "",
         PriceList: "",
-        CountryName: ""
+        CountryName: { value: 1, label: "India" }
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
@@ -170,6 +170,10 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
 
         if (commonPartyDropSelect.value > 0) {
             dispatch(GetRoutesList({ ...loginJsonBody(), "PartyID": commonPartyDropSelect.value }))
+            if (subPageMode === url.RETAILER_MASTER) {
+                dispatch(priceListByPartyAction(11))
+            }
+
         }
         return () => {
             dispatch(GetRoutesListSuccess([]));
@@ -269,8 +273,6 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
         label: data.Country
     }));
 
-
-
     const getSubCluster = async ({ Select }) => {
         const response = await Get_Subcluster_On_cluster_API(Select.value);
 
@@ -278,7 +280,6 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
             setSubClusterOptions(response.Data.map(index => ({ value: index.id, label: index.Name })))
         }
     }
-
 
     const RouteName_Options = RoutesListOptions.filter((index) => {
         return index.IsActive === true
@@ -634,9 +635,9 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
                                             onChangeSelect({ hasSelect, evn, state, setState });
                                         }}
                                     />
-                                    {isError.CountryName.length > 0 && (
+                                    {/* {isError.CountryName.length > 0 && (
                                         <span className="text-danger f-8"><small>{isError.CountryName}</small></span>
-                                    )}
+                                    )} */}
                                 </FormGroup>
                             </Col>}
 

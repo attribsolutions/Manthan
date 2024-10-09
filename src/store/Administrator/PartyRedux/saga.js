@@ -60,7 +60,7 @@ function* Get_Party_GenFun({ jsonBody }) {   // Only CompanyID is Required
       return result
     }
     const newArray = response.Data.map((index) => {
-
+      index["CountryName"] = index.Country?.Country;
       index["State"] = index.State.Name;
       index["District"] = index.District.Name;
       index['Company'] = index.Company.Name;
