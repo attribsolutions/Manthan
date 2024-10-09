@@ -93,7 +93,6 @@ const RetailerExcelUpload = (props) => {
         const page_Id = pageId.INVOICE_EXCEL_UPLOAD
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
-        dispatch(priceListByPartyActionSuccess([]))
         dispatch(getPartyTypelist());
         // dispatch(getPartyListAPI());
 

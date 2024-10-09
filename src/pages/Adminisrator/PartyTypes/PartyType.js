@@ -58,7 +58,7 @@ const PartyType = (props) => {
         IsRetailer: false,
         IsVendor: false,
         IsAdminDivision: false,
-        CountryName: ""
+        CountryName: { value: 1, label: "India" }
 
     }
 
@@ -336,9 +336,9 @@ const PartyType = (props) => {
                                                                     onChangeSelect({ hasSelect, evn, state, setState });
                                                                 }}
                                                             />
-                                                            {isError.CountryName.length > 0 && (
+                                                            {/* {isError.CountryName.length > 0 && (
                                                                 <span className="text-danger f-8"><small>{isError.CountryName}</small></span>
-                                                            )}
+                                                            )} */}
                                                         </FormGroup>
                                                     </Col>
                                                 </Row>
