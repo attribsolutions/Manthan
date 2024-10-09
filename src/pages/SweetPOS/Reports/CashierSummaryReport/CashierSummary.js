@@ -183,7 +183,7 @@ const CashierSummary = (props) => {
                             </div>
                         }
                         onDataSizeChange={({ dataCount, filteredData = [] }) => {
-                            dispatch(BreadcrumbShowCountlabel(`Count:${dataCount} ₹ ${_cfunc.TotalAmount_Func(filteredData)}`));
+                            dispatch(BreadcrumbShowCountlabel(`Count:${dataCount} currency_symbol ${_cfunc.TotalAmount_Func(filteredData)}`));
                         }}
                     />
                 </div>

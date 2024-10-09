@@ -227,7 +227,7 @@ const GRNAdd3 = (props) => {
                 dispatch(Breadcrumb_inputName(hasEditVal.ItemName))
                 seteditCreatedBy(hasEditVal.CreatedBy)
                 let sumOfGrandTotal = GRNItems.reduce((accumulator, currentObject) => accumulator + Number(currentObject["roundedTotalAmount"]) || 0, 0);
-                let count_label = `${"Count"}:${GRNItems.length} ₹ ${Number(sumOfGrandTotal).toLocaleString()}`
+                let count_label = `${"Count"}:${GRNItems.length} currency_symbol ${Number(sumOfGrandTotal).toLocaleString()}`
                 dispatch(BreadcrumbShowCountlabel(count_label));
             }
         }

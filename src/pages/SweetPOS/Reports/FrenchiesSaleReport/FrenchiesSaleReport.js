@@ -66,7 +66,7 @@ const FrenchiesSaleReport = (props) => {
     useEffect(() => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(pageId.FRENCHIESE_SALE_REPORT))
-        dispatch(BreadcrumbShowCountlabel(`Count:${0} ₹ ${0.00}`));
+        dispatch(BreadcrumbShowCountlabel(`Count:${0} currency_symbol ${0.00}`));
         dispatch(changeCommonPartyDropDetailsAction({ isShow: false }))//change party drop-down show false
         dispatch(getCommonPartyDrodownOptionAction())
         dispatch(Get_Items_Drop_Down({
@@ -308,7 +308,7 @@ const FrenchiesSaleReport = (props) => {
                             </div>
                         }
                         onDataSizeChange={({ dataCount, filteredData = [] }) => {
-                            dispatch(BreadcrumbShowCountlabel(`Count:${dataCount} ₹ ${_cfunc.TotalAmount_Func(filteredData)}`));
+                            dispatch(BreadcrumbShowCountlabel(`Count:${dataCount} currency_symbol ${_cfunc.TotalAmount_Func(filteredData)}`));
                         }}
                     />
                 </div>

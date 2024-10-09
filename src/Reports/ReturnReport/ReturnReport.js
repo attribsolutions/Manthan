@@ -51,7 +51,7 @@ const ReturnReport = (props) => {
     useEffect(() => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(pageId.RETURN_REPORT))
-        dispatch(BreadcrumbShowCountlabel(`Count:${0} ₹ ${0.00}`));
+        dispatch(BreadcrumbShowCountlabel(`Count:${0} currency_symbol ${0.00}`));
         dispatch(changeCommonPartyDropDetailsAction({ isShow: false }))//change party drop-down show false
         if (_cfunc.CommonPartyDropValue().value > 0) {
             setDistributorDropdown([_cfunc.CommonPartyDropValue()]);
@@ -266,7 +266,7 @@ const ReturnReport = (props) => {
                             </div>
                         }
                         onDataSizeChange={({ dataCount, filteredData = [] }) => {
-                            dispatch(BreadcrumbShowCountlabel(`Count:${dataCount} ₹ ${_cfunc.TotalAmount_Func(filteredData)}`));
+                            dispatch(BreadcrumbShowCountlabel(`Count:${dataCount} currency_symbol ${_cfunc.TotalAmount_Func(filteredData)}`));
                         }}
                     />
                 </div>

@@ -73,7 +73,7 @@ const GenericSaleReport = (props) => {
         if (_cfunc.CommonPartyDropValue().value > 0) {
             setDistributorDropdown([_cfunc.CommonPartyDropValue()]);
         }
-        dispatch(BreadcrumbShowCountlabel(`Count:${0} ₹ ${0.00}`));
+        dispatch(BreadcrumbShowCountlabel(`Count:${0} currency_symbol ${0.00}`));
         dispatch(changeCommonPartyDropDetailsAction({ isShow: false }))//change party drop-down show false
         return () => {
             setTableData([]);

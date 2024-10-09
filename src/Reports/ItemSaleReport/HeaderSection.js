@@ -148,7 +148,7 @@ const HeaderSection = (props) => {
     dispatch(getGroupList());
     dispatch(getSubGroupList());
     dispatch(Items_On_Group_And_Subgroup_API({ Group: 0, SubGroup: 0 }));
-    dispatch(BreadcrumbShowCountlabel(`Count:0 ₹ 0`));
+    dispatch(BreadcrumbShowCountlabel(`Count:0 currency_symbol 0`));
     if (_cfunc.CommonPartyDropValue().value > 0) {
       states.setSupplierSelect(_cfunc.CommonPartyDropValue())
     }
@@ -450,7 +450,7 @@ const HeaderSection = (props) => {
     dispatch(ItemSaleGoButton_API_Success([]));
     states.setTableData([]);
     states.setInitaialBaseData([]);
-    dispatch(BreadcrumbShowCountlabel(`Count:0 ₹ 0`));
+    dispatch(BreadcrumbShowCountlabel(`Count:0 currency_symbol 0`));
   }
 
   const dataManpulationFunction = async (baseData) => {
