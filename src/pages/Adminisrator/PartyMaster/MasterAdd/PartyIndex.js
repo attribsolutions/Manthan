@@ -134,24 +134,23 @@ const PartyMaster = (props) => {
 	}), [userAccess]);
 
 	useEffect(() => {
-		dispatch(getDistrictOnStateSuccess([]))//clear district privious options
-		dispatch(getCityOnDistrictSuccess([]))//clear City privious options
+
 		dispatch(commonPageFieldSuccess(null));//clear privious PageField
-		dispatch(priceListByPartyActionSuccess([]));//clear privious priceList
 		dispatch(commonPageField(page_id))
 		dispatch(getState());
 		dispatch(getPartyTypelist());
 		dispatch(getClusterlist());
 		dispatch(getcompanyList());
 		dispatch(SSDD_List_under_Company())
-		if ((subPageMode === url.RETAILER_MASTER) || (subPageMode === url.PARTY_SELF_EDIT)) {
-			dispatch(changeCommonPartyDropDetailsAction({ isShow: true }))//change party drop-down  hide
-		}
+	
 		dispatch(getCountryList_Action());
 
 		return () => {
 			dispatch(commonPageFieldListSuccess(null))
 			dispatch(getCountryList_Success());
+			dispatch(priceListByPartyActionSuccess([]));//clear privious priceList
+			dispatch(getCityOnDistrictSuccess([]))//clear City privious options
+			dispatch(getDistrictOnStateSuccess([]))//clear district privious options
 		}
 	}, [])
 
@@ -185,7 +184,6 @@ const PartyMaster = (props) => {
 		prefixTabRef.current = null;
 		dispatch(getDistrictOnStateSuccess([]))//clear district privious options
 		dispatch(getCityOnDistrictSuccess([]))//clear City privious options
-		dispatch(priceListByPartyActionSuccess([]));//clear privious priceList
 		dispatch(priceListByPartyActionSuccess([]));//clear privious priceList
 		dispatch(editPartyIDSuccess({ Status: false }));
 	}
@@ -461,7 +459,7 @@ const PartyMaster = (props) => {
 		};
 
 		if (addressTabDetail.length === 0 && !(subPageMode === url.FRANCHISE_CUSTOMER_MASTER)) {
-			
+
 			setactiveTab1("2")
 			customAlert({
 				Type: 4,
@@ -536,7 +534,7 @@ const PartyMaster = (props) => {
 				(priceListSelect.label === "" || priceListSelect.value === "") &&
 				(subPageMode === url.RETAILER_MASTER || subPageMode === url.FRANCHISE_CUSTOMER_MASTER)
 			) {
-				
+
 				customAlert({
 					Type: 4,
 					Message: alertMessages.PricelistIsRequired,
