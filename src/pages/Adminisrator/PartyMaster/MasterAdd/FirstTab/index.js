@@ -42,7 +42,8 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
         Longitude: "",
         Cluster: "",
         SubCluster: "",
-        PriceList: ""
+        PriceList: "",
+        CountryName: ""
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
@@ -50,7 +51,7 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
     const [priceListSelect, setPriceListSelect] = useState({ value: '' });
     const [partyType_AddMasterAccess, setPartyType_AddMasterAccess] = useState(false)
     const [city_AddMasterAccess, setCity_AddMasterAccess] = useState(false)
-    
+
     const [SubClusterOptions, setSubClusterOptions] = useState({});
 
     const { values } = state;
@@ -85,8 +86,12 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
         districtDropDownLoading,
         cityDropDownLoading,
         clusterDropdown,
-        commonPartyDropSelect
+        commonPartyDropSelect,
+        countryList,
+        countryListloading
     } = useSelector((state) => ({
+        countryList: state.CountryReducer.CountryList,
+        countryListloading: state.CountryReducer.loading,
         clusterDropdown: state.ClusterReducer.ClusterListData,
         stateRedux: state.EmployeesReducer.State,
         DistrictOnState: state.PartyMasterReducer.DistrictOnState,
@@ -259,6 +264,10 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
         label: Data.Name
     }));
 
+    const CountryListOptions = countryList?.map((data) => ({
+        value: data.id,
+        label: data.Country
+    }));
 
 
 
@@ -497,7 +506,7 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
                                 </Col>
                                 : null
                             }
-                           
+
                             {
                                 !(subPageMode === url.RETAILER_MASTER) ?
                                     (partyType_AddMasterAccess) ?
@@ -609,6 +618,28 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
                                 > Verify GSTIN
                                 </Button>
                             </Col>
+
+                            {subPageMode === url.PARTY && <Col md="3">
+                                <FormGroup className="mb-3">
+                                    <Label> {fieldLabel.CountryName} </Label>
+                                    <C_Select
+                                        name="CountryName"
+                                        value={values.CountryName}
+                                        isLoading={countryListloading}
+                                        isSearchable={true}
+                                        className="react-dropdown"
+                                        classNamePrefix="dropdown"
+                                        options={CountryListOptions}
+                                        onChange={(hasSelect, evn) => {
+                                            onChangeSelect({ hasSelect, evn, state, setState });
+                                        }}
+                                    />
+                                    {isError.CountryName.length > 0 && (
+                                        <span className="text-danger f-8"><small>{isError.CountryName}</small></span>
+                                    )}
+                                </FormGroup>
+                            </Col>}
+
 
                         </Row>
                         <Row>

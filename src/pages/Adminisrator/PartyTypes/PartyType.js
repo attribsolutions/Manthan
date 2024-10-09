@@ -85,11 +85,9 @@ const PartyType = (props) => {
         const page_Id = pageId.PARTYTYPE
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
-        // dispatch(getPartyTypelist());
         dispatch(getCountryList_Action());
         return () => {
             dispatch(getCountryList_Success());
-            // dispatch(getPartyTypelistSuccess());
         }
     }, []);
 
@@ -155,7 +153,7 @@ const PartyType = (props) => {
                     values.IsRetailer = IsRetailer
                     values.IsVendor = IsVendor
                     values.IsAdminDivision = IsAdminDivision
-                    values.CountryName = { label: CountryName, value: CountryID }
+                    values.CountryName = CountryID !== null && { label: CountryName, value: CountryID }
 
 
                     values.id = id
@@ -260,7 +258,7 @@ const PartyType = (props) => {
                     IsRetailer: values.IsRetailer,
                     IsVendor: values.IsVendor,
                     IsAdminDivision: values.IsAdminDivision,
-                    CountryID: values.CountryName.value,
+                    Country: values.CountryName.value,
                     Company: _cfunc.loginCompanyID(),
                     CreatedBy: _cfunc.loginUserID(),
                     UpdatedBy: _cfunc.loginUserID(),

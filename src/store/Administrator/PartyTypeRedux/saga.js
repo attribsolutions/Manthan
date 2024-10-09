@@ -24,7 +24,7 @@ function* save_Party_Type_GneFunc({ config }) {// post api
 
 function* Get_PartyType_List_GneFunc() { // get api
   try {
-
+    
     const jsonBody = JSON.stringify({ ...loginJsonBody(), "id": 0 });
     const response = yield call(get_PartyType_List_Api, jsonBody);
     yield put(action.getPartyTypelistSuccess(response.Data));
