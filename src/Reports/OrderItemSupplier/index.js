@@ -92,8 +92,9 @@ const OrderItemSupplierReport = (props) => {
             }
         }
         else if (btnMode === "pdf") {
-            if (tableData.length > 0) {
-                pdfDownloadHandler(tableData)
+            if (ItemSupplierReduxData.length > 0) {
+                pdfDownloadHandler(ItemSupplierReduxData)
+                dispatch(order_Item_Supplier_goBtn_Success([]));
             }
         }
     }, [ItemSupplierReduxData]);
@@ -292,7 +293,7 @@ const OrderItemSupplierReport = (props) => {
                             <C_Button
                                 type="button"
                                 spinnerColor="white"
-                                loading={(goBtnLoading && btnMode === "show") && true}
+                                loading={(goBtnLoading && btnMode === "pdf") && true}
                                 className="btn btn-info m-3 mr"
                                 onClick={() => goAndExcel_Btn_Handler("pdf")}
                             >
