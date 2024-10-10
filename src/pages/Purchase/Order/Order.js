@@ -1124,7 +1124,7 @@ const Order = (props) => {
 
                 const amount = Number(currentObject["Amount"]) || 0.00;
                 const weightage = Number(currentObject["Weightage"]) || 0.00;
-                const row_weightage = Number(currentObject.Quantity) / Number(weightage)
+                const row_weightage = (Number(currentObject.Quantity) * Number(currentObject.BaseUnitQuantity)) / Number(weightage)
                 if (Number(currentObject["Amount"]) > 0) {
                     return {
                         amountSum: accumulator.amountSum + amount,
