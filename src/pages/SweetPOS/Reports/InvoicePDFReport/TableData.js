@@ -28,7 +28,7 @@ export const Discription = [
 
 
 export const ItemRow = (data) => {
-    
+
     const { InvoiceItems = [] } = data
     let hasHedRow = []
     InvoiceItems.forEach(element => {
@@ -46,7 +46,7 @@ export const ItemRow = (data) => {
 
 
 export const GSTDetailsRow = (data, doc) => {
-    
+
     const { InvoiceItems = [] } = data
 
     let totalCGST = 0
@@ -73,10 +73,10 @@ export const DetailsRow = (data) => {
         [`${data.CompanyName}`],
         [`${data.PartyName}`],
         [`------------Tax Invoice---------`],
-        [`${data.PartyAddress}`],
+        [`${data.PartyAddress} Ph.${data.AlternateContactNo}`],
         [`GSTIN:${data.PartyGSTIN}`],
         [`Customer:${data.CustomerName}   GSTIN:${data.CustomerGSTIN}`],
-        [`Contact:${data.AlternateContactNo}`],
+        [`Customer Ph.${data.CustomerMobileNo}`],
         [`Date:${data.InvoiceDate}   ${data?.CreatedOn?.slice(11)}                   Bill No:${data.FullInvoiceNumber}`],
     ]
     if (data.CustomerGSTIN === "") {

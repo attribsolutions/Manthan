@@ -82,6 +82,8 @@ const Order = (props) => {
     const history = useHistory();
     const currentDate_ymd = _cfunc.date_ymd_func();
 
+    const Weight = _cfunc.loginUserDetails().Weight
+
     const initialSubPageMode = useMemo(() => {
         if (_cfunc.IsAuthorisedURL({ subPageMode: history.location.pathname, URL: url.ORDER_2 })) {
             return url.ORDER_2;
@@ -1123,7 +1125,7 @@ const Order = (props) => {
             (accumulator, currentObject) => {
 
                 const amount = Number(currentObject["Amount"]) || 0.00;
-                const weightage = Number(currentObject["Weightage"]) || 0.00;
+                const weightage = (Number(currentObject["Weightage"]) + Number(Weight)) || 0.00;
                 const row_weightage = (Number(currentObject.Quantity) * Number(currentObject.BaseUnitQuantity)) / Number(weightage)
                 if (Number(currentObject["Amount"]) > 0) {
                     return {
