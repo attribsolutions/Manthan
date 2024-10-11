@@ -54,7 +54,7 @@ const CountLabelComp = () => {
                 <span style={{ color: amountColor, marginRight: "5px" }}>{countPart}</span>
                 {/*   this block Add to show Total weightage of order value es show here by targeting through elementi class for optimization*/}
                 {weightageValue !== "" && <>
-                    <span class="weightage-lable" style={{ color: countAndRupeeColor, marginRight: "5px" }}>weightage:</span>
+                    <span class="weightage-lable" style={{ color: countAndRupeeColor, marginRight: "5px" }}>Weight:</span>
                     <span class="weightage-value" style={{ color: amountColor }}>{weightageValue}</span> &nbsp;
                 </>}
                 {amountPart && (

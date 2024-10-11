@@ -44,7 +44,7 @@ const replaceValues = (target, source) => {
 };
 
 export const Rows_1 = ({ OrderItem = [] }) => {
-    
+
     const grouped = groupBy(OrderItem, ele => ele.SubGroup);
 
     let hasHedRow = []
@@ -63,14 +63,26 @@ export const Rows_1 = ({ OrderItem = [] }) => {
         hasHedRow.push(totalrow());
 
         i.forEach((element, inx_2) => {
+            // Calculate spaces based on the number of digits in Quantity
+            const quantityString = Number(element.Quantity).toString();
+            let extraSpaces = '';
+
+            if (quantityString.length === 1) {
+                extraSpaces = '       '; // 5 spaces for 2-digit numbers
+            } else if (quantityString.length === 2) {
+                extraSpaces = '     '; // 3 spaces for 3-digit numbers
+            }
+            else if (quantityString.length === 3) {
+                extraSpaces = '    '; // 3 spaces for 3-digit numbers
+            }
+
             const tableitemRow = [
                 `${element.ItemName}`,
-                `${Number(element.Quantity).toFixed(2)}${element.PrimaryUnitName}${element.UnitName}`,
+                `${Number(element.Quantity)}${extraSpaces}${element.PrimaryUnitName}     ${element.UnitName}`,
                 `${element.Comment === null ? "" : element.Comment}`,
-
             ];
             hasHedRow.push(tableitemRow);
-        })
+        });
 
     })
 

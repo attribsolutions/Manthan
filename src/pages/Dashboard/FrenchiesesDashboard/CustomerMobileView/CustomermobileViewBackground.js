@@ -204,8 +204,8 @@ export const CustomermobileViewBackground = (props) => {
                         src={cbm_logo}
                         alt="CBM Logo"
                         style={{
-                            width: '250px',
-                            height: '250px',
+                            width: '200px',
+                            height: '200px',
                             marginBottom: '-45px',
                             marginTop: '-50px'
                         }}
