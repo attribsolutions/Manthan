@@ -1,48 +1,25 @@
 import React, { useEffect, useState, } from "react";
 import {
-    Card,
-    CardBody,
-    CardHeader,
-    Col,
     Container,
-    FormGroup,
     Input,
-    Label,
-    Row
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
-import { Breadcrumb_inputName, BreadcrumbShowCountlabel, commonPageFieldSuccess } from "../../../../store/actions";
+import { BreadcrumbShowCountlabel, commonPageFieldSuccess } from "../../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { commonPageField } from "../../../../store/actions";
 import { useHistory } from "react-router-dom";
-import {
-    comAddPageFieldFunc,
-    formValid,
-    initialFiledFunc,
-    onChangeSelect,
-    onChangeText,
-    resetFunction
-} from "../../../../components/Common/validationFunction";
-
 import { PageLoadingSpinner, SaveButton } from "../../../../components/Common/CommonButton";
 import {
     breadcrumbReturnFunc,
-    loginUserID,
-    btnIsDissablefunc,
     metaTagLabel,
     loginCompanyID,
     loginPartyID,
-    tableInputArrowUpDounFunc
 } from "../../../../components/Common/CommonFunction";
 import { url, pageId, mode } from "../../../../routes/index";
 import { customAlert } from "../../../../CustomAlert/ConfirmDialog";
 import { C_Select } from "../../../../CustomValidateForm";
 import { GenralMasterSubType } from "../../../../helpers/backend_helper";
 import { SPos_MachineTypeList_Action, SPos_MachineTypeList_Success, SPos_MachineTypeSave_Action, SPos_MachineTypeSave_Success } from "../../../../store/SweetPOSStore/Administrator/MachineTypeMasterRedux/action";
-import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
-import ToolkitProvider from "react-bootstrap-table2-toolkit";
-import BootstrapTable from "react-bootstrap-table-next";
-import { globalTableSearchProps } from "../../../../components/Common/SearchBox/MySearch";
 import SaveButtonDraggable from "../../../../components/Common/saveButtonDraggable";
 import GlobalCustomTable from "../../../../GlobalCustomTable";
 
@@ -58,7 +35,6 @@ const MachineTypeMaster = (props) => {
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
         postMsg,
-        pageField,
         userAccess,
         saveBtnloading,
         listBtnLoading,
@@ -170,28 +146,30 @@ const MachineTypeMaster = (props) => {
         {
             text: "Machine Type",
             dataField: "",
-            style: () => ({ width: "30%" }),
             formatExtraData: { machineTypeOptions: machineTypeOptions },
             formatter: (value, row, key, { machineTypeOptions }) => {
                 return (
-                    <C_Select
-                        defaultValue={!(row.MachineTypeDetails.length > 0) ? "" :
-                            row?.MachineTypeDetails?.map((index) => ({
-                                value: index.id,
-                                label: index.MachineTypeName,
-                            }))}
+                    <div style={{ minWidth: "290px" }}>
+                        <C_Select
+                            defaultValue={!(row.MachineTypeDetails.length > 0) ? "" :
+                                row?.MachineTypeDetails?.map((index) => ({
+                                    value: index.id,
+                                    label: index.MachineTypeName,
+                                }))}
 
-                        options={machineTypeOptions}
-                        isMulti={true}
-                        onChange={e => {
-                            row["MachineTypeDetails"] = e.map((index) => ({
-                                id: index.value,
-                                MachineTypeName: index.label,
-                            }));
+                            options={machineTypeOptions}
+                            isMulti={true}
+                            onChange={e => {
+                                row["MachineTypeDetails"] = e.map((index) => ({
+                                    id: index.value,
+                                    MachineTypeName: index.label,
+                                }));
 
-                        }}
-                    >
-                    </C_Select >
+                            }}
+                        >
+                        </C_Select >
+                    </div>
+
                 )
             },
         },
@@ -211,12 +189,52 @@ const MachineTypeMaster = (props) => {
                     />
                 )
             },
-        }
+        },
+        {
+            text: "ClientID",
+            dataField: "ClientID",
+        },
+        {
+            text: "MachineRole",
+            dataField: "MachineRole",
+        },
+        {
+            text: "IsAutoUpdate",
+            dataField: "IsAutoUpdate",
+        },
+        {
+            text: "IsGiveUpdate",
+            dataField: "IsGiveUpdate",
+        },
+        {
+            text: "IsService",
+            dataField: "IsService",
+        },
+        {
+            text: "MachineName",
+            dataField: "MachineName",
+        },
+        {
+            text: "ServerSequence",
+            dataField: "ServerSequence",
+        },
+        {
+            text: "UploadSaleRecordCount",
+            dataField: "UploadSaleRecordCount",
+        },
+        {
+            text: "Validity",
+            dataField: "Validity",
+        },
+        {
+            text: "Version",
+            dataField: "Version",
+        },
     ];
 
     const SaveHandler = async (event) => {
         event.preventDefault();
-        debugger
+
         try {
             const jsonBody = JSON.stringify(tableListData.map((i) => ({
                 "MacID": i.MacID,
@@ -225,7 +243,7 @@ const MachineTypeMaster = (props) => {
                 "Party": loginPartyID(),
                 "ClientID": i.ClientID,
             })))
-            console.log(jsonBody)
+
             dispatch(SPos_MachineTypeSave_Action({ jsonBody }));
 
         } catch (e) { }
