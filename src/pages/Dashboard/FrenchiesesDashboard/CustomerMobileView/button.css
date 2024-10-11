@@ -1,8 +1,12 @@
 /* From Uiverse.io by marcelodolza */
 .button {
     --primary: #ff5569;
-    --neutral-1: hsl(220, 35%, 72%);
+    --neutral-1: hsl(130, 55%, 64%);
     --neutral-2: #dce9f5;
+
+
+    /* --neutral-1: hsl(220, 35%, 72%);
+    --neutral-2: #dce9f5; */
     --radius: 14px;
 
     cursor: pointer;
@@ -292,8 +296,14 @@
     position: relative;
 }
 
-.state--default span:nth-child(4) {
+.state--default span:nth-child(6) {
     margin-right: 5px;
+}
+
+
+.state--sent span:nth-child(6) {
+    margin-right: 5px;
+
 }
 
 .state--sent {

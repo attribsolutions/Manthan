@@ -281,7 +281,7 @@ export const CustomermobileViewBackground = (props) => {
                                     </svg>
                                 </div>
                                 <p style={{ top: "10px" }} >
-                                    {['S', 'a', 'v', 'e', 'C', 'o', 'n', 't', 'a', 'c', 't'].map((letter, index) => (
+                                    {['S', 'u', 'b', 'm', 'i', 't', 'C', 'o', 'n', 't', 'a', 'c', 't'].map((letter, index) => (
                                         <span key={index} style={{ '--i': index }}>{letter}</span>
                                     ))}
                                 </p>
@@ -309,7 +309,7 @@ export const CustomermobileViewBackground = (props) => {
                                     </svg>
                                 </div>
                                 <p>
-                                    {['S', 'a', 'v', 'e', 'S', 'u', 'c', 'c', 'e', 's', 's', 'f', 'u', 'l', 'l', 'y'].map((letter, index) => (
+                                    {['S', 'u', 'b', 'm', 'i', 't', 'S', 'u', 'c', 'c', 'e', 's', 's', 'f', 'u', 'l', 'l', 'y'].map((letter, index) => (
                                         <span key={index} style={{ '--i': index }}>{letter}</span>
                                     ))}
                                 </p>
