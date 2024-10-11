@@ -40,8 +40,10 @@ const CountLabelComp = () => {
     const RemaningPart = parts.length > 1 ? parts[1].trim() : "";
     const amountPart = RemaningPart.split(" ")[0]
 
-    const weightageValue = RemaningPart.substring(RemaningPart.indexOf("weightage") + 10).trim();  // Extracts value between 'weightage' and 'kg'
-
+    let weightageValue = "";
+    if (RemaningPart.includes("weightage")) {
+        weightageValue = RemaningPart.substring(RemaningPart.indexOf("weightage") + 10).trim();
+    }
     debugger
     const countAndRupeeColor = "#fff"
     const amountColor = "#ffc735"
