@@ -142,7 +142,7 @@ const PartyMaster = (props) => {
 		dispatch(getClusterlist());
 		dispatch(getcompanyList());
 		dispatch(SSDD_List_under_Company())
-	
+
 		dispatch(getCountryList_Action());
 
 		return () => {
@@ -246,7 +246,10 @@ const PartyMaster = (props) => {
 							PAN: hasEditVal.PAN,
 							Email: hasEditVal.Email,
 							AlternateContactNo: hasEditVal.AlternateContactNo,
-							CountryName: {
+							CountryName: hasEditVal.Country === null ? {
+								label: "India",
+								value: 1,
+							} : {
 								label: hasEditVal.Country.Country,
 								value: hasEditVal.Country.id,
 							},
