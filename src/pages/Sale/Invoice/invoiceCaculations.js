@@ -1,4 +1,4 @@
-import { amountCommaSeparateFunc, CommonConsole, compareGSTINState, hasDecimalCheckFunc, loginSystemSetting, roundToDecimalPlaces } from "../../../components/Common/CommonFunction"
+import { amountCommaSeparateFunc, CommonConsole, compareGSTINState, hasDecimalCheckFunc, loginSystemSetting, loginUserDetails, roundToDecimalPlaces } from "../../../components/Common/CommonFunction"
 import { decimalRegx_3dit, onlyNumberRegx } from "../../../CustomValidateForm";
 
 
@@ -34,12 +34,12 @@ export const invoice_discountCalculate_Func = (row, index1, IsComparGstIn) => {
     let IGST_Percentage = 0;
     let SGST_Percentage = (GST_Percentage / 2);
     let CGST_Percentage = (GST_Percentage / 2);
-    
+
     if (IsComparGstIn) {  //compare Supplier and Customer are Same State by GSTIn Number
-        
+
         let isSameSate = compareGSTINState(IsComparGstIn.GSTIn_1, IsComparGstIn.GSTIn_2)
         if (isSameSate) {// iF isSameSate = true ===not same GSTIn
-            
+
             CGST_Amount = 0;
             SGST_Amount = 0;
             IGST_Amount = Number(roundedGstAmount.toFixed(2))
@@ -66,15 +66,34 @@ export const invoice_discountCalculate_Func = (row, index1, IsComparGstIn) => {
 // ************************************************************************
 
 export const settingBaseRoundOffAmountFunc = (tableList = []) => {
+    const Weight = loginUserDetails().Weight
+
     // Get the system settings
     const systemSetting = loginSystemSetting();
     const isGrandAmtRound = systemSetting.InvoiceAmountRoundConfiguration === '1';
     const isTCS_AmtRound = systemSetting.TCSAmountRoundConfiguration === '1';
 
     // Calculate the sum of the item TotalAmount in the tableList
-    let sumOfGrandTotal = tableList.reduce((accumulator, index1) => {
-        return accumulator + Number(index1.ItemTotalAmount) || 0
-    }, 0);
+    // let sumOfGrandTotal = tableList.reduce((accumulator, index1) => {
+    //     return accumulator + Number(index1.ItemTotalAmount) || 0
+    // }, 0);
+
+    debugger
+    let result = tableList.reduce(
+
+        (accumulator, index1) => {
+            const weightage = (Number(index1["Weightage"]) + Number(Weight)) || 0.00;
+            const row_weightage = (Number(index1.Quantity) * Number(index1.BaseUnitQuantity)) / Number(weightage)
+            return {
+                grandTotal: accumulator.grandTotal + (Number(index1.ItemTotalAmount) || 0),
+                weightageTotal: accumulator.weightageTotal + (row_weightage || 0)
+            };
+        },
+        { grandTotal: 0, weightageTotal: 0 }
+    );
+
+    let sumOfGrandTotal = result.grandTotal;
+    let sumOfWeightageTotal = result.weightageTotal;
 
 
     let TCS_Amount = 0; // Initial TCS Amount
@@ -96,6 +115,7 @@ export const settingBaseRoundOffAmountFunc = (tableList = []) => {
         sumOfGrandTotal: isGrandAmtRound ? Math.round(sumOfGrandTotal) : Number(sumOfGrandTotal).toFixed(2), // Round off or format the sumOfGrandTotal
         RoundOffAmount: (Math.round(sumOfGrandTotal) - sumOfGrandTotal).toFixed(2),// Calculate the round-off amount
         TCS_Amount: isTCS_AmtRound ? Math.round(TCS_Amount) : Number(TCS_Amount).toFixed(2),// Round off or format the TCS Amount
+        sumOfWeightageTotal: sumOfWeightageTotal
     };
 };
 
