@@ -47,7 +47,7 @@ import { Group_Subgroup_func, GroupSubgroupDisplay, ModifyTableData_func } from 
 
 
 let editVal = {}
-let initial_BredcrumbMsg = `Count:0 currency_symbol 0.00 weightage 0.00 kg`
+let initial_BredcrumbMsg = `Count:0 currency_symbol 0.00 weight 0.00 kg`
 function initialState(history) {
 
     let page_Id = '';
@@ -343,7 +343,7 @@ const Order = (props) => {
                 setTermsAndConTable(termsAndCondition)
 
                 const commaSeparateAmount = _cfunc.amountCommaSeparateFunc(Number(hasEditVal.OrderAmount).toFixed(2));
-                dispatch(_act.BreadcrumbShowCountlabel(`Count:${orderItems.length} currency_symbol ${commaSeparateAmount} weightage ${hasEditVal?.weightage} kg`))
+                dispatch(_act.BreadcrumbShowCountlabel(`Count:${orderItems.length} currency_symbol ${commaSeparateAmount} weight ${hasEditVal?.weightage} kg`))
 
                 seteditCreatedBy(hasEditVal.CreatedBy)
             }
@@ -1150,7 +1150,7 @@ const Order = (props) => {
 
         const weightage_lable = document.querySelectorAll('.weightage-lable');
         const weightage_value = document.querySelectorAll('.weightage-value');
-        weightage_lable.forEach(element => { element.innerText = "weightage:"; });
+        weightage_lable.forEach(element => { element.innerText = "weight:"; });
         weightage_value.forEach(element => { element.innerText = `${totals.weightageSum} kg`; });
         elements.forEach(element => { element.innerText = commaSeparateAmount; });
 
@@ -1587,7 +1587,7 @@ const Order = (props) => {
                                                                     })
                                                                     return;
                                                                 }
-                                                                dispatch(_act.BreadcrumbShowCountlabel(`Count:${itemSelectDropOptions.length} currency_symbol 0.00 weightage 0.00 kg`))
+                                                                dispatch(_act.BreadcrumbShowCountlabel(`Count:${itemSelectDropOptions.length} currency_symbol 0.00 weight 0.00 kg`))
                                                                 setSelecedItemWiseOrder(false)
                                                                 setOrderItemTable(itemSelectDropOptions)
                                                                 setItemSelect(allLabelWithBlank)

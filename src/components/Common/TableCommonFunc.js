@@ -235,16 +235,15 @@ export default DynamicColumnHook
 
 export const GroupSubgroupDisplay = ({ group, subgroup }) => {
   return (
-    <Row>
-      <Col sm={12} className="mt-n2 mb-n1">
+    <Row className="align-items-center">
+      <Col sm={6} className="mt-n2 mb-n1 d-flex justify-content-between">
         {/* Group Span */}
-        <span className="group-span">
+        <span className="group-span d-flex align-items-center">
           <span className="group-text">Group</span> ({group})
           <span className="group-arrow"></span>
         </span>
-
         {/* SubGroup Span */}
-        <span className="subgroup-span">
+        <span className="subgroup-span d-flex align-items-center">
           <span className="subgroup-text">Sub Group</span> ({subgroup})
           <span className="subgroup-arrow"></span>
         </span>

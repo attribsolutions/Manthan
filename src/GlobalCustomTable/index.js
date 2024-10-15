@@ -31,13 +31,14 @@ const GlobalCustomTable = ({
 
 
     const debounceHandleSearch = _debounce((val) => {
+        
         setCurrentPage(1); // Update currentPage when data changes
         setSearchText(val);
     }, 300);
 
     useEffect(() => {
         globalTableSearchProps({ onSearch: debounceHandleSearch });
-    }, []); // Ensure that globalTableSearchProps is called after mounting
+    }); // Ensure that globalTableSearchProps is called after mounting
 
 
     const rowClasses = (row) => {
@@ -54,6 +55,7 @@ const GlobalCustomTable = ({
     };
 
     const filteredData = useMemo(() => {
+        
         return data.filter((row) =>
             columns.some((column) => {
                 const columnValue = row[column.dataField];

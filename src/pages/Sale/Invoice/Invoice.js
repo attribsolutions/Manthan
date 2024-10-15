@@ -61,6 +61,7 @@ const Invoice = (props) => {
     const subPageMode = history.location.pathname
     const systemSetting = _cfunc.loginSystemSetting();
 
+
     const saveBtnid = `saveBtn${subPageMode}`
 
     const fileds = {
@@ -132,6 +133,7 @@ const Invoice = (props) => {
         dispatch(commonPageField(pageId.INVOICE_1))
         dispatch(GoButtonForinvoiceAddSuccess([]))
 
+
     }, []);
 
     // Common Party Dropdown useEffect
@@ -180,7 +182,7 @@ const Invoice = (props) => {
 
     useEffect(async () => {
         if (postMsg.Status === true && postMsg.StatusCode === 200) {
-            
+
             dispatch(invoiceSaveActionSuccess({ Status: false })); // Reset the status to false
             const config = {
                 editId: postMsg.TransactionID.join(', '),////for saveAndDownloadPdfMode
@@ -259,7 +261,9 @@ const Invoice = (props) => {
     }, [makeIBInvoice]);
 
     useEffect(() => {
+
         if (gobutton_Add.Status === true && gobutton_Add.StatusCode === 200) {
+
             setState((i) => {
                 const obj = { ...i }
                 obj.values.Customer = gobutton_Add.customer;
@@ -274,6 +278,7 @@ const Invoice = (props) => {
             //*********************************************************** */
             setOrderIDs(gobutton_Add.Data.OrderIDs)
             dispatch(GoButtonForinvoiceAddSuccess({ Status: false }))
+
         }
     }, [gobutton_Add]);
 
@@ -654,8 +659,11 @@ const Invoice = (props) => {
         const calcalateGrandTotal = settingBaseRoundOffAmountFunc(tableList)
         const dataCount = tableList.length;
         const commaSeparateAmount = _cfunc.amountCommaSeparateFunc(Number(calcalateGrandTotal.sumOfGrandTotal));
+        // 
+        dispatch(BreadcrumbShowCountlabel(`Count:${dataCount} currency_symbol ${commaSeparateAmount} weight ${calcalateGrandTotal.sumOfWeightageTotal.toString()} kg`))
 
-        dispatch(BreadcrumbShowCountlabel(`Count:${dataCount} currency_symbol ${commaSeparateAmount}`))
+
+
 
     }
     useEffect(() => {
@@ -707,7 +715,7 @@ const Invoice = (props) => {
 
 
     const SaveHandler = async (event) => {
-        
+
         event.preventDefault();
         const btnId = event.target.id;
 
