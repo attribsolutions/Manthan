@@ -385,9 +385,10 @@
 
 
 
-.group-span, .subgroup-span {
+.group-span,
+.subgroup-span {
   background: #cacaebf5;
-  padding: 6px 10px;
+  padding: 1px 10px;
   border-radius: 13px;
   box-shadow: rgba(0, 0, 0, 0.2) 0px 1px 6px;
   position: relative;
@@ -397,14 +398,19 @@
 }
 
 .group-span {
-  padding: 6px 10px;
+  padding: 1px 10px;
+  white-space: nowrap;
+  display: inline-block;
 }
 
 .subgroup-span {
   font-size: 13px;
+  white-space: nowrap;
+  display: inline-block;
 }
 
-.group-arrow, .subgroup-arrow {
+.group-arrow,
+.subgroup-arrow {
   content: '';
   position: absolute;
   right: -12px;
@@ -417,6 +423,7 @@
   border-left: 15px solid #cacaebf5;
 }
 
-.group-text, .subgroup-text {
+.group-text,
+.subgroup-text {
   color: black;
 }
