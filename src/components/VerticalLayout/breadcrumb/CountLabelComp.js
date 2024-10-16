@@ -44,7 +44,7 @@ const CountLabelComp = () => {
     if (RemaningPart.includes("weight")) {
         weightageValue = RemaningPart.substring(RemaningPart.indexOf("weight") + 6).trim();
     }
-    
+
     const countAndRupeeColor = "#fff"
     const amountColor = "#ffc735"
 
