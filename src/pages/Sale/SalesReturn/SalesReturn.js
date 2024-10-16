@@ -48,6 +48,7 @@ import { deltBtnCss } from "../../../components/Common/ListActionsButtons";
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 import { CheckStockEntryForFirstTransaction, CheckStockEntryForFirstTransactionSuccess, CheckStockEntryforBackDatedTransaction, CheckStockEntryforBackDatedTransactionSuccess } from "../../../store/Inventory/StockEntryRedux/action";
+import GlobalCustomTable from "../../../GlobalCustomTable";
 
 
 const SalesReturn = (props) => {
@@ -123,7 +124,9 @@ const SalesReturn = (props) => {
     useEffect(() => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(pageId.SALES_RETURN))
-        dispatch(BreadcrumbShowCountlabel(`${"Total Amount"} :${0}`))
+        dispatch(BreadcrumbShowCountlabel(`Count:${0} currency_symbol ${0}`))
+
+
         return () => {
             dispatch(Retailer_List_Success([]));
             dispatch(CheckStockEntryForFirstTransactionSuccess({ status: false }))
@@ -205,7 +208,7 @@ const SalesReturn = (props) => {
 
 
     useEffect(() => {
-        
+
         const jsonBody = JSON.stringify({
             "FromDate": values.ReturnDate,
             "PartyID": commonPartyDropSelect.value
@@ -309,8 +312,9 @@ const SalesReturn = (props) => {
                 });
 
                 let sumOfGrandTotal = updateItemArr.reduce((accumulator, currentObject) => accumulator + Number(currentObject["roundedTotalAmount"]) || 0, 0);
-                let count_label = `${"Total Amount"} :${Number(sumOfGrandTotal).toLocaleString()}`
-                dispatch(BreadcrumbShowCountlabel(count_label));
+                let count_label = `Count:${updateItemArr.length} currency_symbol ${Number(sumOfGrandTotal).toLocaleString()}`
+                dispatch(BreadcrumbShowCountlabel(count_label))
+
                 updateItemArr.sort((a, b) => b.id - a.id);
                 setTableArr(updateItemArr);
                 setState((i) => {
@@ -748,15 +752,15 @@ const SalesReturn = (props) => {
         row.roundedTotalAmount = caculate.roundedTotalAmount;
 
         let sumOfGrandTotal = TablelistArray.reduce((accumulator, currentObject) => accumulator + Number(currentObject["roundedTotalAmount"]) || 0, 0);
-        let count_label = `${"Total Amount"} :${Number(sumOfGrandTotal).toLocaleString()}`
+        let count_label = `Count:${TablelistArray.length} currency_symbol ${Number(sumOfGrandTotal).toLocaleString()}`
         dispatch(BreadcrumbShowCountlabel(count_label))
     }
 
     const deleteButtonAction = (row, TablelistArray = []) => {
         const newArr = TablelistArray.filter((index) => !(index.id === row.id))
         let sumOfGrandTotal = newArr.reduce((accumulator, currentObject) => accumulator + Number(currentObject["roundedTotalAmount"]) || 0, 0);
-        let count_label = `${"Total Amount"} :${Number(sumOfGrandTotal).toLocaleString()}`
-        dispatch(BreadcrumbShowCountlabel(count_label));
+        let count_label = `Count:${newArr.length} currency_symbol ${Number(sumOfGrandTotal).toLocaleString()}`
+        dispatch(BreadcrumbShowCountlabel(count_label))
         setTableArr(newArr)
     }
 
@@ -1174,52 +1178,30 @@ const SalesReturn = (props) => {
                                                 defaultChecked={isSaleableStock}
                                                 onChange={(event) => { setIsSaleableStock(event.target.checked) }}
                                             />
-
                                         </Col>
-
                                     </FormGroup>
                                 </Col >
-
-
                             </Row>
                         </div>
-
-                        <div>
-                            <ToolkitProvider
+                        <div className="mb-1">
+                            <GlobalCustomTable
                                 keyField={"id"}
+                                key={`table-key-${returnMode}`}
                                 data={TableArr}
                                 columns={pagesListColumns}
-                                search
-                            >
-                                {(toolkitProps) => (
-                                    <React.Fragment>
-                                        <Row>
-                                            <Col xl="12">
-                                                <div className="table-responsive table" style={{ minHeight: "60vh" }}>
-                                                    <BootstrapTable
-                                                        keyField={"id"}
-                                                        key={`table-key-${returnMode}`}
-                                                        id="table_Arrow"
-                                                        classes={"table  table-bordered "}
-                                                        noDataIndication={
-                                                            <div className="text-danger text-center ">
-                                                                Items Not available
-                                                            </div>
-                                                        }
-                                                        {...toolkitProps.baseProps}
-                                                        onDataSizeChange={(e) => {
-                                                            _cfunc.tableInputArrowUpDounFunc("#table_Arrow")
-                                                        }}
-                                                    />
-                                                </div>
-                                            </Col>
-                                            {globalTableSearchProps(toolkitProps.searchProps,)}
-                                        </Row>
-
-                                    </React.Fragment>
-                                )}
-                            </ToolkitProvider>
+                                id="table_Arrow"
+                                noDataIndication={
+                                    <div className="text-danger text-center ">
+                                        Items Not available
+                                    </div>
+                                }
+                                onDataSizeChange={(e) => {
+                                    _cfunc.tableInputArrowUpDounFunc("#table_Arrow")
+                                }}
+                            />
                         </div>
+
+
 
                         {
                             TableArr.length > 0 &&

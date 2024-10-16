@@ -22,7 +22,7 @@ import {
     resetFunction,
 } from "../../../components/Common/validationFunction";
 import Select from "react-select";
-import { Change_Button, C_Button, SaveButton, } from "../../../components/Common/CommonButton";
+import { C_Button, SaveButton, } from "../../../components/Common/CommonButton";
 import { url, mode, pageId } from "../../../routes/index"
 import { GetVenderSupplierCustomer, GetVenderSupplierCustomerSuccess } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
@@ -42,7 +42,8 @@ import Slidewithcaption from "../../../components/Common/CommonImageComponent";
 import { deltBtnCss } from "../../../components/Common/ListActionsButtons";
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
-import { CheckStockEntryForFirstTransaction, CheckStockEntryForFirstTransactionSuccess, CheckStockEntryforBackDatedTransaction, CheckStockEntryforBackDatedTransactionSuccess } from "../../../store/Inventory/StockEntryRedux/action";
+import { CheckStockEntryForFirstTransaction, CheckStockEntryForFirstTransactionSuccess, CheckStockEntryforBackDatedTransaction } from "../../../store/Inventory/StockEntryRedux/action";
+import GlobalCustomTable from "../../../GlobalCustomTable";
 
 
 const PurchaseReturn = (props) => {
@@ -131,7 +132,7 @@ const PurchaseReturn = (props) => {
         dispatch(InvoiceNumberSuccess([]))
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(pageId.PURCHASE_RETURN))
-        dispatch(BreadcrumbShowCountlabel(`${"Total Amount"} :${0}`))
+        dispatch(BreadcrumbShowCountlabel(`Count:${0} currency_symbol ${0}`))
     }, []);
 
     // Common Party Dropdown useEffect
@@ -320,6 +321,11 @@ const PurchaseReturn = (props) => {
                 });
 
                 updateItemArr.sort((a, b) => b.id - a.id);
+                let sumOfGrandTotal = updateItemArr.reduce((accumulator, index1) => accumulator + Number(index1.ItemTotalAmount) || 0, 0);
+
+                let count_label = `Count:${updateItemArr.length} currency_symbol ${Number(sumOfGrandTotal).toLocaleString()}`
+
+                dispatch(BreadcrumbShowCountlabel(count_label))
                 setTableArr(updateItemArr);
                 setState((i) => {
                     let a = { ...i }
@@ -458,7 +464,7 @@ const PurchaseReturn = (props) => {
                             defaultValue={index1.Quantity}
                             onChange={(event) => {
                                 returnQtyOnChange(event, index1, _key);
-                                totalAmountCalcuationFunc(tableList);
+                                totalAmountCalcuationFunc(tableList, index1);
                             }}
                         />
                     </div>
@@ -835,18 +841,19 @@ const PurchaseReturn = (props) => {
         },
     ];
 
-    const totalAmountCalcuationFunc = (tableList = []) => {
-
+    const totalAmountCalcuationFunc = (tableList = [],) => {
+        debugger
         let sumOfGrandTotal = tableList.reduce((accumulator, index1) => accumulator + Number(index1.ItemTotalAmount) || 0, 0);
-        let count_label = `${"Total Amount"} :${Number(sumOfGrandTotal).toLocaleString()}`
+        let count_label = `Count:${tableList.length} currency_symbol ${Number(sumOfGrandTotal).toLocaleString()}`
         dispatch(BreadcrumbShowCountlabel(count_label))
     }
 
     const deleteButtonAction = (row, TablelistArray = []) => {
         const newArr = TablelistArray.filter((index) => !(index.id === row.id))
         let sumOfGrandTotal = newArr.reduce((accumulator, index1) => accumulator + Number(index1.ItemTotalAmount) || 0, 0);
-        let count_label = `${"Total Amount"} :${Number(sumOfGrandTotal).toLocaleString()}`
-        dispatch(BreadcrumbShowCountlabel(count_label));
+
+        let count_label = `Count:${newArr.length} currency_symbol ${Number(sumOfGrandTotal).toLocaleString()}`
+        dispatch(BreadcrumbShowCountlabel(count_label))
         setTableArr(newArr)
     }
 
@@ -1288,7 +1295,7 @@ const PurchaseReturn = (props) => {
 
                     </div>
 
-                    <div>
+                    {/* <div>
                         <ToolkitProvider
                             keyField={"id"}
                             data={TableArr}
@@ -1323,6 +1330,25 @@ const PurchaseReturn = (props) => {
                                 </React.Fragment>
                             )}
                         </ToolkitProvider>
+                    </div> */}
+
+
+                    <div className="mb-1">
+                        <GlobalCustomTable
+                            keyField={"id"}
+                            key={`table-key-${returnMode}`}
+                            data={TableArr}
+                            columns={pagesListColumns}
+                            id="table_Arrow"
+                            noDataIndication={
+                                <div className="text-danger text-center ">
+                                    Items Not available
+                                </div>
+                            }
+                            onDataSizeChange={(e) => {
+                                _cfunc.tableInputArrowUpDounFunc("#table_Arrow")
+                            }}
+                        />
                     </div>
 
                     {
