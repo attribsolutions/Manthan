@@ -1121,11 +1121,11 @@ const Order = (props) => {
         row["Amount"] = calculate.roundedTotalAmount
 
 
-        const totals = tableList.reduce(
+        let totals = tableList.reduce(
             (accumulator, currentObject) => {
 
                 const amount = Number(currentObject["Amount"]) || 0.00;
-                const weightage = (Number(currentObject["Weightage"]) + Number(Weight)) || 0.00;
+                const weightage = (Number(currentObject["Weightage"])) || 0.00;
                 const row_weightage = (Number(currentObject.Quantity) * Number(currentObject.BaseUnitQuantity)) / Number(weightage)
                 if (Number(currentObject["Amount"]) > 0) {
                     return {
@@ -1141,6 +1141,11 @@ const Order = (props) => {
             { amountSum: 0.00, weightageSum: 0.00 }
         );
 
+        if (Number(totals.weightageSum) >= 500) {
+            const Overweight = Number(totals.weightageSum) * (Number(Weight) / 100)
+            totals.weightageSum = totals.weightageSum + Overweight
+        }
+
 
         const commaSeparateAmount = _cfunc.amountCommaSeparateFunc(totals.amountSum.toFixed(2))
 
@@ -1151,7 +1156,7 @@ const Order = (props) => {
         const weightage_lable = document.querySelectorAll('.weightage-lable');
         const weightage_value = document.querySelectorAll('.weightage-value');
         weightage_lable.forEach(element => { element.innerText = "weight:"; });
-        weightage_value.forEach(element => { element.innerText = `${totals.weightageSum} kg`; });
+        weightage_value.forEach(element => { element.innerText = `${(totals.weightageSum).toFixed(2)} kg`; });
         elements.forEach(element => { element.innerText = commaSeparateAmount; });
 
     };
