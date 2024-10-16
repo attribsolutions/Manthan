@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Col, FormGroup, Input, Label, Row, } from "reactstrap";
 import { useHistory } from "react-router-dom";
@@ -32,6 +32,7 @@ import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMs
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 import GlobalCustomTable from "../../../GlobalCustomTable"
 import { sideBarPageFiltersInfoAction } from "../../../store/Utilites/PartyDrodown/action";
+import { GroupSubgroupDisplay, ModifyTableData_func } from "../../../components/Common/TableCommonFunc";
 
 const ItemMasterBulkUpdate = (props) => {
 
@@ -303,6 +304,7 @@ const ItemMasterBulkUpdate = (props) => {
             dataField: "Newvalue",
             formatExtraData: { forceRefresh, dropdownOptions: selectFieldNameDropOptions, tableData: tableData },
             formatter: (cellContent, row, key, { dropdownOptions, tableData }) => {
+                if (row.GroupRow || row.SubGroupRow) { return }
 
                 return (
                     <>
@@ -370,6 +372,8 @@ const ItemMasterBulkUpdate = (props) => {
             dataField: "",
             formatExtraData: { forceRefresh },
             formatter: (cellContent, row) => {
+                if (row.GroupRow || row.SubGroupRow) { return }
+
                 return (
                     <div style={{ width: "180px" }}>
                         <Col>
@@ -387,19 +391,48 @@ const ItemMasterBulkUpdate = (props) => {
         };
     };
 
+    const rowStyle = (row, rowIndex) => {
+        if (row.GroupRow) {
+            return { backgroundColor: 'white', fontWeight: 'bold', fontSize: '18px' };
+        } else if (row.SubGroupRow) {
+            return { backgroundColor: '#f2f2f2', fontWeight: 'bold', fontSize: '15px' };
+        }
+        return {};
+    };
+
+    const rowClasses = (row) => {
+        if (row.GroupRow || row.SubGroupRow) {
+            return 'group-row hide-border';
+        }
+        return '';
+    };
+
     const pagesListColumns = [
+
         {
-            text: "Group",
-            dataField: "GroupName",
-        },
-        {
-            text: "SubGroup",
-            dataField: "SubGroupName",
-        },
-        {
-            text: "Name",
+            text: "Item Name",
             dataField: "ItemName",
-            sort: true
+            sort: true,
+            formatter: (value, row, k) => {
+                if (row.SubGroupRow) {
+                    const [Group, SubGroup] = row.Group_Subgroup.split(/-(.+)/);
+                    debugger
+                    return (
+                        <GroupSubgroupDisplay group={Group} subgroup={SubGroup} />
+                    );
+                } else {
+                    const [itemName] = row.ItemName.split('-');
+                    return (
+                        <>
+                            <div>
+                                {itemName}
+                            </div>
+                        </>
+                    )
+                }
+
+
+            },
         },
         {
             text: SelectFieldName.label,
@@ -476,6 +509,8 @@ const ItemMasterBulkUpdate = (props) => {
         } catch (e) { }
     };
 
+    const processedData = useMemo(() => ModifyTableData_func(tableData), [tableData]);
+    debugger
     return (
         <React.Fragment>
             <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
@@ -486,7 +521,7 @@ const ItemMasterBulkUpdate = (props) => {
                             <Col sm={3} className="">
                                 <FormGroup className="mb- row mt-3 mb-1 " >
                                     <Label className="col-sm-5 p-2"
-                                        style={{ width: "83px" }}>Select Field</Label>
+                                        style={{ width: "110 px" }}>Select Field</Label>
                                     <Col sm="7">
                                         <C_Select
                                             name="SelectField"
@@ -508,7 +543,7 @@ const ItemMasterBulkUpdate = (props) => {
                             {SelectFieldName.label === "Group" && <Col sm={3} className="">
                                 <FormGroup className="mb- row mt-3 mb-1  " >
                                     <Label className="col-sm-7 p-2"
-                                        style={{ width: "65px" }}>Group Type</Label>
+                                        style={{ width: "125px" }}>Group Type</Label>
                                     <Col sm="7" >
                                         <C_Select
                                             name="groupType"
@@ -550,15 +585,12 @@ const ItemMasterBulkUpdate = (props) => {
 
                     <GlobalCustomTable
                         keyField="id"
-                        data={tableData}
+                        data={processedData}
                         columns={pagesListColumns}
                         classes={"custom-table"}
-                        defaultSorted={[
-                            {
-                                dataField: "ItemName",
-                                order: "asc",
-                            },
-                        ]}
+                        rowStyle={rowStyle}
+                        rowClasses={rowClasses}
+
                         noDataIndication={
                             <div className="text-danger text-center ">
                                 Record Not available
