@@ -659,11 +659,7 @@ const Invoice = (props) => {
         const calcalateGrandTotal = settingBaseRoundOffAmountFunc(tableList)
         const dataCount = tableList.length;
         const commaSeparateAmount = _cfunc.amountCommaSeparateFunc(Number(calcalateGrandTotal.sumOfGrandTotal));
-        // 
-        dispatch(BreadcrumbShowCountlabel(`Count:${dataCount} currency_symbol ${commaSeparateAmount} weight ${calcalateGrandTotal.sumOfWeightageTotal.toString()} kg`))
-
-
-
+        dispatch(BreadcrumbShowCountlabel(`Count:${dataCount} currency_symbol ${commaSeparateAmount} weight ${(calcalateGrandTotal.sumOfWeightageTotal).toFixed(3)} kg`))
 
     }
     useEffect(() => {

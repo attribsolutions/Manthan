@@ -82,19 +82,24 @@ export const settingBaseRoundOffAmountFunc = (tableList = []) => {
     let result = tableList.reduce(
 
         (accumulator, index1) => {
-            const weightage = (Number(index1["Weightage"]) + Number(Weight)) || 0.00;
+            const weightage = Number(index1["Weightage"]) || 0.00;
             const row_weightage = (Number(index1.Quantity) * Number(index1.default_UnitDropvalue.BaseUnitQuantity)) / Number(weightage)
             return {
                 grandTotal: accumulator.grandTotal + (Number(index1.ItemTotalAmount) || 0),
                 weightageTotal: accumulator.weightageTotal + (row_weightage || 0)
             };
         },
+
         { grandTotal: 0, weightageTotal: 0 }
     );
 
     let sumOfGrandTotal = result.grandTotal;
     let sumOfWeightageTotal = result.weightageTotal;
 
+    if (Number(result.weightageTotal) >= 500) {
+        const Overweight = Number(result.weightageTotal) * (Number(Weight) / 100)
+        sumOfWeightageTotal = result.weightageTotal + Overweight
+    }
 
     let TCS_Amount = 0; // Initial TCS Amount
 
