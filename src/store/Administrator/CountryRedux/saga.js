@@ -21,6 +21,7 @@ import {
     SAVE_COUNTRY_MASTER_ACTION,
     UPDATE_COUNTRY_ID_ACTION
 } from "./actionType";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 
 function* Get_Country_GenFun() { // List API Using Post Method
 
@@ -38,7 +39,16 @@ function* save_CountryMaster_GenFun({ config }) { // post api
 }
 
 function* Delete_Country_ID_GenFun({ config }) { // delete api 
+    const { deleteId } = config
     try {
+        
+        if (deleteId === 1) {
+            customAlert({
+                Type: 3,
+                Message: "This Country is used in another table",
+            })
+            return
+        }
         const response = yield call(Country_delete_API, config);
         yield put(deleteCountry_ID_Success(response))
     } catch (error) { yield put(CountryApiError_Action()) }
