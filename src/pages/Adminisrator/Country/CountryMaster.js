@@ -14,7 +14,6 @@ import { MetaTags } from "react-meta-tags";
 import { Breadcrumb_inputName, commonPageFieldSuccess } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { commonPageField } from "../../../store/actions";
-
 import { useHistory } from "react-router-dom";
 import {
     comAddPageFieldFunc,
@@ -29,7 +28,6 @@ import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
-import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 import { changeCommonPartyDropDetailsAction } from "../../../store/Utilites/PartyDrodown/action";
 import { editCountry_ID_Success, getCountryList_Action, saveCountryMaster_Action, saveCountryMaster_Success, updateCountry_ID_Action, updateCountry_ID_Success } from "../../../store/Administrator/CountryRedux/action";
 
@@ -43,7 +41,8 @@ const CountryMaster = (props) => {
         Country: "",
         Currency: "",
         CurrencySymbol: "",
-        Weight: ''
+        Weight: '',
+        IsTaxApplicable: false
 
     }
     const [state, setState] = useState(() => initialFiledFunc(fileds))
@@ -128,18 +127,20 @@ const CountryMaster = (props) => {
 
             if (hasEditVal) {
 
-                const { id, Country, Currency, CurrencySymbol, Weight } = hasEditVal
+                const { id, Country, Currency, CurrencySymbol, Weight, IsTaxApplicable } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
                 hasValid.Country.valid = true;
                 hasValid.Currency.valid = true;
                 hasValid.CurrencySymbol.valid = true;
                 hasValid.Weight.valid = true;
+                hasValid.IsTaxApplicable.valid = true;
 
                 values.Country = Country;
                 values.Currency = Currency;
                 values.CurrencySymbol = CurrencySymbol;
                 values.Weight = Weight;
+                values.IsTaxApplicable = IsTaxApplicable;
                 values.id = id;
 
                 setState({ values, fieldLabel, hasValid, required, isError })
@@ -190,9 +191,9 @@ const CountryMaster = (props) => {
     }, [postMsg])
 
     useEffect(() => {
-        
+
         if (updateMsg.Status === true && updateMsg.StatusCode === 200) {
-            
+
             setState(() => resetFunction(fileds, state))//+++++++++ Clear form values 
             history.push({
                 pathname: url.COUNTRY_LIST,
@@ -228,6 +229,8 @@ const CountryMaster = (props) => {
                     "Currency": values.Currency,
                     "CurrencySymbol": values.CurrencySymbol,
                     "Weight": values.Weight,
+                    "IsTaxApplicable": values.IsTaxApplicable
+
                 }]);
 
                 if (pageMode === mode.edit) {
@@ -351,6 +354,29 @@ const CountryMaster = (props) => {
                                                         </FormGroup>
                                                     </Row>
 
+                                                    <Row>
+                                                        <FormGroup className="mb-2 col col-sm-4">
+                                                            <Row className="justify-content-md-left">
+                                                                <Label htmlFor="horizontal-firstname-input"
+                                                                    className="col-sm-5 col-form-label" >{fieldLabel.IsTaxApplicable} </Label>
+                                                                <Col md={2} style={{ marginTop: '9px' }} >
+                                                                    <div className="form-check form-switch form-switch-md mb-3" >
+                                                                        <Input type="checkbox" className="form-check-input"
+                                                                            name="IsTaxApplicable"
+                                                                            checked={values.IsTaxApplicable}
+                                                                            onChange={(e) => {
+                                                                                setState((i) => {
+                                                                                    const a = { ...i }
+                                                                                    a.values.IsTaxApplicable = e.target.checked;
+                                                                                    return a
+                                                                                })
+                                                                            }}
+                                                                        />
+                                                                    </div>
+                                                                </Col>
+                                                            </Row>
+                                                        </FormGroup>
+                                                    </Row>
 
                                                     <FormGroup className="mt-2">
                                                         <Row>
