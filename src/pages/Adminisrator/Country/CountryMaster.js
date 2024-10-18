@@ -136,13 +136,13 @@ const CountryMaster = (props) => {
                 hasValid.Currency.valid = true;
                 hasValid.CurrencySymbol.valid = true;
                 hasValid.Weight.valid = true;
-                // hasValid.IsTaxApplicable.valid = true;
+                hasValid.IsTaxApplicable.valid = true;
 
                 values.Country = Country;
                 values.Currency = Currency;
                 values.CurrencySymbol = CurrencySymbol;
                 values.Weight = Weight;
-                // values.IsTaxApplicable = IsTaxApplicable;
+                values.IsTaxApplicable = IsTaxApplicable;
                 values.id = id;
 
                 setState({ values, fieldLabel, hasValid, required, isError })
