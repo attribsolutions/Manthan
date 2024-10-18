@@ -25,9 +25,10 @@ function addMergedTitleRow(worksheet, HeaderColumns) {
 
 // Function to add rows and format cells based on table data
 function addRowsAndFormatCells(worksheet, HeaderColumns, dataRow, controlTypeName, key) {
+    
     const headerRow = worksheet.addRow(HeaderColumns);
     // Merge cells in the header row with the cells in the merge row
-    
+
     if ((key === "B2B") || (key === "B2CL") || (key === "CDNR")) {
         const mergeRow = worksheet.addRow([])
         const Avoide_Merging_Column = ["C", "D", "E", "F", "K", "L", "M", "N"];
@@ -196,9 +197,9 @@ function formatCellByDataType(cell, controlType, value) {
     }
 }
 
-// Component function for generating an Excel report with multiple tabs
-function GST_ExcelDownloadFun({ excelTableData, excelFileName, pageName }) {
 
+function GST_ExcelDownloadFun({ excelTableData, excelFileName, pageName }) {
+    
     const workbook = new ExcelJS.Workbook(); // Create a new Excel workbook
 
     // Iterate through each key-value pair in the excelTableData object
@@ -209,6 +210,7 @@ function GST_ExcelDownloadFun({ excelTableData, excelFileName, pageName }) {
         addTitleRow(worksheet, key);
 
         if (pageName === "GST-R1") {
+            
             // If there are elements in the first index
             if (value.length > 0) {
 
@@ -216,7 +218,9 @@ function GST_ExcelDownloadFun({ excelTableData, excelFileName, pageName }) {
                 const { HeaderColumns, dataRow, controlTypeName } = generateTableData({ excelTableData: [firstIndex] }); // Generate table data
 
                 // Add rows and format cells based on the generated table data
-                addRowsAndFormatCells(worksheet, HeaderColumns, dataRow, controlTypeName);
+                if (!(key === "WithOutGSTIN" || key === "WithGSTIN")) {
+                    addRowsAndFormatCells(worksheet, HeaderColumns, dataRow, controlTypeName);
+                }
                 worksheet.addRow([]); // Add empty row after title
             }
         }
@@ -224,9 +228,9 @@ function GST_ExcelDownloadFun({ excelTableData, excelFileName, pageName }) {
         setColumnWidths(worksheet)
 
         if (value.length > 0) {
-
+            
             let valueCopy = value
-            if (pageName === "GST-R1") {
+            if (pageName === "GST-R1" && !(key === "WithOutGSTIN" || key === "WithGSTIN")) {
                 valueCopy = value.slice(1); // Create a copy of the value array excluding the first index
             }
 
