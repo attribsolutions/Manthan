@@ -248,6 +248,7 @@ import CustomerMobileView from "../pages/Dashboard/FrenchiesesDashboard/Customer
 import POS_Log from "../pages/ActivityLog/POSLog.js";
 import CountryMaster from "../pages/Adminisrator/Country/CountryMaster.js";
 import CountryList from "../pages/Adminisrator/Country/CountryList.js";
+import MachineTypeList from "../pages/SweetPOS/Adminstration/MachineType/MachineTypeList.js";
 
 
 const userRoutes = [
@@ -640,6 +641,8 @@ const userRoutes = [
 	{ path: path.POS_USER_lIST, component: POSUserList },//not party wise
 
 	{ path: path.SWEET_POS_MACHINE_MASTER, component: MachineTypeMaster },//not party wise
+
+	{ path: path.SWEET_POS_MACHINE_LIST, component: MachineTypeList },//not party wise
 
 	{ path: path.STOCK_OUT_REPORT, component: StockOutReport },//not party wise
 	// ************************************ Pos_Invoice **************************************//

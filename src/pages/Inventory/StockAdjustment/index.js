@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
     Col,
     FormGroup,
@@ -8,7 +8,7 @@ import {
     Button
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
-import { commonPageFieldSuccess } from "../../../store/actions";
+import { BreadcrumbShowCountlabel, commonPageFieldSuccess } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { commonPageField } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
@@ -27,6 +27,8 @@ import "../../../pages/Sale/SalesReturn/salesReturn.scss";
 import Select, { components } from "react-select";
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
+import GlobalCustomTable from "../../../GlobalCustomTable";
+import { GroupSubgroupDisplay, ModifyTableData_func } from "../../../components/Common/TableCommonFunc";
 
 const StockAdjustment = (props) => {
 
@@ -259,11 +261,46 @@ const StockAdjustment = (props) => {
         setTableArr(filterData);
     }
 
+    const rowStyle = (row, rowIndex) => {
+        if (row.GroupRow) {
+            return { backgroundColor: 'white', fontWeight: 'bold', fontSize: '18px' };
+        } else if (row.SubGroupRow) {
+            return { backgroundColor: '#f2f2f2', fontWeight: 'bold', fontSize: '15px' };
+        }
+        return {};
+    };
+
+    const rowClasses = (row) => {
+        if (row.GroupRow || row.SubGroupRow) {
+            return 'group-row hide-border';
+        }
+        return '';
+    };
+
     const pagesListColumns = [
 
         {//*************** ItemName ********************************* */
             text: "Item Name",
             dataField: "ItemName",
+            formatter: (value, row, k) => {
+                if (row.SubGroupRow) {
+                    const [Group, SubGroup] = row.Group_Subgroup.split('-');
+                    return (
+                        <GroupSubgroupDisplay group={Group} subgroup={SubGroup} />
+                    );
+                } else {
+                    const [itemName] = row.ItemName.split('-');
+                    return (
+                        <>
+                            <div>
+                                {itemName}
+                            </div>
+                        </>
+                    )
+                }
+
+
+            },
         },
 
         {//*************** Quantity ********************************* */
@@ -272,6 +309,7 @@ const StockAdjustment = (props) => {
             formatExtraData: { tableList: TableArr, setTableList: setTableArr },
             formatter: (cellContent, index1, key, { tableList = [], setTableList }) => {
 
+                if (index1.GroupRow || index1.SubGroupRow) { return }
 
                 return (<>
                     <div>
@@ -341,6 +379,7 @@ const StockAdjustment = (props) => {
             headerStyle: { zIndex: "2" },
             formatExtraData: { tableList: TableArr },
             formatter: (cellContent, index1, keys_, { tableList = [] }) => {
+                if (index1.GroupRow || index1.SubGroupRow) { return }
 
                 return <>
                     <div className="table-responsive">
@@ -410,6 +449,8 @@ const StockAdjustment = (props) => {
             },
             formatExtraData: { tableList: TableArr },
             formatter: (cellContent, index1, key, { tableList = [] }) => {
+                if (index1.GroupRow || index1.SubGroupRow) { return }
+
                 return (
                     <span className="d-flex justify-content-center align-items-center">
 
@@ -498,6 +539,8 @@ const StockAdjustment = (props) => {
         catch (w) { }
     };
 
+    const processedData = useMemo(() => ModifyTableData_func(TableArr), [TableArr]);
+
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
@@ -543,39 +586,24 @@ const StockAdjustment = (props) => {
                         </div >
 
 
-                        <ToolkitProvider
-                            keyField={"id"}
-                            data={TableArr}
-                            columns={pagesListColumns}
-                            search
-                        >
-                            {(toolkitProps,) => (
-                                <React.Fragment>
-                                    <Row>
-                                        <Col xl="12">
-                                            <div className="table-responsive table" style={{ minHeight: "65vh" }}>
-                                                <BootstrapTable
-                                                    keyField={"id"}
-                                                    id="table_Arrow"
-                                                    classes={"table  table-bordered table-hover "}
-                                                    noDataIndication={
-                                                        <div className="text-danger text-center ">
-                                                            Items Not available
-                                                        </div>
-                                                    }
-                                                    onDataSizeChange={(e) => {
-                                                        _cfunc.tableInputArrowUpDounFunc("#table_Arrow")
-                                                    }}
-                                                    {...toolkitProps.baseProps}
-                                                />
-                                                {globalTableSearchProps(toolkitProps.searchProps)}
-                                            </div>
-                                        </Col>
-                                    </Row>
-
-                                </React.Fragment>
-                            )}
-                        </ToolkitProvider>
+                        <div className="mb-1 ">
+                            <GlobalCustomTable
+                                keyField={"id"}
+                                data={processedData}
+                                rowStyle={rowStyle}
+                                rowClasses={rowClasses}
+                                columns={pagesListColumns}
+                                id="table_Arrow"
+                                noDataIndication={
+                                    <div className="text-danger text-center ">
+                                        Items Not available
+                                    </div>
+                                }
+                                onDataSizeChange={({ dataCount, filteredData = [] }) => {
+                                    dispatch(BreadcrumbShowCountlabel(`Count:${dataCount} currency_symbol ${_cfunc.TotalAmount_Func(filteredData)}`));
+                                }}
+                            />
+                        </div>
 
                         {
                             TableArr.length > 0 &&
@@ -603,3 +631,20 @@ const StockAdjustment = (props) => {
 };
 
 export default StockAdjustment
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
