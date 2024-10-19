@@ -156,7 +156,7 @@ export const Franchise_Customer_Master = url.FRANCHISE_CUSTOMER_LIST
 export const Franchise_Customer_List = url.FRANCHISE_CUSTOMER_MASTER
 
 export const Country_Master = url.COUNTRY_LIST
-export const Country_List =  url.COUNTRY_MASTER
+export const Country_List = url.COUNTRY_MASTER
 
 
 //******************************* Purchase Module ************************************//
@@ -214,7 +214,7 @@ export const GRN_LIST_1 = url.IB_GRN_LIST;
 export const IB_GRN_List = url.GRN_LIST_1;
 
 export const StockEntry = url.STOCK_ENTRY;
-export const Stock_Entry_List =  url.STOCK_ENTRY_LIST;
+export const Stock_Entry_List = url.STOCK_ENTRY_LIST;
 
 export const ChallanList = url.CHALLAN;
 export const Challan = url.CHALLAN_LIST;
@@ -343,15 +343,17 @@ export const TargetVSAchievement = url.TARGET_VS_ACHIEVEMENT
 
 export const Credit_Note_Excel_Field_Map = url.IMPORT_CREDIT_NOTE_EXCEL_FIELD_MAP
 
-export const Order_Item_Supplier_Report =url.ORDER_ITEM_SUPPLIER_REPORT
+export const Order_Item_Supplier_Report = url.ORDER_ITEM_SUPPLIER_REPORT
 
 //**************************** POS ***********************************//
 
 export const POS_User = url.POS_USER_lIST;
 export const POS_User_List = url.POS_USER;
-export const  SweetPOS_Rate_Master = url.SWEET_POS_RATE_MASTER
+export const SweetPOS_Rate_Master = url.SWEET_POS_RATE_MASTER
 
-export const  SweetPOS_Machine_Master = url.SWEET_POS_MACHINE_MASTER
+export const SweetPOS_Machine_List = url.SWEET_POS_MACHINE_MASTER
 
-export const  Stock_Out_Report = url.STOCK_OUT_REPORT
+export const SweetPOS_Machine_Master = url.SWEET_POS_MACHINE_LIST
+
+export const Stock_Out_Report = url.STOCK_OUT_REPORT
 
