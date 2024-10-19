@@ -1,63 +1,110 @@
 import React, { useEffect, useState, } from "react";
 import {
+    Card,
+    CardBody,
+    CardHeader,
+    Col,
     Container,
+    FormGroup,
+    Label,
+    Row,
     Input,
 } from "reactstrap";
+import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
-import { BreadcrumbShowCountlabel, commonPageFieldSuccess } from "../../../../store/actions";
+import {
+    Breadcrumb_inputName,
+    commonPageField,
+    commonPageFieldSuccess
+} from "../../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
-import { commonPageField } from "../../../../store/actions";
 import { useHistory } from "react-router-dom";
-import { PageLoadingSpinner, SaveButton } from "../../../../components/Common/CommonButton";
+import {
+    comAddPageFieldFunc,
+    formValid,
+    initialFiledFunc,
+    onChangeCheckbox,
+    onChangeDate,
+    onChangeSelect,
+    onChangeText,
+    resetFunction
+} from "../../../../components/Common/validationFunction";
+import { SaveButton } from "../../../../components/Common/CommonButton";
 import {
     breadcrumbReturnFunc,
-    metaTagLabel,
     loginCompanyID,
+    btnIsDissablefunc,
+    metaTagLabel,
+    currentDate_ymd,
     loginPartyID,
 } from "../../../../components/Common/CommonFunction";
-import { url, pageId, mode } from "../../../../routes/index";
+import * as pageId from "../../../../routes/allPageID";
+import * as url from "../../../../routes/route_url";
+import * as mode from "../../../../routes/PageMode";
 import { customAlert } from "../../../../CustomAlert/ConfirmDialog";
-import { C_Select } from "../../../../CustomValidateForm";
+import { C_DatePicker } from "../../../../CustomValidateForm";
 import { GenralMasterSubType } from "../../../../helpers/backend_helper";
-import { SPos_MachineTypeList_Action, SPos_MachineTypeList_Success, SPos_MachineTypeSave_Action, SPos_MachineTypeSave_Success } from "../../../../store/SweetPOSStore/Administrator/MachineTypeMasterRedux/action";
-import SaveButtonDraggable from "../../../../components/Common/saveButtonDraggable";
-import GlobalCustomTable from "../../../../GlobalCustomTable";
+import {  SPos_MachineTypeList_Success, SPos_MachineTypeSave_Action, SPos_MachineTypeSave_Success } from "../../../../store/SweetPOSStore/Administrator/MachineTypeMasterRedux/action";
 
 const MachineTypeMaster = (props) => {
 
     const dispatch = useDispatch();
-    const history = useHistory()
+    const history = useHistory();
+    const { location } = history
 
-    const [pageMode] = useState(mode.defaultsave);
-    const [machineTypeOptions, setMachineTypeOptions] = useState([]);
+    const fileds = {
+        id: "",
+        MacID: "",
+        MachineType: "",
+        IsServer: false,
+        ClientID: "",
+        MachineRole: "",
+        IsAutoUpdate: false,
+        IsGiveUpdate: false,
+        IsService: false,
+        MachineName: "",
+        ServerSequence: "",
+        UploadSaleRecordCount: "",
+        Validity: currentDate_ymd,
+        Version: "",
+    }
+
+    const [state, setState] = useState(() => initialFiledFunc(fileds))
+
+    const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState('');
+    const [machineTypeOptions, setMachineTypeOptions] = useState([]);
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
         postMsg,
-        userAccess,
+        pageField,
         saveBtnloading,
-        listBtnLoading,
-        tableListData
-    } = useSelector((state) => ({
-        saveBtnloading: state.SPos_MachineType_Reducer.saveBtnloading,
-        tableListData: state.SPos_MachineType_Reducer.SPosMachineTypeListData,
-        listBtnLoading: state.SPos_MachineType_Reducer.listBtnLoading,
-        postMsg: state.SPos_MachineType_Reducer.postMsg,
-        userAccess: state.Login.RoleAccessUpdateData,
-        pageField: state.CommonPageFieldReducer.pageField
-    }));
+        userAccess } = useSelector((state) => ({
+
+            postMsg: state.SPos_MachineType_Reducer.postMsg,
+            saveBtnloading: state.SPos_MachineType_Reducer.saveBtnloading,
+            userAccess: state.Login.RoleAccessUpdateData,
+            pageField: state.CommonPageFieldReducer.pageField,
+        }));
+
 
     useEffect(() => {
         const page_Id = pageId.SWEET_POS_MACHINE_MASTER
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
-        dispatch(SPos_MachineTypeList_Action({ "Party": loginPartyID() }))
+        return () => {
+            dispatch(SPos_MachineTypeSave_Success({ Status: false }));
+            dispatch(SPos_MachineTypeList_Success([]));
+        }
     }, []);
 
-    const location = { ...history.location }
-    const hasShowloction = location.hasOwnProperty(mode.editValue)
+    const hasShowloction = location.hasOwnProperty("rowData")
     const hasShowModal = props.hasOwnProperty(mode.editValue)
+
+    const values = { ...state.values }
+    const { isError } = state;
+    const { fieldLabel } = state;
 
     // userAccess useEffect
     useEffect(() => {
@@ -85,7 +132,6 @@ const MachineTypeMaster = (props) => {
                 breadcrumbReturnFunc({ dispatch, userAcc });
             }
         };
-
     }, [userAccess])
 
     useEffect(async () => {
@@ -102,14 +148,73 @@ const MachineTypeMaster = (props) => {
         })))
     }, [])
 
+    // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time
     useEffect(() => {
-        dispatch(BreadcrumbShowCountlabel(`Count:${tableListData.length}`));
-    }, [tableListData])
+
+        if ((hasShowloction || hasShowModal)) {
+
+            let hasEditVal = null
+            if (hasShowloction) {
+                setPageMode(location.pageMode)
+                hasEditVal = location.rowData
+            }
+            else if (hasShowModal) {
+                hasEditVal = props.editValue
+                setPageMode(props.pageMode)
+            }
+
+            if (hasEditVal) {
+                const { id, ClientID, IsAutoUpdate, IsGiveUpdate, IsServer, IsService, MacID, MachineName, MachineRole,
+                    MachineTypeDetails, ServerSequence, UploadSaleRecordCount, Validity, Version
+
+                } = hasEditVal
+                const { values, fieldLabel, hasValid, required, isError } = { ...state }
+
+                hasValid.ClientID.valid = true;
+                hasValid.IsAutoUpdate.valid = true;
+                hasValid.IsGiveUpdate.valid = true;
+                hasValid.IsServer.valid = true;
+                hasValid.IsService.valid = true;
+                hasValid.MacID.valid = true;
+                hasValid.MachineName.valid = true;
+                hasValid.MachineRole.valid = true;
+                hasValid.MachineType.valid = true;
+                hasValid.ServerSequence.valid = true;
+                hasValid.UploadSaleRecordCount.valid = true;
+                hasValid.Validity.valid = true;
+                hasValid.Version.valid = true;
+
+                values.id = id
+                values.ClientID = ClientID
+                values.IsAutoUpdate = IsAutoUpdate
+                values.MachineType = MachineTypeDetails.map(i => ({
+                    label: i.MachineTypeName,
+                    value: i.id
+                }));
+                values.IsGiveUpdate = IsGiveUpdate
+                values.IsServer = IsServer
+                values.IsService = IsService
+                values.MacID = MacID
+                values.MachineName = MachineName
+                values.MachineRole = MachineRole
+                values.ServerSequence = ServerSequence
+                values.UploadSaleRecordCount = UploadSaleRecordCount
+                values.IsAutoUpdate = IsAutoUpdate
+                values.Validity = Validity
+                values.Version = Version
+
+                setState({ values, fieldLabel, hasValid, required, isError })
+                dispatch(Breadcrumb_inputName(hasEditVal.RoleMaster))
+            }
+        }
+    }, [location]);
 
     useEffect(async () => {
+
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(SPos_MachineTypeSave_Success({ Status: false }));
             dispatch(SPos_MachineTypeList_Success([]));
+            setState(() => resetFunction(fileds, state)) // Clear form values 
 
             if (pageMode === "other") {
                 customAlert({
@@ -118,14 +223,14 @@ const MachineTypeMaster = (props) => {
                 })
             }
             else {
-                customAlert({
+                let isPermission = await customAlert({
                     Type: 1,
                     Status: true,
                     Message: postMsg.Message,
-                    RedirectPath: url.SWEET_POS_MACHINE_MASTER
                 })
-
-                dispatch(SPos_MachineTypeList_Action({ "Party": loginPartyID() }))
+                if (isPermission) {
+                    history.push({ pathname: url.SWEET_POS_MACHINE_LIST })
+                }
             }
         }
         else if (postMsg.Status === true) {
@@ -138,184 +243,363 @@ const MachineTypeMaster = (props) => {
         }
     }, [postMsg])
 
-    const pagesListColumns = [
-        {
-            text: "MacID",
-            dataField: "MacID",
-        },
-        {
-            text: "Machine Type",
-            dataField: "",
-            formatExtraData: { machineTypeOptions: machineTypeOptions },
-            formatter: (value, row, key, { machineTypeOptions }) => {
-                return (
-                    <div style={{ minWidth: "290px" }}>
-                        <C_Select
-                            defaultValue={!(row.MachineTypeDetails.length > 0) ? "" :
-                                row?.MachineTypeDetails?.map((index) => ({
-                                    value: index.id,
-                                    label: index.MachineTypeName,
-                                }))}
+    useEffect(() => {
 
-                            options={machineTypeOptions}
-                            isMulti={true}
-                            onChange={e => {
-                                row["MachineTypeDetails"] = e.map((index) => ({
-                                    id: index.value,
-                                    MachineTypeName: index.label,
-                                }));
-
-                            }}
-                        >
-                        </C_Select >
-                    </div>
-
-                )
-            },
-        },
-        {
-            text: "IsServer",
-            dataField: "IsServer",
-            style: () => ({ width: "30%" }),
-            formatter: (value, row, key,) => {
-
-                return (
-                    <Input type="checkbox" className="form-check-input"
-                        defaultChecked={row.IsServer}
-                        name="IsServer"
-                        onChange={(e) => {
-                            row.IsServer = e.target.checked;
-                        }}
-                    />
-                )
-            },
-        },
-        {
-            text: "ClientID",
-            dataField: "ClientID",
-        },
-        {
-            text: "MachineRole",
-            dataField: "MachineRole",
-        },
-        {
-            text: "IsAutoUpdate",
-            dataField: "IsAutoUpdate",
-        },
-        {
-            text: "IsGiveUpdate",
-            dataField: "IsGiveUpdate",
-        },
-        {
-            text: "IsService",
-            dataField: "IsService",
-        },
-        {
-            text: "MachineName",
-            dataField: "MachineName",
-        },
-        {
-            text: "ServerSequence",
-            dataField: "ServerSequence",
-        },
-        {
-            text: "UploadSaleRecordCount",
-            dataField: "UploadSaleRecordCount",
-        },
-        {
-            text: "Validity",
-            dataField: "Validity",
-        },
-        {
-            text: "Version",
-            dataField: "Version",
-        },
-    ];
+        if (pageField) {
+            const fieldArr = pageField.PageFieldMaster
+            comAddPageFieldFunc({ state, setState, fieldArr })
+        }
+    }, [pageField])
 
     const SaveHandler = async (event) => {
+
         event.preventDefault();
+        const btnId = event.target.id
 
         try {
-            const jsonBody = JSON.stringify(tableListData.map((i) => ({
-                "MacID": i.MacID,
-                "MachineType": i.MachineTypeDetails.map(i => i.id).join(','),
-                "IsServer": i.IsServer,
-                "Party": loginPartyID(),
-                "ClientID": i.ClientID,
-            })))
+            if (formValid(state, setState)) {
+                btnIsDissablefunc({ btnId, state: true })
 
-            dispatch(SPos_MachineTypeSave_Action({ jsonBody }));
+                const jsonBody = JSON.stringify([{
 
-        } catch (e) { }
+                    "MacID": values.MacID,
+                    "MachineType": values.MachineType.map(i => i.value).join(','),
+                    "IsServer": values.IsServer,
+                    "Party": loginPartyID(),
+                    "ClientID": values.ClientID,
+                    "IsAutoUpdate": values.IsAutoUpdate,
+                    "IsGiveUpdate": values.IsGiveUpdate,
+                    "IsService": values.IsService,
+                    "MachineName": values.MachineName,
+                    "MachineRole": values.MachineRole,
+                    "ServerSequence": values.ServerSequence,
+                    "UploadSaleRecordCount": values.UploadSaleRecordCount,
+                    "Validity": values.Validity,
+                    "Version": values.Version,
+
+                }]);
+                dispatch(SPos_MachineTypeSave_Action({ jsonBody }));
+
+            }
+        } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
     };
 
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
                 <div className="page-content" >
-                    <PageLoadingSpinner isLoading={(listBtnLoading)} />
                     <Container fluid>
                         <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
 
+                        <Card className="text-black" style={{ marginTop: "3px" }}>
+                            <CardHeader className="card-header   text-black c_card_header" >
+                                <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
+                                <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
+                            </CardHeader>
 
-                        <GlobalCustomTable
-                            keyField="id"
-                            data={tableListData}
-                            columns={pagesListColumns}
-                            paginationEnabled={200}//show pagination 200 per page
-                            classes={"custom-table"}
-                            noDataIndication={
-                                <div className="text-danger text-center ">
-                                    Record Not available
-                                </div>
-                            }
-                            onDataSizeChange={({ dataCount }) => {
+                            <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
+                                <form noValidate>
 
-                                dispatch(BreadcrumbShowCountlabel(`Count:${dataCount}`));
-                            }}
-                        />
+                                    <Col md={12}>
+                                        <Card>
+                                            <CardBody className="c_card_body">
+                                                <Row>
+                                                    <FormGroup className="mb-2 col col-sm-3 ">
+                                                        <Label htmlFor="validationCustom01">{fieldLabel.MachineType} </Label>
+                                                        <Select
+                                                            id="MachineType "
+                                                            name="MachineType"
+                                                            value={values.MachineType}
+                                                            isSearchable={true}
+                                                            autoFocus={true}
+                                                            isMulti={true}
+                                                            className="react-dropdown"
+                                                            classNamePrefix="dropdown"
+                                                            options={machineTypeOptions}
+                                                            onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
+                                                        />
+                                                        {isError.MachineType.length > 0 && (
+                                                            <span className="text-danger f-8"><small>{isError.MachineType}</small></span>
+                                                        )}
+                                                    </FormGroup>
 
-                        {/* <div className="mb-4">
-                            <ToolkitProvider
-                                keyField="id"
-                                data={tableListData}
-                                columns={pagesListColumns}
-                                search
-                            >
-                                {toolkitProps => (
-                                    <React.Fragment>
-                                        <div className="table-responsive table mb-6">
-                                            <GlobalCustomTable
-                                                keyField="id"
-                                                id="table_Arrow"
-                                                classes={"table  table-bordered table-hover"}
-                                                noDataIndication={
-                                                    <div className="text-danger text-center ">
-                                                        Party Not available
-                                                    </div>
-                                                }
-                                                onDataSizeChange={({ dataSize }) => {
-                                                    dispatch(BreadcrumbShowCountlabel(`Count:${dataSize}`));
-                                                }}
-                                                {...toolkitProps.baseProps}
-                                            />
-                                            {globalTableSearchProps(toolkitProps.searchProps)}
-                                        </div>
+                                                    <Col md="1">  </Col>
+                                                    <FormGroup className="mb-2 col col-sm-3 ">
+                                                        <Label htmlFor="validationCustom01">{fieldLabel.MacID} </Label>
+                                                        <Input
+                                                            name="MacID"
+                                                            id="MacID"
+                                                            value={values.MacID}
+                                                            type="text"
+                                                            disabled={true}
+                                                            className={isError.MacID.length > 0 ? "is-invalid form-control" : "form-control"}
+                                                            placeholder="Please Enter MacID"
+                                                            autoComplete='off'
+                                                            onChange={(event) => {
+                                                                onChangeText({ event, state, setState })
+                                                                dispatch(Breadcrumb_inputName(event.target.value))
+                                                            }}
+                                                        />
+                                                        {isError.MacID.length > 0 && (
+                                                            <span className="invalid-feedback">{isError.MacID}</span>
+                                                        )}
+                                                    </FormGroup>
 
-                                    </React.Fragment>
-                                )}
-                            </ToolkitProvider>
-                        </div> */}
+                                                    <Col md="1">  </Col>
+                                                    <FormGroup className="mb-2 col col-sm-3 ">
+                                                        <Label htmlFor="validationCustom01">{fieldLabel.ClientID} </Label>
+                                                        <Input
+                                                            name="ClientID"
+                                                            id="ClientID"
+                                                            value={values.ClientID}
+                                                            type="text"
+                                                            disabled={true}
+                                                            className={isError.ClientID.length > 0 ? "is-invalid form-control" : "form-control"}
+                                                            placeholder="Please Enter ClientID"
+                                                            autoComplete='off'
+                                                            onChange={(event) => {
+                                                                onChangeText({ event, state, setState })
+                                                                dispatch(Breadcrumb_inputName(event.target.value))
+                                                            }}
+                                                        />
+                                                        {isError.ClientID.length > 0 && (
+                                                            <span className="invalid-feedback">{isError.ClientID}</span>
+                                                        )}
+                                                    </FormGroup>
+                                                </Row>
 
-                        {tableListData.length > 0 &&
-                            <SaveButtonDraggable>
-                                <SaveButton pageMode={pageMode}
-                                    loading={saveBtnloading}
-                                    onClick={SaveHandler}
-                                    userAcc={userPageAccessState}
-                                />
-                            </SaveButtonDraggable>
-                        }
+                                                <Row className="mt-1">
+                                                    <FormGroup className="mb-2 col col-sm-3 ">
+                                                        <Label htmlFor="validationCustom01">{fieldLabel.MachineName} </Label>
+                                                        <Input
+                                                            name="MachineName"
+                                                            id="MachineName"
+                                                            value={values.MachineName}
+                                                            type="text"
+                                                            className={isError.MachineName.length > 0 ? "is-invalid form-control" : "form-control"}
+                                                            placeholder="Please Enter MachineName"
+                                                            autoComplete='off'
+                                                            onChange={(event) => {
+                                                                onChangeText({ event, state, setState })
+                                                                dispatch(Breadcrumb_inputName(event.target.value))
+                                                            }}
+                                                        />
+                                                        {isError.MachineName.length > 0 && (
+                                                            <span className="text-danger f-8"><small>{isError.MachineName}</small></span>
+                                                        )}
+                                                    </FormGroup>
+
+                                                    <Col md="1">  </Col>
+                                                    <FormGroup className="mb-2 col col-sm-3 ">
+                                                        <Label htmlFor="validationCustom01">{fieldLabel.MachineRole} </Label>
+                                                        <Input
+                                                            name="MachineRole"
+                                                            id="MachineRole"
+                                                            value={values.MachineRole}
+                                                            type="text"
+                                                            className={isError.MachineRole.length > 0 ? "is-invalid form-control" : "form-control"}
+                                                            placeholder="Please Enter MachineRole"
+                                                            autoComplete='off'
+                                                            onChange={(event) => {
+                                                                onChangeText({ event, state, setState })
+                                                                dispatch(Breadcrumb_inputName(event.target.value))
+                                                            }}
+                                                        />
+                                                        {isError.MachineRole.length > 0 && (
+                                                            <span className="invalid-feedback">{isError.MachineRole}</span>
+                                                        )}
+                                                    </FormGroup>
+
+                                                    <Col md="1">  </Col>
+                                                    <FormGroup className="mb-2 col col-sm-3 ">
+                                                        <Label htmlFor="validationCustom01">{fieldLabel.ServerSequence} </Label>
+                                                        <Input
+                                                            name="ServerSequence"
+                                                            id="ServerSequence"
+                                                            value={values.ServerSequence}
+                                                            type="text"
+                                                            className={isError.ServerSequence.length > 0 ? "is-invalid form-control" : "form-control"}
+                                                            placeholder="Please Enter Server Sequence"
+                                                            autoComplete='off'
+                                                            onChange={(event) => {
+                                                                onChangeText({ event, state, setState })
+                                                                dispatch(Breadcrumb_inputName(event.target.value))
+                                                            }}
+                                                        />
+                                                        {isError.ServerSequence.length > 0 && (
+                                                            <span className="invalid-feedback">{isError.ServerSequence}</span>
+                                                        )}
+                                                    </FormGroup>
+                                                </Row>
+
+                                                <Row className="mt-1">
+                                                    <FormGroup className="mb-2 col col-sm-3 ">
+                                                        <Label htmlFor="validationCustom01">{fieldLabel.UploadSaleRecordCount} </Label>
+                                                        <Input
+                                                            name="UploadSaleRecordCount"
+                                                            id="UploadSaleRecordCount"
+                                                            value={values.UploadSaleRecordCount}
+                                                            type="text"
+                                                            className={isError.UploadSaleRecordCount.length > 0 ? "is-invalid form-control" : "form-control"}
+                                                            placeholder="Please Enter Upload Sale RecordCount"
+                                                            autoComplete='off'
+                                                            onChange={(event) => {
+                                                                onChangeText({ event, state, setState })
+                                                                dispatch(Breadcrumb_inputName(event.target.value))
+                                                            }}
+                                                        />
+                                                        {isError.UploadSaleRecordCount.length > 0 && (
+                                                            <span className="text-danger f-8"><small>{isError.UploadSaleRecordCount}</small></span>
+                                                        )}
+                                                    </FormGroup>
+
+                                                    <Col md="1">  </Col>
+
+                                                    <FormGroup className="mb-2 col col-sm-3 ">
+                                                        <Label htmlFor="validationCustom01">{fieldLabel.Validity} </Label>
+                                                        <C_DatePicker
+                                                            name="Validity"
+                                                            value={values.Validity}
+                                                            options={{
+                                                                altInput: true,
+                                                                altFormat: "d-m-Y",
+                                                                dateFormat: "Y-m-d",
+                                                            }}
+                                                            placeholder={"DD/MM/YYYY"}
+                                                            onChange={(y, v, e) => {
+                                                                onChangeDate({ e, v, state, setState })
+                                                            }}
+                                                        />
+                                                    </FormGroup>
+
+                                                    <Col md="1">  </Col>
+                                                    <FormGroup className="mb-2 col col-sm-3 ">
+                                                        <Label htmlFor="validationCustom01">{fieldLabel.Version} </Label>
+                                                        <Input
+                                                            name="Version"
+                                                            id="Version"
+                                                            value={values.Version}
+                                                            type="text"
+                                                            className={isError.Version.length > 0 ? "is-invalid form-control" : "form-control"}
+                                                            placeholder="Please Enter Server Sequence"
+                                                            autoComplete='off'
+                                                            onChange={(event) => {
+                                                                onChangeText({ event, state, setState })
+                                                                dispatch(Breadcrumb_inputName(event.target.value))
+                                                            }}
+                                                        />
+                                                        {isError.Version.length > 0 && (
+                                                            <span className="invalid-feedback">{isError.Version}</span>
+                                                        )}
+                                                    </FormGroup>
+                                                </Row>
+
+                                                <Row>
+                                                    <Col md="3">
+                                                        <FormGroup className="mb-1">
+                                                            <Row style={{ marginTop: '25px' }}>
+                                                                <Label className="col-sm-5 col-form-label">{fieldLabel.IsServer}
+                                                                </Label>
+                                                                <Col md={4} style={{ marginTop: '7px' }} className=" form-check form-switch form-switch-sm ">
+                                                                    <div className="form-check form-switch form-switch-md mb-1">
+                                                                        <Input
+                                                                            type="checkbox"
+                                                                            className="form-check-input"
+                                                                            checked={values.IsServer}
+                                                                            name="IsServer"
+                                                                            onChange={(event) => onChangeCheckbox({ event, state, setState })}
+                                                                        />
+                                                                    </div>
+                                                                </Col>
+                                                            </Row>
+                                                        </FormGroup>
+                                                    </Col>
+
+                                                    <Col md="1">  </Col>
+                                                    <Col md="3">
+                                                        <FormGroup className="mb-1">
+                                                            <Row style={{ marginTop: '25px' }}>
+                                                                <Label className="col-sm-5 col-form-label"> {fieldLabel.IsAutoUpdate}
+                                                                </Label>
+                                                                <Col md={4} style={{ marginTop: '7px' }} className=" form-check form-switch form-switch-sm ">
+                                                                    <div className="form-check form-switch form-switch-md mb-1">
+                                                                        <Input
+                                                                            type="checkbox"
+                                                                            className="form-check-input"
+                                                                            checked={values.IsAutoUpdate}
+                                                                            name="IsAutoUpdate"
+                                                                            onChange={(event) => onChangeCheckbox({ event, state, setState })}
+                                                                        />
+                                                                    </div>
+                                                                </Col>
+                                                            </Row>
+                                                        </FormGroup>
+                                                    </Col>
+
+                                                    <Col md="1">  </Col>
+                                                    <Col md="3">
+                                                        <FormGroup className="mb-1">
+                                                            <Row style={{ marginTop: '25px' }}>
+                                                                <Label className="col-sm-5 col-form-label">  {fieldLabel.IsGiveUpdate}
+                                                                </Label>
+                                                                <Col md={4} style={{ marginTop: '7px' }} className=" form-check form-switch form-switch-sm ">
+                                                                    <div className="form-check form-switch form-switch-md mb-1">
+                                                                        <Input
+                                                                            type="checkbox"
+                                                                            className="form-check-input"
+                                                                            checked={values.IsGiveUpdate}
+                                                                            name="IsGiveUpdate"
+                                                                            onChange={(event) => onChangeCheckbox({ event, state, setState })}
+                                                                        />
+                                                                    </div>
+                                                                </Col>
+                                                            </Row>
+                                                        </FormGroup>
+                                                    </Col>
+                                                </Row>
+
+                                                <Row>
+                                                    <Col md="3">
+                                                        <FormGroup className="mb-3">
+                                                            <Row style={{ marginTop: '25px' }}>
+                                                                <Label className="col-sm-5 col-form-label">{fieldLabel.IsService}
+                                                                </Label>
+                                                                <Col md={4} style={{ marginTop: '7px' }} className=" form-check form-switch form-switch-sm ">
+                                                                    <div className="form-check form-switch form-switch-md mb-3">
+                                                                        <Input
+                                                                            type="checkbox"
+                                                                            className="form-check-input"
+                                                                            checked={values.IsService}
+                                                                            name="IsService"
+                                                                            onChange={(event) => onChangeCheckbox({ event, state, setState })}
+                                                                        />
+                                                                    </div>
+                                                                </Col>
+                                                            </Row>
+                                                        </FormGroup>
+                                                    </Col>
+                                                </Row>
+
+                                                <FormGroup>
+                                                    <Row>
+                                                        <Col sm={2} className="mt-3">
+                                                            <SaveButton pageMode={pageMode}
+                                                                loading={saveBtnloading}
+                                                                onClick={SaveHandler}
+                                                                userAcc={userPageAccessState}
+                                                            />
+                                                        </Col>
+                                                    </Row>
+                                                </FormGroup >
+
+                                            </CardBody>
+                                        </Card>
+                                    </Col>
+
+                                </form>
+                            </CardBody>
+                        </Card>
+
                     </Container>
                 </div>
             </React.Fragment>
@@ -329,3 +613,4 @@ const MachineTypeMaster = (props) => {
 };
 
 export default MachineTypeMaster
+
