@@ -320,8 +320,13 @@ const Order = (props) => {
                     label: i.TermsAndCondition,
                     IsDeleted: 0
                 }))
-
+                let Total_weigtage = 0
                 const orderItems = hasEditVal.OrderItems.map((ele, k) => {
+
+                    const weightage = (Number(ele["Weightage"])) || 0.00;
+                    const row_weightage = (Number(ele.Quantity) * Number(ele.BaseUnitQuantity)) / Number(weightage)
+                    Total_weigtage = Total_weigtage + row_weightage
+
                     ele["id"] = k + 1
                     return ele
                 });
@@ -343,7 +348,7 @@ const Order = (props) => {
                 setTermsAndConTable(termsAndCondition)
 
                 const commaSeparateAmount = _cfunc.amountCommaSeparateFunc(Number(hasEditVal.OrderAmount).toFixed(2));
-                dispatch(_act.BreadcrumbShowCountlabel(`Count:${orderItems.length} currency_symbol ${commaSeparateAmount} weight ${hasEditVal?.weightage} kg`))
+                dispatch(_act.BreadcrumbShowCountlabel(`Count:${orderItems.length} currency_symbol ${commaSeparateAmount} weight ${(Total_weigtage).toFixed(2)} kg`))
 
                 seteditCreatedBy(hasEditVal.CreatedBy)
             }
@@ -1116,7 +1121,7 @@ const Order = (props) => {
     };
 
     function itemWise_CalculationFunc(row, IsComparGstIn, tableList = []) {
-        debugger
+
         const calculate = orderCalculateFunc(row) //order calculation function 
         row["Amount"] = calculate.roundedTotalAmount
 
@@ -1240,7 +1245,7 @@ const Order = (props) => {
 
             // Loop through the order items
             orderItemTable.forEach(item => {
-                debugger
+
                 // Check for item quantity and rate validity
                 if ((item.Quantity > 0) && !(item.Rate > 0)) {
                     validationMessages.push({ [item.ItemName]: alertMessages.itemRateIsRequired });
@@ -1509,7 +1514,6 @@ const Order = (props) => {
                                                         }}
                                                         name="deliverydate"
                                                         value={deliverydate}
-                                                        disabled={(orderItemTable.length > 0 || pageMode === "edit") ? true : false}
                                                         onChange={(e, date) => { setdeliverydate(date) }}
                                                     />
                                                 </Col>
