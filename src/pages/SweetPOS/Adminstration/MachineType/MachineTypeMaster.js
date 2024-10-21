@@ -72,7 +72,8 @@ const MachineTypeMaster = (props) => {
         ServerHost: "",
         ServerName: "",
         ServerPassWord: "",
-        ServerUser: ""
+        ServerUser: "",
+        Invoiceprefix:""
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
@@ -172,7 +173,7 @@ const MachineTypeMaster = (props) => {
             if (hasEditVal) {
                 const { id, ClientID, IsAutoUpdate, IsGiveUpdate, IsServer, IsService,
                     MacID, MachineName, MachineRole, MachineTypeDetails, ServerSequence,
-                    UploadSaleRecordCount, Validity, Version,
+                    UploadSaleRecordCount, Validity, Version,Invoiceprefix,
                     ServerDatabase, ServerHost, ServerName, ServerPassWord, ServerUser
 
                 } = hasEditVal
@@ -196,6 +197,7 @@ const MachineTypeMaster = (props) => {
                 hasValid.ServerName.valid = true;
                 hasValid.ServerPassWord.valid = true;
                 hasValid.ServerUser.valid = true;
+                hasValid.Invoiceprefix.valid=true
 
 
                 values.id = id
@@ -221,6 +223,8 @@ const MachineTypeMaster = (props) => {
                 values.ServerName = ServerName
                 values.ServerPassWord = ServerPassWord
                 values.ServerUser = ServerUser
+                values.Invoiceprefix = Invoiceprefix
+
 
                 setState({ values, fieldLabel, hasValid, required, isError })
                 dispatch(Breadcrumb_inputName(hasEditVal.RoleMaster))
@@ -297,9 +301,10 @@ const MachineTypeMaster = (props) => {
                     "Version": values.Version,
                     "ServerDatabase": values.ServerDatabase,
                     "ServerHost": values.ServerHost,
-                    "ServerName": values.ServerName,
+                    "SeverName": values.ServerName,
                     "ServerPassWord": values.ServerPassWord,
                     "ServerUser": values.ServerUser,
+                    "Invoiceprefix":values.Invoiceprefix
                 }]);
                 dispatch(SPos_MachineTypeSave_Action({ jsonBody }));
 
@@ -378,7 +383,7 @@ const MachineTypeMaster = (props) => {
                                                             type="text"
                                                             disabled={true}
                                                             className={isError.ClientID.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                            placeholder="Please Enter ClientID"
+                                                            placeholder="Please Enter Client ID"
                                                             autoComplete='off'
                                                             onChange={(event) => {
                                                                 onChangeText({ event, state, setState })
@@ -400,7 +405,7 @@ const MachineTypeMaster = (props) => {
                                                             value={values.MachineName}
                                                             type="text"
                                                             className={isError.MachineName.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                            placeholder="Please Enter MachineName"
+                                                            placeholder="Please Enter Machine Name"
                                                             autoComplete='off'
                                                             onChange={(event) => {
                                                                 onChangeText({ event, state, setState })
@@ -421,7 +426,7 @@ const MachineTypeMaster = (props) => {
                                                             value={values.MachineRole}
                                                             type="text"
                                                             className={isError.MachineRole.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                            placeholder="Please Enter MachineRole"
+                                                            placeholder="Please Enter Machine Role"
                                                             autoComplete='off'
                                                             onChange={(event) => {
                                                                 onChangeText({ event, state, setState })
@@ -464,7 +469,7 @@ const MachineTypeMaster = (props) => {
                                                             value={values.UploadSaleRecordCount}
                                                             type="text"
                                                             className={isError.UploadSaleRecordCount.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                            placeholder="Please Enter Upload Sale RecordCount"
+                                                            placeholder="Please Enter Upload Sale Record Count"
                                                             autoComplete='off'
                                                             onChange={(event) => {
                                                                 onChangeText({ event, state, setState })
@@ -504,7 +509,7 @@ const MachineTypeMaster = (props) => {
                                                             value={values.Version}
                                                             type="text"
                                                             className={isError.Version.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                            placeholder="Please Enter Server Sequence"
+                                                            placeholder="Please Enter Version"
                                                             autoComplete='off'
                                                             onChange={(event) => {
                                                                 onChangeText({ event, state, setState })
@@ -596,7 +601,7 @@ const MachineTypeMaster = (props) => {
                                                             value={values.ServerHost}
                                                             type="text"
                                                             className={isError.ServerHost.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                            placeholder="Please Enter Upload Sale RecordCount"
+                                                            placeholder="Please Enter Server Host"
                                                             autoComplete='off'
                                                             onChange={(event) => {
                                                                 onChangeText({ event, state, setState })
@@ -616,7 +621,7 @@ const MachineTypeMaster = (props) => {
                                                             value={values.ServerName}
                                                             type="text"
                                                             className={isError.ServerName.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                            placeholder="Please Enter Upload Sale RecordCount"
+                                                            placeholder="Please Enter Server Name"
                                                             autoComplete='off'
                                                             onChange={(event) => {
                                                                 onChangeText({ event, state, setState })
@@ -637,7 +642,7 @@ const MachineTypeMaster = (props) => {
                                                             type="text"
                                                             className={isError.ServerUser.length > 0 ? "is-invalid form-control" : "form-control"}
                                                             autoComplete='off'
-                                                            placeholder="Please Enter ServerUser"
+                                                            placeholder="Please Enter Server User"
                                                             onChange={(event) => {
                                                                 onChangeText({ event, state, setState })
                                                             }}
@@ -657,7 +662,7 @@ const MachineTypeMaster = (props) => {
                                                             value={values.ServerDatabase}
                                                             type="text"
                                                             className={isError.ServerDatabase.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                            placeholder="Please Enter ServerDatabase"
+                                                            placeholder="Please Enter Server Database"
                                                             autoComplete='off'
                                                             onChange={(event) => {
                                                                 onChangeText({ event, state, setState })
@@ -678,7 +683,7 @@ const MachineTypeMaster = (props) => {
                                                             value={values.ServerPassWord}
                                                             type="text"
                                                             className={isError.ServerPassWord.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                            placeholder="Please Enter ServerPassWord"
+                                                            placeholder="Please Enter Server PassWord"
                                                             autoComplete='off'
                                                             onChange={(event) => {
                                                                 onChangeText({ event, state, setState })
@@ -686,6 +691,26 @@ const MachineTypeMaster = (props) => {
                                                         />
                                                         {isError.ServerPassWord.length > 0 && (
                                                             <span className="text-danger f-8"><small>{isError.ServerPassWord}</small></span>
+                                                        )}
+                                                    </FormGroup>
+
+                                                    <Col md="1">  </Col>
+                                                    <FormGroup className="mb-2 col col-sm-3 ">
+                                                        <Label >{fieldLabel.Invoiceprefix} </Label>
+                                                        <Input
+                                                            name="Invoiceprefix"
+                                                            id="Invoiceprefix"
+                                                            value={values.Invoiceprefix}
+                                                            type="text"
+                                                            className={isError.Invoiceprefix.length > 0 ? "is-invalid form-control" : "form-control"}
+                                                            placeholder="Please Enter Invoice Prefix"
+                                                            autoComplete='off'
+                                                            onChange={(event) => {
+                                                                onChangeText({ event, state, setState })
+                                                            }}
+                                                        />
+                                                        {isError.Invoiceprefix.length > 0 && (
+                                                            <span className="text-danger f-8"><small>{isError.Invoiceprefix}</small></span>
                                                         )}
                                                     </FormGroup>
 
