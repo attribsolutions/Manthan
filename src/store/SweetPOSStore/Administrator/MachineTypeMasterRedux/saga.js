@@ -15,7 +15,7 @@ function* S_Pos_MachineType_List_GenFun({ config }) {
         const newArray = response.Data.map((i) => {
             return {
                 ...i,
-                ValidityDate: date_dmy_func(i.Validity),
+                ValidityDate: i.Validity ? date_dmy_func(i.Validity) : null,
                 MachineTypeNames: i.MachineTypeDetails.map(i => i.MachineTypeName).join(',')
             };
         });
