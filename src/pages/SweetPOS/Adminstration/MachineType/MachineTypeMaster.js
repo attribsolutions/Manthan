@@ -383,7 +383,7 @@ const MachineTypeMaster = (props) => {
                                                             type="text"
                                                             disabled={true}
                                                             className={isError.ClientID.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                            placeholder="Please Enter ClientID"
+                                                            placeholder="Please Enter Client ID"
                                                             autoComplete='off'
                                                             onChange={(event) => {
                                                                 onChangeText({ event, state, setState })
@@ -405,7 +405,7 @@ const MachineTypeMaster = (props) => {
                                                             value={values.MachineName}
                                                             type="text"
                                                             className={isError.MachineName.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                            placeholder="Please Enter MachineName"
+                                                            placeholder="Please Enter Machine Name"
                                                             autoComplete='off'
                                                             onChange={(event) => {
                                                                 onChangeText({ event, state, setState })
@@ -426,7 +426,7 @@ const MachineTypeMaster = (props) => {
                                                             value={values.MachineRole}
                                                             type="text"
                                                             className={isError.MachineRole.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                            placeholder="Please Enter MachineRole"
+                                                            placeholder="Please Enter Machine Role"
                                                             autoComplete='off'
                                                             onChange={(event) => {
                                                                 onChangeText({ event, state, setState })
@@ -469,7 +469,7 @@ const MachineTypeMaster = (props) => {
                                                             value={values.UploadSaleRecordCount}
                                                             type="text"
                                                             className={isError.UploadSaleRecordCount.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                            placeholder="Please Enter Upload Sale RecordCount"
+                                                            placeholder="Please Enter Upload Sale Record Count"
                                                             autoComplete='off'
                                                             onChange={(event) => {
                                                                 onChangeText({ event, state, setState })
@@ -509,7 +509,7 @@ const MachineTypeMaster = (props) => {
                                                             value={values.Version}
                                                             type="text"
                                                             className={isError.Version.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                            placeholder="Please Enter Server Sequence"
+                                                            placeholder="Please Enter Version"
                                                             autoComplete='off'
                                                             onChange={(event) => {
                                                                 onChangeText({ event, state, setState })
@@ -601,7 +601,7 @@ const MachineTypeMaster = (props) => {
                                                             value={values.ServerHost}
                                                             type="text"
                                                             className={isError.ServerHost.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                            placeholder="Please Enter Upload Sale RecordCount"
+                                                            placeholder="Please Enter Server Host"
                                                             autoComplete='off'
                                                             onChange={(event) => {
                                                                 onChangeText({ event, state, setState })
@@ -621,7 +621,7 @@ const MachineTypeMaster = (props) => {
                                                             value={values.ServerName}
                                                             type="text"
                                                             className={isError.ServerName.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                            placeholder="Please Enter Upload Sale RecordCount"
+                                                            placeholder="Please Enter Server Name"
                                                             autoComplete='off'
                                                             onChange={(event) => {
                                                                 onChangeText({ event, state, setState })
@@ -642,7 +642,7 @@ const MachineTypeMaster = (props) => {
                                                             type="text"
                                                             className={isError.ServerUser.length > 0 ? "is-invalid form-control" : "form-control"}
                                                             autoComplete='off'
-                                                            placeholder="Please Enter ServerUser"
+                                                            placeholder="Please Enter Server User"
                                                             onChange={(event) => {
                                                                 onChangeText({ event, state, setState })
                                                             }}
@@ -662,7 +662,7 @@ const MachineTypeMaster = (props) => {
                                                             value={values.ServerDatabase}
                                                             type="text"
                                                             className={isError.ServerDatabase.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                            placeholder="Please Enter ServerDatabase"
+                                                            placeholder="Please Enter Server Database"
                                                             autoComplete='off'
                                                             onChange={(event) => {
                                                                 onChangeText({ event, state, setState })
@@ -683,7 +683,7 @@ const MachineTypeMaster = (props) => {
                                                             value={values.ServerPassWord}
                                                             type="text"
                                                             className={isError.ServerPassWord.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                            placeholder="Please Enter ServerPassWord"
+                                                            placeholder="Please Enter Server PassWord"
                                                             autoComplete='off'
                                                             onChange={(event) => {
                                                                 onChangeText({ event, state, setState })
@@ -703,7 +703,7 @@ const MachineTypeMaster = (props) => {
                                                             value={values.Invoiceprefix}
                                                             type="text"
                                                             className={isError.Invoiceprefix.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                            placeholder="Please Enter Invoiceprefix"
+                                                            placeholder="Please Enter Invoice Prefix"
                                                             autoComplete='off'
                                                             onChange={(event) => {
                                                                 onChangeText({ event, state, setState })
