@@ -72,7 +72,8 @@ const MachineTypeMaster = (props) => {
         ServerHost: "",
         ServerName: "",
         ServerPassWord: "",
-        ServerUser: ""
+        ServerUser: "",
+        Invoiceprefix:""
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
@@ -172,7 +173,7 @@ const MachineTypeMaster = (props) => {
             if (hasEditVal) {
                 const { id, ClientID, IsAutoUpdate, IsGiveUpdate, IsServer, IsService,
                     MacID, MachineName, MachineRole, MachineTypeDetails, ServerSequence,
-                    UploadSaleRecordCount, Validity, Version,
+                    UploadSaleRecordCount, Validity, Version,Invoiceprefix,
                     ServerDatabase, ServerHost, ServerName, ServerPassWord, ServerUser
 
                 } = hasEditVal
@@ -196,6 +197,7 @@ const MachineTypeMaster = (props) => {
                 hasValid.ServerName.valid = true;
                 hasValid.ServerPassWord.valid = true;
                 hasValid.ServerUser.valid = true;
+                hasValid.Invoiceprefix.valid=true
 
 
                 values.id = id
@@ -221,6 +223,8 @@ const MachineTypeMaster = (props) => {
                 values.ServerName = ServerName
                 values.ServerPassWord = ServerPassWord
                 values.ServerUser = ServerUser
+                values.Invoiceprefix = Invoiceprefix
+
 
                 setState({ values, fieldLabel, hasValid, required, isError })
                 dispatch(Breadcrumb_inputName(hasEditVal.RoleMaster))
@@ -297,9 +301,10 @@ const MachineTypeMaster = (props) => {
                     "Version": values.Version,
                     "ServerDatabase": values.ServerDatabase,
                     "ServerHost": values.ServerHost,
-                    "ServerName": values.ServerName,
+                    "SeverName": values.ServerName,
                     "ServerPassWord": values.ServerPassWord,
                     "ServerUser": values.ServerUser,
+                    "Invoiceprefix":values.Invoiceprefix
                 }]);
                 dispatch(SPos_MachineTypeSave_Action({ jsonBody }));
 
@@ -686,6 +691,26 @@ const MachineTypeMaster = (props) => {
                                                         />
                                                         {isError.ServerPassWord.length > 0 && (
                                                             <span className="text-danger f-8"><small>{isError.ServerPassWord}</small></span>
+                                                        )}
+                                                    </FormGroup>
+
+                                                    <Col md="1">  </Col>
+                                                    <FormGroup className="mb-2 col col-sm-3 ">
+                                                        <Label >{fieldLabel.Invoiceprefix} </Label>
+                                                        <Input
+                                                            name="Invoiceprefix"
+                                                            id="Invoiceprefix"
+                                                            value={values.Invoiceprefix}
+                                                            type="text"
+                                                            className={isError.Invoiceprefix.length > 0 ? "is-invalid form-control" : "form-control"}
+                                                            placeholder="Please Enter Invoiceprefix"
+                                                            autoComplete='off'
+                                                            onChange={(event) => {
+                                                                onChangeText({ event, state, setState })
+                                                            }}
+                                                        />
+                                                        {isError.Invoiceprefix.length > 0 && (
+                                                            <span className="text-danger f-8"><small>{isError.Invoiceprefix}</small></span>
                                                         )}
                                                     </FormGroup>
 
