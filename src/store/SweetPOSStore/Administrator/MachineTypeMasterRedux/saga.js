@@ -15,8 +15,12 @@ function* S_Pos_MachineType_List_GenFun({ config }) {
         const newArray = response.Data.map((i) => {
             return {
                 ...i,
-                ValidityDate: date_dmy_func(i.Validity),
-                MachineTypeNames: i.MachineTypeDetails.map(i => i.MachineTypeName).join(',')
+                ValidityDate: i.Validity ? date_dmy_func(i.Validity) : null,
+                MachineTypeNames: i.MachineTypeDetails.map(i => i.MachineTypeName).join(','),
+                // IsAutoUpdate: i.IsAutoUpdate ? "TRUE" : "",
+                // IsGiveUpdate: i.IsGiveUpdate ? "TRUE" : "",
+                // IsServer: i.IsServer ? "TRUE" : "",
+                // IsService: i.IsService ? "TRUE" : "",
             };
         });
         yield put(SPos_MachineTypeList_Success(newArray));
