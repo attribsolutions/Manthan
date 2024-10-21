@@ -45,6 +45,7 @@ import { customAlert } from "../../../../CustomAlert/ConfirmDialog";
 import { C_DatePicker } from "../../../../CustomValidateForm";
 import { GenralMasterSubType } from "../../../../helpers/backend_helper";
 import { SPos_MachineTypeList_Success, SPos_MachineTypeSave_Action, SPos_MachineTypeSave_Success } from "../../../../store/SweetPOSStore/Administrator/MachineTypeMasterRedux/action";
+import SaveButtonDraggable from "../../../../components/Common/saveButtonDraggable";
 
 const MachineTypeMaster = (props) => {
 
@@ -65,13 +66,14 @@ const MachineTypeMaster = (props) => {
         MachineName: "",
         ServerSequence: "",
         UploadSaleRecordCount: "",
-        Validity: currentDate_ymd,
+        Validity: "",
         Version: "",
         ServerDatabase: "",
         ServerHost: "",
         ServerName: "",
         ServerPassWord: "",
-        ServerUser: ""
+        ServerUser: "",
+        Invoiceprefix:""
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
@@ -171,7 +173,7 @@ const MachineTypeMaster = (props) => {
             if (hasEditVal) {
                 const { id, ClientID, IsAutoUpdate, IsGiveUpdate, IsServer, IsService,
                     MacID, MachineName, MachineRole, MachineTypeDetails, ServerSequence,
-                    UploadSaleRecordCount, Validity, Version,
+                    UploadSaleRecordCount, Validity, Version,Invoiceprefix,
                     ServerDatabase, ServerHost, ServerName, ServerPassWord, ServerUser
 
                 } = hasEditVal
@@ -190,6 +192,13 @@ const MachineTypeMaster = (props) => {
                 hasValid.UploadSaleRecordCount.valid = true;
                 hasValid.Validity.valid = true;
                 hasValid.Version.valid = true;
+                hasValid.ServerDatabase.valid = true;
+                hasValid.ServerHost.valid = true;
+                hasValid.ServerName.valid = true;
+                hasValid.ServerPassWord.valid = true;
+                hasValid.ServerUser.valid = true;
+                hasValid.Invoiceprefix.valid=true
+
 
                 values.id = id
                 values.ClientID = ClientID
@@ -214,6 +223,8 @@ const MachineTypeMaster = (props) => {
                 values.ServerName = ServerName
                 values.ServerPassWord = ServerPassWord
                 values.ServerUser = ServerUser
+                values.Invoiceprefix = Invoiceprefix
+
 
                 setState({ values, fieldLabel, hasValid, required, isError })
                 dispatch(Breadcrumb_inputName(hasEditVal.RoleMaster))
@@ -290,9 +301,10 @@ const MachineTypeMaster = (props) => {
                     "Version": values.Version,
                     "ServerDatabase": values.ServerDatabase,
                     "ServerHost": values.ServerHost,
-                    "ServerName": values.ServerName,
+                    "SeverName": values.ServerName,
                     "ServerPassWord": values.ServerPassWord,
                     "ServerUser": values.ServerUser,
+                    "Invoiceprefix":values.Invoiceprefix
                 }]);
                 dispatch(SPos_MachineTypeSave_Action({ jsonBody }));
 
@@ -371,7 +383,7 @@ const MachineTypeMaster = (props) => {
                                                             type="text"
                                                             disabled={true}
                                                             className={isError.ClientID.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                            placeholder="Please Enter ClientID"
+                                                            placeholder="Please Enter Client ID"
                                                             autoComplete='off'
                                                             onChange={(event) => {
                                                                 onChangeText({ event, state, setState })
@@ -393,7 +405,7 @@ const MachineTypeMaster = (props) => {
                                                             value={values.MachineName}
                                                             type="text"
                                                             className={isError.MachineName.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                            placeholder="Please Enter MachineName"
+                                                            placeholder="Please Enter Machine Name"
                                                             autoComplete='off'
                                                             onChange={(event) => {
                                                                 onChangeText({ event, state, setState })
@@ -414,7 +426,7 @@ const MachineTypeMaster = (props) => {
                                                             value={values.MachineRole}
                                                             type="text"
                                                             className={isError.MachineRole.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                            placeholder="Please Enter MachineRole"
+                                                            placeholder="Please Enter Machine Role"
                                                             autoComplete='off'
                                                             onChange={(event) => {
                                                                 onChangeText({ event, state, setState })
@@ -449,7 +461,7 @@ const MachineTypeMaster = (props) => {
                                                 </Row>
 
                                                 <Row className="mt-1">
-                                                    <FormGroup className="mb-2 col col-sm-3 ">
+                                                    <FormGroup className="mb-1 col col-sm-3 ">
                                                         <Label htmlFor="validationCustom01">{fieldLabel.UploadSaleRecordCount} </Label>
                                                         <Input
                                                             name="UploadSaleRecordCount"
@@ -457,7 +469,7 @@ const MachineTypeMaster = (props) => {
                                                             value={values.UploadSaleRecordCount}
                                                             type="text"
                                                             className={isError.UploadSaleRecordCount.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                            placeholder="Please Enter Upload Sale RecordCount"
+                                                            placeholder="Please Enter Upload Sale Record Count"
                                                             autoComplete='off'
                                                             onChange={(event) => {
                                                                 onChangeText({ event, state, setState })
@@ -471,7 +483,7 @@ const MachineTypeMaster = (props) => {
 
                                                     <Col md="1">  </Col>
 
-                                                    <FormGroup className="mb-2 col col-sm-3 ">
+                                                    <FormGroup className="mb-1 col col-sm-3 ">
                                                         <Label htmlFor="validationCustom01">{fieldLabel.Validity} </Label>
                                                         <C_DatePicker
                                                             name="Validity"
@@ -489,7 +501,7 @@ const MachineTypeMaster = (props) => {
                                                     </FormGroup>
 
                                                     <Col md="1">  </Col>
-                                                    <FormGroup className="mb-2 col col-sm-3 ">
+                                                    <FormGroup className="mb-1 col col-sm-3 ">
                                                         <Label htmlFor="validationCustom01">{fieldLabel.Version} </Label>
                                                         <Input
                                                             name="Version"
@@ -497,7 +509,7 @@ const MachineTypeMaster = (props) => {
                                                             value={values.Version}
                                                             type="text"
                                                             className={isError.Version.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                            placeholder="Please Enter Server Sequence"
+                                                            placeholder="Please Enter Version"
                                                             autoComplete='off'
                                                             onChange={(event) => {
                                                                 onChangeText({ event, state, setState })
@@ -510,111 +522,9 @@ const MachineTypeMaster = (props) => {
                                                     </FormGroup>
                                                 </Row>
 
-                                                <Row className="mt-1">
-                                                    <FormGroup className="mb-2 col col-sm-3 ">
-                                                        <Label >{fieldLabel.ServerHost} </Label>
-                                                        <Input
-                                                            name="ServerHost"
-                                                            id="ServerHost"
-                                                            value={values.ServerHost}
-                                                            type="text"
-                                                            className={isError.ServerHost.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                            placeholder="Please Enter Upload Sale RecordCount"
-                                                            autoComplete='off'
-                                                            onChange={(event) => {
-                                                                onChangeText({ event, state, setState })
-                                                            }}
-                                                        />
-                                                        {isError.ServerHost.length > 0 && (
-                                                            <span className="text-danger f-8"><small>{isError.ServerHost}</small></span>
-                                                        )}
-                                                    </FormGroup>
-
-                                                    <Col md="1">  </Col>
-                                                    <FormGroup className="mb-2 col col-sm-3 ">
-                                                        <Label >{fieldLabel.ServerName} </Label>
-                                                        <Input
-                                                            name="ServerName"
-                                                            id="ServerName"
-                                                            value={values.ServerName}
-                                                            type="text"
-                                                            className={isError.ServerName.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                            placeholder="Please Enter Upload Sale RecordCount"
-                                                            autoComplete='off'
-                                                            onChange={(event) => {
-                                                                onChangeText({ event, state, setState })
-                                                            }}
-                                                        />
-                                                        {isError.ServerName.length > 0 && (
-                                                            <span className="text-danger f-8"><small>{isError.ServerName}</small></span>
-                                                        )}
-                                                    </FormGroup>
-
-                                                    <Col md="1">  </Col>
-                                                    <FormGroup className="mb-2 col col-sm-3 ">
-                                                        <Label >{fieldLabel.ServerUser} </Label>
-                                                        <Input
-                                                            name="ServerUser"
-                                                            id="ServerUser"
-                                                            value={values.ServerUser}
-                                                            type="text"
-                                                            className={isError.ServerUser.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                            autoComplete='off'
-                                                            placeholder="Please Enter ServerUser"
-                                                            onChange={(event) => {
-                                                                onChangeText({ event, state, setState })
-                                                            }}
-                                                        />
-                                                        {isError.ServerUser.length > 0 && (
-                                                            <span className="text-danger f-8"><small>{isError.ServerUser}</small></span>
-                                                        )}
-                                                    </FormGroup>
-                                                </Row>
-
-                                                <Row className="mt-1">
-                                                    <FormGroup className="mb-2 col col-sm-3 ">
-                                                        <Label htmlFor="validationCustom01">{fieldLabel.ServerDatabase} </Label>
-                                                        <Input
-                                                            name="ServerDatabase"
-                                                            id="ServerDatabase"
-                                                            value={values.ServerDatabase}
-                                                            type="text"
-                                                            className={isError.ServerDatabase.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                            placeholder="Please Enter ServerDatabase"
-                                                            autoComplete='off'
-                                                            onChange={(event) => {
-                                                                onChangeText({ event, state, setState })
-
-                                                            }}
-                                                        />
-                                                        {isError.ServerDatabase.length > 0 && (
-                                                            <span className="text-danger f-8"><small>{isError.ServerDatabase}</small></span>
-                                                        )}
-                                                    </FormGroup>
-
-                                                    <Col md="1">  </Col>
-                                                    <FormGroup className="mb-2 col col-sm-3 ">
-                                                        <Label >{fieldLabel.ServerPassWord} </Label>
-                                                        <Input
-                                                            name="ServerPassWord"
-                                                            id="ServerPassWord"
-                                                            value={values.ServerPassWord}
-                                                            type="text"
-                                                            className={isError.ServerPassWord.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                            placeholder="Please Enter ServerPassWord"
-                                                            autoComplete='off'
-                                                            onChange={(event) => {
-                                                                onChangeText({ event, state, setState })
-                                                            }}
-                                                        />
-                                                        {isError.ServerPassWord.length > 0 && (
-                                                            <span className="text-danger f-8"><small>{isError.ServerPassWord}</small></span>
-                                                        )}
-                                                    </FormGroup>
-
-                                                    <Col md="1">  </Col>
+                                                <Row >
                                                     <Col md="3">
-                                                        <FormGroup className="mb-3">
+                                                        <FormGroup >
                                                             <Row style={{ marginTop: '25px' }}>
                                                                 <Label className="col-sm-5 col-form-label">{fieldLabel.IsService}
                                                                 </Label>
@@ -633,33 +543,9 @@ const MachineTypeMaster = (props) => {
                                                         </FormGroup>
                                                     </Col>
 
-
-
-                                                </Row>
-                                                <Row>
-                                                    <Col md="3">
-                                                        <FormGroup className="mb-1">
-                                                            <Row style={{ marginTop: '25px' }}>
-                                                                <Label className="col-sm-5 col-form-label">{fieldLabel.IsServer}
-                                                                </Label>
-                                                                <Col md={4} style={{ marginTop: '7px' }} className=" form-check form-switch form-switch-sm ">
-                                                                    <div className="form-check form-switch form-switch-md mb-1">
-                                                                        <Input
-                                                                            type="checkbox"
-                                                                            className="form-check-input"
-                                                                            checked={values.IsServer}
-                                                                            name="IsServer"
-                                                                            onChange={(event) => onChangeCheckbox({ event, state, setState })}
-                                                                        />
-                                                                    </div>
-                                                                </Col>
-                                                            </Row>
-                                                        </FormGroup>
-                                                    </Col>
-
                                                     <Col md="1">  </Col>
                                                     <Col md="3">
-                                                        <FormGroup className="mb-1">
+                                                        <FormGroup >
                                                             <Row style={{ marginTop: '25px' }}>
                                                                 <Label className="col-sm-5 col-form-label"> {fieldLabel.IsAutoUpdate}
                                                                 </Label>
@@ -680,7 +566,7 @@ const MachineTypeMaster = (props) => {
 
                                                     <Col md="1">  </Col>
                                                     <Col md="3">
-                                                        <FormGroup className="mb-1">
+                                                        <FormGroup >
                                                             <Row style={{ marginTop: '25px' }}>
                                                                 <Label className="col-sm-5 col-form-label">  {fieldLabel.IsGiveUpdate}
                                                                 </Label>
@@ -699,24 +585,167 @@ const MachineTypeMaster = (props) => {
                                                         </FormGroup>
                                                     </Col>
                                                 </Row>
-
-
-                                                <FormGroup>
-                                                    <Row>
-                                                        <Col sm={2} className="mt-3">
-                                                            <SaveButton pageMode={pageMode}
-                                                                loading={saveBtnloading}
-                                                                onClick={SaveHandler}
-                                                                userAcc={userPageAccessState}
-                                                            />
-                                                        </Col>
-                                                    </Row>
-                                                </FormGroup >
-
                                             </CardBody>
                                         </Card>
                                     </Col>
 
+                                    <Col md={12}>
+                                        <Card>
+                                            <CardBody className="c_card_body">
+                                                <Row className="mt-1">
+                                                    <FormGroup className="mb-2 col col-sm-3 ">
+                                                        <Label >{fieldLabel.ServerHost} </Label>
+                                                        <Input
+                                                            name="ServerHost"
+                                                            id="ServerHost"
+                                                            value={values.ServerHost}
+                                                            type="text"
+                                                            className={isError.ServerHost.length > 0 ? "is-invalid form-control" : "form-control"}
+                                                            placeholder="Please Enter Server Host"
+                                                            autoComplete='off'
+                                                            onChange={(event) => {
+                                                                onChangeText({ event, state, setState })
+                                                            }}
+                                                        />
+                                                        {isError.ServerHost.length > 0 && (
+                                                            <span className="text-danger f-8"><small>{isError.ServerHost}</small></span>
+                                                        )}
+                                                    </FormGroup>
+
+                                                    <Col md="1">  </Col>
+                                                    <FormGroup className="mb-2 col col-sm-3 ">
+                                                        <Label >{fieldLabel.ServerName} </Label>
+                                                        <Input
+                                                            name="ServerName"
+                                                            id="ServerName"
+                                                            value={values.ServerName}
+                                                            type="text"
+                                                            className={isError.ServerName.length > 0 ? "is-invalid form-control" : "form-control"}
+                                                            placeholder="Please Enter Server Name"
+                                                            autoComplete='off'
+                                                            onChange={(event) => {
+                                                                onChangeText({ event, state, setState })
+                                                            }}
+                                                        />
+                                                        {isError.ServerName.length > 0 && (
+                                                            <span className="text-danger f-8"><small>{isError.ServerName}</small></span>
+                                                        )}
+                                                    </FormGroup>
+
+                                                    <Col md="1">  </Col>
+                                                    <FormGroup className="mb-2 col col-sm-3 ">
+                                                        <Label >{fieldLabel.ServerUser} </Label>
+                                                        <Input
+                                                            name="ServerUser"
+                                                            id="ServerUser"
+                                                            value={values.ServerUser}
+                                                            type="text"
+                                                            className={isError.ServerUser.length > 0 ? "is-invalid form-control" : "form-control"}
+                                                            autoComplete='off'
+                                                            placeholder="Please Enter Server User"
+                                                            onChange={(event) => {
+                                                                onChangeText({ event, state, setState })
+                                                            }}
+                                                        />
+                                                        {isError.ServerUser.length > 0 && (
+                                                            <span className="text-danger f-8"><small>{isError.ServerUser}</small></span>
+                                                        )}
+                                                    </FormGroup>
+                                                </Row>
+
+                                                <Row className="mt-1">
+                                                    <FormGroup className="mb-2 col col-sm-3 ">
+                                                        <Label htmlFor="validationCustom01">{fieldLabel.ServerDatabase} </Label>
+                                                        <Input
+                                                            name="ServerDatabase"
+                                                            id="ServerDatabase"
+                                                            value={values.ServerDatabase}
+                                                            type="text"
+                                                            className={isError.ServerDatabase.length > 0 ? "is-invalid form-control" : "form-control"}
+                                                            placeholder="Please Enter Server Database"
+                                                            autoComplete='off'
+                                                            onChange={(event) => {
+                                                                onChangeText({ event, state, setState })
+
+                                                            }}
+                                                        />
+                                                        {isError.ServerDatabase.length > 0 && (
+                                                            <span className="text-danger f-8"><small>{isError.ServerDatabase}</small></span>
+                                                        )}
+                                                    </FormGroup>
+
+                                                    <Col md="1">  </Col>
+                                                    <FormGroup className="mb-2 col col-sm-3 ">
+                                                        <Label >{fieldLabel.ServerPassWord} </Label>
+                                                        <Input
+                                                            name="ServerPassWord"
+                                                            id="ServerPassWord"
+                                                            value={values.ServerPassWord}
+                                                            type="text"
+                                                            className={isError.ServerPassWord.length > 0 ? "is-invalid form-control" : "form-control"}
+                                                            placeholder="Please Enter Server PassWord"
+                                                            autoComplete='off'
+                                                            onChange={(event) => {
+                                                                onChangeText({ event, state, setState })
+                                                            }}
+                                                        />
+                                                        {isError.ServerPassWord.length > 0 && (
+                                                            <span className="text-danger f-8"><small>{isError.ServerPassWord}</small></span>
+                                                        )}
+                                                    </FormGroup>
+
+                                                    <Col md="1">  </Col>
+                                                    <FormGroup className="mb-2 col col-sm-3 ">
+                                                        <Label >{fieldLabel.Invoiceprefix} </Label>
+                                                        <Input
+                                                            name="Invoiceprefix"
+                                                            id="Invoiceprefix"
+                                                            value={values.Invoiceprefix}
+                                                            type="text"
+                                                            className={isError.Invoiceprefix.length > 0 ? "is-invalid form-control" : "form-control"}
+                                                            placeholder="Please Enter Invoice Prefix"
+                                                            autoComplete='off'
+                                                            onChange={(event) => {
+                                                                onChangeText({ event, state, setState })
+                                                            }}
+                                                        />
+                                                        {isError.Invoiceprefix.length > 0 && (
+                                                            <span className="text-danger f-8"><small>{isError.Invoiceprefix}</small></span>
+                                                        )}
+                                                    </FormGroup>
+
+                                                    <Col md="1">  </Col>
+                                                    <Col md="3">
+                                                        <FormGroup className="mb-1">
+                                                            <Row style={{ marginTop: '25px' }}>
+                                                                <Label className="col-sm-5 col-form-label">{fieldLabel.IsServer}
+                                                                </Label>
+                                                                <Col md={4} style={{ marginTop: '7px' }} className=" form-check form-switch form-switch-sm ">
+                                                                    <div className="form-check form-switch form-switch-md mb-1">
+                                                                        <Input
+                                                                            type="checkbox"
+                                                                            className="form-check-input"
+                                                                            checked={values.IsServer}
+                                                                            name="IsServer"
+                                                                            onChange={(event) => onChangeCheckbox({ event, state, setState })}
+                                                                        />
+                                                                    </div>
+                                                                </Col>
+                                                            </Row>
+                                                        </FormGroup>
+                                                    </Col>
+                                                </Row>
+                                            </CardBody>
+                                        </Card>
+                                    </Col>
+
+                                    <SaveButtonDraggable>
+                                        <SaveButton pageMode={pageMode}
+                                            loading={saveBtnloading}
+                                            onClick={SaveHandler}
+                                            userAcc={userPageAccessState}
+                                        />
+                                    </SaveButtonDraggable>
                                 </form>
                             </CardBody>
                         </Card>
