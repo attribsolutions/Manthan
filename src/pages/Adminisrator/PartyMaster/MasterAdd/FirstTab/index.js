@@ -11,7 +11,7 @@ import PartyType from '../../../PartyTypes/PartyType'
 import * as url from "../../../../../routes/route_url";
 import AddMaster from "../../../EmployeePages/Drodown";
 import * as pageId from "../../../../../routes/allPageID"
-import { loginJsonBody, loginPartyTypeName } from '../../../../../components/Common/CommonFunction'
+import { loginJsonBody, loginPartyID, loginPartyName, loginPartyTypeName } from '../../../../../components/Common/CommonFunction'
 import { getCityOnDistrict, getCityOnDistrictSuccess } from '../../../../../store/Administrator/EmployeeRedux/action'
 import CityMaster from '../../../CityPages/CityMaster'
 import { C_Select } from '../../../../../CustomValidateForm'
@@ -243,7 +243,7 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
                 a.hasValid.PartyType.valid = false
 
 
-                a.values.Supplier = { value: 18837, label: 'Atharv Enterprises' };
+                a.values.Supplier = { value: loginPartyID(), label: loginPartyName() };
                 a.hasValid.Supplier.valid = false
 
                 setSupplierDisabled(true);
