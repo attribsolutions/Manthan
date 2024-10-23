@@ -11,7 +11,7 @@ import PartyType from '../../../PartyTypes/PartyType'
 import * as url from "../../../../../routes/route_url";
 import AddMaster from "../../../EmployeePages/Drodown";
 import * as pageId from "../../../../../routes/allPageID"
-import { loginJsonBody } from '../../../../../components/Common/CommonFunction'
+import { loginJsonBody, loginPartyID, loginPartyName, loginPartyTypeName } from '../../../../../components/Common/CommonFunction'
 import { getCityOnDistrict, getCityOnDistrictSuccess } from '../../../../../store/Administrator/EmployeeRedux/action'
 import CityMaster from '../../../CityPages/CityMaster'
 import { C_Select } from '../../../../../CustomValidateForm'
@@ -21,6 +21,7 @@ import { Get_Subcluster_On_cluster_API } from '../../../../../helpers/backend_he
 const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
 
     const dispatch = useDispatch();
+    const loginPartyType = loginPartyTypeName()
 
     const fileds = {
         Name: "",
@@ -53,6 +54,9 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
     const [city_AddMasterAccess, setCity_AddMasterAccess] = useState(false)
 
     const [SubClusterOptions, setSubClusterOptions] = useState({});
+
+    const [partyTypeDisabled, setPartyTypeDisabled] = useState(false)
+    const [supplierDisabled, setSupplierDisabled] = useState(false)
 
     const { values } = state;
     const { isError } = state;
@@ -229,6 +233,27 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
             dispatch(priceListByPartyAction(retailerParty.id))
         }
     }, [PartyTypes, pageField])
+
+    useEffect(() => {
+        
+        if (loginPartyType && subPageMode === url.FRANCHISE_CUSTOMER_MASTER) {
+            setState((i) => {
+                const a = { ...i }
+                a.values.PartyType = { value: 31, label: "Franchise Customer" };
+                a.hasValid.PartyType.valid = false
+
+
+                a.values.Supplier = { value: loginPartyID(), label: loginPartyName() };
+                a.hasValid.Supplier.valid = false
+
+                setSupplierDisabled(true);
+                setPartyTypeDisabled(true);
+                dispatch(priceListByPartyAction(31))
+                return a
+            })
+        }
+
+    }, [loginPartyType, PartyTypes, SupplierRedux])
 
     const PartyTypeDropdown_Options = PartyTypes.map((index) => ({
         value: index.id,
@@ -491,7 +516,7 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
                                                 name="PartyType"
                                                 value={values.PartyType}
                                                 isSearchable={true}
-                                                isDisabled={(subPageMode === url.PARTY_SELF_EDIT) && true}
+                                                isDisabled={(subPageMode === url.PARTY_SELF_EDIT || partyTypeDisabled) && true}
                                                 className="react-dropdown"
                                                 classNamePrefix="dropdown"
                                                 options={PartyTypeDropdown_Options}
@@ -550,9 +575,10 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
                                         <Label> {fieldLabel.Supplier} </Label>
                                         <Col sm={12}>
                                             <Select
+                                                id="supplierName"
                                                 name="Supplier"
                                                 value={values.Supplier}
-                                                isDisabled={(subPageMode === url.PARTY_SELF_EDIT) && true}
+                                                isDisabled={(subPageMode === url.PARTY_SELF_EDIT || supplierDisabled) && true}
                                                 className="react-dropdown"
                                                 classNamePrefix="dropdown"
                                                 options={SupplierOptions}
