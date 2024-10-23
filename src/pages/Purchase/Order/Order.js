@@ -76,11 +76,16 @@ function initialState(history) {
     return { page_Id, listPath }
 };
 
+
 const Order = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory();
-    const currentDate_ymd = _cfunc.date_ymd_func();
+    const IsFranchisesRole = _cfunc.loginUserIsFranchisesRole()
+
+
+
+    const currentDate_ymd = IsFranchisesRole ? _cfunc.Frenchies_date_ymd_func() : _cfunc.date_ymd_func();
 
     const Weight = _cfunc.loginUserDetails().Weight
 
@@ -240,6 +245,27 @@ const Order = (props) => {
     const otherloginAccss = (ind) => {
         if ((ind.id === pageId.PARTYITEM) && !(subPageMode === url.IB_ORDER)) {
             setFindPartyItemAccess(true)
+        }
+    };
+
+
+
+    const now = new Date();
+    const targetTime = new Date();
+
+    targetTime.setHours(18, 0, 0, 0); // 18:00 is 6 PM
+    let delay = targetTime - now; // Calculate the time difference in milliseconds
+
+    if (delay < 0) {
+        delay += 24 * 60 * 60 * 1000; // Add 24 hours in milliseconds
+    }
+    setTimeout(() => {
+        myFunction();
+    }, delay);
+
+    const myFunction = () => {
+        if (IsFranchisesRole) {
+            setdeliverydate(_cfunc.Frenchies_date_ymd_func())
         }
     };
 
@@ -1918,3 +1944,24 @@ const Order = (props) => {
 }
 
 export default Order
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
