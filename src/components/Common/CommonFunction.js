@@ -28,6 +28,33 @@ export const date_ymd_func = (isdate) => { //+++++++++++++++ Current Date by for
 };
 
 
+function Frenchies_isDateInitial(isdate) {
+  
+  const dateInstance = isdate ? new Date(isdate) : new Date();
+
+  // Get the current time
+  const hours = dateInstance.getHours();
+
+  // If it's 6:00 PM or later, move to the next day
+  if (hours >= 18) {
+    dateInstance.setDate(dateInstance.getDate() + 1);
+  }
+
+  const dd = String(dateInstance.getDate()).padStart(2, '0');
+  const mm = String(dateInstance.getMonth() + 1).padStart(2, '0');
+  const yy = dateInstance.getFullYear();
+  const minutes = String(dateInstance.getMinutes()).padStart(2, '0');
+  const seconds = String(dateInstance.getSeconds()).padStart(2, '0');
+
+  return { dd, mm, yy, hours, minutes, seconds, dateInstance };
+}
+
+export const Frenchies_date_ymd_func = (isdate) => {
+  let date = Frenchies_isDateInitial(isdate);
+  return `${date.yy}-${date.mm}-${date.dd}`;
+};
+
+
 export const date_dmy_func = (isdate) => { //+++++++++++++++ Current Date by format (dd-mm-yyy) ++++++++++++++++++++++++++++++++++++
 
   let date = isDateInitial(isdate);
