@@ -12,6 +12,7 @@ export const columns = [
     "Purchase Return",
     "Stock Adjustment",
     "Closing balance",
+    "Closing Amount",
     "Actual Stock",
     "Unit"
 
@@ -36,11 +37,11 @@ export const Rows = (data) => {
     let TotalPurchaseReturn = 0
     let TotalStockAdjustment = 0
     let TotalActualStock = 0
-
+    let TotalClosingAmount = 0
 
 
     StockDetails.forEach((element, key) => {
-        
+
         const tableitemRow = [
             `${element.GroupName}`,
             `${element.SubGroupName}`,
@@ -52,6 +53,7 @@ export const Rows = (data) => {
             `${numberWithCommas(Number(element.PurchaseReturn).toFixed(2))}`,
             `${numberWithCommas(Number(element.StockAdjustment).toFixed(2))}`,
             `${numberWithCommas(Number(element.ClosingBalance).toFixed(2))}`,
+            `${numberWithCommas(Number(element.ClosingAmount).toFixed(2))}`,
             `${numberWithCommas(Number(element.ActualStock).toFixed(2))}`,
             `${element.UnitName}`,
 
@@ -66,6 +68,7 @@ export const Rows = (data) => {
             TotalPurchaseReturn = Number(TotalPurchaseReturn) + Number(element.PurchaseReturn)
             TotalStockAdjustment = Number(TotalStockAdjustment) + Number(element.StockAdjustment)
             TotalActualStock = Number(TotalActualStock) + Number(element.ActualStock)
+            TotalClosingAmount = Number(TotalClosingAmount) + Number(element.ClosingAmount)
 
         };
 
@@ -81,6 +84,7 @@ export const Rows = (data) => {
                 `${numberWithCommas(Number(TotalPurchaseReturn).toFixed(2))}`,
                 `${numberWithCommas(Number(TotalStockAdjustment).toFixed(2))}`,
                 `${numberWithCommas(Number(TotalClosingBalance).toFixed(2))}`,
+                `${numberWithCommas(Number(TotalClosingAmount).toFixed(2))}`,
                 `${numberWithCommas(Number(TotalActualStock).toFixed(2))}`,
             ];
         };
@@ -91,7 +95,6 @@ export const Rows = (data) => {
             // returnArr.push(materialRow());
             returnArr.push(tableitemRow);
             data["tableTot"] = totalLots()
-
         }
         if (key === StockDetails.length - 1) {
             returnArr.push(totalrow());
