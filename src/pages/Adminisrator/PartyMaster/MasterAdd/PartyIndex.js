@@ -490,7 +490,7 @@ const PartyMaster = (props) => {
 			})
 			return;
 		};
-
+		
 		try {
 			btnIsDissablefunc({ btnId, state: true })
 
@@ -544,7 +544,7 @@ const PartyMaster = (props) => {
 				});
 				return;
 			}
-			debugger
+			
 			const jsonBody = JSON.stringify({
 				"Name": baseValue.Name,
 				"PriceList": priceListSelect.value,
