@@ -87,7 +87,8 @@ export default function InvoiceForGRN() {
                     Supplier: "",
                     Customer: commonPartyDropSelect.value,
                     OrderType: order_Type.InvoiceToGRN,
-                    IBType: ""
+                    IBType: "",
+                    Country:1
                 });
                 dispatch(getOrderListPage({ subPageMode, filtersBody, btnId: gobtnId }));
             }
