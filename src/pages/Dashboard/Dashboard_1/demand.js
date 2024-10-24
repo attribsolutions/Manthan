@@ -44,7 +44,8 @@ export default function DemandListForDashboard() {
                 "OrderType": 1,
                 "CustomerType": "",
                 "IBType": "IBSO",
-                "DashBoardMode": 0
+                "DashBoardMode": 0,
+                "Country": 1
 
             });
             dispatch(getOrderListPage({ subPageMode, filtersBody }));
@@ -87,7 +88,7 @@ export default function DemandListForDashboard() {
 
 
     const makeBtnFunc = (list = [], btnId) => {
-        
+
         let subPageMode = url.IB_ORDER_SO_LIST
         const obj = list[0]
 
