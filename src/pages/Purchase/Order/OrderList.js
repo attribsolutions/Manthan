@@ -25,6 +25,7 @@ import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMs
 import { getOrdersMakeInvoiceDataAction, getOrdersMakeInvoiceDataActionSuccess } from "../../../store/Sales/bulkInvoice/action";
 import { allLabelWithBlank } from "../../../components/Common/CommonErrorMsg/HarderCodeData";
 import { sideBarPageFiltersInfoAction } from "../../../store/Utilites/PartyDrodown/action";
+import { getCountryList_Action } from "../../../store/Administrator/CountryRedux/action";
 
 
 const OrderList = () => {
@@ -37,7 +38,8 @@ const OrderList = () => {
         FromDate: currentDate_ymd,
         ToDate: currentDate_ymd,
         Supplier: allLabelWithBlank,
-        CustomerType: [allLabelWithBlank]
+        CustomerType: [allLabelWithBlank],
+        CountryName: { value: 1, label: "India" }
     }
 
     const initialSubPageMode = useMemo(() => {
@@ -90,6 +92,10 @@ const OrderList = () => {
 
             gobutton_Add_invoice: state.InvoiceReducer.gobutton_Add,
             goBtnloading: state.OrderReducer.goBtnLoading,
+
+            countryList: state.CountryReducer.CountryList,
+            countryListloading: state.CountryReducer.loading,
+
             listBtnLoading: (state.OrderReducer.listBtnLoading
                 || state.InvoiceReducer.listBtnLoading
                 || state.PdfReportReducers.listBtnLoading
@@ -97,6 +103,7 @@ const OrderList = () => {
                 || state.InvoiceReducer.listBtnLoading
                 || state.GRNReducer.listBtnLoading
                 || state.PdfReportReducers.ReportBtnLoading),
+
         })
     );
 
@@ -115,6 +122,8 @@ const OrderList = () => {
         supplierDropLoading,
         unhideMsg,
         userAccess,
+        countryListloading,
+        countryList
     } = reducers;
 
     const ordersBulkInvoiceData = useSelector(state => state.BulkInvoiceReducer.ordersBulkInvoiceData);
@@ -268,7 +277,7 @@ const OrderList = () => {
             goButtonHandler("event", IBType)
         }
         dispatch(priceListByCompay_Action());
-
+        dispatch(getCountryList_Action());
         return () => {
             dispatch(_act.commonPageFieldListSuccess(null));
             dispatch(_act.getOrderListPageSuccess([]));//for clear privious order list  
@@ -422,6 +431,11 @@ const OrderList = () => {
     const customerTypeOptions = customerType.map((index) => ({
         value: index.id,
         label: index.Name,
+    }));
+
+    const CountryListOptions = countryList?.map((data) => ({
+        value: data.id,
+        label: data.Country
     }));
 
     function oderAprovalBtnFunc({ editId, btnId }) {
@@ -603,7 +617,8 @@ const OrderList = () => {
                 "OrderType": order_Type.PurchaseOrder,
                 "CustomerType": "",
                 "IBType": IBType ? IBType : otherState.IBType,
-                "DashBoardMode": 0
+                "DashBoardMode": 0,
+                "Country": values.CountryName.value
 
             }
             const SO_filters = {
@@ -614,7 +629,8 @@ const OrderList = () => {
                 "OrderType": order_Type.SaleOrder,
                 "CustomerType": isCustomerType,
                 "IBType": IBType ? IBType : otherState.IBType,
-                "DashBoardMode": 0
+                "DashBoardMode": 0,
+                "Country": values.CountryName.value
 
             }
             const GRN_STP_3_filters = {
@@ -625,7 +641,8 @@ const OrderList = () => {
                 "OrderType": _cfunc.IsSweetAndSnacksCompany() ? order_Type.PurchaseOrder : order_Type.InvoiceToGRN,
                 "CustomerType": '',
                 "IBType": IBType ? IBType : otherState.IBType,
-                "DashBoardMode": 0
+                "DashBoardMode": 0,
+                "Country": values.CountryName.value
 
             }
 
@@ -671,6 +688,14 @@ const OrderList = () => {
         })
     }
 
+    function CountryOnchange(e) {
+        setState((i) => {
+            const a = { ...i }
+            a.values.CountryName = e;
+            a.hasValid.CountryName.valid = true
+            return a
+        })
+    }
     function customerTypeOnchange(e = []) {
 
         if (e.length === 0) {
@@ -809,9 +834,37 @@ const OrderList = () => {
                         </FormGroup>
                     </Col >
 
+
                     <Col sm="1" className="mt-3 ">
                         <Go_Button loading={reducers.goBtnloading} id={gobtnId} onClick={goButtonHandler} />
                     </Col>
+                </div>
+                <div>
+                    {
+                        subPageMode === url.ORDER_LIST_4 &&
+
+                        <Col lg={2} className="">
+                            <FormGroup className="mb- row mt-3 " >
+                                <Label className="col-sm-5 p-2"
+                                    style={{ width: "83px" }}> {(!(fieldLabel.CountryName === '')) ? fieldLabel.CountryName : "Country"}</Label>
+                                <Col sm="7">
+                                    <C_Select
+                                        name="CountryName"
+                                        classNamePrefix="select2-Customer"
+                                        value={values.CountryName}
+                                        options={CountryListOptions}
+                                        onChange={CountryOnchange}
+                                        isLoading={countryListloading}
+                                        styles={{
+                                            menu: provided => ({ ...provided, zIndex: 2 })
+                                        }}
+                                    />
+                                </Col>
+                            </FormGroup>
+                        </Col>
+
+
+                    }
                 </div>
             </div >
         )
