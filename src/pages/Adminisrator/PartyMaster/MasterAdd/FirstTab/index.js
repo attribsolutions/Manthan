@@ -240,11 +240,11 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
             setState((i) => {
                 const a = { ...i }
                 a.values.PartyType = { value: 31, label: "Franchise Customer" };
-                a.hasValid.PartyType.valid = false
+                a.hasValid.PartyType.valid = true
 
 
                 a.values.Supplier = { value: loginPartyID(), label: loginPartyName() };
-                a.hasValid.Supplier.valid = false
+                a.hasValid.Supplier.valid = true
 
                 setSupplierDisabled(true);
                 setPartyTypeDisabled(true);
