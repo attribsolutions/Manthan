@@ -234,26 +234,26 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
         }
     }, [PartyTypes, pageField])
 
-    useEffect(() => {
+    // useEffect(() => {
         
-        if (loginPartyType && subPageMode === url.FRANCHISE_CUSTOMER_MASTER) {
-            setState((i) => {
-                const a = { ...i }
-                a.values.PartyType = { value: 31, label: "Franchise Customer" };
-                a.hasValid.PartyType.valid = true
+    //     if (loginPartyType && subPageMode === url.FRANCHISE_CUSTOMER_MASTER) {
+    //         setState((i) => {
+    //             const a = { ...i }
+    //             a.values.PartyType = { value: 31, label: "Franchise Customer" };
+    //             a.hasValid.PartyType.valid = false
 
 
-                a.values.Supplier = { value: loginPartyID(), label: loginPartyName() };
-                a.hasValid.Supplier.valid = true
+    //             a.values.Supplier = { value: loginPartyID(), label: loginPartyName() };
+    //             a.hasValid.Supplier.valid = false
 
-                setSupplierDisabled(true);
-                setPartyTypeDisabled(true);
-                dispatch(priceListByPartyAction(31))
-                return a
-            })
-        }
+    //             setSupplierDisabled(true);
+    //             setPartyTypeDisabled(true);
+    //             dispatch(priceListByPartyAction(31))
+    //             return a
+    //         })
+    //     }
 
-    }, [loginPartyType, PartyTypes, SupplierRedux])
+    // }, [loginPartyType, PartyTypes, SupplierRedux])
 
     const PartyTypeDropdown_Options = PartyTypes.map((index) => ({
         value: index.id,
@@ -309,6 +309,7 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
     const RouteName_Options = RoutesListOptions.filter((index) => {
         return index.IsActive === true
     });
+    
     function partyTypeOnChange(hasSelect, evn) {
 
         onChangeSelect({ hasSelect, evn, state, setState })

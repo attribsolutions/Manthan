@@ -41,7 +41,7 @@ const OrderList = () => {
         ToDate: currentDate_ymd,
         Supplier: allLabelWithBlank,
         CustomerType: [allLabelWithBlank],
-        CountryName: { value: LoginDetails?.Country_id, label: LoginDetails?.Country }
+        // CountryName: { value: LoginDetails?.Country_id, label: LoginDetails?.Country }
     }
 
     const initialSubPageMode = useMemo(() => {
@@ -279,7 +279,7 @@ const OrderList = () => {
             goButtonHandler("event", IBType)
         }
         dispatch(priceListByCompay_Action());
-        dispatch(getCountryList_Action());
+        // dispatch(getCountryList_Action());
         return () => {
             dispatch(_act.commonPageFieldListSuccess(null));
             dispatch(_act.getOrderListPageSuccess([]));//for clear privious order list  
@@ -620,7 +620,7 @@ const OrderList = () => {
                 "CustomerType": "",
                 "IBType": IBType ? IBType : otherState.IBType,
                 "DashBoardMode": 0,
-                "Country": values.CountryName.value
+                // "Country": values.CountryName.value
 
             }
             const SO_filters = {
@@ -632,7 +632,7 @@ const OrderList = () => {
                 "CustomerType": isCustomerType,
                 "IBType": IBType ? IBType : otherState.IBType,
                 "DashBoardMode": 0,
-                "Country": values.CountryName.value
+                // "Country": values.CountryName.value
 
             }
             const GRN_STP_3_filters = {
@@ -644,7 +644,7 @@ const OrderList = () => {
                 "CustomerType": '',
                 "IBType": IBType ? IBType : otherState.IBType,
                 "DashBoardMode": 0,
-                "Country": values.CountryName.value
+                // "Country": values.CountryName.value
 
             }
 
@@ -841,7 +841,7 @@ const OrderList = () => {
                         <Go_Button loading={reducers.goBtnloading} id={gobtnId} onClick={goButtonHandler} />
                     </Col>
                 </div>
-                <div>
+                {/* <div>
                     {
                         (subPageMode === url.ORDER_LIST_4 && LoginDetails?.PartyType === "Division") &&
 
@@ -867,7 +867,7 @@ const OrderList = () => {
 
 
                     }
-                </div>
+                </div> */}
             </div >
         )
     }
