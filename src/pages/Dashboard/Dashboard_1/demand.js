@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
-import { date_ymd_func, loginSelectedPartyID } from '../../../components/Common/CommonFunction';
+import { date_ymd_func, loginSelectedPartyID, loginUserDetails } from '../../../components/Common/CommonFunction';
 import { useDispatch, useSelector } from 'react-redux';
 import { globalTableSearchProps } from '../../../components/Common/SearchBox/MySearch';
 import { salesReturnListAPI, salesReturnListAPISuccess } from '../../../store/Sales/SalesReturnRedux/action';
@@ -45,7 +45,7 @@ export default function DemandListForDashboard() {
                 "CustomerType": "",
                 "IBType": "IBSO",
                 "DashBoardMode": 0,
-                "Country": 1
+                "Country": loginUserDetails()?.Country_id
 
             });
             dispatch(getOrderListPage({ subPageMode, filtersBody }));

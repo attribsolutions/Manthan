@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { globalTableSearchProps } from '../../../components/Common/SearchBox/MySearch';
-import { IsSweetAndSnacksCompany, date_ymd_func, loginPartyID } from '../../../components/Common/CommonFunction';
+import { IsSweetAndSnacksCompany, date_ymd_func, loginPartyID, loginUserDetails } from '../../../components/Common/CommonFunction';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { order_Type } from '../../../components/Common/C-Varialbes';
@@ -47,7 +47,7 @@ export default function InvoiceForGRN() {
 
     // Common Party Dropdown useEffect
 
-    
+
     useEffect(() => {
 
         const locationPath = history.location.pathname
@@ -88,7 +88,7 @@ export default function InvoiceForGRN() {
                     Customer: commonPartyDropSelect.value,
                     OrderType: order_Type.InvoiceToGRN,
                     IBType: "",
-                    Country:1
+                    Country: loginUserDetails()?.Country_id
                 });
                 dispatch(getOrderListPage({ subPageMode, filtersBody, btnId: gobtnId }));
             }
@@ -109,7 +109,7 @@ export default function InvoiceForGRN() {
     }, [GRNitem])
 
     function makeBtnHandler(rowData, btnId) {
-        
+
         const list = [rowData]
         var isGRNSelect = ''
         const grnRef = []

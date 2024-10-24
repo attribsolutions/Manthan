@@ -34,12 +34,14 @@ const OrderList = () => {
     const history = useHistory();
     const currentDate_ymd = _cfunc.date_ymd_func();
 
+    const LoginDetails = _cfunc.loginUserDetails();
+
     const fileds = {
         FromDate: currentDate_ymd,
         ToDate: currentDate_ymd,
         Supplier: allLabelWithBlank,
         CustomerType: [allLabelWithBlank],
-        CountryName: { value: 1, label: "India" }
+        CountryName: { value: LoginDetails?.Country_id, label: LoginDetails?.Country }
     }
 
     const initialSubPageMode = useMemo(() => {
@@ -841,7 +843,7 @@ const OrderList = () => {
                 </div>
                 <div>
                     {
-                        subPageMode === url.ORDER_LIST_4 &&
+                        (subPageMode === url.ORDER_LIST_4 && LoginDetails?.PartyType === "Division") &&
 
                         <Col lg={2} className="">
                             <FormGroup className="mb- row mt-3 " >
