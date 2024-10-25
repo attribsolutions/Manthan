@@ -10,6 +10,8 @@ export const SEARCH_BOX3 = "/SerachBox3"
 export const POS_USER = 281
 export const POS_USER_lIST = 282
 
+export const POS_LOG = 309
+
 // *************************** Administration *******************************//
 
 export const MODULE = 5
