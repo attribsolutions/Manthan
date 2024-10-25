@@ -146,13 +146,13 @@ export const tableBody = (doc, data) => {
                 columnWidth: 70,
             },
             1: {
-                columnWidth: 80,
+                columnWidth: 74,
             },
             2: {
-                columnWidth: 125,
+                columnWidth: 113,
             },
             3: {
-                columnWidth: 70,
+                columnWidth: 63,
                 halign: 'right',
             },
             4: {
@@ -164,26 +164,30 @@ export const tableBody = (doc, data) => {
                 halign: 'right',
             },
             6: {
-                columnWidth: 60,
+                columnWidth: 55,
                 halign: 'right',
             },
             7: {
-                columnWidth: 58,
+                columnWidth: 54,
                 halign: 'right',
             },
             8: {
-                columnWidth: 58,
+                columnWidth: 54,
                 halign: 'right',
             },
             9: {
-                columnWidth: 58,
+                columnWidth: 54,
                 halign: 'right',
             },
             10: {
-                columnWidth: 58,
+                columnWidth: 54,
                 halign: 'right',
             },
             11: {
+                columnWidth: 45,
+                halign: 'right',
+            },
+            12: {
                 columnWidth: 45,
                 halign: 'right',
             },

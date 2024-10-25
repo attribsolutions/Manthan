@@ -284,22 +284,22 @@ const PartyMaster = (props) => {
 							isActive: hasEditVal.isActive,
 
 						};
-
+						debugger
 						let prefix = (hasEditVal.PartyPrefix.length > 0) ? hasEditVal.PartyPrefix[0] : '';
 						let prefixValue = {
-							OrderPrefix: prefix.Orderprefix,
-							InvoicePrefix: prefix.Invoiceprefix,
-							GRNPrefix: prefix.Grnprefix,
-							ReceiptPrefix: prefix.Receiptprefix,
-							ChallanPrefix: prefix.Challanprefix,
-							WorkOrderPrefix: prefix.WorkOrderprefix,
-							MaterialIssuePrefix: prefix.MaterialIssueprefix,
-							DemandPrefix: prefix.Demandprefix,
-							IBChallanPrefix: prefix.IBChallanprefix,
-							IBInwardPrefix: prefix.IBInwardprefix,
-							PurchaseReturnprefix: prefix.PurchaseReturnprefix,
-							CreditPrefix: prefix.Creditprefix,
-							DebitPrefix: prefix.Debitprefix
+							OrderPrefix: !prefix.Orderprefix ? "PO" : prefix.Orderprefix,
+							InvoicePrefix: !prefix.Invoiceprefix ? "IN" : prefix.Invoiceprefix,
+							GRNPrefix: !prefix.Grnprefix ? "GRN" : prefix.Grnprefix,
+							ReceiptPrefix: !prefix.Receiptprefix ? "RE" : prefix.Receiptprefix,
+							ChallanPrefix: !prefix.Challanprefix ? "CH" : prefix.Challanprefix,
+							WorkOrderPrefix: !prefix.WorkOrderprefix ? "WO" : prefix.WorkOrderprefix,
+							MaterialIssuePrefix: !prefix.MaterialIssueprefix ? "MI" : prefix.MaterialIssueprefix,
+							DemandPrefix: !prefix.Demandprefix ? "DE" : prefix.Demandprefix,
+							IBChallanPrefix: !prefix.IBChallanprefix ? "IBCH" : prefix.IBChallanprefix,
+							IBInwardPrefix: !prefix.IBInwardprefix ? "IBIN" : prefix.IBInwardprefix,
+							PurchaseReturnprefix: !prefix.PurchaseReturnprefix ? "PR" : prefix.PurchaseReturnprefix,
+							CreditPrefix: !prefix.Creditprefix ? "CR" : prefix.Creditprefix,
+							DebitPrefix: !prefix.Debitprefix ? "DR" : prefix.Debitprefix
 						};
 
 						let editPriceList = (hasEditVal.PriceList) ? {
@@ -544,7 +544,7 @@ const PartyMaster = (props) => {
 				});
 				return;
 			}
-
+			debugger
 			const jsonBody = JSON.stringify({
 				"Name": baseValue.Name,
 				"PriceList": priceListSelect.value,
@@ -577,7 +577,7 @@ const PartyMaster = (props) => {
 						"Invoiceprefix": prefixValue.InvoicePrefix,
 						"Grnprefix": prefixValue.GRNPrefix,
 						"Receiptprefix": prefixValue.ReceiptPrefix,
-						"Challanprefix": prefixValue.Challanprefix,
+						"Challanprefix": prefixValue.ChallanPrefix,
 						"WorkOrderprefix": prefixValue.WorkOrderPrefix,
 						"MaterialIssueprefix": prefixValue.MaterialIssuePrefix,
 						"Demandprefix": prefixValue.DemandPrefix,
