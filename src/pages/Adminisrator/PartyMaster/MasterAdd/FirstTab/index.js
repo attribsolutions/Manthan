@@ -55,9 +55,6 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
 
     const [SubClusterOptions, setSubClusterOptions] = useState({});
 
-    const [partyTypeDisabled, setPartyTypeDisabled] = useState(false)
-    const [supplierDisabled, setSupplierDisabled] = useState(false)
-
     const { values } = state;
     const { isError } = state;
     const { fieldLabel } = state;
@@ -234,26 +231,24 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
         }
     }, [PartyTypes, pageField])
 
-    // useEffect(() => {
-        
-    //     if (loginPartyType && subPageMode === url.FRANCHISE_CUSTOMER_MASTER) {
-    //         setState((i) => {
-    //             const a = { ...i }
-    //             a.values.PartyType = { value: 31, label: "Franchise Customer" };
-    //             a.hasValid.PartyType.valid = false
+    useEffect(() => {
+
+        if (loginPartyType && subPageMode === url.FRANCHISE_CUSTOMER_MASTER) {
+            setState((i) => {
+                const a = { ...i }
+                a.values.PartyType = { value: 31, label: "Franchise Customer" };
+                a.hasValid.PartyType.valid = false
 
 
-    //             a.values.Supplier = { value: loginPartyID(), label: loginPartyName() };
-    //             a.hasValid.Supplier.valid = false
+                a.values.Supplier = [{ value: loginPartyID(), label: loginPartyName() }];
+                a.hasValid.Supplier.valid = false
 
-    //             setSupplierDisabled(true);
-    //             setPartyTypeDisabled(true);
-    //             dispatch(priceListByPartyAction(31))
-    //             return a
-    //         })
-    //     }
+                dispatch(priceListByPartyAction(31))
+                return a
+            })
+        }
 
-    // }, [loginPartyType, PartyTypes, SupplierRedux])
+    }, [loginPartyType, PartyTypes, SupplierRedux])
 
     const PartyTypeDropdown_Options = PartyTypes.map((index) => ({
         value: index.id,
@@ -309,7 +304,7 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
     const RouteName_Options = RoutesListOptions.filter((index) => {
         return index.IsActive === true
     });
-    
+
     function partyTypeOnChange(hasSelect, evn) {
 
         onChangeSelect({ hasSelect, evn, state, setState })
@@ -517,7 +512,7 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
                                                 name="PartyType"
                                                 value={values.PartyType}
                                                 isSearchable={true}
-                                                isDisabled={(subPageMode === url.PARTY_SELF_EDIT || partyTypeDisabled) && true}
+                                                isDisabled={(subPageMode === url.PARTY_SELF_EDIT || url.FRANCHISE_CUSTOMER_MASTER) && true}
                                                 className="react-dropdown"
                                                 classNamePrefix="dropdown"
                                                 options={PartyTypeDropdown_Options}
@@ -579,7 +574,7 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
                                                 id="supplierName"
                                                 name="Supplier"
                                                 value={values.Supplier}
-                                                isDisabled={(subPageMode === url.PARTY_SELF_EDIT || supplierDisabled) && true}
+                                                isDisabled={(subPageMode === url.PARTY_SELF_EDIT || url.FRANCHISE_CUSTOMER_MASTER) && true}
                                                 className="react-dropdown"
                                                 classNamePrefix="dropdown"
                                                 options={SupplierOptions}
