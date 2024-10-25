@@ -2,7 +2,8 @@
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import * as style from './ReportStyle'
-import { CurrentTime, compareGSTINState, currentDate_dmy } from "../../components/Common/CommonFunction";
+import { CurrentTime, compareGSTINState, currentDate_dmy, loginUserDetails } from "../../components/Common/CommonFunction";
+import { AMERICA_ID } from "../../HardCodeID/contryID";
 
 
 var pageHeder = function (doc, data) {
@@ -21,7 +22,6 @@ var pageHeder = function (doc, data) {
 };
 
 function reportBody(doc, data) {
-    debugger
     const isIGST = compareGSTINState(data.CustomerGSTIN, data.PartyGSTIN)
     if (isIGST) {
         style.tableBodyWithIGST(doc, data);                 //table Body
@@ -45,7 +45,7 @@ const generateReportPage = (doc, data) => {
 }
 
 const InvioceReporta5 = async (data) => {
-    data["isAmerica"] = ((data.CustomerGSTIN === "" && data.PartyGSTIN === "") || (data.CustomerGSTIN === null && data.PartyGSTIN === null))
+    data["isAmerica"] = loginUserDetails().Country_id === AMERICA_ID
     var doc = new jsPDF('l', 'pt', 'a5');
 
     const BATCH_SIZE = 40; // You can adjust the batch size according to your needs

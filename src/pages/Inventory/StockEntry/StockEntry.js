@@ -10,7 +10,7 @@ import {
     Spinner
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
-import { BreadcrumbShowCountlabel, commonPageFieldSuccess } from "../../../store/actions";
+import { BreadcrumbShowCountlabel, commonPageFieldSuccess, getpdfReportdataSuccess } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { commonPageField } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
@@ -42,6 +42,9 @@ import paginationFactory from "react-bootstrap-table2-paginator";
 import { table_ArrowUseEffect } from "../../../components/Common/CommonUseEffect";
 import { ExcelReportComponent } from "../../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS";
 import { GroupSubgroupDisplay, ModifyTableData_func } from "../../../components/Common/TableCommonFunc";
+import * as report from '../../../Reports/ReportIndex'
+import C_Report from "../../../components/Common/C_Report";
+
 
 const StockEntry = (props) => {
 
@@ -759,6 +762,18 @@ const StockEntry = (props) => {
         })
     }
 
+    const PDFDownloadhandler = () => {
+        let config = {}
+        TableArr["Closingdate"] = values.Date
+        config["Data"] = TableArr
+        config["ReportType"] = report.StockEntry
+        config["Status"] = true
+        config["StatusCode"] = 200
+
+        debugger
+        dispatch(getpdfReportdataSuccess(config));
+    }
+
     // const processedData = ModifyTableData_func(TableArr);
 
     const processedData = useMemo(() => ModifyTableData_func(TableArr), [TableArr]);
@@ -776,7 +791,7 @@ const StockEntry = (props) => {
 
                         <div className="px-2   c_card_filter text-black" >
                             <div className="row" >
-                                <Col sm={4} className="">
+                                <Col sm={3} className="">
                                     <FormGroup className="mb- row mt-3 mb-1 " >
                                         <Label className="col-sm-5 p-2"
                                             style={{ width: "150px" }}>{fieldLabel.Date}</Label>
@@ -789,7 +804,7 @@ const StockEntry = (props) => {
                                         </Col>
                                     </FormGroup>
                                 </Col>
-                                <Col sm={4} className="">
+                                <Col sm={3} className="">
                                     <FormGroup className="mb- row mt-3 mb-1 " >
                                         <Label className="col-sm-5 p-2"
                                             style={{ width: "115px" }}>{fieldLabel.ItemName}</Label>
@@ -815,7 +830,7 @@ const StockEntry = (props) => {
 
                                 </Col>
 
-                                <Col sm={2} className="">
+                                <Col sm={3} className="">
                                     <FormGroup className="mb- row mt-3 mb-1 " >
                                         <Label className="col p-2"
                                             style={{ width: "115px" }}>{fieldLabel.IsAllStockZero} </Label>
@@ -867,7 +882,18 @@ const StockEntry = (props) => {
                                     >
                                         Excel
                                     </C_Button>
+                                    <C_Button
+                                        type="button"
+                                        spinnerColor="white"
+                                        // loading={excelLoading}
+                                        className="btn btn-success m-3 mr"
+                                        onClick={PDFDownloadhandler}
+                                    >
+                                        PDF
+                                    </C_Button>
                                 </Col>}
+
+
 
 
                             </div>
@@ -920,7 +946,10 @@ const StockEntry = (props) => {
 
                     </form >
                 </div >
+                <C_Report />
             </React.Fragment >
+
+
         );
     }
     else {

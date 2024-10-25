@@ -1,7 +1,8 @@
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import * as style from './ReportStyle'
-import { compareGSTINState } from "../../components/Common/CommonFunction";
+import { compareGSTINState, loginUserDetails } from "../../components/Common/CommonFunction";
+import { AMERICA_ID } from "../../HardCodeID/contryID";
 
 
 var pageHeder = function (doc, data) {
@@ -32,8 +33,7 @@ function pageFooter(doc, data) {
 }
 
 const ordeRreport = (data) => {
-    data["isAmerica"] = ((data.CustomerGSTIN === "" && data.SupplierGSTIN === "") || (data.CustomerGSTIN === null && data.SupplierGSTIN === null))
-
+    data["isAmerica"] = loginUserDetails().Country_id === AMERICA_ID
     var doc = new jsPDF('p', 'pt', 'a4');
     pageHeder(doc, data);
     reportBody(doc, data);

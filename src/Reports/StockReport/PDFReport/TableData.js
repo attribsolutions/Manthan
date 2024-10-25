@@ -39,7 +39,6 @@ export const Rows = (data) => {
     let TotalActualStock = 0
     let TotalClosingAmount = 0
 
-
     StockDetails.forEach((element, key) => {
 
         const tableitemRow = [
@@ -53,8 +52,7 @@ export const Rows = (data) => {
             `${numberWithCommas(Number(element.PurchaseReturn).toFixed(2))}`,
             `${numberWithCommas(Number(element.StockAdjustment).toFixed(2))}`,
             `${numberWithCommas(Number(element.ClosingBalance).toFixed(2))}`,
-            // `${numberWithCommas(Number(element.ClosingAmount).toFixed(2))}`,
-            ``,
+            `${numberWithCommas(Number(element.ClosingAmount).toFixed(2))}`,
             `${numberWithCommas(Number(element.ActualStock).toFixed(2))}`,
             `${element.UnitName}`,
 
@@ -69,7 +67,7 @@ export const Rows = (data) => {
             TotalPurchaseReturn = Number(TotalPurchaseReturn) + Number(element.PurchaseReturn)
             TotalStockAdjustment = Number(TotalStockAdjustment) + Number(element.StockAdjustment)
             TotalActualStock = Number(TotalActualStock) + Number(element.ActualStock)
-            // TotalClosingAmount = Number(TotalClosingAmount) + Number(element.ClosingAmount)
+            TotalClosingAmount = Number(TotalClosingAmount) + Number(element.ClosingAmount)
 
         };
 
