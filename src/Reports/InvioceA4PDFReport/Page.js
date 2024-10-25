@@ -1,8 +1,9 @@
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import * as style from './ReportStyle';
-import { compareGSTINState, loginSystemSetting } from "../../components/Common/CommonFunction";
+import { compareGSTINState, loginSystemSetting, loginUserDetails } from "../../components/Common/CommonFunction";
 import InvioceReporta5 from "../InvoiceA5PDFReport/Page";
+import { AMERICA_ID } from "../../HardCodeID/contryID";
 
 
 
@@ -34,14 +35,8 @@ function pageFooter(doc, data) {
 }
 
 const invioceReport_A4 = async (data) => {
-
-
-    data["isAmerica"] = ((data.CustomerGSTIN === "" && data.PartyGSTIN === "") || (data.CustomerGSTIN === null && data.PartyGSTIN === null))
-
-
+    data["isAmerica"] = loginUserDetails().Country_id === AMERICA_ID
     if (data.InvoiceUploads?.length > 0) {
-
-
         if (data.InvoiceUploads[0].QRCodeUrl !== null) {
             data["isQR"] = true;
         } else {

@@ -86,7 +86,7 @@ const Order = (props) => {
 
 
     const currentDate_ymd = IsFranchisesRole ? _cfunc.Frenchies_date_ymd_func() : _cfunc.date_ymd_func();
-
+    const CurrentOrderDate = _cfunc.date_ymd_func()
     const Weight = _cfunc.loginUserDetails().Weight
 
     const initialSubPageMode = useMemo(() => {
@@ -1448,6 +1448,7 @@ const Order = (props) => {
                 OrderType: order_Type.SaleOrder,
                 IsConfirm: true   // SO Order then IsConfirm true
             }
+            debugger
             const IB_JsonBody = {
                 DemandDate: orderdate,
                 DemandAmount: sumOfOrderAmount,
@@ -1471,8 +1472,8 @@ const Order = (props) => {
                 FullDemandNumber: "PO0001",
                 Division: division,
                 POType: orderTypeSelect.value,
-                POFromDate: orderTypeSelect.value === 1 ? currentDate_ymd : poFromDate,
-                POToDate: orderTypeSelect.value === 1 ? currentDate_ymd : poToDate,
+                POFromDate: orderTypeSelect.value === 1 ? CurrentOrderDate : poFromDate,
+                POToDate: orderTypeSelect.value === 1 ? CurrentOrderDate : poToDate,
                 CreatedBy: _cfunc.loginUserID(),
                 UpdatedBy: _cfunc.loginUserID(),
                 OrderTermsAndConditions: termsAndConditions

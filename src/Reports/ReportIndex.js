@@ -13,6 +13,7 @@ import CustomerWiseClaimReport from "./ClaimSummary/PDFReport/CustomerWiseClaimR
 import FrenchiesesOrderReport from "../pages/SweetPOS/Reports/OrderPDFReport/Page";
 import PosInvoiceReport from "../pages/SweetPOS/Reports/InvoicePDFReport/Page";
 import ordeItemSupplierReport from "./OrderItemSupplier/OrderItemSupplier/Page";
+import StockEntryReport from "./StockEntry/Page";
 
 export const FrenchiesesOrder = "FrenchiesesOrder"
 export const order1 = "order1"
@@ -31,6 +32,8 @@ export const ItemWiseClaim = "ItemWiseClaim"
 export const CustomerWiseClaim = "CustomerWiseClaim"
 export const PosInvoice = "PosInvoice"
 export const ordeItemSupplier = "ordeItemSupplier"
+export const StockEntry = "StockEntry"
+
 
 
 
@@ -88,6 +91,9 @@ const generateReport = (resp) => {
             break;
         case ordeItemSupplier:
             ordeItemSupplierReport(resp.Data)
+            break;
+        case StockEntry:
+            StockEntryReport(resp.Data)
             break;
         default:
             break;
