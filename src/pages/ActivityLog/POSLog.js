@@ -11,11 +11,13 @@ import { customAlert } from '../../CustomAlert/ConfirmDialog';
 import { C_Select, C_TimePicker } from '../../CustomValidateForm';
 import { showToastAlert } from '../../helpers/axios_Config';
 import { commonPartyDropdown_API, GenralMasterSubType, POSLog_Go_Btn_Api, TransactionLog_Get_User_Api, TransactionLog_getjson_for_Transation_Id, TransactionLog_Go_Btn_Api, TransactionLog_transactionType_Api } from '../../helpers/backend_helper';
-import { BreadcrumbShowCountlabel } from '../../store/actions';
+import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess } from '../../store/actions';
 import SimpleBar from "simplebar-react"
 import { allLabelWithBlank } from '../../components/Common/CommonErrorMsg/HarderCodeData';
 import GlobalCustomTable from '../../GlobalCustomTable';
 import { ExcelReportComponent } from '../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS';
+import DynamicColumnHook from '../../components/Common/TableCommonFunc';
+import { pageId } from '../../routes';
 
 
 const POS_Log = () => {
@@ -38,7 +40,22 @@ const POS_Log = () => {
     const [btnMode, setbtnMode] = useState(0);
 
     //Access redux store Data /  'save_ModuleSuccess' action data
-    const { userAccess } = useSelector((state) => ({ userAccess: state.Login.RoleAccessUpdateData }));
+    const { userAccess, pageField
+
+    } = useSelector((state) => ({
+        userAccess: state.Login.RoleAccessUpdateData,
+        pageField: state.CommonPageFieldReducer.pageField
+    }));
+
+    useEffect(() => {
+
+        dispatch(commonPageFieldSuccess(null));
+        dispatch(commonPageField(pageId.POS_LOG));
+        return () => {
+            dispatch(commonPageFieldSuccess(null));
+
+        }
+    }, []);
 
     useEffect(async () => {//initioal Api
 
@@ -68,6 +85,8 @@ const POS_Log = () => {
         };
     }, [userAccess]);
 
+    const [tableColumns] = DynamicColumnHook({ pageField })
+
     function onChangeParty(e) {
         setPartySelect(e);
         setTableData([]);
@@ -85,50 +104,50 @@ const POS_Log = () => {
         }
     }, [tableData])
 
-    const tableColumns = [
-        {
-            text: "Transaction Date",
-            dataField: "CreatedOn",
-            sort: true,
-            showing: true,
-        }, {
-            text: "User Name",
-            dataField: "UserName",
-            showing: true,
-            sort: true
-        }, {
-            text: "MacID",
-            dataField: "MacID",
-            showing: true,
-            sort: true
-        },
-        {
-            text: "ExeVersion",
-            dataField: "ExeVersion",
-            showing: true,
-            sort: true
-        },
-        {
-            text: "ExePath",
-            dataField: "ExePath",
-            showing: true,
-            sort: true
+    // const tableColumns = [
+    //     {
+    //         text: "Transaction Date",
+    //         dataField: "CreatedOn",
+    //         sort: true,
+    //         showing: true,
+    //     }, {
+    //         text: "User Name",
+    //         dataField: "UserName",
+    //         showing: true,
+    //         sort: true
+    //     }, {
+    //         text: "MacID",
+    //         dataField: "MacID",
+    //         showing: true,
+    //         sort: true
+    //     },
+    //     {
+    //         text: "ExeVersion",
+    //         dataField: "ExeVersion",
+    //         showing: true,
+    //         sort: true
+    //     },
+    //     {
+    //         text: "ExePath",
+    //         dataField: "ExePath",
+    //         showing: true,
+    //         sort: true
 
-        },
-        {
-            text: "DivisionID",
-            dataField: "DivisionID",
-            showing: true,
-            sort: true
-        },
-        {
-            text: "ClientID",
-            dataField: "ClientID",
-            showing: true,
-            sort: true
-        },
+    //     },
+    //     {
+    //         text: "DivisionID",
+    //         dataField: "DivisionID",
+    //         showing: true,
+    //         sort: true
+    //     },
+    //     {
+    //         text: "ClientID",
+    //         dataField: "ClientID",
+    //         showing: true,
+    //         sort: true
+    //     },
 
-    ]
+    // ]
 
     const goButtonHandler = async (btnMode) => {
         setbtnMode(btnMode)
