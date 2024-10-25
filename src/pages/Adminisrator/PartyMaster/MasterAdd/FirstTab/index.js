@@ -55,6 +55,9 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
 
     const [SubClusterOptions, setSubClusterOptions] = useState({});
 
+    const [partyTypeDisabled, setPartyTypeDisabled] = useState(false)
+    const [supplierDisabled, setSupplierDisabled] = useState(false)
+
     const { values } = state;
     const { isError } = state;
     const { fieldLabel } = state;
@@ -243,6 +246,8 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
                 a.values.Supplier = [{ value: loginPartyID(), label: loginPartyName() }];
                 a.hasValid.Supplier.valid = false
 
+                setSupplierDisabled(true);
+                setPartyTypeDisabled(true);
                 dispatch(priceListByPartyAction(31))
                 return a
             })
@@ -512,7 +517,7 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
                                                 name="PartyType"
                                                 value={values.PartyType}
                                                 isSearchable={true}
-                                                isDisabled={(subPageMode === url.PARTY_SELF_EDIT || url.FRANCHISE_CUSTOMER_MASTER) && true}
+                                                isDisabled={(subPageMode === url.PARTY_SELF_EDIT || partyTypeDisabled) && true}
                                                 className="react-dropdown"
                                                 classNamePrefix="dropdown"
                                                 options={PartyTypeDropdown_Options}
@@ -574,7 +579,7 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
                                                 id="supplierName"
                                                 name="Supplier"
                                                 value={values.Supplier}
-                                                isDisabled={(subPageMode === url.PARTY_SELF_EDIT || url.FRANCHISE_CUSTOMER_MASTER) && true}
+                                                isDisabled={(subPageMode === url.PARTY_SELF_EDIT || supplierDisabled) && true}
                                                 className="react-dropdown"
                                                 classNamePrefix="dropdown"
                                                 options={SupplierOptions}
