@@ -257,7 +257,7 @@ const PurchaseGSTReport = (props) => {
                         }
 
                         <Col sm={2} >
-                            <FormGroup className="mb- row mt-2 mb-2">
+                            <FormGroup className="mb- row mt-2 ">
                                 <Label style={{ width: "110px" }} className="col-4 p-2" >GST Rate Wise</Label>
                                 <Col sm="2" className=" mt-1 ">
                                     <Input type="checkbox"
