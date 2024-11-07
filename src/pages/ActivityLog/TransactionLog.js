@@ -5,17 +5,20 @@ import ToolkitProvider from 'react-bootstrap-table2-toolkit';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { Button, CardBody, Col, FormGroup, Label, Modal, Row, Spinner } from 'reactstrap';
-import { C_Button, Go_Button } from '../../components/Common/CommonButton';
+import { C_Button, Go_Button, PageLoadingSpinner } from '../../components/Common/CommonButton';
 import { breadcrumbReturnFunc, CommonConsole, convertDateTime_ydm, getDateTime_dmy, loginCompanyID, loginEmployeeID } from '../../components/Common/CommonFunction';
 import { customAlert } from '../../CustomAlert/ConfirmDialog';
 import { C_Select, C_TimePicker } from '../../CustomValidateForm';
 import { showToastAlert } from '../../helpers/axios_Config';
 import { commonPartyDropdown_API, GenralMasterSubType, TransactionLog_Get_User_Api, TransactionLog_getjson_for_Transation_Id, TransactionLog_Go_Btn_Api, TransactionLog_transactionType_Api } from '../../helpers/backend_helper';
-import { BreadcrumbShowCountlabel } from '../../store/actions';
+import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess } from '../../store/actions';
 import SimpleBar from "simplebar-react"
 import { allLabelWithBlank } from '../../components/Common/CommonErrorMsg/HarderCodeData';
 import GlobalCustomTable from '../../GlobalCustomTable';
 import { ExcelReportComponent } from '../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS';
+import DynamicColumnHook from '../../components/Common/TableCommonFunc';
+import { mode, pageId } from '../../routes';
+import { listPageActionsButtonFunc } from '../../components/Common/ListActionsButtons';
 
 
 const TransactionLog = () => {
@@ -45,19 +48,15 @@ const TransactionLog = () => {
     const [isCopy, setisCopy] = useState({});
 
     const [btnMode, setbtnMode] = useState(0);
-
-
-
-
-
-
     const [ViewbtnLoading, setViewbtnLoading] = useState('');
 
-
-
-
     //Access redux store Data /  'save_ModuleSuccess' action data
-    const { userAccess } = useSelector((state) => ({ userAccess: state.Login.RoleAccessUpdateData }));
+    const { userAccess, pageField
+
+    } = useSelector((state) => ({
+        userAccess: state.Login.RoleAccessUpdateData,
+        pageField: state.CommonPageFieldReducer.pageField
+    }));
 
     useEffect(async () => {//initioal Api
         const resp1 = await TransactionLog_transactionType_Api()
@@ -91,8 +90,6 @@ const TransactionLog = () => {
     const partyOptions = useMemo(() => generateOptions(partyRedux), [partyRedux]);
     const categoryTypeOptions = useMemo(() => generateOptions(categoryTypeRedux), [categoryTypeRedux]);
 
-    // const categoryTypeOptions = useMemo(() => categoryTypeRedux.map(item => ({ value: item.id, label: item.Name })), [categoryTypeRedux]);
-
     // userAccess useEffect
     useEffect(() => {
         let locationPath = history.location.pathname;
@@ -105,7 +102,61 @@ const TransactionLog = () => {
         };
     }, [userAccess]);
 
+    useEffect(() => {
 
+        dispatch(commonPageFieldSuccess(null));
+        dispatch(commonPageField(pageId.TRANSACTION_LOG));
+        return () => {
+            dispatch(commonPageFieldSuccess(null));
+
+        }
+    }, []);
+
+    const lastColumn = () => {
+        const isHidden = pageField.PagePageAccess.some(i => i.AccessName === "IsView");
+        if (!isHidden) {
+            return null;
+        }
+
+        return {
+            text: "Action",
+            dataField: "",
+            hidden: false,
+            formatExtraData: { listBtnLoading: ViewbtnLoading },
+
+            formatter: (cellContent, rowData, key, formatExtra) => {
+                let { listBtnLoading } = formatExtra;
+
+                return (
+                    <>
+                        <Button
+                            type="button"
+                            id={`btn-makeBtn-${rowData.id}`}
+                            className="badge badge-soft-primary font-size-12 btn c_btn-primary waves-effect waves-light w-xxs border border-light"
+                            title="View Json"
+                            disabled={listBtnLoading}
+                            onClick={() => {
+                                const btnId = `btn-makeBtn-${rowData.id}`;
+                                setViewbtnLoading(btnId);
+                                makeBtnHandler(rowData.id);
+                            }}
+                        >
+                            {listBtnLoading === `btn-makeBtn-${rowData.id}` ? (
+                                <Spinner style={{ height: "16px", width: "16px" }} color="white" />
+                            ) : (
+                                <span
+                                    style={{ marginLeft: "6px", marginRight: "6px" }}
+                                    className="bx bxs-show font-size-16"
+                                ></span>
+                            )}
+                        </Button>
+                    </>
+                );
+            },
+        };
+    };
+
+    const [tableColumns] = DynamicColumnHook({ pageField, lastColumn });
 
     const makeBtnHandler = async (TransactionID) => {
         const response = await TransactionLog_getjson_for_Transation_Id({ TransctionID: TransactionID })
@@ -145,7 +196,6 @@ const TransactionLog = () => {
     function removeBodyCss() {
         document.body.classList.add("no_padding")
     }
-
 
     function onChangeCategoryType(e = []) {
         if (e.length === 0) {
@@ -187,10 +237,6 @@ const TransactionLog = () => {
         setTableData([]);
     }
 
-
-
-
-
     useEffect(() => {
 
         const transformedData = Object.keys(JsonData).map((key, index) => ({
@@ -203,7 +249,7 @@ const TransactionLog = () => {
     }, [JsonData])
 
     useEffect(() => {
-        
+
         if ((btnMode === 2) && (tableData.length > 0)) {
             ExcelReportComponent({
                 excelTableData: tableData,
@@ -237,10 +283,6 @@ const TransactionLog = () => {
             CommonConsole('Error during copy:', error);
         }
     };
-
-
-
-
 
 
     const viewColumn = [
@@ -286,85 +328,6 @@ const TransactionLog = () => {
         }
     ]
 
-    const tableColumns = [
-        {
-            text: "Transaction Date",
-            dataField: "TransactionDate",
-            sort: true,
-            showing: true,
-        }, {
-            text: "Employee Name (User Name)",
-            dataField: "UserName",
-            showing: true,
-            sort: true
-        }, {
-            text: "IP Address",
-            dataField: "IPaddress",
-            showing: true,
-            sort: true
-        },
-        {
-            text: "Transaction Type",
-            dataField: "TransactionType",
-            showing: true,
-            sort: true
-        },
-        {
-            text: "Transaction Detail",
-            dataField: "TransactionDetails",
-            showing: true,
-            sort: true
-
-        },
-        {
-            text: "Party Name",
-            dataField: "PartyName",
-            showing: true,
-            sort: true
-        },
-        {
-            text: "Customer/Supplier Name",
-            dataField: "CustomerName",
-            showing: true,
-            sort: true
-        },
-        {
-            text: "Action",
-            dataField: "",
-            formatExtraData: { listBtnLoading: ViewbtnLoading, },
-
-
-            formatter: (cellContent, rowData, key, formatExtra) => {
-                let { listBtnLoading } = formatExtra;
-
-                return (<>
-                    < Button
-                        type="button"
-                        id={`btn-makeBtn-${rowData.id}`}
-                        className="badge badge-soft-primary font-size-12 btn c_btn-primary waves-effect waves-light w-xxs border border-light"
-                        title="View Json"
-                        disabled={listBtnLoading}
-                        onClick={() => {
-                            const btnId = `btn-makeBtn-${rowData.id}`
-                            setViewbtnLoading(btnId)
-                            makeBtnHandler(rowData.id)
-                        }}
-                    >
-                        {(listBtnLoading === `btn-makeBtn-${rowData.id}`) ?
-                            <Spinner style={{ height: "16px", width: "16px" }} color="white" />
-                            : <span
-                                style={{ marginLeft: "6px", marginRight: "6px" }}
-                                className="bx bxs-show font-size-16"
-                            ></span>
-                        }
-
-
-                    </Button>
-                </>)
-            }
-        },
-
-    ]
 
     const goButtonHandler = async (btnMode) => {
         setbtnMode(btnMode)
@@ -578,7 +541,7 @@ const TransactionLog = () => {
     return (
 
         <React.Fragment>
-            {/* <PageLoadingSpinner isLoading={goBtnloading || !pageField} /> */}
+            <PageLoadingSpinner isLoading={!pageField} />
             <div className="page-content">
                 <HeaderContent />
                 <GlobalCustomTable

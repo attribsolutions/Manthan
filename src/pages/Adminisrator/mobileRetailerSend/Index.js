@@ -114,12 +114,12 @@ const Index = (props) => {
 		label: index.Name,
 	}));
 
-	// const pagesListColumns = [
-	// 	{
-	// 		text: "Retailer Name",
-	// 		dataField: "Name",
-	// 	}
-	// ];
+	const pagesListColumns = [
+		{
+			text: "Retailer Name",
+			dataField: "Name",
+		}
+	];
 
 	function goButtonOnchange() {
 		if (partyName.length === 0) {
@@ -234,7 +234,7 @@ const Index = (props) => {
 						<ToolkitProvider
 							keyField="id"
 							data={RetailerList}
-							columns={tableColumns}
+							columns={pagesListColumns}
 							search
 						>
 							{toolkitProps => (
