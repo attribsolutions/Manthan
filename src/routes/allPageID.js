@@ -12,6 +12,8 @@ export const POS_USER_lIST = 282
 
 export const POS_LOG = 309
 
+export const TRANSACTION_LOG = 235
+
 // *************************** Administration *******************************//
 
 export const MODULE = 5
@@ -182,6 +184,8 @@ export const FRANCHISE_CUSTOMER_LIST = 308
 
 export const COUNTRY_MASTER = 310
 export const COUNTRY_LIST = 311
+
+export const MOBILE_RETAILER_SEND=249
 
 //******************************* Purchase Module ************************************//
 export const ORDER_1 = 53

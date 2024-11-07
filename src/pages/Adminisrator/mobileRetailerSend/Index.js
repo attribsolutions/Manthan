@@ -7,7 +7,7 @@ import {
 } from "reactstrap";
 
 import { MetaTags } from "react-meta-tags";
-import { BreadcrumbShowCountlabel, GetVenderSupplierCustomer, GetVenderSupplierCustomerSuccess } from "../../../store/actions";
+import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess, GetVenderSupplierCustomer, GetVenderSupplierCustomerSuccess } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Change_Button, C_Button, Go_Button } from "../../../components/Common/CommonButton";
@@ -20,13 +20,14 @@ import * as mode from "../../../routes/PageMode"
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { globalTableSearchProps } from "../../../components/Common/SearchBox/MySearch";
-import { selectAllCheck } from "../../../components/Common/TableCommonFunc";
+import DynamicColumnHook, { selectAllCheck } from "../../../components/Common/TableCommonFunc";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { C_Select } from "../../../CustomValidateForm";
 import { mobileApp_Send_Retailer_Api } from "../../../helpers/backend_helper"
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 import { sideBarPageFiltersInfoAction } from "../../../store/Utilites/PartyDrodown/action";
+import { pageId } from "../../../routes";
 
 const Index = (props) => {
 
@@ -47,12 +48,14 @@ const Index = (props) => {
 		RetailerList,
 		goBtnLoading,
 		userAccess,
+		pageField
 	} = useSelector((state) => ({
 		partyList: state.CommonPartyDropdownReducer.commonPartyDropdownOption,
 		partyDropdownLoading: state.CommonPartyDropdownReducer.partyDropdownLoading,
 		goBtnLoading: state.CommonAPI_Reducer.vendorSupplierCustomerLoading,
 		RetailerList: state.CommonAPI_Reducer.vendorSupplierCustomer,
 		userAccess: state.Login.RoleAccessUpdateData,
+		pageField: state.CommonPageFieldReducer.pageField
 	}));
 
 	// userAccess useEffect
@@ -81,6 +84,18 @@ const Index = (props) => {
 			dispatch(GetVenderSupplierCustomerSuccess([]));
 		}
 	}, [])
+
+	useEffect(() => {
+
+		dispatch(commonPageFieldSuccess(null));
+		dispatch(commonPageField(pageId.MOBILE_RETAILER_SEND));
+		return () => {
+			dispatch(commonPageFieldSuccess(null));
+
+		}
+	}, []);
+
+	const [tableColumns] = DynamicColumnHook({ pageField });
 
 	// sideBar Page Filters Information
 	useEffect(() => {
@@ -234,7 +249,6 @@ const Index = (props) => {
 												nonSelectable: nonSelectedRow(),
 												bgColor: '',
 												tableList: RetailerList
-
 											})}
 											noDataIndication={<div className="text-danger text-center ">Record Not Found</div>}
 											classes={"table align-middle table-nowrap table-hover"}
