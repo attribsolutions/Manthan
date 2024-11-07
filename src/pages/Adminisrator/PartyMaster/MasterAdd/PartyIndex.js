@@ -284,7 +284,7 @@ const PartyMaster = (props) => {
 							isActive: hasEditVal.isActive,
 
 						};
-						debugger
+
 						let prefix = (hasEditVal.PartyPrefix.length > 0) ? hasEditVal.PartyPrefix[0] : '';
 						let prefixValue = {
 							OrderPrefix: !prefix.Orderprefix ? "PO" : prefix.Orderprefix,
@@ -445,8 +445,7 @@ const PartyMaster = (props) => {
 
 		if (
 			(values.PartyAddress.length > 0) &&
-			(isError.PartyAddress === "") &&
-			!(subPageMode === url.FRANCHISE_CUSTOMER_MASTER)
+			(isError.PartyAddress === "")
 		) {
 			customAlert({
 				Type: 4,
@@ -455,13 +454,12 @@ const PartyMaster = (props) => {
 			return;
 		}
 
-
 		if (!validBasetab) {
 			setactiveTab1("1")
 			return
 		};
 
-		if (addressTabDetail.length === 0 && !(subPageMode === url.FRANCHISE_CUSTOMER_MASTER)) {
+		if (addressTabDetail.length === 0) {
 
 			setactiveTab1("2")
 			customAlert({
@@ -482,7 +480,7 @@ const PartyMaster = (props) => {
 			return count
 		}, 0)
 
-		if (totalIsDefault === 0 && !(subPageMode === url.FRANCHISE_CUSTOMER_MASTER)) {
+		if (totalIsDefault === 0) {
 			setactiveTab1("2")
 			customAlert({
 				Type: 4,
@@ -490,7 +488,8 @@ const PartyMaster = (props) => {
 			})
 			return;
 		};
-		debugger
+
+
 		try {
 			btnIsDissablefunc({ btnId, state: true })
 
@@ -544,7 +543,7 @@ const PartyMaster = (props) => {
 				});
 				return;
 			}
-			debugger
+
 			const jsonBody = JSON.stringify({
 				"Name": baseValue.Name,
 				"PriceList": priceListSelect.value,
