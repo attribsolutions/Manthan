@@ -36,6 +36,7 @@
     "firebase": "^8.6.7",
     "flatpickr": "^4.6.13",
     "google-maps-react": "^2.0.6",
+    "html2canvas": "^1.4.1",
     "http-proxy-middleware": "^2.0.6",
     "i": "^0.3.7",
     "i18next": "^20.4.0",
