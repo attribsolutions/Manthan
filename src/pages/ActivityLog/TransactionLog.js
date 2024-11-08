@@ -17,15 +17,13 @@ import { allLabelWithBlank } from '../../components/Common/CommonErrorMsg/Harder
 import GlobalCustomTable from '../../GlobalCustomTable';
 import { ExcelReportComponent } from '../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS';
 import DynamicColumnHook from '../../components/Common/TableCommonFunc';
-import { mode, pageId } from '../../routes';
-import { listPageActionsButtonFunc } from '../../components/Common/ListActionsButtons';
+import { pageId } from '../../routes';
 
 
 const TransactionLog = () => {
 
     const dispatch = useDispatch();
     const history = useHistory()
-    const jsonRef = useRef(null);
 
     const [userPageAccessState, setUserAccState] = useState('');
     const [transactionTypeSelect, setTransactionTypeSelect] = useState([allLabelWithBlank]);
@@ -42,14 +40,13 @@ const TransactionLog = () => {
     const [partyRedux, setPartyRedux] = useState([]);
     const [categoryTypeRedux, setCategoryTypeRedux] = useState([]);
     const [modal_view, setModal_view] = useState(false);
-    const [modal_backdrop, setmodal_backdrop] = useState(false);   // Image Model open Or not
     const [JsonData, setJsonData] = useState('');
     const [UpdateJsonData, setUpdateJsonData] = useState('');
     const [isCopy, setisCopy] = useState({});
 
     const [btnMode, setbtnMode] = useState(0);
     const [ViewbtnLoading, setViewbtnLoading] = useState('');
-    console.log(userPageAccessState)
+
     //Access redux store Data /  'save_ModuleSuccess' action data
     const { userAccess, pageField
 
@@ -114,7 +111,7 @@ const TransactionLog = () => {
 
     const lastColumn = () => {
         const isHidden = userPageAccessState.RoleAccess_IsView;
-        if (!isHidden) {
+        if (isHidden) {
             return null;
         }
 
@@ -184,17 +181,10 @@ const TransactionLog = () => {
 
 
     }
+
     function modalToggleFunc() {
         setModal_view(false);
         setisCopy({ isCopy: false })
-    }
-
-    function tog_backdrop() {
-        setmodal_backdrop(!modal_backdrop)
-        removeBodyCss()
-    }
-    function removeBodyCss() {
-        document.body.classList.add("no_padding")
     }
 
     function onChangeCategoryType(e = []) {
@@ -260,7 +250,6 @@ const TransactionLog = () => {
         }
     }, [tableData])
 
-
     const copyToClipboard = (CopyValue, btnId) => {
         try {
             const textToCopy = JSON.stringify(CopyValue, null, 2);
@@ -283,7 +272,6 @@ const TransactionLog = () => {
             CommonConsole('Error during copy:', error);
         }
     };
-
 
     const viewColumn = [
         {
@@ -327,7 +315,6 @@ const TransactionLog = () => {
 
         }
     ]
-
 
     const goButtonHandler = async (btnMode) => {
         setbtnMode(btnMode)
