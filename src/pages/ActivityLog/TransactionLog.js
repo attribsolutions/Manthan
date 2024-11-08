@@ -49,7 +49,7 @@ const TransactionLog = () => {
 
     const [btnMode, setbtnMode] = useState(0);
     const [ViewbtnLoading, setViewbtnLoading] = useState('');
-
+    console.log(userPageAccessState)
     //Access redux store Data /  'save_ModuleSuccess' action data
     const { userAccess, pageField
 
@@ -113,7 +113,7 @@ const TransactionLog = () => {
     }, []);
 
     const lastColumn = () => {
-        const isHidden = pageField.PagePageAccess.some(i => i.AccessName === "IsView");
+        const isHidden = userPageAccessState.RoleAccess_IsView;
         if (!isHidden) {
             return null;
         }
