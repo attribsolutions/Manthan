@@ -10,7 +10,7 @@ import { Col, FormGroup, Input, Label, Modal, Row } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import { initialFiledFunc } from "../../../components/Common/validationFunction";
 import { GetVenderSupplierCustomer, GetVenderSupplierCustomerSuccess, Retailer_List, Retailer_List_Success } from "../../../store/CommonAPI/SupplierRedux/actions";
-import { Go_Button, PageLoadingSpinner } from "../../../components/Common/CommonButton";
+import { C_Button, Go_Button, PageLoadingSpinner } from "../../../components/Common/CommonButton";
 import SalesReturn from "./SalesReturn";
 import { Upload_Return, Upload_Return_Succcess, confirm_SalesReturn_Id, confirm_SalesReturn_Id_Succcess, delete_SalesReturn_Id, delete_SalesReturn_Id_Succcess, post_Send_to_superStockiest_Id, salesReturnListAPI, salesReturnListAPISuccess } from "../../../store/Sales/SalesReturnRedux/action";
 import { C_DatePicker, C_Select } from "../../../CustomValidateForm";
@@ -26,6 +26,7 @@ import Slidewithcaption from "../../../components/Common/CommonImageComponent";
 import { allLabelWithBlank } from "../../../components/Common/CommonErrorMsg/HarderCodeData";
 import SERVER_HOST_PATH from "../../../helpers/_serverPath";
 import { sideBarPageFiltersInfoAction } from "../../../store/Utilites/PartyDrodown/action";
+import { MarathiReport } from "../../Purchase/Return/ReturnPDF";
 
 const SalesReturnList = () => {
 
@@ -437,6 +438,10 @@ const SalesReturnList = () => {
             return a
         })
     }
+    debugger
+    console.log("and", (values.Customer !== "" && reducers.tableList.length > 0))
+
+    console.log("or", (values.Customer === "" || reducers.tableList.length === 0))
 
     const HeaderContent = () => {
         return (
@@ -477,7 +482,7 @@ const SalesReturnList = () => {
                         </FormGroup>
                     </Col>
 
-                    <Col sm="5">
+                    <Col sm="4">
                         <FormGroup className="mb-2 row mt-3 " >
                             <Label className="col-md-4 p-2"
 
@@ -498,9 +503,26 @@ const SalesReturnList = () => {
                         </FormGroup>
                     </Col >
 
-                    <Col sm="1" className="mt-3 ">
-                        <Go_Button loading={reducers.loading} onClick={goButtonHandler} />
+
+
+                    <Col sm={2} className=" d-flex justify-content-end" >
+                        <C_Button className="btn btn-success" spinnerColor="white" style={{ marginTop: "18px", marginBottom: "16px", marginRight: (values.Customer.value === "" && reducers.tableList.length > 0) ? "60px" : "0px" }} loading={reducers.loading} onClick={goButtonHandler} >
+                            Go</C_Button>
+                        {((values.Customer.value !== "" && reducers.tableList.length > 0) && (subPageMode !== url.SALES_RETURN_LIST)) ? <C_Button
+                            type="button"
+                            spinnerColor="primary"
+                            style={{
+                                marginTop: "18px",
+                                marginBottom: "16px",
+
+                            }}
+                            // loading={goBtnLoading}
+                            className="btn btn-outline-primary border-1 font-size-12 text-center m-3 "
+                            onClick={() => { MarathiReport({ Table_Data: reducers.tableList, Supplier: values.Customer }) }}
+                        >
+                            Print</C_Button> : null}
                     </Col>
+
                 </div>
             </div >
         )
