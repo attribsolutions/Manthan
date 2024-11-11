@@ -384,22 +384,51 @@ const GroupSubGroup = (props) => {
                 GroupID: item.GroupID,
                 GroupName: item.GroupName,
                 GroupSequence: item.GroupSequence,
+                // Items: item.Items.map(obj => ({
+                //     ...obj,
+                //     PriviousGroup_ID: null,
+                //     PriviousSubGroup_ID: null,  // initiall  set null 
+                // }))
+
                 Items: item.Items.map(obj => ({
                     ...obj,
                     PriviousGroup_ID: null,
-                    PriviousSubGroup_ID: null,  // initiall  set null 
-                }))
+                    PriviousSubGroup_ID: null,  // initially set to null
+                })).sort((a, b) => {
+                    // Convert "0.00" to 0 for comparison
+                    const aValue = (a.ItemSequence === "0.00") ? 0 : a.ItemSequence;
+                    const bValue = (b.ItemSequence === "0.00") ? 0 : b.ItemSequence;
+
+                    // Check if `aValue` or `bValue` is `0`, `""`, or `null`
+                    const isAInvalid = (aValue === 0 || aValue === "" || aValue === null);
+                    const isBInvalid = (bValue === 0 || bValue === "" || bValue === null);
+
+                    if (isAInvalid && isBInvalid) {
+                        return 0; // Both are invalid, maintain order
+                    }
+                    if (isAInvalid) {
+                        return 1; // `a` is invalid, move it to the end
+                    }
+                    if (isBInvalid) {
+                        return -1; // `b` is invalid, move it to the end
+                    }
+
+                    // Compare valid `ItemSequence` values in ascending order
+                    return aValue - bValue;
+                })
+
             });
             return acc;
         }, []);
 
         // Sort SubgroupDetails based on SubGroupSequence within each group 
         groupedData.forEach(group => {
-            group.SubgroupDetails.sort((a, b) => a.SubGroupSequence - b.SubGroupSequence);
+            group.SubgroupDetails.sort((a, b) => a.ItemSequence - b.ItemSequence);
         });
 
         try {
             // Replace with your API endpoint
+
             const transformedData = transformData(groupedData);
             setGroups(transformedData);
             setOrderedGroups(Object.keys(transformedData));
@@ -409,21 +438,18 @@ const GroupSubGroup = (props) => {
     };
 
 
-
     useEffect(async () => {
         dispatch(getGroupList())
         dispatch(getGroupTypeslist())
     }, []);
 
     useEffect(() => {
-
         if (GroupType.value !== "") {
             setSubGroups((i) => {
                 const a = { ...i }
                 a.UnAssign = []
                 return a
             })
-
             setGroup({ label: "Select...", value: "" })
             fetchGroups();
         }
@@ -445,19 +471,56 @@ const GroupSubGroup = (props) => {
 
 
                 if ((item.GroupID === Group.value)) {
+                    debugger
                     group = {
                         GroupID: item.SubGroupID,
                         GroupName: item.SubGroupName,
                         GroupSequence: item.SubGroupSequence,
+                        // SubgroupDetails: item.Items.map((inx, i) => ({
+                        //     value: inx.ItemID,
+                        //     label: inx.ItemName,
+                        //     SubGroupSequence: i + 1,    // set item Sequence based on  Index  From backend order by sequence so index will match the Sequence
+                        //     GroupID: item.SubGroupID,
+                        //     GroupName: item.SubGroupName,
+                        //     GroupSub_ID: item.GroupID
+                        // }))
+
+
+
                         SubgroupDetails: item.Items.map((inx, i) => ({
                             value: inx.ItemID,
                             label: inx.ItemName,
-                            SubGroupSequence: i + 1,    // set item Sequence based on  Index  From backend order by sequence so index will match the Sequence
+                            SubGroupSequence: i + 1,  // Set item sequence based on index, ordered by sequence from backend
                             GroupID: item.SubGroupID,
                             GroupName: item.SubGroupName,
+                            ItemSequence: inx.ItemSequence,
                             GroupSub_ID: item.GroupID
-                        }))
+                        })).sort((a, b) => {
+
+                            // Convert "0.00" to 0 for comparison
+                            const aValue = (a.ItemSequence === "0.00") ? 0 : a.ItemSequence;
+                            const bValue = (b.ItemSequence === "0.00") ? 0 : b.ItemSequence;
+
+                            // Check if `aValue` or `bValue` is `0`, `""`, or `null`
+                            const isAInvalid = (aValue === 0 || aValue === "" || aValue === null);
+                            const isBInvalid = (bValue === 0 || bValue === "" || bValue === null);
+
+                            if (isAInvalid && isBInvalid) {
+                                return 0; // Both are invalid, maintain order
+                            }
+                            if (isAInvalid) {
+                                return 1; // `a` is invalid, move it to the end
+                            }
+                            if (isBInvalid) {
+                                return -1; // `b` is invalid, move it to the end
+                            }
+
+                            // Compare valid `SubGroupSequence` values in ascending order
+                            return aValue - bValue;
+                        })
+
                     };
+                    debugger
                     acc.push(group);
                 }
 
@@ -468,9 +531,9 @@ const GroupSubGroup = (props) => {
             }, []);
 
             // Sort SubgroupDetails based on SubGroupSequence within each group
-            groupedData.forEach(group => {
-                group.SubgroupDetails.sort((a, b) => a.SubGroupSequence - b.SubGroupSequence);
-            });
+            // groupedData.forEach(group => {
+            //     group.SubgroupDetails.sort((a, b) => a.SubGroupSequence - b.SubGroupSequence);
+            // });
 
             let transformedData = transformData(groupedData);
             const updatedNullItems = nullGroupItems.map((item, index) => {
