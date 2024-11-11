@@ -4,7 +4,7 @@ import { DndProvider, useDrag, useDrop, useDragLayer } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import SaveButtonDraggable from '../../../components/Common/saveButtonDraggable';
 import { Udate_Group_Subgroup, get_SubGroup_Group } from '../../../helpers/backend_helper';
-import { breadcrumbReturnFunc } from '../../../components/Common/CommonFunction';
+import { breadcrumbReturnFunc, loginCompanyID } from '../../../components/Common/CommonFunction';
 import { useDispatch, useSelector } from 'react-redux';
 import { mode } from '../../../routes';
 import { useHistory } from "react-router-dom";
@@ -342,8 +342,8 @@ const GroupSubGroup = (props) => {
 
     const fetchData = async () => {
 
-        const GroupType_id = JSON.stringify({ GroupType_id: GroupType.value })
-        const response = await get_SubGroup_Group({ GroupType_id })
+        const jsonBody = JSON.stringify({ GroupType_id: GroupType.value, Company_id: loginCompanyID() })
+        const response = await get_SubGroup_Group({ jsonBody })
         return response.Data
     }
 
@@ -399,7 +399,6 @@ const GroupSubGroup = (props) => {
         });
 
         try {
-
             // Replace with your API endpoint
             const transformedData = transformData(groupedData);
             setGroups(transformedData);
@@ -419,6 +418,7 @@ const GroupSubGroup = (props) => {
     useEffect(() => {
 
         if (GroupType.value !== "") {
+
             setGroup({ label: "Select...", value: "" })
             fetchGroups();
         }
