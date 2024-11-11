@@ -418,6 +418,11 @@ const GroupSubGroup = (props) => {
     useEffect(() => {
 
         if (GroupType.value !== "") {
+            setSubGroups((i) => {
+                const a = { ...i }
+                a.UnAssign = []
+                return a
+            })
 
             setGroup({ label: "Select...", value: "" })
             fetchGroups();
