@@ -573,7 +573,7 @@ const GroupSubGroup = (props) => {
 
 
     const transformData = (data) => {
-        
+
         return data.reduce((acc, group) => {
             acc[`${group.GroupName}_${group.GroupID}`] = group.SubgroupDetails;
             return acc;
@@ -602,7 +602,7 @@ const GroupSubGroup = (props) => {
 
 
     const moveSubGroupItem = (item, sourceGroupName, targetGroupName) => {
-
+        debugger
         if (sourceGroupName === targetGroupName) return;
         setSubGroups((prevGroups) => {
             prevGroups["UnAssign"] ? prevGroups["UnAssign"] = prevGroups["UnAssign"] : prevGroups["UnAssign"] = []
@@ -713,7 +713,6 @@ const GroupSubGroup = (props) => {
     const addSubGroupItem = ({ New_subGroup, groupName, GroupID }) => {
         const newItem = { value: "", label: `${New_subGroup}`, GroupID: GroupID, GroupName: groupName, };
         setSubGroups((prevGroups) => ({
-
             ...prevGroups,
             [groupName]: [...prevGroups[groupName], newItem],
         }));
@@ -734,8 +733,6 @@ const GroupSubGroup = (props) => {
         let currentGroupID = null;
         let subGroupCounter = 0;
 
-
-
         const transformedSubgroups = combinedArray.map((subgroup, index) => {
             if (subgroup.label === null) {
                 subgroup.label = "null"
@@ -746,7 +743,7 @@ const GroupSubGroup = (props) => {
             }
             subGroupCounter++
             currentGroupID = subgroup.GroupID;
-            const matchedKey = Object.keys(SequenceSubGroupItem).find(key => subgroup.label === key);
+            const matchedKey = Object.keys(SequenceSubGroupItem).find(key => `${subgroup.label}_${subgroup.value}` === key);
             // if (matchedKey) {
 
             // }
