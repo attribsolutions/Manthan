@@ -674,7 +674,7 @@ const InvoiceList = () => {
                             UpdateDetailsBtnFunc={UpdateDetailsBtnFunc}
                             totalAmountShow={true}
                             selectCheckParams={{
-                                isShow: (subPageMode === url.INVOICE_LIST_1),
+                                // isShow: (subPageMode === url.INVOICE_LIST_1),
                                 selectSaveBtnHandler: selectDeleteBtnHandler,
                                 selectSaveBtnLabel: "Delete",
                                 selectHeaderLabel: "Select",
