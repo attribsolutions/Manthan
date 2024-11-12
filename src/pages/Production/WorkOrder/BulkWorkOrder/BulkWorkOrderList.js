@@ -266,7 +266,7 @@ const BulkWorkOrderList = () => {
                             goButnFunc={goButtonHandler}
                             makeBtnName={otherState.makeBtnName}
                             selectCheckParams={{
-                                isShow: (subPageMode === url.BULK_WORK_ORDER_LIST),
+                                // isShow: (subPageMode === url.BULK_WORK_ORDER_LIST),
                                 selectSaveBtnHandler: BulkInvoice_Handler,
                                 selectSaveBtnLabel: "Bulk Work Order",
                                 selectHeaderLabel: "Select",
