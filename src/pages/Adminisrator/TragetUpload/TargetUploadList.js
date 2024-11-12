@@ -187,7 +187,7 @@ const TargetUploadList = () => {
                     newBtnPath={url.TARGET_UPLOAD}
                     masterPath={url.TARGET_UPLOAD}
                     selectCheckParams={{
-                        isShow: (subPageMode === url.TARGET_UPLOAD_LIST),
+                        // isShow: (subPageMode === url.TARGET_UPLOAD_LIST),
                         selectSaveBtnHandler: selectDeleteBtnHandler,
                         selectSaveBtnLabel: "Delete",
                         selectHeaderLabel: "Select",

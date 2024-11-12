@@ -450,7 +450,7 @@ const CreditList = () => {
                             totalAmountShow={true}
 
                             selectCheckParams={{
-                                isShow: ((subPageMode === url.GOODS_CREDIT_LIST)),
+                                // isShow: ((subPageMode === url.GOODS_CREDIT_LIST)),
                                 selectSaveBtnHandler: selectSaveBtnHandler,
                                 selectSaveBtnLabel: "Delete",
                                 selectHeaderLabel: "Select",

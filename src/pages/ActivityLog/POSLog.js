@@ -5,7 +5,7 @@ import ToolkitProvider from 'react-bootstrap-table2-toolkit';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { Button, CardBody, Col, FormGroup, Label, Modal, Row, Spinner } from 'reactstrap';
-import { C_Button, Go_Button } from '../../components/Common/CommonButton';
+import { C_Button, Go_Button, PageLoadingSpinner } from '../../components/Common/CommonButton';
 import { breadcrumbReturnFunc, CommonConsole, convertDateTime_ydm, getDateTime_dmy, loginCompanyID, loginEmployeeID } from '../../components/Common/CommonFunction';
 import { customAlert } from '../../CustomAlert/ConfirmDialog';
 import { C_Select, C_TimePicker } from '../../CustomValidateForm';
@@ -85,6 +85,7 @@ const POS_Log = () => {
         };
     }, [userAccess]);
 
+    
     const [tableColumns] = DynamicColumnHook({ pageField })
 
     function onChangeParty(e) {
@@ -103,51 +104,6 @@ const POS_Log = () => {
             setTableData([]);
         }
     }, [tableData])
-
-    // const tableColumns = [
-    //     {
-    //         text: "Transaction Date",
-    //         dataField: "CreatedOn",
-    //         sort: true,
-    //         showing: true,
-    //     }, {
-    //         text: "User Name",
-    //         dataField: "UserName",
-    //         showing: true,
-    //         sort: true
-    //     }, {
-    //         text: "MacID",
-    //         dataField: "MacID",
-    //         showing: true,
-    //         sort: true
-    //     },
-    //     {
-    //         text: "ExeVersion",
-    //         dataField: "ExeVersion",
-    //         showing: true,
-    //         sort: true
-    //     },
-    //     {
-    //         text: "ExePath",
-    //         dataField: "ExePath",
-    //         showing: true,
-    //         sort: true
-
-    //     },
-    //     {
-    //         text: "DivisionID",
-    //         dataField: "DivisionID",
-    //         showing: true,
-    //         sort: true
-    //     },
-    //     {
-    //         text: "ClientID",
-    //         dataField: "ClientID",
-    //         showing: true,
-    //         sort: true
-    //     },
-
-    // ]
 
     const goButtonHandler = async (btnMode) => {
         setbtnMode(btnMode)
@@ -292,7 +248,7 @@ const POS_Log = () => {
     return (
 
         <React.Fragment>
-            {/* <PageLoadingSpinner isLoading={goBtnloading || !pageField} /> */}
+            <PageLoadingSpinner isLoading={!pageField} />
             <div className="page-content">
                 <HeaderContent />
                 <GlobalCustomTable

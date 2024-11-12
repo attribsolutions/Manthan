@@ -74,7 +74,7 @@ const CommonPurchaseList = (props) => {
   const { PageFieldMaster = [] } = { ...pageField };
 
   useEffect(async () => {
-    
+
     const locationPath = history.location.pathname;
     let userAcc = userAccess.find((inx) => {
       const AuthenticatedLinkPath = (locationPath.startsWith(`/${inx.ActualPagePath}`)) && locationPath.includes("AuthLink")
@@ -440,7 +440,7 @@ const CommonPurchaseList = (props) => {
                 keyField={"id"}
                 data={tableProps}
                 columns={tableColumns}
-                selectRow={selectCheckParams.isShow ?
+                selectRow={selectCheckParams.isShow || userAccState.RoleAccess_SelectAll ?
                   selectAllCheck({
                     rowSelected: rowSelected(),
                     nonSelectable: nonSelectedRow(),
@@ -470,7 +470,7 @@ const CommonPurchaseList = (props) => {
           </ExtraTableWrapper>
           {//  check box handler buttons
 
-            ((tableList.length > 0) && (selectCheckParams.isShow)) &&
+            ((tableList.length > 0) && (userAccState.RoleAccess_SelectAll)) &&
 
             <SaveButtonDraggable>
               <div>

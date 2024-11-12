@@ -438,7 +438,7 @@ const SalesReturnList = () => {
             return a
         })
     }
-    debugger
+    
     console.log("and", (values.Customer !== "" && reducers.tableList.length > 0))
 
     console.log("or", (values.Customer === "" || reducers.tableList.length === 0))
@@ -573,7 +573,7 @@ const SalesReturnList = () => {
                         deleteName={"FullReturnNumber"}
                         totalAmountShow={true}
                         selectCheckParams={{
-                            isShow: ((subPageMode === url.SALES_RETURN_LIST) && PurchaseReturnMode_3_Access),
+                            // isShow: ((subPageMode === url.SALES_RETURN_LIST) && PurchaseReturnMode_3_Access),
                             selectSaveBtnHandler: selectSaveBtnHandler,
                             selectSaveBtnLabel: "Send To Supplier",
                             selectHeaderLabel: "Select",

@@ -110,10 +110,10 @@ const TransactionLog = () => {
     }, []);
 
     const lastColumn = () => {
-        const isHidden = userPageAccessState.RoleAccess_IsView;
-        if (isHidden) {
-            return null;
-        }
+        // const isHidden = userPageAccessState.RoleAccess_IsView;
+        // if (!isHidden) {
+        //     return null;
+        // }
 
         return {
             text: "Action",
@@ -187,6 +187,7 @@ const TransactionLog = () => {
         setisCopy({ isCopy: false })
     }
 
+  
     function onChangeCategoryType(e = []) {
         if (e.length === 0) {
             e = [allLabelWithBlank]

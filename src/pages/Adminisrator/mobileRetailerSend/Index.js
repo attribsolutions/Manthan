@@ -36,8 +36,7 @@ const Index = (props) => {
 
 	const [modalCss] = useState(false);
 	const [pageMode] = useState(mode.defaultsave);
-	const [userPageAccessState, setUserAccState] = useState(123);
-
+	const [userPageAccessState, setUserAccState] = useState('');
 	const [partyName, setPartyName] = useState([]);
 	const [saveBtnLoading, setSaveBtnLoading] = useState(false);
 
@@ -114,13 +113,6 @@ const Index = (props) => {
 		label: index.Name,
 	}));
 
-	const pagesListColumns = [
-		{
-			text: "Retailer Name",
-			dataField: "Name",
-		}
-	];
-
 	function goButtonOnchange() {
 		if (partyName.length === 0) {
 			customAlert({
@@ -179,7 +171,9 @@ const Index = (props) => {
 	var IsEditMode_Css = ''
 	if ((modalCss) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
 
-	if (!(userPageAccessState === '')) {
+	if (!(userPageAccessState === '') && pageField) {
+		
+		const selectAllShow = userPageAccessState?.RoleAccess_SelectAll
 		return (
 			<React.Fragment>
 				<MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
@@ -234,7 +228,7 @@ const Index = (props) => {
 						<ToolkitProvider
 							keyField="id"
 							data={RetailerList}
-							columns={pagesListColumns}
+							columns={tableColumns}
 							search
 						>
 							{toolkitProps => (
@@ -244,12 +238,14 @@ const Index = (props) => {
 											keyField={"id"}
 											bordered={true}
 											striped={true}
-											selectRow={selectAllCheck({
-												rowSelected: rowSelected(),
-												nonSelectable: nonSelectedRow(),
-												bgColor: '',
-												tableList: RetailerList
-											})}
+											selectRow={
+												(selectAllShow) ? selectAllCheck({
+													rowSelected: rowSelected(),
+													nonSelectable: nonSelectedRow(),
+													bgColor: '',
+													tableList: RetailerList
+												}) : undefined
+											}
 											noDataIndication={<div className="text-danger text-center ">Record Not Found</div>}
 											classes={"table align-middle table-nowrap table-hover"}
 											headerWrapperClasses={"thead-light"}
@@ -267,7 +263,7 @@ const Index = (props) => {
 							}
 						</ToolkitProvider>
 
-						{RetailerList.length > 0 &&
+						{(RetailerList.length > 0 && selectAllShow) &&
 							<SaveButtonDraggable>
 								<C_Button
 									title={`Send Retailer`}
