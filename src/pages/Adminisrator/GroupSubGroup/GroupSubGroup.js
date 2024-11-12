@@ -266,13 +266,13 @@ const DraggableGroup = ({ groupName, items, index, moveGroup, moveItem, moveItem
             }
         },
     });
-
+    const [groupname, groupId] = groupName.split('_');
     return (
         <>
             <div ref={(node) => Type === "Group" && ref(drop(node))} style={{ opacity: isDragging ? 0 : 1 }}>
                 <Card style={{ background: '#d2d6f7', paddingBottom: '15px', paddingLeft: '13px', paddingRight: '13px', borderRadius: '13px', boxShadow: '0px 1px 5px 1px grey' }}>
                     <FormGroup>
-                        <Label style={{ marginTop: '10px', marginLeft: '10px' }}>{groupName.charAt(0).toUpperCase() + groupName.slice(1)} </Label>
+                        <Label style={{ marginTop: '10px', marginLeft: '10px' }}>{groupname.charAt(0).toUpperCase() + groupname.slice(1)} </Label>
                         <DroppableContainer items={items} groupName={groupName} moveItem={moveItem} moveItemWithinGroup={moveItemWithinGroup} addItem={addItem} />
                     </FormGroup>
                 </Card>
@@ -471,7 +471,7 @@ const GroupSubGroup = (props) => {
 
 
                 if ((item.GroupID === Group.value)) {
-                    debugger
+
                     group = {
                         GroupID: item.SubGroupID,
                         GroupName: item.SubGroupName,
@@ -520,7 +520,7 @@ const GroupSubGroup = (props) => {
                         })
 
                     };
-                    debugger
+
                     acc.push(group);
                 }
 
@@ -573,8 +573,9 @@ const GroupSubGroup = (props) => {
 
 
     const transformData = (data) => {
+        
         return data.reduce((acc, group) => {
-            acc[group.GroupName] = group.SubgroupDetails;
+            acc[`${group.GroupName}_${group.GroupID}`] = group.SubgroupDetails;
             return acc;
         }, {});
     };
