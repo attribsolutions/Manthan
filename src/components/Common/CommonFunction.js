@@ -29,7 +29,7 @@ export const date_ymd_func = (isdate) => { //+++++++++++++++ Current Date by for
 
 
 function Frenchies_isDateInitial(isdate) {
-  
+
   const dateInstance = isdate ? new Date(isdate) : new Date();
 
   // Get the current time
@@ -135,6 +135,17 @@ export function getDateTime_dmy(hourOffset = 0) {
   const seconds = String(dateInstance.getSeconds()).padStart(2, '0');
 
   return `${dd}-${mm}-${yy} ${hours}:${minutes}:${seconds}`;
+}
+
+export function getCurrenthours_min_sec(hourOffset = 0) {
+  const { dd, mm, yy, dateInstance } = isDateInitial();
+
+  dateInstance.setHours(dateInstance.getHours() - hourOffset); // Subtract the specified number of hours
+  const hours = String(dateInstance.getHours()).padStart(2, '0');
+  const minutes = String(dateInstance.getMinutes()).padStart(2, '0');
+  const seconds = String(dateInstance.getSeconds()).padStart(2, '0');
+
+  return `${hours}:${minutes}:${seconds}`;
 }
 
 export function convertDateTime_ydm(inputDateTime) {

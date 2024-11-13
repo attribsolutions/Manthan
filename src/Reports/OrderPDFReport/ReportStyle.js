@@ -916,12 +916,10 @@ export const pageFooter = (doc, data) => {
 
     const GrandTotal = Number(data.OrderAmount)
     const Total = numberWithCommas((GrandTotal).toFixed(2))
-    let stringNumber = toWords(Number(GrandTotal))
     // doc.addImage(upi_qr_code, 'PNG', 470, 750, 80, 60)
     doc.setDrawColor(0, 0, 0);
 
     doc.line(570, 735, 30, 735);//horizontal line Footer 2
-
 
     doc.line(430, 735, 430, 815);//vertical right1 Sub Total
     doc.setFont('Tahoma')
@@ -954,37 +952,42 @@ export const pageFooter = (doc, data) => {
     const isIGST = compareGSTINState(data.CustomerGSTIN, data.SupplierGSTIN)
     if (isIGST || data.isAmerica) {
         doc.setFontSize(8)
-        doc.text(`Total Basic:`, 434, 752,)
-        doc.text(`${numberWithCommas(Number(TotalBasicAmount).toFixed(2))}`, 568, 752, 'right')
+        doc.text(`Total Basic:`, 434, 742,)
+        doc.text(`${numberWithCommas(Number(TotalBasicAmount).toFixed(2))}`, 568, 742, 'right')
 
-        doc.text(`Total Disc:`, 434, 762,)
-        doc.text(`${numberWithCommas(Number(totalDiscount).toFixed(2))}`, 568, 762, 'right')
+        doc.text(`Total Disc:`, 434, 752,)
+        doc.text(`${numberWithCommas(Number(totalDiscount).toFixed(2))}`, 568, 752, 'right')
 
-        doc.text(`Total IGST:`, 434, 772,)
-        doc.text(`${numberWithCommas(Number(totalIGST).toFixed(2))}`, 568, 772, 'right')
+        doc.text(`Total IGST:`, 434, 762,)
+        doc.text(`${numberWithCommas(Number(totalIGST).toFixed(2))}`, 568, 762, 'right')
 
-        doc.text(`Total GST:`, 434, 782,)
-        doc.text(` ${numberWithCommas(Number(totalIGST).toFixed(2))}`, 568, 782, 'right')
+        doc.text(`Total GST:`, 434, 772,)
+        doc.text(` ${numberWithCommas(Number(totalIGST).toFixed(2))}`, 568, 772, 'right')
 
+        doc.text(`Advance Amount:`, 434, 782,)
+        doc.text(` ${numberWithCommas(Number(data.AdvanceAmount).toFixed(2))}`, 568, 782, 'right')
 
 
     } else {
 
         doc.setFontSize(8)
-        doc.text(`Total Basic:`, 434, 752,)
-        doc.text(`${numberWithCommas(Number(TotalBasicAmount).toFixed(2))}`, 568, 752, 'right')
+        doc.text(`Total Basic:`, 434, 742,)
+        doc.text(`${numberWithCommas(Number(TotalBasicAmount).toFixed(2))}`, 568, 742, 'right')
 
-        doc.text(`Total Disc:`, 434, 762,)
-        doc.text(`${numberWithCommas(Number(totalDiscount).toFixed(2))}`, 568, 762, 'right')
+        doc.text(`Total Disc:`, 434, 752,)
+        doc.text(`${numberWithCommas(Number(totalDiscount).toFixed(2))}`, 568, 752, 'right')
 
-        doc.text(`Total CGST:`, 434, 772,)
-        doc.text(`${numberWithCommas(Number(totalCGST).toFixed(2))}`, 568, 772, 'right')
+        doc.text(`Total CGST:`, 434, 762,)
+        doc.text(`${numberWithCommas(Number(totalCGST).toFixed(2))}`, 568, 762, 'right')
 
-        doc.text(`Total SGST:`, 434, 782,)
-        doc.text(`${numberWithCommas(Number(totalSGST).toFixed(2))}`, 568, 782, 'right')
+        doc.text(`Total SGST:`, 434, 772,)
+        doc.text(`${numberWithCommas(Number(totalSGST).toFixed(2))}`, 568, 772, 'right')
 
-        doc.text(`Total GST:`, 434, 792,)
-        doc.text(` ${numberWithCommas(Number(TotalGST).toFixed(2))}`, 568, 792, 'right')
+        doc.text(`Total GST:`, 434, 782,)
+        doc.text(` ${numberWithCommas(Number(TotalGST).toFixed(2))}`, 568, 782, 'right')
+
+        doc.text(`Advance Amount:`, 434, 792,)
+        doc.text(` ${numberWithCommas(Number(data.AdvanceAmount).toFixed(2))}`, 568, 792, 'right')
 
     }
 
