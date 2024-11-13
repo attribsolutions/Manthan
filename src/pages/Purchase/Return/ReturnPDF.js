@@ -2,48 +2,47 @@ import React, { useEffect } from 'react';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import { currentDate_dmy, CurrentTime, loginUserDetails } from '../../../components/Common/CommonFunction';
+import { useDispatch } from 'react-redux';
+import { Return_PDF_Loading, Return_PDF_Loading_Succcess } from '../../../store/actions';
 
 
 function formatDate(dateString) {
     // Split the input date string (format: dd-mm-yyyy)
     const [day, month, year] = dateString.split('-');
-
     // Array of month names
     const monthNames = [
         'January', 'February', 'March', 'April', 'May', 'June',
         'July', 'August', 'September', 'October', 'November', 'December'
     ];
-
     // Convert the month number to a month name (subtract 1 for zero-based index)
     const monthName = monthNames[parseInt(month, 10) - 1];
-
     // Return the formatted date
     return `${day} ${monthName} ${year}`;
 }
 
 
-export const MarathiReport = ({ Table_Data, Supplier }) => {
-    debugger
-    const userDetails = loginUserDetails()
-    const Return_Number = Table_Data.map(item => item.FullReturnNumber).join(',')
-    debugger
-    let records = Return_Number.split(',');
-    let result = records.reduce((acc, curr, index) => {
-        // Add a comma to separate numbers except for the last in each group
-        acc += curr + (index % 9 !== 8 ? ',' : '');
-        // Add a line break after every 9th record except the last group
-        if ((index + 1) % 9 === 0 && index !== records.length - 1) {
-            acc += '<br>';
-        }
-        return acc;
-    }, '');
+export const PDF_ReturnReport = ({ Table_Data, Supplier }) => {
 
+    return new Promise((resolve, reject) => {
+        try {
+            const userDetails = loginUserDetails()
+            debugger
+            const Return_Number = Table_Data.map(item => item.FullReturnNumber).join(',')
+            let records = Return_Number.split(',');
+            let result = records.reduce((acc, curr, index) => {
 
+                acc += curr + (index % 9 !== 8 ? ',' : '');
 
-    const element = document.createElement('div');
-    element.style.position = 'absolute';
-    element.style.top = '-9999px'; // Move the element out of the viewport
-    element.innerHTML = `
+                if ((index + 1) % 9 === 0 && index !== records.length - 1) {
+                    acc += '<br>';
+                }
+                return acc;
+            }, '');
+
+            const element = document.createElement('div');
+            element.style.position = 'absolute';
+            element.style.top = '-9999px'; // Move the element out of the viewport
+            element.innerHTML = `
     <div style="font-family: 'Noto Sans Devanagari'; font-size: 10px; sans-serif; color: black; padding: 60px;">
         <table border="1" style="width: 100%; margin-top:-20px; border-collapse: collapse ;">
             <tr>
@@ -56,15 +55,15 @@ export const MarathiReport = ({ Table_Data, Supplier }) => {
             </tr>
             <tr>
                 <td style="font-size: 15px; border: 1px solid black; width: 500px; padding: 3px;">Phone No</td>
-                <td style="font-size: 15px; border: 1px solid black; width: 500px; padding: 3px;"></td>
+                <td style="font-size: 15px; border: 1px solid black; width: 500px; padding: 3px;">${userDetails.MobileNo}</td>
             </tr>
             <tr>
                 <td style="font-size: 15px; border: 1px solid black; width: 500px; padding: 3px;">Cluster</td>
-                <td style="font-size: 15px; border: 1px solid black; width: 500px; padding: 3px;"></td>
+                <td style="font-size: 15px; border: 1px solid black; width: 500px; padding: 3px;"> ${userDetails.ClusterName}</td>
             </tr>
             <tr>
                 <td style="font-size: 15px; border: 1px solid black; width: 500px; padding: 3px;">Sub Cluster</td>
-                <td style="font-size: 15px; border: 1px solid black; width: 500px; padding: 3px;"></td>
+                <td style="font-size: 15px; border: 1px solid black; width: 500px; padding: 3px;">${userDetails.SubClusterName}</td>
             </tr>
             <tr>
                 <td style="font-size: 25px; border: 1px solid black; width: 500px; padding: 3px;">Date of Return</td>
@@ -104,32 +103,42 @@ export const MarathiReport = ({ Table_Data, Supplier }) => {
     </div>
 `;
 
-    document.body.appendChild(element);
-    html2canvas(element, {
-        scale: 3, // Increase the scale for better resolution
-        useCORS: true,
-    }).then((canvas) => {
+            document.body.appendChild(element);
+            html2canvas(element, {
+                scale: 3,
+                useCORS: true,
+            }).then((canvas) => {
 
-        const imgData = canvas.toDataURL('image/png', 1.0); // 1.0 for full image quality
-        const pdf = new jsPDF('l', 'pt', 'a5');
+                const imgData = canvas.toDataURL('image/png', 1.0);
+                const pdf = new jsPDF('l', 'pt', 'a5');
 
-        const imgWidth = 590; // A4 width in mm
-        const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                const imgWidth = 590;
+                const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
-        pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight, undefined, 'FAST'); // 'FAST' for better quality rendering
-        pdf.setFont('helvetica', 'Normal')
-        pdf.setFontSize(8)
-        pdf.text('Print Date :' + String(currentDate_dmy) + ' Time ' + String(CurrentTime()), 32, 403,)
-        pdf.setProperties({
-            title: `Return Report(${currentDate_dmy})`
-        });
+                pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight, undefined, 'FAST');
+                pdf.setFont('helvetica', 'Normal')
+                pdf.setFontSize(8)
+                pdf.text('Print Date :' + String(currentDate_dmy) + ' Time ' + String(CurrentTime()), 32, 403,)
+                pdf.setProperties({
+                    title: `Return Report(${currentDate_dmy})`
+                });
+                window.open(pdf.output('bloburl'), '_blank');
 
-        // Open the PDF in a new browser tab
-        window.open(pdf.output('bloburl'), '_blank');
+                document.body.removeChild(element);
 
-        // Remove the temporary element after PDF generation
-        document.body.removeChild(element);
+                resolve(); // Resolve the promise after the PDF is generated
+            }).catch((error) => {
+                document.body.removeChild(element);
+                reject(error); // Reject the promise if there's an error
+            });
+        } catch (error) {
+            reject(error); // Catch synchronous errors
+        }
+
+
+
     });
+    return
 };
 
 

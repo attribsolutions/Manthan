@@ -1,6 +1,8 @@
 
 import { CurrentTime, compareGSTINState, currentDate_dmy, date_dmy_func } from "../../components/Common/CommonFunction";
 import { numberWithCommas } from "../Report_common_function";
+import cbm_logo from "../../assets/images/cbm_logo.png"
+
 import * as table from './TableData'
 
 let initial_y = 0
@@ -29,12 +31,13 @@ export const pageHeder = (doc, data) => {
         doc.text('TAX INVOICE', 200, 45,)
     }
     doc.setFontSize(9)
-    doc.text('Original For Buyer', 33, 28,)
+    doc.text('Original For Buyer', 320, 26,)
 
 
 }
 
 export const reportHeder1 = (doc, data) => {
+    doc.addImage(cbm_logo, 'PNG', 33, 1, 95, 80, null, 'FAST')
 
 
     let Y1 = 0
