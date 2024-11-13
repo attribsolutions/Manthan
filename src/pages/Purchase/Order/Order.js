@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useMemo, useState } from "react";
+import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { MetaTags } from "react-meta-tags"
 import { useHistory } from "react-router-dom";
 import {
@@ -26,7 +26,7 @@ import PartyItems from "../../Adminisrator/PartyItemPage/PartyItems";
 
 import { customAlert } from "../../../CustomAlert/ConfirmDialog"
 import { order_Type } from "../../../components/Common/C-Varialbes";
-import { CInput, C_DatePicker, C_Select, decimalRegx, onlyNumberRegx, decimalRegx_3dit, C_ItemSelect } from "../../../CustomValidateForm/index";
+import { CInput, C_DatePicker, C_Select, decimalRegx, onlyNumberRegx, decimalRegx_3dit, C_ItemSelect, C_TimePicker } from "../../../CustomValidateForm/index";
 
 import * as _act from "../../../store/actions";
 import * as _cfunc from "../../../components/Common/CommonFunction";
@@ -82,6 +82,8 @@ const Order = (props) => {
     const dispatch = useDispatch();
     const history = useHistory();
     const IsFranchisesRole = _cfunc.loginUserIsFranchisesRole()
+    const advanceAmountRef = useRef("");
+    const descriptionRef = useRef("");
 
 
 
@@ -100,10 +102,12 @@ const Order = (props) => {
         id: "",
         Supplier: "",
         Route: "",
-        Item: ''
+        Item: '',
+        AdvanceAmount: ""
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
+
     const [editCreatedBy, seteditCreatedBy] = useState("");
     const [page_id] = useState(() => initialState(history).page_Id)
     const [listPath] = useState(() => initialState(history).listPath)
@@ -114,7 +118,13 @@ const Order = (props) => {
     const [userPageAccessState, setUserAccState] = useState('');
     const [description, setDescription] = useState('')
 
-    const [deliverydate, setdeliverydate] = useState(currentDate_ymd)
+    const [processedData, setprocessedData] = useState([])
+
+
+
+
+
+    const [deliverydate, setdeliverydate] = useState(IsFranchisesRole ? _cfunc.getDateTime_dmy() : currentDate_ymd)
     const [billAddr, setbillAddr] = useState('')
     const [shippAddr, setshippAddr] = useState('');
 
@@ -294,6 +304,11 @@ const Order = (props) => {
 
     }, [commonPartyDropSelect]);
 
+
+    useEffect(() => {
+
+        setprocessedData(ModifyTableData_func(orderItemTable));
+    }, [orderItemTable])
 
 
     useEffect(() => { // hasEditVal useEffect
@@ -602,6 +617,7 @@ const Order = (props) => {
     };
 
     const rowClasses = (row) => {
+
         if (row.GroupRow || row.SubGroupRow) {
             return 'group-row hide-border';
         }
@@ -1440,15 +1456,18 @@ const Order = (props) => {
                 Customer: division,
                 Supplier: supplier,
                 OrderType: order_Type.PurchaseOrder,
-                IsConfirm: false  // PO Order then IsConfirm true
+                IsConfirm: false, // PO Order then IsConfirm true
+                AdvanceAmount: advanceAmountRef.current.value
+
             }
             const SO_JsonBody = {
                 Customer: supplier,// swipe supllier 
                 Supplier: division,// swipe Customer
                 OrderType: order_Type.SaleOrder,
-                IsConfirm: true   // SO Order then IsConfirm true
+                IsConfirm: true, // SO Order then IsConfirm true
+                AdvanceAmount: advanceAmountRef.current.value
             }
-            debugger
+
             const IB_JsonBody = {
                 DemandDate: orderdate,
                 DemandAmount: sumOfOrderAmount,
@@ -1456,14 +1475,17 @@ const Order = (props) => {
                 Customer: division,
                 Supplier: supplier,
                 OrderType: order_Type.PurchaseOrder,
+                AdvanceAmount: advanceAmountRef.current.value
+
             }
+
+            const OrderDate = deliverydate.split(' ')[0]; // Date and time  split
             const comm_jsonBody = {
-                OrderDate: deliverydate,// order Date as a delivery date 
-                DeliveryDate: deliverydate,
+                OrderDate: OrderDate,// only date 
+                DeliveryDate: IsFranchisesRole ? deliverydate : `${deliverydate} ${_cfunc.getCurrenthours_min_sec()}`,  //date with time  as develiery date
                 OrderAmount: sumOfOrderAmount,
                 OrderItem: orderItems,
-
-                Description: description,
+                Description: descriptionRef.current.value,
                 BillingAddress: billAddr.value,
                 ShippingAddress: shippAddr.value,
                 OrderNo: 1,
@@ -1478,7 +1500,6 @@ const Order = (props) => {
                 UpdatedBy: _cfunc.loginUserID(),
                 OrderTermsAndConditions: termsAndConditions
             };
-
 
             let jsonBody;   //json body decleration 
             if (subPageMode === url.IB_ORDER) {
@@ -1504,7 +1525,6 @@ const Order = (props) => {
         }
     };
 
-    const processedData = ModifyTableData_func(orderItemTable);
 
     if (!(userPageAccessState === "")) {
         return (
@@ -1532,18 +1552,37 @@ const Order = (props) => {
                                                 <Label className="col-sm-5 p-2"
                                                     style={{ width: "115px" }}>Delivery Date</Label>
                                                 <Col sm="7">
-                                                    <C_DatePicker
-                                                        options={{
-                                                            altInput: true,
-                                                            altFormat: "d-m-Y",
-                                                            dateFormat: "Y-m-d",
-                                                            minDate: "today",
-                                                        }}
-                                                        name="deliverydate"
-                                                        value={deliverydate}
-                                                        onChange={(e, date) => { setdeliverydate(date) }}
-                                                    />
+
+                                                    {IsFranchisesRole ?
+                                                        <C_TimePicker
+                                                            value={deliverydate}
+                                                            placeholder="Select FromDate"
+                                                            name="fromdate"
+                                                            data-enable-time
+                                                            data-enable-seconds
+                                                            data-enable-input={true} // Enable manual input
+                                                            options={{
+                                                                altInput: true,
+                                                                altFormat: 'd-m-Y H:i:S', // Updated date format with 24-hour time
+                                                                dateFormat: 'd-m-Y H:i:S', // Updated date format with 24-hour time
+                                                            }}
+                                                            onChange={(obj, selectedDate) => {
+                                                                setdeliverydate(selectedDate)
+                                                            }}
+                                                        ></C_TimePicker>
+                                                        : <C_DatePicker
+                                                            options={{
+                                                                altInput: true,
+                                                                altFormat: "d-m-Y",
+                                                                dateFormat: "Y-m-d",
+                                                                minDate: "today",
+                                                            }}
+                                                            name="deliverydate"
+                                                            value={deliverydate}
+                                                            onChange={(e, date) => { setdeliverydate(date) }}
+                                                        />}
                                                 </Col>
+
                                             </FormGroup>
                                         </Col>
 
@@ -1551,7 +1590,7 @@ const Order = (props) => {
                                             <Col sm="3">
                                                 <FormGroup className=" row mt-2 " >
                                                     <Label className="col-sm-5 p-2"
-                                                        style={{ width: "65px" }}>{fieldLabel.Route}</Label>
+                                                        style={{ width: "130px" }}>{fieldLabel.Route}</Label>
                                                     <Col sm="7">
 
                                                         <C_Select
@@ -1654,24 +1693,50 @@ const Order = (props) => {
                                                 <Label className="col-sm-5 p-2"
                                                     style={{ width: "115px" }}>Description</Label>
                                                 <div className="col-7">
-                                                    <Input type="text"
-                                                        value={description}
+                                                    <input type="text"
+                                                        className="form-control"
+                                                        defaultValue={descriptionRef.current.value}
+                                                        ref={descriptionRef}
                                                         placeholder='Enter Order Description'
-                                                        onChange={e => setDescription(e.target.value)}
+
+
                                                     />
 
                                                 </div>
 
                                             </FormGroup>
                                         </Col >
-                                        <Col sm="3" />
+
+                                        {(_cfunc.loginUserIsFranchisesRole() && subPageMode === url.ORDER_4) ? <Col sm='3'>
+                                            <FormGroup className="row mt-1" >
+                                                <Label className="col-sm-5 p-2"
+                                                    style={{ width: "130px" }}>{fieldLabel.AdvanceAmount}</Label>
+                                                <div className="col-7">
+                                                    <input type="text"
+                                                        defaultValue={0}
+                                                        className="form-control"
+                                                        ref={advanceAmountRef}
+                                                        onChange={e => {
+                                                            const value = e.target.value;
+                                                            if (/^\d*$/.test(value)) {
+                                                                e.target.value = value;
+                                                            } else {
+                                                                e.target.value = '';
+                                                            }
+                                                        }}
+                                                        placeholder='Enter Advance Amount'
+                                                    />
+                                                </div>
+                                            </FormGroup>
+                                        </Col > : <Col sm="3" />}
+
                                         <Col sm="4">
                                             <FormGroup className="row mt-1" >
                                                 <Label className="col-sm-5 p-2"
                                                     style={{ width: "129px" }}>{fieldLabel.Item}</Label>
 
                                                 <Col sm="7">
-                                                    <C_ItemSelect
+                                                    <C_Select
                                                         value={itemSelect}
                                                         isDisabled={(pageMode === "edit" || goBtnloading) ? true : false}
                                                         options={itemSelectDropOptions}
@@ -1855,6 +1920,7 @@ const Order = (props) => {
                         >
                             {(toolkitProps,) => (
                                 <React.Fragment>
+
                                     <BootstrapTable
                                         keyField={"Item_id"}
                                         id="table_Arrow"

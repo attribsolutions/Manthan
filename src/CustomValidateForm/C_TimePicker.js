@@ -23,6 +23,7 @@ export const C_TimePicker = ({
                 <Flatpickr
                     {...rest}
                     value={value}
+                    id="Flatpickr"
                     className="form-control d-block p-2 bg-white text-dark"
                     options={options}
                 />
