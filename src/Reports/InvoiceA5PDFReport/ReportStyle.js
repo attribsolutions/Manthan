@@ -2,6 +2,7 @@
 import * as table from './TableData'
 import { numberWithCommas } from "../Report_common_function";
 import { date_dmy_func, convertOnlyTimefunc, currentDate_dmy, CurrentTime, compareGSTINState } from "../../components/Common/CommonFunction";
+import cbm_logo from "../../assets/images/cbm_logo.png"
 
 
 export const pageBorder = (doc) => {
@@ -16,6 +17,8 @@ export const pageBorder = (doc) => {
 let initial_y = 0
 
 export const pageHeder = (doc, data) => {
+    doc.addImage(cbm_logo, 'PNG', 33, 3, 52, 55, null, 'FAST')
+
     doc.setFont('Tahoma')
     doc.setFont(undefined, 'bold')
     doc.setFontSize(15)
@@ -23,7 +26,7 @@ export const pageHeder = (doc, data) => {
     doc.setDrawColor(0, 0, 0);
     doc.line(570, 45, 30, 45) //Full horizontal line Bill by Upper line
     doc.setFontSize(7)
-    doc.text('Original For Buyer', 33, 28,)
+    doc.text('Original For Buyer', 330, 28,)
 
 }
 

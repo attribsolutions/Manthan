@@ -26,7 +26,7 @@ import Slidewithcaption from "../../../components/Common/CommonImageComponent";
 import { allLabelWithBlank } from "../../../components/Common/CommonErrorMsg/HarderCodeData";
 import SERVER_HOST_PATH from "../../../helpers/_serverPath";
 import { sideBarPageFiltersInfoAction } from "../../../store/Utilites/PartyDrodown/action";
-import { MarathiReport } from "../../Purchase/Return/ReturnPDF";
+import { MarathiReport, PDF_ReturnReport } from "../../Purchase/Return/ReturnPDF";
 
 const SalesReturnList = () => {
 
@@ -46,7 +46,7 @@ const SalesReturnList = () => {
     const [state, setState] = useState(() => initialFiledFunc(fileds))
 
     const [FileLoading, setFileLoading] = useState(false)
-
+    const [Return_Pdf_loading, setReturn_Pdf_loading] = useState(false);
 
     const [pageMode, setPageMode] = useState(mode.defaultList)
     const [subPageMode, setSubPageMode] = useState(history.location.pathname);
@@ -438,10 +438,17 @@ const SalesReturnList = () => {
             return a
         })
     }
-    
-    console.log("and", (values.Customer !== "" && reducers.tableList.length > 0))
 
-    console.log("or", (values.Customer === "" || reducers.tableList.length === 0))
+    const handlePDFGeneration = async () => {
+        setReturn_Pdf_loading(true); // Start the loader
+        try {
+            await PDF_ReturnReport({ Table_Data: reducers.tableList, Supplier: values.Customer });
+        } catch (error) {
+            console.error("Error generating PDF:", error);
+        } finally {
+            setReturn_Pdf_loading(false); // Stop the loader after completion
+        }
+    };
 
     const HeaderContent = () => {
         return (
@@ -516,9 +523,9 @@ const SalesReturnList = () => {
                                 marginBottom: "16px",
 
                             }}
-                            // loading={goBtnLoading}
+                            loading={Return_Pdf_loading}
                             className="btn btn-outline-primary border-1 font-size-12 text-center m-3 "
-                            onClick={() => { MarathiReport({ Table_Data: reducers.tableList, Supplier: values.Customer }) }}
+                            onClick={handlePDFGeneration}
                         >
                             Print</C_Button> : null}
                     </Col>
