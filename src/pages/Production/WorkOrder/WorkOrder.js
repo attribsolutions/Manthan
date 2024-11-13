@@ -214,7 +214,7 @@ const WorkOrder = (props) => {
                     Unit: Unit,
                     UnitName: UnitName,
                     EstimatedOutputQty: EstimatedOutputQty,
-                    StockQty: Stock.toFixed(2),
+                    StockQty: Stock,
                     BOMDate: WorkOrderDate,
                 })
 
@@ -264,6 +264,7 @@ const WorkOrder = (props) => {
 
     useEffect(() => {
         if ((updateMsg.Status === true) && (updateMsg.StatusCode === 200) && !(modalCss)) {
+            
             setState(() => resetFunction(fileds, state))// Clear form values  
             dispatch(postGoButtonForWorkOrder_MasterSuccess([]));
             setTableData([]);
@@ -271,10 +272,12 @@ const WorkOrder = (props) => {
                 pathname: url.WORK_ORDER_LIST,
             })
         } else if (updateMsg.Status === true && !modalCss) {
+            
             customAlert({
-                Type: 3,
-                Message: JSON.stringify(updateMsg.Message),
+                Type: 4,
+                Message: JSON.stringify(updateMsg.Message)
             })
+            return;
         }
     }, [updateMsg, modalCss]);
 
