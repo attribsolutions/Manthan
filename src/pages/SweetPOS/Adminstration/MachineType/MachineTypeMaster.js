@@ -317,7 +317,7 @@ const MachineTypeMaster = (props) => {
                         "Version": values.Version,
 
                         "IsServer": values.IsServer,
-                        "IsService": !(values.IsServer) ? null : values.IsService,
+                        "IsService": !(values.IsServer) ? false : values.IsService,
                         "ServerDatabase": !(values.IsServer) ? null : values.ServerDatabase,
                         "ServerHost": !(values.IsServer) ? null : values.ServerHost,
                         "SeverName": !(values.IsServer) ? null : values.ServerName,
