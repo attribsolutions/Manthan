@@ -2,7 +2,7 @@
 import cbm_logo from "../../assets/images/cbm_logo.png"
 import * as table from './TableData'
 import { toWords, numberWithCommas } from "../Report_common_function";
-import { CurrentTime, compareGSTINState, convertOnlyTimefunc, currentDate_dmy, date_dmy_func } from "../../components/Common/CommonFunction";
+import { CurrentTime, compareGSTINState, convertOnlyTimefunc, currentDate_dmy, date_dmy_func, loginUserIsFranchisesRole } from "../../components/Common/CommonFunction";
 import { url } from "../../routes";
 let initial_y = 0
 
@@ -964,8 +964,11 @@ export const pageFooter = (doc, data) => {
         doc.text(`Total GST:`, 434, 772,)
         doc.text(` ${numberWithCommas(Number(totalIGST).toFixed(2))}`, 568, 772, 'right')
 
-        doc.text(`Advance Amount:`, 434, 782,)
-        doc.text(` ${numberWithCommas(Number(data.AdvanceAmount).toFixed(2))}`, 568, 782, 'right')
+        if (loginUserIsFranchisesRole()) {
+            doc.text(`Advance Amount:`, 434, 782,)
+            doc.text(` ${numberWithCommas(Number(data.AdvanceAmount).toFixed(2))}`, 568, 782, 'right')
+        }
+
 
 
     } else {
@@ -986,8 +989,10 @@ export const pageFooter = (doc, data) => {
         doc.text(`Total GST:`, 434, 782,)
         doc.text(` ${numberWithCommas(Number(TotalGST).toFixed(2))}`, 568, 782, 'right')
 
-        doc.text(`Advance Amount:`, 434, 792,)
-        doc.text(` ${numberWithCommas(Number(data.AdvanceAmount).toFixed(2))}`, 568, 792, 'right')
+        if (loginUserIsFranchisesRole()) {
+            doc.text(`Advance Amount:`, 434, 792,)
+            doc.text(` ${numberWithCommas(Number(data.AdvanceAmount).toFixed(2))}`, 568, 792, 'right')
+        }
 
     }
 

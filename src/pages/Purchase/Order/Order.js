@@ -1553,7 +1553,7 @@ const Order = (props) => {
                                                     style={{ width: "115px" }}>Delivery Date</Label>
                                                 <Col sm="7">
 
-                                                    {IsFranchisesRole ?
+                                                    {(IsFranchisesRole && subPageMode === url.ORDER_4) ?
                                                         <C_TimePicker
                                                             value={deliverydate}
                                                             placeholder="Select FromDate"
