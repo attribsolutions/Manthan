@@ -35,6 +35,7 @@ import {
     SaveWorkOrderMaster,
     SaveWorkOrderMasterSuccess,
     updateWorkOrderList,
+    updateWorkOrderListSuccess,
 } from "../../../store/Production/WorkOrder/action";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
@@ -176,7 +177,7 @@ const WorkOrder = (props) => {
 
             if (hasEditVal) {
                 setEditData(hasEditVal);
-                
+                debugger
                 const { id, WorkOrderDate, Item, ItemName, NumberOfLot, Stock
                     , Quantity, EstimatedOutputQty, Bom, Party, WorkOrderItems, Unit, UnitName } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError, FullWorkOrderNumber, WorkOrderNumber, } = { ...state }
@@ -205,7 +206,7 @@ const WorkOrder = (props) => {
                 // });
                 // dispatch(postGoButtonForWorkOrder_Master(jsonBody));
                 // setWorkOrderItemsDetails(WorkOrderItems)
-
+                debugger
                 setItemselect({
                     value: Item,
                     label: `${ItemName} (BOMDate-${WorkOrderDate})`,
@@ -264,20 +265,18 @@ const WorkOrder = (props) => {
 
     useEffect(() => {
         if ((updateMsg.Status === true) && (updateMsg.StatusCode === 200) && !(modalCss)) {
-            
             setState(() => resetFunction(fileds, state))// Clear form values  
-            dispatch(postGoButtonForWorkOrder_MasterSuccess([]));
+            dispatch(updateWorkOrderListSuccess({ Status: false }));
             setTableData([]);
             history.push({
                 pathname: url.WORK_ORDER_LIST,
             })
         } else if (updateMsg.Status === true && !modalCss) {
-            
+            dispatch(updateWorkOrderListSuccess({ Status: false }));
             customAlert({
-                Type: 4,
-                Message: JSON.stringify(updateMsg.Message)
+                Type: 3,
+                Message: JSON.stringify(updateMsg.Message),
             })
-            return;
         }
     }, [updateMsg, modalCss]);
 
@@ -575,7 +574,7 @@ const WorkOrder = (props) => {
                                                             menu: provided => ({ ...provided, zIndex: 2 })
                                                         }}
                                                         onChange={(hasSelect, evn) => {
-                                                            
+
                                                             onChangeSelect({ hasSelect, evn, state, setState });
                                                             ItemOnchange(hasSelect)
                                                             dispatch(Breadcrumb_inputName(hasSelect.label))
