@@ -169,6 +169,9 @@ const recordNotAvailable = "Records Not available "
 const ImageIsRequired = 'Only JPG, JPEG, or PNG files are allowed.'
 const AllItemExist = 'All Item Exist'
 
+const AdvanceAmount = 'Advance Amount is Greater than Order Amount'
+
+
 // SweetPOS Rate Master
 const rateTypeIsRequired = "Rate Type is required"
 
@@ -290,7 +293,8 @@ export const alertMessages = {
     No_Kg_IsRerquired,
     atLeastOneCheckboxCheck,
     RateIsRequired,
-    AllItemExist
+    AllItemExist,
+    AdvanceAmount
 };
 
 
