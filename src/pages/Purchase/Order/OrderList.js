@@ -34,6 +34,8 @@ const OrderList = () => {
     const history = useHistory();
     const currentDate_ymd = _cfunc.date_ymd_func();
 
+    const IsFranchises = _cfunc.loginUserIsFranchisesRole()
+
     const LoginDetails = _cfunc.loginUserDetails();
 
     const fileds = {
@@ -67,7 +69,7 @@ const OrderList = () => {
         showAprovalBtn: false
     });
 
-    const reducers = useSelector(
+    let reducers = useSelector(
         (state) => ({
             unhideMsg: state.GRNReducer.hideMsg,
             tableList: state.OrderReducer.orderList,
@@ -87,7 +89,6 @@ const OrderList = () => {
             customerTypeDropLoading: state.PriceListReducer.listBtnLoading,
 
             orderConfirmMsg: state.OrderReducer.orderConfirmMsg,
-            pageField: state.CommonPageFieldReducer.pageFieldList,
 
             supplier: state.CommonAPI_Reducer.vendorSupplierCustomer,
             supplierDropLoading: state.CommonAPI_Reducer.vendorSupplierCustomerLoading,
@@ -268,6 +269,8 @@ const OrderList = () => {
             makeBtnName = "Make GRN"
 
         }
+
+
 
         setOtherState({ masterPath, makeBtnShow, newBtnPath, makeBtnName, IBType, showAprovalBtn })
         setPageMode(page_Mode)
@@ -746,7 +749,17 @@ const OrderList = () => {
         dispatch(getOrdersMakeInvoiceDataAction({ jsonBody }))
     }
 
+    const pageFieldMaster = reducers?.pageField?.PageFieldMaster;
 
+    if (Array.isArray(pageFieldMaster) && !(IsFranchises)) {
+        for (let i = pageFieldMaster.length - 1; i >= 0; i--) {
+            if (pageFieldMaster[i].ControlID === "AdvanceAmount") {
+                pageFieldMaster.splice(i, 1);
+            }
+        }
+    }
+
+    debugger
     const HeaderContent = () => {
         return (
             <div className="px-2   c_card_filter text-black" >
@@ -871,6 +884,8 @@ const OrderList = () => {
             </div >
         )
     }
+
+
 
     return (
         <React.Fragment>
