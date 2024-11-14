@@ -1483,7 +1483,7 @@ const Order = (props) => {
                 Customer: supplier,// swipe supllier 
                 Supplier: division,// swipe Customer
                 OrderType: order_Type.SaleOrder,
-                IsConfirm: true, // SO Order then IsConfirm true
+                IsConfirm: _cfunc.loginUserIsFranchisesRole() ? false : true, // SO Order then IsConfirm true
                 AdvanceAmount: advanceAmountRef.current.value ? advanceAmountRef.current.value : 0
             }
 
@@ -1716,7 +1716,7 @@ const Order = (props) => {
                                                 <div className="col-7">
                                                     <input type="text"
                                                         className="form-control"
-                                                        defaultValue={state.values.Description }
+                                                        defaultValue={state.values.Description}
                                                         ref={descriptionRef}
                                                         placeholder='Enter Order Description'
 
