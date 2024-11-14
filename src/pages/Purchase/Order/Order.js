@@ -125,6 +125,7 @@ const Order = (props) => {
 
 
     const [deliverydate, setdeliverydate] = useState(IsFranchisesRole ? _cfunc.getDateTime_ymd() : currentDate_ymd)
+
     const [billAddr, setbillAddr] = useState('')
     const [shippAddr, setshippAddr] = useState('');
 
@@ -1564,7 +1565,9 @@ const Order = (props) => {
                                                             options={{
                                                                 altInput: true,
                                                                 altFormat: 'd-m-Y H:i:S', // Updated date format with 24-hour time
-                                                                dateFormat: 'd-m-Y H:i:S', // Updated date format with 24-hour time
+                                                                dateFormat: 'Y-m-d H:i:S', // Updated date format with 24-hour time
+                                                                minDate: "today",
+
                                                             }}
                                                             onChange={(obj, selectedDate) => {
                                                                 setdeliverydate(selectedDate)
