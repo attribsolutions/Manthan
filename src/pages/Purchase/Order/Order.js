@@ -82,7 +82,7 @@ const Order = (props) => {
     const dispatch = useDispatch();
     const history = useHistory();
     const IsFranchisesRole = _cfunc.loginUserIsFranchisesRole()
-    const advanceAmountRef = useRef("");
+    const advanceAmountRef = useRef(0);
     const descriptionRef = useRef("");
 
 
@@ -124,7 +124,7 @@ const Order = (props) => {
 
 
 
-    const [deliverydate, setdeliverydate] = useState(IsFranchisesRole ? _cfunc.getDateTime_dmy() : currentDate_ymd)
+    const [deliverydate, setdeliverydate] = useState(IsFranchisesRole ? _cfunc.getDateTime_ymd() : currentDate_ymd)
     const [billAddr, setbillAddr] = useState('')
     const [shippAddr, setshippAddr] = useState('');
 
@@ -1451,13 +1451,13 @@ const Order = (props) => {
                 });
                 return;
             }
-
+            debugger
             const po_JsonBody = {
                 Customer: division,
                 Supplier: supplier,
                 OrderType: order_Type.PurchaseOrder,
                 IsConfirm: false, // PO Order then IsConfirm true
-                AdvanceAmount: advanceAmountRef.current.value
+                AdvanceAmount: advanceAmountRef.current.value ? advanceAmountRef.current.value : 0
 
             }
             const SO_JsonBody = {
@@ -1465,7 +1465,7 @@ const Order = (props) => {
                 Supplier: division,// swipe Customer
                 OrderType: order_Type.SaleOrder,
                 IsConfirm: true, // SO Order then IsConfirm true
-                AdvanceAmount: advanceAmountRef.current.value
+                AdvanceAmount: advanceAmountRef.current.value ? advanceAmountRef.current.value : 0
             }
 
             const IB_JsonBody = {
@@ -1475,7 +1475,7 @@ const Order = (props) => {
                 Customer: division,
                 Supplier: supplier,
                 OrderType: order_Type.PurchaseOrder,
-                AdvanceAmount: advanceAmountRef.current.value
+                AdvanceAmount: advanceAmountRef.current.value ? advanceAmountRef.current.value : 0
 
             }
 
