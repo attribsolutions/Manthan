@@ -102,6 +102,8 @@ export function convertTimefunc(inputDate) {
   return `(${day}-${month}-${year} ${hour12}:${minutes} ${meridian})`;
 }
 
+
+
 export function convertOnlyTimefunc(inputDate) {
   const date = new Date(inputDate);
 
@@ -138,10 +140,10 @@ export function getDateTime_dmy(hourOffset = 0) {
 }
 
 
-export function getDateTime_ymd(hourOffset = 0) {
-  const { dd, mm, yy, dateInstance } = isDateInitial();
+export function getDateTime_ymd(date) {
+  const { dd, mm, yy, dateInstance } = isDateInitial(date);
 
-  dateInstance.setHours(dateInstance.getHours() - hourOffset); // Subtract the specified number of hours
+  dateInstance.setHours(dateInstance.getHours() - 0); // Subtract the specified number of hours
   const hours = String(dateInstance.getHours()).padStart(2, '0');
   const minutes = String(dateInstance.getMinutes()).padStart(2, '0');
   const seconds = String(dateInstance.getSeconds()).padStart(2, '0');
