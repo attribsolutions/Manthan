@@ -1452,7 +1452,15 @@ const Order = (props) => {
                 });
                 return;
             }
-            debugger
+
+            if (advanceAmountRef.current.value && Number(advanceAmountRef.current.value) > sumOfOrderAmount) {
+                customAlert({
+                    Type: 4,
+                    Message: alertMessages.AdvanceAmount,
+                });
+                return;
+            }
+
             const po_JsonBody = {
                 Customer: division,
                 Supplier: supplier,
