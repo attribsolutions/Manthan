@@ -103,7 +103,8 @@ const Order = (props) => {
         Supplier: "",
         Route: "",
         Item: '',
-        AdvanceAmount: ""
+        AdvanceAmount: 0,
+        Description: ""
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
@@ -344,14 +345,23 @@ const Order = (props) => {
                         GSTIN: hasEditVal.SupplierGSTIN,
                     });
                 }
-                setdeliverydate(hasEditVal.DeliveryDate)
+                setdeliverydate(_cfunc.getDateTime_ymd(hasEditVal.DeliveryDate))
                 setshippAddr({ label: hasEditVal.ShippingAddress, value: hasEditVal.ShippingAddressID })
                 setbillAddr({ label: hasEditVal.BillingAddress, value: hasEditVal.BillingAddressID });
                 setDescription(hasEditVal.Description)
+
+                setState(i => {
+                    debugger
+                    const state = { ...i }
+                    state.values.AdvanceAmount = hasEditVal.AdvanceAmount
+                    state.values.Description = hasEditVal.Description
+                    return state
+                })
                 editVal = {}
                 editVal = hasEditVal
                 // setOrderAmount(hasEditVal.OrderAmount)
                 setorderTypeSelect({ value: hasEditVal.POType, label: hasEditVal.POTypeName })
+
 
                 setpoToDate(hasEditVal.POToDate)
                 setpoFromDate(hasEditVal.POFromDate)
@@ -1706,7 +1716,7 @@ const Order = (props) => {
                                                 <div className="col-7">
                                                     <input type="text"
                                                         className="form-control"
-                                                        defaultValue={descriptionRef.current.value}
+                                                        defaultValue={state.values.Description }
                                                         ref={descriptionRef}
                                                         placeholder='Enter Order Description'
 
@@ -1724,7 +1734,8 @@ const Order = (props) => {
                                                     style={{ width: "130px" }}>{fieldLabel.AdvanceAmount}</Label>
                                                 <div className="col-7">
                                                     <input type="text"
-                                                        defaultValue={0}
+                                                        defaultValue={state.values.AdvanceAmount}
+                                                        id="AdvanceAmount_id"
                                                         className="form-control"
                                                         ref={advanceAmountRef}
                                                         onChange={e => {
