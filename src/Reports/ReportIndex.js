@@ -14,6 +14,7 @@ import FrenchiesesOrderReport from "../pages/SweetPOS/Reports/OrderPDFReport/Pag
 import PosInvoiceReport from "../pages/SweetPOS/Reports/InvoicePDFReport/Page";
 import ordeItemSupplierReport from "./OrderItemSupplier/OrderItemSupplier/Page";
 import StockEntryReport from "./StockEntry/Page";
+import OrderThermalPrintReport from "../pages/SweetPOS/Reports/OrderThermalPrint/Page";
 
 export const FrenchiesesOrder = "FrenchiesesOrder"
 export const order1 = "order1"
@@ -33,9 +34,7 @@ export const CustomerWiseClaim = "CustomerWiseClaim"
 export const PosInvoice = "PosInvoice"
 export const ordeItemSupplier = "ordeItemSupplier"
 export const StockEntry = "StockEntry"
-
-
-
+export const orderThermalPrintReport = "orderThermalPrintReport"
 
 
 
@@ -95,6 +94,10 @@ const generateReport = (resp) => {
         case StockEntry:
             StockEntryReport(resp.Data)
             break;
+        case orderThermalPrintReport:
+            OrderThermalPrintReport(resp.Data)
+            break;
+
         default:
             break;
     }

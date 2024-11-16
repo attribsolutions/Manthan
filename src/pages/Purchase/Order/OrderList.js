@@ -577,7 +577,14 @@ const OrderList = () => {
 
 
     function minPrintBtn_Func(config) {
-        config["ReportType"] = report.FrenchiesesOrder;
+
+        let reportType = ""
+        if (subPageMode === url.ORDER_LIST_4) {
+            reportType = report.orderThermalPrintReport
+        } else {
+            reportType = report.FrenchiesesOrder
+        }
+        config["ReportType"] = reportType;
         dispatch(_act.getpdfReportdata(OrderPage_Edit_ForDownload_API, config))
     }
 
@@ -759,7 +766,7 @@ const OrderList = () => {
         }
     }
 
-    debugger
+
     const HeaderContent = () => {
         return (
             <div className="px-2   c_card_filter text-black" >
