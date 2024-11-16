@@ -284,9 +284,11 @@ const SalesReturn = (props) => {
                     //     return (prev.MRP > current.MRP) ? prev : current;
                     // }, '');
 
-                    const secondHighestMRP = i.ItemMRPDetails
+                    const uniqueMRPs = i.ItemMRPDetails
                         .sort((a, b) => b.MRP - a.MRP) // Sorts in descending order by MRP
-                        .filter((item, index, array) => array.findIndex(i => i.MRP === item.MRP) === index)[1]; // Removes duplicates and selects the second item
+                        .filter((item, index, array) => array.findIndex(i => i.MRP === item.MRP) === index); // Removes duplicates
+
+                    const secondHighestMRP = uniqueMRPs.length > 1 ? uniqueMRPs[1] : uniqueMRPs[0]; // Returns the second MRP if available, otherwise returns the first one
 
 
                     const highestGST = i.ItemGSTDetails.reduce((prev, current) => {// Default  highest GST when Return mode "2==ItemWise"
