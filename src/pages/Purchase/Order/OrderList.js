@@ -580,7 +580,7 @@ const OrderList = () => {
 
         let reportType = ""
         if (subPageMode === url.ORDER_LIST_4) {
-            reportType = report.orderThermalPrintReport
+            reportType = report.FrenchiesesOrder
         } else {
             reportType = report.FrenchiesesOrder
         }
