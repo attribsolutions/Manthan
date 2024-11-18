@@ -44,13 +44,14 @@ function ShowTable() {
             // }}
             onDataSizeChange={({ dataCount, filteredData = [] }) => {
                 const newfilteredData = filteredData.map(i => {
+                    debugger
                     const { ...rest } = i;
                     return {
                         ...rest,
-                        recordsAmountTotal: i.Amount, // Breadcrumb Count total
+                        recordsAmountTotal: i.GrandTotal, // Breadcrumb Count total
                     };
                 });
-                
+
                 dispatch(BreadcrumbShowCountlabel(`Count:${dataCount} currency_symbol ${TotalAmount_Func(newfilteredData)}`));
             }
             }
