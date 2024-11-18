@@ -276,21 +276,29 @@ const SalesReturn = (props) => {
                 let nextId = existingIds.length > 0 ? Math.max(...existingIds) + 1 : 1;
 
                 addButtonData.Data.forEach((i) => {
+                    debugger
                     const MRPOptions = i.ItemMRPDetails.map(i => ({ label: i.MRPValue, value: i.MRP, Rate: i.Rate }));
                     const GSTOptions = i.ItemGSTDetails.map(i => ({ label: i.GSTPercentage, value: i.GST }));
 
-                    const highestMRP = i.ItemMRPDetails.reduce((prev, current) => {// Default highest GST when Return mode "2==ItemWise"
-                        return (prev.MRP > current.MRP) ? prev : current;
-                    }, '');
+                    // const highestMRP = i.ItemMRPDetails.reduce((prev, current) => {// Default highest GST when Return mode "2==ItemWise"
+                    //     return (prev.MRP > current.MRP) ? prev : current;
+                    // }, '');
+
+                    const uniqueMRPs = i.ItemMRPDetails
+                        .sort((a, b) => b.MRP - a.MRP) // Sorts in descending order by MRP
+                        .filter((item, index, array) => array.findIndex(i => i.MRP === item.MRP) === index); // Removes duplicates
+
+                    const secondHighestMRP = uniqueMRPs.length > 1 ? uniqueMRPs[1] : uniqueMRPs[0]; // Returns the second MRP if available, otherwise returns the first one
+
 
                     const highestGST = i.ItemGSTDetails.reduce((prev, current) => {// Default  highest GST when Return mode "2==ItemWise"
                         return (prev.GST > current.GST) ? prev : current;
                     }, '');
 
                     if (returnMode === 2) { //(returnMode === 2) ItemWise
-                        i.Rate = highestMRP.Rate || "";
-                        i.MRP = highestMRP.MRP || "";
-                        i.MRPValue = highestMRP.MRPValue || "";
+                        i.Rate = secondHighestMRP.Rate || "";
+                        i.MRP = secondHighestMRP.MRP || "";
+                        i.MRPValue = secondHighestMRP.MRPValue || "";
 
                         i.GST = highestGST.GST || "";
                         i.GSTPercentage = highestGST.GSTPercentage || "";
