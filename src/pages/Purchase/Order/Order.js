@@ -1501,7 +1501,7 @@ const Order = (props) => {
             const OrderDate = deliverydate.split(' ')[0]; // Date and time  split
             const comm_jsonBody = {
                 OrderDate: OrderDate,// only date 
-                DeliveryDate: IsFranchisesRole ? deliverydate : `${deliverydate} ${_cfunc.getCurrenthours_min_sec()}`,  //date with time  as develiery date
+                DeliveryDate: OrderDate, //date with time  as develiery date
                 OrderAmount: sumOfOrderAmount,
                 OrderItem: orderItems,
                 Description: descriptionRef.current.value,

@@ -842,7 +842,7 @@ const PurchaseReturn = (props) => {
     ];
 
     const totalAmountCalcuationFunc = (tableList = [],) => {
-        debugger
+        
         let sumOfGrandTotal = tableList.reduce((accumulator, index1) => accumulator + Number(index1.ItemTotalAmount) || 0, 0);
         let count_label = `Count:${tableList.length} currency_symbol ${Number(sumOfGrandTotal).toLocaleString()}`
         dispatch(BreadcrumbShowCountlabel(count_label))
@@ -867,7 +867,7 @@ const PurchaseReturn = (props) => {
     }
 
     const AddPartyHandler = async (byType) => {
-
+        
         const invalidMsg1 = []
         if ((values.ItemName === '') && (byType === 'ItemWise')) {
             invalidMsg1.push(alertMessages.selectItemName)
@@ -888,11 +888,12 @@ const PurchaseReturn = (props) => {
         }
 
         const jsonBody = JSON.stringify({
+            "Party": _cfunc.loginPartyID(),
             "ItemID": values.ItemName.value,
             "BatchCode": values.BatchCode,
             "Customer": commonPartyDropSelect.value// Customer Swipe when Po return
         })
-
+        
         const InvoiceId = values.InvoiceNumber ? values.InvoiceNumber.value : ''
         const nrwReturnMode = (byType === 'ItemWise') ? 2 : 1 //(returnMode === 2) ItemWise
 
