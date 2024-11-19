@@ -8,7 +8,7 @@ export const DEFAULT_TABLE_COLUMNS = [
     },
     {
         text: "	Amount",
-        dataField: "Amount",
+        dataField: "GrandTotal",
         sort: true
     },
 ];
@@ -72,7 +72,7 @@ export const ALL_TABLE_COLUMNS = [
     },
     {
         text: "	Amount",
-        dataField: "Amount",
+        dataField: "GrandTotal",
     },
     {
         text: "	FullGRNNumber",

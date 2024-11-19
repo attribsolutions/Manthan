@@ -102,7 +102,7 @@ function* makeGRN_Mode1_GenFunc({ config }) {
   // Make_GRN Items  genrator function
 
   const { pageMode = '', path = '', grnRef = [], InvoiceDate, subPageMode } = config
-
+  
   try {
     if (subPageMode === url.IB_ORDER_SO_LIST) {
       const response = yield call(get_Demand_Details_Post_API, config);
@@ -114,9 +114,9 @@ function* makeGRN_Mode1_GenFunc({ config }) {
     }
     else {
       const response = yield call(GRN_Make_API, config);
-      
-      response.Data.OrderItem.forEach(index => {
 
+      response.Data.OrderItem.forEach(index => {
+        
         index["GSToption"] = index.GSTDropdown?.map(i => ({ value: i.GST, label: i.GSTPercentage, }));
         index["MRPOps"] = index.MRPDetails?.map(i => ({ label: i.MRPValue, value: i.MRP }));
 
@@ -133,11 +133,19 @@ function* makeGRN_Mode1_GenFunc({ config }) {
         index["MRPValue"] = (deFaultValue?.value === 0) ? index.MRPValue : deFaultValue?.label;
         index["MRP"] = (deFaultValue?.value === 0) ? index.MRP : deFaultValue?.value;
         index["vendorOrderRate"] = index.Rate;
-
+        
         if (index.GST === null) {
           const deFaultValue = index.GSTDropdown?.filter(i => i.GSTPercentage === index.GSTPercentage);
-          index["GSTPercentage"] = deFaultValue[0]?.GSTPercentage
-          index["GST"] = deFaultValue[0]?.GST;
+          if (deFaultValue.length === 0) {
+            const highestGSTObject = index.GSTDropdown?.reduce((maxObj, current) =>
+              current.GST > maxObj.GST ? current : maxObj, index.GSTDropdown[0]);
+            index["GSTPercentage"] = highestGSTObject.GSTPercentage
+            index["GST"] = highestGSTObject.GST;
+          }
+          else {
+            index["GSTPercentage"] = deFaultValue[0]?.GSTPercentage
+            index["GST"] = deFaultValue[0]?.GST;
+          }
 
         } else {
           if (index.GSTDropdown) {
@@ -147,9 +155,6 @@ function* makeGRN_Mode1_GenFunc({ config }) {
           } else {
             index["GSTPercentage"] = index.GSTPercentage
           }
-
-
-
         }
 
       })
