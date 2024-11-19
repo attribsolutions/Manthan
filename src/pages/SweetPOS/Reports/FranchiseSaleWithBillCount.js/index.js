@@ -186,7 +186,7 @@ const FranchiseSaleWithBillCount = (props) => {
                 <div className="mb-1 table-responsive table">
                     <GlobalCustomTable
                         keyField={"id"}
-                        data={tableData2}
+                        data={tableData}
                         columns={tableColumns}
                         id="table_Arrow"
                         noDataIndication={
