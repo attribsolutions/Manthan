@@ -14,11 +14,10 @@ import { commonPageFieldList, commonPageFieldListSuccess, } from "../../../store
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList";
-import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { PageLoadingSpinner } from "../../../components/Common/CommonButton";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
-
+import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 
 const VehicleList = () => {
 
@@ -37,7 +36,18 @@ const VehicleList = () => {
       pageField: state.CommonPageFieldReducer.pageFieldList,
     })
   );
-  const { pageField, goBtnLoading } = reducers
+  const { commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
+
+  const { pageField, goBtnLoading } = reducers;
+
+  // Common Party select Dropdown useEffect
+  useEffect(() => {
+    if (commonPartyDropSelect.value > 0) {
+      partySelectButtonHandler();
+    } else {
+      partySelectOnChangeHandler();
+    }
+  }, [commonPartyDropSelect]);
 
   const action = {
     getList: getVehicleList,
@@ -53,24 +63,21 @@ const VehicleList = () => {
     const page_Id = pageId.VEHICLE_lIST
     dispatch(commonPageFieldListSuccess(null))
     dispatch(commonPageFieldList(page_Id))
-    if (!(_cfunc.loginSelectedPartyID() === 0)) {
-      goButtonHandler()
-    }
     return () => {
       dispatch(getVehicleListSuccess([]));
       dispatch(commonPageFieldListSuccess(null))
     }
   }, []);
 
-  const goButtonHandler = () => {
+  const partySelectButtonHandler = () => {
     try {
-      if (_cfunc.loginSelectedPartyID() === 0) {
-        customAlert({ Type: 3, Message: "Please Select Party" });
+      if (commonPartyDropSelect.value === 0) {
+        customAlert({ Type: 3, Message: alertMessages.commonPartySelectionIsRequired });
         return;
       };
       const jsonBody = {
         ..._cfunc.loginJsonBody(),
-        PartyID: _cfunc.loginSelectedPartyID()
+        PartyID: commonPartyDropSelect.value
       };
 
       dispatch(getVehicleList(jsonBody));
@@ -78,7 +85,7 @@ const VehicleList = () => {
     return
   };
 
-  const partyOnChngeButtonHandler = () => {
+  const partySelectOnChangeHandler = () => {
     dispatch(getVehicleListSuccess([]));
   }
 
@@ -86,12 +93,6 @@ const VehicleList = () => {
     <React.Fragment>
       <PageLoadingSpinner isLoading={(goBtnLoading || !pageField)} />
       <div className="page-content">
-
-        <PartyDropdown_Common 
-          goBtnLoading={goBtnLoading}
-          goButtonHandler={goButtonHandler}
-          changeButtonHandler={partyOnChngeButtonHandler}
-        />
 
         {
           (pageField) &&
@@ -105,7 +106,7 @@ const VehicleList = () => {
               newBtnPath={url.VEHICLE}
               ButtonMsgLable={"Vehicle"}
               deleteName={"VehicleNumber"}
-              goButnFunc={goButtonHandler}
+              goButnFunc={partySelectButtonHandler}
             />
           </div>
 

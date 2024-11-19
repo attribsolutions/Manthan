@@ -17,7 +17,11 @@ import {
   UPDATE_PARTY_ID_SUCCESS,
   PARTY_API_ERROR_ACTION,
   PARTY_ADDRESS_DELETE_ID,
-  PARTY_ADDRESS_DELETE_ID_SUCCESS
+  PARTY_ADDRESS_DELETE_ID_SUCCESS,
+  PARTY_LIST_FOR_APPROVAL_ACTION,
+  PARTY_LIST_FOR_APPROVAL_SUCCESS,
+  GET_PARTY_LIST_FOR_APPROVAL_ACTION,
+  GET_PARTY_LIST_FOR_APPROVAL_SUCCESS
 } from "./actionTypes";
 
 // get api
@@ -139,6 +143,27 @@ export const PartyAddressDeleteIDSuccess = (resp) => ({
   payload: resp
 });
 
+// post api for PartyListForApproval
+export const PartyListforApproval_Action = (jsonBody) => ({
+  type: PARTY_LIST_FOR_APPROVAL_ACTION,
+  jsonBody,
+});
+
+export const PartyListforApproval_Success = (pages) => ({
+  type: PARTY_LIST_FOR_APPROVAL_SUCCESS,
+  payload: pages,
+});
+
+// get api for PartyListForApproval
+export const GetPartyListforApprovalID_Action = (config) => ({
+  type: GET_PARTY_LIST_FOR_APPROVAL_ACTION,
+  config,
+});
+
+export const GetPartyListforApprovalID_Success = (data) => ({
+  type: GET_PARTY_LIST_FOR_APPROVAL_SUCCESS,
+  payload: data,
+});
 
 export const PartyApiErrorAction = () => ({
   type: PARTY_API_ERROR_ACTION,

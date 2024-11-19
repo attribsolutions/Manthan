@@ -15,12 +15,15 @@ import { url, mode, pageId } from "../../../routes/index"
 import { LoadingSheet_GoBtn_API_Succcess, UpdateLoadingSheetSucccess } from "../../../store/Sales/LoadingSheetRedux/action";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
-import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
-import { GetOpeningBalance, ReceiptGoButtonMaster, ReceiptGoButtonMaster_Success } from "../../../store/Accounting/Receipt/action";
+import { globalTableSearchProps } from "../../../components/Common/SearchBox/MySearch";
+import { ReceiptGoButtonMaster, ReceiptGoButtonMaster_Success } from "../../../store/Accounting/Receipt/action";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import DynamicColumnHook, { selectAllCheck } from "../../../components/Common/TableCommonFunc";
 import { C_DatePicker } from "../../../CustomValidateForm";
 import * as _cfunc from "../../../components/Common/CommonFunction";
+import { C_Button } from "../../../components/Common/CommonButton";
+import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
+import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 
 const LoadingSheetUpdate = (props) => {
 
@@ -170,8 +173,7 @@ const LoadingSheetUpdate = (props) => {
     }
 
     function MakeReceiptForAll() {
-
-        const result = tableListData.filter(index => index.selectCheck === true).map(index => index.id);
+        const result = tableListData.filter(index => index.selectCheck && !index.forceSelectDissabled).map(index => index.id);
 
         const LoadingNumber = result.toString()
 
@@ -186,7 +188,7 @@ const LoadingSheetUpdate = (props) => {
         if (LoadingNumber === "") {
             customAlert({
                 Type: 3,
-                Message: "Select At Least One Invoice",
+                Message: alertMessages.atLeastOneInvoiceRequired,
             })
         }
         else {
@@ -224,28 +226,26 @@ const LoadingSheetUpdate = (props) => {
             <React.Fragment>
                 <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
 
-                <div className="page-content" style={{ marginBottom: "5cm" }}>
-                    <div id="id1"></div>
-
+                <div className="page-content" >
                     <form noValidate>
-                        <div className="px-2 c_card_filter header text-black mb-2" >
 
-                            <div className=" row ">
-                                <Col sm="6">
-                                    <FormGroup className=" row mt-2" >
-                                        <Label className="col-sm-1 p-2"
+                        <div className="px-2   c_card_filter text-black" >
+                            <div className="row" >
+                                <Col sm={3} className="">
+                                    <FormGroup className="mb- row mt-3 mb-1 " >
+                                        <Label className="col-sm-5 p-2"
                                             style={{ width: "115px" }}>Loading NO :</Label>
                                         <Col sm="7">
                                             <Label className=" mt-2">{partyDetails.LoadingSheetNo}</Label>
                                         </Col>
                                     </FormGroup>
-                                </Col >
+                                </Col>
 
-                                <Col sm="6">
-                                    <FormGroup className=" row mt-2" >
-                                        <Label className="col-sm-1 p-2"
-                                            style={{ width: "115px", marginRight: "0.4cm" }}>Loading Date </Label>
-                                        <Col sm="7">
+                                <Col sm={3} className="">
+                                    <FormGroup className="mb- row mt-3 mb-1  " >
+                                        <Label className="col-sm-7 p-2"
+                                            style={{ width: "65px" }}>ToDate</Label>
+                                        <Col sm="7" >
                                             <C_DatePicker
                                                 name='Date'
                                                 value={loadingDate}
@@ -253,9 +253,10 @@ const LoadingSheetUpdate = (props) => {
                                             />
                                         </Col>
                                     </FormGroup>
-                                </Col >
+                                </Col>
+
                             </div>
-                        </div>
+                        </div >
 
                         <div className="mt-n1">
                             <ToolkitProvider
@@ -274,6 +275,7 @@ const LoadingSheetUpdate = (props) => {
                                                 selectRow={selectAllCheck({
                                                     rowSelected: rowSelected(),
                                                     nonSelectable: nonSelectedRow(),
+                                                    tableList: tableListData
                                                 })}
                                                 noDataIndication={<div className="text-danger text-center ">Record Not available</div>}
                                                 classes={"table align-middle table-nowrap table-hover"}
@@ -282,7 +284,7 @@ const LoadingSheetUpdate = (props) => {
                                                 {...toolkitProps.baseProps}
 
                                             />
-                                            {mySearchProps(toolkitProps.searchProps)}
+                                            {globalTableSearchProps(toolkitProps.searchProps)}
                                         </div>
 
                                     </React.Fragment>
@@ -292,16 +294,13 @@ const LoadingSheetUpdate = (props) => {
                         </div>
 
                         {
-                            tableListData.length > 0 ?
-                                <FormGroup>
-                                    <Col sm={2} className={"row save1"}>
-                                        <button type="button" style={{ width: "120px" }}
-                                            onClick={MakeReceiptForAll}
-                                            className="btn btn-primary  waves-effect waves-light">
-                                            Make Receipt</button>
-                                    </Col>
-                                </FormGroup >
-                                : null
+                            <SaveButtonDraggable>
+                                <C_Button type="button"
+                                    onClick={MakeReceiptForAll}
+                                    className="btn btn-primary  waves-effect waves-light">
+                                    Make Receipt</C_Button>
+                            </SaveButtonDraggable>
+
                         }
 
 

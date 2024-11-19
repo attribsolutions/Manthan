@@ -1,0 +1,3910 @@
+{
+    "StatusCode": 200,
+    "Status": true,
+    "Message": "",
+    "Data": 
+        
+            [
+                {
+                    "Item": 214,
+                    "ItemName": "Bakarwadi Loose",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 792,
+                            "BaseUnitQuantity": "1.000",
+                            "IsBase": false,
+                            "UnitName": "No(a Kg)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "1003",
+                            "MRPValue": 400.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "225",
+                            "GSTPercentage": 5.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 3,
+                    "ItemName": "Bakarwadi Easy Carry Pack",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 9,
+                            "BaseUnitQuantity": "20.000",
+                            "IsBase": false,
+                            "UnitName": "Box (20 No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "623",
+                            "MRPValue": 60.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "3",
+                            "GSTPercentage": 12.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 601,
+                    "ItemName": "test2 irem",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 876,
+                            "BaseUnitQuantity": "0.400",
+                            "IsBase": false,
+                            "UnitName": "Kg (0.4 No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "1338",
+                            "MRPValue": 111.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "554",
+                            "GSTPercentage": 12.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 5,
+                    "ItemName": "Bakarwadi 3 Pcs Tower",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 868,
+                            "BaseUnitQuantity": "6.000",
+                            "IsBase": false,
+                            "UnitName": "Box (6 No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "625",
+                            "MRPValue": 300.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "5",
+                            "GSTPercentage": 12.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 7,
+                    "ItemName": "Bakarwadi 500 g Tray",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 517,
+                            "BaseUnitQuantity": "20.000",
+                            "IsBase": false,
+                            "UnitName": "Box (20 No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "627",
+                            "MRPValue": 210.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "7",
+                            "GSTPercentage": 12.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 6,
+                    "ItemName": "Bakarwadi 250 g Tray",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 19,
+                            "BaseUnitQuantity": "40.000",
+                            "IsBase": false,
+                            "UnitName": "Box (40 No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "626",
+                            "MRPValue": 110.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "6",
+                            "GSTPercentage": 12.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 4,
+                    "ItemName": "Bakarwadi 3 Pcs",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 745,
+                            "BaseUnitQuantity": "0.000",
+                            "IsBase": false,
+                            "UnitName": "Box (0 No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "624",
+                            "MRPValue": 15.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "4",
+                            "GSTPercentage": 12.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 216,
+                    "ItemName": "Test Product 2",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 793,
+                            "BaseUnitQuantity": "1.000",
+                            "IsBase": true,
+                            "UnitName": "No"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "1010",
+                            "MRPValue": 60.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "227",
+                            "GSTPercentage": 5.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 163,
+                    "ItemName": "Bakarwadi 500 g PP",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 759,
+                            "BaseUnitQuantity": "20.000",
+                            "IsBase": false,
+                            "UnitName": "Box (20 No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "800",
+                            "MRPValue": 190.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "164",
+                            "GSTPercentage": 12.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 162,
+                    "ItemName": "Bakarwadi 250 g PP",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 757,
+                            "BaseUnitQuantity": "16.000",
+                            "IsBase": false,
+                            "UnitName": "Box (16 No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "801",
+                            "MRPValue": 100.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "163",
+                            "GSTPercentage": 12.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 99,
+                    "ItemName": "Chakli 200 g Box",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 303,
+                            "BaseUnitQuantity": "20.000",
+                            "IsBase": false,
+                            "UnitName": "Box (20 No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "719",
+                            "MRPValue": 100.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "99",
+                            "GSTPercentage": 12.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 114,
+                    "ItemName": "Vijapuri Poha Chivda 200 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 348,
+                            "BaseUnitQuantity": "20.000",
+                            "IsBase": false,
+                            "UnitName": "Box (20 No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "734",
+                            "MRPValue": 68.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "114",
+                            "GSTPercentage": 12.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 112,
+                    "ItemName": "Spicy Potato Chivda 200 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 342,
+                            "BaseUnitQuantity": "25.000",
+                            "IsBase": false,
+                            "UnitName": "Box (25 No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "1006",
+                            "MRPValue": 100.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "112",
+                            "GSTPercentage": 12.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 111,
+                    "ItemName": "Special Chivda 500 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 339,
+                            "BaseUnitQuantity": "20.000",
+                            "IsBase": false,
+                            "UnitName": "Box (20 No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "731",
+                            "MRPValue": 210.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "111",
+                            "GSTPercentage": 12.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 109,
+                    "ItemName": "Special Chivda 200 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 333,
+                            "BaseUnitQuantity": "25.000",
+                            "IsBase": false,
+                            "UnitName": "Box (25 No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "729",
+                            "MRPValue": 85.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "109",
+                            "GSTPercentage": 12.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 108,
+                    "ItemName": "Potato Chivda 500 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 330,
+                            "BaseUnitQuantity": "20.000",
+                            "IsBase": false,
+                            "UnitName": "Box (20 No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "728",
+                            "MRPValue": 290.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "108",
+                            "GSTPercentage": 12.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 106,
+                    "ItemName": "Potato Chivda 200 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 324,
+                            "BaseUnitQuantity": "25.000",
+                            "IsBase": false,
+                            "UnitName": "Box (25 No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "726",
+                            "MRPValue": 120.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "106",
+                            "GSTPercentage": 12.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 105,
+                    "ItemName": "Patal Poha Chivda 500 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 321,
+                            "BaseUnitQuantity": "20.000",
+                            "IsBase": false,
+                            "UnitName": "Box (20 No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "725",
+                            "MRPValue": 180.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "105",
+                            "GSTPercentage": 12.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 104,
+                    "ItemName": "Patal Poha Chivda 200 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 318,
+                            "BaseUnitQuantity": "25.000",
+                            "IsBase": false,
+                            "UnitName": "Box (25 No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "724",
+                            "MRPValue": 75.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "104",
+                            "GSTPercentage": 12.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 103,
+                    "ItemName": "Murmure Poha Chivda 200 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 315,
+                            "BaseUnitQuantity": "25.000",
+                            "IsBase": false,
+                            "UnitName": "Box (25 No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "723",
+                            "MRPValue": 75.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "103",
+                            "GSTPercentage": 12.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 102,
+                    "ItemName": "Maka Chivda 200 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 312,
+                            "BaseUnitQuantity": "25.000",
+                            "IsBase": false,
+                            "UnitName": "Box (25 No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "722",
+                            "MRPValue": 85.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "102",
+                            "GSTPercentage": 12.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 101,
+                    "ItemName": "Lite Chivda 200 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 309,
+                            "BaseUnitQuantity": "25.000",
+                            "IsBase": false,
+                            "UnitName": "Box (25 No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "721",
+                            "MRPValue": 75.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "101",
+                            "GSTPercentage": 12.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 100,
+                    "ItemName": "Jwari Lahi Chivda 100 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 306,
+                            "BaseUnitQuantity": "15.000",
+                            "IsBase": false,
+                            "UnitName": "Box (15 No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "720",
+                            "MRPValue": 35.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "100",
+                            "GSTPercentage": 12.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 117,
+                    "ItemName": "Farsan 500 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 357,
+                            "BaseUnitQuantity": "20.000",
+                            "IsBase": false,
+                            "UnitName": "Box (20 No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "737",
+                            "MRPValue": 175.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "117",
+                            "GSTPercentage": 12.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 115,
+                    "ItemName": "Farsan 200 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 351,
+                            "BaseUnitQuantity": "25.000",
+                            "IsBase": false,
+                            "UnitName": "Box (25 No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "735",
+                            "MRPValue": 72.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "115",
+                            "GSTPercentage": 12.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 118,
+                    "ItemName": "Kadboli 200 g (Pack)",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 360,
+                            "BaseUnitQuantity": "30.000",
+                            "IsBase": false,
+                            "UnitName": "Box (30 No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "803",
+                            "MRPValue": 90.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "118",
+                            "GSTPercentage": 12.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 120,
+                    "ItemName": "Tasty Nuts 150 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 366,
+                            "BaseUnitQuantity": "36.000",
+                            "IsBase": false,
+                            "UnitName": "Box (36 No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "778",
+                            "MRPValue": 75.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "120",
+                            "GSTPercentage": 12.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 125,
+                    "ItemName": "Khari Bundi 200 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 381,
+                            "BaseUnitQuantity": "20.000",
+                            "IsBase": false,
+                            "UnitName": "Box (20 No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "745",
+                            "MRPValue": 72.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "125",
+                            "GSTPercentage": 12.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 123,
+                    "ItemName": "Papdi 200 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 375,
+                            "BaseUnitQuantity": "15.000",
+                            "IsBase": false,
+                            "UnitName": "Box (15 No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "743",
+                            "MRPValue": 72.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "123",
+                            "GSTPercentage": 12.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 122,
+                    "ItemName": "Gathi 200 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 372,
+                            "BaseUnitQuantity": "15.000",
+                            "IsBase": false,
+                            "UnitName": "Box (15 No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "742",
+                            "MRPValue": 72.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "122",
+                            "GSTPercentage": 12.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 128,
+                    "ItemName": "Chana Chat Samosa 200 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 571,
+                            "BaseUnitQuantity": "20.000",
+                            "IsBase": false,
+                            "UnitName": "Box (20 No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "799",
+                            "MRPValue": 110.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "128",
+                            "GSTPercentage": 12.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 135,
+                    "ItemName": "Shankarpali 200 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 411,
+                            "BaseUnitQuantity": "25.000",
+                            "IsBase": false,
+                            "UnitName": "Box (25 No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "755",
+                            "MRPValue": 68.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "135",
+                            "GSTPercentage": 5.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 134,
+                    "ItemName": "0 No Shev 200 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 1903,
+                            "BaseUnitQuantity": "25.000",
+                            "IsBase": false,
+                            "UnitName": "Box (25 No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "754",
+                            "MRPValue": 72.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "134",
+                            "GSTPercentage": 12.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 133,
+                    "ItemName": "Bhavnagri Shev 200 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 405,
+                            "BaseUnitQuantity": "15.000",
+                            "IsBase": false,
+                            "UnitName": "Box (15 No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "753",
+                            "MRPValue": 72.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "133",
+                            "GSTPercentage": 12.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 132,
+                    "ItemName": "Bikaner Shev 250 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 402,
+                            "BaseUnitQuantity": "20.000",
+                            "IsBase": false,
+                            "UnitName": "Box (20 No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "752",
+                            "MRPValue": 90.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "132",
+                            "GSTPercentage": 12.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 131,
+                    "ItemName": "Lasun Shev 250 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 399,
+                            "BaseUnitQuantity": "20.000",
+                            "IsBase": false,
+                            "UnitName": "Box (20 No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "751",
+                            "MRPValue": 90.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "131",
+                            "GSTPercentage": 12.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 130,
+                    "ItemName": "Masala Shev 200 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 396,
+                            "BaseUnitQuantity": "25.000",
+                            "IsBase": false,
+                            "UnitName": "Box (25 No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "750",
+                            "MRPValue": 72.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "130",
+                            "GSTPercentage": 12.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 129,
+                    "ItemName": "Palak Shev 250 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 393,
+                            "BaseUnitQuantity": "20.000",
+                            "IsBase": false,
+                            "UnitName": "Box (20 No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "749",
+                            "MRPValue": 90.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "129",
+                            "GSTPercentage": 12.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 127,
+                    "ItemName": "Potato Shev 200 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 387,
+                            "BaseUnitQuantity": "25.000",
+                            "IsBase": false,
+                            "UnitName": "Box (25 No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "747",
+                            "MRPValue": 75.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "127",
+                            "GSTPercentage": 12.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 126,
+                    "ItemName": "Shev 200 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 384,
+                            "BaseUnitQuantity": "25.000",
+                            "IsBase": false,
+                            "UnitName": "Box (25 No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "746",
+                            "MRPValue": 72.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "126",
+                            "GSTPercentage": 12.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 124,
+                    "ItemName": "Tikhat Shev 200 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 378,
+                            "BaseUnitQuantity": "15.000",
+                            "IsBase": false,
+                            "UnitName": "Box (15 No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "744",
+                            "MRPValue": 72.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "124",
+                            "GSTPercentage": 12.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 121,
+                    "ItemName": "Tomato Shev 200 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 369,
+                            "BaseUnitQuantity": "25.000",
+                            "IsBase": false,
+                            "UnitName": "Box (25 No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "741",
+                            "MRPValue": 72.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "121",
+                            "GSTPercentage": 12.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 110,
+                    "ItemName": "Soya Stick 200 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 336,
+                            "BaseUnitQuantity": "15.000",
+                            "IsBase": false,
+                            "UnitName": "Box (15 No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "730",
+                            "MRPValue": 84.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "110",
+                            "GSTPercentage": 12.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 107,
+                    "ItemName": "Chakli Sticks 200 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 327,
+                            "BaseUnitQuantity": "20.000",
+                            "IsBase": false,
+                            "UnitName": "Box (20 No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "802",
+                            "MRPValue": 85.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "107",
+                            "GSTPercentage": 12.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 174,
+                    "ItemName": "Chana Dal 150 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 648,
+                            "BaseUnitQuantity": "20.000",
+                            "IsBase": false,
+                            "UnitName": "Box (20 No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "819",
+                            "MRPValue": 60.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "175",
+                            "GSTPercentage": 12.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 173,
+                    "ItemName": "Dal Muth 150 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 645,
+                            "BaseUnitQuantity": "20.000",
+                            "IsBase": false,
+                            "UnitName": "Box (20 No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "818",
+                            "MRPValue": 60.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "174",
+                            "GSTPercentage": 12.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 172,
+                    "ItemName": "Mug Dal 150 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 642,
+                            "BaseUnitQuantity": "20.000",
+                            "IsBase": false,
+                            "UnitName": "Box (20 No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "817",
+                            "MRPValue": 70.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "173",
+                            "GSTPercentage": 12.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 119,
+                    "ItemName": "Chana Dal 200 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 363,
+                            "BaseUnitQuantity": "25.000",
+                            "IsBase": false,
+                            "UnitName": "Box (25 No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "739",
+                            "MRPValue": 72.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "119",
+                            "GSTPercentage": 12.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 116,
+                    "ItemName": "Dal Muth 200 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 354,
+                            "BaseUnitQuantity": "25.000",
+                            "IsBase": false,
+                            "UnitName": "Box (25 No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "736",
+                            "MRPValue": 72.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "116",
+                            "GSTPercentage": 12.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 113,
+                    "ItemName": "Mug Dal 200 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 345,
+                            "BaseUnitQuantity": "25.000",
+                            "IsBase": false,
+                            "UnitName": "Box (25 No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "733",
+                            "MRPValue": 92.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "113",
+                            "GSTPercentage": 12.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 77,
+                    "ItemName": "Soan Papdi Royal Anjeer 400 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 234,
+                            "BaseUnitQuantity": "10.000",
+                            "IsBase": false,
+                            "UnitName": "Box (10 No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "697",
+                            "MRPValue": 220.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "77",
+                            "GSTPercentage": 5.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 76,
+                    "ItemName": "Soan Papdi Royal Anjeer 200 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 231,
+                            "BaseUnitQuantity": "20.000",
+                            "IsBase": false,
+                            "UnitName": "Box (20 No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "696",
+                            "MRPValue": 145.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "76",
+                            "GSTPercentage": 5.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 75,
+                    "ItemName": "Soan papdi Orange 400 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 228,
+                            "BaseUnitQuantity": "10.000",
+                            "IsBase": false,
+                            "UnitName": "Box (10 No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "695",
+                            "MRPValue": 190.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "75",
+                            "GSTPercentage": 5.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 74,
+                    "ItemName": "Soan papdi Orange 200 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 225,
+                            "BaseUnitQuantity": "20.000",
+                            "IsBase": false,
+                            "UnitName": "Box (20 No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "694",
+                            "MRPValue": 130.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "74",
+                            "GSTPercentage": 5.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 73,
+                    "ItemName": "Soan papdi Mango 400 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 222,
+                            "BaseUnitQuantity": "10.000",
+                            "IsBase": false,
+                            "UnitName": "Box (10 No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "693",
+                            "MRPValue": 190.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "73",
+                            "GSTPercentage": 5.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 72,
+                    "ItemName": "Soan papdi Mango 200 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 219,
+                            "BaseUnitQuantity": "20.000",
+                            "IsBase": false,
+                            "UnitName": "Box (20 No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "692",
+                            "MRPValue": 130.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "72",
+                            "GSTPercentage": 5.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 71,
+                    "ItemName": "Soan Papdi Cran Barry 400 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 216,
+                            "BaseUnitQuantity": "10.000",
+                            "IsBase": false,
+                            "UnitName": "Box (10 No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "691",
+                            "MRPValue": 200.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "71",
+                            "GSTPercentage": 5.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 70,
+                    "ItemName": "Soan Papdi Cran Barry 200 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 213,
+                            "BaseUnitQuantity": "20.000",
+                            "IsBase": false,
+                            "UnitName": "Box (20 No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "690",
+                            "MRPValue": 135.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "70",
+                            "GSTPercentage": 5.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 69,
+                    "ItemName": "Soan Papdi Chilli Guava Flavour 200 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 1932,
+                            "BaseUnitQuantity": "20.000",
+                            "IsBase": false,
+                            "UnitName": "Box (20 No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "689",
+                            "MRPValue": 120.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "69",
+                            "GSTPercentage": 5.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 68,
+                    "ItemName": "Soan papdi Chatpata Mango Flavour 200 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 1930,
+                            "BaseUnitQuantity": "20.000",
+                            "IsBase": false,
+                            "UnitName": "Box (20 No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "688",
+                            "MRPValue": 110.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "68",
+                            "GSTPercentage": 5.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 67,
+                    "ItemName": "Soan Papdi Blue Barry 400 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 1928,
+                            "BaseUnitQuantity": "10.000",
+                            "IsBase": false,
+                            "UnitName": "Box (10 No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "687",
+                            "MRPValue": 220.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "67",
+                            "GSTPercentage": 5.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 66,
+                    "ItemName": "Soan Papdi Blue Barry 200 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 201,
+                            "BaseUnitQuantity": "20.000",
+                            "IsBase": false,
+                            "UnitName": "Box (20 No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "686",
+                            "MRPValue": 145.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "66",
+                            "GSTPercentage": 5.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 65,
+                    "ItemName": "Soan Papdi 400 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 1926,
+                            "BaseUnitQuantity": "10.000",
+                            "IsBase": false,
+                            "UnitName": "Box (10 No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "685",
+                            "MRPValue": 190.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "65",
+                            "GSTPercentage": 5.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 64,
+                    "ItemName": "Soan Papdi 200 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 195,
+                            "BaseUnitQuantity": "20.000",
+                            "IsBase": false,
+                            "UnitName": "Box (20 No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "952",
+                            "MRPValue": 130.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "64",
+                            "GSTPercentage": 5.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 48,
+                    "ItemName": "Pista Katali 250 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 144,
+                            "BaseUnitQuantity": "20.000",
+                            "IsBase": false,
+                            "UnitName": "Box (20 No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "792",
+                            "MRPValue": 275.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "48",
+                            "GSTPercentage": 5.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 47,
+                    "ItemName": "Keshar Katali 250 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 141,
+                            "BaseUnitQuantity": "20.000",
+                            "IsBase": false,
+                            "UnitName": "Box (20 No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "791",
+                            "MRPValue": 275.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "47",
+                            "GSTPercentage": 5.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 46,
+                    "ItemName": "Kaju Katali 500 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 138,
+                            "BaseUnitQuantity": "10.000",
+                            "IsBase": false,
+                            "UnitName": "Box (10 No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "666",
+                            "MRPValue": 500.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "46",
+                            "GSTPercentage": 5.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 45,
+                    "ItemName": "Kaju Katali 250 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 135,
+                            "BaseUnitQuantity": "20.000",
+                            "IsBase": false,
+                            "UnitName": "Box (20 No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "665",
+                            "MRPValue": 265.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "45",
+                            "GSTPercentage": 5.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 44,
+                    "ItemName": "Kaju Badam Roll 250 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 132,
+                            "BaseUnitQuantity": "20.000",
+                            "IsBase": false,
+                            "UnitName": "Box (20 No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "790",
+                            "MRPValue": 275.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "44",
+                            "GSTPercentage": 5.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 2,
+                    "ItemName": "Mango Burfi 500g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 1958,
+                            "BaseUnitQuantity": "10.000",
+                            "IsBase": false,
+                            "UnitName": "Box (10 No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "782",
+                            "MRPValue": 440.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "2",
+                            "GSTPercentage": 5.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 1,
+                    "ItemName": "Mango Burfi 250 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 3,
+                            "BaseUnitQuantity": "20.000",
+                            "IsBase": false,
+                            "UnitName": "Box (20 No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "781",
+                            "MRPValue": 235.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "151",
+                            "GSTPercentage": 5.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 196,
+                    "ItemName": "Mango Burfi 100 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 704,
+                            "BaseUnitQuantity": "40.000",
+                            "IsBase": false,
+                            "UnitName": "Box (40 No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "964",
+                            "MRPValue": 100.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "203",
+                            "GSTPercentage": 5.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 193,
+                    "ItemName": "Test product for POS",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 1848,
+                            "BaseUnitQuantity": "10.000",
+                            "IsBase": false,
+                            "UnitName": "Outer (10 No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "1007",
+                            "MRPValue": 71.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "194",
+                            "GSTPercentage": 5.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 153,
+                    "ItemName": "Chitale Blueberry Baklava 200 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 577,
+                            "BaseUnitQuantity": "10.000",
+                            "IsBase": false,
+                            "UnitName": "Box (10 No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "787",
+                            "MRPValue": 500.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "154",
+                            "GSTPercentage": 18.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 14,
+                    "ItemName": "Banana Chips Twisted Masala 125 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 43,
+                            "BaseUnitQuantity": "32.000",
+                            "IsBase": false,
+                            "UnitName": "Box (32 No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "634",
+                            "MRPValue": 60.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "217",
+                            "GSTPercentage": 12.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 13,
+                    "ItemName": "Banana Chips Spicy Masala 125 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 40,
+                            "BaseUnitQuantity": "32.000",
+                            "IsBase": false,
+                            "UnitName": "Box (32 No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "633",
+                            "MRPValue": 60.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "220",
+                            "GSTPercentage": 12.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 177,
+                    "ItemName": "Bakarwadi Gift Box 400 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 657,
+                            "BaseUnitQuantity": "2.500",
+                            "IsBase": false,
+                            "UnitName": "Kg (2.5 No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "824",
+                            "MRPValue": 190.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "178",
+                            "GSTPercentage": 12.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 243,
+                    "ItemName": "Dosa Mix 200 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 1888,
+                            "BaseUnitQuantity": "30.000",
+                            "IsBase": false,
+                            "UnitName": "Box (30No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "1378",
+                            "MRPValue": 60.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "594",
+                            "GSTPercentage": 18.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 273,
+                    "ItemName": "Mango Drink 150 ml",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 1869,
+                            "BaseUnitQuantity": "40.000",
+                            "IsBase": false,
+                            "UnitName": "Box (40No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "1359",
+                            "MRPValue": 25.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "575",
+                            "GSTPercentage": 12.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 272,
+                    "ItemName": "Guava Drink 150 ml",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 1870,
+                            "BaseUnitQuantity": "40.000",
+                            "IsBase": false,
+                            "UnitName": "Box (40No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "1360",
+                            "MRPValue": 25.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "576",
+                            "GSTPercentage": 12.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 271,
+                    "ItemName": "Alphanso Mango Pulp 450 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 1892,
+                            "BaseUnitQuantity": "0.000",
+                            "IsBase": false,
+                            "UnitName": "Box (0No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "1382",
+                            "MRPValue": 150.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "598",
+                            "GSTPercentage": 12.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 270,
+                    "ItemName": "Alpohnso Mango Pulp (Sweetened) 1 kg",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 1851,
+                            "BaseUnitQuantity": "12.000",
+                            "IsBase": false,
+                            "UnitName": "Box (12No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "1341",
+                            "MRPValue": 200.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "557",
+                            "GSTPercentage": 12.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 269,
+                    "ItemName": "Alphanso Mango Pulp 200 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 1883,
+                            "BaseUnitQuantity": "0.000",
+                            "IsBase": false,
+                            "UnitName": "Box (0No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "1373",
+                            "MRPValue": 70.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "589",
+                            "GSTPercentage": 12.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 268,
+                    "ItemName": "Alpohnso Mango Pulp (Sweetened) 500 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 1850,
+                            "BaseUnitQuantity": "12.000",
+                            "IsBase": false,
+                            "UnitName": "Box (12No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "1340",
+                            "MRPValue": 110.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "556",
+                            "GSTPercentage": 12.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 267,
+                    "ItemName": "Alpohnso Mango Pulp (Sweetened) 200 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 1849,
+                            "BaseUnitQuantity": "30.000",
+                            "IsBase": false,
+                            "UnitName": "Box (30No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "1339",
+                            "MRPValue": 50.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "555",
+                            "GSTPercentage": 12.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 266,
+                    "ItemName": "Tomato Ketchup 8 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 1872,
+                            "BaseUnitQuantity": "750.000",
+                            "IsBase": false,
+                            "UnitName": "Box (750No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "1362",
+                            "MRPValue": 1.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "578",
+                            "GSTPercentage": 12.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 265,
+                    "ItemName": "Tomato Ketchup 100 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 1873,
+                            "BaseUnitQuantity": "60.000",
+                            "IsBase": false,
+                            "UnitName": "Box (60No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "1363",
+                            "MRPValue": 15.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "579",
+                            "GSTPercentage": 12.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 264,
+                    "ItemName": "Tomato Ketchup 200 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 1861,
+                            "BaseUnitQuantity": "30.000",
+                            "IsBase": false,
+                            "UnitName": "Box (30No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "1351",
+                            "MRPValue": 40.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "567",
+                            "GSTPercentage": 12.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 263,
+                    "ItemName": "Tomato Ketchup 500 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 1875,
+                            "BaseUnitQuantity": "12.000",
+                            "IsBase": false,
+                            "UnitName": "Box (12No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "1365",
+                            "MRPValue": 60.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "581",
+                            "GSTPercentage": 12.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 262,
+                    "ItemName": "Tomato Ketchup 1 kg",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 1863,
+                            "BaseUnitQuantity": "12.000",
+                            "IsBase": false,
+                            "UnitName": "Box (12No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "1353",
+                            "MRPValue": 100.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "569",
+                            "GSTPercentage": 12.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 261,
+                    "ItemName": "Tomato Ketchup 400 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 1862,
+                            "BaseUnitQuantity": "15.000",
+                            "IsBase": false,
+                            "UnitName": "Box (15No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "1352",
+                            "MRPValue": 70.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "568",
+                            "GSTPercentage": 12.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 260,
+                    "ItemName": "Pineapple Jam 100 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 1893,
+                            "BaseUnitQuantity": "48.000",
+                            "IsBase": false,
+                            "UnitName": "Box (48No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "1383",
+                            "MRPValue": 25.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "599",
+                            "GSTPercentage": 12.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 259,
+                    "ItemName": "Strawberry Jam 100 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 1895,
+                            "BaseUnitQuantity": "48.000",
+                            "IsBase": false,
+                            "UnitName": "Box (48No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "1385",
+                            "MRPValue": 25.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "601",
+                            "GSTPercentage": 12.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 258,
+                    "ItemName": "Strawberry Jam 200 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 1896,
+                            "BaseUnitQuantity": "24.000",
+                            "IsBase": false,
+                            "UnitName": "Box (24No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "1386",
+                            "MRPValue": 45.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "602",
+                            "GSTPercentage": 12.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 257,
+                    "ItemName": "Pineapple Jam 200 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 1894,
+                            "BaseUnitQuantity": "24.000",
+                            "IsBase": false,
+                            "UnitName": "Box (24No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "1384",
+                            "MRPValue": 45.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "600",
+                            "GSTPercentage": 12.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 256,
+                    "ItemName": "Mango Jam 100 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 1865,
+                            "BaseUnitQuantity": "48.000",
+                            "IsBase": false,
+                            "UnitName": "Box (48No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "1355",
+                            "MRPValue": 25.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "571",
+                            "GSTPercentage": 12.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 255,
+                    "ItemName": "Mango Jam 200 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 1866,
+                            "BaseUnitQuantity": "24.000",
+                            "IsBase": false,
+                            "UnitName": "Box (24No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "1356",
+                            "MRPValue": 45.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "572",
+                            "GSTPercentage": 12.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 254,
+                    "ItemName": "Mix Fruit Jam 100 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 1867,
+                            "BaseUnitQuantity": "48.000",
+                            "IsBase": false,
+                            "UnitName": "Box (48No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "1357",
+                            "MRPValue": 25.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "573",
+                            "GSTPercentage": 12.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 253,
+                    "ItemName": "Mix Fruit Jam 200 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 1868,
+                            "BaseUnitQuantity": "24.000",
+                            "IsBase": false,
+                            "UnitName": "Box (24No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "1358",
+                            "MRPValue": 45.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "574",
+                            "GSTPercentage": 12.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 252,
+                    "ItemName": "Instant Sevai Kheer Mix (Vermicelli)200G",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 1901,
+                            "BaseUnitQuantity": "30.000",
+                            "IsBase": false,
+                            "UnitName": "Box (30No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "1391",
+                            "MRPValue": 120.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "607",
+                            "GSTPercentage": 18.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 251,
+                    "ItemName": "Instant Sevai Kheer Mix (Vermicelli)100G",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 1900,
+                            "BaseUnitQuantity": "60.000",
+                            "IsBase": false,
+                            "UnitName": "Box (60No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "1390",
+                            "MRPValue": 65.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "606",
+                            "GSTPercentage": 18.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 250,
+                    "ItemName": "Jilebi Mix 1 kg",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 1860,
+                            "BaseUnitQuantity": "10.000",
+                            "IsBase": false,
+                            "UnitName": "Box (10No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "1350",
+                            "MRPValue": 140.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "566",
+                            "GSTPercentage": 18.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 249,
+                    "ItemName": "Meduwada Mix 1 kg",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 1879,
+                            "BaseUnitQuantity": "10.000",
+                            "IsBase": false,
+                            "UnitName": "Box (10No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "1369",
+                            "MRPValue": 325.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "585",
+                            "GSTPercentage": 18.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 248,
+                    "ItemName": "Idli Mix 1 kg",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 1871,
+                            "BaseUnitQuantity": "10.000",
+                            "IsBase": false,
+                            "UnitName": "Box (10No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "1361",
+                            "MRPValue": 170.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "577",
+                            "GSTPercentage": 18.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 247,
+                    "ItemName": "Khaman Mix 1 kg",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 1878,
+                            "BaseUnitQuantity": "10.000",
+                            "IsBase": false,
+                            "UnitName": "Box (10No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "1368",
+                            "MRPValue": 210.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "584",
+                            "GSTPercentage": 18.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 246,
+                    "ItemName": "Meduwada Mix 400 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 1874,
+                            "BaseUnitQuantity": "15.000",
+                            "IsBase": false,
+                            "UnitName": "Box (15No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "1364",
+                            "MRPValue": 120.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "580",
+                            "GSTPercentage": 18.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 245,
+                    "ItemName": "Kheer Mix 100 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 1886,
+                            "BaseUnitQuantity": "60.000",
+                            "IsBase": false,
+                            "UnitName": "Box (60No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "1376",
+                            "MRPValue": 45.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "592",
+                            "GSTPercentage": 18.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 244,
+                    "ItemName": "Basundi Mix 100 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 1884,
+                            "BaseUnitQuantity": "60.000",
+                            "IsBase": false,
+                            "UnitName": "Box (60No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "1374",
+                            "MRPValue": 60.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "590",
+                            "GSTPercentage": 18.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 242,
+                    "ItemName": "Kheer Mix 200 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 1887,
+                            "BaseUnitQuantity": "30.000",
+                            "IsBase": false,
+                            "UnitName": "Box (30No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "1377",
+                            "MRPValue": 75.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "593",
+                            "GSTPercentage": 18.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 241,
+                    "ItemName": "Basundi Mix 200 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 1885,
+                            "BaseUnitQuantity": "30.000",
+                            "IsBase": false,
+                            "UnitName": "Box (30No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "1375",
+                            "MRPValue": 105.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "591",
+                            "GSTPercentage": 18.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 240,
+                    "ItemName": "Meduwada Mix 200 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 1859,
+                            "BaseUnitQuantity": "30.000",
+                            "IsBase": false,
+                            "UnitName": "Box (30No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "1349",
+                            "MRPValue": 70.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "565",
+                            "GSTPercentage": 18.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 239,
+                    "ItemName": "Gulab Jamun Mix 1 kg",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 1854,
+                            "BaseUnitQuantity": "10.000",
+                            "IsBase": false,
+                            "UnitName": "Box (10No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "1344",
+                            "MRPValue": 415.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "560",
+                            "GSTPercentage": 18.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 238,
+                    "ItemName": "Idli Mix 400 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 1858,
+                            "BaseUnitQuantity": "15.000",
+                            "IsBase": false,
+                            "UnitName": "Box (15No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "1348",
+                            "MRPValue": 70.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "564",
+                            "GSTPercentage": 18.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 237,
+                    "ItemName": "Idli Mix 200 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 1857,
+                            "BaseUnitQuantity": "30.000",
+                            "IsBase": false,
+                            "UnitName": "Box (30No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "1347",
+                            "MRPValue": 35.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "563",
+                            "GSTPercentage": 18.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 236,
+                    "ItemName": "Khaman Mix 400 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 1856,
+                            "BaseUnitQuantity": "15.000",
+                            "IsBase": false,
+                            "UnitName": "Box (15No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "1346",
+                            "MRPValue": 90.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "562",
+                            "GSTPercentage": 18.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 235,
+                    "ItemName": "Khaman Mix 200 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 1855,
+                            "BaseUnitQuantity": "30.000",
+                            "IsBase": false,
+                            "UnitName": "Box (30No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "1345",
+                            "MRPValue": 47.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "561",
+                            "GSTPercentage": 18.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 234,
+                    "ItemName": "Gulab Jamun Mix 400 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 1853,
+                            "BaseUnitQuantity": "15.000",
+                            "IsBase": false,
+                            "UnitName": "Box (15No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "1343",
+                            "MRPValue": 172.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "559",
+                            "GSTPercentage": 18.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 233,
+                    "ItemName": "Gulab Jamun Mix 200 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 1852,
+                            "BaseUnitQuantity": "30.000",
+                            "IsBase": false,
+                            "UnitName": "Box (30No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "1342",
+                            "MRPValue": 93.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "558",
+                            "GSTPercentage": 18.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 232,
+                    "ItemName": "Dosa Mix 400 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 1889,
+                            "BaseUnitQuantity": "15.000",
+                            "IsBase": false,
+                            "UnitName": "Box (15No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "1379",
+                            "MRPValue": 105.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "595",
+                            "GSTPercentage": 18.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 231,
+                    "ItemName": "Turmeric Ginger Flavoured Milk 200ml",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 1898,
+                            "BaseUnitQuantity": "30.000",
+                            "IsBase": false,
+                            "UnitName": "Box (30No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "1388",
+                            "MRPValue": 30.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "604",
+                            "GSTPercentage": 12.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 230,
+                    "ItemName": "Strawberry Flavoured Milk 200 ml",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 1891,
+                            "BaseUnitQuantity": "30.000",
+                            "IsBase": false,
+                            "UnitName": "Box (30No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "1381",
+                            "MRPValue": 30.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "597",
+                            "GSTPercentage": 12.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 229,
+                    "ItemName": "Pineapple  Flavoured Milk 200 ml",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 1890,
+                            "BaseUnitQuantity": "30.000",
+                            "IsBase": false,
+                            "UnitName": "Box (30No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "1380",
+                            "MRPValue": 30.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "596",
+                            "GSTPercentage": 12.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 228,
+                    "ItemName": "Coffee Flavoured Milk 200 ml",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 1864,
+                            "BaseUnitQuantity": "30.000",
+                            "IsBase": false,
+                            "UnitName": "Box (30No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "1354",
+                            "MRPValue": 35.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "570",
+                            "GSTPercentage": 12.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 227,
+                    "ItemName": "Butterscotch Flavoured Milk 200 ml",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 1880,
+                            "BaseUnitQuantity": "30.000",
+                            "IsBase": false,
+                            "UnitName": "Box (30No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "1370",
+                            "MRPValue": 30.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "586",
+                            "GSTPercentage": 12.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 226,
+                    "ItemName": "Keshar Flavoured Milk 200 ml",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 1882,
+                            "BaseUnitQuantity": "30.000",
+                            "IsBase": false,
+                            "UnitName": "Box (30No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "1372",
+                            "MRPValue": 30.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "588",
+                            "GSTPercentage": 12.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 225,
+                    "ItemName": "Rose Flavoured Milk 200 ml",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 1881,
+                            "BaseUnitQuantity": "30.000",
+                            "IsBase": false,
+                            "UnitName": "Box (30No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "1371",
+                            "MRPValue": 30.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "587",
+                            "GSTPercentage": 12.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 224,
+                    "ItemName": "Masala Flavoured Milk 200 ml",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 1877,
+                            "BaseUnitQuantity": "30.000",
+                            "IsBase": false,
+                            "UnitName": "Box (30No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "1367",
+                            "MRPValue": 30.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "583",
+                            "GSTPercentage": 12.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 223,
+                    "ItemName": "Tamarind Chutney 8 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 1899,
+                            "BaseUnitQuantity": "750.000",
+                            "IsBase": false,
+                            "UnitName": "Box (750No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "1389",
+                            "MRPValue": 2.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "605",
+                            "GSTPercentage": 12.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 222,
+                    "ItemName": "Tamarind Chutney 100 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 1897,
+                            "BaseUnitQuantity": "60.000",
+                            "IsBase": false,
+                            "UnitName": "Box (60No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "1387",
+                            "MRPValue": 20.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "603",
+                            "GSTPercentage": 12.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                },
+                {
+                    "Item": 221,
+                    "ItemName": "Tamarind Chutney 250 g",
+                    "ItemUnitDetails": [
+                        {
+                            "Unit": 1876,
+                            "BaseUnitQuantity": "24.000",
+                            "IsBase": false,
+                            "UnitName": "Box (24No)"
+                        }
+                    ],
+                    "ItemMRPDetails": [
+                        {
+                            "MRP": "1366",
+                            "MRPValue": 45.0
+                        }
+                    ],
+                    "ItemGSTDetails": [
+                        {
+                            "GST": "582",
+                            "GSTPercentage": 12.0
+                        }
+                    ],
+                    "ItemRateDetails": [
+                        {
+                            "Rate": null,
+                            "RateValue": null
+                        }
+                    ]
+                }
+            ]
+        }
+    

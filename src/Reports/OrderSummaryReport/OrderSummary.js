@@ -9,13 +9,14 @@ import * as _cfunc from "../../components/Common/CommonFunction";
 import { mode, pageId } from "../../routes/index"
 import { MetaTags } from "react-meta-tags";
 import { postOrderSummary_API, postOrderSummary_API_Success } from "../../store/Report/OrderSummaryRedux/action";
-import * as XLSX from 'xlsx';
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
-import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
+import { globalTableSearchProps } from "../../components/Common/SearchBox/MySearch";
 import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess } from "../../store/actions";
-import { ReportComponent } from "../ReportComponent";
+import { ExcelReportComponent } from "../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS";
+import { changeCommonPartyDropDetailsAction } from "../../store/Utilites/PartyDrodown/action";
+import { allLabelWithBlank } from "../../components/Common/CommonErrorMsg/HarderCodeData";
 
 const OrderSummary = (props) => {
 
@@ -27,7 +28,7 @@ const OrderSummary = (props) => {
     const fileds = {
         FromDate: currentDate_ymd,
         ToDate: currentDate_ymd,
-        PartyName: { value: "", label: "All" },
+        PartyName: allLabelWithBlank,
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
@@ -38,13 +39,17 @@ const OrderSummary = (props) => {
     const [showTableData, setShowTableData] = useState([]);
     const [orderSummaryApiData, setOrderSummaryApiData] = useState([]);
     const [btnMode, setBtnMode] = useState(0);
+    const [orderTypeSelect, setOrderTypeSelect] = useState({
+        value: 2,
+        label: "Sales Order"
+    });
 
     const { userAccess, goButtonData, SSDD_List, partyLoading, goBtnLoading, pageField } = useSelector(
         (state) => ({
             goButtonData: state.OrderSummaryReducer.orderSummaryGobtn,
             goBtnLoading: state.OrderSummaryReducer.goBtnLoading,
             userAccess: state.Login.RoleAccessUpdateData,
-            SSDD_List: state.CommonPartyDropdownReducer.commonPartyDropdown,
+            SSDD_List: state.CommonPartyDropdownReducer.commonPartyDropdownOption,
             partyLoading: state.CommonAPI_Reducer.SSDD_ListLoading,
             pageField: state.CommonPageFieldReducer.pageField
         })
@@ -75,9 +80,22 @@ const OrderSummary = (props) => {
     useEffect(() => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(pageId.ORDER_SUMMARY_REPORT));
+        dispatch(BreadcrumbShowCountlabel(`Count:${0}`));
+        dispatch(changeCommonPartyDropDetailsAction({ isShow: false }))//change party drop-down show false
+        if (_cfunc.CommonPartyDropValue().value > 0) {
+            setState((i) => {
+                const a = { ...i }
+                a.values.PartyName = _cfunc.CommonPartyDropValue();
+                a.hasValid.PartyName.valid = true
+                return a
+            })
+        }
         return () => {
             dispatch(commonPageFieldSuccess(null));
             dispatch(postOrderSummary_API_Success({ Status: false }));
+            dispatch(changeCommonPartyDropDetailsAction({ isShow: true }))//change party drop-down restore show state
+
+
         }
     }, [])
 
@@ -130,24 +148,30 @@ const OrderSummary = (props) => {
 
     useEffect(() => {
         if (showTableData.length === 0) {
-            setBtnMode(0)
+            setBtnMode(0);
+            dispatch(BreadcrumbShowCountlabel(`Count:${0}`));
+        }
+        else {
+            dispatch(BreadcrumbShowCountlabel(`Count:${showTableData.length}`));
         }
     }, [showTableData]);
 
     const downloadExcelFunction = (excelTableData) => {
         if ((btnMode === 2)) {
+            const { Data } = goButtonData
+            if (Data.length > 0) {
+                ExcelReportComponent({      // Download CSV
+                    pageField,
+                    excelTableData: excelTableData,
+                    excelFileName: "Order Summary Report"
+                })
+            }
             // const groupData = groupByColumnsWithSumFunc(excelTableData);
             // _cfunc.CommonConsole(JSON.stringify("groupData", excelTableData))
             // const worksheet = XLSX.utils.json_to_sheet(groupData);
             // const workbook = XLSX.utils.book_new();
             // XLSX.utils.book_append_sheet(workbook, worksheet, "Order Summary Report");
             // XLSX.writeFile(workbook, `From ${values.FromDate} To ${values.ToDate} ${isSCMParty ? values.PartyName.label : _cfunc.loginUserDetails().PartyName}.XLSX`);
-
-            ReportComponent({      // Download CSV
-                pageField,
-                excelData: excelTableData,
-                excelFileName: "Order Summary Report"
-            })
         }
     }
 
@@ -163,7 +187,7 @@ const OrderSummary = (props) => {
             dynamicColumn.push('CustomerName')
         }
 
-        let currentColumnName = [...dynamicColumn, ...['OrderNo','GroupName', 'SubGroup', 'MaterialName']]
+        let currentColumnName = [...dynamicColumn, ...['OrderNo', 'Product', 'SubProduct', 'SKUName']]
         const columnSumsByGroup = jsonData.reduce((result, item) => {
             const groupKey = currentColumnName.map(columnName => item[columnName]).join('|');
 
@@ -224,6 +248,15 @@ const OrderSummary = (props) => {
         label: " All"
     });
 
+    const orderType_Option = [{
+        value: 1,
+        label: "Purchase Order"
+    },
+    {
+        value: 2,
+        label: "Sales Order"
+    }]
+
     const partySlectHandler = (e) => {
 
         setState((i) => {
@@ -236,14 +269,21 @@ const OrderSummary = (props) => {
         setShowTableData([]);
     }
 
+    const orderTypeSelectHandler = (e) => {
+        setOrderTypeSelect(e);
+        setShowTableData([]);
+        setOrderSummaryApiData([]);
+    }
+
     function excel_And_GoBtnHandler(e, Btnmode) {
         setBtnMode(Btnmode);
         const jsonBody = JSON.stringify({
             "FromDate": values.FromDate,
             "ToDate": values.ToDate,
             "CompanyID": _cfunc.loginCompanyID(),
-            "PartyID": isSCMParty ? values.PartyName.value : _cfunc.loginPartyID()
-
+            "PartyID": isSCMParty ? values.PartyName.value : _cfunc.loginPartyID(),
+            "Employee": !isSCMParty ? 0 : _cfunc.loginEmployeeID(),
+            "OrderType": orderTypeSelect.value
         });
         dispatch(postOrderSummary_API({ jsonBody }));
     }
@@ -256,6 +296,7 @@ const OrderSummary = (props) => {
             return a
         });
         setShowTableData([]);
+        setOrderSummaryApiData([]);
     }
 
     function todateOnchange(e, date) {
@@ -266,19 +307,22 @@ const OrderSummary = (props) => {
             return a
         });
         setShowTableData([]);
+        setOrderSummaryApiData([]);
     }
+
     function groupByDateHandler(e) {
         setGroupByDate(e.target.checked)
         setBtnMode(1)
     }
-    function groupBySupplierHamdler(e) {
+    function groupBySupplierHandler(e) {
         setGroupBySupplier(e.target.checked)
         setBtnMode(1)
     }
-    function groupByCustomerHamdler(e) {
+    function groupByCustomerHandler(e) {
         setGroupByCustomer(e.target.checked)
         setBtnMode(1)
     }
+
     const pagesListColumns = useMemo(() => {
         let internalColumn = [{}];
         if (showTableData.length > 0) {
@@ -301,18 +345,17 @@ const OrderSummary = (props) => {
 
     }, [showTableData]);
 
-
     return (
         <React.Fragment>
             <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
             <div className="page-content">
                 <div className="px-2   c_card_filter text-black" >
-                    <div className="row" >
-                        <Col sm={3} className="">
-                            <FormGroup className="mb- row mt-3 mb-2 " >
-                                <Label className="col-sm-4 p-2"
-                                    style={{ width: "83px" }}>FromDate</Label>
-                                <Col sm="6">
+
+                    <div className="row">
+                        <Col sm={isSCMParty ? 2 : 3} >
+                            <FormGroup className="mb- row mt-3 mb-2">
+                                <Label className="col-sm-4 p-2" style={{ width: "83px" }}>FromDate</Label>
+                                <Col sm="7">
                                     <C_DatePicker
                                         options={{
                                             altInput: true,
@@ -327,11 +370,10 @@ const OrderSummary = (props) => {
                             </FormGroup>
                         </Col>
 
-                        <Col sm={3} className="">
-                            <FormGroup className="mb- row mt-3 mb-2" >
-                                <Label className="col-sm-4 p-2"
-                                    style={{ width: "65px" }}>ToDate</Label>
-                                <Col sm="6">
+                        <Col sm={isSCMParty ? 2 : 3} >
+                            <FormGroup className="mb- row mt-3 mb-2">
+                                <Label className="col-sm-4 p-2" style={{ width: "65px" }}>ToDate</Label>
+                                <Col sm="7">
                                     <C_DatePicker
                                         options={{
                                             altInput: true,
@@ -347,11 +389,10 @@ const OrderSummary = (props) => {
                         </Col>
 
                         {isSCMParty &&
-                            <Col sm={3} className="">
-                                <FormGroup className="mb- row mt-3" >
-                                    <Label className="col-sm-4 p-2"
-                                        style={{ width: "65px" }}>Party</Label>
-                                    <Col sm="7">
+                            <Col sm={3} >
+                                <FormGroup className="mb- row mt-3">
+                                    <Label className="col-sm-6 p-2" style={{ width: "65px" }}>Ordering Party</Label>
+                                    <Col sm="6">
                                         <C_Select
                                             name="PartyName"
                                             value={values.PartyName}
@@ -364,14 +405,33 @@ const OrderSummary = (props) => {
                                             }}
                                             options={Party_Option}
                                             onChange={partySlectHandler}
-
                                         />
                                     </Col>
                                 </FormGroup>
                             </Col>
                         }
+                        <Col sm={3} >
+                            <FormGroup className="mb- row mt-3 mb-2">
+                                <Label className="col-sm-4 p-2" style={{ width: "83px" }}>Order Type</Label>
+                                <Col sm="6">
+                                    <C_Select
+                                        name="orderTypeSelect"
+                                        value={orderTypeSelect}
+                                        isSearchable={true}
+                                        className="react-dropdown"
+                                        classNamePrefix="dropdown"
+                                        styles={{
+                                            menu: provided => ({ ...provided, zIndex: 2 })
+                                        }}
+                                        options={orderType_Option}
+                                        onChange={orderTypeSelectHandler}
 
-                        <Col sm={1} className="mt-3" >
+                                    />
+                                </Col>
+                            </FormGroup>
+                        </Col>
+
+                        <Col sm={1} className=" mt-3 mb-2">
                             <C_Button
                                 type="button"
                                 spinnerColor="white"
@@ -381,11 +441,9 @@ const OrderSummary = (props) => {
                             >
                                 Show
                             </C_Button>
-
                         </Col>
 
-                        <Col sm="2" className="mt-3 ">
-
+                        <Col sm="1" className="mt-3 mb-2">
                             <C_Button
                                 type="button"
                                 spinnerColor="white"
@@ -393,53 +451,46 @@ const OrderSummary = (props) => {
                                 className="btn btn-primary"
                                 onClick={(e) => excel_And_GoBtnHandler(e, 2)}
                             >
-                                Excel Download
+                                Excel
                             </C_Button>
                         </Col>
                     </div>
                 </div>
 
-                <Card className="mt-1">
-                    <CardBody className="c_card_body text-black">
-                        <Row>
-                            <Col sm={4} >
-                                <FormGroup className="row mt-n3 mb-n4">
-                                    <Label className="col-4 p-2" >By Date Group</Label>
-                                    <Col sm="4" style={{ marginTop: '9px', }}>
-                                        <Input type="checkbox"
-                                            checked={groupByDate}
-                                            onChange={groupByDateHandler} />
-                                    </Col>
-                                </FormGroup>
-                            </Col>
+                <Card className="mt-1 mb-1  c_card_filter-2 ">
 
-                            <Col sm={4} >
-                                <FormGroup className="row mt-n3 mb-n4">
-                                    <Label className="col-4 p-2" >By Supplier Name</Label>
-                                    <Col sm="4" style={{ marginTop: '9px', }}>
-                                        <Input type="checkbox"
-                                            checked={groupBySupplier}
-                                            onChange={groupBySupplierHamdler}
-                                        />
-                                    </Col>
-                                </FormGroup>
-                            </Col>
-                            <Col sm={4} >
-                                <FormGroup className="row mt-n3 mb-n4">
-                                    <Label className="col-4 p-2" >By Customer Name</Label>
-                                    <Col sm="4" style={{ marginTop: '9px', }}>
-                                        <Input type="checkbox"
-                                            checked={groupByCustomer}
-                                            onChange={groupByCustomerHamdler}
-                                        />
-                                    </Col>
-                                </FormGroup>
-                            </Col>
-                        </Row>
-                    </CardBody>
+                    <div className="d-flex gap-5">
+                        <div className="d-flex gap-2  justify-content-center">
+                            <div>By Date Group</div>
+                            <Input
+                                type="checkbox"
+                                checked={groupByDate}
+                                onChange={groupByDateHandler}
+                            />
+                        </div>
+
+                        <div className="d-flex gap-2 justify-content-center">
+                            <div>By Supplier Name</div>
+                            <Input
+                                type="checkbox"
+                                checked={groupBySupplier}
+                                onChange={groupBySupplierHandler}
+                            />
+                        </div>
+
+                        <div className="d-flex gap-2 justify-content-center">
+                            <div>By Customer Name</div>
+                            <Input
+                                type="checkbox"
+                                checked={groupByCustomer}
+                                onChange={groupByCustomerHandler}
+                            />
+                        </div>
+                    </div>
+
                 </Card>
 
-                <div className="">
+                <div >
                     <ToolkitProvider
                         keyField={"keyId"}
                         data={showTableData}
@@ -450,10 +501,10 @@ const OrderSummary = (props) => {
                             <React.Fragment>
                                 <Row>
                                     <Col xl="12">
-                                        <div className="table-responsive table">
+                                        <div>
                                             <BootstrapTable
-                                                keyField={"id"}
-                                                classes={"table  table-bordered table-hover"}
+                                                keyField={"keyId"}
+                                                classes={"custom-table"}
                                                 noDataIndication={
                                                     <div className="text-danger text-center ">
                                                         Record Not available
@@ -464,7 +515,7 @@ const OrderSummary = (props) => {
                                                 }}
                                                 {...toolkitProps.baseProps}
                                             />
-                                            {mySearchProps(toolkitProps.searchProps)}
+                                            {globalTableSearchProps(toolkitProps.searchProps)}
                                         </div>
                                     </Col>
                                 </Row>

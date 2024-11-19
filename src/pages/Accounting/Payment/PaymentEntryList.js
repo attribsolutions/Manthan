@@ -1,7 +1,6 @@
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
-    BreadcrumbShowCountlabel,
     commonPageFieldList,
     commonPageFieldListSuccess
 } from "../../../store/actions";
@@ -27,8 +26,11 @@ import { getpdfReportdata } from "../../../store/Utilites/PdfReport/actions";
 import { C_DatePicker } from "../../../CustomValidateForm";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { url, mode, pageId } from "../../../routes/index"
-import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
+import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
+import { allLabelWithBlank } from "../../../components/Common/CommonErrorMsg/HarderCodeData";
+import { sideBarPageFiltersInfoAction } from "../../../store/Utilites/PartyDrodown/action";
+
 
 const PaymentEntryList = () => {
 
@@ -40,7 +42,7 @@ const PaymentEntryList = () => {
     const fileds = {
         FromDate: currentDate_ymd,
         ToDate: currentDate_ymd,
-        Customer: { value: "", label: "All" }
+        Customer: allLabelWithBlank
     }
     const [state, setState] = useState(() => initialFiledFunc(fileds))
 
@@ -75,6 +77,28 @@ const PaymentEntryList = () => {
         deleteSucc: deleteReceiptList_Success
     }
 
+    const { commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
+
+    // Common Party select Dropdown useEffect
+    useEffect(() => {
+        if (commonPartyDropSelect.value > 0) {
+            partySelectButtonHandler();
+        } else {
+            partySelectOnChangeHandler();
+        }
+    }, [commonPartyDropSelect]);
+
+    // sideBar Page Filters Information
+    useEffect(() => {
+
+        dispatch(sideBarPageFiltersInfoAction([
+            { label: "FromDate", content: _cfunc.date_dmy_func(values.FromDate), },
+            { label: "ToDate", content: _cfunc.date_dmy_func(values.ToDate), },
+            { label: "Customer", content: values.Customer.label, }
+        ]));
+
+    }, [state]);
+
     useEffect(() => {
         return () => {
             dispatch(ReceiptListAPISuccess([]))
@@ -94,7 +118,7 @@ const PaymentEntryList = () => {
     useEffect(() => {
         const jsonBody = JSON.stringify({
             Type: 4,
-            PartyID: _cfunc.loginSelectedPartyID(),
+            PartyID: commonPartyDropSelect.value,
             CompanyID: _cfunc.loginCompanyID()
         });
         dispatch(Retailer_List(jsonBody));
@@ -135,7 +159,7 @@ const PaymentEntryList = () => {
         dispatch(commonPageFieldList(page_Id))
         // dispatch(BreadcrumbShowCountlabel(`${"Payment Entry Count"} :0`))
         // dispatch(getSupplier())
-        dispatch(getSupplier({ "PartyID": _cfunc.loginSelectedPartyID() }));
+        dispatch(getSupplier({ "PartyID": commonPartyDropSelect.value }));
 
     }, []);
 
@@ -183,10 +207,10 @@ const PaymentEntryList = () => {
     });
 
     const goButtonHandler = async () => {
-        
+
         try {
-            if ((_cfunc.loginSelectedPartyID() === 0)) {
-                customAlert({ Type: 3, Message: "Please Select Party" });
+            if ((commonPartyDropSelect.value === 0)) {
+                customAlert({ Type: 3, Message: alertMessages.commonPartySelectionIsRequired });
                 return;
             };
             const ReceiptTypeID = ReceiptType.find((index) => {
@@ -197,7 +221,7 @@ const PaymentEntryList = () => {
                 FromDate: values.FromDate,
                 ToDate: values.ToDate,
                 CustomerID: values.Customer.value,
-                PartyID: _cfunc.loginSelectedPartyID(),
+                PartyID: commonPartyDropSelect.value,
                 ReceiptType: ReceiptTypeID.id,
             });
 
@@ -243,11 +267,11 @@ const PaymentEntryList = () => {
         goButtonHandler()
         const jsonBody = JSON.stringify({
             Type: 4,
-            PartyID: _cfunc.loginSelectedPartyID(),
+            PartyID: commonPartyDropSelect.value,
             CompanyID: _cfunc.loginCompanyID()
         });
         dispatch(Retailer_List(jsonBody));
-        dispatch(getSupplier({ "PartyID": _cfunc.loginSelectedPartyID() }));
+        dispatch(getSupplier({ "PartyID": commonPartyDropSelect.value }));
     }
 
     function partySelectOnChangeHandler() {
@@ -257,7 +281,7 @@ const PaymentEntryList = () => {
 
         setState((i) => {
             const a = { ...i }
-            a.values.Customer = { value: "", label: "All" }
+            a.values.Customer = allLabelWithBlank
             a.hasValid.Customer.valid = true
             return a
         })
@@ -269,13 +293,13 @@ const PaymentEntryList = () => {
 
         try {
             const jsonBody = JSON.stringify({
-                PartyID: _cfunc.loginSelectedPartyID(),
+                PartyID: commonPartyDropSelect.value,
                 CustomerID: CustomerID,
                 InvoiceID: ""
             });
 
             const jsonBody1 = JSON.stringify({
-                PartyID: _cfunc.loginSelectedPartyID(),
+                PartyID: commonPartyDropSelect.value,
                 CustomerID: CustomerID,
                 ReceiptDate: currentDate_ymd
             });
@@ -311,8 +335,15 @@ const PaymentEntryList = () => {
                                 style={{ width: "65px" }}>ToDate</Label>
                             <Col sm="7">
                                 <C_DatePicker
+                                    options={{
+                                        minDate: (_cfunc.disablePriviousTodate({ fromDate: values.FromDate })),
+                                        maxDate: "today",
+                                        altInput: true,
+                                        altFormat: "d-m-Y",
+                                        dateFormat: "Y-m-d",
+                                    }}
+                                    value={_cfunc.ToDate({ FromDate: values.FromDate, Todate: values.ToDate })}
                                     name="ToDate"
-                                    value={values.ToDate}
                                     onChange={todateOnchange}
                                 />
                             </Col>
@@ -351,9 +382,6 @@ const PaymentEntryList = () => {
         <React.Fragment>
             <PageLoadingSpinner isLoading={(reducers.loading || !pageField)} />
             <div className="page-content">
-                <PartyDropdown_Common pageMode={pageMode}
-                    goButtonHandler={partySelectButtonHandler}
-                    changeButtonHandler={partySelectOnChangeHandler} />
                 {
                     (pageField) ?
                         <CommonPurchaseList

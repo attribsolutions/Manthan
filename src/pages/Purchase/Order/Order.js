@@ -1,7 +1,8 @@
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { MetaTags } from "react-meta-tags"
 import { useHistory } from "react-router-dom";
 import {
+    Alert,
     Button,
     Col,
     FormGroup,
@@ -9,14 +10,15 @@ import {
     Label,
     Modal,
     Row,
+    Spinner,
 } from "reactstrap";
 import { useDispatch, useSelector } from "react-redux";
 import Select from "react-select";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { orderCalculateFunc } from "./OrderPageCalulation";
-import { SaveButton, Go_Button, Change_Button, GotoInvoiceBtn, PageLoadingSpinner, DashboardLoader } from "../../../components/Common/CommonButton";
-import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
+import { SaveButton, Go_Button, Change_Button, GotoInvoiceBtn, PageLoadingSpinner, DashboardLoader, C_Button } from "../../../components/Common/CommonButton";
+import { globalTableSearchProps } from "../../../components/Common/SearchBox/MySearch";
 
 import OrderPageTermsTable from "./OrderPageTermsTable";
 import { initialFiledFunc } from "../../../components/Common/validationFunction";
@@ -24,7 +26,7 @@ import PartyItems from "../../Adminisrator/PartyItemPage/PartyItems";
 
 import { customAlert } from "../../../CustomAlert/ConfirmDialog"
 import { order_Type } from "../../../components/Common/C-Varialbes";
-import { CInput, C_DatePicker, C_Select, decimalRegx, onlyNumberRegx } from "../../../CustomValidateForm/index";
+import { CInput, C_DatePicker, C_Select, decimalRegx, onlyNumberRegx, decimalRegx_3dit, C_ItemSelect, C_TimePicker } from "../../../CustomValidateForm/index";
 
 import * as _act from "../../../store/actions";
 import * as _cfunc from "../../../components/Common/CommonFunction";
@@ -35,13 +37,17 @@ import { pageFieldUseEffect, table_ArrowUseEffect, updateMsgUseEffect, userAcces
 import { orderApprovalFunc, orderApprovalMessage } from "./orderApproval";
 import { GetRoutesList, GetRoutesListSuccess } from "../../../store/Administrator/RoutesRedux/actions";
 import { ORDER_4 } from "../../../routes/route_url";
-import NewCommonPartyDropdown from "../../../components/Common/NewCommonPartyDropdown";
-import "../../../CustomTable2/CustomTable.scss"
+import "../../../GlobalCustomTable/GlobalCustomTable.scss"
 import "./order.scss"
+import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
+import { changeCommonPartyDropDetailsAction } from "../../../store/Utilites/PartyDrodown/action";
+import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
+import { allLabelWithBlank } from "../../../components/Common/CommonErrorMsg/HarderCodeData";
+import { Group_Subgroup_func, GroupSubgroupDisplay, ModifyTableData_func } from "../../../components/Common/TableCommonFunc";
+
 
 let editVal = {}
-let initial_BredcrumbMsg = "Order Amount :0.00"
-
+let initial_BredcrumbMsg = `Count:0 currency_symbol 0.00 weight 0.00 kg`
 function initialState(history) {
 
     let page_Id = '';
@@ -52,7 +58,7 @@ function initialState(history) {
         page_Id = pageId.ORDER_1;
         listPath = url.ORDER_LIST_1
     }
-    else if (sub_Mode === url.ORDER_2) {
+    else if ((sub_Mode === url.ORDER_2) || _cfunc.IsAuthorisedURL({ subPageMode: sub_Mode, URL: url.ORDER_2 })) {
         page_Id = pageId.ORDER_2;
         listPath = url.ORDER_LIST_2
     }
@@ -60,37 +66,67 @@ function initialState(history) {
         page_Id = pageId.IB_ORDER;
         listPath = url.IB_ORDER_PO_LIST;
     }
-    else if (sub_Mode === url.ORDER_4) {
+    else if ((sub_Mode === url.ORDER_4)) {
         page_Id = pageId.ORDER_4;
         listPath = url.ORDER_LIST_4
+    } else if (sub_Mode === url.IB_SALES_ORDER) {
+        page_Id = pageId.IB_SALES_ORDER;
+        listPath = url.IB_ORDER_SO_LIST
     }
     return { page_Id, listPath }
 };
+
 
 const Order = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory();
-    const currentDate_ymd = _cfunc.date_ymd_func();
+    const IsFranchisesRole = _cfunc.loginUserIsFranchisesRole()
+    const advanceAmountRef = useRef(0);
+    const descriptionRef = useRef("");
+
+
+
+    const currentDate_ymd = IsFranchisesRole ? _cfunc.Frenchies_date_ymd_func() : _cfunc.date_ymd_func();
+    const CurrentOrderDate = _cfunc.date_ymd_func()
+    const Weight = _cfunc.loginUserDetails().Weight
+
+    const initialSubPageMode = useMemo(() => {
+        if (_cfunc.IsAuthorisedURL({ subPageMode: history.location.pathname, URL: url.ORDER_2 })) {
+            return url.ORDER_2;
+        }
+        return history.location.pathname;
+    }, []);
 
     const fileds = {
         id: "",
         Supplier: "",
         Route: "",
-        Item: ''
+        Item: '',
+        AdvanceAmount: 0,
+        Description: ""
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
+
     const [editCreatedBy, seteditCreatedBy] = useState("");
     const [page_id] = useState(() => initialState(history).page_Id)
     const [listPath] = useState(() => initialState(history).listPath)
-    const [subPageMode] = useState(history.location.pathname)
+    const [subPageMode] = useState(initialSubPageMode)
+
     const [modalCss, setModalCss] = useState(false);
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState('');
     const [description, setDescription] = useState('')
 
-    const [deliverydate, setdeliverydate] = useState(currentDate_ymd)
+    const [processedData, setprocessedData] = useState([])
+
+
+
+
+
+    const [deliverydate, setdeliverydate] = useState(IsFranchisesRole ? _cfunc.getDateTime_ymd() : currentDate_ymd)
+
     const [billAddr, setbillAddr] = useState('')
     const [shippAddr, setshippAddr] = useState('');
 
@@ -98,15 +134,19 @@ const Order = (props) => {
     const [poToDate, setpoToDate] = useState(currentDate_ymd);
     const [orderdate, setorderdate] = useState(currentDate_ymd);
 
-    const [supplierSelect, setsupplierSelect] = useState('');
-    const [routeSelect, setRouteSelect] = useState({ value: '', label: "All" });
-    const [itemSelect, setItemSelect] = useState({ value: '', label: "All" });
+    const [supplierSelect, setSupplierSelect] = useState('');
+    const [routeSelect, setRouteSelect] = useState(allLabelWithBlank);
+    const [itemSelect, setItemSelect] = useState(allLabelWithBlank);
     const [itemSelectDropOptions, setitemSelectOptions] = useState([]);
     const [selecedItemWiseOrder, setSelecedItemWiseOrder] = useState(true)
     const [goBtnDissable, setGoBtnDissable] = useState(false)
 
+
+
+
+
     const [termsAndConTable, setTermsAndConTable] = useState([]);
-    const [orderTypeSelect, setorderTypeSelect] = useState('');
+    const [orderTypeSelect, setorderTypeSelect] = useState([]);
     const [isOpen_assignLink, setisOpen_assignLink] = useState(false)
     const [orderItemTable, setOrderItemTable] = useState([])
     const [findPartyItemAccess, setFindPartyItemAccess] = useState(false)
@@ -117,7 +157,7 @@ const Order = (props) => {
     const [discountTypeAll, setDiscountTypeAll] = useState({ value: 2, label: " % " });
     const [discountDropOption] = useState([{ value: 1, label: "Rs" }, { value: 2, label: "%" }])
     const [changeAllDiscount, setChangeAllDiscount] = useState(false)
-    const [forceReload, setForceReload] = useState(false)
+
     // ****************************************************************************
 
     const {
@@ -143,7 +183,9 @@ const Order = (props) => {
         supplierDropLoading,
         orderTypeDropLoading,
         routesDropLoading,
-        commonPartyDropSelect
+        commonPartyDropSelect,
+        partyItemListLoading,
+        PartyItemPostMsg
     } = useSelector((state) => ({
         goBtnOrderdata: state.OrderReducer.goBtnOrderAdd,
 
@@ -177,6 +219,8 @@ const Order = (props) => {
         saveBtnloading: state.OrderReducer.saveBtnloading,
         gotoInvoiceBtnLoading: state.OrderReducer.gotoInvoiceBtnLoading,
 
+        partyItemListLoading: state.PartyItemsReducer.partyItemListLoading,
+        PartyItemPostMsg: state.PartyItemsReducer.postMsg,
         commonPartyDropSelect: state.CommonPartyDropdownReducer.commonPartyDropSelect
     }));;
 
@@ -187,6 +231,7 @@ const Order = (props) => {
     const hasShowModal = props.hasOwnProperty(mode.editValue)
 
     useLayoutEffect(() => {
+
         dispatch(_act.commonPageFieldSuccess(null));
         dispatch(_act.GoButton_For_Order_AddSuccess(null));
         dispatch(_act.commonPageField(page_id));
@@ -201,6 +246,7 @@ const Order = (props) => {
     }, []);
 
     useEffect(() => userAccessUseEffect({ // userAccess useEffect 
+
         props,
         userAccess,
         dispatch,
@@ -214,20 +260,40 @@ const Order = (props) => {
         }
     };
 
+
+
+    const now = new Date();
+    const targetTime = new Date();
+
+    targetTime.setHours(18, 0, 0, 0); // 18:00 is 6 PM
+    let delay = targetTime - now; // Calculate the time difference in milliseconds
+
+    if (delay < 0) {
+        delay += 24 * 60 * 60 * 1000; // Add 24 hours in milliseconds
+    }
+    setTimeout(() => {
+        myFunction();
+    }, delay);
+
+    const myFunction = () => {
+        if (IsFranchisesRole) {
+            setdeliverydate(_cfunc.Frenchies_date_ymd_func())
+        }
+    };
+
     // Common Party Dropdown useEffect
     useEffect(() => {
-
         if (commonPartyDropSelect.value > 0) {
             dispatch(GetRoutesList({ ..._cfunc.loginJsonBody(), "PartyID": commonPartyDropSelect.value }));
-            dispatch(getPartyListAPI({ ..._cfunc.loginJsonBody(), "PartyID": commonPartyDropSelect.value }));
+            dispatch(getPartyListAPI({ ..._cfunc.loginJsonBody(), "PartyID": commonPartyDropSelect.value, IsRetailer: 0 }));
             dispatch(_act.GetVenderSupplierCustomer({ subPageMode, RouteID: "", "PartyID": commonPartyDropSelect.value }));
             if (!(subPageMode === url.ORDER_4)) {
                 dispatch(_act.getSupplierAddress(commonPartyDropSelect.value))
             }
         }
-        setItemSelect({ value: '', label: "All" });
-        setRouteSelect({ value: '', label: "All" });
-        setsupplierSelect('')
+        setItemSelect(allLabelWithBlank);
+        setRouteSelect(allLabelWithBlank);
+        setSupplierSelect('')
         return () => {
             dispatch(getPartyListAPISuccess([]));
             dispatch(GetRoutesListSuccess([]));
@@ -238,8 +304,14 @@ const Order = (props) => {
             dispatch(_act.GoButton_For_Order_AddSuccess([]))
         }
 
-
     }, [commonPartyDropSelect]);
+
+
+    useEffect(() => {
+
+        setprocessedData(ModifyTableData_func(orderItemTable));
+    }, [orderItemTable])
+
 
     useEffect(() => { // hasEditVal useEffect
 
@@ -256,28 +328,40 @@ const Order = (props) => {
                 setModalCss(true)
             }
             if (hasEditVal) {
-                dispatch(_act.BreadcrumbShowCountlabel(`${"Order Amount"} :${_cfunc.amountCommaSeparateFunc(Number(hasEditVal.OrderAmount).toFixed(2))}`))
+
                 setorderdate(hasEditVal.OrderDate)
 
                 if (subPageMode === url.ORDER_4) {
-                    setsupplierSelect({
+                    setSupplierSelect({
                         label: hasEditVal.CustomerName,
-                        value: hasEditVal.Customer
+                        value: hasEditVal.Customer,
+                        GSTIN: hasEditVal.CustomerGSTIN,
                     });
                 } else {
-                    setsupplierSelect({
+
+                    setSupplierSelect({
                         label: hasEditVal.SupplierName,
-                        value: hasEditVal.Supplier
+                        value: hasEditVal.Supplier,
+                        GSTIN: hasEditVal.SupplierGSTIN,
                     });
                 }
-                setdeliverydate(hasEditVal.DeliveryDate)
+                setdeliverydate(_cfunc.getDateTime_ymd(hasEditVal.DeliveryDate))
                 setshippAddr({ label: hasEditVal.ShippingAddress, value: hasEditVal.ShippingAddressID })
                 setbillAddr({ label: hasEditVal.BillingAddress, value: hasEditVal.BillingAddressID });
                 setDescription(hasEditVal.Description)
+
+                setState(i => {
+                    debugger
+                    const state = { ...i }
+                    state.values.AdvanceAmount = hasEditVal.AdvanceAmount
+                    state.values.Description = hasEditVal.Description
+                    return state
+                })
                 editVal = {}
                 editVal = hasEditVal
                 // setOrderAmount(hasEditVal.OrderAmount)
                 setorderTypeSelect({ value: hasEditVal.POType, label: hasEditVal.POTypeName })
+
 
                 setpoToDate(hasEditVal.POToDate)
                 setpoFromDate(hasEditVal.POFromDate)
@@ -288,23 +372,59 @@ const Order = (props) => {
                     label: i.TermsAndCondition,
                     IsDeleted: 0
                 }))
-
+                let Total_weigtage = 0
                 const orderItems = hasEditVal.OrderItems.map((ele, k) => {
+
+                    const weightage = (Number(ele["Weightage"])) || 0.00;
+                    const row_weightage = (Number(ele.Quantity) * Number(ele.BaseUnitQuantity)) / Number(weightage)
+                    Total_weigtage = Total_weigtage + row_weightage
+
                     ele["id"] = k + 1
                     return ele
                 });
+
+                if (!_cfunc.loginUserIsFranchisesRole()) {
+                    orderItems.sort((a, b) => {
+                        if (a.Quantity === null && b.Quantity !== null) {
+                            return 1;
+                        } else if (a.Quantity !== null && b.Quantity === null) {
+                            return -1;
+                        } else if (a.Quantity === null && b.Quantity === null) {
+                            return 0;
+                        } else {
+                            return a.Quantity - b.Quantity;
+                        }
+                    });
+                }
                 setOrderItemTable(orderItems)
                 setTermsAndConTable(termsAndCondition)
+
+                const commaSeparateAmount = _cfunc.amountCommaSeparateFunc(Number(hasEditVal.OrderAmount).toFixed(2));
+                dispatch(_act.BreadcrumbShowCountlabel(`Count:${orderItems.length} currency_symbol ${commaSeparateAmount} weight ${(Total_weigtage).toFixed(2)} kg`))
+
+                seteditCreatedBy(hasEditVal.CreatedBy)
             }
             dispatch(_act.editOrderIdSuccess({ Status: false }))
-            seteditCreatedBy(hasEditVal.CreatedBy)
+            dispatch(changeCommonPartyDropDetailsAction({ forceDisable: true }))//change party drop-down disable when edit/view
         } else {
             dispatch(_act.BreadcrumbShowCountlabel(initial_BredcrumbMsg))
         }
+        return () => {
+            dispatch(changeCommonPartyDropDetailsAction({ forceDisable: false }))//change party drop-down restore state
+        }
     }, []);
 
+
+
+    useEffect(() => {
+        if ((PartyItemPostMsg.Status === true) && (PartyItemPostMsg.StatusCode === 200)) {
+            dispatch(_act.GoButton_For_Order_AddSuccess([]))
+        }
+    }, [PartyItemPostMsg])
+
+
     useEffect(async () => {
-        if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === mode.dropdownAdd)) {
+        if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(_act.saveOrderActionSuccess({ Status: false }))
             setSelecedItemWiseOrder(true)
             setGoBtnDissable(false)
@@ -313,7 +433,7 @@ const Order = (props) => {
             // setorderTypeSelect('');
             setisOpen_assignLink(false)
             setOrderItemTable([])
-            setsupplierSelect('');
+            setSupplierSelect('');
 
             // ??******************************+++++++++++++++++++++++++++++++++++++++++
             const liveMode = false  // temporary not working code thats why false use line no. 253 to 289
@@ -361,7 +481,7 @@ const Order = (props) => {
 
             }
         }
-        else if ((postMsg.Status === true) && !(pageMode === mode.dropdownAdd)) {
+        else if ((postMsg.Status === true)) {
 
             dispatch(_act.saveOrderActionSuccess({ Status: false }))
             customAlert({
@@ -393,8 +513,10 @@ const Order = (props) => {
     }, [assingItemData]);
 
     useEffect(() => {
+
         if (goBtnOrderdata) {
             let { OrderItems = [], TermsAndConditions = [] } = goBtnOrderdata
+
             if (!selecedItemWiseOrder) { setOrderItemTable(OrderItems) }
             setitemSelectOptions(OrderItems.map(i => ({ ...i, value: i.Item_id, label: i.ItemName })))
 
@@ -441,6 +563,28 @@ const Order = (props) => {
         }
     }, [gobutton_Add_invoice]);
 
+    useEffect(() => {
+
+        if (changeAllDiscount) {
+            const updatedOrderItemTable = orderItemTable.map((item) => ({
+                ...item,
+                Discount: discountValueAll,
+                DiscountType: discountTypeAll.value,
+            }));
+
+            // Perform calculations based on the updated values for each item
+            updatedOrderItemTable.forEach((item) => {
+                itemWise_CalculationFunc(item, undefined, updatedOrderItemTable);
+            });
+
+            // Set the updated array as the new orderItemTable
+            setOrderItemTable(updatedOrderItemTable);
+        }
+    }, [changeAllDiscount, discountValueAll, discountTypeAll.value]);
+
+
+
+
     const supplierOptions = vendorSupplierCustomer.map((i) => ({
         value: i.id,
         label: i.Name,
@@ -472,36 +616,35 @@ const Order = (props) => {
         label: "All"
     });
 
+
+
+    const rowStyle = (row, rowIndex) => {
+        if (row.GroupRow) {
+            return { backgroundColor: 'white', fontWeight: 'bold', fontSize: '18px' };
+        } else if (row.SubGroupRow) {
+            return { backgroundColor: '#f2f2f2', fontWeight: 'bold', fontSize: '15px' };
+        }
+        return {};
+    };
+
+    const rowClasses = (row) => {
+
+        if (row.GroupRow || row.SubGroupRow) {
+            return 'group-row hide-border';
+        }
+        return '';
+    };
+
     const pagesListColumns = [
-        {
-            dataField: "GroupName",
-            text: "Group",
-            classes: 'table-cursor-pointer',
-            sort: true,
-            attrs: (cell, row, rowIndex, colIndex) => ({ 'data-label': "GroupName" }),
-            headerStyle: () => {
-                return { minWidth: '100px', textAlign: 'center' };
-            },
-        },
-        {
-            dataField: "SubGroupName",
-            text: "SubGroup",
-            classes: 'table-cursor-pointer',
-            sort: true,
-            attrs: (cell, row, rowIndex, colIndex) => ({ 'data-label': "SubGroupName" }),
-            headerStyle: () => {
-                return { minWidth: '100px', textAlign: 'center' };
-            },
-        },
 
         {//------------- ItemName column ----------------------------------
             dataField: "ItemName",
             text: "Item Name",
             classes: 'table-cursor-pointer',
-            attrs: (cell, row, rowIndex, colIndex) => ({ 'data-label': "ItemName", "sticky-col": "true" }),
+            attrs: (cell, row, rowIndex, colIndex) => ({ 'data-label': "ItemName", "sticky-col": "true", }),
             sort: true,
             headerStyle: () => {
-                return { minWidth: '200px', textAlign: 'center' };
+                return { minWidth: '100px', textAlign: 'center' };
             },
             sortValue: (cell, row) => row["ItemName"],
             headerFormatter: (value, row, k, f) => {
@@ -511,13 +654,37 @@ const Order = (props) => {
                             Item Name
                         </div>
                         <div onClick={assignItem_onClick}>
-                            <samp id={"__assignItem_onClick"} style={{ display: "none", cursor: "pointer" }} className="text-primary fst-italic text-decoration-underline"
+                            <samp id={"__assignItem_onClick"}
+                                style={{ display: "none", cursor: "pointer" }}
+                                className="text-primary fst-italic text-decoration-underline"
                             >
-                                Assign-Items</samp>
+                                Assign-Items
+                                {partyItemListLoading && <Spinner style={{ height: "13px", width: "13px" }} color="primary" />}
+                            </samp>
                         </div>
 
                     </div>
                 )
+            },
+
+            formatter: (value, row, k) => {
+                if (row.SubGroupRow) {
+                    const [Group, SubGroup] = row.Group_Subgroup.split('-');
+                    return (
+                        <GroupSubgroupDisplay group={Group} subgroup={SubGroup} />
+                    );
+                } else {
+                    const [itemName] = row.ItemName.split('-');
+                    return (
+                        <>
+                            <div>
+                                {itemName}
+                            </div>
+                        </>
+                    )
+                }
+
+
             },
         },
         {
@@ -541,15 +708,29 @@ const Order = (props) => {
             },
             formatExtraData: { tableList: orderItemTable },
             formatter: (value, row, k, { tableList }) => {
+                if (row.SubGroupRow) {
+                    return (
+                        <CInput
+                            key={`Quantity-${k}`}
+                            id={`Quantity-${k}`}
+                            cpattern={subPageMode === url.ORDER_1 ? decimalRegx_3dit : onlyNumberRegx}
+                            defaultValue={(row.Quantity)}
+                            className=" text-end"
+                            style={{ display: 'none' }}
+                            onChange={(e) => {
+                                row["Quantity"] = e.target.value
+                                itemWise_CalculationFunc(row, undefined, tableList)
+                            }}
+                        />)
 
+                }
                 return (
                     <>
                         <CInput
                             key={`Quantity-${k}`}
                             id={`Quantity-${k}`}
-                            cpattern={onlyNumberRegx}
-                            defaultValue={row.Quantity}
-                            autoComplete="off"
+                            cpattern={subPageMode === url.ORDER_1 ? decimalRegx_3dit : onlyNumberRegx}
+                            defaultValue={(row.Quantity)}
                             className=" text-end"
                             onChange={(e) => {
                                 row["Quantity"] = e.target.value
@@ -558,6 +739,7 @@ const Order = (props) => {
                         />
                     </>
                 )
+
             },
 
         },
@@ -568,10 +750,11 @@ const Order = (props) => {
             dataField: "",
             attrs: (cell, row, rowIndex, colIndex) => ({ 'data-label': "Unit" }),
             headerStyle: () => {
-                return { width: '9%', textAlign: 'center' };
+                return { width: '10%', textAlign: 'center' };
             },
             formatExtraData: { tableList: orderItemTable },
             formatter: (value, row, key, { tableList }) => {
+                if (row.GroupRow || row.SubGroupRow) { return }
 
                 if (!row.UnitName) {
                     row["Unit_id"] = 0;
@@ -596,7 +779,9 @@ const Order = (props) => {
                         row["po_Unit_id"] = i.UnitID;
                         row["UnitName"] = i.UnitName;
                         row["BaseUnitQuantity"] = i.BaseUnitQuantity;
+                        // if (!(subPageMode === url.ORDER_1 || subPageMode === url.IB_ORDER)) {
                         row["Rate"] = ((i.BaseUnitQuantity / i.BaseUnitQuantityNoUnit) * i.Rate).toFixed(2);
+                        // }
                     }
 
                 } else {
@@ -634,7 +819,7 @@ const Order = (props) => {
                 }
 
                 return (
-                    <div >
+                    <div style={{ width: "130px" }}>
                         <Select
                             id={"ddlUnit"}
                             key={`ddlUnit${row.id}`}
@@ -650,6 +835,7 @@ const Order = (props) => {
                                 }))
                             }
                             onChange={e => {
+
                                 row["Unit_id"] = e.value;
                                 row["UnitName"] = e.label
                                 row["BaseUnitQuantity"] = e.BaseUnitQuantity;
@@ -659,10 +845,14 @@ const Order = (props) => {
 
                                 document.getElementById(`Rate-${key}`).innerText = _cfunc.amountCommaSeparateFunc(Number(row.Rate).toFixed(2))
                             }}
+                            styles={{
+                                menu: provided => ({ ...provided, zIndex: 2 })
+                            }}
                         >
                         </Select >
                     </div>
                 )
+
             },
 
         },
@@ -677,7 +867,9 @@ const Order = (props) => {
             },
             formatExtraData: { tableList: orderItemTable },
             formatter: (value, row, k, { tableList }) => {
-                if (subPageMode === url.ORDER_1) {
+                if (row.GroupRow || row.SubGroupRow) { return }
+
+                if (subPageMode === url.ORDER_1 || subPageMode === url.IB_ORDER || subPageMode === url.IB_SALES_ORDER) {
                     return (
                         <div key={row.id} className="text-end">
                             <CInput
@@ -687,6 +879,7 @@ const Order = (props) => {
                                 defaultValue={row.Rate}
                                 className="text-end"
                                 onChange={(event) => {
+
                                     row.Rate = event.target.value;
                                     itemWise_CalculationFunc(row, undefined, tableList)
 
@@ -705,6 +898,7 @@ const Order = (props) => {
                     )
                 }
 
+
             },
 
         },
@@ -717,13 +911,15 @@ const Order = (props) => {
             headerStyle: () => {
                 return { width: '8%', textAlign: 'center' };
             },
+            hidden: (subPageMode === url.ORDER_1 || subPageMode === url.IB_ORDER || subPageMode === url.IB_SALES_ORDER || _cfunc.loginUserIsFranchisesRole()) && true,
             formatter: (value, row, k) => {
-
+                if (row.GroupRow || row.SubGroupRow) { return }
                 return (
                     <div key={row.id} className="text-end">
                         <span>{row.MRPValue}</span>
                     </div>
                 )
+
             },
 
         },
@@ -731,16 +927,13 @@ const Order = (props) => {
             text: "Discount/unit",
             dataField: "",
             formatExtraData: {
-                discountValueAll: discountValueAll,
-                discountTypeAll: discountTypeAll,
-                changeAllDiscount: changeAllDiscount,
-                forceReload: forceReload,
                 tableList: orderItemTable
             },
-            attrs: (cell, row, rowIndex, colIndex) => ({ 'data-label': "Discount/unit" }),
+            attrs: () => ({ 'data-label': "Discount/unit" }),
             headerStyle: () => {
                 return { width: '11%', textAlign: 'center' };
             },
+            hidden: (subPageMode === url.ORDER_1 || subPageMode === url.IB_ORDER || subPageMode === url.IB_SALES_ORDER || _cfunc.loginUserIsFranchisesRole()) && true,
             headerFormatter: () => {
                 return (
                     <div className="" >
@@ -777,12 +970,12 @@ const Order = (props) => {
                                         value={discountValueAll}
                                         disabled={(subPageMode === url.ORDER_2)}
                                         onChange={(e) => {
+                                            e.target.value = e.target.value.replace(/^\.+/, '');
+                                            e.target.value = e.target.value.replace(/^00+/, '0');
                                             let e_val = Number(e.target.value);
 
-                                            // Check if discount type is "percentage"
                                             if (discountTypeAll.value === 2) {// Discount type 2 represents "percentage"
-                                                // Limit the input to the range of 0 to 100
-                                                if (e_val > 100) {
+                                                if (e_val > 100) { // Limit the input to the range of 0 to 100
                                                     e.target.value = 100; // Set the input value to 100 if it exceeds 100
                                                 } else if (!(e_val >= 0 && e_val < 100)) {
                                                     e.target.value = ""; // Clear the input value if it is less than 0
@@ -801,19 +994,15 @@ const Order = (props) => {
             },
 
             classes: () => "order-discount-row",
-            formatter: (cellContent, index1, key, formatExtraData) => {
-                let { tableList, discountValueAll, discountTypeAll } = formatExtraData;
+            formatter: (cellContent, row, key, formatExtraData) => {
+                if (row.GroupRow || row.SubGroupRow) { return }
 
-                if (formatExtraData.changeAllDiscount) {
-                    index1.Discount = discountValueAll;
-                    index1.DiscountType = discountTypeAll.value;
-                    itemWise_CalculationFunc(index1, undefined, tableList)
-                }
-                if (!index1.DiscountType) { index1.DiscountType = discountTypeAll.value }
+                let { tableList } = formatExtraData;
+
+                if (!row.DiscountType) { row.DiscountType = discountTypeAll.value }
 
                 const defaultDiscountTypelabel =
-                    index1.DiscountType === 1 ? discountDropOption[0] : discountDropOption[1];
-
+                    row.DiscountType === 1 ? discountDropOption[0] : discountDropOption[1];
                 return (
                     <>
                         <div className="mb-2">
@@ -825,16 +1014,15 @@ const Order = (props) => {
                                     <Select
                                         id={`DicountType_${key}`}
                                         classNamePrefix="select2-selection"
-                                        key={`DicountType_${key}-${index1.id}`}
+                                        key={`DicountType_${key}-${row.id}`}
                                         value={defaultDiscountTypelabel}
                                         isDisabled={(subPageMode === url.ORDER_2)}
                                         options={discountDropOption}
                                         onChange={(e) => {
                                             setChangeAllDiscount(false);
-                                            setForceReload(!forceReload);
-                                            index1.DiscountType = e.value;
-                                            index1.Discount = '';
-                                            itemWise_CalculationFunc(index1, undefined, tableList)
+                                            row.DiscountType = e.value;
+                                            row.Discount = '';
+                                            itemWise_CalculationFunc(row, undefined, tableList)
                                         }}
                                     />
                                 </div>
@@ -848,42 +1036,41 @@ const Order = (props) => {
                                 <div className="child">
                                     <CInput
                                         className="input"
-                                        id={`Dicount_${key}-${index1.id}`}
+                                        id={`Dicount_${key}-${row.id}`}
                                         style={{ textAlign: "right" }}
                                         type="text"
-                                        value={index1.Discount}
+                                        value={row.Discount}
                                         disabled={(subPageMode === url.ORDER_2)}
                                         cpattern={decimalRegx}
                                         onChange={(e) => {
 
+                                            e.target.value = e.target.value.replace(/^\.+/, '');
+                                            e.target.value = e.target.value.replace(/^00+/, '0');
                                             let e_val = Number(e.target.value);
-                                            // Check if discount type is "percentage"
-                                            if (index1.DiscountType === 2) { // Discount type 2 represents "percentage"
-                                                // Limit the input to the range of 0 to 100
-                                                if (e_val > 100) {
+
+
+                                            if (row.DiscountType === 2) {// Discount type 2 represents "percentage"
+                                                if (e_val > 100) { // Limit the input to the range of 0 to 100
                                                     e.target.value = 100; // Set the input value to 100 if it exceeds 100
                                                 } else if (!(e_val >= 0 && e_val < 100)) {
-                                                    e.target.value = ''; // Clear the input value if it is less than 0
+                                                    e.target.value = ""; // Clear the input value if it is less than 0
                                                 }
                                             }
-                                            index1.Discount = e.target.value;
+
+
+                                            row.Discount = e.target.value;
                                             setChangeAllDiscount(false);
-                                            setForceReload(!forceReload);
-                                            itemWise_CalculationFunc(index1, undefined, tableList)
+                                            itemWise_CalculationFunc(row, undefined, tableList)
                                         }}
 
                                     />
                                 </div>
                             </div>
                         </div>
-                        {/* <div className="bottom-div">
-                            <span>Amount:</span>
-                            <samp id={`roundedTotalAmount-${index1.id}`}>
-                                {_cfunc.amountCommaSeparateFunc(index1.roundedTotalAmount)}
-                            </samp>
-                        </div> */}
+
                     </>
                 );
+
             },
         },
 
@@ -891,8 +1078,11 @@ const Order = (props) => {
             text: "Comment",
             classes: 'table-cursor-pointer',
             dataField: "",
+            hidden: (subPageMode === url.ORDER_1 || subPageMode === url.IB_ORDER) && true,
             attrs: (cell, row, rowIndex, colIndex) => ({ 'data-label': "Comment" }),
             formatter: (value, row, k) => {
+                if (row.GroupRow || row.SubGroupRow) { return }
+
                 return (
                     <span >
                         <Input type="text"
@@ -905,6 +1095,7 @@ const Order = (props) => {
                         />
                     </span>
                 )
+
             },
 
             headerStyle: () => {
@@ -922,7 +1113,7 @@ const Order = (props) => {
 
     function supplierOnchange(e) {
 
-        setsupplierSelect(e);
+        setSupplierSelect(e);
         if (subPageMode === url.ORDER_4) {
             dispatch(_act.getSupplierAddress(e.value))
             let Date = currentDate_ymd
@@ -952,7 +1143,7 @@ const Order = (props) => {
     };
 
     function RouteOnChange(event) {
-        setsupplierSelect('')
+        setSupplierSelect('')
         dispatch(_act.GetVenderSupplierCustomer({ subPageMode, RouteID: event.value, "PartyID": commonPartyDropSelect.value }))
         setRouteSelect(event)
     }
@@ -970,7 +1161,7 @@ const Order = (props) => {
 
         const isConfirmed = await customAlert({
             Type: 7,
-            Message: "Do you confirm your choice?",
+            Message: alertMessages.doYouConfirmChoice,
         });
 
         if (isConfirmed) {
@@ -978,32 +1169,68 @@ const Order = (props) => {
             const jsonBody = JSON.stringify({ ..._cfunc.loginJsonBody(), ...{ PartyID: isParty } });
 
             dispatch(editPartyItemID({ jsonBody, config }))
-            dispatch(_act.GoButton_For_Order_AddSuccess([]))
+            // dispatch(_act.GoButton_For_Order_AddSuccess([]))
         };
     };
 
-    function itemWise_CalculationFunc(row, IsComparGstIn, tableList) {
+    function itemWise_CalculationFunc(row, IsComparGstIn, tableList = []) {
+
         const calculate = orderCalculateFunc(row) //order calculation function 
         row["Amount"] = calculate.roundedTotalAmount
-        let sumOfAmount = tableList.reduce((accumulator, currentObject) => accumulator + (Number(currentObject["Amount"]) || 0), 0);
-        // setOrderAmount(sumOfAmount.toFixed(2))
-        dispatch(_act.BreadcrumbShowCountlabel(`${"Order Amount"} :${_cfunc.amountCommaSeparateFunc(Number(sumOfAmount).toFixed(2))}`))
+
+
+        let totals = tableList.reduce(
+            (accumulator, currentObject) => {
+
+                const amount = Number(currentObject["Amount"]) || 0.00;
+                const weightage = (Number(currentObject["Weightage"])) || 0.00;
+                const row_weightage = (Number(currentObject.Quantity) * Number(currentObject.BaseUnitQuantity)) / Number(weightage)
+                if (Number(currentObject["Amount"]) > 0) {
+                    return {
+                        amountSum: accumulator.amountSum + amount,
+                        weightageSum: accumulator.weightageSum + row_weightage,
+                    };
+                }
+                return {
+                    ...accumulator,
+                    amountSum: accumulator.amountSum + amount,
+                };
+            },
+            { amountSum: 0.00, weightageSum: 0.00 }
+        );
+
+        if (Number(totals.weightageSum) >= 500) {
+            const Overweight = Number(totals.weightageSum) * (Number(Weight) / 100)
+            totals.weightageSum = totals.weightageSum + Overweight
+        }
+
+
+        const commaSeparateAmount = _cfunc.amountCommaSeparateFunc(totals.amountSum.toFixed(2))
+
+
+        const elements = document.querySelectorAll('.amount-countable-Calulation');
+
+
+        const weightage_lable = document.querySelectorAll('.weightage-lable');
+        const weightage_value = document.querySelectorAll('.weightage-value');
+        weightage_lable.forEach(element => { element.innerText = "weight:"; });
+        weightage_value.forEach(element => { element.innerText = `${(totals.weightageSum).toFixed(2)} kg`; });
+        elements.forEach(element => { element.innerText = commaSeparateAmount; });
+
     };
 
     const item_AddButtonHandler = () => {
-
         setGoBtnDissable(true)
-
         let isfound = orderItemTable.find(i => i.value === itemSelect.value);
 
         if (!itemSelect) {
-            customAlert({ Type: 4, Message: `Select Item Name` })
+            customAlert({ Type: 4, Message: alertMessages.itemNameIsRequired })
         }
         else if (isfound === undefined) {
             setOrderItemTable([itemSelect].concat(orderItemTable))
         }
         else {
-            customAlert({ Type: 3, Message: "This Item Already Exist" })
+            customAlert({ Type: 3, Message: alertMessages.ItemNameAlreadyExists })
         }
         setItemSelect('')
     }
@@ -1020,7 +1247,9 @@ const Order = (props) => {
         let btnId = `go-btn${subPageMode}`
         _cfunc.btnIsDissablefunc({ btnId, state: true })
 
+        console.log(itemSelectDropOptions)
         dispatch(_act.BreadcrumbShowCountlabel(initial_BredcrumbMsg))
+
 
 
         let PO_Body = {
@@ -1029,6 +1258,7 @@ const Order = (props) => {
             RateParty: commonPartyDropSelect.value,
             EffectiveDate: orderdate,
             OrderID: (pageMode === mode.defaultsave) ? 0 : editVal.id,
+            Demand: ((subPageMode === url.ORDER_1) || (pageMode === mode.defaultsave)) ? 0 : editVal.id,  //IB Purachase Order  
             OrderType: order_Type.PurchaseOrder,
         }
         let SO_body = {
@@ -1037,12 +1267,13 @@ const Order = (props) => {
             RateParty: selectSupplier ? selectSupplier : supplierSelect.value,
             EffectiveDate: orderdate,
             OrderID: (pageMode === mode.defaultsave) ? 0 : editVal.id,
+            Demand: ((subPageMode === url.ORDER_1) || (pageMode === mode.defaultsave)) ? 0 : editVal.id,  //IB Purachase Order   
             OrderType: order_Type.SaleOrder,
         }
 
 
         let jsonBody;   //json body decleration 
-        if (subPageMode === url.ORDER_4) {
+        if (subPageMode === url.ORDER_4 || subPageMode === url.IB_SALES_ORDER) {
             jsonBody = JSON.stringify({ ...SO_body, });
         }
         else {
@@ -1053,12 +1284,7 @@ const Order = (props) => {
     };
 
     // Function to handle the form submission
-    const saveHandler = async (event) => {
-        event.preventDefault();
-
-        // Extract the ID from the target element
-        const buttonId = event.target.id;
-        const gotoInvoiceMode = buttonId.substring(0, 14) === "gotoInvoiceBtn";
+    const saveHandler = async (gotoInvoiceMode = false) => {
 
         try {
             // Get the division from the loginPartyID function
@@ -1071,11 +1297,11 @@ const Order = (props) => {
             let sumOfOrderAmount = 0;//total grand total amount
 
             // Loop through the order items
-            await orderItemTable.forEach(item => {
+            orderItemTable.forEach(item => {
 
                 // Check for item quantity and rate validity
                 if ((item.Quantity > 0) && !(item.Rate > 0)) {
-                    validationMessages.push({ [item.ItemName]: "This Item Rate Is Required..." });
+                    validationMessages.push({ [item.ItemName]: alertMessages.itemRateIsRequired });
                 }
                 else if (pageMode === mode.edit) {
                     // Check if the item quantity or unit has changed in edit mode
@@ -1104,7 +1330,7 @@ const Order = (props) => {
             function processOrderItem({ item, isEdit }) {
 
                 // Handle quantity for null or undefined values
-                item.Quantity = !Number(item.Quantity) ? 0 : item.Quantity;
+                item.Quantity = isNaN(parseFloat(item.Quantity)) ? 0 : parseFloat(item.Quantity);
 
                 // Check various conditions for item processing
                 if ((item.Quantity > 0) && (item.Rate > 0) && !(orderTypeSelect.value === 3)) {
@@ -1208,17 +1434,22 @@ const Order = (props) => {
                 });
                 return;
             }
-            if (orderItems.length === 0) {
+
+            const hasNonPositiveQuantity = array => array.every(item => item.Quantity <= 0);
+            const result = hasNonPositiveQuantity(orderItems);
+
+            if (orderItems.length === 0 || result) {
                 customAlert({
                     Type: 4,
-                    Message: "Please Select 1 Item Quantity",
+                    Message: alertMessages.itemQtyIsRequired,
                 });
                 return;
             }
+
             if (orderTypeSelect.length === 0) {
                 customAlert({
                     Type: 4,
-                    Message: "Please Select PO Type",
+                    Message: alertMessages.select_PO_Type,
                 });
                 return;
             }
@@ -1227,7 +1458,15 @@ const Order = (props) => {
             ) {
                 customAlert({
                     Type: 4,
-                    Message: "Please Enter One Terms And Condition",
+                    Message: alertMessages.enterOneTerms_and_Cond,
+                });
+                return;
+            }
+
+            if (advanceAmountRef.current.value && Number(advanceAmountRef.current.value) > sumOfOrderAmount) {
+                customAlert({
+                    Type: 4,
+                    Message: alertMessages.AdvanceAmount,
                 });
                 return;
             }
@@ -1236,14 +1475,18 @@ const Order = (props) => {
                 Customer: division,
                 Supplier: supplier,
                 OrderType: order_Type.PurchaseOrder,
-                IsConfirm: false  // PO Order then IsConfirm true
+                IsConfirm: false, // PO Order then IsConfirm true
+                AdvanceAmount: advanceAmountRef.current.value ? advanceAmountRef.current.value : 0
+
             }
             const SO_JsonBody = {
                 Customer: supplier,// swipe supllier 
                 Supplier: division,// swipe Customer
                 OrderType: order_Type.SaleOrder,
-                IsConfirm: true   // SO Order then IsConfirm true
+                IsConfirm: _cfunc.loginUserIsFranchisesRole() ? false : true, // SO Order then IsConfirm true
+                AdvanceAmount: advanceAmountRef.current.value ? advanceAmountRef.current.value : 0
             }
+
             const IB_JsonBody = {
                 DemandDate: orderdate,
                 DemandAmount: sumOfOrderAmount,
@@ -1251,27 +1494,31 @@ const Order = (props) => {
                 Customer: division,
                 Supplier: supplier,
                 OrderType: order_Type.PurchaseOrder,
+                AdvanceAmount: advanceAmountRef.current.value ? advanceAmountRef.current.value : 0
+
             }
+
+            const OrderDate = deliverydate.split(' ')[0]; // Date and time  split
             const comm_jsonBody = {
-                OrderDate: deliverydate,// order Date as a delivery date 
-                DeliveryDate: deliverydate,
+                OrderDate: OrderDate,// only date 
+                DeliveryDate: IsFranchisesRole ? deliverydate : `${deliverydate} ${_cfunc.getCurrenthours_min_sec()}`,  //date with time  as develiery date
                 OrderAmount: sumOfOrderAmount,
                 OrderItem: orderItems,
-
-                Description: description,
+                Description: descriptionRef.current.value,
                 BillingAddress: billAddr.value,
                 ShippingAddress: shippAddr.value,
                 OrderNo: 1,
                 FullOrderNumber: "PO0001",
+                DemandNo: 1,
+                FullDemandNumber: "PO0001",
                 Division: division,
                 POType: orderTypeSelect.value,
-                POFromDate: orderTypeSelect.value === 1 ? currentDate_ymd : poFromDate,
-                POToDate: orderTypeSelect.value === 1 ? currentDate_ymd : poToDate,
+                POFromDate: orderTypeSelect.value === 1 ? CurrentOrderDate : poFromDate,
+                POToDate: orderTypeSelect.value === 1 ? CurrentOrderDate : poToDate,
                 CreatedBy: _cfunc.loginUserID(),
                 UpdatedBy: _cfunc.loginUserID(),
                 OrderTermsAndConditions: termsAndConditions
             };
-
 
             let jsonBody;   //json body decleration 
             if (subPageMode === url.IB_ORDER) {
@@ -1286,7 +1533,7 @@ const Order = (props) => {
             // +*********************************
 
             if (pageMode === mode.edit) {
-                dispatch(_act.updateOrderIdAction({ jsonBody, updateId: editVal.id, gotoInvoiceMode }))
+                dispatch(_act.updateOrderIdAction({ jsonBody, updateId: editVal.id, gotoInvoiceMode, subPageMode }))
 
             } else {
 
@@ -1297,12 +1544,13 @@ const Order = (props) => {
         }
     };
 
+
     if (!(userPageAccessState === "")) {
         return (
             <React.Fragment>
                 <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
                 <PageLoadingSpinner isLoading={!pageField} />
-                <div className="page-container1">
+                <div>
                     {invoiceGoBtnloading && <div className="c_spinner-container">
                         <div className="d-flex">
                             <div className="">
@@ -1312,13 +1560,10 @@ const Order = (props) => {
                         </div>
 
                     </div>}
+
                     <div className="page-content">
-
-                        <NewCommonPartyDropdown pageMode={pageMode} />
-
                         <div>
-                            <div className="px-2 c_card_filter header text-black" >{/* Order Date And Supplier Name,Go_Button*/}
-
+                            <div className="px-2 c_card_filter text-black" >
                                 <div>
                                     <Row >
                                         <Col sm="4" >
@@ -1326,18 +1571,39 @@ const Order = (props) => {
                                                 <Label className="col-sm-5 p-2"
                                                     style={{ width: "115px" }}>Delivery Date</Label>
                                                 <Col sm="7">
-                                                    <C_DatePicker
-                                                        options={{
-                                                            altInput: true,
-                                                            altFormat: "d-m-Y",
-                                                            dateFormat: "Y-m-d",
-                                                        }}
-                                                        name="deliverydate"
-                                                        value={deliverydate}
-                                                        disabled={(orderItemTable.length > 0 || pageMode === "edit") ? true : false}
-                                                        onChange={(e, date) => { setdeliverydate(date) }}
-                                                    />
+
+                                                    {(IsFranchisesRole && subPageMode === url.ORDER_4) ?
+                                                        <C_TimePicker
+                                                            value={deliverydate}
+                                                            placeholder="Select FromDate"
+                                                            name="fromdate"
+                                                            data-enable-time
+                                                            data-enable-seconds
+                                                            data-enable-input={true} // Enable manual input
+                                                            options={{
+                                                                altInput: true,
+                                                                altFormat: 'd-m-Y H:i:S', // Updated date format with 24-hour time
+                                                                dateFormat: 'Y-m-d H:i:S', // Updated date format with 24-hour time
+                                                                minDate: "today",
+
+                                                            }}
+                                                            onChange={(obj, selectedDate) => {
+                                                                setdeliverydate(selectedDate)
+                                                            }}
+                                                        ></C_TimePicker>
+                                                        : <C_DatePicker
+                                                            options={{
+                                                                altInput: true,
+                                                                altFormat: "d-m-Y",
+                                                                dateFormat: "Y-m-d",
+                                                                minDate: "today",
+                                                            }}
+                                                            name="deliverydate"
+                                                            value={deliverydate}
+                                                            onChange={(e, date) => { setdeliverydate(date) }}
+                                                        />}
                                                 </Col>
+
                                             </FormGroup>
                                         </Col>
 
@@ -1345,7 +1611,7 @@ const Order = (props) => {
                                             <Col sm="3">
                                                 <FormGroup className=" row mt-2 " >
                                                     <Label className="col-sm-5 p-2"
-                                                        style={{ width: "65px" }}>{fieldLabel.Route}</Label>
+                                                        style={{ width: "130px" }}>{fieldLabel.Route}</Label>
                                                     <Col sm="7">
 
                                                         <C_Select
@@ -1370,7 +1636,7 @@ const Order = (props) => {
                                         <Col sm="4" className="">
                                             <FormGroup className="row mt-2" >
                                                 <Label className="col-sm-5 p-2"
-                                                    style={{ width: "115px" }}>{fieldLabel.Supplier}</Label>
+                                                    style={{ width: "129px" }}>{fieldLabel.Supplier}</Label>
                                                 <Col sm="7">
                                                     <C_Select
                                                         value={supplierSelect}
@@ -1417,21 +1683,23 @@ const Order = (props) => {
                                                                     })
                                                                     return;
                                                                 }
+                                                                dispatch(_act.BreadcrumbShowCountlabel(`Count:${itemSelectDropOptions.length} currency_symbol 0.00 weight 0.00 kg`))
                                                                 setSelecedItemWiseOrder(false)
                                                                 setOrderItemTable(itemSelectDropOptions)
-                                                                setItemSelect({ value: '', label: "All" })
+                                                                setItemSelect(allLabelWithBlank)
                                                                 setGoBtnDissable(true)
                                                             }} />
                                                         : (!selecedItemWiseOrder) &&
                                                         <Change_Button
                                                             id={`change-btn${subPageMode}`}
                                                             onClick={(e) => {
-                                                                setsupplierSelect('')
+                                                                setSupplierSelect('')
                                                                 setGoBtnDissable(false)
                                                                 setSelecedItemWiseOrder(true)
                                                                 setOrderItemTable([])
-                                                                setItemSelect({ value: '', label: "All" })
-                                                                dispatch(_act.GoButton_For_Order_AddSuccess([]))
+                                                                setItemSelect(allLabelWithBlank)
+                                                                dispatch(_act.GoButton_For_Order_AddSuccess([]));
+                                                                dispatch(_act.BreadcrumbShowCountlabel(initial_BredcrumbMsg))
                                                             }}
                                                         />
                                                     : null
@@ -1446,21 +1714,48 @@ const Order = (props) => {
                                                 <Label className="col-sm-5 p-2"
                                                     style={{ width: "115px" }}>Description</Label>
                                                 <div className="col-7">
-                                                    <Input type="text"
-                                                        value={description}
+                                                    <input type="text"
+                                                        className="form-control"
+                                                        defaultValue={state.values.Description}
+                                                        ref={descriptionRef}
                                                         placeholder='Enter Order Description'
-                                                        onChange={e => setDescription(e.target.value)}
+
+
                                                     />
 
                                                 </div>
 
                                             </FormGroup>
                                         </Col >
-                                        <Col sm="3" />
+
+                                        {(_cfunc.loginUserIsFranchisesRole() && subPageMode === url.ORDER_4) ? <Col sm='3'>
+                                            <FormGroup className="row mt-1" >
+                                                <Label className="col-sm-5 p-2"
+                                                    style={{ width: "130px" }}>{fieldLabel.AdvanceAmount}</Label>
+                                                <div className="col-7">
+                                                    <input type="text"
+                                                        defaultValue={state.values.AdvanceAmount}
+                                                        id="AdvanceAmount_id"
+                                                        className="form-control"
+                                                        ref={advanceAmountRef}
+                                                        onChange={e => {
+                                                            const value = e.target.value;
+                                                            if (/^\d*$/.test(value)) {
+                                                                e.target.value = value;
+                                                            } else {
+                                                                e.target.value = '';
+                                                            }
+                                                        }}
+                                                        placeholder='Enter Advance Amount'
+                                                    />
+                                                </div>
+                                            </FormGroup>
+                                        </Col > : <Col sm="3" />}
+
                                         <Col sm="4">
                                             <FormGroup className="row mt-1" >
                                                 <Label className="col-sm-5 p-2"
-                                                    style={{ width: "115px" }}>{fieldLabel.Item}</Label>
+                                                    style={{ width: "129px" }}>{fieldLabel.Item}</Label>
 
                                                 <Col sm="7">
                                                     <C_Select
@@ -1482,13 +1777,12 @@ const Order = (props) => {
                                             {pageMode === mode.defaultsave ?
                                                 <div className="row mt-2 pr-1"  >
                                                     {(selecedItemWiseOrder && itemSelectDropOptions.length > 0) ?
-                                                        <Button
-                                                            className
-                                                            color="btn btn-outline-info border-1 font-size-12 "
+                                                        <C_Button
+                                                            className="btn btn-outline-info border-1 font-size-12 "
                                                             disabled={goBtnloading}
                                                             onClick={() => item_AddButtonHandler()} >
                                                             Add Item
-                                                        </Button>
+                                                        </C_Button>
                                                         :
                                                         ((itemSelectDropOptions.length > 0)) &&
                                                         <Button
@@ -1496,7 +1790,7 @@ const Order = (props) => {
                                                             className='text-blac1k'
                                                             disabled={goBtnloading}
                                                             onClick={() => {
-                                                                setsupplierSelect('')
+                                                                setSupplierSelect('')
                                                                 setGoBtnDissable(false)
                                                                 setSelecedItemWiseOrder(true)
                                                                 setOrderItemTable([])
@@ -1516,200 +1810,200 @@ const Order = (props) => {
                                 </div>
 
                             </div>
+                            {subPageMode === url.ORDER_1 &&
 
-                            <div className="px-2  mb-1 c_card_body text-black" >              {/*  Description and Delivery Date  field */}
-                                <div className="row">                                         {/*  Description and Delivery Date  field */}
+                                <div className="px-2 c_card_filter text-black" >
+                                    <div>
+                                        <Row >
+                                            <Col sm="4" >
+                                                <FormGroup className=" row mt-2" >
+                                                    <Label className="col-sm-5 p-2"
+                                                        style={{ width: "115px" }}>Billing Address</Label>
+                                                    <Col sm="7">
+                                                        <C_Select
+                                                            value={billAddr}
+                                                            classNamePrefix="select2-Customer"
+                                                            options={supplierAddress}
+                                                            onChange={(e) => { setbillAddr(e) }}
+                                                            isLoading={supplierADDdropLoading}
+                                                            styles={{
+                                                                menu: provided => ({ ...provided, zIndex: 2 })
+                                                            }}
+                                                        />
+                                                    </Col>
+                                                </FormGroup>
+                                            </Col>
 
+                                            <Col sm='3' />
 
-                                    {/*  Delivery Date field */}
-                                    {/* {!(subPageMode === url.IB_ORDER) ?
-                                    <div className="col col-6" >
-                                        <FormGroup className=" row mt-3 " >
-                                            <Label className=" p-2"
-                                                style={{ width: "130px" }}>Delivery Date</Label>
-                                            <div className="col col-6 sm-1">
-                                                <C_DatePicker
-                                                    id="deliverydate"
-                                                    name="deliverydate"
-                                                    value={deliverydate}
-                                                    disabled={pageMode === "edit" ? true : false}
-                                                    onChange={(e, date) => { setdeliverydate(date) }}
-                                                />
-                                            </div>
+                                            <Col sm="4" className="">
+                                                <FormGroup className="row mt-2" >
+                                                    <Label className="col-form-label-sm p-2"
+                                                        style={{ width: "129px", fontSize: "14px" }}>Shipping Address</Label>
+                                                    <Col sm="7">
+                                                        <Select
+                                                            value={shippAddr}
+                                                            classNamePrefix="select2-Customer"
+                                                            styles={{
+                                                                menu: provided => ({ ...provided, zIndex: 2 })
+                                                            }}
+                                                            isLoading={supplierADDdropLoading}
+                                                            options={supplierAddress}
+                                                            onChange={(e) => { setshippAddr(e) }}
+                                                        />
+                                                    </Col>
 
-                                        </FormGroup>
-                                    </div > : null} */}
+                                                </FormGroup>
+                                            </Col>
+                                        </Row>
+                                        <Row>
+                                            <Col sm="4">                               {/*  Description field */}
+                                                <FormGroup className="row mt-1" >
+                                                    <Label className="col-sm-5 p-2"
+                                                        style={{ width: "115px" }}>PO Type</Label>
+                                                    <div className="col-7">
+                                                        <Select
+                                                            value={orderTypeSelect}
+                                                            classNamePrefix="select2-Customer"
+                                                            options={orderTypeOptions}
+                                                            onChange={(e) => { setorderTypeSelect(e) }}
+                                                            isLoading={orderTypeDropLoading}
+                                                            styles={{
+                                                                menu: provided => ({ ...provided, zIndex: 2 })
+                                                            }}
+                                                        />
+                                                    </div>
+                                                </FormGroup>
+                                            </Col >
+                                            <Col sm="3" />
 
-                                </div>
+                                        </Row>
 
-                                {subPageMode === url.ORDER_1 ? <div>                             {/*  Billing Address   and Shipping Address*/}
-                                    <div className="row mt-2 ">
-
-                                        <div className="col col-6">                             {/* Billing Address */}
-                                            <FormGroup className="row  " >
-                                                <Label className=" p-2"
-                                                    style={{ width: "115px" }}>Billing Address</Label>
-                                                <div className="col col-6">
-                                                    <C_Select
-                                                        value={billAddr}
-                                                        classNamePrefix="select2-Customer"
-                                                        options={supplierAddress}
-                                                        onChange={(e) => { setbillAddr(e) }}
-                                                        isLoading={supplierADDdropLoading}
-                                                        styles={{
-                                                            menu: provided => ({ ...provided, zIndex: 2 })
-                                                        }}
-                                                    />
-                                                </div>
-                                            </FormGroup>
-                                        </div >
-
-                                        <div className="col col-6">                               {/*  Billing Shipping Address */}
-                                            <FormGroup className=" row " >
-                                                <Label className=" p-2"
-                                                    style={{ width: "130px" }}>Shipping Address</Label>
-                                                <div className="col col-6">
-                                                    <Select
-                                                        value={shippAddr}
-                                                        classNamePrefix="select2-Customer"
-                                                        styles={{
-                                                            menu: provided => ({ ...provided, zIndex: 2 })
-                                                        }}
-                                                        isLoading={supplierADDdropLoading}
-                                                        options={supplierAddress}
-                                                        onChange={(e) => { setshippAddr(e) }}
-                                                    />
-                                                </div>
-                                            </FormGroup>
-                                        </div >
-                                    </div>
-
-                                    <div className="row" >                                        {/**PO Type  (PO From Date and PO To Date)*/}
-                                        <div className="col col-6" >                              {/**PO Type */}
-                                            <FormGroup className=" row  " >
-                                                <Label className=" p-2"
-                                                    style={{ width: "115px" }}>PO Type</Label>
-                                                <div className="col col-6 ">
-                                                    <Select
-                                                        value={orderTypeSelect}
-                                                        classNamePrefix="select2-Customer"
-                                                        options={orderTypeOptions}
-                                                        onChange={(e) => { setorderTypeSelect(e) }}
-                                                        isLoading={orderTypeDropLoading}
-                                                        styles={{
-                                                            menu: provided => ({ ...provided, zIndex: 2 })
-                                                        }}
-                                                    />
-                                                </div>
-                                            </FormGroup>
-                                        </div >
-                                    </div>
-
-
-                                    {(orderTypeSelect.label === 'Open PO') ?
-                                        <div className="row" >                                    {/*PO From Date */}
-                                            <div className="col col-6" >
-                                                <FormGroup className=" row " >
-                                                    <Label className=" p-2"
+                                        {(orderTypeSelect.label === 'Open PO') && <Row >
+                                            <Col sm="4" >
+                                                <FormGroup className=" row mt-2" >
+                                                    <Label className="col-sm-5 p-2"
                                                         style={{ width: "115px" }}>PO From Date</Label>
-                                                    <div className="col col-6 ">
+                                                    <Col sm="7">
                                                         <C_DatePicker
+                                                            options={{
+                                                                altInput: true,
+                                                                altFormat: "d-m-Y",
+                                                                dateFormat: "Y-m-d",
+                                                                minDate: "today",
+                                                            }}
                                                             id="pofromdate"
                                                             name="pofromdate"
                                                             value={poFromDate}
                                                             onChange={(e, date) => { setpoFromDate(date) }}
                                                         />
-                                                    </div>
+                                                    </Col>
                                                 </FormGroup>
-                                            </div >
+                                            </Col>
 
-                                            <div className="col col-6" >                        {/*PO To Date */}
-                                                <FormGroup className=" row  " >
-                                                    <Label className=" p-2"
-                                                        style={{ width: "130px" }}>PO To Date</Label>
-                                                    <div className="col col-6 ">
+                                            <Col sm='3' />
+                                            <Col sm="4" className="">
+                                                <FormGroup className="row mt-2" >
+                                                    <Label className="col-form-label-sm p-2"
+                                                        style={{ width: "130px", fontSize: "14px" }}>PO To Date</Label>
+                                                    <Col sm="7">
                                                         <C_DatePicker
+                                                            options={{
+                                                                altInput: true,
+                                                                altFormat: "d-m-Y",
+                                                                dateFormat: "Y-m-d",
+                                                                minDate: "today",
+                                                            }}
                                                             id="potodate"
                                                             name="potodate"
                                                             value={poToDate}
                                                             onChange={(e, date) => { setpoToDate(date) }}
                                                         />
-                                                    </div>
-                                                </FormGroup>
-                                            </div >
-                                        </div> : null}
-                                </div>
-                                    : null}
+                                                    </Col>
 
-                            </div>
+                                                </FormGroup>
+                                            </Col>
+
+                                        </Row>}
+                                    </div>
+
+                                </div>
+
+                            }
 
                         </div>
 
 
                         <ToolkitProvider
                             keyField={"Item_id"}
-                            data={orderItemTable}
+                            data={processedData}
                             columns={pagesListColumns}
                             search
                         >
                             {(toolkitProps,) => (
                                 <React.Fragment>
-                                    <Row>
-                                        <Col xl="12">
-                                            <div className="table-responsive table " style={{ minHeight: "45vh" }} >
-                                                <BootstrapTable
-                                                    keyField={"Item_id"}
-                                                    id="table_Arrow"
-                                                    defaultSorted={!selecedItemWiseOrder ? defaultSorted : ''}
-                                                    classes='custom-table'
-                                                    // headerClasses="custom-table"
-                                                    noDataIndication={
-                                                        <div className="text-danger text-center table-cursor-pointer">
-                                                            Items Not available
-                                                        </div>
-                                                    }
-                                                    onDataSizeChange={(e) => {
-                                                        _cfunc.tableInputArrowUpDounFunc("#table_Arrow")
-                                                    }}
-                                                    {...toolkitProps.baseProps}
-                                                />
-                                                {mySearchProps(toolkitProps.searchProps)}
+
+                                    <BootstrapTable
+                                        keyField={"Item_id"}
+                                        id="table_Arrow"
+                                        defaultSorted={!selecedItemWiseOrder ? defaultSorted : ''}
+                                        classes='custom-table'
+                                        rowStyle={rowStyle}
+                                        rowClasses={rowClasses}
+                                        noDataIndication={
+                                            <div className="text-danger text-center table-cursor-pointer">
+                                                Items Not available
                                             </div>
-                                        </Col>
-                                    </Row>
+                                        }
+                                        onDataSizeChange={(e) => {
+                                            _cfunc.tableInputArrowUpDounFunc("#table_Arrow")
+                                        }}
+                                        {...toolkitProps.baseProps}
+                                    />
+                                    {globalTableSearchProps(toolkitProps.searchProps)}
+
 
                                 </React.Fragment>
                             )}
                         </ToolkitProvider>
 
-                        <OrderPageTermsTable tableList={termsAndConTable} setfunc={setTermsAndConTable} privious={editVal.TermsAndConditions} tableData={orderItemTable} />
+                        <OrderPageTermsTable
+                            tableList={termsAndConTable}
+                            setfunc={setTermsAndConTable}
+                            privious={editVal.TermsAndConditions}
+                            tableData={orderItemTable} />
 
                         {
-                            ((orderItemTable.length > 0) && (!isOpen_assignLink)) ? <div className="row save1" style={{ paddingBottom: 'center' }}>
-                                <Col>
-                                    <SaveButton
-                                        loading={saveBtnloading}
-                                        editCreatedBy={editCreatedBy}
+                            ((orderItemTable.length > 0) && (!isOpen_assignLink)) &&
+
+                            <SaveButtonDraggable>
+
+                                <SaveButton
+                                    loading={saveBtnloading}
+                                    editCreatedBy={editCreatedBy}
+                                    pageMode={pageMode}
+                                    userAcc={userPageAccessState}
+                                    onClick={() => saveHandler(false)}
+                                    forceDisabled={gotoInvoiceBtnLoading}
+                                />
+                                {
+                                    (subPageMode === url.ORDER_4) && (pageMode === mode.defaultsave) &&
+
+                                    <GotoInvoiceBtn
+                                        forceDisabled={gotoInvoiceBtnLoading}
+                                        loading={gotoInvoiceBtnLoading}
                                         pageMode={pageMode}
                                         userAcc={userPageAccessState}
-                                        onClick={saveHandler}
-                                        forceDisabled={gotoInvoiceBtnLoading}
+                                        onClick={() => saveHandler(true)}
                                     />
-                                </Col>
-                                {
-                                    (subPageMode === url.ORDER_4) && (pageMode === mode.defaultsave) ?
-                                        <Col>
-                                            <GotoInvoiceBtn
-                                                forceDisabled={gotoInvoiceBtnLoading}
-                                                loading={gotoInvoiceBtnLoading}
-                                                pageMode={pageMode}
-                                                userAcc={userPageAccessState}
-                                                onClick={saveHandler}
-                                            />
-                                        </Col> : null}
-                            </div>
-                                : <div className="row save1"></div>
+                                }
+
+                            </SaveButtonDraggable>
+
+
+
                         }
+
                     </div >
                 </div>
                 <Modal
@@ -1719,7 +2013,6 @@ const Order = (props) => {
                     }}
                     size="xl"
                 >
-
                     <PartyItems
                         editValue={assingItemData.Data}
                         isAssing={true}
@@ -1740,3 +2033,24 @@ const Order = (props) => {
 }
 
 export default Order
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

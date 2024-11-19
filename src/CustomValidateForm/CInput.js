@@ -17,6 +17,7 @@ export const CInput = ({ onChange = () => { }, cpattern = '', ...rest }) => {
     }
     return (
         <Input
+            autoComplete='off'
             onChange={on_Change}
             {...rest} />
     )

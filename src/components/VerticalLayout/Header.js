@@ -8,7 +8,6 @@ import ReactDrawer from 'react-drawer';
 import 'react-drawer/lib/react-drawer.css';
 
 //Import Icons
-import FeatherIcon from "feather-icons-react";
 
 // Import menuDropdown
 import NotificationDropdown from "../CommonForBoth/TopbarDropdown/NotificationDropdown"
@@ -31,6 +30,9 @@ import {
 } from "../../store/actions"
 import { MainSearchBox, } from '../Common/SearchBox/index';
 import { MySearch } from '../Common/SearchBox/MySearch';
+import { loginSystemSetting } from '../Common/CommonFunction';
+import { Modal } from 'reactstrap';
+import { Notification_Log } from '../../helpers/backend_helper';
 
 const Header = props => {
   const { onChangeLayoutMode } = props;
@@ -38,15 +40,25 @@ const Header = props => {
   const [isClick, setClick] = useState(true);
   const [position, setPosition] = useState();
   const [open, setOpen] = useState(false);
-
+  const [modal_backdrop, setmodal_backdrop] = useState(false);   // Image Model open Or not
 
 
   const onDrawerClose = () => {
     setOpen(false);
   }
+  const IsNotificationShow = loginSystemSetting().IsNotificationShow
 
+
+  function tog_backdrop() {
+    setmodal_backdrop(!modal_backdrop)
+    removeBodyCss()
+  }
+  function removeBodyCss() {
+    document.body.classList.add("no_padding")
+  }
   /*** Sidebar menu icon and default menu set */
   function tToggle() {
+
     var body = document.body;
     setClick(!isClick);
     if (isClick === true) {
@@ -68,33 +80,88 @@ const Header = props => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+
+  const handleClick = async () => {
+    const SelectedPartyID = JSON.parse(localStorage.getItem("selectedParty")).value
+    const jsonBody =
+    {
+      "PartyID": SelectedPartyID,
+      "TransactionID": 0,
+      "FromDate": "",
+      "ToDate": "",
+      "CustomerID": 0
+
+    }
+    setmodal_backdrop(true);
+    await Notification_Log({ jsonBody });
+  };
+
   return (
     <React.Fragment>
       <header id="page-topbar">
+        <Modal
+          isOpen={modal_backdrop}
+          toggle={() => {
+            tog_backdrop()
+          }}
+          style={{ width: "800px", height: "800px", borderRadius: "50%" }}
+          className="modal-dialog-centered"
+        >
+          <div className="modal-content">
+            <div className="modal-body">
+              <p style={{ fontSize: "15px", color: "black" }}>
+
+
+
+
+
+
+
+                <h5> FoodERP 2.0 सिस्टम वापरकर्त्यांसाठी सूचना :</h5>
+
+                FoodERP 2.0 प्रणाली गुरुवार, 16 मे 2024 रोजी दुपारी 1:00 ते 2:00 PM (IST) या वेळेत अनुपलब्ध असेल. यावेळी, सिस्टमची कार्यक्षमता सुनिश्चित करण्यासाठी आवश्यक देखभाल केली जाईल. यामुळे होणाऱ्या कोणत्याही गैरसोयीबद्दल आम्ही दिलगीर आहोत.
+                आपल्या सहकार्यासाठी धन्यवाद.<br />
+                टीम चितळे बंधू<br /><br />
+
+                <h5> Attention FoodERP 2.0 System Users </h5>
+                The FoodERP System will be temporarily unavailable on Thursday, 16th May 2024, from 1:00 PM to 2:00 PM (IST).<br /><br />
+                During this time, essential maintenance will be carried out to ensure performance of the system. We apologise for any inconvenience this may cause and appreciate your understanding as we work to improve our services.
+                Thank you for your cooperation.<br />
+                Team Chitale Bandhu
+              </p>
+            </div>
+
+          </div>
+        </Modal>
+
+
+
         <div className="navbar-header">
+
           <div className="d-flex">
             <div className="navbar-brand-box" >
-              <Link to="/dashboard" className="logo logo-dark">
+              <div style={{ cursor: "context-menu" }} className="logo logo-dark">
                 <span className="logo-sm" >
-                  <img src={logoSvg} alt="" height="35" />
+                  <img src={logoSvg} alt="" height="40" style={{ height: "56px" }} />
                 </span>
                 <span className="logo-lg">
-                  <img src={logoSvg} alt="" height="45" /> <span className="logo-txt" style={{ color: 'white' }}>FoodERP 2.0</span>
+                  <img src={logoSvg} alt="" height="40" style={{ height: "56px" }} /> <span className="logo-txt" style={{ color: 'white' }}>FoodERP 2.0</span>
                 </span>
-              </Link>
+              </div>
 
               <Link to="/dashboard" className="logo logo-light">
                 <span className="logo-sm" >
-                  <img src={logoSvg} alt="" height="35" />
+                  <img src={logoSvg} alt="" height="35" style={{ height: "56px" }} />
                 </span>
                 <span className="logo-lg">
-                  <img src={logoSvg} alt="" height="35" /> <span className="logo-txt">FoodERP 2.0</span>
+                  <img src={logoSvg} alt="" height="35" style={{ height: "56px" }} /> <span className="logo-txt">FoodERP 2.0</span>
                 </span>
               </Link>
             </div>
             <div>
               <button
                 onClick={() => {
+
                   tToggle()
                 }}
                 type="button" className="btn btn-sm  font-size-16 header-item" id="vertical-menu-btn">
@@ -103,35 +170,18 @@ const Header = props => {
             </div>
             <MainSearchBox />
 
-
           </div>
+          {/* 
+          {IsNotificationShow !== "null" ? <div style={{ fontWeight: "bold", cursor: "pointer" }} >
+            <h3 style={{ color: "red" }} onClick={handleClick} class="text-red blink-soft">Important Notification! Click here</h3>
+          </div> : null} */}
 
 
-          <div className="d-flex">
-            <div className="dropdown d-inline-block d-lg-none ms-2">
-              {/* <button type="button" className="btn header-item" id="page-header-search-dropdown"
-                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <FeatherIcon
-                  icon="search"
-                  className="icon-lg"
-                />
-              </button> */}
-              <div className="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0"
-                aria-labelledby="page-header-search-dropdown">
+          {IsNotificationShow === "true" ? <div style={{ fontWeight: "bold", cursor: "pointer" }} >
+            <h3 style={{ color: "red" }} onClick={handleClick} class="text-red blink-soft">Important Notification! Click here</h3>
+          </div> : null}
 
-                <form className="p-3">
-                  <div className="form-group m-0">
-                    <div className="input-group">
-                      <input type="text" className="form-control" placeholder="Search ..." aria-label="Search Result" />
 
-                      <button className="btn btn-primary" type="submit"><i className="mdi mdi-magnify"></i></button>
-                    </div>
-                  </div>
-                </form>
-              </div>
-            </div>
-
-          </div>
           <div className="d-flex">
             <div className="dropdown d-inline-block d-lg-none ms-2">
               <button
@@ -153,25 +203,8 @@ const Header = props => {
                 aria-labelledby="page-header-search-dropdown"
               >
                 <div className=" d-flex position-relative">
-                  <MySearch />
+                  <MySearch isButton={true} />
                 </div>
-                {/* <form className="p-3">
-                  <div className="form-group m-0">
-                    <div className="input-group">
-                      <input
-                        type="text"
-                        className="form-control"
-                        placeholder="Search ..."
-                        aria-label="Recipient's username"
-                      />
-                      <div className="input-group-append">
-                        <button className="btn btn-primary" type="submit">
-                          <i className="mdi mdi-magnify" />
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </form> */}
 
               </div>
             </div>
@@ -180,6 +213,8 @@ const Header = props => {
             <ProfileMenu />
 
           </div>
+
+
         </div>
       </header>
       <ReactDrawer

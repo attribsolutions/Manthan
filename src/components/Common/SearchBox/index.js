@@ -2,8 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import '../../../assets/searchBox/searchBox.scss';
 import { MySearch } from './MySearch';
+import { useHistory } from "react-router-dom";
 
 export const MainSearchBox = () => {
+  const history = useHistory();
+
   const [searchRoleData, setSearchRoleData] = useState([]);
   const { RoleAccessData, searchProps } = useSelector((state) => ({
     RoleAccessData: state.Login.roleAccessSidbarData,
@@ -11,11 +14,32 @@ export const MainSearchBox = () => {
   }));
 
   useEffect(() => {
+    
     const flattenModuleData = RoleAccessData.flatMap((i) => i.ModuleData);
     setSearchRoleData(flattenModuleData);
   }, [RoleAccessData]);
 
   useEffect(() => {
+    if (RoleAccessData) {
+
+      const flattenModuleData = RoleAccessData.flatMap(i => i.ModuleData);
+
+      const newFilteredData = flattenModuleData.filter(i => {
+        if ((i.PageType === 1) && i.RoleAccess_IsSave === true) {
+          return true;
+        }
+        else if ((i.PageType === 2 || i.PageType === 3) && i.RoleAccess_IsShowOnMenu === true) {
+          return true;
+        }
+        return false;
+      });
+
+      setSearchRoleData(newFilteredData);
+    }
+  }, [RoleAccessData]);
+
+  useEffect(() => {
+
     function autocomplete(inp, arr) {
       let currentFocus;
 
@@ -42,14 +66,19 @@ export const MainSearchBox = () => {
 
             filteredItems.forEach((item, index) => {
               const itemDiv = document.createElement('div');
-              itemDiv.innerHTML = `<strong>${item.Name}</strong>${item.Name.substring(1)}`;
+              itemDiv.innerHTML = `<strong>${item.Name}</strong>`;
               itemDiv.innerHTML += `<input type='hidden' id='${index}' value='${item.Name}'>`;
 
               itemDiv.addEventListener('click', function (e) {
+
                 inp.value = this.getElementsByTagName('input')[0].value;
                 const inputId = this.getElementsByTagName('input')[0].id;
                 const actualPagePath = filteredItems[inputId].ActualPagePath;
-                window.location.href = actualPagePath;
+                history.push({
+                  pathname: `/${actualPagePath}`,
+                })
+
+                // window.location.href = actualPagePath;
                 closeAllLists();
               });
 
@@ -116,7 +145,7 @@ export const MainSearchBox = () => {
     <React.Fragment>
       <div className="app-search d-none d-lg-block " style={{ marginTop: "-3px" }} autocomplete="off">
         <div className="position-relative">
-          <MySearch />
+          <MySearch isButton={true} />
         </div>
       </div>
 

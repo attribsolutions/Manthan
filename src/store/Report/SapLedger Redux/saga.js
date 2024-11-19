@@ -1,111 +1,127 @@
 import { call, put, takeLatest } from "redux-saga/effects";
 import {
-  LedgerApiErrorAction,
-  SapLedger_Go_Button_API_Success, getExcel_Button_API_Success
+	LedgerApiErrorAction,
+	SapLedger_Go_Button_API_Success, ProductMargin_Go_Btn_Success
 } from "./action";
 import { Get_Product_Margin_Report, PartyLedger_API, } from "../../../helpers/backend_helper";
-import { GET_EXCELBUTTON_API, GO_BUTTON_API_SAP_LEDGER, } from "./actionType";
+import { PRODUCTMARGIN_GO_BTN_ACTION, GO_BUTTON_API_SAP_LEDGER, } from "./actionType";
+import SERVER_HOST_PATH from "../../../helpers/_serverPath";
 
-function* goBtn_Get_API_GenFun({ filters }) {
+function* SapLedger_GoBtn_GenFuc({ filters }) {
 
-  try {
+	try {
 
-    const response = yield call(PartyLedger_API, filters);
-    let TotalDebitAmount = 0
-    let TotalCreditAmount = 0
-    let NewResponse
+		const response = yield call(PartyLedger_API, filters);
+		let TotalDebitAmount = 0
+		let TotalCreditAmount = 0
+		let NewResponse
 
-    if (response.Data.status_code === 200) {
-      const newresponse = yield response.Data.data.map((i, key) => {
+		if (response.Data.status_code === 200) {
+			const newresponse = yield response.Data.data.map((i, key) => {
 
-        i.id = key + 1
-        if (i.DebitCredit === "S") {
-          i.Debit_Amount = i.Amount
-          TotalDebitAmount = Number(TotalDebitAmount) + Number(i.Debit_Amount)
-        }
-        if (i.DebitCredit === "H") {
-          i.Credit_Amount = i.Amount
-          TotalCreditAmount = Number(TotalCreditAmount) + Number(i.Credit_Amount)
-        }
-        return i
-      })
+				i.id = key + 1
+				if (i.DebitCredit === "S") {
+					i.Debit_Amount = i.Amount
+					TotalDebitAmount = Number(TotalDebitAmount) + Number(i.Debit_Amount)
+				}
+				if (i.DebitCredit === "H") {
+					i.Credit_Amount = i.Amount
+					TotalCreditAmount = Number(TotalCreditAmount) + Number(i.Credit_Amount)
+				}
+				return i
+			})
 
-      newresponse.push({
-        id: response.length - 1,
-        PostingDate: "Total",
-        Credit_Amount: TotalCreditAmount.toFixed(2),
-        Debit_Amount: TotalDebitAmount.toFixed(2)
-      })
+			newresponse.push({
+				id: response.length - 1,
+				PostingDate: "Total",
+				Credit_Amount: TotalCreditAmount.toFixed(2),
+				Debit_Amount: TotalDebitAmount.toFixed(2)
+			})
 
-      NewResponse = {
-        Status: true,
-        StatusCode: 200,
-        count: response.Data.count,
-        OpeingBal: response.Data.OpeingBal,
-        ClosingBal: response.Data.ClosingBal,
-        tableData: newresponse
-      };
-    }
-    else {
+			NewResponse = {
+				Status: true,
+				StatusCode: 200,
+				count: response.Data.count,
+				OpeingBal: response.Data.OpeingBal,
+				ClosingBal: response.Data.ClosingBal,
+				tableData: newresponse
+			};
+		}
+		else {
 
-      NewResponse = {
-        Status: true,
-        StatusCode: 204,
-        tableData: []
-      };
-    }
+			NewResponse = {
+				Status: true,
+				StatusCode: 204,
+				tableData: []
+			};
+		}
 
-    yield put(SapLedger_Go_Button_API_Success(NewResponse));
+		yield put(SapLedger_Go_Button_API_Success(NewResponse));
 
-  } catch (error) { yield put(LedgerApiErrorAction()) }
+	} catch (error) { yield put(LedgerApiErrorAction()) }
 }
 
-function* GetExcelButton_saga({ IsSCM_ID, PartyID }) {
+function* ProductMarginGoBtn_GenFuc({ config }) {
 
-  try {
-    const response = yield call(Get_Product_Margin_Report, IsSCM_ID, PartyID);
+	try {
+		const response = yield call(Get_Product_Margin_Report, config);
 
-    if (response.StatusCode === 200) {
+		let newArray = []
+		if (response.StatusCode === 200) {
 
-      let newArray = []
+			response.Data.forEach(i => {
+				let obj = i;
 
-      response.Data.forEach(i => {
-        let obj = i
-        i.ItemMargins.forEach(ele => {
-          const keys = Object.keys(ele);
-          keys.forEach(key => {
-            obj[key] = ele[key]
-          })
-        })
-        delete obj.ItemMargins
-        newArray.push(obj)
-      })
-      const csvContent = newArray.map(item => {
-        return Object.values(item).join(",");
-      });
+				// Merge ItemMargins and ItemImage properties into the main object
+				["ItemMargins", "ItemImage"].forEach(prop => {
 
-      const csvContentString = ["sep=,", Object.keys(newArray[0]).join(",")].concat(csvContent).join("\n");
+					i[prop].forEach(ele => {
+						const keys = Object.keys(ele);
+						keys.forEach(key => {
 
-      const blob = new Blob([csvContentString], { type: "text/csv;charset=utf-8;" });
-      const url = URL.createObjectURL(blob);
+							let imageColumns = ["SideView(L)", "TopView", "SideView(R)", "BackView", "BarCode", "Poster", "FrontView", "Nutrition"];
+							let isImageColumn = imageColumns.includes(key);
+							if (isImageColumn) {
 
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `Product Margin Report.csv`;
-      a.click();
+								obj[key] = `${ele[key] === " " || ele[key] === "" ? "" : `${SERVER_HOST_PATH}/media/${ele[key]}`}`;
+							} else {
+								obj[key] = ele[key];
+							}
+						});
+					});
+					// Remove the property from the object
+					delete obj[prop];
+				});
 
-      URL.revokeObjectURL(url);
-    }
-    yield put(getExcel_Button_API_Success([]));
-  } catch (error) {
-    yield put(getExcel_Button_API_Success([]));
-    LedgerApiErrorAction()
-  }
+				// Remove specified keys from the object
+				["ProductID", "SubProductID"].forEach(key => {
+					delete obj[key];
+				});
+
+				// Delete PriceListID and keys matching the pattern "BaseUnitRateWithOutGST"
+				delete obj.PriceListID;
+				Object.keys(obj).forEach(key => {
+					if (key.match(/BaseUnitRateWithOutGST/i)) {
+						delete obj[key];
+					}
+				});
+
+				// Add the modified object to newArray
+				newArray.push(obj);
+			});
+		}
+
+		yield put(ProductMargin_Go_Btn_Success(newArray));
+
+	} catch (error) {
+		yield put(ProductMargin_Go_Btn_Success([]));
+		LedgerApiErrorAction()
+	}
 }
 
 function* SapLedgerSaga() {
-  yield takeLatest(GO_BUTTON_API_SAP_LEDGER, goBtn_Get_API_GenFun)
-  yield takeLatest(GET_EXCELBUTTON_API, GetExcelButton_saga)
+	yield takeLatest(GO_BUTTON_API_SAP_LEDGER, SapLedger_GoBtn_GenFuc)
+	yield takeLatest(PRODUCTMARGIN_GO_BTN_ACTION, ProductMarginGoBtn_GenFuc)
 }
 
 export default SapLedgerSaga;

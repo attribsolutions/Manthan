@@ -23,7 +23,6 @@ import * as pageId from "../../../routes//allPageID";
 import * as url from "../../../routes/route_url";
 import * as mode from "../../../routes/PageMode";
 import { GetRoutesList } from "../../../store/Administrator/RoutesRedux/actions";
-import { invoiceListGoBtnfilter } from "../../../store/Sales/Invoice/action";
 import { getVehicleList } from "../../../store/Administrator/VehicleRedux/action";
 import {
     LoadingSheet_GoBtn_API,
@@ -33,7 +32,7 @@ import {
 } from "../../../store/Sales/LoadingSheetRedux/action";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
-import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
+import { globalTableSearchProps } from "../../../components/Common/SearchBox/MySearch";
 import { getDriverList, getDriverListSuccess } from "../../../store/Administrator/DriverRedux/action";
 import { selectAllCheck } from "../../../components/Common/TableCommonFunc";
 import * as _cfunc from "../../../components/Common/CommonFunction";
@@ -41,7 +40,12 @@ import { C_DatePicker } from "../../../CustomValidateForm";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { GetRoutesListSuccess } from "../../../store/Administrator/RoutesRedux/actions";
 import { getVehicleListSuccess } from "../../../store/Administrator/VehicleRedux/action";
-import NewCommonPartyDropdown from "../../../components/Common/NewCommonPartyDropdown";
+import DriverMaster from "../../Adminisrator/DriverPage/DriverMaster";
+import RoutesMaster from "../../Adminisrator/RoutesPages/RoutesMaster";
+import VehicleMaster from "../../Adminisrator/VehiclePages/VehicleMaster";
+import DropdownMaster from "../../../components/Common/DropdownMaster";
+import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
+import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 
 const LoadingSheet = (props) => {
 
@@ -51,6 +55,11 @@ const LoadingSheet = (props) => {
 
     const [pageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState('');
+
+    const [dropDownMasterIsOpen, setDropDownMasterIsOpen] = useState(null);
+    const [driverMasterAccess, setDriverMasterAccess] = useState(false);
+    const [vehicleMasterAccess, setVehicleMasterAccess] = useState(false);
+    const [routeMasterAccess, setRouteMasterAccess] = useState(false);
 
     const fileds = {
         id: "",
@@ -151,6 +160,19 @@ const LoadingSheet = (props) => {
             setUserAccState(userAcc)
             _cfunc.breadcrumbReturnFunc({ dispatch, userAcc });
         };
+        userAccess.forEach((index) => {
+            if (index.id === pageId.DRIVER) {
+                return setDriverMasterAccess(true)
+            }
+            if (index.id === pageId.VEHICLE) {
+
+                return setVehicleMasterAccess(true)
+            }
+            if (index.id === pageId.ROUTES) {
+                return setRouteMasterAccess(true)
+            }
+        });
+
     }, [userAccess])
 
     useEffect(async () => {
@@ -240,7 +262,7 @@ const LoadingSheet = (props) => {
             customAlert({
                 Type: 4,
                 Status: true,
-                Message: "RouteName Is Required",
+                Message: alertMessages.routeNameIsRequired,
             });
             return;
         }
@@ -263,6 +285,7 @@ const LoadingSheet = (props) => {
         const btnId = event.target.id;
 
         const { totalInvoices, GrandTotal, LoadingSheetDetails } = Data.reduce(
+
             (acc, index) => {
                 if (index.selectCheck === true) {
                     acc.totalInvoices++;
@@ -278,7 +301,7 @@ const LoadingSheet = (props) => {
             customAlert({
                 Type: 4,
                 Status: true,
-                Message: "Atleast One Invoice Is Select...!",
+                Message: alertMessages.atLeastOneInvoiceRequired,
             });
             return;
         }
@@ -334,13 +357,32 @@ const LoadingSheet = (props) => {
         })
     }
 
+    const handleLabelClick = ({ showModal = false, masterModal, masterPath }) => {
+        setDropDownMasterIsOpen({ show: showModal, masterModal: masterModal, masterPath: masterPath })
+    };
+
+    const dropdownLabelFunc = ({ IsAccess, masterModal, masterPath, label }) => {
+        return <Label
+            className={`col-sm-1 p-2 ${IsAccess ? 'c_labelHover' : 'text-black'}`}
+            onClick={() => handleLabelClick({ showModal: IsAccess, masterModal, masterPath })}
+            style={{ width: "115px", marginRight: "0.4cm" }}
+        >
+            {label}
+        </Label>
+    }
+
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
                 <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
                 <div className="page-content" style={{ marginBottom: "5cm" }}>
 
-                    <NewCommonPartyDropdown pageMode={pageMode} />
+                    <DropdownMaster
+                        modalShow={dropDownMasterIsOpen?.show}
+                        setModalShow={(e) => { setDropDownMasterIsOpen(null) }}
+                        masterModal={dropDownMasterIsOpen?.masterModal}
+                        masterPath={dropDownMasterIsOpen?.masterPath}
+                    />
 
                     <form noValidate>
                         <div className="px-2 c_card_filter header text-black mb-1" >
@@ -368,9 +410,13 @@ const LoadingSheet = (props) => {
                                 </Col >
 
                                 <Col sm="6">
-                                    <FormGroup className=" row mt-2" >
-                                        <Label className="col-sm-1 p-2"
-                                            style={{ width: "115px", marginRight: "0.4cm" }}>  {fieldLabel.DriverName}</Label>
+                                    <FormGroup className=" row mt-2 " >
+                                        {dropdownLabelFunc({         // Label Show Function
+                                            IsAccess: driverMasterAccess,
+                                            masterModal: DriverMaster,
+                                            masterPath: url.DRIVER,
+                                            label: fieldLabel.DriverName
+                                        })}
                                         <Col sm="7">
                                             <Select
                                                 name="DriverName"
@@ -432,8 +478,13 @@ const LoadingSheet = (props) => {
                             <div className="row ">
                                 <Col sm="6">
                                     <FormGroup className=" row mt-2" >
-                                        <Label className="col-sm-1 p-2"
-                                            style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.RouteName} </Label>
+                                        {dropdownLabelFunc({         // Label Show Function
+                                            IsAccess: routeMasterAccess,
+                                            masterModal: RoutesMaster,
+                                            masterPath: url.ROUTES,
+                                            label: fieldLabel.RouteName
+                                        })}
+
                                         <Col sm="7">
                                             <Select
                                                 name="RouteName"
@@ -460,8 +511,12 @@ const LoadingSheet = (props) => {
 
                                 <Col sm="6">
                                     <FormGroup className=" row mt-2" >
-                                        <Label className="col-sm-1 p-2"
-                                            style={{ width: "115px", marginRight: "0.4cm" }}> {fieldLabel.VehicleNumber}</Label>
+                                        {dropdownLabelFunc({         // Label Show Function
+                                            IsAccess: vehicleMasterAccess,
+                                            masterModal: VehicleMaster,
+                                            masterPath: url.VEHICLE,
+                                            label: fieldLabel.VehicleNumber
+                                        })}
                                         <Col sm="7">
                                             <Select
                                                 name="VehicleNumber"
@@ -511,7 +566,7 @@ const LoadingSheet = (props) => {
                                                 <BootstrapTable
                                                     keyField={"id"}
                                                     id="table_Arrow"
-                                                    selectRow={selectAllCheck({})}
+                                                    selectRow={selectAllCheck({ tableList: Data })}
                                                     classes={"table  table-bordered table-hover"}
                                                     noDataIndication={
                                                         <div className="text-danger text-center ">
@@ -523,7 +578,7 @@ const LoadingSheet = (props) => {
                                                     }}
                                                     {...toolkitProps.baseProps}
                                                 />
-                                                {mySearchProps(toolkitProps.searchProps)}
+                                                {globalTableSearchProps(toolkitProps.searchProps)}
                                             </div>
                                         </Col>
                                     </Row>
@@ -532,19 +587,16 @@ const LoadingSheet = (props) => {
                             )}
                         </ToolkitProvider>
                         {
-                            Data.length > 0 ?
-                                <FormGroup>
-                                    <Col sm={2} style={{ marginLeft: "-70px" }} className={"row save1"}>
-                                        <SaveButton pageMode={pageMode}
-                                            loading={saveBtnloading}
-                                            forceDisabled={goBtnloadingSpinner}
-                                            onClick={saveHandler}
-                                            userAcc={userPageAccessState}
-                                        />
+                            Data.length > 0 &&
+                            <SaveButtonDraggable>
+                                <SaveButton pageMode={pageMode}
+                                    loading={saveBtnloading}
+                                    forceDisabled={goBtnloadingSpinner}
+                                    onClick={saveHandler}
+                                    userAcc={userPageAccessState}
+                                />
 
-                                    </Col>
-                                </FormGroup >
-                                : null
+                            </SaveButtonDraggable>
                         }
 
                     </form >

@@ -1,4 +1,5 @@
-import React, { useEffect, useLayoutEffect, useState } from "react";
+
+import React, { useEffect, useMemo, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { Col, FormGroup, Label } from "reactstrap";
@@ -13,14 +14,18 @@ import { Go_Button, PageLoadingSpinner } from "../../../components/Common/Common
 import * as report from '../../../Reports/ReportIndex'
 import { url, mode, pageId } from "../../../routes/index"
 import { order_Type } from "../../../components/Common/C-Varialbes";
-import { OrderPage_Edit_ForDownload_API } from "../../../helpers/backend_helper";
+import { IB_Order_Get_Api, OrderPage_Edit_ForDownload_API } from "../../../helpers/backend_helper";
 import { comAddPageFieldFunc, initialFiledFunc } from "../../../components/Common/validationFunction";
-import { getOrderApprovalDetailAction, postOrderConfirms_API, postOrderConfirms_API_Success } from "../../../store/actions";
-import { orderApprovalFunc, orderApprovalMessage } from "./orderApproval";
+import { orderApprovalAction, postOrderConfirms_API, postOrderConfirms_API_Success } from "../../../store/actions";
+import { orderApprovalMessage } from "./orderApproval";
 import { priceListByCompay_Action, priceListByCompay_ActionSuccess } from "../../../store/Administrator/PriceList/action";
 import OrderView from "./OrderView";
 import OrderView_Modal from "./OrderView";
-import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
+import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
+import { getOrdersMakeInvoiceDataAction, getOrdersMakeInvoiceDataActionSuccess } from "../../../store/Sales/bulkInvoice/action";
+import { allLabelWithBlank } from "../../../components/Common/CommonErrorMsg/HarderCodeData";
+import { sideBarPageFiltersInfoAction } from "../../../store/Utilites/PartyDrodown/action";
+import { getCountryList_Action } from "../../../store/Administrator/CountryRedux/action";
 
 
 const OrderList = () => {
@@ -29,16 +34,31 @@ const OrderList = () => {
     const history = useHistory();
     const currentDate_ymd = _cfunc.date_ymd_func();
 
+    const IsFranchises = _cfunc.loginUserIsFranchisesRole()
+
+    const LoginDetails = _cfunc.loginUserDetails();
+
     const fileds = {
         FromDate: currentDate_ymd,
         ToDate: currentDate_ymd,
-        Supplier: { value: "", label: "All" },
-        CustomerType: [{ value: "", label: "All" }]
+        Supplier: allLabelWithBlank,
+        CustomerType: [allLabelWithBlank],
+        CountryName: { value: LoginDetails?.Country_id, label: LoginDetails?.Country }
     }
 
+    const initialSubPageMode = useMemo(() => {
+        if (_cfunc.IsAuthorisedURL({ subPageMode: history.location.pathname, URL: url.ORDER_LIST_2 })) {
+            return url.ORDER_LIST_2;
+        }
+        return history.location.pathname;
+    }, []);
+
     const [state, setState] = useState(() => initialFiledFunc(fileds))
-    const [subPageMode] = useState(history.location.pathname);
+    const [subPageMode] = useState(initialSubPageMode);
     const [pageMode, setPageMode] = useState(mode.defaultList);
+    const [hasBulkinvoiceSaveAccess, setHasBulkinvoiceSaveAccess] = useState(false);
+
+    const orderList4_or_app_orderList = ((subPageMode === url.ORDER_LIST_4) || (subPageMode === url.APP_ORDER_LIST))
 
     const [otherState, setOtherState] = useState({
         masterPath: '',
@@ -49,7 +69,7 @@ const OrderList = () => {
         showAprovalBtn: false
     });
 
-    const reducers = useSelector(
+    let reducers = useSelector(
         (state) => ({
             unhideMsg: state.GRNReducer.hideMsg,
             tableList: state.OrderReducer.orderList,
@@ -63,20 +83,22 @@ const OrderList = () => {
             pageField: state.CommonPageFieldReducer.pageFieldList,
 
             orderApprovalMsg: state.OrderReducer.orderApprovalMsg,
-            approvalDetail: state.OrderReducer.approvalDetail,
+            // approvalDetail: state.OrderReducer.approvalDetail,
 
             customerType: state.PriceListReducer.priceListByCompany,
             customerTypeDropLoading: state.PriceListReducer.listBtnLoading,
 
             orderConfirmMsg: state.OrderReducer.orderConfirmMsg,
-            userAccess: state.Login.RoleAccessUpdateData,
-            pageField: state.CommonPageFieldReducer.pageFieldList,
 
             supplier: state.CommonAPI_Reducer.vendorSupplierCustomer,
             supplierDropLoading: state.CommonAPI_Reducer.vendorSupplierCustomerLoading,
 
             gobutton_Add_invoice: state.InvoiceReducer.gobutton_Add,
             goBtnloading: state.OrderReducer.goBtnLoading,
+
+            countryList: state.CountryReducer.CountryList,
+            countryListloading: state.CountryReducer.loading,
+
             listBtnLoading: (state.OrderReducer.listBtnLoading
                 || state.InvoiceReducer.listBtnLoading
                 || state.PdfReportReducers.listBtnLoading
@@ -84,6 +106,7 @@ const OrderList = () => {
                 || state.InvoiceReducer.listBtnLoading
                 || state.GRNReducer.listBtnLoading
                 || state.PdfReportReducers.ReportBtnLoading),
+
         })
     );
 
@@ -94,14 +117,21 @@ const OrderList = () => {
         supplier,
         makeIBInvoice,
         orderApprovalMsg,
-        approvalDetail,
+        // approvalDetail,
         customerType,
         orderConfirmMsg,
         gobutton_Add_invoice,
         customerTypeDropLoading,
         supplierDropLoading,
-        unhideMsg
+        unhideMsg,
+        userAccess,
+        countryListloading,
+        countryList
     } = reducers;
+
+    const ordersBulkInvoiceData = useSelector(state => state.BulkInvoiceReducer.ordersBulkInvoiceData);
+    const makeBulkInvoiceLoading = useSelector(state => state.BulkInvoiceReducer.makeBulkInvoiceLoading);
+    const { commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
 
     const values = { ...state.values }
     const { fieldLabel } = state;
@@ -115,9 +145,43 @@ const OrderList = () => {
     }
 
 
+    // Common Party Dropdown useEffect
+    useEffect(() => {
+
+        if (commonPartyDropSelect.value > 0) {
+            goButtonHandler()
+            dispatch(_act.GetVenderSupplierCustomer({ subPageMode, PartyID: commonPartyDropSelect.value }));
+
+        } else {
+            dispatch(_act.getOrderListPageSuccess([]));
+            dispatch(_act.GetVenderSupplierCustomerSuccess([]));
+            setState((i) => {
+                let a = { ...i }
+                a.values.CustomerType = [allLabelWithBlank]
+                a.values.Supplier = allLabelWithBlank
+                a.hasValid.CustomerType.valid = true;
+                a.hasValid.Supplier.valid = true;
+                return a
+            })
+        }
+
+    }, [commonPartyDropSelect]);
+
+    // sideBar Page Filters Information
+    useEffect(() => {
+        const filtersArray = [
+            { label: fieldLabel.FromDate, content: _cfunc.date_dmy_func(values.FromDate) },
+            { label: fieldLabel.ToDate, content: _cfunc.date_dmy_func(values.ToDate) },
+            ...(orderList4_or_app_orderList
+                ? [{ label: fieldLabel.CustomerType, content: values.CustomerType.map(obj => obj.label).join(',') }]
+                : []),
+            { label: fieldLabel.Supplier, content: values.Supplier.label }
+        ];
+        dispatch(sideBarPageFiltersInfoAction(filtersArray));
+    }, [pageField, state, orderList4_or_app_orderList]);
 
     // Featch Modules List data  First Rendering
-    useLayoutEffect(() => {
+    useEffect(() => {
 
         let page_Id = '';
         let page_Mode = mode.defaultList;
@@ -132,12 +196,23 @@ const OrderList = () => {
             page_Id = pageId.ORDER_LIST_1;
             masterPath = url.ORDER_1;
             newBtnPath = url.ORDER_1;
+            page_Mode = mode.modeSTPList
+            makeBtnShow = true;
+            makeBtnName = "Make GRN"
         }
         else if (subPageMode === url.ORDER_LIST_2) {
-            page_Id = pageId.ORDER_LIST_2
-            masterPath = url.ORDER_2;
-            newBtnPath = url.ORDER_2;
-            showAprovalBtn = true
+            const IsAuthorisedURL = _cfunc.IsAuthorisedURL({ subPageMode: history.location.pathname, URL: url.ORDER_LIST_2 })
+            if (IsAuthorisedURL) {
+                page_Id = pageId.ORDER_LIST_2
+                masterPath = url.POS_ORDER_IN_POS;
+                newBtnPath = url.POS_ORDER_IN_POS;
+                showAprovalBtn = true
+            } else {
+                page_Id = pageId.ORDER_LIST_2
+                masterPath = url.ORDER_2;
+                newBtnPath = url.ORDER_2;
+                showAprovalBtn = true
+            }
         }
         else if (subPageMode === url.IB_ORDER_PO_LIST) {
             page_Id = pageId.IB_ORDER_PO_LIST
@@ -147,11 +222,14 @@ const OrderList = () => {
         }
         else if (subPageMode === url.IB_ORDER_SO_LIST) {
             page_Id = pageId.IB_ORDER_SO_LIST
-            masterPath = url.IB_ORDER;
+            masterPath = url.IB_SALES_ORDER;
+            page_Mode = mode.modeSTPList
+            newBtnPath = url.IB_SALES_ORDER;
             makeBtnShow = true;
-            makeBtnName = "Make IBInvoice"
+            makeBtnName = "Make IB Invoice"
             IBType = "IBSO"
         }
+
         else if (subPageMode === url.ORDER_LIST_4) {
             page_Id = pageId.ORDER_LIST_4
             masterPath = url.ORDER_4;
@@ -159,9 +237,18 @@ const OrderList = () => {
             newBtnPath = url.ORDER_4;
             makeBtnShow = true;
             makeBtnName = "Make Invoice"
-            showAprovalBtn = true                      //Showing  AprovalBtn  in sales order list
-
+            showAprovalBtn = true    //Showing  AprovalBtn  in sales order list
         }
+
+        else if (subPageMode === url.APP_ORDER_LIST) {
+            page_Id = pageId.APP_ORDER_LIST
+            // masterPath = url.ORDER_4;
+            page_Mode = mode.modeSTPList
+            // newBtnPath = url.ORDER_4;
+            makeBtnShow = true;
+            makeBtnName = "Make Invoice"
+        }
+
         else if (subPageMode === url.IB_INVOICE_STP) {
             page_Id = pageId.IB_INVOICE_STP
             page_Mode = mode.modeSTPsave
@@ -171,7 +258,7 @@ const OrderList = () => {
         }
         else if (subPageMode === url.GRN_STP_1) {
             page_Id = pageId.GRN_STP_1
-            page_Mode = mode.modeSTPsave
+            page_Mode = mode.modeSTPList
             makeBtnShow = true;
             makeBtnName = "Make GRN"
         }
@@ -183,6 +270,8 @@ const OrderList = () => {
 
         }
 
+
+
         setOtherState({ masterPath, makeBtnShow, newBtnPath, makeBtnName, IBType, showAprovalBtn })
         setPageMode(page_Mode)
         dispatch(_act.commonPageFieldListSuccess(null))
@@ -193,22 +282,32 @@ const OrderList = () => {
             goButtonHandler("event", IBType)
         }
         dispatch(priceListByCompay_Action());
-
+        dispatch(getCountryList_Action());
         return () => {
-            dispatch(_act.commonPageFieldListSuccess(null))
-            dispatch(_act.getOrderListPageSuccess([]))//for clear privious order list  
-            dispatch(_act.orderSinglegetSuccess({ Status: false }))
-            dispatch(_act.GetVenderSupplierCustomerSuccess([]))
-            dispatch(priceListByCompay_ActionSuccess([]))
+            dispatch(_act.commonPageFieldListSuccess(null));
+            dispatch(_act.getOrderListPageSuccess([]));//for clear privious order list  
+            dispatch(_act.orderSinglegetSuccess({ Status: false }));
+            dispatch(_act.GetVenderSupplierCustomerSuccess([]));
+            dispatch(priceListByCompay_ActionSuccess([]));
         }
     }, []);
+
+    // check bulk-invoice access useEffect
+    useEffect(() => {//only of app order list then check bulk-invoice Access
+        if (subPageMode === url.APP_ORDER_LIST) {
+            userAccess.find((index) => {
+                if (index.id === pageId.BULK_INVOICE) {
+                    return setHasBulkinvoiceSaveAccess(true)
+                }
+            });
+        };
+    }, [userAccess]);
 
     useEffect(() => {
         if (subPageMode === url.GRN_STP_3) {
             dispatch(_act.BreadcrumbRadioButtonView(true));
         }
     }, [])
-
 
     useEffect(() => {
         if (pageField) {
@@ -218,10 +317,12 @@ const OrderList = () => {
     }, [pageField])
 
     useEffect(() => {
+
         if (GRNitem.Status === true && GRNitem.StatusCode === 200) {
+
             history.push({
                 pathname: GRNitem.path,
-                page_Mode: GRNitem.page_Mode,
+                page_Mode: GRNitem.pageMode,
             })
         }
     }, [GRNitem])
@@ -244,6 +345,36 @@ const OrderList = () => {
         }
     }, [gobutton_Add_invoice]);
 
+    useEffect(() => {
+
+        if (ordersBulkInvoiceData.Status === true && ordersBulkInvoiceData.StatusCode === 200) {
+            dispatch(getOrdersMakeInvoiceDataActionSuccess({ ...ordersBulkInvoiceData, Status: false }));
+            history.push({
+                pathname: url.BULK_INVOICE,
+            })
+        }
+        else if (ordersBulkInvoiceData.Status === true && ordersBulkInvoiceData.StatusCode === 204) {
+            customAlert({
+                Type: 3,
+                Message: ordersBulkInvoiceData.Message,
+            })
+            dispatch(getOrdersMakeInvoiceDataActionSuccess({ Status: false }));
+            return
+        }
+    }, [ordersBulkInvoiceData]);
+
+    useEffect(() => {
+        const Todate = _cfunc.ToDate({ FromDate: values.FromDate, Todate: values.ToDate })
+        setState((i) => {
+            const a = { ...i }
+            a.values.ToDate = Todate;
+            a.hasValid.ToDate.valid = true
+            return a
+        })
+
+    }, [values.FromDate]);
+
+    //order confirm
     useEffect(() => {
 
         if (orderConfirmMsg.Status === true && orderConfirmMsg.StatusCode === 200) {
@@ -270,9 +401,9 @@ const OrderList = () => {
 
     }, [orderApprovalMsg]);
 
-    useEffect(() => {
-        orderApprovalFunc({ dispatch, approvalDetail })
-    }, [approvalDetail]);
+    // useEffect(() => {
+    //     orderApprovalFunc({ dispatch, approvalDetail })
+    // }, [approvalDetail]);
 
     useEffect(() => {
         if (unhideMsg.Status === true && unhideMsg.StatusCode === 200) {
@@ -292,8 +423,6 @@ const OrderList = () => {
 
     }, [unhideMsg]);
 
-
-
     const supplierOptions = supplier.map((i) => ({
         value: i.id,
         label: i.Name,
@@ -309,13 +438,19 @@ const OrderList = () => {
         label: index.Name,
     }));
 
+    const CountryListOptions = countryList?.map((data) => ({
+        value: data.id,
+        label: data.Country
+    }));
+
     function oderAprovalBtnFunc({ editId, btnId }) {
 
         // _cfunc.btnIsDissablefunc({ btnId, state: false })
         let config = {}
         config.btnId = btnId;
         config.orderId = editId;
-        dispatch(getOrderApprovalDetailAction(config))
+        // dispatch(getOrderApprovalDetailAction(config))
+        dispatch(orderApprovalAction({ jsonBody: JSON.stringify({ Order: editId }), btnId }))
     }
 
     const makeBtnFunc = (list = [], btnId) => {
@@ -344,7 +479,7 @@ const OrderList = () => {
                 btnId
             }));
         }
-        else if (subPageMode === url.ORDER_LIST_4) {
+        else if (orderList4_or_app_orderList) {
             dispatch(_act.GoButtonForinvoiceAdd({
                 jsonBody,
                 btnId,
@@ -356,6 +491,7 @@ const OrderList = () => {
             }));
         }
         else {
+
             var isGRNSelect = ''
             var challanNo = ''
             const grnRef = []
@@ -365,34 +501,45 @@ const OrderList = () => {
                         grnRef.push({
                             Invoice: (subPageMode === url.GRN_STP_3) ? ele.id : null,
                             Order: !(subPageMode === url.GRN_STP_3) ? ele.POType === "Challan" ? '' : ele.id : null,
-                            ChallanNo: ele.FullOrderNumber,
+                            Full_OrderNumber: ele.FullOrderNumber,
                             Inward: url.GRN_STP_3 ? true : false,
-                            Challan: ele.POType === "Challan" ? ele.id : ''
+                            Challan: ele.POType === "Challan" ? ele.id : '',
+                            POType: ele.POType,
+                            OrderDate: ele.OrderDate,
+                            CustomerID: ele.CustomerID,
+                            CustomerName: ele.Customer,
+                            GRN_From: subPageMode
+
                         });
                         isGRNSelect = isGRNSelect.concat(`${ele.id},`)
-                        challanNo = challanNo.concat(`${ele.FullOrderNumber},`)
+
                     }
                 });
 
                 if (isGRNSelect) {
                     let path = (subPageMode === url.GRN_STP_3 ? url.GRN_ADD_3 : url.GRN_ADD_1)
                     isGRNSelect = isGRNSelect.replace(/,*$/, '');//****** withoutLastComma  function */
-                    challanNo = challanNo.replace(/,*$/, '');           //****** withoutLastComma  function */
-
                     let isMode = 1                               // define isMode for MakeBtn API
-
                     if (list[0].POType === "Challan") {
                         isMode = 2
                     }
-                    else if (subPageMode === url.GRN_STP_3) {
-                        isMode = 3
+
+                    if (subPageMode === url.GRN_STP_3) {
+                        isMode = _cfunc.IsSweetAndSnacksCompany() ? 1 : 3
+                        path = _cfunc.IsSweetAndSnacksCompany() ? url.GRN_ADD_1 : url.GRN_ADD_3
+                    } else if (subPageMode === url.IB_ORDER_SO_LIST) {
+                        path = url.CHALLAN
                     }
+
                     const jsonBody = JSON.stringify({
                         OrderIDs: isGRNSelect,
-                        Mode: isMode
+                        Mode: subPageMode === url.IB_ORDER_SO_LIST ? undefined : isMode,
+                        DemandDate: subPageMode === url.IB_ORDER_SO_LIST ? list[0].OrderDate : undefined,
+                        Party: subPageMode === url.IB_ORDER_SO_LIST ? _cfunc.loginPartyID() : undefined
+
                     })
 
-                    dispatch(_act.makeGRN_Mode_1Action({ jsonBody, subPageMode, pageMode, path: path, grnRef, challanNo, btnId: `btn-makeBtn-${obj.id}` }))
+                    dispatch(_act.makeGRN_Mode_1Action({ jsonBody, subPageMode, pageMode, path: path, grnRef, InvoiceDate: obj.dashboardOrderDate, btnId: `btn-makeBtn-${obj.id}` }))
 
                 } else {
                     alert("Please Select Order1")
@@ -402,23 +549,42 @@ const OrderList = () => {
     }
 
     function editBodyfunc(config) {
-        const { rowData, btnId } = config;
-        _cfunc.btnIsDissablefunc({ btnId, state: true })
+
+        const { rowData } = config;
         try {
             const jsonBody = JSON.stringify({
                 Party: rowData.SupplierID,
                 Customer: rowData.CustomerID,
                 EffectiveDate: rowData.OrderDate,
-                OrderID: rowData.id,
+                OrderID: (subPageMode === url.IB_ORDER_PO_LIST) ? 0 : rowData.id,
+                Demand: (subPageMode === url.IB_ORDER_PO_LIST) ? rowData.id : 0,
                 RateParty: rowData.CustomerID,
-                OrderType: subPageMode === url.ORDER_4 ? order_Type.SaleOrder : order_Type.PurchaseOrder
+                OrderType: ((subPageMode === url.ORDER_4) || (subPageMode === url.APP_ORDER_LIST)) ? order_Type.SaleOrder : order_Type.PurchaseOrder
             })
             dispatch(_act.editOrderId({ jsonBody, ...config }));
-        } catch (error) { _cfunc.btnIsDissablefunc({ btnId, state: false }) }
+        } catch (error) { }
     }
 
     function downBtnFunc(config) {
         config["ReportType"] = report.order1;
+        if (subPageMode === url.IB_ORDER_PO_LIST || subPageMode === url.IB_ORDER_SO_LIST) {
+            dispatch(_act.getpdfReportdata(IB_Order_Get_Api, config))
+        } else {
+            dispatch(_act.getpdfReportdata(OrderPage_Edit_ForDownload_API, config))
+        }
+
+    }
+
+
+    function minPrintBtn_Func(config) {
+
+        let reportType = ""
+        if (subPageMode === url.ORDER_LIST_4) {
+            reportType = report.FrenchiesesOrder
+        } else {
+            reportType = report.FrenchiesesOrder
+        }
+        config["ReportType"] = reportType;
         dispatch(_act.getpdfReportdata(OrderPage_Edit_ForDownload_API, config))
     }
 
@@ -432,15 +598,12 @@ const OrderList = () => {
 
         const isConfirmed = await customAlert({
             Type: 7,
-            Message: "Do you want To Unhide Invoice ?",
+            Message: alertMessages.unHideInvoiceOrNot,
         });
 
         if (isConfirmed) {
             dispatch(_act.hideInvoiceForGRFAction(config))
         }
-
-
-
     }
 
     function viewApprovalBtnFunc(config) {
@@ -452,7 +615,7 @@ const OrderList = () => {
         _cfunc.btnIsDissablefunc({ btnId: gobtnId, state: true })
         try {
             if ((_cfunc.loginSelectedPartyID() === 0)) {
-                customAlert({ Type: 3, Message: "Please Select Party" });
+                customAlert({ Type: 3, Message: alertMessages.commonPartySelectionIsRequired });
                 return;
             };
             let filtersBody = {}
@@ -465,7 +628,10 @@ const OrderList = () => {
                 "Customer": _cfunc.loginSelectedPartyID(),
                 "OrderType": order_Type.PurchaseOrder,
                 "CustomerType": "",
-                "IBType": IBType ? IBType : otherState.IBType
+                "IBType": IBType ? IBType : otherState.IBType,
+                "DashBoardMode": 0,
+                "Country": values.CountryName.value
+
             }
             const SO_filters = {
                 "FromDate": values.FromDate,
@@ -474,18 +640,25 @@ const OrderList = () => {
                 "Customer": values.Supplier.value,//customer swipe
                 "OrderType": order_Type.SaleOrder,
                 "CustomerType": isCustomerType,
-                "IBType": IBType ? IBType : otherState.IBType
+                "IBType": IBType ? IBType : otherState.IBType,
+                "DashBoardMode": 0,
+                "Country": values.CountryName.value
+
             }
             const GRN_STP_3_filters = {
                 "FromDate": values.FromDate,
                 "ToDate": values.ToDate,
                 "Supplier": values.Supplier.value,
                 "Customer": _cfunc.loginSelectedPartyID(),
-                "OrderType": order_Type.InvoiceToGRN,
+                "OrderType": _cfunc.IsSweetAndSnacksCompany() ? order_Type.PurchaseOrder : order_Type.InvoiceToGRN,
                 "CustomerType": '',
-                "IBType": IBType ? IBType : otherState.IBType
+                "IBType": IBType ? IBType : otherState.IBType,
+                "DashBoardMode": 0,
+                "Country": values.CountryName.value
+
             }
-            if (subPageMode === url.ORDER_LIST_4) {
+
+            if (orderList4_or_app_orderList) {
                 filtersBody = JSON.stringify(SO_filters);
             }
             else if (subPageMode === url.GRN_STP_3) {
@@ -527,10 +700,18 @@ const OrderList = () => {
         })
     }
 
+    function CountryOnchange(e) {
+        setState((i) => {
+            const a = { ...i }
+            a.values.CountryName = e;
+            a.hasValid.CountryName.valid = true
+            return a
+        })
+    }
     function customerTypeOnchange(e = []) {
 
         if (e.length === 0) {
-            e = [{ value: "", label: "All" }]
+            e = [allLabelWithBlank]
         } else {
             e = e.filter(i => !(i.value === ''))
         }
@@ -542,14 +723,14 @@ const OrderList = () => {
         })
     }
 
-    const selectSaveBtnHandler = (row = []) => {
+    const OrderConfirm_Handler = (row = []) => {
 
 
-        let ischeck = row.filter(i => (i.selectCheck))
+        let ischeck = row.filter(i => (i.selectCheck && !i.forceSelectDissabled))
         if (!ischeck.length > 0) {
             customAlert({
                 Type: 4,
-                Message: "Please Select One Order",
+                Message: alertMessages.selectOneOrder,
             });
             return
         }
@@ -558,18 +739,43 @@ const OrderList = () => {
         dispatch(postOrderConfirms_API({ jsonBody }))
     }
 
+    const BulkInvoice_Handler = (allList = []) => {
+
+        let checkRows = allList.filter(i => (i.selectCheck && !i.forceSelectDissabled))
+        if (!checkRows.length > 0) {
+            customAlert({
+                Type: 4,
+                Message: alertMessages.selectOneOrder,
+            });
+            return
+        }
+        let idString = checkRows.map(row => row.id).join(',')
+        let jsonBody = {
+            OrderIDs: idString, "Customer": null, "Party": _cfunc.loginSelectedPartyID(),
+        }
+        dispatch(getOrdersMakeInvoiceDataAction({ jsonBody }))
+    }
+
+    const pageFieldMaster = reducers?.pageField?.PageFieldMaster;
+
+    if (Array.isArray(pageFieldMaster) && !(IsFranchises)) {
+        for (let i = pageFieldMaster.length - 1; i >= 0; i--) {
+            if (pageFieldMaster[i].ControlID === "AdvanceAmount") {
+                pageFieldMaster.splice(i, 1);
+            }
+        }
+    }
+
+
     const HeaderContent = () => {
         return (
             <div className="px-2   c_card_filter text-black" >
                 <div className="row" >
-
-                    <Col lg={subPageMode === url.ORDER_LIST_4 ? 0 : 3} >
+                    <Col lg={(orderList4_or_app_orderList) ? 2 : 3} className="">
                         <FormGroup className="mb- row mt-3 " >
                             <Label className="col-sm-5 p-2"
-                                style={{ width: "65px" }}>
-                                {!(fieldLabel.FromDate === '') ? fieldLabel.FromDate : "FromDate"}
-                            </Label>
-                            <Col sm="8">
+                                style={{ width: "83px" }}>  {!(fieldLabel.FromDate === '') ? fieldLabel.FromDate : "FromDate"}</Label>
+                            <Col sm="7">
                                 <C_DatePicker
                                     options={{
                                         altInput: true,
@@ -584,28 +790,28 @@ const OrderList = () => {
                         </FormGroup>
                     </Col>
 
-                    <Col lg={subPageMode === url.ORDER_LIST_4 ? 0 : 3} >
+                    <Col lg={(orderList4_or_app_orderList) ? 2 : 3} className="">
                         <FormGroup className="mb- row mt-3 " >
                             <Label className="col-sm-5 p-2"
-                                style={{ width: "65px" }}>
-                                {!(fieldLabel.ToDate === '') ? fieldLabel.ToDate : "ToDate"}
-                            </Label>
-                            <Col sm="8">
+                                style={{ width: "65px" }}>  {!(fieldLabel.ToDate === '') ? fieldLabel.ToDate : "ToDate"}</Label>
+                            <Col sm="7">
                                 <C_DatePicker
                                     options={{
+                                        minDate: (_cfunc.disablePriviousTodate({ fromDate: values.FromDate })),
                                         altInput: true,
                                         altFormat: "d-m-Y",
                                         dateFormat: "Y-m-d",
                                     }}
                                     name="ToDate"
-                                    value={values.ToDate}
+                                    value={_cfunc.ToDate({ FromDate: values.FromDate, Todate: values.ToDate })}
                                     onChange={todateOnchange}
                                 />
                             </Col>
                         </FormGroup>
                     </Col>
 
-                    {subPageMode === url.ORDER_LIST_4 ?
+
+                    {(orderList4_or_app_orderList) &&
                         <Col lg={3}>
                             <FormGroup className="mb-1 row mt-3 " >
                                 <Label className="col-sm p-2"
@@ -627,18 +833,14 @@ const OrderList = () => {
                                     />
                                 </Col>
                             </FormGroup>
-                        </Col >
-                        :
-                        <Col sm='1' />
-                    }
+                        </Col >}
 
-                    <Col lg={3}>
-                        <FormGroup className="mb-1 row mt-3 " >
+                    <Col lg={(orderList4_or_app_orderList) ? 4 : 5}>
+                        <FormGroup className="mb-2 row mt-3 " >
                             <Label className="col-md-4 p-2"
-                                style={{ width: "90px" }}>
-                                {!(fieldLabel.Supplier === '') ? fieldLabel.Supplier : "Supplier"}
-                            </Label>
-                            <Col sm="7">
+
+                                style={{ width: "115px" }}>{(!(fieldLabel.Supplier === '')) ? fieldLabel.Supplier : (orderList4_or_app_orderList ? "Customer" : "Supplier")}</Label>
+                            <Col sm="5">
                                 <C_Select
                                     name="Supplier"
                                     classNamePrefix="select2-Customer"
@@ -654,41 +856,49 @@ const OrderList = () => {
                         </FormGroup>
                     </Col >
 
-                    {/* <Col sm="1" /> */}
-                    <Col sm="1" className="mt-3 mb-2 ">
+
+                    <Col sm="1" className="mt-3 ">
                         <Go_Button loading={reducers.goBtnloading} id={gobtnId} onClick={goButtonHandler} />
                     </Col>
                 </div>
-            </div>
+                <div>
+                    {
+                        (subPageMode === url.ORDER_LIST_4 && LoginDetails?.PartyType === "Division") &&
+
+                        <Col lg={2} className="">
+                            <FormGroup className="mb- row mt-3 " >
+                                <Label className="col-sm-5 p-2"
+                                    style={{ width: "83px" }}> {(!(fieldLabel.CountryName === '')) ? fieldLabel.CountryName : "Country"}</Label>
+                                <Col sm="7">
+                                    <C_Select
+                                        name="CountryName"
+                                        classNamePrefix="select2-Customer"
+                                        value={values.CountryName}
+                                        options={CountryListOptions}
+                                        onChange={CountryOnchange}
+                                        isLoading={countryListloading}
+                                        styles={{
+                                            menu: provided => ({ ...provided, zIndex: 2 })
+                                        }}
+                                    />
+                                </Col>
+                            </FormGroup>
+                        </Col>
+
+
+                    }
+                </div>
+            </div >
         )
     }
 
-    function partySelectButtonHandler() {
-        goButtonHandler()
-        dispatch(_act.GetVenderSupplierCustomer({ subPageMode, PartyID: _cfunc.loginSelectedPartyID() }));
-    }
 
-    function partyOnChngeButtonHandler() {
-        dispatch(_act.getOrderListPageSuccess([]));
-        dispatch(_act.GetVenderSupplierCustomerSuccess([]));
-        setState((i) => {
-            let a = { ...i }
-            a.values.CustomerType = [{ value: "", label: "All" }]
-            a.values.Supplier = { value: "", label: "All" }
-            a.hasValid.CustomerType.valid = true;
-            a.hasValid.Supplier.valid = true;
-            return a
-        })
-    }
 
     return (
         <React.Fragment>
             <PageLoadingSpinner isLoading={reducers.goBtnloading || !pageField} />
 
             <div className="page-content">
-                <PartyDropdown_Common pageMode={pageMode}
-                    goButtonHandler={partySelectButtonHandler}
-                    changeButtonHandler={partyOnChngeButtonHandler} />
                 {
                     (pageField) ?
                         <CommonPurchaseList
@@ -699,6 +909,7 @@ const OrderList = () => {
                             newBtnPath={otherState.newBtnPath}
                             makeBtnShow={otherState.makeBtnShow}
                             pageMode={pageMode}
+                            minPrintBtn_Func={minPrintBtn_Func}
                             HeaderContent={HeaderContent}
                             viewApprovalBtnFunc={viewApprovalBtnFunc}
                             goButnFunc={goButtonHandler}
@@ -706,17 +917,18 @@ const OrderList = () => {
                             editBodyfunc={editBodyfunc}
                             makeBtnFunc={makeBtnFunc}
                             hideBtnFunc={hideBtnFunc}
-                            ButtonMsgLable={"Order"}
+                            ButtonMsgLable={subPageMode === url.IB_ORDER_PO_LIST ? "Demand" : subPageMode === url.IB_ORDER_SO_LIST ? "" : "Order"}
                             deleteName={"FullOrderNumber"}
                             makeBtnName={otherState.makeBtnName}
                             MasterModal={Order}
                             ViewModal={OrderView}
-                            oderAprovalBtnFunc={otherState.showAprovalBtn && oderAprovalBtnFunc}
+                            oderAprovalBtnFunc={oderAprovalBtnFunc}
                             selectCheckParams={{
-                                isShow: (subPageMode === url.ORDER_LIST_4),
-                                selectSaveBtnHandler: selectSaveBtnHandler,
-                                selectSaveBtnLabel: "Confirm",
-                                selectHeaderLabel: "Confirm"
+                                // isShow: (subPageMode === url.ORDER_LIST_4 || (hasBulkinvoiceSaveAccess && subPageMode === url.APP_ORDER_LIST)),
+                                selectSaveBtnHandler: (subPageMode === url.ORDER_LIST_4) ? OrderConfirm_Handler : BulkInvoice_Handler,
+                                selectSaveBtnLabel: (subPageMode === url.ORDER_LIST_4) ? "Confirm" : "Bulk Invoice",
+                                selectHeaderLabel: (subPageMode === url.ORDER_LIST_4) ? "Confirm" : "Bulk Invoice",
+                                selectSaveBtnLoading: subPageMode === url.APP_ORDER_LIST && makeBulkInvoiceLoading,
                             }}
                             totalAmountShow={true}
                         />

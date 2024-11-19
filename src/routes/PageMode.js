@@ -4,8 +4,17 @@ export const edit = "edit";
 export const view = "view";
 export const copy = "copy";
 export const isdelete = "isdelete";
+export const completed = "completed";
+
+
+
 export const viewApproval = "viewApproval";
 export const isSendToScm = "isSendToScm";
+export const makeGoodsCreditNote = "makeGoodsCreditNote";
+
+export const isShowImages = "isShowImages";
+
+
 
 
 export const dropdownAdd = "dropdownAdd";
@@ -16,8 +25,15 @@ export const hide = "hide";
 
 export const makeBtn = "makeBtn";
 export const download = "download";
+export const upload = "upload";
+export const MinPrint = "MinPrint";
+
+
 export const otherBtn_1 = "otherBtn_1";
 export const MultiInvoice = "MultiInvoice";
+
+export const updateDetails = "updateDetails";
+
 
 export const CustomerWiseSummary = "CustomerWiseSummary";
 export const ItemWiseSummary = "ItemWiseSummary";

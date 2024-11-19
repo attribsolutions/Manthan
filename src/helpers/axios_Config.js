@@ -1,16 +1,22 @@
 import axios from 'axios';
 import axiosRetry from 'axios-retry';
 import { toast, Bounce } from 'react-toastify';
+import { loginSystemSetting, loginUserID } from '../components/Common/CommonFunction';
+import SERVER_HOST_PATH from './_serverPath.js';
 
-// const API_URL = "http://cbmfooderp.com:8000";
 
-const API_URL = "http://192.168.1.114:8000";
 
-const axiosApi = axios.create({ baseURL: API_URL });
+const axiosApi = axios.create({ baseURL: SERVER_HOST_PATH });
 
 const requestUrls = {};
 
 function logRequestAndResponse(config, response) {
+    
+    const userId = String(loginUserID());
+    const isUsershowConsole = loginSystemSetting()?.isConsoleShow?.split(',')?.includes(userId) || false;
+    if (!isUsershowConsole) {
+        return
+    }
     // Get the stored request URL for this request or response
     const requestUrl = requestUrls[config?.url] || requestUrls[response?.config.url];
 
@@ -47,6 +53,7 @@ function logRequestAndResponse(config, response) {
     }
 }
 
+
 axiosApi.interceptors.request.use(
     (config) => {
         const token = localStorage.getItem('token');
@@ -64,14 +71,16 @@ axiosApi.interceptors.request.use(
 
         return config;
     },
-    (error) => Promise.reject(error)
+    (error) => {
+        return Promise.reject(error)
+    }
 );
 
 axiosApi.interceptors.response.use(
+
     (response) => {
         // Log response using utility function
         logRequestAndResponse(null, response);
-
         return response;
     },
     (error) => {
@@ -98,6 +107,7 @@ axiosApi.interceptors.response.use(
                 404: 'Resource not found.',
                 226: 'The requested resource has been used in a different context',
                 406: 'Not Acceptable - The server cannot produce a response matching the list of acceptable values defined in the request',
+                500: "Internal Server Error",
                 0: () => axiosRetry(error.config),
             };
             const errorMessage = messages[status] || 'Oops! Something went wrong.';
@@ -123,7 +133,8 @@ axiosRetry(axiosApi, { retries: 3, retryDelay: axiosRetry.exponentialDelay });
 
 
 const activeToasts = new Set();
-export function showToastAlert(message, color = '') {
+
+export function showToastAlert(message = 'Oops! Something went wrong.', color = '') {
     if (!activeToasts.has(message)) {
         activeToasts.add(message);
 

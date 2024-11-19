@@ -4,29 +4,61 @@ import { createBrowserHistory } from 'history';
 import * as mode from "../../routes/PageMode"
 import $ from 'jquery';
 
+
 export const history = createBrowserHistory();
 
+
+
 function isDateInitial(isdate) {
+  const dateInstance = isdate ? new Date(isdate) : new Date();
+  const dd = String(dateInstance.getDate()).padStart(2, '0');
+  const mm = String(dateInstance.getMonth() + 1).padStart(2, '0');
+  const yy = dateInstance.getFullYear();
+  const hours = String(dateInstance.getHours()).padStart(2, '0');
+  const minutes = String(dateInstance.getMinutes()).padStart(2, '0');
+  const seconds = String(dateInstance.getSeconds()).padStart(2, '0');
 
-  let current = (isdate) ? new Date(isdate) : new Date();
-
-  let month = current.getMonth() + 1;
-  let dd = current.getDate() < 10 ? `0${current.getDate()}` : `${current.getDate()}`;
-  let mm = month < 10 ? `0${month}` : `${month}`;
-  let yy = current.getFullYear();
-
-  return { dd, mm, yy }
-
+  return { dd, mm, yy, hours, minutes, seconds, dateInstance };
 }
 
 export const date_ymd_func = (isdate) => { //+++++++++++++++ Current Date by format (yyyy-dd-mm) ++++++++++++++++++++++++++++++++++++
+
   let date = isDateInitial(isdate);
   return (`${date.yy}-${date.mm}-${date.dd}`)
 };
 
 
+function Frenchies_isDateInitial(isdate) {
+
+  const dateInstance = isdate ? new Date(isdate) : new Date();
+
+  // Get the current time
+  const hours = dateInstance.getHours();
+
+  // If it's 6:00 PM or later, move to the next day
+  if (hours >= 18) {
+    dateInstance.setDate(dateInstance.getDate() + 1);
+  }
+
+  const dd = String(dateInstance.getDate()).padStart(2, '0');
+  const mm = String(dateInstance.getMonth() + 1).padStart(2, '0');
+  const yy = dateInstance.getFullYear();
+  const minutes = String(dateInstance.getMinutes()).padStart(2, '0');
+  const seconds = String(dateInstance.getSeconds()).padStart(2, '0');
+
+  return { dd, mm, yy, hours, minutes, seconds, dateInstance };
+}
+
+export const Frenchies_date_ymd_func = (isdate) => {
+  let date = Frenchies_isDateInitial(isdate);
+  return `${date.yy}-${date.mm}-${date.dd}`;
+};
+
+
 export const date_dmy_func = (isdate) => { //+++++++++++++++ Current Date by format (dd-mm-yyy) ++++++++++++++++++++++++++++++++++++
+
   let date = isDateInitial(isdate);
+
   return (`${date.dd}-${date.mm}-${date.yy}`)
 };
 
@@ -39,43 +71,103 @@ export const currentDate_ymd = date_ymd_func();
 export const currentDate_dmy = date_dmy_func();
 
 
-export function convertTimefunc(inputDate) { //+++++++++++Convert Time Format+++++++++++++++++++++++++++++++
-  const date = new Date(inputDate);
-  let month = date.getMonth() + 1;
 
-  let convDate = `${date.getDate() < 10 ? `0${date.getDate()}` : `${date.getDate()}`
-    }-${month < 10 ? `0${month}` : `${month}`}`;
+export function isDissableForParticularDate(date, type) {
 
-  let hours = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
-  let minutes =
-    date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
-  let timeString = hours + ":" + minutes;
 
-  let [hourString, minute] = timeString.split(":");
-  let hour = +hourString % 24;
-  let time = (hour % 12 || 12) + ":" + minute + (hour < 12 ? "AM" : "PM");
-  return `(${convDate} ${time})`;
+  const currentDate = new Date();
+  const currentDay = currentDate.getDate();
+  const lastDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate();
+  if (type === "Actual") {
+    return date > currentDay && date <= lastDayOfMonth;
+  } else {
+
+    return currentDay === date;
+
+  }
+
 }
 
-export function convertOnlyTimefunc(inputDate) { //+++++++++++Convert Time Format+++++++++++++++++++++++++++++++
+export function convertTimefunc(inputDate) {
   const date = new Date(inputDate);
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const year = date.getFullYear();
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
 
-  let hours = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
-  let minutes =
-    date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
-  let timeString = hours + ":" + minutes;
+  const meridian = hours < 12 ? 'AM' : 'PM';
+  const hour12 = (hours % 12) || 12;
 
-  let [hourString, minute] = timeString.split(":");
-  let hour = +hourString % 24;
-  let time = (hour % 12 || 12) + ":" + minute + (hour < 12 ? "AM" : "PM");
-  return `(${time})`;
+  return `(${day}-${month}-${year} ${hour12}:${minutes} ${meridian})`;
 }
 
-export function concatDateAndTime(date, time) {//+++++++++++time and date concate +++++++++++++++++++++++++++++++
+
+
+export function convertOnlyTimefunc(inputDate) {
+  const date = new Date(inputDate);
+
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+  const meridian = hours < 12 ? 'AM' : 'PM';
+  const hour12 = (hours % 12) || 12;
+
+  return `(${hour12}:${minutes} ${meridian})`;
+}
+
+
+export function listpageConcatDateAndTime(date, time) {//+++++++++++time and date concate +++++++++++++++++++++++++++++++
   const d = date_dmy_func(date);
   const t = convertTimefunc(time);
   return `${d} ${t}`;
 }
+
+export const convertDateFormat = (dateString) => {
+  const [day, month, year] = dateString.split('-');
+  return `${year}-${month}-${day}`;
+};
+
+
+export function getDateTime_dmy(hourOffset = 0) {
+  const { dd, mm, yy, dateInstance } = isDateInitial();
+
+  dateInstance.setHours(dateInstance.getHours() - hourOffset); // Subtract the specified number of hours
+  const hours = String(dateInstance.getHours()).padStart(2, '0');
+  const minutes = String(dateInstance.getMinutes()).padStart(2, '0');
+  const seconds = String(dateInstance.getSeconds()).padStart(2, '0');
+
+  return `${dd}-${mm}-${yy} ${hours}:${minutes}:${seconds}`;
+}
+
+
+export function getDateTime_ymd(date) {
+  const { dd, mm, yy, dateInstance } = isDateInitial(date);
+
+  dateInstance.setHours(dateInstance.getHours() - 0); // Subtract the specified number of hours
+  const hours = String(dateInstance.getHours()).padStart(2, '0');
+  const minutes = String(dateInstance.getMinutes()).padStart(2, '0');
+  const seconds = String(dateInstance.getSeconds()).padStart(2, '0');
+
+  return `${yy}-${mm}-${dd} ${hours}:${minutes}:${seconds}`;
+}
+
+export function getCurrenthours_min_sec(hourOffset = 0) {
+  const { dd, mm, yy, dateInstance } = isDateInitial();
+
+  dateInstance.setHours(dateInstance.getHours() - hourOffset); // Subtract the specified number of hours
+  const hours = String(dateInstance.getHours()).padStart(2, '0');
+  const minutes = String(dateInstance.getMinutes()).padStart(2, '0');
+  const seconds = String(dateInstance.getSeconds()).padStart(2, '0');
+
+  return `${hours}:${minutes}:${seconds}`;
+}
+
+export function convertDateTime_ydm(inputDateTime) {
+  const [datePart, timePart = "00:00"] = inputDateTime.split(' ');
+  const [day, month, year] = datePart.split('-');
+  return `${year}-${month}-${day} ${timePart}`;
+}
+
 
 export function CurrentTime() {
 
@@ -97,6 +189,7 @@ export function CurrentTime() {
 
 
 export const getFirstAndLastDateOfMonth = (inputDate) => {
+
   const [year, month] = inputDate.split('-').map(Number);
   const firstDate = new Date(year, month - 1, 1);
   const lastDate = new Date(year, month, 0);
@@ -104,7 +197,9 @@ export const getFirstAndLastDateOfMonth = (inputDate) => {
   const formattedLastDate = `${year}-${String(month).padStart(2, '0')}-${String(lastDate.getDate()).padStart(2, '0')}`;
   return {
     firstDate: formattedFirstDate,
-    lastDate: formattedLastDate
+    lastDate: formattedLastDate,
+    Year: year,
+    Month: month
   };
 }
 
@@ -116,18 +211,45 @@ export const getCurrentMonthAndYear = () => {
   return `${year}-${month}`;
 }
 
-// export const amountCommaSeparateFunc = (amount) => {
-//   return Number(amount).toLocaleString('en-IN', {
-//     // style: 'currency',
-//     currency: 'INR',
-//     // minimumFractionDigits: 2,
-//     // maximumFractionDigits: 2,
-//   });
-// };
 
-export function amountCommaSeparateFunc(x) {
+export const DateTime = (timestamp) => {
+  const date = new Date(timestamp);
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const year = date.getFullYear();
+  const hours = String(date.getHours() % 12 || 12).padStart(2, '0'); // Convert to 12-hour format
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+  const seconds = String(date.getSeconds()).padStart(2, '0');
+  const milliseconds = String(date.getMilliseconds()).padStart(3, '0');
+  const period = date.getHours() < 12 ? 'AM' : 'PM';
 
-  return x.toString().split('.')[0].length > 3 ? x.toString().substring(0, x.toString().split('.')[0].length - 3).replace(/\B(?=(\d{2})+(?!\d))/g, ",") + "," + x.toString().substring(x.toString().split('.')[0].length - 3) : x.toString();
+  return `${day}-${month}-${year}( ${hours}:${minutes}:${seconds}:${milliseconds} ${period})`;
+
+}
+
+
+export const getPreviousMonthAndYear = ({ date, Privious }) => {
+
+  const previousMonthDate = new Date(date);
+  previousMonthDate.setMonth(previousMonthDate.getMonth() - Privious);
+
+  const year = previousMonthDate.getFullYear();
+  const month = (previousMonthDate.getMonth() + 1).toString().padStart(2, '0'); // Adding padding if needed
+
+  return `${year}-${month}`;
+}
+
+export function amountCommaSeparateFunc(amount) {
+  const amountStr = amount.toString();
+  const [integerPart, decimalPart] = amountStr.split('.');
+
+  if (integerPart.length > 3) {
+    const formattedIntegerPart = integerPart.substring(0, integerPart.length - 3)
+      .replace(/\B(?=(\d{2})+(?!\d))/g, ",");
+    return formattedIntegerPart + "," + integerPart.substring(integerPart.length - 3) + (decimalPart ? "." + decimalPart : "");
+  }
+
+  return amountStr;
 }
 
 export const loginUserDetails = () => { //+++++++++++++++++++++ Session Company Id+++++++++++++++++++++++++++++
@@ -156,6 +278,46 @@ export const loginUserAdminRole = () => { //+++++++++++++++++++++ Session Compan
   return false;
 };
 
+export const loginPartyTypeName = () => { //+++++++++++++++++++++ Session Company Id+++++++++++++++++++++++++++++
+
+  try {
+    const detail = loginUserDetails();
+    return ((detail.PartyType === "Division") || (detail.PartyType === "Franchises"));
+  } catch (e) {
+    CommonConsole("Common loginPartyTypeName Error");
+  }
+  return false;
+};
+
+export const loginPartyTypeID = () => {//+++++++++++++++++++++ Session loginPartyID Id+++++++++++++++++++++++++++++++
+
+  try {
+    return loginUserDetails().PartyTypeID;
+  } catch (e) {
+    CommonConsole("Common login PartyTypeID Func  Error");
+  }
+  return 0;
+};
+
+
+export const loginUserIsFranchisesRole = () => { //+++++++++++++++++++++ IsFranchises Company Id+++++++++++++++++++++++++++++
+
+  try {
+    const detail = loginUserDetails();
+    return (detail.IsFranchises === 1);
+  } catch (e) {
+    CommonConsole("Common loginUserIsFranchisesRole  Error");
+  }
+  return false;
+};
+
+export const isSuperAdmin = () => {
+
+  const detail = loginUserDetails();
+  return detail.id === 1
+}
+
+
 export const loginRoleID = () => { //+++++++++++++++++++++ Session Company Id+++++++++++++++++++++++++++++
 
   try {
@@ -177,6 +339,16 @@ export const loginUserID = () => {//++++++++++++++++++++++ Session User Id++++++
   return created_By;
 };
 
+export const loginUserName = () => {//++++++++++++++++++++++ Session User Id+++++++++++++++++++++++++++++
+  let userName = "";
+  try {
+    userName = localStorage.getItem("UserName");
+  } catch (e) {
+    CommonConsole("Common UserName Error");
+  }
+  return userName;
+};
+
 export const loginCompanyID = () => { //+++++++++++++++++++++ Session Company Id+++++++++++++++++++++++++++++
   try {
     return JSON.parse(localStorage.getItem("Company"));
@@ -185,6 +357,24 @@ export const loginCompanyID = () => { //+++++++++++++++++++++ Session Company Id
   }
   return 0;
 };
+
+
+
+export const IsSweetAndSnacksCompany = () => { //+++++++++++++++++++++ Company condition Company Id+++++++++++++++++++++++++++++
+  try {
+    const loginCompanyId = loginCompanyID();
+    return (loginCompanyId === 4);  // Company Id 4 For (Chitale Sweet and Snacks )
+  } catch (e) {
+    CommonConsole("Common Login company Error");
+  }
+  return false;
+};
+
+export const IsLoginFromOutsideLink = (Path) => {
+  return Path.includes('-') && Path.includes('AuthLink')
+}
+
+
 
 export const loginCompanyName = () => { //+++++++++++++++++++++ Session Company Id+++++++++++++++++++++++++++++
   try {
@@ -224,15 +414,42 @@ export const loginSelectedPartyID = () => {//+++++++++++++++++++++ Session commo
   return 0;
 };
 
+export const CommonPartyDropValue = () => {//+++++++++++++++++++++ Session common party dropdown id +++++++++++++++++++++++++++++++
+  try {
+    return JSON.parse(localStorage.getItem("selectedParty"));
+  } catch (e) {
+    CommonConsole("Common login PartyID Func  Error");
+  }
+  return '';
+};
+
+
 export const loginEmployeeID = () => {//+++++++++++++++++++++ Session loginPartyID Id+++++++++++++++++++++++++++++++
 
   try {
-    return loginUserDetails().Employee_id;
+    const employeeId = parseInt(loginUserDetails().Employee_id);
+    return employeeId
   } catch (e) {
     alert("Common login EmployeeID Func  Error");
   }
   return 0;
 };
+
+export const loginPriceListID = () => {//+++++++++++++++++++++ Session loginPartyID Id+++++++++++++++++++++++++++++++
+
+  try {
+    const PriceList_id = parseInt(loginUserDetails().PriceList_id);
+    return PriceList_id
+  } catch (e) {
+    alert("Common login PriceList_id Func  Error");
+  }
+  return 0;
+};
+
+export const IsAuthorisedURL = ({ subPageMode, URL }) => {
+  return ((subPageMode.includes('AuthLink') && subPageMode.includes(URL)))
+
+}
 
 export const loginIsSCMCompany = () => { //+++++++++++++++++++++ Session loginPartyID Id+++++++++++++++++++++++++++++++
   try {
@@ -292,20 +509,29 @@ export const loginJsonBody = () => ({ //+++++++++++++++++++++ loginJsonBody for 
 });
 
 export const compareGSTINState = (gstin1 = '', gstin2 = '') => {
-  gstin1 = String(gstin1) || ""
-  gstin2 = String(gstin2) || ""
+
+  gstin1 = gstin1 === null ? "" : String(gstin1);
+  gstin2 = gstin2 === null ? "" : String(gstin2);
   let stateCode1 = gstin1.substring(0, 2);
   let stateCode2 = gstin2.substring(0, 2);
 
-  return (!(stateCode1 === stateCode2) && !(gstin1 === "") && !(gstin2 === ""));
+  if ((stateCode1 === stateCode2) || (gstin1 === "") || (gstin2 === "")) {
+    return false;
+  } else if (!(stateCode1 === stateCode2)) {
+    return true;
+  }
+  else {
+    return false;
+  }
+  // return (!(stateCode1 === stateCode2) && !(gstin1 === "") && !(gstin2 === ""));
 }
 
-export function breadcrumbReturnFunc({ dispatch, userAcc, newBtnPath = "", forceNewBtnView = true }) {
-  
+export function breadcrumbReturnFunc({ dispatch, userAcc, newBtnPath = "", forceNewBtnView = true, pageField }) {
+
   const isnewBtnView = userAcc.PageType === 2 && userAcc.RoleAccess_IsSave;
   const isCountLabel = userAcc.CountLabel;
   const isexcelBtnView =
-    userAcc.PageType === 2 && userAcc.RoleAccess_Exceldownload;
+    (userAcc.PageType === 2 || userAcc.PageType === 3) && userAcc.RoleAccess_Exceldownload;
   dispatch(
     CommonBreadcrumbDetails({
       newBtnPath: newBtnPath,
@@ -313,6 +539,8 @@ export function breadcrumbReturnFunc({ dispatch, userAcc, newBtnPath = "", force
       excelBtnView: isexcelBtnView,
       pageHeading: userAcc.PageHeading,
       CountLabel: isCountLabel,
+      pageField: pageField,
+      userAcc: userAcc,
     })
   );
 }
@@ -328,7 +556,7 @@ export function metaTagLabel(userPageAccess = '') {
 
 }
 export function CommonConsole(msg1, msg2 = '', msg3 = '') {// +++++++++++Print Console.log Body+++++++++++++++++++++++++++++++
-  console.log(msg1, msg2, msg3);
+  // console.log(msg1, msg2, msg3);
 }
 
 export function groupBy(list, keyGetter) {// +++++++++++ Array Group By_kye Function +++++++++++++++++++++++++++++++
@@ -344,6 +572,126 @@ export function groupBy(list, keyGetter) {// +++++++++++ Array Group By_kye Func
   });
   return map;
 }
+
+
+
+
+
+
+//convert fixed decimal number 
+export function roundToDecimalPlaces(input, decimalPlaces = 3, returnZerro = false) { //convert fixed decimal number
+
+  const number = Number(input)
+  if (typeof number !== "number" || isNaN(number) || !isFinite(number)) {
+    return returnZerro ? 0 : '';
+  }
+  const multiplier = Math.pow(10, decimalPlaces);
+  const roundedNumber = Math.round(number * multiplier) / multiplier;
+  if (returnZerro) {
+    return roundedNumber;
+  }
+  const result = roundedNumber === 0 ? "" : roundedNumber;
+  return result;
+};
+
+export function hasDecimalCheckFunc(input) {
+  const number = Number(input); // Convert the input to a number
+  return isNaN(number) ? false : !Number.isInteger(number);
+}
+
+export const isButtonEnable = ({ ConditionDetails = {} }) => {   /////// button disable based on condiition ///////
+
+  let isEnable = false;
+  let isEnablePriviousAlert = false;
+  const CustomerPartyTypeID = loginUserDetails().PartyTypeID
+  if (Object.keys(ConditionDetails).length > 0) {
+    isEnablePriviousAlert = false;
+    isEnable = false
+    if (ConditionDetails.Supplierid?.includes(ConditionDetails.SelectedSupplierId) && ConditionDetails?.Coustomerid.includes(CustomerPartyTypeID)) {
+      isEnable = isDissableForParticularDate(ConditionDetails.ActualDate, "Actual");
+      isEnablePriviousAlert = isDissableForParticularDate(ConditionDetails.WarningDate, "warning")
+    }
+  } else {
+    isEnablePriviousAlert = true
+    isEnable = true
+  }
+
+  return { isEnable: isEnable, isEnablePriviousAlert: isEnablePriviousAlert, }
+}
+
+export const DateFormat = (day) => {
+
+  var currentDate = new Date();
+  var day = parseInt(day);
+  var month = currentDate.getMonth() + 1; // Months are zero-based, so we add 1
+  var year = currentDate.getFullYear();
+  return (day < 10 ? '0' : '') + day + '-' + (month < 10 ? '0' : '') + month + '-' + year;
+}
+
+
+
+
+
+export const isFutureDate = (date) => {
+
+  const currentDate = new Date(); // Get the current date
+  const [day, month, year] = date.split('-').map(Number);
+  // JavaScript months are 0-indexed, so subtract 1 from the month
+  const inputDate = new Date(year, month - 1, day);
+  return inputDate > currentDate; // Return true if the input date is in the future
+};
+
+export const isToDateisgreterThanFormDate = ({ FromDate, ToDate }) => {
+  const [ToDateday, ToDatemonth, ToDateyear] = ToDate.split('-').map(Number);
+  const toDate = new Date(ToDateday, ToDatemonth - 1, ToDateyear);
+
+  const [FromDateday, FromDatemonth, FromDateyear] = FromDate.split('-').map(Number);
+  const fromDate = new Date(FromDateday, FromDatemonth - 1, FromDateyear);
+
+  return toDate > fromDate; // Return true if the input date is in the future
+};
+
+
+
+export const areAllDatesSame = (dates) => {
+  if (!Array.isArray(dates) || dates.length === 0) {
+    return null; // Return null for empty arrays or non-array inputs
+  }
+
+  const uniqueDates = Array.from(new Set(dates)); // Get unique dates in the array
+  const futureDates = uniqueDates.filter(date => isFutureDate(date));
+
+  return {
+    allSame: uniqueDates.length === 1,
+    dates: uniqueDates,
+    futureDate: futureDates.length > 0 ? true : false, // Check if the first unique date is a future date
+    futureDates: futureDates, // Array of future dates
+  };
+};
+
+
+export const disablePriviousTodate = ({ fromDate }) => {
+  const [year, month, day] = fromDate?.split("-").map(Number);
+  return new Date(year, month - 1, day)
+}
+
+
+export const ToDate = ({ FromDate, Todate }) => {
+
+  const istoDateisgreterThanFormDate = isToDateisgreterThanFormDate({ FromDate: FromDate, ToDate: Todate })
+  const isfutureDate = isFutureDate(date_dmy_func(FromDate))
+  const todateisNotFuture = !isFutureDate(date_dmy_func(Todate))
+  const date = (isfutureDate && todateisNotFuture) || !(istoDateisgreterThanFormDate) ? FromDate : Todate
+
+  return date
+}
+
+
+
+
+
+
+
 
 export function btnIsDissablefunc({ btnId, state = false }) {// +++++++++++ Button Dissable and Sppiner Function +++++++++++++++++++++++++++++++
 
@@ -411,6 +759,24 @@ export async function CheckAPIResponse({ method, url, response = {}, body, error
   return Promise.reject(response);
 }
 
+
+
+
+export function compareObjects(obj1, obj2) {
+  let keys1 = Object.keys(obj1);
+  let keys2 = Object.keys(obj2);
+  if (keys1.length !== keys2.length) {
+    return false;
+  }
+  for (let key of keys1) {
+    if (obj1[key] !== obj2[key]) {
+      return false;
+    }
+  }
+  return true;
+}
+
+
 export const tableInputArrowUpDounFunc = (tableId) => {
 
   // (function ($) {
@@ -446,7 +812,7 @@ export const tableInputArrowUpDounFunc = (tableId) => {
 
 
             var tr = td.closest('tr');
-            var pos = td[0].cellIndex;
+            var pos = td[0]?.cellIndex;
             var ctd = tr.children('td')
 
             let prevTd = td
@@ -477,7 +843,7 @@ export const tableInputArrowUpDounFunc = (tableId) => {
           if (input.selectionEnd == input.value.length) {
 
             var tr = td.closest('tr');
-            var pos = td[0].cellIndex;
+            var pos = td[0]?.cellIndex;
             var ctd = tr.children('td')
 
             let nextTd = td
@@ -524,7 +890,7 @@ export const tableInputArrowUpDounFunc = (tableId) => {
             return
           }
           var tr = td.closest('tr');
-          var pos = td[0].cellIndex;
+          var pos = td[0]?.cellIndex;
           var moveToRow = tr.prev('tr');
 
 
@@ -564,7 +930,8 @@ export const tableInputArrowUpDounFunc = (tableId) => {
             return
           }
           var tr = td.closest('tr');
-          var pos = td[0].cellIndex;
+
+          var pos = td[0]?.cellIndex;
 
           var moveToRow = tr.next('tr');
 
@@ -602,3 +969,63 @@ export function trailingZeros(value) {// +++++++++++Print Console.log Body++++++
 }
 
 
+
+export const fetchFiles = async (linksArray) => {
+
+  try {
+    const filesArray = [];
+
+    for (const item of linksArray) {
+      const link = item.Image; // Access the URL from the object
+      const response = await fetch(link);
+      if (response.ok) {
+        const blob = await response.blob();
+        const filename = `ItemImage_.jpg`; // Creating a unique filename
+        const file = new File([blob], filename, { type: "image/jpeg" });
+        filesArray.push(file);
+      } else {
+        CommonConsole(`Failed to fetch: ${link}. Status: ${response.status}`);
+      }
+    }
+
+    return filesArray;
+  } catch (error) {
+    CommonConsole('Error fetching files:', error);
+    return [];
+  }
+};
+
+export function TotalAmount_Func(tableList) {
+
+  let totalAmount = tableList.reduce((total, item) => {
+
+    return total + Number(item.recordsAmountTotal) || 0;
+
+  }, 0);
+  let commaSeparateAmount = amountCommaSeparateFunc(Number(totalAmount).toFixed(2));
+  return commaSeparateAmount
+}
+
+// month and year name return 
+export function SelectedMonthAndYearName(selectedMonth) {
+
+  const [year, month] = selectedMonth.split('-');
+  const monthName = new Date(`${year}-${month}-01`).toLocaleString('default', { month: 'long' });
+  return { monthName, year };
+};
+
+
+// export function checkRateDropVisibility() {
+//   const partyTypeID =loginPartyTypeID();
+
+//   const settingsArray = loginSystemSetting().MRP_Rate.split(',');
+//   const searchString = loginCompanyID() + "-2" + `-${partyTypeID}`;
+//   return settingsArray.includes(searchString);
+// }
+
+export function checkRateDropVisibility() {
+
+  const settingsArray = loginSystemSetting().MRP_Rate.split(',');
+  const searchString = loginCompanyID() + "-2";
+  return settingsArray.includes(searchString);
+}

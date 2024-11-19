@@ -22,7 +22,7 @@ import {
 } from "../../store/actions"
 
 // import images
-import logo from "../../assets/images/foodERP_logo.png"
+import logo from "../../assets/images/cbm_logo.png"
 import CarouselPage from "./CarouselPage"
 import resetImage from "../../assets/images/resetpassword.png"
 
@@ -61,10 +61,7 @@ const ForgetPasswordPage = props => {
     if (sendPasswordMsg_reducx) {
       setSendPasswordMsg(sendPasswordMsg_reducx)
       setSendPasswordError(null)
-
-
       dispatch(changePasswordForForgetPasswordSuccess(null))
-      // dispatch(changePasswordForForgetPasswordError(null))
 
     }
     if (sendPasswordError_reducx) {
@@ -83,7 +80,6 @@ const ForgetPasswordPage = props => {
       setSendOtpMegError(null)
       setSetpawShowUI(true)
       dispatch(userForgetPassword_sendOTP_Success(null))
-
     }
     if (sendOtpMegError_reducx) {
       setSendOtpMegError(sendOtpMegError_reducx)
@@ -94,6 +90,13 @@ const ForgetPasswordPage = props => {
   }, [sendOTPSuccessMsg_redux, sendOtpMegError_reducx])
 
   function handleValidSubmit(event, values) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const isEmail = !values.email.match(emailRegex)
+    
+    if (values.email === "" || isEmail) {
+      dispatch(userForgetPassword_sendOTP_Error("Invalid Email"));
+      return
+    }
 
     event.preventDefault();
     var jsonBody = JSON.stringify({
@@ -110,12 +113,10 @@ const ForgetPasswordPage = props => {
     var pawdcn = values.passwordcon
 
     if (!(paswd === pawdcn)) {
-      // setPaswErr("form-control is-invalid mb-2")
       setPaswErr(true)
       return
     }
     else {
-      // setPaswErr("form-control is-valid mb-2")
       setPaswErr(false)
 
       var jsonBody = JSON.stringify({
@@ -132,13 +133,25 @@ const ForgetPasswordPage = props => {
   const handlePasswordChange = (e) => {
     setPassword(e.target.value);
     setConfirmPassword(''); // Clear Confirm Password field
-    // setPasswordMatched(true); // Reset to true when Password changes
   };
 
   const handleConfirmPasswordChange = (e) => {
     setConfirmPassword(e.target.value);
     setPasswordMatched(e.target.value === password);
   };
+
+  function handleKeyDown(event) {
+    
+    // Check if the pressed key is a space
+    if (event.key === " ") {
+      // Check if the input contains only spaces
+      if (event.target.value.trim() === "") {
+        // Prevent default behavior (typing space)
+        event.preventDefault();
+      }
+    }
+  }
+
   return (
     <React.Fragment>
       <MetaTags>
@@ -153,16 +166,18 @@ const ForgetPasswordPage = props => {
               <div className="auth-full-page-content d-flex p-sm-5 p-4">
                 <div className="w-100">
                   <div className="d-flex flex-column h-100">
-                    <div className="mb-4 mb-md-5 text-center">
-                      <Link to="/dashboard" className="d-block auth-logo">
-                        <img src={logo} alt="" height="28" /> <span className="logo-txt">FoodERP</span>
-                      </Link>
+                    <div className="mb-4 md-5 text-center">
+                      <div style={{ cursor: "context-menu" }} className="logo logo-dark">
+                        <span className="logo-txt">FoodERP 2.0</span>
+                      </div>
+                      <img src={logo} alt="" height="150" style={{height:"175px"}} />
+
                     </div>
                     {
                       !sendPasswordMsg ?
                         <div className="auth-content my-auto text-center">
                           <img src={resetImage} alt="" height="100" />
-                          <div className="text-center">
+                          <div style={{ cursor: "context-menu" }} className="text-center">
                             <h5 className="mb-0">  Reset Password</h5>
                           </div>
 
@@ -186,9 +201,8 @@ const ForgetPasswordPage = props => {
                                 <label>LoginName</label>
                                 <AvInput
                                   name="LoginName"
+                                  onKeyDown={handleKeyDown}
                                   className="form-control mb-2"
-                                  // dissabled={true}
-                                  // autoComplete="new-email"
                                   placeholder="LoginName"
                                   type="text"
                                   autoComplete="off"
@@ -198,45 +212,21 @@ const ForgetPasswordPage = props => {
                                 <label>Enter OTP</label>
                                 <AvInput
                                   name="OTP"
+                                  onKeyDown={handleKeyDown}
                                   className="form-control mb-2"
-                                  // dissabled={true}
                                   placeholder="Enter OTP"
                                   type="text"
                                   required
                                 />
 
-                                {/* <label>Password</label>
-                                <AvInput
-                                  name="password1"
-                                  className={"form-control  mb-2"}
-                                  // dissabled={true}
-                                  invalid={paswErr}
-                                  autoComplete="new-password"
-                                  placeholder="Enter password"
-                                  type="password"
-                                  required
-                                />
-                                {(paswErr === true)
-                                  ?
-                                  <div className="text-danger"> Please Enter Correct Password</div>
-                                  : <></>}
-                                <label>confirm password</label>
-                                <AvInput
-                                  name="passwordcon"
-                                  className={"form-control  mb-2"}
-                                  // dissabled={true}
-                                  autoComplete="new-password"
-                                  invalid={paswErr}
-                                  placeholder="Enter confirm password"
-                                  type="password"
-                                  required
-                                />*/}
+
                               </div>
 
                               <div>
                                 <label>Password</label>
                                 <AvInput
                                   name="password1"
+                                  onKeyDown={handleKeyDown}
                                   className="form-control mb-2"
                                   autoComplete="new-password"
                                   placeholder="Enter password"
@@ -249,6 +239,7 @@ const ForgetPasswordPage = props => {
                                 <label>Confirm Password</label>
                                 <AvInput
                                   name="passwordcon"
+                                  onKeyDown={handleKeyDown}
                                   className="form-control mb-2"
                                   autoComplete="new-password"
                                   placeholder="Enter confirm password"
@@ -269,7 +260,7 @@ const ForgetPasswordPage = props => {
 
 
                               <div className="mb-3 mt-4">
-                                <button className="btn btn-primary w-100 waves-effect waves-light" type="submit">change Password</button>
+                                <button className="btn btn-primary w-100 waves-effect waves-light" type="submit">Change Password</button>
                               </div>
                             </AvForm>
                             :
@@ -283,9 +274,11 @@ const ForgetPasswordPage = props => {
                                   label="Email"
                                   className="form-control"
                                   dissabled={true}
-                                  placeholder="Enter email or phone no"
-                                  type="email"
-                                  required
+                                  validate={() => { }}
+                                  onKeyDown={handleKeyDown}
+                                  placeholder="Enter email "
+                                  type="text"
+
                                 />
                               </div>
 
@@ -300,10 +293,8 @@ const ForgetPasswordPage = props => {
                           }
 
                           <div className="mt-5 text-center">
-                            <p className="text-muted mb-0">Remember It ?  &nbsp
+                            <p className="text-muted mb-0">Remember It ?&nbsp;
                               <Link to="/Login" className="text-primary fw-semibold">Login</Link>
-                              {/* <a href="/login"
-                          className="text-primary fw-semibold"> Sign In </a> */}
                             </p>
                           </div>
                         </div>
@@ -325,7 +316,7 @@ const ForgetPasswordPage = props => {
                         </div>
                     }
                     <div className="mt-4 mt-md-5 text-center">
-                      <p className="mb-0">© {new Date().getFullYear()} FoodERP 2.0   . Crafted with <i className="mdi mdi-heart text-danger"></i> by Themesbrand</p>
+                      <p className="mb-0">© {new Date().getFullYear()}.Developed by Attrib Solution </p>
                     </div>
                   </div>
                 </div>

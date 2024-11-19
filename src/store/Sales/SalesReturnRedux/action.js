@@ -15,7 +15,9 @@ import {
   POST_SENT_TO_SUPERSTOCKIEST_ID,
   POST_SENT_TO_SUPERSTOCKIEST_ID_SUCCESS,
   RETURN_APPROVE_ACTION_SUCCESS,
-  RETURN_APPROVE_ACTION
+  RETURN_APPROVE_ACTION,
+  RETURN_UPLOAD_ACTION,
+  RETURN_UPLOAD_ACTION_SUCCESS
 } from "./actionType";
 
 
@@ -95,6 +97,20 @@ export const confirm_SalesReturn_Id_Succcess = (resp) => ({
   type: SALES_RETURN_CONFIRM_BUTTON_ACTION_SUCCESS,
   payload: resp,
 });
+
+
+
+
+export const Upload_Return = (config = {}) => ({
+  type: RETURN_UPLOAD_ACTION,
+  config,
+});
+
+export const Upload_Return_Succcess = (resp) => ({
+  type: RETURN_UPLOAD_ACTION_SUCCESS,
+  payload: resp,
+});
+
 
 export const post_Send_to_superStockiest_Id = (config = {}) => ({
   type: POST_SENT_TO_SUPERSTOCKIEST_ID,

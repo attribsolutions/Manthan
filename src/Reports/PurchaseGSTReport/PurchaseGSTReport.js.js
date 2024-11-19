@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Col, FormGroup, Input, Label, Row } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import { initialFiledFunc, } from "../../components/Common/validationFunction";
-import { C_Button, Go_Button } from "../../components/Common/CommonButton";
+import { C_Button } from "../../components/Common/CommonButton";
 import { C_DatePicker } from "../../CustomValidateForm";
 import * as _cfunc from "../../components/Common/CommonFunction";
 import { MetaTags } from "react-meta-tags";
@@ -12,13 +12,13 @@ import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import Select from "react-select";
 import { postPurchaseGSTReport_API, postPurchaseGSTReport_API_Success } from "../../store/Report/PurchaseGSTRedux/action";
-import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
+import { globalTableSearchProps } from "../../components/Common/SearchBox/MySearch";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import { mode, url, pageId } from "../../routes/index"
 import DynamicColumnHook from "../../components/Common/TableCommonFunc";
-import Papa from 'papaparse';
-import XLSX from 'react-csv';
-import { ReportComponent } from "../ReportComponent";
+import { ExcelReportComponent } from "../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS";
+import { alertMessages } from "../../components/Common/CommonErrorMsg/alertMsg";
+import { changeCommonPartyDropDetailsAction } from '../../store/Utilites/PartyDrodown/action';
 
 const PurchaseGSTReport = (props) => {
 
@@ -38,19 +38,19 @@ const PurchaseGSTReport = (props) => {
     const [userPageAccessState, setUserAccState] = useState('');
     const [GSTRateWise, setGSTRateWise] = useState(false);
     const [PartyDropdown, setPartyDropdown] = useState("");
+    const [btnMode, setBtnMode] = useState("");
 
     const reducers = useSelector(
         (state) => ({
             tableData: state.PurchaseGSTReportReducer.PurchaseGSTGobtn,
-            ExcelBtnLoading: state.PurchaseGSTReportReducer.ExcelBtnLoading,
-            GoBtnLoading: state.PurchaseGSTReportReducer.GoBtnLoading,
-            Distributor: state.CommonPartyDropdownReducer.commonPartyDropdown,
+            Loading: state.PurchaseGSTReportReducer.Loading,
+            Distributor: state.CommonPartyDropdownReducer.commonPartyDropdownOption,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageField
         })
     );
 
-    const { userAccess, tableData, ExcelBtnLoading, GoBtnLoading, Distributor, pageField } = reducers;
+    const { userAccess, tableData, Loading, Distributor, pageField } = reducers;
     const { PurchaseGSTDetails = [], PurchaseGSTRateWiseDetails = [] } = tableData;
 
     const values = { ...state.values }
@@ -79,7 +79,13 @@ const PurchaseGSTReport = (props) => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(pageId.PURCHASE_GST_REPORT));
         dispatch(BreadcrumbShowCountlabel(`Count:${0}`));
+        if (_cfunc.CommonPartyDropValue().value > 0) {
+            setPartyDropdown(_cfunc.CommonPartyDropValue())
+        }
+        dispatch(changeCommonPartyDropDetailsAction({ isShow: false }))//change party drop-down  hide
+
         return () => {
+            dispatch(changeCommonPartyDropDetailsAction({ isShow: true }))//change party drop-down restore state
             dispatch(commonPageFieldSuccess(null));
             dispatch(postPurchaseGSTReport_API_Success([]));
         }
@@ -103,12 +109,11 @@ const PurchaseGSTReport = (props) => {
         label: i.Name
     }));
 
-    function goButtonHandler() {
-
+    function excel_And_GoBtnHandler(e, btnMode) {
+        setBtnMode(btnMode)
         try {
-            const btnId = `gobtn-${url.PURCHASE_GST_REPORT}`
-            if ((isSCMParty) && (PartyDropdown === "")) {
-                customAlert({ Type: 3, Message: "Please Select Party" });
+            if (isSCMParty && PartyDropdown === "") {
+                customAlert({ Type: 3, Message: alertMessages.commonPartySelectionIsRequired });
                 return;
             }
 
@@ -116,49 +121,40 @@ const PurchaseGSTReport = (props) => {
                 "FromDate": values.FromDate,
                 "ToDate": values.ToDate,
                 "Party": PartyDropdown === "" ? _cfunc.loginPartyID() : PartyDropdown.value,
-                "GSTRatewise": GSTRateWise === true ? 1 : 0
+                "GSTRatewise": GSTRateWise ? 1 : 0
             });
-            let config = { jsonBody, btnId }
-            dispatch(postPurchaseGSTReport_API(config))
-            dispatch(postPurchaseGSTReport_API_Success([]));
 
-        } catch (error) { _cfunc.CommonConsole(error) }
+            dispatch(postPurchaseGSTReport_API_Success([]));
+            dispatch(postPurchaseGSTReport_API({ jsonBody }));
+
+        } catch (error) {
+            _cfunc.CommonConsole(error);
+        }
     }
 
     useEffect(() => {
-        if (tableData.btnId === "excel_btnId") {
-            if (GSTRateWise ? PurchaseGSTRateWiseDetails.length : PurchaseGSTDetails.length > 1) {
-                ReportComponent({      // Download CSV
-                    pageField,
-                    excelData: GSTRateWise ? PurchaseGSTRateWiseDetails : PurchaseGSTDetails,
-                    excelFileName: "Purchase GST Report"
+        if (btnMode === 2) {
+
+            if ((PurchaseGSTRateWiseDetails.length > 0) || (PurchaseGSTDetails.length > 0)) {
+                const removeIdField = (arr) => {
+                    arr.forEach(item => {
+                        delete item.id;
+                    });
+                };
+                removeIdField(PurchaseGSTRateWiseDetails);
+                removeIdField(PurchaseGSTDetails);
+
+                ExcelReportComponent({      // Download CSV
+                    excelTableData: GSTRateWise ? PurchaseGSTRateWiseDetails : PurchaseGSTDetails,
+                    excelFileName: "Purchase GST Report",
+                    numericHeaders: ['InvoiceNumber', 'GSTRate', 'GSTPercentage', 'CGST', 'SGST', 'IGST', 'GSTAmount', 'DiscountAmount', 'TaxableValue', 'TotalValue'],
+                    dateHeader: 'InvoiceDate',
+                    lastRowStyle: true
                 })
                 dispatch(postPurchaseGSTReport_API_Success([]));
-                setPartyDropdown('');
             }
         }
     }, [tableData]);
-
-    function excelhandler() {
-
-        try {
-            if ((isSCMParty) && (PartyDropdown === "")) {
-                customAlert({ Type: 3, Message: "Please Select Party" });
-                return;
-            }
-
-            const jsonBody = JSON.stringify({
-                "FromDate": values.FromDate,
-                "ToDate": values.ToDate,
-                "Party": PartyDropdown === "" ? _cfunc.loginPartyID() : PartyDropdown.value,
-                "GSTRatewise": GSTRateWise === true ? 1 : 0
-            });
-            let config = { jsonBody, btnId: "excel_btnId" }
-            dispatch(postPurchaseGSTReport_API(config))
-            dispatch(postPurchaseGSTReport_API_Success([]));
-
-        } catch (error) { _cfunc.CommonConsole(error) }
-    }
 
     const partyOnchange = (e) => {
         setPartyDropdown(e)
@@ -207,13 +203,13 @@ const PurchaseGSTReport = (props) => {
         <React.Fragment>
             <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
             <div className="page-content">
-                <div className="px-2   c_card_filter text-black" >
-                    <div className="row" >
-                        <Col sm={2} className="">
-                            <FormGroup className="mb- row mt-3 mb-2 " >
+                <div className="px-2   c_card_filter text-black " >
+                    <Row>
+                        <Col sm={3} className="">
+                            <FormGroup className=" row mt-2  " >
                                 <Label className="col-sm-4 p-2"
-                                    style={{ width: "78px" }}>FromDate</Label>
-                                <Col sm="6">
+                                    style={{ width: "83px" }}>FromDate</Label>
+                                <Col sm="7">
                                     <C_DatePicker
                                         name='FromDate'
                                         value={values.FromDate}
@@ -223,11 +219,11 @@ const PurchaseGSTReport = (props) => {
                             </FormGroup>
                         </Col>
 
-                        <Col sm={2} className="">
-                            <FormGroup className="mb- row mt-3 mb-2" >
+                        <Col sm={3} className="">
+                            <FormGroup className=" row mt-2 " >
                                 <Label className="col-sm-4 p-2"
                                     style={{ width: "65px" }}>ToDate</Label>
-                                <Col sm="6">
+                                <Col sm="7">
                                     <C_DatePicker
                                         name="ToDate"
                                         value={values.ToDate}
@@ -237,24 +233,11 @@ const PurchaseGSTReport = (props) => {
                             </FormGroup>
                         </Col>
 
-                        <Col sm={2} >
-                            <FormGroup className="mb- row mt-3 mb-2">
-                                <Label style={{ width: "110px" }} className="col-4 p-2" >GST Rate Wise</Label>
-                                <Col sm="2" className=" mt-2 ">
-                                    <Input type="checkbox"
-                                        className="p-2"
-                                        checked={GSTRateWise}
-                                        onChange={(e) => { setGSTRateWise(e.target.checked) }}
-                                    />
-                                </Col>
-                            </FormGroup>
-                        </Col>
-
                         {isSCMParty &&
                             <Col sm={3} className="">
-                                <FormGroup className="mb- row mt-3" >
+                                <FormGroup className=" row mt-2" >
                                     <Label className="col-sm-4 p-2"
-                                        style={{ width: "50px", marginRight: "20px" }}>Party</Label>
+                                        style={{ width: "65px", marginRight: "20px" }}>Party</Label>
                                     <Col sm="8">
                                         <Select
                                             name="Party"
@@ -273,38 +256,48 @@ const PurchaseGSTReport = (props) => {
                             </Col>
                         }
 
-                        <Col sm={1} className="mt-3 ">
+                        <Col sm={2} >
+                            <FormGroup className="mb- row mt-2 ">
+                                <Label style={{ width: "110px" }} className="col-4 p-2" >GST Rate Wise</Label>
+                                <Col sm="2" className=" mt-1 ">
+                                    <Input type="checkbox"
+                                        className="p-2"
+                                        checked={GSTRateWise}
+                                        onChange={(e) => { setGSTRateWise(e.target.checked) }}
+                                    />
+                                </Col>
+                            </FormGroup>
+                        </Col>
 
+
+
+                        <Col sm={isSCMParty ? 1 : 4} className=" d-flex justify-content-end" >
                             <C_Button
                                 type="button"
                                 spinnerColor="white"
-                                loading={GoBtnLoading === `gobtn-${url.PURCHASE_GST_REPORT}`}
-                                className="btn btn-success   "
-                                onClick={goButtonHandler}
+                                loading={btnMode === 1 && Loading}
+                                className="btn btn-success m-3 mr"
+                                onClick={(e) => excel_And_GoBtnHandler(e, 1)}
                             >
                                 Show
                             </C_Button>
-
-                        </Col>
-                        <Col sm={2} className="mt-3 ">
                             <C_Button
                                 type="button"
                                 spinnerColor="white"
-                                loading={ExcelBtnLoading === `excel_btnId`}
-                                className="btn btn-primary  "
-                                onClick={(e) => { excelhandler() }}
+                                loading={btnMode === 2 && Loading}
+                                className="btn btn-primary m-3 mr "
+                                onClick={(e) => excel_And_GoBtnHandler(e, 2)}
                             >
-                                Excel Download
+                                Excel
                             </C_Button>
                         </Col>
-
-                    </div>
+                    </Row>
                 </div>
-
                 <ToolkitProvider
                     keyField={"id"}
                     data={GSTRateWise ? PurchaseGSTRateWiseDetails : PurchaseGSTDetails}
                     columns={updatedTableColumns}
+                    search
                 >
                     {(toolkitProps,) => (
                         <React.Fragment>
@@ -313,6 +306,10 @@ const PurchaseGSTReport = (props) => {
                                     <div className="table-responsive table">
                                         <BootstrapTable
                                             keyField={"id"}
+                                            defaultSorted={[{
+                                                dataField: 'id',
+                                                order: 'asc'
+                                            }]}
                                             rowStyle={rowStyle}
                                             classes={"table  table-bordered table-hover"}
                                             noDataIndication={
@@ -321,11 +318,12 @@ const PurchaseGSTReport = (props) => {
                                                 </div>
                                             }
                                             onDataSizeChange={({ dataSize }) => {
-                                                dispatch(BreadcrumbShowCountlabel(`Count:${dataSize > 0 ? dataSize - 1 : 0}`));
+                                                dispatch(BreadcrumbShowCountlabel(`Count:${dataSize}`));
+                                                // dispatch(BreadcrumbShowCountlabel(`Count:${dataSize > 0 ? dataSize - 1 : 0}`));
                                             }}
                                             {...toolkitProps.baseProps}
                                         />
-                                        {mySearchProps(toolkitProps.searchProps)}
+                                        {globalTableSearchProps(toolkitProps.searchProps)}
                                     </div>
                                 </Col>
                             </Row>

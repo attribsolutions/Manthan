@@ -21,6 +21,7 @@ import {
     editDriverID_Success,
     updateDriverID,
     updateDriverID_Success,
+    getDriverList,
 } from "../../../store/Administrator/DriverRedux/action";
 import { useHistory } from "react-router-dom";
 import {
@@ -37,8 +38,9 @@ import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode";
 import { C_DatePicker } from "../../../CustomValidateForm";
 import * as _cfunc from "../../../components/Common/CommonFunction";
-import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
+import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
+import { changeCommonPartyDropDetailsAction } from "../../../store/Utilites/PartyDrodown/action";
 
 const DriverMaster = (props) => {
 
@@ -72,7 +74,8 @@ const DriverMaster = (props) => {
         updateMsg: state.DriverReducer.updateMessage,
         pageField: state.CommonPageFieldReducer.pageField
     }));
-
+    const { commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
+    
     useEffect(() => {
         const page_Id = pageId.DRIVER
         dispatch(commonPageFieldSuccess(null));
@@ -91,7 +94,13 @@ const DriverMaster = (props) => {
     useEffect(() => {
 
         let userAcc = null;
-        let locationPath = location.pathname;
+        let locationPath;
+
+        if (props.pageMode === mode.dropdownAdd) {
+            locationPath = props.masterPath;
+        } else {
+            locationPath = location.pathname;
+        }
 
         if (hasShowModal) {
             locationPath = props.masterPath;
@@ -102,8 +111,10 @@ const DriverMaster = (props) => {
         })
 
         if (userAcc) {
-            setUserAccState(userAcc)
-            _cfunc.breadcrumbReturnFunc({ dispatch, userAcc });
+            setUserAccState(userAcc);
+            if (!props.isdropdown) {
+                _cfunc.breadcrumbReturnFunc({ dispatch, userAcc });
+            }
         };
     }, [userAccess])
 
@@ -131,19 +142,20 @@ const DriverMaster = (props) => {
                 hasValid.Name.valid = true;
                 hasValid.DOB.valid = true;
                 hasValid.Address.valid = true;
-                // hasValid.Party.valid = true;
-
+               
                 values.Name = Name;
                 values.DOB = DOB;
                 values.Address = Address;
                 values.id = id
-                // values.Party = { value: Party, label: PartyName }
-
                 setState({ values, fieldLabel, hasValid, required, isError })
                 dispatch(Breadcrumb_inputName(hasEditVal.DriverMaster))
                 seteditCreatedBy(hasEditVal.CreatedBy)
             }
             dispatch(editDriverID_Success({ Status: false }))
+            dispatch(changeCommonPartyDropDetailsAction({ forceDisable: true }))//change party drop-down disable when edit/view
+        }
+        return () => {
+            dispatch(changeCommonPartyDropDetailsAction({ forceDisable: false }))//change party drop-down restore state
         }
     }, [])
 
@@ -152,11 +164,19 @@ const DriverMaster = (props) => {
             dispatch(saveDriverMasterSuccess({ Status: false }))
             setState(() => resetFunction(fileds, state))// Clear form values 
             dispatch(Breadcrumb_inputName(''))
-            if (pageMode === mode.dropdownAdd) {
+            if (props.pageMode === mode.dropdownAdd) {
                 customAlert({
                     Type: 1,
                     Message: postMsg.Message,
                 })
+
+                const jsonBody = {
+                    ..._cfunc.loginJsonBody(),
+                    PartyID:  commonPartyDropSelect.value
+                };
+                dispatch(getDriverList(jsonBody));
+
+                props.isOpenModal(false)
             }
             else {
                 let isPermission = await customAlert({
@@ -201,12 +221,12 @@ const DriverMaster = (props) => {
     }, [pageField])
 
     const SaveHandler = async (event) => {
-       
+
         event.preventDefault();
         const btnId = event.target.id
         try {
-            if ((_cfunc.loginSelectedPartyID() === 0)) {
-                customAlert({ Type: 3, Message: "Please Select Party" });
+            if (( commonPartyDropSelect.value === 0)) {
+                customAlert({ Type: 3, Message: alertMessages.commonPartySelectionIsRequired });
                 return;
             };
             if (formValid(state, setState)) {
@@ -216,7 +236,7 @@ const DriverMaster = (props) => {
                     Name: values.Name,
                     Address: values.Address,
                     DOB: values.DOB,
-                    Party: _cfunc.loginSelectedPartyID(),
+                    Party:  commonPartyDropSelect.value,
                     Company: _cfunc.loginCompanyID(),
                     CreatedBy: _cfunc.loginUserID(),
                     UpdatedBy: _cfunc.loginUserID()
@@ -233,8 +253,8 @@ const DriverMaster = (props) => {
     };
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
-    var IsEditMode_Css = ''
-    if ((modalCss) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };// new change
+    // var IsEditMode_Css = ''
+    // if ((modalCss) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };// new change
 
     if (!(userPageAccessState === '')) {
         return (
@@ -242,11 +262,9 @@ const DriverMaster = (props) => {
 
                 <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
 
-                <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
+                <div className="page-content" >
                     <Container fluid>
-                     
-                        <PartyDropdown_Common pageMode={pageMode} />
-
+                  
                         <Card className="text-black" style={{ marginTop: "3px" }}>
                             <CardHeader className="card-header   text-black c_card_header"  >
                                 <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import RoutesMaster from "./RoutesMaster";
 import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
@@ -13,19 +13,15 @@ import {
   updateRoutesIDSuccess,
   GetRoutesListSuccess
 } from "../../../store/Administrator/RoutesRedux/actions";
-import { loginCompanyID, loginSelectedPartyID } from "../../../components/Common/CommonFunction";
+import { loginCompanyID } from "../../../components/Common/CommonFunction";
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList";
-import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 import { PageLoadingSpinner } from "../../../components/Common/CommonButton";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
-import NewCommonPartyDropdown from "../../../components/Common/NewCommonPartyDropdown";
-import { mode } from "../../../routes";
+import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 
-const RoutesList = (props) => {
+const RoutesList = () => {
 
   const dispatch = useDispatch();
-
-  const [pageMode] = useState(mode.defaultList);
 
   const reducers = useSelector(
     (state) => ({
@@ -38,11 +34,20 @@ const RoutesList = (props) => {
       deleteMsg: state.RoutesReducer.deleteMessage,
       userAccess: state.Login.RoleAccessUpdateData,
       pageField: state.CommonPageFieldReducer.pageFieldList,
-      commonPartyDropSelect: state.CommonPartyDropdownReducer.commonPartyDropSelect
     })
   );
+  const { commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
 
-  const { pageField, goBtnLoading, commonPartyDropSelect } = reducers;
+  const { pageField, goBtnLoading } = reducers;
+
+  // Common Party select Dropdown useEffect
+  useEffect(() => {
+    if (commonPartyDropSelect.value > 0) {
+      partySelectButtonHandler();
+    } else {
+      partySelectOnChangeHandler();
+    }
+  }, [commonPartyDropSelect]);
 
   const action = {
     getList: GetRoutesList,
@@ -58,26 +63,17 @@ const RoutesList = (props) => {
     const page_Id = pageId.ROUTES_LIST
     dispatch(commonPageFieldListSuccess(null))
     dispatch(commonPageFieldList(page_Id))
+    // dispatch(BreadcrumbShowCountlabel(`Count :${0}`))
     return () => {
       dispatch(GetRoutesListSuccess([]));
     }
   }, []);
 
-  // Common Party Dropdown useEffect
-  useEffect(() => {
-    if (commonPartyDropSelect.value > 0) {
-      goButtonHandler()
-    }
-    return () => {
-      dispatch(GetRoutesListSuccess([]));
-    }
-  }, [commonPartyDropSelect]);
-
   const goButtonHandler = () => {
 
     try {
       if (commonPartyDropSelect.value === 0) {
-        customAlert({ Type: 3, Message: "Please Select Party" });
+        customAlert({ Type: 3, Message: alertMessages.commonPartySelectionIsRequired });
         return;
       };
       const jsonBody = JSON.stringify({
@@ -90,13 +86,18 @@ const RoutesList = (props) => {
     return
   };
 
+  function partySelectButtonHandler() {
+    goButtonHandler()
+  }
+  function partySelectOnChangeHandler() {
+    dispatch(GetRoutesListSuccess([]));
+  }
 
   return (
     <React.Fragment>
       <PageLoadingSpinner isLoading={(goBtnLoading || !pageField)} />
       <div className="page-content">
 
-        <NewCommonPartyDropdown />
         {
           (pageField) &&
           <div className="mt-n1">

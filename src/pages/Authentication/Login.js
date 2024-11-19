@@ -4,6 +4,8 @@ import React, { useEffect, useState } from "react"
 import { Row, Col, Alert, Container, Input } from "reactstrap"
 import { useSelector, useDispatch } from "react-redux"
 import { withRouter, Link, useHistory } from "react-router-dom"
+
+
 import {
   divisionDropdownSelectSuccess,
   getUserDetailsAction,
@@ -17,6 +19,7 @@ import CarouselPage from "./CarouselPage"
 import { useLayoutEffect } from "react"
 import { afterloginOneTimeAPI } from "../../components/Common/AfterLoginApiFunc"
 import { useSession } from "../../routes/middleware/SessionContext"
+import { event } from "jquery"
 
 const Login = props => {
 
@@ -25,6 +28,7 @@ const Login = props => {
 
   const [currentUserName, setcurrentUserName] = useState("");
   const [Password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
 
   const { loginError, loginSuccess, divisionDropdown_redux = [], userAccess, loading } = useSelector(state => ({
@@ -116,6 +120,18 @@ const Login = props => {
   }
 
   const SaveHandler = async (event) => {
+    if (currentUserName === "" && Password === "") {
+      dispatch(loginError_Action("Invalid UserName and Password"))
+      return
+    }
+    if (currentUserName === "") {
+      dispatch(loginError_Action("Invalid UserName"))
+      return
+    }
+    if (Password === "") {
+      dispatch(loginError_Action("Incorrect Password"))
+      return
+    }
 
     event.preventDefault();
     const values = {
@@ -124,6 +140,20 @@ const Login = props => {
     }
     dispatch(loginUser(values, props.history))
   };
+
+  const toggleShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+  function handleKeyDown({ event, Type }) {
+    // Check if the pressed key is a space
+    if (event.key === " ") {
+      // Check if the input contains only spaces
+      if (event.target.value.trim() === "") {
+        // Prevent default behavior (typing space)
+        event.preventDefault();
+      }
+    }
+  }
 
   return (
     <React.Fragment>
@@ -138,14 +168,14 @@ const Login = props => {
                 <div className="w-100">
                   <div className="d-flex flex-column h-100">
                     <div className="mb-4 md-5 text-center">
-                      <Link to="/dashboard" className="d-block auth-logo">
+                      <div style={{ cursor: "context-menu" }} className="logo logo-dark">
                         <span className="logo-txt">FoodERP 2.0</span>
-                      </Link>
-                      <img src={logo} alt="" height="90" />
+                      </div>
+                      <img src={logo} alt="" height="150" style={{height:"175px"}} />
 
                     </div>
                     <div className="auth-content my-auto">
-                      <div className="text-center">
+                      <div style={{ cursor: "context-menu" }} className="text-center">
                         <h5 className="mb-0">Welcome !</h5>
                         <p className="text-muted mt-2">Sign in to Continue FoodERP 2.0</p>
                       </div>
@@ -169,6 +199,7 @@ const Login = props => {
                               value={currentUserName}
                               autoComplete="off"
                               autoFocus={false}
+                              onKeyDown={(event) => { handleKeyDown({ event: event, Type: "UserName" }) }}
                               required
                               onChange={currentUserOnchange}
                               placeholder="Enter User Name"
@@ -184,20 +215,30 @@ const Login = props => {
                           </div>
 
                           <div className="mb-3">
-                            <Input
-                              name="Password"
-                              defaultValue={Password}
-                              autoComplete="off"
-                              autoFocus={false}
-                              onChange={PasswordOnchange}
-                              type="password"
-                              className="form-control"
-                              required
-                              placeholder="Enter Password"
-                            />
+                            <div className="input-group">
+                              <Input
+                                name="Password"
+                                value={Password}
+                                autoComplete="off"
+                                onChange={PasswordOnchange}
+                                type={showPassword ? 'text' : 'password'}
+                                className="form-control"
+                                onKeyDown={(event) => { handleKeyDown({ event: event, Type: "Password" }) }}
+                                required
+                                placeholder="Enter Password"
+                              />
+                              <button
+                                className="btn btn-outline-primary"
+                                style={{ borderColor: "#d4d4d4" }}
+                                type="button"
+                                onClick={toggleShowPassword}
+                              >
+                                {showPassword ? <i className="mdi mdi-eye-off"></i> : <i className="mdi mdi-eye"></i>}
+                              </button>
+                            </div>
                           </div>
                         </div>
-                        <div className="row mb-4">
+                        <div className=" mb-4">
 
                           <Link to="/forgot-password" className="fw-semibold">Forgot password?</Link>
 
@@ -216,7 +257,7 @@ const Login = props => {
                       </form>
                     </div>
                     <div className="mt-4 mt-md-5 text-center">
-                      <p className="mb-0">© {new Date().getFullYear()}.Developed by Attrib Solution</p>
+                      <p style={{ cursor: "context-menu" }} className="mb-0">© {new Date().getFullYear()}.Developed by Attrib Solution</p>
                     </div>
                   </div>
                 </div>

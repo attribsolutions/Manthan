@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Col, FormGroup, Label } from "reactstrap";
+import { Col, FormGroup, Label, Row } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import { initialFiledFunc, } from "../../components/Common/validationFunction";
 import { C_Button } from "../../components/Common/CommonButton";
@@ -8,12 +8,12 @@ import { C_DatePicker, C_Select } from "../../CustomValidateForm";
 import * as _cfunc from "../../components/Common/CommonFunction";
 import { mode, } from "../../routes/index"
 import { MetaTags } from "react-meta-tags";
-import { GetVenderSupplierCustomer, GetVenderSupplierCustomerSuccess, getBaseUnit_ForDropDown, goButtonPartyItemAddPage, getpdfReportdata, getpdfReportdataSuccess } from "../../store/actions";
+import { getBaseUnit_ForDropDown, goButtonPartyItemAddPage, getpdfReportdata, getpdfReportdataSuccess, goButtonPartyItemAddPageSuccess } from "../../store/actions";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import * as report from '../ReportIndex'
-import { ItemRegister_API, PartyLedgerReport_API } from "../../helpers/backend_helper";
+import { ItemRegister_API } from "../../helpers/backend_helper";
 import C_Report from "../../components/Common/C_Report";
-import PartyDropdown_Common from "../../components/Common/PartyDropdown";
+import { alertMessages } from "../../components/Common/CommonErrorMsg/alertMsg";
 
 const ItemRegisterReport = (props) => {
 
@@ -25,12 +25,10 @@ const ItemRegisterReport = (props) => {
         FromDate: currentDate_ymd,
         ToDate: currentDate_ymd,
         Item: "",
-        Unit: "",
-
+        Unit: { value: 1, label: 'No' },
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
-    const [subPageMode] = useState(history.location.pathname);
     const [userPageAccessState, setUserAccState] = useState('');
 
     const reducers = useSelector(
@@ -52,7 +50,18 @@ const ItemRegisterReport = (props) => {
 
     // Featch Modules List data  First Rendering
     const location = { ...history.location }
-    const hasShowModal = props.hasOwnProperty(mode.editValue)
+    const hasShowModal = props.hasOwnProperty(mode.editValue);
+
+    const { commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
+
+    // Common Party select Dropdown useEffect
+    useEffect(() => {
+        if (commonPartyDropSelect.value > 0) {
+            partySelectButtonHandler();
+        } else {
+            partySelectOnChangeHandler();
+        }
+    }, [commonPartyDropSelect]);
 
     // userAccess useEffect
     useEffect(() => {
@@ -72,8 +81,11 @@ const ItemRegisterReport = (props) => {
 
     useEffect(() => {
         dispatch(getBaseUnit_ForDropDown());
-        const jsonBody = JSON.stringify({ ..._cfunc.loginJsonBody() });
-        dispatch(goButtonPartyItemAddPage({jsonBody}));
+        if (!(commonPartyDropSelect.value === 0)) {
+            const jsonBody = JSON.stringify({ ..._cfunc.loginJsonBody(), "PartyID": commonPartyDropSelect.value });
+            dispatch(goButtonPartyItemAddPage({ jsonBody }));
+        };
+
     }, [])
 
     useEffect(() => {
@@ -97,6 +109,7 @@ const ItemRegisterReport = (props) => {
             value: data.id,
             label: data.Name
         }));
+
     const onselecthandel = (e) => {
         setState((i) => {
             const a = { ...i }
@@ -117,8 +130,8 @@ const ItemRegisterReport = (props) => {
 
     function goButtonHandler() {
 
-        if (_cfunc.loginSelectedPartyID() === 0) {
-            customAlert({ Type: 3, Message: "Please Select Party" });
+        if (commonPartyDropSelect.value === 0) {
+            customAlert({ Type: 3, Message: alertMessages.commonPartySelectionIsRequired });
             return;
         };
 
@@ -127,7 +140,7 @@ const ItemRegisterReport = (props) => {
             "ToDate": values.ToDate,
             "Item": values.Item.value,
             "Unit": values.Unit.value,
-            "Party": _cfunc.loginSelectedPartyID()
+            "Party": commonPartyDropSelect.value
         });
 
         let config = {
@@ -137,13 +150,7 @@ const ItemRegisterReport = (props) => {
         if (values.Item === "") {
             customAlert({
                 Type: 3,
-                Message: "Please Select Item",
-            })
-            return
-        } else if (values.Unit === "") {
-            customAlert({
-                Type: 3,
-                Message: "Please Select Unit",
+                Message: alertMessages.itemNameIsRequired,
             })
             return
         } else {
@@ -170,15 +177,16 @@ const ItemRegisterReport = (props) => {
     }
 
     function partySelectButtonHandler() {
-        dispatch(GetVenderSupplierCustomer({ subPageMode, "PartyID": _cfunc.loginSelectedPartyID() }));
+        const jsonBody = JSON.stringify({ ..._cfunc.loginJsonBody(), "PartyID": commonPartyDropSelect.value });
+        dispatch(goButtonPartyItemAddPage({ jsonBody }));
     }
 
-    function partyOnChngeButtonHandler() {
+    function partySelectOnChangeHandler() {
         dispatch(getpdfReportdataSuccess({ Status: false }));
-        dispatch(GetVenderSupplierCustomerSuccess([]));
+        dispatch(goButtonPartyItemAddPageSuccess([]));
         setState((i) => {
             let a = { ...i }
-            a.values.Item = { value: "", label: "All" }
+            a.values.Item = ""
             a.hasValid.Item.valid = true;
             return a
         })
@@ -188,17 +196,14 @@ const ItemRegisterReport = (props) => {
         <React.Fragment>
             <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
             <div className="page-content">
-                <PartyDropdown_Common 
-                    goButtonHandler={partySelectButtonHandler}
-                    changeButtonHandler={partyOnChngeButtonHandler} />
-
-                <div className="px-2   c_card_filter text-black" >
-                    <div className="row" >
-                        <Col lg={0} className="">
-                            <FormGroup className="mb- row mt-3 mb-2 " >
+        
+                <div className="px-2   c_card_filter text-black " >
+                    <Row>
+                        <Col sm={3} className="">
+                            <FormGroup className=" row mt-2  " >
                                 <Label className="col-sm-4 p-2"
-                                    style={{ width: "70px" }}>FromDate</Label>
-                                <Col sm={6}>
+                                    style={{ width: "83px" }}>FromDate</Label>
+                                <Col sm="7">
                                     <C_DatePicker
                                         name='FromDate'
                                         value={values.FromDate}
@@ -208,11 +213,11 @@ const ItemRegisterReport = (props) => {
                             </FormGroup>
                         </Col>
 
-                        <Col lg={0} className="">
-                            <FormGroup className="mb- row mt-3 mb-2" >
+                        <Col sm={3} className="">
+                            <FormGroup className=" row mt-2 " >
                                 <Label className="col-sm-4 p-2"
-                                    style={{ width: "55px" }}>ToDate</Label>
-                                <Col sm={6}>
+                                    style={{ width: "65px" }}>ToDate</Label>
+                                <Col sm="7">
                                     <C_DatePicker
                                         name="ToDate"
                                         value={values.ToDate}
@@ -224,10 +229,10 @@ const ItemRegisterReport = (props) => {
 
 
                         <Col sm={3} className="">
-                            <FormGroup className="mb- row mt-3" >
+                            <FormGroup className=" row mt-2" >
                                 <Label className="col-sm-4 p-2"
-                                    style={{ width: "70px" }}>Item</Label>
-                                <Col sm={7}>
+                                    style={{ width: "65px", marginRight: "20px" }}>Item</Label>
+                                <Col sm="8">
                                     <C_Select
                                         name="Item"
                                         value={values.Item}
@@ -246,11 +251,12 @@ const ItemRegisterReport = (props) => {
                             </FormGroup>
                         </Col>
 
-                        <Col sm={3} className="">
-                            <FormGroup className="mb- row mt-3" >
+
+                        <Col sm={2} >
+                            <FormGroup className=" row mt-2" >
                                 <Label className="col-sm-4 p-2"
-                                    style={{ width: "70px" }}>Unit</Label>
-                                <Col sm={6}>
+                                    style={{ width: "65px", marginRight: "20px" }}>Unit</Label>
+                                <Col sm="7">
                                     <C_Select
                                         name="Unit"
                                         value={values.Unit}
@@ -269,16 +275,19 @@ const ItemRegisterReport = (props) => {
                         </Col>
 
 
-                        <Col sm={1} className="mt-3 ">
+
+                        <Col sm={1} className=" d-flex justify-content-end" >
                             <C_Button
                                 type="button"
-                                className="btn btn-outline-primary border-1 font-size-12 text-center"
+                                className="btn btn-outline-primary border-1 font-size-12 text-center m-3 mr"
                                 onClick={goButtonHandler}
                                 loading={reducers.goBtnLoading} >
                                 Print</C_Button>
                         </Col>
-                    </div>
+                    </Row>
                 </div>
+
+
             </div>
             <C_Report />
         </React.Fragment >

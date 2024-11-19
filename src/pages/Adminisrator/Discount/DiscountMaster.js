@@ -23,7 +23,7 @@ import { mode, pageId, url } from "../../../routes/index"
 import "../../Sale/SalesReturn/salesReturn.scss";
 import { CInput, C_DatePicker, C_Select, decimalRegx } from "../../../CustomValidateForm/index";
 import * as _cfunc from "../../../components/Common/CommonFunction";
-import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
+import { globalTableSearchProps } from "../../../components/Common/SearchBox/MySearch";
 import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import { Change_Button, Go_Button, SaveButton } from "../../../components/Common/CommonButton";
@@ -34,7 +34,8 @@ import { DiscountCustomer_Dropdown_Action, DiscountCustomer_Dropdown_Success, Di
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { goBtnDiscountAddAction } from "../../../store/Administrator/DiscountRedux/actions";
 import { priceListByPartyActionSuccess } from "../../../store/Administrator/PriceList/action";
-import NewCommonPartyDropdown from "../../../components/Common/NewCommonPartyDropdown";
+import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
+import { allLabelWithBlank } from "../../../components/Common/CommonErrorMsg/HarderCodeData";
 
 const DiscountMaster = (props) => {
 
@@ -49,7 +50,7 @@ const DiscountMaster = (props) => {
         FromDate: currentDate_ymd,
         ToDate: currentDate_ymd,
         Partytype: "",
-        CustomerName: { value: "", label: "All" },
+        CustomerName: allLabelWithBlank,
         PriceListName: "",
     }
 
@@ -117,7 +118,7 @@ const DiscountMaster = (props) => {
         setState((i) => {
 
             let a = { ...i }
-            a.values.CustomerName = { value: "", label: "All" };
+            a.values.CustomerName = allLabelWithBlank;
             a.values.Partytype = ""
             a.values.PriceListName = ''
 
@@ -228,7 +229,7 @@ const DiscountMaster = (props) => {
         }
         setState((i) => {
             const a = { ...i }
-            a.values.CustomerName = { value: "", label: "All" };
+            a.values.CustomerName = allLabelWithBlank;
             a.hasValid.CustomerName.valid = false
             return a
         })
@@ -244,7 +245,7 @@ const DiscountMaster = (props) => {
         label: index.Name,
     }));
 
-    customerOptions.unshift({ value: "", label: "All" });
+    customerOptions.unshift(allLabelWithBlank);
 
     const pagesListColumns = [
         {
@@ -493,7 +494,7 @@ const DiscountMaster = (props) => {
         setPriceListSelect({ label: "", value: "" })
         setState((i) => {
             const a = { ...i }
-            a.values.CustomerName = { value: "", label: "All" };
+            a.values.CustomerName = allLabelWithBlank;
             a.hasValid.CustomerName.valid = false
             return a
         })
@@ -584,7 +585,6 @@ const DiscountMaster = (props) => {
                 <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
 
                 <div className="page-content" >
-                    <NewCommonPartyDropdown pageMode={pageMode} />
                     <form noValidate>
                         <div className="px-2 c_card_filter header text-black mb-1" >
 
@@ -597,9 +597,9 @@ const DiscountMaster = (props) => {
                                             <C_DatePicker
                                                 options={{
                                                     altInput: true,
+                                                    minDate: "today",
                                                     altFormat: "d-m-Y",
                                                     dateFormat: "Y-m-d",
-                                                    maxDate: new Date(new Date().setMonth(new Date().getMonth() + 1)),// Set the maximum date
                                                 }}
                                                 name='FromDate'
                                                 disabled={(tableData.length > 0) && true}
@@ -617,10 +617,10 @@ const DiscountMaster = (props) => {
                                         <Col sm="7">
                                             <C_DatePicker
                                                 options={{
+                                                    minDate: "today",
                                                     altInput: true,
                                                     altFormat: "d-m-Y",
                                                     dateFormat: "Y-m-d",
-                                                    maxDate: new Date(new Date().setMonth(new Date().getMonth() + 1)),// Set the maximum date
                                                 }}
                                                 name='ToDate'
                                                 disabled={(tableData.length > 0) && true}
@@ -753,7 +753,7 @@ const DiscountMaster = (props) => {
                                                     />
                                                 </div>
                                             </Col>
-                                            {mySearchProps(toolkitProps.searchProps,)}
+                                            {globalTableSearchProps(toolkitProps.searchProps,)}
                                         </Row>
 
                                     </React.Fragment>
@@ -765,17 +765,16 @@ const DiscountMaster = (props) => {
 
                     {
                         (tableData.length > 0) &&
-                        <div className="row save1" >
+                        <SaveButtonDraggable>
                             <SaveButton
                                 loading={saveBtnloading}
                                 editCreatedBy={"editCreatedBy"}
                                 pageMode={pageMode}
                                 userAcc={userPageAccessState}
                                 onClick={saveHandler}
-                            // forceDisabled={goBtnloading}
                             />
 
-                        </div>
+                        </SaveButtonDraggable>
                     }
 
                 </div >

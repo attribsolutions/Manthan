@@ -9,7 +9,7 @@ const INIT_STATE = {
   updateMessage: { Status: false },
   listBtnLoading: false,
   saveBtnloading: false,
-  priceListDropDownLoading: true
+  priceListDropDownLoading: false
 }
 
 const PriceListReducer = (state = INIT_STATE, action) => {

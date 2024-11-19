@@ -9,29 +9,20 @@ import {
     Row,
 } from "reactstrap";
 import Select from "react-select";
-import { useDispatch, useSelector } from "react-redux";
-import {
-    get_Division_ForDropDown,
-} from "../../../../../store/Administrator/ItemsRedux/action";
+import { useSelector } from "react-redux";
 import DivisionTable from "./Table";
 
 function DivisionTab(props) {
-    const dispatch = useDispatch();
     const [divisionDropdownSelect, setDivisionDropdownSelect] = useState("");
 
     const { DivisionName } = useSelector((state) => ({
         DivisionName: state.ItemMastersReducer.Division,
     }));
 
-    useEffect(() => {
-        dispatch(get_Division_ForDropDown());
-    }, [dispatch]);
-
     const Division_DropdownOptions = DivisionName.map((data) => ({
         value: data.id,
         label: data.Name,
     }));
-
 
     const Division_Handler = (event) => {
         setDivisionDropdownSelect(event);
@@ -44,22 +35,21 @@ function DivisionTab(props) {
             DivisionName: divisionDropdownSelect.label,
         };
 
-            if (!(divisionDropdownSelect === "")) {
-                const totalTableData = props.tableData.length;
-                val.id = totalTableData + 1;
-                const updatedTableData = [...props.tableData];
-                updatedTableData.push(val);
-                props.func(updatedTableData);
-                clearState();
-            }
-            else {
-                alert("Please select value");
-            }
-        };
-    
+        if (!(divisionDropdownSelect === "")) {
+            const totalTableData = props.tableData.length;
+            val.id = totalTableData + 1;
+            const updatedTableData = [...props.tableData];
+            updatedTableData.push(val);
+            props.func(updatedTableData);
+            clearState();
+        }
+        else {
+            alert("Please select value");
+        }
+    };
+
     const clearState = () => {
         setDivisionDropdownSelect("");
-
     };
 
     return (

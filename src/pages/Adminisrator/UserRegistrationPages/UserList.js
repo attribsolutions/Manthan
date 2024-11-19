@@ -12,10 +12,9 @@ import {
 import CommonListPage from "../../../components/Common/CommonMasterListPage";
 import { commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
 import { USER } from "../../../routes/route_url";
-import { MetaTags } from "react-meta-tags";
 
 import * as pageId from "../../../routes/allPageID"
-import { Listloader, PageLoadingSpinner } from "../../../components/Common/CommonButton";
+import {  PageLoadingSpinner } from "../../../components/Common/CommonButton";
 
 const UserList = () => {
     const dispatch = useDispatch();

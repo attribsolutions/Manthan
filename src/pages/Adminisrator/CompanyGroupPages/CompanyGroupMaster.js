@@ -166,7 +166,7 @@ const CompanyGroupMaster = (props) => {
             dispatch(saveCompanyGroupMasterSuccess({ Status: false }))
             customAlert({
                 Type: 4,
-                 Message: JSON.stringify(postMsg.Message),
+                Message: JSON.stringify(postMsg.Message),
             })
         }
     }, [postMsg])
@@ -179,7 +179,7 @@ const CompanyGroupMaster = (props) => {
             })
         } else if (updateMsg.Status === true && !modalCss) {
             dispatch(updateCompanyGroupIDSuccess({ Status: false }));
-             customAlert({
+            customAlert({
                 Type: 3,
                 Message: JSON.stringify(updateMsg.Message),
             })
@@ -216,16 +216,13 @@ const CompanyGroupMaster = (props) => {
         } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
     };
 
-    // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
-    var IsEditMode_Css = ''
-    if ((modalCss) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
 
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
                 <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
 
-                <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
+                <div className="page-content" >
                     <Container fluid>
                         <Card className="text-black">
                             <CardHeader className="card-header   text-black c_card_header" >

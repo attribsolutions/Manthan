@@ -33,7 +33,7 @@ import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
-import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
+import { globalTableSearchProps } from "../../../components/Common/SearchBox/MySearch";
 import { Retailer_List, Retailer_List_Success } from "../../../store/CommonAPI/SupplierRedux/actions";
 import {
     BankListAPI,
@@ -51,7 +51,8 @@ import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { CInput, C_DatePicker, C_Select } from "../../../CustomValidateForm/index";
 import { decimalRegx } from "../../../CustomValidateForm/RegexPattern";
 import * as _cfunc from "../../../components/Common/CommonFunction";
-import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
+import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
+import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 
 const Receipts = (props) => {
 
@@ -114,7 +115,19 @@ const Receipts = (props) => {
     const hasShowModal = props.hasOwnProperty(mode.editValue)
 
     const { Data = [] } = ReceiptGoButton
-    const { OpeningBalanceAmount = '' } = OpeningBalance
+    const { OpeningBalanceAmount = '' } = OpeningBalance;
+
+    const { commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
+
+    // Common Party select Dropdown useEffect
+    useEffect(() => {
+        if (commonPartyDropSelect.value > 0) {
+            partySelectButtonHandler();
+        } else {
+            partySelectOnChangeHandler();
+        }
+    }, [commonPartyDropSelect]);
+
 
     useEffect(() => {
         const page_Id = pageId.RECEIPTS
@@ -124,10 +137,10 @@ const Receipts = (props) => {
 
     // Customer dropdown Options
     useEffect(() => {
-        if (!(_cfunc.loginSelectedPartyID() === 0)) {
+        if (!(commonPartyDropSelect.value === 0)) {
             const jsonBody = JSON.stringify({
                 Type: 4,
-                PartyID: _cfunc.loginSelectedPartyID(),
+                PartyID: commonPartyDropSelect.value,
                 CompanyID: loginCompanyID()
             });
             dispatch(Retailer_List(jsonBody));
@@ -349,13 +362,13 @@ const Receipts = (props) => {
             return i
         })
         const jsonBody = JSON.stringify({
-            PartyID: _cfunc.loginSelectedPartyID(),
+            PartyID: commonPartyDropSelect.value,
             CustomerID: e.value,
             InvoiceID: ""
         });
 
         const jsonBody1 = JSON.stringify({
-            PartyID: _cfunc.loginSelectedPartyID(),
+            PartyID: commonPartyDropSelect.value,
             CustomerID: e.value,
             ReceiptDate: values.ReceiptDate
         });
@@ -494,7 +507,7 @@ const Receipts = (props) => {
             if (Number(values.AmountPaid) < calSum) {
                 customAlert({
                     Type: 4,
-                    Message: `Amount Paid value is Excess ${diffrence}`,
+                    Message: `${alertMessages.amountPaidValueIsExcess} ${diffrence}`,
                 })
                 return btnIsDissablefunc({ btnId, state: false })
 
@@ -502,17 +515,16 @@ const Receipts = (props) => {
             else if (Number(values.AmountPaid) > calSum) {
                 customAlert({
                     Type: 4,
-                    Message: `Amount Paid value is Short ${diffrence}`,
+                    Message: `${alertMessages.amountPaidValueIsShort} ${diffrence}`,
                 })
                 return btnIsDissablefunc({ btnId, state: false })
-
             }
         }
 
         if ((values.ReceiptModeName.value === undefined) || values.ReceiptModeName.value === "") {
             customAlert({
                 Type: 4,
-                Message: "Receipt Mode Is Required",
+                Message: alertMessages.receiptModeIsRequired,
             })
             return btnIsDissablefunc({ btnId, state: false })
         }
@@ -524,7 +536,7 @@ const Receipts = (props) => {
             || (values.AmountPaid === "0")) {
             customAlert({
                 Type: 4,
-                Message: `The Receipt amount must be greater than zero.`,
+                Message: alertMessages.receiptAmountGreaterThanZero,
             })
             return btnIsDissablefunc({ btnId, state: false })
         }
@@ -533,13 +545,13 @@ const Receipts = (props) => {
         if (values.ReceiptModeName.label === "Cheque") {
 
             if (values.BankName === "") {
-                invalidMsg1.push(`Bank Name Is Required`)
+                invalidMsg1.push(alertMessages.bankNameIsRequired)
             }
             if (values.DepositorBankName === "") {
-                invalidMsg1.push(`Depositor Bank Name Is Required`)
+                invalidMsg1.push(alertMessages.depositorBankIsRequired)
             };
             if (values.DocumentNo === "") {
-                invalidMsg1.push(`Cheque Number Is Required`)
+                invalidMsg1.push(alertMessages.chequeIsRequired)
             };
 
             if (invalidMsg1.length > 0) {
@@ -583,7 +595,7 @@ const Receipts = (props) => {
                     "Customer": values.Customer.value,
                     "ChequeDate": values.ReceiptModeName.label === "Cheque" ? values.ChequeDate : "",
                     "DepositorBank": values.DepositorBankName.value,
-                    "Party": _cfunc.loginSelectedPartyID(),
+                    "Party": commonPartyDropSelect.value,
                     "ReceiptMode": values.ReceiptModeName.value,
                     "ReceiptType": ReceiptTypeID.id,
                     "CreatedBy": loginUserID(),
@@ -609,13 +621,13 @@ const Receipts = (props) => {
     function partySelectButtonHandler() {
         const jsonBody = JSON.stringify({
             Type: 4,
-            PartyID: _cfunc.loginSelectedPartyID(),
+            PartyID: commonPartyDropSelect.value,
             CompanyID: loginCompanyID()
         });
         dispatch(Retailer_List(jsonBody));
     }
 
-    function partyOnChngeButtonHandler() {
+    function partySelectOnChangeHandler() {
         dispatch(Retailer_List_Success([]));
         dispatch(GetOpeningBalance_Success([]));
         setState((i) => {
@@ -626,19 +638,14 @@ const Receipts = (props) => {
         })
     }
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
-    var IsEditMode_Css = ''
-    if ((modalCss) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
+    // var IsEditMode_Css = ''
+    // if ((modalCss) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
 
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
                 <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
                 <div className="page-content" style={{ marginBottom: "5cm" }}>
-
-                    <PartyDropdown_Common pageMode={pageMode}
-                        goButtonHandler={partySelectButtonHandler}
-                        changeButtonHandler={partyOnChngeButtonHandler} />
-
                     <form noValidate>
                         <div className="px-2 c_card_filter header text-black mb-1" >
 
@@ -924,7 +931,7 @@ const Receipts = (props) => {
                                             headerWrapperClasses={"thead-light"}
                                             {...toolkitProps.baseProps}
                                         />
-                                        {mySearchProps(toolkitProps.searchProps)}
+                                        {globalTableSearchProps(toolkitProps.searchProps)}
                                     </div>
                                 </React.Fragment>
                             )
@@ -933,25 +940,21 @@ const Receipts = (props) => {
                         }
 
                         {!(IsSystemSetting) ?
-                            Data.length > 0 ?
-                                <FormGroup>
-                                    <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
-                                        <SaveButton pageMode={pageMode}
-                                            loading={saveBtnloading}
-                                            onClick={saveHandeller}
-                                            userAcc={userPageAccessState}
-                                        />
-                                    </Col>
-                                </FormGroup > : null
-                            : <FormGroup >
-                                <Col style={{ marginTop: "8px" }}>
-                                    <SaveButton pageMode={pageMode}
-                                        loading={saveBtnloading}
-                                        onClick={saveHandeller}
-                                        userAcc={userPageAccessState}
-                                    />
-                                </Col>
-                            </FormGroup >
+                            Data.length > 0 &&
+                            <SaveButtonDraggable>
+                                <SaveButton pageMode={pageMode}
+                                    loading={saveBtnloading}
+                                    onClick={saveHandeller}
+                                    userAcc={userPageAccessState}
+                                />
+                            </SaveButtonDraggable>
+                            : <SaveButtonDraggable>
+                                <SaveButton pageMode={pageMode}
+                                    loading={saveBtnloading}
+                                    onClick={saveHandeller}
+                                    userAcc={userPageAccessState}
+                                />
+                            </SaveButtonDraggable>
                         }
 
                     </form>

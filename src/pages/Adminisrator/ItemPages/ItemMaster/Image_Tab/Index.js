@@ -1,20 +1,19 @@
 
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import Select from 'react-select'
 import { Button, Card, CardBody, Col, FormGroup, Input, Label, Row } from 'reactstrap'
 import { customAlert } from '../../../../../CustomAlert/ConfirmDialog'
-import {  get_ImageType_ForDropDown } from '../../../../../store/actions'
 
 
 export default function Image(props) {
-    
+
     const { ImageType = [] } = useSelector((state) => ({
         ImageType: state.ItemMastersReducer.ImageType
     }));
 
     const { imageTable, setImageTable } = props.state
-    
+
     const dispatch = useDispatch()
 
     const imageTypes = ImageType.map((Data) => ({
@@ -22,12 +21,6 @@ export default function Image(props) {
         label: Data.Name
     }));
 
-    useEffect(() => {
-        if(imageTable.length===0){
-            addRowHandler() 
-        }
-        dispatch(get_ImageType_ForDropDown());
-    }, []);
 
     function addRowHandler(key) {
         var newarr1 = [...imageTable, {
@@ -37,58 +30,58 @@ export default function Image(props) {
         setImageTable(newarr1)
     }
 
-  
+
 
     function deleteRowHandler(key) {
-            var removeElseArrray1 = imageTable.filter((i, k) => {
-                return !(k === key)
-            })
-            setImageTable(removeElseArrray1)
-        }
+        var removeElseArrray1 = imageTable.filter((i, k) => {
+            return !(k === key)
+        })
+        setImageTable(removeElseArrray1)
+    }
 
     const onchangeHandler = async (event, key, type) => {
-            
-            const found1 = imageTable.find(element => {
-                return element.ImageType.value === event.value
-            });
-            if ((found1) && (type === "ImageType")) {
-                dispatch(
-                    customAlert({
-                        Type: 4,
-                        Status: true,
-                        Message: `${event.label} is alerady selected`,
-                        RedirectPath: false,
-                        PermissionAction: false,
-                    })
-                );
-                return;
-            }
 
-            var found = imageTable.find((i, k) => {
-                return (k === key)
+        const found1 = imageTable.find(element => {
+            return element.ImageType.value === event.value
+        });
+        if ((found1) && (type === "ImageType")) {
+
+            customAlert({
+                Type: 4,
+                Status: true,
+                Message: `${event.label} is alerady selected`,
+                RedirectPath: false,
+                PermissionAction: false,
             })
-            let newSelectValue = ''
 
-            if (type === "ImageType") {
-
-                newSelectValue = {
-                    ImageType: event,
-                    ImageUpload: found.ImageUpload,
-                }
-            }
-            else if (type === 'ImageUpload') {
-                const file = event.target.files[0]
-                const base64 = await convertBase64(file);
-                newSelectValue = {
-                    ImageType: found.ImageType,
-                    ImageUpload: base64,
-                }
-            }
-            let newTabArr = imageTable.map((index, k) => {
-                return (k === key) ? newSelectValue : index
-            })
-            setImageTable(newTabArr)
+            return;
         }
+
+        var found = imageTable.find((i, k) => {
+            return (k === key)
+        })
+        let newSelectValue = ''
+
+        if (type === "ImageType") {
+
+            newSelectValue = {
+                ImageType: event,
+                ImageUpload: found.ImageUpload,
+            }
+        }
+        else if (type === 'ImageUpload') {
+            const file = event.target.files[0]
+            const base64 = await convertBase64(file);
+            newSelectValue = {
+                ImageType: found.ImageType,
+                ImageUpload: base64,
+            }
+        }
+        let newTabArr = imageTable.map((index, k) => {
+            return (k === key) ? newSelectValue : index
+        })
+        setImageTable(newTabArr)
+    }
 
 
     const convertBase64 = (file) => {

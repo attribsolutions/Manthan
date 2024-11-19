@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import DriverMaster from "./DriverMaster";
 import {
@@ -15,9 +15,9 @@ import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList";
-import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 import { PageLoadingSpinner } from "../../../components/Common/CommonButton";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
+import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 
 const DriverList = () => {
 
@@ -36,6 +36,8 @@ const DriverList = () => {
       GoBtnlistloading: state.DriverReducer.loading
     })
   );
+  const { commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
+
   const { pageField, GoBtnlistloading } = reducers
 
   const action = {
@@ -46,11 +48,20 @@ const DriverList = () => {
     deleteSucc: deleteDriverID_Success
   }
 
+  // Common Party select Dropdown useEffect
+  useEffect(() => {
+    if (commonPartyDropSelect.value > 0) {
+      partySelectButtonHandler();
+    } else {
+      partySelectOnChangeHandler();
+    }
+  }, [commonPartyDropSelect]);
+
   useEffect(() => {
     const page_Id = pageId.DRIVER_lIST
     dispatch(commonPageFieldListSuccess(null))
     dispatch(commonPageFieldList(page_Id))
-    if (!(_cfunc.loginSelectedPartyID() === 0)) {
+    if (!(commonPartyDropSelect.value === 0)) {
       goButtonHandler()
     }
     return () => {
@@ -60,13 +71,13 @@ const DriverList = () => {
 
   function goButtonHandler() {
     try {
-      if ((_cfunc.loginSelectedPartyID() === 0)) {
-        customAlert({ Type: 3, Message: "Please Select Party" });
+      if ((commonPartyDropSelect.value === 0)) {
+        customAlert({ Type: 3, Message: alertMessages.commonPartySelectionIsRequired });
         return;
       };
       const jsonBody = {
         ..._cfunc.loginJsonBody(),
-        PartyID: _cfunc.loginSelectedPartyID()
+        PartyID: commonPartyDropSelect.value
       };
       dispatch(getDriverList(jsonBody));
     }
@@ -74,7 +85,11 @@ const DriverList = () => {
     return
   };
 
-  function partyOnChngeButtonHandler() {
+  function partySelectButtonHandler() {
+    goButtonHandler()
+  }
+
+  function partySelectOnChangeHandler() {
     dispatch(getDriverListSuccess([]));
   }
 
@@ -82,13 +97,6 @@ const DriverList = () => {
     <React.Fragment>
       <PageLoadingSpinner isLoading={(GoBtnlistloading || !pageField)} />
       <div className="page-content">
-
-        <PartyDropdown_Common 
-          goBtnLoading={GoBtnlistloading}
-          goButtonHandler={goButtonHandler}
-          changeButtonHandler={partyOnChngeButtonHandler}
-        />
-
         {
           (pageField) &&
           <div className="mt-n1">

@@ -33,7 +33,7 @@ import {
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
-import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
+import { globalTableSearchProps } from "../../../components/Common/SearchBox/MySearch";
 import { countlabelFunc } from "../../../components/Common/CommonPurchaseList";
 import {
     PartyBankfilter,
@@ -321,8 +321,8 @@ const BankAssign = (props) => {
 
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
-    var IsEditMode_Css = ''
-    if ((modalCss) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
+    // var IsEditMode_Css = ''
+    // if ((modalCss) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
 
     if (!(userPageAccessState === '')) {
         return (
@@ -330,7 +330,7 @@ const BankAssign = (props) => {
                 <PageLoadingSpinner isLoading={loading} />
                 <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
 
-                <div className="page-content" style={{ marginTop: IsEditMode_Css, }}>
+                <div className="page-content" >
                     <Container fluid>
                         <Card className="text-black">
                             <CardHeader className="card-header   text-black c_card_header" >
@@ -369,7 +369,7 @@ const BankAssign = (props) => {
                                                                                 {...paginationTableProps}
                                                                             />
                                                                             {countlabelFunc(toolkitProps, paginationProps, dispatch, "Bank Assign")}
-                                                                            {mySearchProps(toolkitProps.searchProps)}
+                                                                            {globalTableSearchProps(toolkitProps.searchProps)}
                                                                         </div>
 
                                                                         <Row className="align-items-md-center mt-30">

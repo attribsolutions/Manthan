@@ -22,12 +22,13 @@ import {
 import { useHistory } from "react-router-dom";
 import RoleAccessCopyFunctionality from "./RoleAccessCopyFunctionality";
 import CommonPurchaseList, { countlabelFunc } from "../../../components/Common/CommonPurchaseList";
-import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
+import { globalTableSearchProps } from "../../../components/Common/SearchBox/MySearch";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url"
 import { breadcrumbReturnFunc, btnIsDissablefunc, loginCompanyID, loginRoleID, loginUserID } from "../../../components/Common/CommonFunction";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import RoleAccessAdd from "./RoleAccessAdd"
+import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 
 
 const RoleAccessListPage = () => {
@@ -107,7 +108,7 @@ const RoleAccessListPage = () => {
 
         const ispermission = await customAlert({
             Type: 7,
-            Message: `Are you sure you want to delete this Role : "${rowData.RoleName}"`,
+            Message: `${alertMessages.deleteOrNot} Role : "${rowData.RoleName}"`,
         })
         if (ispermission) {
             btnIsDissablefunc({ btnId, state: true })

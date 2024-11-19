@@ -30,7 +30,7 @@ import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
-import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
+import { globalTableSearchProps } from "../../../components/Common/SearchBox/MySearch";
 import {
     getEmployeedropdownList,
     getPartyTableList,
@@ -41,6 +41,8 @@ import {
 import { selectAllCheck } from "../../../components/Common/TableCommonFunc";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { C_Select } from "../../../CustomValidateForm";
+import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
+import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 
 const ManagementEmpParties = (props) => {
 
@@ -80,7 +82,10 @@ const ManagementEmpParties = (props) => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
         dispatch(getEmployeedropdownList())
-        dispatch(getPartyTableListSuccess([]))
+        dispatch(BreadcrumbShowCountlabel(`Count:${0}`));
+        return () => {
+            dispatch(getPartyTableListSuccess([]));
+        }
     }, []);
 
     const values = { ...state.values }
@@ -151,7 +156,6 @@ const ManagementEmpParties = (props) => {
         }
     }, [postMsg])
 
-
     useEffect(() => {
         dispatch(BreadcrumbShowCountlabel(`${"Count"} :${partyList.length}`))
     }, [partyList])
@@ -204,7 +208,7 @@ const ManagementEmpParties = (props) => {
         const CheckArray = partyList.filter(index => index.selectCheck === true);
 
         if (CheckArray.length === 0) {
-            customAlert({ Type: 4, Status: true, Message: "At least One Party is Selected" });
+            customAlert({ Type: 4, Status: true, Message: alertMessages.atLeastOnePartySelectionRequired });
             return;
         }
         const PartiesJson = CheckArray.map(index => ({ Employee: values.Employee.value, Party: index.id }));
@@ -213,15 +217,15 @@ const ManagementEmpParties = (props) => {
     };
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
-    var IsEditMode_Css = ''
-    if ((modalCss) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
+    // var IsEditMode_Css = ''
+    // if ((modalCss) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
 
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
                 <PageLoadingSpinner isLoading={(!pageField)} />
                 <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
-                <div className="page-content" style={{ marginTop: IsEditMode_Css, marginBottom: "200px" }}>
+                <div className="page-content" >
                     <div className="px-2   c_card_header text-black mb-1" >
                         <div className="row">
                             <Col sm="5">
@@ -283,15 +287,19 @@ const ManagementEmpParties = (props) => {
                                             striped={true}
                                             selectRow={selectAllCheck({
                                                 rowSelected: rowSelected(),
-                                                bgColor:''
+                                                bgColor: '',
+                                                tableList: partyList
                                             })}
                                             noDataIndication={<div className="text-danger text-center ">Party Not available</div>}
                                             classes={"table align-middle table-nowrap table-hover"}
                                             headerWrapperClasses={"thead-light"}
                                             {...toolkitProps.baseProps}
+                                            onDataSizeChange={({ dataSize }) => {
+                                                dispatch(BreadcrumbShowCountlabel(`Count:${dataSize}`));
+                                            }}
                                         />
 
-                                        {mySearchProps(toolkitProps.searchProps)}
+                                        {globalTableSearchProps(toolkitProps.searchProps)}
                                     </div>
 
                                 </React.Fragment>
@@ -299,21 +307,15 @@ const ManagementEmpParties = (props) => {
                             }
                         </ToolkitProvider>
 
-                        {partyList.length > 0 ?
-                            <FormGroup style={{ marginTop: "-25px" }}>
-                                <Row >
-                                    <Col sm={2} className="mt-n4">  <div className="row save1" style={{ paddingBottom: 'center' }}>
-                                        <SaveButton pageMode={pageMode}
-                                            loading={saveBtnloading}
-                                            onClick={SaveHandler}
-                                            userAcc={userPageAccessState}
-                                            module={"RouteUpdate"}
-                                        />
-                                    </div>
-                                    </Col>
-                                </Row>
-                            </FormGroup >
-                            : null
+                        {partyList.length > 0 &&
+                            <SaveButtonDraggable>
+                                <SaveButton pageMode={pageMode}
+                                    loading={saveBtnloading}
+                                    onClick={SaveHandler}
+                                    userAcc={userPageAccessState}
+                                    module={"RouteUpdate"}
+                                />
+                            </SaveButtonDraggable>
                         }
 
                     </form>

@@ -4,6 +4,7 @@ import * as mode from "../../routes/PageMode"
 import { useEffect, useState } from "react";
 
 export function SaveButton(props) {
+  
   const { pageMode = '', userAcc = {}, editCreatedBy } = props
   const isCreated = (loginUserID() === editCreatedBy)
 
@@ -16,13 +17,14 @@ export function SaveButton(props) {
   else if ((userAcc.RoleAccess_IsSave) && (pageMode === mode.defaultsave
     || pageMode === mode.copy
     || pageMode === mode.modeSTPsave
+    || pageMode === mode.modeSTPList
     || pageMode === mode.dropdownAdd
     || pageMode === mode.assingLink)) {
     return <SaveBtn  {...props} />
   }
   return null
 }
-const SaveBtn = ({ onClick, type = "button", userAcc, loading, forceDisabled }) => {
+const SaveBtn = ({ onClick, type = "button", userAcc, loading, forceDisabled, }) => {
   const { Name } = userAcc;
   const btnId = `Save-${Name.replace(/ /g, "")}`;
   return (
@@ -32,6 +34,7 @@ const SaveBtn = ({ onClick, type = "button", userAcc, loading, forceDisabled }) 
           id={btnId}
           title={`Save ${Name} Loging...`}
           type={type}
+          // style={{ padding: "3px", paddingInline: "5px" }}
           className="btn btn-primary w-md"
         >  Saving.. &nbsp;
           <Spinner style={{ height: "13px", width: "13px" }} color="white" />
@@ -41,6 +44,7 @@ const SaveBtn = ({ onClick, type = "button", userAcc, loading, forceDisabled }) 
         <button
           type={type}
           id={btnId}
+          // style={{ padding: "3px", paddingInline: "5px" }}
           disabled={forceDisabled}
           title={`Save ${Name}`}
           className="btn btn-primary w-md"
@@ -86,21 +90,30 @@ export function Go_Button(props) {
   const { onClick, id, type = "button", loading, forceDisabled } = props
 
   return loading ?
-    <Button
+    <button
       id={id}
       type={type}
-      disabled
+      className="btn btn-success "
+      data-mdb-toggle="tooltip"
+      data-mdb-placement="top"
       title={`Go Button Loging...`}
-      color="btn btn-outline-success border-1"
-      onClick={onClick} >
-      <Spinner style={{ height: "13px", width: "13px" }} color="success" />
-    </Button>
-    : <Button
+      disabled
+    >
+      <Spinner style={{ height: "12px", width: "12px" }} color="white" />
+    </button>
+
+    :
+    <button
       id={id}
-      type={type}
+      type="button"
+      className="btn btn-success "
+      style={{ marginTop: "3px" }}
+      data-mdb-toggle="tooltip"
+      data-mdb-placement="top"
+      title="Go get details"
+      onClick={onClick}
       disabled={forceDisabled}
-      color="btn btn-success border-1 font-size-12"
-      onClick={onClick} > <span className="font-weight-bold" style={{ fontWeight: "bold", fontSize: "16px" }}>Go</span></Button>
+    > Go </button>
 }
 
 export function Change_Button(props) {
@@ -122,14 +135,14 @@ export function C_Button({
   spinnerColor = "primary",
   ...rest
 }) {
-  debugger
+
   if (loading) {
     return (
       <button
         disabled
         title={`Add Button Loading...`}
         {...rest}
-      >
+      > {children}..&nbsp;
         <Spinner style={{ height: "12px", width: "12px" }} color={spinnerColor} />
       </button>
     );
@@ -174,33 +187,42 @@ export const GotoInvoiceBtn = ({ onClick, userAcc, loading, forceDisabled }) => 
   )
 }
 
-export const SaveAndDownloadPDF = ({ onClick, userAcc, loading, forceDisabled, type = "button" }) => {
-  const { Name } = userAcc;
-  const btnId = `SaveAndDownloadPdfBtn-${Name.replace(/ /g, "")}`;
-  return (
-    <div>
-      {loading ?
-        <button
-          id={btnId}
-          type={type}
-          className="btn btn-info w-md"
-        >Saving.. &nbsp;
-          <Spinner style={{ height: "13px", width: "13px" }} color="white" />
-        </button>
-        :
-        <button
-          type={type}
-          id={btnId}
-          disabled={forceDisabled}
-          title={` save & goto Invoice ${Name}`}
-          className="btn btn-info w-md"
-          onClick={onClick}
-        >  Save & Print
-        </button>}
+export const SaveAndDownloadPDF = ({ onClick, pageMode, userAcc, loading, forceDisabled, type = "button" }) => {
 
-    </div>
-  )
+  const { Name } = userAcc;
+  if ((userAcc.RoleAccess_IsSave) && (pageMode === mode.defaultsave
+    || pageMode === mode.copy
+    || pageMode === mode.modeSTPsave
+    || pageMode === mode.dropdownAdd
+    || pageMode === mode.assingLink)) {
+    return (
+      <div>
+        {loading ?
+          <button
+            type={type}
+            className="btn btn-info "
+          >Saving.. &nbsp;
+            <Spinner style={{ height: "13px", width: "13px" }} color="white" />
+          </button>
+          :
+          <button
+            type={type}
+
+            disabled={forceDisabled}
+            title={` save & goto Invoice ${Name}`}
+            className="btn btn-info"
+            onClick={onClick}
+          >  Save & Print
+          </button>}
+
+      </div>
+    )
+  }
+  return null
 }
+
+// 
+
 
 export function Loader() {// linner component
   return <div className="dot-pulse"> <span> </span>     &nbsp;
@@ -232,30 +254,6 @@ export function Listloader1({ show = false }) {// common Listcomponent
 }
 
 
-// export function PageLoadingSpinner({ isLoading }) {// common Listcomponent
-//   // if (!isLoading) {
-//   //   return null
-//   // }
-//   useEffect(() => {
-//     //init body click event fot toggle rightbar
-//     // document.body.addEventListener("click", hideRightbar, true);
-//     try {
-//       if (isLoading === true) {
-//         document.getElementById("preloader").style.display = "block";
-//       } else {
-//         document.getElementById("preloader").style.display = "none";
-//       }
-//     } catch (w) { }
-//   }, [isLoading]);
-
-//   return <></>
-//   // return <div id="api_spinner" >
-//   //   <div className="api_spinner_body " >
-//   //     <span className="spinner" style={{ marginLeft: "-20vw" }} ></span>
-//   //   </div>
-//   // </div>
-
-// }
 
 export function DashboardLoader() {// linner component
   return <div className="dot-pulse mt-2"> &nbsp; &nbsp;&nbsp;
@@ -288,12 +286,48 @@ export function PageLoadingSpinner({ isLoading }) {
   }, [isLoading]);
 
   return (
-    <div className="pace pace-active" id="preloader">
-      <div className="pace-progress" data-progress-text="100%" data-progress="99" style={{ transform: "translate3d(100%, 0px, 0px)" }}>
+    <div className="pace pace-active" id="preloader" >
+      <div className="pace-progress" data-progress-text="100%" data-progress="99" style={{ transform: "translate3d(100%, 0px, 0px)", top: 56 }}>
         <div className="pace-progress-inner"></div>
       </div>
-      <div className="pace-activity"></div></div>
+    </div>
   );
 }
 
+
+
+export function Verifiy_Button({
+  loading,
+  color,
+  onClick,
+  forceDisabled,
+  children,
+  spinnerColor = "primary",
+  ...rest
+}) {
+
+  if (loading) {
+    return (
+      <button
+        disabled
+        style={{ padding: "3px", paddingInline: "5px" }}
+        title={`Add Button Loading...`}
+        {...rest}
+      >
+        {children}&nbsp;&nbsp;<Spinner style={{ height: "12px", width: "12px" }} color={spinnerColor} />
+      </button>
+    );
+  }
+
+  return (
+    <button
+      disabled={forceDisabled}
+      onClick={onClick}
+      style={{ padding: "3px", paddingInline: "5px" }}
+      {...rest}
+    >
+      {children}
+    </button>
+  );
+}
 

@@ -25,7 +25,7 @@ const INIT_STATE = {
     masterPage: "",
     pageMode: "",
     downBtnData: [],
-    showCountlabel: ''
+    // showCountlabel: ''
   },
   downBtnData: []
 }

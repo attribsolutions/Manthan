@@ -27,6 +27,9 @@ import {
   OrderPage_Edit_Post_API,
   OrderConfirm_post_API,
   OrderPage_Edit_ForDownload_API,
+  InterBranch_Order_Delete_API,
+  IB_Order_Update_API,
+  IB_Order_Get_Api,
 } from "../../../helpers/backend_helper";
 import {
   UPDATE_ORDER_ID_FROM_ORDER_PAGE,
@@ -40,19 +43,46 @@ import {
   POST_ORDER_CONFIRM_API,
   ORDER_SINGLE_GET_API
 } from "./actionType";
-import { amountCommaSeparateFunc, concatDateAndTime, date_dmy_func, } from "../../../components/Common/CommonFunction";
+import { amountCommaSeparateFunc, listpageConcatDateAndTime, date_dmy_func, loginSystemSetting, IsSweetAndSnacksCompany, loginCompanyID } from "../../../components/Common/CommonFunction";
 import *as url from "../../../routes/route_url"
 
-function* goButtonGenFunc({ config }) {                      // GO-Botton order Add Page by subPageMode  
+
+
+const CheckRateFromCompany = () => {
+  const checkRateFromCompany = loginSystemSetting().MRP_Rate
+  const loginCompanyId = IsSweetAndSnacksCompany() ? loginCompanyID() : "";
+  const result = checkRateFromCompany
+    .split(',')
+    .map((part) => part.split('-')[0])
+    .join(',');
+  const isRateForSweetAndSnacksCompany = result.split(',').includes(loginCompanyId.toString());
+  return { result, isRateForSweetAndSnacksCompany };
+};
+
+
+
+
+function* goButtonGenFunc({ config }) {                     // GO-Botton order Add Page by subPageMode  
 
   try {
 
     const { subPageMode, } = config
     let response;
-    if ((subPageMode === url.ORDER_1) || (subPageMode === url.ORDER_2) || (subPageMode === url.ORDER_4)) {
+    if ((subPageMode === url.ORDER_1) || (subPageMode === url.ORDER_2) || (subPageMode === url.ORDER_4) || (subPageMode === url.IB_ORDER) || (subPageMode === url.IB_SALES_ORDER)) {
       response = yield call(OrderPage_GoButton_API, config); // GO-Botton Purchase Order 1 && 2 Add Page API
       yield response.Data.OrderItems.forEach((ele, k) => {
         ele["id"] = k + 1
+        ele.UnitDetails = ele.UnitDetails.map(unit => ({
+          ...unit,
+          _BaseUnitRate: (unit.Rate * unit.BaseUnitQuantity)  /// this field add only for testing purpose ///checking  not use any where in code only for observation
+        }))
+        const isRateForSweetAndSnacksCompany = CheckRateFromCompany().isRateForSweetAndSnacksCompany;
+        if ((subPageMode === url.ORDER_1) || (subPageMode === url.IB_ORDER) || isRateForSweetAndSnacksCompany) {
+          ele.Rate = Number(ele.VRate)
+          ele.UnitDetails = ele.UnitDetails.map(unit => ({
+            ...unit, Rate: Number(ele.VRate),
+          }))
+        }
       });
       const termArr = []
       var term = response.Data.TermsAndConditions
@@ -66,9 +96,17 @@ function* goButtonGenFunc({ config }) {                      // GO-Botton order 
 
       yield response.Data.TermsAndConditions = termArr;
     }
-    else if (subPageMode === url.IB_ORDER) {
-      response = yield call(IBOrderPage_GoButton_API, config); // GO-Botton IB-invoice Add Page API
-    }
+    // else if (subPageMode === url.IB_ORDER) {
+
+    //   response = yield call(IBOrderPage_GoButton_API, config); // GO-Botton IB-invoice Add Page API
+
+    //   yield response.Data.OrderItems.forEach((ele, k) => {
+    //     ele["id"] = k + 1;
+    //     ele.Rate = Number(ele.Rate);
+    //     ele.UnitDetails = ele.UnitDetails.map(unit => ({ ...unit, Rate: Number(ele.Rate) }));
+    //   });
+    // }
+
     yield put(GoButton_For_Order_AddSuccess(response.Data));
   } catch (error) {
     yield put(orderApiErrorAction())
@@ -106,6 +144,7 @@ function* editOrderGenFunc({ config }) {     //  Edit Order by subPageMode
   const { btnmode, btnId } = config;
   try {
     let response = yield call(OrderPage_Edit_Post_API, config);
+
     response.pageMode = btnmode
     response.btnId = btnId
     yield put(editOrderIdSuccess(response));
@@ -114,10 +153,17 @@ function* editOrderGenFunc({ config }) {     //  Edit Order by subPageMode
   }
 }
 
-function* DeleteOrder_GenFunc({ config }) {                  // Delete Order by subPageMode
+function* DeleteOrder_GenFunc({ config }) {
+  // Delete Order by subPageMode
   try {
+    let response = ""
+    if (config.subPageMode === url.IB_ORDER_PO_LIST || config.subPageMode === url.IB_ORDER_SO_LIST) {
+      response = yield call(InterBranch_Order_Delete_API, config);
+    } else {
+      response = yield call(OrderPage_Delete_API, config);
+    }
 
-    const response = yield call(OrderPage_Delete_API, config);
+
     yield put(deleteOrderIdSuccess(response));
   } catch (error) {
     yield put(orderApiErrorAction())
@@ -125,47 +171,50 @@ function* DeleteOrder_GenFunc({ config }) {                  // Delete Order by 
 }
 
 function* UpdateOrder_ID_GenFunc({ config }) {         // Update Order by subPageMode
+
   try {
-    const response = yield call(OrderPage_Update_API, config);
+    let response = ""
+    if (config.subPageMode === url.IB_ORDER) {
+      response = yield call(IB_Order_Update_API, config);
+    } else {
+      response = yield call(OrderPage_Update_API, config);
+    }
+
     yield put(updateOrderIdSuccess(response))
   } catch (error) {
     yield put(orderApiErrorAction())
   }
-
 }
 
 function* orderList_GoBtn_GenFunc({ config }) {
 
   //  Order List Filter by subPageMode
   try {
-  
     const { subPageMode } = config
     let response;
     let newList;
-    if ((subPageMode === url.ORDER_LIST_1) || (subPageMode === url.ORDER_LIST_2) || (subPageMode === url.ORDER_LIST_4)) {
+    if ((subPageMode === url.ORDER_LIST_1) || (subPageMode === url.ORDER_LIST_2) || (subPageMode === url.ORDER_LIST_4) || (subPageMode === url.APP_ORDER_LIST)) {
       response = yield call(OrderList_get_Filter_API, config); // GO-Botton Purchase Order 1 && 2 Add Page API
     }
     else if ((subPageMode === url.GRN_STP_1) || subPageMode === url.GRN_STP_3) {
 
       response = yield call(GRN_STP_for_orderList_goBtn, config); // GO-Botton IB-invoice Add Page API
+
     }
     else if ((subPageMode === url.IB_ORDER_PO_LIST) || (subPageMode === url.IB_ORDER_SO_LIST) || (subPageMode === url.IB_INVOICE_STP)) {
       response = yield call(IBOrderList_get_Filter_API, config); // GO-Botton IB-invoice Add Page API
     }
-    // else if ((subPageMode === url.ORDER_LIST_4)) {
-    //   response = yield call(IBOrderList_get_Filter_API, config); // GO-Botton IB-invoice Add Page API
-    // }
 
     newList = yield response.Data.map((i) => {
-      
+
       i["recordsAmountTotal"] = i.OrderAmount;  // Breadcrumb Count total
       i.OrderAmount = amountCommaSeparateFunc(i.OrderAmount) //  GrandTotal show with commas
       var DeliveryDate = date_dmy_func(i.DeliveryDate);
 
       i.dashboardOrderDate = date_dmy_func(i.OrderDate); // Only for Dashoard 
-      //tranzaction date is only for fiterand page field but UI show transactionDateLabel
+      // //tranzaction date is only for fiterand page field but UI show transactionDateLabel
       i["transactionDate"] = i.CreatedOn;
-      i["transactionDateLabel"] = concatDateAndTime(i.OrderDate, i.CreatedOn);
+      i["transactionDateLabel"] = listpageConcatDateAndTime(i.OrderDate, i.CreatedOn);
 
       i.DeliveryDate = (`${DeliveryDate}`)
 
@@ -176,15 +225,26 @@ function* orderList_GoBtn_GenFunc({ config }) {
       i.forceHideOrderAprovalBtn = true;
 
       if (i.Inward > 0) {
+
         i.Inward = "Close"
         i.Status = "Close"
         i.forceEditHide = true
+
       } else {
         i.Status = "Open";
         i.Inward = "Open";
+        if (subPageMode === url.GRN_STP_1 || (subPageMode === url.ORDER_LIST_1) || (subPageMode === url.IB_ORDER_SO_LIST) || (subPageMode === url.GRN_STP_3) || (subPageMode === url.IB_ORDER_PO_LIST)) {
+          if ((subPageMode === url.IB_ORDER_SO_LIST || subPageMode === url.IB_ORDER_PO_LIST) && i.InvoiceCreated) {
+            i.forceEditHide = true;
+            i.forceMakeBtnHide = true
+            i.forceDeleteHide = true;
+          } else {
+            i.forceMakeBtnHide = false
+          }
+        }
       }
 
-      //+++++++++++++++++++++++++  Status colonm show Status    ++++++++++++++++++++++++++++++++++++++
+      //+++++++++++++++++++++++++  Status colonm show Status   ++++++++++++++++++++++++++++++++++++++
       if (i.SAPResponse) {
         i.Status = "Order send To SAP"
       }
@@ -212,7 +272,18 @@ function* orderList_GoBtn_GenFunc({ config }) {
       if (i.IsConfirm === true) {// is confirm is true the show force delete and edit true "PO" ans "SO" mode 
         i.forceEditHide = true;
         i.forceDeleteHide = true;
-        i.forceSelectDissabled = true;//select row check box dessible 
+        i.forceSelectDissabled = true;
+        if (subPageMode === url.APP_ORDER_LIST) {
+
+          if (!(i.SubPartyFlag) || (i.InvoiceCreated)) {
+            i.forceSelectDissabled = true;//select row check box dessible 
+            // if (i.InvoiceCreated) {
+            //   i.forceSelectDissabled = true;//select row check box dessible 
+            // }
+          } else {
+            i.forceSelectDissabled = false
+          }
+        }
       }
 
       //**********sap_code order page********************************************************************************************
@@ -227,6 +298,14 @@ function* orderList_GoBtn_GenFunc({ config }) {
 
       return i
     })
+    if (subPageMode === url.ORDER_LIST_4) {
+      newList = newList.filter(i => i.MobileAppOrderFlag === null);
+    } else if (subPageMode === url.APP_ORDER_LIST) {
+      newList = newList.filter(i => i.MobileAppOrderFlag !== null);
+    }
+    else if (subPageMode === url.GRN_STP_1) {
+      newList = newList.filter(i => i.Status === "Open");
+    }
 
     yield put(getOrderListPageSuccess(newList))
 
@@ -274,9 +353,15 @@ function* OrderConfirm_GenFunc({ config }) {         // Update Order by subPageM
 
 function* OrderSingleGet_GenFunc({ config }) {
 
-
   try {
-    const response = yield call(OrderPage_Edit_ForDownload_API, config);
+    let response = ""
+    if (config.subPageMode === url.IB_ORDER_SO_LIST || config.subPageMode === url.IB_ORDER_PO_LIST) {
+      response = yield call(IB_Order_Get_Api, config);
+    } else {
+      response = yield call(OrderPage_Edit_ForDownload_API, config);
+
+    }
+
     yield put(orderSinglegetSuccess(response))
 
   } catch (error) {

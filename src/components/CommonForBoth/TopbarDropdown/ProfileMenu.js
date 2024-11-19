@@ -23,6 +23,7 @@ import { ChangePassword, ChangePassword_Succes } from "../../../store/auth/chang
 import { customAlert } from "../../../CustomAlert/ConfirmDialog"
 import { passwordRgx } from "../../../CustomValidateForm/index";
 import { loginCompanyName, loginIsSCMCompany, loginUserDetails } from "../../Common/CommonFunction"
+import { alertMessages } from "../../Common/CommonErrorMsg/alertMsg"
 
 const ProfileMenu = props => {
 
@@ -147,14 +148,14 @@ const ProfileMenu = props => {
     if ((newPwd.length < 3) || (newPwd.length < 8)) {
       customAlert({
         Type: 3,
-        Message: "Set NewPassoword",
+        Message: alertMessages.setNewPassword,
       });
       return
     }
     else if (!passwordsMatch) {
       customAlert({
         Type: 3,
-        Message: "Confirm does not match to NewPassword ",
+        Message: alertMessages.newPasswordNotMatch,
       });
       return
     }
@@ -167,7 +168,7 @@ const ProfileMenu = props => {
 
     const isConfirmed = await customAlert({
       Type: 7,
-      Message: "Do you Want to Change Password ?",
+      Message: alertMessages.changePassword,
     });
 
     if (isConfirmed) {
@@ -175,24 +176,7 @@ const ProfileMenu = props => {
 
     };
   };
-  // const handleMouseEnter = () => {
-  //   debugger
-  //   document.getElementById('user-detail-div').style.display = 'block';
-  // };
 
-  // const handleMouseLeave = () => {
-  //   document.getElementById('user-detail-div').style.display = 'none';
-  // };
-
-  const [isMouseOver, setIsMouseOver] = useState(false);
-
-  const handleMouseEnter = () => {
-    setIsMouseOver(true);
-  };
-
-  const handleMouseLeave = () => {
-    setIsMouseOver(false);
-  };
   let FooterDetails = loginUserDetails()
   let CompanyName = loginCompanyName()
   let IsSCMCompany = loginIsSCMCompany() === 1 ? "IsSCM" : "Non-SCM"
@@ -223,7 +207,6 @@ const ProfileMenu = props => {
               <FormGroup className="mb-2 col col-sm-9 ">
                 <Label htmlFor="validationCustom01"> Old Password </Label>
                 <Input
-                  // defaultValue={""}
                   type="password"
                   value={currentPwd}
                   autoComplete="off"
@@ -242,7 +225,6 @@ const ProfileMenu = props => {
                   placeholder="Enter New Password"
                   autoComplete='off'
                   className="form-control"
-                  // autoFocus={true}
                   onChange={newpwdOnchange}
                 />
                 {(newPwdError.length > 0) && (
@@ -257,7 +239,6 @@ const ProfileMenu = props => {
                   type="text"
                   placeholder="Enter Confirm Password"
                   autoComplete="off"
-                  // autoFocus={true}
                   onChange={e => {
                     confirmpwdOnchange(e);
                   }}
@@ -323,8 +304,8 @@ const ProfileMenu = props => {
 
         >
           <div
-            // onMouseEnter={handleMouseEnter}
-            // onMouseLeave={handleMouseLeave}
+          // onMouseEnter={handleMouseEnter}
+          // onMouseLeave={handleMouseLeave}
           >
             <DropdownToggle
               className="btn header-item bg-soft-light border-start border-end"
@@ -333,15 +314,16 @@ const ProfileMenu = props => {
 
             >
 
-              <span className=" d-xl-inline-block ms-2 me-1">{employeeName}</span>
+              <span className=" d-xl-inline-block ms-2 me-1">{`${employeeName} `}</span>
+              <span className=" d-xl-inline-block ms-2 me-1">{` (${FooterDetails.PartyName})`}</span>
               <i className="mdi mdi-chevron-down d-none d-xl-inline-block" />
             </DropdownToggle>
           </div>
           <DropdownMenu className="dropdown-menu-end">
             <DropdownItem>
-          <div className="text-left"><label className="text-info font-size-18">{FooterDetails.PartyName}</label> </div>
-            <div className="mb-1"><span className=" text-muted">Role</span> : <span className="text-black">{FooterDetails.RoleName}</span></div>
-            <div className=""><span>Company</span> : <span className="text-black">{CompanyName}&nbsp;&nbsp;({IsSCMCompany})</span></div>
+              <div className="text-left"><label className="text-info font-size-18">{FooterDetails.PartyName}</label> </div>
+              <div className="mb-1"><span className=" text-muted">Role</span> : <span className="text-black">{FooterDetails.RoleName}</span></div>
+              <div className=""><span>Company</span> : <span className="text-black">{CompanyName}&nbsp;&nbsp;({IsSCMCompany})</span></div>
             </DropdownItem>
             <DropdownItem divider />
 
@@ -360,14 +342,12 @@ const ProfileMenu = props => {
               <span>{props.t("Change Password")}</span>
             </DropdownItem >
 
+            <Link to="/logout" className="dropdown-item" >
+              <i className="bx bx-power-off font-size-16 align-middle me-1 text-danger fw-bold" />
+              <span className="">{props.t("Logout")}</span>
+            </Link>
 
-          
-              <Link to="/logout" className="dropdown-item" >
-                <i className="bx bx-power-off font-size-16 align-middle me-1 text-danger fw-bold" />
-                <span className="">{props.t("Logout")}</span>
-              </Link>
 
-         
           </DropdownMenu>
         </Dropdown>
 

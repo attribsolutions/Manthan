@@ -55,6 +55,9 @@ const SelectDivisionPage = () => {
         history.push("/Dashboard")
       }
     }
+    else {
+      localStorage.setItem("isMultipleDivision", false)
+    }
   }, [userAccess])
 
   const divisionDropdown_DropdownOption = divisionDropdown_redux.map((d, key) => ({
@@ -90,7 +93,7 @@ const SelectDivisionPage = () => {
                       <Link to="/dashboard" className="d-block auth-logo">
                         <span className="logo-txt">FoodERP 2.0</span>
                       </Link>
-                      <img src={logo} alt="" height="90" />
+                      <img src={logo} alt="" height="150" style={{height:"175px"}} />
                     </div>
 
                     <div className="auth-content my-auto">

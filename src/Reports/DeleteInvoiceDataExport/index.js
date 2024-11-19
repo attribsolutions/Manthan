@@ -8,16 +8,16 @@ import { C_DatePicker } from "../../CustomValidateForm";
 import * as _cfunc from "../../components/Common/CommonFunction";
 import { mode, url, pageId } from "../../routes/index"
 import { MetaTags } from "react-meta-tags";
-import * as XLSX from 'xlsx';
 import { postDeleteInvoiceDataExport_API, postDeleteInvoiceDataExport_API_Success } from "../../store/Report/InvoiceDataExportRedux/action";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import Select from "react-select";
-import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
+import { globalTableSearchProps } from "../../components/Common/SearchBox/MySearch";
 import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess } from "../../store/actions";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import DynamicColumnHook from "../../components/Common/TableCommonFunc";
-import { ReportComponent } from "../ReportComponent";
+import { ExcelReportComponent } from "../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS";
+import { alertMessages } from "../../components/Common/CommonErrorMsg/alertMsg";
 
 const DeleteInvoiceDataExport = (props) => {
 
@@ -39,7 +39,7 @@ const DeleteInvoiceDataExport = (props) => {
         (state) => ({
             tableData: state.InvoiceDataExportReducer.DeleteInvoiceDataExportGobtn,
             GoBtnLoading: state.InvoiceDataExportReducer.GoBtnLoading,
-            Distributor: state.CommonPartyDropdownReducer.commonPartyDropdown,
+            Distributor: state.CommonPartyDropdownReducer.commonPartyDropdownOption,
             ExcelBtnLoading: state.InvoiceDataExportReducer.ExcelBtnLoading,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageField
@@ -51,7 +51,10 @@ const DeleteInvoiceDataExport = (props) => {
 
     useEffect(() => {
         dispatch(commonPageFieldSuccess(null));
-        dispatch(commonPageField(pageId.DELETE_INVOICE_DATA_EXPORT))
+        dispatch(commonPageField(pageId.DELETE_INVOICE_DATA_EXPORT));
+        if (_cfunc.CommonPartyDropValue().value > 0) {
+            setPartyDropdown(_cfunc.CommonPartyDropValue());
+        }
         return () => {
             dispatch(commonPageFieldSuccess(null));
             dispatch(postDeleteInvoiceDataExport_API_Success([]))
@@ -93,9 +96,9 @@ const DeleteInvoiceDataExport = (props) => {
 
         if (tableData.btnId === "excel_btnId") {
             if (DeletedInvoiceExportSerializerDetails.length > 0) {
-                ReportComponent({                // Download CSV
+                ExcelReportComponent({                // Download CSV
                     pageField,
-                    excelData: DeletedInvoiceExportSerializerDetails,
+                    excelTableData: DeletedInvoiceExportSerializerDetails,
                     excelFileName: "Deleted Invoice Data Export"
                 })
                 dispatch(postDeleteInvoiceDataExport_API_Success([]));
@@ -107,7 +110,7 @@ const DeleteInvoiceDataExport = (props) => {
 
         try {
             if ((isSCMParty) && (PartyDropdown === "")) {
-                customAlert({ Type: 3, Message: "Please Select Party" });
+                customAlert({ Type: 3, Message: alertMessages.commonPartySelectionIsRequired });
                 return;
             };
             const jsonBody = JSON.stringify({
@@ -126,7 +129,7 @@ const DeleteInvoiceDataExport = (props) => {
         try {
             const btnId = `gobtn-${url.DELETE_INVOICE_DATA_EXPORT}`
             if ((isSCMParty) && (PartyDropdown === "")) {
-                customAlert({ Type: 3, Message: "Please Select Party" });
+                customAlert({ Type: 3, Message: alertMessages.commonPartySelectionIsRequired });
                 return;
             };
             const jsonBody = JSON.stringify({
@@ -175,13 +178,14 @@ const DeleteInvoiceDataExport = (props) => {
         <React.Fragment>
             <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
             <div className="page-content">
-                <div className="px-2   c_card_filter text-black" >
-                    <div className="row" >
+
+                <div className="px-2   c_card_filter text-black " >
+                    <Row>
                         <Col sm={3} className="">
-                            <FormGroup className="mb- row mt-3 mb-2 " >
+                            <FormGroup className=" row mt-2  " >
                                 <Label className="col-sm-4 p-2"
                                     style={{ width: "83px" }}>FromDate</Label>
-                                <Col sm="6">
+                                <Col sm="7">
                                     <C_DatePicker
                                         name='FromDate'
                                         value={values.FromDate}
@@ -190,11 +194,12 @@ const DeleteInvoiceDataExport = (props) => {
                                 </Col>
                             </FormGroup>
                         </Col>
+
                         <Col sm={3} className="">
-                            <FormGroup className="mb- row mt-3 mb-2" >
+                            <FormGroup className=" row mt-2 " >
                                 <Label className="col-sm-4 p-2"
                                     style={{ width: "65px" }}>ToDate</Label>
-                                <Col sm="6">
+                                <Col sm="7">
                                     <C_DatePicker
                                         name="ToDate"
                                         value={values.ToDate}
@@ -205,8 +210,8 @@ const DeleteInvoiceDataExport = (props) => {
                         </Col>
 
                         {isSCMParty &&
-                            <Col sm={3} className="">
-                                <FormGroup className="mb- row mt-3" >
+                            <Col sm={4} className="">
+                                <FormGroup className=" row mt-2" >
                                     <Label className="col-sm-4 p-2"
                                         style={{ width: "65px", marginRight: "20px" }}>Party</Label>
                                     <Col sm="8">
@@ -226,39 +231,35 @@ const DeleteInvoiceDataExport = (props) => {
                                 </FormGroup>
                             </Col>
                         }
-                        <Col sm={1} className="mt-3 ">
+                        <Col sm={isSCMParty ? 2 : 6} className=" d-flex justify-content-end" >
                             <C_Button
                                 type="button"
                                 spinnerColor="white"
                                 loading={GoBtnLoading === `gobtn-${url.DELETE_INVOICE_DATA_EXPORT}`}
-                                className="btn btn-success   "
+                                className="btn btn-success m-3 mr"
                                 onClick={goButtonHandler}
                             >
                                 Show
                             </C_Button>
 
-                        </Col>
-
-                        <Col sm={2} className="mt-3 ">
                             <C_Button
                                 type="button"
                                 spinnerColor="white"
                                 loading={ExcelBtnLoading === `excel_btnId`}
-                                className="btn btn-primary   "
+                                className="btn btn-primary m-3 mr"
                                 onClick={(e) => { excelhandler() }}
                             >
-                                Excel Download
+                                Excel
                             </C_Button>
                         </Col>
-
-
-                    </div>
+                    </Row>
                 </div>
+
+
+
                 <div className="mt-1">
                     <ToolkitProvider
                         keyField="PartyID"
-                        // data={tableData.btnId !== "excel_btnId" ? DeletedInvoiceExportSerializerDetails : [{}]}
-                        // columns={tableData.btnId !== "excel_btnId" ? tableColumns : [{}]}
                         data={DeletedInvoiceExportSerializerDetails}
                         columns={tableColumns}
                         search
@@ -281,7 +282,7 @@ const DeleteInvoiceDataExport = (props) => {
                                                 }}
                                                 {...toolkitProps.baseProps}
                                             />
-                                            {mySearchProps(toolkitProps.searchProps)}
+                                            {globalTableSearchProps(toolkitProps.searchProps)}
                                         </div>
                                     </Col>
                                 </Row>

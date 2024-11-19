@@ -5,6 +5,7 @@ import {
     Label,
     Input,
     Row,
+    Modal,
 
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
@@ -25,12 +26,17 @@ import { GetVenderSupplierCustomer, GetVenderSupplierCustomerSuccess, } from "..
 import "../../Sale/SalesReturn/salesReturn.scss";
 import { CInput, C_DatePicker, C_Select, decimalRegx } from "../../../CustomValidateForm/index";
 import * as _cfunc from "../../../components/Common/CommonFunction";
-import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
+import { globalTableSearchProps } from "../../../components/Common/SearchBox/MySearch";
 import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import { SaveButton } from "../../../components/Common/CommonButton";
 import { return_discountCalculate_Func } from "../../Sale/SalesReturn/SalesCalculation";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
+import Slidewithcaption from "../../../components/Common/CommonImageComponent";
+import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
+import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
+import { CheckStockEntryForFirstTransaction, CheckStockEntryForFirstTransactionSuccess, CheckStockEntryforBackDatedTransaction, CheckStockEntryforBackDatedTransactionSuccess } from "../../../store/Inventory/StockEntryRedux/action";
+
 
 const PurchaseReturnMode3 = (props) => {
 
@@ -49,6 +55,13 @@ const PurchaseReturnMode3 = (props) => {
     const [subPageMode] = useState(history.location.pathname)
     const [tableData, setTableData] = useState([]);
     const [returnItemIDs, setReturnItemIDs] = useState("");
+    const [modal_backdrop, setmodal_backdrop] = useState(false);   // Image Model open Or not
+    const [imageTable, setImageTable] = useState([]);
+    const [alertDate, setAlertDate] = useState({ ActualDate: "", WarningDate: "", Coustomerid: [], Supplierid: [], date: [], SelectedCustomerId: null })
+
+    const [ButtonCondition, setButtonCondition] = useState({ isEnable: false, isEnablePriviousAlert: false });
+
+
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
@@ -58,8 +71,12 @@ const PurchaseReturnMode3 = (props) => {
         supplier,
         pageField,
         userAccess,
-        commonPartyDropSelect
+        commonPartyDropSelect,
+        StockEnteryForFirstYear,
+        StockEnteryForBackdated
     } = useSelector((state) => ({
+        StockEnteryForFirstYear: state.StockEntryReducer.StockEnteryForFirstYear,
+        StockEnteryForBackdated: state.StockEntryReducer.StockEnteryForBackdated,
         saveBtnloading: state.SalesReturnReducer.saveBtnloading,
         sendToSSbtnTableData: state.SalesReturnReducer.sendToSSbtnTableData,
         supplier: state.CommonAPI_Reducer.vendorSupplierCustomer,
@@ -71,26 +88,8 @@ const PurchaseReturnMode3 = (props) => {
 
     useEffect(() => {
         if (sendToSSbtnTableData.Status === true) {
-
-            const { Data = [] } = sendToSSbtnTableData;
-
-            let grand_total = 0;
-            const UpdatedTableData = Data.map((item, index) => {
-                const calculate = return_discountCalculate_Func(item);
-
-                item["roundedTotalAmount"] = calculate.roundedTotalAmount
-                grand_total += Number(calculate.roundedTotalAmount);
-
-                return {
-                    ...item, id: index + 1,
-                    salesQuantity: item.Quantity,
-                    Quantity: item.ApprovedQuantity,
-                    tableBatchDate: _cfunc.date_dmy_func(item.BatchDate)
-                };
-            });
-
-            setTableData(UpdatedTableData);
-            let count_label = `${"Total Amount"} :${_cfunc.amountCommaSeparateFunc(grand_total)}`
+            setTableData(history.location.updatedTableData);
+            let count_label = `${"Total Amount"} :${_cfunc.amountCommaSeparateFunc(history.location.GrandTotal)}`
             dispatch(BreadcrumbShowCountlabel(count_label))
             dispatch(post_Send_to_superStockiest_Id_Succcess({ Status: false }))
             setReturnItemIDs(sendToSSbtnTableData.ReturnItemID)
@@ -102,6 +101,12 @@ const PurchaseReturnMode3 = (props) => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(pageId.PURCHASE_RETURN_MODE_3))
     }, []);
+
+    useEffect(() => {
+        if (imageTable.length > 0) {
+            setmodal_backdrop(true)
+        }
+    }, [imageTable])
 
     // Common Party Dropdown useEffect
     useEffect(() => {
@@ -181,6 +186,89 @@ const PurchaseReturnMode3 = (props) => {
         totalAmountCalcuationFunc(row, tableData)
     }
 
+    const imageShowHandler = async (row) => { // image Show handler
+        const Slide = row.ReturnItemImages
+        setImageTable(Slide)
+    }
+
+    function tog_backdrop() {
+        setmodal_backdrop(!modal_backdrop)
+        setImageTable([])
+        removeBodyCss()
+    }
+    function removeBodyCss() {
+        document.body.classList.add("no_padding")
+    }
+
+    useEffect(() => {
+
+    }, [])
+
+
+    useEffect(() => {
+        const jsonBody = JSON.stringify({
+            "FromDate": values.ReturnDate,
+            "PartyID": commonPartyDropSelect.value
+        });
+
+        const jsonBodyForBackdatedTransaction = JSON.stringify({
+            "TransactionDate": values.ReturnDate,
+            "PartyID": commonPartyDropSelect.value,
+        });
+        if (commonPartyDropSelect.value > 0) {
+            dispatch(CheckStockEntryForFirstTransaction({ jsonBody }))
+            dispatch(CheckStockEntryforBackDatedTransaction({ jsonBody: jsonBodyForBackdatedTransaction }))
+        }
+    }, [values.ReturnDate, commonPartyDropSelect.value])
+
+
+    useEffect(() => {
+        if (StockEnteryForFirstYear.Status === true && StockEnteryForFirstYear.StatusCode === 400) {
+            dispatch(CheckStockEntryForFirstTransactionSuccess({ status: false }))
+            customAlert({
+                Type: 3,
+                Message: JSON.stringify(StockEnteryForFirstYear.Message),
+            })
+        }
+    }, [StockEnteryForFirstYear])
+
+
+
+    ///////////////////// code  Block sales return send to supplier based on setting setting format   "PartyTypeID(Customer)-PartyTypeID(Supplier)-Date(Start Date of Block)"
+    useEffect(() => {
+        const CustomerPartyTypeID = _cfunc.loginUserDetails().PartyTypeID
+        const systemsetting = _cfunc.loginSystemSetting().IsSalesReturnSendToSupplier;
+        var ConditionArray = systemsetting?.split(',');
+        const SupplierPartyTypeId = supplier.filter(i => i.id === values.Customer.value)[0]?.PartyTypeID
+        let Coustomerid = [];
+        let Supplierid = [];
+        let date = [];
+
+        if ((ConditionArray?.length > 0) && (ConditionArray !== undefined)) {
+            ///////////////////////////////////////////////////// split according to condition /////////////////////////////////////////////////////////////////////////
+            try {
+                for (let i = 0; i < ConditionArray.length; i++) {
+                    let parts = ConditionArray[i].split('-');
+                    Supplierid.push(parseInt(parts[1]));
+                    Coustomerid.push(parseInt(parts[0]));
+                    date.push({ Coustomerid: parseInt(parts[0]), date: parseInt(parts[2]), Supplierid: parseInt(parts[1]) });
+                }
+                if (date.filter(i => (i.Coustomerid === CustomerPartyTypeID && i.Supplierid === SupplierPartyTypeId))[0]) {
+                    const ActualDate = date.filter(i => (i.Coustomerid === CustomerPartyTypeID && i.Supplierid === SupplierPartyTypeId))[0].date
+                    setAlertDate({ ActualDate: ActualDate, WarningDate: ActualDate - 1, Coustomerid: Coustomerid, Supplierid: Supplierid, date: date, SelectedSupplierId: SupplierPartyTypeId });
+                } else {
+                    setAlertDate({});
+                }
+            } catch (error) {
+                _cfunc.CommonConsole(error)
+            }
+        }
+    }, [values.Customer.value])
+
+    useEffect(() => {
+        setButtonCondition({ isEnable: _cfunc.isButtonEnable({ ConditionDetails: alertDate }).isEnable, isEnablePriviousAlert: _cfunc.isButtonEnable({ ConditionDetails: alertDate }).isEnablePriviousAlert })
+    }, [alertDate])
+
     const pagesListColumns = [
         {
             text: "Item Name",
@@ -220,7 +308,6 @@ const PurchaseReturnMode3 = (props) => {
                 return { width: '120px', textAlign: 'center' };
             }
         },
-
         {
             text: "Unit",
             dataField: "UnitName",
@@ -228,7 +315,6 @@ const PurchaseReturnMode3 = (props) => {
                 return { width: '80px', textAlign: 'center' };
             }
         },
-
         {
             text: "MRP",
             dataField: "MRPValue",
@@ -298,6 +384,38 @@ const PurchaseReturnMode3 = (props) => {
         },
 
         {
+            text: "Image",
+            dataField: "",
+            classes: () => "sales-return-Image-row",
+
+
+            formatter: (cellContent, row, key) => {
+
+                return (<span style={{ justifyContent: 'center', width: "100px" }}>
+                    <div>
+                        <div className="btn-group btn-group-example mb-3" role="group">
+
+                            <button name="image"
+                                accept=".jpg, .jpeg, .png ,.pdf"
+                                onClick={(event) => {
+
+                                    if ((row.ReturnItemImages.length === 0)) {
+                                        customAlert({ Type: 3, Message: `${row.ItemName} ${alertMessages.imageNotUploaded}` });
+                                        return setmodal_backdrop(false)
+                                    } else if ((row.ReturnItemImages) && (row.ReturnItemImages.length > 0)) {
+                                        imageShowHandler(row)
+                                    }
+                                }}
+                                id="ImageId" type="button" className="btn btn-primary "> Show </button>
+                        </div>
+                    </div>
+
+
+                </span>)
+            }
+        },
+
+        {
             text: "Comment",
             dataField: "ItemComment",
         },
@@ -331,7 +449,7 @@ const PurchaseReturnMode3 = (props) => {
         if (values.Customer === "") {
             customAlert({
                 Type: 4,
-                Message: "Please Select Supplier",
+                Message: alertMessages.selectSupplier,
             });
             return;
         }
@@ -341,6 +459,17 @@ const PurchaseReturnMode3 = (props) => {
         const formData = new FormData(); // Create a new FormData object
 
         const ReturnItems = tableData.reduce((filterdItem, i) => {
+
+            let ToatlImages = []
+            if (i.File !== undefined) {
+                ToatlImages = Array.from(i.File).map((item, key) => {
+
+                    formData.append(`uploaded_images_${i.Item}`, i.File[key]);  //Sending image As a file 
+                    return { Item_pic: `Purchase Return Image Count${key}` }
+                })
+            } else {
+                ToatlImages = []
+            }
 
             if (Number(i.Quantity) > 0) {
                 const calculate = return_discountCalculate_Func(i);
@@ -378,7 +507,7 @@ const PurchaseReturnMode3 = (props) => {
                     "PurchaseReturn": i.PurchaseReturn,
                     "SubReturn": i.PurchaseReturn,
                     "primarySourceID": i.primarySourceID,
-                    "ReturnItemImages": [],
+                    "ReturnItemImages": ToatlImages,
                 });
             }
             return filterdItem
@@ -401,18 +530,35 @@ const PurchaseReturnMode3 = (props) => {
             formData.append('PurchaseReturnReferences', JSON.stringify(PurchaseReturnReferences)); // Convert to JSON string
             formData.append('ReturnItems', JSON.stringify(ReturnItems)); // Convert to JSON strin
 
-            dispatch(saveSalesReturnMaster({ formData, btnId }));
+
+            if (StockEnteryForBackdated.Status === true && StockEnteryForBackdated.StatusCode === 400) {
+                dispatch(CheckStockEntryforBackDatedTransactionSuccess({ status: false }))
+                customAlert({ Type: 3, Message: StockEnteryForBackdated.Message });
+            } else {
+                dispatch(saveSalesReturnMaster({ formData, btnId }));
+            }
 
         } catch (e) { _cfunc.CommonConsole(e) }
     };
-
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
                 <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
 
                 <div className="page-content" >
+                    <Modal
+                        isOpen={modal_backdrop}
+                        toggle={() => {
+                            tog_backdrop()
+                        }}
 
+                        style={{ width: "800px", height: "800px", borderRadius: "50%" }}
+                        className="modal-dialog-centered "
+                    >
+                        {<Slidewithcaption Images={imageTable} />}
+                    </Modal>
+                    {(!ButtonCondition.isEnable && values.Customer !== "" && alertDate.ActualDate !== "") && <div style={{ color: "red", fontSize: "18px" }} className="sliding-text " >  Warning: cannot send the sales return to the supplier from {_cfunc.DateFormat(alertDate.ActualDate)} of the month to the end of the month.</div>}
+                    {(ButtonCondition.isEnablePriviousAlert && values.Customer !== "" && alertDate.ActualDate !== undefined) && <div style={{ color: "red", fontSize: "18px" }} className="sliding-text " >  Warning:Sales return send to suppliers will be unavailable from {_cfunc.DateFormat(alertDate.ActualDate)} to month-end.  </div>}
                     <form noValidate>
                         <div className="px-2 c_card_filter header text-black mb-1" >
 
@@ -448,6 +594,7 @@ const PurchaseReturnMode3 = (props) => {
                                                     menu: provided => ({ ...provided, zIndex: 2 })
                                                 }}
                                                 onChange={(hasSelect, evn) => {
+
                                                     onChangeSelect({ hasSelect, evn, state, setState });
                                                 }
                                                 }
@@ -517,7 +664,7 @@ const PurchaseReturnMode3 = (props) => {
                                                     />
                                                 </div>
                                             </Col>
-                                            {mySearchProps(toolkitProps.searchProps,)}
+                                            {globalTableSearchProps(toolkitProps.searchProps,)}
                                         </Row>
 
                                     </React.Fragment>
@@ -528,22 +675,19 @@ const PurchaseReturnMode3 = (props) => {
                     </form >
 
                     {
-                        tableData.length > 0 ?
-                            <div >
-                                <FormGroup>
-                                    <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"} >
-                                        <SaveButton
-                                            pageMode={mode.modeSTPsave}
-                                            loading={saveBtnloading}
-                                            onClick={SaveHandler}
-                                            userAcc={userPageAccessState}
-                                            module={"SalesReturn"}
-                                        />
+                        tableData.length > 0 &&
+                        <SaveButtonDraggable>
+                            <SaveButton
+                                pageMode={mode.modeSTPsave}
+                                loading={saveBtnloading}
+                                onClick={SaveHandler}
+                                forceDisabled={(!ButtonCondition.isEnable) || (!StockEnteryForFirstYear.Data)}
+                                userAcc={userPageAccessState}
+                                module={"SalesReturn"}
+                            />
 
-                                    </Col>
-                                </FormGroup >
-                            </div>
-                            : null
+
+                        </SaveButtonDraggable>
                     }
 
                 </div >

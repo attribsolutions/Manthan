@@ -4,7 +4,7 @@ import {
     DELETE_GENERAL_ID_SUCCESS,
     EDIT_GENERAL_ID_SUCCESS,
     UPDATE_GENERAL_ID_SUCCESS,
-    POST_TYPE_SUCCESS,
+    GENARAL_MASTER_BY_TYPE_SUCCESS,
     GENERAL_MASTER_SUB_TYPE_SUCCESS,
     POST_METHOD_FOR_GENERAL_API,
     UPDATE_GENERAL_ID,
@@ -102,7 +102,7 @@ const GeneralReducer = (state = INIT_STATE, action) => {
             };
 
         /// TypeDropdown
-        case POST_TYPE_SUCCESS:
+        case GENARAL_MASTER_BY_TYPE_SUCCESS:
             return {
                 ...state,
                 Type: action.payload,

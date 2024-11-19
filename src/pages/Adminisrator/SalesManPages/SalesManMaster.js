@@ -36,11 +36,9 @@ import { SaveButton } from "../../../components/Common/CommonButton";
 import {
     breadcrumbReturnFunc,
     loginCompanyID,
-    loginPartyID,
     loginUserID,
     btnIsDissablefunc,
     metaTagLabel,
-    loginSelectedPartyID,
     loginJsonBody,
 
 } from "../../../components/Common/CommonFunction";
@@ -48,8 +46,8 @@ import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
 import { GetRoutesList, GetRoutesListSuccess } from "../../../store/Administrator/RoutesRedux/actions";
-import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
+import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 
 const SalesManMaster = (props) => {
 
@@ -71,6 +69,14 @@ const SalesManMaster = (props) => {
     const [userPageAccessState, setUserAccState] = useState(123);
     const [editCreatedBy, seteditCreatedBy] = useState("");
 
+    const values = { ...state.values }
+    const { isError } = state;
+    const { fieldLabel } = state;
+
+    const location = { ...history.location }
+    const hasShowloction = location.hasOwnProperty(mode.editValue)
+    const hasShowModal = props.hasOwnProperty(mode.editValue);
+
     //Access redux store Data /  'save_ModuleSuccess' action data
     const { postMsg,
         updateMsg,
@@ -86,6 +92,17 @@ const SalesManMaster = (props) => {
             pageField: state.CommonPageFieldReducer.pageField
         }));
 
+    const { commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
+
+    // Common Party select Dropdown useEffect
+    useEffect(() => {
+        if (commonPartyDropSelect.value > 0) {
+            partySelectButtonHandler();
+        } else {
+            partySelectOnChangeHandler();
+        }
+    }, [commonPartyDropSelect]);
+
     useEffect(() => {
         const page_Id = pageId.SALESMAN
         dispatch(commonPageFieldSuccess(null));
@@ -93,13 +110,7 @@ const SalesManMaster = (props) => {
         dispatch(GetRoutesList())
     }, []);
 
-    const values = { ...state.values }
-    const { isError } = state;
-    const { fieldLabel } = state;
 
-    const location = { ...history.location }
-    const hasShowloction = location.hasOwnProperty(mode.editValue)
-    const hasShowModal = props.hasOwnProperty(mode.editValue)
 
     // userAccess useEffect
     useEffect(() => {
@@ -233,7 +244,7 @@ const SalesManMaster = (props) => {
     const partySelectButtonHandler = (e) => {
         const jsonBody = JSON.stringify({
             ...loginJsonBody(),
-            PartyID: loginSelectedPartyID(),
+            PartyID: commonPartyDropSelect.value,
         });
         dispatch(GetRoutesList(jsonBody));
     }
@@ -253,8 +264,8 @@ const SalesManMaster = (props) => {
         event.preventDefault();
         const btnId = event.target.id
         try {
-            if ((loginSelectedPartyID() === 0)) {
-                customAlert({ Type: 3, Message: "Please Select Party" });
+            if ((commonPartyDropSelect.value === 0)) {
+                customAlert({ Type: 3, Message: alertMessages.commonPartySelectionIsRequired });
                 return;
             };
             if (formValid(state, setState)) {
@@ -268,7 +279,7 @@ const SalesManMaster = (props) => {
                     Name: values.Name,
                     MobileNo: values.MobileNo,
                     IsActive: values.IsActive,
-                    Party: loginSelectedPartyID(),
+                    Party: commonPartyDropSelect.value,
                     SalesmanRoute: routeArr,
                     Company: loginCompanyID(),
                     CreatedBy: loginUserID(),
@@ -286,20 +297,15 @@ const SalesManMaster = (props) => {
     };
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
-    var IsEditMode_Css = ''
-    if ((modalCss) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
+    // var IsEditMode_Css = ''
+    // if ((modalCss) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
 
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
                 <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
 
-                <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
-                    <PartyDropdown_Common pageMode={pageMode}
-                        goButtonHandler={partySelectButtonHandler}
-                        changeButtonHandler={partySelectOnChangeHandler}
-                    />
-
+                <div className="page-content" >
                     <Container fluid>
                         <Card className="text-black" style={{ marginTop: "3px" }}>
                             <CardHeader className="card-header   text-black c_card_header">

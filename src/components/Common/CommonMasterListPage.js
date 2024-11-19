@@ -10,9 +10,7 @@ import { breadcrumbReturnFunc, metaTagLabel, }
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import { listPageActionsButtonFunc } from "./ListActionsButtons";
 import DynamicColumnHook from "./TableCommonFunc";
-import CustomTable from "../../CustomTable2";
-
-
+import GlobalCustomTable from "../../GlobalCustomTable";
 
 const CommonListPage = (props) => {
 
@@ -46,24 +44,23 @@ const CommonListPage = (props) => {
   const {
     getListbodyFunc = () => { },
     MasterModal,
-    ButtonMsgLable,
     masterPath,
-
+    mobaileDeleteApiFinc,
   } = props;
 
   const { PageFieldMaster = [] } = { ...pageField };
 
   useEffect(() => {
+
     const locationPath = history.location.pathname
     let userAcc = userAccess.find((inx) => {
       return (`/${inx.ActualPagePath}` === locationPath)
     })
     if (!(userAcc === undefined)) {
       setUserAccState(userAcc);
-      breadcrumbReturnFunc({ dispatch, userAcc, newBtnPath: masterPath });
+      breadcrumbReturnFunc({ dispatch, userAcc, newBtnPath: masterPath, pageField: pageField });
     }
   }, [userAccess]);
-
 
   useEffect(() => {
 
@@ -86,10 +83,23 @@ const CommonListPage = (props) => {
       defaultDownList2.push(listObj2)
       listObj = {}
     })
-    dispatch(CommonBreadcrumbDetails({ downBtnData: downList, defaultDownBtnData: listObj2 }))
-  }, [tableList])
+    dispatch(CommonBreadcrumbDetails({
+      downBtnData: downList,
+      defaultDownBtnData: listObj2,
+      CountLabel: pageField?.CountLabel,
+      pageHeading: pageField?.PageHeading,
+      // newBtnView: userAccState?.RoleAccess_IsSave,
+      excelBtnView: userAccState?.RoleAccess_Exceldownload,
+    }))
+  }, [tableList, pageField, userAccState])
 
-  
+  useEffect(() => {
+
+    if ((tableList.length > 0) && (pageField?.CountLabel === true)) {
+      dispatch(BreadcrumbShowCountlabel(`Count:${tableList.length}`));
+    }
+  }, [tableList, pageField])
+
   useEffect(async () => {// This UseEffect => UpadateModal Success/Unsucces  Show and Hide Control Alert_modal
 
     if (updateMsg.Status === true && updateMsg.StatusCode === 200) {
@@ -109,12 +119,17 @@ const CommonListPage = (props) => {
     }
   }, [updateMsg]);
 
-
   useEffect(async () => {
     if (deleteMsg.Status === true && deleteMsg.StatusCode === 200) {
       dispatch(deleteSucc({ Status: false }));
 
-      const promise = await customAlert({
+      //***************mobail app api*********************** */
+      if (mobaileDeleteApiFinc) {
+        await mobaileDeleteApiFinc(deleteMsg)
+      }
+      //************************************** */
+
+      await customAlert({
         Type: 1,
         Message: deleteMsg.Message,
       })
@@ -127,7 +142,6 @@ const CommonListPage = (props) => {
       })
     }
   }, [deleteMsg]);
-
 
   useEffect(async () => {
 
@@ -150,7 +164,6 @@ const CommonListPage = (props) => {
     }
   }, [postMsg])
 
-  
   useEffect(() => {// Edit Modal Show When Edit Data is true
     if (editData.Status === true) {
       if (pageField.IsEditPopuporComponent) {
@@ -168,11 +181,10 @@ const CommonListPage = (props) => {
 
   function tog_center() {
     if (modal_edit) {
-      breadcrumbReturnFunc({ dispatch, userAcc: userAccState, newBtnPath: masterPath });
+      breadcrumbReturnFunc({ dispatch, userAcc: userAccState, newBtnPath: masterPath, pageField: pageField });
     }
     setmodal_edit(false)
   }
-
 
   const lastColumn = () => {
     return listPageActionsButtonFunc({
@@ -194,7 +206,7 @@ const CommonListPage = (props) => {
         <MetaTags> {metaTagLabel(userAccState)}</MetaTags>
         <div className="page-content">
 
-          <CustomTable
+          <GlobalCustomTable
             keyField={"id"}
             data={tableList}
             columns={tableColumns}
@@ -207,7 +219,7 @@ const CommonListPage = (props) => {
           />
 
           <Modal isOpen={modal_edit} toggle={() => { tog_center() }} size="xl">
-            <MasterModal editValue={editData.Data} masterPath={masterPath} pageMode={editData.pageMode} pageHeading={userAccess.pageHeading} />
+            <MasterModal editValue={editData.Data} masterPath={masterPath} pageMode={editData.pageMode} />
           </Modal>
         </div>
 

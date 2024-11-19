@@ -134,16 +134,19 @@ function* FieldValidationsForAllTypeGenFun({ }) {
     const type2Resp = yield call(GetFieldValidationOnControlType_DropDown_API, 2);
     const type3Resp = yield call(GetFieldValidationOnControlType_DropDown_API, 3);
     const type4Resp = yield call(GetFieldValidationOnControlType_DropDown_API, 4);
+    const type5Resp = yield call(GetFieldValidationOnControlType_DropDown_API, 5);
     if ((type1Resp.StatusCode === 200)
       || (type2Resp.StatusCode === 200)
       || (type3Resp.StatusCode === 200)
-      || (type4Resp.StatusCode === 200)) {
+      || (type4Resp.StatusCode === 200)
+      || (type5Resp.StatusCode === 200)) {
 
       let response = [
         { type: 1, data: type1Resp.Data },
         { type: 2, data: type2Resp.Data },
         { type: 3, data: type3Resp.Data },
-        { type: 4, data: type4Resp.Data }
+        { type: 4, data: type4Resp.Data },
+        { type: 5, data: type5Resp.Data }
       ]
       yield put(getFieldValidationsForALLTypeSuccess(response));
     }

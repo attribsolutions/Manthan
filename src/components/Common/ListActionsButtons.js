@@ -1,13 +1,16 @@
 import { Button, Spinner } from "reactstrap";
 import * as mode from "../../routes/PageMode"
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
-import { date_dmy_func, loginSystemSetting, loginUserID } from "./CommonFunction"
+import { date_dmy_func, loginSystemSetting, loginUserDetails, loginUserID } from "./CommonFunction"
 import '../../assets/searchBox/searchBox.scss'
 import { Cancel_Credit_Debit_EInvoiceAction, Cancel_EInvoiceAction, Cancel_EwayBillAction, Uploaded_Credit_Debit_EInvoiceAction, Uploaded_EInvoiceAction, Uploaded_EwayBillAction } from "../../store/actions";
+import { url } from "../../routes";
+import { alertMessages } from "./CommonErrorMsg/alertMsg";
+
 
 //******************** button class ******************************
 
-const editBtnCss = "badge badge-soft-success font-size-12 btn btn-success waves-effect waves-light w-xxs border border-light"
+export const editBtnCss = "badge badge-soft-success font-size-12 btn btn-success waves-effect waves-light w-xxs border border-light"
 const editSelfBtnCss = "badge badge-soft-primary font-size-12 btn c_btn-primary waves-effect waves-light w-xxs border border-light"
 export const vieBtnCss = "badge badge-soft-primary font-size-12 btn c_btn-primary waves-effect waves-light w-xxs border border-light"
 const copyBtnCss = "badge badge-soft-primary font-size-12 btn c_btn-primary waves-effect waves-light w-xxs border border-light"
@@ -18,6 +21,7 @@ export const printBtnCss = "badge badge-soft-primary font-size-12 btn c_btn-prim
 const printInvoiceBtnCss = "badge badge-soft-info font-size-12 btn btn-info waves-effect waves-light w-xxs border border-light"
 export const hideBtnCss = "badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light "
 
+const forceFullyCompletedBtnCss = "badge badge-soft-primary font-size-12 btn c_btn-primary waves-effect waves-light w-xxs border border-light"
 
 //******************** icon class ******************************
 const editIconClass = "mdi mdi-pencil font-size-16";
@@ -27,19 +31,24 @@ const makeBtnIconClass = "fas fa-file-invoice font-size-16";
 const printIconClass = "bx bx-printer font-size-16";
 const multiInvoiceIconClass = "fas fa-file-download";
 const updateIconClass = "mdi mdi-file-table-box-multiple font-size-16";
+
+const updateDetailsIconClass = "bx bx-detail font-size-16";
+
+
+
 const deleteIconClass = "mdi mdi-delete font-size-16";
 const sendToScmIconClass = "fas fa-share font-size-16";  //Icon Added For Invoice send to SCM Button In Invoice Listf
 const copyIconClass = "bx bxs-copy font-size-16";
 const orderApprovalIconClass = "bx bx-check-shield font-size-20";
-const uploadIconClass = "bx bx-upload font-size-14";
+const uploadIconClass = "bx bx-upload font-size-16";
 const cancelIconClass = "mdi mdi-cancel font-size-14";
 const claimCustomerWisePrintIconClass = "fas fa-file-contract font-size-14";  //Icon Added For Claim Print on Claim list
 const claimItemWisePrintIconClass = "fas fa-file-signature";  //Icon Added For Claim Print on Claim list
 const claimMasterPrintIconClass = "far fa-file-alt font-size-14";  //Icon Added For Claim Print on Claim list
+const makeCreditNoteIconClass = "mdi mdi-file-move font-size-16";
+const ShowImageIconClass = "mdi mdi-image font-size-16";
 
-
-
-
+const forceFullyCompletedIconClass = "fas fa-check font-size-14"
 
 
 
@@ -54,12 +63,15 @@ export const listPageActionsButtonFunc = (props) => {
         ButtonMsgLable,
         deleteName,
         downBtnFunc,
+        upBtnFunc,
         editBodyfunc,
         deleteBodyfunc,
         copyBodyfunc,
         downClaimBtnFunc,
         viewApprovalBtnFunc,
         otherBtn_1Func,
+        minPrintBtn_Func,
+        UpdateDetailsBtnFunc,
         makeBtnFunc = () => { },
         pageMode,
         makeBtnName,
@@ -70,7 +82,7 @@ export const listPageActionsButtonFunc = (props) => {
 
     const { listBtnLoading } = props.reducers;
 
-    const userCreated = loginUserID();
+    const loginUserid = loginUserID();
     const subPageMode = history.location.pathname;
 
     const makeButtonHandler = ({ rowData, btnId }) => {
@@ -98,7 +110,7 @@ export const listPageActionsButtonFunc = (props) => {
                 if (btnmode === mode.isdelete) {
                     let alertRepsponse = await customAlert({
                         Type: 8,
-                        Message: `Are you sure you want to delete this ${ButtonMsgLable} : "${rowData[deleteName]}"`,
+                        Message: `${alertMessages.deleteOrNot} ${ButtonMsgLable} : "${rowData[deleteName]}"`,
                     })
                     if (alertRepsponse) {
                         dispatch(dispatchAction({ ...config }));
@@ -110,7 +122,7 @@ export const listPageActionsButtonFunc = (props) => {
         } catch (error) {
             customAlert({
                 Type: 3,
-                Message: "Action Not defined",
+                Message: alertMessages.actionNotDefined,
             });
         }
     };
@@ -131,7 +143,6 @@ export const listPageActionsButtonFunc = (props) => {
 
     const renderActionButton = (__cell, rowData, __key, formatExtra) => {
 
-
         const { listBtnLoading } = formatExtra;
         const {
             forceEditHide,
@@ -151,37 +162,63 @@ export const listPageActionsButtonFunc = (props) => {
                 .includes(rowData.CustomerPartyType);
         }
 
+        const isUploadAccess = loginSystemSetting().PurchaseReturnPrintUpload?.split(',').map(value => parseInt(value)).includes(rowData.PartyTypeID);
         const hasRole = (role) => userAccState[role];
-        const canEdit = hasRole("RoleAccess_IsEdit") && !forceEditHide;
-        const canEditSelf = hasRole("RoleAccess_IsEditSelf") && !canEdit && rowData.CreatedBy === userCreated && !forceEditHide;
+
+        const userCreatedRow = rowData.CreatedBy === loginUserid;
+        const isApproved = rowData.IsApproved;
+        const isCreditNoteCreated = rowData.IsCreditNoteCreated;
+
+        const canEdit = hasRole("RoleAccess_IsEdit") && !forceEditHide && !IsRecordDeleted;
+        const canEditSelf = hasRole("RoleAccess_IsEditSelf") && !canEdit && userCreatedRow && !forceEditHide;
         const canView = hasRole("RoleAccess_IsView") && !canEdit && !canEditSelf && !viewApprovalBtnFunc;
         const canApprovalView = hasRole("RoleAccess_IsView") && !canEdit && !canEditSelf && viewApprovalBtnFunc;
         const canPrint = hasRole("RoleAccess_IsPrint") && !downClaimBtnFunc;
         const canMultiInvoicePrint = hasRole("RoleAccess_IsMultipleInvoicePrint");
-        const canDelete = hasRole("RoleAccess_IsDelete") && !forceDeleteHide;
-        const canDeleteSelf = hasRole("RoleAccess_IsDeleteSelf") && !canDelete && rowData.CreatedBy === userCreated && !forceDeleteHide;
-        const canCopy = hasRole("RoleAccess_IsSave") && hasRole("RoleAccess_IsCopy");
+        const canDelete = hasRole("RoleAccess_IsDelete") && !forceDeleteHide && !IsRecordDeleted;
+        const canDeleteSelf = hasRole("RoleAccess_IsDeleteSelf") && !canDelete && userCreatedRow && !forceDeleteHide;
+        const canCopy = hasRole("RoleAccess_IsSave") && hasRole("RoleAccess_IsCopy") && IsRecordDeleted;
         const canMakeBtn = pageMode === mode.modeSTPList && makeBtnShow && !forceMakeBtnHide;
-        const canOrderApproval = oderAprovalBtnFunc && !forceHideOrderAprovalBtn;
+        const canOrderApproval = hasRole("RoleAccess_SendToSAP") && oderAprovalBtnFunc && !forceHideOrderAprovalBtn;
 
         const canCustomerWisePrint = hasRole("RoleAccess_IsPrint") && downClaimBtnFunc;
         const canItemWisePrint = hasRole("RoleAccess_IsPrint") && downClaimBtnFunc;
         const canMasterClaimPrint = hasRole("RoleAccess_IsPrint") && downClaimBtnFunc;
         const canSendToScm = isPartyTypeIDInSendToScm //  Currently Button  is remove From InVoice List of CX parties  further Development After Discussion  So condition is False
 
+        const canMakeCreditNoteBtn = (subPageMode === url.SALES_RETURN_LIST) && hasRole("RoleAccess_IsSave") && isApproved && !isCreditNoteCreated
+        const canUpdatebtn = otherBtn_1Func && hasRole("RoleAccess_IsSave")
+
+        const canMinPrint = minPrintBtn_Func && hasRole("RoleAccess_FranchisesOrderPrint")
 
 
 
-        const dummyDisable_OrderApproval = !canOrderApproval && oderAprovalBtnFunc;
-        const dummyDisable_Edit = (userAccState.RoleAccess_IsEdit || userAccState.RoleAccess_IsEditSelf) && !canEdit && !canEditSelf && !canView && !viewApprovalBtnFunc;
-        const dummyDisable_Delete = (hasRole("RoleAccess_IsDelete") || hasRole("RoleAccess_IsDeleteSelf")) && !canDelete && !canDeleteSelf;
+
+        const canUpdateDetails = hasRole("RoleAccess_UpdateDetails")
+
+        const canShowImages = downBtnFunc && (subPageMode === url.CLAIM_TRACKING_ENTRY_LIST)
+
+        const canUpload = hasRole("RoleAccess_Upload") && upBtnFunc && isUploadAccess;
+
+
+        const dummyDisable_OrderApproval = hasRole("RoleAccess_SendToSAP") && !canOrderApproval && oderAprovalBtnFunc;
+        const dummyDisable_Edit = (userAccState.RoleAccess_IsEdit || userAccState.RoleAccess_IsEditSelf) && !canEdit && !canEditSelf && !canView && !viewApprovalBtnFunc && IsRecordDeleted;
+        const dummyDisable_Delete = ((hasRole("RoleAccess_IsDelete") || hasRole("RoleAccess_IsDeleteSelf")) && !canDelete && !canDeleteSelf && !IsRecordDeleted);
         const dummyDisable_MakeBtn = !canMakeBtn && makeBtnShow;
-        const dummyDisable_SendToScm = !isPartyTypeIDInSendToScm && sendToScmBtnFunc
+        const dummyDisable_SendToScm = !isPartyTypeIDInSendToScm && sendToScmBtnFunc && !(subPageMode === url.IB_GRN_LIST);
+
+        const dummyDisable_CreditNoteBtn = (!isApproved && (subPageMode === url.SALES_RETURN_LIST)) || (isCreditNoteCreated && (subPageMode === url.SALES_RETURN_LIST))
 
 
+        const dummyDisable_upload = hasRole("RoleAccess_Upload") && !isUploadAccess
 
-        const renderButtonIfNeeded = ({ condition, btnmode, iconClass, actionFunc, dispatchAction, title, buttonClasss, isDummyBtn }) => {
-            if ((!condition && !isDummyBtn) || IsRecordDeleted) return null;
+        const dummyDisable_UpdateDetails = hasRole("RoleAccess_UpdateDetails") && (!((rowData.InvoiceUploads.length === 0) || (rowData.InvoiceUploads[0]?.Irn === null))) && (!((rowData.InvoiceUploads.length === 0) || (rowData.InvoiceUploads[0]?.EwayBillNo === null)));
+
+
+        const renderButtonIfNeeded = ({ condition, btnmode, iconClass, actionFunc, dispatchAction, title, buttonClasss, isDummyBtn, }) => {
+
+
+            if (((!condition && !isDummyBtn))) return null;
             if (!isDummyBtn) {
 
                 return (
@@ -207,6 +244,7 @@ export const listPageActionsButtonFunc = (props) => {
                         {renderButtonWithSpinner(`btn-${btnmode}-${rowData.id}`, "white", iconClass)}
                     </Button>
                 );
+
             }
             else {
                 return (
@@ -252,6 +290,16 @@ export const listPageActionsButtonFunc = (props) => {
                         buttonClasss: vieBtnCss,
                     })}
 
+                    {renderButtonIfNeeded({    //Can Upload 
+                        condition: canUpload,
+                        btnmode: mode.upload,
+                        iconClass: uploadIconClass,
+                        actionFunc: upBtnFunc,
+                        title: "Upload",
+                        buttonClasss: printBtnCss,
+                        isDummyBtn: dummyDisable_upload
+                    })}
+
                     {renderButtonIfNeeded({
                         condition: canApprovalView,
                         btnmode: mode.viewApproval,
@@ -260,8 +308,6 @@ export const listPageActionsButtonFunc = (props) => {
                         title: "View Items -",
                         buttonClasss: vieBtnCss,
                     })}
-
-
 
                     {renderButtonIfNeeded({
                         condition: canMakeBtn,
@@ -273,6 +319,28 @@ export const listPageActionsButtonFunc = (props) => {
                         isDummyBtn: dummyDisable_MakeBtn
                     })}
 
+                    {renderButtonIfNeeded({   // Button Added For Make Goods Credit Note In Sales Return
+                        condition: canMakeCreditNoteBtn,
+                        btnmode: mode.makeBtn,
+                        iconClass: makeCreditNoteIconClass,
+                        actionFunc: makeButtonHandler,
+                        title: makeBtnName,
+                        buttonClasss: vieBtnCss,
+                        isDummyBtn: dummyDisable_CreditNoteBtn
+
+                    })}
+
+                    {renderButtonIfNeeded({ // Button added For Detail update in Row 
+                        condition: canUpdateDetails,
+                        btnmode: mode.updateDetails,
+                        iconClass: updateDetailsIconClass,
+                        actionFunc: UpdateDetailsBtnFunc,
+                        title: "Update Details",
+                        buttonClasss: updateBtnCss,
+                        isDummyBtn: dummyDisable_UpdateDetails
+
+                    })}
+
                     {renderButtonIfNeeded({
                         condition: canPrint,
                         btnmode: mode.download,
@@ -282,6 +350,15 @@ export const listPageActionsButtonFunc = (props) => {
                         buttonClasss: printBtnCss,
                     })}
                     {renderButtonIfNeeded({
+                        condition: canMinPrint,
+                        btnmode: mode.MinPrint,
+                        iconClass: printIconClass,
+                        actionFunc: minPrintBtn_Func,
+                        title: "view",
+                        buttonClasss: updateBtnCss,
+                    })}
+
+                    {renderButtonIfNeeded({
                         condition: canMultiInvoicePrint,
                         btnmode: mode.MultiInvoice,
                         iconClass: multiInvoiceIconClass,
@@ -290,13 +367,14 @@ export const listPageActionsButtonFunc = (props) => {
                         buttonClasss: printInvoiceBtnCss,
                     })}
                     {renderButtonIfNeeded({
-                        condition: otherBtn_1Func,
+                        condition: canUpdatebtn,
                         btnmode: mode.otherBtn_1,
                         iconClass: updateIconClass,
                         actionFunc: otherBtn_1Func,
                         title: "Update",
                         buttonClasss: updateBtnCss,
                     })}
+
                     {renderButtonIfNeeded({   // Button Added For Customer Wise Claim Summary Print on Claim List page
                         condition: canCustomerWisePrint,
                         btnmode: mode.CustomerWiseSummary,
@@ -321,7 +399,7 @@ export const listPageActionsButtonFunc = (props) => {
                         title: "Print Master ",
                         buttonClasss: printBtnCss,
                     })}
-                    {renderButtonIfNeeded({    //Button Added for Invoice send to SCM  in Invoice List Page
+                    {renderButtonIfNeeded({   //Button Added for Invoice send to SCM  in Invoice List Page
                         condition: canSendToScm,
                         btnmode: mode.isSendToScm,
                         iconClass: sendToScmIconClass,
@@ -329,20 +407,19 @@ export const listPageActionsButtonFunc = (props) => {
                         title: "Send To Scm",
                         buttonClasss: makeBtnCss,
                         isDummyBtn: dummyDisable_SendToScm
-
-
                     })}
-                    {renderButtonIfNeeded({
-                        condition: canDelete,
-                        btnmode: mode.isdelete,
-                        iconClass: deleteIconClass,
-                        actionFunc: deleteBodyfunc,
-                        dispatchAction: deleteActionFun,
-                        title: "Delete",
-                        buttonClasss: deltBtnCss,
-                        isDummyBtn: dummyDisable_Delete
 
+                    {renderButtonIfNeeded({   //Button Added for ClaimTraking list Show iamges
+                        condition: canShowImages,
+                        btnmode: mode.isShowImages,
+                        iconClass: ShowImageIconClass,
+                        actionFunc: downBtnFunc,
+                        title: "Show images",
+                        buttonClasss: printBtnCss,
+                        // isDummyBtn: dummyDisable_SendToScm
                     })}
+
+
                     {renderButtonIfNeeded({
                         condition: canDeleteSelf,
                         btnmode: mode.isdelete,
@@ -359,6 +436,19 @@ export const listPageActionsButtonFunc = (props) => {
                         actionFunc: copyBodyfunc,
                         title: "Copy",
                         buttonClasss: copyBtnCss,
+
+
+                    })}
+                    {renderButtonIfNeeded({
+                        condition: canDelete,
+                        btnmode: mode.isdelete,
+                        iconClass: deleteIconClass,
+                        actionFunc: deleteBodyfunc,
+                        dispatchAction: deleteActionFun,
+                        title: "Delete",
+                        buttonClasss: deltBtnCss,
+                        isDummyBtn: dummyDisable_Delete
+
                     })}
                     {renderButtonIfNeeded({
                         condition: canOrderApproval,
@@ -370,6 +460,14 @@ export const listPageActionsButtonFunc = (props) => {
                         isDummyBtn: dummyDisable_OrderApproval
                     })}
 
+                    {renderButtonIfNeeded({  // Button For Material Issue List Mode 2
+                        condition: subPageMode === url.MATERIAL_ISSUE_STP,
+                        btnmode: mode.completed,
+                        iconClass: forceFullyCompletedIconClass,
+                        actionFunc: copyBodyfunc,
+                        title: "ForceFullyCompleted",
+                        buttonClasss: forceFullyCompletedBtnCss,
+                    })}
 
                 </div>
             </span>
@@ -397,20 +495,14 @@ export const listPageActionsButtonFunc = (props) => {
 };
 
 // ************************* E-Way Bill Button *****************************************************
-export const E_WayBill_ActionsButtonFunc = ({ dispatch, reducers, e_WayBill_ActionsBtnFunc, deleteName }) => {
+export const E_WayBill_ActionsButtonFunc = ({ dispatch, reducers, e_WayBill_ActionsBtnFunc, deleteName, userAccState }) => {
 
     const { listBtnLoading } = reducers;
 
     function Uploaded_EwayBillHandler(btnId, rowData) {
         try {
-
-            let config = { btnId, RowId: rowData.id, UserID: loginUserID() };
-            if ((rowData.VehicleNo === null) && !(rowData.VehicleNo === "") && (e_WayBill_ActionsBtnFunc)) {
-                e_WayBill_ActionsBtnFunc(rowData)
-            }
-            else {
-                dispatch(Uploaded_EwayBillAction(config));
-            }
+            let config = { btnId, RowId: rowData.id, UserID: loginUserID(), Invoice_Identifier_ID: rowData.Identify_id };
+            dispatch(Uploaded_EwayBillAction(config));
         } catch (error) { }
     }
 
@@ -421,7 +513,7 @@ export const E_WayBill_ActionsButtonFunc = ({ dispatch, reducers, e_WayBill_Acti
                 Message: `Are you sure you want to Cancel EwayBill : "${rowData[deleteName]}"`,
             })
             if (alertRepsponse) {
-                dispatch(Cancel_EwayBillAction({ btnId, RowId: rowData.id, UserID: loginUserID() }));
+                dispatch(Cancel_EwayBillAction({ btnId, RowId: rowData.id, UserID: loginUserID(), Invoice_Identifier_ID: rowData.Identify_id }));
             }
 
         } catch (error) { }
@@ -448,8 +540,9 @@ export const E_WayBill_ActionsButtonFunc = ({ dispatch, reducers, e_WayBill_Acti
         }
     };
 
-    const renderButtonIfNeeded = ({ condition, btnmode, iconClass, actionFunc, title, rowData, isDummyBtn }) => {
-        if (!condition && !isDummyBtn) return null;
+    const renderButtonIfNeeded = ({ condition, btnmode, iconClass, actionFunc, title, rowData, isDummyBtn, isAccess }) => {
+
+        if ((!condition && !isDummyBtn) || !isAccess) return null;
         if (!isDummyBtn) {
             return (
                 <Button
@@ -485,11 +578,22 @@ export const E_WayBill_ActionsButtonFunc = ({ dispatch, reducers, e_WayBill_Acti
             )
         }
     };
+    if (!(loginSystemSetting().EWayBillApplicable === "1")) {
+        return null; // Return null if the column should be hidden
+    }
 
     return {
         text: "E-Way Bill",
-        formatExtraData: { listBtnLoading },
-        formatter: (__cell, rowData,) => {
+        formatExtraData: { listBtnLoading, userAccState },
+        formatter: (__cell, rowData, rowIndex, formatExtraDat) => {
+
+            const { userAccState } = formatExtraDat
+            const hasRole = (role) => userAccState[role];
+
+
+            const isUploadAccess = hasRole("RoleAccess_E-WayBillUpload");
+            const isCancelAccess = hasRole("RoleAccess_E-WayBillcancel");
+            const isPrintAccess = hasRole("RoleAccess_E-WayBillPrint");
 
             const canUpload = ((rowData.InvoiceUploads.length === 0) || (rowData.InvoiceUploads[0]?.EwayBillNo === null));
             const canCancel = (!canUpload && (rowData.InvoiceUploads[0]?.EwayBillIsCancel === false));
@@ -504,7 +608,8 @@ export const E_WayBill_ActionsButtonFunc = ({ dispatch, reducers, e_WayBill_Acti
                         actionFunc: Uploaded_EwayBillHandler,
                         title: "E-WayBill Upload",
                         rowData: rowData,
-                        isDummyBtn: !canUpload
+                        isDummyBtn: !canUpload,
+                        isAccess: isUploadAccess
                     })}
 
                     {renderButtonIfNeeded({
@@ -514,7 +619,8 @@ export const E_WayBill_ActionsButtonFunc = ({ dispatch, reducers, e_WayBill_Acti
                         actionFunc: Cancel_EwayBillHandler,
                         title: "Cancel E-WayBill",
                         rowData: rowData,
-                        isDummyBtn: !canCancel
+                        isDummyBtn: !canCancel,
+                        isAccess: isCancelAccess
                     })}
 
                     {renderButtonIfNeeded({
@@ -524,7 +630,8 @@ export const E_WayBill_ActionsButtonFunc = ({ dispatch, reducers, e_WayBill_Acti
                         actionFunc: Print_EwayBillHander,
                         title: "Print E-WayBill",
                         rowData: rowData,
-                        isDummyBtn: !canPrint
+                        isDummyBtn: !canPrint,
+                        isAccess: isPrintAccess
 
                     })}
                 </div>
@@ -533,9 +640,12 @@ export const E_WayBill_ActionsButtonFunc = ({ dispatch, reducers, e_WayBill_Acti
     };
 };
 
+
+
+
 // ************************* E-Invoice Button *****************************************************
 
-export const E_Invoice_ActionsButtonFunc = ({ dispatch, reducers, deleteName }) => {
+export const E_Invoice_ActionsButtonFunc = ({ dispatch, reducers, deleteName, userAccState, e_Invoice_ActionsBtnFunc }) => {
     const { listBtnLoading } = reducers;
 
     function Uploaded_EInvoiceHandler(btnId, rowData) {
@@ -544,7 +654,13 @@ export const E_Invoice_ActionsButtonFunc = ({ dispatch, reducers, deleteName }) 
             if (rowData.PageMode === "CreditDebitList") {
                 dispatch(Uploaded_Credit_Debit_EInvoiceAction({ btnId, RowId: rowData.id, UserID: loginUserID() }));
             } else {
-                dispatch(Uploaded_EInvoiceAction({ btnId, RowId: rowData.id, UserID: loginUserID() }));
+                // if ((e_Invoice_ActionsBtnFunc)) {
+                //     let config = { btnId, RowData: rowData }
+                //     e_Invoice_ActionsBtnFunc(config)
+                // }
+                // else {
+                dispatch(Uploaded_EInvoiceAction({ btnId, RowId: rowData.id, UserID: loginUserID(), Invoice_Identifier_ID: rowData.Identify_id }));
+                // }
             }
         } catch (error) { }
     }
@@ -560,7 +676,7 @@ export const E_Invoice_ActionsButtonFunc = ({ dispatch, reducers, deleteName }) 
                 if (rowData.PageMode === "CreditDebitList") {
                     dispatch(Cancel_Credit_Debit_EInvoiceAction({ btnId, RowId: rowData.id, UserID: loginUserID() }));
                 } else {
-                    dispatch(Cancel_EInvoiceAction({ btnId, RowId: rowData.id, UserID: loginUserID() }));
+                    dispatch(Cancel_EInvoiceAction({ btnId, RowId: rowData.id, UserID: loginUserID(), Invoice_Identifier_ID: rowData.Identify_id }));
 
                 }
             }
@@ -587,8 +703,8 @@ export const E_Invoice_ActionsButtonFunc = ({ dispatch, reducers, deleteName }) 
         return "";
     };
 
-    const renderButtonIfNeeded = ({ condition, btnmode, iconClass, actionFunc, title, rowData, isDummyBtn }) => {
-        if (!condition && !isDummyBtn) return null;
+    const renderButtonIfNeeded = ({ condition, btnmode, iconClass, actionFunc, title, rowData, isDummyBtn, isAccess }) => {
+        if ((!condition && !isDummyBtn) || !isAccess) return null;
         if (!isDummyBtn) {
             return (
                 <Button
@@ -630,12 +746,19 @@ export const E_Invoice_ActionsButtonFunc = ({ dispatch, reducers, deleteName }) 
     }
     return {
         text: "E-Invoice",
-        formatExtraData: { listBtnLoading },
-        formatter: (__cell, rowData) => {
+        formatExtraData: { listBtnLoading, userAccState },
+        formatter: (__cell, rowData, rowIndex, formatExtraDat) => {
+
+            const { userAccState } = formatExtraDat
+            const hasRole = (role) => userAccState[role];
 
             const canUpload = ((rowData.InvoiceUploads.length === 0) || (rowData.InvoiceUploads[0]?.Irn === null));
             const canCancel = ((!canUpload) && (rowData.InvoiceUploads[0]?.EInvoiceIsCancel === false));
             const canPrint = ((!canUpload) && (rowData.InvoiceUploads[0]?.EInvoicePdf !== null));
+
+            const isUploadAccess = hasRole("RoleAccess_E-InvoiceUpload");
+            const isCancelAccess = hasRole("RoleAccess_E-Invoicecancel");
+            const isPrintAccess = hasRole("RoleAccess_E-InvoicePrint");
 
             return (
                 <div id="ActionBtn" >
@@ -647,6 +770,7 @@ export const E_Invoice_ActionsButtonFunc = ({ dispatch, reducers, deleteName }) 
                         title: "E-Invoice Upload",
                         rowData: rowData,
                         isDummyBtn: !canUpload,
+                        isAccess: isUploadAccess
                     })}
 
                     {renderButtonIfNeeded({
@@ -657,6 +781,9 @@ export const E_Invoice_ActionsButtonFunc = ({ dispatch, reducers, deleteName }) 
                         title: "Cancel E-Invoice",
                         rowData: rowData,
                         isDummyBtn: !canCancel,
+                        isAccess: isCancelAccess
+
+
                     })}
 
                     {renderButtonIfNeeded({
@@ -667,6 +794,7 @@ export const E_Invoice_ActionsButtonFunc = ({ dispatch, reducers, deleteName }) 
                         title: "Print E-Invoice",
                         rowData: rowData,
                         isDummyBtn: !canPrint,
+                        isAccess: isPrintAccess
                     })}
                 </div>
             );

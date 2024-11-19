@@ -10,6 +10,8 @@ import {
   updateGRNIdSuccess,
 } from "./actions";
 import {
+  CheckStockEntryforBackDatedTransaction,
+  get_Demand_Details_Post_API,
   GRN_delete_API,
   GRN_Edit_API,
   GRN_get_API, GRN_Make_API, GRN_Post_API,
@@ -27,10 +29,12 @@ import {
 } from "./actionType";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { url } from "../../../routes";
+import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 
 function* saveGRNGenFunc({ config }) {            // Save GRN  genrator function
   try {
     const response = yield call(GRN_Post_API, config);
+    response["GRN_Reference"] = config.GRNReferencesUpdate[0]?.GRN_From
     yield put(saveGRNSuccess(response));
   } catch (error) { yield put(GrnApiErrorAction()) }
 }
@@ -38,6 +42,17 @@ function* saveGRNGenFunc({ config }) {            // Save GRN  genrator function
 
 function* DeleteGRNGenFunc({ config }) {            // Delete GRN  genrator function
   try {
+    const SelectedPartyID = JSON.parse(localStorage.getItem("selectedParty")).value
+    const jsonBodyForBackdatedTransaction = JSON.stringify({
+      "TransactionDate": config.rowData.GRNDate,
+      "PartyID": SelectedPartyID,
+    });
+    const BackDateresponse = yield CheckStockEntryforBackDatedTransaction({ jsonBody: jsonBodyForBackdatedTransaction })
+    if (BackDateresponse.Status === true && BackDateresponse.StatusCode === 400) {
+      customAlert({ Type: 3, Message: BackDateresponse.Message });
+      yield put(GrnApiErrorAction())
+      return
+    }
     const response = yield call(GRN_delete_API, config);
     yield put(deleteGRNIdSuccess(response));
   } catch (error) { yield put(GrnApiErrorAction()) }
@@ -66,10 +81,10 @@ function* GRNListfilterGerFunc({ config }) {          // Grn_List filter  genrat
     const newList = yield response.Data.map((i) => {
       i["recordsAmountTotal"] = i.GrandTotal;  // Breadcrumb Count total
       i.GrandTotal = _cfunc.amountCommaSeparateFunc(i.GrandTotal) //  GrandTotal show with commas
-
+      i.InvoiceDate = _cfunc.date_dmy_func(i.InvoiceDate);
       //tranzaction date is only for fiterand page field but UI show transactionDateLabel
       i["transactionDate"] = i.CreatedOn;
-      i["transactionDateLabel"] = _cfunc.concatDateAndTime(i.GRNDate, i.CreatedOn);
+      i["transactionDateLabel"] = _cfunc.listpageConcatDateAndTime(i.GRNDate, i.CreatedOn);
       return i
     })
     yield put(getGRNListPageSuccess(newList))
@@ -85,48 +100,74 @@ function* HideInvoiceForGRNGenFunc({ config }) {             // Upadte GRN  genr
 
 function* makeGRN_Mode1_GenFunc({ config }) {
   // Make_GRN Items  genrator function
-  
-  const { pageMode = '', path = '', grnRef = [], challanNo = '' } = config
+
+  const { pageMode = '', path = '', grnRef = [], InvoiceDate, subPageMode } = config
+
   try {
-    const response = yield call(GRN_Make_API, config);
+    if (subPageMode === url.IB_ORDER_SO_LIST) {
+      const response = yield call(get_Demand_Details_Post_API, config);
+      response["pageMode"] = pageMode;
+      response["path"] = path;
+      response["Demand_Reference"] = grnRef;
 
-
+      yield put(makeGRN_Mode_1ActionSuccess(response))
+    }
+    else {
+      const response = yield call(GRN_Make_API, config);
+      
       response.Data.OrderItem.forEach(index => {
 
-        index["GSToption"] = index.GSTDropdown.map(i => ({ value: i.GST, label: i.GSTPercentage, }));
-        index["MRPOps"] = index.MRPDetails.map(i => ({ label: i.MRPValue, value: i.MRP }));
-        const deFaultValue = index["MRPOps"].reduce((maxObj, obj) => {
-          return obj.value > maxObj.value ? obj : maxObj;
-        }, { value: -Infinity });
+        index["GSToption"] = index.GSTDropdown?.map(i => ({ value: i.GST, label: i.GSTPercentage, }));
+        index["MRPOps"] = index.MRPDetails?.map(i => ({ label: i.MRPValue, value: i.MRP }));
 
-        index["MRPValue"] = deFaultValue?.label;
-        index["MRP"] = deFaultValue?.value;
+        let deFaultValue = { value: 0 }; // Default value for case when MRPOps is undefined
+        if (index["MRPOps"]) {
+          deFaultValue = index["MRPOps"].reduce((maxObj, obj) => {
+            return obj.value > maxObj.value ? obj : maxObj;
+          }, { value: -Infinity });
+        }
+        // const deFaultValue = index["MRPOps"].reduce((maxObj, obj) => {
+        //   return obj.value > maxObj.value ? obj : maxObj;
+        // }, { value: -Infinity });
+
+        index["MRPValue"] = (deFaultValue?.value === 0) ? index.MRPValue : deFaultValue?.label;
+        index["MRP"] = (deFaultValue?.value === 0) ? index.MRP : deFaultValue?.value;
+        index["vendorOrderRate"] = index.Rate;
 
         if (index.GST === null) {
-          const deFaultValue = index.GSTDropdown.filter(i => i.GSTPercentage === index.GSTPercentage);
+          const deFaultValue = index.GSTDropdown?.filter(i => i.GSTPercentage === index.GSTPercentage);
           index["GSTPercentage"] = deFaultValue[0]?.GSTPercentage
           index["GST"] = deFaultValue[0]?.GST;
 
         } else {
-          const deFaultValue = index.GSTDropdown.filter(i => i.GST === index.GST);
-          index["GSTPercentage"] = deFaultValue[0]?.GSTPercentage;
-          index["GST"] = deFaultValue[0]?.GST;
+          if (index.GSTDropdown) {
+            const deFaultValue = index.GSTDropdown?.filter(i => i.GST === index.GST);
+            index["GSTPercentage"] = (deFaultValue === undefined) ? "" : deFaultValue[0]?.GSTPercentage;
+            index["GST"] = (deFaultValue === undefined) ? "" : deFaultValue[0]?.GST;
+          } else {
+            index["GSTPercentage"] = index.GSTPercentage
+          }
+
+
+
         }
 
       })
 
-      response.Data.OrderItem.sort(function (a, b) {
+      response.Data.OrderItem?.sort(function (a, b) {
         if (a.Item > b.Item) { return 1; }
         else if (a.Item < b.Item) { return -1; }
         return 0;
       });
 
-  
-    response["pageMode"] = pageMode;
-    response["path"] = path; //Pagepath
-    response.Data["GRNReferences"] = grnRef;
-    response.Data["challanNo"] = challanNo;
-    yield put(makeGRN_Mode_1ActionSuccess(response))
+
+      response["pageMode"] = pageMode;
+      response["path"] = path; //Pagepath
+      response.Data["GRNReferences"] = grnRef;
+      response.Data["InvoiceDate"] = InvoiceDate
+      yield put(makeGRN_Mode_1ActionSuccess(response))
+    }
+
 
   } catch (error) { yield put(GrnApiErrorAction()) }
 }

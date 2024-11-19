@@ -18,6 +18,10 @@ import {
   PARTY_DROPDOWN_LIST,
   PARTY_DROPDOWN_LIST_SUCCESS,
   COMMON_API_REDUCER_ERROR_ACTION,
+  SUB_EMPLOYEE_LIST,
+  SUB_EMPLOYEE_LIST_SUCCESS,
+  PARTY_ON_CLUSTER_SUBCLUSTER_LIST,
+  PARTY_ON_CLUSTER_SUBCLUSTER_LIST_SUCCESS,
 } from './actionType'
 
 
@@ -44,8 +48,9 @@ export const getSupplierSuccess = orders => ({
 })
 
 // ************************************************************
-export const GetVender = () => ({
+export const GetVender = (jsonBody) => ({
   type: GET_VENDER,
+  jsonBody
 });
 
 export const GetVenderSuccess = orders => ({
@@ -117,6 +122,34 @@ export const Party_Dropdown_List_Success = resp => ({
   type: PARTY_DROPDOWN_LIST_SUCCESS,
   payload: resp,
 })
+
+
+export const EmployeeSubEmployee_List = (loginEmployeeID) => ({
+  type: SUB_EMPLOYEE_LIST,
+  loginEmployeeID
+});
+
+
+export const EmployeeSubEmployee_List_Success = resp => ({
+  type: SUB_EMPLOYEE_LIST_SUCCESS,
+  payload: resp,
+})
+
+export const Partyonclustersubcluster_List = (config={}) => ({
+  type: PARTY_ON_CLUSTER_SUBCLUSTER_LIST,
+  config
+});
+
+
+export const Partyonclustersubcluste_List_Success = resp => ({
+  type: PARTY_ON_CLUSTER_SUBCLUSTER_LIST_SUCCESS,
+  payload: resp,
+})
+
+
+
+
+
 
 // ************************************************************
 export const commonApiReducer_ErrorAction = () => ({

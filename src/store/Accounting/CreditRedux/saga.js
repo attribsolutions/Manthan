@@ -10,6 +10,7 @@ import {
   CreditDebitApiErrorAction,
   Uploaded_Credit_Debit_EInvoiceSuccess,
   Cancel_Credit_Debit_EInvoiceSuccess,
+  bulk_CreditNote_delete_ID_Success,
 } from "./action";
 import {
   Credit_Debit_Save_API,
@@ -21,8 +22,10 @@ import {
   Receipt_Number_API,
   EInvoice_Credit_Debit_Uploade_Get_API,
   EInvoice_Credit_Debit_Cancel_Get_API,
+  BulkCreditNote_delete_API,
 } from "../../../helpers/backend_helper";
 import {
+  BULK_CREDITNOTE_DELETE_ID,
   CANCLE_CREDIT_DEBIT_E_INVOICE_ACTION,
   CREDITDEBIT_TYPE,
   DELETE_CREDIT_LIST_ID,
@@ -50,10 +53,14 @@ function* Get_Credit_List_GenFunc(data) {               // getList API
     const response = yield call(Go_Button_Credit_Debit_Post_API, data.data);
     const newList = yield response.Data.map((i) => {
 
+      if (!(i.ImportFromExcel)) {
+        i.forceSelectDissabled = true;//select row check box dessible 
+      }
+
       i["recordsAmountTotal"] = i.GrandTotal;  // Breadcrumb Count total
       i["InvoiceUploads"] = i.CRDRNoteUploads  // Added this blank Array to Show e Invoive Array   Further devlopment Remain 
       i["PageMode"] = "CreditDebitList"  //Mode Added  for e invoice  column condition check in list Action button in einvoice
-      i.GrandTotal = amountCommaSeparateFunc(i.GrandTotal) //  GrandTotal show with commas
+      i.GrandTotal = amountCommaSeparateFunc(parseFloat(i.GrandTotal).toFixed(2)) //  GrandTotal show with commas
       var date = date_dmy_func(i.CRDRNoteDate)
       var time = convertTimefunc(i.CreatedOn)
       i.CRDRNoteDate = (`${date} ${time}`)
@@ -71,6 +78,14 @@ function* Delete_Credit_ID_GenFunc({ config }) {         // delete API
   } catch (error) { yield put(CreditDebitApiErrorAction()) }
 }
 
+function* BulkCreditNote_Delete_ID_GenFunc({ config }) {         // delete API
+
+  try {
+    const response = yield call(BulkCreditNote_delete_API, config);
+    yield put(bulk_CreditNote_delete_ID_Success(response))
+  } catch (error) { yield put(CreditDebitApiErrorAction()) }
+}
+
 function* CreditDeitType_ID_GenFunc(data) {                // edit API 
 
   try {
@@ -79,7 +94,8 @@ function* CreditDeitType_ID_GenFunc(data) {                // edit API
   } catch (error) { yield put(CreditDebitApiErrorAction()) }
 }
 
-function* Edit_Creditlist_ID_GenFunc({ config }) {         //edit  Api              
+function* Edit_Creditlist_ID_GenFunc({ config }) {
+  //edit  Api              
   const { btnmode } = config;
   try {
     const response = yield call(Edit_Credit_List_API, config);
@@ -100,7 +116,7 @@ function* InvoiceReturn_ID_GenFunc(id) {           // Invoice Return Api
 //**************************** E-Invoice (upload ,cancel,) ***************************************/
 
 function* Uploade_Credit_Debit_EInvoiceGenFunc({ config }) {
-  debugger
+
   config["UserID"] = loginUserID();
   try {
 
@@ -134,6 +150,7 @@ function* CreditDebitSaga() {
   yield takeLatest(SAVE_CREDIT, Save_Method_ForCredit_GenFun)
   yield takeLatest(GET_CREDIT_LIST, Get_Credit_List_GenFunc)
   yield takeLatest(DELETE_CREDIT_LIST_ID, Delete_Credit_ID_GenFunc)
+  yield takeLatest(BULK_CREDITNOTE_DELETE_ID, BulkCreditNote_Delete_ID_GenFunc)
   yield takeLatest(CREDITDEBIT_TYPE, CreditDeitType_ID_GenFunc)
   yield takeLatest(EDIT_CREDIT_LIST_ID, Edit_Creditlist_ID_GenFunc)
   yield takeLatest(INVOICE_RETURN_ID, InvoiceReturn_ID_GenFunc)

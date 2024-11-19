@@ -17,9 +17,10 @@ import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { PageLoadingSpinner } from '../../../components/Common/CommonButton';
 import CommonPurchaseList from '../../../components/Common/CommonPurchaseList';
-import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 import * as _cfunc from "../../../components/Common/CommonFunction";
-import { customAlert } from '../../../CustomAlert/ConfirmDialog';
+import { mobileApp_RetailerDelete_Api } from '../../../helpers/backend_helper';
+import { showToastAlert } from '../../../helpers/axios_Config';
+import { changeCommonPartyDropDetailsAction } from '../../../store/Utilites/PartyDrodown/action';
 
 const PartyList = () => {
 
@@ -45,10 +46,11 @@ const PartyList = () => {
             userAccess: state.Login.RoleAccessUpdateData,
             postMsg: state.PartyMasterReducer.postMsg,
             pageField: state.CommonPageFieldReducer.pageFieldList,
-            commonPartyDropSelect: state.CommonPartyDropdownReducer.commonPartyDropSelect
         })
     );
-    const { pageField, goBtnLoading, commonPartyDropSelect } = reducers
+    const { commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
+
+    const { pageField, goBtnLoading } = reducers
 
     const action = {
         editId: editPartyID,
@@ -59,25 +61,26 @@ const PartyList = () => {
     }
     // Common Party Dropdown useEffect
     useEffect(() => {
-
-        if (commonPartyDropSelect.value > 0) {
+        if (subPageMode === url.PARTY_lIST) {
             goButtonHandler()
         }
-        else if (subPageMode === url.PARTY_lIST) {
-            dispatch(getPartyListAPI({
-                ..._cfunc.loginJsonBody(),
-                PartyID: _cfunc.loginPartyID(),
-                IsRetailer: 0
-            }));
+        else if ((commonPartyDropSelect.value > 0 &&
+            (subPageMode === url.RETAILER_LIST ||
+                subPageMode === url.NON_RETAILER_PARTY_lIST ||
+                subPageMode === url.FRANCHISE_CUSTOMER_LIST)
+        )) {
+            goButtonHandler()
         }
         return () => {
             dispatch(updatePartyIDSuccess([])); //for clear privious order list 
             dispatch(getPartyListAPISuccess([]));
+            dispatch(changeCommonPartyDropDetailsAction({ isShow: true }))//change party drop-down restore state
         }
     }, [commonPartyDropSelect]);
 
     //  This UseEffect => Featch Modules List data  First Rendering
     useLayoutEffect(() => {
+
         let page_Id = '';
         let page_Mode = mode.defaultList;
         let masterPath = '';
@@ -92,6 +95,11 @@ const PartyList = () => {
             masterPath = url.RETAILER_MASTER;
             newBtnPath = url.RETAILER_MASTER;
         }
+        else if (subPageMode === url.FRANCHISE_CUSTOMER_LIST) {
+            page_Id = pageId.FRANCHISE_CUSTOMER_LIST
+            masterPath = url.FRANCHISE_CUSTOMER_MASTER;
+            newBtnPath = url.FRANCHISE_CUSTOMER_MASTER;
+        }
         else if (subPageMode === url.NON_RETAILER_PARTY_lIST) {
             page_Id = pageId.NON_RETAILER_PARTY_lIST
             masterPath = url.NON_RETAILER_PARTY;
@@ -101,19 +109,14 @@ const PartyList = () => {
         setPageMode(page_Mode)
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
-
     }, []);
 
     function goButtonHandler() {
 
         try {
-            if ((_cfunc.loginSelectedPartyID() === 0)) {
-                customAlert({ Type: 3, Message: "Please Select Party" });
-                return;
-            };
             const jsonBody = {
                 ..._cfunc.loginJsonBody(),
-                PartyID: _cfunc.loginSelectedPartyID(),
+                PartyID: _cfunc.loginSelectedPartyID() === 0 ? _cfunc.loginPartyID() : _cfunc.loginSelectedPartyID(),
                 IsRetailer: subPageMode === url.RETAILER_LIST ? 1 : 0
             }
             dispatch(getPartyListAPI(jsonBody));
@@ -122,21 +125,19 @@ const PartyList = () => {
         return
     };
 
-    function partyOnChngeButtonHandler() {
-        dispatch(getPartyListAPISuccess([]));
+    const mobaileDeleteApiFinc = async (deleteMsg) => {
+        //***************mobail app api*********************** */
+        const mobilApiResp = await mobileApp_RetailerDelete_Api(deleteMsg.TransactionID)
+        if (mobilApiResp.StatusCode === 200) { showToastAlert(mobilApiResp.Message, "success") }
+        //************************************** */
+        return // *note  return required 
     }
 
     return (
         <React.Fragment>
             <div className="page-content">
                 <PageLoadingSpinner isLoading={(goBtnLoading || !pageField)} />
-                {(subPageMode === url.RETAILER_LIST || (subPageMode === url.NON_RETAILER_PARTY_lIST)) &&
-                    <PartyDropdown_Common pageMode={pageMode}
-                        goBtnLoading={goBtnLoading}
-                        goButtonHandler={goButtonHandler}
-                        changeButtonHandler={partyOnChngeButtonHandler}
-                    />
-                }
+
                 {
                     (pageField) &&
                     <CommonPurchaseList
@@ -144,8 +145,10 @@ const PartyList = () => {
                         reducers={reducers}
                         showBreadcrumb={false}
                         MasterModal={PartyMaster}
+                        goButnFunc={goButtonHandler}
                         masterPath={otherState.masterPath}
                         newBtnPath={otherState.newBtnPath}
+                        mobaileDeleteApiFinc={mobaileDeleteApiFinc}
                         pageMode={pageMode}
                         ButtonMsgLable={"Party"}
                         deleteName={"Name"}

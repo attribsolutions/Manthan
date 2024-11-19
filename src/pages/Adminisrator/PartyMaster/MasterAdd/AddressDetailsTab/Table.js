@@ -1,152 +1,171 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, } from 'react';
 import { Button, Input, Table, } from 'reactstrap';
 import { Tbody, Thead } from 'react-super-responsive-table';
 import { useDispatch, useSelector } from 'react-redux';
 import { PartyAddressDeleteID, PartyAddressDeleteIDSuccess } from '../../../../../store/Administrator/PartyRedux/action';
 import { customAlert } from '../../../../../CustomAlert/ConfirmDialog';
+import { deltBtnCss, editBtnCss } from '../../../../../components/Common/ListActionsButtons';
+import "./editDeleteCss.scss"
+import { date_dmy_func } from '../../../../../components/Common/CommonFunction';
 
-function AddressDetailsTable({ addressTable = [], setAddressTable }) {
+function AddressDetailsTable({ addressTable = [], setAddressTable, onEdit }) {
 
-    const dispatch = useDispatch();
+	const selectedRowIndexRef = useRef(-1);
 
-    const {
-        deleteMessage,
-    } = useSelector((state) => ({
-        deleteMessage: state.PartyMasterReducer.PartyAddressDelete,
-    }));
+	const dispatch = useDispatch();
 
-    useEffect(() => {
-        if (deleteMessage.Status === true && deleteMessage.StatusCode === 200) {
-            dispatch(PartyAddressDeleteIDSuccess({ Status: false }));
-            if (!(deleteMessage.deleteId === 0)) {
-                var fil = addressTable.filter((i) => {
-                    return !(i.id === deleteMessage.deleteId);
-                });
-                setAddressTable(fil);
-            }
-            dispatch(
-                customAlert({
-                    Type: 1,
-                    Status: true,
-                    Message: deleteMessage.Message,
+	const {
+		deleteMessage,
+	} = useSelector((state) => ({
+		deleteMessage: state.PartyMasterReducer.PartyAddressDelete,
+	}));
 
-                })
-            );
-        } else if (deleteMessage.Status === true) {
-            dispatch(PartyAddressDeleteIDSuccess({ Status: false }));
-            dispatch(
-                customAlert({
-                    Type: 3,
-                    Status: true,
-                    Message: JSON.stringify(deleteMessage.Message),
-                })
-            );
-        }
-    }, [deleteMessage]);
+	useEffect(() => {
 
-    const ondeleteHandeler = (ele) => {
-        
-        if (ele.id === undefined) {
-            if (!(ele.RowId === 0)) {
-                var fil = addressTable.filter((i) => {
-                    return !(i.RowId === ele.RowId);
-                });
-                setAddressTable(fil);
-            }
-        }
-        else {
-            dispatch(PartyAddressDeleteID({ deleteId: ele.id, btnId: `btn-delete-${ele.id}` }))
-        }
-    };
+		if (deleteMessage.Status === true && deleteMessage.StatusCode === 200) {
 
-    function defaultChangeHandler(key) {
+			dispatch(PartyAddressDeleteIDSuccess({ Status: false }));
+			if (!(deleteMessage.deleteId === 0)) {
+				var fil = addressTable.filter((i) => {
+					return !(i.id === deleteMessage.deleteId);
+				});
+				setAddressTable(fil);
+			}
+			customAlert({
+				Type: 1,
+				Status: true,
+				Message: deleteMessage.Message,
 
-        const newtableData = addressTable.map((ele, k) => {
-            ele.IsDefault = false;
-            if (k === key) {
-                ele.IsDefault = true;
-            }
-            return ele
-        });
-        setAddressTable(newtableData)
-    }
+			})
 
-    function myFunction(row) {
+		} else if (deleteMessage.Status === true) {
+			dispatch(PartyAddressDeleteIDSuccess({ Status: false }));
+			customAlert({
+				Type: 3,
+				Status: true,
+				Message: JSON.stringify(deleteMessage.Message),
+			})
+		}
+	}, [deleteMessage]);
 
-        var x = document.getElementById("add-img");
+	const ondeleteHandeler = (ele) => {
 
-        if (x.style.display === "none") {
-            x.src = row.fssaidocument
-            x.style.display = "block";
-        } else {
-            x.style.display = "none";
-        }
-    }
+		if (ele.id === undefined) {
+			if (!(ele.RowId === 0)) {
+				var fil = addressTable.filter((i) => {
+					return !(i.RowId === ele.RowId);
+				});
+				setAddressTable(fil);
+			}
+		}
+		else {
+			dispatch(PartyAddressDeleteID({ deleteId: ele.id, btnId: `btn-delete-${ele.id}` }))
+		}
+	};
 
-    const tableRows = addressTable.map((info, key) => {
+	function defaultChangeHandler(key) {
 
-        return (
-            <tr>
-                <td>{info.Address}</td>
-                <td>{info.FSSAINo}</td>
-                <td>{info.FSSAIExipry}</td>
-                <td>
-                    <button
-                        type='button'
-                        onClick={() => { myFunction(info) }}
-                        className="badge badge-soft-info font-size-12 btn btn-info waves-effect waves-light w-xxs border border-light">
-                        Show Image
-                    </button>
-                </td>
-                <td>{info.PIN}</td>
-                < td><Input type="radio"
-                    name="btnradio"
-                    id={`radioButton${key}`}
-                    defaultChecked={info.IsDefault ? true : false}
-                    onClick={(e) => defaultChangeHandler(key)} />
-                    {`${info.IsDefault}`}
-                </td>
+		const newtableData = addressTable.map((ele, k) => {
+			ele.IsDefault = false;
+			if (k === key) {
+				ele.IsDefault = true;
+			}
+			return ele
+		});
+		setAddressTable(newtableData)
+	}
 
-                <td>
-                    <Button
-                        className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
-                        data-mdb-toggle="tooltip" data-mdb-placement="top" title="Delete Party Type"
-                        disabled={info.IsDefault === false ? false : true}
-                        onClick={(e) =>
-                            ondeleteHandeler(info)
-                        }
-                    >
-                        <i className="mdi mdi-delete font-size-18"></i>
-                    </Button>
-                </td>
+	function myFunction(row) {
 
-            </tr >
-        );
-    });
+		var x = document.getElementById("add-img");
 
-    return (
-        <>
-            <div>
-                < img id='add-img' className='abc1' src={''} />
-                {addressTable.length > 0 ?
-                    <Table className="table table-bordered table-hover">
-                        <Thead>
-                            <tr>
-                                <th className="col col-sm-3">Address</th>
-                                <th className="col col-sm-3">FSSAINo</th>
-                                <th className="col col-sm-3">FSSAIExipry</th>
-                                <th className="col col-sm-3">FSSAI Document</th>
-                                <th className="col col-sm-3">PIN</th>
-                                <th className="col col-sm-3">IsDefault</th>
-                                <th className="col col-sm-3">{"Action"}</th>
-                            </tr>
-                        </Thead>
-                        <Tbody>{tableRows}</Tbody>
-                    </Table>
-                    : null}
-            </div>
-        </>
-    );
+		if (x.style.display === "none") {
+			x.src = row.fssaidocument
+			x.style.display = "block";
+		} else {
+			x.style.display = "none";
+		}
+	}
+
+	const onEditHandlerHandeler = (row) => {
+		onEdit(row); // Pass the selected row to the parent component
+	}
+
+	const tableRows = addressTable.map((info, key) => {
+
+		return (
+			<tr key={key} className={key === selectedRowIndexRef.current ? 'selected' : ''}>
+				<td>{info.Address}</td>
+				<td>{info.FSSAINo}</td>
+				<td>{date_dmy_func(info.FSSAIExipry)}</td>
+				<td>
+					<button
+						type='button'
+						onClick={() => { myFunction(info) }}
+						className="badge badge-soft-info font-size-12 btn btn-info waves-effect waves-light w-xxs border border-light">
+						Show Image
+					</button>
+				</td>
+				<td>{info.PIN}</td>
+				<td>
+					<Input type="radio"
+						name="btnradio"
+						id={`radioButton${key}`}
+						checked={info.IsDefault} // Use checked attribute to set the radio button state
+						onChange={(e) => defaultChangeHandler(key)} />
+					{`${info.IsDefault}`}
+				</td>
+				<td>
+					<Button
+						className={`btn-edit ${editBtnCss}`}
+						data-mdb-toggle="tooltip"
+						data-mdb-placement="top"
+						title="Edit Party Type"
+						onClick={() => {
+							onEditHandlerHandeler(info);
+							selectedRowIndexRef.current = key; // Set the selected row index
+						}}
+					><i className="mdi mdi-pencil font-size-18"></i></Button>
+
+					<Button
+						className={`btn-delete ${deltBtnCss}`}
+						data-mdb-toggle="tooltip"
+						data-mdb-placement="top"
+						title="Delete Party Type"
+						disabled={info.IsDefault === false ? false : true}
+						onClick={() => ondeleteHandeler(info)}
+					>
+						<i className="mdi mdi-delete font-size-18"></i>
+					</Button>
+				</td>
+			</tr>
+		);
+	});
+
+	return (
+		<>
+			<div style={{ maxHeight: '400px', overflowY: 'auto' }}>
+
+				< img id='add-img' className='abc1' src={''} />
+				{addressTable.length > 0 ?
+					<Table className="table table-bordered table-hover">
+						<Thead>
+							<tr>
+								<th className="col col-sm-3">Address</th>
+								<th className="col col-sm-2">FSSAINo</th>
+								<th className="col col-sm-2">FSSAIExipry</th>
+								<th className="col col-sm-2">FSSAI Document</th>
+								<th className="col col-sm-1">PIN</th>
+								<th className="col col-sm-1">IsDefault</th>
+								<th className="col col-sm-2">Action</th>
+							</tr>
+						</Thead>
+						<Tbody>{tableRows}</Tbody>
+					</Table>
+					: null}
+			</div>
+		</>
+	);
 }
 
 export default AddressDetailsTable;

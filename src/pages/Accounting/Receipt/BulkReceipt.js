@@ -6,7 +6,7 @@ import {
     Label,
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
-import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
+import { commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { SaveButton } from "../../../components/Common/CommonButton";
@@ -16,10 +16,11 @@ import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
-import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
+import { globalTableSearchProps } from "../../../components/Common/SearchBox/MySearch";
 import { ReceiptGoButtonMaster_Success, saveReceiptMaster, saveReceiptMaster_Success } from "../../../store/Accounting/Receipt/action";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { C_DatePicker } from "../../../CustomValidateForm";
+import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 
 const BulkRecipt = (props) => {
 
@@ -250,31 +251,25 @@ const BulkRecipt = (props) => {
                             </div>
                         </div>
 
-
                         <ToolkitProvider
-
                             keyField="id"
                             data={Data}
                             columns={pagesListColumns}
-
                             search
                         >
                             {toolkitProps => (
                                 <React.Fragment>
-                                    <div className="table">
+                                    <div className="">
                                         <BootstrapTable
                                             keyField={"id"}
                                             bordered={true}
                                             striped={false}
                                             noDataIndication={<div className="text-danger text-center ">Record Not available</div>}
-                                            classes={"table align-middle table-nowrap table-hover"}
+                                            classes={"table table-bordered table align-middle table-nowrap table-hover"}
                                             headerWrapperClasses={"thead-light"}
-
                                             {...toolkitProps.baseProps}
-
                                         />
-
-                                        {mySearchProps(toolkitProps.searchProps)}
+                                        {globalTableSearchProps(toolkitProps.searchProps)}
                                     </div>
 
                                 </React.Fragment>
@@ -282,18 +277,15 @@ const BulkRecipt = (props) => {
                             }
                         </ToolkitProvider>
 
-                        {Data.length > 0 ?
-                            <FormGroup>
-                                <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
-                                    <SaveButton pageMode={pageMode}
-                                        onClick={SaveHandler}
-                                        loading={saveBtnloading}
-                                        userAcc={userPageAccessState}
-                                    />
+                        {Data.length > 0 &&
+                            <SaveButtonDraggable>
+                                <SaveButton pageMode={pageMode}
+                                    onClick={SaveHandler}
+                                    loading={saveBtnloading}
+                                    userAcc={userPageAccessState}
+                                />
 
-                                </Col>
-                            </FormGroup >
-                            : null
+                            </SaveButtonDraggable>
                         }
 
                     </form >

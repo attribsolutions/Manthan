@@ -1,17 +1,22 @@
-import InvioceReport from "./InvioceReport/Page";
-import ordeRreport from "./OrderReport/Page";
-import StockReport from "./StockReport/Page";
-import ItemRegisterReport from "./ItemRegisterReport/Page";
+import InvioceReport from "./InvioceA4PDFReport/Page";
+import ordeRreport from "./OrderPDFReport/Page";
+import StockReport from "./StockReport/PDFReport/Page";
+import ItemRegisterReport from "./ItemRegisterReport/PDFReport/Page";
 import VanLoadingSheet from "./Van Loading Party Wise InvoiceList/Page";
-import Receipts from "./Receipts/Page";
-import CreditNote from "./CRDRNote Report/Page";
-import PartyLedgerReport from "./PratyLedger/Page";
-import ReturnReport from "./PurchaseReturnReport/Page";
-import CompanyWiseBudgetReport from "./CompanyWiseBugetReport/Page";
-import ClaimSummaryReport from "./ClaimReportSummary/Page";
-import CustomerWiseReturnReport from "./CustomerWiseReturnReport/Page";
+import Receipts from "./ReceiptsPDFReport/Page";
+import CreditNote from "./CreditDebitPDFReport/Page";
+import PartyLedgerReport from "./PratyLedger/PDFReport/Page";
+import ReturnReport from "./ReturnReport/PDFReport/Page";
+import MasterClaimReport from "./ClaimSummary/PDFReport/MasterClaimReport/Page";
+import ItemWiseClaimReport from "./ClaimSummary/PDFReport/ItemWiseClaimReport/Page";
+import CustomerWiseClaimReport from "./ClaimSummary/PDFReport/CustomerWiseClaimReport/Page";
+import FrenchiesesOrderReport from "../pages/SweetPOS/Reports/OrderPDFReport/Page";
+import PosInvoiceReport from "../pages/SweetPOS/Reports/InvoicePDFReport/Page";
+import ordeItemSupplierReport from "./OrderItemSupplier/OrderItemSupplier/Page";
+import StockEntryReport from "./StockEntry/Page";
+import OrderThermalPrintReport from "../pages/SweetPOS/Reports/OrderThermalPrint/Page";
 
-
+export const FrenchiesesOrder = "FrenchiesesOrder"
 export const order1 = "order1"
 export const invoice = "invoice"
 export const Stock = "Stock"
@@ -23,9 +28,15 @@ export const Receipt = "Receipt"
 export const Credit = "Credit"
 export const PartyLedger = "PartyLedger"
 export const Return = "Return"
-export const CompanyWiseBudget = "CompanyWiseBudget"
-export const ClaimSummary = "ClaimSummary"
-export const CustomerWiseReturn = "CustomerWiseReturn"
+export const MasterClaim = "MasterClaim"
+export const ItemWiseClaim = "ItemWiseClaim"
+export const CustomerWiseClaim = "CustomerWiseClaim"
+export const PosInvoice = "PosInvoice"
+export const ordeItemSupplier = "ordeItemSupplier"
+export const StockEntry = "StockEntry"
+export const orderThermalPrintReport = "orderThermalPrintReport"
+
+
 
 
 
@@ -62,21 +73,34 @@ const generateReport = (resp) => {
         case Return:
             ReturnReport(resp.Data)
             break;
-        case CompanyWiseBudget:
-            CompanyWiseBudgetReport(resp.Data)
+        case MasterClaim:
+            MasterClaimReport(resp.Data)
             break;
-        case ClaimSummary:
-            ClaimSummaryReport(resp.Data)
+        case ItemWiseClaim:
+            ItemWiseClaimReport(resp.Data)
             break;
-        case CustomerWiseReturn:
-            CustomerWiseReturnReport(resp.Data)
+        case CustomerWiseClaim:
+            CustomerWiseClaimReport(resp.Data)
             break;
-
+        case FrenchiesesOrder:
+            FrenchiesesOrderReport(resp.Data)
+            break;
+        case PosInvoice:
+            PosInvoiceReport(resp.Data)
+            break;
+        case ordeItemSupplier:
+            ordeItemSupplierReport(resp.Data)
+            break;
+        case StockEntry:
+            StockEntryReport(resp.Data)
+            break;
+        case orderThermalPrintReport:
+            OrderThermalPrintReport(resp.Data)
+            break;
 
         default:
             break;
     }
 }
-
 
 export default generateReport;

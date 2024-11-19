@@ -2,12 +2,20 @@ import React from 'react'
 import BootstrapTable from 'react-bootstrap-table-next'
 import ToolkitProvider from 'react-bootstrap-table2-toolkit'
 import { Col, Row } from 'reactstrap'
-import { mySearchProps } from '../../components/Common/SearchBox/MySearch'
+import { globalTableSearchProps } from '../../components/Common/SearchBox/MySearch'
 import { ItemSaleContext } from './ContextDataProvider'
+import GridExample from './Pivottable'
+import { useDispatch } from 'react-redux'
+import { BreadcrumbShowCountlabel } from '../../store/actions'
+import GlobalCustomTable from '../../GlobalCustomTable'
+import { TotalAmount_Func } from '../../components/Common/CommonFunction'
 
 function ShowTable() {
-    const { tableData, selectedColumns } = ItemSaleContext();
-    
+
+    const dispatch = useDispatch();
+
+    const { tableData, selectedColumns, pivotMode } = ItemSaleContext();
+
     const sortCaretFunction = {
         sortCaret: (order, column) => {
             if (!order) {
@@ -20,42 +28,70 @@ function ShowTable() {
             return null;
         }
     };
-    return (
-        <div className="mt-n5">
-            <ToolkitProvider
-                keyField="id"
-                data={tableData}
-                columns={selectedColumns} 
-                search
-            >
-                {(toolkitProps,) => (
-                    <React.Fragment>
-                        <Row>
-                            <Col xl="12">
-                                <div className="table-responsive table">
-                                    <BootstrapTable
-                                        keyField="id"
-                                        classes={"table  table-bordered "}
-                                        sort={sortCaretFunction}
-                                        noDataIndication={
-                                            <div className="text-danger text-center ">
-                                                Record Not available
-                                            </div>
-                                        }
-                                        // onDataSizeChange={({ dataSize }) => {
-                                        //     // dispatch(BreadcrumbShowCountlabel(`Count:${dataSize > 0 && dataSize - 1}`));
-                                        // }}
-                                        {...toolkitProps.baseProps}
-                                    />
-                                    {mySearchProps(toolkitProps.searchProps)}
-                                </div>
-                            </Col>
-                        </Row>
 
-                    </React.Fragment>
-                )}
-            </ToolkitProvider>
-        </div>
+    if (pivotMode) {
+        return <GridExample></GridExample>
+    };
+
+    return (
+        <GlobalCustomTable
+            keyField={"id"}
+            data={tableData}
+            columns={selectedColumns}
+            paginationEnabled={false}
+            // onDataSizeChange={({ dataCount }) => {
+            //     dispatch(BreadcrumbShowCountlabel(`Count:${dataCount}`));
+            // }}
+            onDataSizeChange={({ dataCount, filteredData = [] }) => {
+                const newfilteredData = filteredData.map(i => {
+                    const { ...rest } = i;
+                    return {
+                        ...rest,
+                        recordsAmountTotal: i.Amount, // Breadcrumb Count total
+                    };
+                });
+                
+                dispatch(BreadcrumbShowCountlabel(`Count:${dataCount} currency_symbol ${TotalAmount_Func(newfilteredData)}`));
+            }
+            }
+            noDataIndication={<div className="text-danger text-center table-cursor-pointer"  >Data Not available</div>}
+        />
+        // <ToolkitProvider
+        //     keyField="id"
+        //     data={tableData}
+        //     columns={selectedColumns}
+        //     search
+        // >
+        //     {(toolkitProps,) => (
+        //         <React.Fragment>
+        //             <Row>
+        //                 <Col xl="12">
+        //                     <div className="table-responsive table">
+        //                         <BootstrapTable
+        //                             keyField="id"
+        //                             classes={"table  table-bordered "}
+        //                             sort={sortCaretFunction}
+        //                             noDataIndication={
+        //                                 <div className="text-danger text-center ">
+        //                                     Record Not available
+        //                                 </div>
+        //                             }
+        //                             onDataSizeChange={({ dataSize, d }) => {
+        //                                 
+        //                                 // dispatch(BreadcrumbShowCountlabel(`Count:${dataSize} currency_symbol 0`))
+        //                                 dispatch(BreadcrumbShowCountlabel(`Count:${dataSize}`));
+        //                             }}
+        //                             {...toolkitProps.baseProps}
+        //                         />
+        //                         {globalTableSearchProps(toolkitProps.searchProps)}
+        //                     </div>
+        //                 </Col>
+        //             </Row>
+
+        //         </React.Fragment>
+        //     )}
+        // </ToolkitProvider>
+
     )
 }
 

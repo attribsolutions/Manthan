@@ -1,53 +1,16 @@
-import React, { useState } from "react";
+import React from "react";
 import { useSelector } from "react-redux";
 import { Col, FormGroup, Label } from "reactstrap";
-import Papa from 'papaparse';
 import { C_Button } from "../components/Common/CommonButton";
 import { C_Select } from "../CustomValidateForm";
 import { loginIsSCMParty } from "../components/Common/CommonFunction";
 
-export function ReportComponent({ pageField, excelData, excelFileName }) {
-    debugger
-    const csvColumns = pageField.PageFieldMaster
-        .filter(column => column.ShowInListPage) // Only include columns where ShowInListPage is true
-        .sort((a, b) => a.ListPageSeq - b.ListPageSeq) // Sort columns by ListPageSeq in ascending order
-        .map(column => column.ControlID); // Extract ControlID as column headers
-
-    const csvHeaderColumns = pageField.PageFieldMaster
-        .filter(column => column.ShowInListPage) // Only include columns where ShowInListPage is true
-        .sort((a, b) => a.ListPageSeq - b.ListPageSeq) // Sort columns by ListPageSeq in ascending order
-        .map(column => column.FieldLabel); // Extract FieldLabel as column headers
-
-    // Map the data to include only the properties corresponding to the columns
-    const csvData = excelData.map(item =>
-        csvColumns.map(column => item[column])
-    );
-
-    // Combine column headers and data into a single array
-    const csvContent = [csvHeaderColumns, ...csvData];
-
-    // Create the CSV content
-    const csvContentString = Papa.unparse(csvContent, { header: true });
-
-    // Create and trigger the download
-    const blob = new Blob([csvContentString], { type: "text/csv" });
-    const url = URL.createObjectURL(blob);
-
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `${excelFileName}.csv`;
-    a.click();
-
-    URL.revokeObjectURL(url);
-
-}
-
 export const ShowAndExcelBtn = (props) => {
-    const { showLoading, excelLoading, showOnClick, excelOnClick } = props
+    const { sm, margin, showLoading, excelLoading, showOnClick, excelOnClick } = props
 
     return (
         <>
-            <Col sm={1} className="mt-3" >
+            <Col sm={sm} className={margin} >
                 <C_Button
                     type="button"
                     spinnerColor="white"
@@ -60,7 +23,7 @@ export const ShowAndExcelBtn = (props) => {
 
             </Col>
 
-            <Col sm={2} className="mt-3 ">
+            <Col sm={2} className={margin}>
                 <C_Button
                     type="button"
                     spinnerColor="white"
@@ -68,7 +31,7 @@ export const ShowAndExcelBtn = (props) => {
                     className="btn btn-primary"
                     onClick={excelOnClick}
                 >
-                    Excel Download
+                    Excel
                 </C_Button>
             </Col>
         </>)
@@ -81,7 +44,7 @@ const PartyDropdownForReport = (props) => {
     const { partyValue, setPartyValue } = props
 
     const { partyList, partyDropdownLoading } = useSelector((state) => ({
-        partyList: state.CommonPartyDropdownReducer.commonPartyDropdown,
+        partyList: state.CommonPartyDropdownReducer.commonPartyDropdownOption,
         partyDropdownLoading: state.CommonPartyDropdownReducer.partyDropdownLoading,
     }));
 
@@ -97,7 +60,7 @@ const PartyDropdownForReport = (props) => {
                 <Col sm={3}>
                     <FormGroup className=" row mt-3 " >
                         <Label className="col-md-3 p-2 "
-                            style={{ width: "90px" }}>Party</Label>
+                            style={{ width: "65px" }}>Party</Label>
                         <Col sm={7}>
                             <C_Select
                                 value={partyValue}

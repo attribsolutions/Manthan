@@ -1,12 +1,13 @@
 import { call, put, select, takeLatest } from "redux-saga/effects";
 import {
-    
+
     deletePartySubPartySuccess,
     editPartySubPartySuccess,
     getPartySubPartylistSuccess,
     getPartySubParty_For_party_dropdownSuccess,
     savePartySubPartySuccess,
     updatePartySubPartySuccess,
+    PartySubPartyErrorAction,
 } from "./action";
 
 import {
@@ -29,29 +30,26 @@ import {
 
 } from "./actionType"
 
-import { CommonConsole } from "../../../components/Common/CommonFunction";
-
-
 function* Save_Method_ForPartySubParty_GenFun({ config }) {                     //Save API 
     try {
         const response = yield call(PartySubParty_Post_API, config);
         yield put(savePartySubPartySuccess(response));
-    } catch (error) { CommonConsole(error) }
+    } catch (error) { yield put(PartySubPartyErrorAction()) }
 }
 
 function* Get_PartySubParty_List_GenFunc() {                                   //get List API                         
     try {
         const response = yield call(PartySubParty_Get_API);
-        yield put(getPartySubPartylistSuccess(response.Data));
-    } catch (error) { CommonConsole(error) }
+        const updatedData = response.Data.map((i) => ({ ...i, id: i.Party_id }))
+        yield put(getPartySubPartylistSuccess(updatedData));
+    } catch (error) { yield put(PartySubPartyErrorAction()) }
 }
-
 
 function* Delete_PartySubParty_ID_GenFunc({ config }) {                             //Delete API
     try {
         const response = yield call(PartySubParty_Delete_API, config);
         yield put(deletePartySubPartySuccess(response))
-    } catch (error) { CommonConsole(error) }
+    } catch (error) { yield put(PartySubPartyErrorAction()) }
 }
 
 function* Edit_PartySubParty_ID_GenFunc({ config }) {                       //Edit API
@@ -60,14 +58,14 @@ function* Edit_PartySubParty_ID_GenFunc({ config }) {                       //Ed
         const response = yield call(PartySubParty_Edit_API, config);
         response.pageMode = btnmode;
         yield put(editPartySubPartySuccess(response));
-    } catch (error) { CommonConsole(error) }
+    } catch (error) { yield put(PartySubPartyErrorAction()) }
 }
 
 function* Update_PartySubParty_ID_GenFunc({ config }) {                     //Update API
     try {
         const response = yield call(PartySubParty_Update_API, config);
         yield put(updatePartySubPartySuccess(response))
-    } catch (error) { CommonConsole(error) }
+    } catch (error) { yield put(PartySubPartyErrorAction()) }
 }
 
 function* getPartySubPartyGenFunc({ id }) {                                        // get API
@@ -78,21 +76,8 @@ function* getPartySubPartyGenFunc({ id }) {                                     
             return i
         })
         yield put(getPartySubParty_For_party_dropdownSuccess(newArr));
-    } catch (error) { CommonConsole(error) }
+    } catch (error) { yield put(PartySubPartyErrorAction()) }
 }
-
-
-
-// function* deletePartySubPartyGenFunc({ id }) {                                        // get API
-//     try {
-//         const response = yield call(PartySubParty_Dropdown_Get_API, id);
-//         const newArr = response.Data.map((i, k) => {
-//             i.id = k
-//             return i
-//         })
-//         yield put(deleteIDForMasterPageSuccess(newArr));
-//     } catch (error) { CommonConsole(error) }
-// }
 
 function* deletePartySubPartyGenFunc({ id }) {
     const getState = (state) => state.PartySubPartyReducer.PartySubParty;
@@ -103,7 +88,7 @@ function* deletePartySubPartyGenFunc({ id }) {
     try {
         yield put(getPartySubParty_For_party_dropdownSuccess(newList));
 
-    } catch (error) { CommonConsole(error) }
+    } catch (error) { yield put(PartySubPartyErrorAction()) }
 }
 
 function* PartySubPartysaga() {

@@ -51,8 +51,8 @@ const AddMaster = (props) => {
                             }
                         </div>
                     </header>
-                    <div style={{ margin: "-102px  -12px -136px" }}>
-
+                    {/* <div style={{ margin: "-102px  -12px -136px" }}> */}
+                    <div>
                         <props.masterModal
                             masterPath={props.masterPath}
                             isOpenModal={setIsOpen}

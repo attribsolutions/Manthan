@@ -42,6 +42,8 @@ export default function ContextDataProvider({ children }) {
     const [tableData, setTableData] = useState([]);
     const [selectedColumns, setSelectedColumns] = useState(initail.DEFAULT_TABLE_COLUMNS);
     const [initaialBaseData, setInitaialBaseData] = useState([]);
+    const [pivotMode, setPivotMode] = useState(false);
+
 
     async function sortManipulationFunc(baseData) {
 
@@ -94,6 +96,7 @@ export default function ContextDataProvider({ children }) {
         tableData, setTableData,
         selectedColumns, setSelectedColumns,
         initaialBaseData, setInitaialBaseData,
+        pivotMode, setPivotMode,
         sortManipulationFunc
     };
 

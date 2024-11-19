@@ -47,9 +47,10 @@ function* Challan_List_filterGerFunc({ filters }) {          // Challan List Fil
   } catch (error) { CommonConsole(error) }
 }
 
-function* DeleteChallanGenFunc({ id }) {                     // Delete Challan  genrator function
+function* DeleteChallanGenFunc({ config }) { // Delete Challan  genrator function
+  
   try {
-    const response = yield call(Challan_delete_API, id);
+    const response = yield call(Challan_delete_API, config);
 
     yield put(deleteChallanIdSuccess(response));
   } catch (error) { CommonConsole(error) }

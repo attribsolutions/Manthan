@@ -13,6 +13,7 @@ import GSTTable from './Table';
 import { loginUserID, loginCompanyID } from '../../../../../components/Common/CommonFunction';
 import { customAlert } from '../../../../../CustomAlert/ConfirmDialog';
 import { C_DatePicker } from '../../../../../CustomValidateForm';
+import { alertMessages } from '../../../../../components/Common/CommonErrorMsg/alertMsg';
 
 function GSTTab(props) {
 
@@ -41,8 +42,13 @@ function GSTTab(props) {
             && !(HSNCode === "")
             && !(effectiveDate === "")
         ) {
-            const totalTableData = props.tableData.length;
-            val.id = totalTableData + 1;
+            let highestId = -Infinity;
+            for (const item of props.tableData) {
+                if (item.id !== undefined && item.id > highestId) {
+                    highestId = item.id;
+                }
+            }
+            val.id = highestId + 1;
             const updatedTableData = [...props.tableData];
             updatedTableData.push(val);
             props.func(updatedTableData)
@@ -50,7 +56,7 @@ function GSTTab(props) {
 
         }
         else {
-            customAlert({ Type: 4, Message: "Please Enter value" })
+            customAlert({ Type: 4, Message: alertMessages.enterValue})
         }
     };
     const clearState = () => {

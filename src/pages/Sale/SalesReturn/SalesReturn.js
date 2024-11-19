@@ -40,11 +40,16 @@ import { decimalRegx, } from "../../../CustomValidateForm/RegexPattern";
 import { goButtonPartyItemAddPage } from "../../../store/Administrator/PartyItemsRedux/action";
 import { return_discountCalculate_Func } from "./SalesCalculation";
 import * as _cfunc from "../../../components/Common/CommonFunction";
-import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
+import { globalTableSearchProps } from "../../../components/Common/SearchBox/MySearch";
 import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import Slidewithcaption from "../../../components/Common/CommonImageComponent";
-import NewCommonPartyDropdown from "../../../components/Common/NewCommonPartyDropdown";
+import { deltBtnCss } from "../../../components/Common/ListActionsButtons";
+import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
+import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
+import { CheckStockEntryForFirstTransaction, CheckStockEntryForFirstTransactionSuccess, CheckStockEntryforBackDatedTransaction, CheckStockEntryforBackDatedTransactionSuccess } from "../../../store/Inventory/StockEntryRedux/action";
+import GlobalCustomTable from "../../../GlobalCustomTable";
+
 
 const SalesReturn = (props) => {
 
@@ -68,7 +73,8 @@ const SalesReturn = (props) => {
     const [state, setState] = useState(initialFiledFunc(fileds))
     const [discountDropOption] = useState([{ value: 1, label: "Rs" }, { value: 2, label: "%" }]);
     const [TableArr, setTableArr] = useState([]);
-    const [ImageCount, setImageCount] = useState(0);
+    const [isImage, setisImage] = useState({});
+
 
     const [returnMode, setReturnMode] = useState(0); //(1==ItemWise) OR (2==invoiceWise)
     const [imageTable, setImageTable] = useState([]);  // Selected Image Array
@@ -94,8 +100,12 @@ const SalesReturn = (props) => {
         addBtnLoading,
         invoiceNoDropDownLoading,
         retailerDropLoading,
-        commonPartyDropSelect
+        commonPartyDropSelect,
+        StockEnteryForFirstYear,
+        StockEnteryForBackdated
     } = useSelector((state) => ({
+        StockEnteryForFirstYear: state.StockEntryReducer.StockEnteryForFirstYear,
+        StockEnteryForBackdated: state.StockEntryReducer.StockEnteryForBackdated,
         addButtonData: state.SalesReturnReducer.addButtonData,
         postMsg: state.SalesReturnReducer.postMsg,
         RetailerList: state.CommonAPI_Reducer.RetailerList,
@@ -114,9 +124,13 @@ const SalesReturn = (props) => {
     useEffect(() => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(pageId.SALES_RETURN))
-        dispatch(BreadcrumbShowCountlabel(`${"Total Amount"} :${0}`))
+        dispatch(BreadcrumbShowCountlabel(`Count:${0} currency_symbol ${0}`))
+
+
         return () => {
             dispatch(Retailer_List_Success([]));
+            dispatch(CheckStockEntryForFirstTransactionSuccess({ status: false }))
+
         }
     }, []);
 
@@ -190,6 +204,29 @@ const SalesReturn = (props) => {
         dispatch(postSelect_Field_for_dropdown(jsonBody));
     }, []);
 
+
+
+
+    useEffect(() => {
+
+        const jsonBody = JSON.stringify({
+            "FromDate": values.ReturnDate,
+            "PartyID": commonPartyDropSelect.value
+        });
+
+        const jsonBodyForBackdatedTransaction = JSON.stringify({
+            "TransactionDate": values.ReturnDate,
+            "PartyID": commonPartyDropSelect.value,
+        });
+        if (commonPartyDropSelect.value > 0) {
+            dispatch(CheckStockEntryForFirstTransaction({ jsonBody }))
+            dispatch(CheckStockEntryforBackDatedTransaction({ jsonBody: jsonBodyForBackdatedTransaction }))
+        }
+
+    }, [values.ReturnDate, commonPartyDropSelect.value])
+
+
+
     useEffect(() => {
         if (pageField) {
             const fieldArr = pageField.PageFieldMaster
@@ -239,21 +276,29 @@ const SalesReturn = (props) => {
                 let nextId = existingIds.length > 0 ? Math.max(...existingIds) + 1 : 1;
 
                 addButtonData.Data.forEach((i) => {
+                    debugger
                     const MRPOptions = i.ItemMRPDetails.map(i => ({ label: i.MRPValue, value: i.MRP, Rate: i.Rate }));
                     const GSTOptions = i.ItemGSTDetails.map(i => ({ label: i.GSTPercentage, value: i.GST }));
 
-                    const highestMRP = i.ItemMRPDetails.reduce((prev, current) => {// Default highest GST when Return mode "2==ItemWise"
-                        return (prev.MRP > current.MRP) ? prev : current;
-                    }, '');
+                    // const highestMRP = i.ItemMRPDetails.reduce((prev, current) => {// Default highest GST when Return mode "2==ItemWise"
+                    //     return (prev.MRP > current.MRP) ? prev : current;
+                    // }, '');
+
+                    const uniqueMRPs = i.ItemMRPDetails
+                        .sort((a, b) => b.MRP - a.MRP) // Sorts in descending order by MRP
+                        .filter((item, index, array) => array.findIndex(i => i.MRP === item.MRP) === index); // Removes duplicates
+
+                    const secondHighestMRP = uniqueMRPs.length > 1 ? uniqueMRPs[1] : uniqueMRPs[0]; // Returns the second MRP if available, otherwise returns the first one
+
 
                     const highestGST = i.ItemGSTDetails.reduce((prev, current) => {// Default  highest GST when Return mode "2==ItemWise"
                         return (prev.GST > current.GST) ? prev : current;
                     }, '');
 
                     if (returnMode === 2) { //(returnMode === 2) ItemWise
-                        i.Rate = highestMRP.Rate || "";
-                        i.MRP = highestMRP.MRP || "";
-                        i.MRPValue = highestMRP.MRPValue || "";
+                        i.Rate = secondHighestMRP.Rate || "";
+                        i.MRP = secondHighestMRP.MRP || "";
+                        i.MRPValue = secondHighestMRP.MRPValue || "";
 
                         i.GST = highestGST.GST || "";
                         i.GSTPercentage = highestGST.GSTPercentage || "";
@@ -275,8 +320,9 @@ const SalesReturn = (props) => {
                 });
 
                 let sumOfGrandTotal = updateItemArr.reduce((accumulator, currentObject) => accumulator + Number(currentObject["roundedTotalAmount"]) || 0, 0);
-                let count_label = `${"Total Amount"} :${Number(sumOfGrandTotal).toLocaleString()}`
-                dispatch(BreadcrumbShowCountlabel(count_label));
+                let count_label = `Count:${updateItemArr.length} currency_symbol ${Number(sumOfGrandTotal).toLocaleString()}`
+                dispatch(BreadcrumbShowCountlabel(count_label))
+
                 updateItemArr.sort((a, b) => b.id - a.id);
                 setTableArr(updateItemArr);
                 setState((i) => {
@@ -287,6 +333,13 @@ const SalesReturn = (props) => {
                 })
 
             } catch (error) { _cfunc.CommonConsole(error) }
+        }
+        else if (addButtonData.Status === true) {
+            dispatch(SalesReturnAddBtn_Action_Succcess({ StatusCode: false }))
+            customAlert({
+                Type: 3,
+                Message: alertMessages.batchCode_notAvailable,
+            })
         }
     }, [addButtonData])
 
@@ -374,7 +427,6 @@ const SalesReturn = (props) => {
                     <div className="parent" >
                         <div className="child" style={{ minWidth: "100px" }}>
                             <CInput
-
                                 defaultValue={row.Quantity}
                                 autoComplete="off"
                                 type="text"
@@ -618,7 +670,7 @@ const SalesReturn = (props) => {
             text: "Image",
             dataField: "",
             classes: () => "sales-return-Image-row",
-            formatExtraData: { ReturnReasonOptions }, // Pass ReturnReasonOptions as part of formatExtraData
+            formatExtraData: { isImage },// Pass ReturnReasonOptions as part of formatExtraData
 
 
             formatter: (cellContent, row, key) => {
@@ -633,12 +685,19 @@ const SalesReturn = (props) => {
                                 multiple
                                 id="file"
                                 accept=".jpg, .jpeg, .png ,.pdf"
-                                onChange={(event) => { imageSelectHandler(event, row) }}
+                                onChange={(event) => {
+                                    let config = {
+                                        row: row, Row_Id: `Image_${row.id}`
+                                    }
+                                    imageSelectHandler(event, config)
+                                }}
                             />
                             <button name="image"
                                 accept=".jpg, .jpeg, .png ,.pdf"
                                 onClick={(event) => {
-                                    if ((row.ImageURL) && (row.ImageURL.length === 0)) {
+
+                                    if ((row.ImageURL === undefined)) {
+                                        customAlert({ Type: 3, Message: `${row.ItemName} ${alertMessages.imageNotUploaded}` });
                                         return setmodal_backdrop(false)
                                     } else if ((row.ImageURL) && (row.ImageURL.length > 0)) {
                                         imageShowHandler(row)
@@ -646,7 +705,24 @@ const SalesReturn = (props) => {
                                 }}
                                 id="ImageId" type="button" className="btn btn-primary "> Show </button>
                         </div>
-                        {/* Image Count: {row && row.ImageURL ? ImageCount : 0} */}
+                        {((row.ImageURL !== undefined)) ? < div > <span> Remove&nbsp;&nbsp;</span>
+                            <Button
+                                type="button"
+                                className={deltBtnCss}
+                                data-mdb-toggle="tooltip"
+                                data-mdb-placement="top"
+                                title={"Remove Images"}
+                                onClick={(event) => {
+                                    let config = { Type: "Remove", Row_Id: `Image_${row.id}`, row: row }
+                                    imageSelectHandler(event, config)
+                                }}
+                            >
+                                <span
+                                    style={{ marginLeft: "4px", marginRight: "4px" }}
+                                    className="mdi mdi-cancel"
+                                ></span></Button>
+                        </div> : null}
+
                     </div>
 
 
@@ -684,15 +760,15 @@ const SalesReturn = (props) => {
         row.roundedTotalAmount = caculate.roundedTotalAmount;
 
         let sumOfGrandTotal = TablelistArray.reduce((accumulator, currentObject) => accumulator + Number(currentObject["roundedTotalAmount"]) || 0, 0);
-        let count_label = `${"Total Amount"} :${Number(sumOfGrandTotal).toLocaleString()}`
+        let count_label = `Count:${TablelistArray.length} currency_symbol ${Number(sumOfGrandTotal).toLocaleString()}`
         dispatch(BreadcrumbShowCountlabel(count_label))
     }
 
     const deleteButtonAction = (row, TablelistArray = []) => {
         const newArr = TablelistArray.filter((index) => !(index.id === row.id))
         let sumOfGrandTotal = newArr.reduce((accumulator, currentObject) => accumulator + Number(currentObject["roundedTotalAmount"]) || 0, 0);
-        let count_label = `${"Total Amount"} :${Number(sumOfGrandTotal).toLocaleString()}`
-        dispatch(BreadcrumbShowCountlabel(count_label));
+        let count_label = `Count:${newArr.length} currency_symbol ${Number(sumOfGrandTotal).toLocaleString()}`
+        dispatch(BreadcrumbShowCountlabel(count_label))
         setTableArr(newArr)
     }
 
@@ -709,13 +785,13 @@ const SalesReturn = (props) => {
 
         const invalidMsg1 = []
         if ((values.ItemName === '') && (byType === 'ItemWise')) {
-            invalidMsg1.push(`Select Item Name`)
+            invalidMsg1.push(alertMessages.itemNameIsRequired)
         }
         if ((values.InvoiceNumber === '') && (values.Customer === '') && (byType === 'InvoiceWise')) {
             invalidMsg1.push(`Select ${fieldLabel.Customer}.`)
         }
         else if ((values.InvoiceNumber === '') && (byType === 'InvoiceWise')) {
-            invalidMsg1.push(`Select Invoice No.`)
+            invalidMsg1.push(alertMessages.selectInvoiceNo)
         }
 
         if (invalidMsg1.length > 0) {
@@ -729,12 +805,21 @@ const SalesReturn = (props) => {
         const jsonBody = JSON.stringify({
             "ItemID": values.ItemName.value,
             "BatchCode": values.BatchCode,
-            "Customer": values.Customer.value // Customer Swipe when Po return
+            "Customer": values.Customer.value, // Customer Swipe when Po return
+            "Party":_cfunc.loginPartyID()
         })
 
         const InvoiceId = values.InvoiceNumber ? values.InvoiceNumber.value : ''
         const nrwReturnMode = (byType === 'ItemWise') ? 2 : 1 //(returnMode === 2) ItemWise
-        dispatch(SalesReturnAddBtn_Action({ jsonBody, InvoiceId, returnMode: nrwReturnMode }))
+
+        if (StockEnteryForFirstYear.Status === true && StockEnteryForFirstYear.StatusCode === 400) {
+            customAlert({
+                Type: 3,
+                Message: JSON.stringify(StockEnteryForFirstYear.Message),
+            })
+        } else {
+            dispatch(SalesReturnAddBtn_Action({ jsonBody, InvoiceId, returnMode: nrwReturnMode }))
+        }
         setReturnMode(nrwReturnMode)
     }
 
@@ -785,22 +870,30 @@ const SalesReturn = (props) => {
         setReturnMode(2)
     }
 
-    const imageSelectHandler = async (event, row) => { // image Select  handler
+    const imageSelectHandler = async (event, config = {}) => { // image Select  handler
 
-        const file = Array.from(event.target.files)
-        const slides = file.map(item => {  //Create File to URl to Show Image of Particular row
-            return URL.createObjectURL(item);
-        })
-        row["Image"] = file
-        row["ImageURL"] = slides
-        setImageCount(slides.length)
+        if (config.Type === "Remove") {
+            config.row["Image"] = undefined
+            config.row["ImageURL"] = undefined
+            setisImage({ Row_Id: config.Row_Id, Slide: [] })
+        } else {
+            const file = Array.from(event.target.files)
+            const slides = file.map(item => {  //Create File to URl to Show Image of Particular row
+                return URL.createObjectURL(item);
+            })
+            config.row["Image"] = file
+            config.row["ImageURL"] = slides
+            setisImage({ Row_Id: config.Row_Id, Slide: slides })
+
+        }
+
     }
 
     const imageShowHandler = async (row) => { // image Show handler
         const file = Array.from(row.Image)
-        const slides = file.map(item => {
-            return URL.createObjectURL(item);
-        })
+        const slides = file.map(item => ({
+            Image: URL.createObjectURL(item)
+        }));
         setImageTable(slides)
     }
 
@@ -841,7 +934,7 @@ const SalesReturn = (props) => {
         if (filterData.length === 0) {
             customAlert({
                 Type: 4,
-                Message: "Please Enter One Item Quantity",
+                Message: alertMessages.itemQtyIsRequired,
             });
             return;
         }
@@ -881,7 +974,7 @@ const SalesReturn = (props) => {
                 "Rate": i.Rate,
                 "GST": i.GST,
                 "ItemReason": i.defaultReason ? i.defaultReason : "",
-                "Comment": i.ItemComment,
+                "ItemComment": i.ItemComment,
                 "CGST": Number(calculate.CGST_Amount).toFixed(2),
                 "SGST": Number(calculate.SGST_Amount).toFixed(2),
                 "IGST": Number(calculate.IGST_Amount).toFixed(2),
@@ -919,6 +1012,7 @@ const SalesReturn = (props) => {
             formData.append('ReturnItems', JSON.stringify(ReturnItems)); // Convert to JSON string
 
             dispatch(saveSalesReturnMaster({ formData, btnId })); // Send FormData as the payload
+
         } catch (e) {
             _cfunc.CommonConsole(e);
         }
@@ -938,7 +1032,6 @@ const SalesReturn = (props) => {
                 <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
 
                 <div className="page-content" >
-                    <NewCommonPartyDropdown pageMode={pageMode} />
                     <Modal
                         isOpen={modal_backdrop}
                         toggle={() => {
@@ -947,11 +1040,9 @@ const SalesReturn = (props) => {
 
                         style={{ width: "800px", height: "800px", borderRadius: "50%" }}
                         className="modal-dialog-centered "
-
                     >
                         {(imageTable.length > 0) && <Slidewithcaption Images={imageTable} />}
                     </Modal>
-
                     <form noValidate>
                         <div className="px-2 c_card_filter header text-black mb-1" >
                             <Row>
@@ -1057,8 +1148,9 @@ const SalesReturn = (props) => {
                                             <Input
                                                 name="BatchCode"
                                                 value={values.BatchCode}
-                                                placeholder="Enter BatchCode"
+                                                placeholder="Enter Batch Code"
                                                 type='text'
+                                                autoComplete='off'
                                                 onChange={(event) => {
                                                     onChangeText({ event, state, setState })
                                                 }}
@@ -1066,12 +1158,9 @@ const SalesReturn = (props) => {
                                             {isError.BatchCode.length > 0 && (
                                                 <span className="text-danger f-8"><small>{isError.BatchCode}</small></span>
                                             )}
-
-
                                         </Col>
 
                                         <Col sm="1" className="mx-6 mt-1">
-
                                             {(!(returnMode === 1)) &&///(returnMode === 1) InvoiceWise */}
                                                 <C_Button
                                                     type="button"
@@ -1082,7 +1171,6 @@ const SalesReturn = (props) => {
                                                     Add
                                                 </C_Button>
                                             }
-
                                         </Col>
                                     </FormGroup>
                                 </Col >
@@ -1090,7 +1178,7 @@ const SalesReturn = (props) => {
                                 <Col sm="6">
                                     <FormGroup className=" row mt-1 " >
                                         <Label className="col-sm-1 p-2"
-                                            style={{ width: "115px", marginRight: "0.4cm" }}>IsSaleableStock</Label>
+                                            style={{ width: "115px", marginRight: "0.4cm" }}>Is Saleable Stock</Label>
                                         <Col sm="7">
                                             <Input
                                                 style={{ marginRight: "0.4cm", marginTop: "10px", width: "15px", height: "15px" }}
@@ -1099,118 +1187,43 @@ const SalesReturn = (props) => {
                                                 defaultChecked={isSaleableStock}
                                                 onChange={(event) => { setIsSaleableStock(event.target.checked) }}
                                             />
-
                                         </Col>
-
                                     </FormGroup>
                                 </Col >
-
-                                {/* <Col sm="6">
-                                    <FormGroup className=" row mt-1 " >
-                                        <Label className="col-sm-1 p-2"
-                                            style={{ width: "115px", marginRight: "0.4cm" }}>  {fieldLabel.InvoiceNumber}</Label>
-                                        <Col sm="7">
-                                            <C_Select
-                                                id="InvoiceNumber "
-                                                name="InvoiceNumber"
-                                                value={values.InvoiceNumber}
-                                                //(returnMode === 2) ItemWise
-                                                isDisabled={((returnMode === 2) || invoiceNoDropDownLoading || (TableArr.length > 0)) ? true : false}
-                                                isSearchable={true}
-                                                isLoading={invoiceNoDropDownLoading}
-                                                styles={{
-                                                    menu: provided => ({ ...provided, zIndex: 2 })
-                                                }}
-                                                options={InvoiceNo_Options}
-                                                onChange={(hasSelect, evn) => {
-                                                    onChangeSelect({ hasSelect, evn, state, setState, })
-                                                    setReturnMode(1)
-                                                }}
-                                            />
-
-                                        </Col>
-                                        <Col sm="1" className="mx-6 mt-1 ">
-                                            {((TableArr.length > 0) || (!(values.ItemName === ""))) ?
-                                                <Change_Button onClick={(e) => {
-                                                    setTableArr([])
-                                                    setState((i) => {
-                                                        let a = { ...i }
-                                                        a.values.ItemName = ""
-                                                        a.values.InvoiceNumber = ""
-                                                        return a
-                                                    })
-                                                }} />
-                                                :
-                                                (!(returnMode === 2)) &&//(returnMode === 2) ItemWise
-                                                <C_Button
-                                                    type="button"
-                                                    loading={addBtnLoading}
-                                                    className="btn btn-outline-primary border-1 font-size-12 text-center"
-                                                    onClick={() => AddPartyHandler("InvoiceWise")}>
-                                                    Select
-                                                </C_Button>
-
-                                            }
-                                        </Col>
-                                    </FormGroup>
-                                </Col > */}
-
                             </Row>
                         </div>
-
-                        <div>
-                            <ToolkitProvider
+                        <div className="mb-1">
+                            <GlobalCustomTable
                                 keyField={"id"}
+                                key={`table-key-${returnMode}`}
                                 data={TableArr}
                                 columns={pagesListColumns}
-                                search
-                            >
-                                {(toolkitProps) => (
-                                    <React.Fragment>
-                                        <Row>
-                                            <Col xl="12">
-                                                <div className="table-responsive table" style={{ minHeight: "60vh" }}>
-                                                    <BootstrapTable
-                                                        keyField={"id"}
-                                                        key={`table-key-${returnMode}`}
-                                                        id="table_Arrow"
-                                                        classes={"table  table-bordered "}
-                                                        noDataIndication={
-                                                            <div className="text-danger text-center ">
-                                                                Items Not available
-                                                            </div>
-                                                        }
-                                                        {...toolkitProps.baseProps}
-                                                        onDataSizeChange={(e) => {
-                                                            _cfunc.tableInputArrowUpDounFunc("#table_Arrow")
-                                                        }}
-                                                    />
-                                                </div>
-                                            </Col>
-                                            {mySearchProps(toolkitProps.searchProps,)}
-                                        </Row>
-
-                                    </React.Fragment>
-                                )}
-                            </ToolkitProvider>
+                                id="table_Arrow"
+                                noDataIndication={
+                                    <div className="text-danger text-center ">
+                                        Items Not available
+                                    </div>
+                                }
+                                onDataSizeChange={(e) => {
+                                    _cfunc.tableInputArrowUpDounFunc("#table_Arrow")
+                                }}
+                            />
                         </div>
 
-                        {
-                            TableArr.length > 0 ?
-                                <FormGroup>
-                                    <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
-                                        <SaveButton
-                                            pageMode={pageMode}
-                                            forceDisabled={addBtnLoading}
-                                            loading={saveBtnloading}
-                                            onClick={SaveHandler}
-                                            userAcc={userPageAccessState}
-                                            module={"SalesReturn"}
-                                        />
 
-                                    </Col>
-                                </FormGroup >
-                                : null
+
+                        {
+                            TableArr.length > 0 &&
+                            <SaveButtonDraggable>
+                                <SaveButton
+                                    pageMode={pageMode}
+                                    forceDisabled={addBtnLoading || !StockEnteryForFirstYear.Data}
+                                    loading={saveBtnloading}
+                                    onClick={SaveHandler}
+                                    userAcc={userPageAccessState}
+                                    module={"SalesReturn"}
+                                />
+                            </SaveButtonDraggable>
                         }
 
                     </form >

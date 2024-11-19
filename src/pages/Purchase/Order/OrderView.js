@@ -1,7 +1,7 @@
 import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import { Card, CardBody, Modal, } from "reactstrap";
-import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
+import { globalTableSearchProps } from "../../../components/Common/SearchBox/MySearch";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { CommonConsole } from "../../../components/Common/CommonFunction";
@@ -79,7 +79,7 @@ const ViewDetails_Modal = () => {
                                                 {...toolkitProps.baseProps}
 
                                             />
-                                            {mySearchProps(toolkitProps.searchProps)}
+                                            {globalTableSearchProps(toolkitProps.searchProps)}
                                         </div>
 
                                     </React.Fragment>

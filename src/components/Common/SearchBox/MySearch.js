@@ -1,33 +1,33 @@
-import React from "react";
-
-let props1 = { onSearch: () => { } }
+import React, { useState } from "react";
+import { debounce } from 'lodash';
 let input = '';
 let priviousSerach = []
 let pageid = ''
 
-let props22 = { onSearch: () => { } }
+let tableProps = { onSearch: () => { } }
 
-export const mySearchProps = (props, pageID) => {
+export const globalTableSearchProps = (props, pageID) => {
+    tableProps = props;
+    pageid = pageID;
 
-    props1 = props;
-    pageid = pageID
+    // Debounce the search function
+    const debouncedOnSearch = debounce(props.onSearch, 200); // 300ms delay
+
+    // Replace the original onSearch with the debounced version
+    tableProps.onSearch = debouncedOnSearch;
 };
-
-export const customTableSearch = (props) => {
-    props22 = props
-}
 
 
 export const defaultSearch = (defaultid,) => {
+
     let retn = { defaultSearch: '' }
 
     let found = priviousSerach.find((i, k) => {
         return (i.id === defaultid)
     });
-    // document.getElementById("myInput").focus()
 
     if (found) {
-        // document.getElementById("myInput").select()
+
         document.getElementById("myInput").value = found.text
         retn = { defaultSearch: found.text }
     }
@@ -35,14 +35,17 @@ export const defaultSearch = (defaultid,) => {
     return retn
 }
 
-export const MySearch = () => {//compont start
+
+export const MySearch = (props) => {//compont start
+    const [search, setSearch] = useState("");
 
     function handleClick(e) {
-        var len = e.target.value
-        input = e.target.value
+
+        var len = (e.target.value).trimStart()
+        input = (e.target.value).trimStart()
+        setSearch(input)
         if (!(len[0] === "/")) {
-            props1.onSearch(len);
-            props22.onSearch(len);
+            tableProps.onSearch(len);
             const found = priviousSerach.find((i, k) => {
                 if ((i.id === pageid)) {
                     priviousSerach[k] = { id: i.id, text: len }
@@ -62,14 +65,15 @@ export const MySearch = () => {//compont start
                 placeholder="Search..."
                 type="text"
                 onChange={handleClick}
-                name="myCountry"
+                value={search}
                 autoComplete="off"
                 autoFocus={true}
             />
-            <button className="btn btn-primary"
-                type="butten">
+            {props.isButton && <button className="btn btn-primary"
+                style={{ cursor: "context-menu" }}
+                type="button">
                 <i className="bx bx-search-alt align-middle" />
-            </button>
+            </button>}
 
         </React.Fragment>
     );

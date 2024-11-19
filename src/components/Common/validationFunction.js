@@ -25,7 +25,8 @@ export const formValChange = ({ event, state, setState }) => {
         event.preventDefault();
         const { name, value, type, checked } = event.target;
         switch (type) {
-            case "text": {
+            case "text":
+            case "textarea": {
                 const regExp = RegExp(hasValid[name].regExp)
                 if (regExp.test(value)) {
                     isError[name] = "";
@@ -180,6 +181,7 @@ export const onChangeDate = ({ v, e, state, setState }) => {
 }
 
 export const onChangeText = ({ event, state, setState }) => {
+
     formValChange({ event, state, setState })
 }
 
@@ -210,7 +212,7 @@ export const onChangeCheckbox = ({ event, state, setState }) => {
 }
 
 export const initialFiledFunc = (field) => {
-    
+
     const obj = {}
     obj["values"] = field;
     obj["fieldLabel"] = {}
@@ -241,12 +243,15 @@ export const resetFunction = (field, state) => {
     return preState
 }
 
-export const bulkSetState = (field, state, setState) => {
+export const bulkSetState = (field, setState) => {
 
-    let preState = { ...state }
-    Object.keys(field).forEach(label => {
-        preState.hasValid[label]["valid"] = true
-        preState.values[label] = field[label]
+
+    setState((i) => {
+        let preState = { ...i }
+        Object.keys(field).forEach(label => {
+            preState.hasValid[label]["valid"] = true
+            preState.values[label] = field[label]
+        })
+        return preState
     })
-    setState(preState)
 }

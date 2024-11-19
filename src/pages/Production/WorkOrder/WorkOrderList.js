@@ -1,21 +1,24 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { BreadcrumbShowCountlabel, commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
+import { commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList"
 import { Button, Col, FormGroup, Label } from "reactstrap";
 import { useHistory } from "react-router-dom";
-import { date_ymd_func,  loginCompanyID, loginPartyID } from "../../../components/Common/CommonFunction";
+import { date_ymd_func, loginCompanyID, loginPartyID } from "../../../components/Common/CommonFunction";
 import {
     deleteWorkOrderId,
     deleteWorkOrderIdSuccess,
     editWorkOrderList,
     getWorkOrderListPage,
+    getWorkOrderListPageSuccess,
     updateWorkOrderListSuccess,
 } from "../../../store/Production/WorkOrder/action";
 import WorkOrder from "./WorkOrder";
 import { mode, url, pageId } from "../../../routes/index"
 import { goButtonForMaterialIssue_Master_Action } from "../../../store/Production/Matrial_Issue/action";
 import { C_DatePicker } from "../../../CustomValidateForm";
+import * as _cfunc from "../../../components/Common/CommonFunction";
+import { Go_Button, PageLoadingSpinner } from "../../../components/Common/CommonButton";
 
 const WorkOrderList = () => {
 
@@ -23,12 +26,15 @@ const WorkOrderList = () => {
     const history = useHistory();
     const currentDate_ymd = date_ymd_func();
 
-    const hasPagePath = history.location.pathname
+    const subPageMode = history.location.pathname
 
     const [pageMode, setpageMode] = useState(mode.defaultList)
     const [hederFilters, setHederFilters] = useState({ fromdate: currentDate_ymd, todate: currentDate_ymd, })
+
     const reducers = useSelector(
         (state) => ({
+            goBtnLoading: state.WorkOrderReducer.loading,
+            listBtnLoading: (state.MaterialIssueReducer.listBtnLoading || state.WorkOrderReducer.listBtnLoading),
             tableList: state.WorkOrderReducer.WorkOrderList,
             deleteMsg: state.WorkOrderReducer.deleteMsg,
             updateMsg: state.WorkOrderReducer.updateMsg,
@@ -40,10 +46,10 @@ const WorkOrderList = () => {
         })
     );
 
-    const { pageField, makeProductionReIssue } = reducers;
+    const { pageField, makeProductionReIssue, goBtnLoading, listBtnLoading } = reducers;
     const { fromdate, todate } = hederFilters
-    const page_Id = (hasPagePath === url.MATERIAL_ISSUE_STP) ? pageId.MATERIAL_ISSUE_STP : pageId.WORK_ORDER_LIST;
-    const page_mode = (hasPagePath === url.MATERIAL_ISSUE_STP) ? mode.modeSTPsave : mode.defaultList;
+    const page_Id = (subPageMode === url.MATERIAL_ISSUE_STP) ? pageId.MATERIAL_ISSUE_STP : pageId.WORK_ORDER_LIST;
+    const page_mode = (subPageMode === url.MATERIAL_ISSUE_STP) ? mode.modeSTPList : mode.defaultList;
 
     const action = {
         getList: getWorkOrderListPage,
@@ -56,15 +62,17 @@ const WorkOrderList = () => {
 
     useEffect(() => {
         setpageMode(page_mode)
-        // dispatch(BreadcrumbShowCountlabel(`${"Work Order Count"} :0`))
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
         goButtonHandler(true)
-
+        return () => {
+            if (subPageMode === url.WORK_ORDER_LIST) {
+                dispatch(getWorkOrderListPageSuccess([]));
+            }
+        }
     }, []);
 
     useEffect(() => {
-
         if (makeProductionReIssue.Status === true && makeProductionReIssue.StatusCode === 200) {
             history.push({
                 pathname: makeProductionReIssue.path,
@@ -74,54 +82,71 @@ const WorkOrderList = () => {
     }, [makeProductionReIssue])
 
     const goButtonHandler = () => {
+
         const jsonBody = JSON.stringify({
             FromDate: fromdate,
             ToDate: todate,
         });
-        dispatch(getWorkOrderListPage(jsonBody));
+        dispatch(getWorkOrderListPage({ jsonBody, subPageMode }));
     }
 
     function fromdateOnchange(e, date) {
+
         let newObj = { ...hederFilters }
         newObj.fromdate = date
         setHederFilters(newObj)
     }
 
     function todateOnchange(e, date) {
+
         let newObj = { ...hederFilters }
         newObj.todate = date
         setHederFilters(newObj)
     }
 
+    const makeBtnFunc = (list = [], btnId) => {
 
-    const makeBtnFunc = (list = []) => {
-
-        var jsonData = list[0]
         try {
-            const jsonBody = JSON.stringify({
-                WorkOrder: jsonData.id,
-                Item: jsonData.Item,
-                Company: loginCompanyID(),
-                Party: loginPartyID(),
-                Quantity: parseInt(jsonData.Quantity)
-            })
-            const body = { jsonBody, pageMode, path: url.MATERIAL_ISSUE, ListData: list[0] }
-            dispatch(goButtonForMaterialIssue_Master_Action(body))
+            if (list.length > 0) {
+                const jsonData = list[0];
 
-        } catch (e) { }
-    }
+                jsonData.NumberOfLot = jsonData.RemainingLot;  // Update NumberOfLot field to RemainingLot 
+                jsonData.Quantity = jsonData.RemaningQty;  // Update Quantity field to RemaningQty 
+
+                const jsonBody = JSON.stringify({
+                    WorkOrder: jsonData.id,
+                    Item: jsonData.Item,
+                    Company: loginCompanyID(),
+                    Party: loginPartyID(),
+                    Quantity: parseInt(jsonData.Quantity),
+                    NoOfLots: jsonData.NumberOfLot
+                });
+
+                dispatch(goButtonForMaterialIssue_Master_Action({
+                    jsonBody,
+                    pageMode,
+                    path: url.MATERIAL_ISSUE,
+                    ListData: list[0],
+                    goButtonCallByMode: true,
+                    btnId
+                }));
+            }
+        } catch (e) {
+            console.error("Error:", e);
+        }
+    };
 
     return (
         <React.Fragment>
+            <PageLoadingSpinner isLoading={goBtnLoading || pageField} />
             <div className="page-content">
 
-
-                <div className="px-2   c_card_header text-black"  >
+                <div className="px-2   c_card_filter text-black"  >
                     <div className="row" >
                         <Col sm="5" >
                             <FormGroup className=" row mt-3 " >
                                 <Label className="col-sm-5 p-2"
-                                    style={{ width: "83px" }}>From Date</Label>
+                                    style={{ width: "83px" }}>FromDate</Label>
                                 <Col sm="6">
                                     <C_DatePicker
                                         name='fromdate'
@@ -134,21 +159,27 @@ const WorkOrderList = () => {
                         <Col sm="5">
                             <FormGroup className=" mb-1 row mt-3 " >
                                 <Label className="col-sm-1 p-2"
-                                    style={{ width: "65px", marginRight: "0.4cm" }}>To Date</Label>
+                                    style={{ width: "65px", marginRight: "0.4cm" }}>ToDate</Label>
                                 <Col sm="6 ">
                                     <C_DatePicker
-                                        name="todate"
-                                        value={todate}
+                                        options={{
+                                            minDate: (_cfunc.disablePriviousTodate({ fromDate: fromdate })),
+                                            maxDate: "today",
+                                            altInput: true,
+                                            altFormat: "d-m-Y",
+                                            dateFormat: "Y-m-d",
+                                        }}
+                                        value={_cfunc.ToDate({ FromDate: fromdate, Todate: todate })}
+                                        nane='todate'
                                         onChange={todateOnchange}
                                     />
                                 </Col>
                             </FormGroup>
                         </Col>
 
-                        <Col sm="1" className="mx-4 ">
-                            <Button type="button" color="btn btn-outline-success border-2 font-size-12 m-3  "
-                                onClick={() => goButtonHandler()}
-                            >Go</Button>
+                        <Col sm="1" ></Col>
+                        <Col sm="1" className="mt-3 ">
+                            <Go_Button loading={goBtnLoading} onClick={goButtonHandler} />
                         </Col>
                     </div>
                 </div>

@@ -12,8 +12,10 @@ import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import { damageStockReport_GoButton_API, damageStockReport_GoButton_API_Success } from "../../store/Report/DamageStockReportRedux/action";
 import DynamicColumnHook from "../../components/Common/TableCommonFunc";
 import { mode, pageId } from "../../routes/index"
-import CustomTable from "../../CustomTable2";
-import PartyDropdownForReport, { ReportComponent, ShowAndExcelBtn } from "../ReportComponent";
+import GlobalCustomTable from "../../GlobalCustomTable";
+import PartyDropdownForReport, { ShowAndExcelBtn } from "../ReportComponent";
+import { ExcelReportComponent } from "../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS";
+import { alertMessages } from "../../components/Common/CommonErrorMsg/alertMsg";
 
 const DamageStockReport = (props) => {
 
@@ -88,9 +90,9 @@ const DamageStockReport = (props) => {
             if ((goButtonData.Status === true) && (goButtonData.StatusCode === 200)) {
                 setBtnMode(0);
                 if (btnMode === 2) {
-                    ReportComponent({      // Download CSV
+                    ExcelReportComponent({      // Download CSV
                         pageField,
-                        excelData: goButtonData.Data,
+                        excelTableData: goButtonData.Data,
                         excelFileName: "Damage Stock Export"
                     })
                     dispatch(damageStockReport_GoButton_API_Success([]));
@@ -104,7 +106,7 @@ const DamageStockReport = (props) => {
             }
             setBtnMode(0);
         }
-        catch (e) { console.log(e) }
+        catch (e) { }
 
     }, [goButtonData]);
 
@@ -122,13 +124,13 @@ const DamageStockReport = (props) => {
             if (unitDropdown === "") {
                 customAlert({
                     Type: 3,
-                    Message: "Please Select Unit"
+                    Message:alertMessages.selectUnit
                 })
                 setBtnMode(0)
                 return
             }
             else if ((isSCMParty) && (partyDropdown === "")) {
-                customAlert({ Type: 3, Message: "Please Select Party" });
+                customAlert({ Type: 3, Message: alertMessages.commonPartySelectionIsRequired });
                 setBtnMode(0)
                 return;
             }
@@ -238,7 +240,7 @@ const DamageStockReport = (props) => {
                     </div>
                 </div>
 
-                <CustomTable
+                <GlobalCustomTable
                     keyField={"id"}
                     data={tableData}
                     columns={tableColumns}

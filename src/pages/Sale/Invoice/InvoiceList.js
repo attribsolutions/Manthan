@@ -4,6 +4,7 @@ import {
     BreadcrumbShowCountlabel,
     commonPageFieldList,
     commonPageFieldListSuccess,
+    makeGRN_Mode_1Action,
 } from "../../../store/actions";
 import CommonPurchaseList from "../../../components/Common/CommonPurchaseList"
 import { Col, FormGroup, Label, Modal, Row } from "reactstrap";
@@ -14,7 +15,7 @@ import * as report from '../../../Reports/ReportIndex'
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
-import { Invoice_1_Edit_API_Singel_Get } from "../../../helpers/backend_helper";
+import { CheckStockEntryforBackDatedTransaction, Invoice_Singel_Get_for_Report_Api, OrderPage_Edit_ForDownload_API, Pos_Invoice_Singel_Get_for_Report_Api } from "../../../helpers/backend_helper";
 import { getpdfReportdata } from "../../../store/Utilites/PdfReport/actions";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import {
@@ -29,13 +30,22 @@ import {
     deleteInvoiceId,
     deleteInvoiceIdSuccess,
     invoiceListGoBtnfilter,
-    invoiceListGoBtnfilterSucccess
+    invoiceListGoBtnfilterSucccess,
+    GoButtonForinvoiceAdd,
+    editInvoiceAction,
+    updateInvoiceActionSuccess,
+    InvoiceBulkDelete_IDs_Action,
+    InvoiceBulkDelete_IDs_Succcess
 } from "../../../store/Sales/Invoice/action";
 import { makeInward } from "../../../store/Inter Branch/InwardRedux/action";
 import { C_DatePicker, C_Select } from "../../../CustomValidateForm";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
-import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 import { getVehicleList } from "../../../store/Administrator/VehicleRedux/action";
+import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
+import { allLabelWithBlank } from "../../../components/Common/CommonErrorMsg/HarderCodeData";
+import { sideBarPageFiltersInfoAction } from "../../../store/Utilites/PartyDrodown/action";
+import { date_dmy_func } from "../../../components/Common/CommonFunction";
+import { CheckStockEntryforBackDatedTransactionSuccess } from "../../../store/Inventory/StockEntryRedux/action";
 
 const InvoiceList = () => {
 
@@ -45,19 +55,21 @@ const InvoiceList = () => {
 
     const [pageMode, setPageMode] = useState(url.ORDER_LIST_1)
     const [subPageMode, setSubPageMode] = useState(history.location.pathname);
-    const [hederFilters, setHederFilters] = useState({ todate: currentDate_ymd, fromdate: currentDate_ymd, supplierSelect: { value: '', label: "All" } });
+    const [hederFilters, setHederFilters] = useState({ todate: currentDate_ymd, fromdate: currentDate_ymd, supplierSelect: allLabelWithBlank });
     const [otherState, setOtherState] = useState({ masterPath: '', makeBtnShow: false, newBtnPath: '', IBType: '' });
-    const [VehicleNoDropdown, setVehicleNoDropdown] = useState('')
+    const [VehicleNoDropdown, setVehicleNoDropdown] = useState({ value: "", label: "Select..." })
     const [modal, setmodal] = useState(false);
     const [vehicleErrorMsg, setvehicleErrorMsg] = useState(false);
     const [InvoiceID, setInvoiceID] = useState("");
+
+
 
     const reducers = useSelector(
         (state) => ({
             tableList: state.InvoiceReducer.Invoicelist,
             postMsg: state.OrderReducer.postMsg,
             editData: state.InvoiceReducer.editData,
-            updateMsg: state.OrderReducer.updateMsg,
+            updateMsg: state.InvoiceReducer.updateMsg,
             deleteMsg: state.InvoiceReducer.deleteMsg,
             userAccess: state.Login.RoleAccessUpdateData,
             supplier: state.CommonAPI_Reducer.vendorSupplierCustomer,
@@ -71,9 +83,11 @@ const InvoiceList = () => {
             Cancel_EwayBill: state.InvoiceReducer.Cancel_EwayBill,
             VehicleNumber: state.VehicleReducer.VehicleList,
             Update_Vehicle_Invoice: state.InvoiceReducer.Update_Vehicle_Invoice,
+            makeGRN: state.GRNReducer.GRNitem,
 
             sendToScmMsg: state.InvoiceReducer.sendToScmMsg,
-
+            invoiceBulkDeleteLoading: state.InvoiceReducer.invoiceBulkDeleteLoading,
+            invoiceBulkDelete: state.InvoiceReducer.invoiceBulkDelete,
             listBtnLoading: (state.InvoiceReducer.listBtnLoading || state.PdfReportReducers.ReportBtnLoading)
         })
     );
@@ -88,7 +102,11 @@ const InvoiceList = () => {
         supplierDropLoading,
         VehicleNumber,
         Update_Vehicle_Invoice,
-        sendToScmMsg
+        sendToScmMsg,
+        invoiceBulkDelete,
+        invoiceBulkDeleteLoading,
+        makeGRN,
+
     } = reducers;
 
     const {
@@ -99,8 +117,30 @@ const InvoiceList = () => {
 
     const action = {
         deleteId: deleteInvoiceId,
-        deleteSucc: deleteInvoiceIdSuccess
+        deleteSucc: deleteInvoiceIdSuccess,
+        updateSucc: updateInvoiceActionSuccess
     }
+    const { commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
+
+    // Common Party select Dropdown useEffect
+    useEffect(() => {
+        if (commonPartyDropSelect.value > 0) {
+            partySelectButtonHandler();
+        } else {
+            partySelectOnChangeHandler();
+        }
+    }, [commonPartyDropSelect]);
+
+    // sideBar Page Filters Information
+    useEffect(() => {
+
+        dispatch(sideBarPageFiltersInfoAction([
+            { label: "FromDate", content: date_dmy_func(fromdate), },
+            { label: "ToDate", content: date_dmy_func(todate), },
+            { label: "Customer", content: supplierSelect.label, }
+        ]));
+
+    }, [hederFilters]);
 
     // Featch Modules List data  First Rendering
     useEffect(() => {
@@ -126,6 +166,8 @@ const InvoiceList = () => {
         else if (subPageMode === url.IB_GRN_LIST) {
             page_Id = pageId.IB_GRN_LIST;
             masterPath = url.IB_INVOICE
+            page_Mode = mode.modeSTPList;
+            makeBtnShow = true
             IBType = "IBGRN"
         }
         else if (subPageMode === url.IB_INWARD_STP) {
@@ -139,11 +181,10 @@ const InvoiceList = () => {
         setPageMode(page_Mode)
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
-        // dispatch(BreadcrumbShowCountlabel(`${"Count"} :0`))
-        dispatch(GetVenderSupplierCustomer({ subPageMode, PartyID: _cfunc.loginSelectedPartyID() }))
+        // dispatch(GetVenderSupplierCustomer({ subPageMode, PartyID: commonPartyDropSelect.value }))
 
         setmodal(false);
-        if (!(_cfunc.loginSelectedPartyID() === 0)) {
+        if (!(commonPartyDropSelect.value === 0)) {
             goButtonHandler("event", IBType)
         }
         return () => {
@@ -157,7 +198,7 @@ const InvoiceList = () => {
         if (Update_Vehicle_Invoice.Status === true && Update_Vehicle_Invoice.StatusCode === 200) {
             dispatch(UpdateVehicleInvoice_Success([]));
             setInvoiceID('');
-            setVehicleNoDropdown('');
+            setVehicleNoDropdown({ value: "", label: "Select..." });
             setvehicleErrorMsg(false);
             goButtonHandler("event");
             setmodal(false);
@@ -177,9 +218,6 @@ const InvoiceList = () => {
         }
     }, [Update_Vehicle_Invoice]);
 
-
-
-
     useEffect(() => {    // Vehicle Update against Invoice Id
         if (sendToScmMsg.Status === true && sendToScmMsg.StatusCode === 200) {
             dispatch(InvoiceSendToScmSuccess({ Status: false }));
@@ -195,13 +233,6 @@ const InvoiceList = () => {
             })
         }
     }, [sendToScmMsg]);
-
-
-
-
-
-
-
 
     useEffect(() => {   // Uploaded EInvoice useEffect 
         if (Uploaded_EInvoice.Status === true && Uploaded_EInvoice.StatusCode === 200) {
@@ -286,6 +317,47 @@ const InvoiceList = () => {
         }
     }, [Cancel_EwayBill]);
 
+    useEffect(() => {
+        const Todate = _cfunc.ToDate({ FromDate: hederFilters.fromdate, Todate: hederFilters.todate })
+        setHederFilters((i) => {
+            const a = { ...i }
+            a.todate = Todate;
+            return a
+        })
+
+    }, [hederFilters.fromdate]);
+
+    useEffect(async () => {    // Invoice bulk delete useEffect 
+
+        if (invoiceBulkDelete.Status === true && invoiceBulkDelete.StatusCode === 200) {
+            dispatch(InvoiceBulkDelete_IDs_Succcess({ Status: false }))
+            goButtonHandler("event")
+            customAlert({
+                Type: 1,
+                Message: invoiceBulkDelete.Message,
+            })
+            return
+        }
+        else if (invoiceBulkDelete.Status === true) {
+            dispatch(InvoiceBulkDelete_IDs_Succcess({ Status: false }))
+            customAlert({
+                Type: 3,
+                Message: JSON.stringify(invoiceBulkDelete.Message),
+            })
+            return
+        }
+    }, [invoiceBulkDelete]);
+
+
+    useEffect(() => {
+        if (makeGRN.Status === true && makeGRN.StatusCode === 200) {
+            history.push({
+                pathname: makeGRN.path,
+                page_Mode: makeGRN.page_Mode,
+            })
+        }
+    }, [makeGRN])
+
     const supplierOptions = supplier.map((i) => ({
         value: i.id,
         label: i.Name,
@@ -304,22 +376,30 @@ const InvoiceList = () => {
     function downBtnFunc(config) {
 
         config["ReportType"] = report.invoice;
-        dispatch(getpdfReportdata(Invoice_1_Edit_API_Singel_Get, config))
+        config["Invoice_Identifier_ID"] = config.rowData.Identify_id
+        if (config.rowData.Identify_id === 1) {
+            dispatch(getpdfReportdata(Invoice_Singel_Get_for_Report_Api, config))
+        } else {
+            dispatch(getpdfReportdata(Pos_Invoice_Singel_Get_for_Report_Api, config))
+        }
+
     }
 
     function goButtonHandler(event, IBType) {
 
         try {
-            if (_cfunc.loginSelectedPartyID() === 0) {
-                customAlert({ Type: 3, Message: "Please Select Party" });
+            if (commonPartyDropSelect.value === 0) {
+                customAlert({ Type: 3, Message: alertMessages.commonPartySelectionIsRequired });
                 return;
             };
             const filtersBody = JSON.stringify({
                 FromDate: fromdate,
                 ToDate: todate,
                 Customer: supplierSelect.value === "" ? '' : supplierSelect.value,
-                Party: _cfunc.loginSelectedPartyID(),
-                IBType: IBType ? IBType : otherState.IBType
+                Party: commonPartyDropSelect.value,
+                IBType: IBType ? IBType : otherState.IBType,
+                DashBoardMode: 0
+
             });
 
             dispatch(invoiceListGoBtnfilter({ subPageMode, filtersBody }));
@@ -347,14 +427,14 @@ const InvoiceList = () => {
 
     const partySelectButtonHandler = (e) => {
         goButtonHandler()
-        dispatch(GetVenderSupplierCustomer({ subPageMode, PartyID: _cfunc.loginSelectedPartyID() }));
+        dispatch(GetVenderSupplierCustomer({ subPageMode, PartyID: commonPartyDropSelect.value }));
     }
 
     function partySelectOnChangeHandler() {
         dispatch(invoiceListGoBtnfilterSucccess([]));
         dispatch(GetVenderSupplierCustomerSuccess([]));
         let newObj = { ...hederFilters }
-        newObj.supplierSelect = { value: '', label: "All" }
+        newObj.supplierSelect = allLabelWithBlank
         setHederFilters(newObj)
     }
 
@@ -365,20 +445,35 @@ const InvoiceList = () => {
 
     function toggleModal() {
         setmodal(!modal);
-        setVehicleNoDropdown('')
+        setVehicleNoDropdown({ value: "", label: "Select..." })
         setvehicleErrorMsg(false);
     };
 
     const makeBtnFunc = (list = {}, btnId) => {
-        const config = { makeInwardId: list[0].id, btnId }
-        dispatch(makeInward(config))
-        history.push({
-            pathname: url.INWARD,
+
+
+        const grnRef = [{
+            Challan: list[0].id,
+            Inward: false,
+            GRN_From: subPageMode,
+            OrderDate: list[0]?.InvoiceDate,
+            Invoice_NO: list[0].FullInvoiceNumber
+        }];
+
+        const jsonBody = JSON.stringify({
+            OrderIDs: list[0].id.toString(),
+            Mode: 4
         })
+        dispatch(makeGRN_Mode_1Action({
+            jsonBody,
+            pageMode: mode.modeSTPsave,
+            grnRef,
+            path: url.GRN_ADD_1,
+        }))
+
     };
     //Added For send To Scm Button 
     function sendToScmBtnFunc(config) {
-
         const InvoiceID = config.rowData.id
         const jsonBody = JSON.stringify({ Invoice: InvoiceID })
         const btnId = config.btnId
@@ -393,9 +488,14 @@ const InvoiceList = () => {
                     <Col sm="3" className="">
                         <FormGroup className="mb- row mt-3 " >
                             <Label className="col-sm-5 p-2"
-                                style={{ width: "83px" }}>From Date</Label>
+                                style={{ width: "83px" }}>FromDate</Label>
                             <Col sm="7">
                                 <C_DatePicker
+                                    options={{
+                                        altInput: true,
+                                        altFormat: "d-m-Y",
+                                        dateFormat: "Y-m-d",
+                                    }}
                                     name='fromdate'
                                     value={fromdate}
                                     onChange={fromdateOnchange}
@@ -403,14 +503,21 @@ const InvoiceList = () => {
                             </Col>
                         </FormGroup>
                     </Col>
+
                     <Col sm="3" className="">
                         <FormGroup className="mb- row mt-3 " >
                             <Label className="col-sm-5 p-2"
-                                style={{ width: "65px" }}>To Date</Label>
+                                style={{ width: "65px" }}>ToDate</Label>
                             <Col sm="7">
                                 <C_DatePicker
+                                    options={{
+                                        minDate: (_cfunc.disablePriviousTodate({ fromDate: fromdate })),
+                                        altInput: true,
+                                        altFormat: "d-m-Y",
+                                        dateFormat: "Y-m-d",
+                                    }}
                                     name="todate"
-                                    value={todate}
+                                    value={_cfunc.ToDate({ FromDate: fromdate, Todate: todate })}
                                     onChange={todateOnchange}
                                 />
                             </Col>
@@ -445,19 +552,32 @@ const InvoiceList = () => {
         )
     }
 
-    function e_WayBill_ActionsBtnFunc(rowData) {
+    // function e_WayBill_ActionsBtnFunc(rowData) {
 
-        const { VehicleNo = '', id } = rowData
-        if (VehicleNo === null) {
-            setmodal(true);
-            dispatch(getVehicleList())
-            setInvoiceID(id)
+    //     const { VehicleNo = '', id } = rowData
+    //     if (VehicleNo === null) {
+    //         setmodal(true);
+    //         dispatch(getVehicleList())
+    //         setInvoiceID(id)
+    //     }
+    // }
+
+
+    function UpdateDetailsBtnFunc(config) {
+        const { id, VehicleNo, VehicleID } = config.rowData
+        setmodal(true);
+        dispatch(getVehicleList())
+        setInvoiceID(id)
+        if ((VehicleID === null) || VehicleNo === null) {
+            setVehicleNoDropdown({ value: "", label: "Select..." });
+        } else {
+            setVehicleNoDropdown({ value: VehicleID, label: VehicleNo })
         }
     }
 
     const updateVehicleInvoice = () => {
 
-        if (VehicleNoDropdown === "") {
+        if (VehicleNoDropdown.value === "") {
             setvehicleErrorMsg(true);
         } else {
             const invoiceAndVehicleID = {
@@ -468,13 +588,68 @@ const InvoiceList = () => {
         }
     };
 
+    async function editBodyfunc(config) {
+
+        const { rowData } = config;
+        const jsonBodyForBackdatedTransaction = JSON.stringify({
+            "TransactionDate": rowData.InvoiceDate,
+            "PartyID": commonPartyDropSelect.value,
+        });
+
+        if (commonPartyDropSelect.value > 0) {
+            const response = await CheckStockEntryforBackDatedTransaction({ jsonBody: jsonBodyForBackdatedTransaction })
+            if (response.Status === true && response.StatusCode === 400) {
+                dispatch(CheckStockEntryforBackDatedTransactionSuccess({ status: false }))
+                customAlert({ Type: 3, Message: response.Message });
+                return
+            }
+        }
+        const customer = {
+            value: rowData.CustomerID,
+            label: rowData.Customer,
+            GSTIN: rowData.CustomerGSTIN,
+            IsTCSParty: rowData.IsTCSParty,
+            ISCustomerPAN: rowData.CustomerPAN
+        }
+
+        dispatch(editInvoiceAction({
+            ...config,
+            customer,
+            subPageMode: url.INVOICE_1,
+            path: url.INVOICE_1,
+        }));
+
+
+
+    }
+
+    const selectDeleteBtnHandler = (row = []) => {
+
+        let isAllcheck = row.filter(i => (i.hasAllSelect))
+        let isRowcheck = row.filter(i => (i.selectCheck))
+        let ischeck = [];
+        if (isAllcheck.length > 0 && isRowcheck.length > 0 && isAllcheck.length === isRowcheck.length) {
+            ischeck = row.filter(i => !(i.forceSelectDissabled))
+        } else {
+            ischeck = row.filter(i => (!i.forceSelectDissabled && i.selectCheck))
+        }
+        if (!ischeck.length > 0) {
+            customAlert({
+                Type: 4,
+                Message: alertMessages.selectOneCheckbox,
+            });
+            return
+        }
+        let idString = ischeck.map(obj => obj.id).join(',')
+        let jsonBody = JSON.stringify({ Invoice_ID: idString })
+        dispatch(InvoiceBulkDelete_IDs_Action({ jsonBody }))
+    }
+
     return (
         <React.Fragment>
-            <PageLoadingSpinner isLoading={reducers.listBtnLoading || !pageField} />
+            <PageLoadingSpinner isLoading={reducers.listBtnLoading || !pageField || supplierDropLoading} />
             <div className="page-content">
-                <PartyDropdown_Common pageMode={pageMode}
-                    goButtonHandler={partySelectButtonHandler}
-                    changeButtonHandler={partySelectOnChangeHandler} />
+
                 {
                     (pageField) ?
                         <CommonPurchaseList
@@ -487,16 +662,26 @@ const InvoiceList = () => {
                             pageMode={pageMode}
                             goButnFunc={goButtonHandler}
                             downBtnFunc={downBtnFunc}
+                            editBodyfunc={editBodyfunc}
                             HeaderContent={HeaderContent}
                             makeBtnFunc={makeBtnFunc}
                             sendToScmBtnFunc={sendToScmBtnFunc}
-                            ButtonMsgLable={"Invoice"}
+                            ButtonMsgLable={subPageMode === url.IB_GRN_LIST ? "GRN" : "Invoice"}
                             deleteName={"FullInvoiceNumber"}
-                            makeBtnName={"Make GRN"}
+                            makeBtnName={"Make"}
                             filters={hederFilters}
                             forceNewBtnView={false}
-                            e_WayBill_ActionsBtnFunc={e_WayBill_ActionsBtnFunc}
+                            UpdateDetailsBtnFunc={UpdateDetailsBtnFunc}
                             totalAmountShow={true}
+                            selectCheckParams={{
+                                // isShow: (subPageMode === url.INVOICE_LIST_1),
+                                selectSaveBtnHandler: selectDeleteBtnHandler,
+                                selectSaveBtnLabel: "Delete",
+                                selectHeaderLabel: "Select",
+                                selectSaveBtnLoading: invoiceBulkDeleteLoading,
+                                pageloading: reducers.listBtnLoading || supplierDropLoading    ////   non selectable  till page loading
+                            }}
+
                         />
                         : null
                 }
@@ -507,7 +692,7 @@ const InvoiceList = () => {
                     centered={true}
                 >
                     <div className="modal-header" style={{ position: "relative" }}>
-                        <h5 className="modal-title mt-0 align-middle">Please Select Vehicle Number</h5>
+                        <h4 className="modal-title mt-0 align-middle">Please Select Vehicle Number</h4>
                         <button
                             type="button"
                             onClick={toggleModal}
@@ -520,14 +705,15 @@ const InvoiceList = () => {
                     </div>
                     <div className="modal-body">
                         <Row >
-                            <Col sm="8" className="">
+                            <Col sm="12" className="">
                                 <FormGroup className="mb- row mt-1 " >
-                                    <Label className="col-sm-6 p-2 text-black"
-                                        style={{ width: "65px" }}>VehicleNo</Label>
+                                    <Label className="col-sm-6 p-2 text-black font-size-18"
+                                        style={{ width: "105px" }}>Vehicle No</Label>
                                     <Col sm="8">
                                         <C_Select
                                             name="VehicleNo"
                                             value={VehicleNoDropdown}
+
                                             isSearchable={true}
                                             id={'VehicleNoselect'}
                                             className="card-header align-items-center d-flex"
@@ -538,7 +724,7 @@ const InvoiceList = () => {
                                                 menu: (provided) => ({
                                                     ...provided,
                                                     zIndex: 5,
-                                                    maxHeight: "80px", // Set a fixed height for the dropdown
+                                                    maxHeight: "300px", // Set a fixed height for the dropdown
                                                     overflowY: "auto", // Add a scrollbar if the content exceeds the height
                                                 }),
                                             }}
@@ -551,21 +737,24 @@ const InvoiceList = () => {
                                 </FormGroup>
                             </Col>
                         </Row>
-                        <div className="modal-footer">
+
+                        <div className="modal-footer justify-content-start modal-footer p-4">
                             <button
                                 type="button"
-                                className="btn btn-secondary"
+                                className="btn btn-secondary pr-3 pl-3"
                                 onClick={toggleModal}
                             >
                                 Cancel
                             </button>
                             <button
                                 type="submit"
-                                className="btn btn-primary"
+                                className="btn btn-primary pr-3 pl-3"
                                 onClick={updateVehicleInvoice}>
                                 Update
                             </button>
                         </div>
+
+
                     </div>
                 </Modal>
             </div>

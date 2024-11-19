@@ -24,8 +24,8 @@ import {
     editGeneralIDSuccess,
     updateGeneralID,
     updateGeneralIDSuccess,
-    PostType,
-    PostTypeSuccess
+    genaral_Master_By_Type_Action,
+    Genaral_Master_By_Type_ActionSuccess
 } from "../../../store/Administrator/GeneralRedux/action";
 import { useHistory } from "react-router-dom";
 import {
@@ -88,7 +88,7 @@ const GeneralMaster = (props) => {
         const page_Id = pageId.GENERAL
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
-        dispatch(PostTypeSuccess());
+        dispatch(Genaral_Master_By_Type_ActionSuccess());
     }, []);
 
     const values = { ...state.values }
@@ -161,7 +161,7 @@ const GeneralMaster = (props) => {
         const jsonBody = JSON.stringify({
             Company: loginCompanyID(),
         });
-        dispatch(PostType(jsonBody));
+        dispatch(genaral_Master_By_Type_Action(jsonBody));
     }, []);
 
     useEffect(async () => {
@@ -250,15 +250,15 @@ const GeneralMaster = (props) => {
 
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
-    var IsEditMode_Css = ''
-    if ((modalCss) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
+    // var IsEditMode_Css = ''
+    // if ((modalCss) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
 
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
                 <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
 
-                <div className="page-content" style={{ marginTop: IsEditMode_Css, height: "18cm" }}>
+                <div className="page-content" >
                     <Container fluid>
                         <Card className="text-black">
                             <CardHeader className="card-header   text-black c_card_header" >

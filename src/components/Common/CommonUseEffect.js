@@ -19,9 +19,12 @@ export const userAccessUseEffect = ({ props,
     } else {
         locationPath = props.location.pathname;
     }
-
+    
     userAccess.forEach((inx) => {
-        if ((`/${inx.ActualPagePath}` === locationPath) && setUserAccState) {
+
+        const AuthenticatedLinkPath = (locationPath.startsWith(`/${inx.ActualPagePath}`)) && locationPath.includes("AuthLink")
+
+        if (((`/${inx.ActualPagePath}` === locationPath) && setUserAccState) || AuthenticatedLinkPath) {
             setUserAccState(inx);
             if (!props.isdropdown) {
                 breadcrumbReturnFunc({ dispatch, userAcc: inx });
@@ -37,7 +40,7 @@ export const userAccessUseEffect = ({ props,
 export const saveMsgUseEffect = async ({
     postMsg, postSuccss, pageMode, dispatch, history, status200, listPath, foreceRedirectList = false }) => {
 
-    if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === mode.dropdownAdd)) {
+    if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
         dispatch(postSuccss({ Status: false }))
 
         if (status200) { status200() };
@@ -60,7 +63,7 @@ export const saveMsgUseEffect = async ({
             }
         }
     }
-    else if ((postMsg.Status === true) && !(pageMode === mode.dropdownAdd)) {
+    else if ((postMsg.Status === true)) {
         dispatch(postSuccss({ Status: false }))
         customAlert({
             Type: 4,
@@ -147,7 +150,7 @@ export const table_ArrowUseEffect = (tableId) => {
 
 
                         var tr = td.closest('tr');
-                        var pos = td[0].cellIndex;
+                        var pos = td[0]?.cellIndex;
                         var ctd = tr.children('td')
 
                         let prevTd = td
@@ -178,7 +181,7 @@ export const table_ArrowUseEffect = (tableId) => {
                     if (input.selectionEnd == input.value.length) {
 
                         var tr = td.closest('tr');
-                        var pos = td[0].cellIndex;
+                        var pos = td[0]?.cellIndex;
                         var ctd = tr.children('td')
 
                         let nextTd = td
@@ -224,7 +227,7 @@ export const table_ArrowUseEffect = (tableId) => {
                         return
                     }
                     var tr = td.closest('tr');
-                    var pos = td[0].cellIndex;
+                    var pos = td[0]?.cellIndex;
                     var moveToRow = tr.prev('tr');
 
 
@@ -262,7 +265,7 @@ export const table_ArrowUseEffect = (tableId) => {
                         return
                     }
                     var tr = td.closest('tr');
-                    var pos = td[0].cellIndex;
+                    var pos = td[0]?.cellIndex;
 
                     var moveToRow = tr.next('tr');
 

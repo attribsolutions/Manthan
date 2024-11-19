@@ -3,6 +3,7 @@ import {
   delete_ImportFiledAdd_Success,
   edit_ImportFiledAdd_Success,
   get_ImportExcelType_Success,
+  ImportFieldAddApiErrorAction,
   post_ImportFiledAdd_Success,
   save_ImportFiledAdd_Success,
   update_ImportFiledAdd_Success,
@@ -30,21 +31,31 @@ function* Save_ImportFieldAdd_GenFun({ config }) {              // Save API
   try {
     const response = yield call(ImportFieldAdd_Save_API, config);
     yield put(save_ImportFiledAdd_Success(response));
-  } catch (error) { CommonConsole(error) }
+ } catch (error) {
+  put(ImportFieldAddApiErrorAction())
+  CommonConsole(error)
+}
 }
 
-function* Post_ImportFieldAdd_GenFun({jsonBody}) { // getList API
+
+function* Post_ImportFieldAdd_GenFun({ jsonBody }) { // getList API
   try {
     const response = yield call(ImportFieldAdd_Post_API, jsonBody);
     yield put(post_ImportFiledAdd_Success(response.Data));
-  } catch (error) { CommonConsole(error) }
+ } catch (error) {
+  put(ImportFieldAddApiErrorAction())
+  CommonConsole(error)
+}
 }
 
 function* Delete_ImportFieldAdd_GenFun({ config }) {                    // delete API
   try {
     const response = yield call(ImportFieldAdd_Delete_API, config);
     yield put(delete_ImportFiledAdd_Success(response))
-  } catch (error) { CommonConsole(error) }
+ } catch (error) {
+  put(ImportFieldAddApiErrorAction())
+  CommonConsole(error)
+}
 }
 
 function* Edit_ImportFieldAdd_GenFun({ config }) {                      // edit API 
@@ -53,21 +64,30 @@ function* Edit_ImportFieldAdd_GenFun({ config }) {                      // edit 
     const response = yield call(ImportFieldAdd_Edit_API, config);
     response.pageMode = btnmode;
     yield put(edit_ImportFiledAdd_Success(response));
-  } catch (error) { CommonConsole(error) }
+ } catch (error) {
+  put(ImportFieldAddApiErrorAction())
+  CommonConsole(error)
+}
 };
 
 function* Update_ImportFieldAdd_GenFun({ config }) {                    // update API
   try {
     const response = yield call(ImportFieldAdd_Update_API, config);
     yield put(update_ImportFiledAdd_Success(response))
-  } catch (error) { CommonConsole(error) }
+ } catch (error) {
+  put(ImportFieldAddApiErrorAction())
+  CommonConsole(error)
+}
 };
 
-function* Get_ImportEXcelType_GenFun({ config }) {                    
+function* Get_ImportEXcelType_GenFun({ config }) {
   try {
     const response = yield call(ImportExcelType_API);
     yield put(get_ImportExcelType_Success(response.Data))
-  } catch (error) { CommonConsole(error) }
+ } catch (error) {
+  put(ImportFieldAddApiErrorAction())
+  CommonConsole(error)
+}
 };
 
 function* ImportFieldAdd_Saga() {

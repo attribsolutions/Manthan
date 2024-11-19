@@ -7,17 +7,19 @@ import { url } from '../../../../../routes'
 const PrefixTab = forwardRef(({ subPageMode }, ref) => {
 
     const fileds = {
-        OrderPrefix: '',
-        InvoicePrefix: '',
-        GRNPrefix: '',
+        OrderPrefix: 'PO',
+        InvoicePrefix: 'IN',
+        GRNPrefix: 'GRN',
         ChallanPrefix: '',
-        ReceiptPrefix: '',
+        ReceiptPrefix: 'RE',
         WorkOrderPrefix: '',
         MaterialIssuePrefix: '',
         DemandPrefix: '',
         IBChallanPrefix: '',
         IBInwardPrefix: '',
-        PurchaseReturnprefix:'',
+        PurchaseReturnprefix: 'PR',
+        CreditPrefix: 'CR',
+        DebitPrefix: 'DR',
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
@@ -37,9 +39,50 @@ const PrefixTab = forwardRef(({ subPageMode }, ref) => {
 
     const {
         pageField,
+        commonPartyDropSelect
     } = useSelector((state) => ({
-        pageField: state.CommonPageFieldReducer.pageField
+        pageField: state.CommonPageFieldReducer.pageField,
+        commonPartyDropSelect: state.CommonPartyDropdownReducer.commonPartyDropSelect
     }));
+
+
+
+    useEffect(() => {
+        if (commonPartyDropSelect.value <= 0) {
+            setState((i) => {
+                let a = { ...i }
+                a.values.OrderPrefix = 'PO'
+                a.values.InvoicePrefix = 'IN'
+                a.values.GRNPrefix = 'GRN'
+                a.values.ChallanPrefix = ''
+                a.values.ReceiptPrefix = 'RE'
+                a.values.WorkOrderPrefix = ''
+                a.values.MaterialIssuePrefix = ''
+                a.values.DemandPrefix = ''
+                a.values.IBChallanPrefix = ''
+                a.values.IBInwardPrefix = ''
+                a.values.PurchaseReturnprefix = 'PR'
+                a.values.CreditPrefix = 'CR'
+                a.values.DebitPrefix = 'DR'
+
+                a.hasValid.OrderPrefix.valid = true;
+                a.hasValid.InvoicePrefix.valid = true;
+                a.hasValid.GRNPrefix.valid = true;
+                a.hasValid.ChallanPrefix.valid = true;
+                a.hasValid.ReceiptPrefix.valid = true;
+                a.hasValid.WorkOrderPrefix.valid = true;
+                a.hasValid.MaterialIssuePrefix.valid = true;
+                a.hasValid.DemandPrefix.valid = true;
+                a.hasValid.IBChallanPrefix.valid = true;
+                a.hasValid.IBInwardPrefix.valid = true;
+                a.hasValid.PurchaseReturnprefix.valid = true;
+                a.hasValid.CreditPrefix.valid = true;
+                a.hasValid.DebitPrefix.valid = true;
+
+                return a
+            })
+        }
+    }, [commonPartyDropSelect]);
 
     useEffect(() => {
         if (pageField) {
@@ -254,6 +297,49 @@ const PrefixTab = forwardRef(({ subPageMode }, ref) => {
                         {isError.PurchaseReturnprefix.length > 0 && (
                             <span className="invalid-feedback">{isError.PurchaseReturnprefix}</span>
                         )}
+
+                    </FormGroup>
+
+                    <FormGroup className="mb-3">
+                        <Label className='col col-4'>{fieldLabel.CreditPrefix} </Label>
+                        <Col sm={4}>
+                            <Input
+                                name="CreditPrefix"
+                                value={values.CreditPrefix}
+                                type="text"
+                                className={isError.CreditPrefix.length > 0 ? "is-invalid form-control" : "form-control"}
+                                placeholder="Please Enter Credit prefix"
+                                autoComplete='off'
+                                onChange={(event) => {
+                                    onChangeText({ event, state, setState })
+                                }}
+                            />
+                        </Col>
+                        {isError.CreditPrefix.length > 0 && (
+                            <span className="invalid-feedback">{isError.CreditPrefix}</span>
+                        )}
+
+                    </FormGroup>
+
+                    <FormGroup className="mb-3">
+                        <Label className='col col-4'>{fieldLabel.DebitPrefix} </Label>
+                        <Col sm={4}>
+                            <Input
+                                name="DebitPrefix"
+                                value={values.DebitPrefix}
+                                type="text"
+                                className={isError.DebitPrefix.length > 0 ? "is-invalid form-control" : "form-control"}
+                                placeholder="Please Enter Debit prefix"
+                                autoComplete='off'
+                                onChange={(event) => {
+                                    onChangeText({ event, state, setState })
+                                }}
+                            />
+                        </Col>
+                        {isError.DebitPrefix.length > 0 && (
+                            <span className="invalid-feedback">{isError.DebitPrefix}</span>
+                        )}
+
                     </FormGroup>
 
 

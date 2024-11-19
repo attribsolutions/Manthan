@@ -27,7 +27,7 @@ import { C_DatePicker, C_Select } from "../../../CustomValidateForm";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { url, mode, pageId } from "../../../routes/index"
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
-import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
+import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 
 const PaymentEntry = (props) => {
 
@@ -78,13 +78,24 @@ const PaymentEntry = (props) => {
         }));
 
     const { OpeningBalanceAmount = '' } = OpeningBalance
+    
+    const { commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
+
+    // Common Party select Dropdown useEffect
+    useEffect(() => {
+        if (commonPartyDropSelect.value > 0) {
+            partySelectButtonHandler();
+        } else {
+            partySelectOnChangeHandler();
+        }
+    }, [commonPartyDropSelect]);
 
     useEffect(() => {
         const page_Id = pageId.PAYMENT_ENTRY
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id));
-        if (!(_cfunc.loginSelectedPartyID() === 0)) {
-            dispatch(getSupplier({ PartyID: _cfunc.loginSelectedPartyID() }));
+        if (!(commonPartyDropSelect.value === 0)) {
+            dispatch(getSupplier({ PartyID: commonPartyDropSelect.value }));
         }
         return () => {
             dispatch(commonPageFieldListSuccess(null));
@@ -226,7 +237,7 @@ const PaymentEntry = (props) => {
         })
         const jsonBody = JSON.stringify({
             PartyID: e.value,
-            CustomerID: _cfunc.loginSelectedPartyID(),
+            CustomerID: commonPartyDropSelect.value,
             ReceiptDate: values.ReceiptDate
         });
 
@@ -251,10 +262,10 @@ const PaymentEntry = (props) => {
             const invalidMsg1 = []
 
             if (values.BankName === "") {
-                invalidMsg1.push(`BankName Is Required`)
+                invalidMsg1.push(alertMessages.bankNameIsRequired)
             }
             if (values.DocumentNo === "") {
-                invalidMsg1.push(`DocumentNo Is Required`)
+                invalidMsg1.push(alertMessages.documentNoIsRequired)
             };
 
             if ((values.BankName === "")
@@ -276,7 +287,7 @@ const PaymentEntry = (props) => {
                 if (Number(values.AmountPaid) === 0) {
                     customAlert({
                         Type: 4,
-                        Message: `The payment amount must be greater than zero.`,
+                        Message: alertMessages.paymentAmountGreaterThanZero,
                     })
                     return _cfunc.btnIsDissablefunc({ btnId, state: false })
                 }
@@ -289,7 +300,7 @@ const PaymentEntry = (props) => {
                     "DocumentNo": values.DocumentNo,
                     "AdvancedAmountAjusted": "",
                     "Bank": values.BankName.value,
-                    "Customer": _cfunc.loginSelectedPartyID(),
+                    "Customer": commonPartyDropSelect.value,
                     "ChequeDate": values.ReceiptModeName.label === "Cheque" ? values.ChequeDate : "",
                     "Party": values.Customer.value,
                     "ReceiptMode": values.ReceiptModeName.value,
@@ -311,7 +322,7 @@ const PaymentEntry = (props) => {
     };
 
     function partySelectButtonHandler() {
-        dispatch(getSupplier({ PartyID: _cfunc.loginSelectedPartyID() }));
+        dispatch(getSupplier({ PartyID: commonPartyDropSelect.value }));
     }
 
     function partySelectOnChangeHandler() {
@@ -324,10 +335,10 @@ const PaymentEntry = (props) => {
             return a
         })
     }
-    
+
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
-    var IsEditMode_Css = ''
-    if ((modalCss) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
+    // var IsEditMode_Css = ''
+    // if ((modalCss) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
 
     if (!(userPageAccessState === '')) {
         return (
@@ -335,10 +346,6 @@ const PaymentEntry = (props) => {
                 <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
 
                 <div className="page-content" style={{ marginBottom: "5cm" }}>
-                    <PartyDropdown_Common pageMode={pageMode}
-                        goButtonHandler={partySelectButtonHandler}
-                        changeButtonHandler={partySelectOnChangeHandler}
-                    />
                     <form noValidate>
                         <div className="px-2 c_card_filter header text-black mb-2" >
 

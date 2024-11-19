@@ -26,17 +26,13 @@ function GroupTab(props) {
     const [groupDropdownSelect, setGroupDropdownSelect] = useState("");
     const [subGroupDropdownSelect, setSubGroupDropdownSelect] = useState("");
 
-    const { GroupType, GroupList, SubGroupList, groupDropDownLoading, subgroupDropDownLoading} = useSelector((state) => ({
+    const { GroupType, GroupList, SubGroupList, groupDropDownLoading, subgroupDropDownLoading } = useSelector((state) => ({
         GroupType: state.GroupTypeReducer.GroupType,
         GroupList: state.ItemMastersReducer.GroupList,
         SubGroupList: state.ItemMastersReducer.SubGroupList,
         groupDropDownLoading: state.ItemMastersReducer.groupDropDownLoading,
         subgroupDropDownLoading: state.ItemMastersReducer.subgroupDropDownLoading,
     }));
-
-    useEffect(() => {
-        dispatch(getGroupTypeslist());
-    }, [dispatch]);
 
     const GroupType_DropdownOptions = GroupType.map((index) => ({
         value: index.id,
@@ -67,7 +63,11 @@ function GroupTab(props) {
 
         }
         else {
-            alert(`${event.label} Is Already Selected...!`)
+            customAlert({
+                Type: 4,
+                Status: true,
+                Message: `${event.label} Is Already Selected...!`,
+            })
         }
     };
 
@@ -82,7 +82,11 @@ function GroupTab(props) {
             setSubGroupDropdownSelect([]);
         }
         else {
-            alert(`${event.label} Is Already Selected...!`)
+            customAlert({
+                Type: 4,
+                Status: true,
+                Message: `${event.label} Is Already Selected...!`,
+            })
         }
     };
 
@@ -100,27 +104,22 @@ function GroupTab(props) {
             SubGroupName: subGroupDropdownSelect.label,
         };
         if ((groupTypeDropdownSelect.value === undefined)) {
-            dispatch(
-                customAlert({
-                    Type: 4,
-                    Status: true,
-                    Message: "Please Select GroupType value...!",
-                    RedirectPath: false,
-                    PermissionAction: false,
-                })
-            );
+
+            customAlert({
+                Type: 4,
+                Status: true,
+                Message: "Please Select GroupType value...!",
+
+            })
+
             return;
         }
         if ((groupDropdownSelect.value === undefined)) {
-            dispatch(
-                customAlert({
-                    Type: 4,
-                    Status: true,
-                    Message: "Please Select Group value...!",
-                    RedirectPath: false,
-                    PermissionAction: false,
-                })
-            );
+            customAlert({
+                Type: 4,
+                Status: true,
+                Message: "Please Select Group value...!",
+            })
             return;
         }
         else {

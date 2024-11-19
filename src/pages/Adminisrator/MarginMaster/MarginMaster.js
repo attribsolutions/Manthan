@@ -15,22 +15,17 @@ import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { Breadcrumb_inputName, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
-import paginationFactory, {
-    PaginationListStandalone,
-    PaginationProvider,
-} from "react-bootstrap-table2-paginator";
+import { BreadcrumbShowCountlabel, Breadcrumb_inputName, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
-import { get_Party_ForDropDown } from "../../../store/Administrator/ItemsRedux/action";
+import { get_Party_ForDropDown, get_Party_ForDropDown_Success } from "../../../store/Administrator/ItemsRedux/action";
 import BootstrapTable from "react-bootstrap-table-next";
 import {
     deleteIdForMarginMaster,
     deleteIdForMarginMasterSuccess,
-    getMarginList,
     goButtonForMargin,
     goButtonForMarginSuccess,
     saveMarginMaster,
-    saveMarginMasterSuccess
+    saveMarginMasterSuccess,
 } from "../../../store/Administrator/MarginMasterRedux/action";
 import {
     breadcrumbReturnFunc,
@@ -40,13 +35,20 @@ import {
 } from "../../../components/Common/CommonFunction";
 import { priceListByCompay_Action } from "../../../store/Administrator/PriceList/action";
 import * as _cfunc from "../../../components/Common/CommonFunction";
-import { CInput, C_DatePicker, decimalRegx } from "../../../CustomValidateForm";
+import { CInput, C_DatePicker, C_Select, decimalRegx } from "../../../CustomValidateForm";
 import { mode, pageId, url } from "../../../routes";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { comAddPageFieldFunc, formValid, initialFiledFunc, onChangeDate, onChangeSelect, resetFunction } from "../../../components/Common/validationFunction";
-import { Go_Button, SaveButton } from "../../../components/Common/CommonButton";
-import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
-import { async } from "q";
+import { Change_Button, Go_Button, SaveButton } from "../../../components/Common/CommonButton";
+import { globalTableSearchProps } from "../../../components/Common/SearchBox/MySearch";
+import { mobileApp_ProductUpdate_Api } from "../../../helpers/backend_helper";
+import { showToastAlert } from "../../../helpers/axios_Config";
+import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
+import { priceListByCompay_ActionSuccess } from "../../../store/Administrator/PriceList/action";
+import { DISCOUNT_API_ERROR_ACTION } from "../../../store/Administrator/DiscountRedux/actionType";
+import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
+import GlobalCustomTable from "../../../GlobalCustomTable";
+
 
 const MarginMaster = (props) => {
     const dispatch = useDispatch();
@@ -63,12 +65,18 @@ const MarginMaster = (props) => {
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState("");
     const [editCreatedBy, seteditCreatedBy] = useState("");
+    const [selectedMargin, setSelectedMargin] = useState([]);
+    const [marginDeleteId, setMarginDeleteId] = useState("");
 
-    //Access redux store Data /  'save_ModuleSuccess' action data
+    const [btnForceDisabled, setBtnForceDisabled] = useState(false);
+    const [mobileApiLoading, setMobileApiLoading] = useState(false);
+
+    //Access redux store tableData /  'save_ModuleSuccess' action data
     const { postMsg,
         tableData,
         deleteMessage,
         Party,
+        partyDropLoading,
         PriceList,
         userAccess,
         pageField,
@@ -80,18 +88,26 @@ const MarginMaster = (props) => {
         tableData: state.MarginMasterReducer.MarginGoButton,
         deleteMessage: state.MarginMasterReducer.deleteId_For_MarginMaster,
         postMsg: state.MarginMasterReducer.postMsg,
+
         Party: state.ItemMastersReducer.Party,
+        partyDropLoading: state.ItemMastersReducer.partyApiLoading,
+
         PriceList: state.PriceListReducer.priceListByCompany,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField
     }));
 
-    const { Data = [] } = tableData
-
     useEffect(() => {
-        const page_Id = pageId.MARGIN
         dispatch(commonPageFieldSuccess(null));
-        dispatch(commonPageField(page_Id))
+        dispatch(commonPageField(pageId.MARGIN));
+        dispatch(priceListByCompay_Action());
+        dispatch(get_Party_ForDropDown());
+        dispatch(BreadcrumbShowCountlabel(`Count:${0}`));
+        return () => {
+            dispatch(get_Party_ForDropDown_Success([]));
+            dispatch(priceListByCompay_ActionSuccess([]));
+            dispatch(goButtonForMarginSuccess([]));
+        }
     }, []);
 
     const values = { ...state.values }
@@ -101,11 +117,6 @@ const MarginMaster = (props) => {
     const location = { ...history.location }
     const hasShowloction = location.hasOwnProperty(mode.editValue)
     const hasShowModal = props.hasOwnProperty(mode.editValue)
-
-    useEffect(() => {
-        dispatch(priceListByCompay_Action());
-        dispatch(get_Party_ForDropDown());
-    }, [dispatch]);
 
     // userAccess useEffect
     useEffect(() => {
@@ -168,88 +179,27 @@ const MarginMaster = (props) => {
             }
         }
         else {
-            dispatch(goButtonForMarginSuccess({ Status: false }))
+            dispatch(goButtonForMarginSuccess([]));
         }
     }, [])
 
-    useEffect(() => {
-        if (deleteMessage.Status === true && deleteMessage.StatusCode === 200) {
-            dispatch(deleteIdForMarginMasterSuccess({ Status: false }));
-            dispatch(goButtonForMarginSuccess([]))
-            GoButton_Handler()
-            customAlert({
-                Type: 1,
-                Message: deleteMessage.Message,
-            })
-
-        } else if (deleteMessage.Status === true) {
-            dispatch(deleteIdForMarginMasterSuccess({ Status: false }));
-
-            customAlert({
-                Type: 3,
-                Status: true,
-                Message: JSON.stringify(deleteMessage.Message),
-            })
-
-        }
-    }, [deleteMessage]);
-
-    useEffect(() => _cfunc.tableInputArrowUpDounFunc("#table_Arrow"), [Data]);
-
-    const PartyTypeDropdown_Options = Party.map((Data) => ({
-        value: Data.id,
-        label: Data.Name
-    }));
-    PartyTypeDropdown_Options.unshift({
-        value: "",
-        label: "select"
-    });
-
-    const PriceList_DropdownOptions = PriceList.map((data) => ({
-        value: data.id,
-        label: data.Name
-    }));
-
-    const GoButton_Handler = () => {
-
-        if (values.EffectiveDate === '') {
-            customAlert({
-                Type: 4,
-                Message: "Please select EffectiveDate",
-            })
-            return
-        }
-        try {
-            if (formValid(state, setState)) {
-
-                const jsonBody = JSON.stringify({
-                    PriceList: values.PriceListName.value,
-                    Party: values.PartyName.value ? values.PartyName.value : 0,
-                    EffectiveDate: values.EffectiveDate
-                });
-                dispatch(goButtonForMargin({ jsonBody }));
-            }
-        } catch (e) { console.log(e) }
-    };
-
-    //select id for delete row
-    const deleteHandeler = async (id, name) => {
-
-        const isConfirmed = await customAlert({
-            Type: 7,
-            Message: `Are you sure you want to delete this Item : "${name}"`
-        });
-
-        if (isConfirmed) {
-            dispatch(deleteIdForMarginMaster(id))
-        }
-
-    };
-
     useEffect(async () => {
 
-        if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
+        if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
+            setMobileApiLoading(true)
             dispatch(saveMarginMasterSuccess({ Status: false }))
+
+            //***************mobail app api*********************** */
+            let arrayOfMrpID = selectedMargin.map(function (i) {
+                return i.Item;
+            });
+            const jsonBody = JSON.stringify({
+                products: arrayOfMrpID.join(', ')
+            })
+            const mobilApiResp = await mobileApp_ProductUpdate_Api({ jsonBody })
+            if (mobilApiResp.StatusCode === 200) { showToastAlert(mobilApiResp.Message) }
+            //************************************** */
+
             setState(() => resetFunction(fileds, state))// Clear form values  
             if (pageMode === mode.dropdownAdd) {
                 customAlert({
@@ -276,12 +226,94 @@ const MarginMaster = (props) => {
                 Message: JSON.stringify(postMsg.Message),
             })
         }
+        setMobileApiLoading(false)
+        dispatch(goButtonForMarginSuccess([]));
     }, [postMsg])
 
-    const pageOptions = {
-        sizePerPage: 10,
-        totalSize: Data.length,
-        custom: true,
+    useEffect(async () => {
+        if (deleteMessage.Status === true && deleteMessage.StatusCode === 200) {
+            setBtnForceDisabled(true);
+            dispatch(deleteIdForMarginMasterSuccess({ Status: false }));
+            //***************mobail app api*********************** */
+            const jsonBody = JSON.stringify({
+                products: marginDeleteId.toString()
+            })
+            const mobilApiResp = await mobileApp_ProductUpdate_Api({ jsonBody });
+            if (mobilApiResp.StatusCode === 200) { showToastAlert(mobilApiResp.Message); }
+            //************************************** */
+
+            dispatch(goButtonForMarginSuccess([]))
+            GoButton_Handler()
+            customAlert({
+                Type: 1,
+                Message: deleteMessage.Message,
+            })
+
+        } else if (deleteMessage.Status === true) {
+            dispatch(deleteIdForMarginMasterSuccess({ Status: false }));
+
+            customAlert({
+                Type: 3,
+                Status: true,
+                Message: JSON.stringify(deleteMessage.Message),
+            })
+
+        }
+        setBtnForceDisabled(false)
+    }, [deleteMessage]);
+
+    useEffect(() => _cfunc.tableInputArrowUpDounFunc("#table_Arrow"), [tableData]);
+
+    const PartyTypeDropdown_Options = Party.map((tableData) => ({
+        value: tableData.id,
+        label: tableData.Name
+    }));
+    PartyTypeDropdown_Options.unshift({
+        value: "",
+        label: "select"
+    });
+
+    const PriceList_DropdownOptions = PriceList.map((data) => ({
+        value: data.id,
+        label: data.Name
+    }));
+
+    const GoButton_Handler = () => {
+
+        if (values.EffectiveDate === '' || values.PriceListName === '') {
+            customAlert({
+                Type: 4,
+                Message: alertMessages.effectiveDateAndPriceListIsRequired,
+            })
+            return
+        }
+
+        try {
+            if (formValid(state, setState)) {
+
+                const jsonBody = JSON.stringify({
+                    PriceList: values.PriceListName.value,
+                    Party: values.PartyName.value ? values.PartyName.value : 0,
+                    EffectiveDate: values.EffectiveDate
+                });
+                dispatch(goButtonForMargin({ jsonBody }));
+            }
+        } catch (e) { _cfunc.CommonConsole(e) }
+    };
+
+    //select id for delete row
+    const deleteHandeler = async (id, name, ItemID) => {
+
+        const isConfirmed = await customAlert({
+            Type: 7,
+            Message: `${alertMessages.deleteThisItem} : "${name}"`
+        });
+
+        if (isConfirmed) {
+            setBtnForceDisabled(true);
+            setMarginDeleteId(ItemID)
+            dispatch(deleteIdForMarginMaster(id))
+        }
     };
 
     const pagesListColumns = [
@@ -372,9 +404,10 @@ const MarginMaster = (props) => {
                             <Button
                                 id={"deleteid"}
                                 type="button"
+                                disabled={btnForceDisabled}
                                 className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
                                 data-mdb-toggle="tooltip" data-mdb-placement="top" title='Delete MRP'
-                                onClick={() => { deleteHandeler(user.id, user.Name); }}
+                                onClick={() => { deleteHandeler(user.id, user.Name, user.Item); }}
                             >
                                 <i className="mdi mdi-delete font-size-18"></i>
                             </Button>}
@@ -388,10 +421,9 @@ const MarginMaster = (props) => {
         event.preventDefault();
         const btnId = event.target.id
         try {
-            // if (formValid(state, setState)) {
             _cfunc.btnIsDissablefunc({ btnId, state: true })
 
-            var ItemData = Data.map((index) => ({
+            var ItemData = tableData.map((index) => ({
                 PriceList: values.PriceListName.value,
                 Party: values.PartyName.value,
                 EffectiveDate: values.EffectiveDate,
@@ -407,14 +439,14 @@ const MarginMaster = (props) => {
             const Find = ItemData.filter((index) => {   // condition for margin save without 0
                 return (Number(index.Margin) > 0)
             })
-
+            setSelectedMargin(Find)
             const jsonBody = JSON.stringify(Find)
 
             if (!(Find.length > 0)) {
 
                 customAlert({
                     Type: 4,
-                    Message: "Please Enter Margin"
+                    Message: alertMessages.marginISRequired
                 })
                 return _cfunc.btnIsDissablefunc({ btnId, state: false })
             }
@@ -431,11 +463,10 @@ const MarginMaster = (props) => {
 
     return (
         <React.Fragment>
-            <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
+            <div className="page-content" >
                 <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
                 <Container fluid>
 
-                    {/* <form noValidate> */}
                     <Card className="text-black ">
                         <CardHeader className="card-header  text-black c_card_header" >
                             <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
@@ -479,13 +510,14 @@ const MarginMaster = (props) => {
                                             <FormGroup className="mb-3 row ">
                                                 <Label htmlFor="validationCustom01" className="col-sm-3 p-2" style={{ width: "2.5cm" }}>{fieldLabel.PartyName}</Label>
                                                 <Col sm={8} >
-                                                    <Select
+                                                    <C_Select
                                                         name="PartyName"
                                                         value={values.PartyName}
                                                         id={"PartyName"}
                                                         options={PartyTypeDropdown_Options}
                                                         isDisabled={pageMode === mode.edit ? true : false}
                                                         isSearchable={true}
+                                                        isLoading={partyDropLoading}
                                                         styles={{
                                                             menu: provided => ({ ...provided, zIndex: 2 })
                                                         }}
@@ -525,16 +557,19 @@ const MarginMaster = (props) => {
                                             </FormGroup>
                                         </Col>
                                         <Col sm={1}>
-                                            <Go_Button onClick={(event) => { GoButton_Handler(event) }} loading={listBtnLoading} />
+                                            {
+                                                !(tableData.length > 0) ?
+                                                    <Go_Button onClick={(event) => { GoButton_Handler(event) }} loading={listBtnLoading} />
+                                                    : <Change_Button onClick={() => { dispatch(goButtonForMarginSuccess([])) }} />}
                                         </Col>
                                     </Row>
                                 </CardHeader>
                             </Card>
 
-                            {Data.length > 0 ?
+                            {/* {tableData.length > 0 ?
                                 <ToolkitProvider
                                     keyField="Item"
-                                    data={Data}
+                                    data={tableData}
                                     columns={pagesListColumns}
                                     search
                                 >
@@ -542,7 +577,7 @@ const MarginMaster = (props) => {
                                         <React.Fragment>
                                             <Row>
                                                 <Col xl="12">
-                                                    <div className="table-responsive">
+                                                    <div >
                                                         <BootstrapTable
                                                             keyField={"Item"}
                                                             id="table_Arrow"
@@ -552,8 +587,11 @@ const MarginMaster = (props) => {
                                                             classes={"table  table-bordered"}
                                                             noDataIndication={<div className="text-danger text-center ">Items Not available</div>}
                                                             {...toolkitProps.baseProps}
+                                                            onDataSizeChange={({ dataSize }) => {
+                                                                dispatch(BreadcrumbShowCountlabel(`Count:${dataSize}`));
+                                                            }}
                                                         />
-                                                        {mySearchProps(toolkitProps.searchProps)}
+                                                        {globalTableSearchProps(toolkitProps.searchProps)}
 
                                                     </div>
                                                 </Col>
@@ -563,25 +601,36 @@ const MarginMaster = (props) => {
                                     )}
                                 </ToolkitProvider>
                                 : null
-                            }
+                            } */}
+                            <GlobalCustomTable
+                                keyField={"Item"}
+                                data={tableData}
+                                columns={pagesListColumns}
+                                id="table_Arrow"
+                                noDataIndication={
+                                    <div className="text-danger text-center ">
+                                        Items Not available
+                                    </div>
+                                }
+                                onDataSizeChange={({ dataCount, filteredData = [] }) => {
+                                    dispatch(BreadcrumbShowCountlabel(`Count:${dataCount}`));
+                                }}
+                            />
 
-                            {Data.length > 0 ?
-                                <FormGroup>
-                                    <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
-                                        <SaveButton pageMode={pageMode}
-                                            loading={saveBtnloading}
-                                            onClick={SaveHandler}
-                                            userAcc={userPageAccessState}
-                                            editCreatedBy={editCreatedBy}
-                                        />
-                                    </Col>
-                                </FormGroup >
-                                : null
+                            {tableData.length > 0 &&
+                                <SaveButtonDraggable>
+                                    <SaveButton pageMode={pageMode}
+                                        loading={(saveBtnloading) || (mobileApiLoading)}
+                                        forceDisabled={mobileApiLoading}
+                                        onClick={SaveHandler}
+                                        userAcc={userPageAccessState}
+                                        editCreatedBy={editCreatedBy}
+                                    />
+                                </SaveButtonDraggable>
                             }
 
                         </CardBody>
                     </Card>
-                    {/* </form> */}
                 </Container>
             </div>
         </React.Fragment>

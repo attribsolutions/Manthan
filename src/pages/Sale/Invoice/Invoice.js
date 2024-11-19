@@ -1,11 +1,9 @@
-import React, { useEffect, useState, } from "react";
+import React, { useEffect, useLayoutEffect, useState, } from "react";
 import {
     Col,
     FormGroup,
     Input,
     Label,
-    Row,
-    Table
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
 import { BreadcrumbShowCountlabel, commonPageFieldSuccess, getpdfReportdata } from "../../../store/actions";
@@ -14,26 +12,24 @@ import { commonPageField } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import {
     comAddPageFieldFunc,
-    formValid,
     initialFiledFunc,
     onChangeDate,
     onChangeSelect,
 } from "../../../components/Common/validationFunction";
 import Select from "react-select";
-import { GotoInvoiceBtn, SaveAndDownloadPDF, SaveButton } from "../../../components/Common/CommonButton";
-import {
-    updateBOMListSuccess
-} from "../../../store/Production/BOMRedux/action";
+import { SaveAndDownloadPDF, SaveButton } from "../../../components/Common/CommonButton";
 import * as mode from "../../../routes/PageMode";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url"
 import {
-    GoButtonForinvoiceAdd,
     GoButtonForinvoiceAddSuccess,
     Uploaded_EInvoiceAction,
     invoiceSaveAction,
     invoiceSaveActionSuccess,
-    makeIB_InvoiceActionSuccess
+    makeIB_InvoiceActionSuccess,
+    editInvoiceActionSuccess,
+    updateInvoiceAction,
+    updateInvoiceActionSuccess
 } from "../../../store/Sales/Invoice/action";
 import { GetVenderSupplierCustomer, GetVenderSupplierCustomerSuccess } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
@@ -49,9 +45,13 @@ import "./invoice.scss"
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { CInput, C_DatePicker, decimalRegx } from "../../../CustomValidateForm";
 import { getVehicleList, getVehicleListSuccess } from "../../../store/Administrator/VehicleRedux/action";
-import { Invoice_1_Edit_API_Singel_Get } from "../../../helpers/backend_helper";
+import { Invoice_Singel_Get_for_Report_Api } from "../../../helpers/backend_helper";
 import * as report from '../../../Reports/ReportIndex'
-import CustomTable from "../../../CustomTable2";
+import GlobalCustomTable from "../../../GlobalCustomTable";
+import { changeCommonPartyDropDetailsAction } from "../../../store/Utilites/PartyDrodown/action";
+import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
+import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
+import { CheckStockEntryForFirstTransaction, CheckStockEntryForFirstTransactionSuccess, CheckStockEntryforBackDatedTransaction, CheckStockEntryforBackDatedTransactionSuccess } from "../../../store/Inventory/StockEntryRedux/action";
 
 const Invoice = (props) => {
 
@@ -61,7 +61,7 @@ const Invoice = (props) => {
     const subPageMode = history.location.pathname
     const systemSetting = _cfunc.loginSystemSetting();
 
-    const goBtnId = `ADDGoBtn${subPageMode}`
+
     const saveBtnid = `saveBtn${subPageMode}`
 
     const fileds = {
@@ -72,18 +72,19 @@ const Invoice = (props) => {
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
     const [orderItemDetails, setOrderItemDetails] = useState([])
-    const [orderIDs, setOrderIDs] = useState([])
+    const [orderIDs, setOrderIDs] = useState('')
+    const [editInvoiceData, setEditInvoiceData] = useState('')
 
-    // for invoicer page heder dicount functionality useSate ************************************
+    // for invoice page heder discount functionality useSate ************************************
     const [discountValueAll, setDiscountValueAll] = useState("");
     const [discountTypeAll, setDiscountTypeAll] = useState({ value: 2, label: " % " });
     const [discountDropOption] = useState([{ value: 1, label: "Rs" }, { value: 2, label: "%" }])
     const [changeAllDiscount, setChangeAllDiscount] = useState(false)
-    const [forceReload, setForceReload] = useState(false)
+
     // ****************************************************************************
 
     const [modalCss] = useState(false);
-    const [pageMode] = useState(mode.defaultsave);
+    const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState('');
 
     const {
@@ -95,13 +96,16 @@ const Invoice = (props) => {
         vendorSupplierCustomer,
         makeIBInvoice,
         VehicleNumber,
-        goBtnloading,
+        editData,
         saveBtnloading,
         saveAndPdfBtnLoading,
-        commonPartyDropSelect
+        commonPartyDropSelect,
+        StockEnteryForFirstYear,
+        StockEnteryForBackdated
     } = useSelector((state) => ({
         postMsg: state.InvoiceReducer.postMsg,
-        updateMsg: state.BOMReducer.updateMsg,
+        editData: state.InvoiceReducer.editData,
+        updateMsg: state.InvoiceReducer.updateMsg,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
         customer: state.CommonAPI_Reducer.customer,
@@ -110,9 +114,11 @@ const Invoice = (props) => {
         VehicleNumber: state.VehicleReducer.VehicleList,
         makeIBInvoice: state.InvoiceReducer.makeIBInvoice,
         saveBtnloading: state.InvoiceReducer.saveBtnloading,
-        goBtnloading: state.InvoiceReducer.goBtnloading,
         saveAndPdfBtnLoading: state.InvoiceReducer.saveAndPdfBtnLoading,
-        commonPartyDropSelect: state.CommonPartyDropdownReducer.commonPartyDropSelect
+        commonPartyDropSelect: state.CommonPartyDropdownReducer.commonPartyDropSelect,
+        StockEnteryForFirstYear: state.StockEntryReducer.StockEnteryForFirstYear,
+        StockEnteryForBackdated: state.StockEntryReducer.StockEnteryForBackdated,
+
     }));
 
     const location = { ...history.location }
@@ -127,6 +133,7 @@ const Invoice = (props) => {
         dispatch(commonPageField(pageId.INVOICE_1))
         dispatch(GoButtonForinvoiceAddSuccess([]))
 
+
     }, []);
 
     // Common Party Dropdown useEffect
@@ -140,8 +147,19 @@ const Invoice = (props) => {
         return () => {
             dispatch(GetVenderSupplierCustomerSuccess([]));
             dispatch(getVehicleListSuccess([]));
+            dispatch(CheckStockEntryForFirstTransactionSuccess({ status: false }))
+            dispatch(changeCommonPartyDropDetailsAction({ forceDisable: false }))//change party drop-down restore state
+            dispatch(invoiceSaveActionSuccess({ Status: false })); // Reset the status to false
+            setOrderItemDetails([]);
+            setState((i) => {
+                const obj = { ...i }
+                obj.values.Customer = "";
+                obj.values.VehicleNo = "";
+                obj.hasValid.Customer.valid = true;
+                obj.hasValid.VehicleNo.valid = true;
+                return obj
+            })
         }
-
     }, [commonPartyDropSelect]);
 
     // userAccess useEffect
@@ -164,22 +182,23 @@ const Invoice = (props) => {
 
     useEffect(async () => {
         if (postMsg.Status === true && postMsg.StatusCode === 200) {
-            dispatch(invoiceSaveActionSuccess({ Status: false })); // Reset the status to false
 
+            dispatch(invoiceSaveActionSuccess({ Status: false })); // Reset the status to false
+            const config = {
+                editId: postMsg.TransactionID.join(', '),////for saveAndDownloadPdfMode
+                ReportType: report.invoice,//for saveAndDownloadPdfMode
+                RowId: postMsg.TransactionID.join(', '),//for Invoice-Upload
+                UserID: _cfunc.loginUserID(),//for Invoice-Upload
+            };
             //************************* / Fetch PDF report data if saveAndDownloadPdfMode is true /
             if (postMsg.saveAndDownloadPdfMode) {
-                const config = {
-                    editId: postMsg.InvoiceID,
-                    ReportType: report.invoice,
-                };
-                dispatch(getpdfReportdata(Invoice_1_Edit_API_Singel_Get, config));
+                dispatch(getpdfReportdata(Invoice_Singel_Get_for_Report_Api, config));
             }
 
             // ***************** Upload E-Invoice if AutoEInvoice and EInvoiceApplicable are both "1"  *****/
             if (systemSetting.AutoEInvoice === "1" && systemSetting.EInvoiceApplicable === "1") {
-                let btnId = `btn-E-Invoice-Upload-${postMsg.InvoiceID}`;
                 try {
-                    dispatch(Uploaded_EInvoiceAction({ btnId, RowId: postMsg.InvoiceID, UserID: _cfunc.loginUserID() }));
+                    dispatch(Uploaded_EInvoiceAction(config));
                 } catch (error) { }
             }
 
@@ -190,12 +209,13 @@ const Invoice = (props) => {
 
             // Redirect to appropriate page based on subPageMode
             if (subPageMode === url.INVOICE_1) {
-                history.push({ pathname: url.INVOICE_LIST_1 });
+                history.push({ pathname: url.INVOICE_LIST_1, updatedRowBlinkId: postMsg.TransactionID.join(', ') });
             } else if (subPageMode === url.IB_INVOICE) {
                 history.push({ pathname: url.IB_INVOICE_LIST });
             }
         } else if (postMsg.Status === true) {
             // Show error alert message with the JSON stringified postMsg.Message
+            dispatch(invoiceSaveActionSuccess({ Status: false })); // Reset the status to false
             customAlert({
                 Type: 4,
                 Message: JSON.stringify(postMsg.Message),
@@ -207,10 +227,10 @@ const Invoice = (props) => {
 
         if ((updateMsg.Status === true) && (updateMsg.StatusCode === 200) && !(modalCss)) {
             history.push({
-                pathname: url.MATERIAL_ISSUE_LIST,
+                pathname: url.INVOICE_LIST_1,
             })
         } else if (updateMsg.Status === true && !modalCss) {
-            dispatch(updateBOMListSuccess({ Status: false }));
+            dispatch(updateInvoiceActionSuccess({ Status: false }));
             customAlert({
                 Type: 3,
                 Status: true,
@@ -243,6 +263,7 @@ const Invoice = (props) => {
     useEffect(() => {
 
         if (gobutton_Add.Status === true && gobutton_Add.StatusCode === 200) {
+
             setState((i) => {
                 const obj = { ...i }
                 obj.values.Customer = gobutton_Add.customer;
@@ -255,11 +276,79 @@ const Invoice = (props) => {
             // **********************************************************
             totalAmountCalcuationFunc(gobutton_Add.Data.OrderItemDetails)// show breadcrump tolat amount function//passs table array 
             //*********************************************************** */
-
             setOrderIDs(gobutton_Add.Data.OrderIDs)
             dispatch(GoButtonForinvoiceAddSuccess({ Status: false }))
+
         }
     }, [gobutton_Add]);
+
+    useLayoutEffect(() => {
+
+        if (((editData.Status === true) && (editData.StatusCode === 200))) {
+
+            setState((i) => {
+                const obj = { ...i }
+                obj.values.Customer = editData.customer;
+                obj.hasValid.Customer.valid = true;
+
+                obj.values.InvoiceDate = editData.Data.InvoiceDate;
+                obj.hasValid.InvoiceDate.valid = true;
+
+                return obj
+            })
+
+            setPageMode(editData.pageMode);
+            setEditInvoiceData(editData);
+            setOrderItemDetails(editData.Data.OrderItemDetails);
+
+            if (editData.pageMode === mode.edit) {
+                dispatch(changeCommonPartyDropDetailsAction({ forceDisable: true }))//change party drop-down disable when edit/view
+            };
+
+            // **********************************************************
+            totalAmountCalcuationFunc(editData.Data.OrderItemDetails)// show breadcrump tolat amount function//passs table array 
+            //*********************************************************** */
+            setOrderIDs(editData.Data.OrderIDs)
+            dispatch(editInvoiceActionSuccess({ Status: false }))
+        }
+
+    }, [editData]);
+
+    useLayoutEffect(() => {
+
+        if ((VehicleNumber.length > 0) && editInvoiceData !== '' && pageMode == mode.edit) {
+            const foundVehicle = VehicleNumber.find(i => editInvoiceData.Data.Vehicle === i.id);
+
+            setState((i) => {
+                const obj = { ...i }
+                if (foundVehicle !== undefined) {
+                    obj.values.VehicleNo = { value: foundVehicle.id, label: foundVehicle.VehicleNumber };
+                    obj.hasValid.VehicleNo.valid = true;
+                }
+                return obj
+            })
+        }
+    }, [VehicleNumber, editInvoiceData, pageMode]);
+
+    useEffect(() => {
+
+        if (changeAllDiscount) {
+            const updatedOrderItemTable = orderItemDetails.map((item) => ({
+                ...item,
+                Discount: discountValueAll,
+                DiscountType: discountTypeAll.value,
+            }));
+
+            // Perform calculations based on the updated values for each item
+            updatedOrderItemTable.forEach((index1) => {
+                innerStockCaculation(index1);
+            });
+            totalAmountCalcuationFunc(updatedOrderItemTable);
+            // Set the updated array as the new orderItemTable
+            setOrderItemDetails(updatedOrderItemTable);
+        }
+    }, [changeAllDiscount, discountValueAll, discountTypeAll.value]);
+
 
     useEffect(() => _cfunc.tableInputArrowUpDounFunc("#table_Arrow"), [orderItemDetails]);
 
@@ -283,12 +372,23 @@ const Invoice = (props) => {
                 return (
                     <>
                         <div>
-                            <samp id={`ItemName${index1.id}`}>{index1.ItemName}</samp>
+                            <samp className="theme-font"
+                                id={`ItemName${index1.id}`}>{index1.ItemName}</samp>
                         </div>
-                        {
-                            (index1.StockInValid) ? <div><samp id={`StockInvalidMsg-${index1.id}`} style={{ color: "red" }}> {index1.StockInvalidMsg}</samp></div>
-                                : <></>
-                        }
+                        <div style={{
+                            overflow: "hidden",
+                            whiteSpace: "nowrap",
+                            width: "100%", // Set the width to the desired container width
+                        }}>
+                            <samp id={`StockInvalidMsg-${index1.id}`}
+                                style={{
+                                    display: index1.StockInValid ? "block" : "none",
+                                    color: "red",
+                                    animation: "scrollRightToLeft 15s linear infinite",
+                                }}>
+                                {index1.StockInvalidMsg}
+                            </samp>
+                        </div>
                     </>
                 )
             },
@@ -297,21 +397,24 @@ const Invoice = (props) => {
             text: "Quantity/Unit",
             dataField: "",
             formatExtraData: { tableList: orderItemDetails },
-            attrs: (cell, row, rowIndex, colIndex) => ({ 'data-label': "Quantity/Unit" }),
+            attrs: () => ({ 'data-label': "Quantity/Unit" }),
             formatter: (cellContent, index1, keys_, { tableList = [] }) => (
                 <>
                     <div>
                         <Input
                             type="text"
-                            disabled={pageMode === 'edit' ? true : false}
+
                             id={`OrderQty-${index1.id}`}
-                            className="input"
-                            style={{ textAlign: "right" }}
-                            key={index1.id}
+                            placeholder="Enter quantity"
+                            className="right-aligned-placeholder mb-1"
+                            style={{
+                                border: index1.StockInValid ? '2px solid red' : "1px solid #ced4da"
+                            }}
+                            key={`OrderQty-${index1.id}`}
                             autoComplete="off"
                             defaultValue={index1.Quantity}
                             onChange={(event) => {
-                                orderQtyOnChange(event, index1);
+                                orderQtyOnChange(event, index1,);
                                 totalAmountCalcuationFunc(tableList);
                             }}
                         />
@@ -321,13 +424,13 @@ const Invoice = (props) => {
                             <Select
                                 classNamePrefix="select2-selection"
                                 id={"ddlUnit"}
-                                isDisabled={true}
+                                isDisabled={pageMode === mode.edit && true}
                                 defaultValue={index1.default_UnitDropvalue}
                                 options={index1.UnitDetails.map(i => ({
                                     "label": i.UnitName,
                                     "value": i.UnitID,
                                     "ConversionUnit": i.ConversionUnit,
-                                    "Unitlabel": i.Unitlabel,
+                                    "Unitlabel": i.UnitName,
                                     "BaseUnitQuantity": i.BaseUnitQuantity,
                                     "BaseUnitQuantityNoUnit": i.BaseUnitQuantityNoUnit,
                                 }))}
@@ -338,10 +441,14 @@ const Invoice = (props) => {
                             ></Select>
                         </div>
                     </div>
-                    <div >
-                        <span>Order-Qty :</span>
-                        <samp>{index1.OrderQty}</samp>
+                    <div className="theme-font">
+                        <span className="text-muted">Order-Qty :</span>
+                        <samp>{index1.OrderQty}</samp>&nbsp;&nbsp;
                         <samp>{index1.UnitName}</samp>
+                    </div>
+                    <div>
+                        <samp className="theme-font text-muted" >Available stock :</samp>
+                        <label className="text-black">{_cfunc.roundToDecimalPlaces(index1.ItemTotalStock, 3)}</label>
                     </div>
                 </>
             ),
@@ -349,9 +456,8 @@ const Invoice = (props) => {
         {//***************StockDetails********************************************************************* */
             text: "Stock Details",
             dataField: "StockDetails",
-            attrs: (cell, row, rowIndex, colIndex) => ({ 'data-label1': "Stock Details", "stock-header": "true" }),
+            attrs: () => ({ 'data-label1': "Stock Details", "stock-header": "true" }),
             headerStyle: { zIndex: "2" },
-            // classes: '_StockDetails-header',
             formatExtraData: { tableList: orderItemDetails },
             formatter: (cellContent, index1, keys_, { tableList = [] }) => (
                 <div className="table-responsive">
@@ -359,7 +465,7 @@ const Invoice = (props) => {
                         <thead >
                             <tr>
                                 <th>BatchCode</th>
-                                <th>Stock Quantity</th>
+                                <th>Stock </th>
                                 <th>Quantity</th>
                                 <th>Basic Rate</th>
                                 <th>MRP</th>
@@ -375,8 +481,8 @@ const Invoice = (props) => {
                                     <td data-label='Quantity'>
                                         <Input
                                             type="text"
-                                            disabled={pageMode === 'edit' ? true : false}
-                                            style={{ textAlign: "right" }}
+                                            placeholder="Manually enter quantity"
+                                            className="right-aligned-placeholder"
                                             key={`batchQty${index1.id}-${index2.id}`}
                                             id={`batchQty${index1.id}-${index2.id}`}
                                             defaultValue={index2.Qty}
@@ -387,9 +493,9 @@ const Invoice = (props) => {
                                         />
                                     </td>
                                     <td data-label='Basic Rate' style={{ textAlign: "right" }}>
-                                        <span id={`stockItemRate-${index1.id}-${index2.id}`}>{_cfunc.amountCommaSeparateFunc(Number(index2.Rate).toFixed(2))}</span>
+                                        <span id={`stockItemRate-${index1.id}-${index2.id}`}>{_cfunc.amountCommaSeparateFunc(index2.Rate)}</span>
                                     </td>
-                                    <td data-label='MRP' style={{ textAlign: "right" }}>{index2.MRP}</td>
+                                    <td data-label='MRP' style={{ textAlign: "right" }}>{_cfunc.amountCommaSeparateFunc(_cfunc.roundToDecimalPlaces(index2.MRP, 2))}</td>
                                 </tr>
                             ))}
                         </tbody>
@@ -400,12 +506,8 @@ const Invoice = (props) => {
         {//***************Discount********************************************************************* */
             text: "Discount/unit",
             dataField: "",
-            attrs: (cell, row, rowIndex, colIndex) => ({ 'data-label': "Discount/unit" }),
+            attrs: () => ({ 'data-label': "Discount/unit" }),
             formatExtraData: {
-                discountValueAll: discountValueAll,
-                discountTypeAll: discountTypeAll,
-                changeAllDiscount: changeAllDiscount,
-                forceReload: forceReload,
                 tableList: orderItemDetails
             },
             headerFormatter: () => {
@@ -426,7 +528,10 @@ const Invoice = (props) => {
                                         defaultValue={discountTypeAll}
                                         classNamePrefix="select2-selection"
                                         options={discountDropOption}
-                                        style={{ textAlign: "right" }}
+                                        // style={{ textAlign: "right",zIndex: 2 }}
+                                        styles={{
+                                            menu: provided => ({ ...provided, zIndex: 55 })
+                                        }}
                                         onChange={(e) => {
                                             setChangeAllDiscount(true);
                                             setDiscountTypeAll(e);
@@ -437,17 +542,17 @@ const Invoice = (props) => {
                                 <div className="col col-6" style={{ width: "100px" }}>
                                     <CInput
                                         type="text"
-                                        className="input"
-                                        style={{ textAlign: "right" }}
+                                        className="right-aligned-placeholder"
                                         cpattern={decimalRegx}
+                                        placeholder="Enter discount value"
                                         value={discountValueAll}
                                         onChange={(e) => {
+                                            e.target.value = e.target.value.replace(/^\.+/, '');
+                                            e.target.value = e.target.value.replace(/^00+/, '0');
                                             let e_val = Number(e.target.value);
 
-                                            // Check if discount type is "percentage"
                                             if (discountTypeAll.value === 2) {// Discount type 2 represents "percentage"
-                                                // Limit the input to the range of 0 to 100
-                                                if (e_val > 100) {
+                                                if (e_val >= 100) { // Limit the input to the range of 0 to 100
                                                     e.target.value = 100; // Set the input value to 100 if it exceeds 100
                                                 } else if (!(e_val >= 0 && e_val < 100)) {
                                                     e.target.value = ""; // Clear the input value if it is less than 0
@@ -467,14 +572,8 @@ const Invoice = (props) => {
 
             classes: () => "invoice-discount-row",
             formatter: (cellContent, index1, key, formatExtraData) => {
-                let { tableList, discountValueAll, discountTypeAll } = formatExtraData;
+                let { tableList } = formatExtraData;
 
-                if (formatExtraData.changeAllDiscount) {
-                    index1.Discount = discountValueAll;
-                    index1.DiscountType = discountTypeAll.value;
-                    innerStockCaculation(index1);
-                    totalAmountCalcuationFunc(tableList);
-                }
                 if (!index1.DiscountType) { index1.DiscountType = discountTypeAll.value }
 
                 const defaultDiscountTypelabel =
@@ -496,7 +595,6 @@ const Invoice = (props) => {
                                         options={discountDropOption}
                                         onChange={(e) => {
                                             setChangeAllDiscount(false);
-                                            setForceReload(!forceReload);
                                             index1.DiscountType = e.value;
                                             index1.Discount = '';
                                             innerStockCaculation(index1);
@@ -513,27 +611,29 @@ const Invoice = (props) => {
                                 </div>
                                 <div className="child">
                                     <CInput
-                                        className="input"
+
                                         id={`Dicount_${key}-${index1.id}`}
-                                        style={{ textAlign: "right" }}
+                                        className="right-aligned-placeholder"
                                         type="text"
+                                        placeholder="Enter discount value"
                                         value={index1.Discount}
                                         cpattern={decimalRegx}
                                         onChange={(e) => {
-
+                                            e.target.value = e.target.value.replace(/^\.+/, '');
+                                            e.target.value = e.target.value.replace(/^00+/, '0');
                                             let e_val = Number(e.target.value);
-                                            // Check if discount type is "percentage"
-                                            if (index1.DiscountType === 2) { // Discount type 2 represents "percentage"
-                                                // Limit the input to the range of 0 to 100
-                                                if (e_val > 100) {
+
+
+                                            if (index1.DiscountType === 2) {// Discount type 2 represents "percentage"
+                                                if (e_val >= 100) { // Limit the input to the range of 0 to 100
                                                     e.target.value = 100; // Set the input value to 100 if it exceeds 100
                                                 } else if (!(e_val >= 0 && e_val < 100)) {
-                                                    e.target.value = ''; // Clear the input value if it is less than 0
+                                                    e.target.value = ""; // Clear the input value if it is less than 0
                                                 }
                                             }
+
                                             index1.Discount = e.target.value;
                                             setChangeAllDiscount(false);
-                                            setForceReload(!forceReload);
                                             innerStockCaculation(index1);
                                             totalAmountCalcuationFunc(tableList);
                                         }}
@@ -543,9 +643,9 @@ const Invoice = (props) => {
                             </div>
                         </div>
                         <div className="bottom-div">
-                            <span>Amount:</span>
-                            <samp id={`itemTotalAmount-${index1.id}`}>
-                                {_cfunc.amountCommaSeparateFunc(Number(index1.itemTotalAmount).toFixed(2))}
+                            <span className="theme-font text-muted">Amount:</span>
+                            <samp className='text-black' id={`item-TotalAmount-${index1.id}`}>
+                                {_cfunc.amountCommaSeparateFunc(index1.ItemTotalAmount)}
                             </samp>
                         </div>
                     </>
@@ -555,14 +655,47 @@ const Invoice = (props) => {
     ];
 
     const totalAmountCalcuationFunc = (tableList = []) => {
+
         const calcalateGrandTotal = settingBaseRoundOffAmountFunc(tableList)
-        //toLocaleString is convert comma saprate Amount
-        let count_label = `${"Total Amount"} :${_cfunc.amountCommaSeparateFunc(Number(calcalateGrandTotal.sumOfGrandTotal).toFixed(2))}`
-        dispatch(BreadcrumbShowCountlabel(count_label))
+        const dataCount = tableList.length;
+        const commaSeparateAmount = _cfunc.amountCommaSeparateFunc(Number(calcalateGrandTotal.sumOfGrandTotal));
+        dispatch(BreadcrumbShowCountlabel(`Count:${dataCount} currency_symbol ${commaSeparateAmount} weight ${(calcalateGrandTotal.sumOfWeightageTotal).toFixed(3)} kg`))
+
     }
+    useEffect(() => {
+        const jsonBody = JSON.stringify({
+            "FromDate": values.InvoiceDate,
+            "PartyID": commonPartyDropSelect.value
+        });
+
+        const jsonBodyForBackdatedTransaction = JSON.stringify({
+            "TransactionDate": values.InvoiceDate,
+            "PartyID": commonPartyDropSelect.value,
+
+        });
+
+        if (commonPartyDropSelect.value > 0) {
+            dispatch(CheckStockEntryForFirstTransaction({ jsonBody }))
+            dispatch(CheckStockEntryforBackDatedTransaction({ jsonBody: jsonBodyForBackdatedTransaction }))
+
+        }
+    }, [values.InvoiceDate, commonPartyDropSelect.value])
+
+
+
+    useEffect(() => {
+        if (StockEnteryForFirstYear.Status === true && StockEnteryForFirstYear.StatusCode === 400) {
+            customAlert({
+                Type: 3,
+                Message: JSON.stringify(StockEnteryForFirstYear.Message),
+            })
+        }
+    }, [StockEnteryForFirstYear])
+
 
     function InvoiceDateOnchange(y, v, e) {
         dispatch(GoButtonForinvoiceAddSuccess([]))
+
         onChangeDate({ e, v, state, setState })
     };
 
@@ -576,44 +709,34 @@ const Invoice = (props) => {
         })
     };
 
-    function goButtonHandler(makeIBInvoice) {
-        const btnId = goBtnId;
-        _cfunc.btnIsDissablefunc({ btnId, state: true })
-
-        try {
-            const jsonBody = JSON.stringify({
-                FromDate: values.InvoiceDate,
-                Customer: makeIBInvoice ? makeIBInvoice.customer.value : values.Customer.value,
-                Party: commonPartyDropSelect.value,
-                OrderIDs: ""
-            });
-            dispatch(GoButtonForinvoiceAdd({ subPageMode, jsonBody, btnId }));
-
-        } catch (e) { _cfunc.btnIsDissablefunc({ btnId, state: false }) }
-    };
 
     const SaveHandler = async (event) => {
 
         event.preventDefault();
-        const btnId = event.target.id
-        const saveAndDownloadPdfMode = btnId.substring(0, 21) === "SaveAndDownloadPdfBtn";
+        const btnId = event.target.id;
+
+        let saveAndDownloadPdfMode = false;
+
+        if (btnId === "") {
+            saveAndDownloadPdfMode = true
+        }
 
         const validMsg = []
         const invoiceItems = []
 
         // IsComparGstIn= compare Supplier and Customer are Same State by GSTIn Number
         let IsComparGstIn = { GSTIn_1: values.Customer.GSTIN, GSTIn_2: _cfunc.loginUserGSTIN() }
-debugger
+
         orderItemDetails.forEach((index) => {
             if (index.StockInValid) {
-                validMsg.push({ [index.ItemName]:` ${index.StockInvalidMsg}.`})
+                validMsg.push({ [index.ItemName]: ` ${index.StockInvalidMsg}.` })
                 return
             };
 
             let isSameMRPinStock = ''; //this is check is Enterd stock Quantity is Same MRP
             index.StockDetails.forEach((ele) => {
 
-                if (Number(ele.Qty) > 0) {
+                if ((Number(ele.Qty) > 0) || (pageMode === mode.edit)) {
 
                     if ((isSameMRPinStock === "") && !(isSameMRPinStock === false)) {//this is check is Enterd stock Quantity is Same MRP
                         isSameMRPinStock = parseFloat(ele.MRP)
@@ -621,7 +744,7 @@ debugger
                         isSameMRPinStock = false
                     }
                     if (!Number(ele.Rate) > 0) {//** */ rate validation check  */
-                        validMsg.push({ [index.ItemName]: " Rate not available." })
+                        validMsg.push({ [index.ItemName]: alertMessages.rateNotAvailable })
                         return
                     };
 
@@ -637,6 +760,8 @@ debugger
                         "BatchDate": ele.BatchDate,
                         "BatchID": ele.id,
                         "BaseUnitQuantity": Number(ele.BaseUnitQuantity).toFixed(3),
+                        "PreviousInvoiceBaseUnitQuantity": Number(ele.BaseUnitQuantity).toFixed(3),
+
                         "LiveBatch": ele.LiveBatche,
                         "MRP": ele.LiveBatcheMRPID,
                         "MRPValue": ele.MRP,//changes
@@ -665,7 +790,7 @@ debugger
             })
 
             if (isSameMRPinStock === false) {
-                validMsg.push({ [index.ItemName]:" Multiple MRP’S Invoice not allowed."})
+                validMsg.push({ [index.ItemName]: alertMessages.multiple_MRP_notAllowed })
                 return
             };
         })
@@ -677,11 +802,18 @@ debugger
             })
             return
         }
+        if (!state.values.Customer?.value > 0) {
+            customAlert({
+                Type: 4,
+                Message: alertMessages.customerIsRequired,
+            })
+            return
+        }
 
         if (!(invoiceItems.length > 0)) {
             customAlert({
                 Type: 4,
-                Message: "Please Enter One Item Quantity",
+                Message: alertMessages.itemQtyIsRequired,
             })
             return
         }
@@ -692,13 +824,13 @@ debugger
         const forInvoice_1_json = () => ({  //** Json Body Generate For Invoice_1  Start+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
             InvoiceDate: values.InvoiceDate,
             InvoiceItems: invoiceItems,
-            InvoicesReferences: orderIDs.map(i => ({ Order: i }))
+            InvoicesReferences: [{ Order: orderIDs }],
         });
 
         const forIB_Invoice_json = async () => ({   //**   Json Body Generate For IB_Invoice  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
             IBChallanDate: values.InvoiceDate,
             IBChallanItems: invoiceItems,
-            IBChallansReferences: await orderIDs.map(i => ({ Demand: i }))
+            IBChallansReferences: [{ Order: orderIDs }],
         });
 
         const for_common_json = () => ({  //**  Json Body Generate Common for Both +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -714,25 +846,29 @@ debugger
         });
 
         try {
+            let jsonBody;  //json body decleration 
+            if (subPageMode === url.INVOICE_1) {
+                const body = { InvoiceData: [{ ...for_common_json(), ...forInvoice_1_json() }] }
+                jsonBody = JSON.stringify(body);
+            } else if (subPageMode === url.IB_INVOICE) {
+                jsonBody = JSON.stringify({ ...for_common_json(), ...forIB_Invoice_json() });
+            }
+            // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+            if (pageMode === mode.edit) {
+                jsonBody = JSON.stringify({ ...for_common_json(), ...forInvoice_1_json() });
+                const config = { updateId: editInvoiceData.editId, subPageMode, jsonBody };
+                dispatch(updateInvoiceAction(config));
+            }
+            else {
 
-            if (formValid(state, setState)) {
-                _cfunc.btnIsDissablefunc({ btnId, state: true })
-                let jsonBody;  //json body decleration 
-                if (subPageMode === url.INVOICE_1) {
-                    jsonBody = JSON.stringify({ ...for_common_json(), ...forInvoice_1_json() });
-                } else if (subPageMode === url.IB_INVOICE) {
-                    jsonBody = JSON.stringify({ ...for_common_json(), ...forIB_Invoice_json() });
-                }
-                // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-                if (pageMode === mode.edit) {
-                    return
-                }
-                else {
+                if (StockEnteryForBackdated.Status === true && StockEnteryForBackdated.StatusCode === 400) {
+                    customAlert({ Type: 3, Message: StockEnteryForBackdated.Message });
+                } else {
                     dispatch(invoiceSaveAction({ subPageMode, jsonBody, btnId, saveAndDownloadPdfMode }));
                 }
             }
-        } catch (e) { _cfunc.CommonConsole("invode save Handler", e) }
 
+        } catch (e) { _cfunc.CommonConsole("invoice save Handler", e) }
     }
 
     if (!(userPageAccessState === '')) {
@@ -816,12 +952,11 @@ debugger
                             </div>
                         </Col>
                         <div className="mb-1">
-                            <CustomTable
+                            <GlobalCustomTable
                                 keyField={"id"}
                                 data={orderItemDetails}
                                 columns={pagesListColumns}
                                 id="table_Arrow"
-                                classes={"table  table-bordered "}
                                 noDataIndication={
                                     <div className="text-danger text-center ">
                                         Items Not available
@@ -832,35 +967,30 @@ debugger
                                 }}
                             />
                         </div>
-                        {
-                            (orderItemDetails.length > 0) ? <div className="row save1" style={{ paddingBottom: 'center' }}>
-                                <Col>
-                                    <SaveButton
-                                        loading={saveBtnloading}
-                                        id={saveBtnid}
+                        {(orderItemDetails.length > 0) &&
+                            <SaveButtonDraggable>
+                                <SaveButton
+                                    loading={saveBtnloading}
+                                    pageMode={pageMode}
+                                    userAcc={userPageAccessState}
+                                    onClick={SaveHandler}
+                                    forceDisabled={saveBtnloading || !StockEnteryForFirstYear.Data}
+                                    module={"Invoice"}
+                                />
+                                {(pageMode === mode.defaultsave) &&
+                                    <SaveAndDownloadPDF
+                                        loading={saveAndPdfBtnLoading}
                                         pageMode={pageMode}
                                         userAcc={userPageAccessState}
                                         onClick={SaveHandler}
-                                        forceDisabled={saveAndPdfBtnLoading}
+                                        forceDisabled={(saveAndPdfBtnLoading) || !(StockEnteryForFirstYear.Data)}
+                                        module={"Invoice"}
                                     />
-                                </Col>
-                                {
-                                    (pageMode === mode.defaultsave) ?
-                                        <Col>
-                                            <SaveAndDownloadPDF
-                                                loading={saveAndPdfBtnLoading}
-                                                pageMode={pageMode}
-                                                id={saveBtnid}
-                                                userAcc={userPageAccessState}
-                                                onClick={SaveHandler}
-                                                forceDisabled={saveBtnloading}
-                                            />
-                                        </Col> : null}
-                            </div>
-                                : <div className="row save1"></div>
+                                }
+                            </SaveButtonDraggable>
                         }
                     </form>
-                </div>
+                </div >
 
             </React.Fragment >
         );

@@ -9,7 +9,7 @@
 }
 
 .item-Sale-card_3 {
-  background-color: rgb(234, 233, 233) !important;
+  background-color: #dfdff1f5 !important;
   border-radius: 5px;
 }
 
@@ -19,5 +19,22 @@
 }
 
 .custom-to-date-col {
-  width: 30%; /* Adjust the width as needed */
+  width: 30%;
+  /* Adjust the width as needed */
+}
+
+
+
+
+
+// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+.ag-grid-container {
+  width: 100%;
+  height: calc(100vh - 200px);
+  /* Adjust the 200px to your desired margin or padding */
+  overflow: auto;
+  /* Add scrollbars if necessary */
 }

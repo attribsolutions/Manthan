@@ -1,15 +1,22 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
-import { date_ymd_func, loginPartyID } from '../../../components/Common/CommonFunction';
+import { globalTableSearchProps } from '../../../components/Common/SearchBox/MySearch';
+import { IsSweetAndSnacksCompany, date_ymd_func, loginPartyID, loginUserDetails } from '../../../components/Common/CommonFunction';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { order_Type } from '../../../components/Common/C-Varialbes';
 import { getOrderListPage, getOrderListPageSuccess } from '../../../store/Purchase/OrderPageRedux/actions';
-import { mySearchProps } from '../../../components/Common/SearchBox/MySearch';
 import { Button, Spinner } from 'reactstrap';
 import { makeGRN_Mode_1Action } from '../../../store/Inventory/GRNRedux/actions';
 import { mode, url } from "../../../routes/index";
+import SimpleBar from "simplebar-react"
+import { printBtnCss } from '../../../components/Common/ListActionsButtons';
+import * as report from '../../../Reports/ReportIndex'
+import { IB_Invoice_Singel_Get_for_Report_Api, Invoice_Singel_Get_for_Report_Api } from '../../../helpers/backend_helper';
+import { getpdfReportdata, invoiceListGoBtnfilter } from '../../../store/actions';
+import C_Report from '../../../components/Common/C_Report';
+
 
 
 export default function InvoiceForGRN() {
@@ -18,32 +25,73 @@ export default function InvoiceForGRN() {
     const history = useHistory();
     const currentDate_ymd = date_ymd_func();
 
-    const { tableList, GRNitem, listBtnLoading, commonPartyDropSelect } = useSelector((state) => ({
-        tableList: state.OrderReducer.orderList,
+    const IsCompanySweetAndSnacks = IsSweetAndSnacksCompany()
+
+    const [userAccState, setUserAccState] = useState('');
+
+
+    const { tableList, GRNitem, listBtnLoading, commonPartyDropSelect, userAccess } = useSelector((state) => ({
+        tableList: IsCompanySweetAndSnacks ? state.InvoiceReducer.Invoicelist : state.OrderReducer.orderList,
         GRNitem: state.GRNReducer.GRNitem,
-        listBtnLoading: state.GRNReducer.listBtnLoading,
+        listBtnLoading: state.GRNReducer.listBtnLoading || state.PdfReportReducers.ReportBtnLoading,
+        userAccess: state.Login.RoleAccessUpdateData,
         commonPartyDropSelect: state.CommonPartyDropdownReducer.commonPartyDropSelect
     }));
 
-
-    const TableListWithNonDeleteRecord = tableList.filter(i => i.IsRecordDeleted === false);
+    let TableListWithNonDeleteRecord = []
+    if (IsCompanySweetAndSnacks) {
+        TableListWithNonDeleteRecord = tableList
+    } else {
+        TableListWithNonDeleteRecord = tableList.filter(i => i.IsRecordDeleted === false);
+    }
 
     // Common Party Dropdown useEffect
+
+
+    useEffect(() => {
+
+        const locationPath = history.location.pathname
+        let userAcc = userAccess.find((inx) => {
+            return (`/${inx.ActualPagePath}` === `/GRN_ADD_3`)
+        })
+
+        if (!(userAcc === undefined)) {
+            setUserAccState(userAcc);
+        }
+    }, [userAccess]);
+
+    const hasRole = (role) => userAccState[role];
+
     useEffect(() => {
 
         if (commonPartyDropSelect.value > 0) {
 
-            let subPageMode = url.GRN_STP_3
-            const gobtnId = `gobtn-${subPageMode}`
-            const filtersBody = JSON.stringify({
-                FromDate: "",
-                ToDate: "",
-                Supplier: "",
-                Customer: commonPartyDropSelect.value,
-                OrderType: order_Type.InvoiceToGRN,
-                IBType: ""
-            });
-            dispatch(getOrderListPage({ subPageMode, filtersBody, btnId: gobtnId }));
+            if (IsCompanySweetAndSnacks) {
+                let subPageMode = url.IB_GRN_LIST
+                const filtersBody = JSON.stringify({
+                    FromDate: currentDate_ymd,
+                    ToDate: currentDate_ymd,
+                    Customer: "",
+                    Party: commonPartyDropSelect.value,
+                    IBType: "IBGRN",
+                    DashBoardMode: 0
+
+                });
+                dispatch(invoiceListGoBtnfilter({ subPageMode, filtersBody }));
+            } else {
+                let subPageMode = url.GRN_STP_3
+                const gobtnId = `gobtn-${subPageMode}`
+                const filtersBody = JSON.stringify({
+                    FromDate: "",
+                    ToDate: "",
+                    Supplier: "",
+                    Customer: commonPartyDropSelect.value,
+                    OrderType: order_Type.InvoiceToGRN,
+                    IBType: "",
+                    Country: loginUserDetails()?.Country_id
+                });
+                dispatch(getOrderListPage({ subPageMode, filtersBody, btnId: gobtnId }));
+            }
         }
         return () => {
             dispatch(getOrderListPageSuccess([]))
@@ -64,32 +112,35 @@ export default function InvoiceForGRN() {
 
         const list = [rowData]
         var isGRNSelect = ''
-        var challanNo = ''
         const grnRef = []
         if (list.length > 0) {
             list.forEach(ele => {
                 grnRef.push({
                     Invoice: ele.id,
                     Order: null,
-                    ChallanNo: ele.FullOrderNumber,
+                    Invoice_NO: ele.FullInvoiceNumber,
                     Inward: true,
-                    Challan: ''
+                    Challan: ele.POType === "Challan" ? ele.id : '',
+                    GRN_From: IsCompanySweetAndSnacks ? url.IB_GRN_LIST : ""
                 });
                 isGRNSelect = isGRNSelect.concat(`${ele.id},`)
-                challanNo = challanNo.concat(`${ele.FullOrderNumber},`)
             });
 
             if (isGRNSelect) {
                 let path = url.GRN_ADD_3
+                if (IsCompanySweetAndSnacks) {
+                    path = url.GRN_ADD_1
+                } else {
+                    path = url.GRN_ADD_3
+                }
                 isGRNSelect = isGRNSelect.replace(/,*$/, '');//****** withoutLastComma  function */
-                challanNo = challanNo.replace(/,*$/, '');           //****** withoutLastComma  function */
 
                 const jsonBody = JSON.stringify({
                     OrderIDs: isGRNSelect,
-                    Mode: 3
+                    Mode: IsCompanySweetAndSnacks ? 4 : 3
                 })
 
-                dispatch(makeGRN_Mode_1Action({ jsonBody, pageMode: mode.modeSTPsave, path: path, grnRef, challanNo, btnId }))
+                dispatch(makeGRN_Mode_1Action({ jsonBody, pageMode: mode.modeSTPsave, path: path, grnRef, btnId, InvoiceDate: rowData.dashboardOrderDate }))
 
             } else {
                 alert("Please Select Order1")
@@ -97,26 +148,43 @@ export default function InvoiceForGRN() {
         }
     }
 
+    function printBtnHandler(rowData, btnId) {
+        let config = {}
+        config["btnId"] = btnId
+        config["editId"] = rowData.id
+        config["ReportType"] = report.invoice;
+
+        if (IsCompanySweetAndSnacks) {
+            dispatch(getpdfReportdata(IB_Invoice_Singel_Get_for_Report_Api, config))
+        } else {
+            dispatch(getpdfReportdata(Invoice_Singel_Get_for_Report_Api, config))
+        }
+    }
+
+
+
     const pagesListColumns = [
         {
-            text: "InvoiceDate",
-            dataField: "dashboardOrderDate",
+            text: "Invoice Date",
+            dataField: IsCompanySweetAndSnacks ? "transactionDateLabel" : "dashboardOrderDate",
+            sort: IsCompanySweetAndSnacks ? true : false
         },
         {
-            text: "InvoiceNo",
-            dataField: "FullOrderNumber",
+            text: "Invoice No",
+            dataField: IsCompanySweetAndSnacks ? "FullInvoiceNumber" : "FullOrderNumber",
         },
         {
             text: "Supplier",
-            dataField: "Supplier",
+            dataField: IsCompanySweetAndSnacks ? "Party" : "Supplier",
         },
         {
-            text: "InvoiceAmount",
-            dataField: "OrderAmount",
+            text: "Invoice Amount",
+            dataField: IsCompanySweetAndSnacks ? "GrandTotal" : "OrderAmount",
             align: "right"
         },
         {
             text: "Action",
+            hidden: !hasRole("RoleAccess_IsSave"),
             dataField: "",
             formatExtraData: { listBtnLoading: listBtnLoading, },
             formatter: (cellContent, rowData, key, formatExtra) => {
@@ -128,17 +196,35 @@ export default function InvoiceForGRN() {
                         id={`btn-makeBtn-${rowData.id}`}
                         className="badge badge-soft-info font-size-12 btn btn-info waves-effect waves-light w-xxs border border-light "
                         title="Make GRN"
-                        disabled={listBtnLoading}
                         onClick={() => {
                             const btnId = `btn-makeBtn-${rowData.id}`
-                            makeBtnHandler(rowData, btnId)
+                            !listBtnLoading && makeBtnHandler(rowData, btnId)
                         }}
                     >
                         {(listBtnLoading === `btn-makeBtn-${rowData.id}`) ?
                             <Spinner style={{ height: "16px", width: "16px" }} color="white" />
                             : <span
-                                style={{ marginLeft: "6px", marginRight: "6px" }}
-                                className=" fas fa-file-invoice"
+                                className=" fas fa-file-invoice font-size-17"
+                            ></span>
+                        }
+                    </Button>
+
+                    < Button
+                        type="button"
+                        id={`btn-print-${rowData.id}`}
+                        className={printBtnCss}
+                        style={{ marginLeft: "9px" }}
+                        title="Print Invoice"
+                        onClick={() => {
+                            const btnId = `btn-print-${rowData.id}`
+                            !listBtnLoading && printBtnHandler(rowData, btnId)
+                        }}
+                    >
+                        {(listBtnLoading === `btn-print-${rowData.id}`) ?
+                            <Spinner style={{ height: "16px", width: "16px" }} color="white" />
+                            : <span
+
+                                className="bx bx-printer font-size-16"
                             ></span>
                         }
                     </Button>
@@ -146,6 +232,10 @@ export default function InvoiceForGRN() {
             }
         },
     ];
+    const defaultSorted = [{
+        dataField: IsCompanySweetAndSnacks ? "transactionDateLabel" : "dashboardOrderDate",
+        order: 'desc'
+    }];
 
     return (
         <ToolkitProvider
@@ -156,11 +246,14 @@ export default function InvoiceForGRN() {
         >
             {toolkitProps => (
                 <React.Fragment>
-                    <div className="table-container">
+                    {/* <div className="table-container"> */}
+                    <SimpleBar className="" style={{ maxHeight: "352px" }}>
+
                         <BootstrapTable
                             keyField={"Invoice"}
                             bordered={true}
                             striped={false}
+                            defaultSorted={defaultSorted}
                             noDataIndication={<div className="text-danger text-center ">Record Not available</div>}
                             classes={"table align-middle table-nowrap table-hover"}
                             headerWrapperClasses={"thead-light"}
@@ -168,11 +261,13 @@ export default function InvoiceForGRN() {
                             {...toolkitProps.baseProps}
 
                         />
-                        {mySearchProps(toolkitProps.searchProps)}
-                    </div>
-
+                        {globalTableSearchProps(toolkitProps.searchProps)}
+                        {/* </div> */}
+                    </SimpleBar >
+                    <C_Report />
                 </React.Fragment>
             )}
+
         </ToolkitProvider>
     )
 }

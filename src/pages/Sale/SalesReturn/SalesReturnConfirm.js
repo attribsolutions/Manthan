@@ -1,24 +1,37 @@
 import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import { Card, CardBody, FormGroup, Input, Modal, Spinner, } from "reactstrap";
-import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
+import { globalTableSearchProps } from "../../../components/Common/SearchBox/MySearch";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { CommonConsole, date_dmy_func, date_ymd_func, loginRoleID, loginSystemSetting, loginUserID, tableInputArrowUpDounFunc } from "../../../components/Common/CommonFunction";
 import { confirm_SalesReturn_Id_Succcess, returnApprove, returnApprove_Success } from "../../../store/actions";
 import { useState } from "react";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
-import { url } from "../../../routes";
+import { mode, url } from "../../../routes";
 import { table_ArrowUseEffect } from "../../../components/Common/CommonUseEffect";
 import { CInput, onlyNumberRegx } from "../../../CustomValidateForm";
+import { C_Button } from "../../../components/Common/CommonButton";
+import Slidewithcaption from "../../../components/Common/CommonImageComponent";
+import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
+import { CheckStockEntryForFirstTransaction, CheckStockEntryforBackDatedTransaction } from "../../../helpers/backend_helper";
+import { ModalCount } from "../../../components/Common/ModalCount";
 
-const ViewDetails_Modal = () => {
+
+const ViewDetails_Modal = (Props) => {
 
     const dispatch = useDispatch();
     const { ReturnFinalApprovalRole = '' } = loginSystemSetting()
 
     const [modal_view, setModal_view] = useState(false);
     const [tableArray, setTableArray] = useState({});
+    const [imageTable, setImageTable] = useState([]);  // Selected Image Array
+    const [modal_backdrop, setmodal_backdrop] = useState(false);   // Image Model open Or not
+
+
+    console.log(tableArray)
+
+
 
     const { viewData_redux = [], ApprovrMsg, saveBtnloading } = useSelector((state) => ({
         viewData_redux: state.SalesReturnReducer.confirmBtnData, // modify Redux State
@@ -26,18 +39,66 @@ const ViewDetails_Modal = () => {
         saveBtnloading: state.SalesReturnReducer.saveBtnloading // modify Redux State
     }))
 
-    useEffect(() => {
-
+    useEffect(async () => {
         try {
+
             if ((viewData_redux.Status === true)) {
                 if (viewData_redux.Data.length > 0) {
+                    const SelectedPartyID = JSON.parse(localStorage.getItem("selectedParty")).value
                     setTableArray(viewData_redux.Data[0])// modify Custom Table Data
-                    setModal_view(true);
-                }
+                    const allowedRoles = ReturnFinalApprovalRole.split(",").map(role => parseInt(role.trim()));
 
+
+                    const jsonBody = JSON.stringify({
+                        "FromDate": viewData_redux.Data[0].ReturnDate,
+                        "PartyID": SelectedPartyID
+                    });
+
+                    const jsonBodyForBackdatedTransaction = JSON.stringify({
+                        "TransactionDate": viewData_redux.Data[0].ReturnDate,
+                        "PartyID": SelectedPartyID,
+                    });
+                    if (SelectedPartyID > 0) {
+                        if (allowedRoles.includes(loginRoleID())) {
+                            return setModal_view(true);
+                        }
+                        if ((viewData_redux.Data[0].viewMode === url.PURCHASE_RETURN_LIST)) {
+                            return setModal_view(true);
+
+                        }
+                        let StockEnteryForTransaction = { Status: false, StatusCode: 200 }
+                        let BackDateresponse = { Status: false, StatusCode: 200 }
+
+                        if (Props.subPageMode !== url.PURCHASE_RETURN_LIST) {
+                            StockEnteryForTransaction = await (CheckStockEntryForFirstTransaction({ jsonBody }))
+                            BackDateresponse = await (CheckStockEntryforBackDatedTransaction({ jsonBody: jsonBodyForBackdatedTransaction }))
+                        }
+
+                        if (StockEnteryForTransaction.Status === true && StockEnteryForTransaction.StatusCode === 400) {
+                            customAlert({
+                                Type: 3,
+                                Message: JSON.stringify(StockEnteryForTransaction.Message),
+                            })
+                            return
+                        } else if (BackDateresponse.Status === true && BackDateresponse.StatusCode === 400) {
+                            customAlert({
+                                Type: 3,
+                                Message: JSON.stringify(BackDateresponse.Message),
+                            })
+                            return
+                        } else if (Props.subPageMode !== url.PURCHASE_RETURN_LIST) {
+                            return setModal_view(true);
+                        }
+                    }
+                }
             }
         } catch (error) { CommonConsole(error) }
+
+
     }, [viewData_redux]);
+
+
+
 
     useEffect(() => {
 
@@ -69,15 +130,22 @@ const ViewDetails_Modal = () => {
     useEffect(() => table_ArrowUseEffect("#table_Arrow"), [viewData_redux]);
 
     function QuantityHandler(event, row,) {
-
         let input = event.target.value
-
         let v1 = Number(row.Quantity);
         let v2 = Number(input)
         if (!(v1 >= v2)) {
             event.target.value = v1;
         }
-        row.ApprovedQuantity = input;
+        row.ApprovedQuantity = event.target.value;
+    }
+
+    const imageShowHandler = async (row) => { // image Show handler
+
+        // customAlert({ Type: 3, Message: "Payment QR not uploaded" });
+
+        setImageTable(row.ReturnItemImages)
+        setmodal_backdrop(true)
+
     }
 
     const pagesListColumns = [
@@ -89,8 +157,6 @@ const ViewDetails_Modal = () => {
                     <div >{`${(row.ItemName)}`}</div>
                 </>
             )
-
-
         },
 
         {
@@ -98,8 +164,9 @@ const ViewDetails_Modal = () => {
             dataField: "primarySource",
             style: { width: "200px" },
             formatter: (value, row, k) => (
+
                 <>
-                    <div  >{`${row.primarySource}`}</div>
+                    <div > {`${row.primarySource}`}</div>
                 </>
             )
 
@@ -119,6 +186,11 @@ const ViewDetails_Modal = () => {
         {
             text: "Basic Rate",
             dataField: "Rate",
+        },
+
+        {
+            text: "MRP",
+            dataField: "MRPValue",
         },
         {
             text: "Batch",
@@ -185,6 +257,32 @@ const ViewDetails_Modal = () => {
                 )
             },
         },
+        {
+            text: "Image",
+            dataField: "",
+            formatter: (value, row, k) => {
+                return (
+                    <div>
+                        <C_Button
+                            type="button"
+                            spinnerColor="white"
+                            className="btn btn-success   "
+                            onClick={(event) => {
+
+                                if ((row.ReturnItemImages) && (row.ReturnItemImages.length === 0)) {
+                                    customAlert({ Type: 3, Message: alertMessages.imageNotUploaded });
+                                    return setmodal_backdrop(false)
+                                } else if ((row.ReturnItemImages) && (row.ReturnItemImages.length > 0)) {
+                                    imageShowHandler(row)
+                                }
+                            }}
+                        >
+                            Show
+                        </C_Button>
+                    </div>
+                )
+            },
+        },
     ];
 
     const SaveHandler = async (event) => {
@@ -193,13 +291,16 @@ const ViewDetails_Modal = () => {
         try {
             const tableItemArray = []
             let inValideUnits = []
+
+
             tableArray.ReturnItems.forEach(index => {
-                
+
                 const approvedQty = index.ApprovedQuantity ? index.ApprovedQuantity : index.Quantity
                 const Comment = index.ApproveComment ? index.ApproveComment : null
 
                 if (index.ApprovedQuantity === "") {
-                    inValideUnits.push({ [`${index.ItemName}`]: `Please Enter Approve Quantity` })
+                    inValideUnits.push({ [`${index.ItemName}`]: alertMessages.approvedQtyIsRequired })
+
                 } else if (Number(approvedQty) >= 0) {
                     const ReturnItems = {
                         "id": index.id,
@@ -248,10 +349,11 @@ const ViewDetails_Modal = () => {
                     tableItemArray.push(ReturnItems)
                 }
             })
-
+            const allZeroQuantity = tableItemArray.every(item => item.ApprovedQuantity === "0");
             const jsonBody = JSON.stringify({
                 "ReturnID": viewData_redux.Data[0].ReturnID,
                 "UserID": loginUserID(),
+                "IsApproved": allZeroQuantity ? 2 : 1,
                 "ReturnItem": tableItemArray
             });
 
@@ -268,18 +370,44 @@ const ViewDetails_Modal = () => {
         } catch (e) { }
     };
 
+    function tog_backdrop() {
+        setmodal_backdrop(!modal_backdrop)
+        removeBodyCss()
+    }
+    function removeBodyCss() {
+        document.body.classList.add("no_padding")
+    }
+
     return (
+
+
         <Modal
             isOpen={modal_view}
             toggle={modalToggleFunc}
             size="xl"
         >
+
+            <Modal
+                isOpen={modal_backdrop}
+                toggle={() => {
+                    tog_backdrop()
+                }}
+
+                style={{ width: "800px", height: "800px", borderRadius: "50%" }}
+                className="modal-dialog-centered "
+
+            >
+                {(imageTable.length > 0) && <Slidewithcaption Images={imageTable} />}
+            </Modal>
+
             <Card>
                 <CardBody className="c_card_body">
                     <div className="modal-body">
                         {tableArray.viewMode === url.PURCHASE_RETURN_LIST ?
                             <h2 className="text-center">Purchase Return Items</h2> :
                             <h2 className="text-center">Sales Return Items</h2>}
+                        <ModalCount Count={tableArray.ReturnItems?.length} />
+
                         <div className="mt-n1">
                             <ToolkitProvider
                                 keyField="id"
@@ -303,7 +431,7 @@ const ViewDetails_Modal = () => {
                                                 {...toolkitProps.baseProps}
 
                                             />
-                                            {mySearchProps(toolkitProps.searchProps)}
+                                            {globalTableSearchProps(toolkitProps.searchProps)}
                                         </div>
 
                                     </React.Fragment>
@@ -332,7 +460,6 @@ const ViewDetails_Modal = () => {
                                             </button>}
                                     </div>
                                 </FormGroup >}
-
                         </div>
                     </div>
                 </CardBody>
@@ -342,3 +469,24 @@ const ViewDetails_Modal = () => {
 
 }
 export default ViewDetails_Modal;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

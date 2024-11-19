@@ -5,11 +5,11 @@ import {
     EDIT_GENERAL_ID,
     POST_GENERAL_LIST,
     UPDATE_GENERAL_ID,
-    POST_TYPE,
+    GENARAL_MASTER_BY_TYPE,
     GENERAL_MASTER_SUB_TYPE
 } from "./actionType";
 import {
-    post_Type_API,
+    genaraMasterBy_Type_API,
     Post_General_API,
     delete_General_List_Api,
     edit_General_List_Api,
@@ -22,7 +22,7 @@ import {
     deleteGeneralIDSuccess,
     editGeneralIDSuccess,
     updateGeneralIDSuccess,
-    PostTypeSuccess,
+    Genaral_Master_By_Type_ActionSuccess,
     PostGenerallistSuccess,
     GeneralMasterSubType_Success
 } from "./action";
@@ -73,10 +73,10 @@ function* Update_General_ID_GenratorFunction({ config }) {
 }
 
 /// Type Dropdown
-function* Post_Type_GenFun({ data }) {
+function* Genaral_Master_by_Type_GenFun({ jsonBody }) {
     try {
-        const response = yield call(post_Type_API, data);
-        yield put(PostTypeSuccess(response.Data));
+        const response = yield call(genaraMasterBy_Type_API, jsonBody);
+        yield put(Genaral_Master_By_Type_ActionSuccess(response.Data));
     } catch (error) { CommonConsole(error) }
 }
 
@@ -93,7 +93,7 @@ function* GeneralSaga() {
     yield takeLatest(DELETE_GENERAL_ID, Delete_General_ID_GenratorFunction)
     yield takeLatest(EDIT_GENERAL_ID, Edit_General_ID_GenratorFunction)
     yield takeLatest(UPDATE_GENERAL_ID, Update_General_ID_GenratorFunction)
-    yield takeLatest(POST_TYPE, Post_Type_GenFun)
+    yield takeLatest(GENARAL_MASTER_BY_TYPE, Genaral_Master_by_Type_GenFun)
     yield takeLatest(GENERAL_MASTER_SUB_TYPE, GeneralMasterSubType_Genfun)
 }
 

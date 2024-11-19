@@ -12,11 +12,13 @@ import { postInvoiceDataExport_API, postInvoiceDataExport_API_Success } from "..
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import Select from "react-select";
-import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
+import { globalTableSearchProps } from "../../components/Common/SearchBox/MySearch";
 import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess } from "../../store/actions";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
 import DynamicColumnHook from "../../components/Common/TableCommonFunc";
-import { ReportComponent } from "../ReportComponent";
+import { alertMessages } from "../../components/Common/CommonErrorMsg/alertMsg";
+import { ExcelReportComponent } from "../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS";
+import { allLabelWithZero } from "../../components/Common/CommonErrorMsg/HarderCodeData";
 
 const InvoiceDataExport = (props) => {
 
@@ -33,7 +35,7 @@ const InvoiceDataExport = (props) => {
     const [subPageMode] = useState(history.location.pathname);
     const [state, setState] = useState(() => initialFiledFunc(fileds))
     const [userPageAccessState, setUserAccState] = useState('');
-    const [PartyDropdown, setPartyDropdown] = useState("");
+    const [PartyDropdown, setPartyDropdown] = useState(allLabelWithZero);
 
     const {
         userAccess,
@@ -45,7 +47,7 @@ const InvoiceDataExport = (props) => {
     } = useSelector((state) => ({
         tableData: state.InvoiceDataExportReducer.InvoiceDataExportGobtn,
         GoBtnLoading: state.InvoiceDataExportReducer.GoBtnLoading,
-        Distributor: state.CommonPartyDropdownReducer.commonPartyDropdown,
+        Distributor: state.CommonPartyDropdownReducer.commonPartyDropdownOption,
         ExcelBtnLoading: state.InvoiceDataExportReducer.ExcelBtnLoading,
         supplier: state.CommonAPI_Reducer.vendorSupplierCustomer,
         userAccess: state.Login.RoleAccessUpdateData,
@@ -72,6 +74,9 @@ const InvoiceDataExport = (props) => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(pageID));
         dispatch(BreadcrumbShowCountlabel(`Count:${0}`));
+        if (_cfunc.CommonPartyDropValue().value > 0) {
+            setPartyDropdown(_cfunc.CommonPartyDropValue())
+        }
         return () => {
             dispatch(commonPageFieldSuccess(null));
         }
@@ -108,9 +113,9 @@ const InvoiceDataExport = (props) => {
                 excelName = "Purchase Data Export"
             }
             if (Data.length > 0) {
-                ReportComponent({      // Download CSV
+                ExcelReportComponent({      // Download CSV
                     pageField,
-                    excelData: Data,
+                    excelTableData: Data,
                     excelFileName: excelName
                 })
                 dispatch(postInvoiceDataExport_API_Success([]));   // Reset Excel Data
@@ -118,14 +123,13 @@ const InvoiceDataExport = (props) => {
         }
     }, [goBtnMode, Data, pageField]);
 
-
     function goButtonHandler(goBtnMode) {
 
         try {
             let jsonBody
 
             if ((isSCMParty) && (PartyDropdown === "")) {
-                customAlert({ Type: 3, Message: "Please Select Party" });
+                customAlert({ Type: 3, Message: alertMessages.commonPartySelectionIsRequired });
                 return;
             };
 
@@ -134,7 +138,10 @@ const InvoiceDataExport = (props) => {
                     "FromDate": values.FromDate,
                     "ToDate": values.ToDate,
                     "Party": 0,
-                    "Customer": (isSCMParty) ? PartyDropdown.value : _cfunc.loginPartyID()
+                    "Customer": (isSCMParty) ? PartyDropdown.value : _cfunc.loginPartyID(),
+                    "Mode": 2,
+                    "Employee": !isSCMParty ? 0 : _cfunc.loginEmployeeID(),
+
                 });
             }
             else {
@@ -142,7 +149,10 @@ const InvoiceDataExport = (props) => {
                     "FromDate": values.FromDate,
                     "ToDate": values.ToDate,
                     "Party": (isSCMParty) ? PartyDropdown.value : _cfunc.loginPartyID(),
-                    "Customer": 0
+                    "Customer": 0,
+                    "Mode": 1,
+                    "Employee": !isSCMParty ? 0 : _cfunc.loginEmployeeID(),
+
                 });
             }
 
@@ -182,19 +192,22 @@ const InvoiceDataExport = (props) => {
         label: i.Name
     }));
 
-
+    Party_Option.unshift({
+        value: 0,
+        label: " All"
+    });
 
     return (
         <React.Fragment>
             <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
             <div className="page-content">
-                <div className="px-2   c_card_filter text-black" >
-                    <div className="row" >
+                <div className="px-2   c_card_filter text-black " >
+                    <Row>
                         <Col sm={3} className="">
-                            <FormGroup className="mb- row mt-3 mb-2 " >
+                            <FormGroup className=" row mt-2  " >
                                 <Label className="col-sm-4 p-2"
                                     style={{ width: "83px" }}>FromDate</Label>
-                                <Col sm="6">
+                                <Col sm="7">
                                     <C_DatePicker
                                         name='FromDate'
                                         value={values.FromDate}
@@ -203,11 +216,12 @@ const InvoiceDataExport = (props) => {
                                 </Col>
                             </FormGroup>
                         </Col>
+
                         <Col sm={3} className="">
-                            <FormGroup className="mb- row mt-3 mb-2" >
+                            <FormGroup className=" row mt-2 " >
                                 <Label className="col-sm-4 p-2"
                                     style={{ width: "65px" }}>ToDate</Label>
-                                <Col sm="6">
+                                <Col sm="7">
                                     <C_DatePicker
                                         name="ToDate"
                                         value={values.ToDate}
@@ -218,8 +232,8 @@ const InvoiceDataExport = (props) => {
                         </Col>
 
                         {isSCMParty &&
-                            <Col sm={3} className="">
-                                <FormGroup className="mb- row mt-3" >
+                            <Col sm={4} className="">
+                                <FormGroup className=" row mt-2" >
                                     <Label className="col-sm-4 p-2"
                                         style={{ width: "65px", marginRight: "20px" }}>Party</Label>
                                     <Col sm="8">
@@ -239,34 +253,50 @@ const InvoiceDataExport = (props) => {
                                 </FormGroup>
                             </Col>
                         }
-                        <Col sm={1} className="mt-3 ">
+                        <Col sm={isSCMParty ? 2 : 6} className=" d-flex justify-content-end" >
                             <C_Button
                                 type="button"
                                 spinnerColor="white"
                                 loading={GoBtnLoading === "showOnTable"}
-                                className="btn btn-success"
+                                className="btn btn-success m-3 mr"
                                 onClick={() => goButtonHandler("showOnTable")}
                             >
                                 Show
                             </C_Button>
-
-                        </Col>
-
-                        <Col sm={2} className="mt-3 ">
                             <C_Button
                                 type="button"
                                 spinnerColor="white"
                                 loading={ExcelBtnLoading === "downloadExcel"}
-                                className="btn btn-primary"
+                                className="btn btn-primary m-3 mr"
                                 onClick={() => goButtonHandler("downloadExcel")}
                             >
-                                Excel Download
+                                Excel
                             </C_Button>
                         </Col>
-
-
-                    </div>
+                    </Row>
                 </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
                 <div className="mt-1">
                     <ToolkitProvider
@@ -293,7 +323,7 @@ const InvoiceDataExport = (props) => {
                                                 }}
                                                 {...toolkitProps.baseProps}
                                             />
-                                            {mySearchProps(toolkitProps.searchProps)}
+                                            {globalTableSearchProps(toolkitProps.searchProps)}
                                         </div>
                                     </Col>
                                 </Row>

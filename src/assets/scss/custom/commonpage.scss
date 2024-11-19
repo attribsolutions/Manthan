@@ -148,10 +148,9 @@
 
 
 .c_card_body {
-  // rgb(225 225 237)
-  // background-color:rgb(237, 237, 242) !important ;
-  background-color: whitesmoke !important;
+  background-color: #7a51e311;
   border-radius: 5px;
+  padding: 10px;
 }
 
 .c_card_header {
@@ -161,8 +160,17 @@
 
 
 .c_card_filter {
-  background-color: rgb(218, 218, 219) !important;
+  background-color: #c2c2dbf5 !important;
   border-radius: 5px;
+  margin-bottom: 6px;
+  box-shadow: 2px 3px 3px 0px darkgray;
+}
+
+.c_card_filter-2 {
+  background-color: #8b7fa952;
+  border-radius: 5px;
+  padding: 10px;
+  box-shadow: 2px 3px 3px 0px darkgray;
 }
 
 
@@ -308,19 +316,114 @@
 .sliding-text {
   display: inline-block;
   white-space: nowrap;
-  animation: slide 15s linear infinite;
+  animation: slideRightToLeft 20s linear infinite;
   transform: translateX(0);
   /* Initially centered */
 }
 
-@keyframes slide {
+@keyframes slideRightToLeft {
   0% {
-    transform: translateX(0);
-    /* Start from centered position */
+    transform: translateX(200%);
+    /* Start off-screen to the right */
   }
 
   100% {
-    transform: translateX(250%);
-    /* Slide to the left */
+    transform: translateX(-100%);
+    /* Move to off-screen to the left */
   }
+}
+
+.labelHover:hover {
+  color: $primary;
+  text-decoration: underline;
+
+}
+
+.c_labelHover {
+  color: $primary;
+  text-decoration: underline;
+}
+
+
+
+
+
+
+
+
+.container {
+  width: 75%;
+  margin: 0 auto;
+  font-family: sans-serif;
+}
+
+
+// .text-red {
+//   color: rgb(229, 255, 0);
+// }
+
+.blink-hard {
+  animation: blinker 1.5s step-end infinite;
+}
+
+.blink-soft {
+  animation: blinker 1.0s linear infinite;
+}
+
+@keyframes blinker {
+  60% {
+    opacity: 0;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+.group-span,
+.subgroup-span {
+  background: #cacaebf5;
+  padding: 1px 10px;
+  border-radius: 13px;
+  box-shadow: rgba(0, 0, 0, 0.2) 0px 1px 6px;
+  position: relative;
+  display: inline-block;
+  margin-right: 30px;
+  margin-top: 5px;
+}
+
+.group-span {
+  padding: 1px 10px;
+  white-space: nowrap;
+  display: inline-block;
+}
+
+.subgroup-span {
+  font-size: 13px;
+  white-space: nowrap;
+  display: inline-block;
+}
+
+.group-arrow,
+.subgroup-arrow {
+  content: '';
+  position: absolute;
+  right: -12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  border-left: 15px solid #cacaebf5;
+}
+
+.group-text,
+.subgroup-text {
+  color: black;
 }

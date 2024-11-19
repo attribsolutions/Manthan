@@ -4,10 +4,13 @@ import * as  apiCall from "../../../helpers/backend_helper";
 import * as actionType from "./actionType";
 import * as action from "./action";
 
-function* Get_Items_GenFunc() {
-  const filters = JSON.stringify(loginJsonBody());
+function* Get_Items_GenFunc({ jsonBody }) {
+  debugger
+  const filters = JSON.stringify(jsonBody ? jsonBody : { ...loginJsonBody(), IsBOM: 0 });
   try {
+
     const response = yield call(apiCall.Items_Filter_API, filters);
+
     yield put(action.getItemListSuccess(response.Data))
   } catch (error) {
     yield put(action.ItemsApiErrorAction());
@@ -169,6 +172,16 @@ function* Category_DropDown_API_GenFunc({ id }) {
   }
 }
 
+function* Item_Image_Upload_GenFun({ config }) {
+  try {
+    const response = yield call(apiCall.ItemImageUpload, config);
+    if (config.Delete === "Delete") {
+      response["Delete"] = true
+    }
+    yield put(action.Item_Image_Upload_Success(response));
+  } catch (error) { yield put(action.ItemsApiErrorAction()) }
+}
+
 function* ItemsMastersSaga() {
   yield takeLatest(actionType.GET_ITEM_LIST_API, Get_Items_GenFunc);
   yield takeLatest(actionType.GET_ITEM_GROUP_FOR_DROPDOWN, Items_Group_GenFunc);
@@ -187,6 +200,10 @@ function* ItemsMastersSaga() {
   yield takeLatest(actionType.GET_SUB_GROUP_BY_GROUP_FOR_DROPDOWN, SubGroup_DropDown_GenFunc);
   yield takeLatest(actionType.GET_CATEGORY_BY_CATEGORYTYPE_FOR_DROPDOWN_API, Category_DropDown_API_GenFunc);
   yield takeLatest(actionType.GET_ITEMTAG_API, Item_tagname_GenFunc);
+
+  yield takeLatest(actionType.ITEM_IMAGE_UPLOAD, Item_Image_Upload_GenFun);
+
+
 }
 
 export default ItemsMastersSaga;

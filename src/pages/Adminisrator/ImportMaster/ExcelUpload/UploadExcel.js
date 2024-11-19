@@ -31,6 +31,7 @@ import {
     ExcelUpload_save_action_Success
 } from "../../../../store/Administrator/ImportMasterMapRedux/action";
 import './scss.scss'
+import { alertMessages } from "../../../../components/Common/CommonErrorMsg/alertMsg";
 
 
 const UploadExcel = (props) => {
@@ -141,7 +142,8 @@ const UploadExcel = (props) => {
         let partyId = ((commonFunc.loginIsSCMCompany() === 1)) ? commonFunc.loginPartyID() : e.value;
         const jsonBody = JSON.stringify({
             PartyID: partyId,
-            CompanyID: commonFunc.loginCompanyID()
+            CompanyID: commonFunc.loginCompanyID(),
+            IsFieldType:1// type 1 is all Invoices fields
         })
         dispatch(GoButton_ImportFiledMap_Add({ jsonBody }))
     };
@@ -153,7 +155,7 @@ const UploadExcel = (props) => {
         if (files.length == 0) {
             customAlert({
                 Type: 3,
-                Message: "Please choose any file...",
+                Message: alertMessages.chooseAnyFile,
             })
             return;
         }
@@ -182,7 +184,7 @@ const UploadExcel = (props) => {
         } else {
             customAlert({
                 Type: 3,
-                Message: "Please select a valid excel file.",
+                Message:alertMessages.selectValidExcelFile,
             })
         }
     }
@@ -192,7 +194,7 @@ const UploadExcel = (props) => {
         if (selectedFiles.length > 0) {
             const isConfirmed = await customAlert({
                 Type: 8,
-                Message: "Do you confirm your choice?",
+                Message: alertMessages.doYouConfirmChoice,
             });
             if (!isConfirmed) {
                 return
@@ -296,7 +298,6 @@ const UploadExcel = (props) => {
             outerArr.push({ ...parentObj, InvoiceItems: invoiceItems })
         });
 
-        console.log('Upload data', outerArr)
         const jsonBody = JSON.stringify({ "BulkData": outerArr })
         dispatch(ExcelUpload_save_action({ jsonBody, }));
     };

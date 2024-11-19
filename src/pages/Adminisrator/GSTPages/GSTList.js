@@ -14,6 +14,11 @@ import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import GSTMaster from "./GSTMaster";
 import { deleteGSTListId, deleteGSTListId_Success, getGSTList, goButtonForGST_Master_Success } from "../../../store/Administrator/GSTRedux/action";
 import { PageLoadingSpinner, Listloader } from "../../../components/Common/CommonButton";
+import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
+import GSTView from "./GSTView";
+import { Col, FormGroup, Label } from "reactstrap";
+import { C_DatePicker } from "../../../CustomValidateForm";
+import { Go_Button } from "../../../components/Common/CommonButton";
 
 const GSTList = () => {
 
@@ -23,6 +28,8 @@ const GSTList = () => {
 
   const [pageMode, setpageMode] = useState(mode.defaultsave)
   const [userAccState, setUserAccState] = useState('');
+  const [hederFilters, setHederFilters] = useState({ fromdate: _cfunc.currentDate_ymd, todate: _cfunc.currentDate_ymd })
+  const { fromdate, todate, } = hederFilters;
 
   const reducers = useSelector(
     (state) => ({
@@ -50,8 +57,7 @@ const GSTList = () => {
     setpageMode(hasPagePath)
     dispatch(commonPageFieldListSuccess(null))
     dispatch(commonPageFieldList(page_Id))
-    // dispatch(BreadcrumbShowCountlabel(`${"GST Count"} :0`))
-    dispatch(getGSTList())
+    goButtonHandler()
     return () => {
       dispatch(_act.getGSTListSuccess([]));
     }
@@ -71,7 +77,7 @@ const GSTList = () => {
 
     if (deleteMsg.Status === true && deleteMsg.StatusCode === 200) {
       dispatch(deleteGSTListId_Success([]))
-      dispatch(getGSTList())
+      goButtonHandler()
     }
   }, [deleteMsg]);
 
@@ -86,6 +92,17 @@ const GSTList = () => {
       })
     }
   }, [GSTGoButton]);
+
+  function viewApprovalBtnFunc(config) {
+
+    const jsonBody = JSON.stringify({
+      "EffectiveDate": config.rowData.EffectiveDate,
+      "CommonID": config.rowData.CommonID,
+
+    })
+    dispatch(_act.postViewGst({ jsonBody, btnId: `btn-viewApproval-${config.rowData.id}` }));
+
+  }
 
   function editBodyfunc(index) {
 
@@ -109,7 +126,7 @@ const GSTList = () => {
     if (rowData.CommonID) {
       const rep = await customAlert({
         Type: 8,
-        Message: `Are you sure you want to delete this ${"EffectiveDate"}: "${rowData.EffectiveDate}"`,
+        Message: `${alertMessages.deleteOrNot} ${"EffectiveDate"}: "${rowData.EffectiveDate}"`,
       })
       if (rep) {
         _cfunc.btnIsDissablefunc({ btnId, state: true })
@@ -120,6 +137,80 @@ const GSTList = () => {
         catch (error) { _cfunc.btnIsDissablefunc({ btnId, state: false }) }
       }
     }
+  }
+
+  function fromdateOnchange(e, date) {
+    let newObj = { ...hederFilters }
+    newObj.fromdate = date
+    setHederFilters(newObj)
+  }
+
+  function todateOnchange(e, date) {
+    let newObj = { ...hederFilters }
+    newObj.todate = date
+    setHederFilters(newObj)
+  }
+
+  const goButtonHandler = () => {
+    const jsonBody = JSON.stringify({
+      FromDate: fromdate,
+      ToDate: todate,
+    });
+    dispatch(getGSTList({ jsonBody }));
+  };
+
+  const HeaderContent = () => {
+
+    return (
+      <div className="px-2   c_card_filter text-black" >
+        <div className="row" >
+          <Col sm="3" className="">
+            <FormGroup className="mb-2 row mt-3 " >
+              <Label className="col-sm-5 p-2"
+                style={{ width: "83px" }}>FromDate</Label>
+              <Col sm="7">
+                <C_DatePicker
+                  name='FromDate'
+                  value={fromdate}
+                  onChange={fromdateOnchange}
+                />
+              </Col>
+            </FormGroup>
+          </Col>
+
+          <Col sm="3" className="">
+            <FormGroup className="mb-2 row mt-3 " >
+              <Label className="col-sm-5 p-2"
+                style={{ width: "65px" }}>ToDate</Label>
+              <Col sm="7">
+                <C_DatePicker
+
+                  options={{
+                    minDate: (_cfunc.disablePriviousTodate({ fromDate: fromdate })),
+                    maxDate: "today",
+                    altInput: true,
+                    altFormat: "d-m-Y",
+                    dateFormat: "Y-m-d",
+                  }}
+                  value={_cfunc.ToDate({ FromDate: fromdate, Todate: todate })}
+                  name="ToDate"
+                  onChange={todateOnchange}
+                />
+              </Col>
+            </FormGroup>
+          </Col>
+
+          <Col sm="5" ></Col>
+
+          <Col sm="1" className="mt-3 mb-2 ">
+            <Go_Button
+              loading={GoBtnlistloading}
+              onClick={goButtonHandler}
+            />
+          </Col>
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -136,15 +227,19 @@ const GSTList = () => {
             MasterModal={GSTMaster}
             masterPath={url.GST}
             newBtnPath={url.GST}
+            HeaderContent={HeaderContent}
             ButtonMsgLable={"GST"}
             deleteName={"EffectiveDate"}
             pageMode={pageMode}
             editBodyfunc={editBodyfunc}
+            viewApprovalBtnFunc={viewApprovalBtnFunc}
             deleteBodyfunc={deleteBodyfunc}
           />
 
         }
       </div>
+      <GSTView />
+
     </React.Fragment>
   )
 }

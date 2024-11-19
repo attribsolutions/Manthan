@@ -1,46 +1,70 @@
-import { Input } from "reactstrap"
+
+import { Col, Input, Row } from "reactstrap"
 import { useState } from "react";
 import { useEffect } from "react";
 
 
-const onSelectAll = (event, allarray,) => {
-
-  allarray.forEach(ele => {
+export const onSelectAll = ({ event, allarray, nonSelectable }) => {  // event only call After all selection 
+  allarray.forEach((ele,) => {
+    ele.forceSelectDissabled = nonSelectable.includes(ele.id)
     ele.selectCheck = event
+    ele["hasAllSelect"] = event
   })
+
 }
 
-const selectRow = (row, event) => {
-
+export const selectRow = (row, event) => {
   row.selectCheck = event
 }
+
 export const selectAllCheck = ({
   rowSelected = '',
   nonSelectable = '',
   position,
   headLabel,
   bgColor = "#9dadf09e",
-  disabledWithMsg = ''
+  disabledWithMsg = '',
+  tableList = [],
+  pageloading = false
+
 }) => ({
+
 
   mode: "checkbox",
   bgColor: bgColor,
-  onSelectAll: onSelectAll,
+  onSelectAll: (event) => onSelectAll({ event: event, allarray: tableList, nonSelectable }),
   onSelect: selectRow,
   selected: rowSelected,
   selectColumnPosition: position ? position : "right",
-  nonSelectable: nonSelectable,
+  nonSelectable: pageloading ? tableList.map(row => row.id) : nonSelectable,
   attrs: () => ({ 'data-label': "Select" }),
 
   selectionHeaderRenderer: (head) => {
 
+    if (tableList.length > 0) {
+      let isAllcheck = tableList.filter(i => (i.hasAllSelect))
+      let ischeck = tableList.filter(i => (i.selectCheck))
+      if (isAllcheck.length > 0 && ischeck.length > 0 && isAllcheck.length === ischeck.length) {
+        head.checked = true
+      }
+    }
     return <div className="">
       <Input type="checkbox" checked={head.checked} />
-      <label style={{ paddingLeft: "7px" }}>{headLabel ? headLabel : "SelectAll"}</label>
+      {/*  marginBottom: 0  added because in common  them css margin have change affected here so to fix extra margin */}
+      <label style={{ paddingLeft: "7px", marginBottom: 0 }}>{headLabel ? headLabel : "SelectAll"}</label>
     </div>
   },
   selectionRenderer: ({ mode, checked, ...rest }) => {
+
+    if (tableList.length > 0) {
+      let isAllcheck = tableList.filter(i => (i.hasAllSelect))
+      let ischeck = tableList.filter(i => (i.selectCheck))
+      if (isAllcheck.length > 0 && ischeck.length > 0 && isAllcheck.length === ischeck.length) {
+        checked = rest.disabled ? false : true
+      }
+    }
     if (rest.disabled) {
+
       return <>
         <Input
           type="checkbox"
@@ -55,11 +79,52 @@ export const selectAllCheck = ({
         &nbsp;&nbsp; <samp className="text-danger">{disabledWithMsg}</samp>
       </>;
     }
-    return <Input type="checkbox" checked={checked}  {...rest} />
+    return <Input id="CheckBox_id" type="checkbox" checked={checked}  {...rest} />
 
   }
 
 })
+
+const LABEL_COLORS = {
+  "Invoice Created": "green_label",
+  "Order Confirm": "yellow_label",
+  "Open": "blue_lable",
+  "Send To Supplier": "indigo_label",
+  "Approved": "green_label",
+  "Order send To SAP": "indigo_label",
+  "Reject": "red_label",
+  "Partially Completed": "darkOrange_label",
+  "Completed": "green_label",
+  "Close": "red_label",
+};
+
+
+const listColomnformatter = (cell, row, pagefield) => {
+
+  if (LABEL_COLORS[cell]) {
+    return (
+      <span className={`label  ${LABEL_COLORS[cell]}`} >
+        {cell}
+      </span>
+    );
+  }
+
+  if (pagefield.ControlID === "transactionDate") {
+    return <>{row.transactionDateLabel}</>;
+  }
+
+  if (cell === "Party" && row.Mode) {
+    const statusMap = { 1: "(Sale Return)", 2: "(Purchase Return)", 3: "(Send To Supplier)" };
+    return (
+      <>
+        <div>{`${row.Party}`}</div>
+        <div>{statusMap[row.Mode] || ""}</div>
+      </>
+    );
+  }
+
+  return <>{typeof cell === "boolean" ? String(cell) : cell}</>;
+};
 
 const DynamicColumnHook = ({
   reducers = "",
@@ -102,122 +167,9 @@ const DynamicColumnHook = ({
           dataField: i.ControlID,
           hidden: false,
           sort: true,
-          // key: `column-${k}`,
-          // classes: "table-cursor-pointer",
           align: i.Alignment || null,
           attrs: (cell, row, rowIndex, colIndex) => ({ 'data-label': i.FieldLabel, "sticky-col": (colIndex === 0) ? "true" : "false" }),
-
-          formatter: (cell, row) => {
-            if (i.ControlID === "transactionDate") {
-              return (
-                <>
-                  {row.transactionDateLabel}
-                </>
-              )
-            }
-            if (cell === "Invoice Created") {
-              return (
-                <span
-                  className="label label-"
-                  style={{
-                    backgroundColor: "#b6efdcf7",
-                    color: "#0e0d0d",
-                    fontSize: "12px",
-                    padding: "2px 4px 2px 4px",
-                    borderRadius: "5px",
-                  }}
-                >
-                  {cell}
-                </span>
-              );
-            }
-            if (cell === "Order Confirm") {
-              return (
-                <span
-                  className="label label"
-                  style={{
-                    backgroundColor: "#f7dfb6",
-                    color: "#0e0d0d",
-                    fontSize: "12px",
-                    padding: "2px 4px 2px 4px",
-                    borderRadius: "5px",
-                  }}
-                >
-                  {cell}
-                </span>
-              );
-            }
-            if (cell === "Open") {
-              return (
-                <span
-                  className="label label"
-                  style={{
-                    backgroundColor: "#c3bfc7a6",
-                    color: "#0e0d0d",
-                    fontSize: "12px",
-                    padding: "2px 4px 2px 4px",
-                    borderRadius: "5px",
-                  }}
-                >
-                  {cell}
-                </span>
-              );
-            }
-            if (cell === "Send To Supplier") {
-              return (
-                <span
-                  className="label label-"
-                  style={{
-                    backgroundColor: "#b6efdcf7",
-                    color: "#0e0d0d",
-                    fontSize: "12px",
-                    padding: "2px 4px 2px 4px",
-                    borderRadius: "5px",
-                  }}
-                >
-                  {cell}
-                </span>
-              );
-            }
-            if (cell === "Approved") {
-              return (
-                <span
-                  className="label label"
-                  style={{
-                    backgroundColor: "#f7dfb6",
-                    color: "#0e0d0d",
-                    fontSize: "12px",
-                    padding: "2px 4px 2px 4px",
-                    borderRadius: "5px",
-                  }}
-                >
-                  {cell}
-                </span>
-              );
-            }
-
-            if (i.ControlID === "Party" && row.Mode) {
-
-              let Staus = ""
-              if (row.Mode === 1) {
-                Staus = `(Sale Return)`
-              } else if (row.Mode === 2) {
-                Staus = `(Purchase Return)`
-              } else if (row.Mode === 3) {
-                Staus = `(Send To Supplier)`
-              }
-              return (
-                <>
-                  <div >{`${row.Party}`}</div>
-                  <div >{`${Staus}`}</div>
-                </>
-              );
-            }
-
-
-            return <>
-              {typeof cell === "boolean" ? String(cell) : cell}</>;
-          },
+          formatter: (cell, row) => listColomnformatter(cell, row, i)
         };
 
         columns.push(column);
@@ -276,3 +228,68 @@ const DynamicColumnHook = ({
 };
 
 export default DynamicColumnHook
+
+
+
+
+
+export const GroupSubgroupDisplay = ({ group, subgroup }) => {
+  return (
+    <Row className="align-items-center">
+      <Col sm={6} className="mt-n2 mb-n1 d-flex justify-content-between">
+        {/* Group Span */}
+        <span className="group-span d-flex align-items-center">
+          <span className="group-text">Group</span> ({group})
+          <span className="group-arrow"></span>
+        </span>
+        {/* SubGroup Span */}
+        <span className="subgroup-span d-flex align-items-center">
+          <span className="subgroup-text">Sub Group</span> ({subgroup})
+          <span className="subgroup-arrow"></span>
+        </span>
+      </Col>
+    </Row>
+  );
+};
+
+
+
+export const ModifyTableData_func = (data) => {
+  const result = [];
+  const subGroups = {}; // Store a concatenated string of ItemNames for each subgroup
+  let previousSubGroup = undefined;
+
+  data.forEach(item => {
+    // Check if the current item's subgroup is different from the previous one
+    if (item.SubGroupName !== previousSubGroup) {
+      // Initialize the concatenated string for the subgroup
+      if (!subGroups[item.SubGroupName]) {
+        subGroups[item.SubGroupName] = "";
+      }
+      // Push a subgroup row into the result array
+      result.push({
+        id: `${item.id}-${item.SubGroupName}`,
+        SubGroupRow: true,
+        SubGroupName: item.SubGroupName,
+        Group_Subgroup: `${item.GroupName}-${item.SubGroupName}`,
+      });
+      previousSubGroup = item.SubGroupName;
+    }
+
+    // Modify the ItemName to include subgroup and group names
+    item.ItemName = `${item.ItemName}-${item.SubGroupName} ${item.GroupName}`;
+    result.push(item);
+
+    // Concatenate the ItemName to the appropriate subgroup string
+    subGroups[item.SubGroupName] += `${item.ItemName}, `;
+  });
+
+  // Update the result array where SubGroupRow is true with the concatenated ItemNames
+  result.forEach(row => {
+    if (row.SubGroupRow) {
+      row.ItemName = subGroups[row.SubGroupName].slice(0, -2); // Remove the trailing ", "
+    }
+  });
+  return result;
+}
+

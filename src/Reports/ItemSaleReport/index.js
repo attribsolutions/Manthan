@@ -7,10 +7,12 @@ import ShowTable from "./showTable";
 const ItemSaleReport = () => {
 
     return (
-        <ContextDataProvider>
-            <HeaderSection />
-            <ShowTable />
-        </ContextDataProvider>
+        <div className="page-content " style={{ paddingBottom: "10vh" }}>
+            <ContextDataProvider>
+                <HeaderSection />
+                <ShowTable />
+            </ContextDataProvider>
+        </div >
     )
 }
 

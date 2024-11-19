@@ -11,11 +11,7 @@ import {
     Row
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
-import {
-    Breadcrumb_inputName,
-    commonPageField,
-    commonPageFieldSuccess,
-} from "../../../store/actions";
+import { Breadcrumb_inputName,   commonPageField, commonPageFieldSuccess,} from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import {
@@ -82,10 +78,9 @@ const BankMaster = (props) => {
         dispatch(commonPageField(page_Id))
     }, []);
 
-
     const values = { ...state.values }
     const { isError } = state;
-    const { fieldLabel } = state;
+
 
     const location = { ...history.location }
     const hasShowloction = location.hasOwnProperty(mode.editValue)//changes
@@ -198,7 +193,6 @@ const BankMaster = (props) => {
         }
     }, [pageField])
 
-
     const saveHandeller = async (event) => {
         event.preventDefault();
         const btnId = event.target.id
@@ -224,15 +218,15 @@ const BankMaster = (props) => {
     };
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
-    var IsEditMode_Css = ''
-    if ((modalCss) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
+    // var IsEditMode_Css = ''
+    // if ((modalCss) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
 
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
                 <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
 
-                <div className="page-content" style={{ marginTop: IsEditMode_Css, }}>
+                <div className="page-content">
                     <Container fluid>
                         <Card className="text-black">
                             <CardHeader className="card-header   text-black c_card_header" >

@@ -1,5 +1,5 @@
 import {
-    DELETE_INVOICE_LIST_PAGE_SUCCESS, EDIT_INVOICE_LIST_SUCCESS, INVOICE_LIST_GO_BUTTON_FILTER_SUCCESS,
+    DELETE_INVOICE_LIST_PAGE_SUCCESS, EDIT_INVOICE_ACTION_SUCCESS, INVOICE_LIST_GO_BUTTON_FILTER_SUCCESS,
     GO_BUTTON_FOR_INVOICE_ADD_SUCCESS,
     INVOICE_SAVE_ADD_PAGE_ACTION_SUCCESS,
     MAKE_IB_INVOICE_ACTION_SUCCESS,
@@ -18,13 +18,20 @@ import {
     UPLOADED_E_WAY_BILL_ACTION,
     UPDATE_VEHICLE_INVOICE_SUCCESS,
     INVOICE_SEND_TO_SCM_ACTION,
-    INVOICE_SEND_TO_SCM_ACTION_SUCCESS
+    INVOICE_SEND_TO_SCM_ACTION_SUCCESS,
+    EDIT_INVOICE_ACTION,
+    UPDATE_INVOICE_ACTION,
+    UPDATE_INVOICE_ACTION_SUCCESS,
+    INVOICE_BULK_DELETE_IDS_ACTION,
+    INVOICE_BULK_DELETE_IDS_SUCCESS,
+    UPDATE_VEHICLE_CUSTOMER_INVOICE_ACTION_SUCCESS
 } from "./actionType"
 
 const INIT_STATE = {
     gobutton_Add: { Status: false },
     makeIBInvoice: { Status: false },
     postMsg: { Status: false },
+    updateMsg: { Status: false },
     editData: { Status: false },
     Invoicelist: [],
     deleteMsg: { Status: false },
@@ -33,11 +40,14 @@ const INIT_STATE = {
     Cancel_EInvoice: { Status: false },
     Cancel_EwayBill: { Status: false },
     Update_Vehicle_Invoice: [],
+    Update_Vehicle_Customer_Invoice:[],
+    invoiceBulkDelete: { Status: false },
 
     listBtnLoading: false,
     saveAndPdfBtnLoading: false,
     saveBtnloading: false,
     goBtnloading: false,
+    invoiceBulkDeleteLoading: false,
 
     sendToScmMsg: { Status: false }
 }
@@ -106,13 +116,34 @@ const InvoiceReducer = (state = INIT_STATE, action) => {
             }
         /**************************************** */
 
-
-        case EDIT_INVOICE_LIST_SUCCESS:
+        case EDIT_INVOICE_ACTION:
             return {
                 ...state,
                 listBtnLoading: action.config.btnId,
+            }
+
+        case EDIT_INVOICE_ACTION_SUCCESS:
+            return {
+                ...state,
+                listBtnLoading: false,
                 editData: action.payload,
             }
+        /**************************************** */
+        case UPDATE_INVOICE_ACTION:
+            // let { saveAndDownloadPdfMode = false } = action.config
+            return {
+                ...state,
+                saveBtnloading: true,
+
+            }
+        case UPDATE_INVOICE_ACTION_SUCCESS:
+            return {
+                ...state,
+                saveBtnloading: false,
+                updateMsg: action.payload,
+            }
+        /**************************************** */
+
         case DELETE_INVOICE_LIST_PAGE_SUCCESS:
             return {
                 ...state,
@@ -123,13 +154,13 @@ const InvoiceReducer = (state = INIT_STATE, action) => {
         case MAKE_IB_INVOICE_ACTION:
             return {
                 ...state,
-                listBtnLoading: action.config.btnId,
+                listBtnLoading: true,
             }
         case MAKE_IB_INVOICE_ACTION_SUCCESS:
             return {
                 ...state,
-                listBtnLoading: false,
                 makeIBInvoice: action.payload,
+                listBtnLoading: false,
             }
         /**************************************** */
 
@@ -187,8 +218,30 @@ const InvoiceReducer = (state = INIT_STATE, action) => {
                 ...state,
                 Update_Vehicle_Invoice: action.payload,
             }
+
         /**************************************** */
 
+        case UPDATE_VEHICLE_CUSTOMER_INVOICE_ACTION_SUCCESS:
+            return {
+                ...state,
+                Update_Vehicle_Customer_Invoice: action.payload,
+            }
+        /**************************************** */
+
+        case INVOICE_BULK_DELETE_IDS_ACTION:
+            return {
+                ...state,
+                invoiceBulkDeleteLoading: action.config.btnId,
+
+            }
+
+        case INVOICE_BULK_DELETE_IDS_SUCCESS:
+            return {
+                ...state,
+                invoiceBulkDeleteLoading: false,
+                invoiceBulkDelete: action.payload,
+
+            }
         case INVOICE_API_ERROR_ACTION:
             return {
                 ...state,
@@ -196,6 +249,7 @@ const InvoiceReducer = (state = INIT_STATE, action) => {
                 goBtnloading: false,
                 saveBtnloading: false,
                 saveAndPdfBtnLoading: false,
+                invoiceBulkDeleteLoading: false,
             }
 
         default:

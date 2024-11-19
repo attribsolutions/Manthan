@@ -81,14 +81,14 @@ function* Update_User_GenFunc({ config }) {
 }
 
 function* Get_UserPartiesForUserMaster_GenFunc({ editDetail }) {
-
+  debugger
   const { id, editRole = [] } = editDetail
   try {
     const response = yield call(UserPartiesForUserMaster_API, id);
     const rewRes = response.Data.map(i1 => {
       let newRole = []
       editRole.map(i2 => {
-        if (i2.Party === i1.Party_id) {
+        if (i2.Party === i1.PartyID) {
           newRole = i2.PartyRoles.map(i3 => ({
             value: i3.Role,
             label: i3.RoleName
@@ -97,8 +97,8 @@ function* Get_UserPartiesForUserMaster_GenFunc({ editDetail }) {
       })
       const arr = {
         PartyRoles: newRole,
-        Party: i1.Party_id,
-        PartyName: i1.PartyName
+        Party: i1.PartyID,
+        PartyName: i1.Partyname
       }
       return arr
     })

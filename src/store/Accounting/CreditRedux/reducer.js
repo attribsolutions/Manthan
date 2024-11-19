@@ -1,4 +1,6 @@
 import {
+  BULK_CREDITNOTE_DELETE_ID,
+  BULK_CREDITNOTE_DELETE_ID_SUCCESS,
   CANCLE_CREDIT_DEBIT_E_INVOICE_ACTION,
   CANCLE_CREDIT_DEBIT_E_INVOICE_ACTION_SUCCESS,
   CREDITDEBIT_TYPE_SUCCESS,
@@ -21,6 +23,7 @@ const INIT_STATE = {
   postMsg: { Status: false },
   CreditList: [],
   deleteMsg: { Status: false },
+  BulkCreditNotedeleteMsg: { Status: false },
   editData: { Status: false },
   updateMsg: { Status: false },
   CreditDebitType: [],
@@ -28,6 +31,7 @@ const INIT_STATE = {
   ReceiptNumber: [],
   saveBtnloading: false,
   listBtnLoading: false,
+  GobuttonLoading: false,
   Uploaded_Credit_Debit_EInvoice: { Status: false },
   Cancel_Credit_Debit_EInvoice: { Status: false },
 }
@@ -54,17 +58,17 @@ const CredietDebitReducer = (state = INIT_STATE, action) => {
     case GET_CREDIT_LIST:
       return {
         ...state,
-        listBtnLoading: true
+        GobuttonLoading: true
       }
 
     case GET_CREDIT_LIST_SUCCESS:
       return {
         ...state,
         CreditList: action.payload,
-        listBtnLoading: false
+        GobuttonLoading: false
       }
 
-    //  del
+    //  delete
     case DELETE_CREDIT_LIST_ID:
       return {
         ...state,
@@ -75,6 +79,20 @@ const CredietDebitReducer = (state = INIT_STATE, action) => {
       return {
         ...state,
         deleteMsg: action.payload,
+        listBtnLoading: false
+      };
+
+    // Bulk Credit Note delete
+    case BULK_CREDITNOTE_DELETE_ID:
+      return {
+        ...state,
+        listBtnLoading: action.config.btnId,
+      };
+
+    case BULK_CREDITNOTE_DELETE_ID_SUCCESS:
+      return {
+        ...state,
+        BulkCreditNotedeleteMsg: action.payload,
         listBtnLoading: false
       };
 
@@ -116,6 +134,7 @@ const CredietDebitReducer = (state = INIT_STATE, action) => {
         ...state,
         saveBtnloading: false,
         listBtnLoading: false,
+        GobuttonLoading: false
       }
 
 

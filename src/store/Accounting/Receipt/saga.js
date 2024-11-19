@@ -2,7 +2,7 @@ import { call, put, takeLatest } from "redux-saga/effects";
 import * as  apiCall from "../../../helpers/backend_helper";
 import * as actionType from "./actionType";
 import * as action from "./action";
-import { amountCommaSeparateFunc, concatDateAndTime, date_dmy_func, loginCompanyID, loginPartyID } from "../../../components/Common/CommonFunction";
+import { amountCommaSeparateFunc, listpageConcatDateAndTime, date_dmy_func, loginCompanyID, loginPartyID } from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url";
 
 // customer dropdown click then table values display
@@ -19,7 +19,7 @@ function* ReceiptGoButtonGenFunc({ config }) {
 
       //tranzaction date is only for fiterand page field but UI show transactionDateLabel
       i["transactionDate"] = i.CreatedOn;
-      i["transactionDateLabel"] = concatDateAndTime(i.InvoiceDate, i.CreatedOn);
+      i["transactionDateLabel"] = listpageConcatDateAndTime(i.InvoiceDate, i.CreatedOn);
 
       i["Calculate"] = 0
       return i
@@ -58,7 +58,7 @@ function* Receipt_List_GenFun({ jsonBody, subPageMode }) {
       i.dashboardReceiptDate = date_dmy_func(i.ReceiptDate);
       i["ChequeDate"] = i.ReceiptModeName === "Cash" ? "" : date_dmy_func(i.ChequeDate)
       i["transactionDate"] = i.CreatedOn;
-      i["transactionDateLabel"] = concatDateAndTime(i.ReceiptDate, i.CreatedOn);
+      i["transactionDateLabel"] = listpageConcatDateAndTime(i.ReceiptDate, i.CreatedOn);
 
       return i
     })

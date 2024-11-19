@@ -1,5 +1,6 @@
 import { call, put, takeLatest } from "redux-saga/effects";
 import {
+  EmployeeSubEmployee_List_Success,
   GetCustomerSuccess,
   getOrderTypeSuccess,
   getSupplierAddressSuccess,
@@ -7,6 +8,7 @@ import {
   GetVenderSuccess,
   GetVenderSupplierCustomerSuccess,
   Party_Dropdown_List_Success,
+  Partyonclustersubcluste_List_Success,
   Retailer_List_Success,
   SSDD_List_under_Company_Success,
 } from "./actions";
@@ -14,8 +16,10 @@ import {
   get_OrderType_Api,
   Party_Dropdown_Get_API,
   Party_Master_Edit_API,
+  PartyOnClusterSbcluster_Dropdown_Get_API,
   Retailer_List_under_Company_PartyAPI,
   SSDD_List_under_Company_API,
+  SubEmployee_Dropdown_Get_API,
   VendorSupplierCustomer,
 } from "../../../helpers/backend_helper";
 
@@ -27,13 +31,15 @@ import {
   GET_VENDER,
   GET_VENDER_SUPPLIER_CUSTOMER,
   PARTY_DROPDOWN_LIST,
+  PARTY_ON_CLUSTER_SUBCLUSTER_LIST,
   RETAILER_LIST,
   SSDD_LIST_UNDER_COMPANY,
+  SUB_EMPLOYEE_LIST,
 } from "./actionType";
 
-import { CommonConsole, loginCompanyID, loginPartyID } from "../../../components/Common/CommonFunction";
+import { CommonConsole, IsAuthorisedURL, loginCompanyID, loginPartyID } from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url";
-import { orderApiErrorAction } from "../../actions";
+import { commonApiReducer_ErrorAction } from "../../actions";
 
 function* supplierAddressGenFunc({ editId }) {
   const config = { editId: editId }
@@ -60,7 +66,7 @@ function* supplierAddressGenFunc({ editId }) {
     yield put(getSupplierAddressSuccess(newArr));
   } catch (error) {
     CommonConsole(error);
-    yield put(orderApiErrorAction());
+    yield put(commonApiReducer_ErrorAction());
   }
 }
 
@@ -71,30 +77,31 @@ function* OrderType_GenFunc() {
     yield put(getOrderTypeSuccess(response.Data));
   } catch (error) {
     CommonConsole(error);
-    yield put(orderApiErrorAction());
+    yield put(commonApiReducer_ErrorAction());
   }
 }
 
-function* getVendorGenFunc() {
-
+function* getVendorGenFunc({ jsonBody = '' }) {
+  
+  const { PartyID = loginPartyID(), Type = 1 } = jsonBody
   try {
-    const response = yield call(VendorSupplierCustomer, { "Type": 1, "PartyID": loginPartyID(), "Company": loginCompanyID(), Route: "" });
+    const response = yield call(VendorSupplierCustomer, { "Type": Type, "PartyID": PartyID, "Company": loginCompanyID(), Route: "" });
     yield put(GetVenderSuccess(response.Data));
   } catch (error) {
     CommonConsole(error);
-    yield put(orderApiErrorAction());
+    yield put(commonApiReducer_ErrorAction());
   }
 }
 
 function* getSupplierGenFunc({ jsonBody = '' }) {
-  
+
   const { PartyID = loginPartyID() } = jsonBody
   try {
     const response = yield call(VendorSupplierCustomer, { "Type": 2, "PartyID": PartyID, "Company": loginCompanyID(), Route: "" });
     yield put(getSupplierSuccess(response.Data));
   } catch (error) {
     CommonConsole(error);
-    yield put(orderApiErrorAction());
+    yield put(commonApiReducer_ErrorAction());
   }
 }
 
@@ -104,12 +111,12 @@ function* getCustomerGenFunc() {
     yield put(GetCustomerSuccess(response.Data));
   } catch (error) {
     CommonConsole(error);
-    yield put(orderApiErrorAction());
+    yield put(commonApiReducer_ErrorAction());
   }
 }
 
 function* vendorSupplierCustomer_genFunc({ data }) {
-  
+
   const {
     subPageMode,
     RouteID = "",
@@ -128,16 +135,23 @@ function* vendorSupplierCustomer_genFunc({ data }) {
     || subPageMode === url.GRN_LIST_3
     || subPageMode === url.PURCHASE_RETURN_LIST
     || subPageMode === url.PURCHASE_RETURN
-    || subPageMode === url.PURCHASE_RETURN_MODE_3);
+    || subPageMode === url.PURCHASE_RETURN_MODE_3
+    || subPageMode === url.SELF_LEDGER
+    || subPageMode === url.PARTY_DETAILS)
+  
+    ;
 
-  const isCustomer = (subPageMode === url.ORDER_4                 //Customer mode 3
+  const isCustomer = (subPageMode === url.ORDER_4  //Customer mode 3
     || subPageMode === url.ORDER_LIST_4
+    || subPageMode === url.APP_ORDER_LIST
     || subPageMode === url.ITEM_SALE_REPORT
     || subPageMode === url.INVOICE_1
     || subPageMode === url.INVOICE_LIST_1
     || subPageMode === url.PARTY_LEDGER
     || subPageMode === url.GST_R1_REPORT
-
+    || subPageMode === url.MOBILE_RETAILER_SEND
+    || subPageMode === url.POS_INVOICE_LIST
+   
   );
 
 
@@ -147,9 +161,10 @@ function* vendorSupplierCustomer_genFunc({ data }) {
     || subPageMode === url.IB_INVOICE
     || subPageMode === url.IB_INVOICE_LIST
     || subPageMode === url.INWARD_LIST
+    || subPageMode === url.IB_SALES_ORDER
   );
 
-  const isPartyWithoutRetailers = (subPageMode === url.CLAIM_SUMMARY_REPORT)
+
 
   const jsonBody = {
     "PartyID": PartyID,
@@ -169,19 +184,19 @@ function* vendorSupplierCustomer_genFunc({ data }) {
     }
     else if (isDivisions) {
       response = yield call(VendorSupplierCustomer, JSON.stringify({ ...jsonBody, "Type": 4, }));//divisions mode 4
-    }
-    else if (isPartyWithoutRetailers) {
-      response = yield call(VendorSupplierCustomer, JSON.stringify({ ...jsonBody, "Type": 5, }));//divisions mode 4
-    }
-    else {
+    } else {
       response = { Data: [] }
     }
+    response.Data.map((index) => {
+      index["selectCheck"] = false
+      return index
+    });
 
     yield put(GetVenderSupplierCustomerSuccess(response.Data));
   }
   catch (error) {
     CommonConsole(error);
-    yield put(orderApiErrorAction());
+    yield put(commonApiReducer_ErrorAction());
   }
 }
 
@@ -191,7 +206,7 @@ function* SSDD_List_under_Company_GenFunc() {
     yield put(SSDD_List_under_Company_Success(response.Data));
   } catch (error) {
     CommonConsole(error);
-    yield put(orderApiErrorAction());
+    yield put(commonApiReducer_ErrorAction());
   }
 }
 
@@ -202,7 +217,7 @@ function* Retailer_List_GenFunc({ data }) {
     yield put(Retailer_List_Success(response.Data));
   } catch (error) {
     CommonConsole(error);
-    yield put(orderApiErrorAction());
+    yield put(commonApiReducer_ErrorAction());
   }
 }
 
@@ -213,9 +228,34 @@ function* Party_Dropdown_List_GenFunc({ loginEmployeeID }) {
     yield put(Party_Dropdown_List_Success(response.Data));
   } catch (error) {
     CommonConsole(error);
-    yield put(orderApiErrorAction());
+    yield put(commonApiReducer_ErrorAction());
   }
 }
+
+function* SubEmployee_Dropdown_List_GenFunc({ loginEmployeeID }) {
+
+  try {
+    const response = yield call(SubEmployee_Dropdown_Get_API, loginEmployeeID);
+    yield put(EmployeeSubEmployee_List_Success(response.Data));
+  } catch (error) {
+    CommonConsole(error);
+    yield put(commonApiReducer_ErrorAction());
+  }
+}
+
+
+
+function* PartyonClusterSubcluster_Dropdown_List_GenFunc({ config }) {
+  try {
+    const response = yield call(PartyOnClusterSbcluster_Dropdown_Get_API, config);
+    yield put(Partyonclustersubcluste_List_Success(response.Data));
+  } catch (error) {
+    CommonConsole(error);
+    yield put(commonApiReducer_ErrorAction());
+  }
+}
+
+
 
 function* SupplierSaga() {
   yield takeLatest(GET_SUPPLIER, getSupplierGenFunc);
@@ -227,6 +267,11 @@ function* SupplierSaga() {
   yield takeLatest(SSDD_LIST_UNDER_COMPANY, SSDD_List_under_Company_GenFunc);
   yield takeLatest(RETAILER_LIST, Retailer_List_GenFunc);
   yield takeLatest(PARTY_DROPDOWN_LIST, Party_Dropdown_List_GenFunc);
+  yield takeLatest(SUB_EMPLOYEE_LIST, SubEmployee_Dropdown_List_GenFunc);
+  yield takeLatest(PARTY_ON_CLUSTER_SUBCLUSTER_LIST, PartyonClusterSubcluster_Dropdown_List_GenFunc);
+
+
+
 
 
 }

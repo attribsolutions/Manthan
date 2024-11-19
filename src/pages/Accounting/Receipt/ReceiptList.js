@@ -28,7 +28,10 @@ import { getpdfReportdata } from "../../../store/Utilites/PdfReport/actions";
 import { Receipt_Print } from "../../../helpers/backend_helper";
 import { C_DatePicker, C_Select } from "../../../CustomValidateForm";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
-import NewCommonPartyDropdown from "../../../components/Common/NewCommonPartyDropdown";
+import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
+import { allLabelWithBlank } from "../../../components/Common/CommonErrorMsg/HarderCodeData";
+import { sideBarPageFiltersInfoAction } from "../../../store/Utilites/PartyDrodown/action";
+import * as _cfunc from "../../../components/Common/CommonFunction";
 
 const ReceiptList = () => {
 
@@ -39,7 +42,7 @@ const ReceiptList = () => {
     const fileds = {
         FromDate: currentDate_ymd,
         ToDate: currentDate_ymd,
-        Customer: { value: "", label: "All" }
+        Customer: allLabelWithBlank
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
@@ -83,6 +86,17 @@ const ReceiptList = () => {
         }
     }, []);
 
+    // sideBar Page Filters Information
+    useEffect(() => {
+
+        dispatch(sideBarPageFiltersInfoAction([
+            { label: "FromDate", content: _cfunc.date_dmy_func(values.FromDate), },
+            { label: "ToDate", content: _cfunc.date_dmy_func(values.ToDate), },
+            { label: "Customer", content: values.Customer.label, }
+        ]));
+
+    }, [state]);
+
     // Common Party Dropdown useEffect
     useEffect(() => {
 
@@ -97,7 +111,7 @@ const ReceiptList = () => {
         }
         setState((i) => {
             let a = { ...i }
-            a.values.Customer = { value: "", label: "All" }
+            a.values.Customer = allLabelWithBlank
             return a
         })
         return () => {
@@ -145,7 +159,7 @@ const ReceiptList = () => {
     const goButtonHandler = () => {
         try {
             if (commonPartyDropSelect.value === 0) {
-                customAlert({ Type: 3, Message: "Please Select Party" });
+                customAlert({ Type: 3, Message: alertMessages.commonPartySelectionIsRequired });
                 return;
             };
             const ReceiptTypeID = ReceiptType.find((index) => {
@@ -207,7 +221,8 @@ const ReceiptList = () => {
         })
     }
 
-    const HeaderContent = () => {
+    const HeaderContent = (props) => {
+        
         return (
             <div className="px-2   c_card_filter text-black" >
                 <div className="row" >
@@ -231,8 +246,16 @@ const ReceiptList = () => {
                                 style={{ width: "65px" }}>ToDate</Label>
                             <Col sm="7">
                                 <C_DatePicker
+
+                                    options={{
+                                        minDate: (_cfunc.disablePriviousTodate({ fromDate: values.FromDate })),
+                                        maxDate: "today",
+                                        altInput: true,
+                                        altFormat: "d-m-Y",
+                                        dateFormat: "Y-m-d",
+                                    }}
+                                    value={_cfunc.ToDate({ FromDate: values.FromDate, Todate: values.ToDate })}
                                     name="ToDate"
-                                    value={values.ToDate}
                                     onChange={todateOnchange}
                                 />
                             </Col>
@@ -271,7 +294,6 @@ const ReceiptList = () => {
         <React.Fragment>
             <PageLoadingSpinner isLoading={(reducers.loading || !pageField)} />
             <div className="page-content">
-                <NewCommonPartyDropdown />
                 {
                     (pageField) ?
                         <CommonPurchaseList

@@ -1,15 +1,12 @@
 import {
-    Card,
-    CardBody,
     Col,
-    Container,
     FormGroup,
     Input,
     Label,
     Row
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
-import { BreadcrumbShowCountlabel, Breadcrumb_inputName, commonPageFieldSuccess } from "../../../store/actions";
+import { BreadcrumbShowCountlabel, commonPageFieldSuccess } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { commonPageField } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
@@ -19,13 +16,12 @@ import {
     resetFunction
 } from "../../../components/Common/validationFunction";
 import Select from "react-select";
-import { Go_Button, SaveButton } from "../../../components/Common/CommonButton";
+import { Change_Button, Go_Button, PageLoadingSpinner, SaveButton } from "../../../components/Common/CommonButton";
 import {
     breadcrumbReturnFunc,
     btnIsDissablefunc,
     date_ymd_func,
     loginCompanyID,
-    loginPartyID,
     metaTagLabel
 } from "../../../components/Common/CommonFunction";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
@@ -34,8 +30,8 @@ import BootstrapTable from "react-bootstrap-table-next";
 import * as pageId from "../../../routes//allPageID";
 import * as url from "../../../routes/route_url";
 import * as mode from "../../../routes/PageMode";
-import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
-import React, { useEffect, useRef, useState } from "react";
+import { globalTableSearchProps } from "../../../components/Common/SearchBox/MySearch";
+import React, { useEffect, useState } from "react";
 import { GetRoutesList, GetRoutesListSuccess } from "../../../store/Administrator/RoutesRedux/actions";
 import {
     GoButton_For_Party_Master_Bulk_Update_Add,
@@ -51,36 +47,39 @@ import { getState, getStateESuccess } from "../../../store/Administrator/Employe
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { C_DatePicker, C_Select } from "../../../CustomValidateForm";
-import { getDistrictOnState } from "../../../store/Administrator/PartyRedux/action";
-
+import { GetDistrictOnState_For_Dropdown, mobileApp_RetailerUpdate_Api } from "../../../helpers/backend_helper";
+import { showToastAlert } from "../../../helpers/axios_Config";
+import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
+import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
+import { allLabelWithBlank } from "../../../components/Common/CommonErrorMsg/HarderCodeData";
+import { sideBarPageFiltersInfoAction } from "../../../store/Utilites/PartyDrodown/action";
 
 const PartyMasterBulkUpdate = (props) => {
 
-    const count = useRef(0)
-
     const dispatch = useDispatch();
-    const history = useHistory()
-    const [modalCss, setModalCss] = useState(false);
-    const [pageMode, setPageMode] = useState(mode.defaultsave);
-    const [userPageAccessState, setUserPageAccessState] = useState('');
-    const [SelectFieldName, setSelectFieldName] = useState([]);
-    const [state_DropDown_select, setState_DropDown_select] = useState();
-    const [district_dropdown_Select, setDistrict_dropdown_Select] = useState();
+    const history = useHistory();
 
+    const [pageMode] = useState(mode.defaultsave);
+    const [userPageAccessState, setUserPageAccessState] = useState('');
 
     const fileds = {
         id: "",
-        RoutesName: "",
-        PartyName: "",
-        SelectField: "",
-        Party: { value: "", label: "All" },
-        Routes: { value: "", label: "All" }
+        Party: allLabelWithBlank,
+        Routes: allLabelWithBlank,
+        Type: ""
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
-    const [val, setvalue] = useState()
-    const [key, setKey] = useState()
+    const [forceRefresh, setForceRefresh] = useState(false);
+    const [SelectedParty, SetSelectedParty] = useState([])
+    const [SelectFieldName, setSelectFieldName] = useState('');
+    const [mobileApiLoading, setMobileApiLoading] = useState(false);
 
+    const location = { ...history.location }
+    const hasShowModal = props.hasOwnProperty(mode.editValue)
+
+    const values = { ...state.values }
+    const { fieldLabel } = state;
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
@@ -91,42 +90,61 @@ const PartyMasterBulkUpdate = (props) => {
         SelectField,
         PartyName,
         Data,
-        DistrictOnState,
         State,
         saveBtnloading,
         listBtnLoading,
-        districtDropDownLoading,
+
     } = useSelector((state) => ({
         listBtnLoading: state.PartyMasterBulkUpdateReducer.listBtnLoading,
-        districtDropDownLoading: state.PartyMasterReducer.districtDropDownLoading,
         saveBtnloading: state.PartyMasterBulkUpdateReducer.saveBtnloading,
         postMsg: state.PartyMasterBulkUpdateReducer.postMsg,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
         Routes: state.CreditLimitReducer.Routes,
         State: state.EmployeesReducer.State,
-        DistrictOnState: state.PartyMasterReducer.DistrictOnState,
         Data: state.PartyMasterBulkUpdateReducer.goButton,
         RoutesList: state.RoutesReducer.RoutesList,
         SelectField: state.PartyMasterBulkUpdateReducer.SelectField,
         PartyName: state.PartyMasterBulkUpdateReducer.PartyName,
     }));
 
-    const location = { ...history.location }
-    const hasShowModal = props.hasOwnProperty(mode.editValue)
+    const { commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
 
-    const values = { ...state.values }
-    const { isError } = state;
-    const { fieldLabel } = state;
+    // Common Party select Dropdown useEffect
+    useEffect(() => {
+        if (commonPartyDropSelect.value > 0) {
+            partySelectButtonHandler();
+        } else {
+            partySelectOnChangeHandler();
+        }
+    }, [commonPartyDropSelect]);
 
+    // sideBar Page Filters Information
+    useEffect(() => {
+
+        dispatch(sideBarPageFiltersInfoAction([
+            { label: fieldLabel.Type, content: SelectFieldName.label, },
+            { label: fieldLabel.Party, content: values.Party.label, },
+            { label: fieldLabel.Routes, content: values.Routes.label, },
+        ]));
+
+    }, [state, pageField, SelectFieldName]);
 
     useEffect(() => {
         dispatch(GoButton_For_Party_Master_Bulk_Update_AddSuccess([]))
         const page_Id = pageId.PARTY_MASTER_BULK_UPDATE
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
-        dispatch(GetRoutesList());
         dispatch(getState())
+        if (!(commonPartyDropSelect.value === 0)) {
+            dispatch(GetRoutesList({ ..._cfunc.loginJsonBody(), "PartyID": commonPartyDropSelect.value }));
+            const jsonBody = JSON.stringify({
+                CompanyID: loginCompanyID(),
+                PartyID: commonPartyDropSelect.value,
+                Type: 4
+            });
+            dispatch(postPartyName_for_dropdown(jsonBody));
+        }
         return () => {
             dispatch(GetRoutesListSuccess([]))
             dispatch(getStateESuccess([]))
@@ -150,7 +168,6 @@ const PartyMasterBulkUpdate = (props) => {
         };
     }, [userAccess])
 
-
     useEffect(() => {
         const jsonBody = JSON.stringify({
             Company: loginCompanyID(),
@@ -159,20 +176,40 @@ const PartyMasterBulkUpdate = (props) => {
         dispatch(postSelect_Field_for_dropdown(jsonBody));
     }, []);
 
-    useEffect(() => {
-        const jsonBody = JSON.stringify({
-            CompanyID: loginCompanyID(),
-            PartyID: loginPartyID(),
-            Type: 1
-        });
-        dispatch(postPartyName_for_dropdown(jsonBody));
-    }, []);
-
     useEffect(async () => {
-        if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
-            dispatch(postParty_Master_Bulk_Update_Success({ Status: false }))
-            setState(() => resetFunction(fileds, state))// Clear form values  
-            dispatch(Breadcrumb_inputName(''))
+
+        if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
+            dispatch(postParty_Master_Bulk_Update_Success({ Status: false }));
+            dispatch(GoButton_For_Party_Master_Bulk_Update_AddSuccess([]));
+            setState(() => resetFunction(fileds, state))// Clear form values 
+            setSelectFieldName([]);
+
+            //***************mobail app api*********************** */
+            try {
+                setMobileApiLoading(true);
+                let arrayOfRetailerID = SelectedParty.map(function (i) {
+                    return i.SubPartyID;
+                });
+                const jsonBody = JSON.stringify({
+                    RetailerID: arrayOfRetailerID.join(', '),
+                    DistributorID: commonPartyDropSelect.value
+                })
+                const mobilApiResp = await mobileApp_RetailerUpdate_Api({ jsonBody })
+
+                if (mobilApiResp.StatusCode === 200) {
+                    showToastAlert(mobilApiResp.Message);
+                    setMobileApiLoading(false);
+                } else {
+                    setMobileApiLoading(false);
+                }
+
+            } catch (error) {
+                console.log("An error occurred while fetching mobileApiResp:", error);
+            }
+
+            finally {
+                setMobileApiLoading(false);
+            }
 
             if (pageMode === mode.dropdownAdd) {
                 customAlert({
@@ -191,9 +228,9 @@ const PartyMasterBulkUpdate = (props) => {
                 }
             }
         }
-        else if ((postMsg.Status === true) && !(pageMode === "dropdownAdd")) {
-            dispatch(GoButton_For_Party_Master_Bulk_Update_AddSuccess([]))
-            dispatch(postParty_Master_Bulk_Update_Success({ Status: false }))
+        else if ((postMsg.Status === true)) {
+            dispatch(GoButton_For_Party_Master_Bulk_Update_AddSuccess([]));
+            dispatch(postParty_Master_Bulk_Update_Success({ Status: false }));
             customAlert({
                 Type: 4,
                 Message: JSON.stringify(postMsg.Message),
@@ -229,11 +266,6 @@ const PartyMasterBulkUpdate = (props) => {
         label: index.Name,
     }));
 
-    const DistrictOnStateValues = DistrictOnState.map((index) => ({
-        value: index.id,
-        label: index.Name
-    }));
-
     const PartyDropdown_Options = PartyName.map(i => ({
         value: i.id,
         label: i.Name
@@ -246,19 +278,24 @@ const PartyMasterBulkUpdate = (props) => {
 
     const GoButton_Handler = () => {
 
-        if (SelectFieldName.length === 0) {
-            customAlert({
-                Type: 3,
-                Message: "Please select field",
-            })
+        if ((commonPartyDropSelect.value === 0)) {
+            customAlert({ Type: 3, Message: alertMessages.commonPartySelectionIsRequired });
             return;
         }
 
+        else if (SelectFieldName === '') {
+            customAlert({
+                Type: 3,
+                Message: alertMessages.selectField,
+            })
+            return;
+        }
+        
         const jsonBody = JSON.stringify({
 
-            PartyID: loginPartyID(),
+            PartyID: commonPartyDropSelect.value,
             Route: values.Routes.value === "" ? 0 : values.Routes.value,
-            Type: SelectFieldName.length === 0 ? 0 : SelectFieldName.label,
+            Type: SelectFieldName === '' ? 0 : SelectFieldName.label,
             FilterPartyID: values.Party.value === "" ? 0 : values.Party.value
 
         });
@@ -268,30 +305,41 @@ const PartyMasterBulkUpdate = (props) => {
 
     function SelectFieldHandler(event) {
         setSelectFieldName(event)
-        dispatch(GoButton_For_Party_Master_Bulk_Update_AddSuccess([]))
     }
 
-    function tableSelectHandler(event, user) {
+    function tableSelectHandler(event, row) {
         let input = event.target.value;
-        user.Newvalue = input
+        row.Newvalue = input
     }
 
-    function handllerState(event, user, key) {
+    const handllerState = async (stateID, row) => {
 
-        user.Newvalue = event.value
-        setState_DropDown_select(event)
-        setKey(key)
+        try {
+            const response = await GetDistrictOnState_For_Dropdown(stateID.value);
+            if (response.StatusCode === 200) {
 
+                row.Newvalue = stateID.value
+                row.selectedState = stateID
+                row.districtOptions = response.Data.map(item => ({ value: item.id, label: item.Name }));
+                setForceRefresh(i => !i)
+            } else {
+                customAlert({
+                    Type: 1,
+                    Message: `Error for State ID ${stateID.label}:`,
+                });
+            }
+        } catch (error) {
+            _cfunc.CommonConsole(`Error for State ID ${stateID.label}:`, error);
+        }
+    };
+
+    function divisionhandler(event, row) {
+        row.Newvalue = event.target.checked
     }
 
-    function divisionhandler(event, user) {
-        user.Newvalue = event.target.checked
+    function TCSPartyhandler(event, row) {
+        row.Newvalue = event.target.checked
     }
-
-    function TCSPartyhandler(event, user) {
-        user.Newvalue = event.target.checked
-    }
-
 
     function partyOnchange(e) {
         setState((i) => {
@@ -311,27 +359,29 @@ const PartyMasterBulkUpdate = (props) => {
         })
     }
 
-    function handllerDistrictOnState(event, user) {
-        user.NewDistrict = event.value
-        // setDistrict_dropdown_Select(event)
-        // dispatch(getDistrictOnState(event.value))
+    function handllerDistrictOnState(event, row) {
+        row.NewDistrict = event.value
     }
 
-    function fromdateOnchange(event, user) {
+    function fromdateOnchange(event, row) {
         const Date = date_ymd_func(event[0])
-        user.NewFSSAIExipry = Date
+        row.NewFSSAIExipry = Date
+    }
+
+    function OpeningBalanceDateOnchange(event, row) {
+        const Date = date_ymd_func(event[0])
+        row.Date = Date
     }
 
     const pagesListColumns = [
         {
-            text: "PartyName",
+            text: "Party Name",
             dataField: "PartyName",
         },
         {
             text: SelectFieldName.label,
             dataField: SelectFieldName.label,
         },
-
     ];
 
     PartyDropdown_Options.unshift({
@@ -346,7 +396,7 @@ const PartyMasterBulkUpdate = (props) => {
 
     if (SelectFieldName.label === "FSSAINo") {
         let FSSAINo = {
-            text: "FSSAIExipry",
+            text: "FSSAI  Exipry",
             dataField: "FSSAIExipry",
         }
         pagesListColumns.push(FSSAINo)
@@ -360,13 +410,11 @@ const PartyMasterBulkUpdate = (props) => {
         pagesListColumns.push(District)
     }
 
-
     const Newvalue = {
-        text: `New${SelectFieldName.label === undefined ? "Value" : SelectFieldName.label}`,
+        text: `New${SelectFieldName.label === undefined ? " Value" : SelectFieldName.label}`,
         dataField: "Newvalue",
 
-        formatter: (cellContent, user, key) => (
-
+        formatter: (cellContent, row, key) => (
             <>
                 {SelectFieldName.label === "State" ?
 
@@ -374,10 +422,12 @@ const PartyMasterBulkUpdate = (props) => {
                         <Col>
                             <FormGroup >
                                 <C_Select
-                                    id={key}
-                                    value={state_DropDown_select}
+                                    key={row.Newvalue}
+                                    value={(row?.selectedState === "") ?
+                                        { value: "", label: "Select..." }
+                                        : row.selectedState}
                                     options={StateValues}
-                                    onChange={(event) => handllerState(event, user, key)}
+                                    onChange={(event) => handllerState(event, row, key)}
                                 />
                             </FormGroup>
                         </Col>
@@ -389,8 +439,8 @@ const PartyMasterBulkUpdate = (props) => {
                                 type="checkbox"
                                 id={key}
                                 className="p-2"
-                                defaultChecked={user.IsTCSParty}
-                                onChange={(event) => TCSPartyhandler(event, user)}
+                                defaultChecked={row.IsTCSParty}
+                                onChange={(event) => TCSPartyhandler(event, row)}
                             />
 
                         </Col> :
@@ -401,8 +451,8 @@ const PartyMasterBulkUpdate = (props) => {
                                 <div className="form-check form-switch form-switch-md mb-3">
                                     <Input type="checkbox" className="form-check-input"
                                         id={key}
-                                        defaultChecked={user.IsDivision}
-                                        onChange={(event) => divisionhandler(event, user)}
+                                        defaultChecked={row.IsDivision}
+                                        onChange={(event) => divisionhandler(event, row)}
                                         name="IsActive"
 
                                     />
@@ -416,9 +466,9 @@ const PartyMasterBulkUpdate = (props) => {
                                             id={key}
                                             type="text"
                                             placeholder={`Enter New ${SelectFieldName.label}`}
-                                            defaultValue={user.Newvalue}
+                                            defaultValue={row.Newvalue}
                                             className="col col-sm "
-                                            onChange={(event) => tableSelectHandler(event, user)}
+                                            onChange={(event) => tableSelectHandler(event, row)}
                                         />
                                     </FormGroup>
                                 </Col>
@@ -431,39 +481,44 @@ const PartyMasterBulkUpdate = (props) => {
     const DistrictColumn = {
         text: " New District",
         dataField: "",
-        formatter: (cellContent, user, key) => (
-            <>
+        formatExtraData: { forceRefresh },
+        formatter: (cellContent, row, key) => {
+
+            return (<>
                 <div style={{ width: "180px" }}>
                     <Col>
                         <FormGroup >
                             <C_Select
-                                id={`id${key}`}
-                                value={district_dropdown_Select}
-                                isLoading={districtDropDownLoading}
-                                options={DistrictOnStateValues}
-                                onChange={(event) => handllerDistrictOnState(event, user)}
+                                key={row.Newvalue}
+                                options={row.districtOptions}
+                                onChange={(event) => handllerDistrictOnState(event, row)}
                             />
                         </FormGroup>
                     </Col>
                 </div>
-            </>
-        ),
+            </>)
+        }
     }
-
 
     pagesListColumns.push(Newvalue)
     const dateColumn = {
-        text: " New FSSAIExipry",
+        text: " New FSSAI Exipry",
         dataField: "",
-        formatter: (cellContent, user, key) => (
+        formatter: (cellContent, row, key) => (
             <>
                 <div style={{ width: "180px" }} >
                     <Col sm={12}>
                         <FormGroup sm={6}>
                             <C_DatePicker
+                                options={{
+                                    minDate: "today",
+                                    altInput: true,
+                                    altFormat: "d-m-Y",
+                                    dateFormat: "Y-m-d",
+                                }}
                                 id={key}
                                 name='fromdate'
-                                onChange={(event) => fromdateOnchange(event, user)}
+                                onChange={(event) => fromdateOnchange(event, row)}
                             />
                         </FormGroup>
                     </Col>
@@ -472,6 +527,36 @@ const PartyMasterBulkUpdate = (props) => {
             </>
         ),
     }
+
+    const OpeningBalanceDatePicker = {
+        text: "Opening Balance Date",
+        dataField: "",
+        formatter: (cellContent, row,) => {
+
+            return (
+                <>
+                    <div style={{ width: "180px" }} >
+                        <Col sm={12}>
+                            <FormGroup sm={6}>
+                                <C_DatePicker
+                                    options={{
+                                        altInput: true,
+                                        altFormat: "d-m-Y",
+                                        dateFormat: "Y-m-d",
+                                    }}
+                                    key={row.id}
+                                    value={row.Date}
+                                    onChange={(event) => OpeningBalanceDateOnchange(event, row)}
+                                />
+                            </FormGroup>
+                        </Col>
+                    </div>
+
+                </>
+            )
+        }
+    }
+
     if (SelectFieldName.label === "FSSAINo") {
         pagesListColumns.push(dateColumn)
     }
@@ -479,12 +564,39 @@ const PartyMasterBulkUpdate = (props) => {
         pagesListColumns.push(DistrictColumn)
     }
 
+    if (SelectFieldName.label === "OpeningBalance") {
+        pagesListColumns.push(OpeningBalanceDatePicker)
+    }
 
     const pageOptions = {
         sizePerPage: 10,
         totalSize: Data.length,
         custom: true,
     };
+
+    function partySelectButtonHandler() {
+        const jsonBody = JSON.stringify({
+            CompanyID: loginCompanyID(),
+            PartyID: commonPartyDropSelect.value,
+            Type: 4
+        });
+        dispatch(postPartyName_for_dropdown(jsonBody));
+        dispatch(GetRoutesList({ ..._cfunc.loginJsonBody(), "PartyID": commonPartyDropSelect.value }));
+    }
+
+    function partySelectOnChangeHandler() {
+        setState((i) => {
+            const a = { ...i }
+            a.values.Party = allLabelWithBlank
+            a.values.Routes = allLabelWithBlank
+            a.hasValid.Party.valid = true;
+            a.hasValid.Routes.valid = true;
+            return a
+        })
+        dispatch(GetRoutesListSuccess([]));
+        dispatch(postPartyName_for_dropdown_Success([]));
+        dispatch(GoButton_For_Party_Master_Bulk_Update_AddSuccess([]));
+    }
 
     const SaveHandler = (event) => {
 
@@ -500,19 +612,21 @@ const PartyMasterBulkUpdate = (props) => {
                     const arr = {
                         SubPartyID: i.SubPartyID,
                         Value1: i.Newvalue,
-                        Value2: i.NewFSSAIExipry,
-                        Value2: i.NewDistrict,
+                        Value2: i.NewFSSAIExipry || i.NewDistrict,
+                        Date: i.Date,
                         party: i.PartyName
                     }
                     arr1.push(arr)
                 }
             })
 
+            SetSelectedParty(arr1)
             const jsonBody = JSON.stringify({
-                PartyID: loginPartyID(),
+                PartyID: commonPartyDropSelect.value,
                 Type: SelectFieldName.label,
+                CreatedBy: _cfunc.loginUserID(),
+                UpdatedBy: _cfunc.loginUserID(),
                 UpdateData: arr1
-
             });
 
             if (pageMode === mode.edit) {
@@ -523,26 +637,34 @@ const PartyMasterBulkUpdate = (props) => {
                 if (arr1.length <= 0) {
                     customAlert({
                         Type: 3,
-                        Message: "Update At least One Field",
+                        Message: alertMessages.updateAtLeastOneField,
                     })
                     btnIsDissablefunc({ btnId, state: false })
                 } else {
+
                     const invalidMsg1 = []
                     arr1.forEach((i) => {
+
+                        if ((SelectFieldName.label === "State")) {
+                            if (!(i.Value2)) {
+                                invalidMsg1.push({ [i.party]: alertMessages.DistrictIsRequired })
+                            }
+                        };
 
                         if ((SelectFieldName.label === "MobileNo")) {
                             const regexExp1 = /^[6-9]\d{9}$/gi;
                             const IsMobile = regexExp1.test(i.Value1)
                             if (!IsMobile) {
+                                invalidMsg1.push({ [i.party]: alertMessages.invalidMobile })
 
-                                invalidMsg1.push(`InValid Mobile No ${i.party}`)
                             }
                         };
+
                         if ((SelectFieldName.label === "Email")) {
                             const regexExp2 = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
                             const IsEmail = regexExp2.test(i.Value1)
                             if (!IsEmail) {
-                                invalidMsg1.push(`InValid Email ${i.party} `)
+                                invalidMsg1.push({ [i.party]: alertMessages.invalidEmail })
                             }
                         };
 
@@ -550,7 +672,7 @@ const PartyMasterBulkUpdate = (props) => {
                             const regexExp3 = /[A-Z]{5}[0-9]{4}[A-Z]{1}/
                             const IsPan = regexExp3.test(i.Value1)
                             if (!IsPan) {
-                                invalidMsg1.push(`InValid Pan No ${i.party}`)
+                                invalidMsg1.push({ [i.party]: alertMessages.invalidPAN })
                             }
                         };
 
@@ -558,197 +680,173 @@ const PartyMasterBulkUpdate = (props) => {
                             const regexExp4 = /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/
                             const IsGSTIN = regexExp4.test(i.Value1)
                             if (!IsGSTIN) {
-                                invalidMsg1.push(`InValid GSTIN No ${i.party}`)
+                                invalidMsg1.push({ [i.party]: alertMessages.invalid_GSTIN_no })
                             }
                         };
 
-                        if ((SelectFieldName.label === "Name")) {
-                            const regexExp5 = /^[A-Za-z]+$/
-                            const IsName = regexExp5.test(i.Value1)
-                            if (!IsName) {
-                                invalidMsg1.push(`InValid Name ${i.party}`)
+                        if ((SelectFieldName.label === "OpeningBalance")) {
+
+                            if ((i.Date === undefined || i.Date === "") && !(i.Value1 === "")) {
+                                invalidMsg1.push({ [i.party]: alertMessages.OpeningBalanceDateRequired })
                             }
                         };
-
                     })
+
                     if (invalidMsg1.length > 0) {
                         customAlert({
                             Type: 3,
-                            Message: invalidMsg1.toString()
+                            Message: invalidMsg1
                         })
-                        return btnIsDissablefunc({ btnId, state: false })
+                        return;
                     }
-
                     dispatch(postParty_Master_Bulk_Update({ jsonBody, btnId }));
                 }
 
             }
-        } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
+        } catch (e) { }
     };
-
-
-    // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
-    var IsEditMode_Css = ''
-    if ((modalCss) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
 
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
+                <PageLoadingSpinner isLoading={(!pageField)} />
                 <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
-
-                <div className="page-content" style={{ marginTop: IsEditMode_Css, }}>
-                    <Container fluid>
-                        <form noValidate>
-
-                            <Card className="mb-1" style={{ marginBottom: "6px" }}>
-                                <CardBody className="c_card_header text-black">
-                                    <Row>
-                                        <Col sm={3} >
-                                            <FormGroup className=" row" >
-                                                <Label className="mt-1"
-                                                    style={{ width: "95px" }}>SelectField </Label>
-                                                <div className="col col-7 sm-1">
-                                                    <Select
-                                                        name="SelectField"
-                                                        value={val}
-                                                        isSearchable={true}
-                                                        className="react-dropdown"
-                                                        classNamePrefix="dropdown"
-                                                        styles={{
-                                                            menu: provided => ({ ...provided, zIndex: 2 })
-                                                        }}
-                                                        options={SelectFieldDropdown_options}
-                                                        onChange={(event) => SelectFieldHandler(event)}
-                                                    />
-                                                    {isError.SelectField.length > 0 && (
-                                                        <span className="text-danger f-8"><small>{isError.SelectField}</small></span>
-                                                    )}
-                                                </div>
-                                            </FormGroup>
+                <div className="page-content" >
+                    <form noValidate>
+                        <div className="px-2   c_card_filter text-black" >
+                            <div className="row" >
+                                <Col sm="3" className="">
+                                    <FormGroup className="mb- row mt-3 " >
+                                        <Label className="col-sm-5 p-2"
+                                            style={{ width: "83px" }}>{fieldLabel.Type}</Label>
+                                        <Col sm="7">
+                                            <Select
+                                                name="SelectField"
+                                                value={SelectFieldName}
+                                                isSearchable={true}
+                                                className="react-dropdown"
+                                                classNamePrefix="dropdown"
+                                                isDisabled={Data.length > 0 && true}
+                                                styles={{
+                                                    menu: provided => ({ ...provided, zIndex: 2 })
+                                                }}
+                                                options={SelectFieldDropdown_options}
+                                                onChange={(event) => SelectFieldHandler(event)}
+                                            />
                                         </Col>
-                                        <Col sm={3} >
-                                            <FormGroup className=" row ">
-                                                <Label className="mt-1"
-                                                    style={{ width: "104px" }}>RoutesName </Label>
-                                                <div className="col col-7 sm-1">
-                                                    <Select
-                                                        name="RoutesName"
-                                                        value={values.Routes}
-                                                        isSearchable={true}
-                                                        className="react-dropdown"
-                                                        styles={{
-                                                            menu: provided => ({ ...provided, zIndex: 2 })
-                                                        }}
-                                                        classNamePrefix="dropdown"
-                                                        options={RouteName_Options}
-                                                        // onChange={(e) => { setRouteSelect(e) }}
-                                                        onChange={RoutesNameOnchange}
+                                    </FormGroup>
+                                </Col>
+                                <Col sm="3" className="">
+                                    <FormGroup className="mb- row mt-3 " >
+                                        <Label className="col-sm-5 p-2"
+                                            style={{ width: "80px" }}>{fieldLabel.Routes}</Label>
+                                        <Col sm="7">
+                                            <Select
+                                                name="RoutesName"
+                                                value={values.Routes}
+                                                isSearchable={true}
+                                                className="react-dropdown"
+                                                isDisabled={Data.length > 0 && true}
+                                                styles={{
+                                                    menu: provided => ({ ...provided, zIndex: 2 })
+                                                }}
+                                                classNamePrefix="dropdown"
+                                                options={RouteName_Options}
+                                                onChange={RoutesNameOnchange}
 
-                                                    />
-                                                    {isError.RoutesName.length > 0 && (
-                                                        <span className="text-danger f-8"><small>{isError.RoutesName}</small></span>
-                                                    )}
-                                                </div>
-                                            </FormGroup>
+                                            />
                                         </Col>
+                                    </FormGroup>
+                                </Col>
+                                <Col sm="5">
+                                    <FormGroup className="mb-2 row mt-3 " >
+                                        <Label className="col-md-4 p-2"
+                                            style={{ width: "115px" }}>{fieldLabel.Party}</Label>
+                                        <Col sm="5">
+                                            <Select
+                                                name="PartyName"
+                                                value={values.Party}
+                                                isSearchable={true}
+                                                className="react-dropdown"
+                                                classNamePrefix="dropdown"
+                                                isDisabled={Data.length > 0 && true}
+                                                styles={{
+                                                    menu: provided => ({ ...provided, zIndex: 2 })
+                                                }}
+                                                options={PartyDropdown_Options}
+                                                onChange={partyOnchange}
 
-                                        <Col sm={4} >
-                                            <FormGroup className=" row " >
-                                                <Label htmlFor="validationCustom01" className="mt-1"
-                                                    style={{ width: "100px" }}>PartyName </Label>
-                                                <div className="col col-7 sm-1">
-                                                    <Select
-                                                        name="PartyName"
-                                                        value={values.Party}
-                                                        isSearchable={true}
-                                                        className="react-dropdown"
-                                                        classNamePrefix="dropdown"
-                                                        styles={{
-                                                            menu: provided => ({ ...provided, zIndex: 2 })
-                                                        }}
-                                                        options={PartyDropdown_Options}
-                                                        // onChange={(e) => { setParty(e) }}
-                                                        onChange={partyOnchange}
-
-                                                    />
-                                                </div>
-                                                {isError.PartyName.length > 0 && (
-                                                    <span className="text-danger f-8"><small>{isError.PartyName}</small></span>
-                                                )}
-                                            </FormGroup>
+                                            />
                                         </Col>
-
-                                        <Col sm={1}>
-                                            <div className="col col-1 px-5">
-                                                <Go_Button onClick={(event) => { GoButton_Handler(event) }} loading={listBtnLoading} />
-
-                                            </div>
-                                        </Col>
-                                    </Row>
-                                </CardBody>
-                            </Card>
-                            <PaginationProvider
-                                pagination={paginationFactory(pageOptions)}
-                            >
-                                {({ paginationProps, paginationTableProps }) => (
-                                    <ToolkitProvider
-                                        keyField="id"
-                                        data={Data}
-                                        columns={pagesListColumns}
-                                        search
-                                    >
-                                        {toolkitProps => (
-                                            <React.Fragment>
-                                                <div className="table">
-                                                    <BootstrapTable
-                                                        keyField={"id"}
-                                                        id="table_Arrow"
-                                                        bordered={true}
-                                                        striped={false}
-                                                        noDataIndication={<div className="text-danger text-center ">PartyMasterbulk Not available</div>}
-                                                        classes={"table align-middle table-nowrap table-hover"}
-                                                        headerWrapperClasses={"thead-light"}
-
-                                                        {...toolkitProps.baseProps}
-                                                        {...paginationTableProps}
-                                                    />
-                                                    {/* {countlabelFunc(toolkitProps, paginationProps,)} */}
-                                                    {mySearchProps(toolkitProps.searchProps)}
-                                                </div>
-
-                                                <Row className="align-items-md-center mt-30">
-                                                    <Col className="pagination pagination-rounded justify-content-end mb-2">
-                                                        <PaginationListStandalone
-                                                            {...paginationProps}
-                                                        />
-                                                    </Col>
-                                                </Row>
-                                            </React.Fragment>
-                                        )
-                                        }
-                                    </ToolkitProvider>
-                                )
-                                }
-                            </PaginationProvider>
-
-                            {Data.length > 0 ? <FormGroup className="row row-cols-2 save1" >
-                                <Row >
-                                    <Col sm={2} className="mt-n4">
-                                        <SaveButton pageMode={pageMode}
-                                            loading={saveBtnloading}
-                                            onClick={SaveHandler}
-                                            userAcc={userPageAccessState}
-                                            module={"PartyMasterBulkUpdate"}
+                                    </FormGroup>
+                                </Col >
+                                <Col sm="1" className="mt-3 ">
+                                    {!Data.length > 0 ?
+                                        <Go_Button onClick={(event) => { GoButton_Handler(event) }} loading={listBtnLoading} />
+                                        : <Change_Button
+                                            onClick={(e) => dispatch(GoButton_For_Party_Master_Bulk_Update_AddSuccess([]))}
                                         />
-                                    </Col>
-                                </Row>
-                            </FormGroup >
-                                : null
+                                    }
+                                </Col>
+                            </div>
+                        </div>
+
+                        <PaginationProvider
+                            pagination={paginationFactory(pageOptions)}
+                        >
+                            {({ paginationProps, paginationTableProps }) => (
+                                <ToolkitProvider
+                                    keyField="id"
+                                    data={Data}
+                                    columns={pagesListColumns}
+                                    search
+                                >
+                                    {toolkitProps => (
+                                        <React.Fragment>
+                                            <div className="table">
+                                                <BootstrapTable
+                                                    keyField={"id"}
+                                                    id="table_Arrow"
+                                                    bordered={true}
+                                                    striped={false}
+                                                    noDataIndication={<div className="text-danger text-center ">PartyMasterbulk Not available</div>}
+                                                    classes={"table align-middle table-nowrap table-hover"}
+                                                    headerWrapperClasses={"thead-light"}
+
+                                                    {...toolkitProps.baseProps}
+                                                    {...paginationTableProps}
+                                                />
+                                                {/* {countlabelFunc(toolkitProps, paginationProps,)} */}
+                                                {globalTableSearchProps(toolkitProps.searchProps)}
+                                            </div>
+
+                                            <Row className="align-items-md-center mt-30">
+                                                <Col className="pagination pagination-rounded justify-content-end mb-2">
+                                                    <PaginationListStandalone
+                                                        {...paginationProps}
+                                                    />
+                                                </Col>
+                                            </Row>
+                                        </React.Fragment>
+                                    )
+                                    }
+                                </ToolkitProvider>
+                            )
                             }
-                        </form>
-                        {/* </CardBody> */}
-                        {/* </Card> */}
-                    </Container>
+                        </PaginationProvider>
+
+                        {Data.length > 0 &&
+                            <SaveButtonDraggable>
+                                <SaveButton pageMode={pageMode}
+                                    loading={saveBtnloading || mobileApiLoading}
+                                    onClick={SaveHandler}
+                                    userAcc={userPageAccessState}
+                                    module={"PartyMasterBulkUpdate"}
+                                />
+                            </SaveButtonDraggable>
+                        }
+                    </form>
+
                 </div>
             </React.Fragment >
         );
@@ -759,7 +857,6 @@ const PartyMasterBulkUpdate = (props) => {
         )
     }
 };
-
 
 export default PartyMasterBulkUpdate
 

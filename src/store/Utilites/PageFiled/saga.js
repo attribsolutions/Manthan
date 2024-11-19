@@ -6,7 +6,6 @@ import {
   commonPageFieldSuccess,
   commonPageFieldListSuccess
 } from "../../actions"
-import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 
 
 function* commonPageFiled_GenFunc({ pageId }) {
@@ -23,6 +22,7 @@ function* commonPageFiled_GenFunc({ pageId }) {
   } catch (error) { }
 }
 function* commonPageFiledList_GenFunc({ pageId }) {
+  
   try {
 
     const response = yield call(commonPageFiled_API, pageId);

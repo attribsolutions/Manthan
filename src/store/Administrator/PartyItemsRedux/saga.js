@@ -1,5 +1,5 @@
 import { call, put, takeLatest } from "redux-saga/effects";
-import { CommonConsole } from "../../../components/Common/CommonFunction";
+import { CommonConsole, loginUserDetails } from "../../../components/Common/CommonFunction";
 import { PartyItemGoBtnAdd_API, ChannelItemGoBtnAdd_API, PartyItem_Save_API, ChannelItem_Save_API, ChannelItem_View_API } from "../../../helpers/backend_helper";
 import { url } from "../../../routes";
 import { savePartyItemsActionSuccess, goButtonPartyItemAddPageSuccess, editPartyItemIDSuccess, PartyItemApiErrorAction, channalItemViewDetailActionSuccess, } from "./action";
@@ -25,8 +25,7 @@ function* save_PartyItems_GenFunc({ config }) {
   }
 }
 
-function* goButton_partyItem_Add_GenFunc({config}) {
-  
+function* goButton_partyItem_Add_GenFunc({ config }) {
   const { jsonBody, subPageMode } = config;
   try {
     let response = null
@@ -35,19 +34,34 @@ function* goButton_partyItem_Add_GenFunc({config}) {
     } else {
       response = yield call(PartyItemGoBtnAdd_API, jsonBody);
     }
+    
     response.Data.map((item) => {
+      
       item["selectCheck"] = false;
+      item["GST"] = Number(item.GST)
 
       if (subPageMode === url.CHANNEL_ITEM) {
         if (item.PartyType > 0) {
           item["selectCheck"] = true;
         }
       }
-      else if (item.Party > 0) {
-        item["selectCheck"] = true;
+
+      else {
+        let isItemMap = false
+        const UploadSalesDatafromExcelParty = loginUserDetails().UploadSalesDatafromExcelParty
+        if (UploadSalesDatafromExcelParty === 1 && item.MapItem === null) {
+          isItemMap = true
+        }
+        item["isItemMap"] = isItemMap
+        if (item.Party > 0) {
+          item["selectCheck"] = true;
+        }
       }
+
+
       return item
     });
+
     yield put(goButtonPartyItemAddPageSuccess(response.Data));
 
 
@@ -62,12 +76,12 @@ function* goButton_partyItem_Add_GenFunc({config}) {
 
 
 function* editPartyItems_ID_GenFunc({ body }) {     // edit API 
-  
+
   const { config, jsonBody } = body;
 
   try {
-    let  response = yield call(PartyItemGoBtnAdd_API, jsonBody);
-    
+    let response = yield call(PartyItemGoBtnAdd_API, jsonBody);
+
     if (response) {
       response.pageMode = config.btnmode;
 
@@ -92,11 +106,11 @@ function* editPartyItems_ID_GenFunc({ body }) {     // edit API
 
 
 function* viewChannelItem_GenFunc({ config }) {     // edit API 
-  
- 
+
+
   try {
-    let  response = yield call(ChannelItem_View_API, config);
-      yield put(channalItemViewDetailActionSuccess(response));
+    let response = yield call(ChannelItem_View_API, config);
+    yield put(channalItemViewDetailActionSuccess(response));
   } catch (error) {
     CommonConsole(error)
     yield put(PartyItemApiErrorAction())
@@ -110,7 +124,7 @@ function* PartyItemsSaga() {
   yield takeLatest(GO_BUTTON_PARTY_ITEM_ADD, goButton_partyItem_Add_GenFunc)
   yield takeLatest(EDIT_PARTY_ITEM_ID, editPartyItems_ID_GenFunc)
   yield takeLatest(CHANNEL_ITEM_VIEW_DETAIL_ACTION, viewChannelItem_GenFunc)
-  
+
 
 }
 

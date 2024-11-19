@@ -37,7 +37,6 @@ import {
 } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { PAGE_lIST } from "../../../routes/route_url";
 import { breadcrumbReturnFunc, loginUserID, metaTagLabel } from "../../../components/Common/CommonFunction";
 import PageFieldMaster_Tab from "./PageFieldMaster";
 import * as mode from "../../../routes/PageMode"
@@ -47,15 +46,18 @@ import AddMaster from "../EmployeePages/Drodown";
 import Modules from "../ModulesPages/Modules";
 import * as url from "../../../routes/route_url";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
+import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 
 const PageMaster = (props) => {
+
   const dispatch = useDispatch();
   const history = useHistory()
 
-  const [EditData, setEditData] = useState([]);
+  const [EditData, setEditData] = useState({});
   const [modalCss, setModalCss] = useState(false);
   const [pageMode, setPageMode] = useState(mode.defaultsave);
   const [userPageAccessState, setUserAccState] = useState('');
+  const [actualPagePath, setActualPagePath] = useState('');
 
   const [customActiveTab, setcustomActiveTab] = useState("1");
   const [relatedPageListShowUI, setRelatedPageListShowUI] = useState(false);
@@ -67,6 +69,12 @@ const PageMaster = (props) => {
   const [pageAccessData, setPageAccessData] = useState([]);
   const [editCreatedBy, seteditCreatedBy] = useState("");
   const [moduleMaster_AddAccess, setModuleMaster_AddAccess] = useState(false)
+
+  const [isActiveCheckbox, setIsActiveCheckbox] = useState(true);
+  const [showCountLabel, setShowCountLabel] = useState(false);
+  const [isSweetPOSPage, setIsSweetPOSPage] = useState(false);
+  const [countLabel, setCountLabel] = useState("");
+  const [isEditPopuporComponent, setIsEditPopuporComponent] = useState(false);
 
   const [pageFieldTabTable, setPageFieldTabTable] = useState([{
     ControlID: '',
@@ -109,6 +117,7 @@ const PageMaster = (props) => {
   }));
 
   const location = { ...history.location }
+  // const hasBreadcrumb = location.state.hasOwnProperty(mode.editValue)
   const hasShowloction = location.hasOwnProperty(mode.editValue)
   const hasShowModal = props.hasOwnProperty(mode.editValue)
 
@@ -145,7 +154,7 @@ const PageMaster = (props) => {
     dispatch(getFieldValidationsForALLType())
   }, [dispatch]);
 
-  // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
+  //Edit Data UseEffect.
   useEffect(() => {
 
     if (((fieldValidationsALLType.length > 0) && (hasShowloction || hasShowModal))) {
@@ -153,6 +162,7 @@ const PageMaster = (props) => {
       let hasEditVal = null
       if (hasShowloction) {
         setPageMode(location.pageMode)
+        setActualPagePath(location.actualPagePath)
         hasEditVal = location.editValue
       }
       else if (hasShowModal) {
@@ -165,6 +175,11 @@ const PageMaster = (props) => {
         let pageType_ID = hasEditVal.PageType;
 
         setEditData(hasEditVal);
+        setIsActiveCheckbox(hasEditVal?.isActive)
+        setShowCountLabel(hasEditVal?.CountLabel)
+        setIsSweetPOSPage(hasEditVal?.IsSweetPOSPage)
+        setCountLabel(hasEditVal?.ShowCountLabel)
+        setIsEditPopuporComponent(hasEditVal?.IsEditPopuporComponent)
 
         dispatch(Breadcrumb_inputName(hasEditVal.Name))
         setPageAccessData(hasEditVal.PagePageAccess);
@@ -221,7 +236,7 @@ const PageMaster = (props) => {
         if (!(PageFieldMaster.length === 0) && (pageType_ID === 1) || (pageType_ID === 3)) {
           setPageFieldTabTable(PageFieldMaster)
         }
-        
+
 
         let PageFieldList = hasEditVal.PageFieldList.map((index) => {
           return {
@@ -289,12 +304,11 @@ const PageMaster = (props) => {
       setrelatedPage_DropdownSelect("");
 
       if (pageMode === "true") {
-        dispatch(
-          customAlert({
-            Type: 1,
-            Message: postMsg.Message,
-          })
-        );
+        customAlert({
+          Type: 1,
+          Message: postMsg.Message,
+        })
+
       } else {
         let isPermission = await customAlert({
           Type: 1,
@@ -317,21 +331,21 @@ const PageMaster = (props) => {
   useEffect(() => {
     if ((modulePostAPIResponse.Status === true) && (modulePostAPIResponse.StatusCode === 200)) {
       dispatch(saveModuleMasterSuccess({ Status: false }))
-      dispatch(customAlert({
+      customAlert({
         Type: 1,
         Status: true,
         Message: modulePostAPIResponse.Message,
-      }))
+      })
       tog_center()
     } else if (modulePostAPIResponse.Status === true) {
       dispatch(saveModuleMasterSuccess({ Status: false }))
-      dispatch(customAlert({
+      customAlert({
         Type: 4,
         Status: true,
         Message: JSON.stringify(modulePostAPIResponse.Message),
         RedirectPath: false,
         AfterResponseAction: false
-      }));
+      })
     }
 
   }, [modulePostAPIResponse])
@@ -339,10 +353,19 @@ const PageMaster = (props) => {
   useEffect(() => {
 
     if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
-      history.push({
-        pathname: PAGE_lIST,
-      })
-    } else if (updateMsg.Status === true && !modalCss) {
+      dispatch(update_PageListId_Success({ Status: false }));
+      if (actualPagePath) {
+        history.push({
+          pathname: actualPagePath
+        })
+      }
+      else {
+        history.push({
+          pathname: url.PAGE_lIST,
+        })
+      }
+
+    } else if (updateMsg.Status === true && (!modalCss)) {
       dispatch(update_PageListId_Success({ Status: false }));
       customAlert({
         Type: 3,
@@ -374,108 +397,6 @@ const PageMaster = (props) => {
     }
   };
 
-  const SaveHandler = (event, values) => {
-
-    event.preventDefault();
-    const btnId = event.target.id;
-
-    let Access = []
-    PageAccess.forEach((element, key) => {
-      if (element.hascheck) {
-        Access.push({ Access: element.id })
-      }
-    });
-    const PageFieldMaster = pageFieldTabTable.map((index) => ({
-      ControlID: index.ControlID,
-      FieldLabel: index.FieldLabel,
-      InValidMsg: index.InValidMsg,
-      IsCompulsory: index.IsCompulsory,
-      DefaultSort: index.DefaultSort,
-      ListPageSeq: index.ListPageSeq,
-      Alignment: index.Alignment,
-      ShowInListPage: index.ShowInListPage,
-      ShowInDownload: index.ShowInDownload,
-      ControlType: index.ControlType.value,
-      FieldValidation: index.FieldValidation.value,
-      DownloadDefaultSelect: index.DownloadDefaultSelect,
-    }))
-
-    if (
-      Access.length === 0 &&
-      (pageType_DropdownSelect.value === 2)
-    ) {
-      dispatch(
-        customAlert({
-          Type: 4,
-          Status: true,
-          Message: "At Least One PageAccess is Select",
-          RedirectPath: false,
-          PermissionAction: false,
-        })
-      );
-      return;
-    }
-
-    if ((pageType_DropdownSelect.value === 2) && (relatedPage_DropdownSelect === undefined)) {
-      dispatch(
-        customAlert({
-          Type: 4,
-          Status: true,
-          Message: "Please Select Related Page ID",
-          RedirectPath: false,
-          PermissionAction: false,
-        })
-      );
-      return;
-    }
-
-    const jsonBody = JSON.stringify({
-
-      Name: values.Name,
-      Module: module_DropdownSelect.value,
-      isActive: values.isActive,
-      DisplayIndex: values.displayIndex,
-      Icon: values.Icon,
-      CountLabel: values.CountLabel,
-      ShowCountLabel: values.ShowCountLabel,
-      ActualPagePath: values.pagePath,
-      PageType: pageType_DropdownSelect.value,
-      PageHeading: values.pageheading,
-      PageDescription: values.pagedescription,
-      PageDescriptionDetails: values.pageheadingdescription,
-      RelatedPageID: (pageType_DropdownSelect.value === 2) ? relatedPage_DropdownSelect.value : 0,
-      IsDivisionRequired: values.IsDivisionRequired,
-      IsEditPopuporComponent: values.IsEditPopuporComponent,
-      CreatedBy: loginUserID(),
-      UpdatedBy: loginUserID(),
-      PagePageAccess: Access,
-      PageFieldMaster: PageFieldMaster,
-    })
-
-    if ((pageType_DropdownSelect.value === 1) && (PageFieldMaster.length === 0)) {
-      {
-        dispatch(
-          customAlert({
-            Type: 4,
-            Status: true,
-            Message: "PageFields is Required",
-            RedirectPath: false,
-            PermissionAction: false,
-          })
-        );
-        return;
-      }
-    }
-
-    if (pageMode === mode.edit) {
-      dispatch(update_PageListId_Action({ jsonBody, updateId: EditData.id, btnId }));
-
-    } else {
-
-      dispatch(save_PageMaster_Action({ jsonBody, btnId }));
-
-    }
-  };
 
   // for module dropdown
   const Module_DropdownSelectHandller = (e) => {
@@ -515,15 +436,106 @@ const PageMaster = (props) => {
     setmodal_center(!modal_center)
   }
 
+  const SaveHandler = (event, values) => {
 
-  // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
-  var IsEditMode_Css = ''
-  if ((modalCss) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
+    event.preventDefault();
+    const btnId = event.target.id;
+
+    let Access = []
+    PageAccess.forEach((element, key) => {
+      if (element.hascheck) {
+        Access.push({ Access: element.id })
+      }
+    });
+    const PageFieldMaster = pageFieldTabTable.map((index) => ({
+      ControlID: index.ControlID,
+      FieldLabel: index.FieldLabel,
+      InValidMsg: index.InValidMsg,
+      IsCompulsory: index.IsCompulsory,
+      DefaultSort: index.DefaultSort,
+      ListPageSeq: index.ListPageSeq,
+      Alignment: index.Alignment,
+      ShowInListPage: index.ShowInListPage,
+      ShowInDownload: index.ShowInDownload,
+      ControlType: index.ControlType.value,
+      FieldValidation: index.FieldValidation.value,
+      DownloadDefaultSelect: index.DownloadDefaultSelect,
+    }))
+
+    if (
+      Access.length === 0 &&
+      (pageType_DropdownSelect.value === 2)
+    ) {
+      customAlert({
+        Type: 4,
+        Status: true,
+        Message: alertMessages.selectPageAcces,
+        RedirectPath: false,
+        PermissionAction: false,
+      })
+      return;
+    }
+
+    if ((pageType_DropdownSelect.value === 2) && (relatedPage_DropdownSelect === undefined)) {
+      customAlert({
+        Type: 4,
+        Status: true,
+        Message: alertMessages.selectRelatedID,
+        RedirectPath: false,
+        PermissionAction: false,
+      })
+      return;
+    }
+
+    const jsonBody = JSON.stringify({
+
+      Name: values.Name,
+      Module: module_DropdownSelect.value,
+      isActive: isActiveCheckbox,
+      DisplayIndex: values.displayIndex,
+      Icon: values.Icon,
+      CountLabel: showCountLabel,
+      ShowCountLabel: countLabel,
+      IsSweetPOSPage:isSweetPOSPage,
+      ActualPagePath: values.pagePath,
+      PageType: pageType_DropdownSelect.value,
+      PageHeading: values.pageheading,
+      PageDescription: values.pagedescription,
+      PageDescriptionDetails: values.pageheadingdescription,
+      RelatedPageID: (pageType_DropdownSelect.value === 2) ? relatedPage_DropdownSelect.value : 0,
+      IsDivisionRequired: values.IsDivisionRequired,
+      IsEditPopuporComponent: isEditPopuporComponent,
+      CreatedBy: loginUserID(),
+      UpdatedBy: loginUserID(),
+      PagePageAccess: Access,
+      PageFieldMaster: PageFieldMaster,
+    })
+
+    if ((pageType_DropdownSelect.value === 1) && (PageFieldMaster.length === 0)) {
+      {
+        customAlert({
+          Type: 4,
+          Status: true,
+          Message: alertMessages.pageField_IsRequired,
+          RedirectPath: false,
+          PermissionAction: false,
+        })
+        return;
+      }
+    }
+
+    if (pageMode === mode.edit) {
+      dispatch(update_PageListId_Action({ jsonBody, updateId: EditData.id, btnId }));
+
+    } else {
+      dispatch(save_PageMaster_Action({ jsonBody, btnId }));
+    }
+  };
 
   if (!(userPageAccessState === '')) {
     return (
       <React.Fragment>
-        <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
+        <div className="page-content">
           <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
           <Container fluid>
             <AvForm
@@ -555,7 +567,7 @@ const PageMaster = (props) => {
                           <span className="d-none d-sm-block">Page Master Details</span>
                         </NavLink>
                       </NavItem>
-                      {/* {!(pageType_DropdownSelect.value === 2) ? */}
+
                       <NavItem>
                         <NavLink
                           style={{ cursor: "pointer" }}
@@ -572,8 +584,6 @@ const PageMaster = (props) => {
                           <span className="d-none d-sm-block">Page Field</span>
                         </NavLink>
                       </NavItem>
-                      {/* : <></> */}
-                      {/* } */}
 
                     </Nav>
 
@@ -701,6 +711,7 @@ const PageMaster = (props) => {
                                   <Select
                                     value={pageType_DropdownSelect}
                                     options={PageType_DropdownOption}
+                                    // isDisabled={(actualPagePath) && true}
                                     autoComplete="off"
                                     onChange={(e) => {
                                       PageType_DropdownSelectHandller(e);
@@ -758,12 +769,13 @@ const PageMaster = (props) => {
                               <Col md="1"> </Col>
                               <Col md="3">
                                 <FormGroup className="mb-3">
-                                  <Label htmlFor="validationCustom01">Page Path</Label>
+                                  <Label>Page Path</Label>
                                   <AvField
                                     name="pagePath"
                                     id="pagePathid"
                                     value={EditData.ActualPagePath}
                                     type="text"
+                                    disabled={(actualPagePath) && true}
                                     placeholder="Please Enter Page Path"
                                     validate={{
                                       required: {
@@ -779,7 +791,7 @@ const PageMaster = (props) => {
                               <Col md="1"> </Col>
                               <Col md="3">
                                 <FormGroup className="mb-3">
-                                  <Label htmlFor="validationCustom01">Icon</Label>
+                                  <Label>Icon</Label>
                                   <AvField
                                     name="Icon"
                                     value={EditData.Icon}
@@ -800,13 +812,14 @@ const PageMaster = (props) => {
                             <Row>
                               <Col md="3">
                                 <FormGroup className="mb-3">
-                                  <Label htmlFor="validationCustom01"> Show Count Label</Label>
+                                  <Label >Count Label</Label>
                                   <AvField
-                                    name="ShowCountLabel"
-                                    value={EditData.ShowCountLabel}
+                                    name="countLabel"
+                                    value={countLabel}
                                     type="text"
                                     placeholder="Please Enter  Show Count Label"
                                     autoComplete="off"
+                                    onChange={(e) => { setCountLabel(e.target.value) }}
                                   />
                                 </FormGroup>
                               </Col>
@@ -818,7 +831,7 @@ const PageMaster = (props) => {
                                     htmlFor="horizontal-firstname-input"
                                     className="col-sm-4 col-form-label mt-4"
                                   >
-                                    Count Label
+                                    Show Count Label
                                   </Label>
                                   <Col md={5} style={{ marginTop: "15px" }}>
                                     <div
@@ -827,14 +840,50 @@ const PageMaster = (props) => {
                                     >
                                       <AvInput
                                         type="checkbox"
+                                        name="showCountLabel"
                                         className="form-check-input mt-4"
-                                        id="customSwitchsizemd"
+                                        // key={EditData.CountLabel}
                                         defaultChecked={EditData.CountLabel}
-                                        name="CountLabel"
+                                        checked={showCountLabel}
+                                        onChange={(e) => { setShowCountLabel(e.target.checked) }}
                                       />
                                       <label
                                         className="form-check-label"
-                                        htmlFor="customSwitchsizemd"
+                                      ></label>
+                                    </div>
+                                  </Col>
+                                </Row>
+                              </FormGroup>
+
+
+
+
+
+                              <FormGroup className="mb-1 col col-sm-4">
+                                <Row className="justify-content-md-left">
+                                  <Col md="3"> </Col>
+                                  <Label
+                                    htmlFor="horizontal-firstname-input"
+                                    className="col-sm-4 col-form-label mt-4"
+                                  >
+                                   Is SweetPOS Page
+                                  </Label>
+                                  <Col md={5} style={{ marginTop: "15px" }}>
+                                    <div
+                                      className="form-check form-switch form-switch-md mb-1"
+                                      dir="ltr"
+                                    >
+                                      <AvInput
+                                        type="checkbox"
+                                        name="IsSweetPOSPage"
+                                        className="form-check-input mt-4"
+                                        // key={EditData.CountLabel}
+                                        defaultChecked={EditData.IsSweetPOSPage}
+                                        checked={isSweetPOSPage}
+                                        onChange={(e) => { setIsSweetPOSPage(e.target.checked) }}
+                                      />
+                                      <label
+                                        className="form-check-label"
                                       ></label>
                                     </div>
                                   </Col>
@@ -860,10 +909,10 @@ const PageMaster = (props) => {
                                       <AvInput
                                         type="checkbox"
                                         className="form-check-input mt-4"
-                                        id="customSwitchsizemd"
-                                        checked={EditData.isActive}
                                         name="isActive"
-                                        defaultChecked={true}
+                                        // defaultChecked={EditData.isActive}
+                                        defaultChecked={isActiveCheckbox}
+                                        onChange={(e) => { setIsActiveCheckbox(e.target.checked) }}
                                       />
                                       <label
                                         className="form-check-label"
@@ -891,7 +940,6 @@ const PageMaster = (props) => {
                                       <AvInput
                                         type="checkbox"
                                         className="form-check-input mt-4"
-                                        id="customSwitchsizemd"
                                         defaultChecked={EditData.IsDivisionRequired}
                                         name="IsDivisionRequired"
                                       />
@@ -922,9 +970,10 @@ const PageMaster = (props) => {
                                         <AvInput
                                           type="checkbox"
                                           className="form-check-input mt-4"
-                                          id="customSwitchsizemd"
                                           defaultChecked={EditData.IsEditPopuporComponent}
+                                          checked={isEditPopuporComponent}
                                           name="IsEditPopuporComponent"
+                                          onChange={(e) => { setIsEditPopuporComponent(e.target.checked) }}
                                         />
                                         <label
                                           className="form-check-label"
@@ -990,7 +1039,7 @@ const PageMaster = (props) => {
                       </TabPane>
 
                     </TabContent>
-                   
+
                   </CardBody>
                   <div style={{ paddingLeft: "30px", paddingBottom: "10px" }}>
                     <SaveButton

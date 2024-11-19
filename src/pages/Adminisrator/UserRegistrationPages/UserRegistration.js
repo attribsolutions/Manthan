@@ -24,24 +24,27 @@ import {
 import { Tbody, Thead } from "react-super-responsive-table";
 import { Breadcrumb_inputName } from "../../../store/Utilites/Breadcrumb/actions";
 import { MetaTags } from "react-meta-tags";
-import { useHistory } from "react-router-dom";
-import { breadcrumbReturnFunc, btnIsDissablefunc, loginUserID, metaTagLabel } from "../../../components/Common/CommonFunction";
+import reactRouterDom, { useHistory } from "react-router-dom";
+import { breadcrumbReturnFunc, btnIsDissablefunc, loginCompanyID, loginUserDetails, loginUserID, metaTagLabel } from "../../../components/Common/CommonFunction";
 import * as mode from "../../../routes/PageMode"
 import * as pageId from "../../../routes/allPageID"
 import { SaveButton } from "../../../components/Common/CommonButton";
 import { getRole } from "../../../store/Administrator/RoleMasterRedux/action";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { comAddPageFieldFunc, initialFiledFunc, onChangeSelect, onChangeText } from "../../../components/Common/validationFunction";
-import { commonPageField, commonPageFieldSuccess } from "../../../store/actions";
+import { commonPageField, commonPageFieldSuccess, postSelect_Field_for_dropdown } from "../../../store/actions";
 import AddMaster from "../EmployeePages/Drodown";
 import * as url from "../../../routes/route_url";
 import AddEmployee from "../EmployeePages/EmployeeMaster";
+import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
+import { GenralMasterSubType } from "../../../helpers/backend_helper";
 
 const AddUser = (props) => {
 
   // const formRef = useRef(null);
   const dispatch = useDispatch();
   const history = useHistory()
+  const loginPartyTypeName = loginUserDetails().PartyType;
 
   const fileds = {
     id: "",
@@ -49,6 +52,7 @@ const AddUser = (props) => {
     LoginName: '',
     Password: '',
     EmployeeName: '',
+    POSRateType: '',
     isActive: true,
     isLoginUsingEmail: false,
     isLoginUsingMobile: false,
@@ -82,16 +86,18 @@ const AddUser = (props) => {
   const {
     postMsg,
     employeelistForDropdown,
-    Roles=[],
+    Roles = [],
     employePartyWiseRoleState,
     userAccess,
     pageField,
     saveBtnloading,
+    RateTypeList
   } = useSelector((state) => ({
     saveBtnloading: state.User_Registration_Reducer.saveBtnloading,
-    postMsg:state.User_Registration_Reducer.postMsg,
+    postMsg: state.User_Registration_Reducer.postMsg,
     employePartyWiseRoleState: state.User_Registration_Reducer.userPartiesForUserMaster,
     employeelistForDropdown: state.User_Registration_Reducer.employeelistForDropdown,
+    RateTypeList: state.PartyMasterBulkUpdateReducer.SelectField,
     Roles: state.RoleMaster_Reducer.roleList,
     userAccess: state.Login.RoleAccessUpdateData,
     pageField: state.CommonPageFieldReducer.pageField
@@ -111,6 +117,14 @@ const AddUser = (props) => {
     dispatch(commonPageField(pageId.USER))
     dispatch(getEmployeeForUseRegistration());
     dispatch(getRole());
+  }, []);
+
+  useEffect(() => { // Rate Type Dropdown useEffect
+    const jsonBody = JSON.stringify({
+      Company: loginCompanyID(),
+      TypeID: 173
+    });
+    dispatch(postSelect_Field_for_dropdown(jsonBody));
   }, []);
 
   useEffect(() => {
@@ -166,7 +180,7 @@ const AddUser = (props) => {
   }, [pageField])
 
   // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
-  useEffect(() => {
+  useEffect(async () => {
 
     if ((hasShowloction || hasShowModal)) {
 
@@ -184,9 +198,19 @@ const AddUser = (props) => {
 
       if (hasEditVal) {
         const { id, LoginName, AdminPassword, CreatedBy, EmployeeName, Employee, UserRole,
-          isLoginUsingMobile, isActive, isSendOTP, isLoginUsingEmail
+          isLoginUsingMobile, isActive, isSendOTP, isLoginUsingEmail, POSRateType
         } = hasEditVal
         const { values, hasValid, } = { ...state }
+
+        const jsonBody = {
+          Company: loginCompanyID(),
+          TypeID: 173
+        };
+        const rateTypeApiResp = await GenralMasterSubType(jsonBody)
+
+        const defaultSaveValue = rateTypeApiResp.Data
+          .filter(i => i.id === POSRateType)
+          .map(i => ({ label: i.Name, value: i.id }))[0] || null;
 
         values.id = id;
         values.LoginName = LoginName;
@@ -196,6 +220,7 @@ const AddUser = (props) => {
         values.isLoginUsingEmail = isLoginUsingEmail;
         values.isLoginUsingMobile = isLoginUsingMobile;
         values.isSendOTP = isSendOTP;
+        values.POSRateType = defaultSaveValue;
 
         hasValid.id.valid = true;
         hasValid.LoginName.valid = true;
@@ -205,6 +230,7 @@ const AddUser = (props) => {
         hasValid.isLoginUsingEmail.valid = true;
         hasValid.isLoginUsingMobile.valid = true;
         hasValid.isSendOTP.valid = true;
+        hasValid.POSRateType.valid = true;
 
         dispatch(Breadcrumb_inputName(LoginName))
         dispatch(GetUserPartiesForUserMastePage({ id: Employee, editRole: UserRole }))
@@ -214,50 +240,62 @@ const AddUser = (props) => {
         dispatch(userEditActionSuccess({ Status: false }))
       }
     }
+
+    return () => {
+      dispatch(Breadcrumb_inputName(""))
+    }
   }, [])
+
 
   useEffect(async () => {
 
-    if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === mode.dropdownAdd)) {
+    if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
       dispatch(saveUserMasterActionSuccess({ Status: false }))
 
       if (pageMode === mode.dropdownAdd) {
         customAlert({
           Type: 1,
           Message: postMsg.Message,
-      })
+        })
       }
       else {
-        let isPermission = await customAlert({
+        customAlert({
           Type: 1,
           Status: true,
           Message: postMsg.Message,
-      })
-      if (isPermission) {
-          history.push({ pathname: url.USER_lIST })
-      }
+        })
+        history.push({
+          pathname: url.USER_lIST,
+        })
       }
     }
 
-    else if ((postMsg.Status === true) && !(pageMode === mode.dropdownAdd)) {
+    else if ((postMsg.Status === true)) {
       dispatch(saveUserMasterActionSuccess({ Status: false }))
       customAlert({
         Type: 4,
-         Message: JSON.stringify(postMsg.Message),
-    })
+        Message: JSON.stringify(postMsg.Message),
+      })
     }
   }, [postMsg.Status])
 
   const EmployeeOptions = employeelistForDropdown.map((Data) => ({
     value: Data.id,
-    label: Data.Name
+    label: Data.Name,
+    EmployeeEmail: Data.EmployeeEmail,
+    EmployeeMobile: Data.EmployeeMobile
   }));
 
   const RolesValues = Roles.map((Data) => ({
     value: Data.id,
     label: Data.Name
   }));
-  
+
+  const RateTypeValue = RateTypeList.map((Data) => ({
+    value: Data.id,
+    label: Data.Name
+  }));
+
   function handllerEmployeeID(e) {
     dispatch(GetUserPartiesForUserMastePage({ id: e.value }))
   }
@@ -272,11 +310,12 @@ const AddUser = (props) => {
   };
 
   const saveHandler = (event) => {
+    
     event.preventDefault();
     const btnId = event.target.id;
     btnIsDissablefunc({ btnId: btnId, state: true })
     try {
-
+      
       const userRoleArr = []
       employePartyWiseRoleState.map(i1 => {
 
@@ -290,7 +329,7 @@ const AddUser = (props) => {
       if (userRoleArr.length <= 0) {
         customAlert({
           Type: 4,
-          Message: "At Least One Role  Add in the Table",
+          Message: alertMessages.atLeastOneRoleAddInTable,
         })
         return btnIsDissablefunc({ btnId: btnId, state: false })
       }
@@ -301,6 +340,7 @@ const AddUser = (props) => {
         Employee: values.EmployeeName.value,
         isActive: values.isActive,
         isSendOTP: values.isSendOTP,
+        POSRateType: (values.POSRateType === "" || values.POSRateType === null) ? 0 : values.POSRateType.value,
         isLoginUsingMobile: values.isLoginUsingMobile,
         isLoginUsingEmail: values.isLoginUsingEmail,
         CreatedBy: loginUserID(),
@@ -325,7 +365,7 @@ const AddUser = (props) => {
     if (!(employePartyWiseRoleState.length === 0)) {
       if ((employePartyWiseRoleState[0].Party > 0)) {
         return (
-          <div className="col col-6" style={{ marginTop: '28px' }}>
+          <div className="col col-12" style={{ marginTop: '28px' }}>
             <table className="table table-bordered ">
               <Thead >
                 <tr>
@@ -378,8 +418,8 @@ const AddUser = (props) => {
   }
 
   // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
-  var IsEditMode_Css = ''
-  if (modalCss || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
+  // var IsEditMode_Css = ''
+  // if (modalCss || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
 
   if (!(userPageAccessState === '')) {
     return (
@@ -387,7 +427,7 @@ const AddUser = (props) => {
         <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
         {/* <BreadcrumbNew userAccess={userAccess} pageId={pageId.USER} /> */}
 
-        <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
+        <div className="page-content" >
           <Container fluid>
             <div >
               <Row>
@@ -434,6 +474,27 @@ const AddUser = (props) => {
                               }
 
                             </Row>
+                            {loginPartyTypeName === "Franchises" &&
+                              <Row>
+                                <FormGroup className="mb-2 col col-sm-4 ">
+                                  <Label htmlFor="validationCustom01"> {fieldLabel.POSRateType} </Label>
+                                  <Col sm={12}>
+                                    <Select
+                                      id="POSRateType"
+                                      name="POSRateType"
+                                      value={values.POSRateType}
+                                      options={RateTypeValue}
+                                      onChange={(hasSelect, evn) => {
+                                        onChangeSelect({ hasSelect, evn, state, setState, })
+                                      }}
+                                    />
+                                    {isError.POSRateType.length > 0 && (
+                                      <span className="text-danger font-size-17"><small>{isError.POSRateType}</small></span>
+                                    )}
+                                  </Col>
+                                </FormGroup>
+                              </Row>
+                            }
 
                             <Row>
                               <FormGroup className="mb-2 col col-sm-4 ">
@@ -457,33 +518,38 @@ const AddUser = (props) => {
                               </FormGroup>
                             </Row>
 
-                            <Row>
-                              <FormGroup className="mb-2 col col-sm-4 ">
-                                <Label htmlFor="validationCustom01">Password</Label>
-                                <Input name="password" id="password"
-                                  type="password"
-                                  placeholder="Please Enter Password"
-                                  autoComplete="new-password"
-                                  className="form-control"
-                                  value={password}
-                                  onChange={(e) => { setPassword(e.target.value) }} />
-                              </FormGroup>
-                            </Row>
+                            {!(pageMode === mode.edit || pageMode === mode.view) &&
+                              <Row>
+                                <FormGroup className="mb-2 col col-sm-4 ">
+                                  <Label htmlFor="validationCustom01">Password</Label>
+                                  <Input name="password" id="password"
+                                    type="password"
+                                    placeholder="Please Enter Password"
+                                    autoComplete="new-password"
+                                    className="form-control"
+                                    value={password}
+                                    onChange={(e) => { setPassword(e.target.value) }} />
+                                </FormGroup>
+                              </Row>
+                            }
 
-                            <Row>
-                              <FormGroup className="mb-2 col col-sm-4 ">
-                                <Label htmlFor="validationCustom01">Confirm Password</Label>
-                                <Input
-                                  name="Password" id="password"
-                                  type="password"
-                                  placeholder="Please Enter Password"
-                                  autoComplete="new-password"
-                                  className={cPasswordClass}
-                                  value={cPassword}
-                                  onChange={handleCPassword} />
-                                {showErrorMessage && isCPassword ? <div> Passwords did not match </div> : ''}
-                              </FormGroup>
-                            </Row>
+                            {!(pageMode === mode.edit || pageMode === mode.view) &&
+                              <Row>
+                                <FormGroup className="mb-2 col col-sm-4 ">
+                                  <Label htmlFor="validationCustom01">Confirm Password</Label>
+                                  <Input
+                                    name="Password" id="password"
+                                    type="password"
+                                    placeholder="Please Enter Password"
+                                    autoComplete="new-password"
+                                    className={cPasswordClass}
+                                    value={cPassword}
+                                    onChange={handleCPassword} />
+                                  {showErrorMessage && isCPassword ? <div> Passwords did not match </div> : ''}
+                                </FormGroup>
+                              </Row>
+                            }
+
 
                             <Row className="mt-2">
                               <FormGroup className="mb-1 col col-sm-12 " >
@@ -493,6 +559,8 @@ const AddUser = (props) => {
                                     <div className="form-check form-switch form-switch-md ml-4 " dir="ltr">
                                       <Input type="checkbox" className="form-check-input"
                                         checked={values.isLoginUsingMobile}
+                                        disabled={values.EmployeeName.EmployeeMobile === "" ? true : false}
+
                                         name="isLoginUsingMobile"
                                         onChange={(event) => {
                                           setState((i) => {
@@ -514,6 +582,7 @@ const AddUser = (props) => {
                                         checked={values.isActive}
                                         defaultChecked={true}
                                         name="isActive"
+
                                         onChange={(event) => {
                                           setState((i) => {
                                             const a = { ...i }
@@ -537,6 +606,7 @@ const AddUser = (props) => {
                                     <div className="form-check form-switch form-switch-md" dir="ltr">
                                       <Input type="checkbox" className="form-check-input"
                                         checked={values.isLoginUsingEmail}
+                                        disabled={values.EmployeeName.EmployeeEmail === "" ? true : false}
                                         name="isLoginUsingEmail"
                                         onChange={(event) => {
                                           setState((i) => {

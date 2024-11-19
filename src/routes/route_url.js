@@ -1,6 +1,4 @@
 
-export const DASHBORD = "/Dashboard"
-
 export const DASHBORD_1 = "/Dashboard_1"
 export const DASHBORD_2 = "/Dashboard_2"
 // ***************************** Utility **************************************//
@@ -8,6 +6,7 @@ export const DASHBORD_2 = "/Dashboard_2"
 export const SEARCH_BOX2 = "/SearchBoxSecond"
 export const SEARCH_BOX3 = "/SerachBox3"
 export const TRANSACTION_LOG = "/TransactionLog"
+export const POS_LOG = "/POS_Log"
 
 // *************************** Administration *******************************//
 
@@ -83,6 +82,9 @@ export const SALESMAN_LIST = "/SalesManList"
 export const GROUP = "/GroupMaster"
 export const GROUP_lIST = "/GroupList"
 
+export const GROUP_SUBGROUP = "/Group_SubGroup"
+
+
 export const PRICE = "/PriceMaster"
 export const PRICE_lIST = "/PriceList"
 
@@ -115,15 +117,21 @@ export const CITY_LIST = "/CityList"
 
 export const IMPORT_EXCEL_FIELD_MAP = "/Import_ExcelFieldMap"
 
+export const IMPORT_CREDIT_NOTE_EXCEL_FIELD_MAP = "/Credit_Note_Excel_Field_Map"
+
+export const TARGET_UPLOAD = "/Target_Upload"
+
+export const TARGET_UPLOAD_LIST = "/Target_Upload_List"
+
+export const PARTY_EMPLOYEE_DETAILS = "/PartyEmployeeDetails"
+
 export const INVOICE_EXCEL_UPLOAD = "/Invoice_Excel_Upload"
 export const RETAILER_EXCEL_UPLOAD = "/Retailer_Excel_Upload"
 
 export const IMPORT_FIELD_ADD = "/ImportFieldAdd"
 export const IMPORT_FIELD_ADD_LIST = "/ImportFieldAddList"
 
-
 export const IMPORT_EXCEL_PARTY_MAP = "/ImportExcelPartyMap"
-
 
 export const ROUTE_UPDATE = "/RouteUpdate"
 
@@ -139,6 +147,37 @@ export const PRODUCT_MARGIN_REPORT = "/ProductMarginReport"
 export const DISCOUNT_MASTER = "/Discount_Master"
 export const DISCOUNT_LIST = "/Discount_List"
 
+export const CLUSTER_MASTER = "/Cluster_Master"
+export const CLUSTER_lIST = "/Cluster_List"
+
+export const SUB_CLUSTER_MASTER = "/SubCluster_Master"
+export const SUB_CLUSTER_lIST = "/SubCluster_List"
+
+export const CENTRAL_SERVICE_ITEM_MASTER = "/CentralServiceItem"
+export const CENTRAL_SERVICE_ITEM_lIST = "/CentralServiceItemList"
+
+export const SERVICE_ITEM_ASSIGN = "/Service_Item_Assign"
+
+export const PARTY_DETAILS = "/Party_Details"
+
+export const ITEM_MASTER_BULK_UPDATE = "/ItemMasterBulkUpdate"
+
+export const ITEM_SUPPLIER_ASSIGN = "/Item_Supplier_Assign"
+
+export const ITEM_IMAGE_UPLOAD = "/ItemImageUpload"
+
+export const CREDIT_NOTE_UPLOAD = "/CreditNoteUpload"
+
+export const RATE_MASTER = "/Rate_Master"
+export const RATE_LIST = "/Rate_List"
+
+export const FRANCHISE_CUSTOMER_MASTER = "/Franchise_Customer_Master"
+
+export const FRANCHISE_CUSTOMER_LIST = "/Franchise_Customer_List"
+
+export const COUNTRY_MASTER = "/Country_Master"
+export const COUNTRY_LIST = "/Country_List"
+
 //******************************* Purchase Module ************************************//
 export const ORDER_1 = "/Order_1"
 export const ORDER_LIST_1 = "/OrderList_1"
@@ -148,6 +187,8 @@ export const ORDER_LIST_2 = "/OrderList_2"
 
 export const ORDER_4 = '/Order_4'
 export const ORDER_LIST_4 = '/OrderList_4'
+
+export const APP_ORDER_LIST = "/App_Order_List"
 
 export const PURCHASE_RETURN = "/PurchaseReturn"
 export const PURCHASE_RETURN_LIST = "/PurchaseReturnList"
@@ -167,7 +208,12 @@ export const CHALLAN = "/Challan"
 
 export const STOCK_ENTRY = "/Stock_Entry"
 
+export const STOCK_ENTRY_LIST = "/Stock_Entry_List"
+
 export const STOCK_ADJUSTMENT = "/StockAdjustment"
+
+export const STOCK_ADJUSTMENT_MODE_2 = "/StockAdjustmentMode_2"
+
 //*******************************All report page ************************************//
 export const REPORT = "/Report"
 
@@ -178,6 +224,28 @@ export const BIllOf_MATERIALS_LIST = "/BOMList"
 
 export const WORK_ORDER = "/WorkOrder"
 export const WORK_ORDER_LIST = "/WorkOrderList"
+
+export const BULK_WORK_ORDER = "/Bulk_Work_Order"
+
+export const BULK_WORK_ORDER_LIST = "/Bulk_Work_Order_List"
+
+export const FRENCHIESE_SALE_REPORT = "/Frenchies_Item_sale_Report"
+
+
+export const DAILY_SALE_REPORT = '/Daily_Sale_Report'
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 export const MATERIAL_ISSUE = "/MaterialIssue"
 export const MATERIAL_ISSUE_LIST = "/MaterialIssueList"
@@ -191,7 +259,7 @@ export const PRODUCTION_REISSUE = "/ProductionReIssue"
 export const PRODUCTION_REISSUE_LIST = "/ProductionReIssueList"
 export const PRODUCTION_REISSUE_STP = "/ProductionReIssue_STP"
 
-//******************************* Sale Module  ************************************//
+//******************************* Sale Module ************************************//
 
 export const INVOICE_1 = "/Invoice_1"
 export const INVOICE_LIST_1 = "/InvoiceList_1"
@@ -205,9 +273,13 @@ export const SALES_RETURN_LIST = "/SalesReturnList"
 
 export const PURCHASE_RETURN_MODE_3 = "/Purchase_Return_Mode_3"
 
+export const BULK_INVOICE = "/Bulk_Invoice"
 //******************************* InterBranch Module ************************************//
 
 export const IB_ORDER = "/IB_Order" // IB Order
+
+export const IB_SALES_ORDER = "/IB_Sales_Order" // IB Order
+
 export const IB_ORDER_PO_LIST = "/IB_Order_PO_List" //IB Order List
 export const IB_ORDER_SO_LIST = "/IB_Order_SO_List" //IB Order List
 
@@ -234,13 +306,10 @@ export const PAYMENT_ENTRY_LIST = "/PaymentEntryList"
 
 export const BANK_ASSIGN = "/BankAssign"
 
-
+export const CLAIM_TRACKING_ENTRY = "/ClaimTrackingEntry"
+export const CLAIM_TRACKING_ENTRY_LIST = "/ClaimTrackingEntryList"
 
 export const INVOICE_CONFIGURATION = "/InvoiceConfiguration"
-
-
-
-
 
 export const CREDIT_NOTE = "/Credit"
 export const CREDIT_LIST = "/Credit_List"
@@ -254,18 +323,20 @@ export const GOODS_CREDIT_LIST = "/GoodsCreditNoteList"
 export const GOODS_DEBIT_NOTE = "/GoodsDebitNote"
 export const GOODS_DEBIT_LIST = "/GoodsDebitNoteList"
 
-
-
-
-export const SAP_LEDGER = "/SapLedger"
-
-export const PARTY_LEDGER = "/PartyLedger"
-
-export const STOCK_REPORT = "/StockReport"
-
-export const STOCK_REPORT_1 = "/Stock_Report_1"
+export const CREDIT_NOTE_1 = "/Credit_Note_1"
+export const CREDIT_NOTE_LIST_1 = "/Credit_Note_List_1"
 
 //**************************** Reports ***********************************//
+
+export const SAP_LEDGER = "/SapLedger";
+
+export const PARTY_LEDGER = "/PartyLedger";
+
+export const SELF_LEDGER = "/SelfLedger";
+
+export const CURRENT_STOCK_REPORT = "/StockReport"
+
+export const SNS_REPORT = "/Stock_Report_1"
 
 export const ORDER_SUMMARY_REPORT = "/OrderSummaryReport"
 
@@ -273,12 +344,11 @@ export const GENERIC_SALE_REPORT = "/Generic_Sale_Report"
 
 export const RETAILER_DATA_REPORT = "/RetailerDataReport"
 
-export const CLAIM_SUMMARY_REPORT = "/ClaimSummary"
+
 
 export const CLAIM_SUMMARY_MASTER = "/Claim_Summary_Master"
 
 export const CLAIM_SUMMARY_lIST = "/Claim_Summary_List"
-
 
 export const PURCHASE_GST_REPORT = "/PurchaseGSTReport"
 
@@ -296,15 +366,64 @@ export const RETURN_REPORT = "/ReturnReport"
 
 export const ITEM_SALE_REPORT = "/Item_Sale_Report"
 
-export const ITEM_REGISTER_REPORT = "/ItemRegister"
+export const MATERIAL_REGISTER_REPORT = "/MaterialRegister"
+
+export const DEBIT_DATA_EXPORT = "/DebitDataExport"
+
+export const CREDIT_DATA_EXPORT = "/CreditDataExport"
+
+export const RECEIPT_DATA_EXPORT = "/ReceiptDataExport"
+
+export const PARTY_OUTSTANDING_REPORT = "/PartyOutstandingReport"
+
+export const RETAILER_APPROVAL = "/RetailerApproval"
+
+export const MOBILE_RETAILER_SEND = "/MobileRetailerSend"
+
+export const MAN_POWER_REPORT = "/ManPowerReport"
+
+export const CLAIM_TRACKING_REPORT = "/Claim_Tracking_Report"
+
+export const TCS_AMOUNT_REPORT = "/TCS_Amount_Report"
+
+export const CX_DD_DIFFERENCE_REPORT = "/CX_DD_Difference"
+
+export const SYSTEM_SETTING = "/System_Setting"
+
+export const SYSTEM_SETTING_LIST = "/System_Setting_List"
+
+export const TARGET_VS_ACHIEVEMENT = "/TargetVSAchievement"
+
+export const ORDER_ITEM_SUPPLIER_REPORT = "/Order_Item_Supplier_Report"
 
 
+//**************************** Sweet Pos ***********************************//
+
+export const POS_ROLE_ACCESS = "/POS_RoleAccess"
+
+export const POS_USER = "/POS_User"
+
+export const POS_USER_lIST = "/POS_User_List"
+
+export const POS_INVOICE_LIST = "/Pos_InvoiceList"
 
 
+export const POS_INVOICE_LIST_IN_POS = "/Pos_InvoiceList/AuthLink/:Credentials"
+
+export const POS_ORDER_IN_POS = "/Order_2/AuthLink/:Credentials"
+
+export const POS_ORDER_LIST_IN_POS = "/OrderList_2/AuthLink/:Credentials"
 
 
+export const CASHIER_SUMMARY_REPORT = "/Cashier_Summary_Report"
 
+export const SWEET_POS_RATE_MASTER = "/SweetPOS_Rate_Master"
 
+export const  SWEET_POS_MACHINE_MASTER = "/SweetPOS_Machine_Master"
+
+export const SWEET_POS_MACHINE_LIST = "/SweetPOS_Machine_List"
+
+export const  STOCK_OUT_REPORT = "/Stock_Out_Report"
 
 
 

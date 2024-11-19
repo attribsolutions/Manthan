@@ -8,6 +8,7 @@ import {
   RetailerExcelUploadApiErrorAction
 } from "./action";
 import {
+  CreditNote_ExcelUpload_Save_API,
   ExcelUpload_Invoice_Save_API,
   ExcelUpload_Retailer_Save_API,
   ImportMaster_Map_Customer_GoButton_API,
@@ -24,6 +25,7 @@ import {
   RETAILER_EXCEL_UPLOAD_SAVE,
 } from "./actionType";
 import { CommonConsole } from "../../../components/Common/CommonFunction";
+import { url } from "../../../routes";
 
 
 function* GoButtonExcel_ImportMaster_GenFun({ config }) {              // Go buuton add Page API
@@ -31,36 +33,36 @@ function* GoButtonExcel_ImportMaster_GenFun({ config }) {              // Go buu
   const { mapType, partyId } = config
 
   try {
+
     let newResp = []
     if (mapType === 1) {
       const response = yield call(ImportMaster_Map_Customer_GoButton_API, config);
+
       newResp = response.Data.map(i => ({
         "id": i.id,
         "party": !(i.Party_id === null) ? i.Party_id : partyId,
         "fieldName": i.CustomerName,
+        "CustomerAddress": i.CustomerAddress,
+        "GSTIN": i.GSTIN,
+        "RouteName": i.RouteName,
         "fieldId": i.Customer,
         "mapValue": i.MapCustomer,
       }))
 
-    } else if (mapType === 2) {
-      const response = yield call(ImportMaster_Map_Item_GoButton_API, config);
-      newResp = response.Data.map(i => ({
-        "id": i.id,
-        "party": !(i.Party_id === null) ? i.Party_id : partyId,
-        "fieldName": i.Name,
-        "fieldId": i.Item_id,
-        "mapValue": i.MapItem,
-      }))
-    } else {
+    } else if (mapType === 3) {
       const response = yield call(ImportMaster_Map_Unit_GoButton_API, config);
 
       newResp = response.Data.map(i => ({
         "id": i.id,
         "party": !(i.Party_id === null) ? i.Party_id : partyId,
         "fieldName": i.Name,
+
         "fieldId": i.id,
         "mapValue": i.MapUnit,
       }))
+    } else {
+      const response = yield call(ImportMaster_Map_Customer_GoButton_API, config);
+      newResp = response.Data
     }
 
     yield put(GoButton_ImportExcelPartyMap_Success(newResp));
@@ -90,7 +92,13 @@ function* Save_Method_ForExcel_ImportMaster_GenFun({ config }) {  // Save API
 function* InvoiceExcelUpload_save_GenFun({ config }) {  // Save API
 
   try {
-    const response = yield call(ExcelUpload_Invoice_Save_API, config);
+    let response
+    if (config.subPageMode === url.CREDIT_NOTE_UPLOAD) {
+      response = yield call(CreditNote_ExcelUpload_Save_API, config);
+    }
+    else {
+      response = yield call(ExcelUpload_Invoice_Save_API, config);
+    }
     yield put(InvoiceExcelUpload_save_Success(response));
 
   } catch (error) { yield put(RetailerExcelUploadApiErrorAction()) }

@@ -10,6 +10,8 @@ const REFRESH_TOKEN_INTERVAL = 29 * 60 * 1000; // 1.3 minutes
 
 export const SessionProvider = ({ history, children }) => {
 
+    const IsLoginFromOutsideLink = history.location.pathname.includes('AuthLink') && history.location.pathname.includes('-');
+
     const dispatch = useDispatch();
 
     const [session, setSession] = useState({
@@ -31,8 +33,6 @@ export const SessionProvider = ({ history, children }) => {
         resetSessionTimeout,
     }) => {
 
-        console.log('logOut function ....');
-
         window.removeEventListener('mousemove', resetSessionTimeout);
         window.removeEventListener('keydown', resetSessionTimeout);
         localStorage.clear();
@@ -46,7 +46,6 @@ export const SessionProvider = ({ history, children }) => {
         let refreshTokenIntervalId;
 
         const startSessionTimeout = () => {
-            // console.log('startSessionTimeout...');
             localStorage.setItem("lastActivity", Date.now())
             sessionTimeout = setTimeout(() => {
 
@@ -97,6 +96,9 @@ export const SessionProvider = ({ history, children }) => {
 
     useEffect(() => {
         const handleStorageChange = (event) => {
+            if (IsLoginFromOutsideLink) {
+                return
+            }
             if ((event.key === 'roleId')) {
                 if (!(event.oldValue === event.newValue)) {
 

@@ -1,18 +1,24 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Col, FormGroup, Label } from "reactstrap";
+import { Col, FormGroup, Label, Row } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import { initialFiledFunc, } from "../../components/Common/validationFunction";
-import { C_Button, Go_Button } from "../../components/Common/CommonButton";
+import { C_Button } from "../../components/Common/CommonButton";
 import { C_DatePicker } from "../../CustomValidateForm";
 import * as _cfunc from "../../components/Common/CommonFunction";
-import { mode, } from "../../routes/index"
+import { mode, url, } from "../../routes/index"
 import { MetaTags } from "react-meta-tags";
-import * as report from '../ReportIndex'
 import C_Report from "../../components/Common/C_Report";
 import { GST_R1_Report_API, GST_R1_Report_API_Success, GST_R3B_Report_API, GST_R3B_Report_API_Success } from "../../store/Report/GSTR1ReportRedux/action";
-import PartyDropdown_Common from "../../components/Common/PartyDropdown";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
+import { alertMessages } from "../../components/Common/CommonErrorMsg/alertMsg";
+import { allLabelWithBlank } from "../../components/Common/CommonErrorMsg/HarderCodeData";
+import GST_ExcelDownloadFun from "./GST_ExcelDownloadFun";
+
+
+
+
+
 
 const GSTR1Report = (props) => {
     const dispatch = useDispatch();
@@ -22,7 +28,7 @@ const GSTR1Report = (props) => {
     const fileds = {
         FromDate: currentDate_ymd,
         ToDate: currentDate_ymd,
-        Customer: { value: "", label: "All" },
+        Customer: allLabelWithBlank,
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
@@ -48,7 +54,18 @@ const GSTR1Report = (props) => {
 
     // Featch Modules List data  First Rendering
     const location = { ...history.location }
-    const hasShowModal = props.hasOwnProperty(mode.editValue)
+    const hasShowModal = props.hasOwnProperty(mode.editValue);
+
+    const { commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
+
+    // Common Party select Dropdown useEffect
+    useEffect(() => {
+        if (commonPartyDropSelect.value > 0) {
+            // partySelectButtonHandler();
+        } else {
+            partySelectOnChangeHandler();
+        }
+    }, [commonPartyDropSelect]);
 
     // userAccess useEffect
     useEffect(() => {
@@ -67,26 +84,29 @@ const GSTR1Report = (props) => {
     }, [userAccess])
 
     useEffect(() => {
-        if ((GstR3BReportData.length !== 0)) {
+        if ((GstR3BReportData.StatusCode === 200 && GstR3BReportData.Status)) {
+            GST_ExcelDownloadFun({      // Download multi tab excel
+                excelTableData: GstR3BReportData.Data,
+                excelFileName: `GST-R3B Report (${values.FromDate}) To (${values.ToDate})`,
+                pageName: "GST-R3B"
+            })
+            dispatch(GST_R3B_Report_API_Success({ Status: false }))
+        }
+    }, [GstR3BReportData]);
 
-            const blob = new Blob([GstR3BReportData], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-            const url = URL.createObjectURL(blob);
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = `GST_R3B_Report_From_(${values.FromDate})_To_(${values.ToDate}).xlsx`;
-            link.click();
-            dispatch(GST_R3B_Report_API_Success([]))
-        } else if ((GstR1ReportData.length !== 0)) {
-            const blob = new Blob([GstR1ReportData], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-            const url = URL.createObjectURL(blob);
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = `GST_R1_Report_From_(${values.FromDate})_To_(${values.ToDate}).xlsx`;
-            link.click();
-            dispatch(GST_R1_Report_API_Success([]))
+    useEffect(() => {
+        if ((GstR1ReportData.StatusCode === 200 && GstR1ReportData.Status)) {
+            
+            GST_ExcelDownloadFun({      // Download multi tab excel
+                excelTableData: GstR1ReportData.Data,
+                excelFileName: `GST-R1 Report (${values.FromDate}) To (${values.ToDate})`,
+                pageName: "GST-R1"
+            })
+
+            dispatch(GST_R1_Report_API_Success({ Status: false }))
         }
 
-    }, [GstR3BReportData, GstR1ReportData])
+    }, [GstR1ReportData])
 
     useEffect(() => {
         return () => {
@@ -97,15 +117,15 @@ const GSTR1Report = (props) => {
 
     function goButtonHandler(Type) {
 
-        if (_cfunc.loginSelectedPartyID() === 0) {
-            customAlert({ Type: 3, Message: "Please Select Party" });
+        if (commonPartyDropSelect.value === 0) {
+            customAlert({ Type: 3, Message: alertMessages.commonPartySelectionIsRequired });
             return;
         };
 
         const jsonBody = JSON.stringify({
             "FromDate": values.FromDate,
             "ToDate": values.ToDate,
-            "Party": _cfunc.loginSelectedPartyID()
+            "Party": commonPartyDropSelect.value
         });
 
         let config = { jsonBody }
@@ -134,7 +154,7 @@ const GSTR1Report = (props) => {
         })
     }
 
-    function partyOnChngeButtonHandler() {
+    function partySelectOnChangeHandler() {
         dispatch(GST_R3B_Report_API_Success([]))
         dispatch(GST_R1_Report_API_Success([]))
     }
@@ -143,17 +163,13 @@ const GSTR1Report = (props) => {
         <React.Fragment>
             <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
             <div className="page-content">
-
-                <PartyDropdown_Common
-                    changeButtonHandler={partyOnChngeButtonHandler} />
-
-                <div className="px-2   c_card_filter text-black" >
-                    <div className="row" >
+                <div className="px-2   c_card_filter text-black " >
+                    <Row>
                         <Col sm={3} className="">
-                            <FormGroup className="mb- row mt-3 mb-2 " >
+                            <FormGroup className=" row mt-2  " >
                                 <Label className="col-sm-4 p-2"
                                     style={{ width: "83px" }}>FromDate</Label>
-                                <Col sm="6">
+                                <Col sm="7">
                                     <C_DatePicker
                                         name='FromDate'
                                         value={values.FromDate}
@@ -164,10 +180,10 @@ const GSTR1Report = (props) => {
                         </Col>
 
                         <Col sm={3} className="">
-                            <FormGroup className="mb- row mt-3 mb-2" >
+                            <FormGroup className=" row mt-2 " >
                                 <Label className="col-sm-4 p-2"
                                     style={{ width: "65px" }}>ToDate</Label>
-                                <Col sm="6">
+                                <Col sm="7">
                                     <C_DatePicker
                                         name="ToDate"
                                         value={values.ToDate}
@@ -176,33 +192,33 @@ const GSTR1Report = (props) => {
                                 </Col>
                             </FormGroup>
                         </Col>
-                        <Col sm={2} className="mt-3" >
+
+
+                        <Col sm={6} className=" d-flex justify-content-end" >
                             <C_Button
                                 type="button"
-                                style={{ width: "90px" }}
+                                // style={{ width: "90px" }}
                                 spinnerColor="white"
                                 loading={GstR1BtnLoading}
-                                className="btn btn-primary"
+                                className="btn btn-primary m-3 mr "
                                 onClick={() => goButtonHandler("GSTR1")}
                             >
                                 GST R1
                             </C_Button>
-                        </Col>
-
-                        <Col sm={2} className="mt-3" >
                             <C_Button
                                 type="button"
-                                style={{ width: "90px" }}
+                                // style={{ width: "90px" }}
                                 spinnerColor="white"
                                 loading={GstR3BBtnLoading}
-                                className="btn btn-primary"
+                                className="btn btn-primary m-3 mr "
                                 onClick={() => goButtonHandler("GSTR3B")}
                             >
                                 GST R3B
                             </C_Button>
                         </Col>
-                    </div>
+                    </Row>
                 </div>
+
             </div>
             <C_Report />
         </React.Fragment >

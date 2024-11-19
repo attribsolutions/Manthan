@@ -25,7 +25,8 @@ import {
     getVehicleListSuccess,
     editVehicleID_Success,
     updateVehicleID,
-    updateVehicleID_Success
+    updateVehicleID_Success,
+    getVehicleList
 } from "../../../store/Administrator/VehicleRedux/action";
 import { useHistory } from "react-router-dom";
 import {
@@ -40,24 +41,22 @@ import { SaveButton } from "../../../components/Common/CommonButton";
 import {
     breadcrumbReturnFunc,
     loginCompanyID,
-    loginPartyID,
     loginUserID,
     btnIsDissablefunc,
     metaTagLabel,
-    loginUserAdminRole,
-    loginSelectedPartyID,
+    loginJsonBody,
 } from "../../../components/Common/CommonFunction";
-import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 import * as pageId from "../../../routes/allPageID";
 import * as url from "../../../routes/route_url";
 import * as mode from "../../../routes/PageMode";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
+import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
+import { changeCommonPartyDropDetailsAction } from "../../../store/Utilites/PartyDrodown/action";
 
 const VehicleMaster = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory()
-    const userAdminRole = loginUserAdminRole();
 
     const fileds = {
         id: "",
@@ -91,6 +90,8 @@ const VehicleMaster = (props) => {
             pageField: state.CommonPageFieldReducer.pageField,
         }));
 
+    const { commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
+
     useEffect(() => {
         const page_Id = pageId.VEHICLE
         dispatch(commonPageFieldSuccess(null));
@@ -108,8 +109,15 @@ const VehicleMaster = (props) => {
 
     // userAccess useEffect
     useEffect(() => {
+
         let userAcc = null;
-        let locationPath = location.pathname;
+        let locationPath;
+
+        if (props.pageMode === mode.dropdownAdd) {
+            locationPath = props.masterPath;
+        } else {
+            locationPath = location.pathname;
+        }
 
         if (hasShowModal) {
             locationPath = props.masterPath;
@@ -120,8 +128,10 @@ const VehicleMaster = (props) => {
         })
 
         if (userAcc) {
-            setUserAccState(userAcc)
-            breadcrumbReturnFunc({ dispatch, userAcc });
+            setUserAccState(userAcc);
+            if (!props.isdropdown) {
+                breadcrumbReturnFunc({ dispatch, userAcc });
+            }
         };
     }, [userAccess])
 
@@ -160,7 +170,11 @@ const VehicleMaster = (props) => {
                 dispatch(Breadcrumb_inputName(hasEditVal.RoleMaster))
                 dispatch(editVehicleID_Success({ Status: false }))
                 seteditCreatedBy(hasEditVal.CreatedBy)
+                dispatch(changeCommonPartyDropDetailsAction({ forceDisable: true }))//change party drop-down disable when edit/view
             }
+        }
+        return () => {
+            dispatch(changeCommonPartyDropDetailsAction({ forceDisable: false }))//change party drop-down restore state
         }
     }, []);
 
@@ -170,11 +184,19 @@ const VehicleMaster = (props) => {
             setState(() => resetFunction(fileds, state))// Clear form values  
             dispatch(Breadcrumb_inputName(''))
 
-            if (pageMode === mode.dropdownAdd) {
+            if (props.pageMode === mode.dropdownAdd) {
                 customAlert({
                     Type: 1,
                     Message: postMsg.Message,
                 })
+                const jsonBody = {
+                    ...loginJsonBody(),
+                    PartyID: commonPartyDropSelect.value
+                };
+
+                dispatch(getVehicleList(jsonBody));
+
+                props.isOpenModal(false)
             }
             else {
                 let isPermission = await customAlert({
@@ -224,23 +246,15 @@ const VehicleMaster = (props) => {
         label: data.Name
     }));
 
-    const partyOnChngeHandler = (e) => {
-        setState((i) => {
-            const a = { ...i }
-            a.values.Party = e;
-            return a
-        })
-    }
-
     const SaveHandler = async (event) => {
         event.preventDefault();
         const btnId = event.target.id
-        if ((loginSelectedPartyID() === 0)) {
-            customAlert({ Type: 3, Message: "Please Select Party" });
+        if ((commonPartyDropSelect.value === 0)) {
+            customAlert({ Type: 3, Message: alertMessages.commonPartySelectionIsRequired });
             return;
         };
         try {
-            
+
             if (formValid(state, setState)) {
                 btnIsDissablefunc({ btnId, state: true })
 
@@ -249,7 +263,7 @@ const VehicleMaster = (props) => {
                     VehicleNumber: values.VehicleNumber,
                     Description: values.Description,
                     VehicleType: values.VehicleTypeName.value,
-                    Party:loginSelectedPartyID(),
+                    Party: commonPartyDropSelect.value,
                     Company: loginCompanyID(),
                     CreatedBy: loginUserID(),
                     UpdatedBy: loginUserID()
@@ -265,18 +279,12 @@ const VehicleMaster = (props) => {
         } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
     };
 
-    // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
-    var IsEditMode_Css = ''
-    if ((modalCss) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
-
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
-                <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
+                <div className="page-content" >
                     <Container fluid>
                         <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
-
-                        <PartyDropdown_Common pageMode={pageMode} />
 
                         <Card className="text-black" style={{ marginTop: "3px" }}>
                             <CardHeader className="card-header   text-black c_card_header" >
@@ -353,19 +361,7 @@ const VehicleMaster = (props) => {
                                                     </FormGroup>
 
                                                     <Col md="1">  </Col>
-
-                                                    {/* {RoleID === 2 ?
-                                                        <FormGroup className="mb-2 col col-sm-3 ">
-                                                            <PartyDropdownMaster
-                                                                fieldLabel={fieldLabel.Party}
-                                                                state={values.Party}
-                                                                setState={setState}
-                                                            />
-                                                        </FormGroup>
-                                                        : null} */}
-
                                                 </Row>
-
 
                                                 <FormGroup>
                                                     <Row>

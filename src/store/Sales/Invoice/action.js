@@ -1,8 +1,8 @@
 import {
     DELETE_INVOICE_LIST_PAGE,
     DELETE_INVOICE_LIST_PAGE_SUCCESS,
-    EDIT_INVOICE_LIST,
-    EDIT_INVOICE_LIST_SUCCESS,
+    EDIT_INVOICE_ACTION,
+    EDIT_INVOICE_ACTION_SUCCESS,
     INVOICE_LIST_GO_BUTTON_FILTER,
     INVOICE_LIST_GO_BUTTON_FILTER_SUCCESS,
     GO_BUTTON_FOR_INVOICE_ADD,
@@ -24,6 +24,12 @@ import {
     UPDATE_VEHICLE_INVOICE_SUCCESS,
     INVOICE_SEND_TO_SCM_ACTION,
     INVOICE_SEND_TO_SCM_ACTION_SUCCESS,
+    UPDATE_INVOICE_ACTION,
+    UPDATE_INVOICE_ACTION_SUCCESS,
+    INVOICE_BULK_DELETE_IDS_ACTION,
+    INVOICE_BULK_DELETE_IDS_SUCCESS,
+    UPDATE_VEHICLE_CUSTOMER_INVOICE_ACTION,
+    UPDATE_VEHICLE_CUSTOMER_INVOICE_ACTION_SUCCESS,
 
 } from "./actionType";
 
@@ -39,14 +45,24 @@ export const invoiceListGoBtnfilterSucccess = (resp) => ({
 });
 
 // edit api
-export const editInvoiceList = (config = {}) => ({
-    type: EDIT_INVOICE_LIST,
+export const editInvoiceAction = (config = {}) => ({
+    type: EDIT_INVOICE_ACTION,
     config,
 })
 
-export const editInvoiceListSuccess = (editData) => ({
-    type: EDIT_INVOICE_LIST_SUCCESS,
+export const editInvoiceActionSuccess = (editData) => ({
+    type: EDIT_INVOICE_ACTION_SUCCESS,
     payload: editData,
+})
+// edit api
+export const updateInvoiceAction = (config) => ({
+    type: UPDATE_INVOICE_ACTION,
+    config,
+})
+
+export const updateInvoiceActionSuccess = (reps) => ({
+    type: UPDATE_INVOICE_ACTION_SUCCESS,
+    payload: reps,
 })
 
 // listpage api
@@ -106,10 +122,6 @@ export const makeIB_InvoiceActionSuccess = (data) => ({
     payload: data,
 });
 
-export const InvoiceApiErrorAction = () => ({
-    type: INVOICE_API_ERROR_ACTION,
-})
-
 //**************************** E-Invoice (upload ,cancel) ***************************************/
 
 export const Uploaded_EInvoiceAction = (config) => ({
@@ -165,3 +177,33 @@ export const UpdateVehicleInvoice_Success = (data) => ({
     payload: data,
 });
 
+
+
+export const Pos_UpdateVehicleCustomerInvoice_Action = (config) => ({
+    type: UPDATE_VEHICLE_CUSTOMER_INVOICE_ACTION,
+    config
+});
+
+export const Pos_UpdateVehicleCustomerInvoice_Action_Success = (data) => ({
+    type: UPDATE_VEHICLE_CUSTOMER_INVOICE_ACTION_SUCCESS,
+    payload: data,
+});
+
+
+
+
+// Invoice Bulk Delete
+export const InvoiceBulkDelete_IDs_Action = (config = {}) => ({
+    type: INVOICE_BULK_DELETE_IDS_ACTION,
+    config,
+});
+
+export const InvoiceBulkDelete_IDs_Succcess = (resp) => ({
+    type: INVOICE_BULK_DELETE_IDS_SUCCESS,
+    payload: resp,
+});
+
+// Invoice Error Action
+export const InvoiceApiErrorAction = () => ({
+    type: INVOICE_API_ERROR_ACTION,
+})

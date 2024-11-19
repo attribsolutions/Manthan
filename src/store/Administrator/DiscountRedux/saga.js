@@ -95,7 +95,7 @@ function* update_Discount({ config }) {
 
 // Party Type Drodown API
 function* DiscountPartyTypeDropdown_GenFunc(config) {
-  debugger
+  
   // const config = { "PartyID": loginPartyID() }
   try {
     const response = yield call(DiscountPartyType_Dropdown_API, config);

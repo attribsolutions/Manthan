@@ -133,7 +133,7 @@ const RoleAccessCopyFunctionality = (props) => {
 
     return (
         <React.Fragment>
-            <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
+            <div className="page-content" >
                 <MetaTags>
                     <title>Role Access| FoodERP-React FrontEnd</title>
                 </MetaTags>

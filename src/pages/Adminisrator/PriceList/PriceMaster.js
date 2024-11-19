@@ -39,6 +39,7 @@ import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { getPartyTypelist } from "../../../store/Administrator/PartyTypeRedux/action";
 // import { PriceDrop } from "./PriceDrop";
 import * as mode from "../../../routes/PageMode"
+import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 
 const PriceMaster = (props) => {
 
@@ -230,7 +231,7 @@ const PriceMaster = (props) => {
         const btnId = "cc";
         const promise = await customAlert({
             Type: 7,
-            Message: `Are you sure you want to delete this Price : "${price.label}"`,
+            Message: `${alertMessages.deleteOrNot} Price : "${price.label}"`,
         })
         if (promise) {
             btnIsDissablefunc({ btnId, state: true })
@@ -621,7 +622,7 @@ const PriceMaster = (props) => {
                                                         </Row>
 
                                                         <Row className="mt-2">
-                                                            <Label className="col-3 col-form-label" >MkUp </Label>
+                                                            <Label className="col-3 col-form-label" >MkDown </Label>
                                                             <Col className="mt-2">
                                                                 <Input type={"checkbox"} id='mkupMkdown'
                                                                     defaultChecked={currentPrice.MkUpMkDn} />

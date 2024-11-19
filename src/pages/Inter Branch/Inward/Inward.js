@@ -15,11 +15,12 @@ import paginationFactory, { PaginationListStandalone, PaginationProvider } from 
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { postInward, postInwardSuccess } from "../../../store/Inter Branch/InwardRedux/action";
-import  {mode,url} from "../../../routes/index";
+import { mode, url } from "../../../routes/index";
 import { SaveButton } from "../../../components/Common/CommonButton";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { C_DatePicker } from "../../../CustomValidateForm";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
+import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 
 const Inward = (props) => {
 
@@ -64,31 +65,31 @@ const Inward = (props) => {
     useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(postInwardSuccess({ Status: false }))
-            dispatch(customAlert({
+            customAlert({
                 Type: 1,
                 Status: true,
                 Message: postMsg.Message,
                 RedirectPath: url.INWARD_LIST,
-            }))
+            })
 
         } else if (postMsg.Status === true) {
             dispatch(postInwardSuccess({ Status: false }))
-            dispatch(customAlert({
+           customAlert({
                 Type: 4,
                 Status: true,
                 Message: JSON.stringify(postMsg.Message),
                 RedirectPath: false,
                 AfterResponseAction: false
-            }));
+            })
         }
     }, [postMsg])
 
 
-    function InwardDateOnchange(e, date) {
+    function InwardDateOnchange( date) {
         setInwardDate(date)
     };
 
-    const saveHandeller = (e, values) => {
+    const saveHandeller = () => {
 
         const arr = InvoiceItems.map(i => ({
             Item: i.Item,
@@ -131,7 +132,6 @@ const Inward = (props) => {
             }]
         });
 
-
         if (pageMode === mode.edit) {
         } else {
 
@@ -148,7 +148,6 @@ const Inward = (props) => {
             text: "Batch Code",
             dataField: "",
             formatter: (cellContent, user) => (
-
                 <>
                     <Table className="table table-bordered table-responsive mb-1">
                         <Thead>
@@ -159,7 +158,6 @@ const Inward = (props) => {
                         </Thead>
                         <Tbody>
                             {InvoiceItems.map((index) => {
-
                                 return (
                                     < tr >
                                         <td>
@@ -204,7 +202,7 @@ const Inward = (props) => {
 
     return (
         <React.Fragment>
-           <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
+            <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
 
             <div className="page-content">
 
@@ -213,7 +211,7 @@ const Inward = (props) => {
                         <Col sm="4" className="">
                             <FormGroup className=" row mt-3 " >
                                 <Label className="col-sm-5 p-2"
-                                    style={{ width: "83px" }}>From Date</Label>
+                                    style={{ width: "83px" }}>FromDate</Label>
                                 <Col sm="7">
                                     <C_DatePicker
                                         style={{ userselect: "all" }}
@@ -253,7 +251,6 @@ const Inward = (props) => {
                         </Col>
                     </div>
                 </div>
-
                 <div className="mt-1">
                     <PaginationProvider pagination={paginationFactory(pageOptions)}>
                         {({ paginationProps, paginationTableProps }) => (
@@ -297,12 +294,13 @@ const Inward = (props) => {
 
                     </PaginationProvider>
                 </div>
-                <div className="row save1" style={{ paddingBottom: 'center', marginTop: "-30px" }}>
+                <SaveButtonDraggable>
                     <SaveButton pageMode={pageMode}
                         userAcc={userPageAccessState}
-                        module={"Inward"} onClick={saveHandeller}
+                        module={"Inward"}
+                        onClick={saveHandeller}
                     />
-                </div>
+                </SaveButtonDraggable>
             </div>
         </React.Fragment>
     )

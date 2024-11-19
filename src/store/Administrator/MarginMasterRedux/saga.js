@@ -1,6 +1,6 @@
 import { call, put, takeLatest } from "redux-saga/effects";
-import { concatDateAndTime } from "../../../components/Common/CommonFunction";
-// import {concatDateAndTime} from "../../../components/Common/CommonFunction";
+import { date_dmy_func, listpageConcatDateAndTime } from "../../../components/Common/CommonFunction";
+// import {listpageConcatDateAndTime} from "../../../components/Common/CommonFunction";
 import {
   delete_MarginList_API,
   GetMarginList_For_Listpage,
@@ -32,14 +32,13 @@ function* post_Margin_GenFunc({ config }) {
 }
 
 //listpage
-function* get_Margin_GenFunc() {
+function* get_Margin_GenFunc({ config }) {
   try {
-    const response = yield call(GetMarginList_For_Listpage);
+    const response = yield call(GetMarginList_For_Listpage, config);
     response.Data.map(i => {
-
       //tranzaction date is only for fiterand page field but UI show transactionDateLabel
-      i["transactionDate"] = i.CreatedOn;
-      i["transactionDateLabel"] = concatDateAndTime(i.EffectiveDate, i.CreatedOn);
+      i["transactionDateLabel"] = date_dmy_func(i.EffectiveDate);
+      // i["transactionDateLabel"] = listpageConcatDateAndTime(i.EffectiveDate, i.CreatedOn);
     })
     yield put(getMarginListSuccess(response.Data))
   } catch (error) { yield put(MarginApiErrorAction()) }
@@ -62,7 +61,7 @@ function* goButton_Margin_GenFunc({ data }) {
     response.pageMode = btnmode
     response.pathname = pathname
     response.rowData = rowData
-    yield put(goButtonForMarginSuccess(response));
+    yield put(goButtonForMarginSuccess(response.Data));
   } catch (error) { yield put(MarginApiErrorAction()) }
 }
 
@@ -70,7 +69,7 @@ function* goButton_Margin_GenFunc({ data }) {
 
 function* delete_Margin_Master_table_GenFunc({ id }) {
   try {
-    
+
     const response = yield call(Margin_MasterPage_delete_API, id);
     response["deletedId"] = id
     yield put(deleteIdForMarginMasterSuccess(response));

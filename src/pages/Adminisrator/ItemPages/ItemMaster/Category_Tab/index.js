@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
     Button,
     Card,
@@ -13,26 +13,20 @@ import { useDispatch, useSelector } from "react-redux";
 import {
     get_Category_By_CategoryType_ForDropDownAPI,
 } from "../../../../../store/Administrator/ItemsRedux/action";
-import {  getCategoryTypelist } from "../../../../../store/actions";
 import CategoryTable from "./Table";
 import { customAlert } from "../../../../../CustomAlert/ConfirmDialog";
+import { alertMessages } from "../../../../../components/Common/CommonErrorMsg/alertMsg";
 
 function CategoryTab(props) {
     const dispatch = useDispatch();
     const [CategoryTypeDropdownSelect, setCategoryTypeDropdownSelect] = useState("");
     const [categoryDropdownSelect, setcategoryDropdownSelect] = useState("");
-    const [categoryTableData, setCategoryTableData] = useState([]);
 
     const { CategoryType, Category } = useSelector((state) => ({
         CategoryType: state.categoryTypeReducer.categoryTypeListData,
         Category: state.ItemMastersReducer.Category,
     }));
 
-    useEffect(() => {
-        dispatch(getCategoryTypelist());
-        dispatch(get_Category_By_CategoryType_ForDropDownAPI());
-
-    }, [dispatch]);
 
     const CategoryType_DropdownOptions = CategoryType.map((data) => ({
         value: data.id,
@@ -57,16 +51,16 @@ function CategoryTab(props) {
 
     const addRowsHandler = (e) => {
 
-        const find =  props.tableData.find((element) => {
+        const find = props.tableData.find((element) => {
             return element.value === categoryDropdownSelect.value
         });
 
         if (!(find === undefined)) {
-            dispatch(customAlert({
+            customAlert({
                 Type: 4,
                 Status: true,
-                Message: "Category alredy Select",
-            }))
+                Message: alertMessages.categoryAlreadyExists,
+            })
             return
         }
         const val = {
@@ -76,19 +70,14 @@ function CategoryTab(props) {
             CategoryName: categoryDropdownSelect.label,
 
         };
-      
-            const totalTableData = props.tableData.length;
-            val.id = totalTableData + 1;
-            const updatedTableData = [...props.tableData];
-            updatedTableData.push(val);
-            props.func(updatedTableData);
-            clearState();
-    
 
-       
-        // else {
-        //     alert("Please select value");
-        // }
+        const totalTableData = props.tableData.length;
+        val.id = totalTableData + 1;
+        const updatedTableData = [...props.tableData];
+        updatedTableData.push(val);
+        props.func(updatedTableData);
+        clearState();
+
     };
     const clearState = () => {
         setCategoryTypeDropdownSelect("");

@@ -6,6 +6,14 @@ export const DASHBORD_1 = 171
 export const SEARCH_BOX2 = "/SearchBoxSecond"
 export const SEARCH_BOX3 = "/SerachBox3"
 
+// *************************** POS Administration *******************************//
+export const POS_USER = 281
+export const POS_USER_lIST = 282
+
+export const POS_LOG = 309
+
+export const TRANSACTION_LOG = 235
+
 // *************************** Administration *******************************//
 
 export const MODULE = 5
@@ -109,6 +117,8 @@ export const SALESMAN_LIST = 152
 
 export const IMPORT_EXCEL_FIELD_MAP = 157
 
+export const IMPORT_CREDIT_NOTE_EXCEL_FIELD_MAP = 274
+
 export const IMPORT_MASTER_MAP = 194
 
 export const INVOICE_EXCEL_UPLOAD = 184
@@ -116,6 +126,12 @@ export const RETAILER_EXCEL_UPLOAD = 184
 
 export const IMPORT_FIELD_ADD = 188
 export const IMPORT_FIELD_ADD_LIST = 189
+
+
+export const TARGET_UPLOAD = 270
+export const TARGET_UPLOAD_LIST = 271
+
+export const CREDIT_NOTE_UPLOAD = 276
 
 export const IMPORT_EXCEL_PARTY_MAP = 194
 
@@ -139,6 +155,38 @@ export const PRODUCT_MARGIN_REPORT = 198
 export const DISCOUNT_MASTER = 212
 export const DISCOUNT_LIST = 213
 
+export const CLUSTER_MASTER = 252
+export const CLUSTER_lIST = 253
+
+export const SUB_CLUSTER_MASTER = 254
+export const SUB_CLUSTER_lIST = 255
+
+
+export const CENTRAL_SERVICE_ITEM = 250
+export const CENTRAL_SERVICE_ITEM_LIST = 251
+
+export const SERVICE_ITEM_ASSIGN = 256
+
+export const PARTY_DETAILS = 260
+
+export const ITEM_MASTER_BULK_UPDATE = 261
+
+export const ITEM_SUPPLIER_ASSIGN = 292
+
+export const PARTY_EMPLOYEE_DETAILS = 275
+
+export const RATE_MASTER = 277
+export const RATE_LIST = 278
+
+export const FRANCHISE_CUSTOMER_MASTER = 307
+
+export const FRANCHISE_CUSTOMER_LIST = 308
+
+export const COUNTRY_MASTER = 310
+export const COUNTRY_LIST = 311
+
+export const MOBILE_RETAILER_SEND=249
+
 //******************************* Purchase Module ************************************//
 export const ORDER_1 = 53
 export const ORDER_LIST_1 = 54
@@ -150,15 +198,20 @@ export const IB_ORDER = 126
 export const IB_ORDER_PO_LIST = 127
 export const IB_ORDER_SO_LIST = 147
 
+export const IB_SALES_ORDER = 284
+
 export const ORDER_4 = 144
 export const ORDER_LIST_4 = 143
 
+export const APP_ORDER_LIST = 267
 
 export const BIllOf_MATERIALS = 69
 export const BIllOf_MATERIALS_LIST = 70
 
 export const WORK_ORDER = 72
 export const WORK_ORDER_LIST = 73
+
+export const BULK_WORK_ORDER = 285
 
 export const MATERIAL_ISSUE = 75
 export const MATERIAL_ISSUE_LIST = 76
@@ -175,6 +228,14 @@ export const PRODUCTION_REISSUE_STP = 142
 export const INVOICE_1 = 121
 export const INVOICE_LIST_1 = 122
 
+export const POS_INVOICE_LIST = 288
+
+export const BULK_WORK_ORDER_LIST = 289
+
+export const FRENCHIESE_SALE_REPORT = 290
+
+export const BULK_INVOICE = 265
+
 //******************************* Inventory Module ************************************//
 
 export const GRN_ADD_1 = 55
@@ -186,8 +247,12 @@ export const GRN_LIST_3 = 166
 export const GRN_STP_3 = 164
 
 export const STOCK_ENTRY = 205
+export const STOCK_ENTRY_LIST = 293
 
 export const STOCK_ADJUSTMENT = 236
+
+export const STOCK_ADJUSTMENT_MODE_2 = 239
+
 //******************************* Inter Branch ************************************//
 
 export const INWARD = 128
@@ -199,8 +264,8 @@ export const IB_INVOICE_LIST = 131
 export const IB_GRN_LIST = 146
 export const IB_INVOICE_STP = 132
 
-export const CHALLAN = 139
-export const CHALLAN_LIST = 138
+export const CHALLAN = 130
+export const CHALLAN_LIST = 131
 // export const IB_INVOICE_STP = 132
 
 //******************************* Sales ************************************//
@@ -231,8 +296,11 @@ export const DEBIT_LIST = 193
 export const GOODS_CREDIT_LIST = 229
 export const GOODS_CREDIT_NOTE = 228
 
-export const GOODS_DEBIT_LIST = 230
-export const GOODS_DEBIT_NOTE = 231
+export const GOODS_DEBIT_LIST = 231
+export const GOODS_DEBIT_NOTE = 230
+
+export const CREDIT_NOTE_1 = 258
+export const CREDIT_NOTE_LIST_1 = 259
 // ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 
 
@@ -245,6 +313,9 @@ export const BULK_RECIPT = 181
 
 export const PAYMENT_ENTRY = 177
 export const PAYMENT_ENTRY_LIST = 178
+
+export const CLAIM_TRACKING_ENTRY = 240
+export const CLAIM_TRACKING_ENTRY_LIST = 241
 
 export const SAP_LEDGER = 197
 
@@ -280,5 +351,46 @@ export const STOCK_REPORT = 208
 
 export const STOCK_REPORT_1 = 216
 
+export const DEBIT_DATA_EXPORT = 243
+
+export const CREDIT_DATA_EXPORT = 244
+
+export const RECEIPT_DATA_EXPORT = 245
+
+export const PARTY_OUTSTANDING_REPORT = 246
+
+export const RETAILER_APPROVAL = 247
+
+export const MAN_POWER_REPORT = 248
+
+export const PARTY_LEDGER = 207
+
+export const CLAIM_TRACKING_REPORT = 257
+
+export const TCS_AMOUNT_REPORT = 263
+
+export const CX_DD_DIFFERENCE_REPORT = 264
+
+export const ORDER_ITEM_SUPPLIER_REPORT = 301
+
+// ***************** Sweet POS *******************
+
+export const POS_ROLE_ACCESS = 266
+
+export const SYSTEM_SETTING = 268
+
+export const SYSTEM_SETTING_LIST = 269
+
+export const TARGET_VS_ACHIEVEMENT = 273
+
+export const CASHIER_SUMMARY_REPORT = 287
+
+export const SWEET_POS_RATE_MASTER = 295
+
+export const SWEET_POS_MACHINE_MASTER = 304
+
+export const SWEET_POS_MACHINE_LIST = 315
+
+export const STOCK_OUT_REPORT = 306
 
 

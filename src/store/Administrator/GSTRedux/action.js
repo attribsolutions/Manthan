@@ -8,6 +8,8 @@ import {
     GO_BUTTON_FOR_GST_MASTER,
     GO_BUTTON_FOR_GST_MASTER_SUCCESS,
     GST_API_ERROR_ACTION,
+    POST_VIEW_GST,
+    POST_VIEW_GST_SUCCESS,
     SAVE_GST_MASTER,
     SAVE_GST_MASTER_SUCCESS
 } from "./actionType";
@@ -24,8 +26,9 @@ export const saveGSTMasterSuccess = (resp) => ({
 });
 
 //get listpage api
-export const getGSTList = () => ({
+export const getGSTList = (config = {}) => ({
     type: GET_GST_LIST,
+    config
 });
 
 export const getGSTListSuccess = (resp) => ({
@@ -60,6 +63,17 @@ export const deleteGSTId_ForMaster = (id) => ({
     type: DELETE_GST_ID_FOR_MASTER,
     id,
 });
+
+export const postViewGst = (config = {}) => ({
+    type: POST_VIEW_GST,
+    config,
+});
+
+export const postViewGst_Success = (resp) => ({
+    type: POST_VIEW_GST_SUCCESS,
+    payload: resp,
+});
+
 
 export const deleteGSTId_ForMaster_Success = (resp) => ({
     type: DELETE_GST_ID_FOR_MASTER_SUCCESS,

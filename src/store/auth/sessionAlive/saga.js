@@ -6,10 +6,8 @@ import { getSessionAlive_Api} from "../../../helpers/backend_helper"
 function* getSessionAlive_GenFunc({ jsonBody }) {
   try {
     const response = yield call(getSessionAlive_Api, jsonBody)
-    // console.log( "response.access",response)
     if ((response.hasOwnProperty("access"))) {
       localStorage.setItem("token", response.access)
-    //  console.log( "response.access",response.access)
     }
   } catch (error) {
   }

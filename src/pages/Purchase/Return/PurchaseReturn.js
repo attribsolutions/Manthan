@@ -22,7 +22,7 @@ import {
     resetFunction,
 } from "../../../components/Common/validationFunction";
 import Select from "react-select";
-import { Change_Button, C_Button, SaveButton, } from "../../../components/Common/CommonButton";
+import { C_Button, SaveButton, } from "../../../components/Common/CommonButton";
 import { url, mode, pageId } from "../../../routes/index"
 import { GetVenderSupplierCustomer, GetVenderSupplierCustomerSuccess } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
@@ -34,12 +34,17 @@ import { decimalRegx, } from "../../../CustomValidateForm/RegexPattern";
 import { goButtonPartyItemAddPage, goButtonPartyItemAddPageSuccess } from "../../../store/Administrator/PartyItemsRedux/action";
 import { innerStockCaculation, returnQtyOnChange, return_discountCalculate_Func, stockQtyOnChange } from "./PurchaseReturnCalculation";
 import * as _cfunc from "../../../components/Common/CommonFunction";
-import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
+import { globalTableSearchProps } from "../../../components/Common/SearchBox/MySearch";
 import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import { Tbody, Thead } from "react-super-responsive-table";
 import Slidewithcaption from "../../../components/Common/CommonImageComponent";
-import NewCommonPartyDropdown from "../../../components/Common/NewCommonPartyDropdown";
+import { deltBtnCss } from "../../../components/Common/ListActionsButtons";
+import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
+import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
+import { CheckStockEntryForFirstTransaction, CheckStockEntryForFirstTransactionSuccess, CheckStockEntryforBackDatedTransaction } from "../../../store/Inventory/StockEntryRedux/action";
+import GlobalCustomTable from "../../../GlobalCustomTable";
+
 
 const PurchaseReturn = (props) => {
 
@@ -64,6 +69,13 @@ const PurchaseReturn = (props) => {
     const [TableArr, setTableArr] = useState([]);
     const [returnMode, setReturnMode] = useState(0); //(1==ItemWise) OR (2==invoiceWise)
     const [imageTable, setImageTable] = useState([]);
+    const [isImage, setisImage] = useState({});
+    const [ButtonCondition, setButtonCondition] = useState({ isEnable: false, isEnablePriviousAlert: false });
+    const [alertDate, setAlertDate] = useState({ ActualDate: "", WarningDate: "", Coustomerid: [], Supplierid: [], date: [], SelectedCustomerId: null })
+
+
+
+
 
     // for invoicer page heder dicount functionality useSate ************************************
     const [discountValueAll, setDiscountValueAll] = useState("");
@@ -95,9 +107,12 @@ const PurchaseReturn = (props) => {
         addButtonData,
         saveBtnloading,
         addBtnLoading,
-        invoiceNoDropDownLoading,
-        commonPartyDropSelect
+        commonPartyDropSelect,
+        StockEnteryForFirstYear,
+        StockEnteryForBackdated
     } = useSelector((state) => ({
+        StockEnteryForFirstYear: state.StockEntryReducer.StockEnteryForFirstYear,
+        StockEnteryForBackdated: state.StockEntryReducer.StockEnteryForBackdated,
         addButtonData: state.SalesReturnReducer.addButtonData,
         postMsg: state.SalesReturnReducer.postMsg,
         supplierDrodownLoading: state.CommonAPI_Reducer.vendorSupplierCustomerLoading,
@@ -117,7 +132,7 @@ const PurchaseReturn = (props) => {
         dispatch(InvoiceNumberSuccess([]))
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(pageId.PURCHASE_RETURN))
-        dispatch(BreadcrumbShowCountlabel(`${"Total Amount"} :${0}`))
+        dispatch(BreadcrumbShowCountlabel(`Count:${0} currency_symbol ${0}`))
     }, []);
 
     // Common Party Dropdown useEffect
@@ -151,6 +166,9 @@ const PurchaseReturn = (props) => {
         }
     }, [TableArr]);
 
+
+
+
     const location = { ...history.location }
     const hasShowModal = props.hasOwnProperty(mode.editValue)
 
@@ -180,7 +198,14 @@ const PurchaseReturn = (props) => {
             TypeID: 8
         });
         dispatch(postSelect_Field_for_dropdown(jsonBody));
+
+        return () => {
+            dispatch(CheckStockEntryForFirstTransactionSuccess({ status: false }))
+        }
+
     }, []);
+
+
 
     useEffect(() => {
         if (pageField) {
@@ -226,6 +251,28 @@ const PurchaseReturn = (props) => {
         }
     }, [postMsg])
 
+
+    useEffect(() => {
+
+        const jsonBody = JSON.stringify({
+            "FromDate": values.ReturnDate,
+            "PartyID": commonPartyDropSelect.value
+        });
+
+        const jsonBodyForBackdatedTransaction = JSON.stringify({
+            "TransactionDate": values.ReturnDate,
+            "PartyID": commonPartyDropSelect.value,
+            "TransactionMode": "PurchaseReturn",
+            "TransactionId": "",
+        });
+        if (commonPartyDropSelect.value > 0) {
+            dispatch(CheckStockEntryForFirstTransaction({ jsonBody }))
+            dispatch(CheckStockEntryforBackDatedTransaction({ jsonBody: jsonBodyForBackdatedTransaction }))
+        }
+
+    }, [values.ReturnDate, commonPartyDropSelect])
+
+
     useEffect(() => {
 
         if (addButtonData.StatusCode === 200 && addButtonData.Status === true) {
@@ -262,24 +309,23 @@ const PurchaseReturn = (props) => {
                     const newItemRow = {
                         ...i,
                         Quantity: '',
-                        itemTotalAmount: 0,
+                        ItemTotalAmount: 0,
                         InvoiceQuantity,
                         ItemTotalStock,
                         id: nextId,
                         MRPOptions,
                         GSTOptions,
                     }
-                    // const caculate = return_discountCalculate_Func(newItemRow)
-                    // newItemRow["roundedTotalAmount"] = caculate.roundedTotalAmount;
-
                     updateItemArr.push(newItemRow);
                     nextId++;
                 });
 
-                // let sumOfGrandTotal = updateItemArr.reduce((accumulator, currentObject) => accumulator + Number(currentObject["itemTotalAmount"]) || 0, 0);
-                // let count_label = `${"Total Amount"} :${Number(sumOfGrandTotal).toLocaleString()}`
-                // dispatch(BreadcrumbShowCountlabel(count_label));
                 updateItemArr.sort((a, b) => b.id - a.id);
+                let sumOfGrandTotal = updateItemArr.reduce((accumulator, index1) => accumulator + Number(index1.ItemTotalAmount) || 0, 0);
+
+                let count_label = `Count:${updateItemArr.length} currency_symbol ${Number(sumOfGrandTotal).toLocaleString()}`
+
+                dispatch(BreadcrumbShowCountlabel(count_label))
                 setTableArr(updateItemArr);
                 setState((i) => {
                     let a = { ...i }
@@ -289,6 +335,13 @@ const PurchaseReturn = (props) => {
                 })
 
             } catch (error) { _cfunc.CommonConsole(error) }
+        }
+        else if (addButtonData.Status === true) {
+            dispatch(SalesReturnAddBtn_Action_Succcess({ StatusCode: false }))
+            customAlert({
+                Type: 3,
+                Message: alertMessages.batchCode_notAvailable,
+            })
         }
     }, [addButtonData])
 
@@ -313,6 +366,46 @@ const PurchaseReturn = (props) => {
             setReturnReasonOptions(reasonArrExceptPartyID);
         }
     }, [isSaleableStock, filteredReasonArr, reasonArrExceptPartyID]);
+
+
+
+
+    ///////////////////// code  Block sales return send to supplier based on setting setting format   "PartyTypeID(Customer)-PartyTypeID(Supplier)-Date(Start Date of Block)"
+    useEffect(() => {
+        const CustomerPartyTypeID = _cfunc.loginUserDetails().PartyTypeID
+        const systemsetting = _cfunc.loginSystemSetting().IsSalesReturnSendToSupplier;
+        var ConditionArray = systemsetting?.split(',');
+        const SupplierPartyTypeId = supplier.filter(i => i.id === values.Customer.value)[0]?.PartyTypeID
+        let Coustomerid = [];
+        let Supplierid = [];
+        let date = [];
+
+        if ((ConditionArray?.length > 0) && (ConditionArray !== undefined)) {
+            try {
+                for (let i = 0; i < ConditionArray.length; i++) {
+                    let parts = ConditionArray[i].split('-');
+                    Supplierid.push(parseInt(parts[1]));
+                    Coustomerid.push(parseInt(parts[0]));
+                    date.push({ Coustomerid: parseInt(parts[0]), date: parseInt(parts[2]), Supplierid: parseInt(parts[1]) });
+                }
+                if (date.filter(i => (i.Coustomerid === CustomerPartyTypeID && i.Supplierid === SupplierPartyTypeId))[0]) {
+                    const ActualDate = date.filter(i => (i.Coustomerid === CustomerPartyTypeID && i.Supplierid === SupplierPartyTypeId))[0].date
+                    setAlertDate({ ActualDate: ActualDate, WarningDate: ActualDate - 1, Coustomerid: Coustomerid, Supplierid: Supplierid, date: date, SelectedSupplierId: SupplierPartyTypeId });
+                } else {
+                    setAlertDate({});
+                }
+            } catch (error) {
+                _cfunc.CommonConsole(error)
+            }
+        }
+    }, [values.Customer.value])
+
+    useEffect(() => {
+        setButtonCondition({ isEnable: _cfunc.isButtonEnable({ ConditionDetails: alertDate }).isEnable, isEnablePriviousAlert: _cfunc.isButtonEnable({ ConditionDetails: alertDate }).isEnablePriviousAlert })
+    }, [alertDate])
+
+
+
 
     const itemList = ItemList.map((index) => ({
         value: index.Item,
@@ -371,7 +464,7 @@ const PurchaseReturn = (props) => {
                             defaultValue={index1.Quantity}
                             onChange={(event) => {
                                 returnQtyOnChange(event, index1, _key);
-                                totalAmountCalcuationFunc(tableList);
+                                totalAmountCalcuationFunc(tableList, index1);
                             }}
                         />
                     </div>
@@ -609,8 +702,8 @@ const PurchaseReturn = (props) => {
                         </div>
                         <div className="bottom-div">
                             <div>Amount:</div>
-                            <div id={`itemTotalAmount-${index1.id}-${_key}`}>
-                                {_cfunc.amountCommaSeparateFunc(index1.itemTotalAmount)}
+                            <div id={`item-TotalAmount-${index1.id}-${_key}`}>
+                                {_cfunc.amountCommaSeparateFunc(index1.ItemTotalAmount)}
                             </div>
                         </div>
                     </>
@@ -661,7 +754,7 @@ const PurchaseReturn = (props) => {
             text: "Image",
             dataField: "",
             classes: () => "sales-return-Image-row",
-            formatExtraData: { ReturnReasonOptions }, // Pass ReturnReasonOptions as part of formatExtraData
+            formatExtraData: { isImage }, // Pass ReturnReasonOptions as part of formatExtraData
 
 
             formatter: (cellContent, row, key) => {
@@ -676,13 +769,19 @@ const PurchaseReturn = (props) => {
                                 multiple
                                 id="file"
                                 accept=".jpg, .jpeg, .png ,.pdf"
-                                onChange={(event) => { imageSelectHandler(event, row) }}
+                                onChange={(event) => {
+                                    let config = {
+                                        row: row, Row_Id: `Image_${row.id}`
+                                    }
+                                    imageSelectHandler(event, config)
+                                }}
                             />
                             <button name="image"
                                 accept=".jpg, .jpeg, .png ,.pdf"
                                 onClick={(event) => {
 
-                                    if ((row.ImageURL) && (row.ImageURL.length === 0)) {
+                                    if ((row.ImageURL === undefined)) {
+                                        customAlert({ Type: 3, Message: `${row.ItemName} ${alertMessages.imageNotUploaded}` });
                                         return setmodal_backdrop(false)
                                     } else if ((row.ImageURL) && (row.ImageURL.length > 0)) {
                                         imageShowHandler(row)
@@ -690,11 +789,28 @@ const PurchaseReturn = (props) => {
                                 }}
                                 id="ImageId" type="button" className="btn btn-primary "> Show </button>
                         </div>
-                        {/* Image Count: {row && row.ImageURL ? ImageCount : 0} */}
+
+                        {(row.ImageURL !== undefined) ? < div > <span> Remove&nbsp;&nbsp;</span>
+                            <Button
+                                type="button"
+                                className={deltBtnCss}
+                                data-mdb-toggle="tooltip"
+                                data-mdb-placement="top"
+                                title={"Remove Images"}
+                                onClick={(event) => {
+                                    let config = { Type: "Remove", Row_Id: `Image_${row.id}`, row: row }
+                                    imageSelectHandler(event, config)
+                                }}
+                            >
+                                <span
+                                    style={{ marginLeft: "4px", marginRight: "4px" }}
+                                    className="mdi mdi-cancel"
+                                ></span></Button>
+                        </div> : null}
                     </div>
 
 
-                </span>)
+                </span >)
             }
         },
 
@@ -725,18 +841,19 @@ const PurchaseReturn = (props) => {
         },
     ];
 
-    const totalAmountCalcuationFunc = (tableList = []) => {
-
-        let sumOfGrandTotal = tableList.reduce((accumulator, currentObject) => accumulator + Number(currentObject["itemTotalAmount"]) || 0, 0);
-        let count_label = `${"Total Amount"} :${Number(sumOfGrandTotal).toLocaleString()}`
+    const totalAmountCalcuationFunc = (tableList = [],) => {
+        
+        let sumOfGrandTotal = tableList.reduce((accumulator, index1) => accumulator + Number(index1.ItemTotalAmount) || 0, 0);
+        let count_label = `Count:${tableList.length} currency_symbol ${Number(sumOfGrandTotal).toLocaleString()}`
         dispatch(BreadcrumbShowCountlabel(count_label))
     }
 
     const deleteButtonAction = (row, TablelistArray = []) => {
         const newArr = TablelistArray.filter((index) => !(index.id === row.id))
-        let sumOfGrandTotal = newArr.reduce((accumulator, currentObject) => accumulator + Number(currentObject["itemTotalAmount"]) || 0, 0);
-        let count_label = `${"Total Amount"} :${Number(sumOfGrandTotal).toLocaleString()}`
-        dispatch(BreadcrumbShowCountlabel(count_label));
+        let sumOfGrandTotal = newArr.reduce((accumulator, index1) => accumulator + Number(index1.ItemTotalAmount) || 0, 0);
+
+        let count_label = `Count:${newArr.length} currency_symbol ${Number(sumOfGrandTotal).toLocaleString()}`
+        dispatch(BreadcrumbShowCountlabel(count_label))
         setTableArr(newArr)
     }
 
@@ -750,16 +867,16 @@ const PurchaseReturn = (props) => {
     }
 
     const AddPartyHandler = async (byType) => {
-
+        
         const invalidMsg1 = []
         if ((values.ItemName === '') && (byType === 'ItemWise')) {
-            invalidMsg1.push(`Select Item Name`)
+            invalidMsg1.push(alertMessages.selectItemName)
         }
         if ((values.InvoiceNumber === '') && (values.Customer === '') && (byType === 'InvoiceWise')) {
             invalidMsg1.push(`Select ${fieldLabel.Customer}.`)
         }
         else if ((values.InvoiceNumber === '') && (byType === 'InvoiceWise')) {
-            invalidMsg1.push(`Select Invoice No.`)
+            invalidMsg1.push(alertMessages.selectInvoiceNo)
         }
 
         if (invalidMsg1.length > 0) {
@@ -771,14 +888,23 @@ const PurchaseReturn = (props) => {
         }
 
         const jsonBody = JSON.stringify({
+            "Party": _cfunc.loginPartyID(),
             "ItemID": values.ItemName.value,
             "BatchCode": values.BatchCode,
             "Customer": commonPartyDropSelect.value// Customer Swipe when Po return
         })
-
+        
         const InvoiceId = values.InvoiceNumber ? values.InvoiceNumber.value : ''
         const nrwReturnMode = (byType === 'ItemWise') ? 2 : 1 //(returnMode === 2) ItemWise
-        dispatch(SalesReturnAddBtn_Action({ jsonBody, InvoiceId, returnMode: nrwReturnMode }))
+
+        if (StockEnteryForFirstYear.Status === true && StockEnteryForFirstYear.StatusCode === 400) {
+            customAlert({
+                Type: 3,
+                Message: JSON.stringify(StockEnteryForFirstYear.Message),
+            })
+        } else {
+            dispatch(SalesReturnAddBtn_Action({ jsonBody, InvoiceId, returnMode: nrwReturnMode }))
+        }
         setReturnMode(nrwReturnMode)
     }
 
@@ -829,22 +955,33 @@ const PurchaseReturn = (props) => {
         setReturnMode(2)
     }
 
-    const imageSelectHandler = async (event, row) => { // image Select  handler
+    const imageSelectHandler = async (event, config = {}) => { // image Select  handler
 
-        const file = Array.from(event.target.files)
-        const slides = file.map(item => {  //Create File to URl to Show Image of Particular row
-            return URL.createObjectURL(item);
-        })
-        row["Image"] = file
-        row["ImageURL"] = slides
+        if (config.Type === "Remove") {
+            config.row["Image"] = undefined
+            config.row["ImageURL"] = undefined
+            setisImage({ Row_Id: config.Row_Id, Slide: [] })
+        } else {
+            const file = Array.from(event.target.files)
+            const slides = file.map(item => {  //Create File to URl to Show Image of Particular row
+                return URL.createObjectURL(item);
+            })
+            config.row["Image"] = file
+            config.row["ImageURL"] = slides
+            setisImage({ Row_Id: config.Row_Id, Slide: slides })
+
+        }
+
     }
 
     const imageShowHandler = async (row) => { // image Show handler
 
         const file = Array.from(row.Image)
-        const slides = file.map(item => {
-            return URL.createObjectURL(item);
-        })
+
+        const slides = file.map(item => ({
+            Image: URL.createObjectURL(item)
+        }));
+
         setImageTable(slides)
     }
 
@@ -860,9 +997,7 @@ const PurchaseReturn = (props) => {
 
         event.preventDefault();
         try {
-
             const invalidMessages = [];
-
             const filterData = TableArr.filter((index) => {
                 if (index.Quantity > 0) {
                     let msgString = ' Select';
@@ -892,7 +1027,7 @@ const PurchaseReturn = (props) => {
             if (filterData.length === 0) {
                 customAlert({
                     Type: 4,
-                    Message: "Please Enter One Item Quantity",
+                    Message: alertMessages.itemQtyIsRequired,
                 });
                 return;
             }
@@ -992,7 +1127,7 @@ const PurchaseReturn = (props) => {
                 <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
 
                 <div className="page-content">
-                    <NewCommonPartyDropdown pageMode={pageMode} />
+
                     <Modal
                         isOpen={modal_backdrop}
                         toggle={() => {
@@ -1004,266 +1139,236 @@ const PurchaseReturn = (props) => {
                     >
                         {(imageTable.length > 0) && <Slidewithcaption Images={imageTable} />}
                     </Modal>
+                    {(!ButtonCondition.isEnable && values.Customer !== "" && alertDate.ActualDate !== "") && <div style={{ color: "red", fontSize: "18px" }} className="sliding-text " >  Warning: cannot send the sales return to the supplier from {_cfunc.DateFormat(alertDate.ActualDate)} of the month to the end of the month.</div>}
+                    {(ButtonCondition.isEnablePriviousAlert && values.Customer !== "" && alertDate.ActualDate !== undefined) && <div style={{ color: "red", fontSize: "18px" }} className="sliding-text " >  Warning:Sales return send to suppliers will be unavailable from {_cfunc.DateFormat(alertDate.ActualDate)} to month-end.  </div>}
 
-                    <form noValidate>
-                        <div className="px-2 c_card_filter header text-black mb-1" >
+                    <div className="px-2 c_card_filter header text-black mb-1" >
 
-                            <Row>
-                                <Col sm="6">
-                                    <FormGroup className="row mt-2" >
-                                        <Label className="col-sm-1 p-2"
-                                            style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.ReturnDate}  </Label>
-                                        <Col sm="7">
-                                            <C_DatePicker
-                                                name='ReturnDate'
-                                                value={values.ReturnDate}
-                                                onChange={ReturnDate_Onchange}
-                                            />
-                                        </Col>
-                                    </FormGroup>
-                                </Col >
-
-                                <Col sm="6">
-                                    <FormGroup className=" row mt-2 " >
-                                        <Label className="col-sm-1 p-2"
-                                            style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.Customer} </Label>
-                                        <Col sm="7">
-                                            <C_Select
-                                                id="Customer "
-                                                name="Customer"
-                                                value={values.Customer}
-                                                isSearchable={true}
-                                                isLoading={supplierDrodownLoading}
-                                                isDisabled={((TableArr.length > 0) || addBtnLoading) ? true : false}
-                                                options={supplierOptions}
-                                                styles={{
-                                                    menu: provided => ({ ...provided, zIndex: 2 })
-                                                }}
-                                                onChange={RetailerHandler}
-                                                onCancelClick={RetailerOnCancelClickHandler}
-                                            />
-                                            {isError.Customer.length > 0 && (
-                                                <span className="text-danger f-8"><small>{isError.Customer}</small></span>
-                                            )}
-                                        </Col>
-
-                                    </FormGroup>
-                                </Col >
-                            </Row>
-
-                            <Row>
-                                <Col sm="6">
-                                    <FormGroup className=" row mt-1 " >
-                                        <Label className="col-sm-1 p-2"
-                                            style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.ItemName} </Label>
-                                        <Col sm="7">
-                                            <C_Select
-                                                id="ItemName "
-                                                name="ItemName"
-                                                value={values.ItemName}
-                                                isDisabled={(returnMode === 1) ? true : false}
-                                                isSearchable={true}
-                                                className="react-dropdown"
-                                                classNamePrefix="dropdown"
-                                                styles={{
-                                                    menu: provided => ({ ...provided, zIndex: 2 })
-                                                }}
-                                                options={ItemList_Options}
-                                                onChange={itemNameOnChangeHandler}
-                                            />
-                                        </Col>
-                                    </FormGroup>
-                                </Col >
-
-                                <Col sm="6">
-                                    <FormGroup className=" row mt-1 " >
-                                        <Label className="col-sm-1 p-2"
-                                            style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.Comment} </Label>
-                                        <Col sm="7">
-                                            <Input
-                                                name="Comment"
-                                                id="Comment"
-                                                value={values.Comment}
-                                                type="text"
-                                                className={isError.Comment.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                placeholder="Enter Comment"
-                                                autoComplete='off'
-                                                onChange={(event) => {
-                                                    onChangeText({ event, state, setState })
-                                                }}
-                                            />
-                                            {isError.Comment.length > 0 && (
-                                                <span className="invalid-feedback">{isError.Comment}</span>
-                                            )}
-                                        </Col>
-
-                                    </FormGroup>
-                                </Col >
-                            </Row>
-
-                            <Row>
-                                <Col sm="6">
-                                    <FormGroup className=" row mt-1 " >
-                                        <Label className="col-sm-1 p-2"
-                                            style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.BatchCode}</Label>
-                                        <Col sm="7">
-                                            <Input
-                                                name="BatchCode"
-                                                value={values.BatchCode}
-                                                placeholder="Enter BatchCode"
-                                                type='text'
-                                                onChange={(event) => {
-                                                    onChangeText({ event, state, setState })
-                                                }}
-                                            />
-                                            {isError.BatchCode.length > 0 && (
-                                                <span className="text-danger f-8"><small>{isError.BatchCode}</small></span>
-                                            )}
-
-                                        </Col>
-                                        <Col sm="1" className="mx-6 mt-1">
-                                            {
-                                                (!(returnMode === 1)) &&///(returnMode === 1) InvoiceWise
-                                                <C_Button
-                                                    type="button"
-                                                    loading={addBtnLoading}
-                                                    className="btn btn-outline-primary border-1 font-size-12 text-center"
-                                                    onClick={() => AddPartyHandler("ItemWise")}>
-                                                    Add
-                                                </C_Button>
-                                            }
-
-                                        </Col>
-                                    </FormGroup>
-                                </Col >
-                                {/* <Col sm="6">
-                                    <FormGroup className=" row mt-1 " >
-                                        <Label className="col-sm-1 p-2"
-                                            style={{ width: "115px", marginRight: "0.4cm" }}>  {fieldLabel.InvoiceNumber}</Label>
-                                        <Col sm="7">
-                                            <C_Select
-                                                id="InvoiceNumber "
-                                                name="InvoiceNumber"
-                                                value={values.InvoiceNumber}
-                                                //(returnMode === 2) ItemWise
-                                                // isDisabled={((returnMode === 2) || invoiceNoDropDownLoading || (TableArr.length > 0)) ? true : false}
-                                                isDisabled={true}
-                                                isSearchable={true}
-                                                isLoading={invoiceNoDropDownLoading}
-                                                styles={{
-                                                    menu: provided => ({ ...provided, zIndex: 2 })
-                                                }}
-                                                options={InvoiceNo_Options}
-                                                onChange={(hasSelect, evn) => {
-                                                    onChangeSelect({ hasSelect, evn, state, setState, })
-                                                    setReturnMode(1)
-                                                }}
-                                            />
-
-                                        </Col>
-                                        <Col sm="1" className="mx-6 mt-1 ">
-                                            {((TableArr.length > 0) || (!(values.ItemName === ""))) ?
-                                                <Change_Button
-                                                    forceDisabled={addBtnLoading}
-                                                    onClick={(e) => {
-                                                        setTableArr([])
-                                                        setState((i) => {
-                                                            let a = { ...i }
-                                                            a.values.ItemName = ""
-                                                            a.values.InvoiceNumber = ""
-                                                            return a
-                                                        })
-                                                    }} />
-                                                :
-                                                (!(returnMode === 2)) &&//(returnMode === 2) ItemWise
-                                                <C_Button
-                                                    type="button"
-                                                    loading={addBtnLoading}
-                                                    className="btn btn-outline-primary border-1 font-size-12 text-center"
-                                                    onClick={() => AddPartyHandler("InvoiceWise")}>
-                                                    Select
-                                                </C_Button>
-                                            }
-                                        </Col>
-                                    </FormGroup>
-                                </Col > */}
-
-                                <Col sm="6">
-                                    <FormGroup className=" row mt-1 " >
-                                        <Label className="col-sm-1 p-2"
-                                            style={{ width: "115px", marginRight: "0.4cm" }}>IsSaleableStock</Label>
-                                        <Col sm="7">
-                                            <Input
-                                                style={{ marginRight: "0.4cm", marginTop: "10px", width: "15px", height: "15px" }}
-                                                type="checkbox"
-                                                disabled={TableArr.length > 0 && true}
-                                                defaultChecked={isSaleableStock}
-                                                onChange={(event) => { setIsSaleableStock(event.target.checked) }}
-                                            />
-
-                                        </Col>
-
-                                    </FormGroup>
-                                </Col >
-                            </Row>
-
-                        </div>
-
-                        <div>
-                            <ToolkitProvider
-                                keyField={"id"}
-                                data={TableArr}
-                                columns={pagesListColumns}
-                                search
-                            >
-                                {(toolkitProps) => (
-                                    <React.Fragment>
-                                        <Row>
-                                            <Col xl="12">
-                                                <div className="table-responsive table" style={{ minHeight: "60vh" }}>
-                                                    <BootstrapTable
-                                                        keyField={"id"}
-                                                        key={`table-key-${returnMode}`}
-                                                        id="table_Arrow"
-                                                        classes={"table  table-bordered "}
-                                                        noDataIndication={
-                                                            <div className="text-danger text-center ">
-                                                                Items Not available
-                                                            </div>
-                                                        }
-                                                        {...toolkitProps.baseProps}
-                                                        onDataSizeChange={(e) => {
-                                                            _cfunc.tableInputArrowUpDounFunc("#table_Arrow")
-                                                        }}
-                                                    />
-                                                </div>
-                                            </Col>
-                                            {mySearchProps(toolkitProps.searchProps,)}
-                                        </Row>
-
-                                    </React.Fragment>
-                                )}
-                            </ToolkitProvider>
-                        </div>
-
-                        {
-                            TableArr.length > 0 ?
-                                <FormGroup>
-                                    <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
-                                        <SaveButton
-                                            pageMode={pageMode}
-                                            forceDisabled={addBtnLoading}
-                                            loading={saveBtnloading}
-                                            onClick={SaveHandler}
-                                            userAcc={userPageAccessState}
-                                            module={"SalesReturn"}
+                        <Row>
+                            <Col sm="6">
+                                <FormGroup className="row mt-2" >
+                                    <Label className="col-sm-1 p-2"
+                                        style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.ReturnDate}  </Label>
+                                    <Col sm="7">
+                                        <C_DatePicker
+                                            name='ReturnDate'
+                                            value={values.ReturnDate}
+                                            onChange={ReturnDate_Onchange}
                                         />
                                     </Col>
-                                </FormGroup >
-                                : null
-                        }
+                                </FormGroup>
+                            </Col >
 
-                    </form >
+                            <Col sm="6">
+                                <FormGroup className=" row mt-2 " >
+                                    <Label className="col-sm-1 p-2"
+                                        style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.Customer} </Label>
+                                    <Col sm="7">
+                                        <C_Select
+                                            id="Customer "
+                                            name="Customer"
+                                            value={values.Customer}
+                                            isSearchable={true}
+                                            isLoading={supplierDrodownLoading}
+                                            isDisabled={((TableArr.length > 0) || addBtnLoading) ? true : false}
+                                            options={supplierOptions}
+                                            styles={{
+                                                menu: provided => ({ ...provided, zIndex: 2 })
+                                            }}
+                                            onChange={RetailerHandler}
+                                            onCancelClick={RetailerOnCancelClickHandler}
+                                        />
+                                        {isError.Customer.length > 0 && (
+                                            <span className="text-danger f-8"><small>{isError.Customer}</small></span>
+                                        )}
+                                    </Col>
+
+                                </FormGroup>
+                            </Col >
+                        </Row>
+
+                        <Row>
+                            <Col sm="6">
+                                <FormGroup className=" row mt-1 " >
+                                    <Label className="col-sm-1 p-2"
+                                        style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.ItemName} </Label>
+                                    <Col sm="7">
+                                        <C_Select
+                                            id="ItemName "
+                                            name="ItemName"
+                                            value={values.ItemName}
+                                            isDisabled={(returnMode === 1) ? true : false}
+                                            isSearchable={true}
+                                            className="react-dropdown"
+                                            classNamePrefix="dropdown"
+                                            styles={{
+                                                menu: provided => ({ ...provided, zIndex: 2 })
+                                            }}
+                                            options={ItemList_Options}
+                                            onChange={itemNameOnChangeHandler}
+                                        />
+                                    </Col>
+                                </FormGroup>
+                            </Col >
+
+                            <Col sm="6">
+                                <FormGroup className=" row mt-1 " >
+                                    <Label className="col-sm-1 p-2"
+                                        style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.Comment} </Label>
+                                    <Col sm="7">
+                                        <Input
+                                            name="Comment"
+                                            id="Comment"
+                                            value={values.Comment}
+                                            type="text"
+                                            className={isError.Comment.length > 0 ? "is-invalid form-control" : "form-control"}
+                                            placeholder="Enter Comment"
+                                            autoComplete='off'
+                                            onChange={(event) => {
+                                                onChangeText({ event, state, setState })
+                                            }}
+                                        />
+                                        {isError.Comment.length > 0 && (
+                                            <span className="invalid-feedback">{isError.Comment}</span>
+                                        )}
+                                    </Col>
+
+                                </FormGroup>
+                            </Col >
+                        </Row>
+
+                        <Row>
+                            <Col sm="6">
+                                <FormGroup className=" row mt-1 " >
+                                    <Label className="col-sm-1 p-2"
+                                        style={{ width: "115px", marginRight: "0.4cm" }}>{fieldLabel.BatchCode}</Label>
+                                    <Col sm="7">
+                                        <Input
+                                            name="BatchCode"
+                                            value={values.BatchCode}
+                                            placeholder="Enter Batch Code"
+                                            type='text'
+                                            autoComplete='off'
+                                            onChange={(event) => {
+                                                onChangeText({ event, state, setState })
+                                            }}
+                                        />
+                                        {isError.BatchCode.length > 0 && (
+                                            <span className="text-danger f-8"><small>{isError.BatchCode}</small></span>
+                                        )}
+
+                                    </Col>
+                                    <Col sm="1" className="mx-6 mt-1">
+                                        {
+                                            (!(returnMode === 1)) &&///(returnMode === 1) InvoiceWise
+                                            <C_Button
+                                                type="button"
+                                                loading={addBtnLoading}
+                                                className="btn btn-outline-primary border-1 font-size-12 text-center"
+                                                onClick={() => AddPartyHandler("ItemWise")}>
+                                                Add
+                                            </C_Button>
+                                        }
+
+                                    </Col>
+                                </FormGroup>
+                            </Col >
+
+
+                            <Col sm="6">
+                                <FormGroup className=" row mt-1 " >
+                                    <Label className="col-sm-1 p-2"
+                                        style={{ width: "115px", marginRight: "0.4cm" }}>IsSaleableStock</Label>
+                                    <Col sm="7">
+                                        <Input
+                                            style={{ marginRight: "0.4cm", marginTop: "10px", width: "15px", height: "15px" }}
+                                            type="checkbox"
+                                            disabled={TableArr.length > 0 && true}
+                                            defaultChecked={isSaleableStock}
+                                            onChange={(event) => { setIsSaleableStock(event.target.checked) }}
+                                        />
+
+                                    </Col>
+
+                                </FormGroup>
+                            </Col >
+                        </Row>
+
+                    </div>
+
+                    {/* <div>
+                        <ToolkitProvider
+                            keyField={"id"}
+                            data={TableArr}
+                            columns={pagesListColumns}
+                            search
+                        >
+                            {(toolkitProps) => (
+                                <React.Fragment>
+                                    <Row>
+                                        <Col xl="12">
+                                            <div className="table-responsive table" style={{ minHeight: "60vh" }}>
+                                                <BootstrapTable
+                                                    keyField={"id"}
+                                                    key={`table-key-${returnMode}`}
+                                                    id="table_Arrow"
+                                                    classes={"table  table-bordered "}
+                                                    noDataIndication={
+                                                        <div className="text-danger text-center ">
+                                                            Items Not available
+                                                        </div>
+                                                    }
+                                                    {...toolkitProps.baseProps}
+                                                    onDataSizeChange={(e) => {
+                                                        _cfunc.tableInputArrowUpDounFunc("#table_Arrow")
+                                                    }}
+                                                />
+                                            </div>
+                                        </Col>
+                                        {globalTableSearchProps(toolkitProps.searchProps,)}
+                                    </Row>
+
+                                </React.Fragment>
+                            )}
+                        </ToolkitProvider>
+                    </div> */}
+
+
+                    <div className="mb-1">
+                        <GlobalCustomTable
+                            keyField={"id"}
+                            key={`table-key-${returnMode}`}
+                            data={TableArr}
+                            columns={pagesListColumns}
+                            id="table_Arrow"
+                            noDataIndication={
+                                <div className="text-danger text-center ">
+                                    Items Not available
+                                </div>
+                            }
+                            onDataSizeChange={(e) => {
+                                _cfunc.tableInputArrowUpDounFunc("#table_Arrow")
+                            }}
+                        />
+                    </div>
+
+                    {
+                        TableArr.length > 0 &&
+                        <SaveButtonDraggable>
+                            <SaveButton
+                                pageMode={pageMode}
+                                forceDisabled={addBtnLoading || !ButtonCondition.isEnable || !StockEnteryForFirstYear.Data}
+                                loading={saveBtnloading}
+
+                                onClick={SaveHandler}
+                                userAcc={userPageAccessState}
+                                module={"SalesReturn"}
+                            />
+                        </SaveButtonDraggable>
+
+                    }
+
+
                 </div >
             </React.Fragment >
         );

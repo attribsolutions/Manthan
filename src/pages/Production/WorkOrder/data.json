@@ -1,0 +1,26 @@
+[
+    {
+        "id": 31,
+        "IsActive": true,
+        "Item": 1104,
+        "ItemName": "Kandi Pedha",
+        "Stock": 0,
+        "EstimatedOutputQty": 58,
+        "TotalQuantity": 0,
+        "WorkQuantity": 0,
+        "Unit": 2803,
+        "UnitName": "Kg",
+        "BOMItems": [
+            {
+                "id": 9,
+                "Item": 883,
+                "ItemName": "Khawa",
+                "Unit": 2582,
+                "UnitName": "Kg",
+                "StockQuantity": 132,
+                "BomQuantity": "50.000",
+                "Quantity": 50
+            }
+        ]
+    }
+]

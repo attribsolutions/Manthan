@@ -2,7 +2,8 @@ import { call, put, takeLatest } from "redux-saga/effects";
 import * as  apiCall from "../../../helpers/backend_helper";
 import * as actionType from "./actionType";
 import * as action from "./action";
-import { concatDateAndTime } from "../../../components/Common/CommonFunction";
+import { date_dmy_func, listpageConcatDateAndTime } from "../../../components/Common/CommonFunction";
+import { url } from "../../../routes";
 
 function* save_GSTMaster_GenFunc({ config }) {
   try {
@@ -12,15 +13,15 @@ function* save_GSTMaster_GenFunc({ config }) {
 }
 
 //listpage
-function* get_GSTList_GenFunc() {
+function* get_GSTList_GenFunc({ config }) {
 
   try {
-    const response = yield call(apiCall.GetGSTList_For_Listpage);
+    const response = yield call(apiCall.GetGSTList_For_Listpage, config);
     response.Data.map(i => {
 
       //tranzaction date is only for fiterand page field but UI show transactionDateLabel
-      i["transactionDate"] = i.CreatedOn;
-      i["transactionDateLabel"] = concatDateAndTime(i.EffectiveDate, i.CreatedOn);
+      i["transactionDateLabel"] = date_dmy_func(i.EffectiveDate);
+      // i["transactionDateLabel"] = listpageConcatDateAndTime(i.EffectiveDate, i.CreatedOn);
     })
     yield put(action.getGSTListSuccess(response.Data));
   } catch (error) { yield put(action.GSTApiErrorAction()) }
@@ -34,6 +35,29 @@ function* delete_GSTList_ID_GenFunc({ config }) {
   } catch (error) { yield put(action.GSTApiErrorAction()) }
 
 }
+
+function* viewGST_GenFunc({ config }) {
+  const { subPageMode } = config
+  try {
+    let response
+    if (subPageMode === url.MARGIN_lIST) {
+      response = yield call(apiCall.View_Margin_Details_API, config);
+      response.Data?.MarginList.forEach(i => {
+        i.EffectiveDate = date_dmy_func(i.EffectiveDate)
+        return i
+      });
+    } else {
+      response = yield call(apiCall.View_GST_Details_API, config);
+      response.Data?.GSTHSNList.forEach(i => {
+        i.EffectiveDate = date_dmy_func(i.EffectiveDate)
+        return i
+      });
+    }
+
+    yield put(action.postViewGst_Success(response.Data));
+  } catch (error) { yield put(action.GSTApiErrorAction()) }
+}
+
 
 function* goButton_GST_GenFunc({ data }) {
   const { jsonBody, pathname, btnmode, rowData } = data
@@ -58,6 +82,7 @@ function* delete_GSTMaster_ID_GenFunc({ id }) {
 
 function* GSTSaga() {
   yield takeLatest(actionType.SAVE_GST_MASTER, save_GSTMaster_GenFunc);
+  yield takeLatest(actionType.POST_VIEW_GST, viewGST_GenFunc);
   yield takeLatest(actionType.GET_GST_LIST, get_GSTList_GenFunc);
   yield takeLatest(actionType.DELETE_GST_LIST_ID, delete_GSTList_ID_GenFunc);
   yield takeLatest(actionType.GO_BUTTON_FOR_GST_MASTER, goButton_GST_GenFunc);

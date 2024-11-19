@@ -16,6 +16,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import {
     Breadcrumb_inputName,
+    BreadcrumbShowCountlabel,
     commonPageField,
     commonPageFieldSuccess,
     deleteGSTId_ForMaster,
@@ -26,8 +27,6 @@ import {
     saveGSTMaster,
     saveGSTMasterSuccess,
 } from "../../../store/actions";
-import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
-import BootstrapTable from "react-bootstrap-table-next";
 import {
     breadcrumbReturnFunc,
     loginUserID,
@@ -35,18 +34,22 @@ import {
     metaTagLabel
 } from "../../../components/Common/CommonFunction";
 import * as _cfunc from "../../../components/Common/CommonFunction";
-import { CInput, C_DatePicker, decimalRegx } from "../../../CustomValidateForm";
+import { CInput, C_DatePicker, C_Select, decimalRegx } from "../../../CustomValidateForm";
 import { mode, pageId, url } from "../../../routes";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
-import { comAddPageFieldFunc, initialFiledFunc, onChangeDate, resetFunction } from "../../../components/Common/validationFunction";
+import { comAddPageFieldFunc, initialFiledFunc, onChangeDate, onChangeSelect, resetFunction } from "../../../components/Common/validationFunction";
 import { Go_Button, SaveButton } from "../../../components/Common/CommonButton";
-import { mySearchProps } from "../../../components/Common/SearchBox/MySearch";
+import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
+import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
+import GlobalCustomTable from "../../../GlobalCustomTable";
+import { getPartyTypelist, getPartyTypelistSuccess } from "../../../store/Administrator/PartyTypeRedux/action";
 
 const GSTMaster = (props) => {
     const dispatch = useDispatch();
     const history = useHistory();
 
     const fileds = {
+        PartyType: "",
         EffectiveDate: "",
     }
 
@@ -65,9 +68,15 @@ const GSTMaster = (props) => {
         pageField,
         saveBtnloading,
         listBtnLoading,
+        PartyTypeList,
+        PartyTypeListLoading
     } = useSelector((state) => ({
         listBtnLoading: state.GSTReducer.listBtnLoading,
         saveBtnloading: state.GSTReducer.saveBtnloading,
+
+        PartyTypeList: state.PartyTypeReducer.ListData,
+        PartyTypeListLoading: state.PartyTypeReducer.goBtnLoading,
+
         tableData: state.GSTReducer.GSTGoButton,
         deleteMessage: state.GSTReducer.deleteMsgForMaster,
         postMsg: state.GSTReducer.postMsg,
@@ -81,7 +90,13 @@ const GSTMaster = (props) => {
         const page_Id = pageId.GST
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
+        dispatch(BreadcrumbShowCountlabel(`Count:${0}`));
+        dispatch(getPartyTypelist());
+        return () => {
+            dispatch(getPartyTypelistSuccess([]));
+        }
     }, []);
+
 
     const values = { ...state.values }
     const { isError } = state;
@@ -156,7 +171,7 @@ const GSTMaster = (props) => {
 
     useEffect(async () => {
 
-        if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
+        if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(saveGSTMasterSuccess({ Status: false }))
             setState(() => resetFunction(fileds, state))// Clear form values  
             if (pageMode === mode.dropdownAdd) {
@@ -191,23 +206,23 @@ const GSTMaster = (props) => {
             dispatch(deleteGSTId_ForMaster_Success({ Status: false }));
             dispatch(goButtonForGST_Master_Success([]))
             GoButton_Handler()
-            dispatch(
-                customAlert({
-                    Type: 1,
-                    Status: true,
-                    Message: deleteMessage.Message,
-                    AfterResponseAction: getGSTList,
-                })
-            );
+
+            customAlert({
+                Type: 1,
+                Status: true,
+                Message: deleteMessage.Message,
+                // AfterResponseAction: getGSTList,
+            })
+
         } else if (deleteMessage.Status === true) {
             dispatch(deleteGSTId_ForMaster_Success({ Status: false }));
-            dispatch(
-                customAlert({
-                    Type: 3,
-                    Status: true,
-                    Message: JSON.stringify(deleteMessage.Message),
-                })
-            );
+
+            customAlert({
+                Type: 3,
+                Status: true,
+                Message: JSON.stringify(deleteMessage.Message),
+            })
+
         }
     }, [deleteMessage]);
 
@@ -218,13 +233,14 @@ const GSTMaster = (props) => {
         if (values.EffectiveDate === '') {
             customAlert({
                 Type: 4,
-                Message: "Please select EffectiveDate",
+                Message: alertMessages.effectiveDateIsRequired,
             })
             return
         }
         else {
             const jsonBody = JSON.stringify({
-                EffectiveDate: values.EffectiveDate
+                "EffectiveDate": values.EffectiveDate,
+                "PartyTypeID": values.PartyType.value ? values.PartyType.value : 0,
             });
 
             dispatch(goButtonForGST_Master({ jsonBody }));
@@ -233,23 +249,20 @@ const GSTMaster = (props) => {
 
     //select id for delete row
     const deleteHandeler = (id, name) => {
-        dispatch(
-            customAlert({
-                Type: 5,
-                Status: true,
-                Message: `Are you sure you want to delete this Item : "${name}"`,
-                RedirectPath: false,
-                PermissionAction: deleteGSTId_ForMaster,
-                ID: id,
-            })
-        )
+        customAlert({
+            Type: 5,
+            Status: true,
+            Message: `${alertMessages.deleteThisItem} : "${name}"`,
+            RedirectPath: false,
+            PermissionAction: deleteGSTId_ForMaster,
+            ID: id,
+        })
     };
 
-    const pageOptions = {
-        sizePerPage: 10,
-        totalSize: Data.length,
-        custom: true,
-    };
+    const PartyTypeDropdown_Options = PartyTypeList.map((Data) => ({
+        value: Data.id,
+        label: Data.Name
+    }));
 
     const pagesListColumns = [
         {
@@ -385,19 +398,20 @@ const GSTMaster = (props) => {
         event.preventDefault();
         const btnId = event.target.id
         try {
-
+            debugger
             _cfunc.btnIsDissablefunc({ btnId, state: true })
 
             var ItemData = Data.map((index) => ({
-                EffectiveDate: values.EffectiveDate,
-                Company: loginCompanyID(),
-                CreatedBy: loginUserID(),
-                IsDeleted: 0,
-                UpdatedBy: loginUserID(),
-                Item: index.Item,
-                GSTPercentage: index.GSTPercentage,
-                HSNCode: index.HSNCode,
-                id: index.id
+                "EffectiveDate": values.EffectiveDate,
+                "PartyType": values.PartyType.value ? values.PartyType.value : null,
+                "Company": loginCompanyID(),
+                "CreatedBy": loginUserID(),
+                "IsDeleted": 0,
+                "UpdatedBy": loginUserID(),
+                "Item": index.Item,
+                "GSTPercentage": index.GSTPercentage,
+                "HSNCode": index.HSNCode,
+                "id": index.id
             }))
 
             const filterData = ItemData.filter((index) => {
@@ -407,13 +421,13 @@ const GSTMaster = (props) => {
             const jsonBody = JSON.stringify(filterData)
 
             if (!(filterData.length > 0)) {
-                dispatch(
-                    customAlert({
-                        Type: 4,
-                        Status: true,
-                        Message: "Please Enter One GSTPercentage & HSNCode",
-                    })
-                );
+
+                customAlert({
+                    Type: 4,
+                    Status: true,
+                    Message: alertMessages.enterGSTPercentage_HSNCodeIsRequired
+                })
+
                 return _cfunc.btnIsDissablefunc({ btnId, state: false })
             }
             else {
@@ -429,7 +443,7 @@ const GSTMaster = (props) => {
 
     return (
         <React.Fragment>
-            <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
+            <div className="page-content" >
                 <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
                 <Container fluid>
 
@@ -444,7 +458,32 @@ const GSTMaster = (props) => {
                                 <Card style={{ backgroundColor: "whitesmoke" }} className=" mb-1">
                                     <CardHeader className="c_card_body"  >
                                         <Row className="mt-3">
+                                            <Col sm={4}>
+                                                <FormGroup className="mb-3 row">
+                                                    <Label className="col-md-6 p-2" style={{ width: "2.9cm" }}>{fieldLabel.PartyType}</Label>
+                                                    <Col sm={8}>
+                                                        <C_Select
+                                                            name="PartyType"
+                                                            value={values.PartyType}
+                                                            options={PartyTypeDropdown_Options}
+                                                            // isDisabled={!(values.PartyName === "")}
+                                                            isSearchable={true}
+                                                            classNamePrefix="dropdown"
+                                                            isLoading={PartyTypeListLoading}
+                                                            styles={{
+                                                                menu: provided => ({ ...provided, zIndex: 2 })
+                                                            }}
+                                                            onChange={(hasSelect, evn) => {
 
+                                                                onChangeSelect({ hasSelect, evn, state, setState, })
+                                                            }}
+                                                        />
+                                                    </Col>
+                                                    {isError.PartyType.length > 0 && (
+                                                        <span className="invalid-feedback">{isError.PartyType}</span>
+                                                    )}
+                                                </FormGroup>
+                                            </Col>
                                             <Col sm={4}>
                                                 <FormGroup className="mb-3 row ">
                                                     <Label className="col-md-6 p-2" style={{ width: "2.9cm" }}>{fieldLabel.EffectiveDate}</Label>
@@ -477,52 +516,29 @@ const GSTMaster = (props) => {
                                     </CardHeader>
                                 </Card>
 
-                                {Data.length > 0 ?
-
-                                    <ToolkitProvider
-                                        keyField="Item"
-                                        data={Data}
-                                        columns={pagesListColumns}
-                                        search
-                                    >
-                                        {(toolkitProps) => (
-                                            <React.Fragment>
-                                                <Row>
-                                                    <Col xl="12">
-                                                        <div className="table-responsive">
-                                                            <BootstrapTable
-                                                                keyField={"Item"}
-                                                                id="table_Arrow"
-                                                                responsive
-                                                                bordered={false}
-                                                                striped={false}
-                                                                classes={"table  table-bordered"}
-                                                                noDataIndication={<div className="text-danger text-center ">Items Not available</div>}
-                                                                {...toolkitProps.baseProps}
-                                                            />
-                                                            {mySearchProps(toolkitProps.searchProps)}
-
-                                                        </div>
-                                                    </Col>
-                                                </Row>
-
-                                            </React.Fragment>
-                                        )}
-                                    </ToolkitProvider>
-                                    : null}
-
-                                {Data.length > 0 ?
-                                    <FormGroup>
-                                        <Col sm={2} style={{ marginLeft: "-40px" }} className={"row save1"}>
-                                            <SaveButton pageMode={pageMode}
-                                                loading={saveBtnloading}
-                                                onClick={SaveHandler}
-                                                userAcc={userPageAccessState}
-                                                editCreatedBy={editCreatedBy}
-                                            />
-                                        </Col>
-                                    </FormGroup >
-                                    : null
+                                <GlobalCustomTable
+                                    keyField={"Item"}
+                                    data={Data}
+                                    columns={pagesListColumns}
+                                    id="table_Arrow"
+                                    noDataIndication={
+                                        <div className="text-danger text-center ">
+                                            Items Not available
+                                        </div>
+                                    }
+                                    onDataSizeChange={({ dataCount }) => {
+                                        dispatch(BreadcrumbShowCountlabel(`Count:${dataCount}`));
+                                    }}
+                                />
+                                {Data.length > 0 &&
+                                    <SaveButtonDraggable>
+                                        <SaveButton pageMode={pageMode}
+                                            loading={saveBtnloading}
+                                            onClick={SaveHandler}
+                                            userAcc={userPageAccessState}
+                                            editCreatedBy={editCreatedBy}
+                                        />
+                                    </SaveButtonDraggable>
                                 }
 
                             </CardBody>

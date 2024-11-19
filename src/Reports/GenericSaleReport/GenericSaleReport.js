@@ -8,24 +8,25 @@ import * as _cfunc from "../../components/Common/CommonFunction";
 import { mode, pageId } from "../../routes/index"
 import { MetaTags } from "react-meta-tags";
 import { GoButton_For_GenericSale_Action, GoButton_For_GenericSale_Success } from "../../store/Report/GenericSaleRedux/action";
-import * as XLSX from 'xlsx';
-import ToolkitProvider from "react-bootstrap-table2-toolkit";
-import BootstrapTable from "react-bootstrap-table-next";
-import { mySearchProps } from "../../components/Common/SearchBox/MySearch";
 import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess } from "../../store/actions";
 import DynamicColumnHook from "../../components/Common/TableCommonFunc";
-import { ReportComponent } from "../ReportComponent";
+import { ExcelReportComponent } from "../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS";
+import { changeCommonPartyDropDetailsAction } from "../../store/Utilites/PartyDrodown/action";
+import { allLabelWithBlank } from "../../components/Common/CommonErrorMsg/HarderCodeData";
+import ToolkitProvider from "react-bootstrap-table2-toolkit";
+import BootstrapTable from "react-bootstrap-table-next";
+import { globalTableSearchProps } from "../../components/Common/SearchBox/MySearch";
 
 const GenericSaleReport = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory();
     const currentDate_ymd = _cfunc.date_ymd_func();
-    const isSCMParty = _cfunc.loginIsSCMParty();
+    const userAdminRole = _cfunc.loginUserAdminRole();
 
     const [headerFilters, setHeaderFilters] = useState('');
     const [userPageAccessState, setUserAccState] = useState('');
-    const [distributorDropdown, setDistributorDropdown] = useState([{ value: "", label: "All" }]);
+    const [distributorDropdown, setDistributorDropdown] = useState([allLabelWithBlank]);
     const [tableData, setTableData] = useState([]);
     const [btnMode, setBtnMode] = useState(0);
 
@@ -38,7 +39,7 @@ const GenericSaleReport = (props) => {
     } = useSelector((state) => ({
         goButtonData: state.GenericSaleReportReducer.genericSaleGobtn,
         partyDropdownLoading: state.CommonPartyDropdownReducer.partyDropdownLoading,
-        Distributor: state.CommonPartyDropdownReducer.commonPartyDropdown,
+        Distributor: state.CommonPartyDropdownReducer.commonPartyDropdownOption,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField
     })
@@ -49,12 +50,6 @@ const GenericSaleReport = (props) => {
     // Featch Modules List data  First Rendering
     const location = { ...history.location }
     const hasShowModal = props.hasOwnProperty(mode.editValue)
-
-    useEffect(() => {
-        dispatch(commonPageFieldSuccess(null));
-        dispatch(commonPageField(pageId.GENERIC_SALE_REPORT))
-
-    }, []);
 
     // userAccess useEffect
     useEffect(() => {
@@ -73,9 +68,17 @@ const GenericSaleReport = (props) => {
     }, [userAccess])
 
     useEffect(() => {
-        dispatch(BreadcrumbShowCountlabel(`Count:${0} ₹ ${0.00}`));
+        dispatch(commonPageFieldSuccess(null));
+        dispatch(commonPageField(pageId.GENERIC_SALE_REPORT))
+        if (_cfunc.CommonPartyDropValue().value > 0) {
+            setDistributorDropdown([_cfunc.CommonPartyDropValue()]);
+        }
+        dispatch(BreadcrumbShowCountlabel(`Count:${0} currency_symbol ${0.00}`));
+        dispatch(changeCommonPartyDropDetailsAction({ isShow: false }))//change party drop-down show false
         return () => {
             setTableData([]);
+            dispatch(changeCommonPartyDropDetailsAction({ isShow: true }))//change party drop-down restore show state
+            dispatch(GoButton_For_GenericSale_Success([]));
         }
     }, [])
 
@@ -83,7 +86,6 @@ const GenericSaleReport = (props) => {
         if (tableData.length === 0) {
             setBtnMode(0)
         }
-
     }, [tableData]);
 
     const Party_Option = Distributor.map(i => ({
@@ -100,13 +102,13 @@ const GenericSaleReport = (props) => {
                 setBtnMode(0);
                 const { Data } = goButtonData
                 if (btnMode === 2) {
-                    ReportComponent({      // Download CSV
+                    ExcelReportComponent({      // Download CSV
                         pageField,
-                        excelData: Data,
+                        excelTableData: Data,
                         excelFileName: "Generic Sale Report"
                     })
                     dispatch(GoButton_For_GenericSale_Success([]));
-                    setDistributorDropdown([{ value: "", label: "All" }])
+                    setDistributorDropdown([allLabelWithBlank])
                 }
                 else {
                     const UpdatedTableData = Data.map((item, index) => {
@@ -124,7 +126,7 @@ const GenericSaleReport = (props) => {
             }
             setBtnMode(0);
         }
-        catch (e) { console.log(e) }
+        catch (e) { }
 
     }, [goButtonData]);
 
@@ -139,12 +141,12 @@ const GenericSaleReport = (props) => {
         else {
             isDistributorDropdown = distributorDropdown.filter(i => !(i.value === '')).map(obj => obj.value).join(',');
         }
-
         const jsonBody = JSON.stringify({
             "FromDate": fromdate,
             "ToDate": todate,
-            "Party": !(isSCMParty) ? _cfunc.loginPartyID().toString() : isDistributorDropdown,
+            "Party": !(userAdminRole) ? _cfunc.loginPartyID().toString() : isDistributorDropdown,
         });
+
         let config = { jsonBody }
         dispatch(GoButton_For_GenericSale_Action(config));
     }
@@ -168,7 +170,7 @@ const GenericSaleReport = (props) => {
     function PartyDrodownOnChange(e = []) {
 
         if (e.length === 0) {
-            e = [{ value: "", label: "All" }]
+            e = [allLabelWithBlank]
         } else {
             e = e.filter(i => !(i.value === ''))
         }
@@ -181,13 +183,13 @@ const GenericSaleReport = (props) => {
             <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
 
             <div className="page-content">
-                <div className="px-2   c_card_filter text-black mb-1" >
-                    <div className="row" >
+                <div className="px-2   c_card_filter text-black " >
+                    <Row>
                         <Col sm={3} className="">
-                            <FormGroup className="mb- row mt-3 mb-2 " >
+                            <FormGroup className=" row mt-2  " >
                                 <Label className="col-sm-4 p-2"
                                     style={{ width: "83px" }}>FromDate</Label>
-                                <Col sm="6">
+                                <Col sm="7">
                                     <C_DatePicker
                                         name='FromDate'
                                         value={fromdate}
@@ -198,10 +200,10 @@ const GenericSaleReport = (props) => {
                         </Col>
 
                         <Col sm={3} className="">
-                            <FormGroup className="mb- row mt-3 mb-2" >
+                            <FormGroup className=" row mt-2 " >
                                 <Label className="col-sm-4 p-2"
                                     style={{ width: "65px" }}>ToDate</Label>
-                                <Col sm="6">
+                                <Col sm="7">
                                     <C_DatePicker
                                         name="ToDate"
                                         value={todate}
@@ -211,9 +213,9 @@ const GenericSaleReport = (props) => {
                             </FormGroup>
                         </Col>
 
-                        {isSCMParty &&
-                            <Col sm={3} className="">
-                                <FormGroup className="mb- row mt-3" >
+                        {userAdminRole &&
+                            <Col sm={4} className="">
+                                <FormGroup className=" row mt-2" >
                                     <Label className="col-sm-4 p-2"
                                         style={{ width: "65px", marginRight: "20px" }}>Party</Label>
                                     <Col sm="8">
@@ -235,37 +237,34 @@ const GenericSaleReport = (props) => {
                                 </FormGroup>
                             </Col>
                         }
-
-                        <Col sm={1} className="mt-3" >
+                        <Col sm={userAdminRole ? 2 : 6} className=" d-flex justify-content-end" >
                             <C_Button
                                 type="button"
                                 spinnerColor="white"
                                 loading={btnMode === 1 && true}
-                                className="btn btn-success"
+                                className="btn btn-success m-3 mr"
                                 onClick={(e) => excel_And_GoBtnHandler(e, 1)}
                             >
                                 Show
                             </C_Button>
-
-                        </Col>
-
-                        <Col sm={2} className="mt-3 ">
                             <C_Button
                                 type="button"
                                 spinnerColor="white"
                                 loading={btnMode === 2 && true}
-                                className="btn btn-primary"
+                                className="btn btn-primary m-3 mr"
                                 onClick={(e) => excel_And_GoBtnHandler(e, 2)}
                             >
-                                Excel Download
+                                Excel
                             </C_Button>
                         </Col>
-                    </div>
+                    </Row>
                 </div>
 
-                <div>
+
+
+                <div className="mt-1">
                     <ToolkitProvider
-                        keyField={"id"}
+                        keyField="id"
                         data={tableData}
                         columns={tableColumns}
                         search
@@ -274,10 +273,10 @@ const GenericSaleReport = (props) => {
                             <React.Fragment>
                                 <Row>
                                     <Col xl="12">
-                                        <div className="table-responsive table">
+                                        <div className="table-responsive table" style={{ maxHeight: "77vh" }}>
                                             <BootstrapTable
-                                                keyField={"id"}
-                                                classes={"table  table-bordered table-hover"}
+                                                keyField="PartyID"
+                                                classes={"custom-table"}
                                                 noDataIndication={
                                                     <div className="text-danger text-center ">
                                                         Record Not available
@@ -288,7 +287,8 @@ const GenericSaleReport = (props) => {
                                                 }}
                                                 {...toolkitProps.baseProps}
                                             />
-                                            {mySearchProps(toolkitProps.searchProps)}
+
+                                            {globalTableSearchProps(toolkitProps.searchProps)}
                                         </div>
                                     </Col>
                                 </Row>
@@ -296,9 +296,7 @@ const GenericSaleReport = (props) => {
                             </React.Fragment>
                         )}
                     </ToolkitProvider>
-
                 </div>
-
             </div>
 
         </React.Fragment >

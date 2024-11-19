@@ -37,3 +37,5 @@ export * from "./Accounting/CreditRedux/action";
 export * from "./Accounting/Receipt/action";
 export * from "./Sales/SalesReturnRedux/action";
 export * from "./Inventory/ChallanRedux/actions";
+
+export * from "./Inventory/StockEntryRedux/action";

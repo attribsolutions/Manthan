@@ -24,12 +24,14 @@ import {
     getPartyTypelist,
     updatePartyTypeAction,
     SavePartyTypeAction,
-    updatePartyTypeIDSuccess
+    updatePartyTypeIDSuccess,
+    getPartyTypelistSuccess
 } from "../../../store/Administrator/PartyTypeRedux/action";
 import {
     comAddPageFieldFunc,
     formValid,
     initialFiledFunc,
+    onChangeSelect,
     onChangeText,
     resetFunction
 } from "../../../components/Common/validationFunction";
@@ -39,6 +41,8 @@ import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import * as _cfunc from "../../../components/Common/CommonFunction";
+import { C_Select } from "../../../CustomValidateForm";
+import { getCountryList_Action, getCountryList_Success } from "../../../store/Administrator/CountryRedux/action";
 
 
 const PartyType = (props) => {
@@ -49,11 +53,15 @@ const PartyType = (props) => {
     const fileds = {
         id: "",
         Name: "",
+        SAPIndicator: "",
         IsSCM: _cfunc.loginIsSCMCompany() > 0 ? true : false,
         IsDivision: false,
         IsRetailer: false,
         IsVendor: false,
-        IsAdminDivision: false
+        IsAdminDivision: false,
+        IsFranchises: false,
+        CountryName: { value: 1, label: "India" }
+
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
@@ -64,8 +72,10 @@ const PartyType = (props) => {
     const [editCreatedBy, seteditCreatedBy] = useState("");
 
     //Access redux store Data /  'save_ModuleSuccess' action data
-    const { postMsg, pageField, updateMsg, userAccess, saveBtnloading } =
+    const { postMsg, pageField, updateMsg, userAccess, saveBtnloading, countryList = [], countryListloading } =
         useSelector((state) => ({
+            countryList: state.CountryReducer.CountryList,
+            countryListloading: state.CountryReducer.loading,
             saveBtnloading: state.PartyTypeReducer.saveBtnloading,
             postMsg: state.PartyTypeReducer.PostData,
             pageField: state.CommonPageFieldReducer.pageField,
@@ -77,7 +87,10 @@ const PartyType = (props) => {
         const page_Id = pageId.PARTYTYPE
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
-        dispatch(getPartyTypelist());
+        dispatch(getCountryList_Action());
+        return () => {
+            dispatch(getCountryList_Success());
+        }
     }, []);
 
     const values = { ...state.values }
@@ -118,7 +131,7 @@ const PartyType = (props) => {
 
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
-       
+
         if (!(props.pageMode === mode.dropdownAdd)) {
             if ((hasShowloction || hasShowModal)) {
 
@@ -134,7 +147,7 @@ const PartyType = (props) => {
                 }
 
                 if (hasEditVal) {
-                    const { id, Name, IsSCM, IsDivision, IsRetailer, IsVendor, IsAdminDivision } = hasEditVal
+                    const { id, Name, IsSCM, IsDivision, IsRetailer, IsVendor, IsAdminDivision, CountryID, CountryName, IsFranchises, SAPIndicator } = hasEditVal
                     const { values, fieldLabel, hasValid, required, isError } = { ...state }
                     values.Name = Name;
                     values.IsSCM = IsSCM;
@@ -142,6 +155,10 @@ const PartyType = (props) => {
                     values.IsRetailer = IsRetailer
                     values.IsVendor = IsVendor
                     values.IsAdminDivision = IsAdminDivision
+                    values.IsFranchises = IsFranchises
+                    values.SAPIndicator = SAPIndicator
+                    values.CountryName = CountryID !== null && { label: CountryName, value: CountryID }
+
 
                     values.id = id
                     hasValid.Name.valid = true;
@@ -150,6 +167,9 @@ const PartyType = (props) => {
                     hasValid.IsRetailer.valid = true
                     hasValid.IsVendor.valid = true
                     hasValid.IsAdminDivision.valid = true
+                    hasValid.CountryName.valid = true
+                    hasValid.IsFranchises.valid = true
+                    hasValid.SAPIndicator.valid = true
 
                     setState({ values, fieldLabel, hasValid, required, isError })
                     dispatch(Breadcrumb_inputName(hasEditVal.Name))
@@ -160,7 +180,6 @@ const PartyType = (props) => {
         }
 
     }, [])
-
 
     useEffect(async () => {
 
@@ -173,9 +192,6 @@ const PartyType = (props) => {
                     Type: 1,
                     Message: postMsg.Message,
                 })
-                // history.push({
-                //     Data: postMsg.Data
-                // })
                 dispatch(getPartyTypelist())
 
                 props.isOpenModal(false)
@@ -230,6 +246,11 @@ const PartyType = (props) => {
         }
     }, [pageField])
 
+    const CountryListOptions = countryList?.map((data) => ({
+        value: data.id,
+        label: data.Country
+    }));
+
     const SaveHandler = (event) => {
         event.preventDefault();
         const btnId = event.target.id;
@@ -242,6 +263,9 @@ const PartyType = (props) => {
                     IsDivision: values.IsDivision,
                     IsRetailer: values.IsRetailer,
                     IsVendor: values.IsVendor,
+                    Country: values.CountryName.value,
+                    IsFranchises: values.IsFranchises,
+                    SAPIndicator: values.SAPIndicator,
                     IsAdminDivision: values.IsAdminDivision,
                     Company: _cfunc.loginCompanyID(),
                     CreatedBy: _cfunc.loginUserID(),
@@ -266,7 +290,7 @@ const PartyType = (props) => {
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
-                <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
+                <div className="page-content" >
                     <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
                     <Container fluid>
                         <Card className="text-black">
@@ -277,176 +301,226 @@ const PartyType = (props) => {
 
                             <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
                                 <form noValidate>
-                                    {/* <Row className=""> */}
+
                                     <Col md={12}>
                                         <Card>
                                             <CardBody className="c_card_body">
                                                 <Row>
-                                                    <FormGroup className="mb-2 col col-sm-4 ">
-                                                        <Label htmlFor="validationCustom01">{fieldLabel.Name} </Label>
-                                                        <Input
-                                                            name="Name"
-                                                            id="txtName"
-                                                            value={values.Name}
-                                                            type="text"
-                                                            className={isError.Name.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                            placeholder="Please Enter Name"
-                                                            autoComplete='off'
-                                                            autoFocus={true}
-                                                            onChange={(event) => {
-                                                                onChangeText({ event, state, setState })
-                                                                dispatch(Breadcrumb_inputName(event.target.value))
-                                                            }}
-                                                        />
-                                                        {isError.Name.length > 0 && (
-                                                            <span className="invalid-feedback">{isError.Name}</span>
-                                                        )}
-                                                    </FormGroup>
+                                                    <Col md={6}>
+                                                        <FormGroup className="mb-2 col col-sm-6 ">
+                                                            <Label htmlFor="validationCustom01">{fieldLabel.Name} </Label>
+                                                            <Input
+                                                                name="Name"
+                                                                id="txtName"
+                                                                value={values.Name}
+                                                                type="text"
+                                                                className={isError.Name.length > 0 ? "is-invalid form-control" : "form-control"}
+                                                                placeholder="Please Enter Name"
+                                                                autoComplete='off'
+                                                                autoFocus={true}
+                                                                onChange={(event) => {
+                                                                    onChangeText({ event, state, setState })
+                                                                    dispatch(Breadcrumb_inputName(event.target.value))
+                                                                }}
+                                                            />
+                                                            {isError.Name.length > 0 && (
+                                                                <span className="invalid-feedback">{isError.Name}</span>
+                                                            )}
+                                                        </FormGroup>
+                                                    </Col>
+
+                                                    <Col md={6}>
+                                                        <FormGroup className="mb-2 col col-sm-6 ">
+                                                            <Label htmlFor="validationCustom01">{fieldLabel.CountryName} </Label>
+                                                            <C_Select
+                                                                name="CountryName"
+                                                                value={values.CountryName}
+                                                                isSearchable={true}
+                                                                isLoading={countryListloading}
+                                                                className="react-dropdown"
+                                                                classNamePrefix="dropdown"
+                                                                options={CountryListOptions}
+                                                                onChange={(hasSelect, evn) => {
+                                                                    onChangeSelect({ hasSelect, evn, state, setState });
+                                                                }}
+                                                            />
+                                                            {/* {isError.CountryName.length > 0 && (
+                                                                <span className="text-danger f-8"><small>{isError.CountryName}</small></span>
+                                                            )} */}
+                                                        </FormGroup>
+                                                    </Col>
                                                 </Row>
 
                                                 <Row>
-                                                    <FormGroup className="mb-2 col col-sm-4">
-                                                        <Row className="justify-content-md-left">
-                                                            <Label htmlFor="horizontal-firstname-input"
-                                                                className="col-sm-5 col-form-label" >{fieldLabel.IsSCM} </Label>
-                                                            <Col md={2} style={{ marginTop: '9px' }} >
-                                                                <div className="form-check form-switch form-switch-md mb-2">
-                                                                    <Input type="checkbox" className="form-check-input"
-                                                                        checked={values.IsSCM}
-                                                                        disabled={_cfunc.loginIsSCMCompany() > 0 ? true : false}
-                                                                        name="IsSCM"
-                                                                        onChange={(e) => {
-                                                                            setState((i) => {
-                                                                                const a = { ...i }
-                                                                                a.values.IsSCM = e.target.checked;
-                                                                                return a
-                                                                            })
-                                                                        }}
-                                                                    />
-                                                                </div>
-                                                            </Col>
-                                                        </Row>
-                                                    </FormGroup>
-
-                                                    <FormGroup className="mb-2 col col-sm-4">
-                                                        <Row className="justify-content-md-left">
-                                                            <Label htmlFor="horizontal-firstname-input"
-                                                                className="col-sm-5 col-form-label" >{fieldLabel.IsDivision} </Label>
-                                                            <Col md={2} style={{ marginTop: '9px' }} >
-                                                                <div className="form-check form-switch form-switch-md mb-3">
-                                                                    <Input type="checkbox" className="form-check-input"
-                                                                        checked={values.IsDivision}
-                                                                        name="IsDivision"
-                                                                        onChange={(e) => {
-                                                                            setState((i) => {
-                                                                                const a = { ...i }
-                                                                                a.values.IsDivision = e.target.checked;
-                                                                                return a
-                                                                            })
-                                                                        }}
-                                                                    />
-                                                                </div>
-                                                            </Col>
-                                                        </Row>
-                                                    </FormGroup>
+                                                    <Col md={6}>
+                                                        <FormGroup className="mb-2 col col-sm-6 ">
+                                                            <Label htmlFor="validationCustom01">{fieldLabel.SAPIndicator} </Label>
+                                                            <Input
+                                                                name="SAPIndicator"
+                                                                value={values.SAPIndicator}
+                                                                type="text"
+                                                                className={isError.SAPIndicator.length > 0 ? "is-invalid form-control" : "form-control"}
+                                                                placeholder="Please Enter SAP Indicator"
+                                                                autoComplete='off'
+                                                                autoFocus={true}
+                                                                onChange={(event) => {
+                                                                    onChangeText({ event, state, setState })
+                                                                }}
+                                                            />
+                                                            {isError.SAPIndicator.length > 0 && (
+                                                                <span className="invalid-feedback">{isError.SAPIndicator}</span>
+                                                            )}
+                                                        </FormGroup>
+                                                    </Col>
                                                 </Row>
-
-                                                {/* <Row>
-                                                    
-                                                </Row> */}
 
                                                 <Row>
-                                                    <FormGroup className="mb-2 col col-sm-4">
-                                                        <Row className="justify-content-md-left">
-                                                            <Label htmlFor="horizontal-firstname-input"
-                                                                className="col-sm-5 col-form-label" >{fieldLabel.IsRetailer} </Label>
-                                                            <Col md={1} style={{ marginTop: '9px' }} >
-                                                                <div className="form-check form-switch form-switch-md mb-3">
-                                                                    <Input type="checkbox" className="form-check-input"
-                                                                        checked={values.IsRetailer}
-                                                                        name="IsRetailer"
-                                                                        onChange={(e) => {
-                                                                            setState((i) => {
-                                                                                const a = { ...i }
-                                                                                a.values.IsRetailer = e.target.checked;
-                                                                                return a
-                                                                            })
-                                                                        }}
-                                                                    />
-                                                                </div>
-                                                            </Col>
-                                                        </Row>
-                                                    </FormGroup>
-
-                                                    <FormGroup className="mb-2 col col-sm-4">
-                                                        <Row className="justify-content-md-left">
-                                                            <Label htmlFor="horizontal-firstname-input"
-                                                                className="col-sm-5 col-form-label" >{fieldLabel.IsVendor} </Label>
-                                                            <Col md={1} style={{ marginTop: '9px' }} >
-                                                                <div className="form-check form-switch form-switch-md mb-3">
-                                                                    <Input type="checkbox" className="form-check-input"
-                                                                        checked={values.IsVendor}
-                                                                        name="IsVendor"
-                                                                        onChange={(e) => {
-                                                                            setState((i) => {
-                                                                                const a = { ...i }
-                                                                                a.values.IsVendor = e.target.checked;
-                                                                                return a
-                                                                            })
-                                                                        }}
-                                                                    />
-                                                                </div>
-                                                            </Col>
-                                                        </Row>
-                                                    </FormGroup>
+                                                    <Col md={6}>
+                                                        <FormGroup className="mb-2 col col-sm-6">
+                                                            <Row className="justify-content-md-left">
+                                                                <Label htmlFor="horizontal-firstname-input"
+                                                                    className="col-sm-6 col-form-label" >{fieldLabel.IsSCM} </Label>
+                                                                <Col md={2} style={{ marginTop: '9px' }} >
+                                                                    <div className="form-check form-switch form-switch-md mb-2">
+                                                                        <Input type="checkbox" className="form-check-input"
+                                                                            checked={values.IsSCM}
+                                                                            disabled={_cfunc.loginIsSCMCompany() > 0 ? true : false}
+                                                                            name="IsSCM"
+                                                                            onChange={(e) => {
+                                                                                setState((i) => {
+                                                                                    const a = { ...i }
+                                                                                    a.values.IsSCM = e.target.checked;
+                                                                                    return a
+                                                                                })
+                                                                            }}
+                                                                        />
+                                                                    </div>
+                                                                </Col>
+                                                            </Row>
+                                                        </FormGroup>
+                                                    </Col>
+                                                    <Col md={6}>
+                                                        <FormGroup className="mb-2 col col-sm-6">
+                                                            <Row className="justify-content-md-left">
+                                                                <Label htmlFor="horizontal-firstname-input"
+                                                                    className="col-sm-6 col-form-label" >{fieldLabel.IsDivision} </Label>
+                                                                <Col md={2} style={{ marginTop: '9px' }} >
+                                                                    <div className="form-check form-switch form-switch-md mb-3">
+                                                                        <Input type="checkbox" className="form-check-input"
+                                                                            checked={values.IsDivision}
+                                                                            name="IsDivision"
+                                                                            onChange={(e) => {
+                                                                                setState((i) => {
+                                                                                    const a = { ...i }
+                                                                                    a.values.IsDivision = e.target.checked;
+                                                                                    return a
+                                                                                })
+                                                                            }}
+                                                                        />
+                                                                    </div>
+                                                                </Col>
+                                                            </Row>
+                                                        </FormGroup>
+                                                    </Col>
                                                 </Row>
 
-                                                {/* <Row>
-                                                    <FormGroup className="mb-2 col col-sm-5">
-                                                        <Row className="justify-content-md-left">
-                                                            <Label htmlFor="horizontal-firstname-input" className="col-sm-3 col-form-label" >{fieldLabel.IsVendor} </Label>
-                                                            <Col md={2} style={{ marginTop: '9px' }} >
-                                                                <div className="form-check form-switch form-switch-md mb-3">
-                                                                    <Input type="checkbox" className="form-check-input"
-                                                                        checked={values.IsVendor}
-                                                                        name="IsVendor"
-                                                                        onChange={(e) => {
-                                                                            setState((i) => {
-                                                                                const a = { ...i }
-                                                                                a.values.IsVendor = e.target.checked;
-                                                                                return a
-                                                                            })
-                                                                        }}
-                                                                    />
-                                                                </div>
-                                                            </Col>
-                                                        </Row>
-                                                    </FormGroup>
-                                                </Row> */}
+                                                <Row>
+                                                    <Col md={6}>
+                                                        <FormGroup className="mb-2 col col-sm-6">
+                                                            <Row className="justify-content-md-left">
+                                                                <Label htmlFor="horizontal-firstname-input"
+                                                                    className="col-sm-6 col-form-label" >{fieldLabel.IsRetailer} </Label>
+                                                                <Col md={1} style={{ marginTop: '9px' }} >
+                                                                    <div className="form-check form-switch form-switch-md mb-3">
+                                                                        <Input type="checkbox" className="form-check-input"
+                                                                            checked={values.IsRetailer}
+                                                                            name="IsRetailer"
+                                                                            onChange={(e) => {
+                                                                                setState((i) => {
+                                                                                    const a = { ...i }
+                                                                                    a.values.IsRetailer = e.target.checked;
+                                                                                    return a
+                                                                                })
+                                                                            }}
+                                                                        />
+                                                                    </div>
+                                                                </Col>
+                                                            </Row>
+                                                        </FormGroup>
+                                                    </Col>
+                                                    <Col md={6}>
+                                                        <FormGroup className="mb-2 col col-sm-6">
+                                                            <Row className="justify-content-md-left">
+                                                                <Label htmlFor="horizontal-firstname-input"
+                                                                    className="col-sm-6 col-form-label" >{fieldLabel.IsVendor} </Label>
+                                                                <Col md={1} style={{ marginTop: '9px' }} >
+                                                                    <div className="form-check form-switch form-switch-md mb-3">
+                                                                        <Input type="checkbox" className="form-check-input"
+                                                                            checked={values.IsVendor}
+                                                                            name="IsVendor"
+                                                                            onChange={(e) => {
+                                                                                setState((i) => {
+                                                                                    const a = { ...i }
+                                                                                    a.values.IsVendor = e.target.checked;
+                                                                                    return a
+                                                                                })
+                                                                            }}
+                                                                        />
+                                                                    </div>
+                                                                </Col>
+                                                            </Row>
+                                                        </FormGroup>
+                                                    </Col>
+                                                </Row>
 
-                                                {/* <Row>
-                                                    <FormGroup className="mb-2 col col-sm-4">
-                                                        <Row className="justify-content-md-left">
-                                                            <Label htmlFor="horizontal-firstname-input"
-                                                                className="col-sm-5 col-form-label" >{fieldLabel.IsAdminDivision} </Label>
-                                                            <Col md={2} style={{ marginTop: '9px' }} >
-                                                                <div className="form-check form-switch form-switch-md mb-3">
-                                                                    <Input type="checkbox" className="form-check-input"
-                                                                        name="IsAdminDivision"
-                                                                        checked={values.IsAdminDivision}
-                                                                        onChange={(e) => {
-                                                                            setState((i) => {
-                                                                                const a = { ...i }
-                                                                                a.values.IsAdminDivision = e.target.checked;
-                                                                                return a
-                                                                            })
-                                                                        }}
-                                                                    />
-                                                                </div>
-                                                            </Col>
-                                                        </Row>
-                                                    </FormGroup>
-                                                </Row> */}
+                                                <Row>
+                                                    <Col md={6}>
+                                                        <FormGroup className="mb-2 col col-sm-6">
+                                                            <Row className="justify-content-md-left">
+                                                                <Label className="col-sm-6 col-form-label" >{fieldLabel.IsFranchises} </Label>
+                                                                <Col md={2} style={{ marginTop: '9px' }} >
+                                                                    <div className="form-check form-switch form-switch-md mb-3">
+                                                                        <Input type="checkbox" className="form-check-input"
+                                                                            checked={values.IsFranchises}
+                                                                            name="IsFranchises"
+                                                                            onChange={(e) => {
+                                                                                setState((i) => {
+                                                                                    const a = { ...i }
+                                                                                    a.values.IsFranchises = e.target.checked;
+                                                                                    return a
+                                                                                })
+                                                                            }}
+                                                                        />
+                                                                    </div>
+                                                                </Col>
+                                                            </Row>
+                                                        </FormGroup>
+
+                                                    </Col>
+                                                    <Col md={6}>
+                                                        <FormGroup className="mb-2 col col-sm-6">
+                                                            <Row className="justify-content-md-left">
+                                                                <Label htmlFor="horizontal-firstname-input"
+                                                                    className="col-sm-6 col-form-label" >{fieldLabel.IsAdminDivision} </Label>
+                                                                <Col md={2} style={{ marginTop: '9px' }} >
+                                                                    <div className="form-check form-switch form-switch-md mb-3">
+                                                                        <Input type="checkbox" className="form-check-input"
+                                                                            name="IsAdminDivision"
+                                                                            checked={values.IsAdminDivision}
+                                                                            onChange={(e) => {
+                                                                                setState((i) => {
+                                                                                    const a = { ...i }
+                                                                                    a.values.IsAdminDivision = e.target.checked;
+                                                                                    return a
+                                                                                })
+                                                                            }}
+                                                                        />
+                                                                    </div>
+                                                                </Col>
+                                                            </Row>
+                                                        </FormGroup>
+                                                    </Col>
+                                                </Row>
 
                                                 <FormGroup>
                                                     <Row>
@@ -465,7 +539,7 @@ const PartyType = (props) => {
                                             </CardBody>
                                         </Card>
                                     </Col>
-                                    {/* </Row> */}
+
                                 </form>
                             </CardBody>
                         </Card>

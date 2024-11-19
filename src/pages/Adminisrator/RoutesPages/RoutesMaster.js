@@ -22,6 +22,7 @@ import {
     updateRoutesID,
     GetRoutesListSuccess,
     updateRoutesIDSuccess,
+    GetRoutesList,
 } from "../../../store/Administrator/RoutesRedux/actions";
 import {
     comAddPageFieldFunc,
@@ -34,18 +35,16 @@ import { SaveButton } from "../../../components/Common/CommonButton";
 import {
     breadcrumbReturnFunc,
     loginCompanyID,
-    loginPartyID,
     loginUserID,
     btnIsDissablefunc,
     metaTagLabel,
-    loginSelectedPartyID,
-
 } from "../../../components/Common/CommonFunction";
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
-import PartyDropdown_Common from "../../../components/Common/PartyDropdown";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
+import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
+import { changeCommonPartyDropDetailsAction } from "../../../store/Utilites/PartyDrodown/action";
 
 const RoutesMaster = (props) => {
 
@@ -86,6 +85,8 @@ const RoutesMaster = (props) => {
             pageField: state.CommonPageFieldReducer.pageField
         }));
 
+    const { commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
+
     useEffect(() => {
         const page_Id = pageId.ROUTES
         dispatch(commonPageFieldSuccess(null));
@@ -102,8 +103,15 @@ const RoutesMaster = (props) => {
 
     // userAccess useEffect
     useEffect(() => {
+
         let userAcc = null;
-        let locationPath = location.pathname;
+        let locationPath;
+
+        if (props.pageMode === mode.dropdownAdd) {
+            locationPath = props.masterPath;
+        } else {
+            locationPath = location.pathname;
+        }
 
         if (hasShowModal) {
             locationPath = props.masterPath;
@@ -114,8 +122,10 @@ const RoutesMaster = (props) => {
         })
 
         if (userAcc) {
-            setUserAccState(userAcc)
-            breadcrumbReturnFunc({ dispatch, userAcc });
+            setUserAccState(userAcc);
+            if (!props.isdropdown) {
+                breadcrumbReturnFunc({ dispatch, userAcc });
+            }
         };
     }, [userAccess])
 
@@ -166,8 +176,12 @@ const RoutesMaster = (props) => {
                 setState({ values, fieldLabel, hasValid, required, isError })
                 dispatch(Breadcrumb_inputName(hasEditVal.Name))
                 seteditCreatedBy(hasEditVal.CreatedBy)
+                dispatch(changeCommonPartyDropDetailsAction({ forceDisable: true }))//change party drop-down disable when edit/view
             }
             dispatch(editRoutesIDSuccess({ Status: false }))
+        }
+        return () => {
+            dispatch(changeCommonPartyDropDetailsAction({ forceDisable: false }))//change party drop-down restore state
         }
     }, [])
 
@@ -177,11 +191,20 @@ const RoutesMaster = (props) => {
             dispatch(SaveRoutesMasterSuccess({ Status: false }))
             setState(() => resetFunction(fileds, state)) // Clear form values 
             dispatch(Breadcrumb_inputName(''))
-            if (pageMode === "other") {
+            if (props.pageMode === mode.dropdownAdd) {
                 customAlert({
                     Type: 1,
                     Message: postMsg.Message,
                 })
+
+                const jsonBody = JSON.stringify({
+                    CompanyID: loginCompanyID(),
+                    PartyID: commonPartyDropSelect.value,
+                });
+
+                dispatch(GetRoutesList(jsonBody));
+
+                props.isOpenModal(false)
             }
 
             else {
@@ -238,8 +261,8 @@ const RoutesMaster = (props) => {
         const btnId = event.target.id
 
         try {
-            if ((loginSelectedPartyID() === 0)) {
-                customAlert({ Type: 3, Message: "Please Select Party" });
+            if ((commonPartyDropSelect.value === 0)) {
+                customAlert({ Type: 3, Message: alertMessages.commonPartySelectionIsRequired });
                 return;
             };
             if (formValid(state, setState)) {
@@ -248,7 +271,7 @@ const RoutesMaster = (props) => {
                 const jsonBody = JSON.stringify({
                     Name: values.Name,
                     IsActive: values.IsActive,
-                    Party: loginSelectedPartyID(),
+                    Party: commonPartyDropSelect.value,
                     Sunday: values.Sunday,
                     Monday: values.Monday,
                     Tuesday: values.Tuesday,
@@ -264,7 +287,6 @@ const RoutesMaster = (props) => {
                 if (pageMode === mode.edit) {
                     dispatch(updateRoutesID({ jsonBody, updateId: values.id, btnId }));
                 }
-
                 else {
                     dispatch(SaveRoutesMaster({ jsonBody, btnId }));
                 }
@@ -273,16 +295,15 @@ const RoutesMaster = (props) => {
     };
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
-    var IsEditMode_Css = ''
-    if ((modalCss) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
+    // var IsEditMode_Css = ''
+    // if ((modalCss) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
 
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
                 <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
 
-                <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
-                    <PartyDropdown_Common pageMode={pageMode} />
+                <div className="page-content" >
 
                     <Container fluid>
                         <Card className="text-black" style={{ marginTop: "3px" }}>

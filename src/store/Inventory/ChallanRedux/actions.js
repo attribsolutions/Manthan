@@ -69,10 +69,11 @@ export const challanItemForDropdownSuccess = (data) => ({
 });
 
 
-export const deleteChallanId = (id) => ({
+export const deleteChallanId = (config = {}) => ({
   type: DELETE_CHALLAN_FOR_CHALLAN_PAGE,
-  id,
+  config,
 });
+
 export const deleteChallanIdSuccess = (data) => ({
   type: DELETE_CHALLAN_FOR_CHALLAN_PAGE_SUCCESS,
   payload: data,

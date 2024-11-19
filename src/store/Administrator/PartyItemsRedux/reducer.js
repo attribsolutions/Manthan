@@ -1,6 +1,7 @@
 import {
   CHANNEL_ITEM_VIEW_DETAIL_ACTION,
   CHANNEL_ITEM_VIEW_DETAIL_ACTION_SUCCESS,
+  EDIT_PARTY_ITEM_ID,
   EDIT_PARTY_ITEM_ID_SUCCESS,
   GO_BUTTON_PARTY_ITEM_ADD,
   GO_BUTTON_PARTY_ITEM_ADD_SUCCESS,
@@ -57,7 +58,7 @@ const PartyItemsReducer = (state = INIT_STATE, action) => {
       }
 
     case CHANNEL_ITEM_VIEW_DETAIL_ACTION:
-      
+
       return {
         ...state,
         channeItemViewBtnLoading: action.config.btnId,
@@ -70,10 +71,17 @@ const PartyItemsReducer = (state = INIT_STATE, action) => {
         channeItemViewDetail: action.payload,
       }
 
+    case EDIT_PARTY_ITEM_ID:
+      return {
+        ...state,
+        partyItemListLoading: true,
+      }
+
     case EDIT_PARTY_ITEM_ID_SUCCESS:
       return {
         ...state,
         editData: action.payload,
+        partyItemListLoading: false,
       }
 
     case PARTY_ITEM_API_ERROR_ACTION:

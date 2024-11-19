@@ -2,8 +2,9 @@
 import * as actionType from "./actionType";
 
 // get api
-export const getItemList = () => ({
+export const getItemList = (jsonBody) => ({
   type: actionType.GET_ITEM_LIST_API,
+  jsonBody,
 });
 
 
@@ -181,6 +182,19 @@ export const get_Category_By_CategoryType_ForDropDownAPI_Success = (data) => ({
   type: actionType.GET_CATEGORY_BY_CATEGORYTYPE_FOR_DROPDOWN_API_SUCCESS,
   payload: data,
 });
+
+
+export const Item_Image_Upload = (config = {}) => ({// save Action
+  type: actionType.ITEM_IMAGE_UPLOAD,
+  config,
+});
+
+export const Item_Image_Upload_Success = (resp) => ({// Save  success
+  type: actionType.ITEM_IMAGE_UPLOAD_SUCCESS,
+  payload: resp,
+});
+
+
 
 
 export const ItemsApiErrorAction = () => ({
