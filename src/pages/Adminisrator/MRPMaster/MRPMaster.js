@@ -42,7 +42,7 @@ const MRPMaster = (props) => {
     let IsSCM = _cfunc.loginIsSCMCompany()
 
     const fileds = {
-        PartyType: "",
+        PartyTypeName: "",
         // DivisionName: "",
         PartyName: "",
         EffectiveDate: "",
@@ -240,7 +240,7 @@ const MRPMaster = (props) => {
             // if (formValid(state, setState)) {
             const jsonBody = JSON.stringify({
                 "Division": 0,
-                "PartyTypeID": values.PartyType.value ? values.PartyType.value : 0,
+                "PartyTypeID": values.PartyTypeName.value ? values.PartyTypeName.value : 0,
                 "Party": values.PartyName.value ? values.PartyName.value : 0,
                 "EffectiveDate": values.EffectiveDate,
                 "CompanyID": _cfunc.loginCompanyID()
@@ -422,7 +422,7 @@ const MRPMaster = (props) => {
             var ItemData = Data.map((index) => ({
                 "Division": null,
                 // Party: values.PartyName.value,
-                "PartyType": values.PartyType.value ? values.PartyType.value : null,
+                "PartyType": values.PartyTypeName.value ? values.PartyTypeName.value : null,
                 "Party": values.PartyName.value ? values.PartyName.value : null,
                 "EffectiveDate": values.EffectiveDate,
                 "Company": loginCompanyID(),
@@ -458,7 +458,7 @@ const MRPMaster = (props) => {
         dispatch(GoButtonForMRP_MasterSuccess([]));
         setState((i) => {
             let a = { ...i }
-            a.values.PartyType = ''
+            a.values.PartyTypeName = ''
             a.values.PartyName = ''
             return a
         })
@@ -511,11 +511,11 @@ const MRPMaster = (props) => {
                                                         )}
                                                     </FormGroup> */}
                                                 <FormGroup className="mb-3 row">
-                                                    <Label className="col-sm-4 p-2 ml-n2 ">{fieldLabel.PartyType}</Label>
+                                                    <Label className="col-sm-4 p-2 ml-n2 ">{fieldLabel.PartyTypeName}</Label>
                                                     <Col sm={8}>
                                                         <C_Select
-                                                            name="PartyType"
-                                                            value={values.PartyType}
+                                                            name="PartyTypeName"
+                                                            value={values.PartyTypeName}
                                                             options={PartyTypeDropdown_Options}
                                                             isDisabled={!(values.PartyName === "")}
                                                             isSearchable={true}
@@ -530,8 +530,8 @@ const MRPMaster = (props) => {
                                                             }}
                                                         />
                                                     </Col>
-                                                    {isError.PartyType.length > 0 && (
-                                                        <span className="invalid-feedback">{isError.PartyType}</span>
+                                                    {isError.PartyTypeName.length > 0 && (
+                                                        <span className="invalid-feedback">{isError.PartyTypeName}</span>
                                                     )}
                                                 </FormGroup>
                                             </Col>
@@ -546,7 +546,7 @@ const MRPMaster = (props) => {
                                                                 value={values.PartyName}
                                                                 options={PartyDropdown_Options}
                                                                 isLoading={partyApiLoading}
-                                                                isDisabled={!(values.PartyType === "")}
+                                                                isDisabled={!(values.PartyTypeName === "")}
                                                                 isSearchable={true}
                                                                 classNamePrefix="dropdown"
                                                                 styles={{
@@ -589,7 +589,7 @@ const MRPMaster = (props) => {
                                             </Col>
 
                                             <Col sm={1} className="mb-3 mt-1">
-                                                {(values.PartyName.value > 0 || values.PartyType.value > 0) &&
+                                                {(values.PartyName.value > 0 || values.PartyTypeName.value > 0) &&
                                                     <Change_Button
                                                         type="button"
                                                         onClick={changeButtonHandler}
