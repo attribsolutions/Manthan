@@ -946,6 +946,10 @@ export const Country_delete_API = ({ deleteId }) => del(`${url.COUNTRY_UPDATE_DE
 export const Country_edit_API = ({ editId }) => get(`${url.COUNTRY_UPDATE_DELETE_API}/${editId}`) // edit api
 export const Country_update_API = ({ jsonBody, updateId }) => put(`${url.COUNTRY_UPDATE_DELETE_API}/${updateId}`, jsonBody)// update
 
+
+//Franchise Sale With Bill Count Report 
+export const Franchise_Sale_With_Bill_Count_API = ({ jsonBody }) => post(url.FRANCHAISE_SALE_WITH_BILL_COUNT_API, jsonBody)//Go button api
+
 export {
 	getLoggedInUser,
 	isUserAuthenticated,

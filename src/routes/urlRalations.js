@@ -357,3 +357,4 @@ export const SweetPOS_Machine_Master = url.SWEET_POS_MACHINE_LIST
 
 export const Stock_Out_Report = url.STOCK_OUT_REPORT
 
+export const Franchise_Sale_With_Bill_Count = url.FRANCHAISE_SALE_WITH_BILL_COUNT
