@@ -8,7 +8,37 @@ import Image from "../../../../assets/images/CBM_BlackWhite.png";
 
 
 const PosInvoiceReport = (data) => {
-    // Convert inches to points (1 inch = 72 points)
+
+    // Transform the array dynamically
+    const transformedItems = [];
+    const mixGroups = {}; // To group items by MixItemId
+
+    // Step 1: Group items by MixItemId
+    data.InvoiceItems.forEach(item => {
+        if (item.MixItemId) {
+            if (!mixGroups[item.MixItemId]) {
+                mixGroups[item.MixItemId] = [];
+            }
+            mixGroups[item.MixItemId].push(item);
+        }
+    });
+
+    // Step 2: Transform the array with nested MixItems
+    data.InvoiceItems.forEach(item => {
+        if (item.MixItemId === null && mixGroups[item.Item]) {
+            // Parent item with MixItems
+            transformedItems.push({
+                ...item,
+                MixItems: mixGroups[item.Item],
+            });
+        } else if (!item.MixItemId) {
+            // Add non-mix items as they are
+            transformedItems.push(item);
+        }
+    });
+
+
+
     const widthInInches = 3.14;
     const widthInPoints = widthInInches * 72;
 
@@ -121,17 +151,35 @@ const PosInvoiceReport = (data) => {
         margin: {
             top: 45, left: 10, right: 35,
         },
-        didDrawCell: (data) => {
-            const { cell, row } = data;
+        didDrawCell: (Table_data) => {
+            debugger
+            const { cell, row } = Table_data;
 
             // Set the line color to green
             doc.setDrawColor(0, 0, 0);
 
             // Draw the top border only for the first row and header
-            if (row.index === 0 || data.section === 'head') {
+            if (row.index === 0 || Table_data.section === 'head') {
 
                 doc.setLineWidth(cell.styles.lineWidth);
                 doc.line(cell.x, cell.y, cell.x + cell.width, cell.y); // Top border
+            }
+
+            if (Table_data.row.cells[1].raw === "Item\nGST%") {
+                let isDiscount = false
+                let TotalBox = 0;
+                data.InvoiceItems.forEach((element, key) => {
+                    if (Number(element.Discount) > 0) {
+                        isDiscount = true
+
+                    }
+                })
+
+                Table_data.row.cells[1].text[0] = `Item (${data.InvoiceItems.length})`
+                if (isDiscount) {
+                    Table_data.row.cells[1].text[0] = `Item (${data.InvoiceItems.length})`
+                }
+
             }
 
             // Draw the bottom border for each row
@@ -190,7 +238,7 @@ const PosInvoiceReport = (data) => {
         startY: doc.previousAutoTable.finalY,
     };
 
-    doc.autoTable(table.Item, table.ItemRow(data), ItemStyle);
+    doc.autoTable(table.Item, table.ItemRow(transformedItems), ItemStyle);
     doc.setFontSize(11)
 
     doc.text(`------------ GST Break Up details ------------`, 113, doc.previousAutoTable.finalY + 13, "center")
@@ -264,7 +312,6 @@ const PosInvoiceReport = (data) => {
     data.InvoiceItems.forEach(arg => {
         totalAmount += Number(arg.Amount);
         totalDiscount += Number(arg.DiscountAmount);
-
     });
 
 

@@ -162,7 +162,7 @@ const GRN_ADD_1 = (props) => {
                     ele["poAmount"] = ele.Amount
                     ele["Amount"] = 0
                     ele["BatchDate"] = currentDate_ymd
-                    ele["BatchCode"] = ''
+                    ele["BatchCode"] = ele.BatchCode
                     ele["delbtn"] = false
                     ele["Invoice"] = null
                 });
