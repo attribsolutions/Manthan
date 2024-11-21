@@ -45,9 +45,9 @@ export const PDF_ReturnReport = ({ Table_Data, Supplier }) => {
             element.innerHTML = `
     <div style="font-family: 'Noto Sans Devanagari'; font-size: 10px; sans-serif; color: black; padding: 60px;">
         <table border="1" style="width: 100%; margin-top:-20px; border-collapse: collapse ;">
-            <tr>
-                <td style="font-size: 25px; border: 1px solid black; width: 500px; padding: 3px; ">Distributors / SS / CX Name</td>
-                <td style="font-size: 25px; border: 1px solid black; width: 500px; padding: 3px;">${userDetails.PartyName}</td>
+             <tr>
+                <td style="font-size: 25px; border: 1px solid black; width: 500px; padding: 3px;">Supplier Name (SS / CBM)</td>
+                <td style="font-size: 25px; border: 1px solid black; width: 500px; padding: 3px;">${Supplier.label}</td>
             </tr>
             <tr>
                 <td style="font-size: 15px; border: 1px solid black; width: 500px; padding: 3px;">Address</td>
@@ -74,10 +74,11 @@ export const PDF_ReturnReport = ({ Table_Data, Supplier }) => {
                 <td style="font-size: 15px; border: 1px solid black; width: 500px; padding: 3px;">Return Note Number</td>
                 <td style="font-size: 15px; border: 1px solid black; width: 500px; padding: 3px;">${result}</td>
             </tr>
-            <tr>
-                <td style="font-size: 25px; border: 1px solid black; width: 500px; padding: 3px;">Supplier Name (SS / CBM)</td>
-                <td style="font-size: 25px; border: 1px solid black; width: 500px; padding: 3px;">${Supplier.label}</td>
+               <tr>
+                <td style="font-size: 25px; border: 1px solid black; width: 500px; padding: 3px; ">Distributors / SS / CX Name</td>
+                <td style="font-size: 25px; border: 1px solid black; width: 500px; padding: 3px;">${userDetails.PartyName}</td>
             </tr>
+           
             <tr>
                 <td style="font-size: 18px; border: 1px solid black; width: 500px; padding: 3px;"> या बॉक्स मधील स्वच्छ केलेली एक्सपायरी झालेल्या स्टॉकची रिकामी पॅकेट आम्ही सॉर्टीग केलेली आहेत व QTY. चेक केलेली आहे.</br>
 बॉक्स भरताना स्वच्छ व रिकामी पॅकेट, तसेच QTY. आमच्या एरियामधील विक्री प्रतिनिधीकडून सुद्धा चेक करून घेतली आहेत, विक्री प्रतिनिधीचे अप्रूव्हल म्हणून सेल्स रिटर्न नोट वरती सही घेतलेली आहे.</br>

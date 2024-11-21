@@ -1,9 +1,11 @@
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import * as style from './ReportStyle';
-import { compareGSTINState, loginSystemSetting, loginUserDetails } from "../../components/Common/CommonFunction";
+import { compareGSTINState, IsSweetAndSnacksCompany, loginSystemSetting, loginUserDetails } from "../../components/Common/CommonFunction";
 import InvioceReporta5 from "../InvoiceA5PDFReport/Page";
 import { AMERICA_ID } from "../../HardCodeID/contryID";
+import QRCode from "qrcode"; // Generates the QR code as an image
+
 
 
 
@@ -84,6 +86,11 @@ const invioceReport_A4 = async (data) => {
     pageHeder(doc, data);
     reportBody(doc, data);
     pageFooter(doc, data);
+
+    if (IsSweetAndSnacksCompany()) {
+        const qrCodeImage = await QRCode.toDataURL(data.FullInvoiceNumber);
+        doc.addImage(qrCodeImage, "PNG", 344, 738, 90, 76, null, 'FAST');
+    }
 
     doc.setProperties({
         title: `InvoiceReport/${data.InvoiceDate}-${data.CustomerName} `
