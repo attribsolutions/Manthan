@@ -154,8 +154,8 @@ const ItemSupplierAssign = (props) => {
     };
 
     const SupplierHandler = async (supplierID, row) => {
+        
         row.Newvalue = supplierID
-        row.DropdownSetValue = supplierID
         setForceRefresh(i => !i)
     };
 
@@ -191,7 +191,7 @@ const ItemSupplierAssign = (props) => {
                                     <Select
                                         key={row.Newvalue}
                                         defaultValue={defaultSelected}
-                                        value={row.DropdownSetValue}
+                                        value={row.Newvalue}
                                         isMulti={true}
                                         options={dropdownOptions}
                                         onChange={(event) => AllDropdownHandler(event, row, tableData)}
@@ -230,23 +230,21 @@ const ItemSupplierAssign = (props) => {
         try {
 
             let updatedData = [];
-
             tableData.forEach(item => {
-                const hasDropdownSetValue = item?.DropdownSetValue && item.DropdownSetValue.length > 0;
+                const hasNewvalue = item?.Newvalue;
                 const hasSupplierDetails = item?.SupplierDetails && item.SupplierDetails.length > 0;
 
-                // Case 1: Only DropdownSetValue is populated
-                if (hasDropdownSetValue && !hasSupplierDetails) {
-                    item.DropdownSetValue.forEach(supplier => {
+                // Case 1: Process Newvalue if available
+                if (hasNewvalue) {
+                    item.Newvalue.forEach(supplier => {
                         updatedData.push({
                             Item: item.ItemID,
                             Supplier: supplier.value
                         });
                     });
                 }
-
-                // Case 2: Only SupplierDetails is populated
-                if (hasSupplierDetails && !hasDropdownSetValue) {
+                // Case 2: Process SupplierDetails if Newvalue is not available
+                else if (hasSupplierDetails) {
                     item.SupplierDetails.forEach(supplier => {
                         updatedData.push({
                             Item: item.ItemID,
@@ -254,29 +252,19 @@ const ItemSupplierAssign = (props) => {
                         });
                     });
                 }
-
-                // Case 3: Both DropdownSetValue and SupplierDetails are populated
-                if (hasDropdownSetValue && hasSupplierDetails) {
-                    item.DropdownSetValue.forEach(supplier => {
-                        updatedData.push({
-                            Item: item.ItemID,
-                            Supplier: supplier.value
-                        });
-                    });
-                }
             });
 
+            // Log or dispatch the updated data
             if (updatedData.length === 0) {
                 customAlert({
                     Type: 3,
-                    Message: alertMessages.updateOneFieldIsRequired
+                    Message: "Update at least one field is required."
                 });
-                return;
-            }
-            else {
+            } else {
                 const jsonBody = JSON.stringify(updatedData);
                 dispatch(ItemWiseUpdate_Save_Action({ jsonBody, subPageMode: url.ITEM_SUPPLIER_ASSIGN }));
             }
+
         } catch (e) { }
     };
 
