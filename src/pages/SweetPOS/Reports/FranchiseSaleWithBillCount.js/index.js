@@ -8,13 +8,12 @@ import { mode, pageId } from "../../../../routes/index"
 import { MetaTags } from "react-meta-tags";
 import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess } from "../../../../store/actions";
 import DynamicColumnHook from "../../../../components/Common/TableCommonFunc";
-import { getClaimTrackingEntrySuccess } from "../../../../store/Accounting/ClaimTrackingEntryRedux/action";
 import { C_DatePicker } from "../../../../CustomValidateForm";
 import { ExcelReportComponent } from "../../../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS";
-import { CashierSummaryReport_GoButton_API, CashierSummaryReport_GoButton_API_Success } from "../../../../store/SweetPOSStore/Report/CashierSummaryRedux/action";
 import GlobalCustomTable from "../../../../GlobalCustomTable";
+import { Franchise_Sale_With_Bill_Count_API } from "../../../../helpers/backend_helper";
 
-const CashierSummary = (props) => {
+const FranchiseSaleWithBillCount = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory();
@@ -24,31 +23,38 @@ const CashierSummary = (props) => {
     const [toDate, setToDate] = useState(currentDate_ymd)
 
     const [userPageAccessState, setUserAccState] = useState('');
-
     const [btnMode, setBtnMode] = useState("");
+    const [apiResponse, setApiResponse] = useState([]);
+    const [tableData, setTableData] = useState([]);
+    const [GoBtnLoading, setGoBtnLoading] = useState(false);
 
     const location = { ...history.location }
     const hasShowModal = props.hasOwnProperty(mode.editValue)
 
     const {
         userAccess,
-        tableData,
-        GoBtnLoading,
         pageField
     } = useSelector((state) => ({
-        tableData: state.CashierSummaryReportReducer.CashierSummary,
-        GoBtnLoading: state.CashierSummaryReportReducer.listBtnLoading,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField
     }));
 
     useEffect(() => {
-        dispatch(commonPageFieldSuccess(null));
-        dispatch(commonPageField(pageId.CASHIER_SUMMARY_REPORT));
+        if (apiResponse.length > 0) {
+            const newList = apiResponse.map((i) => {
+                i["recordsAmountTotal"] = i.GrandTotal;  // Breadcrumb Count total
+                return i
+            })
+            setTableData(newList)
+        }
+    }, [apiResponse])
 
+    useEffect(() => {
+        dispatch(commonPageFieldSuccess(null));
+        dispatch(commonPageField(pageId.FRANCHAISE_SALE_WITH_BILL_COUNT));
+        dispatch(BreadcrumbShowCountlabel(`Count:${0} currency_symbol ${0.00}`));
         return () => {
             dispatch(commonPageFieldSuccess(null));
-            dispatch(CashierSummaryReport_GoButton_API_Success([]));
         }
     }, []);
 
@@ -77,40 +83,49 @@ const CashierSummary = (props) => {
                 ExcelReportComponent({      // Download CSV
                     pageField,
                     excelTableData: tableData,
-                    excelFileName: "Cashier Summary Report"
+                    excelFileName: "Franchise Sale With Bill Count Report"
                 })
-                dispatch(CashierSummaryReport_GoButton_API_Success([]));   // Reset Excel tableData
+                setTableData([]);
+                setApiResponse([]);
             }
         }
     }, [tableData, pageField]);
 
-    function goButtonHandler(goBtnMode) {
+    async function goButtonHandler(goBtnMode) {
         setBtnMode(goBtnMode)
         try {
             const jsonBody = JSON.stringify({
                 "FromDate": fromDate,
                 "ToDate": toDate,
-                "Party": _cfunc.loginPartyID(),
+                "EmployeeID": _cfunc.loginEmployeeID(),
             })
-            const config = { jsonBody };
-            dispatch(CashierSummaryReport_GoButton_API(config))
+            setGoBtnLoading(true)
+            const resp = await Franchise_Sale_With_Bill_Count_API({ jsonBody });
+
+            if (resp.StatusCode === 200) {
+                setApiResponse(resp.Data);
+            }
+            setGoBtnLoading(false)
 
         } catch (error) { _cfunc.CommonConsole(error) }
     }
 
     function fromdateOnchange(e, date) {
         setFromDate(date)
-        dispatch(getClaimTrackingEntrySuccess([]));
+        setTableData([]);
+        setApiResponse([]);
     }
 
     function todateOnchange(e, date) {
         setToDate(date);
-        dispatch(getClaimTrackingEntrySuccess([]));
+        setTableData([]);
+        setApiResponse([]);
     }
 
     return (
         <React.Fragment>
             <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
+            
             <div className="page-content">
 
                 <div className="px-2   c_card_filter text-black " >
@@ -189,4 +204,4 @@ const CashierSummary = (props) => {
     )
 }
 
-export default CashierSummary;
+export default FranchiseSaleWithBillCount;

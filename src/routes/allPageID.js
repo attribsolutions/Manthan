@@ -393,4 +393,7 @@ export const SWEET_POS_MACHINE_LIST = 315
 
 export const STOCK_OUT_REPORT = 306
 
+export const FRANCHAISE_SALE_WITH_BILL_COUNT=316
+
+
 

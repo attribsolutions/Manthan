@@ -241,6 +241,7 @@ const GSTMaster = (props) => {
             const jsonBody = JSON.stringify({
                 "EffectiveDate": values.EffectiveDate,
                 "PartyTypeID": values.PartyType.value ? values.PartyType.value : 0,
+                "Company": loginCompanyID()
             });
 
             dispatch(goButtonForGST_Master({ jsonBody }));
