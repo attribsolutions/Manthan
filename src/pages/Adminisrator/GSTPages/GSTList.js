@@ -28,6 +28,8 @@ const GSTList = () => {
 
   const [pageMode, setpageMode] = useState(mode.defaultsave)
   const [userAccState, setUserAccState] = useState('');
+  const [rowData, setRowData] = useState({})
+
   const [hederFilters, setHederFilters] = useState({ fromdate: _cfunc.currentDate_ymd, todate: _cfunc.currentDate_ymd })
   const { fromdate, todate, } = hederFilters;
 
@@ -101,7 +103,7 @@ const GSTList = () => {
 
     })
     dispatch(_act.postViewGst({ jsonBody, btnId: `btn-viewApproval-${config.rowData.id}` }));
-
+    setRowData(config.rowData)
   }
 
   function editBodyfunc(index) {
@@ -238,7 +240,7 @@ const GSTList = () => {
 
         }
       </div>
-      <GSTView />
+      <GSTView tableRowData={rowData} />
 
     </React.Fragment>
   )

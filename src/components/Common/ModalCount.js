@@ -16,9 +16,11 @@ export const DetailsSection = ({ title, firstLabel, firstValue, secondLabel, sec
             <span className="fw-bold me-auto">
                 {firstLabel}: <span style={{ color: '#1583cd' }}>{firstValue}</span>
             </span>
-            <span className="fw-bold mx-auto">
-                {secondLabel}: <span style={{ color: '#1583cd' }}>{secondValue}</span>
-            </span>
+            {secondLabel && (
+                <span className="fw-bold mx-auto">
+                    {secondLabel}: <span style={{ color: '#1583cd' }}>{secondValue}</span>
+                </span>
+            )}
             <span className="fw-bold ms-auto">
                 {thirdLabel}: <span style={{ color: '#1583cd' }}>{thirdValue}</span>
             </span>
