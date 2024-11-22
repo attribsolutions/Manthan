@@ -805,7 +805,8 @@ const SalesReturn = (props) => {
         const jsonBody = JSON.stringify({
             "ItemID": values.ItemName.value,
             "BatchCode": values.BatchCode,
-            "Customer": values.Customer.value // Customer Swipe when Po return
+            "Customer": values.Customer.value, // Customer Swipe when Po return
+            "Party":_cfunc.loginPartyID()
         })
 
         const InvoiceId = values.InvoiceNumber ? values.InvoiceNumber.value : ''

@@ -301,7 +301,7 @@ const MachineTypeMaster = (props) => {
                 if (formValid(state, setState)) {
                     btnIsDissablefunc({ btnId, state: true })
 
-                    const jsonBody = JSON.stringify([{
+                    const jsonBody = JSON.stringify({
 
                         "MacID": values.MacID,
                         "MachineType": values.MachineType.map(i => i.value).join(','),
@@ -317,14 +317,14 @@ const MachineTypeMaster = (props) => {
                         "Version": values.Version,
 
                         "IsServer": values.IsServer,
-                        "IsService": !(values.IsServer) ? null : values.IsService,
+                        "IsService": !(values.IsServer) ? false : values.IsService,
                         "ServerDatabase": !(values.IsServer) ? null : values.ServerDatabase,
                         "ServerHost": !(values.IsServer) ? null : values.ServerHost,
                         "SeverName": !(values.IsServer) ? null : values.ServerName,
                         "ServerPassWord": !(values.IsServer) ? null : values.ServerPassWord,
                         "ServerUser": !(values.IsServer) ? null : values.ServerUser,
                         "Invoiceprefix": !(values.IsServer) ? null : values.Invoiceprefix
-                    }]);
+                    });
                     dispatch(SPos_MachineTypeSave_Action({ jsonBody }));
 
                 }

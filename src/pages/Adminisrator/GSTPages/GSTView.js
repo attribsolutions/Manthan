@@ -7,10 +7,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { CommonConsole } from "../../../components/Common/CommonFunction";
 import { postViewGst_Success } from "../../../store/actions";
 import { useState } from "react";
-import { ModalCount } from "../../../components/Common/ModalCount";
+import { DetailsSection, ModalCount } from "../../../components/Common/ModalCount";
 
-const GSTView = () => {
+const GSTView = (Props) => {
+
     const dispatch = useDispatch()
+    const { tableRowData = {} } = Props
+
     const [modal_view, setModal_view] = useState(false);
     const [tableArray, setTableArray] = useState([]);
 
@@ -19,6 +22,7 @@ const GSTView = () => {
     }))
 
     const { ItemCount, GSTHSNList = [] } = viewData_redux
+    const { PartyTypeName = '' } = tableRowData
 
     useEffect(() => {
         try {
@@ -52,7 +56,7 @@ const GSTView = () => {
             text: "HSN Code",
             dataField: "HSNCode",
         },
-      
+
     ];
 
     return (
@@ -65,8 +69,15 @@ const GSTView = () => {
                 <CardBody className="c_card_body">
                     <div className="modal-body">
 
-                        <h2 className="text-center">GST Details</h2>
-                        <ModalCount Count={ItemCount} />
+                        <DetailsSection
+                            title="GST Details"
+                            firstLabel="PartyType"
+                            firstValue={PartyTypeName}
+                            thirdLabel="Count"
+                            thirdValue={ItemCount}
+                        />
+                        {/* <h2 className="text-center">GST Details</h2>
+                        <ModalCount Count={ItemCount} /> */}
 
                         <div className="mt-n1">
                             <ToolkitProvider

@@ -27,13 +27,14 @@ import { CInput, C_DatePicker, C_Select, decimalRegx } from "../../../CustomVali
 import { mode, pageId, url } from "../../../routes";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { comAddPageFieldFunc, formValid, initialFiledFunc, onChangeDate, onChangeSelect, resetFunction } from "../../../components/Common/validationFunction";
-import { Go_Button, SaveButton } from "../../../components/Common/CommonButton";
+import { Change_Button, Go_Button, SaveButton } from "../../../components/Common/CommonButton";
 import { deleteMRPMaster_Id, deleteMRPMaster_Id_Success, GoButtonForMRP_Master, GoButtonForMRP_MasterSuccess, saveMRPMaster, saveMRPMasterSuccess } from "../../../store/Administrator/MRPMasterRedux/action";
 import { mobileApp_ProductUpdate_Api } from "../../../helpers/backend_helper";
 import { showToastAlert } from "../../../helpers/axios_Config";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 import GlobalCustomTable from "../../../GlobalCustomTable";
+import { getPartyTypelist, getPartyTypelistSuccess } from "../../../store/Administrator/PartyTypeRedux/action";
 
 const MRPMaster = (props) => {
     const dispatch = useDispatch();
@@ -41,7 +42,8 @@ const MRPMaster = (props) => {
     let IsSCM = _cfunc.loginIsSCMCompany()
 
     const fileds = {
-        DivisionName: "",
+        PartyTypeName: "",
+        // DivisionName: "",
         PartyName: "",
         EffectiveDate: "",
     }
@@ -66,8 +68,13 @@ const MRPMaster = (props) => {
         saveBtnloading,
         listBtnLoading,
         partyApiLoading,
-        divisionApiLoading
+        divisionApiLoading,
+        PartyTypeList,
+        PartyTypeListLoading
     } = useSelector((state) => ({
+        PartyTypeList: state.PartyTypeReducer.ListData,
+        PartyTypeListLoading: state.PartyTypeReducer.goBtnLoading,
+
         listBtnLoading: state.MRPMasterReducer.listBtnLoading,
         saveBtnloading: state.MRPMasterReducer.saveBtnloading,
         tableData: state.MRPMasterReducer.MRPGoButton,
@@ -102,9 +109,11 @@ const MRPMaster = (props) => {
         dispatch(get_Party_ForDropDown());
         dispatch(get_Division_ForDropDown());
         dispatch(BreadcrumbShowCountlabel(`Count:${0}`));
+        dispatch(getPartyTypelist());
         return () => {
             dispatch(get_Party_ForDropDown_Success([]))
             dispatch(get_Division_ForDropDown_Success([]))
+            dispatch(getPartyTypelistSuccess([]));
         }
     }, []);
 
@@ -198,11 +207,16 @@ const MRPMaster = (props) => {
 
     useEffect(() => _cfunc.tableInputArrowUpDounFunc("#table_Arrow"), [Data]);
 
-    const PartyTypeDropdown_Options = Party.map((Data) => ({
+    const PartyDropdown_Options = Party.map((Data) => ({
         value: Data.id,
         label: Data.Name
     }));
-    // PartyTypeDropdown_Options.unshift({
+
+    const PartyTypeDropdown_Options = PartyTypeList.map((Data) => ({
+        value: Data.id,
+        label: Data.Name
+    }));
+    // PartyDropdown_Options.unshift({
     //     value: "",
     //     label: "select"
     // });
@@ -214,23 +228,25 @@ const MRPMaster = (props) => {
 
     const GoButton_Handler = (event) => {
 
-        if (values.EffectiveDate === '') {
+        if (values.EffectiveDate === "") {
             customAlert({
                 Type: 4,
-                Message: alertMessages.effectiveDateAndDivisionIsRequired,
+                Message: alertMessages.effectiveDateIsRequired,
             })
-            return
+            return;
         }
         try {
-            if (formValid(state, setState)) {
-                const jsonBody = JSON.stringify({
-                    Division: values.DivisionName.value ? values.DivisionName.value : 0,
-                    Party: values.PartyName.value ? values.PartyName.value : 0,
-                    EffectiveDate: values.EffectiveDate,
-                    CompanyID: _cfunc.loginCompanyID()
-                });
-                dispatch(GoButtonForMRP_Master({ jsonBody }));
-            }
+
+            // if (formValid(state, setState)) {
+            const jsonBody = JSON.stringify({
+                "Division": 0,
+                "PartyTypeID": values.PartyTypeName.value ? values.PartyTypeName.value : 0,
+                "Party": values.PartyName.value ? values.PartyName.value : 0,
+                "EffectiveDate": values.EffectiveDate,
+                "CompanyID": _cfunc.loginCompanyID()
+            });
+            dispatch(GoButtonForMRP_Master({ jsonBody }));
+            // }
         } catch (e) { _cfunc.CommonConsole(e) }
     };
 
@@ -397,21 +413,26 @@ const MRPMaster = (props) => {
     const SaveHandler = async (event) => {
         event.preventDefault();
         const btnId = event.target.id
+
         try {
+
             // if (formValid(state, setState)) {
             _cfunc.btnIsDissablefunc({ btnId, state: true })
 
             var ItemData = Data.map((index) => ({
-                Division: values.DivisionName.value,
-                Party: values.PartyName.value,
-                EffectiveDate: values.EffectiveDate,
-                Company: loginCompanyID(),
-                CreatedBy: loginUserID(),
-                UpdatedBy: loginUserID(),
-                IsDeleted: 0,
-                Item: index.Item,
-                MRP: index.MRP,
-                id: index.id
+                "Division": null,
+                // Party: values.PartyName.value,
+                "PartyType": values.PartyTypeName.value ? values.PartyTypeName.value : null,
+                "Party": values.PartyName.value ? values.PartyName.value : null,
+                "EffectiveDate": values.EffectiveDate,
+                "Company": loginCompanyID(),
+                "CreatedBy": loginUserID(),
+                "UpdatedBy": loginUserID(),
+                "IsDeleted": 0,
+                "Item": index.Item,
+                "MRP": index.MRP,
+                "id": index.id,
+
             }))
 
             const Find = ItemData.filter((index) => {
@@ -432,6 +453,16 @@ const MRPMaster = (props) => {
 
         } catch (e) { _cfunc.btnIsDissablefunc({ btnId, state: false }) }
     };
+
+    function changeButtonHandler() {
+        dispatch(GoButtonForMRP_MasterSuccess([]));
+        setState((i) => {
+            let a = { ...i }
+            a.values.PartyTypeName = ''
+            a.values.PartyName = ''
+            return a
+        })
+    }
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
@@ -454,9 +485,9 @@ const MRPMaster = (props) => {
                                 <Card style={{ backgroundColor: "whitesmoke" }} className=" mb-1">
                                     <CardHeader className="c_card_body"  >
                                         <Row className="mt-3">
-                                            {(IsSCM === 0) &&
-                                                <Col sm={3}>
-                                                    <FormGroup className="mb-3 row">
+
+                                            <Col sm={3}>
+                                                {/* <FormGroup className="mb-3 row">
                                                         <Label className="col-sm-4 p-2 ml-n2 ">{fieldLabel.DivisionName}</Label>
                                                         <Col sm={8}>
                                                             <C_Select
@@ -475,8 +506,35 @@ const MRPMaster = (props) => {
                                                                 }}
                                                             />
                                                         </Col>
-                                                    </FormGroup>
-                                                </Col>}
+                                                        {(isError.DivisionName.length > 0 && values.DivisionName === "" && IsSCM === 0) && (
+                                                            <span className="invalid-feedback">{isError.DivisionName}</span>
+                                                        )}
+                                                    </FormGroup> */}
+                                                <FormGroup className="mb-3 row">
+                                                    <Label className="col-sm-4 p-2 ml-n2 ">{fieldLabel.PartyTypeName}</Label>
+                                                    <Col sm={8}>
+                                                        <C_Select
+                                                            name="PartyTypeName"
+                                                            value={values.PartyTypeName}
+                                                            options={PartyTypeDropdown_Options}
+                                                            isDisabled={!(values.PartyName === "")}
+                                                            isSearchable={true}
+                                                            classNamePrefix="dropdown"
+                                                            isLoading={PartyTypeListLoading}
+                                                            styles={{
+                                                                menu: provided => ({ ...provided, zIndex: 2 })
+                                                            }}
+                                                            onChange={(hasSelect, evn) => {
+
+                                                                onChangeSelect({ hasSelect, evn, state, setState, })
+                                                            }}
+                                                        />
+                                                    </Col>
+                                                    {isError.PartyTypeName.length > 0 && (
+                                                        <span className="invalid-feedback">{isError.PartyTypeName}</span>
+                                                    )}
+                                                </FormGroup>
+                                            </Col>
 
                                             {(IsSCM === 0) &&
                                                 <Col sm={3}>
@@ -486,9 +544,9 @@ const MRPMaster = (props) => {
                                                             <C_Select
                                                                 name="PartyName"
                                                                 value={values.PartyName}
-                                                                options={PartyTypeDropdown_Options}
+                                                                options={PartyDropdown_Options}
                                                                 isLoading={partyApiLoading}
-                                                                isDisabled={pageMode === mode.edit ? true : false}
+                                                                isDisabled={!(values.PartyTypeName === "")}
                                                                 isSearchable={true}
                                                                 classNamePrefix="dropdown"
                                                                 styles={{
@@ -497,6 +555,9 @@ const MRPMaster = (props) => {
                                                                 onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
                                                             />
                                                         </Col>
+                                                        {(isError.PartyName.length > 0 && values.PartyName === "" && IsSCM === 0) && (
+                                                            <span className="invalid-feedback">{isError.PartyName}</span>
+                                                        )}
                                                     </FormGroup>
                                                 </Col>
                                             }
@@ -521,10 +582,27 @@ const MRPMaster = (props) => {
                                                             }}
                                                         />
                                                     </Col>
+                                                    {isError.EffectiveDate.length > 0 && (
+                                                        <span className="invalid-feedback">{isError.EffectiveDate}</span>
+                                                    )}
                                                 </FormGroup>
                                             </Col>
+
+                                            <Col sm={1} className="mb-3 mt-1">
+                                                {(values.PartyName.value > 0 || values.PartyTypeName.value > 0) &&
+                                                    <Change_Button
+                                                        type="button"
+                                                        onClick={changeButtonHandler}
+                                                    />
+                                                }
+                                            </Col>
+
                                             <Col sm={1}>
-                                                <Go_Button onClick={(event) => { GoButton_Handler(event) }} loading={listBtnLoading} />
+                                                <Go_Button
+                                                    onClick={(event) => GoButton_Handler(event)}
+                                                    loading={listBtnLoading}
+                                                />
+
                                             </Col>
                                         </Row>
                                     </CardHeader>

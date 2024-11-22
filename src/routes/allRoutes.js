@@ -249,6 +249,7 @@ import POS_Log from "../pages/ActivityLog/POSLog.js";
 import CountryMaster from "../pages/Adminisrator/Country/CountryMaster.js";
 import CountryList from "../pages/Adminisrator/Country/CountryList.js";
 import MachineTypeList from "../pages/SweetPOS/Adminstration/MachineType/MachineTypeList.js";
+import FranchiseSaleWithBillCount from "../pages/SweetPOS/Reports/FranchiseSaleWithBillCount.js/index.js";
 
 
 const userRoutes = [
@@ -656,8 +657,7 @@ const userRoutes = [
 
 	{ path: path.FRENCHIESE_SALE_REPORT, component: FrenchiesSaleReport },//not party wise
 
-
-
+	{ path: path.FRANCHAISE_SALE_WITH_BILL_COUNT, component: FranchiseSaleWithBillCount },//not party wise
 
 
 

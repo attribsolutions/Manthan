@@ -704,8 +704,7 @@ export const COUNTRY_SAVE_API = '/CountrySave'
 export const COUNTRY_GET_API = '/GETCountry'
 export const COUNTRY_UPDATE_DELETE_API = '/Country'
 
-
-
+export const FRANCHAISE_SALE_WITH_BILL_COUNT_API = "/SweetPOS/FranchiseSaleWithBillCount"
 
 
 

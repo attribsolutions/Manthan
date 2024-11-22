@@ -653,7 +653,8 @@ const GoodsCreditNote = (props) => {
         const jsonBody = JSON.stringify({
             "ItemID": values.ItemName.value,
             "BatchCode": "",
-            "Customer": values.Customer.value // Customer Swipe when Po return
+            "Customer": values.Customer.value ,// Customer Swipe when Po return
+            "Party":_cfunc.loginPartyID()
         })
 
         const InvoiceId = ''
