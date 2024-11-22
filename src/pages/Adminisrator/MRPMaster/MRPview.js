@@ -11,7 +11,7 @@ import { DetailsSection } from "../../../components/Common/ModalCount";
 
 const MRPView = (Props) => {
     const { tableRowData = {} } = Props
-    const { DivisionName = '', PartyName = '' } = tableRowData
+    const { PartyTypeName = '', PartyName = '' } = tableRowData
 
     const dispatch = useDispatch()
     const [modal_view, setModal_view] = useState(false);
@@ -65,8 +65,8 @@ const MRPView = (Props) => {
                     <div className="modal-body">
                         <DetailsSection
                             title="MRP Details"
-                            firstLabel="Division"
-                            firstValue={DivisionName}
+                            firstLabel="PartyType"
+                            firstValue={PartyTypeName}
                             secondLabel="Party"
                             secondValue={PartyName}
                             thirdLabel="Count"

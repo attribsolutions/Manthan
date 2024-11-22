@@ -49,7 +49,7 @@ const GSTMaster = (props) => {
     const history = useHistory();
 
     const fileds = {
-        PartyType: "",
+        PartyTypeName: "",
         EffectiveDate: "",
     }
 
@@ -240,7 +240,7 @@ const GSTMaster = (props) => {
         else {
             const jsonBody = JSON.stringify({
                 "EffectiveDate": values.EffectiveDate,
-                "PartyTypeID": values.PartyType.value ? values.PartyType.value : 0,
+                "PartyTypeID": values.PartyTypeName.value ? values.PartyTypeName.value : 0,
                 "Company": loginCompanyID()
             });
 
@@ -399,12 +399,12 @@ const GSTMaster = (props) => {
         event.preventDefault();
         const btnId = event.target.id
         try {
-            debugger
+            
             _cfunc.btnIsDissablefunc({ btnId, state: true })
 
             var ItemData = Data.map((index) => ({
                 "EffectiveDate": values.EffectiveDate,
-                "PartyType": values.PartyType.value ? values.PartyType.value : null,
+                "PartyType": values.PartyTypeName.value ? values.PartyTypeName.value : null,
                 "Company": loginCompanyID(),
                 "CreatedBy": loginUserID(),
                 "IsDeleted": 0,
@@ -461,13 +461,12 @@ const GSTMaster = (props) => {
                                         <Row className="mt-3">
                                             <Col sm={4}>
                                                 <FormGroup className="mb-3 row">
-                                                    <Label className="col-md-6 p-2" style={{ width: "2.9cm" }}>{fieldLabel.PartyType}</Label>
+                                                    <Label className="col-md-6 p-2" style={{ width: "2.9cm" }}>{fieldLabel.PartyTypeName}</Label>
                                                     <Col sm={8}>
                                                         <C_Select
-                                                            name="PartyType"
-                                                            value={values.PartyType}
+                                                            name="PartyTypeName"
+                                                            value={values.PartyTypeName}
                                                             options={PartyTypeDropdown_Options}
-                                                            // isDisabled={!(values.PartyName === "")}
                                                             isSearchable={true}
                                                             classNamePrefix="dropdown"
                                                             isLoading={PartyTypeListLoading}
@@ -480,8 +479,8 @@ const GSTMaster = (props) => {
                                                             }}
                                                         />
                                                     </Col>
-                                                    {isError.PartyType.length > 0 && (
-                                                        <span className="invalid-feedback">{isError.PartyType}</span>
+                                                    {isError.PartyTypeName.length > 0 && (
+                                                        <span className="invalid-feedback">{isError.PartyTypeName}</span>
                                                     )}
                                                 </FormGroup>
                                             </Col>
