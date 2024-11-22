@@ -576,6 +576,14 @@ const OrderList = () => {
     }
 
 
+
+    function thermalprintBtnFunc(config) {
+        const reportType = report.orderThermalPrintReport
+        config["ReportType"] = reportType;
+        dispatch(_act.getpdfReportdata(OrderPage_Edit_ForDownload_API, config))
+    }
+
+
     function minPrintBtn_Func(config) {
 
         let reportType = ""
@@ -915,6 +923,7 @@ const OrderList = () => {
                             goButnFunc={goButtonHandler}
                             downBtnFunc={downBtnFunc}
                             editBodyfunc={editBodyfunc}
+                            thermalprintBtnFunc={thermalprintBtnFunc}
                             makeBtnFunc={makeBtnFunc}
                             hideBtnFunc={hideBtnFunc}
                             ButtonMsgLable={subPageMode === url.IB_ORDER_PO_LIST ? "Demand" : subPageMode === url.IB_ORDER_SO_LIST ? "" : "Order"}
