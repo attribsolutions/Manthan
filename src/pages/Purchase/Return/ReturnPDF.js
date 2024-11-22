@@ -23,6 +23,7 @@ function formatDate(dateString) {
 
 export const PDF_ReturnReport = ({ Table_Data, Supplier }) => {
 
+
     return new Promise((resolve, reject) => {
         try {
             const userDetails = loginUserDetails()
@@ -41,6 +42,7 @@ export const PDF_ReturnReport = ({ Table_Data, Supplier }) => {
 
             const element = document.createElement('div');
             element.style.position = 'absolute';
+
             element.style.top = '-9999px'; // Move the element out of the viewport
             element.innerHTML = `
     <div style="font-family: 'Noto Sans Devanagari'; font-size: 10px; sans-serif; color: black; padding: 60px;">
@@ -78,7 +80,8 @@ export const PDF_ReturnReport = ({ Table_Data, Supplier }) => {
                 <td style="font-size: 25px; border: 1px solid black; width: 500px; padding: 3px; ">Distributors / SS / CX Name</td>
                 <td style="font-size: 25px; border: 1px solid black; width: 500px; padding: 3px;">${userDetails.PartyName}</td>
             </tr>
-           
+
+
             <tr>
                 <td style="font-size: 18px; border: 1px solid black; width: 500px; padding: 3px;"> या बॉक्स मधील स्वच्छ केलेली एक्सपायरी झालेल्या स्टॉकची रिकामी पॅकेट आम्ही सॉर्टीग केलेली आहेत व QTY. चेक केलेली आहे.</br>
 बॉक्स भरताना स्वच्छ व रिकामी पॅकेट, तसेच QTY. आमच्या एरियामधील विक्री प्रतिनिधीकडून सुद्धा चेक करून घेतली आहेत, विक्री प्रतिनिधीचे अप्रूव्हल म्हणून सेल्स रिटर्न नोट वरती सही घेतलेली आहे.</br>
@@ -106,32 +109,56 @@ export const PDF_ReturnReport = ({ Table_Data, Supplier }) => {
 
             document.body.appendChild(element);
             html2canvas(element, {
-                scale: 3,
+                scale: 4, // High resolution scale to capture detailed content
                 useCORS: true,
+                // Set width and height to fixed values if needed to maintain consistency
+                width: element.offsetWidth,  // Use the element's actual width
+                height: element.offsetHeight,  // Use the element's actual height
             }).then((canvas) => {
+                const pdf = new jsPDF('l', 'pt', 'a5'); // Landscape A5
+                const pageWidth = pdf.internal.pageSize.getWidth();
+                const pageHeight = pdf.internal.pageSize.getHeight();
 
-                const imgData = canvas.toDataURL('image/png', 1.0);
-                const pdf = new jsPDF('l', 'pt', 'a5');
+                // Get canvas dimensions
+                const canvasWidth = canvas.width;
+                const canvasHeight = canvas.height;
 
-                const imgWidth = 590;
-                const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                // Calculate the aspect ratio to fit the image on the A5 page
+                let imgWidth = pageWidth;
+                let imgHeight = (canvasHeight * pageWidth) / canvasWidth;
 
-                pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight, undefined, 'FAST');
-                pdf.setFont('helvetica', 'Normal')
-                pdf.setFontSize(8)
-                pdf.text('Print Date :' + String(currentDate_dmy) + ' Time ' + String(CurrentTime()), 32, 403,)
+                // Ensure the image height fits within the page height
+                if (imgHeight > pageHeight) {
+                    imgWidth = (canvasWidth * pageHeight) / canvasHeight;
+                    imgHeight = pageHeight;
+                }
+
+                // Add the image to PDF
+                pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, imgWidth, imgHeight, undefined, 'FAST');
+
+                // Add footer text
+                pdf.setFont('helvetica', 'normal');
+                pdf.setFontSize(8);
+                pdf.text(`Print Date: ${currentDate_dmy} Time: ${CurrentTime()}`, 32, pageHeight - 20);
+
+                // Set document properties
                 pdf.setProperties({
                     title: `Return Report(${currentDate_dmy})`
                 });
+
+                // Open PDF in a new tab
                 window.open(pdf.output('bloburl'), '_blank');
 
+                // Remove the element after capturing
                 document.body.removeChild(element);
-
-                resolve(); // Resolve the promise after the PDF is generated
+                resolve();
             }).catch((error) => {
                 document.body.removeChild(element);
-                reject(error); // Reject the promise if there's an error
+                reject(error);
             });
+
+
+
         } catch (error) {
             reject(error); // Catch synchronous errors
         }
@@ -141,6 +168,15 @@ export const PDF_ReturnReport = ({ Table_Data, Supplier }) => {
     });
     return
 };
+
+
+
+
+
+
+
+
+
 
 
 
