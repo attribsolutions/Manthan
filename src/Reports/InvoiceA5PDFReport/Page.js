@@ -2,8 +2,9 @@
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import * as style from './ReportStyle'
-import { CurrentTime, compareGSTINState, currentDate_dmy, loginUserDetails } from "../../components/Common/CommonFunction";
+import { CurrentTime, IsSweetAndSnacksCompany, compareGSTINState, currentDate_dmy, loginUserDetails } from "../../components/Common/CommonFunction";
 import { AMERICA_ID } from "../../HardCodeID/contryID";
+import QRCode from "qrcode"; // Generates the QR code as an image
 
 
 var pageHeder = function (doc, data) {
@@ -74,6 +75,11 @@ const InvioceReporta5 = async (data) => {
             }
         });
     }
+    if (IsSweetAndSnacksCompany()) {
+        const qrCodeImage = await QRCode.toDataURL(data.FullInvoiceNumber);
+        doc.addImage(qrCodeImage, "PNG", 344, 310, 90, 80, null, 'FAST');
+    }
+
     doc.setProperties({
         title: `InvoiceReport/${data.CustomerName}/${data.InvoiceDate} `
     });
