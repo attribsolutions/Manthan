@@ -27,7 +27,7 @@ export const PDF_ReturnReport = ({ Table_Data, Supplier }) => {
     return new Promise((resolve, reject) => {
         try {
             const userDetails = loginUserDetails()
-            debugger
+            
             const Return_Number = Table_Data.map(item => item.FullReturnNumber).join(',')
             let records = Return_Number.split(',');
             let result = records.reduce((acc, curr, index) => {

@@ -96,7 +96,7 @@ export const C_Select = ({ value, onCancelClick, isDisabled, isLoading, ...rest 
 export const C_ItemSelect = ({ value, onCancelClick, isDisabled, isLoading, ...rest }) => {
 
     const transformDataToOptions = (data) => {
-        debugger
+        
         const groupedData = data.reduce((acc, currentItem) => {
             // Find if the group already exists
             const SubGroupNameIndex = acc.findIndex(SubGroupName => SubGroupName.label === `${currentItem.GroupName}-${currentItem.SubGroupName}`);
@@ -124,7 +124,7 @@ export const C_ItemSelect = ({ value, onCancelClick, isDisabled, isLoading, ...r
     };
     const options = transformDataToOptions(rest.options);
 
-    debugger
+    
 
     const { DropdownIndicator } = components;
 

@@ -602,7 +602,7 @@ const GroupSubGroup = (props) => {
 
 
     const moveSubGroupItem = (item, sourceGroupName, targetGroupName) => {
-        debugger
+        
         if (sourceGroupName === targetGroupName) return;
         setSubGroups((prevGroups) => {
             prevGroups["UnAssign"] ? prevGroups["UnAssign"] = prevGroups["UnAssign"] : prevGroups["UnAssign"] = []
