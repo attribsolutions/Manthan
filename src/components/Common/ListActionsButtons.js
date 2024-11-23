@@ -1,7 +1,7 @@
 import { Button, Spinner } from "reactstrap";
 import * as mode from "../../routes/PageMode"
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
-import { date_dmy_func, loginSystemSetting, loginUserDetails, loginUserID } from "./CommonFunction"
+import { date_dmy_func, loginSystemSetting, loginUserDetails, loginUserID, loginUserIsFranchisesRole } from "./CommonFunction"
 import '../../assets/searchBox/searchBox.scss'
 import { Cancel_Credit_Debit_EInvoiceAction, Cancel_EInvoiceAction, Cancel_EwayBillAction, Uploaded_Credit_Debit_EInvoiceAction, Uploaded_EInvoiceAction, Uploaded_EwayBillAction } from "../../store/actions";
 import { url } from "../../routes";
@@ -18,6 +18,9 @@ const updateBtnCss = "badge badge-soft-info font-size-12 btn btn-info waves-effe
 export const deltBtnCss = "badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
 export const makeBtnCss = "badge badge-soft-info font-size-12 btn btn-info waves-effect waves-light w-xxs border border-light "
 export const printBtnCss = "badge badge-soft-primary font-size-12 btn c_btn-primary waves-effect waves-light w-xxs border border-light "
+
+export const canOrderthermalPrintBtnCss = "badge badge-soft-secondary font-size-12 btn c_btn-secondary waves-effect waves-light w-xxs border border-light "
+
 const printInvoiceBtnCss = "badge badge-soft-info font-size-12 btn btn-info waves-effect waves-light w-xxs border border-light"
 export const hideBtnCss = "badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light "
 
@@ -69,6 +72,7 @@ export const listPageActionsButtonFunc = (props) => {
         copyBodyfunc,
         downClaimBtnFunc,
         viewApprovalBtnFunc,
+        thermalprintBtnFunc,
         otherBtn_1Func,
         minPrintBtn_Func,
         UpdateDetailsBtnFunc,
@@ -190,6 +194,9 @@ export const listPageActionsButtonFunc = (props) => {
         const canUpdatebtn = otherBtn_1Func && hasRole("RoleAccess_IsSave")
 
         const canMinPrint = minPrintBtn_Func && hasRole("RoleAccess_FranchisesOrderPrint")
+
+
+        const canOrderthermalPrint = hasRole("RoleAccess_IsPrint") && loginUserIsFranchisesRole() && (subPageMode === url.ORDER_LIST_4)&&thermalprintBtnFunc
 
 
 
@@ -349,6 +356,7 @@ export const listPageActionsButtonFunc = (props) => {
                         title: "Print",
                         buttonClasss: printBtnCss,
                     })}
+                   
                     {renderButtonIfNeeded({
                         condition: canMinPrint,
                         btnmode: mode.MinPrint,
@@ -365,6 +373,14 @@ export const listPageActionsButtonFunc = (props) => {
                         actionFunc: downBtnFunc,
                         title: "MultipleInvoices",
                         buttonClasss: printInvoiceBtnCss,
+                    })}
+                     {renderButtonIfNeeded({
+                        condition: canOrderthermalPrint,
+                        btnmode: mode.ThermalPrint,
+                        iconClass: printIconClass,
+                        actionFunc: thermalprintBtnFunc,
+                        title: "Print",
+                        buttonClasss: canOrderthermalPrintBtnCss,
                     })}
                     {renderButtonIfNeeded({
                         condition: canUpdatebtn,

@@ -760,7 +760,7 @@ const GroupSubGroup = (props) => {
             const Obj = {
                 GroupID: subgroup.GroupID,
                 GroupName: subgroup.GroupName,
-                GroupSequence: orderedGroups.indexOf(subgroup.GroupName) + 1,
+                GroupSequence: orderedGroups.indexOf(`${subgroup.GroupName}_${subgroup.GroupID}`) + 1,
                 SubGroupSequence: subGroupCounter,
                 SubGroup: subgroup.label,
                 SubGroupID: subgroup.value,
@@ -769,7 +769,7 @@ const GroupSubGroup = (props) => {
             };
 
 
-
+            debugger
             return Obj
         });
 
