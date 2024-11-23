@@ -185,7 +185,7 @@ const Login = props => {
                             <i className="mdi mdi-cog spin-right display-3"></i>
                             <i className="mdi mdi-cog spin-left display-4 cog-icon"></i>
                           </div>
-                          <h3 className="mt-4">Site is Under Maintenance</h3>
+                          <h3 className="mt-4">This Site is Under Maintenance</h3>
                           <p>Please check back in sometime.</p>
 
                         </div>
