@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 import { CustomermobileViewBackground } from './CustomermobileViewBackground';
 const CustomerMobileView = () => {
     const { Mac_ID } = useParams();
-    debugger
+    
     return (
         <div>
             <CustomermobileViewBackground Details={Mac_ID} />

@@ -177,7 +177,7 @@ const WorkOrder = (props) => {
 
             if (hasEditVal) {
                 setEditData(hasEditVal);
-                debugger
+                
                 const { id, WorkOrderDate, Item, ItemName, NumberOfLot, Stock
                     , Quantity, EstimatedOutputQty, Bom, Party, WorkOrderItems, Unit, UnitName } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError, FullWorkOrderNumber, WorkOrderNumber, } = { ...state }
@@ -206,7 +206,7 @@ const WorkOrder = (props) => {
                 // });
                 // dispatch(postGoButtonForWorkOrder_Master(jsonBody));
                 // setWorkOrderItemsDetails(WorkOrderItems)
-                debugger
+                
                 setItemselect({
                     value: Item,
                     label: `${ItemName} (BOMDate-${WorkOrderDate})`,

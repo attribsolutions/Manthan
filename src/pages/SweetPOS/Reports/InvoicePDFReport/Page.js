@@ -152,7 +152,7 @@ const PosInvoiceReport = (data) => {
             top: 45, left: 10, right: 35,
         },
         didDrawCell: (Table_data) => {
-            debugger
+            
             const { cell, row } = Table_data;
 
             // Set the line color to green

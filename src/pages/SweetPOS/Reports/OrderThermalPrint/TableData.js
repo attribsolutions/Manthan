@@ -68,7 +68,7 @@ export const GSTDetailsRow = (data, doc) => {
 }
 
 export const DetailsRow = (data) => {
-    debugger
+    
     var DetailsArray = [
         // [`${data.CompanyName}`],
         [`${data.SupplierName}`],

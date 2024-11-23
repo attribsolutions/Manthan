@@ -78,7 +78,7 @@ export const settingBaseRoundOffAmountFunc = (tableList = []) => {
     //     return accumulator + Number(index1.ItemTotalAmount) || 0
     // }, 0);
 
-    debugger
+    
     let result = tableList.reduce(
 
         (accumulator, index1) => {

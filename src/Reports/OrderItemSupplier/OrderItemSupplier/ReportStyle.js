@@ -222,7 +222,7 @@ export const tableBody = (doc, Row_Data) => {
 
 
     const startY = doc.lastAutoTable.finalY
-    debugger
+    
     // doc.setPage(doc.internal.getNumberOfPages());
 
     // // If there's remaining vertical space in the page: start printing next table from the current section

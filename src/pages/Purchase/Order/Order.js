@@ -351,7 +351,7 @@ const Order = (props) => {
                 setDescription(hasEditVal.Description)
 
                 setState(i => {
-                    debugger
+                    
                     const state = { ...i }
                     state.values.AdvanceAmount = hasEditVal.AdvanceAmount
                     state.values.Description = hasEditVal.Description

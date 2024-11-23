@@ -9,7 +9,7 @@ import {
     Col,
     Container, Label, Row,
 } from "reactstrap";
-import { breadcrumbReturnFunc, loginSystemSetting } from '../../../components/Common/CommonFunction';
+import { breadcrumbReturnFunc, loginSystemSetting, loginUserDetails } from '../../../components/Common/CommonFunction';
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import { commonPageField, commonPageFieldSuccess, getGRNListPageSuccess, invoiceListGoBtnfilterSucccess } from '../../../store/actions';
@@ -120,7 +120,7 @@ const Dashboard_Admin = (props) => {
     }, [userAccess])
 
     useEffect(() => {
-
+        
         const page_Id = pageId.DASHBORD_1//changes
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id))
@@ -152,7 +152,8 @@ const Dashboard_Admin = (props) => {
             "OrderType": "",
             "CustomerType": "",
             "IBType": "",
-            "DashBoardMode": 1
+            "DashBoardMode": 1,
+            "Country": loginUserDetails()?.Country_id
         }
         subPageMode = url.ORDER_LIST_4
         filtersBody = JSON.stringify(Orders_Filter);
@@ -545,7 +546,7 @@ const Dashboard_Admin = (props) => {
                                 </Card>
                             </Col>
 
-                           
+
 
 
 
@@ -602,23 +603,23 @@ const Dashboard_Admin = (props) => {
 
 
                         {IsTransactionLogShow === "true" && <Col xl={12} >
-                                <Card >
-                                    <div className='mb-n6'>
-                                        <CardHeader style={{ backgroundColor: "whitesmoke" }}
-                                            className="card-header align-items-center d-flex text-center">
-                                            <Label className="card-title mb-0 flex-grow-4 text-primary text-bold mb-n2 text-decoration-underline"
-                                                style={{ cursor: "pointer" }}
-                                                onClick={Transactionlog}
-                                            >
-                                                TransactionLog</Label>
-                                            {
-                                                (logLoading) &&
-                                                <DashboardLoader />}
-                                        </CardHeader>
-                                    </div>
-                                    <TransactionLog logData={logtableData} />
-                                </Card>
-                            </Col>}
+                            <Card >
+                                <div className='mb-n6'>
+                                    <CardHeader style={{ backgroundColor: "whitesmoke" }}
+                                        className="card-header align-items-center d-flex text-center">
+                                        <Label className="card-title mb-0 flex-grow-4 text-primary text-bold mb-n2 text-decoration-underline"
+                                            style={{ cursor: "pointer" }}
+                                            onClick={Transactionlog}
+                                        >
+                                            TransactionLog</Label>
+                                        {
+                                            (logLoading) &&
+                                            <DashboardLoader />}
+                                    </CardHeader>
+                                </div>
+                                <TransactionLog logData={logtableData} />
+                            </Card>
+                        </Col>}
 
 
 
