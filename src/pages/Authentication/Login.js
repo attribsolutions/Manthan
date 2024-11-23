@@ -21,6 +21,7 @@ import { afterloginOneTimeAPI } from "../../components/Common/AfterLoginApiFunc"
 import { useSession } from "../../routes/middleware/SessionContext"
 import { event } from "jquery"
 
+
 const Login = props => {
 
   const dispatch = useDispatch()
@@ -28,6 +29,8 @@ const Login = props => {
 
   const [currentUserName, setcurrentUserName] = useState("");
   const [Password, setPassword] = useState("");
+  const [IsLogin, setIsLogin] = useState(false);
+
   const [showPassword, setShowPassword] = useState(false);
 
 
@@ -66,8 +69,11 @@ const Login = props => {
   useEffect(() => {
     try {
       if ((loginSuccess.Status === true) && (loginSuccess.StatusCode === 200)) {
+        if (!loginSuccess.IsLoginPermissions) {
+          setIsLogin(true)
+          return dispatch(loginError_Action("Website Under Maintenance"))
+        }
         updateSessionActivity({ active: true });
-
         localStorage.setItem("token", (loginSuccess.token))
         localStorage.setItem("refreshToken", (loginSuccess.refreshtoken))
         localStorage.setItem("userId", (loginSuccess.UserID))
@@ -171,7 +177,19 @@ const Login = props => {
                       <div style={{ cursor: "context-menu" }} className="logo logo-dark">
                         <span className="logo-txt">FoodERP 2.0</span>
                       </div>
-                      <img src={logo} alt="" height="150" style={{height:"175px"}} />
+                      <img src={logo} alt="" height="150" style={{ height: "175px" }} />
+                      {IsLogin && <Col lg={12}>
+                        <div className="text-center">
+
+                          <div className="maintenance-cog-icon text-primary pt-4">
+                            <i className="mdi mdi-cog spin-right display-3"></i>
+                            <i className="mdi mdi-cog spin-left display-4 cog-icon"></i>
+                          </div>
+                          <h3 className="mt-4">Site is Under Maintenance</h3>
+                          <p>Please check back in sometime.</p>
+
+                        </div>
+                      </Col>}
 
                     </div>
                     <div className="auth-content my-auto">
