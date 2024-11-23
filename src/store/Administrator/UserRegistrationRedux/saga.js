@@ -81,7 +81,7 @@ function* Update_User_GenFunc({ config }) {
 }
 
 function* Get_UserPartiesForUserMaster_GenFunc({ editDetail }) {
-  debugger
+  
   const { id, editRole = [] } = editDetail
   try {
     const response = yield call(UserPartiesForUserMaster_API, id);

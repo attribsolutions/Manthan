@@ -246,7 +246,7 @@ const PartySubParty = (props) => {
         }
 
     }, [PartySubParty]);
-    debugger
+    
     const PartyDropdown_Options = SSDD_List.map(i => ({
         value: i.id,
         label: i.Name,

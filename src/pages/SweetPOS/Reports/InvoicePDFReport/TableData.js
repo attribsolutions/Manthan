@@ -79,7 +79,7 @@ export const ItemRow = (data) => {
         hasHedRow.push(tableitemRow.map(str => str.replace(/,/g, "")));
 
     });
-    debugger
+    
     return hasHedRow
 }
 

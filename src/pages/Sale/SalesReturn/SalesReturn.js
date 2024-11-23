@@ -276,7 +276,7 @@ const SalesReturn = (props) => {
                 let nextId = existingIds.length > 0 ? Math.max(...existingIds) + 1 : 1;
 
                 addButtonData.Data.forEach((i) => {
-                    debugger
+                    
                     const MRPOptions = i.ItemMRPDetails.map(i => ({ label: i.MRPValue, value: i.MRP, Rate: i.Rate }));
                     const GSTOptions = i.ItemGSTDetails.map(i => ({ label: i.GSTPercentage, value: i.GST }));
 

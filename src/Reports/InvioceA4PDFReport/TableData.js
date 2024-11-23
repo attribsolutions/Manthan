@@ -140,7 +140,7 @@ export const Rows = (data) => {
 
         let HSNcodes = ""
         if (element.HSNCode) {
-            debugger
+            
             if (data.SettingData.HSNCodeDigit === "0") {
                 HSNcodes = element.HSNCode.slice(0, 0);
             } else if (data.SettingData.HSNCodeDigit === "1") {
@@ -449,7 +449,7 @@ export const RowsForAmericaInvoice = (data) => {
     const TotalItemlength = Object.values(groupedItems).length;
     data["TotalItemlength"] = TotalItemlength;
     Object.values(groupedItems).forEach((element, key) => {
-        debugger
+        
         let HSNcodes = ""
         if (element.HSNCode) {
             if (data.SettingData.HSNCodeDigit === "0") {

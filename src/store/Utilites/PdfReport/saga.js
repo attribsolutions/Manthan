@@ -21,7 +21,7 @@ function* getpdfData_GenFunc({ urlpath, config }) {
       response.Data["subPageMode"] = config.subPageMode;
       response.Data["forceA5"] = config.forceA5;
     }
-    debugger
+    
     yield put(getpdfReportdataSuccess(response));
 
   } catch (error) {

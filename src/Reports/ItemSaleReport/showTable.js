@@ -44,7 +44,7 @@ function ShowTable() {
             // }}
             onDataSizeChange={({ dataCount, filteredData = [] }) => {
                 const newfilteredData = filteredData.map(i => {
-                    debugger
+                    
                     const { ...rest } = i;
                     return {
                         ...rest,

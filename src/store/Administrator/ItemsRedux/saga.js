@@ -5,7 +5,7 @@ import * as actionType from "./actionType";
 import * as action from "./action";
 
 function* Get_Items_GenFunc({ jsonBody }) {
-  debugger
+  
   const filters = JSON.stringify(jsonBody ? jsonBody : { ...loginJsonBody(), IsBOM: 0 });
   try {
 

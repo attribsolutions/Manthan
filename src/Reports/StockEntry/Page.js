@@ -20,7 +20,7 @@ function reportBody_1(doc, data) {
 
 
 const StockEntryReport = (data) => {
-    debugger
+    
     function generatePDF() {
         const doc = new jsPDF('p', 'pt', 'a4');
 

@@ -155,7 +155,7 @@ const ProductMarginReport = (props) => {
 
 
     useEffect(async () => {
-        debugger
+        
         let results = [];
         if (partyTypeSelect.length > 0) {
             for (const PartyType of partyTypeSelect) {
@@ -334,7 +334,7 @@ const ProductMarginReport = (props) => {
     }, [ProductMargin, pageField]);
 
     function GobtnExcelhandler(Type) {
-        debugger
+        
         setBtnMode(Type)
         const userDetails = loginUserDetails();
 

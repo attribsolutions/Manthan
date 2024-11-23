@@ -23,7 +23,7 @@ export const CustomermobileViewBackground = (props) => {
         const [Mac_ID, Party] = props.Details.split("&");
         console.log(Mac_ID); // "64:51:06:3F:5F:D2"
         console.log(Party); // "60722
-        debugger
+        
         setResponse("")
         if (!validateMobileNumber(CustomerMobileNumber)) {
             setError('Please enter a valid 10-digit mobile number.');

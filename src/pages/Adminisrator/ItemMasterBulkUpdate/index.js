@@ -416,7 +416,7 @@ const ItemMasterBulkUpdate = (props) => {
             formatter: (value, row, k) => {
                 if (row.SubGroupRow) {
                     const [Group, SubGroup] = row.Group_Subgroup.split(/-(.+)/);
-                    debugger
+                    
                     return (
                         <GroupSubgroupDisplay group={Group} subgroup={SubGroup} />
                     );
@@ -510,7 +510,7 @@ const ItemMasterBulkUpdate = (props) => {
     };
 
     const processedData = useMemo(() => ModifyTableData_func(tableData), [tableData]);
-    debugger
+    
     return (
         <React.Fragment>
             <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>

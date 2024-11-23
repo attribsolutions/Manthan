@@ -911,7 +911,7 @@ export const tableBodyWithIGST = (doc, data) => {
 
 
 export const tableBodyForAmericanInvoice = (doc, data) => {
-    debugger
+    
     var options = {
 
         didParseCell: (data1) => {
