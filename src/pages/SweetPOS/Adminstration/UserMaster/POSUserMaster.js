@@ -276,6 +276,7 @@ const POSUSER = (props) => {
           IsActive: values.IsActive,
           CreatedBy: loginUserID(),
           UpdatedBy: loginUserID(),
+          IsLoginPermissions: true,
           POSRateType: values.POSRateType === "" ? "" : values.POSRateType.value
 
         })
