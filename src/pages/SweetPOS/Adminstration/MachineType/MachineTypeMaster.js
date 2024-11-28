@@ -297,38 +297,38 @@ const MachineTypeMaster = (props) => {
         //     })
         // }
 
-            try {
-                if (formValid(state, setState)) {
-                    btnIsDissablefunc({ btnId, state: true })
+        try {
+            if (formValid(state, setState)) {
+                btnIsDissablefunc({ btnId, state: true })
 
-                    const jsonBody = JSON.stringify({
+                const jsonBody = JSON.stringify({
 
-                        "MacID": values.MacID,
-                        "MachineType": values.MachineType.map(i => i.value).join(','),
-                        "Party": loginPartyID(),
-                        "ClientID": values.ClientID,
-                        "IsAutoUpdate": values.IsAutoUpdate,
-                        "IsGiveUpdate": values.IsGiveUpdate,
-                        "MachineName": values.MachineName,
-                        "MachineRole": values.MachineRole,
-                        "ServerSequence": values.ServerSequence,
-                        "UploadSaleRecordCount": values.UploadSaleRecordCount,
-                        "Validity": values.Validity,
-                        "Version": values.Version,
+                    "MacID": values.MacID,
+                    "MachineType": values.MachineType.map(i => i.value).join(','),
+                    "Party": loginPartyID(),
+                    "ClientID": values.ClientID,
+                    "IsAutoUpdate": values.IsAutoUpdate,
+                    "IsGiveUpdate": values.IsGiveUpdate,
+                    "MachineName": values.MachineName,
+                    "MachineRole": values.MachineRole,
+                    "ServerSequence": values.ServerSequence,
+                    "UploadSaleRecordCount": values.UploadSaleRecordCount,
+                    "Validity": values.Validity,
+                    "Version": values.Version,
 
-                        "IsServer": values.IsServer,
-                        "IsService": !(values.IsServer) ? false : values.IsService,
-                        "ServerDatabase": !(values.IsServer) ? null : values.ServerDatabase,
-                        "ServerHost": !(values.IsServer) ? null : values.ServerHost,
-                        "SeverName": !(values.IsServer) ? null : values.ServerName,
-                        "ServerPassWord": !(values.IsServer) ? null : values.ServerPassWord,
-                        "ServerUser": !(values.IsServer) ? null : values.ServerUser,
-                        "Invoiceprefix": !(values.IsServer) ? null : values.Invoiceprefix
-                    });
-                    dispatch(SPos_MachineTypeSave_Action({ jsonBody }));
+                    "IsServer": values.IsServer,
+                    "IsService": !(values.IsServer) ? false : values.IsService,
+                    "ServerDatabase": !(values.IsServer) ? null : values.ServerDatabase,
+                    "ServerHost": !(values.IsServer) ? null : values.ServerHost,
+                    "SeverName": !(values.IsServer) ? null : values.ServerName,
+                    "ServerPassWord": !(values.IsServer) ? null : values.ServerPassWord,
+                    "ServerUser": !(values.IsServer) ? null : values.ServerUser,
+                    "Invoiceprefix": !(values.IsServer) ? null : values.Invoiceprefix
+                });
+                dispatch(SPos_MachineTypeSave_Action({ jsonBody }));
 
-                }
-            } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
+            }
+        } catch (e) { btnIsDissablefunc({ btnId, state: false }) }
     };
 
     if (!(userPageAccessState === '')) {
@@ -628,6 +628,7 @@ const MachineTypeMaster = (props) => {
                                                                                 <Input
                                                                                     type="checkbox"
                                                                                     className="form-check-input"
+                                                                                    disabled={values.IsServer}
                                                                                     checked={values.IsService}
                                                                                     name="IsService"
                                                                                     onChange={(event) => onChangeCheckbox({ event, state, setState })}
