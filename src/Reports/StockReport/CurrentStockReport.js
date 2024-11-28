@@ -209,6 +209,15 @@ const CurrentStockReport = (props) => {
 			controlTypeName: "Number"
 		},
 		{
+			text: 'SAPItemCode',
+			dataField: 'SAPItemCode',
+			showing: ['', 0, 1].includes(stockTypeSelect.value),
+			groupBy: true,
+			align: 'right',
+			sequence: 2,
+			controlTypeName: "Number"
+		},
+		{
 			text: 'Group',
 			dataField: 'GroupName',
 			showing: true,
@@ -504,7 +513,7 @@ const CurrentStockReport = (props) => {
 					UnSaleableStockValue, SaleableStockTaxValue,
 					SaleableStockValue, MRP, BatchCode, Item, ItemName,
 					PurchaseRate, DistributorCode, DistributorName, Cluster, SubCluster, GroupName,
-					SubGroupName, GroupTypeName, Stockvaluewithtax, Unit, TaxValue } = currentItem;
+					SubGroupName, GroupTypeName, Stockvaluewithtax, Unit, TaxValue, SAPItemCode } = currentItem;
 
 				let key = "";
 
@@ -536,7 +545,7 @@ const CurrentStockReport = (props) => {
 						UnSaleableStock: Number(UnSaleableStock), TotalStockValue: TotalStockValue,
 						UnSaleableStockTaxValue: Number(UnSaleableStockTaxValue), UnSaleableStockValue: Number(UnSaleableStockValue),
 						SaleableStockTaxValue: Number(SaleableStockTaxValue), SaleableStockValue: Number(SaleableStockValue), TaxValue: Number(TaxValue), BatchCode,
-						DistributorCode, DistributorName, Item, GroupName, SubGroupName, GroupTypeName, BatchCode, Stockvaluewithtax, Unit, SubCluster, Cluster
+						DistributorCode, DistributorName, Item, GroupName, SubGroupName, GroupTypeName, BatchCode, Stockvaluewithtax, Unit, SubCluster, Cluster, SAPItemCode
 					};
 				}
 				return accumulator;
