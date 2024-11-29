@@ -227,7 +227,7 @@ export const SortButtonFunc = (props) => {
         },
         {
             text: "Amount",
-            dataField: "GrandTotal",
+            dataField: "Amount",
             selectValue: [allLabelWithBlank],
             checkboxState: true,
             sort: true,
@@ -324,7 +324,7 @@ export const SortButtonFunc = (props) => {
             if (!groupedData[groupKey]) {
                 groupedData[groupKey] = {
                     ...item,
-                    GrandTotal: 0,
+                    Amount: 0,
                     QtyInNo: 0,
                     QtyInKg: 0,
                     QtyInBox: 0,
@@ -350,7 +350,7 @@ export const SortButtonFunc = (props) => {
 
     let totalAmount = 0
     manupulatedData = manupulatedData.map((item, key) => {
-        totalAmount += parseFloat(item.GrandTotal);
+        totalAmount += parseFloat(item.Amount);
         item.id = key + 1
         return item
     });
