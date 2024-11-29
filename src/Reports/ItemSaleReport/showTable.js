@@ -43,12 +43,13 @@ function ShowTable() {
             //     dispatch(BreadcrumbShowCountlabel(`Count:${dataCount}`));
             // }}
             onDataSizeChange={({ dataCount, filteredData = [] }) => {
+                
                 const newfilteredData = filteredData.map(i => {
                     
                     const { ...rest } = i;
                     return {
                         ...rest,
-                        recordsAmountTotal: i.GrandTotal, // Breadcrumb Count total
+                        recordsAmountTotal: i.Amount, // Breadcrumb Count total
                     };
                 });
 
