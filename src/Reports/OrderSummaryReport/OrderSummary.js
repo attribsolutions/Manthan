@@ -181,13 +181,15 @@ const OrderSummary = (props) => {
             dynamicColumn.push('OrderDate')
         }
         if (groupBySupplier) {
+            dynamicColumn.push('SupplierID')
             dynamicColumn.push('SupplierName')
         }
         if (groupByCustomer) {
+            dynamicColumn.push('CustomerID')
             dynamicColumn.push('CustomerName')
         }
 
-        let currentColumnName = [...dynamicColumn, ...['OrderNo', 'Product', 'SubProduct', 'SKUName']]
+        let currentColumnName = [...dynamicColumn, ...['OrderNo', 'Product', 'SubProduct', 'ItemID', 'SKUName']]
         const columnSumsByGroup = jsonData.reduce((result, item) => {
             const groupKey = currentColumnName.map(columnName => item[columnName]).join('|');
 
