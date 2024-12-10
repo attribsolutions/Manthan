@@ -90,6 +90,7 @@ const Order = (props) => {
     const currentDate_ymd = IsFranchisesRole ? _cfunc.Frenchies_date_ymd_func() : _cfunc.date_ymd_func();
     const CurrentOrderDate = _cfunc.date_ymd_func()
     const Weight = _cfunc.loginUserDetails().Weight
+    const CurrentTime = _cfunc.CurrentTime()   ///03:32:15 PM
 
     const initialSubPageMode = useMemo(() => {
         if (_cfunc.IsAuthorisedURL({ subPageMode: history.location.pathname, URL: url.ORDER_2 })) {
@@ -351,7 +352,7 @@ const Order = (props) => {
                 setDescription(hasEditVal.Description)
 
                 setState(i => {
-                    
+
                     const state = { ...i }
                     state.values.AdvanceAmount = hasEditVal.AdvanceAmount
                     state.values.Description = hasEditVal.Description
@@ -1112,7 +1113,28 @@ const Order = (props) => {
     ];
 
     function supplierOnchange(e) {
+        
+        if (subPageMode === url.ORDER_2) {
+            const OrderDate = deliverydate.split(' ')[0]; // Date and time  split
 
+            if (OrderDate === CurrentOrderDate) {
+
+                if (CurrentTime <= "10:30:00 AM") {
+                    customAlert({
+                        Type: 4,
+                        Message: "Orders can only be placed after 10:30 AM.",
+                    });
+                    return;
+                }
+            }
+            else {
+                customAlert({
+                    Type: 4,
+                    Message: "Orders cannot be placed on the next day.",
+                });
+                return;
+            }
+        }
         setSupplierSelect(e);
         if (subPageMode === url.ORDER_4) {
             dispatch(_act.getSupplierAddress(e.value))
@@ -1287,6 +1309,27 @@ const Order = (props) => {
     const saveHandler = async (gotoInvoiceMode = false) => {
 
         try {
+            if (subPageMode === url.ORDER_2) {
+                const OrderDate = deliverydate.split(' ')[0]; // Date and time  split
+
+                if (OrderDate === CurrentOrderDate) {
+
+                    if (CurrentTime <= "10:30:00 AM") {
+                        customAlert({
+                            Type: 4,
+                            Message: "Orders can only be placed after 10:30 AM.",
+                        });
+                        return;
+                    }
+                }
+                else {
+                    customAlert({
+                        Type: 4,
+                        Message: "Orders cannot be placed on the next day.",
+                    });
+                    return;
+                }
+            }
             // Get the division from the loginPartyID function
             const division = commonPartyDropSelect.value;
             const supplier = supplierSelect.value;
@@ -1669,6 +1712,28 @@ const Order = (props) => {
                                                             loading={goBtnloading}
                                                             id={`go-btn${subPageMode}`}
                                                             onClick={(e) => {
+                                                                if (subPageMode === url.ORDER_2) {
+                                                                    
+                                                                    const OrderDate = deliverydate.split(' ')[0]; // Date and time  split
+
+                                                                    if (OrderDate === CurrentOrderDate) {
+
+                                                                        if (CurrentTime <= "10:30:00 AM") {
+                                                                            customAlert({
+                                                                                Type: 4,
+                                                                                Message: "Orders can only be placed after 10:30 AM.",
+                                                                            });
+                                                                            return;
+                                                                        }
+                                                                    }
+                                                                    else {
+                                                                        customAlert({
+                                                                            Type: 4,
+                                                                            Message: "Orders cannot be placed on the next day.",
+                                                                        });
+                                                                        return;
+                                                                    }
+                                                                }
                                                                 if (commonPartyDropSelect.value === 0) {
                                                                     customAlert({
                                                                         Type: 4,
@@ -2033,8 +2098,6 @@ const Order = (props) => {
 }
 
 export default Order
-
-
 
 
 
