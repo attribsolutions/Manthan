@@ -84,8 +84,7 @@ const Order = (props) => {
     const IsFranchisesRole = _cfunc.loginUserIsFranchisesRole()
     const advanceAmountRef = useRef(0);
     const descriptionRef = useRef("");
-
-
+    const ordersNotSave = _cfunc.loginSystemSetting().OrdersnotSave
 
     const currentDate_ymd = IsFranchisesRole ? _cfunc.Frenchies_date_ymd_func() : _cfunc.date_ymd_func();
     const CurrentOrderDate = _cfunc.date_ymd_func()
@@ -1113,45 +1112,35 @@ const Order = (props) => {
     ];
 
     function supplierOnchange(e) {
-        
-        if (subPageMode === url.ORDER_2) {
-            const OrderDate = deliverydate.split(' ')[0]; // Date and time  split
 
-            if (OrderDate === CurrentOrderDate) {
+        const validationMessage = _cfunc.validateOrder(page_id, deliverydate);  // Get the validation message
 
-                if (CurrentTime <= "10:30:00 AM") {
-                    customAlert({
-                        Type: 4,
-                        Message: "Orders can only be placed after 10:30 AM.",
-                    });
-                    return;
-                }
-            }
-            else {
-                customAlert({
-                    Type: 4,
-                    Message: "Orders cannot be placed on the next day.",
-                });
-                return;
-            }
+        if (validationMessage !== "") {
+            // If validation fails, show the message and stop further execution
+            customAlert({ Type: 4, Message: validationMessage });
+            return;  // Stop further execution if validation fails
         }
+
+        // Continue with the rest of the code if validation passes
         setSupplierSelect(e);
+
         if (subPageMode === url.ORDER_4) {
-            dispatch(_act.getSupplierAddress(e.value))
-            let Date = currentDate_ymd
+            dispatch(_act.getSupplierAddress(e.value));
+            let Date = currentDate_ymd;
+
             if ((e.FSSAIExipry === "") || (e.FSSAIExipry === null)) {
-                setFSSAI_Date_Is_Expired("There is No FSSAI Expiry Date Please Insert FSSAI Date!")
-            }
-            else if (e.FSSAIExipry < Date) {
-                setFSSAI_Date_Is_Expired("FSSAI Expired")
+                setFSSAI_Date_Is_Expired("There is No FSSAI Expiry Date Please Insert FSSAI Date!");
+            } else if (e.FSSAIExipry < Date) {
+                setFSSAI_Date_Is_Expired("FSSAI Expired");
             } else {
-                setFSSAI_Date_Is_Expired("")
+                setFSSAI_Date_Is_Expired("");
             }
         }
-        setOrderItemTable([])
-        setItemSelect('')
-        goButtonHandler(e.value)
-    };
+
+        setOrderItemTable([]);
+        setItemSelect('');
+        goButtonHandler(e.value);
+    }
 
     function itemSelectOnchange(e) {
         setItemSelect(e)
@@ -1269,10 +1258,7 @@ const Order = (props) => {
         let btnId = `go-btn${subPageMode}`
         _cfunc.btnIsDissablefunc({ btnId, state: true })
 
-        console.log(itemSelectDropOptions)
         dispatch(_act.BreadcrumbShowCountlabel(initial_BredcrumbMsg))
-
-
 
         let PO_Body = {
             Party: selectSupplier ? selectSupplier : supplierSelect.value,
@@ -1305,30 +1291,46 @@ const Order = (props) => {
         dispatch(_act.GoButton_For_Order_Add(config))
     };
 
+    const handleGoButtonClick = (e) => {
+        const validationMessage = _cfunc.validateOrder(page_id, deliverydate);  // Get the validation message
+
+        if (validationMessage !== "") {
+            // If validation fails, show the message and stop further execution
+            customAlert({ Type: 4, Message: validationMessage });
+            return;  // Stop further execution if validation fails
+        }
+        if (commonPartyDropSelect.value === 0) {
+            customAlert({
+                Type: 4,
+                Message: "Select Party",
+            });
+            return;
+        }
+        if (supplierSelect === '') {
+            customAlert({
+                Type: 4,
+                Message: `Please Select ${fieldLabel.Supplier}`
+            })
+            return;
+        }
+        dispatch(_act.BreadcrumbShowCountlabel(`Count:${itemSelectDropOptions.length} currency_symbol 0.00 weight 0.00 kg`))
+        setSelecedItemWiseOrder(false)
+        setOrderItemTable(itemSelectDropOptions)
+        setItemSelect(allLabelWithBlank)
+        setGoBtnDissable(true)
+    };
+
+
     // Function to handle the form submission
     const saveHandler = async (gotoInvoiceMode = false) => {
 
         try {
-            if (subPageMode === url.ORDER_2) {
-                const OrderDate = deliverydate.split(' ')[0]; // Date and time  split
+            const validationMessage = _cfunc.validateOrder(page_id, deliverydate);  // Get the validation message
 
-                if (OrderDate === CurrentOrderDate) {
-
-                    if (CurrentTime <= "10:30:00 AM") {
-                        customAlert({
-                            Type: 4,
-                            Message: "Orders can only be placed after 10:30 AM.",
-                        });
-                        return;
-                    }
-                }
-                else {
-                    customAlert({
-                        Type: 4,
-                        Message: "Orders cannot be placed on the next day.",
-                    });
-                    return;
-                }
+            if (validationMessage !== "") {
+                // If validation fails, show the message and stop further execution
+                customAlert({ Type: 4, Message: validationMessage });
+                return;  // Stop further execution if validation fails
             }
             // Get the division from the loginPartyID function
             const division = commonPartyDropSelect.value;
@@ -1708,52 +1710,11 @@ const Order = (props) => {
                                                     // (!selecedItemWiseOrder && itemSelectDropOptions.length > 0) ?
                                                     (!goBtnDissable) ?
 
-                                                        < Go_Button
+                                                        <Go_Button
                                                             loading={goBtnloading}
                                                             id={`go-btn${subPageMode}`}
-                                                            onClick={(e) => {
-                                                                if (subPageMode === url.ORDER_2) {
-                                                                    
-                                                                    const OrderDate = deliverydate.split(' ')[0]; // Date and time  split
-
-                                                                    if (OrderDate === CurrentOrderDate) {
-
-                                                                        if (CurrentTime <= "10:30:00 AM") {
-                                                                            customAlert({
-                                                                                Type: 4,
-                                                                                Message: "Orders can only be placed after 10:30 AM.",
-                                                                            });
-                                                                            return;
-                                                                        }
-                                                                    }
-                                                                    else {
-                                                                        customAlert({
-                                                                            Type: 4,
-                                                                            Message: "Orders cannot be placed on the next day.",
-                                                                        });
-                                                                        return;
-                                                                    }
-                                                                }
-                                                                if (commonPartyDropSelect.value === 0) {
-                                                                    customAlert({
-                                                                        Type: 4,
-                                                                        Message: "Select Party",
-                                                                    });
-                                                                    return;
-                                                                }
-                                                                if (supplierSelect === '') {
-                                                                    customAlert({
-                                                                        Type: 4,
-                                                                        Message: `Please Select ${fieldLabel.Supplier}`
-                                                                    })
-                                                                    return;
-                                                                }
-                                                                dispatch(_act.BreadcrumbShowCountlabel(`Count:${itemSelectDropOptions.length} currency_symbol 0.00 weight 0.00 kg`))
-                                                                setSelecedItemWiseOrder(false)
-                                                                setOrderItemTable(itemSelectDropOptions)
-                                                                setItemSelect(allLabelWithBlank)
-                                                                setGoBtnDissable(true)
-                                                            }} />
+                                                            onClick={handleGoButtonClick}
+                                                        />
                                                         : (!selecedItemWiseOrder) &&
                                                         <Change_Button
                                                             id={`change-btn${subPageMode}`}
@@ -2099,6 +2060,30 @@ const Order = (props) => {
 
 export default Order
 
+// export function OrderNotPlaced(subPageMode, CurrentOrderDate, deliverydate) {
+//     if (subPageMode === url.ORDER_2) {
+//         const OrderDate = deliverydate.split(' ')[0]; // Date and time  split
+
+//         if (OrderDate === CurrentOrderDate) {
+
+//             if (CurrentTime <= "10:30:00 AM") {
+//                 customAlert({
+//                     Type: 4,
+//                     Message: "Orders can only be placed after 10:30 AM.",
+//                 });
+//                 return;
+//             }
+//         }
+//         else {
+//             customAlert({
+//                 Type: 4,
+//                 Message: "Orders cannot be placed on the next day.",
+//             });
+//             return;
+//         }
+//     }
+
+// }
 
 
 
