@@ -482,6 +482,7 @@ export const loginIsSCMParty = () => { //+++++++++++++++++++++ Session Company I
 
 export const loginSystemSetting = () => { //+++++++++++++++++++++ Session Company Id+++++++++++++++++++++++++++++
   try {
+
     const hassetting = JSON.parse(sessionStorage.getItem("SystemSetting"));
     return hassetting || "";
   } catch (e) {
@@ -1029,3 +1030,79 @@ export function checkRateDropVisibility() {
   const searchString = loginCompanyID() + "-2";
   return settingsArray.includes(searchString);
 }
+
+
+export function validateOrder(PageID, deliveryDate) {
+  const restrictedOrders = (loginSystemSetting()?.OrdersnotSave || "").split(',');
+  const currentPartyKey = `${loginPartyTypeID()}-${PageID}`;
+  debugger
+  let checkValid = restrictedOrders.includes(currentPartyKey)
+
+  if (!checkValid) {
+    return ''
+  }
+  const now = new Date();
+  const selectedDate = new Date(deliveryDate);
+
+  // Get today's date and time boundaries
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);  // Midnight today
+  const todayStartTime = new Date();
+  todayStartTime.setHours(10, 30, 0, 0);  // 10:30 AM today
+  const todayEndTime = new Date();
+  todayEndTime.setHours(22, 30, 0, 0);  // 10:30 PM today
+
+  // Get tomorrow's date and time boundaries
+  const tomorrow = new Date(today);
+  tomorrow.setDate(today.getDate() + 1);  // Midnight tomorrow
+  const tomorrowEndTime = new Date(tomorrow);
+  tomorrowEndTime.setHours(22, 30, 0, 0);  // 10:30 PM tomorrow
+
+  // Rounding the times to seconds for easier comparison
+  const now_time = Math.floor(now.getTime() / 1000) * 1000;  // Round down to the nearest second
+  const selectedDate_time = Math.floor(selectedDate.getTime() / 1000) * 1000;  // Round down to the nearest second
+
+  console.log("Rounded Current Time in milliseconds (now_time):", now_time);
+  console.log("Rounded Selected Date in milliseconds (selectedDate_time):", selectedDate_time);
+
+  // Check if the selected date is today
+  if (selectedDate.toDateString() === today.toDateString()) {
+    console.log("Selected date is today");
+
+    // Orders can only be placed after 10:30 AM today
+    if (now_time < todayStartTime.getTime()) {
+      console.log("Before 10:30 AM today");
+      return "Orders can only be placed after 10:30 AM today.";
+    }
+
+    // Orders can only be placed before 10:30 PM today
+    if (now_time >= todayEndTime.getTime()) {  // Changed `>` to `>=` to allow exactly 10:30 PM
+      console.log("After or exactly 10:30 PM today");
+      return "Orders can only be placed before 10:30 PM today.";
+    }
+  }
+  // Check if the selected date is tomorrow
+  else if (selectedDate.toDateString() === tomorrow.toDateString()) {
+    console.log("Selected date is tomorrow");
+
+    // Check if it's past 10:30 PM today
+    if (now_time >= todayEndTime.getTime()) {
+      console.log("After 10:30 PM today, orders for tomorrow not allowed");
+      return "Orders for tomorrow can only be placed before 10:30 PM today.";
+    }
+
+    // Orders can only be placed before 10:30 PM tomorrow
+    if (now_time >= tomorrowEndTime.getTime()) {  // Changed `>` to `>=` to allow exactly 10:30 PM
+      console.log("After or exactly 10:30 PM tomorrow");
+      return "Orders can only be placed before 10:30 PM tomorrow.";
+    }
+  }
+
+  // If valid, return an empty string (valid order)
+  console.log("Order is valid.");
+  return "";
+
+
+}
+
+
