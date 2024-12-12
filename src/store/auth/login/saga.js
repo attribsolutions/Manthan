@@ -36,6 +36,8 @@ function* loginUser({ payload: { user } }) {
       password: user.Password
     })
 
+    localStorage.setItem("Password", (user.Password))
+
     if (response.StatusCode === 200) {
       yield put(loginSuccessAction(response))
     } else {

@@ -1,5 +1,5 @@
 import axios from "axios"
-import { del, get, put, post, postWithoutToken, postRefreshToken, getWithotMsg, postMethodExcel, delwithPostBody, postForFormData, putForFormData, } from "./api_helper"
+import { del, get, put, post, postWithoutToken, postRefreshToken, getWithotMsg, postMethodExcel, delwithPostBody, postForFormData, putForFormData, postWithBasicAuth, } from "./api_helper"
 import * as url from "./url_helper"
 
 // Gets the logged in user data from local session
@@ -595,6 +595,7 @@ export const Invoice_1_Edit_API = ({ editId }) => get(`${url.INVOICE_1_Edit}/${e
 export const Invoice_1_Update_API = ({ updateId, jsonBody }) => put(`${url.INVOICE_1_Edit}/${updateId}`, jsonBody)// delete api
 
 export const Invoice_Singel_Get_for_Report_Api = ({ editId }) => get(`${url.INVOICE_1_SAVE}/${editId}/P`)// delete api
+
 export const Update_Vehicle_Invoice_API = ({ Invoiceid, vehicleid }) => get(`${url.UPDATE_VEHICLE_INVOICE}/${Invoiceid}/${vehicleid}`)// Cancel_EwayBill
 export const Invoice_Send_To_Scm = ({ jsonBody }) => post(url.INVOICE_SEND_TO_SCM, jsonBody)// delete api
 
@@ -604,11 +605,11 @@ export const Invoice_1_Bulk_Delete_API = ({ jsonBody }) => delwithPostBody(url.I
 export const Update_Vehicle_Customer_Invoice_API = ({ jsonBody }) => post(url.UPDATE_VEHICLE_CUSTOMER_INVOICE, jsonBody)// Cancel_EwayBill
 
 
-
 export const IB_Invoice_Singel_Get_for_Report_Api = ({ editId }) => get(`${url.IB_INVOICE_SINGEL_GET}/${editId}`)// delete api
 
-
-
+/// Franchies Invoice
+export const Franchies_Invoice_Singel_Get_for_Report_Api = ({ editId }) => get(`${url.POS_INVOICE_PRINT}/${editId}/P`)// delete api
+export const Franchies_Invoice_Delete_API = ({ deleteId }) => del(`${url.FRANCHAISE_INVOICE_DELETE_API}/${deleteId}`)// delete api
 
 
 //**************************** E-Invoice (upload ,cancel,print) ***************************************/

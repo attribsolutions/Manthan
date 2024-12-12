@@ -185,7 +185,7 @@ export const FRANCHISE_CUSTOMER_LIST = 308
 export const COUNTRY_MASTER = 310
 export const COUNTRY_LIST = 311
 
-export const MOBILE_RETAILER_SEND=249
+export const MOBILE_RETAILER_SEND = 249
 
 //******************************* Purchase Module ************************************//
 export const ORDER_1 = 53
@@ -227,6 +227,8 @@ export const PRODUCTION_REISSUE_STP = 142
 
 export const INVOICE_1 = 121
 export const INVOICE_LIST_1 = 122
+
+export const FRANCHAISE_INVOICE = 317
 
 export const POS_INVOICE_LIST = 288
 
@@ -393,7 +395,7 @@ export const SWEET_POS_MACHINE_LIST = 315
 
 export const STOCK_OUT_REPORT = 306
 
-export const FRANCHAISE_SALE_WITH_BILL_COUNT=316
+export const FRANCHAISE_SALE_WITH_BILL_COUNT = 316
 
 
 

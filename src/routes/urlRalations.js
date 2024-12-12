@@ -246,6 +246,8 @@ export const IB_Invoice_STP = url.IB_ORDER_PO_LIST;
 export const InvoiceList = url.INVOICE_1;
 export const Invoice_1 = url.INVOICE_LIST_1;
 
+export const Franchies_Invoice = url.POS_INVOICE_LIST;
+
 export const Loading_Sheet_List = url.LOADING_SHEET;
 export const Loading_Sheet = url.LOADING_SHEET_LIST;
 export const Loading_Sheet_List_Update = url.LOADING_SHEET_LIST;
