@@ -189,6 +189,7 @@ const Invoice = (props) => {
                 ReportType: report.invoice,//for saveAndDownloadPdfMode
                 RowId: postMsg.TransactionID.join(', '),//for Invoice-Upload
                 UserID: _cfunc.loginUserID(),//for Invoice-Upload
+                subPageMode: subPageMode
             };
             //************************* / Fetch PDF report data if saveAndDownloadPdfMode is true /
             if (postMsg.saveAndDownloadPdfMode) {
