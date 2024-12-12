@@ -49,7 +49,7 @@ import { changeCommonPartyDropDetailsAction } from "../../../store/Utilites/Part
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 import { CheckStockEntryForFirstTransaction, CheckStockEntryForFirstTransactionSuccess, CheckStockEntryforBackDatedTransaction, CheckStockEntryforBackDatedTransactionSuccess } from "../../../store/Inventory/StockEntryRedux/action";
-import { Franchies_invoice_Calculate_Func, innerStockCaculationForFranchies, orderQtyOnChange, orderQtyUnit_SelectOnchange, postWithBasicAuth, RoundCalculationFunc, } from "./FranchiesInvoiceFunc";
+import { Franchies_invoice_Calculate_Func, DiscountCaculationForFranchies, orderQtyOnChange, orderQtyUnit_SelectOnchange, postWithBasicAuth, RoundCalculationFunc, } from "./FranchiesInvoiceFunc";
 
 const Franchies_Invoice_Master = (props) => {
 
@@ -347,7 +347,7 @@ const Franchies_Invoice_Master = (props) => {
 
             // Perform calculations based on the updated values for each item
             updatedOrderItemTable.forEach((index1) => {
-                innerStockCaculationForFranchies(index1, subPageMode);
+                DiscountCaculationForFranchies(index1, subPageMode);
             });
             totalAmountCalcuationFunc(updatedOrderItemTable);
             // Set the updated array as the new orderItemTable
@@ -541,7 +541,7 @@ const Franchies_Invoice_Master = (props) => {
                                             setChangeAllDiscount(false);
                                             index1.DiscountType = e.value;
                                             index1.Discount = '';
-                                            innerStockCaculationForFranchies(index1);
+                                            DiscountCaculationForFranchies(index1);
                                             totalAmountCalcuationFunc(tableList);
                                         }}
                                     />
@@ -579,7 +579,7 @@ const Franchies_Invoice_Master = (props) => {
 
                                             index1.Discount = e.target.value;
                                             setChangeAllDiscount(false);
-                                            innerStockCaculationForFranchies(index1);
+                                            DiscountCaculationForFranchies(index1);
                                             totalAmountCalcuationFunc(tableList);
                                         }}
 
@@ -693,11 +693,11 @@ const Franchies_Invoice_Master = (props) => {
 
                         "MRP": parseFloat(ele.MRP),
                         "Rate": ele.Rate,
-                        "Amount": calculate.roundedTotalAmount,
-                        "BasicAmount": calculate.taxableAmount,
+                        "Amount": calculate.ItemTotalAmount,
+                        "BasicAmount": (calculate.taxableAmount).toFixed(2),
 
                         "GSTRate": parseFloat(ele.GST),
-                        "GSTAmount": parseFloat(calculate.GST_Percentage),
+                        "GSTAmount": parseFloat(calculate.GST_Amount),
 
                         "CGSTRate": parseFloat(calculate.CGST_Percentage),
                         "CGSTAmount": calculate.CGST_Amount,
