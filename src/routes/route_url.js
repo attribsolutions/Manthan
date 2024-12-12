@@ -264,6 +264,8 @@ export const PRODUCTION_REISSUE_STP = "/ProductionReIssue_STP"
 export const INVOICE_1 = "/Invoice_1"
 export const INVOICE_LIST_1 = "/InvoiceList_1"
 
+export const FRANCHAISE_INVOICE = "/Franchies_Invoice"
+
 export const LOADING_SHEET = "/Loading_Sheet"
 export const LOADING_SHEET_LIST = "/Loading_Sheet_List"
 export const LOADING_SHEET_LIST_UPDATE = "/Loading_Sheet_List_Update"

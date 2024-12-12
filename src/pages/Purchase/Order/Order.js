@@ -449,8 +449,13 @@ const Order = (props) => {
 
                 dispatch(_act.GoButton_For_Order_AddSuccess([]))
                 if ((subPageMode === url.ORDER_4) && (postMsg.gotoInvoiceMode)) {
-
-                    const customer = supplierSelect
+                    debugger
+                    // const customer = supplierSelect
+                    const customer = {
+                        ...supplierSelect, // Spread existing customer fields
+                        OrderID: postMsg.TransactionID, // Add OrderID
+                        AdvanceAmount: advanceAmountRef.current.value ? advanceAmountRef.current.value : 0, // Add AdvanceAmount
+                    };
                     const jsonBody = JSON.stringify({
                         OrderIDs: postMsg.OrderID.toString(),
                         FromDate: orderdate,
@@ -459,8 +464,8 @@ const Order = (props) => {
                     });
                     dispatch(_act.GoButtonForinvoiceAdd({
                         jsonBody,
-                        subPageMode: url.INVOICE_1,
-                        path: url.INVOICE_1,
+                        subPageMode: _cfunc.loginUserIsFranchisesRole() ? url.FRANCHAISE_INVOICE : url.INVOICE_1,
+                        path: _cfunc.loginUserIsFranchisesRole() ? url.FRANCHAISE_INVOICE : url.INVOICE_1,
                         pageMode: mode.defaultsave,
                         customer,
                         errorMsg: "Order Save Successfully But Can't Make Invoice"
@@ -581,8 +586,6 @@ const Order = (props) => {
             setOrderItemTable(updatedOrderItemTable);
         }
     }, [changeAllDiscount, discountValueAll, discountTypeAll.value]);
-
-
 
 
     const supplierOptions = vendorSupplierCustomer.map((i) => ({

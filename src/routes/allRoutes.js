@@ -250,6 +250,7 @@ import CountryMaster from "../pages/Adminisrator/Country/CountryMaster.js";
 import CountryList from "../pages/Adminisrator/Country/CountryList.js";
 import MachineTypeList from "../pages/SweetPOS/Adminstration/MachineType/MachineTypeList.js";
 import FranchiseSaleWithBillCount from "../pages/SweetPOS/Reports/FranchiseSaleWithBillCount.js/index.js";
+import Franchies_Invoice_Master from "../pages/Sale/Franchies_Invoice/Franchies_Invoice_Master.js";
 
 
 const userRoutes = [
@@ -505,6 +506,8 @@ const userRoutes = [
 	//******************************* Sale Module ************************************//
 	{ path: path.INVOICE_1, component: Invoice, isPartyWisePage: true },
 	{ path: path.INVOICE_LIST_1, component: InvoiceList, isPartyWisePage: true },
+
+	{ path: path.FRANCHAISE_INVOICE, component: Franchies_Invoice_Master, isPartyWisePage: true },
 
 	{ path: path.LOADING_SHEET, component: LoadingSheet, isPartyWisePage: true },
 	{ path: path.LOADING_SHEET_LIST, component: LoadingSheetList, isPartyWisePage: true },
