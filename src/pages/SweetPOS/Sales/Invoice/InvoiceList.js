@@ -180,8 +180,8 @@ const InvoiceList = () => {
 
         if ((subPageMode === url.POS_INVOICE_LIST)) {
             page_Id = pageId.POS_INVOICE_LIST
-            masterPath = url.INVOICE_1
-            newBtnPath = url.INVOICE_1
+            masterPath = url.FRANCHAISE_INVOICE
+            newBtnPath = url.FRANCHAISE_INVOICE
         }
 
         setSubPageMode(subPageMode)
@@ -605,7 +605,7 @@ const InvoiceList = () => {
     };
 
     async function editBodyfunc(config) {
-
+        debugger
         const { rowData } = config;
         const jsonBodyForBackdatedTransaction = JSON.stringify({
             "TransactionDate": rowData.InvoiceDate,
@@ -631,8 +631,8 @@ const InvoiceList = () => {
         dispatch(editInvoiceAction({
             ...config,
             customer,
-            subPageMode: url.INVOICE_1,
-            path: url.INVOICE_1,
+            subPageMode: url.FRANCHAISE_INVOICE,
+            path: url.FRANCHAISE_INVOICE,
         }));
 
 
