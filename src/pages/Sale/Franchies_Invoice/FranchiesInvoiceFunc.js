@@ -85,22 +85,22 @@ export function orderQtyUnit_SelectOnchange(event, index1, subPageMode) {
 
 export function RoundCalculationFunc(data) {
     debugger
-    const totalAmount = data.reduce((sum, item) => sum + item.Amount, 0).toFixed(2); // Ensure 2 decimal places
-    const DiscountTotalAmount = data.reduce((sum, item) => sum + parseFloat(item.DiscountAmount || 0), 0).toFixed(2); // Convert string to number and sum
-    const NetAmount = (totalAmount - DiscountTotalAmount).toFixed(2); // Subtract and ensure 2 decimal places
+    const NetAmount = data.reduce((sum, item) => sum + item.Amount, 0); // Ensure 2 decimal places
+    const DiscountTotalAmount = data.reduce((sum, item) => sum + parseFloat(item.DiscountAmount || 0), 0); // Convert string to number and sum
+    const totalAmount = (NetAmount + DiscountTotalAmount); // Subtract and ensure 2 decimal places
     const RoundedAmount = Math.round(NetAmount); // Nearest integer
-    const RoundOffAmount = (NetAmount - RoundedAmount).toFixed(2); // Difference rounded to 2 decimal places
+    const RoundOffAmount = (NetAmount - RoundedAmount); // Difference rounded to 2 decimal places
 
     return {
-        "DiscountAmount": DiscountTotalAmount,
-        "TotalAmount": totalAmount,
-        "NetAmount": NetAmount,
-        "RoundedAmount": RoundedAmount,
-        "RoundOffAmount": RoundOffAmount,
+        "DiscountAmount": DiscountTotalAmount.toFixed(2),
+        "TotalAmount": totalAmount.toFixed(2),
+        "NetAmount": NetAmount.toFixed(2),
+        "RoundedAmount": RoundedAmount.toFixed(2),
+        "RoundOffAmount": RoundOffAmount.toFixed(2),
     }
 }
 
-export const innerStockCaculationForFranchies = (index1) => {
+export const DiscountCaculationForFranchies = (index1) => {
 
     let totalAmount = 0;
 
@@ -119,7 +119,7 @@ export const innerStockCaculationForFranchies = (index1) => {
 }
 
 
-export const Franchies_invoice_Calculate_Func = (row, index1, IsComparGstIn) => {
+const Franchies_invoice_Calculate_Func_____ = (row, index1, IsComparGstIn) => {
 
     const rate = Number(row.Rate) || 0;
     const mrp = Number(row.MRP) || 0;
@@ -146,10 +146,10 @@ export const Franchies_invoice_Calculate_Func = (row, index1, IsComparGstIn) => 
     const TotalBasic = basicAmount - (basicAmount * (gstPercentage / 100))
 
     // Taxable and GST amounts
-    // const taxableAmount = rate * quantity;
+    const taxableAmount = rate * quantity;
     // const discountBaseAmt = basicAmount - discountedAmount;
 
-    const gstAmt = basicAmount * (gstPercentage / 100);
+    const gstAmt = taxableAmount * (gstPercentage / 100);
     const CGST_Amount = Number((gstAmt / 2).toFixed(2));
     const SGST_Amount = CGST_Amount;
     let IGST_Amount = 0;
@@ -174,17 +174,114 @@ export const Franchies_invoice_Calculate_Func = (row, index1, IsComparGstIn) => 
         ItemTotalAmount: discountedAmount,
         roundedGstAmount: Number(roundedGstAmount.toFixed(2)),
         roundedTotalAmount: Number(basicAmount.toFixed(2)),
-        taxableAmount: Number(TotalBasic.toFixed(2)),
+        taxableAmount: Number(basicAmount.toFixed(2)),
         CGST_Amount,
         SGST_Amount,
         IGST_Amount,
-        GST_Percentage: GST_Percentage.toFixed(2),
+        GST_Amount: gstAmt.toFixed(2),
         CGST_Percentage: CGST_Percentage.toFixed(2),
         SGST_Percentage: SGST_Percentage.toFixed(2),
         IGST_Percentage: IGST_Percentage.toFixed(2),
     };
 
 };
+
+export function Franchies_invoice_Calculate_Func(row, index1, IsComparGstIn,
+
+) {
+    const discountBasedOnRate = true
+
+
+
+    debugger
+
+    const qty = Number(row.Qty) || 0;
+    const initialRate = Number(row.MRP) || 0;
+    let rate = Number(row.MRP) || 0;
+    const gstPercentage = Number(index1.GSTPercentage) || 0;
+    const discountValue = Number(index1.Discount) || 0;
+    const discountType = Number(index1.DiscountType) || 2;
+
+    let discountAmount = 0;
+
+    // Calculate the discount before Taxable calculation
+    if (discountValue > 0 && discountBasedOnRate) {
+        if (discountType === 1) {//'Rs'
+            rate -= discountValue;
+            discountAmount = parseFloat((discountValue * qty).toFixed(2));
+        } else {
+            discountAmount = parseFloat(((rate * discountValue / 100) * qty).toFixed(2));
+            rate = parseFloat((rate - (rate * discountValue / 100)).toFixed(2));
+        }
+    }
+
+    const grossAmount = qty * rate;
+
+    // Handle case where quantity is zero
+    let taxableAmount = 0;
+    let taxableRate = 0;
+
+    if (qty !== 0) {
+        taxableAmount = parseFloat((grossAmount * 100 / (100 + gstPercentage)).toFixed(2));
+        taxableRate = parseFloat((rate * 100 / (100 + gstPercentage)).toFixed(2));
+    }
+
+    const cgst = parseFloat((taxableAmount * (gstPercentage / 2) / 100).toFixed(2));
+    const sgst = cgst;
+    const igst = 0; // Assuming local billing, hence IGST is 0
+    const gstAmount = cgst + sgst;
+
+    // Final amount after applying GST
+    let itemFinalAmount = taxableAmount + gstAmount;
+
+    // Adjust Taxable Amount and Item Final Amount to handle 1 paisa differences
+    if (discountValue === 0) {
+        taxableAmount = (qty * rate) - gstAmount;
+        itemFinalAmount = taxableAmount + gstAmount;
+    } else {
+        if (discountType === 1) {//'Rs'
+            taxableAmount = (qty * rate) - gstAmount;
+            itemFinalAmount = taxableAmount + gstAmount;
+        } else {
+            taxableAmount = (qty * initialRate) - discountAmount - gstAmount;
+            itemFinalAmount = taxableAmount + gstAmount;
+        }
+    }
+    debugger
+    index1.ItemTotalAmount = itemFinalAmount;
+
+    return {
+        // discountBaseAmt: Number(discountBaseAmt.toFixed(2)),
+        disCountAmt: discountAmount,
+        ItemTotalAmount: itemFinalAmount,
+
+        taxableAmount: taxableAmount,
+        CGST_Amount: cgst,
+        SGST_Amount: sgst,
+        IGST_Amount: igst,
+        GST_Amount: gstAmount,
+        IGST_Amount: gstAmount,
+        CGST_Percentage: gstPercentage / 2,
+        SGST_Percentage: gstPercentage / 2,
+        IGST_Percentage: igst,
+
+    };
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 function hasCheckUnitIs_NOFunc(index1) {
     return index1.default_UnitDropvalue?.Unitlabel === "No";
