@@ -454,7 +454,7 @@ const OrderList = () => {
     }
 
     const makeBtnFunc = (list = [], btnId) => {
-
+        
         const obj = list[0]
 
         const customer = {
@@ -462,7 +462,9 @@ const OrderList = () => {
             label: obj.Customer,
             GSTIN: obj.CustomerGSTIN,
             IsTCSParty: obj.IsTCSParty,
-            ISCustomerPAN: obj.CustomerPAN
+            ISCustomerPAN: obj.CustomerPAN,
+            AdvanceAmount: obj.AdvanceAmount,
+            OrderID: obj.id
         }
         const jsonBody = JSON.stringify({
             FromDate: obj.OrderDate,
@@ -480,12 +482,13 @@ const OrderList = () => {
             }));
         }
         else if (orderList4_or_app_orderList) {
+
             dispatch(_act.GoButtonForinvoiceAdd({
                 jsonBody,
                 btnId,
                 customer,
-                subPageMode: url.INVOICE_1,
-                path: url.INVOICE_1,
+                subPageMode: _cfunc.loginUserIsFranchisesRole() ? url.FRANCHAISE_INVOICE : url.INVOICE_1,
+                path: _cfunc.loginUserIsFranchisesRole() ? url.FRANCHAISE_INVOICE : url.INVOICE_1,
                 pageMode: mode.defaultsave,
 
             }));

@@ -4,7 +4,7 @@ import * as mode from "../../routes/PageMode"
 import { useEffect, useState } from "react";
 
 export function SaveButton(props) {
-  
+
   const { pageMode = '', userAcc = {}, editCreatedBy } = props
   const isCreated = (loginUserID() === editCreatedBy)
 
@@ -209,7 +209,7 @@ export const SaveAndDownloadPDF = ({ onClick, pageMode, userAcc, loading, forceD
             type={type}
 
             disabled={forceDisabled}
-            title={` save & goto Invoice ${Name}`}
+            title={`save & Print`}
             className="btn btn-info"
             onClick={onClick}
           >  Save & Print

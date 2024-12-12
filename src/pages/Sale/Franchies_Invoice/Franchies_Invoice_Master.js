@@ -15,6 +15,7 @@ import {
     initialFiledFunc,
     onChangeDate,
     onChangeSelect,
+    onChangeText,
 } from "../../../components/Common/validationFunction";
 import Select from "react-select";
 import { SaveAndDownloadPDF, SaveButton } from "../../../components/Common/CommonButton";
@@ -34,26 +35,23 @@ import {
 import { GetVenderSupplierCustomer, GetVenderSupplierCustomerSuccess } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import {
-    invoice_discountCalculate_Func,
     innerStockCaculation,
-    orderQtyOnChange,
-    orderQtyUnit_SelectOnchange,
-    stockQtyOnChange,
-    settingBaseRoundOffAmountFunc
-} from "./invoiceCaculations";
-import "./invoice.scss"
+    settingBaseRoundOffAmountFunc,
+} from "../../Sale/Invoice/invoiceCaculations";
+import "../../Sale/Invoice/invoice.scss"
 import * as _cfunc from "../../../components/Common/CommonFunction";
-import { CInput, C_DatePicker, decimalRegx } from "../../../CustomValidateForm";
+import { CInput, C_DatePicker, decimalRegx, } from "../../../CustomValidateForm";
 import { getVehicleList, getVehicleListSuccess } from "../../../store/Administrator/VehicleRedux/action";
-import { Invoice_Singel_Get_for_Report_Api } from "../../../helpers/backend_helper";
+import { Franchies_Invoice_Singel_Get_for_Report_Api, } from "../../../helpers/backend_helper";
 import * as report from '../../../Reports/ReportIndex'
 import GlobalCustomTable from "../../../GlobalCustomTable";
 import { changeCommonPartyDropDetailsAction } from "../../../store/Utilites/PartyDrodown/action";
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 import { CheckStockEntryForFirstTransaction, CheckStockEntryForFirstTransactionSuccess, CheckStockEntryforBackDatedTransaction, CheckStockEntryforBackDatedTransactionSuccess } from "../../../store/Inventory/StockEntryRedux/action";
+import { Franchies_invoice_Calculate_Func, DiscountCaculationForFranchies, orderQtyOnChange, orderQtyUnit_SelectOnchange, postWithBasicAuth, RoundCalculationFunc, } from "./FranchiesInvoiceFunc";
 
-const Invoice = (props) => {
+const Franchies_Invoice_Master = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory();
@@ -61,13 +59,18 @@ const Invoice = (props) => {
     const subPageMode = history.location.pathname
     const systemSetting = _cfunc.loginSystemSetting();
 
+    const now = new Date();
+    const date = now.toISOString().slice(0, 10); // e.g., 2024-11-29
+    const time = now.toTimeString().slice(0, 8); // e.g., 13:32:54
 
     const saveBtnid = `saveBtn${subPageMode}`
 
     const fileds = {
         InvoiceDate: currentDate_ymd,
         Customer: "",
-        VehicleNo: ""
+        VehicleNo: "",
+        AdvanceAmount: "0",
+        OrderID: 0
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
@@ -81,12 +84,14 @@ const Invoice = (props) => {
     const [discountDropOption] = useState([{ value: 1, label: "Rs" }, { value: 2, label: "%" }])
     const [changeAllDiscount, setChangeAllDiscount] = useState(false)
 
+    const [saveBtnloading, setSaveBtnloading] = useState(false);
+    const [btnMode, setBtnMode] = useState('');
+    const [franchiesSaveApiRep, setFranchiesSaveApiRep] = useState({});
     // ****************************************************************************
 
     const [modalCss] = useState(false);
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState('');
-
     const {
         postMsg,
         updateMsg,
@@ -97,7 +102,7 @@ const Invoice = (props) => {
         makeIBInvoice,
         VehicleNumber,
         editData,
-        saveBtnloading,
+        // saveBtnloading,
         saveAndPdfBtnLoading,
         commonPartyDropSelect,
         StockEnteryForFirstYear,
@@ -130,11 +135,50 @@ const Invoice = (props) => {
 
     useEffect(() => {
         dispatch(commonPageFieldSuccess(null));
-        dispatch(commonPageField(pageId.INVOICE_1))
+        dispatch(commonPageField(pageId.FRANCHAISE_INVOICE))
         dispatch(GoButtonForinvoiceAddSuccess([]))
-
-
     }, []);
+
+    useEffect(() => {
+        if (franchiesSaveApiRep?.Success === true && franchiesSaveApiRep?.status_code === 200) {
+
+            setFranchiesSaveApiRep({});
+            const config = {
+                editId: franchiesSaveApiRep?.TransactionID,////for saveAndDownloadPdfMode
+                ReportType: report.invoice,//for saveAndDownloadPdfMode
+                RowId: franchiesSaveApiRep?.TransactionID,//for Invoice-Upload
+                UserID: _cfunc.loginUserID(),//for Invoice-Upload
+            };
+            //************************* / Fetch PDF report data if saveAndDownloadPdfMode is true /
+            if (franchiesSaveApiRep?.saveAndDownloadPdfMode) {
+                dispatch(getpdfReportdata(Franchies_Invoice_Singel_Get_for_Report_Api, config));
+            }
+
+            // ***************** Upload E-Invoice if AutoEInvoice and EInvoiceApplicable are both "1"  *****/
+            if (systemSetting.AutoEInvoice === "1" && systemSetting.EInvoiceApplicable === "1") {
+                try {
+                    dispatch(Uploaded_EInvoiceAction(config));
+                } catch (error) { }
+            }
+
+            customAlert({
+                Type: 1,
+                Message: franchiesSaveApiRep?.Message,
+            });
+
+            // Redirect to appropriate page based on subPageMode
+            if (subPageMode === url.FRANCHAISE_INVOICE) {
+                history.push({ pathname: url.POS_INVOICE_LIST, updatedRowBlinkId: franchiesSaveApiRep?.TransactionID });
+            }
+        } else if (franchiesSaveApiRep?.Success === true) {
+            // Show error alert message with the JSON stringified postMsg.Message
+            setFranchiesSaveApiRep({});
+            customAlert({
+                Type: 4,
+                Message: JSON.stringify(franchiesSaveApiRep?.Message),
+            });
+        }
+    }, [franchiesSaveApiRep]);
 
     // Common Party Dropdown useEffect
     useEffect(() => {
@@ -180,49 +224,6 @@ const Invoice = (props) => {
         };
     }, [userAccess])
 
-    useEffect(async () => {
-        if (postMsg.Status === true && postMsg.StatusCode === 200) {
-
-            dispatch(invoiceSaveActionSuccess({ Status: false })); // Reset the status to false
-            const config = {
-                editId: postMsg.TransactionID.join(', '),////for saveAndDownloadPdfMode
-                ReportType: report.invoice,//for saveAndDownloadPdfMode
-                RowId: postMsg.TransactionID.join(', '),//for Invoice-Upload
-                UserID: _cfunc.loginUserID(),//for Invoice-Upload
-                subPageMode: subPageMode
-            };
-            //************************* / Fetch PDF report data if saveAndDownloadPdfMode is true /
-            if (postMsg.saveAndDownloadPdfMode) {
-                dispatch(getpdfReportdata(Invoice_Singel_Get_for_Report_Api, config));
-            }
-
-            // ***************** Upload E-Invoice if AutoEInvoice and EInvoiceApplicable are both "1"  *****/
-            if (systemSetting.AutoEInvoice === "1" && systemSetting.EInvoiceApplicable === "1") {
-                try {
-                    dispatch(Uploaded_EInvoiceAction(config));
-                } catch (error) { }
-            }
-
-            customAlert({
-                Type: 1,
-                Message: postMsg.Message,
-            });
-
-            // Redirect to appropriate page based on subPageMode
-            if (subPageMode === url.INVOICE_1) {
-                history.push({ pathname: url.INVOICE_LIST_1, updatedRowBlinkId: postMsg.TransactionID.join(', ') });
-            } else if (subPageMode === url.IB_INVOICE) {
-                history.push({ pathname: url.IB_INVOICE_LIST });
-            }
-        } else if (postMsg.Status === true) {
-            // Show error alert message with the JSON stringified postMsg.Message
-            dispatch(invoiceSaveActionSuccess({ Status: false })); // Reset the status to false
-            customAlert({
-                Type: 4,
-                Message: JSON.stringify(postMsg.Message),
-            });
-        }
-    }, [postMsg]);
 
     useEffect(() => {
 
@@ -250,10 +251,12 @@ const Invoice = (props) => {
     useEffect(() => {
 
         if (makeIBInvoice.Status === true && makeIBInvoice.StatusCode === 200) {
+
             setState((i) => {
                 const obj = { ...i }
                 obj.values.Customer = makeIBInvoice.customer;
                 obj.hasValid.Customer.valid = true;
+
                 return obj
             })
 
@@ -269,6 +272,8 @@ const Invoice = (props) => {
                 const obj = { ...i }
                 obj.values.Customer = gobutton_Add.customer;
                 obj.hasValid.Customer.valid = true;
+                obj.values.AdvanceAmount = gobutton_Add.customer.AdvanceAmount;
+                obj.values.OrderID = gobutton_Add.customer.OrderID;
                 return obj
             })
 
@@ -286,7 +291,7 @@ const Invoice = (props) => {
     useLayoutEffect(() => {
 
         if (((editData.Status === true) && (editData.StatusCode === 200))) {
-
+            debugger
             setState((i) => {
                 const obj = { ...i }
                 obj.values.Customer = editData.customer;
@@ -342,14 +347,13 @@ const Invoice = (props) => {
 
             // Perform calculations based on the updated values for each item
             updatedOrderItemTable.forEach((index1) => {
-                innerStockCaculation(index1);
+                DiscountCaculationForFranchies(index1, subPageMode);
             });
             totalAmountCalcuationFunc(updatedOrderItemTable);
             // Set the updated array as the new orderItemTable
             setOrderItemDetails(updatedOrderItemTable);
         }
     }, [changeAllDiscount, discountValueAll, discountTypeAll.value]);
-
 
     useEffect(() => _cfunc.tableInputArrowUpDounFunc("#table_Arrow"), [orderItemDetails]);
 
@@ -363,36 +367,11 @@ const Invoice = (props) => {
         label: index.VehicleNumber,
     }));
 
+
     const pagesListColumns = [
-        {//***************ItemName********************************************************************* */
+        {
             text: "Item Name",
             dataField: "ItemName",
-            attrs: (cell, row, rowIndex, colIndex) => ({ 'data-label': "ItemName", "sticky-col": "true" }),
-            // headerClasses: 'd-none d-sm-table-cell', // Hide on mobile
-            formatter: (cellContent, index1) => {
-                return (
-                    <>
-                        <div>
-                            <samp className="theme-font"
-                                id={`ItemName${index1.id}`}>{index1.ItemName}</samp>
-                        </div>
-                        <div style={{
-                            overflow: "hidden",
-                            whiteSpace: "nowrap",
-                            width: "100%", // Set the width to the desired container width
-                        }}>
-                            <samp id={`StockInvalidMsg-${index1.id}`}
-                                style={{
-                                    display: index1.StockInValid ? "block" : "none",
-                                    color: "red",
-                                    animation: "scrollRightToLeft 15s linear infinite",
-                                }}>
-                                {index1.StockInvalidMsg}
-                            </samp>
-                        </div>
-                    </>
-                )
-            },
         },
         {//***************Quantity********************************************************************* */
             text: "Quantity/Unit",
@@ -408,14 +387,11 @@ const Invoice = (props) => {
                             id={`OrderQty-${index1.id}`}
                             placeholder="Enter quantity"
                             className="right-aligned-placeholder mb-1"
-                            style={{
-                                border: index1.StockInValid ? '2px solid red' : "1px solid #ced4da"
-                            }}
                             key={`OrderQty-${index1.id}`}
                             autoComplete="off"
                             defaultValue={index1.Quantity}
                             onChange={(event) => {
-                                orderQtyOnChange(event, index1,);
+                                orderQtyOnChange(event, index1, subPageMode);
                                 totalAmountCalcuationFunc(tableList);
                             }}
                         />
@@ -425,18 +401,18 @@ const Invoice = (props) => {
                             <Select
                                 classNamePrefix="select2-selection"
                                 id={"ddlUnit"}
-                                isDisabled={pageMode === mode.edit && true}
+                                isDisabled={true}
                                 defaultValue={index1.default_UnitDropvalue}
                                 options={index1.UnitDetails.map(i => ({
                                     "label": i.UnitName,
-                                    "value": i.UnitID,
+                                    "value": i.MUnitID,
                                     "ConversionUnit": i.ConversionUnit,
                                     "Unitlabel": i.UnitName,
                                     "BaseUnitQuantity": i.BaseUnitQuantity,
                                     "BaseUnitQuantityNoUnit": i.BaseUnitQuantityNoUnit,
                                 }))}
                                 onChange={(event) => {
-                                    orderQtyUnit_SelectOnchange(event, index1);
+                                    orderQtyUnit_SelectOnchange(event, index1, subPageMode);
                                     totalAmountCalcuationFunc(tableList);
                                 }}
                             ></Select>
@@ -447,62 +423,28 @@ const Invoice = (props) => {
                         <samp>{index1.OrderQty}</samp>&nbsp;&nbsp;
                         <samp>{index1.UnitName}</samp>
                     </div>
-                    <div>
-                        <samp className="theme-font text-muted" >Available stock :</samp>
-                        <label className="text-black">{_cfunc.roundToDecimalPlaces(index1.ItemTotalStock, 3)}</label>
-                    </div>
                 </>
             ),
         },
-        {//***************StockDetails********************************************************************* */
-            text: "Stock Details",
-            dataField: "StockDetails",
-            attrs: () => ({ 'data-label1': "Stock Details", "stock-header": "true" }),
-            headerStyle: { zIndex: "2" },
-            formatExtraData: { tableList: orderItemDetails },
-            formatter: (cellContent, index1, keys_, { tableList = [] }) => (
-                <div className="table-responsive">
-                    <table className="custom-table ">
-                        <thead >
-                            <tr>
-                                <th>BatchCode</th>
-                                <th>Stock </th>
-                                <th>Quantity</th>
-                                <th>Basic Rate</th>
-                                <th>MRP</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {cellContent.map((index2) => (
-                                <tr key={index1.id}>
-                                    <td data-label="BatchCode">{index2.BatchCode}</td>
-                                    <td data-label="Stock Quantity" style={{ textAlign: "right" }} >
-                                        <samp id={`ActualQuantity-${index1.id}-${index2.id}`}>{index2.ActualQuantity}</samp>
-                                    </td>
-                                    <td data-label='Quantity'>
-                                        <Input
-                                            type="text"
-                                            placeholder="Manually enter quantity"
-                                            className="right-aligned-placeholder"
-                                            key={`batchQty${index1.id}-${index2.id}`}
-                                            id={`batchQty${index1.id}-${index2.id}`}
-                                            defaultValue={index2.Qty}
-                                            onChange={(event) => {
-                                                stockQtyOnChange(event, index1, index2);
-                                                totalAmountCalcuationFunc(tableList);
-                                            }}
-                                        />
-                                    </td>
-                                    <td data-label='Basic Rate' style={{ textAlign: "right" }}>
-                                        <span id={`stockItemRate-${index1.id}-${index2.id}`}>{_cfunc.amountCommaSeparateFunc(index2.Rate)}</span>
-                                    </td>
-                                    <td data-label='MRP' style={{ textAlign: "right" }}>{_cfunc.amountCommaSeparateFunc(_cfunc.roundToDecimalPlaces(index2.MRP, 2))}</td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
-            ),
+
+        // {
+        //     text: "Basic Rate",
+        //     dataField: "",
+        //     formatter: (cellContent, index1) => {
+        //         return (
+        //             <>
+        //                 <div>
+        //                     <samp className="theme-font"
+        //                         id={`stockItemRate-${index1.id}`}>{index1.Rate}</samp>
+        //                 </div>
+        //             </>
+        //         )
+        //     },
+        // },
+
+        {
+            text: "MRP",
+            dataField: "MRPValue",
         },
         {//***************Discount********************************************************************* */
             text: "Discount/unit",
@@ -529,11 +471,11 @@ const Invoice = (props) => {
                                         defaultValue={discountTypeAll}
                                         classNamePrefix="select2-selection"
                                         options={discountDropOption}
-                                        // style={{ textAlign: "right",zIndex: 2 }}
                                         styles={{
                                             menu: provided => ({ ...provided, zIndex: 55 })
                                         }}
                                         onChange={(e) => {
+
                                             setChangeAllDiscount(true);
                                             setDiscountTypeAll(e);
                                             setDiscountValueAll('');
@@ -595,10 +537,11 @@ const Invoice = (props) => {
                                         value={defaultDiscountTypelabel}
                                         options={discountDropOption}
                                         onChange={(e) => {
+
                                             setChangeAllDiscount(false);
                                             index1.DiscountType = e.value;
                                             index1.Discount = '';
-                                            innerStockCaculation(index1);
+                                            DiscountCaculationForFranchies(index1);
                                             totalAmountCalcuationFunc(tableList);
                                         }}
                                     />
@@ -620,6 +563,7 @@ const Invoice = (props) => {
                                         value={index1.Discount}
                                         cpattern={decimalRegx}
                                         onChange={(e) => {
+
                                             e.target.value = e.target.value.replace(/^\.+/, '');
                                             e.target.value = e.target.value.replace(/^00+/, '0');
                                             let e_val = Number(e.target.value);
@@ -635,7 +579,7 @@ const Invoice = (props) => {
 
                                             index1.Discount = e.target.value;
                                             setChangeAllDiscount(false);
-                                            innerStockCaculation(index1);
+                                            DiscountCaculationForFranchies(index1);
                                             totalAmountCalcuationFunc(tableList);
                                         }}
 
@@ -646,7 +590,7 @@ const Invoice = (props) => {
                         <div className="bottom-div">
                             <span className="theme-font text-muted">Amount:</span>
                             <samp className='text-black' id={`item-TotalAmount-${index1.id}`}>
-                                {_cfunc.amountCommaSeparateFunc(index1.ItemTotalAmount)}
+                                {_cfunc.amountCommaSeparateFunc(index1.ItemTotalAmount || 0)}
                             </samp>
                         </div>
                     </>
@@ -663,6 +607,7 @@ const Invoice = (props) => {
         dispatch(BreadcrumbShowCountlabel(`Count:${dataCount} currency_symbol ${commaSeparateAmount} weight ${(calcalateGrandTotal.sumOfWeightageTotal).toFixed(3)} kg`))
 
     }
+
     useEffect(() => {
         const jsonBody = JSON.stringify({
             "FromDate": values.InvoiceDate,
@@ -682,8 +627,6 @@ const Invoice = (props) => {
         }
     }, [values.InvoiceDate, commonPartyDropSelect.value])
 
-
-
     useEffect(() => {
         if (StockEnteryForFirstYear.Status === true && StockEnteryForFirstYear.StatusCode === 400) {
             customAlert({
@@ -692,7 +635,6 @@ const Invoice = (props) => {
             })
         }
     }, [StockEnteryForFirstYear])
-
 
     function InvoiceDateOnchange(y, v, e) {
         dispatch(GoButtonForinvoiceAddSuccess([]))
@@ -710,18 +652,11 @@ const Invoice = (props) => {
         })
     };
 
-
-    const SaveHandler = async (event) => {
-
+    const SaveHandler = async (event, btnId) => {
+        debugger
         event.preventDefault();
-        const btnId = event.target.id;
-
-        let saveAndDownloadPdfMode = false;
-
-        if (btnId === "") {
-            saveAndDownloadPdfMode = true
-        }
-
+        setBtnMode(btnId)
+        setSaveBtnloading(true)
         const validMsg = []
         const invoiceItems = []
 
@@ -729,71 +664,53 @@ const Invoice = (props) => {
         let IsComparGstIn = { GSTIn_1: values.Customer.GSTIN, GSTIn_2: _cfunc.loginUserGSTIN() }
 
         orderItemDetails.forEach((index) => {
-            if (index.StockInValid) {
-                validMsg.push({ [index.ItemName]: ` ${index.StockInvalidMsg}.` })
-                return
-            };
-
-            let isSameMRPinStock = ''; //this is check is Enterd stock Quantity is Same MRP
+            debugger
             index.StockDetails.forEach((ele) => {
 
                 if ((Number(ele.Qty) > 0) || (pageMode === mode.edit)) {
 
-                    if ((isSameMRPinStock === "") && !(isSameMRPinStock === false)) {//this is check is Enterd stock Quantity is Same MRP
-                        isSameMRPinStock = parseFloat(ele.MRP)
-                    } else if (isSameMRPinStock !== parseFloat(ele.MRP)) {
-                        isSameMRPinStock = false
-                    }
-                    if (!Number(ele.Rate) > 0) {//** */ rate validation check  */
-                        validMsg.push({ [index.ItemName]: alertMessages.rateNotAvailable })
-                        return
-                    };
-
-                    //**calculate Amount ,Discount Amount based on Discound type */
-
-                    const calculate = invoice_discountCalculate_Func(ele, index, IsComparGstIn)
+                    const calculate = Franchies_invoice_Calculate_Func(ele, index, IsComparGstIn)
 
                     invoiceItems.push({
-                        "Item": index.Item,
-                        "Unit": index.default_UnitDropvalue.value,
-                        "BatchCode": ele.BatchCode,
-                        "Quantity": Number(ele.Qty).toFixed(3),
-                        "BatchDate": ele.BatchDate,
-                        "BatchID": ele.id,
-                        "BaseUnitQuantity": Number(ele.BaseUnitQuantity).toFixed(3),
-                        "PreviousInvoiceBaseUnitQuantity": Number(ele.BaseUnitQuantity).toFixed(3),
 
-                        "LiveBatch": ele.LiveBatche,
-                        "MRP": ele.LiveBatcheMRPID,
-                        "MRPValue": ele.MRP,//changes
-                        "Rate": Number(ele.Rate).toFixed(2),
+                        "SaleDate": values.InvoiceDate,
+                        "PartyID": _cfunc.loginPartyID(),
+                        "ClientID": 0,
+                        "ClientSaleItemID": 0,
+                        "ClientSaleID": 0,
+                        "ERPItemID": index.Item,
+                        "ItemID": index.Item,
+                        "IsMixItem": 0,
+                        "MixItemId": null,
+                        "ItemName": null,
+                        "HSNCode": index.HSNCode,
+                        "Quantity": ele.Qty,
+                        "UnitID": (index.default_UnitDropvalue.value).toString(),
 
-                        "GST": ele.LiveBatcheGSTID,
-                        "CGST": Number(calculate.CGST_Amount).toFixed(2),
-                        "SGST": Number(calculate.SGST_Amount).toFixed(2),
-                        "IGST": Number(calculate.IGST_Amount).toFixed(2),
-
-                        "GSTPercentage": calculate.GST_Percentage,
-                        "CGSTPercentage": calculate.CGST_Percentage,
-                        "SGSTPercentage": calculate.SGST_Percentage,
-                        "IGSTPercentage": calculate.IGST_Percentage,
-
-                        "BasicAmount": Number(calculate.discountBaseAmt).toFixed(2),
-                        "GSTAmount": Number(calculate.roundedGstAmount).toFixed(2),
-                        "Amount": Number(calculate.roundedTotalAmount).toFixed(2),
-
-                        "TaxType": 'GST',
                         "DiscountType": index.DiscountType,
-                        "Discount": Number(index.Discount) || 0,
-                        "DiscountAmount": Number(calculate.disCountAmt).toFixed(2),
+                        "DiscountValue": index.Discount || 0,
+                        "DiscountAmount": calculate.disCountAmt,
+
+                        "MRP": parseFloat(ele.MRP),
+                        "Rate": ele.Rate,
+                        "Amount": calculate.ItemTotalAmount,
+                        "BasicAmount": (calculate.taxableAmount).toFixed(2),
+
+                        "GSTRate": parseFloat(ele.GST),
+                        "GSTAmount": parseFloat(calculate.GST_Amount),
+
+                        "CGSTRate": parseFloat(calculate.CGST_Percentage),
+                        "CGSTAmount": calculate.CGST_Amount,
+
+                        "SGSTRate": parseFloat(calculate.SGST_Percentage),
+                        "SGSTAmount": calculate.SGST_Amount,
+
+                        "IGSTRate": calculate.IGST_Amount,
+                        "IGSTAmount": parseFloat(calculate.IGST_Percentage),
                     })
                 }
             })
 
-            if (isSameMRPinStock === false) {
-                validMsg.push({ [index.ItemName]: alertMessages.multiple_MRP_notAllowed })
-                return
-            };
         })
 
         if (validMsg.length > 0) {
@@ -820,56 +737,55 @@ const Invoice = (props) => {
         }
 
         //**grand total and Tcs Round Off calculations  */ 
-        const calcalateGrandTotal = settingBaseRoundOffAmountFunc(orderItemDetails)//Pass Table Data 
-
-        const forInvoice_1_json = () => ({  //** Json Body Generate For Invoice_1  Start+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
-            InvoiceDate: values.InvoiceDate,
-            InvoiceItems: invoiceItems,
-            InvoicesReferences: [{ Order: orderIDs }],
-        });
-
-        const forIB_Invoice_json = async () => ({   //**   Json Body Generate For IB_Invoice  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
-            IBChallanDate: values.InvoiceDate,
-            IBChallanItems: invoiceItems,
-            IBChallansReferences: [{ Order: orderIDs }],
-        });
-
-        const for_common_json = () => ({  //**  Json Body Generate Common for Both +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-            CustomerGSTTin: values.Customer.GSTIN,
-            GrandTotal: calcalateGrandTotal.sumOfGrandTotal,
-            RoundOffAmount: calcalateGrandTotal.RoundOffAmount,
-            TCSAmount: calcalateGrandTotal.TCS_Amount,
-            Customer: values.Customer.value,
-            Vehicle: values.VehicleNo.value ? values.VehicleNo.value : "",
-            Party: commonPartyDropSelect.value,
-            CreatedBy: _cfunc.loginUserID(),
-            UpdatedBy: _cfunc.loginUserID(),
-        });
-
+        // const calcalateGrandTotal = settingBaseRoundOffAmountFunc(orderItemDetails)//Pass Table Data 
+        const RoundCalculation = RoundCalculationFunc(invoiceItems);
+        debugger
         try {
-            let jsonBody;  //json body decleration 
-            if (subPageMode === url.INVOICE_1) {
-                const body = { InvoiceData: [{ ...for_common_json(), ...forInvoice_1_json() }] }
-                jsonBody = JSON.stringify(body);
-            } else if (subPageMode === url.IB_INVOICE) {
-                jsonBody = JSON.stringify({ ...for_common_json(), ...forIB_Invoice_json() });
-            }
-            // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-            if (pageMode === mode.edit) {
-                jsonBody = JSON.stringify({ ...for_common_json(), ...forInvoice_1_json() });
-                const config = { updateId: editInvoiceData.editId, subPageMode, jsonBody };
-                dispatch(updateInvoiceAction(config));
-            }
-            else {
+            let jsonBody = [{
+                "ClientID": 0,
+                "ClientSaleID": 0,
+                "DivisionID": _cfunc.loginPartyID(),
+                "MacID": null,
+                "SaleDate": values.InvoiceDate,
+                "BillNumber": 9353,
+                "FullInvoiceNumber": "INV-9353",
+                "CustomerID": values.Customer.value,
+                "Mobile": '',
+                "PaymentType": "Cash",
+                "DiscountAmount": RoundCalculation.DiscountAmount,
+                "TotalAmount": RoundCalculation.TotalAmount,
+                "NetAmount": RoundCalculation.NetAmount,
+                "RoundedAmount": RoundCalculation.RoundedAmount,
+                "RoundOffAmount": RoundCalculation.RoundOffAmount,
+                "CreatedBy": _cfunc.loginUserID(),
+                "CreatedOn": `${date} ${time}`,
+                "UpdatedBy": _cfunc.loginUserID(),
+                "UpdatedOn": `${date} ${time}`,
+                "IsDeleted": 0,
+                "ReferenceInvoiceID": null,
+                "Description": null,
+                "AdvanceAmount": values.AdvanceAmount,
+                "SaleItems": invoiceItems,
+                "SPOSInvoicesReferences": [
+                    {
+                        "Order": values.OrderID
+                    }
+                ],
+            }]
+            console.log("Invoice Save JsonBody", JSON.stringify(jsonBody))
+            const jsonData = await postWithBasicAuth({ jsonBody, btnId })
+            debugger
+            setSaveBtnloading(false)
+            setFranchiesSaveApiRep(jsonData)
+            debugger
+            // console.log("Invoice Save JsonBody", JSON.stringify(jsonBody))
+        } catch (e) {
+            _cfunc.CommonConsole("invoice save Handler", e)
 
-                if (StockEnteryForBackdated.Status === true && StockEnteryForBackdated.StatusCode === 400) {
-                    customAlert({ Type: 3, Message: StockEnteryForBackdated.Message });
-                } else {
-                    dispatch(invoiceSaveAction({ subPageMode, jsonBody, btnId, saveAndDownloadPdfMode }));
-                }
-            }
-
-        } catch (e) { _cfunc.CommonConsole("invoice save Handler", e) }
+        }
+        finally {
+            setSaveBtnloading(false);
+        }
     }
 
     if (!(userPageAccessState === '')) {
@@ -883,7 +799,7 @@ const Invoice = (props) => {
                         <Col className="px-2 mb-1 c_card_filter header text-black" sm={12}>
 
                             <div className="row" >
-                                <Col sm="4" className="">
+                                <Col sm="3" className="">
                                     <FormGroup className="mb- row mt-3 " >
                                         <Label className="col-sm-8 p-2" style={{ width: "83px" }}>{fieldLabel.InvoiceDate}</Label>
                                         <Col sm="7">
@@ -901,7 +817,7 @@ const Invoice = (props) => {
                                     </FormGroup>
                                 </Col>
 
-                                <Col sm="4" className="">
+                                <Col sm="3" className="">
                                     <FormGroup className="mb- row mt-3 " >
                                         <Label className="col-sm-6 p-2"
                                             style={{ width: "65px" }}>{fieldLabel.Customer}</Label>
@@ -926,7 +842,7 @@ const Invoice = (props) => {
                                     </FormGroup>
                                 </Col>
 
-                                <Col sm="4" className="">
+                                <Col sm="3" className="">
                                     <FormGroup className="mb- row mt-3 " >
                                         <Label className="col-sm-5 p-2"
                                             style={{ width: "65px" }}>{fieldLabel.VehicleNo}</Label>
@@ -947,6 +863,26 @@ const Invoice = (props) => {
                                             {isError.VehicleNo.length > 0 && (
                                                 <span className="text-danger f-8"><small>{isError.VehicleNo}</small></span>
                                             )}
+                                        </Col>
+                                    </FormGroup>
+                                </Col>
+
+                                <Col sm="3" className="">
+                                    <FormGroup className="mb- row mt-3 " >
+                                        <Label className="col-sm-5 p-2"
+                                            style={{ width: "65px" }}>{fieldLabel.AdvanceAmount}</Label>
+                                        <Col sm="7">
+                                            <Input
+                                                name="AdvanceAmount"
+                                                value={values.AdvanceAmount}
+                                                disabled={true}
+                                                placeholder="Enter Advance Amount"
+                                                type='text'
+                                                autoComplete='off'
+                                                onChange={(event) => {
+                                                    onChangeText({ event, state, setState })
+                                                }}
+                                            />
                                         </Col>
                                     </FormGroup>
                                 </Col>
@@ -971,20 +907,20 @@ const Invoice = (props) => {
                         {(orderItemDetails.length > 0) &&
                             <SaveButtonDraggable>
                                 <SaveButton
-                                    loading={saveBtnloading}
+                                    loading={saveBtnloading && btnMode === "save"}
                                     pageMode={pageMode}
                                     userAcc={userPageAccessState}
-                                    onClick={SaveHandler}
+                                    onClick={(e) => { SaveHandler(e, "save") }}
                                     forceDisabled={saveBtnloading || !StockEnteryForFirstYear.Data}
                                     module={"Invoice"}
                                 />
                                 {(pageMode === mode.defaultsave) &&
                                     <SaveAndDownloadPDF
-                                        loading={saveAndPdfBtnLoading}
+                                        loading={saveBtnloading && btnMode === "print"}
                                         pageMode={pageMode}
                                         userAcc={userPageAccessState}
-                                        onClick={SaveHandler}
-                                        forceDisabled={(saveAndPdfBtnLoading) || !(StockEnteryForFirstYear.Data)}
+                                        onClick={(e) => { SaveHandler(e, "print") }}
+                                        forceDisabled={(saveBtnloading) || !(StockEnteryForFirstYear.Data)}
                                         module={"Invoice"}
                                     />
                                 }
@@ -1003,4 +939,5 @@ const Invoice = (props) => {
     }
 };
 
-export default Invoice
+export default Franchies_Invoice_Master
+
