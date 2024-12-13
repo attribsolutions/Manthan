@@ -427,7 +427,7 @@ export const POS_INVOICE_PRINT = '/SweetPOS/Invoice' // Uploaded_E-wayBill
 /// Franchies Invoice
 
 export const FRANCHAISE_INVOICE_SAVE_API = '/SweetPOS/InsertSweetPOSSaleList'// invoice_1  addpage save Api
-export const FRANCHAISE_INVOICE_DELETE_API = '/SweetPOS/FranchiseInvoiceDelete'// ib_INVOICE  addpage save Api
+export const FRANCHAISE_INVOICE_DELETE_API = '/SweetPOS/posDeletEInvoicE'// ib_INVOICE  addpage save Api
 
 //BulkInvoices
 export const BULK_INVOICES = '/BulkInvoices'// invoice_1 addpage GoButton Api 
