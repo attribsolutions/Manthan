@@ -653,7 +653,7 @@ const Franchies_Invoice_Master = (props) => {
     };
 
     const SaveHandler = async (event, btnId) => {
-        debugger
+
         event.preventDefault();
         setBtnMode(btnId)
         setSaveBtnloading(true)
@@ -664,7 +664,7 @@ const Franchies_Invoice_Master = (props) => {
         let IsComparGstIn = { GSTIn_1: values.Customer.GSTIN, GSTIn_2: _cfunc.loginUserGSTIN() }
 
         orderItemDetails.forEach((index) => {
-            debugger
+
             index.StockDetails.forEach((ele) => {
 
                 if ((Number(ele.Qty) > 0) || (pageMode === mode.edit)) {
@@ -736,10 +736,9 @@ const Franchies_Invoice_Master = (props) => {
             return
         }
 
-        //**grand total and Tcs Round Off calculations  */ 
         // const calcalateGrandTotal = settingBaseRoundOffAmountFunc(orderItemDetails)//Pass Table Data 
         const RoundCalculation = RoundCalculationFunc(invoiceItems);
-        debugger
+
         try {
             let jsonBody = [{
                 "ClientID": 0,
@@ -747,8 +746,6 @@ const Franchies_Invoice_Master = (props) => {
                 "DivisionID": _cfunc.loginPartyID(),
                 "MacID": null,
                 "SaleDate": values.InvoiceDate,
-                "BillNumber": 9353,
-                "FullInvoiceNumber": "INV-9353",
                 "CustomerID": values.Customer.value,
                 "Mobile": '',
                 "PaymentType": "Cash",
@@ -774,11 +771,10 @@ const Franchies_Invoice_Master = (props) => {
             }]
             console.log("Invoice Save JsonBody", JSON.stringify(jsonBody))
             const jsonData = await postWithBasicAuth({ jsonBody, btnId })
-            debugger
+
             setSaveBtnloading(false)
             setFranchiesSaveApiRep(jsonData)
-            debugger
-            // console.log("Invoice Save JsonBody", JSON.stringify(jsonBody))
+
         } catch (e) {
             _cfunc.CommonConsole("invoice save Handler", e)
 
@@ -888,6 +884,7 @@ const Franchies_Invoice_Master = (props) => {
                                 </Col>
                             </div>
                         </Col>
+                        
                         <div className="mb-1">
                             <GlobalCustomTable
                                 keyField={"id"}
@@ -904,6 +901,7 @@ const Franchies_Invoice_Master = (props) => {
                                 }}
                             />
                         </div>
+
                         {(orderItemDetails.length > 0) &&
                             <SaveButtonDraggable>
                                 <SaveButton
