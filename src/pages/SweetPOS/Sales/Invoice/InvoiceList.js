@@ -51,6 +51,8 @@ import { sideBarPageFiltersInfoAction } from "../../../../store/Utilites/PartyDr
 import { date_dmy_func } from "../../../../components/Common/CommonFunction";
 import { CheckStockEntryforBackDatedTransactionSuccess } from "../../../../store/Inventory/StockEntryRedux/action";
 import { useParams } from 'react-router-dom';
+import SERVER_HOST_PATH from "../../../../helpers/_serverPath";
+import { FRANCHAISE_INVOICE_DELETE_API } from "../../../../helpers/url_helper";
 
 
 
@@ -59,6 +61,9 @@ const InvoiceList = () => {
     const dispatch = useDispatch();
     const history = useHistory();
 
+    const now = new Date();
+    const date = now.toISOString().slice(0, 10); // e.g., 2024-11-29
+    const time = now.toTimeString().slice(0, 8); // e.g., 13:32:54
 
     const currentDate_ymd = _cfunc.date_ymd_func();
 
@@ -78,14 +83,12 @@ const InvoiceList = () => {
     const [Customer, setCustomer] = useState('')
 
 
-
-
     const [modal, setmodal] = useState(false);
     const [vehicleErrorMsg, setvehicleErrorMsg] = useState(false);
     const [InvoiceID, setInvoiceID] = useState("");
+    const [deleteBtnloading, setDeleteBtnloading] = useState(false);
 
-
-
+    const [franchiesDeleteApiRep, setFranchiesDeleteApiRep] = useState({});
 
     const reducers = useSelector(
         (state) => ({
@@ -108,11 +111,10 @@ const InvoiceList = () => {
             VehicleNumber: state.VehicleReducer.VehicleList,
             Update_Vehicle_Customer_Invoice: state.InvoiceReducer.Update_Vehicle_Customer_Invoice,
             makeGRN: state.GRNReducer.GRNitem,
-
             sendToScmMsg: state.InvoiceReducer.sendToScmMsg,
             invoiceBulkDeleteLoading: state.InvoiceReducer.invoiceBulkDeleteLoading,
             invoiceBulkDelete: state.InvoiceReducer.invoiceBulkDelete,
-            listBtnLoading: (state.InvoiceReducer.listBtnLoading || state.PdfReportReducers.ReportBtnLoading)
+            listBtnLoading: (state.InvoiceReducer.listBtnLoading || state.PdfReportReducers.ReportBtnLoading || deleteBtnloading)
         })
     );
 
@@ -130,8 +132,9 @@ const InvoiceList = () => {
         invoiceBulkDelete,
         invoiceBulkDeleteLoading,
         makeGRN,
+        listBtnLoading
     } = reducers;
-
+    console.log(listBtnLoading)
     const {
         fromdate,
         todate,
@@ -661,6 +664,53 @@ const InvoiceList = () => {
         dispatch(InvoiceBulkDelete_IDs_Action({ jsonBody }))
     }
 
+    useEffect(() => {   // Uploaded E-way Bill useEffect 
+
+        if ((franchiesDeleteApiRep.Status === true) && (franchiesDeleteApiRep.StatusCode === 200)) {
+            debugger
+            setFranchiesDeleteApiRep({})
+            goButtonHandler("event")
+            customAlert({
+                Type: 1,
+                Message: JSON.stringify(franchiesDeleteApiRep.Message),
+            })
+        }
+
+        else if (franchiesDeleteApiRep.Status === true) {
+            setFranchiesDeleteApiRep({})
+            customAlert({
+                Type: 3,
+                Message: JSON.stringify(franchiesDeleteApiRep.Message),
+            })
+            return
+        }
+    }, [franchiesDeleteApiRep]);
+
+    async function deleteBodyfunc(config) {
+        let btnId = `btn-isdelete-${config.deleteId}`
+        setDeleteBtnloading(btnId)
+        let rowData = config.rowData
+
+        const jsonBody = JSON.stringify([{
+            "DeletedTableAutoID": config.deleteId,
+            "ClientID": 0,
+            "ClientSaleID": config.deleteId,
+            "PartyID": rowData.PartyID,
+            "InvoiceDate": rowData.InvoiceDate,
+            "DeletedBy": _cfunc.loginUserID(),
+            "DeletedOn": `${date} ${time}`,
+            "ReferenceInvoiceID": null,
+            "isUpdate": false,
+            "UpdatedBy": _cfunc.loginUserID(),
+            "UpdatedOn": `${date} ${time}`,
+            "UpdatedInvoiceDetails": []
+        }]);
+        console.log(jsonBody)
+        const jsonData = await postWithBasicAuthForDelete({ jsonBody })
+        setDeleteBtnloading(false)
+        setFranchiesDeleteApiRep(jsonData)
+    }
+
     return (
         <React.Fragment>
             <PageLoadingSpinner isLoading={reducers.listBtnLoading || !pageField || supplierDropLoading} />
@@ -680,6 +730,7 @@ const InvoiceList = () => {
                             goButnFunc={goButtonHandler}
                             downBtnFunc={downBtnFunc}
                             editBodyfunc={editBodyfunc}
+                            deleteBodyfunc={deleteBodyfunc}
                             HeaderContent={HeaderContent}
                             makeBtnFunc={makeBtnFunc}
                             ButtonMsgLable={subPageMode === url.IB_GRN_LIST ? "GRN" : "Invoice"}
@@ -805,7 +856,32 @@ const InvoiceList = () => {
 export default InvoiceList;
 
 
+export const postWithBasicAuthForDelete = async ({ jsonBody, btnId }) => { //+++++++++++++++++++++ Session Company Id+++++++++++++++++++++++++++++
+    debugger
+    const username = _cfunc.loginUserName();
+    const password = localStorage.getItem("Password");
+    const authHeader = 'Basic ' + window.btoa(`${username}:${password}`);
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Authorization", authHeader);
 
+    const requestOptions = {
+        method: "POST",
+        headers: myHeaders,
+        body: jsonBody, // Convert the body to JSON string
+        redirect: "follow"
+    };
+
+    try {
+        const Response = await fetch(`${SERVER_HOST_PATH}${FRANCHAISE_INVOICE_DELETE_API}`, requestOptions)
+        const jsonData = await Response.json();
+        return jsonData
+    } catch (error) {
+        console.error("Error in POST request:", error);
+        throw error;
+    }
+
+};
 
 
 
