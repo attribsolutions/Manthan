@@ -125,7 +125,7 @@ const Order = (props) => {
 
 
 
-    const [deliverydate, setdeliverydate] = useState(IsFranchisesRole ? _cfunc.getDateTime_ymd() : currentDate_ymd)
+    const [deliverydate, setdeliverydate] = useState(IsFranchisesRole ? _cfunc.deliverydate_ForFranchise() : currentDate_ymd)
 
     const [billAddr, setbillAddr] = useState('')
     const [shippAddr, setshippAddr] = useState('');
