@@ -139,6 +139,31 @@ export function getDateTime_dmy(hourOffset = 0) {
   return `${dd}-${mm}-${yy} ${hours}:${minutes}:${seconds}`;
 }
 
+export function deliverydate_ForFranchise() {
+  const { dd, mm, yy, dateInstance } = isDateInitial();
+
+  // Set the hours to the correct time zone (or any specific adjustment)
+  dateInstance.setHours(dateInstance.getHours() - 0); 
+
+  const hours = dateInstance.getHours();
+  const minutes = String(dateInstance.getMinutes()).padStart(2, '0');
+  const seconds = String(dateInstance.getSeconds()).padStart(2, '0');
+
+  // Check if the time is after 6 PM
+  if (hours >= 18) {
+    // Add one day to the current date
+    dateInstance.setDate(dateInstance.getDate() + 1);
+  }
+
+  // Recalculate the date components after potentially modifying the date
+  const updatedDd = String(dateInstance.getDate()).padStart(2, '0');
+  const updatedMm = String(dateInstance.getMonth() + 1).padStart(2, '0');
+  const updatedYy = dateInstance.getFullYear();
+
+  // Return the updated date and time
+  return `${updatedYy}-${updatedMm}-${updatedDd} ${String(dateInstance.getHours()).padStart(2, '0')}:${minutes}:${seconds}`;
+}
+
 
 export function getDateTime_ymd(date) {
   const { dd, mm, yy, dateInstance } = isDateInitial(date);
