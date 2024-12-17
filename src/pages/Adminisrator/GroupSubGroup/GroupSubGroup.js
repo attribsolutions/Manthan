@@ -768,8 +768,7 @@ const GroupSubGroup = (props) => {
                 GroupTypeID: GroupType.value
             };
 
-
-            debugger
+           
             return Obj
         });
 

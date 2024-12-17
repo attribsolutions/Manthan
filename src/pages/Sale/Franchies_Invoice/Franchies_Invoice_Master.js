@@ -49,7 +49,7 @@ import { changeCommonPartyDropDetailsAction } from "../../../store/Utilites/Part
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 import { CheckStockEntryForFirstTransaction, CheckStockEntryForFirstTransactionSuccess, CheckStockEntryforBackDatedTransaction, CheckStockEntryforBackDatedTransactionSuccess } from "../../../store/Inventory/StockEntryRedux/action";
-import { Franchies_invoice_Calculate_Func, DiscountCaculationForFranchies, orderQtyOnChange, orderQtyUnit_SelectOnchange, postWithBasicAuth, RoundCalculationFunc, } from "./FranchiesInvoiceFunc";
+import { Franchies_invoice_Calculate_Func, DiscountCaculationForFranchies, orderQtyOnChange, orderQtyUnit_SelectOnchange, postWithBasicAuth, RoundCalculationFunc, postWithBasicAuthForDelete, } from "./FranchiesInvoiceFunc";
 
 const Franchies_Invoice_Master = (props) => {
 
@@ -87,6 +87,7 @@ const Franchies_Invoice_Master = (props) => {
     const [saveBtnloading, setSaveBtnloading] = useState(false);
     const [btnMode, setBtnMode] = useState('');
     const [franchiesSaveApiRep, setFranchiesSaveApiRep] = useState({});
+    const [franchiesUpdateApiRep, setFranchiesUpdateApiRep] = useState({});
     // ****************************************************************************
 
     const [modalCss] = useState(false);
@@ -179,6 +180,48 @@ const Franchies_Invoice_Master = (props) => {
             });
         }
     }, [franchiesSaveApiRep]);
+
+    useEffect(() => {
+        if (franchiesUpdateApiRep?.Status === true && franchiesUpdateApiRep?.StatusCode === 200) {
+
+            setFranchiesUpdateApiRep({});
+            // const config = {
+            //     editId: franchiesSaveApiRep?.TransactionID,////for saveAndDownloadPdfMode
+            //     ReportType: report.invoice,//for saveAndDownloadPdfMode
+            //     RowId: franchiesSaveApiRep?.TransactionID,//for Invoice-Upload
+            //     UserID: _cfunc.loginUserID(),//for Invoice-Upload
+            // };
+            // //************************* / Fetch PDF report data if saveAndDownloadPdfMode is true /
+            // if (franchiesUpdateApiRep?.saveAndDownloadPdfMode) {
+            //     dispatch(getpdfReportdata(Franchies_Invoice_Singel_Get_for_Report_Api, config));
+            // }
+
+            // ***************** Upload E-Invoice if AutoEInvoice and EInvoiceApplicable are both "1"  *****/
+            // if (systemSetting.AutoEInvoice === "1" && systemSetting.EInvoiceApplicable === "1") {
+            //     try {
+            //         dispatch(Uploaded_EInvoiceAction(config));
+            //     } catch (error) { }
+            // }
+
+            customAlert({
+                Type: 1,
+                Message: "POSInvoice Update Successfully",
+            });
+
+            // Redirect to appropriate page based on subPageMode
+            if (subPageMode === url.FRANCHAISE_INVOICE) {
+                history.push({ pathname: url.POS_INVOICE_LIST, updatedRowBlinkId: franchiesUpdateApiRep?.TransactionID });
+            }
+
+        } else if (franchiesUpdateApiRep?.Status === true) {
+            // Show error alert message with the JSON stringified postMsg.Message
+            setFranchiesUpdateApiRep({});
+            customAlert({
+                Type: 4,
+                Message: JSON.stringify(franchiesUpdateApiRep?.Message),
+            });
+        }
+    }, [franchiesUpdateApiRep]);
 
     // Common Party Dropdown useEffect
     useEffect(() => {
@@ -296,6 +339,8 @@ const Franchies_Invoice_Master = (props) => {
                 const obj = { ...i }
                 obj.values.Customer = editData.customer;
                 obj.hasValid.Customer.valid = true;
+
+                obj.values.OrderID = editData.customer.OrderID;
 
                 obj.values.InvoiceDate = editData.Data.InvoiceDate;
                 obj.hasValid.InvoiceDate.valid = true;
@@ -600,7 +645,7 @@ const Franchies_Invoice_Master = (props) => {
     ];
 
     const totalAmountCalcuationFunc = (tableList = []) => {
-
+        debugger
         const calcalateGrandTotal = settingBaseRoundOffAmountFunc(tableList)
         const dataCount = tableList.length;
         const commaSeparateAmount = _cfunc.amountCommaSeparateFunc(Number(calcalateGrandTotal.sumOfGrandTotal));
@@ -769,11 +814,37 @@ const Franchies_Invoice_Master = (props) => {
                     }
                 ],
             }]
-            console.log("Invoice Save JsonBody", JSON.stringify(jsonBody))
-            const jsonData = await postWithBasicAuth({ jsonBody, btnId })
+            let jsonData
+            let updateJsonData
+            if (pageMode === mode.edit) {
+                const updateJsonBody = JSON.stringify([{
+                    "DeletedTableAutoID": values.OrderID,
+                    "ClientID": 0,
+                    "ClientSaleID": values.OrderID,
+                    "PartyID": values.Customer.PartyID,
+                    "InvoiceDate": values.InvoiceDate,
+                    "DeletedBy": _cfunc.loginUserID(),
+                    "DeletedOn": `${date} ${time}`,
+                    "ReferenceInvoiceID": null,
+                    "isUpdate": true,
+                    "UpdatedBy": _cfunc.loginUserID(),
+                    "UpdatedOn": `${date} ${time}`,
+                    "UpdatedInvoiceDetails": jsonBody
+                }]);
+
+
+                console.log(updateJsonBody)
+                updateJsonData = await postWithBasicAuthForDelete(updateJsonBody)
+                setFranchiesUpdateApiRep(updateJsonData)
+
+            }
+            else {
+                console.log("Invoice Save JsonBody", JSON.stringify(jsonBody))
+                jsonData = await postWithBasicAuth({ jsonBody, btnId })
+                setFranchiesSaveApiRep(jsonData)
+            }
 
             setSaveBtnloading(false)
-            setFranchiesSaveApiRep(jsonData)
 
         } catch (e) {
             _cfunc.CommonConsole("invoice save Handler", e)
@@ -884,7 +955,7 @@ const Franchies_Invoice_Master = (props) => {
                                 </Col>
                             </div>
                         </Col>
-                        
+
                         <div className="mb-1">
                             <GlobalCustomTable
                                 keyField={"id"}

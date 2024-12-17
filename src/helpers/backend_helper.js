@@ -610,7 +610,7 @@ export const IB_Invoice_Singel_Get_for_Report_Api = ({ editId }) => get(`${url.I
 /// Franchies Invoice
 export const Franchies_Invoice_Singel_Get_for_Report_Api = ({ editId }) => get(`${url.POS_INVOICE_PRINT}/${editId}/P`)// delete api
 export const Franchies_Invoice_Delete_API = ({ deleteId }) => del(`${url.FRANCHAISE_INVOICE_DELETE_API}/${deleteId}`)// delete api
-
+export const Franchies_Invoice_Edit_API = ({ editId }) => get(`${url.SWEET_POS_INVOICE_Edit}/${editId}`)// delete api
 
 //**************************** E-Invoice (upload ,cancel,print) ***************************************/
 

@@ -53,10 +53,11 @@ import { CheckStockEntryforBackDatedTransactionSuccess } from "../../../../store
 import { useParams } from 'react-router-dom';
 import SERVER_HOST_PATH from "../../../../helpers/_serverPath";
 import { FRANCHAISE_INVOICE_DELETE_API } from "../../../../helpers/url_helper";
+import { postWithBasicAuthForDelete } from "../../../Sale/Franchies_Invoice/FranchiesInvoiceFunc";
 
 
 
-const InvoiceList = () => {
+const SweetPosInvoiceList = () => {
 
     const dispatch = useDispatch();
     const history = useHistory();
@@ -134,7 +135,7 @@ const InvoiceList = () => {
         makeGRN,
         listBtnLoading
     } = reducers;
-    console.log(listBtnLoading)
+
     const {
         fromdate,
         todate,
@@ -608,27 +609,17 @@ const InvoiceList = () => {
     };
 
     async function editBodyfunc(config) {
-        debugger
-        const { rowData } = config;
-        const jsonBodyForBackdatedTransaction = JSON.stringify({
-            "TransactionDate": rowData.InvoiceDate,
-            "PartyID": commonPartyDropSelect.value,
-        });
 
-        if (commonPartyDropSelect.value > 0) {
-            const response = await CheckStockEntryforBackDatedTransaction({ jsonBody: jsonBodyForBackdatedTransaction })
-            if (response.Status === true && response.StatusCode === 400) {
-                dispatch(CheckStockEntryforBackDatedTransactionSuccess({ status: false }))
-                customAlert({ Type: 3, Message: response.Message });
-                return
-            }
-        }
+        const { rowData } = config;
+
         const customer = {
             value: rowData.CustomerID,
             label: rowData.Customer,
             GSTIN: rowData.CustomerGSTIN,
             IsTCSParty: rowData.IsTCSParty,
-            ISCustomerPAN: rowData.CustomerPAN
+            ISCustomerPAN: rowData.CustomerPAN,
+            PartyID: rowData.PartyID,
+            OrderID: rowData.id,
         }
 
         dispatch(editInvoiceAction({
@@ -667,7 +658,7 @@ const InvoiceList = () => {
     useEffect(() => {   // Uploaded E-way Bill useEffect 
 
         if ((franchiesDeleteApiRep.Status === true) && (franchiesDeleteApiRep.StatusCode === 200)) {
-            debugger
+
             setFranchiesDeleteApiRep({})
             goButtonHandler("event")
             customAlert({
@@ -706,7 +697,7 @@ const InvoiceList = () => {
             "UpdatedInvoiceDetails": []
         }]);
         console.log(jsonBody)
-        const jsonData = await postWithBasicAuthForDelete({ jsonBody })
+        const jsonData = await postWithBasicAuthForDelete(jsonBody)
         setDeleteBtnloading(false)
         setFranchiesDeleteApiRep(jsonData)
     }
@@ -853,35 +844,10 @@ const InvoiceList = () => {
     )
 }
 
-export default InvoiceList;
+export default SweetPosInvoiceList;
 
 
-export const postWithBasicAuthForDelete = async ({ jsonBody, btnId }) => { //+++++++++++++++++++++ Session Company Id+++++++++++++++++++++++++++++
-    debugger
-    const username = _cfunc.loginUserName();
-    const password = localStorage.getItem("Password");
-    const authHeader = 'Basic ' + window.btoa(`${username}:${password}`);
-    const myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-    myHeaders.append("Authorization", authHeader);
 
-    const requestOptions = {
-        method: "POST",
-        headers: myHeaders,
-        body: jsonBody, // Convert the body to JSON string
-        redirect: "follow"
-    };
-
-    try {
-        const Response = await fetch(`${SERVER_HOST_PATH}${FRANCHAISE_INVOICE_DELETE_API}`, requestOptions)
-        const jsonData = await Response.json();
-        return jsonData
-    } catch (error) {
-        console.error("Error in POST request:", error);
-        throw error;
-    }
-
-};
 
 
 

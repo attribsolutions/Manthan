@@ -599,7 +599,7 @@ const StockEntry = (props) => {
     }
 
     function deleteButtonAction(row, key, { TableArr = [], setTableArr }) {
-        debugger
+        
         const newArr = TableArr.filter((index, key1) => !(row.ItemId === index.ItemId))
         setTableArr(newArr)
         dispatch(BreadcrumbShowCountlabel(`Count:${newArr.length}`));
@@ -770,7 +770,7 @@ const StockEntry = (props) => {
         config["Status"] = true
         config["StatusCode"] = 200
 
-        debugger
+        
         dispatch(getpdfReportdataSuccess(config));
     }
 
