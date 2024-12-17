@@ -232,7 +232,6 @@ import IBInvoice from "../pages/Inter Branch/IBInvoice/IBInvoice.js";
 import IBInvoiceList from "../pages/Inter Branch/IBInvoice/IBInvoiceList.js";
 import GRN_ADD_1 from "../pages/Inventory/GRN/GRN_ADD_1.js";
 import CashierSummary from "../pages/SweetPOS/Reports/CashierSummaryReport/CashierSummary.js";
-import Pos_InvoiceList from "../pages/SweetPOS/Sales/Invoice/InvoiceList.js";
 import BulkWorkOrderList from "../pages/Production/WorkOrder/BulkWorkOrder/BulkWorkOrderList.js";
 import FrenchiesSaleReport from "../pages/SweetPOS/Reports/FrenchiesSaleReport/FrenchiesSaleReport.js";
 import DailyItemSaleView from "../pages/Dashboard/FrenchiesesDashboard/DailyItemSaleView.js";
@@ -251,12 +250,13 @@ import CountryList from "../pages/Adminisrator/Country/CountryList.js";
 import MachineTypeList from "../pages/SweetPOS/Adminstration/MachineType/MachineTypeList.js";
 import FranchiseSaleWithBillCount from "../pages/SweetPOS/Reports/FranchiseSaleWithBillCount.js/index.js";
 import Franchies_Invoice_Master from "../pages/Sale/Franchies_Invoice/Franchies_Invoice_Master.js";
+import SweetPosInvoiceList from "../pages/SweetPOS/Sales/Invoice/SPOS_InvoiceList.js";
 
 
 const userRoutes = [
 
 	{ path: path.POS_ORDER_IN_POS, component: Order },
-	{ path: path.POS_INVOICE_LIST_IN_POS, component: Pos_InvoiceList },
+	{ path: path.POS_INVOICE_LIST_IN_POS, component: SweetPosInvoiceList },
 
 	{ path: path.POS_ORDER_LIST_IN_POS, component: OrderList },
 
@@ -652,7 +652,7 @@ const userRoutes = [
 	// ************************************ Pos_Invoice **************************************//
 
 
-	{ path: path.POS_INVOICE_LIST, component: Pos_InvoiceList },//not party wise
+	{ path: path.POS_INVOICE_LIST, component: SweetPosInvoiceList },//not party wise
 
 
 	// ************************************ Frenchies  **************************************//

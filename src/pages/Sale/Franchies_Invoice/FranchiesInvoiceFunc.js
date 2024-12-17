@@ -1,10 +1,10 @@
 import { amountCommaSeparateFunc, CommonConsole, compareGSTINState, loginUserName, roundToDecimalPlaces } from "../../../components/Common/CommonFunction";
 import { decimalRegx_3dit, onlyNumberRegx } from "../../../CustomValidateForm";
 import SERVER_HOST_PATH from "../../../helpers/_serverPath";
-import { FRANCHAISE_INVOICE_SAVE_API } from "../../../helpers/url_helper";
+import { FRANCHAISE_INVOICE_DELETE_API, FRANCHAISE_INVOICE_SAVE_API } from "../../../helpers/url_helper";
 
 export const postWithBasicAuth = async ({ jsonBody, btnId }) => { //+++++++++++++++++++++ Session Company Id+++++++++++++++++++++++++++++
-    debugger
+    
     const username = loginUserName();
     const password = localStorage.getItem("Password");
     const authHeader = 'Basic ' + window.btoa(`${username}:${password}`);
@@ -24,6 +24,33 @@ export const postWithBasicAuth = async ({ jsonBody, btnId }) => { //++++++++++++
         const jsonData = await Response.json();
         jsonData["saveAndDownloadPdfMode"] = btnId === "print" ? true : false;
         jsonData["TransactionID"] = jsonData.TransactionID[0];
+        return jsonData
+    } catch (error) {
+        console.error("Error in POST request:", error);
+        throw error;
+    }
+
+};
+
+export const postWithBasicAuthForDelete = async (jsonBody) => { //+++++++++++++++++++++ Session Company Id+++++++++++++++++++++++++++++
+    
+    const username = loginUserName();
+    const password = localStorage.getItem("Password");
+    const authHeader = 'Basic ' + window.btoa(`${username}:${password}`);
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Authorization", authHeader);
+
+    const requestOptions = {
+        method: "POST",
+        headers: myHeaders,
+        body: jsonBody, // Convert the body to JSON string
+        redirect: "follow"
+    };
+
+    try {
+        const Response = await fetch(`${SERVER_HOST_PATH}${FRANCHAISE_INVOICE_DELETE_API}`, requestOptions)
+        const jsonData = await Response.json();
         return jsonData
     } catch (error) {
         console.error("Error in POST request:", error);
@@ -84,7 +111,7 @@ export function orderQtyUnit_SelectOnchange(event, index1, subPageMode) {
 
 
 export function RoundCalculationFunc(data) {
-    debugger
+    
     const NetAmount = data.reduce((sum, item) => sum + item.Amount, 0); // Ensure 2 decimal places
     const DiscountTotalAmount = data.reduce((sum, item) => sum + parseFloat(item.DiscountAmount || 0), 0); // Convert string to number and sum
     const totalAmount = (NetAmount + DiscountTotalAmount); // Subtract and ensure 2 decimal places
@@ -131,7 +158,7 @@ const Franchies_invoice_Calculate_Func_____ = (row, index1, IsComparGstIn) => {
     const SGST_Percentage = GST_Percentage / 2;
     const CGST_Percentage = SGST_Percentage;
     let IGST_Percentage = 0;
-    debugger
+    
     //iscounted amounts
     const basicAmount = mrp * quantity; // Total price without any discount
 
@@ -191,10 +218,6 @@ export function Franchies_invoice_Calculate_Func(row, index1, IsComparGstIn,
 ) {
     const discountBasedOnRate = true
 
-
-
-    debugger
-
     const qty = Number(row.Qty) || 0;
     const initialRate = Number(row.MRP) || 0;
     let rate = Number(row.MRP) || 0;
@@ -247,7 +270,7 @@ export function Franchies_invoice_Calculate_Func(row, index1, IsComparGstIn,
             itemFinalAmount = taxableAmount + gstAmount;
         }
     }
-    debugger
+
     index1.ItemTotalAmount = itemFinalAmount;
 
     return {
@@ -266,21 +289,7 @@ export function Franchies_invoice_Calculate_Func(row, index1, IsComparGstIn,
         IGST_Percentage: igst,
 
     };
-
-
-
 }
-
-
-
-
-
-
-
-
-
-
-
 
 
 function hasCheckUnitIs_NOFunc(index1) {

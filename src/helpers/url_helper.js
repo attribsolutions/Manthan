@@ -420,7 +420,7 @@ export const UPDATE_VEHICLE_CUSTOMER_INVOICE = '/SweetPOS/UpdateCustomerVehicleP
 
 
 
-
+export const SWEET_POS_INVOICE_Edit = '/SweetPOS/FranchiseInvoiceEdit'// invoice_1  edit Api
 
 export const POS_INVOICE_PRINT = '/SweetPOS/Invoice' // Uploaded_E-wayBill
 
