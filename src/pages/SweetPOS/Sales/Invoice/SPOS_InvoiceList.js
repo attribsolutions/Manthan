@@ -49,12 +49,8 @@ import { alertMessages } from "../../../../components/Common/CommonErrorMsg/aler
 import { allLabelWithBlank } from "../../../../components/Common/CommonErrorMsg/HarderCodeData";
 import { sideBarPageFiltersInfoAction } from "../../../../store/Utilites/PartyDrodown/action";
 import { date_dmy_func } from "../../../../components/Common/CommonFunction";
-import { CheckStockEntryforBackDatedTransactionSuccess } from "../../../../store/Inventory/StockEntryRedux/action";
-import { useParams } from 'react-router-dom';
-import SERVER_HOST_PATH from "../../../../helpers/_serverPath";
+import { postWithBasicAuth } from "../../../Sale/Franchies_Invoice/FranchiesInvoiceFunc";
 import { FRANCHAISE_INVOICE_DELETE_API } from "../../../../helpers/url_helper";
-import { postWithBasicAuthForDelete } from "../../../Sale/Franchies_Invoice/FranchiesInvoiceFunc";
-
 
 
 const SweetPosInvoiceList = () => {
@@ -697,7 +693,11 @@ const SweetPosInvoiceList = () => {
             "UpdatedInvoiceDetails": []
         }]);
         console.log(jsonBody)
-        const jsonData = await postWithBasicAuthForDelete(jsonBody)
+        const jsonData = await postWithBasicAuth({
+            jsonBody: jsonBody,
+            APIName: FRANCHAISE_INVOICE_DELETE_API,
+        });
+
         setDeleteBtnloading(false)
         setFranchiesDeleteApiRep(jsonData)
     }
