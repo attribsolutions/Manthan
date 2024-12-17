@@ -25,17 +25,14 @@ import * as url from "../../../routes/route_url"
 import {
     GoButtonForinvoiceAddSuccess,
     Uploaded_EInvoiceAction,
-    invoiceSaveAction,
     invoiceSaveActionSuccess,
     makeIB_InvoiceActionSuccess,
     editInvoiceActionSuccess,
-    updateInvoiceAction,
     updateInvoiceActionSuccess
 } from "../../../store/Sales/Invoice/action";
 import { GetVenderSupplierCustomer, GetVenderSupplierCustomerSuccess } from "../../../store/CommonAPI/SupplierRedux/actions";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import {
-    innerStockCaculation,
     settingBaseRoundOffAmountFunc,
 } from "../../Sale/Invoice/invoiceCaculations";
 import "../../Sale/Invoice/invoice.scss"
@@ -49,7 +46,8 @@ import { changeCommonPartyDropDetailsAction } from "../../../store/Utilites/Part
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 import { CheckStockEntryForFirstTransaction, CheckStockEntryForFirstTransactionSuccess, CheckStockEntryforBackDatedTransaction, CheckStockEntryforBackDatedTransactionSuccess } from "../../../store/Inventory/StockEntryRedux/action";
-import { Franchies_invoice_Calculate_Func, DiscountCaculationForFranchies, orderQtyOnChange, orderQtyUnit_SelectOnchange, postWithBasicAuth, RoundCalculationFunc, } from "./FranchiesInvoiceFunc";
+import { Franchies_invoice_Calculate_Func, DiscountCaculationForFranchies, orderQtyOnChange, orderQtyUnit_SelectOnchange, postWithBasicAuth, RoundCalculationFunc } from "./FranchiesInvoiceFunc";
+import { FRANCHAISE_INVOICE_DELETE_API, FRANCHAISE_INVOICE_SAVE_API } from "../../../helpers/url_helper";
 
 const Franchies_Invoice_Master = (props) => {
 
@@ -87,13 +85,14 @@ const Franchies_Invoice_Master = (props) => {
     const [saveBtnloading, setSaveBtnloading] = useState(false);
     const [btnMode, setBtnMode] = useState('');
     const [franchiesSaveApiRep, setFranchiesSaveApiRep] = useState({});
+    const [franchiesUpdateApiRep, setFranchiesUpdateApiRep] = useState({});
     // ****************************************************************************
 
     const [modalCss] = useState(false);
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState('');
     const {
-        postMsg,
+
         updateMsg,
         pageField,
         userAccess,
@@ -102,13 +101,10 @@ const Franchies_Invoice_Master = (props) => {
         makeIBInvoice,
         VehicleNumber,
         editData,
-        // saveBtnloading,
-        saveAndPdfBtnLoading,
         commonPartyDropSelect,
         StockEnteryForFirstYear,
-        StockEnteryForBackdated
     } = useSelector((state) => ({
-        postMsg: state.InvoiceReducer.postMsg,
+
         editData: state.InvoiceReducer.editData,
         updateMsg: state.InvoiceReducer.updateMsg,
         userAccess: state.Login.RoleAccessUpdateData,
@@ -118,11 +114,9 @@ const Franchies_Invoice_Master = (props) => {
         vendorSupplierCustomer: state.CommonAPI_Reducer.vendorSupplierCustomer,
         VehicleNumber: state.VehicleReducer.VehicleList,
         makeIBInvoice: state.InvoiceReducer.makeIBInvoice,
-        saveBtnloading: state.InvoiceReducer.saveBtnloading,
-        saveAndPdfBtnLoading: state.InvoiceReducer.saveAndPdfBtnLoading,
+
         commonPartyDropSelect: state.CommonPartyDropdownReducer.commonPartyDropSelect,
         StockEnteryForFirstYear: state.StockEntryReducer.StockEnteryForFirstYear,
-        StockEnteryForBackdated: state.StockEntryReducer.StockEnteryForBackdated,
 
     }));
 
@@ -179,6 +173,30 @@ const Franchies_Invoice_Master = (props) => {
             });
         }
     }, [franchiesSaveApiRep]);
+
+    useEffect(() => {
+        if (franchiesUpdateApiRep?.Status === true && franchiesUpdateApiRep?.StatusCode === 200) {
+
+            setFranchiesUpdateApiRep({});
+            customAlert({
+                Type: 1,
+                Message: "POSInvoice Update Successfully",
+            });
+
+            // Redirect to appropriate page based on subPageMode
+            if (subPageMode === url.FRANCHAISE_INVOICE) {
+                history.push({ pathname: url.POS_INVOICE_LIST, updatedRowBlinkId: franchiesUpdateApiRep?.TransactionID });
+            }
+
+        } else if (franchiesUpdateApiRep?.Status === true) {
+            // Show error alert message with the JSON stringified postMsg.Message
+            setFranchiesUpdateApiRep({});
+            customAlert({
+                Type: 4,
+                Message: JSON.stringify(franchiesUpdateApiRep?.Message),
+            });
+        }
+    }, [franchiesUpdateApiRep]);
 
     // Common Party Dropdown useEffect
     useEffect(() => {
@@ -291,11 +309,13 @@ const Franchies_Invoice_Master = (props) => {
     useLayoutEffect(() => {
 
         if (((editData.Status === true) && (editData.StatusCode === 200))) {
-            debugger
+
             setState((i) => {
                 const obj = { ...i }
                 obj.values.Customer = editData.customer;
                 obj.hasValid.Customer.valid = true;
+
+                obj.values.OrderID = editData.customer.OrderID;
 
                 obj.values.InvoiceDate = editData.Data.InvoiceDate;
                 obj.hasValid.InvoiceDate.valid = true;
@@ -381,11 +401,12 @@ const Franchies_Invoice_Master = (props) => {
             formatter: (cellContent, index1, keys_, { tableList = [] }) => (
                 <>
                     <div>
-                        <Input
+                        <CInput
                             type="text"
 
                             id={`OrderQty-${index1.id}`}
                             placeholder="Enter quantity"
+                            cpattern={decimalRegx}
                             className="right-aligned-placeholder mb-1"
                             key={`OrderQty-${index1.id}`}
                             autoComplete="off"
@@ -426,22 +447,6 @@ const Franchies_Invoice_Master = (props) => {
                 </>
             ),
         },
-
-        // {
-        //     text: "Basic Rate",
-        //     dataField: "",
-        //     formatter: (cellContent, index1) => {
-        //         return (
-        //             <>
-        //                 <div>
-        //                     <samp className="theme-font"
-        //                         id={`stockItemRate-${index1.id}`}>{index1.Rate}</samp>
-        //                 </div>
-        //             </>
-        //         )
-        //     },
-        // },
-
         {
             text: "MRP",
             dataField: "MRPValue",
@@ -736,7 +741,6 @@ const Franchies_Invoice_Master = (props) => {
             return
         }
 
-        // const calcalateGrandTotal = settingBaseRoundOffAmountFunc(orderItemDetails)//Pass Table Data 
         const RoundCalculation = RoundCalculationFunc(invoiceItems);
 
         try {
@@ -769,11 +773,42 @@ const Franchies_Invoice_Master = (props) => {
                     }
                 ],
             }]
-            console.log("Invoice Save JsonBody", JSON.stringify(jsonBody))
-            const jsonData = await postWithBasicAuth({ jsonBody, btnId })
+
+            if (pageMode === mode.edit) {
+                const updateJsonBody = JSON.stringify([{
+                    "DeletedTableAutoID": values.OrderID,
+                    "ClientID": 0,
+                    "ClientSaleID": values.OrderID,
+                    "PartyID": values.Customer.PartyID,
+                    "InvoiceDate": values.InvoiceDate,
+                    "DeletedBy": _cfunc.loginUserID(),
+                    "DeletedOn": `${date} ${time}`,
+                    "ReferenceInvoiceID": null,
+                    "isUpdate": true,
+                    "UpdatedBy": _cfunc.loginUserID(),
+                    "UpdatedOn": `${date} ${time}`,
+                    "UpdatedInvoiceDetails": jsonBody
+                }]);
+
+                console.log("Invoice update JsonBody", updateJsonBody)
+                const updateApiResponse = await postWithBasicAuth({
+                    jsonBody: updateJsonBody,
+                    APIName: FRANCHAISE_INVOICE_DELETE_API,
+                });
+                setFranchiesUpdateApiRep(updateApiResponse)
+
+            }
+            else {
+                console.log("Invoice Save JsonBody", JSON.stringify(jsonBody))
+                const saveApiRespone = await postWithBasicAuth({
+                    jsonBody: jsonBody,
+                    btnId: btnId,
+                    APIName: FRANCHAISE_INVOICE_SAVE_API,
+                });
+                setFranchiesSaveApiRep(saveApiRespone)
+            }
 
             setSaveBtnloading(false)
-            setFranchiesSaveApiRep(jsonData)
 
         } catch (e) {
             _cfunc.CommonConsole("invoice save Handler", e)
@@ -884,7 +919,7 @@ const Franchies_Invoice_Master = (props) => {
                                 </Col>
                             </div>
                         </Col>
-                        
+
                         <div className="mb-1">
                             <GlobalCustomTable
                                 keyField={"id"}

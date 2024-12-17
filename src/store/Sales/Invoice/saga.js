@@ -29,6 +29,7 @@ import {
   CheckStockEntryforBackDatedTransaction,
   Update_Vehicle_Customer_Invoice_API,
   Franchies_Invoice_Delete_API,
+  Franchies_Invoice_Edit_API,
 } from "../../../helpers/backend_helper";
 import {
   deleteInvoiceIdSuccess,
@@ -175,194 +176,61 @@ function* InvoiceListGenFunc({ config }) {
 function* editInvoiceListGenFunc({ config }) {
   try {
 
-    const { path, customer, btnmode, editId } = config;
+    const { path, customer, btnmode, editId, subPageMode } = config;
+    let response
+    if (subPageMode === url.FRANCHAISE_INVOICE) {
+      response = yield call(Franchies_Invoice_Edit_API, config);
+      response.Data?.OrderItemDetails.forEach(item => {
+        
+        const isUnitIDPresent = item.UnitDetails.find(findEle => findEle.UnitID === item.Unit);
+        const isMCunitID = item.UnitDetails.find(findEle => findEle.DeletedMCUnitsUnitID === item.MCUnitsUnitID);
+        const defaultunit = isUnitIDPresent !== undefined ? isUnitIDPresent : isMCunitID;
+        item.Unit = item.MIUnitID;
+        item.default_UnitDropvalue = {//initialize
+          value: item.Unit,
+          label: item.UnitName,
+          ConversionUnit: '1',
+          Unitlabel: item.UnitName,
+          BaseUnitQuantity: defaultunit.BaseUnitQuantity,
+          BaseUnitQuantityNoUnit: defaultunit.BaseUnitQuantityNoUnit,
+        };
+        item.StockDetails.forEach(stock => {
 
-    let response = yield call(Invoice_1_Edit_API, config);
-    // let response = {
-    //   "StatusCode": 200,
-    //   "Status": true,
-    //   "Data": {
-    //     "OrderIDs": [
-    //       "277440"
-    //     ],
-    //     "OrderItemDetails": [
-    //       {
-    //         "id": 1337340,
-    //         "Item": 1,
-    //         "ItemName": "Mango Burfi 250 g",
-    //         "Quantity": "1.000",
-    //         "MRP": 781,
-    //         "MRPValue": "235.00",
-    //         "Rate": "185.10",
-    //         "Unit": 1,
-    //         "UnitName": "No",
-    //         "DeletedMCUnitsUnitID": 1,
-    //         "ConversionUnit": "1.00",
-    //         "BaseUnitQuantity": "1.00",
-    //         "GST": 151,
-    //         "HSNCode": "21069099",
-    //         "GSTPercentage": "5.00",
-    //         "BasicAmount": "185.10",
-    //         "GSTAmount": "9.26",
-    //         "CGST": "4.63",
-    //         "SGST": "4.63",
-    //         "IGST": "0.00",
-    //         "CGSTPercentage": "2.50",
-    //         "SGSTPercentage": "2.50",
-    //         "IGSTPercentage": "0.00",
-    //         "Amount": "194.36",
-    //         "DiscountType": 2,
-    //         "Discount": "0.00",
-    //         "DiscountAmount": "0.00",
-    //         "UnitDetails": [
-    //           {
-    //             "UnitID": 1,
-    //             "UnitName": "No",
-    //             "BaseUnitQuantity": "1.000",
-    //             "PODefaultUnit": false,
-    //             "SODefaultUnit": true,
-    //             "Rate": 185.1,
-    //             "BaseUnitQuantityNoUnit": "1.000",
-    //             "DeletedMCUnitsUnitID": 1
-    //           },
-    //           {
-    //             "UnitID": 4224,
-    //             "UnitName": "Kg (4 No)",
-    //             "BaseUnitQuantity": "4.000",
-    //             "PODefaultUnit": false,
-    //             "SODefaultUnit": false,
-    //             "Rate": 185.1,
-    //             "BaseUnitQuantityNoUnit": "1.000",
-    //             "DeletedMCUnitsUnitID": 2
-    //           },
-    //           {
-    //             "UnitID": 4225,
-    //             "UnitName": "Box (20 No)",
-    //             "BaseUnitQuantity": "20.000",
-    //             "PODefaultUnit": true,
-    //             "SODefaultUnit": false,
-    //             "Rate": 185.1,
-    //             "BaseUnitQuantityNoUnit": "1.000",
-    //             "DeletedMCUnitsUnitID": 4
-    //           }
-    //         ],
-    //         "StockDetails": [
-    //           {
-    //             "id": 569914,
-    //             "Item": 1,
-    //             "BatchDate": "2024-11-19",
-    //             "BatchCode": "19RK2024",
-    //             "SystemBatchDate": "2024-11-23",
-    //             "SystemBatchCode": "20241123_1_6_0",
-    //             "LiveBatche": 428429,
-    //             "LiveBatcheMRPID": 781,
-    //             "LiveBatcheGSTID": 151,
-    //             "Rate": 185.1,
-    //             "MRP": "235.00",
-    //             "GST": "5.00",
-    //             "UnitName": "No",
-    //             "BaseUnitQuantity": "1.00"
-    //           }
-    //         ]
-    //       },
-    //       {
-    //         "id": 1337341,
-    //         "Item": 41,
-    //         "ItemName": "Gulabjam 500 g",
-    //         "Quantity": "1.000",
-    //         "MRP": 661,
-    //         "MRPValue": "160.00",
-    //         "Rate": "123.84",
-    //         "Unit": 121,
-    //         "UnitName": "No",
-    //         "DeletedMCUnitsUnitID": 1,
-    //         "ConversionUnit": "1.00",
-    //         "BaseUnitQuantity": "1.00",
-    //         "GST": 41,
-    //         "HSNCode": "21069099",
-    //         "GSTPercentage": "5.00",
-    //         "BasicAmount": "123.84",
-    //         "GSTAmount": "6.20",
-    //         "CGST": "3.10",
-    //         "SGST": "3.10",
-    //         "IGST": "0.00",
-    //         "CGSTPercentage": "2.50",
-    //         "SGSTPercentage": "2.50",
-    //         "IGSTPercentage": "0.00",
-    //         "Amount": "130.04",
-    //         "DiscountType": 2,
-    //         "Discount": "0.00",
-    //         "DiscountAmount": "0.00",
-    //         "UnitDetails": [
-    //           {
-    //             "UnitID": 121,
-    //             "UnitName": "No",
-    //             "BaseUnitQuantity": "1.000",
-    //             "PODefaultUnit": false,
-    //             "SODefaultUnit": true,
-    //             "Rate": 123.84,
-    //             "BaseUnitQuantityNoUnit": "1.000",
-    //             "DeletedMCUnitsUnitID": 1
-    //           },
-    //           {
-    //             "UnitID": 122,
-    //             "UnitName": "Kg (2 No)",
-    //             "BaseUnitQuantity": "2.000",
-    //             "PODefaultUnit": false,
-    //             "SODefaultUnit": false,
-    //             "Rate": 123.84,
-    //             "BaseUnitQuantityNoUnit": "1.000",
-    //             "DeletedMCUnitsUnitID": 2
-    //           },
-    //           {
-    //             "UnitID": 123,
-    //             "UnitName": "Box (12 No)",
-    //             "BaseUnitQuantity": "12.000",
-    //             "PODefaultUnit": true,
-    //             "SODefaultUnit": false,
-    //             "Rate": 123.84,
-    //             "BaseUnitQuantityNoUnit": "1.000",
-    //             "DeletedMCUnitsUnitID": 4
-    //           }
-    //         ],
-    //         "StockDetails": [
-    //           {
-    //             "id": 569918,
-    //             "Item": 41,
-    //             "BatchDate": "2024-11-13",
-    //             "BatchCode": "13RK2024",
-    //             "SystemBatchDate": "2024-11-23",
-    //             "SystemBatchCode": "20241123_41_6_0",
-    //             "LiveBatche": 428433,
-    //             "LiveBatcheMRPID": 661,
-    //             "LiveBatcheGSTID": 41,
-    //             "Rate": 123.84,
-    //             "MRP": "160.00",
-    //             "GST": "5.00",
-    //             "UnitName": "No",
-    //             "BaseUnitQuantity": "1.00"
-    //           }
-    //         ]
-    //       }
-    //     ],
-    //     "InvoiceDate": "2024-12-02",
-    //     "Vehicle": null
-    //   }
-    // }
+          // Assign values correctly from item to stock
+          stock.BaseUnitQuantity = item.BaseUnitQuantity; // Use the correct field
+          stock.GSTPercentage = item.GSTPercentage; // Assign GSTPercentage correctly
+          stock.GST = item.GSTPercentage; // Assign GST directly from the item,
+          stock.Qty = item.Quantity
+          Franchies_invoice_Calculate_Func(stock, item);
+        });
+      });
 
-    response["path"] = url.FRANCHAISE_INVOICE;
+    }
+    else {
+      response = yield call(Invoice_1_Edit_API, config);
+    }
+
+    response["path"] = path;
     response.editId = editId;
     response.customer = customer;
     response.pageMode = btnmode;
     response.Data.OrderIDs = response?.Data.OrderIDs[0];
 
-    const updatedResp = invoice_GoButton_dataConversion_Func(response, customer);
-    debugger
+    let updatedResp
+    if (subPageMode === url.FRANCHAISE_INVOICE) {
+      updatedResp = { ...response, ...customer }
+    }
+    else {
+      updatedResp = invoice_GoButton_dataConversion_Func(response, customer);
+    }
+    
     yield put(editInvoiceActionSuccess(updatedResp))
+    
   } catch (error) {
     yield put(InvoiceApiErrorAction())
   }
 }
+
 //update Invoice 
 function* updateInvoiceGenFunc({ config }) {
 
@@ -397,9 +265,7 @@ function* DeleteInvoiceGenFunc({ config }) {
     } else if (subPageMode === url.IB_INVOICE_LIST) {
       response = yield call(IB_Invoice_Delete_API, config)
     }
-    else if (subPageMode === url.POS_INVOICE_LIST) {
-      response = yield call(Franchies_Invoice_Delete_API, config)
-    }
+
     yield put(deleteInvoiceIdSuccess(response));
   } catch (error) {
     yield put(InvoiceApiErrorAction())
@@ -463,7 +329,7 @@ function invoice_GoButton_dataConversion_Func(response, customer = '') {
       if (qtyToDeduct > 0) {// Calculate total amount if quantity is greater than 0
 
         const calculatedItem = invoice_discountCalculate_Func(index2, index1);
-        debugger
+        
         totalAmount += parseFloat(calculatedItem.roundedTotalAmount); // Convert to a number
       }
 
@@ -491,7 +357,7 @@ function invoice_GoButton_dataConversion_Func(response, customer = '') {
 
 function* gobutton_invoiceAdd_genFunc({ config }) {
   const { subPageMode, path, pageMode, customer, errorMsg, OrderID } = config;
-  
+
   try {
 
     let response;

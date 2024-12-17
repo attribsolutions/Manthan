@@ -1,63 +1,52 @@
-import { amountCommaSeparateFunc, CommonConsole, compareGSTINState, loginUserName, roundToDecimalPlaces } from "../../../components/Common/CommonFunction";
-import { decimalRegx_3dit, onlyNumberRegx } from "../../../CustomValidateForm";
+import { amountCommaSeparateFunc, CommonConsole, loginUserName, roundToDecimalPlaces } from "../../../components/Common/CommonFunction";
 import SERVER_HOST_PATH from "../../../helpers/_serverPath";
-import { FRANCHAISE_INVOICE_SAVE_API } from "../../../helpers/url_helper";
 
-export const postWithBasicAuth = async ({ jsonBody, btnId }) => { //+++++++++++++++++++++ Session Company Id+++++++++++++++++++++++++++++
-    debugger
+export const postWithBasicAuth = async ({
+    jsonBody,
+    btnId = null,
+    APIName
+}) => {
+    // Get username and password for basic authentication
     const username = loginUserName();
     const password = localStorage.getItem("Password");
     const authHeader = 'Basic ' + window.btoa(`${username}:${password}`);
+
+    // Configure headers
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
     myHeaders.append("Authorization", authHeader);
 
+    // Set up request options
     const requestOptions = {
         method: "POST",
         headers: myHeaders,
-        body: JSON.stringify(jsonBody), // Convert the body to JSON string
-        redirect: "follow"
+        body: typeof jsonBody === "string" ? jsonBody : JSON.stringify(jsonBody), // Convert body to string if necessary
+        redirect: "follow",
     };
 
     try {
-        const Response = await fetch(`${SERVER_HOST_PATH}${FRANCHAISE_INVOICE_SAVE_API}`, requestOptions)
-        const jsonData = await Response.json();
-        jsonData["saveAndDownloadPdfMode"] = btnId === "print" ? true : false;
-        jsonData["TransactionID"] = jsonData.TransactionID[0];
-        return jsonData
+        // Make the POST request
+        const response = await fetch(`${SERVER_HOST_PATH}${APIName}`, requestOptions);
+        const jsonData = await response.json();
+
+        // Add additional processing for specific cases
+        if (btnId === "print") {
+            jsonData["saveAndDownloadPdfMode"] = true;
+        }
+        if (jsonData.TransactionID && Array.isArray(jsonData.TransactionID)) {
+            jsonData["TransactionID"] = jsonData.TransactionID[0];
+        }
+
+        return jsonData;
     } catch (error) {
         console.error("Error in POST request:", error);
         throw error;
     }
-
 };
 
-
-export function orderQtyOnChange(event, index1, subPageMode) {
-
-    const hasUnit_NO = hasCheckUnitIs_NOFunc(index1);
-    const totalStock = parseFloat(index1.ItemTotalStock); // Convert to a number
-    const priviosValue = index1.Quantity;
+export function orderQtyOnChange(event, index1) {
 
     let inputValue = event.target.value;
-    if (inputValue === '') { }
-    else if (hasUnit_NO) {
-        if (onlyNumberRegx.test(inputValue)) {
-            // if (totalStock < inputValue) {
-            //     inputValue = Math.floor(totalStock).toString(); // Show stock quantity without decimals
-            // }
-        } else {
-            inputValue = Number(priviosValue).toFixed(0) || ''
-        }
-    } else {
-        if (decimalRegx_3dit.test(inputValue)) {
-            // if (totalStock < inputValue) {
-            //     inputValue = roundToDecimalPlaces(totalStock, 3); // Show stock quantity with up to 3 decimals
-            // }
-        } else {
-            inputValue = priviosValue
-        }
-    }
 
     event.target.value = inputValue;
     index1.Quantity = inputValue
@@ -67,8 +56,7 @@ export function orderQtyOnChange(event, index1, subPageMode) {
     })
 }
 
-
-export function orderQtyUnit_SelectOnchange(event, index1, subPageMode) {
+export function orderQtyUnit_SelectOnchange(event, index1) {
 
     index1.default_UnitDropvalue = event;
     index1.ConversionUnit = event.ConversionUnit;
@@ -84,7 +72,7 @@ export function orderQtyUnit_SelectOnchange(event, index1, subPageMode) {
 
 
 export function RoundCalculationFunc(data) {
-    debugger
+
     const NetAmount = data.reduce((sum, item) => sum + item.Amount, 0); // Ensure 2 decimal places
     const DiscountTotalAmount = data.reduce((sum, item) => sum + parseFloat(item.DiscountAmount || 0), 0); // Convert string to number and sum
     const totalAmount = (NetAmount + DiscountTotalAmount); // Subtract and ensure 2 decimal places
@@ -118,82 +106,8 @@ export const DiscountCaculationForFranchies = (index1) => {
     } catch (e) { CommonConsole('inner-Stock-Caculation', e) };
 }
 
-
-const Franchies_invoice_Calculate_Func_____ = (row, index1, IsComparGstIn) => {
-
-    const rate = Number(row.Rate) || 0;
-    const mrp = Number(row.MRP) || 0;
-    const quantity = Number(row.Qty) || 0;
-    const gstPercentage = Number(row.GST) || 0;
-    const discount = Number(index1.Discount) || 0;
-    const discountType = Number(index1.DiscountType) || 2;
-    const GST_Percentage = Number(index1.GSTPercentage) || 0;
-    const SGST_Percentage = GST_Percentage / 2;
-    const CGST_Percentage = SGST_Percentage;
-    let IGST_Percentage = 0;
-    debugger
-    //iscounted amounts
-    const basicAmount = mrp * quantity; // Total price without any discount
-
-    // Calculate the discount amount 
-    const discountAmount = discountType === 2
-        ? (mrp * discount / 100) * quantity  // Percentage discount
-        : discount * quantity;               // Fixed discount
-
-    // Calculate the discounted total amount
-    const discountedAmount = basicAmount - discountAmount;
-
-    const TotalBasic = basicAmount - (basicAmount * (gstPercentage / 100))
-
-    // Taxable and GST amounts
-    const taxableAmount = rate * quantity;
-    // const discountBaseAmt = basicAmount - discountedAmount;
-
-    const gstAmt = taxableAmount * (gstPercentage / 100);
-    const CGST_Amount = Number((gstAmt / 2).toFixed(2));
-    const SGST_Amount = CGST_Amount;
-    let IGST_Amount = 0;
-
-    // Adjust GST based on state comparison
-    if (IsComparGstIn && compareGSTINState(IsComparGstIn.GSTIn_1, IsComparGstIn.GSTIn_2)) {
-        IGST_Percentage = GST_Percentage; // Full GST applies as IGST
-        CGST_Percentage = 0;
-        SGST_Percentage = 0;
-    }
-
-    // Total amounts
-    const roundedGstAmount = CGST_Amount + SGST_Amount;
-    // const totalAmount = roundedGstAmount + taxableAmount;
-
-    index1.ItemTotalAmount = Number(discountedAmount.toFixed(2));
-
-    // Return calculated values
-    return {
-        // discountBaseAmt: Number(discountBaseAmt.toFixed(2)),
-        disCountAmt: Number(discountAmount.toFixed(2)),
-        ItemTotalAmount: discountedAmount,
-        roundedGstAmount: Number(roundedGstAmount.toFixed(2)),
-        roundedTotalAmount: Number(basicAmount.toFixed(2)),
-        taxableAmount: Number(basicAmount.toFixed(2)),
-        CGST_Amount,
-        SGST_Amount,
-        IGST_Amount,
-        GST_Amount: gstAmt.toFixed(2),
-        CGST_Percentage: CGST_Percentage.toFixed(2),
-        SGST_Percentage: SGST_Percentage.toFixed(2),
-        IGST_Percentage: IGST_Percentage.toFixed(2),
-    };
-
-};
-
-export function Franchies_invoice_Calculate_Func(row, index1, IsComparGstIn,
-
-) {
+export function Franchies_invoice_Calculate_Func(row, index1, IsComparGstIn,) {
     const discountBasedOnRate = true
-
-
-
-    debugger
 
     const qty = Number(row.Qty) || 0;
     const initialRate = Number(row.MRP) || 0;
@@ -247,7 +161,7 @@ export function Franchies_invoice_Calculate_Func(row, index1, IsComparGstIn,
             itemFinalAmount = taxableAmount + gstAmount;
         }
     }
-    debugger
+
     index1.ItemTotalAmount = itemFinalAmount;
 
     return {
@@ -266,23 +180,4 @@ export function Franchies_invoice_Calculate_Func(row, index1, IsComparGstIn,
         IGST_Percentage: igst,
 
     };
-
-
-
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-function hasCheckUnitIs_NOFunc(index1) {
-    return index1.default_UnitDropvalue?.Unitlabel === "No";
 }
