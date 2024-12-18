@@ -1433,7 +1433,7 @@ const Order = (props) => {
                     Item: item.Item_id,
                     Quantity: isDelete ? 0 : item.Quantity,
                     MRP: item.MRP_id,
-                    MRPValue: item.MRPValue,
+                    MRPValue: _cfunc.loginCompanyID() === 4 ? "1" : item.MRPValue,
                     Rate: item.Rate,
                     Unit: item.Unit_id,
                     BaseUnitQuantity: (Number(item.BaseUnitQuantity) * Number(item.Quantity)).toFixed(2),
