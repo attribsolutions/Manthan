@@ -38,7 +38,7 @@ import {
     saveManagementParties,
     saveManagementParties_Success
 } from "../../../store/Administrator/ManagementPartiesRedux/action";
-import { selectAllCheck } from "../../../components/Common/TableCommonFunc";
+import DynamicColumnHook, { selectAllCheck } from "../../../components/Common/TableCommonFunc";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { C_Select } from "../../../CustomValidateForm";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
@@ -51,7 +51,7 @@ const ManagementEmpParties = (props) => {
 
     const [modalCss] = useState(false);
     const [pageMode] = useState(mode.defaultsave);
-    const [userPageAccessState, setUserAccState] = useState(123);
+    const [userPageAccessState, setUserAccState] = useState('');
 
     const fileds = {
         Employee: ""
@@ -180,25 +180,26 @@ const ManagementEmpParties = (props) => {
     function rowSelected() {
         return partyList.map((index) => { return (index.selectCheck) && index.id })
     }
-
-    const pagesListColumns = [
-        {
-            text: "Party Name",
-            dataField: "Name",
-        },
-        {
-            text: "Party Type",
-            dataField: "PartyType",
-        },
-        {
-            text: "State",
-            dataField: "State",
-        },
-        {
-            text: "District",
-            dataField: "District",
-        },
-    ];
+    const [tableColumns] = DynamicColumnHook({ pageField });
+    
+    // const pagesListColumns = [
+    //     {
+    //         text: "Party Name",
+    //         dataField: "Name",
+    //     },
+    //     {
+    //         text: "Party Type",
+    //         dataField: "PartyType",
+    //     },
+    //     {
+    //         text: "State",
+    //         dataField: "State",
+    //     },
+    //     {
+    //         text: "District",
+    //         dataField: "District",
+    //     },
+    // ];
 
     const SaveHandler = async (event) => {
 
@@ -220,7 +221,9 @@ const ManagementEmpParties = (props) => {
     // var IsEditMode_Css = ''
     // if ((modalCss) || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
 
-    if (!(userPageAccessState === '')) {
+    if (!(userPageAccessState === '') && pageField) {
+
+        const selectAllShow = userPageAccessState?.RoleAccess_SelectAll
         return (
             <React.Fragment>
                 <PageLoadingSpinner isLoading={(!pageField)} />
@@ -275,7 +278,7 @@ const ManagementEmpParties = (props) => {
                         <ToolkitProvider
                             keyField="id"
                             data={partyList}
-                            columns={pagesListColumns}
+                            columns={tableColumns}
                             search
                         >
                             {toolkitProps => (
@@ -285,11 +288,14 @@ const ManagementEmpParties = (props) => {
                                             keyField={"id"}
                                             bordered={true}
                                             striped={true}
-                                            selectRow={selectAllCheck({
-                                                rowSelected: rowSelected(),
-                                                bgColor: '',
-                                                tableList: partyList
-                                            })}
+                                            selectRow={
+                                                (selectAllShow) ?
+                                                    selectAllCheck({
+                                                        rowSelected: rowSelected(),
+                                                        bgColor: '',
+                                                        tableList: partyList
+                                                    })
+                                                    : undefined}
                                             noDataIndication={<div className="text-danger text-center ">Party Not available</div>}
                                             classes={"table align-middle table-nowrap table-hover"}
                                             headerWrapperClasses={"thead-light"}
@@ -307,7 +313,7 @@ const ManagementEmpParties = (props) => {
                             }
                         </ToolkitProvider>
 
-                        {partyList.length > 0 &&
+                        {(partyList.length > 0 && selectAllShow) &&
                             <SaveButtonDraggable>
                                 <SaveButton pageMode={pageMode}
                                     loading={saveBtnloading}
