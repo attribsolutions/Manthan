@@ -449,7 +449,7 @@ const Order = (props) => {
 
                 dispatch(_act.GoButton_For_Order_AddSuccess([]))
                 if ((subPageMode === url.ORDER_4) && (postMsg.gotoInvoiceMode)) {
-                    
+
                     // const customer = supplierSelect
                     const customer = {
                         ...supplierSelect, // Spread existing customer fields
@@ -1895,6 +1895,7 @@ const Order = (props) => {
                                                             value={orderTypeSelect}
                                                             classNamePrefix="select2-Customer"
                                                             options={orderTypeOptions}
+                                                            isDisabled={subPageMode === url.ORDER_1 && true}
                                                             onChange={(e) => { setorderTypeSelect(e) }}
                                                             isLoading={orderTypeDropLoading}
                                                             styles={{
