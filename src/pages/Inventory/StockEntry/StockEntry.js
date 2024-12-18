@@ -329,7 +329,7 @@ const StockEntry = (props) => {
                     <CInput
                         id={`Qty${key}`}
                         key={`Qty${row.id}`}
-                        value={row.Qty}
+                        defaultValue={row.Qty}
                         autoComplete="off"
                         type="text"
                         cpattern={decimalRegx}
@@ -504,17 +504,6 @@ const StockEntry = (props) => {
                     </Col>
                 </div>)
             }
-
-
-
-
-
-
-
-
-
-
-
 
         },
     ];
@@ -774,13 +763,9 @@ const StockEntry = (props) => {
         dispatch(getpdfReportdataSuccess(config));
     }
 
-    // const processedData = ModifyTableData_func(TableArr);
-
     const processedData = useMemo(() => ModifyTableData_func(TableArr), [TableArr]);
 
 
-
-    console.log(processedData)
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
