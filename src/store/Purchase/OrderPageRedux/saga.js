@@ -193,6 +193,7 @@ function* orderList_GoBtn_GenFunc({ config }) {
     const { subPageMode } = config
     let response;
     let newList;
+
     if ((subPageMode === url.ORDER_LIST_1) || (subPageMode === url.ORDER_LIST_2) || (subPageMode === url.ORDER_LIST_4) || (subPageMode === url.APP_ORDER_LIST)) {
       response = yield call(OrderList_get_Filter_API, config); // GO-Botton Purchase Order 1 && 2 Add Page API
     }
@@ -306,7 +307,14 @@ function* orderList_GoBtn_GenFunc({ config }) {
     else if (subPageMode === url.GRN_STP_1) {
       newList = newList.filter(i => i.Status === "Open");
     }
+    else if (subPageMode === url.ORDER_LIST_1) {
+      newList.forEach(order => {
+        if (order.Status === "Close") {
+          order.forceDeleteHide = true;
+        }
+      });
 
+    }
     yield put(getOrderListPageSuccess(newList))
 
   } catch (error) {

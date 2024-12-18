@@ -132,7 +132,7 @@ const GRN_ADD_1 = (props) => {
     useEffect(() => {
 
         if ((items.Status === true) && (items.StatusCode === 200)) {
-            
+
             const grnItems = items.Data
 
             if ((grnItems.GRNReferences[0]?.GRN_From === url.IB_GRN_LIST)) { /// If GRN from IB GRN List then this 
@@ -647,7 +647,7 @@ const GRN_ADD_1 = (props) => {
                     Item: i.Item,
                     Quantity: i.Quantity,
                     MRP: i.MRP,
-                    MRPValue: i.MRPValue,
+                    MRPValue: _cfunc.loginCompanyID() === 4 ? "1" : i.MRPValue,
                     ReferenceRate: i.Rate,
                     Rate: i.Rate,
                     vendorOrderRate: i.vendorOrderRate,
@@ -673,7 +673,7 @@ const GRN_ADD_1 = (props) => {
                     DiscountAmount: Number(calculated.disCountAmt).toFixed(2),
 
                 }
-                
+
                 let isfound = GRNItemArray.filter(ind => {
                     return ind.Item === i.Item
                 })
