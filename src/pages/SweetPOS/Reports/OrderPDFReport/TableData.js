@@ -78,7 +78,7 @@ export const Rows_1 = ({ OrderItem = [] }) => {
 
             const tableitemRow = [
                 `${element.ItemName}`,
-                `${Number(element.Quantity)}${extraSpaces}${element.UnitName}`,
+                `${Number(element.Quantity)}${extraSpaces}   ${element.UnitName}`,
                 `${element.Comment === null ? "" : element.Comment}`,
             ];
             hasHedRow.push(tableitemRow);
