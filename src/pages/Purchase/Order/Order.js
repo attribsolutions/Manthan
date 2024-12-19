@@ -716,7 +716,7 @@ const Order = (props) => {
                         <CInput
                             key={`Quantity-${k}`}
                             id={`Quantity-${k}`}
-                            cpattern={subPageMode === url.ORDER_1 ? decimalRegx_3dit : onlyNumberRegx}
+                            cpattern={(subPageMode === url.ORDER_1 || subPageMode === url.ORDER_4) ? decimalRegx_3dit : onlyNumberRegx}
                             defaultValue={(row.Quantity)}
                             className=" text-end"
                             style={{ display: 'none' }}
@@ -732,7 +732,7 @@ const Order = (props) => {
                         <CInput
                             key={`Quantity-${k}`}
                             id={`Quantity-${k}`}
-                            cpattern={subPageMode === url.ORDER_1 ? decimalRegx_3dit : onlyNumberRegx}
+                            cpattern={(subPageMode === url.ORDER_1 || subPageMode === url.ORDER_4) ? decimalRegx_3dit : onlyNumberRegx}
                             defaultValue={(row.Quantity)}
                             className=" text-end"
                             onChange={(e) => {
@@ -1531,7 +1531,7 @@ const Order = (props) => {
                 Customer: supplier,// swipe supllier 
                 Supplier: division,// swipe Customer
                 OrderType: order_Type.SaleOrder,
-                IsConfirm: _cfunc.loginUserIsFranchisesRole() ? false : true, // SO Order then IsConfirm true
+                IsConfirm: true, // SO Order then IsConfirm true
                 AdvanceAmount: advanceAmountRef.current.value ? advanceAmountRef.current.value : 0
             }
 
