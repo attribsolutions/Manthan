@@ -309,15 +309,16 @@ const Franchies_Invoice_Master = (props) => {
     useLayoutEffect(() => {
 
         if (((editData.Status === true) && (editData.StatusCode === 200))) {
-
+            debugger
             setState((i) => {
                 const obj = { ...i }
                 obj.values.Customer = editData.customer;
                 obj.hasValid.Customer.valid = true;
 
                 obj.values.OrderID = editData.customer.OrderID;
+                obj.values.AdvanceAmount = editData.Data?.AdvanceAmount;
 
-                obj.values.InvoiceDate = editData.Data.InvoiceDate;
+                obj.values.InvoiceDate = editData.Data?.InvoiceDate;
                 obj.hasValid.InvoiceDate.valid = true;
 
                 return obj
@@ -325,7 +326,7 @@ const Franchies_Invoice_Master = (props) => {
 
             setPageMode(editData.pageMode);
             setEditInvoiceData(editData);
-            setOrderItemDetails(editData.Data.OrderItemDetails);
+            setOrderItemDetails(editData.Data?.OrderItemDetails);
 
             if (editData.pageMode === mode.edit) {
                 dispatch(changeCommonPartyDropDetailsAction({ forceDisable: true }))//change party drop-down disable when edit/view
