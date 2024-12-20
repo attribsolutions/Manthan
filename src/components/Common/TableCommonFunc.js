@@ -101,6 +101,19 @@ const LABEL_COLORS = {
 
 const listColomnformatter = (cell, row, pagefield) => {
 
+  if (cell === row.Status && row.SAPStatus === "Order send To SAP") {
+    return (
+      <>
+        <div className={`label ${LABEL_COLORS[row.Status]}`} style={{ marginBottom: "8px" }}>
+          {row.Status}
+        </div>
+        <div className={`label ${LABEL_COLORS["Order send To SAP"]}`}>
+          Order send To SAP
+        </div>
+      </>
+    );
+  }
+
   if (LABEL_COLORS[cell]) {
     return (
       <span className={`label  ${LABEL_COLORS[cell]}`} >
