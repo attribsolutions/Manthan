@@ -5,7 +5,7 @@ import './dragbutton.css';
 import { mode } from "../../../routes";
 
 const SaveButtonDraggable = ({ children }) => {
-  debugger
+  
   let pageMode;
 
   if (Array.isArray(children)) {
