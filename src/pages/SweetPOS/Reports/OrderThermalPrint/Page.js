@@ -294,9 +294,12 @@ const OrderThermalPrintReport = (data) => {
     var DiscriptionStyle = {
 
         didParseCell: (data1) => {
-            data1.table.body[1].cells[0].styles.fontSize = 9
+            data1.table.body[2].cells[0].styles.fontSize = 9
+            data1.table.body[2].cells[0].styles.fontStyle = "bold"
+            data1.table.body[2].cells[0].styles.halign = "center"
+            data1.table.body[1].cells[0].styles.halign = "left"
             data1.table.body[1].cells[0].styles.fontStyle = "bold"
-            data1.table.body[1].cells[0].styles.halign = "center"
+
 
         },
 

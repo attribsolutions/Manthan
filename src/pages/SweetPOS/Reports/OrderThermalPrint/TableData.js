@@ -5,7 +5,7 @@ import { convertTo12Hour } from "../../../Dashboard/FrenchiesesDashboard/Functio
 // original
 export const Item = [
     "HSN\nRate",
-    "Item\nGST%/Dist./Dist.Amt",
+    "Item\nGST%/Disc./Disc.Amt",
     "Qty\nAmount",
 ];
 
@@ -34,7 +34,7 @@ export const ItemRow = (data) => {
     OrderItem.forEach(element => {
         const tableitemRow = [
             `${element.HSNCode}\n${element.MRPValue}`,
-            `${element.ItemName}\n${element.GSTPercentage}/${element.Discount}/${element.DiscountAmount}`,
+            `${element.ItemName}\n${element.GSTPercentage}${Number(element.Discount) > 0 ? `/${element.Discount}/${element.DiscountAmount}` : ''}\n ${element.Comment}`,
             `${element.Quantity}\n${element.Amount}`,
 
         ];
@@ -68,7 +68,7 @@ export const GSTDetailsRow = (data, doc) => {
 }
 
 export const DetailsRow = (data) => {
-    
+
     var DetailsArray = [
         // [`${data.CompanyName}`],
         [`${data.SupplierName}`],
@@ -90,7 +90,9 @@ export const DetailsRow = (data) => {
 export const DiscriptionRow = (data) => {
     var discriptionArray = [
         [`We hereby certify that food/foods mentioned in this invoice is/are warranted to be the nature & quality when it/this purport to be at the time of delivery. Kindly consume sweets immediately. Goods once sold will not be taken back`],
-        [`FSSAI:${data.SupplierGSTIN}`]
+        [`Description: ${data.Description}`],
+        [`FSSAI:${data.SupplierGSTIN}`],
+
     ]
     return discriptionArray;
 }

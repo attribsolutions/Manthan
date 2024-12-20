@@ -152,7 +152,7 @@ const PosInvoiceReport = (data) => {
             top: 45, left: 10, right: 35,
         },
         didDrawCell: (Table_data) => {
-            
+
             const { cell, row } = Table_data;
 
             // Set the line color to green
@@ -166,6 +166,7 @@ const PosInvoiceReport = (data) => {
             }
 
             if (Table_data.row.cells[1].raw === "Item\nGST%") {
+                debugger
                 let isDiscount = false
                 let TotalBox = 0;
                 data.InvoiceItems.forEach((element, key) => {
@@ -174,10 +175,9 @@ const PosInvoiceReport = (data) => {
 
                     }
                 })
-
-                Table_data.row.cells[1].text[0] = `Item (${data.InvoiceItems.length})`
                 if (isDiscount) {
-                    Table_data.row.cells[1].text[0] = `Item (${data.InvoiceItems.length})`
+                    Table_data.row.cells[1].text[0] = `Item(${data.InvoiceItems.length})`
+                    Table_data.row.cells[1].text[1] = `GST%/Disc./Disc.Amt`
                 }
 
             }
