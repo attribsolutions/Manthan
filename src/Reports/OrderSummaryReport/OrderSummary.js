@@ -355,6 +355,14 @@ const OrderSummary = (props) => {
 
     }, [showTableData]);
 
+    function addTotalField(obj) {
+        debugger
+        const total = Object.keys(obj)
+            .filter((key) => typeof obj[key] === "number") // Only include numeric fields
+            .reduce((sum, key) => sum + obj[key], 0); // Calculate the sum of numeric values
+
+        return { ...obj, Total: total }; // Add the total field
+    }
 
     const supplierNames = [...new Set(orderSummaryApiData.map((item) => item.SupplierName))];
     const skuNames = [...new Set(orderSummaryApiData.map((item) => item.SKUName))];
@@ -367,14 +375,22 @@ const OrderSummary = (props) => {
             const totalQty = orderSummaryApiData
                 .filter((item) => item.SKUName === sku && item.SupplierName === supplier)
                 .reduce((sum, item) => sum + (item[qtyType] || 0), 0);
-            row[supplier] = totalQty > 0 ? (totalQty).toFixed(0) : 0;
+            row[supplier] = Number(totalQty) > 0 ? Math.round(Number(totalQty)) : 0;
+
         });
-        return row;
+        debugger
+        return addTotalField(row);
     });
 
     // Step 3: Define columns dynamically
     const columns = [
         { dataField: "SKUName", text: "SKU Name", sort: true },
+        {
+            dataField: 'Total',
+            text: 'Total',
+            sort: true, // Optional: Enable sorting
+            formatter: (cell) => <strong>{cell}</strong>, // Render the text in bold
+        },
         ...supplierNames.map((supplier) => ({
             dataField: supplier,
             text: supplier,
