@@ -1,3 +1,4 @@
+
 import React, { useEffect, useMemo, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Card, CardBody, Col, FormGroup, Input, Label, Row } from "reactstrap";
@@ -39,6 +40,11 @@ const OrderSummary = (props) => {
     const [showTableData, setShowTableData] = useState([]);
     const [orderSummaryApiData, setOrderSummaryApiData] = useState([]);
     const [btnMode, setBtnMode] = useState(0);
+
+    const [PivotMode, setPivotMode] = useState(false);
+
+    const [qtyType, setQtyType] = useState("QtyInNo"); // Default to "Qty In No"
+
     const [orderTypeSelect, setOrderTypeSelect] = useState({
         value: 2,
         label: "Sales Order"
@@ -298,6 +304,7 @@ const OrderSummary = (props) => {
             return a
         });
         setShowTableData([]);
+        setPivotMode(false)
         setOrderSummaryApiData([]);
     }
 
@@ -309,6 +316,7 @@ const OrderSummary = (props) => {
             return a
         });
         setShowTableData([]);
+        setPivotMode(false)
         setOrderSummaryApiData([]);
     }
 
@@ -346,6 +354,34 @@ const OrderSummary = (props) => {
         return internalColumn
 
     }, [showTableData]);
+
+
+    const supplierNames = [...new Set(orderSummaryApiData.map((item) => item.SupplierName))];
+    const skuNames = [...new Set(orderSummaryApiData.map((item) => item.SKUName))];
+
+    // Step 2: Pivot the data and aggregate dynamically based on qtyType
+    const pivotedData = skuNames.map((sku) => {
+        const row = { SKUName: sku };
+        supplierNames.forEach((supplier) => {
+            // Sum dynamically based on selected qtyType
+            const totalQty = orderSummaryApiData
+                .filter((item) => item.SKUName === sku && item.SupplierName === supplier)
+                .reduce((sum, item) => sum + (item[qtyType] || 0), 0);
+            row[supplier] = totalQty > 0 ? (totalQty).toFixed(0) : 0;
+        });
+        return row;
+    });
+
+    // Step 3: Define columns dynamically
+    const columns = [
+        { dataField: "SKUName", text: "SKU Name", sort: true },
+        ...supplierNames.map((supplier) => ({
+            dataField: supplier,
+            text: supplier,
+            sort: true,
+        })),
+    ];
+
 
     return (
         <React.Fragment>
@@ -393,7 +429,7 @@ const OrderSummary = (props) => {
                         {isSCMParty &&
                             <Col sm={3} >
                                 <FormGroup className="mb- row mt-3">
-                                    <Label className="col-sm-6 p-2" style={{ width: "65px" }}>Ordering Party</Label>
+                                    <Label className="col-sm-6 p-2" style={{ width: "130px" }}>Ordering Party</Label>
                                     <Col sm="6">
                                         <C_Select
                                             name="PartyName"
@@ -414,7 +450,7 @@ const OrderSummary = (props) => {
                         }
                         <Col sm={3} >
                             <FormGroup className="mb- row mt-3 mb-2">
-                                <Label className="col-sm-4 p-2" style={{ width: "83px" }}>Order Type</Label>
+                                <Label className="col-sm-4 p-2" style={{ width: "100px" }}>Order Type</Label>
                                 <Col sm="6">
                                     <C_Select
                                         name="orderTypeSelect"
@@ -433,35 +469,58 @@ const OrderSummary = (props) => {
                             </FormGroup>
                         </Col>
 
-                        <Col sm={1} className=" mt-3 mb-2">
+                        {/* <Col sm={1} className=" mt-3 mb-2"> */}
+                        <Col sm={2} className=" d-flex justify-content-end mt-2" >
+
                             <C_Button
                                 type="button"
                                 spinnerColor="white"
                                 loading={btnMode === 1 && goBtnLoading}
-                                className="btn btn-success"
+                                className="btn btn-success m-3 mr"
                                 onClick={(e) => excel_And_GoBtnHandler(e, 1)}
                             >
                                 Show
                             </C_Button>
-                        </Col>
+                            {/* </Col> */}
 
-                        <Col sm="1" className="mt-3 mb-2">
+                            {/* <Col sm="1" className="mt-3 mb-2"> */}
                             <C_Button
                                 type="button"
                                 spinnerColor="white"
                                 loading={btnMode === 2 && goBtnLoading}
-                                className="btn btn-primary"
+                                className="btn btn-primary m-3 mr"
                                 onClick={(e) => excel_And_GoBtnHandler(e, 2)}
                             >
                                 Excel
                             </C_Button>
+
+                            {(orderSummaryApiData.length > 0 && !PivotMode) && <C_Button
+                                type="button"
+                                spinnerColor="white"
+                                loading={btnMode === 2 && goBtnLoading}
+                                className="btn btn-info m-3 mr"
+                                onClick={(e) => setPivotMode(true)}
+                            >
+                                Pivot
+                            </C_Button>}
+                            {(orderSummaryApiData.length > 0 && PivotMode) && <C_Button
+                                type="button"
+                                spinnerColor="white"
+                                loading={btnMode === 2 && goBtnLoading}
+                                className="btn btn-info m-3 mr"
+                                onClick={(e) => setPivotMode(false)
+
+                                }
+                            >
+                                Change
+                            </C_Button>}
                         </Col>
                     </div>
                 </div>
 
                 <Card className="mt-1 mb-1  c_card_filter-2 ">
 
-                    <div className="d-flex gap-5">
+                    {!PivotMode && <div className="d-flex gap-5">
                         <div className="d-flex gap-2  justify-content-center">
                             <div>By Date Group</div>
                             <Input
@@ -489,10 +548,45 @@ const OrderSummary = (props) => {
                             />
                         </div>
                     </div>
+                    }
+                    {PivotMode && (
+                        <div className="d-flex gap-5">
 
+
+                            <div className="d-flex gap-2 justify-content-center">
+                                <div>Qty In No</div>
+                                <Input
+                                    type="radio"
+                                    name="qtyType"
+                                    checked={qtyType === "QtyInNo"}
+                                    onChange={() => setQtyType("QtyInNo")}
+                                />
+                            </div>
+                            <div className="d-flex gap-2 justify-content-center">
+                                <div>Qty In Kg</div>
+                                <Input
+                                    type="radio"
+                                    name="qtyType"
+                                    checked={qtyType === "QtyInKg"}
+                                    onChange={() => setQtyType("QtyInKg")}
+                                />
+                            </div>
+
+                            <div className="d-flex gap-2 justify-content-center">
+                                <div>Qty In Box</div>
+                                <Input
+                                    type="radio"
+                                    name="qtyType"
+                                    checked={qtyType === "QtyInBox"}
+                                    onChange={() => setQtyType("QtyInBox")}
+                                />
+                            </div>
+
+                        </div>
+                    )}
                 </Card>
 
-                <div >
+                {!PivotMode && < div >
                     <ToolkitProvider
                         keyField={"keyId"}
                         data={showTableData}
@@ -526,10 +620,85 @@ const OrderSummary = (props) => {
                         )}
                     </ToolkitProvider>
 
-                </div>
+                </div>}
+
+                {PivotMode && <div >
+                    <ToolkitProvider
+                        keyField={"keyId"}
+                        data={pivotedData}
+                        columns={columns}
+                        search
+                    >
+                        {(toolkitProps,) => (
+                            <React.Fragment>
+                                <Row>
+                                    <Col xl="12">
+                                        <div>
+                                            <BootstrapTable
+                                                keyField={"keyId"}
+                                                classes={"custom-table"}
+                                                noDataIndication={
+                                                    <div className="text-danger text-center ">
+                                                        Record Not available
+                                                    </div>
+                                                }
+                                                onDataSizeChange={({ dataSize }) => {
+                                                    dispatch(BreadcrumbShowCountlabel(`Count:${dataSize}`));
+                                                }}
+                                                {...toolkitProps.baseProps}
+                                            />
+                                            {globalTableSearchProps(toolkitProps.searchProps)}
+                                        </div>
+                                    </Col>
+                                </Row>
+
+                            </React.Fragment>
+                        )}
+                    </ToolkitProvider>
+
+                </div>}
             </div>
         </React.Fragment >
     )
 }
 
 export default OrderSummary;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
