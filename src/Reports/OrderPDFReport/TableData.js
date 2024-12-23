@@ -166,6 +166,27 @@ export const Rows = (data) => {
 export const RowsWithIGST = (data) => {
 
     const { OrderItem = [] } = data
+
+    OrderItem.sort((a, b) => {
+        const compare = (x, y) => {
+            // Convert strings to numbers and handle null or 0
+            const numX = x === null ? 0 : Number(x);
+            const numY = y === null ? 0 : Number(y);
+
+            if (numX === 0) return -1; // Treat null or 0 as smaller
+            if (numY === 0) return 1;  // Treat null or 0 as smaller
+            return numX - numY;
+        };
+
+        const groupComparison = compare(a.GroupSequence, b.GroupSequence);
+        if (groupComparison !== 0) return groupComparison;
+
+        const subgroupComparison = compare(a.SubGroupSequence, b.SubGroupSequence);
+        if (subgroupComparison !== 0) return subgroupComparison;
+
+        return compare(a.ItemSequence, b.ItemSequence);
+    });
+
     let hasHedRow = []
     const grouped = groupBy(OrderItem, ele => ele.GSTPercentage);
     grouped.forEach(i => {
@@ -235,6 +256,26 @@ export const RowsWithIGST = (data) => {
 export const RowsForAmericanOrder = (data) => {
 
     const { OrderItem = [] } = data
+
+    OrderItem.sort((a, b) => {
+        const compare = (x, y) => {
+            // Convert strings to numbers and handle null or 0
+            const numX = x === null ? 0 : Number(x);
+            const numY = y === null ? 0 : Number(y);
+
+            if (numX === 0) return -1; // Treat null or 0 as smaller
+            if (numY === 0) return 1;  // Treat null or 0 as smaller
+            return numX - numY;
+        };
+
+        const groupComparison = compare(a.GroupSequence, b.GroupSequence);
+        if (groupComparison !== 0) return groupComparison;
+
+        const subgroupComparison = compare(a.SubGroupSequence, b.SubGroupSequence);
+        if (subgroupComparison !== 0) return subgroupComparison;
+
+        return compare(a.ItemSequence, b.ItemSequence);
+    });
     let hasHedRow = []
     const grouped = groupBy(OrderItem, ele => ele.GSTPercentage);
     grouped.forEach(i => {
