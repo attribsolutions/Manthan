@@ -50,9 +50,9 @@ export default function InvoiceForGRN() {
 
     useEffect(() => {
 
-        const locationPath = history.location.pathname
+       
         let userAcc = userAccess.find((inx) => {
-            return (`/${inx.ActualPagePath}` === `/GRN_ADD_3`)
+            return (`/${inx.ActualPagePath}` === url.GRN_STP_3)
         })
 
         if (!(userAcc === undefined)) {
@@ -191,7 +191,7 @@ export default function InvoiceForGRN() {
 
                 let { listBtnLoading } = formatExtra;
                 return (<>
-                    < Button
+                    {hasRole("RoleAccess_MakeGRN") && < Button
                         type="button"
                         id={`btn-makeBtn-${rowData.id}`}
                         className="badge badge-soft-info font-size-12 btn btn-info waves-effect waves-light w-xxs border border-light "
@@ -207,9 +207,9 @@ export default function InvoiceForGRN() {
                                 className=" fas fa-file-invoice font-size-17"
                             ></span>
                         }
-                    </Button>
+                    </Button>}
 
-                    < Button
+                   { hasRole("RoleAccess_IsPrint") &&  < Button
                         type="button"
                         id={`btn-print-${rowData.id}`}
                         className={printBtnCss}
@@ -227,7 +227,7 @@ export default function InvoiceForGRN() {
                                 className="bx bx-printer font-size-16"
                             ></span>
                         }
-                    </Button>
+                    </Button>}
                 </>)
             }
         },

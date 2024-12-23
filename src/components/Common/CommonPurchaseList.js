@@ -248,6 +248,8 @@ const CommonPurchaseList = (props) => {
   }
 
   const makeBtnColumn = () => {// ======================== for makeBtnColumn Page Action Button ================================
+    const hasRole = (role) => userAccState[role];
+
 
     if (
       makeBtnShow &&
@@ -259,6 +261,9 @@ const CommonPurchaseList = (props) => {
         sort: true,
         attrs: (cell, row, rowIndex, colIndex) => ({ 'data-label': 'Action', "sticky-col": (colIndex === 0) ? "true" : "false" }),
         formatter: (cellContent, rowData) => {
+          // if (condition) {
+
+
 
           if (rowData.IsRecordDeleted === true) {   ///hide button in GRN list 3 STP page last action column for Make Button
             return (
@@ -311,7 +316,7 @@ const CommonPurchaseList = (props) => {
           } else {
             return (
               <div>
-                <Button
+                {hasRole("RoleAccess_MakeGRN") && <Button
                   type="button"
                   className={makeBtnCss}
                   data-mdb-toggle="tooltip"
@@ -329,8 +334,8 @@ const CommonPurchaseList = (props) => {
                       className=" fas fa-file-invoice font-size-16"
                     ></span>
                   }
-                </Button>
-                < Button
+                </Button>}
+                {hasRole("RoleAccess_IsPrint") && < Button
                   type="button"
                   id={`btn-print-${rowData.id}`}
                   className={printBtnCss}
@@ -348,12 +353,12 @@ const CommonPurchaseList = (props) => {
                       className="bx bx-printer font-size-16"
                     ></span>
                   }
-                </Button>
+                </Button>}
               </div>
             );
           }
 
-          // }
+
         },
       }
     }
