@@ -247,7 +247,7 @@ function* orderList_GoBtn_GenFunc({ config }) {
 
       //+++++++++++++++++++++++++  Status colonm show Status   ++++++++++++++++++++++++++++++++++++++
       if (i.SAPResponse) {
-        i.Status = "Order send To SAP"
+        i.SAPStatus = "Order send To SAP"
       }
       else if (i.InvoiceCreated === true) {
         i.Status = "Invoice Created"

@@ -28,7 +28,7 @@ const POS_Log = () => {
 
     const [userPageAccessState, setUserAccState] = useState('');
 
-    const [partySelect, setPartySelect] = useState([]);
+    const [partySelect, setPartySelect] = useState({ value: 0, label: "All" });
     const [formDateSelect, setFormDateSelect] = useState(() => getDateTime_dmy(1));//offSetTime 1 hour earlier
     const [toDateSelect, setToDateSelect] = useState(getDateTime_dmy(-1));
     const [categoryTypeSelect, setCategoryTypeSelect] = useState([allLabelWithBlank]);
@@ -74,6 +74,9 @@ const POS_Log = () => {
 
 
     // userAccess useEffect
+    partyOptions.unshift({ value: 0, label: "All" })
+
+
     useEffect(() => {
         let locationPath = history.location.pathname;
         let userAcc = userAccess.find((inx) => {
@@ -85,7 +88,7 @@ const POS_Log = () => {
         };
     }, [userAccess]);
 
-    
+
     const [tableColumns] = DynamicColumnHook({ pageField })
 
     function onChangeParty(e) {
@@ -128,8 +131,6 @@ const POS_Log = () => {
 
                 setTableData(resp3.Data);
                 dispatch(BreadcrumbShowCountlabel(`Count : ${resp3.Data.length}`))
-            } else if (!(resp3.StatusCode === 406)) {
-                showToastAlert()
             }
         } catch (w) { setGoBtnloading(false); }
 
