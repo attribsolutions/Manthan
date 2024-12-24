@@ -10,23 +10,28 @@ var pageHeder = function (doc, data) {
 };
 
 function reportBody(doc, data) {
-    style.tableBody(doc, data);
+    debugger
+    if (data.Period.isChecked) {
+        style.tableBodyWithUnit(doc, data)
+    } else {
+        style.tableBody(doc, data);
+    }
 }
-
-
 
 const ordeItemSupplierReport = (data) => {
 
     const flattenSupplierData = (data) => {
         let result = [];
         data.forEach(supplier => {
+            debugger
             supplier.ItemDetails.forEach(item => {
                 result.push({
                     SupplierName: supplier.SupplierName,
                     SKUName: item.SKUName,
                     QtyInNo: item.QtyInNo,
                     QtyInKg: item.QtyInKg,
-                    QtyInBox: item.QtyInBox
+                    QtyInBox: item.QtyInBox,
+                    QuantityWithUnit: `${item.Quantity} ${item.Unit}`
                 });
             });
         });
