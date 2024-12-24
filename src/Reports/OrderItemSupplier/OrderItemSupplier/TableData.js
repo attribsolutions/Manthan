@@ -8,6 +8,12 @@ export const columns = [
     "Qty (Box)",
 ];
 
+export const columnsWithUnit = [
+    "Supplier Name",
+    "Item Name",
+    "Quantity With Unit",
+];
+
 
 export const TableSection_1 = [
     "TableSection_1",
@@ -28,31 +34,24 @@ export const Rows = (data) => {
         Row.push(tableitemRow);
     })
     return Row
-    // let supplierName = "";
 
-    // data.forEach((item, index) => {
-    //     
-    //     if (index === 0 || item.SupplierName !== supplierName) {
-    //         const rowSpanCount = data.filter(d => d.SupplierName === item.SupplierName).length;
-    //         Row.push([
-    //             { content: item.SupplierName || "", rowSpan: rowSpanCount },
-    //             item.SKUName,
-    //             Number(item.QtyInNo).toFixed(2),
-    //             Number(item.QtyInKg).toFixed(2),
-    //             Number(item.QtyInBox).toFixed(2), ,
-    //         ]);
-    //     } else {
-    //         Row.push([
+}
 
-    //             item.SKUName,
-    //             Number(item.QtyInNo).toFixed(2),
-    //             Number(item.QtyInKg).toFixed(2),
-    //             Number(item.QtyInBox).toFixed(2),
-    //         ]);
-    //     }
-    //     supplierName = item.SupplierName;
-    // });
-    // return Row
+export const RowsWithUnit = (data) => {
+    let Row = []
+    
+    data.forEach(item => {
+        const tableitemRow = [
+            `${item.SupplierName}`,
+            `${item.SKUName}`,
+            `${item.QuantityWithUnit}`,
+
+        ];
+
+        Row.push(tableitemRow);
+    })
+    return Row
+
 }
 
 export const DetailsSection_Row_1 = (data) => {

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Col, FormGroup, Label, Row } from "reactstrap";
+import { Col, FormGroup, Input, Label, Row } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import { initialFiledFunc } from "../../components/Common/validationFunction";
 import { C_Button } from "../../components/Common/CommonButton";
@@ -33,6 +33,17 @@ const OrderItemSupplierReport = (props) => {
     const [userPageAccessState, setUserAccState] = useState('');
     const [btnMode, setBtnMode] = useState("");
 
+    const [isChecked, setIsChecked] = useState(false);
+
+    const [updatetableColumn, setupdatetableColumn] = useState([{}]);
+
+    const [updatedpageField, setupdatedpageField] = useState({});
+
+
+
+
+
+
     const reducers = useSelector(
         (state) => ({
             ItemSupplierReduxData: state.OrderItemSupplier_Reducer.ItemSupplierReportGobtn,
@@ -57,6 +68,46 @@ const OrderItemSupplierReport = (props) => {
     }, []);
 
     const [tableColumns] = DynamicColumnHook({ pageField })
+
+
+    useEffect(() => {
+        console.log(pageField)
+
+        let updatedcolumn = []
+        let updatedpageField = []
+        if (isChecked) {
+            updatedcolumn = tableColumns.filter(item =>
+                item.dataField !== "QtyInNo" &&
+                item.dataField !== "QtyInKg" &&
+                item.dataField !== "QtyInBox"
+            );
+
+            updatedpageField = pageField?.PageFieldMaster.filter(item =>
+                item.ControlID !== "QtyInNo" &&
+                item.ControlID !== "QtyInKg" &&
+                item.ControlID !== "QtyInBox"
+            );
+        } else {
+            updatedcolumn = tableColumns.filter(item => item.dataField !== "QuantityWithUnit");
+            updatedpageField = pageField?.PageFieldMaster.filter(item =>
+                item.ControlID !== "QuantityWithUnit"
+
+            );
+        }
+        debugger
+        if (pageField) {
+
+            const newPageField = {
+                ...pageField,
+                PageFieldMaster: updatedpageField || [],
+            };
+            setupdatetableColumn(updatedcolumn)
+            setupdatedpageField(newPageField)
+        }
+
+
+
+    }, [tableColumns, isChecked])
 
     const values = { ...state.values }
 
@@ -85,7 +136,7 @@ const OrderItemSupplierReport = (props) => {
         if (btnMode === "excel") {
             if (ItemSupplierReduxData.length > 0) {
                 ExcelReportComponent({                // Download CSV
-                    pageField,
+                    pageField: updatedpageField,
                     excelTableData: ItemSupplierReduxData,
                     excelFileName: "Order Item Supplier Report",
                 })
@@ -113,6 +164,7 @@ const OrderItemSupplierReport = (props) => {
                 let config = { "FromDate": values.FromDate, "ToDate": values.ToDate, }
                 config["ReportType"] = report.ordeItemSupplier;
                 config["jsonBody"] = jsonBody;
+                config["isChecked"] = isChecked
                 dispatch(getpdfReportdata(OrderItemSupplier_GoButton_API, config))
             } else {
                 dispatch(order_Item_Supplier_goBtn_Action({ jsonBody }))
@@ -142,7 +194,9 @@ const OrderItemSupplierReport = (props) => {
         dispatch(order_Item_Supplier_goBtn_Success([]))
     }
 
-
+    const handleCheckboxChange = (event) => {
+        setIsChecked(event.target.checked); // Updates the state based on the checkbox value
+    };
     return (
         <React.Fragment>
             <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
@@ -179,7 +233,27 @@ const OrderItemSupplierReport = (props) => {
                             </FormGroup>
                         </Col>
 
-                        <Col sm={6} className=" d-flex justify-content-end" >
+
+                        <Col sm={3} className="">
+                            <FormGroup className=" row mt-2 " >
+                                <Label className="col-sm-4 p-2"
+                                    style={{ width: "150px" }}>Quantity with Unit</Label>
+                                <Col sm="7">
+                                    <Input
+                                        type="checkbox"
+                                        name="checkbox"
+                                        className="mt-2 p-2"
+                                        checked={isChecked} // Bind checkbox state to isChecked
+                                        onChange={handleCheckboxChange} // Handle change
+                                    />
+                                </Col>
+                            </FormGroup>
+                        </Col>
+
+
+
+
+                        <Col sm={3} className=" d-flex justify-content-end" >
                             <C_Button
                                 type="button"
                                 spinnerColor="white"
@@ -216,7 +290,7 @@ const OrderItemSupplierReport = (props) => {
                     <ReportTableFunc
                         keyField="id"
                         tableData={ItemSupplierReduxData}
-                        columns={tableColumns}
+                        columns={updatetableColumn}
                     />
                 </div>
             </div>
