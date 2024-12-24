@@ -18,14 +18,18 @@ function* OrderItemSupplier_GenFunc({ config }) {
                             QtyInNo: "",
                             QtyInKg: "",
                             QtyInBox: "",
-                            SupplierName: ""
+                            SupplierName: "",
+                            QuantityWithUnit: ""
+
                         },
                         {
                             SKUName: i.SKUName,
                             QtyInNo: amountCommaSeparateFunc(parseFloat(i.QtyInNo).toFixed(2)),
                             QtyInKg: amountCommaSeparateFunc(parseFloat(i.QtyInKg).toFixed(2)),
                             QtyInBox: amountCommaSeparateFunc(parseFloat(i.QtyInBox).toFixed(2)),
-                            SupplierName: "Supplier Not Assigned"
+                            SupplierName: "Supplier Not Assigned",
+                            QuantityWithUnit: `${i.Quantity} ${i.Unit}`
+
                         }
                     ];
                 } else {
@@ -34,7 +38,8 @@ function* OrderItemSupplier_GenFunc({ config }) {
                         QtyInNo: amountCommaSeparateFunc(parseFloat(i.QtyInNo).toFixed(2)),
                         QtyInKg: amountCommaSeparateFunc(parseFloat(i.QtyInKg).toFixed(2)),
                         QtyInBox: amountCommaSeparateFunc(parseFloat(i.QtyInBox).toFixed(2)),
-                        SupplierName: index === 0 ? item.SupplierName : ""
+                        SupplierName: index === 0 ? item.SupplierName : "",
+                        QuantityWithUnit: `${i.Quantity} ${i.Unit}`
                     };
                 }
             });

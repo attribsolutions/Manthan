@@ -221,19 +221,121 @@ export const tableBody = (doc, Row_Data) => {
     doc.autoTable(table.columns, table.Rows(Row_Data, doc), options);
 
 
-    const startY = doc.lastAutoTable.finalY
-    
-    // doc.setPage(doc.internal.getNumberOfPages());
 
-    // // If there's remaining vertical space in the page: start printing next table from the current section
-    // const remainingVSpace = doc.internal.pageSize.height - margin.bottom - doc.lastAutoTable.finalY;
-    // if (remainingVSpace > 25) {
-    //     nextSection = currentSection;
-    //     startY = doc.lastAutoTable.finalY + 10;
-    // } else {
-    //     startY = margin.top;
-    //     if (nextSection == 1) doc.addPage();
-    // }
+    const pageCount = doc.internal.getNumberOfPages()
+    doc.setFont('helvetica', 'Normal')
+
+    for (var i = 1; i <= pageCount; i++) {
+        doc.setPage(i)
+        pageHeder(doc, Row_Data)
+        pageBorder(doc)
+        doc.setFontSize(8)
+        doc.setFont('helvetica', 'Normal')
+        doc.text('Print Date :' + String(currentDate_dmy) + 'Time' + String(CurrentTime()), 30, 828,)
+        doc.text('Page' + String(i) + ' of ' + String(pageCount), 500, 828,)
+
+    }
+
+}
+
+
+
+export const tableBodyWithUnit = (doc, Row_Data) => {
+    
+    let PriviousrowSpanCount = "";
+    let previousSupplierName = "";
+    var options = {
+        didParseCell: function (data) {
+            if (data.column.index === 0 && data.section === "body") {
+                if (data.row.index === data.table.body.length - 1) {
+                    data.row.cells[0].styles.lineWidth = { top: 0.1, right: 0.1, bottom: 1, left: 0.1 }
+                } else {
+                    data.row.cells[0].styles.lineWidth = { top: 0.1, right: 0.1, bottom: 0, left: 0.1 }
+                }
+            } else if (data.column.index === 0 && data.section === "head") {
+                data.row.cells[0].styles.lineWidth = { top: 0.1, right: 0.1, bottom: 0.9, left: 0.1 }
+            }
+
+            // Check if the current row's supplier name is the same as the previous one
+            if (data.row.index > 0 && data.row.cells[0].raw === previousSupplierName) {
+
+                // Only hide the bottom border of the Supplier Name column
+                if (data.column.index === 0 && data.section === "body") {
+
+                    data.row.cells[0].styles.lineColor = [255, 255, 255]
+                    data.row.cells[0].styles.lineWidth = 0; // Hide bottom border for SupplierName column
+                    data.cell.text[0] = ""
+                }
+            } else {
+                const rowSpanCount = Row_Data.filter(d => d.SupplierName === data.row.cells[0].raw).length;
+                if (rowSpanCount !== PriviousrowSpanCount && rowSpanCount > 1) {
+                    data.row.cells[0].rowSpan = 2
+                }
+                previousSupplierName = data.row.cells[0].raw;
+                data.row.cells[0].styles.fontSize = 9; // Hide bottom border for SupplierName column
+                data.row.cells[0].styles.fontStyle = "bold"; // Hide bottom border for SupplierName column
+                PriviousrowSpanCount = rowSpanCount;
+            }
+        },
+
+
+        didDrawPage: (data) => {
+            const finalY = data.cursor.y;
+            doc.line(570, finalY, 30, finalY);//horizontal line (Bottom)    
+        },
+
+        pageBreak: 'auto',
+        margin: {
+            left: 30, right: 25, top: 65
+        },
+
+        theme: 'grid',
+        headerStyles: {
+            cellPadding: 3,
+            lineWidth: 0.8,
+            valign: 'top',
+            fontStyle: 'bold',
+            halign: 'center',
+            fillColor: "white",
+            textColor: [0, 0, 0],
+            fontSize: 8,
+            rowHeight: 10,
+            lineColor: "black"
+        },
+        bodyStyles: {
+            columnWidth: 'wrap',
+            textColor: [30, 30, 30],
+            cellPadding: 5,
+            fontSize: 7,
+            lineColor: [6, 3, 1]
+        },
+        columnStyles: {
+            0: {
+                valign: "top",
+                columnWidth: 208,
+            },
+            1: {
+                columnWidth: 104,
+                halign: 'right',
+            },
+
+            2: {
+                columnWidth: 228,
+                halign: 'right',
+            },
+
+
+        },
+
+        tableLineColor: "black",
+        startY: initial_y,// 45,
+
+    };
+
+
+    
+    doc.autoTable(table.columnsWithUnit, table.RowsWithUnit(Row_Data, doc), options);
+
 
     const pageCount = doc.internal.getNumberOfPages()
     doc.setFont('helvetica', 'Normal')
