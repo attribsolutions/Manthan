@@ -131,8 +131,6 @@ const POS_Log = () => {
 
                 setTableData(resp3.Data);
                 dispatch(BreadcrumbShowCountlabel(`Count : ${resp3.Data.length}`))
-            } else if (!(resp3.StatusCode === 406)) {
-                showToastAlert()
             }
         } catch (w) { setGoBtnloading(false); }
 
