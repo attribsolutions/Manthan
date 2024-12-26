@@ -44,7 +44,7 @@ const generateReport = (resp) => {
 
     switch (resp.ReportType) {
         case order1:
-            ordeRreport(resp.Data)
+            ordeRreport(resp.Data[0])
             break;
         case invoice:
             InvioceReport(resp.Data)
@@ -83,7 +83,7 @@ const generateReport = (resp) => {
             CustomerWiseClaimReport(resp.Data)
             break;
         case FrenchiesesOrder:
-            FrenchiesesOrderReport(resp.Data)
+            FrenchiesesOrderReport(resp.Data[0])
             break;
         case PosInvoice:
             PosInvoiceReport(resp.Data)
@@ -95,7 +95,7 @@ const generateReport = (resp) => {
             StockEntryReport(resp.Data)
             break;
         case orderThermalPrintReport:
-            OrderThermalPrintReport(resp.Data)
+            OrderThermalPrintReport(resp.Data[0])
             break;
 
         default:

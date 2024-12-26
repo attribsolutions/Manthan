@@ -206,7 +206,7 @@ export const RowsWithIGST = (data) => {
 
                 const tableitemRow = [
                     `(${element.HSNCode}) ${element.ItemName}\n${element.Comment === null ? "" : element.Comment}`,
-                    `${Number(element.Quantity).toFixed(2)} ${element.PrimaryUnitName}                  ${element.UnitName}`,
+                    `${Number(element.Quantity).toFixed(2)}                   ${element.UnitName}`,
                     `${numberWithCommas(Number(element.MRPValue).toFixed(2))}`,
                     `${numberWithCommas(Number(element.Rate).toFixed(2))}`,
                     `${element.Discount} ${element.DiscountType === "1" ? "Rs" : "%"}`,
@@ -293,7 +293,7 @@ export const RowsForAmericanOrder = (data) => {
 
                 const tableitemRow = [
                     `(${element.HSNCode}) ${element.ItemName}\n${element.Comment === null ? "" : element.Comment}`,
-                    `${Number(element.Quantity).toFixed(2)} ${element.PrimaryUnitName}                  ${element.UnitName}`,
+                    `${Number(element.Quantity).toFixed(2)}                   ${element.UnitName}`,
                     `${numberWithCommas(Number(element.Rate).toFixed(2))}`,
                     `${element.Discount} ${element.DiscountType === "1" ? "Rs" : "%"}`,
                     `${numberWithCommas(Number(element.DiscountAmount).toFixed(2))}`,
