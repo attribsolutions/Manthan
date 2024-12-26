@@ -14,7 +14,7 @@ import { Go_Button, PageLoadingSpinner } from "../../../components/Common/Common
 import * as report from '../../../Reports/ReportIndex'
 import { url, mode, pageId } from "../../../routes/index"
 import { order_Type } from "../../../components/Common/C-Varialbes";
-import { IB_Order_Get_Api, OrderPage_Edit_ForDownload_API } from "../../../helpers/backend_helper";
+import { IB_Order_Get_Api, order_Single_and_Multiple_Print_API } from "../../../helpers/backend_helper";
 import { comAddPageFieldFunc, initialFiledFunc } from "../../../components/Common/validationFunction";
 import { orderApprovalAction, postOrderConfirms_API, postOrderConfirms_API_Success } from "../../../store/actions";
 import { orderApprovalMessage } from "./orderApproval";
@@ -99,6 +99,8 @@ const OrderList = () => {
             countryList: state.CountryReducer.CountryList,
             countryListloading: state.CountryReducer.loading,
 
+            printAllBtnLoading: state.PdfReportReducers.printAllBtnLoading,
+
             listBtnLoading: (state.OrderReducer.listBtnLoading
                 || state.InvoiceReducer.listBtnLoading
                 || state.PdfReportReducers.listBtnLoading
@@ -126,7 +128,8 @@ const OrderList = () => {
         unhideMsg,
         userAccess,
         countryListloading,
-        countryList
+        countryList,
+        printAllBtnLoading
     } = reducers;
 
     const ordersBulkInvoiceData = useSelector(state => state.BulkInvoiceReducer.ordersBulkInvoiceData);
@@ -454,7 +457,7 @@ const OrderList = () => {
     }
 
     const makeBtnFunc = (list = [], btnId) => {
-        
+
         const obj = list[0]
 
         const customer = {
@@ -569,26 +572,34 @@ const OrderList = () => {
     }
 
     function downBtnFunc(config) {
+
+        let id = config.rowData.id
         config["ReportType"] = report.order1;
         if (subPageMode === url.IB_ORDER_PO_LIST || subPageMode === url.IB_ORDER_SO_LIST) {
             dispatch(_act.getpdfReportdata(IB_Order_Get_Api, config))
         } else {
-            dispatch(_act.getpdfReportdata(OrderPage_Edit_ForDownload_API, config))
+            config['jsonBody'] = {
+                "OrderIDs": id.toString()
+            }
+
+            dispatch(_act.getpdfReportdata(order_Single_and_Multiple_Print_API, config))
         }
 
     }
 
-
-
     function thermalprintBtnFunc(config) {
+        let id = config.rowData.id
         const reportType = report.orderThermalPrintReport
         config["ReportType"] = reportType;
-        dispatch(_act.getpdfReportdata(OrderPage_Edit_ForDownload_API, config))
+        config['jsonBody'] = {
+            "OrderIDs": id.toString()
+        }
+        dispatch(_act.getpdfReportdata(order_Single_and_Multiple_Print_API, config))
     }
 
 
     function minPrintBtn_Func(config) {
-
+        let id = config.rowData.id
         let reportType = ""
         if (subPageMode === url.ORDER_LIST_4) {
             reportType = report.FrenchiesesOrder
@@ -596,7 +607,10 @@ const OrderList = () => {
             reportType = report.FrenchiesesOrder
         }
         config["ReportType"] = reportType;
-        dispatch(_act.getpdfReportdata(OrderPage_Edit_ForDownload_API, config))
+        config['jsonBody'] = {
+            "OrderIDs": id.toString()
+        }
+        dispatch(_act.getpdfReportdata(order_Single_and_Multiple_Print_API, config))
     }
 
 
@@ -903,6 +917,24 @@ const OrderList = () => {
         )
     }
 
+    const PrintAlldownBtnFunc = (row = []) => {
+        
+        let config = {};
+        let ischeck = row.filter(i => (i.selectCheck && !i.forceSelectDissabled))
+        if (!ischeck.length > 0) {
+            customAlert({
+                Type: 4,
+                Message: alertMessages.selectOneOrder,
+            });
+            return
+        }
+        let idString = ischeck.map(obj => obj.id).join(',')
+        config["ReportType"] = report.FrenchiesesOrder;
+       
+        config['jsonBody'] = { OrderIDs: idString }
+        dispatch(_act.getpdfReportdata(order_Single_and_Multiple_Print_API, config))
+        // }
+    };
 
 
     return (
@@ -936,6 +968,9 @@ const OrderList = () => {
                             ViewModal={OrderView}
                             oderAprovalBtnFunc={oderAprovalBtnFunc}
                             selectCheckParams={{
+                                // isPrintAllShow: (subPageMode === url.ORDER_LIST_4 || subPageMode === url.ORDER_LIST_2),
+                                // selectPrintAllBtnHandler: PrintAlldownBtnFunc,
+                                // selectPrintAllBtnLoading: printAllBtnLoading,
                                 // isShow: (subPageMode === url.ORDER_LIST_4 || (hasBulkinvoiceSaveAccess && subPageMode === url.APP_ORDER_LIST)),
                                 selectSaveBtnHandler: (subPageMode === url.ORDER_LIST_4) ? OrderConfirm_Handler : BulkInvoice_Handler,
                                 selectSaveBtnLabel: (subPageMode === url.ORDER_LIST_4) ? "Confirm" : "Bulk Invoice",

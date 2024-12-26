@@ -333,7 +333,7 @@ export const INTERBRANCH_ORDER_PAGE_API = '/InterBranchesOrder'
 
 export const IB_ORDER_GET_API = '/IBPOList'
 
-
+export const ORDER_PRINT_ALL_API = '/OrdersPrint'
 
 
 
