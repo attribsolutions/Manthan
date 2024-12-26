@@ -99,10 +99,14 @@ function AddressDetailsTable({ addressTable = [], setAddressTable, onEdit }) {
 
 	function myFunction(row) {
 		if (row.fssaidocument !== "") {
-			setFssaiDocument([{
-				Image: row.fssaidocument
-			}])
-			setmodal_backdrop(true)
+			if (row.fssaidocument && row.fssaidocument.startsWith("data:application/pdf;base64,")) {
+				openPdfFromBase64(row.fssaidocument);
+			} else {
+				setFssaiDocument([{
+					Image: row.fssaidocument
+				}])
+				setmodal_backdrop(true)
+			}
 		} else {
 			customAlert({
 				Type: 3,
@@ -110,6 +114,30 @@ function AddressDetailsTable({ addressTable = [], setAddressTable, onEdit }) {
 			})
 			return
 		}
+	}
+
+	function openPdfFromBase64(base64String) {
+		// Split the Base64 string to remove the `data:application/pdf;base64,` part
+		const base64 = base64String.split(",")[1];
+
+		// Convert Base64 string to binary data
+		const binary = atob(base64);
+		const array = new Uint8Array(binary.length);
+		for (let i = 0; i < binary.length; i++) {
+			array[i] = binary.charCodeAt(i);
+		}
+
+		// Create a Blob from the binary data
+		const blob = new Blob([array], { type: "application/pdf" });
+
+		// Create a URL for the Blob
+		const url = URL.createObjectURL(blob);
+
+		// Open the PDF in a new browser tab
+		window.open(url, "_blank");
+
+		// Optionally, revoke the Blob URL later to free up resources
+		setTimeout(() => URL.revokeObjectURL(url), 1000);
 	}
 
 	const onEditHandlerHandeler = (row) => {
@@ -128,7 +156,7 @@ function AddressDetailsTable({ addressTable = [], setAddressTable, onEdit }) {
 						type='button'
 						onClick={() => { myFunction(info) }}
 						className="badge badge-soft-info font-size-12 btn btn-info waves-effect waves-light w-xxs border border-light">
-						Show Image
+						Show Document
 					</button>
 				</td>
 				<td>{info.PIN}</td>
