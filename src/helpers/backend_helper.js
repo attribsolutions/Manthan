@@ -508,7 +508,7 @@ export const IB_Order_Get_Api = ({ editId }) => get(`${url.IB_ORDER_GET_API}/${e
 export const IB_Order_Update_API = ({ jsonBody, updateId }) => put(`${url.IB_ORDER_GET_API}/${updateId}`, jsonBody)// update api
 
 
-
+export const order_Single_and_Multiple_Print_API = ({ jsonBody }) => post(url.ORDER_PRINT_ALL_API, jsonBody)// Order approval
 
 
 
