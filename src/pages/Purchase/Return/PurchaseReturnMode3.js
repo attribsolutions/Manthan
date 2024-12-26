@@ -89,7 +89,7 @@ const PurchaseReturnMode3 = (props) => {
     useEffect(() => {
         if (sendToSSbtnTableData.Status === true) {
             setTableData(history.location.updatedTableData);
-            let count_label = `${"Total Amount"} :${_cfunc.amountCommaSeparateFunc(history.location.GrandTotal)}`
+            let count_label = `${"count"} :${sendToSSbtnTableData.Data.length}`
             dispatch(BreadcrumbShowCountlabel(count_label))
             dispatch(post_Send_to_superStockiest_Id_Succcess({ Status: false }))
             setReturnItemIDs(sendToSSbtnTableData.ReturnItemID)

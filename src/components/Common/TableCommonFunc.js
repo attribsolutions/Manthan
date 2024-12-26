@@ -40,7 +40,7 @@ export const selectAllCheck = ({
   attrs: () => ({ 'data-label': "Select" }),
 
   selectionHeaderRenderer: (head) => {
-
+    debugger
     if (tableList.length > 0) {
       let isAllcheck = tableList.filter(i => (i.hasAllSelect))
       let ischeck = tableList.filter(i => (i.selectCheck))
@@ -55,13 +55,26 @@ export const selectAllCheck = ({
     </div>
   },
   selectionRenderer: ({ mode, checked, ...rest }) => {
-
+    debugger
     if (tableList.length > 0) {
       let isAllcheck = tableList.filter(i => (i.hasAllSelect))
       let ischeck = tableList.filter(i => (i.selectCheck))
-      if (isAllcheck.length > 0 && ischeck.length > 0 && isAllcheck.length === ischeck.length) {
-        checked = rest.disabled ? false : true
+
+
+      let unCheckIds = tableList
+        .filter(i => !i.selectCheck) // Filter items where selectCheck is false
+        .map(i => i.id); // Extract the id of the filtered items
+
+      if (unCheckIds.includes(rest.rowKey) || rest.disabled ) {
+        checked = false
+      } else if (isAllcheck.length > 0 && ischeck.length > 0) {
+        checked = true
       }
+
+
+      // if (isAllcheck.length > 0 && ischeck.length > 0) {
+      //   checked = rest.disabled ? false : true
+      // }
     }
     if (rest.disabled) {
 
