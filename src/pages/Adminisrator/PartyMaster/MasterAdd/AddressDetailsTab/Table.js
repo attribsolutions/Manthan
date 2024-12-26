@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, } from 'react';
-import { Button, Input, Table, } from 'reactstrap';
+import React, { useEffect, useRef, useState, } from 'react';
+import { Button, Input, Modal, Table, } from 'reactstrap';
 import { Tbody, Thead } from 'react-super-responsive-table';
 import { useDispatch, useSelector } from 'react-redux';
 import { PartyAddressDeleteID, PartyAddressDeleteIDSuccess } from '../../../../../store/Administrator/PartyRedux/action';
@@ -7,12 +7,19 @@ import { customAlert } from '../../../../../CustomAlert/ConfirmDialog';
 import { deltBtnCss, editBtnCss } from '../../../../../components/Common/ListActionsButtons';
 import "./editDeleteCss.scss"
 import { date_dmy_func } from '../../../../../components/Common/CommonFunction';
+import Slidewithcaption from '../../../../../components/Common/CommonImageComponent';
+import { alertMessages } from '../../../../../components/Common/CommonErrorMsg/alertMsg';
 
 function AddressDetailsTable({ addressTable = [], setAddressTable, onEdit }) {
 
 	const selectedRowIndexRef = useRef(-1);
 
 	const dispatch = useDispatch();
+	const [modal_backdrop, setmodal_backdrop] = useState(false);   // Image Model open Or not
+
+	const [FssaiDocument, setFssaiDocument] = useState([]);   // Image Model open Or not
+
+
 
 	const {
 		deleteMessage,
@@ -48,6 +55,21 @@ function AddressDetailsTable({ addressTable = [], setAddressTable, onEdit }) {
 		}
 	}, [deleteMessage]);
 
+
+	// useEffect(() => {
+	// 	if (imageTable.length > 0) {
+	// 		setmodal_backdrop(true)
+	// 	}
+	// }, [imageTable])
+
+	function tog_backdrop() {
+		setmodal_backdrop(!modal_backdrop)
+		removeBodyCss()
+	}
+	function removeBodyCss() {
+		document.body.classList.add("no_padding")
+	}
+
 	const ondeleteHandeler = (ele) => {
 
 		if (ele.id === undefined) {
@@ -76,14 +98,17 @@ function AddressDetailsTable({ addressTable = [], setAddressTable, onEdit }) {
 	}
 
 	function myFunction(row) {
-
-		var x = document.getElementById("add-img");
-
-		if (x.style.display === "none") {
-			x.src = row.fssaidocument
-			x.style.display = "block";
+		if (row.fssaidocument !== "") {
+			setFssaiDocument([{
+				Image: row.fssaidocument
+			}])
+			setmodal_backdrop(true)
 		} else {
-			x.style.display = "none";
+			customAlert({
+				Type: 3,
+				Message: alertMessages.imageNotUploaded,
+			})
+			return
 		}
 	}
 
@@ -92,7 +117,7 @@ function AddressDetailsTable({ addressTable = [], setAddressTable, onEdit }) {
 	}
 
 	const tableRows = addressTable.map((info, key) => {
-
+		debugger
 		return (
 			<tr key={key} className={key === selectedRowIndexRef.current ? 'selected' : ''}>
 				<td>{info.Address}</td>
@@ -145,8 +170,17 @@ function AddressDetailsTable({ addressTable = [], setAddressTable, onEdit }) {
 	return (
 		<>
 			<div style={{ maxHeight: '400px', overflowY: 'auto' }}>
+				<Modal
+					isOpen={modal_backdrop}
+					toggle={() => {
+						tog_backdrop()
+					}}
 
-				< img id='add-img' className='abc1' src={''} />
+					style={{ width: "800px", height: "800px", borderRadius: "50%" }}
+					className="modal-dialog-centered "
+				>
+					{(FssaiDocument.length > 0) && <Slidewithcaption Images={FssaiDocument} />}
+				</Modal>
 				{addressTable.length > 0 ?
 					<Table className="table table-bordered table-hover">
 						<Thead>
