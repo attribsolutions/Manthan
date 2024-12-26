@@ -716,11 +716,12 @@ const Order = (props) => {
                         <CInput
                             key={`Quantity-${k}`}
                             id={`Quantity-${k}`}
-                            cpattern={(subPageMode === url.ORDER_1 || subPageMode === url.ORDER_4) ? decimalRegx_3dit : onlyNumberRegx}
+                            cpattern={(subPageMode === url.ORDER_1 || subPageMode === url.ORDER_4 || subPageMode === url.ORDER_2) ? decimalRegx_3dit : onlyNumberRegx}
                             defaultValue={(row.Quantity)}
                             className=" text-end"
                             style={{ display: 'none' }}
                             onChange={(e) => {
+                                debugger
                                 row["Quantity"] = e.target.value
                                 itemWise_CalculationFunc(row, undefined, tableList)
                             }}
@@ -732,10 +733,11 @@ const Order = (props) => {
                         <CInput
                             key={`Quantity-${k}`}
                             id={`Quantity-${k}`}
-                            cpattern={(subPageMode === url.ORDER_1 || subPageMode === url.ORDER_4) ? decimalRegx_3dit : onlyNumberRegx}
+                            cpattern={(subPageMode === url.ORDER_1 || subPageMode === url.ORDER_4 || subPageMode === url.ORDER_2) ? decimalRegx_3dit : onlyNumberRegx}
                             defaultValue={(row.Quantity)}
                             className=" text-end"
                             onChange={(e) => {
+                                debugger
                                 row["Quantity"] = e.target.value
                                 itemWise_CalculationFunc(row, undefined, tableList)
                             }}
