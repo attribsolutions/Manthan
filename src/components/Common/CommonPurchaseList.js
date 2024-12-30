@@ -475,7 +475,7 @@ const CommonPurchaseList = (props) => {
           </ExtraTableWrapper>
           {//  check box handler buttons
 
-            ((tableList.length > 0) && (userAccState.RoleAccess_SelectAll)) &&
+            ((tableList.length > 0)) &&
 
             <SaveButtonDraggable>
               <div>
@@ -490,6 +490,21 @@ const CommonPurchaseList = (props) => {
                   onClick={() => { selectCheckParams.selectSaveBtnHandler(tableList) }}
                 >
                   {selectCheckParams.selectSaveBtnLabel}
+                </C_Button>
+              </div>
+
+              <div>
+                <C_Button
+                  forceDisabled={listBtnLoading}
+                  loading={selectCheckParams.selectPrintAllBtnLoading}
+
+                  // style={{ marginTop: "-10px", padding: "3px", paddingInline: "5px" }}
+                  type="button"
+                  spinnerColor="white"
+                  className="btn btn-primary"
+                  onClick={() => { selectCheckParams.selectPrintAllBtnHandler(tableList) }}
+                >
+                  Print All
                 </C_Button>
               </div>
 

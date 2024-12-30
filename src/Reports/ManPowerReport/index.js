@@ -124,44 +124,45 @@ const ManPowerReport = (props) => {
     return (
         <React.Fragment>
             <MetaTags>{metaTagLabel(userPageAccessState)}</MetaTags>
-            <div className="page-content">
-                <div className="px-2   c_card_filter text-black " >
-                    <Row>
+            {/* <div className="page-content"> */}
+                <div className="sticky-wrapper">
+                    <div className="px-2   c_card_filter text-black " >
+                        <Row>
 
-                        <Col sm={12} className=" d-flex justify-content-end" >
-                            <C_Button
-                                type="button"
-                                spinnerColor="white"
-                                loading={(downloadManPower) && btnMode === "Show"}
-                                className="btn btn-success m-3 mr"
-                                onClick={() => GobtnExcelhandler("Show")}
-                            >
-                                Show
-                            </C_Button>
-                            {(downloadManPower) && btnMode === "Excel" ?
-                                <Button type="button"
-                                    color='btn btn-primary'
-                                    className="btn btn-primary m-3 mr"
-                                    id="excelbtn-id"
-                                > Downloading..    &nbsp;
-                                    <Spinner style={{ height: "13px", width: "13px" }} color="white" />
-                                </Button> :
+                            <Col sm={12} className=" d-flex justify-content-end" >
+                                <C_Button
+                                    type="button"
+                                    spinnerColor="white"
+                                    loading={(downloadManPower) && btnMode === "Show"}
+                                    className="btn btn-success m-3 mr"
+                                    onClick={() => GobtnExcelhandler("Show")}
+                                >
+                                    Show
+                                </C_Button>
+                                {(downloadManPower) && btnMode === "Excel" ?
+                                    <Button type="button"
+                                        color='btn btn-primary'
+                                        className="btn btn-primary m-3 mr"
+                                        id="excelbtn-id"
+                                    > Downloading..    &nbsp;
+                                        <Spinner style={{ height: "13px", width: "13px" }} color="white" />
+                                    </Button> :
 
-                                <Button type="button"
-                                    className="btn btn-primary m-3 mr"
-                                    color='btn btn-primary'
-                                    id="excelbtn-id"
-                                    onClick={() => GobtnExcelhandler("Excel")}> Excel
-                                </Button>}
-                        </Col>
-                    </Row>
-                </div>
-
-
-
+                                    <Button type="button"
+                                        className="btn btn-primary m-3 mr"
+                                        color='btn btn-primary'
+                                        id="excelbtn-id"
+                                        onClick={() => GobtnExcelhandler("Excel")}> Excel
+                                    </Button>}
+                            </Col>
+                        </Row>
+                    </div>
 
 
 
+
+
+                {/* </div> */}
                 <div className="mt-1">
                     <ToolkitProvider
                         keyField="id"
@@ -173,7 +174,7 @@ const ManPowerReport = (props) => {
                             <React.Fragment>
                                 <Row>
                                     <Col xl="12">
-                                        <div className="table-responsive table" style={{ maxHeight: "77vh" }}>
+                                        <div className="" style={{ maxHeight: "77vh" }}>
                                             <BootstrapTable
                                                 keyField="PartyID"
                                                 classes={"custom-table"}

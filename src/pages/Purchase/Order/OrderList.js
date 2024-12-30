@@ -918,7 +918,7 @@ const OrderList = () => {
     }
 
     const PrintAlldownBtnFunc = (row = []) => {
-        
+        debugger
         let config = {};
         let ischeck = row.filter(i => (i.selectCheck && !i.forceSelectDissabled))
         if (!ischeck.length > 0) {
@@ -968,9 +968,9 @@ const OrderList = () => {
                             ViewModal={OrderView}
                             oderAprovalBtnFunc={oderAprovalBtnFunc}
                             selectCheckParams={{
-                                // isPrintAllShow: (subPageMode === url.ORDER_LIST_4 || subPageMode === url.ORDER_LIST_2),
-                                // selectPrintAllBtnHandler: PrintAlldownBtnFunc,
-                                // selectPrintAllBtnLoading: printAllBtnLoading,
+                                isPrintAllShow: (subPageMode === url.ORDER_LIST_4 || subPageMode === url.ORDER_LIST_2),
+                                selectPrintAllBtnHandler: PrintAlldownBtnFunc,
+                                selectPrintAllBtnLoading: printAllBtnLoading,
                                 // isShow: (subPageMode === url.ORDER_LIST_4 || (hasBulkinvoiceSaveAccess && subPageMode === url.APP_ORDER_LIST)),
                                 selectSaveBtnHandler: (subPageMode === url.ORDER_LIST_4) ? OrderConfirm_Handler : BulkInvoice_Handler,
                                 selectSaveBtnLabel: (subPageMode === url.ORDER_LIST_4) ? "Confirm" : "Bulk Invoice",

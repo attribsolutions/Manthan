@@ -5,7 +5,8 @@ const INIT_STATE = {
   ReportBtnLoading: false,
   goBtnLoading: false,
   customerWiseBtnloading: false,
-  claimSummaryBtnLoading: false
+  claimSummaryBtnLoading: false,
+  printAllBtnLoading:false,
 }
 
 const PdfReportReducers = (state = INIT_STATE, action) => {
@@ -14,6 +15,7 @@ const PdfReportReducers = (state = INIT_STATE, action) => {
     case GET_PDF_REPORT_DATA:
       return {
         ...state,
+        printAllBtnLoading:true,
         ReportBtnLoading: action.config.btnId,
         goBtnLoading: true,
         customerWiseBtnloading: true,
@@ -24,6 +26,7 @@ const PdfReportReducers = (state = INIT_STATE, action) => {
     case GET_PDF_REPORT_DATA_SUCCESS:
       return {
         ...state,
+        printAllBtnLoading:false,
         ReportBtnLoading: false,
         goBtnLoading: false,
         customerWiseBtnloading: false,
@@ -36,6 +39,7 @@ const PdfReportReducers = (state = INIT_STATE, action) => {
         ...state,
         ReportBtnLoading: false,
         goBtnLoading: false,
+        printAllBtnLoading:false,
 
       }
     default:
