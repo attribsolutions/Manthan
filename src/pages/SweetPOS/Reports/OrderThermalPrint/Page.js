@@ -8,7 +8,7 @@ import Image from "../../../../assets/images/CBM_BlackWhite.png";
 
 
 const OrderThermalPrintReport = (data) => {
-
+    debugger
     // Convert inches to points (1 inch = 72 points)
     const widthInInches = 3.14;
     const widthInPoints = widthInInches * 72;

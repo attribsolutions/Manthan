@@ -15,7 +15,7 @@ export const pageBorder = (doc) => {
     doc.line(570, 815, 30, 815);//horizontal line (Bottom)    
 }
 
-export const pageHeder = (doc, data) => {
+export const pageHeder1 = (doc, data) => {
 
     doc.addImage(cbm_logo, 'PNG', 33, 1, 95, 80, null, 'FAST')
     doc.addFont("Arial", 'Normal')
@@ -273,6 +273,7 @@ export const reportHeder1 = (doc, data) => {
 
     doc.autoTable(table.DetailsOfTransport, table.DetailsOfTransportRow(data), DetailsOfTransportStyle);
     priLength()
+    data["initial_y"] = initial_y
 
     doc.line(408, initial_y, 408, 16);//vertical right 1
     doc.line(220, initial_y, 220, 63);//vertical right 2
@@ -291,32 +292,71 @@ export const reportHeder2 = (doc, data) => {
 }
 
 
+// export const reportHeder3 = (doc, data) => {
+
+//     doc.setFont('Tahoma')
+//     doc.setFontSize(9)
+//     doc.setDrawColor(0, 0, 0);
+//     doc.line(570, 30, 408, 30) //horizontal line 1 billby upper
+//     doc.line(570, 45, 408, 45) //horizontal line 2 billby upper
+
+
+//     doc.line(408, 65, 408, 16);//vertical right 1
+
+//     doc.setFont(undefined, 'bold')
+//     doc.text(`Order No: ${data.FullOrderNumber}`, 415, 25) //Invoice Id
+
+//     var time = convertOnlyTimefunc(data.CreatedOn)
+
+//     const dateOnly = data.CreatedOn.substring(0, 10);
+//     var Orderdate = date_dmy_func(dateOnly)
+//     doc.text(`Order Date: ${Orderdate}  ${time}`, 415, 40) //Invoice date
+//     var DeliveryDate = date_dmy_func(data.OrderDate)                          ///   Delivery Date
+//     doc.text(`Delivery Date: ${DeliveryDate}`, 415, 55) //Invoice date
+//     doc.line(570, 63, 30, 63) //horizontal line 2 billby upper
+
+// }
+
+
 export const reportHeder3 = (doc, data) => {
+   debugger 
+    // Check if data.CreatedOn is defined and is a valid string before using substring
+    if (!data || !data.CreatedOn) {
+        console.error('CreatedOn is missing or undefined in the data');
+        return; // Exit the function early if the required data is missing
+    }
 
-    doc.setFont('Tahoma')
-    doc.setFontSize(9)
+    doc.setFont('Tahoma');
+    doc.setFontSize(9);
     doc.setDrawColor(0, 0, 0);
-    doc.line(570, 30, 408, 30) //horizontal line 1 billby upper
-    doc.line(570, 45, 408, 45) //horizontal line 2 billby upper
 
+    // Horizontal lines
+    doc.line(570, 30, 408, 30); // horizontal line 1
+    doc.line(570, 45, 408, 45); // horizontal line 2
+    doc.line(408, 65, 408, 16); // vertical right 1
 
-    doc.line(408, 65, 408, 16);//vertical right 1
+    doc.setFont(undefined, 'bold');
+    doc.text(`Order No: ${data.FullOrderNumber}`, 415, 25); // Invoice Id
 
-    doc.setFont(undefined, 'bold')
-    doc.text(`Order No: ${data.FullOrderNumber}`, 415, 25) //Invoice Id
+    // Safely handle the CreatedOn date
+    let time = '';
+    if (data.CreatedOn) {
+        time = convertOnlyTimefunc(data.CreatedOn);
+    }
 
-    var time = convertOnlyTimefunc(data.CreatedOn)
+    let Orderdate = '';
+    const dateOnly = data.CreatedOn ? data.CreatedOn.substring(0, 10) : ''; // Ensure CreatedOn is valid
+    if (dateOnly) {
+        Orderdate = date_dmy_func(dateOnly);
+    }
 
-    const dateOnly = data.CreatedOn.substring(0, 10);
-    var Orderdate = date_dmy_func(dateOnly)
-    doc.text(`Order Date: ${Orderdate}  ${time}`, 415, 40) //Invoice date
-    var DeliveryDate = date_dmy_func(data.OrderDate)                          ///   Delivery Date
-    doc.text(`Delivery Date: ${DeliveryDate}`, 415, 55) //Invoice date
-    doc.line(570, 63, 30, 63) //horizontal line 2 billby upper
+    doc.text(`Order Date: ${Orderdate}  ${time}`, 415, 40); // Order date
+    const DeliveryDate = data.OrderDate ? date_dmy_func(data.OrderDate) : 'N/A'; // Safe Delivery Date
+    doc.text(`Delivery Date: ${DeliveryDate}`, 415, 55); // Delivery date
 
-}
-
-
+    // Horizontal line 2
+    doc.line(570, 63, 30, 63); // horizontal line 2
+};
 
 
 

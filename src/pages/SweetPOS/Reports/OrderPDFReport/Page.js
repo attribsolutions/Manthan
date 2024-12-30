@@ -8,11 +8,12 @@ import { currentDate_dmy, CurrentTime } from "../../../../components/Common/Comm
 
 
 var pageHeder = function (doc, data) {
-    style.pageBorder(doc, data);
-    style.pageHeder(doc, data);
+    // style.pageBorder(doc, data);
+    style.pageHeder1(doc, data);
     style.reportHeder1(doc, data);
     style.reportHeder2(doc, data);
     style.reportHeder3(doc, data);
+    return
 };
 
 function reportBody_1(doc, data) {
@@ -26,48 +27,45 @@ function reportBody_1(doc, data) {
 
 const FrenchiesesOrderReport = (data) => {
 
-
-
-    // Define the generatePDF function to create the PDF document
     function generatePDF() {
+
         const doc = new jsPDF('p', 'pt', 'a4');
-
-        const { OrderItem } = data
-
         const margin = {
             left: 30,
             right: 26,
-            top: 62,
+            top: 50,
             bottom: 20,
         };
 
-        // Configuration parameters (these could be made dynamic as needed)
-        const tablesCount = 1; // Example value, replace with actual count if needed
-        const rowsCount = 100; // Example value, replace with actual count if needed
-        const sections = 2; // Example value, replace with actual count if needed
-        const spacing = 5;
-
-        // Calculate each section width
         const printWidth = doc.internal.pageSize.width - (margin.left + margin.right);
+        const sections = 2;  // Number of sections per page
+        const spacing = 5;
         const sectionWidth = (printWidth - ((sections - 1) * spacing)) / sections;
 
-        // Add an initial empty page that will be deleted later
-        doc.addPage();
+        // Iterate over each data set (or table) to be printed
+        data.forEach((tableData, tableIndex) => {
+            debugger
+            if (tableIndex >= 0) {
+                doc.addPage(); // Add a new page for each table after the first one
+            }
 
-        let currentSection;
-        let nextSection = 1;
+            // Page Header for each table
+            pageHeder(doc, tableData);
 
-        for (let i = 0; i < tablesCount; i++) {
-            pageHeder(doc, data)
-            reportBody_1(doc, data)
-            const lasttable = doc.lastAutoTable.finalY
-            let startY = lasttable;
+            // Report body for each table
+            reportBody_1(doc, tableData);
 
-            
+            const lastTablePosition = tableData.initial_y;
+
+            let startY = lastTablePosition;
+
+            let currentSection = 1;
+            let nextSection = 1;
+
             doc.autoTable({
                 theme: 'grid',
                 head: [table.columns_1],
-                body: table.Rows_1({ OrderItem }),
+                body: table.Rows_1({ OrderItem: tableData.OrderItem }),
                 tableWidth: sectionWidth,
                 headerStyles: {
                     cellPadding: 3,
@@ -93,97 +91,109 @@ const FrenchiesesOrderReport = (data) => {
                     top: margin.top,
                     bottom: margin.bottom,
                 },
-                startY,
-                rowPageBreak: 'avoid', // Avoid breaking rows into multiple sections
-                didDrawPage({ table, pageNumber, pageCount }) {
-
+                startY: lastTablePosition,
+                rowPageBreak: 'avoid',
+                didDrawPage({ table, pageNumber }) {
 
                     currentSection = nextSection;
                     nextSection = (nextSection % sections) + 1;
 
-                    // Set left margin which will control x position of next section
                     const shift = (nextSection - 1) * (sectionWidth + spacing);
                     table.settings.margin.left = margin.left + shift;
+
                     if (pageNumber === 1) {
-                        table.settings.margin.top = lasttable
+                        table.settings.margin.top = lastTablePosition;
                     } else {
-                        table.settings.margin.top = 62
+                        table.settings.margin.top = lastTablePosition - 10;
                     }
-                    // If next section is not the first, move to previous page
+
                     if (nextSection > 1) {
+
                         doc.setPage(doc.internal.getNumberOfPages() - 1);
                     }
                 },
                 didParseCell: (data1) => {
                     if (data1.row.cells[1].raw === "") {
-                        data1.row.cells[0].colSpan = 3
-                        data1.row.cells[0].styles.halign = "left"
-                        data1.row.cells[0].styles.fontSize = 8
-                        data1.row.cells[0].styles.fontStyle = "bold"
+                        data1.row.cells[0].colSpan = 3;
+                        data1.row.cells[0].styles.halign = "left";
+                        data1.row.cells[0].styles.fontSize = 8;
+                        data1.row.cells[0].styles.fontStyle = "bold";
                     }
                 },
             });
 
-            // Activate last page for further printing
-            doc.setPage(doc.internal.getNumberOfPages());
-
-            // If there's remaining vertical space in the page: start printing next table from the current section
+            // Ensure correct positioning for the next section
             const remainingVSpace = doc.internal.pageSize.height - margin.bottom - doc.lastAutoTable.finalY;
+
             if (remainingVSpace > 25) {
                 nextSection = currentSection;
-                startY = doc.lastAutoTable.finalY + 10;
+                startY = doc.lastAutoTable.finalY;
             } else {
                 startY = margin.top;
-                if (nextSection == 1) doc.addPage();
+                if (nextSection === 1) doc.addPage();
             }
-        }
 
+            const pageCount = doc.internal.getNumberOfPages();
 
+            doc.setFont('helvetica', 'Normal');
+            for (let i = 0; i <= pageCount; i++) {
 
+                doc.setPage(i);
+                if (i !== 1) {
+                    pageHeder(doc, tableData);
+                    // style.pageBorder(doc, tableData);
+                    // style.pageHeder1(doc, tableData);
+                    // style.reportHeder3(doc, tableData);
+                }
+                doc.setFont('helvetica', 'Normal');
+                doc.setFontSize(11);
 
-        const pageCount = doc.internal.getNumberOfPages()
-
-        doc.setFont('helvetica', 'Normal')
-
-        for (var i = 1; i <= pageCount; i++) {
-            doc.setPage(i)
-            if (i !== 1) {
-                style.pageHeder(doc)
-                style.reportHeder3(doc, data)
-
+                doc.text('Print Date: ' + String(currentDate_dmy) + ' Time: ' + String(CurrentTime()), 30, 828);
+                doc.text('Page ' + String(i) + ' of ' + String(pageCount), 500, 828);
             }
-            doc.setFont('helvetica', 'Normal')
-            doc.setFontSize(11)
 
-            style.pageBorder(doc)
-
-            doc.text('Print Date :' + String(currentDate_dmy) + 'Time' + String(CurrentTime()), 30, 828,)
-            doc.text('Page' + String(i) + ' of ' + String(pageCount), 500, 828,)
-
-        }
+        });
 
 
+        // Add footer and page numbers
+        // const pageCount = doc.internal.getNumberOfPages();
+        // debugger
+        // doc.setFont('helvetica', 'Normal');
+        // for (let i = 0; i <= pageCount; i++) {
+        //     doc.setPage(i);
+        //     if (i !== 1) {
+        //         style.pageHeder(doc);
+        //         style.reportHeder3(doc, data);
+        //     }
+        //     doc.setFont('helvetica', 'Normal');
+        //     doc.setFontSize(11);
 
+        //     style.pageBorder(doc);
 
-        // Delete unused empty page
+        //     doc.text('Print Date: ' + String(currentDate_dmy) + ' Time: ' + String(CurrentTime()), 30, 828);
+        //     doc.text('Page ' + String(i) + ' of ' + String(pageCount), 500, 828);
+        // }
+
+        // Delete the unused first empty page
         doc.deletePage(1);
 
         doc.setProperties({
-
-            title: `POReport/${data.OrderDate}-${data.CustomerName}`
+            title: `POReport/${data[0].OrderDate}-${data[0].CustomerName}`
         });
 
         return doc;
     }
 
-    // Call the generatePDF function and save the document
-    // generatePDF().save('multi-section table.pdf');
 
-    // Set properties for the document
-    // generatePDF().setProperties({
 
-    //     title: `POReport/${data.OrderDate}-${data.CustomerName}`
-    // });
+
+
+
+
+
+
+
+
 
 
 
