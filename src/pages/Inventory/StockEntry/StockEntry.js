@@ -127,6 +127,8 @@ const StockEntry = (props) => {
         dispatch(BreadcrumbShowCountlabel(`Count:${0}`));
     }, []);
 
+ 
+
     useEffect(() => {
         if (commonPartyDropSelect.value > 0) {
             dispatch(Get_Items_Drop_Down({
@@ -260,27 +262,7 @@ const StockEntry = (props) => {
 
 
     const pagesListColumns = [
-        // {
-        //     text: "Group",
-        //     dataField: "GroupName",
-        //     classes: () => "",
-        //     formatter: (cellContent, row, key) => {
 
-        //         return (
-        //             <Label>{row.GroupName}</Label>
-        //         )
-        //     }
-        // },
-        // {
-        //     text: "Sub-Group",
-        //     dataField: "SubGroupName",
-        //     classes: () => "",
-        //     formatter: (cellContent, row, key) => {
-        //         return (
-        //             <Label>{row.SubGroupName}</Label>
-        //         )
-        //     }
-        // },
         {
             text: "Item Name",
             dataField: "ItemName",
@@ -588,7 +570,7 @@ const StockEntry = (props) => {
     }
 
     function deleteButtonAction(row, key, { TableArr = [], setTableArr }) {
-        
+
         const newArr = TableArr.filter((index, key1) => !(row.ItemId === index.ItemId))
         setTableArr(newArr)
         dispatch(BreadcrumbShowCountlabel(`Count:${newArr.length}`));
@@ -728,10 +710,12 @@ const StockEntry = (props) => {
         }
     };
     const ExcelDownloadhandler = () => {
-
+        debugger
         const StockItem_Array = TableArr.map(item => {
             const [ItemName] = item.ItemName.split('-');
             return {
+                GroupName: item.GroupName,
+                SubGroupName: item.SubGroupName,
                 ItemName: ItemName,
                 Quantity: item.Qty ? parseFloat(item.Qty) : item.Quantity,
                 Unit: item.defaultUnit.label,
@@ -739,27 +723,37 @@ const StockEntry = (props) => {
                 GST: item.defaultGST.label,
                 BatchCode: item.BatchCode,
                 BatchDate: item.BatchDate,
+
             };
         });
 
+        let column = [...pagesListColumns, {
+            text: "Group Name",
+            dataField: "GroupName",
+            hidden: false
 
+        }, {
+            text: "Sub Group Name",
+            dataField: "SubGroupName",
+            hidden: false
+        }]
 
         ExcelReportComponent({
-            extraColumn: pagesListColumns,
+
+            extraColumn: column,
             excelTableData: StockItem_Array,
             excelFileName: "Stock Entry Report"
         })
     }
 
     const PDFDownloadhandler = () => {
+
         let config = {}
         TableArr["Closingdate"] = values.Date
         config["Data"] = TableArr
         config["ReportType"] = report.StockEntry
         config["Status"] = true
         config["StatusCode"] = 200
-
-        
         dispatch(getpdfReportdataSuccess(config));
     }
 

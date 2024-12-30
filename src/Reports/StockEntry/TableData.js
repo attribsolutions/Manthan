@@ -30,17 +30,6 @@ export const DetailsOfTransport = [
 ]
 
 
-const replaceValues = (target, source) => {
-
-    return target.map((item, index) => {
-        if (source[index]) {
-            item[4] = source[index].ItemName;
-            item[5] = source[index].Quantity;
-            item[6] = source[index].Comments;
-        }
-        return item;
-    });
-};
 
 export const Rows_1 = ({ data = [] }) => {
     data.forEach((element) => {
@@ -48,7 +37,7 @@ export const Rows_1 = ({ data = [] }) => {
         element.ItemName = itemName;  // Modify the field directly
 
     });
-    
+
     const grouped = groupBy(data, ele => ele.SubGroupName);
 
     let hasHedRow = []
@@ -67,6 +56,7 @@ export const Rows_1 = ({ data = [] }) => {
         hasHedRow.push(totalrow());
 
         i.forEach((element, inx_2) => {
+            debugger
             // Calculate spaces based on the number of digits in Quantity
             const quantityString = Number(element.Quantity).toString();
             let extraSpaces = '';
@@ -83,7 +73,8 @@ export const Rows_1 = ({ data = [] }) => {
             const tableitemRow = [
                 `${element.ItemName}`,
                 `${element.defaultMRP.label}`,
-                `${Number(!element.Quantity ? "" : element.Quantity)}${extraSpaces}${element.defaultUnit.label}`,
+                ``
+
             ];
             hasHedRow.push(tableitemRow);
         });
