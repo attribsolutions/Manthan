@@ -66,8 +66,8 @@ export const Currencycolumn = [
     "",
 ]
 
-export const Rows = (data) => {
-    debugger
+export const Rows = (data, doc) => {
+
     const { OrderItem = [] } = data
 
 
@@ -125,7 +125,7 @@ export const Rows = (data) => {
                     `${Number(element.SGSTPercentage)}%`,
                     `${(numberWithCommas(Number(element.SGST).toFixed(2)))}`,
                     `${(numberWithCommas(Number(element.Amount).toFixed(2)))}`,
-
+                    { Item_id: element.Item, IsHighlightItemInPrint: element.IsHighlightItemInPrint }
                 ];
 
                 totalQuantity = Number(totalQuantity) + Number(element.Quantity)
@@ -139,6 +139,9 @@ export const Rows = (data) => {
 
 
                 hasHedRow.push(tableitemRow);
+
+                doc.rowinfo = { Item_id: element.Item, IsHighlightItemInPrint: element.IsHighlightItemInPrint }
+
             })
 
             function totalrow() {
@@ -228,6 +231,7 @@ export const RowsWithIGST = (data) => {
 
 
                 hasHedRow.push(tableitemRow);
+
             })
 
             function totalrow() {

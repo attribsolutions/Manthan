@@ -40,7 +40,7 @@ export const selectAllCheck = ({
   attrs: () => ({ 'data-label': "Select" }),
 
   selectionHeaderRenderer: (head) => {
-    debugger
+
     if (tableList.length > 0) {
       let isAllcheck = tableList.filter(i => (i.hasAllSelect))
       let ischeck = tableList.filter(i => (i.selectCheck))
@@ -52,10 +52,13 @@ export const selectAllCheck = ({
       <Input type="checkbox" checked={head.checked} />
       {/*  marginBottom: 0  added because in common  them css margin have change affected here so to fix extra margin */}
       <label style={{ paddingLeft: "7px", marginBottom: 0 }}>{headLabel ? headLabel : "SelectAll"}</label>
+
+
+
     </div>
   },
   selectionRenderer: ({ mode, checked, ...rest }) => {
-    debugger
+
     if (tableList.length > 0) {
       let isAllcheck = tableList.filter(i => (i.hasAllSelect))
       let ischeck = tableList.filter(i => (i.selectCheck))
@@ -65,7 +68,7 @@ export const selectAllCheck = ({
         .filter(i => !i.selectCheck) // Filter items where selectCheck is false
         .map(i => i.id); // Extract the id of the filtered items
 
-      if (unCheckIds.includes(rest.rowKey) || rest.disabled ) {
+      if (unCheckIds.includes(rest.rowKey) || rest.disabled) {
         checked = false
       } else if (isAllcheck.length > 0 && ischeck.length > 0) {
         checked = true
@@ -159,6 +162,7 @@ const DynamicColumnHook = ({
   secondLastColumn,
   thirdLastColumn,
   makeBtnColumn,
+  ExtraSelectColumn,
   userAccState,
 }) => {
   const { listBtnLoading } = reducers;
@@ -206,6 +210,12 @@ const DynamicColumnHook = ({
         } else if (i.DefaultSort === 2) {
           sortLabel = i.ControlID;
           sortType = "desc";
+        }
+      }
+      if (k === 0 && ExtraSelectColumn) {
+        const isCol = ExtraSelectColumn();
+        if (isCol) {
+          columns.push(isCol);
         }
       }
 

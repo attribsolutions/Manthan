@@ -10,9 +10,9 @@ let initial_y = 0
 export const pageBorder = (doc) => {
     doc.setDrawColor(0, 0, 0);
     doc.line(570, 16, 30, 16);//horizontal line (Top)
-    doc.line(30, 815, 30, 16);//vertical line (left)
-    doc.line(570, 815, 570, 16);//vertical line (Right)
-    doc.line(570, 815, 30, 815);//horizontal line (Bottom)    
+    doc.line(30, 820, 30, 16);//vertical line (left)
+    doc.line(570, 820, 570, 16);//vertical line (Right)
+    doc.line(570, 820, 30, 820);//horizontal line (Bottom)    
 }
 
 export const pageHeder1 = (doc, data) => {
@@ -292,34 +292,9 @@ export const reportHeder2 = (doc, data) => {
 }
 
 
-// export const reportHeder3 = (doc, data) => {
-
-//     doc.setFont('Tahoma')
-//     doc.setFontSize(9)
-//     doc.setDrawColor(0, 0, 0);
-//     doc.line(570, 30, 408, 30) //horizontal line 1 billby upper
-//     doc.line(570, 45, 408, 45) //horizontal line 2 billby upper
-
-
-//     doc.line(408, 65, 408, 16);//vertical right 1
-
-//     doc.setFont(undefined, 'bold')
-//     doc.text(`Order No: ${data.FullOrderNumber}`, 415, 25) //Invoice Id
-
-//     var time = convertOnlyTimefunc(data.CreatedOn)
-
-//     const dateOnly = data.CreatedOn.substring(0, 10);
-//     var Orderdate = date_dmy_func(dateOnly)
-//     doc.text(`Order Date: ${Orderdate}  ${time}`, 415, 40) //Invoice date
-//     var DeliveryDate = date_dmy_func(data.OrderDate)                          ///   Delivery Date
-//     doc.text(`Delivery Date: ${DeliveryDate}`, 415, 55) //Invoice date
-//     doc.line(570, 63, 30, 63) //horizontal line 2 billby upper
-
-// }
-
 
 export const reportHeder3 = (doc, data) => {
-   debugger 
+    
     // Check if data.CreatedOn is defined and is a valid string before using substring
     if (!data || !data.CreatedOn) {
         console.error('CreatedOn is missing or undefined in the data');

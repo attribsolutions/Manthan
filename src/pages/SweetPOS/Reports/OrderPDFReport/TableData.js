@@ -5,7 +5,7 @@ import { numberWithCommas } from "../../../../Reports/Report_common_function";
 export const columns_1 = [
     "Item Name",
     "Unit",
-    "Comments",
+    "Comments\nmorning   evening",
 
 ];
 
@@ -84,23 +84,13 @@ export const Rows_1 = ({ OrderItem = [] }) => {
         hasHedRow.push(totalrow());
 
         i.forEach((element, inx_2) => {
-            // Calculate spaces based on the number of digits in Quantity
-            const quantityString = Number(element.Quantity).toString();
-            let extraSpaces = '';
-
-            if (quantityString.length === 1) {
-                extraSpaces = '       '; // 5 spaces for 2-digit numbers
-            } else if (quantityString.length === 2) {
-                extraSpaces = '     '; // 3 spaces for 3-digit numbers
-            }
-            else if (quantityString.length === 3) {
-                extraSpaces = '    '; // 3 spaces for 3-digit numbers
-            }
+           
 
             const tableitemRow = [
                 `${element.ItemName}`,
-                `${Number(element.Quantity)}${extraSpaces}   ${element.UnitName}`,
+                `${Number(element.Quantity)} ${element.UnitName}`,
                 `${element.Comment === null ? "" : element.Comment}`,
+                { Item_id: element.Item, IsHighlightItemInPrint: element.IsHighlightItemInPrint }
             ];
             hasHedRow.push(tableitemRow);
         });

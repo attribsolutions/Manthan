@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Modal, Spinner } from "reactstrap";
+import { Button, Input, Modal, Spinner } from "reactstrap";
 import { useDispatch } from "react-redux";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
@@ -8,7 +8,7 @@ import {
   CommonBreadcrumbDetails,
   getpdfReportdata,
 } from "../../store/actions";
-import { TotalAmount_Func, breadcrumbReturnFunc, metaTagLabel } from "./CommonFunction";
+import { TotalAmount_Func, breadcrumbReturnFunc, loginEmployeeID, loginUserDetails, metaTagLabel } from "./CommonFunction";
 import C_Report from "./C_Report";
 import * as mode from "../../routes/PageMode";
 import { customAlert } from "../../CustomAlert/ConfirmDialog";
@@ -21,6 +21,8 @@ import ExtraTableWrapper from "../../GlobalCustomTable/TableWrapper";
 import SaveButtonDraggable from "./saveButtonDraggable";
 import * as report from '../../Reports/ReportIndex'
 import { Invoice_Singel_Get_for_Report_Api } from "../../helpers/backend_helper";
+
+
 
 export async function isAlertFunc(type, Msg) {
   await customAlert({
@@ -38,6 +40,14 @@ const CommonPurchaseList = (props) => {
   const [userAccState, setUserAccState] = useState("");
   const [modal_edit, setmodal_edit] = useState(false);
 
+  const [cellReferesh, setcellReferesh] = useState(false)
+
+
+
+
+
+
+
   const {
     editData = { Data: "" },
     updateMsg = { Status: false },
@@ -53,6 +63,7 @@ const CommonPurchaseList = (props) => {
     props.action;
 
   const {
+
     MasterModal,
     masterPath,
     goButnFunc = () => { },
@@ -68,7 +79,7 @@ const CommonPurchaseList = (props) => {
     },
     selectCheckParams = { isShow: false },
     totalAmountShow = false,
-    mobaileDeleteApiFinc,
+    mobaileDeleteApiFinc
   } = props;
 
   const { PageFieldMaster = [] } = { ...pageField };
@@ -401,6 +412,43 @@ const CommonPurchaseList = (props) => {
     }
   }
 
+
+  const ExtraSelectColumn = () => {  // ======================== for List Page Action Button ================================
+    debugger
+    if (loginUserDetails().RoleName === "Division") {
+
+      return {
+        dataField: 'printAllSelect',
+        formatExtraData: tableList,
+        text: (
+          <div>
+            <Input
+              type="checkbox"
+
+              onChange={(e) => selectCheckParams.headerselecthandler({ event: e, tableList: tableList })}
+            />
+            &nbsp;&nbsp; Print All
+          </div>
+        ),
+        formatter: (cell, row, rowindex, formatExtraData) => {
+          return (
+            <Input
+              type="checkbox"
+              defaultChecked={row.printAllSelect}
+              onChange={(e) => {
+                selectCheckParams.selecthandler({ event: e, rowData: row, tableList: formatExtraData })
+              }}
+            />
+          );
+        },
+        headerStyle: { width: '100px' },
+      }
+    }
+
+  }
+
+
+
   const [tableColumns, defaultSorted] = DynamicColumnHook({
     pageField,
     reducers: props.reducers,
@@ -408,6 +456,7 @@ const CommonPurchaseList = (props) => {
     thirdLastColumn,
     lastColumn,
     makeBtnColumn,
+    ExtraSelectColumn,
     userAccState: userAccState
   })
 
@@ -475,7 +524,7 @@ const CommonPurchaseList = (props) => {
           </ExtraTableWrapper>
           {//  check box handler buttons
 
-            ((tableList.length > 0)) &&
+            ((tableList.length > 0)) && (userAccState.RoleAccess_SelectAll) &&
 
             <SaveButtonDraggable>
               <div>
@@ -493,7 +542,9 @@ const CommonPurchaseList = (props) => {
                 </C_Button>
               </div>
 
-              <div>
+              {loginUserDetails().RoleName === "Division" && <div>
+
+
                 <C_Button
                   forceDisabled={listBtnLoading}
                   loading={selectCheckParams.selectPrintAllBtnLoading}
@@ -506,7 +557,10 @@ const CommonPurchaseList = (props) => {
                 >
                   Print All
                 </C_Button>
-              </div>
+
+
+
+              </div>}
 
             </SaveButtonDraggable>
           }

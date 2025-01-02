@@ -222,8 +222,10 @@ function* orderList_GoBtn_GenFunc({ config }) {
       i.forceEditHide = false;
       i.forceMakeBtnHide = true;
       i.forceDeleteHide = false;
-      // i.forceSelectDissabled = false;
+      i.forceSelectDissabled = false;
       i.forceHideOrderAprovalBtn = true;
+      i.printAllSelect = false
+      
 
       if (i.Inward > 0) {
 
@@ -249,7 +251,8 @@ function* orderList_GoBtn_GenFunc({ config }) {
       if (i.SAPResponse) {
         i.SAPStatus = "Order send To SAP"
       }
-      else if (i.InvoiceCreated === true) {
+
+      if (i.InvoiceCreated === true) {
         i.Status = "Invoice Created"
       }
       else if (i.IsConfirm === true) {
@@ -260,7 +263,7 @@ function* orderList_GoBtn_GenFunc({ config }) {
 
       if (!i.SAPResponse && i.CustomerSAPCode) {//order Aproval button Show Condition 
         i.forceHideOrderAprovalBtn = false;
-        // i.forceSelectDissabled = true;//select row check box dessible 
+        i.forceSelectDissabled = true;//select row check box dessible 
       }
 
       //++++++++++++++++++++++++++++++++++++++ make invoice Button dessiable/vissbble ++++++++++++++++++++++++++++++++++++++
@@ -273,16 +276,16 @@ function* orderList_GoBtn_GenFunc({ config }) {
       if (i.IsConfirm === true) {// is confirm is true the show force delete and edit true "PO" ans "SO" mode 
         i.forceEditHide = true;
         i.forceDeleteHide = true;
-        // i.forceSelectDissabled = true;
+        i.forceSelectDissabled = true;
         if (subPageMode === url.APP_ORDER_LIST) {
 
           if (!(i.SubPartyFlag) || (i.InvoiceCreated)) {
-            // i.forceSelectDissabled = true;//select row check box dessible 
-            // if (i.InvoiceCreated) {
-            //   i.forceSelectDissabled = true;//select row check box dessible 
-            // }
+            i.forceSelectDissabled = true;//select row check box dessible 
+            if (i.InvoiceCreated) {
+              i.forceSelectDissabled = true;//select row check box dessible 
+            }
           } else {
-            // i.forceSelectDissabled = false
+            i.forceSelectDissabled = false
           }
         }
       }
