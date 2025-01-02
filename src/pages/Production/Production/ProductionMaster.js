@@ -160,6 +160,9 @@ const ProductionMaster = (props) => {
                     i.hasValid.ItemName.valid = true
                     i.hasValid.EstimatedQuantity.valid = true
                     i.hasValid.NumberOfLot.valid = true
+                    i.hasValid.PrintedBatchCode.valid = true
+                 
+
                     return i
                 })
 
