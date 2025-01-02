@@ -224,6 +224,8 @@ function* orderList_GoBtn_GenFunc({ config }) {
       i.forceDeleteHide = false;
       i.forceSelectDissabled = false;
       i.forceHideOrderAprovalBtn = true;
+      i.printAllSelect = false
+      
 
       if (i.Inward > 0) {
 
@@ -249,7 +251,8 @@ function* orderList_GoBtn_GenFunc({ config }) {
       if (i.SAPResponse) {
         i.SAPStatus = "Order send To SAP"
       }
-      else if (i.InvoiceCreated === true) {
+
+      if (i.InvoiceCreated === true) {
         i.Status = "Invoice Created"
       }
       else if (i.IsConfirm === true) {
@@ -278,9 +281,9 @@ function* orderList_GoBtn_GenFunc({ config }) {
 
           if (!(i.SubPartyFlag) || (i.InvoiceCreated)) {
             i.forceSelectDissabled = true;//select row check box dessible 
-            // if (i.InvoiceCreated) {
-            //   i.forceSelectDissabled = true;//select row check box dessible 
-            // }
+            if (i.InvoiceCreated) {
+              i.forceSelectDissabled = true;//select row check box dessible 
+            }
           } else {
             i.forceSelectDissabled = false
           }

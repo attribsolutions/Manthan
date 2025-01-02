@@ -26,7 +26,7 @@ import { C_Button, DashboardLoader, Loader, SaveButton } from "../../../componen
 import { url, mode, pageId } from "../../../routes/index"
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { CInput, C_DatePicker, C_ItemSelect, C_Select } from "../../../CustomValidateForm/index";
-import { decimalRegx, } from "../../../CustomValidateForm/RegexPattern";
+import { decimalRegx, decimalRegx_3dit, } from "../../../CustomValidateForm/RegexPattern";
 import { goButtonPartyItemAddPageSuccess, goButtonPartyItemAddPage } from "../../../store/Administrator/PartyItemsRedux/action";
 import { StockEntry_GO_button_api_For_Item } from "../../../helpers/backend_helper";
 import * as _cfunc from "../../../components/Common/CommonFunction";
@@ -314,7 +314,7 @@ const StockEntry = (props) => {
                         defaultValue={row.Qty}
                         autoComplete="off"
                         type="text"
-                        cpattern={decimalRegx}
+                        cpattern={decimalRegx_3dit}
                         className="text-end"
                         onChange={(e) => {
                             row.Qty = e.target.value

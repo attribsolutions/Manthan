@@ -867,7 +867,8 @@ const BOMMaster = (props) => {
                     Company: _cfunc.loginCompanyID(),
                     BOMItems: BOMItems,
                     IsVDCItem: values.IsVDCItem,
-                    ReferenceBom: BOMrefID
+                    ReferenceBom: BOMrefID,
+                    Party: _cfunc.loginPartyID()
                 });
                 if (BOMItems.length === 0) {
                     customAlert({

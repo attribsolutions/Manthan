@@ -1,5 +1,6 @@
 
 import cbm_logo from "../../assets/images/cbm_logo.png"
+
 import * as table from './TableData'
 import { toWords, numberWithCommas } from "../Report_common_function";
 import { CurrentTime, compareGSTINState, convertOnlyTimefunc, currentDate_dmy, date_dmy_func, loginUserIsFranchisesRole } from "../../components/Common/CommonFunction";
@@ -373,6 +374,23 @@ export const tableBody = (doc, data) => {
     var options = {
         didParseCell: (data1) => {
 
+            if (data1.row?.raw[12]?.IsHighlightItemInPrint) {
+
+                data1.row.cells[0].styles.fillColor = [211, 211, 211]
+                data1.row.cells[1].styles.fillColor = [211, 211, 211]
+                data1.row.cells[2].styles.fillColor = [211, 211, 211]
+                data1.row.cells[3].styles.fillColor = [211, 211, 211]
+                data1.row.cells[4].styles.fillColor = [211, 211, 211]
+                data1.row.cells[5].styles.fillColor = [211, 211, 211]
+                data1.row.cells[6].styles.fillColor = [211, 211, 211]
+                data1.row.cells[7].styles.fillColor = [211, 211, 211]
+                data1.row.cells[8].styles.fillColor = [211, 211, 211]
+                data1.row.cells[9].styles.fillColor = [211, 211, 211]
+                data1.row.cells[10].styles.fillColor = [211, 211, 211]
+                data1.row.cells[11].styles.fillColor = [211, 211, 211]
+            }
+
+
             if (data1.row.cells[8].raw === "isaddition") {
                 data1.row.cells[0].colSpan = 2
                 data1.row.cells[2].colSpan = 2
@@ -383,7 +401,6 @@ export const tableBody = (doc, data) => {
                 data1.row.cells[9].colSpan = 2
 
                 data1.row.cells[0].styles.halign = "right"
-
 
                 data1.row.cells[0].styles.fontSize = 7
                 data1.row.cells[4].styles.fontSize = 7
@@ -397,6 +414,8 @@ export const tableBody = (doc, data) => {
                 data1.row.cells[7].styles.fontStyle = "bold"
                 data1.row.cells[9].styles.fontStyle = "bold"
                 data1.row.cells[11].styles.fontStyle = "bold"
+
+
             }
             if (data1.row.cells[0].raw === "HSN Item Name") {
                 let TotalBox = 0;
@@ -412,6 +431,7 @@ export const tableBody = (doc, data) => {
             }
         },
         didDrawCell: (data1) => {
+
             const rowIdx = data1.row.index;
             const colIdx = data1.column.index;
             if (rowIdx === 0 && colIdx === 7) {
@@ -450,6 +470,9 @@ export const tableBody = (doc, data) => {
                     doc.line(startX, startY, endX, endY);
                 }
             }
+
+
+
 
         },
         margin: {
@@ -538,7 +561,7 @@ export const tableBody = (doc, data) => {
 
     };
 
-    doc.autoTable(table.columns, table.Rows(data), options);
+    doc.autoTable(table.columns, table.Rows(data, doc), options);
 
     const optionsTable4 = {
         margin: {
@@ -565,6 +588,7 @@ export const tableBodyWithIGST = (doc, data) => {
     //Body table  Css
     var options = {
         didParseCell: (data1) => {
+
             if (data1.row.cells[8].raw === "isaddition") {
                 data1.row.cells[0].colSpan = 2
                 data1.row.cells[2].colSpan = 2

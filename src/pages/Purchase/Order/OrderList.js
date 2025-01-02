@@ -57,6 +57,7 @@ const OrderList = () => {
     const [subPageMode] = useState(initialSubPageMode);
     const [pageMode, setPageMode] = useState(mode.defaultList);
     const [hasBulkinvoiceSaveAccess, setHasBulkinvoiceSaveAccess] = useState(false);
+    const [extraSelect, setExtraSelect] = useState(false);
 
     const orderList4_or_app_orderList = ((subPageMode === url.ORDER_LIST_4) || (subPageMode === url.APP_ORDER_LIST))
 
@@ -129,7 +130,8 @@ const OrderList = () => {
         userAccess,
         countryListloading,
         countryList,
-        printAllBtnLoading
+        printAllBtnLoading,
+        tableList
     } = reducers;
 
     const ordersBulkInvoiceData = useSelector(state => state.BulkInvoiceReducer.ordersBulkInvoiceData);
@@ -784,6 +786,7 @@ const OrderList = () => {
     const pageFieldMaster = reducers?.pageField?.PageFieldMaster;
 
     if (Array.isArray(pageFieldMaster) && !(IsFranchises)) {
+
         for (let i = pageFieldMaster.length - 1; i >= 0; i--) {
             if (pageFieldMaster[i].ControlID === "AdvanceAmount") {
                 pageFieldMaster.splice(i, 1);
@@ -918,9 +921,9 @@ const OrderList = () => {
     }
 
     const PrintAlldownBtnFunc = (row = []) => {
-        
+
         let config = {};
-        let ischeck = row.filter(i => (i.selectCheck && !i.forceSelectDissabled))
+        let ischeck = row.filter(i => (i.printAllSelect))
         if (!ischeck.length > 0) {
             customAlert({
                 Type: 4,
@@ -930,11 +933,42 @@ const OrderList = () => {
         }
         let idString = ischeck.map(obj => obj.id).join(',')
         config["ReportType"] = report.FrenchiesesOrder;
-       
         config['jsonBody'] = { OrderIDs: idString }
         dispatch(_act.getpdfReportdata(order_Single_and_Multiple_Print_API, config))
-        // }
+
     };
+
+
+
+
+    const headerselecthandler = ({ event, tableList }) => {
+        
+        const isChecked = event.currentTarget.checked
+        let updatedTableList = []
+
+        if (isChecked) {
+            updatedTableList = tableList.map(row => ({
+                ...row,
+                printAllSelect: isChecked
+            }));
+
+        } else {
+            updatedTableList = tableList.map(row => ({
+                ...row,
+                printAllSelect: isChecked
+            }));
+
+        }
+
+        dispatch(_act.getOrderListPageSuccess(updatedTableList))
+    }
+
+
+    const selecthandler = ({ event, rowData, tableList }) => {
+        const isChecked = event.currentTarget.checked
+        rowData.printAllSelect = isChecked
+
+    }
 
 
     return (
@@ -967,10 +1001,13 @@ const OrderList = () => {
                             MasterModal={Order}
                             ViewModal={OrderView}
                             oderAprovalBtnFunc={oderAprovalBtnFunc}
+                            extraSelect={extraSelect}
                             selectCheckParams={{
-                                // isPrintAllShow: (subPageMode === url.ORDER_LIST_4 || subPageMode === url.ORDER_LIST_2),
-                                // selectPrintAllBtnHandler: PrintAlldownBtnFunc,
-                                // selectPrintAllBtnLoading: printAllBtnLoading,
+                                isPrintAllShow: (subPageMode === url.ORDER_LIST_4 || subPageMode === url.ORDER_LIST_2),
+                                selectPrintAllBtnHandler: PrintAlldownBtnFunc,
+                                headerselecthandler: headerselecthandler,
+                                selecthandler: selecthandler,
+                                selectPrintAllBtnLoading: printAllBtnLoading,
                                 // isShow: (subPageMode === url.ORDER_LIST_4 || (hasBulkinvoiceSaveAccess && subPageMode === url.APP_ORDER_LIST)),
                                 selectSaveBtnHandler: (subPageMode === url.ORDER_LIST_4) ? OrderConfirm_Handler : BulkInvoice_Handler,
                                 selectSaveBtnLabel: (subPageMode === url.ORDER_LIST_4) ? "Confirm" : "Bulk Invoice",
