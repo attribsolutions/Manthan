@@ -32,7 +32,7 @@ const FrenchiesSaleReport = (props) => {
     const [PartyDropdown, setPartyDropdown] = useState(allLabelWithZero);
     const [tableData, setTableData] = useState([]);
     const [btnMode, setBtnMode] = useState(0);
-    
+
     const [Item, setItem] = useState(allLabelWithZero);
 
 
@@ -252,7 +252,7 @@ const FrenchiesSaleReport = (props) => {
 
 
 
-                        <Col sm={3} className="">
+                        {!_cfunc.loginUserIsFranchisesRole() && < Col sm={3} className="">
                             <FormGroup className=" row mt-2" >
                                 <Label className="col-sm-4 p-2"
                                     style={{ width: "65px", marginRight: "20px" }}>Party</Label>
@@ -261,6 +261,7 @@ const FrenchiesSaleReport = (props) => {
                                         name="Party"
                                         value={PartyDropdown}
                                         isSearchable={true}
+
                                         isLoading={partyDropdownLoading}
                                         className="react-dropdown"
                                         classNamePrefix="dropdown"
@@ -272,9 +273,9 @@ const FrenchiesSaleReport = (props) => {
                                     />
                                 </Col>
                             </FormGroup>
-                        </Col>
+                        </Col>}
 
-                        <Col sm={isSCMParty ? 2 : 6} className=" d-flex justify-content-end" >
+                        <Col sm={5} className=" d-flex justify-content-end" >
                             <C_Button
                                 type="button"
                                 spinnerColor="white"
