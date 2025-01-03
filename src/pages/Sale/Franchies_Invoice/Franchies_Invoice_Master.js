@@ -309,7 +309,7 @@ const Franchies_Invoice_Master = (props) => {
     useLayoutEffect(() => {
 
         if (((editData.Status === true) && (editData.StatusCode === 200))) {
-            debugger
+
             setState((i) => {
                 const obj = { ...i }
                 obj.values.Customer = editData.customer;
@@ -596,7 +596,7 @@ const Franchies_Invoice_Master = (props) => {
                         <div className="bottom-div">
                             <span className="theme-font text-muted">Amount:</span>
                             <samp className='text-black' id={`item-TotalAmount-${index1.id}`}>
-                                {_cfunc.amountCommaSeparateFunc(index1.ItemTotalAmount || 0)}
+                                {_cfunc.amountCommaSeparateFunc((index1.ItemTotalAmount).toFixed(2) || 0)}
                             </samp>
                         </div>
                     </>
@@ -690,29 +690,29 @@ const Franchies_Invoice_Master = (props) => {
                         "MixItemId": null,
                         "ItemName": null,
                         "HSNCode": index.HSNCode,
-                        "Quantity": ele.Qty,
+                        "Quantity": Number(Number(ele.Qty).toFixed(3)),
                         "UnitID": (index.default_UnitDropvalue.value).toString(),
 
                         "DiscountType": index.DiscountType,
-                        "DiscountValue": index.Discount || 0,
-                        "DiscountAmount": calculate.disCountAmt,
+                        "DiscountValue": Number(Number(index.Discount).toFixed(2)) || 0,
+                        "DiscountAmount": Number(Number(calculate.disCountAmt).toFixed(2)),
 
                         "MRP": parseFloat(ele.MRP),
-                        "Rate": ele.Rate,
-                        "Amount": calculate.ItemTotalAmount,
-                        "BasicAmount": (calculate.taxableAmount).toFixed(2),
+                        "Rate": Number(Number(ele.Rate).toFixed(2)),
+                        "Amount": Number(Number(calculate.ItemTotalAmount).toFixed(2)),
+                        "BasicAmount": Number(Number(calculate.taxableAmount).toFixed(2)),
 
                         "GSTRate": parseFloat(ele.GST),
-                        "GSTAmount": parseFloat(calculate.GST_Amount),
+                        "GSTAmount": parseFloat((calculate.GST_Amount).toFixed(2)),
 
                         "CGSTRate": parseFloat(calculate.CGST_Percentage),
-                        "CGSTAmount": calculate.CGST_Amount,
+                        "CGSTAmount": Number(Number(calculate.CGST_Amount).toFixed(2)),
 
                         "SGSTRate": parseFloat(calculate.SGST_Percentage),
-                        "SGSTAmount": calculate.SGST_Amount,
+                        "SGSTAmount": Number(Number(calculate.SGST_Amount).toFixed(2)),
 
-                        "IGSTRate": calculate.IGST_Amount,
-                        "IGSTAmount": parseFloat(calculate.IGST_Percentage),
+                        "IGSTRate": Number(Number(calculate.IGST_Amount).toFixed(2)),
+                        "IGSTAmount": Number(Number(calculate.IGST_Percentage).toFixed(2)),
                     })
                 }
             })
@@ -902,12 +902,11 @@ const Franchies_Invoice_Master = (props) => {
                                 <Col sm="3" className="">
                                     <FormGroup className="mb- row mt-3 " >
                                         <Label className="col-sm-5 p-2"
-                                            style={{ width: "65px" }}>{fieldLabel.AdvanceAmount}</Label>
+                                            style={{ width: "127px" }}>{fieldLabel.AdvanceAmount}</Label>
                                         <Col sm="7">
                                             <Input
                                                 name="AdvanceAmount"
                                                 value={values.AdvanceAmount}
-                                                disabled={true}
                                                 placeholder="Enter Advance Amount"
                                                 type='text'
                                                 autoComplete='off'

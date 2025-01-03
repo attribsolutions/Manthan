@@ -345,7 +345,7 @@ const Order = (props) => {
                         GSTIN: hasEditVal.SupplierGSTIN,
                     });
                 }
-                setdeliverydate(_cfunc.getDateTime_ymd(hasEditVal.DeliveryDate))
+                setdeliverydate(_cfunc.getDateTime_ymd(hasEditVal.OrderDate))
                 setshippAddr({ label: hasEditVal.ShippingAddress, value: hasEditVal.ShippingAddressID })
                 setbillAddr({ label: hasEditVal.BillingAddress, value: hasEditVal.BillingAddressID });
                 setDescription(hasEditVal.Description)
