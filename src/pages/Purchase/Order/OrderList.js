@@ -634,6 +634,11 @@ const OrderList = () => {
     }
 
     function viewApprovalBtnFunc(config) {
+        let id = config.rowData.id
+
+        config['jsonBody'] = {
+            "OrderIDs": id.toString()
+        }
         dispatch(_act.viewOrderSingleget(config))
     }
 
@@ -942,7 +947,7 @@ const OrderList = () => {
 
 
     const headerselecthandler = ({ event, tableList }) => {
-        
+
         const isChecked = event.currentTarget.checked
         let updatedTableList = []
 

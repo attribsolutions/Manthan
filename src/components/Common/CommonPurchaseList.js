@@ -414,7 +414,7 @@ const CommonPurchaseList = (props) => {
 
 
   const ExtraSelectColumn = () => {  // ======================== for List Page Action Button ================================
-    debugger
+    
     if (loginUserDetails().RoleName === "Division") {
 
       return {

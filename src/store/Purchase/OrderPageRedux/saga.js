@@ -30,6 +30,7 @@ import {
   InterBranch_Order_Delete_API,
   IB_Order_Update_API,
   IB_Order_Get_Api,
+  order_Single_and_Multiple_Print_API,
 } from "../../../helpers/backend_helper";
 import {
   UPDATE_ORDER_ID_FROM_ORDER_PAGE,
@@ -225,7 +226,7 @@ function* orderList_GoBtn_GenFunc({ config }) {
       i.forceSelectDissabled = false;
       i.forceHideOrderAprovalBtn = true;
       i.printAllSelect = false
-      
+
 
       if (i.Inward > 0) {
 
@@ -363,14 +364,14 @@ function* OrderConfirm_GenFunc({ config }) {         // Update Order by subPageM
 }
 
 function* OrderSingleGet_GenFunc({ config }) {
-
+  debugger
   try {
     let response = ""
     if (config.subPageMode === url.IB_ORDER_SO_LIST || config.subPageMode === url.IB_ORDER_PO_LIST) {
       response = yield call(IB_Order_Get_Api, config);
     } else {
-      response = yield call(OrderPage_Edit_ForDownload_API, config);
-
+      response = yield call(order_Single_and_Multiple_Print_API, config);
+      
     }
 
     yield put(orderSinglegetSuccess(response))
