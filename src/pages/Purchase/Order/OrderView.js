@@ -10,7 +10,7 @@ import { useState } from "react";
 
 
 const ViewDetails_Modal = () => {
-
+    debugger
     const dispatch = useDispatch()
     const [modal_view, setModal_view] = useState(false);
     const [tableArray, setTableArray] = useState([]);
@@ -22,7 +22,7 @@ const ViewDetails_Modal = () => {
     useEffect(() => {
         try {
             if ((viewData_redux.Status === true)) {
-                setTableArray(viewData_redux.Data.OrderItem)// modify Custom Table Data
+                setTableArray(viewData_redux.Data[0].OrderItem)// modify Custom Table Data
                 setModal_view(true);
             }
         } catch (error) { CommonConsole(error) }
