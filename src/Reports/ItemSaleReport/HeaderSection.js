@@ -439,6 +439,8 @@ const HeaderSection = (props) => {
         PartyType: states.supplierSelect.value > 0 ? 0 : states.channelFromSelect.value,
         Party: !isSCMParty ? _cfunc.loginSelectedPartyID() : states.supplierSelect.value,
         Employee: !isSCMParty ? 0 : _cfunc.loginEmployeeID(),
+        CompanyID: _cfunc.loginCompanyID()
+
       });
       dispatch(ItemSaleGoButton_API({ jsonBody, btnId: url.ITEM_SALE_REPORT }));
     } catch (error) {

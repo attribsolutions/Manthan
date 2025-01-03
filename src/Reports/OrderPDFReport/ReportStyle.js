@@ -22,7 +22,8 @@ export const pageHeder = (doc, data) => {
     doc.addFont("Arial", 'Normal')
     doc.setFont('Arial')
     doc.setFontSize(18)
-    if (data.subPageMode === url.ORDER_LIST_4) {
+    debugger
+    if (data.Period.subPageMode === url.ORDER_LIST_4) {
         doc.text('SALES  ORDER', 180, 45,)
     } else {
         doc.text('PURCHASE ORDER', 180, 45,)

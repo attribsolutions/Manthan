@@ -38,60 +38,43 @@ const generateReportPage = (doc, data) => {
     pageFooter(doc, data);
 }
 
-const ordeRreport = async (data) => {
-    data["isAmerica"] = loginUserDetails().Country_id === AMERICA_ID
-    var doc = new jsPDF('p', 'pt', 'a4');
-
-    const BATCH_SIZE = 40; // You can adjust the batch size according to your needs
-
-    if (Array.isArray(data)) {
-        for (let i = 0; i < data.length; i += BATCH_SIZE) {
-            const batch = data.slice(i, i + BATCH_SIZE);
-            batch.forEach((item, index) => {
-                // flag for condition check in loading sheet multiple invoice print 
-                item["isMultiPrint"] = true
-                item.SettingData = data.SettingData;
-                generateReportPage(doc, item);
-                if (index !== batch.length - 1) {
-                    doc.addPage();
-                }
-            });
-        }
-
-    }
-    // else {
-    //     const Data = [data];
-    //     Data.forEach((item, index) => {
-    //         item["isMultiPrint"] = false
-    //         generateReportPage(doc, item);
-    //         if (index !== Data.length - 1) {
-    //             doc.addPage();
-    //         }
-    //     });
-    // }
-    // if (IsSweetAndSnacksCompany()) {
-    //     const qrCodeImage = await QRCode.toDataURL(data.FullInvoiceNumber);
-    //     doc.addImage(qrCodeImage, "PNG", 344, 310, 90, 80, null, 'FAST');
-    // }
-
-    doc.setProperties({
-        title: `POReport/${data.OrderDate}-${data.CustomerName} `
-    });
-
-    function generateSaveAndOpenPDFReport() {
-        const pdfUrl = URL.createObjectURL(doc.output('blob'));
-        window.open(pdfUrl);
-    }
-    generateSaveAndOpenPDFReport();
-
-}
-// const ordeRreport = (data) => {
-//     debugger
+// const ordeRreport = async (data) => {
+//     
 //     data["isAmerica"] = loginUserDetails().Country_id === AMERICA_ID
 //     var doc = new jsPDF('p', 'pt', 'a4');
-//     pageHeder(doc, data);
-//     reportBody(doc, data);
-//     pageFooter(doc, data);
+
+//     const BATCH_SIZE = 40; // You can adjust the batch size according to your needs
+
+//     if (Array.isArray(data)) {
+//         for (let i = 0; i < data.length; i += BATCH_SIZE) {
+//             const batch = data.slice(i, i + BATCH_SIZE);
+//             batch.forEach((item, index) => {
+//                 // flag for condition check in loading sheet multiple invoice print 
+//                 item["isMultiPrint"] = true
+//                 item.SettingData = data.SettingData;
+//                 generateReportPage(doc, item);
+//                 if (index !== batch.length - 1) {
+//                     doc.addPage();
+//                 }
+//             });
+//         }
+
+//     }
+//     // else {
+//     //     const Data = [data];
+//     //     Data.forEach((item, index) => {
+//     //         item["isMultiPrint"] = false
+//     //         generateReportPage(doc, item);
+//     //         if (index !== Data.length - 1) {
+//     //             doc.addPage();
+//     //         }
+//     //     });
+//     // }
+//     // if (IsSweetAndSnacksCompany()) {
+//     //     const qrCodeImage = await QRCode.toDataURL(data.FullInvoiceNumber);
+//     //     doc.addImage(qrCodeImage, "PNG", 344, 310, 90, 80, null, 'FAST');
+//     // }
+
 //     doc.setProperties({
 //         title: `POReport/${data.OrderDate}-${data.CustomerName} `
 //     });
@@ -103,4 +86,24 @@ const ordeRreport = async (data) => {
 //     generateSaveAndOpenPDFReport();
 
 // }
+const ordeRreport = (data) => {
+
+    data = { ...data[0] }
+
+    data["isAmerica"] = loginUserDetails().Country_id === AMERICA_ID
+    var doc = new jsPDF('p', 'pt', 'a4');
+    pageHeder(doc, data);
+    reportBody(doc, data);
+    pageFooter(doc, data);
+    doc.setProperties({
+        title: `POReport/${data.OrderDate}-${data.CustomerName} `
+    });
+
+    function generateSaveAndOpenPDFReport() {
+        const pdfUrl = URL.createObjectURL(doc.output('blob'));
+        window.open(pdfUrl);
+    }
+    generateSaveAndOpenPDFReport();
+
+}
 export default ordeRreport;
