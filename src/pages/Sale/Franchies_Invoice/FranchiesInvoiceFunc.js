@@ -78,13 +78,13 @@ export function RoundCalculationFunc(data) {
     const totalAmount = (NetAmount + DiscountTotalAmount); // Subtract and ensure 2 decimal places
     const RoundedAmount = Math.round(NetAmount); // Nearest integer
     const RoundOffAmount = (NetAmount - RoundedAmount); // Difference rounded to 2 decimal places
-
+    debugger
     return {
-        "DiscountAmount": DiscountTotalAmount.toFixed(2),
-        "TotalAmount": totalAmount.toFixed(2),
-        "NetAmount": NetAmount.toFixed(2),
-        "RoundedAmount": RoundedAmount.toFixed(2),
-        "RoundOffAmount": RoundOffAmount.toFixed(2),
+        "DiscountAmount": Number(Number(DiscountTotalAmount).toFixed(2)),
+        "TotalAmount": Number(Number(totalAmount).toFixed(2)),
+        "NetAmount": Number(Number(NetAmount).toFixed(2)),
+        "RoundedAmount": Number(Number(RoundedAmount).toFixed(2)),
+        "RoundOffAmount": Number(Number(RoundOffAmount).toFixed(2)),
     }
 }
 
