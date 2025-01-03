@@ -9,12 +9,16 @@ import { CommonConsole } from "../../../components/Common/CommonFunction";
 function* getpdfData_GenFunc({ urlpath, config }) {
 
   try {
-    
+
     const response = yield call(urlpath, config);
 
     response["ReportType"] = config.ReportType
     response.Data["ReportType"] = config.ReportType
-    response.Data["Period"] = config
+    if (Array.isArray(response.Data)) {
+      response.Data[0]["Period"] = config
+    } else {
+      response.Data["Period"] = config
+    }
 
     let i = {
       SAPOrderNo: response.Data?.SAPOrderNo || "", // Default to an empty string if null or undefined
