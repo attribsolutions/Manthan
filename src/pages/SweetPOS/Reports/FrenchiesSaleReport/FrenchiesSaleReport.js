@@ -160,12 +160,14 @@ const FrenchiesSaleReport = (props) => {
     }, [goButtonData]);
 
     function excel_And_GoBtnHandler(e, Btnmode) {
+        debugger
         setBtnMode(Btnmode);
+
         const jsonBody = JSON.stringify({
             "FromDate": fromdate,
             "ToDate": todate,
             "Item": Item.value,
-            "Party": PartyDropdown.value
+            "Party": _cfunc.loginUserIsFranchisesRole() ? _cfunc.loginPartyID() : PartyDropdown.value
         });
 
         dispatch(Frenchies_Item_sale_Report_Action({ jsonBody }));
@@ -275,7 +277,7 @@ const FrenchiesSaleReport = (props) => {
                             </FormGroup>
                         </Col>}
 
-                        <Col sm={5} className=" d-flex justify-content-end" >
+                        <Col sm={!_cfunc.loginUserIsFranchisesRole() ? 2: 5} className=" d-flex justify-content-end" >
                             <C_Button
                                 type="button"
                                 spinnerColor="white"
