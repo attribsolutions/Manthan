@@ -951,6 +951,10 @@ export const Country_update_API = ({ jsonBody, updateId }) => put(`${url.COUNTRY
 //Franchise Sale With Bill Count Report 
 export const Franchise_Sale_With_Bill_Count_API = ({ jsonBody }) => post(url.FRANCHAISE_SALE_WITH_BILL_COUNT_API, jsonBody)//Go button api
 
+
+export const Bill_booking_Report_Api = ({ jsonBody }) => post(url.BILL_BOOKING_REPORT_API, jsonBody)//Go button api
+
+
 export {
 	getLoggedInUser,
 	isUserAuthenticated,

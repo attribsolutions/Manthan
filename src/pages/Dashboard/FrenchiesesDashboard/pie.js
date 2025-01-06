@@ -29,7 +29,7 @@ class Pie extends Component {
             },
             tooltip: {
                 trigger: "item",
-                formatter: "{a} <br/>{b} : {c} ({d}%)",
+                formatter: "{a} <br/>{b} : {c}",
             },
          
             color: ["#02a499", "#f8b425", "#ec4561", "#38a4f8", "#3c4ccf"],

@@ -708,4 +708,11 @@ export const COUNTRY_UPDATE_DELETE_API = '/Country'
 export const FRANCHAISE_SALE_WITH_BILL_COUNT_API = "/SweetPOS/FranchiseSaleWithBillCount"
 
 
+export const BILL_BOOKING_REPORT_API = '/BillBookingReport'
+
+
+
+
+
+
 
