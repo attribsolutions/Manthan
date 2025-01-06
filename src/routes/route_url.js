@@ -427,6 +427,8 @@ export const SWEET_POS_MACHINE_LIST = "/SweetPOS_Machine_List"
 
 export const  STOCK_OUT_REPORT = "/Stock_Out_Report"
 
+export const  BILL_BOOKING_REPORT = "/Bill_Booking_Report"
+
 export const FRANCHAISE_SALE_WITH_BILL_COUNT="/Franchise_Sale_With_Bill_Count"
 
 

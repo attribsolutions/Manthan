@@ -251,6 +251,7 @@ import MachineTypeList from "../pages/SweetPOS/Adminstration/MachineType/Machine
 import FranchiseSaleWithBillCount from "../pages/SweetPOS/Reports/FranchiseSaleWithBillCount.js/index.js";
 import Franchies_Invoice_Master from "../pages/Sale/Franchies_Invoice/Franchies_Invoice_Master.js";
 import SweetPosInvoiceList from "../pages/SweetPOS/Sales/Invoice/SPOS_InvoiceList.js";
+import BillBookingReport from "../Reports/BillBookingReport/index.js";
 
 
 const userRoutes = [
@@ -664,10 +665,12 @@ const userRoutes = [
 
 
 
+	// ************************************ Sweet And Snacks Report  **************************************//
+
+	{ path: path.BILL_BOOKING_REPORT, component: BillBookingReport },//not party wise
 
 
-
-
+	
 
 
 
