@@ -19,11 +19,11 @@ function reportBody(doc, data) {
 }
 
 const ordeItemSupplierReport = (data) => {
-
+    debugger
     const flattenSupplierData = (data) => {
         let result = [];
         data.forEach(supplier => {
-            debugger
+
             supplier.ItemDetails.forEach(item => {
                 result.push({
                     SupplierName: supplier.SupplierName,
@@ -35,7 +35,7 @@ const ordeItemSupplierReport = (data) => {
                 });
             });
         });
-        result["Period"] = data.Period
+        result["Period"] = data[0].Period
         return result;
 
     };

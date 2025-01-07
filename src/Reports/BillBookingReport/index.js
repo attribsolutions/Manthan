@@ -114,7 +114,7 @@ const BillBookingReport = (props) => {
                                 <td>SGST</td>
                             </tr>
                             <tr>
-                                <td>Supplier Name</td>
+                                <td>{row.SupplierName}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -143,7 +143,7 @@ const BillBookingReport = (props) => {
                                 <td>{row.SGST}</td>
                             </tr>
                             <tr>
-                                <td>{row.SupplierName}</td>
+                                <td>{"0"}</td>
                             </tr>
                         </tbody>
                     </table>

@@ -35,6 +35,22 @@ const FrenchiesesOrderReport = (data) => {
 
         // Iterate over each data set (or table) to be printed
         data.forEach((tableData, tableIndex) => {
+            let i = {
+                SAPOrderNo: tableData?.SAPOrderNo || "", // Default to an empty string if null or undefined
+                FullOrderNumber: tableData?.FullOrderNumber || "", // Default to an empty string if null or undefined
+            };
+
+            if (i.SAPOrderNo) {
+                var numb = i.SAPOrderNo.match(/\d/g);
+                i.SAPOrderNo = numb ? numb.join("") : ""; // Join digits if found, else default to an empty string
+            }
+
+            tableData["FullOrderNumber"] = i.SAPOrderNo
+                ? `${i.FullOrderNumber} (${i.SAPOrderNo})`
+                : i.FullOrderNumber; // If SAPOrderNo is empty, show only FullOrderNumber
+
+
+
             if (tableIndex >= 0) {
                 doc.addPage(); // Add a new page for each table after the first one
             }
@@ -67,21 +83,25 @@ const FrenchiesesOrderReport = (data) => {
                     columnWidth: 'wrap',
                     textColor: [30, 30, 30],
                     cellPadding: 3,
-                    fontSize: 7,
+                    fontSize: 8,
                     lineColor: [6, 3, 1]
                 },
                 columnStyles: {
                     0: {
                         valign: "top",
-                        columnWidth: 137,
+                        columnWidth: 147,
+
+
+
                     },
                     1: {
                         columnWidth: 50,
                         halign: 'left',
 
+
                     },
                     2: {
-                        columnWidth: 80,
+                        columnWidth: 70,
                         halign: 'right',
                     },
 
@@ -131,19 +151,9 @@ const FrenchiesesOrderReport = (data) => {
                     const startY1vertical = data1.cell.y + 9;
                     const endYvertical = startY + cellHeight;
 
-                    if (rowIdx === 0 && colIdx === 2) {
-
-                        doc.line(startXVertical, startY1vertical + 2, startXVertical, endYvertical + 2); // Draw a vertical line
-                        doc.line(startX, startY, endX, endY);
-
-                    }
-
-                    if (rowIdx !== 0 && colIdx === 2) {
-
+                    if (colIdx === 2) {
                         doc.line(startXVertical, startY1vertical - 8, startXVertical, endYvertical - 8); // Draw a vertical line
-
                     }
-                    debugger
 
                 },
 

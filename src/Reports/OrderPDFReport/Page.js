@@ -89,6 +89,21 @@ const generateReportPage = (doc, data) => {
 const ordeRreport = (data) => {
 
     data = { ...data[0] }
+    
+    let i = {
+        SAPOrderNo: data?.SAPOrderNo || "", // Default to an empty string if null or undefined
+        FullOrderNumber: data?.FullOrderNumber || "", // Default to an empty string if null or undefined
+    };
+
+    if (i.SAPOrderNo) {
+        var numb = i.SAPOrderNo.match(/\d/g);
+        i.SAPOrderNo = numb ? numb.join("") : ""; // Join digits if found, else default to an empty string
+    }
+
+    data["FullOrderNumber"] = i.SAPOrderNo
+        ? `${i.FullOrderNumber} (${i.SAPOrderNo})`
+        : i.FullOrderNumber; // If SAPOrderNo is empty, show only FullOrderNumber
+
 
     data["isAmerica"] = loginUserDetails().Country_id === AMERICA_ID
     var doc = new jsPDF('p', 'pt', 'a4');
