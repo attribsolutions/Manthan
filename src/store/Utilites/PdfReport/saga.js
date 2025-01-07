@@ -7,11 +7,11 @@ import { CommonConsole } from "../../../components/Common/CommonFunction";
 
 
 function* getpdfData_GenFunc({ urlpath, config }) {
-
+  
   try {
 
     const response = yield call(urlpath, config);
-
+    
     response["ReportType"] = config.ReportType
     response.Data["ReportType"] = config.ReportType
     if (Array.isArray(response.Data)) {
@@ -20,21 +20,6 @@ function* getpdfData_GenFunc({ urlpath, config }) {
       response.Data["Period"] = config
     }
 
-    let i = {
-      SAPOrderNo: response.Data?.SAPOrderNo || "", // Default to an empty string if null or undefined
-      FullOrderNumber: response.Data?.FullOrderNumber || "", // Default to an empty string if null or undefined
-    };
-
-    // Ensure SAPOrderNo has digits to process
-    if (i.SAPOrderNo) {
-      var numb = i.SAPOrderNo.match(/\d/g);
-      i.SAPOrderNo = numb ? numb.join("") : ""; // Join digits if found, else default to an empty string
-    }
-
-    // Combine with FullOrderNumber conditionally
-    response.Data["FullOrderNumber"] = i.SAPOrderNo
-      ? `${i.FullOrderNumber} (${i.SAPOrderNo})`
-      : i.FullOrderNumber; // If SAPOrderNo is empty, show only FullOrderNumber
 
 
     if ((config.systemSetting) || (config.subPageMode)) {

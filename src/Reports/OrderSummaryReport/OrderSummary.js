@@ -163,7 +163,7 @@ const OrderSummary = (props) => {
     }, [showTableData]);
 
     const downloadExcelFunction = (excelTableData) => {
-        if ((btnMode === 2)) {
+        if ((btnMode === 2) && (!PivotMode)) {
             const { Data } = goButtonData
             if (Data.length > 0) {
                 ExcelReportComponent({      // Download CSV
@@ -172,13 +172,20 @@ const OrderSummary = (props) => {
                     excelFileName: "Order Summary Report"
                 })
             }
-            // const groupData = groupByColumnsWithSumFunc(excelTableData);
-            // _cfunc.CommonConsole(JSON.stringify("groupData", excelTableData))
-            // const worksheet = XLSX.utils.json_to_sheet(groupData);
-            // const workbook = XLSX.utils.book_new();
-            // XLSX.utils.book_append_sheet(workbook, worksheet, "Order Summary Report");
-            // XLSX.writeFile(workbook, `From ${values.FromDate} To ${values.ToDate} ${isSCMParty ? values.PartyName.label : _cfunc.loginUserDetails().PartyName}.XLSX`);
+
+        } else if ((btnMode === 2) && (PivotMode)) {
+            const { Data } = goButtonData
+            if (Data.length > 0) {
+                ExcelReportComponent({      // Download CSV
+                    extraColumn: columns,
+                    excelTableData: pivotedData,
+                    excelFileName: "Order Summary Report"
+                })
+            }
+
+
         }
+
     }
 
     const groupByColumnsWithSumFunc = (jsonData) => {
@@ -356,7 +363,7 @@ const OrderSummary = (props) => {
     }, [showTableData]);
 
     function addTotalField(obj) {
-        debugger
+
         const total = Object.keys(obj)
             .filter((key) => typeof obj[key] === "number") // Only include numeric fields
             .reduce((sum, key) => sum + obj[key], 0); // Calculate the sum of numeric values
@@ -512,8 +519,6 @@ const OrderSummary = (props) => {
 
                             {(orderSummaryApiData.length > 0 && !PivotMode) && <C_Button
                                 type="button"
-                                spinnerColor="white"
-                                loading={btnMode === 2 && goBtnLoading}
                                 className="btn btn-info m-3 mr"
                                 onClick={(e) => setPivotMode(true)}
                             >
@@ -521,8 +526,6 @@ const OrderSummary = (props) => {
                             </C_Button>}
                             {(orderSummaryApiData.length > 0 && PivotMode) && <C_Button
                                 type="button"
-                                spinnerColor="white"
-                                loading={btnMode === 2 && goBtnLoading}
                                 className="btn btn-info m-3 mr"
                                 onClick={(e) => setPivotMode(false)
 

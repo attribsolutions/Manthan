@@ -5,7 +5,7 @@ import { numberWithCommas } from "../../../../Reports/Report_common_function";
 export const columns_1 = [
     "Item Name",
     "Unit",
-    "Comments\nmorning   evening",
+    "morning   evening",
 
 ];
 
@@ -84,12 +84,12 @@ export const Rows_1 = ({ OrderItem = [] }) => {
         hasHedRow.push(totalrow());
 
         i.forEach((element, inx_2) => {
-           
+
 
             const tableitemRow = [
-                `${element.ItemName}`,
+                `${element.ItemName}${element.Comment ? `\n${element.Comment}` : ""}`,
                 `${Number(element.Quantity)} ${element.UnitName}`,
-                `${element.Comment === null ? "" : element.Comment}`,
+                ``,
                 { Item_id: element.Item, IsHighlightItemInPrint: element.IsHighlightItemInPrint }
             ];
             hasHedRow.push(tableitemRow);
