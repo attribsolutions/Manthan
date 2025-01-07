@@ -22,7 +22,7 @@ export const pageHeder = (doc, data) => {
     doc.addFont("Arial", 'Normal')
     doc.setFont('Arial')
     doc.setFontSize(18)
-    debugger
+
     if (data.Period.subPageMode === url.ORDER_LIST_4) {
         doc.text('SALES  ORDER', 180, 45,)
     } else {
@@ -308,7 +308,7 @@ export const reportHeder3 = (doc, data) => {
 
 
     doc.line(408, 65, 408, 16);//vertical right 1
-
+    
     doc.setFont(undefined, 'bold')
     doc.text(`Order No: ${data.FullOrderNumber}`, 415, 25) //Invoice Id
 
