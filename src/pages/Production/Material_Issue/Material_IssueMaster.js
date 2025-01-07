@@ -377,7 +377,7 @@ const MaterialIssueMaster = (props) => {
                                                 <div style={{ width: "120px", textAlign: "right" }}>
                                                     <Label
                                                     >
-                                                        {index.ObatchwiseQuantity}
+                                                        {parseFloat(index.ObatchwiseQuantity).toFixed(2)}
                                                     </Label>
                                                 </div>
                                             </td>
@@ -390,7 +390,7 @@ const MaterialIssueMaster = (props) => {
                                                         id={`stock${user.id}-${index.id}`}
                                                         style={{ textAlign: "right" }}
                                                         cpattern={decimalRegx}
-                                                        defaultValue={index.Qty}
+                                                        defaultValue={parseFloat(index.Qty).toFixed(2)}
                                                         autoComplete='off'
                                                         onChange={(event) => tableQuantityOnchangeHandler(event, user, index)}
                                                     />
@@ -562,12 +562,12 @@ const MaterialIssueMaster = (props) => {
                 materialIssueItems.push({
                     Item: index.Item,
                     Unit: index.Unit,
-                    WorkOrderQuantity: index.Quantity,
+                    WorkOrderQuantity: parseFloat(index.Quantity).toFixed(2),
                     BatchCode: ele.BatchCode,
                     BatchDate: ele.BatchDate,
                     SystemBatchDate: ele.SystemBatchDate,
                     SystemBatchCode: ele.SystemBatchCode,
-                    IssueQuantity: ele.Qty,
+                    IssueQuantity: parseFloat(ele.Qty).toFixed(2),
                     BatchID: ele.id,
                     LiveBatchID: ele.LiveBatchID
                 })
