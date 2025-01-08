@@ -4,6 +4,7 @@ import { Modal } from 'reactstrap'
 import * as mode from "../../routes/PageMode"
 
 const DropdownMaster = (props) => {
+    
     const { modalShow, setModalShow, } = props
 
     const [pageHeading, setPageHeading] = useState('')
@@ -53,6 +54,7 @@ const DropdownMaster = (props) => {
                             isOpenModal={setModalShow}
                             isdropdown={true}
                             pageMode={mode.dropdownAdd}
+                            location={props.location}
                         />
                     </div>
                 </Modal>

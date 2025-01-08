@@ -2,7 +2,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { Col, FormGroup, Label } from "reactstrap";
+import { Button, Col, FormGroup, Label } from "reactstrap";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import { C_DatePicker, C_Select } from "../../../CustomValidateForm";
 import Order from "./Order";
@@ -26,6 +26,9 @@ import { getOrdersMakeInvoiceDataAction, getOrdersMakeInvoiceDataActionSuccess }
 import { allLabelWithBlank } from "../../../components/Common/CommonErrorMsg/HarderCodeData";
 import { sideBarPageFiltersInfoAction } from "../../../store/Utilites/PartyDrodown/action";
 import { getCountryList_Action } from "../../../store/Administrator/CountryRedux/action";
+import AddMaster from "../../Adminisrator/EmployeePages/Drodown";
+import PartyMaster from "../../Adminisrator/PartyMaster/MasterAdd/PartyIndex";
+import DropdownMaster from "../../../components/Common/DropdownMaster";
 
 
 const OrderList = () => {
@@ -56,8 +59,10 @@ const OrderList = () => {
     const [state, setState] = useState(() => initialFiledFunc(fileds))
     const [subPageMode] = useState(initialSubPageMode);
     const [pageMode, setPageMode] = useState(mode.defaultList);
-    const [hasBulkinvoiceSaveAccess, setHasBulkinvoiceSaveAccess] = useState(false);
+    const [FrenchiesesCustomerMasterAccess, setFrenchiesesCustomerMasterAccess] = useState(false);
     const [extraSelect, setExtraSelect] = useState(false);
+    const [dropDownMasterIsOpen, setDropDownMasterIsOpen] = useState(null);
+
 
     const orderList4_or_app_orderList = ((subPageMode === url.ORDER_LIST_4) || (subPageMode === url.APP_ORDER_LIST))
 
@@ -276,7 +281,6 @@ const OrderList = () => {
         }
 
 
-
         setOtherState({ masterPath, makeBtnShow, newBtnPath, makeBtnName, IBType, showAprovalBtn })
         setPageMode(page_Mode)
         dispatch(_act.commonPageFieldListSuccess(null))
@@ -299,14 +303,26 @@ const OrderList = () => {
 
     // check bulk-invoice access useEffect
     useEffect(() => {//only of app order list then check bulk-invoice Access
-        if (subPageMode === url.APP_ORDER_LIST) {
+
+        if (subPageMode === url.ORDER_LIST_4) {
             userAccess.find((index) => {
-                if (index.id === pageId.BULK_INVOICE) {
-                    return setHasBulkinvoiceSaveAccess(true)
+                if (index.id === pageId.FRANCHISE_CUSTOMER_MASTER) {
+                    return setFrenchiesesCustomerMasterAccess(true)
                 }
             });
         };
     }, [userAccess]);
+
+
+
+
+
+
+
+
+
+
+
 
     useEffect(() => {
         if (subPageMode === url.GRN_STP_3) {
@@ -866,6 +882,7 @@ const OrderList = () => {
                                     />
                                 </Col>
                             </FormGroup>
+
                         </Col >}
 
                     <Col lg={(orderList4_or_app_orderList) ? 4 : 5}>
@@ -874,6 +891,7 @@ const OrderList = () => {
 
                                 style={{ width: "115px" }}>{(!(fieldLabel.Supplier === '')) ? fieldLabel.Supplier : (orderList4_or_app_orderList ? "Customer" : "Supplier")}</Label>
                             <Col sm="5">
+
                                 <C_Select
                                     name="Supplier"
                                     classNamePrefix="select2-Customer"
@@ -886,6 +904,18 @@ const OrderList = () => {
                                     }}
                                 />
                             </Col>
+
+                            {((FrenchiesesCustomerMasterAccess) && (_cfunc.loginUserIsFranchisesRole())) && <Col sm="2" className="mt-n2">
+                                <Button
+                                    className="mt-2"
+                                    style={{ borderRadius: "30px" }}
+                                    color="btn btn-outline-primary border-2 font-size-14"
+                                    type="button"
+                                    onClick={() => handleLabelClick({ showModal: FrenchiesesCustomerMasterAccess, masterModal: PartyMaster, masterPath: url.FRANCHISE_CUSTOMER_MASTER })}
+                                >  <i className="dripicons-plus align-center"></i>
+                                </Button>
+
+                            </Col>}
                         </FormGroup>
                     </Col >
 
@@ -944,6 +974,9 @@ const OrderList = () => {
     };
 
 
+    const handleLabelClick = ({ showModal = false, masterModal, masterPath }) => {
+        setDropDownMasterIsOpen({ show: showModal, masterModal: masterModal, masterPath: masterPath })
+    };
 
 
     const headerselecthandler = ({ event, tableList }) => {
@@ -981,6 +1014,7 @@ const OrderList = () => {
             <PageLoadingSpinner isLoading={reducers.goBtnloading || !pageField} />
 
             <div className="page-content">
+
                 {
                     (pageField) ?
                         <CommonPurchaseList
@@ -1023,6 +1057,13 @@ const OrderList = () => {
                         />
                         : null
                 }
+                {dropDownMasterIsOpen?.show && <DropdownMaster
+                    modalShow={dropDownMasterIsOpen?.show}
+                    setModalShow={(e) => { setDropDownMasterIsOpen(prevState => ({ ...prevState, show: false })) }}
+                    masterModal={dropDownMasterIsOpen?.masterModal}
+                    masterPath={dropDownMasterIsOpen?.masterPath}
+                    location={{ pathname: url.FRANCHISE_CUSTOMER_MASTER }}
+                />}
             </div>
 
             <OrderView_Modal />{/** order view component */}
