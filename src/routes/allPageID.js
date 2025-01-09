@@ -401,6 +401,13 @@ export const FRANCHAISE_SALE_WITH_BILL_COUNT = 316
 export const BILL_BOOKING_REPORT = 318
 
 
+export const DEMAND_VS_SUPPLY = 319
+
+
+
+
+
+
 
 
 

@@ -135,6 +135,7 @@ import SPos_MachineType_Reducer from "./SweetPOSStore/Administrator/MachineTypeM
 import StockOutReportReducer from "./SweetPOSStore/Report/StockOutReportRedux/reducer"
 import CountryReducer from "./Administrator/CountryRedux/reducer"
 import BillBookingReportReducer from "./Report/BillBookingRedux/reducer"
+import DemandVsSupplyReportReducer from "./Report/DemandVsSupply/reducer"
 
 const rootReducer = combineReducers({
 	Layout,
@@ -248,7 +249,8 @@ const rootReducer = combineReducers({
 	SPos_MachineType_Reducer,
 	StockOutReportReducer,
 	CountryReducer,
-	BillBookingReportReducer
+	BillBookingReportReducer,
+	DemandVsSupplyReportReducer
 
 })
 export default rootReducer
