@@ -235,6 +235,14 @@ export const FRENCHIESE_SALE_REPORT = "/Frenchies_Item_sale_Report"
 export const DAILY_SALE_REPORT = '/Daily_Sale_Report'
 
 
+export const DEMAND_VS_SUPPLY_REPORT = "/Demand_Vs_Supply_Report"
+
+
+
+
+
+
+
 
 
 

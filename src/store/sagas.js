@@ -127,6 +127,7 @@ import S_Pos_MachineType_Saga from "./SweetPOSStore/Administrator/MachineTypeMas
 import StockOutReportSaga from "./SweetPOSStore/Report/StockOutReportRedux/saga"
 import CountrySaga from "./Administrator/CountryRedux/saga"
 import BillBookingReportSaga from "./Report/BillBookingRedux/saga"
+import DemandVsSupplyReportSaga from "./Report/DemandVsSupply/saga"
 
 
 export default function* rootSaga() {
@@ -246,7 +247,10 @@ export default function* rootSaga() {
 		fork(S_Pos_MachineType_Saga),
 		fork(StockOutReportSaga),
 		fork(CountrySaga),
-		fork(BillBookingReportSaga)
+		fork(BillBookingReportSaga),
+		fork(DemandVsSupplyReportSaga),
+
+		
 
 
 		

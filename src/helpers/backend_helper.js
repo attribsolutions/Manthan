@@ -954,6 +954,10 @@ export const Franchise_Sale_With_Bill_Count_API = ({ jsonBody }) => post(url.FRA
 
 export const Bill_booking_Report_Api = ({ jsonBody }) => post(url.BILL_BOOKING_REPORT_API, jsonBody)//Go button api
 
+export const DemandVsSupplyReport_API = ({ jsonBody }) => post(url.DEMAND_VS_SUPPLY_API, jsonBody)//Go button api
+
+
+
 
 export {
 	getLoggedInUser,

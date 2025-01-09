@@ -710,6 +710,11 @@ export const FRANCHAISE_SALE_WITH_BILL_COUNT_API = "/SweetPOS/FranchiseSaleWithB
 
 export const BILL_BOOKING_REPORT_API = '/BillBookingReport'
 
+export const DEMAND_VS_SUPPLY_API = '/demandvssupply'
+
+
+
+
 
 
 
