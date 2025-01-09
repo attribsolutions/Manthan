@@ -5,7 +5,7 @@ import { numberWithCommas } from "../../../../Reports/Report_common_function";
 export const columns_1 = [
     "Item Name",
     "Unit",
-    "morning   evening",
+    "Morning   Evening",
 
 ];
 
@@ -87,7 +87,7 @@ export const Rows_1 = ({ OrderItem = [] }) => {
 
 
             const tableitemRow = [
-                `${element.ItemName}${element.Comment ? `\n${element.Comment}` : ""}`,
+                `${element.ItemName}${element.Comment ? `           \n(${element.Comment})` : ""}`,
                 `${Number(element.Quantity)} ${element.UnitName}`,
                 ``,
                 { Item_id: element.Item, IsHighlightItemInPrint: element.IsHighlightItemInPrint }

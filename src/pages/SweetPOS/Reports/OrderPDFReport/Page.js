@@ -89,13 +89,13 @@ const FrenchiesesOrderReport = (data) => {
                 columnStyles: {
                     0: {
                         valign: "top",
-                        columnWidth: 147,
+                        columnWidth: 133,
 
 
 
                     },
                     1: {
-                        columnWidth: 50,
+                        columnWidth: 65,
                         halign: 'left',
 
 

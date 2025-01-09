@@ -135,6 +135,7 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
 
         setState((i) => {
             let a = { ...i }
+
             a.values.Name = ''
             a.values.MobileNo = ''
             a.values.PartyType = ''
@@ -168,7 +169,11 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
             a.hasValid.Distance.valid = false;
             a.hasValid.Latitude.valid = false;
             a.hasValid.Longitude.valid = false;
+            a.hasValid.Route.valid = false;
 
+
+
+            debugger
             return a
         })
 
@@ -193,6 +198,7 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
 
     useEffect(() => {
         if (PartyTypes.length === 1) {
+            debugger
             setState((i) => {
                 let a = { ...i }
                 a.values.PartyType = {
@@ -237,14 +243,15 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
     useEffect(() => {
 
         if (loginPartyType && subPageMode === url.FRANCHISE_CUSTOMER_MASTER) {
+            debugger
             setState((i) => {
                 const a = { ...i }
                 a.values.PartyType = { value: 31, label: "Franchise Customer" };
-                a.hasValid.PartyType.valid = false
+                a.hasValid.PartyType.valid = true
 
 
                 a.values.Supplier = [{ value: loginPartyID(), label: loginPartyName() }];
-                a.hasValid.Supplier.valid = false
+                a.hasValid.Supplier.valid = true
 
                 setSupplierDisabled(true);
                 setPartyTypeDisabled(true);

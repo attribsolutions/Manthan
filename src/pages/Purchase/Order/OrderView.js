@@ -10,7 +10,7 @@ import { useState } from "react";
 
 
 const ViewDetails_Modal = () => {
-    debugger
+    
     const dispatch = useDispatch()
     const [modal_view, setModal_view] = useState(false);
     const [tableArray, setTableArray] = useState([]);

@@ -51,11 +51,11 @@ import { alertMessages } from "../../../../components/Common/CommonErrorMsg/aler
 import { getClusterlist } from "../../../../store/Administrator/ClusterRedux/action";
 import { getCountryList_Action, getCountryList_Success } from "../../../../store/Administrator/CountryRedux/action";
 
-function initialState(history) {
+function initialState(props) {
 
 	let page_Id = '';
 	let listPath = ''
-	let sub_Mode = history.location.pathname;
+	let sub_Mode = props.location.pathname;
 
 	if (sub_Mode === url.PARTY) {
 		page_Id = pageId.PARTY;
@@ -80,7 +80,7 @@ function initialState(history) {
 };
 
 const PartyMaster = (props) => {
-
+	debugger
 	const dispatch = useDispatch();
 	const history = useHistory()
 
@@ -88,13 +88,14 @@ const PartyMaster = (props) => {
 	const baseTabRef = useRef(null);
 	const prefixTabRef = useRef(null);
 
-	const [page_id] = useState(() => initialState(history).page_Id)
-	const [listPath] = useState(() => initialState(history).listPath)
-	const [subPageMode] = useState(history.location.pathname)
+	const [page_id] = useState(() => initialState(props).page_Id)
+	const [listPath] = useState(() => initialState(props).listPath)
+	const [subPageMode] = useState(props.location.pathname)
 
 	const [EditData, setEditData] = useState('');
 	const [pageMode, setPageMode] = useState(mode.defaultsave);
 	const [userPageAccessState, setUserAccState] = useState(11);
+
 	const [activeTab1, setactiveTab1] = useState("1")
 	const [modalCss, setModalCss] = useState(false);
 	const [isMobileRetailer, setIsMobileRetailer] = useState(false);
@@ -133,9 +134,14 @@ const PartyMaster = (props) => {
 		setUserAccState
 	}), [userAccess]);
 
+
+
+
+
+
 	useEffect(() => {
 
-		dispatch(commonPageFieldSuccess(null));//clear privious PageField
+
 		dispatch(commonPageField(page_id))
 		dispatch(getState());
 		dispatch(getPartyTypelist());
@@ -146,7 +152,7 @@ const PartyMaster = (props) => {
 		dispatch(getCountryList_Action());
 
 		return () => {
-			dispatch(commonPageFieldListSuccess(null))
+
 			dispatch(getCountryList_Success());
 			dispatch(priceListByPartyActionSuccess([]));//clear privious priceList
 			dispatch(getCityOnDistrictSuccess([]))//clear City privious options
@@ -427,7 +433,7 @@ const PartyMaster = (props) => {
 	}
 
 	const SaveHandler = (event) => {
-
+		debugger
 		event.preventDefault();
 		const btnId = event.target.id;
 
@@ -605,7 +611,7 @@ const PartyMaster = (props) => {
 	if (!(userPageAccessState === '')) {
 		return (
 			<React.Fragment>
-				<MetaTags> {metaTagLabel(userPageAccessState)}</MetaTags>
+				{/* <MetaTags> {metaTagLabel(userPageAccessState)}</MetaTags> */}
 				<div className="page-content" >
 
 					<Container fluid>
