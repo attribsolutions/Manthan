@@ -44,6 +44,8 @@ import { changeCommonPartyDropDetailsAction } from "../../../store/Utilites/Part
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 import { allLabelWithBlank } from "../../../components/Common/CommonErrorMsg/HarderCodeData";
 import { Group_Subgroup_func, GroupSubgroupDisplay, ModifyTableData_func } from "../../../components/Common/TableCommonFunc";
+import AddMaster from "../../Adminisrator/EmployeePages/Drodown";
+import PartyMaster from "../../Adminisrator/PartyMaster/MasterAdd/PartyIndex";
 
 
 let editVal = {}
@@ -151,6 +153,8 @@ const Order = (props) => {
     const [orderItemTable, setOrderItemTable] = useState([])
     const [findPartyItemAccess, setFindPartyItemAccess] = useState(false)
     const [FSSAI_Date_Is_Expired, setFSSAI_Date_Is_Expired] = useState("")
+    const [FrenchiesesCustomerMasterAccess, setFrenchiesesCustomerMasterAccess] = useState(false);
+
 
     // for Order page heder dicount functionality useSate ************************************
     const [discountValueAll, setDiscountValueAll] = useState("");
@@ -257,6 +261,9 @@ const Order = (props) => {
     const otherloginAccss = (ind) => {
         if ((ind.id === pageId.PARTYITEM) && !(subPageMode === url.IB_ORDER)) {
             setFindPartyItemAccess(true)
+        } else if (ind.id === pageId.FRANCHISE_CUSTOMER_MASTER) {
+            setFrenchiesesCustomerMasterAccess(true)
+
         }
     };
 
@@ -1548,7 +1555,7 @@ const Order = (props) => {
                 Customer: supplier,// swipe supllier 
                 Supplier: division,// swipe Customer
                 OrderType: order_Type.SaleOrder,
-                IsConfirm: true, // SO Order then IsConfirm true
+                IsConfirm: _cfunc.loginUserIsFranchisesRole() ? false : true, // SO Order then IsConfirm true
                 AdvanceAmount: advanceAmountRef.current.value ? advanceAmountRef.current.value : 0
             }
 
@@ -1699,28 +1706,40 @@ const Order = (props) => {
                                         }
 
                                         <Col sm="4" className="">
-                                            <FormGroup className="row mt-2" >
-                                                <Label className="col-sm-5 p-2"
-                                                    style={{ width: "129px" }}>{fieldLabel.Supplier}</Label>
-                                                <Col sm="7">
-                                                    <C_Select
-                                                        value={supplierSelect}
-                                                        isDisabled={(orderItemTable.length > 0 || pageMode === "edit" || goBtnloading) ? true : false}
-                                                        options={supplierOptions}
-                                                        onChange={supplierOnchange}
-                                                        isLoading={supplierDropLoading}
-                                                        styles={{
-                                                            menu: provided => ({ ...provided, zIndex: 2 })
-                                                        }}
-                                                    />
-                                                    {(FSSAI_Date_Is_Expired) &&
-                                                        <span className="text-danger f-8">
-                                                            <small>{FSSAI_Date_Is_Expired} </small>
-                                                        </span>
-                                                    }
-                                                </Col>
+                                            <Row>
+                                                <FormGroup className="row mt-2" >
+                                                    <Label className="col-sm-5 p-2"
+                                                        style={{ width: "129px" }}>{fieldLabel.Supplier}</Label>
+                                                    <Col sm="6">
 
-                                            </FormGroup>
+                                                        <C_Select
+                                                            value={supplierSelect}
+                                                            isDisabled={(orderItemTable.length > 0 || pageMode === "edit" || goBtnloading) ? true : false}
+                                                            options={supplierOptions}
+                                                            onChange={supplierOnchange}
+                                                            isLoading={supplierDropLoading}
+                                                            styles={{
+                                                                menu: provided => ({ ...provided, zIndex: 2 })
+                                                            }}
+                                                        />
+                                                        {(FSSAI_Date_Is_Expired) &&
+                                                            <span className="text-danger f-8">
+                                                                <small>{FSSAI_Date_Is_Expired} </small>
+                                                            </span>
+                                                        }
+
+                                                    </Col>
+                                                    <Col sm="1" style={{ marginTop: "-12px" }} >
+                                                        {FrenchiesesCustomerMasterAccess && <AddMaster
+                                                            masterModal={PartyMaster}
+                                                            location={{ pathname: url.FRANCHISE_CUSTOMER_MASTER }}
+                                                            masterPath={url.FRANCHISE_CUSTOMER_MASTER}
+
+                                                        />}
+                                                    </Col>
+
+                                                </FormGroup>
+                                            </Row>
                                         </Col>
 
                                         <Col sm="1">                      {/*Go_Button  */}

@@ -23,7 +23,7 @@ const SNSReport = (props) => {
     const history = useHistory();
     const currentDate_ymd = _cfunc.date_ymd_func();
     const isSCMParty = _cfunc.loginUserAdminRole();
-    const isFranchises = _cfunc.loginUserIsFranchisesRole();
+    const isFranchises = (_cfunc.loginUserIsFranchisesRole() || _cfunc.loginUserIsCBMAttribRole());
 
 
 

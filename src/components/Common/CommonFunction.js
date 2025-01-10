@@ -143,7 +143,7 @@ export function deliverydate_ForFranchise() {
   const { dd, mm, yy, dateInstance } = isDateInitial();
 
   // Set the hours to the correct time zone (or any specific adjustment)
-  dateInstance.setHours(dateInstance.getHours() - 0); 
+  dateInstance.setHours(dateInstance.getHours() - 0);
 
   const hours = dateInstance.getHours();
   const minutes = String(dateInstance.getMinutes()).padStart(2, '0');
@@ -335,6 +335,26 @@ export const loginUserIsFranchisesRole = () => { //+++++++++++++++++++++ IsFranc
   }
   return false;
 };
+
+
+
+
+export const loginUserIsCBMAttribRole = () => { //+++++++++++++++++++++ IsFranchises Company Id+++++++++++++++++++++++++++++
+
+  try {
+    const detail = loginUserDetails();
+    return (detail.Role === 33);
+  } catch (e) {
+    CommonConsole("Common loginUserIsFranchisesRole  Error");
+  }
+  return false;
+};
+
+
+
+
+
+
 
 export const isSuperAdmin = () => {
 

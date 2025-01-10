@@ -5,10 +5,11 @@ import { DemandVsSupplyReport_API } from "../../../helpers/backend_helper";
 
 
 function* DemandVsSupplyReport_GenFunc({ config }) {
-
+	
 	try {
 		let response = yield call(DemandVsSupplyReport_API, config);
-		response.Mode = config.Mode
+		response["Mode"] = config.Mode
+		
 		yield put(DemandVSSupply_Report_Action_Success(response))
 	} catch (error) { yield put(DemandVSSupply_Report_ErrorAction()) }
 }

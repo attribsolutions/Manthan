@@ -26,9 +26,7 @@ import { getOrdersMakeInvoiceDataAction, getOrdersMakeInvoiceDataActionSuccess }
 import { allLabelWithBlank } from "../../../components/Common/CommonErrorMsg/HarderCodeData";
 import { sideBarPageFiltersInfoAction } from "../../../store/Utilites/PartyDrodown/action";
 import { getCountryList_Action } from "../../../store/Administrator/CountryRedux/action";
-import AddMaster from "../../Adminisrator/EmployeePages/Drodown";
-import PartyMaster from "../../Adminisrator/PartyMaster/MasterAdd/PartyIndex";
-import DropdownMaster from "../../../components/Common/DropdownMaster";
+
 
 
 const OrderList = () => {
@@ -905,17 +903,7 @@ const OrderList = () => {
                                 />
                             </Col>
 
-                            {((FrenchiesesCustomerMasterAccess) && (_cfunc.loginUserIsFranchisesRole())) && <Col sm="2" className="mt-n2">
-                                <Button
-                                    className="mt-2"
-                                    style={{ borderRadius: "30px" }}
-                                    color="btn btn-outline-primary border-2 font-size-14"
-                                    type="button"
-                                    onClick={() => handleLabelClick({ showModal: FrenchiesesCustomerMasterAccess, masterModal: PartyMaster, masterPath: url.FRANCHISE_CUSTOMER_MASTER })}
-                                >  <i className="dripicons-plus align-center"></i>
-                                </Button>
-
-                            </Col>}
+                            
                         </FormGroup>
                     </Col >
 
@@ -974,9 +962,7 @@ const OrderList = () => {
     };
 
 
-    const handleLabelClick = ({ showModal = false, masterModal, masterPath }) => {
-        setDropDownMasterIsOpen({ show: showModal, masterModal: masterModal, masterPath: masterPath })
-    };
+   
 
 
     const headerselecthandler = ({ event, tableList }) => {
@@ -1057,13 +1043,7 @@ const OrderList = () => {
                         />
                         : null
                 }
-                {dropDownMasterIsOpen?.show && <DropdownMaster
-                    modalShow={dropDownMasterIsOpen?.show}
-                    setModalShow={(e) => { setDropDownMasterIsOpen(prevState => ({ ...prevState, show: false })) }}
-                    masterModal={dropDownMasterIsOpen?.masterModal}
-                    masterPath={dropDownMasterIsOpen?.masterPath}
-                    location={{ pathname: url.FRANCHISE_CUSTOMER_MASTER }}
-                />}
+              
             </div>
 
             <OrderView_Modal />{/** order view component */}
