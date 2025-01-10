@@ -2,6 +2,7 @@ import jsPDF from "jspdf";
 import "jspdf-autotable";
 import * as table from './TableData'
 import Image from "../../../../assets/images/CBM_BlackWhite.png";
+import { amountCommaSeparateFunc } from "../../../../components/Common/CommonFunction";
 
 
 
@@ -195,6 +196,7 @@ const PosInvoiceReport = (data) => {
             overflow: 'linebreak',
             fontSize: 8,
             font: 'Cambria',
+            lineHeight: 1,
             height: 0,
         },
         bodyStyles: {
@@ -203,7 +205,9 @@ const PosInvoiceReport = (data) => {
             cellPadding: 2,
             fontSize: 9,
             fontStyle: 'normal',
-            lineColor: [0, 1, 0]
+            lineColor: [0, 1, 0],
+            rowHeight: 0,
+
         },
         headerStyles: {
             cellPadding: 3,
@@ -213,7 +217,7 @@ const PosInvoiceReport = (data) => {
             fillColor: "white",
             textColor: [0, 0, 0],
             fontSize: 9,
-            rowHeight: 10,
+            rowHeight: 5,
         },
         columnStyles: {
             0: {
@@ -239,7 +243,7 @@ const PosInvoiceReport = (data) => {
     };
 
     doc.autoTable(table.Item, table.ItemRow(transformedItems), ItemStyle);
-    doc.setFontSize(11)
+    doc.setFontSize(9)
 
     doc.text(`------------ GST Break Up details ------------`, 113, doc.previousAutoTable.finalY + 13, "center")
 
@@ -335,8 +339,8 @@ const PosInvoiceReport = (data) => {
     }
 
     doc.setFontSize(12)
-    doc.text(`Total Payable:`, 10, GST_Table_Y + 42,)
-    doc.text(`${Number(data.GrandTotal).toFixed(2)}`, 215, GST_Table_Y + 42, "right")
+    doc.text(`Total:`, 10, GST_Table_Y + 42,)
+    doc.text(`${amountCommaSeparateFunc(Number(data.GrandTotal).toFixed(2))}`, 215, GST_Table_Y + 42, "right")
 
     doc.setLineDash([]); // Dash pattern: 3 points dash, 3 points gap
     doc.line(10, GST_Table_Y + 50, 10 + lineWidth, GST_Table_Y + 50); // Draw line
@@ -390,8 +394,11 @@ const PosInvoiceReport = (data) => {
     doc.setLineDash([1, 1]); // Dash pattern: 3 points dash, 3 points gap
     const Discription_Table_Y = doc.previousAutoTable.finalY
     doc.line(10, Discription_Table_Y + 5, 10 + lineWidth, Discription_Table_Y + 5); // Draw line
+    doc.setFontSize(10)
     doc.text(`Cashier: ${data.CashierName}`, 10, Discription_Table_Y + 20,)
+    doc.setFontSize(12)
     doc.text(`Thank You...!`, 113, Discription_Table_Y + 35, "center")
+
 
     doc.setProperties({
         title: `InvoiceReport/${data.InvoiceDate}-${data.CustomerName} `

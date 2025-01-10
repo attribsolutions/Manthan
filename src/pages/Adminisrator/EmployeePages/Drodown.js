@@ -58,6 +58,7 @@ const AddMaster = (props) => {
                             isOpenModal={setIsOpen}
                             isdropdown={true}
                             pageMode={mode.dropdownAdd}
+                            location={props.location}
                         />
                     </div>
                 </Modal>

@@ -33,7 +33,7 @@ const DemandVSSupply = (props) => {
         userAccess,
         listBtnLoading
     } = useSelector((state) => ({
-        goButtonData: state.DemandVsSupplyReportReducer.returnReportData,
+        goButtonData: state.DemandVsSupplyReportReducer.DemandVsSupplyReportData,
         listBtnLoading: state.DemandVsSupplyReportReducer.listBtnLoading,
         Distributor: state.CommonPartyDropdownReducer.commonPartyDropdownOption,
         userAccess: state.Login.RoleAccessUpdateData,
@@ -83,17 +83,18 @@ const DemandVSSupply = (props) => {
 
         try {
             if ((goButtonData.Status === true) && (goButtonData.StatusCode === 200)) {
+                if (goButtonData.Mode === "Show") {
+                    setTableData(goButtonData.Data);
 
+                } else {
+                    ExcelReportComponent({      // Download CSV
+                        pageField,
+                        excelTableData: goButtonData.Data,
+                        excelFileName: "Demand Vs Supply",
+                    })
+                }
 
-                ExcelReportComponent({      // Download CSV
-                    pageField,
-                    excelTableData: goButtonData.Data,
-                    excelFileName: "ReturnReport"
-                })
-                dispatch(Return_Report_Action_Success([]));
-
-
-
+                dispatch(DemandVSSupply_Report_Action_Success([]));
             }
             else if ((goButtonData.Status === true)) {
                 setTableData([]);
@@ -111,7 +112,7 @@ const DemandVSSupply = (props) => {
             "Party": _cfunc.loginPartyID(),
         });
         let config = { jsonBody, Mode: mode }
-        // dispatch(DemandVSSupply_Report_Action(config));
+        dispatch(DemandVSSupply_Report_Action(config));
     }
 
     function fromdateOnchange(e, date) {
@@ -171,7 +172,7 @@ const DemandVSSupply = (props) => {
                             <C_Button
                                 type="button"
                                 spinnerColor="white"
-                                loading={listBtnLoading.Mode === "Show"}
+                                loading={listBtnLoading === "Show"}
                                 className="btn btn-success m-3 mr"
                                 onClick={(e) => excel_And_GoBtnHandler(e, "Show")}
                             >
@@ -180,7 +181,7 @@ const DemandVSSupply = (props) => {
                             <C_Button
                                 type="button"
                                 spinnerColor="white"
-                                loading={listBtnLoading.Mode === "Excel"}
+                                loading={listBtnLoading === "Excel"}
                                 className="btn btn-primary m-3 mr "
                                 onClick={(e) => excel_And_GoBtnHandler(e, "Excel")}
                             >
@@ -189,7 +190,7 @@ const DemandVSSupply = (props) => {
                         </Col>
                     </Row>
                 </div>
-                <div className="mb-1 table-responsive table">
+                <div className="mb-1 ">
                     <GlobalCustomTable
                         keyField={"id"}
                         data={tableData}

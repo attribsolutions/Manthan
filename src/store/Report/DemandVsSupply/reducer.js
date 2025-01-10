@@ -13,15 +13,18 @@ const INIT_STATE = {
 }
 
 const DemandVsSupplyReportReducer = (state = INIT_STATE, action) => {
+
     switch (action.type) {
 
         case DEMANDVSSUPPLY_REPORT_ACTION:
+
             return {
                 ...state,
-                listBtnLoading: action.Mode
+                listBtnLoading: action?.config?.Mode
             }
 
         case DEMANDVSSUPPLY_REPORT_ACTION_SUCCESS:
+            
             return {
                 ...state,
                 DemandVsSupplyReportData: action.payload,
