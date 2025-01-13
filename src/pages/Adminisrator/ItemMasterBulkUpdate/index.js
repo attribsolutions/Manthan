@@ -239,7 +239,8 @@ const ItemMasterBulkUpdate = (props) => {
 
         const jsonBody = JSON.stringify({
             "Type": SelectFieldName.label === "SAPUnit" ? "SAPUnitID" : SelectFieldName.label,
-            "GroupType": groupTypeSelect.value
+            "GroupType": groupTypeSelect.value,
+            "CompanyID": _cfunc.loginCompanyID()
         });
 
         dispatch(ItemWiseUpdateGoButton_Action(jsonBody));
