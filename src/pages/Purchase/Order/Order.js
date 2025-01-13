@@ -261,7 +261,7 @@ const Order = (props) => {
     const otherloginAccss = (ind) => {
         if ((ind.id === pageId.PARTYITEM) && !(subPageMode === url.IB_ORDER)) {
             setFindPartyItemAccess(true)
-        } else if (ind.id === pageId.FRANCHISE_CUSTOMER_MASTER) {
+        } else if (ind.id === pageId.FRANCHISE_CUSTOMER_MASTER && subPageMode === url.ORDER_4) {
             setFrenchiesesCustomerMasterAccess(true)
 
         }
@@ -1706,40 +1706,39 @@ const Order = (props) => {
                                         }
 
                                         <Col sm="4" className="">
-                                            <Row>
-                                                <FormGroup className="row mt-2" >
-                                                    <Label className="col-sm-5 p-2"
-                                                        style={{ width: "129px" }}>{fieldLabel.Supplier}</Label>
-                                                    <Col sm="6">
 
-                                                        <C_Select
-                                                            value={supplierSelect}
-                                                            isDisabled={(orderItemTable.length > 0 || pageMode === "edit" || goBtnloading) ? true : false}
-                                                            options={supplierOptions}
-                                                            onChange={supplierOnchange}
-                                                            isLoading={supplierDropLoading}
-                                                            styles={{
-                                                                menu: provided => ({ ...provided, zIndex: 2 })
-                                                            }}
-                                                        />
-                                                        {(FSSAI_Date_Is_Expired) &&
-                                                            <span className="text-danger f-8">
-                                                                <small>{FSSAI_Date_Is_Expired} </small>
-                                                            </span>
-                                                        }
+                                            <FormGroup className="row mt-2" >
+                                                <Label className="col-sm-5 p-2"
+                                                    style={{ width: "129px" }}>{fieldLabel.Supplier}</Label>
+                                                <Col sm="7">
+                                                    <C_Select
+                                                        value={supplierSelect}
+                                                        isDisabled={(orderItemTable.length > 0 || pageMode === "edit" || goBtnloading) ? true : false}
+                                                        options={supplierOptions}
+                                                        onChange={supplierOnchange}
+                                                        isLoading={supplierDropLoading}
+                                                        styles={{
+                                                            menu: provided => ({ ...provided, zIndex: 2 })
+                                                        }}
+                                                    />
+                                                    {(FSSAI_Date_Is_Expired) &&
+                                                        <span className="text-danger f-8">
+                                                            <small>{FSSAI_Date_Is_Expired} </small>
+                                                        </span>
+                                                    }
 
-                                                    </Col>
-                                                    <Col sm="1" style={{ marginTop: "-12px" }} >
-                                                        {FrenchiesesCustomerMasterAccess && <AddMaster
-                                                            masterModal={PartyMaster}
-                                                            location={{ pathname: url.FRANCHISE_CUSTOMER_MASTER }}
-                                                            masterPath={url.FRANCHISE_CUSTOMER_MASTER}
+                                                </Col>
+                                                <Col sm="1" style={{ marginTop: "-12px" }} >
+                                                    {FrenchiesesCustomerMasterAccess && <AddMaster
+                                                        masterModal={PartyMaster}
+                                                        location={{ pathname: url.FRANCHISE_CUSTOMER_MASTER }}
+                                                        masterPath={url.FRANCHISE_CUSTOMER_MASTER}
 
-                                                        />}
-                                                    </Col>
+                                                    />}
+                                                </Col>
 
-                                                </FormGroup>
-                                            </Row>
+                                            </FormGroup>
+
                                         </Col>
 
                                         <Col sm="1">                      {/*Go_Button  */}
