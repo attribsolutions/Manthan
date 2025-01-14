@@ -97,14 +97,15 @@ const POS_Log = () => {
     }
 
     useEffect(() => {
-
         if ((btnMode === 2) && (tableData.length > 0)) {
+
             ExcelReportComponent({
                 excelTableData: tableData,
                 excelFileName: 'Transaction Log',
-                customKeyColumns: { tableData: tableColumns, isButton: true },
+                extraColumn: tableColumns
+                // customKeyColumns: { tableData: tableColumns, isButton: true },
             });
-            setTableData([]);
+            // setTableData([]);
         }
     }, [tableData])
 
@@ -118,7 +119,7 @@ const POS_Log = () => {
                 })
                 return
             }
-            setTableData([]);
+            // setTableData([]);
             setGoBtnloading(true);
             const jsonBody = JSON.stringify({
                 "FromDate": convertDateTime_ydm(formDateSelect),
