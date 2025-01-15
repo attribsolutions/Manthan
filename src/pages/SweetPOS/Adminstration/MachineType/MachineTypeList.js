@@ -39,6 +39,8 @@ const MachineTypeList = () => {
         })
     );
 
+    const { commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
+
     const { pageField, GoBtnlistloading } = reducers
 
     const action = {
@@ -53,11 +55,17 @@ const MachineTypeList = () => {
         const page_Id = pageId.SWEET_POS_MACHINE_LIST
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(page_Id))
-        dispatch(SPos_MachineTypeList_Action({ "Party": _cfunc.loginPartyID() }))
+
         return () => {
             dispatch(SPos_MachineTypeList_Success([]));
         }
     }, []);
+
+    useEffect(() => {
+
+        commonPartyDropSelect.value > 0 && dispatch(SPos_MachineTypeList_Action({ "Party": commonPartyDropSelect.value }))
+
+    }, [commonPartyDropSelect]);
 
     function editBodyfunc(index) {
 

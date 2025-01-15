@@ -646,9 +646,9 @@ const userRoutes = [
 	{ path: path.POS_USER, component: POSUSER },//not party wise
 	{ path: path.POS_USER_lIST, component: POSUserList },//not party wise
 
-	{ path: path.SWEET_POS_MACHINE_MASTER, component: MachineTypeMaster },//not party wise
+	{ path: path.SWEET_POS_MACHINE_MASTER, component: MachineTypeMaster,isPartyWisePage: true },//not party wise
 
-	{ path: path.SWEET_POS_MACHINE_LIST, component: MachineTypeList },//not party wise
+	{ path: path.SWEET_POS_MACHINE_LIST, component: MachineTypeList,isPartyWisePage: true },//not party wise
 
 	{ path: path.STOCK_OUT_REPORT, component: StockOutReport },//not party wise
 	// ************************************ Pos_Invoice **************************************//
