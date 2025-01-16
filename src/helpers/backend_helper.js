@@ -311,6 +311,18 @@ export const GroupTypes_Delete_API = ({ deleteId }) => del(`${url.GROUP_TYPE_API
 export const GroupTypes_Edit_API = ({ editId }) => get(`${url.GROUP_TYPE_API}/${editId}`)// edit api
 export const GroupTypes_Update_API = ({ jsonBody, updateId }) => put(`${url.GROUP_TYPE_API}/${updateId}`, jsonBody)// update api
 
+
+
+export const Voucher_API = () => get(url.VOUCHER_LIST_API)
+export const Voucher__Post_API = ({ jsonBody }) => post(url.VOUCHER_API, jsonBody)// post api
+export const Voucher__Delete_API = ({ deleteId }) => del(`${url.VOUCHER_API}/${deleteId}`)// delete api
+export const Voucher_Edit_API = ({ editId }) => get(`${url.VOUCHER_API}/${editId}`)// edit api
+export const Voucher__Update_API = ({ jsonBody, updateId }) => put(`${url.VOUCHER_API}/${updateId}`, jsonBody)// update api
+export const Voucher_Validity_Check_API = ({ Voucher_Code }) => get(`${url.VOUCHER_API}/${Voucher_Code}`)// delete api
+
+
+
+
 // GroupMaster
 
 export const get_Group_List_Api = () => get(url.GROUP_API)// get api

@@ -228,6 +228,13 @@ export const TERMSANDCONDITIONS_API = '/TermsAndCondtions'
 // GroupType API
 export const GROUP_TYPE_API = '/GroupTypes'
 
+export const VOUCHER_LIST_API = '/GiftVoucherList'
+
+export const VOUCHER_API = '/giftvouchervalidityCheck'
+
+
+
+
 // Group Api
 export const GROUP_API = '/Group'
 

@@ -128,6 +128,7 @@ import StockOutReportSaga from "./SweetPOSStore/Report/StockOutReportRedux/saga"
 import CountrySaga from "./Administrator/CountryRedux/saga"
 import BillBookingReportSaga from "./Report/BillBookingRedux/saga"
 import DemandVsSupplyReportSaga from "./Report/DemandVsSupply/saga"
+import VoucherSaga from "./Administrator/voucherRedux/saga"
 
 
 export default function* rootSaga() {
@@ -249,6 +250,7 @@ export default function* rootSaga() {
 		fork(CountrySaga),
 		fork(BillBookingReportSaga),
 		fork(DemandVsSupplyReportSaga),
+		fork(VoucherSaga),
 
 		
 

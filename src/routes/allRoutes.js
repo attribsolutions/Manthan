@@ -253,6 +253,8 @@ import Franchies_Invoice_Master from "../pages/Sale/Franchies_Invoice/Franchies_
 import SweetPosInvoiceList from "../pages/SweetPOS/Sales/Invoice/SPOS_InvoiceList.js";
 import BillBookingReport from "../Reports/BillBookingReport/index.js";
 import DemandVSSupply from "../Reports/DemandVsSupply/index.js";
+import Voucher from "../pages/Adminisrator/voucherPages/Voucher.js";
+import VoucherList from "../pages/Adminisrator/voucherPages/VoucherList.js";
 
 
 const userRoutes = [
@@ -441,6 +443,10 @@ const userRoutes = [
 
 	{ path: path.COUNTRY_MASTER, component: CountryMaster },//not party wise
 	{ path: path.COUNTRY_LIST, component: CountryList },//not party wise
+
+
+	{ path: path.VOUCHER, component: Voucher },//not party wise
+	{ path: path.VOUCHER_LIST, component: VoucherList },//not party wise
 
 	//******************************* Inventory Module ************************************//
 	{ path: path.CHALLAN_LIST, component: IBInvoiceList },
@@ -646,9 +652,9 @@ const userRoutes = [
 	{ path: path.POS_USER, component: POSUSER },//not party wise
 	{ path: path.POS_USER_lIST, component: POSUserList },//not party wise
 
-	{ path: path.SWEET_POS_MACHINE_MASTER, component: MachineTypeMaster },//not party wise
+	{ path: path.SWEET_POS_MACHINE_MASTER, component: MachineTypeMaster,isPartyWisePage: true },//not party wise
 
-	{ path: path.SWEET_POS_MACHINE_LIST, component: MachineTypeList },//not party wise
+	{ path: path.SWEET_POS_MACHINE_LIST, component: MachineTypeList,isPartyWisePage: true },//not party wise
 
 	{ path: path.STOCK_OUT_REPORT, component: StockOutReport },//not party wise
 	// ************************************ Pos_Invoice **************************************//

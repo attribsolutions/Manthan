@@ -19,6 +19,7 @@ function pageFooter(doc, data) {
 }
 
 const ItemRegisterReport = (data) => {
+    data["Period"] = data[0].Period
     var doc = new jsPDF('p', 'pt', 'a4');
     pageHeder(doc, data);
     reportBody(doc, data);

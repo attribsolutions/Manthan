@@ -95,7 +95,7 @@ const MachineTypeMaster = (props) => {
             pageField: state.CommonPageFieldReducer.pageField,
         }));
 
-
+   const { commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
     useEffect(() => {
         const page_Id = pageId.SWEET_POS_MACHINE_MASTER
         dispatch(commonPageFieldSuccess(null));
@@ -305,7 +305,7 @@ const MachineTypeMaster = (props) => {
 
                     "MacID": values.MacID,
                     "MachineType": values.MachineType.map(i => i.value).join(','),
-                    "Party": loginPartyID(),
+                    "Party": commonPartyDropSelect.value,
                     "ClientID": values.ClientID,
                     "IsAutoUpdate": values.IsAutoUpdate,
                     "IsGiveUpdate": values.IsGiveUpdate,
