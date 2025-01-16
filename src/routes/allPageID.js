@@ -185,6 +185,9 @@ export const FRANCHISE_CUSTOMER_LIST = 308
 export const COUNTRY_MASTER = 310
 export const COUNTRY_LIST = 311
 
+export const VOUCHER = 320
+export const VOUCHER_LIST = 321
+
 export const MOBILE_RETAILER_SEND = 249
 
 //******************************* Purchase Module ************************************//

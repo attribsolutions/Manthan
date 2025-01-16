@@ -136,6 +136,7 @@ import StockOutReportReducer from "./SweetPOSStore/Report/StockOutReportRedux/re
 import CountryReducer from "./Administrator/CountryRedux/reducer"
 import BillBookingReportReducer from "./Report/BillBookingRedux/reducer"
 import DemandVsSupplyReportReducer from "./Report/DemandVsSupply/reducer"
+import VoucherReducer from "./Administrator/voucherRedux/reducer"
 
 const rootReducer = combineReducers({
 	Layout,
@@ -250,7 +251,8 @@ const rootReducer = combineReducers({
 	StockOutReportReducer,
 	CountryReducer,
 	BillBookingReportReducer,
-	DemandVsSupplyReportReducer
+	DemandVsSupplyReportReducer,
+	VoucherReducer
 
 })
 export default rootReducer

@@ -178,6 +178,12 @@ export const FRANCHISE_CUSTOMER_LIST = "/Franchise_Customer_List"
 export const COUNTRY_MASTER = "/Country_Master"
 export const COUNTRY_LIST = "/Country_List"
 
+export const VOUCHER = "/Voucher"
+export const VOUCHER_LIST = "/Voucher_List"
+
+
+
+
 //******************************* Purchase Module ************************************//
 export const ORDER_1 = "/Order_1"
 export const ORDER_LIST_1 = "/OrderList_1"

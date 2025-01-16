@@ -158,6 +158,12 @@ export const Franchise_Customer_List = url.FRANCHISE_CUSTOMER_MASTER
 export const Country_Master = url.COUNTRY_LIST
 export const Country_List = url.COUNTRY_MASTER
 
+export const Voucher = url.VOUCHER_LIST
+export const Voucher_List = url.VOUCHER
+
+
+
+
 
 //******************************* Purchase Module ************************************//
 
