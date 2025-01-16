@@ -11,31 +11,38 @@ import DynamicColumnHook from "../../components/Common/TableCommonFunc";
 import { Return_Report_Action_Success } from "../../store/Report/ReturnReportRedux/action";
 import { ExcelReportComponent } from "../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS";
 import GlobalCustomTable from "../../GlobalCustomTable";
-import { allLabelWithBlank } from "../../components/Common/CommonErrorMsg/HarderCodeData";
+import { allLabelWithBlank, allLabelWithZero } from "../../components/Common/CommonErrorMsg/HarderCodeData";
 import { DemandVSSupply_Report_Action, DemandVSSupply_Report_Action_Success } from "../../store/Report/DemandVsSupply/action";
-import { C_DatePicker } from "../../CustomValidateForm";
+import { C_DatePicker, C_Select } from "../../CustomValidateForm";
+import { getCommonPartyDrodownOptionAction } from "../../store/Utilites/PartyDrodown/action";
 
 const DemandVSSupply = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory();
     const currentDate_ymd = _cfunc.date_ymd_func();
+    const isFrenchieses = _cfunc.loginUserIsFranchisesRole();
 
 
     const [headerFilters, setHeaderFilters] = useState('');
     const [userPageAccessState, setUserAccState] = useState('');
     const [tableData, setTableData] = useState([]);
+    const [PartyDropdown, setPartyDropdown] = useState(allLabelWithZero);
 
 
     const {
         goButtonData,
         pageField,
         userAccess,
-        listBtnLoading
+        listBtnLoading,
+        Party,
+        partyDropdownLoadings
     } = useSelector((state) => ({
         goButtonData: state.DemandVsSupplyReportReducer.DemandVsSupplyReportData,
         listBtnLoading: state.DemandVsSupplyReportReducer.listBtnLoading,
+        partyDropdownLoading: state.CommonPartyDropdownReducer.partyDropdownLoading,
         Distributor: state.CommonPartyDropdownReducer.commonPartyDropdownOption,
+        Party: state.CommonPartyDropdownReducer.commonPartyDropdownOption,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField
     })
@@ -49,6 +56,8 @@ const DemandVSSupply = (props) => {
     useEffect(() => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(pageId.DEMAND_VS_SUPPLY));
+        dispatch(getCommonPartyDrodownOptionAction())
+
         dispatch(BreadcrumbShowCountlabel(`Count:${0} currency_symbol ${0.00}`));
 
 
@@ -109,11 +118,18 @@ const DemandVSSupply = (props) => {
         const jsonBody = JSON.stringify({
             "FromDate": fromdate,
             "ToDate": todate,
-            "Party": _cfunc.loginPartyID(),
+            "Party": isFrenchieses ? _cfunc.loginPartyID() : PartyDropdown.value,
         });
         let config = { jsonBody, Mode: mode }
         dispatch(DemandVSSupply_Report_Action(config));
     }
+
+    const Party_Option = Party.map(i => ({
+        value: i.id,
+        label: i.Name,
+        PartyType: i.PartyType
+    })).filter(index => index.PartyType === "Franchises");
+    Party_Option.unshift(allLabelWithZero);
 
     function fromdateOnchange(e, date) {
 
@@ -128,6 +144,10 @@ const DemandVSSupply = (props) => {
         let newObj = { ...headerFilters }
         newObj.todate = date
         setHeaderFilters(newObj);
+        setTableData([]);
+    }
+    function PartyDrodownOnChange(e) {
+        setPartyDropdown(e);
         setTableData([]);
     }
 
@@ -167,8 +187,30 @@ const DemandVSSupply = (props) => {
                             </FormGroup>
                         </Col>
 
+                        {!isFrenchieses && < Col sm={3} className="">
+                            <FormGroup className=" row mt-2" >
+                                <Label className="col-sm-4 p-2"
+                                    style={{ width: "65px", marginRight: "20px" }}>Party</Label>
+                                <Col sm="8">
+                                    <C_Select
+                                        name="Party"
+                                        value={PartyDropdown}
+                                        isSearchable={true}
+                                        isLoading={partyDropdownLoadings}
+                                        className="react-dropdown"
+                                        classNamePrefix="dropdown"
+                                        styles={{
+                                            menu: provided => ({ ...provided, zIndex: 2 })
+                                        }}
+                                        options={Party_Option}
+                                        onChange={PartyDrodownOnChange}
+                                    />
+                                </Col>
+                            </FormGroup>
+                        </Col>}
 
-                        <Col sm={6} className=" d-flex justify-content-end" >
+
+                        <Col sm={isFrenchieses ? 6 : 3} className=" d-flex justify-content-end" >
                             <C_Button
                                 type="button"
                                 spinnerColor="white"
