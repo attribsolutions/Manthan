@@ -44,7 +44,7 @@ import {
   POST_ORDER_CONFIRM_API,
   ORDER_SINGLE_GET_API
 } from "./actionType";
-import { amountCommaSeparateFunc, listpageConcatDateAndTime, date_dmy_func, loginSystemSetting, IsSweetAndSnacksCompany, loginCompanyID } from "../../../components/Common/CommonFunction";
+import { amountCommaSeparateFunc, listpageConcatDateAndTime, date_dmy_func, loginSystemSetting, IsSweetAndSnacksCompany, loginCompanyID, loginUserIsFranchisesRole } from "../../../components/Common/CommonFunction";
 import *as url from "../../../routes/route_url"
 
 
@@ -301,6 +301,12 @@ function* orderList_GoBtn_GenFunc({ config }) {
         i.forceDeleteHide = true
       }
 
+
+      if (loginUserIsFranchisesRole() && i.Status === "Open") {
+        i.forceMakeBtnHide = false
+
+      }
+
       return i
     })
     if (subPageMode === url.ORDER_LIST_4) {
@@ -356,7 +362,8 @@ function* getOrderApproval_Detail_GenFunc({ config }) {
 
 function* OrderConfirm_GenFunc({ config }) {         // Update Order by subPageMode
   try {
-    const response = yield call(OrderConfirm_post_API, config);
+    let response = yield call(OrderConfirm_post_API, config);
+    response["conform_saveInvoice"] = config.conform_saveInvoice
     yield put(postOrderConfirms_API_Success(response))
   } catch (error) {
     yield put(orderApiErrorAction())
@@ -364,14 +371,14 @@ function* OrderConfirm_GenFunc({ config }) {         // Update Order by subPageM
 }
 
 function* OrderSingleGet_GenFunc({ config }) {
-  
+
   try {
     let response = ""
     if (config.subPageMode === url.IB_ORDER_SO_LIST || config.subPageMode === url.IB_ORDER_PO_LIST) {
       response = yield call(IB_Order_Get_Api, config);
     } else {
       response = yield call(order_Single_and_Multiple_Print_API, config);
-      
+
     }
 
     yield put(orderSinglegetSuccess(response))

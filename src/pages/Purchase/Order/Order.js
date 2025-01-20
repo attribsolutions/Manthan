@@ -189,7 +189,8 @@ const Order = (props) => {
         routesDropLoading,
         commonPartyDropSelect,
         partyItemListLoading,
-        PartyItemPostMsg
+        PartyItemPostMsg,
+        CustomerSave
     } = useSelector((state) => ({
         goBtnOrderdata: state.OrderReducer.goBtnOrderAdd,
 
@@ -222,6 +223,8 @@ const Order = (props) => {
         goBtnloading: state.OrderReducer.goBtnLoading,
         saveBtnloading: state.OrderReducer.saveBtnloading,
         gotoInvoiceBtnLoading: state.OrderReducer.gotoInvoiceBtnLoading,
+        CustomerSave: state.PartyMasterReducer.postMsg,
+
 
         partyItemListLoading: state.PartyItemsReducer.partyItemListLoading,
         PartyItemPostMsg: state.PartyItemsReducer.postMsg,
@@ -421,6 +424,12 @@ const Order = (props) => {
         }
     }, []);
 
+    useEffect(() => {
+        if ((CustomerSave.Status === true) && (CustomerSave.StatusCode === 200)) {
+            dispatch(_act.GetVenderSupplierCustomer({ subPageMode, RouteID: "", "PartyID": commonPartyDropSelect.value }));
+
+        }
+    }, [CustomerSave])
 
 
     useEffect(() => {
@@ -1733,6 +1742,9 @@ const Order = (props) => {
                                                         masterModal={PartyMaster}
                                                         location={{ pathname: url.FRANCHISE_CUSTOMER_MASTER }}
                                                         masterPath={url.FRANCHISE_CUSTOMER_MASTER}
+                                                        RedirectPath={url.ORDER_4}
+
+
 
                                                     />}
                                                 </Col>

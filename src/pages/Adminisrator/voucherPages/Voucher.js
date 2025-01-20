@@ -39,7 +39,7 @@ import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import * as mode from "../../../routes/PageMode"
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
-import { saveVoucher, updateVoucherID, updateVoucherIDSuccess, ValideVoucherID, ValideVoucherIDSuccess } from "../../../store/Administrator/voucherRedux/action";
+import { saveVoucher, saveVoucherSuccess, updateVoucherID, updateVoucherIDSuccess, ValideVoucherID, ValideVoucherIDSuccess } from "../../../store/Administrator/voucherRedux/action";
 import { C_DatePicker } from "../../../CustomValidateForm";
 import { hideBtnCss } from "../../../components/Common/ListActionsButtons";
 import { Voucher_Validity_Check_API } from "../../../helpers/backend_helper";
@@ -99,6 +99,8 @@ const Voucher = (props) => {
         return () => {
 
             dispatch(ValideVoucherIDSuccess({ Status: false }))
+            dispatch(saveVoucherSuccess({ Status: false }))
+
         }
     }, []);
 
@@ -140,13 +142,13 @@ const Voucher = (props) => {
     }, [userAccess])
 
     useEffect(() => {
-
+        debugger
         if (VoucherValidityData?.StatusCode === 200 && VoucherValidityData?.Status === true) {
             customAlert({
                 Type: 1,
                 Message: VoucherValidityData.Message,
             })
-        } else if (VoucherValidityData?.StatusCode === 204 && VoucherValidityData?.Status === true) {
+        } else if (VoucherValidityData?.StatusCode === 204 && VoucherValidityData?.Status === false) {
             customAlert({
                 Type: 2,
                 Message: VoucherValidityData.Message,
@@ -196,7 +198,7 @@ const Voucher = (props) => {
     useEffect(async () => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-            dispatch(saveGroupTypeMasterSuccess({ Status: false }))
+            dispatch(saveVoucherSuccess({ Status: false }))
             dispatch(Breadcrumb_inputName(''))
             setState(() => resetFunction(fileds, state))// Clear form values  
             if (props.pageMode === mode.dropdownAdd) {

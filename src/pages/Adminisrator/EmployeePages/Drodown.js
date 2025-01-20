@@ -29,6 +29,7 @@ const AddMaster = (props) => {
                     className=" rounded_Add_Btn "
                     color="btn btn-outline-primary border-2 font-size-12"
                     type="button"
+                    disabled={props.disabled}
                     onClick={() => { setIsOpen(true) }}
                 >  <i className="dripicons-plus align-center"></i>
                 </Button>
@@ -59,6 +60,9 @@ const AddMaster = (props) => {
                             isdropdown={true}
                             pageMode={mode.dropdownAdd}
                             location={props.location}
+                            RedirectPath={props.RedirectPath}
+
+
                         />
                     </div>
                 </Modal>

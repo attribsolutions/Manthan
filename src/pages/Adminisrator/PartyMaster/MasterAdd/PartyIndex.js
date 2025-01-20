@@ -52,7 +52,7 @@ import { getClusterlist } from "../../../../store/Administrator/ClusterRedux/act
 import { getCountryList_Action, getCountryList_Success } from "../../../../store/Administrator/CountryRedux/action";
 
 function initialState(props) {
-
+	debugger
 	let page_Id = '';
 	let listPath = ''
 	let sub_Mode = props.location.pathname;
@@ -69,6 +69,7 @@ function initialState(props) {
 		page_Id = pageId.PARTY_SELF_EDIT;
 	}
 	else if (sub_Mode === url.FRANCHISE_CUSTOMER_MASTER) {
+
 		page_Id = pageId.FRANCHISE_CUSTOMER_MASTER;
 		listPath = url.FRANCHISE_CUSTOMER_LIST
 	}
@@ -348,7 +349,7 @@ const PartyMaster = (props) => {
 
 		if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
 			dispatch(postPartyDataSuccess({ Status: false }));
-
+			debugger
 			//***************mobail app api*********************** */
 
 			//************************************** */
@@ -366,7 +367,7 @@ const PartyMaster = (props) => {
 				})
 				if (a) {
 					history.push({
-						pathname: listPath,
+						pathname: (props.isdropdown && props.RedirectPath) ? props.RedirectPath : listPath,
 					});
 				}
 			}

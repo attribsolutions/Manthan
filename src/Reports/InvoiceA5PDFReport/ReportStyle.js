@@ -342,18 +342,18 @@ export const reportFooter = (doc, data) => {
     debugger
 
     if (data.SettingData.Qr_Image === null) {
-    
+
     } else {
         doc.addImage(data.SettingData.Qr_Image, 'JPEG', 335, 303, 105, 96, null, 'FAST');
     }
 
 
     doc.setDrawColor(0, 0, 0);
-    doc.line(570, 308, 30, 308);//horizontal line  (4)
+    doc.line(570, 298, 30, 298);//horizontal line  (4)
     doc.line(570, 380, 435, 380);//horizontal line  (5)
 
-    doc.line(435, 308, 435, 393);//vertical line (3)
-    doc.line(340, 308, 340, 393);//vertical line (2)
+    doc.line(435, 298, 435, 393);//vertical line (3)
+    doc.line(340, 298, 340, 393);//vertical line (2)
 
     const a = data.InvoiceItems.map((data) => ({
 
@@ -383,43 +383,46 @@ export const reportFooter = (doc, data) => {
     const isIGST = compareGSTINState(data.CustomerGSTIN, data.PartyGSTIN)
     if (isIGST || data.isAmerica) {
 
-        doc.text(`Total Basic:`, 440, 327,)
-        doc.text(`${TotalBasicAmount.toFixed(2)}`, 567, 327, 'right')
+        doc.text(`Total Basic:`, 440, 317,)
+        doc.text(`${TotalBasicAmount.toFixed(2)}`, 567, 317, 'right')
 
-        doc.text(`Total Disc:`, 440, 337,)
-        doc.text(` ${TotalDiscount.toFixed(2)}`, 567, 337, 'right')
+        doc.text(`Total Disc:`, 440, 327,)
+        doc.text(` ${TotalDiscount.toFixed(2)}`, 567, 327, 'right')
 
-        doc.text(`Total IGST:`, 440, 347)
-        doc.text(`${totalICGST.toFixed(2)}`, 567, 347, 'right')
+        doc.text(`Total IGST:`, 440, 337)
+        doc.text(`${totalICGST.toFixed(2)}`, 567, 337, 'right')
 
-        doc.text(`Total GST:`, 440, 357,)
-        doc.text(` ${totalICGST.toFixed(2)}`, 567, 357, 'right')
+        doc.text(`Total GST:`, 440, 347,)
+        doc.text(` ${totalICGST.toFixed(2)}`, 567, 347, 'right')
 
 
     } else {
-        doc.text(`Total Basic:`, 440, 317,)
-        doc.text(`${numberWithCommas(TotalBasicAmount.toFixed(2))}`, 567, 317, 'right')
+        doc.text(`Total Basic:`, 440, 307,)
+        doc.text(`${numberWithCommas(TotalBasicAmount.toFixed(2))}`, 567, 307, 'right')
 
-        doc.text(`Total Disc:`, 440, 327,)
-        doc.text(`${numberWithCommas(TotalDiscount.toFixed(2))}`, 567, 327, 'right')
+        doc.text(`Total Disc:`, 440, 317,)
+        doc.text(`${numberWithCommas(TotalDiscount.toFixed(2))}`, 567, 317, 'right')
 
-        doc.text(`Total CGST:`, 440, 337)
-        doc.text(`${numberWithCommas(totalCGST.toFixed(2))}`, 567, 337, 'right')
+        doc.text(`Total CGST:`, 440, 327)
+        doc.text(`${numberWithCommas(totalCGST.toFixed(2))}`, 567, 327, 'right')
 
-        doc.text(`Total SGST:`, 440, 347,)
-        doc.text(`${numberWithCommas(totalSGST.toFixed(2))}`, 567, 347, 'right')
+        doc.text(`Total SGST:`, 440, 337,)
+        doc.text(`${numberWithCommas(totalSGST.toFixed(2))}`, 567, 337, 'right')
 
-        doc.text(`Total GST:`, 440, 357,)
-        doc.text(` ${numberWithCommas(TotalGST.toFixed(2))}`, 567, 357, 'right')
+        doc.text(`Total GST:`, 440, 347,)
+        doc.text(` ${numberWithCommas(TotalGST.toFixed(2))}`, 567, 347, 'right')
 
     }
 
     if (!data.isAmerica) {
-        doc.text(`Round Off:`, 440, 367,)
-        doc.text(` ${Number(data.RoundOffAmount).toFixed(2)}`, 567, 367, 'right')
+        doc.text(`Round Off:`, 440, 357,)
+        doc.text(` ${Number(data.RoundOffAmount).toFixed(2)}`, 567, 357, 'right')
 
-        doc.text(`TCS Amount:`, 440, 377,)
-        doc.text(` ${numberWithCommas(Number(data.TCSAmount).toFixed(2))}`, 567, 377, 'right')
+        doc.text(`TCS Amount:`, 440, 367,)
+        doc.text(` ${numberWithCommas(Number(data.TCSAmount).toFixed(2))}`, 567, 367, 'right')
+
+        doc.text(`Advance Amount:`, 440, 377,)
+        doc.text(` ${numberWithCommas(Number(data.AdvanceAmount).toFixed(2))}`, 567, 377, 'right')
 
     }
 
@@ -476,7 +479,7 @@ export const reportFooter = (doc, data) => {
 
         },
         tableLineColor: "black",
-        startY: 308,
+        startY: 298,
 
     };
 
