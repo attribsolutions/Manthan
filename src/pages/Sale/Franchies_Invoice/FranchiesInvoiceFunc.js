@@ -4,6 +4,7 @@ import SERVER_HOST_PATH from "../../../helpers/_serverPath";
 export const postWithBasicAuth = async ({
     jsonBody,
     btnId = null,
+    OrderID,
     APIName
 }) => {
     // Get username and password for basic authentication
@@ -35,6 +36,7 @@ export const postWithBasicAuth = async ({
         }
         if (jsonData.TransactionID && Array.isArray(jsonData.TransactionID)) {
             jsonData["TransactionID"] = jsonData.TransactionID[0];
+            jsonData["OrderID"] = OrderID
         }
 
         return jsonData;

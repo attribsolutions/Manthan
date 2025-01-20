@@ -278,6 +278,18 @@ export const SortButtonFunc = (props) => {
             controlTypeName: "Number",
         },
 
+        {
+            text: 'Basic Amount',
+            dataField: 'BasicAmount',
+            selectValue: [allLabelWithBlank],
+            checkboxState: showAlsoSelect.some(item => item.value === 12),
+            sort: true,
+            isSum: true,
+            toFixed: 2,
+            sequence: 24,
+            controlTypeName: "Number",
+        },
+
     ];
 
     //************************************************************************************************** */
@@ -333,11 +345,11 @@ export const SortButtonFunc = (props) => {
                     TCSAmount: 0
                 };
             }
-
+            debugger
             buttonStateArray.forEach(field => {
                 if (field.isSum === true) {
                     groupedData[groupKey][field.dataField] += parseFloat(item[field.dataField]);
-                    groupedData[groupKey][field.dataField] = parseFloat((groupedData[groupKey][field.dataField]).toFixed(field.toFixed));
+                    groupedData[groupKey][field.dataField] = (parseFloat((groupedData[groupKey][field.dataField]))).toFixed(field.toFixed);
                 }
             })
 

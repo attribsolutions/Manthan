@@ -400,9 +400,9 @@ export const reportFooter = (doc, data) => {
         doc.addImage(data.SettingData.Qr_Image, 'JPEG', 337, 728, 100, 86, null, 'FAST');
     }
     doc.setDrawColor(0, 0, 0);
-    doc.line(570, 730, 30, 730);//horizontal line Footer 1
-    doc.line(435, 730, 435, 815);//vertical right Sub Total
-    doc.line(340, 730, 340, 815);//vertical right Qr Code (1)
+    doc.line(570, 715, 30, 715);//horizontal line Footer 1
+    doc.line(435, 715, 435, 815);//vertical right Sub Total
+    doc.line(340, 715, 340, 815);//vertical right Qr Code (1)
     doc.setFont('Tahoma')
 
     const a = data.InvoiceItems.map((data) => ({
@@ -427,24 +427,24 @@ export const reportFooter = (doc, data) => {
 
     });
     const TotalGST = totalCGST + totalSGST;
-    doc.setFontSize(8)
+    doc.setFontSize(9)
 
 
 
     const isIGST = compareGSTINState(data.CustomerGSTIN, data.PartyGSTIN)
-    if (isIGST || data.isAmerica) {
+    if ((isIGST || data.isAmerica)) {
 
-        doc.text(`Total Basic:`, 440, 748,)
-        doc.text(`${numberWithCommas(Number(TotalBasicAmount).toFixed(2))}`, 567, 748, 'right')
+        doc.text(`Total Basic:`, 440, 735,)
+        doc.text(`${numberWithCommas(Number(TotalBasicAmount).toFixed(2))}`, 567, 735, 'right')
 
-        doc.text(`Total Disc:`, 440, 758,)
-        doc.text(` ${numberWithCommas(Number(TotalDiscount).toFixed(2))}`, 567, 758, 'right')
+        doc.text(`Total Disc:`, 440, 745,)
+        doc.text(` ${numberWithCommas(Number(TotalDiscount).toFixed(2))}`, 567, 745, 'right')
 
-        doc.text(`Total IGST:`, 440, 768,)
-        doc.text(`${numberWithCommas(Number(totalICGST).toFixed(2))}`, 567, 768, 'right')
+        doc.text(`Total IGST:`, 440, 755,)
+        doc.text(`${numberWithCommas(Number(totalICGST).toFixed(2))}`, 567, 755, 'right')
 
-        doc.text(`Total GST:`, 440, 778,)
-        doc.text(` ${numberWithCommas(Number(TotalGST).toFixed(2))}`, 567, 778, 'right')
+        doc.text(`Total GST:`, 440, 765,)
+        doc.text(` ${numberWithCommas(Number(TotalGST).toFixed(2))}`, 567, 765, 'right')
 
         // doc.text(`Round Off:`, 440, 788,)
         // doc.text(` ${numberWithCommas(Number(data.RoundOffAmount).toFixed(2))}`, 567, 788, 'right')
@@ -456,20 +456,20 @@ export const reportFooter = (doc, data) => {
 
     } else {
 
-        doc.text(`Total Basic:`, 440, 738,)
-        doc.text(`${numberWithCommas(Number(TotalBasicAmount).toFixed(2))}`, 567, 738, 'right')
+        doc.text(`Total Basic:`, 440, 725,)
+        doc.text(`${numberWithCommas(Number(TotalBasicAmount).toFixed(2))}`, 567, 725, 'right')
 
-        doc.text(`Total Disc:`, 440, 748,)
-        doc.text(` ${numberWithCommas(Number(TotalDiscount).toFixed(2))}`, 567, 748, 'right')
+        doc.text(`Total Disc:`, 440, 735,)
+        doc.text(` ${numberWithCommas(Number(TotalDiscount).toFixed(2))}`, 567, 735, 'right')
 
-        doc.text(`Total CGST:`, 440, 758)
-        doc.text(`${numberWithCommas(Number(totalCGST).toFixed(2))}`, 567, 758, 'right')
+        doc.text(`Total CGST:`, 440, 745)
+        doc.text(`${numberWithCommas(Number(totalCGST).toFixed(2))}`, 567, 745, 'right')
 
-        doc.text(`Total SGST:`, 440, 768,)
-        doc.text(`${numberWithCommas(Number(totalSGST).toFixed(2))}`, 567, 768, 'right')
+        doc.text(`Total SGST:`, 440, 755,)
+        doc.text(`${numberWithCommas(Number(totalSGST).toFixed(2))}`, 567, 755, 'right')
 
-        doc.text(`Total GST:`, 440, 778,)
-        doc.text(` ${numberWithCommas(Number(TotalGST).toFixed(2))}`, 567, 778, 'right')
+        doc.text(`Total GST:`, 440, 765,)
+        doc.text(` ${numberWithCommas(Number(TotalGST).toFixed(2))}`, 567, 765, 'right')
 
         // doc.text(`Round Off:`, 440, 788,)
         // doc.text(` ${numberWithCommas(Number(data.RoundOffAmount).toFixed(2))}`, 567, 788, 'right')
@@ -480,11 +480,14 @@ export const reportFooter = (doc, data) => {
 
 
     if (!data.isAmerica) {
-        doc.text(`Round Off:`, 440, 788,)
-        doc.text(` ${numberWithCommas(Number(data.RoundOffAmount).toFixed(2))}`, 567, 788, 'right')
+        doc.text(`Round Off:`, 440, 775,)
+        doc.text(` ${numberWithCommas(Number(data.RoundOffAmount).toFixed(2))}`, 567, 775, 'right')
 
-        doc.text(`TCS Amount:`, 440, 798,)
-        doc.text(` ${numberWithCommas(Number(data.TCSAmount).toFixed(2))}`, 567, 798, 'right')
+        doc.text(`TCS Amount:`, 440, 785,)
+        doc.text(` ${numberWithCommas(Number(data.TCSAmount).toFixed(2))}`, 567, 785, 'right')
+
+        doc.text(`Advance Amount :`, 440, 795,)
+        doc.text(` ${numberWithCommas(Number(data.AdvanceAmount).toFixed(2))}`, 567, 795, 'right')
 
     }
 
@@ -530,7 +533,7 @@ export const reportFooter = (doc, data) => {
 
         },
         tableLineColor: "black",
-        startY: 730,
+        startY: 715,
 
     };
 
@@ -562,7 +565,7 @@ export const reportFooter = (doc, data) => {
             columnWidth: 'wrap',
             textColor: [30, 30, 30],
             cellPadding: 1,
-            fontSize: 7,
+            fontSize: 8,
             lineColor: [0, 0, 0]
         },
         columnStyles: {

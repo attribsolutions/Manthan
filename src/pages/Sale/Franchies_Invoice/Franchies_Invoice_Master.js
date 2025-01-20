@@ -6,7 +6,7 @@ import {
     Label,
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
-import { BreadcrumbShowCountlabel, commonPageFieldSuccess, getpdfReportdata } from "../../../store/actions";
+import { BreadcrumbShowCountlabel, commonPageFieldSuccess, getpdfReportdata, postOrderConfirms_API, postOrderConfirms_API_Success } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { commonPageField } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
@@ -131,10 +131,23 @@ const Franchies_Invoice_Master = (props) => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(pageId.FRANCHAISE_INVOICE))
         dispatch(GoButtonForinvoiceAddSuccess([]))
+
+        return () => {
+            dispatch(postOrderConfirms_API_Success({ Status: false }))
+        }
     }, []);
+
+
+
+
 
     useEffect(() => {
         if (franchiesSaveApiRep?.Success === true && franchiesSaveApiRep?.status_code === 200) {
+            
+            let jsonBody = { OrderIDs: (franchiesSaveApiRep.OrderID).toString() }
+
+
+            dispatch(postOrderConfirms_API({ jsonBody: jsonBody, conform_saveInvoice: true }))
 
             setFranchiesSaveApiRep({});
             const config = {
@@ -162,10 +175,12 @@ const Franchies_Invoice_Master = (props) => {
 
             // Redirect to appropriate page based on subPageMode
             if (subPageMode === url.FRANCHAISE_INVOICE) {
+
                 history.push({ pathname: url.POS_INVOICE_LIST, updatedRowBlinkId: franchiesSaveApiRep?.TransactionID });
             }
         } else if (franchiesSaveApiRep?.Success === true) {
             // Show error alert message with the JSON stringified postMsg.Message
+            dispatch(postOrderConfirms_API_Success({ Status: false }))
             setFranchiesSaveApiRep({});
             customAlert({
                 Type: 4,
@@ -804,6 +819,7 @@ const Franchies_Invoice_Master = (props) => {
                 const saveApiRespone = await postWithBasicAuth({
                     jsonBody: jsonBody,
                     btnId: btnId,
+                    OrderID: values.OrderID,
                     APIName: FRANCHAISE_INVOICE_SAVE_API,
                 });
                 setFranchiesSaveApiRep(saveApiRespone)

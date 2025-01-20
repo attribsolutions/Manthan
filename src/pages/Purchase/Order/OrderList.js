@@ -282,6 +282,7 @@ const OrderList = () => {
         setOtherState({ masterPath, makeBtnShow, newBtnPath, makeBtnName, IBType, showAprovalBtn })
         setPageMode(page_Mode)
         dispatch(_act.commonPageFieldListSuccess(null))
+
         dispatch(_act.commonPageFieldList(page_Id))
         // dispatch(_act.BreadcrumbShowCountlabel(`${"Order Count"} :0`))
         if (!(_cfunc.loginSelectedPartyID() === 0)) {
@@ -396,7 +397,7 @@ const OrderList = () => {
     //order confirm
     useEffect(() => {
 
-        if (orderConfirmMsg.Status === true && orderConfirmMsg.StatusCode === 200) {
+        if (orderConfirmMsg.Status === true && orderConfirmMsg.StatusCode === 200 && !(orderConfirmMsg.conform_saveInvoice)) {
             dispatch(postOrderConfirms_API_Success({ Status: false }))
             goButtonHandler("event",)
             customAlert({
@@ -903,7 +904,7 @@ const OrderList = () => {
                                 />
                             </Col>
 
-                            
+
                         </FormGroup>
                     </Col >
 
@@ -962,7 +963,7 @@ const OrderList = () => {
     };
 
 
-   
+
 
 
     const headerselecthandler = ({ event, tableList }) => {
@@ -1043,7 +1044,7 @@ const OrderList = () => {
                         />
                         : null
                 }
-              
+
             </div>
 
             <OrderView_Modal />{/** order view component */}

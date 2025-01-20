@@ -130,6 +130,11 @@ export const SHOW_ALSO_OPTIONS = [{
     label: "GST",
 },
 
+{
+    value: 12,
+    label: "Basic Amount",
+},
+
 ]
 
 export const UNIT_DROPDOWN_OPTIONS = [

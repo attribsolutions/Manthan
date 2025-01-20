@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
     BreadcrumbShowCountlabel,
@@ -8,6 +8,7 @@ import {
     loginSuccessAction,
     loginUser,
     makeGRN_Mode_1Action,
+    postOrderConfirms_API_Success,
 } from "../../../../store/actions";
 import CommonPurchaseList from "../../../../components/Common/CommonPurchaseList"
 import { Col, FormGroup, Input, Label, Modal, Row } from "reactstrap";
@@ -40,6 +41,7 @@ import {
     InvoiceBulkDelete_IDs_Succcess,
     Pos_UpdateVehicleCustomerInvoice_Action,
     Pos_UpdateVehicleCustomerInvoice_Action_Success,
+    InvoiceFilterSelect_Action_Success,
 
 } from "../../../../store/Sales/Invoice/action";
 import { C_DatePicker, C_Select } from "../../../../CustomValidateForm";
@@ -51,13 +53,16 @@ import { sideBarPageFiltersInfoAction } from "../../../../store/Utilites/PartyDr
 import { date_dmy_func } from "../../../../components/Common/CommonFunction";
 import { postWithBasicAuth } from "../../../Sale/Franchies_Invoice/FranchiesInvoiceFunc";
 import { FRANCHAISE_INVOICE_DELETE_API } from "../../../../helpers/url_helper";
+// import { C_FilterSelect } from "./CustomFilter";
+
 
 
 const SweetPosInvoiceList = () => {
 
     const dispatch = useDispatch();
     const history = useHistory();
-
+    const filterStateRef = useRef({});
+    debugger
     const now = new Date();
     const date = now.toISOString().slice(0, 10); // e.g., 2024-11-29
     const time = now.toTimeString().slice(0, 8); // e.g., 13:32:54
@@ -78,7 +83,6 @@ const SweetPosInvoiceList = () => {
     const [otherState, setOtherState] = useState({ masterPath: '', makeBtnShow: false, newBtnPath: '', IBType: '' });
     const [Vehicle_No, setVehicle_No] = useState({ value: null, label: "Select..." })
     const [Customer, setCustomer] = useState('')
-
 
     const [modal, setmodal] = useState(false);
     const [vehicleErrorMsg, setvehicleErrorMsg] = useState(false);
@@ -105,6 +109,7 @@ const SweetPosInvoiceList = () => {
             Uploaded_EwayBill: state.InvoiceReducer.Uploaded_EwayBill,
             Cancel_EInvoice: state.InvoiceReducer.Cancel_EInvoice,
             Cancel_EwayBill: state.InvoiceReducer.Cancel_EwayBill,
+            FilterSelectData: state.InvoiceReducer.FilterSelectData,
             VehicleNumber: state.VehicleReducer.VehicleList,
             Update_Vehicle_Customer_Invoice: state.InvoiceReducer.Update_Vehicle_Customer_Invoice,
             makeGRN: state.GRNReducer.GRNitem,
@@ -129,7 +134,8 @@ const SweetPosInvoiceList = () => {
         invoiceBulkDelete,
         invoiceBulkDeleteLoading,
         makeGRN,
-        listBtnLoading
+        listBtnLoading,
+        FilterSelectData
     } = reducers;
 
     const {
@@ -157,9 +163,16 @@ const SweetPosInvoiceList = () => {
     // sideBar Page Filters Information 
 
 
+    // const handleChildStateChange = (state) => {
+    //     debugger
+    //     setChildState(state);
+    // };
+
+
 
 
     useEffect(() => {
+
         dispatch(sideBarPageFiltersInfoAction([
             { label: "FromDate", content: date_dmy_func(fromdate), },
             { label: "ToDate", content: date_dmy_func(todate), },
@@ -188,6 +201,7 @@ const SweetPosInvoiceList = () => {
         setOtherState({ masterPath, makeBtnShow, newBtnPath, IBType })
         setPageMode(page_Mode)
         dispatch(commonPageFieldListSuccess(null))
+
         setmodal(false);
 
 
@@ -203,9 +217,15 @@ const SweetPosInvoiceList = () => {
             dispatch(invoiceListGoBtnfilterSucccess([]));
             dispatch(Pos_UpdateVehicleCustomerInvoice_Action_Success([]));
 
+
         }
 
     }, [dispatch]);
+    
+    useEffect(() => {
+        dispatch(postOrderConfirms_API_Success({ Status: false }))
+    }, [])
+
 
     useEffect(() => {    // Vehicle Update against Invoice Id
         if (Update_Vehicle_Customer_Invoice.Status === true && Update_Vehicle_Customer_Invoice.StatusCode === 200) {
@@ -309,6 +329,10 @@ const SweetPosInvoiceList = () => {
             return
         }
     }, [Cancel_EInvoice]);
+
+    const handleFilterChange = useCallback((updatedState) => {
+        filterStateRef.current = updatedState;
+    }, []);
 
     useEffect(async () => {    // Uploaded Cancel E-way Bill useEffect 
 
@@ -416,7 +440,9 @@ const SweetPosInvoiceList = () => {
                 Customer: supplierSelect.value === "" ? '' : supplierSelect.value,
                 Party: commonPartyDropSelect.value,
                 IBType: IBType ? IBType : otherState.IBType,
-                DashBoardMode: 0
+                DashBoardMode: 0,
+                // ...filterStateRef.current,
+
 
             });
 
@@ -501,6 +527,7 @@ const SweetPosInvoiceList = () => {
     };
 
 
+
     const HeaderContent = () => {
 
         return (
@@ -550,13 +577,13 @@ const SweetPosInvoiceList = () => {
                         <FormGroup className="mb-2 row mt-3 " >
                             <Label className="col-md-4 p-2"
                                 style={{ width: "115px" }}>Customer</Label>
-                            <Col sm="5">
+                            <Col sm="7">
                                 <C_Select
-                                    classNamePrefix="react-select"
                                     value={supplierSelect}
                                     options={supplierOptions}
-                                    onChange={supplierOnchange}
                                     isLoading={supplierDropLoading}
+                                    onChange={supplierOnchange}
+                                    // onFilterChange={handleFilterChange}
                                     styles={{
                                         menu: provided => ({ ...provided, zIndex: 2 })
                                     }}
@@ -840,6 +867,7 @@ const SweetPosInvoiceList = () => {
                     </div>
                 </Modal>
             </div>
+
         </React.Fragment>
     )
 }
