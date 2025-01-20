@@ -1738,7 +1738,7 @@ const Order = (props) => {
 
                                                 </Col>
                                                 <Col sm="1" style={{ marginTop: "-12px" }} >
-                                                    {FrenchiesesCustomerMasterAccess && <AddMaster
+                                                    {(FrenchiesesCustomerMasterAccess && pageMode === mode.defaultsave) && <AddMaster
                                                         masterModal={PartyMaster}
                                                         location={{ pathname: url.FRANCHISE_CUSTOMER_MASTER }}
                                                         masterPath={url.FRANCHISE_CUSTOMER_MASTER}
