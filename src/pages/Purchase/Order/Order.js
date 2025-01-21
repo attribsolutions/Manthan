@@ -384,10 +384,12 @@ const Order = (props) => {
                 }))
                 let Total_weigtage = 0
                 const orderItems = hasEditVal.OrderItems.map((ele, k) => {
-
+                    debugger
                     const weightage = (Number(ele["Weightage"])) || 0.00;
                     const row_weightage = (Number(ele.Quantity) * Number(ele.BaseUnitQuantity)) / Number(weightage)
-                    Total_weigtage = Total_weigtage + row_weightage
+                    if (!isNaN(row_weightage) && row_weightage !== null) {
+                        Total_weigtage += row_weightage;
+                    }
 
                     ele["id"] = k + 1
                     return ele
@@ -790,7 +792,7 @@ const Order = (props) => {
             formatExtraData: { tableList: orderItemTable },
             formatter: (value, row, key, { tableList }) => {
                 if (row.GroupRow || row.SubGroupRow) { return }
-                debugger
+
                 if (!row.UnitName) {
                     row["Unit_id"] = 0;
                     row["UnitName"] = 'null';
@@ -1220,7 +1222,7 @@ const Order = (props) => {
     };
 
     function itemWise_CalculationFunc(row, IsComparGstIn, tableList = []) {
-        debugger
+
         let calculate = {} //order calculation function 
         if (_cfunc.loginUserIsFranchisesRole() && url.ORDER_4) {
             calculate = Franchies_Order_Calculate_Func(row)
