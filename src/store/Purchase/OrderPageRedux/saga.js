@@ -78,12 +78,14 @@ function* goButtonGenFunc({ config }) {                     // GO-Botton order A
           _BaseUnitRate: (unit.Rate * unit.BaseUnitQuantity)  /// this field add only for testing purpose ///checking  not use any where in code only for observation
         }))
         const isRateForSweetAndSnacksCompany = CheckRateFromCompany().isRateForSweetAndSnacksCompany;
+
         if ((subPageMode === url.ORDER_4) && loginUserIsFranchisesRole()) {
           ele.Rate = Number(ele.MRPValue)
           ele.UnitDetails = ele.UnitDetails.map(unit => ({
             ...unit, Rate: Number(ele.MRPValue),
           }))
         }
+
         if ((subPageMode === url.ORDER_1) || (subPageMode === url.IB_ORDER) || isRateForSweetAndSnacksCompany) {
           ele.Rate = Number(ele.VRate)
           ele.UnitDetails = ele.UnitDetails.map(unit => ({
