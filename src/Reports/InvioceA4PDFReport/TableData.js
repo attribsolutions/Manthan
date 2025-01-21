@@ -140,7 +140,7 @@ export const Rows = (data) => {
 
         let HSNcodes = ""
         if (element.HSNCode) {
-            
+
             if (data.SettingData.HSNCodeDigit === "0") {
                 HSNcodes = element.HSNCode.slice(0, 0);
             } else if (data.SettingData.HSNCodeDigit === "1") {
@@ -253,7 +253,7 @@ export const Rows = (data) => {
 }
 
 export const RowsWithIGST = (data) => {
-
+    debugger
     const { InvoiceItems = [] } = data
     InvoiceItems.sort((firstItem, secondItem) => firstItem.GSTPercentage - secondItem.GSTPercentage);
     const returnArr = [];
@@ -270,6 +270,21 @@ export const RowsWithIGST = (data) => {
         const { HSNCode, ItemName, IGSTPercentage, MRP, Rate, Discount, CGST, SGST, Amount, DiscountAmount,
             BasicAmount, Quantity, UnitName, MRPValue, CGSTPercentage, SGSTPercentage, GSTPercentage, BatchCode,
             BatchDate, DiscountType, PrimaryUnitName, IGST, ItemExpiryDate } = currentItem;
+
+        let PcsinNumber = ""
+        let PcsinNumberUnit = ""
+        const pattern = /\((.*?)\)/;
+
+        if (currentItem.UnitName !== "") {
+            const matchFound = currentItem.UnitName.match(pattern);
+            const extractedText = matchFound[1];
+            const match = extractedText.split(" ")
+            PcsinNumber = match[0];
+            PcsinNumberUnit = match[1];
+
+        }
+
+
         const key = ItemName + '_' + MRPValue;
         if (accumulator[key]) {
             accumulator[key].DiscountAmount += Number(DiscountAmount);
@@ -449,7 +464,7 @@ export const RowsForAmericaInvoice = (data) => {
     const TotalItemlength = Object.values(groupedItems).length;
     data["TotalItemlength"] = TotalItemlength;
     Object.values(groupedItems).forEach((element, key) => {
-        
+
         let HSNcodes = ""
         if (element.HSNCode) {
             if (data.SettingData.HSNCodeDigit === "0") {
