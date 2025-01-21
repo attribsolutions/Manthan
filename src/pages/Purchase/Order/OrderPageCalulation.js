@@ -77,9 +77,9 @@ export function Franchies_Order_Calculate_Func(row, index1, IsComparGstIn,) {
   const qty = Number(row.Quantity) || 0;
   const initialRate = Number(row.Rate) || 0;
   let rate = Number(row.Rate) || 0;
-  const gstPercentage = Number(index1?.GSTPercentage) || 0;
-  const discountValue = Number(index1?.Discount) || 0;
-  const discountType = Number(index1?.DiscountType) || 2;
+  const gstPercentage = Number(row?.GSTPercentage) || 0;
+  const discountValue = Number(row?.Discount) || 0;
+  const discountType = Number(row?.DiscountType) || 2;
 
   let discountAmount = 0;
 
