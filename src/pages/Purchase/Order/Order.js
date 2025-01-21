@@ -1224,7 +1224,7 @@ const Order = (props) => {
     function itemWise_CalculationFunc(row, IsComparGstIn, tableList = []) {
 
         let calculate = {} //order calculation function 
-        if (_cfunc.loginUserIsFranchisesRole() && url.ORDER_4) {
+        if (_cfunc.loginUserIsFranchisesRole() && subPageMode === url.ORDER_4) {
             calculate = Franchies_Order_Calculate_Func(row)
         } else {
             calculate = orderCalculateFunc(row) //order calculation function 
@@ -1464,8 +1464,9 @@ const Order = (props) => {
 
             // Function to handle value changes in order items
             function processValueChanged({ item, isEdit, isDelete }) {
+                debugger
                 let calculated = {}
-                if (_cfunc.loginUserIsFranchisesRole() && url.ORDER_4) {
+                if (_cfunc.loginUserIsFranchisesRole() && subPageMode === url.ORDER_4) {
                     calculated = Franchies_Order_Calculate_Func(item)
                 } else {
                     calculated = orderCalculateFunc(item, { GSTIn_1: supplierSelect.GSTIN, GSTIn_2: _cfunc.loginUserGSTIN() });
