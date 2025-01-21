@@ -328,6 +328,7 @@ export const SortButtonFunc = (props) => {
         const groupedData = {};
 
         manupulatedData.forEach(item => {
+            debugger
             const groupValues = buttonStateArray
                 .filter(option => option.checkboxState && (option.groupBy === true))
                 .map(option => item[option.dataField]);
@@ -349,11 +350,16 @@ export const SortButtonFunc = (props) => {
             buttonStateArray.forEach(field => {
                 if (field.isSum === true) {
                     groupedData[groupKey][field.dataField] += parseFloat(item[field.dataField]);
-                    groupedData[groupKey][field.dataField] = (parseFloat((groupedData[groupKey][field.dataField]))).toFixed(field.toFixed);
+                    groupedData[groupKey][field.dataField] = parseFloat((groupedData[groupKey][field.dataField]).toFixed(field.toFixed));
                 }
             })
 
         });
+
+
+
+
+
         manupulatedData = Object.values(groupedData);
     }
     else {
