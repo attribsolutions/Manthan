@@ -350,7 +350,8 @@ export const SortButtonFunc = (props) => {
             buttonStateArray.forEach(field => {
                 if (field.isSum === true) {
                     groupedData[groupKey][field.dataField] += parseFloat(item[field.dataField]);
-                    groupedData[groupKey][field.dataField] = parseFloat((groupedData[groupKey][field.dataField]).toFixed(field.toFixed));
+                    const value = Number(groupedData[groupKey][field.dataField]) || 0;
+                    groupedData[groupKey][field.dataField] = parseFloat(value.toFixed(field.toFixed));
                 }
             })
 

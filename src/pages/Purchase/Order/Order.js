@@ -16,7 +16,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Select from "react-select";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
-import { orderCalculateFunc } from "./OrderPageCalulation";
+import { Franchies_Order_Calculate_Func, orderCalculateFunc } from "./OrderPageCalulation";
 import { SaveButton, Go_Button, Change_Button, GotoInvoiceBtn, PageLoadingSpinner, DashboardLoader, C_Button } from "../../../components/Common/CommonButton";
 import { globalTableSearchProps } from "../../../components/Common/SearchBox/MySearch";
 
@@ -790,7 +790,7 @@ const Order = (props) => {
             formatExtraData: { tableList: orderItemTable },
             formatter: (value, row, key, { tableList }) => {
                 if (row.GroupRow || row.SubGroupRow) { return }
-
+                debugger
                 if (!row.UnitName) {
                     row["Unit_id"] = 0;
                     row["UnitName"] = 'null';
@@ -1220,8 +1220,13 @@ const Order = (props) => {
     };
 
     function itemWise_CalculationFunc(row, IsComparGstIn, tableList = []) {
-
-        const calculate = orderCalculateFunc(row) //order calculation function 
+        debugger
+        let calculate = {} //order calculation function 
+        if (_cfunc.loginUserIsFranchisesRole() && url.ORDER_4) {
+            calculate = Franchies_Order_Calculate_Func(row)
+        } else {
+            calculate = orderCalculateFunc(row) //order calculation function 
+        }
         row["Amount"] = calculate.roundedTotalAmount
 
 
@@ -1457,8 +1462,12 @@ const Order = (props) => {
 
             // Function to handle value changes in order items
             function processValueChanged({ item, isEdit, isDelete }) {
-
-                const calculated = orderCalculateFunc(item, { GSTIn_1: supplierSelect.GSTIN, GSTIn_2: _cfunc.loginUserGSTIN() });
+                let calculated = {}
+                if (_cfunc.loginUserIsFranchisesRole() && url.ORDER_4) {
+                    calculated = Franchies_Order_Calculate_Func(item)
+                } else {
+                    calculated = orderCalculateFunc(item, { GSTIn_1: supplierSelect.GSTIN, GSTIn_2: _cfunc.loginUserGSTIN() });
+                }
 
                 // Create an object for the order item
                 const orderItem = {

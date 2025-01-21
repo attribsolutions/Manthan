@@ -1,7 +1,7 @@
 import { compareGSTINState } from "../../../components/Common/CommonFunction";
 
 export const orderCalculateFunc = (row, IsComparGstIn) => {
-  
+
   // Retrieve values from input object
   const rate = Number(row.Rate) || 0;
   const quantity = Number(row.Quantity) || 0;
@@ -64,3 +64,85 @@ export const orderCalculateFunc = (row, IsComparGstIn) => {
 
   };
 };
+
+
+
+
+
+
+export function Franchies_Order_Calculate_Func(row, index1, IsComparGstIn,) {
+  debugger
+  const discountBasedOnRate = true
+
+  const qty = Number(row.Quantity) || 0;
+  const initialRate = Number(row.Rate) || 0;
+  let rate = Number(row.Rate) || 0;
+  const gstPercentage = Number(index1?.GSTPercentage) || 0;
+  const discountValue = Number(index1?.Discount) || 0;
+  const discountType = Number(index1?.DiscountType) || 2;
+
+  let discountAmount = 0;
+
+  // Calculate the discount before Taxable calculation
+  if (discountValue > 0 && discountBasedOnRate) {
+    if (discountType === 1) {//'Rs'
+      rate -= discountValue;
+      discountAmount = parseFloat((discountValue * qty).toFixed(2));
+    } else {
+      discountAmount = parseFloat(((rate * discountValue / 100) * qty).toFixed(2));
+      rate = parseFloat((rate - (rate * discountValue / 100)).toFixed(2));
+    }
+  }
+
+  const grossAmount = qty * rate;
+
+  // Handle case where quantity is zero
+  let taxableAmount = 0;
+  let taxableRate = 0;
+
+  if (qty !== 0) {
+    taxableAmount = parseFloat((grossAmount * 100 / (100 + gstPercentage)).toFixed(2));
+    taxableRate = parseFloat((rate * 100 / (100 + gstPercentage)).toFixed(2));
+  }
+
+  const cgst = parseFloat((taxableAmount * (gstPercentage / 2) / 100).toFixed(2));
+  const sgst = cgst;
+  const igst = 0; // Assuming local billing, hence IGST is 0
+  const gstAmount = cgst + sgst;
+
+  // Final amount after applying GST
+  let itemFinalAmount = taxableAmount + gstAmount;
+
+  // Adjust Taxable Amount and Item Final Amount to handle 1 paisa differences
+  if (discountValue === 0) {
+    taxableAmount = (qty * rate) - gstAmount;
+    itemFinalAmount = taxableAmount + gstAmount;
+  } else {
+    if (discountType === 1) {//'Rs'
+      taxableAmount = (qty * rate) - gstAmount;
+      itemFinalAmount = taxableAmount + gstAmount;
+    } else {
+      taxableAmount = (qty * initialRate) - discountAmount - gstAmount;
+      itemFinalAmount = taxableAmount + gstAmount;
+    }
+  }
+
+
+
+  return {
+    // discountBaseAmt: Number(discountBaseAmt.toFixed(2)),
+    disCountAmt: discountAmount,
+    roundedTotalAmount: itemFinalAmount,
+    basicAmount: taxableAmount,
+    CGST_Amount: cgst,
+    SGST_Amount: sgst,
+    IGST_Amount: igst,
+    roundedGstAmount: gstAmount,
+    IGST_Amount: gstAmount,
+    CGST_Percentage: gstPercentage / 2,
+    SGST_Percentage: gstPercentage / 2,
+    IGST_Percentage: igst,
+    GST_Percentage:gstPercentage
+
+  };
+}
