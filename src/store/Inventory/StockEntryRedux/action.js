@@ -5,6 +5,7 @@ import {
     CHECK_STOCK_ENTERY_FOR_FIRST_TRANSACTION_SUCCESS,
     GET_ITEM_DROPDOWM_ACTION,
     GET_ITEM_DROPDOWM_ACTION_SUCCESS,
+    GET_LAST_STOCK_ENTRY_SUCCESS,
     GET_STOCK_COUNT_ACTION,
     GET_STOCK_COUNT_ACTION_SUCCESS,
     GET_STOCK_ENTRY_LIST_ACTION,
@@ -41,6 +42,11 @@ export const GetStockCount = (config = {}) => ({
 });
 export const GetStockCountSuccess = (resp) => ({
     type: GET_STOCK_COUNT_ACTION_SUCCESS,
+    payload: resp
+});
+
+export const GetlastStockEntryDateSuccess = (resp) => ({
+    type: GET_LAST_STOCK_ENTRY_SUCCESS,
     payload: resp
 });
 
