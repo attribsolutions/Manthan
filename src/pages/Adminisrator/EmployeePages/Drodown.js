@@ -19,6 +19,9 @@ const AddMaster = (props) => {
         if (!(pagefond === undefined)) {
             setPageHeading(pagefond.PageHeading)
         }
+        if (props?.ModelClose) {
+            setIsOpen(false)
+        }
 
     }, [userAccess, props]);
 
