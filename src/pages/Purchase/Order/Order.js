@@ -1755,6 +1755,7 @@ const Order = (props) => {
                                                         location={{ pathname: url.FRANCHISE_CUSTOMER_MASTER }}
                                                         masterPath={url.FRANCHISE_CUSTOMER_MASTER}
                                                         RedirectPath={url.ORDER_4}
+                                                        ModelClose={(CustomerSave.Status === true) && (CustomerSave.StatusCode === 200)}
 
 
 
