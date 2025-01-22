@@ -143,7 +143,7 @@ const Franchies_Invoice_Master = (props) => {
 
     useEffect(() => {
         if (franchiesSaveApiRep?.Success === true && franchiesSaveApiRep?.status_code === 200) {
-            
+
             let jsonBody = { OrderIDs: (franchiesSaveApiRep.OrderID).toString() }
 
 
@@ -624,7 +624,8 @@ const Franchies_Invoice_Master = (props) => {
 
         const calcalateGrandTotal = settingBaseRoundOffAmountFunc(tableList)
         const dataCount = tableList.length;
-        const commaSeparateAmount = _cfunc.amountCommaSeparateFunc(Number(calcalateGrandTotal.sumOfGrandTotal));
+
+        const commaSeparateAmount = _cfunc.amountCommaSeparateFunc(Number(calcalateGrandTotal.sumOfGrandTotal).toFixed(2));
         dispatch(BreadcrumbShowCountlabel(`Count:${dataCount} currency_symbol ${commaSeparateAmount} weight ${(calcalateGrandTotal.sumOfWeightageTotal).toFixed(3)} kg`))
 
     }

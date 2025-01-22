@@ -895,7 +895,7 @@ const Order = (props) => {
         },
 
         {//------------- Rate column ----------------------------------
-            text: "Basic Rate",
+            text: (_cfunc.loginUserIsFranchisesRole && subPageMode === url.ORDER_4) ? "MRP" : "Basic Rate",
             classes: 'table-cursor-pointer',
             dataField: "",
             attrs: (cell, row, rowIndex, colIndex) => ({ 'data-label': "Basic Rate" }),
