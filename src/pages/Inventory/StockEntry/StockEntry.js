@@ -834,7 +834,7 @@ const StockEntry = (props) => {
                                         <Label className=" p-2"
                                             style={{ width: "130px" }}>{"Last Stock Entry"} : </Label>
                                         <Label className=" p-2"
-                                            style={{ fontSize: "20px" }}> {_cfunc.date_dmy_func(lastStockEntryDate)}</Label>
+                                            style={{ fontSize: "20px" }}> {(lastStockEntryDate !== "") && _cfunc.date_dmy_func(lastStockEntryDate)}</Label>
                                     </FormGroup>
                                 </Col>
 
