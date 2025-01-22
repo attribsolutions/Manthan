@@ -815,7 +815,7 @@ const StockEntry = (props) => {
 
                                 <Col className="">
                                     <FormGroup className="mb- row mt-3 mb-1 " >
-                                        <Label className="col p-2"
+                                        <Label className="col-10 p-2"
                                             style={{ width: "130px" }}>{fieldLabel.IsAllStockZero} </Label>
                                         <Col className="col-lg-8" style={{ marginTop: '5px' }} >
                                             <div className="form-check form-switch form-switch-md mb-3">
