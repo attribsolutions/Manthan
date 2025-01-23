@@ -86,6 +86,9 @@ const Franchies_Invoice_Master = (props) => {
     const [btnMode, setBtnMode] = useState('');
     const [franchiesSaveApiRep, setFranchiesSaveApiRep] = useState({});
     const [franchiesUpdateApiRep, setFranchiesUpdateApiRep] = useState({});
+    const [createdBy, seteditCreatedBy] = useState("");
+
+
     // ****************************************************************************
 
     const [modalCss] = useState(false);
@@ -324,7 +327,7 @@ const Franchies_Invoice_Master = (props) => {
     useLayoutEffect(() => {
 
         if (((editData.Status === true) && (editData.StatusCode === 200))) {
-
+            debugger
             setState((i) => {
                 const obj = { ...i }
                 obj.values.Customer = editData.customer;
@@ -342,6 +345,8 @@ const Franchies_Invoice_Master = (props) => {
             setPageMode(editData.pageMode);
             setEditInvoiceData(editData);
             setOrderItemDetails(editData.Data?.OrderItemDetails);
+            seteditCreatedBy(editData?.Data?.CreatedBy)
+
 
             if (editData.pageMode === mode.edit) {
                 dispatch(changeCommonPartyDropDetailsAction({ forceDisable: true }))//change party drop-down disable when edit/view
@@ -675,7 +680,7 @@ const Franchies_Invoice_Master = (props) => {
     };
 
     const SaveHandler = async (event, btnId) => {
-
+        debugger
         event.preventDefault();
         setBtnMode(btnId)
         setSaveBtnloading(true)
@@ -719,7 +724,7 @@ const Franchies_Invoice_Master = (props) => {
                         "BasicAmount": Number(Number(calculate.taxableAmount).toFixed(2)),
 
                         "GSTRate": parseFloat(ele.GST),
-                        "GSTAmount": parseFloat((calculate.GST_Amount).toFixed(2)),
+                        "GSTAmount": Number(Number(calculate.GST_Amount).toFixed(2)),
 
                         "CGSTRate": parseFloat(calculate.CGST_Percentage),
                         "CGSTAmount": Number(Number(calculate.CGST_Amount).toFixed(2)),
@@ -972,9 +977,10 @@ const Franchies_Invoice_Master = (props) => {
                         {(orderItemDetails.length > 0) &&
                             <SaveButtonDraggable>
                                 <SaveButton
-                                    loading={saveBtnloading && btnMode === "save"}
+                                    loading={saveBtnloading}
                                     pageMode={pageMode}
                                     userAcc={userPageAccessState}
+                                    editCreatedBy={createdBy}
                                     onClick={(e) => { SaveHandler(e, "save") }}
                                     forceDisabled={saveBtnloading || !StockEnteryForFirstYear.Data}
                                     module={"Invoice"}
