@@ -104,7 +104,7 @@ const PosInvoiceReport = (data) => {
             data1.table.body[6].cells[0].styles.fontStyle = "bold"
 
             if (isCoustomeGSTIN) {
-                data1.table.body[7].cells[0].styles.fontStyle = "bold"
+                data1.table.body[6].cells[0].styles.fontStyle = "bold"
             }
 
 
@@ -339,11 +339,22 @@ const PosInvoiceReport = (data) => {
     }
 
     doc.setFontSize(12)
-    doc.text(`Total:`, 10, GST_Table_Y + 42,)
-    doc.text(`${amountCommaSeparateFunc(Number(data.GrandTotal).toFixed(2))}`, 215, GST_Table_Y + 42, "right")
+
+    if (Number(data.AdvanceAmount) > 0) {
+        doc.text(`Advance Amount:`, 10, GST_Table_Y + 40,)
+        doc.text(`${amountCommaSeparateFunc(Number(data.AdvanceAmount).toFixed(2))}`, 215, GST_Table_Y + 40, "right")
+
+        doc.text(`Total:`, 10, GST_Table_Y + 53,)
+        doc.text(`${amountCommaSeparateFunc(Number(data.GrandTotal).toFixed(2))}`, 215, GST_Table_Y + 53, "right")
+    } else {
+
+        doc.text(`Total:`, 10, GST_Table_Y + 47,)
+        doc.text(`${amountCommaSeparateFunc(Number(data.GrandTotal).toFixed(2))}`, 215, GST_Table_Y + 47, "right")
+    }
+
 
     doc.setLineDash([]); // Dash pattern: 3 points dash, 3 points gap
-    doc.line(10, GST_Table_Y + 50, 10 + lineWidth, GST_Table_Y + 50); // Draw line
+    doc.line(10, GST_Table_Y + 57, 10 + lineWidth, GST_Table_Y + 57); // Draw line
 
 
 
@@ -386,7 +397,7 @@ const PosInvoiceReport = (data) => {
         },
         tableLineColor: "black",
 
-        startY: GST_Table_Y + 50,
+        startY: GST_Table_Y + 59,
 
     };
 

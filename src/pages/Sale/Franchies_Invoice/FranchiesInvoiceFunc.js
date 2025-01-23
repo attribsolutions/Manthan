@@ -169,15 +169,15 @@ export function Franchies_invoice_Calculate_Func(row, index1, IsComparGstIn,) {
 
     return {
         // discountBaseAmt: Number(discountBaseAmt.toFixed(2)),
-        disCountAmt: discountAmount,
-        ItemTotalAmount: itemFinalAmount,
+        disCountAmt: discountAmount.toFixed(2),
+        ItemTotalAmount: itemFinalAmount.toFixed(2),
 
-        taxableAmount: taxableAmount,
-        CGST_Amount: cgst,
-        SGST_Amount: sgst,
-        IGST_Amount: igst,
-        GST_Amount: gstAmount,
-        IGST_Amount: gstAmount,
+        taxableAmount: taxableAmount.toFixed(2),
+        CGST_Amount: cgst.toFixed(2),
+        SGST_Amount: sgst.toFixed(2),
+        IGST_Amount: igst.toFixed(2),
+        GST_Amount: gstAmount.toFixed(2),
+        IGST_Amount: gstAmount.toFixed(2),
         CGST_Percentage: gstPercentage / 2,
         SGST_Percentage: gstPercentage / 2,
         IGST_Percentage: igst,

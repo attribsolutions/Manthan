@@ -740,6 +740,8 @@ const Franchies_Invoice_Master = (props) => {
                 Type: 4,
                 Message: validMsg,
             })
+            setSaveBtnloading(false)
+
             return
         }
         if (!state.values.Customer?.value > 0) {
@@ -747,6 +749,8 @@ const Franchies_Invoice_Master = (props) => {
                 Type: 4,
                 Message: alertMessages.customerIsRequired,
             })
+            setSaveBtnloading(false)
+
             return
         }
 
@@ -755,10 +759,21 @@ const Franchies_Invoice_Master = (props) => {
                 Type: 4,
                 Message: alertMessages.itemQtyIsRequired,
             })
+            setSaveBtnloading(false)
+
             return
         }
 
+
         const RoundCalculation = RoundCalculationFunc(invoiceItems);
+        if (Number(values.AdvanceAmount) > RoundCalculation.RoundedAmount) {
+            customAlert({
+                Type: 4,
+                Message: alertMessages.AdvanceAmount,
+            })
+            setSaveBtnloading(false)
+            return
+        }
 
         try {
             let jsonBody = [{
@@ -782,7 +797,7 @@ const Franchies_Invoice_Master = (props) => {
                 "IsDeleted": 0,
                 "ReferenceInvoiceID": null,
                 "Description": null,
-                "AdvanceAmount": values.AdvanceAmount,
+                "AdvanceAmount": (Number(values.AdvanceAmount)).toFixed(2),
                 "SaleItems": invoiceItems,
                 "SPOSInvoicesReferences": [
                     {
