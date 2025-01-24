@@ -47,7 +47,7 @@ export const postWithBasicAuth = async ({
 };
 
 export function orderQtyOnChange(event, index1) {
-
+    debugger
     let inputValue = event.target.value;
 
     event.target.value = inputValue;
@@ -109,10 +109,10 @@ export const DiscountCaculationForFranchies = (index1) => {
 }
 
 export function Franchies_invoice_Calculate_Func(row, index1, IsComparGstIn,) {
-    debugger
+
     const discountBasedOnRate = true
 
-    const qty = Number(row.BaseUnitQuantity) || 0;
+    const qty = (Number(row.BaseUnitQuantity) * Number(row.Qty)) || 0;
     const initialRate = Number(row.MRP) || 0;
     let rate = Number(row.MRP) || 0;
     const gstPercentage = Number(index1.GSTPercentage) || 0;
