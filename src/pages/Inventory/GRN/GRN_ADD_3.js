@@ -45,6 +45,9 @@ const GRNAdd3 = (props) => {
     const [grnItemTableList, setGrnItemTableList] = useState([]);
     const [openPOdata, setopenPOdata] = useState([]);
     const [invoiceNo, setInvoiceNo] = useState('');
+    const [comment, setComment] = useState('');
+
+
     const [InvoiceID, setInvoiceID] = useState('');
     const [invoiceDate, setInvoiceDate] = useState('');
 
@@ -444,6 +447,7 @@ const GRNAdd3 = (props) => {
                 CreatedBy: _cfunc.loginUserID(),
                 UpdatedBy: 1,
                 GRNItems: itemArray,
+                Comment: comment,
                 GRNReferences: GRNReferencesUpdate,
             });
 
@@ -469,7 +473,7 @@ const GRNAdd3 = (props) => {
 
                     <div className="px-2 mb-1  c_card_filter" >
                         <Row>
-                            <Col sm={5}>
+                            <Col sm={4}>
 
                                 <FormGroup className=" row mt-2 " >
                                     <Label className="col-sm-4 p-2"
@@ -512,7 +516,7 @@ const GRNAdd3 = (props) => {
                                     </Col>
                                 </FormGroup>
                             </Col>
-                            <Col sm={5}>
+                            <Col sm={4}>
                                 <FormGroup className=" row mt-2" >
                                     <Label className="col-md-4 p-2"
                                         style={{ width: "130px" }}>Invoice Date</Label>
@@ -562,6 +566,25 @@ const GRNAdd3 = (props) => {
 
 
                             </Col>
+
+                            <Col sm={3}>
+                                <FormGroup className=" row mt-2" >
+                                    <Label className="col-md-4 p-2"
+                                        style={{ width: "100px" }}>Comment</Label>
+                                    <Col md="7">
+                                        <Input
+                                            type="text"
+                                            value={comment}
+                                            placeholder="Enter Comment"
+                                            onChange={(e) => setComment(e.target.value)}
+                                        />
+                                    </Col>
+                                </FormGroup>
+
+
+                            </Col>
+
+
                             <Col className="mt-2">
                                 {pageMode !== mode.view &&
                                     <C_Button

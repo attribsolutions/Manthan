@@ -15,6 +15,7 @@ import { allLabelWithBlank } from "../../../components/Common/CommonErrorMsg/Har
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { sideBarPageFiltersInfoAction } from "../../../store/Utilites/PartyDrodown/action";
 import GRN_ADD_1 from "./GRN_ADD_1";
+import GRNAdd3 from "./GRN_ADD_3";
 
 const GRNList = () => {
 
@@ -83,14 +84,17 @@ const GRNList = () => {
         let page_Id = '';
         let page_Mode = mode.defaultList;
         let masterPath = '';
-        let makeBtnShow = false
-        let newBtnPath = ''
+        let makeBtnShow = false;
+        let newBtnPath = '';
+        let MasterModal = '';
+
         if (subPageMode === url.GRN_LIST_1) {
             page_Id = pageId.GRN_LIST_1;
             masterPath = url.GRN_ADD_1;
             newBtnPath = url.IB_GRN_LIST;
             page_Mode = mode.modeSTPList
             makeBtnShow = false;
+            MasterModal = GRN_ADD_1
         }
         else if (subPageMode === url.GRN_LIST_3) {
             page_Id = pageId.GRN_LIST_3;
@@ -98,9 +102,11 @@ const GRNList = () => {
             newBtnPath = url.GRN_STP_3;
             page_Mode = mode.modeSTPList
             makeBtnShow = false;
+            MasterModal = GRNAdd3
+
         }
         setSubPageMode(subPageMode)
-        setOtherState({ masterPath, makeBtnShow, newBtnPath })
+        setOtherState({ masterPath, makeBtnShow, newBtnPath, MasterModal })
         setPageMode(page_Mode)
         dispatch(_act.commonPageFieldListSuccess(null))
         dispatch(_act.commonPageFieldList(page_Id))
@@ -272,7 +278,7 @@ const GRNList = () => {
                             ButtonMsgLable={"GRN"}
                             deleteName={"FullGRNNumber"}
                             makeBtnName={otherState.makeBtnName}
-                            MasterModal={GRN_ADD_1}
+                            MasterModal={otherState.MasterModal}
                             totalAmountShow={true}
                         />
                         : null

@@ -101,10 +101,12 @@ const PosInvoiceReport = (data) => {
             // data1.table.body[5].cells[0].styles.fontSize = 9
 
             // data1.table.body[5].cells[0].styles.halign = "center"
-            data1.table.body[6].cells[0].styles.fontStyle = "bold"
+            // data1.table.body[5].cells[0].styles.fontStyle = "bold"
 
             if (isCoustomeGSTIN) {
-                data1.table.body[6].cells[0].styles.fontStyle = "bold"
+                data1.table.body[5].cells[0].styles.fontSize = 7
+
+                data1.table.body[5].cells[0].styles.fontStyle = "bold"
             }
 
 
