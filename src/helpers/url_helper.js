@@ -525,7 +525,7 @@ export const STOCK_PROCESSING = '/StockProcessing'
 export const POS_STOCK_PROCESSING = 'SweetPOS/StockProcesSPOS'
 
 
-
+export const GRN_PENDING_REPORT = "/PendingGRNInvoices"
 
 
 export const STOCK_REPORT_1 = '/StockReport'

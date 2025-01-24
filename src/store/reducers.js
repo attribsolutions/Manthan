@@ -137,6 +137,7 @@ import CountryReducer from "./Administrator/CountryRedux/reducer"
 import BillBookingReportReducer from "./Report/BillBookingRedux/reducer"
 import DemandVsSupplyReportReducer from "./Report/DemandVsSupply/reducer"
 import VoucherReducer from "./Administrator/voucherRedux/reducer"
+import grnpendingReducer from "./Report/GRNPendingReport/reducer"
 
 const rootReducer = combineReducers({
 	Layout,
@@ -252,7 +253,8 @@ const rootReducer = combineReducers({
 	CountryReducer,
 	BillBookingReportReducer,
 	DemandVsSupplyReportReducer,
-	VoucherReducer
+	VoucherReducer,
+	grnpendingReducer,
 
 })
 export default rootReducer

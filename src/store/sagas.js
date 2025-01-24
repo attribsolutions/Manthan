@@ -129,6 +129,7 @@ import CountrySaga from "./Administrator/CountryRedux/saga"
 import BillBookingReportSaga from "./Report/BillBookingRedux/saga"
 import DemandVsSupplyReportSaga from "./Report/DemandVsSupply/saga"
 import VoucherSaga from "./Administrator/voucherRedux/saga"
+import GRN_Pending_Saga from "./Report/GRNPendingReport/saga"
 
 
 export default function* rootSaga() {
@@ -251,10 +252,11 @@ export default function* rootSaga() {
 		fork(BillBookingReportSaga),
 		fork(DemandVsSupplyReportSaga),
 		fork(VoucherSaga),
+		fork(GRN_Pending_Saga),
 
-		
 
 
-		
+
+
 	])
 }

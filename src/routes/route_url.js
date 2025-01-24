@@ -244,6 +244,10 @@ export const DAILY_SALE_REPORT = '/Daily_Sale_Report'
 export const DEMAND_VS_SUPPLY_REPORT = "/Demand_Vs_Supply_Report"
 
 
+export const GRN_PENDING_REPORT = "/GrnpendingReport"
+
+
+
 
 
 
@@ -435,15 +439,15 @@ export const CASHIER_SUMMARY_REPORT = "/Cashier_Summary_Report"
 
 export const SWEET_POS_RATE_MASTER = "/SweetPOS_Rate_Master"
 
-export const  SWEET_POS_MACHINE_MASTER = "/SweetPOS_Machine_Master"
+export const SWEET_POS_MACHINE_MASTER = "/SweetPOS_Machine_Master"
 
 export const SWEET_POS_MACHINE_LIST = "/SweetPOS_Machine_List"
 
-export const  STOCK_OUT_REPORT = "/Stock_Out_Report"
+export const STOCK_OUT_REPORT = "/Stock_Out_Report"
 
-export const  BILL_BOOKING_REPORT = "/Bill_Booking_Report"
+export const BILL_BOOKING_REPORT = "/Bill_Booking_Report"
 
-export const FRANCHAISE_SALE_WITH_BILL_COUNT="/Franchise_Sale_With_Bill_Count"
+export const FRANCHAISE_SALE_WITH_BILL_COUNT = "/Franchise_Sale_With_Bill_Count"
 
 
 
