@@ -255,6 +255,7 @@ import BillBookingReport from "../Reports/BillBookingReport/index.js";
 import DemandVSSupply from "../Reports/DemandVsSupply/index.js";
 import Voucher from "../pages/Adminisrator/voucherPages/Voucher.js";
 import VoucherList from "../pages/Adminisrator/voucherPages/VoucherList.js";
+import GRNPendingReport from "../Reports/GRN Pending Reort/GRNPendingReport.js";
 
 
 const userRoutes = [
@@ -674,7 +675,12 @@ const userRoutes = [
 	{ path: path.DEMAND_VS_SUPPLY_REPORT, component: DemandVSSupply },//not party wise
 
 
+	{ path: path.GRN_PENDING_REPORT, component: GRNPendingReport },//not party wise
 
+
+
+
+	
 
 
 

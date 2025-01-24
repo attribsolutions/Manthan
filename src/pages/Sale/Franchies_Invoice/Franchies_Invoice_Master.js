@@ -86,6 +86,9 @@ const Franchies_Invoice_Master = (props) => {
     const [btnMode, setBtnMode] = useState('');
     const [franchiesSaveApiRep, setFranchiesSaveApiRep] = useState({});
     const [franchiesUpdateApiRep, setFranchiesUpdateApiRep] = useState({});
+    const [createdBy, seteditCreatedBy] = useState("");
+
+
     // ****************************************************************************
 
     const [modalCss] = useState(false);
@@ -143,7 +146,7 @@ const Franchies_Invoice_Master = (props) => {
 
     useEffect(() => {
         if (franchiesSaveApiRep?.Success === true && franchiesSaveApiRep?.status_code === 200) {
-            
+
             let jsonBody = { OrderIDs: (franchiesSaveApiRep.OrderID).toString() }
 
 
@@ -324,7 +327,7 @@ const Franchies_Invoice_Master = (props) => {
     useLayoutEffect(() => {
 
         if (((editData.Status === true) && (editData.StatusCode === 200))) {
-
+            debugger
             setState((i) => {
                 const obj = { ...i }
                 obj.values.Customer = editData.customer;
@@ -342,6 +345,8 @@ const Franchies_Invoice_Master = (props) => {
             setPageMode(editData.pageMode);
             setEditInvoiceData(editData);
             setOrderItemDetails(editData.Data?.OrderItemDetails);
+            seteditCreatedBy(editData?.Data?.CreatedBy)
+
 
             if (editData.pageMode === mode.edit) {
                 dispatch(changeCommonPartyDropDetailsAction({ forceDisable: true }))//change party drop-down disable when edit/view
@@ -624,7 +629,8 @@ const Franchies_Invoice_Master = (props) => {
 
         const calcalateGrandTotal = settingBaseRoundOffAmountFunc(tableList)
         const dataCount = tableList.length;
-        const commaSeparateAmount = _cfunc.amountCommaSeparateFunc(Number(calcalateGrandTotal.sumOfGrandTotal));
+
+        const commaSeparateAmount = _cfunc.amountCommaSeparateFunc(Number(calcalateGrandTotal.sumOfGrandTotal).toFixed(2));
         dispatch(BreadcrumbShowCountlabel(`Count:${dataCount} currency_symbol ${commaSeparateAmount} weight ${(calcalateGrandTotal.sumOfWeightageTotal).toFixed(3)} kg`))
 
     }
@@ -674,7 +680,7 @@ const Franchies_Invoice_Master = (props) => {
     };
 
     const SaveHandler = async (event, btnId) => {
-
+        debugger
         event.preventDefault();
         setBtnMode(btnId)
         setSaveBtnloading(true)
@@ -718,7 +724,7 @@ const Franchies_Invoice_Master = (props) => {
                         "BasicAmount": Number(Number(calculate.taxableAmount).toFixed(2)),
 
                         "GSTRate": parseFloat(ele.GST),
-                        "GSTAmount": parseFloat((calculate.GST_Amount).toFixed(2)),
+                        "GSTAmount": Number(Number(calculate.GST_Amount).toFixed(2)),
 
                         "CGSTRate": parseFloat(calculate.CGST_Percentage),
                         "CGSTAmount": Number(Number(calculate.CGST_Amount).toFixed(2)),
@@ -739,6 +745,8 @@ const Franchies_Invoice_Master = (props) => {
                 Type: 4,
                 Message: validMsg,
             })
+            setSaveBtnloading(false)
+
             return
         }
         if (!state.values.Customer?.value > 0) {
@@ -746,6 +754,8 @@ const Franchies_Invoice_Master = (props) => {
                 Type: 4,
                 Message: alertMessages.customerIsRequired,
             })
+            setSaveBtnloading(false)
+
             return
         }
 
@@ -754,10 +764,21 @@ const Franchies_Invoice_Master = (props) => {
                 Type: 4,
                 Message: alertMessages.itemQtyIsRequired,
             })
+            setSaveBtnloading(false)
+
             return
         }
 
+
         const RoundCalculation = RoundCalculationFunc(invoiceItems);
+        if (Number(values.AdvanceAmount) > RoundCalculation.RoundedAmount) {
+            customAlert({
+                Type: 4,
+                Message: alertMessages.AdvanceAmount,
+            })
+            setSaveBtnloading(false)
+            return
+        }
 
         try {
             let jsonBody = [{
@@ -781,7 +802,7 @@ const Franchies_Invoice_Master = (props) => {
                 "IsDeleted": 0,
                 "ReferenceInvoiceID": null,
                 "Description": null,
-                "AdvanceAmount": values.AdvanceAmount,
+                "AdvanceAmount": (Number(values.AdvanceAmount)).toFixed(2),
                 "SaleItems": invoiceItems,
                 "SPOSInvoicesReferences": [
                     {
@@ -956,9 +977,10 @@ const Franchies_Invoice_Master = (props) => {
                         {(orderItemDetails.length > 0) &&
                             <SaveButtonDraggable>
                                 <SaveButton
-                                    loading={saveBtnloading && btnMode === "save"}
+                                    loading={saveBtnloading}
                                     pageMode={pageMode}
                                     userAcc={userPageAccessState}
+                                    editCreatedBy={createdBy}
                                     onClick={(e) => { SaveHandler(e, "save") }}
                                     forceDisabled={saveBtnloading || !StockEnteryForFirstYear.Data}
                                     module={"Invoice"}

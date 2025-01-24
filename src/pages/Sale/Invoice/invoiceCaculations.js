@@ -78,12 +78,12 @@ export const settingBaseRoundOffAmountFunc = (tableList = []) => {
     //     return accumulator + Number(index1.ItemTotalAmount) || 0
     // }, 0);
 
-    
+
     let result = tableList.reduce(
 
         (accumulator, index1) => {
             const weightage = Number(index1["Weightage"]) || 0.00;
-            const row_weightage = (Number(index1.Quantity) * Number(index1.default_UnitDropvalue.BaseUnitQuantity)) / Number(weightage)
+            const row_weightage = Number(weightage) === 0 ? 0 : (Number(index1.Quantity) * Number(index1.default_UnitDropvalue.BaseUnitQuantity)) / Number(weightage)
             return {
                 grandTotal: accumulator.grandTotal + (Number(index1.ItemTotalAmount) || 0),
                 weightageTotal: accumulator.weightageTotal + (row_weightage || 0)

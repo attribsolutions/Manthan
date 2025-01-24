@@ -759,6 +759,9 @@ export const StockProcessing_API = ({ jsonBody }) => post(url.STOCK_PROCESSING, 
 
 export const Pos_StockProcessing_API = ({ jsonBody }) => post(url.POS_STOCK_PROCESSING, jsonBody)//Go button api
 
+export const GRNpending_Api = () => get(url.GRN_PENDING_REPORT) // get api
+
+
 
 
 

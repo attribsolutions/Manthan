@@ -1,4 +1,4 @@
-import { groupBy } from "../../../../components/Common/CommonFunction";
+import { date_dmy_func, groupBy } from "../../../../components/Common/CommonFunction";
 import { numberWithCommas } from "../../../../Reports/Report_common_function";
 import { convertTo12Hour } from "../../../Dashboard/FrenchiesesDashboard/Function";
 
@@ -79,7 +79,7 @@ export const ItemRow = (data) => {
         hasHedRow.push(tableitemRow.map(str => str.replace(/,/g, "")));
 
     });
-    
+
     return hasHedRow
 }
 
@@ -109,14 +109,14 @@ export const GSTDetailsRow = (data, doc) => {
 
 export const DetailsRow = (data) => {
     var DetailsArray = [
-        [`${data.CompanyName}`],
+        // [`${data.CompanyName}`],
         [`${data.PartyName}`],
         [`------------Tax Invoice---------`],
         [`${data.PartyAddress} Ph.${data.AlternateContactNo}`],
         [`GSTIN:${data.PartyGSTIN}`],
         [`Customer:${data.CustomerName}   GSTIN:${data.CustomerGSTIN}`],
         [`Customer Ph.${data.CustomerMobileNo}`],
-        [`Date:${data.InvoiceDate}   ${data?.CreatedOn?.slice(11)}              Bill No:${data.FullInvoiceNumber}`],
+        [`Date:${date_dmy_func(data.InvoiceDate)}   ${data?.CreatedOn?.slice(11)}              Bill No:${data.FullInvoiceNumber}`],
     ]
     if (data.CustomerGSTIN === "") {
         DetailsArray.splice(5, 1);

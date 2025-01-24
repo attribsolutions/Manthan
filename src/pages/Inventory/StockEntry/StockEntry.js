@@ -89,10 +89,12 @@ const StockEntry = (props) => {
         partyItemListLoading,
         StockCount,
         ItemDropDown,
+        lastStockEntryDate,
         ItemDropDownloading
     } = useSelector((state) => ({
         partyItemListLoading: state.PartyItemsReducer.partyItemListLoading,
         saveBtnloading: state.StockEntryReducer.saveBtnloading,
+        lastStockEntryDate: state.StockEntryReducer.lastStockEntryDate,
         ItemDropDown: state.StockEntryReducer.ItemDropDown,
         ItemDropDownloading: state.StockEntryReducer.ItemDropDownloading,
 
@@ -103,7 +105,9 @@ const StockEntry = (props) => {
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
     }));
+    debugger
 
+    console.log(lastStockEntryDate)
     const { commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
 
     // Common Party select Dropdown useEffect
@@ -127,7 +131,7 @@ const StockEntry = (props) => {
         dispatch(BreadcrumbShowCountlabel(`Count:${0}`));
     }, []);
 
- 
+
 
     useEffect(() => {
         if (commonPartyDropSelect.value > 0) {
@@ -809,11 +813,11 @@ const StockEntry = (props) => {
 
                                 </Col>
 
-                                <Col sm={3} className="">
+                                <Col className="">
                                     <FormGroup className="mb- row mt-3 mb-1 " >
-                                        <Label className="col p-2"
-                                            style={{ width: "115px" }}>{fieldLabel.IsAllStockZero} </Label>
-                                        <Col sm={7} style={{ marginTop: '5px' }} >
+                                        <Label className="col-10 p-2"
+                                            style={{ width: "130px" }}>{fieldLabel.IsAllStockZero} </Label>
+                                        <Col className="col-lg-8" style={{ marginTop: '5px' }} >
                                             <div className="form-check form-switch form-switch-md mb-3">
                                                 <Input type="checkbox" className="form-check-input"
                                                     checked={values.IsAllStockZero}
@@ -823,6 +827,14 @@ const StockEntry = (props) => {
                                                 />
                                             </div>
                                         </Col>
+                                    </FormGroup>
+                                </Col>
+                                <Col>
+                                    <FormGroup className="mb mt-3 mb-1 " >
+                                        <Label className=" p-2"
+                                            style={{ width: "130px" }}>{"Last Stock Entry"} : </Label>
+                                        <Label className=" p-2"
+                                            style={{ fontSize: "20px" }}> {(lastStockEntryDate !== "") && _cfunc.date_dmy_func(lastStockEntryDate)}</Label>
                                     </FormGroup>
                                 </Col>
 

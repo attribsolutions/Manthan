@@ -5,7 +5,7 @@ import * as action from "./action";
 import { date_dmy_func, loginUserIsFranchisesRole } from "../../../components/Common/CommonFunction";
 
 function* StockEntry_API_GenFunc({ config }) { // Save GRN  genrator function
-    
+
     try {
         let response = "";
         if (loginUserIsFranchisesRole()) {
@@ -28,9 +28,12 @@ function* StockCount_API_GenFunc({ config }) { // Save GRN  genrator function
 }
 
 function* ItemDropDown_API_GenFunc({ config }) { // Save GRN  genrator function
+    debugger
     try {
         const response = yield call(apiCall.Item_DropDown_Api, config);
         yield put(action.Get_Items_Drop_Down_Success(response.Data));
+        yield put(action.GetlastStockEntryDateSuccess(response.LastStockEntryDate));
+
     } catch (error) { yield put(action.StockEntryApiErrorAction()) }
 }
 

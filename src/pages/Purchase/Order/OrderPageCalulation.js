@@ -131,18 +131,18 @@ export function Franchies_Order_Calculate_Func(row, index1, IsComparGstIn,) {
 
   return {
     // discountBaseAmt: Number(discountBaseAmt.toFixed(2)),
-    disCountAmt: discountAmount,
-    roundedTotalAmount: itemFinalAmount,
-    basicAmount: taxableAmount,
-    CGST_Amount: cgst,
-    SGST_Amount: sgst,
-    IGST_Amount: igst,
-    roundedGstAmount: gstAmount,
-    IGST_Amount: gstAmount,
+    disCountAmt: discountAmount.toFixed(2),
+    roundedTotalAmount: itemFinalAmount.toFixed(0),
+    basicAmount: taxableAmount.toFixed(2),
+    CGST_Amount: cgst.toFixed(2),
+    SGST_Amount: sgst.toFixed(2),
+    IGST_Amount: igst.toFixed(2),
+    roundedGstAmount: gstAmount.toFixed(2),
+    IGST_Amount: gstAmount.toFixed(2),
     CGST_Percentage: gstPercentage / 2,
     SGST_Percentage: gstPercentage / 2,
     IGST_Percentage: igst,
-    GST_Percentage:gstPercentage
+    GST_Percentage: gstPercentage
 
   };
 }

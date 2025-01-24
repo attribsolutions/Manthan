@@ -384,10 +384,12 @@ const Order = (props) => {
                 }))
                 let Total_weigtage = 0
                 const orderItems = hasEditVal.OrderItems.map((ele, k) => {
-
+                    debugger
                     const weightage = (Number(ele["Weightage"])) || 0.00;
                     const row_weightage = (Number(ele.Quantity) * Number(ele.BaseUnitQuantity)) / Number(weightage)
-                    Total_weigtage = Total_weigtage + row_weightage
+                    if (!isNaN(row_weightage) && row_weightage !== null) {
+                        Total_weigtage += row_weightage;
+                    }
 
                     ele["id"] = k + 1
                     return ele
@@ -790,7 +792,7 @@ const Order = (props) => {
             formatExtraData: { tableList: orderItemTable },
             formatter: (value, row, key, { tableList }) => {
                 if (row.GroupRow || row.SubGroupRow) { return }
-                debugger
+
                 if (!row.UnitName) {
                     row["Unit_id"] = 0;
                     row["UnitName"] = 'null';
@@ -893,7 +895,7 @@ const Order = (props) => {
         },
 
         {//------------- Rate column ----------------------------------
-            text: "Basic Rate",
+            text: (_cfunc.loginUserIsFranchisesRole && subPageMode === url.ORDER_4) ? "MRP" : "Basic Rate",
             classes: 'table-cursor-pointer',
             dataField: "",
             attrs: (cell, row, rowIndex, colIndex) => ({ 'data-label': "Basic Rate" }),
@@ -1220,9 +1222,9 @@ const Order = (props) => {
     };
 
     function itemWise_CalculationFunc(row, IsComparGstIn, tableList = []) {
-        debugger
+
         let calculate = {} //order calculation function 
-        if (_cfunc.loginUserIsFranchisesRole() && url.ORDER_4) {
+        if (_cfunc.loginUserIsFranchisesRole() && subPageMode === url.ORDER_4) {
             calculate = Franchies_Order_Calculate_Func(row)
         } else {
             calculate = orderCalculateFunc(row) //order calculation function 
@@ -1235,8 +1237,13 @@ const Order = (props) => {
 
                 const amount = Number(currentObject["Amount"]) || 0.00;
                 const weightage = (Number(currentObject["Weightage"])) || 0.00;
-                const row_weightage = (Number(currentObject.Quantity) * Number(currentObject.BaseUnitQuantity)) / Number(weightage)
+
+                const row_weightage = Number(weightage) === 0
+                    ? 0
+                    : (Number(currentObject.Quantity) * Number(currentObject.BaseUnitQuantity)) / Number(weightage);
+
                 if (Number(currentObject["Amount"]) > 0) {
+                    debugger
                     return {
                         amountSum: accumulator.amountSum + amount,
                         weightageSum: accumulator.weightageSum + row_weightage,
@@ -1462,8 +1469,9 @@ const Order = (props) => {
 
             // Function to handle value changes in order items
             function processValueChanged({ item, isEdit, isDelete }) {
+                debugger
                 let calculated = {}
-                if (_cfunc.loginUserIsFranchisesRole() && url.ORDER_4) {
+                if (_cfunc.loginUserIsFranchisesRole() && subPageMode === url.ORDER_4) {
                     calculated = Franchies_Order_Calculate_Func(item)
                 } else {
                     calculated = orderCalculateFunc(item, { GSTIn_1: supplierSelect.GSTIN, GSTIn_2: _cfunc.loginUserGSTIN() });
@@ -1752,6 +1760,7 @@ const Order = (props) => {
                                                         location={{ pathname: url.FRANCHISE_CUSTOMER_MASTER }}
                                                         masterPath={url.FRANCHISE_CUSTOMER_MASTER}
                                                         RedirectPath={url.ORDER_4}
+                                                        ModelClose={(CustomerSave.Status === true) && (CustomerSave.StatusCode === 200)}
 
 
 
