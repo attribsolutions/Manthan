@@ -313,7 +313,7 @@ export const GroupTypes_Update_API = ({ jsonBody, updateId }) => put(`${url.GROU
 
 
 
-export const Voucher_API = () => get(url.VOUCHER_LIST_API)
+export const Voucher_API = ({ jsonBody }) => post(url.VOUCHER_LIST_API, jsonBody)
 export const Voucher__Post_API = ({ jsonBody }) => post(url.VOUCHER_API, jsonBody)// post api
 export const Voucher__Delete_API = ({ deleteId }) => del(`${url.VOUCHER_API}/${deleteId}`)// delete api
 export const Voucher_Edit_API = ({ editId }) => get(`${url.VOUCHER_API}/${editId}`)// edit api

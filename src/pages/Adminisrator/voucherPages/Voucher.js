@@ -111,7 +111,7 @@ const Voucher = (props) => {
     const values = { ...state.values }
     const { isError } = state;
     const { fieldLabel } = state;
-    debugger
+
     // userAccess useEffect
     useEffect(() => {
 
@@ -142,15 +142,15 @@ const Voucher = (props) => {
     }, [userAccess])
 
     useEffect(() => {
-        debugger
+
         if (VoucherValidityData?.StatusCode === 200 && VoucherValidityData?.Status === true) {
             customAlert({
                 Type: 1,
                 Message: VoucherValidityData.Message,
             })
-        } else if (VoucherValidityData?.StatusCode === 204 && VoucherValidityData?.Status === false) {
+        } else if (VoucherValidityData?.Status === false && [404, 400, 204].includes(VoucherValidityData?.StatusCode)) {
             customAlert({
-                Type: 2,
+                Type: 4,
                 Message: VoucherValidityData.Message,
             })
         }
@@ -225,7 +225,8 @@ const Voucher = (props) => {
             }
 
         } else if
-            (postMsg.Status === true) {
+            (postMsg.Status === false && [404, 400, 204].includes(postMsg.StatusCode)) {
+
             customAlert({
                 Type: 3,
                 Message: JSON.stringify(postMsg.Message),

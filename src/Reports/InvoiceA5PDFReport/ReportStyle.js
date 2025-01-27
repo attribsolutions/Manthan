@@ -1,7 +1,7 @@
 
 import * as table from './TableData'
 import { numberWithCommas } from "../Report_common_function";
-import { date_dmy_func, convertOnlyTimefunc, currentDate_dmy, CurrentTime, compareGSTINState } from "../../components/Common/CommonFunction";
+import { date_dmy_func, convertOnlyTimefunc, currentDate_dmy, CurrentTime, compareGSTINState, loginUserIsFranchisesRole } from "../../components/Common/CommonFunction";
 import cbm_logo from "../../assets/images/cbm_logo.png"
 
 
@@ -420,9 +420,11 @@ export const reportFooter = (doc, data) => {
 
         doc.text(`TCS Amount:`, 440, 367,)
         doc.text(` ${numberWithCommas(Number(data.TCSAmount).toFixed(2))}`, 567, 367, 'right')
+        if (loginUserIsFranchisesRole()) {
+            doc.text(`Advance Amount:`, 440, 377,)
+            doc.text(` ${numberWithCommas(Number(data.AdvanceAmount).toFixed(2))}`, 567, 377, 'right')
+        }
 
-        doc.text(`Advance Amount:`, 440, 377,)
-        doc.text(` ${numberWithCommas(Number(data.AdvanceAmount).toFixed(2))}`, 567, 377, 'right')
 
     }
 

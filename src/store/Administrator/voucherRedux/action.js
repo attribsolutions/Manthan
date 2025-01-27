@@ -15,8 +15,9 @@ import {
     VALIDE_VOUCHER_ID_SUCCESS
 } from "./actionType";
 
-export const getVoucherlist = () => ({// get List Action
+export const getVoucherlist = (config = {}) => ({// get List Action
     type: GET_VOUCHER_LIST,
+    config
 });
 
 export const getVoucherlistSuccess = (pages) => ({// get List success
