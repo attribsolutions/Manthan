@@ -195,10 +195,13 @@ function* UpdateOrder_ID_GenFunc({ config }) {         // Update Order by subPag
   }
 }
 
+
 function* orderList_GoBtn_GenFunc({ config }) {
 
   //  Order List Filter by subPageMode
+  debugger
   try {
+    const hasRole = (role) => config?.userAccess[role];
     const { subPageMode } = config
     let response;
     let newList;
@@ -271,9 +274,24 @@ function* orderList_GoBtn_GenFunc({ config }) {
       //**********************************order Aproval button Show Condition ********************************************************** */
 
       if (!i.SAPResponse && i.CustomerSAPCode) {//order Aproval button Show Condition 
-        i.forceHideOrderAprovalBtn = false;
-        i.forceSelectDissabled = true;//select row check box dessible 
+
+        // i.forceHideOrderAprovalBtn = false;
+
+        if (i.SupplierSAPCode) {             //if   SupplierSAPCode not there then user not allow to 
+          i.forceHideOrderAprovalBtn = false;
+        } else {
+          i.forceHideOrderAprovalBtn = true;
+        }
+
+        if (hasRole("RoleAccess_SendToSAP")) {  //if RoleAccess_SendToSAP then only all select aplicable access not then not aplical
+
+          i.forceSelectDissabled = true;
+        } else {
+          i.forceSelectDissabled = false;
+        }
       }
+
+
 
       //++++++++++++++++++++++++++++++++++++++ make invoice Button dessiable/vissbble ++++++++++++++++++++++++++++++++++++++
       if (!(i.InvoiceCreated === true) && (i.IsConfirm === true)) {
