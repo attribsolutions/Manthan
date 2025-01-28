@@ -90,6 +90,8 @@ const PartyType = (props) => {
         dispatch(getCountryList_Action());
         return () => {
             dispatch(getCountryList_Success());
+            dispatch(SavePartyTypeAPISuccess({ Status: false }))
+
         }
     }, []);
 
@@ -184,7 +186,7 @@ const PartyType = (props) => {
     useEffect(async () => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-            dispatch(SavePartyTypeAPISuccess({ Status: false }))
+           
             dispatch(Breadcrumb_inputName(''))
             setState(() => resetFunction(fileds, state))// Clear form values  
             if (props.pageMode === mode.dropdownAdd) {
@@ -254,9 +256,9 @@ const PartyType = (props) => {
     const SaveHandler = (event) => {
         event.preventDefault();
         const btnId = event.target.id;
+        _cfunc.btnIsDissablefunc({ btnId, state: true })
         try {
             if (formValid(state, setState)) {
-                _cfunc.btnIsDissablefunc({ btnId, state: true })
                 const jsonBody = JSON.stringify({
                     Name: values.Name,
                     IsSCM: values.IsSCM,
@@ -279,7 +281,7 @@ const PartyType = (props) => {
                 }
             }
         } catch (error) {
-            _cfunc.btnIsDissablefunc({ btnId, state: false })
+            _cfunc.btnIsDissablefunc({ btnId:btnId, state: false })
         }
     };
 

@@ -35,7 +35,7 @@ const GRNPendingReport = (props) => {
         dispatch(BreadcrumbShowCountlabel(`Count:${0}`));
         dispatch(Grn_Pending_Action());
         return () => {
-            dispatch(Grn_Pending_Action_Success());
+            dispatch(Grn_Pending_Action_Success([]));
         }
     }, []);
     useEffect(() => {

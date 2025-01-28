@@ -1,5 +1,5 @@
 
-import { CurrentTime, compareGSTINState, currentDate_dmy, date_dmy_func } from "../../components/Common/CommonFunction";
+import { CurrentTime, compareGSTINState, currentDate_dmy, date_dmy_func, loginUserAdminRole, loginUserIsFranchisesRole } from "../../components/Common/CommonFunction";
 import { numberWithCommas } from "../Report_common_function";
 import cbm_logo from "../../assets/images/cbm_logo.png"
 
@@ -485,9 +485,10 @@ export const reportFooter = (doc, data) => {
 
         doc.text(`TCS Amount:`, 440, 785,)
         doc.text(` ${numberWithCommas(Number(data.TCSAmount).toFixed(2))}`, 567, 785, 'right')
-
-        doc.text(`Advance Amount :`, 440, 795,)
-        doc.text(` ${numberWithCommas(Number(data.AdvanceAmount).toFixed(2))}`, 567, 795, 'right')
+        if (loginUserIsFranchisesRole()) {
+            doc.text(`Advance Amount :`, 440, 795,)
+            doc.text(` ${numberWithCommas(Number(data.AdvanceAmount).toFixed(2))}`, 567, 795, 'right')
+        }
 
     }
 

@@ -3,6 +3,7 @@ import { call, put, takeLatest } from "redux-saga/effects";
 import { ValideVoucherIDSuccess, VoucherErrorAction, deleteVoucherIDSuccess, editVoucherIDSuccess, getVoucherlistSuccess, saveVoucherSuccess, updateVoucherIDSuccess } from "./action";
 import { DELETE_VOUCHER_ID, EDIT_VOUCHER_ID, GET_VOUCHER_LIST, SAVE_VOUCHER_MASTER, UPDATE_VOUCHER_ID, VALIDE_VOUCHER_ID } from "./actionType";
 import { Voucher__Delete_API, Voucher__Post_API, Voucher__Update_API, Voucher_API, Voucher_Edit_API, Voucher_Validity_Check_API } from "../../../helpers/backend_helper";
+import { currentDate_dmy, date_dmy_func } from "../../../components/Common/CommonFunction";
 
 function* save_Voucher_GenFun({ config }) {                      // Save API
     try {
@@ -11,10 +12,21 @@ function* save_Voucher_GenFun({ config }) {                      // Save API
     } catch (error) { yield put(VoucherErrorAction()) }
 }
 
-function* Get_Voucher_List_GenrFun() {                            // getList API
+function* Get_Voucher_List_GenrFun({ config }) {                            // getList API
     try {
-        const response = yield call(Voucher_API);
-        yield put(getVoucherlistSuccess(response.Data));
+
+
+
+
+        const response = yield call(Voucher_API, config);
+
+        const newList = yield response.Data.map((i) => {
+
+            i["recordsAmountTotal"] = i.InvoiceAmount;  // Breadcrumb Count total
+            i["InvoiceDate"] = date_dmy_func(i.InvoiceDate)
+            return i
+        })
+        yield put(getVoucherlistSuccess(newList));
     } catch (error) { yield put(VoucherErrorAction()) }
 }
 
