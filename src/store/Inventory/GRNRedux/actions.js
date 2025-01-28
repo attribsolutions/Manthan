@@ -14,7 +14,10 @@ import {
   UPDATE_GRN_ID_FROM_GRN_PAGE_SUCCESS,
   GRN_API_ERROR_ACTION,
   HIDE_INVOICE_FOR_GRN_ACTION,
-  HIDE_INVOICE_FOR_GRN_ACTION_SUCCESS
+  POST_GRN_LIST_PAGE_SUCCESS,
+  HIDE_INVOICE_FOR_GRN_ACTION_SUCCESS,
+  POST_INVOICENO_MESSAGE_SUCCESS,
+  POST_INVOICENO_MESSAGE
 } from './actionType'
 
 
@@ -88,8 +91,15 @@ export const hideInvoiceForGRFActionSuccess = (response) => ({
   payload: response
 });
 
+export const postInvoiceNoMessage = (config = {}) => ({ // save Action
+  type: POST_INVOICENO_MESSAGE,
+  config,
+});
 
-
+export const postInvoiceNoMessageSuccess = (resp) => ({ // Save  success
+  type: POST_INVOICENO_MESSAGE_SUCCESS,
+  payload: resp,
+});
 
 export const GrnApiErrorAction = () => ({
   type: GRN_API_ERROR_ACTION,
