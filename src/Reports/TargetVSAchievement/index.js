@@ -135,13 +135,20 @@ const TargetVSAchievement = (props) => {
 
 
     const [tableColumns] = DynamicColumnHook({ pageField });
-
+    let sortedData = []
+    if (tableDataGroupWise.length > 0) {
+        debugger
+        sortedData = [
+            ...tableDataGroupWise.slice(0, -1).sort((a, b) => b.TargetQuantityInKG - a.TargetQuantityInKG),
+            tableDataGroupWise[tableDataGroupWise.length - 1] // Keep total row at the bottom
+        ];
+    }
 
     useEffect(() => {
 
         if (isGropuWise) {
-            setTabledata(tableDataGroupWise)
-            dispatch(BreadcrumbShowCountlabel(`Count:${tableDataGroupWise.length}`));
+            setTabledata(sortedData)
+            dispatch(BreadcrumbShowCountlabel(`Count:${sortedData.length}`));
         } else {
             setTabledata(tableData)
             dispatch(BreadcrumbShowCountlabel(`Count:${tableData.length}`));
@@ -160,7 +167,7 @@ const TargetVSAchievement = (props) => {
         });
         let config = { jsonBody }
         dispatch(Partyonclustersubcluster_List(config));
-    }, [cluster, subCluster,SubEmployee])
+    }, [cluster, subCluster, SubEmployee])
 
     useEffect(async () => {
         if (cluster[0].value !== "") {
@@ -253,6 +260,9 @@ const TargetVSAchievement = (props) => {
             showing: true,
             align: "right",
 
+
+
+
         },
         {
             text: "Ach in KG",
@@ -316,6 +326,7 @@ const TargetVSAchievement = (props) => {
     ];
 
     const ExtraHeader = ["", "", "Primary", "", "CX Ach", "", "", "", "GT Achivement", "", "", "", "Sales Return", "", ""]
+
 
 
     useEffect(() => {
@@ -392,8 +403,6 @@ const TargetVSAchievement = (props) => {
         setSubCluster(e);
         setTabledata([]);
     }
-
-
 
 
 
@@ -514,7 +523,7 @@ const TargetVSAchievement = (props) => {
 
                     </Row>
                     <Row>
-                       {isSCMParty && <Col sm={3} className="">
+                        {isSCMParty && <Col sm={3} className="">
                             <FormGroup className=" row mt-2" >
                                 <Label className="col-sm-4 p-2"
                                     style={{ width: "120px" }}>Sub Employee</Label>
@@ -635,7 +644,7 @@ const TargetVSAchievement = (props) => {
 
                     <ToolkitProvider
                         keyField="key"
-                        data={tableDataGroupWise}
+                        data={sortedData}
                         columns={Columns}
                         search
                     >
@@ -647,6 +656,7 @@ const TargetVSAchievement = (props) => {
                                             <BootstrapTable
                                                 keyField="key"
                                                 rowStyle={rowStyle}
+
                                                 classes={"table  table-bordered table-hover"}
                                                 noDataIndication={
                                                     <div className="text-danger text-center ">
