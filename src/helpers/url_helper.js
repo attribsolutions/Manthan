@@ -350,6 +350,7 @@ export const ORDER_PRINT_ALL_API = '/OrdersPrint'
 
 export const GRN_STP_FOR_ORDER_lIST_goBtn = "/OrdersFilterSecond"
 export const GRN_MAKE_API = "/MakeOrdersGrn"
+export const INVOICE_NO_MESSAGE = "/GRNSaveforCSS"
 export const GRN = "/GRN"
 export const GRN_LiST_BY_FILTERS = "/GRNFilter"
 export const HIDE_INVOICE_FOR_GRN = "/InvoiceHide"
