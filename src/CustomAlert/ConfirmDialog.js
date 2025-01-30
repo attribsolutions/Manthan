@@ -39,6 +39,8 @@ const ConfirmDialog = () => {
                 break;
             case 8: component = <AlertPermission4 btnRef={buttonRef} />
                 break;
+            case 9: component = <AlertHTMLString btnRef={buttonRef} />
+                break;
             default: return null;
         }
     }
@@ -170,6 +172,7 @@ const AlertInfo = ({ btnRef }) => {
                             className="close" aria-label="Close" onClick={outerNo}><span aria-hidden="true">×</span></button><i
                                 className="mdi mdi-alert-circle-outline d-block display-4 mt-2 mb-3 text-info"></i>
                             <MessageFun msg={Message} />
+
                             <button type="button" ref={btnRef} className="btn btn-primary " onClick={innerOk}>OK</button>
                         </div>
                     </div>
@@ -181,6 +184,59 @@ const AlertInfo = ({ btnRef }) => {
 
     )
 };
+
+
+
+
+
+const AlertHTMLString = ({ btnRef }) => {
+    const { onCancel, confirmState } = useConfirm();
+    const { Status = false, Message = "400 Error", } = confirmState;
+
+    const outerNo = (e, no) => {
+        if (no === 2) {
+            e.stopPropagation();
+            return;
+        } else {
+            e.stopPropagation();
+            onCancel();
+        };
+    };
+
+    const innerOk = (e) => {
+        e.stopPropagation();
+        onCancel();
+    };
+    return (
+
+        <div id="c-alert1" className="modal fade show transparent1 " role="dialog" onClick={(e) => outerNo(e, 1)} tabindex="-1" style={{ display: Status ? "block" : "none" }}>
+            <div className="modal-dialog modal-dialog-centered" role="document">
+                <div className="modal-content alertbody" onClick={(e) => outerNo(e, 2)}>
+                    <div className="modal-content ">
+                        <div className="px-4 mb-0 text-center alert alert-info alert-dismissible fade show" role="alert"><button type="button"
+                            className="close" aria-label="Close" onClick={outerNo}><span aria-hidden="true">×</span></button><i
+                                className="mdi mdi-alert-circle-outline d-block display-4 mt-2 mb-3 text-info"></i>
+                            <MessageFunHtmlString msg={Message} />
+
+                            <button type="button" ref={btnRef} className="btn btn-primary " onClick={innerOk}>OK</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+    )
+};
+
+
+
+
+
+
+
+
 
 const AlertDanger = ({ btnRef }) => {
     const { onCancel, confirmState } = useConfirm();
@@ -443,3 +499,34 @@ const MessageFun = ({ msg }) => {
 }
 
 
+
+
+
+
+const MessageFunHtmlString = ({ msg }) => {
+    debugger
+    let t = Array.isArray(msg)
+    if (t) {
+        let count = 0
+        let msgarr = [];
+
+        msg.map((i1, k1) => {
+            let keys = Object.keys(i1);
+
+            keys.map((i2, k2) => {
+
+                if (!(i1[i2] === null)) {
+                    msgarr.push(`${i2}:${i1[i2]}`);
+
+                    count = count + 1;
+                }
+                return null
+            })
+            return null
+        })
+        return msgarr.map((i) => (<div style={{ textAlign: 'left' }}><p> <h5>{i}</h5></p></div>))
+    }
+    else {
+        return (<div style={{ textAlign: 'center' }}><p> <h5><div dangerouslySetInnerHTML={{ __html: msg }} /></h5></p></div>)
+    }
+}
