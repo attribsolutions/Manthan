@@ -27,6 +27,7 @@ import { pageFieldUseEffect, saveMsgUseEffect, table_ArrowUseEffect, userAccessU
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 import { goButtonForRate_Master, saveRateMaster } from "../../../store/Administrator/RateMasterRedux/action";
+import { Invoice_No_Message } from "../../../helpers/backend_helper";
 
 
 //// This GRN_ADD_1 Page is Use For  Sweets and Snacks GRN  Add page Use for 2 MODE From vendor Order to GRN & Inter Branch GRN
@@ -63,13 +64,14 @@ const GRN_ADD_1 = (props) => {
         userAccess,
         pageField,
         saveBtnloading,
-        RateMasterGoButton
+        RateMasterGoButton,
+        
     } = useSelector((state) => ({
         saveBtnloading: state.GRNReducer.saveBtnloading,
         items: state.GRNReducer.GRNitem,
         postMsg: state.GRNReducer.postMsg,
         updateMsg: state.GRNReducer.updateMsg,
-
+     
         RateMasterGoButton: state.RateMasterReducer.RateMasterGoButton,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField
@@ -225,6 +227,7 @@ const GRN_ADD_1 = (props) => {
                 seteditCreatedBy(hasEditVal.CreatedBy)
             }
         }
+
     }, [])
 
     function val_onChange(val, row, type) {
@@ -625,7 +628,7 @@ const GRN_ADD_1 = (props) => {
         }
     };
 
-    const saveHandeller = (event) => {
+    const saveHandeller = async (event) => {
 
         event.preventDefault();
 
@@ -760,9 +763,24 @@ const GRN_ADD_1 = (props) => {
                 Invoice: null
             }));
 
+            const jsonData = JSON.stringify({
+                InvoiceDate: openPOdata[0]?.GRN_From === url.IB_GRN_LIST ? (grnDetail.InvoiceDate) : (grnDetail.DemandDate),
+                InvoiceNumber: invoiceNo,
+                Customer: grnDetail.Customer,
+            });
+            const Response = await Invoice_No_Message({ jsonBody: jsonData })
+            
+            if (Response.Status === false && Response.StatusCode) {
+                customAlert({
+                    Type: 3,
+                    Message: Response.Message,
+                })
+                return
+            }
 
             const jsonBody = JSON.stringify({
                 GRNDate: grnDate,
+                InvoiceDate: openPOdata[0]?.GRN_From === url.IB_GRN_LIST ? (grnDetail.InvoiceDate) : (grnDetail.DemandDate),
                 Customer: grnDetail.Customer,
                 GRNNumber: 1,
                 GrandTotal: Number(sum_roundedTotalAmount).toFixed(2),
