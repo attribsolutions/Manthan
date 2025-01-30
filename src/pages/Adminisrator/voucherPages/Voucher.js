@@ -150,7 +150,7 @@ const Voucher = (props) => {
             })
         } else if (VoucherValidityData?.Status === false && [404, 400, 204].includes(VoucherValidityData?.StatusCode)) {
             customAlert({
-                Type: 4,
+                Type: 9,
                 Message: VoucherValidityData.Message,
             })
         }
@@ -226,9 +226,9 @@ const Voucher = (props) => {
 
         } else if
             (postMsg.Status === false && [404, 400, 204].includes(postMsg.StatusCode)) {
-
+     
             customAlert({
-                Type: 3,
+                Type: 9,
                 Message: JSON.stringify(postMsg.Message),
             })
         }
@@ -251,6 +251,7 @@ const Voucher = (props) => {
                 })
             );
         }
+
     }, [updateMsg, modalCss]);
 
     useEffect(() => {
