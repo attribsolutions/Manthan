@@ -148,6 +148,9 @@ const PartyItems = (props) => {
 			}
 			dispatch(editPartyItemIDSuccess({ Status: false }));
 		}
+		return () => {
+			props.isOpenModal(false)
+		}
 	}, []);
 
 	useEffect(() => {
