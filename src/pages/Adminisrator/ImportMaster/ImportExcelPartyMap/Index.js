@@ -453,8 +453,8 @@ const ImportExcelPartyMap = (props) => {
 
                     <div className="px-2 c_card_filter text-black" >
                         <form onSubmit={(event) => goButtonHandler(event)} noValidate>
-                            <div className="row">
-                                <Col sm="5">
+                        <div className="row" style={{ display: "flex", justifyContent: "space-between"  }}>
+                                <Col sm="6">
                                     <FormGroup className="mb-2 row mt-3 " >
                                         <Label className=" p-2"
                                             style={{ maxWidth: "115px" }}>{fieldLabel.MapType}</Label>
@@ -479,9 +479,10 @@ const ImportExcelPartyMap = (props) => {
                                     </FormGroup>
                                 </Col>
 
-                                <Col sm="2" className="mt-3 ">
+                                <Col sm="1" className="mt-3 ">
                                     {(UpdateTableList.length === 0) ?
                                         <Go_Button
+
                                             onClick={goButtonHandler} loading={listBtnLoading} />
                                         :
                                         <Change_Button onClick={partyOnChangeHandler} />
