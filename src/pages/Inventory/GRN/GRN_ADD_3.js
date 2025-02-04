@@ -438,6 +438,7 @@ const GRNAdd3 = (props) => {
 
             const jsonBody = JSON.stringify({
                 GRNDate: grnDate,
+                IsSave: (grnDetail?.IsSave === 1) ? 2 : 0,
                 Customer: grnDetail.Customer,
                 GRNNumber: 1,
                 GrandTotal: grnDetail.OrderAmount,
