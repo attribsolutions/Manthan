@@ -46,8 +46,7 @@ const SalesReturnList = () => {
     const [state, setState] = useState(() => initialFiledFunc(fileds))
 
     const [FileLoading, setFileLoading] = useState(false)
-    const [Return_Pdf_loading, setReturn_Pdf_loading] = useState(false);
-
+    const [Return_Pdf_loading, setReturn_Pdf_loading] = useState(false); 
     const [pageMode, setPageMode] = useState(mode.defaultList)
     const [subPageMode, setSubPageMode] = useState(history.location.pathname);
     const [otherState, setOtherState] = useState({ masterPath: '', newBtnPath: '', buttonMsgLable: '' });
@@ -281,7 +280,6 @@ const SalesReturnList = () => {
     });
 
     const goButtonHandler = () => {
-
         try {
             if (_cfunc.loginSelectedPartyID() === 0) {
                 customAlert({ Type: 3, Message: alertMessages.commonPartySelectionIsRequired });
@@ -513,9 +511,11 @@ const SalesReturnList = () => {
 
 
                     <Col sm={2} className=" d-flex justify-content-end" >
-                        <C_Button className="btn btn-success" spinnerColor="white" style={{ marginTop: "18px", marginBottom: "16px", marginRight: (values.Customer.value === "" && reducers.tableList.length > 0) ? "60px" : "0px" }} loading={reducers.loading} onClick={goButtonHandler} >
+
+                        <C_Button className="btn btn-success" spinnerColor="white" style={{ marginTop: "18px", marginBottom: "16px", marginRight: ((values.Customer.value !== "" && reducers.tableList.length > 0)?"0px":"50px")  }} loading={reducers.loading} onClick={goButtonHandler} >
                             Go</C_Button>
-                        {((values.Customer.value !== "" && reducers.tableList.length > 0) && (subPageMode !== url.SALES_RETURN_LIST)) ? <C_Button
+                        {((values.Customer.value !== "" && reducers.tableList.length > 0) && (subPageMode !== url.SALES_RETURN_LIST)) ? 
+                        <C_Button
                             type="button"
                             spinnerColor="primary"
                             style={{

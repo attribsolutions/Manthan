@@ -148,6 +148,9 @@ const PartyItems = (props) => {
 			}
 			dispatch(editPartyItemIDSuccess({ Status: false }));
 		}
+		return () => {
+			props?.isOpenModal && props.isOpenModal(false)
+		}
 	}, []);
 
 	useEffect(() => {
@@ -217,7 +220,7 @@ const PartyItems = (props) => {
 			}))
 			.filter((row) => row.items.length > 0);
 
-	
+
 
 		const numberOfItems = groupWiseItemNewArray.reduce((total, group) => total + group.items.length, 0);
 

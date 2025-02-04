@@ -187,7 +187,7 @@ const TransactionLog = () => {
         setisCopy({ isCopy: false })
     }
 
-  
+
     function onChangeCategoryType(e = []) {
         if (e.length === 0) {
             e = [allLabelWithBlank]
@@ -431,12 +431,13 @@ const TransactionLog = () => {
                         </FormGroup>
                     </Col>
                     <Col sm="3" >
-                        <Row> <Col sm="2" >
-                            <Go_Button
-                                loading={btnMode === 1 && goBtnloading}
-                                onClick={() => goButtonHandler(1)} />
-                        </Col>
-                            <Col sm="4" className='mt-n2' >
+                        <Row style={{ display: "flex", justifyContent: "space-between", marginTop:"10px" }}>
+                            <Col sm="1" style={{marginLeft:"175px"}} >
+                                <Go_Button
+                                    loading={btnMode === 1 && goBtnloading}
+                                    onClick={() => goButtonHandler(1)} />
+                            </Col>
+                            <Col sm="3" className='mt-n2' >
                                 <C_Button
                                     type="button"
                                     spinnerColor="white"

@@ -65,13 +65,13 @@ const GRN_ADD_1 = (props) => {
         pageField,
         saveBtnloading,
         RateMasterGoButton,
-        
+
     } = useSelector((state) => ({
         saveBtnloading: state.GRNReducer.saveBtnloading,
         items: state.GRNReducer.GRNitem,
         postMsg: state.GRNReducer.postMsg,
         updateMsg: state.GRNReducer.updateMsg,
-     
+
         RateMasterGoButton: state.RateMasterReducer.RateMasterGoButton,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField
@@ -769,7 +769,7 @@ const GRN_ADD_1 = (props) => {
                 Customer: grnDetail.Customer,
             });
             const Response = await Invoice_No_Message({ jsonBody: jsonData })
-            
+
             if (Response.Status === false && Response.StatusCode) {
                 customAlert({
                     Type: 3,
@@ -780,6 +780,7 @@ const GRN_ADD_1 = (props) => {
 
             const jsonBody = JSON.stringify({
                 GRNDate: grnDate,
+                IsSave: (grnDetail?.IsSave === 1) ? 2 : 0,
                 InvoiceDate: openPOdata[0]?.GRN_From === url.IB_GRN_LIST ? (grnDetail.InvoiceDate) : (grnDetail.DemandDate),
                 Customer: grnDetail.Customer,
                 GRNNumber: 1,

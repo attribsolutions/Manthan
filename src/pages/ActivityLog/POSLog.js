@@ -221,14 +221,14 @@ const POS_Log = () => {
                     </Col>
 
                     <Col sm="3" className='mt-2' >
-                        <Row>
-                            <Col sm="4" ></Col>
-                            <Col sm="2" >
+                        <Row style={{ display: "flex", justifyContent: "space-between"  }}>
+                            
+                            <Col sm="1" style={{marginLeft:"170px"}}>
                                 <Go_Button
                                     loading={btnMode === 1 && goBtnloading}
                                     onClick={() => goButtonHandler(1)} />
                             </Col>
-                            <Col sm="4" className='mt-n2' >
+                            <Col sm="3" className='mt-n2' >
                                 <C_Button
                                     type="button"
                                     spinnerColor="white"
