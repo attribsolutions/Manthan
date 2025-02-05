@@ -973,6 +973,7 @@ export const Bill_booking_Report_Api = ({ jsonBody }) => post(url.BILL_BOOKING_R
 export const DemandVsSupplyReport_API = ({ jsonBody }) => post(url.DEMAND_VS_SUPPLY_API, jsonBody)//Go button api
 
 
+export const CashierName_Api = ({ jsonBody }) => post(url.CHASHIER_API, jsonBody)//Go button api
 
 
 export {
