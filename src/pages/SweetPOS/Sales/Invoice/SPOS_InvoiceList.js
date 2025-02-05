@@ -81,7 +81,7 @@ const initial_state = {
             Between_InvoiceNumber_1: "",
             Between_InvoiceNumber_2: "",
         },
-        customer: { SelectedCustomer: [] },
+        Customers: { SelectedCustomer: [] },
         cashier: { SelectedCashier: [] },
         Item: { SelectedItem: [] },
         EInvoice: {
