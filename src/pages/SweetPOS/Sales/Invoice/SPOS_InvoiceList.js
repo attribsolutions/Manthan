@@ -549,6 +549,7 @@ const SweetPosInvoiceList = () => {
             const filtersBody = JSON.stringify({
                 FromDate: fromdate,
                 ToDate: todate,
+                Customer: supplierSelect.value === "" ? '' : supplierSelect.value,
                 Party: commonPartyDropSelect.value,
                 IBType: IBType ? IBType : otherState.IBType,
                 DashBoardMode: 0,
