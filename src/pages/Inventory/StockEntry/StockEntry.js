@@ -582,7 +582,7 @@ const StockEntry = (props) => {
     }
 
     const SaveHandler = async (event) => {
-
+        debugger
         event.preventDefault();
 
         const btnId = event.target.id
@@ -610,7 +610,10 @@ const StockEntry = (props) => {
         const ReturnItems = TableArr.map(mapItemArray);
 
         const filterData = ReturnItems.filter((i) => {
-            return i.Quantity > 0;
+            // return i.Quantity > 0;
+
+            return (typeof i.Quantity === "string" || i.Quantity > 0)
+            
         });
 
         if (filterData.length === 0) {
