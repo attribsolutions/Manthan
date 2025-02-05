@@ -34,7 +34,7 @@ export const C_FilterSelect = React.memo(({ State, isDisabled, SelectState, Sele
     //         Between_InvoiceNumber_1: "",
     //         Between_InvoiceNumber_2: "",
     //     },
-    //     customer: { SelectedCustomer: [] },
+    //     Customer: { SelectedCustomer: [] },
     //     cashier: { SelectedCashier: [] },
     //     Item: { SelectedItem: [] },
     //     EInvoice: {
@@ -59,7 +59,7 @@ export const C_FilterSelect = React.memo(({ State, isDisabled, SelectState, Sele
         { label: "Payment Mode", value: "paymentMode" },
         { label: "Grand Total", value: "invoiceAmount" },
         { label: "Cashier", value: "cashier" },
-        { label: "Customer", value: "customer" },
+        { label: "Customer", value: "Customer" },
         { label: "E-Invoice", value: "EInvoice" },
         { label: "E-WayBill", value: "EWayBill" },
         { label: "Item", value: "Item" },
@@ -164,7 +164,7 @@ export const C_FilterSelect = React.memo(({ State, isDisabled, SelectState, Sele
             let jsonFilter = {
                 ...updatedState,
                 Item: { SelectedItem: updatedState?.Item?.SelectedItem?.map(item => item.value).join(',') },
-                customer: { SelectedCustomer: updatedState?.customer?.SelectedCustomer?.map(item => item.value).join(',') },
+                Customer: { SelectedCustomer: updatedState?.Customer?.SelectedCustomer?.map(item => item.value).join(',') },
                 cashier: { SelectedCashier: updatedState?.cashier?.SelectedCashier?.map(item => item.value).join(',') },
 
             }
@@ -427,15 +427,15 @@ export const C_FilterSelect = React.memo(({ State, isDisabled, SelectState, Sele
                         </Row>}
                     </div>
                 )}
-                {selectedOption.some(item => item.value === "customer") && (
+                {selectedOption.some(item => item.value === "Customer") && (
 
                     <div style={{ border: "ridge", borderRadius: "7px", padding: "8px" }}>
                         <span>Customer</span>
                         <Select
-                            value={state.customer.SelectedCustomer}
+                            value={state.Customer.SelectedCustomer}
                             options={CustomerOption}
                             isMulti={true}
-                            onChange={(e) => handleInvoiceAmountChange("customer", "SelectedCustomer", e)}
+                            onChange={(e) => handleInvoiceAmountChange("Customer", "SelectedCustomer", e)}
                             style={{
                                 width: "100%",
                                 marginTop: "10px",
