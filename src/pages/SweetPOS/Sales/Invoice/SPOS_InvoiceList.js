@@ -4,6 +4,7 @@ import {
     BreadcrumbShowCountlabel,
     commonPageFieldList,
     commonPageFieldListSuccess,
+    Get_Items_Drop_Down,
     getUserDetailsAction,
     loginSuccessAction,
     loginUser,
@@ -19,7 +20,7 @@ import * as report from '../../../../Reports/ReportIndex'
 import * as url from "../../../../routes/route_url";
 import * as pageId from "../../../../routes/allPageID"
 import * as mode from "../../../../routes/PageMode"
-import { CheckStockEntryforBackDatedTransaction, Invoice_Singel_Get_for_Report_Api, OrderPage_Edit_ForDownload_API, Pos_Invoice_Singel_Get_for_Report_Api } from "../../../../helpers/backend_helper";
+import { CashierName_Api, CheckStockEntryforBackDatedTransaction, Invoice_Singel_Get_for_Report_Api, OrderPage_Edit_ForDownload_API, Pos_Invoice_Singel_Get_for_Report_Api } from "../../../../helpers/backend_helper";
 import { getpdfReportdata } from "../../../../store/Utilites/PdfReport/actions";
 import * as _cfunc from "../../../../components/Common/CommonFunction";
 import {
@@ -53,22 +54,96 @@ import { sideBarPageFiltersInfoAction } from "../../../../store/Utilites/PartyDr
 import { date_dmy_func } from "../../../../components/Common/CommonFunction";
 import { postWithBasicAuth } from "../../../Sale/Franchies_Invoice/FranchiesInvoiceFunc";
 import { FRANCHAISE_INVOICE_DELETE_API } from "../../../../helpers/url_helper";
+import { C_FilterSelect } from "./CustomFilter";
 // import { C_FilterSelect } from "./CustomFilter";
 
 
+const initial_state = {
+    updatedState: {
+        paymentMode: {
+            Cash: false,
+            Card: false,
+            UPI: false,
+        },
+        invoiceAmount: {
+            Less_Than: false,
+            Greater_Than: false,
+            Invoice_Amount: "",
+            Between_InvoiceAmount: false,
+            Between_InvoiceAmount_1: "",
+            Between_InvoiceAmount_2: "",
+        },
+        InvoiceNumber: {
+            Less_Than: false,
+            Greater_Than: false,
+            Invoice_Number: "",
+            Between_InvoiceNumber: false,
+            Between_InvoiceNumber_1: "",
+            Between_InvoiceNumber_2: "",
+        },
+        customer: { SelectedCustomer: [] },
+        cashier: { SelectedCashier: [] },
+        Item: { SelectedItem: [] },
+        EInvoice: {
+            EInvoiceCreated: false,
+            EInvoiceNotCreated: false,
+        },
+        EWayBill: {
+            EWayBillCreated: false,
+            EWayBillNotCreated: false,
+        },
+
+    },
+    jsonFilter: {
+        paymentMode: {
+            Cash: false,
+            Card: false,
+            UPI: false,
+        },
+        invoiceAmount: {
+            Less_Than: false,
+            Greater_Than: false,
+            Invoice_Amount: "",
+            Between_InvoiceAmount: false,
+            Between_InvoiceAmount_1: "",
+            Between_InvoiceAmount_2: "",
+        },
+        InvoiceNumber: {
+            Less_Than: false,
+            Greater_Than: false,
+            Invoice_Number: "",
+            Between_InvoiceNumber: false,
+            Between_InvoiceNumber_1: "",
+            Between_InvoiceNumber_2: "",
+        },
+        customer: { SelectedCustomer: [] },
+        cashier: { SelectedCashier: [] },
+        Item: { SelectedItem: [] },
+        EInvoice: {
+            EInvoiceCreated: false,
+            EInvoiceNotCreated: false,
+        },
+        EWayBill: {
+            EWayBillCreated: false,
+            EWayBillNotCreated: false,
+        },
+
+    }
+};
 
 const SweetPosInvoiceList = () => {
 
     const dispatch = useDispatch();
     const history = useHistory();
-    const filterStateRef = useRef({});
-    debugger
+    const filterStateRef = useRef(initial_state);
+    const SelectStateRef = useRef([]);
+
+
     const now = new Date();
     const date = now.toISOString().slice(0, 10); // e.g., 2024-11-29
     const time = now.toTimeString().slice(0, 8); // e.g., 13:32:54
 
     const currentDate_ymd = _cfunc.date_ymd_func();
-
 
     const initialSubPageMode = useMemo(() => {
         if (_cfunc.IsAuthorisedURL({ subPageMode: history.location.pathname, URL: url.POS_INVOICE_LIST })) {
@@ -83,6 +158,11 @@ const SweetPosInvoiceList = () => {
     const [otherState, setOtherState] = useState({ masterPath: '', makeBtnShow: false, newBtnPath: '', IBType: '' });
     const [Vehicle_No, setVehicle_No] = useState({ value: null, label: "Select..." })
     const [Customer, setCustomer] = useState('')
+
+    const [CashierOption, setCashierOption] = useState([])
+
+
+
 
     const [modal, setmodal] = useState(false);
     const [vehicleErrorMsg, setvehicleErrorMsg] = useState(false);
@@ -116,7 +196,8 @@ const SweetPosInvoiceList = () => {
             sendToScmMsg: state.InvoiceReducer.sendToScmMsg,
             invoiceBulkDeleteLoading: state.InvoiceReducer.invoiceBulkDeleteLoading,
             invoiceBulkDelete: state.InvoiceReducer.invoiceBulkDelete,
-            listBtnLoading: (state.InvoiceReducer.listBtnLoading || state.PdfReportReducers.ReportBtnLoading || deleteBtnloading)
+            listBtnLoading: (state.InvoiceReducer.listBtnLoading || state.PdfReportReducers.ReportBtnLoading || deleteBtnloading),
+            ItemDropDown: state.StockEntryReducer.ItemDropDown,
         })
     );
 
@@ -135,7 +216,8 @@ const SweetPosInvoiceList = () => {
         invoiceBulkDeleteLoading,
         makeGRN,
         listBtnLoading,
-        FilterSelectData
+        FilterSelectData,
+        ItemDropDown
     } = reducers;
 
     const {
@@ -164,7 +246,7 @@ const SweetPosInvoiceList = () => {
 
 
     // const handleChildStateChange = (state) => {
-    //     debugger
+    //     
     //     setChildState(state);
     // };
 
@@ -221,9 +303,27 @@ const SweetPosInvoiceList = () => {
         }
 
     }, [dispatch]);
-    
-    useEffect(() => {
+
+    useEffect(async () => {
+        dispatch(Get_Items_Drop_Down({
+            jsonBody: JSON.stringify({
+                UserID: _cfunc.loginUserID(),
+                RoleID: _cfunc.loginRoleID(),
+                CompanyID: _cfunc.loginCompanyID(),
+                IsSCMCompany: _cfunc.loginIsSCMCompany(),
+                CompanyGroup: _cfunc.loginCompanyGroup(),
+                PartyID: _cfunc.loginSelectedPartyID(),
+            })
+        }));
         dispatch(postOrderConfirms_API_Success({ Status: false }))
+
+        const Resp = await CashierName_Api({
+            jsonBody: JSON.stringify({
+                Party: _cfunc.loginPartyID(),
+            })
+        })
+        setCashierOption(Resp?.Data)
+
     }, [])
 
 
@@ -287,6 +387,12 @@ const SweetPosInvoiceList = () => {
         }
     }, [Uploaded_EInvoice]);
 
+
+
+
+
+
+
     useEffect(() => {   // Uploaded E-way Bill useEffect 
 
         if ((Uploaded_EwayBill.Status === true) && (Uploaded_EwayBill.StatusCode === 200)) {
@@ -330,8 +436,14 @@ const SweetPosInvoiceList = () => {
         }
     }, [Cancel_EInvoice]);
 
-    const handleFilterChange = useCallback((updatedState) => {
-        filterStateRef.current = updatedState;
+    const handleFilterChange = useCallback((filterData) => {
+        filterStateRef.current.updatedState = filterData.updatedState;
+        filterStateRef.current.jsonFilter = filterData.jsonFilter;
+
+    }, []);
+
+    const SelecthandleChange = useCallback((SelectState) => {
+        SelectStateRef.current = SelectState;
     }, []);
 
     useEffect(async () => {    // Uploaded Cancel E-way Bill useEffect 
@@ -395,15 +507,13 @@ const SweetPosInvoiceList = () => {
         }
     }, [makeGRN])
 
-    const supplierOptions = supplier.map((i) => ({
-        value: i.id,
-        label: i.Name,
-    }));
+    const supplierOptions = useMemo(() => {
+        return supplier.map((i) => ({
+            value: i.id,
+            label: i.Name,
+        }));
+    }, [supplier]);
 
-    supplierOptions.unshift({
-        value: "",
-        label: " All"
-    });
 
     const VehicleNumber_Options = VehicleNumber.map((index) => ({
         value: index.id,
@@ -427,6 +537,8 @@ const SweetPosInvoiceList = () => {
         dispatch(getpdfReportdata(Pos_Invoice_Singel_Get_for_Report_Api, config))
     }
 
+
+
     function goButtonHandler(event, IBType) {
 
         try {
@@ -441,7 +553,7 @@ const SweetPosInvoiceList = () => {
                 Party: commonPartyDropSelect.value,
                 IBType: IBType ? IBType : otherState.IBType,
                 DashBoardMode: 0,
-                // ...filterStateRef.current,
+                ...filterStateRef.current.jsonFilter,
 
 
             });
@@ -533,7 +645,6 @@ const SweetPosInvoiceList = () => {
         return (
             <div className="px-2   c_card_filter text-black" >
                 <div className="row" >
-
                     <Col sm="3" className="">
                         <FormGroup className="mb- row mt-3 " >
                             <Label className="col-sm-5 p-2"
@@ -576,14 +687,16 @@ const SweetPosInvoiceList = () => {
                     <Col sm="5">
                         <FormGroup className="mb-2 row mt-3 " >
                             <Label className="col-md-4 p-2"
-                                style={{ width: "115px" }}>Customer</Label>
+                                style={{ width: "115px" }}>Advance Filter</Label>
                             <Col sm="7">
-                                <C_Select
-                                    value={supplierSelect}
-                                    options={supplierOptions}
-                                    isLoading={supplierDropLoading}
-                                    onChange={supplierOnchange}
-                                    // onFilterChange={handleFilterChange}
+                                <C_FilterSelect
+                                    CustomerOption={supplierOptions}
+                                    ItemOption={ItemDropDown}
+                                    CashierOption={CashierOption}
+                                    onFilterChange={handleFilterChange}
+                                    SelecthandleChange={SelecthandleChange}
+                                    SelectState={SelectStateRef.current}
+                                    State={filterStateRef.current.updatedState}
                                     styles={{
                                         menu: provided => ({ ...provided, zIndex: 2 })
                                     }}
