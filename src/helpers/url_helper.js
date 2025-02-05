@@ -720,6 +720,7 @@ export const BILL_BOOKING_REPORT_API = '/BillBookingReport'
 
 export const DEMAND_VS_SUPPLY_API = '/DemandVsSupplyReport'
 
+export const CHASHIER_API = '/FranchisesCashierDetails'
 
 
 
