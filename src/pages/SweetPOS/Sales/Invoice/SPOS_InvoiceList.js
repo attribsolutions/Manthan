@@ -55,80 +55,50 @@ import { date_dmy_func } from "../../../../components/Common/CommonFunction";
 import { postWithBasicAuth } from "../../../Sale/Franchies_Invoice/FranchiesInvoiceFunc";
 import { FRANCHAISE_INVOICE_DELETE_API } from "../../../../helpers/url_helper";
 import { C_FilterSelect } from "./CustomFilter";
+
 // import { C_FilterSelect } from "./CustomFilter";
 
 
-const initial_state = {
-    updatedState: {
-        paymentMode: {
-            Cash: false,
-            Card: false,
-            UPI: false,
-        },
-        invoiceAmount: {
-            Less_Than: false,
-            Greater_Than: false,
-            Invoice_Amount: "",
-            Between_InvoiceAmount: false,
-            Between_InvoiceAmount_1: "",
-            Between_InvoiceAmount_2: "",
-        },
-        InvoiceNumber: {
-            Less_Than: false,
-            Greater_Than: false,
-            Invoice_Number: "",
-            Between_InvoiceNumber: false,
-            Between_InvoiceNumber_1: "",
-            Between_InvoiceNumber_2: "",
-        },
-        Customers: { SelectedCustomer: [] },
-        cashier: { SelectedCashier: [] },
-        Item: { SelectedItem: [] },
-        EInvoice: {
-            EInvoiceCreated: false,
-            EInvoiceNotCreated: false,
-        },
-        EWayBill: {
-            EWayBillCreated: false,
-            EWayBillNotCreated: false,
-        },
 
+const State = {
+    paymentMode: {
+        Cash: false,
+        Card: false,
+        UPI: false,
     },
-    jsonFilter: {
-        paymentMode: {
-            Cash: false,
-            Card: false,
-            UPI: false,
-        },
-        invoiceAmount: {
-            Less_Than: false,
-            Greater_Than: false,
-            Invoice_Amount: "",
-            Between_InvoiceAmount: false,
-            Between_InvoiceAmount_1: "",
-            Between_InvoiceAmount_2: "",
-        },
-        InvoiceNumber: {
-            Less_Than: false,
-            Greater_Than: false,
-            Invoice_Number: "",
-            Between_InvoiceNumber: false,
-            Between_InvoiceNumber_1: "",
-            Between_InvoiceNumber_2: "",
-        },
-        customer: { SelectedCustomer: [] },
-        cashier: { SelectedCashier: [] },
-        Item: { SelectedItem: [] },
-        EInvoice: {
-            EInvoiceCreated: false,
-            EInvoiceNotCreated: false,
-        },
-        EWayBill: {
-            EWayBillCreated: false,
-            EWayBillNotCreated: false,
-        },
+    invoiceAmount: {
+        Less_Than: false,
+        Greater_Than: false,
+        Invoice_Amount: "",
+        Between_InvoiceAmount: false,
+        Between_InvoiceAmount_1: "",
+        Between_InvoiceAmount_2: "",
+    },
+    InvoiceNumber: {
+        Less_Than: false,
+        Greater_Than: false,
+        Invoice_Number: "",
+        Between_InvoiceNumber: false,
+        Between_InvoiceNumber_1: "",
+        Between_InvoiceNumber_2: "",
+    },
+    Customers: { SelectedCustomer: [] },
+    cashier: { SelectedCashier: [] },
+    Item: { SelectedItem: [] },
+    EInvoice: {
+        EInvoiceCreated: false,
+        EInvoiceNotCreated: false,
+    },
+    EWayBill: {
+        EWayBillCreated: false,
+        EWayBillNotCreated: false,
+    },
 
-    }
+}
+
+const initial_state = {
+    updatedState: State,
+    jsonFilter: State,
 };
 
 const SweetPosInvoiceList = () => {
@@ -138,7 +108,8 @@ const SweetPosInvoiceList = () => {
     const filterStateRef = useRef(initial_state);
     const SelectStateRef = useRef([]);
 
-
+    const InvoiceAdvanceFilter = (_cfunc.loginSystemSetting().InvoiceAdvanceFilter === "ON");
+    
     const now = new Date();
     const date = now.toISOString().slice(0, 10); // e.g., 2024-11-29
     const time = now.toTimeString().slice(0, 8); // e.g., 13:32:54
@@ -442,6 +413,9 @@ const SweetPosInvoiceList = () => {
 
     }, []);
 
+
+
+
     const SelecthandleChange = useCallback((SelectState) => {
         SelectStateRef.current = SelectState;
     }, []);
@@ -508,12 +482,15 @@ const SweetPosInvoiceList = () => {
     }, [makeGRN])
 
     const supplierOptions = useMemo(() => {
-        return supplier.map((i) => ({
-            value: i.id,
-            label: i.Name,
-        }));
+        // Create the options array with the 'All' option at index 0
+        return [
+            { value: "", label: "All" },  // First option
+            ...supplier.map((i) => ({     // Spread the mapped supplier options
+                value: i.id,
+                label: i.Name,
+            })),
+        ];
     }, [supplier]);
-
 
     const VehicleNumber_Options = VehicleNumber.map((index) => ({
         value: index.id,
@@ -553,9 +530,7 @@ const SweetPosInvoiceList = () => {
                 Party: commonPartyDropSelect.value,
                 IBType: IBType ? IBType : otherState.IBType,
                 DashBoardMode: 0,
-                ...filterStateRef.current.jsonFilter,
-
-
+                ...(InvoiceAdvanceFilter ? filterStateRef.current.jsonFilter : {}),
             });
 
             dispatch(invoiceListGoBtnfilter({ subPageMode, filtersBody }));
@@ -685,7 +660,7 @@ const SweetPosInvoiceList = () => {
                     </Col>
 
                     <Col sm="5">
-                        <FormGroup className="mb-2 row mt-3 " >
+                        {InvoiceAdvanceFilter ? <FormGroup className="mb-2 row mt-3 " >
                             <Label className="col-md-4 p-2"
                                 style={{ width: "115px" }}>Advance Filter</Label>
                             <Col sm="7">
@@ -694,6 +669,7 @@ const SweetPosInvoiceList = () => {
                                     ItemOption={ItemDropDown}
                                     CashierOption={CashierOption}
                                     onFilterChange={handleFilterChange}
+                                    jsonFilter={filterStateRef.current.jsonFilter}
                                     SelecthandleChange={SelecthandleChange}
                                     SelectState={SelectStateRef.current}
                                     State={filterStateRef.current.updatedState}
@@ -702,7 +678,26 @@ const SweetPosInvoiceList = () => {
                                     }}
                                 />
                             </Col>
-                        </FormGroup>
+                        </FormGroup> :
+
+                            <FormGroup className="mb-2 row mt-3 " >
+                                <Label className="col-md-4 p-2"
+                                    style={{ width: "115px" }}>Customer</Label>
+                                <Col sm="7">
+                                    <C_Select
+                                        value={supplierSelect}
+                                        options={supplierOptions}
+                                        isLoading={supplierDropLoading}
+                                        onChange={supplierOnchange}
+                                        // onFilterChange={handleFilterChange}
+                                        styles={{
+                                            menu: provided => ({ ...provided, zIndex: 2 })
+                                        }}
+                                    />
+                                </Col>
+                            </FormGroup>
+
+                        }
                     </Col >
 
                     <Col sm="1" className="mt-3 ">

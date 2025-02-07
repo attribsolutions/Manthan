@@ -723,6 +723,13 @@ export const DEMAND_VS_SUPPLY_API = '/DemandVsSupplyReport'
 export const CHASHIER_API = '/FranchisesCashierDetails'
 
 
+export const GRN_DISCREPANCY_REPORT = '/GRNDiscrepancyReport'
+
+
+export const DATA_EXPORT_TO_SAP = '/SAPExportDetails'
+
+
+
 
 
 

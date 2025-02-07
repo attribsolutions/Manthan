@@ -256,6 +256,8 @@ import DemandVSSupply from "../Reports/DemandVsSupply/index.js";
 import Voucher from "../pages/Adminisrator/voucherPages/Voucher.js";
 import VoucherList from "../pages/Adminisrator/voucherPages/VoucherList.js";
 import GRNPendingReport from "../Reports/GRN Pending Reort/GRNPendingReport.js";
+import DataExportToSAP from "../pages/Adminisrator/DataExportToSAP/DataExportToSAP.js";
+import GRNDiscrepancyReport from "../Reports/GRNDiscrepancyReport/GRNDiscrepancyReport.js";
 
 
 const userRoutes = [
@@ -653,9 +655,9 @@ const userRoutes = [
 	{ path: path.POS_USER, component: POSUSER },//not party wise
 	{ path: path.POS_USER_lIST, component: POSUserList },//not party wise
 
-	{ path: path.SWEET_POS_MACHINE_MASTER, component: MachineTypeMaster,isPartyWisePage: true },//not party wise
+	{ path: path.SWEET_POS_MACHINE_MASTER, component: MachineTypeMaster, isPartyWisePage: true },//not party wise
 
-	{ path: path.SWEET_POS_MACHINE_LIST, component: MachineTypeList,isPartyWisePage: true },//not party wise
+	{ path: path.SWEET_POS_MACHINE_LIST, component: MachineTypeList, isPartyWisePage: true },//not party wise
 
 	{ path: path.STOCK_OUT_REPORT, component: StockOutReport },//not party wise
 	// ************************************ Pos_Invoice **************************************//
@@ -680,7 +682,9 @@ const userRoutes = [
 
 
 
-	
+	{ path: path.DATA_EXPORT_TO_SAP, component: DataExportToSAP },//not party wise
+
+	{ path: path.GRN_DISCREPANCY_REPORT, component: GRNDiscrepancyReport },//not party wise
 
 
 

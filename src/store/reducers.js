@@ -138,6 +138,8 @@ import BillBookingReportReducer from "./Report/BillBookingRedux/reducer"
 import DemandVsSupplyReportReducer from "./Report/DemandVsSupply/reducer"
 import VoucherReducer from "./Administrator/voucherRedux/reducer"
 import grnpendingReducer from "./Report/GRNPendingReport/reducer"
+import ExportToSapReducer from "./Administrator/ExportToSAPRedux/reducer"
+import GRNDiscrepancyReportReducer from "./Report/GRNDiscrepancyRedux/reducer"
 
 const rootReducer = combineReducers({
 	Layout,
@@ -255,6 +257,8 @@ const rootReducer = combineReducers({
 	DemandVsSupplyReportReducer,
 	VoucherReducer,
 	grnpendingReducer,
+	ExportToSapReducer,
+	GRNDiscrepancyReportReducer
 
 })
 export default rootReducer

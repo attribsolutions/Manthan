@@ -365,8 +365,8 @@ const GRNAdd3 = (props) => {
                                 className="input"
                                 autoComplete="off"
                                 placeholder="Enter Item Related Quary"
-                                defaultValue={index1.comment}
-                                onChange={event => index1.comment = event.target.value}
+                                defaultValue={index1.DiscrepancyComment}
+                                onChange={event => index1.DiscrepancyComment = event.target.value}
                             />
                         </div>
                     </>
@@ -417,7 +417,6 @@ const GRNAdd3 = (props) => {
                 return {
                     ...item,
                     ActualQuantity: item.invoiceQuantity, //invoice actual quantity 
-                    Comment: item.comment,
                     Reason: item.defaultDiscrepancy ? item.defaultDiscrepancy.value : "",//default Discrepancy value
                     ReferenceRate: item.Rate,
                     BaseUnitQuantity: item.BaseUnitQuantity,

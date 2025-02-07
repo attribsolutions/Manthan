@@ -957,6 +957,8 @@ export const StockOutReport_API = ({ jsonBody }) => post(url.SWEET_POS_STOCK_OUT
 
 //Country api
 
+
+
 export const Country_Post_API = ({ jsonBody }) => post(url.COUNTRY_SAVE_API, jsonBody)// post api
 export const Country_get_API = () => get(url.COUNTRY_GET_API) // get api
 export const Country_delete_API = ({ deleteId }) => del(`${url.COUNTRY_UPDATE_DELETE_API}/${deleteId}`) // delete api
@@ -974,6 +976,14 @@ export const DemandVsSupplyReport_API = ({ jsonBody }) => post(url.DEMAND_VS_SUP
 
 
 export const CashierName_Api = ({ jsonBody }) => post(url.CHASHIER_API, jsonBody)//Go button api
+
+export const GRNDiscrepancyReport_API = ({ jsonBody }) => post(url.GRN_DISCREPANCY_REPORT, jsonBody)//Go button api
+
+export const DataExportToSAP_API = ({ jsonBody }) => post(url.DATA_EXPORT_TO_SAP, jsonBody)//Go button api
+
+
+
+
 
 
 export {
