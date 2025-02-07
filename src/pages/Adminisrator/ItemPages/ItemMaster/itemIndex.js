@@ -105,6 +105,7 @@ const ItemsMaster = (props) => {
     }]);
 
     const [baseUnitTableData, setBaseUnitTableData] = useState([unitConversionInitial]);
+
     const [previousBaseUnitTableData, setPreviousBaseUnitTableData] = useState([]);
     const [MRP_Tab_TableData, setMRP_Tab_TableData] = useState([]);
     const [Group_Tab_TableData, setGroup_Tab_TableData] = useState([]);
@@ -262,7 +263,7 @@ const ItemsMaster = (props) => {
                 setEditItemShelfLife(ItemShelfLife[0])
 
                 const { id, Name, SAPItemCode, ShortName, BarCode, Sequence, CompanyName, Company,
-                    BaseUnitName, BaseUnitID, isActive, IsSCM, IsCBMItem,IsMixItem } = hasEditVal
+                    BaseUnitName, BaseUnitID, isActive, IsSCM, IsCBMItem, IsMixItem } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
                 hasValid.Name.valid = true;
@@ -295,7 +296,7 @@ const ItemsMaster = (props) => {
                 values.isActive = isActive;
                 values.IsSCM = IsSCM;
                 values.IsMixItem = IsMixItem;
-                
+
                 values.CategoryType = editCategoryType;
                 values.Category = editCategory;
                 values.Division = editDivision;
@@ -326,6 +327,7 @@ const ItemsMaster = (props) => {
 
                 setPreviousBaseUnitTableData(JSON.parse(JSON.stringify(UnitDetails)));// Assign the deep copy to previousBaseUnitTableData
                 setBaseUnitTableData(UnitDetails);
+                console.log(UnitDetails)
                 // ====================== Weightage tab =================================
 
                 setWeightageTabMaster({
@@ -512,6 +514,7 @@ const ItemsMaster = (props) => {
                 let isChangeBaseUnitTable = false; // Flag to track if there are any changes in the data
 
                 // Check if the page is in edit mode and compare the current and previous baseUnitTableData arrays
+
                 if (isEditMode) {
                     // Check if the lengths of the arrays are different, indicating a change
                     if (baseUnitTableData.length !== previousBaseUnitTableData.length) {
@@ -538,7 +541,7 @@ const ItemsMaster = (props) => {
                 }
 
                 let itemUnitDetails = baseUnitTableData.reduce((result, index, key) => {
-
+                    debugger
                     const val1 = index.Conversion !== '' ? parseFloat(index.Conversion).toFixed(3) : '';
                     const unit1 = index.Unit.value;
 
@@ -555,7 +558,9 @@ const ItemsMaster = (props) => {
 
                     //Add the item to the result array if it's not a duplicate, not existing already,and not empty
                     // Also, if in edit mode, exclude the item if its UnitID matches the specificID
-                    if (!isDuplicate && !isExisting && val1 !== '' && unit1 !== '' && !(isEditMode && unit1 === specificID)) {
+                    // if (!isDuplicate && !isExisting && val1 !== '' && unit1 !== '' && !(isEditMode && unit1 === specificID)) { Privious condition
+                    if (!isDuplicate && !isExisting && val1 !== '' && unit1 !== '') {
+
                         result.push({
                             BaseUnitQuantity: index.Conversion,
                             UnitID: unit1,
@@ -633,7 +638,7 @@ const ItemsMaster = (props) => {
                     Length: weightageTabMaster.Length,
                     StoringCondition: weightageTabMaster.StoringCondition,
                     ItemCategoryDetails: ItemCategoryDetails,
-                    ItemUnitDetails: itemUnitDetails,
+                    ItemUnitDetails: isChangeBaseUnitTable ? itemUnitDetails : [],
 
                     ItemDivisionDetails: values.Division.map((i) => {
                         return ({ Party: i.value })
