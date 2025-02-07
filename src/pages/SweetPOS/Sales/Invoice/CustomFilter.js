@@ -5,53 +5,49 @@ import { Col, Input, Row } from "reactstrap";
 
 
 
-export const C_FilterSelect = React.memo(({ State, isDisabled, SelectState, SelecthandleChange, CustomerOption, ItemOption, CashierOption, onFilterChange, ...rest }) => {
+export const C_FilterSelect = React.memo(({ State, isDisabled, SelectState, SelecthandleChange, jsonFilter, CustomerOption, ItemOption, CashierOption, onFilterChange, ...rest }) => {
 
 
-    useEffect(() => {
-        console.log("useEffect triggered");
-    }, []);
+    const Initial_State = {
+        paymentMode: {
+            Cash: false,
+            Card: false,
+            UPI: false,
+        },
+        invoiceAmount: {
+            Less_Than: false,
+            Greater_Than: false,
+            Invoice_Amount: "",
+            Between_InvoiceAmount: false,
+            Between_InvoiceAmount_1: "",
+            Between_InvoiceAmount_2: "",
+        },
+        InvoiceNumber: {
+            Less_Than: false,
+            Greater_Than: false,
+            Invoice_Number: "",
+            Between_InvoiceNumber: false,
+            Between_InvoiceNumber_1: "",
+            Between_InvoiceNumber_2: "",
+        },
+        Customers: { SelectedCustomer: [] },
+        cashier: { SelectedCashier: [] },
+        Item: { SelectedItem: [] },
+        EInvoice: {
+            EInvoiceCreated: false,
+            EInvoiceNotCreated: false,
+        },
+        EWayBill: {
+            EWayBillCreated: false,
+            EWayBillNotCreated: false,
+        },
 
-    // const initial_state = {
-    //     paymentMode: {
-    //         Cash: false,
-    //         Card: false,
-    //         UPI: false,
-    //     },
-    //     invoiceAmount: {
-    //         Less_Than: false,
-    //         Greater_Than: false,
-    //         Invoice_Amount: "",
-    //         Between_InvoiceAmount: false,
-    //         Between_InvoiceAmount_1: "",
-    //         Between_InvoiceAmount_2: "",
-    //     },
-    //     InvoiceNumber: {
-    //         Less_Than: false,
-    //         Greater_Than: false,
-    //         Invoice_Number: "",
-    //         Between_InvoiceNumber: false,
-    //         Between_InvoiceNumber_1: "",
-    //         Between_InvoiceNumber_2: "",
-    //     },
-    //     Customers: { SelectedCustomer: [] },
-    //     cashier: { SelectedCashier: [] },
-    //     Item: { SelectedItem: [] },
-    //     EInvoice: {
-    //         EInvoiceCreated: false,
-    //         EInvoiceNotCreated: false,
-    //     },
-    //     EWayBill: {
-    //         EWayBillCreated: false,
-    //         EWayBillNotCreated: false,
-    //     },
+    }
 
-
-    // };
 
     const [selectedOption, setSelectedOption] = useState(SelectState);
     const [state, setState] = useState(State);
-    debugger
+
     const [isOpen, setIsOpen] = useState(true);
 
 
@@ -61,7 +57,7 @@ export const C_FilterSelect = React.memo(({ State, isDisabled, SelectState, Sele
         { label: "Cashier", value: "cashier" },
         { label: "Customers", value: "Customers" },
         { label: "E-Invoice", value: "EInvoice" },
-        { label: "E-WayBill", value: "EWayBill" },
+        // { label: "E-WayBill", value: "EWayBill" },
         { label: "Item", value: "Item" },
         { label: "Invoice Number", value: "InvoiceNumber" },
 
@@ -73,9 +69,21 @@ export const C_FilterSelect = React.memo(({ State, isDisabled, SelectState, Sele
         label: index.ItemName,
     }));
 
-    const onChangehandler = (option) => {
+    const onChangehandler = (option, jsonFilter) => {
+        debugger
+        const removedOption = selectedOption.find(
+            (opt) => !option?.some((newOpt) => newOpt.value === opt.value)
+        );
+
+        if (removedOption && removedOption.value in jsonFilter) {
+            jsonFilter[removedOption.value] = Initial_State[removedOption.value]
+            state[removedOption.value] = Initial_State[removedOption.value]
+
+            onFilterChange({ jsonFilter: jsonFilter, updatedState: state })
+        }
         setSelectedOption(option);
         SelecthandleChange(option)
+
         const advanceFilter = document.getElementById("Advance-Filter");
         if (advanceFilter && option.length > 0) {
             setIsOpen(true);
@@ -87,7 +95,7 @@ export const C_FilterSelect = React.memo(({ State, isDisabled, SelectState, Sele
     };
 
     useEffect(() => {
-        debugger
+
         if (SelectState.length > 0) {
             const hasNone = document.getElementById("Advance-Filter").style;
             hasNone.display = "block";
@@ -212,7 +220,7 @@ export const C_FilterSelect = React.memo(({ State, isDisabled, SelectState, Sele
                 {...rest}
                 options={options}
                 value={selectedOption}
-                onChange={(option) => { onChangehandler(option) }}
+                onChange={(option) => { onChangehandler(option, jsonFilter) }}
                 isMulti={true}
                 onMenuOpen={handleSelectClick} // Add onMenuOpen event handler
                 onFocus={handleSelectClick}

@@ -405,7 +405,9 @@ export const BILL_BOOKING_REPORT = 318
 
 export const GRN_PENDING_REPORT = 322
 
+export const DATA_EXPORT_TO_SAP = 323
 
+export const GRN_DISCREPANCY_REPORT = 324
 
 
 export const DEMAND_VS_SUPPLY = 319

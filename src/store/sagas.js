@@ -130,6 +130,8 @@ import BillBookingReportSaga from "./Report/BillBookingRedux/saga"
 import DemandVsSupplyReportSaga from "./Report/DemandVsSupply/saga"
 import VoucherSaga from "./Administrator/voucherRedux/saga"
 import GRN_Pending_Saga from "./Report/GRNPendingReport/saga"
+import GRNDiscrepancyReportSaga from "./Report/GRNDiscrepancyRedux/saga"
+import DataExportToSapSaga from "./Administrator/ExportToSAPRedux/saga"
 
 
 export default function* rootSaga() {
@@ -253,6 +255,9 @@ export default function* rootSaga() {
 		fork(DemandVsSupplyReportSaga),
 		fork(VoucherSaga),
 		fork(GRN_Pending_Saga),
+		fork(DataExportToSapSaga),
+		fork(GRNDiscrepancyReportSaga),
+
 
 
 
