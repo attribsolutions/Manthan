@@ -10,7 +10,7 @@ import { CInput, decimalRegx_3dit } from '../../../../../CustomValidateForm';
 export default function UnitConverstion(props) {
     const { pageMode, formValue, TableData = [], BaseUnit = [] } = props.state;
     const { settable, setFormValue } = props;
-
+    
     // Map BaseUnit to dropdown options
     const BaseUnit_DropdownOptions = BaseUnit.map((data) => ({
         value: data.id,
@@ -77,7 +77,7 @@ export default function UnitConverstion(props) {
 
     // Handle changes in the table rows
     function baseUnit2_onChange(event, type = '', Id) {
-
+        
         settable((prevTableData) =>
             prevTableData.map((row) => {
 
@@ -125,7 +125,7 @@ export default function UnitConverstion(props) {
     // Generate table body rows
     const tbodyfunction = () => {
         return TableData.map((index, key) => {
-            
+
             if (formValue.values.BaseUnitName.value === index.Unit.value) {
                 index.IsShowUnit = true
             }
