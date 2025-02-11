@@ -311,7 +311,7 @@ const ItemsMaster = (props) => {
                 hasEditVal.ItemUnitDetails.forEach((index, key) => {
                     // if (!index.IsBase) {
                     UnitDetails.push({
-                        id: key + 1,
+                        id: index.id,
                         Unit: { label: index.UnitName, value: index.UnitID },
                         Conversion: index.BaseUnitQuantity,
                         IsBase: index.IsBase,
@@ -539,7 +539,7 @@ const ItemsMaster = (props) => {
                         }
                     }
                 }
-
+                debugger
                 let itemUnitDetails = baseUnitTableData.reduce((result, index, key) => {
                     debugger
                     const val1 = index.Conversion !== '' ? parseFloat(index.Conversion).toFixed(3) : '';
@@ -562,6 +562,7 @@ const ItemsMaster = (props) => {
                     if (!isDuplicate && !isExisting && val1 !== '' && unit1 !== '') {
 
                         result.push({
+                            id: index.id,
                             BaseUnitQuantity: index.Conversion,
                             UnitID: unit1,
                             IsBase: index.IsBase,

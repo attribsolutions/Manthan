@@ -47,6 +47,7 @@ export const C_FilterSelect = React.memo(({ State, isDisabled, SelectState, Sele
 
     const [selectedOption, setSelectedOption] = useState(SelectState);
     const [state, setState] = useState(State);
+    debugger
 
     const [isOpen, setIsOpen] = useState(true);
 
@@ -118,7 +119,7 @@ export const C_FilterSelect = React.memo(({ State, isDisabled, SelectState, Sele
 
 
     const handleInvoiceAmountChange = (SelectMode, key, value) => {
-
+        debugger
         setState((prevState) => {
             let currentMode = prevState[SelectMode] || {};
 
@@ -133,7 +134,7 @@ export const C_FilterSelect = React.memo(({ State, isDisabled, SelectState, Sele
                 currentMode = {
                     Less_Than: false,
                     Greater_Than: false,
-                    Invoice_Amount: "",
+                    Invoice_Amount: currentMode?.Invoice_Amount,
                     Between_InvoiceAmount: false,
                     Between_InvoiceAmount_1: "",
                     Between_InvoiceAmount_2: "",
@@ -143,7 +144,7 @@ export const C_FilterSelect = React.memo(({ State, isDisabled, SelectState, Sele
                 currentMode = {
                     Less_Than: false,
                     Greater_Than: false,
-                    Invoice_Number: "",
+                    Invoice_Number: currentMode?.Invoice_Number,
                     Between_InvoiceNumber: false,
                     Between_InvoiceNumber_1: "",
                     Between_InvoiceNumber_2: "",
@@ -276,7 +277,7 @@ export const C_FilterSelect = React.memo(({ State, isDisabled, SelectState, Sele
                             <label style={{ marginRight: "32px", fontSize: "16px" }}>
                                 <Input
                                     type="radio"
-                                    name="Less_Than"
+                                    name="Less_Than_InvoiceAmount"
                                     checked={state.invoiceAmount.Less_Than}
                                     style={{ marginRight: "7px" }} className="p-2"
                                     onChange={(e) => handleInvoiceAmountChange("invoiceAmount", "Less_Than", e.target.checked)}
@@ -286,7 +287,7 @@ export const C_FilterSelect = React.memo(({ State, isDisabled, SelectState, Sele
                             <label style={{ marginRight: "32px", fontSize: "16px" }}>
                                 <Input
                                     type="radio"
-                                    name="Greater_Than"
+                                    name="Greater_Than_InvoiceAmount"
                                     checked={state.invoiceAmount.Greater_Than}
                                     style={{ marginRight: "7px" }} className="p-2"
                                     onChange={(e) => handleInvoiceAmountChange("invoiceAmount", "Greater_Than", e.target.checked)}
@@ -360,7 +361,7 @@ export const C_FilterSelect = React.memo(({ State, isDisabled, SelectState, Sele
                             <label style={{ marginRight: "32px", fontSize: "16px" }}>
                                 <Input
                                     type="radio"
-                                    name="Less_Than"
+                                    name="Less_Than_InvoiceNumber"
                                     checked={state.InvoiceNumber.Less_Than}
                                     style={{ marginRight: "7px" }} className="p-2"
                                     onChange={(e) => handleInvoiceAmountChange("InvoiceNumber", "Less_Than", e.target.checked)}
@@ -370,7 +371,7 @@ export const C_FilterSelect = React.memo(({ State, isDisabled, SelectState, Sele
                             <label style={{ marginRight: "32px", fontSize: "16px" }}>
                                 <Input
                                     type="radio"
-                                    name="Greater_Than"
+                                    name="Greater_Than_InvoiceNumber"
                                     checked={state.InvoiceNumber.Greater_Than}
                                     style={{ marginRight: "7px" }} className="p-2"
                                     onChange={(e) => handleInvoiceAmountChange("InvoiceNumber", "Greater_Than", e.target.checked)}
