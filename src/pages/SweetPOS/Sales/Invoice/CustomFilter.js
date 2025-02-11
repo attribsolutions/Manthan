@@ -70,7 +70,7 @@ export const C_FilterSelect = React.memo(({ State, isDisabled, SelectState, Sele
     }));
 
     const onChangehandler = (option, jsonFilter) => {
-        debugger
+
         const removedOption = selectedOption.find(
             (opt) => !option?.some((newOpt) => newOpt.value === opt.value)
         );
@@ -89,6 +89,7 @@ export const C_FilterSelect = React.memo(({ State, isDisabled, SelectState, Sele
             setIsOpen(true);
             advanceFilter.style.display = "block";
         } else {
+
             advanceFilter.style.display = "none";
         }
 
@@ -107,6 +108,7 @@ export const C_FilterSelect = React.memo(({ State, isDisabled, SelectState, Sele
 
 
     const handleSelectClick = () => {
+        setIsOpen(false);
 
         const hasNone = document.getElementById("Advance-Filter").style;
         hasNone.display = "none";

@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Col, FormGroup, Label, Row } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import { C_Button } from "../../../../components/Common/CommonButton";
-import { C_DatePicker } from "../../../../CustomValidateForm";
+
 import * as _cfunc from "../../../../components/Common/CommonFunction";
 import { mode, pageId } from "../../../../routes/index"
 import { MetaTags } from "react-meta-tags";
@@ -14,15 +14,20 @@ import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { globalTableSearchProps } from "../../../../components/Common/SearchBox/MySearch";
 import { GoButton_For_StockOut_Action, GoButton_For_StockOut_Success } from "../../../../store/SweetPOSStore/Report/StockOutReportRedux/action";
+import Flatpickr from "react-flatpickr";
+import { C_Select } from "../../../../CustomValidateForm";
+import { allLabelWithZero } from "../../../../components/Common/CommonErrorMsg/HarderCodeData";
+import { getCommonPartyDrodownOptionAction } from "../../../../store/Utilites/PartyDrodown/action";
 
 const StockOutReport = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory();
-    const currentDate_ymd = _cfunc.date_ymd_func();
+    const current_Date_and_Time = _cfunc.getCurrentFormattedDate();
 
     const [headerFilters, setHeaderFilters] = useState('');
     const [userPageAccessState, setUserAccState] = useState('');
+    const [PartyDropdown, setPartyDropdown] = useState(allLabelWithZero);
     const [tableData, setTableData] = useState([]);
     const [btnMode, setBtnMode] = useState(0);
 
@@ -30,14 +35,18 @@ const StockOutReport = (props) => {
         goButtonData,
         pageField,
         userAccess,
+        Party,
+        partyDropdownLoading
     } = useSelector((state) => ({
+        partyDropdownLoading: state.CommonPartyDropdownReducer.partyDropdownLoading,
         goButtonData: state.StockOutReportReducer.stockOutListData,
+        Party: state.CommonPartyDropdownReducer.commonPartyDropdownOption,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField
     })
     );
 
-    const { fromdate = currentDate_ymd, todate = currentDate_ymd } = headerFilters;
+    const { date = current_Date_and_Time.Date_and_time, time = current_Date_and_Time.Time } = headerFilters;
 
     // Featch Modules List data  First Rendering
     const location = { ...history.location }
@@ -62,6 +71,10 @@ const StockOutReport = (props) => {
     useEffect(() => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(pageId.STOCK_OUT_REPORT))
+        dispatch(getCommonPartyDrodownOptionAction())
+        if (_cfunc.CommonPartyDropValue().value > 0) {
+            setPartyDropdown(_cfunc.CommonPartyDropValue());
+        }
         return () => {
             setTableData([]);
             dispatch(GoButton_For_StockOut_Success([]));
@@ -91,6 +104,7 @@ const StockOutReport = (props) => {
                         excelFileName: "Stock Out Report"
                     })
                     dispatch(GoButton_For_StockOut_Success([]));
+                    setPartyDropdown([allLabelWithZero])
                 }
             }
             else if ((goButtonData.Status === true)) {
@@ -108,33 +122,45 @@ const StockOutReport = (props) => {
         setBtnMode(Btnmode);
 
         const jsonBody = JSON.stringify({
-            "FromDate": fromdate,
-            "ToDate": todate,
-            "Party": _cfunc.loginPartyID(),
+            "Date": date,
+            "Time": time,
+            "Party": _cfunc.loginUserIsFranchisesRole() ? _cfunc.loginPartyID() : PartyDropdown.value
         });
 
         let config = { jsonBody }
         dispatch(GoButton_For_StockOut_Action(config));
     }
 
-    function fromdateOnchange(e, date) {
+    function dateOnchange(e, date) {
 
+        debugger
+        const Date = `${date}`;
+        const time = Date.split(' ')[1];
         let newObj = { ...headerFilters }
-        newObj.fromdate = date
+        newObj.date = Date
+        newObj.time = time
+
         setHeaderFilters(newObj)
         setTableData([]);
         dispatch(GoButton_For_StockOut_Success([]));
     }
 
-    function todateOnchange(e, date) {
 
-        let newObj = { ...headerFilters }
-        newObj.todate = date
-        setHeaderFilters(newObj);
+    function PartyDrodownOnChange(e) {
+        setPartyDropdown(e);
         setTableData([]);
-        dispatch(GoButton_For_StockOut_Success([]));
     }
 
+    const Party_Option = Party.map(i => ({
+        value: i.id,
+        label: i.Name,
+        PartyType: i.PartyType
+    })).filter(index => index.PartyType === "Franchises");
+
+    let elements = document?.getElementsByClassName('numInput flatpickr-minute');
+    if (elements.length > 0) {
+        elements[0].disabled = true;
+    }
     return (
         <React.Fragment>
             <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
@@ -145,33 +171,58 @@ const StockOutReport = (props) => {
                         <Col sm={3} className="">
                             <FormGroup className=" row mt-2  " >
                                 <Label className="col-sm-4 p-2"
-                                    style={{ width: "83px" }}>FromDate</Label>
+                                    style={{ width: "60px" }}>Date</Label>
                                 <Col sm="7">
-                                    <C_DatePicker
-                                        name='FromDate'
-                                        value={fromdate}
-                                        onChange={fromdateOnchange}
+                                    <Flatpickr
+                                        id="todate"
+                                        name="todate"
+                                        placeholder="Select ToDate"
+                                        value={date}
+                                        className="form-control d-block p-2 bg-white text-dark"
+                                        data-enable-input={false}  // Disables Flatpickr's input
+                                        options={{
+                                            altInput: true,
+                                            altFormat: 'd-m-Y H:00', // Display hours only, minutes set to 00
+                                            dateFormat: 'd-m-Y H:00', // Format for hours only
+                                            enableTime: true,         // Enable time picker
+                                            noCalendar: false,        // Keep the calendar enabled
+                                            minuteIncrement: 60,      // Prevent minute adjustments
+                                            allowInput: false,        // Disables manual input in the text field
+                                        }}
+                                        onChange={dateOnchange}
+
                                     />
+
+
                                 </Col>
                             </FormGroup>
                         </Col>
 
-                        <Col sm={3} className="">
-                            <FormGroup className=" row mt-2 " >
+                        {!_cfunc.loginUserIsFranchisesRole() && < Col sm={3} className="">
+                            <FormGroup className=" row mt-2" >
                                 <Label className="col-sm-4 p-2"
-                                    style={{ width: "65px" }}>ToDate</Label>
-                                <Col sm="7">
-                                    <C_DatePicker
-                                        name="ToDate"
-                                        value={todate}
-                                        onChange={todateOnchange}
+                                    style={{ width: "65px", marginRight: "20px" }}>Party</Label>
+                                <Col sm="8">
+                                    <C_Select
+                                        name="Party"
+                                        value={PartyDropdown}
+                                        isSearchable={true}
+
+                                        isLoading={partyDropdownLoading}
+                                        className="react-dropdown"
+                                        classNamePrefix="dropdown"
+                                        styles={{
+                                            menu: provided => ({ ...provided, zIndex: 2 })
+                                        }}
+                                        options={Party_Option}
+                                        onChange={PartyDrodownOnChange}
                                     />
                                 </Col>
                             </FormGroup>
-                        </Col>
+                        </Col>}
 
-                        <Col sm={4}></Col>
-                        <Col sm={2} className=" d-flex justify-content-end" >
+
+                        <Col sm={_cfunc.loginUserIsFranchisesRole() ? 9 : 6} className=" d-flex justify-content-end" >
                             <C_Button
                                 type="button"
                                 spinnerColor="white"
