@@ -104,6 +104,7 @@ export function convertTimefunc(inputDate) {
 
 
 
+
 export function convertOnlyTimefunc(inputDate) {
   const date = new Date(inputDate);
 
@@ -237,6 +238,24 @@ export const getCurrentMonthAndYear = () => {
 }
 
 
+
+
+export const getCurrentFormattedDate = () => {
+  const currentDate = new Date();
+  const day = String(currentDate.getDate()).padStart(2, '0');
+  const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // Month is zero-indexed
+  const year = currentDate.getFullYear();
+  const hours = String(currentDate.getHours()).padStart(2, '0');
+
+  // Always set minutes to '00'
+  const minutes = '00';
+
+  return {
+    Date_and_time: `${day}-${month}-${year} ${hours}:${minutes}`,
+    Time: `${hours}:${minutes}`
+  };
+}
+
 export const DateTime = (timestamp) => {
   const date = new Date(timestamp);
   const day = String(date.getDate()).padStart(2, '0');
@@ -248,7 +267,7 @@ export const DateTime = (timestamp) => {
   const milliseconds = String(date.getMilliseconds()).padStart(3, '0');
   const period = date.getHours() < 12 ? 'AM' : 'PM';
 
-  return `${day}-${month}-${year}( ${hours}:${minutes}:${seconds}:${milliseconds} ${period})`;
+  return `${day} -${month} -${year} (${hours}:${minutes}:${seconds}:${milliseconds} ${period})`;
 
 }
 
@@ -261,7 +280,7 @@ export const getPreviousMonthAndYear = ({ date, Privious }) => {
   const year = previousMonthDate.getFullYear();
   const month = (previousMonthDate.getMonth() + 1).toString().padStart(2, '0'); // Adding padding if needed
 
-  return `${year}-${month}`;
+  return `${year} -${month} `;
 }
 
 export function amountCommaSeparateFunc(amount) {
@@ -750,7 +769,7 @@ export function btnIsDissablefunc({ btnId, state = false }) {// +++++++++++ Butt
   //       ? "block"
   //       : "none";
   //   } catch (error) {
-  //     CommonConsole(`btnIsDissablefunc Error ==> ${btnId}`);
+  //     CommonConsole(`btnIsDissablefunc Error ==> ${ btnId } `);
   //   }
   // }
 }
@@ -770,7 +789,7 @@ export async function CheckAPIResponse({ method, url, response = {}, body, error
     const tokenXp = error.response?.data.code === "token_not_valid";
 
     if (method === "post" || method === "put" || method === "postForget") {
-      CommonConsole(`${url}***=> ${method} Body =>`, body);
+      CommonConsole(`${url}***=> ${method} Body => `, body);
     }
 
     if (tokenXp) {
@@ -779,7 +798,7 @@ export async function CheckAPIResponse({ method, url, response = {}, body, error
       return;
     }
     if (!MessgeAlreadyShow) {
-      CommonConsole(`${url}***${method} apiCall response:=>`, error);
+      CommonConsole(`${url}*** ${method} apiCall response:=> `, error);
       customAlert({ Type: 2, Message: `${url}:This API ${method} Method Execution Error` });
     }
     return Promise.reject(error);
@@ -787,16 +806,16 @@ export async function CheckAPIResponse({ method, url, response = {}, body, error
   {/******************************************************** */ }
 
   if (method === "post" || method === "put" || method === "postForget") {
-    CommonConsole(`${url}***=> ${method} Body =>`, body);
+    CommonConsole(`${url}***=> ${method} Body => `, body);
   }
 
   if (successCodes.includes(statusCode)) {
-    CommonConsole(`${url}***${method} apiCall response:=>`, response.data);
+    CommonConsole(`${url}*** ${method} apiCall response:=> `, response.data);
     return response.data;
   }
 
   if (rejectionCodes.includes(statusCode)) {
-    CommonConsole(`${url}***${method} apiCall response:=>`, response.data);
+    CommonConsole(`${url}*** ${method} apiCall response:=> `, response.data);
     await customAlert({ Type: 3, Message: JSON.stringify(response.data.Message) });
     response.data["MessgeAlreadyShow"] = true
     return Promise.reject(response.data);
@@ -1030,7 +1049,7 @@ export const fetchFiles = async (linksArray) => {
         const file = new File([blob], filename, { type: "image/jpeg" });
         filesArray.push(file);
       } else {
-        CommonConsole(`Failed to fetch: ${link}. Status: ${response.status}`);
+        CommonConsole(`Failed to fetch: ${link}.Status: ${response.status} `);
       }
     }
 
@@ -1056,7 +1075,7 @@ export function TotalAmount_Func(tableList) {
 export function SelectedMonthAndYearName(selectedMonth) {
 
   const [year, month] = selectedMonth.split('-');
-  const monthName = new Date(`${year}-${month}-01`).toLocaleString('default', { month: 'long' });
+  const monthName = new Date(`${year} -${month}-01`).toLocaleString('default', { month: 'long' });
   return { monthName, year };
 };
 
@@ -1065,7 +1084,7 @@ export function SelectedMonthAndYearName(selectedMonth) {
 //   const partyTypeID =loginPartyTypeID();
 
 //   const settingsArray = loginSystemSetting().MRP_Rate.split(',');
-//   const searchString = loginCompanyID() + "-2" + `-${partyTypeID}`;
+//   const searchString = loginCompanyID() + "-2" + `- ${ partyTypeID } `;
 //   return settingsArray.includes(searchString);
 // }
 
@@ -1079,8 +1098,8 @@ export function checkRateDropVisibility() {
 
 export function validateOrder(PageID, deliveryDate) {
   const restrictedOrders = (loginSystemSetting()?.OrdersnotSave || "").split(',');
-  const currentPartyKey = `${loginPartyTypeID()}-${PageID}`;
-  debugger
+  const currentPartyKey = `${loginPartyTypeID()} -${PageID} `;
+
   let checkValid = restrictedOrders.includes(currentPartyKey)
 
   if (!checkValid) {
@@ -1121,7 +1140,7 @@ export function validateOrder(PageID, deliveryDate) {
     }
 
     // Orders can only be placed before 10:30 PM today
-    if (now_time >= todayEndTime.getTime()) {  // Changed `>` to `>=` to allow exactly 10:30 PM
+    if (now_time >= todayEndTime.getTime()) {  // Changed `> ` to ` >= ` to allow exactly 10:30 PM
       console.log("After or exactly 10:30 PM today");
       return "Orders can only be placed before 10:30 PM today.";
     }
@@ -1137,7 +1156,7 @@ export function validateOrder(PageID, deliveryDate) {
     }
 
     // Orders can only be placed before 10:30 PM tomorrow
-    if (now_time >= tomorrowEndTime.getTime()) {  // Changed `>` to `>=` to allow exactly 10:30 PM
+    if (now_time >= tomorrowEndTime.getTime()) {  // Changed `> ` to ` >= ` to allow exactly 10:30 PM
       console.log("After or exactly 10:30 PM tomorrow");
       return "Orders can only be placed before 10:30 PM tomorrow.";
     }

@@ -796,13 +796,17 @@ const Order = (props) => {
                 if (!row.UnitName) {
                     row["Unit_id"] = 0;
                     row["UnitName"] = 'null';
-
+                    debugger
                     row.UnitDetails.forEach(i => {
                         if ((i.PODefaultUnit) && !(subPageMode === url.ORDER_4)) {
                             defaultUnit(i)
                         }
                         else if ((i.SODefaultUnit) && (subPageMode === url.ORDER_4)) {
-                            defaultUnit(i)
+                            if (_cfunc.loginUserIsFranchisesRole() && i?.IsBase) {
+                                defaultUnit(i)
+                            } else if (!_cfunc.loginUserIsFranchisesRole()) {
+                                defaultUnit(i)
+                            }
                         }
                     });
                     // ********************** //if default unit is not selected then auto first indx unit select
@@ -861,6 +865,7 @@ const Order = (props) => {
                             id={"ddlUnit"}
                             key={`ddlUnit${row.id}`}
                             defaultValue={{ value: row.Unit_id, label: row.UnitName }}
+                            isDisabled={subPageMode === url.ORDER_4 && _cfunc.loginUserIsFranchisesRole()}
                             options={
                                 row.UnitDetails.map(i => ({
                                     label: i.UnitName,
@@ -895,7 +900,7 @@ const Order = (props) => {
         },
 
         {//------------- Rate column ----------------------------------
-            text: (_cfunc.loginUserIsFranchisesRole && subPageMode === url.ORDER_4) ? "MRP" : "Basic Rate",
+            text: (_cfunc.loginUserIsFranchisesRole() && subPageMode === url.ORDER_4) ? "MRP" : "Basic Rate",
             classes: 'table-cursor-pointer',
             dataField: "",
             attrs: (cell, row, rowIndex, colIndex) => ({ 'data-label': "Basic Rate" }),
