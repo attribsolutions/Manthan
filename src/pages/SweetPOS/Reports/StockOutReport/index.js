@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Col, FormGroup, Label, Row } from "reactstrap";
 import { useHistory } from "react-router-dom";
@@ -8,7 +8,7 @@ import * as _cfunc from "../../../../components/Common/CommonFunction";
 import { mode, pageId } from "../../../../routes/index"
 import { MetaTags } from "react-meta-tags";
 import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess } from "../../../../store/actions";
-import DynamicColumnHook from "../../../../components/Common/TableCommonFunc";
+import DynamicColumnHook, { GroupSubgroupDisplay, ModifyTableData_func } from "../../../../components/Common/TableCommonFunc";
 import { ExcelReportComponent } from "../../../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
@@ -89,6 +89,60 @@ const StockOutReport = (props) => {
 
     const [tableColumns] = DynamicColumnHook({ pageField, })
 
+    const rowStyle = (row, rowIndex) => {
+        if (row.GroupRow) {
+            return { backgroundColor: 'white', fontWeight: 'bold', fontSize: '18px' };
+        } else if (row.SubGroupRow) {
+            return { backgroundColor: '#f2f2f2', fontWeight: 'bold', fontSize: '15px' };
+        }
+        return {};
+    };
+
+    const rowClasses = (row) => {
+        if (row.GroupRow || row.SubGroupRow) {
+            return 'group-row hide-border';
+        }
+        return '';
+    };
+
+    const processedData = useMemo(() => ModifyTableData_func(tableData), [tableData]);
+
+    const modifiedTableColumns = useMemo(() => {
+        const updatedArr = tableColumns.filter(item => item.dataField !== 'GroupName' && item.dataField !== 'SubGroupName');
+        return updatedArr.map(item => {
+            debugger;  // This will pause execution here when running in developer tools.
+            console.log(item);  // Logs the entire item object for inspection.
+
+            return {
+                ...item,
+                formatter: (value, row, k) => {
+                    const Column = item;
+
+                    if ((row.GroupRow || row.SubGroupRow) && Column.dataField !== "ItemName") {
+                        return null;
+                    }
+
+                    if (Column.dataField === "ItemName") {
+                        if (row.SubGroupRow) {
+                            const [Group, SubGroup] = row.Group_Subgroup.split('-');
+                            return <GroupSubgroupDisplay group={Group} subgroup={SubGroup} />;
+                        } else {
+                            const [itemName] = row.ItemName.split('-');
+                            return <div>{itemName}</div>;
+                        }
+                    } else {
+                        return <div>{value}</div>;
+                    }
+                }
+            };
+        });
+
+    }, [tableColumns, processedData]);
+
+
+
+
+
     useEffect(() => {
 
         try {
@@ -122,9 +176,9 @@ const StockOutReport = (props) => {
         setBtnMode(Btnmode);
 
         const jsonBody = JSON.stringify({
-            "Date": date,
+            "Date": _cfunc.getDateTime_ymd(date),
             "Time": time,
-            "Party": _cfunc.loginUserIsFranchisesRole() ? _cfunc.loginPartyID() : PartyDropdown.value
+            "Party": _cfunc.loginUserIsFranchisesRole() ? _cfunc.loginPartyID().toString() : (PartyDropdown.value).toString()
         });
 
         let config = { jsonBody }
@@ -133,7 +187,7 @@ const StockOutReport = (props) => {
 
     function dateOnchange(e, date) {
 
-        debugger
+
         const Date = `${date}`;
         const time = Date.split(' ')[1];
         let newObj = { ...headerFilters }
@@ -161,6 +215,10 @@ const StockOutReport = (props) => {
     if (elements.length > 0) {
         elements[0].disabled = true;
     }
+
+
+
+
     return (
         <React.Fragment>
             <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
@@ -182,8 +240,8 @@ const StockOutReport = (props) => {
                                         data-enable-input={false}  // Disables Flatpickr's input
                                         options={{
                                             altInput: true,
-                                            altFormat: 'd-m-Y H:00', // Display hours only, minutes set to 00
-                                            dateFormat: 'd-m-Y H:00', // Format for hours only
+                                            altFormat: 'd-m-Y H:00:00', // Display hours only, minutes set to 00
+                                            dateFormat: 'd-m-Y H:00:00', // Format for hours only
                                             enableTime: true,         // Enable time picker
                                             noCalendar: false,        // Keep the calendar enabled
                                             minuteIncrement: 60,      // Prevent minute adjustments
@@ -248,8 +306,8 @@ const StockOutReport = (props) => {
                 <div className="mt-1">
                     <ToolkitProvider
                         keyField="id"
-                        data={tableData}
-                        columns={tableColumns}
+                        data={processedData}
+                        columns={modifiedTableColumns}
                         search
                     >
                         {(toolkitProps,) => (
@@ -260,6 +318,8 @@ const StockOutReport = (props) => {
                                             <BootstrapTable
                                                 keyField="id"
                                                 classes={"custom-table"}
+                                                rowStyle={rowStyle}
+                                                rowClasses={rowClasses}
                                                 noDataIndication={
                                                     <div className="text-danger text-center ">
                                                         Record Not available

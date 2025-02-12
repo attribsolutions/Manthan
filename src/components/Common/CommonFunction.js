@@ -249,10 +249,11 @@ export const getCurrentFormattedDate = () => {
 
   // Always set minutes to '00'
   const minutes = '00';
+  const seconds = '00';
 
   return {
-    Date_and_time: `${day}-${month}-${year} ${hours}:${minutes}`,
-    Time: `${hours}:${minutes}`
+    Date_and_time: `${day}-${month}-${year} ${hours}:${minutes}:${seconds}`,
+    Time: `${hours}:${minutes}:${seconds}`
   };
 }
 
