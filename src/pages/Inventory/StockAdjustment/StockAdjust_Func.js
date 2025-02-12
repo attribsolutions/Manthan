@@ -123,7 +123,7 @@ export const AddItemInTableFunc = async ({ itemNameSelect, TableArr }) => {
 
 
     data.push({
-        id: zeroIndexObject.id,
+        id: zeroIndexObject.Item,
         Item: zeroIndexObject.Item,
 
         ItemName: zeroIndexObject.ItemName,
