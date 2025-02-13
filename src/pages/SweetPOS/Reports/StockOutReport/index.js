@@ -181,7 +181,7 @@ const StockOutReport = (props) => {
         setBtnMode(Btnmode);
 
         const jsonBody = JSON.stringify({
-            "Date": _cfunc.getDateTime_ymd(date),
+            "Date": _cfunc.getDate_Time_ymd(date),
             "Time": time,
             "Party": _cfunc.loginUserIsFranchisesRole() ? _cfunc.loginPartyID().toString() : (PartyDropdown.value).toString()
         });

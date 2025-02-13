@@ -172,7 +172,25 @@ export function deliverydate_ForFranchise() {
 
 export function getDateTime_ymd(date) {
 
-  function isDateInitial(dateString) {
+  const { dd, mm, yy, dateInstance } = isDateInitial(date);
+
+  dateInstance.setHours(dateInstance.getHours() - 0); // Subtract the specified number of hours
+  const hours = String(dateInstance.getHours()).padStart(2, '0');
+  const minutes = String(dateInstance.getMinutes()).padStart(2, '0');
+  const seconds = String(dateInstance.getSeconds()).padStart(2, '0');
+
+  return `${yy}-${mm}-${dd} ${hours}:${minutes}:${seconds}`;
+}
+
+
+
+
+
+
+
+export function getDate_Time_ymd(date) {
+  
+  function isDate_Initial(dateString) {
     // Extract day, month, year, and time from "DD-MM-YYYY HH:mm:ss"
     const [datePart, timePart] = dateString.split(" ");
     const [dd, mm, yy] = datePart.split("-").map(Number);
@@ -184,7 +202,7 @@ export function getDateTime_ymd(date) {
     return { dd, mm: String(mm).padStart(2, '0'), yy, dateInstance };
   }
 
-  const { dd, mm, yy, dateInstance } = isDateInitial(date);
+  const { dd, mm, yy, dateInstance } = isDate_Initial(date);
 
   dateInstance.setHours(dateInstance.getHours() - 0); // Subtract the specified number of hours
   const hours = String(dateInstance.getHours()).padStart(2, '0');
@@ -193,6 +211,15 @@ export function getDateTime_ymd(date) {
 
   return `${yy}-${mm}-${dd} ${hours}:${minutes}:${seconds}`;
 }
+
+
+
+
+
+
+
+
+
 
 export function getCurrenthours_min_sec(hourOffset = 0) {
   const { dd, mm, yy, dateInstance } = isDateInitial();
