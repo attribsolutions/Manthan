@@ -131,7 +131,12 @@ const StockOutReport = (props) => {
                             return <div>{itemName}</div>;
                         }
                     } else {
-                        return <div>{value}</div>;
+
+                        if (Column.dataField === "StockoutTime") {
+                            return <div>{_cfunc.DateTime(value)}</div>;
+                        } else {
+                            return <div>{value}</div>;
+                        }
                     }
                 }
             };
