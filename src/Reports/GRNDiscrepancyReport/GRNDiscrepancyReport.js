@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Col, FormGroup, Label, Row } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import { C_Button } from "../../components/Common/CommonButton";
-import { C_DatePicker } from "../../CustomValidateForm";
+import { C_DatePicker, C_Select } from "../../CustomValidateForm";
 import * as _cfunc from "../../components/Common/CommonFunction";
 import { mode, pageId } from "../../routes/index"
 import { MetaTags } from "react-meta-tags";
@@ -13,6 +13,7 @@ import { ExcelReportComponent } from "../../components/Common/ReportCommonFunc/E
 import GlobalCustomTable from "../../GlobalCustomTable";
 import { changeCommonPartyDropDetailsAction } from "../../store/Utilites/PartyDrodown/action";
 import { GRN_Discrepancy_Report_Action, GRN_Discrepancy_Report_Action_Success } from "../../store/Report/GRNDiscrepancyRedux/action";
+import { allLabelWithZero } from "../../components/Common/CommonErrorMsg/HarderCodeData";
 
 const GRNDiscrepancyReport = (props) => {
 
@@ -20,21 +21,27 @@ const GRNDiscrepancyReport = (props) => {
     const history = useHistory();
     const currentDate_ymd = _cfunc.date_ymd_func();
 
+    const isSCMParty = _cfunc.loginIsSCMParty();
+
     const [headerFilters, setHeaderFilters] = useState('');
     const [userPageAccessState, setUserAccState] = useState('');
     const [tableData, setTableData] = useState([]);
+    const [PartyDropdown, setPartyDropdown] = useState(allLabelWithZero);
     const [btnMode, setBtnMode] = useState(0);
 
     const {
         goButtonData,
         pageField,
         userAccess,
-        listBtnLoading
+        listBtnLoading,
+        partyDropdownLoading,
+        Party
 
     } = useSelector((state) => ({
         goButtonData: state.GRNDiscrepancyReportReducer.GRNDiscrepancyData,
         listBtnLoading: state.GRNDiscrepancyReportReducer.listBtnLoading,
         partyDropdownLoading: state.CommonPartyDropdownReducer.partyDropdownLoading,
+        Party: state.CommonPartyDropdownReducer.commonPartyDropdownOption,
         Distributor: state.CommonPartyDropdownReducer.commonPartyDropdownOption,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField
@@ -52,7 +59,9 @@ const GRNDiscrepancyReport = (props) => {
         dispatch(commonPageField(pageId.GRN_DISCREPANCY_REPORT))
         dispatch(BreadcrumbShowCountlabel(`Count:${0} `));
         dispatch(changeCommonPartyDropDetailsAction({ isShow: false }))//change party drop-down show false
-
+        if (_cfunc.CommonPartyDropValue().value > 0) {
+            setPartyDropdown(_cfunc.CommonPartyDropValue());
+        }
         return () => {
             dispatch(GRN_Discrepancy_Report_Action_Success([]));
             setTableData([]);
@@ -77,6 +86,13 @@ const GRNDiscrepancyReport = (props) => {
     }, [userAccess])
 
 
+    const Party_Option = Party.map(i => ({
+        value: i.id,
+        label: i.Name,
+        PartyType: i.PartyType
+    }));
+    Party_Option.unshift(allLabelWithZero);
+
     const [tableColumns] = DynamicColumnHook({ pageField, })
 
     useEffect(() => {
@@ -92,7 +108,9 @@ const GRNDiscrepancyReport = (props) => {
                     ExcelReportComponent({      // Download CSV
                         pageField,
                         excelTableData: goButtonData.Data,
-                        excelFileName: "GRN Discrepancy Report "
+                        excelFileName: "GRN Discrepancy Report ",
+                        ExtraHeader: ["From Date", `${_cfunc.date_dmy_func(fromdate)}`, "", "", "To Date", `${_cfunc.date_dmy_func(todate)}`, "", "", "", "", "", "", "", "", ""]
+
                     })
                     dispatch(GRN_Discrepancy_Report_Action_Success([]));
                 }
@@ -110,6 +128,8 @@ const GRNDiscrepancyReport = (props) => {
         const jsonBody = JSON.stringify({
             "FromDate": fromdate,
             "ToDate": todate,
+            "Party": !isSCMParty ? _cfunc.loginPartyID() : PartyDropdown.value
+
         });
         let config = { jsonBody, Mode: mode }
         dispatch(GRN_Discrepancy_Report_Action(config));
@@ -130,7 +150,10 @@ const GRNDiscrepancyReport = (props) => {
         setHeaderFilters(newObj);
         setTableData([]);
     }
-
+    function PartyDrodownOnChange(e) {
+        setPartyDropdown(e);
+        setTableData([]);
+    }
 
 
     return (
@@ -168,7 +191,33 @@ const GRNDiscrepancyReport = (props) => {
                         </Col>
 
 
-                        <Col sm={6} className=" d-flex justify-content-end" >
+                        {isSCMParty && < Col sm={3} className="">
+                            <FormGroup className=" row mt-2" >
+                                <Label className="col-sm-4 p-2"
+                                    style={{ width: "65px", marginRight: "20px" }}>Party</Label>
+                                <Col sm="8">
+                                    <C_Select
+                                        name="Party"
+                                        value={PartyDropdown}
+                                        isSearchable={true}
+
+                                        isLoading={partyDropdownLoading}
+                                        className="react-dropdown"
+                                        classNamePrefix="dropdown"
+                                        styles={{
+                                            menu: provided => ({ ...provided, zIndex: 2 })
+                                        }}
+                                        options={Party_Option}
+                                        onChange={PartyDrodownOnChange}
+                                    />
+                                </Col>
+                            </FormGroup>
+                        </Col>}
+
+
+
+
+                        <Col sm={isSCMParty ? 3 : 6} className=" d-flex justify-content-end" >
                             <C_Button
                                 type="button"
                                 spinnerColor="white"

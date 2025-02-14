@@ -182,7 +182,7 @@ const StockAdjustment = (props) => {
     }
 
     function QuantityOnchange(event, index1, index2) {
-
+        debugger
         const InputQty = event.target.value;
         index2.Qty = InputQty
 
@@ -480,33 +480,35 @@ const StockAdjustment = (props) => {
                 index2.Qty = Number(_cfunc.roundToDecimalPlaces(index2.Qty, 3));
                 index2.ActualQuantity = Number(_cfunc.roundToDecimalPlaces(index2.ActualQuantity, 3));
 
-                const hasChange = index2.Qty !== index2.ActualQuantity;
+                // const hasChange = index2.Qty !== index2.ActualQuantity;
 
-                function changebodyFunc() {
-                    accumulator.push({
-                        "Item": index2.Item,
-                        "Quantity": index2.Qty,
-                        "MRP": index2.MRPID,
-                        "Unit": index1.UnitID,
-                        "GST": index2.GSTID,
-                        "MRPValue": index2.MRPValue,
-                        "GSTPercentage": index2.GSTPercentage,
-                        "BatchDate": index2.BatchDate,
-                        "BatchCode": index2.BatchCode,
-                        "BatchCodeID": index2.id
-                    })
-                };
+                // function changebodyFunc() {
+                accumulator.push({
+                    "Item": index2.Item,
+                    "Quantity": index2.Qty,
+                    "MRP": index2.MRPID,
+                    "Unit": index1.UnitID,
+                    "GST": index2.GSTID,
+                    "MRPValue": index2.MRPValue,
+                    "GSTPercentage": index2.GSTPercentage,
+                    "BatchDate": index2.BatchDate,
+                    "BatchCode": index2.BatchCode,
+                    "BatchCodeID": index2.id
+                })
+                // };
 
-                if (hasChange) {
-                    if (index2.Qty > 0) {
-                        changebodyFunc()
-                    }
-                    else if (((index2.ActualQuantity > 0) && (index2.Qty === 0))) {
-                        changebodyFunc()
-                    } else if (((index2.ActualQuantity === 0) && (index2.Qty > 0))) {
-                        changebodyFunc()
-                    };
-                };
+                // if (hasChange) {
+                //     if (index2.Qty > 0) {
+                //         changebodyFunc()
+                //     }
+                //     else if (((index2.ActualQuantity > 0) && (index2.Qty === 0))) {
+                //         changebodyFunc()
+                //     } else if (((index2.ActualQuantity === 0) && (index2.Qty > 0))) {
+                //         changebodyFunc()
+                //     };
+                // } else if (index2.Qty === 0) {
+                // changebodyFunc()
+                // };
 
 
             });

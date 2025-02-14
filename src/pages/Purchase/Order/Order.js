@@ -384,7 +384,7 @@ const Order = (props) => {
                 }))
                 let Total_weigtage = 0
                 const orderItems = hasEditVal.OrderItems.map((ele, k) => {
-                    debugger
+
                     const weightage = (Number(ele["Weightage"])) || 0.00;
                     const row_weightage = (Number(ele.Quantity) * Number(ele.BaseUnitQuantity)) / Number(weightage)
                     if (!isNaN(row_weightage) && row_weightage !== null) {
@@ -796,19 +796,24 @@ const Order = (props) => {
                 if (!row.UnitName) {
                     row["Unit_id"] = 0;
                     row["UnitName"] = 'null';
-                    debugger
-                    row.UnitDetails.forEach(i => {
-                        if ((i.PODefaultUnit) && !(subPageMode === url.ORDER_4)) {
-                            defaultUnit(i)
-                        }
-                        else if ((i.SODefaultUnit) && (subPageMode === url.ORDER_4)) {
-                            if (_cfunc.loginUserIsFranchisesRole() && i?.IsBase) {
-                                defaultUnit(i)
-                            } else if (!_cfunc.loginUserIsFranchisesRole()) {
+                    if (_cfunc.loginUserIsFranchisesRole() && subPageMode === url.ORDER_4) {
+                        row.UnitDetails.forEach(i => {
+                            if (i?.IsBase) {
                                 defaultUnit(i)
                             }
-                        }
-                    });
+                        });
+                    } else {
+                        row.UnitDetails.forEach(i => {
+                            if ((i.PODefaultUnit) && !(subPageMode === url.ORDER_4)) {
+                                defaultUnit(i)
+                            }
+                            else if ((i.SODefaultUnit) && (subPageMode === url.ORDER_4)) {
+                                defaultUnit(i)
+                            }
+                        });
+                    }
+
+
                     // ********************** //if default unit is not selected then auto first indx unit select
                     if ((row["UnitName"] === 'null') && row.UnitDetails.length > 0) {
                         defaultUnit(row.UnitDetails[0])
@@ -1248,7 +1253,7 @@ const Order = (props) => {
                     : (Number(currentObject.Quantity) * Number(currentObject.BaseUnitQuantity)) / Number(weightage);
 
                 if (Number(currentObject["Amount"]) > 0) {
-                    debugger
+
                     return {
                         amountSum: accumulator.amountSum + amount,
                         weightageSum: accumulator.weightageSum + row_weightage,
@@ -1474,7 +1479,7 @@ const Order = (props) => {
 
             // Function to handle value changes in order items
             function processValueChanged({ item, isEdit, isDelete }) {
-                debugger
+
                 let calculated = {}
                 if (_cfunc.loginUserIsFranchisesRole() && subPageMode === url.ORDER_4) {
                     calculated = Franchies_Order_Calculate_Func(item)
@@ -1879,6 +1884,7 @@ const Order = (props) => {
                                                         <C_Button
                                                             className="btn btn-outline-info border-1 font-size-12 "
                                                             disabled={goBtnloading}
+
                                                             onClick={() => item_AddButtonHandler()} >
                                                             Add Item
                                                         </C_Button>
@@ -2133,51 +2139,4 @@ const Order = (props) => {
 }
 
 export default Order
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

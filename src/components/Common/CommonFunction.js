@@ -130,6 +130,10 @@ export const convertDateFormat = (dateString) => {
 
 
 export function getDateTime_dmy(hourOffset = 0) {
+
+
+
+
   const { dd, mm, yy, dateInstance } = isDateInitial();
 
   dateInstance.setHours(dateInstance.getHours() - hourOffset); // Subtract the specified number of hours
@@ -167,6 +171,7 @@ export function deliverydate_ForFranchise() {
 
 
 export function getDateTime_ymd(date) {
+
   const { dd, mm, yy, dateInstance } = isDateInitial(date);
 
   dateInstance.setHours(dateInstance.getHours() - 0); // Subtract the specified number of hours
@@ -176,6 +181,45 @@ export function getDateTime_ymd(date) {
 
   return `${yy}-${mm}-${dd} ${hours}:${minutes}:${seconds}`;
 }
+
+
+
+
+
+
+
+export function getDate_Time_ymd(date) {
+  
+  function isDate_Initial(dateString) {
+    // Extract day, month, year, and time from "DD-MM-YYYY HH:mm:ss"
+    const [datePart, timePart] = dateString.split(" ");
+    const [dd, mm, yy] = datePart.split("-").map(Number);
+    const [hours, minutes, seconds] = timePart.split(":").map(Number);
+
+    // Create a Date object (months are zero-based in JS)
+    const dateInstance = new Date(yy, mm - 1, dd, hours, minutes, seconds);
+
+    return { dd, mm: String(mm).padStart(2, '0'), yy, dateInstance };
+  }
+
+  const { dd, mm, yy, dateInstance } = isDate_Initial(date);
+
+  dateInstance.setHours(dateInstance.getHours() - 0); // Subtract the specified number of hours
+  const hours = String(dateInstance.getHours()).padStart(2, '0');
+  const minutes = String(dateInstance.getMinutes()).padStart(2, '0');
+  const seconds = String(dateInstance.getSeconds()).padStart(2, '0');
+
+  return `${yy}-${mm}-${dd} ${hours}:${minutes}:${seconds}`;
+}
+
+
+
+
+
+
+
+
+
 
 export function getCurrenthours_min_sec(hourOffset = 0) {
   const { dd, mm, yy, dateInstance } = isDateInitial();
@@ -249,10 +293,11 @@ export const getCurrentFormattedDate = () => {
 
   // Always set minutes to '00'
   const minutes = '00';
+  const seconds = '00';
 
   return {
-    Date_and_time: `${day}-${month}-${year} ${hours}:${minutes}`,
-    Time: `${hours}:${minutes}`
+    Date_and_time: `${day}-${month}-${year} ${hours}:${minutes}:${seconds}`,
+    Time: `${hours}:${minutes}:${seconds}`
   };
 }
 
