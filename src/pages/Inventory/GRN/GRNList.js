@@ -39,7 +39,7 @@ const GRNList = () => {
     const reducers = useSelector(
         (state) => ({
             loading: state.GRNReducer.loading,
-            listBtnLoading: state.GRNReducer.listBtnLoading,
+            listBtnLoading: state.GRNReducer.listBtnLoading || state.PdfReportReducers.ReportBtnLoading,
             customer: state.CommonAPI_Reducer.vendorSupplierCustomer,
             tableList: state.GRNReducer.GRNList,
             deleteMsg: state.GRNReducer.deleteMsg,
@@ -164,7 +164,7 @@ const GRNList = () => {
     }
 
     function downBtnFunc(config) {
-        
+
         config["ReportType"] = report.invoice;
         config["editId"] = config.rowData.InvoiceID
         dispatch(_act.getpdfReportdata(Invoice_Singel_Get_for_Report_Api, config))
