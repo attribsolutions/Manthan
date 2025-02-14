@@ -156,7 +156,7 @@ const GRNList = () => {
                 DashBoardMode: 0
 
             });
-            // dispatch(_act.getGRNListPage({ filtersBody }));
+            dispatch(_act.getGRNListPage({ filtersBody }));
         } catch (error) { }
     }
 
