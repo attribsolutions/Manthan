@@ -480,6 +480,7 @@ export const reportFooter = (doc, data) => {
 
 
     if (!data.isAmerica) {
+        const advanceAmount = isNaN(Number(data?.AdvanceAmount)) ? 0 : Number(data?.AdvanceAmount);
         doc.text(`Round Off:`, 440, 775,)
         doc.text(` ${numberWithCommas(Number(data.RoundOffAmount).toFixed(2))}`, 567, 775, 'right')
 
@@ -487,7 +488,7 @@ export const reportFooter = (doc, data) => {
         doc.text(` ${numberWithCommas(Number(data.TCSAmount).toFixed(2))}`, 567, 785, 'right')
         if (loginUserIsFranchisesRole()) {
             doc.text(`Advance Amount :`, 440, 795,)
-            doc.text(` ${numberWithCommas(Number(data.AdvanceAmount).toFixed(2))}`, 567, 795, 'right')
+            doc.text(` ${numberWithCommas(Number(advanceAmount).toFixed(2))}`, 567, 795, 'right')
         }
 
     }

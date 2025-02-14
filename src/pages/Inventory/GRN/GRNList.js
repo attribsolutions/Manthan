@@ -16,6 +16,9 @@ import * as _cfunc from "../../../components/Common/CommonFunction";
 import { sideBarPageFiltersInfoAction } from "../../../store/Utilites/PartyDrodown/action";
 import GRN_ADD_1 from "./GRN_ADD_1";
 import GRNAdd3 from "./GRN_ADD_3";
+import { Invoice_Singel_Get_for_Report_Api, Pos_Invoice_Singel_Get_for_Report_Api } from "../../../helpers/backend_helper";
+import * as report from '../../../Reports/ReportIndex'
+
 
 const GRNList = () => {
 
@@ -160,6 +163,13 @@ const GRNList = () => {
         } catch (error) { }
     }
 
+    function downBtnFunc(config) {
+        
+        config["ReportType"] = report.invoice;
+        config["editId"] = config.rowData.InvoiceID
+        dispatch(_act.getpdfReportdata(Invoice_Singel_Get_for_Report_Api, config))
+    }
+
     function fromdateOnchange(e, date) {
         let newObj = { ...hederFilters }
         newObj.fromdate = date
@@ -272,6 +282,7 @@ const GRNList = () => {
                             newBtnPath={otherState.newBtnPath}
                             makeBtnShow={otherState.makeBtnShow}
                             pageMode={pageMode}
+                            downBtnFunc={downBtnFunc}
                             goButnFunc={goButtonHandler}
                             HeaderContent={HeaderContent}
                             makeBtnFunc={makeBtnFunc}
