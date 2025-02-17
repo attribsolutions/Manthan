@@ -61,7 +61,7 @@ const CountLabelComp = () => {
                 </>}
                 {amountPart && (
                     <>
-                        <span style={{ color: countAndRupeeColor, marginRight: "5px" }}>{CurrencySymbol}:</span>
+                        <span class="CurrencySymbol-Class" style={{ color: countAndRupeeColor, marginRight: "5px" }}>{CurrencySymbol}:</span>
                         <span class="amount-countable-Calulation" style={{ color: amountColor }}>{amountPart}</span>
                     </>
                 )}

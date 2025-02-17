@@ -505,7 +505,11 @@ export const reportFooter = (doc, data) => {
                 let y = data1.cursor.y + 8
                 doc.setFontSize(8)
                 doc.setFont(undefined, 'bold')
-                doc.text('Rupees: ', x, y)
+                if (data.isAmerica) {
+                    doc.text('Dollars: ', x, y)
+                } else {
+                    doc.text('Rupees: ', x, y)
+                }
             }
         },
 
