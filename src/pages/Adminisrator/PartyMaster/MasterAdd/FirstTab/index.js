@@ -11,7 +11,7 @@ import PartyType from '../../../PartyTypes/PartyType'
 import * as url from "../../../../../routes/route_url";
 import AddMaster from "../../../EmployeePages/Drodown";
 import * as pageId from "../../../../../routes/allPageID"
-import { loginJsonBody, loginPartyID, loginPartyName, loginPartyTypeName } from '../../../../../components/Common/CommonFunction'
+import { getSettingBasedPartyTypeID, loginJsonBody, loginPartyID, loginPartyName, loginPartyTypeName, loginRoleID, loginSystemSetting } from '../../../../../components/Common/CommonFunction'
 import { getCityOnDistrict, getCityOnDistrictSuccess } from '../../../../../store/Administrator/EmployeeRedux/action'
 import CityMaster from '../../../CityPages/CityMaster'
 import { C_Select } from '../../../../../CustomValidateForm'
@@ -214,9 +214,16 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
     }, [PartyTypes])
 
     useEffect(() => {
-        let retailerParty = PartyTypes.find(i => (i.IsRetailer))
+        debugger
+        const PartyTypeID = getSettingBasedPartyTypeID(loginSystemSetting().PriceListSetting, loginRoleID())
+        let PartyType = null
+        if (PartyTypeID !== null) {
+            PartyType = PartyTypes.find(i => (i.id === PartyTypeID))
+        } else {
+            PartyType = PartyTypes.find(i => (i.IsRetailer))
+        }
 
-        if ((subPageMode === url.RETAILER_MASTER) && !(retailerParty === undefined)) {
+        if ((subPageMode === url.RETAILER_MASTER) && !(PartyType === undefined)) {
 
             setState((i) => {
                 let a = { ...i }
@@ -225,8 +232,8 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
                 }]
 
                 a.values.PartyType = {
-                    value: retailerParty.id,
-                    label: retailerParty.Name
+                    value: PartyType.id,
+                    label: PartyType.Name
                 }
                 a.values.Supplier = supilerArr
                 a.hasValid.PartyType.valid = true;
@@ -236,7 +243,7 @@ const BaseTabForm = forwardRef(({ subPageMode }, ref) => {
                 delete a.required.Supplier
                 return a
             })
-            dispatch(priceListByPartyAction(retailerParty.id))
+            dispatch(priceListByPartyAction(PartyType.id))
         }
     }, [PartyTypes, pageField])
 
