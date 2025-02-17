@@ -36,6 +36,7 @@ const OrderList = () => {
     const currentDate_ymd = _cfunc.date_ymd_func();
 
     const IsFranchises = _cfunc.loginUserIsFranchisesRole()
+    let originalStorageDetails = JSON.parse(localStorage.getItem("roleId"));
 
     const LoginDetails = _cfunc.loginUserDetails();
 
@@ -297,6 +298,7 @@ const OrderList = () => {
             dispatch(_act.orderSinglegetSuccess({ Status: false }));
             dispatch(_act.GetVenderSupplierCustomerSuccess([]));
             dispatch(priceListByCompay_ActionSuccess([]));
+            localStorage.setItem("roleId", JSON.stringify(originalStorageDetails));
         }
     }, []);
 
@@ -366,7 +368,6 @@ const OrderList = () => {
     }, [gobutton_Add_invoice]);
 
     useEffect(() => {
-
         if (ordersBulkInvoiceData.Status === true && ordersBulkInvoiceData.StatusCode === 200) {
             dispatch(getOrdersMakeInvoiceDataActionSuccess({ ...ordersBulkInvoiceData, Status: false }));
             history.push({
@@ -460,7 +461,8 @@ const OrderList = () => {
 
     const CountryListOptions = countryList?.map((data) => ({
         value: data.id,
-        label: data.Country
+        label: data.Country,
+        CurrencySymbol: data.CurrencySymbol
     }));
 
     function oderAprovalBtnFunc({ editId, btnId }) {
@@ -584,6 +586,7 @@ const OrderList = () => {
                 RateParty: rowData.CustomerID,
                 OrderType: ((subPageMode === url.ORDER_4) || (subPageMode === url.APP_ORDER_LIST)) ? order_Type.SaleOrder : order_Type.PurchaseOrder
             })
+
             dispatch(_act.editOrderId({ jsonBody, ...config }));
         } catch (error) { }
     }
@@ -715,7 +718,7 @@ const OrderList = () => {
                 filtersBody = JSON.stringify(PO_filters);
             }
 
-            dispatch(_act.getOrderListPage({ subPageMode, filtersBody, btnId: gobtnId ,userAccess}));
+            dispatch(_act.getOrderListPage({ subPageMode, filtersBody, btnId: gobtnId, userAccess }));
 
         } catch (error) { _cfunc.btnIsDissablefunc({ btnId: gobtnId, state: false }) }
     }
@@ -748,12 +751,27 @@ const OrderList = () => {
     }
 
     function CountryOnchange(e) {
+
+        let StorageDetails = JSON.parse(localStorage.getItem("roleId"));
+
+        StorageDetails.Country = e.label;  // Updating age
+        StorageDetails.Country_id = e.value;
+        StorageDetails.CurrencySymbol = e.CurrencySymbol;
+        StorageDetails.Weight = e.Weight;
+        localStorage.setItem("roleId", JSON.stringify(StorageDetails));
         setState((i) => {
             const a = { ...i }
             a.values.CountryName = e;
             a.hasValid.CountryName.valid = true
             return a
         })
+
+        const elements = document.querySelectorAll('.CurrencySymbol-Class');
+        elements.forEach((element) => {
+            element.innerHTML = e.CurrencySymbol;
+        });
+        dispatch(_act.getOrderListPageSuccess([]));//for clear privious order list  
+
     }
     function customerTypeOnchange(e = []) {
 
