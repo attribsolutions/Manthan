@@ -126,6 +126,12 @@ export const BankList = url.BANK
 export const RetailerMaster = url.RETAILER_LIST
 export const RetailerList = url.RETAILER_MASTER
 
+
+export const Retailer_Master_1 = url.RETAILER_MASTER_LIST_1
+export const Retailer_Master_List_1 = url.RETAILER_MASTER_1
+
+
+
 export const ProductMarginReport = url.PRODUCT_MARGIN_REPORT
 
 export const Discount_Master = url.DISCOUNT_LIST

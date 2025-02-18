@@ -56,6 +56,11 @@ export const PARTY_lIST = "/PartyList"
 export const RETAILER_MASTER = "/RetailerMaster"
 export const RETAILER_LIST = "/RetailerList"
 
+export const RETAILER_MASTER_1 = "/Retailer_Master_1"
+export const RETAILER_MASTER_LIST_1 = "/Retailer_Master_List_1"
+
+
+
 export const NON_RETAILER_PARTY = "/Non_Retailer_Party"
 export const NON_RETAILER_PARTY_lIST = "/Non_Retailer_Party_List"
 

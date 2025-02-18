@@ -67,7 +67,8 @@ const PartyList = () => {
         else if ((commonPartyDropSelect.value > 0 &&
             (subPageMode === url.RETAILER_LIST ||
                 subPageMode === url.NON_RETAILER_PARTY_lIST ||
-                subPageMode === url.FRANCHISE_CUSTOMER_LIST)
+                subPageMode === url.FRANCHISE_CUSTOMER_LIST) ||
+            subPageMode === url.RETAILER_MASTER_LIST_1
         )) {
             goButtonHandler()
         }
@@ -89,6 +90,10 @@ const PartyList = () => {
             page_Id = pageId.PARTY_lIST;
             masterPath = url.PARTY;
             newBtnPath = url.PARTY;
+        } else if (subPageMode === url.RETAILER_MASTER_LIST_1) {
+            page_Id = pageId.RETAILER_MASTER_LIST_1
+            masterPath = url.RETAILER_MASTER_1;
+            newBtnPath = url.RETAILER_MASTER_1;
         }
         else if (subPageMode === url.RETAILER_LIST) {
             page_Id = pageId.RETAILER_LIST
@@ -117,7 +122,7 @@ const PartyList = () => {
             const jsonBody = {
                 ..._cfunc.loginJsonBody(),
                 PartyID: _cfunc.loginSelectedPartyID() === 0 ? _cfunc.loginPartyID() : _cfunc.loginSelectedPartyID(),
-                IsRetailer: subPageMode === url.RETAILER_LIST ? 1 : 0
+                IsRetailer: (subPageMode === url.RETAILER_LIST) || (subPageMode === url.RETAILER_MASTER_LIST_1) ? 1 : 0
             }
             dispatch(getPartyListAPI(jsonBody));
         }

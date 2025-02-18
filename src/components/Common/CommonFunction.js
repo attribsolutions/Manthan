@@ -431,6 +431,22 @@ export const loginUserIsCBMAttribRole = () => { //+++++++++++++++++++++ IsFranch
 
 
 
+export const loginUserChitaleAmericaRole = () => { //+++++++++++++++++++++ IsFranchises Company Id+++++++++++++++++++++++++++++
+
+  try {
+    const detail = loginUserDetails(); //P
+    return (detail.Role === 24);
+  } catch (e) {
+    CommonConsole("Common loginUserChitaleAmericaRole  Error");
+  }
+  return false;
+};
+
+
+
+
+
+
 
 
 
