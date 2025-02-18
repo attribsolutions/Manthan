@@ -613,7 +613,7 @@ const StockEntry = (props) => {
             // return i.Quantity > 0;
 
             return (typeof i.Quantity === "string" || i.Quantity > 0)
-            
+
         });
 
         if (filterData.length === 0) {
@@ -837,7 +837,9 @@ const StockEntry = (props) => {
                                         <Label className=" p-2"
                                             style={{ width: "130px" }}>{"Last Stock Entry"} : </Label>
                                         <Label className=" p-2"
-                                            style={{ fontSize: "20px" }}> {(lastStockEntryDate !== "") && _cfunc.date_dmy_func(lastStockEntryDate)}</Label>
+                                            style={{ fontSize: "20px" }}> {lastStockEntryDate && lastStockEntryDate !== "" && lastStockEntryDate !== undefined
+                                                ? _cfunc.date_dmy_func(lastStockEntryDate)
+                                                : ""}</Label>
                                     </FormGroup>
                                 </Col>
 
