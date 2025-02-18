@@ -73,15 +73,19 @@ function initialState(props) {
 		page_Id = pageId.FRANCHISE_CUSTOMER_MASTER;
 		listPath = url.FRANCHISE_CUSTOMER_LIST
 	}
-	else {
+	else if (sub_Mode === url.RETAILER_MASTER_1) { // chitale americar change For validation field validation Page id change
+		page_Id = pageId.RETAILER_MASTER_1;
+		listPath = url.RETAILER_MASTER_LIST_1
+		sub_Mode = url.RETAILER_MASTER
+	} else {
 		page_Id = pageId.RETAILER_MASTER;
 		listPath = url.RETAILER_LIST
 	}
-	return { page_Id, listPath }
+	return { page_Id, listPath, sub_Mode }
 };
 
 const PartyMaster = (props) => {
-	debugger
+
 	const dispatch = useDispatch();
 	const history = useHistory()
 
@@ -91,7 +95,7 @@ const PartyMaster = (props) => {
 
 	const [page_id] = useState(() => initialState(props).page_Id)
 	const [listPath] = useState(() => initialState(props).listPath)
-	const [subPageMode] = useState(props.location.pathname)
+	const [subPageMode] = useState(() => initialState(props).sub_Mode)
 
 	const [EditData, setEditData] = useState('');
 	const [pageMode, setPageMode] = useState(mode.defaultsave);
@@ -371,7 +375,7 @@ const PartyMaster = (props) => {
 					});
 				}
 			}
-
+			debugger
 			if (subPageMode === url.RETAILER_MASTER) {
 				const jsonBody = JSON.stringify({ RetailerID: postMsg.TransactionID.toString(), DistributorID: commonPartyDropSelect.value });
 				const mobilApiResp = await mobileApp_Send_Retailer_Api({ jsonBody });

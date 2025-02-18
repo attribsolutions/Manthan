@@ -311,6 +311,11 @@ const userRoutes = [
 	{ path: path.RETAILER_LIST, component: PartyList, isPartyWisePage: true },
 	{ path: path.RETAILER_MASTER, component: PartyMaster, isPartyWisePage: true },
 
+	{ path: path.RETAILER_MASTER_1, component: PartyMaster, isPartyWisePage: true },
+	{ path: path.RETAILER_MASTER_LIST_1, component: PartyList, isPartyWisePage: true },
+
+
+
 	{ path: path.FRANCHISE_CUSTOMER_LIST, component: PartyList, isPartyWisePage: true },
 	{ path: path.FRANCHISE_CUSTOMER_MASTER, component: PartyMaster, isPartyWisePage: true },
 

@@ -189,7 +189,7 @@ export function getDateTime_ymd(date) {
 
 
 export function getDate_Time_ymd(date) {
-  
+
   function isDate_Initial(dateString) {
     // Extract day, month, year, and time from "DD-MM-YYYY HH:mm:ss"
     const [datePart, timePart] = dateString.split(" ");
@@ -393,12 +393,26 @@ export const loginUserIsFranchisesRole = () => { //+++++++++++++++++++++ IsFranc
 
   try {
     const detail = loginUserDetails();
-    return (detail.IsFranchises === 1);
+    return (detail.IsFranchises === 1);  //P
   } catch (e) {
     CommonConsole("Common loginUserIsFranchisesRole  Error");
   }
   return false;
 };
+
+
+
+export const PartyTypeIsChitaleXxpress = () => { //+++++++++++++++++++++ IsFranchises Company Id+++++++++++++++++++++++++++++
+
+  try {
+    const detail = loginUserDetails();
+    return (detail.IsFranchises === 1);  //P
+  } catch (e) {
+    CommonConsole("Common loginUserIsFranchisesRole  Error");
+  }
+  return false;
+};
+
 
 
 
@@ -406,13 +420,29 @@ export const loginUserIsFranchisesRole = () => { //+++++++++++++++++++++ IsFranc
 export const loginUserIsCBMAttribRole = () => { //+++++++++++++++++++++ IsFranchises Company Id+++++++++++++++++++++++++++++
 
   try {
-    const detail = loginUserDetails();
+    const detail = loginUserDetails(); //P
     return (detail.Role === 33);
   } catch (e) {
     CommonConsole("Common loginUserIsFranchisesRole  Error");
   }
   return false;
 };
+
+
+
+
+export const loginUserChitaleAmericaRole = () => { //+++++++++++++++++++++ IsFranchises Company Id+++++++++++++++++++++++++++++
+
+  try {
+    const detail = loginUserDetails(); //P
+    return (detail.Role === 24);
+  } catch (e) {
+    CommonConsole("Common loginUserChitaleAmericaRole  Error");
+  }
+  return false;
+};
+
+
 
 
 
@@ -578,6 +608,17 @@ export const loginCompanyGroup = () => {//+++++++++++++++++++++ Session loginPar
   return 0;
 };
 
+
+export const getSettingBasedPartyTypeID = (str, LoginRollId) => {
+  let pairs = str.split(','); // Split by comma
+  for (let pair of pairs) {
+    let [key, value] = pair.split('-').map(Number); // Split by hyphen and convert to numbers
+    if (key === LoginRollId) {
+      return value;
+    }
+  }
+  return null; // Return null if no match found
+}
 
 export const loginIsSCMParty = () => { //+++++++++++++++++++++ Session Company Id+++++++++++++++++++++++++++++
   try {
