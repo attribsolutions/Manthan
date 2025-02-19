@@ -669,7 +669,7 @@ const userRoutes = [
 	// ************************************ Pos_Invoice **************************************//
 
 
-	{ path: path.POS_INVOICE_LIST, component: SweetPosInvoiceList },//not party wise
+	{ path: path.POS_INVOICE_LIST, component: SweetPosInvoiceList ,isPartyWisePage: true},//not party wise
 
 
 	// ************************************ Frenchies  **************************************//
