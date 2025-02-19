@@ -538,7 +538,13 @@ export const GRN_Post_API = ({ jsonBody }) => post(url.GRN, jsonBody)//get api
 export const GRN_update_API = ({ jsonBody, updateId }) => put(`${url.GRN}/${updateId}`, jsonBody)// update api
 export const GRN_delete_API = ({ deleteId }) => del(`${url.GRN}/${deleteId}`)//Delete Order
 export const GRN_Make_API = ({ jsonBody }) => post(url.GRN_MAKE_API, jsonBody)
-export const Hide_Invoice_For_GRN_API = ({ InvoiceId, IsHide }) => del(`${url.HIDE_INVOICE_FOR_GRN}/${InvoiceId}/${IsHide}`)
+// export const Hide_Invoice_For_GRN_API = ({ InvoiceId, IsHide }) => del(`${url.HIDE_INVOICE_FOR_GRN}/${InvoiceId}/${IsHide}`)
+
+
+export const Hide_Invoice_For_GRN_API = ({ jsonBody }) => post(url.HIDE_INVOICE_FOR_GRN, jsonBody)
+
+
+
 export const Invoice_No_Message = ({ jsonBody }) => post(url.INVOICE_NO_MESSAGE, jsonBody)
 
 //Challan API
@@ -980,6 +986,10 @@ export const CashierName_Api = ({ jsonBody }) => post(url.CHASHIER_API, jsonBody
 export const GRNDiscrepancyReport_API = ({ jsonBody }) => post(url.GRN_DISCREPANCY_REPORT, jsonBody)//Go button api
 
 export const DataExportToSAP_API = ({ jsonBody }) => post(url.DATA_EXPORT_TO_SAP, jsonBody)//Go button api
+
+
+export const DataExportToSAP_Get_API = () => get(url.GET_DATA_EXPORT_TO_SAP)//Go button api
+
 
 
 

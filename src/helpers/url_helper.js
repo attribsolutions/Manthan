@@ -729,6 +729,9 @@ export const GRN_DISCREPANCY_REPORT = '/GRNDiscrepancyReport'
 export const DATA_EXPORT_TO_SAP = '/SAPExportDetails'
 
 
+export const GET_DATA_EXPORT_TO_SAP = '/UploadFileListDetails'
+
+
 
 
 
