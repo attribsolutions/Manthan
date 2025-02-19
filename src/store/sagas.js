@@ -132,6 +132,7 @@ import VoucherSaga from "./Administrator/voucherRedux/saga"
 import GRN_Pending_Saga from "./Report/GRNPendingReport/saga"
 import GRNDiscrepancyReportSaga from "./Report/GRNDiscrepancyRedux/saga"
 import DataExportToSapSaga from "./Administrator/ExportToSAPRedux/saga"
+import CodeRedemptionReportSaga from "./Report/CodeRedemptionRedux/saga"
 
 
 export default function* rootSaga() {
@@ -257,11 +258,7 @@ export default function* rootSaga() {
 		fork(GRN_Pending_Saga),
 		fork(DataExportToSapSaga),
 		fork(GRNDiscrepancyReportSaga),
-
-
-
-
-
+		fork(CodeRedemptionReportSaga),
 
 	])
 }

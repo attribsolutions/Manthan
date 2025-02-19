@@ -985,6 +985,9 @@ export const CashierName_Api = ({ jsonBody }) => post(url.CHASHIER_API, jsonBody
 
 export const GRNDiscrepancyReport_API = ({ jsonBody }) => post(url.GRN_DISCREPANCY_REPORT, jsonBody)//Go button api
 
+export const CodeRedemptionReport_API = ({ jsonBody }) => post(url.CODE_REDEMPTION_REPORT, jsonBody)//Go button api
+
+
 export const DataExportToSAP_API = ({ jsonBody }) => post(url.DATA_EXPORT_TO_SAP, jsonBody)//Go button api
 
 

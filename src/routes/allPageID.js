@@ -420,6 +420,11 @@ export const GRN_DISCREPANCY_REPORT = 324
 export const DEMAND_VS_SUPPLY = 319
 
 
+export const CODE_REDEMPTION_REPORT = 327
+
+
+
+
 
 
 
