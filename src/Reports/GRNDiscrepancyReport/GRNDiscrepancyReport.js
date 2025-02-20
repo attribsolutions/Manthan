@@ -21,13 +21,13 @@ const GRNDiscrepancyReport = (props) => {
     const history = useHistory();
     const currentDate_ymd = _cfunc.date_ymd_func();
 
-    const isSCMParty = _cfunc.loginIsSCMParty();
+    const IsMannagementParty = !_cfunc.loginUserIsFranchisesRole() && _cfunc.loginIsSCMParty();
 
     const [headerFilters, setHeaderFilters] = useState('');
     const [userPageAccessState, setUserAccState] = useState('');
     const [tableData, setTableData] = useState([]);
     const [PartyDropdown, setPartyDropdown] = useState(allLabelWithZero);
-    const [btnMode, setBtnMode] = useState(0);
+   
 
     const {
         goButtonData,
@@ -128,7 +128,7 @@ const GRNDiscrepancyReport = (props) => {
         const jsonBody = JSON.stringify({
             "FromDate": fromdate,
             "ToDate": todate,
-            "Party": !isSCMParty ? _cfunc.loginPartyID() : PartyDropdown.value
+            "Party": !IsMannagementParty ? _cfunc.loginPartyID() : PartyDropdown.value
 
         });
         let config = { jsonBody, Mode: mode }
@@ -191,7 +191,7 @@ const GRNDiscrepancyReport = (props) => {
                         </Col>
 
 
-                        {isSCMParty && < Col sm={3} className="">
+                        {IsMannagementParty && < Col sm={3} className="">
                             <FormGroup className=" row mt-2" >
                                 <Label className="col-sm-4 p-2"
                                     style={{ width: "65px", marginRight: "20px" }}>Party</Label>
@@ -217,7 +217,7 @@ const GRNDiscrepancyReport = (props) => {
 
 
 
-                        <Col sm={isSCMParty ? 3 : 6} className=" d-flex justify-content-end" >
+                        <Col sm={IsMannagementParty ? 3 : 6} className=" d-flex justify-content-end" >
                             <C_Button
                                 type="button"
                                 spinnerColor="white"

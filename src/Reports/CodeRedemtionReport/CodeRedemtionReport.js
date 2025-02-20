@@ -21,7 +21,7 @@ const CodeRedemtionReport = (props) => {
     const history = useHistory();
     const currentDate_ymd = _cfunc.date_ymd_func();
 
-    const isSCMParty = !_cfunc.loginIsSCMParty();
+    const isSCMParty = !_cfunc.loginUserIsFranchisesRole();
 
     const [headerFilters, setHeaderFilters] = useState('');
     const [userPageAccessState, setUserAccState] = useState('');
