@@ -60,7 +60,8 @@ const WorkOrder = (props) => {
     const dispatch = useDispatch();
     const history = useHistory();
     const currentDate_ymd = _cfunc.date_ymd_func();
-
+    const WorkOrderSetting = _cfunc.loginSystemSetting().WorkOrderQuantity==="on"?true:false
+    debugger
     const [EditData, setEditData] = useState({});
     const [modalCss, setModalCss] = useState(false);
     const [pageMode, setPageMode] = useState(mode.defaultsave);
@@ -671,7 +672,7 @@ const WorkOrder = (props) => {
                                                         style={{ textAlign: "right" }}
                                                         name="Quantity"
                                                         value={`${values.Quantity}`}
-                                                        disabled={(tableData.length > 0) ? true : false}
+                                                        disabled={(tableData.length > 0 || !WorkOrderSetting)}
                                                         type="text"
                                                         className={isError.Quantity.length > 0 ? "is-invalid form-control text-end" : "form-control text-end"}
                                                         placeholder="Please Enter Quantity"
