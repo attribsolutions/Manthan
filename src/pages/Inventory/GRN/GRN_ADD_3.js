@@ -383,16 +383,15 @@ const GRNAdd3 = (props) => {
     ];
 
     const hideHandler = async () => {
-        //if want to hide grn then pass IsHide="1" otherwise IsHide="0"
-        let config = { InvoiceId: InvoiceID, IsHide: "1" }
 
+        // let config = { InvoiceID: InvoiceID, IsHide: "1" }
+        let jsonBody = JSON.stringify({ InvoiceID: InvoiceID, Mode: 1, Comment: comment })
         const isConfirmed = await customAlert({
             Type: 7,
             Message: alertMessages.hideInvoiceOrNot,
         });
-
         if (isConfirmed) {
-            dispatch(hideInvoiceForGRFAction(config))
+            dispatch(hideInvoiceForGRFAction({ jsonBody }))
         }
 
     }

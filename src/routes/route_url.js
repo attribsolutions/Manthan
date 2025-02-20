@@ -257,6 +257,7 @@ export const DATA_EXPORT_TO_SAP = "/Data_Export_To_SAP"
 
 export const GRN_DISCREPANCY_REPORT = "/GRN_Discrepancy_Report"
 
+export const CODE_REDEMPTION_REPORT = "/Code_Redemption_Report"
 
 
 

@@ -109,7 +109,7 @@ const SweetPosInvoiceList = () => {
     const SelectStateRef = useRef([]);
 
     const InvoiceAdvanceFilter = (_cfunc.loginSystemSetting().InvoiceAdvanceFilter === "ON");
-    
+
     const now = new Date();
     const date = now.toISOString().slice(0, 10); // e.g., 2024-11-29
     const time = now.toTimeString().slice(0, 8); // e.g., 13:32:54
@@ -828,13 +828,23 @@ const SweetPosInvoiceList = () => {
             "UpdatedInvoiceDetails": []
         }]);
         console.log(jsonBody)
-        const jsonData = await postWithBasicAuth({
-            jsonBody: jsonBody,
-            APIName: FRANCHAISE_INVOICE_DELETE_API,
-        });
+
+        let alertRepsponse = await customAlert({
+            Type: 8,
+            Message: `${alertMessages.deleteOrNot} Invoice : "${config.deleteId}"`,
+        })
+        if (alertRepsponse) {
+            const jsonData = await postWithBasicAuth({
+                jsonBody: jsonBody,
+                APIName: FRANCHAISE_INVOICE_DELETE_API,
+            });
+            setDeleteBtnloading(false)
+            setFranchiesDeleteApiRep(jsonData)
+        }
 
         setDeleteBtnloading(false)
-        setFranchiesDeleteApiRep(jsonData)
+
+
     }
 
     return (

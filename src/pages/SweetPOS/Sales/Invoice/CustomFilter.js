@@ -47,10 +47,8 @@ export const C_FilterSelect = React.memo(({ State, isDisabled, SelectState, Sele
 
     const [selectedOption, setSelectedOption] = useState(SelectState);
     const [state, setState] = useState(State);
-    debugger
-
+    
     const [isOpen, setIsOpen] = useState(true);
-
 
     const options = [
         { label: "Payment Mode", value: "paymentMode" },

@@ -12,7 +12,7 @@ const ExportToSapReducer = (state = INIT_STATE, action) => {
         case DATA_EXPORT_TO_SAP_ACTION:
             return {
                 ...state,
-                listBtnLoading: action.config.btnId
+                listBtnLoading:true
             }
 
         case DATA_EXPORT_TO_SAP_ACTION_SUCCESS:
@@ -32,7 +32,7 @@ const ExportToSapReducer = (state = INIT_STATE, action) => {
         case FETCH_UPLOADED_FILE_ACTION:
             return {
                 ...state,
-                listBtnLoading: action.config.btnId
+                listBtnLoading: true
             }
 
         case FETCH_UPLOADED_FILE_ACTION_SUCCESS:

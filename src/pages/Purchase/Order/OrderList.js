@@ -638,16 +638,15 @@ const OrderList = () => {
     async function hideBtnFunc(rowdata) {
         const isHideValue = rowdata[0].isHideValue
         const RowInvoiceId = rowdata[0].id
-        let config = { InvoiceId: RowInvoiceId, IsHide: isHideValue }
 
-
+        let jsonBody = JSON.stringify({ InvoiceID: RowInvoiceId, Mode: isHideValue, Comment: "" })
         const isConfirmed = await customAlert({
             Type: 7,
             Message: alertMessages.unHideInvoiceOrNot,
         });
 
         if (isConfirmed) {
-            dispatch(_act.hideInvoiceForGRFAction(config))
+            dispatch(_act.hideInvoiceForGRFAction({ jsonBody }))
         }
     }
 

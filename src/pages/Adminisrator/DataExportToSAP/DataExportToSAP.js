@@ -11,7 +11,7 @@ import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess } fro
 import DynamicColumnHook from "../../../components/Common/TableCommonFunc";
 import GlobalCustomTable from "../../../GlobalCustomTable";
 import { changeCommonPartyDropDetailsAction } from "../../../store/Utilites/PartyDrodown/action";
-import { DataExportTo_SAP_Action } from "../../../store/Administrator/ExportToSAPRedux/action";
+import { DataExportTo_SAP_Action, Fetch_UploadFile_Action } from "../../../store/Administrator/ExportToSAPRedux/action";
 import { allLabelWithZero } from "../../../components/Common/CommonErrorMsg/HarderCodeData";
 ;
 
@@ -31,10 +31,8 @@ const DataExportToSAP = (props) => {
 
 
     const {
-        ExportToSAPData,
         pageField,
         userAccess,
-        Distributor,
         partyDropdownLoadings,
         UploaledFileData,
         Party
@@ -61,7 +59,7 @@ const DataExportToSAP = (props) => {
         dispatch(commonPageField(pageId.DATA_EXPORT_TO_SAP))
         dispatch(BreadcrumbShowCountlabel(`Count:${0}`));
         dispatch(changeCommonPartyDropDetailsAction({ isShow: false }))//change party drop-down show false
-
+        dispatch(Fetch_UploadFile_Action())
         return () => {
 
             setTableData([]);
@@ -84,6 +82,13 @@ const DataExportToSAP = (props) => {
             _cfunc.breadcrumbReturnFunc({ dispatch, userAcc });
         };
     }, [userAccess])
+
+    useEffect(() => {
+
+        dispatch(BreadcrumbShowCountlabel(`Count:${UploaledFileData.length}`));
+
+    }, [UploaledFileData])
+
 
 
     const [tableColumns] = DynamicColumnHook({ pageField, })
@@ -164,7 +169,7 @@ const DataExportToSAP = (props) => {
 
 
 
-                        <Col sm={isFrenchieses ? 3 : 6} className=" d-flex justify-content-end" >
+                        <Col sm={isFrenchieses ? 9 : 3} className=" d-flex justify-content-end" >
                             <C_Button
                                 type="button"
                                 spinnerColor="white"
@@ -180,7 +185,7 @@ const DataExportToSAP = (props) => {
                 <div className="mb-1 table-responsive table">
                     <GlobalCustomTable
                         keyField={"id"}
-                        data={tableData}
+                        data={UploaledFileData}
                         columns={tableColumns}
                         id="table_Arrow"
                         noDataIndication={

@@ -411,7 +411,7 @@ const GRN_ADD_1 = (props) => {
                             type="text"
                             id={`Ratey${k}`}
                             className=" text-end"
-                            disabled={openPOdata[0]?.GRN_From === url.IB_GRN_LIST}
+                            disabled={openPOdata[0]?.GRN_From === url.IB_GRN_LIST || openPOdata[0]?.GRN_From === url.GRN_STP_3}
                             defaultValue={row.Rate}
                             cpattern={decimalRegx}
                             autoComplete="off"

@@ -258,6 +258,7 @@ import VoucherList from "../pages/Adminisrator/voucherPages/VoucherList.js";
 import GRNPendingReport from "../Reports/GRN Pending Reort/GRNPendingReport.js";
 import DataExportToSAP from "../pages/Adminisrator/DataExportToSAP/DataExportToSAP.js";
 import GRNDiscrepancyReport from "../Reports/GRNDiscrepancyReport/GRNDiscrepancyReport.js";
+import CodeRedemtionReport from "../Reports/CodeRedemtionReport/CodeRedemtionReport.js";
 
 
 const userRoutes = [
@@ -668,7 +669,7 @@ const userRoutes = [
 	// ************************************ Pos_Invoice **************************************//
 
 
-	{ path: path.POS_INVOICE_LIST, component: SweetPosInvoiceList },//not party wise
+	{ path: path.POS_INVOICE_LIST, component: SweetPosInvoiceList ,isPartyWisePage: true},//not party wise
 
 
 	// ************************************ Frenchies  **************************************//
@@ -691,7 +692,7 @@ const userRoutes = [
 
 	{ path: path.GRN_DISCREPANCY_REPORT, component: GRNDiscrepancyReport },//not party wise
 
-
+	{ path: path.CODE_REDEMPTION_REPORT, component: CodeRedemtionReport },//not party wise
 
 
 	// ************************************ Sweet And Snacks Report  **************************************//
@@ -699,7 +700,7 @@ const userRoutes = [
 	{ path: path.BILL_BOOKING_REPORT, component: BillBookingReport },//not party wise
 
 
-
+	
 
 
 

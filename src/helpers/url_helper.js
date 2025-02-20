@@ -725,8 +725,14 @@ export const CHASHIER_API = '/FranchisesCashierDetails'
 
 export const GRN_DISCREPANCY_REPORT = '/GRNDiscrepancyReport'
 
+export const CODE_REDEMPTION_REPORT = '/CouponCodeRedemptionReport'
+
+
 
 export const DATA_EXPORT_TO_SAP = '/SAPExportDetails'
+
+
+export const GET_DATA_EXPORT_TO_SAP = '/UploadFileListDetails'
 
 
 
