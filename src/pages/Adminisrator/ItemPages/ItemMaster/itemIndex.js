@@ -639,7 +639,7 @@ const ItemsMaster = (props) => {
                     Length: weightageTabMaster.Length,
                     StoringCondition: weightageTabMaster.StoringCondition,
                     ItemCategoryDetails: ItemCategoryDetails,
-                    ItemUnitDetails: isChangeBaseUnitTable ? itemUnitDetails : [],
+                    ItemUnitDetails: (isChangeBaseUnitTable || !isEditMode) ? itemUnitDetails : [],
 
                     ItemDivisionDetails: values.Division.map((i) => {
                         return ({ Party: i.value })
