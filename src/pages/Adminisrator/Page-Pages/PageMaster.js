@@ -353,8 +353,13 @@ const PageMaster = (props) => {
   useEffect(() => {
 
     if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
+      debugger
       dispatch(update_PageListId_Success({ Status: false }));
       if (actualPagePath) {
+        customAlert({
+          Type: 1,
+          Message: JSON.stringify(updateMsg.Message),
+        })
         history.push({
           pathname: actualPagePath
         })
@@ -496,7 +501,7 @@ const PageMaster = (props) => {
       Icon: values.Icon,
       CountLabel: showCountLabel,
       ShowCountLabel: countLabel,
-      IsSweetPOSPage:isSweetPOSPage,
+      IsSweetPOSPage: isSweetPOSPage,
       ActualPagePath: values.pagePath,
       PageType: pageType_DropdownSelect.value,
       PageHeading: values.pageheading,
@@ -866,7 +871,7 @@ const PageMaster = (props) => {
                                     htmlFor="horizontal-firstname-input"
                                     className="col-sm-4 col-form-label mt-4"
                                   >
-                                   Is SweetPOS Page
+                                    Is SweetPOS Page
                                   </Label>
                                   <Col md={5} style={{ marginTop: "15px" }}>
                                     <div

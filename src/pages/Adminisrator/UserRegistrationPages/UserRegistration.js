@@ -25,7 +25,7 @@ import { Tbody, Thead } from "react-super-responsive-table";
 import { Breadcrumb_inputName } from "../../../store/Utilites/Breadcrumb/actions";
 import { MetaTags } from "react-meta-tags";
 import reactRouterDom, { useHistory } from "react-router-dom";
-import { breadcrumbReturnFunc, btnIsDissablefunc, loginCompanyID, loginUserDetails, loginUserID, metaTagLabel } from "../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, btnIsDissablefunc, loginCompanyID, loginUserDetails, loginUserID, loginUserIsFranchisesRole, metaTagLabel } from "../../../components/Common/CommonFunction";
 import * as mode from "../../../routes/PageMode"
 import * as pageId from "../../../routes/allPageID"
 import { SaveButton } from "../../../components/Common/CommonButton";
@@ -46,7 +46,7 @@ const AddUser = (props) => {
   // const formRef = useRef(null);
   const dispatch = useDispatch();
   const history = useHistory()
-  const loginPartyTypeName = loginUserDetails().PartyType;
+  const isFrenchises = loginUserIsFranchisesRole();
 
   const fileds = {
     id: "",
@@ -313,7 +313,7 @@ const AddUser = (props) => {
         view: window
       });
       document.dispatchEvent(event);
-      
+
 
       dispatch(ChangePassword_Succes({ Status: false }))
 
@@ -608,7 +608,7 @@ const AddUser = (props) => {
                               }
 
                             </Row>
-                            {loginPartyTypeName === "Franchises" &&
+                            {isFrenchises &&
                               <Row>
                                 <FormGroup className="mb-2 col col-sm-4 ">
                                   <Label htmlFor="validationCustom01"> {fieldLabel.POSRateType} </Label>
