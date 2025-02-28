@@ -21,7 +21,15 @@ const StockEntryView = () => {
         try {
 
             if ((viewData_redux.Status === true)) {
-                setTableArray(viewData_redux.Data)// modify Custom Table Data
+                // debugger
+                // setTableArray(viewData_redux.Data)// modify Custom Table Data
+
+                setTableArray(viewData_redux.Data.sort((a, b) => {
+                    return parseFloat(b.Quantity) - parseFloat(a.Quantity);
+                }))
+
+
+
                 setModal_view(true);
             }
         } catch (error) { CommonConsole(error) }
