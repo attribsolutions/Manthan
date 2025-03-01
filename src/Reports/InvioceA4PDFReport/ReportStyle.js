@@ -400,9 +400,9 @@ export const reportFooter = (doc, data) => {
         doc.addImage(data.SettingData.Qr_Image, 'JPEG', 337, 728, 100, 86, null, 'FAST');
     }
     doc.setDrawColor(0, 0, 0);
-    doc.line(570, 715, 30, 715);//horizontal line Footer 1
-    doc.line(435, 715, 435, 815);//vertical right Sub Total
-    doc.line(340, 715, 340, 815);//vertical right Qr Code (1)
+    doc.line(570, 710, 30, 710);//horizontal line Footer 1
+    doc.line(435, 710, 435, 815);//vertical right Sub Total
+    doc.line(340, 710, 340, 815);//vertical right Qr Code (1)
     doc.setFont('Tahoma')
 
     const a = data.InvoiceItems.map((data) => ({
@@ -456,20 +456,20 @@ export const reportFooter = (doc, data) => {
 
     } else {
 
-        doc.text(`Total Basic:`, 440, 725,)
-        doc.text(`${numberWithCommas(Number(TotalBasicAmount).toFixed(2))}`, 567, 725, 'right')
+        doc.text(`Total Basic:`, 440, 720,)
+        doc.text(`${numberWithCommas(Number(TotalBasicAmount).toFixed(2))}`, 567, 720, 'right')
 
-        doc.text(`Total Disc:`, 440, 735,)
-        doc.text(` ${numberWithCommas(Number(TotalDiscount).toFixed(2))}`, 567, 735, 'right')
+        doc.text(`Total Disc:`, 440, 730,)
+        doc.text(` ${numberWithCommas(Number(TotalDiscount).toFixed(2))}`, 567, 730, 'right')
 
-        doc.text(`Total CGST:`, 440, 745)
-        doc.text(`${numberWithCommas(Number(totalCGST).toFixed(2))}`, 567, 745, 'right')
+        doc.text(`Total CGST:`, 440, 740)
+        doc.text(`${numberWithCommas(Number(totalCGST).toFixed(2))}`, 567, 740, 'right')
 
-        doc.text(`Total SGST:`, 440, 755,)
-        doc.text(`${numberWithCommas(Number(totalSGST).toFixed(2))}`, 567, 755, 'right')
+        doc.text(`Total SGST:`, 440, 750,)
+        doc.text(`${numberWithCommas(Number(totalSGST).toFixed(2))}`, 567, 750, 'right')
 
-        doc.text(`Total GST:`, 440, 765,)
-        doc.text(` ${numberWithCommas(Number(TotalGST).toFixed(2))}`, 567, 765, 'right')
+        doc.text(`Total GST:`, 440, 760,)
+        doc.text(` ${numberWithCommas(Number(TotalGST).toFixed(2))}`, 567, 760, 'right')
 
         // doc.text(`Round Off:`, 440, 788,)
         // doc.text(` ${numberWithCommas(Number(data.RoundOffAmount).toFixed(2))}`, 567, 788, 'right')
@@ -481,16 +481,17 @@ export const reportFooter = (doc, data) => {
 
     if (!data.isAmerica) {
         const advanceAmount = isNaN(Number(data?.AdvanceAmount)) ? 0 : Number(data?.AdvanceAmount);
-        doc.text(`Round Off:`, 440, 775,)
-        doc.text(` ${numberWithCommas(Number(data.RoundOffAmount).toFixed(2))}`, 567, 775, 'right')
+        doc.text(`Round Off:`, 440, 770,)
+        doc.text(` ${numberWithCommas(Number(data.RoundOffAmount).toFixed(2))}`, 567, 770, 'right')
 
-        doc.text(`TCS Amount:`, 440, 785,)
-        doc.text(` ${numberWithCommas(Number(data.TCSAmount).toFixed(2))}`, 567, 785, 'right')
+        doc.text(`TCS Amount:`, 440, 780,)
+        doc.text(` ${numberWithCommas(Number(data.TCSAmount).toFixed(2))}`, 567, 780, 'right')
         if (loginUserIsFranchisesRole()) {
-            doc.text(`Advance Amount :`, 440, 795,)
-            doc.text(` ${numberWithCommas(Number(advanceAmount).toFixed(2))}`, 567, 795, 'right')
+            doc.text(`Advance Amount :`, 440, 790,)
+            doc.text(` ${numberWithCommas(Number(advanceAmount).toFixed(2))}`, 567, 790, 'right')
+            doc.text(`Net Payable :`, 440, 800,)
+            doc.text(` ${numberWithCommas(Number(data.GrandTotal)-(Number(advanceAmount)).toFixed(2))}`, 567, 800, 'right')
         }
-
     }
 
 
@@ -539,7 +540,7 @@ export const reportFooter = (doc, data) => {
 
         },
         tableLineColor: "black",
-        startY: 715,
+        startY: 710,
 
     };
 
