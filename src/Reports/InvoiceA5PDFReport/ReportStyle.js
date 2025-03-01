@@ -350,7 +350,7 @@ export const reportFooter = (doc, data) => {
 
     doc.setDrawColor(0, 0, 0);
     doc.line(570, 294, 30, 294);//horizontal line  (4)
-   
+
 
     doc.line(435, 294, 435, 393);//vertical line (3)
     doc.line(340, 294, 340, 393);//vertical line (2)
@@ -415,6 +415,8 @@ export const reportFooter = (doc, data) => {
     }
 
     if (!data.isAmerica) {
+        const advanceAmount = isNaN(Number(data?.AdvanceAmount)) ? 0 : Number(data?.AdvanceAmount);
+
         doc.text(`Round Off:`, 440, 350,)
         doc.text(` ${Number(data.RoundOffAmount).toFixed(2)}`, 567, 350, 'right')
 
@@ -422,10 +424,10 @@ export const reportFooter = (doc, data) => {
         doc.text(` ${numberWithCommas(Number(data.TCSAmount).toFixed(2))}`, 567, 360, 'right')
         if (loginUserIsFranchisesRole()) {
             doc.text(`Advance Amount:`, 440, 370,)
-            doc.text(` ${numberWithCommas(Number(data.AdvanceAmount).toFixed(2))}`, 567, 370, 'right')
+            doc.text(` ${numberWithCommas(Number(advanceAmount).toFixed(2))}`, 567, 370, 'right')
 
             doc.text(`Net Payable:`, 440, 380,)
-            doc.text(` ${numberWithCommas((Number(data.GrandTotal) - (Number(data.AdvanceAmount))).toFixed(2))}`, 567, 380, 'right')
+            doc.text(` ${numberWithCommas((Number(data.GrandTotal) - (Number(advanceAmount))).toFixed(2))}`, 567, 380, 'right')
         }
     }
 

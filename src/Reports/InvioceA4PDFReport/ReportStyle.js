@@ -490,7 +490,7 @@ export const reportFooter = (doc, data) => {
             doc.text(`Advance Amount :`, 440, 790,)
             doc.text(` ${numberWithCommas(Number(advanceAmount).toFixed(2))}`, 567, 790, 'right')
             doc.text(`Net Payable :`, 440, 800,)
-            doc.text(` ${numberWithCommas(Number(data.GrandTotal)-(Number(advanceAmount)).toFixed(2))}`, 567, 800, 'right')
+            doc.text(`${numberWithCommas((Number(data.GrandTotal) - (Number(advanceAmount))).toFixed(2))}`, 567, 800, 'right')
         }
     }
 
