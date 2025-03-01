@@ -594,7 +594,7 @@ const StockEntry = (props) => {
         const mapItemArray = (index) => ({
             "Item": index.ItemId,
             "ItemName": index.ItemName,
-            "Quantity": index.Qty === undefined ? 0 : index.Qty,
+            "Quantity": index.Qty === undefined ? 0 : parseFloat(index.Qty),
             "MRP": index.defaultMRP.value,
             "Unit": index.defaultUnit?.value,
             "GST": index.defaultGST.value,
@@ -612,7 +612,7 @@ const StockEntry = (props) => {
         const filterData = ReturnItems.filter((i) => {
             // return i.Quantity > 0;
 
-            return (typeof i.Quantity === "string" || i.Quantity > 0)
+            return (i.Quantity >= 0)
 
         });
 
@@ -627,21 +627,21 @@ const StockEntry = (props) => {
         const invalidMsg1 = []
 
         ReturnItems.forEach((i) => {
-
+            const [itemName] = i.ItemName?.split('-');
             if ((i.Unit === undefined) || (i.Unit === null)) {
-                invalidMsg1.push(`${i.ItemName} : ${alertMessages.unitIsRequired}`)
+                invalidMsg1.push(`${itemName} : ${alertMessages.unitIsRequired}`)
             }
             else if ((i.MRP === undefined) || (i.MRP === null) && !(isVisibleRateDrop)) {
-                invalidMsg1.push(`${i.ItemName} :${alertMessages.mrpIsRequired}`)
+                invalidMsg1.push(`${itemName} :${alertMessages.mrpIsRequired}`)
             }
             else if ((i.Rate === undefined) || (i.Rate === null) && (isVisibleRateDrop)) {
-                invalidMsg1.push(`${i.ItemName} :${alertMessages.rateIsRequired}`)
+                invalidMsg1.push(`${itemName} :${alertMessages.rateIsRequired}`)
             }
             else if ((i.GST === undefined) || (i.GST === null)) {
-                invalidMsg1.push(`${i.ItemName} : ${alertMessages.gstIsRequired}`)
+                invalidMsg1.push(`${itemName} : ${alertMessages.gstIsRequired}`)
             }
             else if ((i.BatchCode === "") || (i.BatchCode === undefined)) {
-                invalidMsg1.push(`${i.ItemName} : ${alertMessages.batchCodeIsRequired}`)
+                invalidMsg1.push(`${itemName} : ${alertMessages.batchCodeIsRequired}`)
             };
         })
 
