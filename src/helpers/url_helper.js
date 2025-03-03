@@ -604,6 +604,9 @@ export const TRANSACTION_ON_DASHBOARD = "/LogsOnDashboard"
 //POS log
 export const POS_LOG_GO_BTN = "/SweetPOS/SpoS_login_Detail"
 
+export const POS_VERSION = "/SweetPOS/LVersionList"
+
+
 
 
 // Claim Tracking Entry

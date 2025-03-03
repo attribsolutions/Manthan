@@ -815,6 +815,9 @@ export const TransactionLog_Get_OnDashBoard_Api = () => get(url.TRANSACTION_ON_D
 // POS Log
 export const POSLog_Go_Btn_Api = ({ jsonBody }) => post(url.POS_LOG_GO_BTN, jsonBody);
 
+export const POSExEVersion_Api = ({ jsonBody }) => post(url.POS_VERSION, jsonBody);
+
+
 
 
 // Claim Tracking Entry
