@@ -531,7 +531,7 @@ export const GRN_PENDING_REPORT = "/PendingGRNInvoices"
 
 export const STOCK_REPORT_1 = '/StockReport'
 
-export const POS_STOCK_REPORT = 'SweetPOS/SPOSStockReport'
+export const POS_STOCK_REPORT = 'SweetPOS/SPOSStockReportTT'
 
 
 
