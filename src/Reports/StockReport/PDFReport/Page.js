@@ -20,22 +20,64 @@ function pageFooter(doc, data) {
     style.reportFooter(doc, data);
 }
 
-const StockReport = (stockdata) => {
+// const StockReport = (stockdata) => {
 
-    const data = stockdata[0]
+//     const data = stockdata[0]
 
-    var doc = new jsPDF('l', 'pt', 'a4');
+//     var doc = new jsPDF('l', 'pt', 'a4');
+//     pageHeder(doc, data);
+//     reportBody(doc, data);
+//     pageFooter(doc, data);
+//     doc.setProperties({
+//         title: `Stock_Report From  ${date_dmy_func(data.FromDate)} To ${date_dmy_func(data.ToDate)} Party (${data.PartyName})`
+//     });
+//     function generateSaveAndOpenPDFReport() {
+//         const pdfUrl = URL.createObjectURL(doc.output('blob'));
+//         // const options = { filename: `Stock_Report/${data.PartyName}/${date_dmy_func()}` }
+//         window.open(pdfUrl);
+//     }
+//     generateSaveAndOpenPDFReport();
+// }
+
+const generateReportPage = (doc, data) => {
     pageHeder(doc, data);
     reportBody(doc, data);
     pageFooter(doc, data);
-    doc.setProperties({
-        title: `Stock_Report From  ${date_dmy_func(data.FromDate)} To ${date_dmy_func(data.ToDate)} Party (${data.PartyName})`
+}
+
+
+
+const StockReport = (Data) => {
+    var doc = new jsPDF('l', 'pt', 'a4');
+    Data.forEach((data, index) => {
+        if (index !== 0) {  // Add a new page only after the first iteration
+            doc.addPage();
+        }
+        generateReportPage(doc, data);
+        doc.setProperties({
+            title: `Stock_Report From ${date_dmy_func(data.FromDate)} To ${date_dmy_func(data.ToDate)} Party (${data.PartyName})`
+        });
     });
+
     function generateSaveAndOpenPDFReport() {
         const pdfUrl = URL.createObjectURL(doc.output('blob'));
         // const options = { filename: `Stock_Report/${data.PartyName}/${date_dmy_func()}` }
         window.open(pdfUrl);
     }
     generateSaveAndOpenPDFReport();
-}
+
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
 export default StockReport;
