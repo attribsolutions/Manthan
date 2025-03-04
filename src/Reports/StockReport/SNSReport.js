@@ -16,6 +16,7 @@ import * as report from '../ReportIndex'
 import { ExcelReportComponent } from "../../components/Common/ReportCommonFunc/ExcelDownloadWithCSS";
 import { alertMessages } from "../../components/Common/CommonErrorMsg/alertMsg";
 import { changeCommonPartyDropDetailsAction } from "../../store/Utilites/PartyDrodown/action";
+import { allLabelWithBlank } from "../../components/Common/CommonErrorMsg/HarderCodeData";
 
 const SNSReport = (props) => {
 
@@ -31,7 +32,7 @@ const SNSReport = (props) => {
     const [headerFilters, setHeaderFilters] = useState('');
     const [userPageAccessState, setUserAccState] = useState('');
     const [unitDropdown, setUnitDropdown] = useState({ value: 0, label: "BaseUnit" });
-    const [PartyDropdown, setPartyDropdown] = useState([]);
+    const [PartyDropdown, setPartyDropdown] = useState([allLabelWithBlank]);
     const [btnMode, setBtnMode] = useState("");
 
     const reducers = useSelector(
@@ -93,7 +94,13 @@ const SNSReport = (props) => {
         try {
 
             if ((StockReport_1_Gobtb.Status === true) && (StockReport_1_Gobtb.StatusCode === 200)) {
-                const { StockDetails } = StockReport_1_Gobtb.Data[0]
+
+                const StockDetails = StockReport_1_Gobtb.Data.flatMap(entry =>
+                    entry.StockDetails.map(stock => ({
+                        ...stock,
+                        PartyName: entry.PartyName
+                    }))
+                );
                 if (btnMode === "excel") {
                     ExcelReportComponent({      // Download CSV
                         pageField,
@@ -165,6 +172,15 @@ const SNSReport = (props) => {
     BaseUnit_DropdownOptions.unshift({ value: 0, label: "BaseUnit" })
 
 
+    function onChangeParty(e = []) {
+        if (e.length === 0) {
+            e = [allLabelWithBlank]
+        } else {
+            e = e.filter(i => !(i.value === ''))
+        }
+        setPartyDropdown(e);
+    }
+
     function StockProccessHandler() {
 
         const btnId = `gobtn-${url.STOCK_REPORT_1}`
@@ -195,12 +211,12 @@ const SNSReport = (props) => {
         }
 
         const PartyIDs = PartyDropdown.filter(i => !(i.value === '')).map(obj => obj.value).join(',');
-
+        const finalPartyIDs = (PartyIDs === '') ? Party_Option.map(obj => obj.value).join(',') : PartyIDs;
         const jsonBody = JSON.stringify({
             "FromDate": fromdate,
             "ToDate": todate,
             "Unit": unitDropdown.value,
-            "Party": isSCMParty ? PartyIDs : _cfunc.loginPartyID().toString()
+            "Party": isSCMParty ? finalPartyIDs : _cfunc.loginPartyID().toString()
         });
 
         let config = { ReportType: report.Stock, jsonBody, isFranchises }
@@ -302,7 +318,7 @@ const SNSReport = (props) => {
                                             menu: provided => ({ ...provided, zIndex: 2 })
                                         }}
                                         options={Party_Option}
-                                        onChange={(e) => { setPartyDropdown(e) }}
+                                        onChange={(e) => { onChangeParty(e) }}
                                     />
                                 </Col>
                             </FormGroup>
@@ -314,7 +330,9 @@ const SNSReport = (props) => {
                                 spinnerColor="white"
 
                                 loading={reducers.stockProcessingLoading}
-                                className="btn btn-outline-info border-1 font-size-10 text-center m-3  "
+                                // className="btn btn-outline-info border-1 font-size-10 text-center m-3  "
+                                className="btn btn-info m-3 mr"
+
                                 onClick={() => StockProccessHandler()}
                             >
                                 Stock Process
