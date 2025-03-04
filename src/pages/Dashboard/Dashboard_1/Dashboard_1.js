@@ -24,11 +24,11 @@ import DemandListForDashboard from './demand';
 import WorkOrderForDashboard from './WorkOrder';
 import DailyItemSaleView from '../FrenchiesesDashboard/DailyItemSaleView';
 import Pie from '../FrenchiesesDashboard/pie';
-import Data from './../FrenchiesesDashboard/data.json'
 import SERVER_HOST_PATH, { ERP_LINK } from '../../../helpers/_serverPath';
 import { encodeToHash, formatDate, GetDailySaleData } from '../FrenchiesesDashboard/Function';
 import DatePicker from 'react-flatpickr';
 import { C_DatePicker } from '../../../CustomValidateForm';
+import PosExeVersionDetails from '../FrenchiesesDashboard/PosExeVersionDetails';
 
 const Dashboard_1 = (props) => {
 
@@ -38,7 +38,9 @@ const Dashboard_1 = (props) => {
     const [userPageAccessState, setUserAccState] = useState('');
     const [selectedOption, setSelectedOption] = useState('TODAYS');
     const [data, setData] = useState([]);
-    const [hashedValue, setHashedValue] = useState('');
+
+
+    const isFrenchises = loginUserIsFranchisesRole()
 
     const [dateRange, setDateRange] = useState({
         fromDate: currentDate_ymd,
@@ -131,7 +133,7 @@ const Dashboard_1 = (props) => {
     }
 
     const handleChange = (event) => {
-        
+
         const value = event.target.value;
         setSelectedOption(value);
 
@@ -199,6 +201,8 @@ const Dashboard_1 = (props) => {
                     <title>Dashboard | FoodERP 2.0 - React Admin & Dashboard Template</title>
                 </MetaTags>
                 <Container fluid>
+
+                    
                     <Row>
                         <Col xl={3} md={3} >
                             <Card className="card-h-100">
@@ -296,7 +300,7 @@ const Dashboard_1 = (props) => {
                         </Col>}
 
 
-                        {loginUserIsFranchisesRole() && (
+                        {isFrenchises && (
                             <Col lg={6}>
                                 <Card>
                                     <CardHeader style={{ backgroundColor: "whitesmoke" }} className="card-header align-items-center d-flex justify-content-between">
@@ -330,7 +334,7 @@ const Dashboard_1 = (props) => {
                                                 <option value="YESTERDAY">Yesterday</option>
                                                 <option value="MONTH">Month</option>
                                                 <option value="SIX_MONTH">Six Month</option>
-                                               
+
                                             </select>
 
                                             {selectedOption === "CUSTOM" && (
@@ -483,8 +487,6 @@ const Dashboard_1 = (props) => {
                             </Card>
                         </Col>}
 
-
-
                         {false && <Col lg={6}>
                             <Card >
                                 <div className='mb-n6'>
@@ -504,8 +506,18 @@ const Dashboard_1 = (props) => {
                                 <WorkOrderForDashboard />
                             </Card>
                         </Col>}
+                    </Row>
+                    <Row>
+                        {(isFrenchises) && <Col lg={12}>
+                            <Card >
+                               
+                                <PosExeVersionDetails />
+
+                            </Card>
+                        </Col>}
 
                     </Row>
+
 
                 </Container>
             </div>

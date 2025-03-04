@@ -349,11 +349,11 @@ export const reportFooter = (doc, data) => {
 
 
     doc.setDrawColor(0, 0, 0);
-    doc.line(570, 298, 30, 298);//horizontal line  (4)
-    doc.line(570, 380, 435, 380);//horizontal line  (5)
+    doc.line(570, 294, 30, 294);//horizontal line  (4)
 
-    doc.line(435, 298, 435, 393);//vertical line (3)
-    doc.line(340, 298, 340, 393);//vertical line (2)
+
+    doc.line(435, 294, 435, 393);//vertical line (3)
+    doc.line(340, 294, 340, 393);//vertical line (2)
 
     const a = data.InvoiceItems.map((data) => ({
 
@@ -383,49 +383,52 @@ export const reportFooter = (doc, data) => {
     const isIGST = compareGSTINState(data.CustomerGSTIN, data.PartyGSTIN)
     if (isIGST || data.isAmerica) {
 
-        doc.text(`Total Basic:`, 440, 317,)
-        doc.text(`${TotalBasicAmount.toFixed(2)}`, 567, 317, 'right')
+        doc.text(`Total Basic:`, 440, 310,)
+        doc.text(`${TotalBasicAmount.toFixed(2)}`, 567, 310, 'right')
 
-        doc.text(`Total Disc:`, 440, 327,)
-        doc.text(` ${TotalDiscount.toFixed(2)}`, 567, 327, 'right')
+        doc.text(`Total Disc:`, 440, 320,)
+        doc.text(` ${TotalDiscount.toFixed(2)}`, 567, 320, 'right')
 
-        doc.text(`Total IGST:`, 440, 337)
-        doc.text(`${totalICGST.toFixed(2)}`, 567, 337, 'right')
+        doc.text(`Total IGST:`, 440, 330)
+        doc.text(`${totalICGST.toFixed(2)}`, 567, 330, 'right')
 
-        doc.text(`Total GST:`, 440, 347,)
-        doc.text(` ${totalICGST.toFixed(2)}`, 567, 347, 'right')
+        doc.text(`Total GST:`, 440, 340,)
+        doc.text(` ${totalICGST.toFixed(2)}`, 567, 340, 'right')
 
 
     } else {
-        doc.text(`Total Basic:`, 440, 307,)
-        doc.text(`${numberWithCommas(TotalBasicAmount.toFixed(2))}`, 567, 307, 'right')
+        doc.text(`Total Basic:`, 440, 300,)
+        doc.text(`${numberWithCommas(TotalBasicAmount.toFixed(2))}`, 567, 300, 'right')
 
-        doc.text(`Total Disc:`, 440, 317,)
-        doc.text(`${numberWithCommas(TotalDiscount.toFixed(2))}`, 567, 317, 'right')
+        doc.text(`Total Disc:`, 440, 310,)
+        doc.text(`${numberWithCommas(TotalDiscount.toFixed(2))}`, 567, 310, 'right')
 
-        doc.text(`Total CGST:`, 440, 327)
-        doc.text(`${numberWithCommas(totalCGST.toFixed(2))}`, 567, 327, 'right')
+        doc.text(`Total CGST:`, 440, 320)
+        doc.text(`${numberWithCommas(totalCGST.toFixed(2))}`, 567, 320, 'right')
 
-        doc.text(`Total SGST:`, 440, 337,)
-        doc.text(`${numberWithCommas(totalSGST.toFixed(2))}`, 567, 337, 'right')
+        doc.text(`Total SGST:`, 440, 330,)
+        doc.text(`${numberWithCommas(totalSGST.toFixed(2))}`, 567, 330, 'right')
 
-        doc.text(`Total GST:`, 440, 347,)
-        doc.text(` ${numberWithCommas(TotalGST.toFixed(2))}`, 567, 347, 'right')
+        doc.text(`Total GST:`, 440, 340,)
+        doc.text(` ${numberWithCommas(TotalGST.toFixed(2))}`, 567, 340, 'right')
 
     }
 
     if (!data.isAmerica) {
-        doc.text(`Round Off:`, 440, 357,)
-        doc.text(` ${Number(data.RoundOffAmount).toFixed(2)}`, 567, 357, 'right')
+        const advanceAmount = isNaN(Number(data?.AdvanceAmount)) ? 0 : Number(data?.AdvanceAmount);
 
-        doc.text(`TCS Amount:`, 440, 367,)
-        doc.text(` ${numberWithCommas(Number(data.TCSAmount).toFixed(2))}`, 567, 367, 'right')
+        doc.text(`Round Off:`, 440, 350,)
+        doc.text(` ${Number(data.RoundOffAmount).toFixed(2)}`, 567, 350, 'right')
+
+        doc.text(`TCS Amount:`, 440, 360,)
+        doc.text(` ${numberWithCommas(Number(data.TCSAmount).toFixed(2))}`, 567, 360, 'right')
         if (loginUserIsFranchisesRole()) {
-            doc.text(`Advance Amount:`, 440, 377,)
-            doc.text(` ${numberWithCommas(Number(data.AdvanceAmount).toFixed(2))}`, 567, 377, 'right')
+            doc.text(`Advance Amount:`, 440, 370,)
+            doc.text(` ${numberWithCommas(Number(advanceAmount).toFixed(2))}`, 567, 370, 'right')
+
+            doc.text(`Net Payable:`, 440, 380,)
+            doc.text(` ${numberWithCommas((Number(data.GrandTotal) - (Number(advanceAmount))).toFixed(2))}`, 567, 380, 'right')
         }
-
-
     }
 
 
@@ -485,7 +488,7 @@ export const reportFooter = (doc, data) => {
 
         },
         tableLineColor: "black",
-        startY: 298,
+        startY: 294,
 
     };
 

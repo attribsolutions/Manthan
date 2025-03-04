@@ -239,7 +239,7 @@ const GRNDiscrepancyReport = (props) => {
                         </Col>
                     </Row>
                 </div>
-                <div className="mb-1 table-responsive table">
+                <div className="mb-1">
                     <GlobalCustomTable
                         keyField={"id"}
                         data={tableData}

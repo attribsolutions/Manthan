@@ -25,26 +25,28 @@ import { Tbody, Thead } from "react-super-responsive-table";
 import { Breadcrumb_inputName } from "../../../store/Utilites/Breadcrumb/actions";
 import { MetaTags } from "react-meta-tags";
 import reactRouterDom, { useHistory } from "react-router-dom";
-import { breadcrumbReturnFunc, btnIsDissablefunc, loginCompanyID, loginUserDetails, loginUserID, metaTagLabel } from "../../../components/Common/CommonFunction";
+import { breadcrumbReturnFunc, btnIsDissablefunc, loginCompanyID, loginUserDetails, loginUserID, loginUserIsFranchisesRole, metaTagLabel } from "../../../components/Common/CommonFunction";
 import * as mode from "../../../routes/PageMode"
 import * as pageId from "../../../routes/allPageID"
 import { SaveButton } from "../../../components/Common/CommonButton";
 import { getRole } from "../../../store/Administrator/RoleMasterRedux/action";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
-import { comAddPageFieldFunc, initialFiledFunc, onChangeSelect, onChangeText } from "../../../components/Common/validationFunction";
+import { comAddPageFieldFunc, initialFiledFunc, onChangeSelect, onChangeText, resetFunction } from "../../../components/Common/validationFunction";
 import { commonPageField, commonPageFieldSuccess, postSelect_Field_for_dropdown } from "../../../store/actions";
 import AddMaster from "../EmployeePages/Drodown";
 import * as url from "../../../routes/route_url";
 import AddEmployee from "../EmployeePages/EmployeeMaster";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 import { GenralMasterSubType } from "../../../helpers/backend_helper";
+import { passwordRgx } from "../../../CustomValidateForm";
+import { ChangePassword, ChangePassword_Succes } from "../../../store/auth/changepassword/action";
 
 const AddUser = (props) => {
 
   // const formRef = useRef(null);
   const dispatch = useDispatch();
   const history = useHistory()
-  const loginPartyTypeName = loginUserDetails().PartyType;
+  const isFrenchises = loginUserIsFranchisesRole();
 
   const fileds = {
     id: "",
@@ -57,9 +59,11 @@ const AddUser = (props) => {
     isLoginUsingEmail: false,
     isLoginUsingMobile: false,
     isSendOTP: false,
+    changePassword: '',
   }
 
   const [state, setState] = useState(() => initialFiledFunc(fileds))
+  debugger
   const [employeeMaster_AddAccess, setEmployeeMaster_AddAccess] = useState(false)
 
   //SetState  Edit data Geting From Modules List component
@@ -69,6 +73,8 @@ const AddUser = (props) => {
   const [editCreatedBy, seteditCreatedBy] = useState("");
 
 
+
+
   // M_Roles DropDown
 
   const [password, setPassword] = useState('');
@@ -76,6 +82,17 @@ const AddUser = (props) => {
   const [showErrorMessage, setShowErrorMessage] = useState(false);
   const [cPasswordClass, setCPasswordClass] = useState('form-control');
   const [isCPassword, setisCPassword] = useState(false);
+
+
+  const [currentPwd, setCurrentPwd] = useState("");
+
+  const [newPwd, setNewPwd] = useState("");
+  const [confirmPwd, setConfirmPwd] = useState("");
+  const [passwordsMatch, setPasswordsMatch] = useState(false);
+
+  const [showPassword, setShowPassword] = useState(false);
+
+  const [newPwdError, setNewPwdError] = useState({});
 
   const handleCPassword = (event) => {
     onChangeText({ event, state, setState });
@@ -91,19 +108,24 @@ const AddUser = (props) => {
     userAccess,
     pageField,
     saveBtnloading,
-    RateTypeList
+    RateTypeList,
+    loading,
+    postChangePasswordMsg
   } = useSelector((state) => ({
+    loading: state.ChangePasswordReducer.loading,
     saveBtnloading: state.User_Registration_Reducer.saveBtnloading,
     postMsg: state.User_Registration_Reducer.postMsg,
     employePartyWiseRoleState: state.User_Registration_Reducer.userPartiesForUserMaster,
     employeelistForDropdown: state.User_Registration_Reducer.employeelistForDropdown,
     RateTypeList: state.PartyMasterBulkUpdateReducer.SelectField,
     Roles: state.RoleMaster_Reducer.roleList,
+    postChangePasswordMsg: state.ChangePasswordReducer.postMsg,
     userAccess: state.Login.RoleAccessUpdateData,
     pageField: state.CommonPageFieldReducer.pageField
   }));
 
   const values = { ...state.values }
+
   const { isError } = state;
   const { fieldLabel } = state;
 
@@ -279,6 +301,25 @@ const AddUser = (props) => {
     }
   }, [postMsg.Status])
 
+
+
+  useEffect(() => {
+    if ((postChangePasswordMsg.Status === true) && (postChangePasswordMsg.StatusCode === 200)) {
+      const event = new MouseEvent('click', {
+        clientX: window.innerWidth,
+        clientY: window.innerHeight,
+        bubbles: true,
+        cancelable: true,
+        view: window
+      });
+      document.dispatchEvent(event);
+
+
+      dispatch(ChangePassword_Succes({ Status: false }))
+
+    }
+  }, [postChangePasswordMsg])
+
   const EmployeeOptions = employeelistForDropdown.map((Data) => ({
     value: Data.id,
     label: Data.Name,
@@ -308,6 +349,85 @@ const AddUser = (props) => {
       }
     })
   };
+
+
+
+  const currentpwdOnchange = (e) => {
+    e.preventDefault();
+
+    setCurrentPwd(e.target.value)
+  }
+
+  const newpwdOnchange = (e) => {
+    debugger
+    let val = e.target.value
+
+    const strongRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    const mediumRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/;
+
+    if (state.required.changePassword) {
+      if (strongRegex.test(val) && val !== "") {
+        setNewPwdError({ PasswordLevel: "Strong password", Color: "green" });
+      } else if (mediumRegex.test(val) && val !== "") {
+        setNewPwdError({ PasswordLevel: "Medium password", Color: "orange" });
+      } else if (val !== "") {
+        setNewPwdError({ PasswordLevel: "Weak password", Color: "tomato" });
+      }
+    } else {
+      setNewPwdError({ PasswordLevel: "", Color: "" });
+    }
+    setConfirmPwd('');
+    setPasswordsMatch(false);
+  }
+
+  const confirmpwdOnchange = (e) => {
+
+    let val = e.target.value;
+
+
+    if (values.changePassword === val) {
+      setConfirmPwd(val);
+      setPasswordsMatch(true);
+    } else {
+      setConfirmPwd(val);
+      setPasswordsMatch(false);
+    }
+  };
+
+  const toggleShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const ChangePasswordHandler = async (event) => {
+
+    event.preventDefault();
+
+
+    if (!passwordsMatch) {
+      customAlert({
+        Type: 3,
+        Message: alertMessages.newPasswordNotMatch,
+      });
+      return
+    }
+
+    const jsonBody = JSON.stringify({
+      LoginName: values.LoginName,
+      password: currentPwd,
+      newpassword: values.changePassword
+    });
+
+    const isConfirmed = await customAlert({
+      Type: 7,
+      Message: alertMessages.changePassword,
+    });
+
+    if (isConfirmed) {
+      dispatch(ChangePassword({ jsonBody }));
+
+    };
+  };
+
 
   const saveHandler = (event) => {
 
@@ -422,6 +542,8 @@ const AddUser = (props) => {
   // var IsEditMode_Css = ''
   // if (modalCss || (pageMode === mode.dropdownAdd)) { IsEditMode_Css = "-5.5%" };
 
+
+  console.log(values.POSRateType)
   if (!(userPageAccessState === '')) {
     return (
       <React.Fragment>
@@ -438,6 +560,17 @@ const AddUser = (props) => {
                       <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
                       <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
                     </CardHeader>
+
+
+
+
+
+
+
+
+
+
+
                     <CardBody className="text-black">
                       <form>
                         <Card className=" text-black">
@@ -475,7 +608,7 @@ const AddUser = (props) => {
                               }
 
                             </Row>
-                            {loginPartyTypeName === "Franchises" &&
+                            {isFrenchises &&
                               <Row>
                                 <FormGroup className="mb-2 col col-sm-4 ">
                                   <Label htmlFor="validationCustom01"> {fieldLabel.POSRateType} </Label>
@@ -484,6 +617,7 @@ const AddUser = (props) => {
                                       id="POSRateType"
                                       name="POSRateType"
                                       value={values.POSRateType}
+
                                       options={RateTypeValue}
                                       onChange={(hasSelect, evn) => {
                                         onChangeSelect({ hasSelect, evn, state, setState, })
@@ -643,10 +777,111 @@ const AddUser = (props) => {
                                 </Row>
                               </FormGroup>
                             </Row>
-
-
                           </CardBody>
                         </Card>
+
+                        {pageMode === mode.edit ? <Card className="text-black c_card_body" >
+                          <div className="modal-header">
+                            <h5 className="modal-title" id="staticBackdropLabel">Change Password</h5>
+                          </div>
+                          <div className="modal-body row">
+                            <div className=" col col-7 text-black">
+                              <Label htmlFor="validationCustom01" className="me-2">Old Password</Label>
+                              <FormGroup className="mb-2 col col-sm-9 d-flex align-items-center">
+                                <Input
+                                  // type={showPassword ? 'text' : 'password'}
+                                  type="text"
+                                  value={currentPwd}
+                                  autoComplete="off"
+                                  onChange={currentpwdOnchange}
+                                  placeholder="Enter Old Password"
+                                  className="me-2 flex-grow-1"
+                                />
+                                <button
+                                  className="btn btn-outline-primary"
+                                  style={{ borderColor: "#d4d4d4" }}
+                                  type="button"
+                                  onClick={toggleShowPassword}
+                                >
+                                  {showPassword ? <i className="mdi mdi-eye-off"></i> : <i className="mdi mdi-eye"></i>}
+                                </button>
+                              </FormGroup>
+
+                              <FormGroup className="mb-3 col col-sm-9">
+                                <Label> New Password </Label>
+                                <Input
+                                  value={values.changePassword}
+                                  name="changePassword" id="changePassword"
+                                  type="text"
+                                  placeholder="Enter New Password"
+                                  autoComplete='off'
+                                  className="form-control"
+                                  // onChange={newpwdOnchange}
+                                  onChange={(event) => {
+                                    onChangeText({ event, state, setState });
+                                    newpwdOnchange(event)
+                                  }}
+                                />
+                                {(values.changePassword !== "") && (
+                                  <span className=" font-size-12" style={{ color: newPwdError.Color }}>{newPwdError.PasswordLevel}</span>
+                                )}
+                                {isError.changePassword.length > 0 && (
+                                  <span className="text-danger font-size-17"><small>{isError.changePassword}</small></span>
+                                )}
+                              </FormGroup>
+                              <FormGroup className="mb-3 col col-sm-9">
+                                <Label> Confirm Password </Label>
+                                <Input
+                                  value={confirmPwd}
+                                  type="text"
+                                  placeholder="Enter Confirm Password"
+                                  autoComplete="off"
+                                  onChange={e => {
+                                    confirmpwdOnchange(e);
+                                  }}
+                                />
+                                {confirmPwd.length > 0 && (
+                                  <span className={passwordsMatch ? "text-success font-size-12" : "text-danger font-size-12"}>
+                                    {passwordsMatch ? "Passwords match!" : "Passwords do not match."}
+                                  </span>
+                                )}
+                              </FormGroup>
+                              <FormGroup className="mb-3 col col-sm-9">
+
+                                {loading ? <button type="button" className="btn btn-primary  "
+
+                                >
+                                  <div className="dot-pulse"> <span> Change Password</span>     &nbsp;
+                                    <div className="bounce1" style={{ background: "white" }}></div>
+                                    <div className="bounce2" style={{ background: "white" }}></div>
+                                    <div className="bounce3" style={{ background: "white" }}></div>
+                                  </div>
+                                </button>
+                                  : <button type="button" className="btn btn-primary w-20"
+                                    onClick={ChangePasswordHandler}
+                                  >Change Password</button>}
+                              </FormGroup>
+                            </div>
+                            {state.required.changePassword ? <div className="col col-1">
+                              <span className="text-danger">
+                                *Note
+                              </span>
+                            </div> : null}
+
+                            {state.required.changePassword ? <div className="col col-3  font-size-14">
+                              <span>
+                                must be 8-16 char and include at least one A-Z letter,
+                                one a-z letter, one 0-9, and one special character (@$!%*?&).
+                              </span>
+                            </div> : null}
+                          </div>
+
+
+
+
+
+                        </Card> : null}
+
 
                         < Card className="mt-n2">
                           <CardBody style={{ backgroundColor: "whitesmoke" }}>
@@ -673,11 +908,7 @@ const AddUser = (props) => {
 
                       </form>
                     </CardBody>
-                    <br></br>
-                    <br></br>
-                    <br></br>
-                    <br></br>
-                    <br></br>
+
                   </Card>
                 </Col>
               </Row>

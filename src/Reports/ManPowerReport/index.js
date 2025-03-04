@@ -9,7 +9,7 @@ import {
     Row,
     Spinner,
 } from "reactstrap";
-import { breadcrumbReturnFunc, metaTagLabel } from '../../components/Common/CommonFunction';
+import { breadcrumbReturnFunc, loginEmployeeID, metaTagLabel } from '../../components/Common/CommonFunction';
 import * as pageId from "../../routes/allPageID"
 import { BreadcrumbShowCountlabel, commonPageField, commonPageFieldSuccess } from '../../store/actions';
 import * as mode from "../../routes/PageMode"
@@ -118,7 +118,7 @@ const ManPowerReport = (props) => {
 
     function GobtnExcelhandler(Type) {
         setBtnMode(Type)
-        dispatch(ManPower_Get_Action({ btnId: url.MAN_POWER_REPORT }))
+        dispatch(ManPower_Get_Action({ btnId: url.MAN_POWER_REPORT, EmployeeID: loginEmployeeID() }))
     }
 
     return (

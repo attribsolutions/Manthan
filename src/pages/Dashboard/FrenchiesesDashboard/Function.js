@@ -4,7 +4,7 @@ import { FRENCHIESE_DAILY_SALE_REPORT, FRENCHIESE_MOBILE_CUSTOMER } from "../../
 export const GetDailySaleData = async ({ fromDate, toDate, Party_Id }) => { //+++++++++++++++++++++ Session Company Id+++++++++++++++++++++++++++++
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
-    myHeaders.append("Authorization", "Basic U3dlZXRQT1NVc2VyOjEyMzQ=");
+    myHeaders.append("Authorization", "Basic U3VwZXJBZG1pbjoxMjM0");
 
     const jsonBody = JSON.stringify({
         "FromDate": fromDate,

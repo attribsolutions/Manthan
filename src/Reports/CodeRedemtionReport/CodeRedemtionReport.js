@@ -122,7 +122,7 @@ const CodeRedemtionReport = (props) => {
 
     }, [goButtonData]);
 
-    function excel_And_GoBtnHandler(e, mode) {
+    function excel_And_GoBtnHandler(mode) {
 
         const jsonBody = JSON.stringify({
             "FromDate": fromdate,
@@ -222,7 +222,7 @@ const CodeRedemtionReport = (props) => {
                                 spinnerColor="white"
                                 loading={listBtnLoading === "Show"}
                                 className="btn btn-success m-3 mr"
-                                onClick={(e) => excel_And_GoBtnHandler(e, "Show")}
+                                onClick={(e) => excel_And_GoBtnHandler("Show")}
                             >
                                 Show
                             </C_Button>
@@ -231,14 +231,14 @@ const CodeRedemtionReport = (props) => {
                                 spinnerColor="white"
                                 loading={listBtnLoading === "Excel"}
                                 className="btn btn-primary m-3 mr "
-                                onClick={(e) => excel_And_GoBtnHandler(e, "Excel")}
+                                onClick={(e) => excel_And_GoBtnHandler("Excel")}
                             >
                                 Excel
                             </C_Button>
                         </Col>
                     </Row>
                 </div>
-                <div className="mb-1 table-responsive table">
+                <div className="mb-1">
                     <GlobalCustomTable
                         keyField={"id"}
                         data={tableData}
@@ -249,8 +249,10 @@ const CodeRedemtionReport = (props) => {
                                 Items Not available
                             </div>
                         }
-                        onDataSizeChange={({ dataCount }) => {
-                            dispatch(BreadcrumbShowCountlabel(`Count:${dataCount} `));
+                        onDataSizeChange={({ dataCount, filteredData }) => {
+                            // dispatch(BreadcrumbShowCountlabel(`Count:${dataCount} `));
+                            dispatch(BreadcrumbShowCountlabel(`Count:${dataCount} currency_symbol ${_cfunc.TotalAmount_Func(filteredData)}`));
+
                         }}
                     />
                 </div>
