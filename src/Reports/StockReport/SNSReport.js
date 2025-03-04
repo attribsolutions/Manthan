@@ -31,7 +31,7 @@ const SNSReport = (props) => {
     const [headerFilters, setHeaderFilters] = useState('');
     const [userPageAccessState, setUserAccState] = useState('');
     const [unitDropdown, setUnitDropdown] = useState({ value: 0, label: "BaseUnit" });
-    const [PartyDropdown, setPartyDropdown] = useState("");
+    const [PartyDropdown, setPartyDropdown] = useState([]);
     const [btnMode, setBtnMode] = useState("");
 
     const reducers = useSelector(
@@ -194,11 +194,13 @@ const SNSReport = (props) => {
             return;
         }
 
+        const PartyIDs = PartyDropdown.filter(i => !(i.value === '')).map(obj => obj.value).join(',');
+
         const jsonBody = JSON.stringify({
             "FromDate": fromdate,
             "ToDate": todate,
             "Unit": unitDropdown.value,
-            "Party": isSCMParty ? PartyDropdown.value : _cfunc.loginPartyID()
+            "Party": isSCMParty ? PartyIDs : _cfunc.loginPartyID().toString()
         });
 
         let config = { ReportType: report.Stock, jsonBody, isFranchises }
@@ -291,6 +293,7 @@ const SNSReport = (props) => {
                                 <Col sm="7">
                                     <C_Select
                                         name="Party"
+                                        isMulti={true}
                                         value={PartyDropdown}
                                         isSearchable={true}
                                         className="react-dropdown"
