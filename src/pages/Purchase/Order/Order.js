@@ -432,9 +432,9 @@ const Order = (props) => {
                 //         return a.Quantity - b.Quantity;
                 //     }
                 // });
-                orderItems = orderItems
-                    .filter((i) => i.Quantity !== null)  // Filter out null Quantities first
-                    .sort((a, b) => a.Quantity - b.Quantity);  // Then sort by Quantity
+                // orderItems = orderItems
+                //     .filter((i) => i.Quantity !== null)  // Filter out null Quantities first
+                //     .sort((a, b) => a.Quantity - b.Quantity);  // Then sort by Quantity
                 // }
 
                 const commaSeparateAmount = _cfunc.amountCommaSeparateFunc(Number(hasEditVal.OrderAmount).toFixed(2));
@@ -1421,6 +1421,12 @@ const Order = (props) => {
             customAlert({ Type: 4, Message: validationMessage });
             return;  // Stop further execution if validation fails
         }
+
+        if (itemSelectDropOptions.length === orderItemTable.length) {
+            customAlert({ Type: 4, Message: "Already added all items." });
+            return;  // Stop further execution if validation fails
+        }
+
         if (commonPartyDropSelect.value === 0) {
             customAlert({
                 Type: 4,
