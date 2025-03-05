@@ -46,6 +46,7 @@ import { allLabelWithBlank } from "../../../components/Common/CommonErrorMsg/Har
 import { Group_Subgroup_func, GroupSubgroupDisplay, ModifyTableData_func } from "../../../components/Common/TableCommonFunc";
 import AddMaster from "../../Adminisrator/EmployeePages/Drodown";
 import PartyMaster from "../../Adminisrator/PartyMaster/MasterAdd/PartyIndex";
+import paginationFactory from "react-bootstrap-table2-paginator";
 
 
 let editVal = {}
@@ -106,8 +107,11 @@ const Order = (props) => {
         Route: "",
         Item: '',
         AdvanceAmount: 0,
-        Description: ""
+        Description: "",
+        OrderAmount: "0.00",
+        Total_weigtage: "0.00",
     }
+
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
 
@@ -121,7 +125,7 @@ const Order = (props) => {
     const [userPageAccessState, setUserAccState] = useState('');
     const [description, setDescription] = useState('')
 
-    const [processedData, setprocessedData] = useState([])
+    // const [processedData, setprocessedData] = useState([])
 
 
 
@@ -138,8 +142,9 @@ const Order = (props) => {
 
     const [supplierSelect, setSupplierSelect] = useState('');
     const [routeSelect, setRouteSelect] = useState(allLabelWithBlank);
-    const [itemSelect, setItemSelect] = useState(allLabelWithBlank);
+    const [itemSelect, setItemSelect] = useState("");
     const [itemSelectDropOptions, setitemSelectOptions] = useState([]);
+
     const [selecedItemWiseOrder, setSelecedItemWiseOrder] = useState(true)
     const [goBtnDissable, setGoBtnDissable] = useState(false)
 
@@ -151,6 +156,7 @@ const Order = (props) => {
     const [orderTypeSelect, setorderTypeSelect] = useState([]);
     const [isOpen_assignLink, setisOpen_assignLink] = useState(false)
     const [orderItemTable, setOrderItemTable] = useState([])
+
     const [findPartyItemAccess, setFindPartyItemAccess] = useState(false)
     const [FSSAI_Date_Is_Expired, setFSSAI_Date_Is_Expired] = useState("")
     const [FrenchiesesCustomerMasterAccess, setFrenchiesesCustomerMasterAccess] = useState(false);
@@ -301,7 +307,7 @@ const Order = (props) => {
                 dispatch(_act.getSupplierAddress(commonPartyDropSelect.value))
             }
         }
-        setItemSelect(allLabelWithBlank);
+        // setItemSelect(allLabelWithBlank);
         setRouteSelect(allLabelWithBlank);
         setSupplierSelect('')
         return () => {
@@ -311,16 +317,18 @@ const Order = (props) => {
             setGoBtnDissable(false)
             setSelecedItemWiseOrder(true)
             setOrderItemTable([])
-            dispatch(_act.GoButton_For_Order_AddSuccess([]))
+            dispatch(_act.GoButton_For_Order_AddSuccess(null))
         }
 
     }, [commonPartyDropSelect]);
 
 
-    useEffect(() => {
+    // useEffect(() => {
 
-        setprocessedData(ModifyTableData_func(orderItemTable));
-    }, [orderItemTable])
+    //     setprocessedData(ModifyTableData_func(orderItemTable));
+    // }, [orderItemTable])
+
+    const processedData = useMemo(() => ModifyTableData_func(orderItemTable), [orderItemTable]);
 
 
     useEffect(() => { // hasEditVal useEffect
@@ -360,13 +368,7 @@ const Order = (props) => {
                 setbillAddr({ label: hasEditVal.BillingAddress, value: hasEditVal.BillingAddressID });
                 setDescription(hasEditVal.Description)
 
-                setState(i => {
 
-                    const state = { ...i }
-                    state.values.AdvanceAmount = hasEditVal.AdvanceAmount
-                    state.values.Description = hasEditVal.Description
-                    return state
-                })
                 editVal = {}
                 editVal = hasEditVal
                 // setOrderAmount(hasEditVal.OrderAmount)
@@ -382,36 +384,78 @@ const Order = (props) => {
                     label: i.TermsAndCondition,
                     IsDeleted: 0
                 }))
-                let Total_weigtage = 0
-                const orderItems = hasEditVal.OrderItems.map((ele, k) => {
 
-                    const weightage = (Number(ele["Weightage"])) || 0.00;
-                    const row_weightage = (Number(ele.Quantity) * Number(ele.BaseUnitQuantity)) / Number(weightage)
-                    if (!isNaN(row_weightage) && row_weightage !== null) {
+
+
+                let Total_weigtage = 0
+                // let orderItems = hasEditVal.OrderItems.map((ele, k) => {
+
+                //     const weightage = (Number(ele["Weightage"])) || 0.00;
+                //     const row_weightage = (Number(ele.Quantity) * Number(ele.BaseUnitQuantity)) / Number(weightage)
+                //     if (!isNaN(row_weightage) && row_weightage !== null) {
+                //         Total_weigtage += row_weightage;
+                //     }
+
+                //     ele["id"] = k + 1
+                //     return ele
+                // });
+
+                debugger
+
+                let orderItems = hasEditVal.OrderItems.map((ele, k) => {
+                    // Calculate weightage and total weightage
+                    const weightage = Number(ele["Weightage"]) || 0.00;
+                    const row_weightage = (Number(ele.Quantity) * Number(ele.BaseUnitQuantity)) / weightage;
+                    if (!isNaN(row_weightage) && row_weightage !== null && isFinite(row_weightage)) {
                         Total_weigtage += row_weightage;
                     }
-
-                    ele["id"] = k + 1
-                    return ele
+                    // Add id, value, and label properties
+                    return {
+                        ...ele,
+                        id: k + 1,
+                        value: ele.Item_id,
+                        label: ele.ItemName
+                    };
                 });
 
-                if (!_cfunc.loginUserIsFranchisesRole()) {
-                    orderItems.sort((a, b) => {
-                        if (a.Quantity === null && b.Quantity !== null) {
-                            return 1;
-                        } else if (a.Quantity !== null && b.Quantity === null) {
-                            return -1;
-                        } else if (a.Quantity === null && b.Quantity === null) {
-                            return 0;
-                        } else {
-                            return a.Quantity - b.Quantity;
-                        }
-                    });
-                }
+                setitemSelectOptions(orderItems)
+
+                // if (!_cfunc.loginUserIsFranchisesRole()) {
+                // orderItems.sort((a, b) => {
+                //     if (a.Quantity === null && b.Quantity !== null) {
+                //         return 1;
+                //     } else if (a.Quantity !== null && b.Quantity === null) {
+                //         return -1;
+                //     } else if (a.Quantity === null && b.Quantity === null) {
+                //         return 0;
+                //     } else {
+                //         return a.Quantity - b.Quantity;
+                //     }
+                // });
+                // orderItems = orderItems
+                //     .filter((i) => i.Quantity !== null)  // Filter out null Quantities first
+                //     .sort((a, b) => a.Quantity - b.Quantity);  // Then sort by Quantity
+                // }
+
+                const commaSeparateAmount = _cfunc.amountCommaSeparateFunc(Number(hasEditVal.OrderAmount).toFixed(2));
+
+                setState(i => {
+
+                    const state = { ...i }
+                    state.values.AdvanceAmount = hasEditVal.AdvanceAmount
+                    state.values.Description = hasEditVal.Description
+
+                    state.values.OrderAmount = commaSeparateAmount
+                    state.values.Total_weigtage = Total_weigtage
+
+                    return state
+                })
+
                 setOrderItemTable(orderItems)
                 setTermsAndConTable(termsAndCondition)
 
-                const commaSeparateAmount = _cfunc.amountCommaSeparateFunc(Number(hasEditVal.OrderAmount).toFixed(2));
+
+
                 dispatch(_act.BreadcrumbShowCountlabel(`Count:${orderItems.length} currency_symbol ${commaSeparateAmount} weight ${(Total_weigtage).toFixed(2)} kg`))
 
                 seteditCreatedBy(hasEditVal.CreatedBy)
@@ -436,7 +480,7 @@ const Order = (props) => {
 
     useEffect(() => {
         if ((PartyItemPostMsg.Status === true) && (PartyItemPostMsg.StatusCode === 200)) {
-            dispatch(_act.GoButton_For_Order_AddSuccess([]))
+            dispatch(_act.GoButton_For_Order_AddSuccess(null))
         }
     }, [PartyItemPostMsg])
 
@@ -465,7 +509,7 @@ const Order = (props) => {
             } else {// ??******************************+++++++++++++++++++++++++++++++++++++++++++++++
 
 
-                dispatch(_act.GoButton_For_Order_AddSuccess([]))
+                dispatch(_act.GoButton_For_Order_AddSuccess(null))
                 if ((subPageMode === url.ORDER_4) && (postMsg.gotoInvoiceMode)) {
 
                     // const customer = supplierSelect
@@ -482,8 +526,8 @@ const Order = (props) => {
                     });
                     dispatch(_act.GoButtonForinvoiceAdd({
                         jsonBody,
-                        subPageMode: _cfunc.loginUserIsFranchisesRole() ? url.FRANCHAISE_INVOICE : url.INVOICE_1,
-                        path: _cfunc.loginUserIsFranchisesRole() ? url.FRANCHAISE_INVOICE : url.INVOICE_1,
+                        subPageMode: IsFranchisesRole ? url.FRANCHAISE_INVOICE : url.INVOICE_1,
+                        path: IsFranchisesRole ? url.FRANCHAISE_INVOICE : url.INVOICE_1,
                         pageMode: mode.defaultsave,
                         customer,
                         errorMsg: "Order Save Successfully But Can't Make Invoice"
@@ -537,14 +581,14 @@ const Order = (props) => {
 
     useEffect(() => {
 
+
         if (goBtnOrderdata) {
             let { OrderItems = [], TermsAndConditions = [] } = goBtnOrderdata
-
             if (!selecedItemWiseOrder) { setOrderItemTable(OrderItems) }
             setitemSelectOptions(OrderItems.map(i => ({ ...i, value: i.Item_id, label: i.ItemName })))
 
             setTermsAndConTable(TermsAndConditions)
-            dispatch(_act.GoButton_For_Order_AddSuccess(''))
+            dispatch(_act.GoButton_For_Order_AddSuccess(null))
         }
     }, [goBtnOrderdata]);
 
@@ -601,6 +645,7 @@ const Order = (props) => {
             });
 
             // Set the updated array as the new orderItemTable
+
             setOrderItemTable(updatedOrderItemTable);
         }
     }, [changeAllDiscount, discountValueAll, discountTypeAll.value]);
@@ -656,6 +701,10 @@ const Order = (props) => {
         return '';
     };
 
+
+
+
+
     const pagesListColumns = [
 
         {//------------- ItemName column ----------------------------------
@@ -700,7 +749,7 @@ const Order = (props) => {
                     return (
                         <>
                             <div>
-                                {(subPageMode === url.ORDER_2) && _cfunc.loginUserIsFranchisesRole() && < div className="checkbox-wrapper-31" style={{ marginRight: "20px" }}
+                                {(subPageMode === url.ORDER_2) && IsFranchisesRole && < div className="checkbox-wrapper-31" style={{ marginRight: "20px" }}
                                     title="Select to highlight this item for printing.">
                                     <input type="checkbox"
                                         onChange={(e) => { row.IsHighlightItemInPrint = e.target.checked }}
@@ -796,7 +845,7 @@ const Order = (props) => {
                 if (!row.UnitName) {
                     row["Unit_id"] = 0;
                     row["UnitName"] = 'null';
-                    if (_cfunc.loginUserIsFranchisesRole() && subPageMode === url.ORDER_4) {
+                    if (IsFranchisesRole && subPageMode === url.ORDER_4) {
                         row.UnitDetails.forEach(i => {
                             if (i?.IsBase) {
                                 defaultUnit(i)
@@ -870,7 +919,7 @@ const Order = (props) => {
                             id={"ddlUnit"}
                             key={`ddlUnit${row.id}`}
                             defaultValue={{ value: row.Unit_id, label: row.UnitName }}
-                            isDisabled={subPageMode === url.ORDER_4 && _cfunc.loginUserIsFranchisesRole()}
+                            isDisabled={subPageMode === url.ORDER_4 && IsFranchisesRole}
                             options={
                                 row.UnitDetails.map(i => ({
                                     label: i.UnitName,
@@ -905,7 +954,7 @@ const Order = (props) => {
         },
 
         {//------------- Rate column ----------------------------------
-            text: (_cfunc.loginUserIsFranchisesRole() && subPageMode === url.ORDER_4) ? "MRP" : "Basic Rate",
+            text: (IsFranchisesRole && subPageMode === url.ORDER_4) ? "MRP" : "Basic Rate",
             classes: 'table-cursor-pointer',
             dataField: "",
             attrs: (cell, row, rowIndex, colIndex) => ({ 'data-label': "Basic Rate" }),
@@ -958,7 +1007,7 @@ const Order = (props) => {
             headerStyle: () => {
                 return { width: '8%', textAlign: 'center' };
             },
-            hidden: (subPageMode === url.ORDER_1 || subPageMode === url.IB_ORDER || subPageMode === url.IB_SALES_ORDER || _cfunc.loginUserIsFranchisesRole()) && true,
+            hidden: (subPageMode === url.ORDER_1 || subPageMode === url.IB_ORDER || subPageMode === url.IB_SALES_ORDER || IsFranchisesRole) && true,
             formatter: (value, row, k) => {
                 if (row.GroupRow || row.SubGroupRow) { return }
                 return (
@@ -980,7 +1029,7 @@ const Order = (props) => {
             headerStyle: () => {
                 return { width: '11%', textAlign: 'center' };
             },
-            hidden: (subPageMode === url.ORDER_1 || subPageMode === url.IB_ORDER || subPageMode === url.IB_SALES_ORDER || _cfunc.loginUserIsFranchisesRole()) && true,
+            hidden: (subPageMode === url.ORDER_1 || subPageMode === url.IB_ORDER || subPageMode === url.IB_SALES_ORDER || IsFranchisesRole) && true,
             headerFormatter: () => {
                 return (
                     <div className="" >
@@ -1183,10 +1232,18 @@ const Order = (props) => {
                 setFSSAI_Date_Is_Expired("");
             }
         }
-
+        setSelecedItemWiseOrder(true)
         setOrderItemTable([]);
         setItemSelect('');
         goButtonHandler(e.value);
+
+        const elements = document.querySelectorAll('.amount-countable-Calulation');
+        const weightage_lable = document.querySelectorAll('.weightage-lable');
+        const weightage_value = document.querySelectorAll('.weightage-value');
+        weightage_lable.forEach(element => { element.innerText = "weight:"; });
+        weightage_value.forEach(element => { element.innerText = `${(0).toFixed(2)} kg`; });
+        elements.forEach(element => { element.innerText = 0.00; });
+
     }
 
     function itemSelectOnchange(e) {
@@ -1234,7 +1291,7 @@ const Order = (props) => {
     function itemWise_CalculationFunc(row, IsComparGstIn, tableList = []) {
 
         let calculate = {} //order calculation function 
-        if (_cfunc.loginUserIsFranchisesRole() && subPageMode === url.ORDER_4) {
+        if (IsFranchisesRole && subPageMode === url.ORDER_4) {
             calculate = Franchies_Order_Calculate_Func(row)
         } else {
             calculate = orderCalculateFunc(row) //order calculation function 
@@ -1244,7 +1301,7 @@ const Order = (props) => {
 
         let totals = tableList.reduce(
             (accumulator, currentObject) => {
-
+                debugger
                 const amount = Number(currentObject["Amount"]) || 0.00;
                 const weightage = (Number(currentObject["Weightage"])) || 0.00;
 
@@ -1288,6 +1345,8 @@ const Order = (props) => {
     };
 
     const item_AddButtonHandler = () => {
+
+        debugger
         setGoBtnDissable(true)
         let isfound = orderItemTable.find(i => i.value === itemSelect.value);
 
@@ -1300,6 +1359,11 @@ const Order = (props) => {
         else {
             customAlert({ Type: 3, Message: alertMessages.ItemNameAlreadyExists })
         }
+
+
+
+        dispatch(_act.BreadcrumbShowCountlabel(`Count:${[itemSelect].concat(orderItemTable).length} currency_symbol ${state.values.OrderAmount} weight ${state.values.Total_weigtage} kg`))
+
         setItemSelect('')
     }
 
@@ -1349,6 +1413,7 @@ const Order = (props) => {
     };
 
     const handleGoButtonClick = (e) => {
+
         const validationMessage = _cfunc.validateOrder(page_id, deliverydate);  // Get the validation message
 
         if (validationMessage !== "") {
@@ -1356,6 +1421,12 @@ const Order = (props) => {
             customAlert({ Type: 4, Message: validationMessage });
             return;  // Stop further execution if validation fails
         }
+
+        if (itemSelectDropOptions.length === orderItemTable.length) {
+            customAlert({ Type: 4, Message: "Already added all items." });
+            return;  // Stop further execution if validation fails
+        }
+
         if (commonPartyDropSelect.value === 0) {
             customAlert({
                 Type: 4,
@@ -1370,8 +1441,12 @@ const Order = (props) => {
             })
             return;
         }
-        dispatch(_act.BreadcrumbShowCountlabel(`Count:${itemSelectDropOptions.length} currency_symbol 0.00 weight 0.00 kg`))
+
+        console.log("state", state)
+
+        dispatch(_act.BreadcrumbShowCountlabel(`Count:${itemSelectDropOptions.length} currency_symbol ${state.values.OrderAmount} weight ${state.values.Total_weigtage} kg`))
         setSelecedItemWiseOrder(false)
+
         setOrderItemTable(itemSelectDropOptions)
         setItemSelect(allLabelWithBlank)
         setGoBtnDissable(true)
@@ -1481,7 +1556,7 @@ const Order = (props) => {
             function processValueChanged({ item, isEdit, isDelete }) {
 
                 let calculated = {}
-                if (_cfunc.loginUserIsFranchisesRole() && subPageMode === url.ORDER_4) {
+                if (IsFranchisesRole && subPageMode === url.ORDER_4) {
                     calculated = Franchies_Order_Calculate_Func(item)
                 } else {
                     calculated = orderCalculateFunc(item, { GSTIn_1: supplierSelect.GSTIN, GSTIn_2: _cfunc.loginUserGSTIN() });
@@ -1591,7 +1666,7 @@ const Order = (props) => {
                 Customer: supplier,// swipe supllier 
                 Supplier: division,// swipe Customer
                 OrderType: order_Type.SaleOrder,
-                IsConfirm: _cfunc.loginUserIsFranchisesRole() ? false : true, // SO Order then IsConfirm true
+                IsConfirm: IsFranchisesRole ? false : true, // SO Order then IsConfirm true
                 AdvanceAmount: advanceAmountRef.current.value ? advanceAmountRef.current.value : 0
             }
 
@@ -1749,7 +1824,7 @@ const Order = (props) => {
                                                 <Col sm="7">
                                                     <C_Select
                                                         value={supplierSelect}
-                                                        isDisabled={(orderItemTable.length > 0 || pageMode === "edit" || goBtnloading) ? true : false}
+                                                        isDisabled={(pageMode === mode.edit || goBtnloading) ? true : false}
                                                         options={supplierOptions}
                                                         onChange={supplierOnchange}
                                                         isLoading={supplierDropLoading}
@@ -1784,28 +1859,31 @@ const Order = (props) => {
                                         <Col sm="1">                      {/*Go_Button  */}
 
                                             <div className="row mt-2  pr-1">
-                                                {pageMode === mode.defaultsave ?
+                                                {pageMode === mode.defaultsave || pageMode === mode.edit ?
                                                     // (!selecedItemWiseOrder && itemSelectDropOptions.length > 0) ?
-                                                    (!goBtnDissable) ?
+                                                    // (!goBtnDissable) ?
 
-                                                        <Go_Button
-                                                            loading={goBtnloading}
-                                                            id={`go-btn${subPageMode}`}
-                                                            onClick={handleGoButtonClick}
-                                                        />
-                                                        : (!selecedItemWiseOrder) &&
-                                                        <Change_Button
-                                                            id={`change-btn${subPageMode}`}
-                                                            onClick={(e) => {
-                                                                setSupplierSelect('')
-                                                                setGoBtnDissable(false)
-                                                                setSelecedItemWiseOrder(true)
-                                                                setOrderItemTable([])
-                                                                setItemSelect(allLabelWithBlank)
-                                                                dispatch(_act.GoButton_For_Order_AddSuccess([]));
-                                                                dispatch(_act.BreadcrumbShowCountlabel(initial_BredcrumbMsg))
-                                                            }}
-                                                        />
+                                                    <Go_Button
+                                                        loading={goBtnloading}
+                                                        id={`go-btn${subPageMode}`}
+                                                        Lable={itemSelectDropOptions.length > 0 ? `All Item` : `Go`}
+                                                        iconClass={itemSelectDropOptions.length > 0 ? `bx bx-list-plus fa-2x` : ``}
+                                                        onClick={handleGoButtonClick}
+                                                        styles={{ padding: itemSelectDropOptions.length > 0 ? ` 0px` : `6px` }}
+                                                    />
+                                                    // :
+                                                    // <Change_Button
+                                                    //     id={`change-btn${subPageMode}`}
+                                                    //     onClick={(e) => {
+                                                    //         setSupplierSelect('')
+                                                    //         setGoBtnDissable(false)
+                                                    //         setSelecedItemWiseOrder(true)
+                                                    //         setOrderItemTable([])
+                                                    //         setItemSelect(allLabelWithBlank)
+                                                    //         dispatch(_act.GoButton_For_Order_AddSuccess([]));
+                                                    //         dispatch(_act.BreadcrumbShowCountlabel(initial_BredcrumbMsg))
+                                                    //     }}
+                                                    // />
                                                     : null
                                                 }
                                             </div>
@@ -1832,7 +1910,7 @@ const Order = (props) => {
                                             </FormGroup>
                                         </Col >
 
-                                        {(_cfunc.loginUserIsFranchisesRole() && subPageMode === url.ORDER_4) ? <Col sm='3'>
+                                        {(IsFranchisesRole && subPageMode === url.ORDER_4) ? <Col sm='3'>
                                             <FormGroup className="row mt-1" >
                                                 <Label className="col-sm-5 p-2"
                                                     style={{ width: "130px" }}>{fieldLabel.AdvanceAmount}</Label>
@@ -1864,7 +1942,7 @@ const Order = (props) => {
                                                 <Col sm="7">
                                                     <C_Select
                                                         value={itemSelect}
-                                                        isDisabled={(pageMode === "edit" || goBtnloading) ? true : false}
+                                                        isDisabled={(goBtnloading) ? true : false}
                                                         options={itemSelectDropOptions}
                                                         isLoading={goBtnloading}
                                                         onChange={itemSelectOnchange}
@@ -1878,7 +1956,7 @@ const Order = (props) => {
                                         </Col>
                                         <Col sm="1"  >
 
-                                            {pageMode === mode.defaultsave ?
+                                            {pageMode === mode.defaultsave || pageMode === mode.edit ?
                                                 <div className="row mt-2 pr-1"  >
                                                     {(selecedItemWiseOrder && itemSelectDropOptions.length > 0) ?
                                                         <C_Button
@@ -1895,12 +1973,33 @@ const Order = (props) => {
                                                             className='text-blac1k'
                                                             disabled={goBtnloading}
                                                             onClick={() => {
-                                                                setSupplierSelect('')
+                                                                // setSupplierSelect('')
                                                                 setGoBtnDissable(false)
-                                                                setSelecedItemWiseOrder(true)
-                                                                setOrderItemTable([])
                                                                 setItemSelect('')
-                                                                dispatch(_act.GoButton_For_Order_AddSuccess([]))
+                                                                setSelecedItemWiseOrder(true)
+                                                                if (pageMode === mode.edit) {
+                                                                    let orderItem = orderItemTable
+                                                                        .filter((i) => i.Quantity !== null)
+                                                                        .sort((a, b) => a.Quantity - b.Quantity)
+                                                                    setOrderItemTable(orderItem)
+                                                                    dispatch(_act.BreadcrumbShowCountlabel(`Count:${orderItem.length} currency_symbol ${state.values.OrderAmount} weight ${state.values.Total_weigtage} kg`))
+                                                                } else {
+                                                                    debugger
+                                                                    let orderItem = orderItemTable
+                                                                        .filter((i) => i.Quantity)
+                                                                        .sort((a, b) => a.Quantity - b.Quantity)
+                                                                    setOrderItemTable(orderItem)
+                                                                    // setOrderItemTable([])
+                                                                    // const elements = document.querySelectorAll('.amount-countable-Calulation');
+                                                                    // const weightage_lable = document.querySelectorAll('.weightage-lable');
+                                                                    // const weightage_value = document.querySelectorAll('.weightage-value');
+                                                                    // weightage_lable.forEach(element => { element.innerText = "weight:"; });
+                                                                    // weightage_value.forEach(element => { element.innerText = `${(0).toFixed(2)} kg`; });
+                                                                    // elements.forEach(element => { element.innerText = 0.00; });
+                                                                    // 
+                                                                    dispatch(_act.BreadcrumbShowCountlabel(`Count:${0} currency_symbol ${state.values.OrderAmount} weight ${state.values.Total_weigtage} kg`))
+                                                                }
+                                                                // dispatch(_act.GoButton_For_Order_AddSuccess([]))
                                                             }} >
                                                             Item Wise
                                                         </Button>
@@ -1916,7 +2015,6 @@ const Order = (props) => {
 
                             </div>
                             {subPageMode === url.ORDER_1 &&
-
                                 <div className="px-2 c_card_filter text-black" >
                                     <div>
                                         <Row >
@@ -2048,7 +2146,6 @@ const Order = (props) => {
                         >
                             {(toolkitProps,) => (
                                 <React.Fragment>
-
                                     <BootstrapTable
                                         keyField={"Item_id"}
                                         id="table_Arrow"
@@ -2083,7 +2180,6 @@ const Order = (props) => {
                             ((orderItemTable.length > 0) && (!isOpen_assignLink)) &&
 
                             <SaveButtonDraggable>
-
                                 <SaveButton
                                     loading={saveBtnloading}
                                     editCreatedBy={editCreatedBy}

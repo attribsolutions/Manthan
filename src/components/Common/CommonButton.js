@@ -87,8 +87,9 @@ const UpdateBtn = ({ onClick, userAcc, loading, type = 'button' }) => {
 
 export function Go_Button(props) {
 
-  const { onClick, id, type = "button", loading, forceDisabled } = props
 
+  const { onClick, id, type = "button", loading, forceDisabled, Lable = "Go", iconClass, styles } = props
+  
   return loading ?
     <button
       id={id}
@@ -96,24 +97,24 @@ export function Go_Button(props) {
       className="btn btn-success "
       data-mdb-toggle="tooltip"
       data-mdb-placement="top"
+      style={styles}
       title={`Go Button Loging...`}
       disabled
     >
       <Spinner style={{ height: "12px", width: "12px" }} color="white" />
     </button>
-
     :
     <button
       id={id}
       type="button"
       className="btn btn-success "
-      style={{ marginTop: "3px" }}
       data-mdb-toggle="tooltip"
       data-mdb-placement="top"
       title="Go get details"
+      style={styles}
       onClick={onClick}
       disabled={forceDisabled}
-    > Go </button>
+    >  <i className={iconClass} ></i> {Lable} </button>
 }
 
 export function Change_Button(props) {
