@@ -420,22 +420,8 @@ const Order = (props) => {
 
                 setitemSelectOptions(orderItems)
 
-                // if (!_cfunc.loginUserIsFranchisesRole()) {
-                // orderItems.sort((a, b) => {
-                //     if (a.Quantity === null && b.Quantity !== null) {
-                //         return 1;
-                //     } else if (a.Quantity !== null && b.Quantity === null) {
-                //         return -1;
-                //     } else if (a.Quantity === null && b.Quantity === null) {
-                //         return 0;
-                //     } else {
-                //         return a.Quantity - b.Quantity;
-                //     }
-                // });
-                // orderItems = orderItems
-                //     .filter((i) => i.Quantity !== null)  // Filter out null Quantities first
-                //     .sort((a, b) => a.Quantity - b.Quantity);  // Then sort by Quantity
-                // }
+                orderItems = orderItems
+                    .filter((i) => i.Quantity)
 
                 const commaSeparateAmount = _cfunc.amountCommaSeparateFunc(Number(hasEditVal.OrderAmount).toFixed(2));
 
@@ -1979,7 +1965,7 @@ const Order = (props) => {
                                                                 setSelecedItemWiseOrder(true)
                                                                 if (pageMode === mode.edit) {
                                                                     let orderItem = orderItemTable
-                                                                        .filter((i) => i.Quantity !== null)
+                                                                        .filter((i) => i.Quantity)
                                                                         .sort((a, b) => a.Quantity - b.Quantity)
                                                                     setOrderItemTable(orderItem)
                                                                     dispatch(_act.BreadcrumbShowCountlabel(`Count:${orderItem.length} currency_symbol ${state.values.OrderAmount} weight ${state.values.Total_weigtage} kg`))
