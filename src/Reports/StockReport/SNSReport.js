@@ -79,7 +79,7 @@ const SNSReport = (props) => {
         dispatch(commonPageField(pageId.STOCK_REPORT_1));
         dispatch(getBaseUnit_ForDropDown());
         if (_cfunc.CommonPartyDropValue().value > 0) {
-            setPartyDropdown(_cfunc.CommonPartyDropValue())
+            setPartyDropdown([_cfunc.CommonPartyDropValue()])
         }
         dispatch(changeCommonPartyDropDetailsAction({ isShow: false }))//change party drop-down show false
         return () => {
@@ -114,7 +114,7 @@ const SNSReport = (props) => {
             else if ((StockReport_1_Gobtb.Status === true) && (StockReport_1_Gobtb.StatusCode === 204)) {
                 customAlert({
                     Type: 3,
-                    Message: alertMessages.recordNotAvailable,
+                    Message: StockReport_1_Gobtb.recordNotAvailable,
                 })
                 dispatch(stockReport_1_GoButton_API_Success([]));
                 return
@@ -209,9 +209,9 @@ const SNSReport = (props) => {
             customAlert({ Type: 4, Message: alertMessages.commonPartySelectionIsRequired });
             return;
         }
-
-        const PartyIDs = PartyDropdown.filter(i => !(i.value === '')).map(obj => obj.value).join(',');
-        const finalPartyIDs = (PartyIDs === '') ? Party_Option.map(obj => obj.value).join(',') : PartyIDs;
+        debugger
+        const PartyIDs = PartyDropdown?.filter(i => !(i.value === '')).map(obj => obj.value).join(',');
+        const finalPartyIDs = (PartyIDs === '') ? Party_Option?.map(obj => obj.value).join(',') : PartyIDs;
         const jsonBody = JSON.stringify({
             "FromDate": fromdate,
             "ToDate": todate,
@@ -325,7 +325,7 @@ const SNSReport = (props) => {
                         </Col>
                         }
                         <Col sm={isSCMParty ? 3 : 3} className=" d-flex justify-content-end" >
-                            <C_Button
+                            {!isSCMParty && <C_Button
                                 type="button"
                                 spinnerColor="white"
 
@@ -336,7 +336,7 @@ const SNSReport = (props) => {
                                 onClick={() => StockProccessHandler()}
                             >
                                 Stock Process
-                            </C_Button>
+                            </C_Button>}
                             <C_Button
                                 type="button"
                                 spinnerColor="white"
