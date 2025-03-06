@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         IMAGE_NAME = "fooderpfrontend"
-        IMAGE_TAG = "new"
+        IMAGE_TAG = "latest"
         DOCKER_USERNAME = 'adarshmali'
         DOCKER_PASSWORD = 'Adm@514040'
         DOCKER_HUB_USER = "adarshmali"
