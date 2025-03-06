@@ -49,7 +49,7 @@ FROM node:16.6.2 AS runtime
 
 WORKDIR /app
 
-COPY --from=build /app/build /app
+COPY --from=build /app/build /app 
 
 EXPOSE 3000
 
@@ -60,3 +60,4 @@ CMD ["npx", "serve", "-s", "/app", "-l", "3000"]
 
 # sudo docker run -d -p 3000:3000 --name fooderpfrontend adarshmali/fooderpfrontend:1
 
+ 
