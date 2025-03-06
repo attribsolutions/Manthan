@@ -194,7 +194,7 @@ const Login = props => {
                     </div>
                     <div className="auth-content my-auto">
                       <div style={{ cursor: "context-menu" }} className="text-center">
-                        <h5 className="mb-0">Welcome To Attrib !</h5>
+                        <h5 className="mb-0">HI User</h5>
                         <p className="text-muted mt-2">Sign in to Continue FoodERP 2.0</p>
                       </div>
                       {loginError ? (
