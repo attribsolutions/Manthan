@@ -1,4 +1,4 @@
-import { amountCommaSeparateFunc, CommonConsole, loginUserName, roundToDecimalPlaces } from "../../../components/Common/CommonFunction";
+import { amountCommaSeparateFunc, CommonConsole, compareGSTINState, loginUserName, roundToDecimalPlaces } from "../../../components/Common/CommonFunction";
 import SERVER_HOST_PATH from "../../../helpers/_serverPath";
 
 export const postWithBasicAuth = async ({
@@ -142,10 +142,18 @@ export function Franchies_invoice_Calculate_Func(row, index1, IsComparGstIn,) {
         taxableRate = parseFloat((rate * 100 / (100 + gstPercentage)).toFixed(2));
     }
 
-    const cgst = parseFloat((taxableAmount * (gstPercentage / 2) / 100).toFixed(2));
-    const sgst = cgst;
-    const igst = 0; // Assuming local billing, hence IGST is 0
-    const gstAmount = cgst + sgst;
+    let cgst = parseFloat((taxableAmount * (gstPercentage / 2) / 100).toFixed(2));
+    let sgst = cgst;
+    let igst = 0; // Assuming local billing, hence IGST is 0
+    let gstAmount = cgst + sgst;
+
+    let CGST_Percentage = gstPercentage / 2;
+    let SGST_Percentage = gstPercentage / 2;
+    let IGST_Percentage = 0
+
+
+
+
 
     // Final amount after applying GST
     let itemFinalAmount = taxableAmount + gstAmount;
@@ -164,22 +172,35 @@ export function Franchies_invoice_Calculate_Func(row, index1, IsComparGstIn,) {
         }
     }
 
+    if (IsComparGstIn) {  //compare Supplier and Customer are Same State by GSTIn Number
+
+        let isSameSate = compareGSTINState(IsComparGstIn.GSTIn_1, IsComparGstIn.GSTIn_2)
+        if (isSameSate) {// iF isSameSate = true ===not same GSTIn
+
+            cgst = 0;
+            sgst = 0;
+            igst = Number(gstAmount.toFixed(2))
+            IGST_Percentage = gstPercentage;
+            SGST_Percentage = 0;
+            CGST_Percentage = 0;
+        }
+    }
+
     index1.ItemTotalAmount = itemFinalAmount;
 
     return {
         // discountBaseAmt: Number(discountBaseAmt.toFixed(2)),
         disCountAmt: discountAmount.toFixed(2),
         ItemTotalAmount: itemFinalAmount.toFixed(2),
-
         taxableAmount: taxableAmount.toFixed(2),
         CGST_Amount: cgst.toFixed(2),
         SGST_Amount: sgst.toFixed(2),
         IGST_Amount: igst.toFixed(2),
         GST_Amount: gstAmount.toFixed(2),
         IGST_Amount: gstAmount.toFixed(2),
-        CGST_Percentage: gstPercentage / 2,
-        SGST_Percentage: gstPercentage / 2,
-        IGST_Percentage: igst,
+        CGST_Percentage: CGST_Percentage.toFixed(2),
+        SGST_Percentage: SGST_Percentage.toFixed(2),
+        IGST_Percentage: IGST_Percentage.toFixed(2),
 
     };
 }

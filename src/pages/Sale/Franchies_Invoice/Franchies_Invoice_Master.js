@@ -732,8 +732,8 @@ const Franchies_Invoice_Master = (props) => {
                         "SGSTRate": parseFloat(calculate.SGST_Percentage),
                         "SGSTAmount": Number(Number(calculate.SGST_Amount).toFixed(2)),
 
-                        "IGSTRate": Number(Number(calculate.IGST_Amount).toFixed(2)),
-                        "IGSTAmount": Number(Number(calculate.IGST_Percentage).toFixed(2)),
+                        "IGSTRate": Number(Number(calculate.IGST_Percentage).toFixed(2)),
+                        "IGSTAmount": Number(Number(calculate.IGST_Amount).toFixed(2)),
                     })
                 }
             })

@@ -9,9 +9,9 @@ export default function C_Report() {
     const { pdfdata } = useSelector((state) => ({
         pdfdata: state.PdfReportReducers.pdfdata
     }))
-
     useEffect(() => {
-        
+        debugger
+
         if ((pdfdata.Status === true) && (pdfdata.StatusCode === 200)) {
 
             generateReport(pdfdata)
