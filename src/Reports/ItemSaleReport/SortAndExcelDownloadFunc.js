@@ -167,6 +167,17 @@ export const SortButtonFunc = (props) => {
             controlTypeName: "Number",
         },
         {
+            text: 'Base Item Unit Quantity',
+            dataField: 'BaseItemUnitQuantity',
+            selectValue: [allLabelWithBlank],
+            checkboxState: unitDropdownSelect.value === 4 ? true : false,
+            sort: true,
+            isSum: true,
+            toFixed: 3,
+            sequence: 13,
+            controlTypeName: "Number",
+        },
+        {
             text: 'InvoiceGrandTotal',
             dataField: 'GrandTotal',
             selectValue: [allLabelWithBlank],
