@@ -150,4 +150,7 @@ export const UNIT_DROPDOWN_OPTIONS = [
     {
         value: 3, label: "QtyInBox"
     },
+    {
+        value: 4, label: "Base Unit Qty"
+    },
 ]
