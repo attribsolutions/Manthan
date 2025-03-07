@@ -10,10 +10,9 @@ export default function C_Report() {
         pdfdata: state.PdfReportReducers.pdfdata
     }))
     useEffect(() => {
-        debugger
+        
 
         if ((pdfdata.Status === true) && (pdfdata.StatusCode === 200)) {
-
             generateReport(pdfdata)
             dispatch(getpdfReportdataSuccess({ Status: false }))
         }

@@ -606,6 +606,9 @@ export const POS_LOG_GO_BTN = "/SweetPOS/SpoS_login_Detail"
 
 export const POS_VERSION = "/SweetPOS/LVersionList"
 
+export const VOUCHER_REDEMPTION_CLAIM = "/MATAVoucherRedeemptionClaimTotalList"
+
+
 
 
 

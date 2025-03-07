@@ -15,6 +15,7 @@ import PosInvoiceReport from "../pages/SweetPOS/Reports/InvoicePDFReport/Page";
 import ordeItemSupplierReport from "./OrderItemSupplier/OrderItemSupplier/Page";
 import StockEntryReport from "./StockEntry/Page";
 import OrderThermalPrintReport from "../pages/SweetPOS/Reports/OrderThermalPrint/Page";
+import VoucherRedemptionClaimReport from "./VoucherRedemptionClaim/VoucherRedemptionClaimPDF";
 
 export const FrenchiesesOrder = "FrenchiesesOrder"
 export const order1 = "order1"
@@ -35,8 +36,7 @@ export const PosInvoice = "PosInvoice"
 export const ordeItemSupplier = "ordeItemSupplier"
 export const StockEntry = "StockEntry"
 export const orderThermalPrintReport = "orderThermalPrintReport"
-
-
+export const VoucherRedemptionClaim = "VoucherRedemptionClaim"
 
 
 
@@ -96,6 +96,9 @@ const generateReport = (resp) => {
             break;
         case orderThermalPrintReport:
             OrderThermalPrintReport(resp.Data[0])
+            break;
+        case VoucherRedemptionClaim:
+            VoucherRedemptionClaimReport(resp)
             break;
 
         default:

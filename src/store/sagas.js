@@ -134,6 +134,14 @@ import GRNDiscrepancyReportSaga from "./Report/GRNDiscrepancyRedux/saga"
 import DataExportToSapSaga from "./Administrator/ExportToSAPRedux/saga"
 import CodeRedemptionReportSaga from "./Report/CodeRedemptionRedux/saga"
 
+import VoucherRedemptionClaimSaga from "./Report/VoucherRedemptionClaimRedux/saga"
+
+
+
+
+
+
+
 
 export default function* rootSaga() {
 	yield all([
@@ -259,6 +267,10 @@ export default function* rootSaga() {
 		fork(DataExportToSapSaga),
 		fork(GRNDiscrepancyReportSaga),
 		fork(CodeRedemptionReportSaga),
+		fork(VoucherRedemptionClaimSaga),
+
+
+
 
 	])
 }
