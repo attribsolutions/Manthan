@@ -197,7 +197,6 @@ export function Franchies_invoice_Calculate_Func(row, index1, IsComparGstIn,) {
         SGST_Amount: sgst.toFixed(2),
         IGST_Amount: igst.toFixed(2),
         GST_Amount: gstAmount.toFixed(2),
-        IGST_Amount: gstAmount.toFixed(2),
         CGST_Percentage: CGST_Percentage.toFixed(2),
         SGST_Percentage: SGST_Percentage.toFixed(2),
         IGST_Percentage: IGST_Percentage.toFixed(2),
