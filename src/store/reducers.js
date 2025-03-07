@@ -141,6 +141,7 @@ import grnpendingReducer from "./Report/GRNPendingReport/reducer"
 import ExportToSapReducer from "./Administrator/ExportToSAPRedux/reducer"
 import GRNDiscrepancyReportReducer from "./Report/GRNDiscrepancyRedux/reducer"
 import CodeRedemptionReportReducer from "./Report/CodeRedemptionRedux/reducer"
+import VoucherRedemptionClaimReducer from "./Report/VoucherRedemptionClaimRedux/reducer"
 
 const rootReducer = combineReducers({
 	Layout,
@@ -261,6 +262,7 @@ const rootReducer = combineReducers({
 	ExportToSapReducer,
 	GRNDiscrepancyReportReducer,
 	CodeRedemptionReportReducer,
+	VoucherRedemptionClaimReducer,
 	
 
 })

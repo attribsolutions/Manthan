@@ -425,6 +425,11 @@ export const TARGET_VS_ACHIEVEMENT = "/TargetVSAchievement"
 
 export const ORDER_ITEM_SUPPLIER_REPORT = "/Order_Item_Supplier_Report"
 
+export const VOUCHER_REDEMPTION_CLAIM_ = "/Voucher_Redeemption_Claim"
+
+
+
+
 
 //**************************** Sweet Pos ***********************************//
 

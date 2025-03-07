@@ -423,6 +423,12 @@ export const DEMAND_VS_SUPPLY = 319
 export const CODE_REDEMPTION_REPORT = 327
 
 
+export const VOUCHER_REDEMPTION_CLAIM = 328
+
+
+
+
+
 
 
 

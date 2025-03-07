@@ -817,6 +817,9 @@ export const POSLog_Go_Btn_Api = ({ jsonBody }) => post(url.POS_LOG_GO_BTN, json
 
 export const POSExEVersion_Api = ({ jsonBody }) => post(url.POS_VERSION, jsonBody);
 
+export const VoucherRedemption_Aip = ({ jsonBody }) => post(url.VOUCHER_REDEMPTION_CLAIM, jsonBody);
+
+
 
 
 

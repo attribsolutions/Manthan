@@ -325,7 +325,7 @@ export const getPreviousMonthAndYear = ({ date, Privious }) => {
   const year = previousMonthDate.getFullYear();
   const month = (previousMonthDate.getMonth() + 1).toString().padStart(2, '0'); // Adding padding if needed
 
-  return `${year} -${month} `;
+  return `${year}-${month}`;
 }
 
 export function amountCommaSeparateFunc(amount) {

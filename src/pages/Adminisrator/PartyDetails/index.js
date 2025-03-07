@@ -655,10 +655,11 @@ const PartyDetails = (props) => {
                                         <C_Select
                                             name="groupSelect"
                                             value={groupSelect}
+                                           
                                             isSearchable={true}
                                             isLoading={groupListLoading}
                                             className="react-dropdown"
-                                            isDisabled={(tableData.length > 0) ? true : false}
+                                            isDisabled={(tableData.length > 0) ? true : true}
                                             classNamePrefix="dropdown"
                                             styles={{
                                                 menu: provided => ({ ...provided, zIndex: 2 })
