@@ -31,17 +31,6 @@ const fileds = () => ({
 })
 
 
-const Data = [
-    { Count: 1, Party: "ABC Corp", claimNo: "CLM12345", voucherCount: 3, claimVoucherAmount: 5000 },
-    { Count: 2, Party: "XYZ Ltd", claimNo: "CLM67890", voucherCount: 2, claimVoucherAmount: 3000 },
-    { Count: 3, Party: "PQR Enterprises", claimNo: "CLM11223", voucherCount: 5, claimVoucherAmount: 7000 },
-    { Count: 4, Party: "LMN Pvt Ltd", claimNo: "CLM44556", voucherCount: 4, claimVoucherAmount: 4500 }
-];
-
-
-
-
-
 const VoucherRedemptionClaim = () => {
     const dispatch = useDispatch();
     const isSCMParty = !_cfunc.loginUserIsFranchisesRole();
@@ -58,7 +47,6 @@ const VoucherRedemptionClaim = () => {
         (state) => ({
             deleteMsg: state.ClaimSummaryReducer.deleteMsg,
             tableList: state.VoucherRedemptionClaimReducer.VoucherRedemptionClaimData,
-            pdfdata: state.PdfReportReducers.pdfdata,
             Party: state.CommonPartyDropdownReducer.commonPartyDropdownOption,
             listBtnLoading: state.VoucherRedemptionClaimReducer.listBtnLoading,
             supplier: state.CommonAPI_Reducer.vendorSupplierCustomer,
@@ -70,7 +58,7 @@ const VoucherRedemptionClaim = () => {
 
     const { commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
 
-    const { pageField, pdfdata, Party, partyDropdownLoading, listBtnLoading } = reducers;
+    const { pageField, Party, partyDropdownLoading, listBtnLoading } = reducers;
     const values = { ...state.values }
 
     const action = {
@@ -82,8 +70,10 @@ const VoucherRedemptionClaim = () => {
     useEffect(() => {
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(pageId.VOUCHER_REDEMPTION_CLAIM))
+
         return () => {
             dispatch(VoucherRedemptionClaim_Action_Success([]));
+
         }
     }, []);
 
@@ -104,16 +94,7 @@ const VoucherRedemptionClaim = () => {
         ]));
     }, [values.SelectedMonth]);
 
-    useEffect(() => {
-        if ((pdfdata.Status === true) && (pdfdata.StatusCode === 204)) {
-            dispatch(getpdfReportdataSuccess({ Status: false }))
-            customAlert({
-                Type: 3,
-                Message: pdfdata.Message,
-            })
-            return
-        }
-    }, [pdfdata])
+
 
     const Party_Option = Party.map(i => ({
         value: i.id,
@@ -124,11 +105,12 @@ const VoucherRedemptionClaim = () => {
 
     function downClaimBtnFunc(config) {
         config.rowData["Month"] = values.SelectedMonth
-        config.rowData["ReportType"] = report.VoucherRedemptionClaim;
+        config.rowData["ReportType"] = report.VoucherRedemptionClaimReport;
         config.rowData["Status"] = true
         config.rowData["StatusCode"] = 200
-
+        debugger
         dispatch(getpdfReportdataSuccess(config.rowData))
+
     }
     function PartyDrodownOnChange(e) {
         setPartyDropdown(e);
@@ -153,8 +135,8 @@ const VoucherRedemptionClaim = () => {
 
 
     const GoBtnHandler = () => {
-        debugger
-        const finalPartyId = ((isSCMParty) && (PartyDropdown.value === 0)) ? Party_Option?.filter(obj => obj.value !== 0).map(obj => obj.value).join(',') : (_cfunc.loginPartyID()).toString()
+
+        const finalPartyId = ((isSCMParty) && (PartyDropdown.value === 0)) ? Party_Option?.filter(obj => obj.value !== 0).map(obj => obj.value).join(',') : isSCMParty ? (PartyDropdown.value).toString() : (_cfunc.loginPartyID()).toString()
         const jsonBody = JSON.stringify({
             "FromDate": state.values.FromDate,
             "ToDate": state.values.ToDate,
@@ -183,6 +165,8 @@ const VoucherRedemptionClaim = () => {
                                     />
                                 </Col>
                             </FormGroup>
+
+
                         </Col>
                         {isSCMParty && < Col sm={3} className="">
                             <FormGroup className=" row mt-2" >
@@ -228,11 +212,11 @@ const VoucherRedemptionClaim = () => {
                             reducers={reducers}
                             pageMode={pageMode}
                             downBtnFunc={downClaimBtnFunc}
+                            totalAmountShow={true}
                         />
                         : null
                 }
             </div>
-            <C_Report />
         </React.Fragment>
     )
 }

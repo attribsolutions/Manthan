@@ -1,7 +1,7 @@
 
 import jsPDF from "jspdf";
 import "jspdf-autotable";
-import { amountCommaSeparateFunc, currentDate_dmy, CurrentTime } from "../../components/Common/CommonFunction";
+import { currentDate_dmy, CurrentTime } from "../../components/Common/CommonFunction";
 import { numberWithCommas, toWords } from "../Report_common_function";
 
 
@@ -15,7 +15,7 @@ const columns = [
 
 
 const Rows = (Data) => {
-    debugger
+
     function Header() {
         return [
             "MATA Voucher Redeemption Claim",
@@ -50,19 +50,19 @@ const Rows = (Data) => {
             `${Data.FranchiseName}`,
             `${Data.VoucherCodeCount}`,
             `${Data.ClaimPerVoucher}`,
-            `${numberWithCommas(Number(Data.TotalClaimAmount).toFixed(2))}`,
+            `${numberWithCommas(Number(Data.recordsAmountTotal).toFixed(2))}`,
         ];
     }; function TotalAmount() {
         return [
             "Total",
-            `${numberWithCommas(Number(Data.TotalClaimAmount).toFixed(2))}`,
+            `${numberWithCommas(Number(Data.recordsAmountTotal).toFixed(2))}`,
             "",
             ""
         ];
     }; function TotalAmountInWords() {
         return [
             "Amount in Words",
-            `${toWords(Number(Data.TotalClaimAmount))}`,
+            `${toWords(Number(Data.recordsAmountTotal))}`,
             "",
             "",
         ];
@@ -104,7 +104,7 @@ const Rows = (Data) => {
     returnArr.push(Empty());
     returnArr.push(Stamp());
     returnArr.push(Signature());
-    debugger
+
     return returnArr;
 
 }
@@ -112,7 +112,7 @@ const Rows = (Data) => {
 const tableBody = (doc, data) => {
     var options = {
         didParseCell: (Data) => {
-            debugger
+
             if (Data.row.cells[0].raw === "MATA Voucher Redeemption Claim") {
                 Data.row.cells[0].colSpan = 4
                 Data.row.cells[0].styles.halign = "center"
@@ -242,20 +242,22 @@ const tableBody = (doc, data) => {
 }
 
 
-const VoucherRedemptionClaimReport = async (data) => {
-    debugger
+const voucherRedemptionClaimReport = (data) => {
+
     var doc = new jsPDF('l', 'pt', 'a5');
     tableBody(doc, data);
     doc.setProperties({
-        title: `Voucher Redeemption Claim/${data.FranchiseName}/${data.InvoiceDate} `
+        title: `Voucher Redeemption Claim/${data.FranchiseName}/${new Date(data.Month + "-01").toLocaleString('en-US', { year: 'numeric', month: 'long' })} `
     });
 
     function generateSaveAndOpenPDFReport() {
         const pdfUrl = URL.createObjectURL(doc.output('blob'));
+
         window.open(pdfUrl);
     }
+
     generateSaveAndOpenPDFReport();
 
 }
 
-export default VoucherRedemptionClaimReport;
+export default voucherRedemptionClaimReport;
