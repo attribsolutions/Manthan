@@ -174,8 +174,21 @@ export const SortButtonFunc = (props) => {
             sort: true,
             isSum: true,
             toFixed: 3,
-            sequence: 13,
+            sequence: 14,
             controlTypeName: "Number",
+            // formatter: (cell, Row) => <>{`${Row.BaseItemUnitQuantity}  ${Row.BaseItemUnitName}`}</>
+        },
+
+        {
+            text: 'Unit',
+            dataField: 'BaseItemUnitName',
+            selectValue: [allLabelWithBlank],
+            checkboxState: unitDropdownSelect.value === 4 ? true : false,
+            sort: true,
+            toFixed: 3,
+            sequence: 14,
+            controlTypeName: "Text",
+            // formatter: (cell, Row) => <>{`${Row.BaseItemUnitQuantity}  ${Row.BaseItemUnitName}`}</>
         },
         {
             text: 'InvoiceGrandTotal',
@@ -184,7 +197,7 @@ export const SortButtonFunc = (props) => {
             checkboxState: showAlsoSelect.some(item => item.value === 5),
             sort: true,
             toFixed: 2,
-            sequence: 15,
+            sequence: 16,
             controlTypeName: "Number",
         },
         {
@@ -195,7 +208,7 @@ export const SortButtonFunc = (props) => {
             sort: true,
             isSum: true,
             toFixed: 2,
-            sequence: 16,
+            sequence: 17,
             controlTypeName: "Number",
         },
         {
@@ -206,7 +219,7 @@ export const SortButtonFunc = (props) => {
             isSum: true,
             sort: true,
             toFixed: 2,
-            sequence: 17,
+            sequence: 18,
             controlTypeName: "Number",
         },
         {
@@ -216,7 +229,7 @@ export const SortButtonFunc = (props) => {
             checkboxState: showAlsoSelect.some(item => item.value === 7),
             isSum: true,
             sort: true,
-            sequence: 18,
+            sequence: 19,
             toFixed: 2,
             controlTypeName: "Number",
         },
@@ -227,7 +240,7 @@ export const SortButtonFunc = (props) => {
             checkboxState: showAlsoSelect.some(item => item.value === 3),
             sort: true,
             groupBy: true,
-            sequence: 19,
+            sequence: 20,
             controlTypeName: "Text",
         },
         { //this filed not Show intable 
@@ -339,7 +352,7 @@ export const SortButtonFunc = (props) => {
         const groupedData = {};
 
         manupulatedData.forEach(item => {
-            debugger
+
             const groupValues = buttonStateArray
                 .filter(option => option.checkboxState && (option.groupBy === true))
                 .map(option => item[option.dataField]);
@@ -357,7 +370,7 @@ export const SortButtonFunc = (props) => {
                     TCSAmount: 0
                 };
             }
-            debugger
+
             buttonStateArray.forEach(field => {
                 if (field.isSum === true) {
                     groupedData[groupKey][field.dataField] += parseFloat(item[field.dataField]);
