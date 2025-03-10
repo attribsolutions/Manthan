@@ -177,7 +177,7 @@ const WorkOrder = (props) => {
 
             if (hasEditVal) {
                 setEditData(hasEditVal);
-                
+
                 const { id, WorkOrderDate, Item, ItemName, NumberOfLot, Stock
                     , Quantity, EstimatedOutputQty, Bom, Party, WorkOrderItems, Unit, UnitName } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError, FullWorkOrderNumber, WorkOrderNumber, } = { ...state }
@@ -206,7 +206,7 @@ const WorkOrder = (props) => {
                 // });
                 // dispatch(postGoButtonForWorkOrder_Master(jsonBody));
                 // setWorkOrderItemsDetails(WorkOrderItems)
-                
+
                 setItemselect({
                     value: Item,
                     label: `${ItemName} (BOMDate-${WorkOrderDate})`,
@@ -475,8 +475,8 @@ const WorkOrder = (props) => {
                 const WorkOrderItems = tableData.map((index) => ({
                     Item: index.Item,
                     Unit: index.Unit,
-                    BomQuantity: index.BomQuantity,
-                    Quantity: index.Quantity,
+                    BomQuantity: (Number(index.BomQuantity)).toFixed(3),
+                    Quantity: (Number(index.Quantity)).toFixed(3),
                 }))
 
                 const jsonBody = JSON.stringify([{
@@ -488,7 +488,7 @@ const WorkOrder = (props) => {
                     Item: values.ItemName.ItemID,
                     Unit: values.ItemName.Unit,
                     NumberOfLot: values.NumberOfLot,
-                    Quantity: parseFloat(values.Quantity).toFixed(3),
+                    Quantity: (Number(values.Quantity)).toFixed(3),
                     Company: loginCompanyID(),
                     Party: loginPartyID(),
                     CreatedBy: loginUserID(),
