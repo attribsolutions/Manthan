@@ -90,7 +90,7 @@ export const RowsWithCGST_SGST = (data) => {
             UnitName, MRPValue, CGSTPercentage,
             SGSTPercentage, GSTPercentage,
             BatchCode, BatchDate, DiscountType,
-            PrimaryUnitName, ItemExpiryDate } = currentItem;
+            PrimaryUnitName, ItemExpiryDate, MixItemId } = currentItem;
         let PcsinNumber = ""
         let PcsinNumberUnit = ""
         const pattern = /\((.*?)\)/;
@@ -130,7 +130,7 @@ export const RowsWithCGST_SGST = (data) => {
                 BasicAmount: Number(BasicAmount), Quantity: Number(Quantity),
                 UnitName, CGSTPercentage, SGSTPercentage, GSTPercentage,
                 BatchDate, BatchCode: BatchCode, BatchDate: BatchDate,
-                quantityString: `  ${BatchCode} - M(${date_dmy_func(BatchDate)}) - E(${date_dmy_func(ItemExpiryDate)}) - ${Quantity}`, PrimaryUnitName
+                quantityString: `  ${BatchCode} - M(${date_dmy_func(BatchDate)}) - E(${date_dmy_func(ItemExpiryDate)}) - ${Quantity}`, PrimaryUnitName, MixItemId
             };
         }
         return accumulator;
@@ -139,6 +139,8 @@ export const RowsWithCGST_SGST = (data) => {
     const TotalItemlength = Object.values(groupedItems).length;
     data["TotalItemlength"] = TotalItemlength;
     Object.values(groupedItems).forEach((element, key) => {
+
+        if (element?.MixItemId && element?.MixItemId !== null) { return null }
 
         let HSNcodes = ""
         if (element.HSNCode) {

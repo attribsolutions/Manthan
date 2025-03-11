@@ -269,7 +269,7 @@ export const RowsWithIGST = (data) => {
 
         const { HSNCode, ItemName, IGSTPercentage, MRP, Rate, Discount, CGST, SGST, Amount, DiscountAmount,
             BasicAmount, Quantity, UnitName, MRPValue, CGSTPercentage, SGSTPercentage, GSTPercentage, BatchCode,
-            BatchDate, DiscountType, PrimaryUnitName, IGST, ItemExpiryDate } = currentItem;
+            BatchDate, DiscountType, PrimaryUnitName, IGST, ItemExpiryDate, MixItemId } = currentItem;
 
         let PcsinNumber = ""
         let PcsinNumberUnit = ""
@@ -305,7 +305,7 @@ export const RowsWithIGST = (data) => {
                 Amount: Number(Amount), DiscountAmount: Number(DiscountAmount), BasicAmount: Number(BasicAmount),
                 Quantity: Number(Quantity), UnitName, CGSTPercentage, SGSTPercentage, GSTPercentage,
                 BatchDate, BatchCode: BatchCode, BatchDate: BatchDate,
-                quantityString: ` ${BatchCode} - M(${date_dmy_func(BatchDate)}) - E(${date_dmy_func(ItemExpiryDate)}) - ${Quantity}`, PrimaryUnitName, IGST
+                quantityString: ` ${BatchCode} - M(${date_dmy_func(BatchDate)}) - E(${date_dmy_func(ItemExpiryDate)}) - ${Quantity}`, PrimaryUnitName, IGST, MixItemId
             };
         }
         return accumulator;
@@ -313,7 +313,7 @@ export const RowsWithIGST = (data) => {
     const TotalItemlength = Object.values(groupedItems).length;
     data["TotalItemlength"] = TotalItemlength;
     Object.values(groupedItems).forEach((element, key) => {
-
+        if (element?.MixItemId && element?.MixItemId !== null) { return null }
         let HSNcodes = ""
         if (element.HSNCode) {
             if (data.SettingData.HSNCodeDigit === "0") {
