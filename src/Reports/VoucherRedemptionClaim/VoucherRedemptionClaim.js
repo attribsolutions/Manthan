@@ -108,7 +108,8 @@ const VoucherRedemptionClaim = () => {
         config.rowData["ReportType"] = report.VoucherRedemptionClaimReport;
         config.rowData["Status"] = true
         config.rowData["StatusCode"] = 200
-        debugger
+        config.rowData["tableList"] = [config.rowData]
+
         dispatch(getpdfReportdataSuccess(config.rowData))
 
     }
@@ -144,6 +145,32 @@ const VoucherRedemptionClaim = () => {
         });
         dispatch(VoucherRedemptionClaim_Action({ jsonBody }))
     }
+
+    const PrintAlldownBtnFunc = (row = []) => {
+        let config = { rowData: {} };
+        let ischeck = row.filter(i => (i.selectCheck && !i.forceSelectDissabled))
+        if (!ischeck.length > 0) {
+            customAlert({
+                Type: 4,
+                Message: alertMessages.selectOneOrder,
+            });
+            return
+        }
+
+        config.rowData["Month"] = values.SelectedMonth
+        config.rowData["ReportType"] = report.VoucherRedemptionClaimReport;
+        config.rowData["Status"] = true
+        config.rowData["StatusCode"] = 200
+        config.rowData["tableList"] = ischeck
+
+
+        dispatch(getpdfReportdataSuccess(config.rowData))
+
+        // dispatch(_act.getpdfReportdata(order_Single_and_Multiple_Print_API, config))
+
+    };
+
+
 
     return (
         <React.Fragment>
@@ -212,6 +239,12 @@ const VoucherRedemptionClaim = () => {
                             reducers={reducers}
                             pageMode={pageMode}
                             downBtnFunc={downClaimBtnFunc}
+                            selectCheckParams={{
+                                selectSaveBtnHandler: PrintAlldownBtnFunc,
+                                selectSaveBtnLabel: "Print All",
+                                selectHeaderLabel: "Print All",
+                                // selectSaveBtnLoading: printAllBtnLoading,
+                            }}
                             totalAmountShow={true}
                         />
                         : null

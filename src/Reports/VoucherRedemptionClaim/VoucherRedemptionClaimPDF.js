@@ -243,11 +243,22 @@ const tableBody = (doc, data) => {
 
 
 const voucherRedemptionClaimReport = (data) => {
+    // debugger
+    // var doc = new jsPDF('l', 'pt', 'a5');
+    // tableBody(doc, data);
+    // doc.setProperties({
+    //     title: `Voucher Redeemption Claim/${data.FranchiseName}/${new Date(data.Month + "-01").toLocaleString('en-US', { year: 'numeric', month: 'long' })} `
+    // });
 
     var doc = new jsPDF('l', 'pt', 'a5');
-    tableBody(doc, data);
-    doc.setProperties({
-        title: `Voucher Redeemption Claim/${data.FranchiseName}/${new Date(data.Month + "-01").toLocaleString('en-US', { year: 'numeric', month: 'long' })} `
+    data.tableList.forEach((data, index) => {
+        if (index !== 0) {  // Add a new page only after the first iteration
+            doc.addPage();
+        }
+        tableBody(doc, data);
+        doc.setProperties({
+            title: `Voucher Redeemption Claim/${data.FranchiseName}/${new Date(data.Month + "-01").toLocaleString('en-US', { year: 'numeric', month: 'long' })} `
+        });
     });
 
     function generateSaveAndOpenPDFReport() {
