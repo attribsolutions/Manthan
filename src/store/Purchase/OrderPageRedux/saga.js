@@ -69,7 +69,7 @@ function* goButtonGenFunc({ config }) {                     // GO-Botton order A
     debugger
     const { subPageMode, } = config
     let response;
-    if ((subPageMode === url.ORDER_1) || (subPageMode === url.ORDER_2) || (subPageMode === url.ORDER_4) || (subPageMode === url.IB_ORDER) || (subPageMode === url.IB_SALES_ORDER)) {
+    if ((subPageMode === url.ORDER_1) || (subPageMode === url.ORDER_2) || (subPageMode === url.ORDER_4) || (subPageMode === url.IB_ORDER) || (subPageMode === url.IB_SALES_ORDER)  || (subPageMode === url.ORDER_QUATATION)   ) {
       response = yield call(OrderPage_GoButton_API, config); // GO-Botton Purchase Order 1 && 2 Add Page API
       yield response.Data.OrderItems.forEach((ele, k) => {
         ele["id"] = k + 1

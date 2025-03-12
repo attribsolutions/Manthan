@@ -627,20 +627,21 @@ const StockEntry = (props) => {
         const invalidMsg1 = []
 
         ReturnItems.forEach((i) => {
+            debugger
             const [itemName] = i.ItemName?.split('-');
-            if ((i.Unit === undefined) || (i.Unit === null)) {
+            if (!(i.Unit) && (i.Quantity > 0)) {
                 invalidMsg1.push(`${itemName} : ${alertMessages.unitIsRequired}`)
             }
-            else if ((i.MRP === undefined) || (i.MRP === null) && !(isVisibleRateDrop)) {
+            else if (!(i.MRP) && (i.Quantity > 0) && !(isVisibleRateDrop)) {
                 invalidMsg1.push(`${itemName} :${alertMessages.mrpIsRequired}`)
             }
-            else if ((i.Rate === undefined) || (i.Rate === null) && (isVisibleRateDrop)) {
+            else if (((!i.Rate) && (i.Quantity > 0)) && (isVisibleRateDrop)) {
                 invalidMsg1.push(`${itemName} :${alertMessages.rateIsRequired}`)
             }
-            else if ((i.GST === undefined) || (i.GST === null)) {
+            else if (!(i.GST) && (i.Quantity > 0)) {
                 invalidMsg1.push(`${itemName} : ${alertMessages.gstIsRequired}`)
             }
-            else if ((i.BatchCode === "") || (i.BatchCode === undefined)) {
+            else if (!(i.BatchCode) && (i.Quantity > 0)) {
                 invalidMsg1.push(`${itemName} : ${alertMessages.batchCodeIsRequired}`)
             };
         })
