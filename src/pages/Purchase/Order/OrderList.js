@@ -277,7 +277,13 @@ const OrderList = () => {
             makeBtnShow = true;
             makeBtnName = "Make GRN"
 
+        } else if (subPageMode === url.ORDER_QUATATION_LIST) {
+            page_Id = pageId.ORDER_QUATATION_LIST
+            masterPath = url.ORDER_QUATATION;
+            newBtnPath = url.ORDER_QUATATION;
         }
+
+
 
 
         setOtherState({ masterPath, makeBtnShow, newBtnPath, makeBtnName, IBType, showAprovalBtn })

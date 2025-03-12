@@ -210,6 +210,12 @@ export const IB_ORDER_SO_LIST = 147
 
 export const IB_SALES_ORDER = 284
 
+
+export const ORDER_QUATATION = 329
+export const ORDER_QUATATION_LIST = 330
+
+
+
 export const ORDER_4 = 144
 export const ORDER_LIST_4 = 143
 

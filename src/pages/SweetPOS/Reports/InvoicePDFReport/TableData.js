@@ -44,37 +44,44 @@ export const ItemRow = (data) => {
 
     data.forEach(element => {
 
-        const nestedArray = element?.MixItems?.map((element_2) => {
-            const array = [
-                [`\n${element_2.HSNCode}\n${element_2.MRPValue}\n`] // Add a nested field (e.g., Batch Number)
-            ];
-            return array
-        }) || []
+        // const nestedArray = element?.MixItems?.map((element_2) => {
+        //     const array = [
+        //         [`\n${element_2.HSNCode}\n${element_2.MRPValue}\n`] // Add a nested field (e.g., Batch Number)
+        //     ];
+        //     return array
+        // }) || []
 
-        const nestedArray_1 = element?.MixItems?.map((element_2) => {
+        // const nestedArray_1 = element?.MixItems?.map((element_2) => {
 
-            const array = [
-                [`\n${element_2.ItemName}\n${element_2.GSTPercentage}${Number(element_2.Discount) > 0 ? `/${element_2.Discount}/${element_2.DiscountAmount}\n` : '\n'} `]
+        //     const array = [
+        //         [`\n${element_2.ItemName}\n${element_2.GSTPercentage}${Number(element_2.Discount) > 0 ? `/${element_2.Discount}/${element_2.DiscountAmount}\n` : '\n'} `]
 
-            ];
-            return array
-        }) || []
+        //     ];
+        //     return array
+        // }) || []
 
-        const nestedArray_2 = element?.MixItems?.map((element_2) => {
-            const array = [
-                [`\n${element_2.Quantity}\n${element_2.Amount}\n`]
-            ];
-            return array
-        }) || []
+        // const nestedArray_2 = element?.MixItems?.map((element_2) => {
+        //     const array = [
+        //         [`\n${element_2.Quantity}\n${element_2.Amount}\n`]
+        //     ];
+        //     return array
+        // }) || []
 
 
 
+
+        // const tableitemRow = [
+        //     `${element.HSNCode}\n${element.MRPValue}\n${nestedArray.length > 0 ? nestedArray : ""}`,
+        //     `${element.ItemName}\n${element.GSTPercentage}${Number(element.Discount) > 0 ? `/${element.Discount}/${element.DiscountAmount}` : ''}\n${nestedArray_1.length > 0 ? nestedArray_1 : ""}`,
+        //     `${element.Quantity}\n${element.Amount}\n${nestedArray_2.length > 0 ? nestedArray_2 : ""}`,
+        // ];
 
         const tableitemRow = [
-            `${element.HSNCode}\n${element.MRPValue}\n${nestedArray.length > 0 ? nestedArray : ""}`,
-            `${element.ItemName}\n${element.GSTPercentage}${Number(element.Discount) > 0 ? `/${element.Discount}/${element.DiscountAmount}` : ''}\n${nestedArray_1.length > 0 ? nestedArray_1 : ""}`,
-            `${element.Quantity}\n${element.Amount}\n${nestedArray_2.length > 0 ? nestedArray_2 : ""}`,
+            `${element.HSNCode}\n${element.MRPValue}`,
+            `${element.ItemName}\n${element.GSTPercentage}`,
+            `${element.Quantity}\n${element.Amount}`,
         ];
+
 
         hasHedRow.push(tableitemRow.map(str => str.replace(/,/g, "")));
 

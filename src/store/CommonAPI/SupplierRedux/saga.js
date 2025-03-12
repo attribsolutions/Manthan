@@ -82,7 +82,7 @@ function* OrderType_GenFunc() {
 }
 
 function* getVendorGenFunc({ jsonBody = '' }) {
-  
+
   const { PartyID = loginPartyID(), Type = 1 } = jsonBody
   try {
     const response = yield call(VendorSupplierCustomer, { "Type": Type, "PartyID": PartyID, "Company": loginCompanyID(), Route: "" });
@@ -137,8 +137,11 @@ function* vendorSupplierCustomer_genFunc({ data }) {
     || subPageMode === url.PURCHASE_RETURN
     || subPageMode === url.PURCHASE_RETURN_MODE_3
     || subPageMode === url.SELF_LEDGER
-    || subPageMode === url.PARTY_DETAILS)
-  
+    || subPageMode === url.PARTY_DETAILS
+    || subPageMode === url.ORDER_QUATATION
+    || subPageMode === url.ORDER_QUATATION_LIST
+  )
+
     ;
 
   const isCustomer = (subPageMode === url.ORDER_4  //Customer mode 3
@@ -151,7 +154,7 @@ function* vendorSupplierCustomer_genFunc({ data }) {
     || subPageMode === url.GST_R1_REPORT
     || subPageMode === url.MOBILE_RETAILER_SEND
     || subPageMode === url.POS_INVOICE_LIST
-   
+
   );
 
 

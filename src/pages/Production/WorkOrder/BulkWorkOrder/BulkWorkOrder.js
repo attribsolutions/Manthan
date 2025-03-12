@@ -176,12 +176,12 @@ const BulkWorkOrder = (props) => {
                     ItemName: inx_1.ItemName,
                     Stock: inx_1.Stock,
                     NumberOfLot: inx_1.Number_Lots,
-                    EstimatedOutputQty: inx_1.EstimatedOutputQty,
+                    EstimatedOutputQty: (Number(inx_1.EstimatedOutputQty)).toFixed(3),
                     Company: _cfunc.loginCompanyID(),
                     Party: _cfunc.loginSelectedPartyID(),
                     CreatedBy: _cfunc.loginUserID(),
                     UpdatedBy: _cfunc.loginUserID(),
-                    Quantity: inx_1.Qty,
+                    Quantity: (Number(inx_1.Qty)).toFixed(3),
                     Unit: inx_1.Unit,
                     UnitName: inx_1.UnitName,
                     WorkOrderItems: inx_1.BOMItems.map((inx_2) => ({
@@ -190,9 +190,9 @@ const BulkWorkOrder = (props) => {
                         ItemName: inx_2.ItemName,
                         Unit: inx_2.Unit,
                         UnitName: inx_2.UnitName,
-                        StockQuantity: inx_2.Quantity,
-                        BomQuantity: inx_2.BomQuantity,
-                        Quantity: inx_2.Quantity
+                        StockQuantity: (Number(inx_2.Quantity)).toFixed(3),
+                        BomQuantity: (Number(inx_2.BomQuantity)).toFixed(3),
+                        Quantity: (Number(inx_2.Quantity)).toFixed(3),
                     })),
                 }))
                 const jsonBody = JSON.stringify(WorkOrderItems);
@@ -303,7 +303,7 @@ const BulkWorkOrder = (props) => {
                             </thead>
                             <tbody id={`Body-${inx_1.Item}`} className={inx_1.IsTableOpen ? '' : 'hidden-row'}  >
                                 {cellContent.map((inx_2) => {
-                                    
+
                                     return (
                                         <tr key={inx_1.Item}>
                                             <td data-label="Item Name">{inx_2.ItemName}</td>
