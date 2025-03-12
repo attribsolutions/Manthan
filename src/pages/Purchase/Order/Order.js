@@ -76,6 +76,10 @@ function initialState(history) {
         page_Id = pageId.IB_SALES_ORDER;
         listPath = url.IB_ORDER_SO_LIST
     }
+    else if (sub_Mode === url.ORDER_QUATATION) {
+        page_Id = pageId.ORDER_QUATATION;
+        listPath = url.ORDER_QUATATION_LIST
+    }
     return { page_Id, listPath }
 };
 
@@ -1354,7 +1358,7 @@ const Order = (props) => {
     }
 
     const goButtonHandler = async (selectSupplier) => {
-
+        debugger
         if (!supplierSelect > 0 && !selectSupplier) {
             await customAlert({
                 Type: 4,
@@ -2055,7 +2059,7 @@ const Order = (props) => {
                                                             value={orderTypeSelect}
                                                             classNamePrefix="select2-Customer"
                                                             options={orderTypeOptions}
-                                                            isDisabled={subPageMode === url.ORDER_1 && true}
+                                                            // isDisabled={subPageMode === url.ORDER_1 && true}
                                                             onChange={(e) => { setorderTypeSelect(e) }}
                                                             isLoading={orderTypeDropLoading}
                                                             styles={{

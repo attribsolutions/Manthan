@@ -483,6 +483,9 @@ const userRoutes = [
 	{ path: path.ORDER_1, component: Order, isPartyWisePage: true },
 	{ path: path.ORDER_LIST_1, component: OrderList, isPartyWisePage: true },
 
+	{ path: path.ORDER_QUATATION, component: Order, isPartyWisePage: true },
+	{ path: path.ORDER_QUATATION_LIST, component: OrderList, isPartyWisePage: true },
+
 	{ path: path.ORDER_2, component: Order, isPartyWisePage: true },
 	{ path: path.ORDER_LIST_2, component: OrderList, isPartyWisePage: true },
 

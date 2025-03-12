@@ -312,6 +312,9 @@ export const IB_SALES_ORDER = "/IB_Sales_Order" // IB Order
 export const IB_ORDER_PO_LIST = "/IB_Order_PO_List" //IB Order List
 export const IB_ORDER_SO_LIST = "/IB_Order_SO_List" //IB Order List
 
+export const ORDER_QUATATION = "/Order_Quotation" //IB Order List
+export const ORDER_QUATATION_LIST = "/Order_Quotation_Check_List" //IB Order List
+
 export const INWARD = "/Inward"
 export const INWARD_LIST = "/InwardList"
 export const IB_INWARD_STP = "/IB_Inward_STP"
