@@ -627,7 +627,7 @@ const StockEntry = (props) => {
         const invalidMsg1 = []
 
         ReturnItems.forEach((i) => {
-            debugger
+
             const [itemName] = i.ItemName?.split('-');
             if (!(i.Unit) && (i.Quantity > 0)) {
                 invalidMsg1.push(`${itemName} : ${alertMessages.unitIsRequired}`)
@@ -635,10 +635,10 @@ const StockEntry = (props) => {
             else if (!(i.MRP) && (i.Quantity > 0) && !(isVisibleRateDrop)) {
                 invalidMsg1.push(`${itemName} :${alertMessages.mrpIsRequired}`)
             }
-            else if (((!i.Rate) && (i.Quantity > 0)) && (isVisibleRateDrop)) {
+            else if (((!i.Rate) && ((i.Quantity > 0) || (values.IsAllStockZero))) && (isVisibleRateDrop)) {
                 invalidMsg1.push(`${itemName} :${alertMessages.rateIsRequired}`)
             }
-            else if (!(i.GST) && (i.Quantity > 0)) {
+            else if (!(i.GST) && ((i.Quantity > 0) || (values.IsAllStockZero))) {
                 invalidMsg1.push(`${itemName} : ${alertMessages.gstIsRequired}`)
             }
             else if (!(i.BatchCode) && (i.Quantity > 0)) {
@@ -648,7 +648,7 @@ const StockEntry = (props) => {
 
         if (invalidMsg1.length > 0) {
             customAlert({
-                Type: 4,
+                Type: 10,
                 Message: JSON.stringify(invalidMsg1)
             })
             return _cfunc.btnIsDissablefunc({ btnId, state: false })

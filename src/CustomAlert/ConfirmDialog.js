@@ -41,6 +41,8 @@ const ConfirmDialog = () => {
                 break;
             case 9: component = <AlertHTMLString btnRef={buttonRef} />
                 break;
+            case 10: component = <AlertMsgArray btnRef={buttonRef} />
+                break;
             default: return null;
         }
     }
@@ -231,6 +233,44 @@ const AlertHTMLString = ({ btnRef }) => {
 };
 
 
+const AlertMsgArray = ({ btnRef }) => {
+
+    const { onCancel, confirmState } = useConfirm();
+    const { Status = false, Message = " Warning Error", } = confirmState;
+
+    const outerNo = (e, no) => {
+        if (no === 2) {
+            e.stopPropagation();
+            return;
+        } else {
+            e.stopPropagation();
+            onCancel();
+        };
+    };
+
+    const innerOk = (e) => {
+        e.stopPropagation();
+        onCancel();
+    };
+
+    return (
+        <div className="modal fade show transparent1" role="dialog" onClick={(e) => outerNo(e, 1)} tabindex="-1" style={{ display: Status ? "block" : "none" }}>
+            <div className="modal-dialog modal-dialog-centered" role="document">
+                <div className="modal-content alertbody" onClick={(e) => outerNo(e, 2)}>
+                    <div className="modal-content ">
+                        <div className="px-4 mb-0 text-center alert alert-warning alert-dismissible fade show" role="alert"><button type="button"
+                            className="close" aria-label="Close" onClick={outerNo}><span aria-hidden="true">×</span></button><i
+                                className="mdi mdi-alert-outline  d-block display-4 mt-2 mb-3 text-warning"></i>
+
+                            <MessageArrFun msg={Message} />
+                            <button type="button" ref={btnRef} className="btn btn-primary " onClick={innerOk}>OK</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
+};
 
 
 
@@ -497,6 +537,38 @@ const MessageFun = ({ msg }) => {
         return (<div style={{ textAlign: 'center' }}><p> <h5>{msg}</h5></p></div>)
     }
 }
+
+
+
+
+
+const MessageArrFun = ({ msg }) => {
+    let messages = [];
+
+    try {
+        // If msg is a stringified array, parse it
+        messages = JSON.parse(msg);
+    } catch (e) {
+        // If parsing fails, assume msg is already an array
+        messages = Array.isArray(msg) ? msg : [msg];
+    }
+
+    return (
+        <div style={{ textAlign: 'left' }}>
+            {messages.map((message, index) => {
+                const parts = message.split(":"); // Split message at ':'
+                return (
+                    <div key={index} style={{ marginBottom: '5px' }}>
+                        <h5>
+                            {parts[0]}
+                            {parts[1] && <span style={{ color: 'tomato' }}>:{parts.slice(1).join(":")}</span>}
+                        </h5>
+                    </div>
+                );
+            })}
+        </div>
+    );
+};
 
 
 
