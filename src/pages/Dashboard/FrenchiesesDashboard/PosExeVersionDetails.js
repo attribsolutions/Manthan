@@ -22,14 +22,12 @@ const PosExeVersionDetails = () => {
     }));
 
     useEffect(async () => {
-
         const jsonBody = JSON.stringify({
             Party: loginSelectedPartyID(),
         });
-
-        // const jsonData = await POSExEVersion_Api({ jsonBody })
-        // setExeVersionData(jsonData)
-    }, [])
+        const jsonData = await POSExEVersion_Api({ jsonBody })
+        setExeVersionData(jsonData)
+    }, [commonPartyDropSelect])
 
 
     const pagesListColumns = [

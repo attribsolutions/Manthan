@@ -89,6 +89,8 @@ const Order = (props) => {
     const dispatch = useDispatch();
     const history = useHistory();
     const IsFranchisesRole = _cfunc.loginUserIsFranchisesRole()
+    const isSweetAndSnacksCompany = _cfunc.IsSweetAndSnacksCompany()
+
     const advanceAmountRef = useRef(0);
     const descriptionRef = useRef("");
     const ordersNotSave = _cfunc.loginSystemSetting().OrdersnotSave
@@ -1019,7 +1021,7 @@ const Order = (props) => {
             headerStyle: () => {
                 return { width: '11%', textAlign: 'center' };
             },
-            hidden: (subPageMode === url.ORDER_1 || subPageMode === url.IB_ORDER || subPageMode === url.IB_SALES_ORDER || IsFranchisesRole) && true,
+            hidden: (subPageMode === url.ORDER_1 || subPageMode === url.IB_ORDER || subPageMode === url.IB_SALES_ORDER || IsFranchisesRole || isSweetAndSnacksCompany) && true,
             headerFormatter: () => {
                 return (
                     <div className="" >

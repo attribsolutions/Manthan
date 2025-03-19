@@ -19,10 +19,11 @@ import { getOrderApprovalDetailAction, orderApprovalAction, postOrderConfirms_AP
 import { priceListByCompay_Action, priceListByCompay_ActionSuccess } from "../../../../store/Administrator/PriceList/action";
 import { alertMessages } from "../../../../components/Common/CommonErrorMsg/alertMsg";
 import { getOrdersMakeInvoiceDataAction, getOrdersMakeInvoiceDataActionSuccess } from "../../../../store/Sales/bulkInvoice/action";
-import { allLabelWithBlank } from "../../../../components/Common/CommonErrorMsg/HarderCodeData";
+import { allLabelWithBlank, allLabelWithZero } from "../../../../components/Common/CommonErrorMsg/HarderCodeData";
 import { sideBarPageFiltersInfoAction } from "../../../../store/Utilites/PartyDrodown/action";
 import { getBOMListPage } from "../../../../store/Production/BOMRedux/action";
 import { Bulk_BOM_for_WorkOrder, Bulk_BOM_for_WorkOrderSuccess } from "../../../../store/Production/WorkOrder/action";
+import Select from "react-select"
 
 const BulkWorkOrderList = () => {
 
@@ -34,7 +35,8 @@ const BulkWorkOrderList = () => {
         FromDate: currentDate_ymd,
         ToDate: currentDate_ymd,
         Supplier: allLabelWithBlank,
-        CustomerType: [allLabelWithBlank]
+        CustomerType: [allLabelWithBlank],
+        Category: allLabelWithZero
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
@@ -73,7 +75,9 @@ const BulkWorkOrderList = () => {
             supplierDropLoading: state.CommonAPI_Reducer.vendorSupplierCustomerLoading,
             Bulk_Data: state.WorkOrderReducer.Bulk_Bom_for_WorkOrder,
             tableList: state.BOMReducer.BOMList,
+            goBtnLoading: state.BOMReducer.loading,
             BulkBtnloading: state.WorkOrderReducer.BulkBtnloading,
+            CategoryTypeList: state.categoryTypeReducer.categoryTypeListData,
 
 
 
@@ -83,7 +87,9 @@ const BulkWorkOrderList = () => {
     const {
         pageField,
         Bulk_Data,
-        BulkBtnloading
+        BulkBtnloading,
+        CategoryTypeList,
+        goBtnLoading
     } = reducers;
 
     const ordersBulkInvoiceData = useSelector(state => state.BulkInvoiceReducer.ordersBulkInvoiceData);
@@ -106,6 +112,7 @@ const BulkWorkOrderList = () => {
 
         if (commonPartyDropSelect.value > 0) {
             goButtonHandler()
+            dispatch(_act.getCategoryTypelist());//Category tab
             dispatch(_act.GetVenderSupplierCustomer({ subPageMode, PartyID: commonPartyDropSelect.value }));
 
         } else {
@@ -194,7 +201,7 @@ const BulkWorkOrderList = () => {
 
 
     useEffect(() => {
-        
+
         if (Bulk_Data.Status === true && Bulk_Data.StatusCode === 200) {
             history.push({
                 pathname: url.BULK_WORK_ORDER,
@@ -204,14 +211,28 @@ const BulkWorkOrderList = () => {
         }
     }, [Bulk_Data]);
 
+    function CategoryType_Handler(e) {
+        debugger
+        setState((i) => {
+            const a = { ...i }
+            a.values.Category = e;
+            return { ...a }
+        })
+    }
 
+    const CategoryTypeList_DropdownOptions = CategoryTypeList.map((data) => ({
+        value: data.id,
+        label: data.Name,
+    }));
 
+    CategoryTypeList_DropdownOptions.unshift(allLabelWithZero);
     function goButtonHandler() {
+        
         try {
             const jsonBody = JSON.stringify({
                 Company: _cfunc.loginCompanyID(),
                 Party: _cfunc.loginPartyID(),
-                ItemID: ""
+                Category: values.Category.value,
             });
             dispatch(getBOMListPage(jsonBody));
 
@@ -219,7 +240,7 @@ const BulkWorkOrderList = () => {
     }
 
     const BulkInvoice_Handler = (allList = []) => {
-        
+
         let checkRows = allList.filter(i => (i.selectCheck && !i.forceSelectDissabled))
         if (!checkRows.length > 0) {
             customAlert({
@@ -253,6 +274,37 @@ const BulkWorkOrderList = () => {
             <PageLoadingSpinner isLoading={reducers.goBtnloading || !pageField} />
 
             <div className="page-content">
+                <div className="px-2   c_card_filter text-black"  >
+                    <div className="row">
+                        <Col sm="4">
+                            <FormGroup className="mb-3 row mt-3 ">
+                                <Label className="mt-2" style={{ width: "115px" }}> Item Category </Label>
+                                <Col sm={7}>
+                                    <Select
+                                        name="CategoryType"
+                                        value={values.Category}
+                                        isSearchable={true}
+                                        className="react-dropdown"
+                                        styles={{
+                                            menu: provided => ({ ...provided, zIndex: 2 })
+                                        }}
+                                        classNamePrefix="dropdown"
+                                        options={CategoryTypeList_DropdownOptions}
+                                        onChange={CategoryType_Handler}
+                                    />
+
+                                </Col>
+                            </FormGroup>
+                        </Col>
+
+
+
+                        <Col sm="7" ></Col>
+                        <Col sm="1" className="mt-3 ">
+                            <Go_Button loading={goBtnLoading} onClick={goButtonHandler} />
+                        </Col>
+                    </div>
+                </div>
                 {
                     (pageField) ?
                         <CommonPurchaseList

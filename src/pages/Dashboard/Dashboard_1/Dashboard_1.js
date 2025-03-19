@@ -9,7 +9,7 @@ import {
     Col,
     Container, Label, Row,
 } from "reactstrap";
-import { IsSweetAndSnacksCompany, amountCommaSeparateFunc, breadcrumbReturnFunc, currentDate_dmy, currentDate_ymd, loginPartyID, loginSelectedPartyID, loginUserIsFranchisesRole } from '../../../components/Common/CommonFunction';
+import { IsCBMManagment, IsSweetAndSnacksCompany, amountCommaSeparateFunc, breadcrumbReturnFunc, currentDate_dmy, currentDate_ymd, loginIsSCMParty, loginPartyID, loginSelectedPartyID, loginUserIsFranchisesRole } from '../../../components/Common/CommonFunction';
 import * as url from "../../../routes/route_url";
 import * as pageId from "../../../routes/allPageID"
 import { commonPageField, commonPageFieldSuccess } from '../../../store/actions';
@@ -41,6 +41,7 @@ const Dashboard_1 = (props) => {
 
 
     const isFrenchises = loginUserIsFranchisesRole()
+    const IsMannagementParty = IsCBMManagment();
 
     const [dateRange, setDateRange] = useState({
         fromDate: currentDate_ymd,
@@ -202,7 +203,7 @@ const Dashboard_1 = (props) => {
                 </MetaTags>
                 <Container fluid>
 
-                    
+
                     <Row>
                         <Col xl={3} md={3} >
                             <Card className="card-h-100">
@@ -508,9 +509,9 @@ const Dashboard_1 = (props) => {
                         </Col>}
                     </Row>
                     <Row>
-                        {(isFrenchises) && <Col lg={12}>
+                        {(IsMannagementParty) && <Col lg={12}>
                             <Card >
-                               
+
                                 <PosExeVersionDetails />
 
                             </Card>

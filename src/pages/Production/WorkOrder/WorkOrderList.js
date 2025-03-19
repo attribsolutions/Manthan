@@ -105,7 +105,7 @@ const WorkOrderList = () => {
     }
 
     const makeBtnFunc = (list = [], btnId) => {
-
+        debugger
         try {
             if (list.length > 0) {
                 const jsonData = list[0];
@@ -192,12 +192,11 @@ const WorkOrderList = () => {
                             MasterModal={WorkOrder}
                             masterPath={url.WORK_ORDER}
                             newBtnPath={url.WORK_ORDER}
-                            ButtonMsgLable={"Work Order"}
+                            ButtonMsgLable={""}
                             deleteName={"ItemName"}
                             pageMode={pageMode}
                             goButnFunc={goButtonHandler}
                             makeBtnFunc={makeBtnFunc}
-                            makeBtnShow={pageMode === mode.defaultList ? false : true}
                             makeBtnName={"Make Material Issue"}
                         />
                         : null

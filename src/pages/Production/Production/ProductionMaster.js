@@ -41,7 +41,7 @@ const ProductionMaster = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory();
-
+    const Calculationformula = _cfunc.loginSystemSetting().ProductionSaveValidation
     const [pageMode, setPageMode] = useState(mode.defaultsave);
     const [userPageAccessState, setUserAccState] = useState('');
     const [UnitNamefromPageMod_2, setUnitNamefromPageMod_2] = useState('');
@@ -155,13 +155,16 @@ const ProductionMaster = (props) => {
                     i.values.PrintedBatchCode = PrintedBatchCode;
                     i.values.Remark = Remark;
 
+
                     i.hasValid.id.valid = true
                     i.hasValid.ProductionDate.valid = true
                     i.hasValid.ItemName.valid = true
                     i.hasValid.EstimatedQuantity.valid = true
                     i.hasValid.NumberOfLot.valid = true
                     i.hasValid.PrintedBatchCode.valid = true
-                 
+                    i.hasValid.ActualQuantity.valid = true
+
+
 
                     return i
                 })
@@ -320,7 +323,7 @@ const ProductionMaster = (props) => {
     let isActionPermitted = false; // Flag variable to track permission
 
     const SaveHandler = async (event) => {
-
+        debugger
         event.preventDefault();
         const btnId = event.target.id;
         let jsonBody
@@ -339,7 +342,7 @@ const ProductionMaster = (props) => {
                     NumberOfLot: values.NumberOfLot,
                     ActualQuantity: parseFloat(values.ActualQuantity).toFixed(3),
                     BatchDate: batchDate,
-                    StoreLocation: "21313",
+                    StoreLocation: "",
                     PrintedBatchCode: values.PrintedBatchCode,
                     BestBefore: values.BestBefore,
                     Remark: values.Remark,
@@ -351,20 +354,25 @@ const ProductionMaster = (props) => {
                     Item: values.ItemName.ItemID,
                 });
 
-                const originalEstimatedQty = parseFloat(values.EstimatedQuantity);
-                const actualQuantity = parseFloat(values.ActualQuantity);
 
-                const percentageDecrease = parseFloat((1 - actualQuantity / originalEstimatedQty) * 100).toFixed(2);
+
+                console.log("Calculationformula", Calculationformula)
+                let parts = Calculationformula.split(" , ");
+                let Calculation = parts[0];
+                let percentage = parts[1];
+                // const percentageDecrease = parseFloat((1 - actualQuantity / originalEstimatedQty) * 100).toFixed(2);
+
+                const percentageDecrease = eval(Calculation)
                 let message;
                 let isPermission
-                if (parseFloat(percentageDecrease) > 50) {
-                    message = `Actual Quantity is 50% Lower than Estimated Quantity.`;
+                if (parseFloat(percentageDecrease) > Number(percentage)) {
+                    message = `Actual Quantity is ${percentage}% Lower than Estimated Quantity.`;
                     isPermission = await customAlert({
                         Type: 8,
                         Message: message,
                     });
-                } else if (parseFloat(percentageDecrease) < -50) {
-                    message = `Actual Quantity Exceeds Estimated Quantity by 50%`;
+                } else if (parseFloat(percentageDecrease) < -(Number(percentage))) {
+                    message = `Actual Quantity Exceeds Estimated Quantity by ${percentage}%`;
                     isPermission = await customAlert({
                         Type: 8,
                         Message: message,
@@ -504,7 +512,7 @@ const ProductionMaster = (props) => {
                                                     onChangeText({ event, state, setState })
                                                 }}
                                             />
-                                            {isError.ActualQuantity.length > 0 && (
+                                            {isError.ActualQuantity?.length > 0 && (
                                                 <span className="text-danger f-8"><small>{isError.ActualQuantity}</small></span>
                                             )}
                                         </Col>
