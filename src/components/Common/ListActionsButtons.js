@@ -182,7 +182,12 @@ export const listPageActionsButtonFunc = (props) => {
         const canDelete = hasRole("RoleAccess_IsDelete") && !forceDeleteHide && !IsRecordDeleted;
         const canDeleteSelf = hasRole("RoleAccess_IsDeleteSelf") && !canDelete && userCreatedRow && !forceDeleteHide;
         const canCopy = hasRole("RoleAccess_IsSave") && hasRole("RoleAccess_IsCopy") && IsRecordDeleted;
-        const canMakeBtn = pageMode === mode.modeSTPList && makeBtnShow && !forceMakeBtnHide;
+        // const canMakeBtn = pageMode === mode.modeSTPList && makeBtnShow && !forceMakeBtnHide;
+
+        const canMakeBtn = hasRole("RoleAccess_MakeGRN") && !forceMakeBtnHide;
+
+
+
         const canOrderApproval = hasRole("RoleAccess_SendToSAP") && oderAprovalBtnFunc && !forceHideOrderAprovalBtn;
 
         const canCustomerWisePrint = hasRole("RoleAccess_IsPrint") && downClaimBtnFunc;
@@ -196,7 +201,7 @@ export const listPageActionsButtonFunc = (props) => {
         const canMinPrint = minPrintBtn_Func && hasRole("RoleAccess_FranchisesOrderPrint")
 
 
-        const canOrderthermalPrint = hasRole("RoleAccess_IsPrint") && loginUserIsFranchisesRole() && (subPageMode === url.ORDER_LIST_4)&&thermalprintBtnFunc
+        const canOrderthermalPrint = hasRole("RoleAccess_IsPrint") && loginUserIsFranchisesRole() && (subPageMode === url.ORDER_LIST_4) && thermalprintBtnFunc
 
 
 
@@ -211,7 +216,7 @@ export const listPageActionsButtonFunc = (props) => {
         const dummyDisable_OrderApproval = hasRole("RoleAccess_SendToSAP") && !canOrderApproval && oderAprovalBtnFunc;
         const dummyDisable_Edit = (userAccState.RoleAccess_IsEdit || userAccState.RoleAccess_IsEditSelf) && !canEdit && !canEditSelf && !canView && !viewApprovalBtnFunc && IsRecordDeleted;
         const dummyDisable_Delete = ((hasRole("RoleAccess_IsDelete") || hasRole("RoleAccess_IsDeleteSelf")) && !canDelete && !canDeleteSelf && !IsRecordDeleted);
-        const dummyDisable_MakeBtn = !canMakeBtn && makeBtnShow;
+        const dummyDisable_MakeBtn = hasRole("RoleAccess_MakeGRN") && !canMakeBtn && makeBtnShow;
         const dummyDisable_SendToScm = !isPartyTypeIDInSendToScm && sendToScmBtnFunc && !(subPageMode === url.IB_GRN_LIST);
 
         const dummyDisable_CreditNoteBtn = (!isApproved && (subPageMode === url.SALES_RETURN_LIST)) || (isCreditNoteCreated && (subPageMode === url.SALES_RETURN_LIST))
@@ -356,7 +361,7 @@ export const listPageActionsButtonFunc = (props) => {
                         title: "Print",
                         buttonClasss: printBtnCss,
                     })}
-                   
+
                     {renderButtonIfNeeded({
                         condition: canMinPrint,
                         btnmode: mode.MinPrint,
@@ -374,7 +379,7 @@ export const listPageActionsButtonFunc = (props) => {
                         title: "MultipleInvoices",
                         buttonClasss: printInvoiceBtnCss,
                     })}
-                     {renderButtonIfNeeded({
+                    {renderButtonIfNeeded({
                         condition: canOrderthermalPrint,
                         btnmode: mode.ThermalPrint,
                         iconClass: printIconClass,
@@ -497,7 +502,7 @@ export const listPageActionsButtonFunc = (props) => {
         userAccState.RoleAccess_IsDelete ||
         userAccState.RoleAccess_IsDeleteSelf ||
         userAccState.RoleAccess_IsEditSelf ||
-        makeBtnShow ||
+        userAccState.RoleAccess_MakeGRN ||
         oderAprovalBtnFunc
     );
     if (isActionColunmHidden) return null;

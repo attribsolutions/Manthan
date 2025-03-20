@@ -1,6 +1,8 @@
 import { call, put, takeLatest } from "redux-saga/effects";
 import {
+  AccountingGRNSuccess,
   GrnApiErrorAction,
+  Update_accounting_GRN_Success,
   deleteGRNIdSuccess,
   editGRNIdSuccess,
   getGRNListPageSuccess,
@@ -10,6 +12,7 @@ import {
   updateGRNIdSuccess,
 } from "./actions";
 import {
+  Accounting_GRN_update_API,
   CheckStockEntryforBackDatedTransaction,
   get_Demand_Details_Post_API,
   GRN_delete_API,
@@ -26,6 +29,8 @@ import {
   SAVE_GRN_FROM_GRN_PAGE_ACTION,
   UPDATE_GRN_ID_FROM_GRN_PAGE,
   HIDE_INVOICE_FOR_GRN_ACTION,
+  ACCOUNTING_GRN,
+  UPDATE_ACCOUNTING_GRN,
 } from "./actionType";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { url } from "../../../routes";
@@ -68,6 +73,26 @@ function* Edit_GRN_GenratorFunction({ config }) { // Edit  GRN  genrator functio
   } catch (error) { yield put(GrnApiErrorAction()) }
 }
 
+
+
+
+
+
+function* Accounting_GRN_GenratorFunction({ config }) { // Edit  GRN  genrator function
+  try {
+    const { btnmode, path } = config;
+    const response = yield call(GRN_Edit_API, config);
+    response.pageMode = btnmode
+    response.pageMode = btnmode
+    response["path"] = path;
+    response.Data = response.Data[0];
+    yield put(AccountingGRNSuccess(response));
+  } catch (error) { yield put(GrnApiErrorAction()) }
+}
+
+
+
+
 function* UpdateGRNGenFunc({ config }) {             // Upadte GRN  genrator function
   try {
     const response = yield call(GRN_update_API, config);
@@ -75,14 +100,34 @@ function* UpdateGRNGenFunc({ config }) {             // Upadte GRN  genrator fun
   } catch (error) { yield put(GrnApiErrorAction()) }
 }
 
+
+function* UpdateAccountingGRNGenFunc({ config }) {             // Upadte GRN  genrator function
+  try {
+    const response = yield call(Accounting_GRN_update_API, config);
+    yield put(Update_accounting_GRN_Success(response))
+  } catch (error) { yield put(GrnApiErrorAction()) }
+}
+
+
+
+
+
 function* GRNListfilterGerFunc({ config }) {          // Grn_List filter  genrator function
   try {
     const response = yield call(GRN_get_API, config);
-    const newList = yield response.Data.map((i) => {
+    let filteredData = response.Data;
+
+    if (config.subPageMode === url.ACCOUNTING_GRN_LIST) {
+      filteredData = response.Data.filter(i => i.IsSave === 0);
+    } if (config.subPageMode === url.GRN_LIST_3) {
+      filteredData = response.Data;
+    }
+
+    const newList = yield filteredData.map((i) => {
+      i["forceMakeBtnHide"] = i.IsSave === 0 ? true : false;
       i["recordsAmountTotal"] = i.GrandTotal;  // Breadcrumb Count total
       i.GrandTotal = _cfunc.amountCommaSeparateFunc(i.GrandTotal) //  GrandTotal show with commas
       i.InvoiceDate = _cfunc.date_dmy_func(i.InvoiceDate);
-      //tranzaction date is only for fiterand page field but UI show transactionDateLabel
       i["transactionDate"] = i.CreatedOn;
       i["transactionDateLabel"] = _cfunc.listpageConcatDateAndTime(i.GRNDate, i.CreatedOn);
       return i
@@ -102,7 +147,7 @@ function* makeGRN_Mode1_GenFunc({ config }) {
   // Make_GRN Items  genrator function
 
   const { pageMode = '', path = '', grnRef = [], InvoiceDate, subPageMode } = config
-  
+
   try {
     if (subPageMode === url.IB_ORDER_SO_LIST) {
       const response = yield call(get_Demand_Details_Post_API, config);
@@ -116,7 +161,7 @@ function* makeGRN_Mode1_GenFunc({ config }) {
       const response = yield call(GRN_Make_API, config);
 
       response.Data.OrderItem.forEach(index => {
-        
+
         index["GSToption"] = index.GSTDropdown?.map(i => ({ value: i.GST, label: i.GSTPercentage, }));
         index["MRPOps"] = index.MRPDetails?.map(i => ({ label: i.MRPValue, value: i.MRP }));
 
@@ -133,7 +178,7 @@ function* makeGRN_Mode1_GenFunc({ config }) {
         index["MRPValue"] = (deFaultValue?.value === 0) ? index.MRPValue : deFaultValue?.label;
         index["MRP"] = (deFaultValue?.value === 0) ? index.MRP : deFaultValue?.value;
         index["vendorOrderRate"] = index.Rate;
-        
+
         if (index.GST === null) {
           const deFaultValue = index.GSTDropdown?.filter(i => i.GSTPercentage === index.GSTPercentage);
           if (deFaultValue.length === 0) {
@@ -187,6 +232,11 @@ function* GRNSaga() {
   yield takeLatest(UPDATE_GRN_ID_FROM_GRN_PAGE, UpdateGRNGenFunc)
   yield takeLatest(DELETE_GRN_FOR_GRN_PAGE, DeleteGRNGenFunc);
   yield takeLatest(GET_GRN_LIST_PAGE, GRNListfilterGerFunc);
+  yield takeLatest(ACCOUNTING_GRN, Accounting_GRN_GenratorFunction);
+  yield takeLatest(UPDATE_ACCOUNTING_GRN, UpdateAccountingGRNGenFunc);
+
+
+
 }
 
 export default GRNSaga;

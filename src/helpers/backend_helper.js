@@ -536,6 +536,12 @@ export const GRN_get_API = ({ filtersBody }) => post(url.GRN_LiST_BY_FILTERS, fi
 export const GRN_Edit_API = ({ editId }) => get(`${url.GRN}/${editId}`)// edit api
 export const GRN_Post_API = ({ jsonBody }) => post(url.GRN, jsonBody)//get api
 export const GRN_update_API = ({ jsonBody, updateId }) => put(`${url.GRN}/${updateId}`, jsonBody)// update api
+
+export const Accounting_GRN_update_API = ({ jsonBody, updateId }) => put(`${url.ACCOUNTING_GRN_UPDATE}/${updateId}`, jsonBody)// update api
+
+
+
+
 export const GRN_delete_API = ({ deleteId }) => del(`${url.GRN}/${deleteId}`)//Delete Order
 export const GRN_Make_API = ({ jsonBody }) => post(url.GRN_MAKE_API, jsonBody)
 // export const Hide_Invoice_For_GRN_API = ({ InvoiceId, IsHide }) => del(`${url.HIDE_INVOICE_FOR_GRN}/${InvoiceId}/${IsHide}`)

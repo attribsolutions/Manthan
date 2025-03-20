@@ -1,12 +1,12 @@
 export function Qty_Distribution_Func(Data) {
-    
+    debugger
     return Data.map(item => {
         let remainingQuantity = item.Quantity;
-
+        let TotalStock = 0;
         const updatedBatchesData = item.BatchesData.map(batch => {
-            
-            const quantity = parseFloat(batch.ObatchwiseQuantity);
+            const quantity = Number((batch.ObatchwiseQuantity).toFixed(2));
             const distributedQuantity = Math.min(remainingQuantity, quantity);
+            TotalStock += quantity;
             remainingQuantity -= distributedQuantity;
             return {
                 ...batch,
@@ -17,7 +17,8 @@ export function Qty_Distribution_Func(Data) {
         return {
             ...item,
             // "OriginalWorkOrderQty": item.Quantity,
-            BatchesData: updatedBatchesData
+            BatchesData: updatedBatchesData,
+            TotalStock: TotalStock
         };
     });
 }
@@ -26,9 +27,9 @@ export function updateWorkOrderQuantity_By_Lot(Data, NumberOfLot, noOfLotForDist
 
     return Data.map(item => {
         let remainingQuantity = ((parseFloat(item.OriginalWorkOrderQty) / noOfLotForDistribution) * parseFloat(NumberOfLot)).toFixed(2)
-        
+
         const updatedBatchesData = item.BatchesData.map(batch => {
-            
+
             const quantity = parseFloat(batch.ObatchwiseQuantity);
             const distributedQuantity = Math.min(remainingQuantity, quantity);
             remainingQuantity -= distributedQuantity;
@@ -37,7 +38,7 @@ export function updateWorkOrderQuantity_By_Lot(Data, NumberOfLot, noOfLotForDist
                 Qty: distributedQuantity.toString()
             };
         });
-        
+
         return {
             ...item,
             Quantity: ((parseFloat(item.OriginalWorkOrderQty) / noOfLotForDistribution) * parseFloat(NumberOfLot)).toFixed(2),

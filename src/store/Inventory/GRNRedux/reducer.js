@@ -13,6 +13,10 @@ import {
   EDIT_GRN_FOR_GRN_PAGE,
   MAKE_GRN_MODE_1_ACTION,
   HIDE_INVOICE_FOR_GRN_ACTION_SUCCESS,
+  ACCOUNTING_GRN,
+  ACCOUNTING_GRN_SUCCESS,
+  UPDATE_ACCOUNTING_GRN,
+  UPDATE_ACCOUNTING_GRN_SUCCESS,
 } from "./actionType"
 
 const INIT_STATE = {
@@ -25,9 +29,11 @@ const INIT_STATE = {
   deleteMsg: { Status: false },
   GRNList: [],
   grnItemList: [],
+  AccontingGRNData: [],
   GRNitem: { Status: false, Data: [], },
   saveBtnloading: false,
   listBtnLoading: false,
+  AccontingGRNpayload: { Status: false },
 }
 
 const GRNReducer = (state = INIT_STATE, action) => {
@@ -95,6 +101,45 @@ const GRNReducer = (state = INIT_STATE, action) => {
         listBtnLoading: false,
         editData: action.payload,
       }
+
+    case ACCOUNTING_GRN:
+      debugger
+      return {
+        ...state,
+        listBtnLoading: action.config.btnId,
+      }
+
+    case ACCOUNTING_GRN_SUCCESS:
+      return {
+        ...state,
+        listBtnLoading: false,
+        AccontingGRNData: action.payload,
+      }
+
+
+
+
+    case UPDATE_ACCOUNTING_GRN:
+      debugger
+      return {
+        ...state,
+        saveBtnloading: true,
+      }
+
+    case UPDATE_ACCOUNTING_GRN_SUCCESS:
+      return {
+        ...state,
+        saveBtnloading: false,
+        AccontingGRNpayload: action.payload,
+      }
+
+
+
+
+
+
+
+
 
     case UPDATE_GRN_ID_FROM_GRN_PAGE:
       return {

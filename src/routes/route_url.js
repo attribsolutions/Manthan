@@ -210,6 +210,9 @@ export const GRN_STP_1 = "/GRN_STP_1"
 export const GRN_LIST_1 = "/GRN_LIST_1"
 export const GRN_ADD_1 = "/GRN_ADD_1"
 
+export const ACCOUNTING_GRN = "/Accounting_GRN"
+export const ACCOUNTING_GRN_LIST = "/Accounting_GRN_List"
+
 export const GRN_STP_3 = "/GRN_STP_3"
 export const GRN_LIST_3 = "/GRN_LIST_3"
 export const GRN_ADD_3 = "/GRN_ADD_3"

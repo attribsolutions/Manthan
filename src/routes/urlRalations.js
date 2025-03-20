@@ -212,10 +212,12 @@ export const Production_STP = url.PRODUCTION_LIST;
 //******************************* Inventory ************************************//
 
 
-export const GRN_ADD_1 = url.GRN_LIST_1;
+export const GRN_ADD_1 = url.GRN_LIST_3;
+
 export const GRN_STP_1 = url.GRN_LIST_1;
 
-
+export const Accounting_GRN_List = url.ACCOUNTING_GRN;
+export const Accounting_GRN = url.ACCOUNTING_GRN_LIST;
 
 
 export const GRNList_3 = url.GRN_STP_3;

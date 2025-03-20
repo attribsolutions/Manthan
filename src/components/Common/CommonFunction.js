@@ -509,6 +509,20 @@ export const IsSweetAndSnacksCompany = () => { //+++++++++++++++++++++ Company c
   return false;
 };
 
+
+export const IsCBMManagment = () => { //+++++++++++++++++++++ Company condition Company Id+++++++++++++++++++++++++++++
+  try {
+    const loginCompanyId = loginCompanyID();
+    return (loginCompanyId === 2) && loginIsSCMParty();  // Company Id 4 For (Chitale Sweet and Snacks )
+  } catch (e) {
+    CommonConsole("Common Login company Error");
+  }
+  return false;
+};
+
+
+
+
 export const IsLoginFromOutsideLink = (Path) => {
   return Path.includes('-') && Path.includes('AuthLink')
 }

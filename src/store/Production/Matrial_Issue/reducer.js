@@ -27,12 +27,14 @@ const MaterialIssueReducer = (state = INIT_STATE, action) => {
             return {
                 ...state,
                 goBtnloading: true,
+                listBtnLoading: action.config.btnId,
             }
         case POST_GO_BUTTON_FOR_MATERIAL_ISSUE_MASTER_SUCCESS:
             return {
                 ...state,
                 GoButton: action.payload,
                 goBtnloading: false,
+                listBtnLoading: false,
             }
 
         // Post Method 

@@ -14,8 +14,12 @@ import {
   UPDATE_GRN_ID_FROM_GRN_PAGE_SUCCESS,
   GRN_API_ERROR_ACTION,
   HIDE_INVOICE_FOR_GRN_ACTION,
-  
+
   HIDE_INVOICE_FOR_GRN_ACTION_SUCCESS,
+  ACCOUNTING_GRN,
+  ACCOUNTING_GRN_SUCCESS,
+  UPDATE_ACCOUNTING_GRN,
+  UPDATE_ACCOUNTING_GRN_SUCCESS,
   // POST_INVOICENO_MESSAGE_SUCCESS,
   // POST_INVOICENO_MESSAGE
 } from './actionType'
@@ -60,6 +64,15 @@ export const updateGRNIdSuccess = (resp) => ({
   payload: resp,
 });
 
+export const AccountingGRN = (config = {}) => ({
+  type: ACCOUNTING_GRN,
+  config,
+});
+export const AccountingGRNSuccess = (resp) => ({
+  type: ACCOUNTING_GRN_SUCCESS,
+  payload: resp,
+});
+
 
 export const deleteGRNId = (config = {}) => ({
   type: DELETE_GRN_FOR_GRN_PAGE,
@@ -91,15 +104,21 @@ export const hideInvoiceForGRFActionSuccess = (response) => ({
   payload: response
 });
 
-// export const postInvoiceNoMessage = (config = {}) => ({ // save Action
-//   type: POST_INVOICENO_MESSAGE,
-//   config,
-// });
 
-// export const postInvoiceNoMessageSuccess = (resp) => ({ // Save  success
-//   type: POST_INVOICENO_MESSAGE_SUCCESS,
-//   payload: resp,
-// });
+export const Update_accounting_GRN = (config = {}) => ({
+  type: UPDATE_ACCOUNTING_GRN,
+  config
+});
+
+export const Update_accounting_GRN_Success = (response) => ({
+  type: UPDATE_ACCOUNTING_GRN_SUCCESS,
+  payload: response
+});
+
+
+
+
+
 
 export const GrnApiErrorAction = () => ({
   type: GRN_API_ERROR_ACTION,

@@ -47,6 +47,7 @@ const MaterialIssueMaster = (props) => {
     const dispatch = useDispatch();
     const history = useHistory()
     const currentDate_ymd = _cfunc.date_ymd_func();
+    const isEditable = _cfunc.loginSystemSetting().isEditable
 
     const fileds = {
         MaterialIssueDate: currentDate_ymd,
@@ -65,6 +66,8 @@ const MaterialIssueMaster = (props) => {
     const [Itemselectonchange, setItemselectonchange] = useState("");
     const [goButtonList, setGoButtonList] = useState([]);
     const [originalQty, setOriginalQty] = useState([]);
+
+
 
     const [editCreatedBy, seteditCreatedBy] = useState("");
     const [noOfLotForDistribution, setNoOfLotForDistribution] = useState(0);
@@ -287,6 +290,19 @@ const MaterialIssueMaster = (props) => {
 
     }));
 
+    const workorderQytChange = (inx_1) => {
+        debugger
+        let remainingQuantity = inx_1.Quantity;
+        inx_1.BatchesData.forEach(inx_2 => {
+            const quantity = (Number(inx_2.ObatchwiseQuantity)).toFixed(2);
+            const distributedQuantity = Math.min(remainingQuantity, quantity);
+            remainingQuantity -= distributedQuantity;
+            const batchQtyElement = document.getElementById(`stock${inx_1.id}-${inx_2.id}`);
+            batchQtyElement.value = (distributedQuantity).toFixed(2); // Display with three decimal places
+        });
+    }
+
+
     const pagesListColumns = [
         {
             text: "Item Name",
@@ -313,7 +329,6 @@ const MaterialIssueMaster = (props) => {
                 if (OrderQty > TotalStock) {
                     return {
                         color: "red",
-
                     };
                 }
             },
@@ -325,6 +340,44 @@ const MaterialIssueMaster = (props) => {
         {
             text: "Work Order Qty",
             dataField: "Quantity",
+            formatter: (cellContent, row,) => {
+
+                return (
+                    <>
+                        <div style={{ width: "150px" }}>
+                            <Input
+                                type="text"
+                                key={`stock${row.id}`}
+                                id={`stock${row.id}`}
+                                style={{ textAlign: "right" }}
+                                disabled={!JSON.parse(isEditable)}
+                                cpattern={decimalRegx}
+                                defaultValue={(Number(row.Quantity)).toFixed(2)}
+                                autoComplete='off'
+                                onChange={(e) => {
+
+                                    let Qty = e.target.value
+                                    let result = decimalRegx.test(Qty);
+                                    if (result || Qty === "") {
+                                        if (Number(Qty) > row.TotalStock) {
+                                            e.target.value = row.TotalStock
+                                            row["Quantity"] = row.TotalStock;
+                                        } else {
+                                            row["Quantity"] = Number(Qty) || 0;
+                                        }
+                                        workorderQytChange(row);
+                                    } else {
+                                        e.target.value = row.TotalStock
+                                        workorderQytChange(row);
+                                    }
+                                }}
+                            />
+                        </div>
+                    </>
+                )
+            }
+
+
         },
         {
             text: "Unit",
@@ -333,8 +386,8 @@ const MaterialIssueMaster = (props) => {
         {
             text: "Batch Code",
             dataField: "BatchesData",
-
             formatter: (cellContent, user) => {
+
                 return (
                     <>
                         <Table className="table table-bordered table-responsive mb-1">
@@ -377,7 +430,7 @@ const MaterialIssueMaster = (props) => {
                                                 <div style={{ width: "120px", textAlign: "right" }}>
                                                     <Label
                                                     >
-                                                        {parseFloat(index.ObatchwiseQuantity).toFixed(2)}
+                                                        {Number(index.ObatchwiseQuantity).toFixed(2)}
                                                     </Label>
                                                 </div>
                                             </td>
@@ -390,7 +443,7 @@ const MaterialIssueMaster = (props) => {
                                                         id={`stock${user.id}-${index.id}`}
                                                         style={{ textAlign: "right" }}
                                                         cpattern={decimalRegx}
-                                                        defaultValue={parseFloat(index.Qty).toFixed(2)}
+                                                        defaultValue={Number(index.Qty).toFixed(2)}
                                                         autoComplete='off'
                                                         onChange={(event) => tableQuantityOnchangeHandler(event, user, index)}
                                                     />
@@ -797,7 +850,7 @@ const MaterialIssueMaster = (props) => {
                                 <React.Fragment>
                                     <Row>
                                         <Col xl="12">
-                                            <div className="table-responsive">
+                                            <div >
                                                 <BootstrapTable
                                                     keyField={"id"}
                                                     id="table_Arrow"

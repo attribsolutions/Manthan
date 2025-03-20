@@ -2,7 +2,7 @@ import React, { useEffect, useLayoutEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Col, FormGroup, Label } from "reactstrap";
 import Select from "react-select";
-import CommonPurchaseList from "../../../components/Common/CommonPurchaseList";
+
 import { date_ymd_func, loginSelectedPartyID } from "../../../components/Common/CommonFunction";
 import { mode, url, pageId } from "../../../routes/index"
 import * as _act from "../../../store/actions";
@@ -18,6 +18,7 @@ import GRN_ADD_1 from "./GRN_ADD_1";
 import GRNAdd3 from "./GRN_ADD_3";
 import { Invoice_Singel_Get_for_Report_Api, Pos_Invoice_Singel_Get_for_Report_Api } from "../../../helpers/backend_helper";
 import * as report from '../../../Reports/ReportIndex'
+import CommonPurchaseList from "../../../components/Common/CommonPurchaseList";
 
 
 const GRNList = () => {
@@ -46,15 +47,16 @@ const GRNList = () => {
             updateMsg: state.GRNReducer.updateMsg,
             postMsg: state.GRNReducer.postMsg,
             editData: state.GRNReducer.editData,
+            AccontingGRNData: state.GRNReducer.AccontingGRNData,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList,
             makeChallan: state.ChallanReducer.makeChallan,
 
         })
     );
-    const { pageField, customer, makeChallan } = reducers;
+    const { pageField, customer, makeChallan, AccontingGRNData, listBtnLoading } = reducers;
     const { commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
-
+    console.log(listBtnLoading)
     // Common Party select Dropdown useEffect
     useEffect(() => {
         if (commonPartyDropSelect.value > 0) {
@@ -90,6 +92,7 @@ const GRNList = () => {
         let makeBtnShow = false;
         let newBtnPath = '';
         let MasterModal = '';
+        let makeBtnName = '';
 
         if (subPageMode === url.GRN_LIST_1) {
             page_Id = pageId.GRN_LIST_1;
@@ -97,19 +100,42 @@ const GRNList = () => {
             newBtnPath = url.IB_GRN_LIST;
             page_Mode = mode.modeSTPList
             makeBtnShow = false;
+            makeBtnName = "Make IB Invoice"
             MasterModal = GRN_ADD_1
         }
-        else if (subPageMode === url.GRN_LIST_3) {
+        else if (subPageMode === url.GRN_LIST_3 && !_cfunc.IsSweetAndSnacksCompany()) {
             page_Id = pageId.GRN_LIST_3;
             masterPath = url.GRN_ADD_3;
             newBtnPath = url.GRN_STP_3;
             page_Mode = mode.modeSTPList
-            makeBtnShow = false;
+            makeBtnShow = true;
+            makeBtnName = "GRN"
             MasterModal = GRNAdd3
 
+        } else if (subPageMode === url.GRN_LIST_3 && _cfunc.IsSweetAndSnacksCompany()) {
+            page_Id = pageId.GRN_LIST_3;
+            masterPath = url.GRN_ADD_1;
+            newBtnPath = url.GRN_STP_3;
+            page_Mode = mode.modeSTPList
+            makeBtnShow = true;
+            makeBtnName = "Make Accounting GRN"
+            MasterModal = GRN_ADD_1
+
         }
+        else if (subPageMode === url.ACCOUNTING_GRN_LIST) {
+            page_Id = pageId.ACCOUNTING_GRN_LIST;
+            page_Mode = mode.modeSTPsave
+
+
+        }
+
+
+
+
+
+
         setSubPageMode(subPageMode)
-        setOtherState({ masterPath, makeBtnShow, newBtnPath, MasterModal })
+        setOtherState({ masterPath, makeBtnShow, newBtnPath, MasterModal, makeBtnName })
         setPageMode(page_Mode)
         dispatch(_act.commonPageFieldListSuccess(null))
         dispatch(_act.commonPageFieldList(page_Id))
@@ -119,6 +145,8 @@ const GRNList = () => {
             goButtonHandler()
         }
     }, []);
+
+
 
     useEffect(() => {
         if (makeChallan.Status === true && makeChallan.StatusCode === 200) {
@@ -130,6 +158,22 @@ const GRNList = () => {
         }
     }, [makeChallan]);
 
+
+
+    useEffect(() => {
+
+        if (AccontingGRNData.Status === true && AccontingGRNData.StatusCode === 200 && AccontingGRNData?.pageMode === mode.modeSTPsave) {
+            AccontingGRNData.Data["isAccountingGRN"] = true
+            history.push({
+                pathname: AccontingGRNData.path,
+                state: AccontingGRNData.Data,
+            })
+            dispatch(_act.AccountingGRNSuccess({ Status: false }))
+        }
+    }, [AccontingGRNData]);
+
+
+
     const venderOptions = customer.map((i) => ({
         value: i.id,
         label: i.Name,
@@ -139,10 +183,15 @@ const GRNList = () => {
     const makeBtnFunc = (list = []) => {
 
         const id = list[0].id
-        const makeBody = JSON.stringify({
-            GRN: id,
-        });
-        dispatch(_act.makeChallanAction({ makeBody, pageMode: mode.modeSTPsave, path: url.CHALLAN_LIST }))
+
+        if (subPageMode === url.GRN_LIST_3) {
+            dispatch(_act.AccountingGRN({ btnId: `btn-${mode.makeBtn}-${id}`, editId: id, btnmode: mode.modeSTPsave, path: url.ACCOUNTING_GRN }))
+        } else {
+            const makeBody = JSON.stringify({
+                GRN: id,
+            });
+            dispatch(_act.makeChallanAction({ makeBody, pageMode: mode.modeSTPsave, path: url.CHALLAN_LIST }))
+        }
     };
 
     function goButtonHandler() {
@@ -159,7 +208,7 @@ const GRNList = () => {
                 DashBoardMode: 0
 
             });
-            dispatch(_act.getGRNListPage({ filtersBody }));
+            dispatch(_act.getGRNListPage({ filtersBody, subPageMode }));
         } catch (error) { }
     }
 
@@ -286,11 +335,13 @@ const GRNList = () => {
                             goButnFunc={goButtonHandler}
                             HeaderContent={HeaderContent}
                             makeBtnFunc={makeBtnFunc}
-                            ButtonMsgLable={"GRN"}
+
+                            ButtonMsgLable={""}
                             deleteName={"FullGRNNumber"}
                             makeBtnName={otherState.makeBtnName}
                             MasterModal={otherState.MasterModal}
                             totalAmountShow={true}
+                            forceNewBtnView={subPageMode === url.ACCOUNTING_GRN_LIST ? false : true}
                         />
                         : null
                 }

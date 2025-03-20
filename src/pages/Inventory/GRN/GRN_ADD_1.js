@@ -32,13 +32,42 @@ import { Invoice_No_Message } from "../../../helpers/backend_helper";
 
 //// This GRN_ADD_1 Page is Use For  Sweets and Snacks GRN  Add page Use for 2 MODE From vendor Order to GRN & Inter Branch GRN
 let initialTableData = []
+
+
+
+function initialState(history) {
+
+    let page_Id = '';
+    let listPath = ''
+    let sub_Mode = history.location.pathname;
+
+    if (sub_Mode === url.GRN_ADD_1) {
+        page_Id = pageId.GRN_ADD_1;
+        listPath = url.GRN_LIST_3;
+    }
+    else if ((sub_Mode === url.ACCOUNTING_GRN)) {
+        page_Id = pageId.ACCOUNTING_GRN;
+        listPath = url.ACCOUNTING_GRN_LIST;
+    }
+
+    return { page_Id, listPath, sub_Mode }
+};
+
+
+
 const GRN_ADD_1 = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory();
     const currentDate_ymd = _cfunc.date_ymd_func();
 
+
     const [pageMode, setPageMode] = useState(mode.defaultsave);
+
+    const [page_id] = useState(() => initialState(history).page_Id)
+    const [listPath] = useState(() => initialState(history).listPath)
+    const [subPageMode] = useState(initialState(history).sub_Mode)
+
     const [userPageAccessState, setUserAccState] = useState('');
 
     const fileds = {
@@ -65,21 +94,23 @@ const GRN_ADD_1 = (props) => {
         pageField,
         saveBtnloading,
         RateMasterGoButton,
-
+        AccontingGRN
     } = useSelector((state) => ({
         saveBtnloading: state.GRNReducer.saveBtnloading,
         items: state.GRNReducer.GRNitem,
         postMsg: state.GRNReducer.postMsg,
         updateMsg: state.GRNReducer.updateMsg,
-
+        AccontingGRN: state.GRNReducer.AccontingGRNpayload,
         RateMasterGoButton: state.RateMasterReducer.RateMasterGoButton,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField
     }));
 
     useLayoutEffect(() => {
+
+
         dispatch(_act.commonPageFieldSuccess(null));
-        dispatch(_act.commonPageField(pageId.GRN_ADD_1));
+        dispatch(_act.commonPageField(page_id));
         const jsonBody = JSON.stringify({
             "PriceList": 0, // hard code 0 PriceList find On backend side based on loginPartyID
             "Party": _cfunc.loginPartyID(),
@@ -123,6 +154,28 @@ const GRN_ADD_1 = (props) => {
         }
     }, [postMsg])
 
+
+    useEffect(() => {
+
+        if ((AccontingGRN.Status === true) && (AccontingGRN.StatusCode === 200)) {
+            _act.Update_accounting_GRN_Success({ Status: false })
+            customAlert({
+                Type: 1,
+                Message: AccontingGRN.Message,
+            })
+            history.push({
+                pathname: listPath,
+            });
+        }
+        else if ((AccontingGRN.Status === false) && (AccontingGRN.StatusCode === 406)) {
+            _act.Update_accounting_GRN_Success({ Status: false })
+            customAlert({
+                Type: 4,
+                Message: AccontingGRN.Message,
+            });
+        }
+    }, [AccontingGRN])
+
     useEffect(() => pageFieldUseEffect({// useEffect common pagefield for master
         state,
         setState,
@@ -134,9 +187,7 @@ const GRN_ADD_1 = (props) => {
     useEffect(() => {
 
         if ((items.Status === true) && (items.StatusCode === 200)) {
-
             const grnItems = items.Data
-
             if ((grnItems.GRNReferences[0]?.GRN_From === url.IB_GRN_LIST)) { /// If GRN from IB GRN List then this 
 
                 let sum = 0
@@ -194,6 +245,56 @@ const GRN_ADD_1 = (props) => {
         }
 
     }, [items])
+
+
+    useEffect(() => {
+
+        if (history?.location?.state?.isAccountingGRN && subPageMode === url.ACCOUNTING_GRN) { // Accounting GRN
+
+            const Data = history.location.state
+            let sum = 0
+            Data.GRNItems.forEach((ele, k) => {
+                const calculate = orderCalculateFunc(ele)
+                sum = sum + parseFloat(calculate.roundedTotalAmount)
+                ele.id = k + 1;
+                ele["poQuantity"] = ele.Quantity
+                ele["Quantity"] = ""
+                ele["poAmount"] = ele.Amount
+                ele["Amount"] = calculate.roundedTotalAmount
+                ele["BatchDate"] = currentDate_ymd
+                ele["BatchCode"] = ele.BatchCode
+                ele["delbtn"] = false
+                ele["Invoice"] = null
+            });
+            dispatch(_act.BreadcrumbShowCountlabel(`Count:${Data.GRNItems.length} currency_symbol ${sum.toFixed(2)}`));
+
+            initialTableData = []
+            const grnDetails = { ...Data }
+            grnDetails["SupplierName"] = Data.PartyName
+            grnDetails["Supplier"] = Data.Party
+
+
+            grnDetails.GRNReferences[0]["Full_OrderNumber"] = grnDetails?.GRNReferences[0]?.Order?.FullOrderNumber
+            grnDetails.GRNReferences[0]["Order"] = null  // If accounting Grn then send null  Order
+
+
+            initialTableData = grnDetails.GRNItems;
+            setgrnItemList(initialTableData)
+            grnDetails.GRNItems = []
+
+            grnDetails["InvoiceDate"] = _cfunc.date_ymd_func(grnDetails.InvoiceDate)
+            grnDetails["DemandDate"] = _cfunc.date_ymd_func(grnDetails.DemandDate)
+
+            setGrnDetail(grnDetails)
+            setInvoiceNo(grnDetails.GRNReferences[0]?.Invoice_NO)
+
+            setOpenPOdata(grnDetails.GRNReferences)
+            items.Status = false
+
+
+        }
+
+    }, [history.location.state])
 
     useEffect(() => {
 
@@ -268,7 +369,7 @@ const GRN_ADD_1 = (props) => {
         },
 
         {//------------- Quntity first column ----------------------------------
-            text: "PO-Qty",
+            text: subPageMode === url.ACCOUNTING_GRN ? "GRN-Qty" : "PO-Qty",
             dataField: "poQuantity",
             hidden: pageMode === mode.view ? true : false,
             formatter: (value, row, k) => {
@@ -284,7 +385,7 @@ const GRN_ADD_1 = (props) => {
         },
 
         {//  ------------Quntity column -----------------------------------  
-            text: "GRN-Qty",
+            text: subPageMode === url.ACCOUNTING_GRN ? "Accounting GRN-Qty" : "GRN-Qty",
             dataField: "",
 
             formatter: (value, row, k) => {
@@ -404,6 +505,7 @@ const GRN_ADD_1 = (props) => {
             formatter: (value, row, k) => {
                 if (row.Rate === undefined) { row["Rate"] = 0 }
                 if (row.Amount === undefined) { row["Amount"] = 0 }
+
                 return (
                     <span className="text-right" >
                         <CInput
@@ -411,7 +513,7 @@ const GRN_ADD_1 = (props) => {
                             type="text"
                             id={`Ratey${k}`}
                             className=" text-end"
-                            disabled={openPOdata[0]?.GRN_From === url.IB_GRN_LIST || openPOdata[0]?.GRN_From === url.GRN_STP_3}
+                            disabled={openPOdata[0]?.GRN_From === url.IB_GRN_LIST || openPOdata[0]?.GRN_From === url.GRN_STP_3 || openPOdata[0]?.GRN_From === url.ORDER_LIST_1}
                             defaultValue={row.Rate}
                             cpattern={decimalRegx}
                             autoComplete="off"
@@ -471,7 +573,7 @@ const GRN_ADD_1 = (props) => {
                         id={`Batch${row.id}`}
                         placeholder="Batch Code..."
                         className="text-end "
-                        disabled={((pageMode === mode.view) || openPOdata[0]?.GRN_From === url.IB_GRN_LIST) ? true : false}
+                        disabled={((pageMode === mode.view) || openPOdata[0]?.GRN_From === url.IB_GRN_LIST || subPageMode === url.ACCOUNTING_GRN) ? true : false}
                         defaultValue={row.BatchCode}
                         onChange={e => { row["BatchCode"] = e.target.value }}
                         autoComplete="off"
@@ -498,7 +600,7 @@ const GRN_ADD_1 = (props) => {
                         value={row.BatchDate}
 
                         data-enable-time
-                        disabled={((pageMode === mode.view) || (openPOdata[0]?.GRN_From === url.IB_GRN_LIST)) ? true : false}
+                        disabled={((pageMode === mode.view) || (openPOdata[0]?.GRN_From === url.IB_GRN_LIST) || subPageMode === url.ACCOUNTING_GRN) ? true : false}
                         onChange={(e, date) => { row.BatchDate = date }}
                     />
                 )
@@ -511,7 +613,7 @@ const GRN_ADD_1 = (props) => {
         {//------------- Action column ----------------------------------
             text: "Action",
             dataField: "",
-            hidden: (pageMode === mode.view || openPOdata[0]?.GRN_From === url.IB_GRN_LIST) ? true : false,
+            hidden: (pageMode === mode.view || openPOdata[0]?.GRN_From === url.IB_GRN_LIST || subPageMode === url.ACCOUNTING_GRN) ? true : false,
             formatter: (value, row, k, a, v) => (
                 <div className="d-flex justify-Content-center mt-2" >
                     <div> <Button
@@ -649,8 +751,11 @@ const GRN_ADD_1 = (props) => {
                 const arr = {
                     Item: i.Item,
                     Quantity: i.Quantity,
+                    AccountingQuantity: subPageMode === url.ACCOUNTING_GRN ? i.Quantity : 0,
+                    SystemBatchCode: i.SystemBatchCode,  // only for Accounting GRN else undefined
+                    SystemBatchDate: i.SystemBatchDate,  // only for Accounting GRN else undefined
                     MRP: i.MRP,
-                    MRPValue: _cfunc.loginCompanyID() === 4 ? "1" : i.MRPValue,
+                    MRPValue: _cfunc.IsSweetAndSnacksCompany() ? "1" : i.MRPValue,
                     ReferenceRate: i.Rate,
                     Rate: i.Rate,
                     vendorOrderRate: i.vendorOrderRate,
@@ -753,24 +858,34 @@ const GRN_ADD_1 = (props) => {
                 "UnitID": index.UnitID,
                 "IsDeleted": 0,
                 "Item": index.Item,
-                "PriceList": grnDetail.PriceListId  // Price list ID 0 Hard code    
+                "PriceList": grnDetail?.PriceListId  // Price list ID 0 Hard code    
             }))
 
             setRatePostJsonBody(RateJsonBody);
 
             let GRNReferencesUpdate = openPOdata.map(item => ({
                 ...item,
-                Invoice: null
+                Invoice: null,
+                Full_OrderNumber: null
             }));
 
             const jsonData = JSON.stringify({
-                InvoiceDate: openPOdata[0]?.GRN_From === url.IB_GRN_LIST ? (grnDetail.InvoiceDate) : (grnDetail.DemandDate),
+                InvoiceDate: openPOdata[0]?.GRN_From === url.IB_GRN_LIST ? (grnDetail?.InvoiceDate) : (grnDetail?.DemandDate),
                 InvoiceNumber: invoiceNo,
-                Customer: grnDetail.Customer,
+                Customer: grnDetail?.Customer,
             });
-            const Response = await Invoice_No_Message({ jsonBody: jsonData })
 
-            if (Response.Status === false && Response.StatusCode) {
+
+            const Response = await Invoice_No_Message({ jsonBody: jsonData })
+            if (Response.Status === false && Response.StatusCode === 400) {
+                const isConfirmed = await customAlert({
+                    Type: 7,
+                    Message: Response.Message,
+                });
+                if (!isConfirmed) {
+                    return
+                }
+            } else if ((Response.Status === false && Response.StatusCode === 406)) {
                 customAlert({
                     Type: 3,
                     Message: Response.Message,
@@ -780,12 +895,13 @@ const GRN_ADD_1 = (props) => {
 
             const jsonBody = JSON.stringify({
                 GRNDate: grnDate,
+                FullGRNNumber: grnDetail?.FullGRNNumber,  //Only for Accounting GRN Mode
                 IsSave: (grnDetail?.IsSave === 1) ? 2 : 0,
-                InvoiceDate: openPOdata[0]?.GRN_From === url.IB_GRN_LIST ? (grnDetail.InvoiceDate) : (grnDetail.DemandDate),
-                Customer: grnDetail.Customer,
+                InvoiceDate: openPOdata[0]?.GRN_From === url.IB_GRN_LIST ? (grnDetail?.InvoiceDate) : (grnDetail?.DemandDate),
+                Customer: grnDetail?.Customer,
                 GRNNumber: 1,
                 GrandTotal: Number(sum_roundedTotalAmount).toFixed(2),
-                Party: grnDetail.Supplier,
+                Party: grnDetail?.Supplier,
                 InvoiceNumber: invoiceNo,
                 CreatedBy: _cfunc.loginUserID(),
                 UpdatedBy: 1,
@@ -795,9 +911,14 @@ const GRN_ADD_1 = (props) => {
 
             if (pageMode === mode.edit) {
                 returnFunc()
+            } else if (subPageMode === url.ACCOUNTING_GRN) {
+                dispatch(_act.Update_accounting_GRN({ jsonBody, updateId: grnDetail?.id, btnId, GRNReferencesUpdate }))
             } else {
                 dispatch(_act.saveGRNAction({ jsonBody, btnId, GRNReferencesUpdate }))
             }
+
+
+
 
         } catch (error) { returnFunc() }
     }
@@ -808,7 +929,7 @@ const GRN_ADD_1 = (props) => {
                 <MetaTags>{_cfunc.metaTagLabel(userPageAccessState)}</MetaTags>
                 <div className="page-content" >
 
-                    <div className="px-2 mb-1  c_card_header " >
+                    <div className="px-2 c_card_filter text-black mb-1" >
                         <Row>
                             <Col sm={5}>
 
@@ -819,7 +940,7 @@ const GRN_ADD_1 = (props) => {
                                         <C_DatePicker
                                             name="GRNDate"
                                             value={values.GRNDate}
-                                            disabled={(pageMode === mode.view) ? true : false}
+                                            disabled={((pageMode === mode.view) || subPageMode === url.ACCOUNTING_GRN) ? true : false}
                                             onChange={(e, date) => { setgrnDate(date) }}
                                         />
                                     </Col>
@@ -833,7 +954,7 @@ const GRN_ADD_1 = (props) => {
                                             style={{ backgroundColor: "white" }}
                                             type="text"
                                             value={pageMode === mode.view ? EditData.CustomerName : grnDetail.SupplierName}
-                                            disabled={((pageMode === mode.view) || (openPOdata[0]?.GRN_From === url.IB_GRN_LIST)) ? true : false}
+                                            disabled={((pageMode === mode.view) || (openPOdata[0]?.GRN_From === url.IB_GRN_LIST) || subPageMode === url.ACCOUNTING_GRN) ? true : false}
                                         />
                                     </Col>
                                 </FormGroup>
@@ -844,7 +965,7 @@ const GRN_ADD_1 = (props) => {
                                     <Col sm="7">
                                         <Input type="text"
                                             style={{ backgroundColor: "white" }}
-                                            disabled={((pageMode === mode.view) || (openPOdata[0]?.GRN_From === url.IB_GRN_LIST)) ? true : false}
+                                            disabled={((pageMode === mode.view) || (openPOdata[0]?.GRN_From === url.IB_GRN_LIST) || subPageMode === url.ACCOUNTING_GRN) ? true : false}
 
                                             value={openPOdata[0]?.Full_OrderNumber === undefined ? grnDetail.FullDemandNumber : openPOdata[0]?.Full_OrderNumber}
                                             placeholder="Enter PO Number" />
@@ -941,7 +1062,7 @@ const GRN_ADD_1 = (props) => {
                                                     type="checkbox"
                                                     style={{ paddingTop: "7px", marginLeft: "20px", marginTop: "10px" }}
                                                     placeholder="Enter Invoice No"
-                                                    disabled={openPOdata[0]?.GRN_From === url.IB_GRN_LIST}   // Make Default Disabled true from IB GRN list TO GRN
+                                                    disabled={openPOdata[0]?.GRN_From === url.IB_GRN_LIST || subPageMode === url.ACCOUNTING_GRN}   // Make Default Disabled true from IB GRN list TO GRN
                                                     defaultChecked={openPOdata[0]?.POType === "Open PO" ? false : true}
                                                     onChange={handleCheckboxChange}
                                                 />

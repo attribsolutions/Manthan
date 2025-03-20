@@ -464,6 +464,14 @@ const userRoutes = [
 
 	{ path: path.GRN_LIST_1, component: GRNList, isPartyWisePage: true },
 	{ path: path.GRN_ADD_1, component: GRN_ADD_1, isPartyWisePage: true },
+
+
+
+	{ path: path.ACCOUNTING_GRN_LIST, component: GRNList, isPartyWisePage: true },
+	{ path: path.ACCOUNTING_GRN, component: GRN_ADD_1, isPartyWisePage: true },
+
+
+
 	{ path: path.GRN_STP_1, component: OrderList, isPartyWisePage: true },
 
 	{ path: path.GRN_LIST_3, component: GRNList, isPartyWisePage: true },

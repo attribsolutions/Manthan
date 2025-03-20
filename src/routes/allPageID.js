@@ -264,6 +264,10 @@ export const GRN_ADD_3 = 165
 export const GRN_LIST_3 = 166
 export const GRN_STP_3 = 164
 
+
+export const ACCOUNTING_GRN = 331
+export const ACCOUNTING_GRN_LIST = 332
+
 export const STOCK_ENTRY = 205
 export const STOCK_ENTRY_LIST = 293
 
