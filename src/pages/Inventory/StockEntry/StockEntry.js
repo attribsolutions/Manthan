@@ -105,7 +105,7 @@ const StockEntry = (props) => {
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
     }));
-    debugger
+
 
     console.log(lastStockEntryDate)
     const { commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
@@ -582,7 +582,7 @@ const StockEntry = (props) => {
     }
 
     const SaveHandler = async (event) => {
-        debugger
+
         event.preventDefault();
 
         const btnId = event.target.id
@@ -590,11 +590,12 @@ const StockEntry = (props) => {
         let updatedTableData = []
         let ReturnItemsArr = []
         let StockItemsArray = []
+        debugger
+        const mapItemArray = (index, IsAllStockZero) => ({
 
-        const mapItemArray = (index) => ({
             "Item": index.ItemId,
             "ItemName": index.ItemName,
-            "Quantity": index.Qty === undefined ? 0 : parseFloat(index.Qty),
+            "Quantity": (index.Qty === undefined) ? IsAllStockZero ? 0 : "" : parseFloat(index.Qty),
             "MRP": index.defaultMRP.value,
             "Unit": index.defaultUnit?.value,
             "GST": index.defaultGST.value,
@@ -607,13 +608,16 @@ const StockEntry = (props) => {
             "BatchCodeID": 0
         });
 
-        const ReturnItems = TableArr.map(mapItemArray);
+        // const ReturnItems = TableArr.map(mapItemArray, values.IsAllStockZero);
+        const ReturnItems = TableArr.map(index => mapItemArray(index, values.IsAllStockZero));
 
         const filterData = ReturnItems.filter((i) => {
             // return i.Quantity > 0;
-
-            return (i.Quantity >= 0)
-
+            if (values.IsAllStockZero) {
+                return (i.Quantity >= 0)
+            } else {
+                return (i.Quantity !== "")
+            }
         });
 
         if (filterData.length === 0) {
@@ -627,21 +631,27 @@ const StockEntry = (props) => {
         const invalidMsg1 = []
 
         ReturnItems.forEach((i) => {
+            let CheckQuantity = false
+            if (values.IsAllStockZero) {
+                CheckQuantity = (i.Quantity >= 0)
+            } else {
+                CheckQuantity = (i.Quantity !== "")
+            }
 
             const [itemName] = i.ItemName?.split('-');
-            if (!(i.Unit) && (i.Quantity > 0)) {
+            if (!(i.Unit) && (CheckQuantity)) {
                 invalidMsg1.push(`${itemName} : ${alertMessages.unitIsRequired}`)
             }
-            else if (!(i.MRP) && (i.Quantity > 0) && !(isVisibleRateDrop)) {
+            else if (!(i.MRP) && (CheckQuantity) && !(isVisibleRateDrop)) {
                 invalidMsg1.push(`${itemName} :${alertMessages.mrpIsRequired}`)
             }
-            else if (((!i.Rate) && ((i.Quantity > 0) || (values.IsAllStockZero))) && (isVisibleRateDrop)) {
+            else if (((!i.Rate) && ((CheckQuantity) || (values.IsAllStockZero))) && (isVisibleRateDrop)) {
                 invalidMsg1.push(`${itemName} :${alertMessages.rateIsRequired}`)
             }
-            else if (!(i.GST) && ((i.Quantity > 0) || (values.IsAllStockZero))) {
+            else if (!(i.GST) && ((CheckQuantity) || (values.IsAllStockZero))) {
                 invalidMsg1.push(`${itemName} : ${alertMessages.gstIsRequired}`)
             }
-            else if (!(i.BatchCode) && (i.Quantity > 0)) {
+            else if (!(i.BatchCode) && (CheckQuantity)) {
                 invalidMsg1.push(`${itemName} : ${alertMessages.batchCodeIsRequired}`)
             };
         })
@@ -676,7 +686,8 @@ const StockEntry = (props) => {
             }
             const newArray = updatedTableData.flat().map(item => ({ ...item }));
 
-            ReturnItemsArr = newArray.map(mapItemArray);
+            // ReturnItemsArr = newArray.map(mapItemArray, values.IsAllStockZero);
+            ReturnItemsArr = newArray.map(index => mapItemArray(index, values.IsAllStockZero));
         }
 
         StockItemsArray = [...filterData, ...ReturnItemsArr];
@@ -718,7 +729,7 @@ const StockEntry = (props) => {
         }
     };
     const ExcelDownloadhandler = () => {
-        debugger
+
         const StockItem_Array = TableArr.map(item => {
             const [ItemName] = item.ItemName.split('-');
             return {
