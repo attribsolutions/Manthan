@@ -21,7 +21,7 @@ function* goButton_Rate_GenFunc({ data }) {
     response.rowData = rowData
     const newList = response.Data.map((i) => ({
       ...i,
-      ['defaultUnit']: { value: i.BaseUnitID, label: i.UnitName }
+      ['defaultUnit']: { value: i.UnitID, label: i.UnitName }
     }));
     yield put(action.goButtonForRate_Master_Success(newList));
   } catch (error) { yield put(action.RateApiErrorAction()) }
