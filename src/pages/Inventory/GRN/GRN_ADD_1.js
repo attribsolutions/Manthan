@@ -281,10 +281,17 @@ const GRN_ADD_1 = (props) => {
             const grnDetails = { ...Data }
             grnDetails["SupplierName"] = Data.PartyName
             grnDetails["Supplier"] = Data.Party
+            debugger
+            const OrderDetail = grnDetails?.GRNReferences[0]?.Order
 
-
-            grnDetails.GRNReferences[0]["Full_OrderNumber"] = grnDetails?.GRNReferences[0]?.Order?.FullOrderNumber
+            grnDetails.GRNReferences[0]["Full_OrderNumber"] = OrderDetail.FullOrderNumber
             grnDetails.GRNReferences[0]["Order"] = null  // If accounting Grn then send null  Order
+            grnDetails.GRNReferences[0]["Inward"] = true ///when Accounting grn alwys true
+            grnDetails.GRNReferences[0]["CustomerID"] = OrderDetail.Customer.id
+            grnDetails.GRNReferences[0]["CustomerName"] = OrderDetail.Customer.Name
+            grnDetails.GRNReferences[0]["Order"] = OrderDetail.id
+            grnDetails.GRNReferences[0]["OrderDate"] = OrderDetail.OrderDate
+            grnDetails.GRNReferences[0]["POType"] = OrderDetail.POType.Name
 
 
             initialTableData = grnDetails.GRNItems;
@@ -889,7 +896,9 @@ const GRN_ADD_1 = (props) => {
             let GRNReferencesUpdate = openPOdata.map(item => ({
                 ...item,
                 Invoice: null,
-                Full_OrderNumber: null
+                Full_OrderNumber: null,
+                Inward: openPOdata[0]?.Inward
+
             }));
 
             const jsonData = JSON.stringify({
