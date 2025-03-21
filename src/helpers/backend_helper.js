@@ -562,6 +562,12 @@ export const Challan_items_API = (data) => post(url.CHALLAN_ITEMS, data)//Make c
 export const Challan_items_Stock_API = (data) => post(url.CHALLAN_ITEMS_STOCK, data)//Make challan
 export const get_Demand_Details_Post_API = ({ jsonBody }) => post(url.GET_DEMAND_DETAILS, jsonBody)
 
+export const VDC_Item_Details_API = ({filter}) => post(url.VDC_ITEM_DETAILS, filter)
+export const VDC_Item_API = () => get(url.VDC_ITEMS) // get api
+
+
+
+
 // BOM API
 export const BOM_ListPage_API = (filters) => post(url.BOM_LiST, filters)// get list api
 export const BOM_Post_API = ({ jsonBody }) => post(url.BOM, jsonBody)// post api

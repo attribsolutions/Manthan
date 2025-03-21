@@ -75,7 +75,11 @@ const GRNList = () => {
             { label: "Supplier Name", content: supplierSelect.label, }
         ]));
 
+
     }, [supplierSelect, fromdate, todate]);
+
+
+
 
     const action = {
         editId: _act.editGRNAction,
@@ -125,10 +129,15 @@ const GRNList = () => {
         else if (subPageMode === url.ACCOUNTING_GRN_LIST) {
             page_Id = pageId.ACCOUNTING_GRN_LIST;
             page_Mode = mode.modeSTPsave
-
-
+            newBtnPath = url.GRN_FOR_ACCOUNTING_GRN;
         }
 
+        else if (subPageMode === url.GRN_FOR_ACCOUNTING_GRN) {
+            page_Id = pageId.GRN_FOR_ACCOUNTING_GRN;
+            page_Mode = mode.modeSTPList
+            makeBtnName = "Make Accounting GRN"
+
+        }
 
 
 
@@ -140,10 +149,10 @@ const GRNList = () => {
         dispatch(_act.commonPageFieldListSuccess(null))
         dispatch(_act.commonPageFieldList(page_Id))
 
-        if (!(loginSelectedPartyID() === 0)) {
-            dispatch(_act.GetVenderSupplierCustomer({ PartyID: loginSelectedPartyID(), subPageMode, RouteID: "" }))
-            goButtonHandler()
-        }
+        // if (!(loginSelectedPartyID() === 0)) {
+        //     dispatch(_act.GetVenderSupplierCustomer({ PartyID: loginSelectedPartyID(), subPageMode, RouteID: "" }))
+        //     goButtonHandler()
+        // }
     }, []);
 
 
@@ -184,7 +193,7 @@ const GRNList = () => {
 
         const id = list[0].id
 
-        if (subPageMode === url.GRN_LIST_3) {
+        if (subPageMode === url.GRN_LIST_3 || subPageMode === url.GRN_FOR_ACCOUNTING_GRN) {
             dispatch(_act.AccountingGRN({ btnId: `btn-${mode.makeBtn}-${id}`, editId: id, btnmode: mode.modeSTPsave, path: url.ACCOUNTING_GRN }))
         } else {
             const makeBody = JSON.stringify({
@@ -341,7 +350,7 @@ const GRNList = () => {
                             makeBtnName={otherState.makeBtnName}
                             MasterModal={otherState.MasterModal}
                             totalAmountShow={true}
-                            forceNewBtnView={subPageMode === url.ACCOUNTING_GRN_LIST ? false : true}
+                            forceNewBtnView={true}
                         />
                         : null
                 }

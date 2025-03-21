@@ -553,7 +553,7 @@ const StockEntry = (props) => {
             }
             const updatedTableData = await ItemAPIResponseFunc(selectedItem, Type !== "add_All" ? [...TableArr] : []);
 
-            updatedTableData.reverse();
+            // updatedTableData.reverse();
 
             setState((prevState) => {
                 const newState = { ...prevState };
@@ -614,9 +614,9 @@ const StockEntry = (props) => {
         const filterData = ReturnItems.filter((i) => {
             // return i.Quantity > 0;
             if (values.IsAllStockZero) {
-                return (i.Quantity >= 0)
+                return ((i.Quantity) && i.Quantity >= 0)
             } else {
-                return (i.Quantity !== "")
+                return ((i.Quantity) && i.Quantity !== "")
             }
         });
 
@@ -633,9 +633,9 @@ const StockEntry = (props) => {
         ReturnItems.forEach((i) => {
             let CheckQuantity = false
             if (values.IsAllStockZero) {
-                CheckQuantity = (i.Quantity >= 0)
+                CheckQuantity = ((i.Quantity) && i.Quantity >= 0)
             } else {
-                CheckQuantity = (i.Quantity !== "")
+                CheckQuantity = ((i.Quantity) && i.Quantity !== "")
             }
 
             const [itemName] = i.ItemName?.split('-');

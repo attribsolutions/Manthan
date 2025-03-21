@@ -267,6 +267,8 @@ export const GRN_STP_3 = 164
 
 export const ACCOUNTING_GRN = 331
 export const ACCOUNTING_GRN_LIST = 332
+export const GRN_FOR_ACCOUNTING_GRN = 335
+
 
 export const STOCK_ENTRY = 205
 export const STOCK_ENTRY_LIST = 293
@@ -285,6 +287,9 @@ export const IB_INVOICE = 130
 export const IB_INVOICE_LIST = 131
 export const IB_GRN_LIST = 146
 export const IB_INVOICE_STP = 132
+
+export const VDC_INVOICE = 333
+export const VDC_INVOICE_LIST = 334  
 
 export const CHALLAN = 130
 export const CHALLAN_LIST = 131

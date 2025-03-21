@@ -465,6 +465,7 @@ const userRoutes = [
 	{ path: path.GRN_LIST_1, component: GRNList, isPartyWisePage: true },
 	{ path: path.GRN_ADD_1, component: GRN_ADD_1, isPartyWisePage: true },
 
+	{ path: path.GRN_FOR_ACCOUNTING_GRN, component: GRNList, isPartyWisePage: true },
 
 
 	{ path: path.ACCOUNTING_GRN_LIST, component: GRNList, isPartyWisePage: true },
@@ -563,6 +564,9 @@ const userRoutes = [
 	{ path: path.IB_GRN_LIST, component: InvoiceList },
 	{ path: path.IB_INVOICE, component: Invoice },
 	{ path: path.IB_INVOICE_STP, component: OrderList },
+
+	{ path: path.VDC_INVOICE_LIST, component: IBInvoiceList },
+	{ path: path.VDC_INVOICE, component: IBInvoice },
 
 
 	//********************************Accounting ***********************************//

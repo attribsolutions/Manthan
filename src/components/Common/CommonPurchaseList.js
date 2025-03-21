@@ -133,6 +133,7 @@ const CommonPurchaseList = (props) => {
         pageHeading: pageField?.PageHeading,
         // newBtnView: userAccState?.RoleAccess_IsSave,
         excelBtnView: userAccState?.RoleAccess_Exceldownload,
+        pageMode: pageMode
       })
     );
 
@@ -414,7 +415,7 @@ const CommonPurchaseList = (props) => {
 
 
   const ExtraSelectColumn = () => {  // ======================== for List Page Action Button ================================
-    
+
     if (loginUserDetails().RoleName === "Division") {
 
       return {

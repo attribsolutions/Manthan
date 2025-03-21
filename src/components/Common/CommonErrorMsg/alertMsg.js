@@ -19,7 +19,7 @@ const deleteOrNot = "Are you sure you want to delete this "
 const routeNameIsRequired = "RouteName Is Required"
 
 //Item Dropdown Add button Error Message
-const itemNameIsRequired = "Please Select ItemName"
+const itemNameIsRequired = "Please Select Item Name"
 const ItemNameAlreadyExists = "This Item Name Already Exists"
 const itemQtyIsRequired = "Please Enter One Item Quantity"
 

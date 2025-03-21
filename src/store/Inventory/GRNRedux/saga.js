@@ -116,11 +116,13 @@ function* GRNListfilterGerFunc({ config }) {          // Grn_List filter  genrat
   try {
     const response = yield call(GRN_get_API, config);
     let filteredData = response.Data;
-
+    debugger
     if (config.subPageMode === url.ACCOUNTING_GRN_LIST) {
       filteredData = response.Data.filter(i => i.IsSave === 0);
     } if (config.subPageMode === url.GRN_LIST_3) {
       filteredData = response.Data;
+    } if (config.subPageMode === url.GRN_FOR_ACCOUNTING_GRN) {
+      filteredData = response.Data.filter(i => i.IsSave === 1);
     }
 
     const newList = yield filteredData.map((i) => {
