@@ -368,6 +368,11 @@ export const CHALLAN_ITEMS = "/ChallanItems"
 export const CHALLAN_ITEMS_STOCK = "/ChallanItemStock"
 export const GET_DEMAND_DETAILS = "/GetDemandDetails"
 
+
+export const VDC_ITEM_DETAILS = "/GetBOMForChallanDetails   "
+export const VDC_ITEMS = "/GetBOMItemDetails"
+
+
 //Bill Of Master
 export const BOM = '/Billofmaterial'
 export const GET_ITEM_UNITS = '/GetItemUnits'

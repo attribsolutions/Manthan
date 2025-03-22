@@ -7,7 +7,7 @@ import {
     Label,
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
-import { BreadcrumbShowCountlabel, GoButtonForChallanAddSuccess, commonPageFieldSuccess, getpdfReportdata, makeGRN_Mode_1ActionSuccess, saveChallan_ChallanAdd, saveChallan_ChallanAddSuccess } from "../../../store/actions";
+import { BreadcrumbShowCountlabel, GoButtonForChallanAddSuccess, VDC_Item, VDC_Item_Details, commonPageFieldSuccess, getpdfReportdata, makeGRN_Mode_1ActionSuccess, saveChallan_ChallanAdd, saveChallan_ChallanAddSuccess } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { commonPageField } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
@@ -17,7 +17,7 @@ import {
     onChangeDate,
 } from "../../../components/Common/validationFunction";
 import Select from "react-select";
-import { SaveButton } from "../../../components/Common/CommonButton";
+import { Go_Button, SaveButton } from "../../../components/Common/CommonButton";
 import * as mode from "../../../routes/PageMode";
 import * as pageId from "../../../routes/allPageID"
 import * as url from "../../../routes/route_url"
@@ -39,19 +39,38 @@ import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable"
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 import { CheckStockEntryForFirstTransaction, CheckStockEntryForFirstTransactionSuccess, CheckStockEntryforBackDatedTransaction, CheckStockEntryforBackDatedTransactionSuccess } from "../../../store/Inventory/StockEntryRedux/action";
 
+
+const PageDetailsFunc = (subPageMode) => {
+    let pageID = null;
+    let listPath = null;
+    if (subPageMode === url.CHALLAN) {
+        pageID = pageId.CHALLAN;
+        listPath = url.CHALLAN_LIST
+    } else if (subPageMode === url.VDC_INVOICE) {
+
+        pageID = pageId.VDC_INVOICE;
+        listPath = url.VDC_INVOICE_LIST
+    }
+
+    return { pageID, listPath, }
+}
+
+
+
 const IBInvoice = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory();
     const currentDate_ymd = _cfunc.date_ymd_func();
     const subPageMode = history.location.pathname
-
+    const PageDetails = PageDetailsFunc(subPageMode)
     const saveBtnid = `saveBtn${subPageMode}`
 
     const fileds = {
         ChallanDate: currentDate_ymd,
         Customer: "",
-        VehicleNo: ""
+        VehicleNo: "",
+        VDCItem: ""
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
@@ -80,20 +99,22 @@ const IBInvoice = (props) => {
         commonPartyDropSelect,
         StockEnteryForFirstYear,
         GRNitem,
+        VDCItemDetailsData,
+        VDCItemData,
     } = useSelector((state) => ({
+        VDCItemData: state.ChallanReducer.VDCItemData,
+        VDCItemDetailsData: state.ChallanReducer.VDCItemDetailsData,
         postMsg: state.ChallanReducer.postMsg,
-
-
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
         customer: state.CommonAPI_Reducer.customer,
-
         saveBtnloading: state.InvoiceReducer.saveBtnloading,
         saveAndPdfBtnLoading: state.InvoiceReducer.saveAndPdfBtnLoading,
         commonPartyDropSelect: state.CommonPartyDropdownReducer.commonPartyDropSelect,
         StockEnteryForFirstYear: state.StockEntryReducer.StockEnteryForFirstYear,
         GRNitem: state.GRNReducer.GRNitem,
     }));
+
 
     const location = { ...history.location }
     const hasShowModal = props.hasOwnProperty("editValue")
@@ -107,10 +128,11 @@ const IBInvoice = (props) => {
 
     useEffect(() => {
         dispatch(commonPageFieldSuccess(null));
-        dispatch(commonPageField(pageId.CHALLAN))
+        dispatch(commonPageField(PageDetails.pageID))
         dispatch(GoButtonForChallanAddSuccess([]))
         dispatch(makeGRN_Mode_1ActionSuccess({ Status: false }))
         dispatch(saveChallan_ChallanAddSuccess({ Status: false }))
+        dispatch(VDC_Item())
     }, [])
 
 
@@ -135,7 +157,7 @@ const IBInvoice = (props) => {
 
     useEffect(() => {
         if (GRNitem.Status === true && GRNitem.StatusCode === 200) {
-            
+
             const { DemandItemDetails } = GRNitem.Data
             setCustomerID({ value: GRNitem.Demand_Reference[0].CustomerID, label: GRNitem.Demand_Reference[0].CustomerName })
             setDemandID({ Demand_ID: Number(GRNitem.Data.DemandIDs) })
@@ -289,7 +311,7 @@ const IBInvoice = (props) => {
             formatExtraData: { tableList: tableData },
             attrs: () => ({ 'data-label': "Quantity/Unit" }),
             formatter: (cellContent, index1, keys_, { tableList = [] }) => {
-                
+
                 return (<>
                     <div>
                         <Input
@@ -449,6 +471,37 @@ const IBInvoice = (props) => {
         onChangeDate({ e, v, state, setState })
     };
 
+    const VDCItem_Options = VDCItemData.map((index) => ({
+
+        value: index.Item,
+        label: index.ItemName,
+    }));
+
+
+    function ItemOnchange(e) {
+        setState((i) => {
+            const a = { ...i }
+            a.values.VDCItem = e;
+            return a
+        })
+    }
+
+    const goButtonHandler = () => {
+        debugger
+        if (values.VDCItem === "") {
+            customAlert({
+                Type: 3,
+                Message: alertMessages.itemNameIsRequired,
+            })
+            return
+        }
+        const filter = JSON.stringify({
+            ChallanDate: values.ChallanDate,
+            ItemID: values.VDCItem.value,
+            Party: commonPartyDropSelect.value,
+        });
+        dispatch(VDC_Item_Details({ filter }));
+    }
 
 
     const saveHandeller = (e,) => {
@@ -557,6 +610,32 @@ const IBInvoice = (props) => {
 
 
 
+                                <Col sm="4" className="">
+                                    <FormGroup className="mb- row mt-2" >
+                                        <Label className="col-sm-6 p-2"
+                                            style={{ width: "90px" }}>{"VDC Item"}</Label>
+                                        <Col sm="7">
+                                            <Select
+                                                name="VDCItem"
+                                                value={values.VDCItem}
+                                                isSearchable={true}
+                                                id={'VDCItem'}
+                                                className="react-dropdown"
+                                                classNamePrefix="dropdown"
+                                                options={VDCItem_Options}
+                                                onChange={ItemOnchange}
+                                                styles={{ menu: provided => ({ ...provided, zIndex: 3 }) }}
+                                            />
+
+                                        </Col>
+                                    </FormGroup>
+                                </Col>
+                                <Col sm="3" ></Col>
+                                <Col sm="1" className="mt-2 ">
+                                    <Go_Button
+                                        onClick={goButtonHandler}
+                                    />
+                                </Col>
 
                             </div>
                         </Col>

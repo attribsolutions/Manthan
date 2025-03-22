@@ -6,6 +6,10 @@ import {
   GoButtonForChallanAddSuccess,
   makeChallanActionSuccess,
   saveChallan_ChallanAddSuccess,
+  VDC_Item,
+  VDC_Item_Success,
+  VDC_Item_Details_Success,
+  IB_Invoice_Error_Action,
 } from "./actions";
 import {
   Challan_delete_API,
@@ -14,6 +18,8 @@ import {
   Challan_items_Stock_API,
   Challan_Make_API,
   Challan_Save_API,
+  VDC_Item_API,
+  VDC_Item_Details_API,
 } from "../../../helpers/backend_helper";
 import {
   CHALLAN_POST_API,
@@ -22,6 +28,8 @@ import {
   GO_BUTTON_CHALLAN_POST_API,
   ITEM_DROPDOWN_CHALLAN,
   MAKE_CHALLAN_ACTION,
+  VDC_ITEM,
+  VDC_ITEM_DETAILS,
 } from "./actionType";
 import { CommonConsole, date_dmy_func, convertTimefunc } from "../../../components/Common/CommonFunction";
 
@@ -48,7 +56,7 @@ function* Challan_List_filterGerFunc({ filters }) {          // Challan List Fil
 }
 
 function* DeleteChallanGenFunc({ config }) { // Delete Challan  genrator function
-  
+
   try {
     const response = yield call(Challan_delete_API, config);
 
@@ -75,6 +83,28 @@ function* gobutton_challan_genFunc({ data }) {              //  GoButton Challan
   } catch (error) { CommonConsole(error) }
 }
 
+
+function* VDC_Item_genFunc() {              //  GoButton Challan Addpage genrator function
+  try {
+
+    const response = yield call(VDC_Item_API);
+
+    yield put(VDC_Item_Success(response.Data));
+  } catch (error) { IB_Invoice_Error_Action(error) }
+}
+
+function* VDC_Item_Details_genFunc({ config }) {              //  GoButton Challan Addpage genrator function
+  try {
+
+    const response = yield call(VDC_Item_Details_API, config);
+
+    yield put(VDC_Item_Details_Success(response.Data));
+  } catch (error) { yield put(IB_Invoice_Error_Action(error)) }
+}
+
+
+
+
 function* itemDropDown_Challan_AddPage_genFunc({ data }) {   //  Challan Addpage  IttemDropDown genrator function
   try {
     const response = yield call(Challan_items_API, data);
@@ -89,6 +119,13 @@ function* ChallanSaga() {
   yield takeLatest(MAKE_CHALLAN_ACTION, Make_Challan_GerFunc);
   yield takeLatest(DELETE_CHALLAN_FOR_CHALLAN_PAGE, DeleteChallanGenFunc);
   yield takeLatest(ITEM_DROPDOWN_CHALLAN, itemDropDown_Challan_AddPage_genFunc);
+
+  yield takeLatest(VDC_ITEM_DETAILS, VDC_Item_Details_genFunc);
+
+  yield takeLatest(VDC_ITEM, VDC_Item_genFunc);
+
+
+
 }
 
 export default ChallanSaga;

@@ -65,6 +65,14 @@ const IBInvoiceList = () => {
             page_Mode = mode.modeSTPList
             makeBtnShow = true;
         }
+        else if (subPageMode === url.VDC_INVOICE_LIST) {
+            page_Id = pageId.VDC_INVOICE_LIST;
+            masterPath = url.VDC_INVOICE;
+            newBtnPath = url.VDC_INVOICE;
+            page_Mode = mode.modeSTPList
+
+
+        }
         setOtherState({ masterPath, makeBtnShow, newBtnPath })
         setPageMode(page_Mode)
         dispatch(commonPageFieldListSuccess(null))
@@ -236,7 +244,7 @@ const IBInvoiceList = () => {
                             makeBtnName={"Make GRN"}
                             deleteName={"FullChallanNumber"}
                             MasterModal={Challan}
-                            forceNewBtnView={false}
+                            forceNewBtnView={subPageMode === url.VDC_INVOICE_LIST ? true : false}
                         />
                         : null
                 }

@@ -105,7 +105,7 @@ const ItemsMaster = (props) => {
     }]);
 
     const [baseUnitTableData, setBaseUnitTableData] = useState([unitConversionInitial]);
-
+    debugger
     const [previousBaseUnitTableData, setPreviousBaseUnitTableData] = useState([]);
     const [MRP_Tab_TableData, setMRP_Tab_TableData] = useState([]);
     const [Group_Tab_TableData, setGroup_Tab_TableData] = useState([]);
@@ -514,7 +514,7 @@ const ItemsMaster = (props) => {
                 let isChangeBaseUnitTable = false; // Flag to track if there are any changes in the data
 
                 // Check if the page is in edit mode and compare the current and previous baseUnitTableData arrays
-
+                debugger
                 if (isEditMode) {
                     // Check if the lengths of the arrays are different, indicating a change
                     if (baseUnitTableData.length !== previousBaseUnitTableData.length) {
@@ -531,7 +531,8 @@ const ItemsMaster = (props) => {
                                 Number(currentData.Conversion) !== Number(previousData.Conversion) ||
                                 currentData.IsBase !== previousData.IsBase ||
                                 currentData.SOUnit !== previousData.SOUnit ||
-                                currentData.POUnit !== previousData.POUnit
+                                currentData.POUnit !== previousData.POUnit ||
+                                currentData.IsShowUnit !== previousData.IsShowUnit
                             ) {
                                 isChangeBaseUnitTable = true;
                                 break;

@@ -210,6 +210,9 @@ export const GRN_STP_1 = "/GRN_STP_1"
 export const GRN_LIST_1 = "/GRN_LIST_1"
 export const GRN_ADD_1 = "/GRN_ADD_1"
 
+export const GRN_FOR_ACCOUNTING_GRN = "/GRN_For_Accounting_GRN"
+
+
 export const ACCOUNTING_GRN = "/Accounting_GRN"
 export const ACCOUNTING_GRN_LIST = "/Accounting_GRN_List"
 
@@ -326,6 +329,9 @@ export const IB_INVOICE = "/IB_Invoice" // IB Invoice
 export const IB_INVOICE_LIST = "/IB_Invoice_List" // IB Invoice List
 export const IB_GRN_LIST = "/IB_GRN_List" // IB GRN List
 export const IB_INVOICE_STP = "/IB_Invoice_STP" // IB Invoice from IB Order List
+
+export const VDC_INVOICE = "/VDC_Invoice" // IB Invoice
+export const VDC_INVOICE_LIST = "/VDC_Invoice_List" // IB Invoice List
 
 //********************************Accounting ***********************************//
 

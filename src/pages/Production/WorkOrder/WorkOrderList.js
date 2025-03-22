@@ -124,7 +124,7 @@ const WorkOrderList = () => {
 
                 dispatch(goButtonForMaterialIssue_Master_Action({
                     jsonBody,
-                    pageMode,
+                    pageMode: mode.modeSTPsave,
                     path: url.MATERIAL_ISSUE,
                     ListData: list[0],
                     goButtonCallByMode: true,

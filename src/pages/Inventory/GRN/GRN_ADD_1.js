@@ -106,7 +106,7 @@ const GRN_ADD_1 = (props) => {
         pageField: state.CommonPageFieldReducer.pageField
     }));
 
-    useLayoutEffect(() => {
+    useEffect(() => {
 
 
         dispatch(_act.commonPageFieldSuccess(null));
@@ -117,9 +117,18 @@ const GRN_ADD_1 = (props) => {
             "EffectiveDate": currentDate_ymd,
             "CompanyID": _cfunc.loginCompanyID()
         });
+        if (subPageMode === url.ACCOUNTING_GRN) {
+            dispatch(goButtonForRate_Master({ jsonBody }));
+        }
 
-        dispatch(goButtonForRate_Master({ jsonBody }));
+        return () => {
+            dispatch(_act.Update_accounting_GRN_Success({ Status: false }))
+        }
     }, [])
+
+
+
+
 
     const values = { ...state.values }
     const location = { ...history.location }
@@ -158,7 +167,7 @@ const GRN_ADD_1 = (props) => {
     useEffect(() => {
 
         if ((AccontingGRN.Status === true) && (AccontingGRN.StatusCode === 200)) {
-            _act.Update_accounting_GRN_Success({ Status: false })
+
             customAlert({
                 Type: 1,
                 Message: AccontingGRN.Message,
@@ -168,7 +177,7 @@ const GRN_ADD_1 = (props) => {
             });
         }
         else if ((AccontingGRN.Status === false) && (AccontingGRN.StatusCode === 406)) {
-            _act.Update_accounting_GRN_Success({ Status: false })
+
             customAlert({
                 Type: 4,
                 Message: AccontingGRN.Message,
@@ -272,10 +281,17 @@ const GRN_ADD_1 = (props) => {
             const grnDetails = { ...Data }
             grnDetails["SupplierName"] = Data.PartyName
             grnDetails["Supplier"] = Data.Party
+            debugger
+            const OrderDetail = grnDetails?.GRNReferences[0]?.Order
 
-
-            grnDetails.GRNReferences[0]["Full_OrderNumber"] = grnDetails?.GRNReferences[0]?.Order?.FullOrderNumber
+            grnDetails.GRNReferences[0]["Full_OrderNumber"] = OrderDetail.FullOrderNumber
             grnDetails.GRNReferences[0]["Order"] = null  // If accounting Grn then send null  Order
+            grnDetails.GRNReferences[0]["Inward"] = true ///when Accounting grn alwys true
+            grnDetails.GRNReferences[0]["CustomerID"] = OrderDetail.Customer.id
+            grnDetails.GRNReferences[0]["CustomerName"] = OrderDetail.Customer.Name
+            grnDetails.GRNReferences[0]["Order"] = OrderDetail.id
+            grnDetails.GRNReferences[0]["OrderDate"] = OrderDetail.OrderDate
+            grnDetails.GRNReferences[0]["POType"] = OrderDetail.POType.Name
 
 
             initialTableData = grnDetails.GRNItems;
@@ -286,7 +302,7 @@ const GRN_ADD_1 = (props) => {
             grnDetails["DemandDate"] = _cfunc.date_ymd_func(grnDetails.DemandDate)
 
             setGrnDetail(grnDetails)
-            setInvoiceNo(grnDetails.GRNReferences[0]?.Invoice_NO)
+            setInvoiceNo(grnDetails?.InvoiceNumber)
 
             setOpenPOdata(grnDetails.GRNReferences)
             items.Status = false
@@ -332,7 +348,7 @@ const GRN_ADD_1 = (props) => {
     }, [])
 
     function val_onChange(val, row, type) {
-
+        debugger
         if (type === "qty") {
             row["Quantity"] = val;
         }
@@ -403,7 +419,16 @@ const GRN_ADD_1 = (props) => {
                             key={row.id}
                             disabled={((pageMode === mode.view) || openPOdata[0]?.GRN_From === url.IB_GRN_LIST) ? true : false}
                             onChange={(e) => {
-                                const val = e.target.value
+                                let val = e.target.value
+                                if (subPageMode === url.ACCOUNTING_GRN) {
+                                    if (Number(val) > Number(row.poQuantity)) {
+                                        val = row.poQuantity
+                                        e.target.value = row.poQuantity
+                                        row["Quantity"] = row.poQuantity;
+                                    } else {
+                                        row["Quantity"] = Number(val) || 0;
+                                    }
+                                }
                                 let isnum = /^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)?([eE][+-]?[0-9]+)?$/.test(val);
                                 if ((isnum) || (val === '')) {
                                     val_onChange(val, row, "qty")
@@ -834,18 +859,23 @@ const GRN_ADD_1 = (props) => {
 
             const differentRates = [];
 
-            GRNItemArray.forEach(grnItem => {
-                const matchItemIdReturn = RateMasterGoButton.find(buttonItem => buttonItem.ItemID === grnItem.Item);
-                if (matchItemIdReturn) {
-                    const rateToCompare = parseFloat(matchItemIdReturn.CurrentRate);
-                    const grnRate = parseFloat(grnItem.Rate);
-                    const vendorRate = parseFloat(grnItem.vendorOrderRate);
-                    if (grnRate !== vendorRate || grnRate !== rateToCompare) {
-                        differentRates.push({ Item: grnItem.Item, Rate: grnItem.Rate, UnitID: grnItem.Unit });
+            if (subPageMode === url.ACCOUNTING_GRN) {
+                GRNItemArray.forEach(grnItem => {
+                    const matchItemIdReturn = RateMasterGoButton.find(buttonItem => buttonItem.ItemID === grnItem.Item);
+                    if (matchItemIdReturn) {
+                        const rateToCompare = parseFloat(matchItemIdReturn.CurrentRate);
+                        const grnRate = parseFloat(grnItem.Rate);
+                        const vendorRate = parseFloat(grnItem.vendorOrderRate);
+                        if (grnRate !== vendorRate || grnRate !== rateToCompare) {
+                            differentRates.push({ Item: grnItem.Item, Rate: grnItem.Rate, UnitID: grnItem.Unit });
+                        }
                     }
-                }
-            });
-
+                });
+            } else {
+                GRNItemArray.forEach(grnItem => {
+                    differentRates.push({ Item: grnItem.Item, Rate: grnItem.Rate, UnitID: grnItem.Unit });
+                });
+            }
             const RateJsonBody = differentRates.map((index) => ({
                 "id": index.Item,
                 "Rate": index.Rate,
@@ -866,7 +896,9 @@ const GRN_ADD_1 = (props) => {
             let GRNReferencesUpdate = openPOdata.map(item => ({
                 ...item,
                 Invoice: null,
-                Full_OrderNumber: null
+                Full_OrderNumber: null,
+                Inward: openPOdata[0]?.Inward
+
             }));
 
             const jsonData = JSON.stringify({
@@ -874,29 +906,36 @@ const GRN_ADD_1 = (props) => {
                 InvoiceNumber: invoiceNo,
                 Customer: grnDetail?.Customer,
             });
-
-
-            const Response = await Invoice_No_Message({ jsonBody: jsonData })
-            if (Response.Status === false && Response.StatusCode === 400) {
-                const isConfirmed = await customAlert({
-                    Type: 7,
-                    Message: Response.Message,
-                });
-                if (!isConfirmed) {
+            if (subPageMode === url.GRN_ADD_1) {
+                const Response = await Invoice_No_Message({ jsonBody: jsonData })
+                if (Response.Status === false && Response.StatusCode === 400) {
+                    const isConfirmed = await customAlert({
+                        Type: 7,
+                        Message: Response.Message,
+                    });
+                    if (!isConfirmed) {
+                        return
+                    }
+                } else if ((Response.Status === false && Response.StatusCode === 406)) {
+                    customAlert({
+                        Type: 3,
+                        Message: Response.Message,
+                    })
                     return
                 }
-            } else if ((Response.Status === false && Response.StatusCode === 406)) {
+            } else if (!invoiceNo) {
                 customAlert({
                     Type: 3,
-                    Message: Response.Message,
+                    Message: "Invoice Number is required.",
                 })
                 return
             }
 
+
             const jsonBody = JSON.stringify({
                 GRNDate: grnDate,
                 FullGRNNumber: grnDetail?.FullGRNNumber,  //Only for Accounting GRN Mode
-                IsSave: (grnDetail?.IsSave === 1) ? 2 : 0,
+                IsSave: (subPageMode === url.ACCOUNTING_GRN) ? 0 : 1,
                 InvoiceDate: openPOdata[0]?.GRN_From === url.IB_GRN_LIST ? (grnDetail?.InvoiceDate) : (grnDetail?.DemandDate),
                 Customer: grnDetail?.Customer,
                 GRNNumber: 1,

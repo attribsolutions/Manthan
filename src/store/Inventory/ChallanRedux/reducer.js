@@ -7,6 +7,11 @@ import {
   ITEM_DROPDOWN_CHALLAN_SUCCESS,
   MAKE_CHALLAN_ACTION_SUCCESS,
   CHALLAN_LIST_FOR_LIST_PAGE,
+  VDC_ITEM,
+  VDC_ITEM_SUCCESS,
+  VDC_ITEM_DETAILS,
+  VDC_ITEM_DETAILS_SUCCESS,
+  IB_INVOICE_API_ERROR_ACTION,
 
 } from "./actionType"
 
@@ -20,6 +25,8 @@ const INIT_STATE = {
   postMsg: { Status: false },
   makeChallan: { Status: false },
   goBtnLoading: false,
+  VDCItemData: [],
+  VDCItemDetailsData: []
 
 }
 
@@ -70,6 +77,42 @@ const ChallanReducer = (state = INIT_STATE, action) => {
         ...state,
         makeChallan: action.payload,
       }
+
+
+
+    case VDC_ITEM:
+      return {
+        ...state,
+        listBtnLoading: true,
+      }
+
+    case VDC_ITEM_SUCCESS:
+      return {
+        ...state,
+        listBtnLoading: false,
+        VDCItemData: action.payload,
+      }
+
+
+    case VDC_ITEM_DETAILS:
+      return {
+        ...state,
+        listBtnLoading: true,
+      }
+
+    case VDC_ITEM_DETAILS_SUCCESS:
+      return {
+        ...state,
+        listBtnLoading: false,
+        VDCItemDetailsData: action.payload,
+      }
+
+
+    case IB_INVOICE_API_ERROR_ACTION:
+      return {
+        ...state,
+
+      };
 
     default:
       return state

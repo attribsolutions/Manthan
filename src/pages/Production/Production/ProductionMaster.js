@@ -342,7 +342,7 @@ const ProductionMaster = (props) => {
                     NumberOfLot: values.NumberOfLot,
                     ActualQuantity: parseFloat(values.ActualQuantity).toFixed(3),
                     BatchDate: batchDate,
-                    StoreLocation: "",
+                    StoreLocation: "1234",
                     PrintedBatchCode: values.PrintedBatchCode,
                     BestBefore: values.BestBefore,
                     Remark: values.Remark,
