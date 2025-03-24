@@ -52,6 +52,10 @@ import { changeCommonPartyDropDetailsAction } from "../../../store/Utilites/Part
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 import { CheckStockEntryForFirstTransaction, CheckStockEntryForFirstTransactionSuccess, CheckStockEntryforBackDatedTransaction, CheckStockEntryforBackDatedTransactionSuccess } from "../../../store/Inventory/StockEntryRedux/action";
+import VehicleMaster from "../../Adminisrator/VehiclePages/VehicleMaster";
+import DriverMaster from "../../Adminisrator/DriverPage/DriverMaster";
+import AddMaster from "../../Adminisrator/EmployeePages/Drodown";
+import { getDriverList } from "../../../store/Administrator/DriverRedux/action";
 
 const Invoice = (props) => {
 
@@ -60,20 +64,29 @@ const Invoice = (props) => {
     const currentDate_ymd = _cfunc.date_ymd_func();
     const subPageMode = history.location.pathname
     const systemSetting = _cfunc.loginSystemSetting();
-
+    const isSweetsAndSnacksCompany = _cfunc.IsSweetAndSnacksCompany()
 
     const saveBtnid = `saveBtn${subPageMode}`
 
     const fileds = {
         InvoiceDate: currentDate_ymd,
         Customer: "",
-        VehicleNo: ""
+        VehicleNo: "",
+        DriverName: ""
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
     const [orderItemDetails, setOrderItemDetails] = useState([])
     const [orderIDs, setOrderIDs] = useState('')
     const [editInvoiceData, setEditInvoiceData] = useState('')
+
+    const [Vehicle_AddAccess, setVehicle_AddAccess] = useState(false)
+    const [Driver_AddAccess, setDriver_AddAccess] = useState(false)
+
+    console.log(Vehicle_AddAccess)
+    console.log(Driver_AddAccess)
+
+
 
     // for invoice page heder discount functionality useSate ************************************
     const [discountValueAll, setDiscountValueAll] = useState("");
@@ -101,12 +114,14 @@ const Invoice = (props) => {
         saveAndPdfBtnLoading,
         commonPartyDropSelect,
         StockEnteryForFirstYear,
-        StockEnteryForBackdated
+        StockEnteryForBackdated,
+        DriverList
     } = useSelector((state) => ({
         postMsg: state.InvoiceReducer.postMsg,
         editData: state.InvoiceReducer.editData,
         updateMsg: state.InvoiceReducer.updateMsg,
         userAccess: state.Login.RoleAccessUpdateData,
+        DriverList: state.DriverReducer.DriverList,
         pageField: state.CommonPageFieldReducer.pageField,
         customer: state.CommonAPI_Reducer.customer,
         gobutton_Add: state.InvoiceReducer.gobutton_Add,
@@ -144,6 +159,14 @@ const Invoice = (props) => {
             dispatch(GetVenderSupplierCustomer({ subPageMode, RouteID: "", "PartyID": commonPartyDropSelect.value }));
         }
 
+        if (isSweetsAndSnacksCompany) {
+            const jsonBody = {
+                ..._cfunc.loginJsonBody(),
+                PartyID: commonPartyDropSelect.value
+            };
+            dispatch(getDriverList(jsonBody));
+        }
+
         return () => {
             dispatch(GetVenderSupplierCustomerSuccess([]));
             dispatch(getVehicleListSuccess([]));
@@ -166,6 +189,9 @@ const Invoice = (props) => {
     useEffect(() => {
         let userAcc = null;
         let locationPath = location.pathname;
+        let VehicleMasterID = pageId.VEHICLE
+        let DriverMasterID = pageId.DRIVER
+
 
         if (hasShowModal) {
             locationPath = props.masterPath;
@@ -174,11 +200,24 @@ const Invoice = (props) => {
             return (`/${inx.ActualPagePath}` === locationPath)
         })
 
+        userAccess.forEach(inx => {
+            if (inx.id === VehicleMasterID) {
+                setVehicle_AddAccess(true)
+            }
+            if (inx.id === DriverMasterID) {
+                setDriver_AddAccess(true)
+            }
+        })
+
+
         if (userAcc) {
             setUserAccState(userAcc)
             _cfunc.breadcrumbReturnFunc({ dispatch, userAcc });
         };
     }, [userAccess])
+
+
+
 
     useEffect(async () => {
         if (postMsg.Status === true && postMsg.StatusCode === 200) {
@@ -711,6 +750,12 @@ const Invoice = (props) => {
     };
 
 
+
+    const DriverOptions = DriverList.map((index) => ({
+        value: index.id,
+        label: index.Name,
+    }));
+
     const SaveHandler = async (event) => {
 
         event.preventDefault();
@@ -883,9 +928,9 @@ const Invoice = (props) => {
                         <Col className="px-2 mb-1 c_card_filter header text-black" sm={12}>
 
                             <div className="row" >
-                                <Col sm="4" className="">
-                                    <FormGroup className="mb- row mt-3 " >
-                                        <Label className="col-sm-8 p-2" style={{ width: "83px" }}>{fieldLabel.InvoiceDate}</Label>
+                                <Col sm={3} className="">
+                                    <FormGroup className="mb- row mt-2 " >
+                                        <Label className="col-sm-8 p-2" style={{ width: "100px" }}>{fieldLabel.InvoiceDate}</Label>
                                         <Col sm="7">
                                             <C_DatePicker
                                                 name="InvoiceDate"
@@ -901,10 +946,10 @@ const Invoice = (props) => {
                                     </FormGroup>
                                 </Col>
 
-                                <Col sm="4" className="">
-                                    <FormGroup className="mb- row mt-3 " >
+                                <Col sm={3} className="">
+                                    <FormGroup className="mb- row mt-2 " >
                                         <Label className="col-sm-6 p-2"
-                                            style={{ width: "65px" }}>{fieldLabel.Customer}</Label>
+                                            style={{ width: "70px" }}>{fieldLabel.Customer}</Label>
                                         <Col sm="7">
                                             <Select
 
@@ -926,10 +971,10 @@ const Invoice = (props) => {
                                     </FormGroup>
                                 </Col>
 
-                                <Col sm="4" className="">
-                                    <FormGroup className="mb- row mt-3 " >
+                                <Col sm={3} className="">
+                                    <FormGroup className="mb- row mt-2 " >
                                         <Label className="col-sm-5 p-2"
-                                            style={{ width: "65px" }}>{fieldLabel.VehicleNo}</Label>
+                                            style={{ width: "70px" }}>{fieldLabel.VehicleNo}</Label>
                                         <Col sm="7">
                                             <Select
                                                 name="VehicleNo"
@@ -948,8 +993,54 @@ const Invoice = (props) => {
                                                 <span className="text-danger f-8"><small>{isError.VehicleNo}</small></span>
                                             )}
                                         </Col>
+                                        {(Vehicle_AddAccess) &&
+                                            <Col md="1" className="mt-md-n2">
+                                                <AddMaster
+                                                    masterModal={VehicleMaster}
+                                                    masterPath={url.VEHICLE}
+                                                />
+                                            </Col>}
                                     </FormGroup>
                                 </Col>
+
+
+                                <Col sm={3} className="">
+                                    <FormGroup className="mb- row mt-2 " >
+                                        <Label className="col-sm-6 p-2"
+                                            style={{ width: "70px" }}>{fieldLabel.DriverName}</Label>
+                                        <Col sm="7">
+                                            <Select
+                                                name="DriverName"
+                                                value={values.DriverName}
+                                                isSearchable={true}
+
+                                                id={'customerselect'}
+                                                className="react-dropdown"
+                                                classNamePrefix="dropdown"
+                                                options={DriverOptions}
+                                                onChange={(hasSelect, evn) => {
+                                                    onChangeSelect({ hasSelect, evn, state, setState })
+                                                }}
+                                                styles={{ menu: provided => ({ ...provided, zIndex: 3 }) }}
+                                            />
+                                            {isError.DriverName.length > 0 && (
+                                                <span className="text-danger f-8"><small>{isError.DriverName}</small></span>
+                                            )}
+                                        </Col>
+                                        {(Driver_AddAccess) &&
+                                            <Col md="1" className="mt-md-n2">
+                                                <AddMaster
+                                                    masterModal={DriverMaster}
+                                                    masterPath={url.DRIVER}
+                                                />
+                                            </Col>}
+                                    </FormGroup>
+                                </Col>
+
+
+
+
+
                             </div>
                         </Col>
                         <div className="mb-1">

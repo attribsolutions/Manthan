@@ -98,12 +98,12 @@ const GRNList = () => {
         let MasterModal = '';
         let makeBtnName = '';
 
-        if (subPageMode === url.GRN_LIST_1) {
-            page_Id = pageId.GRN_LIST_1;
-            masterPath = url.GRN_ADD_1;
-            newBtnPath = url.IB_GRN_LIST;
+        if (subPageMode === url.IB_GRN_LIST) {
+            page_Id = pageId.IB_GRN_LIST;
+            masterPath = url.IB_GRN;
+            newBtnPath = url.IB_INVOICE_FOR_GRN;
             page_Mode = mode.modeSTPList
-            makeBtnShow = false;
+            // makeBtnShow = false;
             makeBtnName = "Make IB Invoice"
             MasterModal = GRN_ADD_1
         }
@@ -112,7 +112,7 @@ const GRNList = () => {
             masterPath = url.GRN_ADD_3;
             newBtnPath = url.GRN_STP_3;
             page_Mode = mode.modeSTPList
-            makeBtnShow = true;
+            // makeBtnShow = true;
             makeBtnName = "GRN"
             MasterModal = GRNAdd3
 
@@ -121,7 +121,7 @@ const GRNList = () => {
             masterPath = url.GRN_ADD_1;
             newBtnPath = url.GRN_STP_3;
             page_Mode = mode.modeSTPList
-            makeBtnShow = true;
+            // makeBtnShow = true;
             makeBtnName = "Make Accounting GRN"
             MasterModal = GRN_ADD_1
 
@@ -173,6 +173,7 @@ const GRNList = () => {
 
         if (AccontingGRNData.Status === true && AccontingGRNData.StatusCode === 200 && AccontingGRNData?.pageMode === mode.modeSTPsave) {
             AccontingGRNData.Data["isAccountingGRN"] = true
+
             history.push({
                 pathname: AccontingGRNData.path,
                 state: AccontingGRNData.Data,
@@ -344,7 +345,6 @@ const GRNList = () => {
                             goButnFunc={goButtonHandler}
                             HeaderContent={HeaderContent}
                             makeBtnFunc={makeBtnFunc}
-
                             ButtonMsgLable={""}
                             deleteName={"FullGRNNumber"}
                             makeBtnName={otherState.makeBtnName}

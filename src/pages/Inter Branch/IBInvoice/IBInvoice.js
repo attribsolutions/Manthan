@@ -473,7 +473,7 @@ const IBInvoice = (props) => {
 
     const VDCItem_Options = VDCItemData.map((index) => ({
 
-        value: index.Item,
+        value: index.ItemID,
         label: index.ItemName,
     }));
 
@@ -610,7 +610,7 @@ const IBInvoice = (props) => {
 
 
 
-                                <Col sm="4" className="">
+                                {subPageMode === url.VDC_INVOICE && <Col sm="4" className="">
                                     <FormGroup className="mb- row mt-2" >
                                         <Label className="col-sm-6 p-2"
                                             style={{ width: "90px" }}>{"VDC Item"}</Label>
@@ -629,13 +629,13 @@ const IBInvoice = (props) => {
 
                                         </Col>
                                     </FormGroup>
-                                </Col>
-                                <Col sm="3" ></Col>
-                                <Col sm="1" className="mt-2 ">
+                                </Col>}
+                                {subPageMode === url.VDC_INVOICE && <Col sm="3" ></Col>}
+                                {subPageMode === url.VDC_INVOICE && <Col sm="1" className="mt-2 ">
                                     <Go_Button
                                         onClick={goButtonHandler}
                                     />
-                                </Col>
+                                </Col>}
 
                             </div>
                         </Col>
@@ -655,7 +655,8 @@ const IBInvoice = (props) => {
                                 }}
                             />
                         </div>
-                        {(tableData.length > 0) &&
+                        {
+                            (tableData.length > 0) &&
                             <SaveButtonDraggable>
                                 <SaveButton
                                     loading={saveBtnloading}
@@ -668,7 +669,7 @@ const IBInvoice = (props) => {
 
                             </SaveButtonDraggable>
                         }
-                    </form>
+                    </form >
                 </div >
 
             </React.Fragment >

@@ -257,7 +257,7 @@ export const BULK_INVOICE = 265
 //******************************* Inventory Module ************************************//
 
 export const GRN_ADD_1 = 55
-export const GRN_LIST_1 = 56
+export const IB_GRN_LIST = 56
 export const GRN_STP_1 = 124
 
 export const GRN_ADD_3 = 165
@@ -268,6 +268,10 @@ export const GRN_STP_3 = 164
 export const ACCOUNTING_GRN = 331
 export const ACCOUNTING_GRN_LIST = 332
 export const GRN_FOR_ACCOUNTING_GRN = 335
+
+export const IB_GRN = 336
+
+
 
 
 export const STOCK_ENTRY = 205
@@ -285,7 +289,7 @@ export const IB_INWARD_STP = 133
 
 export const IB_INVOICE = 130
 export const IB_INVOICE_LIST = 131
-export const IB_GRN_LIST = 146
+export const IB_INVOICE_FOR_GRN = 146
 export const IB_INVOICE_STP = 132
 
 export const VDC_INVOICE = 333

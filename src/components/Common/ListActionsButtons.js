@@ -217,7 +217,7 @@ export const listPageActionsButtonFunc = (props) => {
         const dummyDisable_Edit = (userAccState.RoleAccess_IsEdit || userAccState.RoleAccess_IsEditSelf) && !canEdit && !canEditSelf && !canView && !viewApprovalBtnFunc && IsRecordDeleted;
         const dummyDisable_Delete = ((hasRole("RoleAccess_IsDelete") || hasRole("RoleAccess_IsDeleteSelf")) && !canDelete && !canDeleteSelf && !IsRecordDeleted);
         const dummyDisable_MakeBtn = hasRole("RoleAccess_MakeGRN") && !canMakeBtn && makeBtnShow;
-        const dummyDisable_SendToScm = !isPartyTypeIDInSendToScm && sendToScmBtnFunc && !(subPageMode === url.IB_GRN_LIST);
+        const dummyDisable_SendToScm = !isPartyTypeIDInSendToScm && sendToScmBtnFunc && !(subPageMode === url.IB_INVOICE_FOR_GRN);
 
         const dummyDisable_CreditNoteBtn = (!isApproved && (subPageMode === url.SALES_RETURN_LIST)) || (isCreditNoteCreated && (subPageMode === url.SALES_RETURN_LIST))
 

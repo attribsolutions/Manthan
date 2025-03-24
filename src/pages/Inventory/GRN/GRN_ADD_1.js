@@ -48,8 +48,10 @@ function initialState(history) {
     else if ((sub_Mode === url.ACCOUNTING_GRN)) {
         page_Id = pageId.ACCOUNTING_GRN;
         listPath = url.ACCOUNTING_GRN_LIST;
+    } else if ((sub_Mode === url.IB_GRN)) {
+        page_Id = pageId.IB_GRN;
+        listPath = url.IB_INVOICE_FOR_GRN;
     }
-
     return { page_Id, listPath, sub_Mode }
 };
 
@@ -82,6 +84,7 @@ const GRN_ADD_1 = (props) => {
     const [grnItemList, setgrnItemList] = useState([]);
     const [openPOdrp, setOpenPOdrp] = useState(false);
     const [openPOdata, setOpenPOdata] = useState([]);
+    debugger
     const [invoiceNo, setInvoiceNo] = useState('');
     const [editCreatedBy, seteditCreatedBy] = useState("");
     const [EditData, setEditData] = useState({});
@@ -147,7 +150,7 @@ const GRN_ADD_1 = (props) => {
         postMsg, pageMode,
         history, dispatch,
         postSuccss: _act.saveGRNSuccess,
-        listPath: ((postMsg.GRN_Reference === url.GRN_STP_3) || (postMsg.GRN_Reference === url.ORDER_LIST_1)) ? url.GRN_LIST_3 : url.GRN_LIST_1
+        listPath: ((postMsg.GRN_Reference === url.GRN_STP_3) || (postMsg.GRN_Reference === url.ORDER_LIST_1)) ? url.GRN_LIST_3 : url.IB_INVOICE_FOR_GRN
     }), [postMsg]);
 
     useEffect(() => {
@@ -197,7 +200,7 @@ const GRN_ADD_1 = (props) => {
 
         if ((items.Status === true) && (items.StatusCode === 200)) {
             const grnItems = items.Data
-            if ((grnItems.GRNReferences[0]?.GRN_From === url.IB_GRN_LIST)) { /// If GRN from IB GRN List then this 
+            if ((grnItems.GRNReferences[0]?.GRN_From === url.IB_INVOICE_FOR_GRN)) { /// If GRN from IB GRN List then this 
 
                 let sum = 0
 
@@ -281,17 +284,17 @@ const GRN_ADD_1 = (props) => {
             const grnDetails = { ...Data }
             grnDetails["SupplierName"] = Data.PartyName
             grnDetails["Supplier"] = Data.Party
-            debugger
+
             const OrderDetail = grnDetails?.GRNReferences[0]?.Order
 
             grnDetails.GRNReferences[0]["Full_OrderNumber"] = OrderDetail.FullOrderNumber
             grnDetails.GRNReferences[0]["Order"] = null  // If accounting Grn then send null  Order
-            grnDetails.GRNReferences[0]["Inward"] = true ///when Accounting grn alwys true
+            grnDetails.GRNReferences[0]["Inward"] = OrderDetail.OrderReferences[0].Inward ///when Accounting grn alwys true
             grnDetails.GRNReferences[0]["CustomerID"] = OrderDetail.Customer.id
             grnDetails.GRNReferences[0]["CustomerName"] = OrderDetail.Customer.Name
             grnDetails.GRNReferences[0]["Order"] = OrderDetail.id
             grnDetails.GRNReferences[0]["OrderDate"] = OrderDetail.OrderDate
-            grnDetails.GRNReferences[0]["POType"] = OrderDetail.POType.Name
+            grnDetails.GRNReferences[0]["POType"] = OrderDetail.POType.id
 
 
             initialTableData = grnDetails.GRNItems;
@@ -348,7 +351,7 @@ const GRN_ADD_1 = (props) => {
     }, [])
 
     function val_onChange(val, row, type) {
-        debugger
+
         if (type === "qty") {
             row["Quantity"] = val;
         }
@@ -417,7 +420,7 @@ const GRN_ADD_1 = (props) => {
                             className="text-end"
                             autoComplete="off"
                             key={row.id}
-                            disabled={((pageMode === mode.view) || openPOdata[0]?.GRN_From === url.IB_GRN_LIST) ? true : false}
+                            disabled={((pageMode === mode.view) || openPOdata[0]?.GRN_From === url.IB_INVOICE_FOR_GRN) ? true : false}
                             onChange={(e) => {
                                 let val = e.target.value
                                 if (subPageMode === url.ACCOUNTING_GRN) {
@@ -538,7 +541,7 @@ const GRN_ADD_1 = (props) => {
                             type="text"
                             id={`Ratey${k}`}
                             className=" text-end"
-                            disabled={openPOdata[0]?.GRN_From === url.IB_GRN_LIST || openPOdata[0]?.GRN_From === url.GRN_STP_3 || openPOdata[0]?.GRN_From === url.ORDER_LIST_1}
+                            disabled={openPOdata[0]?.GRN_From === url.IB_INVOICE_FOR_GRN}
                             defaultValue={row.Rate}
                             cpattern={decimalRegx}
                             autoComplete="off"
@@ -598,7 +601,7 @@ const GRN_ADD_1 = (props) => {
                         id={`Batch${row.id}`}
                         placeholder="Batch Code..."
                         className="text-end "
-                        disabled={((pageMode === mode.view) || openPOdata[0]?.GRN_From === url.IB_GRN_LIST || subPageMode === url.ACCOUNTING_GRN) ? true : false}
+                        disabled={((pageMode === mode.view) || openPOdata[0]?.GRN_From === url.IB_INVOICE_FOR_GRN || subPageMode === url.ACCOUNTING_GRN) ? true : false}
                         defaultValue={row.BatchCode}
                         onChange={e => { row["BatchCode"] = e.target.value }}
                         autoComplete="off"
@@ -625,7 +628,7 @@ const GRN_ADD_1 = (props) => {
                         value={row.BatchDate}
 
                         data-enable-time
-                        disabled={((pageMode === mode.view) || (openPOdata[0]?.GRN_From === url.IB_GRN_LIST) || subPageMode === url.ACCOUNTING_GRN) ? true : false}
+                        disabled={((pageMode === mode.view) || (openPOdata[0]?.GRN_From === url.IB_INVOICE_FOR_GRN) || subPageMode === url.ACCOUNTING_GRN) ? true : false}
                         onChange={(e, date) => { row.BatchDate = date }}
                     />
                 )
@@ -638,7 +641,7 @@ const GRN_ADD_1 = (props) => {
         {//------------- Action column ----------------------------------
             text: "Action",
             dataField: "",
-            hidden: (pageMode === mode.view || openPOdata[0]?.GRN_From === url.IB_GRN_LIST || subPageMode === url.ACCOUNTING_GRN) ? true : false,
+            hidden: (pageMode === mode.view || openPOdata[0]?.GRN_From === url.IB_INVOICE_FOR_GRN || subPageMode === url.ACCOUNTING_GRN) ? true : false,
             formatter: (value, row, k, a, v) => (
                 <div className="d-flex justify-Content-center mt-2" >
                     <div> <Button
@@ -902,7 +905,7 @@ const GRN_ADD_1 = (props) => {
             }));
 
             const jsonData = JSON.stringify({
-                InvoiceDate: openPOdata[0]?.GRN_From === url.IB_GRN_LIST ? (grnDetail?.InvoiceDate) : (grnDetail?.DemandDate),
+                InvoiceDate: openPOdata[0]?.GRN_From === url.IB_INVOICE_FOR_GRN ? (grnDetail?.InvoiceDate) : (grnDetail?.DemandDate),
                 InvoiceNumber: invoiceNo,
                 Customer: grnDetail?.Customer,
             });
@@ -936,7 +939,7 @@ const GRN_ADD_1 = (props) => {
                 GRNDate: grnDate,
                 FullGRNNumber: grnDetail?.FullGRNNumber,  //Only for Accounting GRN Mode
                 IsSave: (subPageMode === url.ACCOUNTING_GRN) ? 0 : 1,
-                InvoiceDate: openPOdata[0]?.GRN_From === url.IB_GRN_LIST ? (grnDetail?.InvoiceDate) : (grnDetail?.DemandDate),
+                InvoiceDate: openPOdata[0]?.GRN_From === url.IB_INVOICE_FOR_GRN ? (grnDetail?.InvoiceDate) : (grnDetail?.DemandDate),
                 Customer: grnDetail?.Customer,
                 GRNNumber: 1,
                 GrandTotal: Number(sum_roundedTotalAmount).toFixed(2),
@@ -993,7 +996,7 @@ const GRN_ADD_1 = (props) => {
                                             style={{ backgroundColor: "white" }}
                                             type="text"
                                             value={pageMode === mode.view ? EditData.CustomerName : grnDetail.SupplierName}
-                                            disabled={((pageMode === mode.view) || (openPOdata[0]?.GRN_From === url.IB_GRN_LIST) || subPageMode === url.ACCOUNTING_GRN) ? true : false}
+                                            disabled={((pageMode === mode.view) || (openPOdata[0]?.GRN_From === url.IB_INVOICE_FOR_GRN) || subPageMode === url.ACCOUNTING_GRN) ? true : false}
                                         />
                                     </Col>
                                 </FormGroup>
@@ -1004,7 +1007,7 @@ const GRN_ADD_1 = (props) => {
                                     <Col sm="7">
                                         <Input type="text"
                                             style={{ backgroundColor: "white" }}
-                                            disabled={((pageMode === mode.view) || (openPOdata[0]?.GRN_From === url.IB_GRN_LIST) || subPageMode === url.ACCOUNTING_GRN) ? true : false}
+                                            disabled={((pageMode === mode.view) || (openPOdata[0]?.GRN_From === url.IB_INVOICE_FOR_GRN) || subPageMode === url.ACCOUNTING_GRN) ? true : false}
 
                                             value={openPOdata[0]?.Full_OrderNumber === undefined ? grnDetail.FullDemandNumber : openPOdata[0]?.Full_OrderNumber}
                                             placeholder="Enter PO Number" />
@@ -1017,7 +1020,7 @@ const GRN_ADD_1 = (props) => {
                                         style={{ width: "130px" }}>{"Invoice Date"}</Label>
                                     <Col md="7">
                                         <C_DatePicker
-                                            value={openPOdata[0]?.GRN_From === url.IB_GRN_LIST ? (grnDetail.InvoiceDate) : (grnDetail.DemandDate)}
+                                            value={openPOdata[0]?.GRN_From === url.IB_INVOICE_FOR_GRN ? (grnDetail.InvoiceDate) : (grnDetail.DemandDate)}
                                             disabled={true}
                                         />
                                     </Col>
@@ -1031,14 +1034,14 @@ const GRN_ADD_1 = (props) => {
                                             style={{ backgroundColor: "white" }}
                                             value={invoiceNo}
                                             placeholder={`Enter Invoice No `}
-                                            disabled={((pageMode === mode.view) || (openPOdata[0]?.GRN_From === url.IB_GRN_LIST)) ? true : false}
+                                            disabled={((pageMode === mode.view) || (openPOdata[0]?.GRN_From === url.IB_INVOICE_FOR_GRN)) ? true : false}
                                             onChange={(e) => setInvoiceNo(e.target.value)}
                                         />
                                     </Col>
                                 </FormGroup>
 
 
-                                <FormGroup className="mb-2 row  " >
+                                {(subPageMode === url.ACCOUNTING_GRN) ? null : <FormGroup className="mb-2 row  " >
                                     <Label className="col-md-4 p-2"
                                         style={{ width: "130px" }}>Close PO</Label>
                                     <Col md="7" style={{ marginLeft: "-14px" }}>
@@ -1101,13 +1104,13 @@ const GRN_ADD_1 = (props) => {
                                                     type="checkbox"
                                                     style={{ paddingTop: "7px", marginLeft: "20px", marginTop: "10px" }}
                                                     placeholder="Enter Invoice No"
-                                                    disabled={openPOdata[0]?.GRN_From === url.IB_GRN_LIST || subPageMode === url.ACCOUNTING_GRN}   // Make Default Disabled true from IB GRN list TO GRN
-                                                    defaultChecked={openPOdata[0]?.POType === "Open PO" ? false : true}
+                                                    disabled={openPOdata[0]?.GRN_From === url.IB_INVOICE_FOR_GRN || subPageMode === url.ACCOUNTING_GRN}   // Make Default Disabled true from IB GRN list TO GRN
+                                                    defaultChecked={(subPageMode === url.ACCOUNTING_GRN) ? openPOdata[0]?.Inward : openPOdata[0]?.POType === "Open PO" ? false : true}
                                                     onChange={handleCheckboxChange}
                                                 />
                                         }
                                     </Col>
-                                </FormGroup>
+                                </FormGroup>}
 
                             </Col>
                         </Row>

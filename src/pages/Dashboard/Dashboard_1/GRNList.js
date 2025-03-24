@@ -67,7 +67,7 @@ export default function InvoiceForGRN() {
         if (commonPartyDropSelect.value > 0) {
 
             if (IsCompanySweetAndSnacks) {
-                let subPageMode = url.IB_GRN_LIST
+                let subPageMode = url.IB_INVOICE_FOR_GRN
                 const filtersBody = JSON.stringify({
                     FromDate: currentDate_ymd,
                     ToDate: currentDate_ymd,
@@ -121,7 +121,7 @@ export default function InvoiceForGRN() {
                     Invoice_NO: ele.FullInvoiceNumber,
                     Inward: true,
                     Challan: ele.POType === "Challan" ? ele.id : '',
-                    GRN_From: IsCompanySweetAndSnacks ? url.IB_GRN_LIST : ""
+                    GRN_From: IsCompanySweetAndSnacks ? url.IB_INVOICE_FOR_GRN : ""
                 });
                 isGRNSelect = isGRNSelect.concat(`${ele.id},`)
             });
@@ -129,7 +129,7 @@ export default function InvoiceForGRN() {
             if (isGRNSelect) {
                 let path = url.GRN_ADD_3
                 if (IsCompanySweetAndSnacks) {
-                    path = url.GRN_ADD_1
+                    path = url.IB_GRN
                 } else {
                     path = url.GRN_ADD_3
                 }

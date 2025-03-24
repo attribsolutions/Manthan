@@ -112,7 +112,7 @@ function* InvoiceListGenFunc({ config }) {
 
     if ((subPageMode === url.INVOICE_LIST_1) || (subPageMode === url.LOADING_SHEET) || (subPageMode === url.POS_INVOICE_LIST)) {
       response = yield call(Invoice_1_Get_Filter_API, config);
-    } else if (subPageMode === url.IB_INVOICE_LIST || subPageMode === url.IB_GRN_LIST || subPageMode === url.IB_INWARD_STP) {
+    } else if (subPageMode === url.IB_INVOICE_LIST || subPageMode === url.IB_INVOICE_FOR_GRN || subPageMode === url.IB_INWARD_STP) {
       response = yield call(IB_Invoice_Get_Filter_API, config);
     }
 
