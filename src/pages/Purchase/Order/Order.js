@@ -1662,7 +1662,7 @@ const Order = (props) => {
                 AdvanceAmount: advanceAmountRef.current.value ? advanceAmountRef.current.value : 0
             }
 
-            const IB_JsonBody = {
+            const IB_PO_JsonBody = {
                 DemandDate: orderdate,
                 DemandAmount: sumOfOrderAmount,
                 DemandItem: orderItems,
@@ -1672,6 +1672,19 @@ const Order = (props) => {
                 AdvanceAmount: advanceAmountRef.current.value ? advanceAmountRef.current.value : 0
 
             }
+
+            const IB_SO_JsonBody = {
+                DemandDate: orderdate,
+                DemandAmount: sumOfOrderAmount,
+                DemandItem: orderItems,
+                Customer: supplier,
+                Supplier: division,
+                OrderType: order_Type.SaleOrder,
+                AdvanceAmount: advanceAmountRef.current.value ? advanceAmountRef.current.value : 0
+
+            }
+
+
 
             const OrderDate = deliverydate.split(' ')[0]; // Date and time  split
             const comm_jsonBody = {
@@ -1697,9 +1710,10 @@ const Order = (props) => {
 
             let jsonBody;   //json body decleration 
             if (subPageMode === url.IB_ORDER) {
-                jsonBody = JSON.stringify({ ...comm_jsonBody, ...IB_JsonBody });
-            }
-            else if (subPageMode === url.ORDER_4) {
+                jsonBody = JSON.stringify({ ...comm_jsonBody, ...IB_PO_JsonBody });
+            } else if (subPageMode === url.IB_SALES_ORDER) {
+                jsonBody = JSON.stringify({ ...comm_jsonBody, ...IB_SO_JsonBody });
+            } else if (subPageMode === url.ORDER_4) {
                 jsonBody = JSON.stringify({ ...comm_jsonBody, ...SO_JsonBody });
             }
             else {
