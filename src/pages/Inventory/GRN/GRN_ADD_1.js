@@ -30,6 +30,7 @@ import { goButtonForRate_Master, saveRateMaster } from "../../../store/Administr
 import { Invoice_No_Message } from "../../../helpers/backend_helper";
 
 
+
 //// This GRN_ADD_1 Page is Use For  Sweets and Snacks GRN  Add page Use for 2 MODE From vendor Order to GRN & Inter Branch GRN
 let initialTableData = []
 
@@ -84,7 +85,7 @@ const GRN_ADD_1 = (props) => {
     const [grnItemList, setgrnItemList] = useState([]);
     const [openPOdrp, setOpenPOdrp] = useState(false);
     const [openPOdata, setOpenPOdata] = useState([]);
-    debugger
+
     const [invoiceNo, setInvoiceNo] = useState('');
     const [editCreatedBy, seteditCreatedBy] = useState("");
     const [EditData, setEditData] = useState({});
@@ -147,10 +148,12 @@ const GRN_ADD_1 = (props) => {
 
     useEffect(() => saveMsgUseEffect({// saveMsgUseEffect common useEffect 
 
+
+
         postMsg, pageMode,
         history, dispatch,
         postSuccss: _act.saveGRNSuccess,
-        listPath: ((postMsg.GRN_Reference === url.GRN_STP_3) || (postMsg.GRN_Reference === url.ORDER_LIST_1)) ? url.GRN_LIST_3 : url.IB_INVOICE_FOR_GRN
+        listPath: ((postMsg.GRN_Reference === url.GRN_STP_3) || (postMsg.GRN_Reference === url.ORDER_LIST_1)) ? url.GRN_LIST_3 : url.IB_GRN_LIST
     }), [postMsg]);
 
     useEffect(() => {
@@ -217,6 +220,7 @@ const GRN_ADD_1 = (props) => {
                     ele["BatchCode"] = ele.BatchCode
                     ele["delbtn"] = false
                     ele["Invoice"] = null
+
                 });
                 dispatch(_act.BreadcrumbShowCountlabel(`Count:${grnItems.OrderItem.length} currency_symbol ${sum.toFixed(2)}`));
             } else {                                                       // IF GRN From Vendor Order list 
@@ -230,6 +234,7 @@ const GRN_ADD_1 = (props) => {
                     ele["BatchCode"] = ele.BatchCode
                     ele["delbtn"] = false
                     ele["Invoice"] = null
+                    ele["ItemExpiryDate"] = undefined
                 });
                 dispatch(_act.BreadcrumbShowCountlabel(`Count:${grnItems.OrderItem.length} currency_symbol ${0}`));
             }
@@ -277,6 +282,7 @@ const GRN_ADD_1 = (props) => {
                 ele["BatchCode"] = ele.BatchCode
                 ele["delbtn"] = false
                 ele["Invoice"] = null
+                ele["ItemExpiryDate"] = ele.ItemExpiryDate
             });
             dispatch(_act.BreadcrumbShowCountlabel(`Count:${Data.GRNItems.length} currency_symbol ${sum.toFixed(2)}`));
 
@@ -418,6 +424,7 @@ const GRN_ADD_1 = (props) => {
                             id={`Quantity${row.id}`}
                             defaultValue={row.Quantity}
                             className="text-end"
+                            placeholder="Enter GRN-Qty"
                             autoComplete="off"
                             key={row.id}
                             disabled={((pageMode === mode.view) || openPOdata[0]?.GRN_From === url.IB_INVOICE_FOR_GRN) ? true : false}
@@ -444,7 +451,7 @@ const GRN_ADD_1 = (props) => {
                 )
             },
             headerStyle: () => {
-                return { width: '130px', textAlign: 'center' };
+                return { width: '150px', textAlign: 'center' };
             }
         },
 
@@ -486,7 +493,7 @@ const GRN_ADD_1 = (props) => {
                 )
             },
             headerStyle: (colum, colIndex) => {
-                return { width: '150px', textAlign: 'center' };
+                return { width: '170px', textAlign: 'center' };
             }
         },
 
@@ -609,6 +616,30 @@ const GRN_ADD_1 = (props) => {
                 )
             },
 
+            headerStyle: (colum, colIndex) => {
+                return { width: '130px', textAlign: 'center', text: "center" };
+            }
+        },
+
+
+        {//------------- Batch Date column ----------------------------------
+            text: "Item Expiry Date",
+            dataField: "",
+            hidden: openPOdata[0]?.GRN_From === url.IB_INVOICE_FOR_GRN,
+            formatter: (value, row, k) => {
+                debugger
+                return (
+                    <C_DatePicker
+                        id={`ItemExpiryDate${k}`}
+                        key={row.id}
+                        value={row.ItemExpiryDate}
+                        disabled={((pageMode === mode.view) || openPOdata[0]?.GRN_From === url.IB_INVOICE_FOR_GRN || subPageMode === url.ACCOUNTING_GRN) ? true : false}
+                        placeholder="Enter Item Expiry Date"
+                        data-enable-time
+                        onChange={(e, date) => { row.ItemExpiryDate = date }}
+                    />
+                )
+            },
             headerStyle: (colum, colIndex) => {
                 return { width: '130px', textAlign: 'center', text: "center" };
             }
@@ -791,7 +822,7 @@ const GRN_ADD_1 = (props) => {
                     BaseUnitQuantity: i.BaseUnitQuantity,
                     BatchDate: i.BatchDate,
                     BatchCode: i.BatchCode,
-
+                    ItemExpiryDate: i.ItemExpiryDate,
                     GST: i.GST,
                     CGST: calculated.CGST_Amount,
                     SGST: calculated.SGST_Amount,
@@ -820,16 +851,22 @@ const GRN_ADD_1 = (props) => {
                         return condition
                     })
 
-                    if ((i.Quantity > 0)) {
+                    if ((Number(i.Quantity) > 0)) {
 
                         if (dubli.length === 0) {
                             GRNItemArray.push(arr)
                         } else {
                             isvalidMsg.push(`${i.ItemName}:  This Item Is Dublicate...`)
                         }
+
+
+
                     }
-                } else if ((i.Quantity > 0)) {
+                } else if ((Number(i.Quantity) > 0)) {
                     GRNItemArray.push(arr)
+                    if (i.ItemExpiryDate === undefined && subPageMode === url.GRN_ADD_1) {
+                        isvalidMsg.push(`${i.ItemName}:  This Item ExpiryDate Required . `)
+                    }
                 }
 
             })
@@ -854,7 +891,7 @@ const GRN_ADD_1 = (props) => {
             if (isvalidMsg.length > 0) {
 
                 customAlert({
-                    Type: 3,
+                    Type: 10,
                     Message: JSON.stringify(isvalidMsg),
                 })
                 return returnFunc()
@@ -893,14 +930,13 @@ const GRN_ADD_1 = (props) => {
                 "Item": index.Item,
                 "PriceList": grnDetail?.PriceListId  // Price list ID 0 Hard code    
             }))
-
-            setRatePostJsonBody(RateJsonBody);
-
+            if (subPageMode === url.ACCOUNTING_GRN) {
+                setRatePostJsonBody(RateJsonBody);
+            }
             let GRNReferencesUpdate = openPOdata.map(item => ({
                 ...item,
-                Invoice: null,
-                Full_OrderNumber: null,
-                Inward: openPOdata[0]?.Inward
+                Inward: openPOdata[0]?.Inward,
+                Invoice: null
 
             }));
 

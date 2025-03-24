@@ -571,6 +571,7 @@ const IBInvoice = (props) => {
                 CreatedBy: _cfunc.loginUserID(),
                 UpdatedBy: _cfunc.loginUserID(),
                 RoundOffAmount: Math.round(grand_total),
+                
                 ChallanItems: itemArr,
 
             });

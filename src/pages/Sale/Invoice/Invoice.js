@@ -66,7 +66,6 @@ const Invoice = (props) => {
     const systemSetting = _cfunc.loginSystemSetting();
     const isSweetsAndSnacksCompany = _cfunc.IsSweetAndSnacksCompany()
 
-    const saveBtnid = `saveBtn${subPageMode}`
 
     const fileds = {
         InvoiceDate: currentDate_ymd,
@@ -83,8 +82,6 @@ const Invoice = (props) => {
     const [Vehicle_AddAccess, setVehicle_AddAccess] = useState(false)
     const [Driver_AddAccess, setDriver_AddAccess] = useState(false)
 
-    console.log(Vehicle_AddAccess)
-    console.log(Driver_AddAccess)
 
 
 
@@ -886,6 +883,7 @@ const Invoice = (props) => {
             TCSAmount: calcalateGrandTotal.TCS_Amount,
             Customer: values.Customer.value,
             Vehicle: values.VehicleNo.value ? values.VehicleNo.value : "",
+            Driver: values.DriverName.value ? values.DriverName.value : "",
             Party: commonPartyDropSelect.value,
             CreatedBy: _cfunc.loginUserID(),
             UpdatedBy: _cfunc.loginUserID(),

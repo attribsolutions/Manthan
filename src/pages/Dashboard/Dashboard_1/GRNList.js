@@ -50,7 +50,7 @@ export default function InvoiceForGRN() {
 
     useEffect(() => {
 
-       
+
         let userAcc = userAccess.find((inx) => {
             return (`/${inx.ActualPagePath}` === url.GRN_STP_3)
         })
@@ -101,6 +101,7 @@ export default function InvoiceForGRN() {
 
     useEffect(() => {
         if (GRNitem.Status === true && GRNitem.StatusCode === 200) {
+            debugger
             history.push({
                 pathname: GRNitem.path,
                 page_Mode: GRNitem.page_Mode,
@@ -109,7 +110,7 @@ export default function InvoiceForGRN() {
     }, [GRNitem])
 
     function makeBtnHandler(rowData, btnId) {
-
+        debugger
         const list = [rowData]
         var isGRNSelect = ''
         const grnRef = []
@@ -209,7 +210,7 @@ export default function InvoiceForGRN() {
                         }
                     </Button>}
 
-                   { hasRole("RoleAccess_IsPrint") &&  < Button
+                    {hasRole("RoleAccess_IsPrint") && < Button
                         type="button"
                         id={`btn-print-${rowData.id}`}
                         className={printBtnCss}

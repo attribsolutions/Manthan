@@ -174,6 +174,11 @@ const GRNList = () => {
         if (AccontingGRNData.Status === true && AccontingGRNData.StatusCode === 200 && AccontingGRNData?.pageMode === mode.modeSTPsave) {
             AccontingGRNData.Data["isAccountingGRN"] = true
 
+            if (AccontingGRNData?.Data?.GRNReferences[0]?.Order === null) {
+                customAlert({ Type: 3, Message: "Order Detail Getting Null" });
+                return;
+            }
+
             history.push({
                 pathname: AccontingGRNData.path,
                 state: AccontingGRNData.Data,

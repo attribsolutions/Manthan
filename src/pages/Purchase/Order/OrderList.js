@@ -524,7 +524,7 @@ const OrderList = () => {
         else {
 
             var isGRNSelect = ''
-            var challanNo = ''
+    
             const grnRef = []
             if (list.length > 0) {
                 list.forEach(ele => {

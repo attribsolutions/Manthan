@@ -227,12 +227,13 @@ const BulkWorkOrderList = () => {
 
     CategoryTypeList_DropdownOptions.unshift(allLabelWithZero);
     function goButtonHandler() {
-        
+
         try {
             const jsonBody = JSON.stringify({
                 Company: _cfunc.loginCompanyID(),
                 Party: _cfunc.loginPartyID(),
                 Category: values.Category.value,
+                ItemID: ""
             });
             dispatch(getBOMListPage(jsonBody));
 
