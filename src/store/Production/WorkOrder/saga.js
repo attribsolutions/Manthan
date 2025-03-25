@@ -1,5 +1,5 @@
 import { call, put, takeLatest } from "redux-saga/effects";
-import { date_dmy_func, convertTimefunc } from "../../../components/Common/CommonFunction";
+import { date_dmy_func, convertTimefunc, listpageConcatDateAndTime } from "../../../components/Common/CommonFunction";
 import { customAlert } from "../../../CustomAlert/ConfirmDialog";
 import {
   Post_Bulk_BOM_For_WorkOrder_API,
@@ -64,7 +64,7 @@ function* Save_Bulk_BOM_For_WorkOrder_GenratorFunction({ config }) {     // WOrk
 
 
 function* Bulk_BOM_For_WorkOrder_GenratorFunction({ config }) {     // WOrk Order Post API
-  
+
   try {
     let response = yield call(Post_Bulk_BOM_For_WorkOrder_API, config);
 
@@ -91,7 +91,9 @@ function* GetWorkOrderGenFunc({ filters }) {
       i.WorkDate = i.WorkOrderDate;
       var date = date_dmy_func(i.WorkOrderDate)
       var time = convertTimefunc(i.CreatedOn)
-      i.WorkOrderDate = (`${date} ${time}`)
+      i["WorkOrderDate"] = (`${date} ${time}`)
+      i["transactionDate"] = i.CreatedOn
+      i["transactionDateLabel"] = listpageConcatDateAndTime(i.date, i.CreatedOn);
       if (i.Status === 0) {
         i.Status = "Open";
       }

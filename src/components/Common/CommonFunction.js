@@ -740,7 +740,13 @@ export function groupBy(list, keyGetter) {// +++++++++++ Array Group By_kye Func
 
 
 
-
+export function getFixedNumber(qtyToDeduct, decimalPlaces) {
+  let num = parseFloat(qtyToDeduct);  // Convert to number
+  if (isNaN(num)) {
+    return 0;  // Return 0 for invalid inputs
+  }
+  return parseFloat(num.toFixed(decimalPlaces));  // Fix to specified decimal places
+}
 
 
 //convert fixed decimal number 

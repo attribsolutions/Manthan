@@ -1,11 +1,13 @@
 
-import { CurrentTime, compareGSTINState, currentDate_dmy, date_dmy_func, loginUserAdminRole, loginUserIsFranchisesRole } from "../../components/Common/CommonFunction";
+import { CurrentTime, IsSweetAndSnacksCompany, compareGSTINState, currentDate_dmy, date_dmy_func, loginUserAdminRole, loginUserIsFranchisesRole } from "../../components/Common/CommonFunction";
 import { numberWithCommas } from "../Report_common_function";
 import cbm_logo from "../../assets/images/cbm_logo.png"
 
 import * as table from './TableData'
 
 let initial_y = 0
+
+const isSweetAndSnacksCompany = IsSweetAndSnacksCompany()
 
 export const pageBorder = (doc) => {
 
@@ -650,16 +652,18 @@ export const tableBody = (doc, data) => {
 
 
             if (data1.row.cells[1].raw === "HSN Item Name") {
+                debugger
                 let TotalBox = 0;
+                const unit = isSweetAndSnacksCompany ? "Tray" : "Box"
                 data.InvoiceItems.forEach((element, key) => {
-                    if (element.PrimaryUnitName === "Box") {
+                    if (element.PrimaryUnitName === unit) {
                         TotalBox = Number(TotalBox) + Number(element.Quantity)
                     }
                 })
                 if (TotalBox === 0) {
                     data1.row.cells[1].text[0] = ` HSN Item Name (${data.TotalItemlength})`
                 } else {
-                    data1.row.cells[1].text[0] = ` HSN Item Name (${data.TotalItemlength})  (${TotalBox} Box)`
+                    data1.row.cells[1].text[0] = ` HSN Item Name (${data.TotalItemlength})  (${TotalBox} ${unit})`
                 }
 
                 data1.row.cells[8].colSpan = 2
@@ -835,13 +839,15 @@ export const tableBodyWithIGST = (doc, data) => {
 
             if (data1.row.cells[1].raw === "HSN Item Name") {
                 let TotalBox = 0;
+                const unit = isSweetAndSnacksCompany ? "Tray" : "Box"
+
                 data.InvoiceItems.forEach((element, key) => {
-                    if (element.PrimaryUnitName === "Box") {
+                    if (element.PrimaryUnitName === unit) {
                         TotalBox = Number(TotalBox) + Number(element.Quantity)
                     }
                 })
 
-                data1.row.cells[1].text[0] = ` HSN Item Name (${data.TotalItemlength})  (${TotalBox} Box)`
+                data1.row.cells[1].text[0] = ` HSN Item Name (${data.TotalItemlength})  (${TotalBox} ${unit})`
                 data1.row.cells[8].colSpan = 2
             }
 
@@ -993,13 +999,15 @@ export const tableBodyForAmericanInvoice = (doc, data) => {
 
             if (data1.row.cells[1].raw === "HSN Item Name") {
                 let TotalBox = 0;
+                const unit = isSweetAndSnacksCompany ? "Tray" : "Box"
+
                 data.InvoiceItems.forEach((element, key) => {
-                    if (element.PrimaryUnitName === "Box") {
+                    if (element.PrimaryUnitName === unit) {
                         TotalBox = Number(TotalBox) + Number(element.Quantity)
                     }
                 })
 
-                data1.row.cells[1].text[0] = ` HSN Item Name (${data.TotalItemlength})  (${TotalBox} Box)`
+                data1.row.cells[1].text[0] = ` HSN Item Name (${data.TotalItemlength})  (${TotalBox} ${unit})`
                 data1.row.cells[7].colSpan = 2
             }
 

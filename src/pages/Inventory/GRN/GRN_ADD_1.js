@@ -171,6 +171,13 @@ const GRN_ADD_1 = (props) => {
 
 
     useEffect(() => {
+        if (ratePostJsonBody.length > 0 && subPageMode === url.ACCOUNTING_GRN) {
+            dispatch(saveRateMaster(JSON.stringify(ratePostJsonBody)));
+        }
+    }, [ratePostJsonBody])
+
+
+    useEffect(() => {
 
         if ((AccontingGRN.Status === true) && (AccontingGRN.StatusCode === 200)) {
 
@@ -635,7 +642,12 @@ const GRN_ADD_1 = (props) => {
                         value={row.ItemExpiryDate}
                         disabled={((pageMode === mode.view) || openPOdata[0]?.GRN_From === url.IB_INVOICE_FOR_GRN || subPageMode === url.ACCOUNTING_GRN) ? true : false}
                         placeholder="Enter Item Expiry Date"
-                        data-enable-time
+                        options={{
+
+                            altInput: true,
+                            altFormat: "d-m-Y",
+                            dateFormat: "Y-m-d",
+                        }}
                         onChange={(e, date) => { row.ItemExpiryDate = date }}
                     />
                 )
@@ -928,8 +940,10 @@ const GRN_ADD_1 = (props) => {
                 "UnitID": index.UnitID,
                 "IsDeleted": 0,
                 "Item": index.Item,
-                "PriceList": grnDetail?.PriceListId  // Price list ID 0 Hard code    
+                "PriceList": grnDetail?.PriceList_id  // Price list ID 0 Hard code    
             }))
+
+            debugger
             if (subPageMode === url.ACCOUNTING_GRN) {
                 setRatePostJsonBody(RateJsonBody);
             }
