@@ -818,7 +818,7 @@ const BOMMaster = (props) => {
     // }
 
     function Items_Dropdown_Handler(e) {
-
+        debugger
         setItemTabDetails([])
         let Item = Items.filter((index) => {
             return index.id === e.value

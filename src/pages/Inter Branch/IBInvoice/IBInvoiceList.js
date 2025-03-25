@@ -126,7 +126,7 @@ const IBInvoiceList = () => {
             jsonBody,
             pageMode: mode.modeSTPsave,
             grnRef,
-            path: url.GRN_ADD_1,
+            path: url.IB_GRN,
             challanNo
         }))
     };

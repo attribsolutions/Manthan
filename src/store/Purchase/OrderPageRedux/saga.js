@@ -69,7 +69,7 @@ function* goButtonGenFunc({ config }) {                     // GO-Botton order A
     debugger
     const { subPageMode, } = config
     let response;
-    if ((subPageMode === url.ORDER_1) || (subPageMode === url.ORDER_2) || (subPageMode === url.ORDER_4) || (subPageMode === url.IB_ORDER) || (subPageMode === url.IB_SALES_ORDER)  || (subPageMode === url.ORDER_QUATATION)   ) {
+    if ((subPageMode === url.ORDER_1) || (subPageMode === url.ORDER_2) || (subPageMode === url.ORDER_4) || (subPageMode === url.IB_ORDER) || (subPageMode === url.IB_SALES_ORDER) || (subPageMode === url.ORDER_QUATATION)) {
       response = yield call(OrderPage_GoButton_API, config); // GO-Botton Purchase Order 1 && 2 Add Page API
       yield response.Data.OrderItems.forEach((ele, k) => {
         ele["id"] = k + 1
@@ -135,7 +135,7 @@ function* saveOrder_GenFunc({ config }) {
 
   let response = {}
   try {
-    if (subPageMode === url.IB_ORDER) {                   // Save  Order  Add Page by subPageMode 
+    if (subPageMode === url.IB_ORDER || subPageMode === url.IB_SALES_ORDER) {                   // Save  Order  Add Page by subPageMode 
       response = yield call(IBOrderPage_Save_API, newConfig);
     } else {
       response = yield call(OrderPage_Save_API_ForPO, config);
@@ -350,6 +350,8 @@ function* orderList_GoBtn_GenFunc({ config }) {
         }
       });
 
+    } else if (subPageMode === url.GRN_STP_3) {
+      newList = newList.filter(i => i.Inward !== "Close");
     }
     yield put(getOrderListPageSuccess(newList))
 

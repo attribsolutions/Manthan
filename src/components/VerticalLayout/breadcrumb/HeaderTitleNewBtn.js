@@ -70,6 +70,7 @@ const HeaderTitleNewBtn = ({
     }, [editData]);
 
     const NewButtonHandeller = () => {
+        debugger
         history.push({
             pathname: newBtnPath,
             pageMode: pageMode

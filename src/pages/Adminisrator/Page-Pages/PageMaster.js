@@ -780,7 +780,7 @@ const PageMaster = (props) => {
                                     id="pagePathid"
                                     value={EditData.ActualPagePath}
                                     type="text"
-                                    disabled={(actualPagePath) && true}
+                                    // disabled={(actualPagePath) && true}
                                     placeholder="Please Enter Page Path"
                                     validate={{
                                       required: {

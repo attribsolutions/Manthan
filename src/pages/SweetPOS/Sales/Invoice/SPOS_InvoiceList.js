@@ -869,7 +869,7 @@ const SweetPosInvoiceList = () => {
                             deleteBodyfunc={deleteBodyfunc}
                             HeaderContent={HeaderContent}
                             makeBtnFunc={makeBtnFunc}
-                            ButtonMsgLable={subPageMode === url.IB_GRN_LIST ? "GRN" : "Invoice"}
+                            ButtonMsgLable={subPageMode === url.IB_INVOICE_FOR_GRN ? "GRN" : "Invoice"}
                             deleteName={"FullInvoiceNumber"}
                             makeBtnName={"Make"}
                             filters={hederFilters}

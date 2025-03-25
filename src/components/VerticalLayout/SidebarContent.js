@@ -94,6 +94,7 @@ const SidebarContent = (props) => {
     })
     if (userAcc === undefined) { }
     else if (!userAcc.RoleAccess_IsShowOnMenu) {
+      
       pathName = urlRel[`${userAcc.ActualPagePath}`]
     }
 

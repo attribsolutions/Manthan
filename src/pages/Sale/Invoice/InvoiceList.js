@@ -163,8 +163,8 @@ const InvoiceList = () => {
             newBtnPath = url.IB_INVOICE_STP
             IBType = "IBInvoice"
         }
-        else if (subPageMode === url.IB_GRN_LIST) {
-            page_Id = pageId.IB_GRN_LIST;
+        else if (subPageMode === url.IB_INVOICE_FOR_GRN) {
+            page_Id = pageId.IB_INVOICE_FOR_GRN;
             masterPath = url.IB_INVOICE
             page_Mode = mode.modeSTPList;
             makeBtnShow = true
@@ -468,7 +468,7 @@ const InvoiceList = () => {
             jsonBody,
             pageMode: mode.modeSTPsave,
             grnRef,
-            path: url.GRN_ADD_1,
+            path: url.IB_GRN,
         }))
 
     };
@@ -666,7 +666,7 @@ const InvoiceList = () => {
                             HeaderContent={HeaderContent}
                             makeBtnFunc={makeBtnFunc}
                             sendToScmBtnFunc={sendToScmBtnFunc}
-                            ButtonMsgLable={subPageMode === url.IB_GRN_LIST ? "GRN" : "Invoice"}
+                            ButtonMsgLable={subPageMode === url.IB_INVOICE_FOR_GRN ? "GRN" : "Invoice"}
                             deleteName={"FullInvoiceNumber"}
                             makeBtnName={"Make"}
                             filters={hederFilters}

@@ -50,7 +50,7 @@ export default function InvoiceForGRN() {
 
     useEffect(() => {
 
-       
+
         let userAcc = userAccess.find((inx) => {
             return (`/${inx.ActualPagePath}` === url.GRN_STP_3)
         })
@@ -67,7 +67,7 @@ export default function InvoiceForGRN() {
         if (commonPartyDropSelect.value > 0) {
 
             if (IsCompanySweetAndSnacks) {
-                let subPageMode = url.IB_GRN_LIST
+                let subPageMode = url.IB_INVOICE_FOR_GRN
                 const filtersBody = JSON.stringify({
                     FromDate: currentDate_ymd,
                     ToDate: currentDate_ymd,
@@ -101,6 +101,7 @@ export default function InvoiceForGRN() {
 
     useEffect(() => {
         if (GRNitem.Status === true && GRNitem.StatusCode === 200) {
+            debugger
             history.push({
                 pathname: GRNitem.path,
                 page_Mode: GRNitem.page_Mode,
@@ -109,7 +110,7 @@ export default function InvoiceForGRN() {
     }, [GRNitem])
 
     function makeBtnHandler(rowData, btnId) {
-
+        debugger
         const list = [rowData]
         var isGRNSelect = ''
         const grnRef = []
@@ -121,7 +122,7 @@ export default function InvoiceForGRN() {
                     Invoice_NO: ele.FullInvoiceNumber,
                     Inward: true,
                     Challan: ele.POType === "Challan" ? ele.id : '',
-                    GRN_From: IsCompanySweetAndSnacks ? url.IB_GRN_LIST : ""
+                    GRN_From: IsCompanySweetAndSnacks ? url.IB_INVOICE_FOR_GRN : ""
                 });
                 isGRNSelect = isGRNSelect.concat(`${ele.id},`)
             });
@@ -129,7 +130,7 @@ export default function InvoiceForGRN() {
             if (isGRNSelect) {
                 let path = url.GRN_ADD_3
                 if (IsCompanySweetAndSnacks) {
-                    path = url.GRN_ADD_1
+                    path = url.IB_GRN
                 } else {
                     path = url.GRN_ADD_3
                 }
@@ -209,7 +210,7 @@ export default function InvoiceForGRN() {
                         }
                     </Button>}
 
-                   { hasRole("RoleAccess_IsPrint") &&  < Button
+                    {hasRole("RoleAccess_IsPrint") && < Button
                         type="button"
                         id={`btn-print-${rowData.id}`}
                         className={printBtnCss}
