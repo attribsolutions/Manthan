@@ -38,7 +38,8 @@ export default function WorkOrderForDashboard() {
         const jsonBody = JSON.stringify({
             Company: loginCompanyID(),
             Party: loginSelectedPartyID(),
-            ItemID: ""
+            ItemID: "",
+            Category: 0,
         });
         dispatch(getBOMListPage(jsonBody));
     }, [commonPartyDropSelect])

@@ -104,7 +104,8 @@ const BOMList = () => {
         const jsonBody = JSON.stringify({
             Company: _cfunc.loginCompanyID(),
             Party: _cfunc.loginPartyID(),
-            ItemID: Item.value
+            ItemID: Item.value,
+            Category: 0,
         });
         dispatch(getBOMListPage(jsonBody));
     }
