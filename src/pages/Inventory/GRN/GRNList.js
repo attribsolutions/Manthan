@@ -153,6 +153,11 @@ const GRNList = () => {
         //     dispatch(_act.GetVenderSupplierCustomer({ PartyID: loginSelectedPartyID(), subPageMode, RouteID: "" }))
         //     goButtonHandler()
         // }
+        
+        return () => {
+            dispatch(_act.AccountingGRNSuccess({ Status: false }))
+        }
+
     }, []);
 
 
@@ -175,7 +180,9 @@ const GRNList = () => {
             AccontingGRNData.Data["isAccountingGRN"] = true
 
             if (AccontingGRNData?.Data?.GRNReferences[0]?.Order === null) {
+                dispatch(_act.AccountingGRNSuccess({ Status: false }))
                 customAlert({ Type: 3, Message: "Order Detail Getting Null" });
+
                 return;
             }
 
