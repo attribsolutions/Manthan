@@ -29,7 +29,8 @@ import {
     orderQtyUnit_SelectOnchange,
     stockQtyOnChange,
     settingBaseRoundOffAmountFunc,
-    ChallanCalculateFunc
+    ChallanCalculateFunc,
+    stockDistributeFunc
 } from "./IBInvoiceCalculation";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { C_DatePicker } from "../../../CustomValidateForm";
@@ -198,16 +199,10 @@ const IBInvoice = (props) => {
 
                     const stockQty = parseFloat(inx_2.ActualQuantity); // Convert to a number
                     totalStockQty += stockQty
-                    const qtyToDeduct = Math.min(remainingOrderQty, stockQty);
-                    inx_2.Qty = _cfunc.roundToDecimalPlaces(qtyToDeduct, 3); // Round to three decimal places
-                    remainingOrderQty = _cfunc.roundToDecimalPlaces(remainingOrderQty - qtyToDeduct, 3); // Round the remaining order quantity
+
+                    stockDistributeFunc(inx_1)
 
 
-
-                    if (qtyToDeduct > 0) {// Calculate total amount if quantity is greater than 0
-                        const calculatedItem = invoice_discountCalculate_Func(inx_2, inx_1);
-                        totalAmount += parseFloat(calculatedItem.roundedTotalAmount); // Convert to a number
-                    }
                     inx_2.id = key_2;
                     return inx_2;
                 })
@@ -223,6 +218,7 @@ const IBInvoice = (props) => {
                     const msg2 = `Short Stock Quantity ${diffrence}`;
                     inx_1.StockInvalidMsg = inx_1.ItemTotalStock === 0 ? msg1 : msg2;
                 }
+
 
                 return inx_1;
             })
@@ -401,7 +397,7 @@ const IBInvoice = (props) => {
                                                 className="right-aligned-placeholder"
                                                 key={`batchQty${index1.id}-${index2.id}`}
                                                 id={`batchQty${index1.id}-${index2.id}`}
-                                                value={index2.Qty}
+                                                value={!isNaN(parseFloat(index2.Qty)) ? parseFloat(index2.Qty).toFixed(3) : ""}
                                                 onChange={(event) => {
                                                     stockQtyOnChange(event, index1, index2);
                                                     totalAmountCalcuationFunc(tableList);
@@ -487,7 +483,7 @@ const IBInvoice = (props) => {
     }
 
     const goButtonHandler = () => {
-        debugger
+
         if (values.VDCItem === "") {
             customAlert({
                 Type: 3,
@@ -536,9 +532,9 @@ const IBInvoice = (props) => {
                         CGST: calculate.CGST_Amount,
                         SGST: calculate.SGST_Amount,
                         IGST: "0.00",
-                        CGSTPercentage: (tableIndex.CGSTPercentage / 2).toFixed(2),
-                        SGSTPercentage: (tableIndex.SGSTPercentage / 2).toFixed(2),
-                        IGSTPercentage: "0.00",
+                        CGSTPercentage: calculate.CGST_Percentage,
+                        SGSTPercentage: calculate.SGST_Percentage,
+                        IGSTPercentage: calculate.IGST_Percentage,
                         BatchDate: stockIndex.BatchDate,
                         BatchCode: stockIndex.BatchCode,
                         SystemBatchDate: stockIndex.SystemBatchDate,
@@ -566,12 +562,12 @@ const IBInvoice = (props) => {
                 Demand_ID: Demand_ID.Demand_ID,
                 ChallanDate: values.ChallanDate,
                 Party: _cfunc.loginSelectedPartyID(),
-                GrandTotal: grand_total,
+                GrandTotal: (grand_total).toFixed(2),
                 Customer: customerID.value,
                 CreatedBy: _cfunc.loginUserID(),
                 UpdatedBy: _cfunc.loginUserID(),
-                RoundOffAmount: Math.round(grand_total),
-                
+                RoundOffAmount: Math.round(grand_total).toFixed(2),
+
                 ChallanItems: itemArr,
 
             });

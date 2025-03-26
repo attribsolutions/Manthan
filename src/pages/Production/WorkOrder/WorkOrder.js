@@ -292,6 +292,7 @@ const WorkOrder = (props) => {
         const jsonBody = JSON.stringify({
             // FromDate: "2022-12-01",
             // ToDate: currentDate_ymd,
+            Category: 0,
             Company: loginCompanyID(),
             Party: loginPartyID(),
             ItemID: ""

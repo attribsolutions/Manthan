@@ -545,19 +545,19 @@ const MaterialIssueMaster = (props) => {
     }
 
     function NumberOfLotchange(event) {
-
+        debugger
         let input = event.trim(); // Remove leading and trailing whitespace
         let defaultNoOfLot = parseFloat(noOfLotForDistribution);
         let remainingQuantity = 0
 
         if (input === "" || isNaN(input)) {
-            input = 0;
+            input = "";
         }
 
         if (parseFloat(input) > defaultNoOfLot) {
             input = defaultNoOfLot;
         }
-        remainingQuantity = ((parseFloat(values.ItemName.lotQty) / defaultNoOfLot) * parseFloat(input)).toFixed(2)
+        remainingQuantity = ((parseFloat(values.ItemName.lotQty) / defaultNoOfLot) * _cfunc.getFixedNumber(input, 3)).toFixed(2)
 
         if (remainingQuantity === "" || isNaN(remainingQuantity)) {
             remainingQuantity = 0;
@@ -775,7 +775,7 @@ const MaterialIssueMaster = (props) => {
                                                 <CInput
                                                     style={{ textAlign: "right" }}
                                                     name="NumberOfLot"
-                                                    cpattern={onlyNumberRegx}
+                                                    cpattern={decimalRegx}
                                                     value={values.NumberOfLot}
                                                     disabled={(goButtonList.length > 0) ? true : false}
                                                     type="text"

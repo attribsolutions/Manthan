@@ -953,6 +953,7 @@ const Order = (props) => {
             headerStyle: () => {
                 return { width: '9%', textAlign: 'center' };
             },
+
             formatExtraData: { tableList: orderItemTable },
             formatter: (value, row, k, { tableList }) => {
                 if (row.GroupRow || row.SubGroupRow) { return }
@@ -965,6 +966,7 @@ const Order = (props) => {
                                 id={`Rate-${k}`}
                                 cpattern={decimalRegx}
                                 defaultValue={row.Rate}
+                                disabled={subPageMode === url.IB_ORDER}
                                 className="text-end"
                                 onChange={(event) => {
 
@@ -999,7 +1001,7 @@ const Order = (props) => {
             headerStyle: () => {
                 return { width: '8%', textAlign: 'center' };
             },
-            hidden: (subPageMode === url.ORDER_1 || subPageMode === url.IB_ORDER || subPageMode === url.IB_SALES_ORDER || IsFranchisesRole) && true,
+            hidden: (subPageMode === url.ORDER_1 || subPageMode === url.IB_ORDER || subPageMode === url.IB_SALES_ORDER || IsFranchisesRole || isSweetAndSnacksCompany) && true,
             formatter: (value, row, k) => {
                 if (row.GroupRow || row.SubGroupRow) { return }
                 return (
