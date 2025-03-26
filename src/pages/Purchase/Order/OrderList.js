@@ -483,7 +483,7 @@ const OrderList = () => {
     }
 
     const makeBtnFunc = (list = [], btnId) => {
-        debugger
+
         const obj = list[0]
 
         const customer = {
@@ -528,14 +528,14 @@ const OrderList = () => {
         else {
 
             var isGRNSelect = ''
-
+            debugger
             const grnRef = []
             if (list.length > 0) {
                 list.forEach(ele => {
                     if (ele.hasSelect) {
                         grnRef.push({
-                            Invoice: (subPageMode === url.GRN_STP_3) ? ele.id : null,
-                            Order: !(subPageMode === url.GRN_STP_3) ? ele.POType === "Challan" ? '' : ele.id : ele.id,
+                            Invoice: (ele.OrderType === 3) ? ele.id : null,
+                            Order: (ele.OrderType === 1) ? ele.id : null,
                             Full_OrderNumber: ele.FullOrderNumber,
                             Inward: url.GRN_STP_3 ? true : false,
                             Challan: ele.POType === "Challan" ? ele.id : '',

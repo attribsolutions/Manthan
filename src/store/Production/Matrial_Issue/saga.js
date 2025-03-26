@@ -73,6 +73,7 @@ function* GoButton_MaterialIssue_listpage_GenFunc({ filters }) {                
       }
       else if (i.Status === 2) {
         i.Status = "Completed";
+        i.forceMakeBtnHide = true
       }
       return i
     })

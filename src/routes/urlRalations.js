@@ -167,8 +167,8 @@ export const Country_List = url.COUNTRY_MASTER
 export const Voucher = url.VOUCHER_LIST
 export const Voucher_List = url.VOUCHER
 
-
-
+export const VDC_Invoice = url.VDC_INVOICE_LIST
+export const VDC_Invoice_List = url.VDC_INVOICE
 
 
 //******************************* Purchase Module ************************************//

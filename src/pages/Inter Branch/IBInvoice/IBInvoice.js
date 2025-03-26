@@ -39,6 +39,7 @@ import GlobalCustomTable from "../../../GlobalCustomTable";
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 import { CheckStockEntryForFirstTransaction, CheckStockEntryForFirstTransactionSuccess, CheckStockEntryforBackDatedTransaction, CheckStockEntryforBackDatedTransactionSuccess } from "../../../store/Inventory/StockEntryRedux/action";
+import { showToastAlert } from "../../../helpers/axios_Config";
 
 
 const PageDetailsFunc = (subPageMode) => {
@@ -101,13 +102,12 @@ const IBInvoice = (props) => {
         commonPartyDropSelect,
         StockEnteryForFirstYear,
         GRNitem,
-        VDCItemDetailsData,
+
         VDCItemData,
         vender
     } = useSelector((state) => ({
         vender: state.CommonAPI_Reducer.vender,
         VDCItemData: state.ChallanReducer.VDCItemData,
-        VDCItemDetailsData: state.ChallanReducer.VDCItemDetailsData,
         postMsg: state.ChallanReducer.postMsg,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
@@ -163,7 +163,7 @@ const IBInvoice = (props) => {
 
     useEffect(() => {
         if (GRNitem.Status === true && GRNitem.StatusCode === 200) {
-
+            debugger
             const { DemandItemDetails } = GRNitem.Data
 
             if (subPageMode === url.IB_INVOICE) {
@@ -172,26 +172,27 @@ const IBInvoice = (props) => {
                 setDemandID({ Demand_ID: Number(GRNitem?.Data.DemandIDs) })
 
             }
-            
+
             const Updated_DemandDetails = DemandItemDetails.map((inx_1, key_1) => {
 
                 const isUnitIDPresent = inx_1?.UnitDetails?.find(findEle => findEle.UnitID === inx_1.Unit);
                 const isMCunitID = inx_1?.UnitDetails?.find(findEle => findEle.DeletedMCUnitsUnitID === inx_1.DeletedMCUnitsUnitID);
                 const defaultunit = isUnitIDPresent !== undefined ? isUnitIDPresent : isMCunitID;
-
+                if (!defaultunit) {
+                    showToastAlert(`${inx_1.ItemName} this Item Not getting defalut Unit id ,UnitId is not present in UnitDetails `)
+                }
                 let totalStockQty = 0;
                 let totalAmount = 0;
                 inx_1.StockInValid = false;
                 inx_1.StockInvalidMsg = '';
-
 
                 inx_1.default_UnitDropvalue = {//initialize
                     value: inx_1.Unit,
                     label: inx_1.UnitName,
                     ConversionUnit: '1',
                     Unitlabel: inx_1.UnitName,
-                    BaseUnitQuantity: defaultunit.BaseUnitQuantity,
-                    BaseUnitQuantityNoUnit: defaultunit.BaseUnitQuantityNoUnit,
+                    BaseUnitQuantity: defaultunit?.BaseUnitQuantity,
+                    BaseUnitQuantityNoUnit: defaultunit?.BaseUnitQuantityNoUnit,
                 };
 
                 inx_1.InpStockQtyTotal = `${Number(inx_1.Quantity) * Number(inx_1.ConversionUnit)}`;
@@ -199,15 +200,15 @@ const IBInvoice = (props) => {
                 inx_1.StockDetails = inx_1.StockDetails.map((inx_2, key_2) => {
                     inx_2.initialRate = inx_2.Rate;
 
-                    const _hasRate = ((defaultunit.BaseUnitQuantity / defaultunit.BaseUnitQuantityNoUnit) * inx_2.initialRate);
-                    const _hasActualQuantity = (inx_2.BaseUnitQuantity / defaultunit.BaseUnitQuantity);
+                    const _hasRate = ((defaultunit?.BaseUnitQuantity / defaultunit?.BaseUnitQuantityNoUnit) * inx_2.initialRate);
+                    const _hasActualQuantity = (inx_2.BaseUnitQuantity / defaultunit?.BaseUnitQuantity);
 
 
                     inx_2.Rate = _cfunc.roundToDecimalPlaces(_hasRate, 2);//max 2 decimal  //initialize
                     inx_2.ActualQuantity = _cfunc.roundToDecimalPlaces(_hasActualQuantity, 3);//max 3 decimal  //initialize
 
 
-                    
+
 
                     const stockQty = parseFloat(inx_2.ActualQuantity); // Convert to a number
                     totalStockQty += stockQty
@@ -237,6 +238,14 @@ const IBInvoice = (props) => {
             totalAmountCalcuationFunc(Updated_DemandDetails)
             setTableData(Updated_DemandDetails)
 
+        } else {
+            if (GRNitem.Message) {
+                customAlert({
+                    Type: 4,
+                    Message: GRNitem.Message,
+                })
+
+            }
         }
     }, [GRNitem])
 
@@ -498,6 +507,7 @@ const IBInvoice = (props) => {
             a.values.VDCItem = e;
             return a
         })
+        setTableData([])
     }
 
     const goButtonHandler = () => {
@@ -633,6 +643,23 @@ const IBInvoice = (props) => {
                                 </Col>
 
 
+                                {subPageMode === url.VDC_INVOICE && <Col sm="3">
+                                    <FormGroup className="mb- row mt-2 " >
+                                        <Label className="col-md-4 p-2"
+                                            style={{ width: "115px" }}>Customer</Label>
+                                        <Col md="7">
+                                            <Select
+                                                value={values.Customer}
+                                                classNamePrefix="select2-Customer"
+                                                options={venderOptions}
+                                                onChange={venderOnchange}
+                                                styles={{
+                                                    menu: provided => ({ ...provided, zIndex: 3 })
+                                                }}
+                                            />
+                                        </Col>
+                                    </FormGroup>
+                                </Col >}
 
                                 {subPageMode === url.VDC_INVOICE && <Col sm="3" className="">
                                     <FormGroup className="mb- row mt-2" >
@@ -654,23 +681,6 @@ const IBInvoice = (props) => {
                                         </Col>
                                     </FormGroup>
                                 </Col>}
-                                <Col sm="3">
-                                    <FormGroup className="mb- row mt-2 " >
-                                        <Label className="col-md-4 p-2"
-                                            style={{ width: "115px" }}>Customer</Label>
-                                        <Col md="7">
-                                            <Select
-                                                value={values.Customer}
-                                                classNamePrefix="select2-Customer"
-                                                options={venderOptions}
-                                                onChange={venderOnchange}
-                                                styles={{
-                                                    menu: provided => ({ ...provided, zIndex: 3 })
-                                                }}
-                                            />
-                                        </Col>
-                                    </FormGroup>
-                                </Col >
 
 
                                 {subPageMode === url.VDC_INVOICE && <Col sm="1" ></Col>}

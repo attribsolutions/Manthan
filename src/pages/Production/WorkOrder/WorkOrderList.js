@@ -86,6 +86,7 @@ const WorkOrderList = () => {
         const jsonBody = JSON.stringify({
             FromDate: fromdate,
             ToDate: todate,
+            Party: _cfunc.loginSelectedPartyID()
         });
         dispatch(getWorkOrderListPage({ jsonBody, subPageMode }));
     }

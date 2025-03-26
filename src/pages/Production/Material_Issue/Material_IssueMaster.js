@@ -99,6 +99,7 @@ const MaterialIssueMaster = (props) => {
         const jsonBody = JSON.stringify({
             FromDate: "",
             ToDate: "",
+            Party: _cfunc.loginSelectedPartyID()
         });
         dispatch(getWorkOrderListPage({ jsonBody }));
 

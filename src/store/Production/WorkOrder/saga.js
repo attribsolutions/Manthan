@@ -102,6 +102,7 @@ function* GetWorkOrderGenFunc({ filters }) {
       }
       else if (i.Status === 2) {
         i.Status = "Completed";
+        i.forceMakeBtnHide = true
       }
       else if (i.Status === 3) {
         i.Status = "Close";
