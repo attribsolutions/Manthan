@@ -39,7 +39,15 @@ export const pageHeder = (doc, data) => {
 }
 
 export const reportHeder1 = (doc, data) => {
-    doc.addImage(cbm_logo, 'PNG', 33, 1, 95, 80, null, 'FAST')
+
+    if (isSweetAndSnacksCompany) {
+        doc.addImage(cbm_logo, 'PNG', 33, 17, 80, 46, null, 'FAST')
+    } else {
+
+        doc.addImage(cbm_logo, 'PNG', 33, 1, 95, 80, null, 'FAST')
+    }
+
+    // doc.addImage(cbm_logo, 'PNG', 33, 1, 95, 80, null, 'FAST')
 
 
     let Y1 = 0

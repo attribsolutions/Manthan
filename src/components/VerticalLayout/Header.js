@@ -30,7 +30,7 @@ import {
 } from "../../store/actions"
 import { MainSearchBox, } from '../Common/SearchBox/index';
 import { MySearch } from '../Common/SearchBox/MySearch';
-import { loginSystemSetting } from '../Common/CommonFunction';
+import { IsSweetAndSnacksCompany, loginSystemSetting } from '../Common/CommonFunction';
 import { Modal } from 'reactstrap';
 import { Notification_Log } from '../../helpers/backend_helper';
 
@@ -41,7 +41,7 @@ const Header = props => {
   const [position, setPosition] = useState();
   const [open, setOpen] = useState(false);
   const [modal_backdrop, setmodal_backdrop] = useState(false);   // Image Model open Or not
-
+  const isSweetAndSnacksCompany = IsSweetAndSnacksCompany()
 
   const onDrawerClose = () => {
     setOpen(false);
@@ -145,16 +145,16 @@ const Header = props => {
                   <img src={logoSvg} alt="" height="40" style={{ height: "56px" }} />
                 </span>
                 <span className="logo-lg">
-                  <img src={logoSvg} alt="" height="40" style={{ height: "56px" }} /> <span className="logo-txt" style={{ color: 'white' }}>FoodERP 2.0</span>
+                  <img src={logoSvg} alt="" height="40" style={{ height: isSweetAndSnacksCompany ? "46" : "56px", borderRadius: "8px" }} /> <span className="logo-txt" style={{ color: 'white' }}>FoodERP 2.0</span>
                 </span>
               </div>
 
               <Link to="/dashboard" className="logo logo-light">
                 <span className="logo-sm" >
-                  <img src={logoSvg} alt="" height="35" style={{ height: "56px" }} />
+                  <img src={logoSvg} alt="" height="35" style={{ height: isSweetAndSnacksCompany ? "46" : "56px", borderRadius: "8px" }} />
                 </span>
                 <span className="logo-lg">
-                  <img src={logoSvg} alt="" height="35" style={{ height: "56px" }} /> <span className="logo-txt">FoodERP 2.0</span>
+                  <img src={logoSvg} alt="" height="35" style={{ height: IsSweetAndSnacksCompany ? "46" : "56px", borderRadius: "8px" }} /> <span className="logo-txt">FoodERP 2.0</span>
                 </span>
               </Link>
             </div>

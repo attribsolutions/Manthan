@@ -39,6 +39,7 @@ const OrderList = () => {
     let originalStorageDetails = JSON.parse(localStorage.getItem("roleId"));
 
     const LoginDetails = _cfunc.loginUserDetails();
+    const isVisibleRateDrop = _cfunc.checkRateDropVisibility()
 
     const fileds = {
         FromDate: currentDate_ymd,
@@ -482,7 +483,7 @@ const OrderList = () => {
     }
 
     const makeBtnFunc = (list = [], btnId) => {
-
+        debugger
         const obj = list[0]
 
         const customer = {
@@ -494,11 +495,14 @@ const OrderList = () => {
             AdvanceAmount: obj.AdvanceAmount,
             OrderID: obj.id
         }
+
         const jsonBody = JSON.stringify({
             FromDate: obj.OrderDate,
             Customer: obj.CustomerID,
             Party: _cfunc.loginSelectedPartyID(),
             OrderIDs: obj.id.toString(),
+            IsRateWise: isVisibleRateDrop ? 2 : 1
+
         });
 
         if (subPageMode === url.IB_INVOICE_STP) {
@@ -524,14 +528,14 @@ const OrderList = () => {
         else {
 
             var isGRNSelect = ''
-    
+
             const grnRef = []
             if (list.length > 0) {
                 list.forEach(ele => {
                     if (ele.hasSelect) {
                         grnRef.push({
                             Invoice: (subPageMode === url.GRN_STP_3) ? ele.id : null,
-                            Order: !(subPageMode === url.GRN_STP_3) ? ele.POType === "Challan" ? '' : ele.id : null,
+                            Order: !(subPageMode === url.GRN_STP_3) ? ele.POType === "Challan" ? '' : ele.id : ele.id,
                             Full_OrderNumber: ele.FullOrderNumber,
                             Inward: url.GRN_STP_3 ? true : false,
                             Challan: ele.POType === "Challan" ? ele.id : '',
