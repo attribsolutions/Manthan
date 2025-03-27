@@ -1578,9 +1578,9 @@ const StockEntry = (props) => {
         const filterData = ReturnItems.filter((i) => {
             // return i.Quantity > 0;
             if (values.IsAllStockZero) {
-                return ((i.Quantity) && i.Quantity >= 0)
+                return (((i.Quantity) || (i.Quantity === 0)) && i.Quantity >= 0)
             } else {
-                return ((i.Quantity) && i.Quantity !== "")
+                return (((i.Quantity) || (i.Quantity === 0)) && i.Quantity !== "")
             }
         });
 

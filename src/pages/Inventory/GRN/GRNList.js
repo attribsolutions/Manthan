@@ -141,7 +141,7 @@ const GRNList = () => {
 
 
 
-
+        debugger
 
         setSubPageMode(subPageMode)
         setOtherState({ masterPath, makeBtnShow, newBtnPath, MasterModal, makeBtnName })
@@ -153,7 +153,7 @@ const GRNList = () => {
         //     dispatch(_act.GetVenderSupplierCustomer({ PartyID: loginSelectedPartyID(), subPageMode, RouteID: "" }))
         //     goButtonHandler()
         // }
-        
+
         return () => {
             dispatch(_act.AccountingGRNSuccess({ Status: false }))
         }
