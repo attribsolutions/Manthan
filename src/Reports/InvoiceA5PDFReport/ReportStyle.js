@@ -19,8 +19,9 @@ let initial_y = 0
 const isSweetAndSnacksCompany = IsSweetAndSnacksCompany()
 
 export const pageHeder = (doc, data) => {
-    doc.addImage(cbm_logo, 'PNG', 33, 3, 52, 55, null, 'FAST')
-
+    if (!isSweetAndSnacksCompany) {
+        doc.addImage(cbm_logo, 'PNG', 33, 3, 52, 55, null, 'FAST')
+    }
     doc.setFont('Tahoma')
     doc.setFont(undefined, 'bold')
     doc.setFontSize(15)
@@ -499,7 +500,7 @@ export const reportFooter = (doc, data) => {
 
     let DetailsOfBankStyle = {
         didParseCell: (data1) => {
-            if (data.BankData.length > 0) {
+            if (data?.BankData?.length > 0) {
                 let BankData = data.BankData[0]
                 if (data1.row.cells[0].raw === `Bank Name :${BankData.BankName}`) {
                     data1.row.cells[0].colSpan = 3
@@ -512,7 +513,7 @@ export const reportFooter = (doc, data) => {
             top: 0, left: 30, right: 35,
         },
         showHead: 'always',
-        theme: (data.BankData.length > 0) ? 'grid' : 'plain',
+        theme: (data?.BankData?.length > 0) ? 'grid' : 'plain',
         headerStyles: { cellPadding: 1, },
         styles: {
             overflow: 'linebreak',
@@ -529,12 +530,12 @@ export const reportFooter = (doc, data) => {
         columnStyles: {
             0: {
                 valign: "top",
-                columnWidth: (data.BankData.length > 0) ? 90 : 30,
+                columnWidth: (data?.BankData?.length > 0) ? 90 : 30,
                 halign: 'lfet',
             },
             1: {
                 valign: "top",
-                columnWidth: (data.BankData.length > 0) ? 90 : 300,
+                columnWidth: (data?.BankData?.length > 0) ? 90 : 300,
                 halign: 'lfet',
 
 

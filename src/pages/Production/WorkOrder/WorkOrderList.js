@@ -19,6 +19,7 @@ import { goButtonForMaterialIssue_Master_Action } from "../../../store/Productio
 import { C_DatePicker } from "../../../CustomValidateForm";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { Go_Button, PageLoadingSpinner } from "../../../components/Common/CommonButton";
+import useCheckStockEntry from "../../../components/Common/commonComponent/CheckStockEntry";
 
 const WorkOrderList = () => {
 
@@ -30,7 +31,7 @@ const WorkOrderList = () => {
 
     const [pageMode, setpageMode] = useState(mode.defaultList)
     const [hederFilters, setHederFilters] = useState({ fromdate: currentDate_ymd, todate: currentDate_ymd, })
-
+    const { commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
     const reducers = useSelector(
         (state) => ({
             goBtnLoading: state.WorkOrderReducer.loading,
@@ -60,6 +61,8 @@ const WorkOrderList = () => {
         deleteSucc: deleteWorkOrderIdSuccess
     }
 
+    const { Actionhandler } = useCheckStockEntry(hederFilters.fromdate, commonPartyDropSelect);
+
     useEffect(() => {
         setpageMode(page_mode)
         dispatch(commonPageFieldListSuccess(null))
@@ -86,6 +89,7 @@ const WorkOrderList = () => {
         const jsonBody = JSON.stringify({
             FromDate: fromdate,
             ToDate: todate,
+            Party: _cfunc.loginSelectedPartyID()
         });
         dispatch(getWorkOrderListPage({ jsonBody, subPageMode }));
     }
@@ -122,14 +126,30 @@ const WorkOrderList = () => {
                     NoOfLots: jsonData.NumberOfLot
                 });
 
-                dispatch(goButtonForMaterialIssue_Master_Action({
-                    jsonBody,
-                    pageMode: mode.modeSTPsave,
-                    path: url.MATERIAL_ISSUE,
-                    ListData: list[0],
-                    goButtonCallByMode: true,
-                    btnId
-                }));
+
+
+                Actionhandler({
+                    action: goButtonForMaterialIssue_Master_Action, // The function you want to call
+                    params: {
+                        jsonBody,
+                        pageMode: mode.modeSTPsave,
+                        path: url.MATERIAL_ISSUE,
+                        ListData: list[0],
+                        goButtonCallByMode: true,
+                        btnId
+                    },
+                });
+
+
+
+                // dispatch(goButtonForMaterialIssue_Master_Action({
+                //     jsonBody,
+                //     pageMode: mode.modeSTPsave,
+                //     path: url.MATERIAL_ISSUE,
+                //     ListData: list[0],
+                //     goButtonCallByMode: true,
+                //     btnId
+                // }));
             }
         } catch (e) {
             console.error("Error:", e);

@@ -699,6 +699,7 @@ const Invoice = (props) => {
         dispatch(BreadcrumbShowCountlabel(`Count:${dataCount} currency_symbol ${commaSeparateAmount} weight ${(calcalateGrandTotal.sumOfWeightageTotal).toFixed(3)} kg`))
 
     }
+    
     useEffect(() => {
         const jsonBody = JSON.stringify({
             "FromDate": values.InvoiceDate,
@@ -754,7 +755,7 @@ const Invoice = (props) => {
     }));
 
     const SaveHandler = async (event) => {
-
+        
         event.preventDefault();
         const btnId = event.target.id;
 

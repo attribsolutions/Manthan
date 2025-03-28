@@ -18,6 +18,7 @@ import { updateWorkOrderListSuccess } from "../../../store/Production/WorkOrder/
 import { C_DatePicker } from "../../../CustomValidateForm";
 import * as _cfunc from "../../../components/Common/CommonFunction";
 import { Go_Button, PageLoadingSpinner } from "../../../components/Common/CommonButton";
+import useCheckStockEntry from "../../../components/Common/commonComponent/CheckStockEntry";
 
 const MaterialIssueList = () => {
 
@@ -41,6 +42,8 @@ const MaterialIssueList = () => {
             pageField: state.CommonPageFieldReducer.pageFieldList,
         })
     );
+
+    const { commonPartyDropSelect } = useSelector((state) => state.CommonPartyDropdownReducer);
 
     const { pageField, produtionMake, goBtnLoading } = reducers;
     const { fromdate, todate } = hederFilters;
@@ -67,6 +70,8 @@ const MaterialIssueList = () => {
         }
     }, []);
 
+    const { Actionhandler } = useCheckStockEntry(hederFilters.fromdate, commonPartyDropSelect);
+
     useEffect(() => {
         if (produtionMake.Status === true && produtionMake.StatusCode === 406) {
             history.push({
@@ -77,20 +82,24 @@ const MaterialIssueList = () => {
     }, [produtionMake]);
 
     const makeBtnFunc = (list = {}) => {
-
         const obj = { ...list[0], EstimatedQuantity: list[0].LotQuantity }
-        history.push({
-            pathname: url.PRODUCTION_MASTER,
-            editValue: obj,
-            pageMode: mode.modeSTPsave
+        Actionhandler({
+            callback: () => {
+                history.push({
+                    pathname: url.PRODUCTION_MASTER,
+                    editValue: obj,
+                    pageMode: mode.modeSTPsave,
+                });
+            },
         })
+
     };
 
     const goButtonHandler = (onload) => {
 
         const jsonBody = JSON.stringify({
-            FromDate: onload===true ? "" : fromdate,
-            ToDate:  onload===true  ? "" : todate,
+            FromDate: onload === true ? "" : fromdate,
+            ToDate: onload === true ? "" : todate,
         });
         dispatch(getMaterialIssueListPage(jsonBody));
     };

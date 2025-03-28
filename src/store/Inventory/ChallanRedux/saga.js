@@ -32,6 +32,7 @@ import {
   VDC_ITEM_DETAILS,
 } from "./actionType";
 import { CommonConsole, date_dmy_func, convertTimefunc } from "../../../components/Common/CommonFunction";
+import { makeGRN_Mode_1ActionSuccess } from "../GRNRedux/actions";
 
 
 function* save_Challan_GerFunc({ data }) {                   // Save Challan  genrator function
@@ -98,7 +99,7 @@ function* VDC_Item_Details_genFunc({ config }) {              //  GoButton Chall
 
     const response = yield call(VDC_Item_Details_API, config);
 
-    yield put(VDC_Item_Details_Success(response.Data));
+    yield put(makeGRN_Mode_1ActionSuccess(response));
   } catch (error) { yield put(IB_Invoice_Error_Action(error)) }
 }
 

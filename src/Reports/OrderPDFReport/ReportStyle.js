@@ -3,9 +3,10 @@ import cbm_logo from "../../assets/images/cbm_logo.png"
 
 import * as table from './TableData'
 import { toWords, numberWithCommas } from "../Report_common_function";
-import { CurrentTime, compareGSTINState, convertOnlyTimefunc, currentDate_dmy, date_dmy_func, loginUserIsFranchisesRole } from "../../components/Common/CommonFunction";
+import { CurrentTime, IsSweetAndSnacksCompany, compareGSTINState, convertOnlyTimefunc, currentDate_dmy, date_dmy_func, loginUserIsFranchisesRole } from "../../components/Common/CommonFunction";
 import { url } from "../../routes";
 let initial_y = 0
+const isSweetAndSnacksCompany = IsSweetAndSnacksCompany()
 
 
 export const pageBorder = (doc) => {
@@ -17,8 +18,15 @@ export const pageBorder = (doc) => {
 }
 
 export const pageHeder = (doc, data) => {
+    if (isSweetAndSnacksCompany) {
+        doc.addImage(cbm_logo, 'PNG', 33, 17, 80, 46, null, 'FAST')
+    } else {
 
-    doc.addImage(cbm_logo, 'PNG', 33, 1, 95, 80, null, 'FAST')
+        doc.addImage(cbm_logo, 'PNG', 33, 1, 95, 80, null, 'FAST')
+    }
+
+
+
     doc.addFont("Arial", 'Normal')
     doc.setFont('Arial')
     doc.setFontSize(18)
@@ -308,7 +316,7 @@ export const reportHeder3 = (doc, data) => {
 
 
     doc.line(408, 65, 408, 16);//vertical right 1
-    
+
     doc.setFont(undefined, 'bold')
     doc.text(`Order No: ${data.FullOrderNumber}`, 415, 25) //Invoice Id
 

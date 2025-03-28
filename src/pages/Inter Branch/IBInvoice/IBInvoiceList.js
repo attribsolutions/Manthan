@@ -58,10 +58,10 @@ const IBInvoiceList = () => {
         let newBtnPath = ''
 
 
-        if (subPageMode === url.CHALLAN_LIST) {
-            page_Id = pageId.CHALLAN_LIST;
-            masterPath = url.CHALLAN;
-            newBtnPath = url.CHALLAN;
+        if (subPageMode === url.IB_INVOICE_LIST) {
+            page_Id = pageId.IB_INVOICE_LIST;
+            masterPath = url.IB_INVOICE;
+            newBtnPath = url.IB_INVOICE;
             page_Mode = mode.modeSTPList
             makeBtnShow = true;
         }

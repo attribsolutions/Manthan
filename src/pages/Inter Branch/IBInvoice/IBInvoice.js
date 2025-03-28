@@ -7,7 +7,7 @@ import {
     Label,
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
-import { BreadcrumbShowCountlabel, GoButtonForChallanAddSuccess, VDC_Item, VDC_Item_Details, commonPageFieldSuccess, getpdfReportdata, makeGRN_Mode_1ActionSuccess, saveChallan_ChallanAdd, saveChallan_ChallanAddSuccess } from "../../../store/actions";
+import { BreadcrumbShowCountlabel, GetVender, GoButtonForChallanAddSuccess, VDC_Item, VDC_Item_Details, commonPageFieldSuccess, getpdfReportdata, makeGRN_Mode_1ActionSuccess, saveChallan_ChallanAdd, saveChallan_ChallanAddSuccess } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { commonPageField } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
@@ -39,14 +39,15 @@ import GlobalCustomTable from "../../../GlobalCustomTable";
 import SaveButtonDraggable from "../../../components/Common/saveButtonDraggable";
 import { alertMessages } from "../../../components/Common/CommonErrorMsg/alertMsg";
 import { CheckStockEntryForFirstTransaction, CheckStockEntryForFirstTransactionSuccess, CheckStockEntryforBackDatedTransaction, CheckStockEntryforBackDatedTransactionSuccess } from "../../../store/Inventory/StockEntryRedux/action";
+import { showToastAlert } from "../../../helpers/axios_Config";
 
 
 const PageDetailsFunc = (subPageMode) => {
     let pageID = null;
     let listPath = null;
-    if (subPageMode === url.CHALLAN) {
-        pageID = pageId.CHALLAN;
-        listPath = url.CHALLAN_LIST
+    if (subPageMode === url.IB_INVOICE) {
+        pageID = pageId.IB_INVOICE;
+        listPath = url.IB_INVOICE_LIST
     } else if (subPageMode === url.VDC_INVOICE) {
 
         pageID = pageId.VDC_INVOICE;
@@ -71,7 +72,8 @@ const IBInvoice = (props) => {
         ChallanDate: currentDate_ymd,
         Customer: "",
         VehicleNo: "",
-        VDCItem: ""
+        VDCItem: "",
+        Party: ""
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
@@ -100,11 +102,12 @@ const IBInvoice = (props) => {
         commonPartyDropSelect,
         StockEnteryForFirstYear,
         GRNitem,
-        VDCItemDetailsData,
+
         VDCItemData,
+        vender
     } = useSelector((state) => ({
+        vender: state.CommonAPI_Reducer.vender,
         VDCItemData: state.ChallanReducer.VDCItemData,
-        VDCItemDetailsData: state.ChallanReducer.VDCItemDetailsData,
         postMsg: state.ChallanReducer.postMsg,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
@@ -131,10 +134,17 @@ const IBInvoice = (props) => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(PageDetails.pageID))
         dispatch(GoButtonForChallanAddSuccess([]))
-        dispatch(makeGRN_Mode_1ActionSuccess({ Status: false }))
-        dispatch(saveChallan_ChallanAddSuccess({ Status: false }))
         dispatch(VDC_Item())
+        dispatch(GetVender())
+
+        return () => {
+            dispatch(saveChallan_ChallanAddSuccess({ Status: false }))
+            dispatch(makeGRN_Mode_1ActionSuccess({ Status: false }))
+        }
+
+
     }, [])
+
 
 
 
@@ -158,31 +168,36 @@ const IBInvoice = (props) => {
 
     useEffect(() => {
         if (GRNitem.Status === true && GRNitem.StatusCode === 200) {
-
+            debugger
             const { DemandItemDetails } = GRNitem.Data
-            setCustomerID({ value: GRNitem.Demand_Reference[0].CustomerID, label: GRNitem.Demand_Reference[0].CustomerName })
-            setDemandID({ Demand_ID: Number(GRNitem.Data.DemandIDs) })
+
+            if (subPageMode === url.IB_INVOICE) {
+
+                setCustomerID({ value: GRNitem?.Demand_Reference[0]?.CustomerID, label: GRNitem?.Demand_Reference[0]?.CustomerName })
+                setDemandID({ Demand_ID: Number(GRNitem?.Data.DemandIDs) })
+
+            }
 
             const Updated_DemandDetails = DemandItemDetails.map((inx_1, key_1) => {
 
-                const isUnitIDPresent = inx_1.UnitDetails.find(findEle => findEle.UnitID === inx_1.Unit);
-                const isMCunitID = inx_1.UnitDetails.find(findEle => findEle.DeletedMCUnitsUnitID === inx_1.DeletedMCUnitsUnitID);
+                const isUnitIDPresent = inx_1?.UnitDetails?.find(findEle => findEle.UnitID === inx_1.Unit);
+                const isMCunitID = inx_1?.UnitDetails?.find(findEle => findEle.DeletedMCUnitsUnitID === inx_1.DeletedMCUnitsUnitID);
                 const defaultunit = isUnitIDPresent !== undefined ? isUnitIDPresent : isMCunitID;
-
+                if (!defaultunit) {
+                    showToastAlert(`${inx_1.ItemName} this Item Not getting defalut Unit id ,UnitId is not present in UnitDetails `)
+                }
                 let totalStockQty = 0;
-                let remainingOrderQty = parseFloat(inx_1.Quantity); // Convert to a number
                 let totalAmount = 0;
                 inx_1.StockInValid = false;
                 inx_1.StockInvalidMsg = '';
-
 
                 inx_1.default_UnitDropvalue = {//initialize
                     value: inx_1.Unit,
                     label: inx_1.UnitName,
                     ConversionUnit: '1',
                     Unitlabel: inx_1.UnitName,
-                    BaseUnitQuantity: defaultunit.BaseUnitQuantity,
-                    BaseUnitQuantityNoUnit: defaultunit.BaseUnitQuantityNoUnit,
+                    BaseUnitQuantity: defaultunit?.BaseUnitQuantity,
+                    BaseUnitQuantityNoUnit: defaultunit?.BaseUnitQuantityNoUnit,
                 };
 
                 inx_1.InpStockQtyTotal = `${Number(inx_1.Quantity) * Number(inx_1.ConversionUnit)}`;
@@ -190,18 +205,20 @@ const IBInvoice = (props) => {
                 inx_1.StockDetails = inx_1.StockDetails.map((inx_2, key_2) => {
                     inx_2.initialRate = inx_2.Rate;
 
-                    const _hasRate = ((defaultunit.BaseUnitQuantity / defaultunit.BaseUnitQuantityNoUnit) * inx_2.initialRate);
-                    const _hasActualQuantity = (inx_2.BaseUnitQuantity / defaultunit.BaseUnitQuantity);
+                    const _hasRate = ((defaultunit?.BaseUnitQuantity / defaultunit?.BaseUnitQuantityNoUnit) * inx_2.initialRate);
+                    const _hasActualQuantity = (inx_2.BaseUnitQuantity / defaultunit?.BaseUnitQuantity);
 
 
                     inx_2.Rate = _cfunc.roundToDecimalPlaces(_hasRate, 2);//max 2 decimal  //initialize
                     inx_2.ActualQuantity = _cfunc.roundToDecimalPlaces(_hasActualQuantity, 3);//max 3 decimal  //initialize
 
+
+
+
                     const stockQty = parseFloat(inx_2.ActualQuantity); // Convert to a number
                     totalStockQty += stockQty
 
                     stockDistributeFunc(inx_1)
-
 
                     inx_2.id = key_2;
                     return inx_2;
@@ -226,8 +243,23 @@ const IBInvoice = (props) => {
             totalAmountCalcuationFunc(Updated_DemandDetails)
             setTableData(Updated_DemandDetails)
 
+        } else {
+            if (GRNitem.Message) {
+                customAlert({
+                    Type: 4,
+                    Message: GRNitem.Message,
+                })
+
+            }
         }
     }, [GRNitem])
+
+    const venderOptions = vender.map((i) => ({
+        value: i.id,
+        label: i.Name,
+    }));
+
+
 
     useEffect(async () => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
@@ -246,7 +278,7 @@ const IBInvoice = (props) => {
                     Message: postMsg.Message,
                 })
                 if (isPermission) {
-                    history.push({ pathname: url.CHALLAN_LIST })
+                    history.push({ pathname: url.IB_INVOICE_LIST })
                 }
             }
         }
@@ -480,6 +512,7 @@ const IBInvoice = (props) => {
             a.values.VDCItem = e;
             return a
         })
+        setTableData([])
     }
 
     const goButtonHandler = () => {
@@ -495,8 +528,18 @@ const IBInvoice = (props) => {
             ChallanDate: values.ChallanDate,
             ItemID: values.VDCItem.value,
             Party: commonPartyDropSelect.value,
+            Customer: values.Customer.value
         });
         dispatch(VDC_Item_Details({ filter }));
+    }
+
+    function venderOnchange(e) {
+        setState((i) => {
+            const a = { ...i }
+            a.values.Customer = e;
+            return a
+        })
+
     }
 
 
@@ -505,7 +548,6 @@ const IBInvoice = (props) => {
         let grand_total = 0;
 
         tableData.forEach(tableIndex => {
-
             tableIndex.StockDetails.forEach(stockIndex => {
                 if ((Number(stockIndex.Qty) > 0)) {
 
@@ -587,7 +629,7 @@ const IBInvoice = (props) => {
                         <Col className="px-2 mb-1 c_card_filter header text-black" sm={12}>
 
                             <div className="row" >
-                                <Col sm="4" className="">
+                                <Col sm="3" className="">
                                     <FormGroup className="mb- row mt-2 " >
                                         <Label className="col-sm-8 p-2" style={{ width: "130px" }}>IB Invoice Date</Label>
                                         <Col sm="7">
@@ -606,8 +648,25 @@ const IBInvoice = (props) => {
                                 </Col>
 
 
+                                {subPageMode === url.VDC_INVOICE && <Col sm="3">
+                                    <FormGroup className="mb- row mt-2 " >
+                                        <Label className="col-md-4 p-2"
+                                            style={{ width: "115px" }}>Customer</Label>
+                                        <Col md="7">
+                                            <Select
+                                                value={values.Customer}
+                                                classNamePrefix="select2-Customer"
+                                                options={venderOptions}
+                                                onChange={venderOnchange}
+                                                styles={{
+                                                    menu: provided => ({ ...provided, zIndex: 3 })
+                                                }}
+                                            />
+                                        </Col>
+                                    </FormGroup>
+                                </Col >}
 
-                                {subPageMode === url.VDC_INVOICE && <Col sm="4" className="">
+                                {subPageMode === url.VDC_INVOICE && <Col sm="3" className="">
                                     <FormGroup className="mb- row mt-2" >
                                         <Label className="col-sm-6 p-2"
                                             style={{ width: "90px" }}>{"VDC Item"}</Label>
@@ -627,8 +686,10 @@ const IBInvoice = (props) => {
                                         </Col>
                                     </FormGroup>
                                 </Col>}
-                                {subPageMode === url.VDC_INVOICE && <Col sm="3" ></Col>}
-                                {subPageMode === url.VDC_INVOICE && <Col sm="1" className="mt-2 ">
+
+
+                                {subPageMode === url.VDC_INVOICE && <Col sm="1" ></Col>}
+                                {subPageMode === url.VDC_INVOICE && <Col sm="2" className="mt-2 ">
                                     <Go_Button
                                         onClick={goButtonHandler}
                                     />

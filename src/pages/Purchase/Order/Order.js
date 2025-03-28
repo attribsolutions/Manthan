@@ -90,6 +90,7 @@ const Order = (props) => {
     const history = useHistory();
     const IsFranchisesRole = _cfunc.loginUserIsFranchisesRole()
     const isSweetAndSnacksCompany = _cfunc.IsSweetAndSnacksCompany()
+    const isVisibleRateDrop = _cfunc.checkRateDropVisibility()
 
     const advanceAmountRef = useRef(0);
     const descriptionRef = useRef("");
@@ -515,6 +516,7 @@ const Order = (props) => {
                         FromDate: orderdate,
                         Customer: supplierSelect.value,
                         Party: commonPartyDropSelect.value,
+                        IsRateWise: isVisibleRateDrop ? 2 : 1
                     });
                     dispatch(_act.GoButtonForinvoiceAdd({
                         jsonBody,

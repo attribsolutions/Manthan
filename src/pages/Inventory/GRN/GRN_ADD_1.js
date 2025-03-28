@@ -53,6 +53,10 @@ function initialState(history) {
         page_Id = pageId.IB_GRN;
         listPath = url.IB_INVOICE_FOR_GRN;
     }
+    else if ((sub_Mode === url.GRN_LIST_3) && _cfunc.IsSweetAndSnacksCompany()) {
+        page_Id = pageId.GRN_ADD_1;
+        listPath = url.GRN_LIST_3;
+    }
     return { page_Id, listPath, sub_Mode }
 };
 
@@ -112,7 +116,7 @@ const GRN_ADD_1 = (props) => {
 
     useEffect(() => {
 
-
+        debugger
         dispatch(_act.commonPageFieldSuccess(null));
         dispatch(_act.commonPageField(page_id));
         const jsonBody = JSON.stringify({
@@ -257,6 +261,8 @@ const GRN_ADD_1 = (props) => {
             grnDetails["InvoiceDate"] = _cfunc.date_ymd_func(grnDetails.InvoiceDate)
             grnDetails["DemandDate"] = _cfunc.date_ymd_func(grnDetails.DemandDate)
 
+
+
             setGrnDetail(grnDetails)
             setInvoiceNo(grnDetails.GRNReferences[0]?.Invoice_NO)
 
@@ -344,14 +350,14 @@ const GRN_ADD_1 = (props) => {
             if (hasEditVal) {
                 setEditData(hasEditVal);
                 const { GRNItems = [], GRNReferences = [], InvoiceNumber } = hasEditVal;
-
+                debugger
                 let ChallanNo1 = ''
-
+                GRNReferences[0]["Full_OrderNumber"] = GRNReferences[0]?.Order?.FullOrderNumber
                 GRNReferences.forEach(ele => {
                     ChallanNo1 = ChallanNo1.concat(`${ele.ChallanNo},`)
                 });
                 ChallanNo1 = ChallanNo1.replace(/,*$/, '');
-
+                setOpenPOdata(GRNReferences)
                 setInvoiceNo(InvoiceNumber)
                 setGrnDetail(ChallanNo1);
                 setgrnItemList(GRNItems)
@@ -634,7 +640,7 @@ const GRN_ADD_1 = (props) => {
             dataField: "",
             hidden: openPOdata[0]?.GRN_From === url.IB_INVOICE_FOR_GRN,
             formatter: (value, row, k) => {
-                debugger
+
                 return (
                     <C_DatePicker
                         id={`ItemExpiryDate${k}`}
@@ -943,7 +949,7 @@ const GRN_ADD_1 = (props) => {
                 "PriceList": grnDetail?.PriceList_id  // Price list ID 0 Hard code    
             }))
 
-            debugger
+
             if (subPageMode === url.ACCOUNTING_GRN) {
                 setRatePostJsonBody(RateJsonBody);
             }
