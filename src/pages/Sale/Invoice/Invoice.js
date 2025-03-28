@@ -505,7 +505,7 @@ const Invoice = (props) => {
                                 <th>Stock </th>
                                 <th>Quantity</th>
                                 <th>Basic Rate</th>
-                                <th>MRP</th>
+                                {!isSweetsAndSnacksCompany && <th>MRP</th>}
                             </tr>
                         </thead>
                         <tbody>
@@ -532,7 +532,7 @@ const Invoice = (props) => {
                                     <td data-label='Basic Rate' style={{ textAlign: "right" }}>
                                         <span id={`stockItemRate-${index1.id}-${index2.id}`}>{_cfunc.amountCommaSeparateFunc(index2.Rate)}</span>
                                     </td>
-                                    <td data-label='MRP' style={{ textAlign: "right" }}>{_cfunc.amountCommaSeparateFunc(_cfunc.roundToDecimalPlaces(index2.MRP, 2))}</td>
+                                    {!isSweetsAndSnacksCompany && <td data-label='MRP' style={{ textAlign: "right" }}>{_cfunc.amountCommaSeparateFunc(_cfunc.roundToDecimalPlaces(index2.MRP, 2))}</td>}
                                 </tr>
                             ))}
                         </tbody>
@@ -699,7 +699,7 @@ const Invoice = (props) => {
         dispatch(BreadcrumbShowCountlabel(`Count:${dataCount} currency_symbol ${commaSeparateAmount} weight ${(calcalateGrandTotal.sumOfWeightageTotal).toFixed(3)} kg`))
 
     }
-    
+
     useEffect(() => {
         const jsonBody = JSON.stringify({
             "FromDate": values.InvoiceDate,
@@ -755,7 +755,7 @@ const Invoice = (props) => {
     }));
 
     const SaveHandler = async (event) => {
-        
+
         event.preventDefault();
         const btnId = event.target.id;
 

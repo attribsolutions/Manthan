@@ -80,9 +80,13 @@ const StockAdjustment = (props) => {
         if (subPageMode === url.STOCK_ADJUSTMENT) {
             page_Id = pageId.STOCK_ADJUSTMENT;
         }
-        else {
+        else if (subPageMode === url.STOCK_ADJUSTMENT_MODE_2) {
             page_Id = pageId.STOCK_ADJUSTMENT_MODE_2;
+        } else if (subPageMode === url.RATE_ADJUSTMENT) {
+            page_Id = pageId.RATE_ADJUSTMENT;
         }
+
+
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(page_Id));
 
@@ -388,7 +392,7 @@ const StockAdjustment = (props) => {
                                 <tr>
                                     <th>BatchCode</th>
                                     <th>Stock </th>
-                                    <th>Quantity</th>
+                                    <th>{(subPageMode === url.RATE_ADJUSTMENT) ? `Rate` : `Quantity`}</th>
                                     <th>MRP</th>
                                     <th></th>
                                 </tr>
@@ -400,7 +404,8 @@ const StockAdjustment = (props) => {
                                         <td data-label="Stock Quantity" style={{ textAlign: "right" }} >
                                             <samp id={`ActualQuantity-${index1.id}-${index2.id}`}>{index2.ActualQuantity}</samp>
                                         </td>
-                                        <td data-label='Quantity'>
+                                        <td data-label={(subPageMode === url.RATE_ADJUSTMENT) ? `Rate` : `Quantity`}>
+
                                             <Input
                                                 type="text"
                                                 disabled={pageMode === 'edit' ? true : false}

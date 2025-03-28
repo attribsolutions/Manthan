@@ -672,7 +672,7 @@ const userRoutes = [
 
 	{ path: path.VOUCHER_REDEMPTION_CLAIM_, component: VoucherRedemptionClaim },
 
-
+	{ path: path.RATE_ADJUSTMENT, component: StockAdjustment },
 
 
 	//******************************* Sweet Pos ************************************//

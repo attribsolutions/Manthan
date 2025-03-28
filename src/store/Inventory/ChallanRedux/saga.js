@@ -85,10 +85,10 @@ function* gobutton_challan_genFunc({ data }) {              //  GoButton Challan
 }
 
 
-function* VDC_Item_genFunc() {              //  GoButton Challan Addpage genrator function
+function* VDC_Item_genFunc({ config }) {              //  GoButton Challan Addpage genrator function
   try {
 
-    const response = yield call(VDC_Item_API);
+    const response = yield call(VDC_Item_API, config);
 
     yield put(VDC_Item_Success(response.Data));
   } catch (error) { IB_Invoice_Error_Action(error) }
