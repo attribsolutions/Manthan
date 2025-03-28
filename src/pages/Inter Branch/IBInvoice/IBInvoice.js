@@ -127,7 +127,7 @@ const IBInvoice = (props) => {
 
     useEffect(() => {
         const jsonBody = JSON.stringify({
-            Party: commonPartyDropSelect.value,
+            Party: _cfunc.loginSelectedPartyID(),
         })
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(PageDetails.pageID))
