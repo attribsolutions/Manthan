@@ -45,9 +45,9 @@ import { showToastAlert } from "../../../helpers/axios_Config";
 const PageDetailsFunc = (subPageMode) => {
     let pageID = null;
     let listPath = null;
-    if (subPageMode === url.CHALLAN) {
-        pageID = pageId.CHALLAN;
-        listPath = url.CHALLAN_LIST
+    if (subPageMode === url.IB_INVOICE) {
+        pageID = pageId.IB_INVOICE;
+        listPath = url.IB_INVOICE_LIST
     } else if (subPageMode === url.VDC_INVOICE) {
 
         pageID = pageId.VDC_INVOICE;
@@ -134,12 +134,17 @@ const IBInvoice = (props) => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(PageDetails.pageID))
         dispatch(GoButtonForChallanAddSuccess([]))
-        dispatch(makeGRN_Mode_1ActionSuccess({ Status: false }))
-        dispatch(saveChallan_ChallanAddSuccess({ Status: false }))
         dispatch(VDC_Item())
         dispatch(GetVender())
 
+        return () => {
+            dispatch(saveChallan_ChallanAddSuccess({ Status: false }))
+            dispatch(makeGRN_Mode_1ActionSuccess({ Status: false }))
+        }
+
+
     }, [])
+
 
 
 
@@ -273,7 +278,7 @@ const IBInvoice = (props) => {
                     Message: postMsg.Message,
                 })
                 if (isPermission) {
-                    history.push({ pathname: url.CHALLAN_LIST })
+                    history.push({ pathname: url.IB_INVOICE_LIST })
                 }
             }
         }

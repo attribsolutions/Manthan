@@ -243,8 +243,8 @@ export const GRN_For_Accounting_GRN = url.ACCOUNTING_GRN_LIST;
 export const Stock_Entry_List = url.STOCK_ENTRY;
 export const Stock_Entry = url.STOCK_ENTRY_LIST;
 
-export const ChallanList = url.CHALLAN;
-export const Challan = url.CHALLAN_LIST;
+export const ChallanList = url.IB_INVOICE;
+export const Challan = url.IB_INVOICE_LIST;
 
 export const StockAdjustment = url.STOCK_ADJUSTMENT
 

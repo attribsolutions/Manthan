@@ -459,8 +459,8 @@ const userRoutes = [
 	{ path: path.VOUCHER_LIST, component: VoucherList },//not party wise
 
 	//******************************* Inventory Module ************************************//
-	{ path: path.CHALLAN_LIST, component: IBInvoiceList },
-	{ path: path.CHALLAN, component: IBInvoice },
+	{ path: path.IB_INVOICE_LIST, component: IBInvoiceList },
+	{ path: path.IB_INVOICE, component: IBInvoice },
 
 	{ path: path.GRN_LIST_1, component: GRNList, isPartyWisePage: true },
 	{ path: path.GRN_ADD_1, component: GRN_ADD_1, isPartyWisePage: true },
@@ -563,13 +563,13 @@ const userRoutes = [
 	{ path: path.INWARD_LIST, component: InwardList },
 	{ path: path.IB_INWARD_STP, component: InvoiceList },
 
-	{ path: path.IB_INVOICE_LIST, component: InvoiceList },
+	// { path: path.IB_INVOICE_LIST, component: InvoiceList },
 	{ path: path.IB_GRN_LIST, component: GRNList },
 	{ path: path.IB_INVOICE_FOR_GRN, component: InvoiceList },
 
 
 
-	{ path: path.IB_INVOICE, component: Invoice },
+	// { path: path.IB_INVOICE, component: Invoice },
 	{ path: path.IB_INVOICE_STP, component: OrderList },
 
 	{ path: path.VDC_INVOICE_LIST, component: IBInvoiceList },

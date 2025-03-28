@@ -224,8 +224,8 @@ export const GRN_STP_3 = "/GRN_STP_3"
 export const GRN_LIST_3 = "/GRN_LIST_3"
 export const GRN_ADD_3 = "/GRN_ADD_3"
 
-export const CHALLAN_LIST = "/ChallanList"
-export const CHALLAN = "/Challan"
+export const IB_INVOICE_LIST = "/ChallanList"
+export const IB_INVOICE = "/Challan"
 
 export const STOCK_ENTRY = "/Stock_Entry"
 
@@ -329,8 +329,7 @@ export const INWARD = "/Inward"
 export const INWARD_LIST = "/InwardList"
 export const IB_INWARD_STP = "/IB_Inward_STP"
 
-export const IB_INVOICE = "/IB_Invoice" // IB Invoice
-export const IB_INVOICE_LIST = "/IB_Invoice_List" // IB Invoice List
+
 export const IB_GRN_LIST = "/IB_GRN_LIST" // IB GRN List
 
 export const IB_INVOICE_FOR_GRN = "/IB_INVOICE_FOR_GRN" // IB GRN List

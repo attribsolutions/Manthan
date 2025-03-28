@@ -295,8 +295,7 @@ export const IB_INVOICE_STP = 132
 export const VDC_INVOICE = 333
 export const VDC_INVOICE_LIST = 334  
 
-export const CHALLAN = 130
-export const CHALLAN_LIST = 131
+
 // export const IB_INVOICE_STP = 132
 
 //******************************* Sales ************************************//

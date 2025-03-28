@@ -26,6 +26,7 @@ import { getOrdersMakeInvoiceDataAction, getOrdersMakeInvoiceDataActionSuccess }
 import { allLabelWithBlank } from "../../../components/Common/CommonErrorMsg/HarderCodeData";
 import { sideBarPageFiltersInfoAction } from "../../../store/Utilites/PartyDrodown/action";
 import { getCountryList_Action } from "../../../store/Administrator/CountryRedux/action";
+import useCheckStockEntry from "../../../components/Common/commonComponent/CheckStockEntry";
 
 
 
@@ -59,9 +60,9 @@ const OrderList = () => {
     const [state, setState] = useState(() => initialFiledFunc(fileds))
     const [subPageMode] = useState(initialSubPageMode);
     const [pageMode, setPageMode] = useState(mode.defaultList);
-    const [FrenchiesesCustomerMasterAccess, setFrenchiesesCustomerMasterAccess] = useState(false);
+
     const [extraSelect, setExtraSelect] = useState(false);
-    const [dropDownMasterIsOpen, setDropDownMasterIsOpen] = useState(null);
+
 
 
     const orderList4_or_app_orderList = ((subPageMode === url.ORDER_LIST_4) || (subPageMode === url.APP_ORDER_LIST))
@@ -176,6 +177,8 @@ const OrderList = () => {
         }
 
     }, [commonPartyDropSelect]);
+
+    const { Actionhandler } = useCheckStockEntry(values.FromDate, commonPartyDropSelect);
 
     // sideBar Page Filters Information
     useEffect(() => {
@@ -308,26 +311,6 @@ const OrderList = () => {
             localStorage.setItem("roleId", JSON.stringify(originalStorageDetails));
         }
     }, []);
-
-    // check bulk-invoice access useEffect
-    useEffect(() => {//only of app order list then check bulk-invoice Access
-
-        if (subPageMode === url.ORDER_LIST_4) {
-            userAccess.find((index) => {
-                if (index.id === pageId.FRANCHISE_CUSTOMER_MASTER) {
-                    return setFrenchiesesCustomerMasterAccess(true)
-                }
-            });
-        };
-    }, [userAccess]);
-
-
-
-
-
-
-
-
 
 
 
@@ -514,16 +497,18 @@ const OrderList = () => {
             }));
         }
         else if (orderList4_or_app_orderList) {
+            Actionhandler({
+                action: _act.GoButtonForinvoiceAdd, // The function you want to call
+                params: {
+                    jsonBody,
+                    btnId,
+                    customer,
+                    subPageMode: _cfunc.loginUserIsFranchisesRole() ? url.FRANCHAISE_INVOICE : url.INVOICE_1,
+                    path: _cfunc.loginUserIsFranchisesRole() ? url.FRANCHAISE_INVOICE : url.INVOICE_1,
+                    pageMode: mode.defaultsave,
 
-            dispatch(_act.GoButtonForinvoiceAdd({
-                jsonBody,
-                btnId,
-                customer,
-                subPageMode: _cfunc.loginUserIsFranchisesRole() ? url.FRANCHAISE_INVOICE : url.INVOICE_1,
-                path: _cfunc.loginUserIsFranchisesRole() ? url.FRANCHAISE_INVOICE : url.INVOICE_1,
-                pageMode: mode.defaultsave,
-
-            }));
+                },
+            });
         }
         else {
 
@@ -563,7 +548,7 @@ const OrderList = () => {
                         isMode = _cfunc.IsSweetAndSnacksCompany() ? 1 : 3
                         path = _cfunc.IsSweetAndSnacksCompany() ? url.GRN_ADD_1 : url.GRN_ADD_3
                     } else if (subPageMode === url.IB_ORDER_SO_LIST) {
-                        path = url.CHALLAN
+                        path = url.IB_INVOICE
                     }
 
                     const jsonBody = JSON.stringify({
@@ -571,10 +556,18 @@ const OrderList = () => {
                         Mode: subPageMode === url.IB_ORDER_SO_LIST ? undefined : isMode,
                         DemandDate: subPageMode === url.IB_ORDER_SO_LIST ? list[0].OrderDate : undefined,
                         Party: subPageMode === url.IB_ORDER_SO_LIST ? _cfunc.loginPartyID() : undefined
-
                     })
 
-                    dispatch(_act.makeGRN_Mode_1Action({ jsonBody, subPageMode, pageMode, path: path, grnRef, InvoiceDate: obj.dashboardOrderDate, btnId: `btn-makeBtn-${obj.id}` }))
+                    if (subPageMode === url.ORDER_LIST_1) {
+                        Actionhandler({
+                            action: _act.makeGRN_Mode_1Action, // The function you want to call
+                            params: { jsonBody, subPageMode, pageMode, path: path, grnRef, InvoiceDate: obj.dashboardOrderDate, btnId: `btn-makeBtn-${obj.id}` },
+                        });
+                    } else {
+                        dispatch(_act.makeGRN_Mode_1Action({ jsonBody, subPageMode, pageMode, path: path, grnRef, InvoiceDate: obj.dashboardOrderDate, btnId: `btn-makeBtn-${obj.id}` }))
+
+                    }
+
 
                 } else {
                     alert("Please Select Order1")
@@ -827,6 +820,8 @@ const OrderList = () => {
         let jsonBody = {
             OrderIDs: idString, "Customer": null, "Party": _cfunc.loginSelectedPartyID(),
         }
+
+
         dispatch(getOrdersMakeInvoiceDataAction({ jsonBody }))
     }
 
