@@ -110,24 +110,13 @@ const Header = props => {
           <div className="modal-content">
             <div className="modal-body">
               <p style={{ fontSize: "15px", color: "black" }}>
+                <h5> All FoodERP users</h5>
 
-
-
-
-
-
-
-                <h5> FoodERP 2.0 सिस्टम वापरकर्त्यांसाठी सूचना :</h5>
-
-                FoodERP 2.0 प्रणाली गुरुवार, 16 मे 2024 रोजी दुपारी 1:00 ते 2:00 PM (IST) या वेळेत अनुपलब्ध असेल. यावेळी, सिस्टमची कार्यक्षमता सुनिश्चित करण्यासाठी आवश्यक देखभाल केली जाईल. यामुळे होणाऱ्या कोणत्याही गैरसोयीबद्दल आम्ही दिलगीर आहोत.
-                आपल्या सहकार्यासाठी धन्यवाद.<br />
-                टीम चितळे बंधू<br /><br />
-
-                <h5> Attention FoodERP 2.0 System Users </h5>
-                The FoodERP System will be temporarily unavailable on Thursday, 16th May 2024, from 1:00 PM to 2:00 PM (IST).<br /><br />
-                During this time, essential maintenance will be carried out to ensure performance of the system. We apologise for any inconvenience this may cause and appreciate your understanding as we work to improve our services.
-                Thank you for your cooperation.<br />
-                Team Chitale Bandhu
+                Following are the changes in FoodERP in view of commencement of new financial year (2025-26) on 1st April 2025.<br /><br />
+                1 - On 31st March 2025 after completion of all work or if updating stock on 1st April 2025 select date 31st March 2025 to update closing stock. (Billing will not be possible on 1st April 2025 without stock update)<br /><br />
+                2 - After the stock update dated 31st March 2025 no old transactions can be changed.<br /><br />
+                2 - After the stock update dated 31st March 20245  old transactions cannot be changed.<br /><br />
+                3 - All transaction document numbers will start from 001. (Eg Bill Number, Credit Note Number…. )<br /><br />
               </p>
             </div>
 
@@ -154,7 +143,7 @@ const Header = props => {
                   <img src={logoSvg} alt="" height="35" style={{ height: isSweetAndSnacksCompany ? "46" : "56px", borderRadius: "8px" }} />
                 </span>
                 <span className="logo-lg">
-                  <img src={logoSvg} alt="" height="35" style={{ height: IsSweetAndSnacksCompany ? "46" : "56px", borderRadius: "8px" }} /> <span className="logo-txt">FoodERP 2.0</span>
+                  <img src={logoSvg} alt="" height="35" style={{ height: isSweetAndSnacksCompany ? "46" : "56px", borderRadius: "8px" }} /> <span className="logo-txt">FoodERP 2.0</span>
                 </span>
               </Link>
             </div>
