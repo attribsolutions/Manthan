@@ -573,16 +573,16 @@ const IBInvoice = (props) => {
         }
         else {
             const jsonBody = JSON.stringify({
-                ChallansReferences: [{ Demands: Demand_ID.Demand_ID }],
+                ChallansReferences: (subPageMode === url.VDC_INVOICE) ? [] : [{ Demands: Demand_ID.Demand_ID }],
                 Demand_ID: Demand_ID.Demand_ID,
                 ChallanDate: values.ChallanDate,
                 Party: _cfunc.loginSelectedPartyID(),
-                GrandTotal: (grand_total).toFixed(2),
+                GrandTotal: _cfunc.getFixedNumber(grand_total, 2),
                 Customer: customerID.value,
                 CreatedBy: _cfunc.loginUserID(),
                 UpdatedBy: _cfunc.loginUserID(),
                 RoundOffAmount: Math.round(grand_total).toFixed(2),
-
+                IsVDCChallan: (subPageMode === url.VDC_INVOICE) ? 1 : 0,
                 ChallanItems: itemArr,
 
             });

@@ -224,6 +224,7 @@ const InvoiceList = () => {
     useEffect(() => {    // Vehicle Update against Invoice Id
         if (sendToScmMsg.Status === true && sendToScmMsg.StatusCode === 200) {
             dispatch(InvoiceSendToScmSuccess({ Status: false }));
+            goButtonHandler("event")
             customAlert({
                 Type: 1,
                 Message: JSON.stringify(sendToScmMsg.Message),

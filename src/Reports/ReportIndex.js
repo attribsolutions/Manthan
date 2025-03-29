@@ -16,7 +16,7 @@ import ordeItemSupplierReport from "./OrderItemSupplier/OrderItemSupplier/Page";
 import StockEntryReport from "./StockEntry/Page";
 import OrderThermalPrintReport from "../pages/SweetPOS/Reports/OrderThermalPrint/Page";
 import voucherRedemptionClaimReport from "./VoucherRedemptionClaim/VoucherRedemptionClaimPDF";
-import PeriodicGRNReport from "./PeriodicGRNReport/PeriodicGRNReport";
+import PeriodicGRNReport from "./PeriodicGRNReport/PDFReport/Page";
 
 export const FrenchiesesOrder = "FrenchiesesOrder"
 export const order1 = "order1"
@@ -102,6 +102,7 @@ const generateReport = (resp) => {
             voucherRedemptionClaimReport(resp)
             break;
         case PeriodicGRN:
+
             PeriodicGRNReport(resp.Data)
             break;
         default:

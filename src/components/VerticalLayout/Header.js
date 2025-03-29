@@ -115,7 +115,7 @@ const Header = props => {
                 Following are the changes in FoodERP in view of commencement of new financial year (2025-26) on 1st April 2025.<br /><br />
                 1 - On 31st March 2025 after completion of all work or if updating stock on 1st April 2025 select date 31st March 2025 to update closing stock. (Billing will not be possible on 1st April 2025 without stock update)<br /><br />
                 2 - After the stock update dated 31st March 2025 no old transactions can be changed.<br /><br />
-                2 - After the stock update dated 31st March 20245  old transactions cannot be changed.<br /><br />
+                2 - After the stock update dated 31st March 2025  old transactions cannot be changed.<br /><br />
                 3 - All transaction document numbers will start from 001. (Eg Bill Number, Credit Note Number…. )<br /><br />
               </p>
             </div>

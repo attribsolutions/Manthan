@@ -146,7 +146,11 @@ function* InvoiceListGenFunc({ config }) {
       i["PartyTypeID"] = PartyTypeID
 
       if (isSweetAndSnacksCompany) {
-        i["isSend"] = true
+        if (i.IsSendToFTPSAP) {
+          i["isSend"] = false
+        } else {
+          i["isSend"] = true
+        }
       }
 
       //tranzaction date is only for fiterand page field but UI show transactionDateLabel
@@ -298,7 +302,7 @@ function invoice_GoButton_dataConversion_Func(response, customer = '') {
     const isUnitIDPresent = index1.UnitDetails.find(findEle => findEle.UnitID === index1.Unit);
     const isMCunitID = index1.UnitDetails.find(findEle => findEle.DeletedMCUnitsUnitID === index1.DeletedMCUnitsUnitID);
     const defaultunit = isUnitIDPresent !== undefined ? isUnitIDPresent : isMCunitID;
-
+    debugger
     const { IsTCSParty, ISCustomerPAN } = customer;
 
     index1.Quantity = roundToDecimalPlaces(index1.Quantity, 3);  //initialize // Round to 3 decimal places

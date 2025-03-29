@@ -135,7 +135,7 @@ const IBInvoiceList = () => {
                 jsonBody,
                 pageMode: mode.modeSTPsave,
                 grnRef,
-                path: url.IB_GRN,
+                path: url.GRN_ADD_1,
                 challanNo
             },
         })
@@ -147,6 +147,7 @@ const IBInvoiceList = () => {
             ToDate: todate,
             Party: loginPartyID(),
             Customer: venderSelect === "" ? '' : venderSelect.value,
+            IsVDCChallan: (subPageMode === url.VDC_INVOICE_LIST) ? 1 : 2
         });
         dispatch(challanList_ForListPage(jsonBody));
     }

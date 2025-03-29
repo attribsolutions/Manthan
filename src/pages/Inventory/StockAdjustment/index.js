@@ -333,6 +333,7 @@ const StockAdjustment = (props) => {
                                 classNamePrefix="select2-selection"
                                 defaultValue={index1.defaultUnitSelect}
                                 options={index1.unitDetailsOptions}
+                                isDisabled={(subPageMode === url.RATE_ADJUSTMENT)}
                                 onChange={(event) => {
 
                                     stockQtyUnit_SelectOnchange(event, index1, tableList);
@@ -382,7 +383,7 @@ const StockAdjustment = (props) => {
             formatExtraData: { tableList: TableArr },
             formatter: (cellContent, index1, keys_, { tableList = [] }) => {
                 if (index1.GroupRow || index1.SubGroupRow) { return }
-                
+
                 return <>
                     <div className="table-responsive">
                         <table className="custom-table ">
@@ -391,8 +392,8 @@ const StockAdjustment = (props) => {
                                     <th>BatchCode</th>
                                     <th>Stock </th>
                                     {(subPageMode === url.RATE_ADJUSTMENT) ? <th>Rate</th> : <th>Quantity</th>}
-                                    <th>MRP</th>
-                                    <th></th>
+                                    {!(subPageMode === url.RATE_ADJUSTMENT) && <th>MRP</th>}
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -432,7 +433,7 @@ const StockAdjustment = (props) => {
                                                     }}
                                                 />}
                                         </td>
-                                        <td data-label="MRP">{index2.MRP}</td>
+                                        {!(subPageMode === url.RATE_ADJUSTMENT) && <td data-label="MRP">{index2.MRP}</td>}
                                         < td >
                                             <span className="d-flex justify-content-center align-items-center">
                                                 <Button
@@ -597,7 +598,7 @@ const StockAdjustment = (props) => {
                                 </Col>
                                 <Col sm={1} className="mt-3" style={{}}>
                                     {
-                                        < Button type="button" color="btn btn-outline-primary border-1 font-size-11 text-center mt-1"
+                                        < Button type="button" color="btn btn-outline-primary border-1 font-size-11 text-center mt-1 p-2"
                                             onClick={(e,) => ItemAddButtonHandler(e)}
                                         > Add</Button>
                                     }

@@ -1,5 +1,5 @@
 import { numberWithCommas } from "../../Report_common_function";
-import { date_dmy_func } from "../../../components/Common/CommonFunction";
+import { date_dmy_func, loginUserDetails } from "../../../components/Common/CommonFunction";
 
 export const columns = [
     "GRN Date",
@@ -20,21 +20,19 @@ export const PageHedercolumns = [
 ]
 
 export const Rows = (data) => {
-    const { StockDetails = [] } = data
-    StockDetails.sort((firstItem, secondItem) => firstItem.GSTPercentage - secondItem.GSTPercentage);
+    debugger
     const returnArr = [];
-
-    StockDetails.forEach((element, key) => {
+    data.forEach((element, key) => {
         const tableitemRow = [
-            `${element.GRNDate}`,
+            `${date_dmy_func(element.GRNDate)}`,
             `${element.GRNNo}`,
-            `${element.PO}`,
+            `${element.PO ? element.PO : ""}`,
             `${element.Supplier}`,
             `${element.ChallanNo}`,
             `${element.ItemName}`,
             `${(Number(element.Quantity).toFixed(2))}`,
             `${(Number(element.Rate).toFixed(2))}`,
-            `${(Number(element.Unit).toFixed(2))}`,
+            `${element.Unit}`,
         ];
         returnArr.push(tableitemRow);
     })
@@ -43,8 +41,8 @@ export const Rows = (data) => {
 
 export const ReportHederRows = (data) => {
     var reportArray = [
-        [`From Date:  ${date_dmy_func(data.FromDate)}`,],
-        [`To Date:      ${date_dmy_func(data.ToDate)}`],
+        [`From Date:  ${date_dmy_func(data.FromDate)}`, `To Date:     ${date_dmy_func(data.ToDate)}`, `Address:  ${loginUserDetails().PartyAddress}`],
+        // [],
     ]
     return reportArray;
 }

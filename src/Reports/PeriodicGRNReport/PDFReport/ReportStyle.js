@@ -1,6 +1,6 @@
 
 import * as table from './TableData'
-import { CurrentTime, currentDate_dmy } from "../../../components/Common/CommonFunction";
+import { CurrentTime, currentDate_dmy, loginUserDetails } from "../../../components/Common/CommonFunction";
 
 export const pageBorder = (doc) => {
     doc.line(817, 16, 30, 16);//horizontal line (Top)
@@ -12,27 +12,27 @@ export const pageHeder = (doc, data) => {
     doc.addFont("Arial", 'Normal')
     doc.setFont('Arial')
     doc.setFontSize(15)
-    doc.text('Stock Report', 400, 30, 'center') //stock Header
+    doc.text('Periodic GRN Report', 400, 30, 'center') //stock Header
 }
 export const reportHeder1 = (doc, data) => {
     doc.setFont('Tahoma')
     doc.setFontSize(14)
     doc.setFont(undefined, 'bold')
-    doc.text(`*** ${data.PartyName} ***`, 400, 50, 'center')  //bill by 
+    doc.text(`*** ${loginUserDetails().PartyName} ***`, 400, 50, 'center')  //bill by 
     doc.line(815, 60, 30, 60) //horizontal line 1 billby upper
     doc.line(815, 16, 30, 16);//horizontal line 2
-    doc.line(30, 400, 30, 16);//vertical left 1
-    doc.line(407, 100, 407, 60); //vertical line middle 
+    // doc.line(30, 400, 30, 16);//vertical left 1
+    // doc.line(407, 100, 407, 60); //vertical line middle 
     doc.line(30, 100, 815, 100) //horizontal line Current date upper
 
 
 
     var options3 = {
         margin: {
-            // top: 45, left: 35, right: 35,// bottom:100 
+            top: 45, left: 30, right: 35,// bottom:100 
         },
         showHead: 'always',
-        theme: 'plain',
+        theme: 'grid',
         styles: {
             overflow: 'linebreak',
             fontSize: 8,
@@ -49,13 +49,24 @@ export const reportHeder1 = (doc, data) => {
         columnStyles: {
             0: {
                 valign: "top",
-                columnWidth: 200,
+                columnWidth: 170,
+                halign: 'lfet',
+            },
+            1: {
+                valign: "top",
+                columnWidth: 170,
+                halign: 'lfet',
+            },
+            2: {
+                valign: "top",
+                columnWidth: 447,
                 halign: 'lfet',
             },
 
+
         },
         tableLineColor: "black",
-        startY:  63,// 45,
+        startY: 60,// 45,
     };
     doc.autoTable(table.PageHedercolumns, table.ReportHederRows(data), options3);
 }
@@ -82,41 +93,7 @@ export const reportFooter = (doc, data) => {
 export const tableBody = (doc, data) => {
 
     var options = {
-        didParseCell: (data1) => {
 
-            if (data1.row.cells[0].raw === `Total`) {
-                data1.row.cells[0].styles.fontSize = 8
-                data1.row.cells[3].styles.fontSize = 8
-                data1.row.cells[4].styles.fontSize = 8
-                data1.row.cells[5].styles.fontSize = 8
-                data1.row.cells[6].styles.fontSize = 8
-                data1.row.cells[7].styles.fontSize = 8
-                data1.row.cells[8].styles.fontSize = 8
-                data1.row.cells[9].styles.fontSize = 8
-                data1.row.cells[10].styles.fontSize = 8
-
-
-
-                data1.row.cells[0].styles.fontStyle = "bold"
-                data1.row.cells[3].styles.fontStyle = "bold"
-                data1.row.cells[4].styles.fontStyle = "bold"
-                data1.row.cells[5].styles.fontStyle = "bold"
-                data1.row.cells[6].styles.fontStyle = "bold"
-                data1.row.cells[7].styles.fontStyle = "bold"
-                data1.row.cells[8].styles.fontStyle = "bold"
-                data1.row.cells[9].styles.fontStyle = "bold"
-                data1.row.cells[10].styles.fontStyle = "bold"
-
-
-            }
-
-            if (data1.row.cells[5].raw === "packing") {
-                data1.row.cells[0].colSpan = 12
-
-                data1.row.cells[0].styles.fontSize = 8
-                data1.row.cells[0.].styles.fontStyle = "bold"
-            }
-        },
         margin: {
             left: 30, right: 25,//200 bottom
         },
@@ -147,20 +124,21 @@ export const tableBody = (doc, data) => {
             },
             1: {
                 columnWidth: 74,
+                halign: 'right',
             },
             2: {
-                columnWidth: 113,
+                columnWidth: 100,
             },
             3: {
-                columnWidth: 63,
+                columnWidth: 130,
                 halign: 'right',
             },
             4: {
-                columnWidth: 50,
+                columnWidth: 80,
                 halign: 'right',
             },
             5: {
-                columnWidth: 55,
+                columnWidth: 170,
                 halign: 'right',
             },
             6: {
@@ -181,14 +159,6 @@ export const tableBody = (doc, data) => {
             },
             10: {
                 columnWidth: 54,
-                halign: 'right',
-            },
-            11: {
-                columnWidth: 45,
-                halign: 'right',
-            },
-            12: {
-                columnWidth: 45,
                 halign: 'right',
             },
 
